@@ -3,13 +3,13 @@
 // @allowJs: true
 
 // @Filename: /a.js
-////exports.f = async function* f(p) {}
+////exports.f = async function* f(p) { p; }
 ////exports.C = class C extends D { m() {} }
 
 verify.codeFix({
     description: "Convert to ES6 module",
     newFileContent:
-`export async function* f(p) { }
+`export async function* f(p) { p; }
 export class C extends D {
     m() { }
 }`,

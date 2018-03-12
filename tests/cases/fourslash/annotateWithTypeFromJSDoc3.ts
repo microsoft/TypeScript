@@ -27,10 +27,6 @@ verify.codeFix({
  * @param {*} beta - I have no idea how this got here
  */
 function f(x: number, y: { a: string; b: Date; }, z: string, alpha, beta: any) {
-    x;
-    y;
-    z;
-    alpha;
-    beta;
+    x; y; z; alpha; beta;
 }`,
 });

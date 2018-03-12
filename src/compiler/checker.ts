@@ -311,7 +311,22 @@ namespace ts {
                 return node && getTypeArgumentConstraint(node);
             },
 
-            getSuggestionDiagnostics: file => suggestionDiagnostics.get(file.fileName) || emptyArray,
+            getSuggestionDiagnostics: file => {
+                return (suggestionDiagnostics.get(file.fileName) || emptyArray).concat(getUnusedDiagnostics());
+                function getUnusedDiagnostics(): ReadonlyArray<Diagnostic> {
+                    checkSourceFile(file);
+                    const diagnostics: Diagnostic[] = [];
+                    Debug.assert(!!(getNodeLinks(file).flags & NodeCheckFlags.TypeChecked));
+                    if (!file.isDeclarationFile) {
+                        checkUnusedIdentifiers(allPotentiallyUnusedIdentifiers.get(file.fileName)!, (kind, diag) => {
+                            if (!unusedIsError(kind)) {
+                                diagnostics.push({ ...diag, category: DiagnosticCategory.Suggestion });
+                            }
+                        });
+                    }
+                    return diagnostics;
+                }
+            },
         };
 
         const tupleTypes: GenericType[] = [];
@@ -420,7 +435,8 @@ namespace ts {
         let deferredGlobalTemplateStringsArrayType: ObjectType;
 
         let deferredNodes: Node[];
-        let deferredUnusedIdentifierNodes: Node[];
+        const allPotentiallyUnusedIdentifiers = createMap<ReadonlyArray<PotentiallyUnusedIdentifier>>(); // key is file name
+        let potentiallyUnusedIdentifiers: PotentiallyUnusedIdentifier[]; // Potentially unused identifiers in the source file currently being checked.
 
         let flowLoopStart = 0;
         let flowLoopCount = 0;
@@ -609,6 +625,12 @@ namespace ts {
             resolvedExports = "resolvedExports",
             resolvedMembers = "resolvedMembers"
         }
+
+        const enum UnusedKind {
+            Local,
+            Parameter,
+        }
+        type AddUnusedDiagnostic = (type: UnusedKind, diagnostic: Diagnostic) => void;
 
         const builtinGlobals = createSymbolTable();
         builtinGlobals.set(undefinedSymbol.escapedName, undefinedSymbol);
@@ -10300,8 +10322,7 @@ namespace ts {
             // related to Y, where X' is an instantiation of X in which P is replaced with Q. Notice
             // that S and T are contra-variant whereas X and Y are co-variant.
             function mappedTypeRelatedTo(source: MappedType, target: MappedType, reportErrors: boolean): Ternary {
-                const modifiersRelated = relation === comparableRelation || (
-                    relation === identityRelation ? getMappedTypeModifiers(source) === getMappedTypeModifiers(target) :
+                const modifiersRelated = relation === comparableRelation || (relation === identityRelation ? getMappedTypeModifiers(source) === getMappedTypeModifiers(target) :
                         getCombinedMappedTypeOptionality(source) <= getCombinedMappedTypeOptionality(target));
                 if (modifiersRelated) {
                     let result: Ternary;
@@ -14674,7 +14695,7 @@ namespace ts {
                 }
             }
 
-            return getUnionType(map(signatures, ctor ? t => getJsxPropsTypeFromConstructSignature(t, isJs, context) : t => getJsxPropsTypeFromCallSignature(t, context)), UnionReduction.None);
+            return getUnionType(map(signatures, ctor ? (t => getJsxPropsTypeFromConstructSignature(t, isJs, context)) : (t => getJsxPropsTypeFromCallSignature(t, context))), UnionReduction.None);
         }
 
         function getJsxPropsTypeFromCallSignature(sig: Signature, context: Node) {
@@ -18771,7 +18792,6 @@ namespace ts {
                         }
                     }
                 }
-                registerForUnusedIdentifiersCheck(node);
             }
         }
 
@@ -20101,8 +20121,8 @@ namespace ts {
                         checkAsyncFunctionReturnType(<FunctionLikeDeclaration>node);
                     }
                 }
-                if (!(<FunctionDeclaration>node).body) {
-                    checkUnusedTypeParameters(node);
+                if (node.kind !== SyntaxKind.IndexSignature && node.kind !== SyntaxKind.JSDocFunctionType) {
+                    registerForUnusedIdentifiersCheck(node);
                 }
             }
         }
@@ -20303,7 +20323,6 @@ namespace ts {
             if (!checkGrammarConstructorTypeParameters(node)) checkGrammarConstructorTypeAnnotation(node);
 
             checkSourceElement(node.body);
-            registerForUnusedIdentifiersCheck(node);
 
             const symbol = getSymbolOfNode(node);
             const firstDeclaration = getDeclarationOfKind(symbol, node.kind);
@@ -20423,7 +20442,6 @@ namespace ts {
                 }
             }
             checkSourceElement(node.body);
-            registerForUnusedIdentifiersCheck(node);
         }
 
         function checkAccessorDeclarationTypesIdentical(first: AccessorDeclaration, second: AccessorDeclaration, getAnnotatedType: (a: AccessorDeclaration) => Type, message: DiagnosticMessage) {
@@ -21557,67 +21575,75 @@ namespace ts {
                     getReturnTypeOfSignature(getSignatureFromDeclaration(node));
                 }
             }
-
-            registerForUnusedIdentifiersCheck(node);
         }
 
-        function registerForUnusedIdentifiersCheck(node: Node) {
-            if (deferredUnusedIdentifierNodes) {
-                deferredUnusedIdentifierNodes.push(node);
+        function registerForUnusedIdentifiersCheck(node: PotentiallyUnusedIdentifier): void {
+            // May be in a call such as getTypeOfNode that happened to call this. But potentiallyUnusedIdentifiers is only defined in the scope of `checkSourceFile`.
+            if (potentiallyUnusedIdentifiers === undefined) return;
+
+            if (contains(potentiallyUnusedIdentifiers, node)) {
+                // TODO: GH#22491 Apparently we check the BlockStatement in the callback in `getPropertyAssignment` twice.
+                // Debug.fail();
+            }
+            else {
+                potentiallyUnusedIdentifiers.push(node);
             }
         }
 
-        function checkUnusedIdentifiers() {
-            if (deferredUnusedIdentifierNodes) {
-                for (const node of deferredUnusedIdentifierNodes) {
-                    switch (node.kind) {
-                        case SyntaxKind.SourceFile:
-                        case SyntaxKind.ModuleDeclaration:
-                            checkUnusedModuleMembers(<ModuleDeclaration | SourceFile>node);
-                            break;
-                        case SyntaxKind.ClassDeclaration:
-                        case SyntaxKind.ClassExpression:
-                            checkUnusedClassMembers(<ClassDeclaration | ClassExpression>node);
-                            checkUnusedTypeParameters(<ClassDeclaration | ClassExpression>node);
-                            break;
-                        case SyntaxKind.InterfaceDeclaration:
-                            checkUnusedTypeParameters(<InterfaceDeclaration>node);
-                            break;
-                        case SyntaxKind.Block:
-                        case SyntaxKind.CaseBlock:
-                        case SyntaxKind.ForStatement:
-                        case SyntaxKind.ForInStatement:
-                        case SyntaxKind.ForOfStatement:
-                            checkUnusedLocalsAndParameters(node);
-                            break;
-                        case SyntaxKind.Constructor:
-                        case SyntaxKind.FunctionExpression:
-                        case SyntaxKind.FunctionDeclaration:
-                        case SyntaxKind.ArrowFunction:
-                        case SyntaxKind.MethodDeclaration:
-                        case SyntaxKind.GetAccessor:
-                        case SyntaxKind.SetAccessor:
-                            if ((<FunctionLikeDeclaration>node).body) {
-                                checkUnusedLocalsAndParameters(<FunctionLikeDeclaration>node);
-                            }
-                            checkUnusedTypeParameters(<FunctionLikeDeclaration>node);
-                            break;
-                        case SyntaxKind.MethodSignature:
-                        case SyntaxKind.CallSignature:
-                        case SyntaxKind.ConstructSignature:
-                        case SyntaxKind.FunctionType:
-                        case SyntaxKind.ConstructorType:
-                        case SyntaxKind.TypeAliasDeclaration:
-                            checkUnusedTypeParameters(<MethodSignature | CallSignatureDeclaration | ConstructSignatureDeclaration | FunctionTypeNode | ConstructorTypeNode | TypeAliasDeclaration>node);
-                            break;
-                        default:
-                            Debug.fail("Node should not have been registered for unused identifiers check");
-                    }
+        type PotentiallyUnusedIdentifier =
+            | SourceFile | ModuleDeclaration | ClassLikeDeclaration | InterfaceDeclaration
+            | Block | CaseBlock | ForStatement | ForInStatement | ForOfStatement
+            | Exclude<SignatureDeclaration, IndexSignatureDeclaration | JSDocFunctionType> | TypeAliasDeclaration;
+
+        function checkUnusedIdentifiers(potentiallyUnusedIdentifiers: ReadonlyArray<PotentiallyUnusedIdentifier>, addDiagnostic: AddUnusedDiagnostic) {
+            for (const node of potentiallyUnusedIdentifiers) {
+                switch (node.kind) {
+                    case SyntaxKind.SourceFile:
+                    case SyntaxKind.ModuleDeclaration:
+                        checkUnusedModuleMembers(node, addDiagnostic);
+                        break;
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.ClassExpression:
+                        checkUnusedClassMembers(node, addDiagnostic);
+                        checkUnusedTypeParameters(node, addDiagnostic);
+                        break;
+                    case SyntaxKind.InterfaceDeclaration:
+                        checkUnusedTypeParameters(node, addDiagnostic);
+                        break;
+                    case SyntaxKind.Block:
+                    case SyntaxKind.CaseBlock:
+                    case SyntaxKind.ForStatement:
+                    case SyntaxKind.ForInStatement:
+                    case SyntaxKind.ForOfStatement:
+                        checkUnusedLocalsAndParameters(node, addDiagnostic);
+                        break;
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.ArrowFunction:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        if (node.body) {
+                            checkUnusedLocalsAndParameters(node, addDiagnostic);
+                        }
+                        checkUnusedTypeParameters(node, addDiagnostic);
+                        break;
+                    case SyntaxKind.MethodSignature:
+                    case SyntaxKind.CallSignature:
+                    case SyntaxKind.ConstructSignature:
+                    case SyntaxKind.FunctionType:
+                    case SyntaxKind.ConstructorType:
+                    case SyntaxKind.TypeAliasDeclaration:
+                        checkUnusedTypeParameters(node, addDiagnostic);
+                        break;
+                    default:
+                        Debug.assertNever(node, "Node should not have been registered for unused identifiers check");
                 }
             }
         }
 
-        function checkUnusedLocalsAndParameters(node: Node): void {
+        function checkUnusedLocalsAndParameters(node: Node, addDiagnostic: AddUnusedDiagnostic): void {
             if (!(node.flags & NodeFlags.Ambient)) {
                 node.locals.forEach(local => {
                     // If it's purely a type parameter, ignore, will be checked in `checkUnusedTypeParameters`.
@@ -21627,11 +21653,11 @@ namespace ts {
                             const parameter = <ParameterDeclaration>getRootDeclaration(local.valueDeclaration);
                             const name = getNameOfDeclaration(local.valueDeclaration);
                             if (!isParameterPropertyDeclaration(parameter) && !parameterIsThisKeyword(parameter) && !parameterNameStartsWithUnderscore(name)) {
-                                errorOrSuggestion(/*isError*/ compilerOptions.noUnusedParameters, name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(local));
+                                addDiagnostic(UnusedKind.Parameter, createDiagnosticForNode(name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(local)));
                             }
                         }
                         else {
-                            forEach(local.declarations, d => errorUnusedLocal(d, symbolName(local)));
+                            forEach(local.declarations, d => errorUnusedLocal(d, symbolName(local), addDiagnostic));
                         }
                     }
                 });
@@ -21646,7 +21672,7 @@ namespace ts {
             return false;
         }
 
-        function errorUnusedLocal(declaration: Declaration, name: string) {
+        function errorUnusedLocal(declaration: Declaration, name: string, addDiagnostic: AddUnusedDiagnostic) {
             const node = getNameOfDeclaration(declaration) || declaration;
             if (isIdentifierThatStartsWithUnderScore(node)) {
                 const declaration = getRootDeclaration(node.parent);
@@ -21657,7 +21683,7 @@ namespace ts {
             }
 
             if (!isRemovedPropertyFromObjectSpread(node.kind === SyntaxKind.Identifier ? node.parent : node)) {
-                addErrorOrSuggestion(/*isError*/ compilerOptions.noUnusedLocals, createDiagnosticForNodeSpan(getSourceFileOfNode(declaration), declaration, node, Diagnostics._0_is_declared_but_its_value_is_never_read, name));
+                addDiagnostic(UnusedKind.Local, createDiagnosticForNodeSpan(getSourceFileOfNode(declaration), declaration, node, Diagnostics._0_is_declared_but_its_value_is_never_read, name));
             }
         }
 
@@ -21669,7 +21695,7 @@ namespace ts {
             return isIdentifier(node) && idText(node).charCodeAt(0) === CharacterCodes._;
         }
 
-        function checkUnusedClassMembers(node: ClassDeclaration | ClassExpression): void {
+        function checkUnusedClassMembers(node: ClassDeclaration | ClassExpression, addDiagnostic: AddUnusedDiagnostic): void {
             if (!(node.flags & NodeFlags.Ambient)) {
                 for (const member of node.members) {
                     switch (member.kind) {
@@ -21683,13 +21709,13 @@ namespace ts {
                             }
                             const symbol = getSymbolOfNode(member);
                             if (!symbol.isReferenced && hasModifier(member, ModifierFlags.Private)) {
-                                errorOrSuggestion(/*isError*/ compilerOptions.noUnusedLocals, member.name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolToString(symbol));
+                                addDiagnostic(UnusedKind.Local, createDiagnosticForNode(member.name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolToString(symbol)));
                             }
                             break;
                         case SyntaxKind.Constructor:
                             for (const parameter of (<ConstructorDeclaration>member).parameters) {
                                 if (!parameter.symbol.isReferenced && hasModifier(parameter, ModifierFlags.Private)) {
-                                    errorOrSuggestion(/*isError*/ compilerOptions.noUnusedLocals, parameter.name, Diagnostics.Property_0_is_declared_but_its_value_is_never_read, symbolName(parameter.symbol));
+                                    addDiagnostic(UnusedKind.Local, createDiagnosticForNode(parameter.name, Diagnostics.Property_0_is_declared_but_its_value_is_never_read, symbolName(parameter.symbol)));
                                 }
                             }
                             break;
@@ -21704,19 +21730,22 @@ namespace ts {
             }
         }
 
-        function checkUnusedTypeParameters(node: ClassDeclaration | ClassExpression | FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction | ConstructorDeclaration | SignatureDeclaration | InterfaceDeclaration | TypeAliasDeclaration) {
+        function checkUnusedTypeParameters(
+            node: ClassDeclaration | ClassExpression | FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction | ConstructorDeclaration | SignatureDeclaration | InterfaceDeclaration | TypeAliasDeclaration,
+            addDiagnostic: AddUnusedDiagnostic,
+        ): void {
             // Only report errors on the last declaration for the type parameter container;
             // this ensures that all uses have been accounted for.
             if (!(node.flags & NodeFlags.Ambient) && node.typeParameters && last(getSymbolOfNode(node)!.declarations) === node) {
                 for (const typeParameter of node.typeParameters) {
                     if (!(getMergedSymbol(typeParameter.symbol).isReferenced & SymbolFlags.TypeParameter) && !isIdentifierThatStartsWithUnderScore(typeParameter.name)) {
-                        errorOrSuggestion(/*isError*/ compilerOptions.noUnusedParameters, typeParameter.name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(typeParameter.symbol));
+                        addDiagnostic(UnusedKind.Parameter, createDiagnosticForNode(typeParameter.name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(typeParameter.symbol)));
                     }
                 }
             }
         }
 
-        function checkUnusedModuleMembers(node: ModuleDeclaration | SourceFile): void {
+        function checkUnusedModuleMembers(node: ModuleDeclaration | SourceFile, addDiagnostic: AddUnusedDiagnostic): void {
             if (!(node.flags & NodeFlags.Ambient)) {
                 // Ideally we could use the ImportClause directly as a key, but must wait until we have full ES6 maps. So must store key along with value.
                 const unusedImports = createMap<[ImportClause, ImportedDeclaration[]]>();
@@ -21736,7 +21765,7 @@ namespace ts {
                             }
                         }
                         else {
-                            errorUnusedLocal(declaration, symbolName(local));
+                            errorUnusedLocal(declaration, symbolName(local), addDiagnostic);
                         }
                     }
                 });
@@ -21744,13 +21773,13 @@ namespace ts {
                 unusedImports.forEach(([importClause, unuseds]) => {
                     const importDecl = importClause.parent;
                     if (forEachImportedDeclaration(importClause, d => !contains(unuseds, d))) {
-                        for (const unused of unuseds) errorUnusedLocal(unused, idText(unused.name));
+                        for (const unused of unuseds) errorUnusedLocal(unused, idText(unused.name), addDiagnostic);
                     }
                     else if (unuseds.length === 1) {
-                        error(importDecl, Diagnostics._0_is_declared_but_its_value_is_never_read, idText(first(unuseds).name));
+                        addDiagnostic(UnusedKind.Local, createDiagnosticForNode(importDecl, Diagnostics._0_is_declared_but_its_value_is_never_read, idText(first(unuseds).name)));
                     }
                     else {
-                        error(importDecl, Diagnostics.All_imports_in_import_declaration_are_unused, showModuleSpecifier(importDecl));
+                        addDiagnostic(UnusedKind.Local, createDiagnosticForNode(importDecl, Diagnostics.All_imports_in_import_declaration_are_unused, showModuleSpecifier(importDecl)));
                     }
                 });
             }
@@ -24528,6 +24557,17 @@ namespace ts {
             performance.measure("Check", "beforeCheck", "afterCheck");
         }
 
+        function unusedIsError(kind: UnusedKind): boolean {
+            switch (kind) {
+                case UnusedKind.Local:
+                    return compilerOptions.noUnusedLocals;
+                case UnusedKind.Parameter:
+                    return compilerOptions.noUnusedParameters;
+                default:
+                    return Debug.assertNever(kind);
+            }
+        }
+
         // Fully type check a source file and collect the relevant diagnostics.
         function checkSourceFileWorker(node: SourceFile) {
             const links = getNodeLinks(node);
@@ -24546,8 +24586,10 @@ namespace ts {
                 clear(potentialNewTargetCollisions);
 
                 deferredNodes = [];
-                deferredUnusedIdentifierNodes = produceDiagnostics ? [] : undefined;
-                flowAnalysisDisabled = false;
+                if (produceDiagnostics) {
+                    Debug.assert(!allPotentiallyUnusedIdentifiers.has(node.fileName));
+                    allPotentiallyUnusedIdentifiers.set(node.fileName, potentiallyUnusedIdentifiers = []);
+                }
 
                 forEach(node.statements, checkSourceElement);
 
@@ -24557,12 +24599,16 @@ namespace ts {
                     registerForUnusedIdentifiersCheck(node);
                 }
 
-                if (!node.isDeclarationFile) {
-                    checkUnusedIdentifiers();
+                if (!node.isDeclarationFile && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters)) {
+                    checkUnusedIdentifiers(potentiallyUnusedIdentifiers, (kind, diag) => {
+                        if (unusedIsError(kind)) {
+                            diagnostics.add(diag);
+                        }
+                    });
                 }
 
                 deferredNodes = undefined;
-                deferredUnusedIdentifierNodes = undefined;
+                potentiallyUnusedIdentifiers = undefined;
 
                 if (isExternalOrCommonJsModule(node)) {
                     checkExternalModuleExports(node);
