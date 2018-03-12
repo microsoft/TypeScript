@@ -827,13 +827,15 @@ interface MediaTrackCapabilities {
 
 interface MediaTrackConstraintSet {
     aspectRatio?: number | ConstrainDoubleRange;
+    channelCount?: number | ConstrainLongRange;
     deviceId?: string | string[] | ConstrainDOMStringParameters;
     displaySurface?: string | string[] | ConstrainDOMStringParameters;
-    echoCancelation?: boolean | ConstrainBooleanParameters;
+    echoCancellation?: boolean | ConstrainBooleanParameters;
     facingMode?: string | string[] | ConstrainDOMStringParameters;
     frameRate?: number | ConstrainDoubleRange;
     groupId?: string | string[] | ConstrainDOMStringParameters;
     height?: number | ConstrainLongRange;
+    latency?: number | ConstrainDoubleRange;
     logicalSurface?: boolean | ConstrainBooleanParameters;
     sampleRate?: number | ConstrainLongRange;
     sampleSize?: number | ConstrainLongRange;
@@ -3652,7 +3654,7 @@ interface Document extends Node, GlobalEventHandlers, ParentNode, DocumentEvent 
     /**
      * Contains information about the current URL.
      */
-    readonly location: Location;
+    location: Location;
     msCSSOMElementFloatMetrics: boolean;
     msCapsLockWarningOff: boolean;
     /**
@@ -7092,7 +7094,7 @@ declare var HTMLOptionElement: {
     new(): HTMLOptionElement;
 };
 
-interface HTMLOptionsCollection extends HTMLCollectionBase {
+interface HTMLOptionsCollection extends HTMLCollectionOf<HTMLOptionElement> {
     length: number;
     selectedIndex: number;
     add(element: HTMLOptionElement | HTMLOptGroupElement, before?: HTMLElement | number | null): void;
@@ -9346,7 +9348,7 @@ interface NavigatorUserMedia {
 
 interface Node extends EventTarget {
     readonly baseURI: string | null;
-    readonly childNodes: NodeList;
+    readonly childNodes: NodeListOf<Node & ChildNode>;
     readonly firstChild: Node | null;
     readonly lastChild: Node | null;
     readonly localName: string | null;
@@ -9696,7 +9698,7 @@ interface Path2D extends CanvasPathMethods {
 
 declare var Path2D: {
     prototype: Path2D;
-    new(path?: Path2D): Path2D;
+    new(d?: Path2D | string): Path2D;
 };
 
 interface PaymentAddress {
@@ -10337,19 +10339,19 @@ interface RTCPeerConnection extends EventTarget {
     onsignalingstatechange: ((this: RTCPeerConnection, ev: Event) => any) | null;
     readonly remoteDescription: RTCSessionDescription | null;
     readonly signalingState: RTCSignalingState;
-    addIceCandidate(candidate: RTCIceCandidate, successCallback?: VoidFunction, failureCallback?: RTCPeerConnectionErrorCallback): Promise<void>;
+    addIceCandidate(candidate: RTCIceCandidateInit | RTCIceCandidate): Promise<void>;
     addStream(stream: MediaStream): void;
     close(): void;
-    createAnswer(successCallback?: RTCSessionDescriptionCallback, failureCallback?: RTCPeerConnectionErrorCallback): Promise<RTCSessionDescription>;
-    createOffer(successCallback?: RTCSessionDescriptionCallback, failureCallback?: RTCPeerConnectionErrorCallback, options?: RTCOfferOptions): Promise<RTCSessionDescription>;
+    createAnswer(options?: RTCOfferOptions): Promise<RTCSessionDescriptionInit>;
+    createOffer(options?: RTCOfferOptions): Promise<RTCSessionDescriptionInit>;
     getConfiguration(): RTCConfiguration;
     getLocalStreams(): MediaStream[];
     getRemoteStreams(): MediaStream[];
     getStats(selector: MediaStreamTrack | null, successCallback?: RTCStatsCallback, failureCallback?: RTCPeerConnectionErrorCallback): Promise<RTCStatsReport>;
     getStreamById(streamId: string): MediaStream | null;
     removeStream(stream: MediaStream): void;
-    setLocalDescription(description: RTCSessionDescription, successCallback?: VoidFunction, failureCallback?: RTCPeerConnectionErrorCallback): Promise<void>;
-    setRemoteDescription(description: RTCSessionDescription, successCallback?: VoidFunction, failureCallback?: RTCPeerConnectionErrorCallback): Promise<void>;
+    setLocalDescription(description: RTCSessionDescriptionInit): Promise<void>;
+    setRemoteDescription(description: RTCSessionDescriptionInit): Promise<void>;
     addEventListener<K extends keyof RTCPeerConnectionEventMap>(type: K, listener: (this: RTCPeerConnection, ev: RTCPeerConnectionEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof RTCPeerConnectionEventMap>(type: K, listener: (this: RTCPeerConnection, ev: RTCPeerConnectionEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -14907,7 +14909,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     readonly innerWidth: number;
     readonly isSecureContext: boolean;
     readonly length: number;
-    readonly location: Location;
+    location: Location;
     readonly locationbar: BarProp;
     readonly menubar: BarProp;
     readonly msContentScript: ExtensionScriptApis;

@@ -2,24 +2,25 @@
 namespace ts.SymbolDisplay {
     // TODO(drosen): use contextual SemanticMeaning.
     export function getSymbolKind(typeChecker: TypeChecker, symbol: Symbol, location: Node): ScriptElementKind {
-        const flags = getCombinedLocalAndExportSymbolFlags(symbol);
+        const result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location);
+        if (result !== ScriptElementKind.unknown) {
+            return result;
+        }
 
+        const flags = getCombinedLocalAndExportSymbolFlags(symbol);
         if (flags & SymbolFlags.Class) {
             return getDeclarationOfKind(symbol, SyntaxKind.ClassExpression) ?
-            ScriptElementKind.localClassElement : ScriptElementKind.classElement;
+                ScriptElementKind.localClassElement : ScriptElementKind.classElement;
         }
         if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
         if (flags & SymbolFlags.TypeAlias) return ScriptElementKind.typeElement;
         if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
         if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
 
-        const result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location);
-        if (result === ScriptElementKind.unknown) {
-            if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
-            if (flags & SymbolFlags.EnumMember) return ScriptElementKind.enumMemberElement;
-            if (flags & SymbolFlags.Alias) return ScriptElementKind.alias;
-            if (flags & SymbolFlags.Module) return ScriptElementKind.moduleElement;
-        }
+        if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
+        if (flags & SymbolFlags.EnumMember) return ScriptElementKind.enumMemberElement;
+        if (flags & SymbolFlags.Alias) return ScriptElementKind.alias;
+        if (flags & SymbolFlags.Module) return ScriptElementKind.moduleElement;
 
         return result;
     }

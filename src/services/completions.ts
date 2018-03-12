@@ -996,6 +996,7 @@ namespace ts.Completions {
             // Since this is qualified name check its a type node location
             const isTypeLocation = insideJsDocTagTypeExpression || isPartOfTypeNode(node.parent);
             const isRhsOfImportDeclaration = isInRightSideOfInternalImportEqualsDeclaration(node);
+            const allowTypeOrValue = isRhsOfImportDeclaration || (!isTypeLocation && isPossiblyTypeArgumentPosition(contextToken, sourceFile));
             if (isEntityName(node)) {
                 let symbol = typeChecker.getSymbolAtLocation(node);
                 if (symbol) {
@@ -1006,7 +1007,7 @@ namespace ts.Completions {
                         const exportedSymbols = Debug.assertEachDefined(typeChecker.getExportsOfModule(symbol), "getExportsOfModule() should all be defined");
                         const isValidValueAccess = (symbol: Symbol) => typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name);
                         const isValidTypeAccess = (symbol: Symbol) => symbolCanBeReferencedAtTypeLocation(symbol);
-                        const isValidAccess = isRhsOfImportDeclaration ?
+                        const isValidAccess = allowTypeOrValue ?
                             // Any kind is allowed when dotting off namespace in internal import equals declaration
                             (symbol: Symbol) => isValidTypeAccess(symbol) || isValidValueAccess(symbol) :
                             isTypeLocation ? isValidTypeAccess : isValidValueAccess;
@@ -1173,8 +1174,9 @@ namespace ts.Completions {
         }
 
         function filterGlobalCompletion(symbols: Symbol[]): void {
-            const isTypeCompletion = insideJsDocTagTypeExpression || !isContextTokenValueLocation(contextToken) && (isPartOfTypeNode(location) || isContextTokenTypeLocation(contextToken));
-            if (isTypeCompletion) keywordFilters = KeywordCompletionFilters.TypeKeywords;
+            const isTypeOnlyCompletion = insideJsDocTagTypeExpression || !isContextTokenValueLocation(contextToken) && (isPartOfTypeNode(location) || isContextTokenTypeLocation(contextToken));
+            const allowTypes = isTypeOnlyCompletion || !isContextTokenValueLocation(contextToken) && isPossiblyTypeArgumentPosition(contextToken, sourceFile);
+            if (isTypeOnlyCompletion) keywordFilters = KeywordCompletionFilters.TypeKeywords;
 
             filterMutate(symbols, symbol => {
                 if (!isSourceFile(location)) {
@@ -1190,9 +1192,12 @@ namespace ts.Completions {
                         return !!(symbol.flags & SymbolFlags.Namespace);
                     }
 
-                    if (isTypeCompletion) {
+                    if (allowTypes) {
                         // Its a type, but you can reach it by namespace.type as well
-                        return symbolCanBeReferencedAtTypeLocation(symbol);
+                        const symbolAllowedAsType = symbolCanBeReferencedAtTypeLocation(symbol);
+                        if (symbolAllowedAsType || isTypeOnlyCompletion) {
+                            return symbolAllowedAsType;
+                        }
                     }
                 }
 
@@ -1204,7 +1209,7 @@ namespace ts.Completions {
         function isContextTokenValueLocation(contextToken: Node) {
             return contextToken &&
                 contextToken.kind === SyntaxKind.TypeOfKeyword &&
-                contextToken.parent.kind === SyntaxKind.TypeQuery;
+                (contextToken.parent.kind === SyntaxKind.TypeQuery || isTypeOfExpression(contextToken.parent));
         }
 
         function isContextTokenTypeLocation(contextToken: Node): boolean {

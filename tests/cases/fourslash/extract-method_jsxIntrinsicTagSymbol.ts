@@ -7,4 +7,9 @@
 /////*a*/<div></div>/*b*/
 
 goTo.select("a", "b");
-verify.refactorAvailable("Extract Symbol", "constant_scope_0");
+edit.applyRefactor({
+    refactorName: "Extract Symbol",
+    actionName: "constant_scope_0",
+    actionDescription: "Extract to constant in enclosing scope",
+    newContent: "const /*RENAME*/newLocal = <div></div>;",
+});

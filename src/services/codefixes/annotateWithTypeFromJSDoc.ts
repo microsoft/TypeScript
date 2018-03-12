@@ -42,28 +42,22 @@ namespace ts.codefix {
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, decl: DeclarationWithType): void {
         if (isFunctionLikeDeclaration(decl) && (getJSDocReturnType(decl) || decl.parameters.some(p => !!getJSDocType(p)))) {
-            const typeParameters = getJSDocTypeParameterDeclarations(decl);
-            const returnType = getJSDocReturnType(decl);
-            const returnTypeNode = returnType && transformJSDocType(returnType);
-
-            if (isArrowFunction(decl) && !findChildOfKind(decl, SyntaxKind.OpenParenToken, sourceFile)) {
-                const params = decl.parameters.map(p => {
-                    const paramType = getJSDocType(p);
-                    return paramType && !p.type ? updateParameter(p, p.decorators, p.modifiers, p.dotDotDotToken, p.name, p.questionToken, transformJSDocType(paramType), p.initializer) : p;
-                });
-                changes.replaceNode(sourceFile, decl, updateArrowFunction(decl, decl.modifiers, decl.typeParameters || typeParameters, params, decl.type || returnTypeNode, decl.equalsGreaterThanToken, decl.body));
+            if (!decl.typeParameters) {
+                const typeParameters = getJSDocTypeParameterDeclarations(decl);
+                if (typeParameters) changes.insertTypeParameters(sourceFile, decl, typeParameters);
             }
-            else {
-                if (typeParameters && !decl.typeParameters) {
-                    changes.insertTypeParameters(sourceFile, decl, typeParameters);
+            const needParens = isArrowFunction(decl) && !findChildOfKind(decl, SyntaxKind.OpenParenToken, sourceFile);
+            if (needParens) changes.insertNodeBefore(sourceFile, first(decl.parameters), createToken(SyntaxKind.OpenParenToken));
+            for (const param of decl.parameters) {
+                if (!param.type) {
+                    const paramType = getJSDocType(param);
+                    if (paramType) changes.insertTypeAnnotation(sourceFile, param, transformJSDocType(paramType));
                 }
-                for (const param of decl.parameters) {
-                    if (!param.type) {
-                        const paramType = getJSDocType(param);
-                        if (paramType) changes.insertTypeAnnotation(sourceFile, param, transformJSDocType(paramType));
-                    }
-                }
-                if (returnTypeNode && !decl.type) changes.insertTypeAnnotation(sourceFile, decl, returnTypeNode);
+            }
+            if (needParens) changes.insertNodeAfter(sourceFile, last(decl.parameters), createToken(SyntaxKind.CloseParenToken));
+            if (!decl.type) {
+                const returnType = getJSDocReturnType(decl);
+                if (returnType) changes.insertTypeAnnotation(sourceFile, decl, transformJSDocType(returnType));
             }
         }
         else {

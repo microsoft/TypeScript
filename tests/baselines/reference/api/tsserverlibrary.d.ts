@@ -644,7 +644,8 @@ declare namespace ts {
         body?: Block | Expression;
     }
     type FunctionLikeDeclaration = FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | FunctionExpression | ArrowFunction;
-    type FunctionLike = FunctionLikeDeclaration | FunctionTypeNode | ConstructorTypeNode | IndexSignatureDeclaration | MethodSignature | ConstructSignatureDeclaration | CallSignatureDeclaration | JSDocFunctionType;
+    /** @deprecated Use SignatureDeclaration */
+    type FunctionLike = SignatureDeclaration;
     interface FunctionDeclaration extends FunctionLikeDeclarationBase, DeclarationStatement {
         kind: SyntaxKind.FunctionDeclaration;
         name?: Identifier;
@@ -1802,7 +1803,7 @@ declare namespace ts {
          */
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature | undefined;
-        isImplementationOfOverload(node: FunctionLike): boolean | undefined;
+        isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
         isUnknownSymbol(symbol: Symbol): boolean;
@@ -3214,7 +3215,7 @@ declare namespace ts {
     function isEntityName(node: Node): node is EntityName;
     function isPropertyName(node: Node): node is PropertyName;
     function isBindingName(node: Node): node is BindingName;
-    function isFunctionLike(node: Node): node is FunctionLike;
+    function isFunctionLike(node: Node): node is SignatureDeclaration;
     function isClassElement(node: Node): node is ClassElement;
     function isClassLike(node: Node): node is ClassLikeDeclaration;
     function isAccessor(node: Node): node is AccessorDeclaration;
@@ -5065,6 +5066,7 @@ declare namespace ts.server.protocol {
         OpenExternalProject = "openExternalProject",
         OpenExternalProjects = "openExternalProjects",
         CloseExternalProject = "closeExternalProject",
+        GetOutliningSpans = "getOutliningSpans",
         TodoComments = "todoComments",
         Indentation = "indentation",
         DocCommentTemplate = "docCommentTemplate",
@@ -5222,6 +5224,31 @@ declare namespace ts.server.protocol {
          * Requires that the enclosing span be a multi-line comment, or else the request returns undefined.
          */
         onlyMultiLine: boolean;
+    }
+    /**
+     * Request to obtain outlining spans in file.
+     */
+    interface OutliningSpansRequest extends FileRequest {
+        command: CommandTypes.GetOutliningSpans;
+    }
+    interface OutliningSpan {
+        /** The span of the document to actually collapse. */
+        textSpan: TextSpan;
+        /** The span of the document to display when the user hovers over the collapsed span. */
+        hintSpan: TextSpan;
+        /** The text to display in the editor for the collapsed region. */
+        bannerText: string;
+        /**
+         * Whether or not this region should be automatically collapsed when
+         * the 'Collapse to Definitions' command is invoked.
+         */
+        autoCollapse: boolean;
+    }
+    /**
+     * Response to OutliningSpansRequest request.
+     */
+    interface OutliningSpansResponse extends Response {
+        body?: OutliningSpan[];
     }
     /**
      * A request to get indentation for a location in file
@@ -7274,7 +7301,7 @@ declare namespace ts.server {
         private getFileAndProject(args);
         private getFileAndLanguageServiceForSyntacticOperation(args);
         private getFileAndProjectWorker(uncheckedFileName, projectFileName);
-        private getOutliningSpans(args);
+        private getOutliningSpans(args, simplifiedResult);
         private getTodoComments(args);
         private getDocCommentTemplate(args);
         private getSpanOfEnclosingComment(args);

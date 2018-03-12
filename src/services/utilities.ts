@@ -892,6 +892,117 @@ namespace ts {
         return isTemplateLiteralKind(token.kind) && position > token.getStart(sourceFile);
     }
 
+    export function findPrecedingMatchingToken(token: Node, matchingTokenKind: SyntaxKind, sourceFile: SourceFile) {
+        const tokenKind = token.kind;
+        let remainingMatchingTokens = 0;
+        while (true) {
+            const preceding = findPrecedingToken(token.getFullStart(), sourceFile);
+            if (!preceding) {
+                return undefined;
+            }
+            token = preceding;
+
+            if (token.kind === matchingTokenKind) {
+                if (remainingMatchingTokens === 0) {
+                    return token;
+                }
+
+                remainingMatchingTokens--;
+            }
+            else if (token.kind === tokenKind) {
+                remainingMatchingTokens++;
+            }
+        }
+    }
+
+    export function isPossiblyTypeArgumentPosition(tokenIn: Node, sourceFile: SourceFile): boolean {
+        let token: Node | undefined = tokenIn;
+        // This function determines if the node could be type argument position
+        // Since during editing, when type argument list is not complete,
+        // the tree could be of any shape depending on the tokens parsed before current node,
+        // scanning of the previous identifier followed by "<" before current node would give us better result
+        // Note that we also balance out the already provided type arguments, arrays, object literals while doing so
+        let remainingLessThanTokens = 0;
+        while (token) {
+            switch (token.kind) {
+                case SyntaxKind.LessThanToken:
+                    // Found the beginning of the generic argument expression
+                    token = findPrecedingToken(token.getFullStart(), sourceFile);
+                    if (!token) return false;
+                    const tokenIsIdentifier = isIdentifier(token);
+                    if (!remainingLessThanTokens || !tokenIsIdentifier) {
+                        return tokenIsIdentifier;
+                    }
+                    remainingLessThanTokens--;
+                    break;
+
+                case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+                    remainingLessThanTokens = + 3;
+                    break;
+
+                case SyntaxKind.GreaterThanGreaterThanToken:
+                    remainingLessThanTokens = + 2;
+                    break;
+
+                case SyntaxKind.GreaterThanToken:
+                    remainingLessThanTokens++;
+                    break;
+
+                case SyntaxKind.CloseBraceToken:
+                    // This can be object type, skip untill we find the matching open brace token
+                    // Skip untill the matching open brace token
+                    token = findPrecedingMatchingToken(token, SyntaxKind.OpenBraceToken, sourceFile);
+                    if (!token) return false;
+                    break;
+
+                case SyntaxKind.CloseParenToken:
+                    // This can be object type, skip untill we find the matching open brace token
+                    // Skip untill the matching open brace token
+                    token = findPrecedingMatchingToken(token, SyntaxKind.OpenParenToken, sourceFile);
+                    if (!token) return false;
+                    break;
+
+                case SyntaxKind.CloseBracketToken:
+                    // This can be object type, skip untill we find the matching open brace token
+                    // Skip untill the matching open brace token
+                    token = findPrecedingMatchingToken(token, SyntaxKind.OpenBracketToken, sourceFile);
+                    if (!token) return false;
+                    break;
+
+                // Valid tokens in a type name. Skip.
+                case SyntaxKind.CommaToken:
+                case SyntaxKind.EqualsGreaterThanToken:
+
+                case SyntaxKind.Identifier:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+
+                case SyntaxKind.TypeOfKeyword:
+                case SyntaxKind.ExtendsKeyword:
+                case SyntaxKind.KeyOfKeyword:
+                case SyntaxKind.DotToken:
+                case SyntaxKind.BarToken:
+                case SyntaxKind.QuestionToken:
+                case SyntaxKind.ColonToken:
+                    break;
+
+                default:
+                    if (isTypeNode(token)) {
+                        break;
+                    }
+
+                    // Invalid token in type
+                    return false;
+            }
+
+            token = findPrecedingToken(token.getFullStart(), sourceFile);
+        }
+
+        return false;
+    }
+
     /**
      * Returns true if the cursor at position in sourceFile is within a comment.
      *

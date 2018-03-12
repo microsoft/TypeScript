@@ -91,8 +91,9 @@ namespace ts.server.protocol {
         EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full",
         /* @internal */
         Cleanup = "cleanup",
+        GetOutliningSpans = "getOutliningSpans",
         /* @internal */
-        OutliningSpans = "outliningSpans",
+        GetOutliningSpansFull = "outliningSpans", // Full command name is different for backward compatibility purposes
         TodoComments = "todoComments",
         Indentation = "indentation",
         DocCommentTemplate = "docCommentTemplate",
@@ -303,17 +304,48 @@ namespace ts.server.protocol {
     /**
      * Request to obtain outlining spans in file.
      */
-    /* @internal */
     export interface OutliningSpansRequest extends FileRequest {
-        command: CommandTypes.OutliningSpans;
+        command: CommandTypes.GetOutliningSpans;
+    }
+
+    export interface OutliningSpan {
+        /** The span of the document to actually collapse. */
+        textSpan: TextSpan;
+
+        /** The span of the document to display when the user hovers over the collapsed span. */
+        hintSpan: TextSpan;
+
+        /** The text to display in the editor for the collapsed region. */
+        bannerText: string;
+
+        /**
+         * Whether or not this region should be automatically collapsed when
+         * the 'Collapse to Definitions' command is invoked.
+         */
+        autoCollapse: boolean;
+    }
+
+    /**
+     * Response to OutliningSpansRequest request.
+     */
+    export interface OutliningSpansResponse extends Response {
+        body?: OutliningSpan[];
+    }
+
+    /**
+     * Request to obtain outlining spans in file.
+     */
+    /* @internal */
+    export interface OutliningSpansRequestFull extends FileRequest {
+        command: CommandTypes.GetOutliningSpansFull;
     }
 
     /**
      * Response to OutliningSpansRequest request.
      */
     /* @internal */
-    export interface OutliningSpansResponse extends Response {
-        body?: OutliningSpan[];
+    export interface OutliningSpansResponseFull extends Response {
+        body?: ts.OutliningSpan[];
     }
 
     /**

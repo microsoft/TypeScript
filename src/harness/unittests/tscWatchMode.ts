@@ -2333,9 +2333,9 @@ declare module "fs" {
                 verifyRenamingFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.NonRecursiveWatchDirectory);
             });
 
-            it("uses non recursive dynamic polling when renaming file in subfolder", () => {
-                verifyRenamingFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.DynamicPolling);
-            });
+            // it("uses non recursive dynamic polling when renaming file in subfolder", () => {
+            //     verifyRenamingFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.DynamicPolling);
+            // });
         });
     });
 }

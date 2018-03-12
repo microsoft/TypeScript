@@ -522,8 +522,16 @@ namespace ts.server {
             }));
         }
 
-        getOutliningSpans(_fileName: string): OutliningSpan[] {
-            return notImplemented();
+        getOutliningSpans(file: string): OutliningSpan[] {
+            const request = this.processRequest<protocol.OutliningSpansRequest>(CommandNames.GetOutliningSpans, { file });
+            const response = this.processResponse<protocol.OutliningSpansResponse>(request);
+
+            return response.body!.map<OutliningSpan>(item => ({
+                textSpan: this.decodeSpan(item.textSpan, file),
+                hintSpan: this.decodeSpan(item.hintSpan, file),
+                bannerText: item.bannerText,
+                autoCollapse: item.autoCollapse
+            }));
         }
 
         getTodoComments(_fileName: string, _descriptors: TodoCommentDescriptor[]): TodoComment[] {
