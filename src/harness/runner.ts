@@ -136,8 +136,8 @@ function handleTestConfig() {
             stackTraceLimit = testConfig.stackTraceLimit;
         }
         else if ((+testConfig.stackTraceLimit | 0) > 0) {
-            (<any>Error).stackTraceLimit = testConfig.stackTraceLimit;
-            stackTraceLimit = testConfig.stackTraceLimit;
+            (<any>Error).stackTraceLimit = +testConfig.stackTraceLimit | 0;
+            stackTraceLimit = +testConfig.stackTraceLimit | 0;
         }
         if (testConfig.listenForWork) {
             return true;
