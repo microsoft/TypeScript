@@ -32,3 +32,16 @@ function concat(/* first, second, ... */) {
 >s : Symbol(s, Decl(a.js, 4, 5))
 }
 
+/**
+ * @param {...string} strings
+ */
+function correct() {
+>correct : Symbol(correct, Decl(a.js, 9, 1))
+
+    arguments
+>arguments : Symbol(arguments)
+}
+
+correct(1,2,3) // oh no
+>correct : Symbol(correct, Decl(a.js, 9, 1))
+

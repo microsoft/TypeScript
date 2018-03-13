@@ -16,3 +16,12 @@ function concat(/* first, second, ... */) {
   }
   return s
 }
+
+/**
+ * @param {...string} strings
+ */
+function correct() {
+    arguments
+}
+
+correct(1,2,3) // oh no

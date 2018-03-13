@@ -38,3 +38,20 @@ function concat(/* first, second, ... */) {
 >s : string
 }
 
+/**
+ * @param {...string} strings
+ */
+function correct() {
+>correct : (...args: string[]) => void
+
+    arguments
+>arguments : IArguments
+}
+
+correct(1,2,3) // oh no
+>correct(1,2,3) : void
+>correct : (...args: string[]) => void
+>1 : 1
+>2 : 2
+>3 : 3
+
