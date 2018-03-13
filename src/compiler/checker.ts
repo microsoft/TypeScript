@@ -4167,11 +4167,9 @@ namespace ts {
 
             let isOptional = false;
             if (includeOptionality) {
-                if (isInJavaScriptFile(declaration) && isParameterDeclaration(declaration)) {
-                    const parameterTags = getJSDocParameterTags(declaration as ParameterDeclaration);
-                    if (parameterTags && parameterTags.length > 0 && find(parameterTags, tag => tag.isBracketed)) {
-                        isOptional = true;
-                    }
+                if (isInJavaScriptFile(declaration) && isParameter(declaration)) {
+                    const parameterTags = getJSDocParameterTags(declaration);
+                    isOptional = !!(parameterTags && parameterTags.length > 0 && find(parameterTags, tag => tag.isBracketed));
                 }
                 if (!isBindingElement(declaration) && !isVariableDeclaration(declaration) && !!declaration.questionToken) {
                     isOptional = true;
