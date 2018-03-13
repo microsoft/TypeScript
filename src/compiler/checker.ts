@@ -11724,7 +11724,10 @@ namespace ts {
                 else if ((isLiteralType(source) || source.flags & TypeFlags.String) && target.flags & TypeFlags.Index) {
                     const empty = createEmptyObjectTypeFromStringLiteral(source);
                     contravariant = !contravariant;
+                    const savePriority = priority;
+                    priority |= InferencePriority.LiteralKeyof;
                     inferFromTypes(empty, (target as IndexType).type);
+                    priority = savePriority;
                     contravariant = !contravariant;
                 }
                 else if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {
@@ -11967,6 +11970,10 @@ namespace ts {
             return candidates;
         }
 
+        function getContravariantInference(inference: InferenceInfo) {
+            return inference.priority & InferencePriority.PriorityImpliesCombination ? getIntersectionType(inference.contraCandidates) : getCommonSubtype(inference.contraCandidates);
+        }
+
         function getInferredType(context: InferenceContext, index: number): Type {
             const inference = context.inferences[index];
             let inferredType = inference.inferredType;
@@ -11987,19 +11994,19 @@ namespace ts {
                         // If all inferences were made from contravariant positions, infer a common subtype. Otherwise, if
                         // union types were requested or if all inferences were made from the return type position, infer a
                         // union type. Otherwise, infer a common supertype.
-                        const unwidenedType = context.flags & InferenceFlags.InferUnionTypes || inference.priority & InferencePriority.PriorityImpliesUnion ?
+                        const unwidenedType = context.flags & InferenceFlags.InferUnionTypes || inference.priority & InferencePriority.PriorityImpliesCombination ?
                             getUnionType(baseCandidates, UnionReduction.Subtype) :
                             getCommonSupertype(baseCandidates);
                         inferredType = getWidenedType(unwidenedType);
                         // If we have inferred 'never' but have contravariant candidates. To get a more specific type we
                         // infer from the contravariant candidates instead.
                         if (inferredType.flags & TypeFlags.Never && inference.contraCandidates) {
-                            inferredType = getCommonSubtype(inference.contraCandidates);
+                            inferredType = getContravariantInference(inference);
                         }
                     }
                     else if (inference.contraCandidates) {
                         // We only have contravariant inferences, infer the best common subtype of those
-                        inferredType = getCommonSubtype(inference.contraCandidates);
+                        inferredType = getContravariantInference(inference);
                     }
                     else if (context.flags & InferenceFlags.NoDefault) {
                         // We use silentNeverType as the wildcard that signals no inferences.
