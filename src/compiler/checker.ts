@@ -422,6 +422,7 @@ namespace ts {
 
         let deferredNodes: Node[];
         let deferredUnusedIdentifierNodes: Node[];
+        const seenDeferredUnusedIdentifiers = createMap<true>(); // For assertion that we don't defer the same identifier twice
 
         let flowLoopStart = 0;
         let flowLoopCount = 0;
@@ -18674,7 +18675,6 @@ namespace ts {
 
             // The identityMapper object is used to indicate that function expressions are wildcards
             if (checkMode === CheckMode.SkipContextSensitive && isContextSensitive(node)) {
-                checkNodeDeferred(node);
                 return anyFunctionType;
             }
 
@@ -21564,6 +21564,7 @@ namespace ts {
 
         function registerForUnusedIdentifiersCheck(node: Node) {
             if (deferredUnusedIdentifierNodes) {
+                Debug.assert(addToSeen(seenDeferredUnusedIdentifiers, getNodeId(node)), "Deferring unused identifier check twice");
                 deferredUnusedIdentifierNodes.push(node);
             }
         }
@@ -24573,6 +24574,7 @@ namespace ts {
                 }
 
                 deferredNodes = undefined;
+                seenDeferredUnusedIdentifiers.clear();
                 deferredUnusedIdentifierNodes = undefined;
 
                 if (isExternalOrCommonJsModule(node)) {
