@@ -276,12 +276,14 @@ interface Array<T> {}`
         DynamicPolling = "RecursiveDirectoryUsingDynamicPriorityPolling"
     }
 
+    const timeIncrements = 1000;
     export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost, ModuleResolutionHost {
         args: string[] = [];
 
         private readonly output: string[] = [];
 
         private fs: Map<FSEntry> = createMap<FSEntry>();
+        private time = timeIncrements;
         getCanonicalFileName: (s: string) => string;
         private toPath: (f: string) => Path;
         private timeoutCallbacks = new Callbacks();
@@ -355,6 +357,11 @@ interface Array<T> {}`
             return s;
         }
 
+        private now() {
+            this.time += timeIncrements;
+            return new Date(this.time);
+        }
+
         reloadFS(fileOrFolderList: ReadonlyArray<FileOrFolder>, options?: Partial<ReloadWatchInvokeOptions>) {
             const mapNewLeaves = createMap<true>();
             const isNewFs = this.fs.size === 0;
@@ -381,8 +388,8 @@ interface Array<T> {}`
                                 }
                                 else {
                                     currentEntry.content = fileOrDirectory.content;
-                                    currentEntry.modifiedTime = new Date();
-                                    this.fs.get(getDirectoryPath(currentEntry.path)).modifiedTime = new Date();
+                                    currentEntry.modifiedTime = this.now();
+                                    this.fs.get(getDirectoryPath(currentEntry.path)).modifiedTime = this.now();
                                     if (options && options.invokeDirectoryWatcherInsteadOfFileChanged) {
                                         this.invokeDirectoryWatcher(getDirectoryPath(currentEntry.fullPath), currentEntry.fullPath);
                                     }
@@ -406,7 +413,7 @@ interface Array<T> {}`
                         }
                         else {
                             // Folder update: Nothing to do.
-                            currentEntry.modifiedTime = new Date();
+                            currentEntry.modifiedTime = this.now();
                         }
                     }
                 }
@@ -513,7 +520,7 @@ interface Array<T> {}`
 
         private addFileOrFolderInFolder(folder: Folder, fileOrDirectory: File | Folder | SymLink, ignoreWatch?: boolean) {
             insertSorted(folder.entries, fileOrDirectory, (a, b) => compareStringsCaseSensitive(getBaseFileName(a.path), getBaseFileName(b.path)));
-            folder.modifiedTime = new Date();
+            folder.modifiedTime = this.now();
             this.fs.set(fileOrDirectory.path, fileOrDirectory);
 
             if (ignoreWatch) {
@@ -528,7 +535,7 @@ interface Array<T> {}`
             const baseFolder = this.fs.get(basePath) as Folder;
             if (basePath !== fileOrDirectory.path) {
                 Debug.assert(!!baseFolder);
-                baseFolder.modifiedTime = new Date();
+                baseFolder.modifiedTime = this.now();
                 filterMutate(baseFolder.entries, entry => entry !== fileOrDirectory);
             }
             this.fs.delete(fileOrDirectory.path);
@@ -603,7 +610,7 @@ interface Array<T> {}`
             return {
                 path: this.toPath(fullPath),
                 fullPath,
-                modifiedTime: new Date()
+                modifiedTime: this.now()
             };
         }
 
