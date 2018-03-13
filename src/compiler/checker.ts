@@ -18674,7 +18674,6 @@ namespace ts {
 
             // The identityMapper object is used to indicate that function expressions are wildcards
             if (checkMode === CheckMode.SkipContextSensitive && isContextSensitive(node)) {
-                checkNodeDeferred(node);
                 return anyFunctionType;
             }
 
@@ -21564,6 +21563,7 @@ namespace ts {
 
         function registerForUnusedIdentifiersCheck(node: Node) {
             if (deferredUnusedIdentifierNodes) {
+                Debug.assert(!contains(deferredUnusedIdentifierNodes, node), "Registering unused identifier twice");
                 deferredUnusedIdentifierNodes.push(node);
             }
         }
