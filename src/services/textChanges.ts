@@ -292,10 +292,9 @@ namespace ts.textChanges {
         }
 
         // TODO (https://github.com/Microsoft/TypeScript/issues/21246): default should probably be useNonAdjustedPositions
-        public replaceNode(sourceFile: SourceFile, oldNode: Node, newNode: Node, options: ChangeNodeOptions = {}) {
+        public replaceNode(sourceFile: SourceFile, oldNode: Node, newNode: Node, options: InsertNodeOptions & ConfigurableStart = {}) {
             const pos = getAdjustedStartPosition(sourceFile, oldNode, options, Position.Start);
-            const end = getAdjustedEndPosition(sourceFile, oldNode, options);
-            return this.replaceRange(sourceFile, { pos, end }, newNode, options);
+            return this.replaceRange(sourceFile, { pos, end: oldNode.end }, newNode, options);
         }
 
         // TODO (https://github.com/Microsoft/TypeScript/issues/21246): default should probably be useNonAdjustedPositions
@@ -398,7 +397,7 @@ namespace ts.textChanges {
         }
 
         private replaceConstructorBody(sourceFile: SourceFile, ctr: ConstructorDeclaration, statements: ReadonlyArray<Statement>): void {
-            this.replaceNode(sourceFile, ctr.body, createBlock(statements, /*multiLine*/ true), { useNonAdjustedEndPosition: true });
+            this.replaceNode(sourceFile, ctr.body, createBlock(statements, /*multiLine*/ true));
         }
 
         public insertNodeAtEndOfScope(sourceFile: SourceFile, scope: Node, newNode: Node): void {
@@ -613,7 +612,7 @@ namespace ts.textChanges {
                 const newCls = cls.kind === SyntaxKind.ClassDeclaration
                     ? updateClassDeclaration(cls, cls.decorators, cls.modifiers, cls.name, cls.typeParameters, cls.heritageClauses, members)
                     : updateClassExpression(cls, cls.modifiers, cls.name, cls.typeParameters, cls.heritageClauses, members);
-                this.replaceNode(sourceFile, cls, newCls, { useNonAdjustedEndPosition: true });
+                this.replaceNode(sourceFile, cls, newCls);
             });
         }
 
