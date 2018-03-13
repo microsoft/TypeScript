@@ -747,6 +747,10 @@ namespace ts {
 
                 function fileChanged(curr: any, prev: any) {
                     if (+curr.mtime === 0) {
+                        if (eventKind === FileWatcherEventKind.Deleted) {
+                            // Already deleted file, no need to callback again
+                            return;
+                        }
                         eventKind = FileWatcherEventKind.Deleted;
                     }
                     // previous event kind check is to ensure we send created event when file is restored or renamed twice (that is it disappears and reappears)
