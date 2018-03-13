@@ -4165,7 +4165,19 @@ namespace ts {
                 return getTypeForBindingElement(<BindingElement>declaration);
             }
 
-            const isOptional = !isBindingElement(declaration) && !isVariableDeclaration(declaration) && !!declaration.questionToken && includeOptionality;
+            let isOptional = false;
+            if (includeOptionality) {
+                if (isInJavaScriptFile(declaration) && isParameterDeclaration(declaration)) {
+                    const parameterTags = getJSDocParameterTags(declaration as ParameterDeclaration);
+                    if (parameterTags && parameterTags.length > 0 && find(parameterTags, tag => tag.isBracketed)) {
+                        isOptional = true;
+                    }
+                }
+                if (!isBindingElement(declaration) && !isVariableDeclaration(declaration) && !!declaration.questionToken) {
+                    isOptional = true;
+                }
+            }
+
             // Use type from type annotation if one is present
             const declaredType = tryGetTypeFromEffectiveTypeNode(declaration);
             if (declaredType) {
@@ -8668,9 +8680,10 @@ namespace ts {
                     return getTypeFromIntersectionTypeNode(<IntersectionTypeNode>node);
                 case SyntaxKind.JSDocNullableType:
                     return getTypeFromJSDocNullableTypeNode(<JSDocNullableType>node);
+                case SyntaxKind.JSDocOptionalType:
+                    return addOptionality(getTypeFromTypeNode((node as JSDocOptionalType).type));
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.JSDocNonNullableType:
-                case SyntaxKind.JSDocOptionalType:
                 case SyntaxKind.JSDocTypeExpression:
                     return getTypeFromTypeNode((<ParenthesizedTypeNode | JSDocTypeReferencingNode | JSDocTypeExpression>node).type);
                 case SyntaxKind.JSDocVariadicType:
