@@ -2051,6 +2051,7 @@ namespace ts {
                     }
                     if (namespace.valueDeclaration &&
                         isVariableDeclaration(namespace.valueDeclaration) &&
+                        namespace.valueDeclaration.initializer &&
                         isCommonJsRequire(namespace.valueDeclaration.initializer)) {
                         const moduleName = (namespace.valueDeclaration.initializer as CallExpression).arguments[0] as StringLiteral;
                         const moduleSym = resolveExternalModuleName(moduleName, moduleName);
