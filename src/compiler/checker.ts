@@ -21447,7 +21447,8 @@ namespace ts {
 
         function checkJSDocParameterTag(node: JSDocParameterTag) {
             checkSourceElement(node.typeExpression);
-            if (!getParameterSymbolFromJSDoc(node)) {
+            const decl = getHostSignatureFromJSDoc(node);
+            if (!getParameterSymbolFromJSDoc(node) && decl && !containsArgumentsReference(decl)) {
                 error(node.name,
                     Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name,
                     idText(node.name.kind === SyntaxKind.QualifiedName ? node.name.right : node.name));
