@@ -3839,6 +3839,16 @@ namespace ts {
     export function showModuleSpecifier({ moduleSpecifier }: ImportDeclaration): string {
         return isStringLiteral(moduleSpecifier) ? moduleSpecifier.text : getTextOfNode(moduleSpecifier);
     }
+
+    /** Add a value to a set, and return true if it wasn't already present. */
+    export function addToSeen(seen: Map<true>, key: string | number): boolean {
+        key = String(key);
+        if (seen.has(key)) {
+            return false;
+        }
+        seen.set(key, true);
+        return true;
+    }
 }
 
 namespace ts {
