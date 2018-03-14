@@ -421,13 +421,17 @@ namespace ts.server {
 
         // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
         let oldPrepare: AnyFunction;
+        let oldStackTraceLimit: number;
         before(() => {
+            oldStackTraceLimit = (Error as any).stackTraceLimit;
             oldPrepare = (Error as any).prepareStackTrace;
             delete (Error as any).prepareStackTrace;
+            (Error as any).stackTraceLimit = 10;
         });
 
         after(() => {
             (Error as any).prepareStackTrace = oldPrepare;
+            (Error as any).stackTraceLimit = oldStackTraceLimit;
         });
 
         const command = "testhandler";

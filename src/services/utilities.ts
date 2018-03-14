@@ -1210,16 +1210,6 @@ namespace ts {
         };
     }
 
-    /** Add a value to a set, and return true if it wasn't already present. */
-    export function addToSeen(seen: Map<true>, key: string | number): boolean {
-        key = String(key);
-        if (seen.has(key)) {
-            return false;
-        }
-        seen.set(key, true);
-        return true;
-    }
-
     export function getSnapshotText(snap: IScriptSnapshot): string {
         return snap.getText(0, snap.getLength());
     }

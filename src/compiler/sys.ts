@@ -457,6 +457,7 @@ namespace ts {
         setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         clearTimeout?(timeoutId: any): void;
         clearScreen?(): void;
+        /*@internal*/ setBlocking?(): void;
     }
 
     export interface FileWatcher {
@@ -616,6 +617,11 @@ namespace ts {
                 clearTimeout,
                 clearScreen: () => {
                     process.stdout.write("\x1Bc");
+                },
+                setBlocking: () => {
+                    if (process.stdout && process.stdout._handle && process.stdout._handle.setBlocking) {
+                        process.stdout._handle.setBlocking(true);
+                    }
                 }
             };
             return nodeSystem;

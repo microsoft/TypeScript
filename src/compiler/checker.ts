@@ -423,6 +423,7 @@ namespace ts {
 
         let deferredNodes: Node[] | undefined;
         let deferredUnusedIdentifierNodes: Node[] | undefined;
+        const seenDeferredUnusedIdentifiers = createMap<true>(); // For assertion that we don't defer the same identifier twice
 
         let flowLoopStart = 0;
         let flowLoopCount = 0;
@@ -4182,7 +4183,10 @@ namespace ts {
                 return getTypeForBindingElement(<BindingElement>declaration);
             }
 
-            const isOptional = !isBindingElement(declaration) && !isVariableDeclaration(declaration) && !!declaration.questionToken && includeOptionality;
+            const isOptional = includeOptionality && (
+                isInJavaScriptFile(declaration) && isParameter(declaration) && getJSDocParameterTags(declaration).some(tag => tag.isBracketed)
+                || !isBindingElement(declaration) && !isVariableDeclaration(declaration) && !!declaration.questionToken);
+
             // Use type from type annotation if one is present
             const declaredType = tryGetTypeFromEffectiveTypeNode(declaration);
             if (declaredType) {
@@ -6592,23 +6596,10 @@ namespace ts {
         }
 
         function isJSDocOptionalParameter(node: ParameterDeclaration) {
-            if (isInJavaScriptFile(node)) {
-                if (node.type && node.type.kind === SyntaxKind.JSDocOptionalType) {
-                    return true;
-                }
-                const paramTags = getJSDocParameterTags(node);
-                if (paramTags) {
-                    for (const paramTag of paramTags) {
-                        if (paramTag.isBracketed) {
-                            return true;
-                        }
-
-                        if (paramTag.typeExpression) {
-                            return paramTag.typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
-                        }
-                    }
-                }
-            }
+            return isInJavaScriptFile(node) && (
+                node.type && node.type.kind === SyntaxKind.JSDocOptionalType
+                || getJSDocParameterTags(node).some(({ isBracketed, typeExpression }) =>
+                    isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType));
         }
 
         function tryFindAmbientModule(moduleName: string, withAugmentations: boolean) {
@@ -8694,9 +8685,10 @@ namespace ts {
                     return getTypeFromIntersectionTypeNode(<IntersectionTypeNode>node);
                 case SyntaxKind.JSDocNullableType:
                     return getTypeFromJSDocNullableTypeNode(<JSDocNullableType>node);
+                case SyntaxKind.JSDocOptionalType:
+                    return addOptionality(getTypeFromTypeNode((node as JSDocOptionalType).type));
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.JSDocNonNullableType:
-                case SyntaxKind.JSDocOptionalType:
                 case SyntaxKind.JSDocTypeExpression:
                     return getTypeFromTypeNode((<ParenthesizedTypeNode | JSDocTypeReferencingNode | JSDocTypeExpression>node).type);
                 case SyntaxKind.JSDocVariadicType:
@@ -18722,7 +18714,6 @@ namespace ts {
 
             // The identityMapper object is used to indicate that function expressions are wildcards
             if (checkMode === CheckMode.SkipContextSensitive && isContextSensitive(node)) {
-                checkNodeDeferred(node);
                 return anyFunctionType;
             }
 
@@ -21621,6 +21612,7 @@ namespace ts {
 
         function registerForUnusedIdentifiersCheck(node: Node) {
             if (deferredUnusedIdentifierNodes) {
+                Debug.assert(addToSeen(seenDeferredUnusedIdentifiers, getNodeId(node)), "Deferring unused identifier check twice");
                 deferredUnusedIdentifierNodes.push(node);
             }
         }
@@ -24629,6 +24621,7 @@ namespace ts {
                 }
 
                 deferredNodes = undefined;
+                seenDeferredUnusedIdentifiers.clear();
                 deferredUnusedIdentifierNodes = undefined;
 
                 if (isExternalOrCommonJsModule(node)) {
