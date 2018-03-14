@@ -182,6 +182,9 @@ namespace ts {
                     visitNode(cbNode, (<ConditionalTypeNode>node).falseType);
             case SyntaxKind.InferType:
                 return visitNode(cbNode, (<InferTypeNode>node).typeParameter);
+            case SyntaxKind.ImportTypeNode:
+                return visitNode(cbNode, (<ImportTypeNode>node).argument) ||
+                    visitNode(cbNode, (<ImportTypeNode>node).qualifier);
             case SyntaxKind.ParenthesizedType:
             case SyntaxKind.TypeOperator:
                 return visitNode(cbNode, (<ParenthesizedTypeNode | TypeOperatorNode>node).type);
@@ -2702,6 +2705,18 @@ namespace ts {
             return finishNode(node);
         }
 
+        function parseImportType(): ImportTypeNode {
+            const node = createNode(SyntaxKind.ImportTypeNode) as ImportTypeNode;
+            nextToken();
+            parseExpected(SyntaxKind.OpenParenToken);
+            node.argument = parseType();
+            parseExpected(SyntaxKind.CloseParenToken);
+            if (parseOptional(SyntaxKind.DotToken)) {
+                node.qualifier = parseEntityName(/*allowReservedWords*/ true, Diagnostics.Type_expected);
+            }
+            return finishNode(node);
+        }
+
         function nextTokenIsNumericLiteral() {
             return nextToken() === SyntaxKind.NumericLiteral;
         }
@@ -2754,6 +2769,8 @@ namespace ts {
                     return parseTupleType();
                 case SyntaxKind.OpenParenToken:
                     return parseParenthesizedType();
+                case SyntaxKind.ImportKeyword:
+                    return parseImportType();
                 default:
                     return parseTypeReference();
             }
@@ -2789,6 +2806,7 @@ namespace ts {
                 case SyntaxKind.ExclamationToken:
                 case SyntaxKind.DotDotDotToken:
                 case SyntaxKind.InferKeyword:
+                case SyntaxKind.ImportKeyword:
                     return true;
                 case SyntaxKind.MinusToken:
                     return !inStartOfParameter && lookAhead(nextTokenIsNumericLiteral);

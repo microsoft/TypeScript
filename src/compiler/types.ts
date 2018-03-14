@@ -283,6 +283,7 @@ namespace ts {
         IndexedAccessType,
         MappedType,
         LiteralType,
+        ImportTypeNode,
         // Binding patterns
         ObjectBindingPattern,
         ArrayBindingPattern,
@@ -444,7 +445,7 @@ namespace ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypePredicate,
-        LastTypeNode = LiteralType,
+        LastTypeNode = ImportTypeNode,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
@@ -1061,6 +1062,12 @@ namespace ts {
             | SyntaxKind.UndefinedKeyword
             | SyntaxKind.NullKeyword
             | SyntaxKind.NeverKeyword;
+    }
+
+    export interface ImportTypeNode extends TypeNode {
+        kind: SyntaxKind.ImportTypeNode;
+        argument: TypeNode;
+        qualifier?: EntityName;
     }
 
     export interface ThisTypeNode extends TypeNode {

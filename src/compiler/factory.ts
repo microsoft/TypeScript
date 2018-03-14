@@ -768,6 +768,20 @@ namespace ts {
             : node;
     }
 
+    export function createImportTypeNode(argument: TypeNode, qualifier?: EntityName) {
+        const node = <ImportTypeNode>createSynthesizedNode(SyntaxKind.ImportTypeNode);
+        node.argument = argument;
+        node.qualifier = qualifier;
+        return node;
+    }
+
+    export function updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, qualifier?: EntityName) {
+        return node.argument !== argument
+            && node.qualifier !== qualifier
+            ? updateNode(createImportTypeNode(argument, qualifier), node)
+            : node;
+    }
+
     export function createParenthesizedType(type: TypeNode) {
         const node = <ParenthesizedTypeNode>createSynthesizedNode(SyntaxKind.ParenthesizedType);
         node.type = type;

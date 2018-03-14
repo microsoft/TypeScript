@@ -951,6 +951,14 @@
         "category": "Error",
         "code": 1338
     },
+    "Module '{0}' does not refer to a value, but is used as a value here.": {
+        "category": "Error",
+        "code": 1339
+    },
+    "Module '{0}' does not refer to a type, but is used as a type here.": {
+        "category": "Error",
+        "code": 1340
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
