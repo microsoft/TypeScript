@@ -422,6 +422,7 @@ namespace ts {
 
         let deferredNodes: Node[];
         let deferredUnusedIdentifierNodes: Node[];
+        const seenDeferredUnusedIdentifiers = createMap<true>(); // For assertion that we don't defer the same identifier twice
 
         let flowLoopStart = 0;
         let flowLoopCount = 0;
@@ -4166,7 +4167,10 @@ namespace ts {
                 return getTypeForBindingElement(<BindingElement>declaration);
             }
 
-            const isOptional = !isBindingElement(declaration) && !isVariableDeclaration(declaration) && !!declaration.questionToken && includeOptionality;
+            const isOptional = includeOptionality && (
+                isInJavaScriptFile(declaration) && isParameter(declaration) && getJSDocParameterTags(declaration).some(tag => tag.isBracketed)
+                || !isBindingElement(declaration) && !isVariableDeclaration(declaration) && !!declaration.questionToken);
+
             // Use type from type annotation if one is present
             const declaredType = tryGetTypeFromEffectiveTypeNode(declaration);
             if (declaredType) {
@@ -6570,23 +6574,10 @@ namespace ts {
         }
 
         function isJSDocOptionalParameter(node: ParameterDeclaration) {
-            if (isInJavaScriptFile(node)) {
-                if (node.type && node.type.kind === SyntaxKind.JSDocOptionalType) {
-                    return true;
-                }
-                const paramTags = getJSDocParameterTags(node);
-                if (paramTags) {
-                    for (const paramTag of paramTags) {
-                        if (paramTag.isBracketed) {
-                            return true;
-                        }
-
-                        if (paramTag.typeExpression) {
-                            return paramTag.typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
-                        }
-                    }
-                }
-            }
+            return isInJavaScriptFile(node) && (
+                node.type && node.type.kind === SyntaxKind.JSDocOptionalType
+                || getJSDocParameterTags(node).some(({ isBracketed, typeExpression }) =>
+                    isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType));
         }
 
         function tryFindAmbientModule(moduleName: string, withAugmentations: boolean) {
@@ -6762,17 +6753,20 @@ namespace ts {
             return links.resolvedSignature;
         }
 
+        /**
+         * A JS function gets a synthetic rest parameter if it references `arguments` AND:
+         * 1. It has no parameters but at least one `@param` with a type that starts with `...`
+         * OR
+         * 2. It has at least one parameter, and the last parameter has a matching `@param` with a type that starts with `...`
+         */
         function maybeAddJsSyntheticRestParameter(declaration: SignatureDeclaration, parameters: Symbol[]): boolean {
-            // JS functions get a free rest parameter if:
-            // a) The last parameter has `...` preceding its type
-            // b) It references `arguments` somewhere
-            const lastParam = lastOrUndefined(declaration.parameters);
-            const lastParamTags = lastParam && getJSDocParameterTags(lastParam);
-            const lastParamVariadicType = firstDefined(lastParamTags, p =>
-                p.typeExpression && isJSDocVariadicType(p.typeExpression.type) ? p.typeExpression.type : undefined);
-            if (!lastParamVariadicType && !containsArgumentsReference(declaration)) {
+            if (!containsArgumentsReference(declaration)) {
                 return false;
             }
+            const lastParam = lastOrUndefined(declaration.parameters);
+            const lastParamTags = lastParam ? getJSDocParameterTags(lastParam) : getJSDocTags(declaration).filter(isJSDocParameterTag);
+            const lastParamVariadicType = firstDefined(lastParamTags, p =>
+                p.typeExpression && isJSDocVariadicType(p.typeExpression.type) ? p.typeExpression.type : undefined);
 
             const syntheticArgsSymbol = createSymbol(SymbolFlags.Variable, "args" as __String);
             syntheticArgsSymbol.type = lastParamVariadicType ? createArrayType(getTypeFromTypeNode(lastParamVariadicType.type)) : anyArrayType;
@@ -8669,9 +8663,10 @@ namespace ts {
                     return getTypeFromIntersectionTypeNode(<IntersectionTypeNode>node);
                 case SyntaxKind.JSDocNullableType:
                     return getTypeFromJSDocNullableTypeNode(<JSDocNullableType>node);
+                case SyntaxKind.JSDocOptionalType:
+                    return addOptionality(getTypeFromTypeNode((node as JSDocOptionalType).type));
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.JSDocNonNullableType:
-                case SyntaxKind.JSDocOptionalType:
                 case SyntaxKind.JSDocTypeExpression:
                     return getTypeFromTypeNode((<ParenthesizedTypeNode | JSDocTypeReferencingNode | JSDocTypeExpression>node).type);
                 case SyntaxKind.JSDocVariadicType:
@@ -18674,7 +18669,6 @@ namespace ts {
 
             // The identityMapper object is used to indicate that function expressions are wildcards
             if (checkMode === CheckMode.SkipContextSensitive && isContextSensitive(node)) {
-                checkNodeDeferred(node);
                 return anyFunctionType;
             }
 
@@ -21449,9 +21443,24 @@ namespace ts {
         function checkJSDocParameterTag(node: JSDocParameterTag) {
             checkSourceElement(node.typeExpression);
             if (!getParameterSymbolFromJSDoc(node)) {
-                error(node.name,
-                    Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name,
-                    idText(node.name.kind === SyntaxKind.QualifiedName ? node.name.right : node.name));
+                const decl = getHostSignatureFromJSDoc(node);
+                // don't issue an error for invalid hosts -- just functions --
+                // and give a better error message when the host function mentions `arguments`
+                // but the tag doesn't have an array type
+                if (decl) {
+                    if (!containsArgumentsReference(decl)) {
+                        error(node.name,
+                            Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name,
+                            idText(node.name.kind === SyntaxKind.QualifiedName ? node.name.right : node.name));
+                    }
+                    else if (findLast(getJSDocTags(decl), isJSDocParameterTag) === node &&
+                        node.typeExpression && node.typeExpression.type &&
+                        !isArrayType(getTypeFromTypeNode(node.typeExpression.type))) {
+                        error(node.name,
+                              Diagnostics.The_last_param_tag_of_a_function_that_uses_arguments_must_have_an_array_type,
+                              idText(node.name.kind === SyntaxKind.QualifiedName ? node.name.right : node.name));
+                    }
+                }
             }
         }
 
@@ -21564,6 +21573,7 @@ namespace ts {
 
         function registerForUnusedIdentifiersCheck(node: Node) {
             if (deferredUnusedIdentifierNodes) {
+                Debug.assert(addToSeen(seenDeferredUnusedIdentifiers, getNodeId(node)), "Deferring unused identifier check twice");
                 deferredUnusedIdentifierNodes.push(node);
             }
         }
@@ -24478,18 +24488,19 @@ namespace ts {
             const paramTag = parent.parent;
             if (isJSDocTypeExpression(parent) && isJSDocParameterTag(paramTag)) {
                 // Else we will add a diagnostic, see `checkJSDocVariadicType`.
-                const param = getParameterSymbolFromJSDoc(paramTag);
-                if (param) {
-                    const host = getHostSignatureFromJSDoc(paramTag);
+                const host = getHostSignatureFromJSDoc(paramTag);
+                if (host) {
                     /*
-                    Only return an array type if the corresponding parameter is marked as a rest parameter.
+                    Only return an array type if the corresponding parameter is marked as a rest parameter, or if there are no parameters.
                     So in the following situation we will not create an array type:
                         /** @param {...number} a * /
                         function f(a) {}
                     Because `a` will just be of type `number | undefined`. A synthetic `...args` will also be added, which *will* get an array type.
                     */
-                    const lastParamDeclaration = host && last(host.parameters);
-                    if (lastParamDeclaration.symbol === param && isRestParameter(lastParamDeclaration)) {
+                    const lastParamDeclaration = lastOrUndefined(host.parameters);
+                    const symbol = getParameterSymbolFromJSDoc(paramTag);
+                    if (!lastParamDeclaration ||
+                        symbol && lastParamDeclaration.symbol === symbol && isRestParameter(lastParamDeclaration)) {
                         return createArrayType(type);
                     }
                 }
@@ -24573,6 +24584,7 @@ namespace ts {
                 }
 
                 deferredNodes = undefined;
+                seenDeferredUnusedIdentifiers.clear();
                 deferredUnusedIdentifierNodes = undefined;
 
                 if (isExternalOrCommonJsModule(node)) {

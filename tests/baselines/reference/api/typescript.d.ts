@@ -3051,7 +3051,7 @@ declare namespace ts {
      * Does not return tags for binding patterns, because JSDoc matches
      * parameters by name and binding patterns do not have a name.
      */
-    function getJSDocParameterTags(param: ParameterDeclaration): ReadonlyArray<JSDocParameterTag> | undefined;
+    function getJSDocParameterTags(param: ParameterDeclaration): ReadonlyArray<JSDocParameterTag>;
     /**
      * Return true if the node has JSDoc parameter tags.
      *
