@@ -224,7 +224,7 @@ namespace ts.textChanges {
         }
 
         /** Public for tests only. Other callers should use `ChangeTracker.with`. */
-        constructor(public readonly newLineCharacter: string, private readonly formatContext: formatting.FormatContext) {}
+        constructor(private readonly newLineCharacter: string, private readonly formatContext: formatting.FormatContext) {}
 
         public deleteRange(sourceFile: SourceFile, range: TextRange) {
             this.changes.push({ kind: ChangeKind.Remove, sourceFile, range });
@@ -352,7 +352,7 @@ namespace ts.textChanges {
             this.replaceRange(sourceFile, { pos, end: pos }, createToken(modifier), { suffix: " " });
         }
 
-        public insertCommentBeforeLine(sourceFile: SourceFile, lineNumber: number, position: number, commentText: string) {
+        public insertCommentBeforeLine(sourceFile: SourceFile, lineNumber: number, position: number, commentText: string): void {
             const lineStartPosition = getStartPositionOfLine(lineNumber, sourceFile);
             const startPosition = getFirstNonSpaceCharacterPosition(sourceFile.text, lineStartPosition);
             // First try to see if we can put the comment on the previous line.
@@ -365,7 +365,7 @@ namespace ts.textChanges {
             this.insertText(sourceFile, token.getStart(sourceFile), text);
         }
 
-        public insertText(sourceFile: SourceFile, pos: number, text: string) {
+        private insertText(sourceFile: SourceFile, pos: number, text: string): void {
             this.changes.push({ kind: ChangeKind.Text, sourceFile, range: { pos, end: pos }, text });
         }
 
