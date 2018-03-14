@@ -43,7 +43,7 @@ function insertOnConflictDoNothing<Req extends object, Def extends object>(_tabl
 }
 
 function f() {
-    insertOnConflictDoNothing(bookTable, ConflictTarget.tableColumns(["serial"]));  // <-- Compile error here
+    insertOnConflictDoNothing(bookTable, ConflictTarget.tableColumns(["serial"]));  // <-- No error here; should use the type inferred for the return type of `tableColumns`
 }
 
 
@@ -53,5 +53,5 @@ function insertOnConflictDoNothing(_table, _conflictTarget) {
     throw new Error();
 }
 function f() {
-    insertOnConflictDoNothing(bookTable, ConflictTarget.tableColumns(["serial"])); // <-- Compile error here
+    insertOnConflictDoNothing(bookTable, ConflictTarget.tableColumns(["serial"])); // <-- No error here; should use the type inferred for the return type of `tableColumns`
 }

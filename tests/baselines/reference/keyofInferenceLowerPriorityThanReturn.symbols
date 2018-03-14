@@ -128,7 +128,7 @@ function insertOnConflictDoNothing<Req extends object, Def extends object>(_tabl
 function f() {
 >f : Symbol(f, Decl(keyofInferenceLowerPriorityThanReturn.ts, 41, 1))
 
-    insertOnConflictDoNothing(bookTable, ConflictTarget.tableColumns(["serial"]));  // <-- Compile error here
+    insertOnConflictDoNothing(bookTable, ConflictTarget.tableColumns(["serial"]));  // <-- No error here; should use the type inferred for the return type of `tableColumns`
 >insertOnConflictDoNothing : Symbol(insertOnConflictDoNothing, Decl(keyofInferenceLowerPriorityThanReturn.ts, 36, 1))
 >bookTable : Symbol(bookTable, Decl(keyofInferenceLowerPriorityThanReturn.ts, 26, 5))
 >ConflictTarget.tableColumns : Symbol(ConflictTarget.tableColumns, Decl(keyofInferenceLowerPriorityThanReturn.ts, 19, 36))
