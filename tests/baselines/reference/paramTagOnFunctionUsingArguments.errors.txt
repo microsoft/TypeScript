@@ -1,4 +1,4 @@
-tests/cases/conformance/jsdoc/a.js(2,20): error TS8029: The last @param tag of a function that uses 'arguments' must have an array type.
+tests/cases/conformance/jsdoc/a.js(2,20): error TS8029: JSDoc '@param' tag has name 'first', but there is no parameter with that name. It would match 'arguments' if it had an array type.
 tests/cases/conformance/jsdoc/a.js(19,9): error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
 
 
@@ -8,7 +8,7 @@ tests/cases/conformance/jsdoc/a.js(19,9): error TS2345: Argument of type '1' is 
     /**
      * @param {string} first
                        ~~~~~
-!!! error TS8029: The last @param tag of a function that uses 'arguments' must have an array type.
+!!! error TS8029: JSDoc '@param' tag has name 'first', but there is no parameter with that name. It would match 'arguments' if it had an array type.
      */
     function concat(/* first, second, ... */) {
       var s = ''
