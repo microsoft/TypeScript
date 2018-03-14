@@ -2223,7 +2223,7 @@ declare namespace ts {
         Construct = 1,
     }
     interface Signature {
-        declaration: SignatureDeclaration;
+        declaration?: SignatureDeclaration;
         typeParameters?: TypeParameter[];
         parameters: Symbol[];
     }
