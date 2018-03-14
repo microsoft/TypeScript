@@ -21460,7 +21460,7 @@ namespace ts {
                     }
                     else if (lastOrUndefined(getJSDocTags(decl).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag))) === node &&
                         node.typeExpression && node.typeExpression.type &&
-                        node.typeExpression.type.kind !== SyntaxKind.JSDocVariadicType) {
+                        !isArrayType(getTypeFromTypeNode(node.typeExpression.type))) {
                         error(node.name,
                               Diagnostics.JSDoc_must_appear_on_the_last_param_tag_of_a_function_that_uses_arguments,
                               idText(node.name.kind === SyntaxKind.QualifiedName ? node.name.right : node.name));
@@ -24492,18 +24492,19 @@ namespace ts {
             const paramTag = parent.parent;
             if (isJSDocTypeExpression(parent) && isJSDocParameterTag(paramTag)) {
                 // Else we will add a diagnostic, see `checkJSDocVariadicType`.
-                const param = getParameterSymbolFromJSDoc(paramTag);
-                if (param) {
-                    const host = getHostSignatureFromJSDoc(paramTag);
+                const host = getHostSignatureFromJSDoc(paramTag);
+                if (host) {
                     /*
-                    Only return an array type if the corresponding parameter is marked as a rest parameter.
+                    Only return an array type if the corresponding parameter is marked as a rest parameter, or if there are no parameters.
                     So in the following situation we will not create an array type:
                         /** @param {...number} a * /
                         function f(a) {}
                     Because `a` will just be of type `number | undefined`. A synthetic `...args` will also be added, which *will* get an array type.
                     */
-                    const lastParamDeclaration = host && last(host.parameters);
-                    if (lastParamDeclaration.symbol === param && isRestParameter(lastParamDeclaration)) {
+                    const lastParamDeclaration = host.parameters.length > 0 && last(host.parameters);
+                    const symbol = getParameterSymbolFromJSDoc(paramTag);
+                    if (!lastParamDeclaration ||
+                        symbol && lastParamDeclaration.symbol === symbol && isRestParameter(lastParamDeclaration)) {
                         return createArrayType(type);
                     }
                 }
