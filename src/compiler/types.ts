@@ -3528,7 +3528,9 @@ namespace ts {
         Object                  = 1 << 16,  // Object type
         Union                   = 1 << 17,  // Union (T | U)
         Intersection            = 1 << 18,  // Intersection (T & U)
-        Index                   = 1 << 19,  // keyof T
+        Keyof                   = 1 << 19,  // keyof T
+        /** @deprecated */
+        Index                   = Keyof,
         IndexedAccess           = 1 << 20,  // T[K]
         Conditional             = 1 << 21,  // T extends U ? X : Y
         Substitution            = 1 << 22,  // Type parameter substitution
@@ -3558,7 +3560,7 @@ namespace ts {
         Intrinsic = Any | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
         /* @internal */
         Primitive = String | Number | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol,
-        StringLike = String | StringLiteral | Index,
+        StringLike = String | StringLiteral | Keyof,
         NumberLike = Number | NumberLiteral | Enum,
         BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
@@ -3567,7 +3569,7 @@ namespace ts {
         StructuredType = Object | Union | Intersection,
         TypeVariable = TypeParameter | IndexedAccess,
         InstantiableNonPrimitive = TypeVariable | Conditional | Substitution,
-        InstantiablePrimitive = Index,
+        InstantiablePrimitive = Keyof,
         Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
         StructuredOrInstantiable = StructuredType | Instantiable,
 
@@ -3713,7 +3715,7 @@ namespace ts {
         /* @internal */
         resolvedProperties: Symbol[];
         /* @internal */
-        resolvedIndexType: IndexType;
+        resolvedKeyofType: KeyofType;
         /* @internal */
         resolvedBaseConstraint: Type;
         /* @internal */
@@ -3800,7 +3802,7 @@ namespace ts {
         /* @internal */
         resolvedBaseConstraint?: Type;
         /* @internal */
-        resolvedIndexType?: IndexType;
+        resolvedKeyofType?: KeyofType;
     }
 
     // Type parameters (TypeFlags.TypeParameter)
@@ -3828,10 +3830,12 @@ namespace ts {
         constraint?: Type;
     }
 
-    // keyof T types (TypeFlags.Index)
-    export interface IndexType extends InstantiableType {
+    // keyof T types (TypeFlags.Keyof)
+    export interface KeyofType extends InstantiableType {
         type: InstantiableType | UnionOrIntersectionType;
     }
+    /** @deprecated */
+    export type IndexType = KeyofType;
 
     export interface ConditionalRoot {
         node: ConditionalTypeNode;

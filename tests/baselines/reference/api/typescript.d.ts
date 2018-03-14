@@ -2071,6 +2071,8 @@ declare namespace ts {
         Object = 65536,
         Union = 131072,
         Intersection = 262144,
+        Keyof = 524288,
+        /** @deprecated */
         Index = 524288,
         IndexedAccess = 1048576,
         Conditional = 2097152,
@@ -2191,9 +2193,11 @@ declare namespace ts {
         indexType: Type;
         constraint?: Type;
     }
-    interface IndexType extends InstantiableType {
+    interface KeyofType extends InstantiableType {
         type: InstantiableType | UnionOrIntersectionType;
     }
+    /** @deprecated */
+    type IndexType = KeyofType;
     interface ConditionalRoot {
         node: ConditionalTypeNode;
         checkType: Type;
