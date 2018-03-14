@@ -959,6 +959,10 @@
         "category": "Error",
         "code": 1340
     },
+    "Import specifier must be a string literal type, but here is '{0}'.": {
+        "category": "Error",
+        "code": 1341
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

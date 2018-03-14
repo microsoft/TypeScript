@@ -2711,6 +2711,7 @@ namespace ts {
         }
 
         function parseImportType(): ImportTypeNode {
+            sourceFile.flags |= NodeFlags.PossiblyContainsDynamicImport;
             const node = createNode(SyntaxKind.ImportTypeNode) as ImportTypeNode;
             if (parseOptional(SyntaxKind.TypeOfKeyword)) {
                 node.isTypeOf = true;

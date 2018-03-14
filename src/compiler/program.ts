@@ -1682,6 +1682,9 @@ namespace ts {
                 else if (isImportCall(node) && node.arguments.length === 1 && node.arguments[0].kind === SyntaxKind.StringLiteral) {
                     (imports || (imports = [])).push(<StringLiteral>(<CallExpression>node).arguments[0]);
                 }
+                else if (isLiteralImportTypeNode(node)) {
+                    (imports || (imports = [])).push(node.argument.literal);
+                }
                 else {
                     forEachChild(node, collectDynamicImportOrRequireCalls);
                 }

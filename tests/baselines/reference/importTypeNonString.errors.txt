@@ -1,0 +1,8 @@
+tests/cases/conformance/types/import/importTypeNonString.ts(1,24): error TS1341: Import specifier must be a string literal type, but here is '{ x: 12; }'.
+
+
+==== tests/cases/conformance/types/import/importTypeNonString.ts (1 errors) ====
+    export const x: import({x: 12}) = undefined as any;
+                           ~~~~~~~
+!!! error TS1341: Import specifier must be a string literal type, but here is '{ x: 12; }'.
+    

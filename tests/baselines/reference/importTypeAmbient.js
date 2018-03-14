@@ -62,7 +62,7 @@ declare module "foo" {
     }
     export = Point;
 }
-declare const x: ;
+declare const x: import("foo");
 declare module "foo2" {
     namespace Bar {
         interface I {
@@ -81,7 +81,7 @@ declare module "foo2" {
         constructor(input: Baz.J);
     }
 }
-declare let y: ;
+declare let y: import("foo2").Bar.I;
 declare class Bar2 {
     item: {
         a: string;
@@ -90,58 +90,4 @@ declare class Bar2 {
     };
     constructor(input?: any);
 }
-declare let shim: ;
-
-
-//// [DtsFileErrors]
-
-
-tests/cases/conformance/types/import/importTypeAmbient.d.ts(8,18): error TS1110: Type expected.
-tests/cases/conformance/types/import/importTypeAmbient.d.ts(27,16): error TS1110: Type expected.
-tests/cases/conformance/types/import/importTypeAmbient.d.ts(36,19): error TS1110: Type expected.
-
-
-==== tests/cases/conformance/types/import/importTypeAmbient.d.ts (3 errors) ====
-    declare module "foo" {
-        interface Point {
-            x: number;
-            y: number;
-        }
-        export = Point;
-    }
-    declare const x: ;
-                     ~
-!!! error TS1110: Type expected.
-    declare module "foo2" {
-        namespace Bar {
-            interface I {
-                a: string;
-                b: number;
-            }
-        }
-        namespace Baz {
-            interface J {
-                a: number;
-                b: string;
-            }
-        }
-        class Bar {
-            item: Bar.I;
-            constructor(input: Baz.J);
-        }
-    }
-    declare let y: ;
-                   ~
-!!! error TS1110: Type expected.
-    declare class Bar2 {
-        item: {
-            a: string;
-            b: number;
-            c: object;
-        };
-        constructor(input?: any);
-    }
-    declare let shim: ;
-                      ~
-!!! error TS1110: Type expected.
-    
+declare let shim: typeof import("foo2");

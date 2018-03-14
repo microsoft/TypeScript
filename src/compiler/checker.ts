@@ -8417,12 +8417,21 @@ namespace ts {
                 const argumentType = getTypeFromTypeNode(node.argument);
                 const targetMeaning = node.isTypeOf ? SymbolFlags.Value : SymbolFlags.Type;
                 // TODO: Future work: support unions/generics/whatever via a deferred import-type
-                if (!(argumentType.flags & TypeFlags.StringLiteral)) {
-                    return links.resolvedType = neverType;
+                if (!argumentType || !(argumentType.flags & TypeFlags.StringLiteral)) {
+                    error(node.argument, Diagnostics.Import_specifier_must_be_a_string_literal_type_but_here_is_0, argumentType ? typeToString(argumentType) : "undefined");
+                    return links.resolvedType = anyType;
                 }
                 const moduleName = (argumentType as StringLiteralType).value;
                 const innerModuleSymbol = resolveExternalModule(node, moduleName, Diagnostics.Cannot_find_module_0, node, /*isForAugmentation*/ false);
+                if (!innerModuleSymbol) {
+                    error(node, Diagnostics.Cannot_find_module_0, moduleName);
+                    return links.resolvedType = anyType;
+                }
                 const moduleSymbol = resolveExternalModuleSymbol(innerModuleSymbol, /*dontResolveAlias*/ false);
+                if (!moduleSymbol) {
+                    error(node, Diagnostics.Cannot_find_module_0, moduleName);
+                    return links.resolvedType = anyType;
+                }
                 if (node.qualifier) {
                     const nameStack: Identifier[] = [];
                     let currentNamespace = moduleSymbol;
@@ -8439,10 +8448,10 @@ namespace ts {
                     }
                     while (current = nameStack.pop()) {
                         const meaning = nameStack.length ? SymbolFlags.Namespace : targetMeaning;
-                        const next = getSymbol(getExportsOfSymbol(currentNamespace), current.escapedText, meaning);
+                        const next = getSymbol(getExportsOfSymbol(getMergedSymbol(resolveSymbol(currentNamespace))), current.escapedText, meaning);
                         if (!next) {
                             error(current, Diagnostics.Namespace_0_has_no_exported_member_1, getFullyQualifiedName(currentNamespace), declarationNameToString(current));
-                            return links.resolvedType = neverType;
+                            return links.resolvedType = anyType;
                         }
                         currentNamespace = next;
                     }
@@ -8453,8 +8462,8 @@ namespace ts {
                         links.resolvedType = targetMeaning === SymbolFlags.Value ? getTypeOfSymbol(moduleSymbol) : getDeclaredTypeOfSymbol(moduleSymbol);
                     }
                     else {
-                        error(node, targetMeaning & SymbolFlags.Value ? Diagnostics.Module_0_does_not_refer_to_a_value_but_is_used_as_a_value_here : Diagnostics.Module_0_does_not_refer_to_a_type_but_is_used_as_a_type_here, moduleName);
-                        links.resolvedType = neverType;
+                        error(node, targetMeaning === SymbolFlags.Value ? Diagnostics.Module_0_does_not_refer_to_a_value_but_is_used_as_a_value_here : Diagnostics.Module_0_does_not_refer_to_a_type_but_is_used_as_a_type_here, moduleName);
+                        links.resolvedType = anyType;
                     }
                 }
             }
@@ -20661,6 +20670,11 @@ namespace ts {
             checkSourceElement(node.typeParameter);
         }
 
+        function checkImportType(node: ImportTypeNode) {
+            checkSourceElement(node.argument);
+            getTypeFromTypeNode(node);
+        }
+
         function isPrivateWithinAmbient(node: Node): boolean {
             return hasModifier(node, ModifierFlags.Private) && !!(node.flags & NodeFlags.Ambient);
         }
@@ -24408,6 +24422,8 @@ namespace ts {
                     return checkConditionalType(<ConditionalTypeNode>node);
                 case SyntaxKind.InferType:
                     return checkInferType(<InferTypeNode>node);
+                case SyntaxKind.ImportTypeNode:
+                    return checkImportType(<ImportTypeNode>node);
                 case SyntaxKind.JSDocAugmentsTag:
                     return checkJSDocAugmentsTag(node as JSDocAugmentsTag);
                 case SyntaxKind.JSDocTypedefTag:

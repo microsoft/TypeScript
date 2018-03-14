@@ -454,6 +454,8 @@ namespace ts {
                     return emitConditionalType(<ConditionalTypeNode>type);
                 case SyntaxKind.InferType:
                     return emitInferType(<InferTypeNode>type);
+                case SyntaxKind.ImportTypeNode:
+                    return emitImportType(<ImportTypeNode>type);
                 case SyntaxKind.ParenthesizedType:
                     return emitParenType(<ParenthesizedTypeNode>type);
                 case SyntaxKind.TypeOperator:
@@ -565,6 +567,19 @@ namespace ts {
             function emitInferType(node: InferTypeNode) {
                 write("infer ");
                 writeTextOfNode(currentText, node.typeParameter.name);
+            }
+
+            function emitImportType(node: ImportTypeNode) {
+                if (node.isTypeOf) {
+                    write("typeof ");
+                }
+                write("import(");
+                emitType(node.argument);
+                write(")");
+                if(node.qualifier) {
+                    write(".");
+                    writeEntityName(node.qualifier); // Don't do visibility checking; this entity name is _not_ looked up like a type query is
+                }
             }
 
             function emitParenType(type: ParenthesizedTypeNode) {
