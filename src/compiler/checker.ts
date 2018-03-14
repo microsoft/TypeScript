@@ -11978,7 +11978,7 @@ namespace ts {
             // Extract all object literal types and replace them with a single widened and normalized type.
             const candidates = widenObjectLiteralCandidates(inference.candidates);
             // We widen inferred literal types if
-            // all inferences were made to top-level ocurrences of the type parameter, and
+            // all inferences were made to top-level occurrences of the type parameter, and
             // the type parameter has no constraint or its constraint includes no primitive or literal types, and
             // the type parameter was fixed during inference or does not occur at top-level in the return type.
             const widenLiteralTypes = inference.topLevel &&
