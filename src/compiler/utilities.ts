@@ -4513,6 +4513,11 @@ namespace ts {
     function getFirstJSDocTag<T extends JSDocTag>(node: Node, predicate: (tag: JSDocTag) => tag is T): T | undefined {
         return find(getJSDocTags(node), predicate);
     }
+
+    /** Gets all JSDoc tags of a specified kind, or undefined if not present. */
+    export function getAllJSDocTagsOfKind(node: Node, kind: SyntaxKind): ReadonlyArray<JSDocTag> | undefined {
+        return getJSDocTags(node).filter(doc => doc.kind === kind);
+    }
 }
 
 // Simple node tests of the form `node.kind === SyntaxKind.Foo`.
