@@ -64,17 +64,21 @@ namespace ts.codefix {
             return undefined;
         }
 
+        const { parent } = token;
         switch (errorCode) {
             // Variable and Property declarations
             case Diagnostics.Member_0_implicitly_has_an_1_type.code:
             case Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined.code:
-                annotateVariableDeclaration(changes, sourceFile, <PropertyDeclaration | PropertySignature | VariableDeclaration>token.parent, program, cancellationToken);
-                return token.parent as Declaration;
+                if (isVariableDeclaration(parent) || isPropertyDeclaration(parent) || isPropertySignature(parent)) {
+                    annotateVariableDeclaration(changes, sourceFile, parent, program, cancellationToken);
+                    return parent;
+                }
+                return undefined;
 
             case Diagnostics.Variable_0_implicitly_has_an_1_type.code: {
                 const symbol = program.getTypeChecker().getSymbolAtLocation(token);
-                if (symbol && symbol.valueDeclaration) {
-                    annotateVariableDeclaration(changes, sourceFile, <VariableDeclaration>symbol.valueDeclaration, program, cancellationToken);
+                if (symbol && symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration)) {
+                    annotateVariableDeclaration(changes, sourceFile, symbol.valueDeclaration, program, cancellationToken);
                     return symbol.valueDeclaration;
                 }
             }
@@ -95,7 +99,7 @@ namespace ts.codefix {
                 // falls through
             case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
                 if (!seenFunctions || addToSeen(seenFunctions, getNodeId(containingFunction))) {
-                    const param = cast(token.parent, isParameter);
+                    const param = cast(parent, isParameter);
                     annotateParameters(changes, param, containingFunction, sourceFile, program, cancellationToken);
                     return param;
                 }
