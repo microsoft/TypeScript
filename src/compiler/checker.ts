@@ -4167,16 +4167,9 @@ namespace ts {
                 return getTypeForBindingElement(<BindingElement>declaration);
             }
 
-            let isOptional = false;
-            if (includeOptionality) {
-                if (isInJavaScriptFile(declaration) && isParameter(declaration)) {
-                    const parameterTags = getJSDocParameterTags(declaration);
-                    isOptional = !!(parameterTags && parameterTags.length > 0 && find(parameterTags, tag => tag.isBracketed));
-                }
-                if (!isBindingElement(declaration) && !isVariableDeclaration(declaration) && !!declaration.questionToken) {
-                    isOptional = true;
-                }
-            }
+            const isOptional = includeOptionality && (
+                isInJavaScriptFile(declaration) && isParameter(declaration) && getJSDocParameterTags(declaration).some(tag => tag.isBracketed)
+                || !isBindingElement(declaration) && !isVariableDeclaration(declaration) && !!declaration.questionToken);
 
             // Use type from type annotation if one is present
             const declaredType = tryGetTypeFromEffectiveTypeNode(declaration);
@@ -6581,23 +6574,10 @@ namespace ts {
         }
 
         function isJSDocOptionalParameter(node: ParameterDeclaration) {
-            if (isInJavaScriptFile(node)) {
-                if (node.type && node.type.kind === SyntaxKind.JSDocOptionalType) {
-                    return true;
-                }
-                const paramTags = getJSDocParameterTags(node);
-                if (paramTags) {
-                    for (const paramTag of paramTags) {
-                        if (paramTag.isBracketed) {
-                            return true;
-                        }
-
-                        if (paramTag.typeExpression) {
-                            return paramTag.typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
-                        }
-                    }
-                }
-            }
+            return isInJavaScriptFile(node) && (
+                node.type && node.type.kind === SyntaxKind.JSDocOptionalType
+                || getJSDocParameterTags(node).some(({ isBracketed, typeExpression }) =>
+                    isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType));
         }
 
         function tryFindAmbientModule(moduleName: string, withAugmentations: boolean) {

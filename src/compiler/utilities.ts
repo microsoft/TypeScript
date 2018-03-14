@@ -4419,13 +4419,13 @@ namespace ts {
      * Does not return tags for binding patterns, because JSDoc matches
      * parameters by name and binding patterns do not have a name.
      */
-    export function getJSDocParameterTags(param: ParameterDeclaration): ReadonlyArray<JSDocParameterTag> | undefined {
+    export function getJSDocParameterTags(param: ParameterDeclaration): ReadonlyArray<JSDocParameterTag> {
         if (param.name && isIdentifier(param.name)) {
             const name = param.name.escapedText;
             return getJSDocTags(param.parent).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && isIdentifier(tag.name) && tag.name.escapedText === name);
         }
         // a binding pattern doesn't have a name, so it's not possible to match it a JSDoc parameter, which is identified by name
-        return undefined;
+        return emptyArray;
     }
 
     /**
@@ -4481,11 +4481,8 @@ namespace ts {
      */
     export function getJSDocType(node: Node): TypeNode | undefined {
         let tag: JSDocTypeTag | JSDocParameterTag = getFirstJSDocTag(node, SyntaxKind.JSDocTypeTag) as JSDocTypeTag;
-        if (!tag && node.kind === SyntaxKind.Parameter) {
-            const paramTags = getJSDocParameterTags(node as ParameterDeclaration);
-            if (paramTags) {
-                tag = find(paramTags, tag => !!tag.typeExpression);
-            }
+        if (!tag && isParameter(node)) {
+            tag = find(getJSDocParameterTags(node), tag => !!tag.typeExpression);
         }
 
         return tag && tag.typeExpression && tag.typeExpression.type;
