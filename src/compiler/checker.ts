@@ -21476,7 +21476,7 @@ namespace ts {
                         node.typeExpression && node.typeExpression.type &&
                         !isArrayType(getTypeFromTypeNode(node.typeExpression.type))) {
                         error(node.name,
-                              Diagnostics.The_last_param_tag_of_a_function_that_uses_arguments_must_have_an_array_type,
+                              Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name_It_would_match_arguments_if_it_had_an_array_type,
                               idText(node.name.kind === SyntaxKind.QualifiedName ? node.name.right : node.name));
                     }
                 }
