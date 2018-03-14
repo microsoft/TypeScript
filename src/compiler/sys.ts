@@ -456,6 +456,7 @@ namespace ts {
         setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         clearTimeout?(timeoutId: any): void;
         clearScreen?(): void;
+        /*@internal*/ setBlocking?(): void;
     }
 
     export interface FileWatcher {
@@ -614,6 +615,11 @@ namespace ts {
                 clearTimeout,
                 clearScreen: () => {
                     process.stdout.write("\x1Bc");
+                },
+                setBlocking: () => {
+                    if (process.stdout && process.stdout._handle && process.stdout._handle.setBlocking) {
+                        process.stdout._handle.setBlocking(true);
+                    }
                 }
             };
             return nodeSystem;
@@ -747,6 +753,10 @@ namespace ts {
 
                 function fileChanged(curr: any, prev: any) {
                     if (+curr.mtime === 0) {
+                        if (eventKind === FileWatcherEventKind.Deleted) {
+                            // Already deleted file, no need to callback again
+                            return;
+                        }
                         eventKind = FileWatcherEventKind.Deleted;
                     }
                     // previous event kind check is to ensure we send created event when file is restored or renamed twice (that is it disappears and reappears)

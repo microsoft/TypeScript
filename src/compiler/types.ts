@@ -75,6 +75,15 @@ namespace ts {
         | SyntaxKind.Identifier
         | SyntaxKind.Unknown;
 
+    export type JsxTokenSyntaxKind =
+        | SyntaxKind.LessThanSlashToken
+        | SyntaxKind.EndOfFileToken
+        | SyntaxKind.ConflictMarkerTrivia
+        | SyntaxKind.JsxText
+        | SyntaxKind.JsxTextAllWhiteSpaces
+        | SyntaxKind.OpenBraceToken
+        | SyntaxKind.LessThanToken;
+
     // token > SyntaxKind.Identifer => token is a keyword
     // Also, If you add a new SyntaxKind be sure to keep the `Markers` section at the bottom in sync
     export const enum SyntaxKind {
