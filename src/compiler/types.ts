@@ -1066,6 +1066,7 @@ namespace ts {
 
     export interface ImportTypeNode extends TypeNode {
         kind: SyntaxKind.ImportTypeNode;
+        isTypeOf?: boolean;
         argument: TypeNode;
         qualifier?: EntityName;
     }

@@ -31,27 +31,27 @@ declare module "foo2" {
 
 let y: import("foo2").Bar.I = { a: "", b: 0 };
 
-// class Bar2 {
-//     item: {a: string, b: number, c: object};
-//     constructor(input?: any) {}
-// }
-// 
-// let shim: typeof import("foo2") = {
-//     Bar: Bar2
-// };
+class Bar2 {
+    item: {a: string, b: number, c: object};
+    constructor(input?: any) {}
+}
+
+let shim: typeof import("foo2") = {
+    Bar: Bar2
+};
 
 
 //// [importTypeAmbient.js]
 var x = { x: 0, y: 0 };
 var y = { a: "", b: 0 };
-// class Bar2 {
-//     item: {a: string, b: number, c: object};
-//     constructor(input?: any) {}
-// }
-// 
-// let shim: typeof import("foo2") = {
-//     Bar: Bar2
-// };
+var Bar2 = /** @class */ (function () {
+    function Bar2(input) {
+    }
+    return Bar2;
+}());
+var shim = {
+    Bar: Bar2
+};
 
 
 //// [importTypeAmbient.d.ts]
@@ -82,6 +82,15 @@ declare module "foo2" {
     }
 }
 declare let y: ;
+declare class Bar2 {
+    item: {
+        a: string;
+        b: number;
+        c: object;
+    };
+    constructor(input?: any);
+}
+declare let shim: ;
 
 
 //// [DtsFileErrors]
@@ -89,9 +98,10 @@ declare let y: ;
 
 tests/cases/conformance/types/import/importTypeAmbient.d.ts(8,18): error TS1110: Type expected.
 tests/cases/conformance/types/import/importTypeAmbient.d.ts(27,16): error TS1110: Type expected.
+tests/cases/conformance/types/import/importTypeAmbient.d.ts(36,19): error TS1110: Type expected.
 
 
-==== tests/cases/conformance/types/import/importTypeAmbient.d.ts (2 errors) ====
+==== tests/cases/conformance/types/import/importTypeAmbient.d.ts (3 errors) ====
     declare module "foo" {
         interface Point {
             x: number;
@@ -122,5 +132,16 @@ tests/cases/conformance/types/import/importTypeAmbient.d.ts(27,16): error TS1110
     }
     declare let y: ;
                    ~
+!!! error TS1110: Type expected.
+    declare class Bar2 {
+        item: {
+            a: string;
+            b: number;
+            c: object;
+        };
+        constructor(input?: any);
+    }
+    declare let shim: ;
+                      ~
 !!! error TS1110: Type expected.
     

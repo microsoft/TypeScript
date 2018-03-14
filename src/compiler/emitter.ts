@@ -1288,6 +1288,10 @@ namespace ts {
         }
 
         function emitImportTypeNode(node: ImportTypeNode) {
+            if (node.isTypeOf) {
+                writeKeyword("typeof");
+                writeSpace();
+            }
             writeKeyword("import");
             writePunctuation("(");
             emit(node.argument);

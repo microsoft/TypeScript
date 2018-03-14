@@ -32,11 +32,11 @@ declare module "foo2" {
 
 let y: import("foo2").Bar.I = { a: "", b: 0 };
 
-// class Bar2 {
-//     item: {a: string, b: number, c: object};
-//     constructor(input?: any) {}
-// }
-// 
-// let shim: typeof import("foo2") = {
-//     Bar: Bar2
-// };
+class Bar2 {
+    item: {a: string, b: number, c: object};
+    constructor(input?: any) {}
+}
+
+let shim: typeof import("foo2") = {
+    Bar: Bar2
+};

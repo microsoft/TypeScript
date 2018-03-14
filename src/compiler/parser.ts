@@ -2705,9 +2705,17 @@ namespace ts {
             return finishNode(node);
         }
 
+        function isStartOfTypeOfImportType() {
+            nextToken();
+            return token() === SyntaxKind.ImportKeyword;
+        }
+
         function parseImportType(): ImportTypeNode {
             const node = createNode(SyntaxKind.ImportTypeNode) as ImportTypeNode;
-            nextToken();
+            if (parseOptional(SyntaxKind.TypeOfKeyword)) {
+                node.isTypeOf = true;
+            }
+            parseExpected(SyntaxKind.ImportKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
             node.argument = parseType();
             parseExpected(SyntaxKind.CloseParenToken);
@@ -2762,7 +2770,7 @@ namespace ts {
                     }
                 }
                 case SyntaxKind.TypeOfKeyword:
-                    return parseTypeQuery();
+                    return lookAhead(isStartOfTypeOfImportType) ? parseImportType() : parseTypeQuery();
                 case SyntaxKind.OpenBraceToken:
                     return lookAhead(isStartOfMappedType) ? parseMappedType() : parseTypeLiteral();
                 case SyntaxKind.OpenBracketToken:

@@ -8415,7 +8415,7 @@ namespace ts {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 const argumentType = getTypeFromTypeNode(node.argument);
-                const targetMeaning = node.parent.kind === SyntaxKind.TypeQuery ? SymbolFlags.Value : SymbolFlags.Type;
+                const targetMeaning = node.isTypeOf ? SymbolFlags.Value : SymbolFlags.Type;
                 // TODO: Future work: support unions/generics/whatever via a deferred import-type
                 if (!(argumentType.flags & TypeFlags.StringLiteral)) {
                     return links.resolvedType = neverType;

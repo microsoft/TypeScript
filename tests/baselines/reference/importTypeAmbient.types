@@ -78,12 +78,26 @@ let y: import("foo2").Bar.I = { a: "", b: 0 };
 >b : number
 >0 : 0
 
-// class Bar2 {
-//     item: {a: string, b: number, c: object};
-//     constructor(input?: any) {}
-// }
-// 
-// let shim: typeof import("foo2") = {
-//     Bar: Bar2
-// };
+class Bar2 {
+>Bar2 : Bar2
+
+    item: {a: string, b: number, c: object};
+>item : { a: string; b: number; c: object; }
+>a : string
+>b : number
+>c : object
+
+    constructor(input?: any) {}
+>input : any
+}
+
+let shim: typeof import("foo2") = {
+>shim : typeof "foo2"
+>{    Bar: Bar2} : { Bar: typeof Bar2; }
+
+    Bar: Bar2
+>Bar : typeof Bar2
+>Bar2 : typeof Bar2
+
+};
 

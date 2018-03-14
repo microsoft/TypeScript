@@ -70,12 +70,25 @@ let y: import("foo2").Bar.I = { a: "", b: 0 };
 >a : Symbol(a, Decl(importTypeAmbient.ts, 30, 31))
 >b : Symbol(b, Decl(importTypeAmbient.ts, 30, 38))
 
-// class Bar2 {
-//     item: {a: string, b: number, c: object};
-//     constructor(input?: any) {}
-// }
-// 
-// let shim: typeof import("foo2") = {
-//     Bar: Bar2
-// };
+class Bar2 {
+>Bar2 : Symbol(Bar2, Decl(importTypeAmbient.ts, 30, 46))
+
+    item: {a: string, b: number, c: object};
+>item : Symbol(Bar2.item, Decl(importTypeAmbient.ts, 32, 12))
+>a : Symbol(a, Decl(importTypeAmbient.ts, 33, 11))
+>b : Symbol(b, Decl(importTypeAmbient.ts, 33, 21))
+>c : Symbol(c, Decl(importTypeAmbient.ts, 33, 32))
+
+    constructor(input?: any) {}
+>input : Symbol(input, Decl(importTypeAmbient.ts, 34, 16))
+}
+
+let shim: typeof import("foo2") = {
+>shim : Symbol(shim, Decl(importTypeAmbient.ts, 37, 3))
+
+    Bar: Bar2
+>Bar : Symbol(Bar, Decl(importTypeAmbient.ts, 37, 35))
+>Bar2 : Symbol(Bar2, Decl(importTypeAmbient.ts, 30, 46))
+
+};
 
