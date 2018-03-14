@@ -4167,16 +4167,9 @@ namespace ts {
                 return getTypeForBindingElement(<BindingElement>declaration);
             }
 
-            let isOptional = false;
-            if (includeOptionality) {
-                if (isInJavaScriptFile(declaration) && isParameter(declaration)) {
-                    const parameterTags = getJSDocParameterTags(declaration);
-                    isOptional = !!(parameterTags && parameterTags.length > 0 && find(parameterTags, tag => tag.isBracketed));
-                }
-                if (!isBindingElement(declaration) && !isVariableDeclaration(declaration) && !!declaration.questionToken) {
-                    isOptional = true;
-                }
-            }
+            const isOptional = includeOptionality && (
+                isInJavaScriptFile(declaration) && isParameter(declaration) && getJSDocParameterTags(declaration).some(tag => tag.isBracketed)
+                || !isBindingElement(declaration) && !isVariableDeclaration(declaration) && !!declaration.questionToken);
 
             // Use type from type annotation if one is present
             const declaredType = tryGetTypeFromEffectiveTypeNode(declaration);
