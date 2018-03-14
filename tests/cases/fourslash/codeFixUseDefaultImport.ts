@@ -7,10 +7,10 @@
 ////export = x;
 
 // @Filename: /b.ts
-////import * as [|a|] from "./a";
+/////*com ment*/import * as [|a|] from "./a";/*tnem moc*/
 
 // @Filename: /c.ts
-////import [|a|] = require("./a");
+/////*com ment*/import [|a|] = require("./a");/*tnem moc*/
 
 // @Filename: /d.ts
 ////import "./a";
@@ -29,7 +29,7 @@ for (const file of ["/b.ts", "/c.ts"]) {
 
     verify.codeFix({
         description: "Convert to default import",
-        newFileContent: `import a from "./a";`,
+        newFileContent: `/*com ment*/import a from "./a";/*tnem moc*/`,
     });
 }
 
