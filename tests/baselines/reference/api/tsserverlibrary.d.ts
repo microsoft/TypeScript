@@ -2224,7 +2224,7 @@ declare namespace ts {
         Construct = 1,
     }
     interface Signature {
-        declaration: SignatureDeclaration;
+        declaration?: SignatureDeclaration;
         typeParameters?: TypeParameter[];
         parameters: Symbol[];
     }
@@ -3193,6 +3193,7 @@ declare namespace ts {
     function isJSDocVariadicType(node: Node): node is JSDocVariadicType;
     function isJSDoc(node: Node): node is JSDoc;
     function isJSDocAugmentsTag(node: Node): node is JSDocAugmentsTag;
+    function isJSDocClassTag(node: Node): node is JSDocClassTag;
     function isJSDocParameterTag(node: Node): node is JSDocParameterTag;
     function isJSDocReturnTag(node: Node): node is JSDocReturnTag;
     function isJSDocTypeTag(node: Node): node is JSDocTypeTag;

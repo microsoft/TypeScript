@@ -958,7 +958,7 @@ namespace ts {
         function bindDoStatement(node: DoStatement): void {
             const preDoLabel = createLoopLabel();
             const enclosingLabeledStatement = node.parent.kind === SyntaxKind.LabeledStatement
-                ? lastOrUndefined(activeLabels)
+                ? lastOrUndefined(activeLabels!)
                 : undefined;
             // if do statement is wrapped in labeled statement then target labels for break/continue with or without
             // label should be the same

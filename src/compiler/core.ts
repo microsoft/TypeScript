@@ -1108,7 +1108,7 @@ namespace ts {
      * Returns the first element of an array if non-empty, `undefined` otherwise.
      */
     export function firstOrUndefined<T>(array: ReadonlyArray<T>): T | undefined {
-        return elementAt(array, 0);
+        return array.length === 0 ? undefined : array[0];
     }
 
     export function first<T>(array: ReadonlyArray<T>): T {
@@ -1119,8 +1119,8 @@ namespace ts {
     /**
      * Returns the last element of an array if non-empty, `undefined` otherwise.
      */
-    export function lastOrUndefined<T>(array: ReadonlyArray<T> | undefined): T | undefined {
-        return elementAt(array, -1);
+    export function lastOrUndefined<T>(array: ReadonlyArray<T>): T | undefined {
+        return array.length === 0 ? undefined : array[array.length - 1];
     }
 
     export function last<T>(array: ReadonlyArray<T>): T {

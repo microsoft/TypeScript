@@ -13,6 +13,7 @@
 goTo.file("/b.ts");
 verify.codeFixAll({
     fixId: "useDefaultImport",
-    // TODO: GH#22337
-    newFileContent: `import a1 from "./a";import a2 from "./a";`,
+    newFileContent:
+`import a1 from "./a";
+import a2 from "./a";`,
 });

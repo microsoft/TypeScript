@@ -371,11 +371,10 @@ namespace ts {
 
         const noTypePredicate = createIdentifierTypePredicate("<<unresolved>>", 0, anyType);
 
-        // TODO: GH#18217 First parameter is not optional!
-        const anySignature = createSignature(undefined!, undefined, undefined, emptyArray, anyType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
-        const unknownSignature = createSignature(undefined!, undefined, undefined, emptyArray, unknownType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
-        const resolvingSignature = createSignature(undefined!, undefined, undefined, emptyArray, anyType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
-        const silentNeverSignature = createSignature(undefined!, undefined, undefined, emptyArray, silentNeverType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
+        const anySignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
+        const unknownSignature = createSignature(undefined, undefined, undefined, emptyArray, unknownType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
+        const resolvingSignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
+        const silentNeverSignature = createSignature(undefined, undefined, undefined, emptyArray, silentNeverType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
 
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
         const jsObjectLiteralIndexInfo = createIndexInfo(anyType, /*isReadonly*/ false);
@@ -5660,7 +5659,7 @@ namespace ts {
         }
 
         function createSignature(
-            declaration: SignatureDeclaration,
+            declaration: SignatureDeclaration | undefined,
             typeParameters: TypeParameter[] | undefined,
             thisParameter: Symbol | undefined,
             parameters: Symbol[],
@@ -5694,7 +5693,7 @@ namespace ts {
             const baseConstructorType = getBaseConstructorTypeOfClass(classType);
             const baseSignatures = getSignaturesOfType(baseConstructorType, SignatureKind.Construct);
             if (baseSignatures.length === 0) {
-                return [createSignature(undefined!, classType.localTypeParameters, undefined, emptyArray, classType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false)]; // TODO: GH#18217
+                return [createSignature(undefined, classType.localTypeParameters, undefined, emptyArray, classType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false)]; // TODO: GH#18217
             }
             const baseTypeNode = getBaseTypeNodeOfClass(classType)!;
             const isJavaScript = isInJavaScriptFile(baseTypeNode);
@@ -6777,17 +6776,20 @@ namespace ts {
             return links.resolvedSignature;
         }
 
+        /**
+         * A JS function gets a synthetic rest parameter if it references `arguments` AND:
+         * 1. It has no parameters but at least one `@param` with a type that starts with `...`
+         * OR
+         * 2. It has at least one parameter, and the last parameter has a matching `@param` with a type that starts with `...`
+         */
         function maybeAddJsSyntheticRestParameter(declaration: SignatureDeclaration, parameters: Symbol[]): boolean {
-            // JS functions get a free rest parameter if:
-            // a) The last parameter has `...` preceding its type
-            // b) It references `arguments` somewhere
-            const lastParam = lastOrUndefined(declaration.parameters);
-            const lastParamTags = lastParam && getJSDocParameterTags(lastParam);
-            const lastParamVariadicType = firstDefined(lastParamTags, p =>
-                p.typeExpression && isJSDocVariadicType(p.typeExpression.type) ? p.typeExpression.type : undefined);
-            if (!lastParamVariadicType && !containsArgumentsReference(declaration)) {
+            if (!containsArgumentsReference(declaration)) {
                 return false;
             }
+            const lastParam = lastOrUndefined(declaration.parameters);
+            const lastParamTags = lastParam ? getJSDocParameterTags(lastParam) : getJSDocTags(declaration).filter(isJSDocParameterTag);
+            const lastParamVariadicType = firstDefined(lastParamTags, p =>
+                p.typeExpression && isJSDocVariadicType(p.typeExpression.type) ? p.typeExpression.type : undefined);
 
             const syntheticArgsSymbol = createSymbol(SymbolFlags.Variable, "args" as __String);
             syntheticArgsSymbol.type = lastParamVariadicType ? createArrayType(getTypeFromTypeNode(lastParamVariadicType.type)) : anyArrayType;
@@ -7044,7 +7046,7 @@ namespace ts {
             // object type literal or interface (using the new keyword). Each way of declaring a constructor
             // will result in a different declaration kind.
             if (!signature.isolatedSignatureType) {
-                const isConstructor = signature.declaration.kind === SyntaxKind.Constructor || signature.declaration.kind === SyntaxKind.ConstructSignature;
+                const isConstructor = signature.declaration!.kind === SyntaxKind.Constructor || signature.declaration!.kind === SyntaxKind.ConstructSignature; // TODO: GH#18217
                 const type = <ResolvedType>createObjectType(ObjectFlags.Anonymous);
                 type.members = emptySymbols;
                 type.properties = emptyArray;
@@ -9345,7 +9347,7 @@ namespace ts {
                 if (targetTypePredicate) {
                     const sourceTypePredicate = getTypePredicateOfSignature(source);
                     if (sourceTypePredicate) {
-                        result &= compareTypePredicateRelatedTo(sourceTypePredicate, targetTypePredicate, source.declaration, target.declaration, reportErrors, errorReporter, compareTypes);
+                        result &= compareTypePredicateRelatedTo(sourceTypePredicate, targetTypePredicate, source.declaration!, target.declaration!, reportErrors, errorReporter, compareTypes); // TODO: GH#18217
                     }
                     else if (isIdentifierTypePredicate(targetTypePredicate)) {
                         if (reportErrors) {
@@ -21497,9 +21499,24 @@ namespace ts {
         function checkJSDocParameterTag(node: JSDocParameterTag) {
             checkSourceElement(node.typeExpression);
             if (!getParameterSymbolFromJSDoc(node)) {
-                error(node.name,
-                    Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name,
-                    idText(node.name.kind === SyntaxKind.QualifiedName ? node.name.right : node.name));
+                const decl = getHostSignatureFromJSDoc(node);
+                // don't issue an error for invalid hosts -- just functions --
+                // and give a better error message when the host function mentions `arguments`
+                // but the tag doesn't have an array type
+                if (decl) {
+                    if (!containsArgumentsReference(decl)) {
+                        error(node.name,
+                            Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name,
+                            idText(node.name.kind === SyntaxKind.QualifiedName ? node.name.right : node.name));
+                    }
+                    else if (findLast(getJSDocTags(decl), isJSDocParameterTag) === node &&
+                        node.typeExpression && node.typeExpression.type &&
+                        !isArrayType(getTypeFromTypeNode(node.typeExpression.type))) {
+                        error(node.name,
+                              Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name_It_would_match_arguments_if_it_had_an_array_type,
+                              idText(node.name.kind === SyntaxKind.QualifiedName ? node.name.right : node.name));
+                    }
+                }
             }
         }
 
@@ -21510,7 +21527,7 @@ namespace ts {
                 return;
             }
 
-            const augmentsTags = getAllJSDocTagsOfKind(classLike, SyntaxKind.JSDocAugmentsTag)!;
+            const augmentsTags = getJSDocTags(classLike).filter(isJSDocAugmentsTag);
             Debug.assert(augmentsTags.length > 0);
             if (augmentsTags.length > 1) {
                 error(augmentsTags[1], Diagnostics.Class_declarations_cannot_have_more_than_one_augments_or_extends_tag);
@@ -24526,18 +24543,19 @@ namespace ts {
             const paramTag = node.parent.parent;
             if (isJSDocTypeExpression(node.parent) && isJSDocParameterTag(paramTag)) {
                 // Else we will add a diagnostic, see `checkJSDocVariadicType`.
-                const param = getParameterSymbolFromJSDoc(paramTag);
-                if (param) {
-                    const host = getHostSignatureFromJSDoc(paramTag);
+                const host = getHostSignatureFromJSDoc(paramTag);
+                if (host) {
                     /*
-                    Only return an array type if the corresponding parameter is marked as a rest parameter.
+                    Only return an array type if the corresponding parameter is marked as a rest parameter, or if there are no parameters.
                     So in the following situation we will not create an array type:
                         /** @param {...number} a * /
                         function f(a) {}
                     Because `a` will just be of type `number | undefined`. A synthetic `...args` will also be added, which *will* get an array type.
                     */
-                    const lastParamDeclaration = (host && last(host.parameters))!; // TODO: GH#18217
-                    if (lastParamDeclaration.symbol === param && isRestParameter(lastParamDeclaration)) {
+                    const lastParamDeclaration = lastOrUndefined(host.parameters);
+                    const symbol = getParameterSymbolFromJSDoc(paramTag);
+                    if (!lastParamDeclaration ||
+                        symbol && lastParamDeclaration.symbol === symbol && isRestParameter(lastParamDeclaration)) {
                         return createArrayType(type);
                     }
                 }
