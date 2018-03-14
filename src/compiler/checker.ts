@@ -577,9 +577,10 @@ namespace ts {
 
         const enum CheckMode {
             Normal = 0,                // Normal type checking
-            SkipContextSensitive = 1,  // Skip context sensitive function expressions
-            Inferential = 2,           // Inferential typing
-            Contextual = 3,            // Normal type checking informed by a contextual type, therefore not cacheable
+            JustType = 1,              // Just return a type and don't report errors
+            SkipContextSensitive = 2,  // Skip context sensitive function expressions
+            Inferential = 3,           // Inferential typing
+            Contextual = 4,            // Normal type checking informed by a contextual type, therefore not cacheable
         }
 
         const enum CallbackCheck {
@@ -19697,7 +19698,7 @@ namespace ts {
             // Otherwise simply call checkExpression. Ideally, the entire family of checkXXX functions
             // should have a parameter that indicates whether full error checking is required such that
             // we can perform the optimizations locally.
-            return cache ? checkExpressionCached(node) : checkExpression(node);
+            return cache ? checkExpressionCached(node) : checkExpression(node, CheckMode.JustType);
         }
 
         /**
