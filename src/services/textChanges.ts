@@ -70,7 +70,7 @@ namespace ts.textChanges {
      * By default when removing nodes we adjust start and end positions to respect specification of the trivia above.
      * If pos\end should be interpreted literally 'useNonAdjustedStartPosition' or 'useNonAdjustedEndPosition' should be set to true
      */
-    export type ConfigurableStartEnd = ConfigurableStart & ConfigurableEnd;
+    export interface ConfigurableStartEnd extends ConfigurableStart, ConfigurableEnd {}
 
     export const useNonAdjustedPositions: ConfigurableStartEnd = {
         useNonAdjustedStartPosition: true,

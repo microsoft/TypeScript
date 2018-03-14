@@ -27,7 +27,7 @@ namespace ts.codefix {
     }
 
     function doChanges(changes: textChanges.ChangeTracker, sourceFile: SourceFile, extendsToken: Node, heritageClauses: ReadonlyArray<HeritageClause>): void {
-        changes.replaceNode(sourceFile, extendsToken, createToken(SyntaxKind.ImplementsKeyword), textChanges.useNonAdjustedPositions);
+        changes.replaceNode(sourceFile, extendsToken, createToken(SyntaxKind.ImplementsKeyword));
 
         // If there is already an implements clause, replace the implements keyword with a comma.
         if (heritageClauses.length === 2 &&
