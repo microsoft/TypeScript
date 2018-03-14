@@ -69,7 +69,7 @@ namespace ts.codefix {
             // Variable and Property declarations
             case Diagnostics.Member_0_implicitly_has_an_1_type.code:
             case Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined.code:
-                if (isVariableDeclaration(parent) || isPropertyDeclaration(parent) || isPropertySignature(parent)) {
+                if (isVariableDeclaration(parent) || isPropertyDeclaration(parent) || isPropertySignature(parent)) { // handle bad location
                     annotateVariableDeclaration(changes, sourceFile, parent, program, cancellationToken);
                     return parent;
                 }
