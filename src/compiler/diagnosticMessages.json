@@ -1943,7 +1943,7 @@
     "Expected {0} arguments, but got {1} or more.": {
         "category": "Error",
         "code": 2556
-    },
+    },
     "Expected at least {0} arguments, but got {1} or more.": {
         "category": "Error",
         "code": 2557
