@@ -11974,6 +11974,26 @@ namespace ts {
             return inference.priority & InferencePriority.PriorityImpliesCombination ? getIntersectionType(inference.contraCandidates) : getCommonSubtype(inference.contraCandidates);
         }
 
+        function getCovariantInference(inference: InferenceInfo, context: InferenceContext, signature: Signature) {
+            // Extract all object literal types and replace them with a single widened and normalized type.
+            const candidates = widenObjectLiteralCandidates(inference.candidates);
+            // We widen inferred literal types if
+            // all inferences were made to top-level ocurrences of the type parameter, and
+            // the type parameter has no constraint or its constraint includes no primitive or literal types, and
+            // the type parameter was fixed during inference or does not occur at top-level in the return type.
+            const widenLiteralTypes = inference.topLevel &&
+                !hasPrimitiveConstraint(inference.typeParameter) &&
+                (inference.isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), inference.typeParameter));
+            const baseCandidates = widenLiteralTypes ? sameMap(candidates, getWidenedLiteralType) : candidates;
+            // If all inferences were made from contravariant positions, infer a common subtype. Otherwise, if
+            // union types were requested or if all inferences were made from the return type position, infer a
+            // union type. Otherwise, infer a common supertype.
+            const unwidenedType = context.flags & InferenceFlags.InferUnionTypes || inference.priority & InferencePriority.PriorityImpliesCombination ?
+                getUnionType(baseCandidates, UnionReduction.Subtype) :
+                getCommonSupertype(baseCandidates);
+            return getWidenedType(unwidenedType);
+        }
+
         function getInferredType(context: InferenceContext, index: number): Type {
             const inference = context.inferences[index];
             let inferredType = inference.inferredType;
@@ -11981,23 +12001,7 @@ namespace ts {
                 const signature = context.signature;
                 if (signature) {
                     if (inference.candidates) {
-                        // Extract all object literal types and replace them with a single widened and normalized type.
-                        const candidates = widenObjectLiteralCandidates(inference.candidates);
-                        // We widen inferred literal types if
-                        // all inferences were made to top-level ocurrences of the type parameter, and
-                        // the type parameter has no constraint or its constraint includes no primitive or literal types, and
-                        // the type parameter was fixed during inference or does not occur at top-level in the return type.
-                        const widenLiteralTypes = inference.topLevel &&
-                            !hasPrimitiveConstraint(inference.typeParameter) &&
-                            (inference.isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), inference.typeParameter));
-                        const baseCandidates = widenLiteralTypes ? sameMap(candidates, getWidenedLiteralType) : candidates;
-                        // If all inferences were made from contravariant positions, infer a common subtype. Otherwise, if
-                        // union types were requested or if all inferences were made from the return type position, infer a
-                        // union type. Otherwise, infer a common supertype.
-                        const unwidenedType = context.flags & InferenceFlags.InferUnionTypes || inference.priority & InferencePriority.PriorityImpliesCombination ?
-                            getUnionType(baseCandidates, UnionReduction.Subtype) :
-                            getCommonSupertype(baseCandidates);
-                        inferredType = getWidenedType(unwidenedType);
+                        inferredType = getCovariantInference(inference, context, signature);
                         // If we have inferred 'never' but have contravariant candidates. To get a more specific type we
                         // infer from the contravariant candidates instead.
                         if (inferredType.flags & TypeFlags.Never && inference.contraCandidates) {
