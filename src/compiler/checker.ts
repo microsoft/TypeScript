@@ -6572,7 +6572,8 @@ namespace ts {
         function isJSDocOptionalParameter(node: ParameterDeclaration) {
             return isInJavaScriptFile(node) && (
                 node.type && node.type.kind === SyntaxKind.JSDocOptionalType
-                || some(getJSDocParameterTags(node), paramTag => paramTag.isBracketed || !!paramTag.typeExpression && paramTag.typeExpression.type.kind === SyntaxKind.JSDocOptionalType));
+                || getJSDocParameterTags(node).some(({ isBracketed, typeExpression }) =>
+                    isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType));
         }
 
         function tryFindAmbientModule(moduleName: string, withAugmentations: boolean) {
