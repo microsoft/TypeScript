@@ -28,7 +28,7 @@ var d = [{}, 1]; // {}[]
 
 var e = [{}, Object]; // {}[]
 >e : {}[]
->[{}, Object] : (ObjectConstructor | {})[]
+>[{}, Object] : ({} | ObjectConstructor)[]
 >{} : {}
 >Object : ObjectConstructor
 

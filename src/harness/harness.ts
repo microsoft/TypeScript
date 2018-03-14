@@ -73,6 +73,8 @@ interface XMLHttpRequest {
 }
 /* tslint:enable:no-var-keyword */
 
+ts.Debug.currentAssertionLevel = ts.AssertionLevel.Normal;
+
 namespace Utils {
     // Setup some globals based on the current environment
     export const enum ExecutionEnvironment {
