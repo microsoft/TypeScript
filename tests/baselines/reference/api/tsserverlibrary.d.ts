@@ -3036,7 +3036,7 @@ declare namespace ts {
     /** Get all JSDoc tags related to a node, including those on parent nodes. */
     function getJSDocTags(node: Node): ReadonlyArray<JSDocTag> | undefined;
     /** Gets all JSDoc tags of a specified kind, or undefined if not present. */
-    function getAllJSDocTagsOfKind(node: Node, kind: SyntaxKind): ReadonlyArray<JSDocTag> | undefined;
+    function getAllJSDocTagsOfKind<T extends JSDocTag>(node: Node, predicate: (tag: JSDocTag) => tag is T): ReadonlyArray<T> | undefined;
 }
 declare namespace ts {
     function isNumericLiteral(node: Node): node is NumericLiteral;
@@ -3190,6 +3190,7 @@ declare namespace ts {
     function isJSDocVariadicType(node: Node): node is JSDocVariadicType;
     function isJSDoc(node: Node): node is JSDoc;
     function isJSDocAugmentsTag(node: Node): node is JSDocAugmentsTag;
+    function isJSDocClassTag(node: Node): node is JSDocClassTag;
     function isJSDocParameterTag(node: Node): node is JSDocParameterTag;
     function isJSDocReturnTag(node: Node): node is JSDocReturnTag;
     function isJSDocTypeTag(node: Node): node is JSDocTypeTag;
