@@ -6755,16 +6755,16 @@ namespace ts {
 
         /**
          * A JS function gets a synthetic rest parameter if it references `arguments` AND:
-         * 1. It has no parameters and at least one `@param` and the first `@param` has a type and the type starts with `...`
+         * 1. It has no parameters but at least one `@param` with a type that starts with `...`
          * OR
-         * 2. It has at least one parameter, and the last parameter has a matching `@param` with a type and the type starts with `...`
+         * 2. It has at least one parameter, and the last parameter has a matching `@param` with a type that starts with `...`
          */
         function maybeAddJsSyntheticRestParameter(declaration: SignatureDeclaration, parameters: Symbol[]): boolean {
             if (!containsArgumentsReference(declaration)) {
                 return false;
             }
             const lastParam = lastOrUndefined(declaration.parameters);
-            const lastParamTags = lastParam ? getJSDocParameterTags(lastParam) : getJSDocTags(declaration).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag));
+            const lastParamTags = lastParam ? getJSDocParameterTags(lastParam) : getJSDocTags(declaration).filter(isJSDocParameterTag);
             const lastParamVariadicType = firstDefined(lastParamTags, p =>
                 p.typeExpression && isJSDocVariadicType(p.typeExpression.type) ? p.typeExpression.type : undefined);
 
@@ -21444,17 +21444,20 @@ namespace ts {
             checkSourceElement(node.typeExpression);
             if (!getParameterSymbolFromJSDoc(node)) {
                 const decl = getHostSignatureFromJSDoc(node);
+                // don't issue an error for invalid hosts -- just functions --
+                // and give a better error message when the host function mentions `arguments`
+                // but the tag doesn't have an array type
                 if (decl) {
                     if (!containsArgumentsReference(decl)) {
                         error(node.name,
                             Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name,
                             idText(node.name.kind === SyntaxKind.QualifiedName ? node.name.right : node.name));
                     }
-                    else if (lastOrUndefined(getJSDocTags(decl).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag))) === node &&
+                    else if (findLast(getJSDocTags(decl), isJSDocParameterTag) === node &&
                         node.typeExpression && node.typeExpression.type &&
                         !isArrayType(getTypeFromTypeNode(node.typeExpression.type))) {
                         error(node.name,
-                              Diagnostics.JSDoc_must_appear_on_the_last_param_tag_of_a_function_that_uses_arguments,
+                              Diagnostics.The_last_param_tag_of_a_function_that_uses_arguments_must_have_an_array_type,
                               idText(node.name.kind === SyntaxKind.QualifiedName ? node.name.right : node.name));
                     }
                 }
@@ -24494,7 +24497,7 @@ namespace ts {
                         function f(a) {}
                     Because `a` will just be of type `number | undefined`. A synthetic `...args` will also be added, which *will* get an array type.
                     */
-                    const lastParamDeclaration = host.parameters.length > 0 && last(host.parameters);
+                    const lastParamDeclaration = lastOrUndefined(host.parameters);
                     const symbol = getParameterSymbolFromJSDoc(paramTag);
                     if (!lastParamDeclaration ||
                         symbol && lastParamDeclaration.symbol === symbol && isRestParameter(lastParamDeclaration)) {
