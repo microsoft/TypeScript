@@ -80,7 +80,7 @@ namespace ts {
                     visitUnionOrIntersectionType(type as UnionOrIntersectionType);
                 }
                 if (type.flags & TypeFlags.Keyof) {
-                    visitIndexType(type as KeyofType);
+                    visitKeyofType(type as KeyofType);
                 }
                 if (type.flags & TypeFlags.IndexedAccess) {
                     visitIndexedAccessType(type as IndexedAccessType);
@@ -100,7 +100,7 @@ namespace ts {
                 forEach(type.types, visitType);
             }
 
-            function visitIndexType(type: KeyofType): void {
+            function visitKeyofType(type: KeyofType): void {
                 visitType(type.type);
             }
 

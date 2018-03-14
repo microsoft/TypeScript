@@ -3017,8 +3017,8 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.Keyof) {
                     const keyType = (<KeyofType>type).type;
-                    const indexTypeNode = typeToTypeNodeHelper(keyType, context);
-                    return createTypeOperatorNode(indexTypeNode);
+                    const keyTypeNode = typeToTypeNodeHelper(keyType, context);
+                    return createTypeOperatorNode(keyTypeNode);
                 }
                 if (type.flags & TypeFlags.IndexedAccess) {
                     const objectTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).objectType, context);
@@ -4150,8 +4150,8 @@ namespace ts {
             // A variable declared in a for..in statement is of type string, or of type keyof T when the
             // right hand expression is of a type parameter type.
             if (isVariableDeclaration(declaration) && declaration.parent.parent.kind === SyntaxKind.ForInStatement) {
-                const indexType = getKeyofType(checkNonNullExpression(declaration.parent.parent.expression));
-                return indexType.flags & (TypeFlags.TypeParameter | TypeFlags.Keyof) ? indexType : stringType;
+                const keyofType = getKeyofType(checkNonNullExpression(declaration.parent.parent.expression));
+                return keyofType.flags & (TypeFlags.TypeParameter | TypeFlags.Keyof) ? keyofType : stringType;
             }
 
             if (isVariableDeclaration(declaration) && declaration.parent.parent.kind === SyntaxKind.ForOfStatement) {
@@ -8010,7 +8010,7 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getIndexTypeForGenericType(type: InstantiableType | UnionOrIntersectionType) {
+        function getKeyofTypeForGenericType(type: InstantiableType | UnionOrIntersectionType) {
             if (!type.resolvedKeyofType) {
                 type.resolvedKeyofType = <KeyofType>createType(TypeFlags.Keyof);
                 type.resolvedKeyofType.type = type;
@@ -8040,16 +8040,16 @@ namespace ts {
 
         function getKeyofType(type: Type): Type {
             return type.flags & TypeFlags.Intersection ? getUnionType(map((<IntersectionType>type).types, t => getKeyofType(t))) :
-                maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type) :
+                maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getKeyofTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
                 type === wildcardType ? wildcardType :
                 type.flags & TypeFlags.Any || getIndexInfoOfType(type, IndexKind.String) ? stringType :
                 getLiteralTypeFromPropertyNames(type);
         }
 
-        function getIndexTypeOrString(type: Type): Type {
-            const indexType = getKeyofType(type);
-            return indexType.flags & TypeFlags.Never ? stringType : indexType;
+        function getKeyofTypeOrString(type: Type): Type {
+            const keyofType = getKeyofType(type);
+            return keyofType.flags & TypeFlags.Never ? stringType : keyofType;
         }
 
         function getTypeFromTypeOperatorNode(node: TypeOperatorNode) {
@@ -22416,7 +22416,7 @@ namespace ts {
                 if (varExpr.kind === SyntaxKind.ArrayLiteralExpression || varExpr.kind === SyntaxKind.ObjectLiteralExpression) {
                     error(varExpr, Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_a_destructuring_pattern);
                 }
-                else if (!isTypeAssignableTo(getIndexTypeOrString(rightType), leftType)) {
+                else if (!isTypeAssignableTo(getKeyofTypeOrString(rightType), leftType)) {
                     error(varExpr, Diagnostics.The_left_hand_side_of_a_for_in_statement_must_be_of_type_string_or_any);
                 }
                 else {
