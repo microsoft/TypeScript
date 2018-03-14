@@ -256,13 +256,13 @@ var z = 3; // comment 5
 // comment 6
 var a = 4; // comment 7`;
             runSingleFileTest("replaceNode2", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-                changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), { useNonAdjustedStartPosition: true, suffix: newLineCharacter, prefix: newLineCharacter });
+                changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), { suffix: newLineCharacter, prefix: newLineCharacter });
             });
             runSingleFileTest("replaceNode3", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
                 changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), { suffix: newLineCharacter });
             });
             runSingleFileTest("replaceNode4", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-                changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass(), { useNonAdjustedStartPosition: true });
+                changeTracker.replaceNode(sourceFile, findVariableStatementContaining("y", sourceFile), createTestClass());
             });
         }
         {

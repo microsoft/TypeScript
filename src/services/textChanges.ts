@@ -103,10 +103,11 @@ namespace ts.textChanges {
     enum ChangeKind {
         Remove,
         ReplaceWithSingleNode,
-        ReplaceWithMultipleNodes
+        ReplaceWithMultipleNodes,
+        Text,
     }
 
-    type Change = ReplaceWithSingleNode | ReplaceWithMultipleNodes | RemoveNode;
+    type Change = ReplaceWithSingleNode | ReplaceWithMultipleNodes | RemoveNode | ChangeText;
 
     interface BaseChange {
         readonly sourceFile: SourceFile;
@@ -132,6 +133,11 @@ namespace ts.textChanges {
         readonly kind: ChangeKind.ReplaceWithMultipleNodes;
         readonly nodes: ReadonlyArray<Node>;
         readonly options?: ChangeNodeOptions;
+    }
+
+    interface ChangeText extends BaseChange {
+        readonly kind: ChangeKind.Text;
+        readonly text: string;
     }
 
     export function getSeparatorCharacter(separator: Token<SyntaxKind.CommaToken | SyntaxKind.SemicolonToken>) {
@@ -291,10 +297,8 @@ namespace ts.textChanges {
             return this;
         }
 
-        // TODO (https://github.com/Microsoft/TypeScript/issues/21246): default should probably be useNonAdjustedPositions
-        public replaceNode(sourceFile: SourceFile, oldNode: Node, newNode: Node, options: InsertNodeOptions & ConfigurableStart = {}) {
-            const pos = getAdjustedStartPosition(sourceFile, oldNode, options, Position.Start);
-            return this.replaceRange(sourceFile, { pos, end: oldNode.end }, newNode, options);
+        public replaceNode(sourceFile: SourceFile, oldNode: Node, newNode: Node, options: InsertNodeOptions = {}) {
+            return this.replaceRange(sourceFile, { pos: oldNode.getStart(sourceFile), end: oldNode.end }, newNode, options);
         }
 
         // TODO (https://github.com/Microsoft/TypeScript/issues/21246): default should probably be useNonAdjustedPositions
@@ -346,6 +350,23 @@ namespace ts.textChanges {
         public insertModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
             const pos = before.getStart(sourceFile);
             this.replaceRange(sourceFile, { pos, end: pos }, createToken(modifier), { suffix: " " });
+        }
+
+        public insertCommentBeforeLine(sourceFile: SourceFile, lineNumber: number, position: number, commentText: string) {
+            const lineStartPosition = getStartPositionOfLine(lineNumber, sourceFile);
+            const startPosition = getFirstNonSpaceCharacterPosition(sourceFile.text, lineStartPosition);
+            // First try to see if we can put the comment on the previous line.
+            // We need to make sure that we are not in the middle of a string literal or a comment.
+            // If so, we do not want to separate the node from its comment if we can.
+            // Otherwise, add an extra new line immediately before the error span.
+            const insertAtLineStart = codefix.isValidLocationToAddComment(sourceFile, startPosition);
+            const token = getTouchingToken(sourceFile, insertAtLineStart ? startPosition : position, /*includeJsDocComment*/ false);
+            const text = `${insertAtLineStart ? "" : this.newLineCharacter}${sourceFile.text.slice(lineStartPosition, startPosition)}//${commentText}${this.newLineCharacter}`;
+            this.insertText(sourceFile, token.getStart(sourceFile), text);
+        }
+
+        public insertText(sourceFile: SourceFile, pos: number, text: string) {
+            this.changes.push({ kind: ChangeKind.Text, sourceFile, range: { pos, end: pos }, text });
         }
 
         /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
@@ -650,6 +671,9 @@ namespace ts.textChanges {
         function computeNewText(change: Change, sourceFile: SourceFile, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText): string {
             if (change.kind === ChangeKind.Remove) {
                 return "";
+            }
+            if (change.kind === ChangeKind.Text) {
+                return change.text;
             }
 
             const { options = {}, range: { pos } } = change;
