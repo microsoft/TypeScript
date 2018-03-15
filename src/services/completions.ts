@@ -1150,7 +1150,8 @@ namespace ts.Completions {
                 }
             }
 
-            if (options.includeCompletionsForModuleExports) {
+            // Don't suggest import completions for a commonjs-only module
+            if (options.includeCompletionsForModuleExports && !(sourceFile.commonJsModuleIndicator && !sourceFile.externalModuleIndicator)) {
                 getSymbolsFromOtherSourceFileExports(symbols, previousToken && isIdentifier(previousToken) ? previousToken.text : "", target);
             }
             filterGlobalCompletion(symbols);

@@ -1,17 +1,17 @@
 Exit Code: 1
 Standard output:
-../../../../built/local/lib.dom.d.ts(2255,11): error TS2300: Duplicate identifier 'CSSRule'.
-../../../../built/local/lib.dom.d.ts(2274,13): error TS2300: Duplicate identifier 'CSSRule'.
-../../../../built/local/lib.dom.d.ts(2964,11): error TS2300: Duplicate identifier 'Comment'.
-../../../../built/local/lib.dom.d.ts(2968,13): error TS2300: Duplicate identifier 'Comment'.
-../../../../built/local/lib.dom.d.ts(4605,11): error TS2300: Duplicate identifier 'Event'.
-../../../../built/local/lib.dom.d.ts(4630,13): error TS2300: Duplicate identifier 'Event'.
-../../../../built/local/lib.dom.d.ts(10082,11): error TS2300: Duplicate identifier 'Position'.
-../../../../built/local/lib.dom.d.ts(10087,13): error TS2300: Duplicate identifier 'Position'.
-../../../../built/local/lib.dom.d.ts(10575,11): error TS2300: Duplicate identifier 'Request'.
-../../../../built/local/lib.dom.d.ts(10593,13): error TS2300: Duplicate identifier 'Request'.
-../../../../built/local/lib.dom.d.ts(14907,11): error TS2300: Duplicate identifier 'Window'.
-../../../../built/local/lib.dom.d.ts(15102,13): error TS2300: Duplicate identifier 'Window'.
+../../../../built/local/lib.dom.d.ts(2257,11): error TS2300: Duplicate identifier 'CSSRule'.
+../../../../built/local/lib.dom.d.ts(2276,13): error TS2300: Duplicate identifier 'CSSRule'.
+../../../../built/local/lib.dom.d.ts(2966,11): error TS2300: Duplicate identifier 'Comment'.
+../../../../built/local/lib.dom.d.ts(2970,13): error TS2300: Duplicate identifier 'Comment'.
+../../../../built/local/lib.dom.d.ts(4607,11): error TS2300: Duplicate identifier 'Event'.
+../../../../built/local/lib.dom.d.ts(4632,13): error TS2300: Duplicate identifier 'Event'.
+../../../../built/local/lib.dom.d.ts(10084,11): error TS2300: Duplicate identifier 'Position'.
+../../../../built/local/lib.dom.d.ts(10089,13): error TS2300: Duplicate identifier 'Position'.
+../../../../built/local/lib.dom.d.ts(10577,11): error TS2300: Duplicate identifier 'Request'.
+../../../../built/local/lib.dom.d.ts(10595,13): error TS2300: Duplicate identifier 'Request'.
+../../../../built/local/lib.dom.d.ts(14909,11): error TS2300: Duplicate identifier 'Window'.
+../../../../built/local/lib.dom.d.ts(15104,13): error TS2300: Duplicate identifier 'Window'.
 ../../../../built/local/lib.es5.d.ts(1328,11): error TS2300: Duplicate identifier 'ArrayLike'.
 ../../../../built/local/lib.es5.d.ts(1364,6): error TS2300: Duplicate identifier 'Record'.
 ../../../../node_modules/@types/node/index.d.ts(150,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{ [x: string]: any; }', but here has type 'NodeModule'.
@@ -45,7 +45,6 @@ node_modules/chrome-devtools-frontend/front_end/Runtime.js(854,36): error TS2339
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(1083,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(1088,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(107,5): error TS2322: Type 'Timer' is not assignable to type 'number'.
-node_modules/chrome-devtools-frontend/front_end/Tests.js(160,29): error TS8024: JSDoc '@param' tag has name 'args', but there is no parameter with that name.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(208,5): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(221,7): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(378,10): error TS2551: Property 'panels' does not exist on type 'typeof UI'. Did you mean 'Panel'?
@@ -124,8 +123,8 @@ node_modules/chrome-devtools-frontend/front_end/Tests.js(1199,9): error TS2554: 
 node_modules/chrome-devtools-frontend/front_end/Tests.js(1199,28): error TS2551: Property 'panels' does not exist on type 'typeof UI'. Did you mean 'Panel'?
 node_modules/chrome-devtools-frontend/front_end/Tests.js(1229,10): error TS2339: Property 'uiTests' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(1229,41): error TS2339: Property 'domAutomationController' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAAttributesView.js(9,11): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAAttributesView.js(11,46): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAAttributesView.js(9,11): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAAttributesView.js(11,46): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAAttributesView.js(45,27): error TS2694: Namespace '(Anonymous class)' has no exported member 'Attribute'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAAttributesView.js(64,18): error TS2339: Property 'setTextContentTruncatedIfNeeded' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAAttributesView.js(77,26): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
@@ -146,7 +145,7 @@ node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAMetadata.js(56
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAMetadata.js(57,32): error TS2339: Property '_instance' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAMetadata.js(57,102): error TS2339: Property '_config' does not exist on type 'typeof (Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAMetadata.js(58,37): error TS2339: Property '_instance' does not exist on type 'typeof (Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(10,11): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(10,11): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(14,18): error TS2339: Property 'tabIndex' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(24,38): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(40,51): error TS2339: Property 'focus' does not exist on type 'Element'.
@@ -167,7 +166,7 @@ node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(184,42): error TS2339: Property 'enclosingNodeOrSelfWithClass' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(208,42): error TS2339: Property 'enclosingNodeOrSelfWithClass' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(265,42): error TS2339: Property 'enclosingNodeOrSelfWithClass' does not exist on type 'EventTarget'.
-node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(274,42): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(274,42): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(298,19): error TS2339: Property 'breadcrumb' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(302,23): error TS2339: Property 'tabIndex' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(314,15): error TS1110: Type expected.
@@ -180,7 +179,7 @@ node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(457,30): error TS2339: Property 'breadcrumb' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(473,24): error TS2694: Namespace 'Protocol' has no exported member 'Accessibility'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(481,17): error TS2339: Property 'setTextContentTruncatedIfNeeded' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(488,38): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(488,38): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityModel.js(10,24): error TS2694: Namespace 'Protocol' has no exported member 'Accessibility'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityModel.js(54,32): error TS2694: Namespace 'Protocol' has no exported member 'Accessibility'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityModel.js(61,25): error TS2694: Namespace 'Protocol' has no exported member 'Accessibility'.
@@ -198,9 +197,9 @@ node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityModel
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityModel.js(245,15): error TS1055: Type 'Promise<any>' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityModel.js(255,24): error TS2495: Type 'IterableIterator<(Anonymous class)>' is not an array type or a string type.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityModel.js(303,26): error TS2339: Property 'printSelfAndChildren' does not exist on type '(Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(9,11): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(13,40): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(14,41): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(9,11): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(13,40): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(14,41): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(56,28): error TS2694: Namespace 'Protocol' has no exported member 'Accessibility'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(58,16): error TS1251: Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'. Class definitions are automatically in strict mode.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(62,61): error TS2694: Namespace 'Protocol' has no exported member 'Accessibility'.
@@ -214,7 +213,7 @@ node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeV
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(144,18): error TS2339: Property 'title' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(155,24): error TS2339: Property 'type' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(156,24): error TS2339: Property 'title' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(167,33): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(167,33): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(168,19): error TS2339: Property 'title' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(179,24): error TS2694: Namespace 'Protocol' has no exported member 'Accessibility'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(182,32): error TS2339: Property 'Accessibility' does not exist on type 'typeof Protocol'.
@@ -245,24 +244,24 @@ node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeV
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(369,33): error TS2339: Property 'Accessibility' does not exist on type 'typeof Protocol'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(382,24): error TS2694: Namespace 'Protocol' has no exported member 'Accessibility'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(386,38): error TS2339: Property 'Accessibility' does not exist on type 'typeof Protocol'.
-node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(395,37): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(395,37): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(396,23): error TS2339: Property 'title' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(396,31): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(407,37): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(396,31): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(407,37): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(408,23): error TS2339: Property 'title' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(408,31): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(412,37): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(408,31): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(412,37): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(419,26): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(422,91): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(422,91): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(431,26): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(435,28): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(438,28): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(445,20): error TS2339: Property 'Accessibility' does not exist on type 'typeof Protocol'.
-node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(445,62): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(445,62): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(461,24): error TS2694: Namespace 'Protocol' has no exported member 'Accessibility'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(481,20): error TS2339: Property 'Accessibility' does not exist on type 'typeof Protocol'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(492,24): error TS2694: Namespace 'Protocol' has no exported member 'Accessibility'.
-node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(521,84): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(521,84): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(522,20): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(535,24): error TS2694: Namespace 'Protocol' has no exported member 'Accessibility'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AccessibilityNodeView.js(619,26): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
@@ -350,7 +349,7 @@ node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(8
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(14,38): error TS2339: Property 'createSVGChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(19,53): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(20,44): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(21,32): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(21,32): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(26,32): error TS2694: Namespace 'Protocol' has no exported member 'DOM'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(36,47): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(36,63): error TS2345: Argument of type 'this' is not assignable to parameter of type '{ [x: string]: any; modelAdded(model: T): void; modelRemoved(model: T): void; }'.
@@ -369,23 +368,23 @@ node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(9
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(103,57): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(105,28): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(110,48): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(112,44): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(112,44): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(114,34): error TS2345: Argument of type '(Anonymous class)' is not assignable to parameter of type '{ [x: string]: any; item(): any & (Anonymous class); } & (Anonymous class)'.
   Type '(Anonymous class)' is not assignable to type '{ [x: string]: any; item(): any & (Anonymous class); }'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(117,46): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(117,46): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(119,34): error TS2345: Argument of type '(Anonymous class)' is not assignable to parameter of type '{ [x: string]: any; item(): any & (Anonymous class); } & (Anonymous class)'.
   Type '(Anonymous class)' is not assignable to type '{ [x: string]: any; item(): any & (Anonymous class); }'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(123,40): error TS2339: Property 'AnimationTimeline' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(125,45): error TS2345: Argument of type 'TemplateStringsArray' is not assignable to parameter of type 'string | string[]'.
   Type 'TemplateStringsArray' is not assignable to type 'string[]'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(125,72): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(125,72): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(128,24): error TS2345: Argument of type 'TemplateStringsArray' is not assignable to parameter of type 'string | string[]'.
   Type 'TemplateStringsArray' is not assignable to type 'string[]'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(133,50): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(137,47): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(138,35): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(138,35): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(139,41): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(144,48): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(144,48): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(145,36): error TS2339: Property 'AnimationTimeline' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(148,31): error TS2345: Argument of type '(Anonymous class)' is not assignable to parameter of type '{ [x: string]: any; item(): any & (Anonymous class); } & (Anonymous class)'.
   Type '(Anonymous class)' is not assignable to type '{ [x: string]: any; item(): any & (Anonymous class); }'.
@@ -398,18 +397,18 @@ node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(1
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(177,63): error TS2339: Property 'parentElement' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(194,30): error TS2304: Cannot find name 'Image'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(197,25): error TS2339: Property 'AnimationScreenshotPopover' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(208,50): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(208,67): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(208,50): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(208,67): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(216,67): error TS2339: Property 'AnimationModel' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(218,34): error TS2345: Argument of type 'number' is not assignable to parameter of type '{ [x: string]: any; WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; T...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(233,42): error TS2339: Property 'AnimationTimeline' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(235,47): error TS2339: Property 'AnimationTimeline' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(244,38): error TS2339: Property 'AnimationTimeline' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(246,36): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(246,36): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(249,38): error TS2339: Property 'AnimationTimeline' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(251,36): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(251,36): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(254,38): error TS2339: Property 'AnimationTimeline' does not exist on type '{ new (effect?: AnimationEffectReadOnly, timeline?: AnimationTimeline): Animation; prototype: Ani...'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(256,36): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(256,36): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(334,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(359,28): error TS2345: Argument of type '(left: (Anonymous class), right: (Anonymous class)) => boolean' is not assignable to parameter of type '(a: any, b: any) => number'.
   Type 'boolean' is not assignable to type 'number'.
@@ -612,7 +611,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(342,26):
 node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(356,23): error TS2339: Property 'disabled' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(363,24): error TS2345: Argument of type 'TemplateStringsArray' is not assignable to parameter of type 'string | string[]'.
   Type 'TemplateStringsArray' is not assignable to type 'string[]'.
-node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(363,55): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(363,55): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(365,46): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(379,15): error TS1055: Type 'Promise<undefined>' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
 node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(384,31): error TS2339: Property 'singleton' does not exist on type 'Window'.
@@ -3817,11 +3816,11 @@ node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(45,37): e
   Type '(Anonymous class)' is not assignable to type '{ [x: string]: any; item(): any & (Anonymous class); }'.
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(47,37): error TS2345: Argument of type '(Anonymous class)' is not assignable to parameter of type '{ [x: string]: any; item(): any & (Anonymous class); } & (Anonymous class)'.
   Type '(Anonymous class)' is not assignable to type '{ [x: string]: any; item(): any & (Anonymous class); }'.
-node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(50,20): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(50,20): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(75,11): error TS2339: Property 'consume' does not exist on type 'Event'.
-node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(111,22): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(111,22): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(133,20): error TS2694: Namespace 'Diff' has no exported member 'Diff'.
-node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(139,22): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(139,22): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(155,26): error TS2339: Property 'pushAll' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(156,25): error TS2339: Property 'pushAll' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(157,24): error TS2339: Property 'pushAll' does not exist on type 'any[]'.
@@ -4524,8 +4523,8 @@ node_modules/chrome-devtools-frontend/front_end/components/DOMPresentationUtils.
 node_modules/chrome-devtools-frontend/front_end/components/DOMPresentationUtils.js(238,13): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/components/DOMPresentationUtils.js(239,13): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/components/DOMPresentationUtils.js(251,11): error TS2339: Property 'consume' does not exist on type 'Event'.
-node_modules/chrome-devtools-frontend/front_end/components/DOMPresentationUtils.js(256,13): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/components/DOMPresentationUtils.js(259,13): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/components/DOMPresentationUtils.js(256,13): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/components/DOMPresentationUtils.js(259,13): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/components/DOMPresentationUtils.js(643,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/components/DOMPresentationUtils.js(657,19): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/components/DockController.js(42,46): error TS2555: Expected at least 2 arguments, but got 1.
@@ -5033,7 +5032,7 @@ node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(13
   Type 'TemplateStringsArray' is not assignable to type 'string[]'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(1381,63): error TS2339: Property 'withThousandsSeparator' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(1388,33): error TS2339: Property 'createChild' does not exist on type 'DocumentFragment'.
-node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(1389,44): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(1389,44): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(1391,31): error TS2339: Property 'copyText' does not exist on type 'typeof InspectorFrontendHost'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(1402,20): error TS2339: Property 'ConsoleViewMessage' does not exist on type '{ new (): Console; prototype: Console; }'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(1412,18): error TS2339: Property 'ConsoleViewMessage' does not exist on type '{ new (): Console; prototype: Console; }'.
@@ -6434,8 +6433,8 @@ node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(534,54): error TS2339: Property 'toggleHideElement' does not exist on type '(Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(535,21): error TS2339: Property 'isToggledToHidden' does not exist on type '(Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(539,44): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(541,42): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(542,42): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(541,42): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(542,42): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(546,26): error TS2339: Property 'selectedDOMNode' does not exist on type '(Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(575,10): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(576,10): error TS2339: Property 'style' does not exist on type 'Element'.
@@ -9770,8 +9769,8 @@ node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSectio
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(326,20): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(328,20): error TS2339: Property 'title' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(343,35): error TS2694: Namespace '(Anonymous class)' has no exported member 'FunctionDetails'.
-node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(392,11): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(395,11): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(392,11): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(395,11): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(468,48): error TS2339: Property '_skipProto' does not exist on type '(Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(565,16): error TS2339: Property 'parentObject' does not exist on type '(Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(571,38): error TS2339: Property 'getter' does not exist on type '(Anonymous class)'.
@@ -9806,10 +9805,10 @@ node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSectio
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(820,46): error TS2339: Property 'title' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(821,51): error TS2339: Property 'copyText' does not exist on type 'typeof InspectorFrontendHost'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(821,105): error TS2339: Property 'title' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(822,49): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(822,49): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(824,23): error TS2339: Property 'parentObject' does not exist on type '(Anonymous class)'.
-node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(825,44): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(826,44): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(825,44): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(826,44): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(832,43): error TS2339: Property '_editable' does not exist on type '(Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(832,61): error TS2339: Property '_readOnly' does not exist on type '(Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(835,46): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -10318,7 +10317,6 @@ node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(545,5): er
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(580,34): error TS2339: Property 'length' does not exist on type 'PropertyDescriptor'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(581,30): error TS2339: Property 'length' does not exist on type 'PropertyDescriptor'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(595,30): error TS2339: Property 'length' does not exist on type 'PropertyDescriptor'.
-node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(612,5): error TS2322: Type 'PropertyDescriptor' is not assignable to type 'T[]'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(612,5): error TS2322: Type 'PropertyDescriptor' is not assignable to type 'T[]'.
   Property 'includes' is missing in type 'PropertyDescriptor'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(624,28): error TS2339: Property 'length' does not exist on type 'PropertyDescriptor'.
@@ -13071,7 +13069,7 @@ node_modules/chrome-devtools-frontend/front_end/sdk/SecurityOriginManager.js(26,
 node_modules/chrome-devtools-frontend/front_end/sdk/SecurityOriginManager.js(31,24): error TS2495: Type 'Set<string>' is not an array type or a string type.
 node_modules/chrome-devtools-frontend/front_end/sdk/SecurityOriginManager.js(41,34): error TS2339: Property 'valuesArray' does not exist on type 'Set<string>'.
 node_modules/chrome-devtools-frontend/front_end/sdk/ServerTiming.js(20,41): error TS2694: Namespace '(Anonymous class)' has no exported member 'NameValue'.
-node_modules/chrome-devtools-frontend/front_end/sdk/ServerTiming.js(110,26): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/sdk/ServerTiming.js(110,26): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/sdk/ServerTiming.js(129,32): error TS2345: Argument of type 'TemplateStringsArray' is not assignable to parameter of type 'string | string[]'.
   Type 'TemplateStringsArray' is not assignable to type 'string[]'.
     Property 'push' is missing in type 'TemplateStringsArray'.
@@ -13079,9 +13077,8 @@ node_modules/chrome-devtools-frontend/front_end/sdk/ServerTiming.js(134,32): err
   Type 'TemplateStringsArray' is not assignable to type 'string[]'.
 node_modules/chrome-devtools-frontend/front_end/sdk/ServerTiming.js(139,30): error TS2345: Argument of type 'TemplateStringsArray' is not assignable to parameter of type 'string | string[]'.
   Type 'TemplateStringsArray' is not assignable to type 'string[]'.
-node_modules/chrome-devtools-frontend/front_end/sdk/ServerTiming.js(149,24): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/sdk/ServerTiming.js(165,34): error TS2345: Argument of type 'TemplateStringsArray' is not assignable to parameter of type 'string | string[]'.
-  Type 'TemplateStringsArray' is not assignable to type 'string[]'.
+node_modules/chrome-devtools-frontend/front_end/sdk/ServerTiming.js(149,24): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/sdk/ServerTiming.js(165,32): error TS2554: Expected 2 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/sdk/ServerTiming.js(186,25): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/sdk/ServiceWorkerCacheModel.js(15,12): error TS2339: Property 'registerStorageDispatcher' does not exist on type '(Anonymous class)'.
 node_modules/chrome-devtools-frontend/front_end/sdk/ServiceWorkerCacheModel.js(20,31): error TS2339: Property 'cacheStorageAgent' does not exist on type '(Anonymous class)'.
@@ -13459,7 +13456,7 @@ node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(761,9)
 node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(771,38): error TS2694: Namespace '(Anonymous class)' has no exported member 'Origin'.
 node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(772,38): error TS2694: Namespace '(Anonymous class)' has no exported member 'OriginState'.
 node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(783,37): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(784,75): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(784,75): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(794,9): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/security/SecurityPanel.js(796,44): error TS2345: Argument of type '{ filterType: string; filterValue: string; }[]' is not assignable to parameter of type '{ filterType: { [x: string]: any; Domain: string; HasResponseHeader: string; Is: string; LargerTh...'.
   Type '{ filterType: string; filterValue: string; }' is not assignable to type '{ filterType: { [x: string]: any; Domain: string; HasResponseHeader: string; Is: string; LargerTh...'.
@@ -15140,8 +15137,8 @@ node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1258,2
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1279,81): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(value: any) => any'.
   Type 'Function' provides no match for the signature '(value: any): any'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1304,3): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
-node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1310,30): error TS2339: Property 'getAttribute' does not exist on type 'Node'.
-node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1311,44): error TS2339: Property 'getAttribute' does not exist on type 'Node'.
+node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1310,30): error TS2339: Property 'getAttribute' does not exist on type 'Node & ChildNode'.
+node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1311,44): error TS2339: Property 'getAttribute' does not exist on type 'Node & ChildNode'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1388,16): error TS2339: Property 'testRunner' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1424,14): error TS2339: Property '_initializeTargetForStartupTest' does not exist on type 'typeof TestRunner'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(1425,37): error TS2339: Property '_instanceForTest' does not exist on type 'typeof (Anonymous class)'.
