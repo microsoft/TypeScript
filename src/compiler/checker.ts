@@ -8021,8 +8021,7 @@ namespace ts {
         function getLiteralTypeFromPropertyName(prop: Symbol) {
             const links = getSymbolLinks(getLateBoundSymbol(prop));
             if (!links.nameType) {
-                if (links.target && links.target !== unknownSymbol && links.target !== resolvingSymbol) {
-                    Debug.assert(links.target.escapedName === prop.escapedName || links.target.escapedName === InternalSymbolName.Computed, "Target symbol and symbol do not have the same name");
+                if (links.target && links.target !== unknownSymbol && links.target !== resolvingSymbol && links.target.escapedName === prop.escapedName) {
                     links.nameType = getLiteralTypeFromPropertyName(links.target);
                 }
                 else {
