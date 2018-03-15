@@ -52,6 +52,13 @@ namespace ts {
         }
     }
 
+    /*@internal*/
+    export function isJSDocLikeText(text: string, start: number) {
+        return text.charCodeAt(start + 1) === CharacterCodes.asterisk &&
+            text.charCodeAt(start + 2) === CharacterCodes.asterisk &&
+            text.charCodeAt(start + 3) !== CharacterCodes.slash;
+    }
+
     /**
      * Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes
      * stored in properties. If a 'cbNodes' callback is specified, it is invoked for embedded arrays; otherwise,
@@ -6219,7 +6226,7 @@ namespace ts {
                 let result: JSDoc;
 
                 // Check for /** (JSDoc opening part)
-                if (!isJsDocStart(content, start)) {
+                if (!isJSDocLikeText(content, start)) {
                     return result;
                 }
 
@@ -6329,13 +6336,6 @@ namespace ts {
                     while (comments.length && (comments[comments.length - 1] === "\n" || comments[comments.length - 1] === "\r")) {
                         comments.pop();
                     }
-                }
-
-                function isJsDocStart(content: string, start: number) {
-                    return content.charCodeAt(start) === CharacterCodes.slash &&
-                        content.charCodeAt(start + 1) === CharacterCodes.asterisk &&
-                        content.charCodeAt(start + 2) === CharacterCodes.asterisk &&
-                        content.charCodeAt(start + 3) !== CharacterCodes.asterisk;
                 }
 
                 function createJSDocComment(): JSDoc {

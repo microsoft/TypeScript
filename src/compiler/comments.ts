@@ -260,12 +260,6 @@ namespace ts {
             }
         }
 
-        function isJSDocLikeText(text: string, start: number) {
-            return text.charCodeAt(start + 1) === CharacterCodes.asterisk &&
-                text.charCodeAt(start + 2) === CharacterCodes.asterisk &&
-                text.charCodeAt(start + 3) !== CharacterCodes.slash;
-        }
-
         function shouldWriteComment(text: string, pos: number) {
             if (printerOptions.onlyPrintJsDocStyle) {
                 return (isJSDocLikeText(text, pos) || isPinnedComment(text, pos));
