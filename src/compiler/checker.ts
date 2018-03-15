@@ -421,8 +421,8 @@ namespace ts {
         let deferredGlobalTemplateStringsArrayType: ObjectType;
 
         let deferredNodes: Node[];
+        const seenDeferredNodes = createMap<true>(); // For assertion that we don't defer the same node twice
         let deferredUnusedIdentifierNodes: Node[];
-        const seenDeferredUnusedIdentifiers = createMap<true>(); // For assertion that we don't defer the same identifier twice
 
         let flowLoopStart = 0;
         let flowLoopCount = 0;
@@ -577,9 +577,10 @@ namespace ts {
 
         const enum CheckMode {
             Normal = 0,                // Normal type checking
-            SkipContextSensitive = 1,  // Skip context sensitive function expressions
-            Inferential = 2,           // Inferential typing
-            Contextual = 3,            // Normal type checking informed by a contextual type, therefore not cacheable
+            JustType = 1,              // Just return a type and don't report errors
+            SkipContextSensitive = 2,  // Skip context sensitive function expressions
+            Inferential = 3,           // Inferential typing
+            Contextual = 4,            // Normal type checking informed by a contextual type, therefore not cacheable
         }
 
         const enum CallbackCheck {
@@ -19573,14 +19574,14 @@ namespace ts {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 if (checkMode) {
-                    return checkExpression(node, checkMode);
+                    return checkExpressionNoCache(node, checkMode);
                 }
                 // When computing a type that we're going to cache, we need to ignore any ongoing control flow
                 // analysis because variables may have transient types in indeterminable states. Moving flowLoopStart
                 // to the top of the stack ensures all transient types are computed from a known point.
                 const saveFlowLoopStart = flowLoopStart;
                 flowLoopStart = flowLoopCount;
-                links.resolvedType = checkExpression(node, checkMode);
+                links.resolvedType = checkExpressionNoCache(node, checkMode);
                 flowLoopStart = saveFlowLoopStart;
             }
             return links.resolvedType;
@@ -19697,7 +19698,7 @@ namespace ts {
             // Otherwise simply call checkExpression. Ideally, the entire family of checkXXX functions
             // should have a parameter that indicates whether full error checking is required such that
             // we can perform the optimizations locally.
-            return cache ? checkExpressionCached(node) : checkExpression(node);
+            return cache ? checkExpressionCached(node) : checkExpression(node, CheckMode.JustType);
         }
 
         /**
@@ -19715,6 +19716,11 @@ namespace ts {
             return type;
         }
 
+        function checkExpression(node: Expression | QualifiedName, checkMode?: CheckMode): Type {
+            // Do nothing if this was already checked by a `checkExpressionCached` call
+            return getNodeLinks(node).resolvedType || checkExpressionNoCache(node, checkMode);
+        }
+
         // Checks an expression and returns its type. The contextualMapper parameter serves two purposes: When
         // contextualMapper is not undefined and not equal to the identityMapper function object it indicates that the
         // expression is being inferentially typed (section 4.15.2 in spec) and provides the type mapper to use in
@@ -19722,7 +19728,7 @@ namespace ts {
         // object, it serves as an indicator that all contained function and arrow expressions should be considered to
         // have the wildcard function type; this form of type check is used during overload resolution to exclude
         // contextually typed function and arrow expressions in the initial phase.
-        function checkExpression(node: Expression | QualifiedName, checkMode?: CheckMode): Type {
+        function checkExpressionNoCache(node: Expression | QualifiedName, checkMode: CheckMode | undefined): Type {
             let type: Type;
             if (node.kind === SyntaxKind.QualifiedName) {
                 type = checkQualifiedName(<QualifiedName>node);
@@ -19802,7 +19808,7 @@ namespace ts {
                 case SyntaxKind.ParenthesizedExpression:
                     return checkParenthesizedExpression(<ParenthesizedExpression>node, checkMode);
                 case SyntaxKind.ClassExpression:
-                    return checkClassExpression(<ClassExpression>node);
+                    return checkClassExpression(<ClassExpression>node, checkMode);
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                     return checkFunctionExpressionOrObjectLiteralMethod(<FunctionExpression>node, checkMode);
@@ -21573,7 +21579,6 @@ namespace ts {
 
         function registerForUnusedIdentifiersCheck(node: Node) {
             if (deferredUnusedIdentifierNodes) {
-                Debug.assert(addToSeen(seenDeferredUnusedIdentifiers, getNodeId(node)), "Deferring unused identifier check twice");
                 deferredUnusedIdentifierNodes.push(node);
             }
         }
@@ -23175,9 +23180,11 @@ namespace ts {
             return true;
         }
 
-        function checkClassExpression(node: ClassExpression): Type {
-            checkClassLikeDeclaration(node);
-            checkNodeDeferred(node);
+        function checkClassExpression(node: ClassExpression, checkMode: CheckMode | undefined): Type {
+            if (!checkMode) {
+                checkClassLikeDeclaration(node);
+                checkNodeDeferred(node);
+            }
             return getTypeOfSymbol(getSymbolOfNode(node));
         }
 
@@ -24519,6 +24526,7 @@ namespace ts {
         // Delaying the type check of the body ensures foo has been assigned a type.
         function checkNodeDeferred(node: Node) {
             if (deferredNodes) {
+                Debug.assert(addToSeen(seenDeferredNodes, getNodeId(node)));
                 deferredNodes.push(node);
             }
         }
@@ -24584,7 +24592,7 @@ namespace ts {
                 }
 
                 deferredNodes = undefined;
-                seenDeferredUnusedIdentifiers.clear();
+                seenDeferredNodes.clear();
                 deferredUnusedIdentifierNodes = undefined;
 
                 if (isExternalOrCommonJsModule(node)) {
