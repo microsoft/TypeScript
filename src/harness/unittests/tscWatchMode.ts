@@ -76,7 +76,7 @@ namespace ts.tscWatch {
     function checkOutputErrors(
         host: WatchedSystem,
         logsBeforeWatchDiagnostic: string[] | undefined,
-        preErrorsWatchDiagnostic: DiagnosticMessage | undefined,
+        preErrorsWatchDiagnostic: DiagnosticMessage,
         logsBeforeErrors: string[] | undefined,
         errors: ReadonlyArray<Diagnostic>,
         disableConsoleClears?: boolean | undefined,
@@ -84,14 +84,12 @@ namespace ts.tscWatch {
     ) {
         let screenClears = 0;
         const outputs = host.getOutput();
-        const expectedOutputCount = (preErrorsWatchDiagnostic ? 1 : 0) + errors.length + postErrorsWatchDiagnostics.length +
+        const expectedOutputCount = 1 + errors.length + postErrorsWatchDiagnostics.length +
             (logsBeforeWatchDiagnostic ? logsBeforeWatchDiagnostic.length : 0) + (logsBeforeErrors ? logsBeforeErrors.length : 0);
         assert.equal(outputs.length, expectedOutputCount, JSON.stringify(outputs));
         let index = 0;
         forEach(logsBeforeWatchDiagnostic, log => assertLog("logsBeforeWatchDiagnostic", log));
-        if (preErrorsWatchDiagnostic) {
-            assertWatchDiagnostic(preErrorsWatchDiagnostic);
-        }
+        assertWatchDiagnostic(preErrorsWatchDiagnostic);
         forEach(logsBeforeErrors, log => assertLog("logBeforeError", log));
         // Verify errors
         forEach(errors, assertDiagnostic);
@@ -130,20 +128,16 @@ namespace ts.tscWatch {
         }
     }
 
-    function checkOutputErrorsInitial(host: WatchedSystem, errors: ReadonlyArray<Diagnostic>, disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
-        checkOutputErrors(host, logsBeforeWatchDiagnostic, Diagnostics.Starting_compilation_in_watch_mode, logsBeforeErrors, errors, disableConsoleClears, Diagnostics.Compilation_complete_Watching_for_file_changes);
-    }
-
-    function checkOutputErrorsInitialWithConfigErrors(host: WatchedSystem, errors: ReadonlyArray<Diagnostic>) {
-        checkOutputErrors(host, /*logsBeforeWatchDiagnostic*/ undefined, /*preErrorsWatchDiagnostic*/ undefined, /*logsBeforeErrors*/ undefined, errors, /*disableConsoleClears*/ undefined, Diagnostics.Starting_compilation_in_watch_mode, Diagnostics.Compilation_complete_Watching_for_file_changes);
+    function checkOutputErrorsInitial(host: WatchedSystem, errors: ReadonlyArray<Diagnostic>, disableConsoleClears?: boolean, logsBeforeErrors?: string[]) {
+        checkOutputErrors(host, /*logsBeforeWatchDiagnostic*/ undefined, Diagnostics.Starting_compilation_in_watch_mode, logsBeforeErrors, errors, disableConsoleClears, Diagnostics.Compilation_complete_Watching_for_file_changes);
     }
 
     function checkOutputErrorsIncremental(host: WatchedSystem, errors: ReadonlyArray<Diagnostic>, disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
         checkOutputErrors(host, logsBeforeWatchDiagnostic, Diagnostics.File_change_detected_Starting_incremental_compilation, logsBeforeErrors, errors, disableConsoleClears, Diagnostics.Compilation_complete_Watching_for_file_changes);
     }
 
-    function checkOutputErrorsIncrementalWithExit(host: WatchedSystem, errors: ReadonlyArray<Diagnostic>, expectedExitCode: ExitStatus) {
-        checkOutputErrors(host, /*logsBeforeWatchDiagnostic*/ undefined, Diagnostics.File_change_detected_Starting_incremental_compilation, /*logsBeforeErrors*/ undefined, errors, /*disableConsoleClears*/ undefined);
+    function checkOutputErrorsIncrementalWithExit(host: WatchedSystem, errors: ReadonlyArray<Diagnostic>, expectedExitCode: ExitStatus, disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
+        checkOutputErrors(host, logsBeforeWatchDiagnostic, Diagnostics.File_change_detected_Starting_incremental_compilation, logsBeforeErrors, errors, disableConsoleClears);
         assert.equal(host.exitCode, expectedExitCode);
     }
 
@@ -916,7 +910,7 @@ namespace ts.tscWatch {
 
             const host = createWatchedSystem([file, configFile, libFile]);
             const watch = createWatchOfConfigFile(configFile.path, host);
-            checkOutputErrorsInitialWithConfigErrors(host, [
+            checkOutputErrorsInitial(host, [
                 getUnknownCompilerOption(watch(), configFile, "foo"),
                 getUnknownCompilerOption(watch(), configFile, "allowJS")
             ]);
@@ -2185,8 +2179,7 @@ declare module "fs" {
             const host = createWatchedSystem(files);
             createWatchOfFilesAndCompilerOptions([file.path], host, options);
             checkOutputErrorsInitial(host, emptyArray, disableConsoleClear, options.extendedDiagnostics && [
-                "Current directory: / CaseSensitiveFileNames: false\n"
-            ], options.extendedDiagnostics && [
+                "Current directory: / CaseSensitiveFileNames: false\n",
                 "Synchronizing program\n",
                 "CreatingProgramWith::\n",
                 "  roots: [\"f.ts\"]\n",
