@@ -1263,14 +1263,23 @@ namespace ts {
             enclosingDeclaration = prevEnclosingDeclaration;
         }
 
-        function emitPropertyDeclaration(node: Declaration) {
-            if (hasDynamicName(node) && !resolver.isLateBound(node)) {
+        function hasNoncollidingLateBoundPropertyName(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration) {
+            if (!hasModifier(node, ModifierFlags.Private)) {
+                return false;
+            }
+            const entityName = (node as NamedDeclaration as LateBoundDeclaration).name.expression;
+            const visibilityResult = resolver.isEntityNameVisible(entityName, enclosingDeclaration);
+            return visibilityResult.accessibility !== SymbolAccessibility.Accessible;
+        }
+
+        function emitPropertyDeclaration(node: ParameterDeclaration | PropertyDeclaration) {
+            if (hasDynamicName(node) && (!resolver.isLateBound(node) || hasNoncollidingLateBoundPropertyName(node))) {
                 return;
             }
 
             emitJsDocComments(node);
             emitClassMemberDeclarationFlags(getModifierFlags(node));
-            emitVariableDeclaration(<VariableDeclaration>node);
+            emitVariableDeclaration(node);
             write(";");
             writeLine();
         }
