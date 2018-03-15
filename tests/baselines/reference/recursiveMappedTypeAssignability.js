@@ -20,9 +20,10 @@ type DataValidator<T> = {
 
 // modified repro with top-level mapped type, which works
 // because the literal type has aliasSymbol set
-type SafeAny2<T> = {
+type SafeAnyMap<T> = {
     [K in keyof T]?: SafeAny2<T[K]>
 }
+type SafeAny2<T> = SafeAnyMap<T> | boolean | number | string | symbol | null | undefined
 <T>(t: T, sat: SafeAny2<T>) => { sat = t }
 
 

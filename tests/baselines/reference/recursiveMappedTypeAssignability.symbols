@@ -41,55 +41,61 @@ type DataValidator<T> = {
 
 // modified repro with top-level mapped type, which works
 // because the literal type has aliasSymbol set
-type SafeAny2<T> = {
->SafeAny2 : Symbol(SafeAny2, Decl(recursiveMappedTypeAssignability.ts, 17, 1))
->T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 21, 14))
+type SafeAnyMap<T> = {
+>SafeAnyMap : Symbol(SafeAnyMap, Decl(recursiveMappedTypeAssignability.ts, 17, 1))
+>T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 21, 16))
 
     [K in keyof T]?: SafeAny2<T[K]>
 >K : Symbol(K, Decl(recursiveMappedTypeAssignability.ts, 22, 5))
->T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 21, 14))
->SafeAny2 : Symbol(SafeAny2, Decl(recursiveMappedTypeAssignability.ts, 17, 1))
->T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 21, 14))
+>T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 21, 16))
+>SafeAny2 : Symbol(SafeAny2, Decl(recursiveMappedTypeAssignability.ts, 23, 1))
+>T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 21, 16))
 >K : Symbol(K, Decl(recursiveMappedTypeAssignability.ts, 22, 5))
 }
+type SafeAny2<T> = SafeAnyMap<T> | boolean | number | string | symbol | null | undefined
+>SafeAny2 : Symbol(SafeAny2, Decl(recursiveMappedTypeAssignability.ts, 23, 1))
+>T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 24, 14))
+>SafeAnyMap : Symbol(SafeAnyMap, Decl(recursiveMappedTypeAssignability.ts, 17, 1))
+>T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 24, 14))
+
 <T>(t: T, sat: SafeAny2<T>) => { sat = t }
->T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 24, 1))
->t : Symbol(t, Decl(recursiveMappedTypeAssignability.ts, 24, 4))
->T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 24, 1))
->sat : Symbol(sat, Decl(recursiveMappedTypeAssignability.ts, 24, 9))
->SafeAny2 : Symbol(SafeAny2, Decl(recursiveMappedTypeAssignability.ts, 17, 1))
->T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 24, 1))
->sat : Symbol(sat, Decl(recursiveMappedTypeAssignability.ts, 24, 9))
->t : Symbol(t, Decl(recursiveMappedTypeAssignability.ts, 24, 4))
+>T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 25, 1))
+>t : Symbol(t, Decl(recursiveMappedTypeAssignability.ts, 25, 4))
+>T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 25, 1))
+>sat : Symbol(sat, Decl(recursiveMappedTypeAssignability.ts, 25, 9))
+>SafeAny2 : Symbol(SafeAny2, Decl(recursiveMappedTypeAssignability.ts, 23, 1))
+>T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 25, 1))
+>sat : Symbol(sat, Decl(recursiveMappedTypeAssignability.ts, 25, 9))
+>t : Symbol(t, Decl(recursiveMappedTypeAssignability.ts, 25, 4))
 
 
 const fn = <T>(arg: T) => {
->fn : Symbol(fn, Decl(recursiveMappedTypeAssignability.ts, 27, 5))
->T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 27, 12))
->arg : Symbol(arg, Decl(recursiveMappedTypeAssignability.ts, 27, 15))
->T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 27, 12))
+>fn : Symbol(fn, Decl(recursiveMappedTypeAssignability.ts, 28, 5))
+>T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 28, 12))
+>arg : Symbol(arg, Decl(recursiveMappedTypeAssignability.ts, 28, 15))
+>T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 28, 12))
 
     ((arg2: RecursivePartial<T>) => {
->arg2 : Symbol(arg2, Decl(recursiveMappedTypeAssignability.ts, 28, 6))
->RecursivePartial : Symbol(RecursivePartial, Decl(recursiveMappedTypeAssignability.ts, 31, 2))
->T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 27, 12))
+>arg2 : Symbol(arg2, Decl(recursiveMappedTypeAssignability.ts, 29, 6))
+>RecursivePartial : Symbol(RecursivePartial, Decl(recursiveMappedTypeAssignability.ts, 32, 2))
+>T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 28, 12))
 
         // ...
     })(arg);
->arg : Symbol(arg, Decl(recursiveMappedTypeAssignability.ts, 27, 15))
+>arg : Symbol(arg, Decl(recursiveMappedTypeAssignability.ts, 28, 15))
 
 };
 
 type RecursivePartial<T> = {
->RecursivePartial : Symbol(RecursivePartial, Decl(recursiveMappedTypeAssignability.ts, 31, 2))
->T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 33, 22))
+>RecursivePartial : Symbol(RecursivePartial, Decl(recursiveMappedTypeAssignability.ts, 32, 2))
+>T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 34, 22))
 
     [P in keyof T]?: RecursivePartial<T[P]>;
->P : Symbol(P, Decl(recursiveMappedTypeAssignability.ts, 34, 5))
->T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 33, 22))
->RecursivePartial : Symbol(RecursivePartial, Decl(recursiveMappedTypeAssignability.ts, 31, 2))
->T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 33, 22))
->P : Symbol(P, Decl(recursiveMappedTypeAssignability.ts, 34, 5))
+>P : Symbol(P, Decl(recursiveMappedTypeAssignability.ts, 35, 5))
+>T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 34, 22))
+>RecursivePartial : Symbol(RecursivePartial, Decl(recursiveMappedTypeAssignability.ts, 32, 2))
+>T : Symbol(T, Decl(recursiveMappedTypeAssignability.ts, 34, 22))
+>P : Symbol(P, Decl(recursiveMappedTypeAssignability.ts, 35, 5))
 
 };
 
