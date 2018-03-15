@@ -1,12 +1,12 @@
 // @strict: true
-// type D<U> = { [P in keyof U]: D<U[P]> };
-// <T>(t: T, dt: D<T>) => { dt = t };
-// type DR<U> = { readonly [P in keyof U]: DR<U[P]> };
-// <T>(t: T, dt: DR<T>) => { dt = t };
-// type DP<U> = { [P in keyof U]?: DP<U[P]> };
-// <T>(t: T, dt: DP<T>) => { dt = t };
-// type DAP<U> = { [P in keyof U]?: DAP<U[P]> & U[P] };
-// <T>(t: T, dt: DAP<T>) => { dt = t };
+type D<U> = { [P in keyof U]: D<U[P]> };
+<T>(t: T, dt: D<T>) => { dt = t };
+type DR<U> = { readonly [P in keyof U]: DR<U[P]> };
+<T>(t: T, dt: DR<T>) => { dt = t };
+type DP<U> = { [P in keyof U]?: DP<U[P]> };
+<T>(t: T, dt: DP<T>) => { dt = t };
+type DAP<U> = { [P in keyof U]?: DAP<U[P]> & U[P] };
+<T>(t: T, dt: DAP<T>) => { dt = t };
 
 // #21592
 // doesn't work because aliasSymbol isn't set on the literal type

@@ -1,12 +1,89 @@
 === tests/cases/compiler/recursiveMappedTypeAssignability.ts ===
-// type D<U> = { [P in keyof U]: D<U[P]> };
-// <T>(t: T, dt: D<T>) => { dt = t };
-// type DR<U> = { readonly [P in keyof U]: DR<U[P]> };
-// <T>(t: T, dt: DR<T>) => { dt = t };
-// type DP<U> = { [P in keyof U]?: DP<U[P]> };
-// <T>(t: T, dt: DP<T>) => { dt = t };
-// type DAP<U> = { [P in keyof U]?: DAP<U[P]> & U[P] };
-// <T>(t: T, dt: DAP<T>) => { dt = t };
+type D<U> = { [P in keyof U]: D<U[P]> };
+>D : D<U>
+>U : U
+>P : P
+>U : U
+>D : D<U>
+>U : U
+>P : P
+
+<T>(t: T, dt: D<T>) => { dt = t };
+><T>(t: T, dt: D<T>) => { dt = t } : <T>(t: T, dt: D<T>) => void
+>T : T
+>t : T
+>T : T
+>dt : D<T>
+>D : D<U>
+>T : T
+>dt = t : T
+>dt : D<T>
+>t : T
+
+type DR<U> = { readonly [P in keyof U]: DR<U[P]> };
+>DR : DR<U>
+>U : U
+>P : P
+>U : U
+>DR : DR<U>
+>U : U
+>P : P
+
+<T>(t: T, dt: DR<T>) => { dt = t };
+><T>(t: T, dt: DR<T>) => { dt = t } : <T>(t: T, dt: DR<T>) => void
+>T : T
+>t : T
+>T : T
+>dt : DR<T>
+>DR : DR<U>
+>T : T
+>dt = t : T
+>dt : DR<T>
+>t : T
+
+type DP<U> = { [P in keyof U]?: DP<U[P]> };
+>DP : DP<U>
+>U : U
+>P : P
+>U : U
+>DP : DP<U>
+>U : U
+>P : P
+
+<T>(t: T, dt: DP<T>) => { dt = t };
+><T>(t: T, dt: DP<T>) => { dt = t } : <T>(t: T, dt: DP<T>) => void
+>T : T
+>t : T
+>T : T
+>dt : DP<T>
+>DP : DP<U>
+>T : T
+>dt = t : T
+>dt : DP<T>
+>t : T
+
+type DAP<U> = { [P in keyof U]?: DAP<U[P]> & U[P] };
+>DAP : DAP<U>
+>U : U
+>P : P
+>U : U
+>DAP : DAP<U>
+>U : U
+>P : P
+>U : U
+>P : P
+
+<T>(t: T, dt: DAP<T>) => { dt = t };
+><T>(t: T, dt: DAP<T>) => { dt = t } : <T>(t: T, dt: DAP<T>) => void
+>T : T
+>t : T
+>T : T
+>dt : DAP<T>
+>DAP : DAP<U>
+>T : T
+>dt = t : T
+>dt : DAP<T>
+>t : T
 
 // #21592
 // doesn't work because aliasSymbol isn't set on the literal type
