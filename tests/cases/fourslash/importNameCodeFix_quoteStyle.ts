@@ -12,5 +12,5 @@ verify.importFixAtPosition([
 
 foo;`,
 ], /*errorCode*/ undefined, {
-    quote: "single",
+    quotePreference: "single",
 });

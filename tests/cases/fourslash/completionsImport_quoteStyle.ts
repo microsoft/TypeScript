@@ -11,8 +11,8 @@ verify.applyCodeActionFromCompletion("", {
     name: "foo",
     source: "/a",
     description: `Import 'foo' from module "./a"`,
-    options: {
-        quote: "single",
+    preferences: {
+        quotePreference: "single",
     },
     newFileContent: `import { foo } from './a';
 

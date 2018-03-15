@@ -152,7 +152,7 @@ declare namespace FourSlashInterface {
             kind?: string | { kind?: string, kindModifiers?: string },
             spanIndex?: number,
             hasAction?: boolean,
-            options?: Options & {
+            options?: UserPreferences & {
                 sourceDisplay?: string,
                 isRecommended?: true,
                 insertText?: string,
@@ -179,7 +179,7 @@ declare namespace FourSlashInterface {
             newRangeContent?: string,
             errorCode?: number,
             index?: number,
-            options?: Options,
+            preferences?: UserPreferences,
         });
         codeFixAvailable(options?: Array<{ description: string, actions?: Array<{ type: string, data: {} }>, commands?: {}[] }>): void;
         applicableRefactorAvailableAtMarker(markerName: string): void;
@@ -211,7 +211,7 @@ declare namespace FourSlashInterface {
             description: string,
             newFileContent?: string,
             newRangeContent?: string,
-            options?: Options,
+            preferences?: UserPreferences,
         });
         indentationIs(numberOfSpaces: number): void;
         indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle?: ts.IndentStyle, baseIndentSize?: number): void;
@@ -299,7 +299,7 @@ declare namespace FourSlashInterface {
         rangeIs(expectedText: string, includeWhiteSpace?: boolean): void;
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, formattingOptions?: FormatCodeOptions): void;
         getAndApplyCodeFix(errorCode?: number, index?: number): void;
-        importFixAtPosition(expectedTextArray: string[], errorCode?: number, options?: Options): void;
+        importFixAtPosition(expectedTextArray: string[], errorCode?: number, options?: UserPreferences): void;
 
         navigationBar(json: any, options?: { checkSpans?: boolean }): void;
         navigationTree(json: any, options?: { checkSpans?: boolean }): void;
@@ -525,13 +525,13 @@ declare namespace FourSlashInterface {
         range?: Range;
         code: number;
     }
-    interface Options {
-        quote?: "double" | "single";
+    interface UserPreferences {
+        quotePreference?: "double" | "single";
         includeCompletionsForModuleExports?: boolean;
         includeInsertTextCompletions?: boolean;
-        importModuleSpecifierPreference?: "relative" | "baseUrl";
+        importModuleSpecifierPreference?: "relative" | "non-relative";
     }
-    interface CompletionsAtOptions extends Options {
+    interface CompletionsAtOptions extends UserPreferences {
         isNewIdentifierLocation?: boolean;
     }
 }

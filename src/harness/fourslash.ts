@@ -1227,8 +1227,8 @@ Actual: ${stringify(fullActual)}`);
             return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition, options);
         }
 
-        private getCompletionEntryDetails(entryName: string, source?: string, options?: ts.Options): ts.CompletionEntryDetails {
-            return this.languageService.getCompletionEntryDetails(this.activeFile.fileName, this.currentCaretPosition, entryName, this.formatCodeSettings, source, options);
+        private getCompletionEntryDetails(entryName: string, source?: string, preferences?: ts.UserPreferences): ts.CompletionEntryDetails {
+            return this.languageService.getCompletionEntryDetails(this.activeFile.fileName, this.currentCaretPosition, entryName, this.formatCodeSettings, source, preferences);
         }
 
         private getReferencesAtCaret() {
@@ -1727,8 +1727,8 @@ Actual: ${stringify(fullActual)}`);
             Harness.IO.log(stringify(sigHelp));
         }
 
-        public printCompletionListMembers(options: ts.Options | undefined) {
-            const completions = this.getCompletionListAtCaret(options);
+        public printCompletionListMembers(preferences: ts.UserPreferences | undefined) {
+            const completions = this.getCompletionListAtCaret(preferences);
             this.printMembersOrCompletions(completions);
         }
 
@@ -1826,7 +1826,7 @@ Actual: ${stringify(fullActual)}`);
                     }
                     else if (prevChar === " " && /A-Za-z_/.test(ch)) {
                         /* Completions */
-                        this.languageService.getCompletionsAtPosition(this.activeFile.fileName, offset, ts.defaultOptions);
+                        this.languageService.getCompletionsAtPosition(this.activeFile.fileName, offset, ts.defaultPreferences);
                     }
 
                     if (i % checkCadence === 0) {
@@ -2401,14 +2401,14 @@ Actual: ${stringify(fullActual)}`);
         public applyCodeActionFromCompletion(markerName: string, options: FourSlashInterface.VerifyCompletionActionOptions) {
             this.goToMarker(markerName);
 
-            const actualCompletion = this.getCompletionListAtCaret({ ...ts.defaultOptions, includeCompletionsForModuleExports: true }).entries.find(e =>
+            const actualCompletion = this.getCompletionListAtCaret({ ...ts.defaultPreferences, includeCompletionsForModuleExports: true }).entries.find(e =>
                 e.name === options.name && e.source === options.source);
 
             if (!actualCompletion.hasAction) {
                 this.raiseError(`Completion for ${options.name} does not have an associated action.`);
             }
 
-            const details = this.getCompletionEntryDetails(options.name, actualCompletion.source, options.options);
+            const details = this.getCompletionEntryDetails(options.name, actualCompletion.source, options.preferences);
             if (details.codeActions.length !== 1) {
                 this.raiseError(`Expected one code action, got ${details.codeActions.length}`);
             }
@@ -2453,7 +2453,7 @@ Actual: ${stringify(fullActual)}`);
             const { fixId, newFileContent } = options;
             const fixIds = ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => a.fixId);
             ts.Debug.assert(ts.contains(fixIds, fixId), "No available code fix has that group id.", () => `Expected '${fixId}'. Available action ids: ${fixIds}`);
-            const { changes, commands } = this.languageService.getCombinedCodeFix({ type: "file", fileName: this.activeFile.fileName }, fixId, this.formatCodeSettings, ts.defaultOptions);
+            const { changes, commands } = this.languageService.getCombinedCodeFix({ type: "file", fileName: this.activeFile.fileName }, fixId, this.formatCodeSettings, ts.defaultPreferences);
             assert.deepEqual(commands, options.commands);
             assert(changes.every(c => c.fileName === this.activeFile.fileName), "TODO: support testing codefixes that touch multiple files");
             this.applyChanges(changes);
@@ -2482,7 +2482,7 @@ Actual: ${stringify(fullActual)}`);
 
         public verifyCodeFix(options: FourSlashInterface.VerifyCodeFixOptions) {
             const fileName = this.activeFile.fileName;
-            const actions = this.getCodeFixes(fileName, options.errorCode, options.options);
+            const actions = this.getCodeFixes(fileName, options.errorCode, options.preferences);
             let index = options.index;
             if (index === undefined) {
                 if (!(actions && actions.length === 1)) {
@@ -2521,7 +2521,7 @@ Actual: ${stringify(fullActual)}`);
          * Rerieves a codefix satisfying the parameters, or undefined if no such codefix is found.
          * @param fileName Path to file where error should be retrieved from.
          */
-        private getCodeFixes(fileName: string, errorCode?: number, options: ts.Options = ts.defaultOptions): ts.CodeFixAction[] {
+        private getCodeFixes(fileName: string, errorCode?: number, preferences: ts.UserPreferences = ts.defaultPreferences): ts.CodeFixAction[] {
             const diagnosticsForCodeFix = this.getDiagnostics(fileName, /*includeSuggestions*/ true).map(diagnostic => ({
                 start: diagnostic.start,
                 length: diagnostic.length,
@@ -2533,7 +2533,7 @@ Actual: ${stringify(fullActual)}`);
                     return;
                 }
 
-                return this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.start + diagnostic.length, [diagnostic.code], this.formatCodeSettings, options);
+                return this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start, diagnostic.start + diagnostic.length, [diagnostic.code], this.formatCodeSettings, preferences);
             });
         }
 
@@ -2559,7 +2559,7 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        public verifyImportFixAtPosition(expectedTextArray: string[], errorCode: number | undefined, options: ts.Options | undefined) {
+        public verifyImportFixAtPosition(expectedTextArray: string[], errorCode: number | undefined, preferences: ts.UserPreferences | undefined) {
             const { fileName } = this.activeFile;
             const ranges = this.getRanges().filter(r => r.fileName === fileName);
             if (ranges.length !== 1) {
@@ -2567,7 +2567,7 @@ Actual: ${stringify(fullActual)}`);
             }
             const range = ts.first(ranges);
 
-            const codeFixes = this.getCodeFixes(fileName, errorCode, options);
+            const codeFixes = this.getCodeFixes(fileName, errorCode, preferences);
 
             if (codeFixes.length === 0) {
                 if (expectedTextArray.length !== 0) {
@@ -2937,7 +2937,7 @@ Actual: ${stringify(fullActual)}`);
 
         public verifyApplicableRefactorAvailableAtMarker(negative: boolean, markerName: string) {
             const marker = this.getMarkerByName(markerName);
-            const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, marker.position, ts.defaultOptions);
+            const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, marker.position, ts.defaultPreferences);
             const isAvailable = applicableRefactors && applicableRefactors.length > 0;
             if (negative && isAvailable) {
                 this.raiseError(`verifyApplicableRefactorAvailableAtMarker failed - expected no refactor at marker ${markerName} but found some.`);
@@ -2957,7 +2957,7 @@ Actual: ${stringify(fullActual)}`);
         public verifyRefactorAvailable(negative: boolean, name: string, actionName?: string) {
             const selection = this.getSelection();
 
-            let refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, selection, ts.defaultOptions) || [];
+            let refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, selection, ts.defaultPreferences) || [];
             refactors = refactors.filter(r => r.name === name && (actionName === undefined || r.actions.some(a => a.name === actionName)));
             const isAvailable = refactors.length > 0;
 
@@ -2979,7 +2979,7 @@ Actual: ${stringify(fullActual)}`);
         public verifyRefactor({ name, actionName, refactors }: FourSlashInterface.VerifyRefactorOptions) {
             const selection = this.getSelection();
 
-            const actualRefactors = (this.languageService.getApplicableRefactors(this.activeFile.fileName, selection, ts.defaultOptions) || ts.emptyArray)
+            const actualRefactors = (this.languageService.getApplicableRefactors(this.activeFile.fileName, selection, ts.defaultPreferences) || ts.emptyArray)
                 .filter(r => r.name === name && r.actions.some(a => a.name === actionName));
             this.assertObjectsEqual(actualRefactors, refactors);
         }
@@ -2990,7 +2990,7 @@ Actual: ${stringify(fullActual)}`);
                 throw new Error("Exactly one refactor range is allowed per test.");
             }
 
-            const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, ts.first(ranges), ts.defaultOptions);
+            const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, ts.first(ranges), ts.defaultPreferences);
             const isAvailable = applicableRefactors && applicableRefactors.length > 0;
             if (negative && isAvailable) {
                 this.raiseError(`verifyApplicableRefactorAvailableForRange failed - expected no refactor but found some.`);
@@ -3002,7 +3002,7 @@ Actual: ${stringify(fullActual)}`);
 
         public applyRefactor({ refactorName, actionName, actionDescription, newContent: newContentWithRenameMarker }: FourSlashInterface.ApplyRefactorOptions) {
             const range = this.getSelection();
-            const refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, range, ts.defaultOptions);
+            const refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, range, ts.defaultPreferences);
             const refactorsWithName = refactors.filter(r => r.name === refactorName);
             if (refactorsWithName.length === 0) {
                 this.raiseError(`The expected refactor: ${refactorName} is not available at the marker location.\nAvailable refactors: ${refactors.map(r => r.name)}`);
@@ -3016,7 +3016,7 @@ Actual: ${stringify(fullActual)}`);
                 this.raiseError(`Expected action description to be ${JSON.stringify(actionDescription)}, got: ${JSON.stringify(action.description)}`);
             }
 
-            const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, this.formatCodeSettings, range, refactorName, actionName, ts.defaultOptions);
+            const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, this.formatCodeSettings, range, refactorName, actionName, ts.defaultPreferences);
             for (const edit of editInfo.edits) {
                 this.applyEdits(edit.fileName, edit.textChanges, /*isFormattingEdit*/ false);
             }
@@ -3061,14 +3061,14 @@ Actual: ${stringify(fullActual)}`);
             formattingOptions = formattingOptions || this.formatCodeSettings;
             const markerPos = this.getMarkerByName(markerName).position;
 
-            const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, markerPos, ts.defaultOptions);
+            const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, markerPos, ts.defaultPreferences);
             const applicableRefactorToApply = ts.find(applicableRefactors, refactor => refactor.name === refactorNameToApply);
 
             if (!applicableRefactorToApply) {
                 this.raiseError(`The expected refactor: ${refactorNameToApply} is not available at the marker location.`);
             }
 
-            const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, formattingOptions, markerPos, refactorNameToApply, actionName, ts.defaultOptions);
+            const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, formattingOptions, markerPos, refactorNameToApply, actionName, ts.defaultPreferences);
 
             for (const edit of editInfo.edits) {
                 this.applyEdits(edit.fileName, edit.textChanges, /*isFormattingEdit*/ false);
@@ -4233,8 +4233,8 @@ namespace FourSlashInterface {
             this.state.applyCodeActionFromCompletion(markerName, options);
         }
 
-        public importFixAtPosition(expectedTextArray: string[], errorCode?: number, options?: ts.Options): void {
-            this.state.verifyImportFixAtPosition(expectedTextArray, errorCode, options);
+        public importFixAtPosition(expectedTextArray: string[], errorCode?: number, preferences?: ts.UserPreferences): void {
+            this.state.verifyImportFixAtPosition(expectedTextArray, errorCode, preferences);
         }
 
         public navigationBar(json: any, options?: { checkSpans?: boolean }) {
@@ -4440,7 +4440,7 @@ namespace FourSlashInterface {
             this.state.printCurrentSignatureHelp();
         }
 
-        public printCompletionListMembers(options: ts.Options | undefined) {
+        public printCompletionListMembers(options: ts.UserPreferences | undefined) {
             this.state.printCompletionListMembers(options);
         }
 
@@ -4637,11 +4637,11 @@ namespace FourSlashInterface {
     }
 
     export type ExpectedCompletionEntry = string | { name: string, insertText?: string, replacementSpan?: FourSlash.Range };
-    export interface CompletionsAtOptions extends Partial<ts.Options> {
+    export interface CompletionsAtOptions extends Partial<ts.UserPreferences> {
         isNewIdentifierLocation?: boolean;
     }
 
-    export interface VerifyCompletionListContainsOptions extends ts.Options {
+    export interface VerifyCompletionListContainsOptions extends ts.UserPreferences {
         sourceDisplay: string;
         isRecommended?: true;
         insertText?: string;
@@ -4662,7 +4662,7 @@ namespace FourSlashInterface {
         description: string;
         errorCode?: number;
         index?: number;
-        options?: ts.Options;
+        preferences?: ts.UserPreferences;
     }
 
     export interface VerifyCodeFixAvailableOptions {
@@ -4686,7 +4686,7 @@ namespace FourSlashInterface {
         name: string;
         source?: string;
         description: string;
-        options?: ts.Options;
+        preferences?: ts.UserPreferences;
     }
 
     export interface Diagnostic {

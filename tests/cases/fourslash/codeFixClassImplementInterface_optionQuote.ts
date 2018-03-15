@@ -16,5 +16,5 @@ class C implements I {
         throw new Error('Method not implemented.');
     }
 }`,
-    options: { quote: "single" }
+    preferences: { quotePreference: "single" }
 });

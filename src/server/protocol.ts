@@ -1267,7 +1267,7 @@ namespace ts.server.protocol {
          */
         formatOptions?: FormatCodeSettings;
 
-        options?: Options;
+        preferences?: UserPreferences;
 
         /**
          * The host's additional supported .js file extensions
@@ -1744,11 +1744,11 @@ namespace ts.server.protocol {
          */
         prefix?: string;
         /**
-         * @deprecated Use Options
+         * @deprecated Use UserPreferences.includeCompletionsForModuleExports
          */
         includeExternalModuleExports?: boolean;
         /**
-         * @deprecated Use Options
+         * @deprecated Use UserPreferences.includeCompletionsWithInsertText
          */
         includeInsertTextCompletions?: boolean;
     }
@@ -2633,8 +2633,8 @@ namespace ts.server.protocol {
         insertSpaceBeforeTypeAnnotation?: boolean;
     }
 
-    export interface Options {
-        readonly quote?: "double" | "single";
+    export interface UserPreferences {
+        readonly quotePreference?: "double" | "single";
         /**
          * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
          * This affects lone identifier completions but not completions on the right hand side of `obj.`.
@@ -2645,7 +2645,7 @@ namespace ts.server.protocol {
          * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
          */
         readonly includeCompletionsWithInsertText?: boolean;
-        readonly importModuleSpecifierPreference?: "relative" | "baseUrl";
+        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
     }
 
     export interface CompilerOptions {

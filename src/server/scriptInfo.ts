@@ -210,7 +210,7 @@ namespace ts.server {
          */
         readonly containingProjects: Project[] = [];
         private formatSettings: FormatCodeSettings | undefined;
-        private options: Options | undefined;
+        private preferences: UserPreferences | undefined;
 
         /* @internal */
         fileWatcher: FileWatcher;
@@ -300,7 +300,7 @@ namespace ts.server {
         }
 
         getFormatCodeSettings(): FormatCodeSettings { return this.formatSettings; }
-        getOptions(): Options { return this.options; }
+        getPreferences(): UserPreferences { return this.preferences; }
 
         attachToProject(project: Project): boolean {
             const isNew = !this.isAttached(project);
@@ -393,7 +393,7 @@ namespace ts.server {
             }
         }
 
-        setOptions(formatSettings: FormatCodeSettings, options: Options): void {
+        setOptions(formatSettings: FormatCodeSettings, preferences: UserPreferences): void {
             if (formatSettings) {
                 if (!this.formatSettings) {
                     this.formatSettings = getDefaultFormatCodeSettings(this.host);
@@ -401,11 +401,11 @@ namespace ts.server {
                 mergeMapLikes(this.formatSettings, formatSettings);
             }
 
-            if (options) {
-                if (!this.options) {
-                    this.options = clone(defaultOptions);
+            if (preferences) {
+                if (!this.preferences) {
+                    this.preferences = clone(defaultPreferences);
                 }
-                mergeMapLikes(this.options, options);
+                mergeMapLikes(this.preferences, preferences);
             }
         }
 

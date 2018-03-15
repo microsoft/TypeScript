@@ -12,7 +12,7 @@ namespace ts.OrganizeImports {
         formatContext: formatting.FormatContext,
         host: LanguageServiceHost,
         program: Program,
-        _options: Options,
+        _preferences: UserPreferences,
     ) {
 
         const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext });

@@ -200,7 +200,7 @@ namespace ts.server {
 
     export interface HostConfiguration {
         formatCodeOptions: FormatCodeSettings;
-        options: Options;
+        preferences: UserPreferences;
         hostInfo: string;
         extraFileExtensions?: JsFileExtensionInfo[];
     }
@@ -439,7 +439,7 @@ namespace ts.server {
 
             this.hostConfiguration = {
                 formatCodeOptions: getDefaultFormatCodeSettings(this.host),
-                options: defaultOptions,
+                preferences: defaultPreferences,
                 hostInfo: "Unknown host",
                 extraFileExtensions: []
             };
@@ -690,9 +690,9 @@ namespace ts.server {
             return info && info.getFormatCodeSettings() || this.hostConfiguration.formatCodeOptions;
         }
 
-        getOptions(file: NormalizedPath): Options {
+        getPreferences(file: NormalizedPath): UserPreferences {
             const info = this.getScriptInfoForNormalizedPath(file);
-            return info && info.getOptions() || this.hostConfiguration.options;
+            return info && info.getPreferences() || this.hostConfiguration.preferences;
         }
 
         private onSourceFileChanged(fileName: string, eventKind: FileWatcherEventKind, path: Path) {
@@ -1814,7 +1814,7 @@ namespace ts.server {
             if (args.file) {
                 const info = this.getScriptInfoForNormalizedPath(toNormalizedPath(args.file));
                 if (info) {
-                    info.setOptions(convertFormatOptions(args.formatOptions), args.options);
+                    info.setOptions(convertFormatOptions(args.formatOptions), args.preferences);
                     this.logger.info(`Host configuration update for file ${args.file}`);
                 }
             }
@@ -1827,8 +1827,8 @@ namespace ts.server {
                     mergeMapLikes(this.hostConfiguration.formatCodeOptions, convertFormatOptions(args.formatOptions));
                     this.logger.info("Format host information updated");
                 }
-                if (args.options) {
-                    mergeMapLikes(this.hostConfiguration.options, args.options);
+                if (args.preferences) {
+                    mergeMapLikes(this.hostConfiguration.preferences, args.preferences);
                 }
                 if (args.extraFileExtensions) {
                     this.hostConfiguration.extraFileExtensions = args.extraFileExtensions;

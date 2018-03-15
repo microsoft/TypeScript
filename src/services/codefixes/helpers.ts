@@ -6,11 +6,11 @@ namespace ts.codefix {
      * @param possiblyMissingSymbols The collection of symbols to filter and then get insertions for.
      * @returns Empty string iff there are no member insertions.
      */
-    export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: ReadonlyArray<Symbol>, checker: TypeChecker, options: Options, out: (node: ClassElement) => void): void {
+    export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: ReadonlyArray<Symbol>, checker: TypeChecker, preferences: UserPreferences, out: (node: ClassElement) => void): void {
         const classMembers = classDeclaration.symbol.members;
         for (const symbol of possiblyMissingSymbols) {
             if (!classMembers.has(symbol.escapedName)) {
-                addNewNodeForMemberSymbol(symbol, classDeclaration, checker, options, out);
+                addNewNodeForMemberSymbol(symbol, classDeclaration, checker, preferences, out);
             }
         }
     }
@@ -18,7 +18,7 @@ namespace ts.codefix {
     /**
      * @returns Empty string iff there we can't figure out a representation for `symbol` in `enclosingDeclaration`.
      */
-    function addNewNodeForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker, options: Options, out: (node: Node) => void): void {
+    function addNewNodeForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker, preferences: UserPreferences, out: (node: Node) => void): void {
         const declarations = symbol.getDeclarations();
         if (!(declarations && declarations.length)) {
             return undefined;
@@ -63,7 +63,7 @@ namespace ts.codefix {
                 if (declarations.length === 1) {
                     Debug.assert(signatures.length === 1);
                     const signature = signatures[0];
-                    outputMethod(signature, modifiers, name, createStubbedMethodBody(options));
+                    outputMethod(signature, modifiers, name, createStubbedMethodBody(preferences));
                     break;
                 }
 
@@ -74,11 +74,11 @@ namespace ts.codefix {
 
                 if (declarations.length > signatures.length) {
                     const signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration);
-                    outputMethod(signature, modifiers, name, createStubbedMethodBody(options));
+                    outputMethod(signature, modifiers, name, createStubbedMethodBody(preferences));
                 }
                 else {
                     Debug.assert(declarations.length === signatures.length);
-                    out(createMethodImplementingSignatures(signatures, name, optional, modifiers, options));
+                    out(createMethodImplementingSignatures(signatures, name, optional, modifiers, preferences));
                 }
                 break;
         }
@@ -112,7 +112,7 @@ namespace ts.codefix {
         methodName: string,
         inJs: boolean,
         makeStatic: boolean,
-        options: Options,
+        preferences: UserPreferences,
     ): MethodDeclaration {
         return createMethod(
             /*decorators*/ undefined,
@@ -124,7 +124,7 @@ namespace ts.codefix {
                 createTypeParameterDeclaration(CharacterCodes.T + typeArguments.length - 1 <= CharacterCodes.Z ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`)),
             /*parameters*/ createDummyParameters(args.length, /*names*/ undefined, /*minArgumentCount*/ undefined, inJs),
             /*type*/ inJs ? undefined : createKeywordTypeNode(SyntaxKind.AnyKeyword),
-            createStubbedMethodBody(options));
+            createStubbedMethodBody(preferences));
     }
 
     function createDummyParameters(argCount: number, names: string[] | undefined, minArgumentCount: number | undefined, inJs: boolean): ParameterDeclaration[] {
@@ -148,7 +148,7 @@ namespace ts.codefix {
         name: PropertyName,
         optional: boolean,
         modifiers: ReadonlyArray<Modifier> | undefined,
-        options: Options,
+        preferences: UserPreferences,
     ): MethodDeclaration {
         /** This is *a* signature with the maximal number of arguments,
          * such that if there is a "maximal" signature without rest arguments,
@@ -191,7 +191,7 @@ namespace ts.codefix {
             /*typeParameters*/ undefined,
             parameters,
             /*returnType*/ undefined,
-            options);
+            preferences);
     }
 
     function createStubbedMethod(
@@ -201,7 +201,7 @@ namespace ts.codefix {
         typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
         parameters: ReadonlyArray<ParameterDeclaration>,
         returnType: TypeNode | undefined,
-        options: Options
+        preferences: UserPreferences
     ): MethodDeclaration {
         return createMethod(
             /*decorators*/ undefined,
@@ -212,16 +212,16 @@ namespace ts.codefix {
             typeParameters,
             parameters,
             returnType,
-            createStubbedMethodBody(options));
+            createStubbedMethodBody(preferences));
     }
 
-    function createStubbedMethodBody(options: Options): Block {
+    function createStubbedMethodBody(preferences: UserPreferences): Block {
         return createBlock(
             [createThrow(
                 createNew(
                     createIdentifier("Error"),
                     /*typeArguments*/ undefined,
-                    [createLiteral("Method not implemented.", /*isSingleQuote*/ options.quote === "single")]))],
+                    [createLiteral("Method not implemented.", /*isSingleQuote*/ preferences.quotePreference === "single")]))],
             /*multiline*/ true);
     }
 

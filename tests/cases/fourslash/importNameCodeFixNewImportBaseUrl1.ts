@@ -29,5 +29,5 @@ verify.importFixAtPosition([
 
 f1();`,
 ], /*errorCode*/ undefined, {
-    importModuleSpecifierPreference: "baseUrl",
+    importModuleSpecifierPreference: "non-relative",
 });

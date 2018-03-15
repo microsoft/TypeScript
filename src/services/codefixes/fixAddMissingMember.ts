@@ -11,7 +11,7 @@ namespace ts.codefix {
             const info = getInfo(context.sourceFile, context.span.start, context.program.getTypeChecker());
             if (!info) return undefined;
             const { classDeclaration, classDeclarationSourceFile, inJs, makeStatic, token, call } = info;
-            const methodCodeAction = call && getActionForMethodDeclaration(context, classDeclarationSourceFile, classDeclaration, token, call, makeStatic, inJs, context.options);
+            const methodCodeAction = call && getActionForMethodDeclaration(context, classDeclarationSourceFile, classDeclaration, token, call, makeStatic, inJs, context.preferences);
             const addMember = inJs ?
                 singleElementArray(getActionsForAddMissingMemberInJavaScriptFile(context, classDeclarationSourceFile, classDeclaration, token.text, makeStatic)) :
                 getActionsForAddMissingMemberInTypeScriptFile(context, classDeclarationSourceFile, classDeclaration, token, makeStatic);
@@ -21,7 +21,7 @@ namespace ts.codefix {
         getAllCodeActions: context => {
             const seenNames = createMap<true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
-                const { program, options } = context;
+                const { program, preferences } = context;
                 const info = getInfo(diag.file!, diag.start!, program.getTypeChecker());
                 if (!info) return;
                 const { classDeclaration, classDeclarationSourceFile, inJs, makeStatic, token, call } = info;
@@ -31,7 +31,7 @@ namespace ts.codefix {
 
                 // Always prefer to add a method declaration if possible.
                 if (call) {
-                    addMethodDeclaration(changes, classDeclarationSourceFile, classDeclaration, token, call, makeStatic, inJs, options);
+                    addMethodDeclaration(changes, classDeclarationSourceFile, classDeclaration, token, call, makeStatic, inJs, preferences);
                 }
                 else {
                     if (inJs) {
@@ -189,10 +189,10 @@ namespace ts.codefix {
         callExpression: CallExpression,
         makeStatic: boolean,
         inJs: boolean,
-        options: Options,
+        preferences: UserPreferences,
     ): CodeFixAction | undefined {
         const description = formatStringFromArgs(getLocaleSpecificMessage(makeStatic ? Diagnostics.Declare_static_method_0 : Diagnostics.Declare_method_0), [token.text]);
-        const changes = textChanges.ChangeTracker.with(context, t => addMethodDeclaration(t, classDeclarationSourceFile, classDeclaration, token, callExpression, makeStatic, inJs, options));
+        const changes = textChanges.ChangeTracker.with(context, t => addMethodDeclaration(t, classDeclarationSourceFile, classDeclaration, token, callExpression, makeStatic, inJs, preferences));
         return { description, changes, fixId };
     }
 
@@ -204,9 +204,9 @@ namespace ts.codefix {
         callExpression: CallExpression,
         makeStatic: boolean,
         inJs: boolean,
-        options: Options,
+        preferences: UserPreferences,
     ): void {
-        const methodDeclaration = createMethodFromCallExpression(callExpression, token.text, inJs, makeStatic, options);
+        const methodDeclaration = createMethodFromCallExpression(callExpression, token.text, inJs, makeStatic, preferences);
         changeTracker.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, methodDeclaration);
     }
 }
