@@ -3449,17 +3449,7 @@ declare namespace ts {
     function createNull(): NullLiteral & Token<SyntaxKind.NullKeyword>;
     function createTrue(): BooleanLiteral & Token<SyntaxKind.TrueKeyword>;
     function createFalse(): BooleanLiteral & Token<SyntaxKind.FalseKeyword>;
-    function createAbstractModifier(): Token<SyntaxKind.AbstractKeyword>;
-    function createAsyncModifier(): Token<SyntaxKind.AsyncKeyword>;
-    function createConstModifier(): Token<SyntaxKind.ConstKeyword>;
-    function createDeclareModifier(): Token<SyntaxKind.DeclareKeyword>;
-    function createDefaultModifier(): Token<SyntaxKind.DefaultKeyword>;
-    function createExportModifier(): Token<SyntaxKind.ExportKeyword>;
-    function createPublicModifier(): Token<SyntaxKind.PublicKeyword>;
-    function createPrivateModifier(): Token<SyntaxKind.PrivateKeyword>;
-    function createProtectedModifier(): Token<SyntaxKind.ProtectedKeyword>;
-    function createReadonlyModifier(): Token<SyntaxKind.ReadonlyKeyword>;
-    function createStaticModifier(): Token<SyntaxKind.StaticKeyword>;
+    function createModifier<T extends Modifier["kind"]>(kind: T): Token<T>;
     function createModifiersFromModifierFlags(flags: ModifierFlags): Modifier[];
     function createQualifiedName(left: EntityName, right: string | Identifier): QualifiedName;
     function updateQualifiedName(node: QualifiedName, left: EntityName, right: Identifier): QualifiedName;

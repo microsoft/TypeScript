@@ -225,63 +225,23 @@ namespace ts {
 
     // Modifiers
 
-    export function createAbstractModifier() {
-        return createToken(SyntaxKind.AbstractKeyword);
-    }
-
-    export function createAsyncModifier() {
-        return createToken(SyntaxKind.AsyncKeyword);
-    }
-
-    export function createConstModifier() {
-        return createToken(SyntaxKind.ConstKeyword);
-    }
-
-    export function createDeclareModifier() {
-        return createToken(SyntaxKind.DeclareKeyword);
-    }
-
-    export function createDefaultModifier() {
-        return createToken(SyntaxKind.DefaultKeyword);
-    }
-
-    export function createExportModifier() {
-        return createToken(SyntaxKind.ExportKeyword);
-    }
-
-    export function createPublicModifier() {
-        return createToken(SyntaxKind.PublicKeyword);
-    }
-
-    export function createPrivateModifier() {
-        return createToken(SyntaxKind.PrivateKeyword);
-    }
-
-    export function createProtectedModifier() {
-        return createToken(SyntaxKind.ProtectedKeyword);
-    }
-
-    export function createReadonlyModifier() {
-        return createToken(SyntaxKind.ReadonlyKeyword);
-    }
-
-    export function createStaticModifier() {
-        return createToken(SyntaxKind.StaticKeyword);
+    export function createModifier<T extends Modifier["kind"]>(kind: T) {
+        return createToken(kind);
     }
 
     export function createModifiersFromModifierFlags(flags: ModifierFlags) {
         const result: Modifier[] = [];
-        if (flags & ModifierFlags.Export) { result.push(createExportModifier()); }
-        if (flags & ModifierFlags.Ambient) { result.push(createDeclareModifier()); }
-        if (flags & ModifierFlags.Default) { result.push(createDefaultModifier()); }
-        if (flags & ModifierFlags.Const) { result.push(createConstModifier()); }
-        if (flags & ModifierFlags.Public) { result.push(createPublicModifier()); }
-        if (flags & ModifierFlags.Private) { result.push(createPrivateModifier()); }
-        if (flags & ModifierFlags.Protected) { result.push(createProtectedModifier()); }
-        if (flags & ModifierFlags.Abstract) { result.push(createAbstractModifier()); }
-        if (flags & ModifierFlags.Static) { result.push(createStaticModifier()); }
-        if (flags & ModifierFlags.Readonly) { result.push(createReadonlyModifier()); }
-        if (flags & ModifierFlags.Async) { result.push(createAsyncModifier()); }
+        if (flags & ModifierFlags.Export) { result.push(createModifier(SyntaxKind.ExportKeyword)); }
+        if (flags & ModifierFlags.Ambient) { result.push(createModifier(SyntaxKind.DeclareKeyword)); }
+        if (flags & ModifierFlags.Default) { result.push(createModifier(SyntaxKind.DefaultKeyword)); }
+        if (flags & ModifierFlags.Const) { result.push(createModifier(SyntaxKind.ConstKeyword)); }
+        if (flags & ModifierFlags.Public) { result.push(createModifier(SyntaxKind.PublicKeyword)); }
+        if (flags & ModifierFlags.Private) { result.push(createModifier(SyntaxKind.PrivateKeyword)); }
+        if (flags & ModifierFlags.Protected) { result.push(createModifier(SyntaxKind.ProtectedKeyword)); }
+        if (flags & ModifierFlags.Abstract) { result.push(createModifier(SyntaxKind.AbstractKeyword)); }
+        if (flags & ModifierFlags.Static) { result.push(createModifier(SyntaxKind.StaticKeyword)); }
+        if (flags & ModifierFlags.Readonly) { result.push(createModifier(SyntaxKind.ReadonlyKeyword)); }
+        if (flags & ModifierFlags.Async) { result.push(createModifier(SyntaxKind.AsyncKeyword)); }
         return result;
     }
 

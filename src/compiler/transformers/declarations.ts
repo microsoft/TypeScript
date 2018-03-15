@@ -151,7 +151,7 @@ namespace ts {
                             const statements = visitNodes(sourceFile.statements, visitDeclarationStatements);
                             const newFile = updateSourceFileNode(sourceFile, [createModuleDeclaration(
                                 [],
-                                [createDeclareModifier()],
+                                [createModifier(SyntaxKind.DeclareKeyword)],
                                 createLiteral(getResolvedExternalModuleName(context.getEmitHost(), sourceFile)),
                                 createModuleBlock(setTextRange(createNodeArray([
                                     ...filterCandidateImports(),
@@ -810,7 +810,7 @@ namespace ts {
                             errorNode: input
                         });
                         const varDecl = createVariableDeclaration(newId, resolver.createTypeOfExpression(input.expression, input, declarationEmitNodeBuilderFlags, symbolTracker), /*initializer*/ undefined);
-                        const statement = createVariableStatement(needsDeclare ? [createDeclareModifier()] : [], createVariableDeclarationList([varDecl], NodeFlags.Const));
+                        const statement = createVariableStatement(needsDeclare ? [createModifier(SyntaxKind.DeclareKeyword)] : [], createVariableDeclarationList([varDecl], NodeFlags.Const));
                         return [statement, updateExportAssignment(input, input.decorators, input.modifiers, newId)];
                     }
                 }
@@ -974,7 +974,7 @@ namespace ts {
                             typeName: input.name
                         });
                         const varDecl = createVariableDeclaration(newId, resolver.createTypeOfExpression(extendsClause.expression, input, declarationEmitNodeBuilderFlags, symbolTracker), /*initializer*/ undefined);
-                        const statement = createVariableStatement(needsDeclare ? [createDeclareModifier()] : [], createVariableDeclarationList([varDecl], NodeFlags.Const));
+                        const statement = createVariableStatement(needsDeclare ? [createModifier(SyntaxKind.DeclareKeyword)] : [], createVariableDeclarationList([varDecl], NodeFlags.Const));
                         const heritageClauses = createNodeArray(map(input.heritageClauses, clause => {
                             if (clause.token === SyntaxKind.ExtendsKeyword) {
                                 const oldDiag = getSymbolAccessibilityDiagnostic;
