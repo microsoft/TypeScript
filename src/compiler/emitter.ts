@@ -173,6 +173,7 @@ namespace ts {
             }
 
             if (declarationFilePath && !isInJavaScriptFile(sourceFileOrBundle)) {
+                const originalSourceFile = isSourceFile(sourceFileOrBundle) ? getOriginalNode(sourceFileOrBundle) : undefined;
                 const declBlocked = (!!declarationTransform.diagnostics && !!declarationTransform.diagnostics.length) || !!host.isEmitBlocked(declarationFilePath) || !!compilerOptions.noEmit;
                 emitSkipped = emitSkipped || declBlocked;
                 if (!declBlocked || emitOnlyDtsFiles) {
@@ -180,7 +181,7 @@ namespace ts {
                         if (n.kind === SyntaxKind.Bundle) {
                             return sourceFileOrBundle.kind === SyntaxKind.Bundle;
                         }
-                        return getOriginalNode(n) === getOriginalNode(sourceFileOrBundle);
+                        return getOriginalNode(n) === originalSourceFile;
                     });
                     if (associatedDeclarationTree) {
                         const previousState = sourceMap.setState(/*disabled*/ true);

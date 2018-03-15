@@ -25,11 +25,11 @@ var f6 = function () { return [10]; };
 
 //// [declFileRestParametersOfFunctionAndFunctionType.d.ts]
 declare function f1(...args: any[]): void;
-declare function f2(x: (...args) => void): void;
+declare function f2(x: (...args: any[]) => void): void;
 declare function f3(x: {
     (...args: any[]): void;
 }): void;
-declare function f4<T extends (...args) => void>(): void;
+declare function f4<T extends (...args: any[]) => void>(): void;
 declare function f5<T extends {
     (...args: any[]): void;
 }>(): void;

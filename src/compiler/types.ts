@@ -2583,8 +2583,8 @@ namespace ts {
     export interface Bundle extends Node {
         kind: SyntaxKind.Bundle;
         sourceFiles: ReadonlyArray<SourceFile>;
-        /* @internal */ syntheticFileReferences: ReadonlyArray<FileReference>;
-        /* @internal */ syntheticTypeReferences: ReadonlyArray<FileReference>;
+        /* @internal */ syntheticFileReferences?: ReadonlyArray<FileReference>;
+        /* @internal */ syntheticTypeReferences?: ReadonlyArray<FileReference>;
     }
 
     export interface JsonSourceFile extends SourceFile {

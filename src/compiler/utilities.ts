@@ -967,6 +967,10 @@ namespace ts {
         return false;
     }
 
+    export function isVariableLikeOrAccessor(node: Node): node is AccessorDeclaration | VariableLikeDeclaration {
+        return isVariableLike(node) || isAccessor(node);
+    }
+
     export function isVariableDeclarationInVariableStatement(node: VariableDeclaration) {
         return node.parent.kind === SyntaxKind.VariableDeclarationList
             && node.parent.parent.kind === SyntaxKind.VariableStatement;
@@ -6058,9 +6062,10 @@ namespace ts {
         return node.kind === SyntaxKind.TypeReference || node.kind === SyntaxKind.ExpressionWithTypeArguments;
     }
 
+    const MAX_SMI_X86 = 0x3fff_ffff;
     /* @internal */
     export function guessIndentation(lines: string[]) {
-        let indentation = Infinity;
+        let indentation = MAX_SMI_X86;
         for (const line of lines) {
             if (!line.length) {
                 continue;
@@ -6078,7 +6083,7 @@ namespace ts {
                 return 0;
             }
         }
-        return indentation === Infinity ? undefined : indentation;
+        return indentation === MAX_SMI_X86 ? undefined : indentation;
     }
 
     export function isStringLiteralLike(node: Node): node is StringLiteralLike {

@@ -23,7 +23,7 @@ namespace ts {
      */
     export function transformDeclarations(context: TransformationContext) {
         const throwDiagnostic = () => Debug.fail("Diagnostic emitted without context");
-        let getSymbolAccessibilityDiagnostic: declarations.GetSymbolAccessibilityDiagnostic = throwDiagnostic;
+        let getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic = throwDiagnostic;
         let needsDeclare = true;
         let isBundledEmit = false;
         let resultHasExternalModuleIndicator = false;
@@ -271,7 +271,7 @@ namespace ts {
             let oldDiag: typeof getSymbolAccessibilityDiagnostic;
             if (!suppressNewDiagnosticContexts) {
                 oldDiag = getSymbolAccessibilityDiagnostic;
-                getSymbolAccessibilityDiagnostic = declarations.createGetSymbolAccessibilityDiagnosticForNode(p);
+                getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(p);
             }
             const newParam = updateParameter(
                 p,
@@ -279,15 +279,12 @@ namespace ts {
                 maskModifiers(p, modifierMask),
                 p.dotDotDotToken,
                 filterBindingPatternInitializers(p.name),
-                p.questionToken,
+                resolver.isOptionalParameter(p) ? (p.questionToken || createToken(SyntaxKind.QuestionToken)) : undefined,
                 ensureType(p, p.type, /*ignorePrivate*/ true), // Ignore private param props, since this type is going straight back into a param
                 ensureNoInitializer(p)
             );
             if (!suppressNewDiagnosticContexts) {
                 getSymbolAccessibilityDiagnostic = oldDiag;
-            }
-            if (resolver.isOptionalParameter(p)) {
-                newParam.questionToken = p.questionToken || createToken(SyntaxKind.QuestionToken);
             }
             return newParam;
         }
@@ -330,10 +327,10 @@ namespace ts {
                 (resolver.isRequiredInitializedParameter(node) ||
                  resolver.isOptionalUninitializedParameterProperty(node));
             if (type && !shouldUseResolverType) {
-                return visitNode(type, visitDeclarationComponents);
+                return visitNode(type, visitDeclarationSubtree);
             }
             if (!getParseTreeNode(node)) {
-                return type ? visitNode(type, visitDeclarationComponents) : createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                return type ? visitNode(type, visitDeclarationSubtree) : createKeywordTypeNode(SyntaxKind.AnyKeyword);
             }
             if (node.kind === SyntaxKind.SetAccessor) {
                 // Set accessors with no associated type node (from it's param or get accessor return) are `any` since they are never contextually typed right now
@@ -344,7 +341,7 @@ namespace ts {
             let oldDiag: typeof getSymbolAccessibilityDiagnostic;
             if (!suppressNewDiagnosticContexts) {
                 oldDiag = getSymbolAccessibilityDiagnostic;
-                getSymbolAccessibilityDiagnostic = declarations.createGetSymbolAccessibilityDiagnosticForNode(node);
+                getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(node);
             }
             if (node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) {
                 return cleanup(resolver.createTypeOfDeclaration(node, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker));
@@ -413,7 +410,7 @@ namespace ts {
         }
 
         function ensureTypeParams(node: Node, params: NodeArray<TypeParameterDeclaration>) {
-            return hasModifier(node, ModifierFlags.Private) ? undefined : visitNodes(params, visitDeclarationComponents);
+            return hasModifier(node, ModifierFlags.Private) ? undefined : visitNodes(params, visitDeclarationSubtree);
         }
 
         function isEnclosingDeclaration(node: Node) {
@@ -467,7 +464,7 @@ namespace ts {
             }
             else {
                 const oldDiag = getSymbolAccessibilityDiagnostic;
-                getSymbolAccessibilityDiagnostic = declarations.createGetSymbolAccessibilityDiagnosticForNode(decl);
+                getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(decl);
                 checkEntityNameVisibility(decl.moduleReference, enclosingDeclaration);
                 getSymbolAccessibilityDiagnostic = oldDiag;
                 return decl;
@@ -575,7 +572,7 @@ namespace ts {
             return emittedImports;
         }
 
-        function visitDeclarationComponents(input: Node): VisitResult<Node> {
+        function visitDeclarationSubtree(input: Node): VisitResult<Node> {
             if (shouldStripInternal(input)) return;
             if (isDeclaration(input)) {
                 if (isDeclarationAndNotVisible(input)) return;
@@ -605,9 +602,9 @@ namespace ts {
                 }
             }
 
-            const canProdiceDiagnostic = declarations.canProduceDiagnostics(input);
+            const canProdiceDiagnostic = canProduceDiagnostics(input);
             if (canProdiceDiagnostic && !suppressNewDiagnosticContexts) {
-                getSymbolAccessibilityDiagnostic = declarations.createGetSymbolAccessibilityDiagnosticForNode(input as declarations.DeclarationDiagnosticProducing);
+                getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(input as DeclarationDiagnosticProducing);
             }
 
             if (isTypeQueryNode(input)) {
@@ -627,19 +624,19 @@ namespace ts {
                         if ((isEntityName(input.expression) || isEntityNameExpression(input.expression))) {
                             checkEntityNameVisibility(input.expression, enclosingDeclaration);
                         }
-                        const node = visitEachChild(input, visitDeclarationComponents, context);
+                        const node = visitEachChild(input, visitDeclarationSubtree, context);
                         return cleanup(updateExpressionWithTypeArguments(node, parenthesizeTypeParameters(node.typeArguments), node.expression));
                     }
                     case SyntaxKind.TypeReference: {
                         checkEntityNameVisibility(input.typeName, enclosingDeclaration);
-                        const node = visitEachChild(input, visitDeclarationComponents, context);
+                        const node = visitEachChild(input, visitDeclarationSubtree, context);
                         return cleanup(updateTypeReferenceNode(node, node.typeName, parenthesizeTypeParameters(node.typeArguments)));
                     }
                     case SyntaxKind.ConstructSignature:
                         return cleanup(updateConstructSignature(
                             input,
                             ensureTypeParams(input, input.typeParameters),
-                            createNodeArray(updateParamsList(input, input.parameters)),
+                            updateParamsList(input, input.parameters),
                             ensureType(input, input.type)
                         ));
                     case SyntaxKind.Constructor: {
@@ -694,31 +691,31 @@ namespace ts {
                             ensureNoInitializer(input)
                         ));
                     case SyntaxKind.MethodSignature: {
-                        return cleanup(updateModifiers(updateMethodSignature(
+                        return cleanup(updateMethodSignature(
                             input,
                             ensureTypeParams(input, input.typeParameters),
                             updateParamsList(input, input.parameters),
                             ensureType(input, input.type),
                             input.name,
                             input.questionToken
-                        ), input));
+                        ));
                     }
                     case SyntaxKind.CallSignature: {
-                        return cleanup(updateModifiers(updateCallSignature(
+                        return cleanup(updateCallSignature(
                             input,
                             ensureTypeParams(input, input.typeParameters),
                             updateParamsList(input, input.parameters),
                             ensureType(input, input.type)
-                        ), input));
+                        ));
                     }
                     case SyntaxKind.IndexSignature: {
-                        return cleanup(updateModifiers(updateIndexSignature(
+                        return cleanup(updateIndexSignature(
                             input,
                             /*decorators*/ undefined,
-                            input.modifiers,
+                            ensureModifiers(input),
                             updateParamsList(input, input.parameters),
-                            visitNode(input.type, visitDeclarationComponents) || createKeywordTypeNode(SyntaxKind.AnyKeyword)
-                        ), input));
+                            visitNode(input.type, visitDeclarationSubtree) || createKeywordTypeNode(SyntaxKind.AnyKeyword)
+                        ));
                     }
                     case SyntaxKind.VariableDeclaration: {
                         if (isBindingPattern(input.name)) {
@@ -732,29 +729,35 @@ namespace ts {
                         if (isPrivateMethodTypeParameter(input) && (input.default || input.constraint)) {
                             return cleanup(updateTypeParameterDeclaration(input, input.name, /*constraint*/ undefined, /*defaultType*/ undefined));
                         }
-                        return cleanup(visitEachChild(input, visitDeclarationComponents, context));
+                        return cleanup(visitEachChild(input, visitDeclarationSubtree, context));
                     }
                     case SyntaxKind.ConditionalType: {
                         // We have to process conditional types in a special way because for visibility purposes we need to push a new enclosingDeclaration
                         // just for the `infer` types in the true branch. It's an implicit declaration scope that only applies to _part_ of the type.
-                        const checkType = visitNode(input.checkType, visitDeclarationComponents);
-                        const extendsType = visitNode(input.extendsType, visitDeclarationComponents);
+                        const checkType = visitNode(input.checkType, visitDeclarationSubtree);
+                        const extendsType = visitNode(input.extendsType, visitDeclarationSubtree);
                         const oldEnclosingDecl = enclosingDeclaration;
                         enclosingDeclaration = input.trueType;
-                        const trueType = visitNode(input.trueType, visitDeclarationComponents);
+                        const trueType = visitNode(input.trueType, visitDeclarationSubtree);
                         enclosingDeclaration = oldEnclosingDecl;
-                        const falseType = visitNode(input.falseType, visitDeclarationComponents);
+                        const falseType = visitNode(input.falseType, visitDeclarationSubtree);
                         return cleanup(updateConditionalTypeNode(input, checkType, extendsType, trueType, falseType));
+                    }
+                    case SyntaxKind.FunctionType: {
+                        return cleanup(updateFunctionTypeNode(input, visitNodes(input.typeParameters, visitDeclarationSubtree), updateParamsList(input, input.parameters), visitNode(input.type, visitDeclarationSubtree)));
+                    }
+                    case SyntaxKind.ConstructorType: {
+                        return cleanup(updateConstructorTypeNode(input, visitNodes(input.typeParameters, visitDeclarationSubtree), updateParamsList(input, input.parameters), visitNode(input.type, visitDeclarationSubtree)));
                     }
                     default: Debug.assertNever(input, `Attempted to process unhandled node kind: ${(ts as any).SyntaxKind[(input as any).kind]}`);
                 }
             }
 
-            return cleanup(visitEachChild(input, visitDeclarationComponents, context));
+            return cleanup(visitEachChild(input, visitDeclarationSubtree, context));
 
             function cleanup<T extends Node>(returnValue: T | undefined): T {
                 if (returnValue && canProdiceDiagnostic && hasDynamicName(input as Declaration)) {
-                    checkName(input as declarations.DeclarationDiagnosticProducing);
+                    checkName(input as DeclarationDiagnosticProducing);
                 }
                 if (isEnclosingDeclaration(input)) {
                     enclosingDeclaration = previousEnclosingDeclaration;
@@ -774,18 +777,6 @@ namespace ts {
 
         function isPrivateMethodTypeParameter(node: TypeParameterDeclaration) {
             return node.parent.kind === SyntaxKind.MethodDeclaration && hasModifier(node.parent, ModifierFlags.Private);
-        }
-
-        function updateModifiers<T extends Node>(updated: T, input: T): T {
-            const modifiers = ensureModifiers(input);
-            if (modifiers !== input.modifiers) {
-                if (updated === input) {
-                    updated = getMutableClone(input);
-                    updated.decorators = undefined;
-                }
-                updated.modifiers = createNodeArray(modifiers);
-            }
-            return updated;
         }
 
         function visitDeclarationStatements(input: Node): VisitResult<Node> {
@@ -850,10 +841,10 @@ namespace ts {
             }
             let previousNeedsDeclare: typeof needsDeclare;
 
-            const canProdiceDiagnostic = declarations.canProduceDiagnostics(input);
+            const canProdiceDiagnostic = canProduceDiagnostics(input);
             const oldDiag = getSymbolAccessibilityDiagnostic;
             if (canProdiceDiagnostic) {
-                getSymbolAccessibilityDiagnostic = declarations.createGetSymbolAccessibilityDiagnosticForNode(input as declarations.DeclarationDiagnosticProducing);
+                getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(input as DeclarationDiagnosticProducing);
             }
             let oldPossibleImports: typeof possibleImports;
 
@@ -864,28 +855,33 @@ namespace ts {
                         /*decorators*/ undefined,
                         ensureModifiers(input),
                         input.name,
-                        visitNodes(input.typeParameters, visitDeclarationComponents, isTypeParameterDeclaration),
-                        visitNode(input.type, visitDeclarationComponents, isTypeNode)
+                        visitNodes(input.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration),
+                        visitNode(input.type, visitDeclarationSubtree, isTypeNode)
                     ));
                 case SyntaxKind.InterfaceDeclaration: {
-                    const node = getMutableClone(input);
-                    node.decorators = undefined;
-                    node.modifiers = createNodeArray(ensureModifiers(input));
-                    node.typeParameters = ensureTypeParams(input, input.typeParameters);
-                    node.heritageClauses = transformHeritageClauses(node.heritageClauses);
-                    node.members = visitNodes(node.members, visitDeclarationComponents);
-                    return cleanup(node);
+                    return cleanup(updateInterfaceDeclaration(
+                        input,
+                        /*decorators*/ undefined,
+                        ensureModifiers(input),
+                        input.name,
+                        ensureTypeParams(input, input.typeParameters),
+                        transformHeritageClauses(input.heritageClauses),
+                        visitNodes(input.members, visitDeclarationSubtree)
+                    ));
                 }
                 case SyntaxKind.FunctionDeclaration: {
-                    const node = getMutableClone(input);
-                    node.decorators = undefined;
-                    node.modifiers = createNodeArray(ensureModifiers(input));
-                    node.parameters = createNodeArray(updateParamsList(node, node.parameters));
-                    node.typeParameters = ensureTypeParams(node, node.typeParameters);
-                    node.type = ensureType(node, node.type);
-                    node.body = undefined;
-                    node.asteriskToken = undefined; // Generators lose their generator-ness, excepting their return type
-                    return cleanup(node);
+                    // Generators lose their generator-ness, excepting their return type
+                    return cleanup(updateFunctionDeclaration(
+                        input,
+                        /*decorators*/ undefined,
+                        ensureModifiers(input),
+                        /*asteriskToken*/ undefined,
+                        input.name,
+                        ensureTypeParams(input, input.typeParameters),
+                        updateParamsList(input, input.parameters),
+                        ensureType(input, input.type),
+                        /*body*/ undefined
+                    ));
                 }
                 case SyntaxKind.ModuleDeclaration: {
                     previousNeedsDeclare = needsDeclare;
@@ -920,17 +916,15 @@ namespace ts {
                     }
                 }
                 case SyntaxKind.ClassDeclaration: {
-                    const node = getMutableClone(input);
-                    node.decorators = undefined;
-                    node.modifiers = createNodeArray(ensureModifiers(input));
-                    node.typeParameters = ensureTypeParams(input, input.typeParameters);
+                    const modifiers = createNodeArray(ensureModifiers(input));
+                    const typeParameters = ensureTypeParams(input, input.typeParameters);
                     const ctor = getFirstConstructorWithBody(input);
                     let parameterProperties: PropertyDeclaration[];
                     if (ctor) {
                         const oldDiag = getSymbolAccessibilityDiagnostic;
                         parameterProperties = compact(flatMap(ctor.parameters, param => {
                             if (!hasModifier(param, ModifierFlags.ParameterPropertyModifier)) return;
-                            getSymbolAccessibilityDiagnostic = declarations.createGetSymbolAccessibilityDiagnosticForNode(param);
+                            getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(param);
                             if (param.name.kind === SyntaxKind.Identifier) {
                                 return preserveJsDoc(createProperty(
                                     /*decorators*/ undefined,
@@ -967,13 +961,13 @@ namespace ts {
                         }));
                         getSymbolAccessibilityDiagnostic = oldDiag;
                     }
-                    node.members = createNodeArray(concatenate(parameterProperties, visitNodes(input.members, visitDeclarationComponents)));
+                    const members = createNodeArray(concatenate(parameterProperties, visitNodes(input.members, visitDeclarationSubtree)));
 
                     const extendsClause = getClassExtendsHeritageClauseElement(input);
                     if (extendsClause && !isEntityNameExpression(extendsClause.expression) && extendsClause.expression.kind !== SyntaxKind.NullKeyword) {
                         // We must add a temporary declaration for the extends clause expression
 
-                        const newId = createOptimisticUniqueName(`${unescapeLeadingUnderscores(node.name.escapedText)}_base`);
+                        const newId = createOptimisticUniqueName(`${unescapeLeadingUnderscores(input.name.escapedText)}_base`);
                         getSymbolAccessibilityDiagnostic = () => ({
                             diagnosticMessage: Diagnostics.extends_clause_of_exported_class_0_has_or_is_using_private_name_1,
                             errorNode: extendsClause,
@@ -981,49 +975,57 @@ namespace ts {
                         });
                         const varDecl = createVariableDeclaration(newId, resolver.createTypeOfExpression(extendsClause.expression, input, declarationEmitNodeBuilderFlags, symbolTracker), /*initializer*/ undefined);
                         const statement = createVariableStatement(needsDeclare ? [createDeclareModifier()] : [], createVariableDeclarationList([varDecl], NodeFlags.Const));
-                        node.heritageClauses = createNodeArray(map(node.heritageClauses, clause => {
+                        const heritageClauses = createNodeArray(map(input.heritageClauses, clause => {
                             if (clause.token === SyntaxKind.ExtendsKeyword) {
                                 const oldDiag = getSymbolAccessibilityDiagnostic;
-                                getSymbolAccessibilityDiagnostic = declarations.createGetSymbolAccessibilityDiagnosticForNode(clause.types[0]);
-                                const newClause = updateHeritageClause(clause, map(clause.types, t => updateExpressionWithTypeArguments(t, visitNodes(t.typeArguments, visitDeclarationComponents), newId)));
+                                getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(clause.types[0]);
+                                const newClause = updateHeritageClause(clause, map(clause.types, t => updateExpressionWithTypeArguments(t, visitNodes(t.typeArguments, visitDeclarationSubtree), newId)));
                                 getSymbolAccessibilityDiagnostic = oldDiag;
                                 return newClause;
                             }
-                            return updateHeritageClause(clause, visitNodes(createNodeArray(filter(clause.types, t => isEntityNameExpression(t.expression) || t.expression.kind === SyntaxKind.NullKeyword)), visitDeclarationComponents));
+                            return updateHeritageClause(clause, visitNodes(createNodeArray(filter(clause.types, t => isEntityNameExpression(t.expression) || t.expression.kind === SyntaxKind.NullKeyword)), visitDeclarationSubtree));
                         }));
-                        return [statement, cleanup(node)];
+                        return [statement, cleanup(updateClassDeclaration(
+                            input,
+                            /*decorators*/ undefined,
+                            modifiers,
+                            input.name,
+                            typeParameters,
+                            heritageClauses,
+                            members
+                        ))];
                     }
                     else {
-                        node.heritageClauses = transformHeritageClauses(input.heritageClauses);
+                        const heritageClauses = transformHeritageClauses(input.heritageClauses);
+                        return cleanup(updateClassDeclaration(
+                            input,
+                            /*decorators*/ undefined,
+                            modifiers,
+                            input.name,
+                            typeParameters,
+                            heritageClauses,
+                            members
+                        ));
                     }
-                    return cleanup(node);
                 }
                 case SyntaxKind.VariableStatement: {
                     if (!forEach(input.declarationList.declarations, getBindingNameVisible)) return;
-                    const nodes = visitNodes(input.declarationList.declarations, visitDeclarationComponents);
+                    const nodes = visitNodes(input.declarationList.declarations, visitDeclarationSubtree);
                     if (!length(nodes)) return;
-                    const node = getMutableClone(input);
-                    node.decorators = undefined;
-                    node.modifiers = createNodeArray(ensureModifiers(input));
-                    node.declarationList = updateVariableDeclarationList(input.declarationList, nodes);
-                    return cleanup(node);
+                    return cleanup(updateVariableStatement(input, createNodeArray(ensureModifiers(input)), updateVariableDeclarationList(input.declarationList, nodes)));
                 }
                 case SyntaxKind.EnumDeclaration: {
-                    const node = getMutableClone(input);
-                    node.decorators = undefined;
-                    node.modifiers = createNodeArray(ensureModifiers(input));
-                    node.members = createNodeArray(mapDefined(input.members, m => {
+                    return cleanup(updateEnumDeclaration(input, /*decorators*/ undefined, createNodeArray(ensureModifiers(input)), input.name, createNodeArray(mapDefined(input.members, m => {
                         if (shouldStripInternal(m)) return;
                         // Rewrite enum values to their constants, if available
                         const constValue = resolver.getConstantValue(m);
                         return preserveJsDoc(updateEnumMember(m, m.name, constValue !== undefined ? createLiteral(constValue) : undefined), m);
-                    }));
-                    return cleanup(node);
+                    }))));
                 }
             }
 
-            Debug.assertNever(input, `Unhandled top-level node in declaration emit: ${(ts as any).SyntaxKind[(input as any).kind]}`);
-            return; // Anything left unhandled is an error, so this should be unreachable
+            // Anything left unhandled is an error, so this should be unreachable
+            return Debug.assertNever(input, `Unhandled top-level node in declaration emit: ${(ts as any).SyntaxKind[(input as any).kind]}`);
 
             function cleanup<T extends Node>(returnValue: T | undefined): T {
                 if (isEnclosingDeclaration(input)) {
@@ -1068,11 +1070,11 @@ namespace ts {
             }
         }
 
-        function checkName(node: declarations.DeclarationDiagnosticProducing) {
+        function checkName(node: DeclarationDiagnosticProducing) {
             let oldDiag: typeof getSymbolAccessibilityDiagnostic;
             if (!suppressNewDiagnosticContexts) {
                 oldDiag = getSymbolAccessibilityDiagnostic;
-                getSymbolAccessibilityDiagnostic = declarations.createGetSymbolAccessibilityDiagnosticForNodeName(node);
+                getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNodeName(node);
             }
             errorNameNode = (node as NamedDeclaration).name;
             Debug.assert(resolver.isLateBound(getParseTreeNode(node) as Declaration)); // Should only be called with dynamic names
@@ -1129,7 +1131,7 @@ namespace ts {
             if (!accessorType && accessors.secondAccessor) {
                 accessorType = getTypeAnnotationFromAccessor(accessors.secondAccessor);
                 // If we end up pulling the type from the second accessor, we also need to change the diagnostic context to get the expected error message
-                getSymbolAccessibilityDiagnostic = declarations.createGetSymbolAccessibilityDiagnosticForNode(accessors.secondAccessor);
+                getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(accessors.secondAccessor);
             }
             const prop = createProperty(/*decorators*/ undefined, maskModifiers(node, /*mask*/ undefined, (!accessors.setAccessor) ? ModifierFlags.Readonly : ModifierFlags.None), node.name, node.questionToken, ensureType(node, accessorType), /*initializer*/ undefined);
             const leadingsSyntheticCommentRanges = accessors.secondAccessor && getLeadingCommentRangesOfNode(accessors.secondAccessor, currentSourceFile);
@@ -1158,7 +1160,7 @@ namespace ts {
         function transformHeritageClauses(nodes: NodeArray<HeritageClause>) {
             return createNodeArray(filter(map(nodes, clause => updateHeritageClause(clause, visitNodes(createNodeArray(filter(clause.types, t => {
                 return isEntityNameExpression(t.expression) || (clause.token === SyntaxKind.ExtendsKeyword && t.expression.kind === SyntaxKind.NullKeyword);
-            })), visitDeclarationComponents))), clause => clause.types && !!clause.types.length));
+            })), visitDeclarationSubtree))), clause => clause.types && !!clause.types.length));
         }
     }
 
@@ -1250,7 +1252,9 @@ namespace ts {
         | TypeParameterDeclaration
         | ExpressionWithTypeArguments
         | TypeReferenceNode
-        | ConditionalTypeNode;
+        | ConditionalTypeNode
+        | FunctionTypeNode
+        | ConstructorTypeNode;
 
     function isProcessedComponent(node: Node): node is ProcessedComponent {
         switch (node.kind) {
@@ -1269,6 +1273,8 @@ namespace ts {
             case SyntaxKind.ExpressionWithTypeArguments:
             case SyntaxKind.TypeReference:
             case SyntaxKind.ConditionalType:
+            case SyntaxKind.FunctionType:
+            case SyntaxKind.ConstructorType:
             return true;
         }
         return false;
