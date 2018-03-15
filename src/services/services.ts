@@ -646,7 +646,7 @@ namespace ts {
         public nameTable: UnderscoreEscapedMap<number>;
         public resolvedModules: Map<ResolvedModuleFull>;
         public resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
-        public imports: ReadonlyArray<AnyValidImportOrReExport>;
+        public imports: ReadonlyArray<StringLiteralLike>;
         public moduleAugmentations: StringLiteral[];
         private namedDeclarations: Map<Declaration[]>;
         public ambientModuleNames: string[];

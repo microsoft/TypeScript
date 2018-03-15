@@ -158,9 +158,11 @@ namespace ts.codefix {
         const moduleSymbolId = getUniqueSymbolId(moduleSymbol, checker);
         let cached = cachedImportDeclarations[moduleSymbolId];
         if (!cached) {
-            cached = cachedImportDeclarations[moduleSymbolId] = mapDefined<AnyValidImportOrReExport, ExistingImportInfo>(imports, i =>
-                (i.kind === SyntaxKind.ImportDeclaration || i.kind === SyntaxKind.ImportEqualsDeclaration)
-                    && checker.getSymbolAtLocation(moduleSpecifierFromImport(i)) === moduleSymbol ? { declaration: i, importKind } : undefined);
+            cached = cachedImportDeclarations[moduleSymbolId] = mapDefined<StringLiteralLike, ExistingImportInfo>(imports, moduleSpecifier => {
+                const i = importFromModuleSpecifier(moduleSpecifier);
+                return (i.kind === SyntaxKind.ImportDeclaration || i.kind === SyntaxKind.ImportEqualsDeclaration)
+                    && checker.getSymbolAtLocation(moduleSpecifier) === moduleSymbol ? { declaration: i, importKind } : undefined;
+            });
         }
         return cached;
     }
@@ -201,15 +203,12 @@ namespace ts.codefix {
     function createStringLiteralWithQuoteStyle(sourceFile: SourceFile, text: string): StringLiteral {
         const literal = createLiteral(text);
         const firstModuleSpecifier = firstOrUndefined(sourceFile.imports);
-        literal.singleQuote = !!firstModuleSpecifier && !isStringDoubleQuoted(moduleSpecifierFromImport(firstModuleSpecifier), sourceFile);
+        literal.singleQuote = !!firstModuleSpecifier && !isStringDoubleQuoted(firstModuleSpecifier, sourceFile);
         return literal;
     }
 
     function usesJsExtensionOnImports(sourceFile: SourceFile): boolean {
-        return firstDefined(sourceFile.imports, i => {
-            const { text } = moduleSpecifierFromImport(i);
-            return pathIsRelative(text) ? fileExtensionIs(text, Extension.Js) : undefined;
-        }) || false;
+        return firstDefined(sourceFile.imports, ({ text }) => pathIsRelative(text) ? fileExtensionIs(text, Extension.Js) : undefined) || false;
     }
 
     function createImportClauseOfKind(kind: ImportKind.Default | ImportKind.Named | ImportKind.Namespace, symbolName: string) {

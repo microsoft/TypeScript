@@ -33,10 +33,11 @@ namespace ts {
         check(sourceFile);
 
         if (getAllowSyntheticDefaultImports(program.getCompilerOptions())) {
-            for (const importNode of sourceFile.imports) {
+            for (const moduleSpecifier of sourceFile.imports) {
+                const importNode = importFromModuleSpecifier(moduleSpecifier);
                 const name = importNameForConvertToDefaultImport(importNode);
                 if (!name) continue;
-                const module = getResolvedModule(sourceFile, moduleSpecifierFromImport(importNode).text);
+                const module = getResolvedModule(sourceFile, moduleSpecifier.text);
                 const resolvedFile = module && program.getSourceFile(module.resolvedFileName);
                 if (resolvedFile && resolvedFile.externalModuleIndicator && isExportAssignment(resolvedFile.externalModuleIndicator) && resolvedFile.externalModuleIndicator.isExportEquals) {
                     diags.push(createDiagnosticForNode(name, Diagnostics.Import_may_be_converted_to_a_default_import));

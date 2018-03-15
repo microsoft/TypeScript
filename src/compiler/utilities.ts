@@ -1654,18 +1654,17 @@ namespace ts {
             !!getJSDocTypeTag(expr.parent);
     }
 
-    /* @internal */
-    export function moduleSpecifierFromImport(node: AnyValidImportOrReExport): StringLiteralLike {
-        switch (node.kind) {
+    export function importFromModuleSpecifier(node: StringLiteralLike): AnyValidImportOrReExport {
+        switch (node.parent.kind) {
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ExportDeclaration:
-                return node.moduleSpecifier;
-            case SyntaxKind.ImportEqualsDeclaration:
-                return node.moduleReference.expression;
+                return node.parent as AnyValidImportOrReExport;
+            case SyntaxKind.ExternalModuleReference:
+                return (node.parent as ExternalModuleReference).parent as AnyValidImportOrReExport;
             case SyntaxKind.CallExpression:
-                return first(node.arguments);
+                return node.parent as AnyValidImportOrReExport;
             default:
-                return Debug.assertNever(node);
+                return Debug.fail(Debug.showSyntaxKind(node));
         }
     }
 

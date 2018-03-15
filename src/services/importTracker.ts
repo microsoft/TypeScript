@@ -385,7 +385,7 @@ namespace ts.FindAllReferences {
     function forEachImport(sourceFile: SourceFile, action: (importStatement: ImporterOrCallExpression, imported: StringLiteralLike) => void): void {
         if (sourceFile.externalModuleIndicator || sourceFile.imports !== undefined) {
             for (const i of sourceFile.imports) {
-                action(i, moduleSpecifierFromImport(i));
+                action(importFromModuleSpecifier(i), i);
             }
         }
         else {

@@ -971,7 +971,7 @@ namespace ts {
 
                     // check imports and module augmentations
                     collectExternalModuleReferences(newSourceFile);
-                    if (!arrayIsEqualTo(oldSourceFile.imports, newSourceFile.imports, importHasSameModuleName)) {
+                    if (!arrayIsEqualTo(oldSourceFile.imports, newSourceFile.imports, moduleNameIsEqualTo)) {
                         // imports has changed
                         oldProgram.structureIsReused = StructureIsReused.SafeModules;
                     }
@@ -1574,14 +1574,10 @@ namespace ts {
             return a.fileName === b.fileName;
         }
 
-        function importHasSameModuleName(a: AnyValidImportOrReExport, b: AnyValidImportOrReExport): boolean {
-            return moduleSpecifierFromImport(a).text === moduleSpecifierFromImport(b).text;
-        }
-
-        function moduleNameIsEqualTo(a: StringLiteral | Identifier, b: StringLiteral | Identifier): boolean {
-            return a.kind === SyntaxKind.StringLiteral
-                ? b.kind === SyntaxKind.StringLiteral && a.text === b.text
-                : b.kind === SyntaxKind.Identifier && a.escapedText === b.escapedText;
+        function moduleNameIsEqualTo(a: StringLiteralLike | Identifier, b: StringLiteralLike | Identifier): boolean {
+            return a.kind === SyntaxKind.Identifier
+                ? b.kind === SyntaxKind.Identifier && a.escapedText === b.escapedText
+                : b.kind === SyntaxKind.StringLiteral && a.text === b.text;
         }
 
         function collectExternalModuleReferences(file: SourceFile): void {
@@ -1593,7 +1589,7 @@ namespace ts {
             const isExternalModuleFile = isExternalModule(file);
 
             // file.imports may not be undefined if there exists dynamic import
-            let imports: AnyValidImportOrReExport[] | undefined;
+            let imports: StringLiteralLike[] | undefined;
             let moduleAugmentations: (StringLiteral | Identifier)[];
             let ambientModules: string[];
 
@@ -1603,11 +1599,12 @@ namespace ts {
                 && (options.isolatedModules || isExternalModuleFile)
                 && !file.isDeclarationFile) {
                 // synthesize 'import "tslib"' declaration
-                const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined, createLiteral(externalHelpersModuleNameText));
+                const externalHelpersModuleReference = createLiteral(externalHelpersModuleNameText);
+                const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined);
                 addEmitFlags(importDecl, EmitFlags.NeverApplyImportHelper);
-                importDecl.moduleSpecifier.parent = importDecl;
+                externalHelpersModuleReference.parent = importDecl;
                 importDecl.parent = file;
-                imports = [importDecl as ImportDeclaration & { moduleSpecifier: StringLiteral }];
+                imports = [externalHelpersModuleReference];
             }
 
             for (const node of file.statements) {
@@ -1630,7 +1627,7 @@ namespace ts {
                     // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference other external modules
                     // only through top - level external module names. Relative external module names are not permitted.
                     if (moduleNameExpr && isStringLiteral(moduleNameExpr) && moduleNameExpr.text && (!inAmbientModule || !isExternalModuleNameRelative(moduleNameExpr.text))) {
-                        imports = append(imports, node as AnyValidImportOrReExport);
+                        imports = append(imports, moduleNameExpr);
                     }
                 }
                 else if (isModuleDeclaration(node)) {
@@ -1668,11 +1665,11 @@ namespace ts {
 
             function collectDynamicImportOrRequireCalls(node: Node): void {
                 if (isRequireCall(node, /*checkArgumentIsStringLiteral*/ true)) {
-                    imports = append(imports, node);
+                    imports = append(imports, node.arguments[0]);
                 }
                 // we have to check the argument list has length of 1. We will still have to process these even though we have parsing error.
                 else if (isImportCall(node) && node.arguments.length === 1 && node.arguments[0].kind === SyntaxKind.StringLiteral) {
-                    imports = append(imports, node as CallExpression as RequireOrImportCall);
+                    imports = append(imports, node.arguments[0] as StringLiteral);
                 }
                 else {
                     forEachChild(node, collectDynamicImportOrRequireCalls);
@@ -2418,7 +2415,7 @@ namespace ts {
     }
 
     function getModuleNames({ imports, moduleAugmentations }: SourceFile): string[] {
-        const res = imports.map(i => moduleSpecifierFromImport(i).text);
+        const res = imports.map(i => i.text);
         for (const aug of moduleAugmentations) {
             if (aug.kind === SyntaxKind.StringLiteral) {
                 res.push(aug.text);

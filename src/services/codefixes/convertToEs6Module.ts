@@ -19,13 +19,14 @@ namespace ts.codefix {
     });
 
     function fixImportOfModuleExports(importingFile: SourceFile, exportingFile: SourceFile, changes: textChanges.ChangeTracker) {
-        for (const importNode of importingFile.imports) {
-            const { text } = moduleSpecifierFromImport(importNode);
+        for (const moduleSpecifier of importingFile.imports) {
+            const { text } = moduleSpecifier;
             const imported = getResolvedModule(importingFile, text);
             if (!imported || imported.resolvedFileName !== exportingFile.fileName) {
                 continue;
             }
 
+            const importNode = importFromModuleSpecifier(moduleSpecifier);
             switch (importNode.kind) {
                 case SyntaxKind.ImportEqualsDeclaration:
                     changes.replaceNode(importingFile, importNode, makeImport(importNode.name, /*namedImports*/ undefined, text));
