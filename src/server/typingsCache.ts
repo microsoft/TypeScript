@@ -14,6 +14,7 @@ namespace ts.server {
         attach(projectService: ProjectService): void;
         onProjectClosed(p: Project): void;
         readonly globalTypingsCacheLocation: string;
+        readonly typesMapLocation?: string;
     }
 
     export const nullTypingsInstaller: ITypingsInstaller = {
