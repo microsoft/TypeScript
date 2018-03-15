@@ -1029,6 +1029,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";All_imports_in_import_declaration_are_unused_6192" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[All imports in import declaration are unused.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Les importations de la déclaration d'importation ne sont pas toutes utilisées.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Allow_default_imports_from_modules_with_no_default_export_This_does_not_affect_code_emit_just_typech_6011" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Allow default imports from modules with no default export. This does not affect code emit, just typechecking.]]></Val>
@@ -3558,6 +3567,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";File_is_a_CommonJS_module_it_may_be_converted_to_an_ES6_module_80001" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File is a CommonJS module; it may be converted to an ES6 module.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Le fichier est un module CommonJS ; il peut être converti en module ES6.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";File_name_0_differs_from_already_included_file_name_1_only_in_casing_1149" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[File name '{0}' differs from already included file name '{1}' only in casing.]]></Val>
@@ -3996,6 +4014,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Import_may_be_converted_to_a_default_import_80003" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Import may be converted to a default import.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[L'importation peut être convertie en importation par défaut.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Import_name_cannot_be_0_2438" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Import name cannot be '{0}'.]]></Val>
@@ -4374,6 +4401,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";JSDoc_types_may_be_moved_to_TypeScript_types_80004" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[JSDoc types may be moved to TypeScript types.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Les types JSDoc peuvent être déplacés vers les types TypeScript.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";JSX_attribute_expected_17003" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[JSX attribute expected.]]></Val>
@@ -4487,6 +4523,15 @@
           <Val><![CDATA[JSX fragment has no corresponding closing tag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Le fragment JSX n'a pas de balise de fermeture correspondante.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";JSX_fragment_is_not_supported_when_using_an_inline_JSX_factory_pragma_17017" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[JSX fragment is not supported when using an inline JSX factory pragma]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Le fragment JSX n'est pas pris en charge quand vous utilisez un pragma de fabrique JSX inline]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4778,6 +4823,15 @@
           <Val><![CDATA[Module '{0}' has no exported member '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Le module '{0}' n'a aucun membre exporté '{1}'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Module_0_has_no_exported_member_1_Did_you_mean_2_2724" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Module '{0}' has no exported member '{1}'. Did you mean '{2}'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Le module '{0}' n'a aucun membre exporté '{1}'. Pensiez-vous plutôt à '{2}' ?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6093,6 +6147,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Remove_import_from_0_90005" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove import from '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Supprimer l'importation de '{0}']]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Replace_import_with_0_95015" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Replace import with '{0}'.]]></Val>
@@ -6156,15 +6219,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Resolution_for_module_0_was_found_in_cache_6147" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Resolution_for_module_0_was_found_in_cache_from_location_1_6147" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Resolution for module '{0}' was found in cache.]]></Val>
+          <Val><![CDATA[Resolution for module '{0}' was found in cache from location '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La résolution du module '{0}' a été trouvée dans le cache.]]></Val>
+            <Val><![CDATA[La résolution du module '{0}' a été trouvée dans le cache à l'emplacement '{1}'.]]></Val>
           </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Resolution for module '{0}' was found in cache]]></Val>
-          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7398,6 +7458,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_constructor_function_may_be_converted_to_a_class_declaration_80002" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This constructor function may be converted to a class declaration.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Cette fonction constructeur peut être convertie en déclaration de classe.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_syntax_requires_an_imported_helper_but_module_0_cannot_be_found_2354" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This syntax requires an imported helper but module '{0}' cannot be found.]]></Val>
@@ -8270,6 +8339,15 @@
           <Val><![CDATA[Watch input files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Fichiers d'entrée d'espion.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Whether_to_keep_outdated_console_output_in_watch_mode_instead_of_clearing_the_screen_6191" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Whether to keep outdated console output in watch mode instead of clearing the screen.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Garder la sortie de console obsolète en mode espion au lieu d'effacer l'écran.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

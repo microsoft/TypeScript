@@ -1,7 +1,7 @@
-error TS5052: Option 'emitDeclarationOnly' cannot be specified without specifying option 'declarations'.
+error TS5052: Option 'emitDeclarationOnly' cannot be specified without specifying option 'declaration'.
 
 
-!!! error TS5052: Option 'emitDeclarationOnly' cannot be specified without specifying option 'declarations'.
+!!! error TS5052: Option 'emitDeclarationOnly' cannot be specified without specifying option 'declaration'.
 ==== tests/cases/compiler/hello.ts (0 errors) ====
     var hello = "yo!";
     

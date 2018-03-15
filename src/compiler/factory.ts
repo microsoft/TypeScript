@@ -24,13 +24,13 @@ namespace ts {
      * Make `elements` into a `NodeArray<T>`. If `elements` is `undefined`, returns an empty `NodeArray<T>`.
      */
     export function createNodeArray<T extends Node>(elements?: ReadonlyArray<T>, hasTrailingComma?: boolean): NodeArray<T> {
-        if (elements) {
+        if (!elements || elements === emptyArray) {
+            elements = [];
+        }
+        else {
             if (isNodeArray(elements)) {
                 return elements;
             }
-        }
-        else {
-            elements = [];
         }
 
         const array = <NodeArray<T>>elements;

@@ -4119,32 +4119,9 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseJsxChild(): JsxChild {
-            switch (token()) {
-                case SyntaxKind.JsxText:
-                case SyntaxKind.JsxTextAllWhiteSpaces:
-                    return parseJsxText();
-                case SyntaxKind.OpenBraceToken:
-                    return parseJsxExpression(/*inExpressionContext*/ false)!;
-                case SyntaxKind.LessThanToken:
-                    return parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ false);
-            }
-            Debug.fail("Unknown JSX child kind " + token());
-        }
-
-        function parseJsxChildren(openingTag: JsxOpeningElement | JsxOpeningFragment): NodeArray<JsxChild> {
-            const list = [];
-            const listPos = getNodePos();
-            const saveParsingContext = parsingContext;
-            parsingContext |= 1 << ParsingContext.JsxChildren;
-
-            while (true) {
-                currentToken = scanner.reScanJsxToken();
-                if (token() === SyntaxKind.LessThanSlashToken) {
-                    // Closing tag
-                    break;
-                }
-                else if (token() === SyntaxKind.EndOfFileToken) {
+        function parseJsxChild(openingTag: JsxOpeningElement | JsxOpeningFragment, token: JsxTokenSyntaxKind): JsxChild | undefined {
+            switch (token) {
+                case SyntaxKind.EndOfFileToken:
                     // If we hit EOF, issue the error at the tag that lacks the closing element
                     // rather than at the end of the file (which is useless)
                     if (isJsxOpeningFragment(openingTag)) {
@@ -4154,19 +4131,35 @@ namespace ts {
                         const openingTagName = openingTag.tagName;
                         parseErrorAtPosition(openingTagName.pos, openingTagName.end - openingTagName.pos, Diagnostics.JSX_element_0_has_no_corresponding_closing_tag, getTextOfNodeFromSourceText(sourceText, openingTagName));
                     }
-                    break;
-                }
-                else if (token() === SyntaxKind.ConflictMarkerTrivia) {
-                    break;
-                }
-                const child = parseJsxChild();
-                if (child) {
-                    list.push(child);
-                }
+                    return undefined;
+                case SyntaxKind.LessThanSlashToken:
+                case SyntaxKind.ConflictMarkerTrivia:
+                    return undefined;
+                case SyntaxKind.JsxText:
+                case SyntaxKind.JsxTextAllWhiteSpaces:
+                    return parseJsxText();
+                case SyntaxKind.OpenBraceToken:
+                    return parseJsxExpression(/*inExpressionContext*/ false);
+                case SyntaxKind.LessThanToken:
+                    return parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ false);
+                default:
+                    return Debug.assertNever(token);
+            }
+        }
+
+        function parseJsxChildren(openingTag: JsxOpeningElement | JsxOpeningFragment): NodeArray<JsxChild> {
+            const list = [];
+            const listPos = getNodePos();
+            const saveParsingContext = parsingContext;
+            parsingContext |= 1 << ParsingContext.JsxChildren;
+
+            while (true) {
+                const child = parseJsxChild(openingTag, currentToken = scanner.reScanJsxToken());
+                if (!child) break;
+                list.push(child);
             }
 
             parsingContext = saveParsingContext;
-
             return createNodeArray(list, listPos);
         }
 

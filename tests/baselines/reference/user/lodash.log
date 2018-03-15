@@ -1,0 +1,783 @@
+Exit Code: 1
+Standard output:
+node_modules/lodash/_Hash.js(20,17): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_ListCache.js(20,17): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_MapCache.js(20,17): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_SetCache.js(19,14): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_Stack.js(17,20): error TS2339: Property 'size' does not exist on type '{ clear: () => void; get: (key: string) => any; has: (key: string) => boolean; set: (key: string,...'.
+node_modules/lodash/_arrayAggregator.js(16,17): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_arrayEach.js(15,18): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_arrayEach.js(19,3): error TS2322: Type 'any[] | undefined' is not assignable to type 'any[]'.
+  Type 'undefined' is not assignable to type 'any[]'.
+node_modules/lodash/_arrayEachRight.js(14,18): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_arrayEachRight.js(18,3): error TS2322: Type 'any[] | undefined' is not assignable to type 'any[]'.
+  Type 'undefined' is not assignable to type 'any[]'.
+node_modules/lodash/_arrayEvery.js(16,20): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_arrayFilter.js(17,17): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_arrayIncludes.js(9,15): error TS8024: JSDoc '@param' tag has name 'target', but there is no parameter with that name.
+node_modules/lodash/_arrayIncludes.js(14,34): error TS2345: Argument of type 'any[] | undefined' is not assignable to parameter of type 'any[]'.
+  Type 'undefined' is not assignable to type 'any[]'.
+node_modules/lodash/_arrayIncludesWith.js(6,15): error TS8024: JSDoc '@param' tag has name 'target', but there is no parameter with that name.
+node_modules/lodash/_arrayIncludesWith.js(15,27): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_arrayMap.js(16,30): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_arrayReduce.js(18,19): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_arrayReduce.js(21,41): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_arrayReduceRight.js(16,19): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_arrayReduceRight.js(19,41): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_arraySome.js(16,19): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_asciiWords.js(8,20): error TS8024: JSDoc '@param' tag has name 'The', but there is no parameter with that name.
+node_modules/lodash/_baseClone.js(91,16): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/lodash/_baseClone.js(92,16): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/lodash/_baseClone.js(93,16): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/lodash/_baseClone.js(115,33): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean | undefined'.
+node_modules/lodash/_baseClone.js(128,43): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean | undefined'.
+node_modules/lodash/_baseClone.js(157,17): error TS2552: Cannot find name 'keysIn'. Did you mean 'keys'?
+node_modules/lodash/_baseDifference.js(37,5): error TS2322: Type '(array?: any[] | undefined, value: any, comparator: Function) => boolean' is not assignable to type '(array?: any[] | undefined, value: any) => boolean'.
+node_modules/lodash/_baseDifference.js(43,5): error TS2322: Type '{ __data__: { clear: () => void; get: (key: string) => any; has: (key: string) => boolean; set: (...' is not assignable to type 'any[]'.
+  Property 'length' is missing in type '{ __data__: { clear: () => void; get: (key: string) => any; has: (key: string) => boolean; set: (...'.
+node_modules/lodash/_baseDifference.js(60,15): error TS2554: Expected 2 arguments, but got 3.
+node_modules/lodash/_baseFlatten.js(19,17): error TS2322: Type '(value: any) => boolean' is not assignable to type 'boolean | undefined'.
+  Type '(value: any) => boolean' is not assignable to type 'false'.
+node_modules/lodash/_baseFlatten.js(24,22): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_baseFlatten.js(24,22): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/lodash/_baseFlatten.js(24,22): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'Boolean' has no compatible call signatures.
+node_modules/lodash/_baseIntersection.js(53,40): error TS2345: Argument of type 'Function | undefined' is not assignable to parameter of type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/lodash/_baseIntersection.js(60,54): error TS2345: Argument of type 'Function | undefined' is not assignable to parameter of type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/lodash/_baseIsEqual.js(25,40): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+node_modules/lodash/_baseIsMatch.js(52,47): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/_baseMatchesProperty.js(23,36): error TS2345: Argument of type 'string | symbol' is not assignable to parameter of type 'string'.
+  Type 'symbol' is not assignable to type 'string'.
+node_modules/lodash/_baseMatchesProperty.js(29,41): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/_basePullAll.js(41,60): error TS2345: Argument of type 'Function | undefined' is not assignable to parameter of type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/lodash/_basePullAt.js(30,26): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string | any[]'.
+node_modules/lodash/_baseSet.js(41,25): error TS2345: Argument of type 'string | symbol' is not assignable to parameter of type 'string'.
+  Type 'symbol' is not assignable to type 'string'.
+node_modules/lodash/_baseSlice.js(14,7): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_baseSlice.js(15,14): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_baseSlice.js(15,45): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_baseSlice.js(17,9): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_baseSlice.js(18,7): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_baseSlice.js(19,5): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_baseSlice.js(21,12): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_baseSlice.js(21,20): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_baseSlice.js(21,32): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_baseSlice.js(21,38): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_baseSlice.js(22,3): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_baseSlice.js(26,35): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_baseSortBy.js(14,14): error TS2345: Argument of type 'Function' is not assignable to parameter of type '((a: any, b: any) => number) | undefined'.
+  Type 'Function' is not assignable to type '(a: any, b: any) => number'.
+    Type 'Function' provides no match for the signature '(a: any, b: any): number'.
+node_modules/lodash/_baseUniq.js(30,5): error TS2322: Type '(array?: any[] | undefined, value: any, comparator: Function) => boolean' is not assignable to type '(array?: any[] | undefined, value: any) => boolean'.
+node_modules/lodash/_baseUniq.js(33,33): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/_baseUniq.js(39,5): error TS2322: Type '{ __data__: { clear: () => void; get: (key: string) => any; has: (key: string) => boolean; set: (...' is not assignable to type 'any[]'.
+node_modules/lodash/_baseUniq.js(62,15): error TS2554: Expected 2 arguments, but got 3.
+node_modules/lodash/_cloneArrayBuffer.js(11,16): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/_cloneBuffer.js(4,69): error TS2339: Property 'nodeType' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/lodash/node_modules/lodash/_cloneBuffer"'.
+node_modules/lodash/_cloneBuffer.js(7,80): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
+node_modules/lodash/_copySymbols.js(13,29): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/_copySymbolsIn.js(13,29): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/_createAggregator.js(19,37): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/_createCompounder.js(20,24): error TS2554: Expected 3 arguments, but got 1.
+node_modules/lodash/_createCtor.js(19,22): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/_createCtor.js(20,22): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/_createCtor.js(21,22): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/_createCtor.js(22,22): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/_createCtor.js(23,22): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/_createCtor.js(24,22): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/_createCtor.js(25,22): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/_createCtor.js(26,22): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/_createCurry.js(37,46): error TS2339: Property 'placeholder' does not exist on type '(...args: any[]) => any'.
+node_modules/lodash/_createFind.js(16,22): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/_createFind.js(21,34): error TS2454: Variable 'iteratee' is used before being assigned.
+node_modules/lodash/_createFlow.js(38,22): error TS2454: Variable 'wrapper' is used before being assigned.
+node_modules/lodash/_createFlow.js(42,13): error TS2454: Variable 'wrapper' is used before being assigned.
+node_modules/lodash/_createFlow.js(47,42): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/_createFlow.js(53,19): error TS2454: Variable 'wrapper' is used before being assigned.
+node_modules/lodash/_createFlow.js(53,55): error TS2454: Variable 'wrapper' is used before being assigned.
+node_modules/lodash/_createFlow.js(56,13): error TS2454: Variable 'wrapper' is used before being assigned.
+node_modules/lodash/_createFlow.js(57,13): error TS2454: Variable 'wrapper' is used before being assigned.
+node_modules/lodash/_createFlow.js(57,21): error TS2339: Property 'thru' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __chain__: boolean | undefined; __index__: ...'.
+node_modules/lodash/_createFlow.js(65,24): error TS2339: Property 'plant' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __chain__: boolean | undefined; __index__: ...'.
+node_modules/lodash/_createHybrid.js(44,49): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
+  Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/_createHybrid.js(59,42): error TS2345: Argument of type 'any[] | undefined' is not assignable to parameter of type 'any[]'.
+  Type 'undefined' is not assignable to type 'any[]'.
+node_modules/lodash/_createHybrid.js(62,52): error TS2345: Argument of type 'any[] | undefined' is not assignable to parameter of type 'any[]'.
+  Type 'undefined' is not assignable to type 'any[]'.
+node_modules/lodash/_createHybrid.js(64,15): error TS2454: Variable 'holdersCount' is used before being assigned.
+node_modules/lodash/_createHybrid.js(65,31): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_createHybrid.js(68,9): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
+  Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/_createHybrid.js(68,46): error TS2339: Property 'placeholder' does not exist on type '(...args: any[]) => any'.
+node_modules/lodash/_createHybrid.js(69,40): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_createHybrid.js(73,38): error TS2538: Type 'Function' cannot be used as an index type.
+node_modules/lodash/_createHybrid.js(81,18): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_createHybrid.js(82,7): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+node_modules/lodash/_createWrap.js(71,38): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/_createWrap.js(94,29): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
+  Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/_createWrap.js(96,26): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
+  Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/_createWrap.js(97,100): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_createWrap.js(98,28): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
+  Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/_createWrap.js(103,51): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
+  Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/_customDefaultsMerge.js(22,35): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number'.
+node_modules/lodash/_customOmitClone.js(9,20): error TS8024: JSDoc '@param' tag has name 'key', but there is no parameter with that name.
+node_modules/lodash/_equalArrays.js(64,22): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_equalByTag.js(86,7): error TS2454: Variable 'convert' is used before being assigned.
+node_modules/lodash/_equalObjects.js(70,18): error TS2322: Type 'boolean' is not assignable to type 'number'.
+node_modules/lodash/_getFuncName.js(17,22): error TS2339: Property 'name' does not exist on type 'Function'.
+node_modules/lodash/_getHolder.js(10,17): error TS2339: Property 'placeholder' does not exist on type 'Function'.
+node_modules/lodash/_getRawTag.js(36,7): error TS2454: Variable 'unmasked' is used before being assigned.
+node_modules/lodash/_getSymbols.js(11,31): error TS2551: Property 'getOwnPropertySymbols' does not exist on type 'ObjectConstructor'. Did you mean 'getOwnPropertyNames'?
+node_modules/lodash/_getSymbolsIn.js(7,31): error TS2551: Property 'getOwnPropertySymbols' does not exist on type 'ObjectConstructor'. Did you mean 'getOwnPropertyNames'?
+node_modules/lodash/_getSymbolsIn.js(19,23): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/_hasPath.js(35,50): error TS2454: Variable 'key' is used before being assigned.
+node_modules/lodash/_hashDelete.js(7,20): error TS8024: JSDoc '@param' tag has name 'hash', but there is no parameter with that name.
+node_modules/lodash/_initCloneArray.js(16,16): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/_initCloneArray.js(20,26): error TS2339: Property 'index' does not exist on type 'any[]'.
+node_modules/lodash/_initCloneArray.js(21,26): error TS2339: Property 'input' does not exist on type 'any[]'.
+node_modules/lodash/_insertWrapDetails.js(10,5): error TS1223: 'returns' tag already specified.
+node_modules/lodash/_insertWrapDetails.js(15,5): error TS2322: Type 'string' is not assignable to type 'any[]'.
+node_modules/lodash/_insertWrapDetails.js(20,3): error TS2322: Type 'string' is not assignable to type 'any[]'.
+node_modules/lodash/_isLaziable.js(24,14): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/_lazyClone.js(14,3): error TS2322: Type 'any[]' is not assignable to type 'never[] | undefined'.
+  Type 'any[]' is not assignable to type 'never[]'.
+    Type 'any' is not assignable to type 'never'.
+node_modules/lodash/_lazyClone.js(17,3): error TS2322: Type 'any[]' is not assignable to type 'never[] | undefined'.
+  Type 'any[]' is not assignable to type 'never[]'.
+node_modules/lodash/_lazyClone.js(19,3): error TS2322: Type 'any[]' is not assignable to type 'never[] | undefined'.
+  Type 'any[]' is not assignable to type 'never[]'.
+node_modules/lodash/_lazyReverse.js(18,5): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_memoizeCapped.js(22,22): error TS2339: Property 'cache' does not exist on type 'Function'.
+node_modules/lodash/_mergeData.js(60,26): error TS2554: Expected 4 arguments, but got 3.
+node_modules/lodash/_mergeData.js(67,26): error TS2554: Expected 4 arguments, but got 3.
+node_modules/lodash/_nodeUtil.js(4,69): error TS2339: Property 'nodeType' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/lodash/node_modules/lodash/_nodeUtil"'.
+node_modules/lodash/_nodeUtil.js(7,80): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
+node_modules/lodash/_nodeUtil.js(13,47): error TS2339: Property 'process' does not exist on type 'boolean | Global'.
+  Property 'process' does not exist on type 'true'.
+node_modules/lodash/_overRest.js(20,42): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_overRest.js(24,27): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_overRest.js(27,27): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_overRest.js(28,22): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_overRest.js(31,15): error TS2538: Type 'undefined' cannot be used as an index type.
+node_modules/lodash/_root.js(4,56): error TS2339: Property 'Object' does not exist on type 'Window'.
+node_modules/lodash/_unicodeWords.js(62,20): error TS8024: JSDoc '@param' tag has name 'The', but there is no parameter with that name.
+node_modules/lodash/_updateWrapDetails.js(34,5): error TS1223: 'returns' tag already specified.
+node_modules/lodash/_wrapperClone.js(17,3): error TS2322: Type 'any[]' is not assignable to type 'never[] | undefined'.
+  Type 'any[]' is not assignable to type 'never[]'.
+node_modules/lodash/ary.js(16,10): error TS1003: Identifier expected.
+node_modules/lodash/ary.js(16,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/before.js(34,7): error TS2322: Type 'undefined' is not assignable to type 'Function'.
+node_modules/lodash/bind.js(51,55): error TS2454: Variable 'holders' is used before being assigned.
+node_modules/lodash/bind.js(55,6): error TS2339: Property 'placeholder' does not exist on type 'Function'.
+node_modules/lodash/bindKey.js(62,53): error TS2454: Variable 'holders' is used before being assigned.
+node_modules/lodash/bindKey.js(66,9): error TS2339: Property 'placeholder' does not exist on type 'Function'.
+node_modules/lodash/castArray.js(10,15): error TS8029: JSDoc '@param' tag has name 'value', but there is no parameter with that name. It would match 'arguments' if it had an array type.
+node_modules/lodash/chunk.js(20,10): error TS1003: Identifier expected.
+node_modules/lodash/chunk.js(20,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/clamp.js(25,5): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+node_modules/lodash/clone.js(33,27): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/cloneDeep.js(26,27): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/cloneDeepWith.js(37,27): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/cloneWith.js(39,27): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/conforms.js(32,41): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/core.js(68,58): error TS2339: Property 'Object' does not exist on type 'Window'.
+node_modules/lodash/core.js(77,82): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
+node_modules/lodash/core.js(540,19): error TS2322: Type '(value: any) => boolean' is not assignable to type 'boolean | undefined'.
+  Type '(value: any) => boolean' is not assignable to type 'false'.
+node_modules/lodash/core.js(545,24): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/core.js(545,24): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/lodash/core.js(545,24): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'Boolean' has no compatible call signatures.
+node_modules/lodash/core.js(664,42): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+node_modules/lodash/core.js(721,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'result' must be of type 'boolean', but here has type 'any'.
+node_modules/lodash/core.js(749,18): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
+node_modules/lodash/core.js(811,53): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/core.js(826,24): error TS8024: JSDoc '@param' tag has name 'paths', but there is no parameter with that name.
+node_modules/lodash/core.js(848,12): error TS2554: Expected 1 arguments, but got 2.
+node_modules/lodash/core.js(864,9): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/core.js(865,16): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/core.js(865,47): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/core.js(867,11): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/core.js(868,9): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/core.js(869,7): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/core.js(871,14): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/core.js(871,22): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/core.js(871,34): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/core.js(871,40): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/core.js(872,5): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/core.js(876,37): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/core.js(886,22): error TS8024: JSDoc '@param' tag has name 'array', but there is no parameter with that name.
+node_modules/lodash/core.js(1118,24): error TS2554: Expected 1 arguments, but got 2.
+node_modules/lodash/core.js(1123,36): error TS2454: Variable 'iteratee' is used before being assigned.
+node_modules/lodash/core.js(1313,20): error TS2322: Type 'boolean' is not assignable to type 'number'.
+node_modules/lodash/core.js(1338,12): error TS2554: Expected 1 arguments, but got 2.
+node_modules/lodash/core.js(1349,30): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/core.js(1434,23): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+node_modules/lodash/core.js(1438,44): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/core.js(1442,29): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/core.js(1445,29): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/core.js(1446,24): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/core.js(1449,17): error TS2538: Type 'undefined' cannot be used as an index type.
+node_modules/lodash/core.js(1566,33): error TS2554: Expected 1 arguments, but got 2.
+node_modules/lodash/core.js(1709,41): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/core.js(1872,12): error TS1003: Identifier expected.
+node_modules/lodash/core.js(1872,12): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/core.js(2142,12): error TS1003: Identifier expected.
+node_modules/lodash/core.js(2142,12): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/core.js(2183,41): error TS8024: JSDoc '@param' tag has name 'iteratees', but there is no parameter with that name.
+node_modules/lodash/core.js(2473,21): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/core.js(2609,39): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/core.js(2644,12): error TS2554: Expected 3-5 arguments, but got 2.
+node_modules/lodash/core.js(3354,53): error TS2538: Type 'any[]' cannot be used as an index type.
+node_modules/lodash/core.js(3424,41): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
+  Type 'Function' provides no match for the signature '(substring: string, ...args: any[]): string'.
+node_modules/lodash/core.js(3573,51): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/core.js(3590,63): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
+  Property 'push' is missing in type 'IArguments'.
+node_modules/lodash/core.js(3830,14): error TS2304: Cannot find name 'define'.
+node_modules/lodash/core.js(3830,45): error TS2304: Cannot find name 'define'.
+node_modules/lodash/core.js(3830,71): error TS2304: Cannot find name 'define'.
+node_modules/lodash/core.js(3839,5): error TS2304: Cannot find name 'define'.
+node_modules/lodash/core.js(3846,35): error TS2339: Property '_' does not exist on type '{ (value: any): any; assignIn: Function; before: (n: number, func: Function) => Function; bind: F...'.
+node_modules/lodash/curry.js(24,10): error TS1003: Identifier expected.
+node_modules/lodash/curry.js(24,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/curry.js(50,10): error TS2339: Property 'placeholder' does not exist on type 'Function'.
+node_modules/lodash/curryRight.js(21,10): error TS1003: Identifier expected.
+node_modules/lodash/curryRight.js(21,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/curryRight.js(47,10): error TS2339: Property 'placeholder' does not exist on type 'Function'.
+node_modules/lodash/debounce.js(83,17): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/debounce.js(84,27): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/debounce.js(85,43): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/debounce.js(86,30): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/debounce.js(111,23): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/debounce.js(125,65): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/deburr.js(42,44): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
+node_modules/lodash/difference.js(29,52): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean | undefined'.
+  Type '(value: any) => boolean' is not assignable to type 'false'.
+node_modules/lodash/differenceBy.js(40,52): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean | undefined'.
+  Type '(value: any) => boolean' is not assignable to type 'false'.
+node_modules/lodash/differenceBy.js(40,78): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/differenceWith.js(36,52): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean | undefined'.
+  Type '(value: any) => boolean' is not assignable to type 'false'.
+node_modules/lodash/drop.js(13,10): error TS1003: Identifier expected.
+node_modules/lodash/drop.js(13,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/dropRight.js(13,10): error TS1003: Identifier expected.
+node_modules/lodash/dropRight.js(13,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/dropRightWhile.js(41,24): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/dropWhile.js(41,24): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/escape.js(39,39): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
+node_modules/lodash/every.js(23,10): error TS1003: Identifier expected.
+node_modules/lodash/every.js(23,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/every.js(53,27): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/filter.js(45,27): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/findIndex.js(52,31): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/findKey.js(41,30): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/findLastIndex.js(56,31): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/findLastKey.js(41,30): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/fp.js(2,18): error TS2554: Expected 3-4 arguments, but got 2.
+node_modules/lodash/fp/_baseConvert.js(144,5): error TS2322: Type 'Function' is not assignable to type '{ cap?: boolean; curry?: boolean; fixed?: boolean; immutable?: boolean; rearg?: boolean; } | unde...'.
+  Type 'Function' has no properties in common with type '{ cap?: boolean; curry?: boolean; fixed?: boolean; immutable?: boolean; rearg?: boolean; }'.
+node_modules/lodash/fp/_baseConvert.js(145,5): error TS2322: Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(146,5): error TS2322: Type 'undefined' is not assignable to type 'string'.
+node_modules/lodash/fp/_baseConvert.js(165,31): error TS2339: Property 'runInContext' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(184,21): error TS2339: Property 'ary' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'ary' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(185,24): error TS2339: Property 'assign' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'assign' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(186,23): error TS2339: Property 'clone' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'clone' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(187,23): error TS2339: Property 'curry' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'curry' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(188,22): error TS2339: Property 'forEach' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'forEach' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(189,25): error TS2339: Property 'isArray' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'isArray' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(190,25): error TS2339: Property 'isError' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'isError' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(191,28): error TS2339: Property 'isFunction' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'isFunction' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(192,27): error TS2339: Property 'isWeakMap' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'isWeakMap' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(193,22): error TS2339: Property 'keys' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'keys' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(194,23): error TS2339: Property 'rearg' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'rearg' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(195,27): error TS2339: Property 'toInteger' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'toInteger' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(196,24): error TS2339: Property 'toPath' does not exist on type 'Function | { [x: string]: any; 'ary': any; 'assign': any; 'clone': any; 'curry': any; 'forEach': ...'.
+  Property 'toPath' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(263,57): error TS2345: Argument of type '{ cap?: boolean; curry?: boolean; fixed?: boolean; immutable?: boolean; rearg?: boolean; } | unde...' is not assignable to parameter of type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(379,14): error TS2339: Property 'runInContext' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(516,33): error TS2339: Property 'placeholder' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(559,5): error TS2339: Property 'convert' does not exist on type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(561,7): error TS2339: Property 'placeholder' does not exist on type 'Function'.
+node_modules/lodash/fp/_convertBrowser.js(12,30): error TS2345: Argument of type 'Function' is not assignable to parameter of type 'string'.
+node_modules/lodash/fp/_convertBrowser.js(15,12): error TS2304: Cannot find name '_'.
+node_modules/lodash/fp/_convertBrowser.js(15,38): error TS2304: Cannot find name '_'.
+node_modules/lodash/fp/_convertBrowser.js(16,3): error TS2304: Cannot find name '_'.
+node_modules/lodash/fp/_convertBrowser.js(16,22): error TS2304: Cannot find name '_'.
+node_modules/lodash/fp/array.js(2,26): error TS2345: Argument of type '{ [x: string]: any; 'chunk': (array: any[], size?: number | undefined, guard: any) => any[]; 'com...' is not assignable to parameter of type 'string'.
+node_modules/lodash/fp/collection.js(2,26): error TS2345: Argument of type '{ [x: string]: any; 'countBy': Function; 'each': (collection: any, iteratee?: Function | undefine...' is not assignable to parameter of type 'string'.
+node_modules/lodash/fp/convert.js(15,34): error TS2345: Argument of type 'Function | undefined' is not assignable to parameter of type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/lodash/fp/date.js(2,26): error TS2345: Argument of type '{ [x: string]: any; 'now': () => number; }' is not assignable to parameter of type 'string'.
+node_modules/lodash/fp/function.js(2,26): error TS2345: Argument of type '{ [x: string]: any; 'after': (n: number, func: Function) => Function; 'ary': (func: Function, n?:...' is not assignable to parameter of type 'string'.
+node_modules/lodash/fp/lang.js(2,26): error TS2345: Argument of type '{ [x: string]: any; 'castArray': (...args: any[]) => any[]; 'clone': (value: any) => any; 'cloneD...' is not assignable to parameter of type 'string'.
+node_modules/lodash/fp/math.js(2,26): error TS2345: Argument of type '{ [x: string]: any; 'add': Function; 'ceil': Function; 'divide': Function; 'floor': Function; 'ma...' is not assignable to parameter of type 'string'.
+node_modules/lodash/fp/number.js(2,26): error TS2345: Argument of type '{ [x: string]: any; 'clamp': (number: number, lower?: number | undefined, upper: number) => numbe...' is not assignable to parameter of type 'string'.
+node_modules/lodash/fp/object.js(2,26): error TS2345: Argument of type '{ [x: string]: any; 'assign': Function; 'assignIn': Function; 'assignInWith': Function; 'assignWi...' is not assignable to parameter of type 'string'.
+node_modules/lodash/fp/seq.js(2,26): error TS2345: Argument of type '{ [x: string]: any; 'at': Function; 'chain': (value: any) => any; 'commit': () => any; 'lodash': ...' is not assignable to parameter of type 'string'.
+node_modules/lodash/fp/string.js(2,26): error TS2345: Argument of type '{ [x: string]: any; 'camelCase': Function; 'capitalize': (string?: string | undefined) => string;...' is not assignable to parameter of type 'string'.
+node_modules/lodash/fp/util.js(2,26): error TS2345: Argument of type '{ [x: string]: any; 'attempt': Function; 'bindAll': Function; 'cond': (pairs: any[]) => Function;...' is not assignable to parameter of type 'string'.
+node_modules/lodash/includes.js(24,10): error TS1003: Identifier expected.
+node_modules/lodash/includes.js(24,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/index.js(1,26): error TS2306: File '/home/nathansa/ts/tests/cases/user/lodash/node_modules/lodash/lodash.js' is not a module.
+node_modules/lodash/intersectionBy.js(41,32): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/isBuffer.js(5,69): error TS2339: Property 'nodeType' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/lodash/node_modules/lodash/isBuffer"'.
+node_modules/lodash/isBuffer.js(8,80): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
+node_modules/lodash/isEqual.js(32,10): error TS2554: Expected 3-5 arguments, but got 2.
+node_modules/lodash/isEqualWith.js(38,59): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/iteratee.js(50,74): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/keys.js(34,32): error TS2554: Expected 2 arguments, but got 1.
+node_modules/lodash/lodash.js(419,58): error TS2339: Property 'Object' does not exist on type 'Window'.
+node_modules/lodash/lodash.js(428,82): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
+node_modules/lodash/lodash.js(434,49): error TS2339: Property 'process' does not exist on type 'false | Global'.
+  Property 'process' does not exist on type 'false'.
+node_modules/lodash/lodash.js(488,19): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(508,20): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(512,5): error TS2322: Type 'any[] | undefined' is not assignable to type 'any[]'.
+  Type 'undefined' is not assignable to type 'any[]'.
+node_modules/lodash/lodash.js(528,20): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(532,5): error TS2322: Type 'any[] | undefined' is not assignable to type 'any[]'.
+  Type 'undefined' is not assignable to type 'any[]'.
+node_modules/lodash/lodash.js(550,22): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(573,19): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(587,17): error TS8024: JSDoc '@param' tag has name 'target', but there is no parameter with that name.
+node_modules/lodash/lodash.js(592,36): error TS2345: Argument of type 'any[] | undefined' is not assignable to parameter of type 'any[]'.
+  Type 'undefined' is not assignable to type 'any[]'.
+node_modules/lodash/lodash.js(600,17): error TS8024: JSDoc '@param' tag has name 'target', but there is no parameter with that name.
+node_modules/lodash/lodash.js(609,29): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(631,32): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(672,21): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(675,43): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(695,21): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(698,43): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(718,21): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(749,22): error TS8024: JSDoc '@param' tag has name 'The', but there is no parameter with that name.
+node_modules/lodash/lodash.js(924,16): error TS2345: Argument of type 'Function' is not assignable to parameter of type '((a: any, b: any) => number) | undefined'.
+  Type 'Function' is not assignable to type '(a: any, b: any) => number'.
+node_modules/lodash/lodash.js(1374,22): error TS8024: JSDoc '@param' tag has name 'The', but there is no parameter with that name.
+node_modules/lodash/lodash.js(1771,9): error TS2322: Type '{ (value: any): any; templateSettings: any; prototype: any; after: (n: number, func: Function) =>...' is not assignable to type 'Function'.
+  Types of property 'bind' are incompatible.
+    Type 'Function' is not assignable to type '(this: Function, thisArg: any, ...argArray: any[]) => any'.
+      Type 'Function' provides no match for the signature '(this: Function, thisArg: any, ...argArray: any[]): any'.
+node_modules/lodash/lodash.js(1811,7): error TS2322: Type 'any[]' is not assignable to type 'never[] | undefined'.
+  Type 'any[]' is not assignable to type 'never[]'.
+node_modules/lodash/lodash.js(1814,7): error TS2322: Type 'any[]' is not assignable to type 'never[] | undefined'.
+  Type 'any[]' is not assignable to type 'never[]'.
+node_modules/lodash/lodash.js(1816,7): error TS2322: Type 'any[]' is not assignable to type 'never[] | undefined'.
+  Type 'any[]' is not assignable to type 'never[]'.
+node_modules/lodash/lodash.js(1835,9): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(1916,21): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(1939,24): error TS8024: JSDoc '@param' tag has name 'hash', but there is no parameter with that name.
+node_modules/lodash/lodash.js(2020,21): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(2137,21): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(2241,18): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(2288,24): error TS2339: Property 'size' does not exist on type '{ clear: () => void; get: (key: string) => any; has: (key: string) => boolean; set: (key: string,...'.
+node_modules/lodash/lodash.js(2604,11): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+node_modules/lodash/lodash.js(2604,30): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(2628,20): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/lodash/lodash.js(2629,20): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/lodash/lodash.js(2630,20): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/lodash/lodash.js(2652,37): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean | undefined'.
+node_modules/lodash/lodash.js(2665,47): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean | undefined'.
+node_modules/lodash/lodash.js(2791,9): error TS2322: Type '(array?: any[] | undefined, value: any, comparator: Function) => boolean' is not assignable to type '(array?: any[] | undefined, value: any) => boolean'.
+node_modules/lodash/lodash.js(2797,9): error TS2322: Type '{ __data__: { clear: () => void; get: (key: string) => any; has: (key: string) => boolean; set: (...' is not assignable to type 'any[]'.
+  Property 'length' is missing in type '{ __data__: { clear: () => void; get: (key: string) => any; has: (key: string) => boolean; set: (...'.
+node_modules/lodash/lodash.js(2814,19): error TS2554: Expected 2 arguments, but got 3.
+node_modules/lodash/lodash.js(2905,35): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(2949,21): error TS2322: Type '(value: any) => boolean' is not assignable to type 'boolean | undefined'.
+  Type '(value: any) => boolean' is not assignable to type 'false'.
+node_modules/lodash/lodash.js(2954,26): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(2954,26): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/lodash/lodash.js(2954,26): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'Boolean' has no compatible call signatures.
+node_modules/lodash/lodash.js(3176,44): error TS2345: Argument of type 'Function | undefined' is not assignable to parameter of type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/lodash/lodash.js(3183,58): error TS2345: Argument of type 'Function | undefined' is not assignable to parameter of type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/lodash/lodash.js(3286,44): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+node_modules/lodash/lodash.js(3403,51): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(3587,40): error TS2345: Argument of type 'string | symbol' is not assignable to parameter of type 'string'.
+  Type 'symbol' is not assignable to type 'string'.
+node_modules/lodash/lodash.js(3593,45): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(3830,64): error TS2345: Argument of type 'Function | undefined' is not assignable to parameter of type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/lodash/lodash.js(3860,30): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string | any[]'.
+node_modules/lodash/lodash.js(4001,29): error TS2345: Argument of type 'string | symbol' is not assignable to parameter of type 'string'.
+  Type 'symbol' is not assignable to type 'string'.
+node_modules/lodash/lodash.js(4061,11): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(4062,18): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(4062,49): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(4064,13): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(4065,11): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(4066,9): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(4068,16): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(4068,24): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(4068,36): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(4068,42): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(4069,7): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(4073,39): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(4271,9): error TS2322: Type '(array?: any[] | undefined, value: any, comparator: Function) => boolean' is not assignable to type '(array?: any[] | undefined, value: any) => boolean'.
+node_modules/lodash/lodash.js(4274,37): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/lodash.js(4280,9): error TS2322: Type '{ __data__: { clear: () => void; get: (key: string) => any; has: (key: string) => boolean; set: (...' is not assignable to type 'any[]'.
+node_modules/lodash/lodash.js(4303,19): error TS2554: Expected 2 arguments, but got 3.
+node_modules/lodash/lodash.js(4497,25): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(4537,20): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/lodash.js(4757,9): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(4759,7): error TS2322: Type 'any[] | undefined' is not assignable to type 'any[]'.
+  Type 'undefined' is not assignable to type 'any[]'.
+node_modules/lodash/lodash.js(4807,33): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/lodash.js(4819,33): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/lodash.js(4982,28): error TS2554: Expected 3 arguments, but got 1.
+node_modules/lodash/lodash.js(5001,26): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/lodash.js(5002,26): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/lodash.js(5003,26): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/lodash.js(5004,26): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/lodash.js(5005,26): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/lodash.js(5006,26): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/lodash.js(5007,26): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/lodash.js(5008,26): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/lodash.js(5047,50): error TS2339: Property 'placeholder' does not exist on type '(...args: any[]) => any'.
+node_modules/lodash/lodash.js(5072,38): error TS2454: Variable 'iteratee' is used before being assigned.
+node_modules/lodash/lodash.js(5097,26): error TS2454: Variable 'wrapper' is used before being assigned.
+node_modules/lodash/lodash.js(5101,17): error TS2454: Variable 'wrapper' is used before being assigned.
+node_modules/lodash/lodash.js(5106,46): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/lodash.js(5112,23): error TS2454: Variable 'wrapper' is used before being assigned.
+node_modules/lodash/lodash.js(5112,59): error TS2454: Variable 'wrapper' is used before being assigned.
+node_modules/lodash/lodash.js(5115,17): error TS2454: Variable 'wrapper' is used before being assigned.
+node_modules/lodash/lodash.js(5116,17): error TS2454: Variable 'wrapper' is used before being assigned.
+node_modules/lodash/lodash.js(5116,25): error TS2339: Property 'thru' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __chain__: boolean | undefined; __index__: ...'.
+node_modules/lodash/lodash.js(5124,28): error TS2339: Property 'plant' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __chain__: boolean | undefined; __index__: ...'.
+node_modules/lodash/lodash.js(5162,53): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
+  Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/lodash.js(5177,46): error TS2345: Argument of type 'any[] | undefined' is not assignable to parameter of type 'any[]'.
+  Type 'undefined' is not assignable to type 'any[]'.
+node_modules/lodash/lodash.js(5180,56): error TS2345: Argument of type 'any[] | undefined' is not assignable to parameter of type 'any[]'.
+  Type 'undefined' is not assignable to type 'any[]'.
+node_modules/lodash/lodash.js(5182,19): error TS2454: Variable 'holdersCount' is used before being assigned.
+node_modules/lodash/lodash.js(5183,35): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(5186,13): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
+  Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/lodash.js(5186,50): error TS2339: Property 'placeholder' does not exist on type '(...args: any[]) => any'.
+node_modules/lodash/lodash.js(5187,44): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(5191,42): error TS2538: Type 'Function' cannot be used as an index type.
+node_modules/lodash/lodash.js(5199,22): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(5520,42): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/lodash.js(5543,33): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
+  Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/lodash.js(5545,30): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
+  Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/lodash.js(5546,104): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(5547,32): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
+  Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/lodash.js(5552,55): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
+  Type 'string' is not assignable to type 'Function'.
+node_modules/lodash/lodash.js(5605,24): error TS8024: JSDoc '@param' tag has name 'key', but there is no parameter with that name.
+node_modules/lodash/lodash.js(5742,11): error TS2454: Variable 'convert' is used before being assigned.
+node_modules/lodash/lodash.js(5826,22): error TS2322: Type 'boolean' is not assignable to type 'number'.
+node_modules/lodash/lodash.js(5898,26): error TS2339: Property 'name' does not exist on type 'Function'.
+node_modules/lodash/lodash.js(5921,21): error TS2339: Property 'placeholder' does not exist on type 'Function | { (value: any): any; templateSettings: any; prototype: any; after: (n: number, func: F...'.
+  Property 'placeholder' does not exist on type 'Function'.
+node_modules/lodash/lodash.js(5932,25): error TS8029: JSDoc '@param' tag has name 'arity', but there is no parameter with that name. It would match 'arguments' if it had an array type.
+node_modules/lodash/lodash.js(5938,33): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/lodash.js(6006,11): error TS2454: Variable 'unmasked' is used before being assigned.
+node_modules/lodash/lodash.js(6043,27): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/lodash.js(6149,54): error TS2454: Variable 'key' is used before being assigned.
+node_modules/lodash/lodash.js(6162,20): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/lodash/lodash.js(6166,30): error TS2339: Property 'index' does not exist on type 'any[]'.
+node_modules/lodash/lodash.js(6167,30): error TS2339: Property 'input' does not exist on type 'any[]'.
+node_modules/lodash/lodash.js(6239,9): error TS1223: 'returns' tag already specified.
+node_modules/lodash/lodash.js(6244,9): error TS2322: Type 'string' is not assignable to type 'any[]'.
+node_modules/lodash/lodash.js(6249,7): error TS2322: Type 'string' is not assignable to type 'any[]'.
+node_modules/lodash/lodash.js(6359,18): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/lodash.js(6444,26): error TS2339: Property 'cache' does not exist on type 'Function'.
+node_modules/lodash/lodash.js(6489,30): error TS2554: Expected 4 arguments, but got 3.
+node_modules/lodash/lodash.js(6496,30): error TS2554: Expected 4 arguments, but got 3.
+node_modules/lodash/lodash.js(6563,46): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(6567,31): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(6570,31): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(6571,26): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(6574,19): error TS2538: Type 'undefined' cannot be used as an index type.
+node_modules/lodash/lodash.js(6709,24): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(6716,7): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+node_modules/lodash/lodash.js(6778,9): error TS1223: 'returns' tag already specified.
+node_modules/lodash/lodash.js(6802,7): error TS2322: Type 'any[]' is not assignable to type 'never[] | undefined'.
+  Type 'any[]' is not assignable to type 'never[]'.
+node_modules/lodash/lodash.js(6821,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(6821,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(6838,22): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(6843,46): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(6846,64): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(6941,56): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean | undefined'.
+  Type '(value: any) => boolean' is not assignable to type 'false'.
+node_modules/lodash/lodash.js(6977,56): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean | undefined'.
+  Type '(value: any) => boolean' is not assignable to type 'false'.
+node_modules/lodash/lodash.js(7010,56): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean | undefined'.
+  Type '(value: any) => boolean' is not assignable to type 'false'.
+node_modules/lodash/lodash.js(7023,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(7023,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(7057,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(7057,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(7296,17): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(8145,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(8145,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(8178,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(8178,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(8303,46): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean | undefined'.
+  Type '(value: any) => boolean' is not assignable to type 'false'.
+node_modules/lodash/lodash.js(8334,46): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean | undefined'.
+  Type '(value: any) => boolean' is not assignable to type 'false'.
+node_modules/lodash/lodash.js(8361,46): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean | undefined'.
+  Type '(value: any) => boolean' is not assignable to type 'false'.
+node_modules/lodash/lodash.js(8822,55): error TS2339: Property 'thru' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __chain__: boolean | undefined; __index__: ...'.
+node_modules/lodash/lodash.js(9093,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(9093,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9407,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(9407,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9432,12): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(9433,55): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+node_modules/lodash/lodash.js(9563,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(9563,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9587,9): error TS2322: Type 'string[][]' is not assignable to type 'string[] | undefined'.
+  Type 'string[][]' is not assignable to type 'string[]'.
+    Type 'string[]' is not assignable to type 'string'.
+node_modules/lodash/lodash.js(9589,38): error TS2345: Argument of type 'any[] | string[] | Function[] | any[][] | undefined' is not assignable to parameter of type 'any[] | string[] | Function[]'.
+  Type 'undefined' is not assignable to type 'any[] | string[] | Function[]'.
+node_modules/lodash/lodash.js(9673,14): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((array?: any[] | undefined, iteratee: Function, accumulator?: any, initAccum?: boolean | undefin...' has no compatible call signatures.
+node_modules/lodash/lodash.js(9702,14): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((collection: any, iteratee: Function, accumulator: any, initAccum: boolean, eachFunc: Function) ...' has no compatible call signatures.
+node_modules/lodash/lodash.js(9773,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(9773,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(9859,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(9859,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10004,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(10004,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10092,59): error TS2454: Variable 'holders' is used before being assigned.
+node_modules/lodash/lodash.js(10146,57): error TS2454: Variable 'holders' is used before being assigned.
+node_modules/lodash/lodash.js(10167,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(10167,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10193,14): error TS2339: Property 'placeholder' does not exist on type 'Function'.
+node_modules/lodash/lodash.js(10193,34): error TS2339: Property 'placeholder' does not exist on type '(func: Function, arity?: number | undefined, guard: any) => Function'.
+node_modules/lodash/lodash.js(10212,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(10212,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(10238,14): error TS2339: Property 'placeholder' does not exist on type 'Function'.
+node_modules/lodash/lodash.js(10238,39): error TS2339: Property 'placeholder' does not exist on type '(func: Function, arity?: number | undefined, guard: any) => Function'.
+node_modules/lodash/lodash.js(10313,21): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(10314,31): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(10315,47): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(10316,34): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(10341,27): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(10355,69): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(10834,26): error TS2538: Type 'undefined' cannot be used as an index type.
+node_modules/lodash/lodash.js(10896,32): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(10897,34): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(10899,35): error TS2345: Argument of type '{ 'leading': boolean; 'maxWait': number | undefined; 'trailing': boolean; }' is not assignable to parameter of type '{ leading?: boolean; maxWait?: number; trailing?: boolean; } | undefined'.
+  Type '{ 'leading': boolean; 'maxWait': number | undefined; 'trailing': boolean; }' is not assignable to type '{ leading?: boolean; maxWait?: number; trailing?: boolean; }'.
+    Types of property 'maxWait' are incompatible.
+      Type 'number | undefined' is not assignable to type 'number'.
+        Type 'undefined' is not assignable to type 'number'.
+node_modules/lodash/lodash.js(10922,14): error TS2554: Expected 3 arguments, but got 2.
+node_modules/lodash/lodash.js(10960,19): error TS8029: JSDoc '@param' tag has name 'value', but there is no parameter with that name. It would match 'arguments' if it had an array type.
+node_modules/lodash/lodash.js(11021,31): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(11057,31): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(11079,31): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(11112,31): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(11523,14): error TS2554: Expected 3-5 arguments, but got 2.
+node_modules/lodash/lodash.js(13298,36): error TS2554: Expected 2 arguments, but got 1.
+node_modules/lodash/lodash.js(13354,33): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/lodash/lodash.js(13392,38): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/lodash/lodash.js(13500,36): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(13581,16): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/lodash/lodash.js(13796,7): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((array?: any[] | undefined, iteratee: Function) => any[]) | ((object: any, iteratee: Function) =...' has no compatible call signatures.
+node_modules/lodash/lodash.js(13797,16): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/lodash/lodash.js(13974,9): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+node_modules/lodash/lodash.js(14174,48): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
+node_modules/lodash/lodash.js(14245,43): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
+node_modules/lodash/lodash.js(14458,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(14458,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(14486,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(14486,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(14520,33): error TS8029: JSDoc '@param' tag has name 'replacement', but there is no parameter with that name. It would match 'arguments' if it had an array type.
+node_modules/lodash/lodash.js(14582,56): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(14692,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(14692,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(14773,38): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(14780,25): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(14785,10): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(14788,10): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(14793,25): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(14802,19): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(14827,22): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(14877,25): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/lodash.js(14902,25): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/lodash.js(14928,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(14928,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(14966,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(14966,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(14999,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(14999,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(15065,40): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(15066,30): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(15067,34): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(15083,20): error TS2454: Variable 'strSymbols' is used before being assigned.
+node_modules/lodash/lodash.js(15090,11): error TS2454: Variable 'strSymbols' is used before being assigned.
+node_modules/lodash/lodash.js(15138,41): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
+node_modules/lodash/lodash.js(15194,14): error TS1003: Identifier expected.
+node_modules/lodash/lodash.js(15194,14): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/lodash.js(15356,45): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(15518,78): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(15550,44): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(15580,34): error TS2345: Argument of type 'string | any[]' is not assignable to parameter of type 'string'.
+  Type 'any[]' is not assignable to type 'string'.
+node_modules/lodash/lodash.js(15580,60): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/lodash.js(15689,53): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/lodash.js(15706,65): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
+node_modules/lodash/lodash.js(15773,30): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+node_modules/lodash/lodash.js(15872,41): error TS2345: Argument of type 'string | symbol' is not assignable to parameter of type 'string'.
+  Type 'symbol' is not assignable to type 'string'.
+node_modules/lodash/lodash.js(16914,19): error TS2339: Property 'filter' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __dir__: number | undefined; __filtered__: ...'.
+node_modules/lodash/lodash.js(16918,19): error TS2339: Property 'filter' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __dir__: number | undefined; __filtered__: ...'.
+node_modules/lodash/lodash.js(16935,19): error TS2339: Property 'filter' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __dir__: number | undefined; __filtered__: ...'.
+node_modules/lodash/lodash.js(16946,25): error TS2339: Property 'takeRight' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __dir__: number | undefined; __filtered__: ...'.
+node_modules/lodash/lodash.js(16948,25): error TS2339: Property 'drop' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __dir__: number | undefined; __filtered__: ...'.
+node_modules/lodash/lodash.js(16952,35): error TS2339: Property 'dropRight' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __dir__: number | undefined; __filtered__: ...'.
+node_modules/lodash/lodash.js(16952,60): error TS2339: Property 'take' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __dir__: number | undefined; __filtered__: ...'.
+node_modules/lodash/lodash.js(16962,19): error TS2339: Property 'take' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __dir__: number | undefined; __filtered__: ...'.
+node_modules/lodash/lodash.js(16983,68): error TS2345: Argument of type 'IArguments | number[]' is not assignable to parameter of type 'any[]'.
+  Type 'IArguments' is not assignable to type 'any[]'.
+node_modules/lodash/lodash.js(17039,59): error TS2339: Property 'name' does not exist on type 'Function'.
+node_modules/lodash/lodash.js(17073,14): error TS2304: Cannot find name 'define'.
+node_modules/lodash/lodash.js(17073,45): error TS2304: Cannot find name 'define'.
+node_modules/lodash/lodash.js(17073,71): error TS2304: Cannot find name 'define'.
+node_modules/lodash/lodash.js(17082,5): error TS2304: Cannot find name 'define'.
+node_modules/lodash/lodash.js(17089,30): error TS2339: Property '_' does not exist on type '{ (value: any): any; templateSettings: any; prototype: any; after: (n: number, func: Function) =>...'.
+node_modules/lodash/map.js(50,27): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/mapKeys.js(28,14): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/mapKeys.js(31,29): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/lodash/mapValues.js(35,14): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/mapValues.js(38,34): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/lodash/matches.js(36,40): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/matchesProperty.js(34,30): error TS2345: Argument of type 'string | any[]' is not assignable to parameter of type 'string'.
+  Type 'any[]' is not assignable to type 'string'.
+node_modules/lodash/matchesProperty.js(34,56): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/maxBy.js(30,27): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/meanBy.js(28,26): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/minBy.js(30,27): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/mixin.js(49,49): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/mixin.js(66,61): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
+node_modules/lodash/nthArg.js(28,26): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+node_modules/lodash/omit.js(48,32): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/orderBy.js(18,10): error TS1003: Identifier expected.
+node_modules/lodash/orderBy.js(18,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/parseInt.js(24,10): error TS1003: Identifier expected.
+node_modules/lodash/parseInt.js(24,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/partial.js(48,9): error TS2339: Property 'placeholder' does not exist on type 'Function'.
+node_modules/lodash/partialRight.js(47,14): error TS2339: Property 'placeholder' does not exist on type 'Function'.
+node_modules/lodash/pickBy.js(33,12): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/lodash/property.js(29,37): error TS2345: Argument of type 'string | symbol' is not assignable to parameter of type 'string'.
+  Type 'symbol' is not assignable to type 'string'.
+node_modules/lodash/pullAllBy.js(29,34): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/reduce.js(48,10): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((array?: any[] | undefined, iteratee: Function, accumulator?: any, initAccum?: boolean | undefin...' has no compatible call signatures.
+node_modules/lodash/reduce.js(48,27): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/reduceRight.js(33,10): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((array?: any[] | undefined, iteratee: Function, accumulator?: any, initAccum?: boolean | undefin...' has no compatible call signatures.
+node_modules/lodash/reduceRight.js(33,27): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/reject.js(43,34): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/remove.js(41,15): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/repeat.js(15,10): error TS1003: Identifier expected.
+node_modules/lodash/repeat.js(15,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/replace.js(15,29): error TS8029: JSDoc '@param' tag has name 'replacement', but there is no parameter with that name. It would match 'arguments' if it had an array type.
+node_modules/lodash/sampleSize.js(17,10): error TS1003: Identifier expected.
+node_modules/lodash/sampleSize.js(17,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/some.js(18,10): error TS1003: Identifier expected.
+node_modules/lodash/some.js(18,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/some.js(48,27): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/sortedIndexBy.js(30,42): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/sortedLastIndexBy.js(30,42): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/sortedUniqBy.js(22,29): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/split.js(33,5): error TS2322: Type 'undefined' is not assignable to type 'string | RegExp'.
+node_modules/lodash/spread.js(53,22): error TS2538: Type 'undefined' cannot be used as an index type.
+node_modules/lodash/sumBy.js(29,22): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/take.js(13,10): error TS1003: Identifier expected.
+node_modules/lodash/take.js(13,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/takeRight.js(13,10): error TS1003: Identifier expected.
+node_modules/lodash/takeRight.js(13,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/takeRightWhile.js(41,24): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/takeWhile.js(41,24): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/template.js(65,10): error TS1003: Identifier expected.
+node_modules/lodash/template.js(65,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/template.js(146,34): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/template.js(153,21): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/template.js(158,6): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/template.js(161,6): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/template.js(165,34): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/template.js(171,15): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/template.js(196,18): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/template.js(225,21): error TS2345: Argument of type 'any[]' is not assignable to parameter of type 'string'.
+node_modules/lodash/templateSettings.js(63,12): error TS2322: Type '{ [x: string]: any; 'escape': (string?: string | undefined) => string; }' is not assignable to type 'Function'.
+  Object literal may only specify known properties, and ''escape'' does not exist in type 'Function'.
+node_modules/lodash/throttle.js(59,28): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/throttle.js(60,30): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/throttle.js(62,31): error TS2345: Argument of type '{ 'leading': boolean; 'maxWait': number | undefined; 'trailing': boolean; }' is not assignable to parameter of type '{ leading?: boolean; maxWait?: number; trailing?: boolean; } | undefined'.
+  Type '{ 'leading': boolean; 'maxWait': number | undefined; 'trailing': boolean; }' is not assignable to type '{ leading?: boolean; maxWait?: number; trailing?: boolean; }'.
+    Types of property 'maxWait' are incompatible.
+      Type 'number | undefined' is not assignable to type 'number'.
+        Type 'undefined' is not assignable to type 'number'.
+node_modules/lodash/toLower.js(11,21): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/toUpper.js(11,21): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
+node_modules/lodash/transform.js(46,14): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/transform.js(59,3): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((array?: any[] | undefined, iteratee: Function) => any[]) | ((object: any, iteratee: Function) =...' has no compatible call signatures.
+node_modules/lodash/transform.js(60,12): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/lodash/trim.js(20,10): error TS1003: Identifier expected.
+node_modules/lodash/trim.js(20,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/trimEnd.js(19,10): error TS1003: Identifier expected.
+node_modules/lodash/trimEnd.js(19,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/trimStart.js(19,10): error TS1003: Identifier expected.
+node_modules/lodash/trimStart.js(19,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/truncate.js(60,36): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/truncate.js(61,26): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/truncate.js(62,30): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/truncate.js(78,16): error TS2454: Variable 'strSymbols' is used before being assigned.
+node_modules/lodash/truncate.js(85,7): error TS2454: Variable 'strSymbols' is used before being assigned.
+node_modules/lodash/unary.js(19,10): error TS2554: Expected 3 arguments, but got 2.
+node_modules/lodash/unescape.js(30,37): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
+node_modules/lodash/union.js(23,42): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean | undefined'.
+  Type '(value: any) => boolean' is not assignable to type 'false'.
+node_modules/lodash/unionBy.js(36,42): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean | undefined'.
+  Type '(value: any) => boolean' is not assignable to type 'false'.
+node_modules/lodash/unionBy.js(36,68): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/unionWith.js(31,42): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean | undefined'.
+  Type '(value: any) => boolean' is not assignable to type 'false'.
+node_modules/lodash/uniqBy.js(28,52): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/words.js(15,10): error TS1003: Identifier expected.
+node_modules/lodash/words.js(15,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/wrapperAt.js(40,51): error TS2339: Property 'thru' does not exist on type '{ __wrapped__: any; __actions__: never[] | undefined; __chain__: boolean | undefined; __index__: ...'.
+node_modules/lodash/xorBy.js(36,58): error TS2554: Expected 0-1 arguments, but got 2.
+
+
+
+Standard error:
