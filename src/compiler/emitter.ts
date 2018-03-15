@@ -162,7 +162,7 @@ namespace ts {
                 onSetSourceFile: setSourceFile,
             });
 
-            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, length(transform.transformed) > 1 ? createBundle(transform.transformed) : transform.transformed[0], printer);
+            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, isSourceFile(sourceFileOrBundle) ? transform.transformed[0] : createBundle(transform.transformed), printer);
 
             // Clean up emit nodes on parse tree
             transform.dispose();
@@ -193,9 +193,8 @@ namespace ts {
             const declBlocked = (!!declarationTransform.diagnostics && !!declarationTransform.diagnostics.length) || !!host.isEmitBlocked(declarationFilePath) || !!compilerOptions.noEmit;
             emitSkipped = emitSkipped || declBlocked;
             if (!declBlocked || emitOnlyDtsFiles) {
-                const associatedDeclarationTree = length(declarationTransform.transformed) > 1 ? createBundle(declarationTransform.transformed as SourceFile[]) : declarationTransform.transformed[0];
                 const previousState = sourceMap.setState(/*disabled*/ true);
-                printSourceFileOrBundle(declarationFilePath, /*sourceMapFilePath*/ undefined, associatedDeclarationTree, declarationPrinter, /*shouldSkipSourcemap*/ true);
+                printSourceFileOrBundle(declarationFilePath, /*sourceMapFilePath*/ undefined, declarationTransform.transformed[0], declarationPrinter, /*shouldSkipSourcemap*/ true);
                 sourceMap.setState(previousState);
             }
             declarationTransform.dispose();

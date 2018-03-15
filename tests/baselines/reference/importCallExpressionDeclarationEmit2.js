@@ -10,3 +10,7 @@ var p1 = import("./0");
 export function foo() { return "foo"; }
 //// [1.js]
 var p1 = import("./0");
+
+
+//// [0.d.ts]
+export declare function foo(): string;

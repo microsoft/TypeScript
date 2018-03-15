@@ -393,3 +393,37 @@ function privateFunctionWithPrivateModuleParameterTypes(param) {
 function privateFunctionWithPrivateModuleParameterTypes1(param) {
     if (param === void 0) { param = exporter.createExportedWidget4(); }
 }
+
+
+//// [privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.d.ts]
+declare module "GlobalWidgets" {
+    class Widget3 {
+        name: string;
+    }
+    function createWidget3(): Widget3;
+    module SpecializedGlobalWidget {
+        class Widget4 {
+            name: string;
+        }
+        function createWidget4(): Widget4;
+    }
+}
+//// [privacyFunctionCannotNameParameterTypeDeclFile_Widgets.d.ts]
+export declare class Widget1 {
+    name: string;
+}
+export declare function createWidget1(): Widget1;
+export declare module SpecializedWidget {
+    class Widget2 {
+        name: string;
+    }
+    function createWidget2(): Widget2;
+}
+//// [privacyFunctionCannotNameParameterTypeDeclFile_exporter.d.ts]
+/// <reference path="privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.d.ts" />
+import Widgets = require("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets");
+import Widgets1 = require("GlobalWidgets");
+export declare function createExportedWidget1(): Widgets.Widget1;
+export declare function createExportedWidget2(): Widgets.SpecializedWidget.Widget2;
+export declare function createExportedWidget3(): Widgets1.Widget3;
+export declare function createExportedWidget4(): Widgets1.SpecializedGlobalWidget.Widget4;

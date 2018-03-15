@@ -207,3 +207,37 @@ var privateClassWithPrivateModulePropertyTypes = /** @class */ (function () {
 }());
 var privateVarWithPrivateModulePropertyTypes = exporter.createExportedWidget2();
 var privateVarWithPrivateModulePropertyTypes1 = exporter.createExportedWidget4();
+
+
+//// [privacyCannotNameVarTypeDeclFile_GlobalWidgets.d.ts]
+declare module "GlobalWidgets" {
+    class Widget3 {
+        name: string;
+    }
+    function createWidget3(): Widget3;
+    module SpecializedGlobalWidget {
+        class Widget4 {
+            name: string;
+        }
+        function createWidget4(): Widget4;
+    }
+}
+//// [privacyCannotNameVarTypeDeclFile_Widgets.d.ts]
+export declare class Widget1 {
+    name: string;
+}
+export declare function createWidget1(): Widget1;
+export declare module SpecializedWidget {
+    class Widget2 {
+        name: string;
+    }
+    function createWidget2(): Widget2;
+}
+//// [privacyCannotNameVarTypeDeclFile_exporter.d.ts]
+/// <reference path="privacyCannotNameVarTypeDeclFile_GlobalWidgets.d.ts" />
+import Widgets = require("./privacyCannotNameVarTypeDeclFile_Widgets");
+import Widgets1 = require("GlobalWidgets");
+export declare function createExportedWidget1(): Widgets.Widget1;
+export declare function createExportedWidget2(): Widgets.SpecializedWidget.Widget2;
+export declare function createExportedWidget3(): Widgets1.Widget3;
+export declare function createExportedWidget4(): Widgets1.SpecializedGlobalWidget.Widget4;
