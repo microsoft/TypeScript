@@ -18,7 +18,7 @@ namespace ts {
      */
     export function forEachEmittedFile<T>(
         host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) => T,
-        sourceFilesOrTargetSourceFile?: SourceFile[] | SourceFile,
+        sourceFilesOrTargetSourceFile?: ReadonlyArray<SourceFile> | SourceFile,
         emitOnlyDtsFiles?: boolean) {
 
         const sourceFiles = isArray(sourceFilesOrTargetSourceFile) ? sourceFilesOrTargetSourceFile : getSourceFilesToEmit(host, sourceFilesOrTargetSourceFile);
@@ -100,99 +100,22 @@ namespace ts {
         let isOwnFileEmit: boolean;
         let emitSkipped = false;
 
-        const sourceFiles = getSourceFilesToEmit(host, targetSourceFile);
-
-        // Transform the source files
-        const transform = transformNodes(resolver, host, compilerOptions, sourceFiles, transformers, /*allowDtsFiles*/ false);
-
-        // Create a printer to print the nodes
-        const printer = createPrinter(compilerOptions, {
-            // resolver hooks
-            hasGlobalName: resolver.hasGlobalName,
-
-            // transform hooks
-            onEmitNode: transform.emitNodeWithNotification,
-            substituteNode: transform.substituteNode,
-
-            // sourcemap hooks
-            onEmitSourceMapOfNode: sourceMap.emitNodeWithSourceMap,
-            onEmitSourceMapOfToken: sourceMap.emitTokenWithSourceMap,
-            onEmitSourceMapOfPosition: sourceMap.emitPos,
-
-            // emitter hooks
-            onEmitHelpers: emitHelpers,
-            onSetSourceFile: setSourceFile,
-        });
-
-        // Setup and perform the transformation to retrieve declarations from the input files
-        let declarationTransform: TransformationResult<SourceFile | Bundle>;
-        let declarationPrinter: Printer;
-        if (emitOnlyDtsFiles || compilerOptions.declaration) {
-            const nonJsFiles = filter(sourceFiles, isSourceFileNotJavaScript);
-            const inputListOrBundle = (compilerOptions.outFile || compilerOptions.out) ? [createBundle(nonJsFiles)] : nonJsFiles;
-            declarationTransform = transformNodes(resolver, host, compilerOptions, inputListOrBundle, [transformDeclarations], /*allowDtsFiles*/ false);
-            declarationPrinter = createPrinter({ ...compilerOptions, onlyPrintJsDocStyle: true } as PrinterOptions, {
-                // resolver hooks
-                hasGlobalName: resolver.hasGlobalName,
-
-                // transform hooks
-                onEmitNode: declarationTransform.emitNodeWithNotification,
-                substituteNode: declarationTransform.substituteNode,
-            });
-        }
-
         // Emit each output file
         performance.mark("beforePrint");
-        forEachEmittedFile(host, emitSourceFileOrBundle, transform.transformed, emitOnlyDtsFiles);
+        forEachEmittedFile(host, emitSourceFileOrBundle, getSourceFilesToEmit(host, targetSourceFile), emitOnlyDtsFiles);
         performance.measure("printTime", "beforePrint");
 
-        // Clean up emit nodes on parse tree
-        transform.dispose();
-        if (declarationTransform) declarationTransform.dispose();
 
         return {
             emitSkipped,
-            diagnostics: combinedDiagnostics(),
+            diagnostics: emitterDiagnostics.getDiagnostics(),
             emittedFiles: emittedFilesList,
             sourceMaps: sourceMapDataList
         };
 
-        function combinedDiagnostics() {
-            return concatenate(emitterDiagnostics.getDiagnostics(), declarationTransform && declarationTransform.diagnostics);
-        }
-
         function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) {
-            // Make sure not to write js file and source map file if any of them cannot be written
-            if (!host.isEmitBlocked(jsFilePath) && !compilerOptions.noEmit && !compilerOptions.emitDeclarationOnly) {
-                if (!emitOnlyDtsFiles) {
-                    printSourceFileOrBundle(jsFilePath, sourceMapFilePath, sourceFileOrBundle, printer);
-                }
-            }
-            else {
-                emitSkipped = true;
-            }
-
-            if (declarationFilePath && !isInJavaScriptFile(sourceFileOrBundle)) {
-                const originalSourceFile = isSourceFile(sourceFileOrBundle) ? getOriginalNode(sourceFileOrBundle) : undefined;
-                const declBlocked = (!!declarationTransform.diagnostics && !!declarationTransform.diagnostics.length) || !!host.isEmitBlocked(declarationFilePath) || !!compilerOptions.noEmit;
-                emitSkipped = emitSkipped || declBlocked;
-                if (!declBlocked || emitOnlyDtsFiles) {
-                    const associatedDeclarationTree = find(declarationTransform.transformed, n => {
-                        if (n.kind === SyntaxKind.Bundle) {
-                            return sourceFileOrBundle.kind === SyntaxKind.Bundle;
-                        }
-                        return getOriginalNode(n) === originalSourceFile;
-                    });
-                    if (associatedDeclarationTree) {
-                        const previousState = sourceMap.setState(/*disabled*/ true);
-                        printSourceFileOrBundle(declarationFilePath, /*sourceMapFilePath*/ undefined, associatedDeclarationTree, declarationPrinter, /*shouldSkipSourcemap*/ true);
-                        sourceMap.setState(previousState);
-                    }
-                    else {
-                        Debug.fail(`No declaration output found for path "${declarationFilePath}" for js output file: "${jsFilePath}".`);
-                    }
-                }
-            }
+            emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath);
+            emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath);
 
             if (!emitSkipped && emittedFilesList) {
                 if (!emitOnlyDtsFiles) {
@@ -205,6 +128,77 @@ namespace ts {
                     emittedFilesList.push(declarationFilePath);
                 }
             }
+        }
+
+        function emitJsFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, jsFilePath: string, sourceMapFilePath: string) {
+            const sourceFiles = isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : sourceFileOrBundle.sourceFiles;
+            // Make sure not to write js file and source map file if any of them cannot be written
+            if (host.isEmitBlocked(jsFilePath) || compilerOptions.noEmit || compilerOptions.emitDeclarationOnly) {
+                emitSkipped = true;
+                return;
+            }
+            if (emitOnlyDtsFiles) {
+                return;
+            }
+            // Transform the source files
+            const transform = transformNodes(resolver, host, compilerOptions, sourceFiles, transformers, /*allowDtsFiles*/ false);
+
+            // Create a printer to print the nodes
+            const printer = createPrinter(compilerOptions, {
+                // resolver hooks
+                hasGlobalName: resolver.hasGlobalName,
+
+                // transform hooks
+                onEmitNode: transform.emitNodeWithNotification,
+                substituteNode: transform.substituteNode,
+
+                // sourcemap hooks
+                onEmitSourceMapOfNode: sourceMap.emitNodeWithSourceMap,
+                onEmitSourceMapOfToken: sourceMap.emitTokenWithSourceMap,
+                onEmitSourceMapOfPosition: sourceMap.emitPos,
+
+                // emitter hooks
+                onEmitHelpers: emitHelpers,
+                onSetSourceFile: setSourceFile,
+            });
+
+            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, length(transform.transformed) > 1 ? createBundle(transform.transformed) : transform.transformed[0], printer);
+
+            // Clean up emit nodes on parse tree
+            transform.dispose();
+        }
+
+        function emitDeclarationFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, declarationFilePath: string | undefined) {
+            if (!(declarationFilePath && !isInJavaScriptFile(sourceFileOrBundle))) {
+                return;
+            }
+            const sourceFiles = isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : sourceFileOrBundle.sourceFiles;
+            // Setup and perform the transformation to retrieve declarations from the input files
+            const nonJsFiles = filter(sourceFiles, isSourceFileNotJavaScript);
+            const inputListOrBundle = (compilerOptions.outFile || compilerOptions.out) ? [createBundle(nonJsFiles)] : nonJsFiles;
+            const declarationTransform = transformNodes(resolver, host, compilerOptions, inputListOrBundle, [transformDeclarations], /*allowDtsFiles*/ false);
+            if (length(declarationTransform.diagnostics)) {
+                for (const diagnostic of declarationTransform.diagnostics) {
+                    emitterDiagnostics.add(diagnostic);
+                }
+            }
+            const declarationPrinter = createPrinter({ ...compilerOptions, onlyPrintJsDocStyle: true } as PrinterOptions, {
+                // resolver hooks
+                hasGlobalName: resolver.hasGlobalName,
+
+                // transform hooks
+                onEmitNode: declarationTransform.emitNodeWithNotification,
+                substituteNode: declarationTransform.substituteNode,
+            });
+            const declBlocked = (!!declarationTransform.diagnostics && !!declarationTransform.diagnostics.length) || !!host.isEmitBlocked(declarationFilePath) || !!compilerOptions.noEmit;
+            emitSkipped = emitSkipped || declBlocked;
+            if (!declBlocked || emitOnlyDtsFiles) {
+                const associatedDeclarationTree = length(declarationTransform.transformed) > 1 ? createBundle(declarationTransform.transformed as SourceFile[]) : declarationTransform.transformed[0];
+                const previousState = sourceMap.setState(/*disabled*/ true);
+                printSourceFileOrBundle(declarationFilePath, /*sourceMapFilePath*/ undefined, associatedDeclarationTree, declarationPrinter, /*shouldSkipSourcemap*/ true);
+                sourceMap.setState(previousState);
+            }
+            declarationTransform.dispose();
         }
 
         function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string, sourceFileOrBundle: SourceFile | Bundle, printer: Printer, shouldSkipSourcemap = false) {
