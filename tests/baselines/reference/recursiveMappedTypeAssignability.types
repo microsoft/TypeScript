@@ -1,0 +1,103 @@
+=== tests/cases/compiler/recursiveMappedTypeAssignability.ts ===
+// type D<U> = { [P in keyof U]: D<U[P]> };
+// <T>(t: T, dt: D<T>) => { dt = t };
+// type DR<U> = { readonly [P in keyof U]: DR<U[P]> };
+// <T>(t: T, dt: DR<T>) => { dt = t };
+// type DP<U> = { [P in keyof U]?: DP<U[P]> };
+// <T>(t: T, dt: DP<T>) => { dt = t };
+// type DAP<U> = { [P in keyof U]?: DAP<U[P]> & U[P] };
+// <T>(t: T, dt: DAP<T>) => { dt = t };
+
+// #21592
+// doesn't work because aliasSymbol isn't set on the literal type
+// since it's not top-level -- the union is.
+type SafeAny<T> = {
+>SafeAny : SafeAny<T>
+>T : T
+
+    [K in keyof T]?: SafeAny<T[K]>
+>K : K
+>T : T
+>SafeAny : SafeAny<T>
+>T : T
+>K : K
+
+} | boolean | number | string | symbol | null | undefined
+>null : null
+
+type DataValidator<T> = {
+>DataValidator : DataValidator<T>
+>T : T
+
+    [K in keyof T]?: (v: SafeAny<T[K]>) => v is T[K]
+>K : K
+>T : T
+>v : SafeAny<T[K]>
+>SafeAny : SafeAny<T>
+>T : T
+>K : K
+>v : any
+>T : T
+>K : K
+}
+
+// modified repro with top-level mapped type, which works
+// because the literal type has aliasSymbol set
+type SafeAny2<T> = {
+>SafeAny2 : SafeAny2<T>
+>T : T
+
+    [K in keyof T]?: SafeAny2<T[K]>
+>K : K
+>T : T
+>SafeAny2 : SafeAny2<T>
+>T : T
+>K : K
+}
+<T>(t: T, sat: SafeAny2<T>) => { sat = t }
+><T>(t: T, sat: SafeAny2<T>) => { sat = t } : <T>(t: T, sat: SafeAny2<T>) => void
+>T : T
+>t : T
+>T : T
+>sat : SafeAny2<T>
+>SafeAny2 : SafeAny2<T>
+>T : T
+>sat = t : T
+>sat : SafeAny2<T>
+>t : T
+
+
+const fn = <T>(arg: T) => {
+>fn : <T>(arg: T) => void
+><T>(arg: T) => {    ((arg2: RecursivePartial<T>) => {        // ...    })(arg);} : <T>(arg: T) => void
+>T : T
+>arg : T
+>T : T
+
+    ((arg2: RecursivePartial<T>) => {
+>((arg2: RecursivePartial<T>) => {        // ...    })(arg) : void
+>((arg2: RecursivePartial<T>) => {        // ...    }) : (arg2: RecursivePartial<T>) => void
+>(arg2: RecursivePartial<T>) => {        // ...    } : (arg2: RecursivePartial<T>) => void
+>arg2 : RecursivePartial<T>
+>RecursivePartial : RecursivePartial<T>
+>T : T
+
+        // ...
+    })(arg);
+>arg : T
+
+};
+
+type RecursivePartial<T> = {
+>RecursivePartial : RecursivePartial<T>
+>T : T
+
+    [P in keyof T]?: RecursivePartial<T[P]>;
+>P : P
+>T : T
+>RecursivePartial : RecursivePartial<T>
+>T : T
+>P : P
+
+};
+

@@ -10131,20 +10131,21 @@ namespace ts {
                     const template = getTemplateTypeFromMappedType(target);
                     const modifiers = getMappedTypeModifiers(target);
                     if (!(modifiers & MappedTypeModifiers.ExcludeOptional)) {
-                    if (template.flags & TypeFlags.IndexedAccess && (<IndexedAccessType>template).objectType === source &&
-                        (<IndexedAccessType>template).indexType === getTypeParameterFromMappedType(target)) {
-                        return Ternary.True;
-                    }
-                    // A source type T is related to a target type { [P in keyof T]: X } if T[P] is related to X.
-                    if (!isGenericMappedType(source) && getConstraintTypeFromMappedType(target) === getIndexType(source)) {
-                        const indexedAccessType = getIndexedAccessType(source, getTypeParameterFromMappedType(target));
-                        const templateType = getTemplateTypeFromMappedType(target);
-                        if (result = isRelatedTo(indexedAccessType, templateType, reportErrors)) {
-                            errorInfo = saveErrorInfo;
-                            return result;
+                        if (template.flags & TypeFlags.IndexedAccess && (<IndexedAccessType>template).objectType === source &&
+                            (<IndexedAccessType>template).indexType === getTypeParameterFromMappedType(target)) {
+                            return Ternary.True;
+                        }
+                        // A source type T is related to a target type { [P in keyof T]: X } if T[P] is related to X
+                        // *after* occurrences of D<T[P]> in X are replaced with T[P].
+                        if (!isGenericMappedType(source) && getConstraintTypeFromMappedType(target) === getIndexType(source)) {
+                            const indexedAccessType = getIndexedAccessType(source, getTypeParameterFromMappedType(target));
+                            const templateType = replaceRecursiveAliasReference(getTemplateTypeFromMappedType(target), target);
+                            if (result = isRelatedTo(indexedAccessType, templateType, reportErrors)) {
+                                errorInfo = saveErrorInfo;
+                                return result;
+                            }
                         }
                     }
-                }
                 }
 
                 if (source.flags & TypeFlags.TypeParameter) {
@@ -10290,6 +10291,18 @@ namespace ts {
                     }
                 }
                 return Ternary.False;
+            }
+
+            function replaceRecursiveAliasReference(template: Type, target: Type): Type {
+                return mapType(template, t => {
+                    if (t.flags & TypeFlags.Intersection) {
+                        return getIntersectionType((t as IntersectionType).types.map(u => replaceRecursiveAliasReference(u, target)))
+                    }
+                    const hasSharedAliasSymbol = t.aliasSymbol !== undefined &&
+                        t.aliasTypeArguments && t.aliasTypeArguments.length === 1 &&
+                        t.aliasSymbol === target.aliasSymbol;
+                    return hasSharedAliasSymbol ? t.aliasTypeArguments[0] : t;
+                });
             }
 
             // A type [P in S]: X is related to a type [Q in T]: Y if T is related to S and X' is
