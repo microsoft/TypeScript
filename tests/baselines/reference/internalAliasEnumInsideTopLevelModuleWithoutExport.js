@@ -30,7 +30,6 @@ define(["require", "exports"], function (require, exports) {
 
 
 //// [internalAliasEnumInsideTopLevelModuleWithoutExport.d.ts]
-import b = a.weekend;
 export declare module a {
     enum weekend {
         Friday = 0,
@@ -38,4 +37,5 @@ export declare module a {
         Sunday = 2
     }
 }
+import b = a.weekend;
 export declare var bVal: b;

@@ -31,11 +31,11 @@ define(["require", "exports"], function (require, exports) {
 
 
 //// [internalAliasInitializedModuleInsideTopLevelModuleWithoutExport.d.ts]
-import b = a.b;
 export declare module a {
     module b {
         class c {
         }
     }
 }
+import b = a.b;
 export declare var x: b.c;

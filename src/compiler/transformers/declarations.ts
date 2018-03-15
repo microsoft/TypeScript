@@ -30,7 +30,7 @@ namespace ts {
         let enclosingDeclaration: Node;
         let necessaryTypeRefernces: Map<true>;
         let possibleImports: AnyImportSyntax[];
-        let importDeclarationMap: Map<[ImportDeclaration, ImportDeclaration | undefined]>;
+        let importDeclarationMap: Map<AnyImportSyntax | undefined>;
         let suppressNewDiagnosticContexts: boolean;
 
         const symbolTracker: SymbolTracker = {
@@ -153,10 +153,7 @@ namespace ts {
                                 [],
                                 [createModifier(SyntaxKind.DeclareKeyword)],
                                 createLiteral(getResolvedExternalModuleName(context.getEmitHost(), sourceFile)),
-                                createModuleBlock(setTextRange(createNodeArray([
-                                    ...filterCandidateImports(),
-                                    ...statements
-                                ]), sourceFile.statements))
+                                createModuleBlock(setTextRange(createNodeArray(filterCandidateImports(statements)), sourceFile.statements))
                             )], /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ []);
                             return newFile;
                         }
@@ -190,9 +187,9 @@ namespace ts {
             const referenceVisitor = mapReferencesIntoArray(references, outputFilePath);
             refs.forEach(referenceVisitor);
             const statements = visitNodes(node.statements, visitDeclarationStatements);
-            const combinedStatements = setTextRange(createNodeArray([...filterCandidateImports(), ...statements]), node.statements);
+            let combinedStatements = setTextRange(createNodeArray(filterCandidateImports(statements)), node.statements);
             if (isExternalModule(node) && !resultHasExternalModuleIndicator) {
-                combinedStatements.push(createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports([]), /*moduleSpecifier*/ undefined));
+                combinedStatements = setTextRange(createNodeArray([...combinedStatements, createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports([]), /*moduleSpecifier*/ undefined)]), combinedStatements);
             }
             const updated = updateSourceFileNode(node, combinedStatements, /*isDeclarationFile*/ true, references, getFileReferencesForUsedTypeReferences());
             return updated;
@@ -519,8 +516,7 @@ namespace ts {
             // Nothing visible
         }
 
-        function filterCandidateImports(): AnyImportSyntax[] {
-            const emittedImports: AnyImportSyntax[] = [];
+        function filterCandidateImports(statements: ReadonlyArray<Statement>): ReadonlyArray<Statement> {
             // This is a `while` loop because `handleSymbolAccessibilityError` can see additional import aliases marked as visible during
             // error handling which must now be included in the output and themselves checked for errors.
             // For example:
@@ -545,31 +541,35 @@ namespace ts {
                 // Eagerly transform import equals - if they're not visible, we'll get nothing, if they are, we'll immediately add them since it's complete
                 if (i.kind === SyntaxKind.ImportEqualsDeclaration) {
                     const result = transformImportEqualsDeclaration(i);
-                    if (result) {
-                        emittedImports.push(result);
-                    }
+                    importDeclarationMap.set("" + getNodeId(i), result);
                     continue;
                 }
                 // Import declarations, on the other hand, can be partially painted by multiple aliases; so we can see many indeterminate states
                 // until we've marked all possible visibility
                 const result = transformImportDeclaration(i);
-                importDeclarationMap.set("" + getNodeId(i), [i, result]);
+                importDeclarationMap.set("" + getNodeId(i), result);
             }
             // Filtering available imports is the last thing done within a scope, so the possible set becomes those which could not
             // be considered in the child scope
             possibleImports = unconsideredImports;
             // And lastly, we need to get the final form of all those indetermine import declarations from before and add them to the output list
             // (and remove them from the set to examine for outter declarations)
-            const pairs = arrayFrom(importDeclarationMap.values());
-            for (const [original, replacement] of pairs) {
-                if ((isSourceFile(original.parent) ? original.parent : original.parent.parent) !== enclosingDeclaration) continue; // Filter to only declarations in the current scope
-                importDeclarationMap.delete("" + getNodeId(original));
-                if (replacement) {
-                    emittedImports.push(replacement);
+            return mapDefined(statements, statement => {
+                if (isImportDeclaration(statement) || isImportEqualsDeclaration(statement)) {
+                    const key = "" + getNodeId(statement);
+                    if (importDeclarationMap.has(key)) {
+                        const result = importDeclarationMap.get(key);
+                        importDeclarationMap.delete(key);
+                        return result;
+                    }
+                    else {
+                        return undefined;
+                    }
                 }
-            }
-
-            return emittedImports;
+                else {
+                    return statement;
+                }
+            });
         }
 
         function visitDeclarationSubtree(input: Node): VisitResult<Node> {
@@ -815,18 +815,12 @@ namespace ts {
                     }
                 }
                 case SyntaxKind.ImportEqualsDeclaration:
-                    // Attempt to eagerly check visibility and print (nonvisible ones may be readded later by alias marking)
-                    if (contains(possibleImports, input)) {
-                        // If a prior declaration in the file has already caused this to be marked late, we can remove the "possible" part and just emit in the correct place
-                        unorderedRemoveItem(possibleImports, input);
-                    }
-                    return transformImportEqualsDeclaration(input);
                 case SyntaxKind.ImportDeclaration: {
                     // Different parts of the import may be marked visible at different times (via visibility checking), so we defer our first look until later
-                    // to reduce the likelihood we need to rewrite it, and obviate the need to find the node in the statement list and replace it later
+                    // to reduce the likelihood we need to rewrite it
                     possibleImports = possibleImports || [];
-                    possibleImports.push(input);
-                    return;
+                    pushIfUnique(possibleImports, input);
+                    return input;
                 }
             }
             if (isDeclaration(input) && isDeclarationAndNotVisible(input)) return;
@@ -891,7 +885,7 @@ namespace ts {
                     const inner = input.body;
                     if (inner && inner.kind === SyntaxKind.ModuleBlock) {
                         const statements = visitNodes(inner.statements, visitDeclarationStatements);
-                        const body = updateModuleBlock(inner, [...filterCandidateImports(), ...statements]);
+                        const body = updateModuleBlock(inner, filterCandidateImports(statements));
                         needsDeclare = previousNeedsDeclare;
                         const mods = ensureModifiers(input);
                         return cleanup(updateModuleDeclaration(

@@ -26,9 +26,9 @@ exports.bVal2 = b;
 
 
 //// [internalAliasFunctionInsideTopLevelModuleWithoutExport.d.ts]
-import b = a.foo;
 export declare module a {
     function foo(x: number): number;
 }
+import b = a.foo;
 export declare var bVal: number;
 export declare var bVal2: typeof b;
