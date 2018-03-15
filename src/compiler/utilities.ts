@@ -5991,7 +5991,7 @@ namespace ts {
         return !!(node as HasType).type;
     }
 
-    /* True if the node could have a type node at `.type` */
+    /* True if the node could have a type node a `.type` */
     /* @internal */
     export function couldHaveType(node: Node): node is HasType {
         switch (node.kind) {
