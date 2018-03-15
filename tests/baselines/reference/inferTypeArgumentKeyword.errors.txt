@@ -1,0 +1,50 @@
+tests/cases/conformance/types/typeParameters/typeArgumentLists/inferTypeArgumentKeyword.ts(7,59): error TS2345: Argument of type '{ z: number; }' is not assignable to parameter of type '{ z: { y: number; }; }'.
+  Types of property 'z' are incompatible.
+    Type 'number' is not assignable to type '{ y: number; }'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/inferTypeArgumentKeyword.ts(10,38): error TS2345: Argument of type '{ y: number; }' is not assignable to parameter of type 'number'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/inferTypeArgumentKeyword.ts(17,63): error TS2345: Argument of type '{ z: string; }' is not assignable to parameter of type '{ z: number; }'.
+  Types of property 'z' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/inferTypeArgumentKeyword.ts(23,47): error TS2345: Argument of type '{ y: string; }' is not assignable to parameter of type '{ y: number; }'.
+  Types of property 'y' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/types/typeParameters/typeArgumentLists/inferTypeArgumentKeyword.ts (4 errors) ====
+    declare function foo<A, B, C>(x: A, y: B, z: { z: C }): A & B & C;
+    
+    // good
+    var a = foo<infer A, {x: string}, A>({y: 12}, {x: "yes"}, {z: {y: 12}});
+    
+    // error on 3rd arg
+    var b = foo<infer A, {x: string}, A>({y: 12}, {x: "yes"}, {z: 12});
+                                                              ~~~~~~~
+!!! error TS2345: Argument of type '{ z: number; }' is not assignable to parameter of type '{ z: { y: number; }; }'.
+!!! error TS2345:   Types of property 'z' are incompatible.
+!!! error TS2345:     Type 'number' is not assignable to type '{ y: number; }'.
+    
+    // error on first arg
+    var c = foo<A, {x: string}, infer A>({y: 12}, {x: "yes"}, {z: 12});
+                                         ~~~~~~~
+!!! error TS2345: Argument of type '{ y: number; }' is not assignable to parameter of type 'number'.
+    
+    type Ob<T> = {y: T};
+    // good
+    var d = foo<Ob<infer A>, {x: string}, A>({y: 12}, {x: "yes"}, {z: 12});
+    
+    // error on 3rd arg
+    var e = foo<Ob<infer A>, {x: string}, A>({y: 12}, {x: "yes"}, {z: "no"});
+                                                                  ~~~~~~~~~
+!!! error TS2345: Argument of type '{ z: string; }' is not assignable to parameter of type '{ z: number; }'.
+!!! error TS2345:   Types of property 'z' are incompatible.
+!!! error TS2345:     Type 'string' is not assignable to type 'number'.
+    
+    // good
+    var e = foo<{y: A}, {x: string}, Ob<infer A>>({y: 12}, {x: "yes"}, {z: { y: 12 }});
+    
+    // error on 1st arg
+    var f = foo<{y: A}, {x: string}, Ob<infer A>>({y: "no"}, {x: "yes"}, {z: { y: 12 }});
+                                                  ~~~~~~~~~
+!!! error TS2345: Argument of type '{ y: string; }' is not assignable to parameter of type '{ y: number; }'.
+!!! error TS2345:   Types of property 'y' are incompatible.
+!!! error TS2345:     Type 'string' is not assignable to type 'number'.

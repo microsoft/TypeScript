@@ -1,0 +1,161 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/inferTypeArgumentKeyword.ts ===
+declare function foo<A, B, C>(x: A, y: B, z: { z: C }): A & B & C;
+>foo : <A, B, C>(x: A, y: B, z: { z: C; }) => A & B & C
+>A : A
+>B : B
+>C : C
+>x : A
+>A : A
+>y : B
+>B : B
+>z : { z: C; }
+>z : C
+>C : C
+>A : A
+>B : B
+>C : C
+
+// good
+var a = foo<infer A, {x: string}, A>({y: 12}, {x: "yes"}, {z: {y: 12}});
+>a : { y: number; } & { x: string; }
+>foo<infer A, {x: string}, A>({y: 12}, {x: "yes"}, {z: {y: 12}}) : { y: number; } & { x: string; }
+>foo : <A, B, C>(x: A, y: B, z: { z: C; }) => A & B & C
+>A : A
+>x : string
+>A : A
+>{y: 12} : { y: number; }
+>y : number
+>12 : 12
+>{x: "yes"} : { x: string; }
+>x : string
+>"yes" : "yes"
+>{z: {y: 12}} : { z: { y: number; }; }
+>z : { y: number; }
+>{y: 12} : { y: number; }
+>y : number
+>12 : 12
+
+// error on 3rd arg
+var b = foo<infer A, {x: string}, A>({y: 12}, {x: "yes"}, {z: 12});
+>b : any
+>foo<infer A, {x: string}, A>({y: 12}, {x: "yes"}, {z: 12}) : any
+>foo : <A, B, C>(x: A, y: B, z: { z: C; }) => A & B & C
+>A : A
+>x : string
+>A : A
+>{y: 12} : { y: number; }
+>y : number
+>12 : 12
+>{x: "yes"} : { x: string; }
+>x : string
+>"yes" : "yes"
+>{z: 12} : { z: number; }
+>z : number
+>12 : 12
+
+// error on first arg
+var c = foo<A, {x: string}, infer A>({y: 12}, {x: "yes"}, {z: 12});
+>c : any
+>foo<A, {x: string}, infer A>({y: 12}, {x: "yes"}, {z: 12}) : any
+>foo : <A, B, C>(x: A, y: B, z: { z: C; }) => A & B & C
+>A : A
+>x : string
+>A : A
+>{y: 12} : { y: number; }
+>y : number
+>12 : 12
+>{x: "yes"} : { x: string; }
+>x : string
+>"yes" : "yes"
+>{z: 12} : { z: number; }
+>z : number
+>12 : 12
+
+type Ob<T> = {y: T};
+>Ob : Ob<T>
+>T : T
+>y : T
+>T : T
+
+// good
+var d = foo<Ob<infer A>, {x: string}, A>({y: 12}, {x: "yes"}, {z: 12});
+>d : Ob<number> & { x: string; } & number
+>foo<Ob<infer A>, {x: string}, A>({y: 12}, {x: "yes"}, {z: 12}) : Ob<number> & { x: string; } & number
+>foo : <A, B, C>(x: A, y: B, z: { z: C; }) => A & B & C
+>Ob : Ob<T>
+>A : A
+>x : string
+>A : A
+>{y: 12} : { y: number; }
+>y : number
+>12 : 12
+>{x: "yes"} : { x: string; }
+>x : string
+>"yes" : "yes"
+>{z: 12} : { z: number; }
+>z : number
+>12 : 12
+
+// error on 3rd arg
+var e = foo<Ob<infer A>, {x: string}, A>({y: 12}, {x: "yes"}, {z: "no"});
+>e : any
+>foo<Ob<infer A>, {x: string}, A>({y: 12}, {x: "yes"}, {z: "no"}) : any
+>foo : <A, B, C>(x: A, y: B, z: { z: C; }) => A & B & C
+>Ob : Ob<T>
+>A : A
+>x : string
+>A : A
+>{y: 12} : { y: number; }
+>y : number
+>12 : 12
+>{x: "yes"} : { x: string; }
+>x : string
+>"yes" : "yes"
+>{z: "no"} : { z: string; }
+>z : string
+>"no" : "no"
+
+// good
+var e = foo<{y: A}, {x: string}, Ob<infer A>>({y: 12}, {x: "yes"}, {z: { y: 12 }});
+>e : any
+>foo<{y: A}, {x: string}, Ob<infer A>>({y: 12}, {x: "yes"}, {z: { y: 12 }}) : { y: number; } & { x: string; } & Ob<number>
+>foo : <A, B, C>(x: A, y: B, z: { z: C; }) => A & B & C
+>y : A
+>A : A
+>x : string
+>Ob : Ob<T>
+>A : A
+>{y: 12} : { y: number; }
+>y : number
+>12 : 12
+>{x: "yes"} : { x: string; }
+>x : string
+>"yes" : "yes"
+>{z: { y: 12 }} : { z: { y: number; }; }
+>z : { y: number; }
+>{ y: 12 } : { y: number; }
+>y : number
+>12 : 12
+
+// error on 1st arg
+var f = foo<{y: A}, {x: string}, Ob<infer A>>({y: "no"}, {x: "yes"}, {z: { y: 12 }});
+>f : any
+>foo<{y: A}, {x: string}, Ob<infer A>>({y: "no"}, {x: "yes"}, {z: { y: 12 }}) : any
+>foo : <A, B, C>(x: A, y: B, z: { z: C; }) => A & B & C
+>y : A
+>A : A
+>x : string
+>Ob : Ob<T>
+>A : A
+>{y: "no"} : { y: string; }
+>y : string
+>"no" : "no"
+>{x: "yes"} : { x: string; }
+>x : string
+>"yes" : "yes"
+>{z: { y: 12 }} : { z: { y: number; }; }
+>z : { y: number; }
+>{ y: 12 } : { y: number; }
+>y : number
+>12 : 12
+

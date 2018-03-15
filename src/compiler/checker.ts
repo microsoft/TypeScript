@@ -3035,6 +3035,11 @@ namespace ts {
                 if (type.flags & TypeFlags.Substitution) {
                     return typeToTypeNodeHelper((<SubstitutionType>type).typeParameter, context);
                 }
+                if (type.flags & TypeFlags.InferType) {
+                    // Infer types only parse as identifiers, so the target should always be a TypeParameter that becomes a TypeReferenceNode
+                    const ref = typeToTypeNodeHelper((<InferType>type).target, context) as TypeReferenceNode;
+                    return createInferTypeNode(createTypeParameterDeclaration(ref.typeName as Identifier));
+                }
 
                 Debug.fail("Should be unreachable.");
 
@@ -3531,7 +3536,7 @@ namespace ts {
                         const params = getTypeParametersOfClassOrInterface(
                             parentSymbol.flags & SymbolFlags.Alias ? resolveAlias(parentSymbol) : parentSymbol
                         );
-                        typeParameterNodes = mapToTypeNodes(map(params, (nextSymbol as TransientSymbol).mapper), context);
+                        typeParameterNodes = mapToTypeNodes(mapIndexless(params, (nextSymbol as TransientSymbol).mapper), context);
                     }
                     else {
                         typeParameterNodes = typeParametersToTypeParameterDeclarations(symbol, context);
@@ -4758,12 +4763,14 @@ namespace ts {
                     case SyntaxKind.JSDocTemplateTag:
                     case SyntaxKind.MappedType:
                     case SyntaxKind.ConditionalType:
+                    case SyntaxKind.CallExpression:
+                    case SyntaxKind.NewExpression:
                         const outerTypeParameters = getOuterTypeParameters(node, includeThisTypes);
                         if (node.kind === SyntaxKind.MappedType) {
                             return append(outerTypeParameters, getDeclaredTypeOfTypeParameter(getSymbolOfNode((<MappedTypeNode>node).typeParameter)));
                         }
-                        else if (node.kind === SyntaxKind.ConditionalType) {
-                            return concatenate(outerTypeParameters, getInferTypeParameters(<ConditionalTypeNode>node));
+                        else if (node.kind === SyntaxKind.ConditionalType || node.kind === SyntaxKind.NewExpression || node.kind === SyntaxKind.CallExpression) {
+                            return concatenate(outerTypeParameters, getInferTypeParameters(<ConditionalTypeNode | CallLikeExpression>node));
                         }
                         const outerAndOwnTypeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(<DeclarationWithTypeParameters>node) || emptyArray);
                         const thisType = includeThisTypes &&
@@ -8345,7 +8352,7 @@ namespace ts {
             return type.resolvedFalseType || (type.resolvedFalseType = instantiateType(type.root.falseType, type.mapper));
         }
 
-        function getInferTypeParameters(node: ConditionalTypeNode): TypeParameter[] {
+        function getInferTypeParameters(node: ConditionalTypeNode | CallLikeExpression): TypeParameter[] {
             let result: TypeParameter[];
             if (node.locals) {
                 node.locals.forEach(symbol => {
@@ -8386,10 +8393,16 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function createInferType(target: TypeParameter): InferType {
+            const type = createType(TypeFlags.InferType) as InferType;
+            type.target = target;
+            return type;
+        }
+
         function getTypeFromInferTypeNode(node: InferTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getDeclaredTypeOfTypeParameter(getSymbolOfNode(node.typeParameter));
+                links.resolvedType = createInferType(getDeclaredTypeOfTypeParameter(getSymbolOfNode(node.typeParameter)));
             }
             return links.resolvedType;
         }
@@ -8894,7 +8907,7 @@ namespace ts {
                 // mapper to the type parameters to produce the effective list of type arguments, and compute the
                 // instantiation cache key from the type IDs of the type arguments.
                 const combinedMapper = type.objectFlags & ObjectFlags.Instantiated ? combineTypeMappers(type.mapper, mapper) : mapper;
-                const typeArguments = map(typeParameters, combinedMapper);
+                const typeArguments = mapIndexless(typeParameters, combinedMapper);
                 const id = getTypeListId(typeArguments);
                 let result = links.instantiations.get(id);
                 if (!result) {
@@ -8977,7 +8990,7 @@ namespace ts {
                 // We are instantiating a conditional type that has one or more type parameters in scope. Apply the
                 // mapper to the type parameters to produce the effective list of type arguments, and compute the
                 // instantiation cache key from the type IDs of the type arguments.
-                const typeArguments = map(root.outerTypeParameters, mapper);
+                const typeArguments = mapIndexless(root.outerTypeParameters, mapper);
                 const id = getTypeListId(typeArguments);
                 let result = root.instantiations.get(id);
                 if (!result) {
@@ -9047,6 +9060,15 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.Substitution) {
                     return mapper((<SubstitutionType>type).typeParameter);
+                }
+                if (type.flags & TypeFlags.InferType) {
+                    // Fresh infer types are not *actually* type parameters, but look like one; this gives mappers the opportunity
+                    // to handle one directly (as is done for partial inference), before it gets mapped to its target.
+                    const result = mapper(<InferType>type);
+                    if (result !== type) {
+                        return result;
+                    }
+                    return instantiateType((<InferType>type).target, mapper);
                 }
             }
             return type;
@@ -9654,8 +9676,14 @@ namespace ts {
                 if (source.flags & TypeFlags.Substitution) {
                     source = relation === definitelyAssignableRelation ? (<SubstitutionType>source).typeParameter : (<SubstitutionType>source).substitute;
                 }
+                if (source.flags & TypeFlags.InferType) {
+                    source = (<InferType>source).target;
+                }
                 if (target.flags & TypeFlags.Substitution) {
                     target = (<SubstitutionType>target).typeParameter;
+                }
+                if (target.flags & TypeFlags.InferType) {
+                    target = (<InferType>target).target;
                 }
 
                 // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
@@ -11603,6 +11631,12 @@ namespace ts {
             function inferFromTypes(source: Type, target: Type) {
                 if (!couldContainTypeVariables(target)) {
                     return;
+                }
+                if (source.flags & TypeFlags.InferType) {
+                    source = (source as InferType).target;
+                }
+                if (target.flags & TypeFlags.InferType) {
+                    target = (target as InferType).target;
                 }
                 if (source.flags & TypeFlags.Any) {
                     // We are inferring from an 'any' type. We want to infer this type for every type parameter
@@ -17559,10 +17593,35 @@ namespace ts {
                         candidate = originalCandidate;
                         if (candidate.typeParameters) {
                             let typeArgumentTypes: Type[];
+                            const isJavascript = isInJavaScriptFile(candidate.declaration);
                             if (typeArguments) {
                                 const typeArgumentResult = checkTypeArguments(candidate, typeArguments, /*reportErrors*/ false);
                                 if (typeArgumentResult) {
-                                    typeArgumentTypes = typeArgumentResult;
+                                    if (node.locals) {
+                                        // Call has `infer` arguments that still need to be inferred and instantiated
+                                        const inferParams = getInferTypeParameters(node);
+                                        // Mapper replaces references to infered type parameters with emptyObjectType
+                                        // Causing the original location to be the _only_ inference site
+                                        const preprocessMapper = (p: TypeParameter) => {
+                                            // Fresh infer types are not *actually* type parameters, but look like one
+                                            if (p.flags & TypeFlags.InferType) {
+                                                return p.target; // By doing the replacement here, we cause this mapper to be not-called with the target
+                                            }
+                                            if (contains(inferParams, p)) {
+                                                return emptyObjectType;
+                                            }
+                                            return p;
+                                        };
+                                        const resultsWithNonInferInferredVarsDefaulted = map(typeArgumentResult, t => instantiateType(t, preprocessMapper));
+                                        const partialCandidate = getSignatureInstantiation(candidate, resultsWithNonInferInferredVarsDefaulted, isJavascript);
+                                        const context = createInferenceContext(inferParams, partialCandidate, InferenceFlags.None);
+                                        const inferences = inferTypeArguments(node, partialCandidate, args, excludeArgument, context);
+                                        const mapper = createTypeMapper(inferParams, inferences);
+                                        typeArgumentTypes = map(typeArgumentResult, t => instantiateType(t, mapper));
+                                    }
+                                    else {
+                                        typeArgumentTypes = typeArgumentResult;
+                                    }
                                 }
                                 else {
                                     candidateForTypeArgumentError = originalCandidate;
@@ -17572,7 +17631,6 @@ namespace ts {
                             else {
                                 typeArgumentTypes = inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
                             }
-                            const isJavascript = isInJavaScriptFile(candidate.declaration);
                             candidate = getSignatureInstantiation(candidate, typeArgumentTypes, isJavascript);
                         }
                         if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
@@ -20585,9 +20643,18 @@ namespace ts {
             forEachChild(node, checkSourceElement);
         }
 
+        function isConditionalTypeExtendsClause(n: Node) {
+            return n.parent && n.parent.kind === SyntaxKind.ConditionalType && (<ConditionalTypeNode>n.parent).extendsType === n;
+        }
+
+        function isCallOrNewExpressionTypeArgument(n: Node) {
+            return n.parent && (n.parent.kind === SyntaxKind.CallExpression || n.parent.kind === SyntaxKind.NewExpression)
+                && contains((<CallExpression | NewExpression>n.parent).typeArguments, n);
+        }
+
         function checkInferType(node: InferTypeNode) {
-            if (!findAncestor(node, n => n.parent && n.parent.kind === SyntaxKind.ConditionalType && (<ConditionalTypeNode>n.parent).extendsType === n)) {
-                grammarErrorOnNode(node, Diagnostics.infer_declarations_are_only_permitted_in_the_extends_clause_of_a_conditional_type);
+            if (!findAncestor(node, n => isConditionalTypeExtendsClause(n) || isCallOrNewExpressionTypeArgument(n))) {
+                grammarErrorOnNode(node, Diagnostics.infer_declarations_are_only_permitted_in_the_extends_clause_of_a_conditional_type_or_in_call_or_new_expression_type_argument_lists);
             }
             checkSourceElement(node.typeParameter);
         }

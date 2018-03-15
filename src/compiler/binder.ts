@@ -1434,6 +1434,8 @@ namespace ts {
                     return ContainerFlags.IsContainer | ContainerFlags.HasLocals;
 
                 case SyntaxKind.ConditionalType:
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.NewExpression:
                     return ContainerFlags.IsInferenceContainer;
 
                 case SyntaxKind.SourceFile:
