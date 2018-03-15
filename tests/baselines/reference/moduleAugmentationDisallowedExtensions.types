@@ -61,14 +61,14 @@ declare module "./observable" {
 >T : number
 
     import * as all from "./x0";
->all : any
+>all : typeof all
 
     import {a} from "./x0";
->a : any
+>a : number
 
     export * from "./x0";
     export {a} from "./x0";
->a : any
+>a : number
 }
 
 declare module "./test" {

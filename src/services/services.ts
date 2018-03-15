@@ -644,7 +644,7 @@ namespace ts {
         public languageVariant: LanguageVariant;
         public identifiers: Map<string>;
         public nameTable: UnderscoreEscapedMap<number>;
-        public resolvedModules: Map<ResolvedModuleFull>;
+        public resolvedModules: Map<ResolvedModuleState>;
         public resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         public imports: StringLiteral[];
         public moduleAugmentations: StringLiteral[];

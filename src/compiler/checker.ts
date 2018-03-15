@@ -2104,7 +2104,17 @@ namespace ts {
             if (ambientModule) {
                 return ambientModule;
             }
-            const resolvedModule = getResolvedModule(getSourceFileOfNode(location), moduleReference);
+            const currentSourceFile = getSourceFileOfNode(location);
+            const resolvedModuleState = getResolvedModule(currentSourceFile, moduleReference);
+            let resolvedModule: ResolvedModuleFull;
+            if (currentSourceFile && resolvedModuleState === undefined) {
+                // Fallback to uncached lookup for late-bound module names which have not been resolved
+                const resolutions = host.resolveModuleName([moduleReference], currentSourceFile.fileName);
+                resolvedModule = firstOrUndefined(resolutions);
+            }
+            else {
+                resolvedModule = getResolvedModuleFromState(resolvedModuleState);
+            }
             const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule);
             const sourceFile = resolvedModule && !resolutionDiagnostic && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {

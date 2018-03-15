@@ -219,7 +219,19 @@ namespace ts {
     }
 
     function checkResolvedModulesCache(program: Program, fileName: string, expectedContent: Map<ResolvedModule>): void {
-        checkCache("resolved modules", program, fileName, expectedContent, f => f.resolvedModules, checkResolvedModule);
+        checkCache("resolved modules", program, fileName, expectedContent, f => {
+            if (!f.resolvedModules) return undefined;
+            const mapped: Map<ResolvedModule> = createMap();
+            forEachEntry(f.resolvedModules, (value, key) => {
+                if (value.tag === "success") {
+                    mapped.set(key, value.data);
+                }
+                else {
+                    mapped.set(key, undefined);
+                }
+            });
+            return mapped;
+        }, checkResolvedModule);
     }
 
     function checkResolvedTypeDirectivesCache(program: Program, fileName: string, expectedContent: Map<ResolvedTypeReferenceDirective>): void {

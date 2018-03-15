@@ -576,7 +576,7 @@ namespace ts {
                 write("import(");
                 emitType(node.argument);
                 write(")");
-                if(node.qualifier) {
+                if (node.qualifier) {
                     write(".");
                     writeEntityName(node.qualifier); // Don't do visibility checking; this entity name is _not_ looked up like a type query is
                 }

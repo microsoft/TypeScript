@@ -1072,7 +1072,7 @@ namespace ts {
     }
 
     /* @internal */
-    export type LiteralImportTypeNode = ImportTypeNode & { argument: LiteralTypeNode & { literal: StringLiteral } }
+    export type LiteralImportTypeNode = ImportTypeNode & { argument: LiteralTypeNode & { literal: StringLiteral } };
 
     export interface ThisTypeNode extends TypeNode {
         kind: SyntaxKind.ThisType;
@@ -2575,7 +2575,7 @@ namespace ts {
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
-        /* @internal */ resolvedModules: Map<ResolvedModuleFull | undefined>;
+        /* @internal */ resolvedModules: Map<ResolvedModuleState>;
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         /* @internal */ imports: ReadonlyArray<StringLiteral>;
         // Identifier only if `declare global`
@@ -2588,6 +2588,9 @@ namespace ts {
         /* @internal */ localJsxNamespace?: __String;
         /* @internal */ localJsxFactory?: EntityName;
     }
+
+    /* @internal */
+    export type ResolvedModuleState = { tag: "success", data: ResolvedModuleFull } | { tag: "fail" };
 
     export interface Bundle extends Node {
         kind: SyntaxKind.Bundle;
@@ -2709,6 +2712,9 @@ namespace ts {
         /* @internal */ redirectTargetsSet: Map<true>;
         /** Is the file emitted file */
         /* @internal */ isEmittedFile(file: string): boolean;
+
+        /* Used by the type checker to resolve module names which are encountered late */
+        /* @internal */ resolveModuleName(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModuleFull[];
     }
 
     /* @internal */
@@ -2782,6 +2788,8 @@ namespace ts {
         getSourceFiles(): ReadonlyArray<SourceFile>;
         getSourceFile(fileName: string): SourceFile;
         getResolvedTypeReferenceDirectives(): ReadonlyMap<ResolvedTypeReferenceDirective>;
+
+        resolveModuleName(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModuleFull[];
     }
 
     export interface TypeChecker {

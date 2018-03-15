@@ -79,7 +79,9 @@ let a: A;
 
 let b = a.foo().n;
 >b : Symbol(b, Decl(f4.ts, 4, 3))
+>a.foo().n : Symbol(B.n, Decl(f2.ts, 0, 16))
 >a.foo : Symbol(A.foo, Decl(f3.ts, 13, 17))
 >a : Symbol(a, Decl(f4.ts, 3, 3))
 >foo : Symbol(A.foo, Decl(f3.ts, 13, 17))
+>n : Symbol(B.n, Decl(f2.ts, 0, 16))
 

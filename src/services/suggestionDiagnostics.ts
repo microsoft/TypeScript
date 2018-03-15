@@ -36,7 +36,7 @@ namespace ts {
             for (const importNode of sourceFile.imports) {
                 const name = importNameForConvertToDefaultImport(importNode.parent);
                 if (!name) continue;
-                const module = getResolvedModule(sourceFile, importNode.text);
+                const module = getResolvedModuleFromState(getResolvedModule(sourceFile, importNode.text));
                 const resolvedFile = module && program.getSourceFile(module.resolvedFileName);
                 if (resolvedFile && resolvedFile.externalModuleIndicator && isExportAssignment(resolvedFile.externalModuleIndicator) && resolvedFile.externalModuleIndicator.isExportEquals) {
                     diags.push(createDiagnosticForNode(name, Diagnostics.Import_may_be_converted_to_a_default_import));

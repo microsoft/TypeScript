@@ -665,7 +665,8 @@ namespace ts {
             getSourceFileFromReference,
             sourceFileToPackageName,
             redirectTargetsSet,
-            isEmittedFile
+            isEmittedFile,
+            resolveModuleName: resolveModuleNamesWorker
         };
 
         verifyCompilerOptions();
@@ -739,7 +740,7 @@ namespace ts {
                 const result: ResolvedModuleFull[] = [];
                 for (const moduleName of moduleNames) {
                     const resolvedModule = file.resolvedModules.get(moduleName);
-                    result.push(resolvedModule);
+                    result.push(getResolvedModuleFromState(resolvedModule));
                 }
                 return result;
             }
@@ -768,7 +769,7 @@ namespace ts {
                 const moduleName = moduleNames[i];
                 // If the source file is unchanged and doesnt have invalidated resolution, reuse the module resolutions
                 if (file === oldSourceFile && !hasInvalidatedResolution(oldSourceFile.path)) {
-                    const oldResolvedModule = oldSourceFile && oldSourceFile.resolvedModules.get(moduleName);
+                    const oldResolvedModule = getResolvedModuleFromState(oldSourceFile && oldSourceFile.resolvedModules.get(moduleName));
                     if (oldResolvedModule) {
                         if (isTraceEnabled(options, host)) {
                             trace(host, Diagnostics.Reusing_resolution_of_module_0_to_file_1_from_old_program, moduleName, containingFile);
@@ -834,7 +835,7 @@ namespace ts {
             // If we change our policy of rechecking failed lookups on each program create,
             // we should adjust the value returned here.
             function moduleNameResolvesToAmbientModuleInNonModifiedFile(moduleName: string, oldProgramState: OldProgramState): boolean {
-                const resolutionToFile = getResolvedModule(oldProgramState.oldSourceFile, moduleName);
+                const resolutionToFile = getResolvedModuleFromState(getResolvedModule(oldProgramState.oldSourceFile, moduleName));
                 const resolvedFile = resolutionToFile && oldProgramState.program && oldProgramState.program.getSourceFile(resolutionToFile.resolvedFileName);
                 if (resolutionToFile && resolvedFile && !resolvedFile.externalModuleIndicator) {
                     // In the old program, we resolved to an ambient module that was in the same
@@ -1017,10 +1018,10 @@ namespace ts {
                     const oldProgramState: OldProgramState = { program: oldProgram, oldSourceFile, modifiedFilePaths };
                     const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFilePath, newSourceFile, oldProgramState);
                     // ensure that module resolution results are still correct
-                    const resolutionsChanged = hasChangesInResolutions(moduleNames, resolutions, oldSourceFile.resolvedModules, moduleResolutionIsEqualTo);
+                    const resolutionsChanged = hasChangesInResolutions(moduleNames, resolutions, oldSourceFile.resolvedModules, moduleResolutionIsEqualTo, getResolvedModuleFromState);
                     if (resolutionsChanged) {
                         oldProgram.structureIsReused = StructureIsReused.SafeModules;
-                        newSourceFile.resolvedModules = zipToMap(moduleNames, resolutions);
+                        newSourceFile.resolvedModules = zipToMap(moduleNames, map(resolutions, r => ({ tag: "success" as "success", data: r })));
                     }
                     else {
                         newSourceFile.resolvedModules = oldSourceFile.resolvedModules;

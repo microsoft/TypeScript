@@ -780,7 +780,7 @@ namespace ts.server {
             if (file.resolvedModules) {
                 file.resolvedModules.forEach((resolvedModule, name) => {
                     // pick unresolved non-relative names
-                    if (!resolvedModule && !isExternalModuleNameRelative(name) && !isAmbientlyDeclaredModule(name)) {
+                    if (!getResolvedModuleFromState(resolvedModule) && !isExternalModuleNameRelative(name) && !isAmbientlyDeclaredModule(name)) {
                         // for non-scoped names extract part up-to the first slash
                         // for scoped names - extract up to the second slash
                         let trimmed = name.trim();
