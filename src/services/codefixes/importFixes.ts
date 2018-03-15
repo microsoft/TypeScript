@@ -32,10 +32,9 @@ namespace ts.codefix {
         cachedImportDeclarations?: ImportDeclarationMap;
     }
 
-    function createCodeAction(descriptionDiagnostic: DiagnosticMessage, diagnosticArgs: string[], changes: FileTextChanges[]): CodeFixAction {
-        const description = formatMessage.apply(undefined, [undefined, descriptionDiagnostic].concat(<any[]>diagnosticArgs));
+    function createCodeAction(descriptionDiagnostic: DiagnosticMessage, diagnosticArgs: [string, string], changes: FileTextChanges[]): CodeFixAction {
         // TODO: GH#20315
-        return { description, changes, fixId: undefined };
+        return createCodeFixActionNoFixId(changes, [descriptionDiagnostic, ...diagnosticArgs] as [DiagnosticMessage, string, string]);
     }
 
     function convertToImportCodeFixContext(context: CodeFixContext, symbolToken: Node, symbolName: string): ImportCodeFixContext {
@@ -641,13 +640,13 @@ namespace ts.codefix {
         return createCodeAction(Diagnostics.Change_0_to_1, [symbolName, `${namespacePrefix}.${symbolName}`], changes);
     }
 
-    function getImportCodeActions(context: CodeFixContext): CodeAction[] {
+    function getImportCodeActions(context: CodeFixContext): CodeFixAction[] {
         return context.errorCode === Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code
             ? getActionsForUMDImport(context)
             : getActionsForNonUMDImport(context);
     }
 
-    function getActionsForUMDImport(context: CodeFixContext): CodeAction[] {
+    function getActionsForUMDImport(context: CodeFixContext): CodeFixAction[] {
         const token = getTokenAtPosition(context.sourceFile, context.span.start, /*includeJsDocComment*/ false);
         const checker = context.program.getTypeChecker();
 
@@ -703,7 +702,7 @@ namespace ts.codefix {
         }
     }
 
-    function getActionsForNonUMDImport(context: CodeFixContext): CodeAction[] {
+    function getActionsForNonUMDImport(context: CodeFixContext): CodeFixAction[] {
         // This will always be an Identifier, since the diagnostics we fix only fail on identifiers.
         const { sourceFile, span, program, cancellationToken } = context;
         const checker = program.getTypeChecker();

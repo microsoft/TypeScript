@@ -4018,5 +4018,61 @@
     "Add definite assignment assertion to property '{0}'": {
         "category": "Message",
         "code": 95020
+    },
+    "Fix all like: ": {
+        "category": "Message",
+        "code": 95021
+    },
+    "Add all missing members": {
+        "category": "Message",
+        "code": 95022
+    },
+    "Infer all types from usage": {
+        "category": "Message",
+        "code": 95023
+    },
+    "Delete all unused declarations": {
+        "category": "Message",
+        "code": 95024
+    },
+    "Prefix all unused declarations with '_'": {
+        "category": "Message",
+        "code": 95025
+    },
+    "Fix all spelling errors": {
+        "category": "Message",
+        "code": 95026
+    },
+    "Add initializers to all uninitialized properties": {
+        "category": "Message",
+        "code": 95027
+    },
+    "Add definite assignment assertions to all uninitialized properties": {
+        "category": "Message",
+        "code": 95028
+    },
+    "Add undefined type to all uninitialized properties": {
+        "category": "Message",
+        "code": 95029
+    },
+    "Change all jsdoc-style types to TypeScript": {
+        "category": "Message",
+        "code": 95030
+    },
+    "Change all jsdoc-style types to TypeScript (and add '| undefined' to nullable types)": {
+        "category": "Message",
+        "code": 95031
+    },
+    "Implement all unimplemented interfaces": {
+        "category": "Message",
+        "code": 95032
+    },
+    "Install all missing types packages": {
+        "category": "Message",
+        "code": 95033
+    },
+    "Rewrite all as indexed access types": {
+        "category": "Message",
+        "code": 95034
     }
 }

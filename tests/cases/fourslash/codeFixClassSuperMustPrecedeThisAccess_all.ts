@@ -16,6 +16,7 @@
 
 verify.codeFixAll({
     fixId: "classSuperMustPrecedeThisAccess",
+    fixAllDescription: "Fix all like: Make 'super()' call the first statement in the constructor",
     newFileContent: `class C extends Object {
     constructor() {
         super();

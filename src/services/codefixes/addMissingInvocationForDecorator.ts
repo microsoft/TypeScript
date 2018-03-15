@@ -6,7 +6,7 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions: (context) => {
             const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span.start));
-            return [{ description: getLocaleSpecificMessage(Diagnostics.Call_decorator_expression), changes, fixId }];
+            return [createCodeFixAction(changes, Diagnostics.Call_decorator_expression, fixId)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => makeChange(changes, diag.file!, diag.start!)),

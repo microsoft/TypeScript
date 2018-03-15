@@ -10,6 +10,7 @@
 
 verify.codeFixAll({
     fixId: "fixAwaitInSyncFunction",
+    fixAllDescription: "Fix all like: Add async modifier to containing function",
     newFileContent:
 `async function f() {
     await Promise.resolve();

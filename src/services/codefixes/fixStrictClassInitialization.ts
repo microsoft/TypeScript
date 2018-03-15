@@ -55,9 +55,8 @@ namespace ts.codefix {
     }
 
     function getActionForAddMissingDefiniteAssignmentAssertion (context: CodeFixContext, propertyDeclaration: PropertyDeclaration, newLineCharacter: string): CodeFixAction {
-        const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_definite_assignment_assertion_to_property_0), [propertyDeclaration.getText()]);
         const changes = textChanges.ChangeTracker.with(context, t => addDefiniteAssignmentAssertion(t, context.sourceFile, propertyDeclaration, newLineCharacter));
-        return { description, changes, fixId: fixIdAddDefiniteAssignmentAssertions };
+        return createCodeFixAction(changes, [Diagnostics.Add_definite_assignment_assertion_to_property_0, propertyDeclaration.getText()], fixIdAddDefiniteAssignmentAssertions, Diagnostics.Add_definite_assignment_assertions_to_all_uninitialized_properties);
     }
 
     function addDefiniteAssignmentAssertion(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration, newLineCharacter: string): void {
@@ -74,9 +73,8 @@ namespace ts.codefix {
     }
 
     function getActionForAddMissingUndefinedType (context: CodeFixContext, propertyDeclaration: PropertyDeclaration): CodeFixAction {
-        const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_undefined_type_to_property_0), [propertyDeclaration.name.getText()]);
         const changes = textChanges.ChangeTracker.with(context, t => addUndefinedType(t, context.sourceFile, propertyDeclaration));
-        return { description, changes, fixId: fixIdAddUndefinedType };
+        return createCodeFixAction(changes, [Diagnostics.Add_undefined_type_to_property_0, propertyDeclaration.name.getText()], fixIdAddUndefinedType, Diagnostics.Add_undefined_type_to_all_uninitialized_properties);
     }
 
     function addUndefinedType(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration): void {
@@ -85,14 +83,13 @@ namespace ts.codefix {
         changeTracker.replaceNode(propertyDeclarationSourceFile, propertyDeclaration.type, createUnionTypeNode(types));
     }
 
-    function getActionForAddMissingInitializer (context: CodeFixContext, propertyDeclaration: PropertyDeclaration, newLineCharacter: string): CodeFixAction | undefined {
+    function getActionForAddMissingInitializer(context: CodeFixContext, propertyDeclaration: PropertyDeclaration, newLineCharacter: string): CodeFixAction | undefined {
         const checker = context.program.getTypeChecker();
         const initializer = getInitializer(checker, propertyDeclaration);
         if (!initializer) return undefined;
 
-        const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_initializer_to_property_0), [propertyDeclaration.name.getText()]);
         const changes = textChanges.ChangeTracker.with(context, t => addInitializer(t, context.sourceFile, propertyDeclaration, initializer, newLineCharacter));
-        return { description, changes, fixId: fixIdAddInitializer };
+        return createCodeFixAction(changes, [Diagnostics.Add_initializer_to_property_0, propertyDeclaration.name.getText()], fixIdAddInitializer, Diagnostics.Add_initializers_to_all_uninitialized_properties);
     }
 
     function addInitializer (changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration, initializer: Expression, newLineCharacter: string): void {
