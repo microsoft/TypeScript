@@ -29,9 +29,8 @@ namespace ts.sourcemaps {
         log(text: string): void;
     }
 
-    export function decode(host: SourceMapDecodeHost, mapPath: string, map: SourceMapData, program?: Program): SourceMapper {
+    export function decode(host: SourceMapDecodeHost, mapPath: string, map: SourceMapData, program?: Program, fallbackCache = getSourceFileLikeCache(host)): SourceMapper {
         const currentDirectory = getDirectoryPath(mapPath);
-        const fallbackCache: Map<SourceFileLike> = createMap();
         let decodedMappings: ProcessedSourceMapSpan[];
         let forwardSortedMappings: ProcessedSourceMapSpan[];
         let reverseSortedMappings: ProcessedSourceMapSpan[];
@@ -65,24 +64,11 @@ namespace ts.sourcemaps {
 
         function getSourceFileLike(fileName: string): SourceFileLike | undefined {
             // Lookup file in program, if provided
-            let file: SourceFileLike = program && program.getSourceFile(fileName);
+            const file: SourceFileLike = program && program.getSourceFile(fileName);
             if (!file) {
-                // Otherwise check the cache
+                // Otherwise check the cache (which may hit disk)
                 const path = toPath(fileName, currentDirectory, host.getCanonicalFileName);
-                file = fallbackCache.get(path);
-                if (!file) {
-                    // And failing that, check the disk
-                    if (host.fileExists(path)) {
-                        const text = host.readFile(path);
-                        fallbackCache.set(path, file = {
-                            text,
-                            lineMap: undefined,
-                            getLineAndCharacterOfPosition(pos) {
-                                return computeLineAndCharacterOfPosition(getLineStarts(this), pos);
-                            }
-                        });
-                    }
-                }
+                return fallbackCache.get(path);
             }
             return file;
         }

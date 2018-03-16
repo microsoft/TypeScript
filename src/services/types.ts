@@ -81,6 +81,7 @@ namespace ts {
 
     export interface SourceFileLike {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
+        /*@internal*/ sourceMapper?: sourcemaps.SourceMapper;
     }
 
     export interface SourceMapSource {

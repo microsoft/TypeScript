@@ -1170,6 +1170,35 @@ namespace ts {
         }
     }
 
+    /* @internal */
+    export interface SourceFileLikeCache {
+        get(path: Path): SourceFileLike | undefined;
+    }
+
+    /* @internal */
+    export function getSourceFileLikeCache(host: { readFile?: (path: string) => string, fileExists?: (path: string) => boolean }): SourceFileLikeCache {
+        const cached = createMap<SourceFileLike>();
+        return {
+            get(path: Path) {
+                if (cached.has(path)) {
+                    return cached.get(path);
+                }
+                if (!host.fileExists || !host.readFile || !host.fileExists(path)) return;
+                // And failing that, check the disk
+                const text = host.readFile(path);
+                const file: SourceFileLike = {
+                    text,
+                    lineMap: undefined,
+                    getLineAndCharacterOfPosition(pos) {
+                        return computeLineAndCharacterOfPosition(getLineStarts(this), pos);
+                    }
+                };
+                cached.set(path, file);
+                return file;
+            }
+        };
+    }
+
     export function createLanguageService(host: LanguageServiceHost,
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
 
@@ -1186,6 +1215,8 @@ namespace ts {
         if (!localizedDiagnosticMessages && host.getLocalizedDiagnosticMessages) {
             localizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
         }
+
+        let sourcemappedFileCache: SourceFileLikeCache;
 
         function log(message: string) {
             if (host.log) {
@@ -1293,6 +1324,11 @@ namespace ts {
             // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
             // It needs to be cleared to allow all collected snapshots to be released
             hostCache = undefined;
+
+            // We reset this cache on structure invalidation so we don't hold on to outdated files for long; however we can't use the `compilerHost` above,
+            // Because it only functions until `hostCache` is cleared, while we'll potentially need the functionality to lazily read sourcemap files during
+            // the course of whatever called `synchronizeHostData`
+            sourcemappedFileCache = getSourceFileLikeCache(host);
 
             // Make sure all the nodes in the program are both bound, and have their parent
             // pointers set property.
@@ -1537,7 +1573,7 @@ namespace ts {
             return checker.getSymbolAtLocation(node);
         }
 
-        function getSourceMapper(file: SourceFile) {
+        function getSourceMapper(fileName: string, file: { sourceMapper?: sourcemaps.SourceMapper }) {
             if (!host.readFile || !host.fileExists) {
                 return file.sourceMapper = sourcemaps.identitySourceMapper;
             }
@@ -1545,7 +1581,7 @@ namespace ts {
                 return file.sourceMapper;
             }
             // TODO (weswigham): Read sourcemappingurl from last line of .d.ts if present
-            const mapFileName = file.fileName + ".map";
+            const mapFileName = fileName + ".map";
             if (!host.fileExists(mapFileName)) {
                 return file.sourceMapper = sourcemaps.identitySourceMapper;
             }
@@ -1561,17 +1597,29 @@ namespace ts {
                 // obviously invalid map
                 return file.sourceMapper = sourcemaps.identitySourceMapper;
             }
-            return file.sourceMapper = sourcemaps.decode({ readFile: s => host.readFile(s), fileExists: s => host.fileExists(s), getCanonicalFileName }, mapFileName, maps, program);
+            return file.sourceMapper = sourcemaps.decode({
+                readFile: s => host.readFile(s),
+                fileExists: s => host.fileExists(s),
+                getCanonicalFileName,
+                log,
+            }, mapFileName, maps, program, sourcemappedFileCache);
         }
 
         function getTargetOfMappedDeclarationFile(info: DefinitionInfo): DefinitionInfo {
             if (endsWith(info.fileName, Extension.Dts)) {
-                const file = program.getSourceFile(info.fileName);
-                const mapper = getSourceMapper(file);
+                let file: SourceFileLike = program.getSourceFile(info.fileName);
+                if (!file) {
+                    const path = toPath(info.fileName, currentDirectory, getCanonicalFileName);
+                    file = sourcemappedFileCache.get(path);
+                }
+                if (!file) {
+                    return info;
+                }
+                const mapper = getSourceMapper(info.fileName, file);
                 const mapLoc: sourcemaps.SourceMappableLocation = { fileName: info.fileName, position: info.textSpan.start };
                 const newLoc = mapper.getOriginalPosition(mapLoc);
                 if (newLoc === mapLoc) return info;
-                return {
+                return getTargetOfMappedDeclarationFile({
                     containerKind: info.containerKind,
                     containerName: info.containerName,
                     fileName: newLoc.fileName,
@@ -1579,9 +1627,9 @@ namespace ts {
                     name: info.name,
                     textSpan: {
                         start: newLoc.position,
-                        length: info.textSpan.length // TODO: How to determine correct length? mapping the end pos could result in a completely different location...
+                        length: info.textSpan.length
                     }
-                }; // TODO: recur if the target file is also a declaration file
+                });
             }
             return info;
         }
