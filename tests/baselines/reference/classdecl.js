@@ -220,11 +220,10 @@ declare class a {
         x: number;
         y: number;
     };
-    private static d2();
+    private static d2;
     private static readonly p3;
     private pv3;
-    private foo(n);
-    private foo(s);
+    private foo;
 }
 declare class b extends a {
 }
@@ -259,13 +258,11 @@ declare class aAmbient {
     static d2(): any;
     static p3: any;
     private pv3;
-    private foo(s);
+    private foo;
 }
 declare class d {
-    private foo(n);
-    private foo(s);
+    private foo;
 }
 declare class e {
-    private foo(s);
-    private foo(n);
+    private foo;
 }

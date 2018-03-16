@@ -29,5 +29,5 @@ declare const enum E {
     d = -13,
     f = 20,
     g = 20,
-    h = 10,
+    h = 10
 }

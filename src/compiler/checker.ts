@@ -3684,10 +3684,6 @@ namespace ts {
                 isExternalModuleAugmentation(node.parent.parent);
         }
 
-        function literalTypeToString(type: LiteralType) {
-            return type.flags & TypeFlags.StringLiteral ? '"' + escapeString((<StringLiteralType>type).value) + '"' : "" + (<NumberLiteralType>type).value;
-        }
-
         interface NodeBuilderContext {
             enclosingDeclaration: Node | undefined;
             flags: NodeBuilderFlags | undefined;
@@ -3748,7 +3744,7 @@ namespace ts {
             return symbolName(symbol);
         }
 
-        function isDeclarationVisible(node: Declaration): boolean {
+        function isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean {
             if (node) {
                 const links = getNodeLinks(node);
                 if (links.isVisible === undefined) {
@@ -25497,6 +25493,7 @@ namespace ts {
 
         function isImplementationOfOverload(node: SignatureDeclaration) {
             if (nodeIsPresent((node as FunctionLikeDeclaration).body)) {
+                if (isGetAccessor(node) || isSetAccessor(node)) return false; // Get or set accessors can never be overload implementations, but can have up to 2 signatures
                 const symbol = getSymbolOfNode(node);
                 const signaturesOfSymbol = getSignaturesOfSymbol(symbol);
                 // If this function body corresponds to function with multiple signature, it is implementation of overload
@@ -25636,7 +25633,11 @@ namespace ts {
             }
         }
 
-        function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: EmitTextWriter) {
+        function createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean) {
+            declaration = getParseTreeNode(declaration, isVariableLikeOrAccessor);
+            if (!declaration) {
+                return createToken(SyntaxKind.AnyKeyword) as KeywordTypeNode;
+            }
             // Get type of the symbol if this is the valid symbol otherwise get type at location
             const symbol = getSymbolOfNode(declaration);
             let type = symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))
@@ -25644,22 +25645,30 @@ namespace ts {
                 : unknownType;
             if (type.flags & TypeFlags.UniqueESSymbol &&
                 type.symbol === symbol) {
-                flags |= TypeFormatFlags.AllowUniqueESSymbolType;
+                flags |= NodeBuilderFlags.AllowUniqueESSymbolType;
             }
-            if (flags & TypeFormatFlags.AddUndefined) {
+            if (addUndefined) {
                 type = getOptionalType(type);
             }
-            typeToString(type, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals, writer);
+            return nodeBuilder.typeToTypeNode(type, enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
         }
 
-        function writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: EmitTextWriter) {
+        function createReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker) {
+            signatureDeclaration = getParseTreeNode(signatureDeclaration, isFunctionLike);
+            if (!signatureDeclaration) {
+                return createToken(SyntaxKind.AnyKeyword) as KeywordTypeNode;
+            }
             const signature = getSignatureFromDeclaration(signatureDeclaration);
-            typeToString(getReturnTypeOfSignature(signature), enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals, writer);
+            return nodeBuilder.typeToTypeNode(getReturnTypeOfSignature(signature), enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
         }
 
-        function writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: EmitTextWriter) {
+        function createTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker) {
+            expr = getParseTreeNode(expr, isExpression);
+            if (!expr) {
+                return createToken(SyntaxKind.AnyKeyword) as KeywordTypeNode;
+            }
             const type = getWidenedType(getRegularTypeOfExpression(expr));
-            typeToString(type, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals, writer);
+            return nodeBuilder.typeToTypeNode(type, enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
         }
 
         function hasGlobalName(name: string): boolean {
@@ -25707,9 +25716,13 @@ namespace ts {
             return false;
         }
 
-        function writeLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, writer: EmitTextWriter) {
+        function literalTypeToNode(type: LiteralType): Expression {
+            return createLiteral(type.value);
+        }
+
+        function createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration) {
             const type = getTypeOfSymbol(getSymbolOfNode(node));
-            writer.writeStringLiteral(literalTypeToString(<LiteralType>type));
+            return literalTypeToNode(<LiteralType>type);
         }
 
         function createResolver(): EmitResolver {
@@ -25753,9 +25766,10 @@ namespace ts {
                 isImplementationOfOverload,
                 isRequiredInitializedParameter,
                 isOptionalUninitializedParameterProperty,
-                writeTypeOfDeclaration,
-                writeReturnTypeOfSignatureDeclaration,
-                writeTypeOfExpression,
+                createTypeOfDeclaration,
+                createReturnTypeOfSignatureDeclaration,
+                createTypeOfExpression,
+                createLiteralConstValue,
                 isSymbolAccessible,
                 isEntityNameVisible,
                 getConstantValue: node => {
@@ -25777,7 +25791,6 @@ namespace ts {
                     const symbol = node && getSymbolOfNode(node);
                     return !!(symbol && getCheckFlags(symbol) & CheckFlags.Late);
                 },
-                writeLiteralConstValue,
                 getJsxFactoryEntity: location => location ? (getJsxNamespace(location), (getSourceFileOfNode(location).localJsxFactory || _jsxFactoryEntity)) : _jsxFactoryEntity
             };
 
