@@ -406,7 +406,7 @@ namespace ts.Completions {
 
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
-                if (!isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false) && !isImportCall(node.parent)) {
+                if (!isRequireCall(node.parent, /*checkArgumentIsStringLiteralLike*/ false) && !isImportCall(node.parent)) {
                     const argumentInfo = SignatureHelp.getImmediatelyContainingArgumentInfo(node, position, sourceFile);
                     // Get string literal completions from specialized signatures of the target
                     // i.e. declare function f(a: 'A');

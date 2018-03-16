@@ -1600,7 +1600,7 @@ namespace ts {
                 && !file.isDeclarationFile) {
                 // synthesize 'import "tslib"' declaration
                 const externalHelpersModuleReference = createLiteral(externalHelpersModuleNameText);
-                const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined);
+                const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference);
                 addEmitFlags(importDecl, EmitFlags.NeverApplyImportHelper);
                 externalHelpersModuleReference.parent = importDecl;
                 importDecl.parent = file;
@@ -1664,7 +1664,7 @@ namespace ts {
             }
 
             function collectDynamicImportOrRequireCalls(node: Node): void {
-                if (isRequireCall(node, /*checkArgumentIsStringLiteral*/ true)) {
+                if (isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ true)) {
                     imports = append(imports, node.arguments[0]);
                 }
                 // we have to check the argument list has length of 1. We will still have to process these even though we have parsing error.

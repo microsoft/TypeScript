@@ -1953,7 +1953,7 @@ namespace ts {
         decorators: ReadonlyArray<Decorator> | undefined,
         modifiers: ReadonlyArray<Modifier> | undefined,
         importClause: ImportClause | undefined,
-        moduleSpecifier?: Expression): ImportDeclaration {
+        moduleSpecifier: Expression): ImportDeclaration {
         const node = <ImportDeclaration>createSynthesizedNode(SyntaxKind.ImportDeclaration);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
