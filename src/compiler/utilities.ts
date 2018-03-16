@@ -274,9 +274,9 @@ namespace ts {
         return false;
     }
 
-    export function isPinnedComment(text: string, comment: CommentRange) {
-        return text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
-            text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
+    export function isPinnedComment(text: string, start: number) {
+        return text.charCodeAt(start + 1) === CharacterCodes.asterisk &&
+            text.charCodeAt(start + 2) === CharacterCodes.exclamation;
     }
 
     export function getTokenPosOfNode(node: Node, sourceFile?: SourceFileLike, includeJsDoc?: boolean): number {
@@ -967,6 +967,10 @@ namespace ts {
         return false;
     }
 
+    export function isVariableLikeOrAccessor(node: Node): node is AccessorDeclaration | VariableLikeDeclaration {
+        return isVariableLike(node) || isAccessor(node);
+    }
+
     export function isVariableDeclarationInVariableStatement(node: VariableDeclaration) {
         return node.parent.kind === SyntaxKind.VariableDeclarationList
             && node.parent.parent.kind === SyntaxKind.VariableStatement;
@@ -1421,6 +1425,10 @@ namespace ts {
 
     export function isSourceFileJavaScript(file: SourceFile): boolean {
         return isInJavaScriptFile(file);
+    }
+
+    export function isSourceFileNotJavaScript(file: SourceFile): boolean {
+        return !isInJavaScriptFile(file);
     }
 
     export function isInJavaScriptFile(node: Node | undefined): boolean {
@@ -3110,7 +3118,7 @@ namespace ts {
         return currentDetachedCommentInfo;
 
         function isPinnedCommentLocal(comment: CommentRange) {
-            return isPinnedComment(text, comment);
+            return isPinnedComment(text, comment.pos);
         }
 
     }
@@ -3839,6 +3847,16 @@ namespace ts {
     export function showModuleSpecifier({ moduleSpecifier }: ImportDeclaration): string {
         return isStringLiteral(moduleSpecifier) ? moduleSpecifier.text : getTextOfNode(moduleSpecifier);
     }
+
+    /** Add a value to a set, and return true if it wasn't already present. */
+    export function addToSeen(seen: Map<true>, key: string | number): boolean {
+        key = String(key);
+        if (seen.has(key)) {
+            return false;
+        }
+        seen.set(key, true);
+        return true;
+    }
 }
 
 namespace ts {
@@ -4409,13 +4427,13 @@ namespace ts {
      * Does not return tags for binding patterns, because JSDoc matches
      * parameters by name and binding patterns do not have a name.
      */
-    export function getJSDocParameterTags(param: ParameterDeclaration): ReadonlyArray<JSDocParameterTag> | undefined {
+    export function getJSDocParameterTags(param: ParameterDeclaration): ReadonlyArray<JSDocParameterTag> {
         if (param.name && isIdentifier(param.name)) {
             const name = param.name.escapedText;
             return getJSDocTags(param.parent).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && isIdentifier(tag.name) && tag.name.escapedText === name);
         }
         // a binding pattern doesn't have a name, so it's not possible to match it a JSDoc parameter, which is identified by name
-        return undefined;
+        return emptyArray;
     }
 
     /**
@@ -4425,33 +4443,33 @@ namespace ts {
      * for example on a variable declaration whose initializer is a function expression.
      */
     export function hasJSDocParameterTags(node: FunctionLikeDeclaration | SignatureDeclaration): boolean {
-        return !!getFirstJSDocTag(node, SyntaxKind.JSDocParameterTag);
+        return !!getFirstJSDocTag(node, isJSDocParameterTag);
     }
 
     /** Gets the JSDoc augments tag for the node if present */
     export function getJSDocAugmentsTag(node: Node): JSDocAugmentsTag | undefined {
-        return getFirstJSDocTag(node, SyntaxKind.JSDocAugmentsTag) as JSDocAugmentsTag;
+        return getFirstJSDocTag(node, isJSDocAugmentsTag);
     }
 
     /** Gets the JSDoc class tag for the node if present */
     export function getJSDocClassTag(node: Node): JSDocClassTag | undefined {
-        return getFirstJSDocTag(node, SyntaxKind.JSDocClassTag) as JSDocClassTag;
+        return getFirstJSDocTag(node, isJSDocClassTag);
     }
 
     /** Gets the JSDoc return tag for the node if present */
     export function getJSDocReturnTag(node: Node): JSDocReturnTag | undefined {
-        return getFirstJSDocTag(node, SyntaxKind.JSDocReturnTag) as JSDocReturnTag;
+        return getFirstJSDocTag(node, isJSDocReturnTag);
     }
 
     /** Gets the JSDoc template tag for the node if present */
     export function getJSDocTemplateTag(node: Node): JSDocTemplateTag | undefined {
-        return getFirstJSDocTag(node, SyntaxKind.JSDocTemplateTag) as JSDocTemplateTag;
+        return getFirstJSDocTag(node, isJSDocTemplateTag);
     }
 
     /** Gets the JSDoc type tag for the node if present and valid */
     export function getJSDocTypeTag(node: Node): JSDocTypeTag | undefined {
         // We should have already issued an error if there were multiple type jsdocs, so just use the first one.
-        const tag = getFirstJSDocTag(node, SyntaxKind.JSDocTypeTag) as JSDocTypeTag;
+        const tag = getFirstJSDocTag(node, isJSDocTypeTag);
         if (tag && tag.typeExpression && tag.typeExpression.type) {
             return tag;
         }
@@ -4470,12 +4488,9 @@ namespace ts {
      * tag directly on the node would be returned.
      */
     export function getJSDocType(node: Node): TypeNode | undefined {
-        let tag: JSDocTypeTag | JSDocParameterTag = getFirstJSDocTag(node, SyntaxKind.JSDocTypeTag) as JSDocTypeTag;
-        if (!tag && node.kind === SyntaxKind.Parameter) {
-            const paramTags = getJSDocParameterTags(node as ParameterDeclaration);
-            if (paramTags) {
-                tag = find(paramTags, tag => !!tag.typeExpression);
-            }
+        let tag: JSDocTypeTag | JSDocParameterTag | undefined = getFirstJSDocTag(node, isJSDocTypeTag);
+        if (!tag && isParameter(node)) {
+            tag = find(getJSDocParameterTags(node), tag => !!tag.typeExpression);
         }
 
         return tag && tag.typeExpression && tag.typeExpression.type;
@@ -4493,7 +4508,7 @@ namespace ts {
     }
 
     /** Get all JSDoc tags related to a node, including those on parent nodes. */
-    export function getJSDocTags(node: Node): ReadonlyArray<JSDocTag> | undefined {
+    export function getJSDocTags(node: Node): ReadonlyArray<JSDocTag> {
         let tags = (node as JSDocContainer).jsDocCache;
         // If cache is 'null', that means we did the work of searching for JSDoc tags and came up with nothing.
         if (tags === undefined) {
@@ -4503,17 +4518,14 @@ namespace ts {
     }
 
     /** Get the first JSDoc tag of a specified kind, or undefined if not present. */
-    function getFirstJSDocTag(node: Node, kind: SyntaxKind): JSDocTag | undefined {
-        const tags = getJSDocTags(node);
-        return find(tags, doc => doc.kind === kind);
+    function getFirstJSDocTag<T extends JSDocTag>(node: Node, predicate: (tag: JSDocTag) => tag is T): T | undefined {
+        return find(getJSDocTags(node), predicate);
     }
 
     /** Gets all JSDoc tags of a specified kind, or undefined if not present. */
     export function getAllJSDocTagsOfKind(node: Node, kind: SyntaxKind): ReadonlyArray<JSDocTag> | undefined {
-        const tags = getJSDocTags(node);
-        return filter(tags, doc => doc.kind === kind);
+        return getJSDocTags(node).filter(doc => doc.kind === kind);
     }
-
 }
 
 // Simple node tests of the form `node.kind === SyntaxKind.Foo`.
@@ -5154,6 +5166,10 @@ namespace ts {
 
     export function isJSDocAugmentsTag(node: Node): node is JSDocAugmentsTag {
         return node.kind === SyntaxKind.JSDocAugmentsTag;
+    }
+
+    export function isJSDocClassTag(node: Node): node is JSDocClassTag {
+        return node.kind === SyntaxKind.JSDocClassTag;
     }
 
     export function isJSDocParameterTag(node: Node): node is JSDocParameterTag {
@@ -5975,6 +5991,45 @@ namespace ts {
         return !!(node as HasType).type;
     }
 
+    /* True if the node could have a type node a `.type` */
+    /* @internal */
+    export function couldHaveType(node: Node): node is HasType {
+        switch (node.kind) {
+            case SyntaxKind.Parameter:
+            case SyntaxKind.PropertySignature:
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.Constructor:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.CallSignature:
+            case SyntaxKind.ConstructSignature:
+            case SyntaxKind.IndexSignature:
+            case SyntaxKind.TypePredicate:
+            case SyntaxKind.FunctionType:
+            case SyntaxKind.ConstructorType:
+            case SyntaxKind.ParenthesizedType:
+            case SyntaxKind.TypeOperator:
+            case SyntaxKind.MappedType:
+            case SyntaxKind.TypeAssertionExpression:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.AsExpression:
+            case SyntaxKind.VariableDeclaration:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.JSDocTypeExpression:
+            case SyntaxKind.JSDocNullableType:
+            case SyntaxKind.JSDocNonNullableType:
+            case SyntaxKind.JSDocOptionalType:
+            case SyntaxKind.JSDocFunctionType:
+            case SyntaxKind.JSDocVariadicType:
+            return true;
+        }
+        return false;
+    }
+
     /** True if has initializer node attached to it. */
     /* @internal */
     export function hasInitializer(node: Node): node is HasInitializer {
@@ -6005,6 +6060,30 @@ namespace ts {
     /* @internal */
     export function isTypeReferenceType(node: Node): node is TypeReferenceType {
         return node.kind === SyntaxKind.TypeReference || node.kind === SyntaxKind.ExpressionWithTypeArguments;
+    }
+
+    const MAX_SMI_X86 = 0x3fff_ffff;
+    /* @internal */
+    export function guessIndentation(lines: string[]) {
+        let indentation = MAX_SMI_X86;
+        for (const line of lines) {
+            if (!line.length) {
+                continue;
+            }
+            let i = 0;
+            for (; i < line.length && i < indentation; i++) {
+                if (!isWhiteSpaceLike(line.charCodeAt(i))) {
+                    break;
+                }
+            }
+            if (i < indentation) {
+                indentation = i;
+            }
+            if (indentation === 0) {
+                return 0;
+            }
+        }
+        return indentation === MAX_SMI_X86 ? undefined : indentation;
     }
 
     export function isStringLiteralLike(node: Node): node is StringLiteralLike {
