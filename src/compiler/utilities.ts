@@ -1509,7 +1509,7 @@ namespace ts {
      */
     export function getAssignedJavascriptInitializer(node: Node) {
         if (node && node.parent && isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
-            const isPrototypeAssignment = isPropertyAccessExpression(node.parent.left) && node.parent.left.name.escapedText === "prototype";
+            const isPrototypeAssignment = isPrototypeAccess(node.parent.left);
             return getJavascriptInitializer(node.parent.right, isPrototypeAssignment) ||
                 getDefaultedJavascriptInitializer(node.parent.left as EntityNameExpression, node.parent.right, isPrototypeAssignment);
         }
@@ -1629,7 +1629,7 @@ namespace ts {
                 // F.prototype = { ... }
                 return SpecialPropertyAssignmentKind.Prototype;
             }
-            else if (isPropertyAccessExpression(lhs.expression) && lhs.expression.name.escapedText === "prototype") {
+            else if (isPrototypeAccess(lhs.expression)) {
                 // F.G....prototype.x = expr
                 return SpecialPropertyAssignmentKind.PrototypeProperty;
             }
@@ -3336,8 +3336,15 @@ namespace ts {
     }
 
     export function isEntityNameExpression(node: Node): node is EntityNameExpression {
-        return node.kind === SyntaxKind.Identifier ||
-            node.kind === SyntaxKind.PropertyAccessExpression && isEntityNameExpression((<PropertyAccessExpression>node).expression);
+        return node.kind === SyntaxKind.Identifier || isPropertyAccessEntityNameExpression(node);
+    }
+
+    export function isPropertyAccessEntityNameExpression(node: Node): node is PropertyAccessEntityNameExpression {
+        return isPropertyAccessExpression(node) && isEntityNameExpression(node.expression);
+    }
+
+    export function isPrototypeAccess(node: Node): node is PropertyAccessExpression {
+        return isPropertyAccessExpression(node) && node.name.escapedText === "prototype";
     }
 
     export function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {

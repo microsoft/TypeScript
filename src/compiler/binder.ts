@@ -2336,7 +2336,7 @@ namespace ts {
                     // For `f.prototype.m = function() { this.x = 0; }`, `this.x = 0` should modify `f`'s members, not the function expression.
                     if (isBinaryExpression(thisContainer.parent) && thisContainer.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
                         const l = thisContainer.parent.left;
-                        if (isPropertyAccessExpression(l) && isPropertyAccessExpression(l.expression) && l.expression.name.escapedText === "prototype" && isEntityNameExpression(l.expression.expression)) {
+                        if (isPropertyAccessEntityNameExpression(l) && isPrototypeAccess(l.expression)) {
                             constructorSymbol = getJSInitializerSymbolFromName(l.expression.expression, containerContainer);
                         }
                     }
@@ -2368,12 +2368,12 @@ namespace ts {
             if (node.expression.kind === SyntaxKind.ThisKeyword) {
                 bindThisPropertyAssignment(node);
             }
-            else if (isEntityNameExpression(node) && node.parent.parent.kind === SyntaxKind.SourceFile) {
-                if (isPropertyAccessExpression(node.expression) && node.expression.name.escapedText === "prototype") {
-                    bindPrototypePropertyAssignment(node as PropertyAccessEntityNameExpression, node.parent);
+            else if (isPropertyAccessEntityNameExpression(node) && node.parent.parent.kind === SyntaxKind.SourceFile) {
+                if (isPrototypeAccess(node.expression)) {
+                    bindPrototypePropertyAssignment(node, node.parent);
                 }
                 else {
-                    bindStaticPropertyAssignment(node as PropertyAccessEntityNameExpression);
+                    bindStaticPropertyAssignment(node);
                 }
             }
         }
@@ -2436,15 +2436,10 @@ namespace ts {
 
         function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, isPrototypeProperty: boolean) {
             let symbol = getJSInitializerSymbolFromName(name);
-            let isToplevelNamespaceableInitializer: boolean;
-            if (isBinaryExpression(propertyAccess.parent)) {
-                const isPrototypeAssignment = isPropertyAccessExpression(propertyAccess.parent.left) && propertyAccess.parent.left.name.escapedText === "prototype";
-                isToplevelNamespaceableInitializer = propertyAccess.parent.parent.parent.kind === SyntaxKind.SourceFile &&
-                    !!getJavascriptInitializer(propertyAccess.parent.right, isPrototypeAssignment);
-            }
-            else {
-                isToplevelNamespaceableInitializer = propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
-            }
+            const isToplevelNamespaceableInitializer = isBinaryExpression(propertyAccess.parent)
+                ? propertyAccess.parent.parent.parent.kind === SyntaxKind.SourceFile &&
+                    !!getJavascriptInitializer(propertyAccess.parent.right, isPrototypeAccess(propertyAccess.parent.left))
+                : propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
             if (!isPrototypeProperty && (!symbol || !(symbol.flags & SymbolFlags.Namespace)) && isToplevelNamespaceableInitializer) {
                 // make symbols or add declarations for intermediate containers
                 const flags = SymbolFlags.Module | SymbolFlags.JSContainer;
