@@ -55,39 +55,36 @@ sourceFile:tests/cases/compiler/a.ts
 ---
 >>>        return { b: x.a };
 1 >^^^^^^^^
-2 >        ^^^^^^
-3 >              ^
-4 >               ^^
-5 >                 ^
-6 >                  ^^
-7 >                    ^
-8 >                     ^
-9 >                      ^
-10>                       ^^
-11>                         ^
+2 >        ^^^^^^^
+3 >               ^^
+4 >                 ^
+5 >                  ^^
+6 >                    ^
+7 >                     ^
+8 >                      ^
+9 >                       ^^
+10>                         ^
 1 >) {
   >        
-2 >        return
-3 >               
-4 >               {
-5 >                 b
-6 >                  : 
-7 >                    x
-8 >                     .
-9 >                      a
-10>                       }
-11>                         ;
+2 >        return 
+3 >               {
+4 >                 b
+5 >                  : 
+6 >                    x
+7 >                     .
+8 >                      a
+9 >                       }
+10>                         ;
 1 >Emitted(5, 9) Source(3, 9) + SourceIndex(0)
-2 >Emitted(5, 15) Source(3, 15) + SourceIndex(0)
-3 >Emitted(5, 16) Source(3, 16) + SourceIndex(0)
-4 >Emitted(5, 18) Source(3, 17) + SourceIndex(0)
-5 >Emitted(5, 19) Source(3, 18) + SourceIndex(0)
-6 >Emitted(5, 21) Source(3, 20) + SourceIndex(0)
-7 >Emitted(5, 22) Source(3, 21) + SourceIndex(0)
-8 >Emitted(5, 23) Source(3, 22) + SourceIndex(0)
-9 >Emitted(5, 24) Source(3, 23) + SourceIndex(0)
-10>Emitted(5, 26) Source(3, 24) + SourceIndex(0)
-11>Emitted(5, 27) Source(3, 25) + SourceIndex(0)
+2 >Emitted(5, 16) Source(3, 16) + SourceIndex(0)
+3 >Emitted(5, 18) Source(3, 17) + SourceIndex(0)
+4 >Emitted(5, 19) Source(3, 18) + SourceIndex(0)
+5 >Emitted(5, 21) Source(3, 20) + SourceIndex(0)
+6 >Emitted(5, 22) Source(3, 21) + SourceIndex(0)
+7 >Emitted(5, 23) Source(3, 22) + SourceIndex(0)
+8 >Emitted(5, 24) Source(3, 23) + SourceIndex(0)
+9 >Emitted(5, 26) Source(3, 24) + SourceIndex(0)
+10>Emitted(5, 27) Source(3, 25) + SourceIndex(0)
 ---
 >>>    };
 1 >^^^^
@@ -114,27 +111,24 @@ sourceFile:tests/cases/compiler/a.ts
 ---
 >>>        return new Foo();
 1->^^^^^^^^
-2 >        ^^^^^^
-3 >              ^
-4 >               ^^^^
-5 >                   ^^^
-6 >                      ^^
-7 >                        ^
+2 >        ^^^^^^^
+3 >               ^^^^
+4 >                   ^^^
+5 >                      ^^
+6 >                        ^
 1->static make() {
   >        
-2 >        return
-3 >               
-4 >               new 
-5 >                   Foo
-6 >                      ()
-7 >                        ;
+2 >        return 
+3 >               new 
+4 >                   Foo
+5 >                      ()
+6 >                        ;
 1->Emitted(8, 9) Source(6, 9) + SourceIndex(0)
-2 >Emitted(8, 15) Source(6, 15) + SourceIndex(0)
-3 >Emitted(8, 16) Source(6, 16) + SourceIndex(0)
-4 >Emitted(8, 20) Source(6, 20) + SourceIndex(0)
-5 >Emitted(8, 23) Source(6, 23) + SourceIndex(0)
-6 >Emitted(8, 25) Source(6, 25) + SourceIndex(0)
-7 >Emitted(8, 26) Source(6, 26) + SourceIndex(0)
+2 >Emitted(8, 16) Source(6, 16) + SourceIndex(0)
+3 >Emitted(8, 20) Source(6, 20) + SourceIndex(0)
+4 >Emitted(8, 23) Source(6, 23) + SourceIndex(0)
+5 >Emitted(8, 25) Source(6, 25) + SourceIndex(0)
+6 >Emitted(8, 26) Source(6, 26) + SourceIndex(0)
 ---
 >>>    };
 1 >^^^^
@@ -318,17 +312,20 @@ sourceFile:tests/cases/compiler/a.ts
 1->^^^^
 2 >    ^^^^^^^
 3 >           ^
-4 >            ^^^
-5 >               ^^^^->
+4 >            ^
+5 >             ^^
+6 >               ^^^^->
 1->class Foo {
   >    
 2 >    doThing
 3 >           (
-4 >            x: 
+4 >            x
+5 >             : 
 1->Emitted(2, 5) Source(2, 5) + SourceIndex(0)
 2 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
 3 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
-4 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
+4 >Emitted(2, 14) Source(2, 14) + SourceIndex(0)
+5 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
 ---
 >>>        a: number;
 1->^^^^^^^^

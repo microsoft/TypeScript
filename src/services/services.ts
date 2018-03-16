@@ -1597,6 +1597,7 @@ namespace ts {
         function getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan {
             synchronizeHostData();
             const result = GoToDefinition.getDefinitionAndBoundSpan(program, getValidSourceFile(fileName), position);
+            if (!result) return result;
             const mappedDefs = getTargetOfMappedDeclarationFiles(result.definitions);
             if (mappedDefs === result.definitions) {
                 return result;

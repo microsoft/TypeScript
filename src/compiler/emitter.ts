@@ -200,6 +200,7 @@ namespace ts {
                 onEmitSourceMapOfNode: sourceMap.emitNodeWithSourceMap,
                 onEmitSourceMapOfToken: sourceMap.emitTokenWithSourceMap,
                 onEmitSourceMapOfPosition: sourceMap.emitPos,
+                onSetSourceFile: setSourceFile,
 
                 // transform hooks
                 onEmitNode: declarationTransform.emitNodeWithNotification,
@@ -213,11 +214,16 @@ namespace ts {
             declarationTransform.dispose();
         }
 
-        function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string, sourceFileOrBundle: SourceFile | Bundle, printer: Printer, sourcemapKind: SourceMapEmitKind) {
+        function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string | undefined, sourceFileOrBundle: SourceFile | Bundle, printer: Printer, sourcemapKind: SourceMapEmitKind) {
             const bundle = sourceFileOrBundle.kind === SyntaxKind.Bundle ? sourceFileOrBundle : undefined;
             const sourceFile = sourceFileOrBundle.kind === SyntaxKind.SourceFile ? sourceFileOrBundle : undefined;
             const sourceFiles = bundle ? bundle.sourceFiles : [sourceFile];
-            sourceMap.initialize(jsFilePath, sourceMapFilePath, sourceFileOrBundle);
+            if (sourcemapKind !== SourceMapEmitKind.None) {
+                sourceMap.initialize(jsFilePath, sourceMapFilePath, sourceFileOrBundle);
+            }
+            else {
+                sourceMap.setState(/*disabled*/ true);
+            }
 
             if (bundle) {
                 bundledHelpers = createMap<boolean>();
@@ -250,7 +256,13 @@ namespace ts {
             writeFile(host, emitterDiagnostics, jsFilePath, writer.getText(), compilerOptions.emitBOM, sourceFiles);
 
             // Reset state
-            sourceMap.reset();
+            
+            if (sourcemapKind !== SourceMapEmitKind.None) {
+                sourceMap.reset();
+            }
+            else {
+                sourceMap.setState(/*disabled*/ false);
+            }
             writer.clear();
 
             currentSourceFile = undefined;
