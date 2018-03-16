@@ -38,28 +38,28 @@ namespace ts.sourcemaps {
         return {
             getOriginalPosition,
             getGeneratedPosition
-        }
+        };
 
         function getGeneratedPosition(loc: SourceMappableLocation): SourceMappableLocation {
             const maps = filter(getForwardSortedMappings(), m => comparePaths(loc.fileName, m.sourcePath, currentDirectory) === 0);
             if (!length(maps)) return loc;
-            let targetIndex = binarySearch(maps, {sourcePosition: loc.position}, getSourcePosition, compareValues);
+            let targetIndex = binarySearch(maps, { sourcePosition: loc.position }, getSourcePosition, compareValues);
             if (targetIndex < 0 && maps.length > 0) {
                 // if no exact match, closest is 2's compliment of result
                 targetIndex = ~targetIndex;
             }
-            return { fileName: toPath(map.file, currentDirectory, host.getCanonicalFileName), position: maps[targetIndex].emittedPosition } // Closest span
+            return { fileName: toPath(map.file, currentDirectory, host.getCanonicalFileName), position: maps[targetIndex].emittedPosition }; // Closest span
         }
 
         function getOriginalPosition(loc: SourceMappableLocation): SourceMappableLocation {
             const maps = getReverseSortedMappings();
             if (!length(maps)) return loc;
-            let targetIndex = binarySearch(maps, {emittedPosition: loc.position}, identity, compareProcessedSpanEmittedPositions);
+            let targetIndex = binarySearch(maps, { emittedPosition: loc.position }, identity, compareProcessedSpanEmittedPositions);
             if (targetIndex < 0 && maps.length > 0) {
                 // if no exact match, closest is 2's compliment of result
                 targetIndex = ~targetIndex;
             }
-            return { fileName: toPath(maps[targetIndex].sourcePath, currentDirectory, host.getCanonicalFileName), position: maps[targetIndex].sourcePosition } // Closest span
+            return { fileName: toPath(maps[targetIndex].sourcePath, currentDirectory, host.getCanonicalFileName), position: maps[targetIndex].sourcePosition }; // Closest span
         }
 
         function getSourceFileLike(fileName: string): SourceFileLike | undefined {
@@ -119,7 +119,7 @@ namespace ts.sourcemaps {
                 spans: [],
                 decodingIndex: 0,
                 processSpan,
-            }
+            };
             while (!hasCompletedDecoding(state)) {
                 decodeSingleSpan(state);
                 if (state.error) {
@@ -182,7 +182,7 @@ namespace ts.sourcemaps {
         sourceMapNamesLength?: number;
         error?: string;
         spans: T[];
-        processSpan: (span: RawSourceMapSpan) => T
+        processSpan: (span: RawSourceMapSpan) => T;
     }
 
     function hasCompletedDecoding(state: DecoderState<any>) {

@@ -256,7 +256,6 @@ namespace ts {
             writeFile(host, emitterDiagnostics, jsFilePath, writer.getText(), compilerOptions.emitBOM, sourceFiles);
 
             // Reset state
-            
             if (sourcemapKind !== SourceMapEmitKind.None) {
                 sourceMap.reset();
             }

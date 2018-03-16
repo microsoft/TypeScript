@@ -1554,19 +1554,21 @@ namespace ts {
             try {
                 maps = JSON.parse(doc);
             }
-            catch {}
+            catch {
+                // swallow error
+            }
             if (!maps || !maps.sources || !maps.file || !maps.mappings) {
                 // obviously invalid map
                 return file.sourceMapper = sourcemaps.identitySourceMapper;
             }
-            return file.sourceMapper = sourcemaps.decode({readFile: s => host.readFile(s), fileExists: s => host.fileExists(s), getCanonicalFileName}, mapFileName, maps, program);
+            return file.sourceMapper = sourcemaps.decode({ readFile: s => host.readFile(s), fileExists: s => host.fileExists(s), getCanonicalFileName }, mapFileName, maps, program);
         }
 
         function getTargetOfMappedDeclarationFile(info: DefinitionInfo): DefinitionInfo {
             if (endsWith(info.fileName, Extension.Dts)) {
                 const file = program.getSourceFile(info.fileName);
                 const mapper = getSourceMapper(file);
-                const mapLoc: sourcemaps.SourceMappableLocation = {fileName: info.fileName, position: info.textSpan.start};
+                const mapLoc: sourcemaps.SourceMappableLocation = { fileName: info.fileName, position: info.textSpan.start };
                 const newLoc = mapper.getOriginalPosition(mapLoc);
                 if (newLoc === mapLoc) return info;
                 return {
@@ -1605,7 +1607,7 @@ namespace ts {
             return {
                 definitions: mappedDefs,
                 textSpan: result.textSpan // TODO: Does this need to be mapped in some way? I don't _think_ so?
-            }
+            };
         }
 
         function getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
