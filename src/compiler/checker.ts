@@ -17381,13 +17381,13 @@ namespace ts {
         }
 
         function getTypeArgumentArityError(node: Node, signatures: Signature[], typeArguments: NodeArray<TypeNode>) {
-            let min = Number.POSITIVE_INFINITY;
-            let max = Number.NEGATIVE_INFINITY;
+            let min = Infinity;
+            let max = -Infinity;
             for (const sig of signatures) {
                 min = Math.min(min, getMinTypeArgumentCount(sig.typeParameters));
                 max = Math.max(max, length(sig.typeParameters));
             }
-            const paramCount = min < max ? min + "-" + max : min;
+            const paramCount = min === max ? min : min + "-" + max;
             return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, paramCount, typeArguments.length);
         }
 
