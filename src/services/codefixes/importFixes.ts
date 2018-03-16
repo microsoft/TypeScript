@@ -802,21 +802,22 @@ namespace ts.codefix {
     }
 
     export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol, target: ScriptTarget): string {
-        return moduleSpecifierToValidIdentifier(removeFileExtension(getBaseFileName(moduleSymbol.name)), target);
+        return moduleSpecifierToValidIdentifier(removeFileExtension(stripQuotes(moduleSymbol.name)), target);
     }
 
     export function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target: ScriptTarget): string {
+        const baseName = getBaseFileName(removeSuffix(moduleSpecifier, "/index"));
         let res = "";
         let lastCharWasValid = true;
-        const firstCharCode = moduleSpecifier.charCodeAt(0);
+        const firstCharCode = baseName.charCodeAt(0);
         if (isIdentifierStart(firstCharCode, target)) {
             res += String.fromCharCode(firstCharCode);
         }
         else {
             lastCharWasValid = false;
         }
-        for (let i = 1; i < moduleSpecifier.length; i++) {
-            const ch = moduleSpecifier.charCodeAt(i);
+        for (let i = 1; i < baseName.length; i++) {
+            const ch = baseName.charCodeAt(i);
             const isValid = isIdentifierPart(ch, target);
             if (isValid) {
                 let char = String.fromCharCode(ch);
