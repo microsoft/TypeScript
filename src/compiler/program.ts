@@ -1668,8 +1668,8 @@ namespace ts {
                     imports = append(imports, node.arguments[0]);
                 }
                 // we have to check the argument list has length of 1. We will still have to process these even though we have parsing error.
-                else if (isImportCall(node) && node.arguments.length === 1 && node.arguments[0].kind === SyntaxKind.StringLiteral) {
-                    imports = append(imports, node.arguments[0] as StringLiteral);
+                else if (isImportCall(node) && node.arguments.length === 1 && isStringLiteralLike(node.arguments[0])) {
+                    imports = append(imports, node.arguments[0] as StringLiteralLike);
                 }
                 else {
                     forEachChild(node, collectDynamicImportOrRequireCalls);
