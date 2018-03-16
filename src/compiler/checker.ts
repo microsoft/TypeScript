@@ -4164,7 +4164,7 @@ namespace ts {
             }
 
             const isOptional = includeOptionality && (
-                isInJavaScriptFile(declaration) && isParameter(declaration) && getJSDocParameterTags(declaration).some(tag => tag.isBracketed)
+                isParameter(declaration) && isJSDocOptionalParameter(declaration)
                 || !isBindingElement(declaration) && !isVariableDeclaration(declaration) && !!declaration.questionToken);
 
             // Use type from type annotation if one is present
@@ -6571,9 +6571,17 @@ namespace ts {
 
         function isJSDocOptionalParameter(node: ParameterDeclaration) {
             return isInJavaScriptFile(node) && (
+                // node.type should only be a JSDocOptionalType when node is a parameter of a JSDocFunctionType
                 node.type && node.type.kind === SyntaxKind.JSDocOptionalType
                 || getJSDocParameterTags(node).some(({ isBracketed, typeExpression }) =>
-                    isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType));
+                    isBracketed || !!typeExpression && skipJSDocPrefixTypes(typeExpression.type).kind === SyntaxKind.JSDocOptionalType));
+        }
+
+        function skipJSDocPrefixTypes(type: TypeNode): TypeNode {
+            while (type.kind === SyntaxKind.JSDocNullableType || type.kind === SyntaxKind.JSDocNonNullableType) {
+                type = (type as JSDocNullableType | JSDocNonNullableType).type;
+            }
+            return type;
         }
 
         function tryFindAmbientModule(moduleName: string, withAugmentations: boolean) {
