@@ -16,11 +16,11 @@ namespace ts.sourcemaps {
     }
 
     export interface SourceMapper {
-        forwardMap(input: SourceMappableLocation): SourceMappableLocation;
-        reverseMap(input: SourceMappableLocation): SourceMappableLocation;
+        getOriginalPosition(input: SourceMappableLocation): SourceMappableLocation;
+        getGeneratedPosition(input: SourceMappableLocation): SourceMappableLocation;
     }
 
-    export const identitySourceMapper = { forwardMap: identity, reverseMap: identity };
+    export const identitySourceMapper = { getOriginalPosition: identity, getGeneratedPosition: identity };
 
     export interface SourceMapDecodeHost {
         readFile(path: string): string;
@@ -36,11 +36,11 @@ namespace ts.sourcemaps {
         let reverseSortedMappings: ProcessedSourceMapSpan[];
 
         return {
-            forwardMap,
-            reverseMap
+            getOriginalPosition,
+            getGeneratedPosition
         }
 
-        function reverseMap(loc: SourceMappableLocation): SourceMappableLocation {
+        function getGeneratedPosition(loc: SourceMappableLocation): SourceMappableLocation {
             const maps = filter(getForwardSortedMappings(), m => comparePaths(loc.fileName, m.sourcePath, currentDirectory) === 0);
             if (!length(maps)) return loc;
             let targetIndex = binarySearch(maps, {sourcePosition: loc.position}, getSourcePosition, compareValues);
@@ -51,7 +51,7 @@ namespace ts.sourcemaps {
             return { fileName: toPath(map.file, currentDirectory, host.getCanonicalFileName), position: maps[targetIndex].emittedPosition } // Closest span
         }
 
-        function forwardMap(loc: SourceMappableLocation): SourceMappableLocation {
+        function getOriginalPosition(loc: SourceMappableLocation): SourceMappableLocation {
             const maps = getReverseSortedMappings();
             if (!length(maps)) return loc;
             let targetIndex = binarySearch(maps, {emittedPosition: loc.position}, identity, compareProcessedSpanEmittedPositions);

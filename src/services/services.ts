@@ -1567,7 +1567,7 @@ namespace ts {
                 const file = program.getSourceFile(info.fileName);
                 const mapper = getSourceMapper(file);
                 const mapLoc: sourcemaps.SourceMappableLocation = {fileName: info.fileName, position: info.textSpan.start};
-                const newLoc = mapper.forwardMap(mapLoc);
+                const newLoc = mapper.getOriginalPosition(mapLoc);
                 if (newLoc === mapLoc) return info;
                 return {
                     containerKind: info.containerKind,
