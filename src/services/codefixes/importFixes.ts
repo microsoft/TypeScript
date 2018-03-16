@@ -158,27 +158,13 @@ namespace ts.codefix {
         const moduleSymbolId = getUniqueSymbolId(moduleSymbol, checker);
         let cached = cachedImportDeclarations[moduleSymbolId];
         if (!cached) {
-            cached = cachedImportDeclarations[moduleSymbolId] = mapDefined<StringLiteral, ExistingImportInfo>(imports, importModuleSpecifier => {
-                const declaration = checker.getSymbolAtLocation(importModuleSpecifier) === moduleSymbol ? getImportDeclaration(importModuleSpecifier) : undefined;
-                return declaration && { declaration, importKind };
+            cached = cachedImportDeclarations[moduleSymbolId] = mapDefined<StringLiteralLike, ExistingImportInfo>(imports, moduleSpecifier => {
+                const i = importFromModuleSpecifier(moduleSpecifier);
+                return (i.kind === SyntaxKind.ImportDeclaration || i.kind === SyntaxKind.ImportEqualsDeclaration)
+                    && checker.getSymbolAtLocation(moduleSpecifier) === moduleSymbol ? { declaration: i, importKind } : undefined;
             });
         }
         return cached;
-    }
-
-    function getImportDeclaration({ parent }: LiteralExpression): AnyImportSyntax | undefined {
-        switch (parent.kind) {
-            case SyntaxKind.ImportDeclaration:
-                return parent as ImportDeclaration;
-            case SyntaxKind.ExternalModuleReference:
-                return (parent as ExternalModuleReference).parent;
-            case SyntaxKind.ExportDeclaration:
-            case SyntaxKind.CallExpression: // For "require()" calls
-                // Ignore these, can't add imports to them.
-                return undefined;
-            default:
-                Debug.fail();
-        }
     }
 
     function getCodeActionForNewImport(context: SymbolContext, { moduleSpecifier, importKind }: NewImportInfo): CodeFixAction {

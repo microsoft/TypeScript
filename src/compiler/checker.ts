@@ -18229,7 +18229,7 @@ namespace ts {
         }
 
         function isCommonJsRequire(node: Node): boolean {
-            if (!isRequireCall(node, /*checkArgumentIsStringLiteral*/ true)) {
+            if (!isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ true)) {
                 return false;
             }
 
@@ -19689,7 +19689,7 @@ namespace ts {
         function getTypeOfExpression(node: Expression, cache?: boolean) {
             // Optimize for the common case of a call to a function with a single non-generic call
             // signature where we can just fetch the return type without checking the arguments.
-            if (node.kind === SyntaxKind.CallExpression && (<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(node, /*checkArgumentIsStringLiteral*/ true) && !isSymbolOrSymbolForCall(node)) {
+            if (node.kind === SyntaxKind.CallExpression && (<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ true) && !isSymbolOrSymbolForCall(node)) {
                 const funcType = checkNonNullExpression((<CallExpression>node).expression);
                 const signature = getSingleCallSignature(funcType);
                 if (signature && !signature.typeParameters) {
@@ -25039,7 +25039,7 @@ namespace ts {
                     // 3). Dynamic import call or require in javascript
                     if ((isExternalModuleImportEqualsDeclaration(node.parent.parent) && getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node) ||
                         ((node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration) && (<ImportDeclaration>node.parent).moduleSpecifier === node) ||
-                        ((isInJavaScriptFile(node) && isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false)) || isImportCall(node.parent))) {
+                        ((isInJavaScriptFile(node) && isRequireCall(node.parent, /*checkArgumentIsStringLiteralLike*/ false)) || isImportCall(node.parent))) {
                         return resolveExternalModuleName(node, <LiteralExpression>node);
                     }
                     // falls through
@@ -25879,8 +25879,8 @@ namespace ts {
             }
         }
 
-        function getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration): SourceFile {
-            const specifier = getExternalModuleName(declaration);
+        function getExternalModuleFileFromDeclaration(declaration: AnyImportOrReExport | ModuleDeclaration): SourceFile {
+            const specifier = declaration.kind === SyntaxKind.ModuleDeclaration ? tryCast(declaration.name, isStringLiteral) : getExternalModuleName(declaration);
             const moduleSymbol = resolveExternalModuleNameWorker(specifier, specifier, /*moduleNotFoundError*/ undefined);
             if (!moduleSymbol) {
                 return undefined;
