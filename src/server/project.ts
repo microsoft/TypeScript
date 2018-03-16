@@ -131,7 +131,7 @@ namespace ts.server {
         // wrapper over the real language service that will suppress all semantic operations
         protected languageService: LanguageService;
 
-        public languageServiceEnabled = true;
+        public languageServiceEnabled: boolean;
 
         readonly trace?: (s: string) => void;
         readonly realpath?: (path: string) => string;
@@ -240,6 +240,8 @@ namespace ts.server {
                 this.compilerOptions.allowNonTsExtensions = true;
             }
 
+            this.languageServiceEnabled = !this.languageServicePermanentlyDisabled();
+
             this.setInternalCompilerOptionsForEmittingJsFiles();
             const host = this.projectService.host;
             if (this.projectService.logger.loggingEnabled()) {
@@ -261,6 +263,10 @@ namespace ts.server {
             }
             this.markAsDirty();
             this.projectService.pendingEnsureProjectForOpenFiles = true;
+        }
+
+        private languageServicePermanentlyDisabled() {
+            return this.compilerOptions && this.compilerOptions.disableLanguageService;
         }
 
         isKnownTypesPackageName(name: string): boolean {
@@ -506,7 +512,7 @@ namespace ts.server {
         }
 
         enableLanguageService() {
-            if (this.languageServiceEnabled) {
+            if (this.languageServiceEnabled || this.languageServicePermanentlyDisabled()) {
                 return;
             }
             this.languageServiceEnabled = true;
@@ -518,6 +524,7 @@ namespace ts.server {
             if (!this.languageServiceEnabled) {
                 return;
             }
+            Debug.assert(!this.languageServicePermanentlyDisabled());
             this.languageService.cleanupSemanticCache();
             this.languageServiceEnabled = false;
             this.lastFileExceededProgramSize = lastFileExceededProgramSize;

@@ -1472,6 +1472,11 @@ namespace ts.server.protocol {
          * `useInferredProjectPerProjectRoot` enabled.
          */
         projectRootPath?: string;
+
+        /**
+         * Disable the language service of the inferred project.
+         */
+        disableLanguageService?: boolean;
     }
 
     /**

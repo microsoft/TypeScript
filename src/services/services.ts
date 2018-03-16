@@ -1293,9 +1293,11 @@ namespace ts {
             // It needs to be cleared to allow all collected snapshots to be released
             hostCache = undefined;
 
-            // Make sure all the nodes in the program are both bound, and have their parent
-            // pointers set property.
-            program.getTypeChecker();
+            if (host.languageServiceEnabled) {
+                // Make sure all the nodes in the program are both bound, and have their parent
+                // pointers set property.
+                program.getTypeChecker();
+            }
             return;
 
             function fileExists(fileName: string) {

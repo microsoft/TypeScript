@@ -175,6 +175,8 @@ namespace ts {
         error?(s: string): void;
         useCaseSensitiveFileNames?(): boolean;
 
+        languageServiceEnabled: boolean;
+
         /*
          * LS host can optionally implement these methods to support completions for module specifiers.
          * Without these methods, only completions for ambient modules will be provided.
