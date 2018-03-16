@@ -312,6 +312,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 7 >                                    ^^^^^^^^^^^^^^^^^^^^
 8 >                                                        ^^
 9 >                                                          ^^^^
+10>                                                              ^^
 1->
   >
   >
@@ -323,6 +324,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 7 >                                    robots
 8 >                                                        
 9 >                                                          robots
+10>                                                              ) 
 1->Emitted(10, 1) Source(29, 1) + SourceIndex(0)
 2 >Emitted(10, 6) Source(29, 28) + SourceIndex(0)
 3 >Emitted(10, 16) Source(29, 34) + SourceIndex(0)
@@ -332,6 +334,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 7 >Emitted(10, 57) Source(29, 34) + SourceIndex(0)
 8 >Emitted(10, 59) Source(29, 28) + SourceIndex(0)
 9 >Emitted(10, 63) Source(29, 34) + SourceIndex(0)
+10>Emitted(10, 65) Source(29, 36) + SourceIndex(0)
 ---
 >>>    var nameA = robots_1[_i].name;
 1 >^^^^
@@ -390,6 +393,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 9 >                                   ^^^^^^^^^^^^^^
 10>                                                 ^^
 11>                                                   ^^^^
+12>                                                       ^^
 1->
   >
 2 >for (let {name: nameA } of 
@@ -402,6 +406,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 9 >                                   getRobots()
 10>                                                 
 11>                                                   getRobots()
+12>                                                       ) 
 1->Emitted(14, 1) Source(32, 1) + SourceIndex(0)
 2 >Emitted(14, 6) Source(32, 28) + SourceIndex(0)
 3 >Emitted(14, 16) Source(32, 39) + SourceIndex(0)
@@ -413,6 +418,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 9 >Emitted(14, 50) Source(32, 39) + SourceIndex(0)
 10>Emitted(14, 52) Source(32, 28) + SourceIndex(0)
 11>Emitted(14, 56) Source(32, 39) + SourceIndex(0)
+12>Emitted(14, 58) Source(32, 41) + SourceIndex(0)
 ---
 >>>    var nameA = _b[_a].name;
 1 >^^^^
@@ -489,6 +495,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 27>                                                                                                    ^^^^^^^^^^^^^^
 28>                                                                                                                  ^^
 29>                                                                                                                    ^^^^
+30>                                                                                                                        ^^
 1->
   >
 2 >for (let {name: nameA } of 
@@ -519,6 +526,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 27>                                                                                                    [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]
 28>                                                                                                                  
 29>                                                                                                                    [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]
+30>                                                                                                                        ) 
 1->Emitted(18, 1) Source(35, 1) + SourceIndex(0)
 2 >Emitted(18, 6) Source(35, 28) + SourceIndex(0)
 3 >Emitted(18, 16) Source(35, 104) + SourceIndex(0)
@@ -548,6 +556,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 27>Emitted(18, 115) Source(35, 104) + SourceIndex(0)
 28>Emitted(18, 117) Source(35, 28) + SourceIndex(0)
 29>Emitted(18, 121) Source(35, 104) + SourceIndex(0)
+30>Emitted(18, 123) Source(35, 106) + SourceIndex(0)
 ---
 >>>    var nameA = _d[_c].name;
 1 >^^^^
@@ -604,7 +613,8 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 7 >                                              ^^^^^^^^^^^^^^^^^^^^^^^^^
 8 >                                                                       ^^
 9 >                                                                         ^^^^
-10>                                                                             ^^^^^^^^^^^^->
+10>                                                                             ^^
+11>                                                                               ^^^^^^^^^^->
 1->
   >
 2 >for (let { skills: { primary: primaryA, secondary: secondaryA } } of 
@@ -615,6 +625,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 7 >                                              multiRobots
 8 >                                                                       
 9 >                                                                         multiRobots
+10>                                                                             ) 
 1->Emitted(22, 1) Source(38, 1) + SourceIndex(0)
 2 >Emitted(22, 6) Source(38, 70) + SourceIndex(0)
 3 >Emitted(22, 16) Source(38, 81) + SourceIndex(0)
@@ -624,6 +635,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 7 >Emitted(22, 72) Source(38, 81) + SourceIndex(0)
 8 >Emitted(22, 74) Source(38, 70) + SourceIndex(0)
 9 >Emitted(22, 78) Source(38, 81) + SourceIndex(0)
+10>Emitted(22, 80) Source(38, 83) + SourceIndex(0)
 ---
 >>>    var _f = multiRobots_1[_e].skills, primaryA = _f.primary, secondaryA = _f.secondary;
 1->^^^^
@@ -694,7 +706,8 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 9 >                                        ^^^^^^^^^^^^^^
 10>                                                      ^^
 11>                                                        ^^^^
-12>                                                            ^^^^^^^^^^^^^^^^^^->
+12>                                                            ^^
+13>                                                              ^^^^^^^^^^^^^^^^->
 1->
   >
 2 >for (let { skills: { primary: primaryA, secondary: secondaryA } } of 
@@ -707,6 +720,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 9 >                                        getMultiRobots()
 10>                                                      
 11>                                                        getMultiRobots()
+12>                                                            ) 
 1->Emitted(26, 1) Source(41, 1) + SourceIndex(0)
 2 >Emitted(26, 6) Source(41, 70) + SourceIndex(0)
 3 >Emitted(26, 16) Source(41, 86) + SourceIndex(0)
@@ -718,6 +732,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 9 >Emitted(26, 55) Source(41, 86) + SourceIndex(0)
 10>Emitted(26, 57) Source(41, 70) + SourceIndex(0)
 11>Emitted(26, 61) Source(41, 86) + SourceIndex(0)
+12>Emitted(26, 63) Source(41, 88) + SourceIndex(0)
 ---
 >>>    var _j = _h[_g].skills, primaryA = _j.primary, secondaryA = _j.secondary;
 1->^^^^
@@ -871,6 +886,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 21>                                                                                ^^^^^^^^^^^^^^
 22>                                                                                              ^^
 23>                                                                                                ^^^^
+24>                                                                                                    ^^
 1->,
   >    
 2 >    { 
@@ -897,6 +913,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 22>                                                                                              
 23>                                                                                                [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
   >                                                                                                    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]
+24>                                                                                                    ) 
 1->Emitted(31, 5) Source(45, 5) + SourceIndex(0)
 2 >Emitted(31, 7) Source(45, 7) + SourceIndex(0)
 3 >Emitted(31, 11) Source(45, 11) + SourceIndex(0)
@@ -920,6 +937,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 21>Emitted(31, 95) Source(45, 79) + SourceIndex(0)
 22>Emitted(31, 97) Source(44, 70) + SourceIndex(0)
 23>Emitted(31, 101) Source(45, 79) + SourceIndex(0)
+24>Emitted(31, 103) Source(45, 81) + SourceIndex(0)
 ---
 >>>    var _m = _l[_k].skills, primaryA = _m.primary, secondaryA = _m.secondary;
 1 >^^^^
@@ -989,7 +1007,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 7 >                                    ^^^^^^^^^^^^^^^^^^^^
 8 >                                                        ^^
 9 >                                                          ^^^^
-10>                                                              ^->
+10>                                                              ^^
 1->
   >
   >
@@ -1001,6 +1019,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 7 >                                    robots
 8 >                                                        
 9 >                                                          robots
+10>                                                              ) 
 1->Emitted(35, 1) Source(49, 1) + SourceIndex(0)
 2 >Emitted(35, 6) Source(49, 43) + SourceIndex(0)
 3 >Emitted(35, 16) Source(49, 49) + SourceIndex(0)
@@ -1010,23 +1029,24 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 7 >Emitted(35, 57) Source(49, 49) + SourceIndex(0)
 8 >Emitted(35, 59) Source(49, 43) + SourceIndex(0)
 9 >Emitted(35, 63) Source(49, 49) + SourceIndex(0)
+10>Emitted(35, 65) Source(49, 51) + SourceIndex(0)
 ---
 >>>    var _p = robots_2[_o], nameA = _p.name, skillA = _p.skill;
-1->^^^^
+1 >^^^^
 2 >    ^^^^
 3 >        ^^^^^^^^^^^^^^^^^
 4 >                         ^^
 5 >                           ^^^^^^^^^^^^^^^
 6 >                                          ^^
 7 >                                            ^^^^^^^^^^^^^^^^^
-1->
+1 >
 2 >    
 3 >        {name: nameA, skill: skillA }
 4 >                         
 5 >                           name: nameA
 6 >                                          , 
 7 >                                            skill: skillA
-1->Emitted(36, 5) Source(49, 10) + SourceIndex(0)
+1 >Emitted(36, 5) Source(49, 10) + SourceIndex(0)
 2 >Emitted(36, 9) Source(49, 10) + SourceIndex(0)
 3 >Emitted(36, 26) Source(49, 39) + SourceIndex(0)
 4 >Emitted(36, 28) Source(49, 11) + SourceIndex(0)
@@ -1080,7 +1100,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 9 >                                   ^^^^^^^^^^^^^^
 10>                                                 ^^
 11>                                                   ^^^^
-12>                                                       ^^->
+12>                                                       ^^
 1->
   >
 2 >for (let {name: nameA, skill: skillA } of 
@@ -1093,6 +1113,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 9 >                                   getRobots()
 10>                                                 
 11>                                                   getRobots()
+12>                                                       ) 
 1->Emitted(39, 1) Source(52, 1) + SourceIndex(0)
 2 >Emitted(39, 6) Source(52, 43) + SourceIndex(0)
 3 >Emitted(39, 16) Source(52, 54) + SourceIndex(0)
@@ -1104,23 +1125,24 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 9 >Emitted(39, 50) Source(52, 54) + SourceIndex(0)
 10>Emitted(39, 52) Source(52, 43) + SourceIndex(0)
 11>Emitted(39, 56) Source(52, 54) + SourceIndex(0)
+12>Emitted(39, 58) Source(52, 56) + SourceIndex(0)
 ---
 >>>    var _s = _r[_q], nameA = _s.name, skillA = _s.skill;
-1->^^^^
+1 >^^^^
 2 >    ^^^^
 3 >        ^^^^^^^^^^^
 4 >                   ^^
 5 >                     ^^^^^^^^^^^^^^^
 6 >                                    ^^
 7 >                                      ^^^^^^^^^^^^^^^^^
-1->
+1 >
 2 >    
 3 >        {name: nameA, skill: skillA }
 4 >                   
 5 >                     name: nameA
 6 >                                    , 
 7 >                                      skill: skillA
-1->Emitted(40, 5) Source(52, 10) + SourceIndex(0)
+1 >Emitted(40, 5) Source(52, 10) + SourceIndex(0)
 2 >Emitted(40, 9) Source(52, 10) + SourceIndex(0)
 3 >Emitted(40, 20) Source(52, 39) + SourceIndex(0)
 4 >Emitted(40, 22) Source(52, 11) + SourceIndex(0)
@@ -1192,6 +1214,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 27>                                                                                                    ^^^^^^^^^^^^^^
 28>                                                                                                                  ^^
 29>                                                                                                                    ^^^^
+30>                                                                                                                        ^^
 1->
   >
 2 >for (let {name: nameA, skill: skillA } of 
@@ -1222,6 +1245,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 27>                                                                                                    [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]
 28>                                                                                                                  
 29>                                                                                                                    [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]
+30>                                                                                                                        ) 
 1->Emitted(43, 1) Source(55, 1) + SourceIndex(0)
 2 >Emitted(43, 6) Source(55, 43) + SourceIndex(0)
 3 >Emitted(43, 16) Source(55, 119) + SourceIndex(0)
@@ -1251,6 +1275,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 27>Emitted(43, 115) Source(55, 119) + SourceIndex(0)
 28>Emitted(43, 117) Source(55, 43) + SourceIndex(0)
 29>Emitted(43, 121) Source(55, 119) + SourceIndex(0)
+30>Emitted(43, 123) Source(55, 121) + SourceIndex(0)
 ---
 >>>    var _v = _u[_t], nameA = _v.name, skillA = _v.skill;
 1 >^^^^
@@ -1319,7 +1344,8 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 7 >                                              ^^^^^^^^^^^^^^^^^^^^^^^^^
 8 >                                                                       ^^
 9 >                                                                         ^^^^
-10>                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+10>                                                                             ^^
+11>                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of 
@@ -1330,6 +1356,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 7 >                                              multiRobots
 8 >                                                                       
 9 >                                                                         multiRobots
+10>                                                                             ) 
 1->Emitted(47, 1) Source(58, 1) + SourceIndex(0)
 2 >Emitted(47, 6) Source(58, 82) + SourceIndex(0)
 3 >Emitted(47, 16) Source(58, 93) + SourceIndex(0)
@@ -1339,6 +1366,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 7 >Emitted(47, 72) Source(58, 93) + SourceIndex(0)
 8 >Emitted(47, 74) Source(58, 82) + SourceIndex(0)
 9 >Emitted(47, 78) Source(58, 93) + SourceIndex(0)
+10>Emitted(47, 80) Source(58, 95) + SourceIndex(0)
 ---
 >>>    var _x = multiRobots_2[_w], nameA = _x.name, _y = _x.skills, primaryA = _y.primary, secondaryA = _y.secondary;
 1->^^^^
@@ -1421,7 +1449,8 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 9 >                                        ^^^^^^^^^^^^^^
 10>                                                      ^^
 11>                                                        ^^^^
-12>                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+12>                                                            ^^
+13>                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of 
@@ -1434,6 +1463,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 9 >                                        getMultiRobots()
 10>                                                      
 11>                                                        getMultiRobots()
+12>                                                            ) 
 1->Emitted(51, 1) Source(61, 1) + SourceIndex(0)
 2 >Emitted(51, 6) Source(61, 82) + SourceIndex(0)
 3 >Emitted(51, 16) Source(61, 98) + SourceIndex(0)
@@ -1445,6 +1475,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 9 >Emitted(51, 55) Source(61, 98) + SourceIndex(0)
 10>Emitted(51, 57) Source(61, 82) + SourceIndex(0)
 11>Emitted(51, 61) Source(61, 98) + SourceIndex(0)
+12>Emitted(51, 63) Source(61, 100) + SourceIndex(0)
 ---
 >>>    var _1 = _0[_z], nameA = _1.name, _2 = _1.skills, primaryA = _2.primary, secondaryA = _2.secondary;
 1->^^^^
@@ -1610,7 +1641,8 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 21>                                                                                ^^^^^^^^^^^^^^
 22>                                                                                              ^^
 23>                                                                                                ^^^^
-24>                                                                                                    ^^^^->
+24>                                                                                                    ^^
+25>                                                                                                      ^^->
 1->,
   >    
 2 >    { 
@@ -1637,6 +1669,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 22>                                                                                              
 23>                                                                                                [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
   >                                                                                                    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]
+24>                                                                                                    ) 
 1->Emitted(56, 5) Source(65, 5) + SourceIndex(0)
 2 >Emitted(56, 7) Source(65, 7) + SourceIndex(0)
 3 >Emitted(56, 11) Source(65, 11) + SourceIndex(0)
@@ -1660,6 +1693,7 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 21>Emitted(56, 95) Source(65, 79) + SourceIndex(0)
 22>Emitted(56, 97) Source(64, 82) + SourceIndex(0)
 23>Emitted(56, 101) Source(65, 79) + SourceIndex(0)
+24>Emitted(56, 103) Source(65, 81) + SourceIndex(0)
 ---
 >>>    var _5 = _4[_3], nameA = _5.name, _6 = _5.skills, primaryA = _6.primary, secondaryA = _6.secondary;
 1->^^^^
