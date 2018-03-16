@@ -1,0 +1,40 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/** @param {number=} a */
+function f(a) {
+>f : (a?: number | undefined) => void
+>a : number | undefined
+
+    a = 1
+>a = 1 : 1
+>a : number | undefined
+>1 : 1
+
+    a = null // should not be allowed
+>a = null : null
+>a : number | undefined
+>null : null
+
+    a = undefined
+>a = undefined : undefined
+>a : number | undefined
+>undefined : undefined
+}
+f()
+>f() : void
+>f : (a?: number | undefined) => void
+
+f(null) // should not be allowed
+>f(null) : void
+>f : (a?: number | undefined) => void
+>null : null
+
+f(undefined)
+>f(undefined) : void
+>f : (a?: number | undefined) => void
+>undefined : undefined
+
+f(1)
+>f(1) : void
+>f : (a?: number | undefined) => void
+>1 : 1
+
