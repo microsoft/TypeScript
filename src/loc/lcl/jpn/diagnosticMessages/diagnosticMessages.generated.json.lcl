@@ -1020,6 +1020,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";All_imports_in_import_declaration_are_unused_6192" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[All imports in import declaration are unused.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[インポート宣言内のインポートはすべて未使用です。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Allow_default_imports_from_modules_with_no_default_export_This_does_not_affect_code_emit_just_typech_6011" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Allow default imports from modules with no default export. This does not affect code emit, just typechecking.]]></Val>
@@ -3549,6 +3558,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";File_is_a_CommonJS_module_it_may_be_converted_to_an_ES6_module_80001" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File is a CommonJS module; it may be converted to an ES6 module.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ファイルは CommonJS モジュールです。ES6 モジュールに変換される可能性があります。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";File_name_0_differs_from_already_included_file_name_1_only_in_casing_1149" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[File name '{0}' differs from already included file name '{1}' only in casing.]]></Val>
@@ -3987,6 +4005,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Import_may_be_converted_to_a_default_import_80003" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Import may be converted to a default import.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[インポートは既定のインポートに変換される可能性があります。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Import_name_cannot_be_0_2438" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Import name cannot be '{0}'.]]></Val>
@@ -4365,6 +4392,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";JSDoc_types_may_be_moved_to_TypeScript_types_80004" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[JSDoc types may be moved to TypeScript types.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[JSDoc の種類は TypeScript の種類に移行される可能性があります。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";JSX_attribute_expected_17003" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[JSX attribute expected.]]></Val>
@@ -4478,6 +4514,15 @@
           <Val><![CDATA[JSX fragment has no corresponding closing tag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[JSX フラグメントには対応する終了タグがありません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";JSX_fragment_is_not_supported_when_using_an_inline_JSX_factory_pragma_17017" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[JSX fragment is not supported when using an inline JSX factory pragma]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[JSX フラグメントはインライン JSX ファクトリ プラグマの使用時にサポートされていません]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4769,6 +4814,15 @@
           <Val><![CDATA[Module '{0}' has no exported member '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[モジュール '{0}' にエクスポートされたメンバー '{1}' がありません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Module_0_has_no_exported_member_1_Did_you_mean_2_2724" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Module '{0}' has no exported member '{1}'. Did you mean '{2}'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[モジュール '{0}' にエクスポートされたメンバー '{1}' が含まれていません。候補: '{2}']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6084,6 +6138,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Remove_import_from_0_90005" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove import from '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' からのインポートを削除]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Replace_import_with_0_95015" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Replace import with '{0}'.]]></Val>
@@ -6147,15 +6210,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Resolution_for_module_0_was_found_in_cache_6147" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Resolution_for_module_0_was_found_in_cache_from_location_1_6147" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Resolution for module '{0}' was found in cache.]]></Val>
+          <Val><![CDATA[Resolution for module '{0}' was found in cache from location '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[モジュール '{0}' の解決がキャッシュに見つかりました。]]></Val>
+            <Val><![CDATA[モジュール '{0}' の解決が場所 '{1}' のキャッシュに見つかりました。]]></Val>
           </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Resolution for module '{0}' was found in cache]]></Val>
-          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7389,6 +7449,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_constructor_function_may_be_converted_to_a_class_declaration_80002" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This constructor function may be converted to a class declaration.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[このコンストラクター関数はクラス宣言に変換される可能性があります。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_syntax_requires_an_imported_helper_but_module_0_cannot_be_found_2354" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This syntax requires an imported helper but module '{0}' cannot be found.]]></Val>
@@ -8261,6 +8330,15 @@
           <Val><![CDATA[Watch input files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[入力ファイルを監視します。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Whether_to_keep_outdated_console_output_in_watch_mode_instead_of_clearing_the_screen_6191" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Whether to keep outdated console output in watch mode instead of clearing the screen.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[画面をクリアする代わりに、古くなったコンソール出力をウォッチ モードで保持するかどうか。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

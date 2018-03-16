@@ -33,8 +33,8 @@ namespace ts {
         reScanTemplateToken(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
-        reScanJsxToken(): SyntaxKind;
-        scanJsxToken(): SyntaxKind;
+        reScanJsxToken(): JsxTokenSyntaxKind;
+        scanJsxToken(): JsxTokenSyntaxKind;
         scanJSDocToken(): JsDocSyntaxKind;
         scan(): SyntaxKind;
         getText(): string;
@@ -1836,12 +1836,12 @@ namespace ts {
             return token = scanTemplateAndSetTokenValue();
         }
 
-        function reScanJsxToken(): SyntaxKind {
+        function reScanJsxToken(): JsxTokenSyntaxKind {
             pos = tokenPos = startPos;
             return token = scanJsxToken();
         }
 
-        function scanJsxToken(): SyntaxKind {
+        function scanJsxToken(): JsxTokenSyntaxKind {
             startPos = tokenPos = pos;
 
             if (pos >= end) {
