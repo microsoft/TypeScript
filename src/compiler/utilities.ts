@@ -4523,7 +4523,7 @@ namespace ts {
     }
 
     /** Gets all JSDoc tags of a specified kind, or undefined if not present. */
-    export function getAllJSDocTagsOfKind(node: Node, kind: SyntaxKind): ReadonlyArray<JSDocTag> | undefined {
+    export function getAllJSDocTagsOfKind(node: Node, kind: SyntaxKind): ReadonlyArray<JSDocTag> {
         return getJSDocTags(node).filter(doc => doc.kind === kind);
     }
 }
