@@ -645,7 +645,8 @@ namespace ts {
                         const ctor = createSignatureDeclaration(
                             SyntaxKind.Constructor,
                             isPrivate ? undefined : ensureTypeParams(input, input.typeParameters),
-                            isPrivate ? undefined! : updateParamsList(input, input.parameters, ModifierFlags.None), // TODO: GH#18217
+                            // TODO: GH#18217
+                            isPrivate ? undefined! : updateParamsList(input, input.parameters, ModifierFlags.None),
                             /*type*/ undefined
                         );
                         ctor.modifiers = createNodeArray(ensureModifiers(input));

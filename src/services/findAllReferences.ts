@@ -278,7 +278,7 @@ namespace ts.FindAllReferences.Core {
             case SyntaxKind.ExportDeclaration:
                 return true;
             case SyntaxKind.CallExpression:
-                return isRequireCall(node.parent as CallExpression, /*checkArgumentIsStringLiteral*/ false) || isImportCall(node.parent as CallExpression);
+                return isRequireCall(node.parent as CallExpression, /*checkArgumentIsStringLiteralLike*/ false) || isImportCall(node.parent as CallExpression);
             default:
                 return false;
         }

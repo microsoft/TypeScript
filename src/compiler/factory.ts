@@ -1984,12 +1984,12 @@ namespace ts {
         decorators: ReadonlyArray<Decorator> | undefined,
         modifiers: ReadonlyArray<Modifier> | undefined,
         importClause: ImportClause | undefined,
-        moduleSpecifier?: Expression): ImportDeclaration {
+        moduleSpecifier: Expression): ImportDeclaration {
         const node = <ImportDeclaration>createSynthesizedNode(SyntaxKind.ImportDeclaration);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
         node.importClause = importClause;
-        node.moduleSpecifier = moduleSpecifier!; // TODO: GH#18217
+        node.moduleSpecifier = moduleSpecifier;
         return node;
     }
 

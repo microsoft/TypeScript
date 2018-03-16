@@ -2346,32 +2346,26 @@ namespace ts {
                 }
             }
 
-            let bodyLocation: TextRange | undefined;
-            let statementsLocation: TextRange | undefined;
             if (convertedLoopBodyStatements) {
-                addRange(statements, convertedLoopBodyStatements);
+                return createSyntheticBlockForConvertedStatements(addRange(statements, convertedLoopBodyStatements));
             }
             else {
                 const statement = visitNode(node.statement, visitor, isStatement, liftToBlock);
                 if (isBlock(statement)) {
-                    addRange(statements, statement.statements);
-                    bodyLocation = statement;
-                    statementsLocation = statement.statements;
+                    return updateBlock(statement, setTextRange(createNodeArray(concatenate(statements, statement.statements)), statement.statements));
                 }
                 else {
                     statements.push(statement);
+                    return createSyntheticBlockForConvertedStatements(statements);
                 }
             }
+        }
 
-            // The old emitter does not emit source maps for the block.
-            // We add the location to preserve comments.
+        function createSyntheticBlockForConvertedStatements(statements: Statement[]) {
             return setEmitFlags(
-                setTextRange(
-                    createBlock(
-                        setTextRange(createNodeArray(statements), statementsLocation),
-                        /*multiLine*/ true
-                    ),
-                    bodyLocation,
+                createBlock(
+                    createNodeArray(statements),
+                    /*multiLine*/ true
                 ),
                 EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps
             );

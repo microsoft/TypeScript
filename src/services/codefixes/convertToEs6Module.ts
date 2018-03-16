@@ -20,25 +20,22 @@ namespace ts.codefix {
 
     function fixImportOfModuleExports(importingFile: SourceFile, exportingFile: SourceFile, changes: textChanges.ChangeTracker) {
         for (const moduleSpecifier of importingFile.imports) {
-            const imported = getResolvedModule(importingFile, moduleSpecifier.text);
+            const { text } = moduleSpecifier;
+            const imported = getResolvedModule(importingFile, text);
             if (!imported || imported.resolvedFileName !== exportingFile.fileName) {
                 continue;
             }
 
-            const { parent } = moduleSpecifier;
-            switch (parent.kind) {
-                case SyntaxKind.ExternalModuleReference: {
-                    const importEq = (parent as ExternalModuleReference).parent;
-                    changes.replaceNode(importingFile, importEq, makeImport(importEq.name, /*namedImports*/ undefined, moduleSpecifier.text));
+            const importNode = importFromModuleSpecifier(moduleSpecifier);
+            switch (importNode.kind) {
+                case SyntaxKind.ImportEqualsDeclaration:
+                    changes.replaceNode(importingFile, importNode, makeImport(importNode.name, /*namedImports*/ undefined, text));
                     break;
-                }
-                case SyntaxKind.CallExpression: {
-                    const call = parent as CallExpression;
-                    if (isRequireCall(call, /*checkArgumentIsStringLiteral*/ false)) {
-                        changes.replaceNode(importingFile, parent, createPropertyAccess(getSynthesizedDeepClone(call), "default"));
+                case SyntaxKind.CallExpression:
+                    if (isRequireCall(importNode, /*checkArgumentIsStringLiteralLike*/ false)) {
+                        changes.replaceNode(importingFile, importNode, createPropertyAccess(getSynthesizedDeepClone(importNode), "default"));
                     }
                     break;
-                }
             }
         }
     }
@@ -112,7 +109,7 @@ namespace ts.codefix {
                 const { expression } = statement as ExpressionStatement;
                 switch (expression.kind) {
                     case SyntaxKind.CallExpression: {
-                        if (isRequireCall(expression, /*checkArgumentIsStringLiteral*/ true)) {
+                        if (isRequireCall(expression, /*checkArgumentIsStringLiteralLike*/ true)) {
                             // For side-effecting require() call, just make a side-effecting import.
                             changes.replaceNode(sourceFile, statement, makeImport(/*name*/ undefined, /*namedImports*/ undefined, expression.arguments[0].text));
                         }
@@ -141,11 +138,11 @@ namespace ts.codefix {
                 foundImport = true;
                 return [];
             }
-            if (isRequireCall(initializer, /*checkArgumentIsStringLiteral*/ true)) {
+            if (isRequireCall(initializer, /*checkArgumentIsStringLiteralLike*/ true)) {
                 foundImport = true;
                 return convertSingleImport(sourceFile, name, initializer.arguments[0].text, changes, checker, identifiers, target);
             }
-            else if (isPropertyAccessExpression(initializer) && isRequireCall(initializer.expression, /*checkArgumentIsStringLiteral*/ true)) {
+            else if (isPropertyAccessExpression(initializer) && isRequireCall(initializer.expression, /*checkArgumentIsStringLiteralLike*/ true)) {
                 foundImport = true;
                 return convertPropertyAccessImport(name, initializer.name.text, initializer.expression.arguments[0].text, identifiers);
             }
@@ -280,7 +277,7 @@ namespace ts.codefix {
                 return [[classExpressionToDeclaration(cls.name && cls.name.text, modifiers, cls)], true];
             }
             case SyntaxKind.CallExpression:
-                if (isRequireCall(exported, /*checkArgumentIsStringLiteral*/ true)) {
+                if (isRequireCall(exported, /*checkArgumentIsStringLiteralLike*/ true)) {
                     return convertReExportAll(exported.arguments[0], checker);
                 }
                 // falls through
