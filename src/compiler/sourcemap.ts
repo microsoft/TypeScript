@@ -67,6 +67,11 @@ namespace ts {
          * Gets test data for source maps.
          */
         getSourceMapData(): SourceMapData;
+
+        /**
+         * @returns the previous disabled state
+         */
+        setState(disabled: boolean): boolean;
     }
 
     // Used for initialize lastEncodedSourceMapSpan and reset lastEncodedSourceMapSpan when updateLastEncodedAndRecordedSpans
@@ -107,7 +112,14 @@ namespace ts {
             emitTokenWithSourceMap,
             getText,
             getSourceMappingURL,
+            setState,
         };
+
+        function setState(state: boolean) {
+            const last = disabled;
+            disabled = state;
+            return last;
+        }
 
         /**
          * Skips trivia such as comments and white-space that can optionally overriden by the source map source

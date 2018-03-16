@@ -111,8 +111,6 @@ namespace ts {
             }
 
             describe("parsesIncorrectly", () => {
-                parsesIncorrectly("emptyComment", "/***/");
-                parsesIncorrectly("threeAsterisks", "/*** */");
                 parsesIncorrectly("multipleTypes",
                         `/**
   * @type {number}
@@ -152,6 +150,8 @@ namespace ts {
             });
 
             describe("parsesCorrectly", () => {
+                parsesCorrectly("threeAsterisks", "/*** */");
+                parsesCorrectly("emptyComment", "/***/");
                 parsesCorrectly("noLeadingAsterisk",
 `/**
     @type {number}

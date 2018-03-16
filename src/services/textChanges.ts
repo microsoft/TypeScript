@@ -874,7 +874,7 @@ namespace ts.textChanges {
         let ranges = getLeadingCommentRanges(text, position);
         if (!ranges) return position;
         // However we should still skip a pinned comment at the top
-        if (ranges.length && ranges[0].kind === SyntaxKind.MultiLineCommentTrivia && isPinnedComment(text, ranges[0])) {
+        if (ranges.length && ranges[0].kind === SyntaxKind.MultiLineCommentTrivia && isPinnedComment(text, ranges[0].pos)) {
             position = ranges[0].end;
             advancePastLineBreak();
             ranges = ranges.slice(1);

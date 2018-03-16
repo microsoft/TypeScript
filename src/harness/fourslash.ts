@@ -3340,7 +3340,9 @@ ${code}
         let currentFileOptions: { [s: string]: string } = {};
 
         function nextFile() {
-            const file = parseFileContent(currentFileContent!, currentFileName, markerPositions, markers, ranges);
+            if (currentFileContent === undefined) return;
+
+            const file = parseFileContent(currentFileContent, currentFileName, markerPositions, markers, ranges);
             file.fileOptions = currentFileOptions;
             file.symlinks = currentFileSymlinks;
 
@@ -3354,25 +3356,13 @@ ${code}
         }
 
         for (let line of lines) {
-            const lineLength = line.length;
-
-            if (lineLength > 0 && line.charAt(lineLength - 1) === "\r") {
-                line = line.substr(0, lineLength - 1);
+            if (line.length > 0 && line.charAt(line.length - 1) === "\r") {
+                line = line.substr(0, line.length - 1);
             }
 
             if (line.substr(0, 4) === "////") {
-                // Subfile content line
-
-                // Append to the current subfile content, inserting a newline needed
-                if (currentFileContent === undefined) {
-                    currentFileContent = "";
-                }
-                else {
-                    // End-of-line
-                    currentFileContent = currentFileContent + "\n";
-                }
-
-                currentFileContent = currentFileContent + line.substr(4);
+                const text = line.substr(4);
+                currentFileContent = currentFileContent === undefined ? text : currentFileContent + "\n" + text;
             }
             else if (line.substr(0, 2) === "//") {
                 // Comment line, check for global/file @options and record them
@@ -3390,10 +3380,7 @@ ${code}
                         switch (key) {
                             case MetadataOptionNames.fileName:
                                 // Found an @FileName directive, if this is not the first then create a new subfile
-                                if (currentFileContent) {
-                                    nextFile();
-                                }
-
+                                nextFile();
                                 currentFileName = ts.isRootedDiskPath(value) ? value : basePath + "/" + value;
                                 currentFileOptions[key] = value;
                                 break;
@@ -3407,15 +3394,11 @@ ${code}
                     }
                 }
             }
-            else if (line === "" || lineLength === 0) {
-                // Previously blank lines between fourslash content caused it to be considered as 2 files,
-                // Remove this behavior since it just causes errors now
-            }
-            else {
-                // Empty line or code line, terminate current subfile if there is one
-                if (currentFileContent) {
-                    nextFile();
-                }
+            // Previously blank lines between fourslash content caused it to be considered as 2 files,
+            // Remove this behavior since it just causes errors now
+            else if (line !== "") {
+                // Code line, terminate current subfile if there is one
+                nextFile();
             }
         }
 

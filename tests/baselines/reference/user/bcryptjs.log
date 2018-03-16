@@ -5,8 +5,6 @@ Standard output:
 ../../../../node_modules/@types/node/index.d.ts(174,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Buffer' must be of type '(s: string) => void', but here has type '{ new (str: string, encoding?: string | undefined): Buffer; new (size: number): Buffer; new (arra...'.
 node_modules/bcryptjs/dist/bcrypt.js(37,16): error TS2345: Argument of type 'never[]' is not assignable to parameter of type 'string'.
 node_modules/bcryptjs/dist/bcrypt.js(134,18): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
-node_modules/bcryptjs/dist/bcrypt.js(141,13): error TS2322: Type 'undefined' is not assignable to type 'number | ((arg0: Error, arg1?: string) => any)'.
-node_modules/bcryptjs/dist/bcrypt.js(144,13): error TS2322: Type 'undefined' is not assignable to type 'number | ((arg0: Error, arg1?: string) => any)'.
 node_modules/bcryptjs/dist/bcrypt.js(165,24): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
 node_modules/bcryptjs/dist/bcrypt.js(190,9): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
   Type 'undefined' is not assignable to type 'string'.
@@ -15,7 +13,6 @@ node_modules/bcryptjs/dist/bcrypt.js(222,24): error TS2693: 'Promise' only refer
 node_modules/bcryptjs/dist/bcrypt.js(278,18): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
 node_modules/bcryptjs/dist/bcrypt.js(306,24): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
 node_modules/bcryptjs/dist/bcrypt.js(348,25): error TS8028: JSDoc '...' may only appear in the last parameter of a signature.
-node_modules/bcryptjs/dist/bcrypt.js(348,34): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/bcryptjs/dist/bcrypt.js(401,9): error TS2322: Type '(...codes: number[]) => string' is not assignable to type '(arg0: number | undefined) => string'.
   Types of parameters 'codes' and 'arg0' are incompatible.
     Type 'number | undefined' is not assignable to type 'number'.
@@ -32,12 +29,10 @@ node_modules/bcryptjs/dist/bcrypt.js(1203,26): error TS2345: Argument of type 'n
 node_modules/bcryptjs/dist/bcrypt.js(1233,30): error TS2345: Argument of type 'null' is not assignable to parameter of type 'Error'.
 node_modules/bcryptjs/dist/bcrypt.js(1345,27): error TS2345: Argument of type 'number[] | undefined' is not assignable to parameter of type 'number[]'.
   Type 'undefined' is not assignable to type 'number[]'.
-node_modules/bcryptjs/dist/bcrypt.js(1351,35): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string'.
+node_modules/bcryptjs/dist/bcrypt.js(1351,35): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
 node_modules/bcryptjs/dist/bcrypt.js(1353,30): error TS2345: Argument of type 'null' is not assignable to parameter of type 'Error'.
-node_modules/bcryptjs/dist/bcrypt.js(1361,33): error TS8024: JSDoc '@param' tag has name 'b', but there is no parameter with that name.
-node_modules/bcryptjs/dist/bcrypt.js(1362,24): error TS8024: JSDoc '@param' tag has name 'len', but there is no parameter with that name.
-node_modules/bcryptjs/dist/bcrypt.js(1371,24): error TS8024: JSDoc '@param' tag has name 's', but there is no parameter with that name.
-node_modules/bcryptjs/dist/bcrypt.js(1372,24): error TS8024: JSDoc '@param' tag has name 'len', but there is no parameter with that name.
+node_modules/bcryptjs/dist/bcrypt.js(1353,43): error TS2345: Argument of type 'number[] | undefined' is not assignable to parameter of type 'number[]'.
+  Type 'undefined' is not assignable to type 'number[]'.
 node_modules/bcryptjs/externs/bcrypt.js(36,14): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/bcryptjs/externs/bcrypt.js(50,14): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/bcryptjs/externs/bcrypt.js(65,14): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
@@ -73,8 +68,6 @@ node_modules/bcryptjs/scripts/build.js(36,16): error TS2339: Property 'transform
 node_modules/bcryptjs/scripts/build.js(36,29): error TS2339: Property 'readFileSync' does not exist on type 'void'.
 node_modules/bcryptjs/scripts/build.js(36,58): error TS2339: Property 'join' does not exist on type 'void'.
 node_modules/bcryptjs/src/bcrypt.js(94,14): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
-node_modules/bcryptjs/src/bcrypt.js(101,9): error TS2322: Type 'undefined' is not assignable to type 'number | ((arg0: Error, arg1?: string) => any)'.
-node_modules/bcryptjs/src/bcrypt.js(104,9): error TS2322: Type 'undefined' is not assignable to type 'number | ((arg0: Error, arg1?: string) => any)'.
 node_modules/bcryptjs/src/bcrypt.js(125,20): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
 node_modules/bcryptjs/src/bcrypt.js(150,5): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
   Type 'undefined' is not assignable to type 'string'.
@@ -82,17 +75,15 @@ node_modules/bcryptjs/src/bcrypt.js(160,14): error TS2366: Function lacks ending
 node_modules/bcryptjs/src/bcrypt.js(182,20): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
 node_modules/bcryptjs/src/bcrypt.js(238,14): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
 node_modules/bcryptjs/src/bcrypt.js(266,20): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
-node_modules/bcryptjs/src/bcrypt.js(312,29): error TS8024: JSDoc '@param' tag has name 'b', but there is no parameter with that name.
-node_modules/bcryptjs/src/bcrypt.js(313,20): error TS8024: JSDoc '@param' tag has name 'len', but there is no parameter with that name.
-node_modules/bcryptjs/src/bcrypt.js(322,20): error TS8024: JSDoc '@param' tag has name 's', but there is no parameter with that name.
-node_modules/bcryptjs/src/bcrypt.js(323,20): error TS8024: JSDoc '@param' tag has name 'len', but there is no parameter with that name.
 node_modules/bcryptjs/src/bcrypt/impl.js(516,22): error TS2345: Argument of type 'number[] | Int32Array' is not assignable to parameter of type 'number[]'.
   Type 'Int32Array' is not assignable to type 'number[]'.
 node_modules/bcryptjs/src/bcrypt/impl.js(546,26): error TS2345: Argument of type 'null' is not assignable to parameter of type 'Error'.
 node_modules/bcryptjs/src/bcrypt/impl.js(658,23): error TS2345: Argument of type 'number[] | undefined' is not assignable to parameter of type 'number[]'.
   Type 'undefined' is not assignable to type 'number[]'.
-node_modules/bcryptjs/src/bcrypt/impl.js(664,31): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string'.
+node_modules/bcryptjs/src/bcrypt/impl.js(664,31): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
 node_modules/bcryptjs/src/bcrypt/impl.js(666,26): error TS2345: Argument of type 'null' is not assignable to parameter of type 'Error'.
+node_modules/bcryptjs/src/bcrypt/impl.js(666,39): error TS2345: Argument of type 'number[] | undefined' is not assignable to parameter of type 'number[]'.
+  Type 'undefined' is not assignable to type 'number[]'.
 node_modules/bcryptjs/src/bcrypt/prng/accum.js(51,74): error TS2339: Property 'attachEvent' does not exist on type 'Document'.
 node_modules/bcryptjs/src/bcrypt/prng/accum.js(52,22): error TS2339: Property 'attachEvent' does not exist on type 'Document'.
 node_modules/bcryptjs/src/bcrypt/prng/accum.js(53,22): error TS2339: Property 'attachEvent' does not exist on type 'Document'.
@@ -100,7 +91,6 @@ node_modules/bcryptjs/src/bcrypt/prng/accum.js(65,74): error TS2339: Property 'd
 node_modules/bcryptjs/src/bcrypt/prng/accum.js(66,22): error TS2339: Property 'detachEvent' does not exist on type 'Document'.
 node_modules/bcryptjs/src/bcrypt/prng/accum.js(67,22): error TS2339: Property 'detachEvent' does not exist on type 'Document'.
 node_modules/bcryptjs/src/bcrypt/util.js(4,21): error TS8028: JSDoc '...' may only appear in the last parameter of a signature.
-node_modules/bcryptjs/src/bcrypt/util.js(4,30): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/bcryptjs/src/bcrypt/util.js(20,5): error TS2304: Cannot find name 'utfx'.
 node_modules/bcryptjs/src/bcrypt/util/base64.js(29,5): error TS2322: Type '(...codes: number[]) => string' is not assignable to type '(arg0: number | undefined) => string'.
   Types of parameters 'codes' and 'arg0' are incompatible.

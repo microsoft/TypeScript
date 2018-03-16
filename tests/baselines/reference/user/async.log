@@ -1,71 +1,43 @@
 Exit Code: 1
 Standard output:
-node_modules/async/all.js(31,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
 node_modules/async/all.js(32,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/all.js(32,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/all.js(36,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/all.js(49,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/all"'.
 node_modules/async/all.js(49,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/all.js(49,46): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/all.js(50,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/allLimit.js(31,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/allLimit.js(32,20): error TS8024: JSDoc '@param' tag has name 'limit', but there is no parameter with that name.
 node_modules/async/allLimit.js(33,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/allLimit.js(33,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/allLimit.js(37,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/allLimit.js(41,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/allLimit"'.
 node_modules/async/allLimit.js(41,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/allLimit.js(41,51): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/allLimit.js(42,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/allSeries.js(27,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
 node_modules/async/allSeries.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/allSeries.js(28,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/allSeries.js(32,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/allSeries.js(36,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/allSeries"'.
 node_modules/async/allSeries.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/allSeries.js(37,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/any.js(32,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
 node_modules/async/any.js(33,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/any.js(33,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/any.js(37,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/any.js(51,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/any"'.
 node_modules/async/any.js(51,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/any.js(51,46): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/any.js(52,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/anyLimit.js(31,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/anyLimit.js(32,20): error TS8024: JSDoc '@param' tag has name 'limit', but there is no parameter with that name.
 node_modules/async/anyLimit.js(33,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/anyLimit.js(33,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/anyLimit.js(37,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/anyLimit.js(42,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/anyLimit"'.
 node_modules/async/anyLimit.js(42,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/anyLimit.js(42,51): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/anyLimit.js(43,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/anySeries.js(27,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
 node_modules/async/anySeries.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/anySeries.js(28,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/anySeries.js(32,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/anySeries.js(37,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/anySeries"'.
 node_modules/async/anySeries.js(37,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/anySeries.js(38,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/async/apply.js(7,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/apply"'.
 node_modules/async/apply.js(8,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/apply.js(10,25): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/apply.js(35,22): error TS8024: JSDoc '@param' tag has name 'fn', but there is no parameter with that name.
-node_modules/async/apply.js(37,18): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
 node_modules/async/apply.js(37,28): error TS1003: Identifier expected.
 node_modules/async/apply.js(37,29): error TS1003: Identifier expected.
 node_modules/async/apply.js(37,30): error TS1003: Identifier expected.
 node_modules/async/apply.js(68,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/applyEach.js(29,35): error TS8024: JSDoc '@param' tag has name 'fns', but there is no parameter with that name.
-node_modules/async/applyEach.js(31,19): error TS8024: JSDoc '@param' tag has name 'args', but there is no parameter with that name.
-node_modules/async/applyEach.js(33,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/applyEach.js(50,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/applyEach"'.
 node_modules/async/applyEach.js(50,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/applyEach.js(51,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/applyEachSeries.js(26,35): error TS8024: JSDoc '@param' tag has name 'fns', but there is no parameter with that name.
-node_modules/async/applyEachSeries.js(28,19): error TS8024: JSDoc '@param' tag has name 'args', but there is no parameter with that name.
-node_modules/async/applyEachSeries.js(30,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/applyEachSeries.js(36,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/applyEachSeries"'.
 node_modules/async/applyEachSeries.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/applyEachSeries.js(37,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
@@ -110,12 +82,8 @@ node_modules/async/cargo.js(94,1): error TS2309: An export assignment cannot be 
 node_modules/async/compose.js(7,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/compose"'.
 node_modules/async/compose.js(8,37): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/compose.js(36,15): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/compose.js(36,30): error TS8024: JSDoc '@param' tag has name 'functions', but there is no parameter with that name.
 node_modules/async/compose.js(58,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/concat.js(29,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
 node_modules/async/concat.js(30,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/concat.js(30,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/concat.js(32,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/concat.js(32,31): error TS1005: ']' expected.
 node_modules/async/concat.js(42,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/concat"'.
 node_modules/async/concat.js(42,20): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -124,54 +92,34 @@ node_modules/async/concatLimit.js(7,9): error TS2339: Property 'default' does no
 node_modules/async/concatLimit.js(9,22): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/concatLimit.js(10,6): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/concatLimit.js(13,36): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/concatLimit.js(56,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/concatLimit.js(57,20): error TS8024: JSDoc '@param' tag has name 'limit', but there is no parameter with that name.
 node_modules/async/concatLimit.js(58,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/concatLimit.js(58,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/concatLimit.js(60,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/concatLimit.js(65,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/concatSeries.js(26,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
 node_modules/async/concatSeries.js(27,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/concatSeries.js(27,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/concatSeries.js(30,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/concatSeries.js(30,31): error TS1005: ']' expected.
 node_modules/async/concatSeries.js(35,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/concatSeries"'.
 node_modules/async/concatSeries.js(35,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/concatSeries.js(36,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/async/constant.js(7,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/constant"'.
 node_modules/async/constant.js(8,19): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/constant.js(34,18): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
 node_modules/async/constant.js(34,28): error TS1003: Identifier expected.
 node_modules/async/constant.js(34,29): error TS1003: Identifier expected.
 node_modules/async/constant.js(34,30): error TS1003: Identifier expected.
 node_modules/async/constant.js(66,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/detect.js(41,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
 node_modules/async/detect.js(42,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/detect.js(42,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/detect.js(45,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/detect.js(60,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/detect"'.
 node_modules/async/detect.js(60,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/detect.js(60,46): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/detect.js(61,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/detectLimit.js(36,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/detectLimit.js(37,20): error TS8024: JSDoc '@param' tag has name 'limit', but there is no parameter with that name.
 node_modules/async/detectLimit.js(38,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/detectLimit.js(38,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/detectLimit.js(41,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/detectLimit.js(47,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/detectLimit"'.
 node_modules/async/detectLimit.js(47,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/detectLimit.js(47,51): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/detectLimit.js(48,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/detectSeries.js(27,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
 node_modules/async/detectSeries.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/detectSeries.js(28,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/detectSeries.js(31,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/detectSeries.js(37,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/detectSeries"'.
 node_modules/async/detectSeries.js(37,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/detectSeries.js(38,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/async/dir.js(26,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/dir.js(26,27): error TS8024: JSDoc '@param' tag has name 'function', but there is no parameter with that name.
-node_modules/async/dir.js(28,18): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
 node_modules/async/dir.js(28,28): error TS1003: Identifier expected.
 node_modules/async/dir.js(28,29): error TS1003: Identifier expected.
 node_modules/async/dir.js(28,30): error TS1003: Identifier expected.
@@ -181,7 +129,7 @@ node_modules/async/dir.js(43,1): error TS2309: An export assignment cannot be us
 node_modules/async/dist/async.js(3,10): error TS2304: Cannot find name 'define'.
 node_modules/async/dist/async.js(3,35): error TS2304: Cannot find name 'define'.
 node_modules/async/dist/async.js(3,48): error TS2304: Cannot find name 'define'.
-node_modules/async/dist/async.js(31,18): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/async/dist/async.js(31,18): error TS8029: JSDoc '@param' tag has name '', but there is no parameter with that name. It would match 'arguments' if it had an array type.
 node_modules/async/dist/async.js(31,28): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(31,29): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(31,30): error TS1003: Identifier expected.
@@ -189,39 +137,37 @@ node_modules/async/dist/async.js(228,40): error TS2339: Property 'toStringTag' d
 node_modules/async/dist/async.js(257,56): error TS2339: Property 'Object' does not exist on type 'Window'.
 node_modules/async/dist/async.js(298,7): error TS2454: Variable 'unmasked' is used before being assigned.
 node_modules/async/dist/async.js(477,61): error TS2339: Property 'iterator' does not exist on type 'never'.
-node_modules/async/dist/async.js(560,15): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
-node_modules/async/dist/async.js(583,15): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
 node_modules/async/dist/async.js(622,80): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
-node_modules/async/dist/async.js(640,15): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
 node_modules/async/dist/async.js(745,84): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
 node_modules/async/dist/async.js(751,49): error TS2339: Property 'process' does not exist on type 'false | Global'.
   Property 'process' does not exist on type 'false'.
-node_modules/async/dist/async.js(770,15): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
 node_modules/async/dist/async.js(912,32): error TS2554: Expected 2 arguments, but got 1.
-node_modules/async/dist/async.js(1152,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/dist/async.js(1153,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(1157,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(1180,35): error TS8024: JSDoc '@param' tag has name 'fns', but there is no parameter with that name.
-node_modules/async/dist/async.js(1182,19): error TS8024: JSDoc '@param' tag has name 'args', but there is no parameter with that name.
-node_modules/async/dist/async.js(1184,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(1218,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/dist/async.js(1219,20): error TS8024: JSDoc '@param' tag has name 'limit', but there is no parameter with that name.
-node_modules/async/dist/async.js(1220,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(1224,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(1239,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/dist/async.js(1240,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(1244,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(1259,35): error TS8024: JSDoc '@param' tag has name 'fns', but there is no parameter with that name.
-node_modules/async/dist/async.js(1261,19): error TS8024: JSDoc '@param' tag has name 'args', but there is no parameter with that name.
-node_modules/async/dist/async.js(1263,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(1322,20): error TS8024: JSDoc '@param' tag has name 'object', but there is no parameter with that name.
-node_modules/async/dist/async.js(1323,22): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(1324,22): error TS8024: JSDoc '@param' tag has name 'keysFunc', but there is no parameter with that name.
-node_modules/async/dist/async.js(1495,9): error TS2322: Type 'null' is not assignable to type 'number'.
+node_modules/async/dist/async.js(1285,18): error TS2532: Object is possibly 'undefined'.
+node_modules/async/dist/async.js(1289,3): error TS2322: Type 'any[] | undefined' is not assignable to type 'any[]'.
+  Type 'undefined' is not assignable to type 'any[]'.
+node_modules/async/dist/async.js(1495,9): error TS2322: Type 'null' is not assignable to type 'number | undefined'.
+node_modules/async/dist/async.js(1564,20): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/async/dist/async.js(1566,51): error TS2532: Object is possibly 'undefined'.
+node_modules/async/dist/async.js(1608,17): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/async/dist/async.js(1673,30): error TS2532: Object is possibly 'undefined'.
+node_modules/async/dist/async.js(1747,7): error TS2532: Object is possibly 'undefined'.
+node_modules/async/dist/async.js(1748,14): error TS2532: Object is possibly 'undefined'.
+node_modules/async/dist/async.js(1748,45): error TS2532: Object is possibly 'undefined'.
+node_modules/async/dist/async.js(1750,9): error TS2532: Object is possibly 'undefined'.
+node_modules/async/dist/async.js(1751,7): error TS2532: Object is possibly 'undefined'.
+node_modules/async/dist/async.js(1752,5): error TS2532: Object is possibly 'undefined'.
+node_modules/async/dist/async.js(1754,12): error TS2532: Object is possibly 'undefined'.
+node_modules/async/dist/async.js(1754,20): error TS2532: Object is possibly 'undefined'.
+node_modules/async/dist/async.js(1754,32): error TS2532: Object is possibly 'undefined'.
+node_modules/async/dist/async.js(1754,38): error TS2532: Object is possibly 'undefined'.
+node_modules/async/dist/async.js(1755,3): error TS2532: Object is possibly 'undefined'.
+node_modules/async/dist/async.js(1759,35): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(1937,10): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(1937,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
 node_modules/async/dist/async.js(1976,16): error TS2554: Expected 3 arguments, but got 1.
-node_modules/async/dist/async.js(2102,20): error TS2345: Argument of type 'Function' is not assignable to parameter of type 'number'.
+node_modules/async/dist/async.js(2102,20): error TS2345: Argument of type 'Function | undefined' is not assignable to parameter of type 'number | undefined'.
+  Type 'Function' is not assignable to type 'number | undefined'.
+    Type 'Function' is not assignable to type 'number'.
 node_modules/async/dist/async.js(2126,5): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(2141,5): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(2150,5): error TS2532: Object is possibly 'undefined'.
@@ -235,85 +181,36 @@ node_modules/async/dist/async.js(2344,20): error TS2532: Object is possibly 'und
 node_modules/async/dist/async.js(2411,20): error TS1005: '}' expected.
 node_modules/async/dist/async.js(2436,5): error TS2322: Type '{ [x: string]: any; _tasks: { head: null | undefined; tail: null | undefined; length: number | un...' is not assignable to type 'NodeModule'.
   Property 'exports' is missing in type '{ [x: string]: any; _tasks: { head: null | undefined; tail: null | undefined; length: number | un...'.
-node_modules/async/dist/async.js(2449,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/dist/async.js(2450,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(2453,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(2524,30): error TS8024: JSDoc '@param' tag has name 'functions', but there is no parameter with that name.
-node_modules/async/dist/async.js(2550,31): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
-  Property 'push' is missing in type 'IArguments'.
-node_modules/async/dist/async.js(2587,30): error TS8024: JSDoc '@param' tag has name 'functions', but there is no parameter with that name.
-node_modules/async/dist/async.js(2665,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/dist/async.js(2666,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(2668,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
+node_modules/async/dist/async.js(2507,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/async/dist/async.js(2550,31): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[] | undefined'.
+  Type 'IArguments' is not assignable to type 'any[]'.
+    Property 'push' is missing in type 'IArguments'.
+node_modules/async/dist/async.js(2649,16): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(2668,31): error TS1005: ']' expected.
-node_modules/async/dist/async.js(2689,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/dist/async.js(2690,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(2693,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/dist/async.js(2693,31): error TS1005: ']' expected.
-node_modules/async/dist/async.js(2710,18): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
 node_modules/async/dist/async.js(2710,28): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(2710,29): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(2710,30): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(2818,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/dist/async.js(2819,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(2822,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(2850,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/dist/async.js(2851,20): error TS8024: JSDoc '@param' tag has name 'limit', but there is no parameter with that name.
-node_modules/async/dist/async.js(2852,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(2855,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(2873,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/dist/async.js(2874,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(2877,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(2919,27): error TS8024: JSDoc '@param' tag has name 'function', but there is no parameter with that name.
-node_modules/async/dist/async.js(2921,18): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
 node_modules/async/dist/async.js(2921,28): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(2921,29): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(2921,30): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(3195,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/dist/async.js(3196,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(3201,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(3274,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/dist/async.js(3275,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(3279,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(3304,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/dist/async.js(3305,20): error TS8024: JSDoc '@param' tag has name 'limit', but there is no parameter with that name.
-node_modules/async/dist/async.js(3306,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(3310,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(3326,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/dist/async.js(3327,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(3331,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(3407,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/dist/async.js(3408,22): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(3411,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(3436,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/dist/async.js(3437,20): error TS8024: JSDoc '@param' tag has name 'limit', but there is no parameter with that name.
-node_modules/async/dist/async.js(3438,22): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(3441,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(3456,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/dist/async.js(3457,22): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(3460,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(3570,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/dist/async.js(3571,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(3575,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(3601,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/dist/async.js(3602,20): error TS8024: JSDoc '@param' tag has name 'limit', but there is no parameter with that name.
-node_modules/async/dist/async.js(3603,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(3607,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(3624,27): error TS8024: JSDoc '@param' tag has name 'function', but there is no parameter with that name.
-node_modules/async/dist/async.js(3626,18): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/async/dist/async.js(2963,25): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/async/dist/async.js(2970,25): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/async/dist/async.js(2971,28): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/async/dist/async.js(3005,25): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/async/dist/async.js(3008,9): error TS2532: Object is possibly 'undefined'.
+node_modules/async/dist/async.js(3008,9): error TS2684: The 'this' context of type 'Function | undefined' is not assignable to method's 'this' of type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/async/dist/async.js(3081,25): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/async/dist/async.js(3086,25): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/async/dist/async.js(3087,28): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/async/dist/async.js(3550,16): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(3626,28): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3626,29): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3626,30): error TS1003: Identifier expected.
-node_modules/async/dist/async.js(3696,20): error TS8024: JSDoc '@param' tag has name 'obj', but there is no parameter with that name.
-node_modules/async/dist/async.js(3697,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(3701,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(3734,20): error TS8024: JSDoc '@param' tag has name 'obj', but there is no parameter with that name.
-node_modules/async/dist/async.js(3735,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(3739,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
+node_modules/async/dist/async.js(3674,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(3813,14): error TS2339: Property 'memo' does not exist on type '(...args: any[]) => void'.
 node_modules/async/dist/async.js(3814,14): error TS2339: Property 'unmemoized' does not exist on type '(...args: any[]) => void'.
-node_modules/async/dist/async.js(3832,22): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(3834,18): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
 node_modules/async/dist/async.js(3834,23): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3834,24): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3834,25): error TS1003: Identifier expected.
@@ -331,43 +228,32 @@ node_modules/async/dist/async.js(4153,14): error TS2339: Property 'unshift' does
 node_modules/async/dist/async.js(4367,5): error TS2322: Type 'any[] | {}' is not assignable to type 'any[]'.
   Type '{}' is not assignable to type 'any[]'.
     Property 'length' is missing in type '{}'.
-node_modules/async/dist/async.js(4387,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/dist/async.js(4388,22): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(4392,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(4417,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/dist/async.js(4418,20): error TS8024: JSDoc '@param' tag has name 'limit', but there is no parameter with that name.
-node_modules/async/dist/async.js(4419,22): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(4423,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(4437,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/dist/async.js(4438,22): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(4442,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(4735,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/dist/async.js(4736,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(4740,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(4766,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/dist/async.js(4767,20): error TS8024: JSDoc '@param' tag has name 'limit', but there is no parameter with that name.
-node_modules/async/dist/async.js(4768,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(4772,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(4789,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/dist/async.js(4790,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(4794,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
+node_modules/async/dist/async.js(4603,17): error TS2532: Object is possibly 'undefined'.
+node_modules/async/dist/async.js(4603,17): error TS2684: The 'this' context of type 'Function | undefined' is not assignable to method's 'this' of type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
 node_modules/async/dist/async.js(4915,32): error TS2339: Property 'name' does not exist on type 'Function'.
 node_modules/async/dist/async.js(4917,19): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/async/dist/async.js(4919,23): error TS2339: Property 'info' does not exist on type 'Error'.
-node_modules/async/dist/async.js(4996,20): error TS8024: JSDoc '@param' tag has name 'n', but there is no parameter with that name.
-node_modules/async/dist/async.js(4997,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(4999,22): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/dist/async.js(5029,20): error TS8024: JSDoc '@param' tag has name 'n', but there is no parameter with that name.
-node_modules/async/dist/async.js(5030,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/dist/async.js(5032,22): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
+node_modules/async/dist/async.js(5090,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/async/dist/async.js(5146,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(5165,20): error TS2339: Property 'unmemoized' does not exist on type 'Function'.
+node_modules/async/dist/async.js(5208,25): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/async/dist/async.js(5211,9): error TS2532: Object is possibly 'undefined'.
+node_modules/async/dist/async.js(5211,9): error TS2684: The 'this' context of type 'Function | undefined' is not assignable to method's 'this' of type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/async/dist/async.js(5315,20): error TS2532: Object is possibly 'undefined'.
+node_modules/async/dist/async.js(5315,20): error TS2684: The 'this' context of type 'Function | undefined' is not assignable to method's 'this' of type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
 node_modules/async/doDuring.js(6,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/doDuring"'.
 node_modules/async/doDuring.js(37,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/doDuring.js(39,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/doDuring.js(47,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/doDuring.js(48,16): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/doDuring.js(49,18): error TS2695: Left side of comma operator is unused and has no side effects.
+node_modules/async/doDuring.js(52,25): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/doDuring.js(53,21): error TS2695: Left side of comma operator is unused and has no side effects.
+node_modules/async/doDuring.js(59,25): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/async/doDuring.js(60,28): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/doDuring.js(66,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/async/doUntil.js(6,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/doUntil"'.
 node_modules/async/doUntil.js(24,12): error TS2304: Cannot find name 'AsyncFunction'.
@@ -377,7 +263,11 @@ node_modules/async/doWhilst.js(6,9): error TS2339: Property 'default' does not e
 node_modules/async/doWhilst.js(38,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/doWhilst.js(49,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/doWhilst.js(50,22): error TS2695: Left side of comma operator is unused and has no side effects.
+node_modules/async/doWhilst.js(52,25): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/doWhilst.js(53,21): error TS2695: Left side of comma operator is unused and has no side effects.
+node_modules/async/doWhilst.js(55,9): error TS2532: Object is possibly 'undefined'.
+node_modules/async/doWhilst.js(55,9): error TS2684: The 'this' context of type 'Function | undefined' is not assignable to method's 'this' of type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
 node_modules/async/doWhilst.js(59,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/async/during.js(6,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/during"'.
 node_modules/async/during.js(34,12): error TS2304: Cannot find name 'AsyncFunction'.
@@ -385,6 +275,9 @@ node_modules/async/during.js(36,12): error TS2304: Cannot find name 'AsyncFuncti
 node_modules/async/during.js(59,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/during.js(60,16): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/during.js(61,18): error TS2695: Left side of comma operator is unused and has no side effects.
+node_modules/async/during.js(64,25): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/async/during.js(69,25): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/async/during.js(70,28): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/during.js(76,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/async/each.js(6,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/each"'.
 node_modules/async/each.js(39,12): error TS2304: Cannot find name 'AsyncFunction'.
@@ -404,27 +297,18 @@ node_modules/async/eachOf.js(9,33): error TS2695: Left side of comma operator is
 node_modules/async/eachOf.js(48,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/eachOf.js(65,39): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/eachOf.js(70,22): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/eachOf.js(83,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
 node_modules/async/eachOf.js(84,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/eachOf.js(84,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/eachOf.js(88,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/eachOf.js(111,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/async/eachOfLimit.js(6,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/eachOfLimit"'.
 node_modules/async/eachOfLimit.js(31,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/eachOfLimit.js(39,4): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/eachOfLimit.js(39,44): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/eachOfLimit.js(41,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/eachOfSeries.js(27,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
 node_modules/async/eachOfSeries.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/eachOfSeries.js(28,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/eachOfSeries.js(31,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/eachOfSeries.js(34,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/eachOfSeries"'.
 node_modules/async/eachOfSeries.js(34,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/eachOfSeries.js(35,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/eachSeries.js(27,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
 node_modules/async/eachSeries.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/eachSeries.js(28,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/eachSeries.js(33,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/eachSeries.js(36,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/eachSeries"'.
 node_modules/async/eachSeries.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/eachSeries.js(37,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
@@ -437,70 +321,40 @@ node_modules/async/ensureAsync.js(56,10): error TS2695: Left side of comma opera
 node_modules/async/ensureAsync.js(57,13): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/ensureAsync.js(62,18): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/ensureAsync.js(73,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/every.js(31,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
 node_modules/async/every.js(32,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/every.js(32,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/every.js(36,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/every.js(49,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/every"'.
 node_modules/async/every.js(49,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/every.js(49,46): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/every.js(50,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/everyLimit.js(31,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/everyLimit.js(32,20): error TS8024: JSDoc '@param' tag has name 'limit', but there is no parameter with that name.
 node_modules/async/everyLimit.js(33,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/everyLimit.js(33,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/everyLimit.js(37,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/everyLimit.js(41,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/everyLimit"'.
 node_modules/async/everyLimit.js(41,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/everyLimit.js(41,51): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/everyLimit.js(42,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/everySeries.js(27,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
 node_modules/async/everySeries.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/everySeries.js(28,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/everySeries.js(32,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/everySeries.js(36,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/everySeries"'.
 node_modules/async/everySeries.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/everySeries.js(37,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/filter.js(28,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/filter.js(29,22): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/filter.js(32,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/filter.js(44,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/filter"'.
 node_modules/async/filter.js(44,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/filter.js(45,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/filterLimit.js(28,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/filterLimit.js(29,20): error TS8024: JSDoc '@param' tag has name 'limit', but there is no parameter with that name.
-node_modules/async/filterLimit.js(30,22): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/filterLimit.js(33,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/filterLimit.js(36,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/filterLimit"'.
 node_modules/async/filterLimit.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/filterLimit.js(37,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/filterSeries.js(27,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/filterSeries.js(28,22): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/filterSeries.js(31,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/filterSeries.js(34,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/filterSeries"'.
 node_modules/async/filterSeries.js(34,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/filterSeries.js(35,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/find.js(41,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
 node_modules/async/find.js(42,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/find.js(42,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/find.js(45,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/find.js(60,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/find"'.
 node_modules/async/find.js(60,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/find.js(60,46): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/find.js(61,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/findLimit.js(36,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/findLimit.js(37,20): error TS8024: JSDoc '@param' tag has name 'limit', but there is no parameter with that name.
 node_modules/async/findLimit.js(38,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/findLimit.js(38,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/findLimit.js(41,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/findLimit.js(47,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/findLimit"'.
 node_modules/async/findLimit.js(47,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/findLimit.js(47,51): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/findLimit.js(48,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/findSeries.js(27,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
 node_modules/async/findSeries.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/findSeries.js(28,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/findSeries.js(31,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/findSeries.js(37,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/findSeries"'.
 node_modules/async/findSeries.js(37,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/findSeries.js(38,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
@@ -509,6 +363,7 @@ node_modules/async/foldl.js(46,12): error TS2304: Cannot find name 'AsyncFunctio
 node_modules/async/foldl.js(67,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/foldl.js(68,22): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/foldl.js(69,6): error TS2695: Left side of comma operator is unused and has no side effects.
+node_modules/async/foldl.js(75,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/foldl.js(78,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/async/foldr.js(6,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/foldr"'.
 node_modules/async/foldr.js(30,12): error TS2304: Cannot find name 'AsyncFunction'.
@@ -533,27 +388,18 @@ node_modules/async/forEachOf.js(9,33): error TS2695: Left side of comma operator
 node_modules/async/forEachOf.js(48,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/forEachOf.js(65,39): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/forEachOf.js(70,22): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/forEachOf.js(83,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
 node_modules/async/forEachOf.js(84,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/forEachOf.js(84,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/forEachOf.js(88,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/forEachOf.js(111,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/async/forEachOfLimit.js(6,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/forEachOfLimit"'.
 node_modules/async/forEachOfLimit.js(31,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/forEachOfLimit.js(39,4): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/forEachOfLimit.js(39,44): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/forEachOfLimit.js(41,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/forEachOfSeries.js(27,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
 node_modules/async/forEachOfSeries.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/forEachOfSeries.js(28,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/forEachOfSeries.js(31,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/forEachOfSeries.js(34,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/forEachOfSeries"'.
 node_modules/async/forEachOfSeries.js(34,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/forEachOfSeries.js(35,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/forEachSeries.js(27,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
 node_modules/async/forEachSeries.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/forEachSeries.js(28,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/forEachSeries.js(33,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/forEachSeries.js(36,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/forEachSeries"'.
 node_modules/async/forEachSeries.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/forEachSeries.js(37,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
@@ -563,27 +409,16 @@ node_modules/async/forever.js(56,17): error TS2695: Left side of comma operator 
 node_modules/async/forever.js(57,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/forever.js(57,42): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/forever.js(65,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/groupBy.js(33,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
 node_modules/async/groupBy.js(34,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/groupBy.js(34,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/groupBy.js(38,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/groupBy.js(53,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/groupBy"'.
 node_modules/async/groupBy.js(53,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/groupBy.js(54,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/async/groupByLimit.js(7,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/groupByLimit"'.
 node_modules/async/groupByLimit.js(9,22): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/groupByLimit.js(10,6): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/groupByLimit.js(61,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/groupByLimit.js(62,20): error TS8024: JSDoc '@param' tag has name 'limit', but there is no parameter with that name.
 node_modules/async/groupByLimit.js(63,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/groupByLimit.js(63,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/groupByLimit.js(67,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/groupByLimit.js(71,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/groupBySeries.js(26,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/groupBySeries.js(27,20): error TS8024: JSDoc '@param' tag has name 'limit', but there is no parameter with that name.
 node_modules/async/groupBySeries.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/groupBySeries.js(28,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/groupBySeries.js(32,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/groupBySeries.js(36,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/groupBySeries"'.
 node_modules/async/groupBySeries.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/groupBySeries.js(37,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
@@ -790,6 +625,7 @@ node_modules/async/inject.js(46,12): error TS2304: Cannot find name 'AsyncFuncti
 node_modules/async/inject.js(67,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/inject.js(68,22): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/inject.js(69,6): error TS2695: Left side of comma operator is unused and has no side effects.
+node_modules/async/inject.js(75,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/inject.js(78,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/async/internal/DoublyLinkedList.js(6,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/internal/DoublyLinkedList"'.
 node_modules/async/internal/DoublyLinkedList.js(26,5): error TS2532: Object is possibly 'undefined'.
@@ -888,40 +724,25 @@ node_modules/async/internal/wrapAsync.js(17,40): error TS2339: Property 'toStrin
 node_modules/async/internal/wrapAsync.js(21,32): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/internal/wrapAsync.js(25,1): error TS2323: Cannot redeclare exported variable 'isAsync'.
 node_modules/async/log.js(24,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/log.js(24,27): error TS8024: JSDoc '@param' tag has name 'function', but there is no parameter with that name.
-node_modules/async/log.js(26,18): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
 node_modules/async/log.js(26,28): error TS1003: Identifier expected.
 node_modules/async/log.js(26,29): error TS1003: Identifier expected.
 node_modules/async/log.js(26,30): error TS1003: Identifier expected.
 node_modules/async/log.js(40,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/log"'.
 node_modules/async/log.js(40,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/log.js(41,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/map.js(39,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
 node_modules/async/map.js(40,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/map.js(40,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/map.js(44,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/map.js(53,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/map"'.
 node_modules/async/map.js(53,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/map.js(54,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/mapLimit.js(26,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/mapLimit.js(27,20): error TS8024: JSDoc '@param' tag has name 'limit', but there is no parameter with that name.
 node_modules/async/mapLimit.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/mapLimit.js(28,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/mapLimit.js(32,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/mapLimit.js(36,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/mapLimit"'.
 node_modules/async/mapLimit.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/mapLimit.js(37,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/mapSeries.js(26,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
 node_modules/async/mapSeries.js(27,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/mapSeries.js(27,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/mapSeries.js(31,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/mapSeries.js(35,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/mapSeries"'.
 node_modules/async/mapSeries.js(35,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/mapSeries.js(36,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/mapValues.js(35,20): error TS8024: JSDoc '@param' tag has name 'obj', but there is no parameter with that name.
 node_modules/async/mapValues.js(36,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/mapValues.js(36,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/mapValues.js(40,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/mapValues.js(62,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/mapValues"'.
 node_modules/async/mapValues.js(62,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/mapValues.js(63,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
@@ -930,11 +751,9 @@ node_modules/async/mapValuesLimit.js(38,12): error TS2304: Cannot find name 'Asy
 node_modules/async/mapValuesLimit.js(48,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/mapValuesLimit.js(50,22): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/mapValuesLimit.js(51,6): error TS2695: Left side of comma operator is unused and has no side effects.
+node_modules/async/mapValuesLimit.js(58,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/mapValuesLimit.js(61,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/mapValuesSeries.js(26,20): error TS8024: JSDoc '@param' tag has name 'obj', but there is no parameter with that name.
 node_modules/async/mapValuesSeries.js(27,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/mapValuesSeries.js(27,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/mapValuesSeries.js(31,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/mapValuesSeries.js(36,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/mapValuesSeries"'.
 node_modules/async/mapValuesSeries.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/mapValuesSeries.js(37,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
@@ -946,8 +765,6 @@ node_modules/async/memoize.js(76,21): error TS2695: Left side of comma operator 
 node_modules/async/memoize.js(79,14): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/memoize.js(87,29): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/memoize.js(101,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/nextTick.js(23,22): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/nextTick.js(25,18): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
 node_modules/async/nextTick.js(25,23): error TS1003: Identifier expected.
 node_modules/async/nextTick.js(25,24): error TS1003: Identifier expected.
 node_modules/async/nextTick.js(25,25): error TS1003: Identifier expected.
@@ -983,6 +800,7 @@ node_modules/async/reduce.js(46,12): error TS2304: Cannot find name 'AsyncFuncti
 node_modules/async/reduce.js(67,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/reduce.js(68,22): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/reduce.js(69,6): error TS2695: Left side of comma operator is unused and has no side effects.
+node_modules/async/reduce.js(75,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/reduce.js(78,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/async/reduceRight.js(6,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/reduceRight"'.
 node_modules/async/reduceRight.js(30,12): error TS2304: Cannot find name 'AsyncFunction'.
@@ -1000,22 +818,12 @@ node_modules/async/reflectAll.js(95,10): error TS2695: Left side of comma operat
 node_modules/async/reflectAll.js(96,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/reflectAll.js(99,10): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/reflectAll.js(105,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/reject.js(26,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/reject.js(27,22): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/reject.js(31,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/reject.js(44,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/reject"'.
 node_modules/async/reject.js(44,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/reject.js(45,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/rejectLimit.js(27,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/rejectLimit.js(28,20): error TS8024: JSDoc '@param' tag has name 'limit', but there is no parameter with that name.
-node_modules/async/rejectLimit.js(29,22): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/rejectLimit.js(33,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/rejectLimit.js(36,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/rejectLimit"'.
 node_modules/async/rejectLimit.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/rejectLimit.js(37,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/rejectSeries.js(26,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/rejectSeries.js(27,22): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/rejectSeries.js(31,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/rejectSeries.js(34,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/rejectSeries"'.
 node_modules/async/rejectSeries.js(34,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/rejectSeries.js(35,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
@@ -1024,6 +832,9 @@ node_modules/async/retry.js(48,12): error TS2304: Cannot find name 'AsyncFunctio
 node_modules/async/retry.js(112,24): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/retry.js(119,81): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/retry.js(141,18): error TS2695: Left side of comma operator is unused and has no side effects.
+node_modules/async/retry.js(149,17): error TS2532: Object is possibly 'undefined'.
+node_modules/async/retry.js(149,17): error TS2684: The 'this' context of type 'Function | undefined' is not assignable to method's 'this' of type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
 node_modules/async/retry.js(156,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/async/retryable.js(7,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/retryable"'.
 node_modules/async/retryable.js(12,18): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -1031,28 +842,17 @@ node_modules/async/retryable.js(13,13): error TS2695: Left side of comma operato
 node_modules/async/retryable.js(18,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/retryable.js(18,70): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/retryable.js(36,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/select.js(28,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/select.js(29,22): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/select.js(32,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/select.js(44,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/select"'.
 node_modules/async/select.js(44,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/select.js(45,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/selectLimit.js(28,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/selectLimit.js(29,20): error TS8024: JSDoc '@param' tag has name 'limit', but there is no parameter with that name.
-node_modules/async/selectLimit.js(30,22): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/selectLimit.js(33,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/selectLimit.js(36,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/selectLimit"'.
 node_modules/async/selectLimit.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/selectLimit.js(37,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/selectSeries.js(27,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/selectSeries.js(28,22): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/selectSeries.js(31,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/selectSeries.js(34,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/selectSeries"'.
 node_modules/async/selectSeries.js(34,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/selectSeries.js(35,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/async/seq.js(6,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/seq"'.
 node_modules/async/seq.js(43,15): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/seq.js(43,30): error TS8024: JSDoc '@param' tag has name 'functions', but there is no parameter with that name.
 node_modules/async/seq.js(69,23): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/seq.js(71,21): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/seq.js(81,10): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -1061,34 +861,22 @@ node_modules/async/seq.js(91,1): error TS2309: An export assignment cannot be us
 node_modules/async/series.js(6,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/series"'.
 node_modules/async/series.js(83,4): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/series.js(85,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/setImmediate.js(27,22): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
-node_modules/async/setImmediate.js(29,18): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
 node_modules/async/setImmediate.js(29,23): error TS1003: Identifier expected.
 node_modules/async/setImmediate.js(29,24): error TS1003: Identifier expected.
 node_modules/async/setImmediate.js(29,25): error TS1003: Identifier expected.
 node_modules/async/setImmediate.js(44,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/setImmediate"'.
 node_modules/async/setImmediate.js(45,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/some.js(32,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
 node_modules/async/some.js(33,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/some.js(33,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/some.js(37,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/some.js(51,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/some"'.
 node_modules/async/some.js(51,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/some.js(51,46): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/some.js(52,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/someLimit.js(31,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
-node_modules/async/someLimit.js(32,20): error TS8024: JSDoc '@param' tag has name 'limit', but there is no parameter with that name.
 node_modules/async/someLimit.js(33,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/someLimit.js(33,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/someLimit.js(37,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/someLimit.js(42,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/someLimit"'.
 node_modules/async/someLimit.js(42,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/someLimit.js(42,51): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/someLimit.js(43,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/someSeries.js(27,35): error TS8024: JSDoc '@param' tag has name 'coll', but there is no parameter with that name.
 node_modules/async/someSeries.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/someSeries.js(28,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/someSeries.js(32,23): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/someSeries.js(37,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/someSeries"'.
 node_modules/async/someSeries.js(37,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/someSeries.js(38,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
@@ -1107,10 +895,7 @@ node_modules/async/timeout.js(62,13): error TS2695: Left side of comma operator 
 node_modules/async/timeout.js(69,19): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/async/timeout.js(71,23): error TS2339: Property 'info' does not exist on type 'Error'.
 node_modules/async/timeout.js(89,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/times.js(27,20): error TS8024: JSDoc '@param' tag has name 'n', but there is no parameter with that name.
 node_modules/async/times.js(28,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/times.js(28,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/times.js(30,22): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/times.js(49,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/times"'.
 node_modules/async/times.js(49,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/times.js(50,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
@@ -1120,10 +905,7 @@ node_modules/async/timesLimit.js(39,20): error TS2695: Left side of comma operat
 node_modules/async/timesLimit.js(40,4): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/timesLimit.js(40,28): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/timesLimit.js(42,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/async/timesSeries.js(26,20): error TS8024: JSDoc '@param' tag has name 'n', but there is no parameter with that name.
 node_modules/async/timesSeries.js(27,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/timesSeries.js(27,27): error TS8024: JSDoc '@param' tag has name 'iteratee', but there is no parameter with that name.
-node_modules/async/timesSeries.js(29,22): error TS8024: JSDoc '@param' tag has name 'callback', but there is no parameter with that name.
 node_modules/async/timesSeries.js(31,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/timesSeries"'.
 node_modules/async/timesSeries.js(31,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/timesSeries.js(32,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
@@ -1133,11 +915,13 @@ node_modules/async/transform.js(76,24): error TS2695: Left side of comma operato
 node_modules/async/transform.js(78,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/transform.js(79,22): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/transform.js(81,6): error TS2695: Left side of comma operator is unused and has no side effects.
+node_modules/async/transform.js(84,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/transform.js(87,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/async/tryEach.js(6,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/tryEach"'.
 node_modules/async/tryEach.js(67,6): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/tryEach.js(68,10): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/tryEach.js(70,27): error TS2695: Left side of comma operator is unused and has no side effects.
+node_modules/async/tryEach.js(78,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/tryEach.js(81,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/async/unmemoize.js(6,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/unmemoize"'.
 node_modules/async/unmemoize.js(17,12): error TS2304: Cannot find name 'AsyncFunction'.
@@ -1158,7 +942,12 @@ node_modules/async/whilst.js(6,9): error TS2339: Property 'default' does not exi
 node_modules/async/whilst.js(37,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/whilst.js(61,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/whilst.js(62,22): error TS2695: Left side of comma operator is unused and has no side effects.
+node_modules/async/whilst.js(63,25): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/async/whilst.js(65,25): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/whilst.js(67,21): error TS2695: Left side of comma operator is unused and has no side effects.
+node_modules/async/whilst.js(68,9): error TS2532: Object is possibly 'undefined'.
+node_modules/async/whilst.js(68,9): error TS2684: The 'this' context of type 'Function | undefined' is not assignable to method's 'this' of type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
 node_modules/async/whilst.js(72,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/async/wrapSync.js(6,9): error TS2339: Property 'default' does not exist on type 'typeof "/home/nathansa/ts/tests/cases/user/async/node_modules/async/wrapSync"'.
 node_modules/async/wrapSync.js(43,14): error TS2304: Cannot find name 'AsyncFunction'.

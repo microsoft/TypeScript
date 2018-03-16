@@ -171,6 +171,15 @@ namespace ts {
         return name;
     }
 
+    /** Create a unique name based on the supplied text. */
+    export function createOptimisticUniqueName(text: string): Identifier {
+        const name = createIdentifier(text);
+        name.autoGenerateFlags = GeneratedIdentifierFlags.OptimisticUnique;
+        name.autoGenerateId = nextAutoGenerateId;
+        nextAutoGenerateId++;
+        return name;
+    }
+
     /** Create a unique name generated for a node. */
     export function getGeneratedNameForNode(node: Node): Identifier;
     /* @internal */ export function getGeneratedNameForNode(node: Node, shouldSkipNameGenerationScope?: boolean): Identifier; // tslint:disable-line unified-signatures
@@ -212,6 +221,28 @@ namespace ts {
 
     export function createFalse() {
         return <BooleanLiteral & Token<SyntaxKind.FalseKeyword>>createSynthesizedNode(SyntaxKind.FalseKeyword);
+    }
+
+    // Modifiers
+
+    export function createModifier<T extends Modifier["kind"]>(kind: T) {
+        return createToken(kind);
+    }
+
+    export function createModifiersFromModifierFlags(flags: ModifierFlags) {
+        const result: Modifier[] = [];
+        if (flags & ModifierFlags.Export) { result.push(createModifier(SyntaxKind.ExportKeyword)); }
+        if (flags & ModifierFlags.Ambient) { result.push(createModifier(SyntaxKind.DeclareKeyword)); }
+        if (flags & ModifierFlags.Default) { result.push(createModifier(SyntaxKind.DefaultKeyword)); }
+        if (flags & ModifierFlags.Const) { result.push(createModifier(SyntaxKind.ConstKeyword)); }
+        if (flags & ModifierFlags.Public) { result.push(createModifier(SyntaxKind.PublicKeyword)); }
+        if (flags & ModifierFlags.Private) { result.push(createModifier(SyntaxKind.PrivateKeyword)); }
+        if (flags & ModifierFlags.Protected) { result.push(createModifier(SyntaxKind.ProtectedKeyword)); }
+        if (flags & ModifierFlags.Abstract) { result.push(createModifier(SyntaxKind.AbstractKeyword)); }
+        if (flags & ModifierFlags.Static) { result.push(createModifier(SyntaxKind.StaticKeyword)); }
+        if (flags & ModifierFlags.Readonly) { result.push(createModifier(SyntaxKind.ReadonlyKeyword)); }
+        if (flags & ModifierFlags.Async) { result.push(createModifier(SyntaxKind.AsyncKeyword)); }
+        return result;
     }
 
     // Names
@@ -2349,8 +2380,13 @@ namespace ts {
 
     // Top-level nodes
 
-    export function updateSourceFileNode(node: SourceFile, statements: ReadonlyArray<Statement>) {
-        if (node.statements !== statements) {
+    export function updateSourceFileNode(node: SourceFile, statements: ReadonlyArray<Statement>, isDeclarationFile?: boolean, referencedFiles?: SourceFile["referencedFiles"], typeReferences?: SourceFile["typeReferenceDirectives"]) {
+        if (
+            node.statements !== statements ||
+            (isDeclarationFile !== undefined && node.isDeclarationFile !== isDeclarationFile) ||
+            (referencedFiles !== undefined && node.referencedFiles !== referencedFiles) ||
+            (typeReferences !== undefined && node.typeReferenceDirectives !== typeReferences)
+        ) {
             const updated = <SourceFile>createSynthesizedNode(SyntaxKind.SourceFile);
             updated.flags |= node.flags;
             updated.statements = createNodeArray(statements);
@@ -2358,12 +2394,12 @@ namespace ts {
             updated.fileName = node.fileName;
             updated.path = node.path;
             updated.text = node.text;
+            updated.isDeclarationFile = isDeclarationFile === undefined ? node.isDeclarationFile : isDeclarationFile;
+            updated.referencedFiles = referencedFiles === undefined ? node.referencedFiles : referencedFiles;
+            updated.typeReferenceDirectives = typeReferences === undefined ? node.typeReferenceDirectives : typeReferences;
             if (node.amdDependencies !== undefined) updated.amdDependencies = node.amdDependencies;
             if (node.moduleName !== undefined) updated.moduleName = node.moduleName;
-            if (node.referencedFiles !== undefined) updated.referencedFiles = node.referencedFiles;
-            if (node.typeReferenceDirectives !== undefined) updated.typeReferenceDirectives = node.typeReferenceDirectives;
             if (node.languageVariant !== undefined) updated.languageVariant = node.languageVariant;
-            if (node.isDeclarationFile !== undefined) updated.isDeclarationFile = node.isDeclarationFile;
             if (node.renamedDependencies !== undefined) updated.renamedDependencies = node.renamedDependencies;
             if (node.hasNoDefaultLib !== undefined) updated.hasNoDefaultLib = node.hasNoDefaultLib;
             if (node.languageVersion !== undefined) updated.languageVersion = node.languageVersion;
@@ -2955,7 +2991,8 @@ namespace ts {
         requestEmitHelper: noop,
         resumeLexicalEnvironment: noop,
         startLexicalEnvironment: noop,
-        suspendLexicalEnvironment: noop
+        suspendLexicalEnvironment: noop,
+        addDiagnostic: noop,
     };
 
     // Compound nodes
@@ -3154,8 +3191,7 @@ namespace ts {
                         return { value: o && o[i++], done: !o };
                     }
                 };
-            };
-        `
+            };`
     };
 
     export function createValuesHelper(context: TransformationContext, expression: Expression, location?: TextRange) {
@@ -3189,8 +3225,7 @@ namespace ts {
                     finally { if (e) throw e.error; }
                 }
                 return ar;
-            };
-        `
+            };`
     };
 
     export function createReadHelper(context: TransformationContext, iteratorRecord: Expression, count: number | undefined, location?: TextRange) {
@@ -4161,11 +4196,11 @@ namespace ts {
         return createNodeArray(sameMap(members, parenthesizeElementTypeMember));
     }
 
-    export function parenthesizeTypeParameters(typeParameters: ReadonlyArray<TypeNode>) {
+    export function parenthesizeTypeParameters(typeParameters: ReadonlyArray<TypeNode> | undefined) {
         if (some(typeParameters)) {
             const params: TypeNode[] = [];
-            for (let i = 0; i < typeParameters.length; ++i) {
-                const entry = typeParameters[i];
+            for (let i = 0; i < typeParameters!.length; ++i) {
+                const entry = typeParameters![i];
                 params.push(i === 0 && isFunctionOrConstructorTypeNode(entry) && entry.typeParameters ?
                     createParenthesizedType(entry) :
                     entry);

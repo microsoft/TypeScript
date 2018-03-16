@@ -1527,7 +1527,7 @@ namespace ts {
             sourceFile: SourceFile | undefined,
             cancellationToken: CancellationToken,
             cache: DiagnosticCache,
-            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken) => Diagnostic[]) {
+            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken) => Diagnostic[] | undefined) {
 
             const cachedResult = sourceFile
                 ? cache.perFile && cache.perFile.get(sourceFile.path)

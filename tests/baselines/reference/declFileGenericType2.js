@@ -117,7 +117,7 @@ declare module templa.dom.mvc {
     }
 }
 declare module templa.dom.mvc {
-    class AbstractElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.AbstractController<ModelType> implements IElementController<ModelType> {
+    class AbstractElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.AbstractController<ModelType>  implements IElementController<ModelType> {
         constructor();
     }
 }
