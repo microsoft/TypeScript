@@ -1544,7 +1544,7 @@ namespace ts {
             if (file.sourceMapper) {
                 return file.sourceMapper;
             }
-            // TODO (wewigham): Read sourcemappingurl from last line of .d.ts if present
+            // TODO (weswigham): Read sourcemappingurl from last line of .d.ts if present
             const mapFileName = file.fileName + ".map";
             if (!host.fileExists(mapFileName)) {
                 return file.sourceMapper = sourcemaps.identitySourceMapper;
