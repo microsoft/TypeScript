@@ -43,7 +43,7 @@ namespace ts.server.typingsInstaller {
         private readonly packageNameToTypingLocation: Map<JsTyping.CachedTyping> = createMap<JsTyping.CachedTyping>();
         private readonly missingTypingsSet: Map<true> = createMap<true>();
         private readonly knownCachesSet: Map<true> = createMap<true>();
-        private readonly projectWatchers: Map<FileWatcher[]> = createMap<FileWatcher[]>();
+        private readonly projectWatchers = createMap<Map<FileWatcher>>();
         private safeList: JsTyping.SafeList | undefined;
         readonly pendingRunRequests: PendingRequest[] = [];
 
@@ -80,10 +80,7 @@ namespace ts.server.typingsInstaller {
                 }
                 return;
             }
-            for (const w of watchers) {
-                w.close();
-            }
-
+            clearMap(watchers, closeFileWatcher);
             this.projectWatchers.delete(projectName);
 
             if (this.log.isEnabled()) {
@@ -345,27 +342,49 @@ namespace ts.server.typingsInstaller {
 
         private watchFiles(projectName: string, files: string[]) {
             if (!files.length) {
+                // shut down existing watchers
+                this.closeWatchers(projectName);
                 return;
             }
-            // shut down existing watchers
-            this.closeWatchers(projectName);
+
+            let watchers = this.projectWatchers.get(projectName);
+            if (!watchers) {
+                watchers = createMap();
+                this.projectWatchers.set(projectName, watchers);
+            }
 
             // handler should be invoked once for the entire set of files since it will trigger full rediscovery of typings
             let isInvoked = false;
-            const watchers: FileWatcher[] = [];
-            for (const file of files) {
-                const w = this.installTypingHost.watchFile!(file, f => { // TODO: GH#18217
-                    if (this.log.isEnabled()) {
-                        this.log.writeLine(`Got FS notification for ${f}, handler is already invoked '${isInvoked}'`);
-                    }
-                    if (!isInvoked) {
-                        this.sendResponse({ projectName, kind: ActionInvalidate });
-                        isInvoked = true;
-                    }
-                }, /*pollingInterval*/ 2000);
-                watchers.push(w);
-            }
-            this.projectWatchers.set(projectName, watchers);
+            const isLoggingEnabled = this.log.isEnabled();
+            mutateMap(
+                watchers,
+                arrayToSet(files),
+                {
+                    // Watch the missing files
+                    createNewValue: file => {
+                        if (isLoggingEnabled) {
+                            this.log.writeLine(`FileWatcher:: Added:: WatchInfo: ${file}`);
+                        }
+                        const watcher = this.installTypingHost.watchFile!(file, (f, eventKind) => { // TODO: GH#18217
+                            if (isLoggingEnabled) {
+                                this.log.writeLine(`FileWatcher:: Triggered with ${f} eventKind: ${FileWatcherEventKind[eventKind]}:: WatchInfo: ${file}:: handler is already invoked '${isInvoked}'`);
+                            }
+                            if (!isInvoked) {
+                                this.sendResponse({ projectName, kind: ActionInvalidate });
+                                isInvoked = true;
+                            }
+                        }, /*pollingInterval*/ 2000);
+                        return isLoggingEnabled ? {
+                            close: () => {
+                                this.log.writeLine(`FileWatcher:: Closed:: WatchInfo: ${file}`);
+                            }
+                        } : watcher;
+                    },
+                    // Files that are no longer missing (e.g. because they are no longer required)
+                    // should no longer be watched.
+                    onDeleteValue: closeFileWatcher
+                }
+            );
         }
 
         private createSetTypings(request: DiscoverTypings, typings: string[]): SetTypings {

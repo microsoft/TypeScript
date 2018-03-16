@@ -1629,7 +1629,7 @@ namespace ts.Completions {
         }
 
         function isFromClassElementDeclaration(node: Node) {
-            return isClassElement(node.parent) && isClassLike(node.parent.parent);
+            return node.parent && isClassElement(node.parent) && isClassLike(node.parent.parent);
         }
 
         function isParameterOfConstructorDeclaration(node: Node) {
