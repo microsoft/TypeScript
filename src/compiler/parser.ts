@@ -2279,7 +2279,7 @@ namespace ts {
                 type = finishNode(variadic);
             }
             if (token() === SyntaxKind.EqualsToken) {
-                type = createJSDocPostfixType(SyntaxKind.JSDocOptionalType, type);
+                return createJSDocPostfixType(SyntaxKind.JSDocOptionalType, type);
             }
             return type;
         }
