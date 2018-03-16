@@ -2204,8 +2204,15 @@ namespace ts {
         }
 
         function parseJSDocAllType(): JSDocAllType {
-            const result = <JSDocAllType>createNode(SyntaxKind.JSDocAllType);
+            const result = createNode(SyntaxKind.JSDocAllType) as JSDocAllType;
             nextToken();
+            return finishNode(result);
+        }
+
+        function parseJSDocNonNullableType(): TypeNode {
+            const result = createNode(SyntaxKind.JSDocNonNullableType) as JSDocNonNullableType;
+            nextToken();
+            result.type = parseNonArrayType();
             return finishNode(result);
         }
 
@@ -2259,15 +2266,19 @@ namespace ts {
                 parameter.name = parseIdentifierName();
                 parseExpected(SyntaxKind.ColonToken);
             }
+            const dotdotdot = parseOptionalToken(SyntaxKind.DotDotDotToken);
             parameter.type = parseType();
+            if (dotdotdot) {
+                const variadic = createNode(SyntaxKind.JSDocVariadicType, dotdotdot.pos) as JSDocVariadicType;
+                variadic.type = parameter.type;
+                variadic.flags |= NodeFlags.JSDoc;
+                parameter.type = finishNode(variadic);
+            }
+            if (token() === SyntaxKind.EqualsToken) {
+                parameter.type = createJSDocPostfixType(SyntaxKind.JSDocOptionalType, parameter.type);
+                parameter.type.flags |= NodeFlags.JSDoc;
+            }
             return finishNode(parameter);
-        }
-
-        function parseJSDocNodeWithType(kind: SyntaxKind.JSDocVariadicType | SyntaxKind.JSDocNonNullableType): TypeNode {
-            const result = createNode(kind) as JSDocVariadicType | JSDocNonNullableType;
-            nextToken();
-            result.type = parseNonArrayType();
-            return finishNode(result);
         }
 
         function parseTypeQuery(): TypeQueryNode {
@@ -2732,7 +2743,7 @@ namespace ts {
                 case SyntaxKind.FunctionKeyword:
                     return parseJSDocFunctionType();
                 case SyntaxKind.ExclamationToken:
-                    return parseJSDocNodeWithType(SyntaxKind.JSDocNonNullableType);
+                    return parseJSDocNonNullableType();
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
@@ -2817,13 +2828,6 @@ namespace ts {
             let type = parseNonArrayType();
             while (!scanner.hasPrecedingLineBreak()) {
                 switch (token()) {
-                    case SyntaxKind.EqualsToken:
-                        // only parse postfix = inside jsdoc, because it's ambiguous elsewhere
-                        if (!(contextFlags & NodeFlags.JSDoc)) {
-                            return type;
-                        }
-                        type = createJSDocPostfixType(SyntaxKind.JSDocOptionalType, type);
-                        break;
                     case SyntaxKind.ExclamationToken:
                         type = createJSDocPostfixType(SyntaxKind.JSDocNonNullableType, type);
                         break;
@@ -2889,12 +2893,6 @@ namespace ts {
                     return parseTypeOperator(operator);
                 case SyntaxKind.InferKeyword:
                     return parseInferType();
-                case SyntaxKind.DotDotDotToken: {
-                    const result = createNode(SyntaxKind.JSDocVariadicType) as JSDocVariadicType;
-                    nextToken();
-                    result.type = parsePostfixTypeOrHigher();
-                    return finishNode(result);
-                }
             }
             return parsePostfixTypeOrHigher();
         }
@@ -6156,7 +6154,18 @@ namespace ts {
                 const result = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression, scanner.getTokenPos());
 
                 const hasBrace = (mayOmitBraces ? parseOptional : parseExpected)(SyntaxKind.OpenBraceToken);
+                const dotdotdot = parseOptionalToken(SyntaxKind.DotDotDotToken);
                 result.type = doInsideOfContext(NodeFlags.JSDoc, parseType);
+                if (dotdotdot) {
+                    const variadic = createNode(SyntaxKind.JSDocVariadicType, dotdotdot.pos) as JSDocVariadicType;
+                    variadic.type = result.type;
+                    variadic.flags |= NodeFlags.JSDoc;
+                    result.type = finishNode(variadic);
+                }
+                if (token() === SyntaxKind.EqualsToken) {
+                    result.type = createJSDocPostfixType(SyntaxKind.JSDocOptionalType, result.type);
+                    result.type.flags |= NodeFlags.JSDoc;
+                }
                 if (!mayOmitBraces || hasBrace) {
                     parseExpected(SyntaxKind.CloseBraceToken);
                 }
