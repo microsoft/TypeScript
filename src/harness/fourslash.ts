@@ -2857,7 +2857,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public verifyRangesWithSameTextAreDocumentHighlights() {
-            this.rangesByText().forEach(ranges => this.verifyRangesAreDocumentHighlights(ranges));
+            this.rangesByText().forEach(ranges => this.verifyRangesAreDocumentHighlights(ranges, /*options*/ undefined));
         }
 
         public verifyDocumentHighlightsOf(startRange: Range, ranges: Range[], options: FourSlashInterface.VerifyDocumentHighlightsOptions | undefined) {
@@ -2866,9 +2866,9 @@ Actual: ${stringify(fullActual)}`);
             this.verifyDocumentHighlights(ranges, fileNames);
         }
 
-        public verifyRangesAreDocumentHighlights(ranges?: Range[]) {
+        public verifyRangesAreDocumentHighlights(ranges: Range[] | undefined, options: FourSlashInterface.VerifyDocumentHighlightsOptions | undefined) {
             ranges = ranges || this.getRanges();
-            const fileNames = unique(ranges, range => range.fileName);
+            const fileNames = options && options.filesToSearch || unique(ranges, range => range.fileName);
             for (const range of ranges) {
                 this.goToRangeStart(range);
                 this.verifyDocumentHighlights(ranges, fileNames);
@@ -4269,8 +4269,8 @@ namespace FourSlashInterface {
             this.state.verifyRangesAreRenameLocations(options);
         }
 
-        public rangesAreDocumentHighlights(ranges?: FourSlash.Range[]) {
-            this.state.verifyRangesAreDocumentHighlights(ranges);
+        public rangesAreDocumentHighlights(ranges?: FourSlash.Range[], options?: VerifyDocumentHighlightsOptions) {
+            this.state.verifyRangesAreDocumentHighlights(ranges, options);
         }
 
         public rangesWithSameTextAreDocumentHighlights() {
