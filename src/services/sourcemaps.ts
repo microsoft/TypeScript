@@ -26,6 +26,7 @@ namespace ts.sourcemaps {
         readFile(path: string): string;
         fileExists(path: string): boolean;
         getCanonicalFileName(path: string): string;
+        log(text: string): void;
     }
 
     export function decode(host: SourceMapDecodeHost, mapPath: string, map: SourceMapData, program?: Program): SourceMapper {
@@ -123,7 +124,7 @@ namespace ts.sourcemaps {
             while (!hasCompletedDecoding(state)) {
                 decodeSingleSpan(state);
                 if (state.error) {
-                    // TODO: Report diagnostic on invalid source map or silently fail?
+                    host.log(`Encountered error while decoding sourcemap found at ${mapPath}: ${state.error}`);
                     return [];
                 }
             }
