@@ -119,6 +119,7 @@ namespace ts {
         let languageVersion: ScriptTarget;
         let parent: Node;
         let container: Node;
+        let containerContainer: Node; // Container one level up
         let blockScopeContainer: Node;
         let inferenceContainer: Node;
         let lastContainer: Node;
@@ -187,6 +188,7 @@ namespace ts {
             languageVersion = undefined;
             parent = undefined;
             container = undefined;
+            containerContainer = undefined;
             blockScopeContainer = undefined;
             inferenceContainer = undefined;
             lastContainer = undefined;
@@ -224,13 +226,7 @@ namespace ts {
             symbol.flags |= symbolFlags;
 
             node.symbol = symbol;
-
-            if (!symbol.declarations) {
-                symbol.declarations = [node];
-            }
-            else {
-                symbol.declarations.push(node);
-            }
+            symbol.declarations = append(symbol.declarations, node);
 
             if (symbolFlags & SymbolFlags.HasExports && !symbol.exports) {
                 symbol.exports = createSymbolTable();
@@ -486,7 +482,10 @@ namespace ts {
             // and block-container.  Then after we pop out of processing the children, we restore
             // these saved values.
             const saveContainer = container;
+            const saveContainerContainer = containerContainer;
             const savedBlockScopeContainer = blockScopeContainer;
+
+            containerContainer = container;
 
             // Depending on what kind of node this is, we may have to adjust the current container
             // and block-container.   If the current node is a container, then it is automatically
@@ -580,7 +579,9 @@ namespace ts {
             else {
                 bindChildren(node);
             }
+
             container = saveContainer;
+            containerContainer = saveContainerContainer;
             blockScopeContainer = savedBlockScopeContainer;
         }
 
@@ -2327,14 +2328,23 @@ namespace ts {
 
         function bindThisPropertyAssignment(node: BinaryExpression | PropertyAccessExpression) {
             Debug.assert(isInJavaScriptFile(node));
-            const container = getThisContainer(node, /*includeArrowFunctions*/ false);
-            switch (container.kind) {
+            const thisContainer = getThisContainer(node, /*includeArrowFunctions*/ false);
+            switch (thisContainer.kind) {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
+                    let constructorSymbol = thisContainer.symbol;
+                    // For `f.prototype.m = function() { this.x = 0; }`, `this.x = 0` should modify `f`'s members, not the function expression.
+                    if (isBinaryExpression(thisContainer.parent) && thisContainer.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
+                        const l = thisContainer.parent.left;
+                        if (isPropertyAccessExpression(l) && isPropertyAccessExpression(l.expression) && l.expression.name.escapedText === "prototype" && isEntityNameExpression(l.expression.expression)) {
+                            constructorSymbol = getJSInitializerSymbolFromName(l.expression.expression, containerContainer);
+                        }
+                    }
+
                     // Declare a 'member' if the container is an ES5 class or ES6 constructor
-                    container.symbol.members = container.symbol.members || createSymbolTable();
+                    constructorSymbol.members = constructorSymbol.members || createSymbolTable();
                     // It's acceptable for multiple 'this' assignments of the same identifier to occur
-                    declareSymbol(container.symbol.members, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
+                    declareSymbol(constructorSymbol.members, constructorSymbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
                     break;
 
                 case SyntaxKind.Constructor:
@@ -2344,10 +2354,13 @@ namespace ts {
                 case SyntaxKind.SetAccessor:
                     // this.foo assignment in a JavaScript class
                     // Bind this property to the containing class
-                    const containingClass = container.parent;
-                    const symbolTable = hasModifier(container, ModifierFlags.Static) ? containingClass.symbol.exports : containingClass.symbol.members;
+                    const containingClass = thisContainer.parent;
+                    const symbolTable = hasModifier(thisContainer, ModifierFlags.Static) ? containingClass.symbol.exports : containingClass.symbol.members;
                     declareSymbol(symbolTable, containingClass.symbol, node, SymbolFlags.Property, SymbolFlags.None, /*isReplaceableByMethod*/ true);
                     break;
+
+                default:
+                    Debug.fail(Debug.showSyntaxKind(thisContainer));
             }
         }
 
@@ -2417,8 +2430,12 @@ namespace ts {
             bindPropertyAssignment(node.expression, node, /*isPrototypeProperty*/ false);
         }
 
+        function getJSInitializerSymbolFromName(name: EntityNameExpression, lookupContainer?: Node): Symbol {
+            return getJSInitializerSymbol(lookupSymbolForPropertyAccess(name, lookupContainer));
+        }
+
         function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, isPrototypeProperty: boolean) {
-            let symbol = getJSInitializerSymbol(lookupSymbolForPropertyAccess(name));
+            let symbol = getJSInitializerSymbolFromName(name);
             let isToplevelNamespaceableInitializer: boolean;
             if (isBinaryExpression(propertyAccess.parent)) {
                 const isPrototypeAssignment = isPropertyAccessExpression(propertyAccess.parent.left) && propertyAccess.parent.left.name.escapedText === "prototype";
@@ -2458,9 +2475,9 @@ namespace ts {
             declareSymbol(symbolTable, symbol, propertyAccess, symbolFlags, symbolExcludes);
         }
 
-        function lookupSymbolForPropertyAccess(node: EntityNameExpression): Symbol | undefined {
+        function lookupSymbolForPropertyAccess(node: EntityNameExpression, lookupContainer: Node = container): Symbol | undefined {
             if (isIdentifier(node)) {
-                return lookupSymbolForNameWorker(container, node.escapedText);
+                return lookupSymbolForNameWorker(lookupContainer, node.escapedText);
             }
             else {
                 const symbol = getJSInitializerSymbol(lookupSymbolForPropertyAccess(node.expression));

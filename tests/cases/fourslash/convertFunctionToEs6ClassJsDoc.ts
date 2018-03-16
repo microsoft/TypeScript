@@ -23,7 +23,6 @@
 
 verify.codeFix({
     description: "Convert function to an ES2015 class",
-    index: 0, // TODO: GH#22240
     newFileContent:
 `class fn {
     constructor() {
