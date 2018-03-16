@@ -1,0 +1,37 @@
+tests/cases/conformance/jsdoc/a.js(5,5): error TS2322: Type 'undefined' is not assignable to type 'number | null'.
+tests/cases/conformance/jsdoc/a.js(9,3): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number | null'.
+tests/cases/conformance/jsdoc/a.js(16,5): error TS2322: Type 'undefined' is not assignable to type 'number | null'.
+tests/cases/conformance/jsdoc/a.js(20,3): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number | null'.
+
+
+==== tests/cases/conformance/jsdoc/a.js (4 errors) ====
+    /** @param {?number} a */
+    function f(a) {
+        a = 1
+        a = null
+        a = undefined // should not be allowed
+        ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'number | null'.
+    }
+    f()
+    f(null)
+    f(undefined) // should not be allowed
+      ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number | null'.
+    f(1)
+    
+    /** @param {number?} a */
+    function g(a) {
+        a = 1
+        a = null
+        a = undefined // should not be allowed
+        ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'number | null'.
+    }
+    g()
+    g(null)
+    g(undefined) // should not be allowed
+      ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number | null'.
+    g(1)
+    

@@ -1,0 +1,79 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/** @param {?number} a */
+function f(a) {
+>f : (a?: number | null) => void
+>a : number | null
+
+    a = 1
+>a = 1 : 1
+>a : number | null
+>1 : 1
+
+    a = null
+>a = null : null
+>a : number | null
+>null : null
+
+    a = undefined // should not be allowed
+>a = undefined : undefined
+>a : number | null
+>undefined : undefined
+}
+f()
+>f() : void
+>f : (a?: number | null) => void
+
+f(null)
+>f(null) : void
+>f : (a?: number | null) => void
+>null : null
+
+f(undefined) // should not be allowed
+>f(undefined) : void
+>f : (a?: number | null) => void
+>undefined : undefined
+
+f(1)
+>f(1) : void
+>f : (a?: number | null) => void
+>1 : 1
+
+/** @param {number?} a */
+function g(a) {
+>g : (a?: number | null) => void
+>a : number | null
+
+    a = 1
+>a = 1 : 1
+>a : number | null
+>1 : 1
+
+    a = null
+>a = null : null
+>a : number | null
+>null : null
+
+    a = undefined // should not be allowed
+>a = undefined : undefined
+>a : number | null
+>undefined : undefined
+}
+g()
+>g() : void
+>g : (a?: number | null) => void
+
+g(null)
+>g(null) : void
+>g : (a?: number | null) => void
+>null : null
+
+g(undefined) // should not be allowed
+>g(undefined) : void
+>g : (a?: number | null) => void
+>undefined : undefined
+
+g(1)
+>g(1) : void
+>g : (a?: number | null) => void
+>1 : 1
+
