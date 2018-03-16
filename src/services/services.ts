@@ -1654,7 +1654,7 @@ namespace ts {
             }
             return {
                 definitions: mappedDefs,
-                textSpan: result.textSpan // TODO: Does this need to be mapped in some way? I don't _think_ so?
+                textSpan: result.textSpan
             };
         }
 
