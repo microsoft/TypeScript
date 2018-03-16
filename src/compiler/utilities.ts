@@ -3343,7 +3343,7 @@ namespace ts {
         return isPropertyAccessExpression(node) && isEntityNameExpression(node.expression);
     }
 
-    export function isPrototypeAccess(node: Node): boolean {
+    export function isPrototypeAccess(node: Node): node is PropertyAccessExpression {
         return isPropertyAccessExpression(node) && node.name.escapedText === "prototype";
     }
 
