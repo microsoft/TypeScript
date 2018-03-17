@@ -4310,12 +4310,12 @@ namespace ts {
         function getTypeFromObjectBindingPattern(pattern: ObjectBindingPattern, includePatternInType: boolean, reportErrors: boolean): Type {
             const members = createSymbolTable();
             let stringIndexInfo: IndexInfo;
-            let hasComputedProperties = false;
+            let objectFlags = ObjectFlags.ObjectLiteral;
             forEach(pattern.elements, e => {
                 const name = e.propertyName || <Identifier>e.name;
                 if (isComputedNonLiteralName(name)) {
                     // do not include computed properties in the implied type
-                    hasComputedProperties = true;
+                    objectFlags |= ObjectFlags.ObjectLiteralPatternWithComputedProperties;
                     return;
                 }
                 if (e.dotDotDotToken) {
@@ -4331,11 +4331,10 @@ namespace ts {
                 members.set(symbol.escapedName, symbol);
             });
             const result = createAnonymousType(undefined, members, emptyArray, emptyArray, stringIndexInfo, undefined);
+            result.flags |= TypeFlags.ContainsObjectLiteral;
+            result.objectFlags |= objectFlags;
             if (includePatternInType) {
                 result.pattern = pattern;
-            }
-            if (hasComputedProperties) {
-                result.objectFlags |= ObjectFlags.ObjectLiteralPatternWithComputedProperties;
             }
             return result;
         }
