@@ -1605,37 +1605,48 @@ namespace ts {
             }, mapFileName, maps, program, sourcemappedFileCache);
         }
 
-        function getTargetOfMappedDeclarationFile(info: DefinitionInfo): DefinitionInfo {
-            if (endsWith(info.fileName, Extension.Dts)) {
-                let file: SourceFileLike = program.getSourceFile(info.fileName);
-                if (!file) {
-                    const path = toPath(info.fileName, currentDirectory, getCanonicalFileName);
-                    file = sourcemappedFileCache.get(path);
-                }
-                if (!file) {
-                    return info;
-                }
-                const mapper = getSourceMapper(info.fileName, file);
-                const mapLoc: sourcemaps.SourceMappableLocation = { fileName: info.fileName, position: info.textSpan.start };
-                const newLoc = mapper.getOriginalPosition(mapLoc);
-                if (newLoc === mapLoc) return info;
-                return getTargetOfMappedDeclarationFile({
-                    containerKind: info.containerKind,
-                    containerName: info.containerName,
-                    fileName: newLoc.fileName,
-                    kind: info.kind,
-                    name: info.name,
-                    textSpan: {
-                        start: newLoc.position,
-                        length: info.textSpan.length
+        function makeGetTargetOfMappedPosition<TIn>(
+            extract: (original: TIn) => sourcemaps.SourceMappableLocation,
+            create: (result: sourcemaps.SourceMappableLocation, original: TIn) => TIn
+        ) {
+            return getTargetOfMappedPosition;
+            function getTargetOfMappedPosition(input: TIn): TIn {
+                const info = extract(input);
+                if (endsWith(info.fileName, Extension.Dts)) {
+                    let file: SourceFileLike = program.getSourceFile(info.fileName);
+                    if (!file) {
+                        const path = toPath(info.fileName, currentDirectory, getCanonicalFileName);
+                        file = sourcemappedFileCache.get(path);
                     }
-                });
+                    if (!file) {
+                        return input;
+                    }
+                    const mapper = getSourceMapper(info.fileName, file);
+                    const newLoc = mapper.getOriginalPosition(info);
+                    if (newLoc === info) return input;
+                    return getTargetOfMappedPosition(create(newLoc, input));
+                }
+                return input;
             }
-            return info;
         }
 
+        const getTargetOfMappedDeclarationInfo = makeGetTargetOfMappedPosition(
+            (info: DefinitionInfo) => ({ fileName: info.fileName, position: info.textSpan.start }),
+            (newLoc, info) => ({
+                containerKind: info.containerKind,
+                containerName: info.containerName,
+                fileName: newLoc.fileName,
+                kind: info.kind,
+                name: info.name,
+                textSpan: {
+                    start: newLoc.position,
+                    length: info.textSpan.length
+                }
+            })
+        );
+
         function getTargetOfMappedDeclarationFiles(infos: ReadonlyArray<DefinitionInfo>): DefinitionInfo[] {
-            return map(infos, getTargetOfMappedDeclarationFile);
+            return map(infos, getTargetOfMappedDeclarationInfo);
         }
 
         /// Goto definition
@@ -1664,9 +1675,27 @@ namespace ts {
         }
 
         /// Goto implementation
+
+        const getTargetOfMappedImplementationLocation = makeGetTargetOfMappedPosition(
+            (info: ImplementationLocation) => ({ fileName: info.fileName, position: info.textSpan.start }),
+            (newLoc, info) => ({
+                fileName: newLoc.fileName,
+                kind: info.kind,
+                displayParts: info.displayParts,
+                textSpan: {
+                    start: newLoc.position,
+                    length: info.textSpan.length
+                }
+            })
+        );
+
+        function getTargetOfMappedImplementationLocations(infos: ReadonlyArray<ImplementationLocation>): ImplementationLocation[] {
+            return map(infos, getTargetOfMappedImplementationLocation);
+        }
+
         function getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] {
             synchronizeHostData();
-            return FindAllReferences.getImplementationsAtPosition(program, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position);
+            return getTargetOfMappedImplementationLocations(FindAllReferences.getImplementationsAtPosition(program, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position));
         }
 
         /// References and Occurrences
