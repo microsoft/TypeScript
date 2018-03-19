@@ -4259,7 +4259,8 @@ namespace ts {
                 }
 
                 if (isPropertyAccessExpression(expression.left) && expression.left.expression.kind === SyntaxKind.ThisKeyword) {
-                    if (getThisContainer(expression, /*includeArrowFunctions*/ false).kind === SyntaxKind.Constructor) {
+                    const thisContainer = getThisContainer(expression, /*includeArrowFunctions*/ false);
+                    if (thisContainer.kind === SyntaxKind.Constructor || thisContainer.kind === SyntaxKind.FunctionDeclaration || thisContainer.kind === SyntaxKind.FunctionExpression) {
                         definedInConstructor = true;
                     }
                     else {
