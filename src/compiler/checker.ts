@@ -6701,9 +6701,7 @@ namespace ts {
                 const isJSConstructSignature = isJSDocConstructSignature(declaration);
                 const isUntypedSignatureInJSFile = !iife &&
                     isInJavaScriptFile(declaration) &&
-                    declaration.kind !== SyntaxKind.FunctionType &&
-                    declaration.kind !== SyntaxKind.ConstructorType &&
-                    declaration.kind !== SyntaxKind.JSDocFunctionType &&
+                    isValueSignatureDeclaration(declaration) &&
                     !hasJSDocParameterTags(declaration) &&
                     !getJSDocType(declaration);
 
