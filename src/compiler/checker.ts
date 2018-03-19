@@ -4325,12 +4325,12 @@ namespace ts {
         function getTypeFromObjectBindingPattern(pattern: ObjectBindingPattern, includePatternInType: boolean, reportErrors: boolean): Type {
             const members = createSymbolTable();
             let stringIndexInfo: IndexInfo | undefined;
-            let hasComputedProperties = false;
+            let objectFlags = ObjectFlags.ObjectLiteral;
             forEach(pattern.elements, e => {
                 const name = e.propertyName || <Identifier>e.name;
                 if (isComputedNonLiteralName(name)) {
                     // do not include computed properties in the implied type
-                    hasComputedProperties = true;
+                    objectFlags |= ObjectFlags.ObjectLiteralPatternWithComputedProperties;
                     return;
                 }
                 if (e.dotDotDotToken) {
@@ -4346,11 +4346,10 @@ namespace ts {
                 members.set(symbol.escapedName, symbol);
             });
             const result = createAnonymousType(undefined, members, emptyArray, emptyArray, stringIndexInfo, undefined);
+            result.flags |= TypeFlags.ContainsObjectLiteral;
+            result.objectFlags |= objectFlags;
             if (includePatternInType) {
                 result.pattern = pattern;
-            }
-            if (hasComputedProperties) {
-                result.objectFlags |= ObjectFlags.ObjectLiteralPatternWithComputedProperties;
             }
             return result;
         }
@@ -6595,14 +6594,7 @@ namespace ts {
                 // node.type should only be a JSDocOptionalType when node is a parameter of a JSDocFunctionType
                 node.type && node.type.kind === SyntaxKind.JSDocOptionalType
                 || getJSDocParameterTags(node).some(({ isBracketed, typeExpression }) =>
-                    isBracketed || !!typeExpression && skipJSDocPrefixTypes(typeExpression.type).kind === SyntaxKind.JSDocOptionalType));
-        }
-
-        function skipJSDocPrefixTypes(type: TypeNode): TypeNode {
-            while (type.kind === SyntaxKind.JSDocNullableType || type.kind === SyntaxKind.JSDocNonNullableType) {
-                type = (type as JSDocNullableType | JSDocNonNullableType).type;
-            }
-            return type;
+                    isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType));
         }
 
         function tryFindAmbientModule(moduleName: string, withAugmentations: boolean) {
