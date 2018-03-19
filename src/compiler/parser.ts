@@ -2203,7 +2203,7 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseJSDocAllType(postFixEquals: boolean): JSDocAllType  | JSDocOptionalType {
+        function parseJSDocAllType(postFixEquals: boolean): JSDocAllType | JSDocOptionalType {
             const result = finishNode(createNode(SyntaxKind.JSDocAllType)) as JSDocAllType;
             if (postFixEquals) {
                 return createJSDocPostfixType(SyntaxKind.JSDocOptionalType, result) as JSDocOptionalType;
@@ -6503,6 +6503,10 @@ namespace ts {
                 }
 
                 function parseBracketNameInPropertyAndParamTag(): { name: EntityName, isBracketed: boolean } {
+                    if (token() === SyntaxKind.NoSubstitutionTemplateLiteral) {
+                        // a markdown-quoted name: `arg` is not legal jsdoc, but occurs in the wild
+                        return { name: createIdentifier(/*isIdentifier*/ true), isBracketed: false };
+                    }
                     // Looking for something like '[foo]', 'foo', '[foo.bar]' or 'foo.bar'
                     const isBracketed = parseOptional(SyntaxKind.OpenBracketToken);
                     const name = parseJSDocEntityName();
