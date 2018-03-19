@@ -1049,21 +1049,11 @@ namespace ts.Completions {
         }
 
         function tryGetGlobalSymbols(): boolean {
-            let objectLikeContainer: ObjectLiteralExpression | BindingPattern;
-            let namedImportsOrExports: NamedImportsOrExports;
-            let classLikeContainer: ClassLikeDeclaration;
-            let jsxContainer: JsxOpeningLikeElement;
+            const toTry = [tryGetObjectLikeCompletionSymbols, tryGetImportOrExportClauseCompletionSymbols, tryGetConstructorCompletion, tryGetClassLikeCompletionSymbols, tryGetJsxCompletionSymbols, getGlobalCompletions];
+            return firstDefined(toTry, f => f());
+        }
 
-            if (objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken)) {
-                return tryGetObjectLikeCompletionSymbols(objectLikeContainer);
-            }
-
-            if (namedImportsOrExports = tryGetNamedImportsOrExportsForCompletion(contextToken)) {
-                // cursor is in an import clause
-                // try to show exported member for imported module
-                return tryGetImportOrExportClauseCompletionSymbols(namedImportsOrExports);
-            }
-
+        function tryGetConstructorCompletion(): boolean | undefined {
             if (tryGetConstructorLikeCompletionContainer(contextToken)) {
                 // no members, only keywords
                 completionKind = CompletionKind.None;
@@ -1073,28 +1063,21 @@ namespace ts.Completions {
                 keywordFilters = KeywordCompletionFilters.ConstructorParameterKeywords;
                 return true;
             }
+        }
 
-            if (classLikeContainer = tryGetClassLikeCompletionContainer(contextToken)) {
-                // cursor inside class declaration
-                getGetClassLikeCompletionSymbols(classLikeContainer);
+        function tryGetJsxCompletionSymbols(): boolean | undefined {
+            const jsxContainer = tryGetContainingJsxElement(contextToken);
+            // Cursor is inside a JSX self-closing element or opening element
+            const attrsType = jsxContainer && typeChecker.getAllAttributesTypeFromJsxOpeningLikeElement(jsxContainer);
+            if (attrsType) {
+                symbols = filterJsxAttributes(typeChecker.getPropertiesOfType(attrsType), jsxContainer.attributes.properties);
+                completionKind = CompletionKind.MemberLike;
+                isNewIdentifierLocation = false;
                 return true;
             }
+        }
 
-            if (jsxContainer = tryGetContainingJsxElement(contextToken)) {
-                let attrsType: Type;
-                if ((jsxContainer.kind === SyntaxKind.JsxSelfClosingElement) || (jsxContainer.kind === SyntaxKind.JsxOpeningElement)) {
-                    // Cursor is inside a JSX self-closing element or opening element
-                    attrsType = typeChecker.getAllAttributesTypeFromJsxOpeningLikeElement(jsxContainer);
-
-                    if (attrsType) {
-                        symbols = filterJsxAttributes(typeChecker.getPropertiesOfType(attrsType), jsxContainer.attributes.properties);
-                        completionKind = CompletionKind.MemberLike;
-                        isNewIdentifierLocation = false;
-                        return true;
-                    }
-                }
-            }
-
+        function getGlobalCompletions(): true {
             if (tryGetFunctionLikeBodyCompletionContainer(contextToken)) {
                 keywordFilters = KeywordCompletionFilters.FunctionLikeBodyKeywords;
             }
@@ -1437,7 +1420,10 @@ namespace ts.Completions {
          *
          * @returns true if 'symbols' was successfully populated; false otherwise.
          */
-        function tryGetObjectLikeCompletionSymbols(objectLikeContainer: ObjectLiteralExpression | ObjectBindingPattern): boolean {
+        function tryGetObjectLikeCompletionSymbols(): boolean | undefined {
+            const objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken);
+            if (!objectLikeContainer) return undefined;
+
             // We're looking up possible property names from contextual/inferred/declared type.
             completionKind = CompletionKind.ObjectPropertyDeclaration;
 
@@ -1506,7 +1492,12 @@ namespace ts.Completions {
          *
          * @returns true if 'symbols' was successfully populated; false otherwise.
          */
-        function tryGetImportOrExportClauseCompletionSymbols(namedImportsOrExports: NamedImportsOrExports): boolean {
+        function tryGetImportOrExportClauseCompletionSymbols(): boolean | undefined {
+            const namedImportsOrExports = tryGetNamedImportsOrExportsForCompletion(contextToken);
+            if (!namedImportsOrExports) return undefined;
+
+            // cursor is in an import clause
+            // try to show exported member for imported module
             const declarationKind = namedImportsOrExports.kind === SyntaxKind.NamedImports ?
                 SyntaxKind.ImportDeclaration :
                 SyntaxKind.ExportDeclaration;
@@ -1535,7 +1526,10 @@ namespace ts.Completions {
          * Aggregates relevant symbols for completion in class declaration
          * Relevant symbols are stored in the captured 'symbols' variable.
          */
-        function getGetClassLikeCompletionSymbols(classLikeDeclaration: ClassLikeDeclaration) {
+        function tryGetClassLikeCompletionSymbols(): boolean | undefined {
+            const classLikeDeclaration = tryGetClassLikeCompletionContainer(contextToken);
+            if (!classLikeDeclaration) return undefined;
+
             // We're looking up possible property names from parent type.
             completionKind = CompletionKind.MemberLike;
             // Declaring new property/method/accessor
@@ -1585,6 +1579,7 @@ namespace ts.Completions {
                         classElementModifierFlags);
                 }
             }
+            return true;
         }
 
         /**
