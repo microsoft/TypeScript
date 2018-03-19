@@ -14,8 +14,8 @@ const obj = {
 
   /** @type {function(number): number} */
   method1(n1) {
->method1 : (n1: any) => string
->n1 : any
+>method1 : (n1: number) => string
+>n1 : number
 
       return "42";
 >"42" : "42"
@@ -24,18 +24,18 @@ const obj = {
   /** @type {function(number): number} */
   method2: (n1) => "lol",
 >method2 : (arg0: number) => number
->(n1) => "lol" : (n1: any) => string
->n1 : any
+>(n1) => "lol" : (n1: number) => string
+>n1 : number
 >"lol" : "lol"
 
   /** @type {function(number): number} */
   arrowFunc: (num="0") => num + 42,
 >arrowFunc : (arg0: number) => number
->(num="0") => num + 42 : (num?: string) => string
->num : string
+>(num="0") => num + 42 : (num?: number) => number
+>num : number
 >"0" : "0"
->num + 42 : string
->num : string
+>num + 42 : number
+>num : number
 >42 : 42
 
   /** @type {string} */

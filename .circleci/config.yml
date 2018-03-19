@@ -1,21 +1,10 @@
-defaultFilters: &defaultFilters
-  filters:
-    branches:
-      only:
-        - master
-        - release-2.5
-        - release-2.6
-        - release-2.7
 workflows:
   version: 2
   main:
     jobs:
-      - node9:
-          <<: *defaultFilters
-      - node8:
-          <<: *defaultFilters
-      - node6:
-          <<: *defaultFilters
+      - node9
+      - node8
+      - node6
   nightly:
     triggers:
       - schedule:
@@ -25,13 +14,10 @@ workflows:
               only: master
     jobs:
       - node9:
-          <<: *defaultFilters
           context: nightlies
       - node8:
-          <<: *defaultFilters
           context: nightlies
       - node6:
-          <<: *defaultFilters
           context: nightlies
 
 base: &base
@@ -39,10 +25,9 @@ base: &base
     - workerCount: 4
     - timeout: 400000
   steps:
-    - checkout:
-        post:
-          - git submodule update --init --recursive
+    - checkout
     - run: |
+        git submodule update --init --recursive
         npm uninstall typescript --no-save
         npm uninstall tslint --no-save
         npm install
