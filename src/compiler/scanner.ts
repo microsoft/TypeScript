@@ -1975,7 +1975,7 @@ namespace ts {
                 case CharacterCodes.dot:
                     return token = SyntaxKind.DotToken;
                 case CharacterCodes.backtick:
-                    while(pos < end && text.charCodeAt(pos) !== CharacterCodes.backtick) {
+                    while (pos < end && text.charCodeAt(pos) !== CharacterCodes.backtick) {
                         pos++;
                     }
                     tokenValue = text.substring(tokenPos + 1, pos);
