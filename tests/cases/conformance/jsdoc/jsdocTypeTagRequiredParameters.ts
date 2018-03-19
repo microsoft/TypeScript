@@ -11,6 +11,10 @@ const f = (value) => {
 /** @type {(s: string) => void} */
 function g(s) {
 }
+/** @type {{(s: string): void}} */
+function h(s) {
+}
 
 f() // should error
 g() // should error
+h()

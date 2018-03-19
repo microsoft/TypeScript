@@ -1,19 +1,29 @@
-tests/cases/conformance/jsdoc/a.js(8,1): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/conformance/jsdoc/a.js(9,1): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/jsdoc/a.js(8,12): error TS7006: Parameter 's' implicitly has an 'any' type.
+tests/cases/conformance/jsdoc/a.js(11,1): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/jsdoc/a.js(12,1): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/jsdoc/a.js(13,1): error TS2554: Expected 1 arguments, but got 0.
 
 
-==== tests/cases/conformance/jsdoc/a.js (2 errors) ====
+==== tests/cases/conformance/jsdoc/a.js (4 errors) ====
     /** @type {function(string): void} */
     const f = (value) => {
     };
     /** @type {(s: string) => void} */
     function g(s) {
     }
+    /** @type {{(s: string): void}} */
+    function h(s) {
+               ~
+!!! error TS7006: Parameter 's' implicitly has an 'any' type.
+    }
     
     f() // should error
     ~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
     g() // should error
+    ~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+    h()
     ~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
     
