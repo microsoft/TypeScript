@@ -6836,32 +6836,17 @@ namespace ts {
             const result: Signature[] = [];
             for (let i = 0; i < symbol.declarations.length; i++) {
                 const node = symbol.declarations[i];
-                switch (node.kind) {
-                    case SyntaxKind.FunctionType:
-                    case SyntaxKind.ConstructorType:
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.MethodSignature:
-                    case SyntaxKind.Constructor:
-                    case SyntaxKind.CallSignature:
-                    case SyntaxKind.ConstructSignature:
-                    case SyntaxKind.IndexSignature:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.ArrowFunction:
-                    case SyntaxKind.JSDocFunctionType:
-                        // Don't include signature if node is the implementation of an overloaded function. A node is considered
-                        // an implementation node if it has a body and the previous node is of the same kind and immediately
-                        // precedes the implementation node (i.e. has the same parent and ends where the implementation starts).
-                        if (i > 0 && (<FunctionLikeDeclaration>node).body) {
-                            const previous = symbol.declarations[i - 1];
-                            if (node.parent === previous.parent && node.kind === previous.kind && node.pos === previous.end) {
-                                break;
-                            }
-                        }
-                        result.push(getSignatureFromDeclaration(<SignatureDeclaration>node));
+                if (!isFunctionLike(node)) continue;
+                // Don't include signature if node is the implementation of an overloaded function. A node is considered
+                // an implementation node if it has a body and the previous node is of the same kind and immediately
+                // precedes the implementation node (i.e. has the same parent and ends where the implementation starts).
+                if (i > 0 && (node as FunctionLikeDeclaration).body) {
+                    const previous = symbol.declarations[i - 1];
+                    if (node.parent === previous.parent && node.kind === previous.kind && node.pos === previous.end) {
+                        continue;
+                    }
                 }
+                result.push(getSignatureFromDeclaration(node));
             }
             return result;
         }
