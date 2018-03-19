@@ -163,6 +163,10 @@ function f21<T extends number | string>(x: T, y: ZeroOf<T>) {
     y = x;  // Error
 }
 
+type T35<T extends { a: string, b: number }> = T[];
+type T36<T> = T extends { a: string } ? T extends { b: number } ? T35<T> : never : never;
+type T37<T> = T extends { b: number } ? T extends { a: string } ? T35<T> : never : never;
+
 type Extends<T, U> = T extends U ? true : false;
 type If<C extends boolean, T, F> = C extends true ? T : F;
 type Not<C extends boolean> = If<C, false, true>;
@@ -317,3 +321,14 @@ type NonFooKeys2<T extends object> = Exclude<keyof T, 'foo'>;
 
 type Test1 = NonFooKeys1<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
 type Test2 = NonFooKeys2<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
+
+// Repro from #21729
+
+interface Foo2 { foo: string; }
+interface Bar2 { bar: string; }
+type FooBar = Foo2 | Bar2;
+declare interface ExtractFooBar<FB extends FooBar> { }
+
+type Extracted<Struct> = {
+    [K in keyof Struct]: Struct[K] extends FooBar ? ExtractFooBar<Struct[K]> : Struct[K];
+}
