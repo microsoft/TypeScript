@@ -13,8 +13,8 @@ function g(s) {
 }
 /** @type {{(s: string): void}} */
 function h(s) {
->h : (s: any) => void
->s : any
+>h : (s: string) => void
+>s : string
 }
 
 f() // should error
@@ -27,5 +27,5 @@ g() // should error
 
 h()
 >h() : void
->h : (s: any) => void
+>h : (s: string) => void
 
