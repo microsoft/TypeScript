@@ -3015,10 +3015,10 @@ namespace ts {
                     // The type is an object literal type.
                     return createAnonymousTypeNode(<ObjectType>type);
                 }
-                if (type.flags & TypeFlags.Index) {
-                    const indexedType = (<IndexType>type).type;
-                    const indexTypeNode = typeToTypeNodeHelper(indexedType, context);
-                    return createTypeOperatorNode(indexTypeNode);
+                if (type.flags & TypeFlags.Keyof) {
+                    const keyType = (<KeyofType>type).type;
+                    const keyTypeNode = typeToTypeNodeHelper(keyType, context);
+                    return createTypeOperatorNode(keyTypeNode);
                 }
                 if (type.flags & TypeFlags.IndexedAccess) {
                     const objectTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).objectType, context);
@@ -4146,8 +4146,8 @@ namespace ts {
             // A variable declared in a for..in statement is of type string, or of type keyof T when the
             // right hand expression is of a type parameter type.
             if (isVariableDeclaration(declaration) && declaration.parent.parent.kind === SyntaxKind.ForInStatement) {
-                const indexType = getIndexType(checkNonNullExpression(declaration.parent.parent.expression));
-                return indexType.flags & (TypeFlags.TypeParameter | TypeFlags.Index) ? indexType : stringType;
+                const keyofType = getKeyofType(checkNonNullExpression(declaration.parent.parent.expression));
+                return keyofType.flags & (TypeFlags.TypeParameter | TypeFlags.Keyof) ? keyofType : stringType;
             }
 
             if (isVariableDeclaration(declaration) && declaration.parent.parent.kind === SyntaxKind.ForOfStatement) {
@@ -5950,7 +5950,7 @@ namespace ts {
                 // if the key type is a 'keyof X', obtain 'keyof C' where C is the base constraint of X.
                 // Finally, iterate over the constituents of the resulting iteration type.
                 const keyType = constraintType.flags & TypeFlags.InstantiableNonPrimitive ? getApparentType(constraintType) : constraintType;
-                const iterationType = keyType.flags & TypeFlags.Index ? getIndexType(getApparentType((<IndexType>keyType).type)) : keyType;
+                const iterationType = keyType.flags & TypeFlags.Keyof ? getKeyofType(getApparentType((<KeyofType>keyType).type)) : keyType;
                 forEachType(iterationType, addMemberForKeyType);
             }
             setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, undefined);
@@ -6031,7 +6031,7 @@ namespace ts {
                     const declaredType = <MappedType>getTypeFromMappedTypeNode(type.declaration);
                     const constraint = getConstraintTypeFromMappedType(declaredType);
                     const extendedConstraint = constraint && constraint.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>constraint) : constraint;
-                    type.modifiersType = extendedConstraint && extendedConstraint.flags & TypeFlags.Index ? instantiateType((<IndexType>extendedConstraint).type, type.mapper || identityMapper) : emptyObjectType;
+                    type.modifiersType = extendedConstraint && extendedConstraint.flags & TypeFlags.Keyof ? instantiateType((<KeyofType>extendedConstraint).type, type.mapper || identityMapper) : emptyObjectType;
                 }
             }
             return type.modifiersType;
@@ -6222,7 +6222,7 @@ namespace ts {
 
         function getBaseConstraintOfType(type: Type): Type {
             const constraint = getBaseConstraintOfInstantiableNonPrimitiveUnionOrIntersection(type);
-            if (!constraint && type.flags & TypeFlags.Index) {
+            if (!constraint && type.flags & TypeFlags.Keyof) {
                 return stringType;
             }
             return constraint;
@@ -6286,7 +6286,7 @@ namespace ts {
                         t.flags & TypeFlags.Intersection && baseTypes.length ? getIntersectionType(baseTypes) :
                             undefined;
                 }
-                if (t.flags & TypeFlags.Index) {
+                if (t.flags & TypeFlags.Keyof) {
                     return stringType;
                 }
                 if (t.flags & TypeFlags.IndexedAccess) {
@@ -7991,12 +7991,12 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getIndexTypeForGenericType(type: InstantiableType | UnionOrIntersectionType) {
-            if (!type.resolvedIndexType) {
-                type.resolvedIndexType = <IndexType>createType(TypeFlags.Index);
-                type.resolvedIndexType.type = type;
+        function getKeyofTypeForGenericType(type: InstantiableType | UnionOrIntersectionType) {
+            if (!type.resolvedKeyofType) {
+                type.resolvedKeyofType = <KeyofType>createType(TypeFlags.Keyof);
+                type.resolvedKeyofType.type = type;
             }
-            return type.resolvedIndexType;
+            return type.resolvedKeyofType;
         }
 
         function getLiteralTypeFromPropertyName(prop: Symbol) {
@@ -8018,18 +8018,18 @@ namespace ts {
             return getUnionType(map(getPropertiesOfType(type), getLiteralTypeFromPropertyName));
         }
 
-        function getIndexType(type: Type): Type {
-            return type.flags & TypeFlags.Intersection ? getUnionType(map((<IntersectionType>type).types, t => getIndexType(t))) :
-                maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type) :
+        function getKeyofType(type: Type): Type {
+            return type.flags & TypeFlags.Intersection ? getUnionType(map((<IntersectionType>type).types, t => getKeyofType(t))) :
+                maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getKeyofTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
                 type === wildcardType ? wildcardType :
                 type.flags & TypeFlags.Any || getIndexInfoOfType(type, IndexKind.String) ? stringType :
                 getLiteralTypeFromPropertyNames(type);
         }
 
-        function getIndexTypeOrString(type: Type): Type {
-            const indexType = getIndexType(type);
-            return indexType.flags & TypeFlags.Never ? stringType : indexType;
+        function getKeyofTypeOrString(type: Type): Type {
+            const keyofType = getKeyofType(type);
+            return keyofType.flags & TypeFlags.Never ? stringType : keyofType;
         }
 
         function getTypeFromTypeOperatorNode(node: TypeOperatorNode) {
@@ -8037,7 +8037,7 @@ namespace ts {
             if (!links.resolvedType) {
                 switch (node.operator) {
                     case SyntaxKind.KeyOfKeyword:
-                        links.resolvedType = getIndexType(getTypeFromTypeNode(node.type));
+                        links.resolvedType = getKeyofType(getTypeFromTypeNode(node.type));
                         break;
                     case SyntaxKind.UniqueKeyword:
                         links.resolvedType = node.type.kind === SyntaxKind.SymbolKeyword
@@ -8124,7 +8124,7 @@ namespace ts {
         }
 
         function isGenericIndexType(type: Type): boolean {
-            return maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive | TypeFlags.Index);
+            return maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive | TypeFlags.Keyof);
         }
 
         // Return true if the given type is a non-generic object type with a string index signature and no
@@ -8918,8 +8918,8 @@ namespace ts {
             // homomorphic mapped types we leave primitive types alone. For example, when T is instantiated to a
             // union type A | undefined, we produce { [P in keyof A]: X } | undefined.
             const constraintType = getConstraintTypeFromMappedType(type);
-            if (constraintType.flags & TypeFlags.Index) {
-                const typeVariable = (<IndexType>constraintType).type;
+            if (constraintType.flags & TypeFlags.Keyof) {
+                const typeVariable = (<KeyofType>constraintType).type;
                 if (typeVariable.flags & TypeFlags.TypeParameter) {
                     const mappedTypeVariable = instantiateType(typeVariable, mapper);
                     if (typeVariable !== mappedTypeVariable) {
@@ -9016,8 +9016,8 @@ namespace ts {
                     const newTypes = instantiateTypes(types, mapper);
                     return newTypes !== types ? getIntersectionType(newTypes, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper)) : type;
                 }
-                if (type.flags & TypeFlags.Index) {
-                    return getIndexType(instantiateType((<IndexType>type).type, mapper));
+                if (type.flags & TypeFlags.Keyof) {
+                    return getKeyofType(instantiateType((<KeyofType>type).type, mapper));
                 }
                 if (type.flags & TypeFlags.IndexedAccess) {
                     return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper));
@@ -9758,8 +9758,8 @@ namespace ts {
                         }
                     }
                 }
-                if (flags & TypeFlags.Index) {
-                    return isRelatedTo((<IndexType>source).type, (<IndexType>target).type, /*reportErrors*/ false);
+                if (flags & TypeFlags.Keyof) {
+                    return isRelatedTo((<KeyofType>source).type, (<KeyofType>target).type, /*reportErrors*/ false);
                 }
                 if (flags & TypeFlags.IndexedAccess) {
                     if (result = isRelatedTo((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType, /*reportErrors*/ false)) {
@@ -10069,7 +10069,7 @@ namespace ts {
                 const saveErrorInfo = errorInfo;
                 if (target.flags & TypeFlags.TypeParameter) {
                     // A source type { [P in keyof T]: X } is related to a target type T if X is related to T[P].
-                    if (getObjectFlags(source) & ObjectFlags.Mapped && getConstraintTypeFromMappedType(<MappedType>source) === getIndexType(target)) {
+                    if (getObjectFlags(source) & ObjectFlags.Mapped && getConstraintTypeFromMappedType(<MappedType>source) === getKeyofType(target)) {
                         if (!(getMappedTypeModifiers(<MappedType>source) & MappedTypeModifiers.IncludeOptional)) {
                             const templateType = getTemplateTypeFromMappedType(<MappedType>source);
                             const indexedAccessType = getIndexedAccessType(target, getTypeParameterFromMappedType(<MappedType>source));
@@ -10079,18 +10079,18 @@ namespace ts {
                         }
                     }
                 }
-                else if (target.flags & TypeFlags.Index) {
+                else if (target.flags & TypeFlags.Keyof) {
                     // A keyof S is related to a keyof T if T is related to S.
-                    if (source.flags & TypeFlags.Index) {
-                        if (result = isRelatedTo((<IndexType>target).type, (<IndexType>source).type, /*reportErrors*/ false)) {
+                    if (source.flags & TypeFlags.Keyof) {
+                        if (result = isRelatedTo((<KeyofType>target).type, (<KeyofType>source).type, /*reportErrors*/ false)) {
                             return result;
                         }
                     }
                     // A type S is assignable to keyof T if S is assignable to keyof C, where C is the
                     // constraint of T.
-                    const constraint = getConstraintForRelation((<IndexType>target).type);
+                    const constraint = getConstraintForRelation((<KeyofType>target).type);
                     if (constraint) {
-                        if (result = isRelatedTo(source, getIndexType(constraint), reportErrors)) {
+                        if (result = isRelatedTo(source, getKeyofType(constraint), reportErrors)) {
                             return result;
                         }
                     }
@@ -10116,7 +10116,7 @@ namespace ts {
                         return Ternary.True;
                     }
                     // A source type T is related to a target type { [P in keyof T]: X } if T[P] is related to X.
-                    if (!isGenericMappedType(source) && getConstraintTypeFromMappedType(target) === getIndexType(source)) {
+                    if (!isGenericMappedType(source) && getConstraintTypeFromMappedType(target) === getKeyofType(source)) {
                         const indexedAccessType = getIndexedAccessType(source, getTypeParameterFromMappedType(target));
                         const templateType = getTemplateTypeFromMappedType(target);
                         if (result = isRelatedTo(indexedAccessType, templateType, reportErrors)) {
@@ -11547,7 +11547,7 @@ namespace ts {
         }
 
         function inferReverseMappedType(sourceType: Type, target: MappedType): Type {
-            const typeParameter = <TypeParameter>getIndexedAccessType((<IndexType>getConstraintTypeFromMappedType(target)).type, getTypeParameterFromMappedType(target));
+            const typeParameter = <TypeParameter>getIndexedAccessType((<KeyofType>getConstraintTypeFromMappedType(target)).type, getTypeParameterFromMappedType(target));
             const templateType = getTemplateTypeFromMappedType(target);
             const inference = createInferenceInfo(typeParameter);
             inferTypes([inference], sourceType, templateType);
@@ -11691,15 +11691,15 @@ namespace ts {
                         }
                     }
                 }
-                else if (source.flags & TypeFlags.Index && target.flags & TypeFlags.Index) {
+                else if (source.flags & TypeFlags.Keyof && target.flags & TypeFlags.Keyof) {
                     contravariant = !contravariant;
-                    inferFromTypes((<IndexType>source).type, (<IndexType>target).type);
+                    inferFromTypes((<KeyofType>source).type, (<KeyofType>target).type);
                     contravariant = !contravariant;
                 }
-                else if ((isLiteralType(source) || source.flags & TypeFlags.String) && target.flags & TypeFlags.Index) {
+                else if ((isLiteralType(source) || source.flags & TypeFlags.String) && target.flags & TypeFlags.Keyof) {
                     const empty = createEmptyObjectTypeFromStringLiteral(source);
                     contravariant = !contravariant;
-                    inferFromTypes(empty, (target as IndexType).type);
+                    inferFromTypes(empty, (target as KeyofType).type);
                     contravariant = !contravariant;
                 }
                 else if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {
@@ -11806,12 +11806,12 @@ namespace ts {
                 }
                 if (getObjectFlags(target) & ObjectFlags.Mapped) {
                     const constraintType = getConstraintTypeFromMappedType(<MappedType>target);
-                    if (constraintType.flags & TypeFlags.Index) {
+                    if (constraintType.flags & TypeFlags.Keyof) {
                         // We're inferring from some source type S to a homomorphic mapped type { [P in keyof T]: X },
                         // where T is a type variable. Use inferTypeForHomomorphicMappedType to infer a suitable source
                         // type and then make a secondary inference from that type to T. We make a secondary inference
                         // such that direct inferences to T get priority over inferences to Partial<T>, for example.
-                        const inference = getInferenceInfoForType((<IndexType>constraintType).type);
+                        const inference = getInferenceInfoForType((<KeyofType>constraintType).type);
                         if (inference && !inference.isFixed) {
                             const inferredType = inferTypeForHomomorphicMappedType(source, <MappedType>target);
                             if (inferredType) {
@@ -11828,7 +11828,7 @@ namespace ts {
                         // parameter. Infer from 'keyof S' to T and infer from a union of each property type in S to X.
                         const savePriority = priority;
                         priority |= InferencePriority.MappedTypeConstraint;
-                        inferFromTypes(getIndexType(source), constraintType);
+                        inferFromTypes(getKeyofType(source), constraintType);
                         priority = savePriority;
                         inferFromTypes(getUnionType(map(getPropertiesOfType(source), getTypeOfSymbol)), getTemplateTypeFromMappedType(<MappedType>target));
                         return;
@@ -11924,7 +11924,7 @@ namespace ts {
 
         function hasPrimitiveConstraint(type: TypeParameter): boolean {
             const constraint = getConstraintOfTypeParameter(type);
-            return constraint && maybeTypeOfKind(constraint, TypeFlags.Primitive | TypeFlags.Index);
+            return constraint && maybeTypeOfKind(constraint, TypeFlags.Primitive | TypeFlags.Keyof);
         }
 
         function isObjectLiteralType(type: Type) {
@@ -19597,7 +19597,7 @@ namespace ts {
                 }
                 // If the contextual type is a literal of a particular primitive type, we consider this a
                 // literal context for all literals of that primitive type.
-                return contextualType.flags & (TypeFlags.StringLiteral | TypeFlags.Index) && maybeTypeOfKind(candidateType, TypeFlags.StringLiteral) ||
+                return contextualType.flags & (TypeFlags.StringLiteral | TypeFlags.Keyof) && maybeTypeOfKind(candidateType, TypeFlags.StringLiteral) ||
                     contextualType.flags & TypeFlags.NumberLiteral && maybeTypeOfKind(candidateType, TypeFlags.NumberLiteral) ||
                     contextualType.flags & TypeFlags.BooleanLiteral && maybeTypeOfKind(candidateType, TypeFlags.BooleanLiteral) ||
                     contextualType.flags & TypeFlags.UniqueESSymbol && maybeTypeOfKind(candidateType, TypeFlags.UniqueESSymbol);
@@ -20520,7 +20520,7 @@ namespace ts {
             // Check if the index type is assignable to 'keyof T' for the object type.
             const objectType = (<IndexedAccessType>type).objectType;
             const indexType = (<IndexedAccessType>type).indexType;
-            if (isTypeAssignableTo(indexType, getIndexType(objectType))) {
+            if (isTypeAssignableTo(indexType, getKeyofType(objectType))) {
                 if (accessNode.kind === SyntaxKind.ElementAccessExpression && isAssignmentTarget(accessNode) &&
                     getObjectFlags(objectType) & ObjectFlags.Mapped && getMappedTypeModifiers(<MappedType>objectType) & MappedTypeModifiers.IncludeReadonly) {
                     error(accessNode, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(objectType));
@@ -22396,7 +22396,7 @@ namespace ts {
                 if (varExpr.kind === SyntaxKind.ArrayLiteralExpression || varExpr.kind === SyntaxKind.ObjectLiteralExpression) {
                     error(varExpr, Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_a_destructuring_pattern);
                 }
-                else if (!isTypeAssignableTo(getIndexTypeOrString(rightType), leftType)) {
+                else if (!isTypeAssignableTo(getKeyofTypeOrString(rightType), leftType)) {
                     error(varExpr, Diagnostics.The_left_hand_side_of_a_for_in_statement_must_be_of_type_string_or_any);
                 }
                 else {
