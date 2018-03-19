@@ -324,6 +324,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 7 >                                    ^^^^^^^^^^^^^^^^^^^^
 8 >                                                        ^^
 9 >                                                          ^^^^
+10>                                                              ^^
 1->
   >
   >
@@ -335,6 +336,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 7 >                                    robots
 8 >                                                        
 9 >                                                          robots
+10>                                                              ) 
 1->Emitted(13, 1) Source(21, 1) + SourceIndex(0)
 2 >Emitted(13, 6) Source(21, 23) + SourceIndex(0)
 3 >Emitted(13, 16) Source(21, 29) + SourceIndex(0)
@@ -344,6 +346,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 7 >Emitted(13, 57) Source(21, 29) + SourceIndex(0)
 8 >Emitted(13, 59) Source(21, 23) + SourceIndex(0)
 9 >Emitted(13, 63) Source(21, 29) + SourceIndex(0)
+10>Emitted(13, 65) Source(21, 31) + SourceIndex(0)
 ---
 >>>    var _a = robots_1[_i], nameA = _a[1];
 1 >^^^^
@@ -408,6 +411,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >                                   ^^^^^^^^^^^^^^
 10>                                                 ^^
 11>                                                   ^^^^
+12>                                                       ^^
 1->
   >
 2 >for (let [, nameA] of 
@@ -420,6 +424,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >                                   getRobots()
 10>                                                 
 11>                                                   getRobots()
+12>                                                       ) 
 1->Emitted(17, 1) Source(24, 1) + SourceIndex(0)
 2 >Emitted(17, 6) Source(24, 23) + SourceIndex(0)
 3 >Emitted(17, 16) Source(24, 34) + SourceIndex(0)
@@ -431,6 +436,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >Emitted(17, 50) Source(24, 34) + SourceIndex(0)
 10>Emitted(17, 52) Source(24, 23) + SourceIndex(0)
 11>Emitted(17, 56) Source(24, 34) + SourceIndex(0)
+12>Emitted(17, 58) Source(24, 36) + SourceIndex(0)
 ---
 >>>    var _d = _c[_b], nameA = _d[1];
 1 >^^^^
@@ -497,6 +503,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>                                        ^^^^^^^^^^^^^^
 12>                                                      ^^
 13>                                                        ^^^^
+14>                                                            ^^
 1->
   >
 2 >for (let [, nameA] of 
@@ -511,6 +518,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>                                        [robotA, robotB]
 12>                                                      
 13>                                                        [robotA, robotB]
+14>                                                            ) 
 1->Emitted(21, 1) Source(27, 1) + SourceIndex(0)
 2 >Emitted(21, 6) Source(27, 23) + SourceIndex(0)
 3 >Emitted(21, 16) Source(27, 39) + SourceIndex(0)
@@ -524,6 +532,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>Emitted(21, 55) Source(27, 39) + SourceIndex(0)
 12>Emitted(21, 57) Source(27, 23) + SourceIndex(0)
 13>Emitted(21, 61) Source(27, 39) + SourceIndex(0)
+14>Emitted(21, 63) Source(27, 41) + SourceIndex(0)
 ---
 >>>    var _g = _f[_e], nameA = _g[1];
 1 >^^^^
@@ -586,7 +595,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 7 >                                              ^^^^^^^^^^^^^^^^^^^^^^^^^
 8 >                                                                       ^^
 9 >                                                                         ^^^^
-10>                                                                             ^^^^^^^^^^^^^^^->
+10>                                                                             ^^
+11>                                                                               ^^^^^^^^^^^^^->
 1->
   >
 2 >for (let [, [primarySkillA, secondarySkillA]] of 
@@ -597,6 +607,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 7 >                                              multiRobots
 8 >                                                                       
 9 >                                                                         multiRobots
+10>                                                                             ) 
 1->Emitted(25, 1) Source(30, 1) + SourceIndex(0)
 2 >Emitted(25, 6) Source(30, 50) + SourceIndex(0)
 3 >Emitted(25, 16) Source(30, 61) + SourceIndex(0)
@@ -606,6 +617,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 7 >Emitted(25, 72) Source(30, 61) + SourceIndex(0)
 8 >Emitted(25, 74) Source(30, 50) + SourceIndex(0)
 9 >Emitted(25, 78) Source(30, 61) + SourceIndex(0)
+10>Emitted(25, 80) Source(30, 63) + SourceIndex(0)
 ---
 >>>    var _j = multiRobots_1[_h], _k = _j[1], primarySkillA = _k[0], secondarySkillA = _k[1];
 1->^^^^
@@ -682,7 +694,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >                                        ^^^^^^^^^^^^^^
 10>                                                      ^^
 11>                                                        ^^^^
-12>                                                            ^^^^^^^^^^^^^^^^^^^^^->
+12>                                                            ^^
+13>                                                              ^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >for (let [, [primarySkillA, secondarySkillA]] of 
@@ -695,6 +708,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >                                        getMultiRobots()
 10>                                                      
 11>                                                        getMultiRobots()
+12>                                                            ) 
 1->Emitted(29, 1) Source(33, 1) + SourceIndex(0)
 2 >Emitted(29, 6) Source(33, 50) + SourceIndex(0)
 3 >Emitted(29, 16) Source(33, 66) + SourceIndex(0)
@@ -706,6 +720,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >Emitted(29, 55) Source(33, 66) + SourceIndex(0)
 10>Emitted(29, 57) Source(33, 50) + SourceIndex(0)
 11>Emitted(29, 61) Source(33, 66) + SourceIndex(0)
+12>Emitted(29, 63) Source(33, 68) + SourceIndex(0)
 ---
 >>>    var _o = _m[_l], _p = _o[1], primarySkillA = _p[0], secondarySkillA = _p[1];
 1->^^^^
@@ -784,7 +799,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>                                                  ^^^^^^^^^^^^^^
 12>                                                                ^^
 13>                                                                  ^^^^
-14>                                                                      ^^^^^^^^^^^->
+14>                                                                      ^^
+15>                                                                        ^^^^^^^^^->
 1->
   >
 2 >for (let [, [primarySkillA, secondarySkillA]] of 
@@ -799,6 +815,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>                                                  [multiRobotA, multiRobotB]
 12>                                                                
 13>                                                                  [multiRobotA, multiRobotB]
+14>                                                                      ) 
 1->Emitted(33, 1) Source(36, 1) + SourceIndex(0)
 2 >Emitted(33, 6) Source(36, 50) + SourceIndex(0)
 3 >Emitted(33, 16) Source(36, 76) + SourceIndex(0)
@@ -812,6 +829,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>Emitted(33, 65) Source(36, 76) + SourceIndex(0)
 12>Emitted(33, 67) Source(36, 50) + SourceIndex(0)
 13>Emitted(33, 71) Source(36, 76) + SourceIndex(0)
+14>Emitted(33, 73) Source(36, 78) + SourceIndex(0)
 ---
 >>>    var _s = _r[_q], _t = _s[1], primarySkillA = _t[0], secondarySkillA = _t[1];
 1->^^^^
@@ -886,6 +904,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 7 >                                    ^^^^^^^^^^^^^^^^^^^^
 8 >                                                        ^^
 9 >                                                          ^^^^
+10>                                                              ^^
 1->
   >
   >
@@ -897,6 +916,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 7 >                                    robots
 8 >                                                        
 9 >                                                          robots
+10>                                                              ) 
 1->Emitted(37, 1) Source(40, 1) + SourceIndex(0)
 2 >Emitted(37, 6) Source(40, 23) + SourceIndex(0)
 3 >Emitted(37, 16) Source(40, 29) + SourceIndex(0)
@@ -906,6 +926,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 7 >Emitted(37, 57) Source(40, 29) + SourceIndex(0)
 8 >Emitted(37, 59) Source(40, 23) + SourceIndex(0)
 9 >Emitted(37, 63) Source(40, 29) + SourceIndex(0)
+10>Emitted(37, 65) Source(40, 31) + SourceIndex(0)
 ---
 >>>    var numberB = robots_2[_u][0];
 1 >^^^^
@@ -964,6 +985,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >                                   ^^^^^^^^^^^^^^
 10>                                                 ^^
 11>                                                   ^^^^
+12>                                                       ^^
 1->
   >
 2 >for (let [numberB] of 
@@ -976,6 +998,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >                                   getRobots()
 10>                                                 
 11>                                                   getRobots()
+12>                                                       ) 
 1->Emitted(41, 1) Source(43, 1) + SourceIndex(0)
 2 >Emitted(41, 6) Source(43, 23) + SourceIndex(0)
 3 >Emitted(41, 16) Source(43, 34) + SourceIndex(0)
@@ -987,6 +1010,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >Emitted(41, 50) Source(43, 34) + SourceIndex(0)
 10>Emitted(41, 52) Source(43, 23) + SourceIndex(0)
 11>Emitted(41, 56) Source(43, 34) + SourceIndex(0)
+12>Emitted(41, 58) Source(43, 36) + SourceIndex(0)
 ---
 >>>    var numberB = _w[_v][0];
 1 >^^^^
@@ -1047,6 +1071,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>                                        ^^^^^^^^^^^^^^
 12>                                                      ^^
 13>                                                        ^^^^
+14>                                                            ^^
 1->
   >
 2 >for (let [numberB] of 
@@ -1061,6 +1086,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>                                        [robotA, robotB]
 12>                                                      
 13>                                                        [robotA, robotB]
+14>                                                            ) 
 1->Emitted(45, 1) Source(46, 1) + SourceIndex(0)
 2 >Emitted(45, 6) Source(46, 23) + SourceIndex(0)
 3 >Emitted(45, 16) Source(46, 39) + SourceIndex(0)
@@ -1074,6 +1100,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>Emitted(45, 55) Source(46, 39) + SourceIndex(0)
 12>Emitted(45, 57) Source(46, 23) + SourceIndex(0)
 13>Emitted(45, 61) Source(46, 39) + SourceIndex(0)
+14>Emitted(45, 63) Source(46, 41) + SourceIndex(0)
 ---
 >>>    var numberB = _y[_x][0];
 1 >^^^^
@@ -1130,6 +1157,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 7 >                                              ^^^^^^^^^^^^^^^^^^^^^^^^^
 8 >                                                                       ^^
 9 >                                                                         ^^^^
+10>                                                                             ^^
 1->
   >
 2 >for (let [nameB] of 
@@ -1140,6 +1168,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 7 >                                              multiRobots
 8 >                                                                       
 9 >                                                                         multiRobots
+10>                                                                             ) 
 1->Emitted(49, 1) Source(49, 1) + SourceIndex(0)
 2 >Emitted(49, 6) Source(49, 21) + SourceIndex(0)
 3 >Emitted(49, 16) Source(49, 32) + SourceIndex(0)
@@ -1149,6 +1178,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 7 >Emitted(49, 72) Source(49, 32) + SourceIndex(0)
 8 >Emitted(49, 74) Source(49, 21) + SourceIndex(0)
 9 >Emitted(49, 78) Source(49, 32) + SourceIndex(0)
+10>Emitted(49, 80) Source(49, 34) + SourceIndex(0)
 ---
 >>>    var nameB = multiRobots_2[_z][0];
 1 >^^^^
@@ -1207,6 +1237,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >                                        ^^^^^^^^^^^^^^
 10>                                                      ^^
 11>                                                        ^^^^
+12>                                                            ^^
 1->
   >
 2 >for (let [nameB] of 
@@ -1219,6 +1250,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >                                        getMultiRobots()
 10>                                                      
 11>                                                        getMultiRobots()
+12>                                                            ) 
 1->Emitted(53, 1) Source(52, 1) + SourceIndex(0)
 2 >Emitted(53, 6) Source(52, 21) + SourceIndex(0)
 3 >Emitted(53, 16) Source(52, 37) + SourceIndex(0)
@@ -1230,6 +1262,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >Emitted(53, 55) Source(52, 37) + SourceIndex(0)
 10>Emitted(53, 57) Source(52, 21) + SourceIndex(0)
 11>Emitted(53, 61) Source(52, 37) + SourceIndex(0)
+12>Emitted(53, 63) Source(52, 39) + SourceIndex(0)
 ---
 >>>    var nameB = _1[_0][0];
 1 >^^^^
@@ -1290,6 +1323,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>                                                  ^^^^^^^^^^^^^^
 12>                                                                ^^
 13>                                                                  ^^^^
+14>                                                                      ^^
 1->
   >
 2 >for (let [nameB] of 
@@ -1304,6 +1338,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>                                                  [multiRobotA, multiRobotB]
 12>                                                                
 13>                                                                  [multiRobotA, multiRobotB]
+14>                                                                      ) 
 1->Emitted(57, 1) Source(55, 1) + SourceIndex(0)
 2 >Emitted(57, 6) Source(55, 21) + SourceIndex(0)
 3 >Emitted(57, 16) Source(55, 47) + SourceIndex(0)
@@ -1317,6 +1352,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>Emitted(57, 65) Source(55, 47) + SourceIndex(0)
 12>Emitted(57, 67) Source(55, 21) + SourceIndex(0)
 13>Emitted(57, 71) Source(55, 47) + SourceIndex(0)
+14>Emitted(57, 73) Source(55, 49) + SourceIndex(0)
 ---
 >>>    var nameB = _3[_2][0];
 1 >^^^^
@@ -1373,7 +1409,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 7 >                                    ^^^^^^^^^^^^^^^^^^^^
 8 >                                                        ^^
 9 >                                                          ^^^^
-10>                                                              ^^^^^^^^^^^^^^^^->
+10>                                                              ^^
+11>                                                                ^^^^^^^^^^^^^^->
 1->
   >
   >
@@ -1385,6 +1422,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 7 >                                    robots
 8 >                                                        
 9 >                                                          robots
+10>                                                              ) 
 1->Emitted(61, 1) Source(59, 1) + SourceIndex(0)
 2 >Emitted(61, 6) Source(59, 41) + SourceIndex(0)
 3 >Emitted(61, 16) Source(59, 47) + SourceIndex(0)
@@ -1394,6 +1432,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 7 >Emitted(61, 57) Source(59, 47) + SourceIndex(0)
 8 >Emitted(61, 59) Source(59, 41) + SourceIndex(0)
 9 >Emitted(61, 63) Source(59, 47) + SourceIndex(0)
+10>Emitted(61, 65) Source(59, 49) + SourceIndex(0)
 ---
 >>>    var _5 = robots_3[_4], numberA2 = _5[0], nameA2 = _5[1], skillA2 = _5[2];
 1->^^^^
@@ -1470,7 +1509,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >                                   ^^^^^^^^^^^^^^
 10>                                                 ^^
 11>                                                   ^^^^
-12>                                                       ^^^^^^^^^^^^^^^^^->
+12>                                                       ^^
+13>                                                         ^^^^^^^^^^^^^^^->
 1->
   >
 2 >for (let [numberA2, nameA2, skillA2] of 
@@ -1483,6 +1523,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >                                   getRobots()
 10>                                                 
 11>                                                   getRobots()
+12>                                                       ) 
 1->Emitted(65, 1) Source(62, 1) + SourceIndex(0)
 2 >Emitted(65, 6) Source(62, 41) + SourceIndex(0)
 3 >Emitted(65, 16) Source(62, 52) + SourceIndex(0)
@@ -1494,6 +1535,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >Emitted(65, 50) Source(62, 52) + SourceIndex(0)
 10>Emitted(65, 52) Source(62, 41) + SourceIndex(0)
 11>Emitted(65, 56) Source(62, 52) + SourceIndex(0)
+12>Emitted(65, 58) Source(62, 54) + SourceIndex(0)
 ---
 >>>    var _8 = _7[_6], numberA2 = _8[0], nameA2 = _8[1], skillA2 = _8[2];
 1->^^^^
@@ -1572,7 +1614,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>                                         ^^^^^^^^^^^^^^^
 12>                                                        ^^
 13>                                                          ^^^^
-14>                                                              ^^^^^^^^^^^^^^^->
+14>                                                              ^^
+15>                                                                ^^^^^^^^^^^^^->
 1->
   >
 2 >for (let [numberA2, nameA2, skillA2] of 
@@ -1587,6 +1630,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>                                         [robotA, robotB]
 12>                                                        
 13>                                                          [robotA, robotB]
+14>                                                              ) 
 1->Emitted(69, 1) Source(65, 1) + SourceIndex(0)
 2 >Emitted(69, 6) Source(65, 41) + SourceIndex(0)
 3 >Emitted(69, 16) Source(65, 57) + SourceIndex(0)
@@ -1600,6 +1644,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>Emitted(69, 57) Source(65, 57) + SourceIndex(0)
 12>Emitted(69, 59) Source(65, 41) + SourceIndex(0)
 13>Emitted(69, 63) Source(65, 57) + SourceIndex(0)
+14>Emitted(69, 65) Source(65, 59) + SourceIndex(0)
 ---
 >>>    var _11 = _10[_9], numberA2 = _11[0], nameA2 = _11[1], skillA2 = _11[2];
 1->^^^^
@@ -1674,7 +1719,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 7 >                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
 8 >                                                                         ^^
 9 >                                                                           ^^^^^
-10>                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+10>                                                                                ^^
+11>                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >for (let [nameMA, [primarySkillA, secondarySkillA]] of 
@@ -1685,6 +1731,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 7 >                                               multiRobots
 8 >                                                                         
 9 >                                                                           multiRobots
+10>                                                                                ) 
 1->Emitted(73, 1) Source(68, 1) + SourceIndex(0)
 2 >Emitted(73, 6) Source(68, 56) + SourceIndex(0)
 3 >Emitted(73, 17) Source(68, 67) + SourceIndex(0)
@@ -1694,6 +1741,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 7 >Emitted(73, 74) Source(68, 67) + SourceIndex(0)
 8 >Emitted(73, 76) Source(68, 56) + SourceIndex(0)
 9 >Emitted(73, 81) Source(68, 67) + SourceIndex(0)
+10>Emitted(73, 83) Source(68, 69) + SourceIndex(0)
 ---
 >>>    var _13 = multiRobots_3[_12], nameMA = _13[0], _14 = _13[1], primarySkillA = _14[0], secondarySkillA = _14[1];
 1->^^^^
@@ -1776,7 +1824,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >                                          ^^^^^^^^^^^^^^^^
 10>                                                          ^^
 11>                                                            ^^^^^
-12>                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+12>                                                                 ^^
+13>                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >for (let [nameMA, [primarySkillA, secondarySkillA]] of 
@@ -1789,6 +1838,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >                                          getMultiRobots()
 10>                                                          
 11>                                                            getMultiRobots()
+12>                                                                 ) 
 1->Emitted(77, 1) Source(71, 1) + SourceIndex(0)
 2 >Emitted(77, 6) Source(71, 56) + SourceIndex(0)
 3 >Emitted(77, 17) Source(71, 72) + SourceIndex(0)
@@ -1800,6 +1850,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >Emitted(77, 59) Source(71, 72) + SourceIndex(0)
 10>Emitted(77, 61) Source(71, 56) + SourceIndex(0)
 11>Emitted(77, 66) Source(71, 72) + SourceIndex(0)
+12>Emitted(77, 68) Source(71, 74) + SourceIndex(0)
 ---
 >>>    var _17 = _16[_15], nameMA = _17[0], _18 = _17[1], primarySkillA = _18[0], secondarySkillA = _18[1];
 1->^^^^
@@ -1884,7 +1935,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>                                                    ^^^^^^^^^^^^^^^^
 12>                                                                    ^^
 13>                                                                      ^^^^^
-14>                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+14>                                                                           ^^
+15>                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >for (let [nameMA, [primarySkillA, secondarySkillA]] of 
@@ -1899,6 +1951,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>                                                    [multiRobotA, multiRobotB]
 12>                                                                    
 13>                                                                      [multiRobotA, multiRobotB]
+14>                                                                           ) 
 1->Emitted(81, 1) Source(74, 1) + SourceIndex(0)
 2 >Emitted(81, 6) Source(74, 56) + SourceIndex(0)
 3 >Emitted(81, 17) Source(74, 82) + SourceIndex(0)
@@ -1912,6 +1965,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>Emitted(81, 69) Source(74, 82) + SourceIndex(0)
 12>Emitted(81, 71) Source(74, 56) + SourceIndex(0)
 13>Emitted(81, 76) Source(74, 82) + SourceIndex(0)
+14>Emitted(81, 78) Source(74, 84) + SourceIndex(0)
 ---
 >>>    var _21 = _20[_19], nameMA = _21[0], _22 = _21[1], primarySkillA = _22[0], secondarySkillA = _22[1];
 1->^^^^
@@ -1992,7 +2046,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 7 >                                     ^^^^^^^^^^^^^^^^^^^^^
 8 >                                                          ^^
 9 >                                                            ^^^^^
-10>                                                                 ^^^^^^^^^^->
+10>                                                                 ^^
+11>                                                                   ^^^^^^^^->
 1->
   >
   >
@@ -2004,6 +2059,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 7 >                                     robots
 8 >                                                          
 9 >                                                            robots
+10>                                                                 ) 
 1->Emitted(85, 1) Source(78, 1) + SourceIndex(0)
 2 >Emitted(85, 6) Source(78, 39) + SourceIndex(0)
 3 >Emitted(85, 17) Source(78, 45) + SourceIndex(0)
@@ -2013,6 +2069,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 7 >Emitted(85, 59) Source(78, 45) + SourceIndex(0)
 8 >Emitted(85, 61) Source(78, 39) + SourceIndex(0)
 9 >Emitted(85, 66) Source(78, 45) + SourceIndex(0)
+10>Emitted(85, 68) Source(78, 47) + SourceIndex(0)
 ---
 >>>    var _24 = robots_4[_23], numberA3 = _24[0], robotAInfo = _24.slice(1);
 1->^^^^
@@ -2083,7 +2140,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >                                     ^^^^^^^^^^^^^^^^
 10>                                                     ^^
 11>                                                       ^^^^^
-12>                                                            ^^^^^^^^^^->
+12>                                                            ^^
+13>                                                              ^^^^^^^^->
 1->
   >
 2 >for (let [numberA3, ...robotAInfo] of 
@@ -2096,6 +2154,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >                                     getRobots()
 10>                                                     
 11>                                                       getRobots()
+12>                                                            ) 
 1->Emitted(89, 1) Source(81, 1) + SourceIndex(0)
 2 >Emitted(89, 6) Source(81, 39) + SourceIndex(0)
 3 >Emitted(89, 17) Source(81, 50) + SourceIndex(0)
@@ -2107,6 +2166,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >Emitted(89, 54) Source(81, 50) + SourceIndex(0)
 10>Emitted(89, 56) Source(81, 39) + SourceIndex(0)
 11>Emitted(89, 61) Source(81, 50) + SourceIndex(0)
+12>Emitted(89, 63) Source(81, 52) + SourceIndex(0)
 ---
 >>>    var _27 = _26[_25], numberA3 = _27[0], robotAInfo = _27.slice(1);
 1->^^^^
@@ -2179,7 +2239,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>                                          ^^^^^^^^^^^^^^^^
 12>                                                          ^^
 13>                                                            ^^^^^
-14>                                                                 ^^^^^->
+14>                                                                 ^^
+15>                                                                   ^^^->
 1->
   >
 2 >for (let [numberA3, ...robotAInfo] of 
@@ -2194,6 +2255,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>                                          [robotA, robotB]
 12>                                                          
 13>                                                            [robotA, robotB]
+14>                                                                 ) 
 1->Emitted(93, 1) Source(84, 1) + SourceIndex(0)
 2 >Emitted(93, 6) Source(84, 39) + SourceIndex(0)
 3 >Emitted(93, 17) Source(84, 55) + SourceIndex(0)
@@ -2207,6 +2269,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>Emitted(93, 59) Source(84, 55) + SourceIndex(0)
 12>Emitted(93, 61) Source(84, 39) + SourceIndex(0)
 13>Emitted(93, 66) Source(84, 55) + SourceIndex(0)
+14>Emitted(93, 68) Source(84, 57) + SourceIndex(0)
 ---
 >>>    var _30 = _29[_28], numberA3 = _30[0], robotAInfo = _30.slice(1);
 1->^^^^
@@ -2275,6 +2338,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 7 >                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
 8 >                                                                         ^^
 9 >                                                                           ^^^^^
+10>                                                                                ^^
 1->
   >
 2 >for (let [...multiRobotAInfo] of 
@@ -2285,6 +2349,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 7 >                                               multiRobots
 8 >                                                                         
 9 >                                                                           multiRobots
+10>                                                                                ) 
 1->Emitted(97, 1) Source(87, 1) + SourceIndex(0)
 2 >Emitted(97, 6) Source(87, 34) + SourceIndex(0)
 3 >Emitted(97, 17) Source(87, 45) + SourceIndex(0)
@@ -2294,6 +2359,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 7 >Emitted(97, 74) Source(87, 45) + SourceIndex(0)
 8 >Emitted(97, 76) Source(87, 34) + SourceIndex(0)
 9 >Emitted(97, 81) Source(87, 45) + SourceIndex(0)
+10>Emitted(97, 83) Source(87, 47) + SourceIndex(0)
 ---
 >>>    var multiRobotAInfo = multiRobots_4[_31].slice(0);
 1 >^^^^
@@ -2352,6 +2418,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >                                          ^^^^^^^^^^^^^^^^
 10>                                                          ^^
 11>                                                            ^^^^^
+12>                                                                 ^^
 1->
   >
 2 >for (let [...multiRobotAInfo] of 
@@ -2364,6 +2431,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >                                          getMultiRobots()
 10>                                                          
 11>                                                            getMultiRobots()
+12>                                                                 ) 
 1->Emitted(101, 1) Source(90, 1) + SourceIndex(0)
 2 >Emitted(101, 6) Source(90, 34) + SourceIndex(0)
 3 >Emitted(101, 17) Source(90, 50) + SourceIndex(0)
@@ -2375,6 +2443,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 9 >Emitted(101, 59) Source(90, 50) + SourceIndex(0)
 10>Emitted(101, 61) Source(90, 34) + SourceIndex(0)
 11>Emitted(101, 66) Source(90, 50) + SourceIndex(0)
+12>Emitted(101, 68) Source(90, 52) + SourceIndex(0)
 ---
 >>>    var multiRobotAInfo = _33[_32].slice(0);
 1 >^^^^
@@ -2435,6 +2504,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>                                                    ^^^^^^^^^^^^^^^^
 12>                                                                    ^^
 13>                                                                      ^^^^^
+14>                                                                           ^^
 1->
   >
 2 >for (let [...multiRobotAInfo] of 
@@ -2449,6 +2519,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>                                                    [multiRobotA, multiRobotB]
 12>                                                                    
 13>                                                                      [multiRobotA, multiRobotB]
+14>                                                                           ) 
 1->Emitted(105, 1) Source(93, 1) + SourceIndex(0)
 2 >Emitted(105, 6) Source(93, 34) + SourceIndex(0)
 3 >Emitted(105, 17) Source(93, 60) + SourceIndex(0)
@@ -2462,6 +2533,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 11>Emitted(105, 69) Source(93, 60) + SourceIndex(0)
 12>Emitted(105, 71) Source(93, 34) + SourceIndex(0)
 13>Emitted(105, 76) Source(93, 60) + SourceIndex(0)
+14>Emitted(105, 78) Source(93, 62) + SourceIndex(0)
 ---
 >>>    var multiRobotAInfo = _35[_34].slice(0);
 1 >^^^^

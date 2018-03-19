@@ -52,6 +52,13 @@ namespace ts {
         }
     }
 
+    /*@internal*/
+    export function isJSDocLikeText(text: string, start: number) {
+        return text.charCodeAt(start + 1) === CharacterCodes.asterisk &&
+            text.charCodeAt(start + 2) === CharacterCodes.asterisk &&
+            text.charCodeAt(start + 3) !== CharacterCodes.slash;
+    }
+
     /**
      * Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes
      * stored in properties. If a 'cbNodes' callback is specified, it is invoked for embedded arrays; otherwise,
@@ -2197,8 +2204,15 @@ namespace ts {
         }
 
         function parseJSDocAllType(): JSDocAllType {
-            const result = <JSDocAllType>createNode(SyntaxKind.JSDocAllType);
+            const result = createNode(SyntaxKind.JSDocAllType) as JSDocAllType;
             nextToken();
+            return finishNode(result);
+        }
+
+        function parseJSDocNonNullableType(): TypeNode {
+            const result = createNode(SyntaxKind.JSDocNonNullableType) as JSDocNonNullableType;
+            nextToken();
+            result.type = parseNonArrayType();
             return finishNode(result);
         }
 
@@ -2252,15 +2266,22 @@ namespace ts {
                 parameter.name = parseIdentifierName();
                 parseExpected(SyntaxKind.ColonToken);
             }
-            parameter.type = parseType();
+            parameter.type = parseJSDocType();
             return finishNode(parameter);
         }
 
-        function parseJSDocNodeWithType(kind: SyntaxKind.JSDocVariadicType | SyntaxKind.JSDocNonNullableType): TypeNode {
-            const result = createNode(kind) as JSDocVariadicType | JSDocNonNullableType;
-            nextToken();
-            result.type = parseNonArrayType();
-            return finishNode(result);
+        function parseJSDocType() {
+            const dotdotdot = parseOptionalToken(SyntaxKind.DotDotDotToken);
+            let type = parseType();
+            if (dotdotdot) {
+                const variadic = createNode(SyntaxKind.JSDocVariadicType, dotdotdot.pos) as JSDocVariadicType;
+                variadic.type = type;
+                type = finishNode(variadic);
+            }
+            if (token() === SyntaxKind.EqualsToken) {
+                return createJSDocPostfixType(SyntaxKind.JSDocOptionalType, type);
+            }
+            return type;
         }
 
         function parseTypeQuery(): TypeQueryNode {
@@ -2725,7 +2746,7 @@ namespace ts {
                 case SyntaxKind.FunctionKeyword:
                     return parseJSDocFunctionType();
                 case SyntaxKind.ExclamationToken:
-                    return parseJSDocNodeWithType(SyntaxKind.JSDocNonNullableType);
+                    return parseJSDocNonNullableType();
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
@@ -2810,13 +2831,6 @@ namespace ts {
             let type = parseNonArrayType();
             while (!scanner.hasPrecedingLineBreak()) {
                 switch (token()) {
-                    case SyntaxKind.EqualsToken:
-                        // only parse postfix = inside jsdoc, because it's ambiguous elsewhere
-                        if (!(contextFlags & NodeFlags.JSDoc)) {
-                            return type;
-                        }
-                        type = createJSDocPostfixType(SyntaxKind.JSDocOptionalType, type);
-                        break;
                     case SyntaxKind.ExclamationToken:
                         type = createJSDocPostfixType(SyntaxKind.JSDocNonNullableType, type);
                         break;
@@ -2882,12 +2896,6 @@ namespace ts {
                     return parseTypeOperator(operator);
                 case SyntaxKind.InferKeyword:
                     return parseInferType();
-                case SyntaxKind.DotDotDotToken: {
-                    const result = createNode(SyntaxKind.JSDocVariadicType) as JSDocVariadicType;
-                    nextToken();
-                    result.type = parsePostfixTypeOrHigher();
-                    return finishNode(result);
-                }
             }
             return parsePostfixTypeOrHigher();
         }
@@ -6149,7 +6157,7 @@ namespace ts {
                 const result = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression, scanner.getTokenPos());
 
                 const hasBrace = (mayOmitBraces ? parseOptional : parseExpected)(SyntaxKind.OpenBraceToken);
-                result.type = doInsideOfContext(NodeFlags.JSDoc, parseType);
+                result.type = doInsideOfContext(NodeFlags.JSDoc, parseJSDocType);
                 if (!mayOmitBraces || hasBrace) {
                     parseExpected(SyntaxKind.CloseBraceToken);
                 }
@@ -6219,7 +6227,7 @@ namespace ts {
                 let result: JSDoc;
 
                 // Check for /** (JSDoc opening part)
-                if (!isJsDocStart(content, start)) {
+                if (!isJSDocLikeText(content, start)) {
                     return result;
                 }
 
@@ -6329,13 +6337,6 @@ namespace ts {
                     while (comments.length && (comments[comments.length - 1] === "\n" || comments[comments.length - 1] === "\r")) {
                         comments.pop();
                     }
-                }
-
-                function isJsDocStart(content: string, start: number) {
-                    return content.charCodeAt(start) === CharacterCodes.slash &&
-                        content.charCodeAt(start + 1) === CharacterCodes.asterisk &&
-                        content.charCodeAt(start + 2) === CharacterCodes.asterisk &&
-                        content.charCodeAt(start + 3) !== CharacterCodes.asterisk;
                 }
 
                 function createJSDocComment(): JSDoc {

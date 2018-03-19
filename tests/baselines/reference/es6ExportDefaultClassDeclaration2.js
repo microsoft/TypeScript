@@ -11,6 +11,6 @@ export default class {
 
 
 //// [es6ExportDefaultClassDeclaration2.d.ts]
-export default class  {
+export default class {
     method(): void;
 }

@@ -920,8 +920,7 @@ namespace ts {
     export function sum<T extends Record<K, number>, K extends string>(array: ReadonlyArray<T>, prop: K): number {
         let result = 0;
         for (const v of array) {
-            // TODO: Remove the following type assertion once the fix for #17069 is merged
-            result += v[prop] as number;
+            result += v[prop];
         }
         return result;
     }

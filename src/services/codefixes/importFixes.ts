@@ -161,27 +161,13 @@ namespace ts.codefix {
         const moduleSymbolId = getUniqueSymbolId(moduleSymbol, checker);
         let cached = cachedImportDeclarations[moduleSymbolId];
         if (!cached) {
-            cached = cachedImportDeclarations[moduleSymbolId] = mapDefined<StringLiteral, ExistingImportInfo>(imports, importModuleSpecifier => {
-                const declaration = checker.getSymbolAtLocation(importModuleSpecifier) === moduleSymbol ? getImportDeclaration(importModuleSpecifier) : undefined;
-                return declaration && { declaration, importKind };
+            cached = cachedImportDeclarations[moduleSymbolId] = mapDefined<StringLiteralLike, ExistingImportInfo>(imports, moduleSpecifier => {
+                const i = importFromModuleSpecifier(moduleSpecifier);
+                return (i.kind === SyntaxKind.ImportDeclaration || i.kind === SyntaxKind.ImportEqualsDeclaration)
+                    && checker.getSymbolAtLocation(moduleSpecifier) === moduleSymbol ? { declaration: i, importKind } : undefined;
             });
         }
         return cached;
-    }
-
-    function getImportDeclaration({ parent }: LiteralExpression): AnyImportSyntax | undefined {
-        switch (parent.kind) {
-            case SyntaxKind.ImportDeclaration:
-                return parent as ImportDeclaration;
-            case SyntaxKind.ExternalModuleReference:
-                return (parent as ExternalModuleReference).parent;
-            case SyntaxKind.ExportDeclaration:
-            case SyntaxKind.CallExpression: // For "require()" calls
-                // Ignore these, can't add imports to them.
-                return undefined;
-            default:
-                Debug.fail();
-        }
     }
 
     function getCodeActionForNewImport(context: SymbolContext & { preferences: UserPreferences }, { moduleSpecifier, importKind }: NewImportInfo): CodeFixAction {
@@ -815,21 +801,22 @@ namespace ts.codefix {
     }
 
     export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol, target: ScriptTarget): string {
-        return moduleSpecifierToValidIdentifier(removeFileExtension(getBaseFileName(moduleSymbol.name)), target);
+        return moduleSpecifierToValidIdentifier(removeFileExtension(stripQuotes(moduleSymbol.name)), target);
     }
 
     export function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target: ScriptTarget): string {
+        const baseName = getBaseFileName(removeSuffix(moduleSpecifier, "/index"));
         let res = "";
         let lastCharWasValid = true;
-        const firstCharCode = moduleSpecifier.charCodeAt(0);
+        const firstCharCode = baseName.charCodeAt(0);
         if (isIdentifierStart(firstCharCode, target)) {
             res += String.fromCharCode(firstCharCode);
         }
         else {
             lastCharWasValid = false;
         }
-        for (let i = 1; i < moduleSpecifier.length; i++) {
-            const ch = moduleSpecifier.charCodeAt(i);
+        for (let i = 1; i < baseName.length; i++) {
+            const ch = baseName.charCodeAt(i);
             const isValid = isIdentifierPart(ch, target);
             if (isValid) {
                 let char = String.fromCharCode(ch);
