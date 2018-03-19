@@ -6700,7 +6700,6 @@ namespace ts {
                 const iife = getImmediatelyInvokedFunctionExpression(declaration);
                 const isJSConstructSignature = isJSDocConstructSignature(declaration);
                 const isUntypedSignatureInJSFile = !iife &&
-                    !isJSConstructSignature &&
                     isInJavaScriptFile(declaration) &&
                     declaration.kind !== SyntaxKind.FunctionType &&
                     declaration.kind !== SyntaxKind.ConstructorType &&
