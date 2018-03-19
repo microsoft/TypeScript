@@ -989,7 +989,7 @@ namespace ts {
 
     export interface MethodSignature extends SignatureDeclarationBase, TypeElement {
         kind: SyntaxKind.MethodSignature;
-        parent?: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
+        parent?: ObjectTypeDeclaration;
         name: PropertyName;
     }
 
@@ -1044,7 +1044,7 @@ namespace ts {
 
     export interface IndexSignatureDeclaration extends SignatureDeclarationBase, ClassElement, TypeElement {
         kind: SyntaxKind.IndexSignature;
-        parent?: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
+        parent?: ObjectTypeDeclaration;
     }
 
     export interface TypeNode extends Node {
@@ -2022,6 +2022,8 @@ namespace ts {
         variableDeclaration?: VariableDeclaration;
         block: Block;
     }
+
+    export type ObjectTypeDeclaration = ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
 
     export type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag;
 

@@ -114,7 +114,7 @@
 ////}
 ////class O extends B {
 ////    constructor(public a) {
-////    }, 
+////    },
 ////    /*classElementAfterConstructorSeparatedByComma*/
 ////}
 

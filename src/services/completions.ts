@@ -18,7 +18,8 @@ namespace ts.Completions {
 
     const enum KeywordCompletionFilters {
         None,
-        ClassElementKeywords,           // Keywords at class keyword
+        ClassElementKeywords,           // Keywords inside class body
+        InterfaceElementKeywords,       // Keywords inside interface body
         ConstructorParameterKeywords,   // Keywords at constructor parameter
         FunctionLikeBodyKeywords,       // Keywords at function like body
         TypeKeywords,
@@ -1051,7 +1052,6 @@ namespace ts.Completions {
         function tryGetGlobalSymbols(): boolean {
             let objectLikeContainer: ObjectLiteralExpression | BindingPattern;
             let namedImportsOrExports: NamedImportsOrExports;
-            let classLikeContainer: ClassLikeDeclaration;
             let jsxContainer: JsxOpeningLikeElement;
 
             if (objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken)) {
@@ -1074,9 +1074,10 @@ namespace ts.Completions {
                 return true;
             }
 
-            if (classLikeContainer = tryGetClassLikeCompletionContainer(contextToken)) {
+            const objectTypeContainer = contextToken && tryGetObjectTypeDeclarationCompletionContainer(contextToken, location);
+            if (objectTypeContainer) {
                 // cursor inside class declaration
-                getGetClassLikeCompletionSymbols(classLikeContainer);
+                getObjectTypeConpletionSymbols(objectTypeContainer);
                 return true;
             }
 
@@ -1085,7 +1086,6 @@ namespace ts.Completions {
                 if ((jsxContainer.kind === SyntaxKind.JsxSelfClosingElement) || (jsxContainer.kind === SyntaxKind.JsxOpeningElement)) {
                     // Cursor is inside a JSX self-closing element or opening element
                     attrsType = typeChecker.getAllAttributesTypeFromJsxOpeningLikeElement(jsxContainer);
-
                     if (attrsType) {
                         symbols = filterJsxAttributes(typeChecker.getPropertiesOfType(attrsType), jsxContainer.attributes.properties);
                         completionKind = CompletionKind.MemberLike;
@@ -1535,56 +1535,47 @@ namespace ts.Completions {
          * Aggregates relevant symbols for completion in class declaration
          * Relevant symbols are stored in the captured 'symbols' variable.
          */
-        function getGetClassLikeCompletionSymbols(classLikeDeclaration: ClassLikeDeclaration) {
+        function getObjectTypeConpletionSymbols(decl: ObjectTypeDeclaration): void {
             // We're looking up possible property names from parent type.
             completionKind = CompletionKind.MemberLike;
             // Declaring new property/method/accessor
             isNewIdentifierLocation = true;
             // Has keywords for class elements
-            keywordFilters = KeywordCompletionFilters.ClassElementKeywords;
+            keywordFilters = isClassLike(decl) ? KeywordCompletionFilters.ClassElementKeywords : KeywordCompletionFilters.InterfaceElementKeywords;
 
-            const baseTypeNode = getClassExtendsHeritageClauseElement(classLikeDeclaration);
-            const implementsTypeNodes = getClassImplementsHeritageClauseElements(classLikeDeclaration);
-            if (baseTypeNode || implementsTypeNodes) {
-                const classElement = contextToken.parent;
-                let classElementModifierFlags = isClassElement(classElement) && getModifierFlags(classElement);
+            // If you're in an interface you don't want to repeat things from super-interface. So just stop here.
+            if (!isClassLike(decl)) return;
+
+            const baseTypeNode = getClassExtendsHeritageClauseElement(decl);
+            const implementsTypeNodes = getClassImplementsHeritageClauseElements(decl);
+            if (!baseTypeNode && !implementsTypeNodes) return;
+
+            const classElement = contextToken.parent;
+            const classElementModifierFlags = (isClassElement(classElement) ? getModifierFlags(classElement) : ModifierFlags.None)
                 // If this is context token is not something we are editing now, consider if this would lead to be modifier
-                if (contextToken.kind === SyntaxKind.Identifier && !isCurrentlyEditingNode(contextToken)) {
-                    switch (contextToken.getText()) {
-                        case "private":
-                            classElementModifierFlags = classElementModifierFlags | ModifierFlags.Private;
-                            break;
-                        case "static":
-                            classElementModifierFlags = classElementModifierFlags | ModifierFlags.Static;
-                            break;
-                    }
-                }
+                | (isIdentifier(contextToken) && !isCurrentlyEditingNode(contextToken) ? modifierToFlag(contextToken.originalKeywordKind) : ModifierFlags.None);
 
-                // No member list for private methods
-                if (!(classElementModifierFlags & ModifierFlags.Private)) {
-                    let baseClassTypeToGetPropertiesFrom: Type;
-                    if (baseTypeNode) {
-                        baseClassTypeToGetPropertiesFrom = typeChecker.getTypeAtLocation(baseTypeNode);
-                        if (classElementModifierFlags & ModifierFlags.Static) {
-                            // Use static class to get property symbols from
-                            baseClassTypeToGetPropertiesFrom = typeChecker.getTypeOfSymbolAtLocation(
-                                baseClassTypeToGetPropertiesFrom.symbol, classLikeDeclaration);
-                        }
-                    }
-                    const implementedInterfaceTypePropertySymbols = (classElementModifierFlags & ModifierFlags.Static) ?
-                        emptyArray :
-                        flatMap(implementsTypeNodes || emptyArray, typeNode => typeChecker.getPropertiesOfType(typeChecker.getTypeAtLocation(typeNode)));
+            // No member list for private methods
+            if (classElementModifierFlags & ModifierFlags.Private) return;
 
-                    // List of property symbols of base type that are not private and already implemented
-                    symbols = filterClassMembersList(
-                        baseClassTypeToGetPropertiesFrom ?
-                            typeChecker.getPropertiesOfType(baseClassTypeToGetPropertiesFrom) :
-                            emptyArray,
-                        implementedInterfaceTypePropertySymbols,
-                        classLikeDeclaration.members,
-                        classElementModifierFlags);
+            let baseClassTypeToGetPropertiesFrom: Type | undefined;
+            if (baseTypeNode) {
+                baseClassTypeToGetPropertiesFrom = typeChecker.getTypeAtLocation(baseTypeNode);
+                if (classElementModifierFlags & ModifierFlags.Static) {
+                    // Use static class to get property symbols from
+                    baseClassTypeToGetPropertiesFrom = typeChecker.getTypeOfSymbolAtLocation(baseClassTypeToGetPropertiesFrom.symbol, decl);
                 }
             }
+            const implementedInterfaceTypePropertySymbols = !implementsTypeNodes || (classElementModifierFlags & ModifierFlags.Static)
+                ? emptyArray
+                : flatMap(implementsTypeNodes, typeNode => typeChecker.getPropertiesOfType(typeChecker.getTypeAtLocation(typeNode)));
+
+            // List of property symbols of base type that are not private and already implemented
+            symbols = filterClassMembersList(
+                baseClassTypeToGetPropertiesFrom ? typeChecker.getPropertiesOfType(baseClassTypeToGetPropertiesFrom) : emptyArray,
+                implementedInterfaceTypePropertySymbols,
+                decl.members,
+                classElementModifierFlags);
         }
 
         /**
@@ -1627,10 +1618,6 @@ namespace ts.Completions {
             return undefined;
         }
 
-        function isFromClassElementDeclaration(node: Node) {
-            return node.parent && isClassElement(node.parent) && isClassLike(node.parent.parent);
-        }
-
         function isParameterOfConstructorDeclaration(node: Node) {
             return isParameter(node) && isConstructorDeclaration(node.parent);
         }
@@ -1639,56 +1626,6 @@ namespace ts.Completions {
             return node.parent &&
                 isParameterOfConstructorDeclaration(node.parent) &&
                 (isConstructorParameterCompletionKeyword(node.kind) || isDeclarationName(node));
-        }
-
-        /**
-         * Returns the immediate owning class declaration of a context token,
-         * on the condition that one exists and that the context implies completion should be given.
-         */
-        function tryGetClassLikeCompletionContainer(contextToken: Node): ClassLikeDeclaration {
-            if (contextToken) {
-                switch (contextToken.kind) {
-                    case SyntaxKind.OpenBraceToken:  // class c { |
-                        if (isClassLike(contextToken.parent)) {
-                            return contextToken.parent;
-                        }
-                        break;
-
-                    // class c {getValue(): number, | }
-                    case SyntaxKind.CommaToken:
-                        if (isClassLike(contextToken.parent)) {
-                            return contextToken.parent;
-                        }
-                        break;
-
-                    // class c {getValue(): number; | }
-                    case SyntaxKind.SemicolonToken:
-                    // class c { method() { } | }
-                    case SyntaxKind.CloseBraceToken:
-                        if (isClassLike(location)) {
-                            return location;
-                        }
-                        // class c { method() { } b| }
-                        if (isFromClassElementDeclaration(location) &&
-                            (location.parent as ClassElement).name === location) {
-                            return location.parent.parent as ClassLikeDeclaration;
-                        }
-                        break;
-
-                    default:
-                        if (isFromClassElementDeclaration(contextToken) &&
-                            (isClassMemberCompletionKeyword(contextToken.kind) ||
-                                isClassMemberCompletionKeywordText(contextToken.getText()))) {
-                            return contextToken.parent.parent as ClassLikeDeclaration;
-                        }
-                }
-            }
-
-            // class c { method() { } | method2() { } }
-            if (location && location.kind === SyntaxKind.SyntaxList && isClassLike(location.parent)) {
-                return location.parent;
-            }
-            return undefined;
         }
 
         /**
@@ -1825,9 +1762,7 @@ namespace ts.Completions {
                         isFunctionLikeButNotConstructor(containingNodeKind);
 
                 case SyntaxKind.OpenBraceToken:
-                    return containingNodeKind === SyntaxKind.EnumDeclaration ||                     // enum a { |
-                        containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface a { |
-                        containingNodeKind === SyntaxKind.TypeLiteral;                              // const x : { |
+                    return containingNodeKind === SyntaxKind.EnumDeclaration;                       // enum a { |
 
                 case SyntaxKind.SemicolonToken:
                     return containingNodeKind === SyntaxKind.PropertySignature &&
@@ -1862,7 +1797,7 @@ namespace ts.Completions {
 
                 case SyntaxKind.GetKeyword:
                 case SyntaxKind.SetKeyword:
-                    if (isFromClassElementDeclaration(contextToken)) {
+                    if (isFromObjectTypeDeclaration(contextToken)) {
                         return false;
                     }
                 // falls through
@@ -1882,7 +1817,7 @@ namespace ts.Completions {
             // If the previous token is keyword correspoding to class member completion keyword
             // there will be completion available here
             if (isClassMemberCompletionKeywordText(contextToken.getText()) &&
-                isFromClassElementDeclaration(contextToken)) {
+                isFromObjectTypeDeclaration(contextToken)) {
                 return false;
             }
 
@@ -2167,6 +2102,8 @@ namespace ts.Completions {
                     return kind !== SyntaxKind.UndefinedKeyword;
                 case KeywordCompletionFilters.ClassElementKeywords:
                     return isClassMemberCompletionKeyword(kind);
+                case KeywordCompletionFilters.InterfaceElementKeywords:
+                    return kind === SyntaxKind.ReadonlyKeyword;
                 case KeywordCompletionFilters.ConstructorParameterKeywords:
                     return isConstructorParameterCompletionKeyword(kind);
                 case KeywordCompletionFilters.FunctionLikeBodyKeywords:
@@ -2286,5 +2223,34 @@ namespace ts.Completions {
         const filteredTypes = isForAccess ? types : types.filter(memberType =>
             !(memberType.flags & TypeFlags.Primitive || checker.isArrayLikeType(memberType) || typeHasCallOrConstructSignatures(memberType, checker)));
         return Debug.assertEachDefined(checker.getAllPossiblePropertiesOfTypes(filteredTypes), "getAllPossiblePropertiesOfTypes() should all be defined");
+    }
+
+    /**
+     * Returns the immediate owning class declaration of a context token,
+     * on the condition that one exists and that the context implies completion should be given.
+     */
+    function tryGetObjectTypeDeclarationCompletionContainer(contextToken: Node, location: Node): ObjectTypeDeclaration | undefined {
+        // class c { method() { } | method2() { } }
+        if (location.kind === SyntaxKind.SyntaxList && isObjectTypeDeclaration(location.parent)) return location.parent;
+        switch (contextToken.kind) {
+            case SyntaxKind.SemicolonToken: // class c {getValue(): number; | }
+            case SyntaxKind.CloseBraceToken: // class c { method() { } | }
+                // class c { method() { } b| }
+                return isFromObjectTypeDeclaration(location) && (location.parent as ClassElement | TypeElement).name === location
+                    ? location.parent.parent as ObjectTypeDeclaration
+                    : tryCast(location, isClassLike);
+            case SyntaxKind.OpenBraceToken: // class c { |
+            case SyntaxKind.CommaToken: // class c {getValue(): number, | }
+                return tryCast(contextToken.parent, isObjectTypeDeclaration);
+            default:
+                return isFromObjectTypeDeclaration(contextToken) &&
+                    (isClassMemberCompletionKeyword(contextToken.kind) || isIdentifier(contextToken) && isClassMemberCompletionKeywordText(contextToken.text))
+                    ? contextToken.parent.parent as ObjectTypeDeclaration : undefined;
+        }
+    }
+
+    // TODO: GH#19856 Would like to return `node is Node & { parent: (ClassElement | TypeElement) & { parent: ObjectTypeDeclaration } }` but then compilation takes > 10 minutes
+    function isFromObjectTypeDeclaration(node: Node): boolean {
+        return node.parent && (isClassElement(node.parent) || isTypeElement(node.parent)) && isObjectTypeDeclaration(node.parent.parent);
     }
 }
