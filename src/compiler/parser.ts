@@ -2203,10 +2203,15 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseJSDocAllType(): JSDocAllType {
-            const result = createNode(SyntaxKind.JSDocAllType) as JSDocAllType;
-            nextToken();
-            return finishNode(result);
+        function parseJSDocAllType(postFixEquals: boolean): JSDocAllType  | JSDocOptionalType {
+            const result = finishNode(createNode(SyntaxKind.JSDocAllType)) as JSDocAllType;
+            if (postFixEquals) {
+                return createJSDocPostfixType(SyntaxKind.JSDocOptionalType, result) as JSDocOptionalType;
+            }
+            else {
+                nextToken();
+                return result;
+            }
         }
 
         function parseJSDocNonNullableType(): TypeNode {
@@ -2740,7 +2745,9 @@ namespace ts {
                     // If these are followed by a dot, then parse these out as a dotted type reference instead.
                     return tryParse(parseKeywordAndNoDot) || parseTypeReference();
                 case SyntaxKind.AsteriskToken:
-                    return parseJSDocAllType();
+                    return parseJSDocAllType(/*postfixEquals*/ false);
+                case SyntaxKind.AsteriskEqualsToken:
+                    return parseJSDocAllType(/*postfixEquals*/ true);
                 case SyntaxKind.QuestionToken:
                     return parseJSDocUnknownOrNullableType();
                 case SyntaxKind.FunctionKeyword:
