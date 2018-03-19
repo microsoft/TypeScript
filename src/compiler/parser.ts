@@ -2204,14 +2204,14 @@ namespace ts {
         }
 
         function parseJSDocAllType(postFixEquals: boolean): JSDocAllType | JSDocOptionalType {
-            const result = finishNode(createNode(SyntaxKind.JSDocAllType)) as JSDocAllType;
+            const result = createNode(SyntaxKind.JSDocAllType) as JSDocAllType;
             if (postFixEquals) {
                 return createJSDocPostfixType(SyntaxKind.JSDocOptionalType, result) as JSDocOptionalType;
             }
             else {
                 nextToken();
-                return result;
             }
+            return finishNode(result);
         }
 
         function parseJSDocNonNullableType(): TypeNode {
