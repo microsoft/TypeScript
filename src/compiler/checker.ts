@@ -6703,6 +6703,7 @@ namespace ts {
                     !isJSConstructSignature &&
                     isInJavaScriptFile(declaration) &&
                     declaration.kind !== SyntaxKind.FunctionType &&
+                    declaration.kind !== SyntaxKind.ConstructorType &&
                     declaration.kind !== SyntaxKind.JSDocFunctionType &&
                     !hasJSDocParameterTags(declaration) &&
                     !getJSDocType(declaration);
