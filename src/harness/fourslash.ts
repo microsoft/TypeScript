@@ -1601,7 +1601,7 @@ Actual: ${stringify(fullActual)}`);
                 });
         }
 
-        public baselineGetEmitOutput() {
+        public baselineGetEmitOutput(insertResultsIntoVfs?: boolean) {
             // Find file to be emitted
             const emitFiles: FourSlashFile[] = [];  // List of FourSlashFile that has emitThisFile flag on
 
@@ -1650,6 +1650,9 @@ Actual: ${stringify(fullActual)}`);
                         for (const outputFile of emitOutput.outputFiles) {
                             const fileName = "FileName : " + outputFile.name + Harness.IO.newLine();
                             resultString = resultString + fileName + outputFile.text;
+                            if (insertResultsIntoVfs) {
+                                this.languageServiceAdapterHost.addScript(ts.getNormalizedAbsolutePath(outputFile.name, "/"), outputFile.text, /*isRootFile*/ true);
+                            }
                         }
                         resultString += Harness.IO.newLine();
                     });
@@ -4155,8 +4158,8 @@ namespace FourSlashInterface {
             this.state.baselineCurrentFileNameOrDottedNameSpans();
         }
 
-        public baselineGetEmitOutput() {
-            this.state.baselineGetEmitOutput();
+        public baselineGetEmitOutput(insertResultsIntoVfs?: boolean) {
+            this.state.baselineGetEmitOutput(insertResultsIntoVfs);
         }
 
         public baselineQuickInfo() {
