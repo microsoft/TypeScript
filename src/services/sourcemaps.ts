@@ -31,6 +31,7 @@ namespace ts.sourcemaps {
 
     export function decode(host: SourceMapDecodeHost, mapPath: string, map: SourceMapData, program?: Program, fallbackCache = getSourceFileLikeCache(host)): SourceMapper {
         const currentDirectory = getDirectoryPath(mapPath);
+        const sourceRoot = map.sourceRoot || currentDirectory;
         let decodedMappings: ProcessedSourceMapSpan[];
         let forwardSortedMappings: ProcessedSourceMapSpan[];
         let reverseSortedMappings: ProcessedSourceMapSpan[];
@@ -41,14 +42,14 @@ namespace ts.sourcemaps {
         };
 
         function getGeneratedPosition(loc: SourceMappableLocation): SourceMappableLocation {
-            const maps = filter(getForwardSortedMappings(), m => comparePaths(loc.fileName, m.sourcePath, currentDirectory) === 0);
+            const maps = filter(getForwardSortedMappings(), m => comparePaths(loc.fileName, m.sourcePath, sourceRoot) === 0);
             if (!length(maps)) return loc;
             let targetIndex = binarySearch(maps, { sourcePosition: loc.position }, getSourcePosition, compareValues);
             if (targetIndex < 0 && maps.length > 0) {
                 // if no exact match, closest is 2's compliment of result
                 targetIndex = ~targetIndex;
             }
-            return { fileName: toPath(map.file, currentDirectory, host.getCanonicalFileName), position: maps[targetIndex].emittedPosition }; // Closest span
+            return { fileName: toPath(map.file, sourceRoot, host.getCanonicalFileName), position: maps[targetIndex].emittedPosition }; // Closest span
         }
 
         function getOriginalPosition(loc: SourceMappableLocation): SourceMappableLocation {
@@ -59,22 +60,22 @@ namespace ts.sourcemaps {
                 // if no exact match, closest is 2's compliment of result
                 targetIndex = ~targetIndex;
             }
-            return { fileName: toPath(maps[targetIndex].sourcePath, currentDirectory, host.getCanonicalFileName), position: maps[targetIndex].sourcePosition }; // Closest span
+            return { fileName: toPath(maps[targetIndex].sourcePath, sourceRoot, host.getCanonicalFileName), position: maps[targetIndex].sourcePosition }; // Closest span
         }
 
-        function getSourceFileLike(fileName: string): SourceFileLike | undefined {
+        function getSourceFileLike(fileName: string, location: string): SourceFileLike | undefined {
             // Lookup file in program, if provided
             const file: SourceFileLike = program && program.getSourceFile(fileName);
             if (!file) {
                 // Otherwise check the cache (which may hit disk)
-                const path = toPath(fileName, currentDirectory, host.getCanonicalFileName);
+                const path = toPath(fileName, location, host.getCanonicalFileName);
                 return fallbackCache.get(path);
             }
             return file;
         }
 
-        function getPositionOfLineAndCharacterUsingName(fileName: string, line: number, character: number) {
-            const file = getSourceFileLike(fileName);
+        function getPositionOfLineAndCharacterUsingName(fileName: string, directory: string, line: number, character: number) {
+            const file = getSourceFileLike(fileName, directory);
             if (!file) {
                 return -1;
             }
@@ -118,7 +119,7 @@ namespace ts.sourcemaps {
         }
 
         function compareProcessedSpanSourcePositions(a: ProcessedSourceMapSpan, b: ProcessedSourceMapSpan) {
-            return comparePaths(a.sourcePath, b.sourcePath, currentDirectory) ||
+            return comparePaths(a.sourcePath, b.sourcePath, sourceRoot) ||
                 compareValues(a.sourcePosition, b.sourcePosition);
         }
 
@@ -129,8 +130,8 @@ namespace ts.sourcemaps {
         function processSpan(span: RawSourceMapSpan): ProcessedSourceMapSpan {
             const sourcePath = map.sources[span.sourceIndex];
             return {
-                emittedPosition: getPositionOfLineAndCharacterUsingName(map.file, span.emittedLine - 1, span.emittedColumn - 1),
-                sourcePosition: getPositionOfLineAndCharacterUsingName(sourcePath, span.sourceLine - 1, span.sourceColumn - 1),
+                emittedPosition: getPositionOfLineAndCharacterUsingName(map.file, currentDirectory, span.emittedLine - 1, span.emittedColumn - 1),
+                sourcePosition: getPositionOfLineAndCharacterUsingName(sourcePath, sourceRoot, span.sourceLine - 1, span.sourceColumn - 1),
                 sourcePath,
                 name: span.nameIndex ? map.names[span.nameIndex] : undefined
             };
