@@ -1100,10 +1100,10 @@ namespace FourSlash {
                 references: ranges.map<ts.ReferenceEntry>(r => {
                     const { isWriteAccess = false, isDefinition = false, isInString } = (r.marker && r.marker.data || {}) as { isWriteAccess?: boolean, isDefinition?: boolean, isInString?: true };
                     return {
-                        isWriteAccess,
-                        isDefinition,
                         fileName: r.fileName,
                         textSpan: ts.createTextSpanFromRange(r),
+                        isWriteAccess,
+                        isDefinition,
                         ...(isInString ? { isInString: true } : undefined),
                     };
                 }),
@@ -1119,7 +1119,7 @@ namespace FourSlash {
                 const fullActual = ts.map<ts.ReferencedSymbol, ReferenceGroupJson>(this.findReferencesAtCaret(), ({ definition, references }, i) => {
                     const text = definition.displayParts.map(d => d.text).join("");
                     return {
-                        definition: typeof fullExpected[i].definition === "string" ? text : { text, range: definition.textSpan },
+                        definition: fullExpected.length > i && typeof fullExpected[i].definition === "string" ? text : { text, range: definition.textSpan },
                         references,
                     };
                 });

@@ -1599,7 +1599,10 @@ namespace ts.FindAllReferences.Core {
             return firstDefined(checker.getRootSymbols(sym), rootSymbol => {
                 // if it is in the list, then we are done
                 if (search.includes(rootSymbol)) {
-                    return rootSymbol;
+                    // For a root symbol that is a component of a union or intersection, use the original (union/intersection) symbol.
+                    // That we when a symbol references the whole union we avoid claiming it references some particular member of the union.
+                    // For a transient symbol we want to use the root symbol instead.
+                    return getCheckFlags(sym) & CheckFlags.Synthetic ? sym : rootSymbol;
                 }
 
                 // Finally, try all properties with the same name in any type the containing type extended or implemented, and
@@ -1613,7 +1616,7 @@ namespace ts.FindAllReferences.Core {
 
                     const result: Symbol[] = [];
                     getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.name, result, /*previousIterationSymbolsCache*/ createSymbolTable(), checker);
-                    return find(result, search.includes);
+                    return result.some(search.includes) ? rootSymbol : undefined;
                 }
 
                 return undefined;
