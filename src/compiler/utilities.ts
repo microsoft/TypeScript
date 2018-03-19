@@ -4510,6 +4510,15 @@ namespace ts {
         let tag: JSDocTypeTag | JSDocParameterTag | undefined = getFirstJSDocTag(node, isJSDocTypeTag);
         if (!tag && isParameter(node)) {
             tag = find(getJSDocParameterTags(node), tag => !!tag.typeExpression);
+            if (!tag && isFunctionLike(node.parent)) {
+                const typeTag = getJSDocTypeTag(node.parent);
+                if (typeTag && typeTag.typeExpression && isFunctionLike(typeTag.typeExpression.type)) {
+                    const i = node.parent.parameters.indexOf(node);
+                    if (i > -1) {
+                        return typeTag.typeExpression.type.parameters[i].type;
+                    }
+                }
+            }
         }
 
         return tag && tag.typeExpression && tag.typeExpression.type;

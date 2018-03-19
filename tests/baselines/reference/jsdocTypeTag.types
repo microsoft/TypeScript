@@ -79,6 +79,10 @@ var obj;
 var Func;
 >Func : Function
 
+/** @type {(s: string) => number} */
+var f;
+>f : (s: string) => number
+
 === tests/cases/conformance/jsdoc/b.ts ===
 var S: string;
 >S : string
@@ -145,4 +149,8 @@ var obj: any;
 var Func: Function;
 >Func : Function
 >Function : Function
+
+var f: (s: string) => number;
+>f : (s: string) => number
+>s : string
 
