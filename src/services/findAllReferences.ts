@@ -1681,36 +1681,10 @@ namespace ts.FindAllReferences.Core {
     }
 
     function isImplementation(node: Node): boolean {
-        if (!node) {
-            return false;
-        }
-        else if (isVariableLike(node) && hasInitializer(node)) {
-            return true;
-        }
-        else if (node.kind === SyntaxKind.VariableDeclaration) {
-            const parentStatement = getParentStatementOfVariableDeclaration(<VariableDeclaration>node);
-            return parentStatement && hasModifier(parentStatement, ModifierFlags.Ambient);
-        }
-        else if (isFunctionLike(node)) {
-            return !!(node as FunctionLikeDeclaration).body || hasModifier(node, ModifierFlags.Ambient);
-        }
-        else {
-            switch (node.kind) {
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.ClassExpression:
-                case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.ModuleDeclaration:
-                    return true;
-            }
-        }
-        return false;
-    }
-
-    function getParentStatementOfVariableDeclaration(node: VariableDeclaration): VariableStatement {
-        if (node.parent && node.parent.parent && node.parent.parent.kind === SyntaxKind.VariableStatement) {
-            Debug.assert(node.parent.kind === SyntaxKind.VariableDeclarationList);
-            return node.parent.parent;
-        }
+        return !!(node.flags & NodeFlags.Ambient)
+            || (isVariableLike(node) ? hasInitializer(node)
+                : isFunctionLikeDeclaration(node) ? !!node.body
+                : isClassLike(node) || isModuleOrEnumDeclaration(node));
     }
 
     export function getReferenceEntriesForShorthandPropertyAssignment(node: Node, checker: TypeChecker, addReference: (node: Node) => void): void {
