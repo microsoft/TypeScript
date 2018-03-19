@@ -10296,7 +10296,7 @@ namespace ts {
             function replaceRecursiveAliasReference(template: Type, target: Type): Type {
                 return mapType(template, t => {
                     if (t.flags & TypeFlags.Intersection) {
-                        return getIntersectionType((t as IntersectionType).types.map(u => replaceRecursiveAliasReference(u, target)))
+                        return getIntersectionType((t as IntersectionType).types.map(u => replaceRecursiveAliasReference(u, target)));
                     }
                     const hasSharedAliasSymbol = t.aliasSymbol !== undefined &&
                         t.aliasTypeArguments && t.aliasTypeArguments.length === 1 &&
