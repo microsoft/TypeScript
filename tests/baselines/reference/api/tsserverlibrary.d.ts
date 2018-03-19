@@ -2242,9 +2242,10 @@ declare namespace ts {
         HomomorphicMappedType = 2,
         MappedTypeConstraint = 4,
         ReturnType = 8,
-        NoConstraints = 16,
-        AlwaysStrict = 32,
-        PriorityImpliesUnion = 12
+        LiteralKeyof = 16,
+        NoConstraints = 32,
+        AlwaysStrict = 64,
+        PriorityImpliesCombination = 28
     }
     interface JsFileExtensionInfo {
         extension: string;
