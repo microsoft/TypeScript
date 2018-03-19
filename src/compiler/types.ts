@@ -2568,7 +2568,7 @@ namespace ts {
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
         /* @internal */ resolvedModules: Map<ResolvedModuleFull | undefined>;
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
-        /* @internal */ imports: ReadonlyArray<StringLiteral>;
+        /* @internal */ imports: ReadonlyArray<StringLiteralLike>;
         // Identifier only if `declare global`
         /* @internal */ moduleAugmentations: ReadonlyArray<StringLiteral | Identifier>;
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
@@ -3158,6 +3158,18 @@ namespace ts {
 
     /* @internal */
     export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
+
+    /* @internal */
+    export type AnyImportOrReExport = AnyImportSyntax | ExportDeclaration;
+
+    /* @internal */
+    export type AnyValidImportOrReExport =
+        | (ImportDeclaration | ExportDeclaration) & { moduleSpecifier: StringLiteral }
+        | ImportEqualsDeclaration & { moduleReference: ExternalModuleReference & { expression: StringLiteral } }
+        | RequireOrImportCall;
+
+    /* @internal */
+    export type RequireOrImportCall = CallExpression & { arguments: [StringLiteralLike] };
 
     /* @internal */
     export interface SymbolVisibilityResult {

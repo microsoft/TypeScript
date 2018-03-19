@@ -4164,7 +4164,7 @@ namespace ts {
             }
 
             const isOptional = includeOptionality && (
-                isInJavaScriptFile(declaration) && isParameter(declaration) && getJSDocParameterTags(declaration).some(tag => tag.isBracketed)
+                isParameter(declaration) && isJSDocOptionalParameter(declaration)
                 || !isBindingElement(declaration) && !isVariableDeclaration(declaration) && !!declaration.questionToken);
 
             // Use type from type annotation if one is present
@@ -4310,12 +4310,12 @@ namespace ts {
         function getTypeFromObjectBindingPattern(pattern: ObjectBindingPattern, includePatternInType: boolean, reportErrors: boolean): Type {
             const members = createSymbolTable();
             let stringIndexInfo: IndexInfo;
-            let hasComputedProperties = false;
+            let objectFlags = ObjectFlags.ObjectLiteral;
             forEach(pattern.elements, e => {
                 const name = e.propertyName || <Identifier>e.name;
                 if (isComputedNonLiteralName(name)) {
                     // do not include computed properties in the implied type
-                    hasComputedProperties = true;
+                    objectFlags |= ObjectFlags.ObjectLiteralPatternWithComputedProperties;
                     return;
                 }
                 if (e.dotDotDotToken) {
@@ -4331,11 +4331,10 @@ namespace ts {
                 members.set(symbol.escapedName, symbol);
             });
             const result = createAnonymousType(undefined, members, emptyArray, emptyArray, stringIndexInfo, undefined);
+            result.flags |= TypeFlags.ContainsObjectLiteral;
+            result.objectFlags |= objectFlags;
             if (includePatternInType) {
                 result.pattern = pattern;
-            }
-            if (hasComputedProperties) {
-                result.objectFlags |= ObjectFlags.ObjectLiteralPatternWithComputedProperties;
             }
             return result;
         }
@@ -6571,6 +6570,7 @@ namespace ts {
 
         function isJSDocOptionalParameter(node: ParameterDeclaration) {
             return isInJavaScriptFile(node) && (
+                // node.type should only be a JSDocOptionalType when node is a parameter of a JSDocFunctionType
                 node.type && node.type.kind === SyntaxKind.JSDocOptionalType
                 || getJSDocParameterTags(node).some(({ isBracketed, typeExpression }) =>
                     isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType));
@@ -18069,8 +18069,7 @@ namespace ts {
                 parent = parent.parent;
             }
             return parent && isBinaryExpression(parent) &&
-                isPropertyAccessExpression(parent.left) &&
-                parent.left.name.escapedText === "prototype" &&
+                isPrototypeAccess(parent.left) &&
                 parent.operatorToken.kind === SyntaxKind.EqualsToken &&
                 isObjectLiteralExpression(parent.right) &&
                 parent.right;
@@ -18222,7 +18221,7 @@ namespace ts {
         }
 
         function isCommonJsRequire(node: Node): boolean {
-            if (!isRequireCall(node, /*checkArgumentIsStringLiteral*/ true)) {
+            if (!isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ true)) {
                 return false;
             }
 
@@ -19682,7 +19681,7 @@ namespace ts {
         function getTypeOfExpression(node: Expression, cache?: boolean) {
             // Optimize for the common case of a call to a function with a single non-generic call
             // signature where we can just fetch the return type without checking the arguments.
-            if (node.kind === SyntaxKind.CallExpression && (<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(node, /*checkArgumentIsStringLiteral*/ true) && !isSymbolOrSymbolForCall(node)) {
+            if (node.kind === SyntaxKind.CallExpression && (<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ true) && !isSymbolOrSymbolForCall(node)) {
                 const funcType = checkNonNullExpression((<CallExpression>node).expression);
                 const signature = getSingleCallSignature(funcType);
                 if (signature && !signature.typeParameters) {
@@ -25032,7 +25031,7 @@ namespace ts {
                     // 3). Dynamic import call or require in javascript
                     if ((isExternalModuleImportEqualsDeclaration(node.parent.parent) && getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node) ||
                         ((node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration) && (<ImportDeclaration>node.parent).moduleSpecifier === node) ||
-                        ((isInJavaScriptFile(node) && isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false)) || isImportCall(node.parent))) {
+                        ((isInJavaScriptFile(node) && isRequireCall(node.parent, /*checkArgumentIsStringLiteralLike*/ false)) || isImportCall(node.parent))) {
                         return resolveExternalModuleName(node, <LiteralExpression>node);
                     }
                     // falls through
@@ -25872,8 +25871,8 @@ namespace ts {
             }
         }
 
-        function getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration): SourceFile {
-            const specifier = getExternalModuleName(declaration);
+        function getExternalModuleFileFromDeclaration(declaration: AnyImportOrReExport | ModuleDeclaration): SourceFile {
+            const specifier = declaration.kind === SyntaxKind.ModuleDeclaration ? tryCast(declaration.name, isStringLiteral) : getExternalModuleName(declaration);
             const moduleSymbol = resolveExternalModuleNameWorker(specifier, specifier, /*moduleNotFoundError*/ undefined);
             if (!moduleSymbol) {
                 return undefined;

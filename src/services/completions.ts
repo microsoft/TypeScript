@@ -353,7 +353,7 @@ namespace ts.Completions {
         | { readonly kind: StringLiteralCompletionKind.Paths, readonly paths: ReadonlyArray<PathCompletions.PathCompletion> }
         | { readonly kind: StringLiteralCompletionKind.Properties, readonly symbols: ReadonlyArray<Symbol> }
         | { readonly kind: StringLiteralCompletionKind.Types, readonly types: ReadonlyArray<StringLiteralType> };
-   function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringLiteralLike, position: number, typeChecker: TypeChecker, compilerOptions: CompilerOptions, host: LanguageServiceHost): StringLiteralCompletion | undefined {
+    function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringLiteralLike, position: number, typeChecker: TypeChecker, compilerOptions: CompilerOptions, host: LanguageServiceHost): StringLiteralCompletion | undefined {
         switch (node.parent.kind) {
             case SyntaxKind.LiteralType:
                 switch (node.parent.parent.kind) {
@@ -406,7 +406,7 @@ namespace ts.Completions {
 
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
-                if (!isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false) && !isImportCall(node.parent)) {
+                if (!isRequireCall(node.parent, /*checkArgumentIsStringLiteralLike*/ false) && !isImportCall(node.parent)) {
                     const argumentInfo = SignatureHelp.getImmediatelyContainingArgumentInfo(node, position, sourceFile);
                     // Get string literal completions from specialized signatures of the target
                     // i.e. declare function f(a: 'A');
