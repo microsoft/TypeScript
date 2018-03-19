@@ -25,5 +25,9 @@
 ////instance.[|/*1*/methodName|]({member: 12});
 
 verify.baselineGetEmitOutput(/*insertResultIntoVfs*/ true);
-verify.goToDefinition("1", "2");
-verify.goToType("1", "2");
+verify.goToDefinition("1", "2"); // getDefinitionAndBoundSpan
+verify.goToType("1", "2"); // getTypeDefinitionAtPosition
+goTo.marker("1");
+verify.goToDefinitionIs("2"); // getDefinitionAtPosition
+goTo.implementation(); // getImplementationAtPosition
+verify.caretAtMarker("2");
