@@ -435,23 +435,6 @@ namespace ts {
             const previousWriter = writer;
             setWriter(output);
             emitShebangIfNeeded(sourceFile);
-            if (printerOptions.printCommentsForDeclarationEmit) {
-                if (sourceFile.moduleName) {
-                    write(`/// <amd-module name="${sourceFile.moduleName}" />`);
-                    writeLine();
-                }
-                if (sourceFile.amdDependencies) {
-                    for (const dep of sourceFile.amdDependencies) {
-                        if (dep.name) {
-                            write(`/// <amd-dependency name="${dep.name}" path="${dep.path}" />`);
-                        }
-                        else {
-                            write(`/// <amd-dependency path="${dep.path}" />`);
-                        }
-                        writeLine();
-                    }
-                }
-            }
             emitPrologueDirectivesIfNeeded(sourceFile);
             print(EmitHint.SourceFile, sourceFile, sourceFile);
             reset();
@@ -2546,6 +2529,23 @@ namespace ts {
         function emitPrologueDirectivesIfNeeded(sourceFileOrBundle: Bundle | SourceFile) {
             if (isSourceFile(sourceFileOrBundle)) {
                 setSourceFile(sourceFileOrBundle);
+                if (printerOptions.printCommentsForDeclarationEmit) {
+                    if (sourceFileOrBundle.moduleName) {
+                        write(`/// <amd-module name="${sourceFileOrBundle.moduleName}" />`);
+                        writeLine();
+                    }
+                    if (sourceFileOrBundle.amdDependencies) {
+                        for (const dep of sourceFileOrBundle.amdDependencies) {
+                            if (dep.name) {
+                                write(`/// <amd-dependency name="${dep.name}" path="${dep.path}" />`);
+                            }
+                            else {
+                                write(`/// <amd-dependency path="${dep.path}" />`);
+                            }
+                            writeLine();
+                        }
+                    }
+                }
                 emitPrologueDirectives(sourceFileOrBundle.statements);
             }
             else {
