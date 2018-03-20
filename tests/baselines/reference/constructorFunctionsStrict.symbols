@@ -1,0 +1,52 @@
+=== tests/cases/conformance/salsa/a.js ===
+/** @param {number} x */
+function C(x) {
+>C : Symbol(C, Decl(a.js, 0, 0))
+>x : Symbol(x, Decl(a.js, 1, 11))
+
+    this.x = x
+>x : Symbol(C.x, Decl(a.js, 1, 15))
+>x : Symbol(x, Decl(a.js, 1, 11))
+}
+var c = new C(1)
+>c : Symbol(c, Decl(a.js, 4, 3))
+>C : Symbol(C, Decl(a.js, 0, 0))
+
+c.x = undefined // should error
+>c.x : Symbol(C.x, Decl(a.js, 1, 15))
+>c : Symbol(c, Decl(a.js, 4, 3))
+>x : Symbol(C.x, Decl(a.js, 1, 15))
+>undefined : Symbol(undefined)
+
+/** @param {number} x */
+function A(x) {
+>A : Symbol(A, Decl(a.js, 5, 15))
+>x : Symbol(x, Decl(a.js, 8, 11))
+
+    if (!(this instanceof A)) {
+>A : Symbol(A, Decl(a.js, 5, 15))
+
+        return new A(x)
+>A : Symbol(A, Decl(a.js, 5, 15))
+>x : Symbol(x, Decl(a.js, 8, 11))
+    }
+    this.x = x
+>x : Symbol(A.x, Decl(a.js, 11, 5))
+>x : Symbol(x, Decl(a.js, 8, 11))
+}
+var k = A(1)
+>k : Symbol(k, Decl(a.js, 14, 3))
+>A : Symbol(A, Decl(a.js, 5, 15))
+
+var j = new A(2)
+>j : Symbol(j, Decl(a.js, 15, 3))
+>A : Symbol(A, Decl(a.js, 5, 15))
+
+k.x === j.x
+>k.x : Symbol(A.x, Decl(a.js, 11, 5))
+>k : Symbol(k, Decl(a.js, 14, 3))
+>x : Symbol(A.x, Decl(a.js, 11, 5))
+>j.x : Symbol(A.x, Decl(a.js, 11, 5))
+>j : Symbol(j, Decl(a.js, 15, 3))
+>x : Symbol(A.x, Decl(a.js, 11, 5))
+
