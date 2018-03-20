@@ -18585,11 +18585,9 @@ namespace ts {
             if (aggregatedTypes.length === 0 && !hasReturnWithNoExpression && (hasReturnOfTypeNever || mayReturnNever(func))) {
                 return undefined;
             }
-            const isJSConstructorFunction = some(
-                (func.body as Block).statements.filter(st => isExpressionStatement(st) && st.expression.kind === SyntaxKind.BinaryExpression),
-                stmt => getSpecialPropertyAssignmentKind((stmt as ExpressionStatement).expression as BinaryExpression) === SpecialPropertyAssignmentKind.ThisProperty);
-            // TODO: Also check if the aggregated types includes already the instance type. Not sure how to do this.
-            if (strictNullChecks && aggregatedTypes.length && hasReturnWithNoExpression && !isJSConstructorFunction) {
+            if (strictNullChecks && aggregatedTypes.length && hasReturnWithNoExpression &&
+                !(isJavaScriptConstructor(func) && aggregatedTypes.some(t => t.symbol === func.symbol))) {
+                // Javascript "callable constructors", containing eg `if (!(this instanceof A)) return new A()` should not add undefined
                 pushIfUnique(aggregatedTypes, undefinedType);
             }
             return aggregatedTypes;
