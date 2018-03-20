@@ -31,4 +31,4 @@ export declare class Foo {
 export interface SomeType {
     member: number;
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uL3Rlc3RzL2Nhc2VzL2ZvdXJzbGFzaC9pbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLE1BQU0sRUFBRSxNQUFNLENBQUM7SUFDZixVQUFVLENBQUMsUUFBUSxFQUFFLFFBQVEsR0FBRyxJQUFJO0lBQ3BDLFdBQVc7Ozs7Ozs7Q0FNZDtBQUVELE1BQU0sV0FBVyxRQUFRO0lBQ3JCLE1BQU0sRUFBRSxNQUFNLENBQUM7Q0FDbEIifQ==
+//# sourceMappingURL=index.d.ts.map

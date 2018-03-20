@@ -16,7 +16,7 @@ var Foo = /** @class */ (function () {
 }());
 exports.Foo = Foo;
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi90ZXN0cy9jYXNlcy9mb3Vyc2xhc2gvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQTtJQUFBO0lBU0EsQ0FBQztJQVBHLHdCQUFVLEdBQVYsVUFBVyxRQUFrQixJQUFTLENBQUM7SUFDdkMseUJBQVcsR0FBWDtRQUNJLElBQUksSUFBSSxDQUFDLE1BQU0sRUFBRSxHQUFHLEdBQUcsRUFBRTtZQUNyQixPQUFPLEVBQUMsQ0FBQyxFQUFFLEVBQUUsRUFBQyxDQUFDO1NBQ2xCO1FBQ0QsT0FBTyxFQUFDLENBQUMsRUFBRSxLQUFLLEVBQUMsQ0FBQztJQUN0QixDQUFDO0lBQ0wsVUFBQztBQUFELENBQUMsQUFURCxJQVNDO0FBVFksa0JBQUciLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgY2xhc3MgRm9vIHtcbiAgICBtZW1iZXI6IHN0cmluZztcbiAgICBtZXRob2ROYW1lKHByb3BOYW1lOiBTb21lVHlwZSk6IHZvaWQge31cbiAgICBvdGhlck1ldGhvZCgpIHtcbiAgICAgICAgaWYgKE1hdGgucmFuZG9tKCkgPiAwLjUpIHtcbiAgICAgICAgICAgIHJldHVybiB7eDogNDJ9O1xuICAgICAgICB9XG4gICAgICAgIHJldHVybiB7eTogXCJ5ZXNcIn07XG4gICAgfVxufVxuXG5leHBvcnQgaW50ZXJmYWNlIFNvbWVUeXBlIHtcbiAgICBtZW1iZXI6IG51bWJlcjtcbn0iXX0=FileName : ./dist/index.d.ts.map
-{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../tests/cases/fourslash/index.ts"],"names":[],"mappings":"AAAA;IACI,MAAM,EAAE,MAAM,CAAC;IACf,UAAU,CAAC,QAAQ,EAAE,QAAQ,GAAG,IAAI;IACpC,WAAW;;;;;;;CAMd;AAED,MAAM,WAAW,QAAQ;IACrB,MAAM,EAAE,MAAM,CAAC;CAClB","sourcesContent":["export class Foo {\n    member: string;\n    methodName(propName: SomeType): void {}\n    otherMethod() {\n        if (Math.random() > 0.5) {\n            return {x: 42};\n        }\n        return {y: \"yes\"};\n    }\n}\n\nexport interface SomeType {\n    member: number;\n}"]}FileName : ./dist/index.d.ts
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../tests/cases/fourslash/index.ts"],"names":[],"mappings":"AAAA;IACI,MAAM,EAAE,MAAM,CAAC;IACf,UAAU,CAAC,QAAQ,EAAE,QAAQ,GAAG,IAAI;IACpC,WAAW;;;;;;;CAMd;AAED,MAAM,WAAW,QAAQ;IACrB,MAAM,EAAE,MAAM,CAAC;CAClB"}FileName : ./dist/index.d.ts
 export declare class Foo {
     member: string;
     methodName(propName: SomeType): void;
@@ -31,4 +31,4 @@ export declare class Foo {
 export interface SomeType {
     member: number;
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uL3Rlc3RzL2Nhc2VzL2ZvdXJzbGFzaC9pbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLE1BQU0sRUFBRSxNQUFNLENBQUM7SUFDZixVQUFVLENBQUMsUUFBUSxFQUFFLFFBQVEsR0FBRyxJQUFJO0lBQ3BDLFdBQVc7Ozs7Ozs7Q0FNZDtBQUVELE1BQU0sV0FBVyxRQUFRO0lBQ3JCLE1BQU0sRUFBRSxNQUFNLENBQUM7Q0FDbEIiLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgY2xhc3MgRm9vIHtcbiAgICBtZW1iZXI6IHN0cmluZztcbiAgICBtZXRob2ROYW1lKHByb3BOYW1lOiBTb21lVHlwZSk6IHZvaWQge31cbiAgICBvdGhlck1ldGhvZCgpIHtcbiAgICAgICAgaWYgKE1hdGgucmFuZG9tKCkgPiAwLjUpIHtcbiAgICAgICAgICAgIHJldHVybiB7eDogNDJ9O1xuICAgICAgICB9XG4gICAgICAgIHJldHVybiB7eTogXCJ5ZXNcIn07XG4gICAgfVxufVxuXG5leHBvcnQgaW50ZXJmYWNlIFNvbWVUeXBlIHtcbiAgICBtZW1iZXI6IG51bWJlcjtcbn0iXX0=
+//# sourceMappingURL=index.d.ts.map

@@ -64,7 +64,7 @@ namespace ts {
     }
 
     function getSourceMapFilePath(jsFilePath: string, options: CompilerOptions) {
-        return options.sourceMap ? jsFilePath + ".map" : undefined;
+        return (options.sourceMap && !options.inlineSourceMap) ? jsFilePath + ".map" : undefined;
     }
 
     // JavaScript files are always LanguageVariant.JSX, as JSX syntax is allowed in .js files also.
@@ -85,13 +85,6 @@ namespace ts {
         return Extension.Js;
     }
 
-    const enum SourceMapEmitKind {
-        None,
-        File,
-        Inline,
-        DeclarationFile
-    }
-
     /*@internal*/
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean, transformers?: TransformerFactory<SourceFile>[]): EmitResult {
@@ -103,6 +96,13 @@ namespace ts {
         const newLine = host.getNewLine();
         const writer = createTextWriter(newLine);
         const sourceMap = createSourceMapWriter(host, writer);
+        const declarationSourceMap = createSourceMapWriter(host, writer, {
+            sourceMap: compilerOptions.declarationMaps,
+            sourceRoot: compilerOptions.sourceRoot,
+            mapRoot: compilerOptions.mapRoot,
+            extendedDiagnostics: compilerOptions.extendedDiagnostics,
+            // Explicitly do not passthru either `inline` option
+        });
 
         let currentSourceFile: SourceFile;
         let bundledHelpers: Map<boolean>;
@@ -171,8 +171,7 @@ namespace ts {
                 onSetSourceFile: setSourceFile,
             });
 
-            const sourcemapKind = compilerOptions.inlineSourceMap ? SourceMapEmitKind.Inline : compilerOptions.sourceMap ? SourceMapEmitKind.File : SourceMapEmitKind.None;
-            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, isSourceFile(sourceFileOrBundle) ? transform.transformed[0] : createBundle(transform.transformed), printer, sourcemapKind);
+            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, isSourceFile(sourceFileOrBundle) ? transform.transformed[0] : createBundle(transform.transformed), printer, sourceMap);
 
             // Clean up emit nodes on parse tree
             transform.dispose();
@@ -197,10 +196,10 @@ namespace ts {
                 hasGlobalName: resolver.hasGlobalName,
 
                 // sourcemap hooks
-                onEmitSourceMapOfNode: sourceMap.emitNodeWithSourceMap,
-                onEmitSourceMapOfToken: sourceMap.emitTokenWithSourceMap,
-                onEmitSourceMapOfPosition: sourceMap.emitPos,
-                onSetSourceFile: setSourceFile,
+                onEmitSourceMapOfNode: declarationSourceMap.emitNodeWithSourceMap,
+                onEmitSourceMapOfToken: declarationSourceMap.emitTokenWithSourceMap,
+                onEmitSourceMapOfPosition: declarationSourceMap.emitPos,
+                onSetSourceFile: setSourceFileDeclarationMaps,
 
                 // transform hooks
                 onEmitNode: declarationTransform.emitNodeWithNotification,
@@ -209,21 +208,16 @@ namespace ts {
             const declBlocked = (!!declarationTransform.diagnostics && !!declarationTransform.diagnostics.length) || !!host.isEmitBlocked(declarationFilePath) || !!compilerOptions.noEmit;
             emitSkipped = emitSkipped || declBlocked;
             if (!declBlocked || emitOnlyDtsFiles) {
-                printSourceFileOrBundle(declarationFilePath, declarationMapPath, declarationTransform.transformed[0], declarationPrinter, getAreDeclarationMapsEnabled(compilerOptions) ? SourceMapEmitKind.DeclarationFile : SourceMapEmitKind.None);
+                printSourceFileOrBundle(declarationFilePath, declarationMapPath, declarationTransform.transformed[0], declarationPrinter, declarationSourceMap);
             }
             declarationTransform.dispose();
         }
 
-        function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string | undefined, sourceFileOrBundle: SourceFile | Bundle, printer: Printer, sourcemapKind: SourceMapEmitKind) {
+        function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string | undefined, sourceFileOrBundle: SourceFile | Bundle, printer: Printer, mapRecorder: SourceMapWriter) {
             const bundle = sourceFileOrBundle.kind === SyntaxKind.Bundle ? sourceFileOrBundle : undefined;
             const sourceFile = sourceFileOrBundle.kind === SyntaxKind.SourceFile ? sourceFileOrBundle : undefined;
             const sourceFiles = bundle ? bundle.sourceFiles : [sourceFile];
-            if (sourcemapKind !== SourceMapEmitKind.None) {
-                sourceMap.initialize(jsFilePath, sourceMapFilePath, sourceFileOrBundle);
-            }
-            else {
-                sourceMap.setState(/*disabled*/ true);
-            }
+            mapRecorder.initialize(jsFilePath, sourceMapFilePath || "", sourceFileOrBundle, sourceMapDataList);
 
             if (bundle) {
                 bundledHelpers = createMap<boolean>();
@@ -237,31 +231,21 @@ namespace ts {
 
             writer.writeLine();
 
-            const sourceMappingURL = sourceMap.getSourceMappingURL();
+            const sourceMappingURL = mapRecorder.getSourceMappingURL();
             if (sourceMappingURL) {
                 writer.write(`//# ${"sourceMappingURL"}=${sourceMappingURL}`); // Sometimes tools can sometimes see this line as a source mapping url comment
             }
 
             // Write the source map
-            if (sourceMapFilePath && (sourcemapKind === SourceMapEmitKind.File || sourcemapKind === SourceMapEmitKind.DeclarationFile)) {
-                writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap.getText(), /*writeByteOrderMark*/ false, sourceFiles);
-            }
-
-            // Record source map data for the test harness.
-            if (sourcemapKind !== SourceMapEmitKind.None) {
-                sourceMapDataList.push(sourceMap.getSourceMapData());
+            if (sourceMapFilePath) {
+                writeFile(host, emitterDiagnostics, sourceMapFilePath, mapRecorder.getText(), /*writeByteOrderMark*/ false, sourceFiles);
             }
 
             // Write the output file
             writeFile(host, emitterDiagnostics, jsFilePath, writer.getText(), compilerOptions.emitBOM, sourceFiles);
 
             // Reset state
-            if (sourcemapKind !== SourceMapEmitKind.None) {
-                sourceMap.reset();
-            }
-            else {
-                sourceMap.setState(/*disabled*/ false);
-            }
+            mapRecorder.reset();
             writer.clear();
 
             currentSourceFile = undefined;
@@ -272,6 +256,11 @@ namespace ts {
         function setSourceFile(node: SourceFile) {
             currentSourceFile = node;
             sourceMap.setSourceFile(node);
+        }
+
+        function setSourceFileDeclarationMaps(node: SourceFile) {
+            currentSourceFile = node;
+            declarationSourceMap.setSourceFile(node);
         }
 
         function emitHelpers(node: Node, writeLines: (text: string) => void) {
