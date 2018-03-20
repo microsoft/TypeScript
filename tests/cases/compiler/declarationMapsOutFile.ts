@@ -1,5 +1,5 @@
 // @declaration: true
-// @declarationMaps: true
+// @declarationMap: true
 // @module: amd
 // @outFile: bundle.js
 // @filename: a.ts

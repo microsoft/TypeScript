@@ -4,7 +4,7 @@
 // @inlineSourceMap: true
 // @inlineSources: true
 // @declaration: true
-// @declarationMaps: true
+// @declarationMap: true
 // @Filename: index.ts
 // @emitThisFile: true
 ////export class Foo {

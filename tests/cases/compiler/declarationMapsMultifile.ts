@@ -1,5 +1,5 @@
 // @declaration: true
-// @declarationMaps: true
+// @declarationMap: true
 // @filename: a.ts
 export class Foo {
     doThing(x: {a: number}) {

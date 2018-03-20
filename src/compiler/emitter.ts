@@ -97,7 +97,7 @@ namespace ts {
         const writer = createTextWriter(newLine);
         const sourceMap = createSourceMapWriter(host, writer);
         const declarationSourceMap = createSourceMapWriter(host, writer, {
-            sourceMap: compilerOptions.declarationMaps,
+            sourceMap: compilerOptions.declarationMap,
             sourceRoot: compilerOptions.sourceRoot,
             mapRoot: compilerOptions.mapRoot,
             extendedDiagnostics: compilerOptions.extendedDiagnostics,

@@ -2111,9 +2111,9 @@ namespace ts {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", "outFile");
             }
 
-            if (options.mapRoot && !(options.sourceMap || options.declarationMaps)) {
+            if (options.mapRoot && !(options.sourceMap || options.declarationMap)) {
                 // Error to specify --mapRoot without --sourcemap
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "mapRoot", "sourceMap", "declarationMaps");
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "mapRoot", "sourceMap", "declarationMap");
             }
 
             if (options.declarationDir) {
@@ -2125,8 +2125,8 @@ namespace ts {
                 }
             }
 
-            if (options.declarationMaps && !options.declaration) {
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "declarationMaps", "declaration");
+            if (options.declarationMap && !options.declaration) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "declarationMap", "declaration");
             }
 
             if (options.lib && options.noLib) {

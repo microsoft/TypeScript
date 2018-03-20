@@ -1,5 +1,5 @@
 // @declaration: true
-// @declarationMaps: true
+// @declarationMap: true
 // @outFile: bundle.js
 // @sourceMap: true
 // @filename: a.ts

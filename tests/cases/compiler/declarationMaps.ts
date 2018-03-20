@@ -1,5 +1,5 @@
 // @declaration: true
-// @declarationMaps: true
+// @declarationMap: true
 module m2 {
     export interface connectModule {
         (res, req, next): void;

@@ -2,7 +2,7 @@
 // @BaselineFile: declarationMapsGeneratedMapsEnableMapping.baseline
 // @outDir: ./dist
 // @declaration: true
-// @declarationMaps: true
+// @declarationMap: true
 // @Filename: index.ts
 // @emitThisFile: true
 ////export class Foo {
