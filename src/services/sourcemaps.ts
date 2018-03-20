@@ -102,10 +102,10 @@ namespace ts.sourcemaps {
                 encodedText: map.mappings,
                 currentNameIndex: undefined,
                 sourceMapNamesLength: map.names ? map.names.length : undefined,
-                currentEmittedColumn: 1,
-                currentEmittedLine: 1,
-                currentSourceColumn: 1,
-                currentSourceLine: 1,
+                currentEmittedColumn: 0,
+                currentEmittedLine: 0,
+                currentSourceColumn: 0,
+                currentSourceLine: 0,
                 currentSourceIndex: 0,
                 positions: [],
                 decodingIndex: 0,
@@ -133,8 +133,8 @@ namespace ts.sourcemaps {
         function processPosition(position: RawSourceMapPosition): ProcessedSourceMapPosition {
             const sourcePath = map.sources[position.sourceIndex];
             return {
-                emittedPosition: getPositionOfLineAndCharacterUsingName(map.file, currentDirectory, position.emittedLine - 1, position.emittedColumn - 1),
-                sourcePosition: getPositionOfLineAndCharacterUsingName(sourcePath, sourceRoot, position.sourceLine - 1, position.sourceColumn - 1),
+                emittedPosition: getPositionOfLineAndCharacterUsingName(map.file, currentDirectory, position.emittedLine, position.emittedColumn),
+                sourcePosition: getPositionOfLineAndCharacterUsingName(sourcePath, sourceRoot, position.sourceLine, position.sourceColumn),
                 sourcePath,
                 // TODO: Consider using `name` field to remap the expected identifier to scan for renames to handle another tool renaming oout output
                 // name: position.nameIndex ? map.names[position.nameIndex] : undefined
@@ -182,7 +182,7 @@ namespace ts.sourcemaps {
             if (char === CharacterCodes.semicolon) {
                 // New line
                 state.currentEmittedLine++;
-                state.currentEmittedColumn = 1;
+                state.currentEmittedColumn = 0;
                 state.decodingIndex++;
                 continue;
             }
@@ -197,7 +197,7 @@ namespace ts.sourcemaps {
             // 1. Column offset from prev read jsColumn
             state.currentEmittedColumn += base64VLQFormatDecode();
             // Incorrect emittedColumn dont support this map
-            if (createErrorIfCondition(state.currentEmittedColumn < 1, "Invalid emittedColumn found")) {
+            if (createErrorIfCondition(state.currentEmittedColumn < 0, "Invalid emittedColumn found")) {
                 return;
             }
             // Dont support reading mappings that dont have information about original source and its line numbers
@@ -219,7 +219,7 @@ namespace ts.sourcemaps {
             // 3. Relative sourceLine 0 based
             state.currentSourceLine += base64VLQFormatDecode();
             // Incorrect sourceLine dont support this map
-            if (createErrorIfCondition(state.currentSourceLine < 1, "Invalid sourceLine found")) {
+            if (createErrorIfCondition(state.currentSourceLine < 0, "Invalid sourceLine found")) {
                 return;
             }
             // Dont support reading mappings that dont have information about original source and its line numbers
@@ -230,7 +230,7 @@ namespace ts.sourcemaps {
             // 4. Relative sourceColumn 0 based
             state.currentSourceColumn += base64VLQFormatDecode();
             // Incorrect sourceColumn dont support this map
-            if (createErrorIfCondition(state.currentSourceColumn < 1, "Invalid sourceLine found")) {
+            if (createErrorIfCondition(state.currentSourceColumn < 0, "Invalid sourceLine found")) {
                 return;
             }
             // 5. Check if there is name:
