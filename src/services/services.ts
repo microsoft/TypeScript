@@ -1176,7 +1176,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function getSourceFileLikeCache(host: { readFile?: (path: string) => string, fileExists?: (path: string) => boolean }): SourceFileLikeCache {
+    export function createSourceFileLikeCache(host: { readFile?: (path: string) => string, fileExists?: (path: string) => boolean }): SourceFileLikeCache {
         const cached = createMap<SourceFileLike>();
         return {
             get(path: Path) {
@@ -1328,7 +1328,7 @@ namespace ts {
             // We reset this cache on structure invalidation so we don't hold on to outdated files for long; however we can't use the `compilerHost` above,
             // Because it only functions until `hostCache` is cleared, while we'll potentially need the functionality to lazily read sourcemap files during
             // the course of whatever called `synchronizeHostData`
-            sourcemappedFileCache = getSourceFileLikeCache(host);
+            sourcemappedFileCache = createSourceFileLikeCache(host);
 
             // Make sure all the nodes in the program are both bound, and have their parent
             // pointers set property.
