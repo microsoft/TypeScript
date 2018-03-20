@@ -4367,6 +4367,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name_It_would_match_arguments_if_it_h_8029" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[JSDoc '@param' tag has name '{0}', but there is no parameter with that name. It would match 'arguments' if it had an array type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[JSDoc '@param' etiketi '{0}' adına sahip ancak bu ada sahip bir parametre yok. Bir dizi türü olsaydı 'arguments' ile eşleşirdi.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";JSDoc_typedef_tag_should_either_have_a_type_annotation_or_be_followed_by_property_or_member_tags_8021" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[JSDoc '@typedef' tag should either have a type annotation or be followed by '@property' or '@member' tags.]]></Val>

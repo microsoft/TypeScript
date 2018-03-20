@@ -169,8 +169,9 @@ namespace ts.server {
             };
         }
 
-        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): CompletionInfo {
-            const args = { ...this.createFileLocationRequestArgs(fileName, position), ...options } as protocol.CompletionsRequestArgs; // TODO: GH#18217
+        getCompletionsAtPosition(fileName: string, position: number, _preferences: UserPreferences | undefined): CompletionInfo {
+            // Not passing along 'preferences' because server should already have those from the 'configure' command
+            const args: protocol.CompletionsRequestArgs = this.createFileLocationRequestArgs(fileName, position);
 
             const request = this.processRequest<protocol.CompletionsRequest>(CommandNames.Completions, args);
             const response = this.processResponse<protocol.CompletionsResponse>(request);

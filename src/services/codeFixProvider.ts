@@ -11,6 +11,7 @@ namespace ts {
         sourceFile: SourceFile;
         program: Program;
         cancellationToken: CancellationToken;
+        preferences: UserPreferences;
     }
 
     export interface CodeFixAllContext extends CodeFixContextBase {

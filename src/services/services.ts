@@ -33,7 +33,7 @@
 
 namespace ts {
     /** The version of the language service API */
-    export const servicesVersion = "0.7";
+    export const servicesVersion = "0.8";
 
     function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent: Node): NodeObject | TokenObject<TKind> | IdentifierObject {
         const node = isNodeKind(kind) ? new NodeObject(kind, pos, end) :
@@ -1430,7 +1430,13 @@ namespace ts {
             return [...program.getOptionsDiagnostics(cancellationToken), ...program.getGlobalDiagnostics(cancellationToken)];
         }
 
-        function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = { includeExternalModuleExports: false, includeInsertTextCompletions: false }): CompletionInfo | undefined {
+        function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = defaultPreferences): CompletionInfo | undefined {
+            // Convert from deprecated options names to new names
+            const fullPreferences: UserPreferences = {
+                ...identity<UserPreferences>(options), // avoid excess property check
+                includeCompletionsForModuleExports: options.includeCompletionsForModuleExports || options.includeExternalModuleExports,
+                includeCompletionsWithInsertText: options.includeCompletionsWithInsertText || options.includeInsertTextCompletions,
+            };
             synchronizeHostData();
             return Completions.getCompletionsAtPosition(
                 host,
@@ -1440,10 +1446,10 @@ namespace ts {
                 getValidSourceFile(fileName),
                 position,
                 program.getSourceFiles(),
-                options);
+                fullPreferences);
         }
 
-        function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions?: FormatCodeSettings, source?: string): CompletionEntryDetails | undefined {
+        function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = defaultPreferences): CompletionEntryDetails | undefined {
             synchronizeHostData();
             return Completions.getCompletionEntryDetails(
                 program,
@@ -1455,7 +1461,8 @@ namespace ts {
                 program.getSourceFiles(),
                 host,
                 (formattingOptions && formatting.getFormatContext(formattingOptions))!, // TODO: GH#18217
-                getCanonicalFileName);
+                getCanonicalFileName,
+                preferences);
         }
 
         function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol | undefined {
@@ -1820,7 +1827,7 @@ namespace ts {
             return [];
         }
 
-        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings): ReadonlyArray<CodeFixAction> {
+        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings, preferences: UserPreferences = defaultPreferences): ReadonlyArray<CodeFixAction> {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const span = createTextSpanFromBounds(start, end);
@@ -1828,26 +1835,26 @@ namespace ts {
 
             return flatMap(deduplicate(errorCodes, equateValues, compareValues), errorCode => {
                 cancellationToken.throwIfCancellationRequested();
-                return codefix.getFixes({ errorCode, sourceFile, span, program, host, cancellationToken, formatContext });
+                return codefix.getFixes({ errorCode, sourceFile, span, program, host, cancellationToken, formatContext, preferences });
             });
         }
 
-        function getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings): CombinedCodeActions {
+        function getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, preferences: UserPreferences = defaultPreferences): CombinedCodeActions {
             synchronizeHostData();
             Debug.assert(scope.type === "file");
             const sourceFile = getValidSourceFile(scope.fileName);
             const formatContext = formatting.getFormatContext(formatOptions);
 
-            return codefix.getAllFixes({ fixId, sourceFile, program, host, cancellationToken, formatContext });
+            return codefix.getAllFixes({ fixId, sourceFile, program, host, cancellationToken, formatContext, preferences });
         }
 
-        function organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges> {
+        function organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, preferences: UserPreferences = defaultPreferences): ReadonlyArray<FileTextChanges> {
             synchronizeHostData();
             Debug.assert(scope.type === "file");
             const sourceFile = getValidSourceFile(scope.fileName);
             const formatContext = formatting.getFormatContext(formatOptions);
 
-            return OrganizeImports.organizeImports(sourceFile, formatContext, host, program);
+            return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences);
         }
 
         function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
@@ -2071,7 +2078,7 @@ namespace ts {
             return Rename.getRenameInfo(program.getTypeChecker(), defaultLibFileName, getCanonicalFileName, getValidSourceFile(fileName), position);
         }
 
-        function getRefactorContext(file: SourceFile, positionOrRange: number | TextRange, formatOptions?: FormatCodeSettings): RefactorContext {
+        function getRefactorContext(file: SourceFile, positionOrRange: number | TextRange, preferences: UserPreferences, formatOptions?: FormatCodeSettings): RefactorContext {
             const [startPosition, endPosition] = typeof positionOrRange === "number" ? [positionOrRange, undefined] : [positionOrRange.pos, positionOrRange.end];
             return {
                 file,
@@ -2081,13 +2088,14 @@ namespace ts {
                 host,
                 formatContext: formatting.getFormatContext(formatOptions!), // TODO: GH#18217
                 cancellationToken,
+                preferences,
             };
         }
 
-        function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange): ApplicableRefactorInfo[] {
+        function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = defaultPreferences): ApplicableRefactorInfo[] {
             synchronizeHostData();
             const file = getValidSourceFile(fileName);
-            return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange));
+            return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange, preferences));
         }
 
         function getEditsForRefactor(
@@ -2095,11 +2103,12 @@ namespace ts {
             formatOptions: FormatCodeSettings,
             positionOrRange: number | TextRange,
             refactorName: string,
-            actionName: string): RefactorEditInfo {
-
+            actionName: string,
+            preferences: UserPreferences = defaultPreferences,
+        ): RefactorEditInfo | undefined {
             synchronizeHostData();
             const file = getValidSourceFile(fileName);
-            return refactor.getEditsForRefactor(getRefactorContext(file, positionOrRange, formatOptions), refactorName, actionName)!; // TODO: GH#18217
+            return refactor.getEditsForRefactor(getRefactorContext(file, positionOrRange, preferences, formatOptions), refactorName, actionName);
         }
 
         return {

@@ -1326,13 +1326,13 @@ namespace ts.projectSystem {
             service.checkNumberOfProjects({ externalProjects: 1 });
             checkProjectActualFiles(service.externalProjects[0], [f1.path, f2.path, libFile.path]);
 
-            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, { includeExternalModuleExports: false, includeInsertTextCompletions: false })!;
+            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, defaultPreferences)!;
             // should contain completions for string
             assert.isTrue(completions1.entries.some(e => e.name === "charAt"), "should contain 'charAt'");
             assert.isFalse(completions1.entries.some(e => e.name === "toExponential"), "should not contain 'toExponential'");
 
             service.closeClientFile(f2.path);
-            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, { includeExternalModuleExports: false, includeInsertTextCompletions: false })!;
+            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, defaultPreferences)!;
             // should contain completions for string
             assert.isFalse(completions2.entries.some(e => e.name === "charAt"), "should not contain 'charAt'");
             assert.isTrue(completions2.entries.some(e => e.name === "toExponential"), "should contain 'toExponential'");
@@ -1358,11 +1358,11 @@ namespace ts.projectSystem {
             service.checkNumberOfProjects({ externalProjects: 1 });
             checkProjectActualFiles(service.externalProjects[0], [f1.path, f2.path, libFile.path]);
 
-            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, { includeExternalModuleExports: false, includeInsertTextCompletions: false })!;
+            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, defaultPreferences)!;
             assert.isTrue(completions1.entries.some(e => e.name === "somelongname"), "should contain 'somelongname'");
 
             service.closeClientFile(f2.path);
-            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, { includeExternalModuleExports: false, includeInsertTextCompletions: false })!;
+            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, defaultPreferences)!;
             assert.isFalse(completions2.entries.some(e => e.name === "somelongname"), "should not contain 'somelongname'");
             const sf2 = service.externalProjects[0].getLanguageService().getProgram().getSourceFile(f2.path)!;
             assert.equal(sf2.text, "");
@@ -1967,7 +1967,7 @@ namespace ts.projectSystem {
 
             // Check identifiers defined in HTML content are available in .ts file
             const project = configuredProjectAt(projectService, 0);
-            let completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 1, { includeExternalModuleExports: false, includeInsertTextCompletions: false });
+            let completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 1, defaultPreferences);
             assert(completions && completions.entries[0].name === "hello", `expected entry hello to be in completion list`);
 
             // Close HTML file
@@ -1981,7 +1981,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path, config.path]);
 
             // Check identifiers defined in HTML content are not available in .ts file
-            completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 5, { includeExternalModuleExports: false, includeInsertTextCompletions: false });
+            completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 5, defaultPreferences);
             assert(completions && completions.entries[0].name !== "hello", `unexpected hello entry in completion list`);
         });
 
@@ -2634,7 +2634,7 @@ namespace ts.projectSystem {
             assert.equal(lastEvent.data.project, project, "project name");
             assert.isFalse(lastEvent.data.languageServiceEnabled, "Language service state");
 
-            const options = projectService.getFormatCodeOptions();
+            const options = projectService.getFormatCodeOptions(f1.path as server.NormalizedPath);
             const edits = project.getLanguageService().getFormattingEditsForDocument(f1.path, options);
             assert.deepEqual(edits, [{ span: createTextSpan(/*start*/ 7, /*length*/ 3), newText: " " }]);
         });
@@ -3579,7 +3579,7 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host);
             projectService.openClientFile(f1.path);
 
-            const defaultSettings = projectService.getFormatCodeOptions();
+            const defaultSettings = projectService.getFormatCodeOptions(f1.path as server.NormalizedPath);
 
             // set global settings
             const newGlobalSettings1 = clone(defaultSettings);

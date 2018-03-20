@@ -1977,6 +1977,13 @@ namespace ts {
                     return token = SyntaxKind.CommaToken;
                 case CharacterCodes.dot:
                     return token = SyntaxKind.DotToken;
+                case CharacterCodes.backtick:
+                    while (pos < end && text.charCodeAt(pos) !== CharacterCodes.backtick) {
+                        pos++;
+                    }
+                    tokenValue = text.substring(tokenPos + 1, pos);
+                    pos++;
+                    return token = SyntaxKind.NoSubstitutionTemplateLiteral;
             }
 
             if (isIdentifierStart(ch, ScriptTarget.Latest)) {

@@ -4274,7 +4274,12 @@ namespace ts {
                 }
 
                 if (isPropertyAccessExpression(expression.left) && expression.left.expression.kind === SyntaxKind.ThisKeyword) {
-                    if (getThisContainer(expression, /*includeArrowFunctions*/ false).kind === SyntaxKind.Constructor) {
+                    const thisContainer = getThisContainer(expression, /*includeArrowFunctions*/ false);
+                    // Properties defined in a constructor (or javascript constructor function) don't get undefined added.
+                    // Function expressions that are assigned to the prototype count as methods.
+                    if (thisContainer.kind === SyntaxKind.Constructor ||
+                        thisContainer.kind === SyntaxKind.FunctionDeclaration ||
+                        (thisContainer.kind === SyntaxKind.FunctionExpression && !isPrototypePropertyAssignment(thisContainer.parent))) {
                         definedInConstructor = true;
                     }
                     else {
@@ -6714,7 +6719,11 @@ namespace ts {
                 let hasThisParameter = false;
                 const iife = getImmediatelyInvokedFunctionExpression(declaration);
                 const isJSConstructSignature = isJSDocConstructSignature(declaration);
-                const isUntypedSignatureInJSFile = !iife && !isJSConstructSignature && isInJavaScriptFile(declaration) && !hasJSDocParameterTags(declaration);
+                const isUntypedSignatureInJSFile = !iife &&
+                    isInJavaScriptFile(declaration) &&
+                    isValueSignatureDeclaration(declaration) &&
+                    !hasJSDocParameterTags(declaration) &&
+                    !getJSDocType(declaration);
 
                 // If this is a JSDoc construct signature, then skip the first parameter in the
                 // parameter list.  The first parameter represents the return type of the construct
@@ -6743,8 +6752,8 @@ namespace ts {
                     // Record a new minimum argument count if this is not an optional parameter
                     const isOptionalParameter = param.initializer || param.questionToken || param.dotDotDotToken ||
                         iife && parameters.length > iife.arguments.length && !param.type ||
-                        isJSDocOptionalParameter(param) ||
-                        isUntypedSignatureInJSFile;
+                        isUntypedSignatureInJSFile ||
+                        isJSDocOptionalParameter(param);
                     if (!isOptionalParameter) {
                         minArgumentCount = parameters.length;
                     }
@@ -6859,32 +6868,17 @@ namespace ts {
             const result: Signature[] = [];
             for (let i = 0; i < symbol.declarations!.length; i++) {
                 const node = symbol.declarations![i];
-                switch (node.kind) {
-                    case SyntaxKind.FunctionType:
-                    case SyntaxKind.ConstructorType:
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.MethodSignature:
-                    case SyntaxKind.Constructor:
-                    case SyntaxKind.CallSignature:
-                    case SyntaxKind.ConstructSignature:
-                    case SyntaxKind.IndexSignature:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.ArrowFunction:
-                    case SyntaxKind.JSDocFunctionType:
-                        // Don't include signature if node is the implementation of an overloaded function. A node is considered
-                        // an implementation node if it has a body and the previous node is of the same kind and immediately
-                        // precedes the implementation node (i.e. has the same parent and ends where the implementation starts).
-                        if (i > 0 && (<FunctionLikeDeclaration>node).body) {
-                            const previous = symbol.declarations![i - 1];
-                            if (node.parent === previous.parent && node.kind === previous.kind && node.pos === previous.end) {
-                                break;
-                            }
-                        }
-                        result.push(getSignatureFromDeclaration(<SignatureDeclaration>node));
+                if (!isFunctionLike(node)) continue;
+                // Don't include signature if node is the implementation of an overloaded function. A node is considered
+                // an implementation node if it has a body and the previous node is of the same kind and immediately
+                // precedes the implementation node (i.e. has the same parent and ends where the implementation starts).
+                if (i > 0 && (node as FunctionLikeDeclaration).body) {
+                    const previous = symbol.declarations![i - 1];
+                    if (node.parent === previous.parent && node.kind === previous.kind && node.pos === previous.end) {
+                        continue;
+                    }
                 }
+                result.push(getSignatureFromDeclaration(node));
             }
             return result;
         }
@@ -9152,7 +9146,8 @@ namespace ts {
         }
 
         function isContextSensitiveFunctionOrObjectLiteralMethod(func: Node): func is FunctionExpression | ArrowFunction | MethodDeclaration {
-            return (isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func)) && isContextSensitiveFunctionLikeDeclaration(func);
+            return (isInJavaScriptFile(func) && isFunctionDeclaration(func) || isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func)) &&
+                isContextSensitiveFunctionLikeDeclaration(func);
         }
 
         function getTypeWithoutSignatures(type: Type): Type {
@@ -11753,7 +11748,10 @@ namespace ts {
                 else if ((isLiteralType(source) || source.flags & TypeFlags.String) && target.flags & TypeFlags.Index) {
                     const empty = createEmptyObjectTypeFromStringLiteral(source);
                     contravariant = !contravariant;
+                    const savePriority = priority;
+                    priority |= InferencePriority.LiteralKeyof;
                     inferFromTypes(empty, (target as IndexType).type);
+                    priority = savePriority;
                     contravariant = !contravariant;
                 }
                 else if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {
@@ -11996,6 +11994,30 @@ namespace ts {
             return candidates;
         }
 
+        function getContravariantInference(inference: InferenceInfo) {
+            return inference.priority! & InferencePriority.PriorityImpliesCombination ? getIntersectionType(inference.contraCandidates!) : getCommonSubtype(inference.contraCandidates!);
+        }
+
+        function getCovariantInference(inference: InferenceInfo, context: InferenceContext, signature: Signature) {
+            // Extract all object literal types and replace them with a single widened and normalized type.
+            const candidates = widenObjectLiteralCandidates(inference.candidates!);
+            // We widen inferred literal types if
+            // all inferences were made to top-level occurrences of the type parameter, and
+            // the type parameter has no constraint or its constraint includes no primitive or literal types, and
+            // the type parameter was fixed during inference or does not occur at top-level in the return type.
+            const widenLiteralTypes = inference.topLevel &&
+                !hasPrimitiveConstraint(inference.typeParameter) &&
+                (inference.isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), inference.typeParameter));
+            const baseCandidates = widenLiteralTypes ? sameMap(candidates, getWidenedLiteralType) : candidates;
+            // If all inferences were made from contravariant positions, infer a common subtype. Otherwise, if
+            // union types were requested or if all inferences were made from the return type position, infer a
+            // union type. Otherwise, infer a common supertype.
+            const unwidenedType = context.flags & InferenceFlags.InferUnionTypes || inference.priority! & InferencePriority.PriorityImpliesCombination ?
+                getUnionType(baseCandidates, UnionReduction.Subtype) :
+                getCommonSupertype(baseCandidates);
+            return getWidenedType(unwidenedType);
+        }
+
         function getInferredType(context: InferenceContext, index: number): Type {
             const inference = context.inferences[index];
             let inferredType = inference.inferredType;
@@ -12003,32 +12025,16 @@ namespace ts {
                 const signature = context.signature;
                 if (signature) {
                     if (inference.candidates) {
-                        // Extract all object literal types and replace them with a single widened and normalized type.
-                        const candidates = widenObjectLiteralCandidates(inference.candidates);
-                        // We widen inferred literal types if
-                        // all inferences were made to top-level ocurrences of the type parameter, and
-                        // the type parameter has no constraint or its constraint includes no primitive or literal types, and
-                        // the type parameter was fixed during inference or does not occur at top-level in the return type.
-                        const widenLiteralTypes = inference.topLevel &&
-                            !hasPrimitiveConstraint(inference.typeParameter) &&
-                            (inference.isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), inference.typeParameter));
-                        const baseCandidates = widenLiteralTypes ? sameMap(candidates, getWidenedLiteralType) : candidates;
-                        // If all inferences were made from contravariant positions, infer a common subtype. Otherwise, if
-                        // union types were requested or if all inferences were made from the return type position, infer a
-                        // union type. Otherwise, infer a common supertype.
-                        const unwidenedType = context.flags & InferenceFlags.InferUnionTypes || inference.priority! & InferencePriority.PriorityImpliesUnion ?
-                            getUnionType(baseCandidates, UnionReduction.Subtype) :
-                            getCommonSupertype(baseCandidates);
-                        inferredType = getWidenedType(unwidenedType);
+                        inferredType = getCovariantInference(inference, context, signature);
                         // If we have inferred 'never' but have contravariant candidates. To get a more specific type we
                         // infer from the contravariant candidates instead.
                         if (inferredType.flags & TypeFlags.Never && inference.contraCandidates) {
-                            inferredType = getCommonSubtype(inference.contraCandidates);
+                            inferredType = getContravariantInference(inference);
                         }
                     }
                     else if (inference.contraCandidates) {
                         // We only have contravariant inferences, infer the best common subtype of those
-                        inferredType = getCommonSubtype(inference.contraCandidates);
+                        inferredType = getContravariantInference(inference);
                     }
                     else if (context.flags & InferenceFlags.NoDefault) {
                         // We use silentNeverType as the wildcard that signals no inferences.
@@ -14225,49 +14231,49 @@ namespace ts {
         // Return contextual type of parameter or undefined if no contextual type is available
         function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type | undefined {
             const func = parameter.parent;
-            if (isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
-                const iife = getImmediatelyInvokedFunctionExpression(func);
-                if (iife && iife.arguments) {
-                    const indexOfParameter = func.parameters.indexOf(parameter);
-                    if (parameter.dotDotDotToken) {
-                        const restTypes: Type[] = [];
-                        for (let i = indexOfParameter; i < iife.arguments.length; i++) {
-                            restTypes.push(getWidenedLiteralType(checkExpression(iife.arguments[i])));
-                        }
-                        return restTypes.length ? createArrayType(getUnionType(restTypes)) : undefined;
+            if (!isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
+                return undefined;
+            }
+            const iife = getImmediatelyInvokedFunctionExpression(func);
+            if (iife && iife.arguments) {
+                const indexOfParameter = func.parameters.indexOf(parameter);
+                if (parameter.dotDotDotToken) {
+                    const restTypes: Type[] = [];
+                    for (let i = indexOfParameter; i < iife.arguments.length; i++) {
+                        restTypes.push(getWidenedLiteralType(checkExpression(iife.arguments[i])));
                     }
-                    const links = getNodeLinks(iife);
-                    const cached = links.resolvedSignature;
-                    links.resolvedSignature = anySignature;
-                    const type = indexOfParameter < iife.arguments.length ?
-                        getWidenedLiteralType(checkExpression(iife.arguments[indexOfParameter])) :
-                        parameter.initializer ? undefined : undefinedWideningType;
-                    links.resolvedSignature = cached;
-                    return type;
+                    return restTypes.length ? createArrayType(getUnionType(restTypes)) : undefined;
                 }
-                const contextualSignature = getContextualSignature(func);
-                if (contextualSignature) {
-                    const funcHasRestParameters = hasRestParameter(func);
-                    const len = func.parameters.length - (funcHasRestParameters ? 1 : 0);
-                    let indexOfParameter = func.parameters.indexOf(parameter);
-                    if (getThisParameter(func) !== undefined && !contextualSignature.thisParameter) {
-                        Debug.assert(indexOfParameter !== 0); // Otherwise we should not have called `getContextuallyTypedParameterType`.
-                        indexOfParameter -= 1;
-                    }
+                const links = getNodeLinks(iife);
+                const cached = links.resolvedSignature;
+                links.resolvedSignature = anySignature;
+                const type = indexOfParameter < iife.arguments.length ?
+                    getWidenedLiteralType(checkExpression(iife.arguments[indexOfParameter])) :
+                    parameter.initializer ? undefined : undefinedWideningType;
+                links.resolvedSignature = cached;
+                return type;
+            }
+            const contextualSignature = getContextualSignature(func);
+            if (contextualSignature) {
+                const funcHasRestParameters = hasRestParameter(func);
+                const len = func.parameters.length - (funcHasRestParameters ? 1 : 0);
+                let indexOfParameter = func.parameters.indexOf(parameter);
+                if (getThisParameter(func) !== undefined && !contextualSignature.thisParameter) {
+                    Debug.assert(indexOfParameter !== 0); // Otherwise we should not have called `getContextuallyTypedParameterType`.
+                    indexOfParameter -= 1;
+                }
 
-                    if (indexOfParameter < len) {
-                        return getTypeAtPosition(contextualSignature, indexOfParameter);
-                    }
+                if (indexOfParameter < len) {
+                    return getTypeAtPosition(contextualSignature, indexOfParameter);
+                }
 
-                    // If last parameter is contextually rest parameter get its type
-                    if (funcHasRestParameters &&
-                        indexOfParameter === (func.parameters.length - 1) &&
-                        isRestParameterIndex(contextualSignature, func.parameters.length - 1)) {
-                        return getTypeOfSymbol(last(contextualSignature.parameters));
-                    }
+                // If last parameter is contextually rest parameter get its type
+                if (funcHasRestParameters &&
+                    indexOfParameter === (func.parameters.length - 1) &&
+                    isRestParameterIndex(contextualSignature, func.parameters.length - 1)) {
+                    return getTypeOfSymbol(last(contextualSignature.parameters));
                 }
             }
-            return undefined;
         }
 
         // In a variable, parameter or property declaration with a type annotation,
@@ -14830,7 +14836,16 @@ namespace ts {
         // union type of return types from these signatures
         function getContextualSignature(node: FunctionExpression | ArrowFunction | MethodDeclaration): Signature | undefined {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
-            const type = getContextualTypeForFunctionLikeDeclaration(node);
+            let type: Type | undefined;
+            if (isInJavaScriptFile(node)) {
+                const jsdoc = getJSDocType(node);
+                if (jsdoc) {
+                    type = getTypeFromTypeNode(jsdoc);
+                }
+            }
+            if (!type) {
+                type = getContextualTypeForFunctionLikeDeclaration(node);
+            }
             if (!type) {
                 return undefined;
             }
@@ -18603,7 +18618,7 @@ namespace ts {
             return true;
         }
 
-        /** NOTE: Return value of `[]` means a different thing than `undefined`. `[]` means return `void`, `undefined` means return `never`. */
+        /** NOTE: Return value of `[]` means a different thing than `undefined`. `[]` means func returns `void`, `undefined` means it returns `never`. */
         function checkAndAggregateReturnExpressionTypes(func: FunctionLikeDeclaration, checkMode: CheckMode | undefined): Type[] | undefined {
             const functionFlags = getFunctionFlags(func);
             const aggregatedTypes: Type[] = [];
@@ -18632,7 +18647,9 @@ namespace ts {
             if (aggregatedTypes.length === 0 && !hasReturnWithNoExpression && (hasReturnOfTypeNever || mayReturnNever(func))) {
                 return undefined;
             }
-            if (strictNullChecks && aggregatedTypes.length && hasReturnWithNoExpression) {
+            if (strictNullChecks && aggregatedTypes.length && hasReturnWithNoExpression &&
+                !(isJavaScriptConstructor(func) && aggregatedTypes.some(t => t.symbol === func.symbol))) {
+                // Javascript "callable constructors", containing eg `if (!(this instanceof A)) return new A()` should not add undefined
                 pushIfUnique(aggregatedTypes, undefinedType);
             }
             return aggregatedTypes;

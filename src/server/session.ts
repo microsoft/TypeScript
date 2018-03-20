@@ -1125,7 +1125,7 @@ namespace ts.server {
         private getIndentation(args: protocol.IndentationRequestArgs) {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
             const position = this.getPositionInFile(args, file);
-            const options = args.options ? convertFormatOptions(args.options) : this.projectService.getFormatCodeOptions(file);
+            const options = args.options ? convertFormatOptions(args.options) : this.getFormatOptions(file);
             const indentation = languageService.getIndentationAtPosition(file, position, options);
             return { position, indentation };
         }
@@ -1183,8 +1183,7 @@ namespace ts.server {
             const endPosition = scriptInfo.lineOffsetToPosition(args.endLine, args.endOffset);
 
             // TODO: avoid duplicate code (with formatonkey)
-            const edits = languageService.getFormattingEditsForRange(file, startPosition, endPosition,
-                this.projectService.getFormatCodeOptions(file));
+            const edits = languageService.getFormattingEditsForRange(file, startPosition, endPosition, this.getFormatOptions(file));
             if (!edits) {
                 return undefined;
             }
@@ -1194,19 +1193,19 @@ namespace ts.server {
 
         private getFormattingEditsForRangeFull(args: protocol.FormatRequestArgs) {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
-            const options = args.options ? convertFormatOptions(args.options) : this.projectService.getFormatCodeOptions(file);
+            const options = args.options ? convertFormatOptions(args.options) : this.getFormatOptions(file);
             return languageService.getFormattingEditsForRange(file, args.position!, args.endPosition!, options); // TODO: GH#18217
         }
 
         private getFormattingEditsForDocumentFull(args: protocol.FormatRequestArgs) {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
-            const options = args.options ? convertFormatOptions(args.options) : this.projectService.getFormatCodeOptions(file);
+            const options = args.options ? convertFormatOptions(args.options) : this.getFormatOptions(file);
             return languageService.getFormattingEditsForDocument(file, options);
         }
 
         private getFormattingEditsAfterKeystrokeFull(args: protocol.FormatOnKeyRequestArgs) {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
-            const options = args.options ? convertFormatOptions(args.options) : this.projectService.getFormatCodeOptions(file);
+            const options = args.options ? convertFormatOptions(args.options) : this.getFormatOptions(file);
             return languageService.getFormattingEditsAfterKeystroke(file, args.position!, args.key, options); // TODO: GH#18217
         }
 
@@ -1214,7 +1213,7 @@ namespace ts.server {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const position = scriptInfo.lineOffsetToPosition(args.line, args.offset);
-            const formatOptions = this.projectService.getFormatCodeOptions(file);
+            const formatOptions = this.getFormatOptions(file);
             const edits = languageService.getFormattingEditsAfterKeystroke(file, position, args.key,
                 formatOptions);
             // Check whether we should auto-indent. This will be when
@@ -1270,10 +1269,14 @@ namespace ts.server {
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const position = this.getPosition(args, scriptInfo);
 
-            const completions = project.getLanguageService().getCompletionsAtPosition(file, position, args);
-            if (completions && simplifiedResult) {
-                return mapDefined<CompletionEntry, protocol.CompletionEntry>(completions.entries, entry => {
-                    if (completions.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
+            const completions = project.getLanguageService().getCompletionsAtPosition(file, position, {
+                ...this.getPreferences(file),
+                includeExternalModuleExports: args.includeExternalModuleExports,
+                includeInsertTextCompletions: args.includeInsertTextCompletions
+            });
+            if (simplifiedResult) {
+                return mapDefined<CompletionEntry, protocol.CompletionEntry>(completions && completions.entries, entry => {
+                    if (completions!.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
                         const { name, kind, kindModifiers, sortText, insertText, replacementSpan, hasAction, source, isRecommended } = entry;
                         const convertedSpan = replacementSpan ? this.toLocationTextSpan(replacementSpan, scriptInfo) : undefined;
                         // Use `hasAction || undefined` to avoid serializing `false`.
@@ -1294,7 +1297,7 @@ namespace ts.server {
 
             const result = mapDefined(args.entryNames, entryName => {
                 const { name, source } = typeof entryName === "string" ? { name: entryName, source: undefined } : entryName;
-                return project.getLanguageService().getCompletionEntryDetails(file, position, name, formattingOptions, source);
+                return project.getLanguageService().getCompletionEntryDetails(file, position, name, formattingOptions, source, this.getPreferences(file));
             });
             return simplifiedResult
                 ? result.map(details => ({ ...details, codeActions: map(details.codeActions, action => this.mapCodeAction(project, action)) }))
@@ -1592,7 +1595,7 @@ namespace ts.server {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
             const { position, textRange } = this.extractPositionAndRange(args, scriptInfo);
-            return project.getLanguageService().getApplicableRefactors(file, position || textRange);
+            return project.getLanguageService().getApplicableRefactors(file, position || textRange, this.getPreferences(file));
         }
 
         private getEditsForRefactor(args: protocol.GetEditsForRefactorRequestArgs, simplifiedResult: boolean): RefactorEditInfo | protocol.RefactorEditInfo {
@@ -1602,10 +1605,11 @@ namespace ts.server {
 
             const result = project.getLanguageService().getEditsForRefactor(
                 file,
-                this.projectService.getFormatCodeOptions(file),
+                this.getFormatOptions(file),
                 position || textRange,
                 args.refactor,
-                args.action
+                args.action,
+                this.getPreferences(file),
             );
 
             if (result === undefined) {
@@ -1631,8 +1635,7 @@ namespace ts.server {
         private organizeImports({ scope }: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileCodeEdits> | ReadonlyArray<FileTextChanges> {
             Debug.assert(scope.type === "file");
             const { file, project } = this.getFileAndProject(scope.args);
-            const formatOptions = this.projectService.getFormatCodeOptions(file);
-            const changes = project.getLanguageService().organizeImports({ type: "file", fileName: file }, formatOptions);
+            const changes = project.getLanguageService().organizeImports({ type: "file", fileName: file }, this.getFormatOptions(file), this.getPreferences(file));
             if (simplifiedResult) {
                 return this.mapTextChangesToCodeEdits(project, changes);
             }
@@ -1649,9 +1652,8 @@ namespace ts.server {
 
             const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
             const { startPosition, endPosition } = this.getStartAndEndPosition(args, scriptInfo);
-            const formatOptions = this.projectService.getFormatCodeOptions(file);
 
-            const codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes!, formatOptions);
+            const codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes!, this.getFormatOptions(file), this.getPreferences(file));
             if (!codeActions) {
                 return undefined;
             }
@@ -1666,8 +1668,7 @@ namespace ts.server {
         private getCombinedCodeFix({ scope, fixId }: protocol.GetCombinedCodeFixRequestArgs, simplifiedResult: boolean): protocol.CombinedCodeActions | CombinedCodeActions {
             Debug.assert(scope.type === "file");
             const { file, project } = this.getFileAndProject(scope.args);
-            const formatOptions = this.projectService.getFormatCodeOptions(file);
-            const res = project.getLanguageService().getCombinedCodeFix({ type: "file", fileName: file }, fixId, formatOptions);
+            const res = project.getLanguageService().getCombinedCodeFix({ type: "file", fileName: file }, fixId, this.getFormatOptions(file), this.getPreferences(file));
             if (simplifiedResult) {
                 return { changes: this.mapTextChangesToCodeEdits(project, res.changes), commands: res.commands };
             }
@@ -2187,6 +2188,14 @@ namespace ts.server {
                     /*success*/ false,
                     "Error processing request. " + (<StackTraceError>err).message + "\n" + (<StackTraceError>err).stack);
             }
+        }
+
+        private getFormatOptions(file: NormalizedPath): FormatCodeSettings {
+            return this.projectService.getFormatCodeOptions(file);
+        }
+
+        private getPreferences(file: NormalizedPath): UserPreferences {
+            return this.projectService.getPreferences(file);
         }
     }
 

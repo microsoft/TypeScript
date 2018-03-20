@@ -1663,6 +1663,10 @@ namespace ts {
         return SpecialPropertyAssignmentKind.None;
     }
 
+    export function isPrototypePropertyAssignment(node: Node): boolean {
+        return isBinaryExpression(node) && getSpecialPropertyAssignmentKind(node) === SpecialPropertyAssignmentKind.PrototypeProperty;
+    }
+
     export function isSpecialPropertyDeclaration(expr: PropertyAccessExpression): boolean {
         return isInJavaScriptFile(expr) &&
             expr.parent && expr.parent.kind === SyntaxKind.ExpressionStatement &&
@@ -1967,6 +1971,18 @@ namespace ts {
                 return true;
         }
         return false;
+    }
+
+    export type ValueSignatureDeclaration =
+        | FunctionDeclaration
+        | MethodDeclaration
+        | ConstructorDeclaration
+        | AccessorDeclaration
+        | FunctionExpression
+        | ArrowFunction;
+
+    export function isValueSignatureDeclaration(node: Node): node is ValueSignatureDeclaration {
+        return isFunctionExpression(node) || isArrowFunction(node) || isMethodOrAccessor(node) || isFunctionDeclaration(node) || isConstructorDeclaration(node);
     }
 
     function walkUp(node: Node, kind: SyntaxKind) {
