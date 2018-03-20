@@ -1573,22 +1573,29 @@ namespace ts {
             return checker.getSymbolAtLocation(node);
         }
 
-        function getSourceMapper(fileName: string, file: { sourceMapper?: sourcemaps.SourceMapper }) {
-            if (!host.readFile || !host.fileExists) {
-                return file.sourceMapper = sourcemaps.identitySourceMapper;
+
+        const sourceMapCommentRE = /^\/\/[@#] sourceMappingURL=(.+)$/gm;
+        const dataURLRE = /^data:/;
+        const base64URLRE = /^data:application\/json;charset=utf-8;base64,(.+)$/;
+        function scanForSourcemapURL(fileName: string) {
+            const mappedFile = sourcemappedFileCache.get(toPath(fileName, currentDirectory, getCanonicalFileName));
+            if (!mappedFile) {
+                return;
             }
-            if (file.sourceMapper) {
-                return file.sourceMapper;
+            const starts = getLineStarts(mappedFile);
+            for (let index = starts.length - 1; index--; index >= 0) {
+                sourceMapCommentRE.lastIndex = starts[index];
+                const comment = sourceMapCommentRE.exec(mappedFile.text);
+                if (comment) {
+                    return comment[1];
+                }
             }
-            // TODO (weswigham): Read sourcemappingurl from last line of .d.ts if present
-            const mapFileName = fileName + ".map";
-            if (!host.fileExists(mapFileName)) {
-                return file.sourceMapper = sourcemaps.identitySourceMapper;
-            }
-            const doc = host.readFile(mapFileName);
+        }
+
+        function convertDocumentToSourceMapper(file: { sourceMapper?: sourcemaps.SourceMapper }, contents: string, mapFileName: string) {
             let maps: sourcemaps.SourceMapData;
             try {
-                maps = JSON.parse(doc);
+                maps = JSON.parse(contents);
             }
             catch {
                 // swallow error
@@ -1603,6 +1610,36 @@ namespace ts {
                 getCanonicalFileName,
                 log,
             }, mapFileName, maps, program, sourcemappedFileCache);
+        }
+
+        function getSourceMapper(fileName: string, file: { sourceMapper?: sourcemaps.SourceMapper }) {
+            if (!host.readFile || !host.fileExists) {
+                return file.sourceMapper = sourcemaps.identitySourceMapper;
+            }
+            if (file.sourceMapper) {
+                return file.sourceMapper;
+            }
+            let mapFileName = scanForSourcemapURL(fileName);
+            if (mapFileName && dataURLRE.exec(mapFileName)) {
+                const b64EncodedMatch = base64URLRE.exec(mapFileName);
+                if (b64EncodedMatch) {
+                    const base64Object = b64EncodedMatch[1];
+                    return convertDocumentToSourceMapper(file, base64decode(sys, base64Object), fileName);
+                }
+                mapFileName = undefined;
+            }
+            const possibleMapLocations: string[] = [];
+            if (mapFileName) {
+                possibleMapLocations.push(mapFileName);
+            }
+            possibleMapLocations.push(fileName + ".map");
+            for (const location of possibleMapLocations) {
+                const mapPath = toPath(location, getDirectoryPath(fileName), getCanonicalFileName);
+                if (host.fileExists(mapPath)) {
+                    return convertDocumentToSourceMapper(file, host.readFile(mapPath), mapPath);
+                }
+            }
+            return file.sourceMapper = sourcemaps.identitySourceMapper;
         }
 
         function makeGetTargetOfMappedPosition<TIn>(

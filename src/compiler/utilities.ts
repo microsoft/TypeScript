@@ -3463,6 +3463,42 @@ namespace ts {
         return result;
     }
 
+    export function base64decode(host: { base64decode?(input: string): string }, input: string): string {
+        if (host.base64decode) {
+            return host.base64decode(input);
+        }
+        let result = "";
+        const length = input.length;
+        let i = 0;
+        while (i < length) {
+            // Stop decoding once padding characters are present
+            if (input.charCodeAt(i) === base64Digits.charCodeAt(64)) {
+                break;
+            }
+            // convert 4 input digits into three characters, ignoring padding characters at the end
+            const ch1 = base64Digits.indexOf(input[i]);
+            const ch2 = base64Digits.indexOf(input[i + 1]);
+            const ch3 = base64Digits.indexOf(input[i + 2]);
+            const ch4 = base64Digits.indexOf(input[i + 3]);
+
+            const code1 = (ch1 & 0B00111111 << 2) | (ch2 & 0B00000011);
+            const code2 = (ch2 & 0B00001111 << 4) | (ch3 & 0B00001111);
+            const code3 = (ch3 & 0B00000011 << 6) | (ch4 & 0B00111111);
+
+            if (code2 === 0 && ch3 !== 0) { // code2 decoded to zero, but ch3 was padding - elide code2 and code3
+                result += String.fromCharCode(code1);
+            }
+            else if (code3 === 0 && ch4 !== 0) { // code3 decoded to zero, but ch4 was padding, elide code3
+                result += `${String.fromCharCode(code1)}${String.fromCharCode(code2)}`;
+            }
+            else {
+                result += `${String.fromCharCode(code1)}${String.fromCharCode(code2)}${String.fromCharCode(code3)}`;
+            }
+            i += 4;
+        }
+        return result;
+    }
+
     const carriageReturnLineFeed = "\r\n";
     const lineFeed = "\n";
     export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, getNewLine?: () => string): string {

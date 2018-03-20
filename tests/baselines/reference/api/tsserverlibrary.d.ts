@@ -2893,6 +2893,7 @@ declare namespace ts {
         setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         clearTimeout?(timeoutId: any): void;
         clearScreen?(): void;
+        base64decode?(input: string): string;
     }
     interface FileWatcher {
         close(): void;

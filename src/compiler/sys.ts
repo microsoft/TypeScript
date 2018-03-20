@@ -457,6 +457,7 @@ namespace ts {
         clearTimeout?(timeoutId: any): void;
         clearScreen?(): void;
         /*@internal*/ setBlocking?(): void;
+        base64decode?(input: string): string;
     }
 
     export interface FileWatcher {
@@ -527,6 +528,8 @@ namespace ts {
             catch {
               _crypto = undefined;
             }
+
+            const Buffer: typeof global.Buffer = require("buffer").Buffer;
 
             const nodeVersion = getNodeMajorVersion();
             const isNode4OrLater = nodeVersion >= 4;
@@ -620,6 +623,9 @@ namespace ts {
                     if (process.stdout && process.stdout._handle && process.stdout._handle.setBlocking) {
                         process.stdout._handle.setBlocking(true);
                     }
+                },
+                base64decode: input => {
+                    return Buffer.from(input, "base64").toString("utf8");
                 }
             };
             return nodeSystem;
