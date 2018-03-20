@@ -32,9 +32,9 @@ namespace ts.sourcemaps {
     export function decode(host: SourceMapDecodeHost, mapPath: string, map: SourceMapData, program?: Program, fallbackCache = createSourceFileLikeCache(host)): SourceMapper {
         const currentDirectory = getDirectoryPath(mapPath);
         const sourceRoot = map.sourceRoot || currentDirectory;
-        let decodedMappings: ProcessedSourceMapSpan[];
-        let generatedOrderedMappings: ProcessedSourceMapSpan[];
-        let sourceOrderedMappings: ProcessedSourceMapSpan[];
+        let decodedMappings: ProcessedSourceMapPosition[];
+        let generatedOrderedMappings: ProcessedSourceMapPosition[];
+        let sourceOrderedMappings: ProcessedSourceMapPosition[];
 
         return {
             getOriginalPosition,
@@ -44,7 +44,7 @@ namespace ts.sourcemaps {
         function getGeneratedPosition(loc: SourceMappableLocation): SourceMappableLocation {
             const maps = getGeneratedOrderedMappings();
             if (!length(maps)) return loc;
-            let targetIndex = binarySearch(maps, { sourcePath: loc.fileName, sourcePosition: loc.position }, identity, compareProcessedSpanSourcePositions);
+            let targetIndex = binarySearch(maps, { sourcePath: loc.fileName, sourcePosition: loc.position }, identity, compareProcessedPositionSourcePositions);
             if (targetIndex < 0 && maps.length > 0) {
                 // if no exact match, closest is 2's compliment of result
                 targetIndex = ~targetIndex;
@@ -52,18 +52,18 @@ namespace ts.sourcemaps {
             if (!maps[targetIndex] || comparePaths(loc.fileName, maps[targetIndex].sourcePath, sourceRoot) !== 0) {
                 return loc;
             }
-            return { fileName: toPath(map.file, sourceRoot, host.getCanonicalFileName), position: maps[targetIndex].emittedPosition }; // Closest span
+            return { fileName: toPath(map.file, sourceRoot, host.getCanonicalFileName), position: maps[targetIndex].emittedPosition }; // Closest pos
         }
 
         function getOriginalPosition(loc: SourceMappableLocation): SourceMappableLocation {
             const maps = getSourceOrderedMappings();
             if (!length(maps)) return loc;
-            let targetIndex = binarySearch(maps, { emittedPosition: loc.position }, identity, compareProcessedSpanEmittedPositions);
+            let targetIndex = binarySearch(maps, { emittedPosition: loc.position }, identity, compareProcessedPositionEmittedPositions);
             if (targetIndex < 0 && maps.length > 0) {
                 // if no exact match, closest is 2's compliment of result
                 targetIndex = ~targetIndex;
             }
-            return { fileName: toPath(maps[targetIndex].sourcePath, sourceRoot, host.getCanonicalFileName), position: maps[targetIndex].sourcePosition }; // Closest span
+            return { fileName: toPath(maps[targetIndex].sourcePath, sourceRoot, host.getCanonicalFileName), position: maps[targetIndex].sourcePosition }; // Closest pos
         }
 
         function getSourceFileLike(fileName: string, location: string): SourceFileLike | undefined {
@@ -90,15 +90,15 @@ namespace ts.sourcemaps {
         }
 
         function getSourceOrderedMappings() {
-            return sourceOrderedMappings || (sourceOrderedMappings = getDecodedMappings().slice().sort(compareProcessedSpanSourcePositions));
+            return sourceOrderedMappings || (sourceOrderedMappings = getDecodedMappings().slice().sort(compareProcessedPositionSourcePositions));
         }
 
         function getGeneratedOrderedMappings() {
-            return generatedOrderedMappings || (generatedOrderedMappings = getDecodedMappings().slice().sort(compareProcessedSpanEmittedPositions));
+            return generatedOrderedMappings || (generatedOrderedMappings = getDecodedMappings().slice().sort(compareProcessedPositionEmittedPositions));
         }
 
-        function calculateDecodedMappings(): ProcessedSourceMapSpan[] {
-            const state: DecoderState<ProcessedSourceMapSpan> = {
+        function calculateDecodedMappings(): ProcessedSourceMapPosition[] {
+            const state: DecoderState<ProcessedSourceMapPosition> = {
                 encodedText: map.mappings,
                 currentNameIndex: undefined,
                 sourceMapNamesLength: map.names ? map.names.length : undefined,
@@ -107,48 +107,48 @@ namespace ts.sourcemaps {
                 currentSourceColumn: 1,
                 currentSourceLine: 1,
                 currentSourceIndex: 0,
-                spans: [],
+                positions: [],
                 decodingIndex: 0,
-                processSpan,
+                processPosition,
             };
             while (!hasCompletedDecoding(state)) {
-                decodeSingleSpan(state);
+                decodeSinglePosition(state);
                 if (state.error) {
                     host.log(`Encountered error while decoding sourcemap found at ${mapPath}: ${state.error}`);
                     return [];
                 }
             }
-            return state.spans;
+            return state.positions;
         }
 
-        function compareProcessedSpanSourcePositions(a: ProcessedSourceMapSpan, b: ProcessedSourceMapSpan) {
+        function compareProcessedPositionSourcePositions(a: ProcessedSourceMapPosition, b: ProcessedSourceMapPosition) {
             return comparePaths(a.sourcePath, b.sourcePath, sourceRoot) ||
                 compareValues(a.sourcePosition, b.sourcePosition);
         }
 
-        function compareProcessedSpanEmittedPositions(a: ProcessedSourceMapSpan, b: ProcessedSourceMapSpan) {
+        function compareProcessedPositionEmittedPositions(a: ProcessedSourceMapPosition, b: ProcessedSourceMapPosition) {
             return compareValues(a.emittedPosition, b.emittedPosition);
         }
 
-        function processSpan(span: RawSourceMapSpan): ProcessedSourceMapSpan {
-            const sourcePath = map.sources[span.sourceIndex];
+        function processPosition(position: RawSourceMapPosition): ProcessedSourceMapPosition {
+            const sourcePath = map.sources[position.sourceIndex];
             return {
-                emittedPosition: getPositionOfLineAndCharacterUsingName(map.file, currentDirectory, span.emittedLine - 1, span.emittedColumn - 1),
-                sourcePosition: getPositionOfLineAndCharacterUsingName(sourcePath, sourceRoot, span.sourceLine - 1, span.sourceColumn - 1),
+                emittedPosition: getPositionOfLineAndCharacterUsingName(map.file, currentDirectory, position.emittedLine - 1, position.emittedColumn - 1),
+                sourcePosition: getPositionOfLineAndCharacterUsingName(sourcePath, sourceRoot, position.sourceLine - 1, position.sourceColumn - 1),
                 sourcePath,
-                name: span.nameIndex ? map.names[span.nameIndex] : undefined
+                name: position.nameIndex ? map.names[position.nameIndex] : undefined
             };
         }
     }
 
-    interface ProcessedSourceMapSpan {
+    interface ProcessedSourceMapPosition {
         emittedPosition: number;
         sourcePosition: number;
         sourcePath: string;
         name?: string;
     }
 
-    interface RawSourceMapSpan {
+    interface RawSourceMapPosition {
         emittedLine: number;
         emittedColumn: number;
         sourceLine: number;
@@ -168,15 +168,15 @@ namespace ts.sourcemaps {
         encodedText: string;
         sourceMapNamesLength?: number;
         error?: string;
-        spans: T[];
-        processSpan: (span: RawSourceMapSpan) => T;
+        positions: T[];
+        processPosition: (position: RawSourceMapPosition) => T;
     }
 
     function hasCompletedDecoding(state: DecoderState<any>) {
         return state.decodingIndex === state.encodedText.length;
     }
 
-    function decodeSingleSpan<T>(state: DecoderState<T>): void {
+    function decodeSinglePosition<T>(state: DecoderState<T>): void {
         while (state.decodingIndex < state.encodedText.length) {
             const char = state.encodedText.charCodeAt(state.decodingIndex);
             if (char === CharacterCodes.semicolon) {
@@ -193,7 +193,7 @@ namespace ts.sourcemaps {
                 continue;
             }
 
-            // Read the current span
+            // Read the current position
             // 1. Column offset from prev read jsColumn
             state.currentEmittedColumn += base64VLQFormatDecode();
             // Incorrect emittedColumn dont support this map
@@ -211,7 +211,7 @@ namespace ts.sourcemaps {
             if (createErrorIfCondition(state.currentSourceIndex < 0, "Invalid sourceIndex found")) {
                 return;
             }
-            // Dont support reading mappings that dont have information about original source span
+            // Dont support reading mappings that dont have information about original source position
             if (createErrorIfCondition(isSourceMappingSegmentEnd(state.encodedText, state.decodingIndex), "Unsupported Error Format: No entries after sourceIndex")) {
                 return;
             }
@@ -250,15 +250,15 @@ namespace ts.sourcemaps {
             }
 
             // Entry should be complete
-            captureSpan();
+            capturePosition();
             return;
         }
 
         createErrorIfCondition(/*condition*/ true, "No encoded entry found");
         return;
 
-        function captureSpan() {
-            state.spans.push(state.processSpan({
+        function capturePosition() {
+            state.positions.push(state.processPosition({
                 emittedColumn: state.currentEmittedColumn,
                 emittedLine: state.currentEmittedLine,
                 sourceColumn: state.currentSourceColumn,
