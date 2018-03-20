@@ -11,17 +11,40 @@ function C(x) {
 >x : any
 >x : number
 }
+C.prototype.m = function() {
+>C.prototype.m = function() {    this.y = 12} : () => void
+>C.prototype.m : any
+>C.prototype : any
+>C : (x: number) => void
+>prototype : any
+>m : any
+>function() {    this.y = 12} : () => void
+
+    this.y = 12
+>this.y = 12 : 12
+>this.y : number | undefined
+>this : { x: number; m: () => void; y: number | undefined; }
+>y : number | undefined
+>12 : 12
+}
 var c = new C(1)
->c : { x: number; }
->new C(1) : { x: number; }
+>c : { x: number; m: () => void; y: number | undefined; }
+>new C(1) : { x: number; m: () => void; y: number | undefined; }
 >C : (x: number) => void
 >1 : 1
 
 c.x = undefined // should error
 >c.x = undefined : undefined
 >c.x : number
->c : { x: number; }
+>c : { x: number; m: () => void; y: number | undefined; }
 >x : number
+>undefined : undefined
+
+c.y = undefined // ok
+>c.y = undefined : undefined
+>c.y : number | undefined
+>c : { x: number; m: () => void; y: number | undefined; }
+>y : number | undefined
 >undefined : undefined
 
 /** @param {number} x */

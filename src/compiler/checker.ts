@@ -4260,7 +4260,11 @@ namespace ts {
 
                 if (isPropertyAccessExpression(expression.left) && expression.left.expression.kind === SyntaxKind.ThisKeyword) {
                     const thisContainer = getThisContainer(expression, /*includeArrowFunctions*/ false);
-                    if (thisContainer.kind === SyntaxKind.Constructor || thisContainer.kind === SyntaxKind.FunctionDeclaration || thisContainer.kind === SyntaxKind.FunctionExpression) {
+                    const isPrototypeProperty = isBinaryExpression(thisContainer.parent) &&
+                        getSpecialPropertyAssignmentKind(thisContainer.parent) === SpecialPropertyAssignmentKind.PrototypeProperty;
+                    if (thisContainer.kind === SyntaxKind.Constructor ||
+                        thisContainer.kind === SyntaxKind.FunctionDeclaration ||
+                        (thisContainer.kind === SyntaxKind.FunctionExpression && !isPrototypeProperty)) {
                         definedInConstructor = true;
                     }
                     else {

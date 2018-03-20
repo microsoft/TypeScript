@@ -1,4 +1,4 @@
-tests/cases/conformance/salsa/a.js(6,1): error TS2322: Type 'undefined' is not assignable to type 'number'.
+tests/cases/conformance/salsa/a.js(9,1): error TS2322: Type 'undefined' is not assignable to type 'number'.
 
 
 ==== tests/cases/conformance/salsa/a.js (1 errors) ====
@@ -6,10 +6,14 @@ tests/cases/conformance/salsa/a.js(6,1): error TS2322: Type 'undefined' is not a
     function C(x) {
         this.x = x
     }
+    C.prototype.m = function() {
+        this.y = 12
+    }
     var c = new C(1)
     c.x = undefined // should error
     ~~~
 !!! error TS2322: Type 'undefined' is not assignable to type 'number'.
+    c.y = undefined // ok
     
     /** @param {number} x */
     function A(x) {

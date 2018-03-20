@@ -10,8 +10,12 @@
 function C(x) {
     this.x = x
 }
+C.prototype.m = function() {
+    this.y = 12
+}
 var c = new C(1)
 c.x = undefined // should error
+c.y = undefined // ok
 
 /** @param {number} x */
 function A(x) {
