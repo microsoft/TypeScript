@@ -182,7 +182,7 @@ namespace ts {
                     emitterDiagnostics.add(diagnostic);
                 }
             }
-            const declarationPrinter = createPrinter({ ...compilerOptions, onlyPrintJsDocStyle: true } as PrinterOptions, {
+            const declarationPrinter = createPrinter({ ...compilerOptions, printCommentsForDeclarationEmit: true } as PrinterOptions, {
                 // resolver hooks
                 hasGlobalName: resolver.hasGlobalName,
 
@@ -435,6 +435,23 @@ namespace ts {
             const previousWriter = writer;
             setWriter(output);
             emitShebangIfNeeded(sourceFile);
+            if (printerOptions.printCommentsForDeclarationEmit) {
+                if (sourceFile.moduleName) {
+                    write(`/// <amd-module name="${sourceFile.moduleName}" />`);
+                    writeLine();
+                }
+                if (sourceFile.amdDependencies) {
+                    for (const dep of sourceFile.amdDependencies) {
+                        if (dep.name) {
+                            write(`/// <amd-dependency name="${dep.name}" path="${dep.path}" />`);
+                        }
+                        else {
+                            write(`/// <amd-dependency path="${dep.path}" />`);
+                        }
+                        writeLine();
+                    }
+                }
+            }
             emitPrologueDirectivesIfNeeded(sourceFile);
             print(EmitHint.SourceFile, sourceFile, sourceFile);
             reset();
