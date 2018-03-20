@@ -4260,13 +4260,11 @@ namespace ts {
 
                 if (isPropertyAccessExpression(expression.left) && expression.left.expression.kind === SyntaxKind.ThisKeyword) {
                     const thisContainer = getThisContainer(expression, /*includeArrowFunctions*/ false);
-                    const isPrototypeProperty = isBinaryExpression(thisContainer.parent) &&
-                        getSpecialPropertyAssignmentKind(thisContainer.parent) === SpecialPropertyAssignmentKind.PrototypeProperty;
                     // Properties defined in a constructor (or javascript constructor function) don't get undefined added.
                     // Function expressions that are assigned to the prototype count as methods.
                     if (thisContainer.kind === SyntaxKind.Constructor ||
                         thisContainer.kind === SyntaxKind.FunctionDeclaration ||
-                        (thisContainer.kind === SyntaxKind.FunctionExpression && !isPrototypeProperty)) {
+                        (thisContainer.kind === SyntaxKind.FunctionExpression && !isPrototypePropertyAssignment(thisContainer.parent))) {
                         definedInConstructor = true;
                     }
                     else {
