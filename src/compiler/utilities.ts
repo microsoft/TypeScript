@@ -3501,7 +3501,7 @@ namespace ts {
             return host.base64decode(input);
         }
         const length = input.length;
-        let expandedCharCodes: number[] = [];
+        const expandedCharCodes: number[] = [];
         let i = 0;
         while (i < length) {
             // Stop decoding once padding characters are present
