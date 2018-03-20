@@ -4251,7 +4251,7 @@ namespace ts {
             let jsDocType: Type;
             for (const declaration of symbol.declarations) {
                 const expression = declaration.kind === SyntaxKind.BinaryExpression ? <BinaryExpression>declaration :
-                    declaration.kind === SyntaxKind.PropertyAccessExpression ? <BinaryExpression>getAncestor(declaration, SyntaxKind.BinaryExpression) :
+                    declaration.kind === SyntaxKind.PropertyAccessExpression ? cast(declaration.parent, isBinaryExpression) :
                         undefined;
 
                 if (!expression) {
