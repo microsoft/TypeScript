@@ -638,7 +638,7 @@ namespace ts.textChanges {
                 // order changes by start position
                 const normalized = stableSort(changesInFile, (a, b) => a.range.pos - b.range.pos);
                 // verify that change intervals do not overlap, except possibly at end points.
-                for (let i = 0; i < normalized.length - 2; i++) {
+                for (let i = 0; i < normalized.length - 1; i++) {
                     Debug.assert(normalized[i].range.end <= normalized[i + 1].range.pos, "Changes overlap", () =>
                         `${JSON.stringify(normalized[i].range)} and ${JSON.stringify(normalized[i + 1].range)}`);
                 }
