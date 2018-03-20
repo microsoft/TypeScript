@@ -46,7 +46,8 @@ namespace ts.JsDoc {
     let jsDocTagNameCompletionEntries: CompletionEntry[];
     let jsDocTagCompletionEntries: CompletionEntry[];
 
-    export function getJsDocCommentsFromDeclarations(declarations?: Declaration[]) {
+    export function getJsDocCommentsFromDeclarations(declarations: Declaration[] | undefined) {
+        if (!declarations) return emptyArray;
         // Only collect doc comments from duplicate declarations once:
         // In case of a union property there might be same declaration multiple times
         // which only varies in type parameter
@@ -54,7 +55,7 @@ namespace ts.JsDoc {
         // The property length will have two declarations of property length coming
         // from Array<T> - Array<string> and Array<number>
         const documentationComment: SymbolDisplayPart[] = [];
-        forEachUnique(declarations, declaration => {
+        for (const declaration of declarations) {
             for (const { comment } of getCommentHavingNodes(declaration)) {
                 if (comment === undefined) continue;
                 if (documentationComment.length) {
@@ -62,7 +63,7 @@ namespace ts.JsDoc {
                 }
                 documentationComment.push(textPart(comment));
             }
-        });
+        }
         return documentationComment;
     }
 
@@ -77,15 +78,9 @@ namespace ts.JsDoc {
         }
     }
 
-    export function getJsDocTagsFromDeclarations(declarations?: Declaration[]): JSDocTagInfo[] {
+    export function getJsDocTagsFromDeclarations(declarations: Declaration[] | undefined): JSDocTagInfo[] | undefined {
         // Only collect doc comments from duplicate declarations once.
-        const tags: JSDocTagInfo[] = [];
-        forEachUnique(declarations, declaration => {
-            for (const tag of getJSDocTags(declaration)) {
-                tags.push({ name: tag.tagName.text, text: getCommentText(tag) });
-            }
-        });
-        return tags;
+        return flatMap(declarations, d => getJSDocTags(d).map(tag => ({ name: tag.tagName.text, text: getCommentText(tag) })));
     }
 
     function getCommentText(tag: JSDocTag): string | undefined {
@@ -117,25 +112,6 @@ namespace ts.JsDoc {
         function addComment(s: string) {
             return comment === undefined ? s : `${s} ${comment}`;
         }
-    }
-
-    /**
-     * Iterates through 'array' by index and performs the callback on each element of array until the callback
-     * returns a truthy value, then returns that value.
-     * If no such value is found, the callback is applied to each element of array and undefined is returned.
-     */
-    function forEachUnique<T, U>(array: T[], callback: (element: T, index: number) => U): U {
-        if (array) {
-            for (let i = 0; i < array.length; i++) {
-                if (array.indexOf(array[i]) === i) {
-                    const result = callback(array[i], i);
-                    if (result) {
-                        return result;
-                    }
-                }
-            }
-        }
-        return undefined;
     }
 
     export function getJSDocTagNameCompletions(): CompletionEntry[] {
