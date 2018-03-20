@@ -18556,7 +18556,7 @@ namespace ts {
             return true;
         }
 
-        /** NOTE: Return value of `[]` means a different thing than `undefined`. `[]` means return `void`, `undefined` means return `never`. */
+        /** NOTE: Return value of `[]` means a different thing than `undefined`. `[]` means func returns `void`, `undefined` means it returns `never`. */
         function checkAndAggregateReturnExpressionTypes(func: FunctionLikeDeclaration, checkMode: CheckMode): Type[] | undefined {
             const functionFlags = getFunctionFlags(func);
             const aggregatedTypes: Type[] = [];
@@ -18585,7 +18585,11 @@ namespace ts {
             if (aggregatedTypes.length === 0 && !hasReturnWithNoExpression && (hasReturnOfTypeNever || mayReturnNever(func))) {
                 return undefined;
             }
-            if (strictNullChecks && aggregatedTypes.length && hasReturnWithNoExpression) {
+            const isJSConstructorFunction = some(
+                (func.body as Block).statements.filter(st => isExpressionStatement(st) && st.expression.kind === SyntaxKind.BinaryExpression),
+                stmt => getSpecialPropertyAssignmentKind((stmt as ExpressionStatement).expression as BinaryExpression) === SpecialPropertyAssignmentKind.ThisProperty);
+            // TODO: Also check if the aggregated types includes already the instance type. Not sure how to do this.
+            if (strictNullChecks && aggregatedTypes.length && hasReturnWithNoExpression && !isJSConstructorFunction) {
                 pushIfUnique(aggregatedTypes, undefinedType);
             }
             return aggregatedTypes;
