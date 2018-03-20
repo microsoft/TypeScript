@@ -323,7 +323,7 @@ namespace ts.sourcemaps {
 
     function isSourceMappingSegmentEnd(encodedText: string, pos: number) {
         return (pos === encodedText.length ||
-            encodedText.charAt(pos) === "," ||
-            encodedText.charAt(pos) === ";");
+            encodedText.charCodeAt(pos) === CharacterCodes.comma ||
+            encodedText.charCodeAt(pos) === CharacterCodes.semicolon);
     }
 }
