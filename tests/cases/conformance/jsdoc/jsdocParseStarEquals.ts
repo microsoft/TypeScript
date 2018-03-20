@@ -9,3 +9,6 @@
 function f(...args) {
     return null
 }
+
+/** @type *= */
+var x;

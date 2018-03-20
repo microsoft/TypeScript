@@ -8,3 +8,7 @@ function f(...args) {
     return null
 }
 
+/** @type *= */
+var x;
+>x : Symbol(x, Decl(a.js, 7, 3))
+

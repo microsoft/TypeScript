@@ -9,3 +9,7 @@ function f(...args) {
 >null : null
 }
 
+/** @type *= */
+var x;
+>x : any
+
