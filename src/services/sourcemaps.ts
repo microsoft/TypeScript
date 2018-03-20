@@ -136,7 +136,8 @@ namespace ts.sourcemaps {
                 emittedPosition: getPositionOfLineAndCharacterUsingName(map.file, currentDirectory, position.emittedLine - 1, position.emittedColumn - 1),
                 sourcePosition: getPositionOfLineAndCharacterUsingName(sourcePath, sourceRoot, position.sourceLine - 1, position.sourceColumn - 1),
                 sourcePath,
-                name: position.nameIndex ? map.names[position.nameIndex] : undefined
+                // TODO: Consider using `name` field to remap the expected identifier to scan for renames to handle another tool renaming oout output
+                // name: position.nameIndex ? map.names[position.nameIndex] : undefined
             };
         }
     }
@@ -145,7 +146,6 @@ namespace ts.sourcemaps {
         emittedPosition: number;
         sourcePosition: number;
         sourcePath: string;
-        name?: string;
     }
 
     interface RawSourceMapPosition {
@@ -240,9 +240,10 @@ namespace ts.sourcemaps {
                 }
                 state.currentNameIndex += base64VLQFormatDecode();
                 // Incorrect nameIndex dont support this map
-                if (createErrorIfCondition(state.currentNameIndex < 0 || state.currentNameIndex >= state.sourceMapNamesLength, "Invalid name index for the source map entry")) {
-                    return;
-                }
+                // TODO: If we start using `name`s, issue errors when they aren't correct in the sourcemap
+                // if (createErrorIfCondition(state.currentNameIndex < 0 || state.currentNameIndex >= state.sourceMapNamesLength, "Invalid name index for the source map entry")) {
+                //    return;
+                // }
             }
             // Dont support reading mappings that dont have information about original source and its line numbers
             if (createErrorIfCondition(!isSourceMappingSegmentEnd(state.encodedText, state.decodingIndex), "Unsupported Error Format: There are more entries after " + (state.currentNameIndex === undefined ? "sourceColumn" : "nameIndex"))) {
