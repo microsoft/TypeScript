@@ -2767,6 +2767,10 @@
         "category": "Error",
         "code": 5068
     },
+    "Option '{0}' cannot be specified without specifying option '{1}' or option '{2}'.": {
+        "category": "Error",
+        "code": 5069
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",

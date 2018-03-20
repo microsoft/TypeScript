@@ -2113,7 +2113,7 @@ namespace ts {
 
             if (options.mapRoot && !(options.sourceMap || options.declarationMaps)) {
                 // Error to specify --mapRoot without --sourcemap
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "mapRoot", "sourceMap");
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "mapRoot", "sourceMap", "declarationMaps");
             }
 
             if (options.declarationDir) {
@@ -2125,10 +2125,8 @@ namespace ts {
                 }
             }
 
-            if (options.declarationMaps) {
-                if (!options.declaration) {
-                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "declarationMaps", "declaration");
-                }
+            if (options.declarationMaps && !options.declaration) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "declarationMaps", "declaration");
             }
 
             if (options.lib && options.noLib) {
@@ -2305,21 +2303,21 @@ namespace ts {
             return emptyArray;
         }
 
-        function createDiagnosticForOptionName(message: DiagnosticMessage, option1: string, option2?: string) {
-            createDiagnosticForOption(/*onKey*/ true, option1, option2, message, option1, option2);
+        function createDiagnosticForOptionName(message: DiagnosticMessage, option1: string, option2?: string, option3?: string) {
+            createDiagnosticForOption(/*onKey*/ true, option1, option2, message, option1, option2, option3);
         }
 
         function createOptionValueDiagnostic(option1: string, message: DiagnosticMessage, arg0: string) {
             createDiagnosticForOption(/*onKey*/ false, option1, /*option2*/ undefined, message, arg0);
         }
 
-        function createDiagnosticForOption(onKey: boolean, option1: string, option2: string, message: DiagnosticMessage, arg0: string | number, arg1?: string | number) {
+        function createDiagnosticForOption(onKey: boolean, option1: string, option2: string, message: DiagnosticMessage, arg0: string | number, arg1?: string | number, arg2?: string | number) {
             const compilerOptionsObjectLiteralSyntax = getCompilerOptionsObjectLiteralSyntax();
             const needCompilerDiagnostic = !compilerOptionsObjectLiteralSyntax ||
-                !createOptionDiagnosticInObjectLiteralSyntax(compilerOptionsObjectLiteralSyntax, onKey, option1, option2, message, arg0, arg1);
+                !createOptionDiagnosticInObjectLiteralSyntax(compilerOptionsObjectLiteralSyntax, onKey, option1, option2, message, arg0, arg1, arg2);
 
             if (needCompilerDiagnostic) {
-                programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1));
+                programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1, arg2));
             }
         }
 
@@ -2338,10 +2336,10 @@ namespace ts {
             return _compilerOptionsObjectLiteralSyntax;
         }
 
-        function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string, message: DiagnosticMessage, arg0: string | number, arg1?: string | number): boolean {
+        function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string, message: DiagnosticMessage, arg0: string | number, arg1?: string | number, arg2?: string | number): boolean {
             const props = getPropertyAssignment(objectLiteral, key1, key2);
             for (const prop of props) {
-                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile, onKey ? prop.name : prop.initializer, message, arg0, arg1));
+                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile, onKey ? prop.name : prop.initializer, message, arg0, arg1, arg2));
             }
             return !!props.length;
         }
