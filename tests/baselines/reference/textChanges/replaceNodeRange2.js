@@ -17,5 +17,6 @@ public class class1 implements interface1
 {
     property1: boolean;
 }
+ // comment 5
 // comment 6
 var a = 4; // comment 7

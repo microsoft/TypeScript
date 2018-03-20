@@ -302,10 +302,8 @@ namespace ts.textChanges {
         }
 
         // TODO (https://github.com/Microsoft/TypeScript/issues/21246): default should probably be useNonAdjustedPositions
-        public replaceNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, newNode: Node, options: ChangeNodeOptions = {}) {
-            const pos = getAdjustedStartPosition(sourceFile, startNode, options, Position.Start);
-            const end = getAdjustedEndPosition(sourceFile, endNode, options);
-            return this.replaceRange(sourceFile, { pos, end }, newNode, options);
+        public replaceNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, newNode: Node, options: InsertNodeOptions = {}) {
+            this.replaceRange(sourceFile, { pos: startNode.getStart(sourceFile), end: endNode.end }, newNode, options);
         }
 
         public replaceRangeWithNodes(sourceFile: SourceFile, range: TextRange, newNodes: ReadonlyArray<Node>, options: ChangeNodeOptions = useNonAdjustedPositions) {

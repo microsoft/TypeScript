@@ -43,7 +43,12 @@ namespace M
             // comment 1
             const x = 1;
 
+            /**
+             * comment 2 line 1
+             * comment 2 line 2
+             */
             return bar();
+
         }
     }
 }
