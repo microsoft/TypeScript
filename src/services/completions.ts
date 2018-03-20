@@ -1543,47 +1543,28 @@ namespace ts.Completions {
             // Has keywords for class elements
             keywordFilters = KeywordCompletionFilters.ClassElementKeywords;
 
-            const baseTypeNode = getClassExtendsHeritageClauseElement(classLikeDeclaration);
-            const implementsTypeNodes = getClassImplementsHeritageClauseElements(classLikeDeclaration);
-            if (baseTypeNode || implementsTypeNodes) {
-                const classElement = contextToken.parent;
-                let classElementModifierFlags = isClassElement(classElement) && getModifierFlags(classElement);
-                // If this is context token is not something we are editing now, consider if this would lead to be modifier
-                if (contextToken.kind === SyntaxKind.Identifier && !isCurrentlyEditingNode(contextToken)) {
-                    switch (contextToken.getText()) {
-                        case "private":
-                            classElementModifierFlags = classElementModifierFlags | ModifierFlags.Private;
-                            break;
-                        case "static":
-                            classElementModifierFlags = classElementModifierFlags | ModifierFlags.Static;
-                            break;
-                    }
+            const classElement = contextToken.parent;
+            let classElementModifierFlags = isClassElement(classElement) && getModifierFlags(classElement);
+            // If this is context token is not something we are editing now, consider if this would lead to be modifier
+            if (contextToken.kind === SyntaxKind.Identifier && !isCurrentlyEditingNode(contextToken)) {
+                switch (contextToken.getText()) {
+                    case "private":
+                        classElementModifierFlags = classElementModifierFlags | ModifierFlags.Private;
+                        break;
+                    case "static":
+                        classElementModifierFlags = classElementModifierFlags | ModifierFlags.Static;
+                        break;
                 }
+            }
 
-                // No member list for private methods
-                if (!(classElementModifierFlags & ModifierFlags.Private)) {
-                    let baseClassTypeToGetPropertiesFrom: Type;
-                    if (baseTypeNode) {
-                        baseClassTypeToGetPropertiesFrom = typeChecker.getTypeAtLocation(baseTypeNode);
-                        if (classElementModifierFlags & ModifierFlags.Static) {
-                            // Use static class to get property symbols from
-                            baseClassTypeToGetPropertiesFrom = typeChecker.getTypeOfSymbolAtLocation(
-                                baseClassTypeToGetPropertiesFrom.symbol, classLikeDeclaration);
-                        }
-                    }
-                    const implementedInterfaceTypePropertySymbols = (classElementModifierFlags & ModifierFlags.Static) ?
-                        emptyArray :
-                        flatMap(implementsTypeNodes || emptyArray, typeNode => typeChecker.getPropertiesOfType(typeChecker.getTypeAtLocation(typeNode)));
-
-                    // List of property symbols of base type that are not private and already implemented
-                    symbols = filterClassMembersList(
-                        baseClassTypeToGetPropertiesFrom ?
-                            typeChecker.getPropertiesOfType(baseClassTypeToGetPropertiesFrom) :
-                            emptyArray,
-                        implementedInterfaceTypePropertySymbols,
-                        classLikeDeclaration.members,
-                        classElementModifierFlags);
-                }
+            // No member list for private methods
+            if (!(classElementModifierFlags & ModifierFlags.Private)) {
+                // List of property symbols of base type that are not private and already implemented
+                const baseSymbols = flatMap(getAllSuperTypeNodes(classLikeDeclaration), baseTypeNode => {
+                    const type = typeChecker.getTypeAtLocation(baseTypeNode);
+                    return typeChecker.getPropertiesOfType(classElementModifierFlags & ModifierFlags.Static ? typeChecker.getTypeOfSymbolAtLocation(type.symbol, classLikeDeclaration) : type);
+                });
+                symbols = filterClassMembersList(baseSymbols, classLikeDeclaration.members, classElementModifierFlags);
             }
         }
 
@@ -2018,12 +1999,8 @@ namespace ts.Completions {
          *
          * @returns Symbols to be suggested in an class element depending on existing memebers and symbol flags
          */
-        function filterClassMembersList(
-            baseSymbols: ReadonlyArray<Symbol>,
-            implementingTypeSymbols: ReadonlyArray<Symbol>,
-            existingMembers: ReadonlyArray<ClassElement>,
-            currentClassElementModifierFlags: ModifierFlags): Symbol[] {
-            const existingMemberNames = createUnderscoreEscapedMap<boolean>();
+        function filterClassMembersList(baseSymbols: ReadonlyArray<Symbol>, existingMembers: ReadonlyArray<ClassElement>, currentClassElementModifierFlags: ModifierFlags): Symbol[] {
+            const existingMemberNames = createUnderscoreEscapedMap<true>();
             for (const m of existingMembers) {
                 // Ignore omitted expressions for missing members
                 if (m.kind !== SyntaxKind.PropertyDeclaration &&
@@ -2044,10 +2021,7 @@ namespace ts.Completions {
                 }
 
                 // do not filter it out if the static presence doesnt match
-                const mIsStatic = hasModifier(m, ModifierFlags.Static);
-                const currentElementIsStatic = !!(currentClassElementModifierFlags & ModifierFlags.Static);
-                if ((mIsStatic && !currentElementIsStatic) ||
-                    (!mIsStatic && currentElementIsStatic)) {
+                if (hasModifier(m, ModifierFlags.Static) !== !!(currentClassElementModifierFlags & ModifierFlags.Static)) {
                     continue;
                 }
 
@@ -2057,24 +2031,10 @@ namespace ts.Completions {
                 }
             }
 
-            const result: Symbol[] = [];
-            addPropertySymbols(baseSymbols, ModifierFlags.Private);
-            addPropertySymbols(implementingTypeSymbols, ModifierFlags.NonPublicAccessibilityModifier);
-            return result;
-
-            function addPropertySymbols(properties: ReadonlyArray<Symbol>, inValidModifierFlags: ModifierFlags) {
-                for (const property of properties) {
-                    if (isValidProperty(property, inValidModifierFlags)) {
-                        result.push(property);
-                    }
-                }
-            }
-
-            function isValidProperty(propertySymbol: Symbol, inValidModifierFlags: ModifierFlags) {
-                return !existingMemberNames.get(propertySymbol.escapedName) &&
-                    propertySymbol.getDeclarations() &&
-                    !(getDeclarationModifierFlagsFromSymbol(propertySymbol) & inValidModifierFlags);
-            }
+            return baseSymbols.filter(propertySymbol =>
+                !existingMemberNames.has(propertySymbol.escapedName) &&
+                    !!propertySymbol.declarations &&
+                    !(getDeclarationModifierFlagsFromSymbol(propertySymbol) & ModifierFlags.Private));
         }
 
         /**
