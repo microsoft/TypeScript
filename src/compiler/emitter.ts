@@ -182,7 +182,7 @@ namespace ts {
                     emitterDiagnostics.add(diagnostic);
                 }
             }
-            const declarationPrinter = createPrinter({ ...compilerOptions, printCommentsForDeclarationEmit: true } as PrinterOptions, {
+            const declarationPrinter = createPrinter({ ...compilerOptions, onlyPrintJsDocStyle: true } as PrinterOptions, {
                 // resolver hooks
                 hasGlobalName: resolver.hasGlobalName,
 
@@ -2468,6 +2468,21 @@ namespace ts {
         }
 
         function emitTripleSlashDirectives(files: ReadonlyArray<FileReference>, types: ReadonlyArray<FileReference>) {
+            if (currentSourceFile && currentSourceFile.moduleName) {
+                write(`/// <amd-module name="${currentSourceFile.moduleName}" />`);
+                writeLine();
+            }
+            if (currentSourceFile && currentSourceFile.amdDependencies) {
+                for (const dep of currentSourceFile.amdDependencies) {
+                    if (dep.name) {
+                        write(`/// <amd-dependency name="${dep.name}" path="${dep.path}" />`);
+                    }
+                    else {
+                        write(`/// <amd-dependency path="${dep.path}" />`);
+                    }
+                    writeLine();
+                }
+            }
             for (const directive of files) {
                 write(`/// <reference path="${directive.fileName}" />`);
                 writeLine();
@@ -2529,23 +2544,6 @@ namespace ts {
         function emitPrologueDirectivesIfNeeded(sourceFileOrBundle: Bundle | SourceFile) {
             if (isSourceFile(sourceFileOrBundle)) {
                 setSourceFile(sourceFileOrBundle);
-                if (printerOptions.printCommentsForDeclarationEmit) {
-                    if (sourceFileOrBundle.moduleName) {
-                        write(`/// <amd-module name="${sourceFileOrBundle.moduleName}" />`);
-                        writeLine();
-                    }
-                    if (sourceFileOrBundle.amdDependencies) {
-                        for (const dep of sourceFileOrBundle.amdDependencies) {
-                            if (dep.name) {
-                                write(`/// <amd-dependency name="${dep.name}" path="${dep.path}" />`);
-                            }
-                            else {
-                                write(`/// <amd-dependency path="${dep.path}" />`);
-                            }
-                            writeLine();
-                        }
-                    }
-                }
                 emitPrologueDirectives(sourceFileOrBundle.statements);
             }
             else {

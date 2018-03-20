@@ -261,7 +261,7 @@ namespace ts {
         }
 
         function shouldWriteComment(text: string, pos: number) {
-            if (printerOptions.printCommentsForDeclarationEmit) {
+            if (printerOptions.onlyPrintJsDocStyle) {
                 return (isJSDocLikeText(text, pos) || isPinnedComment(text, pos));
             }
             return true;
