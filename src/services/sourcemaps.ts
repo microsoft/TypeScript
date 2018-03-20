@@ -33,8 +33,8 @@ namespace ts.sourcemaps {
         const currentDirectory = getDirectoryPath(mapPath);
         const sourceRoot = map.sourceRoot || currentDirectory;
         let decodedMappings: ProcessedSourceMapSpan[];
-        let forwardSortedMappings: ProcessedSourceMapSpan[];
-        let reverseSortedMappings: ProcessedSourceMapSpan[];
+        let generatedOrderedMappings: ProcessedSourceMapSpan[];
+        let sourceOrderedMappings: ProcessedSourceMapSpan[];
 
         return {
             getOriginalPosition,
@@ -42,7 +42,7 @@ namespace ts.sourcemaps {
         };
 
         function getGeneratedPosition(loc: SourceMappableLocation): SourceMappableLocation {
-            const maps = filter(getForwardSortedMappings(), m => comparePaths(loc.fileName, m.sourcePath, sourceRoot) === 0);
+            const maps = filter(getGeneratedOrderedMappings(), m => comparePaths(loc.fileName, m.sourcePath, sourceRoot) === 0);
             if (!length(maps)) return loc;
             let targetIndex = binarySearch(maps, { sourcePosition: loc.position }, getSourcePosition, compareValues);
             if (targetIndex < 0 && maps.length > 0) {
@@ -53,7 +53,7 @@ namespace ts.sourcemaps {
         }
 
         function getOriginalPosition(loc: SourceMappableLocation): SourceMappableLocation {
-            const maps = getReverseSortedMappings();
+            const maps = getSourceOrderedMappings();
             if (!length(maps)) return loc;
             let targetIndex = binarySearch(maps, { emittedPosition: loc.position }, identity, compareProcessedSpanEmittedPositions);
             if (targetIndex < 0 && maps.length > 0) {
@@ -86,12 +86,12 @@ namespace ts.sourcemaps {
             return decodedMappings || (decodedMappings = calculateDecodedMappings());
         }
 
-        function getReverseSortedMappings() {
-            return reverseSortedMappings || (reverseSortedMappings = getDecodedMappings().slice().sort(compareProcessedSpanSourcePositions));
+        function getSourceOrderedMappings() {
+            return sourceOrderedMappings || (sourceOrderedMappings = getDecodedMappings().slice().sort(compareProcessedSpanSourcePositions));
         }
 
-        function getForwardSortedMappings() {
-            return forwardSortedMappings || (forwardSortedMappings = getDecodedMappings().slice().sort(compareProcessedSpanEmittedPositions));
+        function getGeneratedOrderedMappings() {
+            return generatedOrderedMappings || (generatedOrderedMappings = getDecodedMappings().slice().sort(compareProcessedSpanEmittedPositions));
         }
 
         function calculateDecodedMappings(): ProcessedSourceMapSpan[] {
