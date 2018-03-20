@@ -13,8 +13,7 @@ namespace ts.codefix {
     });
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker): void {
-        const deletedNodes: Node[] = [];
-        const deletes: (() => void)[] = [];
+        const deletedNodes: { node: Node, inList: boolean }[] = [];
         const ctorSymbol = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false));
 
         if (!ctorSymbol || !(ctorSymbol.flags & (SymbolFlags.Function | SymbolFlags.Variable))) {
@@ -51,21 +50,19 @@ namespace ts.codefix {
 
         // Because the preceding node could be touched, we need to insert nodes before delete nodes.
         changes.insertNodeAfter(sourceFile, precedingNode, newClassDeclaration);
-        for (const deleteCallback of deletes) {
-            deleteCallback();
+        for (const { node, inList } of deletedNodes) {
+            if (inList) {
+                changes.deleteNodeInList(sourceFile, node);
+            }
+            else {
+                changes.deleteNode(sourceFile, node);
+            }
         }
 
         function deleteNode(node: Node, inList = false) {
-            if (deletedNodes.some(n => isNodeDescendantOf(node, n))) {
-                // Parent node has already been deleted; do nothing
-                return;
-            }
-            deletedNodes.push(node);
-            if (inList) {
-                deletes.push(() => changes.deleteNodeInList(sourceFile, node));
-            }
-            else {
-                deletes.push(() => changes.deleteNode(sourceFile, node));
+            // If parent node has already been deleted, do nothing
+            if (!deletedNodes.some(n => isNodeDescendantOf(node, n.node))) {
+                deletedNodes.push({ node, inList });
             }
         }
 
