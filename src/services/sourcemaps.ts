@@ -29,7 +29,7 @@ namespace ts.sourcemaps {
         log(text: string): void;
     }
 
-    export function decode(host: SourceMapDecodeHost, mapPath: string, map: SourceMapData, program?: Program, fallbackCache = getSourceFileLikeCache(host)): SourceMapper {
+    export function decode(host: SourceMapDecodeHost, mapPath: string, map: SourceMapData, program?: Program, fallbackCache = createSourceFileLikeCache(host)): SourceMapper {
         const currentDirectory = getDirectoryPath(mapPath);
         const sourceRoot = map.sourceRoot || currentDirectory;
         let decodedMappings: ProcessedSourceMapSpan[];
@@ -179,8 +179,8 @@ namespace ts.sourcemaps {
 
     function decodeSingleSpan<T>(state: DecoderState<T>): void {
         while (state.decodingIndex < state.encodedText.length) {
-            const char = state.encodedText.charAt(state.decodingIndex);
-            if (char === ";") {
+            const char = state.encodedText.charCodeAt(state.decodingIndex);
+            if (char === CharacterCodes.semicolon) {
                 // New line
                 state.currentEmittedLine++;
                 state.currentEmittedColumn = 1;
@@ -188,7 +188,7 @@ namespace ts.sourcemaps {
                 continue;
             }
 
-            if (char === ",") {
+            if (char === CharacterCodes.comma) {
                 // Next entry is on same line - no action needed
                 state.decodingIndex++;
                 continue;
