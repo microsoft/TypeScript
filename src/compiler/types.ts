@@ -73,6 +73,7 @@ namespace ts {
         | SyntaxKind.CommaToken
         | SyntaxKind.DotToken
         | SyntaxKind.Identifier
+        | SyntaxKind.NoSubstitutionTemplateLiteral
         | SyntaxKind.Unknown;
 
     export type JsxTokenSyntaxKind =
@@ -84,7 +85,7 @@ namespace ts {
         | SyntaxKind.OpenBraceToken
         | SyntaxKind.LessThanToken;
 
-    // token > SyntaxKind.Identifer => token is a keyword
+    // token > SyntaxKind.Identifier => token is a keyword
     // Also, If you add a new SyntaxKind be sure to keep the `Markers` section at the bottom in sync
     export const enum SyntaxKind {
         Unknown,
