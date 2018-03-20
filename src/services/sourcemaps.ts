@@ -42,12 +42,15 @@ namespace ts.sourcemaps {
         };
 
         function getGeneratedPosition(loc: SourceMappableLocation): SourceMappableLocation {
-            const maps = filter(getGeneratedOrderedMappings(), m => comparePaths(loc.fileName, m.sourcePath, sourceRoot) === 0);
+            const maps = getGeneratedOrderedMappings();
             if (!length(maps)) return loc;
-            let targetIndex = binarySearch(maps, { sourcePosition: loc.position }, getSourcePosition, compareValues);
+            let targetIndex = binarySearch(maps, { sourcePath: loc.fileName, sourcePosition: loc.position }, identity, compareProcessedSpanSourcePositions);
             if (targetIndex < 0 && maps.length > 0) {
                 // if no exact match, closest is 2's compliment of result
                 targetIndex = ~targetIndex;
+            }
+            if (!maps[targetIndex] || comparePaths(loc.fileName, maps[targetIndex].sourcePath, sourceRoot) !== 0) {
+                return loc;
             }
             return { fileName: toPath(map.file, sourceRoot, host.getCanonicalFileName), position: maps[targetIndex].emittedPosition }; // Closest span
         }
@@ -136,10 +139,6 @@ namespace ts.sourcemaps {
                 name: span.nameIndex ? map.names[span.nameIndex] : undefined
             };
         }
-    }
-
-    function getSourcePosition(span: ProcessedSourceMapSpan) {
-        return span.sourcePosition;
     }
 
     interface ProcessedSourceMapSpan {
