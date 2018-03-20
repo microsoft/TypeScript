@@ -1396,10 +1396,10 @@ namespace ts.Completions {
                 }
 
                 // Previous token may have been a keyword that was converted to an identifier.
-                switch (previousToken.getText()) {
-                    case "public":
-                    case "protected":
-                    case "private":
+                switch (keywordForNode(previousToken)) {
+                    case SyntaxKind.PublicKeyword:
+                    case SyntaxKind.ProtectedKeyword:
+                    case SyntaxKind.PrivateKeyword:
                         return true;
                 }
             }
@@ -1550,11 +1550,11 @@ namespace ts.Completions {
                 let classElementModifierFlags = isClassElement(classElement) && getModifierFlags(classElement);
                 // If this is context token is not something we are editing now, consider if this would lead to be modifier
                 if (contextToken.kind === SyntaxKind.Identifier && !isCurrentlyEditingNode(contextToken)) {
-                    switch (contextToken.getText()) {
-                        case "private":
+                    switch (keywordForNode(contextToken)) {
+                        case SyntaxKind.PrivateKeyword:
                             classElementModifierFlags = classElementModifierFlags | ModifierFlags.Private;
                             break;
-                        case "static":
+                        case SyntaxKind.StaticKeyword:
                             classElementModifierFlags = classElementModifierFlags | ModifierFlags.Static;
                             break;
                     }
@@ -1677,8 +1677,7 @@ namespace ts.Completions {
 
                     default:
                         if (isFromClassElementDeclaration(contextToken) &&
-                            (isClassMemberCompletionKeyword(contextToken.kind) ||
-                                isClassMemberCompletionKeywordText(contextToken.getText()))) {
+                            (isClassMemberCompletionKeyword(keywordForNode(contextToken)))) {
                             return contextToken.parent.parent as ClassLikeDeclaration;
                         }
                 }
@@ -1881,8 +1880,7 @@ namespace ts.Completions {
 
             // If the previous token is keyword correspoding to class member completion keyword
             // there will be completion available here
-            if (isClassMemberCompletionKeywordText(contextToken.getText()) &&
-                isFromClassElementDeclaration(contextToken)) {
+            if (isClassMemberCompletionKeyword(keywordForNode(contextToken)) && isFromClassElementDeclaration(contextToken)) {
                 return false;
             }
 
@@ -1892,29 +1890,29 @@ namespace ts.Completions {
                 // - its name of the parameter and not being edited
                 // eg. constructor(a |<- this shouldnt show completion
                 if (!isIdentifier(contextToken) ||
-                    isConstructorParameterCompletionKeywordText(contextToken.getText()) ||
+                    isConstructorParameterCompletionKeyword(keywordForNode(contextToken)) ||
                     isCurrentlyEditingNode(contextToken)) {
                     return false;
                 }
             }
 
             // Previous token may have been a keyword that was converted to an identifier.
-            switch (contextToken.getText()) {
-                case "abstract":
-                case "async":
-                case "class":
-                case "const":
-                case "declare":
-                case "enum":
-                case "function":
-                case "interface":
-                case "let":
-                case "private":
-                case "protected":
-                case "public":
-                case "static":
-                case "var":
-                case "yield":
+            switch (keywordForNode(contextToken)) {
+                case SyntaxKind.AbstractKeyword:
+                case SyntaxKind.AsyncKeyword:
+                case SyntaxKind.ClassKeyword:
+                case SyntaxKind.ConstKeyword:
+                case SyntaxKind.DeclareKeyword:
+                case SyntaxKind.EnumKeyword:
+                case SyntaxKind.FunctionKeyword:
+                case SyntaxKind.InterfaceKeyword:
+                case SyntaxKind.LetKeyword:
+                case SyntaxKind.PrivateKeyword:
+                case SyntaxKind.ProtectedKeyword:
+                case SyntaxKind.PublicKeyword:
+                case SyntaxKind.StaticKeyword:
+                case SyntaxKind.VarKeyword:
+                case SyntaxKind.YieldKeyword:
                     return true;
             }
 
@@ -2195,8 +2193,8 @@ namespace ts.Completions {
         }
     }
 
-    function isClassMemberCompletionKeywordText(text: string) {
-        return isClassMemberCompletionKeyword(stringToToken(text));
+    function keywordForNode(node: Node): SyntaxKind {
+        return isIdentifier(node) ? node.originalKeywordKind || SyntaxKind.Unknown : node.kind;
     }
 
     function isConstructorParameterCompletionKeyword(kind: SyntaxKind) {
@@ -2207,10 +2205,6 @@ namespace ts.Completions {
             case SyntaxKind.ReadonlyKeyword:
                 return true;
         }
-    }
-
-    function isConstructorParameterCompletionKeywordText(text: string) {
-        return isConstructorParameterCompletionKeyword(stringToToken(text));
     }
 
     function isFunctionLikeBodyCompletionKeyword(kind: SyntaxKind) {
