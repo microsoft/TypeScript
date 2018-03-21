@@ -2895,7 +2895,8 @@ namespace ts {
                     flags,
                     tracker: tracker && tracker.trackSymbol ? tracker : { trackSymbol: noop },
                     encounteredError: false,
-                    symbolStack: undefined
+                    symbolStack: undefined,
+                    inferTypeParameters: undefined
                 };
             }
 
@@ -2987,6 +2988,9 @@ namespace ts {
                     return typeReferenceToTypeNode(<TypeReference>type);
                 }
                 if (type.flags & TypeFlags.TypeParameter || objectFlags & ObjectFlags.ClassOrInterface) {
+                    if (type.flags & TypeFlags.TypeParameter && contains(context.inferTypeParameters, type)) {
+                        return createInferTypeNode(createTypeParameterDeclaration(getNameOfSymbolAsWritten(type.symbol)));
+                    }
                     const name = type.symbol ? symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ false) : createIdentifier("?");
                     // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
@@ -3027,7 +3031,10 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.Conditional) {
                     const checkTypeNode = typeToTypeNodeHelper((<ConditionalType>type).checkType, context);
+                    const saveInferTypeParameters = context.inferTypeParameters;
+                    context.inferTypeParameters = (<ConditionalType>type).root.inferTypeParameters;
                     const extendsTypeNode = typeToTypeNodeHelper((<ConditionalType>type).extendsType, context);
+                    context.inferTypeParameters = saveInferTypeParameters;
                     const trueTypeNode = typeToTypeNodeHelper(getTrueTypeFromConditionalType(<ConditionalType>type), context);
                     const falseTypeNode = typeToTypeNodeHelper(getFalseTypeFromConditionalType(<ConditionalType>type), context);
                     return createConditionalTypeNode(checkTypeNode, extendsTypeNode, trueTypeNode, falseTypeNode);
@@ -3692,6 +3699,7 @@ namespace ts {
             // State
             encounteredError: boolean;
             symbolStack: Symbol[] | undefined;
+            inferTypeParameters: TypeParameter[] | undefined;
         }
 
         function isDefaultBindingContext(location: Node) {
@@ -20597,7 +20605,8 @@ namespace ts {
         }
 
         function checkInferType(node: InferTypeNode) {
-            if (!findAncestor(node, n => n.parent && n.parent.kind === SyntaxKind.ConditionalType && (<ConditionalTypeNode>n.parent).extendsType === n)) {
+            const ancestor = findAncestor(node, n => n.parent && n.parent.kind === SyntaxKind.ConditionalType);
+            if (!ancestor || (<ConditionalTypeNode>ancestor.parent).extendsType !== ancestor) {
                 grammarErrorOnNode(node, Diagnostics.infer_declarations_are_only_permitted_in_the_extends_clause_of_a_conditional_type);
             }
             checkSourceElement(node.typeParameter);
