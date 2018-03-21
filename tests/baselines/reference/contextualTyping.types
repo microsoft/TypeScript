@@ -1,4 +1,4 @@
-=== tests/cases/compiler/contextualTyping.ts ===
+=== tests/cases/compiler/main.ts ===
 // DEFAULT INTERFACES
 interface IFoo {
 >IFoo : IFoo
@@ -849,19 +849,20 @@ declare class Point
 >y : number
 
       add(dx: number, dy: number): Point;
->add : (dx: number, dy: number) => any
+>add : { (dx: number, dy: number): Point; (dx: any, dy: any): Point; }
 >dx : number
 >dy : number
->Point : No type information available!
+>Point : Point
 
       static origin: Point;
->origin : any
->Point : No type information available!
+>origin : Point
+>Point : Point
 
 }
 
+=== tests/cases/compiler/PointImpl.js ===
 function Point(x, y) {
->Point : (x: any, y: any) => any
+>Point : typeof Point
 >x : any
 >y : any
 
@@ -884,48 +885,48 @@ function Point(x, y) {
 }
 
 Point.origin = new Point(0, 0);
->Point.origin = new Point(0, 0) : any
->Point.origin : any
->Point : (x: any, y: any) => any
->origin : any
->new Point(0, 0) : any
->Point : (x: any, y: any) => any
+>Point.origin = new Point(0, 0) : Point
+>Point.origin : Point
+>Point : typeof Point
+>origin : Point
+>new Point(0, 0) : Point
+>Point : typeof Point
 >0 : 0
 >0 : 0
 
 Point.prototype.add = function(dx, dy) {
->Point.prototype.add = function(dx, dy) {    return new Point(this.x + dx, this.y + dy);} : (dx: any, dy: any) => any
->Point.prototype.add : any
->Point.prototype : any
->Point : (x: any, y: any) => any
->prototype : any
->add : any
->function(dx, dy) {    return new Point(this.x + dx, this.y + dy);} : (dx: any, dy: any) => any
+>Point.prototype.add = function(dx, dy) {    return new Point(this.x + dx, this.y + dy);} : (dx: any, dy: any) => Point
+>Point.prototype.add : { (dx: number, dy: number): Point; (dx: any, dy: any): Point; }
+>Point.prototype : Point
+>Point : typeof Point
+>prototype : Point
+>add : { (dx: number, dy: number): Point; (dx: any, dy: any): Point; }
+>function(dx, dy) {    return new Point(this.x + dx, this.y + dy);} : (dx: any, dy: any) => Point
 >dx : any
 >dy : any
 
     return new Point(this.x + dx, this.y + dy);
->new Point(this.x + dx, this.y + dy) : any
->Point : (x: any, y: any) => any
+>new Point(this.x + dx, this.y + dy) : Point
+>Point : typeof Point
 >this.x + dx : any
->this.x : any
->this : any
->x : any
+>this.x : number
+>this : typeof Point
+>x : number
 >dx : any
 >this.y + dy : any
->this.y : any
->this : any
->y : any
+>this.y : number
+>this : typeof Point
+>y : number
 >dy : any
 
 };
 
 Point.prototype = {
->Point.prototype = {    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { x: number; y: number; add: (dx: any, dy: any) => any; }
->Point.prototype : any
->Point : (x: any, y: any) => any
->prototype : any
->{    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { x: number; y: number; add: (dx: any, dy: any) => any; }
+>Point.prototype = {    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { [x: string]: any; x: number; y: number; add: (dx: any, dy: any) => Point; }
+>Point.prototype : Point
+>Point : typeof Point
+>prototype : Point
+>{    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { [x: string]: any; x: number; y: number; add: (dx: any, dy: any) => Point; }
 
     x: 0,
 >x : number
@@ -936,27 +937,28 @@ Point.prototype = {
 >0 : 0
 
     add: function(dx, dy) {
->add : (dx: any, dy: any) => any
->function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    } : (dx: any, dy: any) => any
+>add : (dx: any, dy: any) => Point
+>function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    } : (dx: any, dy: any) => Point
 >dx : any
 >dy : any
 
         return new Point(this.x + dx, this.y + dy);
->new Point(this.x + dx, this.y + dy) : any
->Point : (x: any, y: any) => any
+>new Point(this.x + dx, this.y + dy) : Point
+>Point : typeof Point
 >this.x + dx : any
->this.x : any
->this : any
->x : any
+>this.x : number
+>this : { [x: string]: any; x: number; y: number; add: (dx: any, dy: any) => Point; }
+>x : number
 >dx : any
 >this.y + dy : any
->this.y : any
->this : any
->y : any
+>this.y : number
+>this : { [x: string]: any; x: number; y: number; add: (dx: any, dy: any) => Point; }
+>y : number
 >dy : any
     }
 };
 
+=== tests/cases/compiler/third.ts ===
 interface A { x: string; }
 >A : A
 >x : string

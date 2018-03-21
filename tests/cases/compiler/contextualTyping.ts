@@ -1,3 +1,7 @@
+// @allowJs: true
+// @checkJs: true
+// @noEmit: true
+// @Filename: main.ts
 // @sourcemap: true
 // DEFAULT INTERFACES
 interface IFoo {
@@ -205,6 +209,8 @@ declare class Point
 
 }
 
+// @Filename: PointImpl.js
+
 function Point(x, y) {
     this.x = x;
     this.y = y;
@@ -225,6 +231,8 @@ Point.prototype = {
         return new Point(this.x + dx, this.y + dy);
     }
 };
+
+// @Filename: third.ts
 
 interface A { x: string; }
 interface B extends A { }

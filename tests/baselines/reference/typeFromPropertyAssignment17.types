@@ -1,4 +1,5 @@
 === tests/cases/conformance/salsa/use.js ===
+/// <reference path='./types.d.ts'/>
 var mini = require('./minimatch')
 >mini : { (): void; M: typeof M; filter: () => void; }
 >require('./minimatch') : { (): void; M: typeof M; filter: () => void; }
@@ -32,7 +33,15 @@ mini.filter()
 >mini : { (): void; M: typeof M; filter: () => void; }
 >filter : () => void
 
+=== tests/cases/conformance/salsa/types.d.ts ===
+declare var require: any;
+>require : any
+
+declare var module: any;
+>module : any
+
 === tests/cases/conformance/salsa/minimatch.js ===
+/// <reference path='./types.d.ts'/>
 module.exports = minimatch
 >module.exports = minimatch : { (): void; M: typeof M; filter: () => void; }
 >module.exports : any

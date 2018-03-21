@@ -1,4 +1,5 @@
 === tests/cases/conformance/salsa/index.js ===
+/// <reference path='./types.d.ts'/>
 const C = require("./semver")
 >C : { (): void; f: (n: any) => any; }
 >require("./semver") : { (): void; f: (n: any) => any; }
@@ -13,7 +14,15 @@ var two = C.f(1)
 >f : (n: any) => any
 >1 : 1
 
+=== tests/cases/conformance/salsa/types.d.ts ===
+declare var require: any;
+>require : any
+
+declare var module: any;
+>module : any
+
 === tests/cases/conformance/salsa/semver.js ===
+/// <reference path='./types.d.ts'/>
 exports = module.exports = C
 >exports = module.exports = C : { (): void; f: (n: any) => any; }
 >exports : any
