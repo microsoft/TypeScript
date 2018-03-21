@@ -40,7 +40,6 @@ export function Component(x: Config): any;`
                 getDefaultLibFileName(options) {
                     return getDefaultLibFilePath(options);
                 },
-                languageServiceEnabled: true,
             });
             const definitions = languageService.getDefinitionAtPosition("foo.ts", 160); // 160 is the latter `vueTemplateHtml` position
             expect(definitions).to.exist; // tslint:disable-line no-unused-expression

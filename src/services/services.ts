@@ -1293,7 +1293,7 @@ namespace ts {
             // It needs to be cleared to allow all collected snapshots to be released
             hostCache = undefined;
 
-            if (host.languageServiceEnabled) {
+            if (!(host.isLanguageServiceDisabled && host.isLanguageServiceDisabled())) {
                 // Make sure all the nodes in the program are both bound, and have their parent
                 // pointers set property.
                 program.getTypeChecker();
