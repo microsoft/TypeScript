@@ -2355,12 +2355,10 @@ namespace ts {
                         }
                     }
 
-                    if (constructorSymbol) {
-                        // Declare a 'member' if the container is an ES5 class or ES6 constructor
-                        constructorSymbol.members = constructorSymbol.members || createSymbolTable();
-                        // It's acceptable for multiple 'this' assignments of the same identifier to occur
-                        declareSymbol(constructorSymbol.members, constructorSymbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
-                    }
+                    // Declare a 'member' if the container is an ES5 class or ES6 constructor
+                    constructorSymbol.members = constructorSymbol.members || createSymbolTable();
+                    // It's acceptable for multiple 'this' assignments of the same identifier to occur
+                    declareSymbol(constructorSymbol.members, constructorSymbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
                     break;
 
                 case SyntaxKind.Constructor:
