@@ -213,7 +213,7 @@ namespace ts {
         isKnownTypesPackageName?(name: string): boolean;
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
 
-        isLanguageServiceDisabled?(): boolean;
+        isLanguageServiceEnabled?(): boolean;
     }
 
     export interface UserPreferences {

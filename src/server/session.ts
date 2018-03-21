@@ -824,7 +824,7 @@ namespace ts.server {
             project.updateGraph();
             const projectInfo = {
                 configFileName: project.getProjectName(),
-                languageServiceDisabled: !project.languageServiceEnabled,
+                languageServiceDisabled: !project.isLanguageServiceEnabled(),
                 fileNames: needFileNameList ? project.getFileNames(/*excludeFilesFromExternalLibraries*/ false, excludeConfigFiles) : undefined
             };
             return projectInfo;
@@ -851,7 +851,7 @@ namespace ts.server {
                 symLinkedProjects = this.projectService.getSymlinkedProjects(scriptInfo);
             }
             // filter handles case when 'projects' is undefined
-            projects = filter(projects, p => p.languageServiceEnabled);
+            projects = filter(projects, p => p.isLanguageServiceEnabled());
             if ((!projects || !projects.length) && !symLinkedProjects) {
                 return Errors.ThrowNoProject();
             }
@@ -1321,7 +1321,7 @@ namespace ts.server {
                 symLinkedProjects ? { projects, symLinkedProjects } : projects,
                 (project, info) => {
                     let result: protocol.CompileOnSaveAffectedFileListSingleProject;
-                    if (project.compileOnSaveEnabled && project.languageServiceEnabled && !project.getCompilationSettings().noEmit) {
+                    if (project.compileOnSaveEnabled && project.isLanguageServiceEnabled() && !project.getCompilationSettings().noEmit) {
                         result = {
                             projectFileName: project.getProjectName(),
                             fileNames: project.getCompileOnSaveAffectedFileList(info),
@@ -1338,7 +1338,7 @@ namespace ts.server {
             if (!project) {
                 Errors.ThrowNoProject();
             }
-            if (!project.languageServiceEnabled) {
+            if (!project.isLanguageServiceEnabled()) {
                 return false;
             }
             const scriptInfo = project.getScriptInfo(file);

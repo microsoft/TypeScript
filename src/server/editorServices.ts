@@ -923,7 +923,7 @@ namespace ts.server {
                     }
                 }
 
-                if (!p.languageServiceEnabled) {
+                if (!p.isLanguageServiceEnabled()) {
                     // if project language service is disabled then we create a program only for open files.
                     // this means that project should be marked as dirty to force rebuilding of the program
                     // on the next request
@@ -1427,7 +1427,7 @@ namespace ts.server {
                 compileOnSave: project.compileOnSaveEnabled,
                 configFileName: configFileName(),
                 projectType: project instanceof ExternalProject ? "external" : "configured",
-                languageServiceEnabled: project.languageServiceEnabled,
+                languageServiceEnabled: project.isLanguageServiceEnabled(),
                 version,
             };
             this.eventHandler({ eventName: ProjectInfoTelemetryEvent, data });
@@ -1718,7 +1718,7 @@ namespace ts.server {
                 if (toAddInfo !== info) {
                     for (const project of toAddInfo.containingProjects) {
                         // Add the projects only if they can use symLink targets and not already in the list
-                        if (project.languageServiceEnabled &&
+                        if (project.isLanguageServiceEnabled() &&
                             !project.getCompilerOptions().preserveSymlinks &&
                             !contains(info.containingProjects, project)) {
                             if (!projects) {

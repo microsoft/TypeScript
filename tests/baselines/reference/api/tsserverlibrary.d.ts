@@ -4072,7 +4072,7 @@ declare namespace ts {
         getCustomTransformers?(): CustomTransformers | undefined;
         isKnownTypesPackageName?(name: string): boolean;
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
-        isLanguageServiceDisabled?(): boolean;
+        isLanguageServiceEnabled?(): boolean;
     }
     interface UserPreferences {
         readonly quotePreference?: "double" | "single";
@@ -7538,7 +7538,7 @@ declare namespace ts.server {
         private lastCachedUnresolvedImportsList;
         private lastFileExceededProgramSize;
         protected languageService: LanguageService;
-        languageServiceEnabled: boolean;
+        private languageServiceEnabled;
         readonly trace?: (s: string) => void;
         readonly realpath?: (path: string) => string;
         private builderState;
@@ -7571,6 +7571,7 @@ declare namespace ts.server {
         isNonTsProject(): boolean;
         isJsOnlyProject(): boolean;
         getCachedUnresolvedImportsPerFile_TestOnly(): UnresolvedImportsMap;
+        isLanguageServiceEnabled(): boolean;
         static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {};
         private languageServicePermanentlyDisabled;
         isKnownTypesPackageName(name: string): boolean;

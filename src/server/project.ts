@@ -131,7 +131,7 @@ namespace ts.server {
         // wrapper over the real language service that will suppress all semantic operations
         protected languageService: LanguageService;
 
-        public languageServiceEnabled: boolean;
+        private languageServiceEnabled: boolean;
 
         readonly trace?: (s: string) => void;
         readonly realpath?: (path: string) => string;
@@ -190,6 +190,10 @@ namespace ts.server {
 
         public getCachedUnresolvedImportsPerFile_TestOnly() {
             return this.cachedUnresolvedImportsPerFile;
+        }
+
+        public isLanguageServiceEnabled() {
+            return this.languageServiceEnabled;
         }
 
         public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} {
