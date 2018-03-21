@@ -1,0 +1,23 @@
+=== tests/cases/conformance/types/conditional/inferTypes2.ts ===
+// Repro from #22755
+
+export declare function foo<T>(obj: T): T extends () => infer P ? P : never;
+>foo : Symbol(foo, Decl(inferTypes2.ts, 0, 0))
+>T : Symbol(T, Decl(inferTypes2.ts, 2, 28))
+>obj : Symbol(obj, Decl(inferTypes2.ts, 2, 31))
+>T : Symbol(T, Decl(inferTypes2.ts, 2, 28))
+>T : Symbol(T, Decl(inferTypes2.ts, 2, 28))
+>P : Symbol(P, Decl(inferTypes2.ts, 2, 61))
+>P : Symbol(P, Decl(inferTypes2.ts, 2, 61))
+
+export function bar<T>(obj: T) {
+>bar : Symbol(bar, Decl(inferTypes2.ts, 2, 76))
+>T : Symbol(T, Decl(inferTypes2.ts, 3, 20))
+>obj : Symbol(obj, Decl(inferTypes2.ts, 3, 23))
+>T : Symbol(T, Decl(inferTypes2.ts, 3, 20))
+
+    return foo(obj);
+>foo : Symbol(foo, Decl(inferTypes2.ts, 0, 0))
+>obj : Symbol(obj, Decl(inferTypes2.ts, 3, 23))
+}
+
