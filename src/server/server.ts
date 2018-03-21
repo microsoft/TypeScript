@@ -512,9 +512,9 @@ namespace ts.server {
                 hrtime: process.hrtime,
                 logger,
                 canUseEvents: eventPort !== undefined,
-                globalPlugins: globalPlugins,
-                pluginProbeLocations: pluginProbeLocations,
-                allowLocalPluginLoads: allowLocalPluginLoads
+                globalPlugins,
+                pluginProbeLocations,
+                allowLocalPluginLoads,
             });
 
             this.eventPort = eventPort;
