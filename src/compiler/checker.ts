@@ -11587,10 +11587,21 @@ namespace ts {
             let symbolStack: Symbol[];
             let visited: Map<boolean>;
             let contravariant = false;
+            let propagationType: Type;
             inferFromTypes(originalSource, originalTarget);
 
             function inferFromTypes(source: Type, target: Type) {
                 if (!couldContainTypeVariables(target)) {
+                    return;
+                }
+                if (source === wildcardType) {
+                    // We are inferring from an 'any' type. We want to infer this type for every type parameter
+                    // referenced in the target type, so we record it as the propagation type and infer from the
+                    // target to itself. Then, as we find candidates we substitute the propagation type.
+                    const savePropagationType = propagationType;
+                    propagationType = source;
+                    inferFromTypes(target, target);
+                    propagationType = savePropagationType;
                     return;
                 }
                 if (source.aliasSymbol && source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol) {
@@ -11660,11 +11671,12 @@ namespace ts {
                                 inference.priority = priority;
                             }
                             if (priority === inference.priority) {
+                                const candidate = propagationType || source;
                                 if (contravariant) {
-                                    inference.contraCandidates = append(inference.contraCandidates, source);
+                                    inference.contraCandidates = append(inference.contraCandidates, candidate);
                                 }
                                 else {
-                                    inference.candidates = append(inference.candidates, source);
+                                    inference.candidates = append(inference.candidates, candidate);
                                 }
                             }
                             if (!(priority & InferencePriority.ReturnType) && target.flags & TypeFlags.TypeParameter && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
