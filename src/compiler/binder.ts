@@ -487,7 +487,7 @@ namespace ts {
             // Depending on what kind of node this is, we may have to adjust the current container
             // and block-container.   If the current node is a container, then it is automatically
             // considered the current block-container as well.  Also, for containers that we know
-            // may contain locals, we proactively initialize the .locals field. We do this because
+            // may contain locals, we eagerly initialize the .locals field. We do this because
             // it's highly likely that the .locals will be needed to place some child in (for example,
             // a parameter, or variable declaration).
             //
@@ -593,20 +593,25 @@ namespace ts {
             }
         }
 
-        function bindEach(nodes: NodeArray<Node>) {
+        function bindEachFunctionsFirst(nodes: NodeArray<Node>) {
+            bindEach(nodes, n => n.kind === SyntaxKind.FunctionDeclaration ? bind(n) : undefined);
+            bindEach(nodes, n => n.kind !== SyntaxKind.FunctionDeclaration ? bind(n) : undefined);
+        }
+
+        function bindEach(nodes: NodeArray<Node>, bindFunction = bind) {
             if (nodes === undefined) {
                 return;
             }
 
             if (skipTransformFlagAggregation) {
-                forEach(nodes, bind);
+                forEach(nodes, bindFunction);
             }
             else {
                 const savedSubtreeTransformFlags = subtreeTransformFlags;
                 subtreeTransformFlags = TransformFlags.None;
                 let nodeArrayFlags = TransformFlags.None;
                 for (const node of nodes) {
-                    bind(node);
+                    bindFunction(node);
                     nodeArrayFlags |= node.transformFlags & ~TransformFlags.HasComputedFlags;
                 }
                 nodes.transformFlags = nodeArrayFlags | TransformFlags.HasComputedFlags;
@@ -705,6 +710,15 @@ namespace ts {
                     break;
                 case SyntaxKind.JSDocTypedefTag:
                     bindJSDocTypedefTag(<JSDocTypedefTag>node);
+                    break;
+                // In source files and blocks, bind functions first to match hoisting that occurs at runtime
+                case SyntaxKind.SourceFile:
+                    bindEachFunctionsFirst((node as SourceFile).statements);
+                    bind((node as SourceFile).endOfFileToken);
+                    break;
+                case SyntaxKind.Block:
+                case SyntaxKind.ModuleBlock:
+                    bindEachFunctionsFirst((node as Block).statements);
                     break;
                 default:
                     bindEachChild(node);
