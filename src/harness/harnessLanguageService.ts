@@ -118,6 +118,7 @@ namespace Harness.LanguageService {
 
     export abstract class LanguageServiceAdapterHost {
         public typesRegistry: ts.Map<void> | undefined;
+        public languageServiceEnabled = true;
         protected virtualFileSystem: Utils.VirtualFileSystem = new Utils.VirtualFileSystem(virtualFileSystemRoot, /*useCaseSensitiveFilenames*/false);
 
         constructor(protected cancellationToken = DefaultHostCancellationToken.instance,
