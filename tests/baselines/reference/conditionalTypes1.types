@@ -705,6 +705,16 @@ type T37<T> = T extends { b: number } ? T extends { a: string } ? T35<T> : never
 >T35 : T[]
 >T : T
 
+type T38<T> = [T] extends [{ a: string }] ? [T] extends [{ b: number }] ? T35<T> : never : never;
+>T38 : T38<T>
+>T : T
+>T : T
+>a : string
+>T : T
+>b : number
+>T35 : T[]
+>T : T
+
 type Extends<T, U> = T extends U ? true : false;
 >Extends : Extends<T, U>
 >T : T
