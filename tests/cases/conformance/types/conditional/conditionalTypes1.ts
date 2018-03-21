@@ -166,6 +166,7 @@ function f21<T extends number | string>(x: T, y: ZeroOf<T>) {
 type T35<T extends { a: string, b: number }> = T[];
 type T36<T> = T extends { a: string } ? T extends { b: number } ? T35<T> : never : never;
 type T37<T> = T extends { b: number } ? T extends { a: string } ? T35<T> : never : never;
+type T38<T> = [T] extends [{ a: string }] ? [T] extends [{ b: number }] ? T35<T> : never : never;
 
 type Extends<T, U> = T extends U ? true : false;
 type If<C extends boolean, T, F> = C extends true ? T : F;
