@@ -1,7 +1,3 @@
-// @allowJs: true
-// @checkJs: true
-// @noEmit: true
-// @Filename: main.ts
 // @sourcemap: true
 // DEFAULT INTERFACES
 interface IFoo {
@@ -222,8 +218,6 @@ Point.prototype = {
         return new Point(this.x + dx, this.y + dy);
     }
 };
-
-// @Filename: third.ts
 
 interface A { x: string; }
 interface B extends A { }

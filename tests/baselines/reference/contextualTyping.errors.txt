@@ -1,9 +1,9 @@
-tests/cases/compiler/main.ts(189,18): error TS2384: Overload signatures must all be ambient or non-ambient.
-tests/cases/compiler/third.ts(3,5): error TS2322: Type '{}' is not assignable to type 'B'.
+tests/cases/compiler/contextualTyping.ts(189,18): error TS2384: Overload signatures must all be ambient or non-ambient.
+tests/cases/compiler/contextualTyping.ts(223,5): error TS2322: Type '{}' is not assignable to type 'B'.
   Property 'x' is missing in type '{}'.
 
 
-==== tests/cases/compiler/main.ts (1 errors) ====
+==== tests/cases/compiler/contextualTyping.ts (2 errors) ====
     // DEFAULT INTERFACES
     interface IFoo {
         n: number;
@@ -226,7 +226,6 @@ tests/cases/compiler/third.ts(3,5): error TS2322: Type '{}' is not assignable to
         }
     };
     
-==== tests/cases/compiler/third.ts (1 errors) ====
     interface A { x: string; }
     interface B extends A { }
     var x: B = { };

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/main.ts ===
+=== tests/cases/compiler/contextualTyping.ts ===
 // DEFAULT INTERFACES
 interface IFoo {
 >IFoo : IFoo
@@ -934,7 +934,6 @@ Point.prototype = {
     }
 };
 
-=== tests/cases/compiler/third.ts ===
 interface A { x: string; }
 >A : A
 >x : string
