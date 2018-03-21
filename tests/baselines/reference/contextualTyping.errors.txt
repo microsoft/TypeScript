@@ -1,11 +1,17 @@
 tests/cases/compiler/contextualTyping.ts(189,18): error TS2384: Overload signatures must all be ambient or non-ambient.
 tests/cases/compiler/contextualTyping.ts(197,15): error TS2300: Duplicate identifier 'Point'.
+tests/cases/compiler/contextualTyping.ts(202,36): error TS2304: Cannot find name 'Point'.
+tests/cases/compiler/contextualTyping.ts(203,22): error TS2304: Cannot find name 'Point'.
 tests/cases/compiler/contextualTyping.ts(207,10): error TS2300: Duplicate identifier 'Point'.
+tests/cases/compiler/contextualTyping.ts(214,7): error TS2339: Property 'origin' does not exist on type '(x: any, y: any) => any'.
+tests/cases/compiler/contextualTyping.ts(214,16): error TS2350: Only a void function can be called with the 'new' keyword.
+tests/cases/compiler/contextualTyping.ts(217,12): error TS2350: Only a void function can be called with the 'new' keyword.
+tests/cases/compiler/contextualTyping.ts(224,16): error TS2350: Only a void function can be called with the 'new' keyword.
 tests/cases/compiler/contextualTyping.ts(230,5): error TS2322: Type '{}' is not assignable to type 'B'.
   Property 'x' is missing in type '{}'.
 
 
-==== tests/cases/compiler/contextualTyping.ts (4 errors) ====
+==== tests/cases/compiler/contextualTyping.ts (10 errors) ====
     // DEFAULT INTERFACES
     interface IFoo {
         n: number;
@@ -212,7 +218,11 @@ tests/cases/compiler/contextualTyping.ts(230,5): error TS2322: Type '{}' is not 
           x: number;
           y: number;
           add(dx: number, dy: number): Point;
+                                       ~~~~~
+!!! error TS2304: Cannot find name 'Point'.
           static origin: Point;
+                         ~~~~~
+!!! error TS2304: Cannot find name 'Point'.
     
     }
     
@@ -226,9 +236,15 @@ tests/cases/compiler/contextualTyping.ts(230,5): error TS2322: Type '{}' is not 
     }
     
     Point.origin = new Point(0, 0);
+          ~~~~~~
+!!! error TS2339: Property 'origin' does not exist on type '(x: any, y: any) => any'.
+                   ~~~~~~~~~~~~~~~
+!!! error TS2350: Only a void function can be called with the 'new' keyword.
     
     Point.prototype.add = function(dx, dy) {
         return new Point(this.x + dx, this.y + dy);
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2350: Only a void function can be called with the 'new' keyword.
     };
     
     Point.prototype = {
@@ -236,6 +252,8 @@ tests/cases/compiler/contextualTyping.ts(230,5): error TS2322: Type '{}' is not 
         y: 0,
         add: function(dx, dy) {
             return new Point(this.x + dx, this.y + dy);
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2350: Only a void function can be called with the 'new' keyword.
         }
     };
     

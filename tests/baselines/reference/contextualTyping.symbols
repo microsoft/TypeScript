@@ -651,11 +651,9 @@ declare class Point
 >add : Symbol(Point.add, Decl(contextualTyping.ts, 200, 16))
 >dx : Symbol(dx, Decl(contextualTyping.ts, 201, 10))
 >dy : Symbol(dy, Decl(contextualTyping.ts, 201, 21))
->Point : Symbol(Point, Decl(contextualTyping.ts, 192, 19))
 
       static origin: Point;
 >origin : Symbol(Point.origin, Decl(contextualTyping.ts, 201, 41))
->Point : Symbol(Point, Decl(contextualTyping.ts, 192, 19))
 
 }
 
@@ -674,31 +672,27 @@ function Point(x, y) {
 }
 
 Point.origin = new Point(0, 0);
->Point.origin : Symbol(Point.origin, Decl(contextualTyping.ts, 201, 41))
->Point : Symbol(Point, Decl(contextualTyping.ts, 192, 19))
->origin : Symbol(Point.origin, Decl(contextualTyping.ts, 201, 41))
->Point : Symbol(Point, Decl(contextualTyping.ts, 192, 19))
+>Point : Symbol(Point, Decl(contextualTyping.ts, 204, 1))
+>Point : Symbol(Point, Decl(contextualTyping.ts, 204, 1))
 
 Point.prototype.add = function(dx, dy) {
->Point.prototype.add : Symbol(Point.add, Decl(contextualTyping.ts, 200, 16))
->Point.prototype : Symbol(Point.prototype)
->Point : Symbol(Point, Decl(contextualTyping.ts, 192, 19))
->prototype : Symbol(Point.prototype)
->add : Symbol(Point.add, Decl(contextualTyping.ts, 200, 16))
+>Point.prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
+>Point : Symbol(Point, Decl(contextualTyping.ts, 204, 1))
+>prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
 >dx : Symbol(dx, Decl(contextualTyping.ts, 215, 31))
 >dy : Symbol(dy, Decl(contextualTyping.ts, 215, 34))
 
     return new Point(this.x + dx, this.y + dy);
->Point : Symbol(Point, Decl(contextualTyping.ts, 192, 19))
+>Point : Symbol(Point, Decl(contextualTyping.ts, 204, 1))
 >dx : Symbol(dx, Decl(contextualTyping.ts, 215, 31))
 >dy : Symbol(dy, Decl(contextualTyping.ts, 215, 34))
 
 };
 
 Point.prototype = {
->Point.prototype : Symbol(Point.prototype)
->Point : Symbol(Point, Decl(contextualTyping.ts, 192, 19))
->prototype : Symbol(Point.prototype)
+>Point.prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
+>Point : Symbol(Point, Decl(contextualTyping.ts, 204, 1))
+>prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
 
     x: 0,
 >x : Symbol(x, Decl(contextualTyping.ts, 219, 19))
@@ -712,7 +706,7 @@ Point.prototype = {
 >dy : Symbol(dy, Decl(contextualTyping.ts, 222, 21))
 
         return new Point(this.x + dx, this.y + dy);
->Point : Symbol(Point, Decl(contextualTyping.ts, 192, 19))
+>Point : Symbol(Point, Decl(contextualTyping.ts, 204, 1))
 >dx : Symbol(dx, Decl(contextualTyping.ts, 222, 18))
 >dy : Symbol(dy, Decl(contextualTyping.ts, 222, 21))
     }
