@@ -1,0 +1,74 @@
+=== tests/cases/conformance/salsa/use.js ===
+var mini = require('./minimatch')
+>mini : Symbol(mini, Decl(use.js, 0, 3))
+>'./minimatch' : Symbol("tests/cases/conformance/salsa/minimatch", Decl(minimatch.js, 0, 0))
+
+mini.M.defaults()
+>mini.M.defaults : Symbol(M.defaults, Decl(minimatch.js, 7, 1))
+>mini.M : Symbol(minimatch.M, Decl(minimatch.js, 0, 26))
+>mini : Symbol(mini, Decl(use.js, 0, 3))
+>M : Symbol(minimatch.M, Decl(minimatch.js, 0, 26))
+>defaults : Symbol(M.defaults, Decl(minimatch.js, 7, 1))
+
+var m = new mini.M()
+>m : Symbol(m, Decl(use.js, 2, 3))
+>mini.M : Symbol(minimatch.M, Decl(minimatch.js, 0, 26))
+>mini : Symbol(mini, Decl(use.js, 0, 3))
+>M : Symbol(minimatch.M, Decl(minimatch.js, 0, 26))
+
+m.m()
+>m.m : Symbol(M.m, Decl(minimatch.js, 10, 1))
+>m : Symbol(m, Decl(use.js, 2, 3))
+>m : Symbol(M.m, Decl(minimatch.js, 10, 1))
+
+mini.filter()
+>mini.filter : Symbol(minimatch.filter, Decl(minimatch.js, 1, 15))
+>mini : Symbol(mini, Decl(use.js, 0, 3))
+>filter : Symbol(minimatch.filter, Decl(minimatch.js, 1, 15))
+
+=== tests/cases/conformance/salsa/minimatch.js ===
+module.exports = minimatch
+>module : Symbol(export=, Decl(minimatch.js, 0, 0))
+>exports : Symbol(export=, Decl(minimatch.js, 0, 0))
+>minimatch : Symbol(minimatch, Decl(minimatch.js, 5, 1))
+
+minimatch.M = M
+>minimatch.M : Symbol(minimatch.M, Decl(minimatch.js, 0, 26))
+>minimatch : Symbol(minimatch, Decl(minimatch.js, 5, 1))
+>M : Symbol(minimatch.M, Decl(minimatch.js, 0, 26))
+>M : Symbol(M, Decl(minimatch.js, 12, 1), Decl(minimatch.js, 7, 1))
+
+minimatch.filter = filter
+>minimatch.filter : Symbol(minimatch.filter, Decl(minimatch.js, 1, 15))
+>minimatch : Symbol(minimatch, Decl(minimatch.js, 5, 1))
+>filter : Symbol(minimatch.filter, Decl(minimatch.js, 1, 15))
+>filter : Symbol(filter, Decl(minimatch.js, 2, 25))
+
+function filter() {
+>filter : Symbol(filter, Decl(minimatch.js, 2, 25))
+
+    return minimatch()
+>minimatch : Symbol(minimatch, Decl(minimatch.js, 5, 1))
+}
+function minimatch() {
+>minimatch : Symbol(minimatch, Decl(minimatch.js, 5, 1))
+}
+M.defaults = function (def) {
+>M.defaults : Symbol(M.defaults, Decl(minimatch.js, 7, 1))
+>M : Symbol(M, Decl(minimatch.js, 12, 1), Decl(minimatch.js, 7, 1))
+>defaults : Symbol(M.defaults, Decl(minimatch.js, 7, 1))
+>def : Symbol(def, Decl(minimatch.js, 8, 23))
+
+    return def
+>def : Symbol(def, Decl(minimatch.js, 8, 23))
+}
+M.prototype.m = function () {
+>M.prototype : Symbol(M.m, Decl(minimatch.js, 10, 1))
+>M : Symbol(M, Decl(minimatch.js, 12, 1), Decl(minimatch.js, 7, 1))
+>prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
+>m : Symbol(M.m, Decl(minimatch.js, 10, 1))
+}
+function M() {
+>M : Symbol(M, Decl(minimatch.js, 12, 1), Decl(minimatch.js, 7, 1))
+}
+
