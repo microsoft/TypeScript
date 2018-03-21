@@ -209,15 +209,6 @@ declare class Point
 
 }
 
-// @Filename: PointImpl.js
-
-function Point(x, y) {
-    this.x = x;
-    this.y = y;
-
-    return this;
-}
-
 Point.origin = new Point(0, 0);
 
 Point.prototype.add = function(dx, dy) {

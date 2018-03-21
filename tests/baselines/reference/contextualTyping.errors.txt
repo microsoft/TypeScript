@@ -212,14 +212,6 @@ tests/cases/compiler/third.ts(3,5): error TS2322: Type '{}' is not assignable to
     
     }
     
-==== tests/cases/compiler/PointImpl.js (0 errors) ====
-    function Point(x, y) {
-        this.x = x;
-        this.y = y;
-    
-        return this;
-    }
-    
     Point.origin = new Point(0, 0);
     
     Point.prototype.add = function(dx, dy) {

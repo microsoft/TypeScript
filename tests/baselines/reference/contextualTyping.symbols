@@ -635,101 +635,72 @@ var efv = EF1(1,2);
 
 // contextually typing from ambient class declarations
 declare class Point
->Point : Symbol(Point, Decl(main.ts, 192, 19), Decl(PointImpl.js, 0, 0), Decl(PointImpl.js, 11, 2))
+>Point : Symbol(Point, Decl(main.ts, 192, 19))
 {
       constructor(x: number, y: number);
 >x : Symbol(x, Decl(main.ts, 198, 18))
 >y : Symbol(y, Decl(main.ts, 198, 28))
 
       x: number;
->x : Symbol(Point.x, Decl(main.ts, 198, 40), Decl(PointImpl.js, 0, 22))
+>x : Symbol(Point.x, Decl(main.ts, 198, 40))
 
       y: number;
->y : Symbol(Point.y, Decl(main.ts, 199, 16), Decl(PointImpl.js, 1, 15))
+>y : Symbol(Point.y, Decl(main.ts, 199, 16))
 
       add(dx: number, dy: number): Point;
->add : Symbol(Point.add, Decl(main.ts, 200, 16), Decl(PointImpl.js, 7, 31), Decl(PointImpl.js, 9, 21))
+>add : Symbol(Point.add, Decl(main.ts, 200, 16))
 >dx : Symbol(dx, Decl(main.ts, 201, 10))
 >dy : Symbol(dy, Decl(main.ts, 201, 21))
->Point : Symbol(Point, Decl(main.ts, 192, 19), Decl(PointImpl.js, 0, 0), Decl(PointImpl.js, 11, 2))
+>Point : Symbol(Point, Decl(main.ts, 192, 19))
 
       static origin: Point;
->origin : Symbol(Point.origin, Decl(main.ts, 201, 41), Decl(PointImpl.js, 5, 1))
->Point : Symbol(Point, Decl(main.ts, 192, 19), Decl(PointImpl.js, 0, 0), Decl(PointImpl.js, 11, 2))
+>origin : Symbol(Point.origin, Decl(main.ts, 201, 41))
+>Point : Symbol(Point, Decl(main.ts, 192, 19))
 
-}
-
-=== tests/cases/compiler/PointImpl.js ===
-function Point(x, y) {
->Point : Symbol(Point, Decl(main.ts, 192, 19), Decl(PointImpl.js, 0, 0), Decl(PointImpl.js, 11, 2))
->x : Symbol(x, Decl(PointImpl.js, 0, 15))
->y : Symbol(y, Decl(PointImpl.js, 0, 17))
-
-    this.x = x;
->x : Symbol(Point.x, Decl(main.ts, 198, 40), Decl(PointImpl.js, 0, 22))
->x : Symbol(x, Decl(PointImpl.js, 0, 15))
-
-    this.y = y;
->y : Symbol(Point.y, Decl(main.ts, 199, 16), Decl(PointImpl.js, 1, 15))
->y : Symbol(y, Decl(PointImpl.js, 0, 17))
-
-    return this;
 }
 
 Point.origin = new Point(0, 0);
->Point.origin : Symbol(Point.origin, Decl(main.ts, 201, 41), Decl(PointImpl.js, 5, 1))
->Point : Symbol(Point, Decl(main.ts, 192, 19), Decl(PointImpl.js, 0, 0), Decl(PointImpl.js, 11, 2))
->origin : Symbol(Point.origin, Decl(main.ts, 201, 41), Decl(PointImpl.js, 5, 1))
->Point : Symbol(Point, Decl(main.ts, 192, 19), Decl(PointImpl.js, 0, 0), Decl(PointImpl.js, 11, 2))
+>Point.origin : Symbol(Point.origin, Decl(main.ts, 201, 41))
+>Point : Symbol(Point, Decl(main.ts, 192, 19))
+>origin : Symbol(Point.origin, Decl(main.ts, 201, 41))
+>Point : Symbol(Point, Decl(main.ts, 192, 19))
 
 Point.prototype.add = function(dx, dy) {
->Point.prototype.add : Symbol(Point.add, Decl(main.ts, 200, 16), Decl(PointImpl.js, 7, 31), Decl(PointImpl.js, 9, 21))
->Point.prototype : Symbol(Point.add, Decl(main.ts, 200, 16), Decl(PointImpl.js, 7, 31), Decl(PointImpl.js, 9, 21))
->Point : Symbol(Point, Decl(main.ts, 192, 19), Decl(PointImpl.js, 0, 0), Decl(PointImpl.js, 11, 2))
+>Point.prototype.add : Symbol(Point.add, Decl(main.ts, 200, 16))
+>Point.prototype : Symbol(Point.prototype)
+>Point : Symbol(Point, Decl(main.ts, 192, 19))
 >prototype : Symbol(Point.prototype)
->add : Symbol(Point.add, Decl(main.ts, 200, 16), Decl(PointImpl.js, 7, 31), Decl(PointImpl.js, 9, 21))
->dx : Symbol(dx, Decl(PointImpl.js, 9, 31))
->dy : Symbol(dy, Decl(PointImpl.js, 9, 34))
+>add : Symbol(Point.add, Decl(main.ts, 200, 16))
+>dx : Symbol(dx, Decl(main.ts, 208, 31))
+>dy : Symbol(dy, Decl(main.ts, 208, 34))
 
     return new Point(this.x + dx, this.y + dy);
->Point : Symbol(Point, Decl(main.ts, 192, 19), Decl(PointImpl.js, 0, 0), Decl(PointImpl.js, 11, 2))
->this.x : Symbol(Point.x, Decl(main.ts, 198, 40), Decl(PointImpl.js, 0, 22))
->this : Symbol(Point, Decl(main.ts, 192, 19), Decl(PointImpl.js, 0, 0), Decl(PointImpl.js, 11, 2))
->x : Symbol(Point.x, Decl(main.ts, 198, 40), Decl(PointImpl.js, 0, 22))
->dx : Symbol(dx, Decl(PointImpl.js, 9, 31))
->this.y : Symbol(Point.y, Decl(main.ts, 199, 16), Decl(PointImpl.js, 1, 15))
->this : Symbol(Point, Decl(main.ts, 192, 19), Decl(PointImpl.js, 0, 0), Decl(PointImpl.js, 11, 2))
->y : Symbol(Point.y, Decl(main.ts, 199, 16), Decl(PointImpl.js, 1, 15))
->dy : Symbol(dy, Decl(PointImpl.js, 9, 34))
+>Point : Symbol(Point, Decl(main.ts, 192, 19))
+>dx : Symbol(dx, Decl(main.ts, 208, 31))
+>dy : Symbol(dy, Decl(main.ts, 208, 34))
 
 };
 
 Point.prototype = {
 >Point.prototype : Symbol(Point.prototype)
->Point : Symbol(Point, Decl(main.ts, 192, 19), Decl(PointImpl.js, 0, 0), Decl(PointImpl.js, 11, 2))
+>Point : Symbol(Point, Decl(main.ts, 192, 19))
 >prototype : Symbol(Point.prototype)
 
     x: 0,
->x : Symbol(x, Decl(PointImpl.js, 13, 19))
+>x : Symbol(x, Decl(main.ts, 212, 19))
 
     y: 0,
->y : Symbol(y, Decl(PointImpl.js, 14, 9))
+>y : Symbol(y, Decl(main.ts, 213, 9))
 
     add: function(dx, dy) {
->add : Symbol(add, Decl(PointImpl.js, 15, 9))
->dx : Symbol(dx, Decl(PointImpl.js, 16, 18))
->dy : Symbol(dy, Decl(PointImpl.js, 16, 21))
+>add : Symbol(add, Decl(main.ts, 214, 9))
+>dx : Symbol(dx, Decl(main.ts, 215, 18))
+>dy : Symbol(dy, Decl(main.ts, 215, 21))
 
         return new Point(this.x + dx, this.y + dy);
->Point : Symbol(Point, Decl(main.ts, 192, 19), Decl(PointImpl.js, 0, 0), Decl(PointImpl.js, 11, 2))
->this.x : Symbol(x, Decl(PointImpl.js, 13, 19))
->this : Symbol(__object, Decl(PointImpl.js, 13, 17))
->x : Symbol(x, Decl(PointImpl.js, 13, 19))
->dx : Symbol(dx, Decl(PointImpl.js, 16, 18))
->this.y : Symbol(y, Decl(PointImpl.js, 14, 9))
->this : Symbol(__object, Decl(PointImpl.js, 13, 17))
->y : Symbol(y, Decl(PointImpl.js, 14, 9))
->dy : Symbol(dy, Decl(PointImpl.js, 16, 21))
+>Point : Symbol(Point, Decl(main.ts, 192, 19))
+>dx : Symbol(dx, Decl(main.ts, 215, 18))
+>dy : Symbol(dy, Decl(main.ts, 215, 21))
     }
 };
 

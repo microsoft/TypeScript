@@ -849,7 +849,7 @@ declare class Point
 >y : number
 
       add(dx: number, dy: number): Point;
->add : { (dx: number, dy: number): Point; (dx: any, dy: any): Point; }
+>add : (dx: number, dy: number) => Point
 >dx : number
 >dy : number
 >Point : Point
@@ -858,30 +858,6 @@ declare class Point
 >origin : Point
 >Point : Point
 
-}
-
-=== tests/cases/compiler/PointImpl.js ===
-function Point(x, y) {
->Point : typeof Point
->x : any
->y : any
-
-    this.x = x;
->this.x = x : any
->this.x : any
->this : any
->x : any
->x : any
-
-    this.y = y;
->this.y = y : any
->this.y : any
->this : any
->y : any
->y : any
-
-    return this;
->this : any
 }
 
 Point.origin = new Point(0, 0);
@@ -895,38 +871,38 @@ Point.origin = new Point(0, 0);
 >0 : 0
 
 Point.prototype.add = function(dx, dy) {
->Point.prototype.add = function(dx, dy) {    return new Point(this.x + dx, this.y + dy);} : (dx: any, dy: any) => Point
->Point.prototype.add : { (dx: number, dy: number): Point; (dx: any, dy: any): Point; }
+>Point.prototype.add = function(dx, dy) {    return new Point(this.x + dx, this.y + dy);} : (dx: number, dy: number) => Point
+>Point.prototype.add : (dx: number, dy: number) => Point
 >Point.prototype : Point
 >Point : typeof Point
 >prototype : Point
->add : { (dx: number, dy: number): Point; (dx: any, dy: any): Point; }
->function(dx, dy) {    return new Point(this.x + dx, this.y + dy);} : (dx: any, dy: any) => Point
->dx : any
->dy : any
+>add : (dx: number, dy: number) => Point
+>function(dx, dy) {    return new Point(this.x + dx, this.y + dy);} : (dx: number, dy: number) => Point
+>dx : number
+>dy : number
 
     return new Point(this.x + dx, this.y + dy);
 >new Point(this.x + dx, this.y + dy) : Point
 >Point : typeof Point
 >this.x + dx : any
->this.x : number
->this : typeof Point
->x : number
->dx : any
+>this.x : any
+>this : any
+>x : any
+>dx : number
 >this.y + dy : any
->this.y : number
->this : typeof Point
->y : number
->dy : any
+>this.y : any
+>this : any
+>y : any
+>dy : number
 
 };
 
 Point.prototype = {
->Point.prototype = {    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { [x: string]: any; x: number; y: number; add: (dx: any, dy: any) => Point; }
+>Point.prototype = {    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { x: number; y: number; add: (dx: number, dy: number) => Point; }
 >Point.prototype : Point
 >Point : typeof Point
 >prototype : Point
->{    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { [x: string]: any; x: number; y: number; add: (dx: any, dy: any) => Point; }
+>{    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { x: number; y: number; add: (dx: number, dy: number) => Point; }
 
     x: 0,
 >x : number
@@ -937,24 +913,24 @@ Point.prototype = {
 >0 : 0
 
     add: function(dx, dy) {
->add : (dx: any, dy: any) => Point
->function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    } : (dx: any, dy: any) => Point
->dx : any
->dy : any
+>add : (dx: number, dy: number) => Point
+>function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    } : (dx: number, dy: number) => Point
+>dx : number
+>dy : number
 
         return new Point(this.x + dx, this.y + dy);
 >new Point(this.x + dx, this.y + dy) : Point
 >Point : typeof Point
 >this.x + dx : any
->this.x : number
->this : { [x: string]: any; x: number; y: number; add: (dx: any, dy: any) => Point; }
->x : number
->dx : any
+>this.x : any
+>this : any
+>x : any
+>dx : number
 >this.y + dy : any
->this.y : number
->this : { [x: string]: any; x: number; y: number; add: (dx: any, dy: any) => Point; }
->y : number
->dy : any
+>this.y : any
+>this : any
+>y : any
+>dy : number
     }
 };
 
