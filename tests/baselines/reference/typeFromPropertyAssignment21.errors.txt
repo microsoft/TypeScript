@@ -1,0 +1,11 @@
+tests/cases/conformance/salsa/chrome-devtools-DOMExtension.js(2,1): error TS2304: Cannot find name 'Event'.
+
+
+==== tests/cases/conformance/salsa/chrome-devtools-DOMExtension.js (1 errors) ====
+    // Extend that DOM!
+    Event.prototype.removeChildren = function () {
+    ~~~~~
+!!! error TS2304: Cannot find name 'Event'.
+        this.textContent = 'nope, not going to happen'
+    }
+    

@@ -1,0 +1,7 @@
+=== tests/cases/conformance/salsa/chrome-devtools-DOMExtension.js ===
+// Extend that DOM!
+No type information for this code.Event.prototype.removeChildren = function () {
+No type information for this code.    this.textContent = 'nope, not going to happen'
+No type information for this code.}
+No type information for this code.
+No type information for this code.
