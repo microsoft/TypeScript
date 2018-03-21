@@ -2703,7 +2703,7 @@ namespace ts {
         }
 
         function hasVisibleDeclarations(symbol: Symbol, shouldComputeAliasToMakeVisible: boolean): SymbolVisibilityResult {
-            let aliasesToMakeVisible: AnyImportSyntax[];
+            let aliasesToMakeVisible: LateVisibilityPaintedStatement[];
             if (forEach(symbol.declarations, declaration => !getIsDeclarationVisible(declaration))) {
                 return undefined;
             }
@@ -2717,21 +2717,30 @@ namespace ts {
                     const anyImportSyntax = getAnyImportSyntax(declaration);
                     if (anyImportSyntax &&
                         !hasModifier(anyImportSyntax, ModifierFlags.Export) && // import clause without export
-                        isDeclarationVisible(<Declaration>anyImportSyntax.parent)) {
-                        // In function "buildTypeDisplay" where we decide whether to write type-alias or serialize types,
-                        // we want to just check if type- alias is accessible or not but we don't care about emitting those alias at that time
-                        // since we will do the emitting later in trackSymbol.
-                        if (shouldComputeAliasToMakeVisible) {
-                            getNodeLinks(declaration).isVisible = true;
-                            aliasesToMakeVisible = appendIfUnique(aliasesToMakeVisible, anyImportSyntax);
-                        }
-                        return true;
+                        isDeclarationVisible(anyImportSyntax.parent)) {
+                        return addVisibleAlias(declaration, anyImportSyntax);
+                    }
+                    else if (isVariableDeclaration(declaration) && isVariableStatement(declaration.parent.parent) &&
+                        !hasModifier(declaration.parent.parent, ModifierFlags.Export) && // unexported variable statement
+                        isDeclarationVisible(declaration.parent.parent.parent)) {
+                        return addVisibleAlias(declaration, declaration.parent.parent);
                     }
 
                     // Declaration is not visible
                     return false;
                 }
 
+                return true;
+            }
+
+            function addVisibleAlias(declaration: Declaration, aliasingStatement: LateVisibilityPaintedStatement) {
+                // In function "buildTypeDisplay" where we decide whether to write type-alias or serialize types,
+                // we want to just check if type- alias is accessible or not but we don't care about emitting those alias at that time
+                // since we will do the emitting later in trackSymbol.
+                if (shouldComputeAliasToMakeVisible) {
+                    getNodeLinks(declaration).isVisible = true;
+                    aliasesToMakeVisible = appendIfUnique(aliasesToMakeVisible, aliasingStatement);
+                }
                 return true;
             }
         }
@@ -3752,7 +3761,7 @@ namespace ts {
             return symbolName(symbol);
         }
 
-        function isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean {
+        function isDeclarationVisible(node: Node): boolean {
             if (node) {
                 const links = getNodeLinks(node);
                 if (links.isVisible === undefined) {
@@ -3766,7 +3775,7 @@ namespace ts {
             function determineIfDeclarationIsVisible() {
                 switch (node.kind) {
                     case SyntaxKind.BindingElement:
-                        return isDeclarationVisible(<Declaration>node.parent.parent);
+                        return isDeclarationVisible(node.parent.parent);
                     case SyntaxKind.VariableDeclaration:
                         if (isBindingPattern((node as VariableDeclaration).name) &&
                             !((node as VariableDeclaration).name as BindingPattern).elements.length) {
@@ -3792,7 +3801,7 @@ namespace ts {
                             return isGlobalSourceFile(parent);
                         }
                         // Exported members/ambient module elements (exception import declaration) are visible if parent is visible
-                        return isDeclarationVisible(<Declaration>parent);
+                        return isDeclarationVisible(parent);
 
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.PropertySignature:
@@ -3822,7 +3831,7 @@ namespace ts {
                     case SyntaxKind.UnionType:
                     case SyntaxKind.IntersectionType:
                     case SyntaxKind.ParenthesizedType:
-                        return isDeclarationVisible(<Declaration>node.parent);
+                        return isDeclarationVisible(node.parent);
 
                     // Default binding, import specifier and namespace import is visible
                     // only on demand so by default it is not visible

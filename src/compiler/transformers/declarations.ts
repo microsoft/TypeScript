@@ -29,8 +29,8 @@ namespace ts {
         let resultHasExternalModuleIndicator = false;
         let enclosingDeclaration: Node;
         let necessaryTypeRefernces: Map<true>;
-        let possibleImports: AnyImportSyntax[];
-        let importDeclarationMap: Map<AnyImportSyntax | undefined>;
+        let lateMarkedStatements: LateVisibilityPaintedStatement[];
+        let lateStatementReplacementMap: Map<LateVisibilityPaintedStatement | undefined>;
         let suppressNewDiagnosticContexts: boolean;
 
         const symbolTracker: SymbolTracker = {
@@ -63,12 +63,12 @@ namespace ts {
             if (symbolAccessibilityResult.accessibility === SymbolAccessibility.Accessible) {
                 // Add aliases back onto the possible imports list if they're not there so we can try them again with updated visibility info
                 if (symbolAccessibilityResult && symbolAccessibilityResult.aliasesToMakeVisible) {
-                    if (!possibleImports) {
-                        possibleImports = symbolAccessibilityResult.aliasesToMakeVisible;
+                    if (!lateMarkedStatements) {
+                        lateMarkedStatements = symbolAccessibilityResult.aliasesToMakeVisible;
                     }
                     else {
                         for (const ref of symbolAccessibilityResult.aliasesToMakeVisible) {
-                            pushIfUnique(possibleImports, ref);
+                            pushIfUnique(lateMarkedStatements, ref);
                         }
                     }
                 }
@@ -140,9 +140,9 @@ namespace ts {
                         if (sourceFile.isDeclarationFile || isSourceFileJavaScript(sourceFile)) return; // Omit declaration files from bundle results, too
                         currentSourceFile = sourceFile;
                         enclosingDeclaration = sourceFile;
-                        possibleImports = undefined;
+                        lateMarkedStatements = undefined;
                         suppressNewDiagnosticContexts = false;
-                        importDeclarationMap = createMap();
+                        lateStatementReplacementMap = createMap();
                         getSymbolAccessibilityDiagnostic = throwDiagnostic;
                         collectReferences(sourceFile, refs);
                         if (isExternalModule(sourceFile)) {
@@ -178,8 +178,8 @@ namespace ts {
             isBundledEmit = false;
             resultHasExternalModuleIndicator = false;
             suppressNewDiagnosticContexts = false;
-            possibleImports = undefined;
-            importDeclarationMap = createMap();
+            lateMarkedStatements = undefined;
+            lateStatementReplacementMap = createMap();
             necessaryTypeRefernces = undefined;
             const refs = collectReferences(currentSourceFile, createMap());
             const references: FileReference[] = [];
@@ -531,35 +531,47 @@ namespace ts {
             // In such a scenario, only Q and D are initially visible, but we don't consider imports as private names - instead we say they if they are referenced they must
             // be recorded. So while checking D's visibility we mark C as visible, then we must check C which in turn marks B, completing the chain of
             // dependent imports and allowing a valid declaration file output. Today, this dependent alias marking only happens for internal import aliases.
-            const unconsideredImports: AnyImportSyntax[] = [];
-            while (length(possibleImports)) {
-                const i = possibleImports.shift();
+            const unconsideredStatements: LateVisibilityPaintedStatement[] = [];
+            while (length(lateMarkedStatements)) {
+                const i = lateMarkedStatements.shift();
                 if ((isSourceFile(i.parent) ? i.parent : i.parent.parent) !== enclosingDeclaration) { // Filter to only declarations in the current scope
-                    unconsideredImports.push(i);
+                    unconsideredStatements.push(i);
                     continue;
                 }
-                // Eagerly transform import equals - if they're not visible, we'll get nothing, if they are, we'll immediately add them since it's complete
-                if (i.kind === SyntaxKind.ImportEqualsDeclaration) {
-                    const result = transformImportEqualsDeclaration(i);
-                    importDeclarationMap.set("" + getNodeId(i), result);
-                    continue;
+                if (!isLateVisibilityPaintedStatement(i)) {
+                    return Debug.fail(`Late replaced statement was foudn which is not handled by the declaration transformer!: ${(ts as any).SyntaxKind ? (ts as any).SyntaxKind[(i as any).kind] : (i as any).kind}`);
                 }
-                // Import declarations, on the other hand, can be partially painted by multiple aliases; so we can see many indeterminate states
-                // until we've marked all possible visibility
-                const result = transformImportDeclaration(i);
-                importDeclarationMap.set("" + getNodeId(i), result);
+                switch (i.kind) {
+                    case SyntaxKind.ImportEqualsDeclaration: {
+                        const result = transformImportEqualsDeclaration(i);
+                        lateStatementReplacementMap.set("" + getNodeId(i), result);
+                        break;
+                    }
+                    case SyntaxKind.ImportDeclaration: {
+                        const result = transformImportDeclaration(i);
+                        lateStatementReplacementMap.set("" + getNodeId(i), result);
+                        break;
+                    }
+                    case SyntaxKind.VariableStatement: {
+                        const result = transformVariableStatement(i, /*privateDeclaration*/ true); // Transform the statement (potentially again, possibly revealing more sub-nodes)
+                        lateStatementReplacementMap.set("" + getNodeId(i), result);
+                        break;
+                    }
+                    default: Debug.assertNever(i, "Unhandled late painted statement!");
+                }
             }
             // Filtering available imports is the last thing done within a scope, so the possible set becomes those which could not
             // be considered in the child scope
-            possibleImports = unconsideredImports;
+            lateMarkedStatements = unconsideredStatements;
+
             // And lastly, we need to get the final form of all those indetermine import declarations from before and add them to the output list
             // (and remove them from the set to examine for outter declarations)
             return mapDefined(statements, statement => {
-                if (isImportDeclaration(statement) || isImportEqualsDeclaration(statement)) {
+                if (isLateVisibilityPaintedStatement(statement)) {
                     const key = "" + getNodeId(statement);
-                    if (importDeclarationMap.has(key)) {
-                        const result = importDeclarationMap.get(key);
-                        importDeclarationMap.delete(key);
+                    if (lateStatementReplacementMap.has(key)) {
+                        const result = lateStatementReplacementMap.get(key);
+                        lateStatementReplacementMap.delete(key);
                         return result;
                     }
                     else {
@@ -818,8 +830,8 @@ namespace ts {
                 case SyntaxKind.ImportDeclaration: {
                     // Different parts of the import may be marked visible at different times (via visibility checking), so we defer our first look until later
                     // to reduce the likelihood we need to rewrite it
-                    possibleImports = possibleImports || [];
-                    pushIfUnique(possibleImports, input);
+                    lateMarkedStatements = lateMarkedStatements || [];
+                    pushIfUnique(lateMarkedStatements, input);
                     return input;
                 }
             }
@@ -840,7 +852,7 @@ namespace ts {
             if (canProdiceDiagnostic) {
                 getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(input as DeclarationDiagnosticProducing);
             }
-            let oldPossibleImports: typeof possibleImports;
+            let oldPossibleImports: typeof lateMarkedStatements;
 
             switch (input.kind) {
                 case SyntaxKind.TypeAliasDeclaration: // Type aliases get `declare`d if need be (for legacy support), but that's all
@@ -880,8 +892,8 @@ namespace ts {
                 case SyntaxKind.ModuleDeclaration: {
                     previousNeedsDeclare = needsDeclare;
                     needsDeclare = false;
-                    oldPossibleImports = possibleImports;
-                    possibleImports = undefined;
+                    oldPossibleImports = lateMarkedStatements;
+                    lateMarkedStatements = undefined;
                     const inner = input.body;
                     if (inner && inner.kind === SyntaxKind.ModuleBlock) {
                         const statements = visitNodes(inner.statements, visitDeclarationStatements);
@@ -1003,10 +1015,9 @@ namespace ts {
                     }
                 }
                 case SyntaxKind.VariableStatement: {
-                    if (!forEach(input.declarationList.declarations, getBindingNameVisible)) return;
-                    const nodes = visitNodes(input.declarationList.declarations, visitDeclarationSubtree);
-                    if (!length(nodes)) return;
-                    return cleanup(updateVariableStatement(input, createNodeArray(ensureModifiers(input)), updateVariableDeclarationList(input.declarationList, nodes)));
+                    const result = transformVariableStatement(input);
+                    lateStatementReplacementMap.set("" + getNodeId(input), result); // Don't actually elide yet; just leave as original node - will be elided/swapped by late pass
+                    return cleanup(input);
                 }
                 case SyntaxKind.EnumDeclaration: {
                     return cleanup(updateEnumDeclaration(input, /*decorators*/ undefined, createNodeArray(ensureModifiers(input)), input.name, createNodeArray(mapDefined(input.members, m => {
@@ -1027,7 +1038,7 @@ namespace ts {
                 }
                 if (input.kind === SyntaxKind.ModuleDeclaration) {
                     needsDeclare = previousNeedsDeclare;
-                    possibleImports = concatenate(oldPossibleImports, possibleImports);
+                    lateMarkedStatements = concatenate(oldPossibleImports, lateMarkedStatements);
                 }
                 if (canProdiceDiagnostic) {
                     getSymbolAccessibilityDiagnostic = oldDiag;
@@ -1043,6 +1054,13 @@ namespace ts {
                 }
                 return returnValue && setOriginalNode(preserveJsDoc(returnValue, input), input);
             }
+        }
+
+        function transformVariableStatement(input: VariableStatement, privateDeclaration?: boolean) {
+            if (!forEach(input.declarationList.declarations, getBindingNameVisible)) return;
+            const nodes = visitNodes(input.declarationList.declarations, visitDeclarationSubtree);
+            if (!length(nodes)) return;
+            return updateVariableStatement(input, createNodeArray(ensureModifiers(input, privateDeclaration)), updateVariableDeclarationList(input.declarationList, nodes));
         }
 
         function recreateBindingPattern(d: BindingPattern): VariableDeclaration[] {
@@ -1096,21 +1114,21 @@ namespace ts {
             return false;
         }
 
-        function ensureModifiers(node: Node): ReadonlyArray<Modifier> {
+        function ensureModifiers(node: Node, privateDeclaration?: boolean): ReadonlyArray<Modifier> {
             const currentFlags = getModifierFlags(node);
-            const newFlags = ensureModifierFlags(node);
+            const newFlags = ensureModifierFlags(node, privateDeclaration);
             if (currentFlags === newFlags) {
                 return node.modifiers;
             }
             return createModifiersFromModifierFlags(newFlags);
         }
 
-        function ensureModifierFlags(node: Node): ModifierFlags {
+        function ensureModifierFlags(node: Node, privateDeclaration?: boolean): ModifierFlags {
             let mask = ModifierFlags.All ^ (ModifierFlags.Public | ModifierFlags.Async); // No async modifiers in declaration files
             let additions = (needsDeclare && !isAlwaysType(node)) ? ModifierFlags.Ambient : ModifierFlags.None;
             const parentIsFile = node.parent.kind === SyntaxKind.SourceFile;
             if (!parentIsFile || (isBundledEmit && parentIsFile && isExternalModule(node.parent as SourceFile))) {
-                mask ^= ((isBundledEmit && parentIsFile ? 0 : ModifierFlags.Export) | ModifierFlags.Default | ModifierFlags.Ambient);
+                mask ^= ((privateDeclaration || (isBundledEmit && parentIsFile) ? 0 : ModifierFlags.Export) | ModifierFlags.Default | ModifierFlags.Ambient);
                 additions = ModifierFlags.None;
             }
             return maskModifierFlags(node, mask, additions);
