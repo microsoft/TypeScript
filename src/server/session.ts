@@ -286,7 +286,7 @@ namespace ts.server {
         cancellationToken: ServerCancellationToken;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
-        ignoreConfigFiles: boolean;
+        ignoreConfigFiles?: boolean;
         typingsInstaller: ITypingsInstaller;
         byteLength: (buf: string, encoding?: string) => number;
         hrtime: (start?: number[]) => number[];

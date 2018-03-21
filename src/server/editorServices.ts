@@ -303,7 +303,7 @@ namespace ts.server {
         cancellationToken: HostCancellationToken;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
-        ignoreConfigFiles: boolean;
+        ignoreConfigFiles?: boolean;
         typingsInstaller: ITypingsInstaller;
         eventHandler?: ProjectServiceEventHandler;
         throttleWaitMilliseconds?: number;
