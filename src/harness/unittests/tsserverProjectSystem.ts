@@ -168,11 +168,12 @@ namespace ts.projectSystem {
         readonly session: TestSession;
         readonly service: server.ProjectService;
         readonly host: TestServerHost;
-        constructor(files: FileOrFolder[]) {
+        constructor(files: FileOrFolder[], suppressDiagnosticEvents?: boolean) {
             this.host = createServerHost(files);
             this.session = createSession(this.host, {
                 canUseEvents: true,
                 eventHandler: event => this.events.push(event),
+                suppressDiagnosticEvents,
             });
             this.service = this.session.getProjectService();
         }
@@ -483,6 +484,12 @@ namespace ts.projectSystem {
 
     function checkProjectUpdatedInBackgroundEvent(session: TestSession, openFiles: string[]) {
         checkNthEvent(session, server.toEvent("projectsUpdatedInBackground", { openFiles }), 0, /*isMostRecent*/ true);
+    }
+
+    function checkNoDiagnosticEvents(session: TestSession) {
+        for (const event of session.events) {
+            assert.isFalse(event.event.endsWith("Diag"), JSON.stringify(event));
+        }
     }
 
     function checkNthEvent(session: TestSession, expectedEvent: protocol.Event, index: number, isMostRecent: boolean) {
@@ -4074,6 +4081,63 @@ namespace ts.projectSystem {
             session.clearMessages();
         });
 
+        it("suppressed diagnostic events", () => {
+            const file: FileOrFolder = {
+                path: "/a.ts",
+                content: "1 = 2;",
+            };
+
+            const host = createServerHost([file]);
+            const session = createSession(host, { canUseEvents: true, suppressDiagnosticEvents: true });
+            const service = session.getProjectService();
+
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: server.CommandNames.Open,
+                arguments: { file: file.path, fileContent: file.content },
+            });
+
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+
+            host.checkTimeoutQueueLength(0);
+            checkNoDiagnosticEvents(session);
+
+            session.clearMessages();
+
+            let expectedSequenceId = session.getNextSeq();
+
+            session.executeCommandSeq<protocol.GeterrRequest>({
+                command: server.CommandNames.Geterr,
+                arguments: {
+                    delay: 0,
+                    files: [file.path],
+                }
+            });
+
+            host.checkTimeoutQueueLength(0);
+            checkNoDiagnosticEvents(session);
+
+            checkCompleteEvent(session, 1, expectedSequenceId);
+
+            session.clearMessages();
+
+            expectedSequenceId = session.getNextSeq();
+
+            session.executeCommandSeq<protocol.GeterrForProjectRequest>({
+                command: server.CommandNames.Geterr,
+                arguments: {
+                    delay: 0,
+                    file: file.path,
+                }
+            });
+
+            host.checkTimeoutQueueLength(0);
+            checkNoDiagnosticEvents(session);
+
+            checkCompleteEvent(session, 1, expectedSequenceId);
+
+            session.clearMessages();
+        });
+
         function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: ReadonlyArray<string> = []): protocol.Diagnostic {
             return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category: diagnosticCategoryName(message), source: undefined };
         }
@@ -4149,7 +4213,7 @@ namespace ts.projectSystem {
             serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, configFile.path);
         });
 
-        it("are not generated when the config file doesnot include file opened and config file has errors", () => {
+        it("are not generated when the config file does not include file opened and config file has errors", () => {
             const file = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
@@ -4173,7 +4237,26 @@ namespace ts.projectSystem {
             serverEventManager.hasZeroEvent("configFileDiag");
         });
 
-        it("are not generated when the config file doesnot include file opened and doesnt contain any errors", () => {
+        it("are not generated when the config file has errors but suppressDiagnosticEvents is true", () => {
+            const file = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {
+                        "foo": "bar",
+                        "allowJS": true
+                    }
+                }`
+            };
+            const serverEventManager = new TestServerEventManager([file, configFile], /*suppressDiagnosticEvents*/ true);
+            openFilesForSession([file], serverEventManager.session);
+            serverEventManager.hasZeroEvent("configFileDiag");
+        });
+
+        it("are not generated when the config file does not include file opened and doesnt contain any errors", () => {
             const file = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"

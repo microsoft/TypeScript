@@ -7256,6 +7256,8 @@ declare namespace ts.server {
          */
         canUseEvents: boolean;
         eventHandler?: ProjectServiceEventHandler;
+        /** Has no effect if eventHandler is also specified. */
+        suppressDiagnosticEvents?: boolean;
         throttleWaitMilliseconds?: number;
         globalPlugins?: ReadonlyArray<string>;
         pluginProbeLocations?: ReadonlyArray<string>;
@@ -7274,6 +7276,7 @@ declare namespace ts.server {
         private hrtime;
         protected logger: Logger;
         protected canUseEvents: boolean;
+        private suppressDiagnosticEvents?;
         private eventHandler;
         constructor(opts: SessionOptions);
         private sendRequestCompletedEvent;
@@ -7289,6 +7292,7 @@ declare namespace ts.server {
         private syntacticCheck;
         private infoCheck;
         private sendDiagnosticsEvent;
+        /** It is the caller's responsibility to verify that `!this.suppressDiagnosticEvents`. */
         private updateErrorCheck;
         private cleanProjects;
         private cleanup;
@@ -7817,6 +7821,7 @@ declare namespace ts.server {
         useInferredProjectPerProjectRoot: boolean;
         typingsInstaller: ITypingsInstaller;
         eventHandler?: ProjectServiceEventHandler;
+        suppressDiagnosticEvents?: boolean;
         throttleWaitMilliseconds?: number;
         globalPlugins?: ReadonlyArray<string>;
         pluginProbeLocations?: ReadonlyArray<string>;
@@ -7883,6 +7888,7 @@ declare namespace ts.server {
         readonly typingsInstaller: ITypingsInstaller;
         readonly throttleWaitMilliseconds?: number;
         private readonly eventHandler?;
+        private readonly suppressDiagnosticEvents?;
         readonly globalPlugins: ReadonlyArray<string>;
         readonly pluginProbeLocations: ReadonlyArray<string>;
         readonly allowLocalPluginLoads: boolean;
