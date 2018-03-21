@@ -20605,8 +20605,7 @@ namespace ts {
         }
 
         function checkInferType(node: InferTypeNode) {
-            const ancestor = findAncestor(node, n => n.parent && n.parent.kind === SyntaxKind.ConditionalType);
-            if (!ancestor || (<ConditionalTypeNode>ancestor.parent).extendsType !== ancestor) {
+            if (!findAncestor(node, n => n.parent && n.parent.kind === SyntaxKind.ConditionalType && (<ConditionalTypeNode>n.parent).extendsType === n)) {
                 grammarErrorOnNode(node, Diagnostics.infer_declarations_are_only_permitted_in_the_extends_clause_of_a_conditional_type);
             }
             checkSourceElement(node.typeParameter);
