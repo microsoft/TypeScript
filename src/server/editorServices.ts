@@ -599,7 +599,9 @@ namespace ts.server {
             Debug.assert(projectRootPath === undefined || this.useInferredProjectPerProjectRoot, "Setting compiler options per project root path is only supported when useInferredProjectPerProjectRoot is enabled");
 
             const compilerOptions = convertCompilerOptions(projectCompilerOptions);
-            compilerOptions.disableLanguageService = disableLanguageService;
+            if (disableLanguageService !== undefined) {
+                compilerOptions.disableLanguageService = disableLanguageService;
+            }
 
             // always set 'allowNonTsExtensions' for inferred projects since user cannot configure it from the outside
             // previously we did not expose a way for user to change these settings and this option was enabled by default
