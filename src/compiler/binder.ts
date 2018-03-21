@@ -118,7 +118,7 @@ namespace ts {
         let languageVersion: ScriptTarget;
         let parent: Node;
         let container: Node;
-        let containerContainer: Node; // Container one level up
+        let thisParentContainer: Node; // Container one level up
         let blockScopeContainer: Node;
         let lastContainer: Node;
         let seenThisKeyword: boolean;
@@ -186,7 +186,7 @@ namespace ts {
             languageVersion = undefined;
             parent = undefined;
             container = undefined;
-            containerContainer = undefined;
+            thisParentContainer = undefined;
             blockScopeContainer = undefined;
             lastContainer = undefined;
             seenThisKeyword = false;
@@ -479,10 +479,8 @@ namespace ts {
             // and block-container.  Then after we pop out of processing the children, we restore
             // these saved values.
             const saveContainer = container;
-            const saveContainerContainer = containerContainer;
+            const saveContainerContainer = thisParentContainer;
             const savedBlockScopeContainer = blockScopeContainer;
-
-            containerContainer = container;
 
             // Depending on what kind of node this is, we may have to adjust the current container
             // and block-container.   If the current node is a container, then it is automatically
@@ -502,6 +500,9 @@ namespace ts {
             // for it.  We must clear this so we don't accidentally move any stale data forward from
             // a previous compilation.
             if (containerFlags & ContainerFlags.IsContainer) {
+                if (node.kind !== SyntaxKind.ArrowFunction) {
+                    thisParentContainer = container;
+                }
                 container = blockScopeContainer = node;
                 if (containerFlags & ContainerFlags.HasLocals) {
                     container.locals = createSymbolTable();
@@ -571,7 +572,7 @@ namespace ts {
             }
 
             container = saveContainer;
-            containerContainer = saveContainerContainer;
+            thisParentContainer = saveContainerContainer;
             blockScopeContainer = savedBlockScopeContainer;
         }
 
@@ -2338,14 +2339,16 @@ namespace ts {
                     if (isBinaryExpression(thisContainer.parent) && thisContainer.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
                         const l = thisContainer.parent.left;
                         if (isPropertyAccessEntityNameExpression(l) && isPrototypeAccess(l.expression)) {
-                            constructorSymbol = getJSInitializerSymbolFromName(l.expression.expression, containerContainer);
+                            constructorSymbol = getJSInitializerSymbolFromName(l.expression.expression, thisParentContainer);
                         }
                     }
 
-                    // Declare a 'member' if the container is an ES5 class or ES6 constructor
-                    constructorSymbol.members = constructorSymbol.members || createSymbolTable();
-                    // It's acceptable for multiple 'this' assignments of the same identifier to occur
-                    declareSymbol(constructorSymbol.members, constructorSymbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
+                    if (constructorSymbol) {
+                        // Declare a 'member' if the container is an ES5 class or ES6 constructor
+                        constructorSymbol.members = constructorSymbol.members || createSymbolTable();
+                        // It's acceptable for multiple 'this' assignments of the same identifier to occur
+                        declareSymbol(constructorSymbol.members, constructorSymbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
+                    }
                     break;
 
                 case SyntaxKind.Constructor:

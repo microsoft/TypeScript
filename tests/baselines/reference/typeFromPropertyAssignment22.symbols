@@ -1,0 +1,36 @@
+=== tests/cases/conformance/salsa/npm-install.js ===
+function Installer (where, dryrun, args, opts) {
+>Installer : Symbol(Installer, Decl(npm-install.js, 0, 0))
+>where : Symbol(where, Decl(npm-install.js, 0, 20))
+>dryrun : Symbol(dryrun, Decl(npm-install.js, 0, 26))
+>args : Symbol(args, Decl(npm-install.js, 0, 34))
+>opts : Symbol(opts, Decl(npm-install.js, 0, 40))
+
+  this.args = args
+>args : Symbol(Installer.args, Decl(npm-install.js, 0, 48), Decl(npm-install.js, 5, 13))
+>args : Symbol(args, Decl(npm-install.js, 0, 34))
+}
+Installer.prototype.loadArgMetadata = function (next) {
+>Installer.prototype : Symbol(Installer.loadArgMetadata, Decl(npm-install.js, 2, 1))
+>Installer : Symbol(Installer, Decl(npm-install.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
+>loadArgMetadata : Symbol(Installer.loadArgMetadata, Decl(npm-install.js, 2, 1))
+>next : Symbol(next, Decl(npm-install.js, 3, 48))
+
+  // ArrowFunction isn't treated as a this-container
+  (args) => {
+>args : Symbol(args, Decl(npm-install.js, 5, 3))
+
+    this.args = args
+>this.args : Symbol(Installer.args, Decl(npm-install.js, 0, 48), Decl(npm-install.js, 5, 13))
+>this : Symbol(Installer, Decl(npm-install.js, 0, 0))
+>args : Symbol(Installer.args, Decl(npm-install.js, 0, 48), Decl(npm-install.js, 5, 13))
+>args : Symbol(args, Decl(npm-install.js, 5, 3))
+
+      this.newProperty = 1
+>this.newProperty : Symbol(Installer.newProperty, Decl(npm-install.js, 6, 20))
+>this : Symbol(Installer, Decl(npm-install.js, 0, 0))
+>newProperty : Symbol(Installer.newProperty, Decl(npm-install.js, 6, 20))
+  }
+}
+

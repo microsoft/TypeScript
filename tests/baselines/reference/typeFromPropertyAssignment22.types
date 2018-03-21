@@ -1,0 +1,46 @@
+=== tests/cases/conformance/salsa/npm-install.js ===
+function Installer (where, dryrun, args, opts) {
+>Installer : (where: any, dryrun: any, args: any, opts: any) => void
+>where : any
+>dryrun : any
+>args : any
+>opts : any
+
+  this.args = args
+>this.args = args : any
+>this.args : any
+>this : any
+>args : any
+>args : any
+}
+Installer.prototype.loadArgMetadata = function (next) {
+>Installer.prototype.loadArgMetadata = function (next) {  // ArrowFunction isn't treated as a this-container  (args) => {    this.args = args      this.newProperty = 1  }} : (next: any) => void
+>Installer.prototype.loadArgMetadata : any
+>Installer.prototype : any
+>Installer : (where: any, dryrun: any, args: any, opts: any) => void
+>prototype : any
+>loadArgMetadata : any
+>function (next) {  // ArrowFunction isn't treated as a this-container  (args) => {    this.args = args      this.newProperty = 1  }} : (next: any) => void
+>next : any
+
+  // ArrowFunction isn't treated as a this-container
+  (args) => {
+>(args) => {    this.args = args      this.newProperty = 1  } : (args: any) => void
+>args : any
+
+    this.args = args
+>this.args = args : any
+>this.args : any
+>this : { args: any; loadArgMetadata: (next: any) => void; newProperty: number; }
+>args : any
+>args : any
+
+      this.newProperty = 1
+>this.newProperty = 1 : 1
+>this.newProperty : number
+>this : { args: any; loadArgMetadata: (next: any) => void; newProperty: number; }
+>newProperty : number
+>1 : 1
+  }
+}
+
