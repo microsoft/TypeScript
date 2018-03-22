@@ -24497,7 +24497,7 @@ namespace ts {
 
             // Only legal location is in the *last* parameter tag or last parameter of a JSDoc function.
             const { parent } = node;
-            if (isParameter(node.parent) && isJSDocFunctionType(parent.parent)) {
+            if (isParameter(parent) && isJSDocFunctionType(parent.parent)) {
                 if (last(parent.parent.parameters) !== parent) {
                     error(node, Diagnostics.A_rest_parameter_must_be_last_in_a_parameter_list);
                 }
@@ -24547,6 +24547,11 @@ namespace ts {
                         symbol && lastParamDeclaration.symbol === symbol && isRestParameter(lastParamDeclaration)) {
                         return createArrayType(type);
                     }
+                }
+            }
+            if (isParameter(parent) && isJSDocFunctionType(parent.parent)) {
+                if (last(parent.parent.parameters) === parent) {
+                    return createArrayType(type);
                 }
             }
             return addOptionality(type);
