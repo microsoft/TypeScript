@@ -1045,7 +1045,7 @@ namespace ts {
                 if (canProdiceDiagnostic) {
                     getSymbolAccessibilityDiagnostic = oldDiag;
                 }
-                if (returnValue && (!isLateVisibilityPaintedStatement(input) || lateStatementReplacementMap.has("" + getNodeId(input)))) {
+                if (returnValue && (!isLateVisibilityPaintedStatement(input) || lateStatementReplacementMap.get("" + getNodeId(input)))) {
                     if (!resultHasExternalModuleIndicator && hasModifier(input, ModifierFlags.Export) && isSourceFile(input.parent)) {
                         // Exported top-level member indicates moduleness
                         resultHasExternalModuleIndicator = true;
