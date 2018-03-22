@@ -3031,7 +3031,7 @@ namespace ts {
                     return createConditionalTypeNode(checkTypeNode, extendsTypeNode, trueTypeNode, falseTypeNode);
                 }
                 if (type.flags & TypeFlags.Substitution) {
-                    return typeToTypeNodeHelper((<SubstitutionType>type).typeParameter, context);
+                    return typeToTypeNodeHelper((<SubstitutionType>type).typeVariable, context);
                 }
 
                 Debug.fail("Should be unreachable.");
@@ -7325,7 +7325,7 @@ namespace ts {
             const res = tryGetDeclaredTypeOfSymbol(symbol);
             if (res) {
                 return checkNoTypeArguments(node, symbol) ?
-                    res.flags & TypeFlags.TypeParameter ? getConstrainedTypeParameter(<TypeParameter>res, node) : res :
+                    res.flags & TypeFlags.TypeParameter ? getConstrainedTypeVariable(<TypeParameter>res, node) : res :
                     unknownType;
             }
 
@@ -7364,25 +7364,36 @@ namespace ts {
             }
         }
 
-        function getSubstitutionType(typeParameter: TypeParameter, substitute: Type) {
+        function getSubstitutionType(typeVariable: TypeVariable, substitute: Type) {
             const result = <SubstitutionType>createType(TypeFlags.Substitution);
-            result.typeParameter = typeParameter;
+            result.typeVariable = typeVariable;
             result.substitute = substitute;
             return result;
         }
 
-        function getConstrainedTypeParameter(typeParameter: TypeParameter, node: Node) {
+        function isUnaryTupleTypeNode(node: TypeNode) {
+            return node.kind === SyntaxKind.TupleType && (<TupleTypeNode>node).elementTypes.length === 1;
+        }
+
+        function getImpliedConstraint(typeVariable: TypeVariable, checkNode: TypeNode, extendsNode: TypeNode): Type {
+            return isUnaryTupleTypeNode(checkNode) && isUnaryTupleTypeNode(extendsNode) ? getImpliedConstraint(typeVariable, (<TupleTypeNode>checkNode).elementTypes[0], (<TupleTypeNode>extendsNode).elementTypes[0]) :
+                getActualTypeVariable(getTypeFromTypeNode(checkNode)) === typeVariable ? getTypeFromTypeNode(extendsNode) :
+                undefined;
+        }
+
+        function getConstrainedTypeVariable(typeVariable: TypeVariable, node: Node) {
             let constraints: Type[];
             while (isPartOfTypeNode(node)) {
                 const parent = node.parent;
                 if (parent.kind === SyntaxKind.ConditionalType && node === (<ConditionalTypeNode>parent).trueType) {
-                    if (getTypeFromTypeNode((<ConditionalTypeNode>parent).checkType) === typeParameter) {
-                        constraints = append(constraints, getTypeFromTypeNode((<ConditionalTypeNode>parent).extendsType));
+                    const constraint = getImpliedConstraint(typeVariable, (<ConditionalTypeNode>parent).checkType, (<ConditionalTypeNode>parent).extendsType);
+                    if (constraint) {
+                        constraints = append(constraints, constraint);
                     }
                 }
                 node = parent;
             }
-            return constraints ? getSubstitutionType(typeParameter, getIntersectionType(append(constraints, typeParameter))) : typeParameter;
+            return constraints ? getSubstitutionType(typeVariable, getIntersectionType(append(constraints, typeVariable))) : typeVariable;
         }
 
         function isJSDocTypeReference(node: TypeReferenceType): node is TypeReferenceNode {
@@ -8279,7 +8290,13 @@ namespace ts {
         function getTypeFromIndexedAccessTypeNode(node: IndexedAccessTypeNode) {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getIndexedAccessType(getTypeFromTypeNode(node.objectType), getTypeFromTypeNode(node.indexType), node);
+                const objectType = getTypeFromTypeNode(node.objectType);
+                const indexType = getTypeFromTypeNode(node.indexType);
+                const resolved = getIndexedAccessType(objectType, indexType, node);
+                links.resolvedType = resolved.flags & TypeFlags.IndexedAccess &&
+                    (<IndexedAccessType>resolved).objectType === objectType &&
+                    (<IndexedAccessType>resolved).indexType === indexType ?
+                    getConstrainedTypeVariable(<IndexedAccessType>resolved, node) : resolved;
             }
             return links.resolvedType;
         }
@@ -8299,8 +8316,8 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getActualTypeParameter(type: Type) {
-            return type.flags & TypeFlags.Substitution ? (<SubstitutionType>type).typeParameter : type;
+        function getActualTypeVariable(type: Type) {
+            return type.flags & TypeFlags.Substitution ? (<SubstitutionType>type).typeVariable : type;
         }
 
         function getConditionalType(root: ConditionalRoot, mapper: TypeMapper): Type {
@@ -8344,7 +8361,7 @@ namespace ts {
                 }
             }
             // Return a deferred type for a check that is neither definitely true nor definitely false
-            const erasedCheckType = getActualTypeParameter(checkType);
+            const erasedCheckType = getActualTypeVariable(checkType);
             const result = <ConditionalType>createType(TypeFlags.Conditional);
             result.root = root;
             result.checkType = erasedCheckType;
@@ -9064,7 +9081,7 @@ namespace ts {
                     return getConditionalTypeInstantiation(<ConditionalType>type, combineTypeMappers((<ConditionalType>type).mapper, mapper));
                 }
                 if (type.flags & TypeFlags.Substitution) {
-                    return mapper((<SubstitutionType>type).typeParameter);
+                    return instantiateType((<SubstitutionType>type).typeVariable, mapper);
                 }
             }
             return type;
@@ -9670,10 +9687,10 @@ namespace ts {
                     target = (<LiteralType>target).regularType;
                 }
                 if (source.flags & TypeFlags.Substitution) {
-                    source = relation === definitelyAssignableRelation ? (<SubstitutionType>source).typeParameter : (<SubstitutionType>source).substitute;
+                    source = relation === definitelyAssignableRelation ? (<SubstitutionType>source).typeVariable : (<SubstitutionType>source).substitute;
                 }
                 if (target.flags & TypeFlags.Substitution) {
-                    target = (<SubstitutionType>target).typeParameter;
+                    target = (<SubstitutionType>target).typeVariable;
                 }
 
                 // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
