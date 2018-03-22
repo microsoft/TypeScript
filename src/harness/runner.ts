@@ -242,7 +242,7 @@ function beginTests() {
 
     if (!runUnitTests) {
         // patch `describe` to skip unit tests
-        describe = ts.noop as any;
+        (global as any).describe = ts.noop;
     }
 }
 
