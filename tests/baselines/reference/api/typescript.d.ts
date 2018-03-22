@@ -2823,7 +2823,7 @@ declare namespace ts {
         VariableDeclarationList = 272,
         SingleLineFunctionBodyStatements = 384,
         MultiLineFunctionBodyStatements = 1,
-        ClassHeritageClauses = 256,
+        ClassHeritageClauses = 0,
         ClassMembers = 65,
         InterfaceMembers = 65,
         EnumMembers = 81,
