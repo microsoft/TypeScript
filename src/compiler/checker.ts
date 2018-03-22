@@ -24495,8 +24495,15 @@ namespace ts {
             checkJSDocTypeIsInJsFile(node);
             checkSourceElement(node.type);
 
-            // Only legal location is in the *last* parameter tag.
+            // Only legal location is in the *last* parameter tag or last parameter of a JSDoc function.
             const { parent } = node;
+            if (isParameter(node.parent) && isJSDocFunctionType(parent.parent)) {
+                if (last(parent.parent.parameters) !== parent) {
+                    error(node, Diagnostics.A_rest_parameter_must_be_last_in_a_parameter_list);
+                }
+                return;
+            }
+
             if (!isJSDocTypeExpression(parent)) {
                 error(node, Diagnostics.JSDoc_may_only_appear_in_the_last_parameter_of_a_signature);
             }
