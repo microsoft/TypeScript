@@ -1623,7 +1623,7 @@ namespace ts {
             messageText: text,
             category: message.category,
             code: message.code,
-            unused: message.unused,
+            reportsUnused: message.unused,
         };
     }
 
@@ -1654,7 +1654,7 @@ namespace ts {
             messageText: text,
             category: message.category,
             code: message.code,
-            unused: message.unused,
+            reportsUnused: message.unused,
         };
     }
 

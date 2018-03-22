@@ -357,7 +357,7 @@ namespace ts.server {
             const request = this.processRequest<protocol.SyntacticDiagnosticsSyncRequest | protocol.SemanticDiagnosticsSyncRequest | protocol.SuggestionDiagnosticsSyncRequest>(command, { file, includeLinePosition: true });
             const response = this.processResponse<protocol.SyntacticDiagnosticsSyncResponse | protocol.SemanticDiagnosticsSyncResponse | protocol.SuggestionDiagnosticsSyncResponse>(request);
 
-            return (<protocol.DiagnosticWithLinePosition[]>response.body).map<Diagnostic>(entry => {
+            return (<protocol.DiagnosticWithLinePosition[]>response.body).map((entry): Diagnostic => {
                 const category = firstDefined(Object.keys(DiagnosticCategory), id =>
                     isString(id) && entry.category === id.toLowerCase() ? (<any>DiagnosticCategory)[id] : undefined);
                 return {
@@ -367,7 +367,7 @@ namespace ts.server {
                     messageText: entry.message,
                     category: Debug.assertDefined(category, "convertDiagnostic: category should not be undefined"),
                     code: entry.code,
-                    unused: entry.unused,
+                    reportsUnused: entry.reportsUnused,
                 };
             });
         }

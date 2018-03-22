@@ -314,16 +314,16 @@ namespace ts {
             getSuggestionDiagnostics: file => {
                 return (suggestionDiagnostics.get(file.fileName) || emptyArray).concat(getUnusedDiagnostics());
                 function getUnusedDiagnostics(): ReadonlyArray<Diagnostic> {
+                    if (file.isDeclarationFile) return emptyArray;
+
                     checkSourceFile(file);
                     const diagnostics: Diagnostic[] = [];
                     Debug.assert(!!(getNodeLinks(file).flags & NodeCheckFlags.TypeChecked));
-                    if (!file.isDeclarationFile) {
-                        checkUnusedIdentifiers(allPotentiallyUnusedIdentifiers.get(file.fileName)!, (kind, diag) => {
-                            if (!unusedIsError(kind)) {
-                                diagnostics.push({ ...diag, category: DiagnosticCategory.Suggestion });
-                            }
-                        });
-                    }
+                    checkUnusedIdentifiers(allPotentiallyUnusedIdentifiers.get(file.fileName)!, (kind, diag) => {
+                        if (!unusedIsError(kind)) {
+                            diagnostics.push({ ...diag, category: DiagnosticCategory.Suggestion });
+                        }
+                    });
                     return diagnostics;
                 }
             },

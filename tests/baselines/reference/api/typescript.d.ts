@@ -2279,7 +2279,7 @@ declare namespace ts {
         messageText: string | DiagnosticMessageChain;
         category: DiagnosticCategory;
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
-        unused?: {};
+        reportsUnused?: {};
         code: number;
         source?: string;
     }

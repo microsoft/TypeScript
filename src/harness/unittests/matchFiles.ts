@@ -123,14 +123,14 @@ namespace ts {
         }
         {
             const actual = parseJsonConfigFileContent(json, host, basePath, existingOptions, configFileName, resolutionStack);
-            expected.errors = expected.errors.map<Diagnostic>(error => ({
+            expected.errors = expected.errors.map((error): Diagnostic => ({
                 category: error.category,
                 code: error.code,
                 file: undefined,
                 length: undefined,
                 messageText: error.messageText,
                 start: undefined,
-                unused: undefined,
+                reportsUnused: undefined,
             }));
             assertParsed(actual, expected);
         }

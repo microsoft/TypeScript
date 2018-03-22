@@ -456,7 +456,7 @@ namespace ts.server.protocol {
         category: string;
         code: number;
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
-        unused?: {};
+        reportsUnused?: {};
     }
 
     /**
