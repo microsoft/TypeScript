@@ -1,0 +1,13 @@
+=== tests/cases/compiler/pipelineOperatorMultipleArgumentUse.ts ===
+var array = [10, 20, 30];
+>array : Symbol(array, Decl(pipelineOperatorMultipleArgumentUse.ts, 0, 3))
+
+var last = array |> (a: number[]) => a[a.length - 1];
+>last : Symbol(last, Decl(pipelineOperatorMultipleArgumentUse.ts, 2, 3))
+>array : Symbol(array, Decl(pipelineOperatorMultipleArgumentUse.ts, 0, 3))
+>a : Symbol(a, Decl(pipelineOperatorMultipleArgumentUse.ts, 2, 21))
+>a : Symbol(a, Decl(pipelineOperatorMultipleArgumentUse.ts, 2, 21))
+>a.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>a : Symbol(a, Decl(pipelineOperatorMultipleArgumentUse.ts, 2, 21))
+>length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+
