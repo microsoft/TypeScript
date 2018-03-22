@@ -24,6 +24,7 @@ sourceFile:ES5For-of13.ts
 13>                                       ^^^^^^^^^^^^^^
 14>                                                     ^^
 15>                                                       ^^^^
+16>                                                           ^^
 1 >
 2 >for (let v of 
 3 >     ['a', 'b', 'c']
@@ -39,6 +40,7 @@ sourceFile:ES5For-of13.ts
 13>                                       ['a', 'b', 'c']
 14>                                                     
 15>                                                       ['a', 'b', 'c']
+16>                                                           ) 
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(1, 6) Source(1, 15) + SourceIndex(0)
 3 >Emitted(1, 16) Source(1, 30) + SourceIndex(0)
@@ -54,6 +56,7 @@ sourceFile:ES5For-of13.ts
 13>Emitted(1, 54) Source(1, 30) + SourceIndex(0)
 14>Emitted(1, 56) Source(1, 15) + SourceIndex(0)
 15>Emitted(1, 60) Source(1, 30) + SourceIndex(0)
+16>Emitted(1, 62) Source(1, 32) + SourceIndex(0)
 ---
 >>>    var v = _a[_i];
 1 >^^^^

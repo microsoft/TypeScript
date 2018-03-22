@@ -56,8 +56,6 @@ node_modules/util/util.js(55,20): error TS2555: Expected at least 2 arguments, b
 node_modules/util/util.js(73,15): error TS2339: Property 'noDeprecation' does not exist on type 'Process'.
 node_modules/util/util.js(80,19): error TS2339: Property 'throwDeprecation' does not exist on type 'Process'.
 node_modules/util/util.js(82,26): error TS2339: Property 'traceDeprecation' does not exist on type 'Process'.
-node_modules/util/util.js(566,22): error TS8024: JSDoc '@param' tag has name 'ctor', but there is no parameter with that name.
-node_modules/util/util.js(568,22): error TS8024: JSDoc '@param' tag has name 'superCtor', but there is no parameter with that name.
 
 
 

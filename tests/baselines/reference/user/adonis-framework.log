@@ -40,7 +40,6 @@ node_modules/adonis-framework/src/Event/index.js(128,5): error TS2322: Type '() 
   Property 'push' is missing in type '() => {}[]'.
 node_modules/adonis-framework/src/Event/index.js(153,25): error TS2339: Property 'wildcard' does not exist on type 'EventEmitter2'.
 node_modules/adonis-framework/src/Event/index.js(188,17): error TS2304: Cannot find name 'Spread'.
-node_modules/adonis-framework/src/Event/index.js(188,25): error TS8024: JSDoc '@param' tag has name 'data', but there is no parameter with that name.
 node_modules/adonis-framework/src/Event/index.js(207,24): error TS2304: Cannot find name 'Sring'.
 node_modules/adonis-framework/src/Event/index.js(256,52): error TS2345: Argument of type 'Function' is not assignable to parameter of type 'Listener'.
   Type 'Function' provides no match for the signature '(...values: any[]): void'.
@@ -76,15 +75,16 @@ node_modules/adonis-framework/src/Helpers/index.js(330,23): error TS2532: Object
 node_modules/adonis-framework/src/Helpers/index.js(331,22): error TS2339: Property 'endsWith' does not exist on type 'string'.
 node_modules/adonis-framework/src/Middleware/index.js(13,21): error TS2307: Cannot find module 'adonis-fold'.
 node_modules/adonis-framework/src/Middleware/index.js(57,18): error TS2539: Cannot assign to '"/home/nathansa/ts/tests/cases/user/adonis-framework/node_modules/adonis-framework/src/Middleware/index"' because it is not a variable.
+node_modules/adonis-framework/src/Middleware/index.js(92,19): error TS2538: Type 'undefined' cannot be used as an index type.
 node_modules/adonis-framework/src/Middleware/index.js(230,20): error TS8024: JSDoc '@param' tag has name 'Middleware', but there is no parameter with that name.
 node_modules/adonis-framework/src/Request/index.js(64,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Request/index.js(66,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Request/index.js(95,14): error TS2304: Cannot find name 'Mixed'.
-node_modules/adonis-framework/src/Request/index.js(95,21): error TS8024: JSDoc '@param' tag has name 'keys', but there is no parameter with that name.
+node_modules/adonis-framework/src/Request/index.js(95,21): error TS8029: JSDoc '@param' tag has name 'keys', but there is no parameter with that name. It would match 'arguments' if it had an array type.
 node_modules/adonis-framework/src/Request/index.js(112,14): error TS2304: Cannot find name 'Mixed'.
-node_modules/adonis-framework/src/Request/index.js(112,21): error TS8024: JSDoc '@param' tag has name 'keys', but there is no parameter with that name.
+node_modules/adonis-framework/src/Request/index.js(112,21): error TS8029: JSDoc '@param' tag has name 'keys', but there is no parameter with that name. It would match 'arguments' if it had an array type.
 node_modules/adonis-framework/src/Request/index.js(131,14): error TS2304: Cannot find name 'Mixed'.
-node_modules/adonis-framework/src/Request/index.js(131,21): error TS8024: JSDoc '@param' tag has name 'keys', but there is no parameter with that name.
+node_modules/adonis-framework/src/Request/index.js(131,21): error TS8029: JSDoc '@param' tag has name 'keys', but there is no parameter with that name. It would match 'arguments' if it had an array type.
 node_modules/adonis-framework/src/Request/index.js(188,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Request/index.js(190,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Request/index.js(415,15): error TS2304: Cannot find name 'Mixed'.
@@ -95,7 +95,7 @@ node_modules/adonis-framework/src/Request/index.js(480,14): error TS2304: Cannot
 node_modules/adonis-framework/src/Request/index.js(482,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Request/index.js(499,17): error TS2551: Property '_params' does not exist on type 'Request'. Did you mean 'param'?
 node_modules/adonis-framework/src/Request/index.js(523,15): error TS2304: Cannot find name 'Objecr'.
-node_modules/adonis-framework/src/Request/index.js(572,23): error TS8024: JSDoc '@param' tag has name 'pattern', but there is no parameter with that name.
+node_modules/adonis-framework/src/Request/index.js(572,23): error TS8029: JSDoc '@param' tag has name 'pattern', but there is no parameter with that name. It would match 'arguments' if it had an array type.
 node_modules/adonis-framework/src/Request/index.js(600,12): error TS2554: Expected 2 arguments, but got 1.
 node_modules/adonis-framework/src/Request/index.js(600,35): error TS2554: Expected 2 arguments, but got 1.
 node_modules/adonis-framework/src/Request/index.js(663,23): error TS8024: JSDoc '@param' tag has name 'encodings', but there is no parameter with that name.
@@ -121,20 +121,22 @@ node_modules/adonis-framework/src/Route/index.js(30,5): error TS2322: Type 'null
 node_modules/adonis-framework/src/Route/index.js(36,13): error TS2539: Cannot assign to '"/home/nathansa/ts/tests/cases/user/adonis-framework/node_modules/adonis-framework/src/Route/index"' because it is not a variable.
 node_modules/adonis-framework/src/Route/index.js(58,3): error TS2322: Type 'null' is not assignable to type 'string'.
 node_modules/adonis-framework/src/Route/index.js(321,13): error TS2304: Cannot find name 'Mixed'.
-node_modules/adonis-framework/src/Route/index.js(321,20): error TS8024: JSDoc '@param' tag has name 'keys', but there is no parameter with that name.
+node_modules/adonis-framework/src/Route/index.js(321,20): error TS8029: JSDoc '@param' tag has name 'keys', but there is no parameter with that name. It would match 'arguments' if it had an array type.
 node_modules/adonis-framework/src/Route/index.js(354,20): error TS2694: Namespace 'Route' has no exported member 'Group'.
 node_modules/adonis-framework/src/Route/index.js(368,3): error TS2322: Type 'null' is not assignable to type 'string'.
 node_modules/adonis-framework/src/Route/index.js(396,10): error TS2554: Expected 2 arguments, but got 3.
 node_modules/adonis-framework/src/Route/index.js(407,20): error TS2694: Namespace 'Route' has no exported member 'resources'.
+node_modules/adonis-framework/src/Route/index.js(501,42): error TS2345: Argument of type 'boolean | undefined' is not assignable to parameter of type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
 node_modules/adonis-framework/src/Route/resource.js(92,25): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'string'.
 node_modules/adonis-framework/src/Route/resource.js(93,25): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'string'.
 node_modules/adonis-framework/src/Route/resource.js(95,25): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'string'.
 node_modules/adonis-framework/src/Route/resource.js(96,25): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'string'.
 node_modules/adonis-framework/src/Route/resource.js(97,25): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'string'.
 node_modules/adonis-framework/src/Route/resource.js(172,15): error TS2304: Cannot find name 'Mixed'.
-node_modules/adonis-framework/src/Route/resource.js(172,22): error TS8024: JSDoc '@param' tag has name 'methods', but there is no parameter with that name.
+node_modules/adonis-framework/src/Route/resource.js(172,22): error TS8029: JSDoc '@param' tag has name 'methods', but there is no parameter with that name. It would match 'arguments' if it had an array type.
 node_modules/adonis-framework/src/Route/resource.js(198,15): error TS2304: Cannot find name 'Mixed'.
-node_modules/adonis-framework/src/Route/resource.js(198,22): error TS8024: JSDoc '@param' tag has name 'methods', but there is no parameter with that name.
+node_modules/adonis-framework/src/Route/resource.js(198,22): error TS8029: JSDoc '@param' tag has name 'methods', but there is no parameter with that name. It would match 'arguments' if it had an array type.
 node_modules/adonis-framework/src/Route/resource.js(233,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/resource.js(261,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/resource.js(296,15): error TS2304: Cannot find name 'Mixed'.
@@ -190,6 +192,7 @@ node_modules/adonis-framework/src/Session/index.js(267,15): error TS2304: Cannot
 node_modules/adonis-framework/src/Session/index.js(287,15): error TS2322: Type 'IterableIterator<any>' is not assignable to type 'boolean'.
 node_modules/adonis-framework/src/Session/index.js(293,12): error TS2532: Object is possibly 'undefined'.
 node_modules/adonis-framework/src/Static/index.js(42,16): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/adonis-framework/src/View/Form/index.js(75,11): error TS2532: Object is possibly 'undefined'.
 node_modules/adonis-framework/src/View/Form/index.js(115,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/View/Form/index.js(147,63): error TS2345: Argument of type 'string | any[]' is not assignable to parameter of type 'any[]'.
   Type 'string' is not assignable to type 'any[]'.

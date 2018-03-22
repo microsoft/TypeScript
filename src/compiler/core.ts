@@ -4,7 +4,7 @@
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "2.8";
+    export const versionMajorMinor = "2.9";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0-dev`;
 }
@@ -920,8 +920,7 @@ namespace ts {
     export function sum<T extends Record<K, number>, K extends string>(array: ReadonlyArray<T>, prop: K): number {
         let result = 0;
         for (const v of array) {
-            // TODO: Remove the following type assertion once the fix for #17069 is merged
-            result += v[prop] as number;
+            result += v[prop];
         }
         return result;
     }
@@ -1077,7 +1076,7 @@ namespace ts {
      * Returns the first element of an array if non-empty, `undefined` otherwise.
      */
     export function firstOrUndefined<T>(array: ReadonlyArray<T>): T | undefined {
-        return elementAt(array, 0);
+        return array.length === 0 ? undefined : array[0];
     }
 
     export function first<T>(array: ReadonlyArray<T>): T {
@@ -1089,7 +1088,7 @@ namespace ts {
      * Returns the last element of an array if non-empty, `undefined` otherwise.
      */
     export function lastOrUndefined<T>(array: ReadonlyArray<T>): T | undefined {
-        return elementAt(array, -1);
+        return array.length === 0 ? undefined : array[array.length - 1];
     }
 
     export function last<T>(array: ReadonlyArray<T>): T {

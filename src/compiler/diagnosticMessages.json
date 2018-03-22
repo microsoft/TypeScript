@@ -3720,7 +3720,7 @@
         "category": "Error",
         "code": 8028
     },
-    "The last @param tag of a function that uses 'arguments' must have an array type.": {
+    "JSDoc '@param' tag has name '{0}', but there is no parameter with that name. It would match 'arguments' if it had an array type.": {
         "category": "Error",
         "code": 8029
     },
