@@ -24550,9 +24550,7 @@ namespace ts {
                 }
             }
             if (isParameter(parent) && isJSDocFunctionType(parent.parent)) {
-                if (last(parent.parent.parameters) === parent) {
-                    return createArrayType(type);
-                }
+                return createArrayType(type);
             }
             return addOptionality(type);
         }
