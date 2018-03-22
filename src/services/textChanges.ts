@@ -134,11 +134,7 @@ namespace ts.textChanges {
         readonly options?: ChangeNodeOptions;
     }
 
-    export function getSeparatorCharacter(separator: Token<SyntaxKind.CommaToken | SyntaxKind.SemicolonToken>) {
-        return tokenToString(separator.kind);
-    }
-
-    export function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: ConfigurableStart, position: Position) {
+    function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: ConfigurableStart, position: Position) {
         if (options.useNonAdjustedStartPosition) {
             return node.getStart(sourceFile);
         }
@@ -168,7 +164,7 @@ namespace ts.textChanges {
         return getStartPositionOfLine(getLineOfLocalPosition(sourceFile, adjustedStartPosition), sourceFile);
     }
 
-    export function getAdjustedEndPosition(sourceFile: SourceFile, node: Node, options: ConfigurableEnd) {
+    function getAdjustedEndPosition(sourceFile: SourceFile, node: Node, options: ConfigurableEnd) {
         if (options.useNonAdjustedEndPosition || isExpression(node)) {
             return node.getEnd();
         }
@@ -225,6 +221,7 @@ namespace ts.textChanges {
             return this;
         }
 
+        /** Warning: This deletes comments too. See `copyComments` in `convertFunctionToEs6Class`. */
         public deleteNode(sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd = {}) {
             const startPosition = getAdjustedStartPosition(sourceFile, node, options, Position.FullStart);
             const endPosition = getAdjustedEndPosition(sourceFile, node, options);
@@ -352,14 +349,16 @@ namespace ts.textChanges {
         /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
         public insertTypeAnnotation(sourceFile: SourceFile, node: TypeAnnotatable, type: TypeNode): void {
             const end = (isFunctionLike(node)
-                ? findChildOfKind(node, SyntaxKind.CloseParenToken, sourceFile)!
+                // If no `)`, is an arrow function `x => x`, so use the end of the first parameter
+                ? findChildOfKind(node, SyntaxKind.CloseParenToken, sourceFile) || first(node.parameters)
                 : node.kind !== SyntaxKind.VariableDeclaration && node.questionToken ? node.questionToken : node.name).end;
             this.insertNodeAt(sourceFile, end, type, { prefix: ": " });
         }
 
         public insertTypeParameters(sourceFile: SourceFile, node: SignatureDeclaration, typeParameters: ReadonlyArray<TypeParameterDeclaration>): void {
-            const lparen = findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile)!.pos;
-            this.insertNodesAt(sourceFile, lparen, typeParameters, { prefix: "<", suffix: ">" });
+            // If no `(`, is an arrow function `x => x`, so use the pos of the first parameter
+            const start = (findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile) || first(node.parameters)).getStart(sourceFile);
+            this.insertNodesAt(sourceFile, start, typeParameters, { prefix: "<", suffix: ">" });
         }
 
         private getOptionsForInsertNodeBefore(before: Node, doubleNewlines: boolean): ChangeNodeOptions {
@@ -368,6 +367,9 @@ namespace ts.textChanges {
             }
             else if (isVariableDeclaration(before)) { // insert `x = 1, ` into `const x = 1, y = 2;
                 return { suffix: ", " };
+            }
+            else if (isParameter(before)) {
+                return {};
             }
             return Debug.failBadSyntaxKind(before); // We haven't handled this kind of node yet -- add it
         }
@@ -452,6 +454,9 @@ namespace ts.textChanges {
             }
             else if (isVariableDeclaration(node)) {
                 return { prefix: ", " };
+            }
+            else if (isParameter(node)) {
+                return {};
             }
             return Debug.failBadSyntaxKind(node); // We haven't handled this kind of node yet -- add it
         }
@@ -630,7 +635,7 @@ namespace ts.textChanges {
                 // order changes by start position
                 const normalized = stableSort(changesInFile, (a, b) => a.range.pos - b.range.pos);
                 // verify that change intervals do not overlap, except possibly at end points.
-                for (let i = 0; i < normalized.length - 2; i++) {
+                for (let i = 0; i < normalized.length - 1; i++) {
                     Debug.assert(normalized[i].range.end <= normalized[i + 1].range.pos, "Changes overlap", () =>
                         `${JSON.stringify(normalized[i].range)} and ${JSON.stringify(normalized[i + 1].range)}`);
                 }
@@ -866,7 +871,7 @@ namespace ts.textChanges {
         let ranges = getLeadingCommentRanges(text, position);
         if (!ranges) return position;
         // However we should still skip a pinned comment at the top
-        if (ranges.length && ranges[0].kind === SyntaxKind.MultiLineCommentTrivia && isPinnedComment(text, ranges[0])) {
+        if (ranges.length && ranges[0].kind === SyntaxKind.MultiLineCommentTrivia && isPinnedComment(text, ranges[0].pos)) {
             position = ranges[0].end;
             advancePastLineBreak();
             ranges = ranges.slice(1);

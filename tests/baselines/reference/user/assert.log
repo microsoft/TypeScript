@@ -1,0 +1,68 @@
+Exit Code: 1
+Standard output:
+node_modules/assert/assert.js(73,28): error TS2339: Property 'name' does not exist on type '() => void'.
+node_modules/assert/assert.js(103,14): error TS2309: An export assignment cannot be used in a module with other exported elements.
+node_modules/assert/assert.js(123,8): error TS2339: Property 'AssertionError' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(124,8): error TS2339: Property 'name' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(125,8): error TS2339: Property 'actual' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(126,8): error TS2339: Property 'expected' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(127,8): error TS2339: Property 'operator' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(129,10): error TS2339: Property 'message' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(130,10): error TS2339: Property 'generatedMessage' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(132,10): error TS2339: Property 'message' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(133,10): error TS2339: Property 'generatedMessage' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(154,12): error TS2339: Property 'stack' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(160,22): error TS2339: Property 'AssertionError' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(195,20): error TS2339: Property 'AssertionError' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(205,8): error TS2339: Property 'fail' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(215,55): error TS2339: Property 'ok' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(217,8): error TS2339: Property 'ok' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(223,8): error TS2339: Property 'equal' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(224,72): error TS2339: Property 'equal' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(230,8): error TS2339: Property 'notEqual' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(232,50): error TS2339: Property 'notEqual' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(239,8): error TS2339: Property 'deepEqual' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(241,57): error TS2339: Property 'deepEqual' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(245,8): error TS2339: Property 'deepStrictEqual' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(247,63): error TS2339: Property 'deepStrictEqual' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(366,8): error TS2339: Property 'notDeepEqual' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(368,60): error TS2339: Property 'notDeepEqual' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(372,8): error TS2339: Property 'notDeepStrictEqual' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(383,8): error TS2339: Property 'strictEqual' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(385,51): error TS2339: Property 'strictEqual' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(392,8): error TS2339: Property 'notStrictEqual' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(394,51): error TS2339: Property 'notStrictEqual' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(473,8): error TS2339: Property 'throws' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(478,8): error TS2339: Property 'doesNotThrow' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/assert.js(482,8): error TS2339: Property 'ifError' does not exist on type '(value: any, message: any) => void'.
+node_modules/assert/test.js(25,5): error TS2365: Operator '===' cannot be applied to types 'string | undefined' and 'boolean'.
+node_modules/assert/test.js(39,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
+node_modules/assert/test.js(55,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
+node_modules/assert/test.js(74,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
+node_modules/assert/test.js(84,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
+node_modules/assert/test.js(94,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
+node_modules/assert/test.js(103,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
+node_modules/assert/test.js(120,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
+node_modules/assert/test.js(128,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
+node_modules/assert/test.js(140,10): error TS2339: Property 'a' does not exist on type 'number[]'.
+node_modules/assert/test.js(141,10): error TS2339: Property 'b' does not exist on type 'number[]'.
+node_modules/assert/test.js(142,10): error TS2339: Property 'b' does not exist on type 'number[]'.
+node_modules/assert/test.js(143,10): error TS2339: Property 'a' does not exist on type 'number[]'.
+node_modules/assert/test.js(149,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
+node_modules/assert/test.js(157,51): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'never' has no compatible call signatures.
+node_modules/assert/test.js(161,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
+node_modules/assert/test.js(168,5): error TS2304: Cannot find name 'test'.
+node_modules/assert/test.js(182,5): error TS2304: Cannot find name 'test'.
+node_modules/assert/test.js(229,5): error TS2304: Cannot find name 'test'.
+node_modules/assert/test.js(235,5): error TS2304: Cannot find name 'test'.
+node_modules/assert/test.js(250,5): error TS2304: Cannot find name 'test'.
+node_modules/assert/test.js(254,5): error TS2304: Cannot find name 'test'.
+node_modules/assert/test.js(256,55): error TS2345: Argument of type 'TypeError' is not assignable to parameter of type 'string'.
+node_modules/assert/test.js(262,5): error TS2304: Cannot find name 'test'.
+node_modules/assert/test.js(279,5): error TS2304: Cannot find name 'test'.
+node_modules/assert/test.js(285,5): error TS2304: Cannot find name 'test'.
+node_modules/assert/test.js(320,5): error TS2304: Cannot find name 'test'.
+
+
+
+Standard error:

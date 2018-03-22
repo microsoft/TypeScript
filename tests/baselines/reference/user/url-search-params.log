@@ -1,0 +1,63 @@
+Exit Code: 1
+Standard output:
+node_modules/url-search-params/build/url-search-params.js(2,5): error TS2322: Type '{ new (init?: string | URLSearchParams | undefined): URLSearchParams; prototype: URLSearchParams; }' is not assignable to type '(query: any) => void'.
+  Type '{ new (init?: string | URLSearchParams | undefined): URLSearchParams; prototype: URLSearchParams; }' provides no match for the signature '(query: any): void'.
+node_modules/url-search-params/build/url-search-params.js(2,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'URLSearchParams' must be of type '{ new (init?: string | URLSearchParams | undefined): URLSearchParams; prototype: URLSearchParams; }', but here has type '(query: any) => void'.
+node_modules/url-search-params/build/url-search-params.js(2,3851): error TS2532: Object is possibly 'undefined'.
+node_modules/url-search-params/build/url-search-params.js(2,3851): error TS2532: Object is possibly 'undefined'.
+node_modules/url-search-params/build/url-search-params.js(2,3851): error TS2684: The 'this' context of type '(() => any) | undefined' is not assignable to method's 'this' of type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/url-search-params/build/url-search-params.js(2,3918): error TS2532: Object is possibly 'undefined'.
+node_modules/url-search-params/build/url-search-params.js(2,3918): error TS2532: Object is possibly 'undefined'.
+node_modules/url-search-params/build/url-search-params.js(2,3918): error TS2684: The 'this' context of type '((v: any) => void) | undefined' is not assignable to method's 'this' of type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/url-search-params/build/url-search-params.js(2,4005): error TS2532: Object is possibly 'undefined'.
+node_modules/url-search-params/build/url-search-params.js(2,4005): error TS2532: Object is possibly 'undefined'.
+node_modules/url-search-params/build/url-search-params.js(2,4005): error TS2684: The 'this' context of type '(() => any) | undefined' is not assignable to method's 'this' of type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/url-search-params/build/url-search-params.js(2,4074): error TS2532: Object is possibly 'undefined'.
+node_modules/url-search-params/build/url-search-params.js(2,4074): error TS2532: Object is possibly 'undefined'.
+node_modules/url-search-params/build/url-search-params.js(2,4074): error TS2684: The 'this' context of type '((v: any) => void) | undefined' is not assignable to method's 'this' of type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/url-search-params/build/url-search-params.js(2,4676): error TS2339: Property 'forEach' does not exist on type 'URLSearchParams'.
+node_modules/url-search-params/build/url-search-params.js(2,5038): error TS2339: Property 'keys' does not exist on type 'URLSearchParams'.
+node_modules/url-search-params/build/url-search-params.js(2,5077): error TS2339: Property 'forEach' does not exist on type 'URLSearchParams'.
+node_modules/url-search-params/build/url-search-params.js(2,5368): error TS2339: Property 'values' does not exist on type 'URLSearchParams'.
+node_modules/url-search-params/build/url-search-params.js(2,5411): error TS2339: Property 'forEach' does not exist on type 'URLSearchParams'.
+node_modules/url-search-params/build/url-search-params.js(2,5699): error TS2339: Property 'entries' does not exist on type 'URLSearchParams'.
+node_modules/url-search-params/build/url-search-params.js(2,5744): error TS2339: Property 'forEach' does not exist on type 'URLSearchParams'.
+node_modules/url-search-params/build/url-search-params.js(2,6099): error TS2339: Property 'entries' does not exist on type 'URLSearchParams'.
+node_modules/url-search-params/build/url-search-params.js(2,6165): error TS2339: Property 'sort' does not exist on type 'URLSearchParams'.
+node_modules/url-search-params/build/url-search-params.js(2,6203): error TS2339: Property 'entries' does not exist on type 'URLSearchParams'.
+node_modules/url-search-params/build/url-search-params.max.js(246,22): error TS2532: Object is possibly 'undefined'.
+node_modules/url-search-params/build/url-search-params.max.js(246,22): error TS2532: Object is possibly 'undefined'.
+node_modules/url-search-params/build/url-search-params.max.js(246,22): error TS2684: The 'this' context of type '(() => any) | undefined' is not assignable to method's 'this' of type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/url-search-params/build/url-search-params.max.js(250,15): error TS2532: Object is possibly 'undefined'.
+node_modules/url-search-params/build/url-search-params.max.js(250,15): error TS2532: Object is possibly 'undefined'.
+node_modules/url-search-params/build/url-search-params.max.js(250,15): error TS2684: The 'this' context of type '((v: any) => void) | undefined' is not assignable to method's 'this' of type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/url-search-params/build/url-search-params.max.js(256,22): error TS2532: Object is possibly 'undefined'.
+node_modules/url-search-params/build/url-search-params.max.js(256,22): error TS2532: Object is possibly 'undefined'.
+node_modules/url-search-params/build/url-search-params.max.js(256,22): error TS2684: The 'this' context of type '(() => any) | undefined' is not assignable to method's 'this' of type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/url-search-params/build/url-search-params.max.js(260,15): error TS2532: Object is possibly 'undefined'.
+node_modules/url-search-params/build/url-search-params.max.js(260,15): error TS2532: Object is possibly 'undefined'.
+node_modules/url-search-params/build/url-search-params.max.js(260,15): error TS2684: The 'this' context of type '((v: any) => void) | undefined' is not assignable to method's 'this' of type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/url-search-params/build/url-search-params.max.js(322,26): error TS2339: Property 'forEach' does not exist on type 'URLSearchParams'.
+node_modules/url-search-params/build/url-search-params.max.js(337,26): error TS2339: Property 'keys' does not exist on type 'URLSearchParams'.
+node_modules/url-search-params/build/url-search-params.max.js(339,12): error TS2339: Property 'forEach' does not exist on type 'URLSearchParams'.
+node_modules/url-search-params/build/url-search-params.max.js(358,26): error TS2339: Property 'values' does not exist on type 'URLSearchParams'.
+node_modules/url-search-params/build/url-search-params.max.js(360,12): error TS2339: Property 'forEach' does not exist on type 'URLSearchParams'.
+node_modules/url-search-params/build/url-search-params.max.js(379,26): error TS2339: Property 'entries' does not exist on type 'URLSearchParams'.
+node_modules/url-search-params/build/url-search-params.max.js(381,12): error TS2339: Property 'forEach' does not exist on type 'URLSearchParams'.
+node_modules/url-search-params/build/url-search-params.max.js(400,66): error TS2339: Property 'entries' does not exist on type 'URLSearchParams'.
+node_modules/url-search-params/build/url-search-params.max.js(404,26): error TS2339: Property 'sort' does not exist on type 'URLSearchParams'.
+node_modules/url-search-params/build/url-search-params.max.js(406,24): error TS2339: Property 'entries' does not exist on type 'URLSearchParams'.
+node_modules/url-search-params/build/url-search-params.node.js(174,1): error TS2539: Cannot assign to 'URLSearchParams' because it is not a variable.
+node_modules/url-search-params/build/url-search-params.node.js(174,44): error TS2339: Property 'URLSearchParams' does not exist on type 'Global'.
+
+
+
+Standard error:

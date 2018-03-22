@@ -52,6 +52,13 @@ namespace ts {
         }
     }
 
+    /*@internal*/
+    export function isJSDocLikeText(text: string, start: number) {
+        return text.charCodeAt(start + 1) === CharacterCodes.asterisk &&
+            text.charCodeAt(start + 2) === CharacterCodes.asterisk &&
+            text.charCodeAt(start + 3) !== CharacterCodes.slash;
+    }
+
     /**
      * Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes
      * stored in properties. If a 'cbNodes' callback is specified, it is invoked for embedded arrays; otherwise,
@@ -2196,9 +2203,21 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseJSDocAllType(): JSDocAllType {
-            const result = <JSDocAllType>createNode(SyntaxKind.JSDocAllType);
+        function parseJSDocAllType(postFixEquals: boolean): JSDocAllType | JSDocOptionalType {
+            const result = createNode(SyntaxKind.JSDocAllType) as JSDocAllType;
+            if (postFixEquals) {
+                return createJSDocPostfixType(SyntaxKind.JSDocOptionalType, result) as JSDocOptionalType;
+            }
+            else {
+                nextToken();
+            }
+            return finishNode(result);
+        }
+
+        function parseJSDocNonNullableType(): TypeNode {
+            const result = createNode(SyntaxKind.JSDocNonNullableType) as JSDocNonNullableType;
             nextToken();
+            result.type = parseNonArrayType();
             return finishNode(result);
         }
 
@@ -2252,15 +2271,22 @@ namespace ts {
                 parameter.name = parseIdentifierName();
                 parseExpected(SyntaxKind.ColonToken);
             }
-            parameter.type = parseType();
+            parameter.type = parseJSDocType();
             return finishNode(parameter);
         }
 
-        function parseJSDocNodeWithType(kind: SyntaxKind.JSDocVariadicType | SyntaxKind.JSDocNonNullableType): TypeNode {
-            const result = createNode(kind) as JSDocVariadicType | JSDocNonNullableType;
-            nextToken();
-            result.type = parseNonArrayType();
-            return finishNode(result);
+        function parseJSDocType() {
+            const dotdotdot = parseOptionalToken(SyntaxKind.DotDotDotToken);
+            let type = parseType();
+            if (dotdotdot) {
+                const variadic = createNode(SyntaxKind.JSDocVariadicType, dotdotdot.pos) as JSDocVariadicType;
+                variadic.type = type;
+                type = finishNode(variadic);
+            }
+            if (token() === SyntaxKind.EqualsToken) {
+                return createJSDocPostfixType(SyntaxKind.JSDocOptionalType, type);
+            }
+            return type;
         }
 
         function parseTypeQuery(): TypeQueryNode {
@@ -2719,13 +2745,15 @@ namespace ts {
                     // If these are followed by a dot, then parse these out as a dotted type reference instead.
                     return tryParse(parseKeywordAndNoDot) || parseTypeReference();
                 case SyntaxKind.AsteriskToken:
-                    return parseJSDocAllType();
+                    return parseJSDocAllType(/*postfixEquals*/ false);
+                case SyntaxKind.AsteriskEqualsToken:
+                    return parseJSDocAllType(/*postfixEquals*/ true);
                 case SyntaxKind.QuestionToken:
                     return parseJSDocUnknownOrNullableType();
                 case SyntaxKind.FunctionKeyword:
                     return parseJSDocFunctionType();
                 case SyntaxKind.ExclamationToken:
-                    return parseJSDocNodeWithType(SyntaxKind.JSDocNonNullableType);
+                    return parseJSDocNonNullableType();
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
@@ -2810,13 +2838,6 @@ namespace ts {
             let type = parseNonArrayType();
             while (!scanner.hasPrecedingLineBreak()) {
                 switch (token()) {
-                    case SyntaxKind.EqualsToken:
-                        // only parse postfix = inside jsdoc, because it's ambiguous elsewhere
-                        if (!(contextFlags & NodeFlags.JSDoc)) {
-                            return type;
-                        }
-                        type = createJSDocPostfixType(SyntaxKind.JSDocOptionalType, type);
-                        break;
                     case SyntaxKind.ExclamationToken:
                         type = createJSDocPostfixType(SyntaxKind.JSDocNonNullableType, type);
                         break;
@@ -2882,12 +2903,6 @@ namespace ts {
                     return parseTypeOperator(operator);
                 case SyntaxKind.InferKeyword:
                     return parseInferType();
-                case SyntaxKind.DotDotDotToken: {
-                    const result = createNode(SyntaxKind.JSDocVariadicType) as JSDocVariadicType;
-                    nextToken();
-                    result.type = parsePostfixTypeOrHigher();
-                    return finishNode(result);
-                }
             }
             return parsePostfixTypeOrHigher();
         }
@@ -4119,32 +4134,9 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseJsxChild(): JsxChild {
-            switch (token()) {
-                case SyntaxKind.JsxText:
-                case SyntaxKind.JsxTextAllWhiteSpaces:
-                    return parseJsxText();
-                case SyntaxKind.OpenBraceToken:
-                    return parseJsxExpression(/*inExpressionContext*/ false)!;
-                case SyntaxKind.LessThanToken:
-                    return parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ false);
-            }
-            Debug.fail("Unknown JSX child kind " + token());
-        }
-
-        function parseJsxChildren(openingTag: JsxOpeningElement | JsxOpeningFragment): NodeArray<JsxChild> {
-            const list = [];
-            const listPos = getNodePos();
-            const saveParsingContext = parsingContext;
-            parsingContext |= 1 << ParsingContext.JsxChildren;
-
-            while (true) {
-                currentToken = scanner.reScanJsxToken();
-                if (token() === SyntaxKind.LessThanSlashToken) {
-                    // Closing tag
-                    break;
-                }
-                else if (token() === SyntaxKind.EndOfFileToken) {
+        function parseJsxChild(openingTag: JsxOpeningElement | JsxOpeningFragment, token: JsxTokenSyntaxKind): JsxChild | undefined {
+            switch (token) {
+                case SyntaxKind.EndOfFileToken:
                     // If we hit EOF, issue the error at the tag that lacks the closing element
                     // rather than at the end of the file (which is useless)
                     if (isJsxOpeningFragment(openingTag)) {
@@ -4154,19 +4146,35 @@ namespace ts {
                         const openingTagName = openingTag.tagName;
                         parseErrorAtPosition(openingTagName.pos, openingTagName.end - openingTagName.pos, Diagnostics.JSX_element_0_has_no_corresponding_closing_tag, getTextOfNodeFromSourceText(sourceText, openingTagName));
                     }
-                    break;
-                }
-                else if (token() === SyntaxKind.ConflictMarkerTrivia) {
-                    break;
-                }
-                const child = parseJsxChild();
-                if (child) {
-                    list.push(child);
-                }
+                    return undefined;
+                case SyntaxKind.LessThanSlashToken:
+                case SyntaxKind.ConflictMarkerTrivia:
+                    return undefined;
+                case SyntaxKind.JsxText:
+                case SyntaxKind.JsxTextAllWhiteSpaces:
+                    return parseJsxText();
+                case SyntaxKind.OpenBraceToken:
+                    return parseJsxExpression(/*inExpressionContext*/ false);
+                case SyntaxKind.LessThanToken:
+                    return parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ false);
+                default:
+                    return Debug.assertNever(token);
+            }
+        }
+
+        function parseJsxChildren(openingTag: JsxOpeningElement | JsxOpeningFragment): NodeArray<JsxChild> {
+            const list = [];
+            const listPos = getNodePos();
+            const saveParsingContext = parsingContext;
+            parsingContext |= 1 << ParsingContext.JsxChildren;
+
+            while (true) {
+                const child = parseJsxChild(openingTag, currentToken = scanner.reScanJsxToken());
+                if (!child) break;
+                list.push(child);
             }
 
             parsingContext = saveParsingContext;
-
             return createNodeArray(list, listPos);
         }
 
@@ -6156,7 +6164,7 @@ namespace ts {
                 const result = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression, scanner.getTokenPos());
 
                 const hasBrace = (mayOmitBraces ? parseOptional : parseExpected)(SyntaxKind.OpenBraceToken);
-                result.type = doInsideOfContext(NodeFlags.JSDoc, parseType);
+                result.type = doInsideOfContext(NodeFlags.JSDoc, parseJSDocType);
                 if (!mayOmitBraces || hasBrace) {
                     parseExpected(SyntaxKind.CloseBraceToken);
                 }
@@ -6226,7 +6234,7 @@ namespace ts {
                 let result: JSDoc;
 
                 // Check for /** (JSDoc opening part)
-                if (!isJsDocStart(content, start)) {
+                if (!isJSDocLikeText(content, start)) {
                     return result;
                 }
 
@@ -6336,13 +6344,6 @@ namespace ts {
                     while (comments.length && (comments[comments.length - 1] === "\n" || comments[comments.length - 1] === "\r")) {
                         comments.pop();
                     }
-                }
-
-                function isJsDocStart(content: string, start: number) {
-                    return content.charCodeAt(start) === CharacterCodes.slash &&
-                        content.charCodeAt(start + 1) === CharacterCodes.asterisk &&
-                        content.charCodeAt(start + 2) === CharacterCodes.asterisk &&
-                        content.charCodeAt(start + 3) !== CharacterCodes.asterisk;
                 }
 
                 function createJSDocComment(): JSDoc {
@@ -6502,6 +6503,10 @@ namespace ts {
                 }
 
                 function parseBracketNameInPropertyAndParamTag(): { name: EntityName, isBracketed: boolean } {
+                    if (token() === SyntaxKind.NoSubstitutionTemplateLiteral) {
+                        // a markdown-quoted name: `arg` is not legal jsdoc, but occurs in the wild
+                        return { name: createIdentifier(/*isIdentifier*/ true), isBracketed: false };
+                    }
                     // Looking for something like '[foo]', 'foo', '[foo.bar]' or 'foo.bar'
                     const isBracketed = parseOptional(SyntaxKind.OpenBracketToken);
                     const name = parseJSDocEntityName();

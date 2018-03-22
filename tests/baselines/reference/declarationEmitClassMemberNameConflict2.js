@@ -46,10 +46,10 @@ var Foo = /** @class */ (function () {
 //// [declarationEmitClassMemberNameConflict2.d.ts]
 declare const Bar = "bar";
 declare enum Hello {
-    World = 0,
+    World = 0
 }
 declare enum Hello1 {
-    World1 = 0,
+    World1 = 0
 }
 declare class Foo {
     Bar: string;
