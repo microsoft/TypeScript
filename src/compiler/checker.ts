@@ -15392,7 +15392,7 @@ namespace ts {
             if (hasSpreadAnyType) {
                 return anyType;
             }
-            return typeToIntersect && spread !== emptyObjectType ? getIntersectionType([typeToIntersect, spread]) : (typeToIntersect || spread);
+            return typeToIntersect && spread !== emptyObjectType ? getIntersectionType([typeToIntersect, spread]) : (typeToIntersect || (spread === emptyObjectType ? createJsxAttributesType() : spread));
 
             /**
              * Create anonymous type from given attributes symbol table.
