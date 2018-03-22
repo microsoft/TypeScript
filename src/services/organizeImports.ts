@@ -98,7 +98,7 @@ namespace ts.OrganizeImports {
                 }
                 else {
                     // List of named imports
-                    const newElements = namedBindings.elements.filter(e => isDeclarationUsed(e.propertyName || e.name));
+                    const newElements = namedBindings.elements.filter(e => isDeclarationUsed(e.name));
                     if (newElements.length < namedBindings.elements.length) {
                         namedBindings = newElements.length
                             ? updateNamedImports(namedBindings, newElements)
