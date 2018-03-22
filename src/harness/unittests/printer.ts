@@ -64,7 +64,7 @@ namespace ts {
             printsCorrectly("regularExpressionLiteral", {}, printer => printer.printFile(createSourceFile("source.ts", "let regex = /abc/;", ScriptTarget.ES2017)));
 
             printsCorrectly("classHeritageClauses", {}, printer => printer.printFile(createSourceFile(
-                "source.ts", 
+                "source.ts",
                 `class A extends B implements C implements D {}`,
                 ScriptTarget.ES2017
             )));
