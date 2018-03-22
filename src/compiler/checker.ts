@@ -3185,7 +3185,9 @@ namespace ts {
                     }
                     else if (context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral &&
                         type.symbol.valueDeclaration &&
-                        type.symbol.valueDeclaration.kind === SyntaxKind.ClassExpression) {
+                        isClassLike(type.symbol.valueDeclaration) &&
+                        !isValueSymbolAccessible(type.symbol, context.enclosingDeclaration)
+                    ) {
                         return createAnonymousTypeNode(type);
                     }
                     else {
