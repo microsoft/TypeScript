@@ -1392,6 +1392,26 @@ namespace ts.projectSystem {
             });
         });
 
+        it("disable inferred project", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "let x =1;"
+            };
+
+            const host = createServerHost([file1]);
+            const projectService = createProjectService(host);
+
+            projectService.setCompilerOptionsForInferredProjects({ }, undefined, true /*disableLanguageService*/);
+
+            projectService.openClientFile(file1.path, file1.content);
+
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            const proj = projectService.inferredProjects[0];
+            assert.isDefined(proj);
+
+            assert.isFalse(proj.isLanguageServiceEnabled());
+        });
+
         it("reload regular file after closing", () => {
             const f1 = {
                 path: "/a/b/app.ts",
