@@ -2203,9 +2203,14 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseJSDocAllType(): JSDocAllType {
+        function parseJSDocAllType(postFixEquals: boolean): JSDocAllType | JSDocOptionalType {
             const result = createNode(SyntaxKind.JSDocAllType) as JSDocAllType;
-            nextToken();
+            if (postFixEquals) {
+                return createJSDocPostfixType(SyntaxKind.JSDocOptionalType, result) as JSDocOptionalType;
+            }
+            else {
+                nextToken();
+            }
             return finishNode(result);
         }
 
@@ -2740,7 +2745,9 @@ namespace ts {
                     // If these are followed by a dot, then parse these out as a dotted type reference instead.
                     return tryParse(parseKeywordAndNoDot) || parseTypeReference();
                 case SyntaxKind.AsteriskToken:
-                    return parseJSDocAllType();
+                    return parseJSDocAllType(/*postfixEquals*/ false);
+                case SyntaxKind.AsteriskEqualsToken:
+                    return parseJSDocAllType(/*postfixEquals*/ true);
                 case SyntaxKind.QuestionToken:
                     return parseJSDocUnknownOrNullableType();
                 case SyntaxKind.FunctionKeyword:
@@ -6496,6 +6503,10 @@ namespace ts {
                 }
 
                 function parseBracketNameInPropertyAndParamTag(): { name: EntityName, isBracketed: boolean } {
+                    if (token() === SyntaxKind.NoSubstitutionTemplateLiteral) {
+                        // a markdown-quoted name: `arg` is not legal jsdoc, but occurs in the wild
+                        return { name: createIdentifier(/*isIdentifier*/ true), isBracketed: false };
+                    }
                     // Looking for something like '[foo]', 'foo', '[foo.bar]' or 'foo.bar'
                     const isBracketed = parseOptional(SyntaxKind.OpenBracketToken);
                     const name = parseJSDocEntityName();
@@ -7232,7 +7243,7 @@ namespace ts {
             forEachChild(sourceFile, visit);
 
             if (lastNodeEntirelyBeforePosition) {
-                const lastChildOfLastEntireNodeBeforePosition = getLastChild(lastNodeEntirelyBeforePosition);
+                const lastChildOfLastEntireNodeBeforePosition = getLastDescendant(lastNodeEntirelyBeforePosition);
                 if (lastChildOfLastEntireNodeBeforePosition.pos > bestResult.pos) {
                     bestResult = lastChildOfLastEntireNodeBeforePosition;
                 }
@@ -7240,9 +7251,9 @@ namespace ts {
 
             return bestResult;
 
-            function getLastChild(node: Node): Node {
+            function getLastDescendant(node: Node): Node {
                 while (true) {
-                    const lastChild = getLastChildWorker(node);
+                    const lastChild = getLastChild(node);
                     if (lastChild) {
                         node = lastChild;
                     }
@@ -7250,16 +7261,6 @@ namespace ts {
                         return node;
                     }
                 }
-            }
-
-            function getLastChildWorker(node: Node): Node | undefined {
-                let last: Node;
-                forEachChild(node, child => {
-                    if (nodeIsPresent(child)) {
-                        last = child;
-                    }
-                });
-                return last;
             }
 
             function visit(child: Node) {

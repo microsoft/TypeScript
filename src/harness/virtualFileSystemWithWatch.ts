@@ -455,16 +455,24 @@ interface Array<T> {}`
             this.addFileOrFolderInFolder(baseFolder, newFolder);
 
             // Invoke watches for files in the folder as deleted (from old path)
-            for (const entry of folder.entries) {
-                Debug.assert(isFile(entry));
+            this.renameFolderEntries(folder, newFolder);
+        }
+
+        private renameFolderEntries(oldFolder: Folder, newFolder: Folder) {
+            for (const entry of oldFolder.entries) {
                 this.fs.delete(entry.path);
                 this.invokeFileWatcher(entry.fullPath, FileWatcherEventKind.Deleted);
 
-                entry.fullPath = combinePaths(newFullPath, getBaseFileName(entry.fullPath));
+                entry.fullPath = combinePaths(newFolder.fullPath, getBaseFileName(entry.fullPath));
                 entry.path = this.toPath(entry.fullPath);
-                newFolder.entries.push(entry);
+                if (newFolder !== oldFolder) {
+                    newFolder.entries.push(entry);
+                }
                 this.fs.set(entry.path, entry);
                 this.invokeFileWatcher(entry.fullPath, FileWatcherEventKind.Created);
+                if (isFolder(entry)) {
+                    this.renameFolderEntries(entry, entry);
+                }
             }
         }
 

@@ -134,11 +134,7 @@ namespace ts.textChanges {
         readonly options?: ChangeNodeOptions;
     }
 
-    export function getSeparatorCharacter(separator: Token<SyntaxKind.CommaToken | SyntaxKind.SemicolonToken>) {
-        return tokenToString(separator.kind);
-    }
-
-    export function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: ConfigurableStart, position: Position) {
+    function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: ConfigurableStart, position: Position) {
         if (options.useNonAdjustedStartPosition) {
             return node.getStart(sourceFile);
         }
@@ -168,7 +164,7 @@ namespace ts.textChanges {
         return getStartPositionOfLine(getLineOfLocalPosition(sourceFile, adjustedStartPosition), sourceFile);
     }
 
-    export function getAdjustedEndPosition(sourceFile: SourceFile, node: Node, options: ConfigurableEnd) {
+    function getAdjustedEndPosition(sourceFile: SourceFile, node: Node, options: ConfigurableEnd) {
         if (options.useNonAdjustedEndPosition || isExpression(node)) {
             return node.getEnd();
         }
@@ -225,6 +221,7 @@ namespace ts.textChanges {
             return this;
         }
 
+        /** Warning: This deletes comments too. See `copyComments` in `convertFunctionToEs6Class`. */
         public deleteNode(sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd = {}) {
             const startPosition = getAdjustedStartPosition(sourceFile, node, options, Position.FullStart);
             const endPosition = getAdjustedEndPosition(sourceFile, node, options);
@@ -638,7 +635,7 @@ namespace ts.textChanges {
                 // order changes by start position
                 const normalized = stableSort(changesInFile, (a, b) => a.range.pos - b.range.pos);
                 // verify that change intervals do not overlap, except possibly at end points.
-                for (let i = 0; i < normalized.length - 2; i++) {
+                for (let i = 0; i < normalized.length - 1; i++) {
                     Debug.assert(normalized[i].range.end <= normalized[i + 1].range.pos, "Changes overlap", () =>
                         `${JSON.stringify(normalized[i].range)} and ${JSON.stringify(normalized[i + 1].range)}`);
                 }
