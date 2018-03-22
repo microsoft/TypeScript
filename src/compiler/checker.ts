@@ -19298,7 +19298,7 @@ namespace ts {
                 error(operatorToken, Diagnostics.Experimental_support_for_the_pipeline_operator_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalPipelineOperator_option_to_remove_this_warning);
             }
 
-            return getReturnTypeOfSignature(getResolvedSignature(node))
+            return getReturnTypeOfSignature(getResolvedSignature(node));
         }
 
         function checkBinaryExpression(node: BinaryExpression, checkMode?: CheckMode) {
