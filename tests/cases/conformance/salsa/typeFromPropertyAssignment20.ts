@@ -14,7 +14,4 @@
                 this._trampolineEnabled = false;
             }
         };
-        var a = new Async()
-        a._trampolineEnabled = true;
-        a.disableTrampolineIfNecessary(false);
     })

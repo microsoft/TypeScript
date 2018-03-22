@@ -31,19 +31,5 @@
 >_trampolineEnabled : Symbol(Async._trampolineEnabled, Decl(bluebird.js, 2, 26), Decl(bluebird.js, 7, 20))
             }
         };
-        var a = new Async()
->a : Symbol(a, Decl(bluebird.js, 11, 11))
->Async : Symbol(Async, Decl(bluebird.js, 1, 23))
-
-        a._trampolineEnabled = true;
->a._trampolineEnabled : Symbol(Async._trampolineEnabled, Decl(bluebird.js, 2, 26), Decl(bluebird.js, 7, 20))
->a : Symbol(a, Decl(bluebird.js, 11, 11))
->_trampolineEnabled : Symbol(Async._trampolineEnabled, Decl(bluebird.js, 2, 26), Decl(bluebird.js, 7, 20))
-
-        a.disableTrampolineIfNecessary(false);
->a.disableTrampolineIfNecessary : Symbol(Async.disableTrampolineIfNecessary, Decl(bluebird.js, 4, 9))
->a : Symbol(a, Decl(bluebird.js, 11, 11))
->disableTrampolineIfNecessary : Symbol(Async.disableTrampolineIfNecessary, Decl(bluebird.js, 4, 9))
-
     })
 

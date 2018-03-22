@@ -1,14 +1,14 @@
 === tests/cases/conformance/salsa/bluebird.js ===
 !function outer (f) { return f }(
->!function outer (f) { return f }(    function inner () {        function Async() {            this._trampolineEnabled = true;        }        Async.prototype.disableTrampolineIfNecessary = function dtin(b) {            if (b) {                this._trampolineEnabled = false;            }        };        var a = new Async()        a._trampolineEnabled = true;        a.disableTrampolineIfNecessary(false);    }) : boolean
->function outer (f) { return f }(    function inner () {        function Async() {            this._trampolineEnabled = true;        }        Async.prototype.disableTrampolineIfNecessary = function dtin(b) {            if (b) {                this._trampolineEnabled = false;            }        };        var a = new Async()        a._trampolineEnabled = true;        a.disableTrampolineIfNecessary(false);    }) : () => void
+>!function outer (f) { return f }(    function inner () {        function Async() {            this._trampolineEnabled = true;        }        Async.prototype.disableTrampolineIfNecessary = function dtin(b) {            if (b) {                this._trampolineEnabled = false;            }        };    }) : boolean
+>function outer (f) { return f }(    function inner () {        function Async() {            this._trampolineEnabled = true;        }        Async.prototype.disableTrampolineIfNecessary = function dtin(b) {            if (b) {                this._trampolineEnabled = false;            }        };    }) : () => void
 >function outer (f) { return f } : (f: () => void) => () => void
 >outer : (f: () => void) => () => void
 >f : () => void
 >f : () => void
 
     function inner () {
->function inner () {        function Async() {            this._trampolineEnabled = true;        }        Async.prototype.disableTrampolineIfNecessary = function dtin(b) {            if (b) {                this._trampolineEnabled = false;            }        };        var a = new Async()        a._trampolineEnabled = true;        a.disableTrampolineIfNecessary(false);    } : () => void
+>function inner () {        function Async() {            this._trampolineEnabled = true;        }        Async.prototype.disableTrampolineIfNecessary = function dtin(b) {            if (b) {                this._trampolineEnabled = false;            }        };    } : () => void
 >inner : () => void
 
         function Async() {
@@ -44,24 +44,5 @@
 >false : false
             }
         };
-        var a = new Async()
->a : { _trampolineEnabled: boolean; disableTrampolineIfNecessary: (b: any) => void; }
->new Async() : { _trampolineEnabled: boolean; disableTrampolineIfNecessary: (b: any) => void; }
->Async : () => void
-
-        a._trampolineEnabled = true;
->a._trampolineEnabled = true : true
->a._trampolineEnabled : boolean
->a : { _trampolineEnabled: boolean; disableTrampolineIfNecessary: (b: any) => void; }
->_trampolineEnabled : boolean
->true : true
-
-        a.disableTrampolineIfNecessary(false);
->a.disableTrampolineIfNecessary(false) : void
->a.disableTrampolineIfNecessary : (b: any) => void
->a : { _trampolineEnabled: boolean; disableTrampolineIfNecessary: (b: any) => void; }
->disableTrampolineIfNecessary : (b: any) => void
->false : false
-
     })
 

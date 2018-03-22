@@ -479,7 +479,7 @@ namespace ts {
             // and block-container.  Then after we pop out of processing the children, we restore
             // these saved values.
             const saveContainer = container;
-            const saveContainerContainer = thisParentContainer;
+            const saveThisContainer = thisParentContainer;
             const savedBlockScopeContainer = blockScopeContainer;
 
             // Depending on what kind of node this is, we may have to adjust the current container
@@ -572,7 +572,7 @@ namespace ts {
             }
 
             container = saveContainer;
-            thisParentContainer = saveContainerContainer;
+            thisParentContainer = saveThisContainer;
             blockScopeContainer = savedBlockScopeContainer;
         }
 
