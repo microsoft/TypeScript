@@ -221,6 +221,7 @@ namespace ts.textChanges {
             return this;
         }
 
+        /** Warning: This deletes comments too. See `copyComments` in `convertFunctionToEs6Class`. */
         public deleteNode(sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd = {}) {
             const startPosition = getAdjustedStartPosition(sourceFile, node, options, Position.FullStart);
             const endPosition = getAdjustedEndPosition(sourceFile, node, options);
