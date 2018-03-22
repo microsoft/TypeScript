@@ -2113,6 +2113,28 @@ declare module "fs" {
                 };
             }
         });
+
+        it("works when renaming node_modules folder that already contains @types folder", () => {
+            const currentDirectory = "/user/username/projects/myproject";
+            const file: FileOrFolder = {
+                path: `${currentDirectory}/a.ts`,
+                content: `import * as q from "qqq";`
+            };
+            const module: FileOrFolder = {
+                path: `${currentDirectory}/node_modules2/@types/qqq/index.d.ts`,
+                content: "export {}"
+            };
+            const files = [file, module, libFile];
+            const host = createWatchedSystem(files, { currentDirectory });
+            const watch = createWatchOfFilesAndCompilerOptions([file.path], host);
+            checkProgramActualFiles(watch(), [file.path, libFile.path]);
+            checkOutputErrorsInitial(host, [getDiagnosticModuleNotFoundOfFile(watch(), file, "qqq")]);
+
+            host.renameFolder(`${currentDirectory}/node_modules2`, `${currentDirectory}/node_modules`);
+            host.runQueuedTimeoutCallbacks();
+            checkProgramActualFiles(watch(), [file.path, libFile.path, `${currentDirectory}/node_modules/@types/qqq/index.d.ts`]);
+            checkOutputErrorsIncremental(host, emptyArray);
+        });
     });
 
     describe("tsc-watch with when module emit is specified as node", () => {
