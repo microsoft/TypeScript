@@ -2190,6 +2190,7 @@ declare namespace ts {
         indexType: Type;
         constraint?: Type;
     }
+    type TypeVariable = TypeParameter | IndexedAccessType;
     interface IndexType extends InstantiableType {
         type: InstantiableType | UnionOrIntersectionType;
     }
@@ -2214,7 +2215,7 @@ declare namespace ts {
         resolvedFalseType?: Type;
     }
     interface SubstitutionType extends InstantiableType {
-        typeParameter: TypeParameter;
+        typeVariable: TypeVariable;
         substitute: Type;
     }
     enum SignatureKind {
@@ -2240,9 +2241,10 @@ declare namespace ts {
         HomomorphicMappedType = 2,
         MappedTypeConstraint = 4,
         ReturnType = 8,
-        NoConstraints = 16,
-        AlwaysStrict = 32,
-        PriorityImpliesUnion = 12,
+        LiteralKeyof = 16,
+        NoConstraints = 32,
+        AlwaysStrict = 64,
+        PriorityImpliesCombination = 28,
     }
     interface JsFileExtensionInfo {
         extension: string;
