@@ -671,6 +671,7 @@ namespace ts {
     export type EqualsGreaterThanToken = Token<SyntaxKind.EqualsGreaterThanToken>;
     export type EndOfFileToken = Token<SyntaxKind.EndOfFileToken> & JSDocContainer;
     export type AtToken = Token<SyntaxKind.AtToken>;
+    export type PipelineToken = Token<SyntaxKind.PipelineToken>;
     export type ReadonlyToken = Token<SyntaxKind.ReadonlyKeyword>;
     export type AwaitKeywordToken = Token<SyntaxKind.AwaitKeyword>;
     export type PlusToken = Token<SyntaxKind.PlusToken>;
@@ -1455,6 +1456,10 @@ namespace ts {
         right: Expression;
     }
 
+    export interface PipelineExpression extends BinaryExpression {
+        operatorToken: PipelineToken;
+    }
+
     export type AssignmentOperatorToken = Token<AssignmentOperator>;
 
     export interface AssignmentExpression<TOperator extends AssignmentOperatorToken> extends BinaryExpression {
@@ -1721,7 +1726,7 @@ namespace ts {
         template: TemplateLiteral;
     }
 
-    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement;
+    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | PipelineExpression | JsxOpeningLikeElement;
 
     export interface AsExpression extends Expression {
         kind: SyntaxKind.AsExpression;
