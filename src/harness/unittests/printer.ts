@@ -51,7 +51,7 @@ namespace ts {
 
                     // comment10
                     function functionWithDefaultArgValue(argument: string = "defaultValue"): void { }
-                `, ScriptTarget.ES2015)
+                `, ScriptTarget.ES2015);
             });
             printsCorrectly("default", {}, printer => printer.printFile(sourceFile));
             printsCorrectly("removeComments", { removeComments: true }, printer => printer.printFile(sourceFile));
