@@ -114,13 +114,15 @@ namespace ts.textChanges {
         readonly range: TextRange;
     }
 
-    export interface ChangeNodeOptions extends ConfigurableStartEnd, InsertNodeOptions {
+    interface FormatNodeOptions extends InsertNodeOptions {
         readonly useIndentationFromFile?: boolean;
     }
+
+    export interface ChangeNodeOptions extends ConfigurableStartEnd, FormatNodeOptions {}
     interface ReplaceWithSingleNode extends BaseChange {
         readonly kind: ChangeKind.ReplaceWithSingleNode;
         readonly node: Node;
-        readonly options?: ChangeNodeOptions;
+        readonly options?: InsertNodeOptions;
     }
 
     interface RemoveNode extends BaseChange {
@@ -132,12 +134,16 @@ namespace ts.textChanges {
     interface ReplaceWithMultipleNodes extends BaseChange {
         readonly kind: ChangeKind.ReplaceWithMultipleNodes;
         readonly nodes: ReadonlyArray<Node>;
-        readonly options?: ChangeNodeOptions;
+        readonly options?: FormatNodeOptions;
     }
 
     interface ChangeText extends BaseChange {
         readonly kind: ChangeKind.Text;
         readonly text: string;
+    }
+
+    function getAdjustedRange(sourceFile: SourceFile, startNode: Node, endNode: Node, options: ConfigurableStartEnd): TextRange {
+        return { pos: getAdjustedStartPosition(sourceFile, startNode, options, Position.Start), end: getAdjustedEndPosition(sourceFile, endNode, options) };
     }
 
     function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: ConfigurableStart, position: Position) {
@@ -288,36 +294,30 @@ namespace ts.textChanges {
             return this;
         }
 
-        // TODO (https://github.com/Microsoft/TypeScript/issues/21246): default should probably be useNonAdjustedPositions
-        public replaceRange(sourceFile: SourceFile, range: TextRange, newNode: Node, options: ChangeNodeOptions = {}) {
+        public replaceRange(sourceFile: SourceFile, range: TextRange, newNode: Node, options: InsertNodeOptions = {}) {
             this.changes.push({ kind: ChangeKind.ReplaceWithSingleNode, sourceFile, range, options, node: newNode });
             return this;
         }
 
-        public replaceNode(sourceFile: SourceFile, oldNode: Node, newNode: Node, options: InsertNodeOptions = {}) {
-            return this.replaceRange(sourceFile, { pos: oldNode.getStart(sourceFile), end: oldNode.end }, newNode, options);
+        public replaceNode(sourceFile: SourceFile, oldNode: Node, newNode: Node, options: ChangeNodeOptions = useNonAdjustedPositions) {
+            return this.replaceRange(sourceFile, getAdjustedRange(sourceFile, oldNode, oldNode, options), newNode, options);
         }
 
-        // TODO (https://github.com/Microsoft/TypeScript/issues/21246): default should probably be useNonAdjustedPositions
-        public replaceNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, newNode: Node, options: InsertNodeOptions = {}) {
-            this.replaceRange(sourceFile, { pos: startNode.getStart(sourceFile), end: endNode.end }, newNode, options);
+        public replaceNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, newNode: Node, options: ChangeNodeOptions = useNonAdjustedPositions) {
+            this.replaceRange(sourceFile, getAdjustedRange(sourceFile, startNode, endNode, options), newNode, options);
         }
 
-        public replaceRangeWithNodes(sourceFile: SourceFile, range: TextRange, newNodes: ReadonlyArray<Node>, options: ChangeNodeOptions = useNonAdjustedPositions) {
+        private replaceRangeWithNodes(sourceFile: SourceFile, range: TextRange, newNodes: ReadonlyArray<Node>, options: InsertNodeOptions = {}) {
             this.changes.push({ kind: ChangeKind.ReplaceWithMultipleNodes, sourceFile, range, options, nodes: newNodes });
             return this;
         }
 
         public replaceNodeWithNodes(sourceFile: SourceFile, oldNode: Node, newNodes: ReadonlyArray<Node>, options: ChangeNodeOptions = useNonAdjustedPositions) {
-            const pos = getAdjustedStartPosition(sourceFile, oldNode, options, Position.Start);
-            const end = getAdjustedEndPosition(sourceFile, oldNode, options);
-            return this.replaceRangeWithNodes(sourceFile, { pos, end }, newNodes, options);
+            return this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, oldNode, oldNode, options), newNodes, options);
         }
 
         public replaceNodeRangeWithNodes(sourceFile: SourceFile, startNode: Node, endNode: Node, newNodes: ReadonlyArray<Node>, options: ChangeNodeOptions = useNonAdjustedPositions) {
-            const pos = getAdjustedStartPosition(sourceFile, startNode, options, Position.Start);
-            const end = getAdjustedEndPosition(sourceFile, endNode, options);
-            return this.replaceRangeWithNodes(sourceFile, { pos, end }, newNodes, options);
+            return this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, startNode, endNode, options), newNodes, options);
         }
 
         private insertNodeAt(sourceFile: SourceFile, pos: number, newNode: Node, options: InsertNodeOptions = {}) {
@@ -682,7 +682,7 @@ namespace ts.textChanges {
         }
 
         /** Note: this may mutate `nodeIn`. */
-        function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, options: ChangeNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText): string {
+        function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, options: FormatNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText): string {
             const { node, text } = getNonformattedText(nodeIn, sourceFile, newLineCharacter);
             if (validate) validate(node, text);
             const { options: formatOptions } = formatContext;
