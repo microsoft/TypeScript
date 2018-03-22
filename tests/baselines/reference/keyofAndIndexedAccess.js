@@ -976,7 +976,7 @@ declare type NumericallyIndexed<T> = {
 declare const enum E {
     A = 0,
     B = 1,
-    C = 2,
+    C = 2
 }
 declare type K00 = keyof any;
 declare type K01 = keyof string;
