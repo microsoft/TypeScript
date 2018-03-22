@@ -145,7 +145,7 @@ namespace ts.server {
 
                 session.onMessage(JSON.stringify(configureRequest));
 
-                assert.equal(session.getProjectService().getFormatCodeOptions().indentStyle, IndentStyle.Block);
+                assert.equal(session.getProjectService().getFormatCodeOptions("" as NormalizedPath).indentStyle, IndentStyle.Block);
 
                 const setOptionsRequest: protocol.SetCompilerOptionsForInferredProjectsRequest = {
                     command: CommandNames.CompilerOptionsForInferredProjects,

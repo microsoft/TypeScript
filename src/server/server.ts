@@ -2,29 +2,6 @@
 /// <reference path="session.ts" />
 
 namespace ts.server {
-    interface IoSessionOptions {
-        host: ServerHost;
-        cancellationToken: ServerCancellationToken;
-        canUseEvents: boolean;
-        /**
-         * If defined, specifies the socket used to send events to the client.
-         * Otherwise, events are sent through the host.
-         */
-        eventPort?: number;
-        useSingleInferredProject: boolean;
-        useInferredProjectPerProjectRoot: boolean;
-        disableAutomaticTypingAcquisition: boolean;
-        globalTypingsCacheLocation: string;
-        logger: Logger;
-        typingSafeListLocation: string;
-        typesMapLocation: string | undefined;
-        npmLocation: string | undefined;
-        telemetryEnabled: boolean;
-        globalPlugins: ReadonlyArray<string>;
-        pluginProbeLocations: ReadonlyArray<string>;
-        allowLocalPluginLoads: boolean;
-    }
-
     const childProcess: {
         fork(modulePath: string, args: string[], options?: { execArgv: string[], env?: MapLike<string> }): NodeChildProcess;
         execFileSync(file: string, args: string[], options: { stdio: "ignore", env: MapLike<string> }): string | Buffer;
@@ -505,9 +482,7 @@ namespace ts.server {
         private socketEventQueue: { body: any, eventName: string }[] | undefined;
         private constructed: boolean | undefined;
 
-        constructor(options: IoSessionOptions) {
-            const { host, eventPort, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, canUseEvents } = options;
-
+        constructor() {
             const event: Event | undefined = (body: object, eventName: string) => {
                 if (this.constructed) {
                     this.event(body, eventName);
@@ -521,9 +496,11 @@ namespace ts.server {
                 }
             };
 
+            const host = sys;
+
             const typingsInstaller = disableAutomaticTypingAcquisition
                 ? undefined
-                : new NodeTypingsInstaller(telemetryEnabled, logger, host, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, event);
+                : new NodeTypingsInstaller(telemetryEnabled, logger, host, getGlobalTypingsCacheLocation(), typingSafeListLocation, typesMapLocation, npmLocation, event);
 
             super({
                 host,
@@ -534,10 +511,10 @@ namespace ts.server {
                 byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
                 logger,
-                canUseEvents,
-                globalPlugins: options.globalPlugins,
-                pluginProbeLocations: options.pluginProbeLocations,
-                allowLocalPluginLoads: options.allowLocalPluginLoads
+                canUseEvents: true,
+                globalPlugins,
+                pluginProbeLocations,
+                allowLocalPluginLoads,
             });
 
             this.eventPort = eventPort;
@@ -952,31 +929,12 @@ namespace ts.server {
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
 
-    const options: IoSessionOptions = {
-        host: sys,
-        cancellationToken,
-        eventPort,
-        canUseEvents: true,
-        useSingleInferredProject,
-        useInferredProjectPerProjectRoot,
-        disableAutomaticTypingAcquisition,
-        globalTypingsCacheLocation: getGlobalTypingsCacheLocation(),
-        typingSafeListLocation,
-        typesMapLocation,
-        npmLocation,
-        telemetryEnabled,
-        logger,
-        globalPlugins,
-        pluginProbeLocations,
-        allowLocalPluginLoads
-    };
-
     logger.info(`Starting TS Server`);
     logger.info(`Version: ${version}`);
     logger.info(`Arguments: ${process.argv.join(" ")}`);
     logger.info(`Platform: ${os.platform()} NodeVersion: ${nodeVersion} CaseSensitive: ${sys.useCaseSensitiveFileNames}`);
 
-    const ioSession = new IOSession(options);
+    const ioSession = new IOSession();
     process.on("uncaughtException", err => {
         ioSession.logError(err, "unknown");
     });
