@@ -4106,6 +4106,7 @@ namespace ts {
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
+        experimentalPipelineOperator?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         /*@internal*/help?: boolean;
         importHelpers?: boolean;

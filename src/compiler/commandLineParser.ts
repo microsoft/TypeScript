@@ -473,6 +473,12 @@ namespace ts {
             category: Diagnostics.Experimental_Options,
             description: Diagnostics.Enables_experimental_support_for_emitting_type_metadata_for_decorators
         },
+        {
+            name: "experimentalPipelineOperator",
+            type: "boolean",
+            category: Diagnostics.Experimental_Options,
+            description: Diagnostics.Enables_experimental_support_for_ESNext_pipeline_operator
+        },
 
         // Advanced
         {

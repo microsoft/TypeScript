@@ -282,6 +282,10 @@ var x = 0;`, {
             options: { compilerOptions: { experimentalDecorators: true }, fileName: "input.js", reportDiagnostics: true }
         });
 
+        transpilesCorrectly("Supports setting 'experimentalPipelineOperator'", "x;", {
+            options: { compilerOptions: { experimentalPipelineOperator: true }, fileName: "input.js", reportDiagnostics: true }
+        });
+
         transpilesCorrectly("Supports setting 'forceConsistentCasingInFileNames'", "x;", {
             options: { compilerOptions: { forceConsistentCasingInFileNames: true }, fileName: "input.js", reportDiagnostics: true }
         });

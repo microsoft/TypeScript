@@ -2649,6 +2649,7 @@ namespace ts.server.protocol {
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
+        experimentalPipelineOperator?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         importHelpers?: boolean;
         inlineSourceMap?: boolean;
