@@ -1,0 +1,463 @@
+=== tests/cases/compiler/pipelineOperatorPrecedence.ts ===
+var inc = (x: number) => x + 1;
+>inc : (x: number) => number
+>(x: number) => x + 1 : (x: number) => number
+>x : number
+>x + 1 : number
+>x : number
+>1 : 1
+
+var a: number;
+>a : number
+
+var b: number;
+>b : number
+
+var c = (x: number) => x + 10;
+>c : (x: number) => number
+>(x: number) => x + 10 : (x: number) => number
+>x : number
+>x + 10 : number
+>x : number
+>10 : 10
+
+var d = (x: number) => x + 20;
+>d : (x: number) => number
+>(x: number) => x + 20 : (x: number) => number
+>x : number
+>x + 20 : number
+>x : number
+>20 : 20
+
+var r1a1 = a || b |> inc;
+>r1a1 : number
+>a || b |> inc : number
+>a || b : number
+>a : number
+>b : number
+>inc : (x: number) => number
+
+var r1a2 = a && b |> inc;
+>r1a2 : number
+>a && b |> inc : number
+>a && b : number
+>a : number
+>b : number
+>inc : (x: number) => number
+
+var r1a3 = a | b |> inc;
+>r1a3 : number
+>a | b |> inc : number
+>a | b : number
+>a : number
+>b : number
+>inc : (x: number) => number
+
+var r1a4 = a ^ b |> inc;
+>r1a4 : number
+>a ^ b |> inc : number
+>a ^ b : number
+>a : number
+>b : number
+>inc : (x: number) => number
+
+var r1a5 = a & b |> inc;
+>r1a5 : number
+>a & b |> inc : number
+>a & b : number
+>a : number
+>b : number
+>inc : (x: number) => number
+
+var r1a6 = a == b |> inc;
+>r1a6 : any
+>a == b |> inc : any
+>a == b : boolean
+>a : number
+>b : number
+>inc : (x: number) => number
+
+var r1a7 = a != b |> inc;
+>r1a7 : any
+>a != b |> inc : any
+>a != b : boolean
+>a : number
+>b : number
+>inc : (x: number) => number
+
+var r1a8 = a === b |> inc;
+>r1a8 : any
+>a === b |> inc : any
+>a === b : boolean
+>a : number
+>b : number
+>inc : (x: number) => number
+
+var r1a9 = a !== b |> inc;
+>r1a9 : any
+>a !== b |> inc : any
+>a !== b : boolean
+>a : number
+>b : number
+>inc : (x: number) => number
+
+var r1a10 = a < b |> inc;
+>r1a10 : any
+>a < b |> inc : any
+>a < b : boolean
+>a : number
+>b : number
+>inc : (x: number) => number
+
+var r1a11 = a > b |> inc;
+>r1a11 : any
+>a > b |> inc : any
+>a > b : boolean
+>a : number
+>b : number
+>inc : (x: number) => number
+
+var r1a12 = a <= b |> inc;
+>r1a12 : any
+>a <= b |> inc : any
+>a <= b : boolean
+>a : number
+>b : number
+>inc : (x: number) => number
+
+var r1a13 = a >= b |> inc;
+>r1a13 : any
+>a >= b |> inc : any
+>a >= b : boolean
+>a : number
+>b : number
+>inc : (x: number) => number
+
+var r1a14 = a instanceof b |> inc;
+>r1a14 : any
+>a instanceof b |> inc : any
+>a instanceof b : boolean
+>a : number
+>b : number
+>inc : (x: number) => number
+
+var r1a15 = a in b |> inc;
+>r1a15 : any
+>a in b |> inc : any
+>a in b : boolean
+>a : number
+>b : number
+>inc : (x: number) => number
+
+var r1a16 = a << b |> inc;
+>r1a16 : number
+>a << b |> inc : number
+>a << b : number
+>a : number
+>b : number
+>inc : (x: number) => number
+
+var r1a17 = a >> b |> inc;
+>r1a17 : number
+>a >> b |> inc : number
+>a >> b : number
+>a : number
+>b : number
+>inc : (x: number) => number
+
+var r1a18 = a >>> b |> inc;
+>r1a18 : number
+>a >>> b |> inc : number
+>a >>> b : number
+>a : number
+>b : number
+>inc : (x: number) => number
+
+var r1a19 = a + b |> inc;
+>r1a19 : number
+>a + b |> inc : number
+>a + b : number
+>a : number
+>b : number
+>inc : (x: number) => number
+
+var r1a20 = a - b |> inc;
+>r1a20 : number
+>a - b |> inc : number
+>a - b : number
+>a : number
+>b : number
+>inc : (x: number) => number
+
+var r1a21 = a * b |> inc;
+>r1a21 : number
+>a * b |> inc : number
+>a * b : number
+>a : number
+>b : number
+>inc : (x: number) => number
+
+var r1a22 = a / b |> inc;
+>r1a22 : number
+>a / b |> inc : number
+>a / b : number
+>a : number
+>b : number
+>inc : (x: number) => number
+
+var r1a23 = a % b |> inc;
+>r1a23 : number
+>a % b |> inc : number
+>a % b : number
+>a : number
+>b : number
+>inc : (x: number) => number
+
+var r1a24 = a ** b |> inc;
+>r1a24 : number
+>a ** b |> inc : number
+>a ** b : number
+>a : number
+>b : number
+>inc : (x: number) => number
+
+var r2a1 = 10 |> c || d |> inc;
+>r2a1 : number
+>10 |> c || d |> inc : number
+>10 |> c || d : number
+>10 : 10
+>c || d : (x: number) => number
+>c : (x: number) => number
+>d : (x: number) => number
+>inc : (x: number) => number
+
+var r2a2 = 10 |> c && d |> inc;
+>r2a2 : number
+>10 |> c && d |> inc : number
+>10 |> c && d : number
+>10 : 10
+>c && d : (x: number) => number
+>c : (x: number) => number
+>d : (x: number) => number
+>inc : (x: number) => number
+
+var r2a3 = 10 |> c | d |> inc;
+>r2a3 : number
+>10 |> c | d |> inc : number
+>10 |> c | d : any
+>10 : 10
+>c | d : number
+>c : (x: number) => number
+>d : (x: number) => number
+>inc : (x: number) => number
+
+var r2a4 = 10 |> c ^ d |> inc;
+>r2a4 : number
+>10 |> c ^ d |> inc : number
+>10 |> c ^ d : any
+>10 : 10
+>c ^ d : number
+>c : (x: number) => number
+>d : (x: number) => number
+>inc : (x: number) => number
+
+var r2a5 = 10 |> c & d |> inc;
+>r2a5 : number
+>10 |> c & d |> inc : number
+>10 |> c & d : any
+>10 : 10
+>c & d : number
+>c : (x: number) => number
+>d : (x: number) => number
+>inc : (x: number) => number
+
+var r2a6 = 10 |> c == d |> inc;
+>r2a6 : number
+>10 |> c == d |> inc : number
+>10 |> c == d : any
+>10 : 10
+>c == d : boolean
+>c : (x: number) => number
+>d : (x: number) => number
+>inc : (x: number) => number
+
+var r2a7 = 10 |> c != d |> inc;
+>r2a7 : number
+>10 |> c != d |> inc : number
+>10 |> c != d : any
+>10 : 10
+>c != d : boolean
+>c : (x: number) => number
+>d : (x: number) => number
+>inc : (x: number) => number
+
+var r2a8 = 10 |> c === d |> inc;
+>r2a8 : number
+>10 |> c === d |> inc : number
+>10 |> c === d : any
+>10 : 10
+>c === d : boolean
+>c : (x: number) => number
+>d : (x: number) => number
+>inc : (x: number) => number
+
+var r2a9 = 10 |> c !== d |> inc;
+>r2a9 : number
+>10 |> c !== d |> inc : number
+>10 |> c !== d : any
+>10 : 10
+>c !== d : boolean
+>c : (x: number) => number
+>d : (x: number) => number
+>inc : (x: number) => number
+
+var r2a10 = 10 |> c < d |> inc;
+>r2a10 : number
+>10 |> c < d |> inc : number
+>10 |> c < d : any
+>10 : 10
+>c < d : boolean
+>c : (x: number) => number
+>d : (x: number) => number
+>inc : (x: number) => number
+
+var r2a11 = 10 |> c > d |> inc;
+>r2a11 : number
+>10 |> c > d |> inc : number
+>10 |> c > d : any
+>10 : 10
+>c > d : boolean
+>c : (x: number) => number
+>d : (x: number) => number
+>inc : (x: number) => number
+
+var r2a12 = 10 |> c <= d |> inc;
+>r2a12 : number
+>10 |> c <= d |> inc : number
+>10 |> c <= d : any
+>10 : 10
+>c <= d : boolean
+>c : (x: number) => number
+>d : (x: number) => number
+>inc : (x: number) => number
+
+var r2a13 = 10 |> c >= d |> inc;
+>r2a13 : number
+>10 |> c >= d |> inc : number
+>10 |> c >= d : any
+>10 : 10
+>c >= d : boolean
+>c : (x: number) => number
+>d : (x: number) => number
+>inc : (x: number) => number
+
+var r2a14 = 10 |> c instanceof d |> inc;
+>r2a14 : number
+>10 |> c instanceof d |> inc : number
+>10 |> c instanceof d : any
+>10 : 10
+>c instanceof d : boolean
+>c : (x: number) => number
+>d : (x: number) => number
+>inc : (x: number) => number
+
+var r2a15 = 10 |> c in d |> inc;
+>r2a15 : number
+>10 |> c in d |> inc : number
+>10 |> c in d : any
+>10 : 10
+>c in d : boolean
+>c : (x: number) => number
+>d : (x: number) => number
+>inc : (x: number) => number
+
+var r2a16 = 10 |> c << d |> inc;
+>r2a16 : number
+>10 |> c << d |> inc : number
+>10 |> c << d : any
+>10 : 10
+>c << d : number
+>c : (x: number) => number
+>d : (x: number) => number
+>inc : (x: number) => number
+
+var r2a17 = 10 |> c >> d |> inc;
+>r2a17 : number
+>10 |> c >> d |> inc : number
+>10 |> c >> d : any
+>10 : 10
+>c >> d : number
+>c : (x: number) => number
+>d : (x: number) => number
+>inc : (x: number) => number
+
+var r2a18 = 10 |> c >>> d |> inc;
+>r2a18 : number
+>10 |> c >>> d |> inc : number
+>10 |> c >>> d : any
+>10 : 10
+>c >>> d : number
+>c : (x: number) => number
+>d : (x: number) => number
+>inc : (x: number) => number
+
+var r2a19 = 10 |> c + d |> inc;
+>r2a19 : number
+>10 |> c + d |> inc : number
+>10 |> c + d : any
+>10 : 10
+>c + d : any
+>c : (x: number) => number
+>d : (x: number) => number
+>inc : (x: number) => number
+
+var r2a20 = 10 |> c - d |> inc;
+>r2a20 : number
+>10 |> c - d |> inc : number
+>10 |> c - d : any
+>10 : 10
+>c - d : number
+>c : (x: number) => number
+>d : (x: number) => number
+>inc : (x: number) => number
+
+var r2a21 = 10 |> c * d |> inc;
+>r2a21 : number
+>10 |> c * d |> inc : number
+>10 |> c * d : any
+>10 : 10
+>c * d : number
+>c : (x: number) => number
+>d : (x: number) => number
+>inc : (x: number) => number
+
+var r2a22 = 10 |> c / d |> inc;
+>r2a22 : number
+>10 |> c / d |> inc : number
+>10 |> c / d : any
+>10 : 10
+>c / d : number
+>c : (x: number) => number
+>d : (x: number) => number
+>inc : (x: number) => number
+
+var r2a23 = 10 |> c % d |> inc;
+>r2a23 : number
+>10 |> c % d |> inc : number
+>10 |> c % d : any
+>10 : 10
+>c % d : number
+>c : (x: number) => number
+>d : (x: number) => number
+>inc : (x: number) => number
+
+var r2a24 = 10 |> c ** d |> inc;
+>r2a24 : number
+>10 |> c ** d |> inc : number
+>10 |> c ** d : any
+>10 : 10
+>c ** d : number
+>c : (x: number) => number
+>d : (x: number) => number
+>inc : (x: number) => number
+

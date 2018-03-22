@@ -1,0 +1,57 @@
+// @experimentalPipelineOperator: true
+var inc = (x: number) => x + 1;
+
+var a: number;
+var b: number;
+var c = (x: number) => x + 10;
+var d = (x: number) => x + 20;
+
+var r1a1 = a || b |> inc;
+var r1a2 = a && b |> inc;
+var r1a3 = a | b |> inc;
+var r1a4 = a ^ b |> inc;
+var r1a5 = a & b |> inc;
+var r1a6 = a == b |> inc;
+var r1a7 = a != b |> inc;
+var r1a8 = a === b |> inc;
+var r1a9 = a !== b |> inc;
+var r1a10 = a < b |> inc;
+var r1a11 = a > b |> inc;
+var r1a12 = a <= b |> inc;
+var r1a13 = a >= b |> inc;
+var r1a14 = a instanceof b |> inc;
+var r1a15 = a in b |> inc;
+var r1a16 = a << b |> inc;
+var r1a17 = a >> b |> inc;
+var r1a18 = a >>> b |> inc;
+var r1a19 = a + b |> inc;
+var r1a20 = a - b |> inc;
+var r1a21 = a * b |> inc;
+var r1a22 = a / b |> inc;
+var r1a23 = a % b |> inc;
+var r1a24 = a ** b |> inc;
+
+var r2a1 = 10 |> c || d |> inc;
+var r2a2 = 10 |> c && d |> inc;
+var r2a3 = 10 |> c | d |> inc;
+var r2a4 = 10 |> c ^ d |> inc;
+var r2a5 = 10 |> c & d |> inc;
+var r2a6 = 10 |> c == d |> inc;
+var r2a7 = 10 |> c != d |> inc;
+var r2a8 = 10 |> c === d |> inc;
+var r2a9 = 10 |> c !== d |> inc;
+var r2a10 = 10 |> c < d |> inc;
+var r2a11 = 10 |> c > d |> inc;
+var r2a12 = 10 |> c <= d |> inc;
+var r2a13 = 10 |> c >= d |> inc;
+var r2a14 = 10 |> c instanceof d |> inc;
+var r2a15 = 10 |> c in d |> inc;
+var r2a16 = 10 |> c << d |> inc;
+var r2a17 = 10 |> c >> d |> inc;
+var r2a18 = 10 |> c >>> d |> inc;
+var r2a19 = 10 |> c + d |> inc;
+var r2a20 = 10 |> c - d |> inc;
+var r2a21 = 10 |> c * d |> inc;
+var r2a22 = 10 |> c / d |> inc;
+var r2a23 = 10 |> c % d |> inc;
+var r2a24 = 10 |> c ** d |> inc;
