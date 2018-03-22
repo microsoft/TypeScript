@@ -189,6 +189,7 @@ namespace ts {
         "|=": SyntaxKind.BarEqualsToken,
         "^=": SyntaxKind.CaretEqualsToken,
         "@": SyntaxKind.AtToken,
+        "|>": SyntaxKind.PipelineToken,
     });
 
     /*
@@ -1702,6 +1703,9 @@ namespace ts {
                         }
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.BarEqualsToken;
+                        }
+                        if (text.charCodeAt(pos + 1) === CharacterCodes.greaterThan) {
+                            return pos += 2, token = SyntaxKind.PipelineToken;
                         }
                         pos++;
                         return token = SyntaxKind.BarToken;

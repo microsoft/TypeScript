@@ -151,6 +151,7 @@ namespace ts {
         QuestionToken,
         ColonToken,
         AtToken,
+        PipelineToken,
         // Assignments
         EqualsToken,
         PlusEqualsToken,
@@ -1302,9 +1303,14 @@ namespace ts {
         expression?: Expression;
     }
 
+    export type PipelineOperator
+        = SyntaxKind.PipelineToken
+        ;
+
     // see: https://tc39.github.io/ecma262/#prod-ExponentiationExpression
     export type ExponentiationOperator
-        = SyntaxKind.AsteriskAsteriskToken
+        = PipelineOperator
+        | SyntaxKind.AsteriskAsteriskToken
         ;
 
     // see: https://tc39.github.io/ecma262/#prod-MultiplicativeOperator
