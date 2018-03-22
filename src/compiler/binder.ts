@@ -101,7 +101,6 @@ namespace ts {
         HasLocals = 1 << 5,
         IsInterface = 1 << 6,
         IsObjectLiteralOrClassExpressionMethod = 1 << 7,
-        IsInferenceContainer = 1 << 8,
     }
 
     const binder = createBinder();
@@ -120,7 +119,6 @@ namespace ts {
         let parent: Node;
         let container: Node;
         let blockScopeContainer: Node;
-        let inferenceContainer: Node;
         let lastContainer: Node;
         let seenThisKeyword: boolean;
 
@@ -188,7 +186,6 @@ namespace ts {
             parent = undefined;
             container = undefined;
             blockScopeContainer = undefined;
-            inferenceContainer = undefined;
             lastContainer = undefined;
             seenThisKeyword = false;
             currentFlow = undefined;
@@ -569,13 +566,6 @@ namespace ts {
                 seenThisKeyword = false;
                 bindChildren(node);
                 node.flags = seenThisKeyword ? node.flags | NodeFlags.ContainsThis : node.flags & ~NodeFlags.ContainsThis;
-            }
-            else if (containerFlags & ContainerFlags.IsInferenceContainer) {
-                const saveInferenceContainer = inferenceContainer;
-                inferenceContainer = node;
-                node.locals = undefined;
-                bindChildren(node);
-                inferenceContainer = saveInferenceContainer;
             }
             else {
                 bindChildren(node);
@@ -1432,9 +1422,6 @@ namespace ts {
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.MappedType:
                     return ContainerFlags.IsContainer | ContainerFlags.HasLocals;
-
-                case SyntaxKind.ConditionalType:
-                    return ContainerFlags.IsInferenceContainer;
 
                 case SyntaxKind.SourceFile:
                     return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals;
@@ -2626,13 +2613,25 @@ namespace ts {
                 : declareSymbolAndAddToSymbolTable(node, symbolFlags, symbolExcludes);
         }
 
+        function getInferTypeContainer(node: Node): ConditionalTypeNode {
+            while (node) {
+                const parent = node.parent;
+                if (parent && parent.kind === SyntaxKind.ConditionalType && (<ConditionalTypeNode>parent).extendsType === node) {
+                    return <ConditionalTypeNode>parent;
+                }
+                node = parent;
+            }
+            return undefined;
+        }
+
         function bindTypeParameter(node: TypeParameterDeclaration) {
             if (node.parent.kind === SyntaxKind.InferType) {
-                if (inferenceContainer) {
-                    if (!inferenceContainer.locals) {
-                        inferenceContainer.locals = createSymbolTable();
+                const container = getInferTypeContainer(node.parent);
+                if (container) {
+                    if (!container.locals) {
+                        container.locals = createSymbolTable();
                     }
-                    declareSymbol(inferenceContainer.locals, /*parent*/ undefined, node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
+                    declareSymbol(container.locals, /*parent*/ undefined, node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
                 }
                 else {
                     bindAnonymousDeclaration(node, SymbolFlags.TypeParameter, getDeclarationName(node));
