@@ -2346,8 +2346,16 @@ namespace ts {
                     if (constructorSymbol) {
                         // Declare a 'member' if the container is an ES5 class or ES6 constructor
                         constructorSymbol.members = constructorSymbol.members || createSymbolTable();
-                        // It's acceptable for multiple 'this' assignments of the same identifier to occur
-                        declareSymbol(constructorSymbol.members, constructorSymbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
+                        const existing = constructorSymbol.members.get(getDeclarationName(node));
+                        const existingThisContainer = existing && getThisContainer(existing.valueDeclaration, /*includeArrowFunctions*/ false);
+                        // TODO: Maybe extract this to a utility
+                        const definedInConstructor = existingThisContainer && (existingThisContainer.kind === SyntaxKind.Constructor ||
+                                                      existingThisContainer.kind === SyntaxKind.FunctionDeclaration ||
+                                                      (existingThisContainer.kind === SyntaxKind.FunctionExpression && !isPrototypePropertyAssignment(existingThisContainer.parent)));
+                        if (!definedInConstructor) {
+                            // It's acceptable for multiple 'this' assignments of the same identifier to occur
+                            declareSymbol(constructorSymbol.members, constructorSymbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
+                        }
                     }
                     break;
 
