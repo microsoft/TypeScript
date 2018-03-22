@@ -12,7 +12,7 @@ type TestObj = {
 
 // Should be never but without an error
 type Result1 = TestObj[never];
->Result1 : any
+>Result1 : never
 >TestObj : TestObj
 
 type EmptyObj = {};
@@ -20,7 +20,7 @@ type EmptyObj = {};
 
 // Should be never but without an error
 type Result2 = EmptyObj[keyof EmptyObj];
->Result2 : any
+>Result2 : never
 >EmptyObj : EmptyObj
 >EmptyObj : EmptyObj
 
@@ -33,8 +33,8 @@ declare function genericFn1<T>(obj: T): T[never];
 
 // Should be never
 const result3 = genericFn1({ c: "ctest", d: "dtest" });
->result3 : any
->genericFn1({ c: "ctest", d: "dtest" }) : any
+>result3 : never
+>genericFn1({ c: "ctest", d: "dtest" }) : never
 >genericFn1 : <T>(obj: T) => T[never]
 >{ c: "ctest", d: "dtest" } : { c: string; d: string; }
 >c : string
@@ -56,8 +56,8 @@ declare function genericFn2<T extends { [ind: string]: string }>(
 
 // Should be never
 const result4 = genericFn2({ e: "etest", f: "ftest" });
->result4 : any
->genericFn2({ e: "etest", f: "ftest" }) : any
+>result4 : never
+>genericFn2({ e: "etest", f: "ftest" }) : never
 >genericFn2 : <T extends { [ind: string]: string; }>(obj: T) => T[never]
 >{ e: "etest", f: "ftest" } : { e: string; f: string; }
 >e : string
@@ -219,7 +219,7 @@ type P1Names = RequiredPropNames<P1>; // expect never
 >P1 : P1
 
 type P0Names = RequiredPropNames<P0>; // expect never
->P0Names : any
+>P0Names : never
 >RequiredPropNames : { [P in keyof T]-?: undefined extends T[P] ? never : P; }[keyof T]
 >P0 : P0
 
@@ -239,9 +239,9 @@ declare const p1NameTest: ExpectType<never, P1Names>;
 >P1Names : never
 
 declare const p0NameTest: ExpectType<never, P0Names>;
->p0NameTest : "Did not match"
+>p0NameTest : "Match"
 >ExpectType : ExpectType<Exp, Act>
->P0Names : any
+>P0Names : never
 
 type P3Props = RequiredProps<P3>; // expect { a: string; b: number }
 >P3Props : RequiredProps<P3>
@@ -320,7 +320,7 @@ type O1Names = OptionalPropNames<O1>; // expect never
 >O1 : O1
 
 type O0Names = OptionalPropNames<O0>; // expect never
->O0Names : any
+>O0Names : never
 >OptionalPropNames : { [P in keyof T]-?: undefined extends T[P] ? P : never; }[keyof T]
 >O0 : O0
 
@@ -340,9 +340,9 @@ declare const o1NameTest: ExpectType<never, O1Names>;
 >O1Names : never
 
 declare const o0NameTest: ExpectType<never, O0Names>;
->o0NameTest : "Did not match"
+>o0NameTest : "Match"
 >ExpectType : ExpectType<Exp, Act>
->O0Names : any
+>O0Names : never
 
 type O3Props = OptionalProps<O3>; // expect { a?: string | undefined; b?: number | undefined }
 >O3Props : OptionalProps<O3>
