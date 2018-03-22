@@ -511,7 +511,7 @@ namespace ts.server {
                 byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
                 logger,
-                canUseEvents: eventPort !== undefined,
+                canUseEvents: true,
                 globalPlugins,
                 pluginProbeLocations,
                 allowLocalPluginLoads,
