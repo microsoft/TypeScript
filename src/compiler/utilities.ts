@@ -1861,7 +1861,7 @@ namespace ts {
     }
 
     export function isRestParameter(node: ParameterDeclaration): boolean {
-        return node.dotDotDotToken !== undefined;
+        return node.dotDotDotToken !== undefined || node.type && node.type.kind === SyntaxKind.JSDocVariadicType;
     }
 
     export const enum AssignmentKind {
