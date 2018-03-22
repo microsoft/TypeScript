@@ -1,0 +1,45 @@
+=== tests/cases/compiler/pipelineOperatorWithParenthesizedArrowFunctions.ts ===
+var res1 = [5, 10]
+>res1 : Symbol(res1, Decl(pipelineOperatorWithParenthesizedArrowFunctions.ts, 0, 3))
+
+  |> (_: number[]) => _.map((x) => x * 2)
+>_ : Symbol(_, Decl(pipelineOperatorWithParenthesizedArrowFunctions.ts, 1, 6))
+>_.map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>_ : Symbol(_, Decl(pipelineOperatorWithParenthesizedArrowFunctions.ts, 1, 6))
+>map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(pipelineOperatorWithParenthesizedArrowFunctions.ts, 1, 29))
+>x : Symbol(x, Decl(pipelineOperatorWithParenthesizedArrowFunctions.ts, 1, 29))
+
+  |> (_: number[]) => _.reduce((a, b) => a + b)
+>_ : Symbol(_, Decl(pipelineOperatorWithParenthesizedArrowFunctions.ts, 2, 6))
+>_.reduce : Symbol(Array.reduce, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>_ : Symbol(_, Decl(pipelineOperatorWithParenthesizedArrowFunctions.ts, 2, 6))
+>reduce : Symbol(Array.reduce, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>a : Symbol(a, Decl(pipelineOperatorWithParenthesizedArrowFunctions.ts, 2, 32))
+>b : Symbol(b, Decl(pipelineOperatorWithParenthesizedArrowFunctions.ts, 2, 34))
+>a : Symbol(a, Decl(pipelineOperatorWithParenthesizedArrowFunctions.ts, 2, 32))
+>b : Symbol(b, Decl(pipelineOperatorWithParenthesizedArrowFunctions.ts, 2, 34))
+
+  |> (sum: number) => sum + 1;
+>sum : Symbol(sum, Decl(pipelineOperatorWithParenthesizedArrowFunctions.ts, 3, 6))
+>sum : Symbol(sum, Decl(pipelineOperatorWithParenthesizedArrowFunctions.ts, 3, 6))
+
+var inc = (x: number) => x + 1;
+>inc : Symbol(inc, Decl(pipelineOperatorWithParenthesizedArrowFunctions.ts, 5, 3))
+>x : Symbol(x, Decl(pipelineOperatorWithParenthesizedArrowFunctions.ts, 5, 11))
+>x : Symbol(x, Decl(pipelineOperatorWithParenthesizedArrowFunctions.ts, 5, 11))
+
+var double = (x: number) => x * 2;
+>double : Symbol(double, Decl(pipelineOperatorWithParenthesizedArrowFunctions.ts, 6, 3))
+>x : Symbol(x, Decl(pipelineOperatorWithParenthesizedArrowFunctions.ts, 6, 14))
+>x : Symbol(x, Decl(pipelineOperatorWithParenthesizedArrowFunctions.ts, 6, 14))
+
+var res2 = [4, 9].map(x => x |> inc |> double);
+>res2 : Symbol(res2, Decl(pipelineOperatorWithParenthesizedArrowFunctions.ts, 8, 3))
+>[4, 9].map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(pipelineOperatorWithParenthesizedArrowFunctions.ts, 8, 22))
+>x : Symbol(x, Decl(pipelineOperatorWithParenthesizedArrowFunctions.ts, 8, 22))
+>inc : Symbol(inc, Decl(pipelineOperatorWithParenthesizedArrowFunctions.ts, 5, 3))
+>double : Symbol(double, Decl(pipelineOperatorWithParenthesizedArrowFunctions.ts, 6, 3))
+
