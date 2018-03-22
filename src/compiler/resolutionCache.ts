@@ -588,7 +588,8 @@ namespace ts {
                 // Some file or directory in the watching directory is created
                 // Return early if it does not have any of the watching extension or not the custom failed lookup path
                 const dirOfFileOrDirectory = getDirectoryPath(fileOrDirectoryPath);
-                if (isNodeModulesAtTypesDirectory(dirOfFileOrDirectory) || isNodeModulesDirectory(dirOfFileOrDirectory)) {
+                if (isNodeModulesAtTypesDirectory(fileOrDirectoryPath) || isNodeModulesDirectory(fileOrDirectoryPath) ||
+                    isNodeModulesAtTypesDirectory(dirOfFileOrDirectory) || isNodeModulesDirectory(dirOfFileOrDirectory)) {
                     // Invalidate any resolution from this directory
                     isChangedFailedLookupLocation = location => {
                         const locationPath = resolutionHost.toPath(location);
