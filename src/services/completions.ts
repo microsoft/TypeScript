@@ -24,6 +24,8 @@ namespace ts.Completions {
         TypeKeywords,
     }
 
+    const enum GlobalsSearch { Continue, Success, Fail }
+
     export function getCompletionsAtPosition(
         host: LanguageServiceHost,
         typeChecker: TypeChecker,
@@ -1046,35 +1048,38 @@ namespace ts.Completions {
         }
 
         function tryGetGlobalSymbols(): boolean {
-            const toTry = [tryGetObjectLikeCompletionSymbols, tryGetImportOrExportClauseCompletionSymbols, tryGetConstructorCompletion, tryGetClassLikeCompletionSymbols, tryGetJsxCompletionSymbols, getGlobalCompletions];
-            return firstDefined(toTry, f => f());
+            const result: GlobalsSearch = tryGetObjectLikeCompletionSymbols()
+                || tryGetImportOrExportClauseCompletionSymbols()
+                || tryGetConstructorCompletion()
+                || tryGetClassLikeCompletionSymbols()
+                || tryGetJsxCompletionSymbols()
+                || (getGlobalCompletions(), GlobalsSearch.Success);
+            return result === GlobalsSearch.Success;
         }
 
-        function tryGetConstructorCompletion(): boolean | undefined {
-            if (tryGetConstructorLikeCompletionContainer(contextToken)) {
-                // no members, only keywords
-                completionKind = CompletionKind.None;
-                // Declaring new property/method/accessor
-                isNewIdentifierLocation = true;
-                // Has keywords for constructor parameter
-                keywordFilters = KeywordCompletionFilters.ConstructorParameterKeywords;
-                return true;
-            }
+        function tryGetConstructorCompletion(): GlobalsSearch {
+            if (!tryGetConstructorLikeCompletionContainer(contextToken)) return GlobalsSearch.Continue;
+            // no members, only keywords
+            completionKind = CompletionKind.None;
+            // Declaring new property/method/accessor
+            isNewIdentifierLocation = true;
+            // Has keywords for constructor parameter
+            keywordFilters = KeywordCompletionFilters.ConstructorParameterKeywords;
+            return GlobalsSearch.Success;
         }
 
-        function tryGetJsxCompletionSymbols(): boolean | undefined {
+        function tryGetJsxCompletionSymbols(): GlobalsSearch {
             const jsxContainer = tryGetContainingJsxElement(contextToken);
             // Cursor is inside a JSX self-closing element or opening element
             const attrsType = jsxContainer && typeChecker.getAllAttributesTypeFromJsxOpeningLikeElement(jsxContainer);
-            if (attrsType) {
-                symbols = filterJsxAttributes(typeChecker.getPropertiesOfType(attrsType), jsxContainer.attributes.properties);
-                completionKind = CompletionKind.MemberLike;
-                isNewIdentifierLocation = false;
-                return true;
-            }
+            if (!attrsType) return GlobalsSearch.Continue;
+            symbols = filterJsxAttributes(typeChecker.getPropertiesOfType(attrsType), jsxContainer.attributes.properties);
+            completionKind = CompletionKind.MemberLike;
+            isNewIdentifierLocation = false;
+            return GlobalsSearch.Success;
         }
 
-        function getGlobalCompletions(): true {
+        function getGlobalCompletions(): void {
             if (tryGetFunctionLikeBodyCompletionContainer(contextToken)) {
                 keywordFilters = KeywordCompletionFilters.FunctionLikeBodyKeywords;
             }
@@ -1138,8 +1143,6 @@ namespace ts.Completions {
                 getSymbolsFromOtherSourceFileExports(symbols, previousToken && isIdentifier(previousToken) ? previousToken.text : "", target);
             }
             filterGlobalCompletion(symbols);
-
-            return true;
         }
 
         function isSnippetScope(scopeNode: Node): boolean {
@@ -1417,9 +1420,9 @@ namespace ts.Completions {
          *
          * @returns true if 'symbols' was successfully populated; false otherwise.
          */
-        function tryGetObjectLikeCompletionSymbols(): boolean | undefined {
+        function tryGetObjectLikeCompletionSymbols(): GlobalsSearch | undefined {
             const objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken);
-            if (!objectLikeContainer) return undefined;
+            if (!objectLikeContainer) return GlobalsSearch.Continue;
 
             // We're looking up possible property names from contextual/inferred/declared type.
             completionKind = CompletionKind.ObjectPropertyDeclaration;
@@ -1432,7 +1435,7 @@ namespace ts.Completions {
                 // other than those within the declared type.
                 isNewIdentifierLocation = true;
                 const typeForObject = typeChecker.getContextualType(objectLikeContainer);
-                if (!typeForObject) return false;
+                if (!typeForObject) return GlobalsSearch.Fail;
                 typeMembers = getPropertiesForCompletion(typeForObject, typeChecker, /*isForAccess*/ false);
                 existingMembers = objectLikeContainer.properties;
             }
@@ -1460,7 +1463,7 @@ namespace ts.Completions {
                 }
                 if (canGetType) {
                     const typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
-                    if (!typeForObject) return false;
+                    if (!typeForObject) return GlobalsSearch.Fail;
                     // In a binding pattern, get only known properties. Everywhere else we will get all possible properties.
                     typeMembers = typeChecker.getPropertiesOfType(typeForObject).filter((symbol) => !(getDeclarationModifierFlagsFromSymbol(symbol) & ModifierFlags.NonPublicAccessibilityModifier));
                     existingMembers = objectLikeContainer.elements;
@@ -1471,7 +1474,7 @@ namespace ts.Completions {
                 // Add filtered items to the completion list
                 symbols = filterObjectMembersList(typeMembers, Debug.assertDefined(existingMembers));
             }
-            return true;
+            return GlobalsSearch.Success;
         }
 
         /**
@@ -1489,7 +1492,7 @@ namespace ts.Completions {
          *
          * @returns true if 'symbols' was successfully populated; false otherwise.
          */
-        function tryGetImportOrExportClauseCompletionSymbols(): boolean | undefined {
+        function tryGetImportOrExportClauseCompletionSymbols(): GlobalsSearch {
             const namedImportsOrExports = tryGetNamedImportsOrExportsForCompletion(contextToken);
             if (!namedImportsOrExports) return undefined;
 
@@ -1502,7 +1505,7 @@ namespace ts.Completions {
             const moduleSpecifier = importOrExportDeclaration.moduleSpecifier;
 
             if (!moduleSpecifier) {
-                return false;
+                return GlobalsSearch.Fail;
             }
 
             completionKind = CompletionKind.MemberLike;
@@ -1511,21 +1514,21 @@ namespace ts.Completions {
             const moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(moduleSpecifier);
             if (!moduleSpecifierSymbol) {
                 symbols = emptyArray;
-                return true;
+                return GlobalsSearch.Fail;
             }
 
             const exports = typeChecker.getExportsAndPropertiesOfModule(moduleSpecifierSymbol);
             symbols = filterNamedImportOrExportCompletionItems(exports, namedImportsOrExports.elements);
-            return true;
+            return GlobalsSearch.Success;
         }
 
         /**
          * Aggregates relevant symbols for completion in class declaration
          * Relevant symbols are stored in the captured 'symbols' variable.
          */
-        function tryGetClassLikeCompletionSymbols(): boolean | undefined {
+        function tryGetClassLikeCompletionSymbols(): GlobalsSearch {
             const classLikeDeclaration = tryGetClassLikeCompletionContainer(contextToken);
-            if (!classLikeDeclaration) return undefined;
+            if (!classLikeDeclaration) return GlobalsSearch.Continue;
 
             // We're looking up possible property names from parent type.
             completionKind = CompletionKind.MemberLike;
@@ -1576,7 +1579,7 @@ namespace ts.Completions {
                         classElementModifierFlags);
                 }
             }
-            return true;
+            return GlobalsSearch.Success;
         }
 
         /**
