@@ -3883,6 +3883,24 @@ namespace ts {
         return isStringLiteral(moduleSpecifier) ? moduleSpecifier.text : getTextOfNode(moduleSpecifier);
     }
 
+    export function getLastChild(node: Node): Node | undefined {
+        let lastChild: Node | undefined;
+        forEachChild(node,
+            child => {
+                if (nodeIsPresent(child)) lastChild = child;
+            },
+            children => {
+                // As an optimization, jump straight to the end of the list.
+                for (let i = children.length - 1; i >= 0; i--) {
+                    if (nodeIsPresent(children[i])) {
+                        lastChild = children[i];
+                        break;
+                    }
+                }
+            });
+        return lastChild;
+    }
+
     /** Add a value to a set, and return true if it wasn't already present. */
     export function addToSeen(seen: Map<true>, key: string | number): boolean {
         key = String(key);
