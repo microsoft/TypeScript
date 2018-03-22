@@ -159,7 +159,7 @@ namespace ts {
                         }
                         needsDeclare = true;
                         const updated = visitNodes(sourceFile.statements, visitDeclarationStatements);
-                        return updateSourceFileNode(sourceFile, updated, /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ []);
+                        return updateSourceFileNode(sourceFile, filterCandidateImports(updated), /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ []);
                     }
                 ));
                 bundle.syntheticFileReferences = [];
@@ -516,7 +516,7 @@ namespace ts {
             // Nothing visible
         }
 
-        function filterCandidateImports(statements: ReadonlyArray<Statement>): ReadonlyArray<Statement> {
+        function filterCandidateImports(statements: NodeArray<Statement>): NodeArray<Statement> {
             // This is a `while` loop because `handleSymbolAccessibilityError` can see additional import aliases marked as visible during
             // error handling which must now be included in the output and themselves checked for errors.
             // For example:
@@ -566,22 +566,24 @@ namespace ts {
 
             // And lastly, we need to get the final form of all those indetermine import declarations from before and add them to the output list
             // (and remove them from the set to examine for outter declarations)
-            return mapDefined(statements, statement => {
-                if (isLateVisibilityPaintedStatement(statement)) {
-                    const key = "" + getNodeId(statement);
-                    if (lateStatementReplacementMap.has(key)) {
-                        const result = lateStatementReplacementMap.get(key);
-                        lateStatementReplacementMap.delete(key);
-                        return result;
-                    }
-                    else {
-                        return undefined;
-                    }
+            return visitNodes(statements, visitLateVisibilityMarkedStatements);
+        }
+
+        function visitLateVisibilityMarkedStatements(statement: Statement) {
+            if (isLateVisibilityPaintedStatement(statement)) {
+                const key = "" + getNodeId(statement);
+                if (lateStatementReplacementMap.has(key)) {
+                    const result = lateStatementReplacementMap.get(key);
+                    lateStatementReplacementMap.delete(key);
+                    return result;
                 }
                 else {
-                    return statement;
+                    return getParseTreeNode(statement) ? undefined : statement;
                 }
-            });
+            }
+            else {
+                return statement;
+            }
         }
 
         function visitDeclarationSubtree(input: Node): VisitResult<Node> {
@@ -1043,7 +1045,7 @@ namespace ts {
                 if (canProdiceDiagnostic) {
                     getSymbolAccessibilityDiagnostic = oldDiag;
                 }
-                if (returnValue) {
+                if (returnValue && (!isLateVisibilityPaintedStatement(input) || lateStatementReplacementMap.has("" + getNodeId(input)))) {
                     if (!resultHasExternalModuleIndicator && hasModifier(input, ModifierFlags.Export) && isSourceFile(input.parent)) {
                         // Exported top-level member indicates moduleness
                         resultHasExternalModuleIndicator = true;
