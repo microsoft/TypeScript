@@ -62,6 +62,12 @@ namespace ts {
 
             // github #18071
             printsCorrectly("regularExpressionLiteral", {}, printer => printer.printFile(createSourceFile("source.ts", "let regex = /abc/;", ScriptTarget.ES2017)));
+
+            printsCorrectly("classHeritageClauses", {}, printer => printer.printFile(createSourceFile(
+                "source.ts",
+                `class A extends B implements C implements D {}`,
+                ScriptTarget.ES2017
+            )));
         });
 
         describe("printBundle", () => {

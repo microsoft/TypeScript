@@ -1768,6 +1768,7 @@ namespace ts {
         kind: SyntaxKind.JsxOpeningElement;
         parent?: JsxElement;
         tagName: JsxTagNameExpression;
+        typeArguments?: NodeArray<TypeNode>;
         attributes: JsxAttributes;
     }
 
@@ -1775,6 +1776,7 @@ namespace ts {
     export interface JsxSelfClosingElement extends PrimaryExpression {
         kind: SyntaxKind.JsxSelfClosingElement;
         tagName: JsxTagNameExpression;
+        typeArguments?: NodeArray<TypeNode>;
         attributes: JsxAttributes;
     }
 
@@ -5164,7 +5166,7 @@ namespace ts {
         VariableDeclarationList = CommaDelimited | SpaceBetweenSiblings | SingleLine,
         SingleLineFunctionBodyStatements = SingleLine | SpaceBetweenSiblings | SpaceBetweenBraces,
         MultiLineFunctionBodyStatements = MultiLine,
-        ClassHeritageClauses = SingleLine | SpaceBetweenSiblings,
+        ClassHeritageClauses = SingleLine,
         ClassMembers = Indented | MultiLine,
         InterfaceMembers = Indented | MultiLine,
         EnumMembers = CommaDelimited | Indented | MultiLine,
