@@ -10,7 +10,7 @@ namespace ts.codefix {
             const classDeclaration = getClass(sourceFile, span.start);
             const checker = program.getTypeChecker();
             return mapDefined<ExpressionWithTypeArguments, CodeFixAction>(getClassImplementsHeritageClauseElements(classDeclaration), implementedTypeNode => {
-                const changes = textChanges.ChangeTracker.with(context, t => addMissingDeclarations(checker, implementedTypeNode, sourceFile, classDeclaration, t));
+                const changes = textChanges.ChangeTracker.with(context, t => addMissingDeclarations(checker, implementedTypeNode, sourceFile, classDeclaration, t, context.preferences));
                 if (changes.length === 0) return undefined;
                 const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Implement_interface_0), [implementedTypeNode.getText()]);
                 return { description, changes, fixId };
@@ -23,7 +23,7 @@ namespace ts.codefix {
                 const classDeclaration = getClass(diag.file!, diag.start!);
                 if (addToSeen(seenClassDeclarations, getNodeId(classDeclaration))) {
                     for (const implementedTypeNode of getClassImplementsHeritageClauseElements(classDeclaration)) {
-                        addMissingDeclarations(context.program.getTypeChecker(), implementedTypeNode, diag.file!, classDeclaration, changes);
+                        addMissingDeclarations(context.program.getTypeChecker(), implementedTypeNode, diag.file!, classDeclaration, changes, context.preferences);
                     }
                 }
             });
@@ -39,7 +39,8 @@ namespace ts.codefix {
         implementedTypeNode: ExpressionWithTypeArguments,
         sourceFile: SourceFile,
         classDeclaration: ClassLikeDeclaration,
-        changeTracker: textChanges.ChangeTracker
+        changeTracker: textChanges.ChangeTracker,
+        preferences: UserPreferences,
     ): void {
         // Note that this is ultimately derived from a map indexed by symbol names,
         // so duplicates cannot occur.
@@ -56,7 +57,7 @@ namespace ts.codefix {
             createMissingIndexSignatureDeclaration(implementedType, IndexKind.String);
         }
 
-        createMissingMemberNodes(classDeclaration, nonPrivateMembers, checker, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member));
+        createMissingMemberNodes(classDeclaration, nonPrivateMembers, checker, preferences, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member));
 
         function createMissingIndexSignatureDeclaration(type: InterfaceType, kind: IndexKind): void {
             const indexInfoOfKind = checker.getIndexInfoOfType(type, kind);

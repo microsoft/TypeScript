@@ -1656,6 +1656,10 @@ namespace ts {
         return SpecialPropertyAssignmentKind.None;
     }
 
+    export function isPrototypePropertyAssignment(node: Node): boolean {
+        return isBinaryExpression(node) && getSpecialPropertyAssignmentKind(node) === SpecialPropertyAssignmentKind.PrototypeProperty;
+    }
+
     export function isSpecialPropertyDeclaration(expr: PropertyAccessExpression): boolean {
         return isInJavaScriptFile(expr) &&
             expr.parent && expr.parent.kind === SyntaxKind.ExpressionStatement &&
@@ -1857,7 +1861,7 @@ namespace ts {
     }
 
     export function isRestParameter(node: ParameterDeclaration): boolean {
-        return node.dotDotDotToken !== undefined;
+        return node.dotDotDotToken !== undefined || node.type && node.type.kind === SyntaxKind.JSDocVariadicType;
     }
 
     export const enum AssignmentKind {
@@ -1956,6 +1960,18 @@ namespace ts {
                 return true;
         }
         return false;
+    }
+
+    export type ValueSignatureDeclaration =
+        | FunctionDeclaration
+        | MethodDeclaration
+        | ConstructorDeclaration
+        | AccessorDeclaration
+        | FunctionExpression
+        | ArrowFunction;
+
+    export function isValueSignatureDeclaration(node: Node): node is ValueSignatureDeclaration {
+        return isFunctionExpression(node) || isArrowFunction(node) || isMethodOrAccessor(node) || isFunctionDeclaration(node) || isConstructorDeclaration(node);
     }
 
     function walkUp(node: Node, kind: SyntaxKind) {
@@ -3865,6 +3881,24 @@ namespace ts {
 
     export function showModuleSpecifier({ moduleSpecifier }: ImportDeclaration): string {
         return isStringLiteral(moduleSpecifier) ? moduleSpecifier.text : getTextOfNode(moduleSpecifier);
+    }
+
+    export function getLastChild(node: Node): Node | undefined {
+        let lastChild: Node | undefined;
+        forEachChild(node,
+            child => {
+                if (nodeIsPresent(child)) lastChild = child;
+            },
+            children => {
+                // As an optimization, jump straight to the end of the list.
+                for (let i = children.length - 1; i >= 0; i--) {
+                    if (nodeIsPresent(children[i])) {
+                        lastChild = children[i];
+                        break;
+                    }
+                }
+            });
+        return lastChild;
     }
 
     /** Add a value to a set, and return true if it wasn't already present. */

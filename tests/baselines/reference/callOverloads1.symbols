@@ -26,14 +26,12 @@ function F1(a:any) { return a;}
 
 var f1 = new Foo("hey");
 >f1 : Symbol(f1, Decl(callOverloads1.ts, 12, 3))
->Foo : Symbol(Foo, Decl(callOverloads1.ts, 0, 0))
+>Foo : Symbol(Foo, Decl(callOverloads1.ts, 6, 1))
 
 
 f1.bar1();
->f1.bar1 : Symbol(Foo.bar1, Decl(callOverloads1.ts, 0, 11))
 >f1 : Symbol(f1, Decl(callOverloads1.ts, 12, 3))
->bar1 : Symbol(Foo.bar1, Decl(callOverloads1.ts, 0, 11))
 
 Foo();
->Foo : Symbol(Foo, Decl(callOverloads1.ts, 0, 0))
+>Foo : Symbol(Foo, Decl(callOverloads1.ts, 6, 1))
 
