@@ -69,20 +69,20 @@ const Printable = <T extends Constructor<Base>>(superClass: T): Constructor<Prin
     }
 
 interface Tagged {
->Tagged : Symbol(Tagged, Decl(mixinClassesAnnotated.ts, 22, 5), Decl(mixinClassesAnnotated.ts, 26, 1))
+>Tagged : Symbol(Tagged, Decl(mixinClassesAnnotated.ts, 26, 1), Decl(mixinClassesAnnotated.ts, 22, 5))
 
     _tag: string;
 >_tag : Symbol(Tagged._tag, Decl(mixinClassesAnnotated.ts, 24, 18))
 }
 
 function Tagged<T extends Constructor<{}>>(superClass: T): Constructor<Tagged> & T {
->Tagged : Symbol(Tagged, Decl(mixinClassesAnnotated.ts, 22, 5), Decl(mixinClassesAnnotated.ts, 26, 1))
+>Tagged : Symbol(Tagged, Decl(mixinClassesAnnotated.ts, 26, 1), Decl(mixinClassesAnnotated.ts, 22, 5))
 >T : Symbol(T, Decl(mixinClassesAnnotated.ts, 28, 16))
 >Constructor : Symbol(Constructor, Decl(mixinClassesAnnotated.ts, 0, 0))
 >superClass : Symbol(superClass, Decl(mixinClassesAnnotated.ts, 28, 43))
 >T : Symbol(T, Decl(mixinClassesAnnotated.ts, 28, 16))
 >Constructor : Symbol(Constructor, Decl(mixinClassesAnnotated.ts, 0, 0))
->Tagged : Symbol(Tagged, Decl(mixinClassesAnnotated.ts, 22, 5), Decl(mixinClassesAnnotated.ts, 26, 1))
+>Tagged : Symbol(Tagged, Decl(mixinClassesAnnotated.ts, 26, 1), Decl(mixinClassesAnnotated.ts, 22, 5))
 >T : Symbol(T, Decl(mixinClassesAnnotated.ts, 28, 16))
 
     class C extends superClass {
@@ -111,12 +111,12 @@ function Tagged<T extends Constructor<{}>>(superClass: T): Constructor<Tagged> &
 
 const Thing1 = Tagged(Derived);
 >Thing1 : Symbol(Thing1, Decl(mixinClassesAnnotated.ts, 39, 5))
->Tagged : Symbol(Tagged, Decl(mixinClassesAnnotated.ts, 22, 5), Decl(mixinClassesAnnotated.ts, 26, 1))
+>Tagged : Symbol(Tagged, Decl(mixinClassesAnnotated.ts, 26, 1), Decl(mixinClassesAnnotated.ts, 22, 5))
 >Derived : Symbol(Derived, Decl(mixinClassesAnnotated.ts, 4, 1))
 
 const Thing2 = Tagged(Printable(Derived));
 >Thing2 : Symbol(Thing2, Decl(mixinClassesAnnotated.ts, 40, 5))
->Tagged : Symbol(Tagged, Decl(mixinClassesAnnotated.ts, 22, 5), Decl(mixinClassesAnnotated.ts, 26, 1))
+>Tagged : Symbol(Tagged, Decl(mixinClassesAnnotated.ts, 26, 1), Decl(mixinClassesAnnotated.ts, 22, 5))
 >Printable : Symbol(Printable, Decl(mixinClassesAnnotated.ts, 10, 1), Decl(mixinClassesAnnotated.ts, 16, 5))
 >Derived : Symbol(Derived, Decl(mixinClassesAnnotated.ts, 4, 1))
 

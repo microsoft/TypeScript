@@ -7,10 +7,10 @@ tests/cases/conformance/jsdoc/b.js(51,17): error TS2352: Type 'SomeDerived' cann
   Property 'q' is missing in type 'SomeDerived'.
 tests/cases/conformance/jsdoc/b.js(52,17): error TS2352: Type 'SomeBase' cannot be converted to type 'SomeOther'.
   Property 'q' is missing in type 'SomeBase'.
-tests/cases/conformance/jsdoc/b.js(58,1): error TS2322: Type '{ p: string | number | undefined; }' is not assignable to type 'SomeBase'.
+tests/cases/conformance/jsdoc/b.js(58,1): error TS2322: Type '{ p: string | number; }' is not assignable to type 'SomeBase'.
   Types of property 'p' are incompatible.
-    Type 'string | number | undefined' is not assignable to type 'number'.
-      Type 'undefined' is not assignable to type 'number'.
+    Type 'string | number' is not assignable to type 'number'.
+      Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/jsdoc/b.js(66,8): error TS2352: Type 'boolean' cannot be converted to type 'string | number'.
 tests/cases/conformance/jsdoc/b.js(66,15): error TS2304: Cannot find name 'numOrStr'.
 tests/cases/conformance/jsdoc/b.js(66,24): error TS1005: '}' expected.
@@ -97,10 +97,10 @@ tests/cases/conformance/jsdoc/b.js(67,8): error TS2454: Variable 'numOrStr' is u
     
     someBase = someFakeClass; // Error
     ~~~~~~~~
-!!! error TS2322: Type '{ p: string | number | undefined; }' is not assignable to type 'SomeBase'.
+!!! error TS2322: Type '{ p: string | number; }' is not assignable to type 'SomeBase'.
 !!! error TS2322:   Types of property 'p' are incompatible.
-!!! error TS2322:     Type 'string | number | undefined' is not assignable to type 'number'.
-!!! error TS2322:       Type 'undefined' is not assignable to type 'number'.
+!!! error TS2322:     Type 'string | number' is not assignable to type 'number'.
+!!! error TS2322:       Type 'string' is not assignable to type 'number'.
     someBase = /** @type {SomeBase} */(someFakeClass);
     
     // Type assertion cannot be a type-predicate type

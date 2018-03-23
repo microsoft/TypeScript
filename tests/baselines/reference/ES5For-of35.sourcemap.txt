@@ -32,7 +32,8 @@ sourceFile:ES5For-of35.ts
 10>                                ^
 11>                                 ^
 12>                                  ^^^^^^^^^^^^^^^^
-13>                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+13>                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+14>                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    for (const {x: a = 0, y: b = 1} of 
 3 >         
@@ -45,6 +46,7 @@ sourceFile:ES5For-of35.ts
 10>                                ]
 11>                                 
 12>                                  
+13>                                                  ) 
 1 >Emitted(12, 5) Source(1, 1) + SourceIndex(0)
 2 >Emitted(12, 10) Source(1, 36) + SourceIndex(0)
 3 >Emitted(12, 14) Source(1, 36) + SourceIndex(0)
@@ -57,6 +59,7 @@ sourceFile:ES5For-of35.ts
 10>Emitted(12, 34) Source(1, 42) + SourceIndex(0)
 11>Emitted(12, 35) Source(1, 42) + SourceIndex(0)
 12>Emitted(12, 51) Source(1, 42) + SourceIndex(0)
+13>Emitted(12, 79) Source(1, 44) + SourceIndex(0)
 ---
 >>>        var _c = _b.value, _d = _c.x, a = _d === void 0 ? 0 : _d, _e = _c.y, b = _e === void 0 ? 1 : _e;
 1->^^^^^^^^

@@ -11,6 +11,7 @@
 /// <reference path="transformers/module/module.ts" />
 /// <reference path="transformers/module/system.ts" />
 /// <reference path="transformers/module/es2015.ts" />
+/// <reference path="transformers/declarations.ts" />
 
 /* @internal */
 namespace ts {
@@ -104,6 +105,7 @@ namespace ts {
         let onSubstituteNode: TransformationContext["onSubstituteNode"] = (_, node) => node;
         let onEmitNode: TransformationContext["onEmitNode"] = (hint, node, callback) => callback(hint, node);
         let state = TransformationState.Uninitialized;
+        const diagnostics: Diagnostic[] = [];
 
         // The transformation context is provided to each transformer as part of transformer
         // initialization.
@@ -134,6 +136,9 @@ namespace ts {
                 Debug.assert(state < TransformationState.Initialized, "Cannot modify transformation hooks after initialization has completed.");
                 Debug.assert(value !== undefined, "Value must not be 'undefined'");
                 onEmitNode = value;
+            },
+            addDiagnostic(diag) {
+                diagnostics.push(diag);
             }
         };
 
@@ -163,7 +168,8 @@ namespace ts {
             transformed,
             substituteNode,
             emitNodeWithNotification,
-            dispose
+            dispose,
+            diagnostics
         };
 
         function transformRoot(node: T) {

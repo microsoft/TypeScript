@@ -436,7 +436,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 7 >                                    ^^^^^^^^^^^^^^^^^^^^
 8 >                                                        ^^
 9 >                                                          ^^^^
-10>                                                              ^^^^^^^^^^^^->
+10>                                                              ^^
+11>                                                                ^^^^^^^^^^->
 1->
   >
   >
@@ -448,6 +449,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 7 >                                    robots
 8 >                                                        
 9 >                                                          robots
+10>                                                              ) 
 1->Emitted(17, 1) Source(26, 1) + SourceIndex(0)
 2 >Emitted(17, 6) Source(26, 30) + SourceIndex(0)
 3 >Emitted(17, 16) Source(26, 36) + SourceIndex(0)
@@ -457,6 +459,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 7 >Emitted(17, 57) Source(26, 36) + SourceIndex(0)
 8 >Emitted(17, 59) Source(26, 30) + SourceIndex(0)
 9 >Emitted(17, 63) Source(26, 36) + SourceIndex(0)
+10>Emitted(17, 65) Source(26, 38) + SourceIndex(0)
 ---
 >>>    _a = robots_1[_i], _b = _a[1], nameA = _b === void 0 ? "noName" : _b;
 1->^^^^^^^^^^^^^^^^^^^^^^^
@@ -518,7 +521,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 9 >                                   ^^^^^^^^^^^^^^
 10>                                                 ^^
 11>                                                   ^^^^
-12>                                                       ^^^^^^^^^^^^^->
+12>                                                       ^^
+13>                                                         ^^^^^^^^^^^->
 1->
   >
 2 >for ([, nameA = "noName"] of 
@@ -531,6 +535,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 9 >                                   getRobots()
 10>                                                 
 11>                                                   getRobots()
+12>                                                       ) 
 1->Emitted(21, 1) Source(29, 1) + SourceIndex(0)
 2 >Emitted(21, 6) Source(29, 30) + SourceIndex(0)
 3 >Emitted(21, 16) Source(29, 41) + SourceIndex(0)
@@ -542,6 +547,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 9 >Emitted(21, 50) Source(29, 41) + SourceIndex(0)
 10>Emitted(21, 52) Source(29, 30) + SourceIndex(0)
 11>Emitted(21, 56) Source(29, 41) + SourceIndex(0)
+12>Emitted(21, 58) Source(29, 43) + SourceIndex(0)
 ---
 >>>    _e = _d[_c], _f = _e[1], nameA = _f === void 0 ? "noName" : _f;
 1->^^^^^^^^^^^^^^^^^
@@ -605,7 +611,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 11>                                        ^^^^^^^^^^^^^^
 12>                                                      ^^
 13>                                                        ^^^^
-14>                                                            ^^^^^^^^->
+14>                                                            ^^
+15>                                                              ^^^^^^->
 1->
   >
 2 >for ([, nameA = "noName"] of 
@@ -620,6 +627,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 11>                                        [robotA, robotB]
 12>                                                      
 13>                                                        [robotA, robotB]
+14>                                                            ) 
 1->Emitted(25, 1) Source(32, 1) + SourceIndex(0)
 2 >Emitted(25, 6) Source(32, 30) + SourceIndex(0)
 3 >Emitted(25, 16) Source(32, 46) + SourceIndex(0)
@@ -633,6 +641,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 11>Emitted(25, 55) Source(32, 46) + SourceIndex(0)
 12>Emitted(25, 57) Source(32, 30) + SourceIndex(0)
 13>Emitted(25, 61) Source(32, 46) + SourceIndex(0)
+14>Emitted(25, 63) Source(32, 48) + SourceIndex(0)
 ---
 >>>    _j = _h[_g], _k = _j[1], nameA = _k === void 0 ? "noName" : _k;
 1->^^^^^^^^^^^^^^^^^
@@ -692,7 +701,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 7 >                                              ^^^^^^^^^^^^^^^^^^^^^^^^^
 8 >                                                                       ^^
 9 >                                                                         ^^^^
-10>                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+10>                                                                             ^^
+11>                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >for ([, [
@@ -706,6 +716,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 7 >                                              multiRobots
 8 >                                                                       
 9 >                                                                         multiRobots
+10>                                                                             ) 
 1->Emitted(29, 1) Source(35, 1) + SourceIndex(0)
 2 >Emitted(29, 6) Source(38, 30) + SourceIndex(0)
 3 >Emitted(29, 16) Source(38, 41) + SourceIndex(0)
@@ -715,6 +726,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 7 >Emitted(29, 72) Source(38, 41) + SourceIndex(0)
 8 >Emitted(29, 74) Source(38, 30) + SourceIndex(0)
 9 >Emitted(29, 78) Source(38, 41) + SourceIndex(0)
+10>Emitted(29, 80) Source(38, 43) + SourceIndex(0)
 ---
 >>>    _m = multiRobots_1[_l], _o = _m[1], _p = _o === void 0 ? ["skill1", "skill2"] : _o, _q = _p[0], primarySkillA = _q === void 0 ? "primary" : _q, _r = _p[1], secondarySkillA = _r === void 0 ? "secondary" : _r;
 1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -808,7 +820,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 9 >                                        ^^^^^^^^^^^^^^
 10>                                                      ^^
 11>                                                        ^^^^
-12>                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+12>                                                            ^^
+13>                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >for ([, [
@@ -824,6 +837,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 9 >                                        getMultiRobots()
 10>                                                      
 11>                                                        getMultiRobots()
+12>                                                            ) 
 1->Emitted(33, 1) Source(41, 1) + SourceIndex(0)
 2 >Emitted(33, 6) Source(44, 30) + SourceIndex(0)
 3 >Emitted(33, 16) Source(44, 46) + SourceIndex(0)
@@ -835,6 +849,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 9 >Emitted(33, 55) Source(44, 46) + SourceIndex(0)
 10>Emitted(33, 57) Source(44, 30) + SourceIndex(0)
 11>Emitted(33, 61) Source(44, 46) + SourceIndex(0)
+12>Emitted(33, 63) Source(44, 48) + SourceIndex(0)
 ---
 >>>    _u = _t[_s], _v = _u[1], _w = _v === void 0 ? ["skill1", "skill2"] : _v, _x = _w[0], primarySkillA = _x === void 0 ? "primary" : _x, _y = _w[1], secondarySkillA = _y === void 0 ? "secondary" : _y;
 1->^^^^^^^^^^^^^^^^^
@@ -930,7 +945,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 11>                                                  ^^^^^^^^^^^^^^
 12>                                                                ^^
 13>                                                                  ^^^^
-14>                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+14>                                                                      ^^
+15>                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >for ([, [
@@ -948,6 +964,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 11>                                                  [multiRobotA, multiRobotB]
 12>                                                                
 13>                                                                  [multiRobotA, multiRobotB]
+14>                                                                      ) 
 1->Emitted(37, 1) Source(47, 1) + SourceIndex(0)
 2 >Emitted(37, 6) Source(50, 30) + SourceIndex(0)
 3 >Emitted(37, 16) Source(50, 56) + SourceIndex(0)
@@ -961,6 +978,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 11>Emitted(37, 65) Source(50, 56) + SourceIndex(0)
 12>Emitted(37, 67) Source(50, 30) + SourceIndex(0)
 13>Emitted(37, 71) Source(50, 56) + SourceIndex(0)
+14>Emitted(37, 73) Source(50, 58) + SourceIndex(0)
 ---
 >>>    _1 = _0[_z], _2 = _1[1], _3 = _2 === void 0 ? ["skill1", "skill2"] : _2, _4 = _3[0], primarySkillA = _4 === void 0 ? "primary" : _4, _5 = _3[1], secondarySkillA = _5 === void 0 ? "secondary" : _5;
 1->^^^^^^^^^^^^^^^^^
@@ -1052,6 +1070,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 7 >                                    ^^^^^^^^^^^^^^^^^^^^
 8 >                                                        ^^
 9 >                                                          ^^^^
+10>                                                              ^^
 1->
   >
   >
@@ -1063,6 +1082,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 7 >                                    robots
 8 >                                                        
 9 >                                                          robots
+10>                                                              ) 
 1->Emitted(41, 1) Source(54, 1) + SourceIndex(0)
 2 >Emitted(41, 6) Source(54, 24) + SourceIndex(0)
 3 >Emitted(41, 16) Source(54, 30) + SourceIndex(0)
@@ -1072,6 +1092,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 7 >Emitted(41, 57) Source(54, 30) + SourceIndex(0)
 8 >Emitted(41, 59) Source(54, 24) + SourceIndex(0)
 9 >Emitted(41, 63) Source(54, 30) + SourceIndex(0)
+10>Emitted(41, 65) Source(54, 32) + SourceIndex(0)
 ---
 >>>    _7 = robots_2[_6][0], numberB = _7 === void 0 ? -1 : _7;
 1 >^^^^
@@ -1133,7 +1154,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 9 >                                   ^^^^^^^^^^^^^^
 10>                                                 ^^
 11>                                                   ^^^^
-12>                                                       ^^^->
+12>                                                       ^^
+13>                                                         ^->
 1->
   >
 2 >for ([numberB = -1] of 
@@ -1146,6 +1168,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 9 >                                   getRobots()
 10>                                                 
 11>                                                   getRobots()
+12>                                                       ) 
 1->Emitted(45, 1) Source(57, 1) + SourceIndex(0)
 2 >Emitted(45, 6) Source(57, 24) + SourceIndex(0)
 3 >Emitted(45, 16) Source(57, 35) + SourceIndex(0)
@@ -1157,6 +1180,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 9 >Emitted(45, 50) Source(57, 35) + SourceIndex(0)
 10>Emitted(45, 52) Source(57, 24) + SourceIndex(0)
 11>Emitted(45, 56) Source(57, 35) + SourceIndex(0)
+12>Emitted(45, 58) Source(57, 37) + SourceIndex(0)
 ---
 >>>    _10 = _9[_8][0], numberB = _10 === void 0 ? -1 : _10;
 1->^^^^
@@ -1220,6 +1244,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 11>                                          ^^^^^^^^^^^^^^^^
 12>                                                          ^^
 13>                                                            ^^^^^
+14>                                                                 ^^
 1->
   >
 2 >for ([numberB = -1] of 
@@ -1234,6 +1259,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 11>                                          [robotA, robotB]
 12>                                                          
 13>                                                            [robotA, robotB]
+14>                                                                 ) 
 1->Emitted(49, 1) Source(60, 1) + SourceIndex(0)
 2 >Emitted(49, 6) Source(60, 24) + SourceIndex(0)
 3 >Emitted(49, 17) Source(60, 40) + SourceIndex(0)
@@ -1247,6 +1273,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 11>Emitted(49, 59) Source(60, 40) + SourceIndex(0)
 12>Emitted(49, 61) Source(60, 24) + SourceIndex(0)
 13>Emitted(49, 66) Source(60, 40) + SourceIndex(0)
+14>Emitted(49, 68) Source(60, 42) + SourceIndex(0)
 ---
 >>>    _13 = _12[_11][0], numberB = _13 === void 0 ? -1 : _13;
 1 >^^^^
@@ -1306,6 +1333,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 7 >                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
 8 >                                                                         ^^
 9 >                                                                           ^^^^^
+10>                                                                                ^^
 1->
   >
 2 >for ([nameB = "noName"] of 
@@ -1316,6 +1344,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 7 >                                               multiRobots
 8 >                                                                         
 9 >                                                                           multiRobots
+10>                                                                                ) 
 1->Emitted(53, 1) Source(63, 1) + SourceIndex(0)
 2 >Emitted(53, 6) Source(63, 28) + SourceIndex(0)
 3 >Emitted(53, 17) Source(63, 39) + SourceIndex(0)
@@ -1325,6 +1354,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 7 >Emitted(53, 74) Source(63, 39) + SourceIndex(0)
 8 >Emitted(53, 76) Source(63, 28) + SourceIndex(0)
 9 >Emitted(53, 81) Source(63, 39) + SourceIndex(0)
+10>Emitted(53, 83) Source(63, 41) + SourceIndex(0)
 ---
 >>>    _15 = multiRobots_2[_14][0], nameB = _15 === void 0 ? "noName" : _15;
 1 >^^^^
@@ -1386,6 +1416,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 9 >                                          ^^^^^^^^^^^^^^^^
 10>                                                          ^^
 11>                                                            ^^^^^
+12>                                                                 ^^
 1->
   >
 2 >for ([nameB = "noName"] of 
@@ -1398,6 +1429,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 9 >                                          getMultiRobots()
 10>                                                          
 11>                                                            getMultiRobots()
+12>                                                                 ) 
 1->Emitted(57, 1) Source(66, 1) + SourceIndex(0)
 2 >Emitted(57, 6) Source(66, 28) + SourceIndex(0)
 3 >Emitted(57, 17) Source(66, 44) + SourceIndex(0)
@@ -1409,6 +1441,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 9 >Emitted(57, 59) Source(66, 44) + SourceIndex(0)
 10>Emitted(57, 61) Source(66, 28) + SourceIndex(0)
 11>Emitted(57, 66) Source(66, 44) + SourceIndex(0)
+12>Emitted(57, 68) Source(66, 46) + SourceIndex(0)
 ---
 >>>    _18 = _17[_16][0], nameB = _18 === void 0 ? "noName" : _18;
 1 >^^^^
@@ -1472,6 +1505,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 11>                                                    ^^^^^^^^^^^^^^^^
 12>                                                                    ^^
 13>                                                                      ^^^^^
+14>                                                                           ^^
 1->
   >
 2 >for ([nameB = "noName"] of 
@@ -1486,6 +1520,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 11>                                                    [multiRobotA, multiRobotB]
 12>                                                                    
 13>                                                                      [multiRobotA, multiRobotB]
+14>                                                                           ) 
 1->Emitted(61, 1) Source(69, 1) + SourceIndex(0)
 2 >Emitted(61, 6) Source(69, 28) + SourceIndex(0)
 3 >Emitted(61, 17) Source(69, 54) + SourceIndex(0)
@@ -1499,6 +1534,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 11>Emitted(61, 69) Source(69, 54) + SourceIndex(0)
 12>Emitted(61, 71) Source(69, 28) + SourceIndex(0)
 13>Emitted(61, 76) Source(69, 54) + SourceIndex(0)
+14>Emitted(61, 78) Source(69, 56) + SourceIndex(0)
 ---
 >>>    _21 = _20[_19][0], nameB = _21 === void 0 ? "noName" : _21;
 1 >^^^^
@@ -1558,7 +1594,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 7 >                                     ^^^^^^^^^^^^^^^^^^^^^
 8 >                                                          ^^
 9 >                                                            ^^^^^
-10>                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+10>                                                                 ^^
+11>                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >
@@ -1570,6 +1607,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 7 >                                     robots
 8 >                                                          
 9 >                                                            robots
+10>                                                                 ) 
 1->Emitted(65, 1) Source(73, 1) + SourceIndex(0)
 2 >Emitted(65, 6) Source(73, 63) + SourceIndex(0)
 3 >Emitted(65, 17) Source(73, 69) + SourceIndex(0)
@@ -1579,6 +1617,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 7 >Emitted(65, 59) Source(73, 69) + SourceIndex(0)
 8 >Emitted(65, 61) Source(73, 63) + SourceIndex(0)
 9 >Emitted(65, 66) Source(73, 69) + SourceIndex(0)
+10>Emitted(65, 68) Source(73, 71) + SourceIndex(0)
 ---
 >>>    _23 = robots_3[_22], _24 = _23[0], numberA2 = _24 === void 0 ? -1 : _24, _25 = _23[1], nameA2 = _25 === void 0 ? "noName" : _25, _26 = _23[2], skillA2 = _26 === void 0 ? "skill" : _26;
 1->^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1664,7 +1703,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 9 >                                     ^^^^^^^^^^^^^^^^
 10>                                                     ^^
 11>                                                       ^^^^^
-12>                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+12>                                                            ^^
+13>                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >for ([numberA2 = -1, nameA2 = "noName", skillA2 = "skill"] of 
@@ -1677,6 +1717,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 9 >                                     getRobots()
 10>                                                     
 11>                                                       getRobots()
+12>                                                            ) 
 1->Emitted(69, 1) Source(76, 1) + SourceIndex(0)
 2 >Emitted(69, 6) Source(76, 63) + SourceIndex(0)
 3 >Emitted(69, 17) Source(76, 74) + SourceIndex(0)
@@ -1688,6 +1729,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 9 >Emitted(69, 54) Source(76, 74) + SourceIndex(0)
 10>Emitted(69, 56) Source(76, 63) + SourceIndex(0)
 11>Emitted(69, 61) Source(76, 74) + SourceIndex(0)
+12>Emitted(69, 63) Source(76, 76) + SourceIndex(0)
 ---
 >>>    _29 = _28[_27], _30 = _29[0], numberA2 = _30 === void 0 ? -1 : _30, _31 = _29[1], nameA2 = _31 === void 0 ? "noName" : _31, _32 = _29[2], skillA2 = _32 === void 0 ? "skill" : _32;
 1->^^^^^^^^^^^^^^^^^^^^
@@ -1775,7 +1817,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 11>                                          ^^^^^^^^^^^^^^^^
 12>                                                          ^^
 13>                                                            ^^^^^
-14>                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+14>                                                                 ^^
+15>                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >for ([numberA2 = -1, nameA2 = "noName", skillA2 = "skill"] of 
@@ -1790,6 +1833,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 11>                                          [robotA, robotB]
 12>                                                          
 13>                                                            [robotA, robotB]
+14>                                                                 ) 
 1->Emitted(73, 1) Source(79, 1) + SourceIndex(0)
 2 >Emitted(73, 6) Source(79, 63) + SourceIndex(0)
 3 >Emitted(73, 17) Source(79, 79) + SourceIndex(0)
@@ -1803,6 +1847,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 11>Emitted(73, 59) Source(79, 79) + SourceIndex(0)
 12>Emitted(73, 61) Source(79, 63) + SourceIndex(0)
 13>Emitted(73, 66) Source(79, 79) + SourceIndex(0)
+14>Emitted(73, 68) Source(79, 81) + SourceIndex(0)
 ---
 >>>    _35 = _34[_33], _36 = _35[0], numberA2 = _36 === void 0 ? -1 : _36, _37 = _35[1], nameA2 = _37 === void 0 ? "noName" : _37, _38 = _35[2], skillA2 = _38 === void 0 ? "skill" : _38;
 1->^^^^^^^^^^^^^^^^^^^^
@@ -1886,7 +1931,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 7 >                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
 8 >                                                                         ^^
 9 >                                                                           ^^^^^
-10>                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+10>                                                                                ^^
+11>                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >for ([nameMA = "noName", [
@@ -1900,6 +1946,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 7 >                                               multiRobots
 8 >                                                                         
 9 >                                                                           multiRobots
+10>                                                                                ) 
 1->Emitted(77, 1) Source(82, 1) + SourceIndex(0)
 2 >Emitted(77, 6) Source(85, 30) + SourceIndex(0)
 3 >Emitted(77, 17) Source(85, 41) + SourceIndex(0)
@@ -1909,6 +1956,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 7 >Emitted(77, 74) Source(85, 41) + SourceIndex(0)
 8 >Emitted(77, 76) Source(85, 30) + SourceIndex(0)
 9 >Emitted(77, 81) Source(85, 41) + SourceIndex(0)
+10>Emitted(77, 83) Source(85, 43) + SourceIndex(0)
 ---
 >>>    _40 = multiRobots_3[_39], _41 = _40[0], nameMA = _41 === void 0 ? "noName" : _41, _42 = _40[1], _43 = _42 === void 0 ? ["skill1", "skill2"] : _42, _44 = _43[0], primarySkillA = _44 === void 0 ? "primary" : _44, _45 = _43[1], secondarySkillA = _45 === void 0 ? "secondary" : _45;
 1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2014,7 +2062,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 9 >                                          ^^^^^^^^^^^^^^^^
 10>                                                          ^^
 11>                                                            ^^^^^
-12>                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+12>                                                                 ^^
+13>                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >for ([nameMA = "noName", [
@@ -2030,6 +2079,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 9 >                                          getMultiRobots()
 10>                                                          
 11>                                                            getMultiRobots()
+12>                                                                 ) 
 1->Emitted(81, 1) Source(88, 1) + SourceIndex(0)
 2 >Emitted(81, 6) Source(91, 30) + SourceIndex(0)
 3 >Emitted(81, 17) Source(91, 46) + SourceIndex(0)
@@ -2041,6 +2091,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 9 >Emitted(81, 59) Source(91, 46) + SourceIndex(0)
 10>Emitted(81, 61) Source(91, 30) + SourceIndex(0)
 11>Emitted(81, 66) Source(91, 46) + SourceIndex(0)
+12>Emitted(81, 68) Source(91, 48) + SourceIndex(0)
 ---
 >>>    _48 = _47[_46], _49 = _48[0], nameMA = _49 === void 0 ? "noName" : _49, _50 = _48[1], _51 = _50 === void 0 ? ["skill1", "skill2"] : _50, _52 = _51[0], primarySkillA = _52 === void 0 ? "primary" : _52, _53 = _51[1], secondarySkillA = _53 === void 0 ? "secondary" : _53;
 1->^^^^^^^^^^^^^^^^^^^^
@@ -2148,7 +2199,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 11>                                                    ^^^^^^^^^^^^^^^^
 12>                                                                    ^^
 13>                                                                      ^^^^^
-14>                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+14>                                                                           ^^
+15>                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >for ([nameMA = "noName", [
@@ -2166,6 +2218,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 11>                                                    [multiRobotA, multiRobotB]
 12>                                                                    
 13>                                                                      [multiRobotA, multiRobotB]
+14>                                                                           ) 
 1->Emitted(85, 1) Source(94, 1) + SourceIndex(0)
 2 >Emitted(85, 6) Source(97, 30) + SourceIndex(0)
 3 >Emitted(85, 17) Source(97, 56) + SourceIndex(0)
@@ -2179,6 +2232,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 11>Emitted(85, 69) Source(97, 56) + SourceIndex(0)
 12>Emitted(85, 71) Source(97, 30) + SourceIndex(0)
 13>Emitted(85, 76) Source(97, 56) + SourceIndex(0)
+14>Emitted(85, 78) Source(97, 58) + SourceIndex(0)
 ---
 >>>    _56 = _55[_54], _57 = _56[0], nameMA = _57 === void 0 ? "noName" : _57, _58 = _56[1], _59 = _58 === void 0 ? ["skill1", "skill2"] : _58, _60 = _59[0], primarySkillA = _60 === void 0 ? "primary" : _60, _61 = _59[1], secondarySkillA = _61 === void 0 ? "secondary" : _61;
 1->^^^^^^^^^^^^^^^^^^^^
@@ -2282,7 +2336,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 7 >                                     ^^^^^^^^^^^^^^^^^^^^^
 8 >                                                          ^^
 9 >                                                            ^^^^^
-10>                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+10>                                                                 ^^
+11>                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >
@@ -2294,6 +2349,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 7 >                                     robots
 8 >                                                          
 9 >                                                            robots
+10>                                                                 ) 
 1->Emitted(89, 1) Source(101, 1) + SourceIndex(0)
 2 >Emitted(89, 6) Source(101, 40) + SourceIndex(0)
 3 >Emitted(89, 17) Source(101, 46) + SourceIndex(0)
@@ -2303,6 +2359,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 7 >Emitted(89, 59) Source(101, 46) + SourceIndex(0)
 8 >Emitted(89, 61) Source(101, 40) + SourceIndex(0)
 9 >Emitted(89, 66) Source(101, 46) + SourceIndex(0)
+10>Emitted(89, 68) Source(101, 48) + SourceIndex(0)
 ---
 >>>    _63 = robots_4[_62], _64 = _63[0], numberA3 = _64 === void 0 ? -1 : _64, robotAInfo = _63.slice(1);
 1->^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2370,7 +2427,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 9 >                                     ^^^^^^^^^^^^^^^^
 10>                                                     ^^
 11>                                                       ^^^^^
-12>                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+12>                                                            ^^
+13>                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >for ([numberA3 = -1, ...robotAInfo] of 
@@ -2383,6 +2441,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 9 >                                     getRobots()
 10>                                                     
 11>                                                       getRobots()
+12>                                                            ) 
 1->Emitted(93, 1) Source(104, 1) + SourceIndex(0)
 2 >Emitted(93, 6) Source(104, 40) + SourceIndex(0)
 3 >Emitted(93, 17) Source(104, 51) + SourceIndex(0)
@@ -2394,6 +2453,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 9 >Emitted(93, 54) Source(104, 51) + SourceIndex(0)
 10>Emitted(93, 56) Source(104, 40) + SourceIndex(0)
 11>Emitted(93, 61) Source(104, 51) + SourceIndex(0)
+12>Emitted(93, 63) Source(104, 53) + SourceIndex(0)
 ---
 >>>    _67 = _66[_65], _68 = _67[0], numberA3 = _68 === void 0 ? -1 : _68, robotAInfo = _67.slice(1);
 1->^^^^^^^^^^^^^^^^^^^^
@@ -2463,7 +2523,8 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 11>                                          ^^^^^^^^^^^^^^^^
 12>                                                          ^^
 13>                                                            ^^^^^
-14>                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+14>                                                                 ^^
+15>                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >for ([numberA3 = -1, ...robotAInfo] of 
@@ -2478,6 +2539,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 11>                                          [robotA, robotB]
 12>                                                          
 13>                                                            [robotA, robotB]
+14>                                                                 ) 
 1->Emitted(97, 1) Source(107, 1) + SourceIndex(0)
 2 >Emitted(97, 6) Source(107, 40) + SourceIndex(0)
 3 >Emitted(97, 17) Source(107, 56) + SourceIndex(0)
@@ -2491,6 +2553,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues
 11>Emitted(97, 59) Source(107, 56) + SourceIndex(0)
 12>Emitted(97, 61) Source(107, 40) + SourceIndex(0)
 13>Emitted(97, 66) Source(107, 56) + SourceIndex(0)
+14>Emitted(97, 68) Source(107, 58) + SourceIndex(0)
 ---
 >>>    _71 = _70[_69], _72 = _71[0], numberA3 = _72 === void 0 ? -1 : _72, robotAInfo = _71.slice(1);
 1->^^^^^^^^^^^^^^^^^^^^
