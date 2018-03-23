@@ -4275,6 +4275,7 @@ namespace ts {
                     if (thisContainer.kind === SyntaxKind.Constructor ||
                         thisContainer.kind === SyntaxKind.FunctionDeclaration ||
                         (thisContainer.kind === SyntaxKind.FunctionExpression && !isPrototypePropertyAssignment(thisContainer.parent))) {
+                        // TODO: Use the constructor types only if they contain anything but null and undefined
                         definedInConstructor = true;
                     }
                     else {
@@ -19683,9 +19684,10 @@ namespace ts {
         function checkDeclarationInitializer(declaration: HasExpressionInitializer) {
             const initializer = isInJavaScriptFile(declaration) && getDeclaredJavascriptInitializer(declaration) || declaration.initializer;
             const type = getTypeOfExpression(initializer, /*cache*/ true);
-            return getCombinedNodeFlags(declaration) & NodeFlags.Const ||
+            const t = getCombinedNodeFlags(declaration) & NodeFlags.Const ||
                 (getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration)) ||
                 isTypeAssertion(initializer) ? type : getWidenedLiteralType(type);
+            return isInJavaScriptFile(declaration) && t.flags & TypeFlags.Nullable ? anyType : t;
         }
 
         function isLiteralOfContextualType(candidateType: Type, contextualType: Type): boolean {
