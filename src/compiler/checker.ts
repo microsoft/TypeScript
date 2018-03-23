@@ -4083,8 +4083,7 @@ namespace ts {
                     if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
                         parentType = getNonNullableType(parentType);
                     }
-                    const propType = getTypeOfPropertyOfType(parentType, text);
-                    const declaredType = propType && getConstraintForLocation(propType, declaration.name);
+                    const declaredType = getConstraintForLocation(getTypeOfPropertyOfType(parentType, text), declaration.name);
                     type = declaredType && getFlowTypeOfReference(declaration, declaredType) ||
                         isNumericLiteralName(text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
                         getIndexTypeOfType(parentType, IndexKind.String);
@@ -12408,7 +12407,7 @@ namespace ts {
 
         function getTypeOfDestructuredProperty(type: Type, name: PropertyName) {
             const text = getTextOfPropertyName(name);
-            return getTypeOfPropertyOfType(type, text) ||
+            return getConstraintForLocation(getTypeOfPropertyOfType(type, text), name) ||
                 isNumericLiteralName(text) && getIndexTypeOfType(type, IndexKind.Number) ||
                 getIndexTypeOfType(type, IndexKind.String) ||
                 unknownType;
@@ -13524,7 +13523,7 @@ namespace ts {
             // and the type of the node includes type variables with constraints that are nullable, we fetch the
             // apparent type of the node *before* performing control flow analysis such that narrowings apply to
             // the constraint type.
-            if (isConstraintPosition(node) && forEachType(type, typeHasNullableConstraint)) {
+            if (type && isConstraintPosition(node) && forEachType(type, typeHasNullableConstraint)) {
                 return mapType(getWidenedType(type), getBaseConstraintOrType);
             }
             return type;
