@@ -401,7 +401,10 @@ namespace ts {
             case SyntaxKind.ImportTypeNode:
                 return updateImportTypeNode(<ImportTypeNode>node,
                     visitNode((<ImportTypeNode>node).argument, visitor, isTypeNode),
-                    visitNode((<ImportTypeNode>node).qualifier, visitor, isEntityName));
+                    visitNode((<ImportTypeNode>node).qualifier, visitor, isEntityName),
+                    visitNodes((<ImportTypeNode>node).typeArguments, visitor, isTypeNode),
+                    (<ImportTypeNode>node).isTypeOf
+                );
 
             case SyntaxKind.ParenthesizedType:
                 return updateParenthesizedType(<ParenthesizedTypeNode>node,
