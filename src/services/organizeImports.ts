@@ -32,6 +32,13 @@ namespace ts.OrganizeImports {
                 return;
             }
 
+            // Special case: normally, we'd expect leading and trailing trivia to follow each import
+            // around as it's sorted.  However, we do not want this to happen for leading trivia
+            // on the first import because it is probably the header comment for the file.
+            // Consider: we could do a more careful check that this trivia is actually a header,
+            // but the consequences of being wrong are very minor.
+            suppressLeadingTrivia(oldImportDecls[0]);
+
             const oldImportGroups = group(oldImportDecls, importDecl => getExternalModuleName(importDecl.moduleSpecifier));
             const sortedImportGroups = stableSort(oldImportGroups, (group1, group2) => compareModuleSpecifiers(group1[0].moduleSpecifier, group2[0].moduleSpecifier));
             const newImportDecls = flatMap(sortedImportGroups, importGroup =>
@@ -41,12 +48,15 @@ namespace ts.OrganizeImports {
 
             // Delete or replace the first import.
             if (newImportDecls.length === 0) {
-                changeTracker.deleteNode(sourceFile, oldImportDecls[0]);
+                changeTracker.deleteNode(sourceFile, oldImportDecls[0], {
+                    useNonAdjustedStartPosition: true, // Leave header comment in place
+                    useNonAdjustedEndPosition: false,
+                });
             }
             else {
                 // Note: Delete the surrounding trivia because it will have been retained in newImportDecls.
                 changeTracker.replaceNodeWithNodes(sourceFile, oldImportDecls[0], newImportDecls, {
-                    useNonAdjustedStartPosition: false,
+                    useNonAdjustedStartPosition: true, // Leave header comment in place
                     useNonAdjustedEndPosition: false,
                     suffix: getNewLineOrDefaultFromHost(host, formatContext.options),
                 });
