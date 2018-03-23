@@ -2130,7 +2130,22 @@ namespace ts {
 
         function emitImportDeclaration(node: ImportDeclaration) {
             emitModifiers(node, node.modifiers);
-            emitTokenWithComment(SyntaxKind.ImportKeyword, node.modifiers ? node.modifiers.end : node.pos, writeKeyword, node);
+            const pos = node.modifiers ? node.modifiers.end : node.pos;
+            if (node.emitNode && node.emitNode.flags && (node.emitNode.flags & EmitFlags.NoLeadingComments)) {
+                // HACK: If we called emitTokenWithComment, it would emit the leading trivia, regardless
+                // of the EmitFlags on node.  However, in order to be able to organize imports without
+                // disrupting header comments, we need to be able to control this.  For now, inline the
+                // parts of emitTokenWithComment that do what we want.
+                // TODO (https://github.com/Microsoft/TypeScript/issues/22831): Remove this hack.
+                const keywordPos = skipTrivia(currentSourceFile.text, pos);
+                const trailingCommentPos = writeTokenText(SyntaxKind.ImportKeyword, writeKeyword, keywordPos);
+                if (emitTrailingCommentsOfPosition) {
+                    emitTrailingCommentsOfPosition(trailingCommentPos, /*prefixSpace*/ true);
+                }
+            }
+            else {
+                emitTokenWithComment(SyntaxKind.ImportKeyword, pos, writeKeyword, node);
+            }
             writeSpace();
             if (node.importClause) {
                 emit(node.importClause);
