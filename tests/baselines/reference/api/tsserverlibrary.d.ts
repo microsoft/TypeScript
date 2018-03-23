@@ -1081,11 +1081,13 @@ declare namespace ts {
         kind: SyntaxKind.JsxOpeningElement;
         parent: JsxElement;
         tagName: JsxTagNameExpression;
+        typeArguments?: NodeArray<TypeNode>;
         attributes: JsxAttributes;
     }
     interface JsxSelfClosingElement extends PrimaryExpression {
         kind: SyntaxKind.JsxSelfClosingElement;
         tagName: JsxTagNameExpression;
+        typeArguments?: NodeArray<TypeNode>;
         attributes: JsxAttributes;
     }
     interface JsxFragment extends PrimaryExpression {
@@ -2193,6 +2195,7 @@ declare namespace ts {
         indexType: Type;
         constraint?: Type;
     }
+    type TypeVariable = TypeParameter | IndexedAccessType;
     interface IndexType extends InstantiableType {
         type: InstantiableType | UnionOrIntersectionType;
     }
@@ -2217,7 +2220,7 @@ declare namespace ts {
         resolvedFalseType?: Type;
     }
     interface SubstitutionType extends InstantiableType {
-        typeParameter: TypeParameter;
+        typeVariable: TypeVariable;
         substitute: Type;
     }
     enum SignatureKind {
@@ -2823,7 +2826,7 @@ declare namespace ts {
         VariableDeclarationList = 272,
         SingleLineFunctionBodyStatements = 384,
         MultiLineFunctionBodyStatements = 1,
-        ClassHeritageClauses = 256,
+        ClassHeritageClauses = 0,
         ClassMembers = 65,
         InterfaceMembers = 65,
         EnumMembers = 81,
@@ -2842,7 +2845,7 @@ declare namespace ts {
     }
 }
 declare namespace ts {
-    const versionMajorMinor = "2.8";
+    const versionMajorMinor = "2.9";
     /** The version of the TypeScript compiler release */
     const version: string;
 }
@@ -3677,10 +3680,10 @@ declare namespace ts {
     function updateExternalModuleReference(node: ExternalModuleReference, expression: Expression): ExternalModuleReference;
     function createJsxElement(openingElement: JsxOpeningElement, children: ReadonlyArray<JsxChild>, closingElement: JsxClosingElement): JsxElement;
     function updateJsxElement(node: JsxElement, openingElement: JsxOpeningElement, children: ReadonlyArray<JsxChild>, closingElement: JsxClosingElement): JsxElement;
-    function createJsxSelfClosingElement(tagName: JsxTagNameExpression, attributes: JsxAttributes): JsxSelfClosingElement;
-    function updateJsxSelfClosingElement(node: JsxSelfClosingElement, tagName: JsxTagNameExpression, attributes: JsxAttributes): JsxSelfClosingElement;
-    function createJsxOpeningElement(tagName: JsxTagNameExpression, attributes: JsxAttributes): JsxOpeningElement;
-    function updateJsxOpeningElement(node: JsxOpeningElement, tagName: JsxTagNameExpression, attributes: JsxAttributes): JsxOpeningElement;
+    function createJsxSelfClosingElement(tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeNode> | undefined, attributes: JsxAttributes): JsxSelfClosingElement;
+    function updateJsxSelfClosingElement(node: JsxSelfClosingElement, tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeNode> | undefined, attributes: JsxAttributes): JsxSelfClosingElement;
+    function createJsxOpeningElement(tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeNode> | undefined, attributes: JsxAttributes): JsxOpeningElement;
+    function updateJsxOpeningElement(node: JsxOpeningElement, tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeNode> | undefined, attributes: JsxAttributes): JsxOpeningElement;
     function createJsxClosingElement(tagName: JsxTagNameExpression): JsxClosingElement;
     function updateJsxClosingElement(node: JsxClosingElement, tagName: JsxTagNameExpression): JsxClosingElement;
     function createJsxFragment(openingFragment: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, closingFragment: JsxClosingFragment): JsxFragment;
@@ -7258,6 +7261,8 @@ declare namespace ts.server {
          */
         canUseEvents: boolean;
         eventHandler?: ProjectServiceEventHandler;
+        /** Has no effect if eventHandler is also specified. */
+        suppressDiagnosticEvents?: boolean;
         throttleWaitMilliseconds?: number;
         globalPlugins?: ReadonlyArray<string>;
         pluginProbeLocations?: ReadonlyArray<string>;
@@ -7276,6 +7281,7 @@ declare namespace ts.server {
         private hrtime;
         protected logger: Logger;
         protected canUseEvents: boolean;
+        private suppressDiagnosticEvents?;
         private eventHandler;
         constructor(opts: SessionOptions);
         private sendRequestCompletedEvent;
@@ -7291,6 +7297,7 @@ declare namespace ts.server {
         private syntacticCheck;
         private infoCheck;
         private sendDiagnosticsEvent;
+        /** It is the caller's responsibility to verify that `!this.suppressDiagnosticEvents`. */
         private updateErrorCheck;
         private cleanProjects;
         private cleanup;
@@ -7819,6 +7826,7 @@ declare namespace ts.server {
         useInferredProjectPerProjectRoot: boolean;
         typingsInstaller: ITypingsInstaller;
         eventHandler?: ProjectServiceEventHandler;
+        suppressDiagnosticEvents?: boolean;
         throttleWaitMilliseconds?: number;
         globalPlugins?: ReadonlyArray<string>;
         pluginProbeLocations?: ReadonlyArray<string>;
@@ -7885,6 +7893,7 @@ declare namespace ts.server {
         readonly typingsInstaller: ITypingsInstaller;
         readonly throttleWaitMilliseconds?: number;
         private readonly eventHandler?;
+        private readonly suppressDiagnosticEvents?;
         readonly globalPlugins: ReadonlyArray<string>;
         readonly pluginProbeLocations: ReadonlyArray<string>;
         readonly allowLocalPluginLoads: boolean;

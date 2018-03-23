@@ -1508,17 +1508,4 @@ namespace ts {
     function getFirstChild(node: Node): Node | undefined {
         return node.forEachChild(child => child);
     }
-
-    function getLastChild(node: Node): Node | undefined {
-        let lastChild: Node | undefined;
-        node.forEachChild(
-            child => { lastChild = child; },
-            children => {
-                // As an optimization, jump straight to the end of the list.
-                if (children.length) {
-                    lastChild = last(children);
-                }
-            });
-        return lastChild;
-    }
 }

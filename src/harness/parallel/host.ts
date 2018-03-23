@@ -386,7 +386,7 @@ namespace Harness.Parallel.Host {
             };
         }
 
-        describe = ts.noop as any; // Disable unit tests
+        (global as any).describe = ts.noop as any; // Disable unit tests
 
         return;
     }

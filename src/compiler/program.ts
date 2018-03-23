@@ -1459,8 +1459,10 @@ namespace ts {
                         case SyntaxKind.CallExpression:
                         case SyntaxKind.NewExpression:
                         case SyntaxKind.ExpressionWithTypeArguments:
+                        case SyntaxKind.JsxSelfClosingElement:
+                        case SyntaxKind.JsxOpeningElement:
                             // Check type arguments
-                            if (nodes === (<CallExpression | NewExpression | ExpressionWithTypeArguments>parent).typeArguments) {
+                            if (nodes === (<CallExpression | NewExpression | ExpressionWithTypeArguments | JsxOpeningLikeElement>parent).typeArguments) {
                                 diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.type_arguments_can_only_be_used_in_a_ts_file));
                                 return;
                             }

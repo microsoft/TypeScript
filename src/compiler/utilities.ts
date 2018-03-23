@@ -1872,7 +1872,7 @@ namespace ts {
     }
 
     export function isRestParameter(node: ParameterDeclaration): boolean {
-        return node.dotDotDotToken !== undefined;
+        return node.dotDotDotToken !== undefined || !!node.type && node.type.kind === SyntaxKind.JSDocVariadicType;
     }
 
     export const enum AssignmentKind {
@@ -3895,6 +3895,24 @@ namespace ts {
 
     export function showModuleSpecifier({ moduleSpecifier }: ImportDeclaration): string {
         return isStringLiteral(moduleSpecifier) ? moduleSpecifier.text : getTextOfNode(moduleSpecifier);
+    }
+
+    export function getLastChild(node: Node): Node | undefined {
+        let lastChild: Node | undefined;
+        forEachChild(node,
+            child => {
+                if (nodeIsPresent(child)) lastChild = child;
+            },
+            children => {
+                // As an optimization, jump straight to the end of the list.
+                for (let i = children.length - 1; i >= 0; i--) {
+                    if (nodeIsPresent(children[i])) {
+                        lastChild = children[i];
+                        break;
+                    }
+                }
+            });
+        return lastChild;
     }
 
     /** Add a value to a set, and return true if it wasn't already present. */
