@@ -1633,7 +1633,7 @@ namespace ts.Completions {
         function isConstructorParameterCompletion(node: Node) {
             return node.parent &&
                 isParameterOfConstructorDeclaration(node.parent) &&
-                (isConstructorParameterCompletionKeyword(node.kind) || isDeclarationName(node));
+                (isParameterPropertyModifier(node.kind) || isDeclarationName(node));
         }
 
         /**
@@ -2163,9 +2163,9 @@ namespace ts.Completions {
                 case KeywordCompletionFilters.ClassElementKeywords:
                     return isClassMemberCompletionKeyword(kind);
                 case KeywordCompletionFilters.ConstructorParameterKeywords:
-                    return isConstructorParameterCompletionKeyword(kind);
+                    return isParameterPropertyModifier(kind);
                 case KeywordCompletionFilters.FunctionLikeBodyKeywords:
-                    return isFunctionLikeBodyCompletionKeyword(kind);
+                    return !isClassMemberCompletionKeyword(kind);
                 case KeywordCompletionFilters.TypeKeywords:
                     return isTypeKeyword(kind);
                 default:
@@ -2176,17 +2176,14 @@ namespace ts.Completions {
 
     function isClassMemberCompletionKeyword(kind: SyntaxKind) {
         switch (kind) {
-            case SyntaxKind.PublicKeyword:
-            case SyntaxKind.ProtectedKeyword:
-            case SyntaxKind.PrivateKeyword:
             case SyntaxKind.AbstractKeyword:
-            case SyntaxKind.StaticKeyword:
             case SyntaxKind.ConstructorKeyword:
-            case SyntaxKind.ReadonlyKeyword:
             case SyntaxKind.GetKeyword:
             case SyntaxKind.SetKeyword:
             case SyntaxKind.AsyncKeyword:
                 return true;
+            default:
+                return isClassMemberModifier(kind);
         }
     }
 
@@ -2194,35 +2191,8 @@ namespace ts.Completions {
         return isClassMemberCompletionKeyword(stringToToken(text));
     }
 
-    function isConstructorParameterCompletionKeyword(kind: SyntaxKind) {
-        switch (kind) {
-            case SyntaxKind.PublicKeyword:
-            case SyntaxKind.PrivateKeyword:
-            case SyntaxKind.ProtectedKeyword:
-            case SyntaxKind.ReadonlyKeyword:
-                return true;
-        }
-    }
-
     function isConstructorParameterCompletionKeywordText(text: string) {
-        return isConstructorParameterCompletionKeyword(stringToToken(text));
-    }
-
-    function isFunctionLikeBodyCompletionKeyword(kind: SyntaxKind) {
-        switch (kind) {
-            case SyntaxKind.PublicKeyword:
-            case SyntaxKind.PrivateKeyword:
-            case SyntaxKind.ProtectedKeyword:
-            case SyntaxKind.ReadonlyKeyword:
-            case SyntaxKind.ConstructorKeyword:
-            case SyntaxKind.StaticKeyword:
-            case SyntaxKind.AbstractKeyword:
-            case SyntaxKind.GetKeyword:
-            case SyntaxKind.SetKeyword:
-            case SyntaxKind.UndefinedKeyword:
-                return false;
-        }
-        return true;
+        return isParameterPropertyModifier(stringToToken(text));
     }
 
     function isEqualityOperatorKind(kind: SyntaxKind): kind is EqualityOperator {

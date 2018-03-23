@@ -5506,19 +5506,6 @@ namespace ts {
             return finishNode(node);
         }
 
-        function isClassMemberModifier(idToken: SyntaxKind) {
-            switch (idToken) {
-                case SyntaxKind.PublicKeyword:
-                case SyntaxKind.PrivateKeyword:
-                case SyntaxKind.ProtectedKeyword:
-                case SyntaxKind.StaticKeyword:
-                case SyntaxKind.ReadonlyKeyword:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
         function isClassMemberStart(): boolean {
             let idToken: SyntaxKind;
 
