@@ -1626,14 +1626,9 @@ namespace ts.Completions {
             return node.parent && isClassElement(node.parent) && isClassLike(node.parent.parent);
         }
 
-        function isParameterOfConstructorDeclaration(node: Node) {
-            return isParameter(node) && isConstructorDeclaration(node.parent);
-        }
-
-        function isConstructorParameterCompletion(node: Node) {
-            return node.parent &&
-                isParameterOfConstructorDeclaration(node.parent) &&
-                (isConstructorParameterCompletionKeyword(node.kind) || isDeclarationName(node));
+        function isConstructorParameterCompletion(node: Node): boolean {
+            return !!node.parent && isParameter(node.parent) && isConstructorDeclaration(node.parent.parent)
+                && (isConstructorParameterCompletionKeyword(node.kind) || isDeclarationName(node));
         }
 
         /**
