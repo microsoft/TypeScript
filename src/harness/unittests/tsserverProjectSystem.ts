@@ -6045,8 +6045,8 @@ namespace ts.projectSystem {
             });
         });
 
-        describe("Subfolder invalidations correctly include parent folder failed lookup locations QJWOP", () => {
-            it("Includes the parent folder FLLs", () => {
+        describe("Subfolder invalidations correctly include parent folder failed lookup locations", () => {
+            function runFailedLookupTest(resolution: "Node" | "Classic") {
                 const projectLocation = "/proj";
                 const file1: FileOrFolder = {
                     path: `${projectLocation}/foo/boo/app.ts`,
@@ -6059,7 +6059,8 @@ namespace ts.projectSystem {
                 const tsconfig: FileOrFolder = {
                     path: `${projectLocation}/tsconfig.json`,
                     content: JSON.stringify({
-                        files: ["foo/boo/app.ts", "foo/boo/moo/app.ts"]
+                        files: ["foo/boo/app.ts", "foo/boo/moo/app.ts"],
+                        moduleResolution: resolution
                     })
                 };
 
@@ -6083,6 +6084,13 @@ namespace ts.projectSystem {
                 checkProjectActualFiles(project, files.map(f => f.path));
                 assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file1.path).map(diag => diag.messageText), []);
                 assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file2.path).map(diag => diag.messageText), []);
+            }
+
+            it("Includes the parent folder FLLs in node module resolution mode", () => {
+                runFailedLookupTest("Node");
+            });
+            it("Includes the parent folder FLLs in classic module resolution mode", () => {
+                runFailedLookupTest("Classic");
             });
         });
 
@@ -6251,6 +6259,44 @@ namespace ts.projectSystem {
             it("timeout occurs after installation", () => {
                 verifyNpmInstall(/*timeoutDuringPartialInstallation*/ false);
             });
+        });
+
+        it("when node_modules dont receive event for the @types file addition", () => {
+            const projectLocation = "/user/username/folder/myproject";
+            const app: FileOrFolder = {
+                path: `${projectLocation}/app.ts`,
+                content: `import * as debug from "debug"`
+            };
+            const tsconfig: FileOrFolder = {
+                path: `${projectLocation}/tsconfig.json`,
+                content: ""
+            };
+
+            const files = [app, tsconfig, libFile];
+            const host = createServerHost(files);
+            const service = createProjectService(host);
+            service.openClientFile(app.path);
+
+            const project = service.configuredProjects.get(tsconfig.path);
+            checkProjectActualFiles(project, files.map(f => f.path));
+            assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(app.path).map(diag => diag.messageText), ["Cannot find module 'debug'."]);
+
+            const debugTypesFile: FileOrFolder = {
+                path: `${projectLocation}/node_modules/@types/debug/index.d.ts`,
+                content: "export {}"
+            };
+            files.push(debugTypesFile);
+            // Do not invoke recursive directory watcher for anything other than node_module/@types
+            const invoker = host.invokeWatchedDirectoriesRecursiveCallback;
+            host.invokeWatchedDirectoriesRecursiveCallback = (fullPath, relativePath) => {
+                if (fullPath.endsWith("@types")) {
+                    invoker.call(host, fullPath, relativePath);
+                }
+            };
+            host.reloadFS(files);
+            host.runQueuedTimeoutCallbacks();
+            checkProjectActualFiles(project, files.map(f => f.path));
+            assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(app.path).map(diag => diag.messageText), []);
         });
     });
 
