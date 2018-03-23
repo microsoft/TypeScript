@@ -227,6 +227,7 @@ F2();
                 {
                     path: "/test.ts",
                     content: `
+/** Comment */
 import { F1, F2 } from "lib";
 import * as NS from "lib";
 import D from "lib";

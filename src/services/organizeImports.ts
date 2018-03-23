@@ -34,21 +34,23 @@ namespace ts.OrganizeImports {
                 return;
             }
 
+            const deletedImportDeclarations = createMap<true>();
+
             const oldImportGroups = group(oldImportDecls, importDecl => getExternalModuleName(importDecl.moduleSpecifier));
             const sortedImportGroups = stableSort(oldImportGroups, (group1, group2) => compareModuleSpecifiers(group1[0].moduleSpecifier, group2[0].moduleSpecifier));
             const newImportDecls = flatMap(sortedImportGroups, importGroup =>
                 getExternalModuleName(importGroup[0].moduleSpecifier)
-                    ? coalesceImports(removeUnusedImports(importGroup, sourceFile, program))
+                    ? coalesceImports(removeUnusedImports(importGroup, sourceFile, program, deletedImportDeclarations))
                     : importGroup);
 
             // Delete or replace the first import.
             if (newImportDecls.length === 0) {
-                changeTracker.deleteNode(sourceFile, oldImportDecls[0]);
+                removeOldImport(newImportDecls[0]);
             }
             else {
                 // Note: Delete the surrounding trivia because it will have been retained in newImportDecls.
                 changeTracker.replaceNodeWithNodes(sourceFile, oldImportDecls[0], newImportDecls, {
-                    useNonAdjustedStartPosition: false,
+                    useNonAdjustedStartPosition: deletedImportDeclarations.has(String(getNodeId(oldImportDecls[0]))),
                     useNonAdjustedEndPosition: false,
                     suffix: getNewLineOrDefaultFromHost(host, formatContext.options),
                 });
@@ -56,7 +58,11 @@ namespace ts.OrganizeImports {
 
             // Delete any subsequent imports.
             for (let i = 1; i < oldImportDecls.length; i++) {
-                changeTracker.deleteNode(sourceFile, oldImportDecls[i]);
+                removeOldImport(oldImportDecls[i]);
+            }
+
+            function removeOldImport(oldImport: ImportDeclaration): void {
+                changeTracker.deleteNode(sourceFile, oldImport, { useNonAdjustedStartPosition: deletedImportDeclarations.has(String(getNodeId(oldImport))) });
             }
         }
     }
@@ -66,7 +72,7 @@ namespace ts.OrganizeImports {
         return body && !isIdentifier(body) && (isModuleBlock(body) ? body : getModuleBlock(body));
     }
 
-    function removeUnusedImports(oldImports: ReadonlyArray<ImportDeclaration>, sourceFile: SourceFile, program: Program) {
+    function removeUnusedImports(oldImports: ReadonlyArray<ImportDeclaration>, sourceFile: SourceFile, program: Program, deletedImportDeclarations: Map<true>) {
         const typeChecker = program.getTypeChecker();
         const jsxNamespace = typeChecker.getJsxNamespace();
         const jsxContext = sourceFile.languageVariant === LanguageVariant.JSX && program.getCompilerOptions().jsx;
@@ -109,6 +115,9 @@ namespace ts.OrganizeImports {
 
             if (name || namedBindings) {
                 usedImports.push(updateImportDeclarationAndClause(importDecl, name, namedBindings));
+            }
+            else {
+                deletedImportDeclarations.set(String(getNodeId(importDecl)), true);
             }
         }
 
