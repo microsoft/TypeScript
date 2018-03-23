@@ -339,6 +339,28 @@ F1();
                 },
                 libFile);
 
+            testOrganizeImports("UnusedHeaderComment",
+                {
+                    path: "/test.ts",
+                    content: `
+// Header
+import { F1 } from "lib";
+`,
+                },
+                libFile);
+
+            testOrganizeImports("SortHeaderComment",
+                {
+                    path: "/test.ts",
+                    content: `
+// Header
+import "lib2";
+import "lib1";
+`,
+                },
+                { path: "/lib1.ts", content: "" },
+                { path: "/lib2.ts", content: "" });
+
             testOrganizeImports("AmbientModule",
                 {
                     path: "/test.ts",
