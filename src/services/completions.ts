@@ -1528,7 +1528,7 @@ namespace ts.Completions {
          * Relevant symbols are stored in the captured 'symbols' variable.
          */
         function tryGetClassLikeCompletionSymbols(): GlobalsSearch {
-            const decl = contextToken && tryGetObjectTypeDeclarationCompletionContainer(contextToken, location);
+            const decl = tryGetObjectTypeDeclarationCompletionContainer(sourceFile, contextToken, location);
             if (!decl) return GlobalsSearch.Continue;
 
             // We're looking up possible property names from parent type.
@@ -1761,12 +1761,6 @@ namespace ts.Completions {
 
                 case SyntaxKind.OpenBraceToken:
                     return containingNodeKind === SyntaxKind.EnumDeclaration;                       // enum a { |
-
-                case SyntaxKind.SemicolonToken:
-                    return containingNodeKind === SyntaxKind.PropertySignature &&
-                        contextToken.parent && contextToken.parent.parent &&
-                        (contextToken.parent.parent.kind === SyntaxKind.InterfaceDeclaration ||    // interface a { f; |
-                            contextToken.parent.parent.kind === SyntaxKind.TypeLiteral);           // const x : { a; |
 
                 case SyntaxKind.LessThanToken:
                     return containingNodeKind === SyntaxKind.ClassDeclaration ||                    // class A< |
@@ -2101,7 +2095,7 @@ namespace ts.Completions {
                 case KeywordCompletionFilters.ClassElementKeywords:
                     return isClassMemberCompletionKeyword(kind);
                 case KeywordCompletionFilters.InterfaceElementKeywords:
-                    return kind === SyntaxKind.ReadonlyKeyword;
+                    return isInterfaceOrTypeLiteralCompletionKeyword(kind);
                 case KeywordCompletionFilters.ConstructorParameterKeywords:
                     return isConstructorParameterCompletionKeyword(kind);
                 case KeywordCompletionFilters.FunctionLikeBodyKeywords:
@@ -2112,6 +2106,10 @@ namespace ts.Completions {
                     return Debug.assertNever(keywordFilter);
             }
         }));
+    }
+
+    function isInterfaceOrTypeLiteralCompletionKeyword(kind: SyntaxKind): boolean {
+        return kind === SyntaxKind.ReadonlyKeyword;
     }
 
     function isClassMemberCompletionKeyword(kind: SyntaxKind) {
@@ -2227,22 +2225,33 @@ namespace ts.Completions {
      * Returns the immediate owning class declaration of a context token,
      * on the condition that one exists and that the context implies completion should be given.
      */
-    function tryGetObjectTypeDeclarationCompletionContainer(contextToken: Node, location: Node): ObjectTypeDeclaration | undefined {
+    function tryGetObjectTypeDeclarationCompletionContainer(sourceFile: SourceFile, contextToken: Node | undefined, location: Node): ObjectTypeDeclaration | undefined {
         // class c { method() { } | method2() { } }
-        if (location.kind === SyntaxKind.SyntaxList && isObjectTypeDeclaration(location.parent)) return location.parent;
+        switch (location.kind) {
+            case SyntaxKind.SyntaxList:
+                return tryCast(location.parent, isObjectTypeDeclaration);
+            case SyntaxKind.EndOfFileToken:
+                const cls = tryCast(lastOrUndefined(cast(location.parent, isSourceFile).statements), isObjectTypeDeclaration);
+                if (cls && !findChildOfKind(cls, SyntaxKind.CloseBraceToken, sourceFile)) {
+                    return cls;
+                }
+        }
+
+        if (!contextToken) return undefined;
         switch (contextToken.kind) {
             case SyntaxKind.SemicolonToken: // class c {getValue(): number; | }
             case SyntaxKind.CloseBraceToken: // class c { method() { } | }
                 // class c { method() { } b| }
                 return isFromObjectTypeDeclaration(location) && (location.parent as ClassElement | TypeElement).name === location
                     ? location.parent.parent as ObjectTypeDeclaration
-                    : tryCast(location, isClassLike);
+                    : tryCast(location, isObjectTypeDeclaration);
             case SyntaxKind.OpenBraceToken: // class c { |
             case SyntaxKind.CommaToken: // class c {getValue(): number, | }
                 return tryCast(contextToken.parent, isObjectTypeDeclaration);
             default:
-                return isFromObjectTypeDeclaration(contextToken) &&
-                    (isClassMemberCompletionKeyword(contextToken.kind) || isIdentifier(contextToken) && isClassMemberCompletionKeywordText(contextToken.text))
+                if (!isFromObjectTypeDeclaration(contextToken)) return undefined;
+                const isValidKeyword = isClassLike(contextToken.parent.parent) ? isClassMemberCompletionKeyword : isInterfaceOrTypeLiteralCompletionKeyword;
+                return (isValidKeyword(contextToken.kind) || isIdentifier(contextToken) && isValidKeyword(stringToToken(contextToken.text)))
                     ? contextToken.parent.parent as ObjectTypeDeclaration : undefined;
         }
     }

@@ -5,7 +5,14 @@
 ////    m(): void;
 ////    fo/*i*/
 ////}
-////type T = { fo/*t*/ };
+////interface J { /*j*/ }
+////interface K { f; /*k*/ }
 
-//verify.completionsAt("i", ["readonly"]);
-verify.completionsAt("t", ["readonly"]);
+////type T = { fo/*t*/ };
+////type U = { /*u*/ };
+
+////interface EndOfFile { f; /*e*/
+
+for (const marker of test.markerNames()) {
+    verify.completionsAt(marker, ["readonly"]);
+}
