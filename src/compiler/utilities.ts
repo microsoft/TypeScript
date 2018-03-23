@@ -948,7 +948,7 @@ namespace ts {
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
             case SyntaxKind.TypeLiteral:
-                return (<ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode>node).members;
+                return (<ObjectTypeDeclaration>node).members;
             case SyntaxKind.ObjectLiteralExpression:
                 return (<ObjectLiteralExpression>node).properties;
         }
@@ -3909,6 +3909,10 @@ namespace ts {
         }
         seen.set(key, true);
         return true;
+    }
+
+    export function isObjectTypeDeclaration(node: Node): node is ObjectTypeDeclaration {
+        return isClassLike(node) || isInterfaceDeclaration(node) || isTypeLiteralNode(node);
     }
 }
 

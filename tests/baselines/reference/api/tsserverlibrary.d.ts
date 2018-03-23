@@ -655,7 +655,7 @@ declare namespace ts {
     }
     interface MethodSignature extends SignatureDeclarationBase, TypeElement {
         kind: SyntaxKind.MethodSignature;
-        parent?: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
+        parent?: ObjectTypeDeclaration;
         name: PropertyName;
     }
     interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer {
@@ -689,7 +689,7 @@ declare namespace ts {
     type AccessorDeclaration = GetAccessorDeclaration | SetAccessorDeclaration;
     interface IndexSignatureDeclaration extends SignatureDeclarationBase, ClassElement, TypeElement {
         kind: SyntaxKind.IndexSignature;
-        parent?: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
+        parent?: ObjectTypeDeclaration;
     }
     interface TypeNode extends Node {
         _typeNodeBrand: any;
@@ -1266,6 +1266,7 @@ declare namespace ts {
         variableDeclaration?: VariableDeclaration;
         block: Block;
     }
+    type ObjectTypeDeclaration = ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
     type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag;
     interface ClassLikeDeclarationBase extends NamedDeclaration, JSDocContainer {
         kind: SyntaxKind.ClassDeclaration | SyntaxKind.ClassExpression;
