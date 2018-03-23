@@ -6045,6 +6045,47 @@ namespace ts.projectSystem {
             });
         });
 
+        describe("Subfolder invalidations correctly include parent folder failed lookup locations QJWOP", () => {
+            it("Includes the parent folder FLLs", () => {
+                const projectLocation = "/proj";
+                const file1: FileOrFolder = {
+                    path: `${projectLocation}/foo/boo/app.ts`,
+                    content: `import * as debug from "debug"`
+                };
+                const file2: FileOrFolder = {
+                    path: `${projectLocation}/foo/boo/moo/app.ts`,
+                    content: `import * as debug from "debug"`
+                };
+                const tsconfig: FileOrFolder = {
+                    path: `${projectLocation}/tsconfig.json`,
+                    content: JSON.stringify({
+                        files: ["foo/boo/app.ts", "foo/boo/moo/app.ts"]
+                    })
+                };
+
+                const files = [file1, file2, tsconfig, libFile];
+                const host = createServerHost(files);
+                const service = createProjectService(host);
+                service.openClientFile(file1.path);
+
+                const project = service.configuredProjects.get(tsconfig.path);
+                checkProjectActualFiles(project, files.map(f => f.path));
+                assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file1.path).map(diag => diag.messageText), ["Cannot find module 'debug'."]);
+                assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file2.path).map(diag => diag.messageText), ["Cannot find module 'debug'."]);
+
+                const debugTypesFile: FileOrFolder = {
+                    path: `${projectLocation}/node_modules/debug/index.d.ts`,
+                    content: "export {}"
+                };
+                files.push(debugTypesFile);
+                host.reloadFS(files);
+                host.runQueuedTimeoutCallbacks();
+                checkProjectActualFiles(project, files.map(f => f.path));
+                assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file1.path).map(diag => diag.messageText), []);
+                assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file2.path).map(diag => diag.messageText), []);
+            });
+        });
+
         describe("Verify npm install in directory with tsconfig file works when", () => {
             function verifyNpmInstall(timeoutDuringPartialInstallation: boolean) {
                 const root = "/user/username/rootfolder/otherfolder";
