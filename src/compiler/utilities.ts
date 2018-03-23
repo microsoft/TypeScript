@@ -2464,50 +2464,6 @@ namespace ts {
                     case SyntaxKind.TildeToken:
                         return 15;
 
-                    case SyntaxKind.AsteriskAsteriskToken:
-                    case SyntaxKind.AsteriskToken:
-                    case SyntaxKind.SlashToken:
-                    case SyntaxKind.PercentToken:
-                        return 14;
-
-                    case SyntaxKind.PlusToken:
-                    case SyntaxKind.MinusToken:
-                        return 13;
-
-                    case SyntaxKind.LessThanLessThanToken:
-                    case SyntaxKind.GreaterThanGreaterThanToken:
-                    case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
-                        return 12;
-
-                    case SyntaxKind.LessThanToken:
-                    case SyntaxKind.LessThanEqualsToken:
-                    case SyntaxKind.GreaterThanToken:
-                    case SyntaxKind.GreaterThanEqualsToken:
-                    case SyntaxKind.InKeyword:
-                    case SyntaxKind.InstanceOfKeyword:
-                        return 11;
-
-                    case SyntaxKind.EqualsEqualsToken:
-                    case SyntaxKind.EqualsEqualsEqualsToken:
-                    case SyntaxKind.ExclamationEqualsToken:
-                    case SyntaxKind.ExclamationEqualsEqualsToken:
-                        return 10;
-
-                    case SyntaxKind.AmpersandToken:
-                        return 9;
-
-                    case SyntaxKind.CaretToken:
-                        return 8;
-
-                    case SyntaxKind.BarToken:
-                        return 7;
-
-                    case SyntaxKind.AmpersandAmpersandToken:
-                        return 6;
-
-                    case SyntaxKind.BarBarToken:
-                        return 5;
-
                     case SyntaxKind.EqualsToken:
                     case SyntaxKind.PlusEqualsToken:
                     case SyntaxKind.MinusEqualsToken:
@@ -2526,8 +2482,12 @@ namespace ts {
                     case SyntaxKind.CommaToken:
                         return 0;
 
+                    case SyntaxKind.AsteriskAsteriskToken:
+                        // This would be 15 if we used the below line instead, which changes emit for the test `emitExponentiationOperator4`.
+                        return 14;
+
                     default:
-                        return -1;
+                        return getBinaryOperatorPrecedence(operatorKind) + 4; // returns a result in [5, 14]
                 }
 
             case SyntaxKind.ConditionalExpression:
@@ -2545,6 +2505,52 @@ namespace ts {
             default:
                 return -1;
         }
+    }
+
+    /* @internal */
+    export function getBinaryOperatorPrecedence(kind: SyntaxKind): number {
+        switch (kind) {
+            case SyntaxKind.BarBarToken:
+                return 1;
+            case SyntaxKind.AmpersandAmpersandToken:
+                return 2;
+            case SyntaxKind.BarToken:
+                return 3;
+            case SyntaxKind.CaretToken:
+                return 4;
+            case SyntaxKind.AmpersandToken:
+                return 5;
+            case SyntaxKind.EqualsEqualsToken:
+            case SyntaxKind.ExclamationEqualsToken:
+            case SyntaxKind.EqualsEqualsEqualsToken:
+            case SyntaxKind.ExclamationEqualsEqualsToken:
+                return 6;
+            case SyntaxKind.LessThanToken:
+            case SyntaxKind.GreaterThanToken:
+            case SyntaxKind.LessThanEqualsToken:
+            case SyntaxKind.GreaterThanEqualsToken:
+            case SyntaxKind.InstanceOfKeyword:
+            case SyntaxKind.InKeyword:
+            case SyntaxKind.AsKeyword:
+                return 7;
+            case SyntaxKind.LessThanLessThanToken:
+            case SyntaxKind.GreaterThanGreaterThanToken:
+            case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+                return 8;
+            case SyntaxKind.PlusToken:
+            case SyntaxKind.MinusToken:
+                return 9;
+            case SyntaxKind.AsteriskToken:
+            case SyntaxKind.SlashToken:
+            case SyntaxKind.PercentToken:
+                return 10;
+            case SyntaxKind.AsteriskAsteriskToken:
+                return 11;
+        }
+
+        // -1 is lower than all other precedences.  Returning it will cause binary expression
+        // parsing to stop.
+        return -1;
     }
 
     export function createDiagnosticCollection(): DiagnosticCollection {
