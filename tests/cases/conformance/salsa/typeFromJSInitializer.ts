@@ -4,33 +4,55 @@
 // @strictNullChecks: true
 // @Filename: a.js
 function A () {
-    this.arg = 0
+    // should get any on this-assignments in constructor
     this.unknown = null
     this.unknowable = undefined
     this.empty = []
 }
-A.prototype.m = function () {
-    this.unknown = 1
-    this.unknown = true
-    this.unknown = {}
-    this.unknown = 'hi'
-    this.unknowable = 1
-    this.unknowable = true
-    this.unknowable = {}
-    this.unknowable = 'hi'
-    this.empty.push(1)
-    this.empty.push(true)
-    this.empty.push({})
-    this.empty.push('hi')
-}
-A.prototype.second = function () {
-    this.arg = false // error
-    this.newProperty = false // should be ok
-}
+var a = new A()
+a.unknown = 1
+a.unknown = true
+a.unknown = {}
+a.unknown = 'hi'
+a.unknowable = 1
+a.unknowable = true
+a.unknowable = {}
+a.unknowable = 'hi'
+a.empty.push(1)
+a.empty.push(true)
+a.empty.push({})
+a.empty.push('hi')
 
-function f(a = null) {
+/** @type {number | undefined} */
+var n;
+
+// should get any on parameter initialisers
+function f(a = null, b = n, l = []) {
+    // a should be any
+    a = undefined
+    a = null
     a = 1
     a = true
     a = {}
-    a = 'hi'
+    a = 'ok'
+
+    // b should be number | undefined, not any
+    b = 1
+    b = undefined
+    b = 'error'
+
+    // l should be any[]
+    l.push(1)
+    l.push('ok')
 }
+
+// should get any on variable initialisers
+var u = undefined;
+var l = [];
+u = undefined
+u = 1
+u = true
+u = {}
+u = 'ok'
+
+l.push('ok')

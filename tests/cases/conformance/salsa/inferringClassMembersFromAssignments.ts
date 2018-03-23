@@ -21,6 +21,7 @@ class C {
             this.inMethod = "string"
         }
         this.inMultiple = "string";
+        this.inMultipleMethods = "string";
 
         var action = () => {
             if (Math.random()) {
@@ -39,6 +40,7 @@ class C {
             this.inGetter = "string"
         }
         this.inMultiple = false;
+        this.inMultipleMethods = false;
     }
     set() {
         if (Math.random()) {
@@ -115,7 +117,10 @@ var stringOrNumberOrUndefined = c.inNestedArrowFunction
 
 var stringOrNumberOrBoolean: string | number | boolean;
 
-var stringOrNumberOrBoolean = c.inMultiple;
+var number: number;
+var number = c.inMultiple;
+var stringOrBooleanOrUndefined : string | boolean | undefined;
+var stringOrBooleanOrUndefined = c.inMultipleMethods;
 
 
 var stringOrNumberOrUndefined = C.inStaticMethod;
