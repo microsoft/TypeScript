@@ -512,6 +512,7 @@ namespace ts.server {
                 hrtime: process.hrtime,
                 logger,
                 canUseEvents: true,
+                suppressDiagnosticEvents,
                 globalPlugins,
                 pluginProbeLocations,
                 allowLocalPluginLoads,
@@ -927,6 +928,7 @@ namespace ts.server {
     const useSingleInferredProject = hasArgument("--useSingleInferredProject");
     const useInferredProjectPerProjectRoot = hasArgument("--useInferredProjectPerProjectRoot");
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
+    const suppressDiagnosticEvents = hasArgument("--suppressDiagnosticEvents");
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
 
     logger.info(`Starting TS Server`);

@@ -295,6 +295,8 @@ namespace ts.server {
          */
         canUseEvents: boolean;
         eventHandler?: ProjectServiceEventHandler;
+        /** Has no effect if eventHandler is also specified. */
+        suppressDiagnosticEvents?: boolean;
         throttleWaitMilliseconds?: number;
 
         globalPlugins?: ReadonlyArray<string>;
@@ -318,6 +320,7 @@ namespace ts.server {
         protected logger: Logger;
 
         protected canUseEvents: boolean;
+        private suppressDiagnosticEvents?: boolean;
         private eventHandler: ProjectServiceEventHandler;
 
         constructor(opts: SessionOptions) {
@@ -328,6 +331,7 @@ namespace ts.server {
             this.hrtime = opts.hrtime;
             this.logger = opts.logger;
             this.canUseEvents = opts.canUseEvents;
+            this.suppressDiagnosticEvents = opts.suppressDiagnosticEvents;
 
             const { throttleWaitMilliseconds } = opts;
 
@@ -352,6 +356,7 @@ namespace ts.server {
                 typingsInstaller: this.typingsInstaller,
                 throttleWaitMilliseconds,
                 eventHandler: this.eventHandler,
+                suppressDiagnosticEvents: this.suppressDiagnosticEvents,
                 globalPlugins: opts.globalPlugins,
                 pluginProbeLocations: opts.pluginProbeLocations,
                 allowLocalPluginLoads: opts.allowLocalPluginLoads
@@ -401,11 +406,12 @@ namespace ts.server {
         private projectsUpdatedInBackgroundEvent(openFiles: string[]): void {
             this.projectService.logger.info(`got projects updated in background, updating diagnostics for ${openFiles}`);
             if (openFiles.length) {
-                const checkList = this.createCheckList(openFiles);
+                if (!this.suppressDiagnosticEvents) {
+                    const checkList = this.createCheckList(openFiles);
 
-                // For now only queue error checking for open files. We can change this to include non open files as well
-                this.errorCheck.startNew(next => this.updateErrorCheck(next, checkList, 100, /*requireOpen*/ true));
-
+                    // For now only queue error checking for open files. We can change this to include non open files as well
+                    this.errorCheck.startNew(next => this.updateErrorCheck(next, checkList, 100, /*requireOpen*/ true));
+                }
 
                 // Send project changed event
                 this.event<protocol.ProjectsUpdatedInBackgroundEventBody>({
@@ -489,7 +495,10 @@ namespace ts.server {
             }
         }
 
+        /** It is the caller's responsibility to verify that `!this.suppressDiagnosticEvents`. */
         private updateErrorCheck(next: NextStep, checkList: PendingErrorCheck[], ms: number, requireOpen = true) {
+            Debug.assert(!this.suppressDiagnosticEvents); // Caller's responsibility
+
             const seq = this.changeSeq;
             const followMs = Math.min(ms, 200);
 
@@ -1379,6 +1388,10 @@ namespace ts.server {
         }
 
         private getDiagnostics(next: NextStep, delay: number, fileNames: string[]): void {
+            if (this.suppressDiagnosticEvents) {
+                return;
+            }
+
             const checkList = this.createCheckList(fileNames);
             if (checkList.length > 0) {
                 this.updateErrorCheck(next, checkList, delay);
@@ -1748,6 +1761,10 @@ namespace ts.server {
         }
 
         private getDiagnosticsForProject(next: NextStep, delay: number, fileName: string): void {
+            if (this.suppressDiagnosticEvents) {
+                return;
+            }
+
             const { fileNames, languageServiceDisabled } = this.getProjectInfoWorker(fileName, /*projectFileName*/ undefined, /*needFileNameList*/ true, /*excludeConfigFiles*/ true);
             if (languageServiceDisabled) {
                 return;
