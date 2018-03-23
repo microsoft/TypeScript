@@ -4264,10 +4264,12 @@ namespace ts {
                 return getWidenedLiteralType(checkExpressionCached(specialDeclaration));
             }
             const types: Type[] = [];
+            let constructorTypes: Type[];
             let definedInConstructor = false;
             let definedInMethod = false;
             let jsDocType: Type;
             for (const declaration of symbol.declarations) {
+                let declarationInConstructor = false;
                 const expression = declaration.kind === SyntaxKind.BinaryExpression ? <BinaryExpression>declaration :
                     declaration.kind === SyntaxKind.PropertyAccessExpression ? <BinaryExpression>getAncestor(declaration, SyntaxKind.BinaryExpression) :
                         undefined;
@@ -4280,9 +4282,10 @@ namespace ts {
                     const thisContainer = getThisContainer(expression, /*includeArrowFunctions*/ false);
                     // Properties defined in a constructor (or javascript constructor function) don't get undefined added.
                     // Function expressions that are assigned to the prototype count as methods.
-                    if (thisContainer.kind === SyntaxKind.Constructor ||
+                    declarationInConstructor = thisContainer.kind === SyntaxKind.Constructor ||
                         thisContainer.kind === SyntaxKind.FunctionDeclaration ||
-                        (thisContainer.kind === SyntaxKind.FunctionExpression && !isPrototypePropertyAssignment(thisContainer.parent))) {
+                        (thisContainer.kind === SyntaxKind.FunctionExpression && !isPrototypePropertyAssignment(thisContainer.parent));
+                    if (declarationInConstructor) {
                         // TODO: Use the constructor types only if they contain anything but null and undefined
                         definedInConstructor = true;
                     }
@@ -4306,13 +4309,31 @@ namespace ts {
                 }
                 else if (!jsDocType) {
                     // If we don't have an explicit JSDoc type, get the type from the expression.
-                    types.push(getWidenedLiteralType(checkExpressionCached(expression.right)));
+                    const type = getWidenedLiteralType(checkExpressionCached(expression.right));
+                    const anyedType = isEmptyArrayLiteralType(type) ? anyArrayType : type;
+                    types.push(anyedType);
+                    if (declarationInConstructor) {
+                        (constructorTypes || (constructorTypes = [])).push(anyedType);
+                    }
+                }
+            }
+            let type = jsDocType;
+            if (!type) {
+                // TODO: Re-collapse this to one expression
+                if (some(constructorTypes, t => !!(t.flags & ~(TypeFlags.Nullable | TypeFlags.ContainsWideningType)))) {
+                    type = getUnionType(constructorTypes, UnionReduction.Subtype);
+                }
+                else if (constructorTypes && constructorTypes.length === types.length) {
+                    type = anyType;
+                }
+                else {
+                    type = getUnionType(types, UnionReduction.Subtype);
                 }
             }
 
-            const type = jsDocType || getUnionType(types, UnionReduction.Subtype);
             return getWidenedType(addOptionality(type, definedInMethod && !definedInConstructor));
         }
+
 
         // Return the type implied by a binding pattern element. This is the type of the initializer of the element if
         // one is present. Otherwise, if the element is itself a binding pattern, it is the type implied by the binding
