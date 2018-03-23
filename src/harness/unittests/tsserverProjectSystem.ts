@@ -6294,6 +6294,44 @@ namespace ts.projectSystem {
                 verifyNpmInstall(/*timeoutDuringPartialInstallation*/ false);
             });
         });
+
+        it("when node_modules dont receive event for the @types file addition", () => {
+            const projectLocation = "/user/username/folder/myproject";
+            const app: FileOrFolder = {
+                path: `${projectLocation}/app.ts`,
+                content: `import * as debug from "debug"`
+            };
+            const tsconfig: FileOrFolder = {
+                path: `${projectLocation}/tsconfig.json`,
+                content: ""
+            };
+
+            const files = [app, tsconfig, libFile];
+            const host = createServerHost(files);
+            const service = createProjectService(host);
+            service.openClientFile(app.path);
+
+            const project = service.configuredProjects.get(tsconfig.path);
+            checkProjectActualFiles(project, files.map(f => f.path));
+            assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(app.path).map(diag => diag.messageText), ["Cannot find module 'debug'."]);
+
+            const debugTypesFile: FileOrFolder = {
+                path: `${projectLocation}/node_modules/@types/debug/index.d.ts`,
+                content: "export {}"
+            };
+            files.push(debugTypesFile);
+            // Do not invoke recursive directory watcher for anything other than node_module/@types
+            const invoker = host.invokeWatchedDirectoriesRecursiveCallback;
+            host.invokeWatchedDirectoriesRecursiveCallback = (fullPath, relativePath) => {
+                if (fullPath.endsWith("@types")) {
+                    invoker.call(host, fullPath, relativePath);
+                }
+            };
+            host.reloadFS(files);
+            host.runQueuedTimeoutCallbacks();
+            checkProjectActualFiles(project, files.map(f => f.path));
+            assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(app.path).map(diag => diag.messageText), []);
+        });
     });
 
     describe("tsserverProjectSystem ProjectsChangedInBackground", () => {
