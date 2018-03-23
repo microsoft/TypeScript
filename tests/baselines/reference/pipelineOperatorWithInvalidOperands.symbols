@@ -1,0 +1,75 @@
+=== tests/cases/compiler/pipelineOperatorWithInvalidOperands.ts ===
+var a: any;
+>a : Symbol(a, Decl(pipelineOperatorWithInvalidOperands.ts, 0, 3))
+
+var b: number;
+>b : Symbol(b, Decl(pipelineOperatorWithInvalidOperands.ts, 1, 3))
+
+var c: undefined;
+>c : Symbol(c, Decl(pipelineOperatorWithInvalidOperands.ts, 2, 3))
+
+var d: null;
+>d : Symbol(d, Decl(pipelineOperatorWithInvalidOperands.ts, 3, 3))
+
+var e: boolean;
+>e : Symbol(e, Decl(pipelineOperatorWithInvalidOperands.ts, 4, 3))
+
+var f: object;
+>f : Symbol(f, Decl(pipelineOperatorWithInvalidOperands.ts, 5, 3))
+
+var h: string;
+>h : Symbol(h, Decl(pipelineOperatorWithInvalidOperands.ts, 6, 3))
+
+var g: Number;
+>g : Symbol(g, Decl(pipelineOperatorWithInvalidOperands.ts, 7, 3))
+>Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+var k: { a: number };
+>k : Symbol(k, Decl(pipelineOperatorWithInvalidOperands.ts, 8, 3))
+>a : Symbol(a, Decl(pipelineOperatorWithInvalidOperands.ts, 8, 8))
+
+var r1a1 = a |> a; //ok
+>r1a1 : Symbol(r1a1, Decl(pipelineOperatorWithInvalidOperands.ts, 10, 3))
+>a : Symbol(a, Decl(pipelineOperatorWithInvalidOperands.ts, 0, 3))
+>a : Symbol(a, Decl(pipelineOperatorWithInvalidOperands.ts, 0, 3))
+
+var r1a2 = a |> b;
+>r1a2 : Symbol(r1a2, Decl(pipelineOperatorWithInvalidOperands.ts, 11, 3))
+>a : Symbol(a, Decl(pipelineOperatorWithInvalidOperands.ts, 0, 3))
+>b : Symbol(b, Decl(pipelineOperatorWithInvalidOperands.ts, 1, 3))
+
+var r1a3 = a |> c; //ok
+>r1a3 : Symbol(r1a3, Decl(pipelineOperatorWithInvalidOperands.ts, 12, 3))
+>a : Symbol(a, Decl(pipelineOperatorWithInvalidOperands.ts, 0, 3))
+>c : Symbol(c, Decl(pipelineOperatorWithInvalidOperands.ts, 2, 3))
+
+var r1a4 = a |> d; //ok
+>r1a4 : Symbol(r1a4, Decl(pipelineOperatorWithInvalidOperands.ts, 13, 3))
+>a : Symbol(a, Decl(pipelineOperatorWithInvalidOperands.ts, 0, 3))
+>d : Symbol(d, Decl(pipelineOperatorWithInvalidOperands.ts, 3, 3))
+
+var r1a5 = a |> e;
+>r1a5 : Symbol(r1a5, Decl(pipelineOperatorWithInvalidOperands.ts, 14, 3))
+>a : Symbol(a, Decl(pipelineOperatorWithInvalidOperands.ts, 0, 3))
+>e : Symbol(e, Decl(pipelineOperatorWithInvalidOperands.ts, 4, 3))
+
+var r1a6 = a |> f;
+>r1a6 : Symbol(r1a6, Decl(pipelineOperatorWithInvalidOperands.ts, 15, 3))
+>a : Symbol(a, Decl(pipelineOperatorWithInvalidOperands.ts, 0, 3))
+>f : Symbol(f, Decl(pipelineOperatorWithInvalidOperands.ts, 5, 3))
+
+var r1a7 = a |> h;
+>r1a7 : Symbol(r1a7, Decl(pipelineOperatorWithInvalidOperands.ts, 16, 3))
+>a : Symbol(a, Decl(pipelineOperatorWithInvalidOperands.ts, 0, 3))
+>h : Symbol(h, Decl(pipelineOperatorWithInvalidOperands.ts, 6, 3))
+
+var r1a8 = a |> g;
+>r1a8 : Symbol(r1a8, Decl(pipelineOperatorWithInvalidOperands.ts, 17, 3))
+>a : Symbol(a, Decl(pipelineOperatorWithInvalidOperands.ts, 0, 3))
+>g : Symbol(g, Decl(pipelineOperatorWithInvalidOperands.ts, 7, 3))
+
+var r1a9 = a |> k;
+>r1a9 : Symbol(r1a9, Decl(pipelineOperatorWithInvalidOperands.ts, 18, 3))
+>a : Symbol(a, Decl(pipelineOperatorWithInvalidOperands.ts, 0, 3))
+>k : Symbol(k, Decl(pipelineOperatorWithInvalidOperands.ts, 8, 3))
+
