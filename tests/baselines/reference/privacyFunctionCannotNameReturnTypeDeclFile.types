@@ -313,7 +313,7 @@ function privateFunctionWithPrivateModuleReturnTypes1() {
 
 === tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalWidgets.ts ===
 declare module "GlobalWidgets" {
->"GlobalWidgets" : typeof "GlobalWidgets"
+>"GlobalWidgets" : typeof import("GlobalWidgets")
 
     export class Widget3 {
 >Widget3 : Widget3

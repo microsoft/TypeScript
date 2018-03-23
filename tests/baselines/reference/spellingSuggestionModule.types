@@ -1,6 +1,6 @@
 === tests/cases/compiler/spellingSuggestionModule.ts ===
 declare module "foobar" { export const x: number; }
->"foobar" : typeof "foobar"
+>"foobar" : typeof import("foobar")
 >x : number
 
 foobar;

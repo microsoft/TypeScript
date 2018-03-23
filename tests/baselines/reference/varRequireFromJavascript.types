@@ -1,7 +1,7 @@
 === tests/cases/conformance/salsa/use.js ===
 var ex = require('./ex')
->ex : typeof "tests/cases/conformance/salsa/ex"
->require('./ex') : typeof "tests/cases/conformance/salsa/ex"
+>ex : typeof import("tests/cases/conformance/salsa/ex")
+>require('./ex') : typeof import("tests/cases/conformance/salsa/ex")
 >require : any
 >'./ex' : "./ex"
 
@@ -10,7 +10,7 @@ var crunch = new ex.Crunch(1);
 >crunch : Crunch
 >new ex.Crunch(1) : Crunch
 >ex.Crunch : typeof Crunch
->ex : typeof "tests/cases/conformance/salsa/ex"
+>ex : typeof import("tests/cases/conformance/salsa/ex")
 >Crunch : typeof Crunch
 >1 : 1
 

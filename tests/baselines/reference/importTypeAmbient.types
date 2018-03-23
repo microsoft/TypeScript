@@ -1,6 +1,6 @@
 === tests/cases/conformance/types/import/importTypeAmbient.ts ===
 declare module "foo" {
->"foo" : typeof "foo"
+>"foo" : typeof import("foo")
 
     interface Point {
 >Point : Point
@@ -23,7 +23,7 @@ const x: import("foo") = { x: 0, y: 0 };
 >0 : 0
 
 declare module "foo2" {
->"foo2" : typeof "foo2"
+>"foo2" : typeof import("foo2")
 
     namespace Bar {
 >Bar : typeof Bar
@@ -92,7 +92,7 @@ class Bar2 {
 }
 
 let shim: typeof import("foo2") = {
->shim : typeof "foo2"
+>shim : typeof import("foo2")
 >{    Bar: Bar2} : { Bar: typeof Bar2; }
 
     Bar: Bar2

@@ -239,7 +239,7 @@ class privateClassWithPrivateModuleGetAccessorTypes {
 }
 === tests/cases/compiler/privacyCannotNameAccessorDeclFile_GlobalWidgets.ts ===
 declare module "GlobalWidgets" {
->"GlobalWidgets" : typeof "GlobalWidgets"
+>"GlobalWidgets" : typeof import("GlobalWidgets")
 
     export class Widget3 {
 >Widget3 : Widget3

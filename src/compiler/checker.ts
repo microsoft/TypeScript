@@ -25107,7 +25107,7 @@ namespace ts {
                 return getSymbolOfPartOfRightHandSideOfImportEquals(entityName, /*dontResolveAlias*/ true);
             }
 
-            if (isRightSideOfQualifiedNameOrPropertyAccess(entityName)) {
+            while (isRightSideOfQualifiedNameOrPropertyAccess(entityName)) {
                 entityName = <QualifiedName | PropertyAccessEntityNameExpression>entityName.parent;
             }
 

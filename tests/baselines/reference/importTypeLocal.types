@@ -89,7 +89,7 @@ export class Bar2 {
 }
 
 export let shim: typeof import("./foo2") = {
->shim : typeof "tests/cases/conformance/types/import/foo2"
+>shim : typeof import("tests/cases/conformance/types/import/foo2")
 >{    Bar: Bar2} : { Bar: typeof Bar2; }
 
     Bar: Bar2
