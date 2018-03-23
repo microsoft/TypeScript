@@ -802,17 +802,19 @@ namespace ts {
             : node;
     }
 
-    export function createImportTypeNode(argument: TypeNode, qualifier?: EntityName) {
+    export function createImportTypeNode(argument: TypeNode, qualifier?: EntityName, isTypeOf?: boolean) {
         const node = <ImportTypeNode>createSynthesizedNode(SyntaxKind.ImportTypeNode);
         node.argument = argument;
         node.qualifier = qualifier;
+        node.isTypeOf = isTypeOf;
         return node;
     }
 
-    export function updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, qualifier?: EntityName) {
+    export function updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, qualifier?: EntityName, isTypeOf?: boolean) {
         return node.argument !== argument
-            && node.qualifier !== qualifier
-            ? updateNode(createImportTypeNode(argument, qualifier), node)
+            || node.qualifier !== qualifier
+            || !!node.isTypeOf !== !!isTypeOf
+            ? updateNode(createImportTypeNode(argument, qualifier, isTypeOf), node)
             : node;
     }
 

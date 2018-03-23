@@ -2953,7 +2953,7 @@ namespace ts {
                 if (type.flags & TypeFlags.UniqueESSymbol) {
                     if (!(context.flags & NodeBuilderFlags.AllowUniqueESSymbolType)) {
                         if (isValueSymbolAccessible(type.symbol, context.enclosingDeclaration)) {
-                            return createTypeQueryNode(symbolToName(type.symbol, context, SymbolFlags.Value, /*expectsIdentifier*/ false));
+                            return symbolToTypeNode(type.symbol, context, SymbolFlags.Value);
                         }
                         if (context.tracker.reportInaccessibleUniqueSymbolError) {
                             context.tracker.reportInaccessibleUniqueSymbolError();
@@ -3072,15 +3072,14 @@ namespace ts {
                         if (symbol.flags & SymbolFlags.Class && !getBaseTypeVariableOfClass(symbol) && !(symbol.valueDeclaration.kind === SyntaxKind.ClassExpression && context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral) ||
                             symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule) ||
                             shouldWriteTypeOfFunctionSymbol()) {
-                            return createTypeQueryNodeFromSymbol(symbol, SymbolFlags.Value);
+                            return symbolToTypeNode(symbol, context, SymbolFlags.Value);
                         }
                         else if (contains(context.symbolStack, symbol)) {
                             // If type is an anonymous type literal in a type alias declaration, use type alias name
                             const typeAlias = getTypeAliasForTypeLiteral(type);
                             if (typeAlias) {
                                 // The specified symbol flags need to be reinterpreted as type flags
-                                const entityName = symbolToName(typeAlias, context, SymbolFlags.Type, /*expectsIdentifier*/ false);
-                                return createTypeReferenceNode(entityName, /*typeArguments*/ undefined);
+                                return symbolToTypeNode(typeAlias, context, SymbolFlags.Type);
                             }
                             else {
                                 return createKeywordTypeNode(SyntaxKind.AnyKeyword);
@@ -3156,11 +3155,6 @@ namespace ts {
                     context.flags = savedFlags;
                     const typeLiteralNode = createTypeLiteralNode(members);
                     return setEmitFlags(typeLiteralNode, (context.flags & NodeBuilderFlags.MultilineObjectLiterals) ? 0 : EmitFlags.SingleLine);
-                }
-
-                function createTypeQueryNodeFromSymbol(symbol: Symbol, symbolFlags: SymbolFlags) {
-                    const entityName = symbolToName(symbol, context, symbolFlags, /*expectsIdentifier*/ false);
-                    return createTypeQueryNode(entityName);
                 }
 
                 function symbolToTypeReferenceName(symbol: Symbol) {
@@ -3557,6 +3551,41 @@ namespace ts {
                     }
                 }
                 return typeParameterNodes;
+            }
+
+            function symbolToTypeNode(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags): TypeQueryNode | TypeReferenceNode | ImportTypeNode {
+                const chain = lookupSymbolChain(symbol, context, meaning);
+
+                context.flags |= NodeBuilderFlags.InInitialEntityName;
+                const rootName = getNameOfSymbolAsWritten(chain[0], context);
+                context.flags ^= NodeBuilderFlags.InInitialEntityName;
+
+                const isTypeOf = meaning === SymbolFlags.Value;
+                if (ambientModuleSymbolRegex.test(rootName)) {
+                    // module is root, must use `ImportTypeNode`
+                    const nonRootParts = chain.length > 1 ? createEntityNameFromSymbolChain(chain, chain.length - 1, 1) : undefined;
+                    return createImportTypeNode(createLiteralTypeNode(createLiteral(rootName.substring(1, rootName.length - 1))), nonRootParts, isTypeOf);
+                }
+
+                const entityName = createEntityNameFromSymbolChain(chain, chain.length - 1, 0);
+                return isTypeOf ? createTypeQueryNode(entityName) : createTypeReferenceNode(entityName, /*typeArguments*/ undefined);
+
+                function createEntityNameFromSymbolChain(chain: Symbol[], index: number, stopper: number): EntityName {
+                    const typeParameterNodes = lookupTypeParameterNodes(chain, index, context);
+                    const symbol = chain[index];
+
+                    if (index === 0) {
+                       context.flags |= NodeBuilderFlags.InInitialEntityName;
+                    }
+                    const symbolName = getNameOfSymbolAsWritten(symbol, context);
+                    if (index === 0) {
+                        context.flags ^= NodeBuilderFlags.InInitialEntityName;
+                    }
+                    const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                    identifier.symbol = symbol;
+
+                    return index > stopper ? createQualifiedName(createEntityNameFromSymbolChain(chain, index - 1, stopper), identifier) : identifier;
+                }
             }
 
             function symbolToName(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, expectsIdentifier: true): Identifier;
