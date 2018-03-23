@@ -4230,6 +4230,14 @@ namespace ts {
 
             // Use the type of the initializer expression if one is present
             if (declaration.initializer) {
+                if (isInJavaScriptFile(declaration)) {
+                    if (isNullOrUndefined(declaration.initializer)) {
+                        return anyType;
+                    }
+                    else if (isEmptyArrayLiteral(declaration.initializer)) {
+                        return anyArrayType;
+                    }
+                }
                 const type = checkDeclarationInitializer(declaration);
                 return addOptionality(type, isOptional);
             }
