@@ -531,9 +531,23 @@ namespace ts.formatting {
             return false;
         }
 
-        export function nodeWillIndentChild(parent: TextRangeWithKind, child: TextRangeWithKind | undefined, indentByDefault: boolean): boolean {
+        export function nodeWillIndentChild(parent: TextRangeWithKind, child: Node | undefined, indentByDefault: boolean): boolean {
             const childKind = child ? child.kind : SyntaxKind.Unknown;
+
             switch (parent.kind) {
+                case SyntaxKind.VariableDeclaration:
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.ObjectLiteralExpression:
+                    if (childKind === SyntaxKind.ObjectLiteralExpression) {
+                        const sourceFile = child.getSourceFile();
+                        if (sourceFile) {
+                            // May not be defined for synthesized nodes.
+                            const startLine = sourceFile.getLineAndCharacterOfPosition(child.getStart()).line;
+                            const endLine = sourceFile.getLineAndCharacterOfPosition(child.getEnd()).line;
+                            return startLine === endLine;
+                        }
+                    }
+                    break;
                 case SyntaxKind.DoStatement:
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.ForInStatement:
@@ -585,7 +599,7 @@ namespace ts.formatting {
          * True when the parent node should indent the given child by an explicit rule.
          * @param isNextChild If true, we are judging indent of a hypothetical child *after* this one, not the current child.
          */
-        export function shouldIndentChildNode(parent: TextRangeWithKind, child?: TextRangeWithKind, isNextChild = false): boolean {
+        export function shouldIndentChildNode(parent: TextRangeWithKind, child?: Node, isNextChild = false): boolean {
             return (nodeContentIsAlwaysIndented(parent.kind) || nodeWillIndentChild(parent, child, /*indentByDefault*/ false))
                 && !(isNextChild && child && isControlFlowEndingStatement(child.kind, parent));
         }

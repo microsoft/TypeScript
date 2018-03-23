@@ -581,7 +581,7 @@ namespace ts.formatting {
                     && !(node.decorators && kind === getFirstNonDecoratorTokenOfNode(node));
             }
 
-            function getDelta(child: TextRangeWithKind) {
+            function getDelta(child: Node) {
                 // Delta value should be zero when the node explicitly prevents indentation of the child node
                 return SmartIndenter.nodeWillIndentChild(node, child, /*indentByDefault*/ true) ? delta : 0;
             }
