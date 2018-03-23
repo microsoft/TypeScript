@@ -1,0 +1,51 @@
+=== tests/cases/compiler/pipelineOperatorWithAsyncArrowFunctions.ts ===
+function then<T, R>(fn: (value: T) => R) {
+>then : <T, R>(fn: (value: T) => R) => (value: Promise<T>) => Promise<R>
+>T : T
+>R : R
+>fn : (value: T) => R
+>value : T
+>T : T
+>R : R
+
+  return async (value: Promise<T>): Promise<R> => {
+>async (value: Promise<T>): Promise<R> => {    return fn(await value);  } : (value: Promise<T>) => Promise<R>
+>value : Promise<T>
+>Promise : Promise<T>
+>T : T
+>Promise : Promise<T>
+>R : R
+
+    return fn(await value);
+>fn(await value) : R
+>fn : (value: T) => R
+>await value : T
+>value : Promise<T>
+
+  };
+}
+
+var res = 1
+>res : Promise<number>
+>1  |> (async (x: number) => await x + 1)  |> then((x: number) => x + 1) : Promise<number>
+>1  |> (async (x: number) => await x + 1) : Promise<number>
+>1 : 1
+
+  |> (async (x: number) => await x + 1)
+>(async (x: number) => await x + 1) : (x: number) => Promise<number>
+>async (x: number) => await x + 1 : (x: number) => Promise<number>
+>x : number
+>await x + 1 : number
+>await x : number
+>x : number
+>1 : 1
+
+  |> then((x: number) => x + 1);
+>then((x: number) => x + 1) : (value: Promise<number>) => Promise<number>
+>then : <T, R>(fn: (value: T) => R) => (value: Promise<T>) => Promise<R>
+>(x: number) => x + 1 : (x: number) => number
+>x : number
+>x + 1 : number
+>x : number
+>1 : 1
+

@@ -1,0 +1,36 @@
+=== tests/cases/compiler/pipelineOperatorWithAsyncArrowFunctions.ts ===
+function then<T, R>(fn: (value: T) => R) {
+>then : Symbol(then, Decl(pipelineOperatorWithAsyncArrowFunctions.ts, 0, 0))
+>T : Symbol(T, Decl(pipelineOperatorWithAsyncArrowFunctions.ts, 0, 14))
+>R : Symbol(R, Decl(pipelineOperatorWithAsyncArrowFunctions.ts, 0, 16))
+>fn : Symbol(fn, Decl(pipelineOperatorWithAsyncArrowFunctions.ts, 0, 20))
+>value : Symbol(value, Decl(pipelineOperatorWithAsyncArrowFunctions.ts, 0, 25))
+>T : Symbol(T, Decl(pipelineOperatorWithAsyncArrowFunctions.ts, 0, 14))
+>R : Symbol(R, Decl(pipelineOperatorWithAsyncArrowFunctions.ts, 0, 16))
+
+  return async (value: Promise<T>): Promise<R> => {
+>value : Symbol(value, Decl(pipelineOperatorWithAsyncArrowFunctions.ts, 1, 16))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>T : Symbol(T, Decl(pipelineOperatorWithAsyncArrowFunctions.ts, 0, 14))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>R : Symbol(R, Decl(pipelineOperatorWithAsyncArrowFunctions.ts, 0, 16))
+
+    return fn(await value);
+>fn : Symbol(fn, Decl(pipelineOperatorWithAsyncArrowFunctions.ts, 0, 20))
+>value : Symbol(value, Decl(pipelineOperatorWithAsyncArrowFunctions.ts, 1, 16))
+
+  };
+}
+
+var res = 1
+>res : Symbol(res, Decl(pipelineOperatorWithAsyncArrowFunctions.ts, 6, 3))
+
+  |> (async (x: number) => await x + 1)
+>x : Symbol(x, Decl(pipelineOperatorWithAsyncArrowFunctions.ts, 7, 13))
+>x : Symbol(x, Decl(pipelineOperatorWithAsyncArrowFunctions.ts, 7, 13))
+
+  |> then((x: number) => x + 1);
+>then : Symbol(then, Decl(pipelineOperatorWithAsyncArrowFunctions.ts, 0, 0))
+>x : Symbol(x, Decl(pipelineOperatorWithAsyncArrowFunctions.ts, 8, 11))
+>x : Symbol(x, Decl(pipelineOperatorWithAsyncArrowFunctions.ts, 8, 11))
+
