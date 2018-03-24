@@ -1781,14 +1781,14 @@ namespace ts {
             writeSemicolon();
         }
 
-        function emitTokenWithComment(token: SyntaxKind, pos: number, writer: (s: string) => void, contextNode?: Node, indentLeading?: boolean) {
-            const node = contextNode && getParseTreeNode(contextNode);
+        function emitTokenWithComment(token: SyntaxKind, pos: number, writer: (s: string) => void, contextNode: Node, indentLeading?: boolean) {
+            const node = getParseTreeNode(contextNode);
             const isSimilarNode = node && node.kind === contextNode.kind;
             const startPos = pos;
             if (isSimilarNode) {
                 pos = skipTrivia(currentSourceFile.text, pos);
             }
-            if (emitLeadingCommentsOfPosition && isSimilarNode) {
+            if (emitLeadingCommentsOfPosition && isSimilarNode && contextNode.pos !== startPos) {
                 const needsIndent = indentLeading && !positionsAreOnSameLine(startPos, pos, currentSourceFile);
                 if (needsIndent) {
                     increaseIndent();
@@ -1799,7 +1799,7 @@ namespace ts {
                 }
             }
             pos = writeTokenText(token, writer, pos);
-            if (emitTrailingCommentsOfPosition && isSimilarNode) {
+            if (emitTrailingCommentsOfPosition && isSimilarNode && contextNode.end !== pos) {
                 emitTrailingCommentsOfPosition(pos, /*prefixSpace*/ true);
             }
             return pos;
