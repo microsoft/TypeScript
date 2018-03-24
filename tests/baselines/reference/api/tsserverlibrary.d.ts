@@ -2899,6 +2899,7 @@ declare namespace ts {
         clearTimeout?(timeoutId: any): void;
         clearScreen?(): void;
         base64decode?(input: string): string;
+        base64encode?(input: string): string;
     }
     interface FileWatcher {
         close(): void;

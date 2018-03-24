@@ -1581,18 +1581,18 @@ namespace ts {
         }
 
 
-        const sourceMapCommentRE = /^\/\/[@#] sourceMappingURL=(.+)$/gm;
-        const dataURLRE = /^data:/;
-        const base64URLRE = /^data:application\/json;charset=utf-8;base64,(.+)$/;
+        const sourceMapCommentRegExp = /^\/\/[@#] sourceMappingURL=(.+)$/gm;
+        const dataURLRegExp = /^data:/;
+        const base64UrlRegExp = /^data:application\/json;charset=utf-8;base64,(.+)$/;
         function scanForSourcemapURL(fileName: string) {
             const mappedFile = sourcemappedFileCache.get(toPath(fileName, currentDirectory, getCanonicalFileName));
             if (!mappedFile) {
                 return;
             }
             const starts = getLineStarts(mappedFile);
-            for (let index = starts.length - 1; index--; index >= 0) {
-                sourceMapCommentRE.lastIndex = starts[index];
-                const comment = sourceMapCommentRE.exec(mappedFile.text);
+            for (let index = starts.length - 1; index >= 0; index--) {
+                sourceMapCommentRegExp.lastIndex = starts[index];
+                const comment = sourceMapCommentRegExp.exec(mappedFile.text);
                 if (comment) {
                     return comment[1];
                 }
@@ -1627,8 +1627,8 @@ namespace ts {
                 return file.sourceMapper;
             }
             let mapFileName = scanForSourcemapURL(fileName);
-            if (mapFileName && dataURLRE.exec(mapFileName)) {
-                const b64EncodedMatch = base64URLRE.exec(mapFileName);
+            if (mapFileName && dataURLRegExp.exec(mapFileName)) {
+                const b64EncodedMatch = base64UrlRegExp.exec(mapFileName);
                 if (b64EncodedMatch) {
                     const base64Object = b64EncodedMatch[1];
                     return convertDocumentToSourceMapper(file, base64decode(sys, base64Object), fileName);

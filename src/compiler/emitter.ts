@@ -199,7 +199,7 @@ namespace ts {
                 onEmitSourceMapOfNode: declarationSourceMap.emitNodeWithSourceMap,
                 onEmitSourceMapOfToken: declarationSourceMap.emitTokenWithSourceMap,
                 onEmitSourceMapOfPosition: declarationSourceMap.emitPos,
-                onSetSourceFile: setSourceFileDeclarationMaps,
+                onSetSourceFile: setSourceFileForDeclarationSourceMaps,
 
                 // transform hooks
                 onEmitNode: declarationTransform.emitNodeWithNotification,
@@ -258,7 +258,7 @@ namespace ts {
             sourceMap.setSourceFile(node);
         }
 
-        function setSourceFileDeclarationMaps(node: SourceFile) {
+        function setSourceFileForDeclarationSourceMaps(node: SourceFile) {
             currentSourceFile = node;
             declarationSourceMap.setSourceFile(node);
         }

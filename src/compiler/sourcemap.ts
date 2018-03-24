@@ -475,7 +475,7 @@ namespace ts {
 
             if (compilerOptions.inlineSourceMap) {
                 // Encode the sourceMap into the sourceMap url
-                const base64SourceMapText = convertToBase64(getText());
+                const base64SourceMapText = base64encode(sys, getText());
                 return sourceMapData.jsSourceMappingURL = `data:application/json;base64,${base64SourceMapText}`;
             }
             else {
