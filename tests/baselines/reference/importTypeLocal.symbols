@@ -64,6 +64,8 @@ export const x: import("./foo") = { x: 0, y: 0 };
 
 export let y: import("./foo2").Bar.I = { a: "", b: 0 };
 >y : Symbol(y, Decl(usage.ts, 1, 10))
+>Bar : Symbol(Bar, Decl(foo2.ts, 18, 8))
+>I : Symbol(Bar.I, Decl(foo2.ts, 0, 15))
 >a : Symbol(a, Decl(usage.ts, 1, 40))
 >b : Symbol(b, Decl(usage.ts, 1, 47))
 

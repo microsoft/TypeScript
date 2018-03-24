@@ -91,7 +91,7 @@ export const x: import("./foo")<{x: number}> = { x: 0, y: 0, data: {x: 12} };
 export let y: import("./foo2").Bar.I<{x: number}> = { a: "", b: 0, data: {x: 12} };
 >y : Bar.I<{ x: number; }>
 >Bar : any
->I : No type information available!
+>I : Bar.I<T>
 >x : number
 >{ a: "", b: 0, data: {x: 12} } : { a: string; b: number; data: { x: number; }; }
 >a : string

@@ -9,4 +9,6 @@ export type Value = "yes";
 === tests/cases/conformance/types/import/chainer.ts ===
 export const x: import(import("./a").LookAt).Value = "yes";
 >x : Symbol(x, Decl(chainer.ts, 0, 12))
+>LookAt : Symbol(LookAt, Decl(a.d.ts, 0, 0))
+>Value : Symbol(Value, Decl(b.d.ts, 0, 0))
 

@@ -9,7 +9,7 @@ export type Value = "yes";
 === tests/cases/conformance/types/import/chainer.ts ===
 export const x: import(import("./a").LookAt).Value = "yes";
 >x : "yes"
->LookAt : No type information available!
->Value : No type information available!
+>LookAt : "./b"
+>Value : "yes"
 >"yes" : "yes"
 

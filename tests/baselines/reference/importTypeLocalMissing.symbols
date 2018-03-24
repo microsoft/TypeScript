@@ -69,6 +69,7 @@ export let y: import("./fo2").Bar.I = { a: "", b: 0 };
 
 export let z: import("./foo2").Bar.Q = { a: "", b: 0 };
 >z : Symbol(z, Decl(usage.ts, 2, 10))
+>Bar : Symbol(Bar, Decl(foo2.ts, 18, 8))
 >a : Symbol(a, Decl(usage.ts, 2, 40))
 >b : Symbol(b, Decl(usage.ts, 2, 47))
 
