@@ -11603,6 +11603,13 @@ namespace ts {
             return undefined;
         }
 
+        function typesDefinitelyUnrelated(source: Type, target: Type) {
+            // Two tuple types with different arity are definitely unrelated.
+            // Two object types that each have a property that is unmatched in the other are definitely unrelated.
+            return isTupleType(source) && isTupleType(target) && getTypeReferenceArity(<TypeReference>source) !== getTypeReferenceArity(<TypeReference>target) ||
+                !!getUnmatchedProperty(source, target, /*requireOptionalProperties*/ false) && !!getUnmatchedProperty(target, source, /*requireOptionalProperties*/ false);
+        }
+
         function getTypeFromInference(inference: InferenceInfo) {
             return inference.candidates ? getUnionType(inference.candidates, UnionReduction.Subtype) :
                 inference.contraCandidates ? getIntersectionType(inference.contraCandidates) :
@@ -11873,9 +11880,8 @@ namespace ts {
                         return;
                     }
                 }
-                // Infer from the members of source and target only if the two types are possibly related. We check
-                // in both directions because we may be inferring for a co-variant or a contra-variant position.
-                if (!getUnmatchedProperty(source, target, /*requireOptionalProperties*/ false) || !getUnmatchedProperty(target, source, /*requireOptionalProperties*/ false)) {
+                // Infer from the members of source and target only if the two types are possibly related
+                if (!typesDefinitelyUnrelated(source, target)) {
                     inferFromProperties(source, target);
                     inferFromSignatures(source, target, SignatureKind.Call);
                     inferFromSignatures(source, target, SignatureKind.Construct);
