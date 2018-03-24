@@ -8499,6 +8499,8 @@ namespace ts {
                             error(current, Diagnostics.Namespace_0_has_no_exported_member_1, getFullyQualifiedName(currentNamespace), declarationNameToString(current));
                             return links.resolvedType = anyType;
                         }
+                        getNodeLinks(current).resolvedSymbol = next;
+                        getNodeLinks(current.parent).resolvedSymbol = next;
                         currentNamespace = next;
                     }
                     resolveImportSymbolType(node, links, currentNamespace, targetMeaning);
@@ -25080,6 +25082,18 @@ namespace ts {
             }
         }
 
+        function isImportTypeQualifierPart(node: EntityName): ImportTypeNode | undefined {
+            let parent = node.parent;
+            while (isQualifiedName(parent)) {
+                node = parent;
+                parent = parent.parent;
+            }
+            if (parent && parent.kind === SyntaxKind.ImportTypeNode && (parent as ImportTypeNode).qualifier === node) {
+                return parent as ImportTypeNode;
+            }
+            return undefined;
+        }
+
         function getSymbolOfEntityNameOrPropertyAccessExpression(entityName: EntityName | PropertyAccessExpression): Symbol | undefined {
             if (isDeclarationName(entityName)) {
                 return getSymbolOfNode(entityName.parent);
@@ -25100,11 +25114,19 @@ namespace ts {
                     /*all meanings*/ SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
             }
 
-            if (entityName.kind !== SyntaxKind.PropertyAccessExpression && isInRightSideOfImportOrExportAssignment(entityName)) {
-                // Since we already checked for ExportAssignment, this really could only be an Import
-                const importEqualsDeclaration = getAncestor(entityName, SyntaxKind.ImportEqualsDeclaration);
-                Debug.assert(importEqualsDeclaration !== undefined);
-                return getSymbolOfPartOfRightHandSideOfImportEquals(entityName, /*dontResolveAlias*/ true);
+            if (!isPropertyAccessExpression(entityName)) {
+                if (isInRightSideOfImportOrExportAssignment(entityName)) {
+                    // Since we already checked for ExportAssignment, this really could only be an Import
+                    const importEqualsDeclaration = getAncestor(entityName, SyntaxKind.ImportEqualsDeclaration);
+                    Debug.assert(importEqualsDeclaration !== undefined);
+                    return getSymbolOfPartOfRightHandSideOfImportEquals(entityName, /*dontResolveAlias*/ true);
+                }
+                const possibleImportNode = isImportTypeQualifierPart(entityName);
+                if (possibleImportNode) {
+                    getTypeFromTypeNode(possibleImportNode);
+                    const sym = getNodeLinks(entityName).resolvedSymbol;
+                    return sym === unknownSymbol ? undefined : sym;
+                }
             }
 
             while (isRightSideOfQualifiedNameOrPropertyAccess(entityName)) {
@@ -25260,9 +25282,12 @@ namespace ts {
                     // 1). import x = require("./mo/*gotToDefinitionHere*/d")
                     // 2). External module name in an import declaration
                     // 3). Dynamic import call or require in javascript
+                    // 4). type A = import("./f/*gotToDefinitionHere*/oo")
                     if ((isExternalModuleImportEqualsDeclaration(node.parent.parent) && getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node) ||
                         ((node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration) && (<ImportDeclaration>node.parent).moduleSpecifier === node) ||
-                        ((isInJavaScriptFile(node) && isRequireCall(node.parent, /*checkArgumentIsStringLiteralLike*/ false)) || isImportCall(node.parent))) {
+                        ((isInJavaScriptFile(node) && isRequireCall(node.parent, /*checkArgumentIsStringLiteralLike*/ false)) || isImportCall(node.parent)) ||
+                        (isLiteralTypeNode(node.parent) && isLiteralImportTypeNode(node.parent.parent) && node.parent.parent.argument === node.parent)
+                    ) {
                         return resolveExternalModuleName(node, <LiteralExpression>node);
                     }
                     // falls through
