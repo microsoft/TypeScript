@@ -10205,10 +10205,13 @@ namespace ts {
                             if (result = isRelatedTo(getTrueTypeFromConditionalType(<ConditionalType>source), getTrueTypeFromConditionalType(<ConditionalType>target), reportErrors)) {
                                 result &= isRelatedTo(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target), reportErrors);
                             }
-                            if (result) {
-                                errorInfo = saveErrorInfo;
-                                return result;
-                            }
+                        }
+                        else {
+                            result = isRelatedTo(getDefaultConstraintOfConditionalType(<ConditionalType>source), getDefaultConstraintOfConditionalType(<ConditionalType>target), reportErrors);
+                        }
+                        if (result) {
+                            errorInfo = saveErrorInfo;
+                            return result;
                         }
                     }
                     else if (relation !== definitelyAssignableRelation) {
