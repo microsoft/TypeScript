@@ -30,80 +30,79 @@ interface Invariant<T> {
 >T : Symbol(T, Decl(conditionalTypes2.ts, 8, 20))
 }
 
-interface A { a: string }
->A : Symbol(A, Decl(conditionalTypes2.ts, 10, 1))
->a : Symbol(A.a, Decl(conditionalTypes2.ts, 12, 13))
-
-interface B extends A { b: string }
->B : Symbol(B, Decl(conditionalTypes2.ts, 12, 25))
->A : Symbol(A, Decl(conditionalTypes2.ts, 10, 1))
->b : Symbol(B.b, Decl(conditionalTypes2.ts, 13, 23))
-
-
-function f1(a: Covariant<A>, b: Covariant<B>) {
->f1 : Symbol(f1, Decl(conditionalTypes2.ts, 13, 35))
->a : Symbol(a, Decl(conditionalTypes2.ts, 16, 12))
+function f1<A, B extends A>(a: Covariant<A>, b: Covariant<B>) {
+>f1 : Symbol(f1, Decl(conditionalTypes2.ts, 10, 1))
+>A : Symbol(A, Decl(conditionalTypes2.ts, 12, 12))
+>B : Symbol(B, Decl(conditionalTypes2.ts, 12, 14))
+>A : Symbol(A, Decl(conditionalTypes2.ts, 12, 12))
+>a : Symbol(a, Decl(conditionalTypes2.ts, 12, 28))
 >Covariant : Symbol(Covariant, Decl(conditionalTypes2.ts, 0, 0))
->A : Symbol(A, Decl(conditionalTypes2.ts, 10, 1))
->b : Symbol(b, Decl(conditionalTypes2.ts, 16, 28))
+>A : Symbol(A, Decl(conditionalTypes2.ts, 12, 12))
+>b : Symbol(b, Decl(conditionalTypes2.ts, 12, 44))
 >Covariant : Symbol(Covariant, Decl(conditionalTypes2.ts, 0, 0))
->B : Symbol(B, Decl(conditionalTypes2.ts, 12, 25))
+>B : Symbol(B, Decl(conditionalTypes2.ts, 12, 14))
 
     a = b;
->a : Symbol(a, Decl(conditionalTypes2.ts, 16, 12))
->b : Symbol(b, Decl(conditionalTypes2.ts, 16, 28))
+>a : Symbol(a, Decl(conditionalTypes2.ts, 12, 28))
+>b : Symbol(b, Decl(conditionalTypes2.ts, 12, 44))
 
     b = a;  // Error
->b : Symbol(b, Decl(conditionalTypes2.ts, 16, 28))
->a : Symbol(a, Decl(conditionalTypes2.ts, 16, 12))
+>b : Symbol(b, Decl(conditionalTypes2.ts, 12, 44))
+>a : Symbol(a, Decl(conditionalTypes2.ts, 12, 28))
 }
 
-function f2(a: Contravariant<A>, b: Contravariant<B>) {
->f2 : Symbol(f2, Decl(conditionalTypes2.ts, 19, 1))
->a : Symbol(a, Decl(conditionalTypes2.ts, 21, 12))
+function f2<A, B extends A>(a: Contravariant<A>, b: Contravariant<B>) {
+>f2 : Symbol(f2, Decl(conditionalTypes2.ts, 15, 1))
+>A : Symbol(A, Decl(conditionalTypes2.ts, 17, 12))
+>B : Symbol(B, Decl(conditionalTypes2.ts, 17, 14))
+>A : Symbol(A, Decl(conditionalTypes2.ts, 17, 12))
+>a : Symbol(a, Decl(conditionalTypes2.ts, 17, 28))
 >Contravariant : Symbol(Contravariant, Decl(conditionalTypes2.ts, 2, 1))
->A : Symbol(A, Decl(conditionalTypes2.ts, 10, 1))
->b : Symbol(b, Decl(conditionalTypes2.ts, 21, 32))
+>A : Symbol(A, Decl(conditionalTypes2.ts, 17, 12))
+>b : Symbol(b, Decl(conditionalTypes2.ts, 17, 48))
 >Contravariant : Symbol(Contravariant, Decl(conditionalTypes2.ts, 2, 1))
->B : Symbol(B, Decl(conditionalTypes2.ts, 12, 25))
+>B : Symbol(B, Decl(conditionalTypes2.ts, 17, 14))
 
     a = b;  // Error
->a : Symbol(a, Decl(conditionalTypes2.ts, 21, 12))
->b : Symbol(b, Decl(conditionalTypes2.ts, 21, 32))
+>a : Symbol(a, Decl(conditionalTypes2.ts, 17, 28))
+>b : Symbol(b, Decl(conditionalTypes2.ts, 17, 48))
 
     b = a;
->b : Symbol(b, Decl(conditionalTypes2.ts, 21, 32))
->a : Symbol(a, Decl(conditionalTypes2.ts, 21, 12))
+>b : Symbol(b, Decl(conditionalTypes2.ts, 17, 48))
+>a : Symbol(a, Decl(conditionalTypes2.ts, 17, 28))
 }
 
-function f3(a: Invariant<A>, b: Invariant<B>) {
->f3 : Symbol(f3, Decl(conditionalTypes2.ts, 24, 1))
->a : Symbol(a, Decl(conditionalTypes2.ts, 26, 12))
+function f3<A, B extends A>(a: Invariant<A>, b: Invariant<B>) {
+>f3 : Symbol(f3, Decl(conditionalTypes2.ts, 20, 1))
+>A : Symbol(A, Decl(conditionalTypes2.ts, 22, 12))
+>B : Symbol(B, Decl(conditionalTypes2.ts, 22, 14))
+>A : Symbol(A, Decl(conditionalTypes2.ts, 22, 12))
+>a : Symbol(a, Decl(conditionalTypes2.ts, 22, 28))
 >Invariant : Symbol(Invariant, Decl(conditionalTypes2.ts, 6, 1))
->A : Symbol(A, Decl(conditionalTypes2.ts, 10, 1))
->b : Symbol(b, Decl(conditionalTypes2.ts, 26, 28))
+>A : Symbol(A, Decl(conditionalTypes2.ts, 22, 12))
+>b : Symbol(b, Decl(conditionalTypes2.ts, 22, 44))
 >Invariant : Symbol(Invariant, Decl(conditionalTypes2.ts, 6, 1))
->B : Symbol(B, Decl(conditionalTypes2.ts, 12, 25))
+>B : Symbol(B, Decl(conditionalTypes2.ts, 22, 14))
 
     a = b;  // Error
->a : Symbol(a, Decl(conditionalTypes2.ts, 26, 12))
->b : Symbol(b, Decl(conditionalTypes2.ts, 26, 28))
+>a : Symbol(a, Decl(conditionalTypes2.ts, 22, 28))
+>b : Symbol(b, Decl(conditionalTypes2.ts, 22, 44))
 
     b = a;  // Error
->b : Symbol(b, Decl(conditionalTypes2.ts, 26, 28))
->a : Symbol(a, Decl(conditionalTypes2.ts, 26, 12))
+>b : Symbol(b, Decl(conditionalTypes2.ts, 22, 44))
+>a : Symbol(a, Decl(conditionalTypes2.ts, 22, 28))
 }
 
 // Repros from #22860
 
 class Opt<T> {
->Opt : Symbol(Opt, Decl(conditionalTypes2.ts, 29, 1))
->T : Symbol(T, Decl(conditionalTypes2.ts, 33, 10))
+>Opt : Symbol(Opt, Decl(conditionalTypes2.ts, 25, 1))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 29, 10))
 
     toVector(): Vector<T> {
->toVector : Symbol(Opt.toVector, Decl(conditionalTypes2.ts, 33, 14))
->Vector : Symbol(Vector, Decl(conditionalTypes2.ts, 41, 1))
->T : Symbol(T, Decl(conditionalTypes2.ts, 33, 10))
+>toVector : Symbol(Opt.toVector, Decl(conditionalTypes2.ts, 29, 14))
+>Vector : Symbol(Vector, Decl(conditionalTypes2.ts, 37, 1))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 29, 10))
 
         return <any>undefined;
 >undefined : Symbol(undefined)
@@ -111,67 +110,67 @@ class Opt<T> {
 }
 
 interface Seq<T> {
->Seq : Symbol(Seq, Decl(conditionalTypes2.ts, 37, 1))
->T : Symbol(T, Decl(conditionalTypes2.ts, 39, 14))
+>Seq : Symbol(Seq, Decl(conditionalTypes2.ts, 33, 1))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 35, 14))
 
     tail(): Opt<Seq<T>>;
->tail : Symbol(Seq.tail, Decl(conditionalTypes2.ts, 39, 18))
->Opt : Symbol(Opt, Decl(conditionalTypes2.ts, 29, 1))
->Seq : Symbol(Seq, Decl(conditionalTypes2.ts, 37, 1))
->T : Symbol(T, Decl(conditionalTypes2.ts, 39, 14))
+>tail : Symbol(Seq.tail, Decl(conditionalTypes2.ts, 35, 18))
+>Opt : Symbol(Opt, Decl(conditionalTypes2.ts, 25, 1))
+>Seq : Symbol(Seq, Decl(conditionalTypes2.ts, 33, 1))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 35, 14))
 }
 
 class Vector<T> implements Seq<T> {
->Vector : Symbol(Vector, Decl(conditionalTypes2.ts, 41, 1))
->T : Symbol(T, Decl(conditionalTypes2.ts, 43, 13))
->Seq : Symbol(Seq, Decl(conditionalTypes2.ts, 37, 1))
->T : Symbol(T, Decl(conditionalTypes2.ts, 43, 13))
+>Vector : Symbol(Vector, Decl(conditionalTypes2.ts, 37, 1))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 39, 13))
+>Seq : Symbol(Seq, Decl(conditionalTypes2.ts, 33, 1))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 39, 13))
 
     tail(): Opt<Vector<T>> {
->tail : Symbol(Vector.tail, Decl(conditionalTypes2.ts, 43, 35))
->Opt : Symbol(Opt, Decl(conditionalTypes2.ts, 29, 1))
->Vector : Symbol(Vector, Decl(conditionalTypes2.ts, 41, 1))
->T : Symbol(T, Decl(conditionalTypes2.ts, 43, 13))
+>tail : Symbol(Vector.tail, Decl(conditionalTypes2.ts, 39, 35))
+>Opt : Symbol(Opt, Decl(conditionalTypes2.ts, 25, 1))
+>Vector : Symbol(Vector, Decl(conditionalTypes2.ts, 37, 1))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 39, 13))
 
         return <any>undefined;
 >undefined : Symbol(undefined)
     }
     partition2<U extends T>(predicate:(v:T)=>v is U): [Vector<U>,Vector<Exclude<T, U>>];
->partition2 : Symbol(Vector.partition2, Decl(conditionalTypes2.ts, 46, 5), Decl(conditionalTypes2.ts, 47, 88), Decl(conditionalTypes2.ts, 48, 64))
->U : Symbol(U, Decl(conditionalTypes2.ts, 47, 15))
->T : Symbol(T, Decl(conditionalTypes2.ts, 43, 13))
->predicate : Symbol(predicate, Decl(conditionalTypes2.ts, 47, 28))
->v : Symbol(v, Decl(conditionalTypes2.ts, 47, 39))
->T : Symbol(T, Decl(conditionalTypes2.ts, 43, 13))
->v : Symbol(v, Decl(conditionalTypes2.ts, 47, 39))
->U : Symbol(U, Decl(conditionalTypes2.ts, 47, 15))
->Vector : Symbol(Vector, Decl(conditionalTypes2.ts, 41, 1))
->U : Symbol(U, Decl(conditionalTypes2.ts, 47, 15))
->Vector : Symbol(Vector, Decl(conditionalTypes2.ts, 41, 1))
+>partition2 : Symbol(Vector.partition2, Decl(conditionalTypes2.ts, 42, 5), Decl(conditionalTypes2.ts, 43, 88), Decl(conditionalTypes2.ts, 44, 64))
+>U : Symbol(U, Decl(conditionalTypes2.ts, 43, 15))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 39, 13))
+>predicate : Symbol(predicate, Decl(conditionalTypes2.ts, 43, 28))
+>v : Symbol(v, Decl(conditionalTypes2.ts, 43, 39))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 39, 13))
+>v : Symbol(v, Decl(conditionalTypes2.ts, 43, 39))
+>U : Symbol(U, Decl(conditionalTypes2.ts, 43, 15))
+>Vector : Symbol(Vector, Decl(conditionalTypes2.ts, 37, 1))
+>U : Symbol(U, Decl(conditionalTypes2.ts, 43, 15))
+>Vector : Symbol(Vector, Decl(conditionalTypes2.ts, 37, 1))
 >Exclude : Symbol(Exclude, Decl(lib.d.ts, --, --))
->T : Symbol(T, Decl(conditionalTypes2.ts, 43, 13))
->U : Symbol(U, Decl(conditionalTypes2.ts, 47, 15))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 39, 13))
+>U : Symbol(U, Decl(conditionalTypes2.ts, 43, 15))
 
     partition2(predicate:(x:T)=>boolean): [Vector<T>,Vector<T>];
->partition2 : Symbol(Vector.partition2, Decl(conditionalTypes2.ts, 46, 5), Decl(conditionalTypes2.ts, 47, 88), Decl(conditionalTypes2.ts, 48, 64))
->predicate : Symbol(predicate, Decl(conditionalTypes2.ts, 48, 15))
->x : Symbol(x, Decl(conditionalTypes2.ts, 48, 26))
->T : Symbol(T, Decl(conditionalTypes2.ts, 43, 13))
->Vector : Symbol(Vector, Decl(conditionalTypes2.ts, 41, 1))
->T : Symbol(T, Decl(conditionalTypes2.ts, 43, 13))
->Vector : Symbol(Vector, Decl(conditionalTypes2.ts, 41, 1))
->T : Symbol(T, Decl(conditionalTypes2.ts, 43, 13))
+>partition2 : Symbol(Vector.partition2, Decl(conditionalTypes2.ts, 42, 5), Decl(conditionalTypes2.ts, 43, 88), Decl(conditionalTypes2.ts, 44, 64))
+>predicate : Symbol(predicate, Decl(conditionalTypes2.ts, 44, 15))
+>x : Symbol(x, Decl(conditionalTypes2.ts, 44, 26))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 39, 13))
+>Vector : Symbol(Vector, Decl(conditionalTypes2.ts, 37, 1))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 39, 13))
+>Vector : Symbol(Vector, Decl(conditionalTypes2.ts, 37, 1))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 39, 13))
 
     partition2<U extends T>(predicate:(v:T)=>boolean): [Vector<U>,Vector<any>] {
->partition2 : Symbol(Vector.partition2, Decl(conditionalTypes2.ts, 46, 5), Decl(conditionalTypes2.ts, 47, 88), Decl(conditionalTypes2.ts, 48, 64))
->U : Symbol(U, Decl(conditionalTypes2.ts, 49, 15))
->T : Symbol(T, Decl(conditionalTypes2.ts, 43, 13))
->predicate : Symbol(predicate, Decl(conditionalTypes2.ts, 49, 28))
->v : Symbol(v, Decl(conditionalTypes2.ts, 49, 39))
->T : Symbol(T, Decl(conditionalTypes2.ts, 43, 13))
->Vector : Symbol(Vector, Decl(conditionalTypes2.ts, 41, 1))
->U : Symbol(U, Decl(conditionalTypes2.ts, 49, 15))
->Vector : Symbol(Vector, Decl(conditionalTypes2.ts, 41, 1))
+>partition2 : Symbol(Vector.partition2, Decl(conditionalTypes2.ts, 42, 5), Decl(conditionalTypes2.ts, 43, 88), Decl(conditionalTypes2.ts, 44, 64))
+>U : Symbol(U, Decl(conditionalTypes2.ts, 45, 15))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 39, 13))
+>predicate : Symbol(predicate, Decl(conditionalTypes2.ts, 45, 28))
+>v : Symbol(v, Decl(conditionalTypes2.ts, 45, 39))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 39, 13))
+>Vector : Symbol(Vector, Decl(conditionalTypes2.ts, 37, 1))
+>U : Symbol(U, Decl(conditionalTypes2.ts, 45, 15))
+>Vector : Symbol(Vector, Decl(conditionalTypes2.ts, 37, 1))
 
         return <any>undefined;
 >undefined : Symbol(undefined)
@@ -179,30 +178,30 @@ class Vector<T> implements Seq<T> {
 }
 
 interface A1<T> {
->A1 : Symbol(A1, Decl(conditionalTypes2.ts, 52, 1))
->T : Symbol(T, Decl(conditionalTypes2.ts, 54, 13))
+>A1 : Symbol(A1, Decl(conditionalTypes2.ts, 48, 1))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 50, 13))
 
     bat: B1<A1<T>>;
->bat : Symbol(A1.bat, Decl(conditionalTypes2.ts, 54, 17))
->B1 : Symbol(B1, Decl(conditionalTypes2.ts, 56, 1))
->A1 : Symbol(A1, Decl(conditionalTypes2.ts, 52, 1))
->T : Symbol(T, Decl(conditionalTypes2.ts, 54, 13))
+>bat : Symbol(A1.bat, Decl(conditionalTypes2.ts, 50, 17))
+>B1 : Symbol(B1, Decl(conditionalTypes2.ts, 52, 1))
+>A1 : Symbol(A1, Decl(conditionalTypes2.ts, 48, 1))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 50, 13))
 }
 
 interface B1<T> extends A1<T> {
->B1 : Symbol(B1, Decl(conditionalTypes2.ts, 56, 1))
->T : Symbol(T, Decl(conditionalTypes2.ts, 58, 13))
->A1 : Symbol(A1, Decl(conditionalTypes2.ts, 52, 1))
->T : Symbol(T, Decl(conditionalTypes2.ts, 58, 13))
+>B1 : Symbol(B1, Decl(conditionalTypes2.ts, 52, 1))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 54, 13))
+>A1 : Symbol(A1, Decl(conditionalTypes2.ts, 48, 1))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 54, 13))
 
     bat: B1<B1<T>>;
->bat : Symbol(B1.bat, Decl(conditionalTypes2.ts, 58, 31))
->B1 : Symbol(B1, Decl(conditionalTypes2.ts, 56, 1))
->B1 : Symbol(B1, Decl(conditionalTypes2.ts, 56, 1))
->T : Symbol(T, Decl(conditionalTypes2.ts, 58, 13))
+>bat : Symbol(B1.bat, Decl(conditionalTypes2.ts, 54, 31))
+>B1 : Symbol(B1, Decl(conditionalTypes2.ts, 52, 1))
+>B1 : Symbol(B1, Decl(conditionalTypes2.ts, 52, 1))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 54, 13))
 
     boom: T extends any ? true : true
->boom : Symbol(B1.boom, Decl(conditionalTypes2.ts, 59, 19))
->T : Symbol(T, Decl(conditionalTypes2.ts, 58, 13))
+>boom : Symbol(B1.boom, Decl(conditionalTypes2.ts, 55, 19))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 54, 13))
 }
 
