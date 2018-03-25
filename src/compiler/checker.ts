@@ -10226,18 +10226,18 @@ namespace ts {
                 }
                 else if (source.flags & TypeFlags.Conditional) {
                     if (target.flags & TypeFlags.Conditional) {
-                        if (isTypeIdenticalTo((<ConditionalType>source).checkType, (<ConditionalType>target).checkType) &&
-                            isTypeIdenticalTo((<ConditionalType>source).extendsType, (<ConditionalType>target).extendsType)) {
+                        // Two conditional types 'T1 extends U1 ? X1 : Y1' and 'T2 extends U2 ? X2 : Y2' are related if
+                        // one of T1 and T2 is related to the other, U1 and U2 are identical types, X1 is related to X2,
+                        // and Y1 is related to Y2.
+                        if (isTypeIdenticalTo((<ConditionalType>source).extendsType, (<ConditionalType>target).extendsType) &&
+                            (isRelatedTo((<ConditionalType>source).checkType, (<ConditionalType>target).checkType) || isRelatedTo((<ConditionalType>target).checkType, (<ConditionalType>source).checkType))) {
                             if (result = isRelatedTo(getTrueTypeFromConditionalType(<ConditionalType>source), getTrueTypeFromConditionalType(<ConditionalType>target), reportErrors)) {
                                 result &= isRelatedTo(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target), reportErrors);
                             }
-                        }
-                        else {
-                            result = isRelatedTo(getDefaultConstraintOfConditionalType(<ConditionalType>source), getDefaultConstraintOfConditionalType(<ConditionalType>target), reportErrors);
-                        }
-                        if (result) {
-                            errorInfo = saveErrorInfo;
-                            return result;
+                            if (result) {
+                                errorInfo = saveErrorInfo;
+                                return result;
+                            }
                         }
                     }
                     else if (relation !== definitelyAssignableRelation) {
