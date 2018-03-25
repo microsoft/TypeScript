@@ -34,18 +34,18 @@ function f3(a: Invariant<A>, b: Invariant<B>) {
 
 // Repros from #22860
 
-export class Option<T> {
+class Opt<T> {
     toVector(): Vector<T> {
         return <any>undefined;
     }
 }
 
 interface Seq<T> {
-    tail(): Option<Seq<T>>;
+    tail(): Opt<Seq<T>>;
 }
 
 class Vector<T> implements Seq<T> {
-    tail(): Option<Vector<T>> {
+    tail(): Opt<Vector<T>> {
         return <any>undefined;
     }
     partition2<U extends T>(predicate:(v:T)=>v is U): [Vector<U>,Vector<Exclude<T, U>>];
