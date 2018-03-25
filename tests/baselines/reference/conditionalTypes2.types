@@ -30,18 +30,11 @@ interface Invariant<T> {
 >T : T
 }
 
-interface A { a: string }
+function f1<A, B extends A>(a: Covariant<A>, b: Covariant<B>) {
+>f1 : <A, B extends A>(a: Covariant<A>, b: Covariant<B>) => void
 >A : A
->a : string
-
-interface B extends A { b: string }
 >B : B
 >A : A
->b : string
-
-
-function f1(a: Covariant<A>, b: Covariant<B>) {
->f1 : (a: Covariant<A>, b: Covariant<B>) => void
 >a : Covariant<A>
 >Covariant : Covariant<T>
 >A : A
@@ -60,8 +53,11 @@ function f1(a: Covariant<A>, b: Covariant<B>) {
 >a : Covariant<A>
 }
 
-function f2(a: Contravariant<A>, b: Contravariant<B>) {
->f2 : (a: Contravariant<A>, b: Contravariant<B>) => void
+function f2<A, B extends A>(a: Contravariant<A>, b: Contravariant<B>) {
+>f2 : <A, B extends A>(a: Contravariant<A>, b: Contravariant<B>) => void
+>A : A
+>B : B
+>A : A
 >a : Contravariant<A>
 >Contravariant : Contravariant<T>
 >A : A
@@ -80,8 +76,11 @@ function f2(a: Contravariant<A>, b: Contravariant<B>) {
 >a : Contravariant<A>
 }
 
-function f3(a: Invariant<A>, b: Invariant<B>) {
->f3 : (a: Invariant<A>, b: Invariant<B>) => void
+function f3<A, B extends A>(a: Invariant<A>, b: Invariant<B>) {
+>f3 : <A, B extends A>(a: Invariant<A>, b: Invariant<B>) => void
+>A : A
+>B : B
+>A : A
 >a : Invariant<A>
 >Invariant : Invariant<T>
 >A : A

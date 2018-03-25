@@ -11,21 +11,17 @@ interface Invariant<T> {
     foo: T extends string ? keyof T : T;
 }
 
-interface A { a: string }
-interface B extends A { b: string }
-
-
-function f1(a: Covariant<A>, b: Covariant<B>) {
+function f1<A, B extends A>(a: Covariant<A>, b: Covariant<B>) {
     a = b;
     b = a;  // Error
 }
 
-function f2(a: Contravariant<A>, b: Contravariant<B>) {
+function f2<A, B extends A>(a: Contravariant<A>, b: Contravariant<B>) {
     a = b;  // Error
     b = a;
 }
 
-function f3(a: Invariant<A>, b: Invariant<B>) {
+function f3<A, B extends A>(a: Invariant<A>, b: Invariant<B>) {
     a = b;  // Error
     b = a;  // Error
 }
@@ -109,15 +105,9 @@ interface Contravariant<T> {
 interface Invariant<T> {
     foo: T extends string ? keyof T : T;
 }
-interface A {
-    a: string;
-}
-interface B extends A {
-    b: string;
-}
-declare function f1(a: Covariant<A>, b: Covariant<B>): void;
-declare function f2(a: Contravariant<A>, b: Contravariant<B>): void;
-declare function f3(a: Invariant<A>, b: Invariant<B>): void;
+declare function f1<A, B extends A>(a: Covariant<A>, b: Covariant<B>): void;
+declare function f2<A, B extends A>(a: Contravariant<A>, b: Contravariant<B>): void;
+declare function f3<A, B extends A>(a: Invariant<A>, b: Invariant<B>): void;
 declare class Opt<T> {
     toVector(): Vector<T>;
 }

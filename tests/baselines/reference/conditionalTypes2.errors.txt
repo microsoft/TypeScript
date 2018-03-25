@@ -1,13 +1,15 @@
-tests/cases/conformance/types/conditional/conditionalTypes2.ts(19,5): error TS2322: Type 'Covariant<A>' is not assignable to type 'Covariant<B>'.
+tests/cases/conformance/types/conditional/conditionalTypes2.ts(15,5): error TS2322: Type 'Covariant<A>' is not assignable to type 'Covariant<B>'.
   Type 'A' is not assignable to type 'B'.
-    Property 'b' is missing in type 'A'.
-tests/cases/conformance/types/conditional/conditionalTypes2.ts(23,5): error TS2322: Type 'Contravariant<B>' is not assignable to type 'Contravariant<A>'.
+tests/cases/conformance/types/conditional/conditionalTypes2.ts(19,5): error TS2322: Type 'Contravariant<B>' is not assignable to type 'Contravariant<A>'.
   Type 'A' is not assignable to type 'B'.
-tests/cases/conformance/types/conditional/conditionalTypes2.ts(28,5): error TS2322: Type 'Invariant<B>' is not assignable to type 'Invariant<A>'.
-  Type 'A' is not assignable to type 'B'.
-tests/cases/conformance/types/conditional/conditionalTypes2.ts(29,5): error TS2322: Type 'Invariant<A>' is not assignable to type 'Invariant<B>'.
+tests/cases/conformance/types/conditional/conditionalTypes2.ts(24,5): error TS2322: Type 'Invariant<B>' is not assignable to type 'Invariant<A>'.
   Types of property 'foo' are incompatible.
-    Type 'A' is not assignable to type 'B'.
+    Type 'B extends string ? keyof B : B' is not assignable to type 'A extends string ? keyof A : A'.
+      Type 'keyof B' is not assignable to type 'keyof A'.
+tests/cases/conformance/types/conditional/conditionalTypes2.ts(25,5): error TS2322: Type 'Invariant<A>' is not assignable to type 'Invariant<B>'.
+  Types of property 'foo' are incompatible.
+    Type 'A extends string ? keyof A : A' is not assignable to type 'B extends string ? keyof B : B'.
+      Type 'A' is not assignable to type 'B'.
 
 
 ==== tests/cases/conformance/types/conditional/conditionalTypes2.ts (4 errors) ====
@@ -23,20 +25,15 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(29,5): error TS23
         foo: T extends string ? keyof T : T;
     }
     
-    interface A { a: string }
-    interface B extends A { b: string }
-    
-    
-    function f1(a: Covariant<A>, b: Covariant<B>) {
+    function f1<A, B extends A>(a: Covariant<A>, b: Covariant<B>) {
         a = b;
         b = a;  // Error
         ~
 !!! error TS2322: Type 'Covariant<A>' is not assignable to type 'Covariant<B>'.
 !!! error TS2322:   Type 'A' is not assignable to type 'B'.
-!!! error TS2322:     Property 'b' is missing in type 'A'.
     }
     
-    function f2(a: Contravariant<A>, b: Contravariant<B>) {
+    function f2<A, B extends A>(a: Contravariant<A>, b: Contravariant<B>) {
         a = b;  // Error
         ~
 !!! error TS2322: Type 'Contravariant<B>' is not assignable to type 'Contravariant<A>'.
@@ -44,16 +41,19 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(29,5): error TS23
         b = a;
     }
     
-    function f3(a: Invariant<A>, b: Invariant<B>) {
+    function f3<A, B extends A>(a: Invariant<A>, b: Invariant<B>) {
         a = b;  // Error
         ~
 !!! error TS2322: Type 'Invariant<B>' is not assignable to type 'Invariant<A>'.
-!!! error TS2322:   Type 'A' is not assignable to type 'B'.
+!!! error TS2322:   Types of property 'foo' are incompatible.
+!!! error TS2322:     Type 'B extends string ? keyof B : B' is not assignable to type 'A extends string ? keyof A : A'.
+!!! error TS2322:       Type 'keyof B' is not assignable to type 'keyof A'.
         b = a;  // Error
         ~
 !!! error TS2322: Type 'Invariant<A>' is not assignable to type 'Invariant<B>'.
 !!! error TS2322:   Types of property 'foo' are incompatible.
-!!! error TS2322:     Type 'A' is not assignable to type 'B'.
+!!! error TS2322:     Type 'A extends string ? keyof A : A' is not assignable to type 'B extends string ? keyof B : B'.
+!!! error TS2322:       Type 'A' is not assignable to type 'B'.
     }
     
     // Repros from #22860
