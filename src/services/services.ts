@@ -1626,14 +1626,16 @@ namespace ts {
                 return file.sourceMapper;
             }
             let mapFileName = scanForSourcemapURL(fileName);
-            let match: RegExpExecArray;
-            if (mapFileName && (match = base64UrlRegExp.exec(mapFileName))) {
-                if (match[1]) {
-                    const base64Object = match[1];
-                    return convertDocumentToSourceMapper(file, base64decode(sys, base64Object), fileName);
+            if (mapFileName) {
+                const match = base64UrlRegExp.exec(mapFileName);
+                if (match) {
+                    if (match[1]) {
+                        const base64Object = match[1];
+                        return convertDocumentToSourceMapper(file, base64decode(sys, base64Object), fileName);
+                    }
+                    // Not a data URL we can parse, skip it
+                    mapFileName = undefined;
                 }
-                // Not a data URL we can parse, skip it
-                mapFileName = undefined;
             }
             const possibleMapLocations: string[] = [];
             if (mapFileName) {
