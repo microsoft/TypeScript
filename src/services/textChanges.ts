@@ -70,7 +70,7 @@ namespace ts.textChanges {
      * By default when removing nodes we adjust start and end positions to respect specification of the trivia above.
      * If pos\end should be interpreted literally 'useNonAdjustedStartPosition' or 'useNonAdjustedEndPosition' should be set to true
      */
-    export type ConfigurableStartEnd = ConfigurableStart & ConfigurableEnd;
+    export interface ConfigurableStartEnd extends ConfigurableStart, ConfigurableEnd {}
 
     export const useNonAdjustedPositions: ConfigurableStartEnd = {
         useNonAdjustedStartPosition: true,
@@ -113,13 +113,11 @@ namespace ts.textChanges {
         readonly range: TextRange;
     }
 
-    export interface ChangeNodeOptions extends ConfigurableStartEnd, InsertNodeOptions {
-        readonly useIndentationFromFile?: boolean;
-    }
+    export interface ChangeNodeOptions extends ConfigurableStartEnd, InsertNodeOptions {}
     interface ReplaceWithSingleNode extends BaseChange {
         readonly kind: ChangeKind.ReplaceWithSingleNode;
         readonly node: Node;
-        readonly options?: ChangeNodeOptions;
+        readonly options?: InsertNodeOptions;
     }
 
     interface RemoveNode extends BaseChange {
@@ -131,7 +129,7 @@ namespace ts.textChanges {
     interface ReplaceWithMultipleNodes extends BaseChange {
         readonly kind: ChangeKind.ReplaceWithMultipleNodes;
         readonly nodes: ReadonlyArray<Node>;
-        readonly options?: ChangeNodeOptions;
+        readonly options?: InsertNodeOptions;
     }
 
     function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: ConfigurableStart, position: Position) {
@@ -283,7 +281,7 @@ namespace ts.textChanges {
         }
 
         // TODO (https://github.com/Microsoft/TypeScript/issues/21246): default should probably be useNonAdjustedPositions
-        public replaceRange(sourceFile: SourceFile, range: TextRange, newNode: Node, options: ChangeNodeOptions = {}) {
+        public replaceRange(sourceFile: SourceFile, range: TextRange, newNode: Node, options: InsertNodeOptions = {}) {
             this.changes.push({ kind: ChangeKind.ReplaceWithSingleNode, sourceFile, range, options, node: newNode });
             return this;
         }
@@ -302,7 +300,7 @@ namespace ts.textChanges {
             return this.replaceRange(sourceFile, { pos, end }, newNode, options);
         }
 
-        public replaceRangeWithNodes(sourceFile: SourceFile, range: TextRange, newNodes: ReadonlyArray<Node>, options: ChangeNodeOptions = useNonAdjustedPositions) {
+        public replaceRangeWithNodes(sourceFile: SourceFile, range: TextRange, newNodes: ReadonlyArray<Node>, options: InsertNodeOptions = {}) {
             this.changes.push({ kind: ChangeKind.ReplaceWithMultipleNodes, sourceFile, range, options, nodes: newNodes });
             return this;
         }
@@ -668,9 +666,7 @@ namespace ts.textChanges {
             const initialIndentation =
                 options.indentation !== undefined
                     ? options.indentation
-                    : (options.useIndentationFromFile !== false)
-                        ? formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, options.prefix === newLineCharacter || getLineStartPositionForPosition(pos, sourceFile) === pos)
-                        : 0;
+                    : formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, options.prefix === newLineCharacter || getLineStartPositionForPosition(pos, sourceFile) === pos);
             const delta =
                 options.delta !== undefined
                     ? options.delta
