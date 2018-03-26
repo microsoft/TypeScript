@@ -1,0 +1,234 @@
+tests/cases/compiler/pipelineOperatorPrecedence.ts(13,22): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(14,22): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(15,23): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(16,23): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(17,22): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(18,22): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(19,23): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(20,23): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(21,13): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(21,26): error TS2359: The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(21,31): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(22,18): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(22,23): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(35,12): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(35,18): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(35,22): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(36,12): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(36,18): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(36,22): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(37,12): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(37,18): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(37,22): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(38,12): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(39,12): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(40,12): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(41,12): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(42,13): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(43,13): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(44,13): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(45,13): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(46,13): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(47,13): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(47,19): error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(48,13): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(48,19): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(48,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(49,13): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(49,19): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(49,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(50,13): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(50,19): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(50,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(51,19): error TS2365: Operator '+' cannot be applied to types '(x: number) => number' and '(x: number) => number'.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(52,13): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(52,19): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(52,23): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(53,13): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(53,19): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(53,23): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(54,13): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(54,19): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(54,23): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(55,13): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(55,19): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(55,23): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(56,13): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(56,19): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/pipelineOperatorPrecedence.ts(56,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+
+
+==== tests/cases/compiler/pipelineOperatorPrecedence.ts (58 errors) ====
+    var inc = (x: number) => x + 1;
+    
+    var a: number;
+    var b: number;
+    var c = (x: number) => x + 10;
+    var d = (x: number) => x + 20;
+    
+    var r1a1 = a || b |> inc;
+    var r1a2 = a && b |> inc;
+    var r1a3 = a | b |> inc;
+    var r1a4 = a ^ b |> inc;
+    var r1a5 = a & b |> inc;
+    var r1a6 = a == b |> inc;
+                         ~~~
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+    var r1a7 = a != b |> inc;
+                         ~~~
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+    var r1a8 = a === b |> inc;
+                          ~~~
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+    var r1a9 = a !== b |> inc;
+                          ~~~
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+    var r1a10 = a < b |> inc;
+                         ~~~
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+    var r1a11 = a > b |> inc;
+                         ~~~
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+    var r1a12 = a <= b |> inc;
+                          ~~~
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+    var r1a13 = a >= b |> inc;
+                          ~~~
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+    var r1a14 = a instanceof b |> inc;
+                ~
+!!! error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
+                             ~
+!!! error TS2359: The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type.
+                                  ~~~
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+    var r1a15 = a in b |> inc;
+                     ~
+!!! error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
+                          ~~~
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+    var r1a16 = a << b |> inc;
+    var r1a17 = a >> b |> inc;
+    var r1a18 = a >>> b |> inc;
+    var r1a19 = a + b |> inc;
+    var r1a20 = a - b |> inc;
+    var r1a21 = a * b |> inc;
+    var r1a22 = a / b |> inc;
+    var r1a23 = a % b |> inc;
+    var r1a24 = a ** b |> inc;
+    
+    var r2a1 = 10 |> c || d |> inc;
+    var r2a2 = 10 |> c && d |> inc;
+    var r2a3 = 10 |> c | d |> inc;
+               ~~~~~~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+                     ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                         ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var r2a4 = 10 |> c ^ d |> inc;
+               ~~~~~~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+                     ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                         ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var r2a5 = 10 |> c & d |> inc;
+               ~~~~~~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+                     ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                         ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var r2a6 = 10 |> c == d |> inc;
+               ~~~~~~~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+    var r2a7 = 10 |> c != d |> inc;
+               ~~~~~~~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+    var r2a8 = 10 |> c === d |> inc;
+               ~~~~~~~~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+    var r2a9 = 10 |> c !== d |> inc;
+               ~~~~~~~~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+    var r2a10 = 10 |> c < d |> inc;
+                ~~~~~~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+    var r2a11 = 10 |> c > d |> inc;
+                ~~~~~~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+    var r2a12 = 10 |> c <= d |> inc;
+                ~~~~~~~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+    var r2a13 = 10 |> c >= d |> inc;
+                ~~~~~~~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+    var r2a14 = 10 |> c instanceof d |> inc;
+                ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+    var r2a15 = 10 |> c in d |> inc;
+                ~~~~~~~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+                      ~
+!!! error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
+    var r2a16 = 10 |> c << d |> inc;
+                ~~~~~~~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+                      ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                           ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var r2a17 = 10 |> c >> d |> inc;
+                ~~~~~~~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+                      ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                           ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var r2a18 = 10 |> c >>> d |> inc;
+                ~~~~~~~~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+                      ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                            ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var r2a19 = 10 |> c + d |> inc;
+                      ~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types '(x: number) => number' and '(x: number) => number'.
+    var r2a20 = 10 |> c - d |> inc;
+                ~~~~~~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+                      ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var r2a21 = 10 |> c * d |> inc;
+                ~~~~~~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+                      ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var r2a22 = 10 |> c / d |> inc;
+                ~~~~~~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+                      ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var r2a23 = 10 |> c % d |> inc;
+                ~~~~~~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+                      ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                          ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var r2a24 = 10 |> c ** d |> inc;
+                ~~~~~~~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+                      ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                           ~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    

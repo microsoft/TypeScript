@@ -1,0 +1,43 @@
+=== tests/cases/compiler/pipelineOperatorWithEvaluation.ts ===
+var obj = {
+>obj : { _prop: number; readonly prop: number; readonly method: (v: number) => number; }
+>{  _prop: 0,  get prop() {    return this._prop = 1;  },  get method() {    return (v: number) => v + 1;  }} : { _prop: number; readonly prop: number; readonly method: (v: number) => number; }
+
+  _prop: 0,
+>_prop : number
+>0 : 0
+
+  get prop() {
+>prop : number
+
+    return this._prop = 1;
+>this._prop = 1 : 1
+>this._prop : any
+>this : any
+>_prop : any
+>1 : 1
+
+  },
+
+  get method() {
+>method : (v: number) => number
+
+    return (v: number) => v + 1;
+>(v: number) => v + 1 : (v: number) => number
+>v : number
+>v + 1 : number
+>v : number
+>1 : 1
+  }
+};
+
+var result = obj.prop |> obj.method;
+>result : number
+>obj.prop |> obj.method : number
+>obj.prop : number
+>obj : { _prop: number; readonly prop: number; readonly method: (v: number) => number; }
+>prop : number
+>obj.method : (v: number) => number
+>obj : { _prop: number; readonly prop: number; readonly method: (v: number) => number; }
+>method : (v: number) => number
+

@@ -1,0 +1,77 @@
+=== tests/cases/compiler/pipelineOperatorWithCurrying.ts ===
+var map = <T, R>(fn: (v: T) => R) => (array: T[]) => array.map(fn);
+>map : <T, R>(fn: (v: T) => R) => (array: T[]) => R[]
+><T, R>(fn: (v: T) => R) => (array: T[]) => array.map(fn) : <T, R>(fn: (v: T) => R) => (array: T[]) => R[]
+>T : T
+>R : R
+>fn : (v: T) => R
+>v : T
+>T : T
+>R : R
+>(array: T[]) => array.map(fn) : (array: T[]) => R[]
+>array : T[]
+>T : T
+>array.map(fn) : R[]
+>array.map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
+>array : T[]
+>map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
+>fn : (v: T) => R
+
+var reduce = <T>(fn: (p: T, v: T) => T) => (array: T[]) => array.reduce(fn);
+>reduce : <T>(fn: (p: T, v: T) => T) => (array: T[]) => T
+><T>(fn: (p: T, v: T) => T) => (array: T[]) => array.reduce(fn) : <T>(fn: (p: T, v: T) => T) => (array: T[]) => T
+>T : T
+>fn : (p: T, v: T) => T
+>p : T
+>T : T
+>v : T
+>T : T
+>T : T
+>(array: T[]) => array.reduce(fn) : (array: T[]) => T
+>array : T[]
+>T : T
+>array.reduce(fn) : T
+>array.reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
+>array : T[]
+>reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
+>fn : (p: T, v: T) => T
+
+var inc = (v: number) => v + 1;
+>inc : (v: number) => number
+>(v: number) => v + 1 : (v: number) => number
+>v : number
+>v + 1 : number
+>v : number
+>1 : 1
+
+var res = [10, 20]
+>res : number
+>[10, 20]  |> map((x: number) => x * 20)  |> reduce<number>((res, x) => res + x)  |> inc : number
+>[10, 20]  |> map((x: number) => x * 20)  |> reduce<number>((res, x) => res + x) : number
+>[10, 20]  |> map((x: number) => x * 20) : number[]
+>[10, 20] : number[]
+>10 : 10
+>20 : 20
+
+  |> map((x: number) => x * 20)
+>map((x: number) => x * 20) : (array: number[]) => number[]
+>map : <T, R>(fn: (v: T) => R) => (array: T[]) => R[]
+>(x: number) => x * 20 : (x: number) => number
+>x : number
+>x * 20 : number
+>x : number
+>20 : 20
+
+  |> reduce<number>((res, x) => res + x)
+>reduce<number>((res, x) => res + x) : (array: number[]) => number
+>reduce : <T>(fn: (p: T, v: T) => T) => (array: T[]) => T
+>(res, x) => res + x : (res: number, x: number) => number
+>res : number
+>x : number
+>res + x : number
+>res : number
+>x : number
+
+  |> inc;
+>inc : (v: number) => number
+

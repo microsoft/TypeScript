@@ -1,0 +1,10 @@
+=== tests/cases/compiler/pipelineOperator.ts ===
+var inc = (x: number) => x + 1;
+>inc : Symbol(inc, Decl(pipelineOperator.ts, 0, 3))
+>x : Symbol(x, Decl(pipelineOperator.ts, 0, 11))
+>x : Symbol(x, Decl(pipelineOperator.ts, 0, 11))
+
+var res = 10 |> inc;
+>res : Symbol(res, Decl(pipelineOperator.ts, 2, 3))
+>inc : Symbol(inc, Decl(pipelineOperator.ts, 0, 3))
+

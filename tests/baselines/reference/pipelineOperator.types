@@ -1,0 +1,15 @@
+=== tests/cases/compiler/pipelineOperator.ts ===
+var inc = (x: number) => x + 1;
+>inc : (x: number) => number
+>(x: number) => x + 1 : (x: number) => number
+>x : number
+>x + 1 : number
+>x : number
+>1 : 1
+
+var res = 10 |> inc;
+>res : number
+>10 |> inc : number
+>10 : 10
+>inc : (x: number) => number
+

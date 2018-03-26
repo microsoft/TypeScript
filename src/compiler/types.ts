@@ -152,6 +152,7 @@ namespace ts {
         QuestionToken,
         ColonToken,
         AtToken,
+        PipelineToken,
         // Assignments
         EqualsToken,
         PlusEqualsToken,
@@ -484,10 +485,11 @@ namespace ts {
         YieldContext       = 1 << 12, // If node was parsed in the 'yield' context created when parsing a generator
         DecoratorContext   = 1 << 13, // If node was parsed as part of a decorator
         AwaitContext       = 1 << 14, // If node was parsed in the 'await' context created when parsing an async function
-        ThisNodeHasError   = 1 << 15, // If the parser encountered an error when parsing the code that created this node
-        JavaScriptFile     = 1 << 16, // If node was parsed in a JavaScript
-        ThisNodeOrAnySubNodesHasError = 1 << 17, // If this node or any of its children had an error
-        HasAggregatedChildData = 1 << 18, // If we've computed data from children and cached it in this node
+        PipelineContext    = 1 << 15, // If operator of the binary expression was the pipeline operator
+        ThisNodeHasError   = 1 << 16, // If the parser encountered an error when parsing the code that created this node
+        JavaScriptFile     = 1 << 17, // If node was parsed in a JavaScript
+        ThisNodeOrAnySubNodesHasError = 1 << 18, // If this node or any of its children had an error
+        HasAggregatedChildData = 1 << 19, // If we've computed data from children and cached it in this node
 
         // This flag will be set when the parser encounters a dynamic import expression so that module resolution
         // will not have to walk the tree if the flag is not set. However, this flag is just a approximation because
@@ -498,10 +500,10 @@ namespace ts {
         // The advantage of this approach is its simplicity. For the case of batch compilation,
         // we guarantee that users won't have to pay the price of walking the tree if a dynamic import isn't used.
         /* @internal */
-        PossiblyContainsDynamicImport = 1 << 19,
-        JSDoc =              1 << 20, // If node was parsed inside jsdoc
-        /* @internal */ Ambient =         1 << 21, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
-        /* @internal */ InWithStatement = 1 << 22, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
+        PossiblyContainsDynamicImport = 1 << 20,
+        JSDoc =              1 << 21, // If node was parsed inside jsdoc
+        /* @internal */ Ambient =         1 << 22, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
+        /* @internal */ InWithStatement = 1 << 23, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
 
         BlockScoped = Let | Const,
 
@@ -670,6 +672,7 @@ namespace ts {
     export type EqualsGreaterThanToken = Token<SyntaxKind.EqualsGreaterThanToken>;
     export type EndOfFileToken = Token<SyntaxKind.EndOfFileToken> & JSDocContainer;
     export type AtToken = Token<SyntaxKind.AtToken>;
+    export type PipelineToken = Token<SyntaxKind.PipelineToken>;
     export type ReadonlyToken = Token<SyntaxKind.ReadonlyKeyword>;
     export type AwaitKeywordToken = Token<SyntaxKind.AwaitKeyword>;
     export type PlusToken = Token<SyntaxKind.PlusToken>;
@@ -1303,9 +1306,14 @@ namespace ts {
         expression?: Expression;
     }
 
+    export type PipelineOperator
+        = SyntaxKind.PipelineToken
+        ;
+
     // see: https://tc39.github.io/ecma262/#prod-ExponentiationExpression
     export type ExponentiationOperator
-        = SyntaxKind.AsteriskAsteriskToken
+        = PipelineOperator
+        | SyntaxKind.AsteriskAsteriskToken
         ;
 
     // see: https://tc39.github.io/ecma262/#prod-MultiplicativeOperator
@@ -1447,6 +1455,10 @@ namespace ts {
         left: Expression;
         operatorToken: BinaryOperatorToken;
         right: Expression;
+    }
+
+    export interface PipelineExpression extends BinaryExpression {
+        operatorToken: PipelineToken;
     }
 
     export type AssignmentOperatorToken = Token<AssignmentOperator>;
@@ -1715,7 +1727,7 @@ namespace ts {
         template: TemplateLiteral;
     }
 
-    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement;
+    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | PipelineExpression | JsxOpeningLikeElement;
 
     export interface AsExpression extends Expression {
         kind: SyntaxKind.AsExpression;
@@ -4114,6 +4126,7 @@ namespace ts {
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
+        experimentalPipelineOperator?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         /*@internal*/help?: boolean;
         importHelpers?: boolean;

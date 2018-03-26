@@ -240,6 +240,23 @@ namespace ts {
                     visitNode(node.right, noDestructuringValue ? visitorNoDestructuringValue : visitor, isExpression)
                 );
             }
+            else if (node.operatorToken.kind === SyntaxKind.PipelineToken) {
+                const temp = createUniqueName("_ref");
+                context.hoistVariableDeclaration(temp);
+
+                return createCommaList([
+                    createAssignment(
+                        temp,
+                        visitNode(node.left, visitor, isExpression)
+                    ),
+                    createCall(
+                        visitNode(node.right, visitor, isExpression),
+                        /*typeArguments*/ undefined,
+                        [temp]
+                    )
+                ]);
+            }
+
             return visitEachChild(node, visitor, context);
         }
 

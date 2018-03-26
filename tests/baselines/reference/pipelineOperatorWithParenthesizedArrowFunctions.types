@@ -1,0 +1,76 @@
+=== tests/cases/compiler/pipelineOperatorWithParenthesizedArrowFunctions.ts ===
+var res1 = [5, 10]
+>res1 : number
+>[5, 10]  |> (_: number[]) => _.map((x) => x * 2)  |> (_: number[]) => _.reduce((a, b) => a + b)  |> (sum: number) => sum + 1 : number
+>[5, 10] : number[]
+>5 : 5
+>10 : 10
+
+  |> (_: number[]) => _.map((x) => x * 2)
+>(_: number[]) => _.map((x) => x * 2)  |> (_: number[]) => _.reduce((a, b) => a + b)  |> (sum: number) => sum + 1 : (_: number[]) => number
+>_ : number[]
+>_.map((x) => x * 2)  |> (_: number[]) => _.reduce((a, b) => a + b)  |> (sum: number) => sum + 1 : number
+>_.map((x) => x * 2) : number[]
+>_.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>_ : number[]
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>(x) => x * 2 : (x: number) => number
+>x : number
+>x * 2 : number
+>x : number
+>2 : 2
+
+  |> (_: number[]) => _.reduce((a, b) => a + b)
+>(_: number[]) => _.reduce((a, b) => a + b)  |> (sum: number) => sum + 1 : (_: number[]) => number
+>_ : number[]
+>_.reduce((a, b) => a + b)  |> (sum: number) => sum + 1 : number
+>_.reduce((a, b) => a + b) : number
+>_.reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
+>_ : number[]
+>reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
+>(a, b) => a + b : (a: number, b: number) => number
+>a : number
+>b : number
+>a + b : number
+>a : number
+>b : number
+
+  |> (sum: number) => sum + 1;
+>(sum: number) => sum + 1 : (sum: number) => number
+>sum : number
+>sum + 1 : number
+>sum : number
+>1 : 1
+
+var inc = (x: number) => x + 1;
+>inc : (x: number) => number
+>(x: number) => x + 1 : (x: number) => number
+>x : number
+>x + 1 : number
+>x : number
+>1 : 1
+
+var double = (x: number) => x * 2;
+>double : (x: number) => number
+>(x: number) => x * 2 : (x: number) => number
+>x : number
+>x * 2 : number
+>x : number
+>2 : 2
+
+var res2 = [4, 9].map(x => x |> inc |> double);
+>res2 : number[]
+>[4, 9].map(x => x |> inc |> double) : number[]
+>[4, 9].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>[4, 9] : number[]
+>4 : 4
+>9 : 9
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>x => x |> inc |> double : (x: number) => number
+>x : number
+>x |> inc |> double : number
+>x |> inc : number
+>x : number
+>inc : (x: number) => number
+>double : (x: number) => number
+

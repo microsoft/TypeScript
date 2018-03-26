@@ -192,6 +192,20 @@ var x = 0;`, {
                 }
             });
 
+        transpilesCorrectly("Transpile with emit the pipeline operator",
+            `var inc = (x: number) => x + 1;\n` +
+            `var res = 10 |> inc;\n`, {
+                options: {
+                    compilerOptions: {
+                        module: ModuleKind.CommonJS,
+                        newLine: NewLineKind.LineFeed,
+                        noEmitHelpers: true,
+                        experimentalPipelineOperator: true,
+                        target: ScriptTarget.ES5,
+                    }
+                }
+            });
+
         transpilesCorrectly("Supports backslashes in file name", "var x", {
             options: { fileName: "a\\b.ts" }
         });
@@ -280,6 +294,10 @@ var x = 0;`, {
 
         transpilesCorrectly("Supports setting 'experimentalDecorators'", "x;", {
             options: { compilerOptions: { experimentalDecorators: true }, fileName: "input.js", reportDiagnostics: true }
+        });
+
+        transpilesCorrectly("Supports setting 'experimentalPipelineOperator'", "x;", {
+            options: { compilerOptions: { experimentalPipelineOperator: true }, fileName: "input.js", reportDiagnostics: true }
         });
 
         transpilesCorrectly("Supports setting 'forceConsistentCasingInFileNames'", "x;", {

@@ -1,0 +1,85 @@
+=== tests/cases/compiler/pipelineOperatorWithInvalidOperands.ts ===
+var a: any;
+>a : any
+
+var b: number;
+>b : number
+
+var c: undefined;
+>c : undefined
+
+var d: null;
+>d : null
+>null : null
+
+var e: boolean;
+>e : boolean
+
+var f: object;
+>f : object
+
+var h: string;
+>h : string
+
+var g: Number;
+>g : Number
+>Number : Number
+
+var k: { a: number };
+>k : { a: number; }
+>a : number
+
+var r1a1 = a |> a; //ok
+>r1a1 : any
+>a |> a : any
+>a : any
+>a : any
+
+var r1a2 = a |> b;
+>r1a2 : any
+>a |> b : any
+>a : any
+>b : number
+
+var r1a3 = a |> c; //ok
+>r1a3 : any
+>a |> c : any
+>a : any
+>c : undefined
+
+var r1a4 = a |> d; //ok
+>r1a4 : any
+>a |> d : any
+>a : any
+>d : null
+
+var r1a5 = a |> e;
+>r1a5 : any
+>a |> e : any
+>a : any
+>e : boolean
+
+var r1a6 = a |> f;
+>r1a6 : any
+>a |> f : any
+>a : any
+>f : object
+
+var r1a7 = a |> h;
+>r1a7 : any
+>a |> h : any
+>a : any
+>h : string
+
+var r1a8 = a |> g;
+>r1a8 : any
+>a |> g : any
+>a : any
+>g : Number
+
+var r1a9 = a |> k;
+>r1a9 : any
+>a |> k : any
+>a : any
+>k : { a: number; }
+

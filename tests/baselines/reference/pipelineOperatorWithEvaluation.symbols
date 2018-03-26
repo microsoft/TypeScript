@@ -1,0 +1,31 @@
+=== tests/cases/compiler/pipelineOperatorWithEvaluation.ts ===
+var obj = {
+>obj : Symbol(obj, Decl(pipelineOperatorWithEvaluation.ts, 0, 3))
+
+  _prop: 0,
+>_prop : Symbol(_prop, Decl(pipelineOperatorWithEvaluation.ts, 0, 11))
+
+  get prop() {
+>prop : Symbol(prop, Decl(pipelineOperatorWithEvaluation.ts, 1, 11))
+
+    return this._prop = 1;
+  },
+
+  get method() {
+>method : Symbol(method, Decl(pipelineOperatorWithEvaluation.ts, 5, 4))
+
+    return (v: number) => v + 1;
+>v : Symbol(v, Decl(pipelineOperatorWithEvaluation.ts, 8, 12))
+>v : Symbol(v, Decl(pipelineOperatorWithEvaluation.ts, 8, 12))
+  }
+};
+
+var result = obj.prop |> obj.method;
+>result : Symbol(result, Decl(pipelineOperatorWithEvaluation.ts, 12, 3))
+>obj.prop : Symbol(prop, Decl(pipelineOperatorWithEvaluation.ts, 1, 11))
+>obj : Symbol(obj, Decl(pipelineOperatorWithEvaluation.ts, 0, 3))
+>prop : Symbol(prop, Decl(pipelineOperatorWithEvaluation.ts, 1, 11))
+>obj.method : Symbol(method, Decl(pipelineOperatorWithEvaluation.ts, 5, 4))
+>obj : Symbol(obj, Decl(pipelineOperatorWithEvaluation.ts, 0, 3))
+>method : Symbol(method, Decl(pipelineOperatorWithEvaluation.ts, 5, 4))
+

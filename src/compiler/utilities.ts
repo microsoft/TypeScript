@@ -1229,6 +1229,8 @@ namespace ts {
         switch (node.kind) {
             case SyntaxKind.TaggedTemplateExpression:
                 return node.tag;
+            case SyntaxKind.BinaryExpression:
+                return node.right;
             case SyntaxKind.JsxOpeningElement:
             case SyntaxKind.JsxSelfClosingElement:
                 return node.tagName;

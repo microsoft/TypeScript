@@ -1,0 +1,22 @@
+=== tests/cases/compiler/pipelineOperatorMultipleArgumentUse.ts ===
+var array = [10, 20, 30];
+>array : number[]
+>[10, 20, 30] : number[]
+>10 : 10
+>20 : 20
+>30 : 30
+
+var last = array |> (a: number[]) => a[a.length - 1];
+>last : number
+>array |> (a: number[]) => a[a.length - 1] : number
+>array : number[]
+>(a: number[]) => a[a.length - 1] : (a: number[]) => number
+>a : number[]
+>a[a.length - 1] : number
+>a : number[]
+>a.length - 1 : number
+>a.length : number
+>a : number[]
+>length : number
+>1 : 1
+

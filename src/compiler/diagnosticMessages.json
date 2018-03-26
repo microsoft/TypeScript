@@ -835,6 +835,10 @@
         "category": "Error",
         "code": 1255
     },
+    "Experimental support for the pipeline operator is a feature that is subject to change in a future release. Set the 'experimentalPipelineOperator' option to remove this warning.": {
+        "category": "Error",
+        "code": 1256
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -3483,6 +3487,10 @@
     "All imports in import declaration are unused.": {
         "category": "Error",
         "code": 6192
+    },
+    "Enables experimental support for ESNext pipeline operator.": {
+        "category": "Message",
+        "code": 6193
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

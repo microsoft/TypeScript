@@ -1,0 +1,41 @@
+tests/cases/compiler/pipelineOperatorWithInvalidOperands.ts(12,12): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorWithInvalidOperands.ts(15,12): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorWithInvalidOperands.ts(16,12): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorWithInvalidOperands.ts(17,12): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorWithInvalidOperands.ts(18,12): error TS2346: Call target does not contain any signatures.
+tests/cases/compiler/pipelineOperatorWithInvalidOperands.ts(19,12): error TS2346: Call target does not contain any signatures.
+
+
+==== tests/cases/compiler/pipelineOperatorWithInvalidOperands.ts (6 errors) ====
+    var a: any;
+    var b: number;
+    var c: undefined;
+    var d: null;
+    var e: boolean;
+    var f: object;
+    var h: string;
+    var g: Number;
+    var k: { a: number };
+    
+    var r1a1 = a |> a; //ok
+    var r1a2 = a |> b;
+               ~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+    var r1a3 = a |> c; //ok
+    var r1a4 = a |> d; //ok
+    var r1a5 = a |> e;
+               ~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+    var r1a6 = a |> f;
+               ~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+    var r1a7 = a |> h;
+               ~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+    var r1a8 = a |> g;
+               ~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+    var r1a9 = a |> k;
+               ~~~~~~
+!!! error TS2346: Call target does not contain any signatures.
+    

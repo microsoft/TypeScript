@@ -888,6 +888,10 @@ namespace ts {
             setContextFlag(val, NodeFlags.AwaitContext);
         }
 
+        function setPipelineContext(val: boolean) {
+            setContextFlag(val, NodeFlags.PipelineContext);
+        }
+
         function doOutsideOfContext<T>(context: NodeFlags, func: () => T): T {
             // contextFlagsToClear will contain only the context flags that are
             // currently set that we need to temporarily clear
@@ -976,6 +980,10 @@ namespace ts {
 
         function inAwaitContext() {
             return inContext(NodeFlags.AwaitContext);
+        }
+
+        function inPipelineContext() {
+            return inContext(NodeFlags.PipelineContext);
         }
 
         function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any): void {
@@ -3586,6 +3594,23 @@ namespace ts {
         }
 
         function parseBinaryExpressionOrHigher(precedence: number): Expression {
+            // We have to support syntax with arrow functions:
+            // Examples:
+            //      1337 |> _ => _ + 1
+            //      1337 |> (_) => _ + 1
+            if (inPipelineContext()) {
+                const arrowExpression = tryParseParenthesizedArrowFunctionExpression();
+                if (arrowExpression) {
+                    return parseBinaryExpressionRest(precedence, arrowExpression);
+                }
+
+                if (lookAhead(() => token() === SyntaxKind.Identifier && nextToken() === SyntaxKind.EqualsGreaterThanToken)) {
+                    const identifier = parseIdentifierName();
+
+                    return parseSimpleArrowFunctionExpression(identifier);
+                }
+            }
+
             const leftOperand = parseUnaryExpressionOrHigher();
             return parseBinaryExpressionRest(precedence, leftOperand);
         }
@@ -3601,6 +3626,11 @@ namespace ts {
 
                 reScanGreaterToken();
                 const newPrecedence = getBinaryOperatorPrecedence();
+
+                // To support the syntax with arrow functions
+                if (token() === SyntaxKind.PipelineToken) {
+                    setPipelineContext(true);
+                }
 
                 // Check the precedence to see if we should "take" this operator
                 // - For left associative operator (all operator but **), consume the operator,
@@ -3654,6 +3684,8 @@ namespace ts {
                 }
             }
 
+            setPipelineContext(false);
+
             return leftOperand;
         }
 
@@ -3667,21 +3699,23 @@ namespace ts {
 
         function getBinaryOperatorPrecedence(): number {
             switch (token()) {
-                case SyntaxKind.BarBarToken:
+                case SyntaxKind.PipelineToken:
                     return 1;
-                case SyntaxKind.AmpersandAmpersandToken:
+                case SyntaxKind.BarBarToken:
                     return 2;
-                case SyntaxKind.BarToken:
+                case SyntaxKind.AmpersandAmpersandToken:
                     return 3;
-                case SyntaxKind.CaretToken:
+                case SyntaxKind.BarToken:
                     return 4;
-                case SyntaxKind.AmpersandToken:
+                case SyntaxKind.CaretToken:
                     return 5;
+                case SyntaxKind.AmpersandToken:
+                    return 6;
                 case SyntaxKind.EqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsEqualsToken:
-                    return 6;
+                    return 7;
                 case SyntaxKind.LessThanToken:
                 case SyntaxKind.GreaterThanToken:
                 case SyntaxKind.LessThanEqualsToken:
@@ -3689,20 +3723,20 @@ namespace ts {
                 case SyntaxKind.InstanceOfKeyword:
                 case SyntaxKind.InKeyword:
                 case SyntaxKind.AsKeyword:
-                    return 7;
+                    return 8;
                 case SyntaxKind.LessThanLessThanToken:
                 case SyntaxKind.GreaterThanGreaterThanToken:
                 case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
-                    return 8;
+                    return 9;
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
-                    return 9;
+                    return 10;
                 case SyntaxKind.AsteriskToken:
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.PercentToken:
-                    return 10;
-                case SyntaxKind.AsteriskAsteriskToken:
                     return 11;
+                case SyntaxKind.AsteriskAsteriskToken:
+                    return 12;
             }
 
             // -1 is lower than all other precedences.  Returning it will cause binary expression

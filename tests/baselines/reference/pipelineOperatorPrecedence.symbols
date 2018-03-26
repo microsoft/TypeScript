@@ -1,0 +1,310 @@
+=== tests/cases/compiler/pipelineOperatorPrecedence.ts ===
+var inc = (x: number) => x + 1;
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+>x : Symbol(x, Decl(pipelineOperatorPrecedence.ts, 0, 11))
+>x : Symbol(x, Decl(pipelineOperatorPrecedence.ts, 0, 11))
+
+var a: number;
+>a : Symbol(a, Decl(pipelineOperatorPrecedence.ts, 2, 3))
+
+var b: number;
+>b : Symbol(b, Decl(pipelineOperatorPrecedence.ts, 3, 3))
+
+var c = (x: number) => x + 10;
+>c : Symbol(c, Decl(pipelineOperatorPrecedence.ts, 4, 3))
+>x : Symbol(x, Decl(pipelineOperatorPrecedence.ts, 4, 9))
+>x : Symbol(x, Decl(pipelineOperatorPrecedence.ts, 4, 9))
+
+var d = (x: number) => x + 20;
+>d : Symbol(d, Decl(pipelineOperatorPrecedence.ts, 5, 3))
+>x : Symbol(x, Decl(pipelineOperatorPrecedence.ts, 5, 9))
+>x : Symbol(x, Decl(pipelineOperatorPrecedence.ts, 5, 9))
+
+var r1a1 = a || b |> inc;
+>r1a1 : Symbol(r1a1, Decl(pipelineOperatorPrecedence.ts, 7, 3))
+>a : Symbol(a, Decl(pipelineOperatorPrecedence.ts, 2, 3))
+>b : Symbol(b, Decl(pipelineOperatorPrecedence.ts, 3, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r1a2 = a && b |> inc;
+>r1a2 : Symbol(r1a2, Decl(pipelineOperatorPrecedence.ts, 8, 3))
+>a : Symbol(a, Decl(pipelineOperatorPrecedence.ts, 2, 3))
+>b : Symbol(b, Decl(pipelineOperatorPrecedence.ts, 3, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r1a3 = a | b |> inc;
+>r1a3 : Symbol(r1a3, Decl(pipelineOperatorPrecedence.ts, 9, 3))
+>a : Symbol(a, Decl(pipelineOperatorPrecedence.ts, 2, 3))
+>b : Symbol(b, Decl(pipelineOperatorPrecedence.ts, 3, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r1a4 = a ^ b |> inc;
+>r1a4 : Symbol(r1a4, Decl(pipelineOperatorPrecedence.ts, 10, 3))
+>a : Symbol(a, Decl(pipelineOperatorPrecedence.ts, 2, 3))
+>b : Symbol(b, Decl(pipelineOperatorPrecedence.ts, 3, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r1a5 = a & b |> inc;
+>r1a5 : Symbol(r1a5, Decl(pipelineOperatorPrecedence.ts, 11, 3))
+>a : Symbol(a, Decl(pipelineOperatorPrecedence.ts, 2, 3))
+>b : Symbol(b, Decl(pipelineOperatorPrecedence.ts, 3, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r1a6 = a == b |> inc;
+>r1a6 : Symbol(r1a6, Decl(pipelineOperatorPrecedence.ts, 12, 3))
+>a : Symbol(a, Decl(pipelineOperatorPrecedence.ts, 2, 3))
+>b : Symbol(b, Decl(pipelineOperatorPrecedence.ts, 3, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r1a7 = a != b |> inc;
+>r1a7 : Symbol(r1a7, Decl(pipelineOperatorPrecedence.ts, 13, 3))
+>a : Symbol(a, Decl(pipelineOperatorPrecedence.ts, 2, 3))
+>b : Symbol(b, Decl(pipelineOperatorPrecedence.ts, 3, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r1a8 = a === b |> inc;
+>r1a8 : Symbol(r1a8, Decl(pipelineOperatorPrecedence.ts, 14, 3))
+>a : Symbol(a, Decl(pipelineOperatorPrecedence.ts, 2, 3))
+>b : Symbol(b, Decl(pipelineOperatorPrecedence.ts, 3, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r1a9 = a !== b |> inc;
+>r1a9 : Symbol(r1a9, Decl(pipelineOperatorPrecedence.ts, 15, 3))
+>a : Symbol(a, Decl(pipelineOperatorPrecedence.ts, 2, 3))
+>b : Symbol(b, Decl(pipelineOperatorPrecedence.ts, 3, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r1a10 = a < b |> inc;
+>r1a10 : Symbol(r1a10, Decl(pipelineOperatorPrecedence.ts, 16, 3))
+>a : Symbol(a, Decl(pipelineOperatorPrecedence.ts, 2, 3))
+>b : Symbol(b, Decl(pipelineOperatorPrecedence.ts, 3, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r1a11 = a > b |> inc;
+>r1a11 : Symbol(r1a11, Decl(pipelineOperatorPrecedence.ts, 17, 3))
+>a : Symbol(a, Decl(pipelineOperatorPrecedence.ts, 2, 3))
+>b : Symbol(b, Decl(pipelineOperatorPrecedence.ts, 3, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r1a12 = a <= b |> inc;
+>r1a12 : Symbol(r1a12, Decl(pipelineOperatorPrecedence.ts, 18, 3))
+>a : Symbol(a, Decl(pipelineOperatorPrecedence.ts, 2, 3))
+>b : Symbol(b, Decl(pipelineOperatorPrecedence.ts, 3, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r1a13 = a >= b |> inc;
+>r1a13 : Symbol(r1a13, Decl(pipelineOperatorPrecedence.ts, 19, 3))
+>a : Symbol(a, Decl(pipelineOperatorPrecedence.ts, 2, 3))
+>b : Symbol(b, Decl(pipelineOperatorPrecedence.ts, 3, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r1a14 = a instanceof b |> inc;
+>r1a14 : Symbol(r1a14, Decl(pipelineOperatorPrecedence.ts, 20, 3))
+>a : Symbol(a, Decl(pipelineOperatorPrecedence.ts, 2, 3))
+>b : Symbol(b, Decl(pipelineOperatorPrecedence.ts, 3, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r1a15 = a in b |> inc;
+>r1a15 : Symbol(r1a15, Decl(pipelineOperatorPrecedence.ts, 21, 3))
+>a : Symbol(a, Decl(pipelineOperatorPrecedence.ts, 2, 3))
+>b : Symbol(b, Decl(pipelineOperatorPrecedence.ts, 3, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r1a16 = a << b |> inc;
+>r1a16 : Symbol(r1a16, Decl(pipelineOperatorPrecedence.ts, 22, 3))
+>a : Symbol(a, Decl(pipelineOperatorPrecedence.ts, 2, 3))
+>b : Symbol(b, Decl(pipelineOperatorPrecedence.ts, 3, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r1a17 = a >> b |> inc;
+>r1a17 : Symbol(r1a17, Decl(pipelineOperatorPrecedence.ts, 23, 3))
+>a : Symbol(a, Decl(pipelineOperatorPrecedence.ts, 2, 3))
+>b : Symbol(b, Decl(pipelineOperatorPrecedence.ts, 3, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r1a18 = a >>> b |> inc;
+>r1a18 : Symbol(r1a18, Decl(pipelineOperatorPrecedence.ts, 24, 3))
+>a : Symbol(a, Decl(pipelineOperatorPrecedence.ts, 2, 3))
+>b : Symbol(b, Decl(pipelineOperatorPrecedence.ts, 3, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r1a19 = a + b |> inc;
+>r1a19 : Symbol(r1a19, Decl(pipelineOperatorPrecedence.ts, 25, 3))
+>a : Symbol(a, Decl(pipelineOperatorPrecedence.ts, 2, 3))
+>b : Symbol(b, Decl(pipelineOperatorPrecedence.ts, 3, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r1a20 = a - b |> inc;
+>r1a20 : Symbol(r1a20, Decl(pipelineOperatorPrecedence.ts, 26, 3))
+>a : Symbol(a, Decl(pipelineOperatorPrecedence.ts, 2, 3))
+>b : Symbol(b, Decl(pipelineOperatorPrecedence.ts, 3, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r1a21 = a * b |> inc;
+>r1a21 : Symbol(r1a21, Decl(pipelineOperatorPrecedence.ts, 27, 3))
+>a : Symbol(a, Decl(pipelineOperatorPrecedence.ts, 2, 3))
+>b : Symbol(b, Decl(pipelineOperatorPrecedence.ts, 3, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r1a22 = a / b |> inc;
+>r1a22 : Symbol(r1a22, Decl(pipelineOperatorPrecedence.ts, 28, 3))
+>a : Symbol(a, Decl(pipelineOperatorPrecedence.ts, 2, 3))
+>b : Symbol(b, Decl(pipelineOperatorPrecedence.ts, 3, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r1a23 = a % b |> inc;
+>r1a23 : Symbol(r1a23, Decl(pipelineOperatorPrecedence.ts, 29, 3))
+>a : Symbol(a, Decl(pipelineOperatorPrecedence.ts, 2, 3))
+>b : Symbol(b, Decl(pipelineOperatorPrecedence.ts, 3, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r1a24 = a ** b |> inc;
+>r1a24 : Symbol(r1a24, Decl(pipelineOperatorPrecedence.ts, 30, 3))
+>a : Symbol(a, Decl(pipelineOperatorPrecedence.ts, 2, 3))
+>b : Symbol(b, Decl(pipelineOperatorPrecedence.ts, 3, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r2a1 = 10 |> c || d |> inc;
+>r2a1 : Symbol(r2a1, Decl(pipelineOperatorPrecedence.ts, 32, 3))
+>c : Symbol(c, Decl(pipelineOperatorPrecedence.ts, 4, 3))
+>d : Symbol(d, Decl(pipelineOperatorPrecedence.ts, 5, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r2a2 = 10 |> c && d |> inc;
+>r2a2 : Symbol(r2a2, Decl(pipelineOperatorPrecedence.ts, 33, 3))
+>c : Symbol(c, Decl(pipelineOperatorPrecedence.ts, 4, 3))
+>d : Symbol(d, Decl(pipelineOperatorPrecedence.ts, 5, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r2a3 = 10 |> c | d |> inc;
+>r2a3 : Symbol(r2a3, Decl(pipelineOperatorPrecedence.ts, 34, 3))
+>c : Symbol(c, Decl(pipelineOperatorPrecedence.ts, 4, 3))
+>d : Symbol(d, Decl(pipelineOperatorPrecedence.ts, 5, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r2a4 = 10 |> c ^ d |> inc;
+>r2a4 : Symbol(r2a4, Decl(pipelineOperatorPrecedence.ts, 35, 3))
+>c : Symbol(c, Decl(pipelineOperatorPrecedence.ts, 4, 3))
+>d : Symbol(d, Decl(pipelineOperatorPrecedence.ts, 5, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r2a5 = 10 |> c & d |> inc;
+>r2a5 : Symbol(r2a5, Decl(pipelineOperatorPrecedence.ts, 36, 3))
+>c : Symbol(c, Decl(pipelineOperatorPrecedence.ts, 4, 3))
+>d : Symbol(d, Decl(pipelineOperatorPrecedence.ts, 5, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r2a6 = 10 |> c == d |> inc;
+>r2a6 : Symbol(r2a6, Decl(pipelineOperatorPrecedence.ts, 37, 3))
+>c : Symbol(c, Decl(pipelineOperatorPrecedence.ts, 4, 3))
+>d : Symbol(d, Decl(pipelineOperatorPrecedence.ts, 5, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r2a7 = 10 |> c != d |> inc;
+>r2a7 : Symbol(r2a7, Decl(pipelineOperatorPrecedence.ts, 38, 3))
+>c : Symbol(c, Decl(pipelineOperatorPrecedence.ts, 4, 3))
+>d : Symbol(d, Decl(pipelineOperatorPrecedence.ts, 5, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r2a8 = 10 |> c === d |> inc;
+>r2a8 : Symbol(r2a8, Decl(pipelineOperatorPrecedence.ts, 39, 3))
+>c : Symbol(c, Decl(pipelineOperatorPrecedence.ts, 4, 3))
+>d : Symbol(d, Decl(pipelineOperatorPrecedence.ts, 5, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r2a9 = 10 |> c !== d |> inc;
+>r2a9 : Symbol(r2a9, Decl(pipelineOperatorPrecedence.ts, 40, 3))
+>c : Symbol(c, Decl(pipelineOperatorPrecedence.ts, 4, 3))
+>d : Symbol(d, Decl(pipelineOperatorPrecedence.ts, 5, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r2a10 = 10 |> c < d |> inc;
+>r2a10 : Symbol(r2a10, Decl(pipelineOperatorPrecedence.ts, 41, 3))
+>c : Symbol(c, Decl(pipelineOperatorPrecedence.ts, 4, 3))
+>d : Symbol(d, Decl(pipelineOperatorPrecedence.ts, 5, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r2a11 = 10 |> c > d |> inc;
+>r2a11 : Symbol(r2a11, Decl(pipelineOperatorPrecedence.ts, 42, 3))
+>c : Symbol(c, Decl(pipelineOperatorPrecedence.ts, 4, 3))
+>d : Symbol(d, Decl(pipelineOperatorPrecedence.ts, 5, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r2a12 = 10 |> c <= d |> inc;
+>r2a12 : Symbol(r2a12, Decl(pipelineOperatorPrecedence.ts, 43, 3))
+>c : Symbol(c, Decl(pipelineOperatorPrecedence.ts, 4, 3))
+>d : Symbol(d, Decl(pipelineOperatorPrecedence.ts, 5, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r2a13 = 10 |> c >= d |> inc;
+>r2a13 : Symbol(r2a13, Decl(pipelineOperatorPrecedence.ts, 44, 3))
+>c : Symbol(c, Decl(pipelineOperatorPrecedence.ts, 4, 3))
+>d : Symbol(d, Decl(pipelineOperatorPrecedence.ts, 5, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r2a14 = 10 |> c instanceof d |> inc;
+>r2a14 : Symbol(r2a14, Decl(pipelineOperatorPrecedence.ts, 45, 3))
+>c : Symbol(c, Decl(pipelineOperatorPrecedence.ts, 4, 3))
+>d : Symbol(d, Decl(pipelineOperatorPrecedence.ts, 5, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r2a15 = 10 |> c in d |> inc;
+>r2a15 : Symbol(r2a15, Decl(pipelineOperatorPrecedence.ts, 46, 3))
+>c : Symbol(c, Decl(pipelineOperatorPrecedence.ts, 4, 3))
+>d : Symbol(d, Decl(pipelineOperatorPrecedence.ts, 5, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r2a16 = 10 |> c << d |> inc;
+>r2a16 : Symbol(r2a16, Decl(pipelineOperatorPrecedence.ts, 47, 3))
+>c : Symbol(c, Decl(pipelineOperatorPrecedence.ts, 4, 3))
+>d : Symbol(d, Decl(pipelineOperatorPrecedence.ts, 5, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r2a17 = 10 |> c >> d |> inc;
+>r2a17 : Symbol(r2a17, Decl(pipelineOperatorPrecedence.ts, 48, 3))
+>c : Symbol(c, Decl(pipelineOperatorPrecedence.ts, 4, 3))
+>d : Symbol(d, Decl(pipelineOperatorPrecedence.ts, 5, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r2a18 = 10 |> c >>> d |> inc;
+>r2a18 : Symbol(r2a18, Decl(pipelineOperatorPrecedence.ts, 49, 3))
+>c : Symbol(c, Decl(pipelineOperatorPrecedence.ts, 4, 3))
+>d : Symbol(d, Decl(pipelineOperatorPrecedence.ts, 5, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r2a19 = 10 |> c + d |> inc;
+>r2a19 : Symbol(r2a19, Decl(pipelineOperatorPrecedence.ts, 50, 3))
+>c : Symbol(c, Decl(pipelineOperatorPrecedence.ts, 4, 3))
+>d : Symbol(d, Decl(pipelineOperatorPrecedence.ts, 5, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r2a20 = 10 |> c - d |> inc;
+>r2a20 : Symbol(r2a20, Decl(pipelineOperatorPrecedence.ts, 51, 3))
+>c : Symbol(c, Decl(pipelineOperatorPrecedence.ts, 4, 3))
+>d : Symbol(d, Decl(pipelineOperatorPrecedence.ts, 5, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r2a21 = 10 |> c * d |> inc;
+>r2a21 : Symbol(r2a21, Decl(pipelineOperatorPrecedence.ts, 52, 3))
+>c : Symbol(c, Decl(pipelineOperatorPrecedence.ts, 4, 3))
+>d : Symbol(d, Decl(pipelineOperatorPrecedence.ts, 5, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r2a22 = 10 |> c / d |> inc;
+>r2a22 : Symbol(r2a22, Decl(pipelineOperatorPrecedence.ts, 53, 3))
+>c : Symbol(c, Decl(pipelineOperatorPrecedence.ts, 4, 3))
+>d : Symbol(d, Decl(pipelineOperatorPrecedence.ts, 5, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r2a23 = 10 |> c % d |> inc;
+>r2a23 : Symbol(r2a23, Decl(pipelineOperatorPrecedence.ts, 54, 3))
+>c : Symbol(c, Decl(pipelineOperatorPrecedence.ts, 4, 3))
+>d : Symbol(d, Decl(pipelineOperatorPrecedence.ts, 5, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+
+var r2a24 = 10 |> c ** d |> inc;
+>r2a24 : Symbol(r2a24, Decl(pipelineOperatorPrecedence.ts, 55, 3))
+>c : Symbol(c, Decl(pipelineOperatorPrecedence.ts, 4, 3))
+>d : Symbol(d, Decl(pipelineOperatorPrecedence.ts, 5, 3))
+>inc : Symbol(inc, Decl(pipelineOperatorPrecedence.ts, 0, 3))
+

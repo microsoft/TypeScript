@@ -16695,6 +16695,9 @@ namespace ts {
             if (node.kind === SyntaxKind.TaggedTemplateExpression) {
                 checkExpression(node.template);
             }
+            else if (node.kind === SyntaxKind.BinaryExpression) {
+                checkExpression(node.left);
+            }
             else if (node.kind !== SyntaxKind.Decorator) {
                 forEach((<CallExpression>node).arguments, argument => {
                     checkExpression(argument);
@@ -16806,6 +16809,10 @@ namespace ts {
                 }
             }
             else if (node.kind === SyntaxKind.Decorator) {
+                typeArguments = undefined;
+                argCount = getEffectiveArgumentCount(node, /*args*/ undefined, signature);
+            }
+            else if (node.kind === SyntaxKind.BinaryExpression) {
                 typeArguments = undefined;
                 argCount = getEffectiveArgumentCount(node, /*args*/ undefined, signature);
             }
@@ -17135,6 +17142,9 @@ namespace ts {
                 // `getEffectiveArgumentCount` and `getEffectiveArgumentType` below.
                 return undefined;
             }
+            else if (node.kind === SyntaxKind.BinaryExpression) {
+                return [node.left];
+            }
             else if (isJsxOpeningLikeElement(node)) {
                 return node.attributes.properties.length > 0 ? [node.attributes] : emptyArray;
             }
@@ -17191,6 +17201,9 @@ namespace ts {
 
                         return 3;
                 }
+            }
+            else if (node.kind === SyntaxKind.BinaryExpression) {
+                return 1;
             }
             else {
                 return args.length;
@@ -17380,6 +17393,9 @@ namespace ts {
             else if (argIndex === 0 && node.kind === SyntaxKind.TaggedTemplateExpression) {
                 return getGlobalTemplateStringsArrayType();
             }
+            else if (node.kind === SyntaxKind.BinaryExpression) {
+                return checkExpression(node.left);
+            }
 
             // This is not a synthetic argument, so we return 'undefined'
             // to signal that the caller needs to check the argument.
@@ -17394,6 +17410,9 @@ namespace ts {
             if (node.kind === SyntaxKind.Decorator ||
                 (argIndex === 0 && node.kind === SyntaxKind.TaggedTemplateExpression)) {
                 return undefined;
+            }
+            else if (node.kind === SyntaxKind.BinaryExpression) {
+                return node.left;
             }
 
             return args[argIndex];
@@ -17410,6 +17429,9 @@ namespace ts {
             else if (argIndex === 0 && node.kind === SyntaxKind.TaggedTemplateExpression) {
                 // For a the first argument of a tagged template expression, we use the template of the tag for error reporting.
                 return node.template;
+            }
+            else if (node.kind === SyntaxKind.BinaryExpression) {
+                return node.right;
             }
             else {
                 return arg;
@@ -17428,13 +17450,14 @@ namespace ts {
         }
 
         function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], fallbackError?: DiagnosticMessage): Signature {
+            const isPipelieExpression = node.kind === SyntaxKind.BinaryExpression && node.operatorToken.kind === SyntaxKind.PipelineToken;
             const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
             const isDecorator = node.kind === SyntaxKind.Decorator;
             const isJsxOpeningOrSelfClosingElement = isJsxOpeningLikeElement(node);
 
             let typeArguments: NodeArray<TypeNode>;
 
-            if (!isTaggedTemplate && !isDecorator && !isJsxOpeningOrSelfClosingElement) {
+            if (!isTaggedTemplate && !isDecorator && !isJsxOpeningOrSelfClosingElement && !isPipelieExpression) {
                 typeArguments = (<CallExpression>node).typeArguments;
 
                 // We already perform checking on the type arguments on the class declaration itself.
@@ -18000,6 +18023,23 @@ namespace ts {
             return resolveCall(node, callSignatures, candidatesOutArray, headMessage);
         }
 
+        function resolvePipelineExpression(node: PipelineExpression, candidatesOutArray?: Signature[]): Signature {
+            const funcType = checkExpression(node.right);
+            const apparentType = getApparentType(funcType);
+
+            if (apparentType === unknownType) {
+                return resolveErrorCall(node);
+            }
+
+            const callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
+            const constructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct);
+            if (isUntypedFunctionCall(funcType, apparentType, callSignatures.length, constructSignatures.length)) {
+                return resolveUntypedCall(node);
+            }
+
+            return resolveCall(node, callSignatures, candidatesOutArray);
+        }
+
         /**
          * Sometimes, we have a decorator that could accept zero arguments,
          * but is receiving too many arguments as part of the decorator invocation.
@@ -18066,6 +18106,8 @@ namespace ts {
                     return resolveTaggedTemplateExpression(node, candidatesOutArray);
                 case SyntaxKind.Decorator:
                     return resolveDecorator(node, candidatesOutArray);
+                case SyntaxKind.BinaryExpression:
+                    return resolvePipelineExpression(node, candidatesOutArray);
                 case SyntaxKind.JsxOpeningElement:
                 case SyntaxKind.JsxSelfClosingElement:
                     // This code-path is called by language service
@@ -19343,6 +19385,16 @@ namespace ts {
             return (target.flags & TypeFlags.Nullable) !== 0 || isTypeComparableTo(source, target);
         }
 
+        function checkPipelineExpression(node: PipelineExpression): Type {
+            const { operatorToken } = node;
+
+            if (!compilerOptions.experimentalPipelineOperator) {
+                error(operatorToken, Diagnostics.Experimental_support_for_the_pipeline_operator_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalPipelineOperator_option_to_remove_this_warning);
+            }
+
+            return getReturnTypeOfSignature(getResolvedSignature(node));
+        }
+
         function checkBinaryExpression(node: BinaryExpression, checkMode?: CheckMode) {
             if (isInJavaScriptFile(node) && getAssignedJavascriptInitializer(node)) {
                 return checkExpression(node.right, checkMode);
@@ -19914,6 +19966,9 @@ namespace ts {
                 case SyntaxKind.PostfixUnaryExpression:
                     return checkPostfixUnaryExpression(<PostfixUnaryExpression>node);
                 case SyntaxKind.BinaryExpression:
+                    if ((node as BinaryExpression).operatorToken.kind === SyntaxKind.PipelineToken) {
+                        return checkPipelineExpression(<PipelineExpression>node);
+                    }
                     return checkBinaryExpression(<BinaryExpression>node, checkMode);
                 case SyntaxKind.ConditionalExpression:
                     return checkConditionalExpression(<ConditionalExpression>node, checkMode);
