@@ -21947,7 +21947,7 @@ namespace ts {
         }
 
         function checkCollisionWithCapturedNewTargetVariable(node: Node, name: Identifier): void {
-            if (languageVersion <= ScriptTarget.ES5 &&!compilerOptions.noEmit && needCollisionCheckForIdentifier(node, name, "_newTarget")) {
+            if (languageVersion <= ScriptTarget.ES5 && !compilerOptions.noEmit && needCollisionCheckForIdentifier(node, name, "_newTarget")) {
                 potentialNewTargetCollisions.push(node);
             }
         }
@@ -21984,7 +21984,7 @@ namespace ts {
         }
 
         function checkCollisionWithCapturedSuperVariable(node: Node, name: Identifier) {
-            if (languageVersion >= ScriptTarget.ES2015 || compilerOptions.noEmit)  {
+            if (languageVersion >= ScriptTarget.ES2015 || compilerOptions.noEmit) {
                 return;
             }
 
