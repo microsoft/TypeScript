@@ -700,6 +700,7 @@ namespace ts {
         Unique = 3,                         // Unique name based on the 'text' property.
         Node = 4,                           // Unique name based on the node in the 'original' property.
         OptimisticUnique = 5,               // Unique name based on the 'text' property, first instance won't use '_#' if there's no conflict
+        FileLevel = 6,                      // Optimistic unique name based on the 'text' property, first instance won't use '_#' if there's no conflict, using only the file identifiers list
         KindMask = 7,                       // Mask to extract the kind of identifier from its flags.
 
         // Flags

@@ -1518,7 +1518,7 @@ namespace ts {
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([
                         createVariableDeclaration(
-                            "_newTarget",
+                            createFileLevelUniqueName("_newTarget"),
                             /*type*/ undefined,
                             newTarget
                         )
@@ -3827,7 +3827,7 @@ namespace ts {
                 else {
                     hierarchyFacts |= HierarchyFacts.NewTarget;
                 }
-                return createIdentifier("_newTarget");
+                return createFileLevelUniqueName("_newTarget");
             }
             return node;
         }

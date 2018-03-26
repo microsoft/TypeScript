@@ -183,6 +183,15 @@ namespace ts {
         return name;
     }
 
+    /** Create a unique name based on the supplied text. This does not consider names injected by the transformer. */
+    export function createFileLevelUniqueName(text: string): Identifier {
+        const name = createIdentifier(text);
+        name.autoGenerateFlags = GeneratedIdentifierFlags.FileLevel;
+        name.autoGenerateId = nextAutoGenerateId;
+        nextAutoGenerateId++;
+        return name;
+    }
+
     /** Create a unique name generated for a node. */
     export function getGeneratedNameForNode(node: Node): Identifier;
     /* @internal */ export function getGeneratedNameForNode(node: Node, shouldSkipNameGenerationScope?: boolean): Identifier; // tslint:disable-line unified-signatures

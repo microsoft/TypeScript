@@ -3237,10 +3237,17 @@ namespace ts {
          * or within the NameGenerator.
          */
         function isUniqueName(name: string): boolean {
-            return !(hasGlobalName && hasGlobalName(name))
-                && !currentSourceFile.identifiers.has(name)
+            return isFileLevelUniqueName(name)
                 && !generatedNames.has(name)
                 && !(reservedNames && reservedNames.has(name));
+        }
+
+        /**
+         * Returns a value indicating whether a name is unique globally or within the current file
+         */
+        function isFileLevelUniqueName(name: string): boolean {
+            return !(hasGlobalName && hasGlobalName(name))
+                && !currentSourceFile.identifiers.has(name);
         }
 
         /**
@@ -3300,9 +3307,9 @@ namespace ts {
          * makeUniqueName are guaranteed to never conflict.
          * If `optimistic` is set, the first instance will use 'baseName' verbatim instead of 'baseName_1'
          */
-        function makeUniqueName(baseName: string, optimistic?: boolean): string {
+        function makeUniqueName(baseName: string, checkFn: (name: string) => boolean = isUniqueName, optimistic?: boolean): string {
             if (optimistic) {
-                if (isUniqueName(baseName)) {
+                if (checkFn(baseName)) {
                     generatedNames.set(baseName, true);
                     return baseName;
                 }
@@ -3314,7 +3321,7 @@ namespace ts {
             let i = 1;
             while (true) {
                 const generatedName = baseName + i;
-                if (isUniqueName(generatedName)) {
+                if (checkFn(generatedName)) {
                     generatedNames.set(generatedName, true);
                     return generatedName;
                 }
@@ -3402,7 +3409,9 @@ namespace ts {
                 case GeneratedIdentifierFlags.Unique:
                     return makeUniqueName(idText(name));
                 case GeneratedIdentifierFlags.OptimisticUnique:
-                    return makeUniqueName(idText(name), /*optimistic*/ true);
+                    return makeUniqueName(idText(name), isUniqueName, /*optimistic*/ true);
+                case GeneratedIdentifierFlags.FileLevel:
+                    return makeUniqueName(idText(name), isFileLevelUniqueName, /*optimistic*/ true);
             }
 
             Debug.fail("Unsupported GeneratedIdentifierKind.");

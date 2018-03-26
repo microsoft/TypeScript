@@ -3396,6 +3396,8 @@ declare namespace ts {
     function createUniqueName(text: string): Identifier;
     /** Create a unique name based on the supplied text. */
     function createOptimisticUniqueName(text: string): Identifier;
+    /** Create a unique name based on the supplied text. This does not consider names injected by the transformer. */
+    function createFileLevelUniqueName(text: string): Identifier;
     /** Create a unique name generated for a node. */
     function getGeneratedNameForNode(node: Node): Identifier;
     function createToken<TKind extends SyntaxKind>(token: TKind): Token<TKind>;

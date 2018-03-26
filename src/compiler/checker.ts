@@ -13619,7 +13619,6 @@ namespace ts {
 
             checkCollisionWithCapturedSuperVariable(node, node);
             checkCollisionWithCapturedThisVariable(node, node);
-            checkCollisionWithCapturedNewTargetVariable(node, node);
             checkNestedBlockScopedBinding(node, symbol);
 
             const type = getConstraintForLocation(getTypeOfSymbol(localOrExportSymbol), node);
@@ -18839,7 +18838,6 @@ namespace ts {
             if (produceDiagnostics && node.kind !== SyntaxKind.MethodDeclaration) {
                 checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);
-                checkCollisionWithCapturedNewTargetVariable(node, node.name);
             }
 
             return type;
@@ -21567,7 +21565,6 @@ namespace ts {
                 checkGrammarForGenerator(node);
                 checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);
-                checkCollisionWithCapturedNewTargetVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
                 checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
             }
@@ -21998,12 +21995,6 @@ namespace ts {
             }
         }
 
-        function checkCollisionWithCapturedNewTargetVariable(node: Node, name: Identifier): void {
-            if (languageVersion <= ScriptTarget.ES5 && !compilerOptions.noEmit && needCollisionCheckForIdentifier(node, name, "_newTarget")) {
-                potentialNewTargetCollisions.push(node);
-            }
-        }
-
         // this function will run after checking the source file so 'CaptureThis' is correct for all nodes
         function checkIfThisIsCapturedInEnclosingScope(node: Node): void {
             findAncestor(node, current => {
@@ -22360,7 +22351,6 @@ namespace ts {
                 }
                 checkCollisionWithCapturedSuperVariable(node, <Identifier>node.name);
                 checkCollisionWithCapturedThisVariable(node, <Identifier>node.name);
-                checkCollisionWithCapturedNewTargetVariable(node, <Identifier>node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, <Identifier>node.name);
                 checkCollisionWithGlobalPromiseInGeneratedCode(node, <Identifier>node.name);
             }
@@ -23347,7 +23337,6 @@ namespace ts {
             if (node.name) {
                 checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
                 checkCollisionWithCapturedThisVariable(node, node.name);
-                checkCollisionWithCapturedNewTargetVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
                 checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
             }
@@ -23877,7 +23866,6 @@ namespace ts {
 
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
             checkCollisionWithCapturedThisVariable(node, node.name);
-            checkCollisionWithCapturedNewTargetVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
             checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
             checkExportsOnMergedDeclarations(node);
