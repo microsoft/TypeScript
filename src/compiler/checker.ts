@@ -4316,6 +4316,7 @@ namespace ts {
             }
             let type = jsDocType;
             if (!type) {
+                // use only the constructor types unless only null | undefined (including widening variants) were assigned there
                 const sourceTypes = some(constructorTypes, t => !!(t.flags & ~(TypeFlags.Nullable | TypeFlags.ContainsWideningType))) ? constructorTypes : types;
                 type = getUnionType(sourceTypes, UnionReduction.Subtype);
             }
