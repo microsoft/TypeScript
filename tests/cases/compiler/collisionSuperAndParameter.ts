@@ -1,3 +1,4 @@
+// @target: es5
 class Foo {
     a() {
         var lamda = (_super: number) => { // No Error 

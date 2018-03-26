@@ -779,7 +779,7 @@ namespace ts {
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
-                extendsClauseElement ? [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "_super")] : [],
+                extendsClauseElement ? [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, createFileLevelUniqueName("_super"))] : [],
                 /*type*/ undefined,
                 transformClassBody(node, extendsClauseElement)
             );
@@ -1142,11 +1142,11 @@ namespace ts {
             return createLogicalOr(
                 createLogicalAnd(
                     createStrictInequality(
-                        createIdentifier("_super"),
+                        createFileLevelUniqueName("_super"),
                         createNull()
                     ),
                     createFunctionApply(
-                        createIdentifier("_super"),
+                        createFileLevelUniqueName("_super"),
                         createActualThis(),
                         createIdentifier("arguments"),
                     )
@@ -3815,8 +3815,8 @@ namespace ts {
         function visitSuperKeyword(isExpressionOfCall: boolean): LeftHandSideExpression {
             return hierarchyFacts & HierarchyFacts.NonStaticClassElement
                 && !isExpressionOfCall
-                    ? createPropertyAccess(createIdentifier("_super"), "prototype")
-                    : createIdentifier("_super");
+                    ? createPropertyAccess(createFileLevelUniqueName("_super"), "prototype")
+                    : createFileLevelUniqueName("_super");
         }
 
         function visitMetaProperty(node: MetaProperty) {
@@ -4056,7 +4056,7 @@ namespace ts {
             /*typeArguments*/ undefined,
             [
                 name,
-                createIdentifier("_super")
+                createFileLevelUniqueName("_super")
             ]
         );
     }

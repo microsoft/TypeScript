@@ -263,7 +263,7 @@ namespace ts {
             declarationSourceMap.setSourceFile(node);
         }
 
-        function emitHelpers(node: Node, writeLines: (text: string) => void) {
+        function emitHelpers(node: Node, writeLines: (text: string) => void, makeUniqueName: UniqueNameHandler) {
             let helpersEmitted = false;
             const bundle = node.kind === SyntaxKind.Bundle ? <Bundle>node : undefined;
             if (bundle && moduleKind === ModuleKind.None) {
@@ -300,13 +300,28 @@ namespace ts {
                             continue;
                         }
 
-                        writeLines(helper.text);
+                        writeHelper(writeLines, helper.text, makeUniqueName);
                         helpersEmitted = true;
                     }
                 }
             }
 
             return helpersEmitted;
+        }
+
+        function writeHelper(writer: (text: string) => void, helper: EmitHelper["text"], makeUniqueName: UniqueNameHandler) {
+            if (typeof helper === "string") {
+                writer(helper);
+            }
+            else {
+                writer(helper({
+                    makeFileLevelUniqueName: name => makeUniqueName(name, isFileLevelUniqueName, /*optimistic*/ true),
+                }));
+            }
+        }
+
+        function isFileLevelUniqueName(name: string) {
+            return ts.isFileLevelUniqueName(currentSourceFile, name, resolver.hasGlobalName);
         }
     }
 
@@ -951,7 +966,7 @@ namespace ts {
 
         function emitHelpersIndirect(node: Node) {
             if (onEmitHelpers) {
-                onEmitHelpers(node, writeLines);
+                onEmitHelpers(node, writeLines, makeUniqueName);
             }
         }
 
@@ -3243,11 +3258,10 @@ namespace ts {
         }
 
         /**
-         * Returns a value indicating whether a name is unique globally or within the current file
+         * Returns a value indicating whether a name is unique globally or within the current file.
          */
-        function isFileLevelUniqueName(name: string): boolean {
-            return !(hasGlobalName && hasGlobalName(name))
-                && !currentSourceFile.identifiers.has(name);
+        function isFileLevelUniqueName(name: string) {
+            return ts.isFileLevelUniqueName(currentSourceFile, name, hasGlobalName);
         }
 
         /**

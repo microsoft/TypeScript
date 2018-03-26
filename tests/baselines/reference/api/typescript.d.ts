@@ -2583,8 +2583,11 @@ declare namespace ts {
     interface EmitHelper {
         readonly name: string;
         readonly scoped: boolean;
-        readonly text: string;
+        readonly text: string | ((node: EmitHelperContext) => string);
         readonly priority?: number;
+    }
+    interface EmitHelperContext {
+        makeFileLevelUniqueName: (name: string) => string;
     }
     enum EmitHint {
         SourceFile = 0,

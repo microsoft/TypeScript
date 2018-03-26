@@ -229,6 +229,14 @@ namespace ts {
         }
     }
 
+    /**
+     * Returns a value indicating whether a name is unique globally or within the current file
+     */
+    export function isFileLevelUniqueName(currentSourceFile: SourceFile, name: string, hasGlobalName?: PrintHandlers["hasGlobalName"]): boolean {
+        return !(hasGlobalName && hasGlobalName(name))
+            && !currentSourceFile.identifiers.has(name);
+    }
+
     // Returns true if this node is missing from the actual source code. A 'missing' node is different
     // from 'undefined/defined'. When a node is undefined (which can happen for optional nodes
     // in the tree), it is definitely missing. However, a node may be defined, but still be

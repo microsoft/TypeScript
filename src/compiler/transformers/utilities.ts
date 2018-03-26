@@ -219,4 +219,20 @@ namespace ts {
             isKeyword(expression.kind) ||
             isIdentifier(expression);
     }
+
+    /**
+     * @param input Template string input strings
+     * @param args Names which need to be made file-level unique
+     */
+    export function helperString(input: TemplateStringsArray, ...args: string[]) {
+        return (context: EmitHelperContext) => {
+            let result = "";
+            for (let i = 0; i < args.length; i++) {
+                result += input[i];
+                result += context.makeFileLevelUniqueName(args[i]);
+            }
+            result += input[input.length - 1];
+            return result;
+        };
+    }
 }

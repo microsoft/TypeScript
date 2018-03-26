@@ -13617,7 +13617,6 @@ namespace ts {
                 }
             }
 
-            checkCollisionWithCapturedSuperVariable(node, node);
             checkCollisionWithCapturedThisVariable(node, node);
             checkNestedBlockScopedBinding(node, symbol);
 
@@ -18836,7 +18835,6 @@ namespace ts {
             }
 
             if (produceDiagnostics && node.kind !== SyntaxKind.MethodDeclaration) {
-                checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);
             }
 
@@ -21563,7 +21561,6 @@ namespace ts {
             if (produceDiagnostics) {
                 checkFunctionOrMethodDeclaration(node);
                 checkGrammarForGenerator(node);
-                checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
                 checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
@@ -22026,33 +22023,6 @@ namespace ts {
             });
         }
 
-        function checkCollisionWithCapturedSuperVariable(node: Node, name: Identifier) {
-            if (languageVersion >= ScriptTarget.ES2015 || compilerOptions.noEmit) {
-                return;
-            }
-
-            if (!needCollisionCheckForIdentifier(node, name, "_super")) {
-                return;
-            }
-
-            // bubble up and find containing type
-            const enclosingClass = getContainingClass(node);
-            // if containing type was not found or it is ambient - exit (no codegen)
-            if (!enclosingClass || enclosingClass.flags & NodeFlags.Ambient) {
-                return;
-            }
-
-            if (getClassExtendsHeritageClauseElement(enclosingClass)) {
-                const isDeclaration = node.kind !== SyntaxKind.Identifier;
-                if (isDeclaration) {
-                    error(node, Diagnostics.Duplicate_identifier_super_Compiler_uses_super_to_capture_base_class_reference);
-                }
-                else {
-                    error(node, Diagnostics.Expression_resolves_to_super_that_compiler_uses_to_capture_base_class_reference);
-                }
-            }
-        }
-
         function checkCollisionWithRequireExportsInGeneratedCode(node: Node, name: Identifier) {
             // No need to check for require or exports for ES6 modules and later
             if (modulekind >= ModuleKind.ES2015 || compilerOptions.noEmit) {
@@ -22349,7 +22319,6 @@ namespace ts {
                 if (node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) {
                     checkVarDeclaredNamesNotShadowed(node);
                 }
-                checkCollisionWithCapturedSuperVariable(node, <Identifier>node.name);
                 checkCollisionWithCapturedThisVariable(node, <Identifier>node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, <Identifier>node.name);
                 checkCollisionWithGlobalPromiseInGeneratedCode(node, <Identifier>node.name);

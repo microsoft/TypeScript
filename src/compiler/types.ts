@@ -4749,10 +4749,19 @@ namespace ts {
     }
 
     export interface EmitHelper {
-        readonly name: string;      // A unique name for this helper.
-        readonly scoped: boolean;   // Indicates whether the helper MUST be emitted in the current scope.
-        readonly text: string;      // ES3-compatible raw script text.
-        readonly priority?: number; // Helpers with a higher priority are emitted earlier than other helpers on the node.
+        readonly name: string;                                          // A unique name for this helper.
+        readonly scoped: boolean;                                       // Indicates whether the helper MUST be emitted in the current scope.
+        readonly text: string | ((node: EmitHelperContext) => string);  // ES3-compatible raw script text, or a function yielding such a string
+        readonly priority?: number;                                     // Helpers with a higher priority are emitted earlier than other helpers on the node.
+    }
+
+    /* @internal */
+    export interface UniqueNameHandler {
+        (baseName: string, checkFn?: (name: string) => boolean, optimistic?: boolean): string;
+    }
+
+    export interface EmitHelperContext {
+        makeFileLevelUniqueName: (name: string) => string;
     }
 
     /**
@@ -5018,7 +5027,7 @@ namespace ts {
         /*@internal*/ onEmitSourceMapOfNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
         /*@internal*/ onEmitSourceMapOfToken?: (node: Node, token: SyntaxKind, writer: (s: string) => void, pos: number, emitCallback: (token: SyntaxKind, writer: (s: string) => void, pos: number) => number) => number;
         /*@internal*/ onEmitSourceMapOfPosition?: (pos: number) => void;
-        /*@internal*/ onEmitHelpers?: (node: Node, writeLines: (text: string) => void) => void;
+        /*@internal*/ onEmitHelpers?: (node: Node, writeLines: (text: string) => void, makeUniqueName: UniqueNameHandler) => void;
         /*@internal*/ onSetSourceFile?: (node: SourceFile) => void;
         /*@internal*/ onBeforeEmitNodeArray?: (nodes: NodeArray<any>) => void;
         /*@internal*/ onAfterEmitNodeArray?: (nodes: NodeArray<any>) => void;
