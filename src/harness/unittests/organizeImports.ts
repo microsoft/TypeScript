@@ -197,6 +197,16 @@ export const Other = 1;
                 assert.isEmpty(changes);
             });
 
+            testOrganizeImports("Renamed_used",
+                {
+                    path: "/test.ts",
+                    content: `
+import { F1 as EffOne, F2 as EffTwo } from "lib";
+EffOne();
+`,
+                },
+                libFile);
+
             testOrganizeImports("Simple",
                 {
                     path: "/test.ts",
@@ -328,6 +338,28 @@ F1();
 `,
                 },
                 libFile);
+
+            testOrganizeImports("UnusedHeaderComment",
+                {
+                    path: "/test.ts",
+                    content: `
+// Header
+import { F1 } from "lib";
+`,
+                },
+                libFile);
+
+            testOrganizeImports("SortHeaderComment",
+                {
+                    path: "/test.ts",
+                    content: `
+// Header
+import "lib2";
+import "lib1";
+`,
+                },
+                { path: "/lib1.ts", content: "" },
+                { path: "/lib2.ts", content: "" });
 
             testOrganizeImports("AmbientModule",
                 {

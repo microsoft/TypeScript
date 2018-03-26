@@ -702,18 +702,18 @@ namespace ts.codefix {
         }
     }
 
-    function getActionsForNonUMDImport(context: CodeFixContext): CodeAction[] {
+    function getActionsForNonUMDImport(context: CodeFixContext): CodeAction[] | undefined {
         // This will always be an Identifier, since the diagnostics we fix only fail on identifiers.
         const { sourceFile, span, program, cancellationToken } = context;
         const checker = program.getTypeChecker();
         const symbolToken = getTokenAtPosition(sourceFile, span.start, /*includeJsDocComment*/ false);
-        const isJsxNamespace = isJsxOpeningLikeElement(symbolToken.parent) && symbolToken.parent.tagName === symbolToken;
-        if (!isJsxNamespace && !isIdentifier(symbolToken)) {
-            return undefined;
-        }
-        const symbolName = isJsxNamespace ? checker.getJsxNamespace() : (<Identifier>symbolToken).text;
-        const allSourceFiles = program.getSourceFiles();
-        const compilerOptions = program.getCompilerOptions();
+        // If we're at `<Foo/>`, we must check if `Foo` is already in scope, and if so, get an import for `React` instead.
+        const symbolName = isJsxOpeningLikeElement(symbolToken.parent)
+            && symbolToken.parent.tagName === symbolToken
+            && (!isIdentifier(symbolToken) || isIntrinsicJsxName(symbolToken.text) || checker.resolveName(symbolToken.text, symbolToken, SymbolFlags.All, /*excludeGlobals*/ false))
+            ? checker.getJsxNamespace()
+            : isIdentifier(symbolToken) ? symbolToken.text : undefined;
+        if (!symbolName) return undefined;
 
         // "default" is a keyword and not a legal identifier for the import, so we don't expect it here
         Debug.assert(symbolName !== "default");
@@ -725,7 +725,7 @@ namespace ts.codefix {
         function addSymbol(moduleSymbol: Symbol, exportedSymbol: Symbol, importKind: ImportKind): void {
             originalSymbolToExportInfos.add(getUniqueSymbolId(exportedSymbol, checker).toString(), { moduleSymbol, importKind });
         }
-        forEachExternalModuleToImportFrom(checker, sourceFile, allSourceFiles, moduleSymbol => {
+        forEachExternalModuleToImportFrom(checker, sourceFile, program.getSourceFiles(), moduleSymbol => {
             cancellationToken.throwIfCancellationRequested();
 
             // check the default export
@@ -735,7 +735,7 @@ namespace ts.codefix {
                 if ((
                         localSymbol && localSymbol.escapedName === symbolName ||
                         getEscapedNameForExportDefault(defaultExport) === symbolName ||
-                        moduleSymbolToValidIdentifier(moduleSymbol, compilerOptions.target) === symbolName
+                        moduleSymbolToValidIdentifier(moduleSymbol, program.getCompilerOptions().target) === symbolName
                     ) && checkSymbolHasMeaning(localSymbol || defaultExport, currentTokenMeaning)) {
                     addSymbol(moduleSymbol, localSymbol || defaultExport, ImportKind.Default);
                 }

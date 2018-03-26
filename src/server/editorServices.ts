@@ -305,6 +305,7 @@ namespace ts.server {
         useInferredProjectPerProjectRoot: boolean;
         typingsInstaller: ITypingsInstaller;
         eventHandler?: ProjectServiceEventHandler;
+        suppressDiagnosticEvents?: boolean;
         throttleWaitMilliseconds?: number;
         globalPlugins?: ReadonlyArray<string>;
         pluginProbeLocations?: ReadonlyArray<string>;
@@ -392,6 +393,7 @@ namespace ts.server {
         public readonly typingsInstaller: ITypingsInstaller;
         public readonly throttleWaitMilliseconds?: number;
         private readonly eventHandler?: ProjectServiceEventHandler;
+        private readonly suppressDiagnosticEvents?: boolean;
 
         public readonly globalPlugins: ReadonlyArray<string>;
         public readonly pluginProbeLocations: ReadonlyArray<string>;
@@ -413,6 +415,7 @@ namespace ts.server {
             this.typingsInstaller = opts.typingsInstaller || nullTypingsInstaller;
             this.throttleWaitMilliseconds = opts.throttleWaitMilliseconds;
             this.eventHandler = opts.eventHandler;
+            this.suppressDiagnosticEvents = opts.suppressDiagnosticEvents;
             this.globalPlugins = opts.globalPlugins || emptyArray;
             this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray;
             this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
@@ -1598,7 +1601,7 @@ namespace ts.server {
         }
 
         private sendConfigFileDiagEvent(project: ConfiguredProject, triggerFile: NormalizedPath) {
-            if (!this.eventHandler) {
+            if (!this.eventHandler || this.suppressDiagnosticEvents) {
                 return;
             }
 
