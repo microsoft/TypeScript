@@ -4328,6 +4328,7 @@ declare namespace ts {
         getCustomTransformers?(): CustomTransformers | undefined;
         isKnownTypesPackageName?(name: string): boolean;
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
+        isLanguageServiceEnabled?(): boolean;
     }
     interface UserPreferences {
         readonly quotePreference?: "double" | "single";

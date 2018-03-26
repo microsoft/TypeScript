@@ -286,6 +286,7 @@ namespace ts.server {
         cancellationToken: ServerCancellationToken;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
+        ignoreConfigFiles?: boolean;
         typingsInstaller: ITypingsInstaller;
         byteLength: (buf: string, encoding?: string) => number;
         hrtime: (start?: number[]) => number[];
@@ -353,6 +354,7 @@ namespace ts.server {
                 cancellationToken: this.cancellationToken,
                 useSingleInferredProject: opts.useSingleInferredProject,
                 useInferredProjectPerProjectRoot: opts.useInferredProjectPerProjectRoot,
+                ignoreConfigFiles: opts.ignoreConfigFiles,
                 typingsInstaller: this.typingsInstaller,
                 throttleWaitMilliseconds,
                 eventHandler: this.eventHandler,
@@ -819,7 +821,7 @@ namespace ts.server {
         }
 
         private setCompilerOptionsForInferredProjects(args: protocol.SetCompilerOptionsForInferredProjectsArgs): void {
-            this.projectService.setCompilerOptionsForInferredProjects(args.options, args.projectRootPath);
+            this.projectService.setCompilerOptionsForInferredProjects(args.options, args.projectRootPath, args.disableLanguageService);
         }
 
         private getProjectInfo(args: protocol.ProjectInfoRequestArgs): protocol.ProjectInfo {
@@ -831,7 +833,7 @@ namespace ts.server {
             project.updateGraph();
             const projectInfo = {
                 configFileName: project.getProjectName(),
-                languageServiceDisabled: !project.languageServiceEnabled,
+                languageServiceDisabled: !project.isLanguageServiceEnabled(),
                 fileNames: needFileNameList ? project.getFileNames(/*excludeFilesFromExternalLibraries*/ false, excludeConfigFiles) : undefined
             };
             return projectInfo;
@@ -858,7 +860,7 @@ namespace ts.server {
                 symLinkedProjects = this.projectService.getSymlinkedProjects(scriptInfo);
             }
             // filter handles case when 'projects' is undefined
-            projects = filter(projects, p => p.languageServiceEnabled);
+            projects = filter(projects, p => p.isLanguageServiceEnabled());
             if ((!projects || !projects.length) && !symLinkedProjects) {
                 return Errors.ThrowNoProject();
             }
@@ -1328,7 +1330,7 @@ namespace ts.server {
                 symLinkedProjects ? { projects, symLinkedProjects } : projects,
                 (project, info) => {
                     let result: protocol.CompileOnSaveAffectedFileListSingleProject;
-                    if (project.compileOnSaveEnabled && project.languageServiceEnabled && !project.getCompilationSettings().noEmit) {
+                    if (project.compileOnSaveEnabled && project.isLanguageServiceEnabled() && !project.getCompilationSettings().noEmit) {
                         result = {
                             projectFileName: project.getProjectName(),
                             fileNames: project.getCompileOnSaveAffectedFileList(info),
@@ -1345,7 +1347,7 @@ namespace ts.server {
             if (!project) {
                 Errors.ThrowNoProject();
             }
-            if (!project.languageServiceEnabled) {
+            if (!project.isLanguageServiceEnabled()) {
                 return false;
             }
             const scriptInfo = project.getScriptInfo(file);

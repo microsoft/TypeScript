@@ -212,6 +212,8 @@ namespace ts {
 
         isKnownTypesPackageName?(name: string): boolean;
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
+
+        isLanguageServiceEnabled?(): boolean;
     }
 
     export interface UserPreferences {

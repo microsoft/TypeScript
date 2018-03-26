@@ -507,6 +507,7 @@ namespace ts.server {
                 cancellationToken,
                 useSingleInferredProject,
                 useInferredProjectPerProjectRoot,
+                ignoreConfigFiles,
                 typingsInstaller: typingsInstaller || nullTypingsInstaller,
                 byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
@@ -927,6 +928,7 @@ namespace ts.server {
 
     const useSingleInferredProject = hasArgument("--useSingleInferredProject");
     const useInferredProjectPerProjectRoot = hasArgument("--useInferredProjectPerProjectRoot");
+    const ignoreConfigFiles = hasArgument("--ignoreConfigFiles");
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
     const suppressDiagnosticEvents = hasArgument("--suppressDiagnosticEvents");
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);

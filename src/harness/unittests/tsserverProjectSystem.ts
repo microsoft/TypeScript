@@ -1056,15 +1056,15 @@ namespace ts.projectSystem {
 
             projectService.openExternalProject({ rootFiles: toExternalFiles([file1.path]), options: {}, projectFileName: proj1name });
             const proj1 = projectService.findProject(proj1name);
-            assert.isTrue(proj1.languageServiceEnabled);
+            assert.isTrue(proj1.isLanguageServiceEnabled());
 
             projectService.openExternalProject({ rootFiles: toExternalFiles([file2.path]), options: {}, projectFileName: proj2name });
             const proj2 = projectService.findProject(proj2name);
-            assert.isTrue(proj2.languageServiceEnabled);
+            assert.isTrue(proj2.isLanguageServiceEnabled());
 
             projectService.openExternalProject({ rootFiles: toExternalFiles([file3.path]), options: {}, projectFileName: proj3name });
             const proj3 = projectService.findProject(proj3name);
-            assert.isFalse(proj3.languageServiceEnabled);
+            assert.isFalse(proj3.isLanguageServiceEnabled());
         });
 
         it("should use only one inferred project if 'useOneInferredProject' is set", () => {
@@ -1312,6 +1312,111 @@ namespace ts.projectSystem {
             assert.isUndefined(projectService.configuredProjects.get(config1.path));
             assert.isDefined(projectService.configuredProjects.get(config2.path));
 
+        });
+
+        describe("ignoreConfigFiles", () => {
+            it("external project including config file", () => {
+                const file1 = {
+                    path: "/a/b/f1.ts",
+                    content: "let x =1;"
+                };
+                const config1 = {
+                    path: "/a/b/tsconfig.json",
+                    content: JSON.stringify(
+                        {
+                            compilerOptions: {},
+                            files: ["f1.ts"]
+                        }
+                    )
+                };
+
+                const externalProjectName = "externalproject";
+                const host = createServerHost([file1, config1]);
+                const projectService = createProjectService(host, { useSingleInferredProject: true }, { ignoreConfigFiles: true });
+                projectService.openExternalProject({
+                    rootFiles: toExternalFiles([file1.path, config1.path]),
+                    options: {},
+                    projectFileName: externalProjectName
+                });
+
+                checkNumberOfProjects(projectService, { externalProjects: 1 });
+                const proj = projectService.externalProjects[0];
+                assert.isDefined(proj);
+
+                assert.isTrue(proj.fileExists(file1.path));
+            });
+
+            it("loose file included in config file (openClientFile)", () => {
+                const file1 = {
+                    path: "/a/b/f1.ts",
+                    content: "let x =1;"
+                };
+                const config1 = {
+                    path: "/a/b/tsconfig.json",
+                    content: JSON.stringify(
+                        {
+                            compilerOptions: {},
+                            files: ["f1.ts"]
+                        }
+                    )
+                };
+
+                const host = createServerHost([file1, config1]);
+                const projectService = createProjectService(host, { useSingleInferredProject: true }, { ignoreConfigFiles: true });
+                projectService.openClientFile(file1.path, file1.content);
+
+                checkNumberOfProjects(projectService, { inferredProjects: 1 });
+                const proj = projectService.inferredProjects[0];
+                assert.isDefined(proj);
+
+                assert.isTrue(proj.fileExists(file1.path));
+            });
+
+            it("loose file included in config file (applyCodeChanges)", () => {
+                const file1 = {
+                    path: "/a/b/f1.ts",
+                    content: "let x =1;"
+                };
+                const config1 = {
+                    path: "/a/b/tsconfig.json",
+                    content: JSON.stringify(
+                        {
+                            compilerOptions: {},
+                            files: ["f1.ts"]
+                        }
+                    )
+                };
+
+                const host = createServerHost([file1, config1]);
+                const projectService = createProjectService(host, { useSingleInferredProject: true }, { ignoreConfigFiles: true });
+                projectService.applyChangesInOpenFiles([{ fileName: file1.path, content: file1.content }], [], []);
+
+                checkNumberOfProjects(projectService, { inferredProjects: 1 });
+                const proj = projectService.inferredProjects[0];
+                assert.isDefined(proj);
+
+                assert.isTrue(proj.fileExists(file1.path));
+            });
+        });
+
+        it("disable inferred project", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "let x =1;"
+            };
+
+            const host = createServerHost([file1]);
+            const projectService = createProjectService(host);
+
+            projectService.setCompilerOptionsForInferredProjects({ }, undefined, true /*disableLanguageService*/);
+
+            projectService.openClientFile(file1.path, file1.content);
+
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            const proj = projectService.inferredProjects[0];
+            assert.isDefined(proj);
+
+            assert.isFalse(proj.isLanguageServiceEnabled());
         });
 
         it("reload regular file after closing", () => {
@@ -2465,7 +2570,7 @@ namespace ts.projectSystem {
                 options: {}
             });
             service.checkNumberOfProjects({ externalProjects: 1 });
-            assert.isFalse(service.externalProjects[0].languageServiceEnabled, "language service should be disabled - 1");
+            assert.isFalse(service.externalProjects[0].isLanguageServiceEnabled(), "language service should be disabled - 1");
 
             service.openExternalProject({
                 projectFileName,
@@ -2473,7 +2578,7 @@ namespace ts.projectSystem {
                 options: {}
             });
             service.checkNumberOfProjects({ externalProjects: 1 });
-            assert.isTrue(service.externalProjects[0].languageServiceEnabled, "language service should be enabled");
+            assert.isTrue(service.externalProjects[0].isLanguageServiceEnabled(), "language service should be enabled");
 
             service.openExternalProject({
                 projectFileName,
@@ -2481,7 +2586,7 @@ namespace ts.projectSystem {
                 options: {}
             });
             service.checkNumberOfProjects({ externalProjects: 1 });
-            assert.isFalse(service.externalProjects[0].languageServiceEnabled, "language service should be disabled - 2");
+            assert.isFalse(service.externalProjects[0].isLanguageServiceEnabled(), "language service should be disabled - 2");
         });
 
         it("files are properly detached when language service is disabled", () => {
@@ -2585,7 +2690,7 @@ namespace ts.projectSystem {
             const projectService = session.getProjectService();
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const project = configuredProjectAt(projectService, 0);
-            assert.isFalse(project.languageServiceEnabled, "Language service enabled");
+            assert.isFalse(project.isLanguageServiceEnabled(), "Language service enabled");
             assert.isTrue(!!lastEvent, "should receive event");
             assert.equal(lastEvent.data.project, project, "project name");
             assert.equal(lastEvent.data.project.getProjectName(), config.path, "config path");
@@ -2594,7 +2699,7 @@ namespace ts.projectSystem {
             host.reloadFS([f1, f2, configWithExclude]);
             host.checkTimeoutQueueLengthAndRun(2);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            assert.isTrue(project.languageServiceEnabled, "Language service enabled");
+            assert.isTrue(project.isLanguageServiceEnabled(), "Language service enabled");
             assert.equal(lastEvent.data.project, project, "project");
             assert.isTrue(lastEvent.data.languageServiceEnabled, "Language service state");
         });
@@ -2637,7 +2742,7 @@ namespace ts.projectSystem {
             const projectService = session.getProjectService();
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const project = configuredProjectAt(projectService, 0);
-            assert.isFalse(project.languageServiceEnabled, "Language service enabled");
+            assert.isFalse(project.isLanguageServiceEnabled(), "Language service enabled");
             assert.isTrue(!!lastEvent, "should receive event");
             assert.equal(lastEvent.data.project, project, "project name");
             assert.isFalse(lastEvent.data.languageServiceEnabled, "Language service state");

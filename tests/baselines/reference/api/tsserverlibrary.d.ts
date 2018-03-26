@@ -4076,6 +4076,7 @@ declare namespace ts {
         getCustomTransformers?(): CustomTransformers | undefined;
         isKnownTypesPackageName?(name: string): boolean;
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
+        isLanguageServiceEnabled?(): boolean;
     }
     interface UserPreferences {
         readonly quotePreference?: "double" | "single";
@@ -6116,6 +6117,10 @@ declare namespace ts.server.protocol {
          * `useInferredProjectPerProjectRoot` enabled.
          */
         projectRootPath?: string;
+        /**
+         * Disable the language service of the inferred project.
+         */
+        disableLanguageService?: boolean;
     }
     /**
      * Response to SetCompilerOptionsForInferredProjectsResponse request. This is just an acknowledgement, so
@@ -7250,6 +7255,7 @@ declare namespace ts.server {
         cancellationToken: ServerCancellationToken;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
+        ignoreConfigFiles?: boolean;
         typingsInstaller: ITypingsInstaller;
         byteLength: (buf: string, encoding?: string) => number;
         hrtime: (start?: number[]) => number[];
@@ -7540,7 +7546,7 @@ declare namespace ts.server {
         private lastCachedUnresolvedImportsList;
         private lastFileExceededProgramSize;
         protected languageService: LanguageService;
-        languageServiceEnabled: boolean;
+        private languageServiceEnabled;
         readonly trace?: (s: string) => void;
         readonly realpath?: (path: string) => string;
         private builderState;
@@ -7573,7 +7579,9 @@ declare namespace ts.server {
         isNonTsProject(): boolean;
         isJsOnlyProject(): boolean;
         getCachedUnresolvedImportsPerFile_TestOnly(): UnresolvedImportsMap;
+        isLanguageServiceEnabled(): boolean;
         static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {};
+        private languageServicePermanentlyDisabled;
         isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
         private readonly typingsCache;
@@ -7822,6 +7830,7 @@ declare namespace ts.server {
         cancellationToken: HostCancellationToken;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
+        ignoreConfigFiles?: boolean;
         typingsInstaller: ITypingsInstaller;
         eventHandler?: ProjectServiceEventHandler;
         suppressDiagnosticEvents?: boolean;
@@ -7888,6 +7897,7 @@ declare namespace ts.server {
         readonly cancellationToken: HostCancellationToken;
         readonly useSingleInferredProject: boolean;
         readonly useInferredProjectPerProjectRoot: boolean;
+        private readonly ignoreConfigFiles;
         readonly typingsInstaller: ITypingsInstaller;
         readonly throttleWaitMilliseconds?: number;
         private readonly eventHandler?;
@@ -7906,7 +7916,7 @@ declare namespace ts.server {
         private delayUpdateProjectGraph;
         private sendProjectsUpdatedInBackgroundEvent;
         private delayUpdateProjectGraphs;
-        setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions, projectRootPath?: string): void;
+        setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions, projectRootPath?: string, disableLanguageService?: boolean): void;
         findProject(projectName: string): Project | undefined;
         getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean): Project;
         getScriptInfoEnsuringProjectsUptoDate(uncheckedFileName: string): ScriptInfo;

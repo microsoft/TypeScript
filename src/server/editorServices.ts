@@ -303,6 +303,7 @@ namespace ts.server {
         cancellationToken: HostCancellationToken;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
+        ignoreConfigFiles?: boolean;
         typingsInstaller: ITypingsInstaller;
         eventHandler?: ProjectServiceEventHandler;
         suppressDiagnosticEvents?: boolean;
@@ -390,6 +391,7 @@ namespace ts.server {
         public readonly cancellationToken: HostCancellationToken;
         public readonly useSingleInferredProject: boolean;
         public readonly useInferredProjectPerProjectRoot: boolean;
+        private readonly ignoreConfigFiles: boolean;
         public readonly typingsInstaller: ITypingsInstaller;
         public readonly throttleWaitMilliseconds?: number;
         private readonly eventHandler?: ProjectServiceEventHandler;
@@ -412,6 +414,7 @@ namespace ts.server {
             this.cancellationToken = opts.cancellationToken;
             this.useSingleInferredProject = opts.useSingleInferredProject;
             this.useInferredProjectPerProjectRoot = opts.useInferredProjectPerProjectRoot;
+            this.ignoreConfigFiles = opts.ignoreConfigFiles;
             this.typingsInstaller = opts.typingsInstaller || nullTypingsInstaller;
             this.throttleWaitMilliseconds = opts.throttleWaitMilliseconds;
             this.eventHandler = opts.eventHandler;
@@ -595,10 +598,13 @@ namespace ts.server {
             this.delayEnsureProjectForOpenFiles();
         }
 
-        setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions, projectRootPath?: string): void {
+        setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions, projectRootPath?: string, disableLanguageService?: boolean): void {
             Debug.assert(projectRootPath === undefined || this.useInferredProjectPerProjectRoot, "Setting compiler options per project root path is only supported when useInferredProjectPerProjectRoot is enabled");
 
             const compilerOptions = convertCompilerOptions(projectCompilerOptions);
+            if (disableLanguageService !== undefined) {
+                compilerOptions.disableLanguageService = disableLanguageService;
+            }
 
             // always set 'allowNonTsExtensions' for inferred projects since user cannot configure it from the outside
             // previously we did not expose a way for user to change these settings and this option was enabled by default
@@ -920,7 +926,7 @@ namespace ts.server {
                     }
                 }
 
-                if (!p.languageServiceEnabled) {
+                if (!p.isLanguageServiceEnabled()) {
                     // if project language service is disabled then we create a program only for open files.
                     // this means that project should be marked as dirty to force rebuilding of the program
                     // on the next request
@@ -1197,6 +1203,11 @@ namespace ts.server {
         private forEachConfigFileLocation(info: ScriptInfo,
             action: (configFileName: NormalizedPath, canonicalConfigFilePath: string) => boolean | void,
             projectRootPath?: NormalizedPath) {
+
+            if (this.ignoreConfigFiles) {
+                return undefined;
+            }
+
             let searchPath = asNormalizedPath(getDirectoryPath(info.fileName));
 
             while (!projectRootPath || containsPath(projectRootPath, searchPath, this.currentDirectory, !this.host.useCaseSensitiveFileNames)) {
@@ -1419,7 +1430,7 @@ namespace ts.server {
                 compileOnSave: project.compileOnSaveEnabled,
                 configFileName: configFileName(),
                 projectType: project instanceof ExternalProject ? "external" : "configured",
-                languageServiceEnabled: project.languageServiceEnabled,
+                languageServiceEnabled: project.isLanguageServiceEnabled(),
                 version,
             };
             this.eventHandler({ eventName: ProjectInfoTelemetryEvent, data });
@@ -1710,7 +1721,7 @@ namespace ts.server {
                 if (toAddInfo !== info) {
                     for (const project of toAddInfo.containingProjects) {
                         // Add the projects only if they can use symLink targets and not already in the list
-                        if (project.languageServiceEnabled &&
+                        if (project.isLanguageServiceEnabled() &&
                             !project.getCompilerOptions().preserveSymlinks &&
                             !contains(info.containingProjects, project)) {
                             if (!projects) {
@@ -2309,7 +2320,7 @@ namespace ts.server {
             for (const file of proj.rootFiles) {
                 const normalized = toNormalizedPath(file.fileName);
                 if (getBaseConfigFileName(normalized)) {
-                    if (this.host.fileExists(normalized)) {
+                    if (!this.ignoreConfigFiles && this.host.fileExists(normalized)) {
                         (tsConfigFiles || (tsConfigFiles = [])).push(normalized);
                     }
                 }
@@ -2336,7 +2347,7 @@ namespace ts.server {
                     else {
                         externalProject.enableLanguageService();
                     }
-                    // external project already exists and not config files were added - update the project and return;
+                    // external project already exists and no config files were added - update the project and return;
                     this.updateNonInferredProject(externalProject, proj.rootFiles, externalFilePropertyReader, compilerOptions, proj.typeAcquisition, proj.options.compileOnSave);
                     return;
                 }
