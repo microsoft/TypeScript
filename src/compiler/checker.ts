@@ -4230,14 +4230,6 @@ namespace ts {
 
             // Use the type of the initializer expression if one is present
             if (declaration.initializer) {
-                if (isInJavaScriptFile(declaration)) {
-                    if (isNullOrUndefined(declaration.initializer)) {
-                        return anyType;
-                    }
-                    else if (isEmptyArrayLiteral(declaration.initializer)) {
-                        return anyArrayType;
-                    }
-                }
                 const type = checkDeclarationInitializer(declaration);
                 return addOptionality(type, isOptional);
             }
@@ -4286,7 +4278,6 @@ namespace ts {
                         thisContainer.kind === SyntaxKind.FunctionDeclaration ||
                         (thisContainer.kind === SyntaxKind.FunctionExpression && !isPrototypePropertyAssignment(thisContainer.parent));
                     if (declarationInConstructor) {
-                        // TODO: Use the constructor types only if they contain anything but null and undefined
                         definedInConstructor = true;
                     }
                     else {
@@ -19703,12 +19694,21 @@ namespace ts {
         }
 
         function checkDeclarationInitializer(declaration: HasExpressionInitializer) {
-            const initializer = isInJavaScriptFile(declaration) && getDeclaredJavascriptInitializer(declaration) || declaration.initializer;
+            const inJs = isInJavaScriptFile(declaration);
+            const initializer = inJs && getDeclaredJavascriptInitializer(declaration) || declaration.initializer;
             const type = getTypeOfExpression(initializer, /*cache*/ true);
-            const t = getCombinedNodeFlags(declaration) & NodeFlags.Const ||
+            const widened = getCombinedNodeFlags(declaration) & NodeFlags.Const ||
                 (getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration)) ||
                 isTypeAssertion(initializer) ? type : getWidenedLiteralType(type);
-            return isInJavaScriptFile(declaration) && t.flags & TypeFlags.Nullable ? anyType : t;
+            if (inJs) {
+                if (widened.flags & TypeFlags.Nullable) {
+                    return anyType;
+                }
+                else if (isEmptyArrayLiteralType(widened)) {
+                    return anyArrayType;
+                }
+            }
+            return widened;
         }
 
         function isLiteralOfContextualType(candidateType: Type, contextualType: Type): boolean {
