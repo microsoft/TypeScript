@@ -5,7 +5,9 @@
 //// {
 ////     outerKey:
 ////     {
-////         innerKey: 1
+////         innerKey: 1,
+////         innerKey2:
+////             2
 ////     }
 //// };
 //// 
@@ -17,7 +19,9 @@ var clear =
 {
     outerKey:
     {
-        innerKey: 1
+        innerKey: 1,
+        innerKey2:
+            2
     }
 };
 `
