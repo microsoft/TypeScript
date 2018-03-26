@@ -14,6 +14,7 @@ namespace ts {
         endPosition?: number;
         program: Program;
         cancellationToken?: CancellationToken;
+        preferences: UserPreferences;
     }
 
     export namespace refactor {

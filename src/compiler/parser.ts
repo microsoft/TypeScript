@@ -429,6 +429,7 @@ namespace ts {
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.JsxOpeningElement:
                 return visitNode(cbNode, (<JsxOpeningLikeElement>node).tagName) ||
+                    visitNodes(cbNode, cbNodes, (<JsxOpeningLikeElement>node).typeArguments) ||
                     visitNode(cbNode, (<JsxOpeningLikeElement>node).attributes);
             case SyntaxKind.JsxAttributes:
                 return visitNodes(cbNode, cbNodes, (<JsxAttributes>node).properties);
@@ -978,10 +979,7 @@ namespace ts {
         }
 
         function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any): void {
-            const start = scanner.getTokenPos();
-            const length = scanner.getTextPos() - start;
-
-            parseErrorAtPosition(start, length, message, arg0);
+            parseErrorAt(scanner.getTokenPos(), scanner.getTextPos(), message, arg0);
         }
 
         function parseErrorAtPosition(start: number, length: number, message: DiagnosticMessage, arg0?: any): void {
@@ -996,9 +994,16 @@ namespace ts {
             parseErrorBeforeNextFinishedNode = true;
         }
 
-        function scanError(message: DiagnosticMessage, length?: number) {
-            const pos = scanner.getTextPos();
-            parseErrorAtPosition(pos, length || 0, message);
+        function parseErrorAt(start: number, end: number, message: DiagnosticMessage, arg0?: any): void {
+            parseErrorAtPosition(start, end - start, message, arg0);
+        }
+
+        function parseErrorAtRange(range: TextRange, message: DiagnosticMessage, arg0?: any): void {
+            parseErrorAt(range.pos, range.end, message, arg0);
+        }
+
+        function scanError(message: DiagnosticMessage, length: number): void {
+            parseErrorAtPosition(scanner.getTextPos(), length, message);
         }
 
         function getNodePos(): number {
@@ -3808,12 +3813,13 @@ namespace ts {
             const unaryOperator = token();
             const simpleUnaryExpression = parseSimpleUnaryExpression();
             if (token() === SyntaxKind.AsteriskAsteriskToken) {
-                const start = skipTrivia(sourceText, simpleUnaryExpression.pos);
+                const pos = skipTrivia(sourceText, simpleUnaryExpression.pos);
+                const { end } = simpleUnaryExpression;
                 if (simpleUnaryExpression.kind === SyntaxKind.TypeAssertionExpression) {
-                    parseErrorAtPosition(start, simpleUnaryExpression.end - start, Diagnostics.A_type_assertion_expression_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses);
+                    parseErrorAt(pos, end, Diagnostics.A_type_assertion_expression_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses);
                 }
                 else {
-                    parseErrorAtPosition(start, simpleUnaryExpression.end - start, Diagnostics.An_unary_expression_with_the_0_operator_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses, tokenToString(unaryOperator));
+                    parseErrorAt(pos, end, Diagnostics.An_unary_expression_with_the_0_operator_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses, tokenToString(unaryOperator));
                 }
             }
             return simpleUnaryExpression;
@@ -4084,7 +4090,7 @@ namespace ts {
                 node.closingElement = parseJsxClosingElement(inExpressionContext);
 
                 if (!tagNamesAreEquivalent(node.openingElement.tagName, node.closingElement.tagName)) {
-                    parseErrorAtPosition(node.closingElement.pos, node.closingElement.end - node.closingElement.pos, Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, getTextOfNodeFromSourceText(sourceText, node.openingElement.tagName));
+                    parseErrorAtRange(node.closingElement, Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, getTextOfNodeFromSourceText(sourceText, node.openingElement.tagName));
                 }
 
                 result = finishNode(node);
@@ -4140,11 +4146,10 @@ namespace ts {
                     // If we hit EOF, issue the error at the tag that lacks the closing element
                     // rather than at the end of the file (which is useless)
                     if (isJsxOpeningFragment(openingTag)) {
-                        parseErrorAtPosition(openingTag.pos, openingTag.end - openingTag.pos, Diagnostics.JSX_fragment_has_no_corresponding_closing_tag);
+                        parseErrorAtRange(openingTag, Diagnostics.JSX_fragment_has_no_corresponding_closing_tag);
                     }
                     else {
-                        const openingTagName = openingTag.tagName;
-                        parseErrorAtPosition(openingTagName.pos, openingTagName.end - openingTagName.pos, Diagnostics.JSX_element_0_has_no_corresponding_closing_tag, getTextOfNodeFromSourceText(sourceText, openingTagName));
+                        parseErrorAtRange(openingTag.tagName, Diagnostics.JSX_element_0_has_no_corresponding_closing_tag, getTextOfNodeFromSourceText(sourceText, openingTag.tagName));
                     }
                     return undefined;
                 case SyntaxKind.LessThanSlashToken:
@@ -4197,6 +4202,7 @@ namespace ts {
             }
 
             const tagName = parseJsxElementName();
+            const typeArguments = tryParseTypeArguments();
             const attributes = parseJsxAttributes();
 
             let node: JsxOpeningLikeElement;
@@ -4221,6 +4227,7 @@ namespace ts {
             }
 
             node.tagName = tagName;
+            node.typeArguments = typeArguments;
             node.attributes = attributes;
 
             return finishNode(node);
@@ -4314,8 +4321,7 @@ namespace ts {
             const node = <JsxClosingFragment>createNode(SyntaxKind.JsxClosingFragment);
             parseExpected(SyntaxKind.LessThanSlashToken);
             if (tokenIsIdentifierOrKeyword(token())) {
-                const unexpectedTagName = parseJsxElementName();
-                parseErrorAtPosition(unexpectedTagName.pos, unexpectedTagName.end - unexpectedTagName.pos, Diagnostics.Expected_corresponding_closing_tag_for_JSX_fragment);
+                parseErrorAtRange(parseJsxElementName(), Diagnostics.Expected_corresponding_closing_tag_for_JSX_fragment);
             }
             if (inExpressionContext) {
                 parseExpected(SyntaxKind.GreaterThanToken);
@@ -6063,8 +6069,7 @@ namespace ts {
                 node.name = identifierName;
             }
             if (kind === SyntaxKind.ImportSpecifier && checkIdentifierIsKeyword) {
-                // Report error identifier expected
-                parseErrorAtPosition(checkIdentifierStart, checkIdentifierEnd - checkIdentifierStart, Diagnostics.Identifier_expected);
+                parseErrorAt(checkIdentifierStart, checkIdentifierEnd, Diagnostics.Identifier_expected);
             }
             return finishNode(node);
         }
@@ -6588,7 +6593,7 @@ namespace ts {
 
                 function parseReturnTag(atToken: AtToken, tagName: Identifier): JSDocReturnTag {
                     if (forEach(tags, t => t.kind === SyntaxKind.JSDocReturnTag)) {
-                        parseErrorAtPosition(tagName.pos, scanner.getTokenPos() - tagName.pos, Diagnostics._0_tag_already_specified, tagName.escapedText);
+                        parseErrorAt(tagName.pos, scanner.getTokenPos(), Diagnostics._0_tag_already_specified, tagName.escapedText);
                     }
 
                     const result = <JSDocReturnTag>createNode(SyntaxKind.JSDocReturnTag, atToken.pos);
@@ -6600,7 +6605,7 @@ namespace ts {
 
                 function parseTypeTag(atToken: AtToken, tagName: Identifier): JSDocTypeTag {
                     if (forEach(tags, t => t.kind === SyntaxKind.JSDocTypeTag)) {
-                        parseErrorAtPosition(tagName.pos, scanner.getTokenPos() - tagName.pos, Diagnostics._0_tag_already_specified, tagName.escapedText);
+                        parseErrorAt(tagName.pos, scanner.getTokenPos(), Diagnostics._0_tag_already_specified, tagName.escapedText);
                     }
 
                     const result = <JSDocTypeTag>createNode(SyntaxKind.JSDocTypeTag, atToken.pos);
@@ -6810,7 +6815,7 @@ namespace ts {
 
                 function parseTemplateTag(atToken: AtToken, tagName: Identifier): JSDocTemplateTag | undefined {
                     if (some(tags, isJSDocTemplateTag)) {
-                        parseErrorAtPosition(tagName.pos, scanner.getTokenPos() - tagName.pos, Diagnostics._0_tag_already_specified, tagName.escapedText);
+                        parseErrorAt(tagName.pos, scanner.getTokenPos(), Diagnostics._0_tag_already_specified, tagName.escapedText);
                     }
 
                     // Type parameter list looks like '@template T,U,V'
@@ -7243,7 +7248,7 @@ namespace ts {
             forEachChild(sourceFile, visit);
 
             if (lastNodeEntirelyBeforePosition) {
-                const lastChildOfLastEntireNodeBeforePosition = getLastChild(lastNodeEntirelyBeforePosition);
+                const lastChildOfLastEntireNodeBeforePosition = getLastDescendant(lastNodeEntirelyBeforePosition);
                 if (lastChildOfLastEntireNodeBeforePosition.pos > bestResult.pos) {
                     bestResult = lastChildOfLastEntireNodeBeforePosition;
                 }
@@ -7251,9 +7256,9 @@ namespace ts {
 
             return bestResult;
 
-            function getLastChild(node: Node): Node {
+            function getLastDescendant(node: Node): Node {
                 while (true) {
-                    const lastChild = getLastChildWorker(node);
+                    const lastChild = getLastChild(node);
                     if (lastChild) {
                         node = lastChild;
                     }
@@ -7261,16 +7266,6 @@ namespace ts {
                         return node;
                     }
                 }
-            }
-
-            function getLastChildWorker(node: Node): Node | undefined {
-                let last: Node;
-                forEachChild(node, child => {
-                    if (nodeIsPresent(child)) {
-                        last = child;
-                    }
-                });
-                return last;
             }
 
             function visit(child: Node) {

@@ -3,6 +3,7 @@ tests/cases/conformance/jsx/file.tsx(25,10): error TS2322: Type '{}' is not assi
     Property 'reqd' is missing in type '{}'.
 tests/cases/conformance/jsx/file.tsx(28,10): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { reqd: any; }'.
   Type '{}' is not assignable to type '{ reqd: any; }'.
+    Property 'reqd' is missing in type '{}'.
 
 
 ==== tests/cases/conformance/jsx/react.d.ts (0 errors) ====
@@ -54,5 +55,6 @@ tests/cases/conformance/jsx/file.tsx(28,10): error TS2322: Type '{}' is not assi
              ~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { reqd: any; }'.
 !!! error TS2322:   Type '{}' is not assignable to type '{ reqd: any; }'.
+!!! error TS2322:     Property 'reqd' is missing in type '{}'.
     
     
