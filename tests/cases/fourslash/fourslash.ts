@@ -284,7 +284,7 @@ declare namespace FourSlashInterface {
         numberOfErrorsInCurrentFile(expected: number): void;
         baselineCurrentFileBreakpointLocations(): void;
         baselineCurrentFileNameOrDottedNameSpans(): void;
-        baselineGetEmitOutput(): void;
+        baselineGetEmitOutput(insertResultsIntoVfs?: boolean): void;
         baselineQuickInfo(): void;
         nameOrDottedNameSpanTextIs(text: string): void;
         outliningSpansInCurrentFile(spans: Range[]): void;
