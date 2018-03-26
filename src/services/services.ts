@@ -1582,8 +1582,7 @@ namespace ts {
 
 
         const sourceMapCommentRegExp = /^\/\/[@#] sourceMappingURL=(.+)$/gm;
-        const dataURLRegExp = /^data:/;
-        const base64UrlRegExp = /^data:application\/json;charset=utf-8;base64,(.+)$/;
+        const base64UrlRegExp = /^data:(?:application\/json(?:;charset=[uU][tT][fF]-8);base64,(.+)$)?/;
         function scanForSourcemapURL(fileName: string) {
             const mappedFile = sourcemappedFileCache.get(toPath(fileName, currentDirectory, getCanonicalFileName));
             if (!mappedFile) {
@@ -1627,12 +1626,13 @@ namespace ts {
                 return file.sourceMapper;
             }
             let mapFileName = scanForSourcemapURL(fileName);
-            if (mapFileName && dataURLRegExp.exec(mapFileName)) {
-                const b64EncodedMatch = base64UrlRegExp.exec(mapFileName);
-                if (b64EncodedMatch) {
-                    const base64Object = b64EncodedMatch[1];
+            let match: RegExpExecArray;
+            if (mapFileName && (match = base64UrlRegExp.exec(mapFileName))) {
+                if (match[1]) {
+                    const base64Object = match[1];
                     return convertDocumentToSourceMapper(file, base64decode(sys, base64Object), fileName);
                 }
+                // Not a data URL we can parse, skip it
                 mapFileName = undefined;
             }
             const possibleMapLocations: string[] = [];
