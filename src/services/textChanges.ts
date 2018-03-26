@@ -114,11 +114,7 @@ namespace ts.textChanges {
         readonly range: TextRange;
     }
 
-    interface FormatNodeOptions extends InsertNodeOptions {
-        readonly useIndentationFromFile?: boolean;
-    }
-
-    export interface ChangeNodeOptions extends ConfigurableStartEnd, FormatNodeOptions {}
+    export interface ChangeNodeOptions extends ConfigurableStartEnd, InsertNodeOptions {}
     interface ReplaceWithSingleNode extends BaseChange {
         readonly kind: ChangeKind.ReplaceWithSingleNode;
         readonly node: Node;
@@ -134,7 +130,7 @@ namespace ts.textChanges {
     interface ReplaceWithMultipleNodes extends BaseChange {
         readonly kind: ChangeKind.ReplaceWithMultipleNodes;
         readonly nodes: ReadonlyArray<Node>;
-        readonly options?: FormatNodeOptions;
+        readonly options?: InsertNodeOptions;
     }
 
     interface ChangeText extends BaseChange {
@@ -682,16 +678,14 @@ namespace ts.textChanges {
         }
 
         /** Note: this may mutate `nodeIn`. */
-        function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, options: FormatNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText): string {
+        function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, options: InsertNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText): string {
             const { node, text } = getNonformattedText(nodeIn, sourceFile, newLineCharacter);
             if (validate) validate(node, text);
             const { options: formatOptions } = formatContext;
             const initialIndentation =
                 options.indentation !== undefined
                     ? options.indentation
-                    : (options.useIndentationFromFile !== false)
-                        ? formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, options.prefix === newLineCharacter || getLineStartPositionForPosition(pos, sourceFile) === pos)
-                        : 0;
+                    : formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, options.prefix === newLineCharacter || getLineStartPositionForPosition(pos, sourceFile) === pos);
             const delta =
                 options.delta !== undefined
                     ? options.delta
