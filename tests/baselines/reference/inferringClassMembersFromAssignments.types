@@ -46,6 +46,13 @@ class C {
 >this : this
 >inMethod : string | number | undefined
 >0 : 0
+
+            this.inMethodNullable = null;
+>this.inMethodNullable = null : null
+>this.inMethodNullable : any
+>this : this
+>inMethodNullable : any
+>null : null
         }
         else {
             this.inMethod = "string"
@@ -54,6 +61,13 @@ class C {
 >this : this
 >inMethod : string | number | undefined
 >"string" : "string"
+
+            this.inMethodNullable = undefined;
+>this.inMethodNullable = undefined : undefined
+>this.inMethodNullable : any
+>this : this
+>inMethodNullable : any
+>undefined : undefined
         }
         this.inMultiple = "string";
 >this.inMultiple = "string" : "string"
@@ -383,6 +397,15 @@ var stringOrBooleanOrUndefined = c.inMultipleMethods;
 >c.inMultipleMethods : string | boolean | undefined
 >c : C
 >inMultipleMethods : string | boolean | undefined
+
+var any: any;
+>any : any
+
+var any = c.inMethodNullable;
+>any : any
+>c.inMethodNullable : any
+>c : C
+>inMethodNullable : any
 
 
 var stringOrNumberOrUndefined = C.inStaticMethod;

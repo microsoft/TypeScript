@@ -14,9 +14,11 @@ class C {
     method() {
         if (Math.random()) {
             this.inMethod = 0;
+            this.inMethodNullable = null;
         }
         else {
             this.inMethod = "string"
+            this.inMethodNullable = undefined;
         }
         this.inMultiple = "string";
         this.inMultipleMethods = "string";
@@ -119,6 +121,8 @@ var number: number;
 var number = c.inMultiple;
 var stringOrBooleanOrUndefined : string | boolean | undefined;
 var stringOrBooleanOrUndefined = c.inMultipleMethods;
+var any: any;
+var any = c.inMethodNullable;
 
 
 var stringOrNumberOrUndefined = C.inStaticMethod;
@@ -153,9 +157,11 @@ var C = /** @class */ (function () {
         var _this = this;
         if (Math.random()) {
             this.inMethod = 0;
+            this.inMethodNullable = null;
         }
         else {
             this.inMethod = "string";
+            this.inMethodNullable = undefined;
         }
         this.inMultiple = "string";
         this.inMultipleMethods = "string";
@@ -243,6 +249,8 @@ var number;
 var number = c.inMultiple;
 var stringOrBooleanOrUndefined;
 var stringOrBooleanOrUndefined = c.inMultipleMethods;
+var any;
+var any = c.inMethodNullable;
 var stringOrNumberOrUndefined = C.inStaticMethod;
 var stringOrNumberOrUndefined = C.inStaticGetter;
 var stringOrNumberOrUndefined = C.inStaticSetter;

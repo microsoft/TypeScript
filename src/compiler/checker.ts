@@ -4319,19 +4319,11 @@ namespace ts {
             }
             let type = jsDocType;
             if (!type) {
-                // TODO: Re-collapse this to one expression
-                if (some(constructorTypes, t => !!(t.flags & ~(TypeFlags.Nullable | TypeFlags.ContainsWideningType)))) {
-                    type = getUnionType(constructorTypes, UnionReduction.Subtype);
-                }
-                else if (constructorTypes && constructorTypes.length === types.length) {
-                    type = anyType;
-                }
-                else {
-                    type = getUnionType(types, UnionReduction.Subtype);
-                }
+                const sourceTypes = some(constructorTypes, t => !!(t.flags & ~(TypeFlags.Nullable | TypeFlags.ContainsWideningType))) ? constructorTypes : types;
+                type = getUnionType(sourceTypes, UnionReduction.Subtype);
             }
-
-            return getWidenedType(addOptionality(type, definedInMethod && !definedInConstructor));
+            const widened = getWidenedType(addOptionality(type, definedInMethod && !definedInConstructor));
+            return filterType(widened, t => !!(t.flags & ~TypeFlags.Nullable)) === neverType ? anyType : widened;
         }
 
 
