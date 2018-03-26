@@ -1731,13 +1731,7 @@ namespace ts {
         }
 
         function isSyntacticDefault(node: Node) {
-            if (isExportAssignment(node) && !node.isExportEquals) {
-                return true;
-            }
-            if (hasModifier(node, ModifierFlags.Default)) {
-                return true;
-            }
-            return false;
+            return ((isExportAssignment(node) && !node.isExportEquals) || hasModifier(node, ModifierFlags.Default));
         }
 
         function canHaveSyntheticDefault(file: SourceFile | undefined, moduleSymbol: Symbol, dontResolveAlias: boolean) {
