@@ -1,0 +1,8 @@
+=== tests/cases/conformance/salsa/a.js ===
+this.a = 10;
+>a : Symbol(a, Decl(a.js, 0, 0))
+
+this.a;
+a;
+>a : Symbol(a, Decl(a.js, 0, 0))
+

@@ -2362,6 +2362,11 @@ namespace ts {
                     const symbolTable = hasModifier(thisContainer, ModifierFlags.Static) ? containingClass.symbol.exports : containingClass.symbol.members;
                     declareSymbol(symbolTable, containingClass.symbol, node, SymbolFlags.Property, SymbolFlags.None, /*isReplaceableByMethod*/ true);
                     break;
+                case SyntaxKind.SourceFile:
+                    // this.foo assignment in a source file
+                    // Bind this property in the global namespace
+                    declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
+                    break;
 
                 default:
                     Debug.fail(Debug.showSyntaxKind(thisContainer));
