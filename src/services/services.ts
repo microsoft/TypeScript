@@ -1582,7 +1582,7 @@ namespace ts {
 
 
         const sourceMapCommentRegExp = /^\/\/[@#] sourceMappingURL=(.+)$/gm;
-        const base64UrlRegExp = /^data:(?:application\/json(?:;charset=[uU][tT][fF]-8);base64,(.+)$)?/;
+        const base64UrlRegExp = /^data:(?:application\/json(?:;charset=[uU][tT][fF]-8);base64,([A-Za-z0-9+\/=]+)$)?/;
         function scanForSourcemapURL(fileName: string) {
             const mappedFile = sourcemappedFileCache.get(toPath(fileName, currentDirectory, getCanonicalFileName));
             if (!mappedFile) {
