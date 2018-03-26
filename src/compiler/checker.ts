@@ -4255,10 +4255,12 @@ namespace ts {
                 return getWidenedLiteralType(checkExpressionCached(specialDeclaration));
             }
             const types: Type[] = [];
+            let constructorTypes: Type[];
             let definedInConstructor = false;
             let definedInMethod = false;
             let jsDocType: Type;
             for (const declaration of symbol.declarations) {
+                let declarationInConstructor = false;
                 const expression = declaration.kind === SyntaxKind.BinaryExpression ? <BinaryExpression>declaration :
                     declaration.kind === SyntaxKind.PropertyAccessExpression ? <BinaryExpression>getAncestor(declaration, SyntaxKind.BinaryExpression) :
                         undefined;
@@ -4271,9 +4273,10 @@ namespace ts {
                     const thisContainer = getThisContainer(expression, /*includeArrowFunctions*/ false);
                     // Properties defined in a constructor (or javascript constructor function) don't get undefined added.
                     // Function expressions that are assigned to the prototype count as methods.
-                    if (thisContainer.kind === SyntaxKind.Constructor ||
+                    declarationInConstructor = thisContainer.kind === SyntaxKind.Constructor ||
                         thisContainer.kind === SyntaxKind.FunctionDeclaration ||
-                        (thisContainer.kind === SyntaxKind.FunctionExpression && !isPrototypePropertyAssignment(thisContainer.parent))) {
+                        (thisContainer.kind === SyntaxKind.FunctionExpression && !isPrototypePropertyAssignment(thisContainer.parent));
+                    if (declarationInConstructor) {
                         definedInConstructor = true;
                     }
                     else {
@@ -4296,13 +4299,36 @@ namespace ts {
                 }
                 else if (!jsDocType) {
                     // If we don't have an explicit JSDoc type, get the type from the expression.
-                    types.push(getWidenedLiteralType(checkExpressionCached(expression.right)));
+                    const type = getWidenedLiteralType(checkExpressionCached(expression.right));
+                    let anyedType = type;
+                    if (isEmptyArrayLiteralType(type)) {
+                        anyedType = anyArrayType;
+                        if (noImplicitAny) {
+                            reportImplicitAnyError(expression, anyArrayType);
+                        }
+                    }
+                    types.push(anyedType);
+                    if (declarationInConstructor) {
+                        (constructorTypes || (constructorTypes = [])).push(anyedType);
+                    }
                 }
             }
-
-            const type = jsDocType || getUnionType(types, UnionReduction.Subtype);
-            return getWidenedType(addOptionality(type, definedInMethod && !definedInConstructor));
+            let type = jsDocType;
+            if (!type) {
+                // use only the constructor types unless only null | undefined (including widening variants) were assigned there
+                const sourceTypes = some(constructorTypes, t => !!(t.flags & ~(TypeFlags.Nullable | TypeFlags.ContainsWideningType))) ? constructorTypes : types;
+                type = getUnionType(sourceTypes, UnionReduction.Subtype);
+            }
+            const widened = getWidenedType(addOptionality(type, definedInMethod && !definedInConstructor));
+            if (filterType(widened, t => !!(t.flags & ~TypeFlags.Nullable)) === neverType) {
+                if (noImplicitAny) {
+                    reportImplicitAnyError(symbol.valueDeclaration, anyType);
+                }
+                return anyType;
+            }
+            return widened;
         }
+
 
         // Return the type implied by a binding pattern element. This is the type of the initializer of the element if
         // one is present. Otherwise, if the element is itself a binding pattern, it is the type implied by the binding
@@ -11394,6 +11420,7 @@ namespace ts {
             const typeAsString = typeToString(getWidenedType(type));
             let diagnostic: DiagnosticMessage;
             switch (declaration.kind) {
+                case SyntaxKind.BinaryExpression:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                     diagnostic = Diagnostics.Member_0_implicitly_has_an_1_type;
@@ -19689,11 +19716,27 @@ namespace ts {
         }
 
         function checkDeclarationInitializer(declaration: HasExpressionInitializer) {
-            const initializer = isInJavaScriptFile(declaration) && getDeclaredJavascriptInitializer(declaration) || declaration.initializer;
+            const inJs = isInJavaScriptFile(declaration);
+            const initializer = inJs && getDeclaredJavascriptInitializer(declaration) || declaration.initializer;
             const type = getTypeOfExpression(initializer, /*cache*/ true);
-            return getCombinedNodeFlags(declaration) & NodeFlags.Const ||
+            const widened = getCombinedNodeFlags(declaration) & NodeFlags.Const ||
                 (getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration)) ||
                 isTypeAssertion(initializer) ? type : getWidenedLiteralType(type);
+            if (inJs) {
+                if (widened.flags & TypeFlags.Nullable) {
+                    if (noImplicitAny) {
+                        reportImplicitAnyError(declaration, anyType);
+                    }
+                    return anyType;
+                }
+                else if (isEmptyArrayLiteralType(widened)) {
+                    if (noImplicitAny) {
+                        reportImplicitAnyError(declaration, anyArrayType);
+                    }
+                    return anyArrayType;
+                }
+            }
+            return widened;
         }
 
         function isLiteralOfContextualType(candidateType: Type, contextualType: Type): boolean {

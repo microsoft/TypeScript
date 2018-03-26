@@ -31,7 +31,7 @@ var i = new Installer()
 >i : Symbol(i, Decl(npm-install.js, 10, 3))
 >Installer : Symbol(Installer, Decl(npm-install.js, 0, 0))
 
-i.newProperty = i.args // error, number | string =/> number | undefined
+i.newProperty = i.args // ok, number ==> number | undefined
 >i.newProperty : Symbol(Installer.newProperty, Decl(npm-install.js, 6, 24))
 >i : Symbol(i, Decl(npm-install.js, 10, 3))
 >newProperty : Symbol(Installer.newProperty, Decl(npm-install.js, 6, 24))
