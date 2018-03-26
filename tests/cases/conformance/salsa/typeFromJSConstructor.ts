@@ -2,6 +2,7 @@
 // @checkJs: true
 // @noEmit: true
 // @strictNullChecks: true
+// @noImplicitAny: true
 // @Filename: a.js
 function Installer () {
     // arg: number

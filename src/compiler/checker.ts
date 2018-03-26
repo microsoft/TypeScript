@@ -4301,7 +4301,13 @@ namespace ts {
                 else if (!jsDocType) {
                     // If we don't have an explicit JSDoc type, get the type from the expression.
                     const type = getWidenedLiteralType(checkExpressionCached(expression.right));
-                    const anyedType = isEmptyArrayLiteralType(type) ? anyArrayType : type;
+                    let anyedType = type;
+                    if (isEmptyArrayLiteralType(type)) {
+                        anyedType = anyArrayType;
+                        if (noImplicitAny) {
+                            reportImplicitAnyError(expression, anyArrayType);
+                        }
+                    }
                     types.push(anyedType);
                     if (declarationInConstructor) {
                         (constructorTypes || (constructorTypes = [])).push(anyedType);
@@ -4314,7 +4320,13 @@ namespace ts {
                 type = getUnionType(sourceTypes, UnionReduction.Subtype);
             }
             const widened = getWidenedType(addOptionality(type, definedInMethod && !definedInConstructor));
-            return filterType(widened, t => !!(t.flags & ~TypeFlags.Nullable)) === neverType ? anyType : widened;
+            if (filterType(widened, t => !!(t.flags & ~TypeFlags.Nullable)) === neverType) {
+                if (noImplicitAny) {
+                    reportImplicitAnyError(symbol.valueDeclaration, anyType);
+                }
+                return anyType;
+            }
+            return widened;
         }
 
 
@@ -11405,6 +11417,7 @@ namespace ts {
             const typeAsString = typeToString(getWidenedType(type));
             let diagnostic: DiagnosticMessage;
             switch (declaration.kind) {
+                case SyntaxKind.BinaryExpression:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                     diagnostic = Diagnostics.Member_0_implicitly_has_an_1_type;
@@ -19702,9 +19715,15 @@ namespace ts {
                 isTypeAssertion(initializer) ? type : getWidenedLiteralType(type);
             if (inJs) {
                 if (widened.flags & TypeFlags.Nullable) {
+                    if (noImplicitAny) {
+                        reportImplicitAnyError(declaration, anyType);
+                    }
                     return anyType;
                 }
                 else if (isEmptyArrayLiteralType(widened)) {
+                    if (noImplicitAny) {
+                        reportImplicitAnyError(declaration, anyArrayType);
+                    }
                     return anyArrayType;
                 }
             }

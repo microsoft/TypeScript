@@ -1,5 +1,7 @@
 // @out: output.js
 // @allowJs: true
+// @checkJs: true
+// @noImplicitAny: true
 // @strictNullChecks: true
 
 // @filename: a.js
