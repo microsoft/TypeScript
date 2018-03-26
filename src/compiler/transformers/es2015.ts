@@ -561,7 +561,7 @@ namespace ts {
         }
 
         function returnCapturedThis(node: Node): ReturnStatement {
-            return setOriginalNode(createReturn(createIdentifier("_this")), node);
+            return setOriginalNode(createReturn(createFileLevelUniqueName("_this")), node);
         }
 
         function visitReturnStatement(node: ReturnStatement): Statement {
@@ -978,7 +978,7 @@ namespace ts {
                 && !(constructor && isSufficientlyCoveredByReturnStatements(constructor.body))) {
                 statements.push(
                     createReturn(
-                        createIdentifier("_this")
+                        createFileLevelUniqueName("_this")
                     )
                 );
             }
@@ -1452,7 +1452,7 @@ namespace ts {
                 /*modifiers*/ undefined,
                 createVariableDeclarationList([
                     createVariableDeclaration(
-                        "_this",
+                        createFileLevelUniqueName("_this"),
                         /*type*/ undefined,
                         initializer
                     )
@@ -3494,7 +3494,7 @@ namespace ts {
                             actualThis
                         );
                     resultingCall = assignToCapturedThis
-                        ? createAssignment(createIdentifier("_this"), initializer)
+                        ? createAssignment(createFileLevelUniqueName("_this"), initializer)
                         : initializer;
                 }
                 return setOriginalNode(resultingCall, node);
@@ -4004,7 +4004,7 @@ namespace ts {
         function substituteThisKeyword(node: PrimaryExpression): PrimaryExpression {
             if (enabledSubstitutions & ES2015SubstitutionFlags.CapturedThis
                 && hierarchyFacts & HierarchyFacts.CapturesThis) {
-                return setTextRange(createIdentifier("_this"), node);
+                return setTextRange(createFileLevelUniqueName("_this"), node);
             }
             return node;
         }
