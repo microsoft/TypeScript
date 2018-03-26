@@ -80,7 +80,8 @@ namespace ts {
         emittedColumn: 1,
         sourceLine: 1,
         sourceColumn: 1,
-        sourceIndex: 0
+        sourceIndex: 0,
+        nameIndex: undefined
     };
 
     export function createSourceMapWriter(host: EmitHost, writer: EmitTextWriter): SourceMapWriter {
@@ -100,6 +101,7 @@ namespace ts {
 
         // Source map data
         let sourceMapData: SourceMapData;
+        let sourceMapNamesIndex: Map<number>;
         let disabled: boolean = !(compilerOptions.sourceMap || compilerOptions.inlineSourceMap);
 
         return {
@@ -168,6 +170,8 @@ namespace ts {
                 sourceMapSourcesContent: compilerOptions.inlineSources ? [] : undefined,
                 sourceMapDecodedMappings: []
             };
+
+            sourceMapNamesIndex = ts.createMap<number>();
 
             // Normalize source root and make sure it has trailing "/" so that it can be used to combine paths with the
             // relative paths of the sources list in the sourcemap
@@ -255,8 +259,7 @@ namespace ts {
             sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.sourceColumn - lastEncodedSourceMapSpan.sourceColumn);
 
             // 5. Relative namePosition 0 based
-            if (lastRecordedSourceMapSpan.nameIndex >= 0) {
-                Debug.assert(false, "We do not support name index right now, Make sure to update updateLastEncodedAndRecordedSpans when we start using this");
+            if (lastRecordedSourceMapSpan.nameIndex != undefined) {
                 sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.nameIndex - lastEncodedNameIndex);
                 lastEncodedNameIndex = lastRecordedSourceMapSpan.nameIndex;
             }
@@ -273,7 +276,7 @@ namespace ts {
          *
          * @param pos The position.
          */
-        function emitPos(pos: number) {
+        function emitPos(pos: number, nameIndex?: number) {
             if (disabled || positionIsSynthesized(pos)) {
                 return;
             }
@@ -295,6 +298,7 @@ namespace ts {
             if (!lastRecordedSourceMapSpan ||
                 lastRecordedSourceMapSpan.emittedLine !== emittedLine ||
                 lastRecordedSourceMapSpan.emittedColumn !== emittedColumn ||
+                lastRecordedSourceMapSpan.nameIndex != undefined ||
                 (lastRecordedSourceMapSpan.sourceIndex === sourceMapSourceIndex &&
                     (lastRecordedSourceMapSpan.sourceLine > sourceLinePos.line ||
                         (lastRecordedSourceMapSpan.sourceLine === sourceLinePos.line && lastRecordedSourceMapSpan.sourceColumn > sourceLinePos.character)))) {
@@ -308,7 +312,8 @@ namespace ts {
                     emittedColumn,
                     sourceLine: sourceLinePos.line,
                     sourceColumn: sourceLinePos.character,
-                    sourceIndex: sourceMapSourceIndex
+                    sourceIndex: sourceMapSourceIndex,
+                    nameIndex,
                 };
             }
             else {
@@ -316,6 +321,7 @@ namespace ts {
                 lastRecordedSourceMapSpan.sourceLine = sourceLinePos.line;
                 lastRecordedSourceMapSpan.sourceColumn = sourceLinePos.character;
                 lastRecordedSourceMapSpan.sourceIndex = sourceMapSourceIndex;
+                lastRecordedSourceMapSpan.nameIndex = nameIndex;
             }
 
             if (extendedDiagnostics) {
@@ -345,12 +351,26 @@ namespace ts {
                 const oldSource = currentSource;
                 if (source === oldSource) source = undefined;
 
+                let nameIndex;
+                if (isIdentifier(node)) {
+                    const originalName = getTextOfNodeFromSourceText(currentSourceText, node);
+                    if (originalName) {
+                        if (sourceMapNamesIndex.has(originalName)) {
+                            nameIndex = sourceMapNamesIndex.get(originalName);
+                        } else {
+                            nameIndex = sourceMapData.sourceMapNames.length;
+                            sourceMapData.sourceMapNames.push(originalName);
+                            sourceMapNamesIndex.set(originalName, nameIndex);
+                        }
+                    }
+                }
+
                 if (source) setSourceFile(source);
 
                 if (node.kind !== SyntaxKind.NotEmittedStatement
                     && (emitFlags & EmitFlags.NoLeadingSourceMap) === 0
                     && pos >= 0) {
-                    emitPos(skipSourceTrivia(pos));
+                    emitPos(skipSourceTrivia(pos), nameIndex);
                 }
 
                 if (source) setSourceFile(oldSource);
