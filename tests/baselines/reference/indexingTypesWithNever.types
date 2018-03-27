@@ -117,8 +117,8 @@ declare const key: never
 >key : never
 
 const result6 = obj[key]
->result6 : any
->obj[key] : any
+>result6 : never
+>obj[key] : never
 >obj : { a: string; b: number; }
 >key : never
 
