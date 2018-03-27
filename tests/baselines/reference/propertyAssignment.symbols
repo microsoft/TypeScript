@@ -8,6 +8,7 @@ var bar1: { x : number; }
 
 var foo2: { [index]; } // should be an error, used to be indexer, now it is a computed property
 >foo2 : Symbol(foo2, Decl(propertyAssignment.ts, 3, 3))
+>[index] : Symbol([index], Decl(propertyAssignment.ts, 3, 11))
 
 var bar2: { x : number; }
 >bar2 : Symbol(bar2, Decl(propertyAssignment.ts, 4, 3))

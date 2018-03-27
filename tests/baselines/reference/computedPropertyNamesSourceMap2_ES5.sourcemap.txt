@@ -74,21 +74,18 @@ sourceFile:computedPropertyNamesSourceMap2_ES5.ts
 ---
 >>>            return 0;
 1->^^^^^^^^^^^^
-2 >            ^^^^^^
-3 >                  ^
-4 >                   ^
-5 >                    ^
+2 >            ^^^^^^^
+3 >                   ^
+4 >                    ^
 1->get ["goodbye"]() {
   >		
-2 >            return
-3 >                   
-4 >                   0
-5 >                    ;
+2 >            return 
+3 >                   0
+4 >                    ;
 1->Emitted(7, 13) Source(6, 3) + SourceIndex(0)
-2 >Emitted(7, 19) Source(6, 9) + SourceIndex(0)
-3 >Emitted(7, 20) Source(6, 10) + SourceIndex(0)
-4 >Emitted(7, 21) Source(6, 11) + SourceIndex(0)
-5 >Emitted(7, 22) Source(6, 12) + SourceIndex(0)
+2 >Emitted(7, 20) Source(6, 10) + SourceIndex(0)
+3 >Emitted(7, 21) Source(6, 11) + SourceIndex(0)
+4 >Emitted(7, 22) Source(6, 12) + SourceIndex(0)
 ---
 >>>        },
 1 >^^^^^^^^

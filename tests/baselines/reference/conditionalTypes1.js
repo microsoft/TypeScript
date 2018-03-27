@@ -64,7 +64,7 @@ type TypeName<T> =
 
 type T20 = TypeName<string | (() => void)>;  // "string" | "function"
 type T21 = TypeName<any>;  // "string" | "number" | "boolean" | "undefined" | "function" | "object"
-type T22 = TypeName<never>;  // "string" | "number" | "boolean" | "undefined" | "function" | "object"
+type T22 = TypeName<never>;  // never
 type T23 = TypeName<{}>;  // "object"
 
 type KnockoutObservable<T> = { object: T };
@@ -161,6 +161,11 @@ function f21<T extends number | string>(x: T, y: ZeroOf<T>) {
     y = x;  // Error
 }
 
+type T35<T extends { a: string, b: number }> = T[];
+type T36<T> = T extends { a: string } ? T extends { b: number } ? T35<T> : never : never;
+type T37<T> = T extends { b: number } ? T extends { a: string } ? T35<T> : never : never;
+type T38<T> = [T] extends [{ a: string }] ? [T] extends [{ b: number }] ? T35<T> : never : never;
+
 type Extends<T, U> = T extends U ? true : false;
 type If<C extends boolean, T, F> = C extends true ? T : F;
 type Not<C extends boolean> = If<C, false, true>;
@@ -172,7 +177,7 @@ type IsString<T> = Extends<T, string>;
 type Q1 = IsString<number>;  // false
 type Q2 = IsString<"abc">;  // true
 type Q3 = IsString<any>;  // boolean
-type Q4 = IsString<never>;  // boolean
+type Q4 = IsString<never>;  // never
 
 type N1 = Not<false>;  // true
 type N2 = Not<true>;  // false
@@ -200,9 +205,9 @@ type O9 = Or<boolean, boolean>;  // boolean
 
 type T40 = never extends never ? true : false;  // true
 type T41 = number extends never ? true : false;  // false
-type T42 = never extends number ? true : false;  // boolean
+type T42 = never extends number ? true : false;  // true
 
-type IsNever<T> = T extends never ? true : false;
+type IsNever<T> = [T] extends [never] ? true : false;
 
 type T50 = IsNever<never>;  // true
 type T51 = IsNever<number>;  // false
@@ -315,6 +320,17 @@ type NonFooKeys2<T extends object> = Exclude<keyof T, 'foo'>;
 
 type Test1 = NonFooKeys1<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
 type Test2 = NonFooKeys2<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
+
+// Repro from #21729
+
+interface Foo2 { foo: string; }
+interface Bar2 { bar: string; }
+type FooBar = Foo2 | Bar2;
+declare interface ExtractFooBar<FB extends FooBar> { }
+
+type Extracted<Struct> = {
+    [K in keyof Struct]: Struct[K] extends FooBar ? ExtractFooBar<Struct[K]> : Struct[K];
+}
 
 
 //// [conditionalTypes1.js]
@@ -517,6 +533,25 @@ declare type ZeroOf<T extends number | string | boolean> = T extends number ? 0 
 declare function zeroOf<T extends number | string | boolean>(value: T): ZeroOf<T>;
 declare function f20<T extends string>(n: number, b: boolean, x: number | boolean, y: T): void;
 declare function f21<T extends number | string>(x: T, y: ZeroOf<T>): void;
+declare type T35<T extends {
+    a: string;
+    b: number;
+}> = T[];
+declare type T36<T> = T extends {
+    a: string;
+} ? T extends {
+    b: number;
+} ? T35<T> : never : never;
+declare type T37<T> = T extends {
+    b: number;
+} ? T extends {
+    a: string;
+} ? T35<T> : never : never;
+declare type T38<T> = [T] extends [{
+    a: string;
+}] ? [T] extends [{
+    b: number;
+}] ? T35<T> : never : never;
 declare type Extends<T, U> = T extends U ? true : false;
 declare type If<C extends boolean, T, F> = C extends true ? T : F;
 declare type Not<C extends boolean> = If<C, false, true>;
@@ -551,7 +586,7 @@ declare type O9 = Or<boolean, boolean>;
 declare type T40 = never extends never ? true : false;
 declare type T41 = number extends never ? true : false;
 declare type T42 = never extends number ? true : false;
-declare type IsNever<T> = T extends never ? true : false;
+declare type IsNever<T> = [T] extends [never] ? true : false;
 declare type T50 = IsNever<never>;
 declare type T51 = IsNever<number>;
 declare type T52 = IsNever<any>;
@@ -572,7 +607,7 @@ declare type T82 = Eq2<false, true>;
 declare type T83 = Eq2<false, false>;
 declare type Foo<T> = T extends string ? boolean : number;
 declare type Bar<T> = T extends string ? boolean : number;
-declare const convert: <U>(value: Foo<U>) => Foo<U>;
+declare const convert: <U>(value: Foo<U>) => Bar<U>;
 declare type Baz<T> = Foo<T>;
 declare const convert2: <T>(value: Foo<T>) => Foo<T>;
 declare function f31<T>(): void;
@@ -624,3 +659,15 @@ declare type Test2 = NonFooKeys2<{
     bar: 2;
     baz: 3;
 }>;
+interface Foo2 {
+    foo: string;
+}
+interface Bar2 {
+    bar: string;
+}
+declare type FooBar = Foo2 | Bar2;
+declare interface ExtractFooBar<FB extends FooBar> {
+}
+declare type Extracted<Struct> = {
+    [K in keyof Struct]: Struct[K] extends FooBar ? ExtractFooBar<Struct[K]> : Struct[K];
+};

@@ -1311,24 +1311,27 @@ namespace ts {
                     setTextRange(
                         createBlock([
                             createStatement(
-                                setTextRange(
-                                    createAssignment(
-                                        setEmitFlags(getMutableClone(name), EmitFlags.NoSourceMap),
-                                        setEmitFlags(initializer, EmitFlags.NoSourceMap | getEmitFlags(initializer))
+                                setEmitFlags(
+                                    setTextRange(
+                                        createAssignment(
+                                            setEmitFlags(getMutableClone(name), EmitFlags.NoSourceMap),
+                                            setEmitFlags(initializer, EmitFlags.NoSourceMap | getEmitFlags(initializer) | EmitFlags.NoComments)
+                                        ),
+                                        parameter
                                     ),
-                                    parameter
+                                    EmitFlags.NoComments
                                 )
                             )
                         ]),
                         parameter
                     ),
-                    EmitFlags.SingleLine | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTokenSourceMaps
+                    EmitFlags.SingleLine | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTokenSourceMaps | EmitFlags.NoComments
                 )
             );
 
             startOnNewLine(statement);
             setTextRange(statement, parameter);
-            setEmitFlags(statement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.CustomPrologue);
+            setEmitFlags(statement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.CustomPrologue | EmitFlags.NoComments);
             statements.push(statement);
         }
 
@@ -2345,32 +2348,26 @@ namespace ts {
                 }
             }
 
-            let bodyLocation: TextRange;
-            let statementsLocation: TextRange;
             if (convertedLoopBodyStatements) {
-                addRange(statements, convertedLoopBodyStatements);
+                return createSyntheticBlockForConvertedStatements(addRange(statements, convertedLoopBodyStatements));
             }
             else {
                 const statement = visitNode(node.statement, visitor, isStatement, liftToBlock);
                 if (isBlock(statement)) {
-                    addRange(statements, statement.statements);
-                    bodyLocation = statement;
-                    statementsLocation = statement.statements;
+                    return updateBlock(statement, setTextRange(createNodeArray(concatenate(statements, statement.statements)), statement.statements));
                 }
                 else {
                     statements.push(statement);
+                    return createSyntheticBlockForConvertedStatements(statements);
                 }
             }
+        }
 
-            // The old emitter does not emit source maps for the block.
-            // We add the location to preserve comments.
+        function createSyntheticBlockForConvertedStatements(statements: Statement[]) {
             return setEmitFlags(
-                setTextRange(
-                    createBlock(
-                        setTextRange(createNodeArray(statements), statementsLocation),
-                        /*multiLine*/ true
-                    ),
-                    bodyLocation,
+                createBlock(
+                    createNodeArray(statements),
+                    /*multiLine*/ true
                 ),
                 EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps
             );

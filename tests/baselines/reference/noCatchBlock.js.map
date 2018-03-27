@@ -1,2 +1,2 @@
 //// [noCatchBlock.js.map]
-{"version":3,"file":"noCatchBlock.js","sourceRoot":"","sources":["noCatchBlock.ts"],"names":[],"mappings":"AAAA,IAAI,CAAC;IACJ,MAAM;AACP,CAAC;QAAS,CAAC;IACV,wBAAwB;AACzB,CAAC"}
+{"version":3,"file":"noCatchBlock.js","sourceRoot":"","sources":["noCatchBlock.ts"],"names":[],"mappings":"AAAA,IAAI;IACH,MAAM;CACN;QAAS;IACT,wBAAwB;CACxB"}

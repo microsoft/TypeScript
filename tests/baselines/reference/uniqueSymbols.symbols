@@ -388,7 +388,7 @@ const constInitToLReadonlyNestedTypeWithIndexedAccess: L["nested"]["readonlyNest
 const promiseForConstCall = Promise.resolve(constCall);
 >promiseForConstCall : Symbol(promiseForConstCall, Decl(uniqueSymbols.ts, 111, 5))
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->Promise : Symbol(Promise, Decl(lib.esnext.promise.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2018.promise.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >constCall : Symbol(constCall, Decl(uniqueSymbols.ts, 1, 5))
 
@@ -406,7 +406,9 @@ declare namespace N { const s: unique symbol; }
 
 declare const o: { [s]: "a", [N.s]: "b" };
 >o : Symbol(o, Decl(uniqueSymbols.ts, 117, 13))
+>[s] : Symbol([s], Decl(uniqueSymbols.ts, 117, 18))
 >s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+>[N.s] : Symbol([N.s], Decl(uniqueSymbols.ts, 117, 28))
 >N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 >N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
 >s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
@@ -685,9 +687,11 @@ Math.random() * 2 ? N["s"] : "a";
 // computed property names
 ({
     [s]: "a",
+>[s] : Symbol([s], Decl(uniqueSymbols.ts, 198, 2))
 >s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
 
     [N.s]: "b",
+>[N.s] : Symbol([N.s], Decl(uniqueSymbols.ts, 199, 13))
 >N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 >N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
 >s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
@@ -698,17 +702,21 @@ class C1 {
 >C1 : Symbol(C1, Decl(uniqueSymbols.ts, 201, 3))
 
     static [s]: "a";
+>[s] : Symbol(C1[s], Decl(uniqueSymbols.ts, 203, 10))
 >s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
 
     static [N.s]: "b";
+>[N.s] : Symbol(C1[N.s], Decl(uniqueSymbols.ts, 204, 20))
 >N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 >N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
 >s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 
     [s]: "a";
+>[s] : Symbol(C1[s], Decl(uniqueSymbols.ts, 205, 22))
 >s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
 
     [N.s]: "b";
+>[N.s] : Symbol(C1[N.s], Decl(uniqueSymbols.ts, 207, 13))
 >N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 >N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
 >s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
@@ -725,7 +733,7 @@ interface Context {
 
     method2(): Promise<typeof s>;
 >method2 : Symbol(Context.method2, Decl(uniqueSymbols.ts, 214, 24))
->Promise : Symbol(Promise, Decl(lib.esnext.promise.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2018.promise.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
 
     method3(): AsyncIterableIterator<typeof s>;

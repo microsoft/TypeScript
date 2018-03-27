@@ -1,0 +1,96 @@
+=== tests/cases/conformance/salsa/a.js ===
+var my = my || {};
+>my : { [x: string]: any; app: { [x: string]: any; Application: () => void; }; }
+>my || {} : { [x: string]: any; app: { [x: string]: any; Application: () => void; }; }
+>my : { [x: string]: any; app: { [x: string]: any; Application: () => void; }; }
+>{} : { [x: string]: any; app: { [x: string]: any; Application: () => void; }; }
+
+my.app = my.app || {};
+>my.app = my.app || {} : { [x: string]: any; Application: () => void; }
+>my.app : { [x: string]: any; Application: () => void; }
+>my : { [x: string]: any; app: { [x: string]: any; Application: () => void; }; }
+>app : { [x: string]: any; Application: () => void; }
+>my.app || {} : { [x: string]: any; Application: () => void; }
+>my.app : { [x: string]: any; Application: () => void; }
+>my : { [x: string]: any; app: { [x: string]: any; Application: () => void; }; }
+>app : { [x: string]: any; Application: () => void; }
+>{} : { [x: string]: any; Application: () => void; }
+
+my.app.Application = (function () {
+>my.app.Application = (function () {var Application = function () {    //...};return Application;})() : () => void
+>my.app.Application : () => void
+>my.app : { [x: string]: any; Application: () => void; }
+>my : { [x: string]: any; app: { [x: string]: any; Application: () => void; }; }
+>app : { [x: string]: any; Application: () => void; }
+>Application : () => void
+>(function () {var Application = function () {    //...};return Application;})() : () => void
+>(function () {var Application = function () {    //...};return Application;}) : () => () => void
+>function () {var Application = function () {    //...};return Application;} : () => () => void
+
+var Application = function () {
+>Application : () => void
+>function () {    //...} : () => void
+
+    //...
+};
+return Application;
+>Application : () => void
+
+})();
+my.app.Application()
+>my.app.Application() : void
+>my.app.Application : () => void
+>my.app : { [x: string]: any; Application: () => void; }
+>my : { [x: string]: any; app: { [x: string]: any; Application: () => void; }; }
+>app : { [x: string]: any; Application: () => void; }
+>Application : () => void
+
+=== tests/cases/conformance/salsa/b.js ===
+var min = window.min || {};
+>min : { [x: string]: any; app: { [x: string]: any; Application: () => void; }; }
+>window.min || {} : any
+>window.min : any
+>window : Window
+>min : any
+>{} : { [x: string]: any; app: { [x: string]: any; Application: () => void; }; }
+
+min.app = min.app || {};
+>min.app = min.app || {} : { [x: string]: any; Application: () => void; }
+>min.app : { [x: string]: any; Application: () => void; }
+>min : { [x: string]: any; app: { [x: string]: any; Application: () => void; }; }
+>app : { [x: string]: any; Application: () => void; }
+>min.app || {} : { [x: string]: any; Application: () => void; }
+>min.app : { [x: string]: any; Application: () => void; }
+>min : { [x: string]: any; app: { [x: string]: any; Application: () => void; }; }
+>app : { [x: string]: any; Application: () => void; }
+>{} : { [x: string]: any; Application: () => void; }
+
+min.app.Application = (function () {
+>min.app.Application = (function () {var Application = function () {    //...};return Application;})() : () => void
+>min.app.Application : () => void
+>min.app : { [x: string]: any; Application: () => void; }
+>min : { [x: string]: any; app: { [x: string]: any; Application: () => void; }; }
+>app : { [x: string]: any; Application: () => void; }
+>Application : () => void
+>(function () {var Application = function () {    //...};return Application;})() : () => void
+>(function () {var Application = function () {    //...};return Application;}) : () => () => void
+>function () {var Application = function () {    //...};return Application;} : () => () => void
+
+var Application = function () {
+>Application : () => void
+>function () {    //...} : () => void
+
+    //...
+};
+return Application;
+>Application : () => void
+
+})();
+min.app.Application()
+>min.app.Application() : void
+>min.app.Application : () => void
+>min.app : { [x: string]: any; Application: () => void; }
+>min : { [x: string]: any; app: { [x: string]: any; Application: () => void; }; }
+>app : { [x: string]: any; Application: () => void; }
+>Application : () => void
+

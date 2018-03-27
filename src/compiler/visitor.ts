@@ -821,11 +821,13 @@ namespace ts {
             case SyntaxKind.JsxSelfClosingElement:
                 return updateJsxSelfClosingElement(<JsxSelfClosingElement>node,
                     visitNode((<JsxSelfClosingElement>node).tagName, visitor, isJsxTagNameExpression),
+                    nodesVisitor((<JsxSelfClosingElement>node).typeArguments, visitor, isTypeNode),
                     visitNode((<JsxSelfClosingElement>node).attributes, visitor, isJsxAttributes));
 
             case SyntaxKind.JsxOpeningElement:
                 return updateJsxOpeningElement(<JsxOpeningElement>node,
                     visitNode((<JsxOpeningElement>node).tagName, visitor, isJsxTagNameExpression),
+                    nodesVisitor((<JsxSelfClosingElement>node).typeArguments, visitor, isTypeNode),
                     visitNode((<JsxOpeningElement>node).attributes, visitor, isJsxAttributes));
 
             case SyntaxKind.JsxClosingElement:

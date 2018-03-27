@@ -15,8 +15,12 @@ tslint.json
 Jakefile.js
 .editorconfig
 .gitattributes
+.gitmodules
 .settings/
 .travis.yml
+.circleci
 .vscode/
+.parallelperf.json
 test.config
 package-lock.json
+yarn.lock

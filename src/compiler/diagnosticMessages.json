@@ -2317,6 +2317,10 @@
         "category": "Error",
         "code": 2723
     },
+    "Module '{0}' has no exported member '{1}'. Did you mean '{2}'?": {
+        "category": "Error",
+        "code": 2724
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -2602,7 +2606,7 @@
         "code": 4083
     },
     "Conflicting definitions for '{0}' found at '{1}' and '{2}'. Consider installing a specific version of this library to resolve the conflict.": {
-        "category": "Message",
+        "category": "Error",
         "code": 4090
     },
     "Parameter '{0}' of index signature from exported interface has or is using name '{1}' from private module '{2}'.": {
@@ -2763,7 +2767,15 @@
         "category": "Error",
         "code": 5068
     },
+    "Option '{0}' cannot be specified without specifying option '{1}' or option '{2}'.": {
+        "category": "Error",
+        "code": 5069
+    },
 
+    "Generates a sourcemap for each corresponding '.d.ts' file.": {
+        "category": "Message",
+        "code": 6000
+    },
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
@@ -3296,7 +3308,7 @@
         "category": "Message",
         "code": 6146
     },
-    "Resolution for module '{0}' was found in cache.": {
+    "Resolution for module '{0}' was found in cache from location '{1}'.": {
         "category": "Message",
         "code": 6147
     },
@@ -3471,6 +3483,14 @@
     "Found 'package.json' at '{0}'. Package ID is '{1}'.": {
         "category": "Message",
         "code": 6190
+    },
+    "Whether to keep outdated console output in watch mode instead of clearing the screen.": {
+        "category": "Message",
+        "code": 6191
+    },
+    "All imports in import declaration are unused.": {
+        "category": "Error",
+        "code": 6192
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -3708,6 +3728,10 @@
         "category": "Error",
         "code": 8028
     },
+    "JSDoc '@param' tag has name '{0}', but there is no parameter with that name. It would match 'arguments' if it had an array type.": {
+        "category": "Error",
+        "code": 8029
+    },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
         "code": 9002
@@ -3788,6 +3812,10 @@
         "category": "Error",
         "code": 17016
     },
+    "JSX fragment is not supported when using an inline JSX factory pragma": {
+        "category": "Error",
+        "code": 17017
+    },
 
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
@@ -3806,6 +3834,23 @@
         "code": 18003
     },
 
+    "File is a CommonJS module; it may be converted to an ES6 module.": {
+        "category": "Suggestion",
+        "code": 80001
+    },
+    "This constructor function may be converted to a class declaration.": {
+        "category": "Suggestion",
+        "code": 80002
+    },
+    "Import may be converted to a default import.": {
+        "category": "Suggestion",
+        "code": 80003
+    },
+    "JSDoc types may be moved to TypeScript types.": {
+        "category": "Suggestion",
+        "code": 80004
+    },
+
     "Add missing 'super()' call": {
         "category": "Message",
         "code": 90001
@@ -3821,6 +3866,10 @@
     "Remove declaration for: '{0}'": {
         "category": "Message",
         "code": 90004
+    },
+    "Remove import from '{0}'": {
+        "category": "Message",
+        "code": 90005
     },
     "Implement interface '{0}'": {
         "category": "Message",
@@ -3965,5 +4014,17 @@
     "Convert to ES6 module": {
         "category": "Message",
         "code": 95017
+    },
+    "Add 'undefined' type to property '{0}'": {
+        "category": "Message",
+        "code": 95018
+    },
+    "Add initializer to property '{0}'": {
+        "category": "Message",
+        "code": 95019
+    },
+    "Add definite assignment assertion to property '{0}'": {
+        "category": "Message",
+        "code": 95020
     }
 }

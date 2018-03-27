@@ -3,5 +3,6 @@ declare class C {
 >C : C
 
     [e](): number 
+>[e] : () => number
 >e : any
 }

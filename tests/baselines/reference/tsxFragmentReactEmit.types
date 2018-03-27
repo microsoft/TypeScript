@@ -52,3 +52,6 @@ declare var React: any;
 >span : any
 >span : any
 
+<>#</>; // # would cause scanning error if not in jsxtext
+><>#</> : JSX.Element
+

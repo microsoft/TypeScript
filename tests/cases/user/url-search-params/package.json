@@ -1,0 +1,11 @@
+{
+  "name": "url-search-params-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "url-search-params": "^0.10.0"
+  }
+}

@@ -24,7 +24,7 @@ namespace ts {
 
                 if (transpileOptions.compilerOptions.newLine === undefined) {
                     // use \r\n as default new line
-                    transpileOptions.compilerOptions.newLine = ts.NewLineKind.CarriageReturnLineFeed;
+                    transpileOptions.compilerOptions.newLine = NewLineKind.CarriageReturnLineFeed;
                 }
 
                 transpileOptions.compilerOptions.sourceMap = true;
@@ -85,7 +85,7 @@ namespace ts {
                 }
 
                 it("Correct output for " + justName, () => {
-                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ts.Extension.Js), () => {
+                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, Extension.Js), () => {
                         if (transpileResult.outputText) {
                             return transpileResult.outputText;
                         }

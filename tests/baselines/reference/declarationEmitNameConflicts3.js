@@ -105,7 +105,7 @@ declare module M.P {
     class E extends C {
     }
     enum D {
-        f = 0,
+        f = 0
     }
     var v: M.D;
     var w: typeof M.D.f;

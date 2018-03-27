@@ -4,6 +4,7 @@ interface I1 {
 >I1 : I1
 
     [Symbol.toStringTag]: string;
+>[Symbol.toStringTag] : string
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
@@ -16,6 +17,7 @@ interface I2 {
 >I2 : I2
 
     [Symbol.toStringTag]: string;
+>[Symbol.toStringTag] : string
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
@@ -31,6 +33,7 @@ interface I3 {
 >I3 : I3
 
     [mySymbol]: string;
+>[mySymbol] : string
 >mySymbol : unique symbol
 
     [key: string]: number;
@@ -41,6 +44,7 @@ interface I4 {
 >I4 : I4
 
     [mySymbol]: string;
+>[mySymbol] : string
 >mySymbol : unique symbol
 
     [key: number]: boolean;

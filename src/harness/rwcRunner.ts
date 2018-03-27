@@ -55,7 +55,7 @@ namespace RWC {
             });
 
             it("can compile", function(this: Mocha.ITestCallbackContext) {
-                this.timeout(800000); // Allow long timeouts for RWC compilations
+                this.timeout(800_000); // Allow long timeouts for RWC compilations
                 let opts: ts.ParsedCommandLine;
 
                 const ioLog: IoLog = Playback.newStyleLogIntoOldStyleLog(JSON.parse(Harness.IO.readFile(`internal/cases/rwc/${jsonPath}/test.json`)), Harness.IO, `internal/cases/rwc/${baseName}`);
@@ -171,7 +171,7 @@ namespace RWC {
 
 
             it("has the expected emitted code", function(this: Mocha.ITestCallbackContext) {
-                this.timeout(10000); // Allow long timeouts for RWC js verification
+                this.timeout(100_000); // Allow longer timeouts for RWC js verification
                 Harness.Baseline.runMultifileBaseline(baseName, "", () => {
                     return Harness.Compiler.iterateOutputs(compilerResult.files);
                 }, baselineOpts, [".js", ".jsx"]);

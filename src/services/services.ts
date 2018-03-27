@@ -20,6 +20,7 @@
 /// <reference path='preProcess.ts' />
 /// <reference path='rename.ts' />
 /// <reference path='signatureHelp.ts' />
+/// <reference path='suggestionDiagnostics.ts' />
 /// <reference path='symbolDisplay.ts' />
 /// <reference path='transpile.ts' />
 /// <reference path='formatting\formatting.ts' />
@@ -29,10 +30,11 @@
 /// <reference path='refactorProvider.ts' />
 /// <reference path='codefixes\fixes.ts' />
 /// <reference path='refactors\refactors.ts' />
+/// <reference path="sourcemaps.ts" />
 
 namespace ts {
     /** The version of the language service API */
-    export const servicesVersion = "0.7";
+    export const servicesVersion = "0.8";
 
     function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent?: Node): NodeObject | TokenObject<TKind> | IdentifierObject {
         const node = isNodeKind(kind) ? new NodeObject(kind, pos, end) :
@@ -224,7 +226,7 @@ namespace ts {
                 return undefined;
             }
 
-            const child = ts.find(children, kid => kid.kind < SyntaxKind.FirstJSDocNode || kid.kind > SyntaxKind.LastJSDocNode);
+            const child = find(children, kid => kid.kind < SyntaxKind.FirstJSDocNode || kid.kind > SyntaxKind.LastJSDocNode);
             return child.kind < SyntaxKind.FirstNode ?
                 child :
                 child.getFirstToken(sourceFile);
@@ -376,7 +378,7 @@ namespace ts {
                                 const inheritedDocs = findInheritedJSDocComments(declaration, this.getName(), checker);
                                 if (inheritedDocs.length > 0) {
                                     if (this.documentationComment.length > 0) {
-                                        inheritedDocs.push(ts.lineBreakPart());
+                                        inheritedDocs.push(lineBreakPart());
                                     }
                                     this.documentationComment = concatenate(inheritedDocs, this.documentationComment);
                                     break;
@@ -530,7 +532,7 @@ namespace ts {
                     if (this.documentationComment.length === 0 || hasJSDocInheritDocTag(this.declaration)) {
                         const inheritedDocs = findInheritedJSDocComments(this.declaration, this.declaration.symbol.getName(), this.checker);
                         if (this.documentationComment.length > 0) {
-                            inheritedDocs.push(ts.lineBreakPart());
+                            inheritedDocs.push(lineBreakPart());
                         }
                         this.documentationComment = concatenate(
                             inheritedDocs,
@@ -561,7 +563,7 @@ namespace ts {
      * @returns `true` if `node` has a JSDoc "inheritDoc" tag on it, otherwise `false`.
      */
     function hasJSDocInheritDocTag(node: Node) {
-        return ts.getJSDocTags(node).some(tag => tag.tagName.text === "inheritDoc");
+        return getJSDocTags(node).some(tag => tag.tagName.text === "inheritDoc");
     }
 
     /**
@@ -645,12 +647,15 @@ namespace ts {
         public nameTable: UnderscoreEscapedMap<number>;
         public resolvedModules: Map<ResolvedModuleFull>;
         public resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
-        public imports: StringLiteral[];
+        public imports: ReadonlyArray<StringLiteralLike>;
         public moduleAugmentations: StringLiteral[];
         private namedDeclarations: Map<Declaration[]>;
         public ambientModuleNames: string[];
         public checkJsDirective: CheckJsDirective | undefined;
         public possiblyContainDynamicImport: boolean;
+        public pragmas: PragmaMap;
+        public localJsxFactory: EntityName;
+        public localJsxNamespace: __String;
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
             super(kind, pos, end);
@@ -661,7 +666,7 @@ namespace ts {
         }
 
         public getLineAndCharacterOfPosition(position: number): LineAndCharacter {
-            return ts.getLineAndCharacterOfPosition(this, position);
+            return getLineAndCharacterOfPosition(this, position);
         }
 
         public getLineStarts(): ReadonlyArray<number> {
@@ -669,7 +674,7 @@ namespace ts {
         }
 
         public getPositionOfLineAndCharacter(line: number, character: number): number {
-            return ts.getPositionOfLineAndCharacter(this, line, character);
+            return getPositionOfLineAndCharacter(this, line, character);
         }
 
         public getLineEndOfPosition(pos: number): number {
@@ -844,7 +849,7 @@ namespace ts {
         constructor(public fileName: string, public text: string, public skipTrivia?: (pos: number) => number) { }
 
         public getLineAndCharacterOfPosition(pos: number): LineAndCharacter {
-            return ts.getLineAndCharacterOfPosition(this, pos);
+            return getLineAndCharacterOfPosition(this, pos);
         }
     }
 
@@ -1165,6 +1170,35 @@ namespace ts {
         }
     }
 
+    /* @internal */
+    export interface SourceFileLikeCache {
+        get(path: Path): SourceFileLike | undefined;
+    }
+
+    /* @internal */
+    export function createSourceFileLikeCache(host: { readFile?: (path: string) => string, fileExists?: (path: string) => boolean }): SourceFileLikeCache {
+        const cached = createMap<SourceFileLike>();
+        return {
+            get(path: Path) {
+                if (cached.has(path)) {
+                    return cached.get(path);
+                }
+                if (!host.fileExists || !host.readFile || !host.fileExists(path)) return;
+                // And failing that, check the disk
+                const text = host.readFile(path);
+                const file: SourceFileLike = {
+                    text,
+                    lineMap: undefined,
+                    getLineAndCharacterOfPosition(pos) {
+                        return computeLineAndCharacterOfPosition(getLineStarts(this), pos);
+                    }
+                };
+                cached.set(path, file);
+                return file;
+            }
+        };
+    }
+
     export function createLanguageService(host: LanguageServiceHost,
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
 
@@ -1181,6 +1215,8 @@ namespace ts {
         if (!localizedDiagnosticMessages && host.getLocalizedDiagnosticMessages) {
             localizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
         }
+
+        let sourcemappedFileCache: SourceFileLikeCache;
 
         function log(message: string) {
             if (host.log) {
@@ -1288,6 +1324,11 @@ namespace ts {
             // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
             // It needs to be cleared to allow all collected snapshots to be released
             hostCache = undefined;
+
+            // We reset this cache on structure invalidation so we don't hold on to outdated files for long; however we can't use the `compilerHost` above,
+            // Because it only functions until `hostCache` is cleared, while we'll potentially need the functionality to lazily read sourcemap files during
+            // the course of whatever called `synchronizeHostData`
+            sourcemappedFileCache = createSourceFileLikeCache(host);
 
             // Make sure all the nodes in the program are both bound, and have their parent
             // pointers set property.
@@ -1416,12 +1457,23 @@ namespace ts {
             return [...semanticDiagnostics, ...declarationDiagnostics];
         }
 
+        function getSuggestionDiagnostics(fileName: string): Diagnostic[] {
+            synchronizeHostData();
+            return computeSuggestionDiagnostics(getValidSourceFile(fileName), program);
+        }
+
         function getCompilerOptionsDiagnostics() {
             synchronizeHostData();
             return [...program.getOptionsDiagnostics(cancellationToken), ...program.getGlobalDiagnostics(cancellationToken)];
         }
 
-        function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = { includeExternalModuleExports: false, includeInsertTextCompletions: false }): CompletionInfo {
+        function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = defaultPreferences): CompletionInfo {
+            // Convert from deprecated options names to new names
+            const fullPreferences: UserPreferences = {
+                ...identity<UserPreferences>(options), // avoid excess property check
+                includeCompletionsForModuleExports: options.includeCompletionsForModuleExports || options.includeExternalModuleExports,
+                includeCompletionsWithInsertText: options.includeCompletionsWithInsertText || options.includeInsertTextCompletions,
+            };
             synchronizeHostData();
             return Completions.getCompletionsAtPosition(
                 host,
@@ -1431,10 +1483,10 @@ namespace ts {
                 getValidSourceFile(fileName),
                 position,
                 program.getSourceFiles(),
-                options);
+                fullPreferences);
         }
 
-        function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions?: FormatCodeSettings, source?: string): CompletionEntryDetails {
+        function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = defaultPreferences): CompletionEntryDetails {
             synchronizeHostData();
             return Completions.getCompletionEntryDetails(
                 program,
@@ -1446,7 +1498,8 @@ namespace ts {
                 program.getSourceFiles(),
                 host,
                 formattingOptions && formatting.getFormatContext(formattingOptions),
-                getCanonicalFileName);
+                getCanonicalFileName,
+                preferences);
         }
 
         function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol {
@@ -1467,10 +1520,7 @@ namespace ts {
             const sourceFile = getValidSourceFile(fileName);
             const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
             if (node === sourceFile) {
-                return undefined;
-            }
-
-            if (isLabelName(node)) {
+                // Avoid giving quickInfo for the sourceFile as a whole.
                 return undefined;
             }
 
@@ -1481,6 +1531,11 @@ namespace ts {
                 // Try getting just type at this position and show
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
+                        if (isLabelName(node)) {
+                            // Type here will be 'any', avoid displaying this.
+                            return undefined;
+                        }
+                        // falls through
                     case SyntaxKind.PropertyAccessExpression:
                     case SyntaxKind.QualifiedName:
                     case SyntaxKind.ThisKeyword:
@@ -1488,29 +1543,27 @@ namespace ts {
                     case SyntaxKind.SuperKeyword:
                         // For the identifiers/this/super etc get the type at position
                         const type = typeChecker.getTypeAtLocation(node);
-                        if (type) {
-                            return {
-                                kind: ScriptElementKind.unknown,
-                                kindModifiers: ScriptElementKindModifier.none,
-                                textSpan: createTextSpan(node.getStart(), node.getWidth()),
-                                displayParts: typeToDisplayParts(typeChecker, type, getContainerNode(node)),
-                                documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
-                                tags: type.symbol ? type.symbol.getJsDocTags() : undefined
-                            };
-                        }
+                        return type && {
+                            kind: ScriptElementKind.unknown,
+                            kindModifiers: ScriptElementKindModifier.none,
+                            textSpan: createTextSpanFromNode(node, sourceFile),
+                            displayParts: typeToDisplayParts(typeChecker, type, getContainerNode(node)),
+                            documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
+                            tags: type.symbol ? type.symbol.getJsDocTags() : undefined
+                        };
                 }
 
                 return undefined;
             }
 
-            const displayPartsDocumentationsAndKind = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(node), node);
+            const { symbolKind, displayParts, documentation, tags } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(node), node);
             return {
-                kind: displayPartsDocumentationsAndKind.symbolKind,
+                kind: symbolKind,
                 kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
-                textSpan: createTextSpan(node.getStart(), node.getWidth()),
-                displayParts: displayPartsDocumentationsAndKind.displayParts,
-                documentation: displayPartsDocumentationsAndKind.documentation,
-                tags: displayPartsDocumentationsAndKind.tags
+                textSpan: createTextSpanFromNode(node, sourceFile),
+                displayParts,
+                documentation,
+                tags,
             };
         }
 
@@ -1519,36 +1572,176 @@ namespace ts {
                 && isPropertyAssignment(node.parent)
                 && node.parent.name === node) {
                 const type = checker.getContextualType(node.parent.parent);
-                if (type) {
-                    const property = checker.getPropertyOfType(type, getTextOfIdentifierOrLiteral(node));
-                    if (property) {
-                        return property;
-                    }
+                const property = type && checker.getPropertyOfType(type, getTextOfIdentifierOrLiteral(node));
+                if (property) {
+                    return property;
                 }
             }
             return checker.getSymbolAtLocation(node);
         }
 
+
+        const sourceMapCommentRegExp = /^\/\/[@#] sourceMappingURL=(.+)$/gm;
+        const base64UrlRegExp = /^data:(?:application\/json(?:;charset=[uU][tT][fF]-8);base64,([A-Za-z0-9+\/=]+)$)?/;
+        function scanForSourcemapURL(fileName: string) {
+            const mappedFile = sourcemappedFileCache.get(toPath(fileName, currentDirectory, getCanonicalFileName));
+            if (!mappedFile) {
+                return;
+            }
+            const starts = getLineStarts(mappedFile);
+            for (let index = starts.length - 1; index >= 0; index--) {
+                sourceMapCommentRegExp.lastIndex = starts[index];
+                const comment = sourceMapCommentRegExp.exec(mappedFile.text);
+                if (comment) {
+                    return comment[1];
+                }
+            }
+        }
+
+        function convertDocumentToSourceMapper(file: { sourceMapper?: sourcemaps.SourceMapper }, contents: string, mapFileName: string) {
+            let maps: sourcemaps.SourceMapData;
+            try {
+                maps = JSON.parse(contents);
+            }
+            catch {
+                // swallow error
+            }
+            if (!maps || !maps.sources || !maps.file || !maps.mappings) {
+                // obviously invalid map
+                return file.sourceMapper = sourcemaps.identitySourceMapper;
+            }
+            return file.sourceMapper = sourcemaps.decode({
+                readFile: s => host.readFile(s),
+                fileExists: s => host.fileExists(s),
+                getCanonicalFileName,
+                log,
+            }, mapFileName, maps, program, sourcemappedFileCache);
+        }
+
+        function getSourceMapper(fileName: string, file: { sourceMapper?: sourcemaps.SourceMapper }) {
+            if (!host.readFile || !host.fileExists) {
+                return file.sourceMapper = sourcemaps.identitySourceMapper;
+            }
+            if (file.sourceMapper) {
+                return file.sourceMapper;
+            }
+            let mapFileName = scanForSourcemapURL(fileName);
+            if (mapFileName) {
+                const match = base64UrlRegExp.exec(mapFileName);
+                if (match) {
+                    if (match[1]) {
+                        const base64Object = match[1];
+                        return convertDocumentToSourceMapper(file, base64decode(sys, base64Object), fileName);
+                    }
+                    // Not a data URL we can parse, skip it
+                    mapFileName = undefined;
+                }
+            }
+            const possibleMapLocations: string[] = [];
+            if (mapFileName) {
+                possibleMapLocations.push(mapFileName);
+            }
+            possibleMapLocations.push(fileName + ".map");
+            for (const location of possibleMapLocations) {
+                const mapPath = toPath(location, getDirectoryPath(fileName), getCanonicalFileName);
+                if (host.fileExists(mapPath)) {
+                    return convertDocumentToSourceMapper(file, host.readFile(mapPath), mapPath);
+                }
+            }
+            return file.sourceMapper = sourcemaps.identitySourceMapper;
+        }
+
+        function makeGetTargetOfMappedPosition<TIn>(
+            extract: (original: TIn) => sourcemaps.SourceMappableLocation,
+            create: (result: sourcemaps.SourceMappableLocation, original: TIn) => TIn
+        ) {
+            return getTargetOfMappedPosition;
+            function getTargetOfMappedPosition(input: TIn): TIn {
+                const info = extract(input);
+                if (endsWith(info.fileName, Extension.Dts)) {
+                    let file: SourceFileLike = program.getSourceFile(info.fileName);
+                    if (!file) {
+                        const path = toPath(info.fileName, currentDirectory, getCanonicalFileName);
+                        file = sourcemappedFileCache.get(path);
+                    }
+                    if (!file) {
+                        return input;
+                    }
+                    const mapper = getSourceMapper(info.fileName, file);
+                    const newLoc = mapper.getOriginalPosition(info);
+                    if (newLoc === info) return input;
+                    return getTargetOfMappedPosition(create(newLoc, input));
+                }
+                return input;
+            }
+        }
+
+        const getTargetOfMappedDeclarationInfo = makeGetTargetOfMappedPosition(
+            (info: DefinitionInfo) => ({ fileName: info.fileName, position: info.textSpan.start }),
+            (newLoc, info) => ({
+                containerKind: info.containerKind,
+                containerName: info.containerName,
+                fileName: newLoc.fileName,
+                kind: info.kind,
+                name: info.name,
+                textSpan: {
+                    start: newLoc.position,
+                    length: info.textSpan.length
+                }
+            })
+        );
+
+        function getTargetOfMappedDeclarationFiles(infos: ReadonlyArray<DefinitionInfo>): DefinitionInfo[] {
+            return map(infos, getTargetOfMappedDeclarationInfo);
+        }
+
         /// Goto definition
         function getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             synchronizeHostData();
-            return GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position);
+            return getTargetOfMappedDeclarationFiles(GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position));
         }
 
         function getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan {
             synchronizeHostData();
-            return GoToDefinition.getDefinitionAndBoundSpan(program, getValidSourceFile(fileName), position);
+            const result = GoToDefinition.getDefinitionAndBoundSpan(program, getValidSourceFile(fileName), position);
+            if (!result) return result;
+            const mappedDefs = getTargetOfMappedDeclarationFiles(result.definitions);
+            if (mappedDefs === result.definitions) {
+                return result;
+            }
+            return {
+                definitions: mappedDefs,
+                textSpan: result.textSpan
+            };
         }
 
         function getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             synchronizeHostData();
-            return GoToDefinition.getTypeDefinitionAtPosition(program.getTypeChecker(), getValidSourceFile(fileName), position);
+            return getTargetOfMappedDeclarationFiles(GoToDefinition.getTypeDefinitionAtPosition(program.getTypeChecker(), getValidSourceFile(fileName), position));
         }
 
         /// Goto implementation
+
+        const getTargetOfMappedImplementationLocation = makeGetTargetOfMappedPosition(
+            (info: ImplementationLocation) => ({ fileName: info.fileName, position: info.textSpan.start }),
+            (newLoc, info) => ({
+                fileName: newLoc.fileName,
+                kind: info.kind,
+                displayParts: info.displayParts,
+                textSpan: {
+                    start: newLoc.position,
+                    length: info.textSpan.length
+                }
+            })
+        );
+
+        function getTargetOfMappedImplementationLocations(infos: ReadonlyArray<ImplementationLocation>): ImplementationLocation[] {
+            return map(infos, getTargetOfMappedImplementationLocation);
+        }
+
         function getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] {
             synchronizeHostData();
-            return FindAllReferences.getImplementationsAtPosition(program, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position);
+            return getTargetOfMappedImplementationLocations(FindAllReferences.getImplementationsAtPosition(program, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position));
         }
 
         /// References and Occurrences
@@ -1610,7 +1803,7 @@ namespace ts {
             synchronizeHostData();
 
             const sourceFiles = fileName ? [getValidSourceFile(fileName)] : program.getSourceFiles();
-            return ts.NavigateTo.getNavigateToItems(sourceFiles, program.getTypeChecker(), cancellationToken, searchValue, maxResultCount, excludeDtsFiles);
+            return NavigateTo.getNavigateToItems(sourceFiles, program.getTypeChecker(), cancellationToken, searchValue, maxResultCount, excludeDtsFiles);
         }
 
         function getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean) {
@@ -1813,7 +2006,7 @@ namespace ts {
             return [];
         }
 
-        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings): ReadonlyArray<CodeFixAction> {
+        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings, preferences: UserPreferences = defaultPreferences): ReadonlyArray<CodeFixAction> {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const span = createTextSpanFromBounds(start, end);
@@ -1821,26 +2014,26 @@ namespace ts {
 
             return flatMap(deduplicate(errorCodes, equateValues, compareValues), errorCode => {
                 cancellationToken.throwIfCancellationRequested();
-                return codefix.getFixes({ errorCode, sourceFile, span, program, host, cancellationToken, formatContext });
+                return codefix.getFixes({ errorCode, sourceFile, span, program, host, cancellationToken, formatContext, preferences });
             });
         }
 
-        function getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings): CombinedCodeActions {
+        function getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, preferences: UserPreferences = defaultPreferences): CombinedCodeActions {
             synchronizeHostData();
             Debug.assert(scope.type === "file");
             const sourceFile = getValidSourceFile(scope.fileName);
             const formatContext = formatting.getFormatContext(formatOptions);
 
-            return codefix.getAllFixes({ fixId, sourceFile, program, host, cancellationToken, formatContext });
+            return codefix.getAllFixes({ fixId, sourceFile, program, host, cancellationToken, formatContext, preferences });
         }
 
-        function organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges> {
+        function organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, preferences: UserPreferences = defaultPreferences): ReadonlyArray<FileTextChanges> {
             synchronizeHostData();
             Debug.assert(scope.type === "file");
             const sourceFile = getValidSourceFile(scope.fileName);
             const formatContext = formatting.getFormatContext(formatOptions);
 
-            return OrganizeImports.organizeImports(sourceFile, formatContext, host);
+            return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences);
         }
 
         function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
@@ -1907,7 +2100,7 @@ namespace ts {
 
         function getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean) {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            const range = ts.formatting.getRangeOfEnclosingComment(sourceFile, position, onlyMultiLine);
+            const range = formatting.getRangeOfEnclosingComment(sourceFile, position, onlyMultiLine);
             return range && createTextSpanFromRange(range);
         }
 
@@ -1964,7 +2157,7 @@ namespace ts {
                         continue;
                     }
 
-                    let descriptor: TodoCommentDescriptor = undefined;
+                    let descriptor: TodoCommentDescriptor;
                     for (let i = 0; i < descriptors.length; i++) {
                         if (matchArray[i + firstDescriptorCaptureIndex]) {
                             descriptor = descriptors[i];
@@ -2064,7 +2257,7 @@ namespace ts {
             return Rename.getRenameInfo(program.getTypeChecker(), defaultLibFileName, getCanonicalFileName, getValidSourceFile(fileName), position);
         }
 
-        function getRefactorContext(file: SourceFile, positionOrRange: number | TextRange, formatOptions?: FormatCodeSettings): RefactorContext {
+        function getRefactorContext(file: SourceFile, positionOrRange: number | TextRange, preferences: UserPreferences, formatOptions?: FormatCodeSettings): RefactorContext {
             const [startPosition, endPosition] = typeof positionOrRange === "number" ? [positionOrRange, undefined] : [positionOrRange.pos, positionOrRange.end];
             return {
                 file,
@@ -2074,13 +2267,14 @@ namespace ts {
                 host,
                 formatContext: formatting.getFormatContext(formatOptions),
                 cancellationToken,
+                preferences,
             };
         }
 
-        function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange): ApplicableRefactorInfo[] {
+        function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = defaultPreferences): ApplicableRefactorInfo[] {
             synchronizeHostData();
             const file = getValidSourceFile(fileName);
-            return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange));
+            return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange, preferences));
         }
 
         function getEditsForRefactor(
@@ -2088,11 +2282,13 @@ namespace ts {
             formatOptions: FormatCodeSettings,
             positionOrRange: number | TextRange,
             refactorName: string,
-            actionName: string): RefactorEditInfo {
+            actionName: string,
+            preferences: UserPreferences = defaultPreferences,
+        ): RefactorEditInfo {
 
             synchronizeHostData();
             const file = getValidSourceFile(fileName);
-            return refactor.getEditsForRefactor(getRefactorContext(file, positionOrRange, formatOptions), refactorName, actionName);
+            return refactor.getEditsForRefactor(getRefactorContext(file, positionOrRange, preferences, formatOptions), refactorName, actionName);
         }
 
         return {
@@ -2100,6 +2296,7 @@ namespace ts {
             cleanupSemanticCache,
             getSyntacticDiagnostics,
             getSemanticDiagnostics,
+            getSuggestionDiagnostics,
             getCompilerOptionsDiagnostics,
             getSyntacticClassifications,
             getSemanticClassifications,
@@ -2181,7 +2378,7 @@ namespace ts {
      * then we want 'something' to be in the name table.  Similarly, if we have
      * "a['propname']" then we want to store "propname" in the name table.
      */
-    function literalIsName(node: ts.StringLiteral | ts.NumericLiteral): boolean {
+    function literalIsName(node: StringLiteral | NumericLiteral): boolean {
         return isDeclarationName(node) ||
             node.parent.kind === SyntaxKind.ExternalModuleReference ||
             isArgumentOfElementAccessExpression(node) ||
