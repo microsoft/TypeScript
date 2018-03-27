@@ -6314,6 +6314,8 @@ declare namespace ts.server.protocol {
          * This may be omitted to indicate that the code fix can't be applied in a group.
          */
         fixId?: {};
+        /** Should be present if and only if 'fixId' is. */
+        fixAllDescription?: SymbolDisplayPart[];
     }
     /**
      * Format and format on key response message.
