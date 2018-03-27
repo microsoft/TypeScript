@@ -349,7 +349,7 @@ namespace ts.textChanges {
             // We need to make sure that we are not in the middle of a string literal or a comment.
             // If so, we do not want to separate the node from its comment if we can.
             // Otherwise, add an extra new line immediately before the error span.
-            const insertAtLineStart = codefix.isValidLocationToAddComment(sourceFile, startPosition);
+            const insertAtLineStart = isValidLocationToAddComment(sourceFile, startPosition);
             const token = getTouchingToken(sourceFile, insertAtLineStart ? startPosition : position, /*includeJsDocComment*/ false);
             const text = `${insertAtLineStart ? "" : this.newLineCharacter}${sourceFile.text.slice(lineStartPosition, startPosition)}//${commentText}${this.newLineCharacter}`;
             this.insertText(sourceFile, token.getStart(sourceFile), text);
@@ -374,7 +374,7 @@ namespace ts.textChanges {
             this.insertNodesAt(sourceFile, start, typeParameters, { prefix: "<", suffix: ">" });
         }
 
-        private getOptionsForInsertNodeBefore(before: Node, doubleNewlines: boolean): ChangeNodeOptions {
+        private getOptionsForInsertNodeBefore(before: Node, doubleNewlines: boolean): InsertNodeOptions {
             if (isStatement(before) || isClassElement(before)) {
                 return { suffix: doubleNewlines ? this.newLineCharacter + this.newLineCharacter : this.newLineCharacter };
             }
@@ -645,20 +645,17 @@ namespace ts.textChanges {
         }
 
         /** Note: this may mutate `nodeIn`. */
-        function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, options: InsertNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText): string {
+        function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, { indentation, prefix, delta }: InsertNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText): string {
             const { node, text } = getNonformattedText(nodeIn, sourceFile, newLineCharacter);
             if (validate) validate(node, text);
             const { options: formatOptions } = formatContext;
             const initialIndentation =
-                options.indentation !== undefined
-                    ? options.indentation
-                    : formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, options.prefix === newLineCharacter || getLineStartPositionForPosition(pos, sourceFile) === pos);
-            const delta =
-                options.delta !== undefined
-                    ? options.delta
-                    : formatting.SmartIndenter.shouldIndentChildNode(nodeIn)
-                        ? (formatOptions.indentSize || 0)
-                        : 0;
+                indentation !== undefined
+                    ? indentation
+                    : formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, prefix === newLineCharacter || getLineStartPositionForPosition(pos, sourceFile) === pos);
+            if (delta === undefined) {
+                delta = formatting.SmartIndenter.shouldIndentChildNode(nodeIn) ? (formatOptions.indentSize || 0) : 0;
+            }
             const file: SourceFileLike = { text, getLineAndCharacterOfPosition(pos) { return getLineAndCharacterOfPosition(this, pos); } };
             const changes = formatting.formatNodeGivenIndentation(node, file, sourceFile.languageVariant, initialIndentation, delta, formatContext);
             return applyChanges(text, changes);
@@ -881,5 +878,9 @@ namespace ts.textChanges {
                 }
             }
         }
+    }
+
+    export function isValidLocationToAddComment(sourceFile: SourceFile, position: number) {
+        return !isInComment(sourceFile, position) && !isInString(sourceFile, position) && !isInTemplateString(sourceFile, position);
     }
 }

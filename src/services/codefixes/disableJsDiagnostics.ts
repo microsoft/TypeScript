@@ -26,7 +26,7 @@ namespace ts.codefix {
                     Diagnostics.Disable_checking_for_this_file),
             ];
 
-            if (isValidLocationToAddComment(sourceFile, span.start)) {
+            if (textChanges.isValidLocationToAddComment(sourceFile, span.start)) {
                 fixes.unshift(createCodeFixAction(textChanges.ChangeTracker.with(context, t => makeChange(t, sourceFile, span.start)), Diagnostics.Ignore_this_error_message, fixId, Diagnostics.Add_ts_ignore_to_all_error_messages));
             }
 
@@ -36,16 +36,12 @@ namespace ts.codefix {
         getAllCodeActions: context => {
             const seenLines = createMap<true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
-                if (isValidLocationToAddComment(diag.file!, diag.start!)) {
+                if (textChanges.isValidLocationToAddComment(diag.file!, diag.start!)) {
                     makeChange(changes, diag.file!, diag.start!, seenLines);
                 }
             });
         },
     });
-
-    export function isValidLocationToAddComment(sourceFile: SourceFile, position: number) {
-        return !isInComment(sourceFile, position) && !isInString(sourceFile, position) && !isInTemplateString(sourceFile, position);
-    }
 
     function makeChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, seenLines?: Map<true>) {
         const { line: lineNumber } = getLineAndCharacterOfPosition(sourceFile, position);
