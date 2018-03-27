@@ -868,6 +868,14 @@ namespace FourSlash {
             });
         }
 
+        public verifyTypeAtLocation(markerName: string, type: string) {
+            const marker = this.getMarkerByName(markerName);
+            const file = this.getProgram().getSourceFile(marker.fileName)!;
+            const node = ts.findPrecedingToken(marker.position, file);
+            const checker = this.getProgram().getTypeChecker();
+            assert.equal(checker.typeToString(checker.getTypeAtLocation(node)), type);
+        }
+
         public verifyCompletionListContains(entryId: ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string | { kind?: string, kindModifiers?: string }, spanIndex?: number, hasAction?: boolean, options?: FourSlashInterface.VerifyCompletionListContainsOptions) {
             const completions = this.getCompletionListAtCaret(options);
             if (completions) {
@@ -3986,6 +3994,10 @@ namespace FourSlashInterface {
     export class Verify extends VerifyNegatable {
         constructor(state: FourSlash.TestState) {
             super(state);
+        }
+
+        public typeAtLocation(markerName: string, type: string) {
+            this.state.verifyTypeAtLocation(markerName, type);
         }
 
         public completionsAt(markerName: string, completions: ReadonlyArray<ExpectedCompletionEntry>, options?: CompletionsAtOptions) {
