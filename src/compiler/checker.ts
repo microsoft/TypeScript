@@ -13952,6 +13952,11 @@ namespace ts {
                 if (type && type !== unknownType) {
                     return getFlowTypeOfReference(node, type);
                 }
+                if (isSourceFile(container)) {
+                    // look up in the source file's locals or exports
+                    const parent = getSymbolOfNode(container);
+                    return createAnonymousType(parent, container.commonJsModuleIndicator ? parent.exports : globals, emptyArray, emptyArray, createIndexInfo(anyType, /*isReadonly*/ false), undefined);
+                }
             }
         }
 

@@ -1,0 +1,20 @@
+tests/cases/conformance/salsa/mod.js(6,1): error TS2304: Cannot find name 'a'.
+
+
+==== tests/cases/conformance/salsa/use.js (0 errors) ====
+    var mod = require('./mod')
+    mod.a;
+    
+==== tests/cases/conformance/salsa/decl.d.ts (0 errors) ====
+    declare var module: { exports: any };
+    declare function require(name: string): any;
+==== tests/cases/conformance/salsa/mod.js (1 errors) ====
+    /// <reference path='./decl.d.ts' />
+    module.exports = {};
+    this.a = 10;
+    this.a;     // ok
+    module.exports.a;  // should be ok but doesn't have the right type
+    a;          // error: not actually at top-level in a module
+    ~
+!!! error TS2304: Cannot find name 'a'.
+    

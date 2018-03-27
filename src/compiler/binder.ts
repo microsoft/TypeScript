@@ -2364,8 +2364,13 @@ namespace ts {
                     break;
                 case SyntaxKind.SourceFile:
                     // this.foo assignment in a source file
-                    // Bind this property in the global namespace
-                    declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
+                    // Bind this property in the global namespace or in the exports if in commonjs
+                    if ((thisContainer as SourceFile).commonJsModuleIndicator) {
+                        declareSymbol(file.symbol.exports, file.symbol, node, SymbolFlags.Property | SymbolFlags.ExportValue, SymbolFlags.None);
+                    }
+                    else {
+                        declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
+                    }
                     break;
 
                 default:

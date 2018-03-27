@@ -1,0 +1,44 @@
+=== tests/cases/conformance/salsa/use.js ===
+var mod = require('./mod')
+>mod : Symbol(mod, Decl(use.js, 0, 3))
+>require : Symbol(require, Decl(decl.d.ts, 0, 37))
+>'./mod' : Symbol("tests/cases/conformance/salsa/mod", Decl(mod.js, 0, 0))
+
+mod.a;
+>mod.a : Symbol(a, Decl(mod.js, 1, 20))
+>mod : Symbol(mod, Decl(use.js, 0, 3))
+>a : Symbol(a, Decl(mod.js, 1, 20))
+
+=== tests/cases/conformance/salsa/decl.d.ts ===
+declare var module: { exports: any };
+>module : Symbol(module, Decl(decl.d.ts, 0, 11))
+>exports : Symbol(exports, Decl(decl.d.ts, 0, 21))
+
+declare function require(name: string): any;
+>require : Symbol(require, Decl(decl.d.ts, 0, 37))
+>name : Symbol(name, Decl(decl.d.ts, 1, 25))
+
+=== tests/cases/conformance/salsa/mod.js ===
+/// <reference path='./decl.d.ts' />
+module.exports = {};
+>module.exports : Symbol(exports, Decl(decl.d.ts, 0, 21))
+>module : Symbol(module, Decl(decl.d.ts, 0, 11))
+>exports : Symbol(exports, Decl(decl.d.ts, 0, 21))
+
+this.a = 10;
+>this.a : Symbol(a, Decl(mod.js, 1, 20))
+>this : Symbol("tests/cases/conformance/salsa/mod", Decl(mod.js, 0, 0))
+>a : Symbol(a, Decl(mod.js, 1, 20))
+
+this.a;     // ok
+>this.a : Symbol(a, Decl(mod.js, 1, 20))
+>this : Symbol("tests/cases/conformance/salsa/mod", Decl(mod.js, 0, 0))
+>a : Symbol(a, Decl(mod.js, 1, 20))
+
+module.exports.a;  // should be ok but doesn't have the right type
+>module.exports : Symbol(exports, Decl(decl.d.ts, 0, 21))
+>module : Symbol(module, Decl(decl.d.ts, 0, 11))
+>exports : Symbol(exports, Decl(decl.d.ts, 0, 21))
+
+a;          // error: not actually at top-level in a module
+

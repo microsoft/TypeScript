@@ -1,13 +1,31 @@
 === tests/cases/conformance/salsa/a.js ===
 this.a = 10;
+>this.a : Symbol(a, Decl(a.js, 0, 0))
 >a : Symbol(a, Decl(a.js, 0, 0))
 
 this.a;
+>this.a : Symbol(a, Decl(a.js, 0, 0))
+>a : Symbol(a, Decl(a.js, 0, 0))
+
 a;
 >a : Symbol(a, Decl(a.js, 0, 0))
+
+unknown;
+this.unknown;
+
+// also, improved types for this-prefixed globals like eval:
+this.eval('hi');
+>this.eval : Symbol(eval, Decl(lib.d.ts, --, --))
+>eval : Symbol(eval, Decl(lib.d.ts, --, --))
 
 === tests/cases/conformance/salsa/b.js ===
 this.a;
+>this.a : Symbol(a, Decl(a.js, 0, 0))
+>a : Symbol(a, Decl(a.js, 0, 0))
+
 a;
 >a : Symbol(a, Decl(a.js, 0, 0))
+
+unknown;
+this.unknown;
 
