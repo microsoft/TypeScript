@@ -440,7 +440,7 @@ namespace ts {
          * This may be omitted to indicate that the code fix can't be applied in a group.
          */
         fixId?: {};
-        fixAllDescription?: SymbolDisplayPart[];
+        fixAllDescription?: string;
     }
 
     export interface CombinedCodeActions {

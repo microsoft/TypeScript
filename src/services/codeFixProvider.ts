@@ -39,10 +39,10 @@ namespace ts {
         }
 
         export function createCodeFixAction(changes: FileTextChanges[], description: DiagnosticAndArguments, fixId: {}, fixAllDescription: DiagnosticAndArguments, command?: CodeActionCommand): CodeFixAction {
-            return createCodeFixActionWorker(diagnosticToString(description), changes, fixId, [textPart(diagnosticToString(fixAllDescription))], command);
+            return createCodeFixActionWorker(diagnosticToString(description), changes, fixId, diagnosticToString(fixAllDescription), command);
         }
 
-        function createCodeFixActionWorker(description: string, changes: FileTextChanges[], fixId?: {}, fixAllDescription?: SymbolDisplayPart[], command?: CodeActionCommand): CodeFixAction {
+        function createCodeFixActionWorker(description: string, changes: FileTextChanges[], fixId?: {}, fixAllDescription?: string, command?: CodeActionCommand): CodeFixAction {
             return { description, changes, fixId, fixAllDescription, commands: command ? [command] : undefined };
         }
 

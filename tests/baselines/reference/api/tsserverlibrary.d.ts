@@ -4242,7 +4242,7 @@ declare namespace ts {
          * This may be omitted to indicate that the code fix can't be applied in a group.
          */
         fixId?: {};
-        fixAllDescription?: SymbolDisplayPart[];
+        fixAllDescription?: string;
     }
     interface CombinedCodeActions {
         changes: ReadonlyArray<FileTextChanges>;
@@ -6315,7 +6315,7 @@ declare namespace ts.server.protocol {
          */
         fixId?: {};
         /** Should be present if and only if 'fixId' is. */
-        fixAllDescription?: SymbolDisplayPart[];
+        fixAllDescription?: string;
     }
     /**
      * Format and format on key response message.

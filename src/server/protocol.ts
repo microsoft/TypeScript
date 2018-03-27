@@ -1702,7 +1702,7 @@ namespace ts.server.protocol {
          */
         fixId?: {};
         /** Should be present if and only if 'fixId' is. */
-        fixAllDescription?: SymbolDisplayPart[];
+        fixAllDescription?: string;
     }
 
     /**
