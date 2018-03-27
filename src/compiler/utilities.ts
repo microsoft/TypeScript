@@ -538,6 +538,10 @@ namespace ts {
         }
     }
 
+    export function isAnyImportOrReExport(node: Node): node is AnyImportOrReExport {
+        return isAnyImportSyntax(node) || isExportDeclaration(node);
+    }
+
     // Gets the nearest enclosing block scope container that has the provided node
     // as a descendant, that is not the provided node.
     export function getEnclosingBlockScopeContainer(node: Node): Node {
@@ -944,7 +948,7 @@ namespace ts {
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
             case SyntaxKind.TypeLiteral:
-                return (<ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode>node).members;
+                return (<ObjectTypeDeclaration>node).members;
             case SyntaxKind.ObjectLiteralExpression:
                 return (<ObjectLiteralExpression>node).properties;
         }
@@ -1452,9 +1456,9 @@ namespace ts {
      * exactly one argument (of the form 'require("name")').
      * This function does not test if the node is in a JavaScript file or not.
      */
-    export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteral: true): callExpression is CallExpression & { expression: Identifier, arguments: [StringLiteralLike] };
-    export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteral: boolean): callExpression is CallExpression;
-    export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteral: boolean): callExpression is CallExpression {
+    export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteralLike: true): callExpression is RequireOrImportCall & { expression: Identifier, arguments: [StringLiteralLike] };
+    export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteralLike: boolean): callExpression is CallExpression;
+    export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteralLike: boolean): callExpression is CallExpression {
         if (callExpression.kind !== SyntaxKind.CallExpression) {
             return false;
         }
@@ -1468,14 +1472,14 @@ namespace ts {
             return false;
         }
         const arg = args[0];
-        return !checkArgumentIsStringLiteral || arg.kind === SyntaxKind.StringLiteral || arg.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
+        return !checkArgumentIsStringLiteralLike || isStringLiteralLike(arg);
     }
 
     export function isSingleOrDoubleQuote(charCode: number) {
         return charCode === CharacterCodes.singleQuote || charCode === CharacterCodes.doubleQuote;
     }
 
-    export function isStringDoubleQuoted(str: StringLiteral, sourceFile: SourceFile): boolean {
+    export function isStringDoubleQuoted(str: StringLiteralLike, sourceFile: SourceFile): boolean {
         return getSourceTextOfNodeFromSourceFile(sourceFile, str).charCodeAt(0) === CharacterCodes.doubleQuote;
     }
 
@@ -1652,27 +1656,39 @@ namespace ts {
         return SpecialPropertyAssignmentKind.None;
     }
 
+    export function isPrototypePropertyAssignment(node: Node): boolean {
+        return isBinaryExpression(node) && getSpecialPropertyAssignmentKind(node) === SpecialPropertyAssignmentKind.PrototypeProperty;
+    }
+
     export function isSpecialPropertyDeclaration(expr: PropertyAccessExpression): boolean {
         return isInJavaScriptFile(expr) &&
             expr.parent && expr.parent.kind === SyntaxKind.ExpressionStatement &&
             !!getJSDocTypeTag(expr.parent);
     }
 
-    export function getExternalModuleName(node: Node): Expression {
-        if (node.kind === SyntaxKind.ImportDeclaration) {
-            return (<ImportDeclaration>node).moduleSpecifier;
+    export function importFromModuleSpecifier(node: StringLiteralLike): AnyValidImportOrReExport {
+        switch (node.parent.kind) {
+            case SyntaxKind.ImportDeclaration:
+            case SyntaxKind.ExportDeclaration:
+                return node.parent as AnyValidImportOrReExport;
+            case SyntaxKind.ExternalModuleReference:
+                return (node.parent as ExternalModuleReference).parent as AnyValidImportOrReExport;
+            case SyntaxKind.CallExpression:
+                return node.parent as AnyValidImportOrReExport;
+            default:
+                return Debug.fail(Debug.showSyntaxKind(node));
         }
-        if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
-            const reference = (<ImportEqualsDeclaration>node).moduleReference;
-            if (reference.kind === SyntaxKind.ExternalModuleReference) {
-                return reference.expression;
-            }
-        }
-        if (node.kind === SyntaxKind.ExportDeclaration) {
-            return (<ExportDeclaration>node).moduleSpecifier;
-        }
-        if (isModuleWithStringLiteralName(node)) {
-            return node.name;
+    }
+
+    export function getExternalModuleName(node: AnyImportOrReExport): Expression {
+        switch (node.kind) {
+            case SyntaxKind.ImportDeclaration:
+            case SyntaxKind.ExportDeclaration:
+                return node.moduleSpecifier;
+            case SyntaxKind.ImportEqualsDeclaration:
+                return node.moduleReference.kind === SyntaxKind.ExternalModuleReference ? node.moduleReference.expression : undefined;
+            default:
+                return Debug.assertNever(node);
         }
     }
 
@@ -1845,7 +1861,7 @@ namespace ts {
     }
 
     export function isRestParameter(node: ParameterDeclaration): boolean {
-        return node.dotDotDotToken !== undefined;
+        return node.dotDotDotToken !== undefined || node.type && node.type.kind === SyntaxKind.JSDocVariadicType;
     }
 
     export const enum AssignmentKind {
@@ -1944,6 +1960,18 @@ namespace ts {
                 return true;
         }
         return false;
+    }
+
+    export type ValueSignatureDeclaration =
+        | FunctionDeclaration
+        | MethodDeclaration
+        | ConstructorDeclaration
+        | AccessorDeclaration
+        | FunctionExpression
+        | ArrowFunction;
+
+    export function isValueSignatureDeclaration(node: Node): node is ValueSignatureDeclaration {
+        return isFunctionExpression(node) || isArrowFunction(node) || isMethodOrAccessor(node) || isFunctionDeclaration(node) || isConstructorDeclaration(node);
     }
 
     function walkUp(node: Node, kind: SyntaxKind) {
@@ -2806,8 +2834,9 @@ namespace ts {
 
     export interface EmitFileNames {
         jsFilePath: string;
-        sourceMapFilePath: string;
-        declarationFilePath: string;
+        sourceMapFilePath: string | undefined;
+        declarationFilePath: string | undefined;
+        declarationMapPath: string | undefined;
     }
 
     /**
@@ -3385,7 +3414,7 @@ namespace ts {
         for (let i = 0; i < length; i++) {
             const charCode = input.charCodeAt(i);
 
-            // handel utf8
+            // handle utf8
             if (charCode < 0x80) {
                 output.push(charCode);
             }
@@ -3448,6 +3477,82 @@ namespace ts {
         }
 
         return result;
+    }
+
+    function getStringFromExpandedCharCodes(codes: number[]): string {
+        let output = "";
+        let i = 0;
+        const length = codes.length;
+        while (i < length) {
+            const charCode = codes[i];
+
+            if (charCode < 0x80) {
+                output += String.fromCharCode(charCode);
+                i++;
+            }
+            else if ((charCode & 0B11000000) === 0B11000000) {
+                let value = charCode & 0B00111111;
+                i++;
+                let nextCode: number = codes[i];
+                while ((nextCode & 0B11000000) === 0B10000000) {
+                    value = (value << 6) | (nextCode & 0B00111111);
+                    i++;
+                    nextCode = codes[i];
+                }
+                // `value` may be greater than 10FFFF (the maximum unicode codepoint) - JS will just make this into an invalid character for us
+                output += String.fromCharCode(value);
+            }
+            else {
+                // We don't want to kill the process when decoding fails (due to a following char byte not
+                // following a leading char), so we just print the (bad) value
+                output += String.fromCharCode(charCode);
+                i++;
+            }
+        }
+        return output;
+    }
+
+    export function base64encode(host: { base64encode?(input: string): string }, input: string): string {
+        if (host.base64encode) {
+            return host.base64encode(input);
+        }
+        return convertToBase64(input);
+    }
+
+    export function base64decode(host: { base64decode?(input: string): string }, input: string): string {
+        if (host.base64decode) {
+            return host.base64decode(input);
+        }
+        const length = input.length;
+        const expandedCharCodes: number[] = [];
+        let i = 0;
+        while (i < length) {
+            // Stop decoding once padding characters are present
+            if (input.charCodeAt(i) === base64Digits.charCodeAt(64)) {
+                break;
+            }
+            // convert 4 input digits into three characters, ignoring padding characters at the end
+            const ch1 = base64Digits.indexOf(input[i]);
+            const ch2 = base64Digits.indexOf(input[i + 1]);
+            const ch3 = base64Digits.indexOf(input[i + 2]);
+            const ch4 = base64Digits.indexOf(input[i + 3]);
+
+            const code1 = ((ch1 & 0B00111111) << 2) | ((ch2 >> 4) & 0B00000011);
+            const code2 = ((ch2 & 0B00001111) << 4) | ((ch3 >> 2) & 0B00001111);
+            const code3 = ((ch3 & 0B00000011) << 6) | (ch4 & 0B00111111);
+
+            if (code2 === 0 && ch3 !== 0) { // code2 decoded to zero, but ch3 was padding - elide code2 and code3
+                expandedCharCodes.push(code1);
+            }
+            else if (code3 === 0 && ch4 !== 0) { // code3 decoded to zero, but ch4 was padding, elide code3
+                expandedCharCodes.push(code1, code2);
+            }
+            else {
+                expandedCharCodes.push(code1, code2, code3);
+            }
+            i += 4;
+        }
+        return getStringFromExpandedCharCodes(expandedCharCodes);
     }
 
     const carriageReturnLineFeed = "\r\n";
@@ -3855,6 +3960,24 @@ namespace ts {
         return isStringLiteral(moduleSpecifier) ? moduleSpecifier.text : getTextOfNode(moduleSpecifier);
     }
 
+    export function getLastChild(node: Node): Node | undefined {
+        let lastChild: Node | undefined;
+        forEachChild(node,
+            child => {
+                if (nodeIsPresent(child)) lastChild = child;
+            },
+            children => {
+                // As an optimization, jump straight to the end of the list.
+                for (let i = children.length - 1; i >= 0; i--) {
+                    if (nodeIsPresent(children[i])) {
+                        lastChild = children[i];
+                        break;
+                    }
+                }
+            });
+        return lastChild;
+    }
+
     /** Add a value to a set, and return true if it wasn't already present. */
     export function addToSeen(seen: Map<true>, key: string | number): boolean {
         key = String(key);
@@ -3863,6 +3986,10 @@ namespace ts {
         }
         seen.set(key, true);
         return true;
+    }
+
+    export function isObjectTypeDeclaration(node: Node): node is ObjectTypeDeclaration {
+        return isClassLike(node) || isInterfaceDeclaration(node) || isTypeLiteralNode(node);
     }
 }
 
@@ -4530,7 +4657,7 @@ namespace ts {
     }
 
     /** Gets all JSDoc tags of a specified kind, or undefined if not present. */
-    export function getAllJSDocTagsOfKind(node: Node, kind: SyntaxKind): ReadonlyArray<JSDocTag> | undefined {
+    export function getAllJSDocTagsOfKind(node: Node, kind: SyntaxKind): ReadonlyArray<JSDocTag> {
         return getJSDocTags(node).filter(doc => doc.kind === kind);
     }
 }

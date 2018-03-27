@@ -74,6 +74,7 @@ type T54 = X3<{ a: (x: number) => void, b: () => void }>;  // number
 type T60 = infer U;  // Error
 type T61<T> = infer A extends infer B ? infer C : infer D;  // Error
 type T62<T> = U extends (infer U)[] ? U : U;  // Error
+type T63<T> = T extends (infer A extends infer B ? infer C : infer D) ? string : number;
 
 type T70<T extends string> = { x: T };
 type T71<T> = T extends T70<infer U> ? T70<U> : never;

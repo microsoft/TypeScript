@@ -152,9 +152,7 @@ declare namespace FourSlashInterface {
             kind?: string | { kind?: string, kindModifiers?: string },
             spanIndex?: number,
             hasAction?: boolean,
-            options?: {
-                includeExternalModuleExports?: boolean,
-                includeInsertTextCompletions?: boolean,
+            options?: UserPreferences & {
                 sourceDisplay?: string,
                 isRecommended?: true,
                 insertText?: string,
@@ -181,6 +179,7 @@ declare namespace FourSlashInterface {
             newRangeContent?: string,
             errorCode?: number,
             index?: number,
+            preferences?: UserPreferences,
         });
         codeFixAvailable(options?: Array<{ description: string, actions?: Array<{ type: string, data: {} }>, commands?: {}[] }>): void;
         applicableRefactorAvailableAtMarker(markerName: string): void;
@@ -197,10 +196,7 @@ declare namespace FourSlashInterface {
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
-        completionsAt(markerName: string, completions: ReadonlyArray<string | { name: string, insertText?: string, replacementSpan?: Range }>, options?: {
-            isNewIdentifierLocation?: boolean;
-            includeInsertTextCompletions?: boolean;
-        }): void;
+        completionsAt(markerName: string, completions: ReadonlyArray<string | { name: string, insertText?: string, replacementSpan?: Range }>, options?: CompletionsAtOptions): void;
         completionsAndDetailsAt(
             markerName: string,
             completions: {
@@ -215,6 +211,7 @@ declare namespace FourSlashInterface {
             description: string,
             newFileContent?: string,
             newRangeContent?: string,
+            preferences?: UserPreferences,
         });
         indentationIs(numberOfSpaces: number): void;
         indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle?: ts.IndentStyle, baseIndentSize?: number): void;
@@ -287,7 +284,7 @@ declare namespace FourSlashInterface {
         numberOfErrorsInCurrentFile(expected: number): void;
         baselineCurrentFileBreakpointLocations(): void;
         baselineCurrentFileNameOrDottedNameSpans(): void;
-        baselineGetEmitOutput(): void;
+        baselineGetEmitOutput(insertResultsIntoVfs?: boolean): void;
         baselineQuickInfo(): void;
         nameOrDottedNameSpanTextIs(text: string): void;
         outliningSpansInCurrentFile(spans: Range[]): void;
@@ -302,7 +299,7 @@ declare namespace FourSlashInterface {
         rangeIs(expectedText: string, includeWhiteSpace?: boolean): void;
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, formattingOptions?: FormatCodeOptions): void;
         getAndApplyCodeFix(errorCode?: number, index?: number): void;
-        importFixAtPosition(expectedTextArray: string[], errorCode?: number): void;
+        importFixAtPosition(expectedTextArray: string[], errorCode?: number, options?: UserPreferences): void;
 
         navigationBar(json: any, options?: { checkSpans?: boolean }): void;
         navigationTree(json: any, options?: { checkSpans?: boolean }): void;
@@ -528,6 +525,15 @@ declare namespace FourSlashInterface {
     }
     interface VerifyDocumentHighlightsOptions {
         filesToSearch?: ReadonlyArray<string>;
+    }
+    interface UserPreferences {
+        quotePreference?: "double" | "single";
+        includeCompletionsForModuleExports?: boolean;
+        includeInsertTextCompletions?: boolean;
+        importModuleSpecifierPreference?: "relative" | "non-relative";
+    }
+    interface CompletionsAtOptions extends UserPreferences {
+        isNewIdentifierLocation?: boolean;
     }
 }
 declare function verifyOperationIsCancelled(f: any): void;
