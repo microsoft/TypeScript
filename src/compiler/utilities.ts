@@ -2435,35 +2435,31 @@ namespace ts {
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.OmittedExpression:
-                return 19;
+                return 20;
 
             case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
-                return 18;
+                return 19;
 
             case SyntaxKind.NewExpression:
-                return hasArguments ? 18 : 17;
+                return hasArguments ? 19 : 18;
 
             case SyntaxKind.CallExpression:
-                return 17;
+                return 18;
 
             case SyntaxKind.PostfixUnaryExpression:
-                return 16;
+                return 17;
 
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.TypeOfExpression:
             case SyntaxKind.VoidExpression:
             case SyntaxKind.DeleteExpression:
             case SyntaxKind.AwaitExpression:
-                return 15;
+                return 16;
 
             case SyntaxKind.BinaryExpression:
                 switch (operatorKind) {
-                    case SyntaxKind.ExclamationToken:
-                    case SyntaxKind.TildeToken:
-                        return 15;
-
                     case SyntaxKind.EqualsToken:
                     case SyntaxKind.PlusEqualsToken:
                     case SyntaxKind.MinusEqualsToken:
@@ -2482,12 +2478,8 @@ namespace ts {
                     case SyntaxKind.CommaToken:
                         return 0;
 
-                    case SyntaxKind.AsteriskAsteriskToken:
-                        // This would be 15 if we used the below line instead, which changes emit for the test `emitExponentiationOperator4`.
-                        return 14;
-
                     default:
-                        return getBinaryOperatorPrecedence(operatorKind) + 4; // returns a result in [5, 14]
+                        return getBinaryOperatorPrecedence(operatorKind);
                 }
 
             case SyntaxKind.ConditionalExpression:
@@ -2511,20 +2503,20 @@ namespace ts {
     export function getBinaryOperatorPrecedence(kind: SyntaxKind): number {
         switch (kind) {
             case SyntaxKind.BarBarToken:
-                return 1;
-            case SyntaxKind.AmpersandAmpersandToken:
-                return 2;
-            case SyntaxKind.BarToken:
-                return 3;
-            case SyntaxKind.CaretToken:
-                return 4;
-            case SyntaxKind.AmpersandToken:
                 return 5;
+            case SyntaxKind.AmpersandAmpersandToken:
+                return 6;
+            case SyntaxKind.BarToken:
+                return 7;
+            case SyntaxKind.CaretToken:
+                return 8;
+            case SyntaxKind.AmpersandToken:
+                return 9;
             case SyntaxKind.EqualsEqualsToken:
             case SyntaxKind.ExclamationEqualsToken:
             case SyntaxKind.EqualsEqualsEqualsToken:
             case SyntaxKind.ExclamationEqualsEqualsToken:
-                return 6;
+                return 10;
             case SyntaxKind.LessThanToken:
             case SyntaxKind.GreaterThanToken:
             case SyntaxKind.LessThanEqualsToken:
@@ -2532,20 +2524,20 @@ namespace ts {
             case SyntaxKind.InstanceOfKeyword:
             case SyntaxKind.InKeyword:
             case SyntaxKind.AsKeyword:
-                return 7;
+                return 11;
             case SyntaxKind.LessThanLessThanToken:
             case SyntaxKind.GreaterThanGreaterThanToken:
             case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
-                return 8;
+                return 12;
             case SyntaxKind.PlusToken:
             case SyntaxKind.MinusToken:
-                return 9;
+                return 13;
             case SyntaxKind.AsteriskToken:
             case SyntaxKind.SlashToken:
             case SyntaxKind.PercentToken:
-                return 10;
+                return 14;
             case SyntaxKind.AsteriskAsteriskToken:
-                return 11;
+                return 15;
         }
 
         // -1 is lower than all other precedences.  Returning it will cause binary expression
