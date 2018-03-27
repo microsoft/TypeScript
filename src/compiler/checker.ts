@@ -1903,7 +1903,13 @@ namespace ts {
         }
 
         function getTargetOfExportAssignment(node: ExportAssignment, dontResolveAlias: boolean): Symbol {
-            return resolveEntityName(<EntityNameExpression>node.expression, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, /*ignoreErrors*/ false, dontResolveAlias);
+            const aliasLike = resolveEntityName(<EntityNameExpression>node.expression, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, /*ignoreErrors*/ true, dontResolveAlias);
+            if (aliasLike) {
+                return aliasLike;
+            }
+            const links = getNodeLinks(node.expression);
+            checkExpression(node.expression);
+            return links.resolvedSymbol;
         }
 
         function getTargetOfAliasDeclaration(node: Declaration, dontRecursivelyResolve?: boolean): Symbol {
@@ -25033,15 +25039,19 @@ namespace ts {
             }
 
             if (entityName.parent.kind === SyntaxKind.ExportAssignment && isEntityNameExpression(entityName)) {
-                return resolveEntityName(entityName,
-                    /*all meanings*/ SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
+                // Even an entity name expression that doesn't resolve as an entityname may still typecheck as a property access expression
+                const success = resolveEntityName(entityName,
+                    /*all meanings*/ SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias, /*ignoreErrors*/ true);
+                if (success && success !== unknownSymbol) {
+                    return success;
+                }
             }
 
             if (entityName.kind !== SyntaxKind.PropertyAccessExpression && isInRightSideOfImportOrExportAssignment(entityName)) {
-                // Since we already checked for ExportAssignment, this really could only be an Import
                 const importEqualsDeclaration = getAncestor(entityName, SyntaxKind.ImportEqualsDeclaration);
-                Debug.assert(importEqualsDeclaration !== undefined);
-                return getSymbolOfPartOfRightHandSideOfImportEquals(entityName, /*dontResolveAlias*/ true);
+                if (importEqualsDeclaration) {
+                    return getSymbolOfPartOfRightHandSideOfImportEquals(entityName, /*dontResolveAlias*/ true);
+                }
             }
 
             if (isRightSideOfQualifiedNameOrPropertyAccess(entityName)) {
