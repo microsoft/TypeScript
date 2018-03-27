@@ -23,14 +23,22 @@
 ////x.common.[|a|];
 
 const [one, base, hasAOrB, x] = test.ranges();
-verify.referenceGroups(one, [{ definition: "(property) a: number", ranges: [one, x] }]);
-verify.referenceGroups(base, [{ definition: "(property) Base.a: string", ranges: [base, hasAOrB, x] }]);
+verify.referenceGroups(one, [
+    { definition: "(property) a: number", ranges: [one] },
+    { definition: "(property) a: string | number", ranges: [x] },
+]);
+verify.referenceGroups(base, [
+    { definition: "(property) Base.a: string", ranges: [base] },
+    { definition: "(property) HasAOrB.a: string", ranges: [hasAOrB, x] },
+]);
 verify.referenceGroups(hasAOrB, [
     { definition: "(property) Base.a: string", ranges: [base] },
-    { definition: "(property) HasAOrB.a: string", ranges: [hasAOrB, x] }
+    { definition: "(property) HasAOrB.a: string", ranges: [hasAOrB] },
+    { definition: "(property) a: string | number", ranges: [x] },
 ]);
 verify.referenceGroups(x, [
-    { definition: "(property) a: number", ranges: [one, x] },
+    { definition: "(property) a: number", ranges: [one] },
     { definition: "(property) Base.a: string", ranges: [base] },
     { definition: "(property) HasAOrB.a: string", ranges: [hasAOrB] },
+    { definition: "(property) a: string | number", ranges: [x] },
 ]);

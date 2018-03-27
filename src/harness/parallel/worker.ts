@@ -25,10 +25,10 @@ namespace Harness.Parallel.Worker {
         (global as any).before = undefined;
         (global as any).after = undefined;
         (global as any).beforeEach = undefined;
-        describe = ((name, callback) => {
+        (global as any).describe = ((name, callback) => {
             testList.push({ name, callback, kind: "suite" });
         }) as Mocha.IContextDefinition;
-        it = ((name, callback) => {
+        (global as any).it = ((name, callback) => {
             if (!testList) {
                 throw new Error("Tests must occur within a describe block");
             }
@@ -251,7 +251,7 @@ namespace Harness.Parallel.Worker {
         });
         if (!runUnitTests) {
             // ensure unit tests do not get run
-            describe = ts.noop as any;
+            (global as any).describe = ts.noop;
         }
         else {
             initialized = true;

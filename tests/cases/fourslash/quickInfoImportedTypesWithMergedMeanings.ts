@@ -14,15 +14,15 @@
 //// Alias/*2*/;
 
 verify.quickInfoAt("1", [
+    "(alias) function Original(): void",
     "(alias) type Original<T> = () => T",
     "(alias) namespace Original",
-    "(alias) function Original(): void",
     "import Original",
 ].join("\n"), "some docs ");
 
 verify.quickInfoAt("2", [
+    "(alias) function Alias(): void",
     "(alias) type Alias<T> = () => T",
     "(alias) namespace Alias",
-    "(alias) function Alias(): void",
     "import Alias",
 ].join("\n"), "some docs ");

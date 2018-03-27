@@ -265,7 +265,7 @@ interface Function {
       * @param thisArg The object to be used as the this object.
       * @param argArray A set of arguments to be passed to the function.
       */
-    apply(this: Function, thisArg: any, argArray?: any): any;
+    apply(this: Function, thisArg: any, argArray?: Readonly<ArrayLike<any>>): any;
 
     /**
       * Calls a method of an object, substituting another object for the current object.
