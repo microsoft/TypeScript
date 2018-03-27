@@ -115,6 +115,7 @@ var harnessCoreSources = [
 });
 
 var harnessSources = harnessCoreSources.concat([
+    "base64.ts",
     "incrementalParser.ts",
     "jsDocParsing.ts",
     "services/colorization.ts",

@@ -95,6 +95,7 @@
         "../server/session.ts",
         "../server/client.ts",
         "../server/editorServices.ts",
+        "./unittests/base64.ts",
         "./unittests/incrementalParser.ts",
         "./unittests/jsDocParsing.ts",
         "./unittests/services/colorization.ts",

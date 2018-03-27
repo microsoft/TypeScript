@@ -1,0 +1,55 @@
+=== tests/cases/conformance/salsa/npm-install.js ===
+function Installer () {
+>Installer : () => void
+
+    this.args = 0
+>this.args = 0 : 0
+>this.args : any
+>this : any
+>args : any
+>0 : 0
+}
+Installer.prototype.loadArgMetadata = function (next) {
+>Installer.prototype.loadArgMetadata = function (next) {    // ArrowFunction isn't treated as a this-container    (args) => {        this.args = 'hi'        this.newProperty = 1    }} : (next: any) => void
+>Installer.prototype.loadArgMetadata : any
+>Installer.prototype : any
+>Installer : () => void
+>prototype : any
+>loadArgMetadata : any
+>function (next) {    // ArrowFunction isn't treated as a this-container    (args) => {        this.args = 'hi'        this.newProperty = 1    }} : (next: any) => void
+>next : any
+
+    // ArrowFunction isn't treated as a this-container
+    (args) => {
+>(args) => {        this.args = 'hi'        this.newProperty = 1    } : (args: any) => void
+>args : any
+
+        this.args = 'hi'
+>this.args = 'hi' : "hi"
+>this.args : number
+>this : { args: number; loadArgMetadata: (next: any) => void; newProperty: number | undefined; }
+>args : number
+>'hi' : "hi"
+
+        this.newProperty = 1
+>this.newProperty = 1 : 1
+>this.newProperty : number | undefined
+>this : { args: number; loadArgMetadata: (next: any) => void; newProperty: number | undefined; }
+>newProperty : number | undefined
+>1 : 1
+    }
+}
+var i = new Installer()
+>i : { args: number; loadArgMetadata: (next: any) => void; newProperty: number | undefined; }
+>new Installer() : { args: number; loadArgMetadata: (next: any) => void; newProperty: number | undefined; }
+>Installer : () => void
+
+i.newProperty = i.args // ok, number ==> number | undefined
+>i.newProperty = i.args : number
+>i.newProperty : number | undefined
+>i : { args: number; loadArgMetadata: (next: any) => void; newProperty: number | undefined; }
+>newProperty : number | undefined
+>i.args : number
+>i : { args: number; loadArgMetadata: (next: any) => void; newProperty: number | undefined; }
+>args : number
+
