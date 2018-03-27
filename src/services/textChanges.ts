@@ -103,10 +103,11 @@ namespace ts.textChanges {
     enum ChangeKind {
         Remove,
         ReplaceWithSingleNode,
-        ReplaceWithMultipleNodes
+        ReplaceWithMultipleNodes,
+        Text,
     }
 
-    type Change = ReplaceWithSingleNode | ReplaceWithMultipleNodes | RemoveNode;
+    type Change = ReplaceWithSingleNode | ReplaceWithMultipleNodes | RemoveNode | ChangeText;
 
     interface BaseChange {
         readonly sourceFile: SourceFile;
@@ -130,6 +131,11 @@ namespace ts.textChanges {
         readonly kind: ChangeKind.ReplaceWithMultipleNodes;
         readonly nodes: ReadonlyArray<Node>;
         readonly options?: InsertNodeOptions;
+    }
+
+    interface ChangeText extends BaseChange {
+        readonly kind: ChangeKind.Text;
+        readonly text: string;
     }
 
     function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: ConfigurableStart, position: Position) {
@@ -342,6 +348,23 @@ namespace ts.textChanges {
         public insertModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
             const pos = before.getStart(sourceFile);
             this.replaceRange(sourceFile, { pos, end: pos }, createToken(modifier), { suffix: " " });
+        }
+
+        public insertCommentBeforeLine(sourceFile: SourceFile, lineNumber: number, position: number, commentText: string): void {
+            const lineStartPosition = getStartPositionOfLine(lineNumber, sourceFile);
+            const startPosition = getFirstNonSpaceCharacterPosition(sourceFile.text, lineStartPosition);
+            // First try to see if we can put the comment on the previous line.
+            // We need to make sure that we are not in the middle of a string literal or a comment.
+            // If so, we do not want to separate the node from its comment if we can.
+            // Otherwise, add an extra new line immediately before the error span.
+            const insertAtLineStart = isValidLocationToAddComment(sourceFile, startPosition);
+            const token = getTouchingToken(sourceFile, insertAtLineStart ? startPosition : position, /*includeJsDocComment*/ false);
+            const text = `${insertAtLineStart ? "" : this.newLineCharacter}${sourceFile.text.slice(lineStartPosition, startPosition)}//${commentText}${this.newLineCharacter}`;
+            this.insertText(sourceFile, token.getStart(sourceFile), text);
+        }
+
+        private insertText(sourceFile: SourceFile, pos: number, text: string): void {
+            this.changes.push({ kind: ChangeKind.Text, sourceFile, range: { pos, end: pos }, text });
         }
 
         /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
@@ -647,6 +670,9 @@ namespace ts.textChanges {
             if (change.kind === ChangeKind.Remove) {
                 return "";
             }
+            if (change.kind === ChangeKind.Text) {
+                return change.text;
+            }
 
             const { options = {}, range: { pos } } = change;
             const format = (n: Node) => getFormattedTextOfNode(n, sourceFile, pos, options, newLineCharacter, formatContext, validate);
@@ -895,5 +921,9 @@ namespace ts.textChanges {
                 }
             }
         }
+    }
+
+    export function isValidLocationToAddComment(sourceFile: SourceFile, position: number) {
+        return !isInComment(sourceFile, position) && !isInString(sourceFile, position) && !isInTemplateString(sourceFile, position);
     }
 }
