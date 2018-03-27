@@ -8151,6 +8151,9 @@ namespace ts {
                     }
                     return indexInfo.type;
                 }
+                if (indexType.flags & TypeFlags.Never) {
+                    return neverType;
+                }
                 if (accessExpression && !isConstEnumObjectType(objectType)) {
                     if (noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors) {
                         if (getIndexTypeOfType(objectType, IndexKind.Number)) {
