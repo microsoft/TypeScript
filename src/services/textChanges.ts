@@ -318,8 +318,7 @@ namespace ts.textChanges {
         }
 
         private insertNodeAt(sourceFile: SourceFile, pos: number, newNode: Node, options: InsertNodeOptions = {}) {
-            this.changes.push({ kind: ChangeKind.ReplaceWithSingleNode, sourceFile, options, node: newNode, range: { pos, end: pos } });
-            return this;
+            this.replaceRange(sourceFile, createTextRange(pos), newNode, options);
         }
 
         private insertNodesAt(sourceFile: SourceFile, pos: number, newNodes: ReadonlyArray<Node>, options: InsertNodeOptions = {}): void {
@@ -430,17 +429,11 @@ namespace ts.textChanges {
                 // check if previous statement ends with semicolon
                 // if not - insert semicolon to preserve the code from changing the meaning due to ASI
                 if (sourceFile.text.charCodeAt(after.end - 1) !== CharacterCodes.semicolon) {
-                    this.changes.push({
-                        kind: ChangeKind.ReplaceWithSingleNode,
-                        sourceFile,
-                        options: {},
-                        range: { pos: after.end, end: after.end },
-                        node: createToken(SyntaxKind.SemicolonToken)
-                    });
+                    this.replaceRange(sourceFile, createTextRange(after.end), createToken(SyntaxKind.SemicolonToken));
                 }
             }
             const endPosition = getAdjustedEndPosition(sourceFile, after, {});
-            return this.replaceRange(sourceFile, { pos: endPosition, end: endPosition }, newNode, this.getInsertNodeAfterOptions(after));
+            return this.replaceRange(sourceFile, createTextRange(endPosition), newNode, this.getInsertNodeAfterOptions(after));
         }
 
         private getInsertNodeAfterOptions(node: Node): InsertNodeOptions {
@@ -524,17 +517,9 @@ namespace ts.textChanges {
                         startPos = getStartPositionOfLine(lineAndCharOfNextElement.line, sourceFile);
                     }
 
-                    this.changes.push({
-                        kind: ChangeKind.ReplaceWithSingleNode,
-                        sourceFile,
-                        range: { pos: startPos, end: containingList[index + 1].getStart(sourceFile) },
-                        node: newNode,
-                        options: {
-                            prefix,
-                            // write separator and leading trivia of the next element as suffix
-                            suffix: `${tokenToString(nextToken.kind)}${sourceFile.text.substring(nextToken.end, containingList[index + 1].getStart(sourceFile))}`
-                        }
-                    });
+                    // write separator and leading trivia of the next element as suffix
+                    const suffix = `${tokenToString(nextToken.kind)}${sourceFile.text.substring(nextToken.end, containingList[index + 1].getStart(sourceFile))}`;
+                    this.replaceRange(sourceFile, createTextRange(startPos, containingList[index + 1].getStart(sourceFile)), newNode, { prefix, suffix });
                 }
             }
             else {
@@ -568,13 +553,7 @@ namespace ts.textChanges {
                 }
                 if (multilineList) {
                     // insert separator immediately following the 'after' node to preserve comments in trailing trivia
-                    this.changes.push({
-                        kind: ChangeKind.ReplaceWithSingleNode,
-                        sourceFile,
-                        range: { pos: end, end },
-                        node: createToken(separator),
-                        options: {}
-                    });
+                    this.replaceRange(sourceFile, createTextRange(end), createToken(separator));
                     // use the same indentation as 'after' item
                     const indentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(afterStartLinePosition, afterStart, sourceFile, this.formatContext.options);
                     // insert element before the line break on the line that contains 'after' element
@@ -582,22 +561,10 @@ namespace ts.textChanges {
                     if (insertPos !== end && isLineBreak(sourceFile.text.charCodeAt(insertPos - 1))) {
                         insertPos--;
                     }
-                    this.changes.push({
-                        kind: ChangeKind.ReplaceWithSingleNode,
-                        sourceFile,
-                        range: { pos: insertPos, end: insertPos },
-                        node: newNode,
-                        options: { indentation, prefix: this.newLineCharacter }
-                    });
+                    this.replaceRange(sourceFile, createTextRange(insertPos), newNode, { indentation, prefix: this.newLineCharacter });
                 }
                 else {
-                    this.changes.push({
-                        kind: ChangeKind.ReplaceWithSingleNode,
-                        sourceFile,
-                        range: { pos: end, end },
-                        node: newNode,
-                        options: { prefix: `${tokenToString(separator)} ` }
-                    });
+                    this.replaceRange(sourceFile, createTextRange(end), newNode, { prefix: `${tokenToString(separator)} ` });
                 }
             }
             return this;
