@@ -256,7 +256,7 @@ namespace ts.codefix {
             changes.replaceNodeWithNodes(sourceFile, statement, newNodes);
         }
         else {
-            changes.replaceNode(sourceFile, statement, convertExportsDotXEquals(text, right), { useNonAdjustedEndPosition: true });
+            changes.replaceNode(sourceFile, statement, convertExportsDotXEquals(text, right));
         }
     }
 

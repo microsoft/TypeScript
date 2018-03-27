@@ -30,6 +30,6 @@ namespace ts.codefix {
         }
         // TODO (https://github.com/Microsoft/TypeScript/issues/21246): use shared helper
         suppressLeadingAndTrailingTrivia(token);
-        changes.replaceNode(sourceFile, token, createPropertyAccess(createThis(), token), textChanges.useNonAdjustedPositions);
+        changes.replaceNode(sourceFile, token, createPropertyAccess(createThis(), token));
     }
 }

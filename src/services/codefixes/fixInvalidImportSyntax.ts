@@ -42,8 +42,7 @@ namespace ts.codefix {
     }
 
     function createAction(context: CodeFixContext, sourceFile: SourceFile, node: Node, replacement: Node): CodeFixAction {
-        // TODO: GH#21246 Should be able to use `replaceNode`, but be sure to preserve comments (see `codeFixCalledES2015Import11.ts`)
-        const changes = textChanges.ChangeTracker.with(context, t => t.replaceRange(sourceFile, { pos: node.getStart(), end: node.end }, replacement));
+        const changes = textChanges.ChangeTracker.with(context, t => t.replaceNode(sourceFile, node, replacement));
         return createCodeFixActionNoFixId(changes, [Diagnostics.Replace_import_with_0, changes[0].textChanges[0].newText]);
     }
 

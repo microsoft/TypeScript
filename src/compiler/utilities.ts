@@ -4070,6 +4070,12 @@ namespace ts {
         return { start, length };
     }
 
+    /* @internal */
+    export function createTextRange(pos: number, end: number = pos): TextRange {
+        Debug.assert(end >= pos);
+        return { pos, end };
+    }
+
     export function createTextSpanFromBounds(start: number, end: number) {
         return createTextSpan(start, end - start);
     }
