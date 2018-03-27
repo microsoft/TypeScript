@@ -33,6 +33,12 @@ declare function genericFn3<
 // Should be never
 const result5 = genericFn3({ g: "gtest", h: "htest" }, "g", "h"); // 'g' & 'h' will reduce to never
 
+
+declare const obj: {a: string, b: number}
+declare const key: never
+
+const result6 = obj[key]
+
 // Expanded examples from https://github.com/Microsoft/TypeScript/issues/21988
 type RequiredPropNames<T> = {
   [P in keyof T]-?: undefined extends T[P] ? never : P
@@ -112,3 +118,4 @@ var result3 = genericFn1({ c: "ctest", d: "dtest" });
 var result4 = genericFn2({ e: "etest", f: "ftest" });
 // Should be never
 var result5 = genericFn3({ g: "gtest", h: "htest" }, "g", "h"); // 'g' & 'h' will reduce to never
+var result6 = obj[key];

@@ -107,6 +107,21 @@ const result5 = genericFn3({ g: "gtest", h: "htest" }, "g", "h"); // 'g' & 'h' w
 >"g" : "g"
 >"h" : "h"
 
+
+declare const obj: {a: string, b: number}
+>obj : { a: string; b: number; }
+>a : string
+>b : number
+
+declare const key: never
+>key : never
+
+const result6 = obj[key]
+>result6 : any
+>obj[key] : any
+>obj : { a: string; b: number; }
+>key : never
+
 // Expanded examples from https://github.com/Microsoft/TypeScript/issues/21988
 type RequiredPropNames<T> = {
 >RequiredPropNames : { [P in keyof T]-?: undefined extends T[P] ? never : P; }[keyof T]
