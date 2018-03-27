@@ -349,7 +349,7 @@ namespace ts.textChanges {
             // We need to make sure that we are not in the middle of a string literal or a comment.
             // If so, we do not want to separate the node from its comment if we can.
             // Otherwise, add an extra new line immediately before the error span.
-            const insertAtLineStart = codefix.isValidLocationToAddComment(sourceFile, startPosition);
+            const insertAtLineStart = isValidLocationToAddComment(sourceFile, startPosition);
             const token = getTouchingToken(sourceFile, insertAtLineStart ? startPosition : position, /*includeJsDocComment*/ false);
             const text = `${insertAtLineStart ? "" : this.newLineCharacter}${sourceFile.text.slice(lineStartPosition, startPosition)}//${commentText}${this.newLineCharacter}`;
             this.insertText(sourceFile, token.getStart(sourceFile), text);
@@ -878,5 +878,9 @@ namespace ts.textChanges {
                 }
             }
         }
+    }
+
+    export function isValidLocationToAddComment(sourceFile: SourceFile, position: number) {
+        return !isInComment(sourceFile, position) && !isInString(sourceFile, position) && !isInTemplateString(sourceFile, position);
     }
 }
