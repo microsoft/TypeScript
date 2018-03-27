@@ -14,7 +14,8 @@
 ////x[|./*a*/|];
 ////x["/*b*/"];
 
-verify.completionsAt("b", ["foo ", "bar", "break", "any", "#", "$", "b", "1b"]);
+// TODO: GH#22907
+verify.completionsAt("b", ["foo ", "bar", "break", "any", "#", "$", "b", "1b"], { isNewIdentifierLocation: true });
 
 const replacementSpan = test.ranges()[0];
 verify.completionsAt("a", [

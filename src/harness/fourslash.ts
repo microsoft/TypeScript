@@ -840,8 +840,8 @@ namespace FourSlash {
                 this.raiseError(`No completions at position '${this.currentCaretPosition}'.`);
             }
 
-            if (options && options.isNewIdentifierLocation !== undefined && actualCompletions.isNewIdentifierLocation !== options.isNewIdentifierLocation) {
-                this.raiseError(`Expected 'isNewIdentifierLocation' to be ${options.isNewIdentifierLocation}, got ${actualCompletions.isNewIdentifierLocation}`);
+            if (actualCompletions.isNewIdentifierLocation !== (options && options.isNewIdentifierLocation || false)) {
+                this.raiseError(`Expected 'isNewIdentifierLocation' to be ${options && options.isNewIdentifierLocation}, got ${actualCompletions.isNewIdentifierLocation}`);
             }
 
             const actual = actualCompletions.entries;
