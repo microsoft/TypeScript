@@ -913,6 +913,12 @@ namespace ts {
                 delete deferredExports[id];
                 return append(statements, node);
             }
+            else {
+                const original = getOriginalNode(node);
+                if (isModuleOrEnumDeclaration(original)) {
+                    return appendExportsOfDeclaration(statements, original);
+                }
+            }
 
             return node;
         }
