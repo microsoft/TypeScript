@@ -5,8 +5,5 @@
 ////function f(x: T, ...args: U[]) { };
 ////f("/*1*/", "/*2*/", "/*3*/");
 
-// TODO: GH#22907
-const options = { isNewIdentifierLocation: true };
-verify.completionsAt("1", ["foo", "bar"], options);
-verify.completionsAt("2", ["oof", "rab"], options);
-verify.completionsAt("3", ["oof", "rab"], options);
+verify.completionsAt("1", ["foo", "bar"]);
+verify.completionsAt(["2", "3"], ["oof", "rab"]);

@@ -50,10 +50,10 @@ namespace ts.codefix {
 
         const classType = checker.getTypeAtLocation(classDeclaration);
 
-        if (!checker.getIndexTypeOfType(classType, IndexKind.Number)) {
+        if (!classType.getNumberIndexType()) {
             createMissingIndexSignatureDeclaration(implementedType, IndexKind.Number);
         }
-        if (!checker.getIndexTypeOfType(classType, IndexKind.String)) {
+        if (!classType.getStringIndexType()) {
             createMissingIndexSignatureDeclaration(implementedType, IndexKind.String);
         }
 

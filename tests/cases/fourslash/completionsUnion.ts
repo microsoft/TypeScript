@@ -7,5 +7,4 @@
 
 // We specifically filter out any array-like types.
 // Private members will be excluded by `createUnionOrIntersectionProperty`.
-// TODO: GH#22907
-verify.completionsAt("", ["x"], { isNewIdentifierLocation: true });
+verify.completionsAt("", ["x"]);
