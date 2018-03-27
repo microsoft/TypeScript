@@ -832,7 +832,12 @@ namespace FourSlash {
             }
         }
 
-        public verifyCompletionsAt(markerName: string, expected: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, options?: FourSlashInterface.CompletionsAtOptions) {
+        public verifyCompletionsAt(markerName: string | ReadonlyArray<string>, expected: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, options?: FourSlashInterface.CompletionsAtOptions) {
+            if (typeof markerName !== "string") {
+                for (const m of markerName) this.verifyCompletionsAt(m, expected, options);
+                return;
+            }
+
             this.goToMarker(markerName);
 
             const actualCompletions = this.getCompletionListAtCaret(options);
@@ -840,8 +845,8 @@ namespace FourSlash {
                 this.raiseError(`No completions at position '${this.currentCaretPosition}'.`);
             }
 
-            if (options && options.isNewIdentifierLocation !== undefined && actualCompletions.isNewIdentifierLocation !== options.isNewIdentifierLocation) {
-                this.raiseError(`Expected 'isNewIdentifierLocation' to be ${options.isNewIdentifierLocation}, got ${actualCompletions.isNewIdentifierLocation}`);
+            if (actualCompletions.isNewIdentifierLocation !== (options && options.isNewIdentifierLocation || false)) {
+                this.raiseError(`Expected 'isNewIdentifierLocation' to be ${options && options.isNewIdentifierLocation}, got ${actualCompletions.isNewIdentifierLocation}`);
             }
 
             const actual = actualCompletions.entries;
@@ -3182,9 +3187,7 @@ Actual: ${stringify(fullActual)}`);
             eq(item.hasAction, hasAction, "hasAction");
             eq(item.isRecommended, options && options.isRecommended, "isRecommended");
             eq(item.insertText, options && options.insertText, "insertText");
-            if (options && options.replacementSpan) { // TODO: GH#21679
-                eq(item.replacementSpan, options && options.replacementSpan && ts.createTextSpanFromRange(options.replacementSpan), "replacementSpan");
-            }
+            eq(item.replacementSpan, options && options.replacementSpan && ts.createTextSpanFromRange(options.replacementSpan), "replacementSpan");
         }
 
         private findFile(indexOrName: string | number) {
@@ -3988,7 +3991,7 @@ namespace FourSlashInterface {
             super(state);
         }
 
-        public completionsAt(markerName: string, completions: ReadonlyArray<ExpectedCompletionEntry>, options?: CompletionsAtOptions) {
+        public completionsAt(markerName: string | ReadonlyArray<string>, completions: ReadonlyArray<ExpectedCompletionEntry>, options?: CompletionsAtOptions) {
             this.state.verifyCompletionsAt(markerName, completions, options);
         }
 

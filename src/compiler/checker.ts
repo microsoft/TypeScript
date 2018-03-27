@@ -1730,14 +1730,19 @@ namespace ts {
                 : resolveSymbol(moduleSymbol.exports.get(name), dontResolveAlias);
         }
 
+        function isSyntacticDefault(node: Node) {
+            return ((isExportAssignment(node) && !node.isExportEquals) || hasModifier(node, ModifierFlags.Default));
+        }
+
         function canHaveSyntheticDefault(file: SourceFile | undefined, moduleSymbol: Symbol, dontResolveAlias: boolean) {
             if (!allowSyntheticDefaultImports) {
                 return false;
             }
             // Declaration files (and ambient modules)
             if (!file || file.isDeclarationFile) {
-                // Definitely cannot have a synthetic default if they have a default member specified
-                if (resolveExportByName(moduleSymbol, InternalSymbolName.Default, dontResolveAlias)) {
+                // Definitely cannot have a synthetic default if they have a syntactic default member specified
+                const defaultExportSymbol = resolveExportByName(moduleSymbol, InternalSymbolName.Default, dontResolveAlias);
+                if (defaultExportSymbol && defaultExportSymbol.valueDeclaration && isSyntacticDefault(defaultExportSymbol.valueDeclaration)) {
                     return false;
                 }
                 // It _might_ still be incorrect to assume there is no __esModule marker on the import at runtime, even if there is no `default` member
@@ -1777,7 +1782,7 @@ namespace ts {
                 if (!exportDefaultSymbol && !hasSyntheticDefault) {
                     error(node.name, Diagnostics.Module_0_has_no_default_export, symbolToString(moduleSymbol));
                 }
-                else if (!exportDefaultSymbol && hasSyntheticDefault) {
+                else if (hasSyntheticDefault) {
                     // per emit behavior, a synthetic default overrides a "real" .default member if `__esModule` is not present
                     return resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias) || resolveSymbol(moduleSymbol, dontResolveAlias);
                 }
@@ -8145,6 +8150,9 @@ namespace ts {
                         error(accessExpression, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(objectType));
                     }
                     return indexInfo.type;
+                }
+                if (indexType.flags & TypeFlags.Never) {
+                    return neverType;
                 }
                 if (accessExpression && !isConstEnumObjectType(objectType)) {
                     if (noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors) {
