@@ -103,10 +103,11 @@ namespace ts.textChanges {
     enum ChangeKind {
         Remove,
         ReplaceWithSingleNode,
-        ReplaceWithMultipleNodes
+        ReplaceWithMultipleNodes,
+        Text,
     }
 
-    type Change = ReplaceWithSingleNode | ReplaceWithMultipleNodes | RemoveNode;
+    type Change = ReplaceWithSingleNode | ReplaceWithMultipleNodes | RemoveNode | ChangeText;
 
     interface BaseChange {
         readonly sourceFile: SourceFile;
@@ -130,6 +131,15 @@ namespace ts.textChanges {
         readonly kind: ChangeKind.ReplaceWithMultipleNodes;
         readonly nodes: ReadonlyArray<Node>;
         readonly options?: InsertNodeOptions;
+    }
+
+    interface ChangeText extends BaseChange {
+        readonly kind: ChangeKind.Text;
+        readonly text: string;
+    }
+
+    function getAdjustedRange(sourceFile: SourceFile, startNode: Node, endNode: Node, options: ConfigurableStartEnd): TextRange {
+        return { pos: getAdjustedStartPosition(sourceFile, startNode, options, Position.Start), end: getAdjustedEndPosition(sourceFile, endNode, options) };
     }
 
     function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: ConfigurableStart, position: Position) {
@@ -212,7 +222,7 @@ namespace ts.textChanges {
         }
 
         /** Public for tests only. Other callers should use `ChangeTracker.with`. */
-        constructor(public readonly newLineCharacter: string, private readonly formatContext: formatting.FormatContext) {}
+        constructor(private readonly newLineCharacter: string, private readonly formatContext: formatting.FormatContext) {}
 
         public deleteRange(sourceFile: SourceFile, range: TextRange) {
             this.changes.push({ kind: ChangeKind.Remove, sourceFile, range });
@@ -280,41 +290,30 @@ namespace ts.textChanges {
             return this;
         }
 
-        // TODO (https://github.com/Microsoft/TypeScript/issues/21246): default should probably be useNonAdjustedPositions
         public replaceRange(sourceFile: SourceFile, range: TextRange, newNode: Node, options: InsertNodeOptions = {}) {
             this.changes.push({ kind: ChangeKind.ReplaceWithSingleNode, sourceFile, range, options, node: newNode });
             return this;
         }
 
-        // TODO (https://github.com/Microsoft/TypeScript/issues/21246): default should probably be useNonAdjustedPositions
-        public replaceNode(sourceFile: SourceFile, oldNode: Node, newNode: Node, options: ChangeNodeOptions = {}) {
-            const pos = getAdjustedStartPosition(sourceFile, oldNode, options, Position.Start);
-            const end = getAdjustedEndPosition(sourceFile, oldNode, options);
-            return this.replaceRange(sourceFile, { pos, end }, newNode, options);
+        public replaceNode(sourceFile: SourceFile, oldNode: Node, newNode: Node, options: ChangeNodeOptions = useNonAdjustedPositions) {
+            return this.replaceRange(sourceFile, getAdjustedRange(sourceFile, oldNode, oldNode, options), newNode, options);
         }
 
-        // TODO (https://github.com/Microsoft/TypeScript/issues/21246): default should probably be useNonAdjustedPositions
-        public replaceNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, newNode: Node, options: ChangeNodeOptions = {}) {
-            const pos = getAdjustedStartPosition(sourceFile, startNode, options, Position.Start);
-            const end = getAdjustedEndPosition(sourceFile, endNode, options);
-            return this.replaceRange(sourceFile, { pos, end }, newNode, options);
+        public replaceNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, newNode: Node, options: ChangeNodeOptions = useNonAdjustedPositions) {
+            this.replaceRange(sourceFile, getAdjustedRange(sourceFile, startNode, endNode, options), newNode, options);
         }
 
-        public replaceRangeWithNodes(sourceFile: SourceFile, range: TextRange, newNodes: ReadonlyArray<Node>, options: InsertNodeOptions = {}) {
+        private replaceRangeWithNodes(sourceFile: SourceFile, range: TextRange, newNodes: ReadonlyArray<Node>, options: InsertNodeOptions = {}) {
             this.changes.push({ kind: ChangeKind.ReplaceWithMultipleNodes, sourceFile, range, options, nodes: newNodes });
             return this;
         }
 
         public replaceNodeWithNodes(sourceFile: SourceFile, oldNode: Node, newNodes: ReadonlyArray<Node>, options: ChangeNodeOptions = useNonAdjustedPositions) {
-            const pos = getAdjustedStartPosition(sourceFile, oldNode, options, Position.Start);
-            const end = getAdjustedEndPosition(sourceFile, oldNode, options);
-            return this.replaceRangeWithNodes(sourceFile, { pos, end }, newNodes, options);
+            return this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, oldNode, oldNode, options), newNodes, options);
         }
 
         public replaceNodeRangeWithNodes(sourceFile: SourceFile, startNode: Node, endNode: Node, newNodes: ReadonlyArray<Node>, options: ChangeNodeOptions = useNonAdjustedPositions) {
-            const pos = getAdjustedStartPosition(sourceFile, startNode, options, Position.Start);
-            const end = getAdjustedEndPosition(sourceFile, endNode, options);
-            return this.replaceRangeWithNodes(sourceFile, { pos, end }, newNodes, options);
+            return this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, startNode, endNode, options), newNodes, options);
         }
 
         private insertNodeAt(sourceFile: SourceFile, pos: number, newNode: Node, options: InsertNodeOptions = {}) {
@@ -342,6 +341,23 @@ namespace ts.textChanges {
         public insertModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
             const pos = before.getStart(sourceFile);
             this.replaceRange(sourceFile, { pos, end: pos }, createToken(modifier), { suffix: " " });
+        }
+
+        public insertCommentBeforeLine(sourceFile: SourceFile, lineNumber: number, position: number, commentText: string): void {
+            const lineStartPosition = getStartPositionOfLine(lineNumber, sourceFile);
+            const startPosition = getFirstNonSpaceCharacterPosition(sourceFile.text, lineStartPosition);
+            // First try to see if we can put the comment on the previous line.
+            // We need to make sure that we are not in the middle of a string literal or a comment.
+            // If so, we do not want to separate the node from its comment if we can.
+            // Otherwise, add an extra new line immediately before the error span.
+            const insertAtLineStart = codefix.isValidLocationToAddComment(sourceFile, startPosition);
+            const token = getTouchingToken(sourceFile, insertAtLineStart ? startPosition : position, /*includeJsDocComment*/ false);
+            const text = `${insertAtLineStart ? "" : this.newLineCharacter}${sourceFile.text.slice(lineStartPosition, startPosition)}//${commentText}${this.newLineCharacter}`;
+            this.insertText(sourceFile, token.getStart(sourceFile), text);
+        }
+
+        private insertText(sourceFile: SourceFile, pos: number, text: string): void {
+            this.changes.push({ kind: ChangeKind.Text, sourceFile, range: { pos, end: pos }, text });
         }
 
         /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
@@ -393,7 +409,7 @@ namespace ts.textChanges {
         }
 
         private replaceConstructorBody(sourceFile: SourceFile, ctr: ConstructorDeclaration, statements: ReadonlyArray<Statement>): void {
-            this.replaceNode(sourceFile, ctr.body, createBlock(statements, /*multiLine*/ true), { useNonAdjustedEndPosition: true });
+            this.replaceNode(sourceFile, ctr.body, createBlock(statements, /*multiLine*/ true));
         }
 
         public insertNodeAtEndOfScope(sourceFile: SourceFile, scope: Node, newNode: Node): void {
@@ -608,7 +624,7 @@ namespace ts.textChanges {
                 const newCls = cls.kind === SyntaxKind.ClassDeclaration
                     ? updateClassDeclaration(cls, cls.decorators, cls.modifiers, cls.name, cls.typeParameters, cls.heritageClauses, members)
                     : updateClassExpression(cls, cls.modifiers, cls.name, cls.typeParameters, cls.heritageClauses, members);
-                this.replaceNode(sourceFile, cls, newCls, { useNonAdjustedEndPosition: true });
+                this.replaceNode(sourceFile, cls, newCls);
             });
         }
 
@@ -647,6 +663,9 @@ namespace ts.textChanges {
             if (change.kind === ChangeKind.Remove) {
                 return "";
             }
+            if (change.kind === ChangeKind.Text) {
+                return change.text;
+            }
 
             const { options = {}, range: { pos } } = change;
             const format = (n: Node) => getFormattedTextOfNode(n, sourceFile, pos, options, newLineCharacter, formatContext, validate);
@@ -659,7 +678,7 @@ namespace ts.textChanges {
         }
 
         /** Note: this may mutate `nodeIn`. */
-        function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, options: ChangeNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText): string {
+        function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, options: InsertNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText): string {
             const { node, text } = getNonformattedText(nodeIn, sourceFile, newLineCharacter);
             if (validate) validate(node, text);
             const { options: formatOptions } = formatContext;
