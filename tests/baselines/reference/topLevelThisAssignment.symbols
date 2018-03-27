@@ -6,3 +6,8 @@ this.a;
 a;
 >a : Symbol(a, Decl(a.js, 0, 0))
 
+=== tests/cases/conformance/salsa/b.js ===
+this.a;
+a;
+>a : Symbol(a, Decl(a.js, 0, 0))
+

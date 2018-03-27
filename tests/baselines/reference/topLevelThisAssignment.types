@@ -14,3 +14,12 @@ this.a;
 a;
 >a : number
 
+=== tests/cases/conformance/salsa/b.js ===
+this.a;
+>this.a : any
+>this : any
+>a : any
+
+a;
+>a : number
+
