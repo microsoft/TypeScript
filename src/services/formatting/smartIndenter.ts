@@ -112,7 +112,7 @@ namespace ts.formatting {
             let previous: Node | undefined;
             let current = precedingToken;
             while (current) {
-                if (positionBelongsToNode(current, position, sourceFile) && shouldIndentChildNode(current, previous, /*isNextChild*/ true)) {
+                if (positionBelongsToNode(current, position, sourceFile) && shouldIndentChildNode(current, previous, sourceFile, /*isNextChild*/ true)) {
                     const currentStart = getStartLineAndCharacterForNode(current, sourceFile);
                     const nextTokenKind = nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken, current, lineAtPosition, sourceFile);
                     const indentationDelta = nextTokenKind !== NextTokenKind.Unknown
@@ -193,7 +193,7 @@ namespace ts.formatting {
                 }
 
                 // increase indentation if parent node wants its content to be indented and parent and child nodes don't start on the same line
-                if (shouldIndentChildNode(parent, current, isNextChild) && !parentAndChildShareLine) {
+                if (shouldIndentChildNode(parent, current, sourceFile, isNextChild) && !parentAndChildShareLine) {
                     indentationDelta += options.indentSize;
                 }
 
@@ -531,21 +531,18 @@ namespace ts.formatting {
             return false;
         }
 
-        export function nodeWillIndentChild(parent: TextRangeWithKind, child: Node | undefined, indentByDefault: boolean): boolean {
+        export function nodeWillIndentChild(parent: TextRangeWithKind, child: TextRangeWithKind | undefined, sourceFile: SourceFileLike | undefined, indentByDefault: boolean): boolean {
             const childKind = child ? child.kind : SyntaxKind.Unknown;
 
             switch (parent.kind) {
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.ObjectLiteralExpression:
-                    if (childKind === SyntaxKind.ObjectLiteralExpression) {
-                        const sourceFile = child.getSourceFile();
-                        if (sourceFile) {
-                            // May not be defined for synthesized nodes.
-                            const startLine = sourceFile.getLineAndCharacterOfPosition(child.getStart()).line;
-                            const endLine = sourceFile.getLineAndCharacterOfPosition(child.getEnd()).line;
-                            return startLine === endLine;
-                        }
+                    if (sourceFile && childKind === SyntaxKind.ObjectLiteralExpression) {
+                        const childStart = skipTrivia(sourceFile.text, child.pos);
+                        const startLine = sourceFile.getLineAndCharacterOfPosition(childStart).line;
+                        const endLine = sourceFile.getLineAndCharacterOfPosition(child.end).line;
+                        return startLine === endLine;
                     }
                     break;
                 case SyntaxKind.DoStatement:
@@ -599,8 +596,8 @@ namespace ts.formatting {
          * True when the parent node should indent the given child by an explicit rule.
          * @param isNextChild If true, we are judging indent of a hypothetical child *after* this one, not the current child.
          */
-        export function shouldIndentChildNode(parent: TextRangeWithKind, child?: Node, isNextChild = false): boolean {
-            return (nodeContentIsAlwaysIndented(parent.kind) || nodeWillIndentChild(parent, child, /*indentByDefault*/ false))
+        export function shouldIndentChildNode(parent: TextRangeWithKind, child?: Node, sourceFile?: SourceFileLike, isNextChild = false): boolean {
+            return (nodeContentIsAlwaysIndented(parent.kind) || nodeWillIndentChild(parent, child, sourceFile, /*indentByDefault*/ false))
                 && !(isNextChild && child && isControlFlowEndingStatement(child.kind, parent));
         }
     }
