@@ -9,7 +9,7 @@
 
 verify.codeFixAll({
     fixId: "constructorForDerivedNeedSuperCall",
-    fixAllDescription: "Fix all like: Add missing 'super()' call",
+    fixAllDescription: "Add all missing super calls",
     newFileContent: `class C extends Object {
     constructor() {
         super();

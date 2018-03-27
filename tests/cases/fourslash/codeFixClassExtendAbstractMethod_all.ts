@@ -9,7 +9,7 @@
 
 verify.codeFixAll({
     fixId: "fixClassDoesntImplementInheritedAbstractMember",
-    fixAllDescription: "Fix all like: Implement inherited abstract class",
+    fixAllDescription: "Implement all inherited abstract classes",
     newFileContent:
 `abstract class A {
     abstract m(): void;

@@ -11,7 +11,7 @@
 
 verify.codeFixAll({
     fixId: "disableJsDiagnostics",
-    fixAllDescription: "Fix all like: Ignore this error message",
+    fixAllDescription: "Add '@ts-ignore' to all error messages",
     newFileContent:
 `let x = "";
 // @ts-ignore

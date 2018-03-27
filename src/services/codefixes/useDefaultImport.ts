@@ -9,7 +9,7 @@ namespace ts.codefix {
             const info = getInfo(sourceFile, start);
             if (!info) return undefined;
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, info));
-            return [createCodeFixAction(changes, Diagnostics.Convert_to_default_import, fixId)];
+            return [createCodeFixAction(changes, Diagnostics.Convert_to_default_import, fixId, Diagnostics.Convert_all_to_default_imports)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {

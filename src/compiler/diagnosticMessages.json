@@ -4027,10 +4027,6 @@
         "category": "Message",
         "code": 95020
     },
-    "Fix all like: ": {
-        "category": "Message",
-        "code": 95021
-    },
     "Add all missing members": {
         "category": "Message",
         "code": 95022
@@ -4043,11 +4039,11 @@
         "category": "Message",
         "code": 95024
     },
-    "Prefix all unused declarations with '_'": {
+    "Prefix all unused declarations with '_' where possible": {
         "category": "Message",
         "code": 95025
     },
-    "Fix all spelling errors": {
+    "Fix all detected spelling errors": {
         "category": "Message",
         "code": 95026
     },
@@ -4082,5 +4078,49 @@
     "Rewrite all as indexed access types": {
         "category": "Message",
         "code": 95034
+    },
+    "Convert all to default imports": {
+        "category": "Message",
+        "code": 95035
+    },
+    "Make all 'super()' calls the first statement in their constructor": {
+        "category": "Message",
+        "code": 95036
+    },
+    "Add 'this.' to all unresolved variables matching a member name": {
+        "category": "Message",
+        "code": 95037
+    },
+    "Change all extended interfaces to 'implements'": {
+        "category": "Message",
+        "code": 95038
+    },
+    "Add all missing super calls": {
+        "category": "Message",
+        "code": 95039
+    },
+    "Implement all inherited abstract classes": {
+        "category": "Message",
+        "code": 95040
+    },
+    "Add all missing 'async' modifiers": {
+        "category": "Message",
+        "code": 95041
+    },
+    "Add '@ts-ignore' to all error messages": {
+        "category": "Message",
+        "code": 95042
+    },
+    "Annotate everything with types from JSDoc": {
+        "category": "Message",
+        "code": 95043
+    },
+    "Add '()' to all uncalled decorators": {
+        "category": "Message",
+        "code": 95044
+    },
+    "Convert all constructor functions to classes": {
+        "category": "Message",
+        "code": 95045
     }
 }

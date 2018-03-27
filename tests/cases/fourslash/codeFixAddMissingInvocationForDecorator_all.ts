@@ -11,7 +11,7 @@
 
 verify.codeFixAll({
     fixId: "addMissingInvocationForDecorator",
-    fixAllDescription: "Fix all like: Call decorator expression",
+    fixAllDescription: "Add '()' to all uncalled decorators",
     newFileContent:
 `declare function foo(): (...args: any[]) => void;
 class C {

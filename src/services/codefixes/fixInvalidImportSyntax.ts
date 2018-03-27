@@ -73,7 +73,7 @@ namespace ts.codefix {
             addRange(fixes, getCodeFixesForImportDeclaration(context, relatedImport));
         }
         const changes = textChanges.ChangeTracker.with(context, t => t.replaceNode(sourceFile, expr, createPropertyAccess(expr, "default"), {}));
-        fixes.push(createCodeFixAction(changes, Diagnostics.Use_synthetic_default_member, /*fixId*/ undefined));
+        fixes.push(createCodeFixActionNoFixId(changes, Diagnostics.Use_synthetic_default_member));
         return fixes;
     }
 }

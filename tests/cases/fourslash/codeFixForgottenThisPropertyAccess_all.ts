@@ -10,7 +10,7 @@
 
 verify.codeFixAll({
     fixId: "forgottenThisPropertyAccess",
-    fixAllDescription: "Fix all like: Add 'this.' to unresolved variable",
+    fixAllDescription: "Add 'this.' to all unresolved variables matching a member name",
     newFileContent:
 `class C {
     foo: number;

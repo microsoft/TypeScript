@@ -11,7 +11,7 @@ namespace ts.codefix {
             const { program, sourceFile, span } = context;
             const changes = textChanges.ChangeTracker.with(context, t =>
                 addMissingMembers(getClass(sourceFile, span.start), sourceFile, program.getTypeChecker(), t, context.preferences));
-            return changes.length === 0 ? undefined : [createCodeFixAction(changes, Diagnostics.Implement_inherited_abstract_class, fixId)];
+            return changes.length === 0 ? undefined : [createCodeFixAction(changes, Diagnostics.Implement_inherited_abstract_class, fixId, Diagnostics.Implement_all_inherited_abstract_classes)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => {

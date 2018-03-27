@@ -11,7 +11,7 @@ namespace ts.codefix {
                 return undefined;
             }
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, token));
-            return [createCodeFixAction(changes, Diagnostics.Add_this_to_unresolved_variable, fixId)];
+            return [createCodeFixAction(changes, Diagnostics.Add_this_to_unresolved_variable, fixId, Diagnostics.Add_this_to_all_unresolved_variables_matching_a_member_name)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {

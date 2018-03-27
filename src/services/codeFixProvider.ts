@@ -38,15 +38,8 @@ namespace ts {
             return createCodeFixActionWorker(diagnosticToString(description), changes, /*fixId*/ undefined, /*fixAllDescription*/ undefined);
         }
 
-        // Use overloads to prevent passing in a parameterized message without a property fix-all description -- messages that include particulars should not have "Fix all like: " messages
-        export function createCodeFixAction(changes: FileTextChanges[], description: DiagnosticAndArguments, fixId: {}, fixAllDescription: DiagnosticAndArguments, command?: CodeActionCommand): CodeFixAction;
-        export function createCodeFixAction(changes: FileTextChanges[], description: DiagnosticMessage, fixId: {}): CodeFixAction;
-        export function createCodeFixAction(changes: FileTextChanges[], description: DiagnosticAndArguments, fixId: {}, fixAllDescription?: DiagnosticAndArguments, command?: CodeActionCommand): CodeFixAction {
-            const descriptionString = diagnosticToString(description);
-            const fixAllDescriptionParts = fixAllDescription
-                ? [textPart(diagnosticToString(fixAllDescription))]
-                : [textPart(getLocaleSpecificMessage(Diagnostics.Fix_all_like_Colon)), textPart(descriptionString)];
-            return createCodeFixActionWorker(descriptionString, changes, fixId, fixAllDescriptionParts, command);
+        export function createCodeFixAction(changes: FileTextChanges[], description: DiagnosticAndArguments, fixId: {}, fixAllDescription: DiagnosticAndArguments, command?: CodeActionCommand): CodeFixAction {
+            return createCodeFixActionWorker(diagnosticToString(description), changes, fixId, [textPart(diagnosticToString(fixAllDescription))], command);
         }
 
         function createCodeFixActionWorker(description: string, changes: FileTextChanges[], fixId?: {}, fixAllDescription?: SymbolDisplayPart[], command?: CodeActionCommand): CodeFixAction {

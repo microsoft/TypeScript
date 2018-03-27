@@ -7,7 +7,7 @@
 
 verify.codeFixAll({
     fixId: "fixSpelling",
-    fixAllDescription: "Fix all spelling errors",
+    fixAllDescription: "Fix all detected spelling errors",
     newFileContent:
 `function f(s: string) {
     s.toString();

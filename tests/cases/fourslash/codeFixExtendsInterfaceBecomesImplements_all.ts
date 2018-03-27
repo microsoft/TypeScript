@@ -6,7 +6,7 @@
 
 verify.codeFixAll({
     fixId: "extendsInterfaceBecomesImplements",
-    fixAllDescription: "Fix all like: Change 'extends' to 'implements'",
+    fixAllDescription: "Change all extended interfaces to 'implements'",
     newFileContent: `interface I {}
 class C implements I {}
 class D implements I {}`,
