@@ -1510,8 +1510,7 @@ namespace ts {
                         break;
 
                     default:
-                        Debug.failBadSyntaxKind(node);
-                        break;
+                        return Debug.failBadSyntaxKind(node);
                 }
 
                 const captureNewTargetStatement = createVariableStatement(
