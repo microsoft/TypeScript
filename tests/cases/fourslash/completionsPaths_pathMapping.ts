@@ -21,5 +21,5 @@
 ////}
 
 const [r0, r1] = test.ranges();
-verify.completionsAt("0", ["a", "b", "dir"].map(name => ({ name, replacementSpan: r0 })));
-verify.completionsAt("1", ["x"].map(name => ({ name, replacementSpan: r1 })));
+verify.completionsAt("0", ["a", "b", "dir"].map(name => ({ name, replacementSpan: r0 })), { isNewIdentifierLocation: true });
+verify.completionsAt("1", ["x"].map(name => ({ name, replacementSpan: r1 })), { isNewIdentifierLocation: true });

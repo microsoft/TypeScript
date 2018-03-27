@@ -1031,6 +1031,8 @@ namespace ts.Completions {
         }
 
         function addTypeProperties(type: Type): void {
+            isNewIdentifierLocation = !!type.getStringIndexType() || !!type.getNumberIndexType();
+
             if (isSourceFileJavaScript(sourceFile)) {
                 // In javascript files, for union types, we don't just get the members that
                 // the individual types have in common, we also include all the members that

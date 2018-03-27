@@ -17,4 +17,4 @@ verify.completionsAt("1", [
     { name: "@a/b", replacementSpan },
     { name: "@c/d", replacementSpan },
     { name: "@e/f", replacementSpan },
-]);
+], { isNewIdentifierLocation: true });

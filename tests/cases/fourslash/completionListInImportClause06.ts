@@ -14,4 +14,4 @@
 // Confirm that entries are de-dup'd.
 verify.completionsAt("1", [
     { name: "@a/b", replacementSpan: test.ranges()[0] },
-]);
+], { isNewIdentifierLocation: true });

@@ -14,4 +14,4 @@
 ////}
 
 const [replacementSpan] = test.ranges();
-verify.completionsAt("", ["src", "foo/"].map(name => ({ name, replacementSpan })));
+verify.completionsAt("", ["src", "foo/"].map(name => ({ name, replacementSpan })), { isNewIdentifierLocation: true });
