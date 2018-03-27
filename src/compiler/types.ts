@@ -4756,9 +4756,7 @@ namespace ts {
     }
 
     /* @internal */
-    export interface UniqueNameHandler {
-        (baseName: string, checkFn?: (name: string) => boolean, optimistic?: boolean): string;
-    }
+    export type UniqueNameHandler = (baseName: string, checkFn?: (name: string) => boolean, optimistic?: boolean) => string;
 
     export interface EmitHelperContext {
         makeFileLevelUniqueName: (name: string) => string;
