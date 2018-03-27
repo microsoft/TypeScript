@@ -30,12 +30,34 @@ const B = function() { this.id = 1; }
 >id : any
 >1 : 1
 
-const b = new B().id;
->b : number
->new B().id : number
->new B() : { id: number; }
+B.prototype.m = function() { this.x = 2; }
+>B.prototype.m = function() { this.x = 2; } : () => void
+>B.prototype.m : any
+>B.prototype : any
 >B : () => void
+>prototype : any
+>m : any
+>function() { this.x = 2; } : () => void
+>this.x = 2 : 2
+>this.x : number
+>this : { id: number; m: () => void; x: number; }
+>x : number
+>2 : 2
+
+const b = new B();
+>b : { id: number; m: () => void; x: number; }
+>new B() : { id: number; m: () => void; x: number; }
+>B : () => void
+
+b.id;
+>b.id : number
+>b : { id: number; m: () => void; x: number; }
 >id : number
+
+b.x;
+>b.x : number
+>b : { id: number; m: () => void; x: number; }
+>x : number
 
 === tests/cases/conformance/salsa/other.js ===
 function A() { this.id = 1; }

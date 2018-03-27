@@ -33,7 +33,7 @@ namespace ts.OutliningElementsCollector {
             const currentLineStart = lineStarts[i];
             const lineEnd = i + 1 === lineStarts.length ? sourceFile.getEnd() : lineStarts[i + 1] - 1;
             const lineText = sourceFile.text.substring(currentLineStart, lineEnd);
-            const result = lineText.match(/^\s*\/\/\s*#(end)?region(?:\s+(.*))?$/);
+            const result = lineText.match(/^\s*\/\/\s*#(end)?region(?:\s+(.*))?(?:\r)?$/);
             if (!result || isInComment(sourceFile, currentLineStart)) {
                 continue;
             }

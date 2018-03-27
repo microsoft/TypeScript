@@ -77,6 +77,7 @@ sourceFile:ES5For-of34.ts
 12>                                         ^
 13>                                          ^
 14>                                           ^^^^^^^^^^^^^^^^
+15>                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
   >
 2 >    for (foo().x of 
@@ -92,6 +93,7 @@ sourceFile:ES5For-of34.ts
 12>                                         ]
 13>                                          
 14>                                           
+15>                                                           ) 
 1->Emitted(15, 5) Source(4, 1) + SourceIndex(0)
 2 >Emitted(15, 10) Source(4, 17) + SourceIndex(0)
 3 >Emitted(15, 14) Source(4, 17) + SourceIndex(0)
@@ -106,6 +108,7 @@ sourceFile:ES5For-of34.ts
 12>Emitted(15, 43) Source(4, 32) + SourceIndex(0)
 13>Emitted(15, 44) Source(4, 32) + SourceIndex(0)
 14>Emitted(15, 60) Source(4, 32) + SourceIndex(0)
+15>Emitted(15, 88) Source(4, 34) + SourceIndex(0)
 ---
 >>>        foo().x = _b.value;
 1 >^^^^^^^^

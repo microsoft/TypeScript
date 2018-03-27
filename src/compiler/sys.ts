@@ -457,6 +457,8 @@ namespace ts {
         clearTimeout?(timeoutId: any): void;
         clearScreen?(): void;
         /*@internal*/ setBlocking?(): void;
+        base64decode?(input: string): string;
+        base64encode?(input: string): string;
     }
 
     export interface FileWatcher {
@@ -527,6 +529,11 @@ namespace ts {
             catch {
               _crypto = undefined;
             }
+
+            const Buffer: {
+                new (input: string, encoding?: string): any;
+                from?(input: string, encoding?: string): any;
+            } = require("buffer").Buffer;
 
             const nodeVersion = getNodeMajorVersion();
             const isNode4OrLater = nodeVersion >= 4;
@@ -620,6 +627,16 @@ namespace ts {
                     if (process.stdout && process.stdout._handle && process.stdout._handle.setBlocking) {
                         process.stdout._handle.setBlocking(true);
                     }
+                },
+                base64decode: Buffer.from ? input => {
+                    return Buffer.from(input, "base64").toString("utf8");
+                } : input => {
+                    return new Buffer(input, "base64").toString("utf8");
+                },
+                base64encode: Buffer.from ? input => {
+                    return Buffer.from(input).toString("base64");
+                } : input => {
+                    return new Buffer(input).toString("base64");
                 }
             };
             return nodeSystem;
@@ -752,16 +769,17 @@ namespace ts {
                 };
 
                 function fileChanged(curr: any, prev: any) {
+                    // previous event kind check is to ensure we recongnize the file as previously also missing when it is restored or renamed twice (that is it disappears and reappears)
+                    // In such case, prevTime returned is same as prev time of event when file was deleted as per node documentation
+                    const isPreviouslyDeleted = +prev.mtime === 0 || eventKind === FileWatcherEventKind.Deleted;
                     if (+curr.mtime === 0) {
-                        if (eventKind === FileWatcherEventKind.Deleted) {
+                        if (isPreviouslyDeleted) {
                             // Already deleted file, no need to callback again
                             return;
                         }
                         eventKind = FileWatcherEventKind.Deleted;
                     }
-                    // previous event kind check is to ensure we send created event when file is restored or renamed twice (that is it disappears and reappears)
-                    // since in that case the prevTime returned is same as prev time of event when file was deleted as per node documentation
-                    else if (+prev.mtime === 0 || eventKind === FileWatcherEventKind.Deleted) {
+                    else if (isPreviouslyDeleted) {
                         eventKind = FileWatcherEventKind.Created;
                     }
                     // If there is no change in modified time, ignore the event

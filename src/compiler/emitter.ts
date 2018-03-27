@@ -1,6 +1,5 @@
 /// <reference path="checker.ts" />
 /// <reference path="transformer.ts" />
-/// <reference path="declarationEmitter.ts" />
 /// <reference path="sourcemap.ts" />
 /// <reference path="comments.ts" />
 
@@ -18,18 +17,16 @@ namespace ts {
      *   Else, calls `getSourceFilesToEmit` with the (optional) target source file to determine the list of source files to emit.
      */
     export function forEachEmittedFile<T>(
-        host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle, emitOnlyDtsFiles: boolean) => T,
-        sourceFilesOrTargetSourceFile?: SourceFile[] | SourceFile,
+        host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) => T,
+        sourceFilesOrTargetSourceFile?: ReadonlyArray<SourceFile> | SourceFile,
         emitOnlyDtsFiles?: boolean) {
 
         const sourceFiles = isArray(sourceFilesOrTargetSourceFile) ? sourceFilesOrTargetSourceFile : getSourceFilesToEmit(host, sourceFilesOrTargetSourceFile);
         const options = host.getCompilerOptions();
         if (options.outFile || options.out) {
             if (sourceFiles.length) {
-                const jsFilePath = options.outFile || options.out;
-                const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
-                const declarationFilePath = options.declaration ? removeFileExtension(jsFilePath) + Extension.Dts : "";
-                const result = action({ jsFilePath, sourceMapFilePath, declarationFilePath }, createBundle(sourceFiles), emitOnlyDtsFiles);
+                const bundle = createBundle(sourceFiles);
+                const result = action(getOutputPathsFor(bundle, host, emitOnlyDtsFiles), bundle);
                 if (result) {
                     return result;
                 }
@@ -37,10 +34,7 @@ namespace ts {
         }
         else {
             for (const sourceFile of sourceFiles) {
-                const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, getOutputExtension(sourceFile, options));
-                const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
-                const declarationFilePath = !isSourceFileJavaScript(sourceFile) && (emitOnlyDtsFiles || options.declaration) ? getDeclarationEmitOutputFilePath(sourceFile, host) : undefined;
-                const result = action({ jsFilePath, sourceMapFilePath, declarationFilePath }, sourceFile, emitOnlyDtsFiles);
+                const result = action(getOutputPathsFor(sourceFile, host, emitOnlyDtsFiles), sourceFile);
                 if (result) {
                     return result;
                 }
@@ -48,8 +42,29 @@ namespace ts {
         }
     }
 
+    /*@internal*/
+    export function getOutputPathsFor(sourceFile: SourceFile | Bundle, host: EmitHost, forceDtsPaths: boolean) {
+        const options = host.getCompilerOptions();
+        if (sourceFile.kind === SyntaxKind.Bundle) {
+            const jsFilePath = options.outFile || options.out;
+            const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
+            const declarationFilePath = (forceDtsPaths || options.declaration) ? removeFileExtension(jsFilePath) + Extension.Dts : undefined;
+            const declarationMapPath = getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
+            return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath };
+        }
+        else {
+            const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, getOutputExtension(sourceFile, options));
+            const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
+            // For legacy reasons (ie, we have baselines capturing the behavior), js files don't report a .d.ts output path - this would only matter if `declaration` and `allowJs` were both on, which is currently an error
+            const isJs = isSourceFileJavaScript(sourceFile);
+            const declarationFilePath = ((forceDtsPaths || options.declaration) && !isJs) ? getDeclarationEmitOutputFilePath(sourceFile, host) : undefined;
+            const declarationMapPath = getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
+            return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath };
+        }
+    }
+
     function getSourceMapFilePath(jsFilePath: string, options: CompilerOptions) {
-        return options.sourceMap ? jsFilePath + ".map" : undefined;
+        return (options.sourceMap && !options.inlineSourceMap) ? jsFilePath + ".map" : undefined;
     }
 
     // JavaScript files are always LanguageVariant.JSX, as JSX syntax is allowed in .js files also.
@@ -70,61 +85,35 @@ namespace ts {
         return Extension.Js;
     }
 
-    function getOriginalSourceFileOrBundle(sourceFileOrBundle: SourceFile | Bundle) {
-        if (sourceFileOrBundle.kind === SyntaxKind.Bundle) {
-            return updateBundle(sourceFileOrBundle, sameMap(sourceFileOrBundle.sourceFiles, getOriginalSourceFile));
-        }
-        return getOriginalSourceFile(sourceFileOrBundle);
-    }
-
     /*@internal*/
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean, transformers?: TransformerFactory<SourceFile>[]): EmitResult {
         const compilerOptions = host.getCompilerOptions();
         const moduleKind = getEmitModuleKind(compilerOptions);
-        const sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
+        const sourceMapDataList: SourceMapData[] = (compilerOptions.sourceMap || compilerOptions.inlineSourceMap || getAreDeclarationMapsEnabled(compilerOptions)) ? [] : undefined;
         const emittedFilesList: string[] = compilerOptions.listEmittedFiles ? [] : undefined;
         const emitterDiagnostics = createDiagnosticCollection();
         const newLine = host.getNewLine();
         const writer = createTextWriter(newLine);
         const sourceMap = createSourceMapWriter(host, writer);
+        const declarationSourceMap = createSourceMapWriter(host, writer, {
+            sourceMap: compilerOptions.declarationMap,
+            sourceRoot: compilerOptions.sourceRoot,
+            mapRoot: compilerOptions.mapRoot,
+            extendedDiagnostics: compilerOptions.extendedDiagnostics,
+            // Explicitly do not passthru either `inline` option
+        });
 
         let currentSourceFile: SourceFile;
         let bundledHelpers: Map<boolean>;
         let isOwnFileEmit: boolean;
         let emitSkipped = false;
 
-        const sourceFiles = getSourceFilesToEmit(host, targetSourceFile);
-
-        // Transform the source files
-        const transform = transformNodes(resolver, host, compilerOptions, sourceFiles, transformers, /*allowDtsFiles*/ false);
-
-        // Create a printer to print the nodes
-        const printer = createPrinter(compilerOptions, {
-            // resolver hooks
-            hasGlobalName: resolver.hasGlobalName,
-
-            // transform hooks
-            onEmitNode: transform.emitNodeWithNotification,
-            substituteNode: transform.substituteNode,
-
-            // sourcemap hooks
-            onEmitSourceMapOfNode: sourceMap.emitNodeWithSourceMap,
-            onEmitSourceMapOfToken: sourceMap.emitTokenWithSourceMap,
-            onEmitSourceMapOfPosition: sourceMap.emitPos,
-
-            // emitter hooks
-            onEmitHelpers: emitHelpers,
-            onSetSourceFile: setSourceFile,
-        });
-
         // Emit each output file
         performance.mark("beforePrint");
-        forEachEmittedFile(host, emitSourceFileOrBundle, transform.transformed, emitOnlyDtsFiles);
+        forEachEmittedFile(host, emitSourceFileOrBundle, getSourceFilesToEmit(host, targetSourceFile), emitOnlyDtsFiles);
         performance.measure("printTime", "beforePrint");
 
-        // Clean up emit nodes on parse tree
-        transform.dispose();
 
         return {
             emitSkipped,
@@ -133,20 +122,9 @@ namespace ts {
             sourceMaps: sourceMapDataList
         };
 
-        function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) {
-            // Make sure not to write js file and source map file if any of them cannot be written
-            if (!host.isEmitBlocked(jsFilePath) && !compilerOptions.noEmit && !compilerOptions.emitDeclarationOnly) {
-                if (!emitOnlyDtsFiles) {
-                    printSourceFileOrBundle(jsFilePath, sourceMapFilePath, sourceFileOrBundle);
-                }
-            }
-            else {
-                emitSkipped = true;
-            }
-
-            if (declarationFilePath) {
-                emitSkipped = writeDeclarationFile(declarationFilePath, getOriginalSourceFileOrBundle(sourceFileOrBundle), host, resolver, emitterDiagnostics, emitOnlyDtsFiles) || emitSkipped;
-            }
+        function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) {
+            emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath);
+            emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath, declarationMapPath);
 
             if (!emitSkipped && emittedFilesList) {
                 if (!emitOnlyDtsFiles) {
@@ -161,11 +139,85 @@ namespace ts {
             }
         }
 
-        function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string, sourceFileOrBundle: SourceFile | Bundle) {
+        function emitJsFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, jsFilePath: string, sourceMapFilePath: string) {
+            const sourceFiles = isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : sourceFileOrBundle.sourceFiles;
+            // Make sure not to write js file and source map file if any of them cannot be written
+            if (host.isEmitBlocked(jsFilePath) || compilerOptions.noEmit || compilerOptions.emitDeclarationOnly) {
+                emitSkipped = true;
+                return;
+            }
+            if (emitOnlyDtsFiles) {
+                return;
+            }
+            // Transform the source files
+            const transform = transformNodes(resolver, host, compilerOptions, sourceFiles, transformers, /*allowDtsFiles*/ false);
+
+            // Create a printer to print the nodes
+            const printer = createPrinter(compilerOptions, {
+                // resolver hooks
+                hasGlobalName: resolver.hasGlobalName,
+
+                // transform hooks
+                onEmitNode: transform.emitNodeWithNotification,
+                substituteNode: transform.substituteNode,
+
+                // sourcemap hooks
+                onEmitSourceMapOfNode: sourceMap.emitNodeWithSourceMap,
+                onEmitSourceMapOfToken: sourceMap.emitTokenWithSourceMap,
+                onEmitSourceMapOfPosition: sourceMap.emitPos,
+
+                // emitter hooks
+                onEmitHelpers: emitHelpers,
+                onSetSourceFile: setSourceFile,
+            });
+
+            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, isSourceFile(sourceFileOrBundle) ? transform.transformed[0] : createBundle(transform.transformed), printer, sourceMap);
+
+            // Clean up emit nodes on parse tree
+            transform.dispose();
+        }
+
+        function emitDeclarationFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, declarationFilePath: string | undefined, declarationMapPath: string | undefined) {
+            if (!(declarationFilePath && !isInJavaScriptFile(sourceFileOrBundle))) {
+                return;
+            }
+            const sourceFiles = isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : sourceFileOrBundle.sourceFiles;
+            // Setup and perform the transformation to retrieve declarations from the input files
+            const nonJsFiles = filter(sourceFiles, isSourceFileNotJavaScript);
+            const inputListOrBundle = (compilerOptions.outFile || compilerOptions.out) ? [createBundle(nonJsFiles)] : nonJsFiles;
+            const declarationTransform = transformNodes(resolver, host, compilerOptions, inputListOrBundle, [transformDeclarations], /*allowDtsFiles*/ false);
+            if (length(declarationTransform.diagnostics)) {
+                for (const diagnostic of declarationTransform.diagnostics) {
+                    emitterDiagnostics.add(diagnostic);
+                }
+            }
+            const declarationPrinter = createPrinter({ ...compilerOptions, onlyPrintJsDocStyle: true } as PrinterOptions, {
+                // resolver hooks
+                hasGlobalName: resolver.hasGlobalName,
+
+                // sourcemap hooks
+                onEmitSourceMapOfNode: declarationSourceMap.emitNodeWithSourceMap,
+                onEmitSourceMapOfToken: declarationSourceMap.emitTokenWithSourceMap,
+                onEmitSourceMapOfPosition: declarationSourceMap.emitPos,
+                onSetSourceFile: setSourceFileForDeclarationSourceMaps,
+
+                // transform hooks
+                onEmitNode: declarationTransform.emitNodeWithNotification,
+                substituteNode: declarationTransform.substituteNode,
+            });
+            const declBlocked = (!!declarationTransform.diagnostics && !!declarationTransform.diagnostics.length) || !!host.isEmitBlocked(declarationFilePath) || !!compilerOptions.noEmit;
+            emitSkipped = emitSkipped || declBlocked;
+            if (!declBlocked || emitOnlyDtsFiles) {
+                printSourceFileOrBundle(declarationFilePath, declarationMapPath, declarationTransform.transformed[0], declarationPrinter, declarationSourceMap);
+            }
+            declarationTransform.dispose();
+        }
+
+        function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string | undefined, sourceFileOrBundle: SourceFile | Bundle, printer: Printer, mapRecorder: SourceMapWriter) {
             const bundle = sourceFileOrBundle.kind === SyntaxKind.Bundle ? sourceFileOrBundle : undefined;
             const sourceFile = sourceFileOrBundle.kind === SyntaxKind.SourceFile ? sourceFileOrBundle : undefined;
             const sourceFiles = bundle ? bundle.sourceFiles : [sourceFile];
-            sourceMap.initialize(jsFilePath, sourceMapFilePath, sourceFileOrBundle);
+            mapRecorder.initialize(jsFilePath, sourceMapFilePath || "", sourceFileOrBundle, sourceMapDataList);
 
             if (bundle) {
                 bundledHelpers = createMap<boolean>();
@@ -179,26 +231,21 @@ namespace ts {
 
             writer.writeLine();
 
-            const sourceMappingURL = sourceMap.getSourceMappingURL();
+            const sourceMappingURL = mapRecorder.getSourceMappingURL();
             if (sourceMappingURL) {
                 writer.write(`//# ${"sourceMappingURL"}=${sourceMappingURL}`); // Sometimes tools can sometimes see this line as a source mapping url comment
             }
 
             // Write the source map
-            if (compilerOptions.sourceMap && !compilerOptions.inlineSourceMap) {
-                writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap.getText(), /*writeByteOrderMark*/ false, sourceFiles);
-            }
-
-            // Record source map data for the test harness.
-            if (sourceMapDataList) {
-                sourceMapDataList.push(sourceMap.getSourceMapData());
+            if (sourceMapFilePath) {
+                writeFile(host, emitterDiagnostics, sourceMapFilePath, mapRecorder.getText(), /*writeByteOrderMark*/ false, sourceFiles);
             }
 
             // Write the output file
             writeFile(host, emitterDiagnostics, jsFilePath, writer.getText(), compilerOptions.emitBOM, sourceFiles);
 
             // Reset state
-            sourceMap.reset();
+            mapRecorder.reset();
             writer.clear();
 
             currentSourceFile = undefined;
@@ -209,6 +256,11 @@ namespace ts {
         function setSourceFile(node: SourceFile) {
             currentSourceFile = node;
             sourceMap.setSourceFile(node);
+        }
+
+        function setSourceFileForDeclarationSourceMaps(node: SourceFile) {
+            currentSourceFile = node;
+            declarationSourceMap.setSourceFile(node);
         }
 
         function emitHelpers(node: Node, writeLines: (text: string) => void) {
@@ -384,6 +436,7 @@ namespace ts {
             emitShebangIfNeeded(bundle);
             emitPrologueDirectivesIfNeeded(bundle);
             emitHelpersIndirect(bundle);
+            emitSyntheticTripleSlashReferencesIfNeeded(bundle);
             for (const sourceFile of bundle.sourceFiles) {
                 print(EmitHint.SourceFile, sourceFile, sourceFile);
             }
@@ -1728,14 +1781,14 @@ namespace ts {
             writeSemicolon();
         }
 
-        function emitTokenWithComment(token: SyntaxKind, pos: number, writer: (s: string) => void, contextNode?: Node, indentLeading?: boolean) {
-            const node = contextNode && getParseTreeNode(contextNode);
+        function emitTokenWithComment(token: SyntaxKind, pos: number, writer: (s: string) => void, contextNode: Node, indentLeading?: boolean) {
+            const node = getParseTreeNode(contextNode);
             const isSimilarNode = node && node.kind === contextNode.kind;
             const startPos = pos;
             if (isSimilarNode) {
                 pos = skipTrivia(currentSourceFile.text, pos);
             }
-            if (emitLeadingCommentsOfPosition && isSimilarNode) {
+            if (emitLeadingCommentsOfPosition && isSimilarNode && contextNode.pos !== startPos) {
                 const needsIndent = indentLeading && !positionsAreOnSameLine(startPos, pos, currentSourceFile);
                 if (needsIndent) {
                     increaseIndent();
@@ -1746,7 +1799,7 @@ namespace ts {
                 }
             }
             pos = writeTokenText(token, writer, pos);
-            if (emitTrailingCommentsOfPosition && isSimilarNode) {
+            if (emitTrailingCommentsOfPosition && isSimilarNode && contextNode.end !== pos) {
                 emitTrailingCommentsOfPosition(pos, /*prefixSpace*/ true);
             }
             return pos;
@@ -2044,6 +2097,7 @@ namespace ts {
             emit(node.name);
 
             let body = node.body;
+            if (!body) return writeSemicolon();
             while (body.kind === SyntaxKind.ModuleDeclaration) {
                 writePunctuation(".");
                 emit((<ModuleDeclaration>body).name);
@@ -2418,11 +2472,31 @@ namespace ts {
             emitSourceFileWorker(node);
         }
 
+        function emitSyntheticTripleSlashReferencesIfNeeded(node: Bundle) {
+            emitTripleSlashDirectives(node.syntheticFileReferences || [], node.syntheticTypeReferences || []);
+        }
+
+        function emitTripleSlashDirectivesIfNeeded(node: SourceFile) {
+            if (node.isDeclarationFile) emitTripleSlashDirectives(node.referencedFiles, node.typeReferenceDirectives);
+        }
+
+        function emitTripleSlashDirectives(files: ReadonlyArray<FileReference>, types: ReadonlyArray<FileReference>) {
+            for (const directive of files) {
+                write(`/// <reference path="${directive.fileName}" />`);
+                writeLine();
+            }
+            for (const directive of types) {
+                write(`/// <reference types="${directive.fileName}" />`);
+                writeLine();
+            }
+        }
+
         function emitSourceFileWorker(node: SourceFile) {
             const statements = node.statements;
             pushNameGenerationScope(node);
             emitHelpersIndirect(node);
             const index = findIndex(statements, statement => !isPrologueDirective(statement));
+            emitTripleSlashDirectivesIfNeeded(node);
             emitList(node, statements, ListFormat.MultiLine, index === -1 ? statements.length : index);
             popNameGenerationScope(node);
         }
@@ -2668,7 +2742,7 @@ namespace ts {
 
             if (format & ListFormat.BracketsMask) {
                 writePunctuation(getOpeningBracket(format));
-                if (isEmpty) {
+                if (isEmpty && !isUndefined) {
                     emitTrailingCommentsOfPosition(children.pos, /*prefixSpace*/ true); // Emit comments within empty bracketed lists
                 }
             }
@@ -2796,7 +2870,7 @@ namespace ts {
             }
 
             if (format & ListFormat.BracketsMask) {
-                if (isEmpty) {
+                if (isEmpty && !isUndefined) {
                     emitLeadingCommentsOfPosition(children.end); // Emit leading comments within empty lists
                 }
                 writePunctuation(getClosingBracket(format));
@@ -2925,21 +2999,6 @@ namespace ts {
                     writeLine();
                 }
             }
-        }
-
-        function guessIndentation(lines: string[]) {
-            let indentation: number;
-            for (const line of lines) {
-                for (let i = 0; i < line.length && (indentation === undefined || i < indentation); i++) {
-                    if (!isWhiteSpaceLike(line.charCodeAt(i))) {
-                        if (indentation === undefined || i < indentation) {
-                            indentation = i;
-                            break;
-                        }
-                    }
-                }
-            }
-            return indentation;
         }
 
         function increaseIndentIf(value: boolean, valueToWriteWhenNotIndenting?: string) {
@@ -3239,8 +3298,15 @@ namespace ts {
          * in global scope. The name is formed by adding an '_n' suffix to the specified base name,
          * where n is a positive integer. Note that names generated by makeTempVariableName and
          * makeUniqueName are guaranteed to never conflict.
+         * If `optimistic` is set, the first instance will use 'baseName' verbatim instead of 'baseName_1'
          */
-        function makeUniqueName(baseName: string): string {
+        function makeUniqueName(baseName: string, optimistic?: boolean): string {
+            if (optimistic) {
+                if (isUniqueName(baseName)) {
+                    generatedNames.set(baseName, true);
+                    return baseName;
+                }
+            }
             // Find the first unique 'name_n', where n is a positive number
             if (baseName.charCodeAt(baseName.length - 1) !== CharacterCodes._) {
                 baseName += "_";
@@ -3335,6 +3401,8 @@ namespace ts {
                     return makeTempVariableName(TempFlags._i, !!(name.autoGenerateFlags & GeneratedIdentifierFlags.ReservedInNestedScopes));
                 case GeneratedIdentifierFlags.Unique:
                     return makeUniqueName(idText(name));
+                case GeneratedIdentifierFlags.OptimisticUnique:
+                    return makeUniqueName(idText(name), /*optimistic*/ true);
             }
 
             Debug.fail("Unsupported GeneratedIdentifierKind.");

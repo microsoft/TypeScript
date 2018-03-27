@@ -278,7 +278,7 @@ namespace ts.FindAllReferences.Core {
             case SyntaxKind.ExportDeclaration:
                 return true;
             case SyntaxKind.CallExpression:
-                return isRequireCall(node.parent as CallExpression, /*checkArgumentIsStringLiteral*/ false) || isImportCall(node.parent as CallExpression);
+                return isRequireCall(node.parent as CallExpression, /*checkArgumentIsStringLiteralLike*/ false) || isImportCall(node.parent as CallExpression);
             default:
                 return false;
         }
@@ -772,9 +772,11 @@ namespace ts.FindAllReferences.Core {
             case SyntaxKind.Identifier:
                 return (node as Identifier).text.length === searchSymbolName.length;
 
-            case SyntaxKind.StringLiteral:
-                return (isLiteralNameOfPropertyDeclarationOrIndexAccess(node as StringLiteral) || isNameOfExternalModuleImportOrDeclaration(node)) &&
-                    (node as StringLiteral).text.length === searchSymbolName.length;
+            case SyntaxKind.StringLiteral: {
+                const str = node as StringLiteral;
+                return (isLiteralNameOfPropertyDeclarationOrIndexAccess(str) || isNameOfModuleDeclaration(node) || isExpressionOfExternalModuleImportEqualsDeclaration(node)) &&
+                    str.text.length === searchSymbolName.length;
+            }
 
             case SyntaxKind.NumericLiteral:
                 return isLiteralNameOfPropertyDeclarationOrIndexAccess(node as NumericLiteral) && (node as NumericLiteral).text.length === searchSymbolName.length;
@@ -1597,7 +1599,10 @@ namespace ts.FindAllReferences.Core {
             return firstDefined(checker.getRootSymbols(sym), rootSymbol => {
                 // if it is in the list, then we are done
                 if (search.includes(rootSymbol)) {
-                    return rootSymbol;
+                    // For a root symbol that is a component of a union or intersection, use the original (union/intersection) symbol.
+                    // That we when a symbol references the whole union we avoid claiming it references some particular member of the union.
+                    // For a transient symbol we want to use the root symbol instead.
+                    return getCheckFlags(sym) & CheckFlags.Synthetic ? sym : rootSymbol;
                 }
 
                 // Finally, try all properties with the same name in any type the containing type extended or implemented, and
@@ -1611,7 +1616,7 @@ namespace ts.FindAllReferences.Core {
 
                     const result: Symbol[] = [];
                     getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.name, result, /*previousIterationSymbolsCache*/ createSymbolTable(), checker);
-                    return find(result, search.includes);
+                    return result.some(search.includes) ? rootSymbol : undefined;
                 }
 
                 return undefined;
@@ -1676,36 +1681,10 @@ namespace ts.FindAllReferences.Core {
     }
 
     function isImplementation(node: Node): boolean {
-        if (!node) {
-            return false;
-        }
-        else if (isVariableLike(node) && hasInitializer(node)) {
-            return true;
-        }
-        else if (node.kind === SyntaxKind.VariableDeclaration) {
-            const parentStatement = getParentStatementOfVariableDeclaration(<VariableDeclaration>node);
-            return parentStatement && hasModifier(parentStatement, ModifierFlags.Ambient);
-        }
-        else if (isFunctionLike(node)) {
-            return !!(node as FunctionLikeDeclaration).body || hasModifier(node, ModifierFlags.Ambient);
-        }
-        else {
-            switch (node.kind) {
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.ClassExpression:
-                case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.ModuleDeclaration:
-                    return true;
-            }
-        }
-        return false;
-    }
-
-    function getParentStatementOfVariableDeclaration(node: VariableDeclaration): VariableStatement {
-        if (node.parent && node.parent.parent && node.parent.parent.kind === SyntaxKind.VariableStatement) {
-            Debug.assert(node.parent.kind === SyntaxKind.VariableDeclarationList);
-            return node.parent.parent;
-        }
+        return !!(node.flags & NodeFlags.Ambient)
+            || (isVariableLike(node) ? hasInitializer(node)
+                : isFunctionLikeDeclaration(node) ? !!node.body
+                : isClassLike(node) || isModuleOrEnumDeclaration(node));
     }
 
     export function getReferenceEntriesForShorthandPropertyAssignment(node: Node, checker: TypeChecker, addReference: (node: Node) => void): void {
@@ -1733,14 +1712,6 @@ namespace ts.FindAllReferences.Core {
     /** Get `C` given `N` if `N` is in the position `class C extends N` or `class C extends foo.N` where `N` is an identifier. */
     function tryGetClassByExtendingIdentifier(node: Node): ClassLikeDeclaration | undefined {
         return tryGetClassExtendingExpressionWithTypeArguments(climbPastPropertyAccess(node).parent);
-    }
-
-    function isNameOfExternalModuleImportOrDeclaration(node: Node): boolean {
-        if (node.kind === SyntaxKind.StringLiteral) {
-            return isNameOfModuleDeclaration(node) || isExpressionOfExternalModuleImportEqualsDeclaration(node);
-        }
-
-        return false;
     }
 
     /**

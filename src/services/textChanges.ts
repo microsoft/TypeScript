@@ -70,7 +70,7 @@ namespace ts.textChanges {
      * By default when removing nodes we adjust start and end positions to respect specification of the trivia above.
      * If pos\end should be interpreted literally 'useNonAdjustedStartPosition' or 'useNonAdjustedEndPosition' should be set to true
      */
-    export type ConfigurableStartEnd = ConfigurableStart & ConfigurableEnd;
+    export interface ConfigurableStartEnd extends ConfigurableStart, ConfigurableEnd {}
 
     export const useNonAdjustedPositions: ConfigurableStartEnd = {
         useNonAdjustedStartPosition: true,
@@ -113,13 +113,11 @@ namespace ts.textChanges {
         readonly range: TextRange;
     }
 
-    export interface ChangeNodeOptions extends ConfigurableStartEnd, InsertNodeOptions {
-        readonly useIndentationFromFile?: boolean;
-    }
+    export interface ChangeNodeOptions extends ConfigurableStartEnd, InsertNodeOptions {}
     interface ReplaceWithSingleNode extends BaseChange {
         readonly kind: ChangeKind.ReplaceWithSingleNode;
         readonly node: Node;
-        readonly options?: ChangeNodeOptions;
+        readonly options?: InsertNodeOptions;
     }
 
     interface RemoveNode extends BaseChange {
@@ -131,14 +129,10 @@ namespace ts.textChanges {
     interface ReplaceWithMultipleNodes extends BaseChange {
         readonly kind: ChangeKind.ReplaceWithMultipleNodes;
         readonly nodes: ReadonlyArray<Node>;
-        readonly options?: ChangeNodeOptions;
+        readonly options?: InsertNodeOptions;
     }
 
-    export function getSeparatorCharacter(separator: Token<SyntaxKind.CommaToken | SyntaxKind.SemicolonToken>) {
-        return tokenToString(separator.kind);
-    }
-
-    export function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: ConfigurableStart, position: Position) {
+    function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: ConfigurableStart, position: Position) {
         if (options.useNonAdjustedStartPosition) {
             return node.getStart(sourceFile);
         }
@@ -168,7 +162,7 @@ namespace ts.textChanges {
         return getStartPositionOfLine(getLineOfLocalPosition(sourceFile, adjustedStartPosition), sourceFile);
     }
 
-    export function getAdjustedEndPosition(sourceFile: SourceFile, node: Node, options: ConfigurableEnd) {
+    function getAdjustedEndPosition(sourceFile: SourceFile, node: Node, options: ConfigurableEnd) {
         if (options.useNonAdjustedEndPosition || isExpression(node)) {
             return node.getEnd();
         }
@@ -225,6 +219,7 @@ namespace ts.textChanges {
             return this;
         }
 
+        /** Warning: This deletes comments too. See `copyComments` in `convertFunctionToEs6Class`. */
         public deleteNode(sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd = {}) {
             const startPosition = getAdjustedStartPosition(sourceFile, node, options, Position.FullStart);
             const endPosition = getAdjustedEndPosition(sourceFile, node, options);
@@ -286,7 +281,7 @@ namespace ts.textChanges {
         }
 
         // TODO (https://github.com/Microsoft/TypeScript/issues/21246): default should probably be useNonAdjustedPositions
-        public replaceRange(sourceFile: SourceFile, range: TextRange, newNode: Node, options: ChangeNodeOptions = {}) {
+        public replaceRange(sourceFile: SourceFile, range: TextRange, newNode: Node, options: InsertNodeOptions = {}) {
             this.changes.push({ kind: ChangeKind.ReplaceWithSingleNode, sourceFile, range, options, node: newNode });
             return this;
         }
@@ -305,7 +300,7 @@ namespace ts.textChanges {
             return this.replaceRange(sourceFile, { pos, end }, newNode, options);
         }
 
-        public replaceRangeWithNodes(sourceFile: SourceFile, range: TextRange, newNodes: ReadonlyArray<Node>, options: ChangeNodeOptions = useNonAdjustedPositions) {
+        public replaceRangeWithNodes(sourceFile: SourceFile, range: TextRange, newNodes: ReadonlyArray<Node>, options: InsertNodeOptions = {}) {
             this.changes.push({ kind: ChangeKind.ReplaceWithMultipleNodes, sourceFile, range, options, nodes: newNodes });
             return this;
         }
@@ -638,7 +633,7 @@ namespace ts.textChanges {
                 // order changes by start position
                 const normalized = stableSort(changesInFile, (a, b) => a.range.pos - b.range.pos);
                 // verify that change intervals do not overlap, except possibly at end points.
-                for (let i = 0; i < normalized.length - 2; i++) {
+                for (let i = 0; i < normalized.length - 1; i++) {
                     Debug.assert(normalized[i].range.end <= normalized[i + 1].range.pos, "Changes overlap", () =>
                         `${JSON.stringify(normalized[i].range)} and ${JSON.stringify(normalized[i + 1].range)}`);
                 }
@@ -671,9 +666,7 @@ namespace ts.textChanges {
             const initialIndentation =
                 options.indentation !== undefined
                     ? options.indentation
-                    : (options.useIndentationFromFile !== false)
-                        ? formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, options.prefix === newLineCharacter || getLineStartPositionForPosition(pos, sourceFile) === pos)
-                        : 0;
+                    : formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, options.prefix === newLineCharacter || getLineStartPositionForPosition(pos, sourceFile) === pos);
             const delta =
                 options.delta !== undefined
                     ? options.delta
@@ -874,7 +867,7 @@ namespace ts.textChanges {
         let ranges = getLeadingCommentRanges(text, position);
         if (!ranges) return position;
         // However we should still skip a pinned comment at the top
-        if (ranges.length && ranges[0].kind === SyntaxKind.MultiLineCommentTrivia && isPinnedComment(text, ranges[0])) {
+        if (ranges.length && ranges[0].kind === SyntaxKind.MultiLineCommentTrivia && isPinnedComment(text, ranges[0].pos)) {
             position = ranges[0].end;
             advancePastLineBreak();
             ranges = ranges.slice(1);

@@ -101,7 +101,6 @@ namespace ts {
         HasLocals = 1 << 5,
         IsInterface = 1 << 6,
         IsObjectLiteralOrClassExpressionMethod = 1 << 7,
-        IsInferenceContainer = 1 << 8,
     }
 
     const binder = createBinder();
@@ -119,8 +118,8 @@ namespace ts {
         let languageVersion: ScriptTarget;
         let parent: Node;
         let container: Node;
+        let thisParentContainer: Node; // Container one level up
         let blockScopeContainer: Node;
-        let inferenceContainer: Node;
         let lastContainer: Node;
         let seenThisKeyword: boolean;
 
@@ -187,8 +186,8 @@ namespace ts {
             languageVersion = undefined;
             parent = undefined;
             container = undefined;
+            thisParentContainer = undefined;
             blockScopeContainer = undefined;
-            inferenceContainer = undefined;
             lastContainer = undefined;
             seenThisKeyword = false;
             currentFlow = undefined;
@@ -224,13 +223,7 @@ namespace ts {
             symbol.flags |= symbolFlags;
 
             node.symbol = symbol;
-
-            if (!symbol.declarations) {
-                symbol.declarations = [node];
-            }
-            else {
-                symbol.declarations.push(node);
-            }
+            symbol.declarations = append(symbol.declarations, node);
 
             if (symbolFlags & SymbolFlags.HasExports && !symbol.exports) {
                 symbol.exports = createSymbolTable();
@@ -304,7 +297,7 @@ namespace ts {
                 case SyntaxKind.Parameter:
                     // Parameters with names are handled at the top of this function.  Parameters
                     // without names can only come from JSDocFunctionTypes.
-                    Debug.assert(node.parent.kind === SyntaxKind.JSDocFunctionType);
+                    Debug.assert(node.parent.kind === SyntaxKind.JSDocFunctionType, "Impossible parameter parent kind", () => `parent is: ${(ts as any).SyntaxKind ? (ts as any).SyntaxKind[node.parent.kind] : node.parent.kind}, expected JSDocFunctionType`);
                     const functionType = <JSDocFunctionType>node.parent;
                     const index = functionType.parameters.indexOf(node as ParameterDeclaration);
                     return "arg" + index as __String;
@@ -486,12 +479,13 @@ namespace ts {
             // and block-container.  Then after we pop out of processing the children, we restore
             // these saved values.
             const saveContainer = container;
+            const saveThisParentContainer = thisParentContainer;
             const savedBlockScopeContainer = blockScopeContainer;
 
             // Depending on what kind of node this is, we may have to adjust the current container
             // and block-container.   If the current node is a container, then it is automatically
             // considered the current block-container as well.  Also, for containers that we know
-            // may contain locals, we proactively initialize the .locals field. We do this because
+            // may contain locals, we eagerly initialize the .locals field. We do this because
             // it's highly likely that the .locals will be needed to place some child in (for example,
             // a parameter, or variable declaration).
             //
@@ -506,6 +500,9 @@ namespace ts {
             // for it.  We must clear this so we don't accidentally move any stale data forward from
             // a previous compilation.
             if (containerFlags & ContainerFlags.IsContainer) {
+                if (node.kind !== SyntaxKind.ArrowFunction) {
+                    thisParentContainer = container;
+                }
                 container = blockScopeContainer = node;
                 if (containerFlags & ContainerFlags.HasLocals) {
                     container.locals = createSymbolTable();
@@ -570,17 +567,12 @@ namespace ts {
                 bindChildren(node);
                 node.flags = seenThisKeyword ? node.flags | NodeFlags.ContainsThis : node.flags & ~NodeFlags.ContainsThis;
             }
-            else if (containerFlags & ContainerFlags.IsInferenceContainer) {
-                const saveInferenceContainer = inferenceContainer;
-                inferenceContainer = node;
-                node.locals = undefined;
-                bindChildren(node);
-                inferenceContainer = saveInferenceContainer;
-            }
             else {
                 bindChildren(node);
             }
+
             container = saveContainer;
+            thisParentContainer = saveThisParentContainer;
             blockScopeContainer = savedBlockScopeContainer;
         }
 
@@ -602,20 +594,25 @@ namespace ts {
             }
         }
 
-        function bindEach(nodes: NodeArray<Node>) {
+        function bindEachFunctionsFirst(nodes: NodeArray<Node>) {
+            bindEach(nodes, n => n.kind === SyntaxKind.FunctionDeclaration ? bind(n) : undefined);
+            bindEach(nodes, n => n.kind !== SyntaxKind.FunctionDeclaration ? bind(n) : undefined);
+        }
+
+        function bindEach(nodes: NodeArray<Node>, bindFunction = bind) {
             if (nodes === undefined) {
                 return;
             }
 
             if (skipTransformFlagAggregation) {
-                forEach(nodes, bind);
+                forEach(nodes, bindFunction);
             }
             else {
                 const savedSubtreeTransformFlags = subtreeTransformFlags;
                 subtreeTransformFlags = TransformFlags.None;
                 let nodeArrayFlags = TransformFlags.None;
                 for (const node of nodes) {
-                    bind(node);
+                    bindFunction(node);
                     nodeArrayFlags |= node.transformFlags & ~TransformFlags.HasComputedFlags;
                 }
                 nodes.transformFlags = nodeArrayFlags | TransformFlags.HasComputedFlags;
@@ -714,6 +711,15 @@ namespace ts {
                     break;
                 case SyntaxKind.JSDocTypedefTag:
                     bindJSDocTypedefTag(<JSDocTypedefTag>node);
+                    break;
+                // In source files and blocks, bind functions first to match hoisting that occurs at runtime
+                case SyntaxKind.SourceFile:
+                    bindEachFunctionsFirst((node as SourceFile).statements);
+                    bind((node as SourceFile).endOfFileToken);
+                    break;
+                case SyntaxKind.Block:
+                case SyntaxKind.ModuleBlock:
+                    bindEachFunctionsFirst((node as Block).statements);
                     break;
                 default:
                     bindEachChild(node);
@@ -1432,9 +1438,6 @@ namespace ts {
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.MappedType:
                     return ContainerFlags.IsContainer | ContainerFlags.HasLocals;
-
-                case SyntaxKind.ConditionalType:
-                    return ContainerFlags.IsInferenceContainer;
 
                 case SyntaxKind.SourceFile:
                     return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals;
@@ -2327,14 +2330,25 @@ namespace ts {
 
         function bindThisPropertyAssignment(node: BinaryExpression | PropertyAccessExpression) {
             Debug.assert(isInJavaScriptFile(node));
-            const container = getThisContainer(node, /*includeArrowFunctions*/ false);
-            switch (container.kind) {
+            const thisContainer = getThisContainer(node, /*includeArrowFunctions*/ false);
+            switch (thisContainer.kind) {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
-                    // Declare a 'member' if the container is an ES5 class or ES6 constructor
-                    container.symbol.members = container.symbol.members || createSymbolTable();
-                    // It's acceptable for multiple 'this' assignments of the same identifier to occur
-                    declareSymbol(container.symbol.members, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
+                    let constructorSymbol = thisContainer.symbol;
+                    // For `f.prototype.m = function() { this.x = 0; }`, `this.x = 0` should modify `f`'s members, not the function expression.
+                    if (isBinaryExpression(thisContainer.parent) && thisContainer.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
+                        const l = thisContainer.parent.left;
+                        if (isPropertyAccessEntityNameExpression(l) && isPrototypeAccess(l.expression)) {
+                            constructorSymbol = getJSInitializerSymbolFromName(l.expression.expression, thisParentContainer);
+                        }
+                    }
+
+                    if (constructorSymbol) {
+                        // Declare a 'member' if the container is an ES5 class or ES6 constructor
+                        constructorSymbol.members = constructorSymbol.members || createSymbolTable();
+                        // It's acceptable for multiple 'this' assignments of the same identifier to occur
+                        declareSymbol(constructorSymbol.members, constructorSymbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
+                    }
                     break;
 
                 case SyntaxKind.Constructor:
@@ -2344,10 +2358,13 @@ namespace ts {
                 case SyntaxKind.SetAccessor:
                     // this.foo assignment in a JavaScript class
                     // Bind this property to the containing class
-                    const containingClass = container.parent;
-                    const symbolTable = hasModifier(container, ModifierFlags.Static) ? containingClass.symbol.exports : containingClass.symbol.members;
+                    const containingClass = thisContainer.parent;
+                    const symbolTable = hasModifier(thisContainer, ModifierFlags.Static) ? containingClass.symbol.exports : containingClass.symbol.members;
                     declareSymbol(symbolTable, containingClass.symbol, node, SymbolFlags.Property, SymbolFlags.None, /*isReplaceableByMethod*/ true);
                     break;
+
+                default:
+                    Debug.fail(Debug.showSyntaxKind(thisContainer));
             }
         }
 
@@ -2355,12 +2372,12 @@ namespace ts {
             if (node.expression.kind === SyntaxKind.ThisKeyword) {
                 bindThisPropertyAssignment(node);
             }
-            else if (isEntityNameExpression(node) && node.parent.parent.kind === SyntaxKind.SourceFile) {
-                if (isPropertyAccessExpression(node.expression) && node.expression.name.escapedText === "prototype") {
-                    bindPrototypePropertyAssignment(node as PropertyAccessEntityNameExpression, node.parent);
+            else if (isPropertyAccessEntityNameExpression(node) && node.parent.parent.kind === SyntaxKind.SourceFile) {
+                if (isPrototypeAccess(node.expression)) {
+                    bindPrototypePropertyAssignment(node, node.parent);
                 }
                 else {
-                    bindStaticPropertyAssignment(node as PropertyAccessEntityNameExpression);
+                    bindStaticPropertyAssignment(node);
                 }
             }
         }
@@ -2417,17 +2434,16 @@ namespace ts {
             bindPropertyAssignment(node.expression, node, /*isPrototypeProperty*/ false);
         }
 
+        function getJSInitializerSymbolFromName(name: EntityNameExpression, lookupContainer?: Node): Symbol {
+            return getJSInitializerSymbol(lookupSymbolForPropertyAccess(name, lookupContainer));
+        }
+
         function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, isPrototypeProperty: boolean) {
-            let symbol = getJSInitializerSymbol(lookupSymbolForPropertyAccess(name));
-            let isToplevelNamespaceableInitializer: boolean;
-            if (isBinaryExpression(propertyAccess.parent)) {
-                const isPrototypeAssignment = isPropertyAccessExpression(propertyAccess.parent.left) && propertyAccess.parent.left.name.escapedText === "prototype";
-                isToplevelNamespaceableInitializer = propertyAccess.parent.parent.parent.kind === SyntaxKind.SourceFile &&
-                    !!getJavascriptInitializer(propertyAccess.parent.right, isPrototypeAssignment);
-            }
-            else {
-                isToplevelNamespaceableInitializer = propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
-            }
+            let symbol = getJSInitializerSymbolFromName(name);
+            const isToplevelNamespaceableInitializer = isBinaryExpression(propertyAccess.parent)
+                ? propertyAccess.parent.parent.parent.kind === SyntaxKind.SourceFile &&
+                    !!getJavascriptInitializer(propertyAccess.parent.right, isPrototypeAccess(propertyAccess.parent.left))
+                : propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
             if (!isPrototypeProperty && (!symbol || !(symbol.flags & SymbolFlags.Namespace)) && isToplevelNamespaceableInitializer) {
                 // make symbols or add declarations for intermediate containers
                 const flags = SymbolFlags.Module | SymbolFlags.JSContainer;
@@ -2458,9 +2474,9 @@ namespace ts {
             declareSymbol(symbolTable, symbol, propertyAccess, symbolFlags, symbolExcludes);
         }
 
-        function lookupSymbolForPropertyAccess(node: EntityNameExpression): Symbol | undefined {
+        function lookupSymbolForPropertyAccess(node: EntityNameExpression, lookupContainer: Node = container): Symbol | undefined {
             if (isIdentifier(node)) {
-                return lookupSymbolForNameWorker(container, node.escapedText);
+                return lookupSymbolForNameWorker(lookupContainer, node.escapedText);
             }
             else {
                 const symbol = getJSInitializerSymbol(lookupSymbolForPropertyAccess(node.expression));
@@ -2485,7 +2501,7 @@ namespace ts {
         function bindCallExpression(node: CallExpression) {
             // We're only inspecting call expressions to detect CommonJS modules, so we can skip
             // this check if we've already seen the module indicator
-            if (!file.commonJsModuleIndicator && isRequireCall(node, /*checkArgumentIsStringLiteral*/ false)) {
+            if (!file.commonJsModuleIndicator && isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ false)) {
                 setCommonJsModuleIndicator(node);
             }
         }
@@ -2626,13 +2642,25 @@ namespace ts {
                 : declareSymbolAndAddToSymbolTable(node, symbolFlags, symbolExcludes);
         }
 
+        function getInferTypeContainer(node: Node): ConditionalTypeNode {
+            while (node) {
+                const parent = node.parent;
+                if (parent && parent.kind === SyntaxKind.ConditionalType && (<ConditionalTypeNode>parent).extendsType === node) {
+                    return <ConditionalTypeNode>parent;
+                }
+                node = parent;
+            }
+            return undefined;
+        }
+
         function bindTypeParameter(node: TypeParameterDeclaration) {
             if (node.parent.kind === SyntaxKind.InferType) {
-                if (inferenceContainer) {
-                    if (!inferenceContainer.locals) {
-                        inferenceContainer.locals = createSymbolTable();
+                const container = getInferTypeContainer(node.parent);
+                if (container) {
+                    if (!container.locals) {
+                        container.locals = createSymbolTable();
                     }
-                    declareSymbol(inferenceContainer.locals, /*parent*/ undefined, node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
+                    declareSymbol(container.locals, /*parent*/ undefined, node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
                 }
                 else {
                     bindAnonymousDeclaration(node, SymbolFlags.TypeParameter, getDeclarationName(node));
