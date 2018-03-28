@@ -16103,7 +16103,9 @@ namespace ts {
         }
 
         function isMethodLike(symbol: Symbol) {
-            return !!(symbol.flags & SymbolFlags.Method || getCheckFlags(symbol) & CheckFlags.SyntheticMethod || isFunctionLikeDeclaration(getAssignedJavascriptInitializer(symbol.valueDeclaration)));
+            return !!(symbol.flags & SymbolFlags.Method ||
+                      getCheckFlags(symbol) & CheckFlags.SyntheticMethod ||
+                      isInJavaScriptFile(symbol.valueDeclaration) && isFunctionLikeDeclaration(getAssignedJavascriptInitializer(symbol.valueDeclaration)));
         }
 
         /**
