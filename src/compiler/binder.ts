@@ -2366,7 +2366,7 @@ namespace ts {
                     // this.foo assignment in a source file
                     // Bind this property in the global namespace or in the exports if in commonjs
                     if ((thisContainer as SourceFile).commonJsModuleIndicator) {
-                        declareSymbol(file.symbol.exports, file.symbol, node, SymbolFlags.Property | SymbolFlags.ExportValue, SymbolFlags.None);
+                        declareSymbol(thisContainer.symbol.exports, thisContainer.symbol, node, SymbolFlags.Property | SymbolFlags.ExportValue, SymbolFlags.None);
                     }
                     else {
                         declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);

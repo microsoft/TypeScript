@@ -419,6 +419,7 @@ namespace ts {
         let deferredGlobalAsyncIteratorType: GenericType;
         let deferredGlobalAsyncIterableIteratorType: GenericType;
         let deferredGlobalTemplateStringsArrayType: ObjectType;
+        let deferredGlobalGlobalType: ObjectType;
 
         let deferredNodes: Node[];
         let deferredUnusedIdentifierNodes: Node[];
@@ -7612,6 +7613,10 @@ namespace ts {
             return deferredGlobalIterableIteratorType || (deferredGlobalIterableIteratorType = getGlobalType("IterableIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
+        function getGlobalGlobalType() {
+            return deferredGlobalGlobalType || (deferredGlobalGlobalType = createAnonymousType(undefined, globals, emptyArray, emptyArray, createIndexInfo(anyType, /*isReadonly*/ false), undefined)) || emptyObjectType;
+        }
+
         function getGlobalTypeOrUndefined(name: __String, arity = 0): ObjectType {
             const symbol = getGlobalSymbol(name, SymbolFlags.Type, /*diagnostic*/ undefined);
             return symbol && <GenericType>getTypeOfGlobalSymbol(symbol, arity);
@@ -13962,8 +13967,13 @@ namespace ts {
                 }
                 if (isSourceFile(container)) {
                     // look up in the source file's locals or exports
-                    const parent = getSymbolOfNode(container);
-                    return createAnonymousType(parent, container.commonJsModuleIndicator ? parent.exports : globals, emptyArray, emptyArray, createIndexInfo(anyType, /*isReadonly*/ false), undefined);
+                    if (container.commonJsModuleIndicator) {
+                        const fileSymbol = getSymbolOfNode(container);
+                        return fileSymbol && getTypeOfSymbol(fileSymbol);
+                    }
+                    else {
+                        return getGlobalGlobalType();
+                    }
                 }
             }
         }
