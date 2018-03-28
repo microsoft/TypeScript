@@ -159,7 +159,7 @@ namespace ts {
         }
     }
 
-    function createChildren(node: Node, sourceFile: SourceFileLike = node.getSourceFile()): Node[] {
+    function createChildren(node: Node, sourceFile: SourceFileLike | undefined): Node[] {
         if (!isNodeKind(node.kind)) {
             return emptyArray;
         }
@@ -172,7 +172,7 @@ namespace ts {
             return children;
         }
 
-        scanner.setText(sourceFile.text);
+        scanner.setText((sourceFile || node.getSourceFile()).text);
         let pos = node.pos;
         const processNode = (child: Node) => {
             addSyntheticNodes(children, pos, child.pos, node);
