@@ -7110,13 +7110,15 @@ interface Event {
     CAPTURING_PHASE: number;
 }
 
-declare var Event: {
-    prototype: Event;
-    new(type: string, eventInitDict?: EventInit): Event;
-    AT_TARGET: number;
-    BUBBLING_PHASE: number;
-    CAPTURING_PHASE: number;
+interface EventConstructor {
+  prototype: Event;
+  new(type: string, eventInitDict?: EventInit): Event;
+  AT_TARGET: number;
+  BUBBLING_PHASE: number;
+  CAPTURING_PHASE: number;
 }
+
+declare var Event: EventConstructor;
 
 interface EventTarget {
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;

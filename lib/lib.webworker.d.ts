@@ -403,13 +403,15 @@ interface Event {
     readonly CAPTURING_PHASE: number;
 }
 
-declare var Event: {
+interface EventConstructor {
     prototype: Event;
     new(typeArg: string, eventInitDict?: EventInit): Event;
     readonly AT_TARGET: number;
     readonly BUBBLING_PHASE: number;
     readonly CAPTURING_PHASE: number;
-};
+}
+
+declare var Event: EventConstructor;
 
 interface EventTarget {
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
