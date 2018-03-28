@@ -16,23 +16,18 @@ namespace ts.codefix {
             }
 
             const fixes: CodeFixAction[] = [
-                {
-                    description: getLocaleSpecificMessage(Diagnostics.Disable_checking_for_this_file),
-                    changes: [createFileTextChanges(sourceFile.fileName, [
+                // fixId unnecessary because adding `// @ts-nocheck` even once will ignore every error in the file.
+                createCodeFixActionNoFixId(
+                    [createFileTextChanges(sourceFile.fileName, [
                         createTextChange(sourceFile.checkJsDirective
                             ? createTextSpanFromBounds(sourceFile.checkJsDirective.pos, sourceFile.checkJsDirective.end)
                             : createTextSpan(0, 0), `// @ts-nocheck${getNewLineOrDefaultFromHost(host, formatContext.options)}`),
                     ])],
-                    // fixId unnecessary because adding `// @ts-nocheck` even once will ignore every error in the file.
-                    fixId: undefined,
-                }];
+                    Diagnostics.Disable_checking_for_this_file),
+            ];
 
             if (textChanges.isValidLocationToAddComment(sourceFile, span.start)) {
-                fixes.unshift({
-                    description: getLocaleSpecificMessage(Diagnostics.Ignore_this_error_message),
-                    changes: textChanges.ChangeTracker.with(context, t => makeChange(t, sourceFile, span.start)),
-                    fixId,
-                });
+                fixes.unshift(createCodeFixAction(textChanges.ChangeTracker.with(context, t => makeChange(t, sourceFile, span.start)), Diagnostics.Ignore_this_error_message, fixId, Diagnostics.Add_ts_ignore_to_all_error_messages));
             }
 
             return fixes;

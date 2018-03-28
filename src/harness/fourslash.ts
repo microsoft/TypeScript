@@ -2457,12 +2457,14 @@ Actual: ${stringify(fullActual)}`);
             this.verifyRangeIs(expectedText, includeWhiteSpace);
         }
 
-        public verifyCodeFixAll(options: FourSlashInterface.VerifyCodeFixAllOptions): void {
-            const { fixId, newFileContent } = options;
-            const fixIds = ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => a.fixId);
-            ts.Debug.assert(ts.contains(fixIds, fixId), "No available code fix has that group id.", () => `Expected '${fixId}'. Available action ids: ${fixIds}`);
+        public verifyCodeFixAll({ fixId, fixAllDescription, newFileContent, commands: expectedCommands }: FourSlashInterface.VerifyCodeFixAllOptions): void {
+            const fixWithId = ts.find(this.getCodeFixes(this.activeFile.fileName), a => a.fixId === fixId);
+            ts.Debug.assert(fixWithId !== undefined, "No available code fix has that group id.", () =>
+                `Expected '${fixId}'. Available action ids: ${ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => a.fixId)}`);
+            ts.Debug.assertEqual(fixWithId.fixAllDescription, fixAllDescription);
+
             const { changes, commands } = this.languageService.getCombinedCodeFix({ type: "file", fileName: this.activeFile.fileName }, fixId, this.formatCodeSettings, ts.defaultPreferences);
-            assert.deepEqual(commands, options.commands);
+            assert.deepEqual(commands, expectedCommands);
             assert(changes.every(c => c.fileName === this.activeFile.fileName), "TODO: support testing codefixes that touch multiple files");
             this.applyChanges(changes);
             this.verifyCurrentFileContent(newFileContent);
@@ -2864,7 +2866,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public verifyRangesWithSameTextAreDocumentHighlights() {
-            this.rangesByText().forEach(ranges => this.verifyRangesAreDocumentHighlights(ranges));
+            this.rangesByText().forEach(ranges => this.verifyRangesAreDocumentHighlights(ranges, /*options*/ undefined));
         }
 
         public verifyDocumentHighlightsOf(startRange: Range, ranges: Range[], options: FourSlashInterface.VerifyDocumentHighlightsOptions | undefined) {
@@ -2873,9 +2875,9 @@ Actual: ${stringify(fullActual)}`);
             this.verifyDocumentHighlights(ranges, fileNames);
         }
 
-        public verifyRangesAreDocumentHighlights(ranges?: Range[]) {
+        public verifyRangesAreDocumentHighlights(ranges: Range[] | undefined, options: FourSlashInterface.VerifyDocumentHighlightsOptions | undefined) {
             ranges = ranges || this.getRanges();
-            const fileNames = unique(ranges, range => range.fileName);
+            const fileNames = options && options.filesToSearch || unique(ranges, range => range.fileName);
             for (const range of ranges) {
                 this.goToRangeStart(range);
                 this.verifyDocumentHighlights(ranges, fileNames);
@@ -4274,8 +4276,8 @@ namespace FourSlashInterface {
             this.state.verifyRangesAreRenameLocations(options);
         }
 
-        public rangesAreDocumentHighlights(ranges?: FourSlash.Range[]) {
-            this.state.verifyRangesAreDocumentHighlights(ranges);
+        public rangesAreDocumentHighlights(ranges?: FourSlash.Range[], options?: VerifyDocumentHighlightsOptions) {
+            this.state.verifyRangesAreDocumentHighlights(ranges, options);
         }
 
         public rangesWithSameTextAreDocumentHighlights() {
@@ -4661,6 +4663,7 @@ namespace FourSlashInterface {
 
     export interface VerifyCodeFixAllOptions {
         fixId: string;
+        fixAllDescription: string;
         newFileContent: string;
         commands: ReadonlyArray<{}>;
     }

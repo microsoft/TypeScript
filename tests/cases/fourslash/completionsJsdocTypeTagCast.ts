@@ -4,4 +4,4 @@
 // @Filename: /a.js
 ////const x = /** @type {{ s: string }} */ ({ /**/ });
 
-verify.completionsAt("", ["s", "x"], { isNewIdentifierLocation: true });
+verify.completionsAt("", ["s", "x"]);

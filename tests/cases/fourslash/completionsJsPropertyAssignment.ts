@@ -7,5 +7,4 @@
 ////const x = { p: "x"  };
 ////x.p = "/**/";
 
-// TODO: GH#22907
-verify.completionsAt("", ["x", "y"], { isNewIdentifierLocation: true });
+verify.completionsAt("", ["x", "y"]);

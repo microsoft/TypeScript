@@ -3,7 +3,6 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes: [Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES6_module.code],
         getCodeActions(context) {
-            const description = getLocaleSpecificMessage(Diagnostics.Convert_to_ES6_module);
             const { sourceFile, program } = context;
             const changes = textChanges.ChangeTracker.with(context, changes => {
                 const moduleExportsChangedToDefault = convertFileToEs6Module(sourceFile, program.getTypeChecker(), changes, program.getCompilerOptions().target);
@@ -14,7 +13,7 @@ namespace ts.codefix {
                 }
             });
             // No support for fix-all since this applies to the whole file at once anyway.
-            return [{ description, changes, fixId: undefined }];
+            return [createCodeFixActionNoFixId(changes, Diagnostics.Convert_to_ES6_module)];
         },
     });
 
