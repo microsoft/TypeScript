@@ -1,13 +1,10 @@
 /// <reference path='fourslash.ts' />
 
-// Test that we leave it alone if the name is a keyword.
-
 // @allowJs: true
-
 // @Filename: /a.js
-////require("foo");
+////const a = require('a');
 
 verify.codeFix({
     description: "Convert to ES6 module",
-    newFileContent: 'import "foo";',
+    newFileContent: "import a from 'a';",
 });
