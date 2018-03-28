@@ -1344,26 +1344,26 @@ namespace ts {
         }
 
         function nextTokenCanFollowModifier() {
-            if (token() === SyntaxKind.ConstKeyword) {
-                // 'const' is only a modifier if followed by 'enum'.
-                return nextToken() === SyntaxKind.EnumKeyword;
+            switch (token()) {
+                case SyntaxKind.ConstKeyword:
+                    // 'const' is only a modifier if followed by 'enum'.
+                    return nextToken() === SyntaxKind.EnumKeyword;
+                case SyntaxKind.ExportKeyword:
+                    nextToken();
+                    if (token() === SyntaxKind.DefaultKeyword) {
+                        return lookAhead(nextTokenCanFollowDefaultKeyword);
+                    }
+                    return token() !== SyntaxKind.AsteriskToken && token() !== SyntaxKind.AsKeyword && token() !== SyntaxKind.OpenBraceToken && canFollowModifier();
+                case SyntaxKind.DefaultKeyword:
+                    return nextTokenCanFollowDefaultKeyword();
+                case SyntaxKind.StaticKeyword:
+                case SyntaxKind.GetKeyword:
+                case SyntaxKind.SetKeyword:
+                    nextToken();
+                    return canFollowModifier();
+                default:
+                    return nextTokenIsOnSameLineAndCanFollowModifier();
             }
-            if (token() === SyntaxKind.ExportKeyword) {
-                nextToken();
-                if (token() === SyntaxKind.DefaultKeyword) {
-                    return lookAhead(nextTokenCanFollowDefaultKeyword);
-                }
-                return token() !== SyntaxKind.AsteriskToken && token() !== SyntaxKind.AsKeyword && token() !== SyntaxKind.OpenBraceToken && canFollowModifier();
-            }
-            if (token() === SyntaxKind.DefaultKeyword) {
-                return nextTokenCanFollowDefaultKeyword();
-            }
-            if (token() === SyntaxKind.StaticKeyword) {
-                nextToken();
-                return canFollowModifier();
-            }
-
-            return nextTokenIsOnSameLineAndCanFollowModifier();
         }
 
         function parseAnyContextualModifier(): boolean {
