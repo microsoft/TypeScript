@@ -576,7 +576,7 @@ namespace ts {
      */
     function findInheritedJSDocComments(declaration: Declaration, propertyName: string, typeChecker: TypeChecker): SymbolDisplayPart[] {
         let foundDocs = false;
-        return flatMap(getAllSuperTypeNodes(declaration), superTypeNode => {
+        return flatMap(declaration.parent ? getAllSuperTypeNodes(declaration.parent) : emptyArray, superTypeNode => {
             if (foundDocs) {
                 return emptyArray;
             }
@@ -592,21 +592,6 @@ namespace ts {
             foundDocs = inheritedDocs.length > 0;
             return inheritedDocs;
         });
-    }
-
-    /**
-     * Finds and returns the `TypeNode` for all super classes and implemented interfaces given a declaration.
-     * @param declaration The possibly-inherited declaration.
-     * @returns A filled array of `TypeNode`s containing all super classes and implemented interfaces if any exist, otherwise an empty array.
-     */
-    function getAllSuperTypeNodes(declaration: Declaration): ReadonlyArray<TypeNode> {
-        const container = declaration.parent;
-        if (!container || (!isClassDeclaration(container) && !isInterfaceDeclaration(container))) {
-            return emptyArray;
-        }
-        const extended = getClassExtendsHeritageClauseElement(container);
-        const types = extended ? [extended] : emptyArray;
-        return isClassLike(container) ? concatenate(types, getClassImplementsHeritageClauseElements(container)) : types;
     }
 
     class SourceFileObject extends NodeObject implements SourceFile {
