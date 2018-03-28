@@ -926,6 +926,21 @@ type T52 = IsNever<any>;  // false
 >T52 : false
 >IsNever : IsNever<T>
 
+function f22<T>(x: T extends (infer U)[] ? U[] : never) {
+>f22 : <T>(x: T extends infer U[] ? U[] : never) => void
+>T : T
+>x : T extends infer U[] ? U[] : never
+>T : T
+>U : U
+>U : U
+
+    let e = x[0];  // {}
+>e : {}
+>x[0] : {}
+>x : T extends infer U[] ? U[] : never
+>0 : 0
+}
+
 // Repros from #21664
 
 type Eq<T, U> = T extends U ? U extends T ? true : false : false;
