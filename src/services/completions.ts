@@ -86,11 +86,11 @@ namespace ts.Completions {
             case StringLiteralCompletionKind.Properties: {
                 const entries: CompletionEntry[] = [];
                 getCompletionEntriesFromSymbols(completion.symbols, entries, sourceFile, sourceFile, checker, ScriptTarget.ESNext, log, CompletionKind.String, preferences); // Target will not be used, so arbitrary
-                return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: true, entries };
+                return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: completion.hasIndexSignature, entries };
             }
             case StringLiteralCompletionKind.Types: {
                 const entries = completion.types.map(type => ({ name: type.value, kindModifiers: ScriptElementKindModifier.none, kind: ScriptElementKind.typeElement, sortText: "0" }));
-                return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: true, entries };
+                return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
             }
             default:
                 return Debug.assertNever(completion);
@@ -360,9 +360,14 @@ namespace ts.Completions {
     }
 
     const enum StringLiteralCompletionKind { Paths, Properties, Types }
+    interface StringLiteralCompletionsFromProperties {
+        readonly kind: StringLiteralCompletionKind.Properties;
+        readonly symbols: ReadonlyArray<Symbol>;
+        readonly hasIndexSignature: boolean;
+    }
     type StringLiteralCompletion =
         | { readonly kind: StringLiteralCompletionKind.Paths, readonly paths: ReadonlyArray<PathCompletions.PathCompletion> }
-        | { readonly kind: StringLiteralCompletionKind.Properties, readonly symbols: ReadonlyArray<Symbol> }
+        | StringLiteralCompletionsFromProperties
         | { readonly kind: StringLiteralCompletionKind.Types, readonly types: ReadonlyArray<StringLiteralType> };
     function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringLiteralLike, position: number, typeChecker: TypeChecker, compilerOptions: CompilerOptions, host: LanguageServiceHost): StringLiteralCompletion | undefined {
         switch (node.parent.kind) {
@@ -377,7 +382,7 @@ namespace ts.Completions {
                         //          bar: string;
                         //      }
                         //      let x: Foo["/*completion position*/"]
-                        return { kind: StringLiteralCompletionKind.Properties, symbols: typeChecker.getTypeFromTypeNode((node.parent.parent as IndexedAccessTypeNode).objectType).getApparentProperties() };
+                        return stringLiteralCompletionsFromProperties(typeChecker.getTypeFromTypeNode((node.parent.parent as IndexedAccessTypeNode).objectType));
                     default:
                         return undefined;
                 }
@@ -396,8 +401,7 @@ namespace ts.Completions {
                     //      foo({
                     //          '/*completion position*/'
                     //      });
-                    const type = typeChecker.getContextualType(node.parent.parent);
-                    return { kind: StringLiteralCompletionKind.Properties, symbols: type && type.getApparentProperties() };
+                    return stringLiteralCompletionsFromProperties(typeChecker.getContextualType(node.parent.parent));
                 }
                 return fromContextualType();
 
@@ -410,7 +414,7 @@ namespace ts.Completions {
                     // }
                     // let a: A;
                     // a['/*completion position*/']
-                    return { kind: StringLiteralCompletionKind.Properties, symbols: typeChecker.getTypeAtLocation(expression).getApparentProperties() };
+                    return stringLiteralCompletionsFromProperties(typeChecker.getTypeAtLocation(expression));
                 }
                 return undefined;
             }
@@ -452,6 +456,10 @@ namespace ts.Completions {
             // i.e. var x: "hi" | "hello" = "/*completion position*/"
             return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker), typeChecker) };
         }
+    }
+
+    function stringLiteralCompletionsFromProperties(type: Type | undefined): StringLiteralCompletionsFromProperties | undefined {
+        return type && { kind: StringLiteralCompletionKind.Properties, symbols: type.getApparentProperties(), hasIndexSignature: hasIndexSignature(type) };
     }
 
     function getStringLiteralTypes(type: Type, typeChecker: TypeChecker, uniques = createMap<true>()): ReadonlyArray<StringLiteralType> {
@@ -1051,7 +1059,7 @@ namespace ts.Completions {
         }
 
         function addTypeProperties(type: Type): void {
-            isNewIdentifierLocation = !!type.getStringIndexType() || !!type.getNumberIndexType();
+            isNewIdentifierLocation = hasIndexSignature(type);
 
             if (isSourceFileJavaScript(sourceFile)) {
                 // In javascript files, for union types, we don't just get the members that
@@ -1454,11 +1462,9 @@ namespace ts.Completions {
             let existingMembers: ReadonlyArray<Declaration>;
 
             if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
-                // We are completing on contextual types, but may also include properties
-                // other than those within the declared type.
-                isNewIdentifierLocation = true;
                 const typeForObject = typeChecker.getContextualType(objectLikeContainer);
                 if (!typeForObject) return GlobalsSearch.Fail;
+                isNewIdentifierLocation = hasIndexSignature(typeForObject);
                 typeMembers = getPropertiesForCompletion(typeForObject, typeChecker, /*isForAccess*/ false);
                 existingMembers = objectLikeContainer.properties;
             }
@@ -2246,5 +2252,9 @@ namespace ts.Completions {
     // TODO: GH#19856 Would like to return `node is Node & { parent: (ClassElement | TypeElement) & { parent: ObjectTypeDeclaration } }` but then compilation takes > 10 minutes
     function isFromObjectTypeDeclaration(node: Node): boolean {
         return node.parent && (isClassElement(node.parent) || isTypeElement(node.parent)) && isObjectTypeDeclaration(node.parent.parent);
+    }
+
+    function hasIndexSignature(type: Type): boolean {
+        return !!type.getStringIndexType() || !!type.getNumberIndexType();
     }
 }
