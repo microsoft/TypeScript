@@ -117,90 +117,6 @@ namespace ts {
             return sourceFile.text.substring(this.getStart(sourceFile), this.getEnd());
         }
 
-        private addSyntheticNodes(nodes: Push<Node>, pos: number, end: number): number {
-            scanner.setTextPos(pos);
-            while (pos < end) {
-                const token = scanner.scan();
-                const textPos = scanner.getTextPos();
-                if (textPos <= end) {
-                    if (token === SyntaxKind.Identifier) {
-                        Debug.fail(`Did not expect ${Debug.showSyntaxKind(this)} to have an Identifier in its trivia`);
-                    }
-                    nodes.push(createNode(token, pos, textPos, this));
-                }
-                pos = textPos;
-                if (token === SyntaxKind.EndOfFileToken) {
-                    break;
-                }
-            }
-            return pos;
-        }
-
-        private createSyntaxList(nodes: NodeArray<Node>): Node {
-            const list = <NodeObject>createNode(SyntaxKind.SyntaxList, nodes.pos, nodes.end, this);
-            list._children = [];
-            let pos = nodes.pos;
-
-            for (const node of nodes) {
-                if (pos < node.pos) {
-                    pos = this.addSyntheticNodes(list._children, pos, node.pos);
-                }
-                list._children.push(node);
-                pos = node.end;
-            }
-            if (pos < nodes.end) {
-                this.addSyntheticNodes(list._children, pos, nodes.end);
-            }
-            return list;
-        }
-
-        private createChildren(sourceFile?: SourceFileLike) {
-            if (!isNodeKind(this.kind)) {
-                this._children = emptyArray;
-                return;
-            }
-
-            if (isJSDocCommentContainingNode(this)) {
-                /** Don't add trivia for "tokens" since this is in a comment. */
-                const children: Node[] = [];
-                this.forEachChild(child => { children.push(child); });
-                this._children = children;
-                return;
-            }
-
-            const children: Node[] = [];
-            scanner.setText((sourceFile || this.getSourceFile()).text);
-            let pos = this.pos;
-            const processNode = (node: Node) => {
-                pos = this.addSyntheticNodes(children, pos, node.pos);
-                children.push(node);
-                pos = node.end;
-            };
-            const processNodes = (nodes: NodeArray<Node>) => {
-                if (pos < nodes.pos) {
-                    pos = this.addSyntheticNodes(children, pos, nodes.pos);
-                }
-                children.push(this.createSyntaxList(nodes));
-                pos = nodes.end;
-            };
-            // jsDocComments need to be the first children
-            if (this.jsDoc) {
-                for (const jsDocComment of this.jsDoc) {
-                    processNode(jsDocComment);
-                }
-            }
-            // For syntactic classifications, all trivia are classcified together, including jsdoc comments.
-            // For that to work, the jsdoc comments should still be the leading trivia of the first child.
-            // Restoring the scanner position ensures that.
-            pos = this.pos;
-            forEachChild(this, processNode, processNodes);
-            if (pos < this.end) {
-                this.addSyntheticNodes(children, pos, this.end);
-            }
-            scanner.setText(undefined);
-            this._children = children;
-        }
-
         public getChildCount(sourceFile?: SourceFile): number {
             this.assertHasRealPosition();
             if (!this._children) this.createChildren(sourceFile);
@@ -247,6 +163,90 @@ namespace ts {
         public forEachChild<T>(cbNode: (node: Node) => T, cbNodeArray?: (nodes: NodeArray<Node>) => T): T {
             return forEachChild(this, cbNode, cbNodeArray);
         }
+    }
+
+    private createChildren(sourceFile?: SourceFileLike) {
+        if (!isNodeKind(this.kind)) {
+            this._children = emptyArray;
+            return;
+        }
+
+        if (isJSDocCommentContainingNode(this)) {
+            /** Don't add trivia for "tokens" since this is in a comment. */
+            const children: Node[] = [];
+            this.forEachChild(child => { children.push(child); });
+            this._children = children;
+            return;
+        }
+
+        const children: Node[] = [];
+        scanner.setText((sourceFile || this.getSourceFile()).text);
+        let pos = this.pos;
+        const processNode = (node: Node) => {
+            pos = this.addSyntheticNodes(children, pos, node.pos);
+            children.push(node);
+            pos = node.end;
+        };
+        const processNodes = (nodes: NodeArray<Node>) => {
+            if (pos < nodes.pos) {
+                pos = this.addSyntheticNodes(children, pos, nodes.pos);
+            }
+            children.push(this.createSyntaxList(nodes));
+            pos = nodes.end;
+        };
+        // jsDocComments need to be the first children
+        if (this.jsDoc) {
+            for (const jsDocComment of this.jsDoc) {
+                processNode(jsDocComment);
+            }
+        }
+        // For syntactic classifications, all trivia are classcified together, including jsdoc comments.
+        // For that to work, the jsdoc comments should still be the leading trivia of the first child.
+        // Restoring the scanner position ensures that.
+        pos = this.pos;
+        forEachChild(this, processNode, processNodes);
+        if (pos < this.end) {
+            this.addSyntheticNodes(children, pos, this.end);
+        }
+        scanner.setText(undefined);
+        this._children = children;
+    }
+
+    private addSyntheticNodes(nodes: Push<Node>, pos: number, end: number): number {
+        scanner.setTextPos(pos);
+        while (pos < end) {
+            const token = scanner.scan();
+            const textPos = scanner.getTextPos();
+            if (textPos <= end) {
+                if (token === SyntaxKind.Identifier) {
+                    Debug.fail(`Did not expect ${Debug.showSyntaxKind(this)} to have an Identifier in its trivia`);
+                }
+                nodes.push(createNode(token, pos, textPos, this));
+            }
+            pos = textPos;
+            if (token === SyntaxKind.EndOfFileToken) {
+                break;
+            }
+        }
+        return pos;
+    }
+
+    private createSyntaxList(nodes: NodeArray<Node>): Node {
+        const list = <NodeObject>createNode(SyntaxKind.SyntaxList, nodes.pos, nodes.end, this);
+        list._children = [];
+        let pos = nodes.pos;
+
+        for (const node of nodes) {
+            if (pos < node.pos) {
+                pos = this.addSyntheticNodes(list._children, pos, node.pos);
+            }
+            list._children.push(node);
+            pos = node.end;
+        }
+        if (pos < nodes.end) {
+            this.addSyntheticNodes(list._children, pos, nodes.end);
+        }
+        return list;
     }
 
     class TokenOrIdentifierObject implements Node {
