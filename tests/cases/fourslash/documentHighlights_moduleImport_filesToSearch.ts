@@ -13,10 +13,5 @@
 // @Filename: /c.ts
 ////import { x } from "foo";
 
-verify.noErrors();
-
 const [r0, r1] = test.ranges();
-//verify.rangesAreDocumentHighlights(test.ranges(), { filesToSearch: ["/a.ts", "/b.ts"] });
-verify.documentHighlightsOf(r1, test.ranges(), {
-    filesToSearch: ["/a.ts", "/b.ts"],
-});
+verify.rangesAreDocumentHighlights(test.ranges(), { filesToSearch: ["/a.ts", "/b.ts"] });
