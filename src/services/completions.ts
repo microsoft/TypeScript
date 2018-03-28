@@ -1644,14 +1644,9 @@ namespace ts.Completions {
             return undefined;
         }
 
-        function isParameterOfConstructorDeclaration(node: Node) {
-            return isParameter(node) && isConstructorDeclaration(node.parent);
-        }
-
-        function isConstructorParameterCompletion(node: Node) {
-            return node.parent &&
-                isParameterOfConstructorDeclaration(node.parent) &&
-                (isParameterPropertyModifier(node.kind) || isDeclarationName(node));
+        function isConstructorParameterCompletion(node: Node): boolean {
+            return !!node.parent && isParameter(node.parent) && isConstructorDeclaration(node.parent.parent)
+                && (isParameterPropertyModifier(node.kind) || isDeclarationName(node));
         }
 
         /**
