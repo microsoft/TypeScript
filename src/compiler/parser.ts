@@ -7013,7 +7013,7 @@ namespace ts {
                 forEachChild(node, visitNode, visitArray);
                 if (hasJSDocNodes(node)) {
                     for (const jsDocComment of node.jsDoc) {
-                        forEachChild(jsDocComment, visitNode, visitArray);
+                        visitNode(<IncrementalNode><Node>jsDocComment);
                     }
                 }
                 checkNodePositions(node, aggressiveChecks);
@@ -7119,10 +7119,16 @@ namespace ts {
         function checkNodePositions(node: Node, aggressiveChecks: boolean) {
             if (aggressiveChecks) {
                 let pos = node.pos;
-                forEachChild(node, child => {
+                const visitNode = (child: Node) => {
                     Debug.assert(child.pos >= pos);
                     pos = child.end;
-                });
+                };
+                if (hasJSDocNodes(node)) {
+                    for (const jsDocComment of node.jsDoc) {
+                        visitNode(jsDocComment);
+                    }
+                }
+                forEachChild(node, visitNode);
                 Debug.assert(pos <= node.end);
             }
         }
@@ -7160,7 +7166,11 @@ namespace ts {
                     // Adjust the pos or end (or both) of the intersecting element accordingly.
                     adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
                     forEachChild(child, visitNode, visitArray);
-
+                    if (hasJSDocNodes(child)) {
+                        for (const jsDocComment of child.jsDoc) {
+                            visitNode(<IncrementalNode><Node>jsDocComment);
+                        }
+                    }
                     checkNodePositions(child, aggressiveChecks);
                     return;
                 }
