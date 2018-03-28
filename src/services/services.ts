@@ -118,21 +118,16 @@ namespace ts {
         }
 
         public getChildCount(sourceFile?: SourceFile): number {
-            this.assertHasRealPosition();
-            if (!this._children) this.createChildren(sourceFile);
-            return this._children.length;
+            return this.getChildren(sourceFile).length;
         }
 
         public getChildAt(index: number, sourceFile?: SourceFile): Node {
-            this.assertHasRealPosition();
-            if (!this._children) this.createChildren(sourceFile);
-            return this._children[index];
+            return this.getChildren(sourceFile)[index];
         }
 
         public getChildren(sourceFile?: SourceFileLike): Node[] {
             this.assertHasRealPosition("Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
-            if (!this._children) this.createChildren(sourceFile);
-            return this._children;
+            return this._children || (this._children = createChildren(this, sourceFile));
         }
 
         public getFirstToken(sourceFile?: SourceFile): Node {
@@ -165,63 +160,61 @@ namespace ts {
         }
     }
 
-    private createChildren(sourceFile?: SourceFileLike) {
-        if (!isNodeKind(this.kind)) {
-            this._children = emptyArray;
-            return;
+    function createChildren(node: Node, sourceFile: SourceFileLike | undefined) {
+        if (!isNodeKind(node.kind)) {
+            return emptyArray;
         }
 
-        if (isJSDocCommentContainingNode(this)) {
+        if (isJSDocCommentContainingNode(node)) {
             /** Don't add trivia for "tokens" since this is in a comment. */
             const children: Node[] = [];
-            this.forEachChild(child => { children.push(child); });
-            this._children = children;
-            return;
+            node.forEachChild(child => { children.push(child); });
+            return children;
         }
 
         const children: Node[] = [];
-        scanner.setText((sourceFile || this.getSourceFile()).text);
-        let pos = this.pos;
+        scanner.setText((sourceFile || node.getSourceFile()).text);
+        let pos = node.pos;
         const processNode = (node: Node) => {
-            pos = this.addSyntheticNodes(children, pos, node.pos);
+            pos = addSyntheticNodes(children, pos, node.pos, node);
             children.push(node);
             pos = node.end;
         };
         const processNodes = (nodes: NodeArray<Node>) => {
             if (pos < nodes.pos) {
-                pos = this.addSyntheticNodes(children, pos, nodes.pos);
+                pos = addSyntheticNodes(children, pos, nodes.pos, node);
             }
-            children.push(this.createSyntaxList(nodes));
+            children.push(createSyntaxList(nodes, node));
             pos = nodes.end;
         };
         // jsDocComments need to be the first children
-        if (this.jsDoc) {
-            for (const jsDocComment of this.jsDoc) {
+        if ((node as JSDocContainer).jsDoc) {
+            for (const jsDocComment of (node as JSDocContainer).jsDoc) {
                 processNode(jsDocComment);
             }
         }
         // For syntactic classifications, all trivia are classcified together, including jsdoc comments.
         // For that to work, the jsdoc comments should still be the leading trivia of the first child.
         // Restoring the scanner position ensures that.
-        pos = this.pos;
-        forEachChild(this, processNode, processNodes);
-        if (pos < this.end) {
-            this.addSyntheticNodes(children, pos, this.end);
+        pos = node.pos;
+        forEachChild(node, processNode, processNodes);
+        if (pos < node.end) {
+            addSyntheticNodes(children, pos, node.end, node);
         }
         scanner.setText(undefined);
-        this._children = children;
+        return children;
     }
-
-    private addSyntheticNodes(nodes: Push<Node>, pos: number, end: number): number {
+    
+    function addSyntheticNodes(nodes: Push<Node>, pos: number, end: number, parent: Node): number {
         scanner.setTextPos(pos);
         while (pos < end) {
             const token = scanner.scan();
             const textPos = scanner.getTextPos();
             if (textPos <= end) {
                 if (token === SyntaxKind.Identifier) {
-                    Debug.fail(`Did not expect ${Debug.showSyntaxKind(this)} to have an Identifier in its trivia`);
+                    Debug.fail(`Did not expect ${Debug.showSyntaxKind(parent)} to have an Identifier in its trivia`);
                 }
-                nodes.push(createNode(token, pos, textPos, this));
+                nodes.push(createNode(token, pos, textPos, parent));
             }
             pos = textPos;
             if (token === SyntaxKind.EndOfFileToken) {
@@ -231,20 +224,20 @@ namespace ts {
         return pos;
     }
 
-    private createSyntaxList(nodes: NodeArray<Node>): Node {
-        const list = <NodeObject>createNode(SyntaxKind.SyntaxList, nodes.pos, nodes.end, this);
+    function createSyntaxList(nodes: NodeArray<Node>, parent: Node): Node {
+        const list = createNode(SyntaxKind.SyntaxList, nodes.pos, nodes.end, parent) as Node as SyntaxList;
         list._children = [];
         let pos = nodes.pos;
 
         for (const node of nodes) {
             if (pos < node.pos) {
-                pos = this.addSyntheticNodes(list._children, pos, node.pos);
+                pos = addSyntheticNodes(list._children, pos, node.pos, parent);
             }
             list._children.push(node);
             pos = node.end;
         }
         if (pos < nodes.end) {
-            this.addSyntheticNodes(list._children, pos, nodes.end);
+            addSyntheticNodes(list._children, pos, nodes.end, parent);
         }
         return list;
     }
