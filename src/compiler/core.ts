@@ -1344,7 +1344,8 @@ namespace ts {
      */
     export function arrayToSet(array: ReadonlyArray<string>): Map<true>;
     export function arrayToSet<T>(array: ReadonlyArray<T>, makeKey: (value: T) => string): Map<true>;
-    export function arrayToSet(array: ReadonlyArray<any>, makeKey?: (value: any) => string): Map<true> {
+    export function arrayToSet<T>(array: ReadonlyArray<T>, makeKey: (value: T) => __String): UnderscoreEscapedMap<true>;
+    export function arrayToSet(array: ReadonlyArray<any>, makeKey?: (value: any) => string | __String): Map<true> | UnderscoreEscapedMap<true> {
         return arrayToMap<any, true>(array, makeKey || (s => s), () => true);
     }
 
