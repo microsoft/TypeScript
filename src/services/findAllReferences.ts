@@ -211,7 +211,7 @@ namespace ts.FindAllReferences {
         return { fileName, span };
     }
 
-    function getTextSpan(node: Node, sourceFile = node.getSourceFile()): TextSpan {
+    function getTextSpan(node: Node, sourceFile?: SourceFile): TextSpan {
         let start = node.getStart(sourceFile);
         let end = node.getEnd();
         if (node.kind === SyntaxKind.StringLiteral) {
