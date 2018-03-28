@@ -1498,6 +1498,59 @@ a type reference of the form 'G&lt;A, B>' places no requirements on 'A' but requ
 
 The process of substituting type arguments for type parameters in a generic type or generic signature is known as ***instantiating*** the generic type or signature. Instantiation of a generic type or signature can fail if the supplied type arguments do not satisfy the constraints of their corresponding type parameters.
 
+### Indexed access types { #indexed-access-types }
+
+An indexed access type represents the type of a property, even when the type or the property name is unknown.
+
+&emsp;&emsp;*IndexedAccessType:*  
+&emsp;&emsp;&emsp;*Type*&emsp;`[`&emsp;*Type*&emsp;`]`
+
+Indexed access types can be created with the above type syntax `T[K]`, as well as the expression syntax `o[k]`.
+In the preceding example, the indexed type is *T* and the key type is *K*.
+However, neither of these forms is guaranteed to result in an indexed access type; when the indexed type is an object type and the key type is a subclass of the String type, the type of the property can be determined at the point the indexed access type is requested.
+The result of `T[K]` and `o[k]` in the second case is just the type of property *K* in type *T*.
+
+For the indexed access type syntax `T[K]`:
+
+* If *K* is a type parameter or key query type, or is a union or intersection containing one of these types, the result is the indexed access type *T[K]* unless *T* is any, in which case the result is any.
+* If *T* did not originate from expression syntax and is a type parameter or key query type, or is a union or intersection containing one of these types, the result is an indexed access type *T[K]* unless *T* is any, in which case the result is any.
+* If *K* is a union, then the result is the union of *T[k]* for all types *k* in *K*.
+* Otherwise, the result is the type of property *K* in type *T*.
+
+Note that the second rule exists for backward compatibility, particularly expressions like `this["p"]`, which should produce the type of the property *p* from the containing class.
+Here, *this* is a generic type, but has a useful apparent type.
+
+### Key query types { #keyof-types }
+
+A key query type represents the property names of a type, even when the type or its property names are not yet known.
+A key query of an object type *O* results in a union of string literal types, where each member of the union corresponds to a property name.
+
+&emsp;&emsp;*KeyQueryType:*  
+&emsp;&emsp;&emsp;`keyof`&emsp;*Type*
+
+Like indexed access types, a type declared as a key query type does not necessarily result in a key query type.
+It may result in either a key query type, the String type, or a subtype of the String type.
+
+For the key query type `keyof T`:
+
+* If *T* is a type parameter, or is a union or intersection containing a type parameter, the result is a key query type of *T*.
+* If *T* is a mapped type, the result is the *constraint type* of the mapped type (see [#mapped-types]).
+* If *T* is the Any type, or *T* has a string index signature, the result is the type string.
+* Otherwise, the result is a union of string literal types, where each member of the union corresponds to a property name of the apparent type of *T*.
+
+```ts
+function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
+    return obj[key];
+}
+
+let x = { foo: 10, bar: "hello!" };
+
+let foo = getProperty(x, "foo"); // number
+let bar = getProperty(x, "bar"); // string
+
+let oops = getProperty(x, "wargarbl"); // Error! "wargarbl" is not "foo" | "bar"
+```
+
 ### <a name="3.6.3"/>3.6.3 This-types
 
 Every class and interface has a ***this-type*** that represents the actual type of instances of the class or interface within the declaration of the class or interface. The this-type is referenced using the keyword `this` in a type position. Within instance methods and constructors of a class, the type of the expression `this` (section [4.2](#4.2)) is the this-type of the class.
