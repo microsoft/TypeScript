@@ -2457,12 +2457,14 @@ Actual: ${stringify(fullActual)}`);
             this.verifyRangeIs(expectedText, includeWhiteSpace);
         }
 
-        public verifyCodeFixAll(options: FourSlashInterface.VerifyCodeFixAllOptions): void {
-            const { fixId, newFileContent } = options;
-            const fixIds = ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => a.fixId);
-            ts.Debug.assert(ts.contains(fixIds, fixId), "No available code fix has that group id.", () => `Expected '${fixId}'. Available action ids: ${fixIds}`);
+        public verifyCodeFixAll({ fixId, fixAllDescription, newFileContent, commands: expectedCommands }: FourSlashInterface.VerifyCodeFixAllOptions): void {
+            const fixWithId = ts.find(this.getCodeFixes(this.activeFile.fileName), a => a.fixId === fixId);
+            ts.Debug.assert(fixWithId !== undefined, "No available code fix has that group id.", () =>
+                `Expected '${fixId}'. Available action ids: ${ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => a.fixId)}`);
+            ts.Debug.assertEqual(fixWithId.fixAllDescription, fixAllDescription);
+
             const { changes, commands } = this.languageService.getCombinedCodeFix({ type: "file", fileName: this.activeFile.fileName }, fixId, this.formatCodeSettings, ts.defaultPreferences);
-            assert.deepEqual(commands, options.commands);
+            assert.deepEqual(commands, expectedCommands);
             assert(changes.every(c => c.fileName === this.activeFile.fileName), "TODO: support testing codefixes that touch multiple files");
             this.applyChanges(changes);
             this.verifyCurrentFileContent(newFileContent);
@@ -4661,6 +4663,7 @@ namespace FourSlashInterface {
 
     export interface VerifyCodeFixAllOptions {
         fixId: string;
+        fixAllDescription: string;
         newFileContent: string;
         commands: ReadonlyArray<{}>;
     }

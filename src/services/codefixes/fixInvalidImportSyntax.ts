@@ -5,7 +5,7 @@ namespace ts.codefix {
         getCodeActions: getActionsForInvalidImport
     });
 
-    function getActionsForInvalidImport(context: CodeFixContext): CodeAction[] | undefined {
+    function getActionsForInvalidImport(context: CodeFixContext): CodeFixAction[] | undefined {
         const sourceFile = context.sourceFile;
 
         // This is the whole import statement, eg:
@@ -19,11 +19,11 @@ namespace ts.codefix {
         return getCodeFixesForImportDeclaration(context, node);
     }
 
-    function getCodeFixesForImportDeclaration(context: CodeFixContext, node: ImportDeclaration) {
+    function getCodeFixesForImportDeclaration(context: CodeFixContext, node: ImportDeclaration): CodeFixAction[] {
         const sourceFile = getSourceFileOfNode(node);
         const namespace = getNamespaceDeclarationNode(node) as NamespaceImport;
         const opts = context.program.getCompilerOptions();
-        const variations: CodeAction[] = [];
+        const variations: CodeFixAction[] = [];
 
         // import Bluebird from "bluebird";
         variations.push(createAction(context, sourceFile, node, makeImportDeclaration(namespace.name, /*namedImports*/ undefined, node.moduleSpecifier)));
@@ -41,12 +41,9 @@ namespace ts.codefix {
         return variations;
     }
 
-    function createAction(context: CodeFixContext, sourceFile: SourceFile, node: Node, replacement: Node): CodeAction {
+    function createAction(context: CodeFixContext, sourceFile: SourceFile, node: Node, replacement: Node): CodeFixAction {
         const changes = textChanges.ChangeTracker.with(context, t => t.replaceNode(sourceFile, node, replacement));
-        return {
-            description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Replace_import_with_0), [changes[0].textChanges[0].newText]),
-            changes,
-        };
+        return createCodeFixActionNoFixId(changes, [Diagnostics.Replace_import_with_0, changes[0].textChanges[0].newText]);
     }
 
     registerCodeFix({
@@ -57,7 +54,7 @@ namespace ts.codefix {
         getCodeActions: getActionsForUsageOfInvalidImport
     });
 
-    function getActionsForUsageOfInvalidImport(context: CodeFixContext): CodeAction[] | undefined {
+    function getActionsForUsageOfInvalidImport(context: CodeFixContext): CodeFixAction[] | undefined {
         const sourceFile = context.sourceFile;
         const targetKind = Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures.code === context.errorCode ? SyntaxKind.CallExpression : SyntaxKind.NewExpression;
         const node = findAncestor(getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false), a => a.kind === targetKind && a.getStart() === context.span.start && a.getEnd() === (context.span.start + context.span.length)) as CallExpression | NewExpression;
@@ -69,15 +66,13 @@ namespace ts.codefix {
         if (!(type.symbol && (type.symbol as TransientSymbol).originatingImport)) {
             return [];
         }
-        const fixes: CodeAction[] = [];
+        const fixes: CodeFixAction[] = [];
         const relatedImport = (type.symbol as TransientSymbol).originatingImport;
         if (!isImportCall(relatedImport)) {
             addRange(fixes, getCodeFixesForImportDeclaration(context, relatedImport));
         }
-        fixes.push({
-            description: getLocaleSpecificMessage(Diagnostics.Use_synthetic_default_member),
-            changes: textChanges.ChangeTracker.with(context, t => t.replaceNode(sourceFile, expr, createPropertyAccess(expr, "default"), {})),
-        });
+        const changes = textChanges.ChangeTracker.with(context, t => t.replaceNode(sourceFile, expr, createPropertyAccess(expr, "default"), {}));
+        fixes.push(createCodeFixActionNoFixId(changes, Diagnostics.Use_synthetic_default_member));
         return fixes;
     }
 }
