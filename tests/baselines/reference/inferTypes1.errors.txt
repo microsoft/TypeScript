@@ -15,9 +15,9 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(75,15): error TS2304: C
 tests/cases/conformance/types/conditional/inferTypes1.ts(75,15): error TS4081: Exported type alias 'T62' has or is using private name 'U'.
 tests/cases/conformance/types/conditional/inferTypes1.ts(75,43): error TS2304: Cannot find name 'U'.
 tests/cases/conformance/types/conditional/inferTypes1.ts(75,43): error TS4081: Exported type alias 'T62' has or is using private name 'U'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(81,44): error TS2344: Type 'U' does not satisfy the constraint 'string'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(82,44): error TS2344: Type 'U' does not satisfy the constraint 'string'.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(143,40): error TS2322: Type 'T' is not assignable to type 'string'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(144,40): error TS2322: Type 'T' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/types/conditional/inferTypes1.ts (16 errors) ====
@@ -127,6 +127,7 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(143,40): error TS2322: 
 !!! error TS2304: Cannot find name 'U'.
                                               ~
 !!! error TS4081: Exported type alias 'T62' has or is using private name 'U'.
+    type T63<T> = T extends (infer A extends infer B ? infer C : infer D) ? string : number;
     
     type T70<T extends string> = { x: T };
     type T71<T> = T extends T70<infer U> ? T70<U> : never;

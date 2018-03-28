@@ -1,0 +1,47 @@
+=== tests/cases/compiler/Class.ts ===
+import { Configurable } from "./Configurable"
+>Configurable : <T extends new (...args: any[]) => {}>(base: T) => T
+
+export class HiddenClass {}
+>HiddenClass : HiddenClass
+
+export class ActualClass extends Configurable(HiddenClass) {}
+>ActualClass : ActualClass
+>Configurable(HiddenClass) : HiddenClass
+>Configurable : <T extends new (...args: any[]) => {}>(base: T) => T
+>HiddenClass : typeof HiddenClass
+
+=== tests/cases/compiler/Configurable.ts ===
+export type Constructor<T> = {
+>Constructor : Constructor<T>
+>T : T
+
+    new(...args: any[]): T;
+>args : any[]
+>T : T
+}
+export function Configurable<T extends Constructor<{}>>(base: T): T {
+>Configurable : <T extends Constructor<{}>>(base: T) => T
+>T : T
+>Constructor : Constructor<T>
+>base : T
+>T : T
+>T : T
+
+    return class extends base {
+>class extends base {        constructor(...args: any[]) {            super(...args);        }    } : { new (...args: any[]): (Anonymous class); prototype: Configurable<any>.(Anonymous class); } & T
+>base : {}
+
+        constructor(...args: any[]) {
+>args : any[]
+
+            super(...args);
+>super(...args) : void
+>super : T
+>...args : any
+>args : any[]
+        }
+
+    };
+}
+
