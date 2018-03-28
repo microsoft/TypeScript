@@ -213,6 +213,10 @@ type T50 = IsNever<never>;  // true
 type T51 = IsNever<number>;  // false
 type T52 = IsNever<any>;  // false
 
+function f22<T>(x: T extends (infer U)[] ? U[] : never) {
+    let e = x[0];  // {}
+}
+
 // Repros from #21664
 
 type Eq<T, U> = T extends U ? U extends T ? true : false : false;
@@ -397,6 +401,9 @@ function f21(x, y) {
     var z2 = y;
     x = y; // Error
     y = x; // Error
+}
+function f22(x) {
+    var e = x[0]; // {}
 }
 var convert = function (value) { return value; };
 var convert2 = function (value) { return value; };
@@ -590,6 +597,7 @@ declare type IsNever<T> = [T] extends [never] ? true : false;
 declare type T50 = IsNever<never>;
 declare type T51 = IsNever<number>;
 declare type T52 = IsNever<any>;
+declare function f22<T>(x: T extends (infer U)[] ? U[] : never): void;
 declare type Eq<T, U> = T extends U ? U extends T ? true : false : false;
 declare type T60 = Eq<true, true>;
 declare type T61 = Eq<true, false>;
