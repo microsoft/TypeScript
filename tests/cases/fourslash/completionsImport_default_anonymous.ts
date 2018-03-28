@@ -1,6 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // Use `/src` to test that directory names are not included in conversion from module path to identifier.
+// @module: esnext
 
 // @Filename: /src/foo-bar.ts
 ////export default 0;

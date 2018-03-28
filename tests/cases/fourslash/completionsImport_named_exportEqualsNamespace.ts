@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts" />
 
+// @module: esnext
+
 // @Filename: /a.d.ts
 ////declare namespace N {
 ////    export const foo = 0;

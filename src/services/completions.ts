@@ -55,7 +55,7 @@ namespace ts.Completions {
             return getLabelCompletionAtPosition(contextToken.parent);
         }
 
-        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, preferences, compilerOptions.target);
+        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, preferences, compilerOptions);
         if (!completionData) {
             return undefined;
         }
@@ -490,7 +490,7 @@ namespace ts.Completions {
         { name, source }: CompletionEntryIdentifier,
         allSourceFiles: ReadonlyArray<SourceFile>,
     ): SymbolCompletion | { type: "request", request: Request } | { type: "none" } {
-        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, { includeCompletionsForModuleExports: true, includeCompletionsWithInsertText: true }, compilerOptions.target);
+        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, { includeCompletionsForModuleExports: true, includeCompletionsWithInsertText: true }, compilerOptions);
         if (!completionData) {
             return { type: "none" };
         }
@@ -767,7 +767,7 @@ namespace ts.Completions {
         position: number,
         allSourceFiles: ReadonlyArray<SourceFile>,
         preferences: Pick<UserPreferences, "includeCompletionsForModuleExports" | "includeCompletionsWithInsertText">,
-        target: ScriptTarget,
+        compilerOptions: CompilerOptions,
     ): CompletionData | Request | undefined {
         let start = timestamp();
         let currentToken = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false); // TODO: GH#15853
@@ -1169,11 +1169,15 @@ namespace ts.Completions {
                 }
             }
 
-            // Don't suggest import completions for a commonjs-only module
-            if (preferences.includeCompletionsForModuleExports && !(sourceFile.commonJsModuleIndicator && !sourceFile.externalModuleIndicator)) {
-                getSymbolsFromOtherSourceFileExports(symbols, previousToken && isIdentifier(previousToken) ? previousToken.text : "", target);
+            if (shouldOfferImportCompletions()) {
+                getSymbolsFromOtherSourceFileExports(symbols, previousToken && isIdentifier(previousToken) ? previousToken.text : "", compilerOptions.target);
             }
             filterGlobalCompletion(symbols);
+        }
+
+        function shouldOfferImportCompletions(): boolean {
+            // If not already a module, must have modules enabled and not currently be in a commonjs module. (TODO: import completions for commonjs)
+            return preferences.includeCompletionsForModuleExports && (!!sourceFile.externalModuleIndicator || !sourceFile.commonJsModuleIndicator && !!compilerOptions.module);
         }
 
         function isSnippetScope(scopeNode: Node): boolean {
