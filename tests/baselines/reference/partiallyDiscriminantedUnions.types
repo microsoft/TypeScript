@@ -96,9 +96,9 @@ function isShape(s : Shapes): s is Shape {
     return !Array.isArray(s);
 >!Array.isArray(s) : boolean
 >Array.isArray(s) : boolean
->Array.isArray : (arg: any) => arg is any[]
+>Array.isArray : (arg: any) => arg is ReadonlyArray<any>
 >Array : ArrayConstructor
->isArray : (arg: any) => arg is any[]
+>isArray : (arg: any) => arg is ReadonlyArray<any>
 >s : Shapes
 }
 

@@ -6,7 +6,7 @@
  */
 var isArray = Array.isArray;
 >isArray : Function
->Array.isArray : (arg: any) => arg is any[]
+>Array.isArray : (arg: any) => arg is ReadonlyArray<any>
 >Array : ArrayConstructor
->isArray : (arg: any) => arg is any[]
+>isArray : (arg: any) => arg is ReadonlyArray<any>
 
