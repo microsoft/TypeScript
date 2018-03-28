@@ -1346,7 +1346,7 @@ namespace ts {
             const categorizedOptions = createMultiMap<CommandLineOption>();
             for (const option of optionDeclarations) {
                 const { category } = option;
-                if (category !== undefined && category !== Diagnostics.Command_line_Options && category !== Diagnostics.Advanced_Options) {
+                if (category !== undefined && category !== Diagnostics.Command_line_Options) {
                     categorizedOptions.add(getLocaleSpecificMessage(category), option);
                 }
             }
