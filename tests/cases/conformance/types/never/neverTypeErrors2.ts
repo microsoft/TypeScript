@@ -21,3 +21,5 @@ function f3(): never {
 
 function f4(): never {
 }
+
+for (const n of f4()) {}
