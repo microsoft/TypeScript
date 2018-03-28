@@ -941,6 +941,21 @@ function f22<T>(x: T extends (infer U)[] ? U[] : never) {
 >0 : 0
 }
 
+function f23<T extends string[]>(x: T extends (infer U)[] ? U[] : never) {
+>f23 : <T extends string[]>(x: T extends infer U[] ? U[] : never) => void
+>T : T
+>x : T extends infer U[] ? U[] : never
+>T : T
+>U : U
+>U : U
+
+    let e = x[0];  // string
+>e : string
+>x[0] : string
+>x : T extends infer U[] ? U[] : never
+>0 : 0
+}
+
 // Repros from #21664
 
 type Eq<T, U> = T extends U ? U extends T ? true : false : false;
