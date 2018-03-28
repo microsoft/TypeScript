@@ -132,15 +132,8 @@ namespace ts.FindAllReferences {
 
         const { node, name, kind, displayParts } = info;
         const sourceFile = node.getSourceFile();
-        return {
-            containerKind: ScriptElementKind.unknown,
-            containerName: "",
-            fileName: sourceFile.fileName,
-            kind,
-            name,
-            textSpan: createTextSpanFromNode(node, sourceFile),
-            displayParts
-        };
+        const textSpan = getTextSpan(isComputedPropertyName(node) ? node.expression : node, sourceFile);
+        return { containerKind: ScriptElementKind.unknown, containerName: "", fileName: sourceFile.fileName, kind, name, textSpan, displayParts };
     }
 
     function getDefinitionKindAndDisplayParts(symbol: Symbol, checker: TypeChecker, node: Node): { displayParts: SymbolDisplayPart[], kind: ScriptElementKind } {
@@ -218,8 +211,8 @@ namespace ts.FindAllReferences {
         return { fileName, span };
     }
 
-    function getTextSpan(node: Node): TextSpan {
-        let start = node.getStart();
+    function getTextSpan(node: Node, sourceFile?: SourceFile): TextSpan {
+        let start = node.getStart(sourceFile);
         let end = node.getEnd();
         if (node.kind === SyntaxKind.StringLiteral) {
             start += 1;
