@@ -1153,33 +1153,17 @@ The only possible values for the Void type are `null` and `undefined`. The Void 
 
 The Null type corresponds to the similarly named JavaScript primitive type and is the type of the `null` literal.
 
-The `null` literal references the one and only value of the Null type. It is not possible to directly reference the Null type itself.
+The `null` literal references the one and only value of the Null type. The `null` keyword references the Null type.
 
-The Null type is a subtype of all types, except the Undefined type. This means that `null` is considered a valid value for all primitive types, object types, union types, intersection types, and type parameters, including even the Number and Boolean primitive types.
-
-Some examples:
-
-```TypeScript
-var n: number = null;   // Primitives can be null  
-var x = null;           // Same as x: any = null  
-var e: Null;            // Error, can't reference Null type
-```
+The only possible value for the Null type is `null`, except when strict null checks are turned off, as described in [#sec-strict-null-checks].
 
 ### <a name="3.2.7"/>3.2.7 The Undefined Type
 
 The Undefined type corresponds to the similarly named JavaScript primitive type and is the type of the `undefined` literal.
 
-The `undefined` literal denotes the value given to all uninitialized variables and is the one and only value of the Undefined type. It is not possible to directly reference the Undefined type itself.
+The `undefined` literal denotes the value given to all uninitialized variables and is the one and only value of the Undefined type. The `undefined` keyword references the Undefined type.
 
-The undefined type is a subtype of all types. This means that `undefined` is considered a valid value for all primitive types, object types, union types, intersection types, and type parameters.
-
-Some examples:
-
-```TypeScript
-var n: number;          // Same as n: number = undefined  
-var x = undefined;      // Same as x: any = undefined  
-var e: Undefined;       // Error, can't reference Undefined type
-```
+The only possible value for the Undefined type is `undefined`, except when strict null checks are turned off, as described in [#sec-strict-null-checks].
 
 ### <a name="3.2.8"/>3.2.8 Enum Types
 
@@ -1194,6 +1178,35 @@ Specialized signatures (section [3.9.2.4](#3.9.2.4)) permit string literals to b
 All string literal types are subtypes of the String primitive type.
 
 *TODO: Update to reflect [expanded support for string literal types](https://github.com/Microsoft/TypeScript/pull/5185)*.
+
+## The Non-Primitive Object Type
+
+The non-primitive object type represents any object that is not a JavaScript primitive.
+
+The `object` keyword references the non-primitive object type.
+
+The apparent type of the non-primitive object type is the empty object type.
+The non-primitive object type is assignable to some other type *T* if the empty object type is assignable to *T*.
+
+All object types are assignable to the non-primitive object type.
+Primitive types and unconstrained type parameters are not assignable to the non-primitive object type.
+
+For example, assignment of a primitive type to a variable of the non-primitive type will fail:
+
+```ts
+function assign(target: object, source: object) {
+    // ...
+}
+assign("hello", null);
+```
+
+Structural compatibility permits indirect assignments of primitives to the non-primitive type via intermediate assignment to a compatible object type:
+
+```ts
+let s: string = "hello";
+let intermediate: {} = s;
+let o: object = intermediate;
+```
 
 ## <a name="3.3"/>3.3 Object Types
 
