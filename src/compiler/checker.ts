@@ -6233,7 +6233,7 @@ namespace ts {
         }
 
         function getDefaultConstraintOfConditionalType(type: ConditionalType) {
-            return getUnionType([getTrueTypeFromConditionalType(type), getFalseTypeFromConditionalType(type)]);
+            return getUnionType([getInferredTrueTypeFromConditionalType(type), getFalseTypeFromConditionalType(type)]);
         }
 
         function getConstraintOfDistributiveConditionalType(type: ConditionalType): Type {
@@ -8343,16 +8343,19 @@ namespace ts {
             // If this is a distributive conditional type and the check type is generic we need to defer
             // resolution of the conditional type such that a later instantiation will properly distribute
             // over union types.
-            if (!root.isDistributive || !maybeTypeOfKind(checkType, TypeFlags.Instantiable)) {
+            const isDeferred = root.isDistributive && maybeTypeOfKind(checkType, TypeFlags.Instantiable);
                 let combinedMapper: TypeMapper;
                 if (root.inferTypeParameters) {
                     const context = createInferenceContext(root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);
+                if (!isDeferred) {
                     // We don't want inferences from constraints as they may cause us to eagerly resolve the
                     // conditional type instead of deferring resolution. Also, we always want strict function
                     // types rules (i.e. proper contravariance) for inferences.
                     inferTypes(context.inferences, checkType, extendsType, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
+                }
                     combinedMapper = combineTypeMappers(mapper, context);
                 }
+            if (!isDeferred) {
                 // Return union of trueType and falseType for 'any' since it matches anything
                 if (checkType.flags & TypeFlags.Any) {
                     return getUnionType([instantiateType(root.trueType, combinedMapper || mapper), instantiateType(root.falseType, mapper)]);
@@ -8381,6 +8384,7 @@ namespace ts {
             result.checkType = erasedCheckType;
             result.extendsType = extendsType;
             result.mapper = mapper;
+            result.combinedMapper = combinedMapper;
             result.aliasSymbol = root.aliasSymbol;
             result.aliasTypeArguments = instantiateTypes(root.aliasTypeArguments, mapper);
             return result;
@@ -8392,6 +8396,12 @@ namespace ts {
 
         function getFalseTypeFromConditionalType(type: ConditionalType) {
             return type.resolvedFalseType || (type.resolvedFalseType = instantiateType(type.root.falseType, type.mapper));
+        }
+
+        function getInferredTrueTypeFromConditionalType(type: ConditionalType) {
+            return type.combinedMapper ?
+                type.resolvedInferredTrueType || (type.resolvedInferredTrueType = instantiateType(type.root.trueType, type.combinedMapper)) :
+                getTrueTypeFromConditionalType(type);
         }
 
         function getInferTypeParameters(node: ConditionalTypeNode): TypeParameter[] {
