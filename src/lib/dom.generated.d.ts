@@ -15059,6 +15059,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     msWriteProfilerMark(profilerMarkName: string): void;
     open(url?: string, target?: string, features?: string, replace?: boolean): Window | null;
     postMessage(message: any, targetOrigin: string, transfer?: any[]): void;
+    print(): void;
     prompt(message?: string, _default?: string): string | null;
     releaseEvents(): void;
     requestAnimationFrame(callback: FrameRequestCallback): number;
