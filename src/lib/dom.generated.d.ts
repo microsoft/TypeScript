@@ -4609,14 +4609,15 @@ interface Event {
     readonly NONE: number;
 }
 
-declare var Event: {
+interface EventConstructor {
     prototype: Event;
     new(typeArg: string, eventInitDict?: EventInit): Event;
     readonly AT_TARGET: number;
     readonly BUBBLING_PHASE: number;
     readonly CAPTURING_PHASE: number;
-    readonly NONE: number;
-};
+}
+
+declare var Event: EventConstructor;
 
 interface EventListenerObject {
     handleEvent(evt: Event): void;
