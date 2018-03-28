@@ -330,7 +330,7 @@ namespace ts {
         return result;
     }
 
-    export function getPositionOfLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number {
+    export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number): number {
         return computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character, sourceFile.text);
     }
 

@@ -72,8 +72,7 @@ namespace ts {
                     return visitJsxFragment(node, /*isChild*/ true);
 
                 default:
-                    Debug.failBadSyntaxKind(node);
-                    return undefined;
+                    return Debug.failBadSyntaxKind(node);
             }
         }
 

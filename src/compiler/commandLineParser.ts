@@ -195,6 +195,13 @@ namespace ts {
             description: Diagnostics.Generates_corresponding_d_ts_file,
         },
         {
+            name: "declarationMap",
+            type: "boolean",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Basic_Options,
+            description: Diagnostics.Generates_a_sourcemap_for_each_corresponding_d_ts_file,
+        },
+        {
             name: "emitDeclarationOnly",
             type: "boolean",
             category: Diagnostics.Advanced_Options,

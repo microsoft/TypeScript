@@ -20,7 +20,7 @@ namespace ts.NavigateTo {
                 continue;
             }
 
-            forEachEntry(sourceFile.getNamedDeclarations(), (declarations, name) => {
+            sourceFile.getNamedDeclarations().forEach((declarations, name) => {
                 getItemsFromNamedDeclaration(patternMatcher, name, declarations, checker, sourceFile.fileName, rawItems);
             });
         }

@@ -1,0 +1,50 @@
+=== tests/cases/compiler/declarationMapsWithoutDeclaration.ts ===
+module m2 {
+>m2 : Symbol(m2, Decl(declarationMapsWithoutDeclaration.ts, 0, 0), Decl(declarationMapsWithoutDeclaration.ts, 11, 3))
+
+    export interface connectModule {
+>connectModule : Symbol(connectModule, Decl(declarationMapsWithoutDeclaration.ts, 0, 11))
+
+        (res, req, next): void;
+>res : Symbol(res, Decl(declarationMapsWithoutDeclaration.ts, 2, 9))
+>req : Symbol(req, Decl(declarationMapsWithoutDeclaration.ts, 2, 13))
+>next : Symbol(next, Decl(declarationMapsWithoutDeclaration.ts, 2, 18))
+    }
+    export interface connectExport {
+>connectExport : Symbol(connectExport, Decl(declarationMapsWithoutDeclaration.ts, 3, 5))
+
+        use: (mod: connectModule) => connectExport;
+>use : Symbol(connectExport.use, Decl(declarationMapsWithoutDeclaration.ts, 4, 36))
+>mod : Symbol(mod, Decl(declarationMapsWithoutDeclaration.ts, 5, 14))
+>connectModule : Symbol(connectModule, Decl(declarationMapsWithoutDeclaration.ts, 0, 11))
+>connectExport : Symbol(connectExport, Decl(declarationMapsWithoutDeclaration.ts, 3, 5))
+
+        listen: (port: number) => void;
+>listen : Symbol(connectExport.listen, Decl(declarationMapsWithoutDeclaration.ts, 5, 51))
+>port : Symbol(port, Decl(declarationMapsWithoutDeclaration.ts, 6, 17))
+    }
+
+}
+
+var m2: {
+>m2 : Symbol(m2, Decl(declarationMapsWithoutDeclaration.ts, 0, 0), Decl(declarationMapsWithoutDeclaration.ts, 11, 3))
+
+    (): m2.connectExport;
+>m2 : Symbol(m2, Decl(declarationMapsWithoutDeclaration.ts, 0, 0), Decl(declarationMapsWithoutDeclaration.ts, 11, 3))
+>connectExport : Symbol(m2.connectExport, Decl(declarationMapsWithoutDeclaration.ts, 3, 5))
+
+    test1: m2.connectModule;
+>test1 : Symbol(test1, Decl(declarationMapsWithoutDeclaration.ts, 12, 25))
+>m2 : Symbol(m2, Decl(declarationMapsWithoutDeclaration.ts, 0, 0), Decl(declarationMapsWithoutDeclaration.ts, 11, 3))
+>connectModule : Symbol(m2.connectModule, Decl(declarationMapsWithoutDeclaration.ts, 0, 11))
+
+    test2(): m2.connectModule;
+>test2 : Symbol(test2, Decl(declarationMapsWithoutDeclaration.ts, 13, 28))
+>m2 : Symbol(m2, Decl(declarationMapsWithoutDeclaration.ts, 0, 0), Decl(declarationMapsWithoutDeclaration.ts, 11, 3))
+>connectModule : Symbol(m2.connectModule, Decl(declarationMapsWithoutDeclaration.ts, 0, 11))
+
+};
+
+export = m2;
+>m2 : Symbol(m2, Decl(declarationMapsWithoutDeclaration.ts, 0, 0), Decl(declarationMapsWithoutDeclaration.ts, 11, 3))
+

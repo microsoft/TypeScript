@@ -75,10 +75,13 @@ namespace ts {
         getLineStarts(): ReadonlyArray<number>;
         getPositionOfLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
+
+        /* @internal */ sourceMapper?: sourcemaps.SourceMapper;
     }
 
     export interface SourceFileLike {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
+        /*@internal*/ sourceMapper?: sourcemaps.SourceMapper;
     }
 
     export interface SourceMapSource {
@@ -437,6 +440,7 @@ namespace ts {
          * This may be omitted to indicate that the code fix can't be applied in a group.
          */
         fixId?: {};
+        fixAllDescription?: string;
     }
 
     export interface CombinedCodeActions {
@@ -638,7 +642,7 @@ namespace ts {
     }
 
     export interface DefinitionInfoAndBoundSpan {
-        definitions: ReadonlyArray<DefinitionInfo>;
+        definitions: ReadonlyArray<DefinitionInfo> | undefined;
         textSpan: TextSpan;
     }
 

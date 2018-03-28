@@ -13,8 +13,7 @@ namespace ts.codefix {
             if (!info) return undefined;
             const { node, suggestion } = info;
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node, suggestion));
-            const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Change_spelling_to_0), [suggestion]);
-            return [{ description, changes, fixId }];
+            return [createCodeFixAction(changes, [Diagnostics.Change_spelling_to_0, suggestion], fixId, Diagnostics.Fix_all_detected_spelling_errors)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {

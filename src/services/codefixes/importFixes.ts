@@ -33,10 +33,9 @@ namespace ts.codefix {
         preferences: UserPreferences;
     }
 
-    function createCodeAction(descriptionDiagnostic: DiagnosticMessage, diagnosticArgs: string[], changes: FileTextChanges[]): CodeFixAction {
-        const description = formatMessage.apply(undefined, [undefined, descriptionDiagnostic].concat(<any[]>diagnosticArgs));
+    function createCodeAction(descriptionDiagnostic: DiagnosticMessage, diagnosticArgs: [string, string], changes: FileTextChanges[]): CodeFixAction {
         // TODO: GH#20315
-        return { description, changes, fixId: undefined };
+        return createCodeFixActionNoFixId(changes, [descriptionDiagnostic, ...diagnosticArgs] as [DiagnosticMessage, string, string]);
     }
 
     function convertToImportCodeFixContext(context: CodeFixContext, symbolToken: Node, symbolName: string): ImportCodeFixContext {
@@ -640,13 +639,13 @@ namespace ts.codefix {
         return createCodeAction(Diagnostics.Change_0_to_1, [symbolName, `${namespacePrefix}.${symbolName}`], changes);
     }
 
-    function getImportCodeActions(context: CodeFixContext): CodeAction[] | undefined {
+    function getImportCodeActions(context: CodeFixContext): CodeFixAction[] | undefined {
         return context.errorCode === Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code
             ? getActionsForUMDImport(context)
             : getActionsForNonUMDImport(context);
     }
 
-    function getActionsForUMDImport(context: CodeFixContext): CodeAction[] | undefined {
+    function getActionsForUMDImport(context: CodeFixContext): CodeFixAction[] | undefined {
         const token = getTokenAtPosition(context.sourceFile, context.span.start, /*includeJsDocComment*/ false);
         const checker = context.program.getTypeChecker();
 
@@ -702,18 +701,18 @@ namespace ts.codefix {
         }
     }
 
-    function getActionsForNonUMDImport(context: CodeFixContext): CodeAction[] | undefined {
+    function getActionsForNonUMDImport(context: CodeFixContext): CodeFixAction[] | undefined {
         // This will always be an Identifier, since the diagnostics we fix only fail on identifiers.
         const { sourceFile, span, program, cancellationToken } = context;
         const checker = program.getTypeChecker();
         const symbolToken = getTokenAtPosition(sourceFile, span.start, /*includeJsDocComment*/ false);
-        const isJsxNamespace = isJsxOpeningLikeElement(symbolToken.parent) && symbolToken.parent.tagName === symbolToken;
-        if (!isJsxNamespace && !isIdentifier(symbolToken)) {
-            return undefined;
-        }
-        const symbolName = isJsxNamespace ? checker.getJsxNamespace() : (<Identifier>symbolToken).text;
-        const allSourceFiles = program.getSourceFiles();
-        const compilerOptions = program.getCompilerOptions();
+        // If we're at `<Foo/>`, we must check if `Foo` is already in scope, and if so, get an import for `React` instead.
+        const symbolName = isJsxOpeningLikeElement(symbolToken.parent)
+            && symbolToken.parent.tagName === symbolToken
+            && (!isIdentifier(symbolToken) || isIntrinsicJsxName(symbolToken.text) || checker.resolveName(symbolToken.text, symbolToken, SymbolFlags.All, /*excludeGlobals*/ false))
+            ? checker.getJsxNamespace()
+            : isIdentifier(symbolToken) ? symbolToken.text : undefined;
+        if (!symbolName) return undefined;
 
         // "default" is a keyword and not a legal identifier for the import, so we don't expect it here
         Debug.assert(symbolName !== "default");
@@ -725,7 +724,7 @@ namespace ts.codefix {
         function addSymbol(moduleSymbol: Symbol, exportedSymbol: Symbol, importKind: ImportKind): void {
             originalSymbolToExportInfos.add(getUniqueSymbolId(exportedSymbol, checker).toString(), { moduleSymbol, importKind });
         }
-        forEachExternalModuleToImportFrom(checker, sourceFile, allSourceFiles, moduleSymbol => {
+        forEachExternalModuleToImportFrom(checker, sourceFile, program.getSourceFiles(), moduleSymbol => {
             cancellationToken.throwIfCancellationRequested();
 
             // check the default export
@@ -735,7 +734,7 @@ namespace ts.codefix {
                 if ((
                         localSymbol && localSymbol.escapedName === symbolName ||
                         getEscapedNameForExportDefault(defaultExport) === symbolName ||
-                        moduleSymbolToValidIdentifier(moduleSymbol, compilerOptions.target!) === symbolName
+                        moduleSymbolToValidIdentifier(moduleSymbol, program.getCompilerOptions().target!) === symbolName
                     ) && checkSymbolHasMeaning(localSymbol || defaultExport, currentTokenMeaning)) {
                     addSymbol(moduleSymbol, localSymbol || defaultExport, ImportKind.Default);
                 }

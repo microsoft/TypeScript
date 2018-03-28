@@ -132,15 +132,8 @@ namespace ts.FindAllReferences {
 
         const { node, name, kind, displayParts } = info;
         const sourceFile = node.getSourceFile();
-        return {
-            containerKind: ScriptElementKind.unknown,
-            containerName: "",
-            fileName: sourceFile.fileName,
-            kind,
-            name,
-            textSpan: createTextSpanFromNode(node, sourceFile),
-            displayParts
-        };
+        const textSpan = getTextSpan(isComputedPropertyName(node) ? node.expression : node, sourceFile);
+        return { containerKind: ScriptElementKind.unknown, containerName: "", fileName: sourceFile.fileName, kind, name, textSpan, displayParts };
     }
 
     function getDefinitionKindAndDisplayParts(symbol: Symbol, checker: TypeChecker, node: Node): { displayParts: SymbolDisplayPart[], kind: ScriptElementKind } {
@@ -218,8 +211,8 @@ namespace ts.FindAllReferences {
         return { fileName, span };
     }
 
-    function getTextSpan(node: Node): TextSpan {
-        let start = node.getStart();
+    function getTextSpan(node: Node, sourceFile?: SourceFile): TextSpan {
+        let start = node.getStart(sourceFile);
         let end = node.getEnd();
         if (node.kind === SyntaxKind.StringLiteral) {
             start += 1;
@@ -366,7 +359,7 @@ namespace ts.FindAllReferences.Core {
             // otherwise we'll need to search globally (i.e. include each file).
             const scope = getSymbolScope(symbol);
             if (scope) {
-                getReferencesInContainer(scope, scope.getSourceFile(), search, state);
+                getReferencesInContainer(scope, scope.getSourceFile(), search, state, /*addReferencesHere*/ !(isSourceFile(scope) && !contains(sourceFiles, scope)));
             }
             else {
                 // Global search
@@ -595,9 +588,8 @@ namespace ts.FindAllReferences.Core {
     function searchForImportedSymbol(symbol: Symbol, state: State): void {
         for (const declaration of symbol.declarations!) {
             const exportingFile = declaration.getSourceFile();
-            if (state.includesSourceFile(exportingFile)) {
-                getReferencesInSourceFile(exportingFile, state.createSearch(declaration, symbol, ImportExport.Import), state);
-            }
+            // Need to search in the file even if it's not in the search-file set, because it might export the symbol.
+            getReferencesInSourceFile(exportingFile, state.createSearch(declaration, symbol, ImportExport.Import), state, state.includesSourceFile(exportingFile));
         }
     }
 
@@ -801,9 +793,9 @@ namespace ts.FindAllReferences.Core {
         return references.length ? [{ definition: { type: "keyword", node: references[0].node }, references }] : undefined;
     }
 
-    function getReferencesInSourceFile(sourceFile: SourceFile, search: Search, state: State): void {
+    function getReferencesInSourceFile(sourceFile: SourceFile, search: Search, state: State, addReferencesHere = true): void {
         state.cancellationToken.throwIfCancellationRequested();
-        return getReferencesInContainer(sourceFile, sourceFile, search, state);
+        return getReferencesInContainer(sourceFile, sourceFile, search, state, addReferencesHere);
     }
 
     /**
@@ -811,17 +803,17 @@ namespace ts.FindAllReferences.Core {
      * tuple of(searchSymbol, searchText, searchLocation, and searchMeaning).
      * searchLocation: a node where the search value
      */
-    function getReferencesInContainer(container: Node, sourceFile: SourceFile, search: Search, state: State): void {
+    function getReferencesInContainer(container: Node, sourceFile: SourceFile, search: Search, state: State, addReferencesHere: boolean): void {
         if (!state.markSearchedSymbol(sourceFile, search.symbol)) {
             return;
         }
 
         for (const position of getPossibleSymbolReferencePositions(sourceFile, search.text, container)) {
-            getReferencesAtLocation(sourceFile, position, search, state);
+            getReferencesAtLocation(sourceFile, position, search, state, addReferencesHere);
         }
     }
 
-    function getReferencesAtLocation(sourceFile: SourceFile, position: number, search: Search, state: State): void {
+    function getReferencesAtLocation(sourceFile: SourceFile, position: number, search: Search, state: State, addReferencesHere: boolean): void {
         const referenceLocation = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
 
         if (!isValidReferencePosition(referenceLocation, search.text)) {
@@ -856,7 +848,7 @@ namespace ts.FindAllReferences.Core {
 
         if (isExportSpecifier(parent)) {
             Debug.assert(referenceLocation.kind === SyntaxKind.Identifier);
-            getReferencesAtExportSpecifier(referenceLocation as Identifier, referenceSymbol, parent, search, state);
+            getReferencesAtExportSpecifier(referenceLocation as Identifier, referenceSymbol, parent, search, state, addReferencesHere);
             return;
         }
 
@@ -868,7 +860,7 @@ namespace ts.FindAllReferences.Core {
 
         switch (state.specialSearchKind) {
             case SpecialSearchKind.None:
-                addReference(referenceLocation, relatedSymbol, state);
+                if (addReferencesHere) addReference(referenceLocation, relatedSymbol, state);
                 break;
             case SpecialSearchKind.Constructor:
                 addConstructorReferences(referenceLocation, sourceFile, search, state);
@@ -883,7 +875,7 @@ namespace ts.FindAllReferences.Core {
         getImportOrExportReferences(referenceLocation, referenceSymbol, search, state);
     }
 
-    function getReferencesAtExportSpecifier(referenceLocation: Identifier, referenceSymbol: Symbol, exportSpecifier: ExportSpecifier, search: Search, state: State): void {
+    function getReferencesAtExportSpecifier(referenceLocation: Identifier, referenceSymbol: Symbol, exportSpecifier: ExportSpecifier, search: Search, state: State, addReferencesHere: boolean): void {
         const { parent, propertyName, name } = exportSpecifier;
         const exportDeclaration = parent.parent;
         const localSymbol = getLocalSymbolForExportSpecifier(referenceLocation, referenceSymbol, exportSpecifier, state.checker);
@@ -901,7 +893,7 @@ namespace ts.FindAllReferences.Core {
                 addRef();
             }
 
-            if (!state.options.isForRename && state.markSeenReExportRHS(name)) {
+            if (addReferencesHere && !state.options.isForRename && state.markSeenReExportRHS(name)) {
                 addReference(name, referenceSymbol, state);
             }
         }
@@ -926,7 +918,7 @@ namespace ts.FindAllReferences.Core {
         }
 
         function addRef() {
-            addReference(referenceLocation, localSymbol, state);
+            if (addReferencesHere) addReference(referenceLocation, localSymbol, state);
         }
     }
 

@@ -1723,9 +1723,9 @@ namespace ts.server {
             return { startPosition, endPosition };
         }
 
-        private mapCodeAction(project: Project, { description, changes: unmappedChanges, commands, fixId }: CodeFixAction): protocol.CodeFixAction {
+        private mapCodeAction(project: Project, { description, changes: unmappedChanges, commands, fixId, fixAllDescription }: CodeFixAction): protocol.CodeFixAction {
             const changes = unmappedChanges.map(change => this.mapTextChangesToCodeEditsUsingScriptinfo(change, project.getScriptInfoForNormalizedPath(toNormalizedPath(change.fileName))!));
-            return { description, changes, commands, fixId };
+            return { description, changes, commands, fixId, fixAllDescription };
         }
 
         private mapTextChangesToCodeEdits(project: Project, textChanges: ReadonlyArray<FileTextChanges>): protocol.FileCodeEdits[] {

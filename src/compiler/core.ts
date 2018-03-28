@@ -636,25 +636,6 @@ namespace ts {
     }
 
     /**
-     * Computes the first matching span of elements and returns a tuple of the first span
-     * and the remaining elements.
-     */
-    export function span<T>(array: ReadonlyArray<T>, f: (x: T, i: number) => boolean): [T[], T[]];
-    export function span<T>(array: ReadonlyArray<T> | undefined, f: (x: T, i: number) => boolean): [T[], T[]] | undefined;
-    export function span<T>(array: ReadonlyArray<T> | undefined, f: (x: T, i: number) => boolean): [T[], T[]] | undefined {
-        if (array) {
-            for (let i = 0; i < array.length; i++) {
-                if (!f(array[i], i)) {
-                    return [array.slice(0, i), array.slice(i)];
-                }
-            }
-            return [array.slice(0), []];
-        }
-
-        return undefined;
-    }
-
-    /**
      * Maps contiguous spans of values with the same key.
      *
      * @param array The array to map.
@@ -2096,6 +2077,10 @@ namespace ts {
             moduleResolution = getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS ? ModuleResolutionKind.NodeJs : ModuleResolutionKind.Classic;
         }
         return moduleResolution;
+    }
+
+    export function getAreDeclarationMapsEnabled(options: CompilerOptions) {
+        return !!(options.declaration && options.declarationMap);
     }
 
     export function getAllowSyntheticDefaultImports(compilerOptions: CompilerOptions) {

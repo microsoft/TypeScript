@@ -8,8 +8,8 @@ namespace ts.codefix {
             const qualifiedName = getQualifiedName(context.sourceFile, context.span.start);
             if (!qualifiedName) return undefined;
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, qualifiedName));
-            const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Rewrite_as_the_indexed_access_type_0), [`${qualifiedName.left.text}["${qualifiedName.right.text}"]`]);
-            return [{ description, changes, fixId }];
+            const newText = `${qualifiedName.left.text}["${qualifiedName.right.text}"]`;
+            return [createCodeFixAction(changes, [Diagnostics.Rewrite_as_the_indexed_access_type_0, newText], fixId, Diagnostics.Rewrite_all_as_indexed_access_types)];
         },
         fixIds: [fixId],
         getAllCodeActions: (context) => codeFixAll(context, errorCodes, (changes, diag) => {

@@ -1236,7 +1236,7 @@ namespace ts {
                                     lastLocation.kind === SyntaxKind.Parameter ||
                                     (
                                         lastLocation === (<FunctionLikeDeclaration>location).type &&
-                                        result.valueDeclaration!.kind === SyntaxKind.Parameter
+                                        !!findAncestor(result.valueDeclaration, isParameter)
                                     );
                             }
                         }
@@ -1732,14 +1732,19 @@ namespace ts {
                 : resolveSymbol(moduleSymbol.exports!.get(name), dontResolveAlias);
         }
 
+        function isSyntacticDefault(node: Node) {
+            return ((isExportAssignment(node) && !node.isExportEquals) || hasModifier(node, ModifierFlags.Default));
+        }
+
         function canHaveSyntheticDefault(file: SourceFile | undefined, moduleSymbol: Symbol, dontResolveAlias: boolean) {
             if (!allowSyntheticDefaultImports) {
                 return false;
             }
             // Declaration files (and ambient modules)
             if (!file || file.isDeclarationFile) {
-                // Definitely cannot have a synthetic default if they have a default member specified
-                if (resolveExportByName(moduleSymbol, InternalSymbolName.Default, dontResolveAlias)) {
+                // Definitely cannot have a synthetic default if they have a syntactic default member specified
+                const defaultExportSymbol = resolveExportByName(moduleSymbol, InternalSymbolName.Default, dontResolveAlias);
+                if (defaultExportSymbol && defaultExportSymbol.valueDeclaration && isSyntacticDefault(defaultExportSymbol.valueDeclaration)) {
                     return false;
                 }
                 // It _might_ still be incorrect to assume there is no __esModule marker on the import at runtime, even if there is no `default` member
@@ -1779,7 +1784,7 @@ namespace ts {
                 if (!exportDefaultSymbol && !hasSyntheticDefault) {
                     error(node.name, Diagnostics.Module_0_has_no_default_export, symbolToString(moduleSymbol));
                 }
-                else if (!exportDefaultSymbol && hasSyntheticDefault) {
+                else if (hasSyntheticDefault) {
                     // per emit behavior, a synthetic default overrides a "real" .default member if `__esModule` is not present
                     return resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias) || resolveSymbol(moduleSymbol, dontResolveAlias);
                 }
@@ -4270,10 +4275,12 @@ namespace ts {
                 return getWidenedLiteralType(checkExpressionCached(specialDeclaration));
             }
             const types: Type[] = [];
+            let constructorTypes: Type[] | undefined;
             let definedInConstructor = false;
             let definedInMethod = false;
             let jsDocType: Type | undefined;
             for (const declaration of symbol.declarations!) {
+                let declarationInConstructor = false;
                 const expression = declaration.kind === SyntaxKind.BinaryExpression ? <BinaryExpression>declaration :
                     declaration.kind === SyntaxKind.PropertyAccessExpression ? <BinaryExpression>getAncestor(declaration, SyntaxKind.BinaryExpression) :
                         undefined;
@@ -4286,9 +4293,10 @@ namespace ts {
                     const thisContainer = getThisContainer(expression, /*includeArrowFunctions*/ false);
                     // Properties defined in a constructor (or javascript constructor function) don't get undefined added.
                     // Function expressions that are assigned to the prototype count as methods.
-                    if (thisContainer.kind === SyntaxKind.Constructor ||
+                    declarationInConstructor = thisContainer.kind === SyntaxKind.Constructor ||
                         thisContainer.kind === SyntaxKind.FunctionDeclaration ||
-                        (thisContainer.kind === SyntaxKind.FunctionExpression && !isPrototypePropertyAssignment(thisContainer.parent))) {
+                        (thisContainer.kind === SyntaxKind.FunctionExpression && !isPrototypePropertyAssignment(thisContainer.parent));
+                    if (declarationInConstructor) {
                         definedInConstructor = true;
                     }
                     else {
@@ -4311,13 +4319,36 @@ namespace ts {
                 }
                 else if (!jsDocType) {
                     // If we don't have an explicit JSDoc type, get the type from the expression.
-                    types.push(getWidenedLiteralType(checkExpressionCached(expression.right)));
+                    const type = getWidenedLiteralType(checkExpressionCached(expression.right));
+                    let anyedType = type;
+                    if (isEmptyArrayLiteralType(type)) {
+                        anyedType = anyArrayType;
+                        if (noImplicitAny) {
+                            reportImplicitAnyError(expression, anyArrayType);
+                        }
+                    }
+                    types.push(anyedType);
+                    if (declarationInConstructor) {
+                        (constructorTypes || (constructorTypes = [])).push(anyedType);
+                    }
                 }
             }
-
-            const type = jsDocType || getUnionType(types, UnionReduction.Subtype);
-            return getWidenedType(addOptionality(type, definedInMethod && !definedInConstructor));
+            let type = jsDocType;
+            if (!type) {
+                // use only the constructor types unless only null | undefined (including widening variants) were assigned there
+                const sourceTypes = constructorTypes && constructorTypes.some(t => !!(t.flags & ~(TypeFlags.Nullable | TypeFlags.ContainsWideningType))) ? constructorTypes : types;
+                type = getUnionType(sourceTypes, UnionReduction.Subtype);
+            }
+            const widened = getWidenedType(addOptionality(type, definedInMethod && !definedInConstructor));
+            if (filterType(widened, t => !!(t.flags & ~TypeFlags.Nullable)) === neverType) {
+                if (noImplicitAny) {
+                    reportImplicitAnyError(symbol.valueDeclaration!, anyType);
+                }
+                return anyType;
+            }
+            return widened;
         }
+
 
         // Return the type implied by a binding pattern element. This is the type of the initializer of the element if
         // one is present. Otherwise, if the element is itself a binding pattern, it is the type implied by the binding
@@ -8144,6 +8175,9 @@ namespace ts {
                     }
                     return indexInfo.type;
                 }
+                if (indexType.flags & TypeFlags.Never) {
+                    return neverType;
+                }
                 if (accessExpression && !isConstEnumObjectType(objectType)) {
                     if (noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors) {
                         if (getIndexTypeOfType(objectType, IndexKind.Number)) {
@@ -10239,8 +10273,11 @@ namespace ts {
                 }
                 else if (source.flags & TypeFlags.Conditional) {
                     if (target.flags & TypeFlags.Conditional) {
-                        if (isTypeIdenticalTo((<ConditionalType>source).checkType, (<ConditionalType>target).checkType) &&
-                            isTypeIdenticalTo((<ConditionalType>source).extendsType, (<ConditionalType>target).extendsType)) {
+                        // Two conditional types 'T1 extends U1 ? X1 : Y1' and 'T2 extends U2 ? X2 : Y2' are related if
+                        // one of T1 and T2 is related to the other, U1 and U2 are identical types, X1 is related to X2,
+                        // and Y1 is related to Y2.
+                        if (isTypeIdenticalTo((<ConditionalType>source).extendsType, (<ConditionalType>target).extendsType) &&
+                            (isRelatedTo((<ConditionalType>source).checkType, (<ConditionalType>target).checkType) || isRelatedTo((<ConditionalType>target).checkType, (<ConditionalType>source).checkType))) {
                             if (result = isRelatedTo(getTrueTypeFromConditionalType(<ConditionalType>source), getTrueTypeFromConditionalType(<ConditionalType>target), reportErrors)) {
                                 result &= isRelatedTo(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target), reportErrors);
                             }
@@ -11430,6 +11467,7 @@ namespace ts {
             const typeAsString = typeToString(getWidenedType(type));
             let diagnostic: DiagnosticMessage;
             switch (declaration.kind) {
+                case SyntaxKind.BinaryExpression:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                     diagnostic = Diagnostics.Member_0_implicitly_has_an_1_type;
@@ -11640,6 +11678,13 @@ namespace ts {
                 }
             }
             return undefined;
+        }
+
+        function typesDefinitelyUnrelated(source: Type, target: Type) {
+            // Two tuple types with different arity are definitely unrelated.
+            // Two object types that each have a property that is unmatched in the other are definitely unrelated.
+            return isTupleType(source) && isTupleType(target) && getTypeReferenceArity(<TypeReference>source) !== getTypeReferenceArity(<TypeReference>target) ||
+                !!getUnmatchedProperty(source, target, /*requireOptionalProperties*/ false) && !!getUnmatchedProperty(target, source, /*requireOptionalProperties*/ false);
         }
 
         function getTypeFromInference(inference: InferenceInfo) {
@@ -11912,9 +11957,8 @@ namespace ts {
                         return;
                     }
                 }
-                // Infer from the members of source and target only if the two types are possibly related. We check
-                // in both directions because we may be inferring for a co-variant or a contra-variant position.
-                if (!getUnmatchedProperty(source, target, /*requireOptionalProperties*/ false) || !getUnmatchedProperty(target, source, /*requireOptionalProperties*/ false)) {
+                // Infer from the members of source and target only if the two types are possibly related
+                if (!typesDefinitelyUnrelated(source, target)) {
                     inferFromProperties(source, target);
                     inferFromSignatures(source, target, SignatureKind.Call);
                     inferFromSignatures(source, target, SignatureKind.Construct);
@@ -18850,9 +18894,9 @@ namespace ts {
             }
 
             if (produceDiagnostics && node.kind !== SyntaxKind.MethodDeclaration) {
-                checkCollisionWithCapturedSuperVariable(node, node.name);
-                checkCollisionWithCapturedThisVariable(node, node.name);
-                checkCollisionWithCapturedNewTargetVariable(node, node.name);
+                checkCollisionWithCapturedSuperVariable(node, node.name!);
+                checkCollisionWithCapturedThisVariable(node, node.name!);
+                checkCollisionWithCapturedNewTargetVariable(node, node.name!);
             }
 
             return type;
@@ -19733,11 +19777,27 @@ namespace ts {
         }
 
         function checkDeclarationInitializer(declaration: HasExpressionInitializer) {
-            const initializer = isInJavaScriptFile(declaration) && getDeclaredJavascriptInitializer(declaration) || declaration.initializer!;
+            const inJs = isInJavaScriptFile(declaration);
+            const initializer = inJs && getDeclaredJavascriptInitializer(declaration) || declaration.initializer!;
             const type = getTypeOfExpression(initializer, /*cache*/ true);
-            return getCombinedNodeFlags(declaration) & NodeFlags.Const ||
+            const widened = getCombinedNodeFlags(declaration) & NodeFlags.Const ||
                 (getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration)) ||
                 isTypeAssertion(initializer) ? type : getWidenedLiteralType(type);
+            if (inJs) {
+                if (widened.flags & TypeFlags.Nullable) {
+                    if (noImplicitAny) {
+                        reportImplicitAnyError(declaration, anyType);
+                    }
+                    return anyType;
+                }
+                else if (isEmptyArrayLiteralType(widened)) {
+                    if (noImplicitAny) {
+                        reportImplicitAnyError(declaration, anyArrayType);
+                    }
+                    return anyArrayType;
+                }
+            }
+            return widened;
         }
 
         function isLiteralOfContextualType(candidateType: Type, contextualType: Type | undefined): boolean {
@@ -21571,9 +21631,9 @@ namespace ts {
             if (produceDiagnostics) {
                 checkFunctionOrMethodDeclaration(node);
                 checkGrammarForGenerator(node);
-                checkCollisionWithCapturedSuperVariable(node, node.name);
-                checkCollisionWithCapturedThisVariable(node, node.name);
-                checkCollisionWithCapturedNewTargetVariable(node, node.name);
+                checkCollisionWithCapturedSuperVariable(node, node.name!);
+                checkCollisionWithCapturedThisVariable(node, node.name!);
+                checkCollisionWithCapturedNewTargetVariable(node, node.name!);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name!);
                 checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name!);
             }
@@ -21958,7 +22018,7 @@ namespace ts {
 
         function checkCollisionWithArgumentsInGeneratedCode(node: SignatureDeclaration) {
             // no rest parameters \ declaration context \ overload - no codegen impact
-            if (!hasRestParameter(node) || node.flags & NodeFlags.Ambient || nodeIsMissing((<FunctionLikeDeclaration>node).body)) {
+            if (languageVersion >= ScriptTarget.ES2015 || compilerOptions.noEmit || !hasRestParameter(node) || node.flags & NodeFlags.Ambient || nodeIsMissing((<FunctionLikeDeclaration>node).body)) {
                 return;
             }
 
@@ -21998,14 +22058,14 @@ namespace ts {
             return true;
         }
 
-        function checkCollisionWithCapturedThisVariable(node: Node, name: Identifier | undefined): void {
-            if (needCollisionCheckForIdentifier(node, name, "_this")) {
+        function checkCollisionWithCapturedThisVariable(node: Node, name: Identifier): void {
+            if (languageVersion <= ScriptTarget.ES5 && !compilerOptions.noEmit && needCollisionCheckForIdentifier(node, name, "_this")) {
                 potentialThisCollisions.push(node);
             }
         }
 
-        function checkCollisionWithCapturedNewTargetVariable(node: Node, name: Identifier | undefined): void {
-            if (needCollisionCheckForIdentifier(node, name, "_newTarget")) {
+        function checkCollisionWithCapturedNewTargetVariable(node: Node, name: Identifier): void {
+            if (languageVersion <= ScriptTarget.ES5 && !compilerOptions.noEmit && needCollisionCheckForIdentifier(node, name, "_newTarget")) {
                 potentialNewTargetCollisions.push(node);
             }
         }
@@ -22043,7 +22103,11 @@ namespace ts {
             });
         }
 
-        function checkCollisionWithCapturedSuperVariable(node: Node, name: Identifier | undefined) {
+        function checkCollisionWithCapturedSuperVariable(node: Node, name: Identifier) {
+            if (languageVersion >= ScriptTarget.ES2015 || compilerOptions.noEmit) {
+                return;
+            }
+
             if (!needCollisionCheckForIdentifier(node, name, "_super")) {
                 return;
             }
@@ -22068,7 +22132,7 @@ namespace ts {
 
         function checkCollisionWithRequireExportsInGeneratedCode(node: Node, name: Identifier) {
             // No need to check for require or exports for ES6 modules and later
-            if (modulekind >= ModuleKind.ES2015) {
+            if (modulekind >= ModuleKind.ES2015 || compilerOptions.noEmit) {
                 return;
             }
 
@@ -22091,7 +22155,7 @@ namespace ts {
         }
 
         function checkCollisionWithGlobalPromiseInGeneratedCode(node: Node, name: Identifier): void {
-            if (languageVersion >= ScriptTarget.ES2017 || !needCollisionCheckForIdentifier(node, name, "Promise")) {
+            if (languageVersion >= ScriptTarget.ES2017 || compilerOptions.noEmit || !needCollisionCheckForIdentifier(node, name, "Promise")) {
                 return;
             }
 
@@ -24196,7 +24260,7 @@ namespace ts {
         }
 
         function checkImportBinding(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier) {
-            checkCollisionWithCapturedThisVariable(node, node.name);
+            checkCollisionWithCapturedThisVariable(node, node.name!);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name!);
             checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name!);
             checkAliasSymbol(node);
