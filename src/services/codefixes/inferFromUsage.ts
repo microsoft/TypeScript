@@ -33,10 +33,8 @@ namespace ts.codefix {
             const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
             let declaration!: Declaration;
             const changes = textChanges.ChangeTracker.with(context, changes => { declaration = doChange(changes, sourceFile, token, errorCode, program, cancellationToken); });
-            if (changes.length === 0) return undefined;
-            const name = getNameOfDeclaration(declaration).getText();
-            const description = formatStringFromArgs(getLocaleSpecificMessage(getDiagnostic(errorCode, token)), [name]);
-            return [{ description, changes, fixId }];
+            return changes.length === 0 ? undefined
+                : [createCodeFixAction(changes, [getDiagnostic(errorCode, token), getNameOfDeclaration(declaration).getText(sourceFile)], fixId, Diagnostics.Infer_all_types_from_usage)];
         },
         fixIds: [fixId],
         getAllCodeActions(context) {

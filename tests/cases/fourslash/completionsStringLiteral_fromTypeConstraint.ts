@@ -3,4 +3,5 @@
 ////interface Foo { foo: string; bar: string; }
 ////type T = Pick<Foo, "/**/">;
 
-verify.completionsAt("", ["foo", "bar"]);
+// TODO: GH#22907
+verify.completionsAt("", ["foo", "bar"], { isNewIdentifierLocation: true });

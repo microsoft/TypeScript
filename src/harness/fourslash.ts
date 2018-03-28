@@ -832,7 +832,12 @@ namespace FourSlash {
             }
         }
 
-        public verifyCompletionsAt(markerName: string, expected: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, options?: FourSlashInterface.CompletionsAtOptions) {
+        public verifyCompletionsAt(markerName: string | ReadonlyArray<string>, expected: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, options?: FourSlashInterface.CompletionsAtOptions) {
+            if (typeof markerName !== "string") {
+                for (const m of markerName) this.verifyCompletionsAt(m, expected, options);
+                return;
+            }
+
             this.goToMarker(markerName);
 
             const actualCompletions = this.getCompletionListAtCaret(options);
@@ -840,8 +845,8 @@ namespace FourSlash {
                 this.raiseError(`No completions at position '${this.currentCaretPosition}'.`);
             }
 
-            if (options && options.isNewIdentifierLocation !== undefined && actualCompletions.isNewIdentifierLocation !== options.isNewIdentifierLocation) {
-                this.raiseError(`Expected 'isNewIdentifierLocation' to be ${options.isNewIdentifierLocation}, got ${actualCompletions.isNewIdentifierLocation}`);
+            if (actualCompletions.isNewIdentifierLocation !== (options && options.isNewIdentifierLocation || false)) {
+                this.raiseError(`Expected 'isNewIdentifierLocation' to be ${options && options.isNewIdentifierLocation}, got ${actualCompletions.isNewIdentifierLocation}`);
             }
 
             const actual = actualCompletions.entries;
@@ -1600,7 +1605,7 @@ Actual: ${stringify(fullActual)}`);
                 });
         }
 
-        public baselineGetEmitOutput() {
+        public baselineGetEmitOutput(insertResultsIntoVfs?: boolean) {
             // Find file to be emitted
             const emitFiles: FourSlashFile[] = [];  // List of FourSlashFile that has emitThisFile flag on
 
@@ -1649,6 +1654,9 @@ Actual: ${stringify(fullActual)}`);
                         for (const outputFile of emitOutput.outputFiles) {
                             const fileName = "FileName : " + outputFile.name + Harness.IO.newLine();
                             resultString = resultString + fileName + outputFile.text;
+                            if (insertResultsIntoVfs) {
+                                this.languageServiceAdapterHost.addScript(ts.getNormalizedAbsolutePath(outputFile.name, "/"), outputFile.text, /*isRootFile*/ true);
+                            }
                         }
                         resultString += Harness.IO.newLine();
                     });
@@ -2449,12 +2457,14 @@ Actual: ${stringify(fullActual)}`);
             this.verifyRangeIs(expectedText, includeWhiteSpace);
         }
 
-        public verifyCodeFixAll(options: FourSlashInterface.VerifyCodeFixAllOptions): void {
-            const { fixId, newFileContent } = options;
-            const fixIds = ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => a.fixId);
-            ts.Debug.assert(ts.contains(fixIds, fixId), "No available code fix has that group id.", () => `Expected '${fixId}'. Available action ids: ${fixIds}`);
+        public verifyCodeFixAll({ fixId, fixAllDescription, newFileContent, commands: expectedCommands }: FourSlashInterface.VerifyCodeFixAllOptions): void {
+            const fixWithId = ts.find(this.getCodeFixes(this.activeFile.fileName), a => a.fixId === fixId);
+            ts.Debug.assert(fixWithId !== undefined, "No available code fix has that group id.", () =>
+                `Expected '${fixId}'. Available action ids: ${ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => a.fixId)}`);
+            ts.Debug.assertEqual(fixWithId.fixAllDescription, fixAllDescription);
+
             const { changes, commands } = this.languageService.getCombinedCodeFix({ type: "file", fileName: this.activeFile.fileName }, fixId, this.formatCodeSettings, ts.defaultPreferences);
-            assert.deepEqual(commands, options.commands);
+            assert.deepEqual(commands, expectedCommands);
             assert(changes.every(c => c.fileName === this.activeFile.fileName), "TODO: support testing codefixes that touch multiple files");
             this.applyChanges(changes);
             this.verifyCurrentFileContent(newFileContent);
@@ -3179,9 +3189,7 @@ Actual: ${stringify(fullActual)}`);
             eq(item.hasAction, hasAction, "hasAction");
             eq(item.isRecommended, options && options.isRecommended, "isRecommended");
             eq(item.insertText, options && options.insertText, "insertText");
-            if (options && options.replacementSpan) { // TODO: GH#21679
-                eq(item.replacementSpan, options && options.replacementSpan && ts.createTextSpanFromRange(options.replacementSpan), "replacementSpan");
-            }
+            eq(item.replacementSpan, options && options.replacementSpan && ts.createTextSpanFromRange(options.replacementSpan), "replacementSpan");
         }
 
         private findFile(indexOrName: string | number) {
@@ -3985,7 +3993,7 @@ namespace FourSlashInterface {
             super(state);
         }
 
-        public completionsAt(markerName: string, completions: ReadonlyArray<ExpectedCompletionEntry>, options?: CompletionsAtOptions) {
+        public completionsAt(markerName: string | ReadonlyArray<string>, completions: ReadonlyArray<ExpectedCompletionEntry>, options?: CompletionsAtOptions) {
             this.state.verifyCompletionsAt(markerName, completions, options);
         }
 
@@ -4154,8 +4162,8 @@ namespace FourSlashInterface {
             this.state.baselineCurrentFileNameOrDottedNameSpans();
         }
 
-        public baselineGetEmitOutput() {
-            this.state.baselineGetEmitOutput();
+        public baselineGetEmitOutput(insertResultsIntoVfs?: boolean) {
+            this.state.baselineGetEmitOutput(insertResultsIntoVfs);
         }
 
         public baselineQuickInfo() {
@@ -4655,6 +4663,7 @@ namespace FourSlashInterface {
 
     export interface VerifyCodeFixAllOptions {
         fixId: string;
+        fixAllDescription: string;
         newFileContent: string;
         commands: ReadonlyArray<{}>;
     }

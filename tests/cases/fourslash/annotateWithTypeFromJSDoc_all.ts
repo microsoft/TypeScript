@@ -8,6 +8,7 @@
 
 verify.codeFixAll({
     fixId: "annotateWithTypeFromJSDoc",
+    fixAllDescription: "Annotate everything with types from JSDoc",
     newFileContent:
 `/** @type {number} */
 var x: number;

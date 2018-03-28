@@ -71,6 +71,10 @@ declare module ts {
     }
 }
 
+declare namespace ts {
+    function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
+}
+
 declare namespace FourSlashInterface {
     interface Marker {
         fileName: string;
@@ -196,7 +200,7 @@ declare namespace FourSlashInterface {
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
-        completionsAt(markerName: string, completions: ReadonlyArray<string | { name: string, insertText?: string, replacementSpan?: Range }>, options?: CompletionsAtOptions): void;
+        completionsAt(markerName: string | ReadonlyArray<string>, completions: ReadonlyArray<string | { name: string, insertText?: string, replacementSpan?: Range }>, options?: CompletionsAtOptions): void;
         completionsAndDetailsAt(
             markerName: string,
             completions: {
@@ -284,7 +288,7 @@ declare namespace FourSlashInterface {
         numberOfErrorsInCurrentFile(expected: number): void;
         baselineCurrentFileBreakpointLocations(): void;
         baselineCurrentFileNameOrDottedNameSpans(): void;
-        baselineGetEmitOutput(): void;
+        baselineGetEmitOutput(insertResultsIntoVfs?: boolean): void;
         baselineQuickInfo(): void;
         nameOrDottedNameSpanTextIs(text: string): void;
         outliningSpansInCurrentFile(spans: Range[]): void;
@@ -294,7 +298,7 @@ declare namespace FourSlashInterface {
         docCommentTemplateAt(markerName: string | FourSlashInterface.Marker, expectedOffset: number, expectedText: string): void;
         noDocCommentTemplateAt(markerName: string | FourSlashInterface.Marker): void;
         rangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number): void;
-        codeFixAll(options: { fixId: string, newFileContent: string, commands?: {}[] }): void;
+        codeFixAll(options: { fixId: string, fixAllDescription: string, newFileContent: string, commands?: {}[] }): void;
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, actionName: string, formattingOptions?: FormatCodeOptions): void;
         rangeIs(expectedText: string, includeWhiteSpace?: boolean): void;
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, formattingOptions?: FormatCodeOptions): void;

@@ -1,0 +1,90 @@
+tests/cases/conformance/types/conditional/conditionalTypes2.ts(15,5): error TS2322: Type 'Covariant<A>' is not assignable to type 'Covariant<B>'.
+  Type 'A' is not assignable to type 'B'.
+tests/cases/conformance/types/conditional/conditionalTypes2.ts(19,5): error TS2322: Type 'Contravariant<B>' is not assignable to type 'Contravariant<A>'.
+  Type 'A' is not assignable to type 'B'.
+tests/cases/conformance/types/conditional/conditionalTypes2.ts(24,5): error TS2322: Type 'Invariant<B>' is not assignable to type 'Invariant<A>'.
+  Types of property 'foo' are incompatible.
+    Type 'B extends string ? keyof B : B' is not assignable to type 'A extends string ? keyof A : A'.
+      Type 'keyof B' is not assignable to type 'keyof A'.
+tests/cases/conformance/types/conditional/conditionalTypes2.ts(25,5): error TS2322: Type 'Invariant<A>' is not assignable to type 'Invariant<B>'.
+  Types of property 'foo' are incompatible.
+    Type 'A extends string ? keyof A : A' is not assignable to type 'B extends string ? keyof B : B'.
+      Type 'A' is not assignable to type 'B'.
+
+
+==== tests/cases/conformance/types/conditional/conditionalTypes2.ts (4 errors) ====
+    interface Covariant<T> {
+        foo: T extends string ? T : number;
+    }
+    
+    interface Contravariant<T> {
+        foo: T extends string ? keyof T : number;
+    }
+    
+    interface Invariant<T> {
+        foo: T extends string ? keyof T : T;
+    }
+    
+    function f1<A, B extends A>(a: Covariant<A>, b: Covariant<B>) {
+        a = b;
+        b = a;  // Error
+        ~
+!!! error TS2322: Type 'Covariant<A>' is not assignable to type 'Covariant<B>'.
+!!! error TS2322:   Type 'A' is not assignable to type 'B'.
+    }
+    
+    function f2<A, B extends A>(a: Contravariant<A>, b: Contravariant<B>) {
+        a = b;  // Error
+        ~
+!!! error TS2322: Type 'Contravariant<B>' is not assignable to type 'Contravariant<A>'.
+!!! error TS2322:   Type 'A' is not assignable to type 'B'.
+        b = a;
+    }
+    
+    function f3<A, B extends A>(a: Invariant<A>, b: Invariant<B>) {
+        a = b;  // Error
+        ~
+!!! error TS2322: Type 'Invariant<B>' is not assignable to type 'Invariant<A>'.
+!!! error TS2322:   Types of property 'foo' are incompatible.
+!!! error TS2322:     Type 'B extends string ? keyof B : B' is not assignable to type 'A extends string ? keyof A : A'.
+!!! error TS2322:       Type 'keyof B' is not assignable to type 'keyof A'.
+        b = a;  // Error
+        ~
+!!! error TS2322: Type 'Invariant<A>' is not assignable to type 'Invariant<B>'.
+!!! error TS2322:   Types of property 'foo' are incompatible.
+!!! error TS2322:     Type 'A extends string ? keyof A : A' is not assignable to type 'B extends string ? keyof B : B'.
+!!! error TS2322:       Type 'A' is not assignable to type 'B'.
+    }
+    
+    // Repros from #22860
+    
+    class Opt<T> {
+        toVector(): Vector<T> {
+            return <any>undefined;
+        }
+    }
+    
+    interface Seq<T> {
+        tail(): Opt<Seq<T>>;
+    }
+    
+    class Vector<T> implements Seq<T> {
+        tail(): Opt<Vector<T>> {
+            return <any>undefined;
+        }
+        partition2<U extends T>(predicate:(v:T)=>v is U): [Vector<U>,Vector<Exclude<T, U>>];
+        partition2(predicate:(x:T)=>boolean): [Vector<T>,Vector<T>];
+        partition2<U extends T>(predicate:(v:T)=>boolean): [Vector<U>,Vector<any>] {
+            return <any>undefined;
+        }
+    }
+    
+    interface A1<T> {
+        bat: B1<A1<T>>;
+    }
+    
+    interface B1<T> extends A1<T> {
+        bat: B1<B1<T>>;
+        boom: T extends any ? true : true
+    }
+    

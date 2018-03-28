@@ -72,6 +72,7 @@
         "shims.ts",
         "signatureHelp.ts",
         "suggestionDiagnostics.ts",
+        "sourcemaps.ts",
         "symbolDisplay.ts",
         "textChanges.ts",
         "refactorProvider.ts",

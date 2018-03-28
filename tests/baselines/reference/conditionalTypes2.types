@@ -1,0 +1,218 @@
+=== tests/cases/conformance/types/conditional/conditionalTypes2.ts ===
+interface Covariant<T> {
+>Covariant : Covariant<T>
+>T : T
+
+    foo: T extends string ? T : number;
+>foo : T extends string ? T : number
+>T : T
+>T : T
+}
+
+interface Contravariant<T> {
+>Contravariant : Contravariant<T>
+>T : T
+
+    foo: T extends string ? keyof T : number;
+>foo : T extends string ? keyof T : number
+>T : T
+>T : T
+}
+
+interface Invariant<T> {
+>Invariant : Invariant<T>
+>T : T
+
+    foo: T extends string ? keyof T : T;
+>foo : T extends string ? keyof T : T
+>T : T
+>T : T
+>T : T
+}
+
+function f1<A, B extends A>(a: Covariant<A>, b: Covariant<B>) {
+>f1 : <A, B extends A>(a: Covariant<A>, b: Covariant<B>) => void
+>A : A
+>B : B
+>A : A
+>a : Covariant<A>
+>Covariant : Covariant<T>
+>A : A
+>b : Covariant<B>
+>Covariant : Covariant<T>
+>B : B
+
+    a = b;
+>a = b : Covariant<B>
+>a : Covariant<A>
+>b : Covariant<B>
+
+    b = a;  // Error
+>b = a : Covariant<A>
+>b : Covariant<B>
+>a : Covariant<A>
+}
+
+function f2<A, B extends A>(a: Contravariant<A>, b: Contravariant<B>) {
+>f2 : <A, B extends A>(a: Contravariant<A>, b: Contravariant<B>) => void
+>A : A
+>B : B
+>A : A
+>a : Contravariant<A>
+>Contravariant : Contravariant<T>
+>A : A
+>b : Contravariant<B>
+>Contravariant : Contravariant<T>
+>B : B
+
+    a = b;  // Error
+>a = b : Contravariant<B>
+>a : Contravariant<A>
+>b : Contravariant<B>
+
+    b = a;
+>b = a : Contravariant<A>
+>b : Contravariant<B>
+>a : Contravariant<A>
+}
+
+function f3<A, B extends A>(a: Invariant<A>, b: Invariant<B>) {
+>f3 : <A, B extends A>(a: Invariant<A>, b: Invariant<B>) => void
+>A : A
+>B : B
+>A : A
+>a : Invariant<A>
+>Invariant : Invariant<T>
+>A : A
+>b : Invariant<B>
+>Invariant : Invariant<T>
+>B : B
+
+    a = b;  // Error
+>a = b : Invariant<B>
+>a : Invariant<A>
+>b : Invariant<B>
+
+    b = a;  // Error
+>b = a : Invariant<A>
+>b : Invariant<B>
+>a : Invariant<A>
+}
+
+// Repros from #22860
+
+class Opt<T> {
+>Opt : Opt<T>
+>T : T
+
+    toVector(): Vector<T> {
+>toVector : () => Vector<T>
+>Vector : Vector<T>
+>T : T
+
+        return <any>undefined;
+><any>undefined : any
+>undefined : undefined
+    }
+}
+
+interface Seq<T> {
+>Seq : Seq<T>
+>T : T
+
+    tail(): Opt<Seq<T>>;
+>tail : () => Opt<Seq<T>>
+>Opt : Opt<T>
+>Seq : Seq<T>
+>T : T
+}
+
+class Vector<T> implements Seq<T> {
+>Vector : Vector<T>
+>T : T
+>Seq : Seq<T>
+>T : T
+
+    tail(): Opt<Vector<T>> {
+>tail : () => Opt<Vector<T>>
+>Opt : Opt<T>
+>Vector : Vector<T>
+>T : T
+
+        return <any>undefined;
+><any>undefined : any
+>undefined : undefined
+    }
+    partition2<U extends T>(predicate:(v:T)=>v is U): [Vector<U>,Vector<Exclude<T, U>>];
+>partition2 : { <U extends T>(predicate: (v: T) => v is U): [Vector<U>, Vector<Exclude<T, U>>]; (predicate: (x: T) => boolean): [Vector<T>, Vector<T>]; }
+>U : U
+>T : T
+>predicate : (v: T) => v is U
+>v : T
+>T : T
+>v : any
+>U : U
+>Vector : Vector<T>
+>U : U
+>Vector : Vector<T>
+>Exclude : Exclude<T, U>
+>T : T
+>U : U
+
+    partition2(predicate:(x:T)=>boolean): [Vector<T>,Vector<T>];
+>partition2 : { <U extends T>(predicate: (v: T) => v is U): [Vector<U>, Vector<Exclude<T, U>>]; (predicate: (x: T) => boolean): [Vector<T>, Vector<T>]; }
+>predicate : (x: T) => boolean
+>x : T
+>T : T
+>Vector : Vector<T>
+>T : T
+>Vector : Vector<T>
+>T : T
+
+    partition2<U extends T>(predicate:(v:T)=>boolean): [Vector<U>,Vector<any>] {
+>partition2 : { <U extends T>(predicate: (v: T) => v is U): [Vector<U>, Vector<Exclude<T, U>>]; (predicate: (x: T) => boolean): [Vector<T>, Vector<T>]; }
+>U : U
+>T : T
+>predicate : (v: T) => boolean
+>v : T
+>T : T
+>Vector : Vector<T>
+>U : U
+>Vector : Vector<T>
+
+        return <any>undefined;
+><any>undefined : any
+>undefined : undefined
+    }
+}
+
+interface A1<T> {
+>A1 : A1<T>
+>T : T
+
+    bat: B1<A1<T>>;
+>bat : B1<A1<T>>
+>B1 : B1<T>
+>A1 : A1<T>
+>T : T
+}
+
+interface B1<T> extends A1<T> {
+>B1 : B1<T>
+>T : T
+>A1 : A1<T>
+>T : T
+
+    bat: B1<B1<T>>;
+>bat : B1<B1<T>>
+>B1 : B1<T>
+>B1 : B1<T>
+>T : T
+
+    boom: T extends any ? true : true
+>boom : T extends any ? true : true
+>T : T
+>true : true
+>true : true
+}
+

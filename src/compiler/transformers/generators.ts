@@ -430,8 +430,7 @@ namespace ts {
                     return visitFunctionExpression(<FunctionExpression>node);
 
                 default:
-                    Debug.failBadSyntaxKind(node);
-                    return visitEachChild(node, visitor, context);
+                    return Debug.failBadSyntaxKind(node);
             }
         }
 
