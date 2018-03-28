@@ -58,7 +58,7 @@ namespace ts.codefix {
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, errorCode: number, program: Program, cancellationToken: CancellationToken, seenFunctions?: Map<true>): Declaration | undefined {
-        if (!isAllowedTokenKind(token.kind)) {
+        if (!isParameterPropertyModifier(token.kind) && token.kind !== SyntaxKind.Identifier && token.kind !== SyntaxKind.DotDotDotToken) {
             return undefined;
         }
 
@@ -122,20 +122,6 @@ namespace ts.codefix {
 
             default:
                 return Debug.fail(String(errorCode));
-        }
-    }
-
-    function isAllowedTokenKind(kind: SyntaxKind): boolean {
-        switch (kind) {
-            case SyntaxKind.Identifier:
-            case SyntaxKind.DotDotDotToken:
-            case SyntaxKind.PublicKeyword:
-            case SyntaxKind.PrivateKeyword:
-            case SyntaxKind.ProtectedKeyword:
-            case SyntaxKind.ReadonlyKeyword:
-                return true;
-            default:
-                return false;
         }
     }
 

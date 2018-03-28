@@ -5436,6 +5436,16 @@ namespace ts {
         return false;
     }
 
+    /* @internal */
+    export function isParameterPropertyModifier(kind: SyntaxKind): boolean {
+        return !!(modifierToFlag(kind) & ModifierFlags.ParameterPropertyModifier);
+    }
+
+    /* @internal */
+    export function isClassMemberModifier(idToken: SyntaxKind): boolean {
+        return isParameterPropertyModifier(idToken) || idToken === SyntaxKind.StaticKeyword;
+    }
+
     export function isModifier(node: Node): node is Modifier {
         return isModifierKind(node.kind);
     }
