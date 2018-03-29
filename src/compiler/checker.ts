@@ -14767,7 +14767,7 @@ namespace ts {
             return propsType;
         }
 
-        function getJsxPropsTypeFromClassType(hostClassType: Type, isJs: boolean, context: JsxOpeningLikeElement, reportErrors?: boolean) {
+        function getJsxPropsTypeFromClassType(hostClassType: Type, isJs: boolean, context: JsxOpeningLikeElement, reportErrors: boolean) {
             if (isTypeAny(hostClassType)) {
                 return hostClassType;
             }
@@ -14822,7 +14822,7 @@ namespace ts {
         function getJsxPropsTypeFromConstructSignature(sig: Signature, isJs: boolean, context: JsxOpeningLikeElement) {
             const hostClassType = getReturnTypeOfSignature(sig);
             if (hostClassType) {
-                return getJsxPropsTypeFromClassType(hostClassType, isJs, context);
+                return getJsxPropsTypeFromClassType(hostClassType, isJs, context, /*reportErrors*/ false);
             }
             return getJsxPropsTypeFromCallSignature(sig, context);
         }
