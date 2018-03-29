@@ -2355,9 +2355,53 @@ declare module "fs" {
                 verifyRenamingFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.NonRecursiveWatchDirectory);
             });
 
-            // it("uses non recursive dynamic polling when renaming file in subfolder", () => {
-            //     verifyRenamingFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.DynamicPolling);
-            // });
+            it("uses non recursive dynamic polling when renaming file in subfolder", () => {
+                verifyRenamingFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.DynamicPolling);
+            });
+
+            it("when there are symlinks to folders in recursive folders", () => {
+                const cwd = "/home/user/projects/myproject";
+                const file1: FileOrFolder = {
+                    path: `${cwd}/src/file.ts`,
+                    content: `import * as a from "a"`
+                };
+                const tsconfig: FileOrFolder = {
+                    path: `${cwd}/tsconfig.json`,
+                    content: `{ "compilerOptions": { "extendedDiagnostics": true, "traceResolution": true }}`
+                };
+                const realA: FileOrFolder = {
+                    path: `${cwd}/node_modules/reala/index.d.ts`,
+                    content: `export {}`
+                };
+                const realB: FileOrFolder = {
+                    path: `${cwd}/node_modules/realb/index.d.ts`,
+                    content: `export {}`
+                };
+                const symLinkA: FileOrFolder = {
+                    path: `${cwd}/node_modules/a`,
+                    symLink: `${cwd}/node_modules/reala`
+                };
+                const symLinkB: FileOrFolder = {
+                    path: `${cwd}/node_modules/b`,
+                    symLink: `${cwd}/node_modules/realb`
+                };
+                const symLinkBInA: FileOrFolder = {
+                    path: `${cwd}/node_modules/reala/node_modules/b`,
+                    symLink: `${cwd}/node_modules/b`
+                };
+                const symLinkAInB: FileOrFolder = {
+                    path: `${cwd}/node_modules/realb/node_modules/a`,
+                    symLink: `${cwd}/node_modules/a`
+                };
+                const files = [file1, tsconfig, realA, realB, symLinkA, symLinkB, symLinkBInA, symLinkAInB];
+                const environmentVariables = createMap<string>();
+                environmentVariables.set("TSC_WATCHDIRECTORY", TestFSWithWatch.Tsc_WatchDirectory.NonRecursiveWatchDirectory);
+                const host = createWatchedSystem(files, { environmentVariables, currentDirectory: cwd });
+                createWatchOfConfigFile("tsconfig.json", host);
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+                checkWatchedDirectories(host, [cwd, `${cwd}/node_modules`, `${cwd}/node_modules/@types`, `${cwd}/node_modules/reala`, `${cwd}/node_modules/realb`,
+                    `${cwd}/node_modules/reala/node_modules`, `${cwd}/node_modules/realb/node_modules`, `${cwd}/src`], /*recursive*/ false);
+            });
         });
     });
 }
