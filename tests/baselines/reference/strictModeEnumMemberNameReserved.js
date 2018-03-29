@@ -6,6 +6,7 @@ enum E {
 
 const x1: E.static = E.static;
 
+
 //// [strictModeEnumMemberNameReserved.js]
 "use strict";
 var E;
