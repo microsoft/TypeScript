@@ -1510,8 +1510,7 @@ namespace ts {
                         break;
 
                     default:
-                        Debug.failBadSyntaxKind(node);
-                        break;
+                        return Debug.failBadSyntaxKind(node);
                 }
 
                 const captureNewTargetStatement = createVariableStatement(
@@ -1922,7 +1921,7 @@ namespace ts {
             return block;
         }
 
-        function visitFunctionBodyDownLevel(node: FunctionDeclaration | FunctionExpression) {
+        function visitFunctionBodyDownLevel(node: FunctionDeclaration | FunctionExpression | AccessorDeclaration) {
             const updated = visitFunctionBody(node.body, functionBodyVisitor, context);
             return updateBlock(
                 updated,
@@ -2348,32 +2347,26 @@ namespace ts {
                 }
             }
 
-            let bodyLocation: TextRange;
-            let statementsLocation: TextRange;
             if (convertedLoopBodyStatements) {
-                addRange(statements, convertedLoopBodyStatements);
+                return createSyntheticBlockForConvertedStatements(addRange(statements, convertedLoopBodyStatements));
             }
             else {
                 const statement = visitNode(node.statement, visitor, isStatement, liftToBlock);
                 if (isBlock(statement)) {
-                    addRange(statements, statement.statements);
-                    bodyLocation = statement;
-                    statementsLocation = statement.statements;
+                    return updateBlock(statement, setTextRange(createNodeArray(concatenate(statements, statement.statements)), statement.statements));
                 }
                 else {
                     statements.push(statement);
+                    return createSyntheticBlockForConvertedStatements(statements);
                 }
             }
+        }
 
-            // The old emitter does not emit source maps for the block.
-            // We add the location to preserve comments.
+        function createSyntheticBlockForConvertedStatements(statements: Statement[]) {
             return setEmitFlags(
-                setTextRange(
-                    createBlock(
-                        setTextRange(createNodeArray(statements), statementsLocation),
-                        /*multiLine*/ true
-                    ),
-                    bodyLocation,
+                createBlock(
+                    createNodeArray(statements),
+                    /*multiLine*/ true
                 ),
                 EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps
             );
@@ -3202,18 +3195,15 @@ namespace ts {
             convertedLoopState = undefined;
             const ancestorFacts = enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
             let updated: AccessorDeclaration;
-            if (node.transformFlags & TransformFlags.ContainsCapturedLexicalThis) {
-                const parameters = visitParameterList(node.parameters, visitor, context);
-                const body = transformFunctionBody(node);
-                if (node.kind === SyntaxKind.GetAccessor) {
-                    updated = updateGetAccessor(node, node.decorators, node.modifiers, node.name, parameters, node.type, body);
-                }
-                else {
-                    updated = updateSetAccessor(node, node.decorators, node.modifiers, node.name, parameters, body);
-                }
+            const parameters = visitParameterList(node.parameters, visitor, context);
+            const body = node.transformFlags & (TransformFlags.ContainsCapturedLexicalThis | TransformFlags.ContainsES2015)
+                ? transformFunctionBody(node)
+                : visitFunctionBodyDownLevel(node);
+            if (node.kind === SyntaxKind.GetAccessor) {
+                updated = updateGetAccessor(node, node.decorators, node.modifiers, node.name, parameters, node.type, body);
             }
             else {
-                updated = visitEachChild(node, visitor, context);
+                updated = updateSetAccessor(node, node.decorators, node.modifiers, node.name, parameters, body);
             }
             exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;

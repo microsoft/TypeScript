@@ -1,0 +1,49 @@
+Exit Code: 1
+Standard output:
+node_modules/minimatch/minimatch.js(2,11): error TS2339: Property 'Minimatch' does not exist on type 'typeof minimatch'.
+node_modules/minimatch/minimatch.js(9,26): error TS2339: Property 'GLOBSTAR' does not exist on type 'typeof minimatch'.
+node_modules/minimatch/minimatch.js(9,47): error TS2339: Property 'GLOBSTAR' does not exist on type 'typeof Minimatch'.
+node_modules/minimatch/minimatch.js(50,11): error TS2339: Property 'filter' does not exist on type 'typeof minimatch'.
+node_modules/minimatch/minimatch.js(54,12): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'typeof minimatch' has no compatible call signatures.
+node_modules/minimatch/minimatch.js(71,1): error TS2300: Duplicate identifier 'minimatch'.
+node_modules/minimatch/minimatch.js(77,17): error TS2339: Property 'minimatch' does not exist on type 'typeof minimatch'.
+node_modules/minimatch/minimatch.js(81,21): error TS2339: Property 'Minimatch' does not exist on type 'typeof minimatch'.
+node_modules/minimatch/minimatch.js(87,1): error TS2300: Duplicate identifier 'Minimatch'.
+node_modules/minimatch/minimatch.js(89,34): error TS2339: Property 'Minimatch' does not exist on type 'typeof minimatch | { (p: any, pattern: any, options: any): any; Minimatch: (pattern: any, options...'.
+  Property 'Minimatch' does not exist on type 'typeof minimatch'.
+node_modules/minimatch/minimatch.js(92,10): error TS2300: Duplicate identifier 'minimatch'.
+node_modules/minimatch/minimatch.js(107,10): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/minimatch/minimatch.js(110,10): error TS2300: Duplicate identifier 'Minimatch'.
+node_modules/minimatch/minimatch.js(111,25): error TS2359: The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type.
+node_modules/minimatch/minimatch.js(112,12): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/minimatch/minimatch.js(139,11): error TS2339: Property 'prototype' does not exist on type 'typeof Minimatch'.
+node_modules/minimatch/minimatch.js(141,11): error TS2339: Property 'prototype' does not exist on type 'typeof Minimatch'.
+node_modules/minimatch/minimatch.js(197,11): error TS2339: Property 'prototype' does not exist on type 'typeof Minimatch'.
+node_modules/minimatch/minimatch.js(231,11): error TS2339: Property 'prototype' does not exist on type 'typeof Minimatch'.
+node_modules/minimatch/minimatch.js(235,25): error TS2359: The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type.
+node_modules/minimatch/minimatch.js(269,11): error TS2339: Property 'prototype' does not exist on type 'typeof Minimatch'.
+node_modules/minimatch/minimatch.js(410,15): error TS2532: Object is possibly 'undefined'.
+node_modules/minimatch/minimatch.js(411,13): error TS2532: Object is possibly 'undefined'.
+node_modules/minimatch/minimatch.js(414,9): error TS2532: Object is possibly 'undefined'.
+node_modules/minimatch/minimatch.js(414,12): error TS2339: Property 'reEnd' does not exist on type '{ type: any; start: number; reStart: number; open: any; close: any; }'.
+node_modules/minimatch/minimatch.js(572,32): error TS2532: Object is possibly 'undefined'.
+node_modules/minimatch/minimatch.js(573,28): error TS2532: Object is possibly 'undefined'.
+node_modules/minimatch/minimatch.js(573,40): error TS2532: Object is possibly 'undefined'.
+node_modules/minimatch/minimatch.js(573,43): error TS2339: Property 'reEnd' does not exist on type '{ type: any; start: number; reStart: number; open: any; close: any; }'.
+node_modules/minimatch/minimatch.js(574,27): error TS2532: Object is possibly 'undefined'.
+node_modules/minimatch/minimatch.js(574,30): error TS2339: Property 'reEnd' does not exist on type '{ type: any; start: number; reStart: number; open: any; close: any; }'.
+node_modules/minimatch/minimatch.js(574,41): error TS2532: Object is possibly 'undefined'.
+node_modules/minimatch/minimatch.js(574,44): error TS2339: Property 'reEnd' does not exist on type '{ type: any; start: number; reStart: number; open: any; close: any; }'.
+node_modules/minimatch/minimatch.js(575,28): error TS2532: Object is possibly 'undefined'.
+node_modules/minimatch/minimatch.js(575,31): error TS2339: Property 'reEnd' does not exist on type '{ type: any; start: number; reStart: number; open: any; close: any; }'.
+node_modules/minimatch/minimatch.js(631,10): error TS2339: Property '_glob' does not exist on type 'RegExp'.
+node_modules/minimatch/minimatch.js(632,10): error TS2339: Property '_src' does not exist on type 'RegExp'.
+node_modules/minimatch/minimatch.js(638,10): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/minimatch/minimatch.js(641,11): error TS2339: Property 'prototype' does not exist on type 'typeof Minimatch'.
+node_modules/minimatch/minimatch.js(689,12): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/minimatch/minimatch.js(699,11): error TS2339: Property 'prototype' does not exist on type 'typeof Minimatch'.
+node_modules/minimatch/minimatch.js(760,11): error TS2339: Property 'prototype' does not exist on type 'typeof Minimatch'.
+
+
+
+Standard error:

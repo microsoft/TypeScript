@@ -254,8 +254,8 @@ type T21 = TypeName<any>;  // "string" | "number" | "boolean" | "undefined" | "f
 >T21 : "string" | "number" | "boolean" | "undefined" | "object" | "function"
 >TypeName : TypeName<T>
 
-type T22 = TypeName<never>;  // "string" | "number" | "boolean" | "undefined" | "function" | "object"
->T22 : "string" | "number" | "boolean" | "undefined" | "object" | "function"
+type T22 = TypeName<never>;  // never
+>T22 : never
 >TypeName : TypeName<T>
 
 type T23 = TypeName<{}>;  // "object"
@@ -678,6 +678,43 @@ function f21<T extends number | string>(x: T, y: ZeroOf<T>) {
 >x : T
 }
 
+type T35<T extends { a: string, b: number }> = T[];
+>T35 : T[]
+>T : T
+>a : string
+>b : number
+>T : T
+
+type T36<T> = T extends { a: string } ? T extends { b: number } ? T35<T> : never : never;
+>T36 : T36<T>
+>T : T
+>T : T
+>a : string
+>T : T
+>b : number
+>T35 : T[]
+>T : T
+
+type T37<T> = T extends { b: number } ? T extends { a: string } ? T35<T> : never : never;
+>T37 : T37<T>
+>T : T
+>T : T
+>b : number
+>T : T
+>a : string
+>T35 : T[]
+>T : T
+
+type T38<T> = [T] extends [{ a: string }] ? [T] extends [{ b: number }] ? T35<T> : never : never;
+>T38 : T38<T>
+>T : T
+>T : T
+>a : string
+>T : T
+>b : number
+>T35 : T[]
+>T : T
+
 type Extends<T, U> = T extends U ? true : false;
 >Extends : Extends<T, U>
 >T : T
@@ -741,8 +778,8 @@ type Q3 = IsString<any>;  // boolean
 >Q3 : boolean
 >IsString : Extends<T, string>
 
-type Q4 = IsString<never>;  // boolean
->Q4 : boolean
+type Q4 = IsString<never>;  // never
+>Q4 : never
 >IsString : Extends<T, string>
 
 type N1 = Not<false>;  // true
@@ -865,12 +902,12 @@ type T41 = number extends never ? true : false;  // false
 >true : true
 >false : false
 
-type T42 = never extends number ? true : false;  // boolean
->T42 : boolean
+type T42 = never extends number ? true : false;  // true
+>T42 : true
 >true : true
 >false : false
 
-type IsNever<T> = T extends never ? true : false;
+type IsNever<T> = [T] extends [never] ? true : false;
 >IsNever : IsNever<T>
 >T : T
 >T : T
@@ -888,6 +925,36 @@ type T51 = IsNever<number>;  // false
 type T52 = IsNever<any>;  // false
 >T52 : false
 >IsNever : IsNever<T>
+
+function f22<T>(x: T extends (infer U)[] ? U[] : never) {
+>f22 : <T>(x: T extends infer U[] ? U[] : never) => void
+>T : T
+>x : T extends infer U[] ? U[] : never
+>T : T
+>U : U
+>U : U
+
+    let e = x[0];  // {}
+>e : {}
+>x[0] : {}
+>x : T extends infer U[] ? U[] : never
+>0 : 0
+}
+
+function f23<T extends string[]>(x: T extends (infer U)[] ? U[] : never) {
+>f23 : <T extends string[]>(x: T extends infer U[] ? U[] : never) => void
+>T : T
+>x : T extends infer U[] ? U[] : never
+>T : T
+>U : U
+>U : U
+
+    let e = x[0];  // string
+>e : string
+>x[0] : string
+>x : T extends infer U[] ? U[] : never
+>0 : 0
+}
 
 // Repros from #21664
 
@@ -1010,8 +1077,8 @@ type Bar<T> = T extends string ? boolean : number;
 >T : T
 
 const convert = <U>(value: Foo<U>): Bar<U> => value;
->convert : <U>(value: Foo<U>) => Foo<U>
-><U>(value: Foo<U>): Bar<U> => value : <U>(value: Foo<U>) => Foo<U>
+>convert : <U>(value: Foo<U>) => Bar<U>
+><U>(value: Foo<U>): Bar<U> => value : <U>(value: Foo<U>) => Bar<U>
 >U : U
 >value : Foo<U>
 >Foo : Foo<T>
@@ -1095,7 +1162,7 @@ function f33<T, U>() {
 >U : U
 
     type T2 = Bar<T & U>;
->T2 : Foo<T & U>
+>T2 : Bar<T & U>
 >Bar : Bar<T>
 >T : T
 >U : U
@@ -1106,7 +1173,7 @@ function f33<T, U>() {
 
     var z: T2;
 >z : Foo<T & U>
->T2 : Foo<T & U>
+>T2 : Bar<T & U>
 }
 
 // Repro from #21823
@@ -1236,7 +1303,7 @@ function f50() {
 >T : T
 
     type Omit<T extends object> = { [P in keyof T]: If<Eq<T[P], never>, never, P>; }[keyof T];
->Omit : { [P in keyof T]: (T[P] extends never ? boolean : false) extends false ? P : never; }[keyof T]
+>Omit : { [P in keyof T]: (T[P] extends never ? never : false) extends false ? P : never; }[keyof T]
 >T : T
 >P : P
 >T : T
@@ -1263,7 +1330,7 @@ function f50() {
 
     type A = Omit<{ a: void; b: never; }>;  // 'a'
 >A : "a"
->Omit : { [P in keyof T]: (T[P] extends never ? boolean : false) extends false ? P : never; }[keyof T]
+>Omit : { [P in keyof T]: (T[P] extends never ? never : false) extends false ? P : never; }[keyof T]
 >a : void
 >b : never
 
@@ -1369,4 +1436,41 @@ type Test2 = NonFooKeys2<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
 >foo : 1
 >bar : 2
 >baz : 3
+
+// Repro from #21729
+
+interface Foo2 { foo: string; }
+>Foo2 : Foo2
+>foo : string
+
+interface Bar2 { bar: string; }
+>Bar2 : Bar2
+>bar : string
+
+type FooBar = Foo2 | Bar2;
+>FooBar : FooBar
+>Foo2 : Foo2
+>Bar2 : Bar2
+
+declare interface ExtractFooBar<FB extends FooBar> { }
+>ExtractFooBar : ExtractFooBar<FB>
+>FB : FB
+>FooBar : FooBar
+
+type Extracted<Struct> = {
+>Extracted : Extracted<Struct>
+>Struct : Struct
+
+    [K in keyof Struct]: Struct[K] extends FooBar ? ExtractFooBar<Struct[K]> : Struct[K];
+>K : K
+>Struct : Struct
+>Struct : Struct
+>K : K
+>FooBar : FooBar
+>ExtractFooBar : ExtractFooBar<FB>
+>Struct : Struct
+>K : K
+>Struct : Struct
+>K : K
+}
 

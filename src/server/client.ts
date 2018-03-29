@@ -71,7 +71,7 @@ namespace ts.server {
             };
         }
 
-        private convertCodeEditsToTextChange(fileName: string, codeEdit: protocol.CodeEdit): ts.TextChange {
+        private convertCodeEditsToTextChange(fileName: string, codeEdit: protocol.CodeEdit): TextChange {
             return { span: this.decodeSpan(codeEdit, fileName), newText: codeEdit.newText };
         }
 
@@ -169,8 +169,9 @@ namespace ts.server {
             };
         }
 
-        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): CompletionInfo {
-            const args: protocol.CompletionsRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), ...options };
+        getCompletionsAtPosition(fileName: string, position: number, _preferences: UserPreferences | undefined): CompletionInfo {
+            // Not passing along 'preferences' because server should already have those from the 'configure' command
+            const args: protocol.CompletionsRequestArgs = this.createFileLocationRequestArgs(fileName, position);
 
             const request = this.processRequest<protocol.CompletionsRequest>(CommandNames.Completions, args);
             const response = this.processResponse<protocol.CompletionsResponse>(request);
@@ -229,7 +230,7 @@ namespace ts.server {
             }));
         }
 
-        getFormattingEditsForRange(file: string, start: number, end: number, _options: FormatCodeOptions): ts.TextChange[] {
+        getFormattingEditsForRange(file: string, start: number, end: number, _options: FormatCodeOptions): TextChange[] {
             const args: protocol.FormatRequestArgs = this.createFileLocationRequestArgsWithEndLineAndOffset(file, start, end);
 
 
@@ -240,11 +241,11 @@ namespace ts.server {
             return response.body.map(entry => this.convertCodeEditsToTextChange(file, entry));
         }
 
-        getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): ts.TextChange[] {
+        getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[] {
             return this.getFormattingEditsForRange(fileName, 0, this.host.getScriptSnapshot(fileName).getLength(), options);
         }
 
-        getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, _options: FormatCodeOptions): ts.TextChange[] {
+        getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, _options: FormatCodeOptions): TextChange[] {
             const args: protocol.FormatOnKeyRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), key };
 
             // TODO: handle FormatCodeOptions
@@ -522,8 +523,16 @@ namespace ts.server {
             }));
         }
 
-        getOutliningSpans(_fileName: string): OutliningSpan[] {
-            return notImplemented();
+        getOutliningSpans(file: string): OutliningSpan[] {
+            const request = this.processRequest<protocol.OutliningSpansRequest>(CommandNames.GetOutliningSpans, { file });
+            const response = this.processResponse<protocol.OutliningSpansResponse>(request);
+
+            return response.body.map<OutliningSpan>(item => ({
+                textSpan: this.decodeSpan(item.textSpan, file),
+                hintSpan: this.decodeSpan(item.hintSpan, file),
+                bannerText: item.bannerText,
+                autoCollapse: item.autoCollapse
+            }));
         }
 
         getTodoComments(_fileName: string, _descriptors: TodoCommentDescriptor[]): TodoComment[] {
@@ -548,7 +557,7 @@ namespace ts.server {
             const request = this.processRequest<protocol.CodeFixRequest>(CommandNames.GetCodeFixes, args);
             const response = this.processResponse<protocol.CodeFixResponse>(request);
 
-            return response.body.map(({ description, changes, fixId }) => ({ description, changes: this.convertChanges(changes, file), fixId }));
+            return response.body.map(({ description, changes, fixId, fixAllDescription }) => ({ description, changes: this.convertChanges(changes, file), fixId, fixAllDescription }));
         }
 
         getCombinedCodeFix = notImplemented;
@@ -607,7 +616,7 @@ namespace ts.server {
             const edits: FileTextChanges[] = this.convertCodeEditsToTextChanges(response.body.edits);
 
             const renameFilename: string | undefined = response.body.renameFilename;
-            let renameLocation: number | undefined = undefined;
+            let renameLocation: number | undefined;
             if (renameFilename !== undefined) {
                 renameLocation = this.lineOffsetToPosition(renameFilename, response.body.renameLocation);
             }
@@ -640,7 +649,7 @@ namespace ts.server {
             }));
         }
 
-        convertTextChangeToCodeEdit(change: protocol.CodeEdit, fileName: string): ts.TextChange {
+        convertTextChangeToCodeEdit(change: protocol.CodeEdit, fileName: string): TextChange {
             return {
                 span: this.decodeSpan(change, fileName),
                 newText: change.newText ? change.newText : ""

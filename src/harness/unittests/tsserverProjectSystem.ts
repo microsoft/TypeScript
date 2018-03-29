@@ -7,14 +7,14 @@ namespace ts.projectSystem {
     import protocol = server.protocol;
     import CommandNames = server.CommandNames;
 
-    export import TestServerHost = ts.TestFSWithWatch.TestServerHost;
-    export type FileOrFolder = ts.TestFSWithWatch.FileOrFolder;
-    export import createServerHost = ts.TestFSWithWatch.createServerHost;
-    export import checkFileNames = ts.TestFSWithWatch.checkFileNames;
-    export import libFile = ts.TestFSWithWatch.libFile;
-    export import checkWatchedFiles = ts.TestFSWithWatch.checkWatchedFiles;
-    import checkWatchedDirectories = ts.TestFSWithWatch.checkWatchedDirectories;
-    import safeList = ts.TestFSWithWatch.safeList;
+    export import TestServerHost = TestFSWithWatch.TestServerHost;
+    export type FileOrFolder = TestFSWithWatch.FileOrFolder;
+    export import createServerHost = TestFSWithWatch.createServerHost;
+    export import checkArray = TestFSWithWatch.checkArray;
+    export import libFile = TestFSWithWatch.libFile;
+    export import checkWatchedFiles = TestFSWithWatch.checkWatchedFiles;
+    import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
+    import safeList = TestFSWithWatch.safeList;
 
     export const customTypesMap = {
         path: <Path>"/typesMap.json",
@@ -167,12 +167,13 @@ namespace ts.projectSystem {
         private events: server.ProjectServiceEvent[] = [];
         readonly session: TestSession;
         readonly service: server.ProjectService;
-        readonly host: projectSystem.TestServerHost;
-        constructor(files: projectSystem.FileOrFolder[]) {
+        readonly host: TestServerHost;
+        constructor(files: FileOrFolder[], suppressDiagnosticEvents?: boolean) {
             this.host = createServerHost(files);
             this.session = createSession(this.host, {
                 canUseEvents: true,
                 eventHandler: event => this.events.push(event),
+                suppressDiagnosticEvents,
             });
             this.service = this.session.getProjectService();
         }
@@ -210,7 +211,7 @@ namespace ts.projectSystem {
         }
 
         assertProjectInfoTelemetryEvent(partial: Partial<server.ProjectInfoTelemetryEventData>, configFile?: string): void {
-            assert.deepEqual(this.getEvent<server.ProjectInfoTelemetryEvent>(ts.server.ProjectInfoTelemetryEvent), {
+            assert.deepEqual(this.getEvent<server.ProjectInfoTelemetryEvent>(server.ProjectInfoTelemetryEvent), {
                 projectId: Harness.mockHash(configFile || "/tsconfig.json"),
                 fileStats: fileStats({ ts: 1 }),
                 compilerOptions: {},
@@ -227,7 +228,7 @@ namespace ts.projectSystem {
                 configFileName: "tsconfig.json",
                 projectType: "configured",
                 languageServiceEnabled: true,
-                version: ts.version,
+                version,
                 ...partial,
             });
         }
@@ -355,11 +356,11 @@ namespace ts.projectSystem {
     }
 
     export function checkProjectActualFiles(project: server.Project, expectedFiles: string[]) {
-        checkFileNames(`${server.ProjectKind[project.projectKind]} project, actual files`, project.getFileNames(), expectedFiles);
+        checkArray(`${server.ProjectKind[project.projectKind]} project, actual files`, project.getFileNames(), expectedFiles);
     }
 
     function checkProjectRootFiles(project: server.Project, expectedFiles: string[]) {
-        checkFileNames(`${server.ProjectKind[project.projectKind]} project, rootFileNames`, project.getRootFiles(), expectedFiles);
+        checkArray(`${server.ProjectKind[project.projectKind]} project, rootFileNames`, project.getRootFiles(), expectedFiles);
     }
 
     function mapCombinedPathsInAncestor(dir: string, path2: string, mapAncestor: (ancestor: string) => boolean) {
@@ -392,7 +393,7 @@ namespace ts.projectSystem {
     }
 
     function checkOpenFiles(projectService: server.ProjectService, expectedFiles: FileOrFolder[]) {
-        checkFileNames("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path).fileName), expectedFiles.map(file => file.path));
+        checkArray("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path).fileName), expectedFiles.map(file => file.path));
     }
 
     /**
@@ -474,15 +475,21 @@ namespace ts.projectSystem {
     }
 
     function checkErrorMessage(session: TestSession, eventName: protocol.DiagnosticEventKind, diagnostics: protocol.DiagnosticEventBody, isMostRecent = false): void {
-        checkNthEvent(session, ts.server.toEvent(eventName, diagnostics), 0, isMostRecent);
+        checkNthEvent(session, server.toEvent(eventName, diagnostics), 0, isMostRecent);
     }
 
     function checkCompleteEvent(session: TestSession, numberOfCurrentEvents: number, expectedSequenceId: number, isMostRecent = true): void {
-        checkNthEvent(session, ts.server.toEvent("requestCompleted", { request_seq: expectedSequenceId }), numberOfCurrentEvents - 1, isMostRecent);
+        checkNthEvent(session, server.toEvent("requestCompleted", { request_seq: expectedSequenceId }), numberOfCurrentEvents - 1, isMostRecent);
     }
 
     function checkProjectUpdatedInBackgroundEvent(session: TestSession, openFiles: string[]) {
-        checkNthEvent(session, ts.server.toEvent("projectsUpdatedInBackground", { openFiles }), 0, /*isMostRecent*/ true);
+        checkNthEvent(session, server.toEvent("projectsUpdatedInBackground", { openFiles }), 0, /*isMostRecent*/ true);
+    }
+
+    function checkNoDiagnosticEvents(session: TestSession) {
+        for (const event of session.events) {
+            assert.isFalse(event.event.endsWith("Diag"), JSON.stringify(event));
+        }
     }
 
     function checkNthEvent(session: TestSession, expectedEvent: protocol.Event, index: number, isMostRecent: boolean) {
@@ -531,7 +538,7 @@ namespace ts.projectSystem {
 
             const project = projectService.inferredProjects[0];
 
-            checkFileNames("inferred project", project.getFileNames(), [appFile.path, libFile.path, moduleFile.path]);
+            checkArray("inferred project", project.getFileNames(), [appFile.path, libFile.path, moduleFile.path]);
             const configFileLocations = ["/a/b/c/", "/a/b/", "/a/", "/"];
             const configFiles = flatMap(configFileLocations, location => [location + "tsconfig.json", location + "jsconfig.json"]);
             checkWatchedFiles(host, configFiles.concat(libFile.path, moduleFile.path));
@@ -1327,13 +1334,13 @@ namespace ts.projectSystem {
             service.checkNumberOfProjects({ externalProjects: 1 });
             checkProjectActualFiles(service.externalProjects[0], [f1.path, f2.path, libFile.path]);
 
-            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, { includeExternalModuleExports: false, includeInsertTextCompletions: false });
+            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, defaultPreferences);
             // should contain completions for string
             assert.isTrue(completions1.entries.some(e => e.name === "charAt"), "should contain 'charAt'");
             assert.isFalse(completions1.entries.some(e => e.name === "toExponential"), "should not contain 'toExponential'");
 
             service.closeClientFile(f2.path);
-            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, { includeExternalModuleExports: false, includeInsertTextCompletions: false });
+            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, defaultPreferences);
             // should contain completions for string
             assert.isFalse(completions2.entries.some(e => e.name === "charAt"), "should not contain 'charAt'");
             assert.isTrue(completions2.entries.some(e => e.name === "toExponential"), "should contain 'toExponential'");
@@ -1359,11 +1366,11 @@ namespace ts.projectSystem {
             service.checkNumberOfProjects({ externalProjects: 1 });
             checkProjectActualFiles(service.externalProjects[0], [f1.path, f2.path, libFile.path]);
 
-            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, { includeExternalModuleExports: false, includeInsertTextCompletions: false });
+            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, defaultPreferences);
             assert.isTrue(completions1.entries.some(e => e.name === "somelongname"), "should contain 'somelongname'");
 
             service.closeClientFile(f2.path);
-            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, { includeExternalModuleExports: false, includeInsertTextCompletions: false });
+            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, defaultPreferences);
             assert.isFalse(completions2.entries.some(e => e.name === "somelongname"), "should not contain 'somelongname'");
             const sf2 = service.externalProjects[0].getLanguageService().getProgram().getSourceFile(f2.path);
             assert.equal(sf2.text, "");
@@ -1968,7 +1975,7 @@ namespace ts.projectSystem {
 
             // Check identifiers defined in HTML content are available in .ts file
             const project = configuredProjectAt(projectService, 0);
-            let completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 1, { includeExternalModuleExports: false, includeInsertTextCompletions: false });
+            let completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 1, defaultPreferences);
             assert(completions && completions.entries[0].name === "hello", `expected entry hello to be in completion list`);
 
             // Close HTML file
@@ -1982,7 +1989,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path, config.path]);
 
             // Check identifiers defined in HTML content are not available in .ts file
-            completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 5, { includeExternalModuleExports: false, includeInsertTextCompletions: false });
+            completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 5, defaultPreferences);
             assert(completions && completions.entries[0].name !== "hello", `unexpected hello entry in completion list`);
         });
 
@@ -2635,7 +2642,7 @@ namespace ts.projectSystem {
             assert.equal(lastEvent.data.project, project, "project name");
             assert.isFalse(lastEvent.data.languageServiceEnabled, "Language service state");
 
-            const options = projectService.getFormatCodeOptions();
+            const options = projectService.getFormatCodeOptions(f1.path as server.NormalizedPath);
             const edits = project.getLanguageService().getFormattingEditsForDocument(f1.path, options);
             assert.deepEqual(edits, [{ span: createTextSpan(/*start*/ 7, /*length*/ 3), newText: " " }]);
         });
@@ -2983,6 +2990,47 @@ namespace ts.projectSystem {
                 checkNumberOfProjects(projectService, { configuredProjects: 1 });
                 checkProjectActualFiles(configuredProject, [file.path, filesFile1.path, libFile.path, config.path]);
             }
+        });
+
+        it("requests are done on file on pendingReload but has svc for previous version", () => {
+            const projectLocation = "/user/username/projects/project";
+            const file1: FileOrFolder = {
+                path: `${projectLocation}/src/file1.ts`,
+                content: `import { y } from "./file1"; let x = 10;`
+            };
+            const file2: FileOrFolder = {
+                path: `${projectLocation}/src/file2.ts`,
+                content: "export let y = 10;"
+            };
+            const config: FileOrFolder = {
+                path: `${projectLocation}/tsconfig.json`,
+                content: "{}"
+            };
+            const files = [file1, file2, libFile, config];
+            const host = createServerHost(files);
+            const session = createSession(host);
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: protocol.CommandTypes.Open,
+                arguments: { file: file2.path, fileContent: file2.content }
+            });
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: protocol.CommandTypes.Open,
+                arguments: { file: file1.path }
+            });
+            session.executeCommandSeq<protocol.CloseRequest>({
+                command: protocol.CommandTypes.Close,
+                arguments: { file: file2.path }
+            });
+
+            file2.content += "export let z = 10;";
+            host.reloadFS(files);
+            // Do not let the timeout runs, before executing command
+            const startOffset = file2.content.indexOf("y") + 1;
+            session.executeCommandSeq<protocol.GetApplicableRefactorsRequest>({
+                command: protocol.CommandTypes.GetApplicableRefactors,
+                arguments: { file: file2.path, startLine: 1, startOffset, endLine: 1, endOffset: startOffset + 1 }
+            });
+
         });
     });
 
@@ -3539,7 +3587,7 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host);
             projectService.openClientFile(f1.path);
 
-            const defaultSettings = projectService.getFormatCodeOptions();
+            const defaultSettings = projectService.getFormatCodeOptions(f1.path as server.NormalizedPath);
 
             // set global settings
             const newGlobalSettings1 = clone(defaultSettings);
@@ -4033,6 +4081,63 @@ namespace ts.projectSystem {
             session.clearMessages();
         });
 
+        it("suppressed diagnostic events", () => {
+            const file: FileOrFolder = {
+                path: "/a.ts",
+                content: "1 = 2;",
+            };
+
+            const host = createServerHost([file]);
+            const session = createSession(host, { canUseEvents: true, suppressDiagnosticEvents: true });
+            const service = session.getProjectService();
+
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: server.CommandNames.Open,
+                arguments: { file: file.path, fileContent: file.content },
+            });
+
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+
+            host.checkTimeoutQueueLength(0);
+            checkNoDiagnosticEvents(session);
+
+            session.clearMessages();
+
+            let expectedSequenceId = session.getNextSeq();
+
+            session.executeCommandSeq<protocol.GeterrRequest>({
+                command: server.CommandNames.Geterr,
+                arguments: {
+                    delay: 0,
+                    files: [file.path],
+                }
+            });
+
+            host.checkTimeoutQueueLength(0);
+            checkNoDiagnosticEvents(session);
+
+            checkCompleteEvent(session, 1, expectedSequenceId);
+
+            session.clearMessages();
+
+            expectedSequenceId = session.getNextSeq();
+
+            session.executeCommandSeq<protocol.GeterrForProjectRequest>({
+                command: server.CommandNames.Geterr,
+                arguments: {
+                    delay: 0,
+                    file: file.path,
+                }
+            });
+
+            host.checkTimeoutQueueLength(0);
+            checkNoDiagnosticEvents(session);
+
+            checkCompleteEvent(session, 1, expectedSequenceId);
+
+            session.clearMessages();
+        });
+
         function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: ReadonlyArray<string> = []): protocol.Diagnostic {
             return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category: diagnosticCategoryName(message), source: undefined };
         }
@@ -4108,7 +4213,7 @@ namespace ts.projectSystem {
             serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, configFile.path);
         });
 
-        it("are not generated when the config file doesnot include file opened and config file has errors", () => {
+        it("are not generated when the config file does not include file opened and config file has errors", () => {
             const file = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
@@ -4132,7 +4237,26 @@ namespace ts.projectSystem {
             serverEventManager.hasZeroEvent("configFileDiag");
         });
 
-        it("are not generated when the config file doesnot include file opened and doesnt contain any errors", () => {
+        it("are not generated when the config file has errors but suppressDiagnosticEvents is true", () => {
+            const file = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {
+                        "foo": "bar",
+                        "allowJS": true
+                    }
+                }`
+            };
+            const serverEventManager = new TestServerEventManager([file, configFile], /*suppressDiagnosticEvents*/ true);
+            openFilesForSession([file], serverEventManager.session);
+            serverEventManager.hasZeroEvent("configFileDiag");
+        });
+
+        it("are not generated when the config file does not include file opened and doesnt contain any errors", () => {
             const file = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
@@ -4890,7 +5014,7 @@ namespace ts.projectSystem {
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 2,
                 arguments: { projectFileName }
-            }).response as ReadonlyArray<ts.server.protocol.DiagnosticWithLinePosition>;
+            }).response as ReadonlyArray<server.protocol.DiagnosticWithLinePosition>;
             assert.isTrue(diags.length === 0);
 
             session.executeCommand(<server.protocol.OpenExternalProjectRequest>{
@@ -4908,7 +5032,7 @@ namespace ts.projectSystem {
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 4,
                 arguments: { projectFileName }
-            }).response as ReadonlyArray<ts.server.protocol.DiagnosticWithLinePosition>;
+            }).response as ReadonlyArray<server.protocol.DiagnosticWithLinePosition>;
             assert.isTrue(diagsAfterUpdate.length === 0);
         });
     });
@@ -5072,7 +5196,7 @@ namespace ts.projectSystem {
 
     describe("tsserverProjectSystem cancellationToken", () => {
         // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
-        let oldPrepare: ts.AnyFunction;
+        let oldPrepare: AnyFunction;
         before(() => {
             oldPrepare = (Error as any).prepareStackTrace;
             delete (Error as any).prepareStackTrace;
@@ -5309,13 +5433,13 @@ namespace ts.projectSystem {
                 });
 
                 // send outlining spans request (normal priority)
-                session.executeCommandSeq(<protocol.OutliningSpansRequest>{
+                session.executeCommandSeq(<protocol.OutliningSpansRequestFull>{
                     command: "outliningSpans",
                     arguments: { file: f1.path }
                 });
 
                 // ensure the outlining spans request can be canceled
-                verifyExecuteCommandSeqIsCancellable(<protocol.OutliningSpansRequest>{
+                verifyExecuteCommandSeqIsCancellable(<protocol.OutliningSpansRequestFull>{
                     command: "outliningSpans",
                     arguments: { file: f1.path }
                 });
@@ -5622,16 +5746,11 @@ namespace ts.projectSystem {
             }
 
             function verifyCalledOnEachEntry(callback: CalledMaps, expectedKeys: Map<number>) {
-                const calledMap = calledMaps[callback];
-                ts.TestFSWithWatch.verifyMapSize(callback, calledMap, arrayFrom(expectedKeys.keys()));
-                expectedKeys.forEach((called, name) => {
-                    assert.isTrue(calledMap.has(name), `${callback} is expected to contain ${name}, actual keys: ${arrayFrom(calledMap.keys())}`);
-                    assert.equal(calledMap.get(name).length, called, `${callback} is expected to be called ${called} times with ${name}. Actual entry: ${calledMap.get(name)}`);
-                });
+                TestFSWithWatch.checkMultiMapKeyCount(callback, calledMaps[callback], expectedKeys);
             }
 
             function verifyCalledOnEachEntryNTimes(callback: CalledMaps, expectedKeys: string[], nTimes: number) {
-                return verifyCalledOnEachEntry(callback, zipToMap(expectedKeys, expectedKeys.map(() => nTimes)));
+                TestFSWithWatch.checkMultiMapEachKeyWithCount(callback, calledMaps[callback], expectedKeys, nTimes);
             }
 
             function verifyNoHostCalls() {
@@ -5674,7 +5793,7 @@ namespace ts.projectSystem {
 
             const host = createServerHost([root, imported]);
             const projectService = createProjectService(host);
-            projectService.setCompilerOptionsForInferredProjects({ module: ts.ModuleKind.AMD, noLib: true });
+            projectService.setCompilerOptionsForInferredProjects({ module: ModuleKind.AMD, noLib: true });
             projectService.openClientFile(root.path);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             const project = projectService.inferredProjects[0];
@@ -5720,7 +5839,7 @@ namespace ts.projectSystem {
 
             // setting compiler options discards module resolution cache
             callsTrackingHost.clear();
-            projectService.setCompilerOptionsForInferredProjects({ module: ts.ModuleKind.AMD, noLib: true, target: ts.ScriptTarget.ES5 });
+            projectService.setCompilerOptionsForInferredProjects({ module: ModuleKind.AMD, noLib: true, target: ScriptTarget.ES5 });
             verifyImportedDiagnostics();
             vertifyF1Lookups();
 
@@ -5790,7 +5909,7 @@ namespace ts.projectSystem {
 
             const host = createServerHost([root]);
             const projectService = createProjectService(host);
-            projectService.setCompilerOptionsForInferredProjects({ module: ts.ModuleKind.AMD, noLib: true });
+            projectService.setCompilerOptionsForInferredProjects({ module: ModuleKind.AMD, noLib: true });
             const callsTrackingHost = createCallsTrackingHost(host);
             projectService.openClientFile(root.path);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
@@ -6009,6 +6128,55 @@ namespace ts.projectSystem {
             });
         });
 
+        describe("Subfolder invalidations correctly include parent folder failed lookup locations", () => {
+            function runFailedLookupTest(resolution: "Node" | "Classic") {
+                const projectLocation = "/proj";
+                const file1: FileOrFolder = {
+                    path: `${projectLocation}/foo/boo/app.ts`,
+                    content: `import * as debug from "debug"`
+                };
+                const file2: FileOrFolder = {
+                    path: `${projectLocation}/foo/boo/moo/app.ts`,
+                    content: `import * as debug from "debug"`
+                };
+                const tsconfig: FileOrFolder = {
+                    path: `${projectLocation}/tsconfig.json`,
+                    content: JSON.stringify({
+                        files: ["foo/boo/app.ts", "foo/boo/moo/app.ts"],
+                        moduleResolution: resolution
+                    })
+                };
+
+                const files = [file1, file2, tsconfig, libFile];
+                const host = createServerHost(files);
+                const service = createProjectService(host);
+                service.openClientFile(file1.path);
+
+                const project = service.configuredProjects.get(tsconfig.path);
+                checkProjectActualFiles(project, files.map(f => f.path));
+                assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file1.path).map(diag => diag.messageText), ["Cannot find module 'debug'."]);
+                assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file2.path).map(diag => diag.messageText), ["Cannot find module 'debug'."]);
+
+                const debugTypesFile: FileOrFolder = {
+                    path: `${projectLocation}/node_modules/debug/index.d.ts`,
+                    content: "export {}"
+                };
+                files.push(debugTypesFile);
+                host.reloadFS(files);
+                host.runQueuedTimeoutCallbacks();
+                checkProjectActualFiles(project, files.map(f => f.path));
+                assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file1.path).map(diag => diag.messageText), []);
+                assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file2.path).map(diag => diag.messageText), []);
+            }
+
+            it("Includes the parent folder FLLs in node module resolution mode", () => {
+                runFailedLookupTest("Node");
+            });
+            it("Includes the parent folder FLLs in classic module resolution mode", () => {
+                runFailedLookupTest("Classic");
+            });
+        });
+
         describe("Verify npm install in directory with tsconfig file works when", () => {
             function verifyNpmInstall(timeoutDuringPartialInstallation: boolean) {
                 const root = "/user/username/rootfolder/otherfolder";
@@ -6174,6 +6342,44 @@ namespace ts.projectSystem {
             it("timeout occurs after installation", () => {
                 verifyNpmInstall(/*timeoutDuringPartialInstallation*/ false);
             });
+        });
+
+        it("when node_modules dont receive event for the @types file addition", () => {
+            const projectLocation = "/user/username/folder/myproject";
+            const app: FileOrFolder = {
+                path: `${projectLocation}/app.ts`,
+                content: `import * as debug from "debug"`
+            };
+            const tsconfig: FileOrFolder = {
+                path: `${projectLocation}/tsconfig.json`,
+                content: ""
+            };
+
+            const files = [app, tsconfig, libFile];
+            const host = createServerHost(files);
+            const service = createProjectService(host);
+            service.openClientFile(app.path);
+
+            const project = service.configuredProjects.get(tsconfig.path);
+            checkProjectActualFiles(project, files.map(f => f.path));
+            assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(app.path).map(diag => diag.messageText), ["Cannot find module 'debug'."]);
+
+            const debugTypesFile: FileOrFolder = {
+                path: `${projectLocation}/node_modules/@types/debug/index.d.ts`,
+                content: "export {}"
+            };
+            files.push(debugTypesFile);
+            // Do not invoke recursive directory watcher for anything other than node_module/@types
+            const invoker = host.invokeWatchedDirectoriesRecursiveCallback;
+            host.invokeWatchedDirectoriesRecursiveCallback = (fullPath, relativePath) => {
+                if (fullPath.endsWith("@types")) {
+                    invoker.call(host, fullPath, relativePath);
+                }
+            };
+            host.reloadFS(files);
+            host.runQueuedTimeoutCallbacks();
+            checkProjectActualFiles(project, files.map(f => f.path));
+            assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(app.path).map(diag => diag.messageText), []);
         });
     });
 
@@ -6754,7 +6960,7 @@ namespace ts.projectSystem {
                     const events: protocol.ProjectsUpdatedInBackgroundEvent[] = filter(
                         map(
                             host.getOutput(), s => convertToObject(
-                                ts.parseJsonText("json.json", s.replace(outputEventRegex, "")),
+                                parseJsonText("json.json", s.replace(outputEventRegex, "")),
                                 []
                             )
                         ),
@@ -6968,7 +7174,6 @@ namespace ts.projectSystem {
             assert.isDefined(projectService.configuredProjects.get(aTsconfig.path));
             assert.isDefined(projectService.configuredProjects.get(bTsconfig.path));
 
-            debugger;
             verifyRenameResponse(session.executeCommandSeq<protocol.RenameRequest>({
                 command: protocol.CommandTypes.Rename,
                 arguments: {
@@ -7395,6 +7600,90 @@ namespace ts.projectSystem {
                     checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
                 }
             });
+        });
+    });
+
+    describe("watchDirectories implementation", () => {
+        function verifyCompletionListWithNewFileInSubFolder(tscWatchDirectory: TestFSWithWatch.Tsc_WatchDirectory) {
+            const projectFolder = "/a/username/project";
+            const projectSrcFolder = `${projectFolder}/src`;
+            const configFile: FileOrFolder = {
+                path: `${projectFolder}/tsconfig.json`,
+                content: "{}"
+            };
+            const index: FileOrFolder = {
+                path: `${projectSrcFolder}/index.ts`,
+                content: `import {} from "./"`
+            };
+            const file1: FileOrFolder = {
+                path: `${projectSrcFolder}/file1.ts`,
+                content: ""
+            };
+
+            const files = [index, file1, configFile, libFile];
+            const fileNames = files.map(file => file.path);
+            // All closed files(files other than index), project folder, project/src folder and project/node_modules/@types folder
+            const expectedWatchedFiles = arrayToMap(fileNames.slice(1), s => s, () => 1);
+            const expectedWatchedDirectories = createMap<number>();
+            const mapOfDirectories = tscWatchDirectory === TestFSWithWatch.Tsc_WatchDirectory.NonRecursiveWatchDirectory ?
+                expectedWatchedDirectories :
+                tscWatchDirectory === TestFSWithWatch.Tsc_WatchDirectory.WatchFile ?
+                    expectedWatchedFiles :
+                    createMap();
+            // For failed resolution lookup and tsconfig files
+            mapOfDirectories.set(projectFolder, 2);
+            // Through above recursive watches
+            mapOfDirectories.set(projectSrcFolder, 2);
+            // node_modules/@types folder
+            mapOfDirectories.set(`${projectFolder}/${nodeModulesAtTypes}`, 1);
+            const expectedCompletions = ["file1"];
+            const completionPosition = index.content.lastIndexOf('"');
+            const environmentVariables = createMap<string>();
+            environmentVariables.set("TSC_WATCHDIRECTORY", tscWatchDirectory);
+            const host = createServerHost(files, { environmentVariables });
+            const projectService = createProjectService(host);
+            projectService.openClientFile(index.path);
+
+            const project = projectService.configuredProjects.get(configFile.path);
+            assert.isDefined(project);
+            verifyProjectAndCompletions();
+
+            // Add file2
+            const file2: FileOrFolder = {
+                path: `${projectSrcFolder}/file2.ts`,
+                content: ""
+            };
+            files.push(file2);
+            fileNames.push(file2.path);
+            expectedWatchedFiles.set(file2.path, 1);
+            expectedCompletions.push("file2");
+            host.reloadFS(files);
+            host.runQueuedTimeoutCallbacks();
+            assert.equal(projectService.configuredProjects.get(configFile.path), project);
+            verifyProjectAndCompletions();
+
+            function verifyProjectAndCompletions() {
+                const completions = project.getLanguageService().getCompletionsAtPosition(index.path, completionPosition, { includeExternalModuleExports: false, includeInsertTextCompletions: false });
+                checkArray("Completion Entries", completions.entries.map(e => e.name), expectedCompletions);
+
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+
+                TestFSWithWatch.checkMultiMapKeyCount("watchedFiles", host.watchedFiles, expectedWatchedFiles);
+                TestFSWithWatch.checkMultiMapKeyCount("watchedDirectories", host.watchedDirectories, expectedWatchedDirectories);
+                checkProjectActualFiles(project, fileNames);
+            }
+        }
+
+        it("uses watchFile when file is added to subfolder, completion list has new file", () => {
+            verifyCompletionListWithNewFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.WatchFile);
+        });
+
+        it("uses non recursive watchDirectory when file is added to subfolder, completion list has new file", () => {
+            verifyCompletionListWithNewFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.NonRecursiveWatchDirectory);
+        });
+
+        it("uses dynamic polling when file is added to subfolder, completion list has new file", () => {
+            verifyCompletionListWithNewFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.DynamicPolling);
         });
     });
 }

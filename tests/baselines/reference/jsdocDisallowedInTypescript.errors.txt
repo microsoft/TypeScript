@@ -7,22 +7,16 @@ tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(11,12): error TS255
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(13,14): error TS8020: JSDoc types can only be used inside documentation comments.
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(14,11): error TS8020: JSDoc types can only be used inside documentation comments.
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(15,8): error TS8020: JSDoc types can only be used inside documentation comments.
-tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(16,5): error TS2322: Type 'boolean[]' is not assignable to type 'boolean | undefined'.
-  Type 'boolean[]' is not assignable to type 'false'.
-tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(16,15): error TS8020: JSDoc types can only be used inside documentation comments.
-tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(16,15): error TS8028: JSDoc '...' may only appear in the last parameter of a signature.
-tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(17,11): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(16,11): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(17,17): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(18,5): error TS2322: Type 'undefined' is not assignable to type 'number | null'.
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(18,17): error TS8020: JSDoc types can only be used inside documentation comments.
-tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(19,5): error TS2322: Type 'undefined' is not assignable to type 'number | null'.
-tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(19,17): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(20,16): error TS8020: JSDoc types can only be used inside documentation comments.
 tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(21,16): error TS8020: JSDoc types can only be used inside documentation comments.
-tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(22,16): error TS8020: JSDoc types can only be used inside documentation comments.
-tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(23,17): error TS8020: JSDoc types can only be used inside documentation comments.
-tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(24,17): error TS8020: JSDoc types can only be used inside documentation comments.
-tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(24,17): error TS8028: JSDoc '...' may only appear in the last parameter of a signature.
+tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(22,17): error TS8020: JSDoc types can only be used inside documentation comments.
 
 
-==== tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts (21 errors) ====
+==== tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts (16 errors) ====
     // grammar error from checker
     var ara: Array.<number> = [1,2,3];
                   ~
@@ -56,14 +50,6 @@ tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(24,17): error TS802
     var g: function(number, number): number = (n,m) => n + m;
            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8020: JSDoc types can only be used inside documentation comments.
-    var variadic: ...boolean = [true, false, true];
-        ~~~~~~~~
-!!! error TS2322: Type 'boolean[]' is not assignable to type 'boolean | undefined'.
-!!! error TS2322:   Type 'boolean[]' is not assignable to type 'false'.
-                  ~~~~~~~~~~
-!!! error TS8020: JSDoc types can only be used inside documentation comments.
-                  ~~~~~~~~~~
-!!! error TS8028: JSDoc '...' may only appear in the last parameter of a signature.
     var most: !string = 'definite';
               ~~~~~~~
 !!! error TS8020: JSDoc types can only be used inside documentation comments.
@@ -85,10 +71,5 @@ tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts(24,17): error TS802
     var anys: Array<*>;
                     ~
 !!! error TS8020: JSDoc types can only be used inside documentation comments.
-    var vars: Array<...number>;
-                    ~~~~~~~~~
-!!! error TS8020: JSDoc types can only be used inside documentation comments.
-                    ~~~~~~~~~
-!!! error TS8028: JSDoc '...' may only appear in the last parameter of a signature.
     
     

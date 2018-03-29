@@ -5,38 +5,27 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         getCodeActions: context => {
-            const codeAction = tryGetCodeActionForInstallPackageTypes(context.host, context.sourceFile.fileName, getModuleName(context.sourceFile, context.span.start));
-            return codeAction && [{ fixId, ...codeAction }];
+            const { host, sourceFile, span: { start } } = context;
+            const packageName = getTypesPackageNameToInstall(host, sourceFile, start);
+            return packageName === undefined ? []
+                : [createCodeFixAction(/*changes*/ [], [Diagnostics.Install_0, packageName], fixId, Diagnostics.Install_all_missing_types_packages, getCommand(sourceFile.fileName, packageName))];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (_, diag, commands) => {
-            const pkg = getTypesPackageNameToInstall(context.host, getModuleName(diag.file, diag.start));
+            const pkg = getTypesPackageNameToInstall(context.host, diag.file, diag.start);
             if (pkg) {
                 commands.push(getCommand(diag.file.fileName, pkg));
             }
         }),
     });
 
-    function getModuleName(sourceFile: SourceFile, pos: number): string {
-        return cast(getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false), isStringLiteral).text;
-    }
-
     function getCommand(fileName: string, packageName: string): InstallPackageAction {
         return { type: "install package", file: fileName, packageName };
     }
 
-    function getTypesPackageNameToInstall(host: LanguageServiceHost, moduleName: string): string | undefined {
+    function getTypesPackageNameToInstall(host: LanguageServiceHost, sourceFile: SourceFile, pos: number): string | undefined {
+        const moduleName = cast(getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false), isStringLiteral).text;
         const { packageName } = getPackageName(moduleName);
-        // If !registry, registry not available yet, can't do anything.
         return host.isKnownTypesPackageName(packageName) ? getTypesPackageName(packageName) : undefined;
-    }
-
-    export function tryGetCodeActionForInstallPackageTypes(host: LanguageServiceHost, fileName: string, moduleName: string): CodeAction | undefined {
-        const packageName = getTypesPackageNameToInstall(host, moduleName);
-        return packageName === undefined ? undefined : {
-            description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Install_0), [packageName]),
-            changes: [],
-            commands: [getCommand(fileName, packageName)],
-        };
     }
 }

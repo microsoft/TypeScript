@@ -262,7 +262,7 @@ class C {
         this[_k] = null;
         this[_l] = null;
     }
-    [foo(), _m = foo(), _k = foo(), _o = fieldNameB, _l = fieldNameC, "some" + "method"]() { }
+    [(foo(), _m = foo(), _k = foo(), _o = fieldNameB, _l = fieldNameC, "some" + "method")]() { }
 }
 __decorate([
     x
@@ -297,7 +297,7 @@ void class D {
         this[_p] = null;
         this[_q] = null;
     }
-    [foo(), _r = foo(), _p = foo(), _s = fieldNameB, _q = fieldNameC, "some" + "method"]() { }
+    [(foo(), _r = foo(), _p = foo(), _s = fieldNameB, _q = fieldNameC, "some" + "method")]() { }
 };
 class E {
     constructor() {
@@ -308,7 +308,7 @@ class E {
         this[_t] = null;
         this[_u] = null;
     }
-    [foo(), _v = foo(), _t = foo(), "some" + "method"]() { }
+    [(foo(), _v = foo(), _t = foo(), "some" + "method")]() { }
 }
 _w = fieldNameB, _u = fieldNameC;
 __decorate([
@@ -344,7 +344,7 @@ void (_x = class F {
             this[_y] = null;
             this[_z] = null;
         }
-        [foo(), _0 = foo(), _y = foo(), "some" + "method"]() { }
+        [(foo(), _0 = foo(), _y = foo(), "some" + "method")]() { }
     },
     _1 = fieldNameB,
     _z = fieldNameC,
@@ -358,8 +358,8 @@ class G {
         this[_2] = null;
         this[_3] = null;
     }
-    [foo(), _4 = foo(), _2 = foo(), "some" + "method"]() { }
-    [_5 = fieldNameB, "some" + "method2"]() { }
+    [(foo(), _4 = foo(), _2 = foo(), "some" + "method")]() { }
+    [(_5 = fieldNameB, "some" + "method2")]() { }
 }
 _3 = fieldNameC;
 __decorate([
@@ -395,8 +395,8 @@ void (_6 = class H {
             this[_7] = null;
             this[_8] = null;
         }
-        [foo(), _9 = foo(), _7 = foo(), "some" + "method"]() { }
-        [_10 = fieldNameB, "some" + "method2"]() { }
+        [(foo(), _9 = foo(), _7 = foo(), "some" + "method")]() { }
+        [(_10 = fieldNameB, "some" + "method2")]() { }
     },
     _8 = fieldNameC,
     _6);
@@ -409,8 +409,8 @@ class I {
         this[_11] = null;
         this[_12] = null;
     }
-    [foo(), _13 = foo(), _11 = foo(), _14 = "some" + "method"]() { }
-    [_15 = fieldNameB, "some" + "method2"]() { }
+    [(foo(), _13 = foo(), _11 = foo(), _14 = "some" + "method")]() { }
+    [(_15 = fieldNameB, "some" + "method2")]() { }
 }
 _12 = fieldNameC;
 __decorate([
@@ -449,8 +449,8 @@ void (_16 = class J {
             this[_17] = null;
             this[_18] = null;
         }
-        [foo(), _19 = foo(), _17 = foo(), _20 = "some" + "method"]() { }
-        [_21 = fieldNameB, "some" + "method2"]() { }
+        [(foo(), _19 = foo(), _17 = foo(), _20 = "some" + "method")]() { }
+        [(_21 = fieldNameB, "some" + "method2")]() { }
     },
     _18 = fieldNameC,
     _16);

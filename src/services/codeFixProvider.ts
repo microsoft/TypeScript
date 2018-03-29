@@ -11,6 +11,7 @@ namespace ts {
         sourceFile: SourceFile;
         program: Program;
         cancellationToken: CancellationToken;
+        preferences: UserPreferences;
     }
 
     export interface CodeFixAllContext extends CodeFixContextBase {
@@ -25,6 +26,25 @@ namespace ts {
     export namespace codefix {
         const codeFixRegistrations: CodeFixRegistration[][] = [];
         const fixIdToRegistration = createMap<CodeFixRegistration>();
+
+        type DiagnosticAndArguments = DiagnosticMessage | [DiagnosticMessage, string] | [DiagnosticMessage, string, string];
+        function diagnosticToString(diag: DiagnosticAndArguments): string {
+            return isArray(diag)
+                ? formatStringFromArgs(getLocaleSpecificMessage(diag[0]), diag.slice(1) as ReadonlyArray<string>)
+                : getLocaleSpecificMessage(diag);
+        }
+
+        export function createCodeFixActionNoFixId(changes: FileTextChanges[], description: DiagnosticAndArguments) {
+            return createCodeFixActionWorker(diagnosticToString(description), changes, /*fixId*/ undefined, /*fixAllDescription*/ undefined);
+        }
+
+        export function createCodeFixAction(changes: FileTextChanges[], description: DiagnosticAndArguments, fixId: {}, fixAllDescription: DiagnosticAndArguments, command?: CodeActionCommand): CodeFixAction {
+            return createCodeFixActionWorker(diagnosticToString(description), changes, fixId, diagnosticToString(fixAllDescription), command);
+        }
+
+        function createCodeFixActionWorker(description: string, changes: FileTextChanges[], fixId?: {}, fixAllDescription?: string, command?: CodeActionCommand): CodeFixAction {
+            return { description, changes, fixId, fixAllDescription, commands: command ? [command] : undefined };
+        }
 
         export function registerCodeFix(reg: CodeFixRegistration) {
             for (const error of reg.errorCodes) {
@@ -88,15 +108,8 @@ namespace ts {
             return createCombinedCodeActions(changes, commands.length === 0 ? undefined : commands);
         }
 
-        export function codeFixAllWithTextChanges(context: CodeFixAllContext, errorCodes: number[], use: (changes: Push<TextChange>, error: Diagnostic) => void): CombinedCodeActions {
-            const changes: TextChange[] = [];
-            eachDiagnostic(context, errorCodes, diag => use(changes, diag));
-            changes.sort((a, b) => b.span.start - a.span.start);
-            return createCombinedCodeActions([createFileTextChanges(context.sourceFile.fileName, changes)]);
-        }
-
         function eachDiagnostic({ program, sourceFile }: CodeFixAllContext, errorCodes: number[], cb: (diag: Diagnostic) => void): void {
-            for (const diag of program.getSemanticDiagnostics(sourceFile)) {
+            for (const diag of program.getSemanticDiagnostics(sourceFile).concat(computeSuggestionDiagnostics(sourceFile, program))) {
                 if (contains(errorCodes, diag.code)) {
                     cb(diag);
                 }

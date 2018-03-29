@@ -42,7 +42,7 @@ namespace ts.server {
         let lastSent: protocol.Message;
 
         function createSession(): TestSession {
-            const opts: server.SessionOptions = {
+            const opts: SessionOptions = {
                 host: mockHost,
                 cancellationToken: nullCancellationToken,
                 useSingleInferredProject: false,
@@ -145,7 +145,7 @@ namespace ts.server {
 
                 session.onMessage(JSON.stringify(configureRequest));
 
-                assert.equal(session.getProjectService().getFormatCodeOptions().indentStyle, IndentStyle.Block);
+                assert.equal(session.getProjectService().getFormatCodeOptions("" as NormalizedPath).indentStyle, IndentStyle.Block);
 
                 const setOptionsRequest: protocol.SetCompilerOptionsForInferredProjectsRequest = {
                     command: CommandNames.CompilerOptionsForInferredProjects,
@@ -181,9 +181,7 @@ namespace ts.server {
                     type: "request"
                 };
 
-                const expected: protocol.StatusResponseBody = {
-                     version: ts.version
-                };
+                const expected: protocol.StatusResponseBody = { version };
                 assert.deepEqual(session.executeCommand(req).response, expected);
             });
         });
@@ -330,7 +328,7 @@ namespace ts.server {
 
         describe("send", () => {
             it("is an overrideable handle which sends protocol messages over the wire", () => {
-                const msg: server.protocol.Request = { seq: 0, type: "request", command: "" };
+                const msg: protocol.Request = { seq: 0, type: "request", command: "" };
                 const strmsg = JSON.stringify(msg);
                 const len = 1 + Utils.byteLength(strmsg, "utf8");
                 const resultMsg = `Content-Length: ${len}\r\n\r\n${strmsg}\n`;
@@ -348,7 +346,7 @@ namespace ts.server {
                     item: false
                 };
                 const command = "newhandle";
-                const result: ts.server.HandlerResponse = {
+                const result: HandlerResponse = {
                     response: respBody,
                     responseRequired: true
                 };
@@ -365,7 +363,7 @@ namespace ts.server {
                 const respBody = {
                     item: false
                 };
-                const resp: ts.server.HandlerResponse = {
+                const resp: HandlerResponse = {
                     response: respBody,
                     responseRequired: true
                 };
@@ -423,13 +421,17 @@ namespace ts.server {
 
         // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
         let oldPrepare: AnyFunction;
+        let oldStackTraceLimit: number;
         before(() => {
+            oldStackTraceLimit = (Error as any).stackTraceLimit;
             oldPrepare = (Error as any).prepareStackTrace;
             delete (Error as any).prepareStackTrace;
+            (Error as any).stackTraceLimit = 10;
         });
 
         after(() => {
             (Error as any).prepareStackTrace = oldPrepare;
+            (Error as any).stackTraceLimit = oldStackTraceLimit;
         });
 
         const command = "testhandler";
@@ -712,7 +714,7 @@ namespace ts.server {
             const text = `// blank line\nconst x = 0;`;
             const renameLocationInOldText = text.indexOf("0");
             const fileName = "/a.ts";
-            const edits: ts.FileTextChanges = {
+            const edits: FileTextChanges = {
                 fileName,
                 textChanges: [
                     {

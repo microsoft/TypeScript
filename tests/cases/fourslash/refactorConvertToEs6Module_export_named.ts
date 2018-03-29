@@ -3,15 +3,12 @@
 // @allowJs: true
 
 // @Filename: /a.js
-////exports.f = function() {}/*diagEnd*/
-////exports.C = class {}
+////[|exports.f = function() {}|];
+////exports.C = class {};
 ////exports.x = 0;
 
 verify.getSuggestionDiagnostics([{
     message: "File is a CommonJS module; it may be converted to an ES6 module.",
-    start: 0,
-    length: test.marker("diagEnd").position,
-    category: "suggestion",
     code: 80001,
 }]);
 
