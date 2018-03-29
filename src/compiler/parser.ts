@@ -6497,7 +6497,7 @@ namespace ts {
                     const result = target === PropertyLikeParse.Parameter ?
                         <JSDocParameterTag>createNode(SyntaxKind.JSDocParameterTag, atToken.pos) :
                         <JSDocPropertyTag>createNode(SyntaxKind.JSDocPropertyTag, atToken.pos);
-                    const nestedTypeLiteral = parseNestedTypeLiteral(typeExpression, name);
+                    const nestedTypeLiteral = parseNestedTypeLiteral(typeExpression, name, target);
                     if (nestedTypeLiteral) {
                         typeExpression = nestedTypeLiteral;
                         isNameFirst = true;
@@ -6511,15 +6511,17 @@ namespace ts {
                     return finishNode(result);
                 }
 
-                function parseNestedTypeLiteral(typeExpression: JSDocTypeExpression, name: EntityName) {
+                function parseNestedTypeLiteral(typeExpression: JSDocTypeExpression, name: EntityName, target: PropertyLikeParse) {
                     if (typeExpression && isObjectOrObjectArrayTypeReference(typeExpression.type)) {
                         const typeLiteralExpression = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression, scanner.getTokenPos());
-                        let child: JSDocParameterTag | false;
+                        let child: JSDocPropertyLikeTag | JSDocTypeTag | false;
                         let jsdocTypeLiteral: JSDocTypeLiteral;
                         const start = scanner.getStartPos();
-                        let children: JSDocParameterTag[];
-                        while (child = tryParse(() => parseChildParameterOrPropertyTag(PropertyLikeParse.Parameter, name))) {
-                            children = append(children, child);
+                        let children: JSDocPropertyLikeTag[];
+                        while (child = tryParse(() => parseChildParameterOrPropertyTag(target, name))) {
+                            if (child.kind === SyntaxKind.JSDocParameterTag || child.kind === SyntaxKind.JSDocPropertyTag) {
+                                children = append(children, child);
+                            }
                         }
                         if (children) {
                             jsdocTypeLiteral = <JSDocTypeLiteral>createNode(SyntaxKind.JSDocTypeLiteral, start);
@@ -6623,7 +6625,7 @@ namespace ts {
                         let jsdocTypeLiteral: JSDocTypeLiteral;
                         let childTypeTag: JSDocTypeTag;
                         const start = scanner.getStartPos();
-                        while (child = tryParse(() => parseChildParameterOrPropertyTag(PropertyLikeParse.Property))) {
+                        while (child = tryParse(() => parseChildPropertyTag())) {
                             if (!jsdocTypeLiteral) {
                                 jsdocTypeLiteral = <JSDocTypeLiteral>createNode(SyntaxKind.JSDocTypeLiteral, start);
                             }
@@ -6683,8 +6685,10 @@ namespace ts {
                     return a.escapedText === b.escapedText;
                 }
 
-                function parseChildParameterOrPropertyTag(target: PropertyLikeParse.Property): JSDocTypeTag | JSDocPropertyTag | false;
-                function parseChildParameterOrPropertyTag(target: PropertyLikeParse.Parameter, name: EntityName): JSDocParameterTag | false;
+                function parseChildPropertyTag() {
+                    return parseChildParameterOrPropertyTag(PropertyLikeParse.Property) as JSDocTypeTag | JSDocPropertyTag | false;
+                }
+
                 function parseChildParameterOrPropertyTag(target: PropertyLikeParse, name?: EntityName): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | false {
                     let canParseTag = true;
                     let seenAsterisk = false;
@@ -6965,7 +6969,7 @@ namespace ts {
                 forEachChild(node, visitNode, visitArray);
                 if (hasJSDocNodes(node)) {
                     for (const jsDocComment of node.jsDoc) {
-                        forEachChild(jsDocComment, visitNode, visitArray);
+                        visitNode(<IncrementalNode><Node>jsDocComment);
                     }
                 }
                 checkNodePositions(node, aggressiveChecks);
@@ -7071,10 +7075,16 @@ namespace ts {
         function checkNodePositions(node: Node, aggressiveChecks: boolean) {
             if (aggressiveChecks) {
                 let pos = node.pos;
-                forEachChild(node, child => {
+                const visitNode = (child: Node) => {
                     Debug.assert(child.pos >= pos);
                     pos = child.end;
-                });
+                };
+                if (hasJSDocNodes(node)) {
+                    for (const jsDocComment of node.jsDoc) {
+                        visitNode(jsDocComment);
+                    }
+                }
+                forEachChild(node, visitNode);
                 Debug.assert(pos <= node.end);
             }
         }
@@ -7112,7 +7122,11 @@ namespace ts {
                     // Adjust the pos or end (or both) of the intersecting element accordingly.
                     adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
                     forEachChild(child, visitNode, visitArray);
-
+                    if (hasJSDocNodes(child)) {
+                        for (const jsDocComment of child.jsDoc) {
+                            visitNode(<IncrementalNode><Node>jsDocComment);
+                        }
+                    }
                     checkNodePositions(child, aggressiveChecks);
                     return;
                 }
