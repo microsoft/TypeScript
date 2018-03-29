@@ -670,7 +670,7 @@ namespace ts.textChanges {
             const delta =
                 options.delta !== undefined
                     ? options.delta
-                    : formatting.SmartIndenter.shouldIndentChildNode(nodeIn)
+                    : formatting.SmartIndenter.shouldIndentChildNode(formatContext.options, nodeIn)
                         ? (formatOptions.indentSize || 0)
                         : 0;
             const file: SourceFileLike = { text, getLineAndCharacterOfPosition(pos) { return getLineAndCharacterOfPosition(this, pos); } };
