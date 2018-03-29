@@ -25047,9 +25047,8 @@ namespace ts {
             }
             else if (entityName.kind !== SyntaxKind.PropertyAccessExpression && isInRightSideOfImportOrExportAssignment(entityName)) {
                 const importEqualsDeclaration = getAncestor(entityName, SyntaxKind.ImportEqualsDeclaration);
-                if (importEqualsDeclaration) {
-                    return getSymbolOfPartOfRightHandSideOfImportEquals(entityName, /*dontResolveAlias*/ true);
-                }
+                Debug.assert(importEqualsDeclaration !== undefined);
+                return getSymbolOfPartOfRightHandSideOfImportEquals(entityName, /*dontResolveAlias*/ true);
             }
 
             if (isRightSideOfQualifiedNameOrPropertyAccess(entityName)) {
