@@ -314,7 +314,8 @@ interface Array<T> {}`
                     directoryExists: path => this.directoryExists(path),
                     getAccessileSortedChildDirectories: path => this.getDirectories(path),
                     filePathComparer: this.useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
-                    watchDirectory
+                    watchDirectory,
+                    realpath: s => this.realpath(s)
                 });
             }
             else if (tscWatchDirectory === Tsc_WatchDirectory.NonRecursiveWatchDirectory) {
@@ -323,7 +324,8 @@ interface Array<T> {}`
                     directoryExists: path => this.directoryExists(path),
                     getAccessileSortedChildDirectories: path => this.getDirectories(path),
                     filePathComparer: this.useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
-                    watchDirectory
+                    watchDirectory,
+                    realpath: s => this.realpath(s)
                 });
             }
             else if (tscWatchDirectory === Tsc_WatchDirectory.DynamicPolling) {
@@ -333,7 +335,8 @@ interface Array<T> {}`
                     directoryExists: path => this.directoryExists(path),
                     getAccessileSortedChildDirectories: path => this.getDirectories(path),
                     filePathComparer: this.useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
-                    watchDirectory
+                    watchDirectory,
+                    realpath: s => this.realpath(s)
                 });
             }
         }
@@ -649,7 +652,7 @@ interface Array<T> {}`
 
             const realpath = this.realpath(path);
             if (path !== realpath) {
-                return this.getRealFsEntry(isFsEntry, realpath as Path);
+                return this.getRealFsEntry(isFsEntry, this.toPath(realpath));
             }
 
             return undefined;
