@@ -337,6 +337,7 @@ namespace ts {
         getAccessileSortedChildDirectories(path: string): ReadonlyArray<string>;
         directoryExists(dir: string): boolean;
         filePathComparer: Comparer<string>;
+        realpath(s: string): string;
     }
 
     /**
@@ -392,9 +393,12 @@ namespace ts {
         function watchChildDirectories(parentDir: string, existingChildWatches: ChildWatches, callback: DirectoryWatcherCallback): ChildWatches {
             let newChildWatches: DirectoryWatcher[] | undefined;
             enumerateInsertsAndDeletes<string, DirectoryWatcher>(
-                host.directoryExists(parentDir) ? host.getAccessileSortedChildDirectories(parentDir) : emptyArray,
+                host.directoryExists(parentDir) ? mapDefined(host.getAccessileSortedChildDirectories(parentDir), child => {
+                    const childFullName = getNormalizedAbsolutePath(child, parentDir);
+                    return host.filePathComparer(childFullName, host.realpath(childFullName)) === Comparison.EqualTo ? childFullName : undefined;
+                }) : emptyArray,
                 existingChildWatches,
-                (child, childWatcher) => host.filePathComparer(getNormalizedAbsolutePath(child, parentDir), childWatcher.dirName),
+                (child, childWatcher) => host.filePathComparer(child, childWatcher.dirName),
                 createAndAddChildDirectoryWatcher,
                 closeFileWatcher,
                 addChildDirectoryWatcher
@@ -406,7 +410,7 @@ namespace ts {
              * Create new childDirectoryWatcher and add it to the new ChildDirectoryWatcher list
              */
             function createAndAddChildDirectoryWatcher(childName: string) {
-                const result = createDirectoryWatcher(getNormalizedAbsolutePath(childName, parentDir), callback);
+                const result = createDirectoryWatcher(childName, callback);
                 addChildDirectoryWatcher(result);
             }
 
@@ -594,14 +598,7 @@ namespace ts {
                 exit(exitCode?: number): void {
                     process.exit(exitCode);
                 },
-                realpath(path: string): string {
-                    try {
-                        return _fs.realpathSync(path);
-                    }
-                    catch {
-                        return path;
-                    }
-                },
+                realpath,
                 debugMode: some(<string[]>process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
                 tryEnableSourceMapsForHost() {
                     try {
@@ -683,7 +680,8 @@ namespace ts {
                     filePathComparer: useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
                     directoryExists,
                     getAccessileSortedChildDirectories: path => getAccessibleFileSystemEntries(path).directories,
-                    watchDirectory
+                    watchDirectory,
+                    realpath
                 });
 
                 return (directoryName, callback, recursive) => {
@@ -1024,6 +1022,15 @@ namespace ts {
 
             function getDirectories(path: string): string[] {
                 return filter<string>(_fs.readdirSync(path), dir => fileSystemEntryExists(combinePaths(path, dir), FileSystemEntryKind.Directory));
+            }
+
+            function realpath(path: string): string {
+                try {
+                    return _fs.realpathSync(path);
+                }
+                catch {
+                    return path;
+                }
             }
 
             function getModifiedTime(path: string) {
