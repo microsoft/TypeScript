@@ -25929,7 +25929,7 @@ namespace ts {
                 // populate reverse mapping: file path -> type reference directive that was resolved to this file
                 fileToDirective = createMap<string>();
                 resolvedTypeReferenceDirectives.forEach((resolvedDirective, key) => {
-                    if (!resolvedDirective) {
+                    if (!resolvedDirective || !resolvedDirective.resolvedFileName) {
                         return;
                     }
                     const file = host.getSourceFile(resolvedDirective.resolvedFileName);
