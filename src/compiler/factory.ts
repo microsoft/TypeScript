@@ -2396,12 +2396,13 @@ namespace ts {
 
     // Top-level nodes
 
-    export function updateSourceFileNode(node: SourceFile, statements: ReadonlyArray<Statement>, isDeclarationFile?: boolean, referencedFiles?: SourceFile["referencedFiles"], typeReferences?: SourceFile["typeReferenceDirectives"]) {
+    export function updateSourceFileNode(node: SourceFile, statements: ReadonlyArray<Statement>, isDeclarationFile?: boolean, referencedFiles?: SourceFile["referencedFiles"], typeReferences?: SourceFile["typeReferenceDirectives"], hasNoDefaultLib?: boolean) {
         if (
             node.statements !== statements ||
             (isDeclarationFile !== undefined && node.isDeclarationFile !== isDeclarationFile) ||
             (referencedFiles !== undefined && node.referencedFiles !== referencedFiles) ||
-            (typeReferences !== undefined && node.typeReferenceDirectives !== typeReferences)
+            (typeReferences !== undefined && node.typeReferenceDirectives !== typeReferences) ||
+            (hasNoDefaultLib !== undefined && node.hasNoDefaultLib !== hasNoDefaultLib)
         ) {
             const updated = <SourceFile>createSynthesizedNode(SyntaxKind.SourceFile);
             updated.flags |= node.flags;
@@ -2413,11 +2414,11 @@ namespace ts {
             updated.isDeclarationFile = isDeclarationFile === undefined ? node.isDeclarationFile : isDeclarationFile;
             updated.referencedFiles = referencedFiles === undefined ? node.referencedFiles : referencedFiles;
             updated.typeReferenceDirectives = typeReferences === undefined ? node.typeReferenceDirectives : typeReferences;
+            updated.hasNoDefaultLib = hasNoDefaultLib === undefined ? node.hasNoDefaultLib : hasNoDefaultLib;
             if (node.amdDependencies !== undefined) updated.amdDependencies = node.amdDependencies;
             if (node.moduleName !== undefined) updated.moduleName = node.moduleName;
             if (node.languageVariant !== undefined) updated.languageVariant = node.languageVariant;
             if (node.renamedDependencies !== undefined) updated.renamedDependencies = node.renamedDependencies;
-            if (node.hasNoDefaultLib !== undefined) updated.hasNoDefaultLib = node.hasNoDefaultLib;
             if (node.languageVersion !== undefined) updated.languageVersion = node.languageVersion;
             if (node.scriptKind !== undefined) updated.scriptKind = node.scriptKind;
             if (node.externalModuleIndicator !== undefined) updated.externalModuleIndicator = node.externalModuleIndicator;

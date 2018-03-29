@@ -59,6 +59,7 @@ const fp = { l10ns: {} } as FlatpickrFn;
 >FlatpickrFn : Symbol(FlatpickrFn, Decl(app.ts, 0, 8))
 
 export default fp.l10ns;
+>fp.l10ns : Symbol(FlatpickrFn.l10ns, Decl(instance.d.ts, 1, 30))
 >fp : Symbol(fp, Decl(app.ts, 1, 5))
 >l10ns : Symbol(FlatpickrFn.l10ns, Decl(instance.d.ts, 1, 30))
 

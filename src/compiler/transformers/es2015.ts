@@ -1510,8 +1510,7 @@ namespace ts {
                         break;
 
                     default:
-                        Debug.failBadSyntaxKind(node);
-                        break;
+                        return Debug.failBadSyntaxKind(node);
                 }
 
                 const captureNewTargetStatement = createVariableStatement(
@@ -1922,7 +1921,7 @@ namespace ts {
             return block;
         }
 
-        function visitFunctionBodyDownLevel(node: FunctionDeclaration | FunctionExpression) {
+        function visitFunctionBodyDownLevel(node: FunctionDeclaration | FunctionExpression | AccessorDeclaration) {
             const updated = visitFunctionBody(node.body, functionBodyVisitor, context);
             return updateBlock(
                 updated,
@@ -3196,18 +3195,15 @@ namespace ts {
             convertedLoopState = undefined;
             const ancestorFacts = enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
             let updated: AccessorDeclaration;
-            if (node.transformFlags & TransformFlags.ContainsCapturedLexicalThis) {
-                const parameters = visitParameterList(node.parameters, visitor, context);
-                const body = transformFunctionBody(node);
-                if (node.kind === SyntaxKind.GetAccessor) {
-                    updated = updateGetAccessor(node, node.decorators, node.modifiers, node.name, parameters, node.type, body);
-                }
-                else {
-                    updated = updateSetAccessor(node, node.decorators, node.modifiers, node.name, parameters, body);
-                }
+            const parameters = visitParameterList(node.parameters, visitor, context);
+            const body = node.transformFlags & (TransformFlags.ContainsCapturedLexicalThis | TransformFlags.ContainsES2015)
+                ? transformFunctionBody(node)
+                : visitFunctionBodyDownLevel(node);
+            if (node.kind === SyntaxKind.GetAccessor) {
+                updated = updateGetAccessor(node, node.decorators, node.modifiers, node.name, parameters, node.type, body);
             }
             else {
-                updated = visitEachChild(node, visitor, context);
+                updated = updateSetAccessor(node, node.decorators, node.modifiers, node.name, parameters, body);
             }
             exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;

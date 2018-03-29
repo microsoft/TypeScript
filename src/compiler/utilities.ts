@@ -2067,12 +2067,12 @@ namespace ts {
                 // Name in member declaration or property name in property access
                 return (<NamedDeclaration | PropertyAccessExpression>parent).name === node;
             case SyntaxKind.QualifiedName:
-                // Name on right hand side of dot in a type query
+                // Name on right hand side of dot in a type query or type reference
                 if ((<QualifiedName>parent).right === node) {
                     while (parent.kind === SyntaxKind.QualifiedName) {
                         parent = parent.parent;
                     }
-                    return parent.kind === SyntaxKind.TypeQuery;
+                    return parent.kind === SyntaxKind.TypeQuery || parent.kind === SyntaxKind.TypeReference;
                 }
                 return false;
             case SyntaxKind.BindingElement:
@@ -2117,6 +2117,13 @@ namespace ts {
     export function getClassImplementsHeritageClauseElements(node: ClassLikeDeclaration) {
         const heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ImplementsKeyword);
         return heritageClause ? heritageClause.types : undefined;
+    }
+
+    /** Returns the node in an `extends` or `implements` clause of a class or interface. */
+    export function getAllSuperTypeNodes(node: Node): ReadonlyArray<TypeNode> {
+        return isInterfaceDeclaration(node) ? getInterfaceBaseTypeNodes(node) || emptyArray
+            : isClassLike(node) ? concatenate(singleElementArray(getClassExtendsHeritageClauseElement(node)), getClassImplementsHeritageClauseElements(node)) || emptyArray
+            : emptyArray;
     }
 
     export function getInterfaceBaseTypeNodes(node: InterfaceDeclaration) {
@@ -2422,6 +2429,63 @@ namespace ts {
 
     export function getOperatorPrecedence(nodeKind: SyntaxKind, operatorKind: SyntaxKind, hasArguments?: boolean) {
         switch (nodeKind) {
+            case SyntaxKind.CommaListExpression:
+                return 0;
+
+            case SyntaxKind.SpreadElement:
+                return 1;
+
+            case SyntaxKind.YieldExpression:
+                return 2;
+
+            case SyntaxKind.ConditionalExpression:
+                return 4;
+
+            case SyntaxKind.BinaryExpression:
+                switch (operatorKind) {
+                    case SyntaxKind.CommaToken:
+                        return 0;
+
+                    case SyntaxKind.EqualsToken:
+                    case SyntaxKind.PlusEqualsToken:
+                    case SyntaxKind.MinusEqualsToken:
+                    case SyntaxKind.AsteriskAsteriskEqualsToken:
+                    case SyntaxKind.AsteriskEqualsToken:
+                    case SyntaxKind.SlashEqualsToken:
+                    case SyntaxKind.PercentEqualsToken:
+                    case SyntaxKind.LessThanLessThanEqualsToken:
+                    case SyntaxKind.GreaterThanGreaterThanEqualsToken:
+                    case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
+                    case SyntaxKind.AmpersandEqualsToken:
+                    case SyntaxKind.CaretEqualsToken:
+                    case SyntaxKind.BarEqualsToken:
+                        return 3;
+
+                    default:
+                        return getBinaryOperatorPrecedence(operatorKind);
+                }
+
+            case SyntaxKind.PrefixUnaryExpression:
+            case SyntaxKind.TypeOfExpression:
+            case SyntaxKind.VoidExpression:
+            case SyntaxKind.DeleteExpression:
+            case SyntaxKind.AwaitExpression:
+                return 16;
+
+            case SyntaxKind.PostfixUnaryExpression:
+                return 17;
+
+            case SyntaxKind.CallExpression:
+                return 18;
+
+            case SyntaxKind.NewExpression:
+                return hasArguments ? 19 : 18;
+
+            case SyntaxKind.TaggedTemplateExpression:
+            case SyntaxKind.PropertyAccessExpression:
+            case SyntaxKind.ElementAccessExpression:
+                return 19;
+
             case SyntaxKind.ThisKeyword:
             case SyntaxKind.SuperKeyword:
             case SyntaxKind.Identifier:
@@ -2443,116 +2507,57 @@ namespace ts {
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.OmittedExpression:
-                return 19;
-
-            case SyntaxKind.TaggedTemplateExpression:
-            case SyntaxKind.PropertyAccessExpression:
-            case SyntaxKind.ElementAccessExpression:
-                return 18;
-
-            case SyntaxKind.NewExpression:
-                return hasArguments ? 18 : 17;
-
-            case SyntaxKind.CallExpression:
-                return 17;
-
-            case SyntaxKind.PostfixUnaryExpression:
-                return 16;
-
-            case SyntaxKind.PrefixUnaryExpression:
-            case SyntaxKind.TypeOfExpression:
-            case SyntaxKind.VoidExpression:
-            case SyntaxKind.DeleteExpression:
-            case SyntaxKind.AwaitExpression:
-                return 15;
-
-            case SyntaxKind.BinaryExpression:
-                switch (operatorKind) {
-                    case SyntaxKind.ExclamationToken:
-                    case SyntaxKind.TildeToken:
-                        return 15;
-
-                    case SyntaxKind.AsteriskAsteriskToken:
-                    case SyntaxKind.AsteriskToken:
-                    case SyntaxKind.SlashToken:
-                    case SyntaxKind.PercentToken:
-                        return 14;
-
-                    case SyntaxKind.PlusToken:
-                    case SyntaxKind.MinusToken:
-                        return 13;
-
-                    case SyntaxKind.LessThanLessThanToken:
-                    case SyntaxKind.GreaterThanGreaterThanToken:
-                    case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
-                        return 12;
-
-                    case SyntaxKind.LessThanToken:
-                    case SyntaxKind.LessThanEqualsToken:
-                    case SyntaxKind.GreaterThanToken:
-                    case SyntaxKind.GreaterThanEqualsToken:
-                    case SyntaxKind.InKeyword:
-                    case SyntaxKind.InstanceOfKeyword:
-                        return 11;
-
-                    case SyntaxKind.EqualsEqualsToken:
-                    case SyntaxKind.EqualsEqualsEqualsToken:
-                    case SyntaxKind.ExclamationEqualsToken:
-                    case SyntaxKind.ExclamationEqualsEqualsToken:
-                        return 10;
-
-                    case SyntaxKind.AmpersandToken:
-                        return 9;
-
-                    case SyntaxKind.CaretToken:
-                        return 8;
-
-                    case SyntaxKind.BarToken:
-                        return 7;
-
-                    case SyntaxKind.AmpersandAmpersandToken:
-                        return 6;
-
-                    case SyntaxKind.BarBarToken:
-                        return 5;
-
-                    case SyntaxKind.EqualsToken:
-                    case SyntaxKind.PlusEqualsToken:
-                    case SyntaxKind.MinusEqualsToken:
-                    case SyntaxKind.AsteriskAsteriskEqualsToken:
-                    case SyntaxKind.AsteriskEqualsToken:
-                    case SyntaxKind.SlashEqualsToken:
-                    case SyntaxKind.PercentEqualsToken:
-                    case SyntaxKind.LessThanLessThanEqualsToken:
-                    case SyntaxKind.GreaterThanGreaterThanEqualsToken:
-                    case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
-                    case SyntaxKind.AmpersandEqualsToken:
-                    case SyntaxKind.CaretEqualsToken:
-                    case SyntaxKind.BarEqualsToken:
-                        return 3;
-
-                    case SyntaxKind.CommaToken:
-                        return 0;
-
-                    default:
-                        return -1;
-                }
-
-            case SyntaxKind.ConditionalExpression:
-                return 4;
-
-            case SyntaxKind.YieldExpression:
-                return 2;
-
-            case SyntaxKind.SpreadElement:
-                return 1;
-
-            case SyntaxKind.CommaListExpression:
-                return 0;
+                return 20;
 
             default:
                 return -1;
         }
+    }
+
+    /* @internal */
+    export function getBinaryOperatorPrecedence(kind: SyntaxKind): number {
+        switch (kind) {
+            case SyntaxKind.BarBarToken:
+                return 5;
+            case SyntaxKind.AmpersandAmpersandToken:
+                return 6;
+            case SyntaxKind.BarToken:
+                return 7;
+            case SyntaxKind.CaretToken:
+                return 8;
+            case SyntaxKind.AmpersandToken:
+                return 9;
+            case SyntaxKind.EqualsEqualsToken:
+            case SyntaxKind.ExclamationEqualsToken:
+            case SyntaxKind.EqualsEqualsEqualsToken:
+            case SyntaxKind.ExclamationEqualsEqualsToken:
+                return 10;
+            case SyntaxKind.LessThanToken:
+            case SyntaxKind.GreaterThanToken:
+            case SyntaxKind.LessThanEqualsToken:
+            case SyntaxKind.GreaterThanEqualsToken:
+            case SyntaxKind.InstanceOfKeyword:
+            case SyntaxKind.InKeyword:
+            case SyntaxKind.AsKeyword:
+                return 11;
+            case SyntaxKind.LessThanLessThanToken:
+            case SyntaxKind.GreaterThanGreaterThanToken:
+            case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+                return 12;
+            case SyntaxKind.PlusToken:
+            case SyntaxKind.MinusToken:
+                return 13;
+            case SyntaxKind.AsteriskToken:
+            case SyntaxKind.SlashToken:
+            case SyntaxKind.PercentToken:
+                return 14;
+            case SyntaxKind.AsteriskAsteriskToken:
+                return 15;
+        }
+
+        // -1 is lower than all other precedences.  Returning it will cause binary expression
+        // parsing to stop.
+        return -1;
     }
 
     export function createDiagnosticCollection(): DiagnosticCollection {
@@ -2560,19 +2565,13 @@ namespace ts {
         const filesWithDiagnostics = [] as SortedArray<string>;
         const fileDiagnostics = createMap<SortedArray<Diagnostic>>();
         let hasReadNonFileDiagnostics = false;
-        let modificationCount = 0;
 
         return {
             add,
             getGlobalDiagnostics,
             getDiagnostics,
-            getModificationCount,
             reattachFileDiagnostics
         };
-
-        function getModificationCount() {
-            return modificationCount;
-        }
 
         function reattachFileDiagnostics(newFile: SourceFile): void {
             forEach(fileDiagnostics.get(newFile.fileName), diagnostic => diagnostic.file = newFile);
@@ -2599,7 +2598,6 @@ namespace ts {
             }
 
             insertSorted(diagnostics, diagnostic, compareDiagnostics);
-            modificationCount++;
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {
@@ -4078,6 +4076,12 @@ namespace ts {
         return { start, length };
     }
 
+    /* @internal */
+    export function createTextRange(pos: number, end: number = pos): TextRange {
+        Debug.assert(end >= pos);
+        return { pos, end };
+    }
+
     export function createTextSpanFromBounds(start: number, end: number) {
         return createTextSpan(start, end - start);
     }
@@ -5438,6 +5442,16 @@ namespace ts {
                 return true;
         }
         return false;
+    }
+
+    /* @internal */
+    export function isParameterPropertyModifier(kind: SyntaxKind): boolean {
+        return !!(modifierToFlag(kind) & ModifierFlags.ParameterPropertyModifier);
+    }
+
+    /* @internal */
+    export function isClassMemberModifier(idToken: SyntaxKind): boolean {
+        return isParameterPropertyModifier(idToken) || idToken === SyntaxKind.StaticKeyword;
     }
 
     export function isModifier(node: Node): node is Modifier {

@@ -14,5 +14,5 @@
 ////interface EndOfFile { f; /*e*/
 
 for (const marker of test.markerNames()) {
-    verify.completionsAt(marker, ["readonly"]);
+    verify.completionsAt(marker, ["readonly"], { isNewIdentifierLocation: true });
 }

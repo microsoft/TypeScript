@@ -117,7 +117,7 @@ namespace ts {
                 createWatchOfConfigFile(configParseResult, commandLineOptions);
             }
             else {
-                performCompilation(configParseResult.fileNames, configParseResult.options);
+                performCompilation(configParseResult.fileNames, configParseResult.options, getConfigFileParsingDiagnostics(configParseResult));
             }
         }
         else {
@@ -139,11 +139,11 @@ namespace ts {
         }
     }
 
-    function performCompilation(rootFileNames: string[], compilerOptions: CompilerOptions) {
+    function performCompilation(rootFileNames: string[], compilerOptions: CompilerOptions, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) {
         const compilerHost = createCompilerHost(compilerOptions);
         enableStatistics(compilerOptions);
 
-        const program = createProgram(rootFileNames, compilerOptions, compilerHost);
+        const program = createProgram(rootFileNames, compilerOptions, compilerHost, /*oldProgram*/ undefined, configFileParsingDiagnostics);
         const exitStatus = emitFilesAndReportErrors(program, reportDiagnostic, s => sys.write(s + sys.newLine));
         reportStatistics(program);
         return sys.exit(exitStatus);
@@ -169,10 +169,7 @@ namespace ts {
     function createWatchOfConfigFile(configParseResult: ParsedCommandLine, optionsToExtend: CompilerOptions) {
         const watchCompilerHost = createWatchCompilerHostOfConfigFile(configParseResult.options.configFilePath, optionsToExtend, sys, /*createProgram*/ undefined, reportDiagnostic, createWatchStatusReporter(configParseResult.options));
         updateWatchCompilationHost(watchCompilerHost);
-        watchCompilerHost.rootFiles = configParseResult.fileNames;
-        watchCompilerHost.options = configParseResult.options;
-        watchCompilerHost.configFileSpecs = configParseResult.configFileSpecs;
-        watchCompilerHost.configFileWildCardDirectories = configParseResult.wildcardDirectories;
+        watchCompilerHost.configFileParsingResult = configParseResult;
         createWatchProgram(watchCompilerHost);
     }
 

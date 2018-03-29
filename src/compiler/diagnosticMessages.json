@@ -27,6 +27,10 @@
         "category": "Error",
         "code": 1012
     },
+    "A rest parameter or binding pattern may not have a trailing comma.": {
+        "category": "Error",
+        "code": 1013
+    },
     "A rest parameter must be last in a parameter list.": {
         "category": "Error",
         "code": 1014
@@ -1372,7 +1376,7 @@
         "category": "Error",
         "code": 2406
     },
-    "The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.": {
+    "The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type '{0}'.": {
         "category": "Error",
         "code": 2407
     },
@@ -1668,7 +1672,7 @@
         "category": "Error",
         "code": 2487
     },
-    "Type must have a '[Symbol.iterator]()' method that returns an iterator.": {
+    "Type '{0}' must have a '[Symbol.iterator]()' method that returns an iterator.": {
         "category": "Error",
         "code": 2488
     },
@@ -1732,7 +1736,7 @@
         "category": "Error",
         "code": 2503
     },
-    "Type must have a '[Symbol.asyncIterator]()' method that returns an async iterator.": {
+    "Type '{0}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.": {
         "category": "Error",
         "code": 2504
     },
@@ -1987,6 +1991,14 @@
     "Enum declarations can only merge with namespace or other enum declarations.": {
         "category": "Error",
         "code": 2567
+    },
+    "Type '{0}' is not an array type. Use compiler option '--downlevelIteration' to allow iterating of iterators.": {
+        "category": "Error",
+        "code": 2568
+    },
+    "Type '{0}' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators.": {
+        "category": "Error",
+        "code": 2569
     },
 
     "JSX element attributes type '{0}' may not be a union type.": {
@@ -4026,5 +4038,101 @@
     "Add definite assignment assertion to property '{0}'": {
         "category": "Message",
         "code": 95020
+    },
+    "Add all missing members": {
+        "category": "Message",
+        "code": 95022
+    },
+    "Infer all types from usage": {
+        "category": "Message",
+        "code": 95023
+    },
+    "Delete all unused declarations": {
+        "category": "Message",
+        "code": 95024
+    },
+    "Prefix all unused declarations with '_' where possible": {
+        "category": "Message",
+        "code": 95025
+    },
+    "Fix all detected spelling errors": {
+        "category": "Message",
+        "code": 95026
+    },
+    "Add initializers to all uninitialized properties": {
+        "category": "Message",
+        "code": 95027
+    },
+    "Add definite assignment assertions to all uninitialized properties": {
+        "category": "Message",
+        "code": 95028
+    },
+    "Add undefined type to all uninitialized properties": {
+        "category": "Message",
+        "code": 95029
+    },
+    "Change all jsdoc-style types to TypeScript": {
+        "category": "Message",
+        "code": 95030
+    },
+    "Change all jsdoc-style types to TypeScript (and add '| undefined' to nullable types)": {
+        "category": "Message",
+        "code": 95031
+    },
+    "Implement all unimplemented interfaces": {
+        "category": "Message",
+        "code": 95032
+    },
+    "Install all missing types packages": {
+        "category": "Message",
+        "code": 95033
+    },
+    "Rewrite all as indexed access types": {
+        "category": "Message",
+        "code": 95034
+    },
+    "Convert all to default imports": {
+        "category": "Message",
+        "code": 95035
+    },
+    "Make all 'super()' calls the first statement in their constructor": {
+        "category": "Message",
+        "code": 95036
+    },
+    "Add 'this.' to all unresolved variables matching a member name": {
+        "category": "Message",
+        "code": 95037
+    },
+    "Change all extended interfaces to 'implements'": {
+        "category": "Message",
+        "code": 95038
+    },
+    "Add all missing super calls": {
+        "category": "Message",
+        "code": 95039
+    },
+    "Implement all inherited abstract classes": {
+        "category": "Message",
+        "code": 95040
+    },
+    "Add all missing 'async' modifiers": {
+        "category": "Message",
+        "code": 95041
+    },
+    "Add '@ts-ignore' to all error messages": {
+        "category": "Message",
+        "code": 95042
+    },
+    "Annotate everything with types from JSDoc": {
+        "category": "Message",
+        "code": 95043
+    },
+    "Add '()' to all uncalled decorators": {
+        "category": "Message",
+        "code": 95044
+    },
+    "Convert all constructor functions to classes": {
+        "category": "Message",
+        "code": 95045
     }
 }
