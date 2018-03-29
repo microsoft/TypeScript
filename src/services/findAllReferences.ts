@@ -1535,30 +1535,23 @@ namespace ts.FindAllReferences.Core {
         function findRootSymbol(sym: Symbol): Symbol | undefined {
             // Unwrap symbols to get to the root (e.g. transient symbols as a result of widening)
             // Or a union property, use its underlying unioned symbols
-            return firstDefined(checker.getRootSymbols(sym), rootSymbol => {
-                // if it is in the list, then we are done
-                if (search.includes(rootSymbol)) {
+            return firstDefined(checker.getRootSymbols(sym), rootSymbol =>
+                isMatchingRootSymbol(search, rootSymbol, state.inheritsFromCache, checker)
                     // For a root symbol that is a component of a union or intersection, use the original (union/intersection) symbol.
                     // That we when a symbol references the whole union we avoid claiming it references some particular member of the union.
                     // For a transient symbol we want to use the root symbol instead.
-                    return getCheckFlags(sym) & CheckFlags.Synthetic ? sym : rootSymbol;
-                }
-
-                // Finally, try all properties with the same name in any type the containing type extended or implemented, and
-                // see if any is in the list. If we were passed a parent symbol, only include types that are subtypes of the
-                // parent symbol
-                if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                    // Parents will only be defined if implementations is true
-                    if (search.parents && !some(search.parents, parent => explicitlyInheritsFrom(rootSymbol.parent, parent, state.inheritsFromCache, checker))) {
-                        return undefined;
-                    }
-
-                    return getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.name, checker).some(search.includes) ? rootSymbol : undefined;
-                }
-
-                return undefined;
-            });
+                    ? getCheckFlags(sym) & CheckFlags.Synthetic ? sym : rootSymbol
+                    : undefined);
         }
+    }
+
+    function isMatchingRootSymbol(search: Search, rootSymbol: Symbol, inheritsFromCache: Map<boolean>, checker: TypeChecker): boolean {
+        return search.includes(rootSymbol)
+            || rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)
+            // If we were passed a parent symbol (if 'implementations' set), only include types that are subtypes of the parent symbol.
+            && !(search.parents && !search.parents.some(parent => explicitlyInheritsFrom(rootSymbol.parent, parent, inheritsFromCache, checker)))
+            // Try all properties with the same name in any type the containing type extended or implemented.
+            && getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.name, checker).some(search.includes);
     }
 
     function getNameFromObjectLiteralElement(node: ObjectLiteralElement): string {
