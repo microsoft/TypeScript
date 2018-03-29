@@ -1544,8 +1544,8 @@ namespace ts {
             return checker.getSymbolAtLocation(node);
         }
 
-
-        const sourceMapCommentRegExp = /^\/\/[@#] sourceMappingURL=(.+)$/gm;
+        // Sometimes tools can sometimes see the following line as a source mapping url comment, so we mangle it a bit (the [M])
+        const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)$/gm;
         const base64UrlRegExp = /^data:(?:application\/json(?:;charset=[uU][tT][fF]-8);base64,([A-Za-z0-9+\/=]+)$)?/;
         function scanForSourcemapURL(fileName: string) {
             const mappedFile = sourcemappedFileCache.get(toPath(fileName, currentDirectory, getCanonicalFileName));
