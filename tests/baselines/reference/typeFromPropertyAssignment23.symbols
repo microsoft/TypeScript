@@ -1,0 +1,24 @@
+=== tests/cases/conformance/salsa/a.js ===
+class Ex {
+>Ex : Symbol(Ex, Decl(a.js, 0, 0))
+
+    foo() {
+>foo : Symbol(Ex.foo, Decl(a.js, 0, 10))
+    }
+}
+
+class MyClass extends Ex {
+>MyClass : Symbol(MyClass, Decl(a.js, 3, 1))
+>Ex : Symbol(Ex, Decl(a.js, 0, 0))
+
+}
+
+// this override should be fine (even if it's a little odd)
+MyClass.prototype.foo = function() {
+>MyClass.prototype.foo : Symbol(MyClass.foo, Decl(a.js, 7, 1))
+>MyClass.prototype : Symbol(MyClass.foo, Decl(a.js, 7, 1))
+>MyClass : Symbol(MyClass, Decl(a.js, 3, 1))
+>prototype : Symbol(MyClass.prototype)
+>foo : Symbol(MyClass.foo, Decl(a.js, 7, 1))
+}
+
