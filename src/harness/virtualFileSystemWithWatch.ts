@@ -288,7 +288,7 @@ interface Array<T> {}`
         private toPath: (f: string) => Path;
         private timeoutCallbacks = new Callbacks();
         private immediateCallbacks = new Callbacks();
-        private screenClears = 0;
+        readonly screenClears: number[] = [];
 
         readonly watchedDirectories = createMultiMap<TestDirectoryWatcher>();
         readonly watchedDirectoriesRecursive = createMultiMap<TestDirectoryWatcher>();
@@ -312,18 +312,20 @@ interface Array<T> {}`
                 const watchDirectory: HostWatchDirectory = (directory, cb) => this.watchFile(directory, () => cb(directory), PollingInterval.Medium);
                 this.customRecursiveWatchDirectory = createRecursiveDirectoryWatcher({
                     directoryExists: path => this.directoryExists(path),
-                    getAccessileSortedChildDirectories: path => this.getDirectories(path),
+                    getAccessibleSortedChildDirectories: path => this.getDirectories(path),
                     filePathComparer: this.useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
-                    watchDirectory
+                    watchDirectory,
+                    realpath: s => this.realpath(s)
                 });
             }
             else if (tscWatchDirectory === Tsc_WatchDirectory.NonRecursiveWatchDirectory) {
                 const watchDirectory: HostWatchDirectory = (directory, cb) => this.watchDirectory(directory, fileName => cb(fileName), /*recursive*/ false);
                 this.customRecursiveWatchDirectory = createRecursiveDirectoryWatcher({
                     directoryExists: path => this.directoryExists(path),
-                    getAccessileSortedChildDirectories: path => this.getDirectories(path),
+                    getAccessibleSortedChildDirectories: path => this.getDirectories(path),
                     filePathComparer: this.useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
-                    watchDirectory
+                    watchDirectory,
+                    realpath: s => this.realpath(s)
                 });
             }
             else if (tscWatchDirectory === Tsc_WatchDirectory.DynamicPolling) {
@@ -331,9 +333,10 @@ interface Array<T> {}`
                 const watchDirectory: HostWatchDirectory = (directory, cb) => watchFile(directory, () => cb(directory), PollingInterval.Medium);
                 this.customRecursiveWatchDirectory = createRecursiveDirectoryWatcher({
                     directoryExists: path => this.directoryExists(path),
-                    getAccessileSortedChildDirectories: path => this.getDirectories(path),
+                    getAccessibleSortedChildDirectories: path => this.getDirectories(path),
                     filePathComparer: this.useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
-                    watchDirectory
+                    watchDirectory,
+                    realpath: s => this.realpath(s)
                 });
             }
         }
@@ -649,7 +652,7 @@ interface Array<T> {}`
 
             const realpath = this.realpath(path);
             if (path !== realpath) {
-                return this.getRealFsEntry(isFsEntry, realpath as Path);
+                return this.getRealFsEntry(isFsEntry, this.toPath(realpath));
             }
 
             return undefined;
@@ -778,7 +781,7 @@ interface Array<T> {}`
         }
 
         clearScreen(): void {
-            this.screenClears += 1;
+            this.screenClears.push(this.output.length);
         }
 
         checkTimeoutQueueLengthAndRun(expected: number) {
@@ -818,10 +821,6 @@ interface Array<T> {}`
             this.immediateCallbacks.unregister(timeoutId);
         }
 
-        checkScreenClears(expected: number): void {
-            assert.equal(this.screenClears, expected);
-        }
-
         createDirectory(directoryName: string): void {
             const folder = this.toFolder(directoryName);
 
@@ -855,6 +854,7 @@ interface Array<T> {}`
 
         clearOutput() {
             clear(this.output);
+            this.screenClears.length = 0;
         }
 
         realpath(s: string): string {

@@ -71,6 +71,10 @@ declare module ts {
     }
 }
 
+declare namespace ts {
+    function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
+}
+
 declare namespace FourSlashInterface {
     interface Marker {
         fileName: string;
@@ -196,7 +200,7 @@ declare namespace FourSlashInterface {
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
-        completionsAt(markerName: string, completions: ReadonlyArray<string | { name: string, insertText?: string, replacementSpan?: Range }>, options?: CompletionsAtOptions): void;
+        completionsAt(markerName: string | ReadonlyArray<string>, completions: ReadonlyArray<string | { name: string, insertText?: string, replacementSpan?: Range }>, options?: CompletionsAtOptions): void;
         completionsAndDetailsAt(
             markerName: string,
             completions: {
@@ -294,7 +298,7 @@ declare namespace FourSlashInterface {
         docCommentTemplateAt(markerName: string | FourSlashInterface.Marker, expectedOffset: number, expectedText: string): void;
         noDocCommentTemplateAt(markerName: string | FourSlashInterface.Marker): void;
         rangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number): void;
-        codeFixAll(options: { fixId: string, newFileContent: string, commands?: {}[] }): void;
+        codeFixAll(options: { fixId: string, fixAllDescription: string, newFileContent: string, commands?: {}[] }): void;
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, actionName: string, formattingOptions?: FormatCodeOptions): void;
         rangeIs(expectedText: string, includeWhiteSpace?: boolean): void;
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, formattingOptions?: FormatCodeOptions): void;
@@ -307,11 +311,9 @@ declare namespace FourSlashInterface {
         navigationItemsListContains(name: string, kind: string, searchValue: string, matchKind: string, fileName?: string, parentName?: string): void;
         occurrencesAtPositionContains(range: Range, isWriteAccess?: boolean): void;
         occurrencesAtPositionCount(expectedCount: number): void;
-        rangesAreDocumentHighlights(ranges?: Range[]): void;
+        rangesAreDocumentHighlights(ranges?: Range[], options?: VerifyDocumentHighlightsOptions): void;
         rangesWithSameTextAreDocumentHighlights(): void;
-        documentHighlightsOf(startRange: Range, ranges: Range[], options?: {
-            filesToSearch?: ReadonlyArray<string>;
-        }): void;
+        documentHighlightsOf(startRange: Range, ranges: Range[], options?: VerifyDocumentHighlightsOptions): void;
         completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string, tags?: ts.JSDocTagInfo[]): void;
         /**
          * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.
@@ -524,6 +526,9 @@ declare namespace FourSlashInterface {
         /** @default `test.ranges()[0]` */
         range?: Range;
         code: number;
+    }
+    interface VerifyDocumentHighlightsOptions {
+        filesToSearch?: ReadonlyArray<string>;
     }
     interface UserPreferences {
         quotePreference?: "double" | "single";

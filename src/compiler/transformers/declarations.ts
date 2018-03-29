@@ -135,9 +135,11 @@ namespace ts {
             if (node.kind === SyntaxKind.Bundle) {
                 isBundledEmit = true;
                 const refs = createMap<SourceFile>();
+                let hasNoDefaultLib = false;
                 const bundle = createBundle(map(node.sourceFiles,
                     sourceFile => {
                         if (sourceFile.isDeclarationFile || isSourceFileJavaScript(sourceFile)) return; // Omit declaration files from bundle results, too
+                        hasNoDefaultLib = hasNoDefaultLib || sourceFile.hasNoDefaultLib;
                         currentSourceFile = sourceFile;
                         enclosingDeclaration = sourceFile;
                         possibleImports = undefined;
@@ -154,16 +156,17 @@ namespace ts {
                                 [createModifier(SyntaxKind.DeclareKeyword)],
                                 createLiteral(getResolvedExternalModuleName(context.getEmitHost(), sourceFile)),
                                 createModuleBlock(setTextRange(createNodeArray(filterCandidateImports(statements)), sourceFile.statements))
-                            )], /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ []);
+                            )], /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false);
                             return newFile;
                         }
                         needsDeclare = true;
                         const updated = visitNodes(sourceFile.statements, visitDeclarationStatements);
-                        return updateSourceFileNode(sourceFile, updated, /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ []);
+                        return updateSourceFileNode(sourceFile, updated, /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false);
                     }
                 ));
                 bundle.syntheticFileReferences = [];
                 bundle.syntheticTypeReferences = getFileReferencesForUsedTypeReferences();
+                bundle.hasNoDefaultLib = hasNoDefaultLib;
                 const outputFilePath = getDirectoryPath(normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath));
                 const referenceVisitor = mapReferencesIntoArray(bundle.syntheticFileReferences as FileReference[], outputFilePath);
                 refs.forEach(referenceVisitor);
@@ -191,7 +194,7 @@ namespace ts {
             if (isExternalModule(node) && !resultHasExternalModuleIndicator) {
                 combinedStatements = setTextRange(createNodeArray([...combinedStatements, createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports([]), /*moduleSpecifier*/ undefined)]), combinedStatements);
             }
-            const updated = updateSourceFileNode(node, combinedStatements, /*isDeclarationFile*/ true, references, getFileReferencesForUsedTypeReferences());
+            const updated = updateSourceFileNode(node, combinedStatements, /*isDeclarationFile*/ true, references, getFileReferencesForUsedTypeReferences(), node.hasNoDefaultLib);
             return updated;
 
             function getFileReferencesForUsedTypeReferences() {

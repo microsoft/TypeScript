@@ -1570,10 +1570,10 @@ namespace ts {
         }
     }
 
-    export function formatStringFromArgs(text: string, args: { [index: number]: string; }, baseIndex?: number): string {
+    export function formatStringFromArgs(text: string, args: ArrayLike<string>, baseIndex?: number): string {
         baseIndex = baseIndex || 0;
 
-        return text.replace(/{(\d+)}/g, (_match, index?) => args[+index + baseIndex]);
+        return text.replace(/{(\d+)}/g, (_match, index?: string) => Debug.assertDefined(args[+index + baseIndex]));
     }
 
     export let localizedDiagnosticMessages: MapLike<string>;
@@ -2909,7 +2909,7 @@ namespace ts {
             return value;
         }
 
-        export function assertEachDefined<T, A extends ReadonlyArray<T>>(value: A, message: string): A {
+        export function assertEachDefined<T, A extends ReadonlyArray<T>>(value: A, message?: string): A {
             for (const v of value) {
                 assertDefined(v, message);
             }

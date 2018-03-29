@@ -394,18 +394,16 @@ namespace ts.FindAllReferences {
                     case SyntaxKind.ExportDeclaration:
                     case SyntaxKind.ImportDeclaration: {
                         const decl = statement as ImportDeclaration | ExportDeclaration;
-                        if (decl.moduleSpecifier && decl.moduleSpecifier.kind === SyntaxKind.StringLiteral) {
-                            action(decl, decl.moduleSpecifier as StringLiteral);
+                        if (decl.moduleSpecifier && isStringLiteral(decl.moduleSpecifier)) {
+                            action(decl, decl.moduleSpecifier);
                         }
                         break;
                     }
 
                     case SyntaxKind.ImportEqualsDeclaration: {
                         const decl = statement as ImportEqualsDeclaration;
-                        const { moduleReference } = decl;
-                        if (moduleReference.kind === SyntaxKind.ExternalModuleReference &&
-                            moduleReference.expression.kind === SyntaxKind.StringLiteral) {
-                            action(decl, moduleReference.expression as StringLiteral);
+                        if (isExternalModuleImportEquals(decl)) {
+                            action(decl, decl.moduleReference.expression);
                         }
                         break;
                     }
@@ -647,7 +645,7 @@ namespace ts.FindAllReferences {
         return node.kind === SyntaxKind.ModuleDeclaration && (node as ModuleDeclaration).name.kind === SyntaxKind.StringLiteral;
     }
 
-    function isExternalModuleImportEquals({ moduleReference }: ImportEqualsDeclaration): boolean {
-        return moduleReference.kind === SyntaxKind.ExternalModuleReference && moduleReference.expression.kind === SyntaxKind.StringLiteral;
+    function isExternalModuleImportEquals(eq: ImportEqualsDeclaration): eq is ImportEqualsDeclaration & { moduleReference: { expression: StringLiteral } } {
+        return eq.moduleReference.kind === SyntaxKind.ExternalModuleReference && eq.moduleReference.expression.kind === SyntaxKind.StringLiteral;
     }
 }
