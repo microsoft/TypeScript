@@ -199,17 +199,17 @@ namespace ts {
                 return necessaryTypeRefernces ? mapDefined(arrayFrom(necessaryTypeRefernces.keys()), getFileReferenceForTypeName) : [];
             }
 
-            function getFileReferenceForTypeName(typeName: string): FileReference {
+            function getFileReferenceForTypeName(typeName: string): FileReference | undefined {
                 // Elide type references for which we have imports
                 for (const importStatement of emittedImports) {
                     if (isImportEqualsDeclaration(importStatement) && isExternalModuleReference(importStatement.moduleReference)) {
                         const expr = importStatement.moduleReference.expression;
                         if (isStringLiteralLike(expr) && expr.text === typeName) {
-                            return;
+                            return undefined;
                         }
                     }
                     else if (isImportDeclaration(importStatement) && isStringLiteral(importStatement.moduleSpecifier) && importStatement.moduleSpecifier.text === typeName) {
-                        return;
+                        return undefined;
                     }
                 }
                 return { fileName: typeName, pos: -1, end: -1 };
