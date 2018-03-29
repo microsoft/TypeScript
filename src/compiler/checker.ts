@@ -22627,7 +22627,12 @@ namespace ts {
          * we want to get the iterated type of an iterable for ES2015 or later, or the iterated type
          * of a iterable (if defined globally) or element type of an array like for ES2015 or earlier.
          */
-        function getIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean, allowAsyncIterables: boolean, checkAssignability: boolean): Type {
+        function getIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean, allowAsyncIterables: boolean, checkAssignability: boolean): Type | undefined {
+            if (inputType === neverType) {
+                reportTypeNotIterableError(errorNode, inputType, allowAsyncIterables);
+                return undefined;
+            }
+
             const uplevelIteration = languageVersion >= ScriptTarget.ES2015;
             const downlevelIteration = !uplevelIteration && compilerOptions.downlevelIteration;
 
@@ -22794,11 +22799,8 @@ namespace ts {
                 const signatures = methodType && getSignaturesOfType(methodType, SignatureKind.Call);
                 if (!some(signatures)) {
                     if (errorNode) {
-                        error(errorNode,
-                            allowAsyncIterables
-                                ? Diagnostics.Type_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator
-                                : Diagnostics.Type_must_have_a_Symbol_iterator_method_that_returns_an_iterator);
                         // only report on the first error
+                        reportTypeNotIterableError(errorNode, type, allowAsyncIterables);
                         errorNode = undefined;
                     }
                     return undefined;
@@ -22819,6 +22821,12 @@ namespace ts {
                     ? typeAsIterable.iteratedTypeOfAsyncIterable = iteratedType
                     : typeAsIterable.iteratedTypeOfIterable = iteratedType;
             }
+        }
+
+        function reportTypeNotIterableError(errorNode: Node, type: Type, allowAsyncIterables: boolean): void {
+            error(errorNode, allowAsyncIterables
+                ? Diagnostics.Type_0_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator
+                : Diagnostics.Type_0_must_have_a_Symbol_iterator_method_that_returns_an_iterator, typeToString(type));
         }
 
         /**

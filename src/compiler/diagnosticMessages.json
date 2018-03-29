@@ -1668,7 +1668,7 @@
         "category": "Error",
         "code": 2487
     },
-    "Type must have a '[Symbol.iterator]()' method that returns an iterator.": {
+    "Type '{0}' must have a '[Symbol.iterator]()' method that returns an iterator.": {
         "category": "Error",
         "code": 2488
     },
@@ -1732,7 +1732,7 @@
         "category": "Error",
         "code": 2503
     },
-    "Type must have a '[Symbol.asyncIterator]()' method that returns an async iterator.": {
+    "Type '{0}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.": {
         "category": "Error",
         "code": 2504
     },
