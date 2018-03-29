@@ -1992,6 +1992,14 @@
         "category": "Error",
         "code": 2567
     },
+    "Type '{0}' is not an array type. Use compiler option '--downlevelIteration' to allow iterating of iterators.": {
+        "category": "Error",
+        "code": 2568
+    },
+    "Type '{0}' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators.": {
+        "category": "Error",
+        "code": 2569
+    },
 
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
