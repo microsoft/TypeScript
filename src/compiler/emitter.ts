@@ -300,23 +300,22 @@ namespace ts {
                             continue;
                         }
 
-                        writeHelper(writeLines, helper.text, makeUniqueName);
+                        if (typeof helper.text === "string") {
+                            writeLines(helper.text);
+                        }
+                        else {
+                            writeLines(helper.text(makeFileLevelOptmiisticUniqueName));
+                        }
+            
                         helpersEmitted = true;
                     }
                 }
             }
 
             return helpersEmitted;
-        }
 
-        function writeHelper(writer: (text: string) => void, helper: EmitHelper["text"], makeUniqueName: UniqueNameHandler) {
-            if (typeof helper === "string") {
-                writer(helper);
-            }
-            else {
-                writer(helper({
-                    makeFileLevelUniqueName: name => makeUniqueName(name, isFileLevelUniqueName, /*optimistic*/ true),
-                }));
+            function makeFileLevelOptmiisticUniqueName(name: string) {
+                return makeUniqueName(name, isFileLevelUniqueName, /*optimistic*/ true);
             }
         }
 
@@ -3440,11 +3439,11 @@ namespace ts {
                 case GeneratedIdentifierFlags.Loop:
                     return makeTempVariableName(TempFlags._i, !!(name.autoGenerateFlags & GeneratedIdentifierFlags.ReservedInNestedScopes));
                 case GeneratedIdentifierFlags.Unique:
-                    return makeUniqueName(idText(name));
-                case GeneratedIdentifierFlags.OptimisticUnique:
-                    return makeUniqueName(idText(name), isUniqueName, /*optimistic*/ true);
-                case GeneratedIdentifierFlags.FileLevel:
-                    return makeUniqueName(idText(name), isFileLevelUniqueName, /*optimistic*/ true);
+                    return makeUniqueName(
+                        idText(name),
+                        (name.autoGenerateFlags & GeneratedIdentifierFlags.FileLevel) ? isFileLevelUniqueName : isUniqueName,
+                        !!(name.autoGenerateFlags & GeneratedIdentifierFlags.Optimistic)
+                    );
             }
 
             Debug.fail("Unsupported GeneratedIdentifierKind.");
