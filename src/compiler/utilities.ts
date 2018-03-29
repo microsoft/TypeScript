@@ -2557,19 +2557,13 @@ namespace ts {
         const filesWithDiagnostics = [] as SortedArray<string>;
         const fileDiagnostics = createMap<SortedArray<Diagnostic>>();
         let hasReadNonFileDiagnostics = false;
-        let modificationCount = 0;
 
         return {
             add,
             getGlobalDiagnostics,
             getDiagnostics,
-            getModificationCount,
             reattachFileDiagnostics
         };
-
-        function getModificationCount() {
-            return modificationCount;
-        }
 
         function reattachFileDiagnostics(newFile: SourceFile): void {
             forEach(fileDiagnostics.get(newFile.fileName), diagnostic => diagnostic.file = newFile);
@@ -2596,7 +2590,6 @@ namespace ts {
             }
 
             insertSorted(diagnostics, diagnostic, compareDiagnostics);
-            modificationCount++;
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {
