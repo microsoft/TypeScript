@@ -22621,7 +22621,7 @@ namespace ts {
          */
         function getIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean, allowAsyncIterables: boolean, checkAssignability: boolean): Type | undefined {
             if (inputType === neverType) {
-                reportTypeNotIterableError(errorNode, allowAsyncIterables);
+                reportTypeNotIterableError(errorNode, inputType, allowAsyncIterables);
                 return undefined;
             }
 
@@ -22792,7 +22792,7 @@ namespace ts {
                 if (!some(signatures)) {
                     if (errorNode) {
                         // only report on the first error
-                        reportTypeNotIterableError(errorNode, allowAsyncIterables);
+                        reportTypeNotIterableError(errorNode, type, allowAsyncIterables);
                         errorNode = undefined;
                     }
                     return undefined;
@@ -22815,10 +22815,10 @@ namespace ts {
             }
         }
 
-        function reportTypeNotIterableError(errorNode: Node, allowAsyncIterables: boolean): void {
+        function reportTypeNotIterableError(errorNode: Node, type: Type, allowAsyncIterables: boolean): void {
             error(errorNode, allowAsyncIterables
-                ? Diagnostics.Type_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator
-                : Diagnostics.Type_must_have_a_Symbol_iterator_method_that_returns_an_iterator);
+                ? Diagnostics.Type_0_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator
+                : Diagnostics.Type_0_must_have_a_Symbol_iterator_method_that_returns_an_iterator, typeToString(type));
         }
 
         /**

@@ -8,7 +8,7 @@ tests/cases/conformance/types/never/neverTypeErrors2.ts(9,5): error TS2349: Cann
 tests/cases/conformance/types/never/neverTypeErrors2.ts(13,5): error TS2322: Type 'undefined' is not assignable to type 'never'.
 tests/cases/conformance/types/never/neverTypeErrors2.ts(17,5): error TS2322: Type '1' is not assignable to type 'never'.
 tests/cases/conformance/types/never/neverTypeErrors2.ts(20,16): error TS2534: A function returning 'never' cannot have a reachable end point.
-tests/cases/conformance/types/never/neverTypeErrors2.ts(23,17): error TS2488: Type must have a '[Symbol.iterator]()' method that returns an iterator.
+tests/cases/conformance/types/never/neverTypeErrors2.ts(23,17): error TS2488: Type 'never' must have a '[Symbol.iterator]()' method that returns an iterator.
 
 
 ==== tests/cases/conformance/types/never/neverTypeErrors2.ts (11 errors) ====
@@ -56,5 +56,5 @@ tests/cases/conformance/types/never/neverTypeErrors2.ts(23,17): error TS2488: Ty
     
     for (const n of f4()) {}
                     ~~~~
-!!! error TS2488: Type must have a '[Symbol.iterator]()' method that returns an iterator.
+!!! error TS2488: Type 'never' must have a '[Symbol.iterator]()' method that returns an iterator.
     
