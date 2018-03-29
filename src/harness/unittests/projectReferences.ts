@@ -260,6 +260,7 @@ namespace ts {
                 "/alpha": {
                     files: { "/alpha/src/a.ts": "export const m: number = 3;" },
                     options: {
+                        declaration: true,
                         outDir: "bin"
                     },
                     references: []

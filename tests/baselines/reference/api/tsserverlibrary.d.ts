@@ -388,17 +388,10 @@ declare namespace ts {
         FirstBinaryOperator = 27,
         LastBinaryOperator = 70,
         FirstNode = 145,
-<<<<<<< HEAD
-        FirstJSDocNode = 274,
-        LastJSDocNode = 292,
-        FirstJSDocTagNode = 284,
-        LastJSDocTagNode = 292
-=======
         FirstJSDocNode = 275,
         LastJSDocNode = 293,
         FirstJSDocTagNode = 285,
-        LastJSDocTagNode = 293,
->>>>>>> Project References
+        LastJSDocTagNode = 293
     }
     enum NodeFlags {
         None = 0,
@@ -2612,12 +2605,8 @@ declare namespace ts {
         Expression = 1,
         IdentifierName = 2,
         MappedTypeParameter = 3,
-<<<<<<< HEAD
-        Unspecified = 4
-=======
         Prepend = 4,
-        Unspecified = 5,
->>>>>>> Project References
+        Unspecified = 5
     }
     interface TransformationContext {
         /** Gets the compiler options supplied to the transformer. */
@@ -3972,13 +3961,9 @@ declare namespace ts {
      * @param configFileParsingDiagnostics - error during config file parsing
      * @returns A 'Program' object.
      */
-<<<<<<< HEAD
     function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program;
-=======
-    function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program;
     function getProjectReferenceFileNames(host: CompilerHost, rootOptions: CompilerOptions): string[] | undefined;
     function walkProjectReferenceGraph(host: CompilerHost, rootOptions: CompilerOptions, callback: (resolvedFile: string, referencedProject: CompilerOptions, settings: ProjectReference) => void, errorCallback?: (failedLocation: string) => void): void;
->>>>>>> Project References
 }
 declare namespace ts {
     interface Node {
