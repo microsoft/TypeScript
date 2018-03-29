@@ -198,6 +198,7 @@ namespace ts {
 
     export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[] {
         const diagnostics = [
+            ...program.getConfigFileParsingDiagnostics(),
             ...program.getOptionsDiagnostics(cancellationToken),
             ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
             ...program.getGlobalDiagnostics(cancellationToken),
@@ -454,6 +455,12 @@ namespace ts {
         }
     }
 
+    export function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): ReadonlyArray<Diagnostic> {
+        return configFileParseResult.options.configFile ?
+            configFileParseResult.options.configFile.parseDiagnostics.concat(configFileParseResult.errors) :
+            configFileParseResult.errors;
+    }
+
     /**
      * Determined if source file needs to be re-created even if its text hasn't changed
      */
@@ -485,9 +492,10 @@ namespace ts {
      * @param options - The compiler options which should be used.
      * @param host - The host interacts with the underlying file system.
      * @param oldProgram - Reuses an old program structure.
+     * @param configFileParsingDiagnostics - error during config file parsing
      * @returns A 'Program' object.
      */
-    export function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program {
+    export function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program {
         let program: Program;
         let files: SourceFile[] = [];
         let commonSourceDirectory: string;
@@ -665,7 +673,8 @@ namespace ts {
             getSourceFileFromReference,
             sourceFileToPackageName,
             redirectTargetsSet,
-            isEmittedFile
+            isEmittedFile,
+            getConfigFileParsingDiagnostics
         };
 
         verifyCompilerOptions();
@@ -1566,6 +1575,10 @@ namespace ts {
 
         function getGlobalDiagnostics(): Diagnostic[] {
             return sortAndDeduplicateDiagnostics(getDiagnosticsProducingTypeChecker().getGlobalDiagnostics().slice());
+        }
+
+        function getConfigFileParsingDiagnostics(): ReadonlyArray<Diagnostic> {
+            return configFileParsingDiagnostics || emptyArray;
         }
 
         function processRootFile(fileName: string, isDefaultLib: boolean) {

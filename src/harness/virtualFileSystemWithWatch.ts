@@ -288,7 +288,7 @@ interface Array<T> {}`
         private toPath: (f: string) => Path;
         private timeoutCallbacks = new Callbacks();
         private immediateCallbacks = new Callbacks();
-        private screenClears = 0;
+        readonly screenClears: number[] = [];
 
         readonly watchedDirectories = createMultiMap<TestDirectoryWatcher>();
         readonly watchedDirectoriesRecursive = createMultiMap<TestDirectoryWatcher>();
@@ -781,7 +781,7 @@ interface Array<T> {}`
         }
 
         clearScreen(): void {
-            this.screenClears += 1;
+            this.screenClears.push(this.output.length);
         }
 
         checkTimeoutQueueLengthAndRun(expected: number) {
@@ -821,10 +821,6 @@ interface Array<T> {}`
             this.immediateCallbacks.unregister(timeoutId);
         }
 
-        checkScreenClears(expected: number): void {
-            assert.equal(this.screenClears, expected);
-        }
-
         createDirectory(directoryName: string): void {
             const folder = this.toFolder(directoryName);
 
@@ -858,6 +854,7 @@ interface Array<T> {}`
 
         clearOutput() {
             clear(this.output);
+            this.screenClears.length = 0;
         }
 
         realpath(s: string): string {
