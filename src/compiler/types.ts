@@ -2590,6 +2590,7 @@ namespace ts {
         sourceFiles: ReadonlyArray<SourceFile>;
         /* @internal */ syntheticFileReferences?: ReadonlyArray<FileReference>;
         /* @internal */ syntheticTypeReferences?: ReadonlyArray<FileReference>;
+        /* @internal */ hasNoDefaultLib?: boolean;
     }
 
     export interface JsonSourceFile extends SourceFile {
