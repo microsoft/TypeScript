@@ -2481,6 +2481,21 @@ namespace ts {
         }
 
         function emitTripleSlashDirectives(files: ReadonlyArray<FileReference>, types: ReadonlyArray<FileReference>) {
+            if (currentSourceFile && currentSourceFile.moduleName) {
+                write(`/// <amd-module name="${currentSourceFile.moduleName}" />`);
+                writeLine();
+            }
+            if (currentSourceFile && currentSourceFile.amdDependencies) {
+                for (const dep of currentSourceFile.amdDependencies) {
+                    if (dep.name) {
+                        write(`/// <amd-dependency name="${dep.name}" path="${dep.path}" />`);
+                    }
+                    else {
+                        write(`/// <amd-dependency path="${dep.path}" />`);
+                    }
+                    writeLine();
+                }
+            }
             for (const directive of files) {
                 write(`/// <reference path="${directive.fileName}" />`);
                 writeLine();
