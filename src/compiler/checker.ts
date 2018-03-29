@@ -3324,6 +3324,10 @@ namespace ts {
                                 const methodDeclaration = <MethodSignature>signatureToSignatureDeclarationHelper(signature, SyntaxKind.MethodSignature, context);
                                 methodDeclaration.name = propertyName;
                                 methodDeclaration.questionToken = optionalToken;
+                                if (propertySymbol.valueDeclaration) {
+                                    // Copy comments to node for declaration emit
+                                    setCommentRange(methodDeclaration, propertySymbol.valueDeclaration);
+                                }
                                 typeElements.push(methodDeclaration);
                             }
                         }
@@ -3340,6 +3344,10 @@ namespace ts {
                                 optionalToken,
                                 propertyTypeNode,
                                /*initializer*/ undefined);
+                            if (propertySymbol.valueDeclaration) {
+                                // Copy comments to node for declaration emit
+                                setCommentRange(propertySignature, propertySymbol.valueDeclaration);
+                            }
                             typeElements.push(propertySignature);
                         }
                     }
