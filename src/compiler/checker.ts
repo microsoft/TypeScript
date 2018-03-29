@@ -14766,11 +14766,11 @@ namespace ts {
                 signatures = mapDefined(signatures, s => getJsxSignatureTypeArgumentInstantiation(s, context, isJs));
             }
 
-            return getUnionType(map(signatures, ctor ? t => getJsxPropsTypeFromConstructSignature(t, isJs, context) : t => getJsxPropsTypeFromCallSignature(t, context)), UnionReduction.None);
+            return getUnionType(map(signatures, ctor ? t => getJsxPropsTypeFromClassType(t, isJs, context, /*reportErrors*/ false) : t => getJsxPropsTypeFromCallSignature(t, context)), UnionReduction.None);
         }
 
         function getJsxPropsTypeFromCallSignature(sig: Signature, context: Node) {
-            let propsType = getTypeOfFirstParameterOfSignature(sig);
+            let propsType = getTypeOfFirstParameterOfSignatureWithFallback(sig, emptyObjectType);
             const intrinsicAttribs = getJsxType(JsxNames.IntrinsicAttributes, context);
             if (intrinsicAttribs !== unknownType) {
                 propsType = intersectTypes(intrinsicAttribs, propsType);
@@ -14778,67 +14778,56 @@ namespace ts {
             return propsType;
         }
 
-        function getJsxPropsTypeFromClassType(hostClassType: Type, isJs: boolean, context: JsxOpeningLikeElement, reportErrors: boolean) {
-            if (isTypeAny(hostClassType)) {
-                return hostClassType;
-            }
+        function getJsxPropsTypeForSignatureFromMember(sig: Signature, forcedLookupLocation: __String) {
+            const instanceType = getReturnTypeOfSignature(sig);
+            return isTypeAny(instanceType) ? instanceType : getTypeOfPropertyOfType(instanceType, forcedLookupLocation);
+        }
 
-            const propsName = getJsxElementPropertiesName(getJsxNamespaceAt(context));
-            if (propsName === undefined) {
-                // There is no type ElementAttributesProperty, return 'any'
-                return anyType;
+        function getJsxPropsTypeFromClassType(sig: Signature, isJs: boolean, context: JsxOpeningLikeElement, reportErrors: boolean) {
+            const forcedLookupLocation = getJsxElementPropertiesName(getJsxNamespaceAt(context));
+            const attributesType = forcedLookupLocation === undefined
+                // If there is no type ElementAttributesProperty, return the type of the first parameter of the signature, which should be the props type
+                ? getTypeOfFirstParameterOfSignatureWithFallback(sig, emptyObjectType)
+                : forcedLookupLocation === ""
+                    // If there is no e.g. 'props' member in ElementAttributesProperty, use the element class type instead
+                    ? getReturnTypeOfSignature(sig)
+                    // Otherwise get the type of the property on the signature return type
+                    : getJsxPropsTypeForSignatureFromMember(sig, forcedLookupLocation);
+
+            if (!attributesType) {
+                // There is no property named 'props' on this instance type
+                if (reportErrors && !!forcedLookupLocation && !!length(context.attributes.properties)) {
+                    error(context, Diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, unescapeLeadingUnderscores(forcedLookupLocation));
+                }
+                return emptyObjectType;
             }
-            else if (propsName === "") {
-                // If there is no e.g. 'props' member in ElementAttributesProperty, use the element class type instead
-                return hostClassType;
+            else if (isTypeAny(attributesType)) {
+                // Props is of type 'any' or unknown
+                return attributesType;
             }
             else {
-                const attributesType = getTypeOfPropertyOfType(hostClassType, propsName);
-
-                if (!attributesType) {
-                    // There is no property named 'props' on this instance type
-                    if (reportErrors && !!length(context.attributes.properties)) {
-                        error(context, Diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, unescapeLeadingUnderscores(propsName));
-                    }
-                    return emptyObjectType;
+                // Normal case -- add in IntrinsicClassElements<T> and IntrinsicElements
+                let apparentAttributesType = attributesType;
+                const intrinsicClassAttribs = getJsxType(JsxNames.IntrinsicClassAttributes, context);
+                if (intrinsicClassAttribs !== unknownType) {
+                    const typeParams = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(intrinsicClassAttribs.symbol);
+                    const hostClassType = getReturnTypeOfSignature(sig);
+                    apparentAttributesType = intersectTypes(
+                        typeParams
+                            ? createTypeReference(<GenericType>intrinsicClassAttribs, fillMissingTypeArguments([hostClassType], typeParams, getMinTypeArgumentCount(typeParams), isJs))
+                            : intrinsicClassAttribs,
+                        apparentAttributesType
+                    );
                 }
-                else if (isTypeAny(attributesType)) {
-                    // Props is of type 'any' or unknown
-                    return attributesType;
-                }
-                else {
-                    // Normal case -- add in IntrinsicClassElements<T> and IntrinsicElements
-                    let apparentAttributesType = attributesType;
-                    const intrinsicClassAttribs = getJsxType(JsxNames.IntrinsicClassAttributes, context);
-                    if (intrinsicClassAttribs !== unknownType) {
-                        const typeParams = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(intrinsicClassAttribs.symbol);
-                        apparentAttributesType = intersectTypes(
-                            typeParams
-                                ? createTypeReference(<GenericType>intrinsicClassAttribs, fillMissingTypeArguments([hostClassType], typeParams, getMinTypeArgumentCount(typeParams), isJs))
-                                : intrinsicClassAttribs,
-                            apparentAttributesType
-                        );
-                    }
 
-                    const intrinsicAttribs = getJsxType(JsxNames.IntrinsicAttributes, context);
-                    if (intrinsicAttribs !== unknownType) {
-                        apparentAttributesType = intersectTypes(intrinsicAttribs, apparentAttributesType);
-                    }
-
-                    return apparentAttributesType;
+                const intrinsicAttribs = getJsxType(JsxNames.IntrinsicAttributes, context);
+                if (intrinsicAttribs !== unknownType) {
+                    apparentAttributesType = intersectTypes(intrinsicAttribs, apparentAttributesType);
                 }
+
+                return apparentAttributesType;
             }
         }
-
-        function getJsxPropsTypeFromConstructSignature(sig: Signature, isJs: boolean, context: JsxOpeningLikeElement) {
-            const hostClassType = getReturnTypeOfSignature(sig);
-            if (hostClassType) {
-                return getJsxPropsTypeFromClassType(hostClassType, isJs, context, /*reportErrors*/ false);
-            }
-            return getJsxPropsTypeFromCallSignature(sig, context);
-        }
-
-
 
         // If the given type is an object or union type with a single signature, and if that signature has at
         // least as many parameters as the given function, return the signature. Otherwise return undefined.
@@ -15556,31 +15545,7 @@ namespace ts {
             return links.resolvedSymbol;
         }
 
-        /**
-         * Given a JSX element that is a class element, finds the Element Instance Type. If the
-         * element is not a class element, or the class element type cannot be determined, returns 'undefined'.
-         * For example, in the element <MyClass>, the element instance type is `MyClass` (not `typeof MyClass`).
-         */
-        function getJsxElementInstanceType(node: JsxOpeningLikeElement, valueType: Type) {
-            Debug.assert(!(valueType.flags & TypeFlags.Union));
-            if (isTypeAny(valueType)) {
-                // Short-circuit if the class tag is using an element type 'any'
-                return anyType;
-            }
-
-            // Resolve the signatures, preferring constructor
-            let signatures = getSignaturesOfType(valueType, SignatureKind.Construct);
-            if (signatures.length === 0) {
-                // No construct signatures, try call signatures
-                signatures = getSignaturesOfType(valueType, SignatureKind.Call);
-                if (signatures.length === 0) {
-                    // We found no signatures at all, which is an error
-                    error(node.tagName, Diagnostics.JSX_element_type_0_does_not_have_any_construct_or_call_signatures, getTextOfNode(node.tagName));
-                    return unknownType;
-                }
-            }
-
-            // Instantiate in context of source type
+        function instantiateJsxSignatures(node: JsxOpeningLikeElement, signatures: Signature[]) {
             const instantiatedSignatures = [];
             let candidateForTypeArgumentError: Signature;
             let hasTypeArgumentError: boolean = !!node.typeArguments;
@@ -15605,7 +15570,6 @@ namespace ts {
                     instantiatedSignatures.push(signature);
                 }
             }
-
             if (node.typeArguments && hasTypeArgumentError) {
                 if (candidateForTypeArgumentError) {
                     checkTypeArguments(candidateForTypeArgumentError, node.typeArguments, /*reportErrors*/ true);
@@ -15615,8 +15579,7 @@ namespace ts {
                     diagnostics.add(getTypeArgumentArityError(node, signatures, node.typeArguments));
                 }
             }
-
-            return getUnionType(map(instantiatedSignatures, getReturnTypeOfSignature), UnionReduction.Subtype);
+            return instantiatedSignatures;
         }
 
         function getJsxSignatureTypeArgumentInstantiation(signature: Signature, node: JsxOpeningLikeElement, isJavascript: boolean, reportErrors?: boolean) {
@@ -15827,8 +15790,12 @@ namespace ts {
                 }), UnionReduction.Subtype);
             }
 
+            // Shortcircuit any
+            if (isTypeAny(elementType)) {
+                return elementType;
+            }
             // If the elemType is a string type, we have to return anyType to prevent an error downstream as we will try to find construct or call signature of the type
-            if (elementType.flags & TypeFlags.String) {
+            else if (elementType.flags & TypeFlags.String) {
                 return anyType;
             }
             else if (elementType.flags & TypeFlags.StringLiteral) {
@@ -15854,7 +15821,22 @@ namespace ts {
             }
 
             // Get the element instance type (the result of newing or invoking this tag)
-            const elemInstanceType = getJsxElementInstanceType(openingLikeElement, elementType);
+
+            // Resolve the signatures, preferring constructor
+            let signatures = getSignaturesOfType(elementType, SignatureKind.Construct);
+            if (signatures.length === 0) {
+                // No construct signatures, try call signatures
+                signatures = getSignaturesOfType(elementType, SignatureKind.Call);
+                if (signatures.length === 0) {
+                    // We found no signatures at all, which is an error
+                    error(openingLikeElement.tagName, Diagnostics.JSX_element_type_0_does_not_have_any_construct_or_call_signatures, getTextOfNode(openingLikeElement.tagName));
+                    return unknownType;
+                }
+            }
+
+            // Instantiate in context of source type
+            const instantiatedSignatures = instantiateJsxSignatures(openingLikeElement, signatures);
+            const elemInstanceType = getUnionType(map(instantiatedSignatures, getReturnTypeOfSignature), UnionReduction.Subtype);
 
             // If we should include all stateless attributes type, then get all attributes type from all stateless function signature.
             // Otherwise get only attributes type from the signature picked by choose-overload logic.
@@ -15871,7 +15853,8 @@ namespace ts {
                 checkTypeRelatedTo(elemInstanceType, elementClassType, assignableRelation, openingLikeElement, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
             }
 
-            return getJsxPropsTypeFromClassType(elemInstanceType, isInJavaScriptFile(openingLikeElement), openingLikeElement, /*reportErrors*/ true);
+            const isJs = isInJavaScriptFile(openingLikeElement);
+            return getUnionType(map(instantiatedSignatures, sig => getJsxPropsTypeFromClassType(sig, isJs, openingLikeElement, /*reportErrors*/ true)));
         }
 
         /**
@@ -18469,8 +18452,13 @@ namespace ts {
                 pos < signature.parameters.length ? getTypeOfParameter(signature.parameters[pos]) : anyType;
         }
 
+
         function getTypeOfFirstParameterOfSignature(signature: Signature) {
-            return signature.parameters.length > 0 ? getTypeAtPosition(signature, 0) : neverType;
+            return getTypeOfFirstParameterOfSignatureWithFallback(signature, neverType);
+        }
+
+        function getTypeOfFirstParameterOfSignatureWithFallback(signature: Signature, fallbackType: Type) {
+            return signature.parameters.length > 0 ? getTypeAtPosition(signature, 0) : fallbackType;
         }
 
         function inferFromAnnotatedParameters(signature: Signature, context: Signature, mapper: TypeMapper) {
@@ -27565,7 +27553,7 @@ namespace ts {
         export const JSX = "JSX" as __String;
         export const IntrinsicElements = "IntrinsicElements" as __String;
         export const ElementClass = "ElementClass" as __String;
-        export const ElementAttributesPropertyNameContainer = "ElementAttributesProperty" as __String;
+        export const ElementAttributesPropertyNameContainer = "ElementAttributesProperty" as __String; // TODO: Deprecate and remove support
         export const ElementChildrenAttributeNameContainer = "ElementChildrenAttribute" as __String;
         export const Element = "Element" as __String;
         export const IntrinsicAttributes = "IntrinsicAttributes" as __String;
