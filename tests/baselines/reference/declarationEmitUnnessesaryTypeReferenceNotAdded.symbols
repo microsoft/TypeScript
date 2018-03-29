@@ -17,19 +17,19 @@ export default function parseArgs(): minimist.ParsedArgs {
 
 === /node_modules/@types/minimist/minimist.d.ts ===
 declare namespace thing {
->thing : Symbol(thing, Decl(minimist.d.ts, 0, 0), Decl(minimist.d.ts, 2, 1))
+>thing : Symbol(thing, Decl(minimist.d.ts, 2, 1), Decl(minimist.d.ts, 0, 0))
 
     interface ParsedArgs {}
 >ParsedArgs : Symbol(ParsedArgs, Decl(minimist.d.ts, 0, 25))
 }
 declare function thing(x: any): thing.ParsedArgs;
->thing : Symbol(thing, Decl(minimist.d.ts, 0, 0), Decl(minimist.d.ts, 2, 1))
+>thing : Symbol(thing, Decl(minimist.d.ts, 2, 1), Decl(minimist.d.ts, 0, 0))
 >x : Symbol(x, Decl(minimist.d.ts, 3, 23))
->thing : Symbol(thing, Decl(minimist.d.ts, 0, 0), Decl(minimist.d.ts, 2, 1))
+>thing : Symbol(thing, Decl(minimist.d.ts, 2, 1), Decl(minimist.d.ts, 0, 0))
 >ParsedArgs : Symbol(thing.ParsedArgs, Decl(minimist.d.ts, 0, 25))
 
 export = thing;
->thing : Symbol(thing, Decl(minimist.d.ts, 0, 0), Decl(minimist.d.ts, 2, 1))
+>thing : Symbol(thing, Decl(minimist.d.ts, 2, 1), Decl(minimist.d.ts, 0, 0))
 
 === /node_modules/@types/process/process.d.ts ===
 declare const thing: any;
