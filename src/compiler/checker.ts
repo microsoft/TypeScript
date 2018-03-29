@@ -22501,18 +22501,16 @@ namespace ts {
         function checkForOfStatement(node: ForOfStatement): void {
             checkGrammarForInOrForOfStatement(node);
 
-            if (node.kind === SyntaxKind.ForOfStatement) {
-                if (node.awaitModifier) {
-                    const functionFlags = getFunctionFlags(getContainingFunction(node));
-                    if ((functionFlags & (FunctionFlags.Invalid | FunctionFlags.Async)) === FunctionFlags.Async && languageVersion < ScriptTarget.ESNext) {
-                        // for..await..of in an async function or async generator function prior to ESNext requires the __asyncValues helper
-                        checkExternalEmitHelpers(node, ExternalEmitHelpers.ForAwaitOfIncludes);
-                    }
+            if (node.awaitModifier) {
+                const functionFlags = getFunctionFlags(getContainingFunction(node));
+                if ((functionFlags & (FunctionFlags.Invalid | FunctionFlags.Async)) === FunctionFlags.Async && languageVersion < ScriptTarget.ESNext) {
+                    // for..await..of in an async function or async generator function prior to ESNext requires the __asyncValues helper
+                    checkExternalEmitHelpers(node, ExternalEmitHelpers.ForAwaitOfIncludes);
                 }
-                else if (compilerOptions.downlevelIteration && languageVersion < ScriptTarget.ES2015) {
-                    // for..of prior to ES2015 requires the __values helper when downlevelIteration is enabled
-                    checkExternalEmitHelpers(node, ExternalEmitHelpers.ForOfIncludes);
-                }
+            }
+            else if (compilerOptions.downlevelIteration && languageVersion < ScriptTarget.ES2015) {
+                // for..of prior to ES2015 requires the __values helper when downlevelIteration is enabled
+                checkExternalEmitHelpers(node, ExternalEmitHelpers.ForOfIncludes);
             }
 
             // Check the LHS and RHS
