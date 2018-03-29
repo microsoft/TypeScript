@@ -7,7 +7,7 @@ namespace ts.projectSystem {
             const file = makeFile("/a.js");
             const et = new TestServerEventManager([file]);
             et.service.openClientFile(file.path);
-            et.hasZeroEvent(ts.server.ProjectInfoTelemetryEvent);
+            et.hasZeroEvent(server.ProjectInfoTelemetryEvent);
         });
 
         it("only sends an event once", () => {
@@ -25,18 +25,18 @@ namespace ts.projectSystem {
             et.service.openClientFile(file2.path);
             checkNumberOfProjects(et.service, { inferredProjects: 1 });
 
-            et.hasZeroEvent(ts.server.ProjectInfoTelemetryEvent);
+            et.hasZeroEvent(server.ProjectInfoTelemetryEvent);
 
             et.service.openClientFile(file.path);
             checkNumberOfProjects(et.service, { configuredProjects: 1, inferredProjects: 1 });
 
-            et.hasZeroEvent(ts.server.ProjectInfoTelemetryEvent);
+            et.hasZeroEvent(server.ProjectInfoTelemetryEvent);
         });
 
         it("counts files by extension", () => {
             const files = ["ts.ts", "tsx.tsx", "moo.ts", "dts.d.ts", "jsx.jsx", "js.js", "badExtension.badExtension"].map(f => makeFile(`/src/${f}`));
             const notIncludedFile = makeFile("/bin/ts.js");
-            const compilerOptions: ts.CompilerOptions = { allowJs: true };
+            const compilerOptions: CompilerOptions = { allowJs: true };
             const tsconfig = makeFile("/tsconfig.json", { compilerOptions, include: ["src"] });
 
             const et = new TestServerEventManager([...files, notIncludedFile, tsconfig]);
@@ -51,7 +51,7 @@ namespace ts.projectSystem {
         it("works with external project", () => {
             const file1 = makeFile("/a.ts");
             const et = new TestServerEventManager([file1]);
-            const compilerOptions: ts.server.protocol.CompilerOptions = { strict: true };
+            const compilerOptions: server.protocol.CompilerOptions = { strict: true };
 
             const projectFileName = "/hunter2/foo.csproj";
 
@@ -92,7 +92,7 @@ namespace ts.projectSystem {
         it("does not expose paths", () => {
             const file = makeFile("/a.ts");
 
-            const compilerOptions: ts.CompilerOptions = {
+            const compilerOptions: CompilerOptions = {
                 project: "",
                 outFile: "hunter2.js",
                 outDir: "hunter2",
@@ -122,7 +122,7 @@ namespace ts.projectSystem {
                 // Sensitive data doesn't get through even if sent to an option of safe type
                 checkJs: "hunter2" as any as boolean,
             };
-            const safeCompilerOptions: ts.CompilerOptions = {
+            const safeCompilerOptions: CompilerOptions = {
                 project: "",
                 outFile: "",
                 outDir: "",
@@ -236,7 +236,7 @@ namespace ts.projectSystem {
         });
     });
 
-    function makeFile(path: string, content: {} = ""): projectSystem.FileOrFolder {
+    function makeFile(path: string, content: {} = ""): FileOrFolder {
         return { path, content: isString(content) ? "" : JSON.stringify(content) };
     }
 }

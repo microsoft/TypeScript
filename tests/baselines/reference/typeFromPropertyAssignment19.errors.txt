@@ -1,0 +1,20 @@
+tests/cases/conformance/salsa/semver.js(2,1): error TS2539: Cannot assign to '"tests/cases/conformance/salsa/semver"' because it is not a variable.
+
+
+==== tests/cases/conformance/salsa/index.js (0 errors) ====
+    /// <reference path='./types.d.ts'/>
+    const C = require("./semver")
+    var two = C.f(1)
+    
+==== tests/cases/conformance/salsa/types.d.ts (0 errors) ====
+    declare var require: any;
+    declare var module: any;
+==== tests/cases/conformance/salsa/semver.js (1 errors) ====
+    /// <reference path='./types.d.ts'/>
+    exports = module.exports = C
+    ~~~~~~~
+!!! error TS2539: Cannot assign to '"tests/cases/conformance/salsa/semver"' because it is not a variable.
+    C.f = n => n + 1
+    function C() {
+        this.p = 1
+    }

@@ -8,7 +8,7 @@ node_js:
 sudo: false
 
 env:
-  - workerCount=3
+  - workerCount=3 timeout=600000
 
 matrix:
   fast_finish: true
@@ -16,9 +16,8 @@ matrix:
 branches:
   only:
   - master
-  - release-2.5
-  - release-2.6
   - release-2.7
+  - release-2.8
 
 install:
   - npm uninstall typescript --no-save

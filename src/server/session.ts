@@ -105,7 +105,7 @@ namespace ts.server {
         project: Project;
     }
 
-    function allEditsBeforePos(edits: ts.TextChange[], pos: number) {
+    function allEditsBeforePos(edits: TextChange[], pos: number) {
         for (const edit of edits) {
             if (textSpanEnd(edit.span) >= pos) {
                 return false;
@@ -122,7 +122,7 @@ namespace ts.server {
     export type CommandNames = protocol.CommandTypes;
     export const CommandNames = (<any>protocol).CommandTypes; // tslint:disable-line variable-name
 
-    export function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
+    export function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
         const verboseLogging = logger.hasLevel(LogLevel.verbose);
 
         const json = JSON.stringify(msg);
@@ -295,6 +295,8 @@ namespace ts.server {
          */
         canUseEvents: boolean;
         eventHandler?: ProjectServiceEventHandler;
+        /** Has no effect if eventHandler is also specified. */
+        suppressDiagnosticEvents?: boolean;
         throttleWaitMilliseconds?: number;
 
         globalPlugins?: ReadonlyArray<string>;
@@ -318,6 +320,7 @@ namespace ts.server {
         protected logger: Logger;
 
         protected canUseEvents: boolean;
+        private suppressDiagnosticEvents?: boolean;
         private eventHandler: ProjectServiceEventHandler;
 
         constructor(opts: SessionOptions) {
@@ -328,6 +331,7 @@ namespace ts.server {
             this.hrtime = opts.hrtime;
             this.logger = opts.logger;
             this.canUseEvents = opts.canUseEvents;
+            this.suppressDiagnosticEvents = opts.suppressDiagnosticEvents;
 
             const { throttleWaitMilliseconds } = opts;
 
@@ -352,6 +356,7 @@ namespace ts.server {
                 typingsInstaller: this.typingsInstaller,
                 throttleWaitMilliseconds,
                 eventHandler: this.eventHandler,
+                suppressDiagnosticEvents: this.suppressDiagnosticEvents,
                 globalPlugins: opts.globalPlugins,
                 pluginProbeLocations: opts.pluginProbeLocations,
                 allowLocalPluginLoads: opts.allowLocalPluginLoads
@@ -401,11 +406,12 @@ namespace ts.server {
         private projectsUpdatedInBackgroundEvent(openFiles: string[]): void {
             this.projectService.logger.info(`got projects updated in background, updating diagnostics for ${openFiles}`);
             if (openFiles.length) {
-                const checkList = this.createCheckList(openFiles);
+                if (!this.suppressDiagnosticEvents) {
+                    const checkList = this.createCheckList(openFiles);
 
-                // For now only queue error checking for open files. We can change this to include non open files as well
-                this.errorCheck.startNew(next => this.updateErrorCheck(next, checkList, 100, /*requireOpen*/ true));
-
+                    // For now only queue error checking for open files. We can change this to include non open files as well
+                    this.errorCheck.startNew(next => this.updateErrorCheck(next, checkList, 100, /*requireOpen*/ true));
+                }
 
                 // Send project changed event
                 this.event<protocol.ProjectsUpdatedInBackgroundEventBody>({
@@ -489,7 +495,10 @@ namespace ts.server {
             }
         }
 
+        /** It is the caller's responsibility to verify that `!this.suppressDiagnosticEvents`. */
         private updateErrorCheck(next: NextStep, checkList: PendingErrorCheck[], ms: number, requireOpen = true) {
+            Debug.assert(!this.suppressDiagnosticEvents); // Caller's responsibility
+
             const seq = this.changeSeq;
             const followMs = Math.min(ms, 200);
 
@@ -1087,9 +1096,21 @@ namespace ts.server {
             return { file, project };
         }
 
-        private getOutliningSpans(args: protocol.FileRequestArgs) {
+        private getOutliningSpans(args: protocol.FileRequestArgs, simplifiedResult: boolean): protocol.OutliningSpan[] | OutliningSpan[] {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
-            return languageService.getOutliningSpans(file);
+            const spans = languageService.getOutliningSpans(file);
+            if (simplifiedResult) {
+                const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
+                return spans.map(s => ({
+                    textSpan: this.toLocationTextSpan(s.textSpan, scriptInfo),
+                    hintSpan: this.toLocationTextSpan(s.hintSpan, scriptInfo),
+                    bannerText: s.bannerText,
+                    autoCollapse: s.autoCollapse
+                }));
+            }
+            else {
+                return spans;
+            }
         }
 
         private getTodoComments(args: protocol.TodoCommentRequestArgs) {
@@ -1113,7 +1134,7 @@ namespace ts.server {
         private getIndentation(args: protocol.IndentationRequestArgs) {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
             const position = this.getPositionInFile(args, file);
-            const options = args.options ? convertFormatOptions(args.options) : this.projectService.getFormatCodeOptions(file);
+            const options = args.options ? convertFormatOptions(args.options) : this.getFormatOptions(file);
             const indentation = languageService.getIndentationAtPosition(file, position, options);
             return { position, indentation };
         }
@@ -1171,8 +1192,7 @@ namespace ts.server {
             const endPosition = scriptInfo.lineOffsetToPosition(args.endLine, args.endOffset);
 
             // TODO: avoid duplicate code (with formatonkey)
-            const edits = languageService.getFormattingEditsForRange(file, startPosition, endPosition,
-                this.projectService.getFormatCodeOptions(file));
+            const edits = languageService.getFormattingEditsForRange(file, startPosition, endPosition, this.getFormatOptions(file));
             if (!edits) {
                 return undefined;
             }
@@ -1182,19 +1202,19 @@ namespace ts.server {
 
         private getFormattingEditsForRangeFull(args: protocol.FormatRequestArgs) {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
-            const options = args.options ? convertFormatOptions(args.options) : this.projectService.getFormatCodeOptions(file);
+            const options = args.options ? convertFormatOptions(args.options) : this.getFormatOptions(file);
             return languageService.getFormattingEditsForRange(file, args.position, args.endPosition, options);
         }
 
         private getFormattingEditsForDocumentFull(args: protocol.FormatRequestArgs) {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
-            const options = args.options ? convertFormatOptions(args.options) : this.projectService.getFormatCodeOptions(file);
+            const options = args.options ? convertFormatOptions(args.options) : this.getFormatOptions(file);
             return languageService.getFormattingEditsForDocument(file, options);
         }
 
         private getFormattingEditsAfterKeystrokeFull(args: protocol.FormatOnKeyRequestArgs) {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
-            const options = args.options ? convertFormatOptions(args.options) : this.projectService.getFormatCodeOptions(file);
+            const options = args.options ? convertFormatOptions(args.options) : this.getFormatOptions(file);
             return languageService.getFormattingEditsAfterKeystroke(file, args.position, args.key, options);
         }
 
@@ -1202,7 +1222,7 @@ namespace ts.server {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
             const position = scriptInfo.lineOffsetToPosition(args.line, args.offset);
-            const formatOptions = this.projectService.getFormatCodeOptions(file);
+            const formatOptions = this.getFormatOptions(file);
             const edits = languageService.getFormattingEditsAfterKeystroke(file, position, args.key,
                 formatOptions);
             // Check whether we should auto-indent. This will be when
@@ -1258,7 +1278,11 @@ namespace ts.server {
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file);
             const position = this.getPosition(args, scriptInfo);
 
-            const completions = project.getLanguageService().getCompletionsAtPosition(file, position, args);
+            const completions = project.getLanguageService().getCompletionsAtPosition(file, position, {
+                ...this.getPreferences(file),
+                includeExternalModuleExports: args.includeExternalModuleExports,
+                includeInsertTextCompletions: args.includeInsertTextCompletions
+            });
             if (simplifiedResult) {
                 return mapDefined<CompletionEntry, protocol.CompletionEntry>(completions && completions.entries, entry => {
                     if (completions.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
@@ -1282,7 +1306,7 @@ namespace ts.server {
 
             const result = mapDefined(args.entryNames, entryName => {
                 const { name, source } = typeof entryName === "string" ? { name: entryName, source: undefined } : entryName;
-                return project.getLanguageService().getCompletionEntryDetails(file, position, name, formattingOptions, source);
+                return project.getLanguageService().getCompletionEntryDetails(file, position, name, formattingOptions, source, this.getPreferences(file));
             });
             return simplifiedResult
                 ? result.map(details => ({ ...details, codeActions: map(details.codeActions, action => this.mapCodeAction(project, action)) }))
@@ -1364,6 +1388,10 @@ namespace ts.server {
         }
 
         private getDiagnostics(next: NextStep, delay: number, fileNames: string[]): void {
+            if (this.suppressDiagnosticEvents) {
+                return;
+            }
+
             const checkList = this.createCheckList(fileNames);
             if (checkList.length > 0) {
                 this.updateErrorCheck(next, checkList, delay);
@@ -1560,7 +1588,7 @@ namespace ts.server {
         }
 
         private extractPositionAndRange(args: protocol.FileLocationOrRangeRequestArgs, scriptInfo: ScriptInfo): { position: number, textRange: TextRange } {
-            let position: number = undefined;
+            let position: number;
             let textRange: TextRange;
             if (this.isLocation(args)) {
                 position = getPosition(args);
@@ -1580,7 +1608,7 @@ namespace ts.server {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const { position, textRange } = this.extractPositionAndRange(args, scriptInfo);
-            return project.getLanguageService().getApplicableRefactors(file, position || textRange);
+            return project.getLanguageService().getApplicableRefactors(file, position || textRange, this.getPreferences(file));
         }
 
         private getEditsForRefactor(args: protocol.GetEditsForRefactorRequestArgs, simplifiedResult: boolean): RefactorEditInfo | protocol.RefactorEditInfo {
@@ -1590,10 +1618,11 @@ namespace ts.server {
 
             const result = project.getLanguageService().getEditsForRefactor(
                 file,
-                this.projectService.getFormatCodeOptions(file),
+                this.getFormatOptions(file),
                 position || textRange,
                 args.refactor,
-                args.action
+                args.action,
+                this.getPreferences(file),
             );
 
             if (result === undefined) {
@@ -1619,8 +1648,7 @@ namespace ts.server {
         private organizeImports({ scope }: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileCodeEdits> | ReadonlyArray<FileTextChanges> {
             Debug.assert(scope.type === "file");
             const { file, project } = this.getFileAndProject(scope.args);
-            const formatOptions = this.projectService.getFormatCodeOptions(file);
-            const changes = project.getLanguageService().organizeImports({ type: "file", fileName: file }, formatOptions);
+            const changes = project.getLanguageService().organizeImports({ type: "file", fileName: file }, this.getFormatOptions(file), this.getPreferences(file));
             if (simplifiedResult) {
                 return this.mapTextChangesToCodeEdits(project, changes);
             }
@@ -1637,9 +1665,8 @@ namespace ts.server {
 
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const { startPosition, endPosition } = this.getStartAndEndPosition(args, scriptInfo);
-            const formatOptions = this.projectService.getFormatCodeOptions(file);
 
-            const codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes, formatOptions);
+            const codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes, this.getFormatOptions(file), this.getPreferences(file));
             if (!codeActions) {
                 return undefined;
             }
@@ -1654,8 +1681,7 @@ namespace ts.server {
         private getCombinedCodeFix({ scope, fixId }: protocol.GetCombinedCodeFixRequestArgs, simplifiedResult: boolean): protocol.CombinedCodeActions | CombinedCodeActions {
             Debug.assert(scope.type === "file");
             const { file, project } = this.getFileAndProject(scope.args);
-            const formatOptions = this.projectService.getFormatCodeOptions(file);
-            const res = project.getLanguageService().getCombinedCodeFix({ type: "file", fileName: file }, fixId, formatOptions);
+            const res = project.getLanguageService().getCombinedCodeFix({ type: "file", fileName: file }, fixId, this.getFormatOptions(file), this.getPreferences(file));
             if (simplifiedResult) {
                 return { changes: this.mapTextChangesToCodeEdits(project, res.changes), commands: res.commands };
             }
@@ -1676,7 +1702,7 @@ namespace ts.server {
         }
 
         private getStartAndEndPosition(args: protocol.FileRangeRequestArgs, scriptInfo: ScriptInfo) {
-            let startPosition: number = undefined, endPosition: number = undefined;
+            let startPosition: number, endPosition: number;
             if (args.startPosition !== undefined) {
                 startPosition = args.startPosition;
             }
@@ -1697,9 +1723,9 @@ namespace ts.server {
             return { startPosition, endPosition };
         }
 
-        private mapCodeAction(project: Project, { description, changes: unmappedChanges, commands, fixId }: CodeFixAction): protocol.CodeFixAction {
+        private mapCodeAction(project: Project, { description, changes: unmappedChanges, commands, fixId, fixAllDescription }: CodeFixAction): protocol.CodeFixAction {
             const changes = unmappedChanges.map(change => this.mapTextChangesToCodeEditsUsingScriptinfo(change, project.getScriptInfoForNormalizedPath(toNormalizedPath(change.fileName))));
-            return { description, changes, commands, fixId };
+            return { description, changes, commands, fixId, fixAllDescription };
         }
 
         private mapTextChangesToCodeEdits(project: Project, textChanges: ReadonlyArray<FileTextChanges>): protocol.FileCodeEdits[] {
@@ -1713,7 +1739,7 @@ namespace ts.server {
             };
         }
 
-        private convertTextChangeToCodeEdit(change: ts.TextChange, scriptInfo: ScriptInfo): protocol.CodeEdit {
+        private convertTextChangeToCodeEdit(change: TextChange, scriptInfo: ScriptInfo): protocol.CodeEdit {
             return {
                 start: scriptInfo.positionToLineOffset(change.span.start),
                 end: scriptInfo.positionToLineOffset(change.span.start + change.span.length),
@@ -1735,6 +1761,10 @@ namespace ts.server {
         }
 
         private getDiagnosticsForProject(next: NextStep, delay: number, fileName: string): void {
+            if (this.suppressDiagnosticEvents) {
+                return;
+            }
+
             const { fileNames, languageServiceDisabled } = this.getProjectInfoWorker(fileName, /*projectFileName*/ undefined, /*needFileNameList*/ true, /*excludeConfigFiles*/ true);
             if (languageServiceDisabled) {
                 return;
@@ -1893,8 +1923,11 @@ namespace ts.server {
             [CommandNames.QuickinfoFull]: (request: protocol.QuickInfoRequest) => {
                 return this.requiredResponse(this.getQuickInfoWorker(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.OutliningSpans]: (request: protocol.FileRequest) => {
-                return this.requiredResponse(this.getOutliningSpans(request.arguments));
+            [CommandNames.GetOutliningSpans]: (request: protocol.FileRequest) => {
+                return this.requiredResponse(this.getOutliningSpans(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.GetOutliningSpansFull]: (request: protocol.FileRequest) => {
+                return this.requiredResponse(this.getOutliningSpans(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.TodoComments]: (request: protocol.TodoCommentRequest) => {
                 return this.requiredResponse(this.getTodoComments(request.arguments));
@@ -2172,6 +2205,14 @@ namespace ts.server {
                     /*success*/ false,
                     "Error processing request. " + (<StackTraceError>err).message + "\n" + (<StackTraceError>err).stack);
             }
+        }
+
+        private getFormatOptions(file: NormalizedPath): FormatCodeSettings {
+            return this.projectService.getFormatCodeOptions(file);
+        }
+
+        private getPreferences(file: NormalizedPath): UserPreferences {
+            return this.projectService.getPreferences(file);
         }
     }
 

@@ -117,7 +117,7 @@ namespace ts {
                 createWatchOfConfigFile(configParseResult, commandLineOptions);
             }
             else {
-                performCompilation(configParseResult.fileNames, configParseResult.options);
+                performCompilation(configParseResult.fileNames, configParseResult.options, getConfigFileParsingDiagnostics(configParseResult));
             }
         }
         else {
@@ -139,11 +139,11 @@ namespace ts {
         }
     }
 
-    function performCompilation(rootFileNames: string[], compilerOptions: CompilerOptions) {
+    function performCompilation(rootFileNames: string[], compilerOptions: CompilerOptions, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) {
         const compilerHost = createCompilerHost(compilerOptions);
         enableStatistics(compilerOptions);
 
-        const program = createProgram(rootFileNames, compilerOptions, compilerHost);
+        const program = createProgram(rootFileNames, compilerOptions, compilerHost, /*oldProgram*/ undefined, configFileParsingDiagnostics);
         const exitStatus = emitFilesAndReportErrors(program, reportDiagnostic, s => sys.write(s + sys.newLine));
         reportStatistics(program);
         return sys.exit(exitStatus);
@@ -167,17 +167,14 @@ namespace ts {
     }
 
     function createWatchOfConfigFile(configParseResult: ParsedCommandLine, optionsToExtend: CompilerOptions) {
-        const watchCompilerHost = ts.createWatchCompilerHostOfConfigFile(configParseResult.options.configFilePath, optionsToExtend, sys, /*createProgram*/ undefined, reportDiagnostic, createWatchStatusReporter(configParseResult.options));
+        const watchCompilerHost = createWatchCompilerHostOfConfigFile(configParseResult.options.configFilePath, optionsToExtend, sys, /*createProgram*/ undefined, reportDiagnostic, createWatchStatusReporter(configParseResult.options));
         updateWatchCompilationHost(watchCompilerHost);
-        watchCompilerHost.rootFiles = configParseResult.fileNames;
-        watchCompilerHost.options = configParseResult.options;
-        watchCompilerHost.configFileSpecs = configParseResult.configFileSpecs;
-        watchCompilerHost.configFileWildCardDirectories = configParseResult.wildcardDirectories;
+        watchCompilerHost.configFileParsingResult = configParseResult;
         createWatchProgram(watchCompilerHost);
     }
 
     function createWatchOfFilesAndCompilerOptions(rootFiles: string[], options: CompilerOptions) {
-        const watchCompilerHost = ts.createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, sys, /*createProgram*/ undefined, reportDiagnostic, createWatchStatusReporter(options));
+        const watchCompilerHost = createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, sys, /*createProgram*/ undefined, reportDiagnostic, createWatchStatusReporter(options));
         updateWatchCompilationHost(watchCompilerHost);
         createWatchProgram(watchCompilerHost);
     }
@@ -262,7 +259,7 @@ namespace ts {
     }
 
     function printVersion() {
-        sys.write(getDiagnosticText(Diagnostics.Version_0, ts.version) + sys.newLine);
+        sys.write(getDiagnosticText(Diagnostics.Version_0, version) + sys.newLine);
     }
 
     function printHelp(showAllOptions: boolean) {
@@ -399,4 +396,9 @@ if (ts.Debug.isDebugging) {
 if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
     ts.sys.tryEnableSourceMapsForHost();
 }
+
+if (ts.sys.setBlocking) {
+    ts.sys.setBlocking();
+}
+
 ts.executeCommandLine(ts.sys.args);

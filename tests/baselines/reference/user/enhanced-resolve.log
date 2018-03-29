@@ -1,0 +1,94 @@
+Exit Code: 1
+Standard output:
+node_modules/enhanced-resolve/lib/AliasFieldPlugin.js(34,30): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/enhanced-resolve/lib/AliasFieldPlugin.js(39,23): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/enhanced-resolve/lib/AliasPlugin.js(40,26): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/enhanced-resolve/lib/AppendPlugin.js(17,23): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(10,22): error TS2304: Cannot find name 'Map'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(11,19): error TS2304: Cannot find name 'Map'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(14,21): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(14,25): error TS2304: Cannot find name 'Set'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(14,36): error TS2304: Cannot find name 'Set'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(14,47): error TS2304: Cannot find name 'Set'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(14,58): error TS2304: Cannot find name 'Set'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(14,69): error TS2304: Cannot find name 'Set'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(14,80): error TS2304: Cannot find name 'Set'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(14,91): error TS2304: Cannot find name 'Set'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(14,102): error TS2304: Cannot find name 'Set'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(14,113): error TS2304: Cannot find name 'Set'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(16,22): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(16,26): error TS2304: Cannot find name 'Set'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(37,28): error TS2339: Property 'size' does not exist on type 'never'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(38,14): error TS2339: Property 'add' does not exist on type 'never'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(39,28): error TS2339: Property 'size' does not exist on type 'never'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(51,28): error TS2339: Property 'size' does not exist on type 'never'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(52,14): error TS2339: Property 'add' does not exist on type 'never'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(53,28): error TS2339: Property 'size' does not exist on type 'never'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(109,19): error TS2532: Object is possibly 'undefined'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(112,17): error TS2532: Object is possibly 'undefined'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(113,3): error TS2532: Object is possibly 'undefined'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(114,23): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'never'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(116,18): error TS2345: Argument of type 'Timer | null' is not assignable to parameter of type 'number | undefined'.
+  Type 'null' is not assignable to type 'number | undefined'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(129,18): error TS2345: Argument of type 'Timer | null' is not assignable to parameter of type 'number | undefined'.
+  Type 'null' is not assignable to type 'number | undefined'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(147,18): error TS2345: Argument of type 'Timer | null' is not assignable to parameter of type 'number | undefined'.
+  Type 'null' is not assignable to type 'number | undefined'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(151,11): error TS2339: Property 'clear' does not exist on type 'never'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(176,19): error TS2322: Type 'null' is not assignable to type '(path: any, callback: any) => void'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(179,23): error TS2322: Type 'null' is not assignable to type '(path: any) => any'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(182,22): error TS2322: Type 'null' is not assignable to type '(path: any, callback: any) => void'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(185,26): error TS2322: Type 'null' is not assignable to type '(path: any) => any'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(188,23): error TS2322: Type 'null' is not assignable to type '(path: any, callback: any) => void'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(191,27): error TS2322: Type 'null' is not assignable to type '(path: any) => any'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(209,4): error TS2322: Type 'null' is not assignable to type '(path: any, callback: any) => void'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(220,4): error TS2322: Type 'null' is not assignable to type '(path: any) => any'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(224,23): error TS2322: Type 'null' is not assignable to type '(path: any, callback: any) => void'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(227,27): error TS2322: Type 'null' is not assignable to type '(path: any) => any'.
+node_modules/enhanced-resolve/lib/CloneBasenamePlugin.js(7,40): error TS2339: Property 'basename' does not exist on type '(path: any) => { [x: string]: any; paths: any[]; seqments: any[]; }'.
+node_modules/enhanced-resolve/lib/CloneBasenamePlugin.js(20,23): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/enhanced-resolve/lib/ConcordExtensionsPlugin.js(26,24): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/enhanced-resolve/lib/ConcordMainPlugin.js(26,23): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/enhanced-resolve/lib/ConcordModulesPlugin.js(29,30): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/enhanced-resolve/lib/ConcordModulesPlugin.js(34,23): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/enhanced-resolve/lib/DescriptionFilePlugin.js(32,24): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/enhanced-resolve/lib/FileKindPlugin.js(17,23): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/enhanced-resolve/lib/JoinRequestPlugin.js(16,23): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/enhanced-resolve/lib/MainFieldPlugin.js(44,23): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/enhanced-resolve/lib/ModuleAppendPlugin.js(31,23): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/enhanced-resolve/lib/ModuleKindPlugin.js(17,23): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/enhanced-resolve/lib/ModulesInHierachicDirectoriesPlugin.js(30,26): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/enhanced-resolve/lib/ModulesInRootPlugin.js(17,23): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/enhanced-resolve/lib/ParsePlugin.js(17,23): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/enhanced-resolve/lib/Resolver.js(19,26): error TS2304: Cannot find name 'Map'.
+node_modules/enhanced-resolve/lib/Resolver.js(45,3): error TS2346: Call target does not contain any signatures.
+node_modules/enhanced-resolve/lib/Resolver.js(160,29): error TS2304: Cannot find name 'Set'.
+node_modules/enhanced-resolve/lib/Resolver.js(178,11): error TS2339: Property 'details' does not exist on type 'Error'.
+node_modules/enhanced-resolve/lib/Resolver.js(179,11): error TS2339: Property 'missing' does not exist on type 'Error'.
+node_modules/enhanced-resolve/lib/Resolver.js(179,27): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/enhanced-resolve/lib/Resolver.js(199,92): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/enhanced-resolve/lib/Resolver.js(200,82): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/enhanced-resolve/lib/Resolver.js(209,19): error TS2304: Cannot find name 'Set'.
+node_modules/enhanced-resolve/lib/Resolver.js(212,83): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/enhanced-resolve/lib/Resolver.js(213,20): error TS2339: Property 'recursion' does not exist on type 'Error'.
+node_modules/enhanced-resolve/lib/Resolver.js(219,19): error TS2304: Cannot find name 'Set'.
+node_modules/enhanced-resolve/lib/Resolver.js(279,43): error TS2304: Cannot find name 'Map'.
+node_modules/enhanced-resolve/lib/ResolverFactory.js(140,17): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/enhanced-resolve/lib/ResultPlugin.js(14,23): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/enhanced-resolve/lib/SymlinkPlugin.js(25,16): error TS2339: Property 'withIndex' does not exist on type '(array: any, iterator: any, callback: any) => any'.
+node_modules/enhanced-resolve/lib/SymlinkPlugin.js(42,24): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/enhanced-resolve/lib/UseFilePlugin.js(18,23): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/enhanced-resolve/lib/concord.js(75,30): error TS2531: Object is possibly 'null'.
+node_modules/enhanced-resolve/lib/concord.js(76,17): error TS2531: Object is possibly 'null'.
+node_modules/enhanced-resolve/lib/concord.js(175,18): error TS2532: Object is possibly 'undefined'.
+node_modules/enhanced-resolve/lib/createInnerCallback.js(16,20): error TS2339: Property 'stack' does not exist on type '(...args: any[]) => any'.
+node_modules/enhanced-resolve/lib/createInnerCallback.js(17,20): error TS2339: Property 'missing' does not exist on type '(...args: any[]) => any'.
+node_modules/enhanced-resolve/lib/forEachBail.js(7,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+node_modules/enhanced-resolve/lib/getPaths.js(7,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+node_modules/enhanced-resolve/lib/node.js(24,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+node_modules/enhanced-resolve/lib/node.js(123,19): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/enhanced-resolve/lib/node.js(143,19): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+
+
+
+Standard error:

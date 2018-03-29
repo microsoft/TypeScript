@@ -3,4 +3,4 @@
 // @noImplicitAny: true
 //// function f(y, z = { p: y[
 
-verify.getAndApplyCodeFix();
+verify.not.codeFixAvailable();

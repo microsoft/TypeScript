@@ -1,10 +1,10 @@
-tests/cases/compiler/noUnusedLocals_selfReference.ts(3,10): error TS6133: 'f' is declared but its value is never read.
-tests/cases/compiler/noUnusedLocals_selfReference.ts(5,14): error TS6133: 'g' is declared but its value is never read.
-tests/cases/compiler/noUnusedLocals_selfReference.ts(9,7): error TS6133: 'C' is declared but its value is never read.
-tests/cases/compiler/noUnusedLocals_selfReference.ts(12,6): error TS6133: 'E' is declared but its value is never read.
-tests/cases/compiler/noUnusedLocals_selfReference.ts(13,11): error TS6133: 'I' is declared but its value is never read.
-tests/cases/compiler/noUnusedLocals_selfReference.ts(14,6): error TS6133: 'T' is declared but its value is never read.
-tests/cases/compiler/noUnusedLocals_selfReference.ts(15,11): error TS6133: 'N' is declared but its value is never read.
+tests/cases/compiler/noUnusedLocals_selfReference.ts(3,1): error TS6133: 'f' is declared but its value is never read.
+tests/cases/compiler/noUnusedLocals_selfReference.ts(5,5): error TS6133: 'g' is declared but its value is never read.
+tests/cases/compiler/noUnusedLocals_selfReference.ts(9,1): error TS6133: 'C' is declared but its value is never read.
+tests/cases/compiler/noUnusedLocals_selfReference.ts(12,1): error TS6133: 'E' is declared but its value is never read.
+tests/cases/compiler/noUnusedLocals_selfReference.ts(13,1): error TS6133: 'I' is declared but its value is never read.
+tests/cases/compiler/noUnusedLocals_selfReference.ts(14,1): error TS6133: 'T' is declared but its value is never read.
+tests/cases/compiler/noUnusedLocals_selfReference.ts(15,1): error TS6133: 'N' is declared but its value is never read.
 tests/cases/compiler/noUnusedLocals_selfReference.ts(22,19): error TS6133: 'm' is declared but its value is never read.
 
 
@@ -12,31 +12,31 @@ tests/cases/compiler/noUnusedLocals_selfReference.ts(22,19): error TS6133: 'm' i
     export {}; // Make this a module scope, so these are local variables.
     
     function f() {
-             ~
+    ~~~~~~~~~~
 !!! error TS6133: 'f' is declared but its value is never read.
         f;
         function g() {
-                 ~
+        ~~~~~~~~~~
 !!! error TS6133: 'g' is declared but its value is never read.
             g;
         }
     }
     class C {
-          ~
+    ~~~~~~~
 !!! error TS6133: 'C' is declared but its value is never read.
         m() { C; }
     }
     enum E { A = 0, B = E.A }
-         ~
+    ~~~~~~
 !!! error TS6133: 'E' is declared but its value is never read.
     interface I { x: I };
-              ~
+    ~~~~~~~~~~~
 !!! error TS6133: 'I' is declared but its value is never read.
     type T = { x: T };
-         ~
+    ~~~~~~
 !!! error TS6133: 'T' is declared but its value is never read.
     namespace N { N; }
-              ~
+    ~~~~~~~~~~~
 !!! error TS6133: 'N' is declared but its value is never read.
     
     // Avoid a false positive.

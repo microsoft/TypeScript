@@ -48,7 +48,7 @@ namespace ts {
         const uniqueExports = createMap<boolean>();
         let exportedNames: Identifier[];
         let hasExportDefault = false;
-        let exportEquals: ExportAssignment = undefined;
+        let exportEquals: ExportAssignment;
         let hasExportStarsToExportValues = false;
         let hasImportStarOrImportDefault = false;
 
@@ -60,7 +60,7 @@ namespace ts {
                     // import * as x from "mod"
                     // import { x, y } from "mod"
                     externalImports.push(<ImportDeclaration>node);
-                    hasImportStarOrImportDefault = getImportNeedsImportStarHelper(<ImportDeclaration>node) || getImportNeedsImportDefaultHelper(<ImportDeclaration>node);
+                    hasImportStarOrImportDefault = hasImportStarOrImportDefault || getImportNeedsImportStarHelper(<ImportDeclaration>node) || getImportNeedsImportDefaultHelper(<ImportDeclaration>node);
                     break;
 
                 case SyntaxKind.ImportEqualsDeclaration:
