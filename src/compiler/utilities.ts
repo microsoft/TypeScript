@@ -2111,6 +2111,13 @@ namespace ts {
         return heritageClause ? heritageClause.types : undefined;
     }
 
+    /** Returns the node in an `extends` or `implements` clause of a class or interface. */
+    export function getAllSuperTypeNodes(node: Node): ReadonlyArray<TypeNode> {
+        return isInterfaceDeclaration(node) ? getInterfaceBaseTypeNodes(node) || emptyArray
+            : isClassLike(node) ? concatenate(singleElementArray(getClassExtendsHeritageClauseElement(node)), getClassImplementsHeritageClauseElements(node)) || emptyArray
+            : emptyArray;
+    }
+
     export function getInterfaceBaseTypeNodes(node: InterfaceDeclaration) {
         const heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
         return heritageClause ? heritageClause.types : undefined;
@@ -2414,6 +2421,63 @@ namespace ts {
 
     export function getOperatorPrecedence(nodeKind: SyntaxKind, operatorKind: SyntaxKind, hasArguments?: boolean) {
         switch (nodeKind) {
+            case SyntaxKind.CommaListExpression:
+                return 0;
+
+            case SyntaxKind.SpreadElement:
+                return 1;
+
+            case SyntaxKind.YieldExpression:
+                return 2;
+
+            case SyntaxKind.ConditionalExpression:
+                return 4;
+
+            case SyntaxKind.BinaryExpression:
+                switch (operatorKind) {
+                    case SyntaxKind.CommaToken:
+                        return 0;
+
+                    case SyntaxKind.EqualsToken:
+                    case SyntaxKind.PlusEqualsToken:
+                    case SyntaxKind.MinusEqualsToken:
+                    case SyntaxKind.AsteriskAsteriskEqualsToken:
+                    case SyntaxKind.AsteriskEqualsToken:
+                    case SyntaxKind.SlashEqualsToken:
+                    case SyntaxKind.PercentEqualsToken:
+                    case SyntaxKind.LessThanLessThanEqualsToken:
+                    case SyntaxKind.GreaterThanGreaterThanEqualsToken:
+                    case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
+                    case SyntaxKind.AmpersandEqualsToken:
+                    case SyntaxKind.CaretEqualsToken:
+                    case SyntaxKind.BarEqualsToken:
+                        return 3;
+
+                    default:
+                        return getBinaryOperatorPrecedence(operatorKind);
+                }
+
+            case SyntaxKind.PrefixUnaryExpression:
+            case SyntaxKind.TypeOfExpression:
+            case SyntaxKind.VoidExpression:
+            case SyntaxKind.DeleteExpression:
+            case SyntaxKind.AwaitExpression:
+                return 16;
+
+            case SyntaxKind.PostfixUnaryExpression:
+                return 17;
+
+            case SyntaxKind.CallExpression:
+                return 18;
+
+            case SyntaxKind.NewExpression:
+                return hasArguments ? 19 : 18;
+
+            case SyntaxKind.TaggedTemplateExpression:
+            case SyntaxKind.PropertyAccessExpression:
+            case SyntaxKind.ElementAccessExpression:
+                return 19;
+
             case SyntaxKind.ThisKeyword:
             case SyntaxKind.SuperKeyword:
             case SyntaxKind.Identifier:
@@ -2435,116 +2499,57 @@ namespace ts {
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.OmittedExpression:
-                return 19;
-
-            case SyntaxKind.TaggedTemplateExpression:
-            case SyntaxKind.PropertyAccessExpression:
-            case SyntaxKind.ElementAccessExpression:
-                return 18;
-
-            case SyntaxKind.NewExpression:
-                return hasArguments ? 18 : 17;
-
-            case SyntaxKind.CallExpression:
-                return 17;
-
-            case SyntaxKind.PostfixUnaryExpression:
-                return 16;
-
-            case SyntaxKind.PrefixUnaryExpression:
-            case SyntaxKind.TypeOfExpression:
-            case SyntaxKind.VoidExpression:
-            case SyntaxKind.DeleteExpression:
-            case SyntaxKind.AwaitExpression:
-                return 15;
-
-            case SyntaxKind.BinaryExpression:
-                switch (operatorKind) {
-                    case SyntaxKind.ExclamationToken:
-                    case SyntaxKind.TildeToken:
-                        return 15;
-
-                    case SyntaxKind.AsteriskAsteriskToken:
-                    case SyntaxKind.AsteriskToken:
-                    case SyntaxKind.SlashToken:
-                    case SyntaxKind.PercentToken:
-                        return 14;
-
-                    case SyntaxKind.PlusToken:
-                    case SyntaxKind.MinusToken:
-                        return 13;
-
-                    case SyntaxKind.LessThanLessThanToken:
-                    case SyntaxKind.GreaterThanGreaterThanToken:
-                    case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
-                        return 12;
-
-                    case SyntaxKind.LessThanToken:
-                    case SyntaxKind.LessThanEqualsToken:
-                    case SyntaxKind.GreaterThanToken:
-                    case SyntaxKind.GreaterThanEqualsToken:
-                    case SyntaxKind.InKeyword:
-                    case SyntaxKind.InstanceOfKeyword:
-                        return 11;
-
-                    case SyntaxKind.EqualsEqualsToken:
-                    case SyntaxKind.EqualsEqualsEqualsToken:
-                    case SyntaxKind.ExclamationEqualsToken:
-                    case SyntaxKind.ExclamationEqualsEqualsToken:
-                        return 10;
-
-                    case SyntaxKind.AmpersandToken:
-                        return 9;
-
-                    case SyntaxKind.CaretToken:
-                        return 8;
-
-                    case SyntaxKind.BarToken:
-                        return 7;
-
-                    case SyntaxKind.AmpersandAmpersandToken:
-                        return 6;
-
-                    case SyntaxKind.BarBarToken:
-                        return 5;
-
-                    case SyntaxKind.EqualsToken:
-                    case SyntaxKind.PlusEqualsToken:
-                    case SyntaxKind.MinusEqualsToken:
-                    case SyntaxKind.AsteriskAsteriskEqualsToken:
-                    case SyntaxKind.AsteriskEqualsToken:
-                    case SyntaxKind.SlashEqualsToken:
-                    case SyntaxKind.PercentEqualsToken:
-                    case SyntaxKind.LessThanLessThanEqualsToken:
-                    case SyntaxKind.GreaterThanGreaterThanEqualsToken:
-                    case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
-                    case SyntaxKind.AmpersandEqualsToken:
-                    case SyntaxKind.CaretEqualsToken:
-                    case SyntaxKind.BarEqualsToken:
-                        return 3;
-
-                    case SyntaxKind.CommaToken:
-                        return 0;
-
-                    default:
-                        return -1;
-                }
-
-            case SyntaxKind.ConditionalExpression:
-                return 4;
-
-            case SyntaxKind.YieldExpression:
-                return 2;
-
-            case SyntaxKind.SpreadElement:
-                return 1;
-
-            case SyntaxKind.CommaListExpression:
-                return 0;
+                return 20;
 
             default:
                 return -1;
         }
+    }
+
+    /* @internal */
+    export function getBinaryOperatorPrecedence(kind: SyntaxKind): number {
+        switch (kind) {
+            case SyntaxKind.BarBarToken:
+                return 5;
+            case SyntaxKind.AmpersandAmpersandToken:
+                return 6;
+            case SyntaxKind.BarToken:
+                return 7;
+            case SyntaxKind.CaretToken:
+                return 8;
+            case SyntaxKind.AmpersandToken:
+                return 9;
+            case SyntaxKind.EqualsEqualsToken:
+            case SyntaxKind.ExclamationEqualsToken:
+            case SyntaxKind.EqualsEqualsEqualsToken:
+            case SyntaxKind.ExclamationEqualsEqualsToken:
+                return 10;
+            case SyntaxKind.LessThanToken:
+            case SyntaxKind.GreaterThanToken:
+            case SyntaxKind.LessThanEqualsToken:
+            case SyntaxKind.GreaterThanEqualsToken:
+            case SyntaxKind.InstanceOfKeyword:
+            case SyntaxKind.InKeyword:
+            case SyntaxKind.AsKeyword:
+                return 11;
+            case SyntaxKind.LessThanLessThanToken:
+            case SyntaxKind.GreaterThanGreaterThanToken:
+            case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+                return 12;
+            case SyntaxKind.PlusToken:
+            case SyntaxKind.MinusToken:
+                return 13;
+            case SyntaxKind.AsteriskToken:
+            case SyntaxKind.SlashToken:
+            case SyntaxKind.PercentToken:
+                return 14;
+            case SyntaxKind.AsteriskAsteriskToken:
+                return 15;
+        }
+
+        // -1 is lower than all other precedences.  Returning it will cause binary expression
+        // parsing to stop.
+        return -1;
     }
 
     export function createDiagnosticCollection(): DiagnosticCollection {
@@ -2834,8 +2839,9 @@ namespace ts {
 
     export interface EmitFileNames {
         jsFilePath: string;
-        sourceMapFilePath: string;
-        declarationFilePath: string;
+        sourceMapFilePath: string | undefined;
+        declarationFilePath: string | undefined;
+        declarationMapPath: string | undefined;
     }
 
     /**
@@ -3413,7 +3419,7 @@ namespace ts {
         for (let i = 0; i < length; i++) {
             const charCode = input.charCodeAt(i);
 
-            // handel utf8
+            // handle utf8
             if (charCode < 0x80) {
                 output.push(charCode);
             }
@@ -3476,6 +3482,82 @@ namespace ts {
         }
 
         return result;
+    }
+
+    function getStringFromExpandedCharCodes(codes: number[]): string {
+        let output = "";
+        let i = 0;
+        const length = codes.length;
+        while (i < length) {
+            const charCode = codes[i];
+
+            if (charCode < 0x80) {
+                output += String.fromCharCode(charCode);
+                i++;
+            }
+            else if ((charCode & 0B11000000) === 0B11000000) {
+                let value = charCode & 0B00111111;
+                i++;
+                let nextCode: number = codes[i];
+                while ((nextCode & 0B11000000) === 0B10000000) {
+                    value = (value << 6) | (nextCode & 0B00111111);
+                    i++;
+                    nextCode = codes[i];
+                }
+                // `value` may be greater than 10FFFF (the maximum unicode codepoint) - JS will just make this into an invalid character for us
+                output += String.fromCharCode(value);
+            }
+            else {
+                // We don't want to kill the process when decoding fails (due to a following char byte not
+                // following a leading char), so we just print the (bad) value
+                output += String.fromCharCode(charCode);
+                i++;
+            }
+        }
+        return output;
+    }
+
+    export function base64encode(host: { base64encode?(input: string): string }, input: string): string {
+        if (host.base64encode) {
+            return host.base64encode(input);
+        }
+        return convertToBase64(input);
+    }
+
+    export function base64decode(host: { base64decode?(input: string): string }, input: string): string {
+        if (host.base64decode) {
+            return host.base64decode(input);
+        }
+        const length = input.length;
+        const expandedCharCodes: number[] = [];
+        let i = 0;
+        while (i < length) {
+            // Stop decoding once padding characters are present
+            if (input.charCodeAt(i) === base64Digits.charCodeAt(64)) {
+                break;
+            }
+            // convert 4 input digits into three characters, ignoring padding characters at the end
+            const ch1 = base64Digits.indexOf(input[i]);
+            const ch2 = base64Digits.indexOf(input[i + 1]);
+            const ch3 = base64Digits.indexOf(input[i + 2]);
+            const ch4 = base64Digits.indexOf(input[i + 3]);
+
+            const code1 = ((ch1 & 0B00111111) << 2) | ((ch2 >> 4) & 0B00000011);
+            const code2 = ((ch2 & 0B00001111) << 4) | ((ch3 >> 2) & 0B00001111);
+            const code3 = ((ch3 & 0B00000011) << 6) | (ch4 & 0B00111111);
+
+            if (code2 === 0 && ch3 !== 0) { // code2 decoded to zero, but ch3 was padding - elide code2 and code3
+                expandedCharCodes.push(code1);
+            }
+            else if (code3 === 0 && ch4 !== 0) { // code3 decoded to zero, but ch4 was padding, elide code3
+                expandedCharCodes.push(code1, code2);
+            }
+            else {
+                expandedCharCodes.push(code1, code2, code3);
+            }
+            i += 4;
+        }
+        return getStringFromExpandedCharCodes(expandedCharCodes);
     }
 
     const carriageReturnLineFeed = "\r\n";
@@ -3991,6 +4073,12 @@ namespace ts {
         }
 
         return { start, length };
+    }
+
+    /* @internal */
+    export function createTextRange(pos: number, end: number = pos): TextRange {
+        Debug.assert(end >= pos);
+        return { pos, end };
     }
 
     export function createTextSpanFromBounds(start: number, end: number) {
@@ -5353,6 +5441,16 @@ namespace ts {
                 return true;
         }
         return false;
+    }
+
+    /* @internal */
+    export function isParameterPropertyModifier(kind: SyntaxKind): boolean {
+        return !!(modifierToFlag(kind) & ModifierFlags.ParameterPropertyModifier);
+    }
+
+    /* @internal */
+    export function isClassMemberModifier(idToken: SyntaxKind): boolean {
+        return isParameterPropertyModifier(idToken) || idToken === SyntaxKind.StaticKeyword;
     }
 
     export function isModifier(node: Node): node is Modifier {

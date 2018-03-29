@@ -1570,10 +1570,10 @@ namespace ts {
         }
     }
 
-    export function formatStringFromArgs(text: string, args: { [index: number]: string; }, baseIndex?: number): string {
+    export function formatStringFromArgs(text: string, args: ArrayLike<string>, baseIndex?: number): string {
         baseIndex = baseIndex || 0;
 
-        return text.replace(/{(\d+)}/g, (_match, index?) => args[+index + baseIndex]);
+        return text.replace(/{(\d+)}/g, (_match, index?: string) => Debug.assertDefined(args[+index + baseIndex]));
     }
 
     export let localizedDiagnosticMessages: MapLike<string>;
@@ -2046,6 +2046,10 @@ namespace ts {
             moduleResolution = getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS ? ModuleResolutionKind.NodeJs : ModuleResolutionKind.Classic;
         }
         return moduleResolution;
+    }
+
+    export function getAreDeclarationMapsEnabled(options: CompilerOptions) {
+        return !!(options.declaration && options.declarationMap);
     }
 
     export function getAllowSyntheticDefaultImports(compilerOptions: CompilerOptions) {

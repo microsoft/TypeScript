@@ -14,4 +14,4 @@ Installer.prototype.loadArgMetadata = function (next) {
     }
 }
 var i = new Installer()
-i.newProperty = i.args // error, number | string =/> number | undefined
+i.newProperty = i.args // ok, number ==> number | undefined

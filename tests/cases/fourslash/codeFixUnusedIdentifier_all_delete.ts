@@ -9,6 +9,7 @@
 
 verify.codeFixAll({
     fixId: "unusedIdentifier_delete",
+    fixAllDescription: "Delete all unused declarations",
     newFileContent:
 `function f() {
 }`,

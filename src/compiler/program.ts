@@ -198,6 +198,7 @@ namespace ts {
 
     export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[] {
         const diagnostics = [
+            ...program.getConfigFileParsingDiagnostics(),
             ...program.getOptionsDiagnostics(cancellationToken),
             ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
             ...program.getGlobalDiagnostics(cancellationToken),
@@ -454,6 +455,12 @@ namespace ts {
         }
     }
 
+    export function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): ReadonlyArray<Diagnostic> {
+        return configFileParseResult.options.configFile ?
+            configFileParseResult.options.configFile.parseDiagnostics.concat(configFileParseResult.errors) :
+            configFileParseResult.errors;
+    }
+
     /**
      * Determined if source file needs to be re-created even if its text hasn't changed
      */
@@ -485,9 +492,10 @@ namespace ts {
      * @param options - The compiler options which should be used.
      * @param host - The host interacts with the underlying file system.
      * @param oldProgram - Reuses an old program structure.
+     * @param configFileParsingDiagnostics - error during config file parsing
      * @returns A 'Program' object.
      */
-    export function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program {
+    export function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program {
         let program: Program;
         let files: SourceFile[] = [];
         let commonSourceDirectory: string;
@@ -665,7 +673,8 @@ namespace ts {
             getSourceFileFromReference,
             sourceFileToPackageName,
             redirectTargetsSet,
-            isEmittedFile
+            isEmittedFile,
+            getConfigFileParsingDiagnostics
         };
 
         verifyCompilerOptions();
@@ -1568,6 +1577,10 @@ namespace ts {
             return sortAndDeduplicateDiagnostics(getDiagnosticsProducingTypeChecker().getGlobalDiagnostics().slice());
         }
 
+        function getConfigFileParsingDiagnostics(): ReadonlyArray<Diagnostic> {
+            return configFileParsingDiagnostics || emptyArray;
+        }
+
         function processRootFile(fileName: string, isDefaultLib: boolean) {
             processSourceFile(normalizePath(fileName), isDefaultLib, /*packageId*/ undefined);
         }
@@ -2113,9 +2126,9 @@ namespace ts {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", "outFile");
             }
 
-            if (options.mapRoot && !options.sourceMap) {
+            if (options.mapRoot && !(options.sourceMap || options.declarationMap)) {
                 // Error to specify --mapRoot without --sourcemap
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "mapRoot", "sourceMap");
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "mapRoot", "sourceMap", "declarationMap");
             }
 
             if (options.declarationDir) {
@@ -2125,6 +2138,10 @@ namespace ts {
                 if (options.out || options.outFile) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "declarationDir", options.out ? "out" : "outFile");
                 }
+            }
+
+            if (options.declarationMap && !options.declaration) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "declarationMap", "declaration");
             }
 
             if (options.lib && options.noLib) {
@@ -2301,21 +2318,21 @@ namespace ts {
             return emptyArray;
         }
 
-        function createDiagnosticForOptionName(message: DiagnosticMessage, option1: string, option2?: string) {
-            createDiagnosticForOption(/*onKey*/ true, option1, option2, message, option1, option2);
+        function createDiagnosticForOptionName(message: DiagnosticMessage, option1: string, option2?: string, option3?: string) {
+            createDiagnosticForOption(/*onKey*/ true, option1, option2, message, option1, option2, option3);
         }
 
         function createOptionValueDiagnostic(option1: string, message: DiagnosticMessage, arg0: string) {
             createDiagnosticForOption(/*onKey*/ false, option1, /*option2*/ undefined, message, arg0);
         }
 
-        function createDiagnosticForOption(onKey: boolean, option1: string, option2: string, message: DiagnosticMessage, arg0: string | number, arg1?: string | number) {
+        function createDiagnosticForOption(onKey: boolean, option1: string, option2: string, message: DiagnosticMessage, arg0: string | number, arg1?: string | number, arg2?: string | number) {
             const compilerOptionsObjectLiteralSyntax = getCompilerOptionsObjectLiteralSyntax();
             const needCompilerDiagnostic = !compilerOptionsObjectLiteralSyntax ||
-                !createOptionDiagnosticInObjectLiteralSyntax(compilerOptionsObjectLiteralSyntax, onKey, option1, option2, message, arg0, arg1);
+                !createOptionDiagnosticInObjectLiteralSyntax(compilerOptionsObjectLiteralSyntax, onKey, option1, option2, message, arg0, arg1, arg2);
 
             if (needCompilerDiagnostic) {
-                programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1));
+                programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1, arg2));
             }
         }
 
@@ -2334,10 +2351,10 @@ namespace ts {
             return _compilerOptionsObjectLiteralSyntax;
         }
 
-        function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string, message: DiagnosticMessage, arg0: string | number, arg1?: string | number): boolean {
+        function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string, message: DiagnosticMessage, arg0: string | number, arg1?: string | number, arg2?: string | number): boolean {
             const props = getPropertyAssignment(objectLiteral, key1, key2);
             for (const prop of props) {
-                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile, onKey ? prop.name : prop.initializer, message, arg0, arg1));
+                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile, onKey ? prop.name : prop.initializer, message, arg0, arg1, arg2));
             }
             return !!props.length;
         }

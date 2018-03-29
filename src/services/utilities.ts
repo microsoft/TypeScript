@@ -1216,6 +1216,10 @@ namespace ts {
         }
         return result;
     }
+
+    export function skipConstraint(type: Type): Type {
+        return type.flags & TypeFlags.TypeParameter ? type.getConstraint() : type;
+    }
 }
 
 // Display-part writer helpers

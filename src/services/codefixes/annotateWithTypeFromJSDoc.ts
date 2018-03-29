@@ -7,9 +7,8 @@ namespace ts.codefix {
         getCodeActions(context) {
             const decl = getDeclaration(context.sourceFile, context.span.start);
             if (!decl) return;
-            const description = getLocaleSpecificMessage(Diagnostics.Annotate_with_type_from_JSDoc);
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, decl));
-            return [{ description, changes, fixId }];
+            return [createCodeFixAction(changes, Diagnostics.Annotate_with_type_from_JSDoc, fixId, Diagnostics.Annotate_everything_with_types_from_JSDoc)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {

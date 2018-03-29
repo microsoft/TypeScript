@@ -1,0 +1,26 @@
+=== tests/cases/conformance/salsa/a.js ===
+class Ex {
+>Ex : Ex
+
+    foo() {
+>foo : () => void
+    }
+}
+
+class MyClass extends Ex {
+>MyClass : MyClass
+>Ex : Ex
+
+}
+
+// this override should be fine (even if it's a little odd)
+MyClass.prototype.foo = function() {
+>MyClass.prototype.foo = function() {} : () => void
+>MyClass.prototype.foo : () => void
+>MyClass.prototype : MyClass
+>MyClass : typeof MyClass
+>prototype : MyClass
+>foo : () => void
+>function() {} : () => void
+}
+
