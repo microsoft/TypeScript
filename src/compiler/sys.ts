@@ -334,7 +334,7 @@ namespace ts {
     /*@internal*/
     export interface RecursiveDirectoryWatcherHost {
         watchDirectory: HostWatchDirectory;
-        getAccessileSortedChildDirectories(path: string): ReadonlyArray<string>;
+        getAccessibleSortedChildDirectories(path: string): ReadonlyArray<string>;
         directoryExists(dir: string): boolean;
         filePathComparer: Comparer<string>;
         realpath(s: string): string;
@@ -393,8 +393,10 @@ namespace ts {
         function watchChildDirectories(parentDir: string, existingChildWatches: ChildWatches, callback: DirectoryWatcherCallback): ChildWatches {
             let newChildWatches: DirectoryWatcher[] | undefined;
             enumerateInsertsAndDeletes<string, DirectoryWatcher>(
-                host.directoryExists(parentDir) ? mapDefined(host.getAccessileSortedChildDirectories(parentDir), child => {
+                host.directoryExists(parentDir) ? mapDefined(host.getAccessibleSortedChildDirectories(parentDir), child => {
                     const childFullName = getNormalizedAbsolutePath(child, parentDir);
+                    // Filter our the symbolic link directories since those arent included in recursive watch
+                    // which is same behaviour when recursive: true is passed to fs.watch
                     return host.filePathComparer(childFullName, host.realpath(childFullName)) === Comparison.EqualTo ? childFullName : undefined;
                 }) : emptyArray,
                 existingChildWatches,
@@ -679,7 +681,7 @@ namespace ts {
                 const watchDirectoryRecursively = createRecursiveDirectoryWatcher({
                     filePathComparer: useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
                     directoryExists,
-                    getAccessileSortedChildDirectories: path => getAccessibleFileSystemEntries(path).directories,
+                    getAccessibleSortedChildDirectories: path => getAccessibleFileSystemEntries(path).directories,
                     watchDirectory,
                     realpath
                 });
