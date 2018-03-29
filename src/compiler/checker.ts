@@ -8344,17 +8344,17 @@ namespace ts {
             // resolution of the conditional type such that a later instantiation will properly distribute
             // over union types.
             const isDeferred = root.isDistributive && maybeTypeOfKind(checkType, TypeFlags.Instantiable);
-                let combinedMapper: TypeMapper;
-                if (root.inferTypeParameters) {
-                    const context = createInferenceContext(root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);
+            let combinedMapper: TypeMapper;
+            if (root.inferTypeParameters) {
+                const context = createInferenceContext(root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);
                 if (!isDeferred) {
                     // We don't want inferences from constraints as they may cause us to eagerly resolve the
                     // conditional type instead of deferring resolution. Also, we always want strict function
                     // types rules (i.e. proper contravariance) for inferences.
                     inferTypes(context.inferences, checkType, extendsType, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
                 }
-                    combinedMapper = combineTypeMappers(mapper, context);
-                }
+                combinedMapper = combineTypeMappers(mapper, context);
+            }
             if (!isDeferred) {
                 // Return union of trueType and falseType for 'any' since it matches anything
                 if (checkType.flags & TypeFlags.Any) {
