@@ -916,7 +916,7 @@ namespace ts {
             else {
                 const original = getOriginalNode(node);
                 if (isModuleOrEnumDeclaration(original)) {
-                    return appendExportsOfDeclaration(statements, original);
+                    return append(appendExportsOfDeclaration(statements, original), node);
                 }
             }
 
