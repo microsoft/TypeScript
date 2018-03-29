@@ -14688,7 +14688,7 @@ namespace ts {
             return mapType(valueType, t => getJsxSignaturesParameterTypes(t, isJs, node));
         }
 
-        function getJsxSignaturesParameterTypes(valueType: Type, isJs: boolean, context: Node) {
+        function getJsxSignaturesParameterTypes(valueType: Type, isJs: boolean, context: JsxOpeningLikeElement) {
             // If the elemType is a string type, we have to return anyType to prevent an error downstream as we will try to find construct or call signature of the type
             if (valueType.flags & TypeFlags.String) {
                 return anyType;
@@ -14738,7 +14738,7 @@ namespace ts {
             return propsType;
         }
 
-        function getJsxPropsTypeFromClassType(hostClassType: Type, isJs: boolean, context: Node) {
+        function getJsxPropsTypeFromClassType(hostClassType: Type, isJs: boolean, context: JsxOpeningLikeElement, reportErrors: boolean) {
             if (isTypeAny(hostClassType)) {
                 return hostClassType;
             }
@@ -14757,6 +14757,9 @@ namespace ts {
 
                 if (!attributesType) {
                     // There is no property named 'props' on this instance type
+                    if (reportErrors && !!length(context.attributes.properties)) {
+                        error(context, Diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, unescapeLeadingUnderscores(propsName));
+                    }
                     return emptyObjectType;
                 }
                 else if (isTypeAny(attributesType)) {
@@ -14787,10 +14790,10 @@ namespace ts {
             }
         }
 
-        function getJsxPropsTypeFromConstructSignature(sig: Signature, isJs: boolean, context: Node) {
+        function getJsxPropsTypeFromConstructSignature(sig: Signature, isJs: boolean, context: JsxOpeningLikeElement) {
             const hostClassType = getReturnTypeOfSignature(sig);
             if (hostClassType) {
-                return getJsxPropsTypeFromClassType(hostClassType, isJs, context);
+                return getJsxPropsTypeFromClassType(hostClassType, isJs, context, /*reportErrors*/ false);
             }
             return getJsxPropsTypeFromCallSignature(sig, context);
         }
@@ -15780,7 +15783,7 @@ namespace ts {
                 checkTypeRelatedTo(elemInstanceType, elementClassType, assignableRelation, openingLikeElement, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
             }
 
-            return getJsxPropsTypeFromClassType(elemInstanceType, isInJavaScriptFile(openingLikeElement), openingLikeElement);
+            return getJsxPropsTypeFromClassType(elemInstanceType, isInJavaScriptFile(openingLikeElement), openingLikeElement, /*reportErrors*/ true);
         }
 
         /**
@@ -15985,28 +15988,21 @@ namespace ts {
             //     attr1 and attr2 are treated as JSXAttributes attached in the JsxOpeningLikeElement as "attributes".
             const sourceAttributesType = createJsxAttributesTypeFromAttributesProperty(openingLikeElement, checkMode);
 
-            // If the targetAttributesType is an emptyObjectType, indicating that there is no property named 'props' on this instance type.
-            // but there exists a sourceAttributesType, we need to explicitly give an error as normal assignability check allow excess properties and will pass.
-            if (targetAttributesType === emptyObjectType && (isTypeAny(sourceAttributesType) || getPropertiesOfType(<ResolvedType>sourceAttributesType).length > 0)) {
-                error(openingLikeElement, Diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, unescapeLeadingUnderscores(getJsxElementPropertiesName(getJsxNamespaceAt(openingLikeElement))));
-            }
-            else {
-                // Check if sourceAttributesType assignable to targetAttributesType though this check will allow excess properties
-                const isSourceAttributeTypeAssignableToTarget = checkTypeAssignableTo(sourceAttributesType, targetAttributesType, openingLikeElement.attributes.properties.length > 0 ? openingLikeElement.attributes : openingLikeElement);
-                // After we check for assignability, we will do another pass to check that all explicitly specified attributes have correct name corresponding in targetAttributeType.
-                // This will allow excess properties in spread type as it is very common pattern to spread outer attributes into React component in its render method.
-                if (isSourceAttributeTypeAssignableToTarget && !isTypeAny(sourceAttributesType) && !isTypeAny(targetAttributesType)) {
-                    for (const attribute of openingLikeElement.attributes.properties) {
-                        if (!isJsxAttribute(attribute)) {
-                            continue;
-                        }
-                        const attrName = attribute.name;
-                        const isNotIgnoredJsxProperty = (isUnhyphenatedJsxName(idText(attrName)) || !!(getPropertyOfType(targetAttributesType, attrName.escapedText)));
-                        if (isNotIgnoredJsxProperty && !isKnownProperty(targetAttributesType, attrName.escapedText, /*isComparingJsxAttributes*/ true)) {
-                            error(attribute, Diagnostics.Property_0_does_not_exist_on_type_1, idText(attrName), typeToString(targetAttributesType));
-                            // We break here so that errors won't be cascading
-                            break;
-                        }
+            // Check if sourceAttributesType assignable to targetAttributesType though this check will allow excess properties
+            const isSourceAttributeTypeAssignableToTarget = checkTypeAssignableTo(sourceAttributesType, targetAttributesType, openingLikeElement.attributes.properties.length > 0 ? openingLikeElement.attributes : openingLikeElement);
+            // After we check for assignability, we will do another pass to check that all explicitly specified attributes have correct name corresponding in targetAttributeType.
+            // This will allow excess properties in spread type as it is very common pattern to spread outer attributes into React component in its render method.
+            if (isSourceAttributeTypeAssignableToTarget && !isTypeAny(sourceAttributesType) && !isTypeAny(targetAttributesType)) {
+                for (const attribute of openingLikeElement.attributes.properties) {
+                    if (!isJsxAttribute(attribute)) {
+                        continue;
+                    }
+                    const attrName = attribute.name;
+                    const isNotIgnoredJsxProperty = (isUnhyphenatedJsxName(idText(attrName)) || !!(getPropertyOfType(targetAttributesType, attrName.escapedText)));
+                    if (isNotIgnoredJsxProperty && !isKnownProperty(targetAttributesType, attrName.escapedText, /*isComparingJsxAttributes*/ true)) {
+                        error(attribute, Diagnostics.Property_0_does_not_exist_on_type_1, idText(attrName), typeToString(targetAttributesType));
+                        // We break here so that errors won't be cascading
+                        break;
                     }
                 }
             }
