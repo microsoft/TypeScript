@@ -3498,6 +3498,7 @@ interface DOMTokenList {
     contains(token: string): boolean;
     item(index: number): string;
     remove(...token: string[]): void;
+    replace(oldToken: string, newToken: string): void;
     toggle(token: string, force?: boolean): boolean;
     toString(): string;
     [index: number]: string;
