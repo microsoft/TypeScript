@@ -1741,8 +1741,8 @@ namespace ts {
             // Declaration files (and ambient modules)
             if (!file || file.isDeclarationFile) {
                 // Definitely cannot have a synthetic default if they have a syntactic default member specified
-                const defaultExportSymbol = resolveExportByName(moduleSymbol, InternalSymbolName.Default, dontResolveAlias);
-                if (defaultExportSymbol && defaultExportSymbol.valueDeclaration && isSyntacticDefault(defaultExportSymbol.valueDeclaration)) {
+                const defaultExportSymbol = resolveExportByName(moduleSymbol, InternalSymbolName.Default, /*dontResolveAlias*/ true); // Dont resolve alias because we want the immediately exported symbol's declaration
+                if (defaultExportSymbol && some(defaultExportSymbol.declarations, isSyntacticDefault)) {
                     return false;
                 }
                 // It _might_ still be incorrect to assume there is no __esModule marker on the import at runtime, even if there is no `default` member
