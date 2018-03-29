@@ -6,12 +6,12 @@
 ////new C().x = 0;
 
 verify.codeFix({
-    description: "Declare property 'foo'",
+    description: "Declare property 'x'",
     index: 0,
-    newFileContent: `class C {
-    foo: number;
-    method() {
-        this.foo = 10;
-    }
-}`
+    newFileContent:
+`interface C {}
+class C {
+    x: number;
+}
+new C().x = 0;`,
 });
