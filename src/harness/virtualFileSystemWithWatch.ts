@@ -312,18 +312,20 @@ interface Array<T> {}`
                 const watchDirectory: HostWatchDirectory = (directory, cb) => this.watchFile(directory, () => cb(directory), PollingInterval.Medium);
                 this.customRecursiveWatchDirectory = createRecursiveDirectoryWatcher({
                     directoryExists: path => this.directoryExists(path),
-                    getAccessileSortedChildDirectories: path => this.getDirectories(path),
+                    getAccessibleSortedChildDirectories: path => this.getDirectories(path),
                     filePathComparer: this.useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
-                    watchDirectory
+                    watchDirectory,
+                    realpath: s => this.realpath(s)
                 });
             }
             else if (tscWatchDirectory === Tsc_WatchDirectory.NonRecursiveWatchDirectory) {
                 const watchDirectory: HostWatchDirectory = (directory, cb) => this.watchDirectory(directory, fileName => cb(fileName), /*recursive*/ false);
                 this.customRecursiveWatchDirectory = createRecursiveDirectoryWatcher({
                     directoryExists: path => this.directoryExists(path),
-                    getAccessileSortedChildDirectories: path => this.getDirectories(path),
+                    getAccessibleSortedChildDirectories: path => this.getDirectories(path),
                     filePathComparer: this.useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
-                    watchDirectory
+                    watchDirectory,
+                    realpath: s => this.realpath(s)
                 });
             }
             else if (tscWatchDirectory === Tsc_WatchDirectory.DynamicPolling) {
@@ -331,9 +333,10 @@ interface Array<T> {}`
                 const watchDirectory: HostWatchDirectory = (directory, cb) => watchFile(directory, () => cb(directory), PollingInterval.Medium);
                 this.customRecursiveWatchDirectory = createRecursiveDirectoryWatcher({
                     directoryExists: path => this.directoryExists(path),
-                    getAccessileSortedChildDirectories: path => this.getDirectories(path),
+                    getAccessibleSortedChildDirectories: path => this.getDirectories(path),
                     filePathComparer: this.useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
-                    watchDirectory
+                    watchDirectory,
+                    realpath: s => this.realpath(s)
                 });
             }
         }
@@ -649,7 +652,7 @@ interface Array<T> {}`
 
             const realpath = this.realpath(path);
             if (path !== realpath) {
-                return this.getRealFsEntry(isFsEntry, realpath as Path);
+                return this.getRealFsEntry(isFsEntry, this.toPath(realpath));
             }
 
             return undefined;
