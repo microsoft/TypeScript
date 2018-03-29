@@ -8,7 +8,7 @@ namespace ts.codefix {
             const { sourceFile, span } = context;
             const ctr = getNode(sourceFile, span.start);
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, ctr));
-            return [{ description: getLocaleSpecificMessage(Diagnostics.Add_missing_super_call), changes, fixId }];
+            return [createCodeFixAction(changes, Diagnostics.Add_missing_super_call, fixId, Diagnostics.Add_all_missing_super_calls)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) =>

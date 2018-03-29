@@ -49,7 +49,8 @@ namespace ts {
             const jsFilePath = options.outFile || options.out;
             const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
             const declarationFilePath = (forceDtsPaths || options.declaration) ? removeFileExtension(jsFilePath) + Extension.Dts : undefined;
-            return { jsFilePath, sourceMapFilePath, declarationFilePath };
+            const declarationMapPath = getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
+            return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath };
         }
         else {
             const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, getOutputExtension(sourceFile, options));
@@ -57,12 +58,13 @@ namespace ts {
             // For legacy reasons (ie, we have baselines capturing the behavior), js files don't report a .d.ts output path - this would only matter if `declaration` and `allowJs` were both on, which is currently an error
             const isJs = isSourceFileJavaScript(sourceFile);
             const declarationFilePath = ((forceDtsPaths || options.declaration) && !isJs) ? getDeclarationEmitOutputFilePath(sourceFile, host) : undefined;
-            return { jsFilePath, sourceMapFilePath, declarationFilePath };
+            const declarationMapPath = getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
+            return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath };
         }
     }
 
     function getSourceMapFilePath(jsFilePath: string, options: CompilerOptions) {
-        return options.sourceMap ? jsFilePath + ".map" : undefined;
+        return (options.sourceMap && !options.inlineSourceMap) ? jsFilePath + ".map" : undefined;
     }
 
     // JavaScript files are always LanguageVariant.JSX, as JSX syntax is allowed in .js files also.
@@ -88,12 +90,19 @@ namespace ts {
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean, transformers?: TransformerFactory<SourceFile>[]): EmitResult {
         const compilerOptions = host.getCompilerOptions();
         const moduleKind = getEmitModuleKind(compilerOptions);
-        const sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
+        const sourceMapDataList: SourceMapData[] = (compilerOptions.sourceMap || compilerOptions.inlineSourceMap || getAreDeclarationMapsEnabled(compilerOptions)) ? [] : undefined;
         const emittedFilesList: string[] = compilerOptions.listEmittedFiles ? [] : undefined;
         const emitterDiagnostics = createDiagnosticCollection();
         const newLine = host.getNewLine();
         const writer = createTextWriter(newLine);
         const sourceMap = createSourceMapWriter(host, writer);
+        const declarationSourceMap = createSourceMapWriter(host, writer, {
+            sourceMap: compilerOptions.declarationMap,
+            sourceRoot: compilerOptions.sourceRoot,
+            mapRoot: compilerOptions.mapRoot,
+            extendedDiagnostics: compilerOptions.extendedDiagnostics,
+            // Explicitly do not passthru either `inline` option
+        });
 
         let currentSourceFile: SourceFile;
         let bundledHelpers: Map<boolean>;
@@ -113,9 +122,9 @@ namespace ts {
             sourceMaps: sourceMapDataList
         };
 
-        function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) {
+        function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) {
             emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath);
-            emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath);
+            emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath, declarationMapPath);
 
             if (!emitSkipped && emittedFilesList) {
                 if (!emitOnlyDtsFiles) {
@@ -162,13 +171,13 @@ namespace ts {
                 onSetSourceFile: setSourceFile,
             });
 
-            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, isSourceFile(sourceFileOrBundle) ? transform.transformed[0] : createBundle(transform.transformed), printer);
+            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, isSourceFile(sourceFileOrBundle) ? transform.transformed[0] : createBundle(transform.transformed), printer, sourceMap);
 
             // Clean up emit nodes on parse tree
             transform.dispose();
         }
 
-        function emitDeclarationFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, declarationFilePath: string | undefined) {
+        function emitDeclarationFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, declarationFilePath: string | undefined, declarationMapPath: string | undefined) {
             if (!(declarationFilePath && !isInJavaScriptFile(sourceFileOrBundle))) {
                 return;
             }
@@ -186,6 +195,12 @@ namespace ts {
                 // resolver hooks
                 hasGlobalName: resolver.hasGlobalName,
 
+                // sourcemap hooks
+                onEmitSourceMapOfNode: declarationSourceMap.emitNodeWithSourceMap,
+                onEmitSourceMapOfToken: declarationSourceMap.emitTokenWithSourceMap,
+                onEmitSourceMapOfPosition: declarationSourceMap.emitPos,
+                onSetSourceFile: setSourceFileForDeclarationSourceMaps,
+
                 // transform hooks
                 onEmitNode: declarationTransform.emitNodeWithNotification,
                 substituteNode: declarationTransform.substituteNode,
@@ -193,18 +208,16 @@ namespace ts {
             const declBlocked = (!!declarationTransform.diagnostics && !!declarationTransform.diagnostics.length) || !!host.isEmitBlocked(declarationFilePath) || !!compilerOptions.noEmit;
             emitSkipped = emitSkipped || declBlocked;
             if (!declBlocked || emitOnlyDtsFiles) {
-                const previousState = sourceMap.setState(/*disabled*/ true);
-                printSourceFileOrBundle(declarationFilePath, /*sourceMapFilePath*/ undefined, declarationTransform.transformed[0], declarationPrinter, /*shouldSkipSourcemap*/ true);
-                sourceMap.setState(previousState);
+                printSourceFileOrBundle(declarationFilePath, declarationMapPath, declarationTransform.transformed[0], declarationPrinter, declarationSourceMap);
             }
             declarationTransform.dispose();
         }
 
-        function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string, sourceFileOrBundle: SourceFile | Bundle, printer: Printer, shouldSkipSourcemap = false) {
+        function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string | undefined, sourceFileOrBundle: SourceFile | Bundle, printer: Printer, mapRecorder: SourceMapWriter) {
             const bundle = sourceFileOrBundle.kind === SyntaxKind.Bundle ? sourceFileOrBundle : undefined;
             const sourceFile = sourceFileOrBundle.kind === SyntaxKind.SourceFile ? sourceFileOrBundle : undefined;
             const sourceFiles = bundle ? bundle.sourceFiles : [sourceFile];
-            sourceMap.initialize(jsFilePath, sourceMapFilePath, sourceFileOrBundle);
+            mapRecorder.initialize(jsFilePath, sourceMapFilePath || "", sourceFileOrBundle, sourceMapDataList);
 
             if (bundle) {
                 bundledHelpers = createMap<boolean>();
@@ -218,26 +231,21 @@ namespace ts {
 
             writer.writeLine();
 
-            const sourceMappingURL = sourceMap.getSourceMappingURL();
-            if (!shouldSkipSourcemap && sourceMappingURL) {
+            const sourceMappingURL = mapRecorder.getSourceMappingURL();
+            if (sourceMappingURL) {
                 writer.write(`//# ${"sourceMappingURL"}=${sourceMappingURL}`); // Sometimes tools can sometimes see this line as a source mapping url comment
             }
 
             // Write the source map
-            if (!shouldSkipSourcemap && compilerOptions.sourceMap && !compilerOptions.inlineSourceMap) {
-                writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap.getText(), /*writeByteOrderMark*/ false, sourceFiles);
-            }
-
-            // Record source map data for the test harness.
-            if (!shouldSkipSourcemap && sourceMapDataList) {
-                sourceMapDataList.push(sourceMap.getSourceMapData());
+            if (sourceMapFilePath) {
+                writeFile(host, emitterDiagnostics, sourceMapFilePath, mapRecorder.getText(), /*writeByteOrderMark*/ false, sourceFiles);
             }
 
             // Write the output file
             writeFile(host, emitterDiagnostics, jsFilePath, writer.getText(), compilerOptions.emitBOM, sourceFiles);
 
             // Reset state
-            sourceMap.reset();
+            mapRecorder.reset();
             writer.clear();
 
             currentSourceFile = undefined;
@@ -248,6 +256,11 @@ namespace ts {
         function setSourceFile(node: SourceFile) {
             currentSourceFile = node;
             sourceMap.setSourceFile(node);
+        }
+
+        function setSourceFileForDeclarationSourceMaps(node: SourceFile) {
+            currentSourceFile = node;
+            declarationSourceMap.setSourceFile(node);
         }
 
         function emitHelpers(node: Node, writeLines: (text: string) => void) {
@@ -1768,14 +1781,14 @@ namespace ts {
             writeSemicolon();
         }
 
-        function emitTokenWithComment(token: SyntaxKind, pos: number, writer: (s: string) => void, contextNode?: Node, indentLeading?: boolean) {
-            const node = contextNode && getParseTreeNode(contextNode);
+        function emitTokenWithComment(token: SyntaxKind, pos: number, writer: (s: string) => void, contextNode: Node, indentLeading?: boolean) {
+            const node = getParseTreeNode(contextNode);
             const isSimilarNode = node && node.kind === contextNode.kind;
             const startPos = pos;
             if (isSimilarNode) {
                 pos = skipTrivia(currentSourceFile.text, pos);
             }
-            if (emitLeadingCommentsOfPosition && isSimilarNode) {
+            if (emitLeadingCommentsOfPosition && isSimilarNode && contextNode.pos !== startPos) {
                 const needsIndent = indentLeading && !positionsAreOnSameLine(startPos, pos, currentSourceFile);
                 if (needsIndent) {
                     increaseIndent();
@@ -1786,7 +1799,7 @@ namespace ts {
                 }
             }
             pos = writeTokenText(token, writer, pos);
-            if (emitTrailingCommentsOfPosition && isSimilarNode) {
+            if (emitTrailingCommentsOfPosition && isSimilarNode && contextNode.end !== pos) {
                 emitTrailingCommentsOfPosition(pos, /*prefixSpace*/ true);
             }
             return pos;

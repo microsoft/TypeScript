@@ -655,7 +655,7 @@ declare namespace ts {
     }
     interface MethodSignature extends SignatureDeclarationBase, TypeElement {
         kind: SyntaxKind.MethodSignature;
-        parent?: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
+        parent?: ObjectTypeDeclaration;
         name: PropertyName;
     }
     interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer {
@@ -689,7 +689,7 @@ declare namespace ts {
     type AccessorDeclaration = GetAccessorDeclaration | SetAccessorDeclaration;
     interface IndexSignatureDeclaration extends SignatureDeclarationBase, ClassElement, TypeElement {
         kind: SyntaxKind.IndexSignature;
-        parent?: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
+        parent?: ObjectTypeDeclaration;
     }
     interface TypeNode extends Node {
         _typeNodeBrand: any;
@@ -1266,6 +1266,7 @@ declare namespace ts {
         variableDeclaration?: VariableDeclaration;
         block: Block;
     }
+    type ObjectTypeDeclaration = ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
     type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag;
     interface ClassLikeDeclarationBase extends NamedDeclaration, JSDocContainer {
         kind: SyntaxKind.ClassDeclaration | SyntaxKind.ClassExpression;
@@ -2281,7 +2282,7 @@ declare namespace ts {
         messageText: string | DiagnosticMessageChain;
         category: DiagnosticCategory;
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
-        reportsUnused?: {};
+        reportsUnnecessary?: {};
         code: number;
         source?: string;
     }
@@ -2309,6 +2310,7 @@ declare namespace ts {
         charset?: string;
         checkJs?: boolean;
         declaration?: boolean;
+        declarationMap?: boolean;
         emitDeclarationOnly?: boolean;
         declarationDir?: string;
         disableSizeLimit?: boolean;
@@ -2899,6 +2901,8 @@ declare namespace ts {
         setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         clearTimeout?(timeoutId: any): void;
         clearScreen?(): void;
+        base64decode?(input: string): string;
+        base64encode?(input: string): string;
     }
     interface FileWatcher {
         close(): void;
@@ -3285,7 +3289,7 @@ declare namespace ts {
         tryScan<T>(callback: () => T): T;
     }
     function tokenToString(t: SyntaxKind): string | undefined;
-    function getPositionOfLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
+    function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number): number;
     function getLineAndCharacterOfPosition(sourceFile: SourceFileLike, position: number): LineAndCharacter;
     function isWhiteSpaceLike(ch: number): boolean;
     /** Does not include line breaks. For that, see isWhiteSpaceLike. */
@@ -4241,6 +4245,7 @@ declare namespace ts {
          * This may be omitted to indicate that the code fix can't be applied in a group.
          */
         fixId?: {};
+        fixAllDescription?: string;
     }
     interface CombinedCodeActions {
         changes: ReadonlyArray<FileTextChanges>;
@@ -5369,7 +5374,7 @@ declare namespace ts.server.protocol {
         category: string;
         code: number;
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
-        reportsUnused?: {};
+        reportsUnnecessary?: {};
     }
     /**
      * Response message for "projectInfo" request
@@ -6314,6 +6319,8 @@ declare namespace ts.server.protocol {
          * This may be omitted to indicate that the code fix can't be applied in a group.
          */
         fixId?: {};
+        /** Should be present if and only if 'fixId' is. */
+        fixAllDescription?: string;
     }
     /**
      * Format and format on key response message.
@@ -7263,6 +7270,8 @@ declare namespace ts.server {
          */
         canUseEvents: boolean;
         eventHandler?: ProjectServiceEventHandler;
+        /** Has no effect if eventHandler is also specified. */
+        suppressDiagnosticEvents?: boolean;
         throttleWaitMilliseconds?: number;
         globalPlugins?: ReadonlyArray<string>;
         pluginProbeLocations?: ReadonlyArray<string>;
@@ -7281,6 +7290,7 @@ declare namespace ts.server {
         private hrtime;
         protected logger: Logger;
         protected canUseEvents: boolean;
+        private suppressDiagnosticEvents?;
         private eventHandler;
         constructor(opts: SessionOptions);
         private sendRequestCompletedEvent;
@@ -7296,6 +7306,7 @@ declare namespace ts.server {
         private syntacticCheck;
         private infoCheck;
         private sendDiagnosticsEvent;
+        /** It is the caller's responsibility to verify that `!this.suppressDiagnosticEvents`. */
         private updateErrorCheck;
         private cleanProjects;
         private cleanup;
@@ -7824,6 +7835,7 @@ declare namespace ts.server {
         useInferredProjectPerProjectRoot: boolean;
         typingsInstaller: ITypingsInstaller;
         eventHandler?: ProjectServiceEventHandler;
+        suppressDiagnosticEvents?: boolean;
         throttleWaitMilliseconds?: number;
         globalPlugins?: ReadonlyArray<string>;
         pluginProbeLocations?: ReadonlyArray<string>;
@@ -7890,6 +7902,7 @@ declare namespace ts.server {
         readonly typingsInstaller: ITypingsInstaller;
         readonly throttleWaitMilliseconds?: number;
         private readonly eventHandler?;
+        private readonly suppressDiagnosticEvents?;
         readonly globalPlugins: ReadonlyArray<string>;
         readonly pluginProbeLocations: ReadonlyArray<string>;
         readonly allowLocalPluginLoads: boolean;

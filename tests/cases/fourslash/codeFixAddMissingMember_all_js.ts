@@ -15,6 +15,7 @@
 
 verify.codeFixAll({
     fixId: "addMissingMember",
+    fixAllDescription: "Add all missing members",
     newFileContent:
 `class C {
     y() {
