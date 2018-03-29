@@ -6254,7 +6254,7 @@ namespace ts {
         }
 
         function getDefaultConstraintOfConditionalType(type: ConditionalType) {
-            return getUnionType([getTrueTypeFromConditionalType(type), getFalseTypeFromConditionalType(type)]);
+            return getUnionType([getInferredTrueTypeFromConditionalType(type), getFalseTypeFromConditionalType(type)]);
         }
 
         function getConstraintOfDistributiveConditionalType(type: ConditionalType): Type | undefined {
@@ -8367,16 +8367,19 @@ namespace ts {
             // If this is a distributive conditional type and the check type is generic we need to defer
             // resolution of the conditional type such that a later instantiation will properly distribute
             // over union types.
-            if (!root.isDistributive || !maybeTypeOfKind(checkType, TypeFlags.Instantiable)) {
+            const isDeferred = root.isDistributive && maybeTypeOfKind(checkType, TypeFlags.Instantiable);
                 let combinedMapper: TypeMapper | undefined;
                 if (root.inferTypeParameters) {
                     const context = createInferenceContext(root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);
+                if (!isDeferred) {
                     // We don't want inferences from constraints as they may cause us to eagerly resolve the
                     // conditional type instead of deferring resolution. Also, we always want strict function
                     // types rules (i.e. proper contravariance) for inferences.
                     inferTypes(context.inferences, checkType, extendsType, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
+                }
                     combinedMapper = combineTypeMappers(mapper, context);
                 }
+            if (!isDeferred) {
                 // Return union of trueType and falseType for 'any' since it matches anything
                 if (checkType.flags & TypeFlags.Any) {
                     return getUnionType([instantiateType(root.trueType, combinedMapper || mapper), instantiateType(root.falseType, mapper)]);
@@ -8405,6 +8408,7 @@ namespace ts {
             result.checkType = erasedCheckType;
             result.extendsType = extendsType;
             result.mapper = mapper;
+            result.combinedMapper = combinedMapper;
             result.aliasSymbol = root.aliasSymbol;
             result.aliasTypeArguments = instantiateTypes(root.aliasTypeArguments, mapper!); // TODO: GH#18217
             return result;
@@ -8416,6 +8420,12 @@ namespace ts {
 
         function getFalseTypeFromConditionalType(type: ConditionalType) {
             return type.resolvedFalseType || (type.resolvedFalseType = instantiateType(type.root.falseType, type.mapper));
+        }
+
+        function getInferredTrueTypeFromConditionalType(type: ConditionalType) {
+            return type.combinedMapper ?
+                type.resolvedInferredTrueType || (type.resolvedInferredTrueType = instantiateType(type.root.trueType, type.combinedMapper)) :
+                getTrueTypeFromConditionalType(type);
         }
 
         function getInferTypeParameters(node: ConditionalTypeNode): TypeParameter[] | undefined {
@@ -16148,7 +16158,9 @@ namespace ts {
         }
 
         function isMethodLike(symbol: Symbol) {
-            return !!(symbol.flags & SymbolFlags.Method || getCheckFlags(symbol) & CheckFlags.SyntheticMethod);
+            return !!(symbol.flags & SymbolFlags.Method ||
+                      getCheckFlags(symbol) & CheckFlags.SyntheticMethod ||
+                      isInJavaScriptFile(symbol.valueDeclaration) && isFunctionLikeDeclaration(getAssignedJavascriptInitializer(symbol.valueDeclaration!)!));
         }
 
         /**
@@ -22549,18 +22561,16 @@ namespace ts {
         function checkForOfStatement(node: ForOfStatement): void {
             checkGrammarForInOrForOfStatement(node);
 
-            if (node.kind === SyntaxKind.ForOfStatement) {
-                if (node.awaitModifier) {
-                    const functionFlags = getFunctionFlags(getContainingFunction(node));
-                    if ((functionFlags & (FunctionFlags.Invalid | FunctionFlags.Async)) === FunctionFlags.Async && languageVersion < ScriptTarget.ESNext) {
-                        // for..await..of in an async function or async generator function prior to ESNext requires the __asyncValues helper
-                        checkExternalEmitHelpers(node, ExternalEmitHelpers.ForAwaitOfIncludes);
-                    }
+            if (node.awaitModifier) {
+                const functionFlags = getFunctionFlags(getContainingFunction(node));
+                if ((functionFlags & (FunctionFlags.Invalid | FunctionFlags.Async)) === FunctionFlags.Async && languageVersion < ScriptTarget.ESNext) {
+                    // for..await..of in an async function or async generator function prior to ESNext requires the __asyncValues helper
+                    checkExternalEmitHelpers(node, ExternalEmitHelpers.ForAwaitOfIncludes);
                 }
-                else if (compilerOptions.downlevelIteration && languageVersion < ScriptTarget.ES2015) {
-                    // for..of prior to ES2015 requires the __values helper when downlevelIteration is enabled
-                    checkExternalEmitHelpers(node, ExternalEmitHelpers.ForOfIncludes);
-                }
+            }
+            else if (compilerOptions.downlevelIteration && languageVersion < ScriptTarget.ES2015) {
+                // for..of prior to ES2015 requires the __values helper when downlevelIteration is enabled
+                checkExternalEmitHelpers(node, ExternalEmitHelpers.ForOfIncludes);
             }
 
             // Check the LHS and RHS

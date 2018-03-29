@@ -1344,26 +1344,26 @@ namespace ts {
         }
 
         function nextTokenCanFollowModifier() {
-            if (token() === SyntaxKind.ConstKeyword) {
-                // 'const' is only a modifier if followed by 'enum'.
-                return nextToken() === SyntaxKind.EnumKeyword;
+            switch (token()) {
+                case SyntaxKind.ConstKeyword:
+                    // 'const' is only a modifier if followed by 'enum'.
+                    return nextToken() === SyntaxKind.EnumKeyword;
+                case SyntaxKind.ExportKeyword:
+                    nextToken();
+                    if (token() === SyntaxKind.DefaultKeyword) {
+                        return lookAhead(nextTokenCanFollowDefaultKeyword);
+                    }
+                    return token() !== SyntaxKind.AsteriskToken && token() !== SyntaxKind.AsKeyword && token() !== SyntaxKind.OpenBraceToken && canFollowModifier();
+                case SyntaxKind.DefaultKeyword:
+                    return nextTokenCanFollowDefaultKeyword();
+                case SyntaxKind.StaticKeyword:
+                case SyntaxKind.GetKeyword:
+                case SyntaxKind.SetKeyword:
+                    nextToken();
+                    return canFollowModifier();
+                default:
+                    return nextTokenIsOnSameLineAndCanFollowModifier();
             }
-            if (token() === SyntaxKind.ExportKeyword) {
-                nextToken();
-                if (token() === SyntaxKind.DefaultKeyword) {
-                    return lookAhead(nextTokenCanFollowDefaultKeyword);
-                }
-                return token() !== SyntaxKind.AsteriskToken && token() !== SyntaxKind.AsKeyword && token() !== SyntaxKind.OpenBraceToken && canFollowModifier();
-            }
-            if (token() === SyntaxKind.DefaultKeyword) {
-                return nextTokenCanFollowDefaultKeyword();
-            }
-            if (token() === SyntaxKind.StaticKeyword) {
-                nextToken();
-                return canFollowModifier();
-            }
-
-            return nextTokenIsOnSameLineAndCanFollowModifier();
         }
 
         function parseAnyContextualModifier(): boolean {
@@ -6965,7 +6965,7 @@ namespace ts {
                 forEachChild(node, visitNode, visitArray);
                 if (hasJSDocNodes(node)) {
                     for (const jsDocComment of node.jsDoc!) {
-                        forEachChild(jsDocComment, visitNode, visitArray);
+                        visitNode(<IncrementalNode><Node>jsDocComment);
                     }
                 }
                 checkNodePositions(node, aggressiveChecks);
@@ -7071,10 +7071,16 @@ namespace ts {
         function checkNodePositions(node: Node, aggressiveChecks: boolean) {
             if (aggressiveChecks) {
                 let pos = node.pos;
-                forEachChild(node, child => {
+                const visitNode = (child: Node) => {
                     Debug.assert(child.pos >= pos);
                     pos = child.end;
-                });
+                };
+                if (hasJSDocNodes(node)) {
+                    for (const jsDocComment of node.jsDoc!) {
+                        visitNode(jsDocComment);
+                    }
+                }
+                forEachChild(node, visitNode);
                 Debug.assert(pos <= node.end);
             }
         }
@@ -7112,7 +7118,11 @@ namespace ts {
                     // Adjust the pos or end (or both) of the intersecting element accordingly.
                     adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
                     forEachChild(child, visitNode, visitArray);
-
+                    if (hasJSDocNodes(child)) {
+                        for (const jsDocComment of child.jsDoc!) {
+                            visitNode(<IncrementalNode><Node>jsDocComment);
+                        }
+                    }
                     checkNodePositions(child, aggressiveChecks);
                     return;
                 }

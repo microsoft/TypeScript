@@ -1201,63 +1201,31 @@ namespace ts.FindAllReferences.Core {
      * distinction between structurally compatible implementations and explicit implementations, so we
      * must use the AST.
      *
-     * @param child         A class or interface Symbol
+     * @param symbol         A class or interface Symbol
      * @param parent        Another class or interface Symbol
      * @param cachedResults A map of symbol id pairs (i.e. "child,parent") to booleans indicating previous results
      */
-    function explicitlyInheritsFrom(child: Symbol, parent: Symbol, cachedResults: Map<boolean>, checker: TypeChecker): boolean {
-        const parentIsInterface = parent.getFlags() & SymbolFlags.Interface;
-        return searchHierarchy(child);
-
-        function searchHierarchy(symbol: Symbol): boolean {
-            if (symbol === parent) {
-                return true;
-            }
-
-            const key = getSymbolId(symbol) + "," + getSymbolId(parent);
-            const cached = cachedResults.get(key);
-            if (cached !== undefined) {
-                return cached;
-            }
-
-            // Set the key so that we don't infinitely recurse
-            cachedResults.set(key, false);
-
-            const inherits = some(symbol.getDeclarations(), declaration => {
-                if (isClassLike(declaration)) {
-                    if (parentIsInterface) {
-                        const interfaceReferences = getClassImplementsHeritageClauseElements(declaration);
-                        if (interfaceReferences) {
-                            for (const typeReference of interfaceReferences) {
-                                if (searchTypeReference(typeReference)) {
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                    return searchTypeReference(getClassExtendsHeritageClauseElement(declaration)!); // TODO: GH#18217
-                }
-                else if (declaration.kind === SyntaxKind.InterfaceDeclaration) {
-                    if (parentIsInterface) {
-                        return some(getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration), searchTypeReference);
-                    }
-                }
-                return false;
-            });
-
-            cachedResults.set(key, inherits);
-            return inherits;
+    function explicitlyInheritsFrom(symbol: Symbol, parent: Symbol, cachedResults: Map<boolean>, checker: TypeChecker): boolean {
+        if (symbol === parent) {
+            return true;
         }
 
-        function searchTypeReference(typeReference: ExpressionWithTypeArguments): boolean {
-            if (typeReference) {
+        const key = getSymbolId(symbol) + "," + getSymbolId(parent);
+        const cached = cachedResults.get(key);
+        if (cached !== undefined) {
+            return cached;
+        }
+
+        // Set the key so that we don't infinitely recurse
+        cachedResults.set(key, false);
+
+        const inherits = symbol.declarations!.some(declaration =>
+            getAllSuperTypeNodes(declaration).some(typeReference => {
                 const type = checker.getTypeAtLocation(typeReference);
-                if (type && type.symbol) {
-                    return searchHierarchy(type.symbol);
-                }
-            }
-            return false;
-        }
+                return !!type && !!type.symbol && explicitlyInheritsFrom(type.symbol, parent, cachedResults, checker);
+            }));
+        cachedResults.set(key, inherits);
+        return inherits;
     }
 
     function getReferencesForSuperKeyword(superKeyword: Node): SymbolAndEntries[] | undefined {
@@ -1492,10 +1460,6 @@ namespace ts.FindAllReferences.Core {
      *                                The value of previousIterationSymbol is undefined when the function is first called.
      */
     function getPropertySymbolsFromBaseTypes(symbol: Symbol, propertyName: string, result: Push<Symbol>, previousIterationSymbolsCache: SymbolTable, checker: TypeChecker): void {
-        if (!symbol) {
-            return;
-        }
-
         // If the current symbol is the same as the previous-iteration symbol, we can just return the symbol that has already been visited
         // This is particularly important for the following cases, so that we do not infinitely visit the same symbol.
         // For example:
@@ -1507,27 +1471,16 @@ namespace ts.FindAllReferences.Core {
         // the function will add any found symbol of the property-name, then its sub-routine will call
         // getPropertySymbolsFromBaseTypes again to walk up any base types to prevent revisiting already
         // visited symbol, interface "C", the sub-routine will pass the current symbol as previousIterationSymbol.
-        if (previousIterationSymbolsCache.has(symbol.escapedName)) {
+        if (!symbol || previousIterationSymbolsCache.has(symbol.escapedName)) {
             return;
         }
 
         if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-            forEach(symbol.getDeclarations(), declaration => {
-                if (isClassLike(declaration)) {
-                    getPropertySymbolFromTypeReference(getClassExtendsHeritageClauseElement(<ClassDeclaration>declaration)!); // TODO: GH#18217
-                    forEach(getClassImplementsHeritageClauseElements(<ClassDeclaration>declaration), getPropertySymbolFromTypeReference);
-                }
-                else if (declaration.kind === SyntaxKind.InterfaceDeclaration) {
-                    forEach(getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration), getPropertySymbolFromTypeReference);
-                }
-            });
-        }
-        return;
+            for (const declaration of symbol.declarations!) {
+                for (const typeReference of getAllSuperTypeNodes(declaration)) {
+                    const type = checker.getTypeAtLocation(typeReference);
+                    if (!type) continue;
 
-        function getPropertySymbolFromTypeReference(typeReference: ExpressionWithTypeArguments): void {
-            if (typeReference) {
-                const type = checker.getTypeAtLocation(typeReference);
-                if (type) {
                     const propertySymbol = checker.getPropertyOfType(type, propertyName);
                     if (propertySymbol) {
                         result.push(...checker.getRootSymbols(propertySymbol));

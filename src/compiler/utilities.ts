@@ -2124,6 +2124,13 @@ namespace ts {
         return heritageClause ? heritageClause.types : undefined;
     }
 
+    /** Returns the node in an `extends` or `implements` clause of a class or interface. */
+    export function getAllSuperTypeNodes(node: Node): ReadonlyArray<TypeNode> {
+        return isInterfaceDeclaration(node) ? getInterfaceBaseTypeNodes(node) || emptyArray
+            : isClassLike(node) ? concatenate(singleElementArray(getClassExtendsHeritageClauseElement(node)), getClassImplementsHeritageClauseElements(node)) || emptyArray
+            : emptyArray;
+    }
+
     export function getInterfaceBaseTypeNodes(node: InterfaceDeclaration) {
         const heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
         return heritageClause ? heritageClause.types : undefined;
