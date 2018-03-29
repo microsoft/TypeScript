@@ -367,7 +367,7 @@ namespace ts.server {
                     messageText: entry.message,
                     category: Debug.assertDefined(category, "convertDiagnostic: category should not be undefined"),
                     code: entry.code,
-                    reportsUnused: entry.reportsUnused,
+                    reportsUnnecessary: entry.reportsUnnecessary,
                 };
             });
         }
