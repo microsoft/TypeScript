@@ -150,7 +150,13 @@ namespace ts {
         performance.mark("beforeTransform");
 
         // Chain together and initialize each transformer.
-        const transformation = chain(...transformers)(context);
+        const transformersWithContext = transformers.map(t => t(context));
+        const transformation = (node: T): T => {
+            for (const transform of transformersWithContext) {
+                node = transform(node);
+            }
+            return node;
+        };
 
         // prevent modification of transformation hooks.
         state = TransformationState.Initialized;
