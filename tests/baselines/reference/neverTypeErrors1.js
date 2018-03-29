@@ -22,6 +22,7 @@ function f4(): never {
 }
 
 for (const n of f4()) {}
+for (const n in f4()) {}
 
 
 //// [neverTypeErrors1.js]
@@ -46,3 +47,4 @@ function f4() {
 for (var _i = 0, _a = f4(); _i < _a.length; _i++) {
     var n = _a[_i];
 }
+for (var n in f4()) { }
