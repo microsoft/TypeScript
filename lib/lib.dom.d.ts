@@ -3983,6 +3983,10 @@ interface HTMLAnchorElement extends HTMLElement {
      */
     href: string;
     /**
+     * Contains the Unicode serialization of the origin of the represented URL.
+     */
+    readonly origin: string;
+    /**
      * Sets or retrieves the language code of the object.
      */
     hreflang: string;
