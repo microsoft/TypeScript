@@ -2584,12 +2584,10 @@ declare namespace ts {
     interface EmitHelper {
         readonly name: string;
         readonly scoped: boolean;
-        readonly text: string | ((node: EmitHelperContext) => string);
+        readonly text: string | ((node: EmitHelperUniqueNameCallback) => string);
         readonly priority?: number;
     }
-    interface EmitHelperContext {
-        makeFileLevelUniqueName: (name: string) => string;
-    }
+    type EmitHelperUniqueNameCallback = (name: string) => string;
     enum EmitHint {
         SourceFile = 0,
         Expression = 1,
