@@ -706,7 +706,6 @@ namespace ts {
         ReservedInNestedScopes = 1 << 4,    // Reserve the generated name in nested scopes
         Optimistic = 1 << 5,                // First instance won't use '_#' if there's no conflict
         FileLevel = 1 << 6,                 // Use only the file identifiers list and not generated names to search for conflicts
-        
     }
 
     export interface Identifier extends PrimaryExpression, Declaration {

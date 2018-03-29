@@ -306,7 +306,6 @@ namespace ts {
                         else {
                             writeLines(helper.text(makeFileLevelOptmiisticUniqueName));
                         }
-            
                         helpersEmitted = true;
                     }
                 }
