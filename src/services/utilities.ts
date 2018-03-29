@@ -1216,6 +1216,10 @@ namespace ts {
         }
         return result;
     }
+
+    export function skipConstraint(type: Type): Type {
+        return type.flags & TypeFlags.TypeParameter ? type.getConstraint() : type;
+    }
 }
 
 // Display-part writer helpers
@@ -1486,14 +1490,30 @@ namespace ts {
      */
     /* @internal */
     export function suppressLeadingAndTrailingTrivia(node: Node) {
-        Debug.assertDefined(node);
-        suppress(node, EmitFlags.NoLeadingComments, getFirstChild);
-        suppress(node, EmitFlags.NoTrailingComments, getLastChild);
-        function suppress(node: Node, flag: EmitFlags, getChild: (n: Node) => Node) {
-            addEmitFlags(node, flag);
-            const child = getChild(node);
-            if (child) suppress(child, flag, getChild);
-        }
+        suppressLeadingTrivia(node);
+        suppressTrailingTrivia(node);
+    }
+
+    /**
+     * Sets EmitFlags to suppress leading trivia on the node.
+     */
+    /* @internal */
+    export function suppressLeadingTrivia(node: Node) {
+        addEmitFlagsRecursively(node, EmitFlags.NoLeadingComments, getFirstChild);
+    }
+
+    /**
+     * Sets EmitFlags to suppress trailing trivia on the node.
+     */
+    /* @internal */
+    export function suppressTrailingTrivia(node: Node) {
+        addEmitFlagsRecursively(node, EmitFlags.NoTrailingComments, getLastChild);
+    }
+
+    function addEmitFlagsRecursively(node: Node, flag: EmitFlags, getChild: (n: Node) => Node) {
+        addEmitFlags(node, flag);
+        const child = getChild(node);
+        if (child) addEmitFlagsRecursively(child, flag, getChild);
     }
 
     function getFirstChild(node: Node): Node | undefined {

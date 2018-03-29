@@ -30,6 +30,7 @@
 /// <reference path='refactorProvider.ts' />
 /// <reference path='codefixes\fixes.ts' />
 /// <reference path='refactors\refactors.ts' />
+/// <reference path="sourcemaps.ts" />
 
 namespace ts {
     /** The version of the language service API */
@@ -53,7 +54,7 @@ namespace ts {
         public jsDoc: JSDoc[];
         public original: Node;
         public transformFlags: TransformFlags;
-        private _children: Node[];
+        private _children: Node[] | undefined;
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
             this.pos = pos;
@@ -116,106 +117,17 @@ namespace ts {
             return sourceFile.text.substring(this.getStart(sourceFile), this.getEnd());
         }
 
-        private addSyntheticNodes(nodes: Push<Node>, pos: number, end: number): number {
-            scanner.setTextPos(pos);
-            while (pos < end) {
-                const token = scanner.scan();
-                const textPos = scanner.getTextPos();
-                if (textPos <= end) {
-                    if (token === SyntaxKind.Identifier) {
-                        Debug.fail(`Did not expect ${Debug.showSyntaxKind(this)} to have an Identifier in its trivia`);
-                    }
-                    nodes.push(createNode(token, pos, textPos, this));
-                }
-                pos = textPos;
-                if (token === SyntaxKind.EndOfFileToken) {
-                    break;
-                }
-            }
-            return pos;
-        }
-
-        private createSyntaxList(nodes: NodeArray<Node>): Node {
-            const list = <NodeObject>createNode(SyntaxKind.SyntaxList, nodes.pos, nodes.end, this);
-            list._children = [];
-            let pos = nodes.pos;
-
-            for (const node of nodes) {
-                if (pos < node.pos) {
-                    pos = this.addSyntheticNodes(list._children, pos, node.pos);
-                }
-                list._children.push(node);
-                pos = node.end;
-            }
-            if (pos < nodes.end) {
-                this.addSyntheticNodes(list._children, pos, nodes.end);
-            }
-            return list;
-        }
-
-        private createChildren(sourceFile?: SourceFileLike) {
-            if (!isNodeKind(this.kind)) {
-                this._children = emptyArray;
-                return;
-            }
-
-            if (isJSDocCommentContainingNode(this)) {
-                /** Don't add trivia for "tokens" since this is in a comment. */
-                const children: Node[] = [];
-                this.forEachChild(child => { children.push(child); });
-                this._children = children;
-                return;
-            }
-
-            const children: Node[] = [];
-            scanner.setText((sourceFile || this.getSourceFile()).text);
-            let pos = this.pos;
-            const processNode = (node: Node) => {
-                pos = this.addSyntheticNodes(children, pos, node.pos);
-                children.push(node);
-                pos = node.end;
-            };
-            const processNodes = (nodes: NodeArray<Node>) => {
-                if (pos < nodes.pos) {
-                    pos = this.addSyntheticNodes(children, pos, nodes.pos);
-                }
-                children.push(this.createSyntaxList(nodes));
-                pos = nodes.end;
-            };
-            // jsDocComments need to be the first children
-            if (this.jsDoc) {
-                for (const jsDocComment of this.jsDoc) {
-                    processNode(jsDocComment);
-                }
-            }
-            // For syntactic classifications, all trivia are classcified together, including jsdoc comments.
-            // For that to work, the jsdoc comments should still be the leading trivia of the first child.
-            // Restoring the scanner position ensures that.
-            pos = this.pos;
-            forEachChild(this, processNode, processNodes);
-            if (pos < this.end) {
-                this.addSyntheticNodes(children, pos, this.end);
-            }
-            scanner.setText(undefined);
-            this._children = children;
-        }
-
         public getChildCount(sourceFile?: SourceFile): number {
-            this.assertHasRealPosition();
-            if (!this._children) this.createChildren(sourceFile);
-            return this._children.length;
+            return this.getChildren(sourceFile).length;
         }
 
         public getChildAt(index: number, sourceFile?: SourceFile): Node {
-            this.assertHasRealPosition();
-            if (!this._children) this.createChildren(sourceFile);
-            return this._children[index];
+            return this.getChildren(sourceFile)[index];
         }
 
         public getChildren(sourceFile?: SourceFileLike): Node[] {
             this.assertHasRealPosition("Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
-            if (!this._children) this.createChildren(sourceFile);
-            return this._children;
+            return this._children || (this._children = createChildren(this, sourceFile));
         }
 
         public getFirstToken(sourceFile?: SourceFile): Node {
@@ -246,6 +158,74 @@ namespace ts {
         public forEachChild<T>(cbNode: (node: Node) => T, cbNodeArray?: (nodes: NodeArray<Node>) => T): T {
             return forEachChild(this, cbNode, cbNodeArray);
         }
+    }
+
+    function createChildren(node: Node, sourceFile: SourceFileLike | undefined): Node[] {
+        if (!isNodeKind(node.kind)) {
+            return emptyArray;
+        }
+
+        const children: Node[] = [];
+
+        if (isJSDocCommentContainingNode(node)) {
+            /** Don't add trivia for "tokens" since this is in a comment. */
+            node.forEachChild(child => { children.push(child); });
+            return children;
+        }
+
+        scanner.setText((sourceFile || node.getSourceFile()).text);
+        let pos = node.pos;
+        const processNode = (child: Node) => {
+            addSyntheticNodes(children, pos, child.pos, node);
+            children.push(child);
+            pos = child.end;
+        };
+        const processNodes = (nodes: NodeArray<Node>) => {
+            addSyntheticNodes(children, pos, nodes.pos, node);
+            children.push(createSyntaxList(nodes, node));
+            pos = nodes.end;
+        };
+        // jsDocComments need to be the first children
+        forEach((node as JSDocContainer).jsDoc, processNode);
+        // For syntactic classifications, all trivia are classified together, including jsdoc comments.
+        // For that to work, the jsdoc comments should still be the leading trivia of the first child.
+        // Restoring the scanner position ensures that.
+        pos = node.pos;
+        node.forEachChild(processNode, processNodes);
+        addSyntheticNodes(children, pos, node.end, node);
+        scanner.setText(undefined);
+        return children;
+    }
+
+    function addSyntheticNodes(nodes: Push<Node>, pos: number, end: number, parent: Node): void {
+        scanner.setTextPos(pos);
+        while (pos < end) {
+            const token = scanner.scan();
+            const textPos = scanner.getTextPos();
+            if (textPos <= end) {
+                if (token === SyntaxKind.Identifier) {
+                    Debug.fail(`Did not expect ${Debug.showSyntaxKind(parent)} to have an Identifier in its trivia`);
+                }
+                nodes.push(createNode(token, pos, textPos, parent));
+            }
+            pos = textPos;
+            if (token === SyntaxKind.EndOfFileToken) {
+                break;
+            }
+        }
+    }
+
+    function createSyntaxList(nodes: NodeArray<Node>, parent: Node): Node {
+        const list = createNode(SyntaxKind.SyntaxList, nodes.pos, nodes.end, parent) as any as SyntaxList;
+        list._children = [];
+        let pos = nodes.pos;
+        for (const node of nodes) {
+            addSyntheticNodes(list._children, pos, node.pos, parent);
+            list._children.push(node);
+            pos = node.end;
+        }
+        addSyntheticNodes(list._children, pos, nodes.end, parent);
+        return list;
     }
 
     class TokenOrIdentifierObject implements Node {
@@ -575,7 +555,7 @@ namespace ts {
      */
     function findInheritedJSDocComments(declaration: Declaration, propertyName: string, typeChecker: TypeChecker): SymbolDisplayPart[] {
         let foundDocs = false;
-        return flatMap(getAllSuperTypeNodes(declaration), superTypeNode => {
+        return flatMap(declaration.parent ? getAllSuperTypeNodes(declaration.parent) : emptyArray, superTypeNode => {
             if (foundDocs) {
                 return emptyArray;
             }
@@ -591,21 +571,6 @@ namespace ts {
             foundDocs = inheritedDocs.length > 0;
             return inheritedDocs;
         });
-    }
-
-    /**
-     * Finds and returns the `TypeNode` for all super classes and implemented interfaces given a declaration.
-     * @param declaration The possibly-inherited declaration.
-     * @returns A filled array of `TypeNode`s containing all super classes and implemented interfaces if any exist, otherwise an empty array.
-     */
-    function getAllSuperTypeNodes(declaration: Declaration): ReadonlyArray<TypeNode> {
-        const container = declaration.parent;
-        if (!container || (!isClassDeclaration(container) && !isInterfaceDeclaration(container))) {
-            return emptyArray;
-        }
-        const extended = getClassExtendsHeritageClauseElement(container);
-        const types = extended ? [extended] : emptyArray;
-        return isClassLike(container) ? concatenate(types, getClassImplementsHeritageClauseElements(container)) : types;
     }
 
     class SourceFileObject extends NodeObject implements SourceFile {
@@ -1169,6 +1134,35 @@ namespace ts {
         }
     }
 
+    /* @internal */
+    export interface SourceFileLikeCache {
+        get(path: Path): SourceFileLike | undefined;
+    }
+
+    /* @internal */
+    export function createSourceFileLikeCache(host: { readFile?: (path: string) => string, fileExists?: (path: string) => boolean }): SourceFileLikeCache {
+        const cached = createMap<SourceFileLike>();
+        return {
+            get(path: Path) {
+                if (cached.has(path)) {
+                    return cached.get(path);
+                }
+                if (!host.fileExists || !host.readFile || !host.fileExists(path)) return;
+                // And failing that, check the disk
+                const text = host.readFile(path);
+                const file: SourceFileLike = {
+                    text,
+                    lineMap: undefined,
+                    getLineAndCharacterOfPosition(pos) {
+                        return computeLineAndCharacterOfPosition(getLineStarts(this), pos);
+                    }
+                };
+                cached.set(path, file);
+                return file;
+            }
+        };
+    }
+
     export function createLanguageService(host: LanguageServiceHost,
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
 
@@ -1185,6 +1179,8 @@ namespace ts {
         if (!localizedDiagnosticMessages && host.getLocalizedDiagnosticMessages) {
             localizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
         }
+
+        let sourcemappedFileCache: SourceFileLikeCache;
 
         function log(message: string) {
             if (host.log) {
@@ -1292,6 +1288,11 @@ namespace ts {
             // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
             // It needs to be cleared to allow all collected snapshots to be released
             hostCache = undefined;
+
+            // We reset this cache on structure invalidation so we don't hold on to outdated files for long; however we can't use the `compilerHost` above,
+            // Because it only functions until `hostCache` is cleared, while we'll potentially need the functionality to lazily read sourcemap files during
+            // the course of whatever called `synchronizeHostData`
+            sourcemappedFileCache = createSourceFileLikeCache(host);
 
             // Make sure all the nodes in the program are both bound, and have their parent
             // pointers set property.
@@ -1543,26 +1544,168 @@ namespace ts {
             return checker.getSymbolAtLocation(node);
         }
 
+        // Sometimes tools can sometimes see the following line as a source mapping url comment, so we mangle it a bit (the [M])
+        const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)$/gm;
+        const base64UrlRegExp = /^data:(?:application\/json(?:;charset=[uU][tT][fF]-8);base64,([A-Za-z0-9+\/=]+)$)?/;
+        function scanForSourcemapURL(fileName: string) {
+            const mappedFile = sourcemappedFileCache.get(toPath(fileName, currentDirectory, getCanonicalFileName));
+            if (!mappedFile) {
+                return;
+            }
+            const starts = getLineStarts(mappedFile);
+            for (let index = starts.length - 1; index >= 0; index--) {
+                sourceMapCommentRegExp.lastIndex = starts[index];
+                const comment = sourceMapCommentRegExp.exec(mappedFile.text);
+                if (comment) {
+                    return comment[1];
+                }
+            }
+        }
+
+        function convertDocumentToSourceMapper(file: { sourceMapper?: sourcemaps.SourceMapper }, contents: string, mapFileName: string) {
+            let maps: sourcemaps.SourceMapData;
+            try {
+                maps = JSON.parse(contents);
+            }
+            catch {
+                // swallow error
+            }
+            if (!maps || !maps.sources || !maps.file || !maps.mappings) {
+                // obviously invalid map
+                return file.sourceMapper = sourcemaps.identitySourceMapper;
+            }
+            return file.sourceMapper = sourcemaps.decode({
+                readFile: s => host.readFile(s),
+                fileExists: s => host.fileExists(s),
+                getCanonicalFileName,
+                log,
+            }, mapFileName, maps, program, sourcemappedFileCache);
+        }
+
+        function getSourceMapper(fileName: string, file: { sourceMapper?: sourcemaps.SourceMapper }) {
+            if (!host.readFile || !host.fileExists) {
+                return file.sourceMapper = sourcemaps.identitySourceMapper;
+            }
+            if (file.sourceMapper) {
+                return file.sourceMapper;
+            }
+            let mapFileName = scanForSourcemapURL(fileName);
+            if (mapFileName) {
+                const match = base64UrlRegExp.exec(mapFileName);
+                if (match) {
+                    if (match[1]) {
+                        const base64Object = match[1];
+                        return convertDocumentToSourceMapper(file, base64decode(sys, base64Object), fileName);
+                    }
+                    // Not a data URL we can parse, skip it
+                    mapFileName = undefined;
+                }
+            }
+            const possibleMapLocations: string[] = [];
+            if (mapFileName) {
+                possibleMapLocations.push(mapFileName);
+            }
+            possibleMapLocations.push(fileName + ".map");
+            for (const location of possibleMapLocations) {
+                const mapPath = toPath(location, getDirectoryPath(fileName), getCanonicalFileName);
+                if (host.fileExists(mapPath)) {
+                    return convertDocumentToSourceMapper(file, host.readFile(mapPath), mapPath);
+                }
+            }
+            return file.sourceMapper = sourcemaps.identitySourceMapper;
+        }
+
+        function makeGetTargetOfMappedPosition<TIn>(
+            extract: (original: TIn) => sourcemaps.SourceMappableLocation,
+            create: (result: sourcemaps.SourceMappableLocation, original: TIn) => TIn
+        ) {
+            return getTargetOfMappedPosition;
+            function getTargetOfMappedPosition(input: TIn): TIn {
+                const info = extract(input);
+                if (endsWith(info.fileName, Extension.Dts)) {
+                    let file: SourceFileLike = program.getSourceFile(info.fileName);
+                    if (!file) {
+                        const path = toPath(info.fileName, currentDirectory, getCanonicalFileName);
+                        file = sourcemappedFileCache.get(path);
+                    }
+                    if (!file) {
+                        return input;
+                    }
+                    const mapper = getSourceMapper(info.fileName, file);
+                    const newLoc = mapper.getOriginalPosition(info);
+                    if (newLoc === info) return input;
+                    return getTargetOfMappedPosition(create(newLoc, input));
+                }
+                return input;
+            }
+        }
+
+        const getTargetOfMappedDeclarationInfo = makeGetTargetOfMappedPosition(
+            (info: DefinitionInfo) => ({ fileName: info.fileName, position: info.textSpan.start }),
+            (newLoc, info) => ({
+                containerKind: info.containerKind,
+                containerName: info.containerName,
+                fileName: newLoc.fileName,
+                kind: info.kind,
+                name: info.name,
+                textSpan: {
+                    start: newLoc.position,
+                    length: info.textSpan.length
+                }
+            })
+        );
+
+        function getTargetOfMappedDeclarationFiles(infos: ReadonlyArray<DefinitionInfo>): DefinitionInfo[] {
+            return map(infos, getTargetOfMappedDeclarationInfo);
+        }
+
         /// Goto definition
         function getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             synchronizeHostData();
-            return GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position);
+            return getTargetOfMappedDeclarationFiles(GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position));
         }
 
         function getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan {
             synchronizeHostData();
-            return GoToDefinition.getDefinitionAndBoundSpan(program, getValidSourceFile(fileName), position);
+            const result = GoToDefinition.getDefinitionAndBoundSpan(program, getValidSourceFile(fileName), position);
+            if (!result) return result;
+            const mappedDefs = getTargetOfMappedDeclarationFiles(result.definitions);
+            if (mappedDefs === result.definitions) {
+                return result;
+            }
+            return {
+                definitions: mappedDefs,
+                textSpan: result.textSpan
+            };
         }
 
         function getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             synchronizeHostData();
-            return GoToDefinition.getTypeDefinitionAtPosition(program.getTypeChecker(), getValidSourceFile(fileName), position);
+            return getTargetOfMappedDeclarationFiles(GoToDefinition.getTypeDefinitionAtPosition(program.getTypeChecker(), getValidSourceFile(fileName), position));
         }
 
         /// Goto implementation
+
+        const getTargetOfMappedImplementationLocation = makeGetTargetOfMappedPosition(
+            (info: ImplementationLocation) => ({ fileName: info.fileName, position: info.textSpan.start }),
+            (newLoc, info) => ({
+                fileName: newLoc.fileName,
+                kind: info.kind,
+                displayParts: info.displayParts,
+                textSpan: {
+                    start: newLoc.position,
+                    length: info.textSpan.length
+                }
+            })
+        );
+
+        function getTargetOfMappedImplementationLocations(infos: ReadonlyArray<ImplementationLocation>): ImplementationLocation[] {
+            return map(infos, getTargetOfMappedImplementationLocation);
+        }
+
         function getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] {
             synchronizeHostData();
-            return FindAllReferences.getImplementationsAtPosition(program, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position);
+            return getTargetOfMappedImplementationLocations(FindAllReferences.getImplementationsAtPosition(program, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position));
         }
 
         /// References and Occurrences

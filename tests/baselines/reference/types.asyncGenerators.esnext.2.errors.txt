@@ -1,5 +1,5 @@
-tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(2,12): error TS2504: Type must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
-tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(8,12): error TS2504: Type must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
+tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(2,12): error TS2504: Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
+tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(8,12): error TS2504: Type 'Promise<number[]>' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
 tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(10,7): error TS2322: Type '() => AsyncIterableIterator<string>' is not assignable to type '() => AsyncIterableIterator<number>'.
   Type 'AsyncIterableIterator<string>' is not assignable to type 'AsyncIterableIterator<number>'.
     Type 'string' is not assignable to type 'number'.
@@ -45,14 +45,14 @@ tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(
     Type '(value?: any) => Promise<IteratorResult<any>>' is not assignable to type '(value?: any) => IteratorResult<number>'.
       Type 'Promise<IteratorResult<any>>' is not assignable to type 'IteratorResult<number>'.
         Property 'done' is missing in type 'Promise<IteratorResult<any>>'.
-tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(74,12): error TS2504: Type must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
+tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(74,12): error TS2504: Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
 
 
 ==== tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts (24 errors) ====
     async function * inferReturnType1() {
         yield* {};
                ~~
-!!! error TS2504: Type must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
+!!! error TS2504: Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
     }
     async function * inferReturnType2() {
         yield* inferReturnType2();
@@ -60,7 +60,7 @@ tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(
     async function * inferReturnType3() {
         yield* Promise.resolve([1, 2]);
                ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2504: Type must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
+!!! error TS2504: Type 'Promise<number[]>' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
     }
     const assignability1: () => AsyncIterableIterator<number> = async function * () {
           ~~~~~~~~~~~~~~
@@ -194,5 +194,5 @@ tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(
     async function * yieldStar() {
         yield* {};
                ~~
-!!! error TS2504: Type must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
+!!! error TS2504: Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
     }

@@ -361,9 +361,13 @@ namespace ts {
                 return { dir: rootDir, dirPath: rootPath };
             }
 
-            let dir = getDirectoryPath(getNormalizedAbsolutePath(failedLookupLocation, getCurrentDirectory()));
-            let dirPath = getDirectoryPath(failedLookupLocationPath);
+            return getDirectoryToWatchFromFailedLookupLocationDirectory(
+                getDirectoryPath(getNormalizedAbsolutePath(failedLookupLocation, getCurrentDirectory())),
+                getDirectoryPath(failedLookupLocationPath)
+            );
+        }
 
+        function getDirectoryToWatchFromFailedLookupLocationDirectory(dir: string, dirPath: Path) {
             // If directory path contains node module, get the most parent node_modules directory for watching
             while (stringContains(dirPath, "/node_modules/")) {
                 dir = getDirectoryPath(dir);
@@ -621,7 +625,19 @@ namespace ts {
             clearMap(typeRootsWatches, closeFileWatcher);
         }
 
-        function createTypeRootsWatch(_typeRootPath: string, typeRoot: string): FileWatcher {
+        function getDirectoryToWatchFailedLookupLocationFromTypeRoot(typeRoot: string, typeRootPath: Path): Path | undefined {
+            if (allFilesHaveInvalidatedResolution) {
+                return undefined;
+            }
+
+            if (isInDirectoryPath(rootPath, typeRootPath)) {
+                return rootPath;
+            }
+            const { dirPath, ignore } = getDirectoryToWatchFromFailedLookupLocationDirectory(typeRoot, typeRootPath);
+            return !ignore && directoryWatchesOfFailedLookups.has(dirPath) && dirPath;
+        }
+
+        function createTypeRootsWatch(typeRootPath: Path, typeRoot: string): FileWatcher {
             // Create new watch and recursive info
             return resolutionHost.watchTypeRootsDirectory(typeRoot, fileOrDirectory => {
                 const fileOrDirectoryPath = resolutionHost.toPath(fileOrDirectory);
@@ -634,6 +650,13 @@ namespace ts {
                 // We could potentially store more data here about whether it was/would be really be used or not
                 // and with that determine to trigger compilation but for now this is enough
                 resolutionHost.onChangedAutomaticTypeDirectiveNames();
+
+                // Since directory watchers invoked are flaky, the failed lookup location events might not be triggered
+                // So handle to failed lookup locations here as well to ensure we are invalidating resolutions
+                const dirPath = getDirectoryToWatchFailedLookupLocationFromTypeRoot(typeRoot, typeRootPath);
+                if (dirPath && invalidateResolutionOfFailedLookupLocation(fileOrDirectoryPath, dirPath === fileOrDirectoryPath)) {
+                    resolutionHost.onInvalidatedResolution();
+                }
             }, WatchDirectoryFlags.Recursive);
         }
 
