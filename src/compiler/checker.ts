@@ -25982,18 +25982,23 @@ namespace ts {
                 getJsxFactoryEntity: location => location ? (getJsxNamespace(location), (getSourceFileOfNode(location).localJsxFactory || _jsxFactoryEntity)) : _jsxFactoryEntity
             };
 
+            function isInHeritageClause(node: PropertyAccessEntityNameExpression) {
+                return node.parent && node.parent.kind === SyntaxKind.ExpressionWithTypeArguments && node.parent.parent && node.parent.parent.kind === SyntaxKind.HeritageClause;
+            }
+
             // defined here to avoid outer scope pollution
             function getTypeReferenceDirectivesForEntityName(node: EntityNameOrEntityNameExpression): string[] {
                 // program does not have any files with type reference directives - bail out
                 if (!fileToDirective) {
                     return undefined;
                 }
-                // property access can only be used as values
+                // property access can only be used as values, or types when within an expression with type arguments inside a heritage clause
                 // qualified names can only be used as types\namespaces
                 // identifiers are treated as values only if they appear in type queries
-                const meaning = (node.kind === SyntaxKind.PropertyAccessExpression) || (node.kind === SyntaxKind.Identifier && isInTypeQuery(node))
-                    ? SymbolFlags.Value | SymbolFlags.ExportValue
-                    : SymbolFlags.Type | SymbolFlags.Namespace;
+                let meaning = SymbolFlags.Type | SymbolFlags.Namespace;
+                if ((node.kind === SyntaxKind.Identifier && isInTypeQuery(node)) || (node.kind === SyntaxKind.PropertyAccessExpression && !isInHeritageClause(node))) {
+                    meaning = SymbolFlags.Value | SymbolFlags.ExportValue;
+                }
 
                 const symbol = resolveEntityName(node, meaning, /*ignoreErrors*/ true);
                 return symbol && symbol !== unknownSymbol ? getTypeReferenceDirectivesForSymbol(symbol, meaning) : undefined;
