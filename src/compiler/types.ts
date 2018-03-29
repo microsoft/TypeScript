@@ -5093,14 +5093,7 @@ namespace ts {
         // Otherwise, returns all the diagnostics (global and file associated) in this collection.
         getDiagnostics(fileName?: string): Diagnostic[];
 
-        // Gets a count of how many times this collection has been modified.  This value changes
-        // each time 'add' is called (regardless of whether or not an equivalent diagnostic was
-        // already in the collection).  As such, it can be used as a simple way to tell if any
-        // operation caused diagnostics to be returned by storing and comparing the return value
-        // of this method before/after the operation is performed.
-        getModificationCount(): number;
-
-        /* @internal */ reattachFileDiagnostics(newFile: SourceFile): void;
+        reattachFileDiagnostics(newFile: SourceFile): void;
     }
 
     // SyntaxKind.SyntaxList
