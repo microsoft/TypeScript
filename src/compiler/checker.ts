@@ -2503,11 +2503,8 @@ namespace ts {
             }
 
             const id = "" + getSymbolId(symbol);
-            let visitedSymbolTables: SymbolTable[];
-            if (visitedSymbolTablesMap.has(id)) {
-                visitedSymbolTables = visitedSymbolTablesMap.get(id);
-            }
-            else {
+            let visitedSymbolTables = visitedSymbolTablesMap.get(id);
+            if (!visitedSymbolTables) {
                 visitedSymbolTablesMap.set(id, visitedSymbolTables = []);
             }
             return forEachSymbolTableInScope(enclosingDeclaration, getAccessibleSymbolChainFromSymbolTable);
