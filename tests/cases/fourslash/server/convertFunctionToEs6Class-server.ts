@@ -14,9 +14,8 @@
 verify.codeFix({
     description: "Convert function to an ES2015 class",
     newFileContent:
-// NOTE: '// Comment' should be included, but due to incorrect handling of trivia,
-// it's omitted right now.
-`class fn {\r
+`// Comment\r
+class fn {\r
     constructor() {\r
         this.baz = 10;\r
     }\r

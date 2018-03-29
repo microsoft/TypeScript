@@ -1706,7 +1706,7 @@ When union, intersection, function, or constructor types are used as array eleme
 
 ```TypeScript
 (string | number)[]  
-(() => string))[]
+(() => string)[]
 ```
 
 Alternatively, array types can be written using the 'Array&lt;T>' notation. For example, the types above are equivalent to
