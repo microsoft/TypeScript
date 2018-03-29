@@ -1,0 +1,39 @@
+=== tests/cases/compiler/bangOperatorRemovesNonNullableWhereSensible.ts ===
+export class Entry<T extends Table> {
+>Entry : Symbol(Entry, Decl(bangOperatorRemovesNonNullableWhereSensible.ts, 0, 0))
+>T : Symbol(T, Decl(bangOperatorRemovesNonNullableWhereSensible.ts, 0, 19))
+>Table : Symbol(Table, Decl(bangOperatorRemovesNonNullableWhereSensible.ts, 6, 1))
+
+    private _table: T | null = null;
+>_table : Symbol(Entry._table, Decl(bangOperatorRemovesNonNullableWhereSensible.ts, 0, 37))
+>T : Symbol(T, Decl(bangOperatorRemovesNonNullableWhereSensible.ts, 0, 19))
+
+    createSubsetForDirectory(): void {
+>createSubsetForDirectory : Symbol(Entry.createSubsetForDirectory, Decl(bangOperatorRemovesNonNullableWhereSensible.ts, 1, 36))
+
+        const entry = new Entry<T>();
+>entry : Symbol(entry, Decl(bangOperatorRemovesNonNullableWhereSensible.ts, 3, 13))
+>Entry : Symbol(Entry, Decl(bangOperatorRemovesNonNullableWhereSensible.ts, 0, 0))
+>T : Symbol(T, Decl(bangOperatorRemovesNonNullableWhereSensible.ts, 0, 19))
+
+        this._table!.fn(entry);
+>this._table!.fn : Symbol(Table.fn, Decl(bangOperatorRemovesNonNullableWhereSensible.ts, 8, 29))
+>this._table : Symbol(Entry._table, Decl(bangOperatorRemovesNonNullableWhereSensible.ts, 0, 37))
+>this : Symbol(Entry, Decl(bangOperatorRemovesNonNullableWhereSensible.ts, 0, 0))
+>_table : Symbol(Entry._table, Decl(bangOperatorRemovesNonNullableWhereSensible.ts, 0, 37))
+>fn : Symbol(Table.fn, Decl(bangOperatorRemovesNonNullableWhereSensible.ts, 8, 29))
+>entry : Symbol(entry, Decl(bangOperatorRemovesNonNullableWhereSensible.ts, 3, 13))
+    }
+}
+
+export abstract class Table {
+>Table : Symbol(Table, Decl(bangOperatorRemovesNonNullableWhereSensible.ts, 6, 1))
+
+    fn(directoryEntry: Entry<this>): this | null {
+>fn : Symbol(Table.fn, Decl(bangOperatorRemovesNonNullableWhereSensible.ts, 8, 29))
+>directoryEntry : Symbol(directoryEntry, Decl(bangOperatorRemovesNonNullableWhereSensible.ts, 9, 7))
+>Entry : Symbol(Entry, Decl(bangOperatorRemovesNonNullableWhereSensible.ts, 0, 0))
+
+        return null;
+    }
+}

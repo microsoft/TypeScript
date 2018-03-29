@@ -1,0 +1,46 @@
+=== tests/cases/compiler/bangOperatorRemovesNonNullableWhereSensible.ts ===
+export class Entry<T extends Table> {
+>Entry : Entry<T>
+>T : T
+>Table : Table
+
+    private _table: T | null = null;
+>_table : T | null
+>T : T
+>null : null
+>null : null
+
+    createSubsetForDirectory(): void {
+>createSubsetForDirectory : () => void
+
+        const entry = new Entry<T>();
+>entry : Entry<T>
+>new Entry<T>() : Entry<T>
+>Entry : typeof Entry
+>T : T
+
+        this._table!.fn(entry);
+>this._table!.fn(entry) : T | null
+>this._table!.fn : (directoryEntry: Entry<T>) => T | null
+>this._table! : T
+>this._table : T | null
+>this : this
+>_table : T | null
+>fn : (directoryEntry: Entry<T>) => T | null
+>entry : Entry<T>
+    }
+}
+
+export abstract class Table {
+>Table : Table
+
+    fn(directoryEntry: Entry<this>): this | null {
+>fn : (directoryEntry: Entry<this>) => this | null
+>directoryEntry : Entry<this>
+>Entry : Entry<T>
+>null : null
+
+        return null;
+>null : null
+    }
+}
