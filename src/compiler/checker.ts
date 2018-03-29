@@ -14764,10 +14764,13 @@ namespace ts {
 
         function getJsxPropsTypeFromClassType(sig: Signature, isJs: boolean, context: Node) {
             const forcedLookupLocation = getJsxElementPropertiesName(getJsxNamespaceAt(context));
-            const attributesType = forcedLookupLocation === undefined 
+            const attributesType = forcedLookupLocation === undefined
+                // If there is no type ElementAttributesProperty, return the type of the first parameter of the signature, which should be the props type
                 ? getTypeOfFirstParameterOfSignatureWithFallback(sig, emptyObjectType)
                 : forcedLookupLocation === ""
+                    // If there is no e.g. 'props' member in ElementAttributesProperty, use the element class type instead
                     ? getReturnTypeOfSignature(sig)
+                    // Otherwise get the type of the property on the signature return type
                     : getJsxPropsTypeForSignatureFromMember(sig, forcedLookupLocation);
 
             if (!attributesType) {
@@ -18438,8 +18441,8 @@ namespace ts {
             return getTypeOfFirstParameterOfSignatureWithFallback(signature, neverType);
         }
 
-        function getTypeOfFirstParameterOfSignatureWithFallback(signature: Signature, fallackType: Type) {
-            return signature.parameters.length > 0 ? getTypeAtPosition(signature, 0) : fallackType;
+        function getTypeOfFirstParameterOfSignatureWithFallback(signature: Signature, fallbackType: Type) {
+            return signature.parameters.length > 0 ? getTypeAtPosition(signature, 0) : fallbackType;
         }
 
         function inferFromAnnotatedParameters(signature: Signature, context: Signature, mapper: TypeMapper) {
