@@ -26626,7 +26626,7 @@ namespace ts {
                                               typeToString(getTypeFromTypeNode(node.type)));
                 }
 
-                if (allTypesAssignableToKind(type, TypeFlags.StringLiteral, /*strict*/ true)) {
+                if (type.flags & TypeFlags.Union && allTypesAssignableToKind(type, TypeFlags.StringLiteral, /*strict*/ true)) {
                     return grammarErrorOnNode(parameter.name,
                                               Diagnostics.An_index_signature_parameter_type_cannot_be_a_union_type_Consider_using_a_mapped_object_type_instead);
                 }
