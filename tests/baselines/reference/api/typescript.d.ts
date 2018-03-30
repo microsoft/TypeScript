@@ -2759,6 +2759,7 @@ declare namespace ts {
         removeComments?: boolean;
         newLine?: NewLineKind;
         omitTrailingSemicolon?: boolean;
+        noEmitHelpers?: boolean;
     }
     /** @deprecated See comment on SymbolWriter */
     interface SymbolTracker {
