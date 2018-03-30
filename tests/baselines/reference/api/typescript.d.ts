@@ -2760,8 +2760,6 @@ declare namespace ts {
         newLine?: NewLineKind;
         omitTrailingSemicolon?: boolean;
         noEmitHelpers?: boolean;
-        module?: CompilerOptions["module"];
-        target?: CompilerOptions["target"];
     }
     /** @deprecated See comment on SymbolWriter */
     interface SymbolTracker {
