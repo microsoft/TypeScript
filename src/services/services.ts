@@ -1198,7 +1198,7 @@ namespace ts {
             return sourceFile;
         }
 
-        function synchronizeHostData(): void {
+        function synchronizeHostData(bindNodes = true): void {
             // perform fast check if host supports it
             if (host.getProjectVersion) {
                 const hostProjectVersion = host.getProjectVersion();
@@ -1294,9 +1294,11 @@ namespace ts {
             // the course of whatever called `synchronizeHostData`
             sourcemappedFileCache = createSourceFileLikeCache(host);
 
-            // Make sure all the nodes in the program are both bound, and have their parent
-            // pointers set property.
-            program.getTypeChecker();
+            if (bindNodes) {
+                // Make sure all the nodes in the program are both bound.
+                program.getTypeChecker();
+            }
+
             return;
 
             function fileExists(fileName: string) {
@@ -1374,7 +1376,7 @@ namespace ts {
         }
 
         function getProgram(): Program {
-            synchronizeHostData();
+            synchronizeHostData(/*bindNodes*/ false);
 
             return program;
         }
