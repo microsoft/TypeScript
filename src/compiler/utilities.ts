@@ -4238,7 +4238,7 @@ namespace ts {
         }
     }
 
-    export function isParameterPropertyDeclaration(node: Node): boolean {
+    export function isParameterPropertyDeclaration(node: Node): node is ParameterDeclaration {
         return hasModifier(node, ModifierFlags.ParameterPropertyModifier) && node.parent.kind === SyntaxKind.Constructor && isClassLike(node.parent.parent);
     }
 

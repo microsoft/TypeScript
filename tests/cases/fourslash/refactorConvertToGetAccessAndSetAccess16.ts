@@ -1,9 +1,21 @@
 /// <reference path='fourslash.ts' />
 
 //// class A {
-////     /*a*/public readonly a: string = "foo";/*b*/
-////     /*c*/public static a: string = "foo";/*d*/
+////     constructor(public /*a*/message/*b*/: string) { }
 //// }
 
 goTo.select("a", "b");
-verify.not.refactorAvailable("Generate 'get' and 'set' accessors");
+edit.applyRefactor({
+    refactorName: "Generate 'get' and 'set' accessors",
+    actionName: "Generate 'get' and 'set' accessors",
+    actionDescription: "Generate 'get' and 'set' accessors",
+    newContent: `class A {
+    private a_1: string;
+    public get a(): string {
+        return this.a_1;
+    }
+    public set a(value: string) {
+        this.a_1 = value;
+    }
+}`,
+});
