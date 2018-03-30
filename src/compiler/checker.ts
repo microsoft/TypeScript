@@ -8496,6 +8496,15 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getIdentifierChain(node: EntityName): Identifier[] {
+            if (isIdentifier(node)) {
+                return [node];
+            }
+            else {
+                return append(getIdentifierChain(node.left), node.right);
+            }
+        }
+
         function getTypeFromImportTypeNode(node: ImportTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
@@ -8520,20 +8529,10 @@ namespace ts {
                 }
                 const moduleSymbol = resolveExternalModuleSymbol(innerModuleSymbol, /*dontResolveAlias*/ false);
                 if (node.qualifier) {
-                    const nameStack: Identifier[] = [];
+                    const nameStack: Identifier[] = getIdentifierChain(node.qualifier);
                     let currentNamespace = moduleSymbol;
-                    let current = node.qualifier;
-                    while (true) {
-                        if (current.kind === SyntaxKind.Identifier) {
-                            nameStack.push(current);
-                            break;
-                        }
-                        else {
-                            nameStack.push(current.right);
-                            current = current.left;
-                        }
-                    }
-                    while (current = nameStack.pop()) {
+                    let current: Identifier | undefined;
+                    while (current = nameStack.shift()) {
                         const meaning = nameStack.length ? SymbolFlags.Namespace : targetMeaning;
                         const next = getSymbol(getExportsOfSymbol(getMergedSymbol(resolveSymbol(currentNamespace))), current.escapedText, meaning);
                         if (!next) {
