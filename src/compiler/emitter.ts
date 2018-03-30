@@ -149,7 +149,7 @@ namespace ts {
             const transform = transformNodes(resolver, host, compilerOptions, sourceFiles, transformers, /*allowDtsFiles*/ false);
 
             // Create a printer to print the nodes
-            const printer = createPrinter({ ...compilerOptions, noEmitHelpers: compilerOptions.noEmitHelpers || (getEmitModuleKind(compilerOptions) === ModuleKind.None) } as PrinterOptions, {
+            const printer = createPrinter({ ...compilerOptions, noEmitHelpers: compilerOptions.noEmitHelpers } as PrinterOptions, {
                 // resolver hooks
                 hasGlobalName: resolver.hasGlobalName,
 
@@ -294,6 +294,7 @@ namespace ts {
             writeSemicolon = deferWriteSemicolon;
         }
         const syntheticParent: TextRange = { pos: -1, end: -1 };
+        const moduleKind = getEmitModuleKind(printerOptions);
         const bundledHelpers = createMap<boolean>();
         let isOwnFileEmit: boolean;
 
@@ -895,7 +896,7 @@ namespace ts {
         function emitHelpers(node: Node) {
             let helpersEmitted = false;
             const bundle = node.kind === SyntaxKind.Bundle ? <Bundle>node : undefined;
-            if (bundle && printerOptions.noEmitHelpers) {
+            if (bundle && moduleKind === ModuleKind.None) {
                 return;
             }
 
