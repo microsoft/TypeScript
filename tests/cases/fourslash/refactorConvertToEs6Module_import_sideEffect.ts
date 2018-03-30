@@ -5,7 +5,7 @@
 // @allowJs: true
 
 // @Filename: /a.js
-/////*a*/require/*b*/("foo");
+////require("foo");
 
 verify.codeFix({
     description: "Convert to ES6 module",

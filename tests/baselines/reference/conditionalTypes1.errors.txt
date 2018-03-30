@@ -64,8 +64,8 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(159,5): error TS2
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(160,5): error TS2322: Type 'T' is not assignable to type 'ZeroOf<T>'.
   Type 'string | number' is not assignable to type 'ZeroOf<T>'.
     Type 'string' is not assignable to type 'ZeroOf<T>'.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(255,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'T1', but here has type 'Foo<T & U>'.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(280,43): error TS2322: Type 'T95<U>' is not assignable to type 'T94<U>'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(263,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'T1', but here has type 'Foo<T & U>'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS2322: Type 'T95<U>' is not assignable to type 'T94<U>'.
   Type 'boolean' is not assignable to type 'true'.
 
 
@@ -370,6 +370,14 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(280,43): error TS
     type T51 = IsNever<number>;  // false
     type T52 = IsNever<any>;  // false
     
+    function f22<T>(x: T extends (infer U)[] ? U[] : never) {
+        let e = x[0];  // {}
+    }
+    
+    function f23<T extends string[]>(x: T extends (infer U)[] ? U[] : never) {
+        let e = x[0];  // string
+    }
+    
     // Repros from #21664
     
     type Eq<T, U> = T extends U ? U extends T ? true : false : false;
@@ -493,4 +501,16 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(280,43): error TS
     type Extracted<Struct> = {
         [K in keyof Struct]: Struct[K] extends FooBar ? ExtractFooBar<Struct[K]> : Struct[K];
     }
+    
+    // Repro from #22985
+    
+    type RecursivePartial<T> = {
+      [P in keyof T]?: T[P] extends Array<any> ? {[index: number]: RecursivePartial<T[P][0]>} :
+        T[P] extends object ? RecursivePartial<T[P]> : T[P];
+    };
+    
+    declare function assign<T>(o: T, a: RecursivePartial<T>): void;
+    
+    var a = {o: 1, b: 2, c: [{a: 1, c: '213'}]}
+    assign(a, {o: 2, c: {0: {a: 2, c: '213123'}}})
     

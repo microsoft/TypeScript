@@ -557,7 +557,7 @@ namespace ts.server {
             const request = this.processRequest<protocol.CodeFixRequest>(CommandNames.GetCodeFixes, args);
             const response = this.processResponse<protocol.CodeFixResponse>(request);
 
-            return response.body.map(({ description, changes, fixId }) => ({ description, changes: this.convertChanges(changes, file), fixId }));
+            return response.body.map(({ description, changes, fixId, fixAllDescription }) => ({ description, changes: this.convertChanges(changes, file), fixId, fixAllDescription }));
         }
 
         getCombinedCodeFix = notImplemented;

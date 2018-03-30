@@ -213,6 +213,14 @@ type T50 = IsNever<never>;  // true
 type T51 = IsNever<number>;  // false
 type T52 = IsNever<any>;  // false
 
+function f22<T>(x: T extends (infer U)[] ? U[] : never) {
+    let e = x[0];  // {}
+}
+
+function f23<T extends string[]>(x: T extends (infer U)[] ? U[] : never) {
+    let e = x[0];  // string
+}
+
 // Repros from #21664
 
 type Eq<T, U> = T extends U ? U extends T ? true : false : false;
@@ -332,6 +340,18 @@ type Extracted<Struct> = {
     [K in keyof Struct]: Struct[K] extends FooBar ? ExtractFooBar<Struct[K]> : Struct[K];
 }
 
+// Repro from #22985
+
+type RecursivePartial<T> = {
+  [P in keyof T]?: T[P] extends Array<any> ? {[index: number]: RecursivePartial<T[P][0]>} :
+    T[P] extends object ? RecursivePartial<T[P]> : T[P];
+};
+
+declare function assign<T>(o: T, a: RecursivePartial<T>): void;
+
+var a = {o: 1, b: 2, c: [{a: 1, c: '213'}]}
+assign(a, {o: 2, c: {0: {a: 2, c: '213123'}}})
+
 
 //// [conditionalTypes1.js]
 "use strict";
@@ -398,6 +418,12 @@ function f21(x, y) {
     x = y; // Error
     y = x; // Error
 }
+function f22(x) {
+    var e = x[0]; // {}
+}
+function f23(x) {
+    var e = x[0]; // string
+}
 var convert = function (value) { return value; };
 var convert2 = function (value) { return value; };
 function f31() {
@@ -421,6 +447,8 @@ var f45 = function (value) { return value; }; // Error
 // Repro from #21863
 function f50() {
 }
+var a = { o: 1, b: 2, c: [{ a: 1, c: '213' }] };
+assign(a, { o: 2, c: { 0: { a: 2, c: '213123' } } });
 
 
 //// [conditionalTypes1.d.ts]
@@ -590,6 +618,8 @@ declare type IsNever<T> = [T] extends [never] ? true : false;
 declare type T50 = IsNever<never>;
 declare type T51 = IsNever<number>;
 declare type T52 = IsNever<any>;
+declare function f22<T>(x: T extends (infer U)[] ? U[] : never): void;
+declare function f23<T extends string[]>(x: T extends (infer U)[] ? U[] : never): void;
 declare type Eq<T, U> = T extends U ? U extends T ? true : false : false;
 declare type T60 = Eq<true, true>;
 declare type T61 = Eq<true, false>;
@@ -670,4 +700,18 @@ declare interface ExtractFooBar<FB extends FooBar> {
 }
 declare type Extracted<Struct> = {
     [K in keyof Struct]: Struct[K] extends FooBar ? ExtractFooBar<Struct[K]> : Struct[K];
+};
+declare type RecursivePartial<T> = {
+    [P in keyof T]?: T[P] extends Array<any> ? {
+        [index: number]: RecursivePartial<T[P][0]>;
+    } : T[P] extends object ? RecursivePartial<T[P]> : T[P];
+};
+declare function assign<T>(o: T, a: RecursivePartial<T>): void;
+declare var a: {
+    o: number;
+    b: number;
+    c: {
+        a: number;
+        c: string;
+    }[];
 };
