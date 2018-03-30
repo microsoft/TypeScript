@@ -250,6 +250,24 @@ namespace ts {
                 }
             }
         });
+
+        // https://github.com/Microsoft/TypeScript/issues/22782
+        testBaseline("transformWithPromise", () => {
+            return transpileModule(`
+            class Foo {
+                @AnyDecorator()
+                public async foobar(): Promise<void> {
+            
+                }
+            }
+            `, {
+                    compilerOptions: {
+                        target: ScriptTarget.ESNext,
+                        emitDecoratorMetadata: true,
+                        experimentalDecorators: true
+                    }
+                }).outputText;
+        });
     });
 }
 

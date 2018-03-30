@@ -1991,6 +1991,15 @@ namespace ts {
                     return createIdentifier("Promise");
 
                 case TypeReferenceSerializationKind.ObjectType:
+                    if (isIdentifier(node.typeName) && node.typeName.escapedText === 'Promise') {
+                        return createLogicalOr(
+                            createLogicalAnd(
+                                createTypeCheck(createIdentifier("Promise"), "function"),
+                                createIdentifier("Promise")
+                            ),
+                            createIdentifier("Object")
+                        );
+                    }
                 default:
                     return createIdentifier("Object");
             }
