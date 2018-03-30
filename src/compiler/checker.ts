@@ -18207,7 +18207,7 @@ namespace ts {
                 parent = parent.parent;
             }
             if (parent && isBinaryExpression(parent) && isPrototypeAccess(parent.left) && parent.operatorToken.kind === SyntaxKind.EqualsToken) {
-                const right = followBinaryRight(parent);
+                const right = getInitializerOfBinaryExpression(parent);
                 return isObjectLiteralExpression(right) && right;
             }
         }

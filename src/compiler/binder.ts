@@ -2445,8 +2445,8 @@ namespace ts {
         function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, isPrototypeProperty: boolean) {
             let symbol = getJSInitializerSymbolFromName(name);
             const isToplevelNamespaceableInitializer = isBinaryExpression(propertyAccess.parent)
-                ? followBinaryParent(propertyAccess.parent).parent.kind === SyntaxKind.SourceFile &&
-                    !!getJavascriptInitializer(followBinaryRight(propertyAccess.parent), isPrototypeAccess(propertyAccess.parent.left))
+                ? getParentOfBinaryExpression(propertyAccess.parent).parent.kind === SyntaxKind.SourceFile &&
+                    !!getJavascriptInitializer(getInitializerOfBinaryExpression(propertyAccess.parent), isPrototypeAccess(propertyAccess.parent.left))
                 : propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
             if (!isPrototypeProperty && (!symbol || !(symbol.flags & SymbolFlags.Namespace)) && isToplevelNamespaceableInitializer) {
                 // make symbols or add declarations for intermediate containers
@@ -2478,7 +2478,7 @@ namespace ts {
             declareSymbol(symbolTable, symbol, propertyAccess, symbolFlags, symbolExcludes);
         }
 
-        function followBinaryParent(expr: BinaryExpression) {
+        function getParentOfBinaryExpression(expr: BinaryExpression) {
             while (isBinaryExpression(expr.parent)) {
                 expr = expr.parent;
             }
