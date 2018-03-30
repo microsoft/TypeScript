@@ -1,0 +1,38 @@
+=== tests/cases/compiler/noImplicitSymbolToString.ts ===
+// Fix #19666
+
+let symbol!: symbol;
+>symbol : symbol
+
+let str = "hello ";
+>str : string
+>"hello " : "hello "
+
+const templateStr = `hello ${symbol}`;
+>templateStr : string
+>`hello ${symbol}` : string
+>symbol : symbol
+
+const appendStr = "hello " + symbol;
+>appendStr : string
+>"hello " + symbol : string
+>"hello " : "hello "
+>symbol : symbol
+
+str += symbol;
+>str += symbol : string
+>str : string
+>symbol : symbol
+
+let symbolUnionNumber!: symbol | number;
+>symbolUnionNumber : number | symbol
+
+let symbolUnionString!: symbol | string;
+>symbolUnionString : string | symbol
+
+const templateStrUnion = `union with number ${symbolUnionNumber} and union with string ${symbolUnionString}`;
+>templateStrUnion : string
+>`union with number ${symbolUnionNumber} and union with string ${symbolUnionString}` : string
+>symbolUnionNumber : number | symbol
+>symbolUnionString : string | symbol
+
