@@ -303,6 +303,7 @@ namespace ts.server {
         cancellationToken: HostCancellationToken;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
+        disableInferredProjectLanguageService?: boolean;
         ignoreConfigFiles?: boolean;
         typingsInstaller: ITypingsInstaller;
         eventHandler?: ProjectServiceEventHandler;
@@ -391,7 +392,8 @@ namespace ts.server {
         public readonly cancellationToken: HostCancellationToken;
         public readonly useSingleInferredProject: boolean;
         public readonly useInferredProjectPerProjectRoot: boolean;
-        public readonly ignoreConfigFiles: boolean;
+        private readonly disableInferredProjectLanguageService?: boolean;
+        private readonly ignoreConfigFiles?: boolean;
         public readonly typingsInstaller: ITypingsInstaller;
         public readonly throttleWaitMilliseconds?: number;
         private readonly eventHandler?: ProjectServiceEventHandler;
@@ -419,6 +421,7 @@ namespace ts.server {
             this.throttleWaitMilliseconds = opts.throttleWaitMilliseconds;
             this.eventHandler = opts.eventHandler;
             this.suppressDiagnosticEvents = opts.suppressDiagnosticEvents;
+            this.disableInferredProjectLanguageService = opts.disableInferredProjectLanguageService;
             this.globalPlugins = opts.globalPlugins || emptyArray;
             this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray;
             this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
@@ -1675,7 +1678,7 @@ namespace ts.server {
 
         private createInferredProject(currentDirectory: string | undefined, isSingleInferredProject?: boolean, projectRootPath?: NormalizedPath): InferredProject {
             const compilerOptions = projectRootPath && this.compilerOptionsForInferredProjectsPerProjectRoot.get(projectRootPath) || this.compilerOptionsForInferredProjects;
-            const project = new InferredProject(this, this.documentRegistry, compilerOptions, projectRootPath, currentDirectory);
+            const project = new InferredProject(this, this.documentRegistry, compilerOptions, this.disableInferredProjectLanguageService, projectRootPath, currentDirectory);
             if (isSingleInferredProject) {
                 this.inferredProjects.unshift(project);
             }

@@ -131,7 +131,7 @@ namespace ts.server {
         // wrapper over the real language service that will suppress all semantic operations
         protected languageService: LanguageService;
 
-        public languageServiceEnabled = true;
+        public languageServiceEnabled: boolean;
 
         readonly trace?: (s: string) => void;
         readonly realpath?: (path: string) => string;
@@ -223,6 +223,7 @@ namespace ts.server {
             lastFileExceededProgramSize: string | undefined,
             private compilerOptions: CompilerOptions,
             public compileOnSaveEnabled: boolean,
+            private languageServicePermanentlyDisabled: boolean,
             directoryStructureHost: DirectoryStructureHost,
             currentDirectory: string | undefined) {
             this.directoryStructureHost = directoryStructureHost;
@@ -239,6 +240,8 @@ namespace ts.server {
                 // If files are listed explicitly or allowJs is specified, allow all extensions
                 this.compilerOptions.allowNonTsExtensions = true;
             }
+
+            this.languageServiceEnabled = !this.languageServicePermanentlyDisabled;
 
             this.setInternalCompilerOptionsForEmittingJsFiles();
             const host = this.projectService.host;
@@ -506,7 +509,7 @@ namespace ts.server {
         }
 
         enableLanguageService() {
-            if (this.languageServiceEnabled) {
+            if (this.languageServiceEnabled || this.languageServicePermanentlyDisabled) {
                 return;
             }
             this.languageServiceEnabled = true;
@@ -518,6 +521,7 @@ namespace ts.server {
             if (!this.languageServiceEnabled) {
                 return;
             }
+            Debug.assert(!this.languageServicePermanentlyDisabled);
             this.languageService.cleanupSemanticCache();
             this.languageServiceEnabled = false;
             this.lastFileExceededProgramSize = lastFileExceededProgramSize;
@@ -1189,6 +1193,7 @@ namespace ts.server {
             projectService: ProjectService,
             documentRegistry: DocumentRegistry,
             compilerOptions: CompilerOptions,
+            languageServicePermanentlyDisabled: boolean,
             projectRootPath: NormalizedPath | undefined,
             currentDirectory: string | undefined) {
             super(InferredProject.newName(),
@@ -1199,6 +1204,7 @@ namespace ts.server {
                 /*lastFileExceededProgramSize*/ undefined,
                 compilerOptions,
                 /*compileOnSaveEnabled*/ false,
+                languageServicePermanentlyDisabled,
                 projectService.host,
                 currentDirectory);
             this.projectRootPath = projectRootPath && projectService.toCanonicalFileName(projectRootPath);
@@ -1286,6 +1292,7 @@ namespace ts.server {
                 lastFileExceededProgramSize,
                 compilerOptions,
                 compileOnSaveEnabled,
+                /*languageServicePermanentlyDisabled*/ false,
                 cachedDirectoryStructureHost,
                 getDirectoryPath(configFileName));
             this.canonicalConfigFilePath = asNormalizedPath(projectService.toCanonicalFileName(configFileName));
@@ -1481,6 +1488,7 @@ namespace ts.server {
                 lastFileExceededProgramSize,
                 compilerOptions,
                 compileOnSaveEnabled,
+                /*languageServicePermanentlyDisabled*/ false,
                 projectService.host,
                 getDirectoryPath(projectFilePath || normalizeSlashes(externalProjectName)));
         }

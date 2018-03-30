@@ -507,6 +507,7 @@ namespace ts.server {
                 cancellationToken,
                 useSingleInferredProject,
                 useInferredProjectPerProjectRoot,
+                disableInferredProjectLanguageService: syntaxOnly,
                 ignoreConfigFiles: syntaxOnly,
                 typingsInstaller: typingsInstaller || nullTypingsInstaller,
                 byteLength: Buffer.byteLength,
