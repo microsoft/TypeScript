@@ -6478,7 +6478,7 @@ namespace ts {
             let commonType: Type;
             for (const prop of props) {
                 if (prop.declarations) {
-                    addRange(declarations, prop.declarations);
+                    addRangeUnique(declarations, prop.declarations);
                 }
                 const type = getTypeOfSymbol(prop);
                 if (!commonType) {
@@ -8555,7 +8555,7 @@ namespace ts {
                     const rightProp = members.get(leftProp.escapedName);
                     const rightType = getTypeOfSymbol(rightProp);
                     if (rightProp.flags & SymbolFlags.Optional) {
-                        const declarations: Declaration[] = concatenate(leftProp.declarations, rightProp.declarations);
+                        const declarations: Declaration[] = concatUnique(leftProp.declarations, rightProp.declarations);
                         const flags = SymbolFlags.Property | (leftProp.flags & SymbolFlags.Optional);
                         const result = createSymbol(flags, leftProp.escapedName);
                         result.type = getUnionType([getTypeOfSymbol(leftProp), getTypeWithFacts(rightType, TypeFacts.NEUndefined)]);

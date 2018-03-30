@@ -121,9 +121,9 @@ function f6() {
 >x : Symbol(x, Decl(controlFlowArrayErrors.ts, 37, 7))
 
     x.push(99);  // Error
->x.push : Symbol(push, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>x.push : Symbol(push, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowArrayErrors.ts, 37, 7))
->push : Symbol(push, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>push : Symbol(push, Decl(lib.d.ts, --, --))
 }
 
 function f7() {

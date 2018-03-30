@@ -967,6 +967,20 @@ namespace ts {
         }
     }
 
+    export function addRangeUnique<T>(to: T[], from: ReadonlyArray<T> | undefined): void {
+        if (from) {
+            for (const em of from) {
+                pushIfUnique(to, em);
+            }
+        }
+    }
+
+    export function concatUnique<T>(array1: ReadonlyArray<T>, array2: ReadonlyArray<T>): T[] {
+        const res = array1.slice();
+        addRangeUnique(res, array2);
+        return res;
+    }
+
     /**
      * Unlike `pushIfUnique`, this can take `undefined` as an input, and returns a new array.
      */
