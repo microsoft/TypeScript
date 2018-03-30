@@ -507,6 +507,7 @@ namespace ts.server {
                 cancellationToken,
                 useSingleInferredProject,
                 useInferredProjectPerProjectRoot,
+                ignoreConfigFiles: syntaxOnly,
                 typingsInstaller: typingsInstaller || nullTypingsInstaller,
                 byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
@@ -929,6 +930,7 @@ namespace ts.server {
     const useInferredProjectPerProjectRoot = hasArgument("--useInferredProjectPerProjectRoot");
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
     const suppressDiagnosticEvents = hasArgument("--suppressDiagnosticEvents");
+    const syntaxOnly = hasArgument("--syntaxOnly");
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
 
     logger.info(`Starting TS Server`);
