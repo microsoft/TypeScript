@@ -26,6 +26,56 @@ function f3<A, B extends A>(a: Invariant<A>, b: Invariant<B>) {
     b = a;  // Error
 }
 
+// Extract<T, Function> is a T that is known to be a Function
+function isFunction<T>(value: T): value is Extract<T, Function> {
+    return typeof value === "function";
+}
+
+function getFunction<T>(item: T) {
+    if (isFunction(item)) {
+        return item;
+    }
+    throw new Error();
+}
+
+function f10<T>(x: T) {
+    if (isFunction(x)) {
+        const f: Function = x;
+        const t: T = x;
+    }
+}
+
+function f11(x: string | (() => string) | undefined) {
+    if (isFunction(x)) {
+        x();
+    }
+}
+
+function f12(x: string | (() => string) | undefined) {
+    const f = getFunction(x);  // () => string
+    f();
+}
+
+type Foo = { foo: string };
+type Bar = { bar: string };
+
+declare function fooBar(x: { foo: string, bar: string }): void;
+declare function fooBat(x: { foo: string, bat: string }): void;
+
+type Extract2<T, U, V> = T extends U ? T extends V ? T : never : never;
+
+function f20<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>) {
+    fooBar(x);
+    fooBar(y);
+    fooBar(z);
+}
+
+function f21<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>) {
+    fooBat(x);  // Error
+    fooBat(y);  // Error
+    fooBat(z);  // Error
+}
+
 // Repros from #22860
 
 class Opt<T> {
@@ -58,6 +108,18 @@ interface B1<T> extends A1<T> {
     boom: T extends any ? true : true
 }
 
+// Repro from #22899
+
+declare function toString1(value: object | Function): string ;
+declare function toString2(value: Function): string ;
+
+function foo<T>(value: T) {
+    if (isFunction(value)) {
+        toString1(value);
+        toString2(value);
+    }
+}
+
 
 //// [conditionalTypes2.js]
 "use strict";
@@ -72,6 +134,41 @@ function f2(a, b) {
 function f3(a, b) {
     a = b; // Error
     b = a; // Error
+}
+// Extract<T, Function> is a T that is known to be a Function
+function isFunction(value) {
+    return typeof value === "function";
+}
+function getFunction(item) {
+    if (isFunction(item)) {
+        return item;
+    }
+    throw new Error();
+}
+function f10(x) {
+    if (isFunction(x)) {
+        var f = x;
+        var t = x;
+    }
+}
+function f11(x) {
+    if (isFunction(x)) {
+        x();
+    }
+}
+function f12(x) {
+    var f = getFunction(x); // () => string
+    f();
+}
+function f20(x, y, z) {
+    fooBar(x);
+    fooBar(y);
+    fooBar(z);
+}
+function f21(x, y, z) {
+    fooBat(x); // Error
+    fooBat(y); // Error
+    fooBat(z); // Error
 }
 // Repros from #22860
 var Opt = /** @class */ (function () {
@@ -93,6 +190,12 @@ var Vector = /** @class */ (function () {
     };
     return Vector;
 }());
+function foo(value) {
+    if (isFunction(value)) {
+        toString1(value);
+        toString2(value);
+    }
+}
 
 
 //// [conditionalTypes2.d.ts]
@@ -108,6 +211,28 @@ interface Invariant<T> {
 declare function f1<A, B extends A>(a: Covariant<A>, b: Covariant<B>): void;
 declare function f2<A, B extends A>(a: Contravariant<A>, b: Contravariant<B>): void;
 declare function f3<A, B extends A>(a: Invariant<A>, b: Invariant<B>): void;
+declare function isFunction<T>(value: T): value is Extract<T, Function>;
+declare function getFunction<T>(item: T): Extract<T, Function>;
+declare function f10<T>(x: T): void;
+declare function f11(x: string | (() => string) | undefined): void;
+declare function f12(x: string | (() => string) | undefined): void;
+declare type Foo = {
+    foo: string;
+};
+declare type Bar = {
+    bar: string;
+};
+declare function fooBar(x: {
+    foo: string;
+    bar: string;
+}): void;
+declare function fooBat(x: {
+    foo: string;
+    bat: string;
+}): void;
+declare type Extract2<T, U, V> = T extends U ? T extends V ? T : never : never;
+declare function f20<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>): void;
+declare function f21<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>): void;
 declare class Opt<T> {
     toVector(): Vector<T>;
 }
@@ -126,3 +251,6 @@ interface B1<T> extends A1<T> {
     bat: B1<B1<T>>;
     boom: T extends any ? true : true;
 }
+declare function toString1(value: object | Function): string;
+declare function toString2(value: Function): string;
+declare function foo<T>(value: T): void;

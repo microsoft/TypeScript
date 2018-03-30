@@ -99,6 +99,199 @@ function f3<A, B extends A>(a: Invariant<A>, b: Invariant<B>) {
 >a : Invariant<A>
 }
 
+// Extract<T, Function> is a T that is known to be a Function
+function isFunction<T>(value: T): value is Extract<T, Function> {
+>isFunction : <T>(value: T) => value is Extract<T, Function>
+>T : T
+>value : T
+>T : T
+>value : any
+>Extract : Extract<T, U>
+>T : T
+>Function : Function
+
+    return typeof value === "function";
+>typeof value === "function" : boolean
+>typeof value : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>value : T
+>"function" : "function"
+}
+
+function getFunction<T>(item: T) {
+>getFunction : <T>(item: T) => Extract<T, Function>
+>T : T
+>item : T
+>T : T
+
+    if (isFunction(item)) {
+>isFunction(item) : boolean
+>isFunction : <T>(value: T) => value is Extract<T, Function>
+>item : T
+
+        return item;
+>item : Extract<T, Function>
+    }
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+function f10<T>(x: T) {
+>f10 : <T>(x: T) => void
+>T : T
+>x : T
+>T : T
+
+    if (isFunction(x)) {
+>isFunction(x) : boolean
+>isFunction : <T>(value: T) => value is Extract<T, Function>
+>x : T
+
+        const f: Function = x;
+>f : Function
+>Function : Function
+>x : Extract<T, Function>
+
+        const t: T = x;
+>t : T
+>T : T
+>x : Extract<T, Function>
+    }
+}
+
+function f11(x: string | (() => string) | undefined) {
+>f11 : (x: string | (() => string) | undefined) => void
+>x : string | (() => string) | undefined
+
+    if (isFunction(x)) {
+>isFunction(x) : boolean
+>isFunction : <T>(value: T) => value is Extract<T, Function>
+>x : string | (() => string) | undefined
+
+        x();
+>x() : string
+>x : () => string
+    }
+}
+
+function f12(x: string | (() => string) | undefined) {
+>f12 : (x: string | (() => string) | undefined) => void
+>x : string | (() => string) | undefined
+
+    const f = getFunction(x);  // () => string
+>f : () => string
+>getFunction(x) : () => string
+>getFunction : <T>(item: T) => Extract<T, Function>
+>x : string | (() => string) | undefined
+
+    f();
+>f() : string
+>f : () => string
+}
+
+type Foo = { foo: string };
+>Foo : Foo
+>foo : string
+
+type Bar = { bar: string };
+>Bar : Bar
+>bar : string
+
+declare function fooBar(x: { foo: string, bar: string }): void;
+>fooBar : (x: { foo: string; bar: string; }) => void
+>x : { foo: string; bar: string; }
+>foo : string
+>bar : string
+
+declare function fooBat(x: { foo: string, bat: string }): void;
+>fooBat : (x: { foo: string; bat: string; }) => void
+>x : { foo: string; bat: string; }
+>foo : string
+>bat : string
+
+type Extract2<T, U, V> = T extends U ? T extends V ? T : never : never;
+>Extract2 : Extract2<T, U, V>
+>T : T
+>U : U
+>V : V
+>T : T
+>U : U
+>T : T
+>V : V
+>T : T
+
+function f20<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>) {
+>f20 : <T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>) => void
+>T : T
+>x : Extract<Extract<T, Foo>, Bar>
+>Extract : Extract<T, U>
+>Extract : Extract<T, U>
+>T : T
+>Foo : Foo
+>Bar : Bar
+>y : Extract<T, Foo & Bar>
+>Extract : Extract<T, U>
+>T : T
+>Foo : Foo
+>Bar : Bar
+>z : Extract2<T, Foo, Bar>
+>Extract2 : Extract2<T, U, V>
+>T : T
+>Foo : Foo
+>Bar : Bar
+
+    fooBar(x);
+>fooBar(x) : void
+>fooBar : (x: { foo: string; bar: string; }) => void
+>x : Extract<Extract<T, Foo>, Bar>
+
+    fooBar(y);
+>fooBar(y) : void
+>fooBar : (x: { foo: string; bar: string; }) => void
+>y : Extract<T, Foo & Bar>
+
+    fooBar(z);
+>fooBar(z) : void
+>fooBar : (x: { foo: string; bar: string; }) => void
+>z : Extract2<T, Foo, Bar>
+}
+
+function f21<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>) {
+>f21 : <T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>) => void
+>T : T
+>x : Extract<Extract<T, Foo>, Bar>
+>Extract : Extract<T, U>
+>Extract : Extract<T, U>
+>T : T
+>Foo : Foo
+>Bar : Bar
+>y : Extract<T, Foo & Bar>
+>Extract : Extract<T, U>
+>T : T
+>Foo : Foo
+>Bar : Bar
+>z : Extract2<T, Foo, Bar>
+>Extract2 : Extract2<T, U, V>
+>T : T
+>Foo : Foo
+>Bar : Bar
+
+    fooBat(x);  // Error
+>fooBat(x) : void
+>fooBat : (x: { foo: string; bat: string; }) => void
+>x : Extract<Extract<T, Foo>, Bar>
+
+    fooBat(y);  // Error
+>fooBat(y) : void
+>fooBat : (x: { foo: string; bat: string; }) => void
+>y : Extract<T, Foo & Bar>
+
+    fooBat(z);  // Error
+>fooBat(z) : void
+>fooBat : (x: { foo: string; bat: string; }) => void
+>z : Extract2<T, Foo, Bar>
+}
+
 // Repros from #22860
 
 class Opt<T> {
@@ -214,5 +407,40 @@ interface B1<T> extends A1<T> {
 >T : T
 >true : true
 >true : true
+}
+
+// Repro from #22899
+
+declare function toString1(value: object | Function): string ;
+>toString1 : (value: object | Function) => string
+>value : object | Function
+>Function : Function
+
+declare function toString2(value: Function): string ;
+>toString2 : (value: Function) => string
+>value : Function
+>Function : Function
+
+function foo<T>(value: T) {
+>foo : <T>(value: T) => void
+>T : T
+>value : T
+>T : T
+
+    if (isFunction(value)) {
+>isFunction(value) : boolean
+>isFunction : <T>(value: T) => value is Extract<T, Function>
+>value : T
+
+        toString1(value);
+>toString1(value) : string
+>toString1 : (value: object | Function) => string
+>value : Extract<T, Function>
+
+        toString2(value);
+>toString2(value) : string
+>toString2 : (value: Function) => string
+>value : Extract<T, Function>
+    }
 }
 
