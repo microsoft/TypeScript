@@ -46,7 +46,7 @@ namespace ts.codefix {
         },
     });
 
-    interface Info { token: Identifier; classDeclaration: ClassLikeDeclaration; makeStatic: boolean; classDeclarationSourceFile: SourceFile; inJs: boolean; call: CallExpression; }
+    interface Info { token: Identifier; classDeclaration: ClassLikeDeclaration; makeStatic: boolean; classDeclarationSourceFile: SourceFile; inJs: boolean; call: CallExpression | undefined; }
     function getInfo(tokenSourceFile: SourceFile, tokenPos: number, checker: TypeChecker): Info | undefined {
         // The identifier of the missing property. eg:
         // this.missing = 1;
@@ -56,43 +56,20 @@ namespace ts.codefix {
             return undefined;
         }
 
-        const classAndMakeStatic = getClassAndMakeStatic(token, checker);
-        if (!classAndMakeStatic) {
-            return undefined;
-        }
-        const { classDeclaration, makeStatic } = classAndMakeStatic;
+        const { parent } = token;
+        if (!isPropertyAccessExpression(parent)) return undefined;
+
+        const leftExpressionType = skipConstraint(checker.getTypeAtLocation(parent.expression));
+        const { symbol } = leftExpressionType;
+        const classDeclaration = symbol && symbol.declarations && find(symbol.declarations, isClassLike);
+        if (!classDeclaration) return undefined;
+
+        const makeStatic = (leftExpressionType as TypeReference).target !== checker.getDeclaredTypeOfSymbol(symbol);
         const classDeclarationSourceFile = classDeclaration.getSourceFile();
-        const inJs = isInJavaScriptFile(classDeclarationSourceFile);
-        const call = tryCast(token.parent.parent, isCallExpression);
+        const inJs = isSourceFileJavaScript(classDeclarationSourceFile);
+        const call = tryCast(parent.parent, isCallExpression);
 
         return { token, classDeclaration, makeStatic, classDeclarationSourceFile, inJs, call };
-    }
-
-    function getClassAndMakeStatic(token: Node, checker: TypeChecker): { readonly classDeclaration: ClassLikeDeclaration, readonly makeStatic: boolean } | undefined {
-        const { parent } = token;
-        if (!isPropertyAccessExpression(parent)) {
-            return undefined;
-        }
-
-        if (parent.expression.kind === SyntaxKind.ThisKeyword) {
-            const containingClassMemberDeclaration = getThisContainer(token, /*includeArrowFunctions*/ false);
-            if (!isClassElement(containingClassMemberDeclaration)) {
-                return undefined;
-            }
-            const classDeclaration = containingClassMemberDeclaration.parent;
-            // Property accesses on `this` in a static method are accesses of a static member.
-            return isClassLike(classDeclaration) ? { classDeclaration, makeStatic: hasModifier(containingClassMemberDeclaration, ModifierFlags.Static) } : undefined;
-        }
-        else {
-            const leftExpressionType = checker.getTypeAtLocation(parent.expression);
-            const { symbol } = leftExpressionType;
-            if (!(symbol && leftExpressionType.flags & TypeFlags.Object && symbol.flags & SymbolFlags.Class)) {
-                return undefined;
-            }
-            const classDeclaration = cast(first(symbol.declarations), isClassLike);
-            // The expression is a class symbol but the type is not the instance-side.
-            return { classDeclaration, makeStatic: leftExpressionType !== checker.getDeclaredTypeOfSymbol(symbol) };
-        }
     }
 
     function getActionsForAddMissingMemberInJavaScriptFile(context: CodeFixContext, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, tokenName: string, makeStatic: boolean): CodeFixAction | undefined {

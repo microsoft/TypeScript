@@ -462,13 +462,12 @@ namespace ts.Completions {
         return type && { kind: StringLiteralCompletionKind.Properties, symbols: type.getApparentProperties(), hasIndexSignature: hasIndexSignature(type) };
     }
 
-    function getStringLiteralTypes(type: Type, typeChecker: TypeChecker, uniques = createMap<true>()): ReadonlyArray<StringLiteralType> {
-        if (type && type.flags & TypeFlags.TypeParameter) {
-            type = type.getConstraint();
-        }
-        return type && type.flags & TypeFlags.Union
+    function getStringLiteralTypes(type: Type | undefined, typeChecker: TypeChecker, uniques = createMap<true>()): ReadonlyArray<StringLiteralType> | undefined {
+        if (!type) return emptyArray;
+        type = skipConstraint(type);
+        return type.flags & TypeFlags.Union
             ? flatMap((<UnionType>type).types, t => getStringLiteralTypes(t, typeChecker, uniques))
-            : type && type.flags & TypeFlags.StringLiteral && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, (type as StringLiteralType).value)
+            : type.flags & TypeFlags.StringLiteral && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, (type as StringLiteralType).value)
             ? [type as StringLiteralType]
             : emptyArray;
     }
@@ -1567,43 +1566,34 @@ namespace ts.Completions {
             completionKind = CompletionKind.MemberLike;
             // Declaring new property/method/accessor
             isNewIdentifierLocation = true;
-            // Has keywords for class elements
             keywordFilters = isClassLike(decl) ? KeywordCompletionFilters.ClassElementKeywords : KeywordCompletionFilters.InterfaceElementKeywords;
 
             // If you're in an interface you don't want to repeat things from super-interface. So just stop here.
             if (!isClassLike(decl)) return GlobalsSearch.Success;
 
-            const baseTypeNode = getClassExtendsHeritageClauseElement(decl);
-            const implementsTypeNodes = getClassImplementsHeritageClauseElements(decl);
-            if (!baseTypeNode && !implementsTypeNodes) return GlobalsSearch.Success;
-
             const classElement = contextToken.parent;
-            const classElementModifierFlags = (isClassElement(classElement) ? getModifierFlags(classElement) : ModifierFlags.None)
-                // If this context token is not something we are editing now, consider if this would lead to be modifier
-                | (!isCurrentlyEditingNode(contextToken) ? modifierToFlag(keywordForNode(contextToken)) : ModifierFlags.None);
-
-            // No member list for private methods
-            if (classElementModifierFlags & ModifierFlags.Private) return GlobalsSearch.Success;
-
-            let baseClassTypeToGetPropertiesFrom: Type | undefined;
-            if (baseTypeNode) {
-                baseClassTypeToGetPropertiesFrom = typeChecker.getTypeAtLocation(baseTypeNode);
-                if (classElementModifierFlags & ModifierFlags.Static) {
-                    // Use static class to get property symbols from
-                    baseClassTypeToGetPropertiesFrom = typeChecker.getTypeOfSymbolAtLocation(baseClassTypeToGetPropertiesFrom.symbol, decl);
+            let classElementModifierFlags = isClassElement(classElement) && getModifierFlags(classElement);
+            // If this is context token is not something we are editing now, consider if this would lead to be modifier
+            if (contextToken.kind === SyntaxKind.Identifier && !isCurrentlyEditingNode(contextToken)) {
+                switch (contextToken.getText()) {
+                    case "private":
+                        classElementModifierFlags = classElementModifierFlags | ModifierFlags.Private;
+                        break;
+                    case "static":
+                        classElementModifierFlags = classElementModifierFlags | ModifierFlags.Static;
+                        break;
                 }
             }
 
-            const implementedInterfaceTypePropertySymbols = !implementsTypeNodes || (classElementModifierFlags & ModifierFlags.Static)
-                ? emptyArray
-                : flatMap(implementsTypeNodes, typeNode => typeChecker.getPropertiesOfType(typeChecker.getTypeAtLocation(typeNode)));
-
-            // List of property symbols of base type that are not private and already implemented
-            symbols = filterClassMembersList(
-                baseClassTypeToGetPropertiesFrom ? typeChecker.getPropertiesOfType(baseClassTypeToGetPropertiesFrom) : emptyArray,
-                implementedInterfaceTypePropertySymbols,
-                decl.members,
-                classElementModifierFlags);
+            // No member list for private methods
+            if (!(classElementModifierFlags & ModifierFlags.Private)) {
+                // List of property symbols of base type that are not private and already implemented
+                const baseSymbols = flatMap(getAllSuperTypeNodes(decl), baseTypeNode => {
+                    const type = typeChecker.getTypeAtLocation(baseTypeNode);
+                    return typeChecker.getPropertiesOfType(classElementModifierFlags & ModifierFlags.Static ? typeChecker.getTypeOfSymbolAtLocation(type.symbol, decl) : type);
+                });
+                symbols = filterClassMembersList(baseSymbols, decl.members, classElementModifierFlags);
+            }
 
             return GlobalsSearch.Success;
         }
@@ -1971,12 +1961,8 @@ namespace ts.Completions {
          *
          * @returns Symbols to be suggested in an class element depending on existing memebers and symbol flags
          */
-        function filterClassMembersList(
-            baseSymbols: ReadonlyArray<Symbol>,
-            implementingTypeSymbols: ReadonlyArray<Symbol>,
-            existingMembers: ReadonlyArray<ClassElement>,
-            currentClassElementModifierFlags: ModifierFlags): Symbol[] {
-            const existingMemberNames = createUnderscoreEscapedMap<boolean>();
+        function filterClassMembersList(baseSymbols: ReadonlyArray<Symbol>, existingMembers: ReadonlyArray<ClassElement>, currentClassElementModifierFlags: ModifierFlags): Symbol[] {
+            const existingMemberNames = createUnderscoreEscapedMap<true>();
             for (const m of existingMembers) {
                 // Ignore omitted expressions for missing members
                 if (m.kind !== SyntaxKind.PropertyDeclaration &&
@@ -1997,10 +1983,7 @@ namespace ts.Completions {
                 }
 
                 // do not filter it out if the static presence doesnt match
-                const mIsStatic = hasModifier(m, ModifierFlags.Static);
-                const currentElementIsStatic = !!(currentClassElementModifierFlags & ModifierFlags.Static);
-                if ((mIsStatic && !currentElementIsStatic) ||
-                    (!mIsStatic && currentElementIsStatic)) {
+                if (hasModifier(m, ModifierFlags.Static) !== !!(currentClassElementModifierFlags & ModifierFlags.Static)) {
                     continue;
                 }
 
@@ -2010,24 +1993,10 @@ namespace ts.Completions {
                 }
             }
 
-            const result: Symbol[] = [];
-            addPropertySymbols(baseSymbols, ModifierFlags.Private);
-            addPropertySymbols(implementingTypeSymbols, ModifierFlags.NonPublicAccessibilityModifier);
-            return result;
-
-            function addPropertySymbols(properties: ReadonlyArray<Symbol>, inValidModifierFlags: ModifierFlags) {
-                for (const property of properties) {
-                    if (isValidProperty(property, inValidModifierFlags)) {
-                        result.push(property);
-                    }
-                }
-            }
-
-            function isValidProperty(propertySymbol: Symbol, inValidModifierFlags: ModifierFlags) {
-                return !existingMemberNames.get(propertySymbol.escapedName) &&
-                    propertySymbol.getDeclarations() &&
-                    !(getDeclarationModifierFlagsFromSymbol(propertySymbol) & inValidModifierFlags);
-            }
+            return baseSymbols.filter(propertySymbol =>
+                !existingMemberNames.has(propertySymbol.escapedName) &&
+                    !!propertySymbol.declarations &&
+                    !(getDeclarationModifierFlagsFromSymbol(propertySymbol) & ModifierFlags.Private));
         }
 
         /**

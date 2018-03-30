@@ -568,7 +568,7 @@ namespace ts {
             writeSpace();
             writeKeyword("in");
             writeSpace();
-            emit(node.constraint);
+            emitIfPresent(node.constraint);
         }
 
         function pipelineEmitUnspecified(node: Node): void {
@@ -1046,7 +1046,7 @@ namespace ts {
             }
             emitIfPresent(node.questionToken);
             if (node.parent && node.parent.kind === SyntaxKind.JSDocFunctionType && !node.name) {
-                emit(node.type);
+                emitIfPresent(node.type);
             }
             else {
                 emitTypeAnnotation(node.type);
@@ -1174,14 +1174,14 @@ namespace ts {
             writeSpace();
             writePunctuation("=>");
             writeSpace();
-            emit(node.type);
+            emitIfPresent(node.type);
         }
 
         function emitJSDocFunctionType(node: JSDocFunctionType) {
             write("function");
             emitParameters(node, node.parameters);
             write(":");
-            emit(node.type);
+            emitIfPresent(node.type);
         }
 
 
@@ -1208,7 +1208,7 @@ namespace ts {
             writeSpace();
             writePunctuation("=>");
             writeSpace();
-            emit(node.type);
+            emitIfPresent(node.type);
         }
 
         function emitTypeQuery(node: TypeQueryNode) {
@@ -1322,7 +1322,7 @@ namespace ts {
             }
             writePunctuation(":");
             writeSpace();
-            emit(node.type);
+            emitIfPresent(node.type);
             writeSemicolon();
             if (emitFlags & EmitFlags.SingleLine) {
                 writeSpace();
@@ -1593,7 +1593,7 @@ namespace ts {
 
         function emitYieldExpression(node: YieldExpression) {
             emitTokenWithComment(SyntaxKind.YieldKeyword, node.pos, writeKeyword, node);
-            emit(node.asteriskToken);
+            emitIfPresent(node.asteriskToken);
             emitExpressionWithLeadingSpace(node.expression);
         }
 
@@ -2156,12 +2156,12 @@ namespace ts {
         }
 
         function emitImportClause(node: ImportClause) {
-            emit(node.name);
+            emitIfPresent(node.name);
             if (node.name && node.namedBindings) {
                 emitTokenWithComment(SyntaxKind.CommaToken, node.name.end, writePunctuation, node);
                 writeSpace();
             }
-            emit(node.namedBindings);
+            emitIfPresent(node.namedBindings);
         }
 
         function emitNamespaceImport(node: NamespaceImport) {
@@ -2473,14 +2473,33 @@ namespace ts {
         }
 
         function emitSyntheticTripleSlashReferencesIfNeeded(node: Bundle) {
-            emitTripleSlashDirectives(node.syntheticFileReferences || [], node.syntheticTypeReferences || []);
+            emitTripleSlashDirectives(node.hasNoDefaultLib, node.syntheticFileReferences || [], node.syntheticTypeReferences || []);
         }
 
         function emitTripleSlashDirectivesIfNeeded(node: SourceFile) {
-            if (node.isDeclarationFile) emitTripleSlashDirectives(node.referencedFiles, node.typeReferenceDirectives);
+            if (node.isDeclarationFile) emitTripleSlashDirectives(node.hasNoDefaultLib, node.referencedFiles, node.typeReferenceDirectives);
         }
 
-        function emitTripleSlashDirectives(files: ReadonlyArray<FileReference>, types: ReadonlyArray<FileReference>) {
+        function emitTripleSlashDirectives(hasNoDefaultLib: boolean, files: ReadonlyArray<FileReference>, types: ReadonlyArray<FileReference>) {
+            if (hasNoDefaultLib) {
+                write(`/// <reference no-default-lib="true"/>`);
+                writeLine();
+            }
+            if (currentSourceFile && currentSourceFile.moduleName) {
+                write(`/// <amd-module name="${currentSourceFile.moduleName}" />`);
+                writeLine();
+            }
+            if (currentSourceFile && currentSourceFile.amdDependencies) {
+                for (const dep of currentSourceFile.amdDependencies) {
+                    if (dep.name) {
+                        write(`/// <amd-dependency name="${dep.name}" path="${dep.path}" />`);
+                    }
+                    else {
+                        write(`/// <amd-dependency path="${dep.path}" />`);
+                    }
+                    writeLine();
+                }
+            }
             for (const directive of files) {
                 write(`/// <reference path="${directive.fileName}" />`);
                 writeLine();
