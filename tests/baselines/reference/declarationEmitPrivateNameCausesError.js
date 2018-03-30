@@ -38,3 +38,14 @@ function ignoreExtraVariables(ctor) {
     var _b, _a;
 }
 exports.ignoreExtraVariables = ignoreExtraVariables;
+
+
+//// [file.d.ts]
+declare const IGNORE_EXTRA_VARIABLES: unique symbol;
+export declare function ignoreExtraVariables<CtorT extends {
+    new (...args: any[]): {};
+}>(ctor: CtorT): {
+    new (...args: any[]): {
+        [IGNORE_EXTRA_VARIABLES]: boolean;
+    };
+} & CtorT;
