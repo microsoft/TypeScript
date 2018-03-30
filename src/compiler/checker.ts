@@ -8453,9 +8453,9 @@ namespace ts {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 if (node.isTypeOf && node.typeArguments) { // Only the non-typeof form can make use of type arguments
-                    error(node, Diagnostics.type_arguments_can_only_be_used_in_a_ts_file);
+                    error(node, Diagnostics.Type_arguments_cannot_be_used_here);
                     links.resolvedSymbol = unknownSymbol;
-                    return links.resolvedType = anyType;
+                    return links.resolvedType = unknownType;
                 }
                 const argumentType = getTypeFromTypeNode(node.argument);
                 const targetMeaning = node.isTypeOf ? SymbolFlags.Value : SymbolFlags.Type;
@@ -8463,21 +8463,15 @@ namespace ts {
                 if (!argumentType || !(argumentType.flags & TypeFlags.StringLiteral)) {
                     error(node.argument, Diagnostics.Import_specifier_must_be_a_string_literal_type_but_here_is_0, argumentType ? typeToString(argumentType) : "undefined");
                     links.resolvedSymbol = unknownSymbol;
-                    return links.resolvedType = anyType;
+                    return links.resolvedType = unknownType;
                 }
                 const moduleName = (argumentType as StringLiteralType).value;
                 const innerModuleSymbol = resolveExternalModule(node, moduleName, Diagnostics.Cannot_find_module_0, node, /*isForAugmentation*/ false);
                 if (!innerModuleSymbol) {
-                    error(node, Diagnostics.Cannot_find_module_0, moduleName);
                     links.resolvedSymbol = unknownSymbol;
-                    return links.resolvedType = anyType;
+                    return links.resolvedType = unknownType;
                 }
                 const moduleSymbol = resolveExternalModuleSymbol(innerModuleSymbol, /*dontResolveAlias*/ false);
-                if (!moduleSymbol) {
-                    error(node, Diagnostics.Cannot_find_module_0, moduleName);
-                    links.resolvedSymbol = unknownSymbol;
-                    return links.resolvedType = anyType;
-                }
                 if (node.qualifier) {
                     const nameStack: Identifier[] = [];
                     let currentNamespace = moduleSymbol;
@@ -8497,7 +8491,7 @@ namespace ts {
                         const next = getSymbol(getExportsOfSymbol(getMergedSymbol(resolveSymbol(currentNamespace))), current.escapedText, meaning);
                         if (!next) {
                             error(current, Diagnostics.Namespace_0_has_no_exported_member_1, getFullyQualifiedName(currentNamespace), declarationNameToString(current));
-                            return links.resolvedType = anyType;
+                            return links.resolvedType = unknownType;
                         }
                         getNodeLinks(current).resolvedSymbol = next;
                         getNodeLinks(current.parent).resolvedSymbol = next;
@@ -8512,7 +8506,7 @@ namespace ts {
                     else {
                         error(node, targetMeaning === SymbolFlags.Value ? Diagnostics.Module_0_does_not_refer_to_a_value_but_is_used_as_a_value_here : Diagnostics.Module_0_does_not_refer_to_a_type_but_is_used_as_a_type_here, moduleName);
                         links.resolvedSymbol = unknownSymbol;
-                        links.resolvedType = anyType;
+                        links.resolvedType = unknownType;
                     }
                 }
             }
