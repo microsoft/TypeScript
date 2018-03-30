@@ -28,6 +28,56 @@ function f3<A, B extends A>(a: Invariant<A>, b: Invariant<B>) {
     b = a;  // Error
 }
 
+// Extract<T, Function> is a T that is known to be a Function
+function isFunction<T>(value: T): value is Extract<T, Function> {
+    return typeof value === "function";
+}
+
+function getFunction<T>(item: T) {
+    if (isFunction(item)) {
+        return item;
+    }
+    throw new Error();
+}
+
+function f10<T>(x: T) {
+    if (isFunction(x)) {
+        const f: Function = x;
+        const t: T = x;
+    }
+}
+
+function f11(x: string | (() => string) | undefined) {
+    if (isFunction(x)) {
+        x();
+    }
+}
+
+function f12(x: string | (() => string) | undefined) {
+    const f = getFunction(x);  // () => string
+    f();
+}
+
+type Foo = { foo: string };
+type Bar = { bar: string };
+
+declare function fooBar(x: { foo: string, bar: string }): void;
+declare function fooBat(x: { foo: string, bat: string }): void;
+
+type Extract2<T, U, V> = T extends U ? T extends V ? T : never : never;
+
+function f20<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>) {
+    fooBar(x);
+    fooBar(y);
+    fooBar(z);
+}
+
+function f21<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>) {
+    fooBat(x);  // Error
+    fooBat(y);  // Error
+    fooBat(z);  // Error
+}
+
 // Repros from #22860
 
 class Opt<T> {
@@ -58,4 +108,16 @@ interface A1<T> {
 interface B1<T> extends A1<T> {
     bat: B1<B1<T>>;
     boom: T extends any ? true : true
+}
+
+// Repro from #22899
+
+declare function toString1(value: object | Function): string ;
+declare function toString2(value: Function): string ;
+
+function foo<T>(value: T) {
+    if (isFunction(value)) {
+        toString1(value);
+        toString2(value);
+    }
 }
