@@ -25198,14 +25198,14 @@ namespace ts {
                     return success;
                 }
             }
+            else if (!isPropertyAccessExpression(entityName) && isInRightSideOfImportOrExportAssignment(entityName)) {
+                // Since we already checked for ExportAssignment, this really could only be an Import
+                const importEqualsDeclaration = getAncestor(entityName, SyntaxKind.ImportEqualsDeclaration);
+                Debug.assert(importEqualsDeclaration !== undefined);
+                return getSymbolOfPartOfRightHandSideOfImportEquals(entityName, /*dontResolveAlias*/ true);
+            }
 
             if (!isPropertyAccessExpression(entityName)) {
-                if (isInRightSideOfImportOrExportAssignment(entityName)) {
-                    // Since we already checked for ExportAssignment, this really could only be an Import
-                    const importEqualsDeclaration = getAncestor(entityName, SyntaxKind.ImportEqualsDeclaration);
-                    Debug.assert(importEqualsDeclaration !== undefined);
-                    return getSymbolOfPartOfRightHandSideOfImportEquals(entityName, /*dontResolveAlias*/ true);
-                }
                 const possibleImportNode = isImportTypeQualifierPart(entityName);
                 if (possibleImportNode) {
                     getTypeFromTypeNode(possibleImportNode);
