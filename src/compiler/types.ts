@@ -2584,7 +2584,7 @@ namespace ts {
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
-        /* @internal */ resolvedModules: Map<ResolvedModuleFull>;
+        /* @internal */ resolvedModules: Map<ResolvedModuleFull | undefined>;
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         /* @internal */ imports: ReadonlyArray<StringLiteralLike>;
         // Identifier only if `declare global`
