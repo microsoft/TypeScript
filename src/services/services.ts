@@ -347,30 +347,10 @@ namespace ts {
         }
 
         getDocumentationComment(checker: TypeChecker | undefined): SymbolDisplayPart[] {
-            if (this.documentationComment === undefined) {
-                if (this.declarations) {
-                    this.documentationComment = JsDoc.getJsDocCommentsFromDeclarations(this.declarations);
-
-                    if (this.documentationComment.length === 0 || this.declarations.some(hasJSDocInheritDocTag)) {
-                        if (checker) {
-                            for (const declaration of this.declarations) {
-                                const inheritedDocs = findInheritedJSDocComments(declaration, this.getName(), checker);
-                                if (inheritedDocs.length > 0) {
-                                    if (this.documentationComment.length > 0) {
-                                        inheritedDocs.push(lineBreakPart());
-                                    }
-                                    this.documentationComment = concatenate(inheritedDocs, this.documentationComment);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-                else {
-                    this.documentationComment = [];
-                }
+            if (!this.documentationComment) {
+                this.documentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding inherited docs
+                this.documentationComment = getDocumentationComment(this.declarations, checker);
             }
-
             return this.documentationComment;
         }
 
@@ -504,27 +484,7 @@ namespace ts {
         }
 
         getDocumentationComment(): SymbolDisplayPart[] {
-            if (this.documentationComment === undefined) {
-                if (this.declaration) {
-                    this.documentationComment = JsDoc.getJsDocCommentsFromDeclarations([this.declaration]);
-
-                    if (this.documentationComment.length === 0 || hasJSDocInheritDocTag(this.declaration)) {
-                        const inheritedDocs = findInheritedJSDocComments(this.declaration, this.declaration.symbol.getName(), this.checker);
-                        if (this.documentationComment.length > 0) {
-                            inheritedDocs.push(lineBreakPart());
-                        }
-                        this.documentationComment = concatenate(
-                            inheritedDocs,
-                            this.documentationComment
-                        );
-                    }
-                }
-                else {
-                    this.documentationComment = [];
-                }
-            }
-
-            return this.documentationComment;
+            return this.documentationComment || (this.documentationComment = getDocumentationComment(singleElementArray(this.declaration), this.checker));
         }
 
         getJsDocTags(): JSDocTagInfo[] {
@@ -545,6 +505,20 @@ namespace ts {
         return getJSDocTags(node).some(tag => tag.tagName.text === "inheritDoc");
     }
 
+    function getDocumentationComment(declarations: ReadonlyArray<Declaration> | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
+        if (!declarations) return emptyArray;
+
+        let doc = JsDoc.getJsDocCommentsFromDeclarations(declarations);
+        if (doc.length === 0 || declarations.some(hasJSDocInheritDocTag)) {
+            for (const declaration of declarations) {
+                const inheritedDocs = findInheritedJSDocComments(declaration, declaration.symbol.name, checker);
+                // TODO: GH#16312 Return a ReadonlyArray, avoid copying inheritedDocs
+                if (inheritedDocs) doc = doc.length === 0 ? inheritedDocs.slice() : inheritedDocs.concat(lineBreakPart(), doc);
+            }
+        }
+        return doc;
+    }
+
     /**
      * Attempts to find JSDoc comments for possibly-inherited properties.  Checks superclasses then traverses
      * implemented interfaces until a symbol is found with the same name and with documentation.
@@ -553,23 +527,12 @@ namespace ts {
      * @param typeChecker A TypeChecker, used to find inherited properties.
      * @returns A filled array of documentation comments if any were found, otherwise an empty array.
      */
-    function findInheritedJSDocComments(declaration: Declaration, propertyName: string, typeChecker: TypeChecker): SymbolDisplayPart[] {
-        let foundDocs = false;
-        return flatMap(declaration.parent ? getAllSuperTypeNodes(declaration.parent) : emptyArray, superTypeNode => {
-            if (foundDocs) {
-                return emptyArray;
-            }
+    function findInheritedJSDocComments(declaration: Declaration, propertyName: string, typeChecker: TypeChecker): ReadonlyArray<SymbolDisplayPart> | undefined {
+        return firstDefined(declaration.parent ? getAllSuperTypeNodes(declaration.parent) : emptyArray, superTypeNode => {
             const superType = typeChecker.getTypeAtLocation(superTypeNode);
-            if (!superType) {
-                return emptyArray;
-            }
-            const baseProperty = typeChecker.getPropertyOfType(superType, propertyName);
-            if (!baseProperty) {
-                return emptyArray;
-            }
-            const inheritedDocs = baseProperty.getDocumentationComment(typeChecker);
-            foundDocs = inheritedDocs.length > 0;
-            return inheritedDocs;
+            const baseProperty = superType && typeChecker.getPropertyOfType(superType, propertyName);
+            const inheritedDocs = baseProperty && baseProperty.getDocumentationComment(typeChecker);
+            return inheritedDocs && inheritedDocs.length ? inheritedDocs : undefined;
         });
     }
 
