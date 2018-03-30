@@ -816,7 +816,15 @@ interface MediaKeySystemMediaCapability {
 
 interface MediaStreamConstraints {
     audio?: boolean | MediaTrackConstraints;
-    video?: boolean | MediaTrackConstraints;
+    video?: boolean | MediaTrackConstraints | MediaTrackMandatoryConstraints;
+}
+                          
+interface MediaTrackMandatoryConstraints extends MediaTrackMandatoryConstraintsSet {
+    advanced?: MediaTrackMandatoryConstraintsSet[];
+}
+
+interface MediaTrackMandatoryConstraintsSet {
+    mandatory?: object;
 }
 
 interface MediaStreamErrorEventInit extends EventInit {
