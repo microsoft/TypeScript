@@ -572,7 +572,7 @@ namespace ts {
         public languageVariant: LanguageVariant;
         public identifiers: Map<string>;
         public nameTable: UnderscoreEscapedMap<number>;
-        public resolvedModules: Map<ResolvedModuleState>;
+        public resolvedModules: Map<ResolvedModuleFull>;
         public resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         public imports: ReadonlyArray<StringLiteralLike>;
         public moduleAugmentations: StringLiteral[];

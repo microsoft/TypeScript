@@ -323,8 +323,7 @@ namespace ts.codefix {
      */
     function getAllModulePaths(program: Program, { fileName }: SourceFile): ReadonlyArray<string> {
         const symlinks = mapDefined(program.getSourceFiles(), sf =>
-            sf.resolvedModules && firstDefinedIterator(sf.resolvedModules.values(), state => {
-                const res = getResolvedModuleFromState(state);
+            sf.resolvedModules && firstDefinedIterator(sf.resolvedModules.values(), res => {
                 return res && res.resolvedFileName === fileName ? res.originalPath : undefined;
             }));
         return symlinks.length === 0 ? [fileName] : symlinks;

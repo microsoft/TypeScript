@@ -674,8 +674,7 @@ namespace ts {
             sourceFileToPackageName,
             redirectTargetsSet,
             isEmittedFile,
-            getConfigFileParsingDiagnostics,
-            resolveModuleName: resolveModuleNamesWorker
+            getConfigFileParsingDiagnostics
         };
 
         verifyCompilerOptions();
@@ -749,7 +748,7 @@ namespace ts {
                 const result: ResolvedModuleFull[] = [];
                 for (const moduleName of moduleNames) {
                     const resolvedModule = file.resolvedModules.get(moduleName);
-                    result.push(getResolvedModuleFromState(resolvedModule));
+                    result.push(resolvedModule);
                 }
                 return result;
             }
@@ -778,7 +777,7 @@ namespace ts {
                 const moduleName = moduleNames[i];
                 // If the source file is unchanged and doesnt have invalidated resolution, reuse the module resolutions
                 if (file === oldSourceFile && !hasInvalidatedResolution(oldSourceFile.path)) {
-                    const oldResolvedModule = getResolvedModuleFromState(oldSourceFile && oldSourceFile.resolvedModules.get(moduleName));
+                    const oldResolvedModule = oldSourceFile && oldSourceFile.resolvedModules.get(moduleName);
                     if (oldResolvedModule) {
                         if (isTraceEnabled(options, host)) {
                             trace(host, Diagnostics.Reusing_resolution_of_module_0_to_file_1_from_old_program, moduleName, containingFile);
@@ -844,7 +843,7 @@ namespace ts {
             // If we change our policy of rechecking failed lookups on each program create,
             // we should adjust the value returned here.
             function moduleNameResolvesToAmbientModuleInNonModifiedFile(moduleName: string, oldProgramState: OldProgramState): boolean {
-                const resolutionToFile = getResolvedModuleFromState(getResolvedModule(oldProgramState.oldSourceFile, moduleName));
+                const resolutionToFile = getResolvedModule(oldProgramState.oldSourceFile, moduleName);
                 const resolvedFile = resolutionToFile && oldProgramState.program && oldProgramState.program.getSourceFile(resolutionToFile.resolvedFileName);
                 if (resolutionToFile && resolvedFile && !resolvedFile.externalModuleIndicator) {
                     // In the old program, we resolved to an ambient module that was in the same
@@ -1027,10 +1026,10 @@ namespace ts {
                     const oldProgramState: OldProgramState = { program: oldProgram, oldSourceFile, modifiedFilePaths };
                     const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFilePath, newSourceFile, oldProgramState);
                     // ensure that module resolution results are still correct
-                    const resolutionsChanged = hasChangesInResolutions(moduleNames, resolutions, oldSourceFile.resolvedModules, moduleResolutionIsEqualTo, getResolvedModuleFromState);
+                    const resolutionsChanged = hasChangesInResolutions(moduleNames, resolutions, oldSourceFile.resolvedModules, moduleResolutionIsEqualTo);
                     if (resolutionsChanged) {
                         oldProgram.structureIsReused = StructureIsReused.SafeModules;
-                        newSourceFile.resolvedModules = zipToMap(moduleNames, map(resolutions, r => ({ tag: "success" as "success", data: r })));
+                        newSourceFile.resolvedModules = zipToMap(moduleNames, resolutions);
                     }
                     else {
                         newSourceFile.resolvedModules = oldSourceFile.resolvedModules;
@@ -1688,11 +1687,18 @@ namespace ts {
                     imports = append(imports, node.arguments[0] as StringLiteralLike);
                 }
                 else if (isLiteralImportTypeNode(node)) {
-                    (imports || (imports = [])).push(node.argument.literal);
+                    imports = append(imports, node.argument.literal);
                 }
                 else {
-                    forEachChild(node, collectDynamicImportOrRequireCalls);
+                    collectDynamicImportOrRequireCallsForEachChild(node);
+                    if (hasJSDocNodes(node)) {
+                        forEach(node.jsDoc, collectDynamicImportOrRequireCallsForEachChild);
+                    }
                 }
+            }
+
+            function collectDynamicImportOrRequireCallsForEachChild(node: Node) {
+                forEachChild(node, collectDynamicImportOrRequireCalls);
             }
         }
 

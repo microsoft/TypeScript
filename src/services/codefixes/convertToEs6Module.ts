@@ -19,7 +19,7 @@ namespace ts.codefix {
 
     function fixImportOfModuleExports(importingFile: SourceFile, exportingFile: SourceFile, changes: textChanges.ChangeTracker) {
         for (const moduleSpecifier of importingFile.imports) {
-            const imported = getResolvedModuleFromState(getResolvedModule(importingFile, moduleSpecifier.text));
+            const imported = getResolvedModule(importingFile, moduleSpecifier.text);
             if (!imported || imported.resolvedFileName !== exportingFile.fileName) {
                 continue;
             }

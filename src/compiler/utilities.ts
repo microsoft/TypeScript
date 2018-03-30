@@ -83,21 +83,16 @@ namespace ts {
         return node.end - node.pos;
     }
 
-    export function getResolvedModule(sourceFile: SourceFile, moduleNameText: string): ResolvedModuleState {
+    export function getResolvedModule(sourceFile: SourceFile, moduleNameText: string): ResolvedModuleFull {
         return sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules.get(moduleNameText);
     }
 
-    export function getResolvedModuleFromState(state: ResolvedModuleState): ResolvedModuleFull | undefined {
-        return state && state.tag === "success" ? state.data : undefined;
-    }
-
-    const failedLookup: { tag: "fail" } = { tag: "fail" };
     export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull): void {
         if (!sourceFile.resolvedModules) {
-            sourceFile.resolvedModules = createMap<ResolvedModuleState>();
+            sourceFile.resolvedModules = createMap<ResolvedModuleFull>();
         }
 
-        sourceFile.resolvedModules.set(moduleNameText, resolvedModule ? { tag: "success", data: resolvedModule } : failedLookup);
+        sourceFile.resolvedModules.set(moduleNameText, resolvedModule);
     }
 
     export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective): void {
@@ -129,18 +124,16 @@ namespace ts {
         return oldResolution.resolvedFileName === newResolution.resolvedFileName && oldResolution.primary === newResolution.primary;
     }
 
-    export function hasChangesInResolutions<T, U = T>(
+    export function hasChangesInResolutions<T>(
         names: ReadonlyArray<string>,
         newResolutions: ReadonlyArray<T>,
-        oldResolutions: ReadonlyMap<U>,
-        comparer: (oldResolution: T, newResolution: T) => boolean,
-        oldMapper?: (x: U) => T): boolean {
+        oldResolutions: ReadonlyMap<T>,
+        comparer: (oldResolution: T, newResolution: T) => boolean): boolean {
         Debug.assert(names.length === newResolutions.length);
 
         for (let i = 0; i < names.length; i++) {
             const newResolution = newResolutions[i];
-            const oldRes = oldResolutions && oldResolutions.get(names[i]);
-            const oldResolution = oldMapper ? oldMapper(oldRes) : oldRes as {} as T;
+            const oldResolution = oldResolutions && oldResolutions.get(names[i]);
             const changed =
                 oldResolution
                     ? !newResolution || !comparer(oldResolution, newResolution)

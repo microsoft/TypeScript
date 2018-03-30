@@ -16,11 +16,11 @@ import {A} from "./f1";
 
 A.prototype.foo = function () { return undefined; }
 >A.prototype.foo = function () { return undefined; } : () => any
->A.prototype.foo : () => B
+>A.prototype.foo : () => any
 >A.prototype : A
 >A : typeof A
 >prototype : A
->foo : () => B
+>foo : () => any
 >function () { return undefined; } : () => any
 >undefined : undefined
 
@@ -40,7 +40,7 @@ declare module "./f1" {
 >"./f1" : typeof import("tests/cases/compiler/f1")
 
     import {B} from "./f2";
->B : typeof B
+>B : any
 
     import I = N.Ifc;
 >I : any
@@ -56,8 +56,8 @@ declare module "./f1" {
 >A : A
 
         foo(): B;
->foo : () => B
->B : B
+>foo : () => any
+>B : any
 
         bar(): I;
 >bar : () => I
@@ -80,11 +80,11 @@ let a: A;
 >A : A
 
 let b = a.foo().n;
->b : number
->a.foo().n : number
->a.foo() : B
->a.foo : () => B
+>b : any
+>a.foo().n : any
+>a.foo() : any
+>a.foo : () => any
 >a : A
->foo : () => B
->n : number
+>foo : () => any
+>n : any
 

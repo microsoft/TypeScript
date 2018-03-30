@@ -1,10 +1,10 @@
-tests/cases/conformance/types/import/chainer.ts(1,17): error TS2307: Cannot find module './b'.
+tests/cases/conformance/types/import/chainer.ts(1,24): error TS1141: String literal expected.
 
 
 ==== tests/cases/conformance/types/import/chainer.ts (1 errors) ====
     export const x: import(import("./a").LookAt).Value = "yes"; // expect outter import to fail, since b.d.ts isn't in the build
-                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module './b'.
+                           ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1141: String literal expected.
     
 ==== tests/cases/conformance/types/import/a.d.ts (0 errors) ====
     export type LookAt = "./b";

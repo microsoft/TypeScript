@@ -2116,16 +2116,7 @@ namespace ts {
                 return ambientModule;
             }
             const currentSourceFile = getSourceFileOfNode(location);
-            const resolvedModuleState = getResolvedModule(currentSourceFile, moduleReference);
-            let resolvedModule: ResolvedModuleFull;
-            if (currentSourceFile && resolvedModuleState === undefined) {
-                // Fallback to uncached lookup for late-bound module names which have not been resolved
-                const resolutions = host.resolveModuleName([moduleReference], currentSourceFile.fileName);
-                resolvedModule = firstOrUndefined(resolutions);
-            }
-            else {
-                resolvedModule = getResolvedModuleFromState(resolvedModuleState);
-            }
+            const resolvedModule = getResolvedModule(currentSourceFile, moduleReference);
             const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule);
             const sourceFile = resolvedModule && !resolutionDiagnostic && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {
@@ -8513,14 +8504,14 @@ namespace ts {
                     links.resolvedSymbol = unknownSymbol;
                     return links.resolvedType = unknownType;
                 }
-                const argumentType = getTypeFromTypeNode(node.argument);
-                const targetMeaning = node.isTypeOf ? SymbolFlags.Value : SymbolFlags.Type;
-                // TODO: Future work: support unions/generics/whatever via a deferred import-type
-                if (!argumentType || !(argumentType.flags & TypeFlags.StringLiteral)) {
-                    error(node.argument, Diagnostics.Import_specifier_must_be_a_string_literal_type_but_here_is_0, argumentType ? typeToString(argumentType) : "undefined");
+                if (!isLiteralImportTypeNode(node)) {
+                    error(node.argument, Diagnostics.String_literal_expected);
                     links.resolvedSymbol = unknownSymbol;
                     return links.resolvedType = unknownType;
                 }
+                const argumentType = getTypeFromTypeNode(node.argument);
+                const targetMeaning = node.isTypeOf ? SymbolFlags.Value : SymbolFlags.Type;
+                // TODO: Future work: support unions/generics/whatever via a deferred import-type
                 const moduleName = (argumentType as StringLiteralType).value;
                 const innerModuleSymbol = resolveExternalModule(node, moduleName, Diagnostics.Cannot_find_module_0, node, /*isForAugmentation*/ false);
                 if (!innerModuleSymbol) {

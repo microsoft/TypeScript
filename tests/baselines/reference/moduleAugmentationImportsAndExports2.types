@@ -40,10 +40,10 @@ declare module "./f1" {
 >"./f1" : typeof import("tests/cases/compiler/f1")
 
     import {B} from "./f2";
->B : typeof B
+>B : any
 
     export {B} from "./f2";
->B : typeof B
+>B : any
 
     import I = N.Ifc;
 >I : any
@@ -60,8 +60,8 @@ declare module "./f1" {
 >A : A
 
         foo(): B;
->foo : () => B
->B : B
+>foo : () => any
+>B : any
 
         bar(): I;
 >bar : () => I
