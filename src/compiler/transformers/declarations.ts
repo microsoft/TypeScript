@@ -614,7 +614,7 @@ namespace ts {
             if (isMethodDeclaration(input) || isMethodSignature(input)) {
                 if (hasModifier(input, ModifierFlags.Private)) {
                     if (input.symbol && input.symbol.declarations && input.symbol.declarations[0] !== input) return; // Elide all but the first overload
-                    return cleanup(createProperty(/*decorators*/undefined, input.modifiers, input.name, /*questionToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined));
+                    return cleanup(createProperty(/*decorators*/undefined, ensureModifiers(input), input.name, /*questionToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined));
                 }
             }
 
