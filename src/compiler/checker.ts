@@ -18206,11 +18206,10 @@ namespace ts {
             while (parent && parent.kind === SyntaxKind.PropertyAccessExpression) {
                 parent = parent.parent;
             }
-            return parent && isBinaryExpression(parent) &&
-                isPrototypeAccess(parent.left) &&
-                parent.operatorToken.kind === SyntaxKind.EqualsToken &&
-                isObjectLiteralExpression(parent.right) &&
-                parent.right;
+            if (parent && isBinaryExpression(parent) && isPrototypeAccess(parent.left) && parent.operatorToken.kind === SyntaxKind.EqualsToken) {
+                const right = followBinaryRight(parent);
+                return isObjectLiteralExpression(right) && right;
+            }
         }
 
 

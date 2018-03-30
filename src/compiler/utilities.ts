@@ -1629,7 +1629,7 @@ namespace ts {
             return SpecialPropertyAssignmentKind.ModuleExports;
         }
         else if (isEntityNameExpression(lhs.expression)) {
-            if (lhs.name.escapedText === "prototype" && isObjectLiteralExpression(expr.right)) {
+            if (lhs.name.escapedText === "prototype" && isObjectLiteralExpression(followBinaryRight(expr))) {
                 // F.prototype = { ... }
                 return SpecialPropertyAssignmentKind.Prototype;
             }
@@ -1654,6 +1654,13 @@ namespace ts {
         }
 
         return SpecialPropertyAssignmentKind.None;
+    }
+
+    export function followBinaryRight(expr: BinaryExpression) {
+        while (isBinaryExpression(expr.right)) {
+            expr = expr.right;
+        }
+        return expr.right;
     }
 
     export function isPrototypePropertyAssignment(node: Node): boolean {
