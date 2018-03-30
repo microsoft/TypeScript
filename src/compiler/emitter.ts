@@ -1353,6 +1353,7 @@ namespace ts {
                 writePunctuation(".");
                 emit(node.qualifier);
             }
+            emitTypeArguments(node, node.typeArguments);
         }
 
         //
