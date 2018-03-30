@@ -463,12 +463,11 @@ namespace ts.Completions {
     }
 
     function getStringLiteralTypes(type: Type | undefined, typeChecker: TypeChecker, uniques = createMap<true>()): ReadonlyArray<StringLiteralType> {
-        if (type && type.flags & TypeFlags.TypeParameter) {
-            type = type.getConstraint();
-        }
-        return type && type.flags & TypeFlags.Union
+        if (!type) return emptyArray;
+        type = skipConstraint(type);
+        return type.flags & TypeFlags.Union
             ? flatMap((<UnionType>type).types, t => getStringLiteralTypes(t, typeChecker, uniques))
-            : type && type.flags & TypeFlags.StringLiteral && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, (type as StringLiteralType).value)
+            : type.flags & TypeFlags.StringLiteral && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, (type as StringLiteralType).value)
             ? [type as StringLiteralType]
             : emptyArray;
     }

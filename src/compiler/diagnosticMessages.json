@@ -27,6 +27,10 @@
         "category": "Error",
         "code": 1012
     },
+    "A rest parameter or binding pattern may not have a trailing comma.": {
+        "category": "Error",
+        "code": 1013
+    },
     "A rest parameter must be last in a parameter list.": {
         "category": "Error",
         "code": 1014
@@ -1372,7 +1376,7 @@
         "category": "Error",
         "code": 2406
     },
-    "The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.": {
+    "The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type '{0}'.": {
         "category": "Error",
         "code": 2407
     },
@@ -1668,7 +1672,7 @@
         "category": "Error",
         "code": 2487
     },
-    "Type must have a '[Symbol.iterator]()' method that returns an iterator.": {
+    "Type '{0}' must have a '[Symbol.iterator]()' method that returns an iterator.": {
         "category": "Error",
         "code": 2488
     },
@@ -1732,7 +1736,7 @@
         "category": "Error",
         "code": 2503
     },
-    "Type must have a '[Symbol.asyncIterator]()' method that returns an async iterator.": {
+    "Type '{0}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.": {
         "category": "Error",
         "code": 2504
     },
@@ -1987,6 +1991,14 @@
     "Enum declarations can only merge with namespace or other enum declarations.": {
         "category": "Error",
         "code": 2567
+    },
+    "Type '{0}' is not an array type. Use compiler option '--downlevelIteration' to allow iterating of iterators.": {
+        "category": "Error",
+        "code": 2568
+    },
+    "Type '{0}' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators.": {
+        "category": "Error",
+        "code": 2569
     },
 
     "JSX element attributes type '{0}' may not be a union type.": {
