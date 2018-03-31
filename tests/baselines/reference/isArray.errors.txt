@@ -1,0 +1,33 @@
+tests/cases/compiler/isArray.ts(7,11): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/isArray.ts(17,11): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/isArray.ts(18,24): error TS2339: Property 'push' does not exist on type 'ReadonlyArray<number>'.
+
+
+==== tests/cases/compiler/isArray.ts (3 errors) ====
+    var maybeArray: number | number[];
+    
+    
+    if (Array.isArray(maybeArray)) {
+        maybeArray.length; // OK
+        maybeArray.push(0); // OK
+        const str: string = maybeArray[0]; // Expect error
+              ~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    }
+    else {
+        maybeArray.toFixed(); // OK
+    }
+    
+    var maybeReadonlyArray: number | ReadonlyArray<number>;
+    if (Array.isArray(maybeReadonlyArray)) {
+        maybeReadonlyArray.length; // OK
+        const num = maybeReadonlyArray[0]; // OK, expect typeof num = number
+        const str: string = maybeReadonlyArray[0]; // Expect error
+              ~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+        maybeReadonlyArray.push(0); // Expect error
+                           ~~~~
+!!! error TS2339: Property 'push' does not exist on type 'ReadonlyArray<number>'.
+    } else {
+        maybeReadonlyArray.toFixed();
+    }

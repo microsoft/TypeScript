@@ -13,10 +13,52 @@ if (Array.isArray(maybeArray)) {
 >maybeArray.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
 >maybeArray : Symbol(maybeArray, Decl(isArray.ts, 0, 3))
 >length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+
+    maybeArray.push(0); // OK
+>maybeArray.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>maybeArray : Symbol(maybeArray, Decl(isArray.ts, 0, 3))
+>push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+
+    const str: string = maybeArray[0]; // Expect error
+>str : Symbol(str, Decl(isArray.ts, 6, 9))
+>maybeArray : Symbol(maybeArray, Decl(isArray.ts, 0, 3))
 }
 else {
     maybeArray.toFixed(); // OK
 >maybeArray.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
 >maybeArray : Symbol(maybeArray, Decl(isArray.ts, 0, 3))
+>toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+}
+
+var maybeReadonlyArray: number | ReadonlyArray<number>;
+>maybeReadonlyArray : Symbol(maybeReadonlyArray, Decl(isArray.ts, 12, 3))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.d.ts, --, --))
+
+if (Array.isArray(maybeReadonlyArray)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.d.ts, --, --))
+>maybeReadonlyArray : Symbol(maybeReadonlyArray, Decl(isArray.ts, 12, 3))
+
+    maybeReadonlyArray.length; // OK
+>maybeReadonlyArray.length : Symbol(ReadonlyArray.length, Decl(lib.d.ts, --, --))
+>maybeReadonlyArray : Symbol(maybeReadonlyArray, Decl(isArray.ts, 12, 3))
+>length : Symbol(ReadonlyArray.length, Decl(lib.d.ts, --, --))
+
+    const num = maybeReadonlyArray[0]; // OK, expect typeof num = number
+>num : Symbol(num, Decl(isArray.ts, 15, 9))
+>maybeReadonlyArray : Symbol(maybeReadonlyArray, Decl(isArray.ts, 12, 3))
+
+    const str: string = maybeReadonlyArray[0]; // Expect error
+>str : Symbol(str, Decl(isArray.ts, 16, 9))
+>maybeReadonlyArray : Symbol(maybeReadonlyArray, Decl(isArray.ts, 12, 3))
+
+    maybeReadonlyArray.push(0); // Expect error
+>maybeReadonlyArray : Symbol(maybeReadonlyArray, Decl(isArray.ts, 12, 3))
+
+} else {
+    maybeReadonlyArray.toFixed();
+>maybeReadonlyArray.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>maybeReadonlyArray : Symbol(maybeReadonlyArray, Decl(isArray.ts, 12, 3))
 >toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
 }

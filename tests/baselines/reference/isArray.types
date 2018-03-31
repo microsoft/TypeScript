@@ -5,20 +5,76 @@ var maybeArray: number | number[];
 
 if (Array.isArray(maybeArray)) {
 >Array.isArray(maybeArray) : boolean
->Array.isArray : (arg: any) => arg is any[]
+>Array.isArray : (arg: any) => arg is ReadonlyArray<any>
 >Array : ArrayConstructor
->isArray : (arg: any) => arg is any[]
+>isArray : (arg: any) => arg is ReadonlyArray<any>
 >maybeArray : number | number[]
 
     maybeArray.length; // OK
 >maybeArray.length : number
 >maybeArray : number[]
 >length : number
+
+    maybeArray.push(0); // OK
+>maybeArray.push(0) : number
+>maybeArray.push : (...items: number[]) => number
+>maybeArray : number[]
+>push : (...items: number[]) => number
+>0 : 0
+
+    const str: string = maybeArray[0]; // Expect error
+>str : string
+>maybeArray[0] : number
+>maybeArray : number[]
+>0 : 0
 }
 else {
     maybeArray.toFixed(); // OK
 >maybeArray.toFixed() : string
 >maybeArray.toFixed : (fractionDigits?: number) => string
 >maybeArray : number
+>toFixed : (fractionDigits?: number) => string
+}
+
+var maybeReadonlyArray: number | ReadonlyArray<number>;
+>maybeReadonlyArray : number | ReadonlyArray<number>
+>ReadonlyArray : ReadonlyArray<T>
+
+if (Array.isArray(maybeReadonlyArray)) {
+>Array.isArray(maybeReadonlyArray) : boolean
+>Array.isArray : (arg: any) => arg is ReadonlyArray<any>
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is ReadonlyArray<any>
+>maybeReadonlyArray : number | ReadonlyArray<number>
+
+    maybeReadonlyArray.length; // OK
+>maybeReadonlyArray.length : number
+>maybeReadonlyArray : ReadonlyArray<number>
+>length : number
+
+    const num = maybeReadonlyArray[0]; // OK, expect typeof num = number
+>num : number
+>maybeReadonlyArray[0] : number
+>maybeReadonlyArray : ReadonlyArray<number>
+>0 : 0
+
+    const str: string = maybeReadonlyArray[0]; // Expect error
+>str : string
+>maybeReadonlyArray[0] : number
+>maybeReadonlyArray : ReadonlyArray<number>
+>0 : 0
+
+    maybeReadonlyArray.push(0); // Expect error
+>maybeReadonlyArray.push(0) : any
+>maybeReadonlyArray.push : any
+>maybeReadonlyArray : ReadonlyArray<number>
+>push : any
+>0 : 0
+
+} else {
+    maybeReadonlyArray.toFixed();
+>maybeReadonlyArray.toFixed() : string
+>maybeReadonlyArray.toFixed : (fractionDigits?: number) => string
+>maybeReadonlyArray : number
 >toFixed : (fractionDigits?: number) => string
 }

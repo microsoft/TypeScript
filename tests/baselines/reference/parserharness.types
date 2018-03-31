@@ -3131,27 +3131,27 @@ module Harness {
 >identifier : any
 
             public normalizeToArray(arg: any) {
->normalizeToArray : (arg: any) => any[]
+>normalizeToArray : (arg: any) => ReadonlyArray<any>
 >arg : any
 
                 if ((Array.isArray && Array.isArray(arg)) || arg instanceof Array)
 >(Array.isArray && Array.isArray(arg)) || arg instanceof Array : boolean
 >(Array.isArray && Array.isArray(arg)) : boolean
 >Array.isArray && Array.isArray(arg) : boolean
->Array.isArray : (arg: any) => arg is any[]
+>Array.isArray : (arg: any) => arg is ReadonlyArray<any>
 >Array : ArrayConstructor
->isArray : (arg: any) => arg is any[]
+>isArray : (arg: any) => arg is ReadonlyArray<any>
 >Array.isArray(arg) : boolean
->Array.isArray : (arg: any) => arg is any[]
+>Array.isArray : (arg: any) => arg is ReadonlyArray<any>
 >Array : ArrayConstructor
->isArray : (arg: any) => arg is any[]
+>isArray : (arg: any) => arg is ReadonlyArray<any>
 >arg : any
 >arg instanceof Array : boolean
 >arg : any
 >Array : ArrayConstructor
 
                     return arg;
->arg : any[]
+>arg : ReadonlyArray<any>
 
                 return [arg];
 >[arg] : any[]
@@ -3311,12 +3311,12 @@ module Harness {
 >others : any
 
                 others = this.normalizeToArray(others);
->others = this.normalizeToArray(others) : any[]
+>others = this.normalizeToArray(others) : ReadonlyArray<any>
 >others : any
->this.normalizeToArray(others) : any[]
->this.normalizeToArray : (arg: any) => any[]
+>this.normalizeToArray(others) : ReadonlyArray<any>
+>this.normalizeToArray : (arg: any) => ReadonlyArray<any>
 >this : this
->normalizeToArray : (arg: any) => any[]
+>normalizeToArray : (arg: any) => ReadonlyArray<any>
 >others : any
 
                 for (var i = 0; i < others.length; i++) {
@@ -3365,12 +3365,12 @@ module Harness {
 >others : any
 
                 others = this.normalizeToArray(others);
->others = this.normalizeToArray(others) : any[]
+>others = this.normalizeToArray(others) : ReadonlyArray<any>
 >others : any
->this.normalizeToArray(others) : any[]
->this.normalizeToArray : (arg: any) => any[]
+>this.normalizeToArray(others) : ReadonlyArray<any>
+>this.normalizeToArray : (arg: any) => ReadonlyArray<any>
 >this : this
->normalizeToArray : (arg: any) => any[]
+>normalizeToArray : (arg: any) => ReadonlyArray<any>
 >others : any
 
                 for (var i = 0; i < others.length; i++) {
@@ -3521,12 +3521,12 @@ module Harness {
 >others : any
 
                 others = this.normalizeToArray(others);
->others = this.normalizeToArray(others) : any[]
+>others = this.normalizeToArray(others) : ReadonlyArray<any>
 >others : any
->this.normalizeToArray(others) : any[]
->this.normalizeToArray : (arg: any) => any[]
+>this.normalizeToArray(others) : ReadonlyArray<any>
+>this.normalizeToArray : (arg: any) => ReadonlyArray<any>
 >this : this
->normalizeToArray : (arg: any) => any[]
+>normalizeToArray : (arg: any) => ReadonlyArray<any>
 >others : any
 
                 for (var i = 0; i < others.length; i++) {
@@ -3577,12 +3577,12 @@ module Harness {
 >others : any
 
                 others = this.normalizeToArray(others);
->others = this.normalizeToArray(others) : any[]
+>others = this.normalizeToArray(others) : ReadonlyArray<any>
 >others : any
->this.normalizeToArray(others) : any[]
->this.normalizeToArray : (arg: any) => any[]
+>this.normalizeToArray(others) : ReadonlyArray<any>
+>this.normalizeToArray : (arg: any) => ReadonlyArray<any>
 >this : this
->normalizeToArray : (arg: any) => any[]
+>normalizeToArray : (arg: any) => ReadonlyArray<any>
 >others : any
 
                 for (var i = 0; i < others.length; i++) {
