@@ -6245,7 +6245,12 @@ namespace ts {
         }
 
         function getDefaultConstraintOfConditionalType(type: ConditionalType) {
-            return getUnionType([getInferredTrueTypeFromConditionalType(type), getFalseTypeFromConditionalType(type)]);
+            if (!type.resolvedDefaultConstraint) {
+                const rootTrueType = type.root.trueType;
+                const rootTrueConstraint = rootTrueType.flags & TypeFlags.Substitution ? (<SubstitutionType>rootTrueType).substitute : rootTrueType;
+                type.resolvedDefaultConstraint = getUnionType([instantiateType(rootTrueConstraint, type.combinedMapper || type.mapper), getFalseTypeFromConditionalType(type)]);
+            }
+            return type.resolvedDefaultConstraint;
         }
 
         function getConstraintOfDistributiveConditionalType(type: ConditionalType): Type {
@@ -6258,7 +6263,10 @@ namespace ts {
                 const constraint = getConstraintOfType(type.checkType);
                 if (constraint) {
                     const mapper = createTypeMapper([<TypeParameter>type.root.checkType], [constraint]);
-                    return getConditionalTypeInstantiation(type, combineTypeMappers(mapper, type.mapper));
+                    const instantiated = getConditionalTypeInstantiation(type, combineTypeMappers(mapper, type.mapper));
+                    if (!(instantiated.flags & TypeFlags.Never)) {
+                        return instantiated;
+                    }
                 }
             }
             return undefined;
@@ -8410,12 +8418,6 @@ namespace ts {
             return type.resolvedFalseType || (type.resolvedFalseType = instantiateType(type.root.falseType, type.mapper));
         }
 
-        function getInferredTrueTypeFromConditionalType(type: ConditionalType) {
-            return type.combinedMapper ?
-                type.resolvedInferredTrueType || (type.resolvedInferredTrueType = instantiateType(type.root.trueType, type.combinedMapper)) :
-                getTrueTypeFromConditionalType(type);
-        }
-
         function getInferTypeParameters(node: ConditionalTypeNode): TypeParameter[] {
             let result: TypeParameter[];
             if (node.locals) {
@@ -8428,13 +8430,25 @@ namespace ts {
             return result;
         }
 
+        function getTopConditionalType(node: Node): ConditionalTypeNode {
+            let result: ConditionalTypeNode;
+            while (node) {
+                if (node.kind === SyntaxKind.ConditionalType) {
+                    result = <ConditionalTypeNode>node;
+                }
+                node = node.parent;
+            }
+            return result;
+        }
+
         function getTypeFromConditionalTypeNode(node: ConditionalTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 const checkType = getTypeFromTypeNode(node.checkType);
                 const aliasTypeArguments = getAliasTypeArgumentsForTypeNode(node);
                 const allOuterTypeParameters = getOuterTypeParameters(node, /*includeThisTypes*/ true);
-                const outerTypeParameters = aliasTypeArguments ? allOuterTypeParameters : filter(allOuterTypeParameters, tp => isTypeParameterPossiblyReferenced(tp, node));
+                const topNode = getTopConditionalType(node);
+                const outerTypeParameters = aliasTypeArguments ? allOuterTypeParameters : filter(allOuterTypeParameters, tp => isTypeParameterPossiblyReferenced(tp, topNode));
                 const root: ConditionalRoot = {
                     node,
                     checkType,

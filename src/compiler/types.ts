@@ -3882,7 +3882,7 @@ namespace ts {
         resolvedTrueType?: Type;
         resolvedFalseType?: Type;
         /* @internal */
-        resolvedInferredTrueType?: Type;
+        resolvedDefaultConstraint?: Type;
         /* @internal */
         mapper?: TypeMapper;
         /* @internal */
