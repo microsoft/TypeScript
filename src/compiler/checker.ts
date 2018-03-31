@@ -13647,9 +13647,6 @@ namespace ts {
                 }
             }
 
-            checkCollisionWithCapturedSuperVariable(node, node);
-            checkCollisionWithCapturedThisVariable(node, node);
-            checkCollisionWithCapturedNewTargetVariable(node, node);
             checkNestedBlockScopedBinding(node, symbol);
 
             const type = getConstraintForLocation(getTypeOfSymbol(localOrExportSymbol), node);
@@ -18852,12 +18849,6 @@ namespace ts {
                 }
             }
 
-            if (produceDiagnostics && node.kind !== SyntaxKind.MethodDeclaration) {
-                checkCollisionWithCapturedSuperVariable(node, node.name);
-                checkCollisionWithCapturedThisVariable(node, node.name);
-                checkCollisionWithCapturedNewTargetVariable(node, node.name);
-            }
-
             return type;
         }
 
@@ -21585,9 +21576,6 @@ namespace ts {
             if (produceDiagnostics) {
                 checkFunctionOrMethodDeclaration(node);
                 checkGrammarForGenerator(node);
-                checkCollisionWithCapturedSuperVariable(node, node.name);
-                checkCollisionWithCapturedThisVariable(node, node.name);
-                checkCollisionWithCapturedNewTargetVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
                 checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
             }
@@ -22012,18 +22000,6 @@ namespace ts {
             return true;
         }
 
-        function checkCollisionWithCapturedThisVariable(node: Node, name: Identifier): void {
-            if (languageVersion <= ScriptTarget.ES5 && !compilerOptions.noEmit && needCollisionCheckForIdentifier(node, name, "_this")) {
-                potentialThisCollisions.push(node);
-            }
-        }
-
-        function checkCollisionWithCapturedNewTargetVariable(node: Node, name: Identifier): void {
-            if (languageVersion <= ScriptTarget.ES5 && !compilerOptions.noEmit && needCollisionCheckForIdentifier(node, name, "_newTarget")) {
-                potentialNewTargetCollisions.push(node);
-            }
-        }
-
         // this function will run after checking the source file so 'CaptureThis' is correct for all nodes
         function checkIfThisIsCapturedInEnclosingScope(node: Node): void {
             findAncestor(node, current => {
@@ -22053,33 +22029,6 @@ namespace ts {
                     return true;
                 }
             });
-        }
-
-        function checkCollisionWithCapturedSuperVariable(node: Node, name: Identifier) {
-            if (languageVersion >= ScriptTarget.ES2015 || compilerOptions.noEmit) {
-                return;
-            }
-
-            if (!needCollisionCheckForIdentifier(node, name, "_super")) {
-                return;
-            }
-
-            // bubble up and find containing type
-            const enclosingClass = getContainingClass(node);
-            // if containing type was not found or it is ambient - exit (no codegen)
-            if (!enclosingClass || enclosingClass.flags & NodeFlags.Ambient) {
-                return;
-            }
-
-            if (getClassExtendsHeritageClauseElement(enclosingClass)) {
-                const isDeclaration = node.kind !== SyntaxKind.Identifier;
-                if (isDeclaration) {
-                    error(node, Diagnostics.Duplicate_identifier_super_Compiler_uses_super_to_capture_base_class_reference);
-                }
-                else {
-                    error(node, Diagnostics.Expression_resolves_to_super_that_compiler_uses_to_capture_base_class_reference);
-                }
-            }
         }
 
         function checkCollisionWithRequireExportsInGeneratedCode(node: Node, name: Identifier) {
@@ -22378,9 +22327,6 @@ namespace ts {
                 if (node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) {
                     checkVarDeclaredNamesNotShadowed(node);
                 }
-                checkCollisionWithCapturedSuperVariable(node, <Identifier>node.name);
-                checkCollisionWithCapturedThisVariable(node, <Identifier>node.name);
-                checkCollisionWithCapturedNewTargetVariable(node, <Identifier>node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, <Identifier>node.name);
                 checkCollisionWithGlobalPromiseInGeneratedCode(node, <Identifier>node.name);
             }
@@ -23377,8 +23323,6 @@ namespace ts {
             checkDecorators(node);
             if (node.name) {
                 checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
-                checkCollisionWithCapturedThisVariable(node, node.name);
-                checkCollisionWithCapturedNewTargetVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
                 checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
             }
@@ -23907,8 +23851,6 @@ namespace ts {
             checkGrammarDecoratorsAndModifiers(node);
 
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
-            checkCollisionWithCapturedThisVariable(node, node.name);
-            checkCollisionWithCapturedNewTargetVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
             checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
             checkExportsOnMergedDeclarations(node);
@@ -24014,7 +23956,6 @@ namespace ts {
                 }
 
                 if (isIdentifier(node.name)) {
-                    checkCollisionWithCapturedThisVariable(node, node.name);
                     checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
                     checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
                 }
@@ -24222,7 +24163,6 @@ namespace ts {
         }
 
         function checkImportBinding(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier) {
-            checkCollisionWithCapturedThisVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
             checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
             checkAliasSymbol(node);

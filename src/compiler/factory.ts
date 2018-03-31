@@ -177,9 +177,16 @@ namespace ts {
     /** Create a unique name based on the supplied text. */
     export function createOptimisticUniqueName(text: string): Identifier {
         const name = createIdentifier(text);
-        name.autoGenerateFlags = GeneratedIdentifierFlags.OptimisticUnique;
+        name.autoGenerateFlags = GeneratedIdentifierFlags.Unique | GeneratedIdentifierFlags.Optimistic;
         name.autoGenerateId = nextAutoGenerateId;
         nextAutoGenerateId++;
+        return name;
+    }
+
+    /** Create a unique name based on the supplied text. This does not consider names injected by the transformer. */
+    export function createFileLevelUniqueName(text: string): Identifier {
+        const name = createOptimisticUniqueName(text);
+        name.autoGenerateFlags |= GeneratedIdentifierFlags.FileLevel;
         return name;
     }
 

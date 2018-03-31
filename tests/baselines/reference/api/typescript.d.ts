@@ -2585,9 +2585,10 @@ declare namespace ts {
     interface EmitHelper {
         readonly name: string;
         readonly scoped: boolean;
-        readonly text: string;
+        readonly text: string | ((node: EmitHelperUniqueNameCallback) => string);
         readonly priority?: number;
     }
+    type EmitHelperUniqueNameCallback = (name: string) => string;
     enum EmitHint {
         SourceFile = 0,
         Expression = 1,
@@ -2759,6 +2760,7 @@ declare namespace ts {
         removeComments?: boolean;
         newLine?: NewLineKind;
         omitTrailingSemicolon?: boolean;
+        noEmitHelpers?: boolean;
     }
     /** @deprecated See comment on SymbolWriter */
     interface SymbolTracker {
@@ -3398,6 +3400,8 @@ declare namespace ts {
     function createUniqueName(text: string): Identifier;
     /** Create a unique name based on the supplied text. */
     function createOptimisticUniqueName(text: string): Identifier;
+    /** Create a unique name based on the supplied text. This does not consider names injected by the transformer. */
+    function createFileLevelUniqueName(text: string): Identifier;
     /** Create a unique name generated for a node. */
     function getGeneratedNameForNode(node: Node): Identifier;
     function createToken<TKind extends SyntaxKind>(token: TKind): Token<TKind>;

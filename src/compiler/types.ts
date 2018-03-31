@@ -699,12 +699,13 @@ namespace ts {
         Loop = 2,                           // Automatically generated identifier with a preference for '_i'.
         Unique = 3,                         // Unique name based on the 'text' property.
         Node = 4,                           // Unique name based on the node in the 'original' property.
-        OptimisticUnique = 5,               // Unique name based on the 'text' property, first instance won't use '_#' if there's no conflict
         KindMask = 7,                       // Mask to extract the kind of identifier from its flags.
 
         // Flags
         SkipNameGenerationScope = 1 << 3,   // Should skip a name generation scope when generating the name for this identifier
         ReservedInNestedScopes = 1 << 4,    // Reserve the generated name in nested scopes
+        Optimistic = 1 << 5,                // First instance won't use '_#' if there's no conflict
+        FileLevel = 1 << 6,                 // Use only the file identifiers list and not generated names to search for conflicts
     }
 
     export interface Identifier extends PrimaryExpression, Declaration {
@@ -4755,11 +4756,16 @@ namespace ts {
     }
 
     export interface EmitHelper {
-        readonly name: string;      // A unique name for this helper.
-        readonly scoped: boolean;   // Indicates whether the helper MUST be emitted in the current scope.
-        readonly text: string;      // ES3-compatible raw script text.
-        readonly priority?: number; // Helpers with a higher priority are emitted earlier than other helpers on the node.
+        readonly name: string;                                          // A unique name for this helper.
+        readonly scoped: boolean;                                       // Indicates whether the helper MUST be emitted in the current scope.
+        readonly text: string | ((node: EmitHelperUniqueNameCallback) => string);  // ES3-compatible raw script text, or a function yielding such a string
+        readonly priority?: number;                                     // Helpers with a higher priority are emitted earlier than other helpers on the node.
     }
+
+    /* @internal */
+    export type UniqueNameHandler = (baseName: string, checkFn?: (name: string) => boolean, optimistic?: boolean) => string;
+
+    export type EmitHelperUniqueNameCallback = (name: string) => string;
 
     /**
      * Used by the checker, this enum keeps track of external emit helpers that should be type
@@ -5024,7 +5030,6 @@ namespace ts {
         /*@internal*/ onEmitSourceMapOfNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
         /*@internal*/ onEmitSourceMapOfToken?: (node: Node, token: SyntaxKind, writer: (s: string) => void, pos: number, emitCallback: (token: SyntaxKind, writer: (s: string) => void, pos: number) => number) => number;
         /*@internal*/ onEmitSourceMapOfPosition?: (pos: number) => void;
-        /*@internal*/ onEmitHelpers?: (node: Node, writeLines: (text: string) => void) => void;
         /*@internal*/ onSetSourceFile?: (node: SourceFile) => void;
         /*@internal*/ onBeforeEmitNodeArray?: (nodes: NodeArray<any>) => void;
         /*@internal*/ onAfterEmitNodeArray?: (nodes: NodeArray<any>) => void;
@@ -5036,6 +5041,9 @@ namespace ts {
         removeComments?: boolean;
         newLine?: NewLineKind;
         omitTrailingSemicolon?: boolean;
+        noEmitHelpers?: boolean;
+        /*@internal*/ module?: CompilerOptions["module"];
+        /*@internal*/ target?: CompilerOptions["target"];
         /*@internal*/ sourceMap?: boolean;
         /*@internal*/ inlineSourceMap?: boolean;
         /*@internal*/ extendedDiagnostics?: boolean;
