@@ -1,0 +1,21 @@
+tests/cases/compiler/missingPropertyOfPromiseUnion.ts(11,7): error TS2570: Property 'method' does not exist on type 'Promise<Foo> | Promise<Bar>'. Did you forget to await the 'Promise<Foo> | Promise<Bar>' as property 'method' exists on awaited 'Foo'?
+  Property 'method' does not exist on type 'Promise<Foo>'.
+
+
+==== tests/cases/compiler/missingPropertyOfPromiseUnion.ts (1 errors) ====
+    interface Foo {
+        method();
+    }
+    
+    interface Bar {
+        method();
+        somethingElse();
+    }
+    
+    function f(x: Promise<Foo> | Promise<Bar>) {
+        x.method();
+          ~~~~~~
+!!! error TS2570: Property 'method' does not exist on type 'Promise<Foo> | Promise<Bar>'. Did you forget to await the 'Promise<Foo> | Promise<Bar>' as property 'method' exists on awaited 'Foo'?
+!!! error TS2570:   Property 'method' does not exist on type 'Promise<Foo>'.
+    }
+    

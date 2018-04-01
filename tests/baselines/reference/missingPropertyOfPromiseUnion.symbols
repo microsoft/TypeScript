@@ -1,0 +1,30 @@
+=== tests/cases/compiler/missingPropertyOfPromiseUnion.ts ===
+interface Foo {
+>Foo : Symbol(Foo, Decl(missingPropertyOfPromiseUnion.ts, 0, 0))
+
+    method();
+>method : Symbol(Foo.method, Decl(missingPropertyOfPromiseUnion.ts, 0, 15))
+}
+
+interface Bar {
+>Bar : Symbol(Bar, Decl(missingPropertyOfPromiseUnion.ts, 2, 1))
+
+    method();
+>method : Symbol(Bar.method, Decl(missingPropertyOfPromiseUnion.ts, 4, 15))
+
+    somethingElse();
+>somethingElse : Symbol(Bar.somethingElse, Decl(missingPropertyOfPromiseUnion.ts, 5, 13))
+}
+
+function f(x: Promise<Foo> | Promise<Bar>) {
+>f : Symbol(f, Decl(missingPropertyOfPromiseUnion.ts, 7, 1))
+>x : Symbol(x, Decl(missingPropertyOfPromiseUnion.ts, 9, 11))
+>Promise : Symbol(Promise, Decl(lib.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(missingPropertyOfPromiseUnion.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.d.ts, --, --))
+>Bar : Symbol(Bar, Decl(missingPropertyOfPromiseUnion.ts, 2, 1))
+
+    x.method();
+>x : Symbol(x, Decl(missingPropertyOfPromiseUnion.ts, 9, 11))
+}
+

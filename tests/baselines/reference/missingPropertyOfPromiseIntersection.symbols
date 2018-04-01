@@ -1,0 +1,26 @@
+=== tests/cases/compiler/missingPropertyOfPromiseIntersection.ts ===
+interface Foo {
+>Foo : Symbol(Foo, Decl(missingPropertyOfPromiseIntersection.ts, 0, 0))
+
+    method();
+>method : Symbol(Foo.method, Decl(missingPropertyOfPromiseIntersection.ts, 0, 15))
+}
+
+interface Bar {
+>Bar : Symbol(Bar, Decl(missingPropertyOfPromiseIntersection.ts, 2, 1))
+
+    somethingElse();
+>somethingElse : Symbol(Bar.somethingElse, Decl(missingPropertyOfPromiseIntersection.ts, 4, 15))
+}
+
+function f(x: Promise<Foo> & Bar) {
+>f : Symbol(f, Decl(missingPropertyOfPromiseIntersection.ts, 6, 1))
+>x : Symbol(x, Decl(missingPropertyOfPromiseIntersection.ts, 8, 11))
+>Promise : Symbol(Promise, Decl(lib.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(missingPropertyOfPromiseIntersection.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(missingPropertyOfPromiseIntersection.ts, 2, 1))
+
+    x.method();
+>x : Symbol(x, Decl(missingPropertyOfPromiseIntersection.ts, 8, 11))
+}
+
