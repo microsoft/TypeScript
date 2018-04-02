@@ -1019,7 +1019,7 @@ namespace ts.Completions {
                                 if (!(node as ImportTypeNode).isTypeOf) return false;
                                 return !!(symbol.flags & SymbolFlags.Value);
                             }
-                        }
+                        };
                         const isValidTypeAccess = (symbol: Symbol) => symbolCanBeReferencedAtTypeLocation(symbol);
                         const isValidAccess = allowTypeOrValue ?
                             // Any kind is allowed when dotting off namespace in internal import equals declaration
