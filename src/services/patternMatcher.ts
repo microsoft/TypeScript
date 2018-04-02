@@ -176,22 +176,15 @@ namespace ts {
     function matchTextChunk(candidate: string, chunk: TextChunk, stringToWordSpans: Map<TextSpan[]>): PatternMatch {
         const index = indexOfIgnoringCase(candidate, chunk.textLowerCase);
         if (index === 0) {
-            if (chunk.text.length === candidate.length) {
-                // a) Check if the part matches the candidate entirely, in an case insensitive or
-                //    sensitive manner.  If it does, return that there was an exact match.
-                return createPatternMatch(PatternMatchKind.exact, /*isCaseSensitive:*/ candidate === chunk.text);
-            }
-            else {
-                // b) Check if the part is a prefix of the candidate, in a case insensitive or sensitive
-                //    manner.  If it does, return that there was a prefix match.
-                return createPatternMatch(PatternMatchKind.prefix, /*isCaseSensitive:*/ startsWith(candidate, chunk.text));
-            }
+            // a) Check if the word is a prefix of the candidate, in a case insensitive or
+            //    sensitive manner. If it does, return that there was an exact match if the word and candidate are the same length, else a prefix match.
+            return createPatternMatch(chunk.text.length === candidate.length ? PatternMatchKind.exact : PatternMatchKind.prefix, /*isCaseSensitive:*/ startsWith(candidate, chunk.text));
         }
 
         const isLowercase = chunk.isLowerCase;
         if (isLowercase) {
             if (index > 0) {
-                // c) If the part is entirely lowercase, then check if it is contained anywhere in the
+                // b) If the part is entirely lowercase, then check if it is contained anywhere in the
                 //    candidate in a case insensitive manner.  If so, return that there was a substring
                 //    match.
                 //
@@ -207,7 +200,7 @@ namespace ts {
             }
         }
         else {
-            // d) If the part was not entirely lowercase, then check if it is contained in the
+            // c) If the part was not entirely lowercase, then check if it is contained in the
             //    candidate in a case *sensitive* manner. If so, return that there was a substring
             //    match.
             if (candidate.indexOf(chunk.text) > 0) {
@@ -216,11 +209,11 @@ namespace ts {
         }
 
         if (!isLowercase) {
-            // e) If the part was not entirely lowercase, then attempt a camel cased match as well.
+            // d) If the part was not entirely lowercase, then attempt a camel cased match as well.
             if (chunk.characterSpans.length > 0) {
                 const candidateParts = getWordSpans(candidate, stringToWordSpans);
                 const isCaseSensitive = tryCamelCaseMatch(candidate, candidateParts, chunk, /*ignoreCase:*/ false) ? true
-                        : tryCamelCaseMatch(candidate, candidateParts, chunk, /*ignoreCase:*/ true) ? false : undefined;
+                    : tryCamelCaseMatch(candidate, candidateParts, chunk, /*ignoreCase:*/ true) ? false : undefined;
                 if (isCaseSensitive !== undefined) {
                     return createPatternMatch(PatternMatchKind.camelCase, isCaseSensitive);
                 }
@@ -228,7 +221,7 @@ namespace ts {
         }
 
         if (isLowercase) {
-            // f) Is the pattern a substring of the candidate starting on one of the candidate's word boundaries?
+            // e) Is the pattern a substring of the candidate starting on one of the candidate's word boundaries?
 
             // We could check every character boundary start of the candidate for the pattern. However, that's
             // an m * n operation in the wost case. Instead, find the first instance of the pattern
@@ -281,13 +274,10 @@ namespace ts {
         //
         // 3) Matching is as follows:
         //
-        //   a) Check if the word matches the candidate entirely, in an case insensitive or
-        //    sensitive manner.  If it does, return that there was an exact match.
+        //   a) Check if the word is a prefix of the candidate, in a case insensitive or
+        //      sensitive manner. If it does, return that there was an exact match if the word and candidate are the same length, else a prefix match.
         //
-        //   b) Check if the word is a prefix of the candidate, in a case insensitive or
-        //      sensitive manner.  If it does, return that there was a prefix match.
-        //
-        //   c) If the word is entirely lowercase, then check if it is contained anywhere in the
+        //   b) If the word is entirely lowercase, then check if it is contained anywhere in the
         //      candidate in a case insensitive manner.  If so, return that there was a substring
         //      match.
         //
@@ -296,14 +286,14 @@ namespace ts {
         //      types 'a'. But we would match 'FooAttribute' (since 'Attribute' starts with
         //      'a').
         //
-        //   d) If the word was not entirely lowercase, then check if it is contained in the
+        //   c) If the word was not entirely lowercase, then check if it is contained in the
         //      candidate in a case *sensitive* manner. If so, return that there was a substring
         //      match.
         //
-        //   e) If the word was not entirely lowercase, then attempt a camel cased match as
+        //   d) If the word was not entirely lowercase, then attempt a camel cased match as
         //      well.
         //
-        //   f) The word is all lower case. Is it a case insensitive substring of the candidate starting
+        //   e) The word is all lower case. Is it a case insensitive substring of the candidate starting
         //      on a part boundary of the candidate?
         //
         // Only if all words have some sort of match is the pattern considered matched.
