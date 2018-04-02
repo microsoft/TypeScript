@@ -1637,7 +1637,7 @@ namespace ts {
             return SpecialPropertyAssignmentKind.ModuleExports;
         }
         else if (isEntityNameExpression(lhs.expression)) {
-            if (lhs.name.escapedText === "prototype" && isObjectLiteralExpression(expr.right)) {
+            if (lhs.name.escapedText === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
                 // F.prototype = { ... }
                 return SpecialPropertyAssignmentKind.Prototype;
             }
@@ -1662,6 +1662,13 @@ namespace ts {
         }
 
         return SpecialPropertyAssignmentKind.None;
+    }
+
+    export function getInitializerOfBinaryExpression(expr: BinaryExpression) {
+        while (isBinaryExpression(expr.right)) {
+            expr = expr.right;
+        }
+        return expr.right;
     }
 
     export function isPrototypePropertyAssignment(node: Node): boolean {
@@ -1787,7 +1794,11 @@ namespace ts {
 
         function getJSDocCommentsAndTagsWorker(node: Node): void {
             const parent = node.parent;
-            if (parent && (parent.kind === SyntaxKind.PropertyAssignment || parent.kind === SyntaxKind.PropertyDeclaration || getNestedModuleDeclaration(parent))) {
+            if (parent &&
+                (parent.kind === SyntaxKind.PropertyAssignment ||
+                 parent.kind === SyntaxKind.PropertyDeclaration ||
+                 isBinaryExpression(parent) && getSpecialPropertyAssignmentKind(parent) !== SpecialPropertyAssignmentKind.None ||
+                 getNestedModuleDeclaration(parent))) {
                 getJSDocCommentsAndTagsWorker(parent);
             }
             // Try to recognize this pattern when node is initializer of variable declaration and JSDoc comments are on containing variable statement.
