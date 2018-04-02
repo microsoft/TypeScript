@@ -9,7 +9,7 @@ module.exports.n = {};
 >{} : typeof __object
 
 module.exports.n.K = function C() {
->module.exports.n.K = function C() {    this.x = 10;} : () => void
+>module.exports.n.K = function C() {    this.x = 10;} : typeof C
 >module.exports.n.K : any
 >module.exports.n : any
 >module.exports : any
@@ -17,8 +17,8 @@ module.exports.n.K = function C() {
 >exports : any
 >n : any
 >K : any
->function C() {    this.x = 10;} : () => void
->C : () => void
+>function C() {    this.x = 10;} : typeof C
+>C : typeof C
 
     this.x = 10;
 >this.x = 10 : 10
@@ -51,17 +51,17 @@ import * as s from './mod'
 >s : typeof s
 
 var k = new s.n.K()
->k : { x: number; }
->new s.n.K() : { x: number; }
->s.n.K : () => void
+>k : C
+>new s.n.K() : C
+>s.n.K : typeof C
 >s.n : typeof __object
 >s : typeof s
 >n : typeof __object
->K : () => void
+>K : typeof C
 
 k.x
 >k.x : number
->k : { x: number; }
+>k : C
 >x : number
 
 var classic = new s.Classic()
@@ -75,13 +75,13 @@ var classic = new s.Classic()
 /** @param {s.n.K} c
     @param {s.Classic} classic */
 function f(c, classic) {
->f : (c: { x: number; }, classic: (Anonymous class)) => void
->c : { x: number; }
+>f : (c: C, classic: (Anonymous class)) => void
+>c : C
 >classic : (Anonymous class)
 
     c.x
 >c.x : number
->c : { x: number; }
+>c : C
 >x : number
 
     classic.p

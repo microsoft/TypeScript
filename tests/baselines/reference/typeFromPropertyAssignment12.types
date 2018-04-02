@@ -8,11 +8,11 @@ var Outer = function(element, config) {};
 === tests/cases/conformance/salsa/usage.js ===
 /** @constructor */
 Outer.Pos = function (line, ch) {};
->Outer.Pos = function (line, ch) {} : (line: any, ch: any) => void
->Outer.Pos : (line: any, ch: any) => void
+>Outer.Pos = function (line, ch) {} : typeof (Anonymous function)
+>Outer.Pos : typeof (Anonymous function)
 >Outer : typeof Outer
->Pos : (line: any, ch: any) => void
->function (line, ch) {} : (line: any, ch: any) => void
+>Pos : typeof (Anonymous function)
+>function (line, ch) {} : typeof (Anonymous function)
 >line : any
 >ch : any
 
@@ -20,24 +20,24 @@ Outer.Pos = function (line, ch) {};
 Outer.Pos.prototype.line;
 >Outer.Pos.prototype.line : any
 >Outer.Pos.prototype : any
->Outer.Pos : (line: any, ch: any) => void
+>Outer.Pos : typeof (Anonymous function)
 >Outer : typeof Outer
->Pos : (line: any, ch: any) => void
+>Pos : typeof (Anonymous function)
 >prototype : any
 >line : any
 
 var pos = new Outer.Pos(1, 'x');
->pos : { line: number; }
->new Outer.Pos(1, 'x') : { line: number; }
->Outer.Pos : (line: any, ch: any) => void
+>pos : (Anonymous function)
+>new Outer.Pos(1, 'x') : (Anonymous function)
+>Outer.Pos : typeof (Anonymous function)
 >Outer : typeof Outer
->Pos : (line: any, ch: any) => void
+>Pos : typeof (Anonymous function)
 >1 : 1
 >'x' : "x"
 
 pos.line;
 >pos.line : number
->pos : { line: number; }
+>pos : (Anonymous function)
 >line : number
 
 

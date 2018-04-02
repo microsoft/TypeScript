@@ -7,13 +7,13 @@ exports.n = {};
 >{} : typeof __object
 
 exports.n.K = function () {
->exports.n.K = function () {    this.x = 10;} : () => void
->exports.n.K : () => void
+>exports.n.K = function () {    this.x = 10;} : typeof (Anonymous function)
+>exports.n.K : typeof (Anonymous function)
 >exports.n : typeof __object
 >exports : typeof import("tests/cases/conformance/salsa/mod")
 >n : typeof __object
->K : () => void
->function () {    this.x = 10;} : () => void
+>K : typeof (Anonymous function)
+>function () {    this.x = 10;} : typeof (Anonymous function)
 
     this.x = 10;
 >this.x = 10 : 10
@@ -44,17 +44,17 @@ import * as s from './mod'
 >s : typeof s
 
 var k = new s.n.K()
->k : { x: number; }
->new s.n.K() : { x: number; }
->s.n.K : () => void
+>k : (Anonymous function)
+>new s.n.K() : (Anonymous function)
+>s.n.K : typeof (Anonymous function)
 >s.n : typeof __object
 >s : typeof s
 >n : typeof __object
->K : () => void
+>K : typeof (Anonymous function)
 
 k.x
 >k.x : number
->k : { x: number; }
+>k : (Anonymous function)
 >x : number
 
 var classic = new s.Classic()
@@ -68,13 +68,13 @@ var classic = new s.Classic()
 /** @param {s.n.K} c
     @param {s.Classic} classic */
 function f(c, classic) {
->f : (c: { x: number; }, classic: (Anonymous class)) => void
->c : { x: number; }
+>f : (c: (Anonymous function), classic: (Anonymous class)) => void
+>c : (Anonymous function)
 >classic : (Anonymous class)
 
     c.x
 >c.x : number
->c : { x: number; }
+>c : (Anonymous function)
 >x : number
 
     classic.p

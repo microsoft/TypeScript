@@ -3067,6 +3067,11 @@ namespace ts {
                 function createAnonymousTypeNode(type: ObjectType): TypeNode {
                     const symbol = type.symbol;
                     if (symbol) {
+                        if (isJavaScriptConstructor(symbol.valueDeclaration)) {
+                            // Instance and static types share the same symbol; only add 'typeof' for the static side.
+                            const isInstanceType = type === getInferredClassType(symbol) ? SymbolFlags.Type : SymbolFlags.Value;
+                            return symbolToTypeNode(symbol, context, isInstanceType);
+                        }
                         // Always use 'typeof T' for type of class, enum, and module objects
                         if (symbol.flags & SymbolFlags.Class && !getBaseTypeVariableOfClass(symbol) && !(symbol.valueDeclaration.kind === SyntaxKind.ClassExpression && context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral) ||
                             symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule) ||
