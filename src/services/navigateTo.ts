@@ -56,9 +56,7 @@ namespace ts.NavigateTo {
                 }
             }
 
-            const matchKind = Math.min(...matches.map(m => m.kind));
-            const isCaseSensitive = allMatchesAreCaseSensitive(containerMatches);
-            rawItems.push({ name, fileName, matchKind, isCaseSensitive, declaration });
+            rawItems.push({ name, fileName, matchKind: Math.min(...matches.map(m => m.kind)), isCaseSensitive: matches.every(m => m.isCaseSensitive), declaration });
         }
     }
 
@@ -73,19 +71,6 @@ namespace ts.NavigateTo {
             default:
                 return true;
         }
-    }
-
-    function allMatchesAreCaseSensitive(matches: ReadonlyArray<PatternMatch>): boolean {
-        Debug.assert(matches.length > 0);
-
-        // This is a case sensitive match, only if all the submatches were case sensitive.
-        for (const match of matches) {
-            if (!match.isCaseSensitive) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     function tryAddSingleDeclarationName(declaration: Declaration, containers: string[]): boolean {
