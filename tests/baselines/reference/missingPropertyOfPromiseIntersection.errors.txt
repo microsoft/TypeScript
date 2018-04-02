@@ -1,0 +1,18 @@
+tests/cases/compiler/missingPropertyOfPromiseIntersection.ts(10,7): error TS2570: Property 'method' does not exist on type 'Promise<Foo> & Bar'. Did you forget to await the 'Promise<Foo> & Bar' as property 'method' exists on awaited 'Foo'?
+
+
+==== tests/cases/compiler/missingPropertyOfPromiseIntersection.ts (1 errors) ====
+    interface Foo {
+        method();
+    }
+    
+    interface Bar {
+        somethingElse();
+    }
+    
+    function f(x: Promise<Foo> & Bar) {
+        x.method();
+          ~~~~~~
+!!! error TS2570: Property 'method' does not exist on type 'Promise<Foo> & Bar'. Did you forget to await the 'Promise<Foo> & Bar' as property 'method' exists on awaited 'Foo'?
+    }
+    

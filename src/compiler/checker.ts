@@ -16529,8 +16529,14 @@ namespace ts {
                 }
             }
             const suggestion = getSuggestionForNonexistentProperty(propNode, containingType);
+            const subtypeHavingProperty = typeHavingProperty(containingType, propNode.escapedText);
+
             if (suggestion !== undefined) {
                 errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, declarationNameToString(propNode), typeToString(containingType), suggestion);
+            }
+            else if (subtypeHavingProperty) {
+                errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_forget_to_await_the_1_as_property_0_exists_on_awaited_2,
+                    declarationNameToString(propNode), typeToString(containingType), typeToString(subtypeHavingProperty));
             }
             else {
                 errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(containingType));
@@ -16541,6 +16547,14 @@ namespace ts {
         function getSuggestionForNonexistentProperty(node: Identifier, containingType: Type): string | undefined {
             const suggestion = getSpellingSuggestionForName(idText(node), getPropertiesOfType(containingType), SymbolFlags.Value);
             return suggestion && symbolName(suggestion);
+        }
+
+        function typeHavingProperty(type: Type, property: __String, errorNode?: Node): Type | undefined {
+            const types: Type[] = (type.flags & TypeFlags.UnionOrIntersection)
+                ? (type as UnionOrIntersectionType).types : [type];
+
+            return find(types.map(t => getPromisedTypeOfPromise(t, errorNode)).filter(t => t !== undefined),
+                t => getPropertyOfType(t, property) !== undefined);
         }
 
         function getSuggestionForNonexistentSymbol(location: Node, outerName: __String, meaning: SymbolFlags): string {

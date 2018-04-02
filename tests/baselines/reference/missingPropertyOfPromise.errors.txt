@@ -1,0 +1,10 @@
+tests/cases/compiler/missingPropertyOfPromise.ts(2,7): error TS2570: Property 'toLowerCase' does not exist on type 'Promise<string>'. Did you forget to await the 'Promise<string>' as property 'toLowerCase' exists on awaited 'string'?
+
+
+==== tests/cases/compiler/missingPropertyOfPromise.ts (1 errors) ====
+    function f(x: Promise<string>) {
+        x.toLowerCase();
+          ~~~~~~~~~~~
+!!! error TS2570: Property 'toLowerCase' does not exist on type 'Promise<string>'. Did you forget to await the 'Promise<string>' as property 'toLowerCase' exists on awaited 'string'?
+    }
+    

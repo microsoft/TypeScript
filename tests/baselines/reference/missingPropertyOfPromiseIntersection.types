@@ -1,0 +1,29 @@
+=== tests/cases/compiler/missingPropertyOfPromiseIntersection.ts ===
+interface Foo {
+>Foo : Foo
+
+    method();
+>method : () => any
+}
+
+interface Bar {
+>Bar : Bar
+
+    somethingElse();
+>somethingElse : () => any
+}
+
+function f(x: Promise<Foo> & Bar) {
+>f : (x: Promise<Foo> & Bar) => void
+>x : Promise<Foo> & Bar
+>Promise : Promise<T>
+>Foo : Foo
+>Bar : Bar
+
+    x.method();
+>x.method() : any
+>x.method : any
+>x : Promise<Foo> & Bar
+>method : any
+}
+

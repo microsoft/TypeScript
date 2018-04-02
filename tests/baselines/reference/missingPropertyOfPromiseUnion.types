@@ -1,0 +1,33 @@
+=== tests/cases/compiler/missingPropertyOfPromiseUnion.ts ===
+interface Foo {
+>Foo : Foo
+
+    method();
+>method : () => any
+}
+
+interface Bar {
+>Bar : Bar
+
+    method();
+>method : () => any
+
+    somethingElse();
+>somethingElse : () => any
+}
+
+function f(x: Promise<Foo> | Promise<Bar>) {
+>f : (x: Promise<Foo> | Promise<Bar>) => void
+>x : Promise<Foo> | Promise<Bar>
+>Promise : Promise<T>
+>Foo : Foo
+>Promise : Promise<T>
+>Bar : Bar
+
+    x.method();
+>x.method() : any
+>x.method : any
+>x : Promise<Foo> | Promise<Bar>
+>method : any
+}
+
