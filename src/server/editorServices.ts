@@ -391,8 +391,7 @@ namespace ts.server {
         public readonly cancellationToken: HostCancellationToken;
         public readonly useSingleInferredProject: boolean;
         public readonly useInferredProjectPerProjectRoot: boolean;
-        private readonly disableInferredProjectLanguageService?: boolean;
-        private readonly ignoreConfigFiles?: boolean;
+        private readonly syntaxOnly?: boolean;
         public readonly typingsInstaller: ITypingsInstaller;
         public readonly throttleWaitMilliseconds?: number;
         private readonly eventHandler?: ProjectServiceEventHandler;
@@ -415,12 +414,11 @@ namespace ts.server {
             this.cancellationToken = opts.cancellationToken;
             this.useSingleInferredProject = opts.useSingleInferredProject;
             this.useInferredProjectPerProjectRoot = opts.useInferredProjectPerProjectRoot;
-            this.ignoreConfigFiles = opts.syntaxOnly;
+            this.syntaxOnly = opts.syntaxOnly;
             this.typingsInstaller = opts.typingsInstaller || nullTypingsInstaller;
             this.throttleWaitMilliseconds = opts.throttleWaitMilliseconds;
             this.eventHandler = opts.eventHandler;
             this.suppressDiagnosticEvents = opts.suppressDiagnosticEvents;
-            this.disableInferredProjectLanguageService = opts.syntaxOnly;
             this.globalPlugins = opts.globalPlugins || emptyArray;
             this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray;
             this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
@@ -1203,7 +1201,7 @@ namespace ts.server {
             action: (configFileName: NormalizedPath, canonicalConfigFilePath: string) => boolean | void,
             projectRootPath?: NormalizedPath) {
 
-            if (this.ignoreConfigFiles) {
+            if (this.syntaxOnly) {
                 return undefined;
             }
 
@@ -1677,7 +1675,7 @@ namespace ts.server {
 
         private createInferredProject(currentDirectory: string | undefined, isSingleInferredProject?: boolean, projectRootPath?: NormalizedPath): InferredProject {
             const compilerOptions = projectRootPath && this.compilerOptionsForInferredProjectsPerProjectRoot.get(projectRootPath) || this.compilerOptionsForInferredProjects;
-            const project = new InferredProject(this, this.documentRegistry, compilerOptions, this.disableInferredProjectLanguageService, projectRootPath, currentDirectory);
+            const project = new InferredProject(this, this.documentRegistry, compilerOptions, this.syntaxOnly, projectRootPath, currentDirectory);
             if (isSingleInferredProject) {
                 this.inferredProjects.unshift(project);
             }
@@ -2319,7 +2317,7 @@ namespace ts.server {
             for (const file of proj.rootFiles) {
                 const normalized = toNormalizedPath(file.fileName);
                 if (getBaseConfigFileName(normalized)) {
-                    if (!this.ignoreConfigFiles && this.host.fileExists(normalized)) {
+                    if (!this.syntaxOnly && this.host.fileExists(normalized)) {
                         (tsConfigFiles || (tsConfigFiles = [])).push(normalized);
                     }
                 }
