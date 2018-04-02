@@ -84,7 +84,7 @@ namespace ts.tscWatch {
     ) {
         let screenClears = 0;
         const outputs = host.getOutput();
-        const expectedOutputCount = 2 + errors.length + postErrorsWatchDiagnostics.length +
+        const expectedOutputCount = 1 + errors.length + postErrorsWatchDiagnostics.length +
             (logsBeforeWatchDiagnostic ? logsBeforeWatchDiagnostic.length : 0) + (logsBeforeErrors ? logsBeforeErrors.length : 0);
         assert.equal(outputs.length, expectedOutputCount, JSON.stringify(outputs));
         let index = 0;
