@@ -17266,7 +17266,7 @@ namespace ts {
          */
         function getThisArgumentOfCall(node: CallLikeExpression): LeftHandSideExpression {
             if (node.kind === SyntaxKind.CallExpression) {
-                const callee = skipParenthesesAndNonNull(node.expression);
+                const callee = skipOuterExpressions(node.expression);
                 if (callee.kind === SyntaxKind.PropertyAccessExpression || callee.kind === SyntaxKind.ElementAccessExpression) {
                     return (callee as PropertyAccessExpression | ElementAccessExpression).expression;
                 }

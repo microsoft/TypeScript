@@ -2028,16 +2028,6 @@ namespace ts {
         return node;
     }
 
-    export function skipParenthesesAndNonNull(node: Expression): Expression;
-    export function skipParenthesesAndNonNull(node: Node): Node;
-    export function skipParenthesesAndNonNull(node: Node): Node {
-        while (node.kind === SyntaxKind.ParenthesizedExpression || node.kind === SyntaxKind.NonNullExpression) {
-            node = (node as ParenthesizedExpression | NonNullExpression).expression;
-        }
-
-        return node;
-    }
-
     // a node is delete target iff. it is PropertyAccessExpression/ElementAccessExpression with parentheses skipped
     export function isDeleteTarget(node: Node): boolean {
         if (node.kind !== SyntaxKind.PropertyAccessExpression && node.kind !== SyntaxKind.ElementAccessExpression) {
