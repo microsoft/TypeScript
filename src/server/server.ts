@@ -2,29 +2,6 @@
 /// <reference path="session.ts" />
 
 namespace ts.server {
-    interface IoSessionOptions {
-        host: ServerHost;
-        cancellationToken: ServerCancellationToken;
-        canUseEvents: boolean;
-        /**
-         * If defined, specifies the socket used to send events to the client.
-         * Otherwise, events are sent through the host.
-         */
-        eventPort?: number;
-        useSingleInferredProject: boolean;
-        useInferredProjectPerProjectRoot: boolean;
-        disableAutomaticTypingAcquisition: boolean;
-        globalTypingsCacheLocation: string;
-        logger: Logger;
-        typingSafeListLocation: string;
-        typesMapLocation: string | undefined;
-        npmLocation: string | undefined;
-        telemetryEnabled: boolean;
-        globalPlugins: ReadonlyArray<string>;
-        pluginProbeLocations: ReadonlyArray<string>;
-        allowLocalPluginLoads: boolean;
-    }
-
     const childProcess: {
         fork(modulePath: string, args: string[], options?: { execArgv: string[], env?: MapLike<string> }): NodeChildProcess;
         execFileSync(file: string, args: string[], options: { stdio: "ignore", env: MapLike<string> }): string | Buffer;
@@ -128,7 +105,7 @@ namespace ts.server {
 
     const fs: {
         openSync(path: string, options: string): number;
-        close(fd: number): void;
+        close(fd: number, callback: (err: NodeJS.ErrnoException) => void): void;
         writeSync(fd: number, buffer: Buffer, offset: number, length: number, position?: number): number;
         writeSync(fd: number, data: any, position?: number, enconding?: string): number;
         statSync(path: string): Stats;
@@ -167,7 +144,7 @@ namespace ts.server {
 
         close() {
             if (this.fd >= 0) {
-                fs.close(this.fd);
+                fs.close(this.fd, noop);
             }
         }
 
@@ -505,9 +482,7 @@ namespace ts.server {
         private socketEventQueue: { body: any, eventName: string }[] | undefined;
         private constructed: boolean | undefined;
 
-        constructor(options: IoSessionOptions) {
-            const { host, eventPort, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, canUseEvents } = options;
-
+        constructor() {
             const event: Event | undefined = (body: object, eventName: string) => {
                 if (this.constructed) {
                     this.event(body, eventName);
@@ -521,9 +496,11 @@ namespace ts.server {
                 }
             };
 
+            const host = sys;
+
             const typingsInstaller = disableAutomaticTypingAcquisition
                 ? undefined
-                : new NodeTypingsInstaller(telemetryEnabled, logger, host, globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, event);
+                : new NodeTypingsInstaller(telemetryEnabled, logger, host, getGlobalTypingsCacheLocation(), typingSafeListLocation, typesMapLocation, npmLocation, event);
 
             super({
                 host,
@@ -534,10 +511,11 @@ namespace ts.server {
                 byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
                 logger,
-                canUseEvents,
-                globalPlugins: options.globalPlugins,
-                pluginProbeLocations: options.pluginProbeLocations,
-                allowLocalPluginLoads: options.allowLocalPluginLoads
+                canUseEvents: true,
+                suppressDiagnosticEvents,
+                globalPlugins,
+                pluginProbeLocations,
+                allowLocalPluginLoads,
             });
 
             this.eventPort = eventPort;
@@ -685,11 +663,11 @@ namespace ts.server {
                 return;
             }
 
-            fs.stat(watchedFile.fileName, (err: any, stats: any) => {
+            fs.stat(watchedFile.fileName, (err, stats) => {
                 if (err) {
                     if (err.code === "ENOENT") {
                         if (watchedFile.mtime.getTime() !== 0) {
-                            watchedFile.mtime = new Date(0);
+                            watchedFile.mtime = missingFileModifiedTime;
                             watchedFile.callback(watchedFile.fileName, FileWatcherEventKind.Deleted);
                         }
                     }
@@ -698,17 +676,7 @@ namespace ts.server {
                     }
                 }
                 else {
-                    const oldTime = watchedFile.mtime.getTime();
-                    const newTime = stats.mtime.getTime();
-                    if (oldTime !== newTime) {
-                        watchedFile.mtime = stats.mtime;
-                        const eventKind = oldTime === 0
-                            ? FileWatcherEventKind.Created
-                            : newTime === 0
-                                ? FileWatcherEventKind.Deleted
-                                : FileWatcherEventKind.Changed;
-                        watchedFile.callback(watchedFile.fileName, eventKind);
-                    }
+                    onWatchedFileStat(watchedFile, stats.mtime);
                 }
             });
         }
@@ -742,7 +710,7 @@ namespace ts.server {
                 callback,
                 mtime: sys.fileExists(fileName)
                     ? getModifiedTime(fileName)
-                    : new Date(0) // Any subsequent modification will occur after this time
+                    : missingFileModifiedTime // Any subsequent modification will occur after this time
             };
 
             watchedFiles.push(file);
@@ -960,37 +928,20 @@ namespace ts.server {
     const useSingleInferredProject = hasArgument("--useSingleInferredProject");
     const useInferredProjectPerProjectRoot = hasArgument("--useInferredProjectPerProjectRoot");
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
+    const suppressDiagnosticEvents = hasArgument("--suppressDiagnosticEvents");
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
-
-    const options: IoSessionOptions = {
-        host: sys,
-        cancellationToken,
-        eventPort,
-        canUseEvents: true,
-        useSingleInferredProject,
-        useInferredProjectPerProjectRoot,
-        disableAutomaticTypingAcquisition,
-        globalTypingsCacheLocation: getGlobalTypingsCacheLocation(),
-        typingSafeListLocation,
-        typesMapLocation,
-        npmLocation,
-        telemetryEnabled,
-        logger,
-        globalPlugins,
-        pluginProbeLocations,
-        allowLocalPluginLoads
-    };
 
     logger.info(`Starting TS Server`);
     logger.info(`Version: ${version}`);
     logger.info(`Arguments: ${process.argv.join(" ")}`);
     logger.info(`Platform: ${os.platform()} NodeVersion: ${nodeVersion} CaseSensitive: ${sys.useCaseSensitiveFileNames}`);
 
-    const ioSession = new IOSession(options);
+    const ioSession = new IOSession();
     process.on("uncaughtException", err => {
         ioSession.logError(err, "unknown");
     });
     // See https://github.com/Microsoft/TypeScript/issues/11348
+    // tslint:disable-next-line no-unnecessary-type-assertion-2
     (process as any).noAsar = true;
     // Start listening
     ioSession.listen();

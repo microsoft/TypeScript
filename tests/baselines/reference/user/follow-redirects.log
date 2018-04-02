@@ -1,0 +1,31 @@
+Exit Code: 1
+Standard output:
+node_modules/follow-redirects/index.js(62,5): error TS2532: Object is possibly 'undefined'.
+node_modules/follow-redirects/index.js(62,35): error TS2345: Argument of type '{ data: any; encoding: any; }' is not assignable to parameter of type 'never'.
+node_modules/follow-redirects/index.js(63,10): error TS2339: Property '_currentRequest' does not exist on type '{ _options: any; _redirectCount: number | undefined; _requestBodyLength: number | undefined; _req...'.
+node_modules/follow-redirects/index.js(66,10): error TS2339: Property 'emit' does not exist on type '{ _options: any; _redirectCount: number | undefined; _requestBodyLength: number | undefined; _req...'.
+node_modules/follow-redirects/index.js(67,10): error TS2339: Property 'abort' does not exist on type '{ _options: any; _redirectCount: number | undefined; _requestBodyLength: number | undefined; _req...'.
+node_modules/follow-redirects/index.js(73,29): error TS2339: Property '_currentRequest' does not exist on type '{ _options: any; _redirectCount: number | undefined; _requestBodyLength: number | undefined; _req...'.
+node_modules/follow-redirects/index.js(87,8): error TS2339: Property '_currentRequest' does not exist on type '{ _options: any; _redirectCount: number | undefined; _requestBodyLength: number | undefined; _req...'.
+node_modules/follow-redirects/index.js(93,8): error TS2339: Property '_currentRequest' does not exist on type '{ _options: any; _redirectCount: number | undefined; _requestBodyLength: number | undefined; _req...'.
+node_modules/follow-redirects/index.js(127,22): error TS2339: Property '_currentRequest' does not exist on type '{ _options: any; _redirectCount: number | undefined; _requestBodyLength: number | undefined; _req...'.
+node_modules/follow-redirects/index.js(129,8): error TS2339: Property '_currentUrl' does not exist on type '{ _options: any; _redirectCount: number | undefined; _requestBodyLength: number | undefined; _req...'.
+node_modules/follow-redirects/index.js(142,12): error TS2339: Property '_isRedirect' does not exist on type '{ _options: any; _redirectCount: number | undefined; _requestBodyLength: number | undefined; _req...'.
+node_modules/follow-redirects/index.js(146,11): error TS2532: Object is possibly 'undefined'.
+node_modules/follow-redirects/index.js(147,22): error TS2532: Object is possibly 'undefined'.
+node_modules/follow-redirects/index.js(148,23): error TS2532: Object is possibly 'undefined'.
+node_modules/follow-redirects/index.js(148,36): error TS2532: Object is possibly 'undefined'.
+node_modules/follow-redirects/index.js(170,11): error TS2532: Object is possibly 'undefined'.
+node_modules/follow-redirects/index.js(171,12): error TS2339: Property 'emit' does not exist on type '{ _options: any; _redirectCount: number | undefined; _requestBodyLength: number | undefined; _req...'.
+node_modules/follow-redirects/index.js(196,15): error TS2339: Property '_isRedirect' does not exist on type '{ _options: any; _redirectCount: number | undefined; _requestBodyLength: number | undefined; _req...'.
+node_modules/follow-redirects/index.js(205,40): error TS2339: Property '_currentUrl' does not exist on type '{ _options: any; _redirectCount: number | undefined; _requestBodyLength: number | undefined; _req...'.
+node_modules/follow-redirects/index.js(207,12): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/follow-redirects/index.js(208,10): error TS2339: Property '_isRedirect' does not exist on type '{ _options: any; _redirectCount: number | undefined; _requestBodyLength: number | undefined; _req...'.
+node_modules/follow-redirects/index.js(213,33): error TS2339: Property '_currentUrl' does not exist on type '{ _options: any; _redirectCount: number | undefined; _requestBodyLength: number | undefined; _req...'.
+node_modules/follow-redirects/index.js(214,10): error TS2339: Property 'emit' does not exist on type '{ _options: any; _redirectCount: number | undefined; _requestBodyLength: number | undefined; _req...'.
+node_modules/follow-redirects/index.js(243,26): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/follow-redirects/index.js(266,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+
+
+
+Standard error:

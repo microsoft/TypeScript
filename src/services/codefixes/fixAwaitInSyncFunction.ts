@@ -12,7 +12,7 @@ namespace ts.codefix {
             const nodes = getNodes(sourceFile, span.start);
             if (!nodes) return undefined;
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, nodes));
-            return [{ description: getLocaleSpecificMessage(Diagnostics.Add_async_modifier_to_containing_function), changes, fixId }];
+            return [createCodeFixAction(changes, Diagnostics.Add_async_modifier_to_containing_function, fixId, Diagnostics.Add_all_missing_async_modifiers)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
@@ -36,6 +36,10 @@ namespace ts.codefix {
     function getNodes(sourceFile: SourceFile, start: number): { insertBefore: Node, returnType: TypeNode | undefined } | undefined {
         const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
         const containingFunction = getContainingFunction(token);
+        if (!containingFunction) {
+            return;
+        }
+
         let insertBefore: Node | undefined;
         switch (containingFunction.kind) {
             case SyntaxKind.MethodDeclaration:

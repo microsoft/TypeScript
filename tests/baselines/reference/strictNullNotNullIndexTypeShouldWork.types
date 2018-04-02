@@ -22,12 +22,12 @@ class Test<T extends A> {
 
         this.attrs.params!.name;
 >this.attrs.params!.name : string
->this.attrs.params! : { name: string; }
->this.attrs.params : { name: string; } | undefined
+>this.attrs.params! : NonNullable<T["params"]>
+>this.attrs.params : T["params"]
 >this.attrs : Readonly<T>
 >this : this
 >attrs : Readonly<T>
->params : { name: string; } | undefined
+>params : T["params"]
 >name : string
     }
 }
@@ -76,14 +76,14 @@ class Test2<T extends A> {
 >T : T
 
     m() {
->m : () => { name: string; }
+>m : () => NonNullable<T["params"]>
 
         return this.attrs.params!; // Return type should maintain relationship with `T` after being not-null-asserted, ideally
->this.attrs.params! : { name: string; }
->this.attrs.params : { name: string; } | undefined
+>this.attrs.params! : NonNullable<T["params"]>
+>this.attrs.params : T["params"]
 >this.attrs : Readonly<T>
 >this : this
 >attrs : Readonly<T>
->params : { name: string; } | undefined
+>params : T["params"]
     }
 }

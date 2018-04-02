@@ -18,7 +18,7 @@ define("main", ["require", "exports", "folder/test"], function (require, exports
 
 //// [outputfile.d.ts]
 declare module "folder/test" {
-    export {  };
+    export {};
 }
 declare module "main" {
     import "folder/test";

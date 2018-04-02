@@ -163,6 +163,11 @@ function f21<T extends number | string>(x: T, y: ZeroOf<T>) {
     y = x;  // Error
 }
 
+type T35<T extends { a: string, b: number }> = T[];
+type T36<T> = T extends { a: string } ? T extends { b: number } ? T35<T> : never : never;
+type T37<T> = T extends { b: number } ? T extends { a: string } ? T35<T> : never : never;
+type T38<T> = [T] extends [{ a: string }] ? [T] extends [{ b: number }] ? T35<T> : never : never;
+
 type Extends<T, U> = T extends U ? true : false;
 type If<C extends boolean, T, F> = C extends true ? T : F;
 type Not<C extends boolean> = If<C, false, true>;
@@ -209,6 +214,14 @@ type IsNever<T> = [T] extends [never] ? true : false;
 type T50 = IsNever<never>;  // true
 type T51 = IsNever<number>;  // false
 type T52 = IsNever<any>;  // false
+
+function f22<T>(x: T extends (infer U)[] ? U[] : never) {
+    let e = x[0];  // {}
+}
+
+function f23<T extends string[]>(x: T extends (infer U)[] ? U[] : never) {
+    let e = x[0];  // string
+}
 
 // Repros from #21664
 
@@ -317,3 +330,26 @@ type NonFooKeys2<T extends object> = Exclude<keyof T, 'foo'>;
 
 type Test1 = NonFooKeys1<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
 type Test2 = NonFooKeys2<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
+
+// Repro from #21729
+
+interface Foo2 { foo: string; }
+interface Bar2 { bar: string; }
+type FooBar = Foo2 | Bar2;
+declare interface ExtractFooBar<FB extends FooBar> { }
+
+type Extracted<Struct> = {
+    [K in keyof Struct]: Struct[K] extends FooBar ? ExtractFooBar<Struct[K]> : Struct[K];
+}
+
+// Repro from #22985
+
+type RecursivePartial<T> = {
+  [P in keyof T]?: T[P] extends Array<any> ? {[index: number]: RecursivePartial<T[P][0]>} :
+    T[P] extends object ? RecursivePartial<T[P]> : T[P];
+};
+
+declare function assign<T>(o: T, a: RecursivePartial<T>): void;
+
+var a = {o: 1, b: 2, c: [{a: 1, c: '213'}]}
+assign(a, {o: 2, c: {0: {a: 2, c: '213123'}}})

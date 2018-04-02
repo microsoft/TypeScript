@@ -9,7 +9,7 @@ const {
     active: _a, // here!
 >_a : Symbol(_a, Decl(unusedLocalsAndObjectSpread2.ts, 2, 13))
 
-  ...rest,
+  ...rest
 >rest : Symbol(rest, Decl(unusedLocalsAndObjectSpread2.ts, 3, 15))
 
 } = props;
@@ -25,10 +25,10 @@ function foo() {
         active: _a,
 >_a : Symbol(_a, Decl(unusedLocalsAndObjectSpread2.ts, 9, 17))
 
-    ...rest,
+        ...rest
 >rest : Symbol(rest, Decl(unusedLocalsAndObjectSpread2.ts, 10, 19))
 
-  } = props;
+    } = props;
 >props : Symbol(props, Decl(unusedLocalsAndObjectSpread2.ts, 0, 11))
 }
 

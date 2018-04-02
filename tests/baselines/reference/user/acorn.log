@@ -1,0 +1,301 @@
+Exit Code: 1
+Standard output:
+node_modules/acorn/bin/_acorn.js(51,30): error TS2339: Property 'getToken' does not exist on type '{ options: any; sourceFile: any; keywords: RegExp | undefined; reservedWords: RegExp | undefined;...'.
+node_modules/acorn/bin/_acorn.js(59,59): error TS2345: Argument of type '2 | null' is not assignable to parameter of type 'string | number | undefined'.
+  Type 'null' is not assignable to type 'string | number | undefined'.
+node_modules/acorn/bin/_acorn.js(63,23): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Buffer | URL'.
+  Type 'undefined' is not assignable to type 'string | number | Buffer | URL'.
+node_modules/acorn/bin/run_test262.js(3,21): error TS2307: Cannot find module 'test262-parser-runner'.
+node_modules/acorn/dist/acorn.es.js(36,1): error TS2322: Type 'null' is not assignable to type 'string'.
+node_modules/acorn/dist/acorn.es.js(36,32): error TS2322: Type 'null' is not assignable to type 'string'.
+node_modules/acorn/dist/acorn.es.js(522,65): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.es.js(523,75): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.es.js(540,43): error TS2339: Property 'startNode' does not exist on type '{ options: any; sourceFile: any; keywords: RegExp | undefined; reservedWords: RegExp | undefined;...'.
+node_modules/acorn/dist/acorn.es.js(541,8): error TS2339: Property 'nextToken' does not exist on type '{ options: any; sourceFile: any; keywords: RegExp | undefined; reservedWords: RegExp | undefined;...'.
+node_modules/acorn/dist/acorn.es.js(542,15): error TS2339: Property 'parseTopLevel' does not exist on type '{ options: any; sourceFile: any; keywords: RegExp | undefined; reservedWords: RegExp | undefined;...'.
+node_modules/acorn/dist/acorn.es.js(555,14): error TS2531: Object is possibly 'null'.
+node_modules/acorn/dist/acorn.es.js(715,25): error TS2531: Object is possibly 'null'.
+node_modules/acorn/dist/acorn.es.js(735,25): error TS2531: Object is possibly 'null'.
+node_modules/acorn/dist/acorn.es.js(2642,9): error TS2322: Type 'null' is not assignable to type 'undefined'.
+node_modules/acorn/dist/acorn.es.js(2743,7): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
+node_modules/acorn/dist/acorn.es.js(2743,22): error TS2339: Property 'loc' does not exist on type 'SyntaxError'.
+node_modules/acorn/dist/acorn.es.js(2743,37): error TS2339: Property 'raisedAt' does not exist on type 'SyntaxError'.
+node_modules/acorn/dist/acorn.es.js(2758,21): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/acorn/dist/acorn.es.js(2953,1): error TS2322: Type '() => void' is not assignable to type 'null | undefined'.
+  Type '() => void' is not assignable to type 'null'.
+node_modules/acorn/dist/acorn.es.js(2953,30): error TS2322: Type '() => void' is not assignable to type 'null | undefined'.
+  Type '() => void' is not assignable to type 'null'.
+node_modules/acorn/dist/acorn.es.js(2954,12): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(2955,10): error TS2339: Property 'exprAllowed' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(2958,18): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(2959,38): error TS2339: Property 'curContext' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(2960,16): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(2962,8): error TS2339: Property 'exprAllowed' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(2965,1): error TS2322: Type '(prevType: any) => void' is not assignable to type 'null | undefined'.
+  Type '(prevType: any) => void' is not assignable to type 'null'.
+node_modules/acorn/dist/acorn.es.js(2966,8): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(2966,26): error TS2339: Property 'braceIsBlock' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(2967,8): error TS2339: Property 'exprAllowed' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(2970,1): error TS2322: Type '() => void' is not assignable to type 'null | undefined'.
+  Type '() => void' is not assignable to type 'null'.
+node_modules/acorn/dist/acorn.es.js(2971,8): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(2972,8): error TS2339: Property 'exprAllowed' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(2975,1): error TS2322: Type '(prevType: any) => void' is not assignable to type 'null | undefined'.
+  Type '(prevType: any) => void' is not assignable to type 'null'.
+node_modules/acorn/dist/acorn.es.js(2977,8): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(2978,8): error TS2339: Property 'exprAllowed' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(2981,1): error TS2322: Type '() => void' is not assignable to type 'null | undefined'.
+  Type '() => void' is not assignable to type 'null'.
+node_modules/acorn/dist/acorn.es.js(2985,1): error TS2322: Type '(prevType: any) => void' is not assignable to type 'null | undefined'.
+  Type '(prevType: any) => void' is not assignable to type 'null'.
+node_modules/acorn/dist/acorn.es.js(2985,33): error TS2322: Type '(prevType: any) => void' is not assignable to type 'null | undefined'.
+  Type '(prevType: any) => void' is not assignable to type 'null'.
+node_modules/acorn/dist/acorn.es.js(2987,73): error TS2339: Property 'curContext' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(2988,12): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(2990,12): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(2991,8): error TS2339: Property 'exprAllowed' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(2994,1): error TS2322: Type '() => void' is not assignable to type 'null | undefined'.
+  Type '() => void' is not assignable to type 'null'.
+node_modules/acorn/dist/acorn.es.js(2995,12): error TS2339: Property 'curContext' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(2996,12): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(2998,12): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(2999,8): error TS2339: Property 'exprAllowed' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(3002,1): error TS2322: Type '(prevType: any) => void' is not assignable to type 'null | undefined'.
+  Type '(prevType: any) => void' is not assignable to type 'null'.
+node_modules/acorn/dist/acorn.es.js(3004,22): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(3005,14): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(3006,14): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(3008,14): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(3010,8): error TS2339: Property 'exprAllowed' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(3013,1): error TS2322: Type '(prevType: any) => void' is not assignable to type 'null | undefined'.
+  Type '(prevType: any) => void' is not assignable to type 'null'.
+node_modules/acorn/dist/acorn.es.js(3015,12): error TS2339: Property 'options' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(3016,14): error TS2339: Property 'value' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(3016,37): error TS2339: Property 'exprAllowed' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(3017,14): error TS2339: Property 'value' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(3017,39): error TS2339: Property 'inGeneratorContext' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(3020,8): error TS2339: Property 'exprAllowed' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.es.js(3522,11): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.es.js(3526,11): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.es.js(3530,22): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.es.js(3535,11): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.es.js(3539,11): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.es.js(3584,23): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.es.js(3585,16): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.es.js(3586,9): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.es.js(3589,9): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.es.js(3609,58): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.es.js(4950,23): error TS2322: Type 'number' is not assignable to type 'undefined'.
+node_modules/acorn/dist/acorn.es.js(4951,28): error TS2322: Type 'number' is not assignable to type 'undefined'.
+node_modules/acorn/dist/acorn.es.js(4952,42): error TS2322: Type 'number' is not assignable to type 'undefined'.
+node_modules/acorn/dist/acorn.es.js(4953,12): error TS2322: Type 'number' is not assignable to type 'undefined'.
+node_modules/acorn/dist/acorn.es.js(4954,9): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.es.js(4956,29): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.es.js(5282,5): error TS2339: Property 'nextToken' does not exist on type '{ options: any; sourceFile: any; keywords: RegExp | undefined; reservedWords: RegExp | undefined;...'.
+node_modules/acorn/dist/acorn.es.js(5283,12): error TS2339: Property 'parseExpression' does not exist on type '{ options: any; sourceFile: any; keywords: RegExp | undefined; reservedWords: RegExp | undefined;...'.
+node_modules/acorn/dist/acorn.js(3,9): error TS2304: Cannot find name 'define'.
+node_modules/acorn/dist/acorn.js(3,34): error TS2304: Cannot find name 'define'.
+node_modules/acorn/dist/acorn.js(3,47): error TS2304: Cannot find name 'define'.
+node_modules/acorn/dist/acorn.js(42,1): error TS2322: Type 'null' is not assignable to type 'string'.
+node_modules/acorn/dist/acorn.js(42,32): error TS2322: Type 'null' is not assignable to type 'string'.
+node_modules/acorn/dist/acorn.js(528,65): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.js(529,75): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.js(546,43): error TS2339: Property 'startNode' does not exist on type '{ options: any; sourceFile: any; keywords: RegExp | undefined; reservedWords: RegExp | undefined;...'.
+node_modules/acorn/dist/acorn.js(547,8): error TS2339: Property 'nextToken' does not exist on type '{ options: any; sourceFile: any; keywords: RegExp | undefined; reservedWords: RegExp | undefined;...'.
+node_modules/acorn/dist/acorn.js(548,15): error TS2339: Property 'parseTopLevel' does not exist on type '{ options: any; sourceFile: any; keywords: RegExp | undefined; reservedWords: RegExp | undefined;...'.
+node_modules/acorn/dist/acorn.js(561,14): error TS2531: Object is possibly 'null'.
+node_modules/acorn/dist/acorn.js(721,25): error TS2531: Object is possibly 'null'.
+node_modules/acorn/dist/acorn.js(741,25): error TS2531: Object is possibly 'null'.
+node_modules/acorn/dist/acorn.js(2648,9): error TS2322: Type 'null' is not assignable to type 'undefined'.
+node_modules/acorn/dist/acorn.js(2749,7): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
+node_modules/acorn/dist/acorn.js(2749,22): error TS2339: Property 'loc' does not exist on type 'SyntaxError'.
+node_modules/acorn/dist/acorn.js(2749,37): error TS2339: Property 'raisedAt' does not exist on type 'SyntaxError'.
+node_modules/acorn/dist/acorn.js(2764,21): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
+node_modules/acorn/dist/acorn.js(2959,1): error TS2322: Type '() => void' is not assignable to type 'null | undefined'.
+  Type '() => void' is not assignable to type 'null'.
+node_modules/acorn/dist/acorn.js(2959,30): error TS2322: Type '() => void' is not assignable to type 'null | undefined'.
+  Type '() => void' is not assignable to type 'null'.
+node_modules/acorn/dist/acorn.js(2960,12): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(2961,10): error TS2339: Property 'exprAllowed' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(2964,18): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(2965,38): error TS2339: Property 'curContext' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(2966,16): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(2968,8): error TS2339: Property 'exprAllowed' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(2971,1): error TS2322: Type '(prevType: any) => void' is not assignable to type 'null | undefined'.
+  Type '(prevType: any) => void' is not assignable to type 'null'.
+node_modules/acorn/dist/acorn.js(2972,8): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(2972,26): error TS2339: Property 'braceIsBlock' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(2973,8): error TS2339: Property 'exprAllowed' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(2976,1): error TS2322: Type '() => void' is not assignable to type 'null | undefined'.
+  Type '() => void' is not assignable to type 'null'.
+node_modules/acorn/dist/acorn.js(2977,8): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(2978,8): error TS2339: Property 'exprAllowed' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(2981,1): error TS2322: Type '(prevType: any) => void' is not assignable to type 'null | undefined'.
+  Type '(prevType: any) => void' is not assignable to type 'null'.
+node_modules/acorn/dist/acorn.js(2983,8): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(2984,8): error TS2339: Property 'exprAllowed' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(2987,1): error TS2322: Type '() => void' is not assignable to type 'null | undefined'.
+  Type '() => void' is not assignable to type 'null'.
+node_modules/acorn/dist/acorn.js(2991,1): error TS2322: Type '(prevType: any) => void' is not assignable to type 'null | undefined'.
+  Type '(prevType: any) => void' is not assignable to type 'null'.
+node_modules/acorn/dist/acorn.js(2991,33): error TS2322: Type '(prevType: any) => void' is not assignable to type 'null | undefined'.
+  Type '(prevType: any) => void' is not assignable to type 'null'.
+node_modules/acorn/dist/acorn.js(2993,73): error TS2339: Property 'curContext' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(2994,12): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(2996,12): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(2997,8): error TS2339: Property 'exprAllowed' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(3000,1): error TS2322: Type '() => void' is not assignable to type 'null | undefined'.
+  Type '() => void' is not assignable to type 'null'.
+node_modules/acorn/dist/acorn.js(3001,12): error TS2339: Property 'curContext' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(3002,12): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(3004,12): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(3005,8): error TS2339: Property 'exprAllowed' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(3008,1): error TS2322: Type '(prevType: any) => void' is not assignable to type 'null | undefined'.
+  Type '(prevType: any) => void' is not assignable to type 'null'.
+node_modules/acorn/dist/acorn.js(3010,22): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(3011,14): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(3012,14): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(3014,14): error TS2339: Property 'context' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(3016,8): error TS2339: Property 'exprAllowed' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(3019,1): error TS2322: Type '(prevType: any) => void' is not assignable to type 'null | undefined'.
+  Type '(prevType: any) => void' is not assignable to type 'null'.
+node_modules/acorn/dist/acorn.js(3021,12): error TS2339: Property 'options' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(3022,14): error TS2339: Property 'value' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(3022,37): error TS2339: Property 'exprAllowed' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(3023,14): error TS2339: Property 'value' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(3023,39): error TS2339: Property 'inGeneratorContext' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(3026,8): error TS2339: Property 'exprAllowed' does not exist on type '{ label: any; keyword: any; beforeExpr: boolean | undefined; startsExpr: boolean | undefined; isL...'.
+node_modules/acorn/dist/acorn.js(3528,11): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.js(3532,11): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.js(3536,22): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.js(3541,11): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.js(3545,11): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.js(3590,23): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.js(3591,16): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.js(3592,9): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.js(3595,9): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.js(3615,58): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.js(4956,23): error TS2322: Type 'number' is not assignable to type 'undefined'.
+node_modules/acorn/dist/acorn.js(4957,28): error TS2322: Type 'number' is not assignable to type 'undefined'.
+node_modules/acorn/dist/acorn.js(4958,42): error TS2322: Type 'number' is not assignable to type 'undefined'.
+node_modules/acorn/dist/acorn.js(4959,12): error TS2322: Type 'number' is not assignable to type 'undefined'.
+node_modules/acorn/dist/acorn.js(4960,9): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.js(4962,29): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn.js(5288,5): error TS2339: Property 'nextToken' does not exist on type '{ options: any; sourceFile: any; keywords: RegExp | undefined; reservedWords: RegExp | undefined;...'.
+node_modules/acorn/dist/acorn.js(5289,12): error TS2339: Property 'parseExpression' does not exist on type '{ options: any; sourceFile: any; keywords: RegExp | undefined; reservedWords: RegExp | undefined;...'.
+node_modules/acorn/dist/acorn_loose.es.js(33,30): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(33,71): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(37,36): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(37,52): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(37,74): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(50,14): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(52,22): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(54,23): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(63,7): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(63,23): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(65,7): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(72,9): error TS2339: Property 'name' does not exist on type '{ type: string | undefined; start: any; end: number | undefined; loc: { start: any; end: any; sou...'.
+node_modules/acorn/dist/acorn_loose.es.js(78,9): error TS2339: Property 'value' does not exist on type '{ type: string | undefined; start: any; end: number | undefined; loc: { start: any; end: any; sou...'.
+node_modules/acorn/dist/acorn_loose.es.js(78,23): error TS2339: Property 'raw' does not exist on type '{ type: string | undefined; start: any; end: number | undefined; loc: { start: any; end: any; sou...'.
+node_modules/acorn/dist/acorn_loose.es.js(83,7): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(84,10): error TS2339: Property 'next' does not exist on type '{ toks: { options: any; sourceFile: any; keywords: RegExp | undefined; reservedWords: RegExp | un...'.
+node_modules/acorn/dist/acorn_loose.es.js(92,10): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(92,45): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(96,10): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(100,10): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(100,44): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(101,37): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(101,52): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(113,16): error TS2339: Property 'lookAhead' does not exist on type '{ toks: { options: any; sourceFile: any; keywords: RegExp | undefined; reservedWords: RegExp | un...'.
+node_modules/acorn/dist/acorn_loose.es.js(114,44): error TS2339: Property 'next' does not exist on type '{ toks: { options: any; sourceFile: any; keywords: RegExp | undefined; reservedWords: RegExp | un...'.
+node_modules/acorn/dist/acorn_loose.es.js(121,3): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(121,21): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'never'.
+  Type 'undefined' is not assignable to type 'never'.
+node_modules/acorn/dist/acorn_loose.es.js(125,20): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(145,7): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(145,37): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(146,39): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(154,16): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(154,41): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(176,8): error TS2339: Property 'next' does not exist on type '{ toks: { options: any; sourceFile: any; keywords: RegExp | undefined; reservedWords: RegExp | un...'.
+node_modules/acorn/dist/acorn_loose.es.js(177,15): error TS2339: Property 'parseTopLevel' does not exist on type '{ toks: { options: any; sourceFile: any; keywords: RegExp | undefined; reservedWords: RegExp | un...'.
+node_modules/acorn/dist/acorn_loose.es.js(221,36): error TS2339: Property 'raisedAt' does not exist on type 'SyntaxError'.
+node_modules/acorn/dist/acorn_loose.es.js(223,32): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
+node_modules/acorn/dist/acorn_loose.es.js(225,11): error TS2322: Type '{ start: any; end: any; type: { label: any; keyword: any; beforeExpr: boolean | undefined; starts...' is not assignable to type 'boolean'.
+node_modules/acorn/dist/acorn_loose.es.js(225,31): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
+node_modules/acorn/dist/acorn_loose.es.js(225,97): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
+node_modules/acorn/dist/acorn_loose.es.js(227,41): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
+node_modules/acorn/dist/acorn_loose.es.js(229,11): error TS2322: Type '{ start: any; end: any; type: { label: any; keyword: any; beforeExpr: boolean | undefined; starts...' is not assignable to type 'boolean'.
+node_modules/acorn/dist/acorn_loose.es.js(229,31): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
+node_modules/acorn/dist/acorn_loose.es.js(231,11): error TS2322: Type '{ start: any; end: any; type: { label: any; keyword: any; beforeExpr: boolean | undefined; starts...' is not assignable to type 'boolean'.
+node_modules/acorn/dist/acorn_loose.es.js(232,22): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
+node_modules/acorn/dist/acorn_loose.es.js(235,41): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
+node_modules/acorn/dist/acorn_loose.es.js(256,31): error TS2322: Type '{ start: any; end: any; type: { label: any; keyword: any; beforeExpr: boolean | undefined; starts...' is not assignable to type 'boolean'.
+node_modules/acorn/dist/acorn_loose.es.js(259,21): error TS2339: Property 'loc' does not exist on type 'true'.
+node_modules/acorn/dist/acorn_loose.es.js(261,47): error TS2339: Property 'start' does not exist on type 'true'.
+node_modules/acorn/dist/acorn_loose.es.js(262,47): error TS2339: Property 'end' does not exist on type 'true'.
+node_modules/acorn/dist/acorn_loose.es.js(598,7): error TS2322: Type 'true' is not assignable to type 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(602,7): error TS2322: Type 'false' is not assignable to type 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(1159,7): error TS2322: Type 'true' is not assignable to type 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(1163,7): error TS2322: Type 'false' is not assignable to type 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(3,9): error TS2304: Cannot find name 'define'.
+node_modules/acorn/dist/acorn_loose.js(3,34): error TS2304: Cannot find name 'define'.
+node_modules/acorn/dist/acorn_loose.js(3,47): error TS2304: Cannot find name 'define'.
+node_modules/acorn/dist/acorn_loose.js(37,38): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(37,79): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(41,36): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(41,52): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(41,74): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(54,14): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(56,22): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(58,23): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(87,7): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(88,10): error TS2339: Property 'next' does not exist on type '{ toks: any; options: any; input: any; tok: { [x: string]: any; type: any; start: number; end: nu...'.
+node_modules/acorn/dist/acorn_loose.js(96,10): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(96,53): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(100,10): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(104,10): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(104,52): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(105,45): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(105,60): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(117,16): error TS2339: Property 'lookAhead' does not exist on type '{ toks: any; options: any; input: any; tok: { [x: string]: any; type: any; start: number; end: nu...'.
+node_modules/acorn/dist/acorn_loose.js(118,44): error TS2339: Property 'next' does not exist on type '{ toks: any; options: any; input: any; tok: { [x: string]: any; type: any; start: number; end: nu...'.
+node_modules/acorn/dist/acorn_loose.js(125,3): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(125,21): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'never'.
+  Type 'undefined' is not assignable to type 'never'.
+node_modules/acorn/dist/acorn_loose.js(129,20): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(149,7): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(149,37): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(150,39): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(158,16): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(158,41): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(180,8): error TS2339: Property 'next' does not exist on type '{ toks: any; options: any; input: any; tok: { [x: string]: any; type: any; start: number; end: nu...'.
+node_modules/acorn/dist/acorn_loose.js(181,15): error TS2339: Property 'parseTopLevel' does not exist on type '{ toks: any; options: any; input: any; tok: { [x: string]: any; type: any; start: number; end: nu...'.
+node_modules/acorn/dist/acorn_loose.js(225,36): error TS2339: Property 'raisedAt' does not exist on type 'SyntaxError'.
+node_modules/acorn/dist/acorn_loose.js(227,32): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
+node_modules/acorn/dist/acorn_loose.js(229,11): error TS2322: Type '{ start: any; end: any; type: any; value: any; }' is not assignable to type 'boolean'.
+node_modules/acorn/dist/acorn_loose.js(229,31): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
+node_modules/acorn/dist/acorn_loose.js(229,105): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
+node_modules/acorn/dist/acorn_loose.js(231,41): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
+node_modules/acorn/dist/acorn_loose.js(233,11): error TS2322: Type '{ start: any; end: any; type: any; value: any; }' is not assignable to type 'boolean'.
+node_modules/acorn/dist/acorn_loose.js(233,31): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
+node_modules/acorn/dist/acorn_loose.js(235,11): error TS2322: Type '{ start: any; end: any; type: any; value: any; }' is not assignable to type 'boolean'.
+node_modules/acorn/dist/acorn_loose.js(236,22): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
+node_modules/acorn/dist/acorn_loose.js(239,41): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
+node_modules/acorn/dist/acorn_loose.js(260,31): error TS2322: Type '{ start: any; end: any; type: any; value: string; }' is not assignable to type 'boolean'.
+node_modules/acorn/dist/acorn_loose.js(263,21): error TS2339: Property 'loc' does not exist on type 'true'.
+node_modules/acorn/dist/acorn_loose.js(265,55): error TS2339: Property 'start' does not exist on type 'true'.
+node_modules/acorn/dist/acorn_loose.js(266,55): error TS2339: Property 'end' does not exist on type 'true'.
+node_modules/acorn/dist/acorn_loose.js(602,7): error TS2322: Type 'true' is not assignable to type 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(606,7): error TS2322: Type 'false' is not assignable to type 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(1163,7): error TS2322: Type 'true' is not assignable to type 'undefined'.
+node_modules/acorn/dist/acorn_loose.js(1167,7): error TS2322: Type 'false' is not assignable to type 'undefined'.
+node_modules/acorn/dist/walk.es.js(154,41): error TS2339: Property 'node' does not exist on type 'never'.
+node_modules/acorn/dist/walk.js(3,9): error TS2304: Cannot find name 'define'.
+node_modules/acorn/dist/walk.js(3,34): error TS2304: Cannot find name 'define'.
+node_modules/acorn/dist/walk.js(3,47): error TS2304: Cannot find name 'define'.
+node_modules/acorn/dist/walk.js(160,41): error TS2339: Property 'node' does not exist on type 'never'.
+
+
+
+Standard error:

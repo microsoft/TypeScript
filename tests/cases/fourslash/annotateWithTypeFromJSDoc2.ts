@@ -2,5 +2,6 @@
 
 // @Filename: test123.ts
 /////** @type {number} */
-////var /*1*/x: string;
-verify.not.applicableRefactorAvailableAtMarker('1');
+////var [|x|]: string;
+
+verify.getSuggestionDiagnostics([]);
