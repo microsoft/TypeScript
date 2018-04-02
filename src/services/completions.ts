@@ -1016,7 +1016,7 @@ namespace ts.Completions {
                                 return typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name);
                             }
                             else {
-                                return !(node as ImportTypeNode).isTypeOf && !!(symbol.flags & SymbolFlags.Value);
+                                return !!(node as ImportTypeNode).isTypeOf && !!(symbol.flags & SymbolFlags.Value);
                             }
                         };
                         const isValidTypeAccess = (symbol: Symbol) => symbolCanBeReferencedAtTypeLocation(symbol);
