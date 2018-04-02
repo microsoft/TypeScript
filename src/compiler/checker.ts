@@ -561,6 +561,7 @@ namespace ts {
 
         const subtypeRelation = createMap<RelationComparisonResult>();
         const assignableRelation = createMap<RelationComparisonResult>();
+        const accessibleRelation = createMap<RelationComparisonResult>();
         const definitelyAssignableRelation = createMap<RelationComparisonResult>();
         const comparableRelation = createMap<RelationComparisonResult>();
         const identityRelation = createMap<RelationComparisonResult>();
@@ -8130,17 +8131,44 @@ namespace ts {
             return links.nameType;
         }
 
-        function getLiteralTypeFromPropertyNames(type: Type) {
-            return getUnionType(map(getPropertiesOfType(type), getLiteralTypeFromPropertyName));
+        function getStringifiedNumberType(type: Type): Type {
+            if (type === numberType) return stringType;
+            if (isLiteralType(type)) {
+                const value = (type as LiteralType).value;
+                if (typeof value !== "undefined") {
+                    return getLiteralType("" + value);
+                }
+            }
+            return neverType;
         }
 
-        function getIndexType(type: Type): Type {
-            return type.flags & TypeFlags.Intersection ? getUnionType(map((<IntersectionType>type).types, t => getIndexType(t))) :
+        function getLiteralTypeFromPropertyNames(type: Type, isAccess: boolean) {
+            if (isAccess) {
+                // For access checking, include raw number/symbol keys
+                return getUnionType(map(getPropertiesOfType(type), getLiteralTypeFromPropertyName));
+            }
+            // Otherwise only return stringified number/string keys
+            const results: Type[] = [];
+            const props = getPropertiesOfType(type);
+            for (const prop of props) {
+                const propType = getLiteralTypeFromPropertyName(prop);
+                if (propType.flags & TypeFlags.StringLike) {
+                    results.push(propType);
+                }
+                if (propType.flags & TypeFlags.NumberLike) {
+                    results.push(getStringifiedNumberType(propType));
+                }
+            }
+            return getUnionType(results);
+        }
+
+        function getIndexType(type: Type, isAccess?: boolean): Type {
+            return type.flags & TypeFlags.Intersection ? getUnionType(map((<IntersectionType>type).types, t => getIndexType(t, isAccess))) :
                 maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
                 type === wildcardType ? wildcardType :
                 type.flags & TypeFlags.Any || getIndexInfoOfType(type, IndexKind.String) ? stringType :
-                getLiteralTypeFromPropertyNames(type);
+                getLiteralTypeFromPropertyNames(type, isAccess);
         }
 
         function getIndexTypeOrString(type: Type): Type {
@@ -9360,6 +9388,10 @@ namespace ts {
             return isTypeRelatedTo(source, target, assignableRelation);
         }
 
+        function isTypeAccessibleTo(source: Type, target: Type): boolean {
+            return isTypeRelatedTo(source, target, accessibleRelation);
+        }
+
         // An object type S is considered to be derived from an object type T if
         // S is a union type and every constituent of S is derived from T,
         // T is a union type and S is derived from at least one constituent of T, or
@@ -9680,7 +9712,7 @@ namespace ts {
             if (s & TypeFlags.Null && (!strictNullChecks || t & TypeFlags.Null)) return true;
             if (s & TypeFlags.Object && t & TypeFlags.NonPrimitive) return true;
             if (s & TypeFlags.UniqueESSymbol || t & TypeFlags.UniqueESSymbol) return false;
-            if (relation === assignableRelation || relation === definitelyAssignableRelation || relation === comparableRelation) {
+            if (relation === assignableRelation || relation === accessibleRelation || relation === definitelyAssignableRelation || relation === comparableRelation) {
                 if (s & TypeFlags.Any) return true;
                 // Type number or any numeric literal type is assignable to any numeric enum type or any
                 // numeric enum literal type. This rule exists for backwards compatibility reasons because
@@ -10007,7 +10039,7 @@ namespace ts {
             function hasExcessProperties(source: FreshObjectLiteralType, target: Type, discriminant: Type | undefined, reportErrors: boolean): boolean {
                 if (maybeTypeOfKind(target, TypeFlags.Object) && !(getObjectFlags(target) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
                     const isComparingJsxAttributes = !!(getObjectFlags(source) & ObjectFlags.JsxAttributes);
-                    if ((relation === assignableRelation || relation === definitelyAssignableRelation || relation === comparableRelation) &&
+                    if ((relation === assignableRelation || relation === accessibleRelation || relation === definitelyAssignableRelation || relation === comparableRelation) &&
                         (isTypeSubsetOf(globalObjectType, target) || (!isComparingJsxAttributes && isEmptyObjectType(target)))) {
                         return false;
                     }
@@ -10307,7 +10339,7 @@ namespace ts {
                     // constraint of T.
                     const constraint = getConstraintForRelation((<IndexType>target).type);
                     if (constraint) {
-                        if (result = isRelatedTo(source, getIndexType(constraint), reportErrors)) {
+                        if (result = isRelatedTo(source, getIndexType(constraint, relation === accessibleRelation), reportErrors)) {
                             return result;
                         }
                     }
@@ -20814,7 +20846,7 @@ namespace ts {
             // Check if the index type is assignable to 'keyof T' for the object type.
             const objectType = (<IndexedAccessType>type).objectType;
             const indexType = (<IndexedAccessType>type).indexType;
-            if (isTypeAssignableTo(indexType, getIndexType(objectType))) {
+            if (isTypeAccessibleTo(indexType, getIndexType(objectType, /*isAccess*/ true))) {
                 if (accessNode.kind === SyntaxKind.ElementAccessExpression && isAssignmentTarget(accessNode) &&
                     getObjectFlags(objectType) & ObjectFlags.Mapped && getMappedTypeModifiers(<MappedType>objectType) & MappedTypeModifiers.IncludeReadonly) {
                     error(accessNode, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(objectType));

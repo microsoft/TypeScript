@@ -1,0 +1,96 @@
+=== tests/cases/compiler/keyofZeroOrderOnlyReturnsStrings.ts ===
+const sym = Symbol();
+>sym : Symbol(sym, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+
+const num = 0;
+>num : Symbol(num, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 1, 5))
+
+const obj = { num: 0, str: 's', [sym]: sym, [num]: num as 0 };
+>obj : Symbol(obj, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 2, 5))
+>num : Symbol(num, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 2, 13))
+>str : Symbol(str, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 2, 21))
+>[sym] : Symbol([sym], Decl(keyofZeroOrderOnlyReturnsStrings.ts, 2, 31))
+>sym : Symbol(sym, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 0, 5))
+>sym : Symbol(sym, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 0, 5))
+>[num] : Symbol([num], Decl(keyofZeroOrderOnlyReturnsStrings.ts, 2, 43))
+>num : Symbol(num, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 1, 5))
+>num : Symbol(num, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 1, 5))
+
+function set <T extends object, K extends keyof T> (obj: T, key: K, value: T[K]): T[K] {
+>set : Symbol(set, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 2, 62))
+>T : Symbol(T, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 4, 14))
+>K : Symbol(K, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 4, 31))
+>T : Symbol(T, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 4, 14))
+>obj : Symbol(obj, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 4, 52))
+>T : Symbol(T, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 4, 14))
+>key : Symbol(key, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 4, 59))
+>K : Symbol(K, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 4, 31))
+>value : Symbol(value, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 4, 67))
+>T : Symbol(T, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 4, 14))
+>K : Symbol(K, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 4, 31))
+>T : Symbol(T, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 4, 14))
+>K : Symbol(K, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 4, 31))
+
+  return obj[key] = value;
+>obj : Symbol(obj, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 4, 52))
+>key : Symbol(key, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 4, 59))
+>value : Symbol(value, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 4, 67))
+}
+
+const val = set(obj, 'str', '');
+>val : Symbol(val, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 8, 5))
+>set : Symbol(set, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 2, 62))
+>obj : Symbol(obj, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 2, 5))
+
+// string
+const valB = set(obj, 'num', '');
+>valB : Symbol(valB, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 10, 5))
+>set : Symbol(set, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 2, 62))
+>obj : Symbol(obj, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 2, 5))
+
+// Expect type error
+// Argument of type '""' is not assignable to parameter of type 'number'.
+const valC = set(obj, sym, sym);
+>valC : Symbol(valC, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 13, 5))
+>set : Symbol(set, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 2, 62))
+>obj : Symbol(obj, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 2, 5))
+>sym : Symbol(sym, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 0, 5))
+>sym : Symbol(sym, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 0, 5))
+
+// Expect type error
+// Argument of type 'unique symbol' is not assignable to parameter of type '"str" | "num" | "0"
+const valD = set(obj, num, num);
+>valD : Symbol(valD, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 16, 5))
+>set : Symbol(set, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 2, 62))
+>obj : Symbol(obj, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 2, 5))
+>num : Symbol(num, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 1, 5))
+>num : Symbol(num, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 1, 5))
+
+// Expect type error
+// Argument of type '0' is not assignable to parameter of type '"str" | "num" | "0"
+const valE = set(obj, "0", num);
+>valE : Symbol(valE, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 19, 5))
+>set : Symbol(set, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 2, 62))
+>obj : Symbol(obj, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 2, 5))
+>num : Symbol(num, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 1, 5))
+
+// 0
+
+type KeyofObj = keyof typeof obj;
+>KeyofObj : Symbol(KeyofObj, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 19, 32))
+>obj : Symbol(obj, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 2, 5))
+
+// "str" | "num" | "0"
+
+type Values<T> = T[keyof T];
+>Values : Symbol(Values, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 22, 33))
+>T : Symbol(T, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 25, 12))
+>T : Symbol(T, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 25, 12))
+>T : Symbol(T, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 25, 12))
+
+type ValuesOfObj = Values<typeof obj>;
+>ValuesOfObj : Symbol(ValuesOfObj, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 25, 28))
+>Values : Symbol(Values, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 22, 33))
+>obj : Symbol(obj, Decl(keyofZeroOrderOnlyReturnsStrings.ts, 2, 5))
+
