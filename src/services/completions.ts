@@ -83,7 +83,7 @@ namespace ts.Completions {
             }
             case StringLiteralCompletionKind.Types: {
                 const entries = completion.types.map(type => ({ name: type.value, kindModifiers: ScriptElementKindModifier.none, kind: ScriptElementKind.typeElement, sortText: "0" }));
-                return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
+                return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: completion.isNewIdentifier, entries };
             }
             default:
                 return Debug.assertNever(completion);
@@ -358,16 +358,18 @@ namespace ts.Completions {
         readonly symbols: ReadonlyArray<Symbol>;
         readonly hasIndexSignature: boolean;
     }
-    type StringLiteralCompletion =
-        | { readonly kind: StringLiteralCompletionKind.Paths, readonly paths: ReadonlyArray<PathCompletions.PathCompletion> }
-        | StringLiteralCompletionsFromProperties
-        | { readonly kind: StringLiteralCompletionKind.Types, readonly types: ReadonlyArray<StringLiteralType> };
+    interface StringLiteralCompletionsFromTypes {
+        readonly kind: StringLiteralCompletionKind.Types;
+        readonly types: ReadonlyArray<StringLiteralType>;
+        readonly isNewIdentifier: boolean;
+    }
+    type StringLiteralCompletion = { readonly kind: StringLiteralCompletionKind.Paths, readonly paths: ReadonlyArray<PathCompletions.PathCompletion> } | StringLiteralCompletionsFromProperties | StringLiteralCompletionsFromTypes;
     function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringLiteralLike, position: number, typeChecker: TypeChecker, compilerOptions: CompilerOptions, host: LanguageServiceHost): StringLiteralCompletion | undefined {
         switch (node.parent.kind) {
             case SyntaxKind.LiteralType:
                 switch (node.parent.parent.kind) {
                     case SyntaxKind.TypeReference:
-                        return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(node.parent as LiteralTypeNode), typeChecker) };
+                        return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(node.parent as LiteralTypeNode), typeChecker), isNewIdentifier: false };
                     case SyntaxKind.IndexedAccessType:
                         // Get all apparent property names
                         // i.e. interface Foo {
@@ -419,13 +421,7 @@ namespace ts.Completions {
                     // Get string literal completions from specialized signatures of the target
                     // i.e. declare function f(a: 'A');
                     // f("/*completion position*/")
-                    if (argumentInfo) {
-                        const candidates: Signature[] = [];
-                        typeChecker.getResolvedSignature(argumentInfo.invocation, candidates, argumentInfo.argumentCount);
-                        const uniques = createMap<true>();
-                        return { kind: StringLiteralCompletionKind.Types, types: flatMap(candidates, candidate => getStringLiteralTypes(typeChecker.getParameterType(candidate, argumentInfo.argumentIndex), typeChecker, uniques)) };
-                    }
-                    return fromContextualType();
+                    return argumentInfo ? getStringLiteralCompletionsFromSignature(argumentInfo, typeChecker) : fromContextualType();
                 }
                 // falls through (is `require("")` or `import("")`)
 
@@ -447,8 +443,24 @@ namespace ts.Completions {
         function fromContextualType(): StringLiteralCompletion {
             // Get completion for string literal from string literal type
             // i.e. var x: "hi" | "hello" = "/*completion position*/"
-            return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker), typeChecker) };
+            return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker), typeChecker), isNewIdentifier: false };
         }
+    }
+
+    function getStringLiteralCompletionsFromSignature(argumentInfo: SignatureHelp.ArgumentListInfo, checker: TypeChecker): StringLiteralCompletionsFromTypes {
+        let isNewIdentifier = false;
+
+        const uniques = createMap<true>();
+        const candidates: Signature[] = [];
+        checker.getResolvedSignature(argumentInfo.invocation, candidates, argumentInfo.argumentCount);
+        const types = flatMap(candidates, candidate => {
+            if (!candidate.hasRestParameter && argumentInfo.argumentCount > candidate.parameters.length) return;
+            const type = checker.getParameterType(candidate, argumentInfo.argumentIndex);
+            isNewIdentifier = isNewIdentifier || !!(type.flags & TypeFlags.String);
+            return getStringLiteralTypes(type, checker, uniques);
+        });
+
+        return { kind: StringLiteralCompletionKind.Types, types, isNewIdentifier };
     }
 
     function stringLiteralCompletionsFromProperties(type: Type | undefined): StringLiteralCompletionsFromProperties | undefined {
