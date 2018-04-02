@@ -303,8 +303,7 @@ namespace ts.server {
         cancellationToken: HostCancellationToken;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
-        disableInferredProjectLanguageService?: boolean;
-        ignoreConfigFiles?: boolean;
+        syntaxOnly?: boolean;
         typingsInstaller: ITypingsInstaller;
         eventHandler?: ProjectServiceEventHandler;
         suppressDiagnosticEvents?: boolean;
@@ -416,12 +415,12 @@ namespace ts.server {
             this.cancellationToken = opts.cancellationToken;
             this.useSingleInferredProject = opts.useSingleInferredProject;
             this.useInferredProjectPerProjectRoot = opts.useInferredProjectPerProjectRoot;
-            this.ignoreConfigFiles = opts.ignoreConfigFiles;
+            this.ignoreConfigFiles = opts.syntaxOnly;
             this.typingsInstaller = opts.typingsInstaller || nullTypingsInstaller;
             this.throttleWaitMilliseconds = opts.throttleWaitMilliseconds;
             this.eventHandler = opts.eventHandler;
             this.suppressDiagnosticEvents = opts.suppressDiagnosticEvents;
-            this.disableInferredProjectLanguageService = opts.disableInferredProjectLanguageService;
+            this.disableInferredProjectLanguageService = opts.syntaxOnly;
             this.globalPlugins = opts.globalPlugins || emptyArray;
             this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray;
             this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;

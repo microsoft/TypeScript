@@ -1332,7 +1332,7 @@ namespace ts.projectSystem {
 
                 const externalProjectName = "externalproject";
                 const host = createServerHost([file1, config1]);
-                const projectService = createProjectService(host, { useSingleInferredProject: true }, { ignoreConfigFiles: true });
+                const projectService = createProjectService(host, { useSingleInferredProject: true }, { syntaxOnly: true });
                 projectService.openExternalProject({
                     rootFiles: toExternalFiles([file1.path, config1.path]),
                     options: {},
@@ -1362,7 +1362,7 @@ namespace ts.projectSystem {
                 };
 
                 const host = createServerHost([file1, config1]);
-                const projectService = createProjectService(host, { useSingleInferredProject: true }, { ignoreConfigFiles: true });
+                const projectService = createProjectService(host, { useSingleInferredProject: true }, { syntaxOnly: true });
                 projectService.openClientFile(file1.path, file1.content);
 
                 checkNumberOfProjects(projectService, { inferredProjects: 1 });
@@ -1388,7 +1388,7 @@ namespace ts.projectSystem {
                 };
 
                 const host = createServerHost([file1, config1]);
-                const projectService = createProjectService(host, { useSingleInferredProject: true }, { ignoreConfigFiles: true });
+                const projectService = createProjectService(host, { useSingleInferredProject: true }, { syntaxOnly: true });
                 projectService.applyChangesInOpenFiles([{ fileName: file1.path, content: file1.content }], [], []);
 
                 checkNumberOfProjects(projectService, { inferredProjects: 1 });
@@ -1406,7 +1406,7 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([file1]);
-            const projectService = createProjectService(host, { useSingleInferredProject: true }, { disableInferredProjectLanguageService: true });
+            const projectService = createProjectService(host, { useSingleInferredProject: true }, { syntaxOnly: true });
 
             projectService.openClientFile(file1.path, file1.content);
 

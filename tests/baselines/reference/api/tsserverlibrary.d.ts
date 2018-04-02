@@ -7259,8 +7259,7 @@ declare namespace ts.server {
         cancellationToken: ServerCancellationToken;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
-        disableInferredProjectLanguageService?: boolean;
-        ignoreConfigFiles?: boolean;
+        syntaxOnly?: boolean;
         typingsInstaller: ITypingsInstaller;
         byteLength: (buf: string, encoding?: string) => number;
         hrtime: (start?: number[]) => number[];
@@ -7834,8 +7833,7 @@ declare namespace ts.server {
         cancellationToken: HostCancellationToken;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
-        disableInferredProjectLanguageService?: boolean;
-        ignoreConfigFiles?: boolean;
+        syntaxOnly?: boolean;
         typingsInstaller: ITypingsInstaller;
         eventHandler?: ProjectServiceEventHandler;
         suppressDiagnosticEvents?: boolean;

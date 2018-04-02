@@ -286,8 +286,7 @@ namespace ts.server {
         cancellationToken: ServerCancellationToken;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
-        disableInferredProjectLanguageService?: boolean;
-        ignoreConfigFiles?: boolean;
+        syntaxOnly?: boolean;
         typingsInstaller: ITypingsInstaller;
         byteLength: (buf: string, encoding?: string) => number;
         hrtime: (start?: number[]) => number[];
@@ -355,8 +354,7 @@ namespace ts.server {
                 cancellationToken: this.cancellationToken,
                 useSingleInferredProject: opts.useSingleInferredProject,
                 useInferredProjectPerProjectRoot: opts.useInferredProjectPerProjectRoot,
-                disableInferredProjectLanguageService: opts.disableInferredProjectLanguageService,
-                ignoreConfigFiles: opts.ignoreConfigFiles,
+                syntaxOnly: opts.syntaxOnly,
                 typingsInstaller: this.typingsInstaller,
                 throttleWaitMilliseconds,
                 eventHandler: this.eventHandler,
