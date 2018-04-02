@@ -3,17 +3,9 @@
 // @moduleResolution: node
 
 // @Filename: /ns.ts
-////export namespace Foo {
-////    export namespace Bar {
-////        export class Baz {}
-////    }
-////}
+////file content not read
 // @Filename: /node_modules/package/index.ts
-////export namespace Foo {
-////    export namespace Bar {
-////        export class Baz {}
-////    }
-////}
+////file content not read
 // @Filename: /usage.ts
 ////type A = typeof import("p/*1*/");
 ////type B = typeof import(".//*2*/");
