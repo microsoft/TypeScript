@@ -608,12 +608,12 @@ interface FileReaderEventMap {
 
 interface FileReader extends EventTarget {
     readonly error: DOMException | null;
-    onabort: ((this: FileReader, ev: ProgressEvent) => any) | null;
-    onerror: ((this: FileReader, ev: ProgressEvent) => any) | null;
-    onload: ((this: FileReader, ev: ProgressEvent) => any) | null;
-    onloadend: ((this: FileReader, ev: ProgressEvent) => any) | null;
-    onloadstart: ((this: FileReader, ev: ProgressEvent) => any) | null;
-    onprogress: ((this: FileReader, ev: ProgressEvent) => any) | null;
+    onabort: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
+    onerror: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
+    onload: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
+    onloadend: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
+    onloadstart: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
+    onprogress: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
     readonly readyState: number;
     readonly result: any;
     abort(): void;
@@ -637,6 +637,10 @@ declare var FileReader: {
     readonly EMPTY: number;
     readonly LOADING: number;
 };
+
+interface FileReaderProgressEvent extends ProgressEvent {
+    readonly target: FileReader | null;
+}
 
 interface FileReaderSync {
     readAsArrayBuffer(blob: Blob): any;
@@ -1463,7 +1467,7 @@ interface WebSocket extends EventTarget {
     readonly readyState: number;
     readonly url: string;
     close(code?: number, reason?: string): void;
-    send(data: string | ArrayBuffer | Blob | ArrayBufferView): void;
+    send(data: string | ArrayBufferLike | Blob | ArrayBufferView): void;
     readonly CLOSED: number;
     readonly CLOSING: number;
     readonly CONNECTING: number;
