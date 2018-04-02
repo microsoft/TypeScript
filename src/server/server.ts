@@ -594,13 +594,12 @@ namespace ts.server {
         const len = args.length - 1;
         for (let i = 0; i < len; i += 2) {
             const option = args[i];
-            const value = args[i + 1];
+            const { value, extraPartCounter } = getEntireValue(i + 1);
+            i += extraPartCounter;
             if (option && value) {
                 switch (option) {
                     case "-file":
-                        const { logPath, extraPartCounter } = getLogPath(i + 1);
-                        logEnv.file = logPath;
-                        i += extraPartCounter;
+                        logEnv.file = value;
                         break;
                     case "-level":
                         const level = getLogLevel(value);
@@ -617,7 +616,7 @@ namespace ts.server {
         }
         return logEnv;
 
-        function getLogPath(initialIndex: number) {
+        function getEntireValue(initialIndex: number) {
             let pathStart = args[initialIndex];
             let extraPartCounter = 0;
             if (pathStart.charCodeAt(0) === CharacterCodes.doubleQuote &&
@@ -629,7 +628,7 @@ namespace ts.server {
                     if (pathStart.charCodeAt(pathStart.length - 1) === CharacterCodes.doubleQuote) break;
                 }
             }
-            return { logPath: stripQuotes(pathStart), extraPartCounter };
+            return { value: stripQuotes(pathStart), extraPartCounter };
         }
     }
 
