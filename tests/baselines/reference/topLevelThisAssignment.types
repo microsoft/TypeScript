@@ -1,25 +1,49 @@
 === tests/cases/conformance/salsa/a.js ===
 this.a = 10;
 >this.a = 10 : 10
->this.a : any
->this : any
->a : any
+>this.a : number
+>this : { [x: string]: any; eval(x: string): any; parseInt(s: string, radix?: number): number; parseFloat(string: string): number; isNaN(number: number): boolean; isFinite(number: number): boolean; decodeURI(encodedURI: string): string; decodeURIComponent(encodedURIComponent: string): string; encodeURI(uri: string): string; encodeURIComponent(uriComponent: string): string; escape(string: string): string; unescape(string: string): string; readonly NaN: number; readonly Infinity: number; readonly Object: ObjectConstructor; readonly Function: FunctionConstructor; readonly String: StringConstructor; readonly Boolean: BooleanConstructor; readonly Number: NumberConstructor; readonly Math: Math; readonly Date: DateConstructor; readonly RegExp: RegExpConstructor; readonly Error: ErrorConstructor; readonly EvalError: EvalErrorConstructor; readonly RangeError: RangeErrorConstructor; readonly ReferenceError: ReferenceErrorConstructor; readonly SyntaxError: SyntaxErrorConstructor; readonly TypeError: TypeErrorConstructor; readonly URIError: URIErrorConstructor; readonly JSON: JSON; readonly Array: ArrayConstructor; readonly ArrayBuffer: ArrayBufferConstructor; readonly DataView: DataViewConstructor; readonly Int8Array: Int8ArrayConstructor; readonly Uint8Array: Uint8ArrayConstructor; readonly Uint8ClampedArray: Uint8ClampedArrayConstructor; readonly Int16Array: Int16ArrayConstructor; readonly Uint16Array: Uint16ArrayConstructor; readonly Int32Array: Int32ArrayConstructor; readonly Uint32Array: Uint32ArrayConstructor; readonly Float32Array: Float32ArrayConstructor; readonly Float64Array: Float64ArrayConstructor; Intl: typeof Intl; a: number; undefined: undefined; }
+>a : number
 >10 : 10
 
 this.a;
->this.a : any
->this : any
->a : any
+>this.a : number
+>this : { [x: string]: any; eval(x: string): any; parseInt(s: string, radix?: number): number; parseFloat(string: string): number; isNaN(number: number): boolean; isFinite(number: number): boolean; decodeURI(encodedURI: string): string; decodeURIComponent(encodedURIComponent: string): string; encodeURI(uri: string): string; encodeURIComponent(uriComponent: string): string; escape(string: string): string; unescape(string: string): string; readonly NaN: number; readonly Infinity: number; readonly Object: ObjectConstructor; readonly Function: FunctionConstructor; readonly String: StringConstructor; readonly Boolean: BooleanConstructor; readonly Number: NumberConstructor; readonly Math: Math; readonly Date: DateConstructor; readonly RegExp: RegExpConstructor; readonly Error: ErrorConstructor; readonly EvalError: EvalErrorConstructor; readonly RangeError: RangeErrorConstructor; readonly ReferenceError: ReferenceErrorConstructor; readonly SyntaxError: SyntaxErrorConstructor; readonly TypeError: TypeErrorConstructor; readonly URIError: URIErrorConstructor; readonly JSON: JSON; readonly Array: ArrayConstructor; readonly ArrayBuffer: ArrayBufferConstructor; readonly DataView: DataViewConstructor; readonly Int8Array: Int8ArrayConstructor; readonly Uint8Array: Uint8ArrayConstructor; readonly Uint8ClampedArray: Uint8ClampedArrayConstructor; readonly Int16Array: Int16ArrayConstructor; readonly Uint16Array: Uint16ArrayConstructor; readonly Int32Array: Int32ArrayConstructor; readonly Uint32Array: Uint32ArrayConstructor; readonly Float32Array: Float32ArrayConstructor; readonly Float64Array: Float64ArrayConstructor; Intl: typeof Intl; a: number; undefined: undefined; }
+>a : number
 
 a;
->a : any
+>a : number
+
+unknown;
+>unknown : any
+
+this.unknown;
+>this.unknown : any
+>this : { [x: string]: any; eval(x: string): any; parseInt(s: string, radix?: number): number; parseFloat(string: string): number; isNaN(number: number): boolean; isFinite(number: number): boolean; decodeURI(encodedURI: string): string; decodeURIComponent(encodedURIComponent: string): string; encodeURI(uri: string): string; encodeURIComponent(uriComponent: string): string; escape(string: string): string; unescape(string: string): string; readonly NaN: number; readonly Infinity: number; readonly Object: ObjectConstructor; readonly Function: FunctionConstructor; readonly String: StringConstructor; readonly Boolean: BooleanConstructor; readonly Number: NumberConstructor; readonly Math: Math; readonly Date: DateConstructor; readonly RegExp: RegExpConstructor; readonly Error: ErrorConstructor; readonly EvalError: EvalErrorConstructor; readonly RangeError: RangeErrorConstructor; readonly ReferenceError: ReferenceErrorConstructor; readonly SyntaxError: SyntaxErrorConstructor; readonly TypeError: TypeErrorConstructor; readonly URIError: URIErrorConstructor; readonly JSON: JSON; readonly Array: ArrayConstructor; readonly ArrayBuffer: ArrayBufferConstructor; readonly DataView: DataViewConstructor; readonly Int8Array: Int8ArrayConstructor; readonly Uint8Array: Uint8ArrayConstructor; readonly Uint8ClampedArray: Uint8ClampedArrayConstructor; readonly Int16Array: Int16ArrayConstructor; readonly Uint16Array: Uint16ArrayConstructor; readonly Int32Array: Int32ArrayConstructor; readonly Uint32Array: Uint32ArrayConstructor; readonly Float32Array: Float32ArrayConstructor; readonly Float64Array: Float64ArrayConstructor; Intl: typeof Intl; a: number; undefined: undefined; }
+>unknown : any
+
+// also, improved types for this-prefixed globals like eval:
+this.eval('hi');
+>this.eval('hi') : any
+>this.eval : (x: string) => any
+>this : { [x: string]: any; eval(x: string): any; parseInt(s: string, radix?: number): number; parseFloat(string: string): number; isNaN(number: number): boolean; isFinite(number: number): boolean; decodeURI(encodedURI: string): string; decodeURIComponent(encodedURIComponent: string): string; encodeURI(uri: string): string; encodeURIComponent(uriComponent: string): string; escape(string: string): string; unescape(string: string): string; readonly NaN: number; readonly Infinity: number; readonly Object: ObjectConstructor; readonly Function: FunctionConstructor; readonly String: StringConstructor; readonly Boolean: BooleanConstructor; readonly Number: NumberConstructor; readonly Math: Math; readonly Date: DateConstructor; readonly RegExp: RegExpConstructor; readonly Error: ErrorConstructor; readonly EvalError: EvalErrorConstructor; readonly RangeError: RangeErrorConstructor; readonly ReferenceError: ReferenceErrorConstructor; readonly SyntaxError: SyntaxErrorConstructor; readonly TypeError: TypeErrorConstructor; readonly URIError: URIErrorConstructor; readonly JSON: JSON; readonly Array: ArrayConstructor; readonly ArrayBuffer: ArrayBufferConstructor; readonly DataView: DataViewConstructor; readonly Int8Array: Int8ArrayConstructor; readonly Uint8Array: Uint8ArrayConstructor; readonly Uint8ClampedArray: Uint8ClampedArrayConstructor; readonly Int16Array: Int16ArrayConstructor; readonly Uint16Array: Uint16ArrayConstructor; readonly Int32Array: Int32ArrayConstructor; readonly Uint32Array: Uint32ArrayConstructor; readonly Float32Array: Float32ArrayConstructor; readonly Float64Array: Float64ArrayConstructor; Intl: typeof Intl; a: number; undefined: undefined; }
+>eval : (x: string) => any
+>'hi' : "hi"
 
 === tests/cases/conformance/salsa/b.js ===
 this.a;
->this.a : any
->this : any
->a : any
+>this.a : number
+>this : { [x: string]: any; eval(x: string): any; parseInt(s: string, radix?: number): number; parseFloat(string: string): number; isNaN(number: number): boolean; isFinite(number: number): boolean; decodeURI(encodedURI: string): string; decodeURIComponent(encodedURIComponent: string): string; encodeURI(uri: string): string; encodeURIComponent(uriComponent: string): string; escape(string: string): string; unescape(string: string): string; readonly NaN: number; readonly Infinity: number; readonly Object: ObjectConstructor; readonly Function: FunctionConstructor; readonly String: StringConstructor; readonly Boolean: BooleanConstructor; readonly Number: NumberConstructor; readonly Math: Math; readonly Date: DateConstructor; readonly RegExp: RegExpConstructor; readonly Error: ErrorConstructor; readonly EvalError: EvalErrorConstructor; readonly RangeError: RangeErrorConstructor; readonly ReferenceError: ReferenceErrorConstructor; readonly SyntaxError: SyntaxErrorConstructor; readonly TypeError: TypeErrorConstructor; readonly URIError: URIErrorConstructor; readonly JSON: JSON; readonly Array: ArrayConstructor; readonly ArrayBuffer: ArrayBufferConstructor; readonly DataView: DataViewConstructor; readonly Int8Array: Int8ArrayConstructor; readonly Uint8Array: Uint8ArrayConstructor; readonly Uint8ClampedArray: Uint8ClampedArrayConstructor; readonly Int16Array: Int16ArrayConstructor; readonly Uint16Array: Uint16ArrayConstructor; readonly Int32Array: Int32ArrayConstructor; readonly Uint32Array: Uint32ArrayConstructor; readonly Float32Array: Float32ArrayConstructor; readonly Float64Array: Float64ArrayConstructor; Intl: typeof Intl; a: number; undefined: undefined; }
+>a : number
 
 a;
->a : any
+>a : number
+
+unknown;
+>unknown : any
+
+this.unknown;
+>this.unknown : any
+>this : { [x: string]: any; eval(x: string): any; parseInt(s: string, radix?: number): number; parseFloat(string: string): number; isNaN(number: number): boolean; isFinite(number: number): boolean; decodeURI(encodedURI: string): string; decodeURIComponent(encodedURIComponent: string): string; encodeURI(uri: string): string; encodeURIComponent(uriComponent: string): string; escape(string: string): string; unescape(string: string): string; readonly NaN: number; readonly Infinity: number; readonly Object: ObjectConstructor; readonly Function: FunctionConstructor; readonly String: StringConstructor; readonly Boolean: BooleanConstructor; readonly Number: NumberConstructor; readonly Math: Math; readonly Date: DateConstructor; readonly RegExp: RegExpConstructor; readonly Error: ErrorConstructor; readonly EvalError: EvalErrorConstructor; readonly RangeError: RangeErrorConstructor; readonly ReferenceError: ReferenceErrorConstructor; readonly SyntaxError: SyntaxErrorConstructor; readonly TypeError: TypeErrorConstructor; readonly URIError: URIErrorConstructor; readonly JSON: JSON; readonly Array: ArrayConstructor; readonly ArrayBuffer: ArrayBufferConstructor; readonly DataView: DataViewConstructor; readonly Int8Array: Int8ArrayConstructor; readonly Uint8Array: Uint8ArrayConstructor; readonly Uint8ClampedArray: Uint8ClampedArrayConstructor; readonly Int16Array: Int16ArrayConstructor; readonly Uint16Array: Uint16ArrayConstructor; readonly Int32Array: Int32ArrayConstructor; readonly Uint32Array: Uint32ArrayConstructor; readonly Float32Array: Float32ArrayConstructor; readonly Float64Array: Float64ArrayConstructor; Intl: typeof Intl; a: number; undefined: undefined; }
+>unknown : any
 

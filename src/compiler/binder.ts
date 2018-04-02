@@ -2364,7 +2364,13 @@ namespace ts {
                     break;
                 case SyntaxKind.SourceFile:
                     // this.foo assignment in a source file
-                    // Do not bind. It would be nice to support this someday though.
+                    // Bind this property in the global namespace or in the exports if in commonjs
+                    if ((thisContainer as SourceFile).commonJsModuleIndicator) {
+                        declareSymbol(thisContainer.symbol.exports, thisContainer.symbol, node, SymbolFlags.Property | SymbolFlags.ExportValue, SymbolFlags.None);
+                    }
+                    else {
+                        declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
+                    }
                     break;
 
                 default:

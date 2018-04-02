@@ -1,0 +1,52 @@
+=== tests/cases/conformance/salsa/use.js ===
+var mod = require('./mod')
+>mod : typeof "tests/cases/conformance/salsa/mod"
+>require('./mod') : typeof "tests/cases/conformance/salsa/mod"
+>require : (name: string) => any
+>'./mod' : "./mod"
+
+mod.a;
+>mod.a : number
+>mod : typeof "tests/cases/conformance/salsa/mod"
+>a : number
+
+=== tests/cases/conformance/salsa/decl.d.ts ===
+declare var module: { exports: any };
+>module : { exports: any; }
+>exports : any
+
+declare function require(name: string): any;
+>require : (name: string) => any
+>name : string
+
+=== tests/cases/conformance/salsa/mod.js ===
+/// <reference path='./decl.d.ts' />
+module.exports = {};
+>module.exports = {} : { [x: string]: any; }
+>module.exports : any
+>module : { exports: any; }
+>exports : any
+>{} : { [x: string]: any; }
+
+this.a = 10;
+>this.a = 10 : 10
+>this.a : number
+>this : typeof "tests/cases/conformance/salsa/mod"
+>a : number
+>10 : 10
+
+this.a;     // ok
+>this.a : number
+>this : typeof "tests/cases/conformance/salsa/mod"
+>a : number
+
+module.exports.a;  // should be ok but doesn't have the right type
+>module.exports.a : any
+>module.exports : any
+>module : { exports: any; }
+>exports : any
+>a : any
+
+a;          // error: not actually at top-level in a module
+>a : any
+

@@ -157,11 +157,11 @@ min.nest = this.min.nest || function () { };
 >min : { [x: string]: any; nest: { (): void; other: typeof (Anonymous class); }; property: { [x: string]: any; }; }
 >nest : { (): void; other: typeof (Anonymous class); }
 >this.min.nest || function () { } : { (): void; other: typeof (Anonymous class); }
->this.min.nest : any
->this.min : any
->this : any
->min : any
->nest : any
+>this.min.nest : { (): void; other: typeof (Anonymous class); }
+>this.min : { [x: string]: any; nest: { (): void; other: typeof (Anonymous class); }; property: { [x: string]: any; }; }
+>this : { [x: string]: any; eval(x: string): any; parseInt(s: string, radix?: number): number; parseFloat(string: string): number; isNaN(number: number): boolean; isFinite(number: number): boolean; decodeURI(encodedURI: string): string; decodeURIComponent(encodedURIComponent: string): string; encodeURI(uri: string): string; encodeURIComponent(uriComponent: string): string; escape(string: string): string; unescape(string: string): string; readonly NaN: number; readonly Infinity: number; readonly Object: ObjectConstructor; readonly Function: FunctionConstructor; readonly String: StringConstructor; readonly Boolean: BooleanConstructor; readonly Number: NumberConstructor; readonly Math: Math; readonly Date: DateConstructor; readonly RegExp: RegExpConstructor; readonly Error: ErrorConstructor; readonly EvalError: EvalErrorConstructor; readonly RangeError: RangeErrorConstructor; readonly ReferenceError: ReferenceErrorConstructor; readonly SyntaxError: SyntaxErrorConstructor; readonly TypeError: TypeErrorConstructor; readonly URIError: URIErrorConstructor; readonly JSON: JSON; readonly Array: ArrayConstructor; Promise: PromiseConstructor; readonly ArrayBuffer: ArrayBufferConstructor; readonly DataView: DataViewConstructor; readonly Int8Array: Int8ArrayConstructor; readonly Uint8Array: Uint8ArrayConstructor; readonly Uint8ClampedArray: Uint8ClampedArrayConstructor; readonly Int16Array: Int16ArrayConstructor; readonly Uint16Array: Uint16ArrayConstructor; readonly Int32Array: Int32ArrayConstructor; readonly Uint32Array: Uint32ArrayConstructor; readonly Float32Array: Float32ArrayConstructor; readonly Float64Array: Float64ArrayConstructor; Intl: typeof Intl; Symbol: SymbolConstructor; Map: MapConstructor; WeakMap: WeakMapConstructor; Set: SetConstructor; WeakSet: WeakSetConstructor; Reflect: typeof Reflect; Proxy: ProxyConstructor; my: { [x: string]: any; method: (n: number) => number; number: number; object: { [x: string]: any; }; predicate: { [x: string]: any; query: { (): void; another: () => number; result: string; }; sort: (first: number, second: number) => number; type: typeof (Anonymous class); }; }; q: any; min: { [x: string]: any; nest: { (): void; other: typeof (Anonymous class); }; property: { [x: string]: any; }; }; undefined: undefined; }
+>min : { [x: string]: any; nest: { (): void; other: typeof (Anonymous class); }; property: { [x: string]: any; }; }
+>nest : { (): void; other: typeof (Anonymous class); }
 >function () { } : { (): void; other: typeof (Anonymous class); }
 
 min.nest.other = self.min.nest.other || class { };

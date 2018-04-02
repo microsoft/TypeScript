@@ -1,0 +1,24 @@
+tests/cases/conformance/salsa/a.js(4,1): error TS2304: Cannot find name 'unknown'.
+tests/cases/conformance/salsa/b.js(3,1): error TS2304: Cannot find name 'unknown'.
+
+
+==== tests/cases/conformance/salsa/a.js (1 errors) ====
+    this.a = 10;
+    this.a;
+    a;
+    unknown;
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'unknown'.
+    this.unknown;
+    
+    // also, improved types for this-prefixed globals like eval:
+    this.eval('hi');
+    
+==== tests/cases/conformance/salsa/b.js (1 errors) ====
+    this.a;
+    a;
+    unknown;
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'unknown'.
+    this.unknown;
+    
