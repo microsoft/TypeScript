@@ -173,7 +173,7 @@ namespace ts.codefix {
 
     function annotate(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: textChanges.TypeAnnotatable, type: Type | undefined, program: Program): void {
         const typeNode = type && getTypeNodeIfAccessible(type, declaration, program.getTypeChecker());
-        if (typeNode) changes.insertTypeAnnotation(sourceFile, declaration, typeNode);
+        if (typeNode) changes.tryInsertTypeAnnotation(sourceFile, declaration, typeNode);
     }
 
     function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, checker: TypeChecker): TypeNode | undefined {
