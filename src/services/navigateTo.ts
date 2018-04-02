@@ -56,7 +56,7 @@ namespace ts.NavigateTo {
                 }
             }
 
-            const matchKind = bestMatchKind(containerMatches);
+            const matchKind = Math.min(...matches.map(m => m.kind));
             const isCaseSensitive = allMatchesAreCaseSensitive(containerMatches);
             rawItems.push({ name, fileName, matchKind, isCaseSensitive, declaration });
         }
@@ -125,16 +125,14 @@ namespace ts.NavigateTo {
         return false;
     }
 
-    function getContainers(declaration: Declaration): string[] {
+    function getContainers(declaration: Declaration): string[] | undefined {
         const containers: string[] = [];
 
         // First, if we started with a computed property name, then add all but the last
         // portion into the container array.
         const name = getNameOfDeclaration(declaration);
-        if (name.kind === SyntaxKind.ComputedPropertyName) {
-            if (!tryAddComputedPropertyName(name.expression, containers, /*includeLastPortion*/ false)) {
-                return undefined;
-            }
+        if (name.kind === SyntaxKind.ComputedPropertyName && !tryAddComputedPropertyName(name.expression, containers, /*includeLastPortion*/ false)) {
+            return undefined;
         }
 
         // Now, walk up our containers, adding all their names to the container array.
@@ -149,20 +147,6 @@ namespace ts.NavigateTo {
         }
 
         return containers;
-    }
-
-    function bestMatchKind(matches: ReadonlyArray<PatternMatch>): PatternMatchKind {
-        Debug.assert(matches.length > 0);
-        let bestMatchKind = PatternMatchKind.camelCase;
-
-        for (const match of matches) {
-            const kind = match.kind;
-            if (kind < bestMatchKind) {
-                bestMatchKind = kind;
-            }
-        }
-
-        return bestMatchKind;
     }
 
     function compareNavigateToItems(i1: RawNavigateToItem, i2: RawNavigateToItem) {
