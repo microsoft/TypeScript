@@ -1,0 +1,29 @@
+Exit Code: 1
+Standard output:
+node_modules/graceful-fs/fs.js(14,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'copy' must be of type '{ [x: string]: any; __proto__: any; }', but here has type 'any'.
+node_modules/graceful-fs/fs.js(17,38): error TS2345: Argument of type 'PropertyDescriptor | undefined' is not assignable to parameter of type 'PropertyDescriptor & ThisType<any>'.
+  Type 'undefined' is not assignable to type 'PropertyDescriptor & ThisType<any>'.
+    Type 'undefined' is not assignable to type 'PropertyDescriptor'.
+node_modules/graceful-fs/graceful-fs.js(12,3): error TS2322: Type '(msg: string, ...param: any[]) => void' is not assignable to type '() => void'.
+node_modules/graceful-fs/graceful-fs.js(22,5): error TS2554: Expected 0 arguments, but got 1.
+node_modules/graceful-fs/graceful-fs.js(27,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+node_modules/graceful-fs/graceful-fs.js(37,1): error TS2322: Type '(fd: any, cb: any) => any' is not assignable to type 'typeof close'.
+  Property '__promisify__' is missing in type '(fd: any, cb: any) => any'.
+node_modules/graceful-fs/graceful-fs.js(161,5): error TS2539: Cannot assign to 'ReadStream' because it is not a variable.
+node_modules/graceful-fs/graceful-fs.js(162,5): error TS2539: Cannot assign to 'WriteStream' because it is not a variable.
+node_modules/graceful-fs/graceful-fs.js(220,12): error TS2350: Only a void function can be called with the 'new' keyword.
+node_modules/graceful-fs/graceful-fs.js(224,12): error TS2350: Only a void function can be called with the 'new' keyword.
+node_modules/graceful-fs/graceful-fs.js(252,3): error TS2554: Expected 0 arguments, but got 3.
+node_modules/graceful-fs/graceful-fs.js(259,5): error TS2554: Expected 0 arguments, but got 3.
+node_modules/graceful-fs/polyfills.js(7,24): error TS2339: Property 'env' does not exist on type 'typeof process'.
+node_modules/graceful-fs/polyfills.js(7,60): error TS2339: Property 'platform' does not exist on type 'typeof process'.
+node_modules/graceful-fs/polyfills.js(32,15): error TS2339: Property 'version' does not exist on type 'typeof process'.
+node_modules/graceful-fs/polyfills.js(73,23): error TS2339: Property 'nextTick' does not exist on type 'typeof process'.
+node_modules/graceful-fs/polyfills.js(79,23): error TS2339: Property 'nextTick' does not exist on type 'typeof process'.
+node_modules/graceful-fs/polyfills.js(229,62): error TS2339: Property 'nextTick' does not exist on type 'typeof process'.
+node_modules/graceful-fs/polyfills.js(323,26): error TS2339: Property 'getuid' does not exist on type 'typeof process'.
+node_modules/graceful-fs/polyfills.js(323,44): error TS2339: Property 'getuid' does not exist on type 'typeof process'.
+
+
+
+Standard error:

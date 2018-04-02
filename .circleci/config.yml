@@ -2,30 +2,9 @@ workflows:
   version: 2
   main:
     jobs:
-      - node9:
-          filters:
-            branches:
-              only:
-                - master
-                - release-2.5
-                - release-2.6
-                - release-2.7
-      - node8:
-          filters:
-            branches:
-              only:
-                - master
-                - release-2.5
-                - release-2.6
-                - release-2.7
-      - node6:
-          filters:
-            branches:
-              only:
-                - master
-                - release-2.5
-                - release-2.6
-                - release-2.7
+      - node9
+      - node8
+      - node6
   nightly:
     triggers:
       - schedule:
@@ -35,31 +14,10 @@ workflows:
               only: master
     jobs:
       - node9:
-          filters:
-            branches:
-              only:
-                - master
-                - release-2.5
-                - release-2.6
-                - release-2.7
           context: nightlies
       - node8:
-          filters:
-            branches:
-              only:
-                - master
-                - release-2.5
-                - release-2.6
-                - release-2.7
           context: nightlies
       - node6:
-          filters:
-            branches:
-              only:
-                - master
-                - release-2.5
-                - release-2.6
-                - release-2.7
           context: nightlies
 
 base: &base
@@ -69,6 +27,7 @@ base: &base
   steps:
     - checkout
     - run: |
+        git submodule update --init --recursive
         npm uninstall typescript --no-save
         npm uninstall tslint --no-save
         npm install

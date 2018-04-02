@@ -1,0 +1,618 @@
+Exit Code: 1
+Standard output:
+node_modules/bluebird/js/browser/bluebird.core.js(30,116): error TS2304: Cannot find name 'define'.
+node_modules/bluebird/js/browser/bluebird.core.js(30,124): error TS2304: Cannot find name 'define'.
+node_modules/bluebird/js/browser/bluebird.core.js(30,135): error TS2304: Cannot find name 'define'.
+node_modules/bluebird/js/browser/bluebird.core.js(30,266): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(30,268): error TS2339: Property 'Promise' does not exist on type 'Window | Global'.
+  Property 'Promise' does not exist on type 'Window'.
+node_modules/bluebird/js/browser/bluebird.core.js(30,394): error TS2304: Cannot find name '_dereq_'.
+node_modules/bluebird/js/browser/bluebird.core.js(30,415): error TS2304: Cannot find name '_dereq_'.
+node_modules/bluebird/js/browser/bluebird.core.js(30,521): error TS2339: Property 'code' does not exist on type 'Error'.
+node_modules/bluebird/js/browser/bluebird.core.js(30,694): error TS2304: Cannot find name '_dereq_'.
+node_modules/bluebird/js/browser/bluebird.core.js(30,715): error TS2304: Cannot find name '_dereq_'.
+node_modules/bluebird/js/browser/bluebird.core.js(190,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+node_modules/bluebird/js/browser/bluebird.core.js(265,12): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bluebird/js/browser/bluebird.core.js(265,43): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bluebird/js/browser/bluebird.core.js(267,15): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bluebird/js/browser/bluebird.core.js(267,37): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bluebird/js/browser/bluebird.core.js(462,23): error TS2531: Object is possibly 'null'.
+node_modules/bluebird/js/browser/bluebird.core.js(681,17): error TS2403: Subsequent variable declarations must have the same type.  Variable 'event' must be of type 'CustomEvent<any>', but here has type 'Event'.
+node_modules/bluebird/js/browser/bluebird.core.js(687,26): error TS2339: Property 'detail' does not exist on type 'Event'.
+node_modules/bluebird/js/browser/bluebird.core.js(1068,46): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/browser/bluebird.core.js(1242,5): error TS2721: Cannot invoke an object which is possibly 'null'.
+node_modules/bluebird/js/browser/bluebird.core.js(1260,30): error TS2339: Property 'stack' does not exist on type '{ _parent: any; _promisesCreated: number | undefined; _length: any; uncycle: () => void; attachEx...'.
+node_modules/bluebird/js/browser/bluebird.core.js(1266,37): error TS2339: Property 'stack' does not exist on type '{ _parent: any; _promisesCreated: number | undefined; _length: any; uncycle: () => void; attachEx...'.
+node_modules/bluebird/js/browser/bluebird.core.js(1305,38): error TS2339: Property 'stack' does not exist on type '{ _parent: any; _promisesCreated: number | undefined; _length: any; uncycle: () => void; attachEx...'.
+node_modules/bluebird/js/browser/bluebird.core.js(1314,25): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/browser/bluebird.core.js(1500,49): error TS2350: Only a void function can be called with the 'new' keyword.
+node_modules/bluebird/js/browser/bluebird.core.js(2125,24): error TS2339: Property 'PromiseInspection' does not exist on type '{ (executor: any): void; getNewLibraryCopy: any; is: (val: any) => boolean; fromNode: (fn: any, ....'.
+node_modules/bluebird/js/browser/bluebird.core.js(2138,32): error TS2322: Type 'null' is not assignable to type 'Domain'.
+node_modules/bluebird/js/browser/bluebird.core.js(2153,25): error TS2339: Property 'TypeError' does not exist on type '{ (executor: any): void; getNewLibraryCopy: any; is: (val: any) => boolean; fromNode: (fn: any, ....'.
+node_modules/bluebird/js/browser/bluebird.core.js(2154,9): error TS2339: Property 'RangeError' does not exist on type '{ (executor: any): void; getNewLibraryCopy: any; is: (val: any) => boolean; fromNode: (fn: any, ....'.
+node_modules/bluebird/js/browser/bluebird.core.js(2155,33): error TS2339: Property 'CancellationError' does not exist on type '{ (executor: any): void; getNewLibraryCopy: any; is: (val: any) => boolean; fromNode: (fn: any, ....'.
+node_modules/bluebird/js/browser/bluebird.core.js(2156,9): error TS2339: Property 'TimeoutError' does not exist on type '{ (executor: any): void; getNewLibraryCopy: any; is: (val: any) => boolean; fromNode: (fn: any, ....'.
+node_modules/bluebird/js/browser/bluebird.core.js(2157,9): error TS2339: Property 'OperationalError' does not exist on type '{ (executor: any): void; getNewLibraryCopy: any; is: (val: any) => boolean; fromNode: (fn: any, ....'.
+node_modules/bluebird/js/browser/bluebird.core.js(2158,9): error TS2339: Property 'RejectionError' does not exist on type '{ (executor: any): void; getNewLibraryCopy: any; is: (val: any) => boolean; fromNode: (fn: any, ....'.
+node_modules/bluebird/js/browser/bluebird.core.js(2159,9): error TS2339: Property 'AggregateError' does not exist on type '{ (executor: any): void; getNewLibraryCopy: any; is: (val: any) => boolean; fromNode: (fn: any, ....'.
+node_modules/bluebird/js/browser/bluebird.core.js(2241,14): error TS2339: Property '_warn' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2266,14): error TS2551: Property 'isFulfilled' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'. Did you mean '_setFulfilled'?
+node_modules/bluebird/js/browser/bluebird.core.js(2267,37): error TS2339: Property 'value' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2269,21): error TS2551: Property 'isRejected' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'. Did you mean '_setRejected'?
+node_modules/bluebird/js/browser/bluebird.core.js(2270,36): error TS2339: Property 'reason' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2278,14): error TS2339: Property '_warn' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2295,9): error TS2339: Property '_captureStackTrace' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2325,9): error TS2339: Property '_captureStackTrace' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2352,15): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2353,20): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2356,63): error TS2339: Property '_boundTo' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2359,14): error TS2339: Property '_fireEvent' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2363,12): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2365,15): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2368,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2371,20): error TS2339: Property '_unsetRejectionIsUnhandled' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2375,20): error TS2339: Property '_attachExtraTrace' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2395,12): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2399,13): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2403,13): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2407,23): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2412,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2413,10): error TS2339: Property '_fireEvent' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2417,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2418,10): error TS2339: Property '_fireEvent' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2422,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2423,10): error TS2339: Property '_fireEvent' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2427,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2431,13): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2435,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2439,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2440,10): error TS2339: Property '_fireEvent' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2444,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2449,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2457,42): error TS2339: Property '_isBound' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2546,11): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2552,26): error TS2339: Property '_propagateFrom' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2589,14): error TS2339: Property '_warn' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2591,10): error TS2339: Property '_attachExtraTrace' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2598,10): error TS2339: Property '_captureStackTrace' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2599,10): error TS2339: Property '_pushContext' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2601,18): error TS2339: Property '_execute' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2607,10): error TS2339: Property '_popContext' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2648,32): error TS2322: Type 'undefined' is not assignable to type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2663,29): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2664,11): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2691,19): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2699,15): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2745,11): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2748,14): error TS2339: Property '_attachExtraTrace' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2754,10): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2755,15): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2765,11): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2773,10): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2776,14): error TS2339: Property '_ensurePossibleRejectionHandled' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2802,16): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2805,15): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2816,10): error TS2339: Property '_clearCancellationData' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2821,11): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2823,18): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(2891,25): error TS2304: Cannot find name 'Map'.
+node_modules/bluebird/js/browser/bluebird.core.js(2951,18): error TS2339: Property '_resolveEmptyArray' does not exist on type '{ _promise: any; _values: any; _length: number | undefined; _totalResolved: number | undefined; l...'.
+node_modules/bluebird/js/browser/bluebird.core.js(2989,30): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/bluebird/js/browser/bluebird.core.js(2991,30): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/browser/bluebird.core.js(3022,27): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(3023,26): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(3036,5): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(3088,25): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(3089,14): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(3089,28): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(3091,20): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(3095,18): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(3102,13): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(3113,20): error TS2538: Type 'undefined' cannot be used as an index type.
+node_modules/bluebird/js/browser/bluebird.core.js(3115,10): error TS2538: Type 'undefined' cannot be used as an index type.
+node_modules/bluebird/js/browser/bluebird.core.js(3116,20): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(3117,5): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(3136,27): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(3136,35): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.core.js(3165,31): error TS2339: Property 'standalone' does not exist on type 'Navigator'.
+node_modules/bluebird/js/browser/bluebird.core.js(3165,52): error TS2339: Property 'cordova' does not exist on type 'Window'.
+node_modules/bluebird/js/browser/bluebird.core.js(3599,5): error TS7027: Unreachable code detected.
+node_modules/bluebird/js/browser/bluebird.core.js(3687,34): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/bluebird/js/browser/bluebird.core.js(3688,22): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/bluebird/js/browser/bluebird.core.js(3720,16): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bluebird/js/browser/bluebird.core.js(3722,31): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bluebird/js/browser/bluebird.core.js(3724,24): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bluebird/js/browser/bluebird.core.js(3761,25): error TS2304: Cannot find name 'chrome'.
+node_modules/bluebird/js/browser/bluebird.core.js(3761,51): error TS2304: Cannot find name 'chrome'.
+node_modules/bluebird/js/browser/bluebird.core.js(3762,25): error TS2304: Cannot find name 'chrome'.
+node_modules/bluebird/js/browser/bluebird.core.js(3781,118): error TS2339: Property 'P' does not exist on type 'Window'.
+node_modules/bluebird/js/browser/bluebird.core.js(3781,129): error TS2339: Property 'Promise' does not exist on type 'Window'.
+node_modules/bluebird/js/browser/bluebird.core.js(3781,282): error TS2339: Property 'P' does not exist on type 'Window'.
+node_modules/bluebird/js/browser/bluebird.core.js(3781,291): error TS2339: Property 'Promise' does not exist on type 'Window'.
+node_modules/bluebird/js/browser/bluebird.js(29,116): error TS2304: Cannot find name 'define'.
+node_modules/bluebird/js/browser/bluebird.js(29,124): error TS2304: Cannot find name 'define'.
+node_modules/bluebird/js/browser/bluebird.js(29,135): error TS2304: Cannot find name 'define'.
+node_modules/bluebird/js/browser/bluebird.js(29,266): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(29,268): error TS2339: Property 'Promise' does not exist on type 'Window | Global'.
+  Property 'Promise' does not exist on type 'Window'.
+node_modules/bluebird/js/browser/bluebird.js(29,394): error TS2304: Cannot find name '_dereq_'.
+node_modules/bluebird/js/browser/bluebird.js(29,415): error TS2304: Cannot find name '_dereq_'.
+node_modules/bluebird/js/browser/bluebird.js(29,521): error TS2339: Property 'code' does not exist on type 'Error'.
+node_modules/bluebird/js/browser/bluebird.js(29,694): error TS2304: Cannot find name '_dereq_'.
+node_modules/bluebird/js/browser/bluebird.js(29,715): error TS2304: Cannot find name '_dereq_'.
+node_modules/bluebird/js/browser/bluebird.js(31,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+node_modules/bluebird/js/browser/bluebird.js(287,12): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bluebird/js/browser/bluebird.js(287,43): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bluebird/js/browser/bluebird.js(289,15): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bluebird/js/browser/bluebird.js(289,37): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bluebird/js/browser/bluebird.js(609,23): error TS2531: Object is possibly 'null'.
+node_modules/bluebird/js/browser/bluebird.js(828,17): error TS2403: Subsequent variable declarations must have the same type.  Variable 'event' must be of type 'CustomEvent<any>', but here has type 'Event'.
+node_modules/bluebird/js/browser/bluebird.js(834,26): error TS2339: Property 'detail' does not exist on type 'Event'.
+node_modules/bluebird/js/browser/bluebird.js(1215,46): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/browser/bluebird.js(1389,5): error TS2721: Cannot invoke an object which is possibly 'null'.
+node_modules/bluebird/js/browser/bluebird.js(1407,30): error TS2339: Property 'stack' does not exist on type '{ _parent: any; _promisesCreated: number | undefined; _length: any; uncycle: () => void; attachEx...'.
+node_modules/bluebird/js/browser/bluebird.js(1413,37): error TS2339: Property 'stack' does not exist on type '{ _parent: any; _promisesCreated: number | undefined; _length: any; uncycle: () => void; attachEx...'.
+node_modules/bluebird/js/browser/bluebird.js(1452,38): error TS2339: Property 'stack' does not exist on type '{ _parent: any; _promisesCreated: number | undefined; _length: any; uncycle: () => void; attachEx...'.
+node_modules/bluebird/js/browser/bluebird.js(1461,25): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/browser/bluebird.js(1679,49): error TS2350: Only a void function can be called with the 'new' keyword.
+node_modules/bluebird/js/browser/bluebird.js(2093,21): error TS2322: Type 'null' is not assignable to type 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(2102,35): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(2111,27): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(2116,27): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(2128,27): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(2137,27): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(2144,9): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
+node_modules/bluebird/js/browser/bluebird.js(2147,9): error TS2533: Object is possibly 'null' or 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(2251,5): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/browser/bluebird.js(2456,10): error TS2551: Property '_init$' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'. Did you mean '_init'?
+node_modules/bluebird/js/browser/bluebird.js(2462,23): error TS2339: Property '_values' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/browser/bluebird.js(2463,23): error TS2339: Property 'length' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/browser/bluebird.js(2471,13): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(2473,22): error TS2339: Property '_isResolved' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/browser/bluebird.js(2476,27): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(2478,13): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(2478,30): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/bluebird/js/browser/bluebird.js(2481,39): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(2483,28): error TS2339: Property '_promise' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/browser/bluebird.js(2496,18): error TS2339: Property '_reject' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/browser/bluebird.js(2500,58): error TS2339: Property '_promise' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/browser/bluebird.js(2506,33): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(2513,22): error TS2339: Property '_reject' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/browser/bluebird.js(2516,22): error TS2339: Property '_cancel' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/browser/bluebird.js(2522,32): error TS2339: Property '_totalResolved' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/browser/bluebird.js(2527,18): error TS2339: Property '_resolve' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/browser/bluebird.js(2537,23): error TS2339: Property '_values' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/browser/bluebird.js(2538,12): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(2538,32): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(2539,18): error TS2339: Property '_isResolved' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/browser/bluebird.js(2540,21): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(2553,10): error TS2339: Property '_resolve' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/browser/bluebird.js(2582,66): error TS2339: Property 'promise' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/browser/bluebird.js(2738,19): error TS2339: Property 'cause' does not exist on type 'Error'.
+node_modules/bluebird/js/browser/bluebird.js(2773,24): error TS2339: Property 'PromiseInspection' does not exist on type '{ (executor: any): void; getNewLibraryCopy: any; is: (val: any) => boolean; fromNode: (fn: any, ....'.
+node_modules/bluebird/js/browser/bluebird.js(2786,32): error TS2322: Type 'null' is not assignable to type 'Domain'.
+node_modules/bluebird/js/browser/bluebird.js(2801,25): error TS2339: Property 'TypeError' does not exist on type '{ (executor: any): void; getNewLibraryCopy: any; is: (val: any) => boolean; fromNode: (fn: any, ....'.
+node_modules/bluebird/js/browser/bluebird.js(2802,9): error TS2339: Property 'RangeError' does not exist on type '{ (executor: any): void; getNewLibraryCopy: any; is: (val: any) => boolean; fromNode: (fn: any, ....'.
+node_modules/bluebird/js/browser/bluebird.js(2803,33): error TS2339: Property 'CancellationError' does not exist on type '{ (executor: any): void; getNewLibraryCopy: any; is: (val: any) => boolean; fromNode: (fn: any, ....'.
+node_modules/bluebird/js/browser/bluebird.js(2804,9): error TS2339: Property 'TimeoutError' does not exist on type '{ (executor: any): void; getNewLibraryCopy: any; is: (val: any) => boolean; fromNode: (fn: any, ....'.
+node_modules/bluebird/js/browser/bluebird.js(2805,9): error TS2339: Property 'OperationalError' does not exist on type '{ (executor: any): void; getNewLibraryCopy: any; is: (val: any) => boolean; fromNode: (fn: any, ....'.
+node_modules/bluebird/js/browser/bluebird.js(2806,9): error TS2339: Property 'RejectionError' does not exist on type '{ (executor: any): void; getNewLibraryCopy: any; is: (val: any) => boolean; fromNode: (fn: any, ....'.
+node_modules/bluebird/js/browser/bluebird.js(2807,9): error TS2339: Property 'AggregateError' does not exist on type '{ (executor: any): void; getNewLibraryCopy: any; is: (val: any) => boolean; fromNode: (fn: any, ....'.
+node_modules/bluebird/js/browser/bluebird.js(2889,14): error TS2339: Property '_warn' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(2914,14): error TS2551: Property 'isFulfilled' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'. Did you mean '_setFulfilled'?
+node_modules/bluebird/js/browser/bluebird.js(2915,37): error TS2339: Property 'value' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(2917,21): error TS2551: Property 'isRejected' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'. Did you mean '_setRejected'?
+node_modules/bluebird/js/browser/bluebird.js(2918,36): error TS2339: Property 'reason' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(2926,14): error TS2339: Property '_warn' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(2943,9): error TS2339: Property '_captureStackTrace' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(2973,9): error TS2339: Property '_captureStackTrace' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(3000,15): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3001,20): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3004,63): error TS2339: Property '_boundTo' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(3007,14): error TS2339: Property '_fireEvent' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(3011,12): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3013,15): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3016,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3019,20): error TS2339: Property '_unsetRejectionIsUnhandled' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(3023,20): error TS2339: Property '_attachExtraTrace' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(3043,12): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3047,13): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3051,13): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3055,23): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3060,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3061,10): error TS2339: Property '_fireEvent' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(3065,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3066,10): error TS2339: Property '_fireEvent' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(3070,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3071,10): error TS2339: Property '_fireEvent' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(3075,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3079,13): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3083,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3087,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3088,10): error TS2339: Property '_fireEvent' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(3092,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3097,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3105,42): error TS2339: Property '_isBound' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(3194,11): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3200,26): error TS2339: Property '_propagateFrom' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(3237,14): error TS2339: Property '_warn' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(3239,10): error TS2339: Property '_attachExtraTrace' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(3246,10): error TS2339: Property '_captureStackTrace' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(3247,10): error TS2339: Property '_pushContext' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(3249,18): error TS2339: Property '_execute' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(3255,10): error TS2339: Property '_popContext' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(3296,32): error TS2322: Type 'undefined' is not assignable to type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(3311,29): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3312,11): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3339,19): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3347,15): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3393,11): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3396,14): error TS2339: Property '_attachExtraTrace' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(3402,10): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3403,15): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3413,11): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3421,10): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3424,14): error TS2339: Property '_ensurePossibleRejectionHandled' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(3450,16): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3453,15): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3464,10): error TS2339: Property '_clearCancellationData' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(3469,11): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3471,18): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3554,25): error TS2304: Cannot find name 'Map'.
+node_modules/bluebird/js/browser/bluebird.js(3614,18): error TS2339: Property '_resolveEmptyArray' does not exist on type '{ _promise: any; _values: any; _length: number | undefined; _totalResolved: number | undefined; l...'.
+node_modules/bluebird/js/browser/bluebird.js(3652,30): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/bluebird/js/browser/bluebird.js(3654,30): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/browser/bluebird.js(3685,27): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3686,26): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3699,5): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3799,22): error TS2554: Expected 0-1 arguments, but got 3.
+node_modules/bluebird/js/browser/bluebird.js(3823,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'number', but here has type 'any'.
+node_modules/bluebird/js/browser/bluebird.js(3979,17): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3982,24): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(3994,12): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(4054,12): error TS2304: Cannot find name 'Map'.
+node_modules/bluebird/js/browser/bluebird.js(4054,41): error TS2304: Cannot find name 'Map'.
+node_modules/bluebird/js/browser/bluebird.js(4111,10): error TS2339: Property '_values' does not exist on type '{ _isMap: boolean | undefined; _init: () => void; _promiseFulfilled: (value: any, index: any) => ...'.
+node_modules/bluebird/js/browser/bluebird.js(4112,32): error TS2339: Property '_totalResolved' does not exist on type '{ _isMap: boolean | undefined; _init: () => void; _promiseFulfilled: (value: any, index: any) => ...'.
+node_modules/bluebird/js/browser/bluebird.js(4113,31): error TS2339: Property '_length' does not exist on type '{ _isMap: boolean | undefined; _init: () => void; _promiseFulfilled: (value: any, index: any) => ...'.
+node_modules/bluebird/js/browser/bluebird.js(4116,37): error TS2339: Property '_values' does not exist on type '{ _isMap: boolean | undefined; _init: () => void; _promiseFulfilled: (value: any, index: any) => ...'.
+node_modules/bluebird/js/browser/bluebird.js(4119,34): error TS2339: Property 'length' does not exist on type '{ _isMap: boolean | undefined; _init: () => void; _promiseFulfilled: (value: any, index: any) => ...'.
+node_modules/bluebird/js/browser/bluebird.js(4120,40): error TS2339: Property 'length' does not exist on type '{ _isMap: boolean | undefined; _init: () => void; _promiseFulfilled: (value: any, index: any) => ...'.
+node_modules/bluebird/js/browser/bluebird.js(4121,26): error TS2339: Property '_values' does not exist on type '{ _isMap: boolean | undefined; _init: () => void; _promiseFulfilled: (value: any, index: any) => ...'.
+node_modules/bluebird/js/browser/bluebird.js(4121,57): error TS2339: Property '_values' does not exist on type '{ _isMap: boolean | undefined; _init: () => void; _promiseFulfilled: (value: any, index: any) => ...'.
+node_modules/bluebird/js/browser/bluebird.js(4124,14): error TS2339: Property '_resolve' does not exist on type '{ _isMap: boolean | undefined; _init: () => void; _promiseFulfilled: (value: any, index: any) => ...'.
+node_modules/bluebird/js/browser/bluebird.js(4148,53): error TS2339: Property 'promise' does not exist on type '{ _isMap: boolean | undefined; _init: () => void; _promiseFulfilled: (value: any, index: any) => ...'.
+node_modules/bluebird/js/browser/bluebird.js(4187,25): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(4188,14): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(4188,28): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(4190,20): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(4194,18): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(4201,13): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(4212,20): error TS2538: Type 'undefined' cannot be used as an index type.
+node_modules/bluebird/js/browser/bluebird.js(4214,10): error TS2538: Type 'undefined' cannot be used as an index type.
+node_modules/bluebird/js/browser/bluebird.js(4215,20): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(4216,5): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(4235,27): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(4235,35): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(4336,9): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(4353,10): error TS2339: Property '_promise' does not exist on type '{ _fn: any; _initialValue: any; _currentCancellable: null | undefined; _eachValues: any[] | null ...'.
+node_modules/bluebird/js/browser/bluebird.js(4354,10): error TS2339: Property '_values' does not exist on type '{ _fn: any; _initialValue: any; _currentCancellable: null | undefined; _eachValues: any[] | null ...'.
+node_modules/bluebird/js/browser/bluebird.js(4358,52): error TS2339: Property '_cancel' does not exist on type '{ _fn: any; _initialValue: any; _currentCancellable: null | undefined; _eachValues: any[] | null ...'.
+node_modules/bluebird/js/browser/bluebird.js(4359,14): error TS2339: Property '_isResolved' does not exist on type '{ _fn: any; _initialValue: any; _currentCancellable: null | undefined; _eachValues: any[] | null ...'.
+node_modules/bluebird/js/browser/bluebird.js(4360,10): error TS2551: Property '_resultCancelled$' does not exist on type '{ _fn: any; _initialValue: any; _currentCancellable: null | undefined; _eachValues: any[] | null ...'. Did you mean '_resultCancelled'?
+node_modules/bluebird/js/browser/bluebird.js(4361,9): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
+node_modules/bluebird/js/browser/bluebird.js(4362,9): error TS2533: Object is possibly 'null' or 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(4370,10): error TS2339: Property '_values' does not exist on type '{ _fn: any; _initialValue: any; _currentCancellable: null | undefined; _eachValues: any[] | null ...'.
+node_modules/bluebird/js/browser/bluebird.js(4425,18): error TS2339: Property 'promise' does not exist on type '{ _fn: any; _initialValue: any; _currentCancellable: null | undefined; _eachValues: any[] | null ...'.
+node_modules/bluebird/js/browser/bluebird.js(4489,31): error TS2339: Property 'standalone' does not exist on type 'Navigator'.
+node_modules/bluebird/js/browser/bluebird.js(4489,52): error TS2339: Property 'cordova' does not exist on type 'Window'.
+node_modules/bluebird/js/browser/bluebird.js(4542,10): error TS2339: Property '_values' does not exist on type '{ _promiseResolved: (index: any, inspection: any) => boolean; _promiseFulfilled: (value: any, ind...'.
+node_modules/bluebird/js/browser/bluebird.js(4543,32): error TS2339: Property '_totalResolved' does not exist on type '{ _promiseResolved: (index: any, inspection: any) => boolean; _promiseFulfilled: (value: any, ind...'.
+node_modules/bluebird/js/browser/bluebird.js(4544,31): error TS2339: Property '_length' does not exist on type '{ _promiseResolved: (index: any, inspection: any) => boolean; _promiseFulfilled: (value: any, ind...'.
+node_modules/bluebird/js/browser/bluebird.js(4545,14): error TS2339: Property '_resolve' does not exist on type '{ _promiseResolved: (index: any, inspection: any) => boolean; _promiseFulfilled: (value: any, ind...'.
+node_modules/bluebird/js/browser/bluebird.js(4545,28): error TS2339: Property '_values' does not exist on type '{ _promiseResolved: (index: any, inspection: any) => boolean; _promiseFulfilled: (value: any, ind...'.
+node_modules/bluebird/js/browser/bluebird.js(4566,46): error TS2339: Property 'promise' does not exist on type '{ _promiseResolved: (index: any, inspection: any) => boolean; _promiseFulfilled: (value: any, ind...'.
+node_modules/bluebird/js/browser/bluebird.js(4598,14): error TS2339: Property '_resolve' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(4601,10): error TS2551: Property '_init$' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'. Did you mean '_init'?
+node_modules/bluebird/js/browser/bluebird.js(4602,40): error TS2339: Property '_values' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(4603,15): error TS2339: Property '_isResolved' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(4605,9): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(4606,14): error TS2551: Property '_reject' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'. Did you mean '_rejected'?
+node_modules/bluebird/js/browser/bluebird.js(4606,47): error TS2339: Property 'length' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(4630,14): error TS2339: Property '_values' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(4632,18): error TS2339: Property '_resolve' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(4632,32): error TS2339: Property '_values' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(4634,18): error TS2339: Property '_resolve' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(4634,32): error TS2339: Property '_values' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(4647,14): error TS2339: Property '_values' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(4647,49): error TS2339: Property '_values' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(4648,21): error TS2339: Property '_cancel' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(4655,9): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/browser/bluebird.js(4657,27): error TS2339: Property 'length' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(4657,46): error TS2339: Property '_values' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(4658,22): error TS2339: Property '_values' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(4659,29): error TS2339: Property '_values' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(4663,18): error TS2551: Property '_reject' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'. Did you mean '_rejected'?
+node_modules/bluebird/js/browser/bluebird.js(4665,18): error TS2339: Property '_cancel' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(4673,17): error TS2339: Property '_totalResolved' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(4677,17): error TS2339: Property '_values' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(4677,39): error TS2339: Property 'length' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(4681,10): error TS2339: Property '_values' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(4685,10): error TS2339: Property '_values' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(4685,23): error TS2339: Property '_totalResolved' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(4689,17): error TS2339: Property 'length' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(4699,10): error TS2551: Property '_reject' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'. Did you mean '_rejected'?
+node_modules/bluebird/js/browser/bluebird.js(4707,23): error TS2339: Property 'promise' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/browser/bluebird.js(5090,20): error TS2339: Property 'doDispose' does not exist on type '{ _data: any; _promise: any; _context: any; data: () => any; promise: () => any; resource: () => ...'.
+node_modules/bluebird/js/browser/bluebird.js(5109,23): error TS2339: Property 'data' does not exist on type '{ doDispose: (resource: any, inspection: any) => any; }'.
+node_modules/bluebird/js/browser/bluebird.js(5441,5): error TS7027: Unreachable code detected.
+node_modules/bluebird/js/browser/bluebird.js(5529,34): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/bluebird/js/browser/bluebird.js(5530,22): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/bluebird/js/browser/bluebird.js(5562,16): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bluebird/js/browser/bluebird.js(5564,31): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bluebird/js/browser/bluebird.js(5566,24): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bluebird/js/browser/bluebird.js(5603,25): error TS2304: Cannot find name 'chrome'.
+node_modules/bluebird/js/browser/bluebird.js(5603,51): error TS2304: Cannot find name 'chrome'.
+node_modules/bluebird/js/browser/bluebird.js(5604,25): error TS2304: Cannot find name 'chrome'.
+node_modules/bluebird/js/browser/bluebird.js(5623,118): error TS2339: Property 'P' does not exist on type 'Window'.
+node_modules/bluebird/js/browser/bluebird.js(5623,129): error TS2339: Property 'Promise' does not exist on type 'Window'.
+node_modules/bluebird/js/browser/bluebird.js(5623,282): error TS2339: Property 'P' does not exist on type 'Window'.
+node_modules/bluebird/js/browser/bluebird.js(5623,291): error TS2339: Property 'Promise' does not exist on type 'Window'.
+node_modules/bluebird/js/release/assert.js(11,30): error TS2339: Property 'constructor$' does not exist on type 'Error'.
+node_modules/bluebird/js/release/async.js(68,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/bluebird/js/release/async.js(100,13): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/bluebird/js/release/async.js(112,13): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/bluebird/js/release/async.js(122,13): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/bluebird/js/release/async.js(152,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/bluebird/js/release/async.js(160,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+node_modules/bluebird/js/release/bluebird.js(3,12): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bluebird/js/release/bluebird.js(3,43): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bluebird/js/release/bluebird.js(5,15): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bluebird/js/release/bluebird.js(5,37): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bluebird/js/release/bluebird.js(10,10): error TS2339: Property 'noConflict' does not exist on type '{ (executor: any): void; getNewLibraryCopy: any; is: (val: any) => boolean; fromNode: (fn: any, ....'.
+node_modules/bluebird/js/release/catch_filter.js(27,28): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: {}) => string[]) | ((o: any) => string[])' has no compatible call signatures.
+node_modules/bluebird/js/release/context.js(12,23): error TS2531: Object is possibly 'null'.
+node_modules/bluebird/js/release/debuggability.js(18,20): error TS2365: Operator '!=' cannot be applied to types 'string | undefined' and 'number'.
+node_modules/bluebird/js/release/debuggability.js(23,19): error TS2365: Operator '!=' cannot be applied to types 'string | undefined' and 'number'.
+node_modules/bluebird/js/release/debuggability.js(26,26): error TS2365: Operator '!=' cannot be applied to types 'string | undefined' and 'number'.
+node_modules/bluebird/js/release/debuggability.js(29,24): error TS2365: Operator '!=' cannot be applied to types 'string | undefined' and 'number'.
+node_modules/bluebird/js/release/debuggability.js(160,17): error TS2403: Subsequent variable declarations must have the same type.  Variable 'event' must be of type 'CustomEvent<any>', but here has type 'Event'.
+node_modules/bluebird/js/release/debuggability.js(166,26): error TS2339: Property 'detail' does not exist on type 'Event'.
+node_modules/bluebird/js/release/debuggability.js(476,19): error TS2350: Only a void function can be called with the 'new' keyword.
+node_modules/bluebird/js/release/debuggability.js(547,46): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/release/debuggability.js(721,5): error TS2721: Cannot invoke an object which is possibly 'null'.
+node_modules/bluebird/js/release/debuggability.js(739,30): error TS2339: Property 'stack' does not exist on type '{ _parent: any; _promisesCreated: number | undefined; _length: any; uncycle: () => void; attachEx...'.
+node_modules/bluebird/js/release/debuggability.js(745,37): error TS2339: Property 'stack' does not exist on type '{ _parent: any; _promisesCreated: number | undefined; _length: any; uncycle: () => void; attachEx...'.
+node_modules/bluebird/js/release/debuggability.js(784,38): error TS2339: Property 'stack' does not exist on type '{ _parent: any; _promisesCreated: number | undefined; _length: any; uncycle: () => void; attachEx...'.
+node_modules/bluebird/js/release/debuggability.js(793,25): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/release/errors.js(10,49): error TS2350: Only a void function can be called with the 'new' keyword.
+node_modules/bluebird/js/release/errors.js(46,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: any, p: string, attributes: PropertyDescriptor & ThisType<any>) => any) | ((o: any, key: any...' has no compatible call signatures.
+node_modules/bluebird/js/release/errors.js(92,18): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; } | ((obj...' has no compatible call signatures.
+node_modules/bluebird/js/release/errors.js(99,5): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: any, p: string, attributes: PropertyDescriptor & ThisType<any>) => any) | ((o: any, key: any...' has no compatible call signatures.
+node_modules/bluebird/js/release/generators.js(62,21): error TS2322: Type 'null' is not assignable to type 'undefined'.
+node_modules/bluebird/js/release/generators.js(71,35): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/generators.js(80,27): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/generators.js(85,27): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/generators.js(97,27): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/generators.js(106,27): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/generators.js(113,9): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
+node_modules/bluebird/js/release/generators.js(116,9): error TS2533: Object is possibly 'null' or 'undefined'.
+node_modules/bluebird/js/release/generators.js(159,21): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/bluebird/js/release/generators.js(190,15): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/bluebird/js/release/generators.js(208,15): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/bluebird/js/release/generators.js(220,5): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/release/map.js(30,10): error TS2551: Property '_init$' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'. Did you mean '_init'?
+node_modules/bluebird/js/release/map.js(36,23): error TS2339: Property '_values' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/release/map.js(37,23): error TS2339: Property 'length' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/release/map.js(45,13): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/map.js(47,22): error TS2339: Property '_isResolved' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/release/map.js(50,27): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/map.js(52,13): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/map.js(52,30): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/bluebird/js/release/map.js(55,39): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/map.js(57,28): error TS2339: Property '_promise' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/release/map.js(70,18): error TS2339: Property '_reject' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/release/map.js(74,58): error TS2339: Property '_promise' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/release/map.js(80,33): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/map.js(87,22): error TS2339: Property '_reject' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/release/map.js(90,22): error TS2339: Property '_cancel' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/release/map.js(96,32): error TS2339: Property '_totalResolved' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/release/map.js(101,18): error TS2339: Property '_resolve' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/release/map.js(111,23): error TS2339: Property '_values' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/release/map.js(112,12): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/map.js(112,32): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/map.js(113,18): error TS2339: Property '_isResolved' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/release/map.js(114,21): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/map.js(127,10): error TS2339: Property '_resolve' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/release/map.js(156,66): error TS2339: Property 'promise' does not exist on type '{ _callback: any; _preservedValues: any[] | null | undefined; _limit: any; _inFlight: number | un...'.
+node_modules/bluebird/js/release/nodeback.js(21,20): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: {}) => string[]) | ((o: any) => string[])' has no compatible call signatures.
+node_modules/bluebird/js/release/nodeify.js(32,19): error TS2339: Property 'cause' does not exist on type 'Error'.
+node_modules/bluebird/js/release/promise.js(4,12): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/bluebird/js/release/promise.js(7,24): error TS2339: Property 'PromiseInspection' does not exist on type '{ (executor: any): void; getNewLibraryCopy: any; is: (val: any) => boolean; fromNode: (fn: any, ....'.
+node_modules/bluebird/js/release/promise.js(10,27): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/bluebird/js/release/promise.js(20,32): error TS2322: Type 'null' is not assignable to type 'Domain'.
+node_modules/bluebird/js/release/promise.js(33,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: any, p: string, attributes: PropertyDescriptor & ThisType<any>) => any) | ((o: any, key: any...' has no compatible call signatures.
+node_modules/bluebird/js/release/promise.js(35,25): error TS2339: Property 'TypeError' does not exist on type '{ (executor: any): void; getNewLibraryCopy: any; is: (val: any) => boolean; fromNode: (fn: any, ....'.
+node_modules/bluebird/js/release/promise.js(36,9): error TS2339: Property 'RangeError' does not exist on type '{ (executor: any): void; getNewLibraryCopy: any; is: (val: any) => boolean; fromNode: (fn: any, ....'.
+node_modules/bluebird/js/release/promise.js(37,33): error TS2339: Property 'CancellationError' does not exist on type '{ (executor: any): void; getNewLibraryCopy: any; is: (val: any) => boolean; fromNode: (fn: any, ....'.
+node_modules/bluebird/js/release/promise.js(38,9): error TS2339: Property 'TimeoutError' does not exist on type '{ (executor: any): void; getNewLibraryCopy: any; is: (val: any) => boolean; fromNode: (fn: any, ....'.
+node_modules/bluebird/js/release/promise.js(39,9): error TS2339: Property 'OperationalError' does not exist on type '{ (executor: any): void; getNewLibraryCopy: any; is: (val: any) => boolean; fromNode: (fn: any, ....'.
+node_modules/bluebird/js/release/promise.js(40,9): error TS2339: Property 'RejectionError' does not exist on type '{ (executor: any): void; getNewLibraryCopy: any; is: (val: any) => boolean; fromNode: (fn: any, ....'.
+node_modules/bluebird/js/release/promise.js(41,9): error TS2339: Property 'AggregateError' does not exist on type '{ (executor: any): void; getNewLibraryCopy: any; is: (val: any) => boolean; fromNode: (fn: any, ....'.
+node_modules/bluebird/js/release/promise.js(62,15): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/bluebird/js/release/promise.js(65,15): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/bluebird/js/release/promise.js(123,14): error TS2339: Property '_warn' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(148,14): error TS2551: Property 'isFulfilled' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'. Did you mean '_setFulfilled'?
+node_modules/bluebird/js/release/promise.js(149,37): error TS2339: Property 'value' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(151,21): error TS2551: Property 'isRejected' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'. Did you mean '_setRejected'?
+node_modules/bluebird/js/release/promise.js(152,36): error TS2339: Property 'reason' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(160,14): error TS2339: Property '_warn' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(177,9): error TS2339: Property '_captureStackTrace' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(207,9): error TS2339: Property '_captureStackTrace' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(214,15): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/bluebird/js/release/promise.js(234,15): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(235,20): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(238,63): error TS2339: Property '_boundTo' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(241,14): error TS2339: Property '_fireEvent' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(245,12): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(247,15): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(250,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(253,20): error TS2339: Property '_unsetRejectionIsUnhandled' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(257,20): error TS2339: Property '_attachExtraTrace' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(277,12): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(281,13): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(285,13): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(289,23): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(294,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(295,10): error TS2339: Property '_fireEvent' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(299,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(300,10): error TS2339: Property '_fireEvent' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(304,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(305,10): error TS2339: Property '_fireEvent' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(309,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(313,13): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(317,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(321,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(322,10): error TS2339: Property '_fireEvent' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(326,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(331,22): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(339,42): error TS2339: Property '_isBound' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(428,11): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(434,26): error TS2339: Property '_propagateFrom' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(471,14): error TS2339: Property '_warn' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(473,10): error TS2339: Property '_attachExtraTrace' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(480,10): error TS2339: Property '_captureStackTrace' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(481,10): error TS2339: Property '_pushContext' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(483,18): error TS2339: Property '_execute' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(489,10): error TS2339: Property '_popContext' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(506,19): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/bluebird/js/release/promise.js(530,32): error TS2322: Type 'undefined' is not assignable to type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(545,29): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(546,11): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(573,19): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(581,15): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(627,11): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(630,14): error TS2339: Property '_attachExtraTrace' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(636,10): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(637,15): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(647,11): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(655,10): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(658,14): error TS2339: Property '_ensurePossibleRejectionHandled' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(684,16): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(687,15): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(698,10): error TS2339: Property '_clearCancellationData' does not exist on type '{ _bitField: number | undefined; _fulfillmentHandler0: undefined; _rejectionHandler0: undefined; ...'.
+node_modules/bluebird/js/release/promise.js(703,11): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(705,18): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise.js(772,27): error TS2339: Property 'firstLineError' does not exist on type '() => void'.
+node_modules/bluebird/js/release/promise_array.js(11,25): error TS2304: Cannot find name 'Map'.
+node_modules/bluebird/js/release/promise_array.js(71,18): error TS2339: Property '_resolveEmptyArray' does not exist on type '{ _promise: any; _values: any; _length: number | undefined; _totalResolved: number | undefined; l...'.
+node_modules/bluebird/js/release/promise_array.js(109,30): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/bluebird/js/release/promise_array.js(111,30): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/release/promise_array.js(142,27): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise_array.js(143,26): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promise_array.js(156,5): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/promisify.js(54,27): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/bluebird/js/release/promisify.js(69,22): error TS2554: Expected 0-1 arguments, but got 3.
+node_modules/bluebird/js/release/promisify.js(93,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'number', but here has type 'any'.
+node_modules/bluebird/js/release/promisify.js(183,39): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
+  Type 'any[]' provides no match for the signature '(substring: string, ...args: any[]): string'.
+node_modules/bluebird/js/release/promisify.js(249,17): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/bluebird/js/release/promisify.js(252,24): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/bluebird/js/release/promisify.js(264,12): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/bluebird/js/release/promisify.js(270,15): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/bluebird/js/release/promisify.js(285,15): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/bluebird/js/release/props.js(8,12): error TS2304: Cannot find name 'Map'.
+node_modules/bluebird/js/release/props.js(8,41): error TS2304: Cannot find name 'Map'.
+node_modules/bluebird/js/release/props.js(47,20): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: {}) => string[]) | ((o: any) => string[])' has no compatible call signatures.
+node_modules/bluebird/js/release/props.js(65,10): error TS2339: Property '_values' does not exist on type '{ _isMap: boolean | undefined; _init: () => void; _promiseFulfilled: (value: any, index: any) => ...'.
+node_modules/bluebird/js/release/props.js(66,32): error TS2339: Property '_totalResolved' does not exist on type '{ _isMap: boolean | undefined; _init: () => void; _promiseFulfilled: (value: any, index: any) => ...'.
+node_modules/bluebird/js/release/props.js(67,31): error TS2339: Property '_length' does not exist on type '{ _isMap: boolean | undefined; _init: () => void; _promiseFulfilled: (value: any, index: any) => ...'.
+node_modules/bluebird/js/release/props.js(70,37): error TS2339: Property '_values' does not exist on type '{ _isMap: boolean | undefined; _init: () => void; _promiseFulfilled: (value: any, index: any) => ...'.
+node_modules/bluebird/js/release/props.js(73,34): error TS2339: Property 'length' does not exist on type '{ _isMap: boolean | undefined; _init: () => void; _promiseFulfilled: (value: any, index: any) => ...'.
+node_modules/bluebird/js/release/props.js(74,40): error TS2339: Property 'length' does not exist on type '{ _isMap: boolean | undefined; _init: () => void; _promiseFulfilled: (value: any, index: any) => ...'.
+node_modules/bluebird/js/release/props.js(75,26): error TS2339: Property '_values' does not exist on type '{ _isMap: boolean | undefined; _init: () => void; _promiseFulfilled: (value: any, index: any) => ...'.
+node_modules/bluebird/js/release/props.js(75,57): error TS2339: Property '_values' does not exist on type '{ _isMap: boolean | undefined; _init: () => void; _promiseFulfilled: (value: any, index: any) => ...'.
+node_modules/bluebird/js/release/props.js(78,14): error TS2339: Property '_resolve' does not exist on type '{ _isMap: boolean | undefined; _init: () => void; _promiseFulfilled: (value: any, index: any) => ...'.
+node_modules/bluebird/js/release/props.js(102,53): error TS2339: Property 'promise' does not exist on type '{ _isMap: boolean | undefined; _init: () => void; _promiseFulfilled: (value: any, index: any) => ...'.
+node_modules/bluebird/js/release/queue.js(21,25): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/queue.js(22,14): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/queue.js(22,28): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/queue.js(24,20): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/queue.js(28,18): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/queue.js(35,13): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/queue.js(46,20): error TS2538: Type 'undefined' cannot be used as an index type.
+node_modules/bluebird/js/release/queue.js(48,10): error TS2538: Type 'undefined' cannot be used as an index type.
+node_modules/bluebird/js/release/queue.js(49,20): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/queue.js(50,5): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/queue.js(69,27): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/queue.js(69,35): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/reduce.js(44,9): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/reduce.js(61,10): error TS2339: Property '_promise' does not exist on type '{ _fn: any; _initialValue: any; _currentCancellable: null | undefined; _eachValues: any[] | null ...'.
+node_modules/bluebird/js/release/reduce.js(62,10): error TS2339: Property '_values' does not exist on type '{ _fn: any; _initialValue: any; _currentCancellable: null | undefined; _eachValues: any[] | null ...'.
+node_modules/bluebird/js/release/reduce.js(66,52): error TS2339: Property '_cancel' does not exist on type '{ _fn: any; _initialValue: any; _currentCancellable: null | undefined; _eachValues: any[] | null ...'.
+node_modules/bluebird/js/release/reduce.js(67,14): error TS2339: Property '_isResolved' does not exist on type '{ _fn: any; _initialValue: any; _currentCancellable: null | undefined; _eachValues: any[] | null ...'.
+node_modules/bluebird/js/release/reduce.js(68,10): error TS2551: Property '_resultCancelled$' does not exist on type '{ _fn: any; _initialValue: any; _currentCancellable: null | undefined; _eachValues: any[] | null ...'. Did you mean '_resultCancelled'?
+node_modules/bluebird/js/release/reduce.js(69,9): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
+node_modules/bluebird/js/release/reduce.js(70,9): error TS2533: Object is possibly 'null' or 'undefined'.
+node_modules/bluebird/js/release/reduce.js(78,10): error TS2339: Property '_values' does not exist on type '{ _fn: any; _initialValue: any; _currentCancellable: null | undefined; _eachValues: any[] | null ...'.
+node_modules/bluebird/js/release/reduce.js(133,18): error TS2339: Property 'promise' does not exist on type '{ _fn: any; _initialValue: any; _currentCancellable: null | undefined; _eachValues: any[] | null ...'.
+node_modules/bluebird/js/release/schedule.js(23,31): error TS2339: Property 'standalone' does not exist on type 'Navigator'.
+node_modules/bluebird/js/release/schedule.js(23,52): error TS2339: Property 'cordova' does not exist on type 'Window'.
+node_modules/bluebird/js/release/settle.js(13,10): error TS2339: Property '_values' does not exist on type '{ _promiseResolved: (index: any, inspection: any) => boolean; _promiseFulfilled: (value: any, ind...'.
+node_modules/bluebird/js/release/settle.js(14,32): error TS2339: Property '_totalResolved' does not exist on type '{ _promiseResolved: (index: any, inspection: any) => boolean; _promiseFulfilled: (value: any, ind...'.
+node_modules/bluebird/js/release/settle.js(15,31): error TS2339: Property '_length' does not exist on type '{ _promiseResolved: (index: any, inspection: any) => boolean; _promiseFulfilled: (value: any, ind...'.
+node_modules/bluebird/js/release/settle.js(16,14): error TS2339: Property '_resolve' does not exist on type '{ _promiseResolved: (index: any, inspection: any) => boolean; _promiseFulfilled: (value: any, ind...'.
+node_modules/bluebird/js/release/settle.js(16,28): error TS2339: Property '_values' does not exist on type '{ _promiseResolved: (index: any, inspection: any) => boolean; _promiseFulfilled: (value: any, ind...'.
+node_modules/bluebird/js/release/settle.js(37,46): error TS2339: Property 'promise' does not exist on type '{ _promiseResolved: (index: any, inspection: any) => boolean; _promiseFulfilled: (value: any, ind...'.
+node_modules/bluebird/js/release/some.js(24,14): error TS2339: Property '_resolve' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/release/some.js(27,10): error TS2551: Property '_init$' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'. Did you mean '_init'?
+node_modules/bluebird/js/release/some.js(28,40): error TS2339: Property '_values' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/release/some.js(29,15): error TS2339: Property '_isResolved' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/release/some.js(31,9): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/some.js(32,14): error TS2551: Property '_reject' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'. Did you mean '_rejected'?
+node_modules/bluebird/js/release/some.js(32,47): error TS2339: Property 'length' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/release/some.js(56,14): error TS2339: Property '_values' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/release/some.js(58,18): error TS2339: Property '_resolve' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/release/some.js(58,32): error TS2339: Property '_values' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/release/some.js(60,18): error TS2339: Property '_resolve' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/release/some.js(60,32): error TS2339: Property '_values' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/release/some.js(73,14): error TS2339: Property '_values' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/release/some.js(73,49): error TS2339: Property '_values' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/release/some.js(74,21): error TS2339: Property '_cancel' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/release/some.js(81,9): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/some.js(83,27): error TS2339: Property 'length' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/release/some.js(83,46): error TS2339: Property '_values' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/release/some.js(84,22): error TS2339: Property '_values' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/release/some.js(85,29): error TS2339: Property '_values' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/release/some.js(89,18): error TS2551: Property '_reject' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'. Did you mean '_rejected'?
+node_modules/bluebird/js/release/some.js(91,18): error TS2339: Property '_cancel' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/release/some.js(99,17): error TS2339: Property '_totalResolved' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/release/some.js(103,17): error TS2339: Property '_values' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/release/some.js(103,39): error TS2339: Property 'length' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/release/some.js(107,10): error TS2339: Property '_values' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/release/some.js(111,10): error TS2339: Property '_values' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/release/some.js(111,23): error TS2339: Property '_totalResolved' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/release/some.js(115,17): error TS2339: Property 'length' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/release/some.js(121,12): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/bluebird/js/release/some.js(125,10): error TS2551: Property '_reject' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'. Did you mean '_rejected'?
+node_modules/bluebird/js/release/some.js(133,23): error TS2339: Property 'promise' does not exist on type '{ _howMany: number | undefined; _unwrap: boolean | undefined; _initialized: boolean | undefined; ...'.
+node_modules/bluebird/js/release/using.js(78,20): error TS2339: Property 'doDispose' does not exist on type '{ _data: any; _promise: any; _context: any; data: () => any; promise: () => any; resource: () => ...'.
+node_modules/bluebird/js/release/using.js(97,23): error TS2339: Property 'data' does not exist on type '{ doDispose: (resource: any, inspection: any) => any; }'.
+node_modules/bluebird/js/release/using.js(223,15): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/bluebird/js/release/util.js(97,5): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: any, p: string, attributes: PropertyDescriptor & ThisType<any>) => any) | ((o: any, key: any...' has no compatible call signatures.
+node_modules/bluebird/js/release/util.js(201,5): error TS7027: Unreachable code detected.
+node_modules/bluebird/js/release/util.js(247,28): error TS2554: Expected 0 arguments, but got 2.
+node_modules/bluebird/js/release/util.js(275,17): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: any, p: string, attributes: PropertyDescriptor & ThisType<any>) => any) | ((o: any, key: any...' has no compatible call signatures.
+node_modules/bluebird/js/release/util.js(275,45): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: any, p: string) => PropertyDescriptor | undefined) | ((o: any, key: any) => { [x: string]: a...' has no compatible call signatures.
+node_modules/bluebird/js/release/util.js(289,34): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/bluebird/js/release/util.js(290,22): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
+node_modules/bluebird/js/release/util.js(322,16): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bluebird/js/release/util.js(324,31): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bluebird/js/release/util.js(326,24): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bluebird/js/release/util.js(363,25): error TS2304: Cannot find name 'chrome'.
+node_modules/bluebird/js/release/util.js(363,51): error TS2304: Cannot find name 'chrome'.
+node_modules/bluebird/js/release/util.js(364,25): error TS2304: Cannot find name 'chrome'.
+
+
+
+Standard error:

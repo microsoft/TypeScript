@@ -104,8 +104,8 @@ function foo2() {
 declare function foo(): void;
 /** This is comment for function signature*/
 declare function fooWithParameters(/** this is comment about a*/ a: string, 
-    /** this is comment for b*/
-    b: number): void;
+/** this is comment for b*/
+b: number): void;
 /** fooFunc
  * comment
  */
@@ -115,6 +115,6 @@ declare var lambddaNoVarComment: (a: number, b: number) => number;
 declare function blah(a: string): void;
 declare function blah2(a: string): void;
 declare function blah3(a: string): void;
-declare function blah4(a: string, b: string): void;
+declare function blah4(/*1*/ a: string, /*3*/ b: string): void;
 declare function foo1(): void;
 declare function foo2(): void;

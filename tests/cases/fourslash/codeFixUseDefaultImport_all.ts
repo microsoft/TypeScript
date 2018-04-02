@@ -13,6 +13,8 @@
 goTo.file("/b.ts");
 verify.codeFixAll({
     fixId: "useDefaultImport",
-    // TODO: GH#22337
-    newFileContent: `import a1 from "./a";import a2 from "./a";`,
+    fixAllDescription: "Convert all to default imports",
+    newFileContent:
+`import a1 from "./a";
+import a2 from "./a";`,
 });

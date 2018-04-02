@@ -561,7 +561,7 @@ namespace ts {
         }
 
         function returnCapturedThis(node: Node): ReturnStatement {
-            return setOriginalNode(createReturn(createIdentifier("_this")), node);
+            return setOriginalNode(createReturn(createFileLevelUniqueName("_this")), node);
         }
 
         function visitReturnStatement(node: ReturnStatement): Statement {
@@ -779,7 +779,7 @@ namespace ts {
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
-                extendsClauseElement ? [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "_super")] : [],
+                extendsClauseElement ? [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, createFileLevelUniqueName("_super"))] : [],
                 /*type*/ undefined,
                 transformClassBody(node, extendsClauseElement)
             );
@@ -978,7 +978,7 @@ namespace ts {
                 && !(constructor && isSufficientlyCoveredByReturnStatements(constructor.body))) {
                 statements.push(
                     createReturn(
-                        createIdentifier("_this")
+                        createFileLevelUniqueName("_this")
                     )
                 );
             }
@@ -1142,11 +1142,11 @@ namespace ts {
             return createLogicalOr(
                 createLogicalAnd(
                     createStrictInequality(
-                        createIdentifier("_super"),
+                        createFileLevelUniqueName("_super"),
                         createNull()
                     ),
                     createFunctionApply(
-                        createIdentifier("_super"),
+                        createFileLevelUniqueName("_super"),
                         createActualThis(),
                         createIdentifier("arguments"),
                     )
@@ -1452,7 +1452,7 @@ namespace ts {
                 /*modifiers*/ undefined,
                 createVariableDeclarationList([
                     createVariableDeclaration(
-                        "_this",
+                        createFileLevelUniqueName("_this"),
                         /*type*/ undefined,
                         initializer
                     )
@@ -1510,15 +1510,14 @@ namespace ts {
                         break;
 
                     default:
-                        Debug.failBadSyntaxKind(node);
-                        break;
+                        return Debug.failBadSyntaxKind(node);
                 }
 
                 const captureNewTargetStatement = createVariableStatement(
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([
                         createVariableDeclaration(
-                            "_newTarget",
+                            createFileLevelUniqueName("_newTarget"),
                             /*type*/ undefined,
                             newTarget
                         )
@@ -1922,7 +1921,7 @@ namespace ts {
             return block;
         }
 
-        function visitFunctionBodyDownLevel(node: FunctionDeclaration | FunctionExpression) {
+        function visitFunctionBodyDownLevel(node: FunctionDeclaration | FunctionExpression | AccessorDeclaration) {
             const updated = visitFunctionBody(node.body, functionBodyVisitor, context);
             return updateBlock(
                 updated,
@@ -2348,32 +2347,26 @@ namespace ts {
                 }
             }
 
-            let bodyLocation: TextRange;
-            let statementsLocation: TextRange;
             if (convertedLoopBodyStatements) {
-                addRange(statements, convertedLoopBodyStatements);
+                return createSyntheticBlockForConvertedStatements(addRange(statements, convertedLoopBodyStatements));
             }
             else {
                 const statement = visitNode(node.statement, visitor, isStatement, liftToBlock);
                 if (isBlock(statement)) {
-                    addRange(statements, statement.statements);
-                    bodyLocation = statement;
-                    statementsLocation = statement.statements;
+                    return updateBlock(statement, setTextRange(createNodeArray(concatenate(statements, statement.statements)), statement.statements));
                 }
                 else {
                     statements.push(statement);
+                    return createSyntheticBlockForConvertedStatements(statements);
                 }
             }
+        }
 
-            // The old emitter does not emit source maps for the block.
-            // We add the location to preserve comments.
+        function createSyntheticBlockForConvertedStatements(statements: Statement[]) {
             return setEmitFlags(
-                setTextRange(
-                    createBlock(
-                        setTextRange(createNodeArray(statements), statementsLocation),
-                        /*multiLine*/ true
-                    ),
-                    bodyLocation,
+                createBlock(
+                    createNodeArray(statements),
+                    /*multiLine*/ true
                 ),
                 EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps
             );
@@ -3202,18 +3195,15 @@ namespace ts {
             convertedLoopState = undefined;
             const ancestorFacts = enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
             let updated: AccessorDeclaration;
-            if (node.transformFlags & TransformFlags.ContainsCapturedLexicalThis) {
-                const parameters = visitParameterList(node.parameters, visitor, context);
-                const body = transformFunctionBody(node);
-                if (node.kind === SyntaxKind.GetAccessor) {
-                    updated = updateGetAccessor(node, node.decorators, node.modifiers, node.name, parameters, node.type, body);
-                }
-                else {
-                    updated = updateSetAccessor(node, node.decorators, node.modifiers, node.name, parameters, body);
-                }
+            const parameters = visitParameterList(node.parameters, visitor, context);
+            const body = node.transformFlags & (TransformFlags.ContainsCapturedLexicalThis | TransformFlags.ContainsES2015)
+                ? transformFunctionBody(node)
+                : visitFunctionBodyDownLevel(node);
+            if (node.kind === SyntaxKind.GetAccessor) {
+                updated = updateGetAccessor(node, node.decorators, node.modifiers, node.name, parameters, node.type, body);
             }
             else {
-                updated = visitEachChild(node, visitor, context);
+                updated = updateSetAccessor(node, node.decorators, node.modifiers, node.name, parameters, body);
             }
             exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;
@@ -3500,7 +3490,7 @@ namespace ts {
                             actualThis
                         );
                     resultingCall = assignToCapturedThis
-                        ? createAssignment(createIdentifier("_this"), initializer)
+                        ? createAssignment(createFileLevelUniqueName("_this"), initializer)
                         : initializer;
                 }
                 return setOriginalNode(resultingCall, node);
@@ -3821,8 +3811,8 @@ namespace ts {
         function visitSuperKeyword(isExpressionOfCall: boolean): LeftHandSideExpression {
             return hierarchyFacts & HierarchyFacts.NonStaticClassElement
                 && !isExpressionOfCall
-                    ? createPropertyAccess(createIdentifier("_super"), "prototype")
-                    : createIdentifier("_super");
+                    ? createPropertyAccess(createFileLevelUniqueName("_super"), "prototype")
+                    : createFileLevelUniqueName("_super");
         }
 
         function visitMetaProperty(node: MetaProperty) {
@@ -3833,7 +3823,7 @@ namespace ts {
                 else {
                     hierarchyFacts |= HierarchyFacts.NewTarget;
                 }
-                return createIdentifier("_newTarget");
+                return createFileLevelUniqueName("_newTarget");
             }
             return node;
         }
@@ -4010,7 +4000,7 @@ namespace ts {
         function substituteThisKeyword(node: PrimaryExpression): PrimaryExpression {
             if (enabledSubstitutions & ES2015SubstitutionFlags.CapturedThis
                 && hierarchyFacts & HierarchyFacts.CapturesThis) {
-                return setTextRange(createIdentifier("_this"), node);
+                return setTextRange(createFileLevelUniqueName("_this"), node);
             }
             return node;
         }
@@ -4062,7 +4052,7 @@ namespace ts {
             /*typeArguments*/ undefined,
             [
                 name,
-                createIdentifier("_super")
+                createFileLevelUniqueName("_super")
             ]
         );
     }

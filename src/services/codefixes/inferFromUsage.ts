@@ -33,10 +33,8 @@ namespace ts.codefix {
             const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
             let declaration!: Declaration;
             const changes = textChanges.ChangeTracker.with(context, changes => { declaration = doChange(changes, sourceFile, token, errorCode, program, cancellationToken); });
-            if (changes.length === 0) return undefined;
-            const name = getNameOfDeclaration(declaration).getText();
-            const description = formatStringFromArgs(getLocaleSpecificMessage(getDiagnostic(errorCode, token)), [name]);
-            return [{ description, changes, fixId }];
+            return changes.length === 0 ? undefined
+                : [createCodeFixAction(changes, [getDiagnostic(errorCode, token), getNameOfDeclaration(declaration).getText(sourceFile)], fixId, Diagnostics.Infer_all_types_from_usage)];
         },
         fixIds: [fixId],
         getAllCodeActions(context) {
@@ -60,21 +58,25 @@ namespace ts.codefix {
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, errorCode: number, program: Program, cancellationToken: CancellationToken, seenFunctions?: Map<true>): Declaration | undefined {
-        if (!isAllowedTokenKind(token.kind)) {
+        if (!isParameterPropertyModifier(token.kind) && token.kind !== SyntaxKind.Identifier && token.kind !== SyntaxKind.DotDotDotToken) {
             return undefined;
         }
 
+        const { parent } = token;
         switch (errorCode) {
             // Variable and Property declarations
             case Diagnostics.Member_0_implicitly_has_an_1_type.code:
             case Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined.code:
-                annotateVariableDeclaration(changes, sourceFile, <PropertyDeclaration | PropertySignature | VariableDeclaration>token.parent, program, cancellationToken);
-                return token.parent as Declaration;
+                if (isVariableDeclaration(parent) || isPropertyDeclaration(parent) || isPropertySignature(parent)) { // handle bad location
+                    annotateVariableDeclaration(changes, sourceFile, parent, program, cancellationToken);
+                    return parent;
+                }
+                return undefined;
 
             case Diagnostics.Variable_0_implicitly_has_an_1_type.code: {
                 const symbol = program.getTypeChecker().getSymbolAtLocation(token);
-                if (symbol && symbol.valueDeclaration) {
-                    annotateVariableDeclaration(changes, sourceFile, <VariableDeclaration>symbol.valueDeclaration, program, cancellationToken);
+                if (symbol && symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration)) {
+                    annotateVariableDeclaration(changes, sourceFile, symbol.valueDeclaration, program, cancellationToken);
                     return symbol.valueDeclaration;
                 }
             }
@@ -95,7 +97,7 @@ namespace ts.codefix {
                 // falls through
             case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
                 if (!seenFunctions || addToSeen(seenFunctions, getNodeId(containingFunction))) {
-                    const param = cast(token.parent, isParameter);
+                    const param = cast(parent, isParameter);
                     annotateParameters(changes, param, containingFunction, sourceFile, program, cancellationToken);
                     return param;
                 }
@@ -120,20 +122,6 @@ namespace ts.codefix {
 
             default:
                 return Debug.fail(String(errorCode));
-        }
-    }
-
-    function isAllowedTokenKind(kind: SyntaxKind): boolean {
-        switch (kind) {
-            case SyntaxKind.Identifier:
-            case SyntaxKind.DotDotDotToken:
-            case SyntaxKind.PublicKeyword:
-            case SyntaxKind.PrivateKeyword:
-            case SyntaxKind.ProtectedKeyword:
-            case SyntaxKind.ReadonlyKeyword:
-                return true;
-            default:
-                return false;
         }
     }
 

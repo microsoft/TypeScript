@@ -57,6 +57,7 @@ sourceFile:ES5For-of25.ts
 7 >                          ^^^^^^^^^^^^^^^
 8 >                                         ^^
 9 >                                           ^^^^
+10>                                               ^^
 1->
   >
 2 >for (var v of 
@@ -67,6 +68,7 @@ sourceFile:ES5For-of25.ts
 7 >                          a
 8 >                                         
 9 >                                           a
+10>                                               ) 
 1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
 2 >Emitted(2, 6) Source(2, 15) + SourceIndex(0)
 3 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
@@ -76,6 +78,7 @@ sourceFile:ES5For-of25.ts
 7 >Emitted(2, 42) Source(2, 16) + SourceIndex(0)
 8 >Emitted(2, 44) Source(2, 15) + SourceIndex(0)
 9 >Emitted(2, 48) Source(2, 16) + SourceIndex(0)
+10>Emitted(2, 50) Source(2, 18) + SourceIndex(0)
 ---
 >>>    var v = a_1[_i];
 1 >^^^^

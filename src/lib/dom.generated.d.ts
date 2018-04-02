@@ -3285,6 +3285,7 @@ interface DOMTokenList {
     contains(token: string): boolean;
     item(index: number): string | null;
     remove(...tokens: string[]): void;
+    replace(oldToken: string, newToken: string): void;
     toString(): string;
     toggle(token: string, force?: boolean): boolean;
     [index: number]: string;
@@ -3532,10 +3533,10 @@ interface DocumentEventMap extends GlobalEventHandlersEventMap {
     "submit": Event;
     "suspend": Event;
     "timeupdate": Event;
-    "touchcancel": Event;
-    "touchend": Event;
-    "touchmove": Event;
-    "touchstart": Event;
+    "touchcancel": TouchEvent;
+    "touchend": TouchEvent;
+    "touchmove": TouchEvent;
+    "touchstart": TouchEvent;
     "volumechange": Event;
     "waiting": Event;
     "webkitfullscreenchange": Event;
@@ -3654,7 +3655,7 @@ interface Document extends Node, GlobalEventHandlers, ParentNode, DocumentEvent 
     /**
      * Contains information about the current URL.
      */
-    location: Location | string;
+    location: Location;
     msCSSOMElementFloatMetrics: boolean;
     msCapsLockWarningOff: boolean;
     /**
@@ -3949,10 +3950,10 @@ interface Document extends Node, GlobalEventHandlers, ParentNode, DocumentEvent 
      * @param ev The event.
      */
     ontimeupdate: ((this: Document, ev: Event) => any) | null;
-    ontouchcancel: ((this: Document, ev: Event) => any) | null;
-    ontouchend: ((this: Document, ev: Event) => any) | null;
-    ontouchmove: ((this: Document, ev: Event) => any) | null;
-    ontouchstart: ((this: Document, ev: Event) => any) | null;
+    ontouchcancel: ((this: Document, ev: TouchEvent) => any) | null;
+    ontouchend: ((this: Document, ev: TouchEvent) => any) | null;
+    ontouchmove: ((this: Document, ev: TouchEvent) => any) | null;
+    ontouchstart: ((this: Document, ev: TouchEvent) => any) | null;
     onvisibilitychange: (this: Document, ev: Event) => any;
     /**
      * Occurs when the volume is changed, or playback is muted or unmuted.
@@ -4138,6 +4139,7 @@ interface Document extends Node, GlobalEventHandlers, ParentNode, DocumentEvent 
      * @param y The y-offset
      */
     elementFromPoint(x: number, y: number): Element;
+    elementsFromPoint(x: number, y: number): Element[];
     evaluate(expression: string, contextNode: Node, resolver: XPathNSResolver | null, type: number, result: XPathResult | null): XPathResult;
     /**
      * Executes a command on the current document, current selection, or the given range.
@@ -4312,6 +4314,7 @@ interface DocumentEvent {
     createEvent(eventInterface: "SpeechSynthesisEvent"): SpeechSynthesisEvent;
     createEvent(eventInterface: "StorageEvent"): StorageEvent;
     createEvent(eventInterface: "TextEvent"): TextEvent;
+    createEvent(eventInterface: "TouchEvent"): TouchEvent;
     createEvent(eventInterface: "TrackEvent"): TrackEvent;
     createEvent(eventInterface: "TransitionEvent"): TransitionEvent;
     createEvent(eventInterface: "UIEvent"): UIEvent;
@@ -4431,10 +4434,10 @@ interface ElementEventMap extends GlobalEventHandlersEventMap {
     "MSPointerOut": Event;
     "MSPointerOver": Event;
     "MSPointerUp": Event;
-    "touchcancel": Event;
-    "touchend": Event;
-    "touchmove": Event;
-    "touchstart": Event;
+    "touchcancel": TouchEvent;
+    "touchend": TouchEvent;
+    "touchmove": TouchEvent;
+    "touchstart": TouchEvent;
     "webkitfullscreenchange": Event;
     "webkitfullscreenerror": Event;
 }
@@ -4473,10 +4476,10 @@ interface Element extends Node, GlobalEventHandlers, ElementTraversal, ParentNod
     onmspointerout: ((this: Element, ev: Event) => any) | null;
     onmspointerover: ((this: Element, ev: Event) => any) | null;
     onmspointerup: ((this: Element, ev: Event) => any) | null;
-    ontouchcancel: ((this: Element, ev: Event) => any) | null;
-    ontouchend: ((this: Element, ev: Event) => any) | null;
-    ontouchmove: ((this: Element, ev: Event) => any) | null;
-    ontouchstart: ((this: Element, ev: Event) => any) | null;
+    ontouchcancel: ((this: Element, ev: TouchEvent) => any) | null;
+    ontouchend: ((this: Element, ev: TouchEvent) => any) | null;
+    ontouchmove: ((this: Element, ev: TouchEvent) => any) | null;
+    ontouchstart: ((this: Element, ev: TouchEvent) => any) | null;
     onwebkitfullscreenchange: ((this: Element, ev: Event) => any) | null;
     onwebkitfullscreenerror: ((this: Element, ev: Event) => any) | null;
     outerHTML: string;
@@ -6131,6 +6134,7 @@ interface HTMLImageElement extends HTMLElement {
     readonly complete: boolean;
     crossOrigin: string | null;
     readonly currentSrc: string;
+    decoding: "async" | "sync" | "auto";
     /**
      * Sets or retrieves the height of the object.
      */
@@ -14742,7 +14746,7 @@ interface WebSocket extends EventTarget {
     readonly readyState: number;
     readonly url: string;
     close(code?: number, reason?: string): void;
-    send(data: string | ArrayBuffer | Blob | ArrayBufferView): void;
+    send(data: string | ArrayBufferLike | Blob | ArrayBufferView): void;
     readonly CLOSED: number;
     readonly CLOSING: number;
     readonly CONNECTING: number;
@@ -14868,10 +14872,10 @@ interface WindowEventMap extends GlobalEventHandlersEventMap {
     "submit": Event;
     "suspend": Event;
     "timeupdate": Event;
-    "touchcancel": Event;
-    "touchend": Event;
-    "touchmove": Event;
-    "touchstart": Event;
+    "touchcancel": TouchEvent;
+    "touchend": TouchEvent;
+    "touchmove": TouchEvent;
+    "touchstart": TouchEvent;
     "unload": Event;
     "volumechange": Event;
     "vrdisplayactivate": Event;
@@ -14909,7 +14913,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     readonly innerWidth: number;
     readonly isSecureContext: boolean;
     readonly length: number;
-    location: Location | string;
+    location: Location;
     readonly locationbar: BarProp;
     readonly menubar: BarProp;
     readonly msContentScript: ExtensionScriptApis;
@@ -15059,6 +15063,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     msWriteProfilerMark(profilerMarkName: string): void;
     open(url?: string, target?: string, features?: string, replace?: boolean): Window | null;
     postMessage(message: any, targetOrigin: string, transfer?: any[]): void;
+    print(): void;
     prompt(message?: string, _default?: string): string | null;
     releaseEvents(): void;
     requestAnimationFrame(callback: FrameRequestCallback): number;
@@ -15718,7 +15723,7 @@ declare var innerHeight: number;
 declare var innerWidth: number;
 declare var isSecureContext: boolean;
 declare var length: number;
-declare var location: Location | string;
+declare var location: Location;
 declare var locationbar: BarProp;
 declare var menubar: BarProp;
 declare var msContentScript: ExtensionScriptApis;
@@ -15868,6 +15873,7 @@ declare function moveTo(x?: number, y?: number): void;
 declare function msWriteProfilerMark(profilerMarkName: string): void;
 declare function open(url?: string, target?: string, features?: string, replace?: boolean): Window | null;
 declare function postMessage(message: any, targetOrigin: string, transfer?: any[]): void;
+declare function print(): void;
 declare function prompt(message?: string, _default?: string): string | null;
 declare function releaseEvents(): void;
 declare function requestAnimationFrame(callback: FrameRequestCallback): number;
