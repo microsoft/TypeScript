@@ -1,8 +1,8 @@
 === tests/cases/conformance/salsa/use.js ===
 /// <reference path='./types.d.ts'/>
 var mod = require('./mod');
->mod : typeof "tests/cases/conformance/salsa/mod"
->require('./mod') : typeof "tests/cases/conformance/salsa/mod"
+>mod : typeof import("tests/cases/conformance/salsa/mod")
+>require('./mod') : typeof import("tests/cases/conformance/salsa/mod")
 >require : (name: string) => any
 >'./mod' : "./mod"
 
@@ -10,14 +10,14 @@ var a = new mod.A()
 >a : { a: number; } & { [x: string]: any; m(n: number): number; }
 >new mod.A() : { a: number; } & { [x: string]: any; m(n: number): number; }
 >mod.A : () => void
->mod : typeof "tests/cases/conformance/salsa/mod"
+>mod : typeof import("tests/cases/conformance/salsa/mod")
 >A : () => void
 
 var b = new mod.B()
 >b : { b: number; } & { [x: string]: any; m(n: number): number; }
 >new mod.B() : { b: number; } & { [x: string]: any; m(n: number): number; }
 >mod.B : () => void
->mod : typeof "tests/cases/conformance/salsa/mod"
+>mod : typeof import("tests/cases/conformance/salsa/mod")
 >B : () => void
 
 a.m('nope')
@@ -69,14 +69,14 @@ var B = function() {
 exports.A = A
 >exports.A = A : () => void
 >exports.A : () => void
->exports : typeof "tests/cases/conformance/salsa/mod"
+>exports : typeof import("tests/cases/conformance/salsa/mod")
 >A : () => void
 >A : () => void
 
 exports.B = B
 >exports.B = B : () => void
 >exports.B : () => void
->exports : typeof "tests/cases/conformance/salsa/mod"
+>exports : typeof import("tests/cases/conformance/salsa/mod")
 >B : () => void
 >B : () => void
 
