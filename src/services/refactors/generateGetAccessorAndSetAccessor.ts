@@ -19,9 +19,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
 
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
         const { file, startPosition } = context;
-
-        const fieldInfo = getConvertibleFieldAtPosition(file, startPosition);
-        if (!fieldInfo) return undefined;
+        if (!getConvertibleFieldAtPosition(file, startPosition)) return undefined;
 
         return [{
             name: actionName,
@@ -205,9 +203,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
             declaration.initializer
         );
 
-        changeTracker.replaceNode(file, declaration, property, {
-            suffix: changeTracker.newLineCharacter
-        });
+        changeTracker.replaceNode(file, declaration, property);
     }
 
     function updateParameterPropertyDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: ParameterDeclaration, fieldName: string, modifiers: ModifiersArray, classLikeContainer: ClassLikeDeclaration) {

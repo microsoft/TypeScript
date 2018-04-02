@@ -75,8 +75,9 @@ namespace ts.codefix {
     }
 
     function addUndefinedType(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration): void {
-        const type = mergeTypeNodeToUnion(propertyDeclaration.type, createKeywordTypeNode(SyntaxKind.UndefinedKeyword));
-        changeTracker.replaceNode(propertyDeclarationSourceFile, propertyDeclaration.type, type);
+        const undefinedTypeNode = createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
+        const types = isUnionTypeNode(propertyDeclaration.type) ? propertyDeclaration.type.types.concat(undefinedTypeNode) : [propertyDeclaration.type, undefinedTypeNode];
+        changeTracker.replaceNode(propertyDeclarationSourceFile, propertyDeclaration.type, createUnionTypeNode(types));
     }
 
     function getActionForAddMissingInitializer(context: CodeFixContext, propertyDeclaration: PropertyDeclaration): CodeFixAction | undefined {
