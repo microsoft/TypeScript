@@ -79,3 +79,25 @@ var a = new A();
 >new A() : A
 >A : typeof A
 
+const {
+    B = function() {
+>B : typeof B
+>function() {        this.b = 'binding pattern'    } : typeof B
+
+        this.b = 'binding pattern'
+>this.b = 'binding pattern' : "binding pattern"
+>this.b : any
+>this : any
+>b : any
+>'binding pattern' : "binding pattern"
+    }
+} = { B: undefined };
+>{ B: undefined } : { B?: undefined; }
+>B : undefined
+>undefined : undefined
+
+var b = new B();
+>b : B
+>new B() : B
+>B : typeof B
+

@@ -29,3 +29,15 @@ var a = new A()
 >a : Symbol(a, Decl(ts.ts, 13, 3))
 >A : Symbol(A, Decl(ts.ts, 10, 3))
 
+const {
+    B = class { }
+>B : Symbol(B, Decl(ts.ts, 15, 7))
+
+} = ({ B: undefined });
+>B : Symbol(B, Decl(ts.ts, 17, 6))
+>undefined : Symbol(undefined)
+
+var b = new B();
+>b : Symbol(b, Decl(ts.ts, 18, 3))
+>B : Symbol(B, Decl(ts.ts, 15, 7))
+

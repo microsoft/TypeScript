@@ -37,3 +37,19 @@ var a = new A()
 >new A() : A
 >A : typeof A
 
+const {
+    B = class { }
+>B : typeof B
+>class { } : typeof B
+
+} = ({ B: undefined });
+>({ B: undefined }) : { B?: undefined; }
+>{ B: undefined } : { B?: undefined; }
+>B : undefined
+>undefined : undefined
+
+var b = new B();
+>b : B
+>new B() : B
+>B : typeof B
+

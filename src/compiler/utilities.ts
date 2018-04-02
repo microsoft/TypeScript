@@ -4591,7 +4591,7 @@ namespace ts {
         if (!node.parent) {
             return undefined;
         }
-        else if (isPropertyAssignment(node.parent)) {
+        else if (isPropertyAssignment(node.parent) || isBindingElement(node.parent)) {
             return node.parent.name;
         }
         else if (isBinaryExpression(node.parent) && node === node.parent.right) {

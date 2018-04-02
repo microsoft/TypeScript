@@ -24,3 +24,10 @@ A = function () {
     this.a = 'assignment'
 }
 var a = new A();
+
+const {
+    B = function() {
+        this.b = 'binding pattern'
+    }
+} = { B: undefined };
+var b = new B();

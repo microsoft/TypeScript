@@ -53,3 +53,18 @@ var a = new A();
 >a : Symbol(a, Decl(b.js, 21, 3))
 >A : Symbol(A, Decl(b.js, 17, 3))
 
+const {
+    B = function() {
+>B : Symbol(B, Decl(b.js, 23, 7))
+
+        this.b = 'binding pattern'
+>b : Symbol(B.b, Decl(b.js, 24, 20))
+    }
+} = { B: undefined };
+>B : Symbol(B, Decl(b.js, 27, 5))
+>undefined : Symbol(undefined)
+
+var b = new B();
+>b : Symbol(b, Decl(b.js, 28, 3))
+>B : Symbol(B, Decl(b.js, 23, 7))
+
