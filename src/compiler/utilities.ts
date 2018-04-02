@@ -1542,7 +1542,9 @@ namespace ts {
             const e = skipParentheses(initializer.expression);
             return e.kind === SyntaxKind.FunctionExpression || e.kind === SyntaxKind.ArrowFunction ? initializer : undefined;
         }
-        if (initializer.kind === SyntaxKind.FunctionExpression || initializer.kind === SyntaxKind.ClassExpression) {
+        if (initializer.kind === SyntaxKind.FunctionExpression ||
+            initializer.kind === SyntaxKind.ClassExpression ||
+            initializer.kind === SyntaxKind.ArrowFunction) {
             return initializer as Expression;
         }
         if (isObjectLiteralExpression(initializer) && (initializer.properties.length === 0 || isPrototypeAssignment)) {
