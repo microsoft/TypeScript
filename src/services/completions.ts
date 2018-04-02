@@ -388,7 +388,7 @@ namespace ts.Completions {
                     //          '/*completion position*/'
                     //      });
                     const type = typeChecker.getContextualType(node.parent.parent);
-                    return { kind: StringLiteralCompletionKind.Properties, symbols: type && type.getApparentProperties() };
+                    return type && { kind: StringLiteralCompletionKind.Properties, symbols: type.getApparentProperties() };
                 }
                 return fromContextualType();
 
