@@ -27,16 +27,9 @@ namespace ts.Completions {
 
     const enum GlobalsSearch { Continue, Success, Fail }
 
-    export function getCompletionsAtPosition(
-        host: LanguageServiceHost,
-        typeChecker: TypeChecker,
-        log: Log,
-        compilerOptions: CompilerOptions,
-        sourceFile: SourceFile,
-        position: number,
-        allSourceFiles: ReadonlyArray<SourceFile>,
-        preferences: UserPreferences,
-    ): CompletionInfo | undefined {
+    export function getCompletionsAtPosition(host: LanguageServiceHost, program: Program, log: Log, sourceFile: SourceFile, position: number, preferences: UserPreferences): CompletionInfo | undefined {
+        const typeChecker = program.getTypeChecker();
+        const compilerOptions = program.getCompilerOptions();
         if (isInReferenceComment(sourceFile, position)) {
             const entries = PathCompletions.getTripleSlashReferenceCompletion(sourceFile, position, compilerOptions, host);
             return entries && convertPathCompletions(entries);
@@ -55,7 +48,7 @@ namespace ts.Completions {
             return getLabelCompletionAtPosition(contextToken.parent);
         }
 
-        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, preferences, compilerOptions.target);
+        const completionData = getCompletionData(program, log, sourceFile, position, preferences);
         if (!completionData) {
             return undefined;
         }
@@ -480,16 +473,9 @@ namespace ts.Completions {
         previousToken: Node;
         readonly isJsxInitializer: IsJsxInitializer;
     }
-    function getSymbolCompletionFromEntryId(
-        typeChecker: TypeChecker,
-        log: (message: string) => void,
-        compilerOptions: CompilerOptions,
-        sourceFile: SourceFile,
-        position: number,
-        { name, source }: CompletionEntryIdentifier,
-        allSourceFiles: ReadonlyArray<SourceFile>,
+    function getSymbolCompletionFromEntryId(program: Program, log: Log, sourceFile: SourceFile, position: number, { name, source }: CompletionEntryIdentifier,
     ): SymbolCompletion | { type: "request", request: Request } | { type: "none" } {
-        const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles, { includeCompletionsForModuleExports: true, includeCompletionsWithInsertText: true }, compilerOptions.target);
+        const completionData = getCompletionData(program, log, sourceFile, position, { includeCompletionsForModuleExports: true, includeCompletionsWithInsertText: true });
         if (!completionData) {
             return { type: "none" };
         }
@@ -505,7 +491,7 @@ namespace ts.Completions {
         // completion entry.
         return firstDefined<Symbol, SymbolCompletion>(symbols, (symbol): SymbolCompletion => { // TODO: Shouldn't need return type annotation (GH#12632)
             const origin = symbolToOriginInfoMap[getSymbolId(symbol)];
-            const info = getCompletionEntryDisplayNameForSymbol(symbol, compilerOptions.target, origin, completionKind);
+            const info = getCompletionEntryDisplayNameForSymbol(symbol, program.getCompilerOptions().target, origin, completionKind);
             return info && info.name === name && getSourceFromOrigin(origin) === source ? { type: "symbol" as "symbol", symbol, location, symbolToOriginInfoMap, previousToken, isJsxInitializer } : undefined;
         }) || { type: "none" };
     }
@@ -525,18 +511,17 @@ namespace ts.Completions {
 
     export function getCompletionEntryDetails(
         program: Program,
-        log: (message: string) => void,
-        compilerOptions: CompilerOptions,
+        log: Log,
         sourceFile: SourceFile,
         position: number,
         entryId: CompletionEntryIdentifier,
-        allSourceFiles: ReadonlyArray<SourceFile>,
         host: LanguageServiceHost,
         formatContext: formatting.FormatContext,
         getCanonicalFileName: GetCanonicalFileName,
         preferences: UserPreferences,
     ): CompletionEntryDetails {
         const typeChecker = program.getTypeChecker();
+        const compilerOptions = program.getCompilerOptions();
         const { name } = entryId;
 
         const contextToken = findPrecedingToken(position, sourceFile);
@@ -548,7 +533,7 @@ namespace ts.Completions {
         }
 
         // Compute all the completion symbols again.
-        const symbolCompletion = getSymbolCompletionFromEntryId(typeChecker, log, compilerOptions, sourceFile, position, entryId, allSourceFiles);
+        const symbolCompletion = getSymbolCompletionFromEntryId(program, log, sourceFile, position, entryId);
         switch (symbolCompletion.type) {
             case "request": {
                 const { request } = symbolCompletion;
@@ -565,7 +550,7 @@ namespace ts.Completions {
             }
             case "symbol": {
                 const { symbol, location, symbolToOriginInfoMap, previousToken } = symbolCompletion;
-                const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(symbolToOriginInfoMap, symbol, program, typeChecker, host, compilerOptions, sourceFile, previousToken, formatContext, getCanonicalFileName, allSourceFiles, preferences);
+                const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(symbolToOriginInfoMap, symbol, program, typeChecker, host, compilerOptions, sourceFile, previousToken, formatContext, getCanonicalFileName, program.getSourceFiles(), preferences);
                 return createCompletionDetailsForSymbol(symbol, typeChecker, sourceFile, location, codeActions, sourceDisplay);
             }
             case "none":
@@ -642,16 +627,8 @@ namespace ts.Completions {
         return { sourceDisplay: [textPart(moduleSpecifier)], codeActions: [codeAction] };
     }
 
-    export function getCompletionEntrySymbol(
-        typeChecker: TypeChecker,
-        log: (message: string) => void,
-        compilerOptions: CompilerOptions,
-        sourceFile: SourceFile,
-        position: number,
-        entryId: CompletionEntryIdentifier,
-        allSourceFiles: ReadonlyArray<SourceFile>,
-    ): Symbol | undefined {
-        const completion = getSymbolCompletionFromEntryId(typeChecker, log, compilerOptions, sourceFile, position, entryId, allSourceFiles);
+    export function getCompletionEntrySymbol(program: Program, log: Log, sourceFile: SourceFile, position: number, entryId: CompletionEntryIdentifier): Symbol | undefined {
+        const completion = getSymbolCompletionFromEntryId(program, log, sourceFile, position, entryId);
         return completion.type === "symbol" ? completion.symbol : undefined;
     }
 
@@ -760,14 +737,14 @@ namespace ts.Completions {
     }
 
     function getCompletionData(
-        typeChecker: TypeChecker,
+        program: Program,
         log: (message: string) => void,
         sourceFile: SourceFile,
         position: number,
-        allSourceFiles: ReadonlyArray<SourceFile>,
         preferences: Pick<UserPreferences, "includeCompletionsForModuleExports" | "includeCompletionsWithInsertText">,
-        target: ScriptTarget,
     ): CompletionData | Request | undefined {
+        const typeChecker = program.getTypeChecker();
+
         let start = timestamp();
         let currentToken = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false); // TODO: GH#15853
         // We will check for jsdoc comments with insideComment and getJsDocTagAtPosition. (TODO: that seems rather inefficient to check the same thing so many times.)
@@ -1168,11 +1145,28 @@ namespace ts.Completions {
                 }
             }
 
-            // Don't suggest import completions for a commonjs-only module
-            if (preferences.includeCompletionsForModuleExports && !(sourceFile.commonJsModuleIndicator && !sourceFile.externalModuleIndicator)) {
-                getSymbolsFromOtherSourceFileExports(symbols, previousToken && isIdentifier(previousToken) ? previousToken.text : "", target);
+            if (shouldOfferImportCompletions()) {
+                getSymbolsFromOtherSourceFileExports(symbols, previousToken && isIdentifier(previousToken) ? previousToken.text : "", program.getCompilerOptions().target);
             }
             filterGlobalCompletion(symbols);
+        }
+
+        function shouldOfferImportCompletions(): boolean {
+            // If not already a module, must have modules enabled and not currently be in a commonjs module. (TODO: import completions for commonjs)
+            if (!preferences.includeCompletionsForModuleExports) return false;
+            // If already using ES6 modules, OK to continue using them.
+            if (sourceFile.externalModuleIndicator) return true;
+            // If already using commonjs, don't introduce ES6.
+            if (sourceFile.commonJsModuleIndicator) return false;
+            // If some file is using ES6 modules, assume that it's OK to add more.
+            if (program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!s.externalModuleIndicator)) {
+                return true;
+            }
+            // For JS, stay on the safe side.
+            if (isSourceFileJavaScript(sourceFile)) return false;
+            // If module transpilation is enabled or we're targeting es6 or above, or not emitting, OK.
+            const compilerOptions = program.getCompilerOptions();
+            return !!compilerOptions.module || compilerOptions.target >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
         }
 
         function isSnippetScope(scopeNode: Node): boolean {
@@ -1268,7 +1262,7 @@ namespace ts.Completions {
         function getSymbolsFromOtherSourceFileExports(symbols: Symbol[], tokenText: string, target: ScriptTarget): void {
             const tokenTextLowerCase = tokenText.toLowerCase();
 
-            codefix.forEachExternalModuleToImportFrom(typeChecker, sourceFile, allSourceFiles, moduleSymbol => {
+            codefix.forEachExternalModuleToImportFrom(typeChecker, sourceFile, program.getSourceFiles(), moduleSymbol => {
                 for (let symbol of typeChecker.getExportsOfModule(moduleSymbol)) {
                     // Don't add a completion for a re-export, only for the original.
                     // The actual import fix might end up coming from a re-export -- we don't compute that until getting completion details.

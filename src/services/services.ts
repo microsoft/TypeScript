@@ -1404,12 +1404,10 @@ namespace ts {
             synchronizeHostData();
             return Completions.getCompletionsAtPosition(
                 host,
-                program.getTypeChecker(),
+                program,
                 log,
-                program.getCompilerOptions(),
                 getValidSourceFile(fileName),
                 position,
-                program.getSourceFiles(),
                 fullPreferences);
         }
 
@@ -1418,11 +1416,9 @@ namespace ts {
             return Completions.getCompletionEntryDetails(
                 program,
                 log,
-                program.getCompilerOptions(),
                 getValidSourceFile(fileName),
                 position,
                 { name, source },
-                program.getSourceFiles(),
                 host,
                 formattingOptions && formatting.getFormatContext(formattingOptions),
                 getCanonicalFileName,
@@ -1431,14 +1427,7 @@ namespace ts {
 
         function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol {
             synchronizeHostData();
-            return Completions.getCompletionEntrySymbol(
-                program.getTypeChecker(),
-                log,
-                program.getCompilerOptions(),
-                getValidSourceFile(fileName),
-                position,
-                { name, source },
-                program.getSourceFiles());
+            return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source });
         }
 
         function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
