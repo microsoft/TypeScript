@@ -206,11 +206,13 @@ namespace ts.Completions {
             if (origin && origin.type === "this-type") {
                 insertText = needsConvertPropertyAccess ? `this[${quote(name, preferences)}]` : `this.${name}`;
             }
-            else if (needsConvertPropertyAccess) {
+            // We should only have needsConvertPropertyAccess if there's a property access to convert. But see #21790.
+            // Somehow there was a global with a non-identifier name. Hopefully someone will complain about getting a "foo bar" global completion and provide a repro.
+            else if (needsConvertPropertyAccess && propertyAccessToConvert) {
                 insertText = `[${quote(name, preferences)}]`;
-                const dot = findChildOfKind(propertyAccessToConvert!, SyntaxKind.DotToken, sourceFile)!;
+                const dot = findChildOfKind(propertyAccessToConvert, SyntaxKind.DotToken, sourceFile)!;
                 // If the text after the '.' starts with this name, write over it. Else, add new text.
-                const end = startsWith(name, propertyAccessToConvert!.name.text) ? propertyAccessToConvert!.name.end : dot.end;
+                const end = startsWith(name, propertyAccessToConvert.name.text) ? propertyAccessToConvert.name.end : dot.end;
                 replacementSpan = createTextSpanFromBounds(dot.getStart(sourceFile), end);
             }
 
@@ -2057,7 +2059,7 @@ namespace ts.Completions {
                 // TODO: GH#18169
                 return { name: JSON.stringify(name), needsConvertPropertyAccess: false };
             case CompletionKind.PropertyAccess:
-            case CompletionKind.Global:
+            case CompletionKind.Global: // For a 'this.' completion it will be in a global context, but may have a non-identifier name.
                 // Don't add a completion for a name starting with a space. See https://github.com/Microsoft/TypeScript/pull/20547
                 return name.charCodeAt(0) === CharacterCodes.space ? undefined : { name, needsConvertPropertyAccess: true };
             case CompletionKind.None:
