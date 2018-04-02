@@ -598,7 +598,9 @@ namespace ts.server {
             if (option && value) {
                 switch (option) {
                     case "-file":
-                        logEnv.file = getLogPath(args, i);
+                        const logPathAndNumberOfExtraParts = getLogPath(args, i + 1);
+                        logEnv.file = logPathAndNumberOfExtraParts[0];
+                        i += logPathAndNumberOfExtraParts[1];
                         break;
                     case "-level":
                         const level = getLogLevel(value);
@@ -616,17 +618,19 @@ namespace ts.server {
         return logEnv;
     }
 
-    function getLogPath(args: string[], initialIndex: number) {
-        let pathStart = args[initialIndex + 1];
+    function getLogPath(args: string[], initialIndex: number): [string, number] {
+        let pathStart = args[initialIndex];
+        let extraPartCounter = 0;
         if (pathStart.charCodeAt(0) === CharacterCodes.doubleQuote &&
             pathStart.charCodeAt(pathStart.length - 1) !== CharacterCodes.doubleQuote) {
-            for (let i = initialIndex + 2; i < args.length; i++) {
+            for (let i = initialIndex + 1; i < args.length; i++) {
                 pathStart += " ";
                 pathStart += args[i];
+                extraPartCounter++;
                 if (pathStart.charCodeAt(pathStart.length - 1) === CharacterCodes.doubleQuote) break;
             }
         }
-        return stripQuotes(pathStart);
+        return [stripQuotes(pathStart), extraPartCounter];
     }
 
     function getLogLevel(level: string) {
