@@ -1561,22 +1561,10 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
-    function getNameFromObjectLiteralElement(node: ObjectLiteralElement): string {
-        if (node.name.kind === SyntaxKind.ComputedPropertyName) {
-            const nameExpression = node.name.expression;
-            // treat computed property names where expression is string/numeric literal as just string/numeric literal
-            if (isStringOrNumericLiteral(nameExpression)) {
-                return nameExpression.text;
-            }
-            return undefined;
-        }
-        return getTextOfIdentifierOrLiteral(node.name);
-    }
-
     /** Gets all symbols for one property. Does not get symbols for every property. */
     function getPropertySymbolsFromContextualType(node: ObjectLiteralElement, checker: TypeChecker): ReadonlyArray<Symbol> {
         const contextualType = checker.getContextualType(<ObjectLiteralExpression>node.parent);
-        const name = getNameFromObjectLiteralElement(node);
+        const name = getNameFromPropertyName(node.name);
         const symbol = contextualType && name && contextualType.getProperty(name);
         return symbol ? [symbol] :
             contextualType && contextualType.flags & TypeFlags.Union ? mapDefined((<UnionType>contextualType).types, t => t.getProperty(name)) : emptyArray;
