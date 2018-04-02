@@ -7900,8 +7900,7 @@ declare namespace ts.server {
         readonly cancellationToken: HostCancellationToken;
         readonly useSingleInferredProject: boolean;
         readonly useInferredProjectPerProjectRoot: boolean;
-        private readonly disableInferredProjectLanguageService?;
-        private readonly ignoreConfigFiles?;
+        private readonly syntaxOnly?;
         readonly typingsInstaller: ITypingsInstaller;
         readonly throttleWaitMilliseconds?: number;
         private readonly eventHandler?;
