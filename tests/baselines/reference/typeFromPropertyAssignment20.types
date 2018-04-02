@@ -39,7 +39,7 @@
                 this._trampolineEnabled = false;
 >this._trampolineEnabled = false : false
 >this._trampolineEnabled : boolean
->this : { _trampolineEnabled: boolean; disableTrampolineIfNecessary: (b: any) => void; }
+>this : { _trampolineEnabled: boolean; disableTrampolineIfNecessary(b: any): void; }
 >_trampolineEnabled : boolean
 >false : false
             }

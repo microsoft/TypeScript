@@ -4679,6 +4679,10 @@ namespace ts {
                 if (symbol.flags & SymbolFlags.Module && isShorthandAmbientModuleSymbol(symbol)) {
                     links.type = anyType;
                 }
+                else if (symbol.valueDeclaration.kind === SyntaxKind.BinaryExpression ||
+                         symbol.valueDeclaration.kind === SyntaxKind.PropertyAccessExpression && symbol.valueDeclaration.parent.kind === SyntaxKind.BinaryExpression) {
+                    links.type = getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
+                }
                 else {
                     const type = createObjectType(ObjectFlags.Anonymous, symbol);
                     if (symbol.flags & SymbolFlags.Class) {
@@ -6935,7 +6939,8 @@ namespace ts {
             if (!symbol) return emptyArray;
             const result: Signature[] = [];
             for (let i = 0; i < symbol.declarations.length; i++) {
-                const node = symbol.declarations[i];
+                const decl = symbol.declarations[i];
+                const node = isPropertyAccessExpression(decl) ? getAssignedJavascriptInitializer(decl) : decl;
                 if (!isFunctionLike(node)) continue;
                 // Don't include signature if node is the implementation of an overloaded function. A node is considered
                 // an implementation node if it has a body and the previous node is of the same kind and immediately
@@ -16221,9 +16226,7 @@ namespace ts {
         }
 
         function isMethodLike(symbol: Symbol) {
-            return !!(symbol.flags & SymbolFlags.Method ||
-                      getCheckFlags(symbol) & CheckFlags.SyntheticMethod ||
-                      isInJavaScriptFile(symbol.valueDeclaration) && isFunctionLikeDeclaration(getAssignedJavascriptInitializer(symbol.valueDeclaration)));
+            return !!(symbol.flags & SymbolFlags.Method || getCheckFlags(symbol) & CheckFlags.SyntheticMethod);
         }
 
         /**
