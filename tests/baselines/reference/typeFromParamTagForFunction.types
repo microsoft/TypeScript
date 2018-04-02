@@ -9,11 +9,11 @@ declare var module: any, exports: any;
 
 === tests/cases/conformance/salsa/a-ext.js ===
 exports.A = function () {
->exports.A = function () {    this.x = 1;} : typeof (Anonymous function)
->exports.A : typeof (Anonymous function)
+>exports.A = function () {    this.x = 1;} : typeof A
+>exports.A : typeof A
 >exports : typeof import("tests/cases/conformance/salsa/a-ext")
->A : typeof (Anonymous function)
->function () {    this.x = 1;} : typeof (Anonymous function)
+>A : typeof A
+>function () {    this.x = 1;} : typeof A
 
     this.x = 1;
 >this.x = 1 : 1
@@ -26,26 +26,26 @@ exports.A = function () {
 
 === tests/cases/conformance/salsa/a.js ===
 const { A } = require("./a-ext");
->A : typeof (Anonymous function)
+>A : typeof A
 >require("./a-ext") : typeof import("tests/cases/conformance/salsa/a-ext")
 >require : (id: string) => any
 >"./a-ext" : "./a-ext"
 
 /** @param {A} p */
 function a(p) { p.x; }
->a : (p: (Anonymous function)) => void
->p : (Anonymous function)
+>a : (p: A) => void
+>p : A
 >p.x : number
->p : (Anonymous function)
+>p : A
 >x : number
 
 === tests/cases/conformance/salsa/b-ext.js ===
 exports.B = class {
->exports.B = class {    constructor() {        this.x = 1;    }} : typeof (Anonymous class)
->exports.B : typeof (Anonymous class)
+>exports.B = class {    constructor() {        this.x = 1;    }} : typeof B
+>exports.B : typeof B
 >exports : typeof import("tests/cases/conformance/salsa/b-ext")
->B : typeof (Anonymous class)
->class {    constructor() {        this.x = 1;    }} : typeof (Anonymous class)
+>B : typeof B
+>class {    constructor() {        this.x = 1;    }} : typeof B
 
     constructor() {
         this.x = 1;
@@ -59,17 +59,17 @@ exports.B = class {
 
 === tests/cases/conformance/salsa/b.js ===
 const { B } = require("./b-ext");
->B : typeof (Anonymous class)
+>B : typeof B
 >require("./b-ext") : typeof import("tests/cases/conformance/salsa/b-ext")
 >require : (id: string) => any
 >"./b-ext" : "./b-ext"
 
 /** @param {B} p */
 function b(p) { p.x; }
->b : (p: (Anonymous class)) => void
->p : (Anonymous class)
+>b : (p: B) => void
+>p : B
 >p.x : number
->p : (Anonymous class)
+>p : B
 >x : number
 
 === tests/cases/conformance/salsa/c-ext.js ===

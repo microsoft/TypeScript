@@ -8,11 +8,11 @@ var Outer = function(element, config) {};
 === tests/cases/conformance/salsa/usage.js ===
 /** @constructor */
 Outer.Pos = function (line, ch) {};
->Outer.Pos = function (line, ch) {} : typeof (Anonymous function)
->Outer.Pos : typeof (Anonymous function)
+>Outer.Pos = function (line, ch) {} : typeof Pos
+>Outer.Pos : typeof Pos
 >Outer : typeof Outer
->Pos : typeof (Anonymous function)
->function (line, ch) {} : typeof (Anonymous function)
+>Pos : typeof Pos
+>function (line, ch) {} : typeof Pos
 >line : any
 >ch : any
 
@@ -20,24 +20,24 @@ Outer.Pos = function (line, ch) {};
 Outer.Pos.prototype.line;
 >Outer.Pos.prototype.line : any
 >Outer.Pos.prototype : any
->Outer.Pos : typeof (Anonymous function)
+>Outer.Pos : typeof Pos
 >Outer : typeof Outer
->Pos : typeof (Anonymous function)
+>Pos : typeof Pos
 >prototype : any
 >line : any
 
 var pos = new Outer.Pos(1, 'x');
->pos : (Anonymous function)
->new Outer.Pos(1, 'x') : (Anonymous function)
->Outer.Pos : typeof (Anonymous function)
+>pos : Pos
+>new Outer.Pos(1, 'x') : Pos
+>Outer.Pos : typeof Pos
 >Outer : typeof Outer
->Pos : typeof (Anonymous function)
+>Pos : typeof Pos
 >1 : 1
 >'x' : "x"
 
 pos.line;
 >pos.line : number
->pos : (Anonymous function)
+>pos : Pos
 >line : number
 
 

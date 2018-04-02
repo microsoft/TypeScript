@@ -28,13 +28,13 @@ module.exports.n.K = function C() {
 >10 : 10
 }
 module.exports.Classic = class {
->module.exports.Classic = class {    constructor() {        this.p = 1    }} : typeof (Anonymous class)
+>module.exports.Classic = class {    constructor() {        this.p = 1    }} : typeof Classic
 >module.exports.Classic : any
 >module.exports : any
 >module : any
 >exports : any
 >Classic : any
->class {    constructor() {        this.p = 1    }} : typeof (Anonymous class)
+>class {    constructor() {        this.p = 1    }} : typeof Classic
 
     constructor() {
         this.p = 1
@@ -65,19 +65,19 @@ k.x
 >x : number
 
 var classic = new s.Classic()
->classic : (Anonymous class)
->new s.Classic() : (Anonymous class)
->s.Classic : typeof (Anonymous class)
+>classic : Classic
+>new s.Classic() : Classic
+>s.Classic : typeof Classic
 >s : typeof s
->Classic : typeof (Anonymous class)
+>Classic : typeof Classic
 
 
 /** @param {s.n.K} c
     @param {s.Classic} classic */
 function f(c, classic) {
->f : (c: C, classic: (Anonymous class)) => void
+>f : (c: C, classic: Classic) => void
 >c : C
->classic : (Anonymous class)
+>classic : Classic
 
     c.x
 >c.x : number
@@ -86,7 +86,7 @@ function f(c, classic) {
 
     classic.p
 >classic.p : number
->classic : (Anonymous class)
+>classic : Classic
 >p : number
 }
 

@@ -15,11 +15,11 @@ exports.x;
 {
     // 'exports' does not provide a contextual type to a function-class
     exports.Cls = function() {
->exports.Cls = function() {        this.x = 0;    } : typeof (Anonymous function)
->exports.Cls : typeof (Anonymous function)
+>exports.Cls = function() {        this.x = 0;    } : typeof Cls
+>exports.Cls : typeof Cls
 >exports : typeof import("/a")
->Cls : typeof (Anonymous function)
->function() {        this.x = 0;    } : typeof (Anonymous function)
+>Cls : typeof Cls
+>function() {        this.x = 0;    } : typeof Cls
 
         this.x = 0;
 >this.x = 0 : 0
@@ -31,9 +31,9 @@ exports.x;
 }
 
 const instance = new exports.Cls();
->instance : (Anonymous function)
->new exports.Cls() : (Anonymous function)
->exports.Cls : typeof (Anonymous function)
+>instance : Cls
+>new exports.Cls() : Cls
+>exports.Cls : typeof Cls
 >exports : typeof import("/a")
->Cls : typeof (Anonymous function)
+>Cls : typeof Cls
 

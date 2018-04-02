@@ -4549,6 +4549,12 @@ namespace ts {
             return undefined;
         }
         switch (declaration.kind) {
+            case SyntaxKind.ClassExpression:
+            case SyntaxKind.FunctionExpression:
+                if (!(declaration as ClassExpression | FunctionExpression).name) {
+                    return getAssignedName(declaration);
+                }
+                break;
             case SyntaxKind.Identifier:
                 return declaration as Identifier;
             case SyntaxKind.JSDocPropertyTag:
@@ -4579,6 +4585,23 @@ namespace ts {
             }
         }
         return (declaration as NamedDeclaration).name;
+    }
+
+    function getAssignedName(node: Node): DeclarationName {
+        if (!node.parent) {
+            return undefined;
+        }
+        else if (isPropertyAssignment(node.parent)) {
+            return node.parent.name;
+        }
+        else if (isBinaryExpression(node.parent) && node === node.parent.right) {
+            if (isIdentifier(node.parent.left)) {
+                return node.parent.left;
+            }
+            else if (isPropertyAccessExpression(node.parent.left)) {
+                return node.parent.left.name;
+            }
+        }
     }
 
     /**

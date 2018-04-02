@@ -4,18 +4,18 @@ var Outer = {}
 >{} : { [x: string]: any; Inner(): void; }
 
 Outer.Inner = function() {}
->Outer.Inner = function() {} : typeof (Anonymous function)
->Outer.Inner : typeof (Anonymous function)
+>Outer.Inner = function() {} : typeof Inner
+>Outer.Inner : typeof Inner
 >Outer : { [x: string]: any; Inner(): void; }
->Inner : typeof (Anonymous function)
->function() {} : typeof (Anonymous function)
+>Inner : typeof Inner
+>function() {} : typeof Inner
 
 Outer.Inner.prototype = {
 >Outer.Inner.prototype = {    m() { },    i: 1} : { [x: string]: any; m(): void; i: number; }
 >Outer.Inner.prototype : any
->Outer.Inner : typeof (Anonymous function)
+>Outer.Inner : typeof Inner
 >Outer : { [x: string]: any; Inner(): void; }
->Inner : typeof (Anonymous function)
+>Inner : typeof Inner
 >prototype : any
 >{    m() { },    i: 1} : { [x: string]: any; m(): void; i: number; }
 
@@ -31,9 +31,9 @@ Outer.Inner.prototype.j = 2
 >Outer.Inner.prototype.j = 2 : 2
 >Outer.Inner.prototype.j : any
 >Outer.Inner.prototype : any
->Outer.Inner : typeof (Anonymous function)
+>Outer.Inner : typeof Inner
 >Outer : { [x: string]: any; Inner(): void; }
->Inner : typeof (Anonymous function)
+>Inner : typeof Inner
 >prototype : any
 >j : any
 >2 : 2
@@ -42,37 +42,37 @@ Outer.Inner.prototype.j = 2
 Outer.Inner.prototype.k;
 >Outer.Inner.prototype.k : any
 >Outer.Inner.prototype : any
->Outer.Inner : typeof (Anonymous function)
+>Outer.Inner : typeof Inner
 >Outer : { [x: string]: any; Inner(): void; }
->Inner : typeof (Anonymous function)
+>Inner : typeof Inner
 >prototype : any
 >k : any
 
 var inner = new Outer.Inner()
->inner : (Anonymous function) & { [x: string]: any; m(): void; i: number; }
->new Outer.Inner() : (Anonymous function) & { [x: string]: any; m(): void; i: number; }
->Outer.Inner : typeof (Anonymous function)
+>inner : Inner & { [x: string]: any; m(): void; i: number; }
+>new Outer.Inner() : Inner & { [x: string]: any; m(): void; i: number; }
+>Outer.Inner : typeof Inner
 >Outer : { [x: string]: any; Inner(): void; }
->Inner : typeof (Anonymous function)
+>Inner : typeof Inner
 
 inner.m()
 >inner.m() : void
 >inner.m : () => void
->inner : (Anonymous function) & { [x: string]: any; m(): void; i: number; }
+>inner : Inner & { [x: string]: any; m(): void; i: number; }
 >m : () => void
 
 inner.i
 >inner.i : number
->inner : (Anonymous function) & { [x: string]: any; m(): void; i: number; }
+>inner : Inner & { [x: string]: any; m(): void; i: number; }
 >i : number
 
 inner.j
 >inner.j : number
->inner : (Anonymous function) & { [x: string]: any; m(): void; i: number; }
+>inner : Inner & { [x: string]: any; m(): void; i: number; }
 >j : number
 
 inner.k
 >inner.k : string
->inner : (Anonymous function) & { [x: string]: any; m(): void; i: number; }
+>inner : Inner & { [x: string]: any; m(): void; i: number; }
 >k : string
 
