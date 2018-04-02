@@ -1,6 +1,6 @@
 === tests/cases/compiler/file1.d.ts ===
 declare module "file1" {
->"file1" : typeof "file1"
+>"file1" : typeof import("file1")
 
     class foo {}
 >foo : foo

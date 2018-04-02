@@ -615,6 +615,8 @@ namespace ts {
                     return emitMappedType(<MappedTypeNode>node);
                 case SyntaxKind.LiteralType:
                     return emitLiteralType(<LiteralTypeNode>node);
+                case SyntaxKind.ImportTypeNode:
+                    return emitImportTypeNode(<ImportTypeNode>node);
                 case SyntaxKind.JSDocAllType:
                     write("*");
                     return;
@@ -1325,6 +1327,22 @@ namespace ts {
 
         function emitLiteralType(node: LiteralTypeNode) {
             emitExpression(node.literal);
+        }
+
+        function emitImportTypeNode(node: ImportTypeNode) {
+            if (node.isTypeOf) {
+                writeKeyword("typeof");
+                writeSpace();
+            }
+            writeKeyword("import");
+            writePunctuation("(");
+            emit(node.argument);
+            writePunctuation(")");
+            if (node.qualifier) {
+                writePunctuation(".");
+                emit(node.qualifier);
+            }
+            emitTypeArguments(node, node.typeArguments);
         }
 
         //

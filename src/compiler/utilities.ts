@@ -734,6 +734,12 @@ namespace ts {
         return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).expression.kind === SyntaxKind.ImportKeyword;
     }
 
+    export function isLiteralImportTypeNode(n: Node): n is LiteralImportTypeNode {
+        return n.kind === SyntaxKind.ImportTypeNode &&
+            (n as ImportTypeNode).argument.kind === SyntaxKind.LiteralType &&
+            isStringLiteral(((n as ImportTypeNode).argument as LiteralTypeNode).literal);
+    }
+
     export function isPrologueDirective(node: Node): node is PrologueDirective {
         return node.kind === SyntaxKind.ExpressionStatement
             && (<ExpressionStatement>node).expression.kind === SyntaxKind.StringLiteral;
@@ -1697,13 +1703,15 @@ namespace ts {
         }
     }
 
-    export function getExternalModuleName(node: AnyImportOrReExport): Expression {
+    export function getExternalModuleName(node: AnyImportOrReExport | ImportTypeNode): Expression {
         switch (node.kind) {
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ExportDeclaration:
                 return node.moduleSpecifier;
             case SyntaxKind.ImportEqualsDeclaration:
                 return node.moduleReference.kind === SyntaxKind.ExternalModuleReference ? node.moduleReference.expression : undefined;
+            case SyntaxKind.ImportTypeNode:
+                return isLiteralImportTypeNode(node) ? node.argument.literal : undefined;
             default:
                 return Debug.assertNever(node);
         }
@@ -2809,7 +2817,7 @@ namespace ts {
         return file.moduleName || getExternalModuleNameFromPath(host, file.fileName);
     }
 
-    export function getExternalModuleNameFromDeclaration(host: EmitHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration): string {
+    export function getExternalModuleNameFromDeclaration(host: EmitHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode): string {
         const file = resolver.getExternalModuleFileFromDeclaration(declaration);
         if (!file || file.isDeclarationFile) {
             return undefined;

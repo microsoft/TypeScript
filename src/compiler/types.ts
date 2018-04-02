@@ -284,6 +284,7 @@ namespace ts {
         IndexedAccessType,
         MappedType,
         LiteralType,
+        ImportTypeNode,
         // Binding patterns
         ObjectBindingPattern,
         ArrayBindingPattern,
@@ -445,7 +446,7 @@ namespace ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypePredicate,
-        LastTypeNode = LiteralType,
+        LastTypeNode = ImportTypeNode,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
@@ -1067,6 +1068,16 @@ namespace ts {
             | SyntaxKind.NeverKeyword;
     }
 
+    export interface ImportTypeNode extends NodeWithTypeArguments {
+        kind: SyntaxKind.ImportTypeNode;
+        isTypeOf?: boolean;
+        argument: TypeNode;
+        qualifier?: EntityName;
+    }
+
+    /* @internal */
+    export type LiteralImportTypeNode = ImportTypeNode & { argument: LiteralTypeNode & { literal: StringLiteral } };
+
     export interface ThisTypeNode extends TypeNode {
         kind: SyntaxKind.ThisType;
     }
@@ -1081,12 +1092,15 @@ namespace ts {
         kind: SyntaxKind.ConstructorType;
     }
 
+    export interface NodeWithTypeArguments extends TypeNode {
+        typeArguments?: NodeArray<TypeNode>;
+    }
+
     export type TypeReferenceType = TypeReferenceNode | ExpressionWithTypeArguments;
 
-    export interface TypeReferenceNode extends TypeNode {
+    export interface TypeReferenceNode extends NodeWithTypeArguments {
         kind: SyntaxKind.TypeReference;
         typeName: EntityName;
-        typeArguments?: NodeArray<TypeNode>;
     }
 
     export interface TypePredicateNode extends TypeNode {
@@ -1696,11 +1710,10 @@ namespace ts {
         expression: ImportExpression;
     }
 
-    export interface ExpressionWithTypeArguments extends TypeNode {
+    export interface ExpressionWithTypeArguments extends NodeWithTypeArguments {
         kind: SyntaxKind.ExpressionWithTypeArguments;
         parent?: HeritageClause;
         expression: LeftHandSideExpression;
-        typeArguments?: NodeArray<TypeNode>;
     }
 
     export interface NewExpression extends PrimaryExpression, Declaration {
@@ -3244,7 +3257,7 @@ namespace ts {
         isOptionalParameter(node: ParameterDeclaration): boolean;
         moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
         isArgumentsLocalBinding(node: Identifier): boolean;
-        getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration): SourceFile;
+        getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode): SourceFile;
         getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): string[];
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[];
         isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;

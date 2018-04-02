@@ -1,0 +1,110 @@
+=== tests/cases/conformance/types/import/foo.ts ===
+interface Point {
+>Point : Point
+
+    x: number;
+>x : number
+
+    y: number;
+>y : number
+}
+export = Point;
+>Point : Point
+
+=== tests/cases/conformance/types/import/foo2.ts ===
+namespace Bar {
+>Bar : typeof Bar
+
+    export interface I {
+>I : I
+
+        a: string;
+>a : string
+
+        b: number;
+>b : number
+    }
+}
+
+export namespace Baz {
+>Baz : any
+
+    export interface J {
+>J : J
+
+        a: number;
+>a : number
+
+        b: string;
+>b : string
+    }
+}
+
+class Bar {
+>Bar : Bar
+
+    item: Bar.I;
+>item : Bar.I
+>Bar : any
+>I : Bar.I
+
+    constructor(input: Baz.J) {}
+>input : Baz.J
+>Baz : any
+>J : Baz.J
+}
+export { Bar }
+>Bar : typeof Bar
+
+=== tests/cases/conformance/types/import/usage.ts ===
+export const x: import("./fo") = { x: 0, y: 0 };
+>x : any
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+
+export let y: import("./fo2").Bar.I = { a: "", b: 0 };
+>y : any
+>Bar : any
+>I : No type information available!
+>{ a: "", b: 0 } : { a: string; b: number; }
+>a : string
+>"" : ""
+>b : number
+>0 : 0
+
+export let z: import("./foo2").Bar.Q = { a: "", b: 0 };
+>z : any
+>Bar : any
+>Q : No type information available!
+>{ a: "", b: 0 } : { a: string; b: number; }
+>a : string
+>"" : ""
+>b : number
+>0 : 0
+
+export class Bar2 {
+>Bar2 : Bar2
+
+    item: {a: string, b: number, c: object};
+>item : { a: string; b: number; c: object; }
+>a : string
+>b : number
+>c : object
+
+    constructor(input?: any) {}
+>input : any
+}
+
+export let shim: typeof import("./fo2") = {
+>shim : any
+>{    Bar: Bar2} : { Bar: typeof Bar2; }
+
+    Bar: Bar2
+>Bar : typeof Bar2
+>Bar2 : typeof Bar2
+
+};
+

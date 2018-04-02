@@ -809,6 +809,24 @@ namespace ts {
             : node;
     }
 
+    export function createImportTypeNode(argument: TypeNode, qualifier?: EntityName, typeArguments?: ReadonlyArray<TypeNode>, isTypeOf?: boolean) {
+        const node = <ImportTypeNode>createSynthesizedNode(SyntaxKind.ImportTypeNode);
+        node.argument = argument;
+        node.qualifier = qualifier;
+        node.typeArguments = asNodeArray(typeArguments);
+        node.isTypeOf = isTypeOf;
+        return node;
+    }
+
+    export function updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, qualifier?: EntityName, typeArguments?: ReadonlyArray<TypeNode>, isTypeOf?: boolean) {
+        return node.argument !== argument
+            || node.qualifier !== qualifier
+            || node.typeArguments !== typeArguments
+            || node.isTypeOf !== isTypeOf
+            ? updateNode(createImportTypeNode(argument, qualifier, typeArguments, isTypeOf), node)
+            : node;
+    }
+
     export function createParenthesizedType(type: TypeNode) {
         const node = <ParenthesizedTypeNode>createSynthesizedNode(SyntaxKind.ParenthesizedType);
         node.type = type;

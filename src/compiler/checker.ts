@@ -2115,7 +2115,8 @@ namespace ts {
             if (ambientModule) {
                 return ambientModule;
             }
-            const resolvedModule = getResolvedModule(getSourceFileOfNode(location), moduleReference);
+            const currentSourceFile = getSourceFileOfNode(location);
+            const resolvedModule = getResolvedModule(currentSourceFile, moduleReference);
             const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule);
             const sourceFile = resolvedModule && !resolutionDiagnostic && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {
@@ -2193,15 +2194,15 @@ namespace ts {
         // An external module with an 'export =' declaration may be referenced as an ES6 module provided the 'export ='
         // references a symbol that is at least declared as a module or a variable. The target of the 'export =' may
         // combine other declarations with the module or variable (e.g. a class/module, function/module, interface/variable).
-        function resolveESModuleSymbol(moduleSymbol: Symbol, moduleReferenceExpression: Expression, dontResolveAlias: boolean): Symbol {
+        function resolveESModuleSymbol(moduleSymbol: Symbol, referencingLocation: Node, dontResolveAlias: boolean): Symbol {
             const symbol = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias);
             if (!dontResolveAlias && symbol) {
                 if (!(symbol.flags & (SymbolFlags.Module | SymbolFlags.Variable))) {
-                    error(moduleReferenceExpression, Diagnostics.Module_0_resolves_to_a_non_module_entity_and_cannot_be_imported_using_this_construct, symbolToString(moduleSymbol));
+                    error(referencingLocation, Diagnostics.Module_0_resolves_to_a_non_module_entity_and_cannot_be_imported_using_this_construct, symbolToString(moduleSymbol));
                     return symbol;
                 }
                 if (compilerOptions.esModuleInterop) {
-                    const referenceParent = moduleReferenceExpression.parent;
+                    const referenceParent = referencingLocation.parent;
                     if (
                         (isImportDeclaration(referenceParent) && getNamespaceDeclarationNode(referenceParent)) ||
                         isImportCall(referenceParent)
@@ -2951,7 +2952,7 @@ namespace ts {
                 if (type.flags & TypeFlags.UniqueESSymbol) {
                     if (!(context.flags & NodeBuilderFlags.AllowUniqueESSymbolType)) {
                         if (isValueSymbolAccessible(type.symbol, context.enclosingDeclaration)) {
-                            return createTypeQueryNode(symbolToName(type.symbol, context, SymbolFlags.Value, /*expectsIdentifier*/ false));
+                            return symbolToTypeNode(type.symbol, context, SymbolFlags.Value);
                         }
                         if (context.tracker.reportInaccessibleUniqueSymbolError) {
                             context.tracker.reportInaccessibleUniqueSymbolError();
@@ -3070,15 +3071,14 @@ namespace ts {
                         if (symbol.flags & SymbolFlags.Class && !getBaseTypeVariableOfClass(symbol) && !(symbol.valueDeclaration.kind === SyntaxKind.ClassExpression && context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral) ||
                             symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule) ||
                             shouldWriteTypeOfFunctionSymbol()) {
-                            return createTypeQueryNodeFromSymbol(symbol, SymbolFlags.Value);
+                            return symbolToTypeNode(symbol, context, SymbolFlags.Value);
                         }
                         else if (contains(context.symbolStack, symbol)) {
                             // If type is an anonymous type literal in a type alias declaration, use type alias name
                             const typeAlias = getTypeAliasForTypeLiteral(type);
                             if (typeAlias) {
                                 // The specified symbol flags need to be reinterpreted as type flags
-                                const entityName = symbolToName(typeAlias, context, SymbolFlags.Type, /*expectsIdentifier*/ false);
-                                return createTypeReferenceNode(entityName, /*typeArguments*/ undefined);
+                                return symbolToTypeNode(typeAlias, context, SymbolFlags.Type);
                             }
                             else {
                                 return createKeywordTypeNode(SyntaxKind.AnyKeyword);
@@ -3154,11 +3154,6 @@ namespace ts {
                     context.flags = savedFlags;
                     const typeLiteralNode = createTypeLiteralNode(members);
                     return setEmitFlags(typeLiteralNode, (context.flags & NodeBuilderFlags.MultilineObjectLiterals) ? 0 : EmitFlags.SingleLine);
-                }
-
-                function createTypeQueryNodeFromSymbol(symbol: Symbol, symbolFlags: SymbolFlags) {
-                    const entityName = symbolToName(symbol, context, symbolFlags, /*expectsIdentifier*/ false);
-                    return createTypeQueryNode(entityName);
                 }
 
                 function symbolToTypeReferenceName(symbol: Symbol) {
@@ -3564,6 +3559,42 @@ namespace ts {
                     }
                 }
                 return typeParameterNodes;
+            }
+
+            function symbolToTypeNode(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags): TypeQueryNode | TypeReferenceNode | ImportTypeNode {
+                const chain = lookupSymbolChain(symbol, context, meaning);
+
+                context.flags |= NodeBuilderFlags.InInitialEntityName;
+                const rootName = getNameOfSymbolAsWritten(chain[0], context);
+                context.flags ^= NodeBuilderFlags.InInitialEntityName;
+
+                const isTypeOf = meaning === SymbolFlags.Value;
+                if (ambientModuleSymbolRegex.test(rootName)) {
+                    // module is root, must use `ImportTypeNode`
+                    const nonRootParts = chain.length > 1 ? createEntityNameFromSymbolChain(chain, chain.length - 1, 1) : undefined;
+                    const typeParameterNodes = lookupTypeParameterNodes(chain, 0, context);
+                    return createImportTypeNode(createLiteralTypeNode(createLiteral(rootName.substring(1, rootName.length - 1))), nonRootParts, typeParameterNodes as ReadonlyArray<TypeNode>, isTypeOf);
+                }
+
+                const entityName = createEntityNameFromSymbolChain(chain, chain.length - 1, 0);
+                return isTypeOf ? createTypeQueryNode(entityName) : createTypeReferenceNode(entityName, /*typeArguments*/ undefined);
+
+                function createEntityNameFromSymbolChain(chain: Symbol[], index: number, stopper: number): EntityName {
+                    const typeParameterNodes = lookupTypeParameterNodes(chain, index, context);
+                    const symbol = chain[index];
+
+                    if (index === 0) {
+                       context.flags |= NodeBuilderFlags.InInitialEntityName;
+                    }
+                    const symbolName = getNameOfSymbolAsWritten(symbol, context);
+                    if (index === 0) {
+                        context.flags ^= NodeBuilderFlags.InInitialEntityName;
+                    }
+                    const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                    identifier.symbol = symbol;
+
+                    return index > stopper ? createQualifiedName(createEntityNameFromSymbolChain(chain, index - 1, stopper), identifier) : identifier;
+                }
             }
 
             function symbolToName(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, expectsIdentifier: true): Identifier;
@@ -7246,7 +7277,7 @@ namespace ts {
         /**
          * Get type from type-reference that reference to class or interface
          */
-        function getTypeFromClassOrInterfaceReference(node: TypeReferenceType, symbol: Symbol, typeArgs: Type[]): Type {
+        function getTypeFromClassOrInterfaceReference(node: NodeWithTypeArguments, symbol: Symbol, typeArgs: Type[]): Type {
             const type = <InterfaceType>getDeclaredTypeOfSymbol(getMergedSymbol(symbol));
             const typeParameters = type.localTypeParameters;
             if (typeParameters) {
@@ -7296,7 +7327,7 @@ namespace ts {
          * references to the type parameters of the alias. We replace those with the actual type arguments by instantiating the
          * declared type. Instantiations are cached using the type identities of the type arguments as the key.
          */
-        function getTypeFromTypeAliasReference(node: TypeReferenceType, symbol: Symbol, typeArguments: Type[]): Type {
+        function getTypeFromTypeAliasReference(node: NodeWithTypeArguments, symbol: Symbol, typeArguments: Type[]): Type {
             const type = getDeclaredTypeOfSymbol(symbol);
             const typeParameters = getSymbolLinks(symbol).typeParameters;
             if (typeParameters) {
@@ -7342,7 +7373,7 @@ namespace ts {
             return resolveEntityName(typeReferenceName, meaning) || unknownSymbol;
         }
 
-        function getTypeReferenceType(node: TypeReferenceType, symbol: Symbol) {
+        function getTypeReferenceType(node: NodeWithTypeArguments, symbol: Symbol) {
             const typeArguments = typeArgumentsFromTypeReferenceNode(node); // Do unconditionally so we mark type arguments as referenced.
             if (symbol === unknownSymbol) {
                 return unknownType;
@@ -7380,7 +7411,7 @@ namespace ts {
             return valueType;
         }
 
-        function getTypeReferenceTypeWorker(node: TypeReferenceType, symbol: Symbol, typeArguments: Type[]): Type | undefined {
+        function getTypeReferenceTypeWorker(node: NodeWithTypeArguments, symbol: Symbol, typeArguments: Type[]): Type | undefined {
             if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                 return getTypeFromClassOrInterfaceReference(node, symbol, typeArguments);
             }
@@ -7428,13 +7459,13 @@ namespace ts {
             return constraints ? getSubstitutionType(typeVariable, getIntersectionType(append(constraints, typeVariable))) : typeVariable;
         }
 
-        function isJSDocTypeReference(node: TypeReferenceType): node is TypeReferenceNode {
+        function isJSDocTypeReference(node: NodeWithTypeArguments): node is TypeReferenceNode {
             return node.flags & NodeFlags.JSDoc && node.kind === SyntaxKind.TypeReference;
         }
 
-        function checkNoTypeArguments(node: TypeReferenceType, symbol?: Symbol) {
+        function checkNoTypeArguments(node: NodeWithTypeArguments, symbol?: Symbol) {
             if (node.typeArguments) {
-                error(node, Diagnostics.Type_0_is_not_generic, symbol ? symbolToString(symbol) : declarationNameToString((<TypeReferenceNode>node).typeName));
+                error(node, Diagnostics.Type_0_is_not_generic, symbol ? symbolToString(symbol) : (<TypeReferenceNode>node).typeName ? declarationNameToString((<TypeReferenceNode>node).typeName) : "(anonymous)");
                 return false;
             }
             return true;
@@ -7515,7 +7546,7 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function typeArgumentsFromTypeReferenceNode(node: TypeReferenceType): Type[] {
+        function typeArgumentsFromTypeReferenceNode(node: NodeWithTypeArguments): Type[] {
             return map(node.typeArguments, getTypeFromTypeNode);
         }
 
@@ -8479,6 +8510,79 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getIdentifierChain(node: EntityName): Identifier[] {
+            if (isIdentifier(node)) {
+                return [node];
+            }
+            else {
+                return append(getIdentifierChain(node.left), node.right);
+            }
+        }
+
+        function getTypeFromImportTypeNode(node: ImportTypeNode): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                if (node.isTypeOf && node.typeArguments) { // Only the non-typeof form can make use of type arguments
+                    error(node, Diagnostics.Type_arguments_cannot_be_used_here);
+                    links.resolvedSymbol = unknownSymbol;
+                    return links.resolvedType = unknownType;
+                }
+                if (!isLiteralImportTypeNode(node)) {
+                    error(node.argument, Diagnostics.String_literal_expected);
+                    links.resolvedSymbol = unknownSymbol;
+                    return links.resolvedType = unknownType;
+                }
+                const argumentType = getTypeFromTypeNode(node.argument);
+                const targetMeaning = node.isTypeOf ? SymbolFlags.Value : SymbolFlags.Type;
+                // TODO: Future work: support unions/generics/whatever via a deferred import-type
+                const moduleName = (argumentType as StringLiteralType).value;
+                const innerModuleSymbol = resolveExternalModule(node, moduleName, Diagnostics.Cannot_find_module_0, node, /*isForAugmentation*/ false);
+                if (!innerModuleSymbol) {
+                    links.resolvedSymbol = unknownSymbol;
+                    return links.resolvedType = unknownType;
+                }
+                const moduleSymbol = resolveExternalModuleSymbol(innerModuleSymbol, /*dontResolveAlias*/ false);
+                if (node.qualifier) {
+                    const nameStack: Identifier[] = getIdentifierChain(node.qualifier);
+                    let currentNamespace = moduleSymbol;
+                    let current: Identifier | undefined;
+                    while (current = nameStack.shift()) {
+                        const meaning = nameStack.length ? SymbolFlags.Namespace : targetMeaning;
+                        const next = getSymbol(getExportsOfSymbol(getMergedSymbol(resolveSymbol(currentNamespace))), current.escapedText, meaning);
+                        if (!next) {
+                            error(current, Diagnostics.Namespace_0_has_no_exported_member_1, getFullyQualifiedName(currentNamespace), declarationNameToString(current));
+                            return links.resolvedType = unknownType;
+                        }
+                        getNodeLinks(current).resolvedSymbol = next;
+                        getNodeLinks(current.parent).resolvedSymbol = next;
+                        currentNamespace = next;
+                    }
+                    resolveImportSymbolType(node, links, currentNamespace, targetMeaning);
+                }
+                else {
+                    if (moduleSymbol.flags & targetMeaning) {
+                        resolveImportSymbolType(node, links, moduleSymbol, targetMeaning);
+                    }
+                    else {
+                        error(node, targetMeaning === SymbolFlags.Value ? Diagnostics.Module_0_does_not_refer_to_a_value_but_is_used_as_a_value_here : Diagnostics.Module_0_does_not_refer_to_a_type_but_is_used_as_a_type_here, moduleName);
+                        links.resolvedSymbol = unknownSymbol;
+                        links.resolvedType = unknownType;
+                    }
+                }
+            }
+            return links.resolvedType;
+        }
+
+        function resolveImportSymbolType(node: ImportTypeNode, links: NodeLinks, symbol: Symbol, meaning: SymbolFlags) {
+            links.resolvedSymbol = symbol;
+            if (meaning === SymbolFlags.Value) {
+                return links.resolvedType = getTypeOfSymbol(symbol);
+            }
+            else {
+                return links.resolvedType = getTypeReferenceType(node, symbol);
+            }
+        }
+
         function getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node: TypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
@@ -8772,6 +8876,8 @@ namespace ts {
                     return getTypeFromConditionalTypeNode(<ConditionalTypeNode>node);
                 case SyntaxKind.InferType:
                     return getTypeFromInferTypeNode(<InferTypeNode>node);
+                case SyntaxKind.ImportTypeNode:
+                    return getTypeFromImportTypeNode(<ImportTypeNode>node);
                 // This function assumes that an identifier or qualified name is a type expression
                 // Callers should first ensure this by calling isTypeNode
                 case SyntaxKind.Identifier:
@@ -20756,6 +20862,11 @@ namespace ts {
             checkSourceElement(node.typeParameter);
         }
 
+        function checkImportType(node: ImportTypeNode) {
+            checkSourceElement(node.argument);
+            getTypeFromTypeNode(node);
+        }
+
         function isPrivateWithinAmbient(node: Node): boolean {
             return hasModifier(node, ModifierFlags.Private) && !!(node.flags & NodeFlags.Ambient);
         }
@@ -24483,6 +24594,8 @@ namespace ts {
                     return checkConditionalType(<ConditionalTypeNode>node);
                 case SyntaxKind.InferType:
                     return checkInferType(<InferTypeNode>node);
+                case SyntaxKind.ImportTypeNode:
+                    return checkImportType(<ImportTypeNode>node);
                 case SyntaxKind.JSDocAugmentsTag:
                     return checkJSDocAugmentsTag(node as JSDocAugmentsTag);
                 case SyntaxKind.JSDocTypedefTag:
@@ -24993,6 +25106,18 @@ namespace ts {
             }
         }
 
+        function isImportTypeQualifierPart(node: EntityName): ImportTypeNode | undefined {
+            let parent = node.parent;
+            while (isQualifiedName(parent)) {
+                node = parent;
+                parent = parent.parent;
+            }
+            if (parent && parent.kind === SyntaxKind.ImportTypeNode && (parent as ImportTypeNode).qualifier === node) {
+                return parent as ImportTypeNode;
+            }
+            return undefined;
+        }
+
         function getSymbolOfEntityNameOrPropertyAccessExpression(entityName: EntityName | PropertyAccessExpression): Symbol | undefined {
             if (isDeclarationName(entityName)) {
                 return getSymbolOfNode(entityName.parent);
@@ -25016,13 +25141,23 @@ namespace ts {
                     return success;
                 }
             }
-            else if (entityName.kind !== SyntaxKind.PropertyAccessExpression && isInRightSideOfImportOrExportAssignment(entityName)) {
+            else if (!isPropertyAccessExpression(entityName) && isInRightSideOfImportOrExportAssignment(entityName)) {
+                // Since we already checked for ExportAssignment, this really could only be an Import
                 const importEqualsDeclaration = getAncestor(entityName, SyntaxKind.ImportEqualsDeclaration);
                 Debug.assert(importEqualsDeclaration !== undefined);
                 return getSymbolOfPartOfRightHandSideOfImportEquals(entityName, /*dontResolveAlias*/ true);
             }
 
-            if (isRightSideOfQualifiedNameOrPropertyAccess(entityName)) {
+            if (!isPropertyAccessExpression(entityName)) {
+                const possibleImportNode = isImportTypeQualifierPart(entityName);
+                if (possibleImportNode) {
+                    getTypeFromTypeNode(possibleImportNode);
+                    const sym = getNodeLinks(entityName).resolvedSymbol;
+                    return sym === unknownSymbol ? undefined : sym;
+                }
+            }
+
+            while (isRightSideOfQualifiedNameOrPropertyAccess(entityName)) {
                 entityName = <QualifiedName | PropertyAccessEntityNameExpression>entityName.parent;
             }
 
@@ -25175,9 +25310,12 @@ namespace ts {
                     // 1). import x = require("./mo/*gotToDefinitionHere*/d")
                     // 2). External module name in an import declaration
                     // 3). Dynamic import call or require in javascript
+                    // 4). type A = import("./f/*gotToDefinitionHere*/oo")
                     if ((isExternalModuleImportEqualsDeclaration(node.parent.parent) && getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node) ||
                         ((node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration) && (<ImportDeclaration>node.parent).moduleSpecifier === node) ||
-                        ((isInJavaScriptFile(node) && isRequireCall(node.parent, /*checkArgumentIsStringLiteralLike*/ false)) || isImportCall(node.parent))) {
+                        ((isInJavaScriptFile(node) && isRequireCall(node.parent, /*checkArgumentIsStringLiteralLike*/ false)) || isImportCall(node.parent)) ||
+                        (isLiteralTypeNode(node.parent) && isLiteralImportTypeNode(node.parent.parent) && node.parent.parent.argument === node.parent)
+                    ) {
                         return resolveExternalModuleName(node, <LiteralExpression>node);
                     }
                     // falls through
@@ -26022,7 +26160,7 @@ namespace ts {
             }
         }
 
-        function getExternalModuleFileFromDeclaration(declaration: AnyImportOrReExport | ModuleDeclaration): SourceFile {
+        function getExternalModuleFileFromDeclaration(declaration: AnyImportOrReExport | ModuleDeclaration | ImportTypeNode): SourceFile {
             const specifier = declaration.kind === SyntaxKind.ModuleDeclaration ? tryCast(declaration.name, isStringLiteral) : getExternalModuleName(declaration);
             const moduleSymbol = resolveExternalModuleNameWorker(specifier, specifier, /*moduleNotFoundError*/ undefined);
             if (!moduleSymbol) {

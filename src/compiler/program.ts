@@ -1686,9 +1686,19 @@ namespace ts {
                 else if (isImportCall(node) && node.arguments.length === 1 && isStringLiteralLike(node.arguments[0])) {
                     imports = append(imports, node.arguments[0] as StringLiteralLike);
                 }
-                else {
-                    forEachChild(node, collectDynamicImportOrRequireCalls);
+                else if (isLiteralImportTypeNode(node)) {
+                    imports = append(imports, node.argument.literal);
                 }
+                else {
+                    collectDynamicImportOrRequireCallsForEachChild(node);
+                    if (hasJSDocNodes(node)) {
+                        forEach(node.jsDoc, collectDynamicImportOrRequireCallsForEachChild);
+                    }
+                }
+            }
+
+            function collectDynamicImportOrRequireCallsForEachChild(node: Node) {
+                forEachChild(node, collectDynamicImportOrRequireCalls);
             }
         }
 

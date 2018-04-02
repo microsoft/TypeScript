@@ -398,6 +398,14 @@ namespace ts {
                 return updateInferTypeNode(<InferTypeNode>node,
                     visitNode((<InferTypeNode>node).typeParameter, visitor, isTypeParameterDeclaration));
 
+            case SyntaxKind.ImportTypeNode:
+                return updateImportTypeNode(<ImportTypeNode>node,
+                    visitNode((<ImportTypeNode>node).argument, visitor, isTypeNode),
+                    visitNode((<ImportTypeNode>node).qualifier, visitor, isEntityName),
+                    visitNodes((<ImportTypeNode>node).typeArguments, visitor, isTypeNode),
+                    (<ImportTypeNode>node).isTypeOf
+                );
+
             case SyntaxKind.ParenthesizedType:
                 return updateParenthesizedType(<ParenthesizedTypeNode>node,
                     visitNode((<ParenthesizedTypeNode>node).type, visitor, isTypeNode));

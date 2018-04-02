@@ -3804,7 +3804,7 @@ declare module Immutable {
   }
 }
 declare module "immutable" {
->"immutable" : typeof "immutable"
+>"immutable" : typeof import("immutable")
 
   export = Immutable
 >Immutable : typeof Immutable
