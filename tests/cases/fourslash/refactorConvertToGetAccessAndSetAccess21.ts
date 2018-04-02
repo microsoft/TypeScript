@@ -1,7 +1,8 @@
 /// <reference path='fourslash.ts' />
 
 //// class A {
-////     /*a*/private _a: string;/*b*/
+////     public a_2: number;
+////     /*a*/public a_1: string;/*b*/
 //// }
 
 goTo.select("a", "b");
@@ -10,12 +11,13 @@ edit.applyRefactor({
     actionName: "Generate 'get' and 'set' accessors",
     actionDescription: "Generate 'get' and 'set' accessors",
     newContent: `class A {
-    private /*RENAME*/__a: string;
-    public get _a(): string {
-        return this.__a;
+    public a_2: number;
+    private /*RENAME*/_a_1: string;
+    public get a_1(): string {
+        return this._a_1;
     }
-    public set _a(value: string) {
-        this.__a = value;
+    public set a_1(value: string) {
+        this._a_1 = value;
     }
 }`,
 });
