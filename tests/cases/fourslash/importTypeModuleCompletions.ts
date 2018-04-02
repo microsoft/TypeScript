@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts" />
 
+// @moduleResolution: node
+
 // @Filename: /ns.ts
 ////export namespace Foo {
 ////    export namespace Bar {
