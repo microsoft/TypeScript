@@ -376,6 +376,8 @@ namespace ts.Completions {
                         //      }
                         //      let x: Foo["/*completion position*/"]
                         return stringLiteralCompletionsFromProperties(typeChecker.getTypeFromTypeNode((node.parent.parent as IndexedAccessTypeNode).objectType));
+                    case SyntaxKind.ImportTypeNode:
+                        return { kind: StringLiteralCompletionKind.Paths, paths: PathCompletions.getStringLiteralCompletionsFromModuleNames(sourceFile, node, compilerOptions, host, typeChecker) };;
                     default:
                         return undefined;
                 }
