@@ -598,7 +598,7 @@ namespace ts.server {
             if (option && value) {
                 switch (option) {
                     case "-file":
-                        const { logPath, extraPartCounter } = getLogPath(args, i + 1);
+                        const { logPath, extraPartCounter } = getLogPath(i + 1);
                         logEnv.file = logPath;
                         i += extraPartCounter;
                         break;
@@ -616,21 +616,21 @@ namespace ts.server {
             }
         }
         return logEnv;
-    }
 
-    function getLogPath(args: string[], initialIndex: number) {
-        let pathStart = args[initialIndex];
-        let extraPartCounter = 0;
-        if (pathStart.charCodeAt(0) === CharacterCodes.doubleQuote &&
-            pathStart.charCodeAt(pathStart.length - 1) !== CharacterCodes.doubleQuote) {
-            for (let i = initialIndex + 1; i < args.length; i++) {
-                pathStart += " ";
-                pathStart += args[i];
-                extraPartCounter++;
-                if (pathStart.charCodeAt(pathStart.length - 1) === CharacterCodes.doubleQuote) break;
+        function getLogPath(initialIndex: number) {
+            let pathStart = args[initialIndex];
+            let extraPartCounter = 0;
+            if (pathStart.charCodeAt(0) === CharacterCodes.doubleQuote &&
+                pathStart.charCodeAt(pathStart.length - 1) !== CharacterCodes.doubleQuote) {
+                for (let i = initialIndex + 1; i < args.length; i++) {
+                    pathStart += " ";
+                    pathStart += args[i];
+                    extraPartCounter++;
+                    if (pathStart.charCodeAt(pathStart.length - 1) === CharacterCodes.doubleQuote) break;
+                }
             }
+            return { logPath: stripQuotes(pathStart), extraPartCounter };
         }
-        return { logPath: stripQuotes(pathStart), extraPartCounter };
     }
 
     function getLogLevel(level: string) {
