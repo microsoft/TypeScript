@@ -131,8 +131,8 @@ namespace ts.GoToDefinition {
             return undefined;
         }
 
-        if (type.flags & TypeFlags.Union && !(type.flags & TypeFlags.Enum)) {
-            return flatMap((<UnionType>type).types, t => t.symbol && getDefinitionFromSymbol(typeChecker, t.symbol, node));
+        if (type.isUnion() && !(type.flags & TypeFlags.Enum)) {
+            return flatMap(type.types, t => t.symbol && getDefinitionFromSymbol(typeChecker, t.symbol, node));
         }
 
         return type.symbol && getDefinitionFromSymbol(typeChecker, type.symbol, node);

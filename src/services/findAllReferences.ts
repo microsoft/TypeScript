@@ -1132,8 +1132,8 @@ namespace ts.FindAllReferences.Core {
             if (componentType.symbol && componentType.symbol.getFlags() & (SymbolFlags.Class | SymbolFlags.Interface)) {
                 result.push(componentType.symbol);
             }
-            if (componentType.getFlags() & TypeFlags.UnionOrIntersection) {
-                getSymbolsForClassAndInterfaceComponents(<UnionOrIntersectionType>componentType, result);
+            if (componentType.isUnionOrIntersection()) {
+                getSymbolsForClassAndInterfaceComponents(componentType, result);
             }
         }
         return result;
@@ -1567,7 +1567,7 @@ namespace ts.FindAllReferences.Core {
         const name = getNameFromPropertyName(node.name);
         const symbol = contextualType && name && contextualType.getProperty(name);
         return symbol ? [symbol] :
-            contextualType && contextualType.flags & TypeFlags.Union ? mapDefined((<UnionType>contextualType).types, t => t.getProperty(name)) : emptyArray;
+            contextualType && contextualType.isUnion() ? mapDefined(contextualType.types, t => t.getProperty(name)) : emptyArray;
     }
 
     /**
@@ -1650,8 +1650,8 @@ namespace ts.FindAllReferences.Core {
         const localParentType = propertyAccessExpression && checker.getTypeAtLocation(propertyAccessExpression.expression);
         return localParentType && localParentType.symbol && localParentType.symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) && localParentType.symbol !== symbol.parent
             ? [localParentType.symbol]
-            : localParentType && localParentType.flags & TypeFlags.UnionOrIntersection
-            ? getSymbolsForClassAndInterfaceComponents(<UnionOrIntersectionType>localParentType)
+            : localParentType && localParentType.isUnionOrIntersection()
+            ? getSymbolsForClassAndInterfaceComponents(localParentType)
             : undefined;
     }
 }

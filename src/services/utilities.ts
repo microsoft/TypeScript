@@ -1218,7 +1218,7 @@ namespace ts {
     }
 
     export function skipConstraint(type: Type): Type {
-        return type.flags & TypeFlags.TypeParameter ? type.getConstraint() : type;
+        return type.isTypeParameter() ? type.getConstraint() : type;
     }
 
     export function getNameFromPropertyName(name: PropertyName): string | undefined {
