@@ -18,4 +18,4 @@ verify.completionListContains('property');
 edit.backspace();
 
 goTo.marker('b');
-verify.quickInfoIs('(property) class2.blah: () => void');
+verify.quickInfoIs('(method) class2.blah(): void');
