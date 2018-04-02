@@ -618,7 +618,7 @@ namespace ts.server {
 
     function getLogPath(args: string[], initialIndex: number) {
         let pathStart = args[initialIndex + 1];
-        if (pathStart.charCodeAt(0) === CharacterCodes.doubleQuote && 
+        if (pathStart.charCodeAt(0) === CharacterCodes.doubleQuote &&
             pathStart.charCodeAt(pathStart.length - 1) !== CharacterCodes.doubleQuote) {
             for (let i = initialIndex + 2; i < args.length; i++) {
                 pathStart += " ";
