@@ -598,7 +598,7 @@ namespace ts.server {
             if (option && value) {
                 switch (option) {
                     case "-file":
-                        logEnv.file = stripQuotes(value);
+                        logEnv.file = getLogPath(args, i);
                         break;
                     case "-level":
                         const level = getLogLevel(value);
@@ -614,6 +614,19 @@ namespace ts.server {
             }
         }
         return logEnv;
+    }
+
+    function getLogPath(args: string[], initialIndex: number) {
+        let pathStart = args[initialIndex + 1];
+        if (pathStart.charCodeAt(0) === CharacterCodes.doubleQuote && 
+            pathStart.charCodeAt(pathStart.length - 1) !== CharacterCodes.doubleQuote) {
+            for (let i = initialIndex + 2; i < args.length; i++) {
+                pathStart += " ";
+                pathStart += args[i];
+                if (pathStart.charCodeAt(pathStart.length - 1) === CharacterCodes.doubleQuote) break;
+            }
+        }
+        return stripQuotes(pathStart);
     }
 
     function getLogLevel(level: string) {
