@@ -811,6 +811,9 @@ namespace ts {
                 if (parent.kind === SyntaxKind.TypeQuery) {
                     return false;
                 }
+                if (parent.kind === SyntaxKind.ImportTypeNode) {
+                    return !(parent as ImportTypeNode).isTypeOf;
+                }
                 // Do not recursively call isPartOfTypeNode on the parent. In the example:
                 //
                 //     let a: A.B.C;
