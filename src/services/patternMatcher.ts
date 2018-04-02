@@ -15,19 +15,10 @@ namespace ts {
         // better than substring matches which are better than CamelCase matches.
         kind: PatternMatchKind;
 
-        // If this was a camel case match, how strong the match is.  Higher number means
-        // it was a better match.
-        camelCaseWeight?: number;
-
         // If this was a match where all constituent parts of the candidate and search pattern
         // matched case sensitively or case insensitively.  Case sensitive matches of the kind
         // are better matches than insensitive matches.
         isCaseSensitive: boolean;
-
-        // Whether or not this match occurred with the punctuation from the search pattern stripped
-        // out or not.  Matches without the punctuation stripped are better than ones with punctuation
-        // stripped.
-        punctuationStripped: boolean;
     }
 
     // The pattern matcher maintains an internal cache of information as it is used.  Therefore,
@@ -99,12 +90,10 @@ namespace ts {
         characterSpans: TextSpan[];
     }
 
-    function createPatternMatch(kind: PatternMatchKind, punctuationStripped: boolean, isCaseSensitive: boolean, camelCaseWeight?: number): PatternMatch {
+    function createPatternMatch(kind: PatternMatchKind, isCaseSensitive: boolean): PatternMatch {
         return {
             kind,
-            punctuationStripped,
-            isCaseSensitive,
-            camelCaseWeight
+            isCaseSensitive
         };
     }
 
@@ -195,18 +184,18 @@ namespace ts {
             return spans;
         }
 
-        function matchTextChunk(candidate: string, chunk: TextChunk, punctuationStripped: boolean): PatternMatch {
+        function matchTextChunk(candidate: string, chunk: TextChunk): PatternMatch {
             const index = indexOfIgnoringCase(candidate, chunk.textLowerCase);
             if (index === 0) {
                 if (chunk.text.length === candidate.length) {
                     // a) Check if the part matches the candidate entirely, in an case insensitive or
                     //    sensitive manner.  If it does, return that there was an exact match.
-                    return createPatternMatch(PatternMatchKind.exact, punctuationStripped, /*isCaseSensitive:*/ candidate === chunk.text);
+                    return createPatternMatch(PatternMatchKind.exact, /*isCaseSensitive:*/ candidate === chunk.text);
                 }
                 else {
                     // b) Check if the part is a prefix of the candidate, in a case insensitive or sensitive
                     //    manner.  If it does, return that there was a prefix match.
-                    return createPatternMatch(PatternMatchKind.prefix, punctuationStripped, /*isCaseSensitive:*/ startsWith(candidate, chunk.text));
+                    return createPatternMatch(PatternMatchKind.prefix, /*isCaseSensitive:*/ startsWith(candidate, chunk.text));
                 }
             }
 
@@ -223,8 +212,7 @@ namespace ts {
                     const wordSpans = getWordSpans(candidate);
                     for (const span of wordSpans) {
                         if (partStartsWith(candidate, span, chunk.text, /*ignoreCase:*/ true)) {
-                            return createPatternMatch(PatternMatchKind.substring, punctuationStripped,
-                                /*isCaseSensitive:*/ partStartsWith(candidate, span, chunk.text, /*ignoreCase:*/ false));
+                            return createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive:*/ partStartsWith(candidate, span, chunk.text, /*ignoreCase:*/ false));
                         }
                     }
                 }
@@ -234,7 +222,7 @@ namespace ts {
                 //    candidate in a case *sensitive* manner. If so, return that there was a substring
                 //    match.
                 if (candidate.indexOf(chunk.text) > 0) {
-                    return createPatternMatch(PatternMatchKind.substring, punctuationStripped, /*isCaseSensitive:*/ true);
+                    return createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive:*/ true);
                 }
             }
 
@@ -242,14 +230,10 @@ namespace ts {
                 // e) If the part was not entirely lowercase, then attempt a camel cased match as well.
                 if (chunk.characterSpans.length > 0) {
                     const candidateParts = getWordSpans(candidate);
-                    let camelCaseWeight = tryCamelCaseMatch(candidate, candidateParts, chunk, /*ignoreCase:*/ false);
-                    if (camelCaseWeight !== undefined) {
-                        return createPatternMatch(PatternMatchKind.camelCase, punctuationStripped, /*isCaseSensitive:*/ true, /*camelCaseWeight:*/ camelCaseWeight);
-                    }
-
-                    camelCaseWeight = tryCamelCaseMatch(candidate, candidateParts, chunk, /*ignoreCase:*/ true);
-                    if (camelCaseWeight !== undefined) {
-                        return createPatternMatch(PatternMatchKind.camelCase, punctuationStripped, /*isCaseSensitive:*/ false, /*camelCaseWeight:*/ camelCaseWeight);
+                    const isCaseSensitive = tryCamelCaseMatch(candidate, candidateParts, chunk, /*ignoreCase:*/ false) ? true
+                        : tryCamelCaseMatch(candidate, candidateParts, chunk, /*ignoreCase:*/ true) ? false : undefined;
+                    if (isCaseSensitive !== undefined) {
+                        return createPatternMatch(PatternMatchKind.camelCase, isCaseSensitive);
                     }
                 }
             }
@@ -264,7 +248,7 @@ namespace ts {
                 // (Pattern: fogbar, Candidate: quuxfogbarFogBar).
                 if (chunk.text.length < candidate.length) {
                     if (index > 0 && isUpperCaseLetter(candidate.charCodeAt(index))) {
-                        return createPatternMatch(PatternMatchKind.substring, punctuationStripped, /*isCaseSensitive:*/ false);
+                        return createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive:*/ false);
                     }
                 }
             }
@@ -292,7 +276,7 @@ namespace ts {
             // Note: if the segment contains a space or an asterisk then we must assume that it's a
             // multi-word segment.
             if (!containsSpaceOrAsterisk(segment.totalTextChunk.text)) {
-                const match = matchTextChunk(candidate, segment.totalTextChunk, /*punctuationStripped:*/ false);
+                const match = matchTextChunk(candidate, segment.totalTextChunk);
                 if (match) {
                     return [match];
                 }
@@ -340,7 +324,7 @@ namespace ts {
 
             for (const subWordTextChunk of subWordTextChunks) {
                 // Try to match the candidate with this word
-                const result = matchTextChunk(candidate, subWordTextChunk, /*punctuationStripped:*/ true);
+                const result = matchTextChunk(candidate, subWordTextChunk);
                 if (!result) {
                     return undefined;
                 }
@@ -383,7 +367,7 @@ namespace ts {
             return true;
         }
 
-        function tryCamelCaseMatch(candidate: string, candidateParts: TextSpan[], chunk: TextChunk, ignoreCase: boolean): number {
+        function tryCamelCaseMatch(candidate: string, candidateParts: TextSpan[], chunk: TextChunk, ignoreCase: boolean): boolean {
             const chunkCharacterSpans = chunk.characterSpans;
 
             // Note: we may have more pattern parts than candidate parts.  This is because multiple
@@ -399,24 +383,11 @@ namespace ts {
             while (true) {
                 // Let's consider our termination cases
                 if (currentChunkSpan === chunkCharacterSpans.length) {
-                    // We did match! We shall assign a weight to this
-                    let weight = 0;
-
-                    // Was this contiguous?
-                    if (contiguous) {
-                        weight += 1;
-                    }
-
-                    // Did we start at the beginning of the candidate?
-                    if (firstMatch === 0) {
-                        weight += 2;
-                    }
-
-                    return weight;
+                    return true;
                 }
                 else if (currentCandidate === candidateParts.length) {
                     // No match, since we still have more of the pattern to hit
-                    return undefined;
+                    return false;
                 }
 
                 let candidatePart = candidateParts[currentCandidate];
