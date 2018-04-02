@@ -8430,15 +8430,19 @@ namespace ts {
             return result;
         }
 
-        function getTopConditionalType(node: Node): ConditionalTypeNode {
-            let result: ConditionalTypeNode;
+        function isPossiblyReferencedInConditionalType(tp: TypeParameter, node: Node) {
+            if (isTypeParameterPossiblyReferenced(tp, node)) {
+                return true;
+            }
             while (node) {
                 if (node.kind === SyntaxKind.ConditionalType) {
-                    result = <ConditionalTypeNode>node;
+                    if (isTypeParameterPossiblyReferenced(tp, (<ConditionalTypeNode>node).extendsType)) {
+                        return true;
+                    }
                 }
                 node = node.parent;
             }
-            return result;
+            return false;
         }
 
         function getTypeFromConditionalTypeNode(node: ConditionalTypeNode): Type {
@@ -8447,8 +8451,7 @@ namespace ts {
                 const checkType = getTypeFromTypeNode(node.checkType);
                 const aliasTypeArguments = getAliasTypeArgumentsForTypeNode(node);
                 const allOuterTypeParameters = getOuterTypeParameters(node, /*includeThisTypes*/ true);
-                const topNode = getTopConditionalType(node);
-                const outerTypeParameters = aliasTypeArguments ? allOuterTypeParameters : filter(allOuterTypeParameters, tp => isTypeParameterPossiblyReferenced(tp, topNode));
+                const outerTypeParameters = aliasTypeArguments ? allOuterTypeParameters : filter(allOuterTypeParameters, tp => isPossiblyReferencedInConditionalType(tp, node));
                 const root: ConditionalRoot = {
                     node,
                     checkType,
