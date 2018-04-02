@@ -121,8 +121,8 @@ namespace ts {
         const invalidPattern = dotSeparatedSegments.length === 0 || forEach(dotSeparatedSegments, segmentIsInvalid);
 
         return {
-            getMatches,
-            getMatchesForLastSegmentOfPattern,
+            getMatches: (containers, candidate) => skipMatch(candidate) ? undefined : getMatches(containers, candidate, dotSeparatedSegments, stringToWordSpans),
+            getMatchesForLastSegmentOfPattern: candidate => skipMatch(candidate) ? undefined : matchSegment(candidate, lastOrUndefined(dotSeparatedSegments), stringToWordSpans),
             patternContainsDots: dotSeparatedSegments.length > 1
         };
 
@@ -130,342 +130,330 @@ namespace ts {
         function skipMatch(candidate: string) {
             return invalidPattern || !candidate;
         }
+    }
 
-        function getMatchesForLastSegmentOfPattern(candidate: string): PatternMatch[] {
-            if (skipMatch(candidate)) {
-                return undefined;
-            }
-
-            return matchSegment(candidate, lastOrUndefined(dotSeparatedSegments));
-        }
-
-        function getMatches(candidateContainers: string[], candidate: string): PatternMatch[] | undefined {
-            if (skipMatch(candidate)) {
-                return undefined;
-            }
-
-            // First, check that the last part of the dot separated pattern matches the name of the
-            // candidate.  If not, then there's no point in proceeding and doing the more
-            // expensive work.
-            const candidateMatch = matchSegment(candidate, lastOrUndefined(dotSeparatedSegments));
-            if (!candidateMatch) {
-                return undefined;
-            }
-
-            candidateContainers = candidateContainers || [];
-
-            // -1 because the last part was checked against the name, and only the rest
-            // of the parts are checked against the container.
-            if (dotSeparatedSegments.length - 1 > candidateContainers.length) {
-                // There weren't enough container parts to match against the pattern parts.
-                // So this definitely doesn't match.
-                return undefined;
-            }
-
-            // So far so good.  Now break up the container for the candidate and check if all
-            // the dotted parts match up correctly.
-            const totalMatch = candidateMatch;
-
-            for (let i = dotSeparatedSegments.length - 2, j = candidateContainers.length - 1;
-                 i >= 0;
-                 i -= 1, j -= 1) {
-
-                const segment = dotSeparatedSegments[i];
-                const containerName = candidateContainers[j];
-
-                const containerMatch = matchSegment(containerName, segment);
-                if (!containerMatch) {
-                    // This container didn't match the pattern piece.  So there's no match at all.
-                    return undefined;
-                }
-
-                addRange(totalMatch, containerMatch);
-            }
-
-            // Success, this symbol's full name matched against the dotted name the user was asking
-            // about.
-            return totalMatch;
-        }
-
-        function getWordSpans(word: string): TextSpan[] {
-            let spans = stringToWordSpans.get(word);
-            if (!spans) {
-                stringToWordSpans.set(word, spans = breakIntoWordSpans(word));
-            }
-            return spans;
-        }
-
-        function matchTextChunk(candidate: string, chunk: TextChunk, punctuationStripped: boolean): PatternMatch {
-            const index = indexOfIgnoringCase(candidate, chunk.textLowerCase);
-            if (index === 0) {
-                if (chunk.text.length === candidate.length) {
-                    // a) Check if the part matches the candidate entirely, in an case insensitive or
-                    //    sensitive manner.  If it does, return that there was an exact match.
-                    return createPatternMatch(PatternMatchKind.exact, punctuationStripped, /*isCaseSensitive:*/ candidate === chunk.text);
-                }
-                else {
-                    // b) Check if the part is a prefix of the candidate, in a case insensitive or sensitive
-                    //    manner.  If it does, return that there was a prefix match.
-                    return createPatternMatch(PatternMatchKind.prefix, punctuationStripped, /*isCaseSensitive:*/ startsWith(candidate, chunk.text));
-                }
-            }
-
-            const isLowercase = chunk.isLowerCase;
-            if (isLowercase) {
-                if (index > 0) {
-                    // c) If the part is entirely lowercase, then check if it is contained anywhere in the
-                    //    candidate in a case insensitive manner.  If so, return that there was a substring
-                    //    match.
-                    //
-                    //    Note: We only have a substring match if the lowercase part is prefix match of some
-                    //    word part. That way we don't match something like 'Class' when the user types 'a'.
-                    //    But we would match 'FooAttribute' (since 'Attribute' starts with 'a').
-                    const wordSpans = getWordSpans(candidate);
-                    for (const span of wordSpans) {
-                        if (partStartsWith(candidate, span, chunk.text, /*ignoreCase:*/ true)) {
-                            return createPatternMatch(PatternMatchKind.substring, punctuationStripped,
-                                /*isCaseSensitive:*/ partStartsWith(candidate, span, chunk.text, /*ignoreCase:*/ false));
-                        }
-                    }
-                }
-            }
-            else {
-                // d) If the part was not entirely lowercase, then check if it is contained in the
-                //    candidate in a case *sensitive* manner. If so, return that there was a substring
-                //    match.
-                if (candidate.indexOf(chunk.text) > 0) {
-                    return createPatternMatch(PatternMatchKind.substring, punctuationStripped, /*isCaseSensitive:*/ true);
-                }
-            }
-
-            if (!isLowercase) {
-                // e) If the part was not entirely lowercase, then attempt a camel cased match as well.
-                if (chunk.characterSpans.length > 0) {
-                    const candidateParts = getWordSpans(candidate);
-                    let camelCaseWeight = tryCamelCaseMatch(candidate, candidateParts, chunk, /*ignoreCase:*/ false);
-                    if (camelCaseWeight !== undefined) {
-                        return createPatternMatch(PatternMatchKind.camelCase, punctuationStripped, /*isCaseSensitive:*/ true, /*camelCaseWeight:*/ camelCaseWeight);
-                    }
-
-                    camelCaseWeight = tryCamelCaseMatch(candidate, candidateParts, chunk, /*ignoreCase:*/ true);
-                    if (camelCaseWeight !== undefined) {
-                        return createPatternMatch(PatternMatchKind.camelCase, punctuationStripped, /*isCaseSensitive:*/ false, /*camelCaseWeight:*/ camelCaseWeight);
-                    }
-                }
-            }
-
-            if (isLowercase) {
-                // f) Is the pattern a substring of the candidate starting on one of the candidate's word boundaries?
-
-                // We could check every character boundary start of the candidate for the pattern. However, that's
-                // an m * n operation in the wost case. Instead, find the first instance of the pattern
-                // substring, and see if it starts on a capital letter. It seems unlikely that the user will try to
-                // filter the list based on a substring that starts on a capital letter and also with a lowercase one.
-                // (Pattern: fogbar, Candidate: quuxfogbarFogBar).
-                if (chunk.text.length < candidate.length) {
-                    if (index > 0 && isUpperCaseLetter(candidate.charCodeAt(index))) {
-                        return createPatternMatch(PatternMatchKind.substring, punctuationStripped, /*isCaseSensitive:*/ false);
-                    }
-                }
-            }
-
+    function getMatches(candidateContainers: ReadonlyArray<string>, candidate: string, dotSeparatedSegments: ReadonlyArray<Segment>, stringToWordSpans: Map<TextSpan[]>): PatternMatch[] | undefined {
+        // First, check that the last part of the dot separated pattern matches the name of the
+        // candidate.  If not, then there's no point in proceeding and doing the more
+        // expensive work.
+        const candidateMatch = matchSegment(candidate, lastOrUndefined(dotSeparatedSegments), stringToWordSpans);
+        if (!candidateMatch) {
             return undefined;
         }
 
-        function containsSpaceOrAsterisk(text: string): boolean {
-            for (let i = 0; i < text.length; i++) {
-                const ch = text.charCodeAt(i);
-                if (ch === CharacterCodes.space || ch === CharacterCodes.asterisk) {
-                    return true;
-                }
+        candidateContainers = candidateContainers || [];
+
+        // -1 because the last part was checked against the name, and only the rest
+        // of the parts are checked against the container.
+        if (dotSeparatedSegments.length - 1 > candidateContainers.length) {
+            // There weren't enough container parts to match against the pattern parts.
+            // So this definitely doesn't match.
+            return undefined;
+        }
+
+        // So far so good.  Now break up the container for the candidate and check if all
+        // the dotted parts match up correctly.
+        const totalMatch = candidateMatch;
+
+        for (let i = dotSeparatedSegments.length - 2, j = candidateContainers.length - 1;
+             i >= 0;
+             i -= 1, j -= 1) {
+
+            const segment = dotSeparatedSegments[i];
+            const containerName = candidateContainers[j];
+
+            const containerMatch = matchSegment(containerName, segment, stringToWordSpans);
+            if (!containerMatch) {
+                // This container didn't match the pattern piece.  So there's no match at all.
+                return undefined;
             }
 
+            addRange(totalMatch, containerMatch);
+        }
+
+        // Success, this symbol's full name matched against the dotted name the user was asking
+        // about.
+        return totalMatch;
+    }
+
+    function getWordSpans(word: string, stringToWordSpans: Map<TextSpan[]>): TextSpan[] {
+        let spans = stringToWordSpans.get(word);
+        if (!spans) {
+            stringToWordSpans.set(word, spans = breakIntoWordSpans(word));
+        }
+        return spans;
+    }
+
+    function matchTextChunk(candidate: string, chunk: TextChunk, punctuationStripped: boolean, stringToWordSpans: Map<TextSpan[]>): PatternMatch {
+        const index = indexOfIgnoringCase(candidate, chunk.textLowerCase);
+        if (index === 0) {
+            if (chunk.text.length === candidate.length) {
+                // a) Check if the part matches the candidate entirely, in an case insensitive or
+                //    sensitive manner.  If it does, return that there was an exact match.
+                return createPatternMatch(PatternMatchKind.exact, punctuationStripped, /*isCaseSensitive:*/ candidate === chunk.text);
+            }
+            else {
+                // b) Check if the part is a prefix of the candidate, in a case insensitive or sensitive
+                //    manner.  If it does, return that there was a prefix match.
+                return createPatternMatch(PatternMatchKind.prefix, punctuationStripped, /*isCaseSensitive:*/ startsWith(candidate, chunk.text));
+            }
+        }
+
+        const isLowercase = chunk.isLowerCase;
+        if (isLowercase) {
+            if (index > 0) {
+                // c) If the part is entirely lowercase, then check if it is contained anywhere in the
+                //    candidate in a case insensitive manner.  If so, return that there was a substring
+                //    match.
+                //
+                //    Note: We only have a substring match if the lowercase part is prefix match of some
+                //    word part. That way we don't match something like 'Class' when the user types 'a'.
+                //    But we would match 'FooAttribute' (since 'Attribute' starts with 'a').
+                const wordSpans = getWordSpans(candidate, stringToWordSpans);
+                for (const span of wordSpans) {
+                    if (partStartsWith(candidate, span, chunk.text, /*ignoreCase:*/ true)) {
+                        return createPatternMatch(PatternMatchKind.substring, punctuationStripped,
+                            /*isCaseSensitive:*/ partStartsWith(candidate, span, chunk.text, /*ignoreCase:*/ false));
+                    }
+                }
+            }
+        }
+        else {
+            // d) If the part was not entirely lowercase, then check if it is contained in the
+            //    candidate in a case *sensitive* manner. If so, return that there was a substring
+            //    match.
+            if (candidate.indexOf(chunk.text) > 0) {
+                return createPatternMatch(PatternMatchKind.substring, punctuationStripped, /*isCaseSensitive:*/ true);
+            }
+        }
+
+        if (!isLowercase) {
+            // e) If the part was not entirely lowercase, then attempt a camel cased match as well.
+            if (chunk.characterSpans.length > 0) {
+                const candidateParts = getWordSpans(candidate, stringToWordSpans);
+                let camelCaseWeight = tryCamelCaseMatch(candidate, candidateParts, chunk, /*ignoreCase:*/ false);
+                if (camelCaseWeight !== undefined) {
+                    return createPatternMatch(PatternMatchKind.camelCase, punctuationStripped, /*isCaseSensitive:*/ true, /*camelCaseWeight:*/ camelCaseWeight);
+                }
+
+                camelCaseWeight = tryCamelCaseMatch(candidate, candidateParts, chunk, /*ignoreCase:*/ true);
+                if (camelCaseWeight !== undefined) {
+                    return createPatternMatch(PatternMatchKind.camelCase, punctuationStripped, /*isCaseSensitive:*/ false, /*camelCaseWeight:*/ camelCaseWeight);
+                }
+            }
+        }
+
+        if (isLowercase) {
+            // f) Is the pattern a substring of the candidate starting on one of the candidate's word boundaries?
+
+            // We could check every character boundary start of the candidate for the pattern. However, that's
+            // an m * n operation in the wost case. Instead, find the first instance of the pattern
+            // substring, and see if it starts on a capital letter. It seems unlikely that the user will try to
+            // filter the list based on a substring that starts on a capital letter and also with a lowercase one.
+            // (Pattern: fogbar, Candidate: quuxfogbarFogBar).
+            if (chunk.text.length < candidate.length) {
+                if (index > 0 && isUpperCaseLetter(candidate.charCodeAt(index))) {
+                    return createPatternMatch(PatternMatchKind.substring, punctuationStripped, /*isCaseSensitive:*/ false);
+                }
+            }
+        }
+
+        return undefined;
+    }
+
+    function containsSpaceOrAsterisk(text: string): boolean {
+        for (let i = 0; i < text.length; i++) {
+            const ch = text.charCodeAt(i);
+            if (ch === CharacterCodes.space || ch === CharacterCodes.asterisk) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    function matchSegment(candidate: string, segment: Segment, stringToWordSpans: Map<TextSpan[]>): PatternMatch[] {
+        // First check if the segment matches as is.  This is also useful if the segment contains
+        // characters we would normally strip when splitting into parts that we also may want to
+        // match in the candidate.  For example if the segment is "@int" and the candidate is
+        // "@int", then that will show up as an exact match here.
+        //
+        // Note: if the segment contains a space or an asterisk then we must assume that it's a
+        // multi-word segment.
+        if (!containsSpaceOrAsterisk(segment.totalTextChunk.text)) {
+            const match = matchTextChunk(candidate, segment.totalTextChunk, /*punctuationStripped:*/ false, stringToWordSpans);
+            if (match) {
+                return [match];
+            }
+        }
+
+        // The logic for pattern matching is now as follows:
+        //
+        // 1) Break the segment passed in into words.  Breaking is rather simple and a
+        //    good way to think about it that if gives you all the individual alphanumeric words
+        //    of the pattern.
+        //
+        // 2) For each word try to match the word against the candidate value.
+        //
+        // 3) Matching is as follows:
+        //
+        //   a) Check if the word matches the candidate entirely, in an case insensitive or
+        //    sensitive manner.  If it does, return that there was an exact match.
+        //
+        //   b) Check if the word is a prefix of the candidate, in a case insensitive or
+        //      sensitive manner.  If it does, return that there was a prefix match.
+        //
+        //   c) If the word is entirely lowercase, then check if it is contained anywhere in the
+        //      candidate in a case insensitive manner.  If so, return that there was a substring
+        //      match.
+        //
+        //      Note: We only have a substring match if the lowercase part is prefix match of
+        //      some word part. That way we don't match something like 'Class' when the user
+        //      types 'a'. But we would match 'FooAttribute' (since 'Attribute' starts with
+        //      'a').
+        //
+        //   d) If the word was not entirely lowercase, then check if it is contained in the
+        //      candidate in a case *sensitive* manner. If so, return that there was a substring
+        //      match.
+        //
+        //   e) If the word was not entirely lowercase, then attempt a camel cased match as
+        //      well.
+        //
+        //   f) The word is all lower case. Is it a case insensitive substring of the candidate starting
+        //      on a part boundary of the candidate?
+        //
+        // Only if all words have some sort of match is the pattern considered matched.
+
+        const subWordTextChunks = segment.subWordTextChunks;
+        let matches: PatternMatch[];
+
+        for (const subWordTextChunk of subWordTextChunks) {
+            // Try to match the candidate with this word
+            const result = matchTextChunk(candidate, subWordTextChunk, /*punctuationStripped:*/ true, stringToWordSpans);
+            if (!result) {
+                return undefined;
+            }
+
+            matches = matches || [];
+            matches.push(result);
+        }
+
+        return matches;
+    }
+
+    function partStartsWith(candidate: string, candidateSpan: TextSpan, pattern: string, ignoreCase: boolean, patternSpan?: TextSpan): boolean {
+        const patternPartStart = patternSpan ? patternSpan.start : 0;
+        const patternPartLength = patternSpan ? patternSpan.length : pattern.length;
+
+        if (patternPartLength > candidateSpan.length) {
+            // Pattern part is longer than the candidate part. There can never be a match.
             return false;
         }
 
-        function matchSegment(candidate: string, segment: Segment): PatternMatch[] {
-            // First check if the segment matches as is.  This is also useful if the segment contains
-            // characters we would normally strip when splitting into parts that we also may want to
-            // match in the candidate.  For example if the segment is "@int" and the candidate is
-            // "@int", then that will show up as an exact match here.
-            //
-            // Note: if the segment contains a space or an asterisk then we must assume that it's a
-            // multi-word segment.
-            if (!containsSpaceOrAsterisk(segment.totalTextChunk.text)) {
-                const match = matchTextChunk(candidate, segment.totalTextChunk, /*punctuationStripped:*/ false);
-                if (match) {
-                    return [match];
+        if (ignoreCase) {
+            for (let i = 0; i < patternPartLength; i++) {
+                const ch1 = pattern.charCodeAt(patternPartStart + i);
+                const ch2 = candidate.charCodeAt(candidateSpan.start + i);
+                if (toLowerCase(ch1) !== toLowerCase(ch2)) {
+                    return false;
                 }
             }
-
-            // The logic for pattern matching is now as follows:
-            //
-            // 1) Break the segment passed in into words.  Breaking is rather simple and a
-            //    good way to think about it that if gives you all the individual alphanumeric words
-            //    of the pattern.
-            //
-            // 2) For each word try to match the word against the candidate value.
-            //
-            // 3) Matching is as follows:
-            //
-            //   a) Check if the word matches the candidate entirely, in an case insensitive or
-            //    sensitive manner.  If it does, return that there was an exact match.
-            //
-            //   b) Check if the word is a prefix of the candidate, in a case insensitive or
-            //      sensitive manner.  If it does, return that there was a prefix match.
-            //
-            //   c) If the word is entirely lowercase, then check if it is contained anywhere in the
-            //      candidate in a case insensitive manner.  If so, return that there was a substring
-            //      match.
-            //
-            //      Note: We only have a substring match if the lowercase part is prefix match of
-            //      some word part. That way we don't match something like 'Class' when the user
-            //      types 'a'. But we would match 'FooAttribute' (since 'Attribute' starts with
-            //      'a').
-            //
-            //   d) If the word was not entirely lowercase, then check if it is contained in the
-            //      candidate in a case *sensitive* manner. If so, return that there was a substring
-            //      match.
-            //
-            //   e) If the word was not entirely lowercase, then attempt a camel cased match as
-            //      well.
-            //
-            //   f) The word is all lower case. Is it a case insensitive substring of the candidate starting
-            //      on a part boundary of the candidate?
-            //
-            // Only if all words have some sort of match is the pattern considered matched.
-
-            const subWordTextChunks = segment.subWordTextChunks;
-            let matches: PatternMatch[];
-
-            for (const subWordTextChunk of subWordTextChunks) {
-                // Try to match the candidate with this word
-                const result = matchTextChunk(candidate, subWordTextChunk, /*punctuationStripped:*/ true);
-                if (!result) {
-                    return undefined;
+        }
+        else {
+            for (let i = 0; i < patternPartLength; i++) {
+                const ch1 = pattern.charCodeAt(patternPartStart + i);
+                const ch2 = candidate.charCodeAt(candidateSpan.start + i);
+                if (ch1 !== ch2) {
+                    return false;
                 }
-
-                matches = matches || [];
-                matches.push(result);
             }
-
-            return matches;
         }
 
-        function partStartsWith(candidate: string, candidateSpan: TextSpan, pattern: string, ignoreCase: boolean, patternSpan?: TextSpan): boolean {
-            const patternPartStart = patternSpan ? patternSpan.start : 0;
-            const patternPartLength = patternSpan ? patternSpan.length : pattern.length;
+        return true;
+    }
 
-            if (patternPartLength > candidateSpan.length) {
-                // Pattern part is longer than the candidate part. There can never be a match.
-                return false;
+    function tryCamelCaseMatch(candidate: string, candidateParts: TextSpan[], chunk: TextChunk, ignoreCase: boolean): number {
+        const chunkCharacterSpans = chunk.characterSpans;
+
+        // Note: we may have more pattern parts than candidate parts.  This is because multiple
+        // pattern parts may match a candidate part.  For example "SiUI" against "SimpleUI".
+        // We'll have 3 pattern parts Si/U/I against two candidate parts Simple/UI.  However, U
+        // and I will both match in UI.
+
+        let currentCandidate = 0;
+        let currentChunkSpan = 0;
+        let firstMatch: number;
+        let contiguous: boolean;
+
+        while (true) {
+            // Let's consider our termination cases
+            if (currentChunkSpan === chunkCharacterSpans.length) {
+                // We did match! We shall assign a weight to this
+                let weight = 0;
+
+                // Was this contiguous?
+                if (contiguous) {
+                    weight += 1;
+                }
+
+                // Did we start at the beginning of the candidate?
+                if (firstMatch === 0) {
+                    weight += 2;
+                }
+
+                return weight;
+            }
+            else if (currentCandidate === candidateParts.length) {
+                // No match, since we still have more of the pattern to hit
+                return undefined;
             }
 
-            if (ignoreCase) {
-                for (let i = 0; i < patternPartLength; i++) {
-                    const ch1 = pattern.charCodeAt(patternPartStart + i);
-                    const ch2 = candidate.charCodeAt(candidateSpan.start + i);
-                    if (toLowerCase(ch1) !== toLowerCase(ch2)) {
-                        return false;
-                    }
-                }
-            }
-            else {
-                for (let i = 0; i < patternPartLength; i++) {
-                    const ch1 = pattern.charCodeAt(patternPartStart + i);
-                    const ch2 = candidate.charCodeAt(candidateSpan.start + i);
-                    if (ch1 !== ch2) {
-                        return false;
-                    }
-                }
-            }
+            let candidatePart = candidateParts[currentCandidate];
+            let gotOneMatchThisCandidate = false;
 
-            return true;
-        }
+            // Consider the case of matching SiUI against SimpleUIElement. The candidate parts
+            // will be Simple/UI/Element, and the pattern parts will be Si/U/I.  We'll match 'Si'
+            // against 'Simple' first.  Then we'll match 'U' against 'UI'. However, we want to
+            // still keep matching pattern parts against that candidate part.
+            for (; currentChunkSpan < chunkCharacterSpans.length; currentChunkSpan++) {
+                const chunkCharacterSpan = chunkCharacterSpans[currentChunkSpan];
 
-        function tryCamelCaseMatch(candidate: string, candidateParts: TextSpan[], chunk: TextChunk, ignoreCase: boolean): number {
-            const chunkCharacterSpans = chunk.characterSpans;
-
-            // Note: we may have more pattern parts than candidate parts.  This is because multiple
-            // pattern parts may match a candidate part.  For example "SiUI" against "SimpleUI".
-            // We'll have 3 pattern parts Si/U/I against two candidate parts Simple/UI.  However, U
-            // and I will both match in UI.
-
-            let currentCandidate = 0;
-            let currentChunkSpan = 0;
-            let firstMatch: number;
-            let contiguous: boolean;
-
-            while (true) {
-                // Let's consider our termination cases
-                if (currentChunkSpan === chunkCharacterSpans.length) {
-                    // We did match! We shall assign a weight to this
-                    let weight = 0;
-
-                    // Was this contiguous?
-                    if (contiguous) {
-                        weight += 1;
-                    }
-
-                    // Did we start at the beginning of the candidate?
-                    if (firstMatch === 0) {
-                        weight += 2;
-                    }
-
-                    return weight;
-                }
-                else if (currentCandidate === candidateParts.length) {
-                    // No match, since we still have more of the pattern to hit
-                    return undefined;
-                }
-
-                let candidatePart = candidateParts[currentCandidate];
-                let gotOneMatchThisCandidate = false;
-
-                // Consider the case of matching SiUI against SimpleUIElement. The candidate parts
-                // will be Simple/UI/Element, and the pattern parts will be Si/U/I.  We'll match 'Si'
-                // against 'Simple' first.  Then we'll match 'U' against 'UI'. However, we want to
-                // still keep matching pattern parts against that candidate part.
-                for (; currentChunkSpan < chunkCharacterSpans.length; currentChunkSpan++) {
-                    const chunkCharacterSpan = chunkCharacterSpans[currentChunkSpan];
-
-                    if (gotOneMatchThisCandidate) {
-                        // We've already gotten one pattern part match in this candidate.  We will
-                        // only continue trying to consumer pattern parts if the last part and this
-                        // part are both upper case.
-                        if (!isUpperCaseLetter(chunk.text.charCodeAt(chunkCharacterSpans[currentChunkSpan - 1].start)) ||
-                            !isUpperCaseLetter(chunk.text.charCodeAt(chunkCharacterSpans[currentChunkSpan].start))) {
-                            break;
-                        }
-                    }
-
-                    if (!partStartsWith(candidate, candidatePart, chunk.text, ignoreCase, chunkCharacterSpan)) {
+                if (gotOneMatchThisCandidate) {
+                    // We've already gotten one pattern part match in this candidate.  We will
+                    // only continue trying to consumer pattern parts if the last part and this
+                    // part are both upper case.
+                    if (!isUpperCaseLetter(chunk.text.charCodeAt(chunkCharacterSpans[currentChunkSpan - 1].start)) ||
+                        !isUpperCaseLetter(chunk.text.charCodeAt(chunkCharacterSpans[currentChunkSpan].start))) {
                         break;
                     }
-
-                    gotOneMatchThisCandidate = true;
-
-                    firstMatch = firstMatch === undefined ? currentCandidate : firstMatch;
-
-                    // If we were contiguous, then keep that value.  If we weren't, then keep that
-                    // value.  If we don't know, then set the value to 'true' as an initial match is
-                    // obviously contiguous.
-                    contiguous = contiguous === undefined ? true : contiguous;
-
-                    candidatePart = createTextSpan(candidatePart.start + chunkCharacterSpan.length, candidatePart.length - chunkCharacterSpan.length);
                 }
 
-                // Check if we matched anything at all.  If we didn't, then we need to unset the
-                // contiguous bit if we currently had it set.
-                // If we haven't set the bit yet, then that means we haven't matched anything so
-                // far, and we don't want to change that.
-                if (!gotOneMatchThisCandidate && contiguous !== undefined) {
-                    contiguous = false;
+                if (!partStartsWith(candidate, candidatePart, chunk.text, ignoreCase, chunkCharacterSpan)) {
+                    break;
                 }
 
-                // Move onto the next candidate.
-                currentCandidate++;
+                gotOneMatchThisCandidate = true;
+
+                firstMatch = firstMatch === undefined ? currentCandidate : firstMatch;
+
+                // If we were contiguous, then keep that value.  If we weren't, then keep that
+                // value.  If we don't know, then set the value to 'true' as an initial match is
+                // obviously contiguous.
+                contiguous = contiguous === undefined ? true : contiguous;
+
+                candidatePart = createTextSpan(candidatePart.start + chunkCharacterSpan.length, candidatePart.length - chunkCharacterSpan.length);
             }
+
+            // Check if we matched anything at all.  If we didn't, then we need to unset the
+            // contiguous bit if we currently had it set.
+            // If we haven't set the bit yet, then that means we haven't matched anything so
+            // far, and we don't want to change that.
+            if (!gotOneMatchThisCandidate && contiguous !== undefined) {
+                contiguous = false;
+            }
+
+            // Move onto the next candidate.
+            currentCandidate++;
         }
     }
 
