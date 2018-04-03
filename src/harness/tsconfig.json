@@ -54,6 +54,8 @@
         "../services/navigationBar.ts",
         "../services/outliningElementsCollector.ts",
         "../services/patternMatcher.ts",
+        "../services/pathCompletions.ts",
+        "../services/completions.ts",
         "../services/services.ts",
         "../services/shims.ts",
         "../services/signatureHelp.ts",
