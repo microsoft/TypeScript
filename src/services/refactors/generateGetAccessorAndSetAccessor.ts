@@ -59,40 +59,6 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         return { renameFilename, renameLocation, edits };
     }
 
-    function getUniqueName(baseName: string, fileText: string): string {
-        let nameText = baseName;
-        for (let i = 1; stringContains(fileText, nameText); i++) {
-            nameText = `${baseName}_${i}`;
-        }
-        return nameText;
-    }
-
-    function getRenameLocation(edits: ReadonlyArray<FileTextChanges>, renameFilename: string, fieldName: string, isDeclaredBeforeUse: boolean): number {
-        let delta = 0;
-        let lastPos = -1;
-        for (const { fileName, textChanges } of edits) {
-            Debug.assert(fileName === renameFilename);
-            for (const change of textChanges) {
-                const { span, newText } = change;
-                const index = newText.indexOf(fieldName);
-                if (index !== -1) {
-                    lastPos = span.start + delta + index;
-
-                    // If the reference comes first, return immediately.
-                    if (!isDeclaredBeforeUse) {
-                        return lastPos;
-                    }
-                }
-                delta += newText.length - span.length;
-            }
-        }
-
-        // If the declaration comes first, return the position of the last occurrence.
-        Debug.assert(isDeclaredBeforeUse);
-        Debug.assert(lastPos >= 0);
-        return lastPos;
-    }
-
     function getAccessorModifiers(declaration: AccepedDeclaration, isStatic: boolean): NodeArray<Modifier> {
         if (!declaration.modifiers || getModifierFlags(declaration) & ModifierFlags.Private) {
             return createNodeArray(
@@ -109,7 +75,6 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     }
 
     function getPropertyDeclarationInfo(propertyDeclaration: PropertyDeclaration): DeclarationInfo | undefined {
-        if (!propertyDeclaration || propertyDeclaration.name.kind !== SyntaxKind.Identifier) return undefined;
         if (!isClassLike(propertyDeclaration.parent) || !propertyDeclaration.parent.members) return undefined;
 
         return {
@@ -119,7 +84,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     }
 
     function getParameterPropertyDeclarationInfo(parameterDeclaration: ParameterDeclaration): DeclarationInfo | undefined {
-        if (!parameterDeclaration || !isIdentifier(parameterDeclaration.name) || !isClassLike(parameterDeclaration.parent.parent) || !parameterDeclaration.parent.parent.members) return undefined;
+        if (!isClassLike(parameterDeclaration.parent.parent) || !parameterDeclaration.parent.parent.members) return undefined;
 
         return {
             isStatic: false,
@@ -134,16 +99,12 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         const meaning = ModifierFlags.AccessibilityModifier | ModifierFlags.Static;
         if (!declaration || !isIdentifier(declaration.name) || (getModifierFlags(declaration) | meaning) !== meaning) return undefined;
 
-        const accessorName = declaration.name.text;
-        const fieldName = getUniqueName(`_${accessorName}`, file.text);
-
         const info = isPropertyDeclaration(declaration) ? getPropertyDeclarationInfo(declaration) : getParameterPropertyDeclarationInfo(declaration);
-
         return {
             ...info,
-            fieldName,
             declaration,
-            accessorName
+            fieldName: getUniqueName(`_${(<Identifier>declaration.name).text}`, file.text),
+            accessorName: (<Identifier>declaration.name).text
         };
     }
 

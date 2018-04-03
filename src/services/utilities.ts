@@ -1519,4 +1519,45 @@ namespace ts {
     function getFirstChild(node: Node): Node | undefined {
         return node.forEachChild(child => child);
     }
+
+    /* @internal */
+    export function getUniqueName(baseName: string, fileText: string): string {
+        let nameText = baseName;
+        for (let i = 1; stringContains(fileText, nameText); i++) {
+            nameText = `${baseName}_${i}`;
+        }
+        return nameText;
+    }
+
+    /**
+     * @return The index of the (only) reference to the extracted symbol.  We want the cursor
+     * to be on the reference, rather than the declaration, because it's closer to where the
+     * user was before extracting it.
+     */
+    /* @internal */
+    export function getRenameLocation(edits: ReadonlyArray<FileTextChanges>, renameFilename: string, name: string, isDeclaredBeforeUse: boolean): number {
+        let delta = 0;
+        let lastPos = -1;
+        for (const { fileName, textChanges } of edits) {
+            Debug.assert(fileName === renameFilename);
+            for (const change of textChanges) {
+                const { span, newText } = change;
+                const index = newText.indexOf(name);
+                if (index !== -1) {
+                    lastPos = span.start + delta + index;
+
+                    // If the reference comes first, return immediately.
+                    if (!isDeclaredBeforeUse) {
+                        return lastPos;
+                    }
+                }
+                delta += newText.length - span.length;
+            }
+        }
+
+        // If the declaration comes first, return the position of the last occurrence.
+        Debug.assert(isDeclaredBeforeUse);
+        Debug.assert(lastPos >= 0);
+        return lastPos;
+    }
 }
