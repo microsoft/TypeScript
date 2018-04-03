@@ -735,7 +735,7 @@ namespace ts {
     }
 
     export function isLiteralImportTypeNode(n: Node): n is LiteralImportTypeNode {
-        return n.kind === SyntaxKind.ImportTypeNode &&
+        return n.kind === SyntaxKind.ImportType &&
             (n as ImportTypeNode).argument.kind === SyntaxKind.LiteralType &&
             isStringLiteral(((n as ImportTypeNode).argument as LiteralTypeNode).literal);
     }
@@ -811,7 +811,7 @@ namespace ts {
                 if (parent.kind === SyntaxKind.TypeQuery) {
                     return false;
                 }
-                if (parent.kind === SyntaxKind.ImportTypeNode) {
+                if (parent.kind === SyntaxKind.ImportType) {
                     return !(parent as ImportTypeNode).isTypeOf;
                 }
                 // Do not recursively call isPartOfTypeNode on the parent. In the example:
@@ -1713,7 +1713,7 @@ namespace ts {
                 return node.moduleSpecifier;
             case SyntaxKind.ImportEqualsDeclaration:
                 return node.moduleReference.kind === SyntaxKind.ExternalModuleReference ? node.moduleReference.expression : undefined;
-            case SyntaxKind.ImportTypeNode:
+            case SyntaxKind.ImportType:
                 return isLiteralImportTypeNode(node) ? node.argument.literal : undefined;
             default:
                 return Debug.assertNever(node);
@@ -5736,7 +5736,7 @@ namespace ts {
         const kind = node.kind;
         return kind === SyntaxKind.PropertyAccessExpression
             || kind === SyntaxKind.QualifiedName
-            || kind === SyntaxKind.ImportTypeNode;
+            || kind === SyntaxKind.ImportType;
     }
 
     // Expression

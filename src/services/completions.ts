@@ -380,7 +380,7 @@ namespace ts.Completions {
                         //      }
                         //      let x: Foo["/*completion position*/"]
                         return stringLiteralCompletionsFromProperties(typeChecker.getTypeFromTypeNode((node.parent.parent as IndexedAccessTypeNode).objectType));
-                    case SyntaxKind.ImportTypeNode:
+                    case SyntaxKind.ImportType:
                         return { kind: StringLiteralCompletionKind.Paths, paths: PathCompletions.getStringLiteralCompletionsFromModuleNames(sourceFile, node, compilerOptions, host, typeChecker) };
                     default:
                         return undefined;
@@ -881,7 +881,7 @@ namespace ts.Completions {
                     case SyntaxKind.QualifiedName:
                         node = (parent as QualifiedName).left;
                         break;
-                    case SyntaxKind.ImportTypeNode:
+                    case SyntaxKind.ImportType:
                         node = parent;
                         break;
                     default:
@@ -1067,7 +1067,7 @@ namespace ts.Completions {
             }
             else {
                 for (const symbol of type.getApparentProperties()) {
-                    if (typeChecker.isValidPropertyAccessForCompletions(node.kind === SyntaxKind.ImportTypeNode ? <ImportTypeNode>node : <PropertyAccessExpression>node.parent, type, symbol)) {
+                    if (typeChecker.isValidPropertyAccessForCompletions(node.kind === SyntaxKind.ImportType ? <ImportTypeNode>node : <PropertyAccessExpression>node.parent, type, symbol)) {
                         addPropertySymbol(symbol);
                     }
                 }
