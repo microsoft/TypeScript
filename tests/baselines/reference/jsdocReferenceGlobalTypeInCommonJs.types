@@ -16,7 +16,7 @@ Puppeteer.connect;
 
 === tests/cases/compiler/puppet.d.ts ===
 export as namespace Puppeteer;
->Puppeteer : typeof import("tests/cases/compiler/puppet")
+>Puppeteer : typeof "tests/cases/compiler/puppet"
 
 export interface Keyboard {
 >Keyboard : Keyboard
