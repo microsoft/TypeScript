@@ -810,7 +810,7 @@ namespace ts {
     }
 
     export function createImportTypeNode(argument: TypeNode, qualifier?: EntityName, typeArguments?: ReadonlyArray<TypeNode>, isTypeOf?: boolean) {
-        const node = <ImportTypeNode>createSynthesizedNode(SyntaxKind.ImportTypeNode);
+        const node = <ImportTypeNode>createSynthesizedNode(SyntaxKind.ImportType);
         node.argument = argument;
         node.qualifier = qualifier;
         node.typeArguments = asNodeArray(typeArguments);

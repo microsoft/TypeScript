@@ -615,7 +615,7 @@ namespace ts {
                     return emitMappedType(<MappedTypeNode>node);
                 case SyntaxKind.LiteralType:
                     return emitLiteralType(<LiteralTypeNode>node);
-                case SyntaxKind.ImportTypeNode:
+                case SyntaxKind.ImportType:
                     return emitImportTypeNode(<ImportTypeNode>node);
                 case SyntaxKind.JSDocAllType:
                     write("*");

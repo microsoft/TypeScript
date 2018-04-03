@@ -398,7 +398,7 @@ namespace ts {
                 return updateInferTypeNode(<InferTypeNode>node,
                     visitNode((<InferTypeNode>node).typeParameter, visitor, isTypeParameterDeclaration));
 
-            case SyntaxKind.ImportTypeNode:
+            case SyntaxKind.ImportType:
                 return updateImportTypeNode(<ImportTypeNode>node,
                     visitNode((<ImportTypeNode>node).argument, visitor, isTypeNode),
                     visitNode((<ImportTypeNode>node).qualifier, visitor, isEntityName),

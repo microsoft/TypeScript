@@ -8884,7 +8884,7 @@ namespace ts {
                     return getTypeFromConditionalTypeNode(<ConditionalTypeNode>node);
                 case SyntaxKind.InferType:
                     return getTypeFromInferTypeNode(<InferTypeNode>node);
-                case SyntaxKind.ImportTypeNode:
+                case SyntaxKind.ImportType:
                     return getTypeFromImportTypeNode(<ImportTypeNode>node);
                 // This function assumes that an identifier or qualified name is a type expression
                 // Callers should first ensure this by calling isTypeNode
@@ -16244,7 +16244,7 @@ namespace ts {
             const flags = getDeclarationModifierFlagsFromSymbol(prop);
             const errorNode = node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.VariableDeclaration ?
                 node.name :
-                node.kind === SyntaxKind.ImportTypeNode ?
+                node.kind === SyntaxKind.ImportType ?
                     node :
                     (<QualifiedName>node).right;
 
@@ -16691,13 +16691,13 @@ namespace ts {
                     return isValidPropertyAccessWithType(node, node.expression, propertyName, getWidenedType(checkExpression(node.expression)));
                 case SyntaxKind.QualifiedName:
                     return isValidPropertyAccessWithType(node, node.left, propertyName, getWidenedType(checkExpression(node.left)));
-                case SyntaxKind.ImportTypeNode:
+                case SyntaxKind.ImportType:
                     return isValidPropertyAccessWithType(node, node, propertyName, getTypeFromTypeNode(node));
             }
         }
 
         function isValidPropertyAccessForCompletions(node: PropertyAccessExpression | ImportTypeNode, type: Type, property: Symbol): boolean {
-            return isValidPropertyAccessWithType(node, node.kind === SyntaxKind.ImportTypeNode ? node : node.expression, property.escapedName, type)
+            return isValidPropertyAccessWithType(node, node.kind === SyntaxKind.ImportType ? node : node.expression, property.escapedName, type)
                 && (!(property.flags & SymbolFlags.Method) || isValidMethodAccess(property, type));
         }
         function isValidMethodAccess(method: Symbol, actualThisType: Type): boolean {
@@ -24605,7 +24605,7 @@ namespace ts {
                     return checkConditionalType(<ConditionalTypeNode>node);
                 case SyntaxKind.InferType:
                     return checkInferType(<InferTypeNode>node);
-                case SyntaxKind.ImportTypeNode:
+                case SyntaxKind.ImportType:
                     return checkImportType(<ImportTypeNode>node);
                 case SyntaxKind.JSDocAugmentsTag:
                     return checkJSDocAugmentsTag(node as JSDocAugmentsTag);
@@ -25123,7 +25123,7 @@ namespace ts {
                 node = parent;
                 parent = parent.parent;
             }
-            if (parent && parent.kind === SyntaxKind.ImportTypeNode && (parent as ImportTypeNode).qualifier === node) {
+            if (parent && parent.kind === SyntaxKind.ImportType && (parent as ImportTypeNode).qualifier === node) {
                 return parent as ImportTypeNode;
             }
             return undefined;
@@ -25344,7 +25344,7 @@ namespace ts {
                 case SyntaxKind.FunctionKeyword:
                 case SyntaxKind.EqualsGreaterThanToken:
                     return getSymbolOfNode(node.parent);
-                case SyntaxKind.ImportTypeNode:
+                case SyntaxKind.ImportType:
                     return isLiteralImportTypeNode(node) ? getSymbolAtLocation(node.argument.literal) : undefined;
 
                 default:

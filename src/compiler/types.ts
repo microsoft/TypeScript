@@ -284,7 +284,7 @@ namespace ts {
         IndexedAccessType,
         MappedType,
         LiteralType,
-        ImportTypeNode,
+        ImportType,
         // Binding patterns
         ObjectBindingPattern,
         ArrayBindingPattern,
@@ -446,7 +446,7 @@ namespace ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypePredicate,
-        LastTypeNode = ImportTypeNode,
+        LastTypeNode = ImportType,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
@@ -1069,7 +1069,7 @@ namespace ts {
     }
 
     export interface ImportTypeNode extends NodeWithTypeArguments {
-        kind: SyntaxKind.ImportTypeNode;
+        kind: SyntaxKind.ImportType;
         isTypeOf?: boolean;
         argument: TypeNode;
         qualifier?: EntityName;

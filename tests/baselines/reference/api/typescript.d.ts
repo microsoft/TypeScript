@@ -240,7 +240,7 @@ declare namespace ts {
         IndexedAccessType = 175,
         MappedType = 176,
         LiteralType = 177,
-        ImportTypeNode = 178,
+        ImportType = 178,
         ObjectBindingPattern = 179,
         ArrayBindingPattern = 180,
         BindingElement = 181,
@@ -699,7 +699,7 @@ declare namespace ts {
         kind: SyntaxKind.AnyKeyword | SyntaxKind.NumberKeyword | SyntaxKind.ObjectKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.StringKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.ThisKeyword | SyntaxKind.VoidKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.NullKeyword | SyntaxKind.NeverKeyword;
     }
     interface ImportTypeNode extends NodeWithTypeArguments {
-        kind: SyntaxKind.ImportTypeNode;
+        kind: SyntaxKind.ImportType;
         isTypeOf?: boolean;
         argument: TypeNode;
         qualifier?: EntityName;

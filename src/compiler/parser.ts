@@ -189,7 +189,7 @@ namespace ts {
                     visitNode(cbNode, (<ConditionalTypeNode>node).falseType);
             case SyntaxKind.InferType:
                 return visitNode(cbNode, (<InferTypeNode>node).typeParameter);
-            case SyntaxKind.ImportTypeNode:
+            case SyntaxKind.ImportType:
                 return visitNode(cbNode, (<ImportTypeNode>node).argument) ||
                     visitNode(cbNode, (<ImportTypeNode>node).qualifier) ||
                     visitNodes(cbNode, cbNodes, (<ImportTypeNode>node).typeArguments);
@@ -2744,7 +2744,7 @@ namespace ts {
 
         function parseImportType(): ImportTypeNode {
             sourceFile.flags |= NodeFlags.PossiblyContainsDynamicImport;
-            const node = createNode(SyntaxKind.ImportTypeNode) as ImportTypeNode;
+            const node = createNode(SyntaxKind.ImportType) as ImportTypeNode;
             if (parseOptional(SyntaxKind.TypeOfKeyword)) {
                 node.isTypeOf = true;
             }
