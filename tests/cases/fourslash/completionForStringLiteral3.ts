@@ -9,4 +9,4 @@
 ////
 ////f("/*2*/
 
-verify.completionsAt(["1", "2"], ["A", "B", "C"]);
+verify.completionsAt(["1", "2"], ["A", "B", "C"], { isNewIdentifierLocation: true });
