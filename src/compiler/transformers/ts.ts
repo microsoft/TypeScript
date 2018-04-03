@@ -1991,7 +1991,7 @@ namespace ts {
                     return createIdentifier("Promise");
 
                 case TypeReferenceSerializationKind.ObjectType:
-                    if (isIdentifier(node.typeName) && node.typeName.escapedText === 'Promise') {
+                    if (isIdentifier(node.typeName) && node.typeName.escapedText === "Promise") {
                         return createLogicalOr(
                             createLogicalAnd(
                                 createTypeCheck(createIdentifier("Promise"), "function"),
@@ -2000,6 +2000,8 @@ namespace ts {
                             createIdentifier("Object")
                         );
                     }
+                    // make 'no-switch-case-fall-through' happy
+                    return createIdentifier("Object");
                 default:
                     return createIdentifier("Object");
             }
