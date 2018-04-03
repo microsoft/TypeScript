@@ -17269,12 +17269,9 @@ namespace ts {
          */
         function getThisArgumentOfCall(node: CallLikeExpression): LeftHandSideExpression {
             if (node.kind === SyntaxKind.CallExpression) {
-                const callee = node.expression;
-                if (callee.kind === SyntaxKind.PropertyAccessExpression) {
-                    return (callee as PropertyAccessExpression).expression;
-                }
-                else if (callee.kind === SyntaxKind.ElementAccessExpression) {
-                    return (callee as ElementAccessExpression).expression;
+                const callee = skipOuterExpressions(node.expression);
+                if (callee.kind === SyntaxKind.PropertyAccessExpression || callee.kind === SyntaxKind.ElementAccessExpression) {
+                    return (callee as PropertyAccessExpression | ElementAccessExpression).expression;
                 }
             }
         }

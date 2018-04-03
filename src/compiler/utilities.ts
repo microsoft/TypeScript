@@ -2022,7 +2022,7 @@ namespace ts {
     export function skipParentheses(node: Node): Node;
     export function skipParentheses(node: Node): Node {
         while (node.kind === SyntaxKind.ParenthesizedExpression) {
-            node = (<ParenthesizedExpression>node).expression;
+            node = (node as ParenthesizedExpression).expression;
         }
 
         return node;
