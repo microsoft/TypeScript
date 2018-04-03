@@ -304,6 +304,11 @@ namespace ts {
                     bodyLocation = node.statement;
                     statementsLocation = node.statement.statements;
                 }
+                else if (node.statement) {
+                    append(statements, node.statement);
+                    bodyLocation = node.statement;
+                    statementsLocation = node.statement;
+                }
                 return updateForOf(
                     node,
                     node.awaitModifier,
