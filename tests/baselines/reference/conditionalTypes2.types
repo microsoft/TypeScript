@@ -444,3 +444,85 @@ function foo<T>(value: T) {
     }
 }
 
+// Repro from #23052
+
+type A<T, V, E> =
+>A : A<T, V, E>
+>T : T
+>V : V
+>E : E
+
+  T extends object
+>T : T
+
+    ? { [Q in { [P in keyof T]: T[P] extends V ? P : P; }[keyof T]]: A<T[Q], V, E>; }
+>Q : Q
+>P : P
+>T : T
+>T : T
+>P : P
+>V : V
+>P : P
+>P : P
+>T : T
+>A : A<T, V, E>
+>T : T
+>Q : Q
+>V : V
+>E : E
+
+    : T extends V ? T : never;
+>T : T
+>V : V
+>T : T
+
+type B<T, V> =
+>B : B<T, V>
+>T : T
+>V : V
+
+  T extends object
+>T : T
+
+    ? { [Q in { [P in keyof T]: T[P] extends V ? P : P; }[keyof T]]: B<T[Q], V>; }
+>Q : Q
+>P : P
+>T : T
+>T : T
+>P : P
+>V : V
+>P : P
+>P : P
+>T : T
+>B : B<T, V>
+>T : T
+>Q : Q
+>V : V
+
+    : T extends V ? T : never;
+>T : T
+>V : V
+>T : T
+
+type C<T, V, E> =
+>C : C<T, V, E>
+>T : T
+>V : V
+>E : E
+
+  { [Q in { [P in keyof T]: T[P] extends V ? P : P; }[keyof T]]: C<T[Q], V, E>; };
+>Q : Q
+>P : P
+>T : T
+>T : T
+>P : P
+>V : V
+>P : P
+>P : P
+>T : T
+>C : C<T, V, E>
+>T : T
+>Q : Q
+>V : V
+>E : E
+
