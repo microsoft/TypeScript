@@ -1921,9 +1921,11 @@ namespace ts {
 
         /**
          * Indicates that a symbol is an alias that does not merge with a local declaration.
+         * OR Is a JSContainer which may merge an alias with a local declaration
          */
         function isNonLocalAlias(symbol: Symbol, excludes = SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace) {
-            return symbol && (symbol.flags & (SymbolFlags.Alias | excludes)) === SymbolFlags.Alias;
+            if (!symbol) return false;
+            return (symbol.flags & (SymbolFlags.Alias | excludes)) === SymbolFlags.Alias || (symbol.flags & SymbolFlags.Alias && symbol.flags & SymbolFlags.JSContainer);
         }
 
         function resolveSymbol(symbol: Symbol, dontResolveAlias?: boolean): Symbol {
