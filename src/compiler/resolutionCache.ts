@@ -23,6 +23,7 @@ namespace ts {
         closeTypeRootsWatch(): void;
 
         clear(): void;
+        invalidateAllResolutions(): void;
     }
 
     interface ResolutionWithFailedLookupLocations {
@@ -129,7 +130,8 @@ namespace ts {
             createHasInvalidatedResolution,
             updateTypeRootsWatch,
             closeTypeRootsWatch,
-            clear
+            clear,
+            invalidateAllResolutions
         };
 
         function getResolvedModule(resolution: ResolvedModuleWithFailedLookupLocations) {
@@ -552,6 +554,11 @@ namespace ts {
             });
         }
 
+        function invalidateAllResolutions() {
+            // Invalidate everything
+            allFilesHaveInvalidatedResolution = true;
+        }
+
         function hasReachedResolutionIterationLimit() {
             const maxSize = resolutionHost.maxNumberOfFilesToIterateForInvalidation || maxNumberOfFilesToIterateForInvalidation;
             return resolvedModuleNames.size > maxSize || resolvedTypeReferenceDirectives.size > maxSize;
@@ -563,7 +570,7 @@ namespace ts {
             // If more than maxNumberOfFilesToIterateForInvalidation present,
             // just invalidated all files and recalculate the resolutions for files instead
             if (hasReachedResolutionIterationLimit()) {
-                allFilesHaveInvalidatedResolution = true;
+                invalidateAllResolutions();
                 return;
             }
             invalidateResolutionCache(resolvedModuleNames, isInvalidatedResolution, getResolvedModule);

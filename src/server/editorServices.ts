@@ -528,12 +528,12 @@ namespace ts.server {
             }
             switch (response.kind) {
                 case ActionSet:
-                    project.resolutionCache.clear();
                     this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typeAcquisition, response.unresolvedImports, response.typings);
+                    project.resolutionCache.invalidateAllResolutions();
                     break;
                 case ActionInvalidate:
-                    project.resolutionCache.clear();
                     this.typingsCache.deleteTypingsForProject(response.projectName);
+                    project.resolutionCache.invalidateAllResolutions();
                     break;
             }
             this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);

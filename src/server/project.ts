@@ -1001,7 +1001,7 @@ namespace ts.server {
                 this.compilerOptions = compilerOptions;
                 this.setInternalCompilerOptionsForEmittingJsFiles();
                 if (changesAffectModuleResolution(oldOptions, compilerOptions)) {
-                    this.resolutionCache.clear();
+                    this.resolutionCache.invalidateAllResolutions();
                 }
                 this.markAsDirty();
             }
