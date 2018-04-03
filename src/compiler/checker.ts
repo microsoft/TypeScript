@@ -9106,6 +9106,11 @@ namespace ts {
             return type;
         }
 
+        function maybeTypeParameterReference(node: Node) {
+            return !(node.kind === SyntaxKind.QualifiedName ||
+                node.parent.kind === SyntaxKind.TypeReference && (<TypeReferenceNode>node.parent).typeArguments && node === (<TypeReferenceNode>node.parent).typeName);
+        }
+
         function isTypeParameterPossiblyReferenced(tp: TypeParameter, node: Node) {
             // If the type parameter doesn't have exactly one declaration, if there are invening statement blocks
             // between the node and the type parameter declaration, if the node contains actual references to the
@@ -9122,7 +9127,8 @@ namespace ts {
                     case SyntaxKind.ThisType:
                         return tp.isThisType;
                     case SyntaxKind.Identifier:
-                        return !tp.isThisType && isPartOfTypeNode(node) && getTypeFromTypeNode(<TypeNode>node) === tp;
+                        return !tp.isThisType && isPartOfTypeNode(node) && maybeTypeParameterReference(node) &&
+                            getTypeFromTypeNode(<TypeNode>node) === tp;
                     case SyntaxKind.TypeQuery:
                         return true;
                 }
