@@ -16304,26 +16304,25 @@ namespace ts {
             if (!(prop.parent.flags & SymbolFlags.Class)) {
                 return false;
             }
-            let classType = getTypeOfSymbol(prop.parent) as InterfaceType;
+            let classType = getTypeOfSymbol(prop.parent);
             while (true) {
-                classType = getSuperClass(classType);
+                classType = classType.symbol && getSuperClass(classType as InterfaceType);
                 if (!classType) {
                     return false;
                 }
-                const superProperty = getPropertyOfObjectType(classType, prop.escapedName);
+                const superProperty = getPropertyOfType(classType, prop.escapedName);
                 if (superProperty && superProperty.valueDeclaration) {
                     return true;
                 }
             }
         }
 
-        function getSuperClass(classType: InterfaceType): InterfaceType | undefined {
+        function getSuperClass(classType: InterfaceType): Type | undefined {
             const x = getBaseTypes(classType);
             if (x.length === 0) {
                 return undefined;
             }
-            Debug.assert(x.length === 1);
-            return x[0] as InterfaceType;
+            return getIntersectionType(x);
         }
 
         function reportNonexistentProperty(propNode: Identifier, containingType: Type) {
