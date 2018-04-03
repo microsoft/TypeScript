@@ -27,6 +27,7 @@ foo("", function* () {
 >{        *[Symbol.iterator]() {            yield x => x.length        }    } : { [Symbol.iterator](): IterableIterator<(x: string) => number>; }
 
         *[Symbol.iterator]() {
+>[Symbol.iterator] : () => IterableIterator<(x: string) => number>
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol

@@ -7,7 +7,7 @@
 
 verify.codeFixAll({
     fixId: "fixClassIncorrectlyImplementsInterface",
-    // TODO: GH#20073
+    fixAllDescription: "Implement all unimplemented interfaces",
     newFileContent:
 `interface I { i(): void; }
 interface J { j(): void; }

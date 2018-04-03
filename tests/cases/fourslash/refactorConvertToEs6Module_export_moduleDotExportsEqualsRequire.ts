@@ -18,7 +18,7 @@
 
 // @Filename: /z.js
 // Normally -- just `export *`
-/////*a*/module/*b*/.exports = require("./a");
+////module.exports = require("./a");
 // If just a default is exported, just `export { default }`
 ////module.exports = require("./b");
 // May need both
@@ -28,12 +28,10 @@
 // In untyped case just go with `export *`
 ////module.exports = require("./unknown");
 
-goTo.select("a", "b");
-edit.applyRefactor({
-    refactorName: "Convert to ES6 module",
-    actionName: "Convert to ES6 module",
-    actionDescription: "Convert to ES6 module",
-    newContent:
+goTo.file("/z.js");
+verify.codeFix({
+    description: "Convert to ES6 module",
+    newFileContent:
 `export * from "./a";
 export { default } from "./b";
 export * from "./c";

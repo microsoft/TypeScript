@@ -3,6 +3,7 @@ class C {
 >C : C
 
     [Symbol.isRegExp]: string;
+>[Symbol.isRegExp] : string
 >Symbol.isRegExp : any
 >Symbol : any
 >isRegExp : any

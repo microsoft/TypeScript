@@ -72,14 +72,13 @@ class TypeWriterWalker {
     private writeTypeOrSymbol(node: ts.Node, isSymbolWalk: boolean): TypeWriterResult {
         const actualPos = ts.skipTrivia(this.currentSourceFile.text, node.pos);
         const lineAndCharacter = this.currentSourceFile.getLineAndCharacterOfPosition(actualPos);
-        const sourceText = ts.getTextOfNodeFromSourceText(this.currentSourceFile.text, node);
-
+        const sourceText = ts.getSourceTextOfNodeFromSourceFile(this.currentSourceFile, node);
 
         if (!isSymbolWalk) {
             // Workaround to ensure we output 'C' instead of 'typeof C' for base class expressions
             // let type = this.checker.getTypeAtLocation(node);
             const type = node.parent && ts.isExpressionWithTypeArgumentsInClassExtendsClause(node.parent) && this.checker.getTypeAtLocation(node.parent) || this.checker.getTypeAtLocation(node);
-            const typeString = type ? this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation) : "No type information available!";
+            const typeString = type ? this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType) : "No type information available!";
             return {
                 line: lineAndCharacter.line,
                 syntaxKind: node.kind,

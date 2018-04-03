@@ -1,0 +1,12 @@
+tests/cases/conformance/types/import/chainer.ts(1,24): error TS1141: String literal expected.
+
+
+==== tests/cases/conformance/types/import/chainer.ts (1 errors) ====
+    export const x: import(import("./a").LookAt).Value = "yes"; // expect outter import to fail, since b.d.ts isn't in the build
+                           ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1141: String literal expected.
+    
+==== tests/cases/conformance/types/import/a.d.ts (0 errors) ====
+    export type LookAt = "./b";
+==== tests/cases/conformance/types/import/b.d.ts (0 errors) ====
+    export type Value = "yes";

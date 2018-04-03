@@ -3,6 +3,7 @@ var x: {
 >x : { [Symbol.toPrimitive]: string; }
 
     [Symbol.toPrimitive]: string
+>[Symbol.toPrimitive] : string
 >Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
 >toPrimitive : symbol

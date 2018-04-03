@@ -1,0 +1,9 @@
+=== tests/cases/compiler/first.ts ===
+class Foo {}
+>Foo : Foo
+
+=== tests/cases/compiler/second.ts ===
+class Bar extends Foo {}
+>Bar : Bar
+>Foo : Foo
+

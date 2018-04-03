@@ -11,6 +11,7 @@ var a = { p  : (true ? { [K] : 'v'}        : null) }
 >true ? { [K] : 'v'}        : null : { [x: string]: string; }
 >true : true
 >{ [K] : 'v'} : { [x: string]: string; }
+>[K] : string
 >K : string
 >'v' : "v"
 >null : null
@@ -24,6 +25,7 @@ var b = { p  : (true ? { [K] : 'v'} as any : null) }
 >true : true
 >{ [K] : 'v'} as any : any
 >{ [K] : 'v'} : { [x: string]: string; }
+>[K] : string
 >K : string
 >'v' : "v"
 >null : null

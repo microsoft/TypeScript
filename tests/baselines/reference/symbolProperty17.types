@@ -3,6 +3,7 @@ interface I {
 >I : I
 
     [Symbol.iterator]: number;
+>[Symbol.iterator] : number
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol

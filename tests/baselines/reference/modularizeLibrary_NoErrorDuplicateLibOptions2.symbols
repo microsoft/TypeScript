@@ -90,6 +90,7 @@ var o = {
 >a : Symbol(a, Decl(modularizeLibrary_NoErrorDuplicateLibOptions2.ts, 38, 9))
 
     [Symbol.hasInstance](value: any) {
+>[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(modularizeLibrary_NoErrorDuplicateLibOptions2.ts, 39, 9))
 >Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 >hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
@@ -173,6 +174,7 @@ const o1 = {
 >o1 : Symbol(o1, Decl(modularizeLibrary_NoErrorDuplicateLibOptions2.ts, 75, 5))
 
     [Symbol.hasInstance](value: any) {
+>[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(modularizeLibrary_NoErrorDuplicateLibOptions2.ts, 75, 12))
 >Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 >hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

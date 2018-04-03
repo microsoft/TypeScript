@@ -13,6 +13,7 @@
 
 verify.codeFixAll({
     fixId: "inferFromUsage",
+    fixAllDescription: "Infer all types from usage",
     newFileContent:
 `function f(x: number, y: string) {
     x += 0;

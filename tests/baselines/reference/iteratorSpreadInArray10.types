@@ -3,6 +3,7 @@ class SymbolIterator {
 >SymbolIterator : SymbolIterator
 
     [Symbol.iterator]() {
+>[Symbol.iterator] : () => this
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol

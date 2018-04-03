@@ -115,6 +115,7 @@ var harnessCoreSources = [
 });
 
 var harnessSources = harnessCoreSources.concat([
+    "base64.ts",
     "incrementalParser.ts",
     "jsDocParsing.ts",
     "services/colorization.ts",
@@ -153,6 +154,7 @@ var harnessSources = harnessCoreSources.concat([
     "transform.ts",
     "customTransforms.ts",
     "programMissingFiles.ts",
+    "programNoParseFalsyFileNames.ts",
     "symbolWalker.ts",
     "languageService.ts",
     "publicApi.ts",
@@ -206,7 +208,10 @@ var es2017LibrarySourceMap = es2017LibrarySource.map(function (source) {
     return { target: "lib." + source, sources: ["header.d.ts", source] };
 });
 
-var es2018LibrarySource = [];
+var es2018LibrarySource = [
+    "es2018.regexp.d.ts",
+    "es2018.promise.d.ts"
+];
 
 var es2018LibrarySourceMap = es2018LibrarySource.map(function (source) {
     return { target: "lib." + source, sources: ["header.d.ts", source] };
@@ -214,8 +219,7 @@ var es2018LibrarySourceMap = es2018LibrarySource.map(function (source) {
 
 var esnextLibrarySource = [
     "esnext.asynciterable.d.ts",
-    "esnext.array.d.ts",
-    "esnext.promise.d.ts"
+    "esnext.array.d.ts"
 ];
 
 var esnextLibrarySourceMap = esnextLibrarySource.map(function (source) {

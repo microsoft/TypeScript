@@ -1,3 +1,5 @@
+// tslint:disable no-unnecessary-qualifier
+
 /**
  * Declaration module describing the TypeScript Server protocol
  */
@@ -42,6 +44,7 @@ namespace ts.server.protocol {
         GeterrForProject = "geterrForProject",
         SemanticDiagnosticsSync = "semanticDiagnosticsSync",
         SyntacticDiagnosticsSync = "syntacticDiagnosticsSync",
+        SuggestionDiagnosticsSync = "suggestionDiagnosticsSync",
         NavBar = "navbar",
         /* @internal */
         NavBarFull = "navbar-full",
@@ -50,6 +53,7 @@ namespace ts.server.protocol {
         NavtoFull = "navto-full",
         NavTree = "navtree",
         NavTreeFull = "navtree-full",
+        /** @deprecated */
         Occurrences = "occurrences",
         DocumentHighlights = "documentHighlights",
         /* @internal */
@@ -87,8 +91,9 @@ namespace ts.server.protocol {
         EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full",
         /* @internal */
         Cleanup = "cleanup",
+        GetOutliningSpans = "getOutliningSpans",
         /* @internal */
-        OutliningSpans = "outliningSpans",
+        GetOutliningSpansFull = "outliningSpans", // Full command name is different for backward compatibility purposes
         TodoComments = "todoComments",
         Indentation = "indentation",
         DocCommentTemplate = "docCommentTemplate",
@@ -299,17 +304,48 @@ namespace ts.server.protocol {
     /**
      * Request to obtain outlining spans in file.
      */
-    /* @internal */
     export interface OutliningSpansRequest extends FileRequest {
-        command: CommandTypes.OutliningSpans;
+        command: CommandTypes.GetOutliningSpans;
+    }
+
+    export interface OutliningSpan {
+        /** The span of the document to actually collapse. */
+        textSpan: TextSpan;
+
+        /** The span of the document to display when the user hovers over the collapsed span. */
+        hintSpan: TextSpan;
+
+        /** The text to display in the editor for the collapsed region. */
+        bannerText: string;
+
+        /**
+         * Whether or not this region should be automatically collapsed when
+         * the 'Collapse to Definitions' command is invoked.
+         */
+        autoCollapse: boolean;
+    }
+
+    /**
+     * Response to OutliningSpansRequest request.
+     */
+    export interface OutliningSpansResponse extends Response {
+        body?: OutliningSpan[];
+    }
+
+    /**
+     * Request to obtain outlining spans in file.
+     */
+    /* @internal */
+    export interface OutliningSpansRequestFull extends FileRequest {
+        command: CommandTypes.GetOutliningSpansFull;
     }
 
     /**
      * Response to OutliningSpansRequest request.
      */
     /* @internal */
-    export interface OutliningSpansResponse extends Response {
-        body?: OutliningSpan[];
+    export interface OutliningSpansResponseFull extends Response {
+        body?: ts.OutliningSpan[];
     }
 
     /**
@@ -829,6 +865,7 @@ namespace ts.server.protocol {
     }
 
     /**
+     * @deprecated
      * Get occurrences request; value of command field is
      * "occurrences". Return response giving spans that are relevant
      * in the file at a given line and column.
@@ -837,6 +874,7 @@ namespace ts.server.protocol {
         command: CommandTypes.Occurrences;
     }
 
+    /** @deprecated */
     export interface OccurrencesResponseItem extends FileSpan {
         /**
          * True if the occurrence is a write location, false otherwise.
@@ -849,6 +887,7 @@ namespace ts.server.protocol {
         isInString?: true;
     }
 
+    /** @deprecated */
     export interface OccurrencesResponse extends Response {
         body?: OccurrencesResponseItem[];
     }
@@ -1227,6 +1266,8 @@ namespace ts.server.protocol {
          * The format options to use during formatting and other code editing features.
          */
         formatOptions?: FormatCodeSettings;
+
+        preferences?: UserPreferences;
 
         /**
          * The host's additional supported .js file extensions
@@ -1660,6 +1701,8 @@ namespace ts.server.protocol {
          * This may be omitted to indicate that the code fix can't be applied in a group.
          */
         fixId?: {};
+        /** Should be present if and only if 'fixId' is. */
+        fixAllDescription?: string;
     }
 
     /**
@@ -1703,15 +1746,13 @@ namespace ts.server.protocol {
          */
         prefix?: string;
         /**
-         * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
-         * This affects lone identifier completions but not completions on the right hand side of `obj.`.
+         * @deprecated Use UserPreferences.includeCompletionsForModuleExports
          */
-        includeExternalModuleExports: boolean;
+        includeExternalModuleExports?: boolean;
         /**
-         * If enabled, the completion list will include completions with invalid identifier names.
-         * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
+         * @deprecated Use UserPreferences.includeCompletionsWithInsertText
          */
-        includeInsertTextCompletions: boolean;
+        includeInsertTextCompletions?: boolean;
     }
 
     /**
@@ -2006,6 +2047,14 @@ namespace ts.server.protocol {
         body?: Diagnostic[] | DiagnosticWithLinePosition[];
     }
 
+    export interface SuggestionDiagnosticsSyncRequest extends FileRequest {
+        command: CommandTypes.SuggestionDiagnosticsSync;
+        arguments: SuggestionDiagnosticsSyncRequestArgs;
+    }
+
+    export type SuggestionDiagnosticsSyncRequestArgs = SemanticDiagnosticsSyncRequestArgs;
+    export type SuggestionDiagnosticsSyncResponse = SemanticDiagnosticsSyncResponse;
+
     /**
      * Synchronous request for syntactic diagnostics of one file.
      */
@@ -2117,7 +2166,7 @@ namespace ts.server.protocol {
         text: string;
 
         /**
-         * The category of the diagnostic message, e.g. "error" vs. "warning"
+         * The category of the diagnostic message, e.g. "error", "warning", or "suggestion".
          */
         category: string;
 
@@ -2151,8 +2200,10 @@ namespace ts.server.protocol {
         diagnostics: Diagnostic[];
     }
 
+    export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag";
+
     /**
-     * Event message for "syntaxDiag" and "semanticDiag" event types.
+     * Event message for DiagnosticEventKind event types.
      * These events provide syntactic and semantic errors for a file.
      */
     export interface DiagnosticEvent extends Event {
@@ -2582,6 +2633,21 @@ namespace ts.server.protocol {
         placeOpenBraceOnNewLineForFunctions?: boolean;
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
         insertSpaceBeforeTypeAnnotation?: boolean;
+    }
+
+    export interface UserPreferences {
+        readonly quotePreference?: "double" | "single";
+        /**
+         * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
+         * This affects lone identifier completions but not completions on the right hand side of `obj.`.
+         */
+        readonly includeCompletionsForModuleExports?: boolean;
+        /**
+         * If enabled, the completion list will include completions with invalid identifier names.
+         * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
+         */
+        readonly includeCompletionsWithInsertText?: boolean;
+        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
     }
 
     export interface CompilerOptions {
