@@ -137,6 +137,7 @@
         "./unittests/telemetry.ts",
         "./unittests/languageService.ts",
         "./unittests/programMissingFiles.ts",
+        "./unittests/programNoParseFalsyFileNames.ts",
         "./unittests/publicApi.ts",
         "./unittests/hostNewLineSupport.ts"
     ]

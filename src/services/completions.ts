@@ -4,7 +4,7 @@
 namespace ts.Completions {
     export type Log = (message: string) => void;
 
-    type SymbolOriginInfo = { type: "this-type" } | SymbolOriginInfoExport;
+    type SymbolOriginInfo = { type: "this-type" } | { type: "symbol-member" } | SymbolOriginInfoExport;
     interface SymbolOriginInfoExport {
         type: "export";
         moduleSymbol: Symbol;
@@ -83,7 +83,7 @@ namespace ts.Completions {
             }
             case StringLiteralCompletionKind.Types: {
                 const entries = completion.types.map(type => ({ name: type.value, kindModifiers: ScriptElementKindModifier.none, kind: ScriptElementKind.typeElement, sortText: "0" }));
-                return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
+                return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: completion.isNewIdentifier, entries };
             }
             default:
                 return Debug.assertNever(completion);
@@ -206,11 +206,13 @@ namespace ts.Completions {
             if (origin && origin.type === "this-type") {
                 insertText = needsConvertPropertyAccess ? `this[${quote(name, preferences)}]` : `this.${name}`;
             }
-            else if (needsConvertPropertyAccess) {
-                insertText = `[${quote(name, preferences)}]`;
+            // We should only have needsConvertPropertyAccess if there's a property access to convert. But see #21790.
+            // Somehow there was a global with a non-identifier name. Hopefully someone will complain about getting a "foo bar" global completion and provide a repro.
+            else if ((origin && origin.type === "symbol-member" || needsConvertPropertyAccess) && propertyAccessToConvert) {
+                insertText = needsConvertPropertyAccess ? `[${quote(name, preferences)}]` : `[${name}]`;
                 const dot = findChildOfKind(propertyAccessToConvert!, SyntaxKind.DotToken, sourceFile)!;
                 // If the text after the '.' starts with this name, write over it. Else, add new text.
-                const end = startsWith(name, propertyAccessToConvert!.name.text) ? propertyAccessToConvert!.name.end : dot.end;
+                const end = startsWith(name, propertyAccessToConvert.name.text) ? propertyAccessToConvert.name.end : dot.end;
                 replacementSpan = createTextSpanFromBounds(dot.getStart(sourceFile), end);
             }
 
@@ -358,16 +360,18 @@ namespace ts.Completions {
         readonly symbols: ReadonlyArray<Symbol>;
         readonly hasIndexSignature: boolean;
     }
-    type StringLiteralCompletion =
-        | { readonly kind: StringLiteralCompletionKind.Paths, readonly paths: ReadonlyArray<PathCompletions.PathCompletion> }
-        | StringLiteralCompletionsFromProperties
-        | { readonly kind: StringLiteralCompletionKind.Types, readonly types: ReadonlyArray<StringLiteralType> };
+    interface StringLiteralCompletionsFromTypes {
+        readonly kind: StringLiteralCompletionKind.Types;
+        readonly types: ReadonlyArray<StringLiteralType>;
+        readonly isNewIdentifier: boolean;
+    }
+    type StringLiteralCompletion = { readonly kind: StringLiteralCompletionKind.Paths, readonly paths: ReadonlyArray<PathCompletions.PathCompletion> } | StringLiteralCompletionsFromProperties | StringLiteralCompletionsFromTypes;
     function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringLiteralLike, position: number, typeChecker: TypeChecker, compilerOptions: CompilerOptions, host: LanguageServiceHost): StringLiteralCompletion | undefined {
         switch (node.parent.kind) {
             case SyntaxKind.LiteralType:
                 switch (node.parent.parent.kind) {
                     case SyntaxKind.TypeReference:
-                        return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(node.parent as LiteralTypeNode), typeChecker) };
+                        return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(node.parent as LiteralTypeNode), typeChecker), isNewIdentifier: false };
                     case SyntaxKind.IndexedAccessType:
                         // Get all apparent property names
                         // i.e. interface Foo {
@@ -376,6 +380,8 @@ namespace ts.Completions {
                         //      }
                         //      let x: Foo["/*completion position*/"]
                         return stringLiteralCompletionsFromProperties(typeChecker.getTypeFromTypeNode((node.parent.parent as IndexedAccessTypeNode).objectType));
+                    case SyntaxKind.ImportTypeNode:
+                        return { kind: StringLiteralCompletionKind.Paths, paths: PathCompletions.getStringLiteralCompletionsFromModuleNames(sourceFile, node, compilerOptions, host, typeChecker) };
                     default:
                         return undefined;
                 }
@@ -419,13 +425,7 @@ namespace ts.Completions {
                     // Get string literal completions from specialized signatures of the target
                     // i.e. declare function f(a: 'A');
                     // f("/*completion position*/")
-                    if (argumentInfo) {
-                        const candidates: Signature[] = [];
-                        typeChecker.getResolvedSignature(argumentInfo.invocation, candidates, argumentInfo.argumentCount);
-                        const uniques = createMap<true>();
-                        return { kind: StringLiteralCompletionKind.Types, types: flatMap(candidates, candidate => getStringLiteralTypes(typeChecker.getParameterType(candidate, argumentInfo.argumentIndex), typeChecker, uniques)) };
-                    }
-                    return fromContextualType();
+                    return argumentInfo ? getStringLiteralCompletionsFromSignature(argumentInfo, typeChecker) : fromContextualType();
                 }
                 // falls through (is `require("")` or `import("")`)
 
@@ -447,8 +447,24 @@ namespace ts.Completions {
         function fromContextualType(): StringLiteralCompletion {
             // Get completion for string literal from string literal type
             // i.e. var x: "hi" | "hello" = "/*completion position*/"
-            return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker), typeChecker) };
+            return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker), typeChecker), isNewIdentifier: false };
         }
+    }
+
+    function getStringLiteralCompletionsFromSignature(argumentInfo: SignatureHelp.ArgumentListInfo, checker: TypeChecker): StringLiteralCompletionsFromTypes {
+        let isNewIdentifier = false;
+
+        const uniques = createMap<true>();
+        const candidates: Signature[] = [];
+        checker.getResolvedSignature(argumentInfo.invocation, candidates, argumentInfo.argumentCount);
+        const types = flatMap(candidates, candidate => {
+            if (!candidate.hasRestParameter && argumentInfo.argumentCount > candidate.parameters.length) return;
+            const type = checker.getParameterType(candidate, argumentInfo.argumentIndex);
+            isNewIdentifier = isNewIdentifier || !!(type.flags & TypeFlags.String);
+            return getStringLiteralTypes(type, checker, uniques);
+        });
+
+        return { kind: StringLiteralCompletionKind.Types, types, isNewIdentifier };
     }
 
     function stringLiteralCompletionsFromProperties(type: Type | undefined): StringLiteralCompletionsFromProperties | undefined {
@@ -1051,11 +1067,32 @@ namespace ts.Completions {
             }
             else {
                 for (const symbol of type.getApparentProperties()) {
-                    if (typeChecker.isValidPropertyAccessForCompletions(node.kind === SyntaxKind.ImportTypeNode ? <ImportTypeNode>node : <PropertyAccessExpression>(node.parent), type, symbol)) {
-                        symbols.push(symbol);
+                    if (typeChecker.isValidPropertyAccessForCompletions(node.kind === SyntaxKind.ImportTypeNode ? <ImportTypeNode>node : <PropertyAccessExpression>node.parent, type, symbol)) {
+                        addPropertySymbol(symbol);
                     }
                 }
             }
+        }
+
+        function addPropertySymbol(symbol: Symbol) {
+            // If this is e.g. [Symbol.iterator], add a completion for `Symbol`.
+            const symbolSymbol = firstDefined(symbol.declarations, decl => {
+                const name = getNameOfDeclaration(decl);
+                const leftName = name.kind === SyntaxKind.ComputedPropertyName ? getLeftMostName(name.expression) : undefined;
+                return leftName && typeChecker.getSymbolAtLocation(leftName);
+            });
+            if (symbolSymbol) {
+                symbols.push(symbolSymbol);
+                symbolToOriginInfoMap[getSymbolId(symbolSymbol)] = { type: "symbol-member" };
+            }
+            else {
+                symbols.push(symbol);
+            }
+        }
+
+        /** Given 'a.b.c', returns 'a'. */
+        function getLeftMostName(e: Expression): Identifier | undefined {
+            return isIdentifier(e) ? e : isPropertyAccessExpression(e) ? getLeftMostName(e.expression) : undefined;
         }
 
         function tryGetGlobalSymbols(): boolean {
@@ -2049,7 +2086,7 @@ namespace ts.Completions {
                 // TODO: GH#18169
                 return { name: JSON.stringify(name), needsConvertPropertyAccess: false };
             case CompletionKind.PropertyAccess:
-            case CompletionKind.Global:
+            case CompletionKind.Global: // For a 'this.' completion it will be in a global context, but may have a non-identifier name.
                 // Don't add a completion for a name starting with a space. See https://github.com/Microsoft/TypeScript/pull/20547
                 return name.charCodeAt(0) === CharacterCodes.space ? undefined : { name, needsConvertPropertyAccess: true };
             case CompletionKind.None:

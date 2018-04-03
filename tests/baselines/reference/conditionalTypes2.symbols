@@ -414,3 +414,85 @@ function foo<T>(value: T) {
     }
 }
 
+// Repro from #23052
+
+type A<T, V, E> =
+>A : Symbol(A, Decl(conditionalTypes2.ts, 119, 1))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 123, 7))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 123, 9))
+>E : Symbol(E, Decl(conditionalTypes2.ts, 123, 12))
+
+  T extends object
+>T : Symbol(T, Decl(conditionalTypes2.ts, 123, 7))
+
+    ? { [Q in { [P in keyof T]: T[P] extends V ? P : P; }[keyof T]]: A<T[Q], V, E>; }
+>Q : Symbol(Q, Decl(conditionalTypes2.ts, 125, 9))
+>P : Symbol(P, Decl(conditionalTypes2.ts, 125, 17))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 123, 7))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 123, 7))
+>P : Symbol(P, Decl(conditionalTypes2.ts, 125, 17))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 123, 9))
+>P : Symbol(P, Decl(conditionalTypes2.ts, 125, 17))
+>P : Symbol(P, Decl(conditionalTypes2.ts, 125, 17))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 123, 7))
+>A : Symbol(A, Decl(conditionalTypes2.ts, 119, 1))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 123, 7))
+>Q : Symbol(Q, Decl(conditionalTypes2.ts, 125, 9))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 123, 9))
+>E : Symbol(E, Decl(conditionalTypes2.ts, 123, 12))
+
+    : T extends V ? T : never;
+>T : Symbol(T, Decl(conditionalTypes2.ts, 123, 7))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 123, 9))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 123, 7))
+
+type B<T, V> =
+>B : Symbol(B, Decl(conditionalTypes2.ts, 126, 30))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 128, 7))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 128, 9))
+
+  T extends object
+>T : Symbol(T, Decl(conditionalTypes2.ts, 128, 7))
+
+    ? { [Q in { [P in keyof T]: T[P] extends V ? P : P; }[keyof T]]: B<T[Q], V>; }
+>Q : Symbol(Q, Decl(conditionalTypes2.ts, 130, 9))
+>P : Symbol(P, Decl(conditionalTypes2.ts, 130, 17))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 128, 7))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 128, 7))
+>P : Symbol(P, Decl(conditionalTypes2.ts, 130, 17))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 128, 9))
+>P : Symbol(P, Decl(conditionalTypes2.ts, 130, 17))
+>P : Symbol(P, Decl(conditionalTypes2.ts, 130, 17))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 128, 7))
+>B : Symbol(B, Decl(conditionalTypes2.ts, 126, 30))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 128, 7))
+>Q : Symbol(Q, Decl(conditionalTypes2.ts, 130, 9))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 128, 9))
+
+    : T extends V ? T : never;
+>T : Symbol(T, Decl(conditionalTypes2.ts, 128, 7))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 128, 9))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 128, 7))
+
+type C<T, V, E> =
+>C : Symbol(C, Decl(conditionalTypes2.ts, 131, 30))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 133, 7))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 133, 9))
+>E : Symbol(E, Decl(conditionalTypes2.ts, 133, 12))
+
+  { [Q in { [P in keyof T]: T[P] extends V ? P : P; }[keyof T]]: C<T[Q], V, E>; };
+>Q : Symbol(Q, Decl(conditionalTypes2.ts, 134, 5))
+>P : Symbol(P, Decl(conditionalTypes2.ts, 134, 13))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 133, 7))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 133, 7))
+>P : Symbol(P, Decl(conditionalTypes2.ts, 134, 13))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 133, 9))
+>P : Symbol(P, Decl(conditionalTypes2.ts, 134, 13))
+>P : Symbol(P, Decl(conditionalTypes2.ts, 134, 13))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 133, 7))
+>C : Symbol(C, Decl(conditionalTypes2.ts, 131, 30))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 133, 7))
+>Q : Symbol(Q, Decl(conditionalTypes2.ts, 134, 5))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 133, 9))
+>E : Symbol(E, Decl(conditionalTypes2.ts, 133, 12))
+
