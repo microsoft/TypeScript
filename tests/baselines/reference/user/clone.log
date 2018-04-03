@@ -1,0 +1,27 @@
+Exit Code: 1
+Standard output:
+node_modules/clone/clone.js(10,15): error TS2304: Cannot find name 'Map'.
+node_modules/clone/clone.js(19,15): error TS2304: Cannot find name 'Set'.
+node_modules/clone/clone.js(26,19): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/clone/clone.js(41,11): error TS1003: Identifier expected.
+node_modules/clone/clone.js(41,11): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/clone/clone.js(42,11): error TS1003: Identifier expected.
+node_modules/clone/clone.js(42,11): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/clone/clone.js(44,11): error TS1003: Identifier expected.
+node_modules/clone/clone.js(44,11): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/clone/clone.js(46,11): error TS1003: Identifier expected.
+node_modules/clone/clone.js(46,11): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/clone/clone.js(48,11): error TS1003: Identifier expected.
+node_modules/clone/clone.js(48,11): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/clone/clone.js(159,16): error TS2551: Property 'getOwnPropertySymbols' does not exist on type 'ObjectConstructor'. Did you mean 'getOwnPropertyNames'?
+node_modules/clone/clone.js(160,28): error TS2551: Property 'getOwnPropertySymbols' does not exist on type 'ObjectConstructor'. Did you mean 'getOwnPropertyNames'?
+node_modules/clone/clone.js(161,16): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'string', but here has type 'number'.
+node_modules/clone/clone.js(161,43): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+node_modules/clone/clone.js(170,14): error TS2532: Object is possibly 'undefined'.
+node_modules/clone/clone.js(180,16): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'string', but here has type 'number'.
+node_modules/clone/clone.js(180,23): error TS2365: Operator '<' cannot be applied to types 'string' and 'number'.
+node_modules/clone/clone.js(180,52): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+
+
+
+Standard error:

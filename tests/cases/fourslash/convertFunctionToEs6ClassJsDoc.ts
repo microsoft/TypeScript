@@ -2,26 +2,28 @@
 
 // @allowNonTsExtensions: true
 // @Filename: test123.js
-//// function fn() {
-////     /** neat! */
-////     this.x = 100;
-//// }
+////function fn() {
+////    /** neat! */
+////    this.x = 100;
+////}
 ////
-//// /** awesome
-////   * stuff
-////   */
-//// fn.prototype.arr = () => { return ""; }
-//// /** great */
-//// fn.prototype.arr2 = () => [];
-//// 
-//// /**
-////   * This is a cool function!
-//// */
-//// /*1*/fn.prototype.bar = function (x, y, z) {
-////     this.x = y;
-//// };
+/////** awesome
+////  * stuff
+////  */
+////fn.prototype.arr = () => { return ""; }
+/////** great */
+////fn.prototype.arr2 = () => [];
+////
+/////**
+////  * This is a cool function!
+////*/
+////fn.prototype.bar = function (x, y, z) {
+////    this.x = y;
+////};
 
-verify.fileAfterApplyingRefactorAtMarker('1',
+verify.codeFix({
+    description: "Convert function to an ES2015 class",
+    newFileContent:
 `class fn {
     constructor() {
         /** neat! */
@@ -42,4 +44,5 @@ verify.fileAfterApplyingRefactorAtMarker('1',
 }
 
 
-`, 'Convert to ES2015 class', 'convert');
+`,
+});

@@ -48,7 +48,7 @@
 ////}
 ////jsDocMi/*7q*/xedComments2(/*7*/);
 ////
-/////** jsdoc comment */ /*** malformed jsDocComment*/
+/////** jsdoc comment */ /*** triplestar jsDocComment*/
 /////// Triple slash comment
 ////function jsDocMixedComments3() {
 ////}
@@ -231,8 +231,8 @@ verify.currentSignatureHelpDocCommentIs("jsdoc comment \nanother jsDocComment");
 verify.quickInfoAt("7q", "function jsDocMixedComments2(): void", "jsdoc comment \nanother jsDocComment");
 
 goTo.marker('8');
-verify.currentSignatureHelpDocCommentIs("jsdoc comment ");
-verify.quickInfoAt("8q", "function jsDocMixedComments3(): void", "jsdoc comment ");
+verify.currentSignatureHelpDocCommentIs("jsdoc comment \n* triplestar jsDocComment");
+verify.quickInfoAt("8q", "function jsDocMixedComments3(): void", "jsdoc comment \n* triplestar jsDocComment");
 
 goTo.marker('9');
 verify.currentSignatureHelpDocCommentIs("jsdoc comment \nanother jsDocComment");

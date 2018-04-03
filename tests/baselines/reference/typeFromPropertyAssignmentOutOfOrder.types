@@ -34,9 +34,9 @@ var am;
 === tests/cases/conformance/salsa/roots.js ===
 var Common = {};
 >Common : typeof Common
->{} : { [x: string]: any; }
+>{} : { [x: string]: any; Item: typeof I; Object: typeof (Anonymous class); }
 
 var Workspace = {};
 >Workspace : typeof Workspace
->{} : { [x: string]: any; }
+>{} : { [x: string]: any; Object: typeof (Anonymous class); }
 

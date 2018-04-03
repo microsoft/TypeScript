@@ -21,7 +21,7 @@ function makePoint(x) {
 ;
 var /*4*/ point = makePoint(2);
 var /*2*/ x = point.x;
-point.x = 30;
+point. /*3*/x = 30;
 
 
 //// [declFileObjectLiteralWithAccessors.d.ts]
@@ -29,8 +29,8 @@ declare function makePoint(x: number): {
     b: number;
     x: number;
 };
-declare var point: {
+declare var /*4*/ point: {
     b: number;
     x: number;
 };
-declare var x: number;
+declare var /*2*/ x: number;

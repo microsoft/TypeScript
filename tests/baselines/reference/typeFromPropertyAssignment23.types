@@ -1,0 +1,53 @@
+=== tests/cases/conformance/salsa/a.js ===
+class B {
+>B : B
+
+    constructor () {
+        this.n = 1
+>this.n = 1 : 1
+>this.n : number
+>this : this
+>n : number
+>1 : 1
+    }
+    foo() {
+>foo : () => void
+    }
+}
+
+class C extends B { }
+>C : C
+>B : B
+
+// this override should be fine (even if it's a little odd)
+C.prototype.foo = function() {
+>C.prototype.foo = function() {} : () => void
+>C.prototype.foo : () => void
+>C.prototype : C
+>C : typeof C
+>prototype : C
+>foo : () => void
+>function() {} : () => void
+}
+
+class D extends B { }
+>D : D
+>B : B
+
+D.prototype.foo = () =>  {
+>D.prototype.foo = () =>  {    this.n = 'not checked, so no error'} : () => void
+>D.prototype.foo : () => void
+>D.prototype : D
+>D : typeof D
+>prototype : D
+>foo : () => void
+>() =>  {    this.n = 'not checked, so no error'} : () => void
+
+    this.n = 'not checked, so no error'
+>this.n = 'not checked, so no error' : "not checked, so no error"
+>this.n : any
+>this : any
+>n : any
+>'not checked, so no error' : "not checked, so no error"
+}
+

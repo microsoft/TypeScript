@@ -1,6 +1,6 @@
 === tests/cases/conformance/jsx/inline/renderer.d.ts ===
 export namespace dom {
->dom : Symbol(dom, Decl(renderer.d.ts, 0, 0), Decl(renderer.d.ts, 17, 1))
+>dom : Symbol(dom, Decl(renderer.d.ts, 17, 1), Decl(renderer.d.ts, 0, 0))
 
     namespace JSX {
 >JSX : Symbol(JSX, Decl(renderer.d.ts, 0, 22))
@@ -44,14 +44,14 @@ export namespace dom {
     }
 }
 export function dom(): dom.JSX.Element;
->dom : Symbol(dom, Decl(renderer.d.ts, 0, 0), Decl(renderer.d.ts, 17, 1))
->dom : Symbol(dom, Decl(renderer.d.ts, 0, 0), Decl(renderer.d.ts, 17, 1))
+>dom : Symbol(dom, Decl(renderer.d.ts, 17, 1), Decl(renderer.d.ts, 0, 0))
+>dom : Symbol(dom, Decl(renderer.d.ts, 17, 1), Decl(renderer.d.ts, 0, 0))
 >JSX : Symbol(dom.JSX, Decl(renderer.d.ts, 0, 22))
 >Element : Symbol(dom.JSX.Element, Decl(renderer.d.ts, 4, 9))
 
 === tests/cases/conformance/jsx/inline/renderer2.d.ts ===
 export namespace predom {
->predom : Symbol(predom, Decl(renderer2.d.ts, 0, 0), Decl(renderer2.d.ts, 17, 1))
+>predom : Symbol(predom, Decl(renderer2.d.ts, 17, 1), Decl(renderer2.d.ts, 0, 0))
 
     namespace JSX {
 >JSX : Symbol(JSX, Decl(renderer2.d.ts, 0, 25))
@@ -95,8 +95,8 @@ export namespace predom {
     }
 }
 export function predom(): predom.JSX.Element;
->predom : Symbol(predom, Decl(renderer2.d.ts, 0, 0), Decl(renderer2.d.ts, 17, 1))
->predom : Symbol(predom, Decl(renderer2.d.ts, 0, 0), Decl(renderer2.d.ts, 17, 1))
+>predom : Symbol(predom, Decl(renderer2.d.ts, 17, 1), Decl(renderer2.d.ts, 0, 0))
+>predom : Symbol(predom, Decl(renderer2.d.ts, 17, 1), Decl(renderer2.d.ts, 0, 0))
 >JSX : Symbol(predom.JSX, Decl(renderer2.d.ts, 0, 25))
 >Element : Symbol(predom.JSX.Element, Decl(renderer2.d.ts, 4, 9))
 

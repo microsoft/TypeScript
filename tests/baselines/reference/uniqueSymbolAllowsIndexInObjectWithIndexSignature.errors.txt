@@ -1,0 +1,21 @@
+tests/cases/compiler/uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts(10,5): error TS2322: Type '{ [SYM]: "str"; }' is not assignable to type 'I'.
+  Types of property '[SYM]' are incompatible.
+    Type '"str"' is not assignable to type '"sym"'.
+
+
+==== tests/cases/compiler/uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts (1 errors) ====
+    // https://github.com/Microsoft/TypeScript/issues/21962
+    export const SYM = Symbol('a unique symbol');
+    
+    export interface I {
+      [SYM]: 'sym';
+      [x: string]: 'str';
+    }
+    
+    let a: I = {[SYM]: 'sym'}; // Expect ok
+    let b: I = {[SYM]: 'str'}; // Expect error
+        ~
+!!! error TS2322: Type '{ [SYM]: "str"; }' is not assignable to type 'I'.
+!!! error TS2322:   Types of property '[SYM]' are incompatible.
+!!! error TS2322:     Type '"str"' is not assignable to type '"sym"'.
+    

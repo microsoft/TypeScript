@@ -145,7 +145,7 @@ namespace Utils {
             path = "tests/" + path;
         }
 
-        let content: string = undefined;
+        let content: string;
         try {
             content = Harness.IO.readFile(Harness.userSpecifiedRoot + path);
         }
@@ -1632,14 +1632,15 @@ namespace Harness {
         }
 
         export function doSourcemapBaseline(baselinePath: string, options: ts.CompilerOptions, result: CompilerResult, harnessSettings: TestCaseParser.CompilerSettings) {
+            const declMaps = ts.getAreDeclarationMapsEnabled(options);
             if (options.inlineSourceMap) {
-                if (result.sourceMaps.length > 0) {
+                if (result.sourceMaps.length > 0 && !declMaps) {
                     throw new Error("No sourcemap files should be generated if inlineSourceMaps was set.");
                 }
                 return;
             }
-            else if (options.sourceMap) {
-                if (result.sourceMaps.length !== result.files.length) {
+            else if (options.sourceMap || declMaps) {
+                if (result.sourceMaps.length !== (result.files.length * (declMaps && options.sourceMap ? 2 : 1))) {
                     throw new Error("Number of sourcemap files should be same as js files.");
                 }
 
@@ -1806,6 +1807,10 @@ namespace Harness {
             return ts.endsWith(fileName, ".js.map") || ts.endsWith(fileName, ".jsx.map");
         }
 
+        export function isDTSMap(fileName: string) {
+            return ts.endsWith(fileName, ".d.ts.map");
+        }
+
         /** Contains the code and errors of a compilation and some helper methods to check its status. */
         export class CompilerResult {
             public files: GeneratedFile[] = [];
@@ -1826,7 +1831,7 @@ namespace Harness {
                         // .js file, add to files
                         this.files.push(emittedFile);
                     }
-                    else if (isJSMap(emittedFile.fileName)) {
+                    else if (isJSMap(emittedFile.fileName) || isDTSMap(emittedFile.fileName)) {
                         this.sourceMaps.push(emittedFile);
                     }
                     else {
@@ -1839,7 +1844,7 @@ namespace Harness {
 
             public getSourceMapRecord() {
                 if (this.sourceMapData && this.sourceMapData.length > 0) {
-                    return SourceMapRecorder.getSourceMapRecord(this.sourceMapData, this.program, this.files);
+                    return SourceMapRecorder.getSourceMapRecord(this.sourceMapData, this.program, this.files, this.declFilesCode);
                 }
             }
         }
@@ -1891,9 +1896,9 @@ namespace Harness {
             const lines = Utils.splitContentByNewlines(code);
 
             // Stuff related to the subfile we're parsing
-            let currentFileContent: string = undefined;
+            let currentFileContent: string;
             let currentFileOptions: any = {};
-            let currentFileName: any = undefined;
+            let currentFileName: any;
             let refs: string[] = [];
 
             for (const line of lines) {

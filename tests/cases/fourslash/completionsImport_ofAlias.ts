@@ -3,6 +3,8 @@
 // Tests that we don't filter out a completion for an alias,
 // so long as it's not an alias to a different module.
 
+// @module: esnext
+
 // @Filename: /a.ts
 ////const foo = 0;
 ////export { foo };

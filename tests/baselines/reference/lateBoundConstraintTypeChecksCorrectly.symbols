@@ -1,0 +1,56 @@
+=== tests/cases/compiler/lateBoundConstraintTypeChecksCorrectly.ts ===
+declare const fooProp: unique symbol;
+>fooProp : Symbol(fooProp, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 0, 13))
+
+declare const barProp: unique symbol;
+>barProp : Symbol(barProp, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 1, 13))
+
+type BothProps = typeof fooProp | typeof barProp;
+>BothProps : Symbol(BothProps, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 1, 37))
+>fooProp : Symbol(fooProp, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 0, 13))
+>barProp : Symbol(barProp, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 1, 13))
+
+export interface Foo<T> {
+>Foo : Symbol(Foo, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 3, 49))
+>T : Symbol(T, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 5, 21))
+
+  [fooProp]: T;
+>[fooProp] : Symbol(Foo[fooProp], Decl(lateBoundConstraintTypeChecksCorrectly.ts, 5, 25))
+>fooProp : Symbol(fooProp, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 0, 13))
+>T : Symbol(T, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 5, 21))
+
+  [barProp]: string;
+>[barProp] : Symbol(Foo[barProp], Decl(lateBoundConstraintTypeChecksCorrectly.ts, 6, 15))
+>barProp : Symbol(barProp, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 1, 13))
+}
+
+function f<T extends Foo<number>>(x: T) {
+>f : Symbol(f, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 8, 1))
+>T : Symbol(T, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 10, 11))
+>Foo : Symbol(Foo, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 3, 49))
+>x : Symbol(x, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 10, 34))
+>T : Symbol(T, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 10, 11))
+
+    const abc = x[fooProp]; // expected: 'T[typeof fooProp]'
+>abc : Symbol(abc, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 11, 9))
+>x : Symbol(x, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 10, 34))
+>fooProp : Symbol(fooProp, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 0, 13))
+
+    /**
+     * Expected: no error
+     */
+    const def: T[typeof fooProp] = x[fooProp];
+>def : Symbol(def, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 16, 9))
+>T : Symbol(T, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 10, 11))
+>fooProp : Symbol(fooProp, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 0, 13))
+>x : Symbol(x, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 10, 34))
+>fooProp : Symbol(fooProp, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 0, 13))
+
+    const def2: T[typeof barProp] = x[barProp];
+>def2 : Symbol(def2, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 17, 9))
+>T : Symbol(T, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 10, 11))
+>barProp : Symbol(barProp, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 1, 13))
+>x : Symbol(x, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 10, 34))
+>barProp : Symbol(barProp, Decl(lateBoundConstraintTypeChecksCorrectly.ts, 1, 13))
+}
+

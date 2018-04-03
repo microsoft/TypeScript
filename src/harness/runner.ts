@@ -88,6 +88,7 @@ let testConfigContent =
 let taskConfigsFolder: string;
 let workerCount: number;
 let runUnitTests: boolean | undefined;
+let stackTraceLimit: number | "full" | undefined;
 let noColors = false;
 
 interface TestConfig {
@@ -132,9 +133,11 @@ function handleTestConfig() {
 
         if (testConfig.stackTraceLimit === "full") {
             (<any>Error).stackTraceLimit = Infinity;
+            stackTraceLimit = testConfig.stackTraceLimit;
         }
         else if ((+testConfig.stackTraceLimit | 0) > 0) {
-            (<any>Error).stackTraceLimit = testConfig.stackTraceLimit;
+            (<any>Error).stackTraceLimit = +testConfig.stackTraceLimit | 0;
+            stackTraceLimit = +testConfig.stackTraceLimit | 0;
         }
         if (testConfig.listenForWork) {
             return true;
@@ -242,7 +245,7 @@ function beginTests() {
 
     if (!runUnitTests) {
         // patch `describe` to skip unit tests
-        describe = ts.noop as any;
+        (global as any).describe = ts.noop;
     }
 }
 

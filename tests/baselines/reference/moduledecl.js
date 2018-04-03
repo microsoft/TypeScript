@@ -451,12 +451,12 @@ declare module "m3" {
 }
 declare module exportTests {
     class C1_public {
-        private f2();
+        private f2;
         f3(): string;
     }
     class C3_public {
-        private getC2_private();
-        private setC2_private(arg);
+        private getC2_private;
+        private setC2_private;
         private readonly c2;
         getC1_public(): C1_public;
         setC1_public(arg: C1_public): void;
@@ -476,7 +476,7 @@ declare module mAmbient {
     enum e {
         x,
         y,
-        z,
+        z
     }
     module m3 {
         class C {
@@ -491,7 +491,7 @@ declare module mAmbient {
         enum e {
             x,
             y,
-            z,
+            z
         }
     }
 }

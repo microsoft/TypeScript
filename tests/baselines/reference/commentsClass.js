@@ -187,7 +187,7 @@ declare var i7_c: typeof c7;
  */
 declare class c8 {
     /** s1 comment */
-    static s1: number;
+    static s1: number; /** s1 comment2 */
     /** constructor comment
     */
     constructor();
