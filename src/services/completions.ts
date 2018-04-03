@@ -1011,14 +1011,7 @@ namespace ts.Completions {
                     if (symbol.flags & (SymbolFlags.Module | SymbolFlags.Enum)) {
                         // Extract module or enum members
                         const exportedSymbols = Debug.assertEachDefined(typeChecker.getExportsOfModule(symbol), "getExportsOfModule() should all be defined");
-                        const isValidValueAccess = (symbol: Symbol) => {
-                            if (!isImportType) {
-                                return typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name);
-                            }
-                            else {
-                                return !!(node as ImportTypeNode).isTypeOf && !!(symbol.flags & SymbolFlags.Value);
-                            }
-                        };
+                        const isValidValueAccess = (symbol: Symbol) => typeChecker.isValidPropertyAccess(isImportType ? <ImportTypeNode>node : <PropertyAccessExpression>(node.parent), symbol.name);
                         const isValidTypeAccess = (symbol: Symbol) => symbolCanBeReferencedAtTypeLocation(symbol);
                         const isValidAccess = allowTypeOrValue ?
                             // Any kind is allowed when dotting off namespace in internal import equals declaration
@@ -1058,7 +1051,7 @@ namespace ts.Completions {
             }
             else {
                 for (const symbol of type.getApparentProperties()) {
-                    if (typeChecker.isValidPropertyAccessForCompletions(<PropertyAccessExpression>(node.parent), type, symbol)) {
+                    if (typeChecker.isValidPropertyAccessForCompletions(node.kind === SyntaxKind.ImportTypeNode ? <ImportTypeNode>node : <PropertyAccessExpression>(node.parent), type, symbol)) {
                         symbols.push(symbol);
                     }
                 }

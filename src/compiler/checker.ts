@@ -213,7 +213,7 @@ namespace ts {
                 return node ? getConstantValue(node) : undefined;
             },
             isValidPropertyAccess: (node, propertyName) => {
-                node = getParseTreeNode(node, isPropertyAccessOrQualifiedName);
+                node = getParseTreeNode(node, isPropertyAccessOrQualifiedNameOrImportTypeNode);
                 return !!node && isValidPropertyAccess(node, escapeLeadingUnderscores(propertyName));
             },
             isValidPropertyAccessForCompletions: (node, type, property) => {
@@ -8547,7 +8547,7 @@ namespace ts {
                     return links.resolvedType = unknownType;
                 }
                 const moduleSymbol = resolveExternalModuleSymbol(innerModuleSymbol, /*dontResolveAlias*/ false);
-                if (node.qualifier) {
+                if (!nodeIsMissing(node.qualifier)) {
                     const nameStack: Identifier[] = getIdentifierChain(node.qualifier);
                     let currentNamespace = moduleSymbol;
                     let current: Identifier | undefined;
@@ -16237,11 +16237,13 @@ namespace ts {
          * @param type The type of left.
          * @param prop The symbol for the right hand side of the property access.
          */
-        function checkPropertyAccessibility(node: PropertyAccessExpression | QualifiedName | VariableLikeDeclaration, left: Expression | QualifiedName, type: Type, prop: Symbol): boolean {
+        function checkPropertyAccessibility(node: PropertyAccessExpression | QualifiedName | VariableLikeDeclaration | ImportTypeNode, left: Expression | QualifiedName | ImportTypeNode, type: Type, prop: Symbol): boolean {
             const flags = getDeclarationModifierFlagsFromSymbol(prop);
             const errorNode = node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.VariableDeclaration ?
                 node.name :
-                (<QualifiedName>node).right;
+                node.kind === SyntaxKind.ImportTypeNode ?
+                    node :
+                    (<QualifiedName>node).right;
 
             if (getCheckFlags(prop) & CheckFlags.ContainsPrivate) {
                 // Synthetic property with private constituent property
@@ -16680,13 +16682,19 @@ namespace ts {
             (getCheckFlags(prop) & CheckFlags.Instantiated ? getSymbolLinks(prop).target : prop).isReferenced = SymbolFlags.All;
         }
 
-        function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: __String): boolean {
-            const left = node.kind === SyntaxKind.PropertyAccessExpression ? node.expression : node.left;
-            return isValidPropertyAccessWithType(node, left, propertyName, getWidenedType(checkExpression(left)));
+        function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: __String): boolean {
+            switch (node.kind) {
+                case SyntaxKind.PropertyAccessExpression:
+                    return isValidPropertyAccessWithType(node, node.expression, propertyName, getWidenedType(checkExpression(node.expression)));
+                case SyntaxKind.QualifiedName:
+                    return isValidPropertyAccessWithType(node, node.left, propertyName, getWidenedType(checkExpression(node.left)));
+                case SyntaxKind.ImportTypeNode:
+                    return isValidPropertyAccessWithType(node, node, propertyName, getTypeFromTypeNode(node));
+            }
         }
 
-        function isValidPropertyAccessForCompletions(node: PropertyAccessExpression, type: Type, property: Symbol): boolean {
-            return isValidPropertyAccessWithType(node, node.expression, property.escapedName, type)
+        function isValidPropertyAccessForCompletions(node: PropertyAccessExpression | ImportTypeNode, type: Type, property: Symbol): boolean {
+            return isValidPropertyAccessWithType(node, node.kind === SyntaxKind.ImportTypeNode ? node : node.expression, property.escapedName, type)
                 && (!(property.flags & SymbolFlags.Method) || isValidMethodAccess(property, type));
         }
         function isValidMethodAccess(method: Symbol, actualThisType: Type): boolean {
@@ -16708,8 +16716,8 @@ namespace ts {
         }
 
         function isValidPropertyAccessWithType(
-            node: PropertyAccessExpression | QualifiedName,
-            left: LeftHandSideExpression | QualifiedName,
+            node: PropertyAccessExpression | QualifiedName | ImportTypeNode,
+            left: LeftHandSideExpression | QualifiedName | ImportTypeNode,
             propertyName: __String,
             type: Type): boolean {
 

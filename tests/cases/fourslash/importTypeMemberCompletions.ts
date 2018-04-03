@@ -6,12 +6,20 @@
 ////        export class Baz {}
 ////        export interface Bat {}
 ////        export const a: number;
+////        const b: string;
 ////    }
 ////}
 
 // @Filename: /top.ts
 ////export interface Bat {}
 ////export const a: number;
+
+// @Filename: /equals.ts
+////class Foo {
+//// public static bar: string;
+//// private static baz: number;
+////}
+////export = Foo;
 
 // @Filename: /usage1.ts
 ////type A = typeof import("./ns")./*1*/
@@ -29,6 +37,8 @@
 ////type G = typeof import("./top")./*7*/
 // @Filename: /usage8.ts
 ////type H = import("./top")./*8*/
+// @Filename: /usage9.ts
+////type H = typeof import("./equals")./*9*/
 
 verify.completionsAt("1", ["Foo"]);
 verify.completionsAt("2", ["Bar"]);
@@ -38,3 +48,4 @@ verify.completionsAt("5", ["Bar"]);
 verify.completionsAt("6", ["Baz", "Bat"]);
 verify.completionsAt("7", ["a"]);
 verify.completionsAt("8", ["Bat"]);
+verify.completionsAt("9", ["prototype", "bar"]);

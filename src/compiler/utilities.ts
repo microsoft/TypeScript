@@ -5731,6 +5731,14 @@ namespace ts {
         return false;
     }
 
+    /* @internal */
+    export function isPropertyAccessOrQualifiedNameOrImportTypeNode(node: Node): node is PropertyAccessExpression | QualifiedName | ImportTypeNode {
+        const kind = node.kind;
+        return kind === SyntaxKind.PropertyAccessExpression
+            || kind === SyntaxKind.QualifiedName
+            || kind === SyntaxKind.ImportTypeNode;
+    }
+
     // Expression
 
     export function isPropertyAccessOrQualifiedName(node: Node): node is PropertyAccessExpression | QualifiedName {
