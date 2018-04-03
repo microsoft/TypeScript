@@ -320,7 +320,8 @@ namespace ts.server {
 
     export class ProjectService {
 
-        public readonly typingsCache: TypingsCache;
+        /*@internal*/
+        readonly typingsCache: TypingsCache;
 
         private readonly documentRegistry: DocumentRegistry;
 

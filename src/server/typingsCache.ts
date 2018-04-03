@@ -26,7 +26,7 @@ namespace ts.server {
         globalTypingsCacheLocation: undefined
     };
 
-    class TypingsCacheEntry {
+    interface TypingsCacheEntry {
         readonly typeAcquisition: TypeAcquisition;
         readonly compilerOptions: CompilerOptions;
         readonly typings: SortedReadonlyArray<string>;
@@ -82,6 +82,7 @@ namespace ts.server {
         return !arrayIsEqualTo(imports1, imports2);
     }
 
+    /*@internal*/
     export class TypingsCache {
         private readonly perProjectCache: Map<TypingsCacheEntry> = createMap<TypingsCacheEntry>();
 
