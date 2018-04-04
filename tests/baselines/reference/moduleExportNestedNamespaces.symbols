@@ -17,9 +17,9 @@ module.exports.Classic = class {
 
     constructor() {
         this.p = 1
->this.p : Symbol((Anonymous class).p, Decl(mod.js, 5, 19))
->this : Symbol((Anonymous class), Decl(mod.js, 4, 24))
->p : Symbol((Anonymous class).p, Decl(mod.js, 5, 19))
+>this.p : Symbol(Classic.p, Decl(mod.js, 5, 19))
+>this : Symbol(Classic, Decl(mod.js, 4, 24))
+>p : Symbol(Classic.p, Decl(mod.js, 5, 19))
     }
 }
 
@@ -60,8 +60,8 @@ function f(c, classic) {
 >x : Symbol(C.x, Decl(mod.js, 1, 35))
 
     classic.p
->classic.p : Symbol((Anonymous class).p, Decl(mod.js, 5, 19))
+>classic.p : Symbol(Classic.p, Decl(mod.js, 5, 19))
 >classic : Symbol(classic, Decl(use.js, 9, 13))
->p : Symbol((Anonymous class).p, Decl(mod.js, 5, 19))
+>p : Symbol(Classic.p, Decl(mod.js, 5, 19))
 }
 

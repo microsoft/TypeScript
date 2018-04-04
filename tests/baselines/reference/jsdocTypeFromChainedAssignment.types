@@ -43,7 +43,7 @@ A.prototype.y = A.prototype.z = function f(n) {
 >n + this.x : number
 >n : number
 >this.x : number
->this : typeof A
+>this : A
 >x : number
 }
 /** @param {number} m */
@@ -68,21 +68,21 @@ A.s = A.t = function g(m) {
 >x : any
 }
 var a = new A()
->a : typeof A
->new A() : typeof A
+>a : A
+>new A() : A
 >A : typeof A
 
 a.y('no') // error
 >a.y('no') : number
 >a.y : (n: number) => number
->a : typeof A
+>a : A
 >y : (n: number) => number
 >'no' : "no"
 
 a.z('not really') // error
 >a.z('not really') : number
 >a.z : (n: number) => number
->a : typeof A
+>a : A
 >z : (n: number) => number
 >'not really' : "not really"
 
@@ -103,7 +103,7 @@ A.t('not here either') // error
 a.first = 10 // error: '10' isn't assignable to '1'
 >a.first = 10 : 10
 >a.first : 1
->a : typeof A
+>a : A
 >first : 1
 >10 : 10
 

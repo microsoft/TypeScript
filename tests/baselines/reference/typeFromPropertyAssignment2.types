@@ -28,11 +28,11 @@ Outer.Inner = class I {
 }
 /** @type {Outer} */
 var ok
->ok : typeof Outer
+>ok : Outer
 
 ok.y
 >ok.y : number
->ok : typeof Outer
+>ok : Outer
 >y : number
 
 /** @type {Outer.Inner} */

@@ -99,7 +99,7 @@ verify.navigationTree({
             ]
         },
         {
-            "text": "global.cls",
+            "text": "cls",
             "kind": "class"
         }
     ]
@@ -123,7 +123,7 @@ verify.navigationBar([
                 "kind": "function"
             },
             {
-                "text": "global.cls",
+                "text": "cls",
                 "kind": "class"
             }
         ]
@@ -225,7 +225,7 @@ verify.navigationBar([
         "indent": 2
     },
     {
-        "text": "global.cls",
+        "text": "cls",
         "kind": "class",
         "indent": 1
     }
