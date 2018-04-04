@@ -16241,7 +16241,7 @@ namespace ts {
          * Note that this is not tracked well within the compiler, so the answer may be incorrect.
          */
         function isPrototypeProperty(symbol: Symbol) {
-            if(symbol.flags & SymbolFlags.Method || getCheckFlags(symbol) & CheckFlags.SyntheticMethod) {
+            if (symbol.flags & SymbolFlags.Method || getCheckFlags(symbol) & CheckFlags.SyntheticMethod) {
                 return true;
             }
             if (isInJavaScriptFile(symbol.valueDeclaration)) {
