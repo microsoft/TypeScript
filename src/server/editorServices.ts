@@ -303,6 +303,7 @@ namespace ts.server {
         cancellationToken: HostCancellationToken;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
+        syntaxOnly?: boolean;
         typingsInstaller: ITypingsInstaller;
         eventHandler?: ProjectServiceEventHandler;
         suppressDiagnosticEvents?: boolean;
@@ -390,6 +391,7 @@ namespace ts.server {
         public readonly cancellationToken: HostCancellationToken;
         public readonly useSingleInferredProject: boolean;
         public readonly useInferredProjectPerProjectRoot: boolean;
+        private readonly syntaxOnly?: boolean;
         public readonly typingsInstaller: ITypingsInstaller;
         public readonly throttleWaitMilliseconds?: number;
         private readonly eventHandler?: ProjectServiceEventHandler;
@@ -412,6 +414,7 @@ namespace ts.server {
             this.cancellationToken = opts.cancellationToken;
             this.useSingleInferredProject = opts.useSingleInferredProject;
             this.useInferredProjectPerProjectRoot = opts.useInferredProjectPerProjectRoot;
+            this.syntaxOnly = opts.syntaxOnly;
             this.typingsInstaller = opts.typingsInstaller || nullTypingsInstaller;
             this.throttleWaitMilliseconds = opts.throttleWaitMilliseconds;
             this.eventHandler = opts.eventHandler;
@@ -1197,6 +1200,11 @@ namespace ts.server {
         private forEachConfigFileLocation(info: ScriptInfo,
             action: (configFileName: NormalizedPath, canonicalConfigFilePath: string) => boolean | void,
             projectRootPath?: NormalizedPath) {
+
+            if (this.syntaxOnly) {
+                return undefined;
+            }
+
             let searchPath = asNormalizedPath(getDirectoryPath(info.fileName));
 
             while (!projectRootPath || containsPath(projectRootPath, searchPath, this.currentDirectory, !this.host.useCaseSensitiveFileNames)) {
@@ -1667,7 +1675,7 @@ namespace ts.server {
 
         private createInferredProject(currentDirectory: string | undefined, isSingleInferredProject?: boolean, projectRootPath?: NormalizedPath): InferredProject {
             const compilerOptions = projectRootPath && this.compilerOptionsForInferredProjectsPerProjectRoot.get(projectRootPath) || this.compilerOptionsForInferredProjects;
-            const project = new InferredProject(this, this.documentRegistry, compilerOptions, projectRootPath, currentDirectory);
+            const project = new InferredProject(this, this.documentRegistry, compilerOptions, this.syntaxOnly, projectRootPath, currentDirectory);
             if (isSingleInferredProject) {
                 this.inferredProjects.unshift(project);
             }
@@ -2309,7 +2317,7 @@ namespace ts.server {
             for (const file of proj.rootFiles) {
                 const normalized = toNormalizedPath(file.fileName);
                 if (getBaseConfigFileName(normalized)) {
-                    if (this.host.fileExists(normalized)) {
+                    if (!this.syntaxOnly && this.host.fileExists(normalized)) {
                         (tsConfigFiles || (tsConfigFiles = [])).push(normalized);
                     }
                 }
@@ -2336,7 +2344,7 @@ namespace ts.server {
                     else {
                         externalProject.enableLanguageService();
                     }
-                    // external project already exists and not config files were added - update the project and return;
+                    // external project already exists and no config files were added - update the project and return;
                     this.updateNonInferredProject(externalProject, proj.rootFiles, externalFilePropertyReader, compilerOptions, proj.typeAcquisition, proj.options.compileOnSave);
                     return;
                 }

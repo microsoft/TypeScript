@@ -7284,6 +7284,7 @@ declare namespace ts.server {
         cancellationToken: ServerCancellationToken;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
+        syntaxOnly?: boolean;
         typingsInstaller: ITypingsInstaller;
         byteLength: (buf: string, encoding?: string) => number;
         hrtime: (start?: number[]) => number[];
@@ -7564,6 +7565,7 @@ declare namespace ts.server {
         private documentRegistry;
         private compilerOptions;
         compileOnSaveEnabled: boolean;
+        private languageServicePermanentlyDisabled;
         private rootFiles;
         private rootFilesMap;
         private program;
@@ -7856,6 +7858,7 @@ declare namespace ts.server {
         cancellationToken: HostCancellationToken;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
+        syntaxOnly?: boolean;
         typingsInstaller: ITypingsInstaller;
         eventHandler?: ProjectServiceEventHandler;
         suppressDiagnosticEvents?: boolean;
@@ -7922,6 +7925,7 @@ declare namespace ts.server {
         readonly cancellationToken: HostCancellationToken;
         readonly useSingleInferredProject: boolean;
         readonly useInferredProjectPerProjectRoot: boolean;
+        private readonly syntaxOnly?;
         readonly typingsInstaller: ITypingsInstaller;
         readonly throttleWaitMilliseconds?: number;
         private readonly eventHandler?;

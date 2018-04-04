@@ -286,6 +286,7 @@ namespace ts.server {
         cancellationToken: ServerCancellationToken;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
+        syntaxOnly?: boolean;
         typingsInstaller: ITypingsInstaller;
         byteLength: (buf: string, encoding?: string) => number;
         hrtime: (start?: number[]) => number[];
@@ -353,6 +354,7 @@ namespace ts.server {
                 cancellationToken: this.cancellationToken,
                 useSingleInferredProject: opts.useSingleInferredProject,
                 useInferredProjectPerProjectRoot: opts.useInferredProjectPerProjectRoot,
+                syntaxOnly: opts.syntaxOnly,
                 typingsInstaller: this.typingsInstaller,
                 throttleWaitMilliseconds,
                 eventHandler: this.eventHandler,
