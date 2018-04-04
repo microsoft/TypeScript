@@ -306,6 +306,7 @@ namespace ts.server {
             const isNew = !this.isAttached(project);
             if (isNew) {
                 this.containingProjects.push(project);
+                project.hasStructureChange = true;
                 if (!project.getCompilerOptions().preserveSymlinks) {
                     this.ensureRealPath();
                 }
@@ -331,18 +332,23 @@ namespace ts.server {
                 case 1:
                     if (this.containingProjects[0] === project) {
                         this.containingProjects.pop();
+                        project.hasStructureChange = true;
                     }
                     break;
                 case 2:
                     if (this.containingProjects[0] === project) {
                         this.containingProjects[0] = this.containingProjects.pop();
+                        project.hasStructureChange = true;
                     }
                     else if (this.containingProjects[1] === project) {
                         this.containingProjects.pop();
+                        project.hasStructureChange = true;
                     }
                     break;
                 default:
-                    unorderedRemoveItem(this.containingProjects, project);
+                    if (unorderedRemoveItem(this.containingProjects, project)) {
+                        project.hasStructureChange = true;
+                    }
                     break;
             }
         }

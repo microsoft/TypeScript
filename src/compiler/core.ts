@@ -2985,18 +2985,19 @@ namespace ts {
     }
 
     /** Remove the *first* occurrence of `item` from the array. */
-    export function unorderedRemoveItem<T>(array: T[], item: T): void {
-        unorderedRemoveFirstItemWhere(array, element => element === item);
+    export function unorderedRemoveItem<T>(array: T[], item: T): boolean {
+        return unorderedRemoveFirstItemWhere(array, element => element === item);
     }
 
     /** Remove the *first* element satisfying `predicate`. */
-    function unorderedRemoveFirstItemWhere<T>(array: T[], predicate: (element: T) => boolean): void {
+    function unorderedRemoveFirstItemWhere<T>(array: T[], predicate: (element: T) => boolean): boolean {
         for (let i = 0; i < array.length; i++) {
             if (predicate(array[i])) {
                 unorderedRemoveItemAt(array, i);
-                break;
+                return true;
             }
         }
+        return false;
     }
 
     export type GetCanonicalFileName = (fileName: string) => string;

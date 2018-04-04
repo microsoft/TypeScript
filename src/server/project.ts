@@ -124,6 +124,9 @@ namespace ts.server {
         /*@internal*/
         resolutionCache: ResolutionCache;
 
+        /*@internal*/
+        hasStructureChange = false;
+
         private builderState: BuilderState | undefined;
         /**
          * Set of files names that were updated since the last call to getChangesSinceVersion.
@@ -810,6 +813,9 @@ namespace ts.server {
                 this.filesWithNoUnresolvedImports.delete(file);
             }
 
+            const hasMoreOrLessFiles = this.hasStructureChange;
+            this.hasStructureChange = false;
+
             // update builder only if language service is enabled
             // otherwise tell it to drop its internal state
             if (this.languageServiceEnabled) {
@@ -827,7 +833,7 @@ namespace ts.server {
                     }
                     this.lastCachedUnresolvedImportsList = result ? toDeduplicatedSortedArray(result) : emptyArray;
                 }
-                this.projectService.typingsCache.enqueueInstallTypingsForProject(this, this.lastCachedUnresolvedImportsList, hasChanges);
+                this.projectService.typingsCache.enqueueInstallTypingsForProject(this, this.lastCachedUnresolvedImportsList, hasMoreOrLessFiles);
             }
             else {
                 this.lastCachedUnresolvedImportsList = emptyArray;
