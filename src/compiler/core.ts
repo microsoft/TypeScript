@@ -1725,6 +1725,10 @@ namespace ts {
         return compareComparableValues(a, b);
     }
 
+    export function min<T>(a: T, b: T, compare: Comparer<T>): T {
+        return compare(a, b) === Comparison.LessThan ? a : b;
+    }
+
     /**
      * Compare two strings using a case-insensitive ordinal comparison.
      *
