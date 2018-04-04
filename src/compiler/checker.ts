@@ -8204,8 +8204,15 @@ namespace ts {
                     getIndexInfoOfType(objectType, IndexKind.String) ||
                     undefined;
                 if (indexInfo) {
-                    if (accessExpression && indexInfo.isReadonly && (isAssignmentTarget(accessExpression) || isDeleteTarget(accessExpression))) {
-                        error(accessExpression, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(objectType));
+                    if (accessExpression) {
+                        if (indexInfo.isReadonly && (isAssignmentTarget(accessExpression) || isDeleteTarget(accessExpression))) {
+                            error(accessExpression, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(objectType));
+                        }
+                        if (accessExpression.expression.kind === SyntaxKind.ThisKeyword &&
+                            isTypeAny(indexInfo.type) &&
+                            noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors) {
+                            error(accessExpression.argumentExpression, Diagnostics.Property_0_implicitly_has_type_any_because_the_base_class_is_of_type_any, typeToString(indexType));
+                        }
                     }
                     return indexInfo.type;
                 }
@@ -14265,6 +14272,9 @@ namespace ts {
                 }
                 else {
                     // for object literal assume that type of 'super' is 'any'
+                    if (noImplicitAny) {
+                        error(node, Diagnostics.super_implicitly_has_type_any_because_the_base_class_is_of_type_any);
+                    }
                     return anyType;
                 }
             }
@@ -14288,9 +14298,13 @@ namespace ts {
                 return unknownType;
             }
 
-            return nodeCheckFlag === NodeCheckFlags.SuperStatic
+            const type = nodeCheckFlag === NodeCheckFlags.SuperStatic
                 ? getBaseConstructorTypeOfClass(classType)
                 : getTypeWithThisArgument(baseClassType, classType.thisType);
+            if (noImplicitAny && type.flags & TypeFlags.Any) {
+                error(node, Diagnostics.super_implicitly_has_type_any_because_the_base_class_is_of_type_any);
+            }
+            return type;
 
             function isLegalUsageOfSuperExpression(container: Node): boolean {
                 if (!container) {
@@ -16433,6 +16447,9 @@ namespace ts {
                 if (indexInfo.isReadonly && (isAssignmentTarget(node) || isDeleteTarget(node))) {
                     error(node, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(apparentType));
                 }
+                if (left.kind === SyntaxKind.ThisKeyword && isTypeAny(indexInfo.type) && noImplicitAny) {
+                    error(right, Diagnostics.Property_0_implicitly_has_type_any_because_the_base_class_is_of_type_any, unescapeLeadingUnderscores(right.escapedText));
+                }
                 propType = indexInfo.type;
             }
             else {
@@ -17898,6 +17915,9 @@ namespace ts {
         function resolveCallExpression(node: CallExpression, candidatesOutArray: Signature[]): Signature {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 const superType = checkSuperExpression(node.expression);
+                if (superType === anyType) {
+                    return anySignature;
+                }
                 if (superType !== unknownType) {
                     // In super call, the candidate signatures are the matching arity signatures of the base constructor function instantiated
                     // with the type arguments specified in the extends clause.

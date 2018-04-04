@@ -1,7 +1,9 @@
 tests/cases/conformance/types/thisType/thisTypeInFunctions2.ts(14,5): error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
+tests/cases/conformance/types/thisType/thisTypeInFunctions2.ts(36,14): error TS7041: Property 'mine' implicitly has type 'any' because the base class is of type 'any'.
+tests/cases/conformance/types/thisType/thisTypeInFunctions2.ts(41,14): error TS7041: Property 'mine' implicitly has type 'any' because the base class is of type 'any'.
 
 
-==== tests/cases/conformance/types/thisType/thisTypeInFunctions2.ts (1 errors) ====
+==== tests/cases/conformance/types/thisType/thisTypeInFunctions2.ts (3 errors) ====
     interface IndexedWithThis {
         // this is a workaround for React
         init?: (this: this) => void;
@@ -38,13 +40,17 @@ tests/cases/conformance/types/thisType/thisTypeInFunctions2.ts(14,5): error TS70
     });
     extend2({
         init() {
-            this // this: containing object literal type
+            this // this: IndexedWithoutThis because of contextual typing
             this.mine
+                 ~~~~
+!!! error TS7041: Property 'mine' implicitly has type 'any' because the base class is of type 'any'.
         },
         mine: 13,
         foo() {
-            this // this: containing object literal type
+            this // this: IndexedWithoutThis because of contextual typing
             this.mine
+                 ~~~~
+!!! error TS7041: Property 'mine' implicitly has type 'any' because the base class is of type 'any'.
         }
     });
     
