@@ -1,21 +1,21 @@
 === tests/cases/conformance/salsa/module.js ===
 var Outer = Outer || {};
->Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
->Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
+>Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(module.js, 0, 24), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
+>Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(module.js, 0, 24), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
 
 Outer.app = Outer.app || {};
 >Outer.app : Symbol(app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(application.js, 0, 6))
->Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
+>Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(module.js, 0, 24), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
 >app : Symbol(app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(application.js, 0, 6))
 >Outer.app : Symbol(app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(application.js, 0, 6))
->Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
+>Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(module.js, 0, 24), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
 >app : Symbol(app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(application.js, 0, 6))
 
 === tests/cases/conformance/salsa/someview.js ===
 Outer.app.SomeView = (function () {
 >Outer.app.SomeView : Symbol(Outer.app.SomeView, Decl(someview.js, 0, 0))
 >Outer.app : Symbol(app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(application.js, 0, 6))
->Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
+>Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(module.js, 0, 24), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
 >app : Symbol(app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(application.js, 0, 6))
 >SomeView : Symbol(Outer.app.SomeView, Decl(someview.js, 0, 0))
 
@@ -32,7 +32,7 @@ Outer.app.SomeView = (function () {
 Outer.app.Inner = class {
 >Outer.app.Inner : Symbol(Outer.app.Inner, Decl(someview.js, 5, 5))
 >Outer.app : Symbol(app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(application.js, 0, 6))
->Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
+>Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(module.js, 0, 24), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
 >app : Symbol(app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(application.js, 0, 6))
 >Inner : Symbol(Outer.app.Inner, Decl(someview.js, 5, 5))
 
@@ -48,7 +48,7 @@ var example = new Outer.app.Inner();
 >example : Symbol(example, Decl(someview.js, 12, 3))
 >Outer.app.Inner : Symbol(Outer.app.Inner, Decl(someview.js, 5, 5))
 >Outer.app : Symbol(app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(application.js, 0, 6))
->Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
+>Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(module.js, 0, 24), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
 >app : Symbol(app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(application.js, 0, 6))
 >Inner : Symbol(Outer.app.Inner, Decl(someview.js, 5, 5))
 
@@ -61,7 +61,7 @@ example.y;
 Outer.app.statische = function (k) {
 >Outer.app.statische : Symbol(Outer.app.statische, Decl(someview.js, 13, 10))
 >Outer.app : Symbol(app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(application.js, 0, 6))
->Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
+>Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(module.js, 0, 24), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
 >app : Symbol(app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(application.js, 0, 6))
 >statische : Symbol(Outer.app.statische, Decl(someview.js, 13, 10))
 >k : Symbol(k, Decl(someview.js, 15, 32))
@@ -74,7 +74,7 @@ Outer.app.statische = function (k) {
 Outer.app.Application = (function () {
 >Outer.app.Application : Symbol(app.Application, Decl(application.js, 0, 0))
 >Outer.app : Symbol(app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(application.js, 0, 6))
->Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
+>Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(module.js, 0, 24), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
 >app : Symbol(app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(application.js, 0, 6))
 >Application : Symbol(app.Application, Decl(application.js, 0, 0))
 
@@ -92,7 +92,7 @@ Outer.app.Application = (function () {
 >me : Symbol(me, Decl(application.js, 7, 11))
 >Outer.app.SomeView : Symbol(Outer.app.SomeView, Decl(someview.js, 0, 0))
 >Outer.app : Symbol(app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(application.js, 0, 6))
->Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
+>Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(module.js, 0, 24), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
 >app : Symbol(app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(application.js, 0, 6))
 >SomeView : Symbol(Outer.app.SomeView, Decl(someview.js, 0, 0))
 
@@ -106,7 +106,7 @@ var app = new Outer.app.Application();
 >app : Symbol(app, Decl(main.js, 0, 3))
 >Outer.app.Application : Symbol(app.Application, Decl(application.js, 0, 0))
 >Outer.app : Symbol(app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(application.js, 0, 6))
->Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
+>Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(module.js, 0, 24), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
 >app : Symbol(app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(application.js, 0, 6))
 >Application : Symbol(app.Application, Decl(application.js, 0, 0))
 
@@ -114,7 +114,7 @@ var inner = new Outer.app.Inner();
 >inner : Symbol(inner, Decl(main.js, 1, 3))
 >Outer.app.Inner : Symbol(Outer.app.Inner, Decl(someview.js, 5, 5))
 >Outer.app : Symbol(app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(application.js, 0, 6))
->Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
+>Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(module.js, 0, 24), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
 >app : Symbol(app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(application.js, 0, 6))
 >Inner : Symbol(Outer.app.Inner, Decl(someview.js, 5, 5))
 
@@ -135,7 +135,7 @@ x.y;
 Outer.app.statische(101); // Infinity, duh
 >Outer.app.statische : Symbol(Outer.app.statische, Decl(someview.js, 13, 10))
 >Outer.app : Symbol(app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(application.js, 0, 6))
->Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
+>Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(module.js, 0, 24), Decl(someview.js, 0, 0), Decl(application.js, 0, 0))
 >app : Symbol(app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(application.js, 0, 6))
 >statische : Symbol(Outer.app.statische, Decl(someview.js, 13, 10))
 

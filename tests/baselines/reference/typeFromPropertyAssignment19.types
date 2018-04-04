@@ -1,8 +1,8 @@
 === tests/cases/conformance/salsa/index.js ===
 /// <reference path='./types.d.ts'/>
 const C = require("./semver")
->C : { (): void; f: (n: any) => any; }
->require("./semver") : { (): void; f: (n: any) => any; }
+>C : typeof C
+>require("./semver") : typeof C
 >require : any
 >"./semver" : "./semver"
 
@@ -10,7 +10,7 @@ var two = C.f(1)
 >two : any
 >C.f(1) : any
 >C.f : (n: any) => any
->C : { (): void; f: (n: any) => any; }
+>C : typeof C
 >f : (n: any) => any
 >1 : 1
 
@@ -24,18 +24,18 @@ declare var module: any;
 === tests/cases/conformance/salsa/semver.js ===
 /// <reference path='./types.d.ts'/>
 exports = module.exports = C
->exports = module.exports = C : { (): void; f: (n: any) => any; }
+>exports = module.exports = C : typeof C
 >exports : any
->module.exports = C : { (): void; f: (n: any) => any; }
+>module.exports = C : typeof C
 >module.exports : any
 >module : any
 >exports : any
->C : { (): void; f: (n: any) => any; }
+>C : typeof C
 
 C.f = n => n + 1
 >C.f = n => n + 1 : (n: any) => any
 >C.f : (n: any) => any
->C : { (): void; f: (n: any) => any; }
+>C : typeof C
 >f : (n: any) => any
 >n => n + 1 : (n: any) => any
 >n : any
@@ -44,7 +44,7 @@ C.f = n => n + 1
 >1 : 1
 
 function C() {
->C : { (): void; f: (n: any) => any; }
+>C : typeof C
 
     this.p = 1
 >this.p = 1 : 1

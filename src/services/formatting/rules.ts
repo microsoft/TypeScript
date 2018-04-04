@@ -198,7 +198,7 @@ namespace ts.formatting {
             rule("NoSpaceAfterCloseAngularBracket",
                 SyntaxKind.GreaterThanToken,
                 [SyntaxKind.OpenParenToken, SyntaxKind.OpenBracketToken, SyntaxKind.GreaterThanToken, SyntaxKind.CommaToken],
-                [isNonJsxSameLineTokenContext, isTypeArgumentOrParameterOrAssertionContext],
+                [isNonJsxSameLineTokenContext, isTypeArgumentOrParameterOrAssertionContext, isNotFunctionDeclContext /*To prevent an interference with the SpaceBeforeOpenParenInFuncDecl rule*/],
                 RuleAction.Delete),
 
             // decorators
@@ -540,6 +540,10 @@ namespace ts.formatting {
         }
 
         return false;
+    }
+
+    function isNotFunctionDeclContext(context: FormattingContext): boolean {
+        return !isFunctionDeclContext(context);
     }
 
     function isFunctionDeclarationOrFunctionExpressionContext(context: FormattingContext): boolean {

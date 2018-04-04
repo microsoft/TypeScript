@@ -2447,8 +2447,8 @@ namespace ts {
         function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, isPrototypeProperty: boolean) {
             let symbol = getJSInitializerSymbolFromName(name);
             const isToplevelNamespaceableInitializer = isBinaryExpression(propertyAccess.parent)
-                ? propertyAccess.parent.parent.parent.kind === SyntaxKind.SourceFile &&
-                    !!getJavascriptInitializer(propertyAccess.parent.right, isPrototypeAccess(propertyAccess.parent.left))
+                ? getParentOfBinaryExpression(propertyAccess.parent).parent.kind === SyntaxKind.SourceFile &&
+                    !!getJavascriptInitializer(getInitializerOfBinaryExpression(propertyAccess.parent), isPrototypeAccess(propertyAccess.parent.left))
                 : propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
             if (!isPrototypeProperty && (!symbol || !(symbol.flags & SymbolFlags.Namespace)) && isToplevelNamespaceableInitializer) {
                 // make symbols or add declarations for intermediate containers
@@ -2475,9 +2475,18 @@ namespace ts {
                 (symbol.exports || (symbol.exports = createSymbolTable()));
 
             // Declare the method/property
-            const symbolFlags = SymbolFlags.Property | (isToplevelNamespaceableInitializer ? SymbolFlags.JSContainer : 0);
-            const symbolExcludes = SymbolFlags.PropertyExcludes & ~(isToplevelNamespaceableInitializer ? SymbolFlags.JSContainer : 0);
+            const jsContainerFlag = isToplevelNamespaceableInitializer ? SymbolFlags.JSContainer : 0;
+            const isMethod = isFunctionLikeDeclaration(getAssignedJavascriptInitializer(propertyAccess)!); // TODO: GH#18217
+            const symbolFlags = (isMethod ? SymbolFlags.Method : SymbolFlags.Property) | jsContainerFlag;
+            const symbolExcludes = (isMethod ? SymbolFlags.MethodExcludes : SymbolFlags.PropertyExcludes) & ~jsContainerFlag;
             declareSymbol(symbolTable, symbol, propertyAccess, symbolFlags, symbolExcludes);
+        }
+
+        function getParentOfBinaryExpression(expr: BinaryExpression) {
+            while (isBinaryExpression(expr.parent)) {
+                expr = expr.parent;
+            }
+            return expr.parent;
         }
 
         function lookupSymbolForPropertyAccess(node: EntityNameExpression, lookupContainer: Node = container): Symbol | undefined {

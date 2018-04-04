@@ -13,13 +13,15 @@ namespace ts.codefix {
             const info = getInfo(sourceFile, context.span.start, context);
             if (!info) return undefined;
             const { node, suggestion } = info;
-            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node, suggestion));
+            const { target } = context.host.getCompilationSettings();
+            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node, suggestion, target!));
             return [createCodeFixAction(changes, [Diagnostics.Change_spelling_to_0, suggestion], fixId, Diagnostics.Fix_all_detected_spelling_errors)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
             const info = getInfo(diag.file!, diag.start!, context);
-            if (info) doChange(changes, context.sourceFile, info.node, info.suggestion);
+            const { target } = context.host.getCompilationSettings();
+            if (info) doChange(changes, context.sourceFile, info.node, info.suggestion, target!);
         }),
     });
 
@@ -54,8 +56,13 @@ namespace ts.codefix {
         return suggestion === undefined ? undefined : { node, suggestion };
     }
 
-    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: Node, suggestion: string) {
-        changes.replaceNode(sourceFile, node, createIdentifier(suggestion));
+    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: Node, suggestion: string, target: ScriptTarget) {
+        if (!isIdentifierText(suggestion, target) && isPropertyAccessExpression(node.parent)) {
+            changes.replaceNode(sourceFile, node.parent, createElementAccess(node.parent.expression, createLiteral(suggestion)));
+        }
+        else {
+            changes.replaceNode(sourceFile, node, createIdentifier(suggestion));
+        }
     }
 
     function convertSemanticMeaningToSymbolFlags(meaning: SemanticMeaning): SymbolFlags {

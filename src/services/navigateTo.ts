@@ -56,9 +56,7 @@ namespace ts.NavigateTo {
                 }
             }
 
-            const matchKind = bestMatchKind(containerMatches);
-            const isCaseSensitive = allMatchesAreCaseSensitive(containerMatches);
-            rawItems.push({ name, fileName, matchKind, isCaseSensitive, declaration });
+            rawItems.push({ name, fileName, matchKind: Math.min(...matches.map(m => m.kind)), isCaseSensitive: matches.every(m => m.isCaseSensitive), declaration });
         }
     }
 
@@ -73,19 +71,6 @@ namespace ts.NavigateTo {
             default:
                 return true;
         }
-    }
-
-    function allMatchesAreCaseSensitive(matches: ReadonlyArray<PatternMatch>): boolean {
-        Debug.assert(matches.length > 0);
-
-        // This is a case sensitive match, only if all the submatches were case sensitive.
-        for (const match of matches) {
-            if (!match.isCaseSensitive) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     function tryAddSingleDeclarationName(declaration: Declaration, containers: string[]): boolean {
@@ -131,10 +116,8 @@ namespace ts.NavigateTo {
         // First, if we started with a computed property name, then add all but the last
         // portion into the container array.
         const name = getNameOfDeclaration(declaration);
-        if (name.kind === SyntaxKind.ComputedPropertyName) {
-            if (!tryAddComputedPropertyName(name.expression, containers, /*includeLastPortion*/ false)) {
-                return undefined;
-            }
+        if (name.kind === SyntaxKind.ComputedPropertyName && !tryAddComputedPropertyName(name.expression, containers, /*includeLastPortion*/ false)) {
+            return undefined;
         }
 
         // Now, walk up our containers, adding all their names to the container array.
@@ -149,20 +132,6 @@ namespace ts.NavigateTo {
         }
 
         return containers;
-    }
-
-    function bestMatchKind(matches: ReadonlyArray<PatternMatch>): PatternMatchKind {
-        Debug.assert(matches.length > 0);
-        let bestMatchKind = PatternMatchKind.camelCase;
-
-        for (const match of matches) {
-            const kind = match.kind;
-            if (kind < bestMatchKind) {
-                bestMatchKind = kind;
-            }
-        }
-
-        return bestMatchKind;
     }
 
     function compareNavigateToItems(i1: RawNavigateToItem, i2: RawNavigateToItem) {

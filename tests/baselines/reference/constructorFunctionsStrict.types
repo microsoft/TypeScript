@@ -23,27 +23,27 @@ C.prototype.m = function() {
     this.y = 12
 >this.y = 12 : 12
 >this.y : number | undefined
->this : { x: number; m: () => void; y: number | undefined; }
+>this : { x: number; m(): void; y: number | undefined; }
 >y : number | undefined
 >12 : 12
 }
 var c = new C(1)
->c : { x: number; m: () => void; y: number | undefined; }
->new C(1) : { x: number; m: () => void; y: number | undefined; }
+>c : { x: number; m(): void; y: number | undefined; }
+>new C(1) : { x: number; m(): void; y: number | undefined; }
 >C : (x: number) => void
 >1 : 1
 
 c.x = undefined // should error
 >c.x = undefined : undefined
 >c.x : number
->c : { x: number; m: () => void; y: number | undefined; }
+>c : { x: number; m(): void; y: number | undefined; }
 >x : number
 >undefined : undefined
 
 c.y = undefined // ok
 >c.y = undefined : undefined
 >c.y : number | undefined
->c : { x: number; m: () => void; y: number | undefined; }
+>c : { x: number; m(): void; y: number | undefined; }
 >y : number | undefined
 >undefined : undefined
 

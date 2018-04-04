@@ -27,29 +27,29 @@ Installer.prototype.loadArgMetadata = function (next) {
         this.args = 'hi'
 >this.args = 'hi' : "hi"
 >this.args : number
->this : { args: number; loadArgMetadata: (next: any) => void; newProperty: number | undefined; }
+>this : { args: number; loadArgMetadata(next: any): void; newProperty: number | undefined; }
 >args : number
 >'hi' : "hi"
 
         this.newProperty = 1
 >this.newProperty = 1 : 1
 >this.newProperty : number | undefined
->this : { args: number; loadArgMetadata: (next: any) => void; newProperty: number | undefined; }
+>this : { args: number; loadArgMetadata(next: any): void; newProperty: number | undefined; }
 >newProperty : number | undefined
 >1 : 1
     }
 }
 var i = new Installer()
->i : { args: number; loadArgMetadata: (next: any) => void; newProperty: number | undefined; }
->new Installer() : { args: number; loadArgMetadata: (next: any) => void; newProperty: number | undefined; }
+>i : { args: number; loadArgMetadata(next: any): void; newProperty: number | undefined; }
+>new Installer() : { args: number; loadArgMetadata(next: any): void; newProperty: number | undefined; }
 >Installer : () => void
 
 i.newProperty = i.args // ok, number ==> number | undefined
 >i.newProperty = i.args : number
 >i.newProperty : number | undefined
->i : { args: number; loadArgMetadata: (next: any) => void; newProperty: number | undefined; }
+>i : { args: number; loadArgMetadata(next: any): void; newProperty: number | undefined; }
 >newProperty : number | undefined
 >i.args : number
->i : { args: number; loadArgMetadata: (next: any) => void; newProperty: number | undefined; }
+>i : { args: number; loadArgMetadata(next: any): void; newProperty: number | undefined; }
 >args : number
 

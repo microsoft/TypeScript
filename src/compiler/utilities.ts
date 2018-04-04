@@ -231,6 +231,14 @@ namespace ts {
         }
     }
 
+    /**
+     * Returns a value indicating whether a name is unique globally or within the current file
+     */
+    export function isFileLevelUniqueName(currentSourceFile: SourceFile, name: string, hasGlobalName?: PrintHandlers["hasGlobalName"]): boolean {
+        return !(hasGlobalName && hasGlobalName(name))
+            && !currentSourceFile.identifiers.has(name);
+    }
+
     // Returns true if this node is missing from the actual source code. A 'missing' node is different
     // from 'undefined/defined'. When a node is undefined (which can happen for optional nodes
     // in the tree), it is definitely missing. However, a node may be defined, but still be
@@ -728,6 +736,12 @@ namespace ts {
         return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).expression.kind === SyntaxKind.ImportKeyword;
     }
 
+    export function isLiteralImportTypeNode(n: Node): n is LiteralImportTypeNode {
+        return n.kind === SyntaxKind.ImportType &&
+            (n as ImportTypeNode).argument.kind === SyntaxKind.LiteralType &&
+            isStringLiteral(((n as ImportTypeNode).argument as LiteralTypeNode).literal);
+    }
+
     export function isPrologueDirective(node: Node): node is PrologueDirective {
         return node.kind === SyntaxKind.ExpressionStatement
             && (<ExpressionStatement>node).expression.kind === SyntaxKind.StringLiteral;
@@ -798,6 +812,9 @@ namespace ts {
                 const { parent } = node;
                 if (parent.kind === SyntaxKind.TypeQuery) {
                     return false;
+                }
+                if (parent.kind === SyntaxKind.ImportType) {
+                    return !(parent as ImportTypeNode).isTypeOf;
                 }
                 // Do not recursively call isPartOfTypeNode on the parent. In the example:
                 //
@@ -1541,7 +1558,9 @@ namespace ts {
             const e = skipParentheses(initializer.expression);
             return e.kind === SyntaxKind.FunctionExpression || e.kind === SyntaxKind.ArrowFunction ? initializer : undefined;
         }
-        if (initializer.kind === SyntaxKind.FunctionExpression || initializer.kind === SyntaxKind.ClassExpression) {
+        if (initializer.kind === SyntaxKind.FunctionExpression ||
+            initializer.kind === SyntaxKind.ClassExpression ||
+            initializer.kind === SyntaxKind.ArrowFunction) {
             return initializer as Expression;
         }
         if (isObjectLiteralExpression(initializer) && (initializer.properties.length === 0 || isPrototypeAssignment)) {
@@ -1636,7 +1655,7 @@ namespace ts {
             return SpecialPropertyAssignmentKind.ModuleExports;
         }
         else if (isEntityNameExpression(lhs.expression)) {
-            if (lhs.name.escapedText === "prototype" && isObjectLiteralExpression(expr.right)) {
+            if (lhs.name.escapedText === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
                 // F.prototype = { ... }
                 return SpecialPropertyAssignmentKind.Prototype;
             }
@@ -1663,6 +1682,13 @@ namespace ts {
         return SpecialPropertyAssignmentKind.None;
     }
 
+    export function getInitializerOfBinaryExpression(expr: BinaryExpression) {
+        while (isBinaryExpression(expr.right)) {
+            expr = expr.right;
+        }
+        return expr.right;
+    }
+
     export function isPrototypePropertyAssignment(node: Node): boolean {
         return isBinaryExpression(node) && getSpecialPropertyAssignmentKind(node) === SpecialPropertyAssignmentKind.PrototypeProperty;
     }
@@ -1687,13 +1713,15 @@ namespace ts {
         }
     }
 
-    export function getExternalModuleName(node: AnyImportOrReExport): Expression | undefined {
+    export function getExternalModuleName(node: AnyImportOrReExport | ImportTypeNode): Expression | undefined {
         switch (node.kind) {
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ExportDeclaration:
                 return node.moduleSpecifier;
             case SyntaxKind.ImportEqualsDeclaration:
                 return node.moduleReference.kind === SyntaxKind.ExternalModuleReference ? node.moduleReference.expression : undefined;
+            case SyntaxKind.ImportType:
+                return isLiteralImportTypeNode(node) ? node.argument.literal : undefined;
             default:
                 return Debug.assertNever(node);
         }
@@ -1787,7 +1815,11 @@ namespace ts {
 
         function getJSDocCommentsAndTagsWorker(node: Node): void {
             const parent = node.parent;
-            if (parent && (parent.kind === SyntaxKind.PropertyAssignment || parent.kind === SyntaxKind.PropertyDeclaration || getNestedModuleDeclaration(parent))) {
+            if (parent &&
+                (parent.kind === SyntaxKind.PropertyAssignment ||
+                 parent.kind === SyntaxKind.PropertyDeclaration ||
+                 isBinaryExpression(parent) && getSpecialPropertyAssignmentKind(parent) !== SpecialPropertyAssignmentKind.None ||
+                 getNestedModuleDeclaration(parent))) {
                 getJSDocCommentsAndTagsWorker(parent);
             }
             // Try to recognize this pattern when node is initializer of variable declaration and JSDoc comments are on containing variable statement.
@@ -2004,7 +2036,7 @@ namespace ts {
     export function skipParentheses(node: Node): Node;
     export function skipParentheses(node: Node): Node {
         while (node.kind === SyntaxKind.ParenthesizedExpression) {
-            node = (<ParenthesizedExpression>node).expression;
+            node = (node as ParenthesizedExpression).expression;
         }
 
         return node;
@@ -2801,7 +2833,7 @@ namespace ts {
         return file.moduleName || getExternalModuleNameFromPath(host, file.fileName);
     }
 
-    export function getExternalModuleNameFromDeclaration(host: EmitHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration): string | undefined {
+    export function getExternalModuleNameFromDeclaration(host: EmitHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode): string | undefined {
         const file = resolver.getExternalModuleFileFromDeclaration(declaration);
         if (!file || file.isDeclarationFile) {
             return undefined;
@@ -5713,6 +5745,14 @@ namespace ts {
         }
 
         return false;
+    }
+
+    /* @internal */
+    export function isPropertyAccessOrQualifiedNameOrImportTypeNode(node: Node): node is PropertyAccessExpression | QualifiedName | ImportTypeNode {
+        const kind = node.kind;
+        return kind === SyntaxKind.PropertyAccessExpression
+            || kind === SyntaxKind.QualifiedName
+            || kind === SyntaxKind.ImportType;
     }
 
     // Expression

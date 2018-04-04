@@ -2,7 +2,7 @@
 exports.n = {};
 >exports.n = {} : typeof __object
 >exports.n : typeof __object
->exports : typeof "tests/cases/conformance/salsa/mod"
+>exports : typeof import("tests/cases/conformance/salsa/mod")
 >n : typeof __object
 >{} : typeof __object
 
@@ -10,7 +10,7 @@ exports.n.K = function () {
 >exports.n.K = function () {    this.x = 10;} : () => void
 >exports.n.K : () => void
 >exports.n : typeof __object
->exports : typeof "tests/cases/conformance/salsa/mod"
+>exports : typeof import("tests/cases/conformance/salsa/mod")
 >n : typeof __object
 >K : () => void
 >function () {    this.x = 10;} : () => void
@@ -25,7 +25,7 @@ exports.n.K = function () {
 exports.Classic = class {
 >exports.Classic = class {    constructor() {        this.p = 1    }} : typeof (Anonymous class)
 >exports.Classic : typeof (Anonymous class)
->exports : typeof "tests/cases/conformance/salsa/mod"
+>exports : typeof import("tests/cases/conformance/salsa/mod")
 >Classic : typeof (Anonymous class)
 >class {    constructor() {        this.p = 1    }} : typeof (Anonymous class)
 

@@ -52,6 +52,16 @@ namespace ts {
         getNonNullableType(): Type;
         getConstraint(): Type | undefined;
         getDefault(): Type | undefined;
+
+        isUnion(): this is UnionType;
+        isIntersection(): this is IntersectionType;
+        isUnionOrIntersection(): this is UnionOrIntersectionType;
+        isLiteral(): this is LiteralType;
+        isStringLiteral(): this is StringLiteralType;
+        isNumberLiteral(): this is NumberLiteralType;
+        isTypeParameter(): this is TypeParameter;
+        isClassOrInterface(): this is InterfaceType;
+        isClass(): this is InterfaceType;
     }
 
     export interface Signature {
@@ -584,6 +594,7 @@ namespace ts {
         IndentStyle: IndentStyle;
     }
 
+    // TODO: GH#18217 These are frequently asserted as defined
     export interface EditorSettings {
         baseIndentSize?: number;
         indentSize?: number;
@@ -630,6 +641,7 @@ namespace ts {
         placeOpenBraceOnNewLineForFunctions?: boolean;
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
         insertSpaceBeforeTypeAnnotation?: boolean;
+        indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
     }
 
     export interface DefinitionInfo {

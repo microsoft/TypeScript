@@ -612,8 +612,9 @@ namespace ts {
             if (!skipDefaultLib) {
                 // If '--lib' is not specified, include default library file according to '--target'
                 // otherwise, using options specified in '--lib' instead of '--target' default library file
-                if (!options.lib) {
-                    processRootFile(getDefaultLibraryFileName(), /*isDefaultLib*/ true);
+                const defaultLibraryFileName = getDefaultLibraryFileName();
+                if (!options.lib && defaultLibraryFileName) {
+                    processRootFile(defaultLibraryFileName, /*isDefaultLib*/ true);
                 }
                 else {
                     forEach(options.lib, libFileName => {
@@ -1118,7 +1119,7 @@ namespace ts {
             // otherwise, using options specified in '--lib' instead of '--target' default library file
             const equalityComparer = host!.useCaseSensitiveFileNames() ? equateStringsCaseSensitive : equateStringsCaseInsensitive;
             if (!options.lib) {
-               return equalityComparer(file.fileName, getDefaultLibraryFileName());
+                return equalityComparer(file.fileName, getDefaultLibraryFileName());
             }
             else {
                 return some(options.lib, libFileName => equalityComparer(file.fileName, combinePaths(defaultLibraryPath, libFileName)));
@@ -1687,9 +1688,19 @@ namespace ts {
                 else if (isImportCall(node) && node.arguments.length === 1 && isStringLiteralLike(node.arguments[0])) {
                     imports = append(imports, node.arguments[0] as StringLiteralLike);
                 }
-                else {
-                    forEachChild(node, collectDynamicImportOrRequireCalls);
+                else if (isLiteralImportTypeNode(node)) {
+                    imports = append(imports, node.argument.literal);
                 }
+                else {
+                    collectDynamicImportOrRequireCallsForEachChild(node);
+                    if (hasJSDocNodes(node)) {
+                        forEach(node.jsDoc, collectDynamicImportOrRequireCallsForEachChild);
+                    }
+                }
+            }
+
+            function collectDynamicImportOrRequireCallsForEachChild(node: Node) {
+                forEachChild(node, collectDynamicImportOrRequireCalls);
             }
         }
 

@@ -189,6 +189,10 @@ namespace ts {
                     visitNode(cbNode, (<ConditionalTypeNode>node).falseType);
             case SyntaxKind.InferType:
                 return visitNode(cbNode, (<InferTypeNode>node).typeParameter);
+            case SyntaxKind.ImportType:
+                return visitNode(cbNode, (<ImportTypeNode>node).argument) ||
+                    visitNode(cbNode, (<ImportTypeNode>node).qualifier) ||
+                    visitNodes(cbNode, cbNodes, (<ImportTypeNode>node).typeArguments);
             case SyntaxKind.ParenthesizedType:
             case SyntaxKind.TypeOperator:
                 return visitNode(cbNode, (<ParenthesizedTypeNode | TypeOperatorNode>node).type);
@@ -2736,6 +2740,28 @@ namespace ts {
             return finishNode(node);
         }
 
+        function isStartOfTypeOfImportType() {
+            nextToken();
+            return token() === SyntaxKind.ImportKeyword;
+        }
+
+        function parseImportType(): ImportTypeNode {
+            sourceFile.flags |= NodeFlags.PossiblyContainsDynamicImport;
+            const node = createNode(SyntaxKind.ImportType) as ImportTypeNode;
+            if (parseOptional(SyntaxKind.TypeOfKeyword)) {
+                node.isTypeOf = true;
+            }
+            parseExpected(SyntaxKind.ImportKeyword);
+            parseExpected(SyntaxKind.OpenParenToken);
+            node.argument = parseType();
+            parseExpected(SyntaxKind.CloseParenToken);
+            if (parseOptional(SyntaxKind.DotToken)) {
+                node.qualifier = parseEntityName(/*allowReservedWords*/ true, Diagnostics.Type_expected);
+            }
+            node.typeArguments = tryParseTypeArguments();
+            return finishNode(node);
+        }
+
         function nextTokenIsNumericLiteral() {
             return nextToken() === SyntaxKind.NumericLiteral;
         }
@@ -2783,13 +2809,15 @@ namespace ts {
                     }
                 }
                 case SyntaxKind.TypeOfKeyword:
-                    return parseTypeQuery();
+                    return lookAhead(isStartOfTypeOfImportType) ? parseImportType() : parseTypeQuery();
                 case SyntaxKind.OpenBraceToken:
                     return lookAhead(isStartOfMappedType) ? parseMappedType() : parseTypeLiteral();
                 case SyntaxKind.OpenBracketToken:
                     return parseTupleType();
                 case SyntaxKind.OpenParenToken:
                     return parseParenthesizedType();
+                case SyntaxKind.ImportKeyword:
+                    return parseImportType();
                 default:
                     return parseTypeReference();
             }
@@ -2825,6 +2853,7 @@ namespace ts {
                 case SyntaxKind.ExclamationToken:
                 case SyntaxKind.DotDotDotToken:
                 case SyntaxKind.InferKeyword:
+                case SyntaxKind.ImportKeyword:
                     return true;
                 case SyntaxKind.MinusToken:
                     return !inStartOfParameter && lookAhead(nextTokenIsNumericLiteral);

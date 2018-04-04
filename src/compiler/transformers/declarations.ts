@@ -450,9 +450,9 @@ namespace ts {
             return setCommentRange(updated, getCommentRange(original));
         }
 
-        function rewriteModuleSpecifier<T extends Node>(parent: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration, input: T | undefined): T | StringLiteral {
+        function rewriteModuleSpecifier<T extends Node>(parent: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode, input: T | undefined): T | StringLiteral {
             if (!input) return undefined!; // TODO: GH#18217
-            resultHasExternalModuleIndicator = resultHasExternalModuleIndicator || parent.kind !== SyntaxKind.ModuleDeclaration;
+            resultHasExternalModuleIndicator = resultHasExternalModuleIndicator || (parent.kind !== SyntaxKind.ModuleDeclaration && parent.kind !== SyntaxKind.ImportType);
             if (input.kind === SyntaxKind.StringLiteral && isBundledEmit) {
                 const newName = getExternalModuleNameFromDeclaration(context.getEmitHost(), resolver, parent);
                 if (newName) {
@@ -614,7 +614,7 @@ namespace ts {
             if (isMethodDeclaration(input) || isMethodSignature(input)) {
                 if (hasModifier(input, ModifierFlags.Private)) {
                     if (input.symbol && input.symbol.declarations && input.symbol.declarations[0] !== input) return; // Elide all but the first overload
-                    return cleanup(createProperty(/*decorators*/undefined, input.modifiers, input.name, /*questionToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined));
+                    return cleanup(createProperty(/*decorators*/undefined, ensureModifiers(input), input.name, /*questionToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined));
                 }
             }
 
@@ -765,6 +765,16 @@ namespace ts {
                     }
                     case SyntaxKind.ConstructorType: {
                         return cleanup(updateConstructorTypeNode(input, visitNodes(input.typeParameters, visitDeclarationSubtree), updateParamsList(input, input.parameters), visitNode(input.type, visitDeclarationSubtree)));
+                    }
+                    case SyntaxKind.ImportType: {
+                        if (!isLiteralImportTypeNode(input)) return cleanup(input);
+                        return cleanup(updateImportTypeNode(
+                            input,
+                            updateLiteralTypeNode(input.argument, rewriteModuleSpecifier(input, input.argument.literal)),
+                            input.qualifier,
+                            visitNodes(input.typeArguments, visitDeclarationSubtree, isTypeNode),
+                            input.isTypeOf
+                        ));
                     }
                     default: Debug.assertNever(input, `Attempted to process unhandled node kind: ${(ts as any).SyntaxKind[(input as any).kind]}`);
                 }
@@ -1265,7 +1275,8 @@ namespace ts {
         | TypeReferenceNode
         | ConditionalTypeNode
         | FunctionTypeNode
-        | ConstructorTypeNode;
+        | ConstructorTypeNode
+        | ImportTypeNode;
 
     function isProcessedComponent(node: Node): node is ProcessedComponent {
         switch (node.kind) {
@@ -1286,6 +1297,7 @@ namespace ts {
             case SyntaxKind.ConditionalType:
             case SyntaxKind.FunctionType:
             case SyntaxKind.ConstructorType:
+            case SyntaxKind.ImportType:
             return true;
         }
         return false;

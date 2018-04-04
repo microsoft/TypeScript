@@ -328,8 +328,8 @@ namespace ts.formatting {
                 break;
             }
 
-            if (SmartIndenter.shouldIndentChildNode(n, child)) {
-                return options.indentSize!; // TODO: GH#18217
+            if (SmartIndenter.shouldIndentChildNode(options, n, child, sourceFile)) {
+                return options.indentSize!;
             }
 
             previousLine = line;
@@ -470,7 +470,7 @@ namespace ts.formatting {
             parentDynamicIndentation: DynamicIndentation,
             effectiveParentStartLine: number
         ): { indentation: number, delta: number } {
-            const delta = SmartIndenter.shouldIndentChildNode(node) ? options.indentSize! : 0;
+            const delta = SmartIndenter.shouldIndentChildNode(options, node) ? options.indentSize! : 0;
 
             if (effectiveParentStartLine === startLine) {
                 // if node is located on the same line with the parent
@@ -514,7 +514,7 @@ namespace ts.formatting {
                     if ((<MethodDeclaration>node).asteriskToken) {
                         return SyntaxKind.AsteriskToken;
                     }
-                    // falls through
+                // falls through
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.Parameter:
                     return getNameOfDeclaration(<Declaration>node).kind;
@@ -541,9 +541,9 @@ namespace ts.formatting {
                 getIndentation: () => indentation,
                 getDelta,
                 recomputeIndentation: lineAdded => {
-                    if (node.parent && SmartIndenter.shouldIndentChildNode(node.parent, node)) {
+                    if (node.parent && SmartIndenter.shouldIndentChildNode(options, node.parent, node, sourceFile)) {
                         indentation += lineAdded ? options.indentSize! : -options.indentSize!;
-                        delta = SmartIndenter.shouldIndentChildNode(node) ? options.indentSize! : 0;
+                        delta = SmartIndenter.shouldIndentChildNode(options, node) ? options.indentSize! : 0;
                     }
                 }
             };
@@ -583,7 +583,7 @@ namespace ts.formatting {
 
             function getDelta(child: TextRangeWithKind) {
                 // Delta value should be zero when the node explicitly prevents indentation of the child node
-                return SmartIndenter.nodeWillIndentChild(node, child, /*indentByDefault*/ true) ? delta : 0;
+                return SmartIndenter.nodeWillIndentChild(options, node, child, sourceFile, /*indentByDefault*/ true) ? delta : 0;
             }
         }
 
@@ -960,7 +960,7 @@ namespace ts.formatting {
             let column = 0;
             for (let i = 0; i < characterInLine; i++) {
                 if (sourceFile.text.charCodeAt(startLinePosition + i) === CharacterCodes.tab) {
-                    column += options.tabSize! - column % options.tabSize!; // TODO: GH#18217
+                    column += options.tabSize! - column % options.tabSize!;
                 }
                 else {
                     column++;
@@ -1120,7 +1120,7 @@ namespace ts.formatting {
                     // edit should not be applied if we have one line feed between elements
                     const lineDelta = currentStartLine - previousStartLine;
                     if (lineDelta !== 1) {
-                        recordReplace(previousRange.end, currentRange.pos - previousRange.end, options.newLineCharacter!); // TODO: GH#18217
+                        recordReplace(previousRange.end, currentRange.pos - previousRange.end, options.newLineCharacter!);
                         return onLaterLine ? LineAction.None : LineAction.LineAdded;
                     }
                     break;
@@ -1246,12 +1246,12 @@ namespace ts.formatting {
             !internedSizes || (internedSizes.tabSize !== options.tabSize || internedSizes.indentSize !== options.indentSize);
 
         if (resetInternedStrings) {
-            internedSizes = { tabSize: options.tabSize!, indentSize: options.indentSize! }; // TODO: GH#18217
+            internedSizes = { tabSize: options.tabSize!, indentSize: options.indentSize! };
             internedTabsIndentation = internedSpacesIndentation = undefined;
         }
 
         if (!options.convertTabsToSpaces) {
-            const tabs = Math.floor(indentation / options.tabSize!); // TODO: GH#18217
+            const tabs = Math.floor(indentation / options.tabSize!);
             const spaces = indentation - tabs * options.tabSize!;
 
             let tabString: string;
@@ -1270,7 +1270,7 @@ namespace ts.formatting {
         }
         else {
             let spacesString: string;
-            const quotient = Math.floor(indentation / options.indentSize!); // TODO: GH#18217
+            const quotient = Math.floor(indentation / options.indentSize!);
             const remainder = indentation % options.indentSize!;
             if (!internedSpacesIndentation) {
                 internedSpacesIndentation = [];

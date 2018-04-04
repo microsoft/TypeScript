@@ -99,8 +99,8 @@ namespace ts.codefix {
             }
 
             function createClassElement(symbol: Symbol, modifiers: Modifier[] | undefined): ClassElement | undefined {
-                // both properties and methods are bound as property symbols
-                if (!(symbol.flags & SymbolFlags.Property)) {
+                // Right now the only thing we can convert are function expressions, which are marked as methods
+                if (!(symbol.flags & SymbolFlags.Method)) {
                     return;
                 }
 

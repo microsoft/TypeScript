@@ -127,7 +127,6 @@ describe("PatternMatcher", () => {
 
             assert.equal(ts.PatternMatchKind.camelCase, match.kind);
             assert.equal(true, match.isCaseSensitive);
-            assertInRange(match.camelCaseWeight!, 1, 1 << 30);
         });
 
         it("PreferCaseSensitiveCamelCaseMatchPartialPattern", () => {
@@ -235,30 +234,6 @@ describe("PatternMatcher", () => {
 
             assert.equal(ts.PatternMatchKind.camelCase, match.kind);
             assert.equal(false, match.isCaseSensitive);
-        });
-
-        it("PreferCaseSensitiveRelativeWeights1", () => {
-            const match1 = getFirstMatch("FogBarBaz", "FB")!;
-            const match2 = getFirstMatch("FooFlobBaz", "FB")!;
-
-            // We should prefer something that starts at the beginning if possible
-            assertInRange(match1.camelCaseWeight!, match2.camelCaseWeight! + 1, 1 << 30);
-        });
-
-        it("PreferCaseSensitiveRelativeWeights2", () => {
-            const match1 = getFirstMatch("BazBarFooFooFoo", "FFF")!;
-            const match2 = getFirstMatch("BazFogBarFooFoo", "FFF")!;
-
-            // Contiguous things should also be preferred
-            assertInRange(match1.camelCaseWeight!, match2.camelCaseWeight! + 1, 1 << 30);
-        });
-
-        it("PreferCaseSensitiveRelativeWeights3", () => {
-            const match1 = getFirstMatch("FogBarFooFoo", "FFF")!;
-            const match2 = getFirstMatch("BarFooFooFoo", "FFF")!;
-
-            // The weight of being first should be greater than the weight of being contiguous
-            assertInRange(match1.camelCaseWeight!, match2.camelCaseWeight! + 1, 1 << 30);
         });
 
         it("AllLowerPattern1", () => {
@@ -505,11 +480,6 @@ describe("PatternMatcher", () => {
         for (let i = 0; i < array1.length; i++) {
             assert.equal(array1[i], array2[i]);
         }
-    }
-
-    function assertInRange(val: number, low: number, high: number) {
-        assert.isTrue(val >= low);
-        assert.isTrue(val <= high);
     }
 
     function verifyBreakIntoCharacterSpans(original: string, ...parts: string[]): void {

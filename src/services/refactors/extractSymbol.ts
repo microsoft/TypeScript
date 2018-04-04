@@ -1595,8 +1595,8 @@ namespace ts.refactor.extractSymbol {
             const {visitedTypes} = symbolWalker.walkType(type);
 
             for (const visitedType of visitedTypes) {
-                if (visitedType.flags & TypeFlags.TypeParameter) {
-                    allTypeParameterUsages.set(visitedType.id.toString(), visitedType as TypeParameter);
+                if (visitedType.isTypeParameter()) {
+                    allTypeParameterUsages.set(visitedType.id.toString(), visitedType);
                 }
             }
         }

@@ -284,6 +284,7 @@ namespace ts {
         IndexedAccessType,
         MappedType,
         LiteralType,
+        ImportType,
         // Binding patterns
         ObjectBindingPattern,
         ArrayBindingPattern,
@@ -445,7 +446,7 @@ namespace ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypePredicate,
-        LastTypeNode = LiteralType,
+        LastTypeNode = ImportType,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
@@ -699,12 +700,13 @@ namespace ts {
         Loop = 2,                           // Automatically generated identifier with a preference for '_i'.
         Unique = 3,                         // Unique name based on the 'text' property.
         Node = 4,                           // Unique name based on the node in the 'original' property.
-        OptimisticUnique = 5,               // Unique name based on the 'text' property, first instance won't use '_#' if there's no conflict
         KindMask = 7,                       // Mask to extract the kind of identifier from its flags.
 
         // Flags
         SkipNameGenerationScope = 1 << 3,   // Should skip a name generation scope when generating the name for this identifier
         ReservedInNestedScopes = 1 << 4,    // Reserve the generated name in nested scopes
+        Optimistic = 1 << 5,                // First instance won't use '_#' if there's no conflict
+        FileLevel = 1 << 6,                 // Use only the file identifiers list and not generated names to search for conflicts
     }
 
     export interface Identifier extends PrimaryExpression, Declaration {
@@ -1066,6 +1068,16 @@ namespace ts {
             | SyntaxKind.NeverKeyword;
     }
 
+    export interface ImportTypeNode extends NodeWithTypeArguments {
+        kind: SyntaxKind.ImportType;
+        isTypeOf?: boolean;
+        argument: TypeNode;
+        qualifier?: EntityName;
+    }
+
+    /* @internal */
+    export type LiteralImportTypeNode = ImportTypeNode & { argument: LiteralTypeNode & { literal: StringLiteral } };
+
     export interface ThisTypeNode extends TypeNode {
         kind: SyntaxKind.ThisType;
     }
@@ -1080,12 +1092,15 @@ namespace ts {
         kind: SyntaxKind.ConstructorType;
     }
 
+    export interface NodeWithTypeArguments extends TypeNode {
+        typeArguments?: NodeArray<TypeNode>;
+    }
+
     export type TypeReferenceType = TypeReferenceNode | ExpressionWithTypeArguments;
 
-    export interface TypeReferenceNode extends TypeNode {
+    export interface TypeReferenceNode extends NodeWithTypeArguments {
         kind: SyntaxKind.TypeReference;
         typeName: EntityName;
-        typeArguments?: NodeArray<TypeNode>;
     }
 
     export interface TypePredicateNode extends TypeNode {
@@ -1695,11 +1710,10 @@ namespace ts {
         expression: ImportExpression;
     }
 
-    export interface ExpressionWithTypeArguments extends TypeNode {
+    export interface ExpressionWithTypeArguments extends NodeWithTypeArguments {
         kind: SyntaxKind.ExpressionWithTypeArguments;
         parent: HeritageClause;
         expression: LeftHandSideExpression;
-        typeArguments?: NodeArray<TypeNode>;
     }
 
     export interface NewExpression extends PrimaryExpression, Declaration {
@@ -2879,9 +2893,9 @@ namespace ts {
         /* @internal */ getMergedSymbol(symbol: Symbol): Symbol;
 
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
-        isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
+        isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): boolean;
         /** Exclude accesses to private properties or methods with a `this` parameter that `type` doesn't satisfy. */
-        /* @internal */ isValidPropertyAccessForCompletions(node: PropertyAccessExpression, type: Type, property: Symbol): boolean;
+        /* @internal */ isValidPropertyAccessForCompletions(node: PropertyAccessExpression | ImportTypeNode, type: Type, property: Symbol): boolean;
         /** Follow all aliases to get the original symbol. */
         getAliasedSymbol(symbol: Symbol): Symbol;
         /** Follow a *single* alias to get the immediately aliased symbol. */
@@ -3246,7 +3260,7 @@ namespace ts {
         isOptionalParameter(node: ParameterDeclaration): boolean;
         moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
         isArgumentsLocalBinding(node: Identifier): boolean;
-        getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration): SourceFile | undefined;
+        getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode): SourceFile | undefined;
         getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): string[] | undefined;
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[] | undefined;
         isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
@@ -3884,7 +3898,7 @@ namespace ts {
         resolvedTrueType?: Type;
         resolvedFalseType?: Type;
         /* @internal */
-        resolvedInferredTrueType?: Type;
+        resolvedDefaultConstraint?: Type;
         /* @internal */
         mapper?: TypeMapper;
         /* @internal */
@@ -4760,11 +4774,16 @@ namespace ts {
     }
 
     export interface EmitHelper {
-        readonly name: string;      // A unique name for this helper.
-        readonly scoped: boolean;   // Indicates whether the helper MUST be emitted in the current scope.
-        readonly text: string;      // ES3-compatible raw script text.
-        readonly priority?: number; // Helpers with a higher priority are emitted earlier than other helpers on the node.
+        readonly name: string;                                          // A unique name for this helper.
+        readonly scoped: boolean;                                       // Indicates whether the helper MUST be emitted in the current scope.
+        readonly text: string | ((node: EmitHelperUniqueNameCallback) => string);  // ES3-compatible raw script text, or a function yielding such a string
+        readonly priority?: number;                                     // Helpers with a higher priority are emitted earlier than other helpers on the node.
     }
+
+    /* @internal */
+    export type UniqueNameHandler = (baseName: string, checkFn?: (name: string) => boolean, optimistic?: boolean) => string;
+
+    export type EmitHelperUniqueNameCallback = (name: string) => string;
 
     /**
      * Used by the checker, this enum keeps track of external emit helpers that should be type
@@ -5029,7 +5048,6 @@ namespace ts {
         /*@internal*/ onEmitSourceMapOfNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
         /*@internal*/ onEmitSourceMapOfToken?: (node: Node | undefined, token: SyntaxKind, writer: (s: string) => void, pos: number, emitCallback: (token: SyntaxKind, writer: (s: string) => void, pos: number) => number) => number;
         /*@internal*/ onEmitSourceMapOfPosition?: (pos: number) => void;
-        /*@internal*/ onEmitHelpers?: (node: Node, writeLines: (text: string) => void) => void;
         /*@internal*/ onSetSourceFile?: (node: SourceFile) => void;
         /*@internal*/ onBeforeEmitNodeArray?: (nodes: NodeArray<any> | undefined) => void;
         /*@internal*/ onAfterEmitNodeArray?: (nodes: NodeArray<any> | undefined) => void;
@@ -5041,6 +5059,9 @@ namespace ts {
         removeComments?: boolean;
         newLine?: NewLineKind;
         omitTrailingSemicolon?: boolean;
+        noEmitHelpers?: boolean;
+        /*@internal*/ module?: CompilerOptions["module"];
+        /*@internal*/ target?: CompilerOptions["target"];
         /*@internal*/ sourceMap?: boolean;
         /*@internal*/ inlineSourceMap?: boolean;
         /*@internal*/ extendedDiagnostics?: boolean;
