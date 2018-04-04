@@ -10,9 +10,9 @@ class A extends Err {
 >payload : Symbol(A.payload, Decl(a.ts, 1, 21))
 
     constructor() {
-        super(1,2,3,3,4,56) // no implicit any
-        super.unknown // no implicit any
-        super['unknown'] // no implicit any
+        super(1,2,3,3,4,56)
+        super.unknown
+        super['unknown']
     }
     process() {
 >process : Symbol(A.process, Decl(a.ts, 7, 5))
@@ -30,7 +30,7 @@ var o = {
     m() {
 >m : Symbol(m, Decl(a.ts, 13, 9))
 
-        super.unknown // no implicit any
+        super.unknown
     }
 }
 === tests/cases/compiler/b.js ===
@@ -39,7 +39,7 @@ class B extends Err {
 >Err : Symbol(Err, Decl(a.ts, 0, 11))
 
     constructor() {
-        super() // no implicit any
+        super()
         this.wat = 12
 >this.wat : Symbol(B.wat, Decl(b.js, 2, 15))
 >this : Symbol(B, Decl(b.js, 0, 0))
@@ -48,18 +48,18 @@ class B extends Err {
     f() {
 >f : Symbol(B.f, Decl(b.js, 4, 5))
 
-        this.wat      // ok
+        this.wat
 >this.wat : Symbol(B.wat, Decl(b.js, 2, 15))
 >this : Symbol(B, Decl(b.js, 0, 0))
 >wat : Symbol(B.wat, Decl(b.js, 2, 15))
 
-        this.wit // no implicit any
+        this.wit
 >this : Symbol(B, Decl(b.js, 0, 0))
 
-        this['wot'] // no implicit any
+        this['wot']
 >this : Symbol(B, Decl(b.js, 0, 0))
 
-        super.alsoBad // no implicit any
+        super.alsoBad
     }
 }
 

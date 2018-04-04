@@ -8,9 +8,9 @@ declare var Err: any
 class A extends Err {
     payload: string
     constructor() {
-        super(1,2,3,3,4,56) // no implicit any
-        super.unknown // no implicit any
-        super['unknown'] // no implicit any
+        super(1,2,3,3,4,56)
+        super.unknown
+        super['unknown']
     }
     process() {
         return this.payload + "!";
@@ -19,19 +19,19 @@ class A extends Err {
 
 var o = {
     m() {
-        super.unknown // no implicit any
+        super.unknown
     }
 }
 // @Filename: b.js
 class B extends Err {
     constructor() {
-        super() // no implicit any
+        super()
         this.wat = 12
     }
     f() {
-        this.wat      // ok
-        this.wit // no implicit any
-        this['wot'] // no implicit any
-        super.alsoBad // no implicit any
+        this.wat
+        this.wit
+        this['wot']
+        super.alsoBad
     }
 }
