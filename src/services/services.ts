@@ -1187,12 +1187,13 @@ namespace ts {
             return sourceFile;
         }
 
-        function synchronizeHostData(): void {
+        function synchronizeHostData(bindNodes = true): void {
             // perform fast check if host supports it
             if (host.getProjectVersion) {
                 const hostProjectVersion = host.getProjectVersion();
                 if (hostProjectVersion) {
                     if (lastProjectVersion === hostProjectVersion && !host.hasChangedAutomaticTypeDirectiveNames) {
+                        bindNodesIfNecessary();
                         return;
                     }
 
@@ -1215,6 +1216,7 @@ namespace ts {
 
             // If the program is already up-to-date, we can reuse it
             if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), path => hostCache.getVersion(path), fileExists, hasInvalidatedResolution, host.hasChangedAutomaticTypeDirectiveNames)) {
+                bindNodesIfNecessary();
                 return;
             }
 
@@ -1283,10 +1285,14 @@ namespace ts {
             // the course of whatever called `synchronizeHostData`
             sourcemappedFileCache = createSourceFileLikeCache(host);
 
-            // Make sure all the nodes in the program are both bound, and have their parent
-            // pointers set property.
-            program.getTypeChecker();
+            bindNodesIfNecessary();
             return;
+
+            function bindNodesIfNecessary() {
+                if (bindNodes) {
+                    program.getTypeChecker();
+                }
+            }
 
             function fileExists(fileName: string) {
                 const path = toPath(fileName, currentDirectory, getCanonicalFileName);
@@ -1363,7 +1369,7 @@ namespace ts {
         }
 
         function getProgram(): Program {
-            synchronizeHostData();
+            synchronizeHostData(/*bindNodes*/ false);
 
             return program;
         }

@@ -1008,7 +1008,8 @@ namespace FourSlash {
         }
 
         private verifyRange(desc: string, expected: Range, actual: ts.Node) {
-            const actualStart = actual.getStart();
+            const sourceFile = this.getProgram().getSourceFile(expected.fileName);
+            const actualStart = actual.getStart(sourceFile);
             const actualEnd = actual.getEnd();
             if (actualStart !== expected.pos || actualEnd !== expected.end) {
                 this.raiseError(`${desc} should be ${expected.pos}-${expected.end}, got ${actualStart}-${actualEnd}`);

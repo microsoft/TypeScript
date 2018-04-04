@@ -664,7 +664,7 @@ namespace ts {
             }
 
             // find the child that contains 'position'
-            for (const child of current.getChildren()) {
+            for (const child of current.getChildren(sourceFile)) {
                 if (!includeJsDocComment && isJSDocNode(child)) {
                     continue;
                 }
