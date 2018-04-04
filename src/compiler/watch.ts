@@ -127,7 +127,7 @@ namespace ts {
     /**
      * Helper that emit files, report diagnostics and lists emitted and/or source files depending on compiler options
      */
-    export function emitFilesAndReportErrors(program: ProgramToEmitFilesAndReportErrors, reportDiagnostic: DiagnosticReporter, reportSummary?: ReportEmitErrorSummary, writeFileName?: (s: string) => void) {
+    export function emitFilesAndReportErrors(program: ProgramToEmitFilesAndReportErrors, reportDiagnostic: DiagnosticReporter, writeFileName?: (s: string) => void, reportSummary?: ReportEmitErrorSummary) {
         // First get and report any syntactic errors.
         const diagnostics = program.getConfigFileParsingDiagnostics().slice();
         const configFileParsingDiagnosticsLength = diagnostics.length;
@@ -242,7 +242,7 @@ namespace ts {
                 }
             };
 
-            emitFilesAndReportErrors(builderProgram, reportDiagnostic, reportSummary, writeFileName);
+            emitFilesAndReportErrors(builderProgram, reportDiagnostic, writeFileName, reportSummary);
         }
     }
 

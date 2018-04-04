@@ -128,6 +128,12 @@ namespace ts.tscWatch {
         }
     }
 
+    function createErrorsFoundCompilerDiagnostic(errors: ReadonlyArray<Diagnostic>) {
+        return errors.length === 1
+            ? createCompilerDiagnostic(Diagnostics.Found_1_error)
+            : createCompilerDiagnostic(Diagnostics.Found_0_errors, errors.length);
+    }
+
     function checkOutputErrorsInitial(host: WatchedSystem, errors: ReadonlyArray<Diagnostic>, disableConsoleClears?: boolean, logsBeforeErrors?: string[]) {
         checkOutputErrors(
             host,
@@ -136,9 +142,7 @@ namespace ts.tscWatch {
             logsBeforeErrors,
             errors,
             disableConsoleClears,
-            errors.length === 1
-                ? createCompilerDiagnostic(Diagnostics.Found_1_error)
-                : createCompilerDiagnostic(Diagnostics.Found_0_errors, errors.length),
+            createErrorsFoundCompilerDiagnostic(errors),
             createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
     }
 
@@ -150,9 +154,7 @@ namespace ts.tscWatch {
             logsBeforeErrors,
             errors,
             disableConsoleClears,
-            errors.length === 1
-                ? createCompilerDiagnostic(Diagnostics.Found_1_error)
-                : createCompilerDiagnostic(Diagnostics.Found_0_errors, errors.length),
+            createErrorsFoundCompilerDiagnostic(errors),
             createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
     }
 
