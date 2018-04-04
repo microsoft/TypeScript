@@ -1,7 +1,7 @@
 tests/cases/conformance/jsx/file.tsx(13,1): error TS2605: JSX element type '{ x: number; }' is not a constructor function for JSX elements.
   Property 'render' is missing in type '{ x: number; }'.
-tests/cases/conformance/jsx/file.tsx(13,7): error TS2322: Type '{ x: number; }' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(19,7): error TS2322: Type '{ x: number; render: number; }' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(13,2): error TS2322: Type '{ x: number; }' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(19,2): error TS2322: Type '{ x: number; render: number; }' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
@@ -21,7 +21,7 @@ tests/cases/conformance/jsx/file.tsx(19,7): error TS2322: Type '{ x: number; ren
     ~~~~~~~~~~~~~~~
 !!! error TS2605: JSX element type '{ x: number; }' is not a constructor function for JSX elements.
 !!! error TS2605:   Property 'render' is missing in type '{ x: number; }'.
-          ~~~~~~
+     ~~~~
 !!! error TS2322: Type '{ x: number; }' is not assignable to type 'string'.
     
     interface Obj2type {
@@ -29,6 +29,6 @@ tests/cases/conformance/jsx/file.tsx(19,7): error TS2322: Type '{ x: number; ren
     }
     var Obj2: Obj2type;
     <Obj2 x={32} render={100} />; // OK
-          ~~~~~~~~~~~~~~~~~~~
+     ~~~~
 !!! error TS2322: Type '{ x: number; render: number; }' is not assignable to type 'string'.
     
