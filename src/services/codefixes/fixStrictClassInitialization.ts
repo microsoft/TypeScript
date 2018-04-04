@@ -116,13 +116,13 @@ namespace ts.codefix {
         else if (type.flags & TypeFlags.Boolean) {
             return createFalse();
         }
-        else if (type.flags & TypeFlags.Literal) {
-            return createLiteral((<LiteralType>type).value);
+        else if (type.isLiteral()) {
+            return createLiteral(type.value);
         }
-        else if (type.flags & TypeFlags.Union) {
-            return firstDefined((<UnionType>type).types, t => getDefaultValueFromType(checker, t));
+        else if (type.isUnion()) {
+            return firstDefined(type.types, t => getDefaultValueFromType(checker, t));
         }
-        else if (getObjectFlags(type) & ObjectFlags.Class) {
+        else if (type.isClass()) {
             const classDeclaration = getClassLikeDeclarationOfSymbol(type.symbol);
             if (!classDeclaration || hasModifier(classDeclaration, ModifierFlags.Abstract)) return undefined;
 
