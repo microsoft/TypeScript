@@ -1,26 +1,31 @@
-tests/cases/compiler/jsxChildrenGenericContextualTypes.tsx(20,22): error TS2322: Type '{ prop: "x"; children: (p: IntrinsicAttributes & LitProps<"x">) => "y"; }' is not assignable to type 'IntrinsicAttributes & LitProps<"x">'.
+tests/cases/compiler/jsxChildrenGenericContextualTypes.tsx(22,22): error TS2322: Type '{ prop: "x"; children: (p: IntrinsicAttributes & LitProps<"x">) => "y"; }' is not assignable to type 'IntrinsicAttributes & LitProps<"x">'.
   Type '{ prop: "x"; children: (p: IntrinsicAttributes & LitProps<"x">) => "y"; }' is not assignable to type 'LitProps<"x">'.
     Types of property 'children' are incompatible.
       Type '(p: IntrinsicAttributes & LitProps<"x">) => "y"' is not assignable to type '(x: LitProps<"x">) => "x"'.
         Type '"y"' is not assignable to type '"x"'.
-tests/cases/compiler/jsxChildrenGenericContextualTypes.tsx(21,27): error TS2322: Type '{ children: (p: IntrinsicAttributes & LitProps<"x">) => "y"; prop: "x"; }' is not assignable to type 'IntrinsicAttributes & LitProps<"x" | "y">'.
-  Type '{ children: (p: IntrinsicAttributes & LitProps<"x">) => "y"; prop: "x"; }' is not assignable to type 'LitProps<"x" | "y">'.
+tests/cases/compiler/jsxChildrenGenericContextualTypes.tsx(23,23): error TS2322: Type '{ prop: "x"; children: () => "y"; }' is not assignable to type 'IntrinsicAttributes & LitProps<"x">'.
+  Type '{ prop: "x"; children: () => "y"; }' is not assignable to type 'LitProps<"x">'.
     Types of property 'children' are incompatible.
-      Type '(p: IntrinsicAttributes & LitProps<"x">) => "y"' is not assignable to type '(x: LitProps<"x" | "y">) => "x" | "y"'.
-        Types of parameters 'p' and 'x' are incompatible.
-          Type 'LitProps<"x" | "y">' is not assignable to type 'IntrinsicAttributes & LitProps<"x">'.
-            Type 'LitProps<"x" | "y">' is not assignable to type 'LitProps<"x">'.
-              Types of property 'prop' are incompatible.
-                Type '"x" | "y"' is not assignable to type '"x"'.
-                  Type '"y"' is not assignable to type '"x"'.
-tests/cases/compiler/jsxChildrenGenericContextualTypes.tsx(22,29): error TS2322: Type '{ children: () => number; prop: "x"; }' is not assignable to type 'IntrinsicAttributes & LitProps<"x">'.
+      Type '() => "y"' is not assignable to type '(x: LitProps<"x">) => "x"'.
+        Type '"y"' is not assignable to type '"x"'.
+tests/cases/compiler/jsxChildrenGenericContextualTypes.tsx(24,27): error TS2322: Type '{ children: (p: IntrinsicAttributes & LitProps<"x">) => "y"; prop: "x"; }' is not assignable to type 'IntrinsicAttributes & LitProps<"x">'.
+  Type '{ children: (p: IntrinsicAttributes & LitProps<"x">) => "y"; prop: "x"; }' is not assignable to type 'LitProps<"x">'.
+    Types of property 'children' are incompatible.
+      Type '(p: IntrinsicAttributes & LitProps<"x">) => "y"' is not assignable to type '(x: LitProps<"x">) => "x"'.
+        Type '"y"' is not assignable to type '"x"'.
+tests/cases/compiler/jsxChildrenGenericContextualTypes.tsx(25,28): error TS2322: Type '{ children: () => "y"; prop: "x"; }' is not assignable to type 'IntrinsicAttributes & LitProps<"x">'.
+  Type '{ children: () => "y"; prop: "x"; }' is not assignable to type 'LitProps<"x">'.
+    Types of property 'children' are incompatible.
+      Type '() => "y"' is not assignable to type '(x: LitProps<"x">) => "x"'.
+        Type '"y"' is not assignable to type '"x"'.
+tests/cases/compiler/jsxChildrenGenericContextualTypes.tsx(26,29): error TS2322: Type '{ children: () => number; prop: "x"; }' is not assignable to type 'IntrinsicAttributes & LitProps<"x">'.
   Type '{ children: () => number; prop: "x"; }' is not assignable to type 'LitProps<"x">'.
     Types of property 'children' are incompatible.
       Type '() => number' is not assignable to type '(x: LitProps<"x">) => "x"'.
         Type 'number' is not assignable to type '"x"'.
 
 
-==== tests/cases/compiler/jsxChildrenGenericContextualTypes.tsx (3 errors) ====
+==== tests/cases/compiler/jsxChildrenGenericContextualTypes.tsx (5 errors) ====
     namespace JSX {
         export interface Element {}
         export interface ElementAttributesProperty { props: {}; }
@@ -37,7 +42,9 @@ tests/cases/compiler/jsxChildrenGenericContextualTypes.tsx(22,29): error TS2322:
     const ElemLit = <T extends string>(p: LitProps<T>) => <div></div>;
     ElemLit({prop: "x", children: () => "x"});
     const j = <ElemLit prop="x" children={() => "x"} />
+    const j2 = <ElemLit prop="x" children={p => "x"} />
     const jj = <ElemLit prop="x">{() => "x"}</ElemLit>
+    const jj2 = <ElemLit prop="x">{p => "x"}</ElemLit>
     
     // Should error
     const arg = <ElemLit prop="x" children={p => "y"} />
@@ -47,18 +54,27 @@ tests/cases/compiler/jsxChildrenGenericContextualTypes.tsx(22,29): error TS2322:
 !!! error TS2322:     Types of property 'children' are incompatible.
 !!! error TS2322:       Type '(p: IntrinsicAttributes & LitProps<"x">) => "y"' is not assignable to type '(x: LitProps<"x">) => "x"'.
 !!! error TS2322:         Type '"y"' is not assignable to type '"x"'.
+    const arg2 = <ElemLit prop="x" children={() => "y"} />
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ prop: "x"; children: () => "y"; }' is not assignable to type 'IntrinsicAttributes & LitProps<"x">'.
+!!! error TS2322:   Type '{ prop: "x"; children: () => "y"; }' is not assignable to type 'LitProps<"x">'.
+!!! error TS2322:     Types of property 'children' are incompatible.
+!!! error TS2322:       Type '() => "y"' is not assignable to type '(x: LitProps<"x">) => "x"'.
+!!! error TS2322:         Type '"y"' is not assignable to type '"x"'.
     const argchild = <ElemLit prop="x">{p => "y"}</ElemLit>
                               ~~~~~~~~
-!!! error TS2322: Type '{ children: (p: IntrinsicAttributes & LitProps<"x">) => "y"; prop: "x"; }' is not assignable to type 'IntrinsicAttributes & LitProps<"x" | "y">'.
-!!! error TS2322:   Type '{ children: (p: IntrinsicAttributes & LitProps<"x">) => "y"; prop: "x"; }' is not assignable to type 'LitProps<"x" | "y">'.
+!!! error TS2322: Type '{ children: (p: IntrinsicAttributes & LitProps<"x">) => "y"; prop: "x"; }' is not assignable to type 'IntrinsicAttributes & LitProps<"x">'.
+!!! error TS2322:   Type '{ children: (p: IntrinsicAttributes & LitProps<"x">) => "y"; prop: "x"; }' is not assignable to type 'LitProps<"x">'.
 !!! error TS2322:     Types of property 'children' are incompatible.
-!!! error TS2322:       Type '(p: IntrinsicAttributes & LitProps<"x">) => "y"' is not assignable to type '(x: LitProps<"x" | "y">) => "x" | "y"'.
-!!! error TS2322:         Types of parameters 'p' and 'x' are incompatible.
-!!! error TS2322:           Type 'LitProps<"x" | "y">' is not assignable to type 'IntrinsicAttributes & LitProps<"x">'.
-!!! error TS2322:             Type 'LitProps<"x" | "y">' is not assignable to type 'LitProps<"x">'.
-!!! error TS2322:               Types of property 'prop' are incompatible.
-!!! error TS2322:                 Type '"x" | "y"' is not assignable to type '"x"'.
-!!! error TS2322:                   Type '"y"' is not assignable to type '"x"'.
+!!! error TS2322:       Type '(p: IntrinsicAttributes & LitProps<"x">) => "y"' is not assignable to type '(x: LitProps<"x">) => "x"'.
+!!! error TS2322:         Type '"y"' is not assignable to type '"x"'.
+    const argchild2 = <ElemLit prop="x">{() => "y"}</ElemLit>
+                               ~~~~~~~~
+!!! error TS2322: Type '{ children: () => "y"; prop: "x"; }' is not assignable to type 'IntrinsicAttributes & LitProps<"x">'.
+!!! error TS2322:   Type '{ children: () => "y"; prop: "x"; }' is not assignable to type 'LitProps<"x">'.
+!!! error TS2322:     Types of property 'children' are incompatible.
+!!! error TS2322:       Type '() => "y"' is not assignable to type '(x: LitProps<"x">) => "x"'.
+!!! error TS2322:         Type '"y"' is not assignable to type '"x"'.
     const mismatched = <ElemLit prop="x">{() => 12}</ElemLit>
                                 ~~~~~~~~
 !!! error TS2322: Type '{ children: () => number; prop: "x"; }' is not assignable to type 'IntrinsicAttributes & LitProps<"x">'.

@@ -90,30 +90,56 @@ const j = <ElemLit prop="x" children={() => "x"} />
 >prop : Symbol(prop, Decl(jsxChildrenGenericContextualTypes.tsx, 15, 18))
 >children : Symbol(children, Decl(jsxChildrenGenericContextualTypes.tsx, 15, 27))
 
-const jj = <ElemLit prop="x">{() => "x"}</ElemLit>
->jj : Symbol(jj, Decl(jsxChildrenGenericContextualTypes.tsx, 16, 5))
+const j2 = <ElemLit prop="x" children={p => "x"} />
+>j2 : Symbol(j2, Decl(jsxChildrenGenericContextualTypes.tsx, 16, 5))
 >ElemLit : Symbol(ElemLit, Decl(jsxChildrenGenericContextualTypes.tsx, 13, 5))
 >prop : Symbol(prop, Decl(jsxChildrenGenericContextualTypes.tsx, 16, 19))
+>children : Symbol(children, Decl(jsxChildrenGenericContextualTypes.tsx, 16, 28))
+>p : Symbol(p, Decl(jsxChildrenGenericContextualTypes.tsx, 16, 39))
+
+const jj = <ElemLit prop="x">{() => "x"}</ElemLit>
+>jj : Symbol(jj, Decl(jsxChildrenGenericContextualTypes.tsx, 17, 5))
+>ElemLit : Symbol(ElemLit, Decl(jsxChildrenGenericContextualTypes.tsx, 13, 5))
+>prop : Symbol(prop, Decl(jsxChildrenGenericContextualTypes.tsx, 17, 19))
+>ElemLit : Symbol(ElemLit, Decl(jsxChildrenGenericContextualTypes.tsx, 13, 5))
+
+const jj2 = <ElemLit prop="x">{p => "x"}</ElemLit>
+>jj2 : Symbol(jj2, Decl(jsxChildrenGenericContextualTypes.tsx, 18, 5))
+>ElemLit : Symbol(ElemLit, Decl(jsxChildrenGenericContextualTypes.tsx, 13, 5))
+>prop : Symbol(prop, Decl(jsxChildrenGenericContextualTypes.tsx, 18, 20))
+>p : Symbol(p, Decl(jsxChildrenGenericContextualTypes.tsx, 18, 31))
 >ElemLit : Symbol(ElemLit, Decl(jsxChildrenGenericContextualTypes.tsx, 13, 5))
 
 // Should error
 const arg = <ElemLit prop="x" children={p => "y"} />
->arg : Symbol(arg, Decl(jsxChildrenGenericContextualTypes.tsx, 19, 5))
+>arg : Symbol(arg, Decl(jsxChildrenGenericContextualTypes.tsx, 21, 5))
 >ElemLit : Symbol(ElemLit, Decl(jsxChildrenGenericContextualTypes.tsx, 13, 5))
->prop : Symbol(prop, Decl(jsxChildrenGenericContextualTypes.tsx, 19, 20))
->children : Symbol(children, Decl(jsxChildrenGenericContextualTypes.tsx, 19, 29))
->p : Symbol(p, Decl(jsxChildrenGenericContextualTypes.tsx, 19, 40))
+>prop : Symbol(prop, Decl(jsxChildrenGenericContextualTypes.tsx, 21, 20))
+>children : Symbol(children, Decl(jsxChildrenGenericContextualTypes.tsx, 21, 29))
+>p : Symbol(p, Decl(jsxChildrenGenericContextualTypes.tsx, 21, 40))
+
+const arg2 = <ElemLit prop="x" children={() => "y"} />
+>arg2 : Symbol(arg2, Decl(jsxChildrenGenericContextualTypes.tsx, 22, 5))
+>ElemLit : Symbol(ElemLit, Decl(jsxChildrenGenericContextualTypes.tsx, 13, 5))
+>prop : Symbol(prop, Decl(jsxChildrenGenericContextualTypes.tsx, 22, 21))
+>children : Symbol(children, Decl(jsxChildrenGenericContextualTypes.tsx, 22, 30))
 
 const argchild = <ElemLit prop="x">{p => "y"}</ElemLit>
->argchild : Symbol(argchild, Decl(jsxChildrenGenericContextualTypes.tsx, 20, 5))
+>argchild : Symbol(argchild, Decl(jsxChildrenGenericContextualTypes.tsx, 23, 5))
 >ElemLit : Symbol(ElemLit, Decl(jsxChildrenGenericContextualTypes.tsx, 13, 5))
->prop : Symbol(prop, Decl(jsxChildrenGenericContextualTypes.tsx, 20, 25))
->p : Symbol(p, Decl(jsxChildrenGenericContextualTypes.tsx, 20, 36))
+>prop : Symbol(prop, Decl(jsxChildrenGenericContextualTypes.tsx, 23, 25))
+>p : Symbol(p, Decl(jsxChildrenGenericContextualTypes.tsx, 23, 36))
+>ElemLit : Symbol(ElemLit, Decl(jsxChildrenGenericContextualTypes.tsx, 13, 5))
+
+const argchild2 = <ElemLit prop="x">{() => "y"}</ElemLit>
+>argchild2 : Symbol(argchild2, Decl(jsxChildrenGenericContextualTypes.tsx, 24, 5))
+>ElemLit : Symbol(ElemLit, Decl(jsxChildrenGenericContextualTypes.tsx, 13, 5))
+>prop : Symbol(prop, Decl(jsxChildrenGenericContextualTypes.tsx, 24, 26))
 >ElemLit : Symbol(ElemLit, Decl(jsxChildrenGenericContextualTypes.tsx, 13, 5))
 
 const mismatched = <ElemLit prop="x">{() => 12}</ElemLit>
->mismatched : Symbol(mismatched, Decl(jsxChildrenGenericContextualTypes.tsx, 21, 5))
+>mismatched : Symbol(mismatched, Decl(jsxChildrenGenericContextualTypes.tsx, 25, 5))
 >ElemLit : Symbol(ElemLit, Decl(jsxChildrenGenericContextualTypes.tsx, 13, 5))
->prop : Symbol(prop, Decl(jsxChildrenGenericContextualTypes.tsx, 21, 27))
+>prop : Symbol(prop, Decl(jsxChildrenGenericContextualTypes.tsx, 25, 27))
 >ElemLit : Symbol(ElemLit, Decl(jsxChildrenGenericContextualTypes.tsx, 13, 5))
 

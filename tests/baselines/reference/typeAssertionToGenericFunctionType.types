@@ -10,8 +10,8 @@ var x = {
 >x : T
 >T : T
 >T : T
->((x: any) => 1) : (x: any) => number
->(x: any) => 1 : (x: any) => number
+>((x: any) => 1) : <T>(x: any) => number
+>(x: any) => 1 : <T>(x: any) => number
 >x : any
 >1 : 1
 

@@ -28,11 +28,11 @@ interface Take<T> {
 foo(n => n.length, () => 'hi');
 >foo(n => n.length, () => 'hi') : void
 >foo : <T>(o: Take<T>, i: Make<T>) => void
->n => n.length : (n: string) => number
->n : string
->n.length : number
->n : string
->length : number
+>n => n.length : (n: {}) => any
+>n : {}
+>n.length : any
+>n : {}
+>length : any
 >() => 'hi' : () => string
 >'hi' : "hi"
 
