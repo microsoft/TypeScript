@@ -198,7 +198,7 @@ namespace ts.Completions.PathCompletions {
             if (!foundGlobal) {
                 forEachAncestorDirectory(scriptPath, ancestor => {
                     const nodeModules = combinePaths(ancestor, "node_modules");
-                    if (host.directoryExists(nodeModules)) {
+                    if (tryDirectoryExists(host, nodeModules)) {
                         getCompletionEntriesForDirectoryFragment(fragment, nodeModules, fileExtensions, /*includeExtensions*/ false, host, /*exclude*/ undefined, result);
                     }
                 });

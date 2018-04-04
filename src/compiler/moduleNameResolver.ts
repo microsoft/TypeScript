@@ -120,7 +120,7 @@ namespace ts {
     /* @internal */
     export function readJson(path: string, host: { readFile(fileName: string): string | undefined }): object {
         try {
-            const jsonText = host.readFile && host.readFile(path);
+            const jsonText = host.readFile(path);
             return jsonText ? JSON.parse(jsonText) : {};
         }
         catch (e) {
