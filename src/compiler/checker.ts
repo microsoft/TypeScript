@@ -1291,7 +1291,7 @@ namespace ts {
                             }
                         }
 
-                        if (result = lookup(moduleExports, name, meaning & SymbolFlags.ModuleMember)) {
+                        if (name !== InternalSymbolName.Default && (result = lookup(moduleExports, name, meaning & SymbolFlags.ModuleMember))) {
                             break loop;
                         }
                         break;
