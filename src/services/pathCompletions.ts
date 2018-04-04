@@ -188,7 +188,7 @@ namespace ts.Completions.PathCompletions {
             if (fragmentDirectory === undefined) {
                 const oldLength = result.length;
                 getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, result);
-                for (const moduleName of getNamesFromVisibleNodeModules(fragmentDirectory, scriptPath, host)) {
+                for (const moduleName of enumerateNodeModulesVisibleToScript(host, scriptPath)) {
                     if (!result.some(entry => entry.name === moduleName)) {
                         result.push(nameAndKind(moduleName, ScriptElementKind.externalModuleName));
                     }
@@ -290,18 +290,6 @@ namespace ts.Completions.PathCompletions {
         return nonRelativeModuleNames;
     }
 
-    function getNamesFromVisibleNodeModules(fragmentDirectory: string | undefined, scriptPath: string, host: LanguageServiceHost): string[] {
-        return flatMap(enumerateNodeModulesVisibleToScript(host, scriptPath), visibleModule => {
-            if (fragmentDirectory === undefined) {
-                return visibleModule.moduleName;
-            }
-            else if (startsWith(visibleModule.moduleName, fragmentDirectory)) {
-                const nestedFiles = tryReadDirectory(host, visibleModule.moduleDir, supportedTypeScriptExtensions, /*exclude*/ undefined, /*include*/ ["./*"]);
-                return map(nestedFiles, f => removeFileExtension(getBaseFileName(normalizePath(f))));
-            }
-        });
-    }
-
     export function getTripleSlashReferenceCompletion(sourceFile: SourceFile, position: number, compilerOptions: CompilerOptions, host: LanguageServiceHost): ReadonlyArray<PathCompletion> | undefined {
         const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
         const commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
@@ -389,48 +377,16 @@ namespace ts.Completions.PathCompletions {
         return paths;
     }
 
-    function enumerateNodeModulesVisibleToScript(host: LanguageServiceHost, scriptPath: string) {
-        const result: VisibleModuleInfo[] = [];
+    function enumerateNodeModulesVisibleToScript(host: LanguageServiceHost, scriptPath: string): ReadonlyArray<string> {
+        if (!host.readFile || !host.fileExists) return emptyArray;
 
-        if (host.readFile && host.fileExists) {
-            for (const packageJson of findPackageJsons(scriptPath, host)) {
-                const contents = tryReadingPackageJson(packageJson);
-                if (!contents) {
-                    return;
-                }
-
-                const nodeModulesDir = combinePaths(getDirectoryPath(packageJson), "node_modules");
-                const foundModuleNames: string[] = [];
-
-                // Provide completions for all non @types dependencies
-                for (const key of nodeModulesDependencyKeys) {
-                    addPotentialPackageNames(contents[key], foundModuleNames);
-                }
-
-                for (const moduleName of foundModuleNames) {
-                    const moduleDir = combinePaths(nodeModulesDir, moduleName);
-                    result.push({
-                        moduleName,
-                        moduleDir
-                    });
-                }
-            }
-        }
-
-        return result;
-
-        function tryReadingPackageJson(filePath: string) {
-            try {
-                const fileText = tryReadFile(host, filePath);
-                return fileText ? JSON.parse(fileText) : undefined;
-            }
-            catch (e) {
-                return undefined;
-            }
-        }
-
-        function addPotentialPackageNames(dependencies: any, result: string[]) {
-            if (dependencies) {
+        const result: string[] = [];
+        for (const packageJson of findPackageJsons(scriptPath, host)) {
+            const contents = readJson(packageJson, host as { readFile: (filename: string) => string | undefined }); // Cast to assert that readFile is defined
+            // Provide completions for all non @types dependencies
+            for (const key of nodeModulesDependencyKeys) {
+                const dependencies: object | undefined = (contents as any)[key];
+                if (!dependencies) continue;
                 for (const dep in dependencies) {
                     if (dependencies.hasOwnProperty(dep) && !startsWith(dep, "@types/")) {
                         result.push(dep);
@@ -438,6 +394,7 @@ namespace ts.Completions.PathCompletions {
                 }
             }
         }
+        return result;
     }
 
     // Replace everything after the last directory seperator that appears
@@ -483,11 +440,6 @@ namespace ts.Completions.PathCompletions {
      */
     const tripleSlashDirectiveFragmentRegex = /^(\/\/\/\s*<reference\s+(path|types)\s*=\s*(?:'|"))([^\3"]*)$/;
 
-    interface VisibleModuleInfo {
-        moduleName: string;
-        moduleDir: string;
-    }
-
     const nodeModulesDependencyKeys = ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"];
 
     function tryGetDirectories(host: LanguageServiceHost, directoryName: string): string[] {
@@ -496,10 +448,6 @@ namespace ts.Completions.PathCompletions {
 
     function tryReadDirectory(host: LanguageServiceHost, path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>): ReadonlyArray<string> {
         return tryIOAndConsumeErrors(host, host.readDirectory, path, extensions, exclude, include) || emptyArray;
-    }
-
-    function tryReadFile(host: LanguageServiceHost, path: string): string | undefined {
-        return tryIOAndConsumeErrors(host, host.readFile, path);
     }
 
     function tryFileExists(host: LanguageServiceHost, path: string): boolean {
