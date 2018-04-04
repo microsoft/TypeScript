@@ -27,6 +27,8 @@ namespace ts {
         let needsDeclare = true;
         let isBundledEmit = false;
         let resultHasExternalModuleIndicator = false;
+        let needsScopeFixMarker = false;
+        let resultHasScopeMarker = false;
         let enclosingDeclaration: Node;
         let necessaryTypeRefernces: Map<true>;
         let lateMarkedStatements: LateVisibilityPaintedStatement[];
@@ -146,6 +148,8 @@ namespace ts {
                         suppressNewDiagnosticContexts = false;
                         lateStatementReplacementMap = createMap();
                         getSymbolAccessibilityDiagnostic = throwDiagnostic;
+                        needsScopeFixMarker = false;
+                        resultHasScopeMarker = false;
                         collectReferences(sourceFile, refs);
                         if (isExternalModule(sourceFile)) {
                             resultHasExternalModuleIndicator = false; // unused in external module bundle emit (all external modules are within module blocks, therefore are known to be modules)
@@ -175,6 +179,8 @@ namespace ts {
 
             // Single source file
             needsDeclare = true;
+            needsScopeFixMarker = false;
+            resultHasScopeMarker = false;
             enclosingDeclaration = node;
             currentSourceFile = node;
             getSymbolAccessibilityDiagnostic = throwDiagnostic;
@@ -192,7 +198,7 @@ namespace ts {
             const statements = visitNodes(node.statements, visitDeclarationStatements);
             let combinedStatements = setTextRange(createNodeArray(filterCandidateImports(statements)), node.statements);
             const emittedImports = filter(combinedStatements, isAnyImportSyntax);
-            if (isExternalModule(node) && !resultHasExternalModuleIndicator) {
+            if (isExternalModule(node) && (!resultHasExternalModuleIndicator || (needsScopeFixMarker && !resultHasScopeMarker))) {
                 combinedStatements = setTextRange(createNodeArray([...combinedStatements, createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports([]), /*moduleSpecifier*/ undefined)]), combinedStatements);
             }
             const updated = updateSourceFileNode(node, combinedStatements, /*isDeclarationFile*/ true, references, getFileReferencesForUsedTypeReferences(), node.hasNoDefaultLib);
@@ -591,6 +597,10 @@ namespace ts {
                 if (lateStatementReplacementMap.has(key)) {
                     const result = lateStatementReplacementMap.get(key);
                     lateStatementReplacementMap.delete(key);
+                    if (result && isSourceFile(statement.parent) && !isAnyImportOrReExport(result) && !isExportAssignment(result) && !hasModifier(result, ModifierFlags.Export)) {
+                        // Top-level declarations in .d.ts files are always considered exported even without a modifier unless there's an export assignment or specifier
+                        needsScopeFixMarker = true;
+                    }
                     return result;
                 }
                 else {
@@ -820,6 +830,7 @@ namespace ts {
                 case SyntaxKind.ExportDeclaration: {
                     if (isSourceFile(input.parent)) {
                         resultHasExternalModuleIndicator = true;
+                        resultHasScopeMarker = true;
                     }
                     // Always visible if the parent node isn't dropped for being not visible
                     // Rewrite external module names if necessary
@@ -829,6 +840,7 @@ namespace ts {
                     // Always visible if the parent node isn't dropped for being not visible
                     if (isSourceFile(input.parent)) {
                         resultHasExternalModuleIndicator = true;
+                        resultHasScopeMarker = true;
                     }
                     if (input.expression.kind === SyntaxKind.Identifier) {
                         return input;

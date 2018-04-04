@@ -49,3 +49,4 @@ export declare function ignoreExtraVariables<CtorT extends {
         [IGNORE_EXTRA_VARIABLES]: boolean;
     };
 } & CtorT;
+export {};
