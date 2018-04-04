@@ -452,7 +452,7 @@ namespace ts {
 
         function rewriteModuleSpecifier<T extends Node>(parent: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode, input: T): T | StringLiteral {
             if (!input) return;
-            resultHasExternalModuleIndicator = resultHasExternalModuleIndicator || (parent.kind !== SyntaxKind.ModuleDeclaration && parent.kind !== SyntaxKind.ImportTypeNode);
+            resultHasExternalModuleIndicator = resultHasExternalModuleIndicator || (parent.kind !== SyntaxKind.ModuleDeclaration && parent.kind !== SyntaxKind.ImportType);
             if (input.kind === SyntaxKind.StringLiteral && isBundledEmit) {
                 const newName = getExternalModuleNameFromDeclaration(context.getEmitHost(), resolver, parent);
                 if (newName) {
@@ -765,7 +765,7 @@ namespace ts {
                     case SyntaxKind.ConstructorType: {
                         return cleanup(updateConstructorTypeNode(input, visitNodes(input.typeParameters, visitDeclarationSubtree), updateParamsList(input, input.parameters), visitNode(input.type, visitDeclarationSubtree)));
                     }
-                    case SyntaxKind.ImportTypeNode: {
+                    case SyntaxKind.ImportType: {
                         if (!isLiteralImportTypeNode(input)) return cleanup(input);
                         return cleanup(updateImportTypeNode(
                             input,
@@ -1296,7 +1296,7 @@ namespace ts {
             case SyntaxKind.ConditionalType:
             case SyntaxKind.FunctionType:
             case SyntaxKind.ConstructorType:
-            case SyntaxKind.ImportTypeNode:
+            case SyntaxKind.ImportType:
             return true;
         }
         return false;

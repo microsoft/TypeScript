@@ -213,7 +213,7 @@ namespace ts {
                 return node ? getConstantValue(node) : undefined;
             },
             isValidPropertyAccess: (node, propertyName) => {
-                node = getParseTreeNode(node, isPropertyAccessOrQualifiedName);
+                node = getParseTreeNode(node, isPropertyAccessOrQualifiedNameOrImportTypeNode);
                 return !!node && isValidPropertyAccess(node, escapeLeadingUnderscores(propertyName));
             },
             isValidPropertyAccessForCompletions: (node, type, property) => {
@@ -1506,7 +1506,7 @@ namespace ts {
                 }
 
                 // If we're in an external module, we can't reference value symbols created from UMD export declarations
-                if (result && isInExternalModule && (meaning & SymbolFlags.Value) === SymbolFlags.Value) {
+                if (result && isInExternalModule && (meaning & SymbolFlags.Value) === SymbolFlags.Value && !(originalLocation.flags & NodeFlags.JSDoc)) {
                     const decls = result.declarations;
                     if (decls && decls.length === 1 && decls[0].kind === SyntaxKind.NamespaceExportDeclaration) {
                         error(errorLocation, Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead, unescapeLeadingUnderscores(name));
@@ -1933,9 +1933,11 @@ namespace ts {
 
         /**
          * Indicates that a symbol is an alias that does not merge with a local declaration.
+         * OR Is a JSContainer which may merge an alias with a local declaration
          */
         function isNonLocalAlias(symbol: Symbol, excludes = SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace) {
-            return symbol && (symbol.flags & (SymbolFlags.Alias | excludes)) === SymbolFlags.Alias;
+            if (!symbol) return false;
+            return (symbol.flags & (SymbolFlags.Alias | excludes)) === SymbolFlags.Alias || (symbol.flags & SymbolFlags.Alias && symbol.flags & SymbolFlags.JSContainer);
         }
 
         function resolveSymbol(symbol: Symbol, dontResolveAlias?: boolean): Symbol {
@@ -8466,15 +8468,19 @@ namespace ts {
             return result;
         }
 
-        function getTopConditionalType(node: Node): ConditionalTypeNode {
-            let result: ConditionalTypeNode;
+        function isPossiblyReferencedInConditionalType(tp: TypeParameter, node: Node) {
+            if (isTypeParameterPossiblyReferenced(tp, node)) {
+                return true;
+            }
             while (node) {
                 if (node.kind === SyntaxKind.ConditionalType) {
-                    result = <ConditionalTypeNode>node;
+                    if (isTypeParameterPossiblyReferenced(tp, (<ConditionalTypeNode>node).extendsType)) {
+                        return true;
+                    }
                 }
                 node = node.parent;
             }
-            return result;
+            return false;
         }
 
         function getTypeFromConditionalTypeNode(node: ConditionalTypeNode): Type {
@@ -8483,8 +8489,7 @@ namespace ts {
                 const checkType = getTypeFromTypeNode(node.checkType);
                 const aliasTypeArguments = getAliasTypeArgumentsForTypeNode(node);
                 const allOuterTypeParameters = getOuterTypeParameters(node, /*includeThisTypes*/ true);
-                const topNode = getTopConditionalType(node);
-                const outerTypeParameters = aliasTypeArguments ? allOuterTypeParameters : filter(allOuterTypeParameters, tp => isTypeParameterPossiblyReferenced(tp, topNode));
+                const outerTypeParameters = aliasTypeArguments ? allOuterTypeParameters : filter(allOuterTypeParameters, tp => isPossiblyReferencedInConditionalType(tp, node));
                 const root: ConditionalRoot = {
                     node,
                     checkType,
@@ -8547,7 +8552,7 @@ namespace ts {
                     return links.resolvedType = unknownType;
                 }
                 const moduleSymbol = resolveExternalModuleSymbol(innerModuleSymbol, /*dontResolveAlias*/ false);
-                if (node.qualifier) {
+                if (!nodeIsMissing(node.qualifier)) {
                     const nameStack: Identifier[] = getIdentifierChain(node.qualifier);
                     let currentNamespace = moduleSymbol;
                     let current: Identifier | undefined;
@@ -8881,7 +8886,7 @@ namespace ts {
                     return getTypeFromConditionalTypeNode(<ConditionalTypeNode>node);
                 case SyntaxKind.InferType:
                     return getTypeFromInferTypeNode(<InferTypeNode>node);
-                case SyntaxKind.ImportTypeNode:
+                case SyntaxKind.ImportType:
                     return getTypeFromImportTypeNode(<ImportTypeNode>node);
                 // This function assumes that an identifier or qualified name is a type expression
                 // Callers should first ensure this by calling isTypeNode
@@ -9103,6 +9108,11 @@ namespace ts {
             return type;
         }
 
+        function maybeTypeParameterReference(node: Node) {
+            return !(node.kind === SyntaxKind.QualifiedName ||
+                node.parent.kind === SyntaxKind.TypeReference && (<TypeReferenceNode>node.parent).typeArguments && node === (<TypeReferenceNode>node.parent).typeName);
+        }
+
         function isTypeParameterPossiblyReferenced(tp: TypeParameter, node: Node) {
             // If the type parameter doesn't have exactly one declaration, if there are invening statement blocks
             // between the node and the type parameter declaration, if the node contains actual references to the
@@ -9119,7 +9129,8 @@ namespace ts {
                     case SyntaxKind.ThisType:
                         return tp.isThisType;
                     case SyntaxKind.Identifier:
-                        return !tp.isThisType && isPartOfTypeNode(node) && getTypeFromTypeNode(<TypeNode>node) === tp;
+                        return !tp.isThisType && isPartOfTypeNode(node) && maybeTypeParameterReference(node) &&
+                            getTypeFromTypeNode(<TypeNode>node) === tp;
                     case SyntaxKind.TypeQuery:
                         return true;
                 }
@@ -16237,11 +16248,13 @@ namespace ts {
          * @param type The type of left.
          * @param prop The symbol for the right hand side of the property access.
          */
-        function checkPropertyAccessibility(node: PropertyAccessExpression | QualifiedName | VariableLikeDeclaration, left: Expression | QualifiedName, type: Type, prop: Symbol): boolean {
+        function checkPropertyAccessibility(node: PropertyAccessExpression | QualifiedName | VariableLikeDeclaration | ImportTypeNode, left: Expression | QualifiedName | ImportTypeNode, type: Type, prop: Symbol): boolean {
             const flags = getDeclarationModifierFlagsFromSymbol(prop);
             const errorNode = node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.VariableDeclaration ?
                 node.name :
-                (<QualifiedName>node).right;
+                node.kind === SyntaxKind.ImportType ?
+                    node :
+                    (<QualifiedName>node).right;
 
             if (getCheckFlags(prop) & CheckFlags.ContainsPrivate) {
                 // Synthetic property with private constituent property
@@ -16496,26 +16509,25 @@ namespace ts {
             if (!(prop.parent.flags & SymbolFlags.Class)) {
                 return false;
             }
-            let classType = getTypeOfSymbol(prop.parent) as InterfaceType;
+            let classType = getTypeOfSymbol(prop.parent);
             while (true) {
-                classType = getSuperClass(classType);
+                classType = classType.symbol && getSuperClass(classType as InterfaceType);
                 if (!classType) {
                     return false;
                 }
-                const superProperty = getPropertyOfObjectType(classType, prop.escapedName);
+                const superProperty = getPropertyOfType(classType, prop.escapedName);
                 if (superProperty && superProperty.valueDeclaration) {
                     return true;
                 }
             }
         }
 
-        function getSuperClass(classType: InterfaceType): InterfaceType | undefined {
+        function getSuperClass(classType: InterfaceType): Type | undefined {
             const x = getBaseTypes(classType);
             if (x.length === 0) {
                 return undefined;
             }
-            Debug.assert(x.length === 1);
-            return x[0] as InterfaceType;
+            return getIntersectionType(x);
         }
 
         function reportNonexistentProperty(propNode: Identifier, containingType: Type) {
@@ -16680,13 +16692,19 @@ namespace ts {
             (getCheckFlags(prop) & CheckFlags.Instantiated ? getSymbolLinks(prop).target : prop).isReferenced = SymbolFlags.All;
         }
 
-        function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: __String): boolean {
-            const left = node.kind === SyntaxKind.PropertyAccessExpression ? node.expression : node.left;
-            return isValidPropertyAccessWithType(node, left, propertyName, getWidenedType(checkExpression(left)));
+        function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: __String): boolean {
+            switch (node.kind) {
+                case SyntaxKind.PropertyAccessExpression:
+                    return isValidPropertyAccessWithType(node, node.expression, propertyName, getWidenedType(checkExpression(node.expression)));
+                case SyntaxKind.QualifiedName:
+                    return isValidPropertyAccessWithType(node, node.left, propertyName, getWidenedType(checkExpression(node.left)));
+                case SyntaxKind.ImportType:
+                    return isValidPropertyAccessWithType(node, node, propertyName, getTypeFromTypeNode(node));
+            }
         }
 
-        function isValidPropertyAccessForCompletions(node: PropertyAccessExpression, type: Type, property: Symbol): boolean {
-            return isValidPropertyAccessWithType(node, node.expression, property.escapedName, type)
+        function isValidPropertyAccessForCompletions(node: PropertyAccessExpression | ImportTypeNode, type: Type, property: Symbol): boolean {
+            return isValidPropertyAccessWithType(node, node.kind === SyntaxKind.ImportType ? node : node.expression, property.escapedName, type)
                 && (!(property.flags & SymbolFlags.Method) || isValidMethodAccess(property, type));
         }
         function isValidMethodAccess(method: Symbol, actualThisType: Type): boolean {
@@ -16708,8 +16726,8 @@ namespace ts {
         }
 
         function isValidPropertyAccessWithType(
-            node: PropertyAccessExpression | QualifiedName,
-            left: LeftHandSideExpression | QualifiedName,
+            node: PropertyAccessExpression | QualifiedName | ImportTypeNode,
+            left: LeftHandSideExpression | QualifiedName | ImportTypeNode,
             propertyName: __String,
             type: Type): boolean {
 
@@ -17266,12 +17284,9 @@ namespace ts {
          */
         function getThisArgumentOfCall(node: CallLikeExpression): LeftHandSideExpression {
             if (node.kind === SyntaxKind.CallExpression) {
-                const callee = node.expression;
-                if (callee.kind === SyntaxKind.PropertyAccessExpression) {
-                    return (callee as PropertyAccessExpression).expression;
-                }
-                else if (callee.kind === SyntaxKind.ElementAccessExpression) {
-                    return (callee as ElementAccessExpression).expression;
+                const callee = skipOuterExpressions(node.expression);
+                if (callee.kind === SyntaxKind.PropertyAccessExpression || callee.kind === SyntaxKind.ElementAccessExpression) {
+                    return (callee as PropertyAccessExpression | ElementAccessExpression).expression;
                 }
             }
         }
@@ -24597,7 +24612,7 @@ namespace ts {
                     return checkConditionalType(<ConditionalTypeNode>node);
                 case SyntaxKind.InferType:
                     return checkInferType(<InferTypeNode>node);
-                case SyntaxKind.ImportTypeNode:
+                case SyntaxKind.ImportType:
                     return checkImportType(<ImportTypeNode>node);
                 case SyntaxKind.JSDocAugmentsTag:
                     return checkJSDocAugmentsTag(node as JSDocAugmentsTag);
@@ -25115,7 +25130,7 @@ namespace ts {
                 node = parent;
                 parent = parent.parent;
             }
-            if (parent && parent.kind === SyntaxKind.ImportTypeNode && (parent as ImportTypeNode).qualifier === node) {
+            if (parent && parent.kind === SyntaxKind.ImportType && (parent as ImportTypeNode).qualifier === node) {
                 return parent as ImportTypeNode;
             }
             return undefined;
@@ -25336,6 +25351,8 @@ namespace ts {
                 case SyntaxKind.FunctionKeyword:
                 case SyntaxKind.EqualsGreaterThanToken:
                     return getSymbolOfNode(node.parent);
+                case SyntaxKind.ImportType:
+                    return isLiteralImportTypeNode(node) ? getSymbolAtLocation(node.argument.literal) : undefined;
 
                 default:
                     return undefined;

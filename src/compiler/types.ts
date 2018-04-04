@@ -284,7 +284,7 @@ namespace ts {
         IndexedAccessType,
         MappedType,
         LiteralType,
-        ImportTypeNode,
+        ImportType,
         // Binding patterns
         ObjectBindingPattern,
         ArrayBindingPattern,
@@ -446,7 +446,7 @@ namespace ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypePredicate,
-        LastTypeNode = ImportTypeNode,
+        LastTypeNode = ImportType,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
@@ -1069,7 +1069,7 @@ namespace ts {
     }
 
     export interface ImportTypeNode extends NodeWithTypeArguments {
-        kind: SyntaxKind.ImportTypeNode;
+        kind: SyntaxKind.ImportType;
         isTypeOf?: boolean;
         argument: TypeNode;
         qualifier?: EntityName;
@@ -2890,9 +2890,9 @@ namespace ts {
         /* @internal */ getMergedSymbol(symbol: Symbol): Symbol;
 
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
-        isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
+        isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): boolean;
         /** Exclude accesses to private properties or methods with a `this` parameter that `type` doesn't satisfy. */
-        /* @internal */ isValidPropertyAccessForCompletions(node: PropertyAccessExpression, type: Type, property: Symbol): boolean;
+        /* @internal */ isValidPropertyAccessForCompletions(node: PropertyAccessExpression | ImportTypeNode, type: Type, property: Symbol): boolean;
         /** Follow all aliases to get the original symbol. */
         getAliasedSymbol(symbol: Symbol): Symbol;
         /** Follow a *single* alias to get the immediately aliased symbol. */

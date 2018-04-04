@@ -735,7 +735,7 @@ namespace ts {
     }
 
     export function isLiteralImportTypeNode(n: Node): n is LiteralImportTypeNode {
-        return n.kind === SyntaxKind.ImportTypeNode &&
+        return n.kind === SyntaxKind.ImportType &&
             (n as ImportTypeNode).argument.kind === SyntaxKind.LiteralType &&
             isStringLiteral(((n as ImportTypeNode).argument as LiteralTypeNode).literal);
     }
@@ -810,6 +810,9 @@ namespace ts {
                 const parent = node.parent;
                 if (parent.kind === SyntaxKind.TypeQuery) {
                     return false;
+                }
+                if (parent.kind === SyntaxKind.ImportType) {
+                    return !(parent as ImportTypeNode).isTypeOf;
                 }
                 // Do not recursively call isPartOfTypeNode on the parent. In the example:
                 //
@@ -1710,7 +1713,7 @@ namespace ts {
                 return node.moduleSpecifier;
             case SyntaxKind.ImportEqualsDeclaration:
                 return node.moduleReference.kind === SyntaxKind.ExternalModuleReference ? node.moduleReference.expression : undefined;
-            case SyntaxKind.ImportTypeNode:
+            case SyntaxKind.ImportType:
                 return isLiteralImportTypeNode(node) ? node.argument.literal : undefined;
             default:
                 return Debug.assertNever(node);
@@ -2022,7 +2025,7 @@ namespace ts {
     export function skipParentheses(node: Node): Node;
     export function skipParentheses(node: Node): Node {
         while (node.kind === SyntaxKind.ParenthesizedExpression) {
-            node = (<ParenthesizedExpression>node).expression;
+            node = (node as ParenthesizedExpression).expression;
         }
 
         return node;
@@ -5726,6 +5729,14 @@ namespace ts {
         }
 
         return false;
+    }
+
+    /* @internal */
+    export function isPropertyAccessOrQualifiedNameOrImportTypeNode(node: Node): node is PropertyAccessExpression | QualifiedName | ImportTypeNode {
+        const kind = node.kind;
+        return kind === SyntaxKind.PropertyAccessExpression
+            || kind === SyntaxKind.QualifiedName
+            || kind === SyntaxKind.ImportType;
     }
 
     // Expression

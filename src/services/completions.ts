@@ -4,7 +4,7 @@
 namespace ts.Completions {
     export type Log = (message: string) => void;
 
-    type SymbolOriginInfo = { type: "this-type" } | SymbolOriginInfoExport;
+    type SymbolOriginInfo = { type: "this-type" } | { type: "symbol-member" } | SymbolOriginInfoExport;
     interface SymbolOriginInfoExport {
         type: "export";
         moduleSymbol: Symbol;
@@ -207,9 +207,9 @@ namespace ts.Completions {
         }
         // We should only have needsConvertPropertyAccess if there's a property access to convert. But see #21790.
         // Somehow there was a global with a non-identifier name. Hopefully someone will complain about getting a "foo bar" global completion and provide a repro.
-        else if (needsConvertPropertyAccess && propertyAccessToConvert) {
-            insertText = `[${quote(name, preferences)}]`;
-            const dot = findChildOfKind(propertyAccessToConvert, SyntaxKind.DotToken, sourceFile)!;
+        else if ((origin && origin.type === "symbol-member" || needsConvertPropertyAccess) && propertyAccessToConvert) {
+            insertText = needsConvertPropertyAccess ? `[${quote(name, preferences)}]` : `[${name}]`;
+            const dot = findChildOfKind(propertyAccessToConvert!, SyntaxKind.DotToken, sourceFile)!;
             // If the text after the '.' starts with this name, write over it. Else, add new text.
             const end = startsWith(name, propertyAccessToConvert.name.text) ? propertyAccessToConvert.name.end : dot.end;
             replacementSpan = createTextSpanFromBounds(dot.getStart(sourceFile), end);
@@ -378,6 +378,8 @@ namespace ts.Completions {
                         //      }
                         //      let x: Foo["/*completion position*/"]
                         return stringLiteralCompletionsFromProperties(typeChecker.getTypeFromTypeNode((node.parent.parent as IndexedAccessTypeNode).objectType));
+                    case SyntaxKind.ImportType:
+                        return { kind: StringLiteralCompletionKind.Paths, paths: PathCompletions.getStringLiteralCompletionsFromModuleNames(sourceFile, node, compilerOptions, host, typeChecker) };
                     default:
                         return undefined;
                 }
@@ -470,10 +472,10 @@ namespace ts.Completions {
     function getStringLiteralTypes(type: Type | undefined, typeChecker: TypeChecker, uniques = createMap<true>()): ReadonlyArray<StringLiteralType> | undefined {
         if (!type) return emptyArray;
         type = skipConstraint(type);
-        return type.flags & TypeFlags.Union
-            ? flatMap((<UnionType>type).types, t => getStringLiteralTypes(t, typeChecker, uniques))
-            : type.flags & TypeFlags.StringLiteral && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, (type as StringLiteralType).value)
-            ? [type as StringLiteralType]
+        return type.isUnion()
+            ? flatMap(type.types, t => getStringLiteralTypes(t, typeChecker, uniques))
+            : type.isStringLiteral() && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, type.value)
+            ? [type]
             : emptyArray;
     }
 
@@ -877,6 +879,9 @@ namespace ts.Completions {
                     case SyntaxKind.QualifiedName:
                         node = (parent as QualifiedName).left;
                         break;
+                    case SyntaxKind.ImportType:
+                        node = parent;
+                        break;
                     default:
                         // There is nothing that precedes the dot, so this likely just a stray character
                         // or leading into a '...' token. Just bail out instead.
@@ -1008,10 +1013,11 @@ namespace ts.Completions {
             completionKind = CompletionKind.PropertyAccess;
 
             // Since this is qualified name check its a type node location
-            const isTypeLocation = insideJsDocTagTypeExpression || isPartOfTypeNode(node.parent);
+            const isImportType = isLiteralImportTypeNode(node);
+            const isTypeLocation = insideJsDocTagTypeExpression || (isImportType && !(node as ImportTypeNode).isTypeOf) || isPartOfTypeNode(node.parent);
             const isRhsOfImportDeclaration = isInRightSideOfInternalImportEqualsDeclaration(node);
             const allowTypeOrValue = isRhsOfImportDeclaration || (!isTypeLocation && isPossiblyTypeArgumentPosition(contextToken, sourceFile));
-            if (isEntityName(node)) {
+            if (isEntityName(node) || isImportType) {
                 let symbol = typeChecker.getSymbolAtLocation(node);
                 if (symbol) {
                     symbol = skipAlias(symbol, typeChecker);
@@ -1019,7 +1025,7 @@ namespace ts.Completions {
                     if (symbol.flags & (SymbolFlags.Module | SymbolFlags.Enum)) {
                         // Extract module or enum members
                         const exportedSymbols = Debug.assertEachDefined(typeChecker.getExportsOfModule(symbol), "getExportsOfModule() should all be defined");
-                        const isValidValueAccess = (symbol: Symbol) => typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name);
+                        const isValidValueAccess = (symbol: Symbol) => typeChecker.isValidPropertyAccess(isImportType ? <ImportTypeNode>node : <PropertyAccessExpression>(node.parent), symbol.name);
                         const isValidTypeAccess = (symbol: Symbol) => symbolCanBeReferencedAtTypeLocation(symbol);
                         const isValidAccess = allowTypeOrValue ?
                             // Any kind is allowed when dotting off namespace in internal import equals declaration
@@ -1059,11 +1065,32 @@ namespace ts.Completions {
             }
             else {
                 for (const symbol of type.getApparentProperties()) {
-                    if (typeChecker.isValidPropertyAccessForCompletions(<PropertyAccessExpression>(node.parent), type, symbol)) {
-                        symbols.push(symbol);
+                    if (typeChecker.isValidPropertyAccessForCompletions(node.kind === SyntaxKind.ImportType ? <ImportTypeNode>node : <PropertyAccessExpression>node.parent, type, symbol)) {
+                        addPropertySymbol(symbol);
                     }
                 }
             }
+        }
+
+        function addPropertySymbol(symbol: Symbol) {
+            // If this is e.g. [Symbol.iterator], add a completion for `Symbol`.
+            const symbolSymbol = firstDefined(symbol.declarations, decl => {
+                const name = getNameOfDeclaration(decl);
+                const leftName = name.kind === SyntaxKind.ComputedPropertyName ? getLeftMostName(name.expression) : undefined;
+                return leftName && typeChecker.getSymbolAtLocation(leftName);
+            });
+            if (symbolSymbol) {
+                symbols.push(symbolSymbol);
+                symbolToOriginInfoMap[getSymbolId(symbolSymbol)] = { type: "symbol-member" };
+            }
+            else {
+                symbols.push(symbol);
+            }
+        }
+
+        /** Given 'a.b.c', returns 'a'. */
+        function getLeftMostName(e: Expression): Identifier | undefined {
+            return isIdentifier(e) ? e : isPropertyAccessExpression(e) ? getLeftMostName(e.expression) : undefined;
         }
 
         function tryGetGlobalSymbols(): boolean {
@@ -2173,13 +2200,12 @@ namespace ts.Completions {
      * excludes array-like types or callable/constructable types.
      */
     function getPropertiesForCompletion(type: Type, checker: TypeChecker, isForAccess: boolean): Symbol[] {
-        if (!(type.flags & TypeFlags.Union)) {
+        if (!(type.isUnion())) {
             return Debug.assertEachDefined(type.getApparentProperties(), "getApparentProperties() should all be defined");
         }
 
-        const { types } = type as UnionType;
         // If we're providing completions for an object literal, skip primitive, array-like, or callable types since those shouldn't be implemented by object literals.
-        const filteredTypes = isForAccess ? types : types.filter(memberType =>
+        const filteredTypes = isForAccess ? type.types : type.types.filter(memberType =>
             !(memberType.flags & TypeFlags.Primitive || checker.isArrayLikeType(memberType) || typeHasCallOrConstructSignatures(memberType, checker)));
         return Debug.assertEachDefined(checker.getAllPossiblePropertiesOfTypes(filteredTypes), "getAllPossiblePropertiesOfTypes() should all be defined");
     }

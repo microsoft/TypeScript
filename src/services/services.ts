@@ -431,9 +431,7 @@ namespace ts {
             return this.checker.getIndexTypeOfType(this, IndexKind.Number);
         }
         getBaseTypes(): BaseType[] | undefined {
-            return this.flags & TypeFlags.Object && this.objectFlags & (ObjectFlags.Class | ObjectFlags.Interface)
-                ? this.checker.getBaseTypes(<InterfaceType><Type>this)
-                : undefined;
+            return this.isClassOrInterface() ? this.checker.getBaseTypes(this) : undefined;
         }
         getNonNullableType(): Type {
             return this.checker.getNonNullableType(this);
@@ -443,6 +441,34 @@ namespace ts {
         }
         getDefault(): Type | undefined {
             return this.checker.getDefaultFromTypeParameter(this);
+        }
+
+        isUnion(): this is UnionType {
+            return !!(this.flags & TypeFlags.Union);
+        }
+        isIntersection(): this is IntersectionType {
+            return !!(this.flags & TypeFlags.Intersection);
+        }
+        isUnionOrIntersection(): this is UnionOrIntersectionType {
+            return !!(this.flags & TypeFlags.UnionOrIntersection);
+        }
+        isLiteral(): this is LiteralType {
+            return !!(this.flags & TypeFlags.Literal);
+        }
+        isStringLiteral(): this is StringLiteralType {
+            return !!(this.flags & TypeFlags.StringLiteral);
+        }
+        isNumberLiteral(): this is NumberLiteralType {
+            return !!(this.flags & TypeFlags.NumberLiteral);
+        }
+        isTypeParameter(): this is TypeParameter {
+            return !!(this.flags & TypeFlags.TypeParameter);
+        }
+        isClassOrInterface(): this is InterfaceType {
+            return !!(getObjectFlags(this) & ObjectFlags.ClassOrInterface);
+        }
+        isClass(): this is InterfaceType {
+            return !!(getObjectFlags(this) & ObjectFlags.Class);
         }
     }
 

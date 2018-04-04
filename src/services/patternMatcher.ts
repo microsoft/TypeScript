@@ -173,37 +173,37 @@ namespace ts {
         return spans;
     }
 
-    function matchTextChunk(candidate: string, chunk: TextChunk, stringToWordSpans: Map<TextSpan[]>): PatternMatch {
+    function matchTextChunk(candidate: string, chunk: TextChunk, stringToWordSpans: Map<TextSpan[]>): PatternMatch | undefined {
         const index = indexOfIgnoringCase(candidate, chunk.textLowerCase);
         if (index === 0) {
-            if (chunk.text.length === candidate.length) {
-                // a) Check if the part matches the candidate entirely, in an case insensitive or
-                //    sensitive manner.  If it does, return that there was an exact match.
-                return createPatternMatch(PatternMatchKind.exact, /*isCaseSensitive:*/ candidate === chunk.text);
-            }
-            else {
-                // b) Check if the part is a prefix of the candidate, in a case insensitive or sensitive
-                //    manner.  If it does, return that there was a prefix match.
-                return createPatternMatch(PatternMatchKind.prefix, /*isCaseSensitive:*/ startsWith(candidate, chunk.text));
-            }
+            // a) Check if the word is a prefix of the candidate, in a case insensitive or
+            //    sensitive manner. If it does, return that there was an exact match if the word and candidate are the same length, else a prefix match.
+            return createPatternMatch(chunk.text.length === candidate.length ? PatternMatchKind.exact : PatternMatchKind.prefix, /*isCaseSensitive:*/ startsWith(candidate, chunk.text));
         }
 
-        const isLowercase = chunk.isLowerCase;
-        if (isLowercase) {
-            if (index > 0) {
-                // c) If the part is entirely lowercase, then check if it is contained anywhere in the
-                //    candidate in a case insensitive manner.  If so, return that there was a substring
-                //    match.
-                //
-                //    Note: We only have a substring match if the lowercase part is prefix match of some
-                //    word part. That way we don't match something like 'Class' when the user types 'a'.
-                //    But we would match 'FooAttribute' (since 'Attribute' starts with 'a').
-                const wordSpans = getWordSpans(candidate, stringToWordSpans);
-                for (const span of wordSpans) {
-                    if (partStartsWith(candidate, span, chunk.text, /*ignoreCase:*/ true)) {
-                        return createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive:*/ partStartsWith(candidate, span, chunk.text, /*ignoreCase:*/ false));
-                    }
+        if (chunk.isLowerCase) {
+            if (index === -1) return undefined;
+            // b) If the part is entirely lowercase, then check if it is contained anywhere in the
+            //    candidate in a case insensitive manner.  If so, return that there was a substring
+            //    match.
+            //
+            //    Note: We only have a substring match if the lowercase part is prefix match of some
+            //    word part. That way we don't match something like 'Class' when the user types 'a'.
+            //    But we would match 'FooAttribute' (since 'Attribute' starts with 'a').
+            const wordSpans = getWordSpans(candidate, stringToWordSpans);
+            for (const span of wordSpans) {
+                if (partStartsWith(candidate, span, chunk.text, /*ignoreCase:*/ true)) {
+                    return createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive:*/ partStartsWith(candidate, span, chunk.text, /*ignoreCase:*/ false));
                 }
+            }
+            // c) Is the pattern a substring of the candidate starting on one of the candidate's word boundaries?
+            // We could check every character boundary start of the candidate for the pattern. However, that's
+            // an m * n operation in the wost case. Instead, find the first instance of the pattern
+            // substring, and see if it starts on a capital letter. It seems unlikely that the user will try to
+            // filter the list based on a substring that starts on a capital letter and also with a lowercase one.
+            // (Pattern: fogbar, Candidate: quuxfogbarFogBar).
+            if (chunk.text.length < candidate.length && isUpperCaseLetter(candidate.charCodeAt(index))) {
+                return createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive:*/ false);
             }
         }
         else {
@@ -213,36 +213,16 @@ namespace ts {
             if (candidate.indexOf(chunk.text) > 0) {
                 return createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive:*/ true);
             }
-        }
-
-        if (!isLowercase) {
             // e) If the part was not entirely lowercase, then attempt a camel cased match as well.
             if (chunk.characterSpans.length > 0) {
                 const candidateParts = getWordSpans(candidate, stringToWordSpans);
                 const isCaseSensitive = tryCamelCaseMatch(candidate, candidateParts, chunk, /*ignoreCase:*/ false) ? true
-                        : tryCamelCaseMatch(candidate, candidateParts, chunk, /*ignoreCase:*/ true) ? false : undefined;
+                    : tryCamelCaseMatch(candidate, candidateParts, chunk, /*ignoreCase:*/ true) ? false : undefined;
                 if (isCaseSensitive !== undefined) {
                     return createPatternMatch(PatternMatchKind.camelCase, isCaseSensitive);
                 }
             }
         }
-
-        if (isLowercase) {
-            // f) Is the pattern a substring of the candidate starting on one of the candidate's word boundaries?
-
-            // We could check every character boundary start of the candidate for the pattern. However, that's
-            // an m * n operation in the wost case. Instead, find the first instance of the pattern
-            // substring, and see if it starts on a capital letter. It seems unlikely that the user will try to
-            // filter the list based on a substring that starts on a capital letter and also with a lowercase one.
-            // (Pattern: fogbar, Candidate: quuxfogbarFogBar).
-            if (chunk.text.length < candidate.length) {
-                if (index > 0 && isUpperCaseLetter(candidate.charCodeAt(index))) {
-                    return createPatternMatch(PatternMatchKind.substring, /*isCaseSensitive:*/ false);
-                }
-            }
-        }
-
-        return undefined;
     }
 
     function containsSpaceOrAsterisk(text: string): boolean {
@@ -281,30 +261,29 @@ namespace ts {
         //
         // 3) Matching is as follows:
         //
-        //   a) Check if the word matches the candidate entirely, in an case insensitive or
-        //    sensitive manner.  If it does, return that there was an exact match.
+        //   a) Check if the word is a prefix of the candidate, in a case insensitive or
+        //      sensitive manner. If it does, return that there was an exact match if the word and candidate are the same length, else a prefix match.
         //
-        //   b) Check if the word is a prefix of the candidate, in a case insensitive or
-        //      sensitive manner.  If it does, return that there was a prefix match.
+        //   If the word is entirely lowercase:
+        //      b) Then check if it is contained anywhere in the
+        //          candidate in a case insensitive manner.  If so, return that there was a substring
+        //          match.
         //
-        //   c) If the word is entirely lowercase, then check if it is contained anywhere in the
-        //      candidate in a case insensitive manner.  If so, return that there was a substring
-        //      match.
+        //          Note: We only have a substring match if the lowercase part is prefix match of
+        //          some word part. That way we don't match something like 'Class' when the user
+        //          types 'a'. But we would match 'FooAttribute' (since 'Attribute' starts with
+        //          'a').
         //
-        //      Note: We only have a substring match if the lowercase part is prefix match of
-        //      some word part. That way we don't match something like 'Class' when the user
-        //      types 'a'. But we would match 'FooAttribute' (since 'Attribute' starts with
-        //      'a').
+        //       c) The word is all lower case. Is it a case insensitive substring of the candidate starting
+        //          on a part boundary of the candidate?
         //
-        //   d) If the word was not entirely lowercase, then check if it is contained in the
-        //      candidate in a case *sensitive* manner. If so, return that there was a substring
-        //      match.
+        //   Else:
+        //       d) If the word was not entirely lowercase, then check if it is contained in the
+        //          candidate in a case *sensitive* manner. If so, return that there was a substring
+        //          match.
         //
-        //   e) If the word was not entirely lowercase, then attempt a camel cased match as
-        //      well.
-        //
-        //   f) The word is all lower case. Is it a case insensitive substring of the candidate starting
-        //      on a part boundary of the candidate?
+        //       e) If the word was not entirely lowercase, then attempt a camel cased match as
+        //          well.
         //
         // Only if all words have some sort of match is the pattern considered matched.
 

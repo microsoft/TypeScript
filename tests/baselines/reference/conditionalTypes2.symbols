@@ -414,3 +414,140 @@ function foo<T>(value: T) {
     }
 }
 
+// Repro from #23052
+
+type A<T, V, E> =
+>A : Symbol(A, Decl(conditionalTypes2.ts, 119, 1))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 123, 7))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 123, 9))
+>E : Symbol(E, Decl(conditionalTypes2.ts, 123, 12))
+
+  T extends object
+>T : Symbol(T, Decl(conditionalTypes2.ts, 123, 7))
+
+    ? { [Q in { [P in keyof T]: T[P] extends V ? P : P; }[keyof T]]: A<T[Q], V, E>; }
+>Q : Symbol(Q, Decl(conditionalTypes2.ts, 125, 9))
+>P : Symbol(P, Decl(conditionalTypes2.ts, 125, 17))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 123, 7))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 123, 7))
+>P : Symbol(P, Decl(conditionalTypes2.ts, 125, 17))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 123, 9))
+>P : Symbol(P, Decl(conditionalTypes2.ts, 125, 17))
+>P : Symbol(P, Decl(conditionalTypes2.ts, 125, 17))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 123, 7))
+>A : Symbol(A, Decl(conditionalTypes2.ts, 119, 1))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 123, 7))
+>Q : Symbol(Q, Decl(conditionalTypes2.ts, 125, 9))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 123, 9))
+>E : Symbol(E, Decl(conditionalTypes2.ts, 123, 12))
+
+    : T extends V ? T : never;
+>T : Symbol(T, Decl(conditionalTypes2.ts, 123, 7))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 123, 9))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 123, 7))
+
+type B<T, V> =
+>B : Symbol(B, Decl(conditionalTypes2.ts, 126, 30))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 128, 7))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 128, 9))
+
+  T extends object
+>T : Symbol(T, Decl(conditionalTypes2.ts, 128, 7))
+
+    ? { [Q in { [P in keyof T]: T[P] extends V ? P : P; }[keyof T]]: B<T[Q], V>; }
+>Q : Symbol(Q, Decl(conditionalTypes2.ts, 130, 9))
+>P : Symbol(P, Decl(conditionalTypes2.ts, 130, 17))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 128, 7))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 128, 7))
+>P : Symbol(P, Decl(conditionalTypes2.ts, 130, 17))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 128, 9))
+>P : Symbol(P, Decl(conditionalTypes2.ts, 130, 17))
+>P : Symbol(P, Decl(conditionalTypes2.ts, 130, 17))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 128, 7))
+>B : Symbol(B, Decl(conditionalTypes2.ts, 126, 30))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 128, 7))
+>Q : Symbol(Q, Decl(conditionalTypes2.ts, 130, 9))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 128, 9))
+
+    : T extends V ? T : never;
+>T : Symbol(T, Decl(conditionalTypes2.ts, 128, 7))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 128, 9))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 128, 7))
+
+type C<T, V, E> =
+>C : Symbol(C, Decl(conditionalTypes2.ts, 131, 30))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 133, 7))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 133, 9))
+>E : Symbol(E, Decl(conditionalTypes2.ts, 133, 12))
+
+  { [Q in { [P in keyof T]: T[P] extends V ? P : P; }[keyof T]]: C<T[Q], V, E>; };
+>Q : Symbol(Q, Decl(conditionalTypes2.ts, 134, 5))
+>P : Symbol(P, Decl(conditionalTypes2.ts, 134, 13))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 133, 7))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 133, 7))
+>P : Symbol(P, Decl(conditionalTypes2.ts, 134, 13))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 133, 9))
+>P : Symbol(P, Decl(conditionalTypes2.ts, 134, 13))
+>P : Symbol(P, Decl(conditionalTypes2.ts, 134, 13))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 133, 7))
+>C : Symbol(C, Decl(conditionalTypes2.ts, 131, 30))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 133, 7))
+>Q : Symbol(Q, Decl(conditionalTypes2.ts, 134, 5))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 133, 9))
+>E : Symbol(E, Decl(conditionalTypes2.ts, 133, 12))
+
+// Repro from #23100
+
+type A2<T, V, E> =
+>A2 : Symbol(A2, Decl(conditionalTypes2.ts, 134, 82))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 138, 8))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 138, 10))
+>E : Symbol(E, Decl(conditionalTypes2.ts, 138, 13))
+
+    T extends object ? T extends any[] ? T : { [Q in keyof T]: A2<T[Q], V, E>; } : T;
+>T : Symbol(T, Decl(conditionalTypes2.ts, 138, 8))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 138, 8))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 138, 8))
+>Q : Symbol(Q, Decl(conditionalTypes2.ts, 139, 48))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 138, 8))
+>A2 : Symbol(A2, Decl(conditionalTypes2.ts, 134, 82))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 138, 8))
+>Q : Symbol(Q, Decl(conditionalTypes2.ts, 139, 48))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 138, 10))
+>E : Symbol(E, Decl(conditionalTypes2.ts, 138, 13))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 138, 8))
+
+type B2<T, V> =
+>B2 : Symbol(B2, Decl(conditionalTypes2.ts, 139, 85))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 141, 8))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 141, 10))
+
+    T extends object ? T extends any[] ? T : { [Q in keyof T]: B2<T[Q], V>; } : T;
+>T : Symbol(T, Decl(conditionalTypes2.ts, 141, 8))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 141, 8))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 141, 8))
+>Q : Symbol(Q, Decl(conditionalTypes2.ts, 142, 48))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 141, 8))
+>B2 : Symbol(B2, Decl(conditionalTypes2.ts, 139, 85))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 141, 8))
+>Q : Symbol(Q, Decl(conditionalTypes2.ts, 142, 48))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 141, 10))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 141, 8))
+
+type C2<T, V, E> =
+>C2 : Symbol(C2, Decl(conditionalTypes2.ts, 142, 82))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 144, 8))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 144, 10))
+>E : Symbol(E, Decl(conditionalTypes2.ts, 144, 13))
+
+    T extends object ? { [Q in keyof T]: C2<T[Q], V, E>; } : T;
+>T : Symbol(T, Decl(conditionalTypes2.ts, 144, 8))
+>Q : Symbol(Q, Decl(conditionalTypes2.ts, 145, 26))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 144, 8))
+>C2 : Symbol(C2, Decl(conditionalTypes2.ts, 142, 82))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 144, 8))
+>Q : Symbol(Q, Decl(conditionalTypes2.ts, 145, 26))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 144, 10))
+>E : Symbol(E, Decl(conditionalTypes2.ts, 144, 13))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 144, 8))
+

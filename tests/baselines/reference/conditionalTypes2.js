@@ -120,6 +120,32 @@ function foo<T>(value: T) {
     }
 }
 
+// Repro from #23052
+
+type A<T, V, E> =
+  T extends object
+    ? { [Q in { [P in keyof T]: T[P] extends V ? P : P; }[keyof T]]: A<T[Q], V, E>; }
+    : T extends V ? T : never;
+
+type B<T, V> =
+  T extends object
+    ? { [Q in { [P in keyof T]: T[P] extends V ? P : P; }[keyof T]]: B<T[Q], V>; }
+    : T extends V ? T : never;
+
+type C<T, V, E> =
+  { [Q in { [P in keyof T]: T[P] extends V ? P : P; }[keyof T]]: C<T[Q], V, E>; };
+
+// Repro from #23100
+
+type A2<T, V, E> =
+    T extends object ? T extends any[] ? T : { [Q in keyof T]: A2<T[Q], V, E>; } : T;
+
+type B2<T, V> =
+    T extends object ? T extends any[] ? T : { [Q in keyof T]: B2<T[Q], V>; } : T;
+
+type C2<T, V, E> =
+    T extends object ? { [Q in keyof T]: C2<T[Q], V, E>; } : T;
+
 
 //// [conditionalTypes2.js]
 "use strict";
@@ -254,3 +280,27 @@ interface B1<T> extends A1<T> {
 declare function toString1(value: object | Function): string;
 declare function toString2(value: Function): string;
 declare function foo<T>(value: T): void;
+declare type A<T, V, E> = T extends object ? {
+    [Q in {
+        [P in keyof T]: T[P] extends V ? P : P;
+    }[keyof T]]: A<T[Q], V, E>;
+} : T extends V ? T : never;
+declare type B<T, V> = T extends object ? {
+    [Q in {
+        [P in keyof T]: T[P] extends V ? P : P;
+    }[keyof T]]: B<T[Q], V>;
+} : T extends V ? T : never;
+declare type C<T, V, E> = {
+    [Q in {
+        [P in keyof T]: T[P] extends V ? P : P;
+    }[keyof T]]: C<T[Q], V, E>;
+};
+declare type A2<T, V, E> = T extends object ? T extends any[] ? T : {
+    [Q in keyof T]: A2<T[Q], V, E>;
+} : T;
+declare type B2<T, V> = T extends object ? T extends any[] ? T : {
+    [Q in keyof T]: B2<T[Q], V>;
+} : T;
+declare type C2<T, V, E> = T extends object ? {
+    [Q in keyof T]: C2<T[Q], V, E>;
+} : T;
