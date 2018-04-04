@@ -16194,7 +16194,7 @@ namespace ts {
             const sourceAttributesType = createJsxAttributesTypeFromAttributesProperty(openingLikeElement, checkMode);
 
             // Check if sourceAttributesType assignable to targetAttributesType though this check will allow excess properties
-            const isSourceAttributeTypeAssignableToTarget = checkTypeAssignableTo(sourceAttributesType, targetAttributesType, openingLikeElement.attributes.properties.length > 0 ? openingLikeElement.attributes : openingLikeElement);
+            const isSourceAttributeTypeAssignableToTarget = isTypeAssignableTo(sourceAttributesType, targetAttributesType);
             // After we check for assignability, we will do another pass to check that all explicitly specified attributes have correct name corresponding in targetAttributeType.
             // This will allow excess properties in spread type as it is very common pattern to spread outer attributes into React component in its render method.
             if (isSourceAttributeTypeAssignableToTarget && !isTypeAny(sourceAttributesType) && !isTypeAny(targetAttributesType)) {
@@ -16210,6 +16210,32 @@ namespace ts {
                         break;
                     }
                 }
+            }
+            else if (!isSourceAttributeTypeAssignableToTarget) {
+                // Assignability failure - check each prop individually, and if that fails, fall back on the bad error span
+                if (length(openingLikeElement.attributes.properties)) {
+                    let reportedError = false;
+                    for (const prop of openingLikeElement.attributes.properties) {
+                        if (isJsxSpreadAttribute(prop)) continue;
+                        const name = idText(prop.name);
+                        const sourcePropType = getIndexedAccessType(sourceAttributesType, getLiteralType(name));
+                        const targetPropType = getIndexedAccessType(targetAttributesType, getLiteralType(name));
+                        const rootChain = () => chainDiagnosticMessages(
+                            /*details*/ undefined,
+                            Diagnostics.Types_of_property_0_are_incompatible,
+                            name,
+                        );
+                        if (!checkTypeAssignableTo(sourcePropType, targetPropType, prop, /*headMessage*/ undefined, rootChain)) {
+                            reportedError = true;
+                        }
+                    }
+
+                    if (reportedError) {
+                        return;
+                    }
+                }
+                // Report fallback error on just the component name
+                checkTypeAssignableTo(sourceAttributesType, targetAttributesType, openingLikeElement.tagName);
             }
         }
 
