@@ -3640,14 +3640,6 @@
         "category": "Error",
         "code": 7039
     },
-    "'super' implicitly has type 'any' because the base class is of type 'any'.": {
-        "category": "Error",
-        "code": 7040
-    },
-    "Property '{0}' implicitly has type 'any' because the base class is of type 'any'.": {
-        "category": "Error",
-        "code": 7041
-    },
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
