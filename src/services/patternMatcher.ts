@@ -253,7 +253,7 @@ namespace ts {
         //
         // Note: if the segment contains a space or an asterisk then we must assume that it's a
         // multi-word segment.
-        if (!every(segment.totalTextChunk.text, ch => ch !== CharacterCodes.space && ch !== CharacterCodes.asterisk)) {
+        if (every(segment.totalTextChunk.text, ch => ch !== CharacterCodes.space && ch !== CharacterCodes.asterisk)) {
             const match = matchTextChunk(candidate, segment.totalTextChunk, stringToWordSpans);
             if (match) {
                 return [match];
