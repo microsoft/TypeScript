@@ -225,17 +225,6 @@ namespace ts {
         }
     }
 
-    function containsSpaceOrAsterisk(text: string): boolean {
-        for (let i = 0; i < text.length; i++) {
-            const ch = text.charCodeAt(i);
-            if (ch === CharacterCodes.space || ch === CharacterCodes.asterisk) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     function matchSegment(candidate: string, segment: Segment, stringToWordSpans: Map<TextSpan[]>): PatternMatch[] | undefined {
         // First check if the segment matches as is.  This is also useful if the segment contains
         // characters we would normally strip when splitting into parts that we also may want to
@@ -244,7 +233,7 @@ namespace ts {
         //
         // Note: if the segment contains a space or an asterisk then we must assume that it's a
         // multi-word segment.
-        if (!containsSpaceOrAsterisk(segment.totalTextChunk.text)) {
+        if (every(segment.totalTextChunk.text, ch => ch !== CharacterCodes.space && ch !== CharacterCodes.asterisk)) {
             const match = matchTextChunk(candidate, segment.totalTextChunk, stringToWordSpans);
             if (match) {
                 return [match];
@@ -304,35 +293,13 @@ namespace ts {
         return matches;
     }
 
-    function partStartsWith(candidate: string, candidateSpan: TextSpan, pattern: string, ignoreCase: boolean, patternSpan?: TextSpan): boolean {
-        const patternPartStart = patternSpan ? patternSpan.start : 0;
-        const patternPartLength = patternSpan ? patternSpan.length : pattern.length;
+    function partStartsWith(candidate: string, candidateSpan: TextSpan, pattern: string, ignoreCase: boolean, patternSpan: TextSpan = { start: 0, length: pattern.length }): boolean {
+        return patternSpan.length <= candidateSpan.length // If pattern part is longer than the candidate part there can never be a match.
+            && everyInRange(0, patternSpan.length, i => equalChars(pattern.charCodeAt(patternSpan.start + i), candidate.charCodeAt(candidateSpan.start + i), ignoreCase));
+    }
 
-        if (patternPartLength > candidateSpan.length) {
-            // Pattern part is longer than the candidate part. There can never be a match.
-            return false;
-        }
-
-        if (ignoreCase) {
-            for (let i = 0; i < patternPartLength; i++) {
-                const ch1 = pattern.charCodeAt(patternPartStart + i);
-                const ch2 = candidate.charCodeAt(candidateSpan.start + i);
-                if (toLowerCase(ch1) !== toLowerCase(ch2)) {
-                    return false;
-                }
-            }
-        }
-        else {
-            for (let i = 0; i < patternPartLength; i++) {
-                const ch1 = pattern.charCodeAt(patternPartStart + i);
-                const ch2 = candidate.charCodeAt(candidateSpan.start + i);
-                if (ch1 !== ch2) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
+    function equalChars(ch1: number, ch2: number, ignoreCase: boolean): boolean {
+        return ignoreCase ? toLowerCase(ch1) === toLowerCase(ch2) : ch1 === ch2;
     }
 
     function tryCamelCaseMatch(candidate: string, candidateParts: TextSpan[], chunk: TextChunk, ignoreCase: boolean): boolean {
@@ -455,27 +422,13 @@ namespace ts {
     // Assumes 'value' is already lowercase.
     function indexOfIgnoringCase(str: string, value: string): number {
         const n = str.length - value.length;
-        for (let i = 0; i <= n; i++) {
-            if (startsWithIgnoringCase(str, value, i)) {
-                return i;
+        for (let start = 0; start <= n; start++) {
+            if (every(value, (valueChar, i) => toLowerCase(str.charCodeAt(i + start)) === valueChar)) {
+                return start;
             }
         }
 
         return -1;
-    }
-
-    // Assumes 'value' is already lowercase.
-    function startsWithIgnoringCase(str: string, value: string, start: number): boolean {
-        for (let i = 0; i < value.length; i++) {
-            const ch1 = toLowerCase(str.charCodeAt(i + start));
-            const ch2 = value.charCodeAt(i);
-
-            if (ch1 !== ch2) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     function toLowerCase(ch: number): number {
@@ -557,7 +510,7 @@ namespace ts {
             const currentIsDigit = isDigit(identifier.charCodeAt(i));
 
             const hasTransitionFromLowerToUpper = transitionFromLowerToUpper(identifier, word, i);
-            const hasTransitionFromUpperToLower = transitionFromUpperToLower(identifier, word, i, wordStart);
+            const hasTransitionFromUpperToLower = word && transitionFromUpperToLower(identifier, i, wordStart);
 
             if (charIsPunctuation(identifier.charCodeAt(i - 1)) ||
                 charIsPunctuation(identifier.charCodeAt(i)) ||
@@ -612,52 +565,29 @@ namespace ts {
     }
 
     function isAllPunctuation(identifier: string, start: number, end: number): boolean {
-        for (let i = start; i < end; i++) {
-            const ch = identifier.charCodeAt(i);
-
-            // We don't consider _ or $ as punctuation as there may be things with that name.
-            if (!charIsPunctuation(ch) || ch === CharacterCodes._ || ch === CharacterCodes.$) {
-                return false;
-            }
-        }
-
-        return true;
+        return every(identifier, ch => charIsPunctuation(ch) && ch !== CharacterCodes._, start, end);
     }
 
-    function transitionFromUpperToLower(identifier: string, word: boolean, index: number, wordStart: number): boolean {
-        if (word) {
-            // Cases this supports:
-            // 1) IDisposable -> I, Disposable
-            // 2) UIElement -> UI, Element
-            // 3) HTMLDocument -> HTML, Document
-            //
-            // etc.
-            if (index !== wordStart &&
-                index + 1 < identifier.length) {
-                const currentIsUpper = isUpperCaseLetter(identifier.charCodeAt(index));
-                const nextIsLower = isLowerCaseLetter(identifier.charCodeAt(index + 1));
-
-                if (currentIsUpper && nextIsLower) {
-                    // We have a transition from an upper to a lower letter here.  But we only
-                    // want to break if all the letters that preceded are uppercase.  i.e. if we
-                    // have "Foo" we don't want to break that into "F, oo".  But if we have
-                    // "IFoo" or "UIFoo", then we want to break that into "I, Foo" and "UI,
-                    // Foo".  i.e. the last uppercase letter belongs to the lowercase letters
-                    // that follows.  Note: this will make the following not split properly:
-                    // "HELLOthere".  However, these sorts of names do not show up in .Net
-                    // programs.
-                    for (let i = wordStart; i < index; i++) {
-                        if (!isUpperCaseLetter(identifier.charCodeAt(i))) {
-                            return false;
-                        }
-                    }
-
-                    return true;
-                }
-            }
-        }
-
-        return false;
+    function transitionFromUpperToLower(identifier: string, index: number, wordStart: number): boolean {
+        // Cases this supports:
+        // 1) IDisposable -> I, Disposable
+        // 2) UIElement -> UI, Element
+        // 3) HTMLDocument -> HTML, Document
+        //
+        // etc.
+        // We have a transition from an upper to a lower letter here.  But we only
+        // want to break if all the letters that preceded are uppercase.  i.e. if we
+        // have "Foo" we don't want to break that into "F, oo".  But if we have
+        // "IFoo" or "UIFoo", then we want to break that into "I, Foo" and "UI,
+        // Foo".  i.e. the last uppercase letter belongs to the lowercase letters
+        // that follows.  Note: this will make the following not split properly:
+        // "HELLOthere".  However, these sorts of names do not show up in .Net
+        // programs.
+        return index !== wordStart
+            && index + 1 < identifier.length
+            && isUpperCaseLetter(identifier.charCodeAt(index))
+            && isLowerCaseLetter(identifier.charCodeAt(index + 1))
+            && every(identifier, isUpperCaseLetter, wordStart, index);
     }
 
     function transitionFromLowerToUpper(identifier: string, word: boolean, index: number): boolean {
@@ -677,9 +607,19 @@ namespace ts {
         // on characters would be: A M
         //
         // We break the search string on characters.  But we break the symbol name on words.
-        const transition = word
-            ? (currentIsUpper && !lastIsUpper)
-            : currentIsUpper;
-        return transition;
+        return currentIsUpper && (!word || !lastIsUpper);
+    }
+
+    function everyInRange(start: number, end: number, pred: (n: number) => boolean): boolean {
+        for (let i = start; i < end; i++) {
+            if (!pred(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function every(s: string, pred: (ch: number, index: number) => boolean, start = 0, end = s.length): boolean {
+        return everyInRange(start, end, i => pred(s.charCodeAt(i), i));
     }
 }
