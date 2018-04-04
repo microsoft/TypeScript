@@ -8142,12 +8142,7 @@ namespace ts {
 
         function getLiteralTypeFromPropertyNames(type: Type, includeDeclaredTypes?: boolean) {
             const originalKeys = map(getPropertiesOfType(type), getLiteralTypeFromPropertyName);
-            if (includeDeclaredTypes) {
-                return getUnionType(originalKeys);
-            }
-            else {
-                return getUnionType(filter(originalKeys, isTypeString));
-            }
+            return getUnionType(includeDeclaredTypes ? originalKeys : filter(originalKeys, isTypeString));
         }
 
         function getIndexType(type: Type, includeDeclaredTypes?: boolean): Type {
