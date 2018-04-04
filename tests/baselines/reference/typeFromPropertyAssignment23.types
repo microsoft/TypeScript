@@ -51,3 +51,43 @@ D.prototype.foo = () =>  {
 >'not checked, so no error' : "not checked, so no error"
 }
 
+// post-class prototype assignments are trying to show that these properties are abstract
+class Module {
+>Module : Module
+}
+Module.prototype.identifier = undefined
+>Module.prototype.identifier = undefined : undefined
+>Module.prototype.identifier : any
+>Module.prototype : Module
+>Module : typeof Module
+>prototype : Module
+>identifier : any
+>undefined : undefined
+
+Module.prototype.size = null
+>Module.prototype.size = null : null
+>Module.prototype.size : any
+>Module.prototype : Module
+>Module : typeof Module
+>prototype : Module
+>size : any
+>null : null
+
+class NormalModule extends Module {
+>NormalModule : NormalModule
+>Module : Module
+
+    identifier() {
+>identifier : () => string
+
+        return 'normal'
+>'normal' : "normal"
+    }
+    size() {
+>size : () => number
+
+        return 0
+>0 : 0
+    }
+}
+

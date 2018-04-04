@@ -20,3 +20,18 @@ class D extends B { }
 D.prototype.foo = () =>  {
     this.n = 'not checked, so no error'
 }
+
+// post-class prototype assignments are trying to show that these properties are abstract
+class Module {
+}
+Module.prototype.identifier = undefined
+Module.prototype.size = null
+
+class NormalModule extends Module {
+    identifier() {
+        return 'normal'
+    }
+    size() {
+        return 0
+    }
+}
