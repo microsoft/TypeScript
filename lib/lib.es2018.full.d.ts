@@ -3996,7 +3996,7 @@ interface Document extends Node, GlobalEventHandlers, ParentNode, DocumentEvent 
     /**
      * Retrieves a value that indicates the current state of the object.
      */
-    readonly readyState: string;
+    readonly readyState: DocumentReadyState;
     /**
      * Gets the URL of the location that referred the user to the current page.
      */
@@ -4255,6 +4255,7 @@ interface Document extends Node, GlobalEventHandlers, ParentNode, DocumentEvent 
      */
     queryCommandValue(commandId: string): string;
     releaseEvents(): void;
+    updateSettings(): void;
     webkitCancelFullScreen(): void;
     webkitExitFullscreen(): void;
     /**
@@ -6279,7 +6280,7 @@ interface HTMLInputElement extends HTMLElement {
     /**
      * Returns a FileList object on a file type input object.
      */
-    readonly files: FileList | null;
+    files: FileList | null;
     /**
      * Retrieves a reference to the form that the object is embedded in.
      */
@@ -12881,6 +12882,7 @@ interface SourceBuffer extends EventTarget {
     readonly audioTracks: AudioTrackList;
     readonly buffered: TimeRanges;
     mode: AppendMode;
+    readonly textTracks: TextTrackList;
     timestampOffset: number;
     readonly updating: boolean;
     readonly videoTracks: VideoTrackList;
@@ -14821,6 +14823,8 @@ declare var WheelEvent: {
 
 interface WindowEventMap extends GlobalEventHandlersEventMap {
     "abort": UIEvent;
+    "afterprint": Event;
+    "beforeprint": Event;
     "beforeunload": BeforeUnloadEvent;
     "blur": FocusEvent;
     "canplay": Event;
@@ -14952,6 +14956,8 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     readonly navigator: Navigator;
     offscreenBuffering: string | boolean;
     onabort: ((this: Window, ev: UIEvent) => any) | null;
+    onafterprint: ((this: Window, ev: Event) => any) | null;
+    onbeforeprint: ((this: Window, ev: Event) => any) | null;
     onbeforeunload: ((this: Window, ev: BeforeUnloadEvent) => any) | null;
     onblur: ((this: Window, ev: FocusEvent) => any) | null;
     oncanplay: ((this: Window, ev: Event) => any) | null;
@@ -15762,6 +15768,8 @@ declare const name: never;
 declare var navigator: Navigator;
 declare var offscreenBuffering: string | boolean;
 declare var onabort: ((this: Window, ev: UIEvent) => any) | null;
+declare var onafterprint: ((this: Window, ev: Event) => any) | null;
+declare var onbeforeprint: ((this: Window, ev: Event) => any) | null;
 declare var onbeforeunload: ((this: Window, ev: BeforeUnloadEvent) => any) | null;
 declare var onblur: ((this: Window, ev: FocusEvent) => any) | null;
 declare var oncanplay: ((this: Window, ev: Event) => any) | null;
@@ -16006,6 +16014,7 @@ type ChannelCountMode = "max" | "clamped-max" | "explicit";
 type ChannelInterpretation = "speakers" | "discrete";
 type DisplayCaptureSurfaceType = "monitor" | "window" | "application" | "browser";
 type DistanceModelType = "linear" | "inverse" | "exponential";
+type DocumentReadyState = "loading" | "interactive" | "complete";
 type EndOfStreamError = "network" | "decode";
 type ExpandGranularity = "character" | "word" | "sentence" | "textedit";
 type GamepadHand = "" | "left" | "right";
