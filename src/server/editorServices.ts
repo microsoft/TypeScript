@@ -529,9 +529,13 @@ namespace ts.server {
             }
             switch (response.kind) {
                 case ActionSet:
-                    this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typeAcquisition, response.unresolvedImports, response.typings);
-                    project.resolutionCache.invalidateAllResolutions();
+                    const typings = toSortedArray(response.typings);
+                    this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typeAcquisition, response.unresolvedImports, typings);
+                    if (!project.updateTypingFiles(typings)) {
+                        return;
+                    }
                     break;
+
                 case ActionInvalidate:
                     this.typingsCache.deleteTypingsForProject(response.projectName);
                     project.resolutionCache.invalidateAllResolutions();

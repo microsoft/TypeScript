@@ -17,7 +17,7 @@ namespace ts.projectSystem {
     class Installer extends TestTypingsInstaller {
         constructor(host: server.ServerHost, p?: InstallerParams, log?: TI.Log) {
             super(
-                (p && p.globalTypingsCacheLocation) || "/a/data",
+                (p && p.globalTypingsCacheLocation) || typingsCacheLocation,
                 (p && p.throttleLimit) || 5,
                 host,
                 (p && p.typesRegistry),
@@ -996,7 +996,7 @@ namespace ts.projectSystem {
             proj.updateGraph();
 
             assert.deepEqual(
-                proj.getCachedUnresolvedImportsPerFile_TestOnly().get(<Path>f1.path),
+                proj.cachedUnresolvedImportsPerFile.get(f1.path),
                 ["foo", "foo", "foo", "@bar/router", "@bar/common", "@bar/common"]
             );
 
@@ -1013,25 +1013,20 @@ namespace ts.projectSystem {
                 import * as cmd from "commander
                 `
             };
-            const openRequest: server.protocol.OpenRequest = {
-                seq: 1,
-                type: "request",
+            session.executeCommandSeq<server.protocol.OpenRequest>({
                 command: server.protocol.CommandTypes.Open,
                 arguments: {
                     file: f.path,
                     fileContent: f.content
                 }
-            };
-            session.executeCommand(openRequest);
+            });
             const projectService = session.getProjectService();
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             const proj = projectService.inferredProjects[0];
-            const version1 = proj.getCachedUnresolvedImportsPerFile_TestOnly().getVersion();
+            const version1 = proj.lastCachedUnresolvedImportsList;
 
             // make a change that should not affect the structure of the program
-            const changeRequest: server.protocol.ChangeRequest = {
-                seq: 2,
-                type: "request",
+            session.executeCommandSeq<server.protocol.ChangeRequest>({
                 command: server.protocol.CommandTypes.Change,
                 arguments: {
                     file: f.path,
@@ -1041,11 +1036,18 @@ namespace ts.projectSystem {
                     endLine: 2,
                     endOffset: 0
                 }
-            };
-            session.executeCommand(changeRequest);
-            host.checkTimeoutQueueLengthAndRun(2); // This enqueues the updategraph and refresh inferred projects
-            const version2 = proj.getCachedUnresolvedImportsPerFile_TestOnly().getVersion();
-            assert.equal(version1, version2, "set of unresolved imports should not change");
+            });
+            // ensure the change takes place
+            session.executeCommandSeq<server.protocol.QuickInfoRequest>({
+                command: server.protocol.CommandTypes.Quickinfo,
+                arguments: {
+                    file: f.path,
+                    line: 4,
+                    offset: 5
+                }
+            });
+            const version2 = proj.lastCachedUnresolvedImportsList;
+            assert.strictEqual(version1, version2, "set of unresolved imports should not change");
         });
 
         it("expired cache entry (inferred project, should install typings)", () => {
@@ -1266,7 +1268,6 @@ namespace ts.projectSystem {
             const finish = logger.finish();
             assert.deepEqual(finish, [
                 'Inferred typings from file names: ["jquery","chroma-js"]',
-                "Inferred typings from unresolved imports: []",
                 'Result: {"cachedTypingPaths":[],"newTypingNames":["jquery","chroma-js"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}',
             ], finish.join("\r\n"));
             assert.deepEqual(result.newTypingNames, ["jquery", "chroma-js"]);
@@ -1333,7 +1334,6 @@ namespace ts.projectSystem {
             assert.deepEqual(logger.finish(), [
                 'Searching for typing names in /node_modules; all files: ["/node_modules/a/package.json"]',
                 '    Found package names: ["a"]',
-                "Inferred typings from unresolved imports: []",
                 'Result: {"cachedTypingPaths":[],"newTypingNames":["a"],"filesToWatch":["/bower_components","/node_modules"]}',
             ]);
             assert.deepEqual(result, {

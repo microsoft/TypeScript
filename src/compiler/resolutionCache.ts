@@ -14,6 +14,8 @@ namespace ts {
 
         invalidateResolutionOfFile(filePath: Path): void;
         removeResolutionsOfFile(filePath: Path): void;
+        invalidateResolutionNames(fileToNames: Map<ReadonlyArray<string>>): void;
+        invalidateAllResolutions(): void;
         createHasInvalidatedResolution(forceAllFilesAsInvalidated?: boolean): HasInvalidatedResolution;
 
         startCachingPerDirectoryResolution(): void;
@@ -23,7 +25,6 @@ namespace ts {
         closeTypeRootsWatch(): void;
 
         clear(): void;
-        invalidateAllResolutions(): void;
     }
 
     interface ResolutionWithFailedLookupLocations {
@@ -127,11 +128,12 @@ namespace ts {
             resolveTypeReferenceDirectives,
             removeResolutionsOfFile,
             invalidateResolutionOfFile,
+            invalidateResolutionNames,
+            invalidateAllResolutions,
             createHasInvalidatedResolution,
             updateTypeRootsWatch,
             closeTypeRootsWatch,
-            clear,
-            invalidateAllResolutions
+            clear
         };
 
         function getResolvedModule(resolution: ResolvedModuleWithFailedLookupLocations) {
@@ -290,7 +292,7 @@ namespace ts {
                 if (oldResolution === newResolution) {
                     return true;
                 }
-                if (!oldResolution || !newResolution || oldResolution.isInvalidated) {
+                if (!oldResolution || !newResolution) {
                     return false;
                 }
                 const oldResult = getResolutionWithResolvedFileName(oldResolution);
@@ -542,6 +544,9 @@ namespace ts {
                 }
                 resolutions.forEach((resolution, name) => {
                     if (seenInDir.has(name)) {
+                        if (resolution.isInvalidated) {
+                            filesWithInvalidatedResolutions.set(containingFilePath, true);
+                        }
                         return;
                     }
                     seenInDir.set(name, true);
@@ -626,6 +631,31 @@ namespace ts {
                 hasChangedFailedLookupLocation
             );
             return allFilesHaveInvalidatedResolution || filesWithInvalidatedResolutions && filesWithInvalidatedResolutions.size !== invalidatedFilesCount;
+        }
+
+        function invalidateResolutionCacheName<T extends ResolutionWithFailedLookupLocations>(resolutions: Map<T>, name: string) {
+            const resolution = resolutions.get(name);
+            if (resolution) {
+                resolution.isInvalidated = true;
+            }
+        }
+
+        function invalidateResolutionNames(fileToNames: Map<ReadonlyArray<string>>) {
+            fileToNames.forEach((names, filePath) => {
+                if (!names.length) {
+                    return;
+                }
+                const moduleResolutionsInFile = resolvedModuleNames.get(filePath);
+                const typeReferenceResolutionsInFile = resolvedTypeReferenceDirectives.get(filePath);
+                if (!moduleResolutionsInFile && !typeReferenceResolutionsInFile) {
+                    return;
+                }
+                (filesWithInvalidatedResolutions || (filesWithInvalidatedResolutions = createMap<true>())).set(filePath as Path, true);
+                names.forEach(name => {
+                    invalidateResolutionCacheName(moduleResolutionsInFile, name);
+                    invalidateResolutionCacheName(typeReferenceResolutionsInFile, name);
+                });
+            });
         }
 
         function closeTypeRootsWatch() {

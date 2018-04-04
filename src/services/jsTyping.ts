@@ -127,7 +127,7 @@ namespace ts.JsTyping {
         getTypingNamesFromSourceFileNames(fileNames);
 
         // add typings for unresolved imports
-        if (unresolvedImports) {
+        if (unresolvedImports && unresolvedImports.length) {
             const module = deduplicate(
                 unresolvedImports.map(moduleId => nodeCoreModules.has(moduleId) ? "node" : moduleId),
                 equateStringsCaseSensitive,

@@ -15,6 +15,7 @@ namespace ts.projectSystem {
     export import checkWatchedFiles = TestFSWithWatch.checkWatchedFiles;
     import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
     import safeList = TestFSWithWatch.safeList;
+    export const typingsCacheLocation = "/a/data/";
 
     export const customTypesMap = {
         path: <Path>"/typesMap.json",
@@ -271,7 +272,7 @@ namespace ts.projectSystem {
 
     export function createSession(host: server.ServerHost, opts: Partial<server.SessionOptions> = {}) {
         if (opts.typingsInstaller === undefined) {
-            opts.typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/ 5, host);
+            opts.typingsInstaller = new TestTypingsInstaller(typingsCacheLocation, /*throttleLimit*/ 5, host);
         }
 
         if (opts.eventHandler !== undefined) {
@@ -3209,7 +3210,7 @@ namespace ts.projectSystem {
                     assert.isDefined(infoForUnitiledAtRoot);
                     assert.isUndefined(infoForUntitledAtProjectRoot);
                 }
-                host.checkTimeoutQueueLength(2);
+                host.checkTimeoutQueueLength(0); // since no typings will be installed, there is nothing in the queue
 
                 const newTimeoutId = host.getNextTimeoutId();
                 const expectedSequenceId = session.getNextSeq();
@@ -3220,13 +3221,13 @@ namespace ts.projectSystem {
                         files: [untitledFile]
                     }
                 });
-                host.checkTimeoutQueueLength(3);
+                host.checkTimeoutQueueLength(1);
 
                 // Run the last one = get error request
                 host.runQueuedTimeoutCallbacks(newTimeoutId);
 
                 assert.isFalse(hasError());
-                host.checkTimeoutQueueLength(2);
+                host.checkTimeoutQueueLength(0);
                 checkErrorMessage(session, "syntaxDiag", { file: untitledFile, diagnostics: [] });
                 session.clearMessages();
 
@@ -4149,10 +4150,7 @@ namespace ts.projectSystem {
             checkNumberOfProjects(service, { inferredProjects: 1 });
             session.clearMessages();
             const expectedSequenceId = session.getNextSeq();
-            host.checkTimeoutQueueLengthAndRun(2);
-
-            checkProjectUpdatedInBackgroundEvent(session, [file.path]);
-            session.clearMessages();
+            host.checkTimeoutQueueLengthAndRun(0);
 
             session.executeCommandSeq<protocol.GeterrRequest>({
                 command: server.CommandNames.Geterr,
