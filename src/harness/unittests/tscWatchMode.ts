@@ -76,11 +76,11 @@ namespace ts.tscWatch {
     function checkOutputErrors(
         host: WatchedSystem,
         logsBeforeWatchDiagnostic: string[] | undefined,
-        preErrorsWatchDiagnostic: DiagnosticMessage,
+        preErrorsWatchDiagnostic: Diagnostic,
         logsBeforeErrors: string[] | undefined,
         errors: ReadonlyArray<Diagnostic>,
         disableConsoleClears?: boolean | undefined,
-        ...postErrorsWatchDiagnostics: DiagnosticMessage[]
+        ...postErrorsWatchDiagnostics: Diagnostic[]
     ) {
         let screenClears = 0;
         const outputs = host.getOutput();
@@ -109,9 +109,9 @@ namespace ts.tscWatch {
             index++;
         }
 
-        function assertWatchDiagnostic(diagnosticMessage: DiagnosticMessage) {
-            const expected = getWatchDiagnosticWithoutDate(diagnosticMessage);
-            if (!disableConsoleClears && diagnosticMessage.code !== Diagnostics.Compilation_complete_Watching_for_file_changes.code) {
+        function assertWatchDiagnostic(diagnostic: Diagnostic) {
+            const expected = getWatchDiagnosticWithoutDate(diagnostic);
+            if (!disableConsoleClears && !contains(nonClearingMessageCodes, diagnostic.code)) {
                 assert.equal(host.screenClears[screenClears], index, `Expected screen clear at this diagnostic: ${expected}`);
                 screenClears++;
             }
@@ -120,24 +120,52 @@ namespace ts.tscWatch {
         }
 
         function getOutputAtFailedMessage(caption: string, expectedOutput: string) {
-            return `Expected ${caption}: ${expectedOutput} at ${index} in ${JSON.stringify(outputs)}`;
+            return `Expected ${caption}: ${JSON.stringify(expectedOutput)} at ${index} in ${JSON.stringify(outputs)}`;
         }
 
-        function getWatchDiagnosticWithoutDate(diagnosticMessage: DiagnosticMessage) {
-            return ` - ${flattenDiagnosticMessageText(getLocaleSpecificMessage(diagnosticMessage), host.newLine)}${host.newLine + host.newLine + host.newLine}`;
+        function getWatchDiagnosticWithoutDate(diagnostic: Diagnostic) {
+            return ` - ${flattenDiagnosticMessageText(diagnostic.messageText, host.newLine)}${host.newLine + host.newLine + host.newLine}`;
         }
+    }
+
+    function createErrorsFoundCompilerDiagnostic(errors: ReadonlyArray<Diagnostic>) {
+        return errors.length === 1
+            ? createCompilerDiagnostic(Diagnostics.Found_1_error)
+            : createCompilerDiagnostic(Diagnostics.Found_0_errors, errors.length);
     }
 
     function checkOutputErrorsInitial(host: WatchedSystem, errors: ReadonlyArray<Diagnostic>, disableConsoleClears?: boolean, logsBeforeErrors?: string[]) {
-        checkOutputErrors(host, /*logsBeforeWatchDiagnostic*/ undefined, Diagnostics.Starting_compilation_in_watch_mode, logsBeforeErrors, errors, disableConsoleClears, Diagnostics.Compilation_complete_Watching_for_file_changes);
+        checkOutputErrors(
+            host,
+            /*logsBeforeWatchDiagnostic*/ undefined,
+            createCompilerDiagnostic(Diagnostics.Starting_compilation_in_watch_mode),
+            logsBeforeErrors,
+            errors,
+            disableConsoleClears,
+            createErrorsFoundCompilerDiagnostic(errors),
+            createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
     }
 
     function checkOutputErrorsIncremental(host: WatchedSystem, errors: ReadonlyArray<Diagnostic>, disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
-        checkOutputErrors(host, logsBeforeWatchDiagnostic, Diagnostics.File_change_detected_Starting_incremental_compilation, logsBeforeErrors, errors, disableConsoleClears, Diagnostics.Compilation_complete_Watching_for_file_changes);
+        checkOutputErrors(
+            host,
+            logsBeforeWatchDiagnostic,
+            createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation),
+            logsBeforeErrors,
+            errors,
+            disableConsoleClears,
+            createErrorsFoundCompilerDiagnostic(errors),
+            createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
     }
 
     function checkOutputErrorsIncrementalWithExit(host: WatchedSystem, errors: ReadonlyArray<Diagnostic>, expectedExitCode: ExitStatus, disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
-        checkOutputErrors(host, logsBeforeWatchDiagnostic, Diagnostics.File_change_detected_Starting_incremental_compilation, logsBeforeErrors, errors, disableConsoleClears);
+        checkOutputErrors(
+            host,
+            logsBeforeWatchDiagnostic,
+            createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation),
+            logsBeforeErrors,
+            errors,
+            disableConsoleClears);
         assert.equal(host.exitCode, expectedExitCode);
     }
 
