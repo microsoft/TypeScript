@@ -8109,12 +8109,12 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getIndexTypeForGenericType(type: InstantiableType | UnionOrIntersectionType, includeSymbols?: boolean) {
-            const cacheLocation = includeSymbols ? "resolvedDeclaredIndexType" : "resolvedIndexType";
+        function getIndexTypeForGenericType(type: InstantiableType | UnionOrIntersectionType, includeDeclaredTypes?: boolean) {
+            const cacheLocation = includeDeclaredTypes ? "resolvedDeclaredIndexType" : "resolvedIndexType";
             if (!type[cacheLocation]) {
                 type[cacheLocation] = <IndexType>createType(TypeFlags.Index);
                 type[cacheLocation].type = type;
-                if (includeSymbols) {
+                if (includeDeclaredTypes) {
                     type[cacheLocation].isDeclaredType = true;
                 }
             }
@@ -8136,27 +8136,27 @@ namespace ts {
             return links.nameType;
         }
 
-        function isTypeNotSymbol(type: Type) {
-            return !isTypeAssignableToKind(type, TypeFlags.ESSymbolLike);
+        function isTypeString(type: Type) {
+            return isTypeAssignableToKind(type, TypeFlags.StringLike);
         }
 
-        function getLiteralTypeFromPropertyNames(type: Type, includeSymbols?: boolean) {
+        function getLiteralTypeFromPropertyNames(type: Type, includeDeclaredTypes?: boolean) {
             const originalKeys = map(getPropertiesOfType(type), getLiteralTypeFromPropertyName);
-            if (includeSymbols) {
+            if (includeDeclaredTypes) {
                 return getUnionType(originalKeys);
             }
             else {
-                return getUnionType(filter(originalKeys, isTypeNotSymbol));
+                return getUnionType(filter(originalKeys, isTypeString));
             }
         }
 
-        function getIndexType(type: Type, includeSymbols?: boolean): Type {
-            return type.flags & TypeFlags.Intersection ? getUnionType(map((<IntersectionType>type).types, t => getIndexType(t, includeSymbols))) :
-                maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type, includeSymbols) :
+        function getIndexType(type: Type, includeDeclaredTypes?: boolean): Type {
+            return type.flags & TypeFlags.Intersection ? getUnionType(map((<IntersectionType>type).types, t => getIndexType(t, includeDeclaredTypes))) :
+                maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type, includeDeclaredTypes) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
                 type === wildcardType ? wildcardType :
                 type.flags & TypeFlags.Any || getIndexInfoOfType(type, IndexKind.String) ? stringType :
-                getLiteralTypeFromPropertyNames(type, includeSymbols);
+                getLiteralTypeFromPropertyNames(type, includeDeclaredTypes);
         }
 
         function getIndexTypeOrString(type: Type): Type {
@@ -20854,7 +20854,7 @@ namespace ts {
             // Check if the index type is assignable to 'keyof T' for the object type.
             const objectType = (<IndexedAccessType>type).objectType;
             const indexType = (<IndexedAccessType>type).indexType;
-            if (isTypeAssignableTo(indexType, getIndexType(objectType, /*includeSymbols*/ true))) {
+            if (isTypeAssignableTo(indexType, getIndexType(objectType, /*includeDeclaredTypes*/ true))) {
                 if (accessNode.kind === SyntaxKind.ElementAccessExpression && isAssignmentTarget(accessNode) &&
                     getObjectFlags(objectType) & ObjectFlags.Mapped && getMappedTypeModifiers(<MappedType>objectType) & MappedTypeModifiers.IncludeReadonly) {
                     error(accessNode, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(objectType));

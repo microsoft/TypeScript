@@ -4,13 +4,21 @@ const sym = Symbol();
 >Symbol() : unique symbol
 >Symbol : SymbolConstructor
 
-const obj = { num: 0, str: 's', [sym]: sym };
->obj : { num: number; str: string; [sym]: symbol; }
->{ num: 0, str: 's', [sym]: sym } : { num: number; str: string; [sym]: symbol; }
+const num = 0;
+>num : 0
+>0 : 0
+
+const obj = { num: 0, str: 's', [num]: num as 0, [sym]: sym };
+>obj : { num: number; str: string; [num]: 0; [sym]: symbol; }
+>{ num: 0, str: 's', [num]: num as 0, [sym]: sym } : { num: number; str: string; [num]: 0; [sym]: symbol; }
 >num : number
 >0 : 0
 >str : string
 >'s' : "s"
+>[num] : 0
+>num : 0
+>num as 0 : 0
+>num : 0
 >[sym] : symbol
 >sym : unique symbol
 >sym : unique symbol
@@ -42,7 +50,7 @@ const val = set(obj, 'str', '');
 >val : string
 >set(obj, 'str', '') : string
 >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
->obj : { num: number; str: string; [sym]: symbol; }
+>obj : { num: number; str: string; [num]: 0; [sym]: symbol; }
 >'str' : "str"
 >'' : ""
 
@@ -51,7 +59,7 @@ const valB = set(obj, 'num', '');
 >valB : any
 >set(obj, 'num', '') : any
 >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
->obj : { num: number; str: string; [sym]: symbol; }
+>obj : { num: number; str: string; [num]: 0; [sym]: symbol; }
 >'num' : "num"
 >'' : ""
 
@@ -61,15 +69,25 @@ const valC = set(obj, sym, sym);
 >valC : any
 >set(obj, sym, sym) : any
 >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
->obj : { num: number; str: string; [sym]: symbol; }
+>obj : { num: number; str: string; [num]: 0; [sym]: symbol; }
 >sym : unique symbol
 >sym : unique symbol
 
 // Expect type error
-// Argument of type 'unique symbol' is not assignable to parameter of type '"str" | "num"
+// Argument of type 'unique symbol' is not assignable to parameter of type "str" | "num"
+const valD = set(obj, num, num);
+>valD : any
+>set(obj, num, num) : any
+>set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
+>obj : { num: number; str: string; [num]: 0; [sym]: symbol; }
+>num : 0
+>num : 0
+
+// Expect type error
+// Argument of type '0' is not assignable to parameter of type "str" | "num"
 type KeyofObj = keyof typeof obj;
 >KeyofObj : "str" | "num"
->obj : { num: number; str: string; [sym]: symbol; }
+>obj : { num: number; str: string; [num]: 0; [sym]: symbol; }
 
 // "str" | "num"
 type Values<T> = T[keyof T];
@@ -81,5 +99,5 @@ type Values<T> = T[keyof T];
 type ValuesOfObj = Values<typeof obj>;
 >ValuesOfObj : string | number
 >Values : T[keyof T]
->obj : { num: number; str: string; [sym]: symbol; }
+>obj : { num: number; str: string; [num]: 0; [sym]: symbol; }
 
