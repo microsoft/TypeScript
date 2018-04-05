@@ -588,6 +588,7 @@ namespace ts {
         length: number;
         category: string;
         code: number;
+        unused?: {};
     }
     export function realizeDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, newLine: string): RealizedDiagnostic[] {
         return diagnostics.map(d => realizeDiagnostic(d, newLine));

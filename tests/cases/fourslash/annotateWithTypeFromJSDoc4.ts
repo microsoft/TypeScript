@@ -10,6 +10,7 @@
 //// * @param {number!} delta
 //// */
 ////function [|f|](x, y, z, alpha, beta, gamma, delta) {
+////    x; y; z; alpha; beta; gamma; delta;
 ////}
 
 verify.codeFix({
@@ -25,5 +26,6 @@ verify.codeFix({
  * @param {number!} delta
  */
 function f(x: any, y: any, z: number | undefined, alpha: number[], beta: (this: { a: string; }, arg1: string, arg2: number) => boolean, gamma: number | null, delta: number) {
+    x; y; z; alpha; beta; gamma; delta;
 }`,
 });

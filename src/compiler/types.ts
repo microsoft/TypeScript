@@ -4069,6 +4069,7 @@ namespace ts {
         category: DiagnosticCategory;
         code: number;
         message: string;
+        unused?: {};
     }
 
     /**
@@ -4090,6 +4091,8 @@ namespace ts {
         length: number | undefined;
         messageText: string | DiagnosticMessageChain;
         category: DiagnosticCategory;
+        /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
+        reportsUnnecessary?: {};
         code: number;
         source?: string;
     }
