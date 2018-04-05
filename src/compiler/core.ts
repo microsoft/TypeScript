@@ -4,7 +4,7 @@
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "2.8";
+    export const versionMajorMinor = "2.9";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0-dev`;
 }
@@ -624,23 +624,6 @@ namespace ts {
     }
 
     /**
-     * Computes the first matching span of elements and returns a tuple of the first span
-     * and the remaining elements.
-     */
-    export function span<T>(array: ReadonlyArray<T>, f: (x: T, i: number) => boolean): [T[], T[]] {
-        if (array) {
-            for (let i = 0; i < array.length; i++) {
-                if (!f(array[i], i)) {
-                    return [array.slice(0, i), array.slice(i)];
-                }
-            }
-            return [array.slice(0), []];
-        }
-
-        return undefined;
-    }
-
-    /**
      * Maps contiguous spans of values with the same key.
      *
      * @param array The array to map.
@@ -920,8 +903,7 @@ namespace ts {
     export function sum<T extends Record<K, number>, K extends string>(array: ReadonlyArray<T>, prop: K): number {
         let result = 0;
         for (const v of array) {
-            // TODO: Remove the following type assertion once the fix for #17069 is merged
-            result += v[prop] as number;
+            result += v[prop];
         }
         return result;
     }
@@ -1588,10 +1570,10 @@ namespace ts {
         }
     }
 
-    export function formatStringFromArgs(text: string, args: { [index: number]: string; }, baseIndex?: number): string {
+    export function formatStringFromArgs(text: string, args: ArrayLike<string>, baseIndex?: number): string {
         baseIndex = baseIndex || 0;
 
-        return text.replace(/{(\d+)}/g, (_match, index?) => args[+index + baseIndex]);
+        return text.replace(/{(\d+)}/g, (_match, index?: string) => Debug.assertDefined(args[+index + baseIndex]));
     }
 
     export let localizedDiagnosticMessages: MapLike<string>;
@@ -1624,6 +1606,7 @@ namespace ts {
             messageText: text,
             category: message.category,
             code: message.code,
+            reportsUnnecessary: message.unused,
         };
     }
 
@@ -1653,7 +1636,8 @@ namespace ts {
 
             messageText: text,
             category: message.category,
-            code: message.code
+            code: message.code,
+            reportsUnnecessary: message.unused,
         };
     }
 
@@ -1665,7 +1649,7 @@ namespace ts {
 
             code: chain.code,
             category: chain.category,
-            messageText: chain.next ? chain : chain.messageText
+            messageText: chain.next ? chain : chain.messageText,
         };
     }
 
@@ -2052,7 +2036,7 @@ namespace ts {
         return compilerOptions.target || ScriptTarget.ES3;
     }
 
-    export function getEmitModuleKind(compilerOptions: CompilerOptions) {
+    export function getEmitModuleKind(compilerOptions: {module?: CompilerOptions["module"], target?: CompilerOptions["target"]}) {
         return typeof compilerOptions.module === "number" ?
             compilerOptions.module :
             getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
@@ -2064,6 +2048,10 @@ namespace ts {
             moduleResolution = getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS ? ModuleResolutionKind.NodeJs : ModuleResolutionKind.Classic;
         }
         return moduleResolution;
+    }
+
+    export function getAreDeclarationMapsEnabled(options: CompilerOptions) {
+        return !!(options.declaration && options.declarationMap);
     }
 
     export function getAllowSyntheticDefaultImports(compilerOptions: CompilerOptions) {
@@ -2923,7 +2911,7 @@ namespace ts {
             return value;
         }
 
-        export function assertEachDefined<T, A extends ReadonlyArray<T>>(value: A, message: string): A {
+        export function assertEachDefined<T, A extends ReadonlyArray<T>>(value: A, message?: string): A {
             for (const v of value) {
                 assertDefined(v, message);
             }

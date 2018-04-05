@@ -334,9 +334,10 @@ namespace ts {
     /*@internal*/
     export interface RecursiveDirectoryWatcherHost {
         watchDirectory: HostWatchDirectory;
-        getAccessileSortedChildDirectories(path: string): ReadonlyArray<string>;
+        getAccessibleSortedChildDirectories(path: string): ReadonlyArray<string>;
         directoryExists(dir: string): boolean;
         filePathComparer: Comparer<string>;
+        realpath(s: string): string;
     }
 
     /**
@@ -392,9 +393,14 @@ namespace ts {
         function watchChildDirectories(parentDir: string, existingChildWatches: ChildWatches, callback: DirectoryWatcherCallback): ChildWatches {
             let newChildWatches: DirectoryWatcher[] | undefined;
             enumerateInsertsAndDeletes<string, DirectoryWatcher>(
-                host.directoryExists(parentDir) ? host.getAccessileSortedChildDirectories(parentDir) : emptyArray,
+                host.directoryExists(parentDir) ? mapDefined(host.getAccessibleSortedChildDirectories(parentDir), child => {
+                    const childFullName = getNormalizedAbsolutePath(child, parentDir);
+                    // Filter our the symbolic link directories since those arent included in recursive watch
+                    // which is same behaviour when recursive: true is passed to fs.watch
+                    return host.filePathComparer(childFullName, host.realpath(childFullName)) === Comparison.EqualTo ? childFullName : undefined;
+                }) : emptyArray,
                 existingChildWatches,
-                (child, childWatcher) => host.filePathComparer(getNormalizedAbsolutePath(child, parentDir), childWatcher.dirName),
+                (child, childWatcher) => host.filePathComparer(child, childWatcher.dirName),
                 createAndAddChildDirectoryWatcher,
                 closeFileWatcher,
                 addChildDirectoryWatcher
@@ -406,7 +412,7 @@ namespace ts {
              * Create new childDirectoryWatcher and add it to the new ChildDirectoryWatcher list
              */
             function createAndAddChildDirectoryWatcher(childName: string) {
-                const result = createDirectoryWatcher(getNormalizedAbsolutePath(childName, parentDir), callback);
+                const result = createDirectoryWatcher(childName, callback);
                 addChildDirectoryWatcher(result);
             }
 
@@ -457,6 +463,8 @@ namespace ts {
         clearTimeout?(timeoutId: any): void;
         clearScreen?(): void;
         /*@internal*/ setBlocking?(): void;
+        base64decode?(input: string): string;
+        base64encode?(input: string): string;
     }
 
     export interface FileWatcher {
@@ -528,6 +536,11 @@ namespace ts {
               _crypto = undefined;
             }
 
+            const Buffer: {
+                new (input: string, encoding?: string): any;
+                from?(input: string, encoding?: string): any;
+            } = require("buffer").Buffer;
+
             const nodeVersion = getNodeMajorVersion();
             const isNode4OrLater = nodeVersion >= 4;
 
@@ -594,14 +607,7 @@ namespace ts {
                 exit(exitCode?: number): void {
                     process.exit(exitCode);
                 },
-                realpath(path: string): string {
-                    try {
-                        return _fs.realpathSync(path);
-                    }
-                    catch {
-                        return path;
-                    }
-                },
+                realpath,
                 debugMode: some(<string[]>process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
                 tryEnableSourceMapsForHost() {
                     try {
@@ -620,6 +626,16 @@ namespace ts {
                     if (process.stdout && process.stdout._handle && process.stdout._handle.setBlocking) {
                         process.stdout._handle.setBlocking(true);
                     }
+                },
+                base64decode: Buffer.from ? input => {
+                    return Buffer.from(input, "base64").toString("utf8");
+                } : input => {
+                    return new Buffer(input, "base64").toString("utf8");
+                },
+                base64encode: Buffer.from ? input => {
+                    return Buffer.from(input).toString("base64");
+                } : input => {
+                    return new Buffer(input).toString("base64");
                 }
             };
             return nodeSystem;
@@ -682,8 +698,9 @@ namespace ts {
                 const watchDirectoryRecursively = createRecursiveDirectoryWatcher({
                     filePathComparer: useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
                     directoryExists,
-                    getAccessileSortedChildDirectories: path => getAccessibleFileSystemEntries(path).directories,
-                    watchDirectory
+                    getAccessibleSortedChildDirectories: path => getAccessibleFileSystemEntries(path).directories,
+                    watchDirectory,
+                    realpath
                 });
 
                 return (directoryName, callback, recursive) => {
@@ -1024,6 +1041,15 @@ namespace ts {
 
             function getDirectories(path: string): string[] {
                 return filter<string>(_fs.readdirSync(path), dir => fileSystemEntryExists(combinePaths(path, dir), FileSystemEntryKind.Directory));
+            }
+
+            function realpath(path: string): string {
+                try {
+                    return _fs.realpathSync(path);
+                }
+                catch {
+                    return path;
+                }
             }
 
             function getModifiedTime(path: string) {

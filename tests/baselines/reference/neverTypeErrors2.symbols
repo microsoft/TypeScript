@@ -43,3 +43,12 @@ function f3(): never {
 function f4(): never {
 >f4 : Symbol(f4, Decl(neverTypeErrors2.ts, 17, 1))
 }
+
+for (const n of f4()) {}
+>n : Symbol(n, Decl(neverTypeErrors2.ts, 22, 10))
+>f4 : Symbol(f4, Decl(neverTypeErrors2.ts, 17, 1))
+
+for (const n in f4()) {}
+>n : Symbol(n, Decl(neverTypeErrors2.ts, 23, 10))
+>f4 : Symbol(f4, Decl(neverTypeErrors2.ts, 17, 1))
+

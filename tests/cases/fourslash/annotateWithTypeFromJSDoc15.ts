@@ -12,6 +12,7 @@
 //// * @param {promise<String>} zeta
 //// */
 ////function f(x, y, z, alpha, beta, gamma, delta, epsilon, zeta) {
+////    x; y; z; alpha; beta; gamma; delta; epsilon; zeta;
 ////}
 
 verify.codeFix({
@@ -29,5 +30,6 @@ verify.codeFix({
  * @param {promise<String>} zeta
  */
 function f(x: boolean, y: string, z: number, alpha: object, beta: Date, gamma: Promise<any>, delta: Array<any>, epsilon: Array<number>, zeta: Promise<string>) {
+    x; y; z; alpha; beta; gamma; delta; epsilon; zeta;
 }`,
 });

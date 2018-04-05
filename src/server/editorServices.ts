@@ -200,6 +200,7 @@ namespace ts.server {
 
     export interface HostConfiguration {
         formatCodeOptions: FormatCodeSettings;
+        preferences: UserPreferences;
         hostInfo: string;
         extraFileExtensions?: JsFileExtensionInfo[];
     }
@@ -304,11 +305,13 @@ namespace ts.server {
         useInferredProjectPerProjectRoot: boolean;
         typingsInstaller: ITypingsInstaller;
         eventHandler?: ProjectServiceEventHandler;
+        suppressDiagnosticEvents?: boolean;
         throttleWaitMilliseconds?: number;
         globalPlugins?: ReadonlyArray<string>;
         pluginProbeLocations?: ReadonlyArray<string>;
         allowLocalPluginLoads?: boolean;
         typesMapLocation?: string;
+        syntaxOnly?: boolean;
     }
 
     function getDetailWatchInfo(watchType: WatchType, project: Project | undefined) {
@@ -391,11 +394,14 @@ namespace ts.server {
         public readonly typingsInstaller: ITypingsInstaller;
         public readonly throttleWaitMilliseconds?: number;
         private readonly eventHandler?: ProjectServiceEventHandler;
+        private readonly suppressDiagnosticEvents?: boolean;
 
         public readonly globalPlugins: ReadonlyArray<string>;
         public readonly pluginProbeLocations: ReadonlyArray<string>;
         public readonly allowLocalPluginLoads: boolean;
         public readonly typesMapLocation: string | undefined;
+
+        public readonly syntaxOnly?: boolean;
 
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects = createMap<true>();
@@ -412,10 +418,12 @@ namespace ts.server {
             this.typingsInstaller = opts.typingsInstaller || nullTypingsInstaller;
             this.throttleWaitMilliseconds = opts.throttleWaitMilliseconds;
             this.eventHandler = opts.eventHandler;
+            this.suppressDiagnosticEvents = opts.suppressDiagnosticEvents;
             this.globalPlugins = opts.globalPlugins || emptyArray;
             this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray;
             this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
             this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(this.getExecutingFilePath(), "../typesMap.json") : opts.typesMapLocation;
+            this.syntaxOnly = opts.syntaxOnly;
 
             Debug.assert(!!this.host.createHash, "'ServerHost.createHash' is required for ProjectService");
             if (this.host.realpath) {
@@ -438,6 +446,7 @@ namespace ts.server {
 
             this.hostConfiguration = {
                 formatCodeOptions: getDefaultFormatCodeSettings(this.host),
+                preferences: defaultPreferences,
                 hostInfo: "Unknown host",
                 extraFileExtensions: []
             };
@@ -683,15 +692,14 @@ namespace ts.server {
             return project.dirty && project.updateGraph();
         }
 
-        getFormatCodeOptions(file?: NormalizedPath) {
-            let formatCodeSettings: FormatCodeSettings;
-            if (file) {
-                const info = this.getScriptInfoForNormalizedPath(file);
-                if (info) {
-                    formatCodeSettings = info.getFormatCodeSettings();
-                }
-            }
-            return formatCodeSettings || this.hostConfiguration.formatCodeOptions;
+        getFormatCodeOptions(file: NormalizedPath) {
+            const info = this.getScriptInfoForNormalizedPath(file);
+            return info && info.getFormatCodeSettings() || this.hostConfiguration.formatCodeOptions;
+        }
+
+        getPreferences(file: NormalizedPath): UserPreferences {
+            const info = this.getScriptInfoForNormalizedPath(file);
+            return info && info.getPreferences() || this.hostConfiguration.preferences;
         }
 
         private onSourceFileChanged(fileName: string, eventKind: FileWatcherEventKind, path: Path) {
@@ -1193,6 +1201,11 @@ namespace ts.server {
         private forEachConfigFileLocation(info: ScriptInfo,
             action: (configFileName: NormalizedPath, canonicalConfigFilePath: string) => boolean | void,
             projectRootPath?: NormalizedPath) {
+
+            if (this.syntaxOnly) {
+                return undefined;
+            }
+
             let searchPath = asNormalizedPath(getDirectoryPath(info.fileName));
 
             while (!projectRootPath || containsPath(projectRootPath, searchPath, this.currentDirectory, !this.host.useCaseSensitiveFileNames)) {
@@ -1597,7 +1610,7 @@ namespace ts.server {
         }
 
         private sendConfigFileDiagEvent(project: ConfiguredProject, triggerFile: NormalizedPath) {
-            if (!this.eventHandler) {
+            if (!this.eventHandler || this.suppressDiagnosticEvents) {
                 return;
             }
 
@@ -1813,7 +1826,7 @@ namespace ts.server {
             if (args.file) {
                 const info = this.getScriptInfoForNormalizedPath(toNormalizedPath(args.file));
                 if (info) {
-                    info.setFormatOptions(convertFormatOptions(args.formatOptions));
+                    info.setOptions(convertFormatOptions(args.formatOptions), args.preferences);
                     this.logger.info(`Host configuration update for file ${args.file}`);
                 }
             }
@@ -1825,6 +1838,9 @@ namespace ts.server {
                 if (args.formatOptions) {
                     mergeMapLikes(this.hostConfiguration.formatCodeOptions, convertFormatOptions(args.formatOptions));
                     this.logger.info("Format host information updated");
+                }
+                if (args.preferences) {
+                    mergeMapLikes(this.hostConfiguration.preferences, args.preferences);
                 }
                 if (args.extraFileExtensions) {
                     this.hostConfiguration.extraFileExtensions = args.extraFileExtensions;
@@ -1980,15 +1996,12 @@ namespace ts.server {
             return this.openClientFileWithNormalizedPath(toNormalizedPath(fileName), fileContent, scriptKind, /*hasMixedContent*/ false, projectRootPath ? toNormalizedPath(projectRootPath) : undefined);
         }
 
-        private findExternalProjetContainingOpenScriptInfo(info: ScriptInfo): ExternalProject {
-            for (const proj of this.externalProjects) {
-                // Ensure project structure is uptodate to check if info is present in external project
+        private findExternalProjectContainingOpenScriptInfo(info: ScriptInfo): ExternalProject | undefined {
+            return find(this.externalProjects, proj => {
+                // Ensure project structure is up-to-date to check if info is present in external project
                 proj.updateGraph();
-                if (proj.containsScriptInfo(info)) {
-                    return proj;
-                }
-            }
-            return undefined;
+                return proj.containsScriptInfo(info);
+            });
         }
 
         openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult {
@@ -1996,8 +2009,8 @@ namespace ts.server {
             let configFileErrors: ReadonlyArray<Diagnostic>;
 
             const info = this.getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName, projectRootPath ? this.getNormalizedAbsolutePath(projectRootPath) : this.currentDirectory, fileContent, scriptKind, hasMixedContent);
-            let project: ConfiguredProject | ExternalProject = this.findExternalProjetContainingOpenScriptInfo(info);
-            if (!project) {
+            let project: ConfiguredProject | ExternalProject | undefined = this.findExternalProjectContainingOpenScriptInfo(info);
+            if (!project && !this.syntaxOnly) { // Checking syntaxOnly is an optimization
                 configFileName = this.getConfigFileNameForFile(info, projectRootPath);
                 if (configFileName) {
                     project = this.findConfiguredProjectByProjectName(configFileName);
@@ -2302,7 +2315,7 @@ namespace ts.server {
             for (const file of proj.rootFiles) {
                 const normalized = toNormalizedPath(file.fileName);
                 if (getBaseConfigFileName(normalized)) {
-                    if (this.host.fileExists(normalized)) {
+                    if (!this.syntaxOnly && this.host.fileExists(normalized)) {
                         (tsConfigFiles || (tsConfigFiles = [])).push(normalized);
                     }
                 }

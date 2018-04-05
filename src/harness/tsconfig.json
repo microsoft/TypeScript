@@ -54,6 +54,8 @@
         "../services/navigationBar.ts",
         "../services/outliningElementsCollector.ts",
         "../services/patternMatcher.ts",
+        "../services/pathCompletions.ts",
+        "../services/completions.ts",
         "../services/services.ts",
         "../services/shims.ts",
         "../services/signatureHelp.ts",
@@ -95,6 +97,7 @@
         "../server/session.ts",
         "../server/client.ts",
         "../server/editorServices.ts",
+        "./unittests/base64.ts",
         "./unittests/incrementalParser.ts",
         "./unittests/jsDocParsing.ts",
         "./unittests/services/colorization.ts",
@@ -134,6 +137,7 @@
         "./unittests/telemetry.ts",
         "./unittests/languageService.ts",
         "./unittests/programMissingFiles.ts",
+        "./unittests/programNoParseFalsyFileNames.ts",
         "./unittests/publicApi.ts",
         "./unittests/hostNewLineSupport.ts"
     ]

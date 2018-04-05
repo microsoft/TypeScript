@@ -3,7 +3,7 @@ class C {
 >C : C
 
   constructor(C: (public A) => any) {
->C : (public A: any) => any
+>C : (A: any) => any
 >A : any
   }
 }

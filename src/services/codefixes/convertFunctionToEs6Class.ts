@@ -6,15 +6,14 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions(context: CodeFixContext) {
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, context.span.start, context.program.getTypeChecker()));
-            return [{ description: getLocaleSpecificMessage(Diagnostics.Convert_function_to_an_ES2015_class), changes, fixId }];
+            return [createCodeFixAction(changes, Diagnostics.Convert_function_to_an_ES2015_class, fixId, Diagnostics.Convert_all_constructor_functions_to_classes)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => doChange(changes, err.file!, err.start, context.program.getTypeChecker())),
     });
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker): void {
-        const deletedNodes: Node[] = [];
-        const deletes: (() => void)[] = [];
+        const deletedNodes: { node: Node, inList: boolean }[] = [];
         const ctorSymbol = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false));
 
         if (!ctorSymbol || !(ctorSymbol.flags & (SymbolFlags.Function | SymbolFlags.Variable))) {
@@ -49,23 +48,23 @@ namespace ts.codefix {
             return undefined;
         }
 
+        copyComments(ctorDeclaration, newClassDeclaration, sourceFile);
+
         // Because the preceding node could be touched, we need to insert nodes before delete nodes.
         changes.insertNodeAfter(sourceFile, precedingNode, newClassDeclaration);
-        for (const deleteCallback of deletes) {
-            deleteCallback();
+        for (const { node, inList } of deletedNodes) {
+            if (inList) {
+                changes.deleteNodeInList(sourceFile, node);
+            }
+            else {
+                changes.deleteNode(sourceFile, node);
+            }
         }
 
         function deleteNode(node: Node, inList = false) {
-            if (deletedNodes.some(n => isNodeDescendantOf(node, n))) {
-                // Parent node has already been deleted; do nothing
-                return;
-            }
-            deletedNodes.push(node);
-            if (inList) {
-                deletes.push(() => changes.deleteNodeInList(sourceFile, node));
-            }
-            else {
-                deletes.push(() => changes.deleteNode(sourceFile, node));
+            // If parent node has already been deleted, do nothing
+            if (!deletedNodes.some(n => isNodeDescendantOf(node, n.node))) {
+                deletedNodes.push({ node, inList });
             }
         }
 
@@ -100,8 +99,8 @@ namespace ts.codefix {
             }
 
             function createClassElement(symbol: Symbol, modifiers: Modifier[]): ClassElement {
-                // both properties and methods are bound as property symbols
-                if (!(symbol.flags & SymbolFlags.Property)) {
+                // Right now the only thing we can convert are function expressions, which are marked as methods
+                if (!(symbol.flags & SymbolFlags.Method)) {
                     return;
                 }
 

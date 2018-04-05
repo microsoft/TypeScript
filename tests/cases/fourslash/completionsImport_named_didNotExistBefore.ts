@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+
 // @Filename: /a.ts
 ////export function Test1() {}
 ////export function Test2() {}

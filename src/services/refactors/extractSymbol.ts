@@ -1053,7 +1053,7 @@ namespace ts.refactor.extractSymbol {
             changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariable, /*blankLineBetween*/ true);
 
             // Consume
-            changeTracker.replaceNode(context.file, node, localReference, textChanges.useNonAdjustedPositions);
+            changeTracker.replaceNode(context.file, node, localReference);
         }
         else {
             const newVariableDeclaration = createVariableDeclaration(localNameText, variableType, initializer);
@@ -1070,7 +1070,7 @@ namespace ts.refactor.extractSymbol {
 
                 // Consume
                 const localReference = createIdentifier(localNameText);
-                changeTracker.replaceNode(context.file, node, localReference, textChanges.useNonAdjustedPositions);
+                changeTracker.replaceNode(context.file, node, localReference);
             }
             else if (node.parent.kind === SyntaxKind.ExpressionStatement && scope === findAncestor(node, isScope)) {
                 // If the parent is an expression statement and the target scope is the immediately enclosing one,
@@ -1078,7 +1078,7 @@ namespace ts.refactor.extractSymbol {
                 const newVariableStatement = createVariableStatement(
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([newVariableDeclaration], NodeFlags.Const));
-                changeTracker.replaceNode(context.file, node.parent, newVariableStatement, textChanges.useNonAdjustedPositions);
+                changeTracker.replaceNode(context.file, node.parent, newVariableStatement);
             }
             else {
                 const newVariableStatement = createVariableStatement(
@@ -1101,7 +1101,7 @@ namespace ts.refactor.extractSymbol {
                 }
                 else {
                     const localReference = createIdentifier(localNameText);
-                    changeTracker.replaceNode(context.file, node, localReference, textChanges.useNonAdjustedPositions);
+                    changeTracker.replaceNode(context.file, node, localReference);
                 }
             }
         }
@@ -1600,8 +1600,8 @@ namespace ts.refactor.extractSymbol {
             const {visitedTypes} = symbolWalker.walkType(type);
 
             for (const visitedType of visitedTypes) {
-                if (visitedType.flags & TypeFlags.TypeParameter) {
-                    allTypeParameterUsages.set(visitedType.id.toString(), visitedType as TypeParameter);
+                if (visitedType.isTypeParameter()) {
+                    allTypeParameterUsages.set(visitedType.id.toString(), visitedType);
                 }
             }
         }

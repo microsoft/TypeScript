@@ -168,11 +168,12 @@ namespace ts.projectSystem {
         readonly session: TestSession;
         readonly service: server.ProjectService;
         readonly host: TestServerHost;
-        constructor(files: FileOrFolder[]) {
+        constructor(files: FileOrFolder[], suppressDiagnosticEvents?: boolean) {
             this.host = createServerHost(files);
             this.session = createSession(this.host, {
                 canUseEvents: true,
                 eventHandler: event => this.events.push(event),
+                suppressDiagnosticEvents,
             });
             this.service = this.session.getProjectService();
         }
@@ -483,6 +484,12 @@ namespace ts.projectSystem {
 
     function checkProjectUpdatedInBackgroundEvent(session: TestSession, openFiles: string[]) {
         checkNthEvent(session, server.toEvent("projectsUpdatedInBackground", { openFiles }), 0, /*isMostRecent*/ true);
+    }
+
+    function checkNoDiagnosticEvents(session: TestSession) {
+        for (const event of session.events) {
+            assert.isFalse(event.event.endsWith("Diag"), JSON.stringify(event));
+        }
     }
 
     function checkNthEvent(session: TestSession, expectedEvent: protocol.Event, index: number, isMostRecent: boolean) {
@@ -1307,6 +1314,109 @@ namespace ts.projectSystem {
 
         });
 
+        describe("ignoreConfigFiles", () => {
+            it("external project including config file", () => {
+                const file1 = {
+                    path: "/a/b/f1.ts",
+                    content: "let x =1;"
+                };
+                const config1 = {
+                    path: "/a/b/tsconfig.json",
+                    content: JSON.stringify(
+                        {
+                            compilerOptions: {},
+                            files: ["f1.ts"]
+                        }
+                    )
+                };
+
+                const externalProjectName = "externalproject";
+                const host = createServerHost([file1, config1]);
+                const projectService = createProjectService(host, { useSingleInferredProject: true }, { syntaxOnly: true });
+                projectService.openExternalProject({
+                    rootFiles: toExternalFiles([file1.path, config1.path]),
+                    options: {},
+                    projectFileName: externalProjectName
+                });
+
+                checkNumberOfProjects(projectService, { externalProjects: 1 });
+                const proj = projectService.externalProjects[0];
+                assert.isDefined(proj);
+
+                assert.isTrue(proj.fileExists(file1.path));
+            });
+
+            it("loose file included in config file (openClientFile)", () => {
+                const file1 = {
+                    path: "/a/b/f1.ts",
+                    content: "let x =1;"
+                };
+                const config1 = {
+                    path: "/a/b/tsconfig.json",
+                    content: JSON.stringify(
+                        {
+                            compilerOptions: {},
+                            files: ["f1.ts"]
+                        }
+                    )
+                };
+
+                const host = createServerHost([file1, config1]);
+                const projectService = createProjectService(host, { useSingleInferredProject: true }, { syntaxOnly: true });
+                projectService.openClientFile(file1.path, file1.content);
+
+                checkNumberOfProjects(projectService, { inferredProjects: 1 });
+                const proj = projectService.inferredProjects[0];
+                assert.isDefined(proj);
+
+                assert.isTrue(proj.fileExists(file1.path));
+            });
+
+            it("loose file included in config file (applyCodeChanges)", () => {
+                const file1 = {
+                    path: "/a/b/f1.ts",
+                    content: "let x =1;"
+                };
+                const config1 = {
+                    path: "/a/b/tsconfig.json",
+                    content: JSON.stringify(
+                        {
+                            compilerOptions: {},
+                            files: ["f1.ts"]
+                        }
+                    )
+                };
+
+                const host = createServerHost([file1, config1]);
+                const projectService = createProjectService(host, { useSingleInferredProject: true }, { syntaxOnly: true });
+                projectService.applyChangesInOpenFiles([{ fileName: file1.path, content: file1.content }], [], []);
+
+                checkNumberOfProjects(projectService, { inferredProjects: 1 });
+                const proj = projectService.inferredProjects[0];
+                assert.isDefined(proj);
+
+                assert.isTrue(proj.fileExists(file1.path));
+            });
+        });
+
+        it("disable inferred project", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "let x =1;"
+            };
+
+            const host = createServerHost([file1]);
+            const projectService = createProjectService(host, { useSingleInferredProject: true }, { syntaxOnly: true });
+
+            projectService.openClientFile(file1.path, file1.content);
+
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            const proj = projectService.inferredProjects[0];
+            assert.isDefined(proj);
+
+            assert.isFalse(proj.languageServiceEnabled);
+        });
+
         it("reload regular file after closing", () => {
             const f1 = {
                 path: "/a/b/app.ts",
@@ -1327,13 +1437,13 @@ namespace ts.projectSystem {
             service.checkNumberOfProjects({ externalProjects: 1 });
             checkProjectActualFiles(service.externalProjects[0], [f1.path, f2.path, libFile.path]);
 
-            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, { includeExternalModuleExports: false, includeInsertTextCompletions: false });
+            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, defaultPreferences);
             // should contain completions for string
             assert.isTrue(completions1.entries.some(e => e.name === "charAt"), "should contain 'charAt'");
             assert.isFalse(completions1.entries.some(e => e.name === "toExponential"), "should not contain 'toExponential'");
 
             service.closeClientFile(f2.path);
-            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, { includeExternalModuleExports: false, includeInsertTextCompletions: false });
+            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 2, defaultPreferences);
             // should contain completions for string
             assert.isFalse(completions2.entries.some(e => e.name === "charAt"), "should not contain 'charAt'");
             assert.isTrue(completions2.entries.some(e => e.name === "toExponential"), "should contain 'toExponential'");
@@ -1359,11 +1469,11 @@ namespace ts.projectSystem {
             service.checkNumberOfProjects({ externalProjects: 1 });
             checkProjectActualFiles(service.externalProjects[0], [f1.path, f2.path, libFile.path]);
 
-            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, { includeExternalModuleExports: false, includeInsertTextCompletions: false });
+            const completions1 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, defaultPreferences);
             assert.isTrue(completions1.entries.some(e => e.name === "somelongname"), "should contain 'somelongname'");
 
             service.closeClientFile(f2.path);
-            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, { includeExternalModuleExports: false, includeInsertTextCompletions: false });
+            const completions2 = service.externalProjects[0].getLanguageService().getCompletionsAtPosition(f1.path, 0, defaultPreferences);
             assert.isFalse(completions2.entries.some(e => e.name === "somelongname"), "should not contain 'somelongname'");
             const sf2 = service.externalProjects[0].getLanguageService().getProgram().getSourceFile(f2.path);
             assert.equal(sf2.text, "");
@@ -1968,7 +2078,7 @@ namespace ts.projectSystem {
 
             // Check identifiers defined in HTML content are available in .ts file
             const project = configuredProjectAt(projectService, 0);
-            let completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 1, { includeExternalModuleExports: false, includeInsertTextCompletions: false });
+            let completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 1, defaultPreferences);
             assert(completions && completions.entries[0].name === "hello", `expected entry hello to be in completion list`);
 
             // Close HTML file
@@ -1982,7 +2092,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path, config.path]);
 
             // Check identifiers defined in HTML content are not available in .ts file
-            completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 5, { includeExternalModuleExports: false, includeInsertTextCompletions: false });
+            completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 5, defaultPreferences);
             assert(completions && completions.entries[0].name !== "hello", `unexpected hello entry in completion list`);
         });
 
@@ -2635,7 +2745,7 @@ namespace ts.projectSystem {
             assert.equal(lastEvent.data.project, project, "project name");
             assert.isFalse(lastEvent.data.languageServiceEnabled, "Language service state");
 
-            const options = projectService.getFormatCodeOptions();
+            const options = projectService.getFormatCodeOptions(f1.path as server.NormalizedPath);
             const edits = project.getLanguageService().getFormattingEditsForDocument(f1.path, options);
             assert.deepEqual(edits, [{ span: createTextSpan(/*start*/ 7, /*length*/ 3), newText: " " }]);
         });
@@ -3584,7 +3694,7 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host);
             projectService.openClientFile(f1.path);
 
-            const defaultSettings = projectService.getFormatCodeOptions();
+            const defaultSettings = projectService.getFormatCodeOptions(f1.path as server.NormalizedPath);
 
             // set global settings
             const newGlobalSettings1 = clone(defaultSettings);
@@ -3962,7 +4072,7 @@ namespace ts.projectSystem {
             const folderPath = "/a/b/projects/temp";
             const file1: FileOrFolder = {
                 path: `${folderPath}/a.ts`,
-                content: 'import f = require("pad")'
+                content: 'import f = require("pad"); f;'
             };
             const files = [file1, libFile];
             const host = createServerHost(files);
@@ -4078,6 +4188,63 @@ namespace ts.projectSystem {
             session.clearMessages();
         });
 
+        it("suppressed diagnostic events", () => {
+            const file: FileOrFolder = {
+                path: "/a.ts",
+                content: "1 = 2;",
+            };
+
+            const host = createServerHost([file]);
+            const session = createSession(host, { canUseEvents: true, suppressDiagnosticEvents: true });
+            const service = session.getProjectService();
+
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: server.CommandNames.Open,
+                arguments: { file: file.path, fileContent: file.content },
+            });
+
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+
+            host.checkTimeoutQueueLength(0);
+            checkNoDiagnosticEvents(session);
+
+            session.clearMessages();
+
+            let expectedSequenceId = session.getNextSeq();
+
+            session.executeCommandSeq<protocol.GeterrRequest>({
+                command: server.CommandNames.Geterr,
+                arguments: {
+                    delay: 0,
+                    files: [file.path],
+                }
+            });
+
+            host.checkTimeoutQueueLength(0);
+            checkNoDiagnosticEvents(session);
+
+            checkCompleteEvent(session, 1, expectedSequenceId);
+
+            session.clearMessages();
+
+            expectedSequenceId = session.getNextSeq();
+
+            session.executeCommandSeq<protocol.GeterrForProjectRequest>({
+                command: server.CommandNames.Geterr,
+                arguments: {
+                    delay: 0,
+                    file: file.path,
+                }
+            });
+
+            host.checkTimeoutQueueLength(0);
+            checkNoDiagnosticEvents(session);
+
+            checkCompleteEvent(session, 1, expectedSequenceId);
+
+            session.clearMessages();
+        });
+
         function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: ReadonlyArray<string> = []): protocol.Diagnostic {
             return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category: diagnosticCategoryName(message), source: undefined };
         }
@@ -4153,7 +4320,7 @@ namespace ts.projectSystem {
             serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, configFile.path);
         });
 
-        it("are not generated when the config file doesnot include file opened and config file has errors", () => {
+        it("are not generated when the config file does not include file opened and config file has errors", () => {
             const file = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
@@ -4177,7 +4344,26 @@ namespace ts.projectSystem {
             serverEventManager.hasZeroEvent("configFileDiag");
         });
 
-        it("are not generated when the config file doesnot include file opened and doesnt contain any errors", () => {
+        it("are not generated when the config file has errors but suppressDiagnosticEvents is true", () => {
+            const file = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {
+                        "foo": "bar",
+                        "allowJS": true
+                    }
+                }`
+            };
+            const serverEventManager = new TestServerEventManager([file, configFile], /*suppressDiagnosticEvents*/ true);
+            openFilesForSession([file], serverEventManager.session);
+            serverEventManager.hasZeroEvent("configFileDiag");
+        });
+
+        it("are not generated when the config file does not include file opened and doesnt contain any errors", () => {
             const file = {
                 path: "/a/b/app.ts",
                 content: "let x = 10"
@@ -6049,6 +6235,55 @@ namespace ts.projectSystem {
             });
         });
 
+        describe("Subfolder invalidations correctly include parent folder failed lookup locations", () => {
+            function runFailedLookupTest(resolution: "Node" | "Classic") {
+                const projectLocation = "/proj";
+                const file1: FileOrFolder = {
+                    path: `${projectLocation}/foo/boo/app.ts`,
+                    content: `import * as debug from "debug"`
+                };
+                const file2: FileOrFolder = {
+                    path: `${projectLocation}/foo/boo/moo/app.ts`,
+                    content: `import * as debug from "debug"`
+                };
+                const tsconfig: FileOrFolder = {
+                    path: `${projectLocation}/tsconfig.json`,
+                    content: JSON.stringify({
+                        files: ["foo/boo/app.ts", "foo/boo/moo/app.ts"],
+                        moduleResolution: resolution
+                    })
+                };
+
+                const files = [file1, file2, tsconfig, libFile];
+                const host = createServerHost(files);
+                const service = createProjectService(host);
+                service.openClientFile(file1.path);
+
+                const project = service.configuredProjects.get(tsconfig.path);
+                checkProjectActualFiles(project, files.map(f => f.path));
+                assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file1.path).map(diag => diag.messageText), ["Cannot find module 'debug'."]);
+                assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file2.path).map(diag => diag.messageText), ["Cannot find module 'debug'."]);
+
+                const debugTypesFile: FileOrFolder = {
+                    path: `${projectLocation}/node_modules/debug/index.d.ts`,
+                    content: "export {}"
+                };
+                files.push(debugTypesFile);
+                host.reloadFS(files);
+                host.runQueuedTimeoutCallbacks();
+                checkProjectActualFiles(project, files.map(f => f.path));
+                assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file1.path).map(diag => diag.messageText), []);
+                assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file2.path).map(diag => diag.messageText), []);
+            }
+
+            it("Includes the parent folder FLLs in node module resolution mode", () => {
+                runFailedLookupTest("Node");
+            });
+            it("Includes the parent folder FLLs in classic module resolution mode", () => {
+                runFailedLookupTest("Classic");
+            });
+        });
+
         describe("Verify npm install in directory with tsconfig file works when", () => {
             function verifyNpmInstall(timeoutDuringPartialInstallation: boolean) {
                 const root = "/user/username/rootfolder/otherfolder";
@@ -6214,6 +6449,44 @@ namespace ts.projectSystem {
             it("timeout occurs after installation", () => {
                 verifyNpmInstall(/*timeoutDuringPartialInstallation*/ false);
             });
+        });
+
+        it("when node_modules dont receive event for the @types file addition", () => {
+            const projectLocation = "/user/username/folder/myproject";
+            const app: FileOrFolder = {
+                path: `${projectLocation}/app.ts`,
+                content: `import * as debug from "debug"`
+            };
+            const tsconfig: FileOrFolder = {
+                path: `${projectLocation}/tsconfig.json`,
+                content: ""
+            };
+
+            const files = [app, tsconfig, libFile];
+            const host = createServerHost(files);
+            const service = createProjectService(host);
+            service.openClientFile(app.path);
+
+            const project = service.configuredProjects.get(tsconfig.path);
+            checkProjectActualFiles(project, files.map(f => f.path));
+            assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(app.path).map(diag => diag.messageText), ["Cannot find module 'debug'."]);
+
+            const debugTypesFile: FileOrFolder = {
+                path: `${projectLocation}/node_modules/@types/debug/index.d.ts`,
+                content: "export {}"
+            };
+            files.push(debugTypesFile);
+            // Do not invoke recursive directory watcher for anything other than node_module/@types
+            const invoker = host.invokeWatchedDirectoriesRecursiveCallback;
+            host.invokeWatchedDirectoriesRecursiveCallback = (fullPath, relativePath) => {
+                if (fullPath.endsWith("@types")) {
+                    invoker.call(host, fullPath, relativePath);
+                }
+            };
+            host.reloadFS(files);
+            host.runQueuedTimeoutCallbacks();
+            checkProjectActualFiles(project, files.map(f => f.path));
+            assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(app.path).map(diag => diag.messageText), []);
         });
     });
 

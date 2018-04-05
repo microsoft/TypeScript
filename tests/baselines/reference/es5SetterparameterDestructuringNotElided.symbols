@@ -1,0 +1,17 @@
+=== tests/cases/compiler/es5SetterparameterDestructuringNotElided.ts ===
+const foo = {
+>foo : Symbol(foo, Decl(es5SetterparameterDestructuringNotElided.ts, 0, 5))
+
+    set foo([start, end]: [any, any]) {
+>foo : Symbol(foo, Decl(es5SetterparameterDestructuringNotElided.ts, 0, 13))
+>start : Symbol(start, Decl(es5SetterparameterDestructuringNotElided.ts, 1, 13))
+>end : Symbol(end, Decl(es5SetterparameterDestructuringNotElided.ts, 1, 19))
+
+        void start;
+>start : Symbol(start, Decl(es5SetterparameterDestructuringNotElided.ts, 1, 13))
+
+        void end;
+>end : Symbol(end, Decl(es5SetterparameterDestructuringNotElided.ts, 1, 19))
+
+    },
+};

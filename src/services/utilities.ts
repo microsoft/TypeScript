@@ -1216,6 +1216,17 @@ namespace ts {
         }
         return result;
     }
+
+    export function skipConstraint(type: Type): Type {
+        return type.isTypeParameter() ? type.getConstraint() : type;
+    }
+
+    export function getNameFromPropertyName(name: PropertyName): string | undefined {
+        return name.kind === SyntaxKind.ComputedPropertyName
+            // treat computed property names where expression is string/numeric literal as just string/numeric literal
+            ? isStringOrNumericLiteral(name.expression) ? name.expression.text : undefined
+            : getTextOfIdentifierOrLiteral(name);
+    }
 }
 
 // Display-part writer helpers
@@ -1486,30 +1497,33 @@ namespace ts {
      */
     /* @internal */
     export function suppressLeadingAndTrailingTrivia(node: Node) {
-        Debug.assertDefined(node);
-        suppress(node, EmitFlags.NoLeadingComments, getFirstChild);
-        suppress(node, EmitFlags.NoTrailingComments, getLastChild);
-        function suppress(node: Node, flag: EmitFlags, getChild: (n: Node) => Node) {
-            addEmitFlags(node, flag);
-            const child = getChild(node);
-            if (child) suppress(child, flag, getChild);
-        }
+        suppressLeadingTrivia(node);
+        suppressTrailingTrivia(node);
+    }
+
+    /**
+     * Sets EmitFlags to suppress leading trivia on the node.
+     */
+    /* @internal */
+    export function suppressLeadingTrivia(node: Node) {
+        addEmitFlagsRecursively(node, EmitFlags.NoLeadingComments, getFirstChild);
+    }
+
+    /**
+     * Sets EmitFlags to suppress trailing trivia on the node.
+     */
+    /* @internal */
+    export function suppressTrailingTrivia(node: Node) {
+        addEmitFlagsRecursively(node, EmitFlags.NoTrailingComments, getLastChild);
+    }
+
+    function addEmitFlagsRecursively(node: Node, flag: EmitFlags, getChild: (n: Node) => Node) {
+        addEmitFlags(node, flag);
+        const child = getChild(node);
+        if (child) addEmitFlagsRecursively(child, flag, getChild);
     }
 
     function getFirstChild(node: Node): Node | undefined {
         return node.forEachChild(child => child);
-    }
-
-    function getLastChild(node: Node): Node | undefined {
-        let lastChild: Node | undefined;
-        node.forEachChild(
-            child => { lastChild = child; },
-            children => {
-                // As an optimization, jump straight to the end of the list.
-                if (children.length) {
-                    lastChild = last(children);
-                }
-            });
-        return lastChild;
     }
 }

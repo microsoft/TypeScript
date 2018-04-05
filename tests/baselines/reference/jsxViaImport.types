@@ -35,7 +35,7 @@ declare module React {
 >U : U
 }
 declare module "BaseComponent" {
->"BaseComponent" : typeof "BaseComponent"
+>"BaseComponent" : typeof import("BaseComponent")
 
     var base: React.Component<any, {}>;
 >base : React.Component<any, {}>

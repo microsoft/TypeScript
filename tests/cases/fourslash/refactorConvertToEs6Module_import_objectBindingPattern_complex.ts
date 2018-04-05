@@ -4,10 +4,12 @@
 
 // @Filename: /a.js
 ////const { x: { a, b } } = require("x");
+////a; b;
 
 verify.codeFix({
     description: "Convert to ES6 module",
     newFileContent:
 `import x from "x";
-const { x: { a, b } } = x;`,
+const { x: { a, b } } = x;
+a; b;`,
 });
