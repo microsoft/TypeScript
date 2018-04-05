@@ -1996,15 +1996,12 @@ namespace ts.server {
             return this.openClientFileWithNormalizedPath(toNormalizedPath(fileName), fileContent, scriptKind, /*hasMixedContent*/ false, projectRootPath ? toNormalizedPath(projectRootPath) : undefined);
         }
 
-        private findExternalProjetContainingOpenScriptInfo(info: ScriptInfo): ExternalProject {
-            for (const proj of this.externalProjects) {
-                // Ensure project structure is uptodate to check if info is present in external project
+        private findExternalProjectContainingOpenScriptInfo(info: ScriptInfo): ExternalProject | undefined {
+            return find(this.externalProjects, proj => {
+                // Ensure project structure is up-to-date to check if info is present in external project
                 proj.updateGraph();
-                if (proj.containsScriptInfo(info)) {
-                    return proj;
-                }
-            }
-            return undefined;
+                return proj.containsScriptInfo(info);
+            });
         }
 
         openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult {
@@ -2012,7 +2009,7 @@ namespace ts.server {
             let configFileErrors: ReadonlyArray<Diagnostic>;
 
             const info = this.getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName, projectRootPath ? this.getNormalizedAbsolutePath(projectRootPath) : this.currentDirectory, fileContent, scriptKind, hasMixedContent);
-            let project: ConfiguredProject | ExternalProject = this.findExternalProjetContainingOpenScriptInfo(info);
+            let project: ConfiguredProject | ExternalProject | undefined = this.findExternalProjectContainingOpenScriptInfo(info);
             if (!project && !this.syntaxOnly) { // Checking syntaxOnly is an optimization
                 configFileName = this.getConfigFileNameForFile(info, projectRootPath);
                 if (configFileName) {
