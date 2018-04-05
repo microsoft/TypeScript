@@ -17938,6 +17938,9 @@ namespace ts {
         function resolveCallExpression(node: CallExpression, candidatesOutArray: Signature[]): Signature {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 const superType = checkSuperExpression(node.expression);
+                if (isTypeAny(superType)) {
+                    return anySignature;
+                }
                 if (superType !== unknownType) {
                     // In super call, the candidate signatures are the matching arity signatures of the base constructor function instantiated
                     // with the type arguments specified in the extends clause.
