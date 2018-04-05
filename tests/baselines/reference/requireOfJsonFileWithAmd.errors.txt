@@ -1,7 +1,9 @@
+error TS5070: Option '--resolveJsonModule' cannot be specified without 'node' module resolution strategy.
 tests/cases/compiler/file1.ts(1,21): error TS2307: Cannot find module './b'.
 tests/cases/compiler/file1.ts(3,21): error TS2307: Cannot find module './b.json'.
 
 
+!!! error TS5070: Option '--resolveJsonModule' cannot be specified without 'node' module resolution strategy.
 ==== tests/cases/compiler/file1.ts (2 errors) ====
     import b1 = require('./b');
                         ~~~~~

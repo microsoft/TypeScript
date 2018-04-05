@@ -2795,6 +2795,10 @@
         "category": "Error",
         "code": 5069
     },
+    "Option '--resolveJsonModule' cannot be specified without 'node' module resolution strategy.": {
+        "category": "Error",
+        "code": 5070
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -3527,6 +3531,11 @@
         "category": "Message",
         "code": 6194
     },
+    "Resolve module name imported with '.json' extension to the json source file.": {
+        "category": "Message",
+        "code": 6195
+    },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

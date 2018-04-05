@@ -4220,6 +4220,7 @@ namespace ts {
         /* @internal */ suppressOutputPathCheck?: boolean;
         target?: ScriptTarget;
         traceResolution?: boolean;
+        resolveJsonModule?: boolean;
         types?: string[];
         /** Paths used to compute primary types search locations */
         typeRoots?: string[];

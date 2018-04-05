@@ -11,8 +11,6 @@
     "Directory '/src/node_modules' does not exist, skipping all lookups in it.",
     "File '/node_modules/xyz.js' does not exist.",
     "File '/node_modules/xyz.jsx' does not exist.",
-    "Loading module 'xyz' from 'node_modules' folder, target file type 'Json'.",
-    "Directory '/src/node_modules' does not exist, skipping all lookups in it.",
     "======== Module name 'xyz' was not resolved. ========",
     "======== Resolving type reference directive 'foo', containing file '/src/__inferred type names__.ts', root directory '/node_modules/@types'. ========",
     "Resolving with primary search path '/node_modules/@types'.",

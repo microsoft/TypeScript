@@ -2390,6 +2390,7 @@ declare namespace ts {
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;
         traceResolution?: boolean;
+        resolveJsonModule?: boolean;
         types?: string[];
         /** Paths used to compute primary types search locations */
         typeRoots?: string[];
@@ -7239,6 +7240,7 @@ declare namespace ts.server.protocol {
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget | ts.ScriptTarget;
         traceResolution?: boolean;
+        resolveJsonModule?: boolean;
         types?: string[];
         /** Paths used to used to compute primary types search locations */
         typeRoots?: string[];

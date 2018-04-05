@@ -2195,6 +2195,12 @@ namespace ts {
                 }
             }
 
+            if (options.resolveJsonModule) {
+                if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs) {
+                    createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_cannot_be_specified_without_node_module_resolution_strategy, "resolveJsonModule");
+                }
+            }
+
             // there has to be common source directory if user specified --outdir || --sourceRoot
             // if user specified --mapRoot, there needs to be common source directory if there would be multiple files being emitted
             if (options.outDir || // there is --outDir specified

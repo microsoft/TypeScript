@@ -3,6 +3,7 @@
 // @allowJs: true
 // @strictNullChecks: true
 // @fullEmitPaths: true
+// @resolveJsonModule: true
 
 // @Filename: file1.ts
 import b = require('./b.json');

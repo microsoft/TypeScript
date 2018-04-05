@@ -743,7 +743,11 @@ namespace ts {
         const failedLookupLocations: string[] = [];
         const state: ModuleResolutionState = { compilerOptions, host, traceEnabled };
 
-        const result = (jsOnly ? tryResolve(Extensions.JavaScript) : (tryResolve(Extensions.TypeScript) || tryResolve(Extensions.JavaScript))) || tryResolve(Extensions.Json);
+        const result = jsOnly ?
+            tryResolve(Extensions.JavaScript) :
+            (tryResolve(Extensions.TypeScript) ||
+                tryResolve(Extensions.JavaScript) ||
+                (compilerOptions.resolveJsonModule ? tryResolve(Extensions.Json) : undefined));
         if (result && result.value) {
             const { resolved, originalPath, isExternalLibraryImport } = result.value;
             return createResolvedModuleWithFailedLookupLocations(resolved, originalPath, isExternalLibraryImport, failedLookupLocations);

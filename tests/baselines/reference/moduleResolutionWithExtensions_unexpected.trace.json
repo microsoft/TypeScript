@@ -31,15 +31,5 @@
     "Directory '/node_modules/normalize.css/normalize.css' does not exist, skipping all lookups in it.",
     "File '/node_modules/normalize.css/index.js' does not exist.",
     "File '/node_modules/normalize.css/index.jsx' does not exist.",
-    "Loading module 'normalize.css' from 'node_modules' folder, target file type 'Json'.",
-    "'package.json' does not have a 'typings' field.",
-    "'package.json' does not have a 'types' field.",
-    "'package.json' has 'main' field 'normalize.css' that references '/node_modules/normalize.css/normalize.css'.",
-    "Found 'package.json' at '/node_modules/normalize.css/package.json'.",
-    "'package.json' has 'main' field 'normalize.css' that references '/node_modules/normalize.css/normalize.css'.",
-    "File '/node_modules/normalize.css/normalize.css' exist - use it as a name resolution result.",
-    "File '/node_modules/normalize.css/normalize.css' has an unsupported extension, so skipping it.",
-    "Loading module as file / folder, candidate module location '/node_modules/normalize.css/normalize.css', target file type 'Json'.",
-    "Directory '/node_modules/normalize.css/normalize.css' does not exist, skipping all lookups in it.",
     "======== Module name 'normalize.css' was not resolved. ========"
 ]

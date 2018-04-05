@@ -2,6 +2,7 @@
 // @outdir: out/
 // @allowJs: true
 // @fullEmitPaths: true
+// @resolveJsonModule: true
 
 // @Filename: file1.ts
 import c1 = require('./c'); // resolves to c.ts 

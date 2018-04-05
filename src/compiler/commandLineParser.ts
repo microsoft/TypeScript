@@ -507,6 +507,12 @@ namespace ts {
             description: Diagnostics.Enable_tracing_of_the_name_resolution_process
         },
         {
+            name: "resolveJsonModule",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Resolve_module_name_imported_with_json_extension_to_the_json_source_file
+        },
+        {
             name: "listFiles",
             type: "boolean",
             category: Diagnostics.Advanced_Options,
