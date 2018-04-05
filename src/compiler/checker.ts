@@ -2063,6 +2063,10 @@ namespace ts {
                     if (initializer) {
                         namespace = getSymbolOfNode(initializer);
                     }
+                    // Currently, IIFEs may not have a symbol and we don't know about their contents. Give up in this case.
+                    if (!namespace) {
+                        return undefined;
+                    }
                     if (namespace.valueDeclaration &&
                         isVariableDeclaration(namespace.valueDeclaration) &&
                         namespace.valueDeclaration.initializer &&
