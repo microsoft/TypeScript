@@ -4396,7 +4396,7 @@ namespace ts {
                         const members = createSymbolTable();
                         copyEntries(o.members, members);
                         copyEntries(symbol.exports, members);
-                        type = createAnonymousType(symbol, members, o.callSignatures, o.constructSignatures, o.stringIndexInfo, o.numberIndexInfo);
+                        type = createAnonymousType(o.symbol, members, o.callSignatures, o.constructSignatures, o.stringIndexInfo, o.numberIndexInfo);
                     }
                     let anyedType = type;
                     if (isEmptyArrayLiteralType(type)) {

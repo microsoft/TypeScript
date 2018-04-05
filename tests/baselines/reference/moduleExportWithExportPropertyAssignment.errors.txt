@@ -1,0 +1,21 @@
+tests/cases/conformance/salsa/a.js(1,12): error TS2304: Cannot find name 'require'.
+tests/cases/conformance/salsa/mod1.js(2,1): error TS2304: Cannot find name 'module'.
+tests/cases/conformance/salsa/mod1.js(3,1): error TS2304: Cannot find name 'module'.
+
+
+==== tests/cases/conformance/salsa/a.js (1 errors) ====
+    var mod1 = require('./mod1')
+               ~~~~~~~
+!!! error TS2304: Cannot find name 'require'.
+    mod1()
+    mod1.f()
+    
+==== tests/cases/conformance/salsa/mod1.js (2 errors) ====
+    // TODO: Test that this is not legal (or at least doesn't work) if module.exports is a primitive
+    module.exports = function () { }
+    ~~~~~~
+!!! error TS2304: Cannot find name 'module'.
+    module.exports.f = function () { }
+    ~~~~~~
+!!! error TS2304: Cannot find name 'module'.
+    

@@ -1,0 +1,35 @@
+=== tests/cases/conformance/salsa/a.js ===
+var mod1 = require('./mod1')
+>mod1 : { (): void; f: () => void; }
+>require('./mod1') : { (): void; f: () => void; }
+>require : any
+>'./mod1' : "./mod1"
+
+mod1()
+>mod1() : void
+>mod1 : { (): void; f: () => void; }
+
+mod1.f()
+>mod1.f() : void
+>mod1.f : () => void
+>mod1 : { (): void; f: () => void; }
+>f : () => void
+
+=== tests/cases/conformance/salsa/mod1.js ===
+// TODO: Test that this is not legal (or at least doesn't work) if module.exports is a primitive
+module.exports = function () { }
+>module.exports = function () { } : () => void
+>module.exports : any
+>module : any
+>exports : any
+>function () { } : () => void
+
+module.exports.f = function () { }
+>module.exports.f = function () { } : () => void
+>module.exports.f : any
+>module.exports : any
+>module : any
+>exports : any
+>f : any
+>function () { } : () => void
+
