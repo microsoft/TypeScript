@@ -20,4 +20,5 @@ verify.completionListContains("foo", "const foo: 0", undefined, "const", undefin
     replacementSpan,
 });
 
-verify.completionsAt(["1", "2"], ["b"]);
+verify.completionsAt("1", ["b"]);
+verify.completionsAt("2", ["b"]);
