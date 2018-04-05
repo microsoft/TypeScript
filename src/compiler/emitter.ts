@@ -89,7 +89,6 @@ namespace ts {
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean, transformers?: TransformerFactory<SourceFile>[]): EmitResult {
         const compilerOptions = host.getCompilerOptions();
-        const moduleKind = getEmitModuleKind(compilerOptions);
         const sourceMapDataList: SourceMapData[] = (compilerOptions.sourceMap || compilerOptions.inlineSourceMap || getAreDeclarationMapsEnabled(compilerOptions)) ? [] : undefined;
         const emittedFilesList: string[] = compilerOptions.listEmittedFiles ? [] : undefined;
         const emitterDiagnostics = createDiagnosticCollection();
@@ -104,9 +103,6 @@ namespace ts {
             // Explicitly do not passthru either `inline` option
         });
 
-        let currentSourceFile: SourceFile;
-        let bundledHelpers: Map<boolean>;
-        let isOwnFileEmit: boolean;
         let emitSkipped = false;
 
         // Emit each output file
@@ -153,7 +149,7 @@ namespace ts {
             const transform = transformNodes(resolver, host, compilerOptions, sourceFiles, transformers, /*allowDtsFiles*/ false);
 
             // Create a printer to print the nodes
-            const printer = createPrinter(compilerOptions, {
+            const printer = createPrinter({ ...compilerOptions, noEmitHelpers: compilerOptions.noEmitHelpers } as PrinterOptions, {
                 // resolver hooks
                 hasGlobalName: resolver.hasGlobalName,
 
@@ -167,7 +163,6 @@ namespace ts {
                 onEmitSourceMapOfPosition: sourceMap.emitPos,
 
                 // emitter hooks
-                onEmitHelpers: emitHelpers,
                 onSetSourceFile: setSourceFile,
             });
 
@@ -191,7 +186,7 @@ namespace ts {
                     emitterDiagnostics.add(diagnostic);
                 }
             }
-            const declarationPrinter = createPrinter({ ...compilerOptions, onlyPrintJsDocStyle: true } as PrinterOptions, {
+            const declarationPrinter = createPrinter({ ...compilerOptions, onlyPrintJsDocStyle: true, noEmitHelpers: true } as PrinterOptions, {
                 // resolver hooks
                 hasGlobalName: resolver.hasGlobalName,
 
@@ -220,12 +215,9 @@ namespace ts {
             mapRecorder.initialize(jsFilePath, sourceMapFilePath || "", sourceFileOrBundle, sourceMapDataList);
 
             if (bundle) {
-                bundledHelpers = createMap<boolean>();
-                isOwnFileEmit = false;
                 printer.writeBundle(bundle, writer);
             }
             else {
-                isOwnFileEmit = true;
                 printer.writeFile(sourceFile, writer);
             }
 
@@ -247,66 +239,14 @@ namespace ts {
             // Reset state
             mapRecorder.reset();
             writer.clear();
-
-            currentSourceFile = undefined;
-            bundledHelpers = undefined;
-            isOwnFileEmit = false;
         }
 
         function setSourceFile(node: SourceFile) {
-            currentSourceFile = node;
             sourceMap.setSourceFile(node);
         }
 
         function setSourceFileForDeclarationSourceMaps(node: SourceFile) {
-            currentSourceFile = node;
             declarationSourceMap.setSourceFile(node);
-        }
-
-        function emitHelpers(node: Node, writeLines: (text: string) => void) {
-            let helpersEmitted = false;
-            const bundle = node.kind === SyntaxKind.Bundle ? <Bundle>node : undefined;
-            if (bundle && moduleKind === ModuleKind.None) {
-                return;
-            }
-
-            const numNodes = bundle ? bundle.sourceFiles.length : 1;
-            for (let i = 0; i < numNodes; i++) {
-                const currentNode = bundle ? bundle.sourceFiles[i] : node;
-                const sourceFile = isSourceFile(currentNode) ? currentNode : currentSourceFile;
-                const shouldSkip = compilerOptions.noEmitHelpers || getExternalHelpersModuleName(sourceFile) !== undefined;
-                const shouldBundle = isSourceFile(currentNode) && !isOwnFileEmit;
-                const helpers = getEmitHelpers(currentNode);
-                if (helpers) {
-                    for (const helper of stableSort(helpers, compareEmitHelpers)) {
-                        if (!helper.scoped) {
-                            // Skip the helper if it can be skipped and the noEmitHelpers compiler
-                            // option is set, or if it can be imported and the importHelpers compiler
-                            // option is set.
-                            if (shouldSkip) continue;
-
-                            // Skip the helper if it can be bundled but hasn't already been emitted and we
-                            // are emitting a bundled module.
-                            if (shouldBundle) {
-                                if (bundledHelpers.get(helper.name)) {
-                                    continue;
-                                }
-
-                                bundledHelpers.set(helper.name, true);
-                            }
-                        }
-                        else if (bundle) {
-                            // Skip the helper if it is scoped and we are emitting bundled helpers
-                            continue;
-                        }
-
-                        writeLines(helper.text);
-                        helpersEmitted = true;
-                    }
-                }
-            }
-
-            return helpersEmitted;
         }
     }
 
@@ -317,7 +257,6 @@ namespace ts {
             onEmitSourceMapOfToken,
             onEmitSourceMapOfPosition,
             onEmitNode,
-            onEmitHelpers,
             onSetSourceFile,
             substituteNode,
             onBeforeEmitNodeArray,
@@ -355,6 +294,9 @@ namespace ts {
             writeSemicolon = deferWriteSemicolon;
         }
         const syntheticParent: TextRange = { pos: -1, end: -1 };
+        const moduleKind = getEmitModuleKind(printerOptions);
+        const bundledHelpers = createMap<boolean>();
+        let isOwnFileEmit: boolean;
 
         reset();
         return {
@@ -431,11 +373,12 @@ namespace ts {
         }
 
         function writeBundle(bundle: Bundle, output: EmitTextWriter) {
+            isOwnFileEmit = false;
             const previousWriter = writer;
             setWriter(output);
             emitShebangIfNeeded(bundle);
             emitPrologueDirectivesIfNeeded(bundle);
-            emitHelpersIndirect(bundle);
+            emitHelpers(bundle);
             emitSyntheticTripleSlashReferencesIfNeeded(bundle);
             for (const sourceFile of bundle.sourceFiles) {
                 print(EmitHint.SourceFile, sourceFile, sourceFile);
@@ -445,6 +388,7 @@ namespace ts {
         }
 
         function writeFile(sourceFile: SourceFile, output: EmitTextWriter) {
+            isOwnFileEmit = true;
             const previousWriter = writer;
             setWriter(output);
             emitShebangIfNeeded(sourceFile);
@@ -568,7 +512,7 @@ namespace ts {
             writeSpace();
             writeKeyword("in");
             writeSpace();
-            emit(node.constraint);
+            emitIfPresent(node.constraint);
         }
 
         function pipelineEmitUnspecified(node: Node): void {
@@ -671,6 +615,8 @@ namespace ts {
                     return emitMappedType(<MappedTypeNode>node);
                 case SyntaxKind.LiteralType:
                     return emitLiteralType(<LiteralTypeNode>node);
+                case SyntaxKind.ImportType:
+                    return emitImportTypeNode(<ImportTypeNode>node);
                 case SyntaxKind.JSDocAllType:
                     write("*");
                     return;
@@ -949,10 +895,55 @@ namespace ts {
             return node && substituteNode && substituteNode(hint, node) || node;
         }
 
-        function emitHelpersIndirect(node: Node) {
-            if (onEmitHelpers) {
-                onEmitHelpers(node, writeLines);
+        function emitHelpers(node: Node) {
+            let helpersEmitted = false;
+            const bundle = node.kind === SyntaxKind.Bundle ? <Bundle>node : undefined;
+            if (bundle && moduleKind === ModuleKind.None) {
+                return;
             }
+
+            const numNodes = bundle ? bundle.sourceFiles.length : 1;
+            for (let i = 0; i < numNodes; i++) {
+                const currentNode = bundle ? bundle.sourceFiles[i] : node;
+                const sourceFile = isSourceFile(currentNode) ? currentNode : currentSourceFile;
+                const shouldSkip = printerOptions.noEmitHelpers || getExternalHelpersModuleName(sourceFile) !== undefined;
+                const shouldBundle = isSourceFile(currentNode) && !isOwnFileEmit;
+                const helpers = getEmitHelpers(currentNode);
+                if (helpers) {
+                    for (const helper of stableSort(helpers, compareEmitHelpers)) {
+                        if (!helper.scoped) {
+                            // Skip the helper if it can be skipped and the noEmitHelpers compiler
+                            // option is set, or if it can be imported and the importHelpers compiler
+                            // option is set.
+                            if (shouldSkip) continue;
+
+                            // Skip the helper if it can be bundled but hasn't already been emitted and we
+                            // are emitting a bundled module.
+                            if (shouldBundle) {
+                                if (bundledHelpers.get(helper.name)) {
+                                    continue;
+                                }
+
+                                bundledHelpers.set(helper.name, true);
+                            }
+                        }
+                        else if (bundle) {
+                            // Skip the helper if it is scoped and we are emitting bundled helpers
+                            continue;
+                        }
+
+                        if (typeof helper.text === "string") {
+                            writeLines(helper.text);
+                        }
+                        else {
+                            writeLines(helper.text(makeFileLevelOptmiisticUniqueName));
+                        }
+                        helpersEmitted = true;
+                    }
+                }
+            }
+
+            return helpersEmitted;
         }
 
         //
@@ -1046,7 +1037,7 @@ namespace ts {
             }
             emitIfPresent(node.questionToken);
             if (node.parent && node.parent.kind === SyntaxKind.JSDocFunctionType && !node.name) {
-                emit(node.type);
+                emitIfPresent(node.type);
             }
             else {
                 emitTypeAnnotation(node.type);
@@ -1174,14 +1165,14 @@ namespace ts {
             writeSpace();
             writePunctuation("=>");
             writeSpace();
-            emit(node.type);
+            emitIfPresent(node.type);
         }
 
         function emitJSDocFunctionType(node: JSDocFunctionType) {
             write("function");
             emitParameters(node, node.parameters);
             write(":");
-            emit(node.type);
+            emitIfPresent(node.type);
         }
 
 
@@ -1208,7 +1199,7 @@ namespace ts {
             writeSpace();
             writePunctuation("=>");
             writeSpace();
-            emit(node.type);
+            emitIfPresent(node.type);
         }
 
         function emitTypeQuery(node: TypeQueryNode) {
@@ -1322,7 +1313,7 @@ namespace ts {
             }
             writePunctuation(":");
             writeSpace();
-            emit(node.type);
+            emitIfPresent(node.type);
             writeSemicolon();
             if (emitFlags & EmitFlags.SingleLine) {
                 writeSpace();
@@ -1336,6 +1327,22 @@ namespace ts {
 
         function emitLiteralType(node: LiteralTypeNode) {
             emitExpression(node.literal);
+        }
+
+        function emitImportTypeNode(node: ImportTypeNode) {
+            if (node.isTypeOf) {
+                writeKeyword("typeof");
+                writeSpace();
+            }
+            writeKeyword("import");
+            writePunctuation("(");
+            emit(node.argument);
+            writePunctuation(")");
+            if (node.qualifier) {
+                writePunctuation(".");
+                emit(node.qualifier);
+            }
+            emitTypeArguments(node, node.typeArguments);
         }
 
         //
@@ -1593,7 +1600,7 @@ namespace ts {
 
         function emitYieldExpression(node: YieldExpression) {
             emitTokenWithComment(SyntaxKind.YieldKeyword, node.pos, writeKeyword, node);
-            emit(node.asteriskToken);
+            emitIfPresent(node.asteriskToken);
             emitExpressionWithLeadingSpace(node.expression);
         }
 
@@ -2006,7 +2013,7 @@ namespace ts {
             // Emit all the prologue directives (like "use strict").
             const statementOffset = emitPrologueDirectives(body.statements, /*startWithNewLine*/ true);
             const pos = writer.getTextPos();
-            emitHelpersIndirect(body);
+            emitHelpers(body);
             if (statementOffset === 0 && pos === writer.getTextPos() && emitBlockFunctionBodyOnSingleLine) {
                 decreaseIndent();
                 emitList(body, body.statements, ListFormat.SingleLineFunctionBodyStatements);
@@ -2156,12 +2163,12 @@ namespace ts {
         }
 
         function emitImportClause(node: ImportClause) {
-            emit(node.name);
+            emitIfPresent(node.name);
             if (node.name && node.namedBindings) {
                 emitTokenWithComment(SyntaxKind.CommaToken, node.name.end, writePunctuation, node);
                 writeSpace();
             }
-            emit(node.namedBindings);
+            emitIfPresent(node.namedBindings);
         }
 
         function emitNamespaceImport(node: NamespaceImport) {
@@ -2473,14 +2480,33 @@ namespace ts {
         }
 
         function emitSyntheticTripleSlashReferencesIfNeeded(node: Bundle) {
-            emitTripleSlashDirectives(node.syntheticFileReferences || [], node.syntheticTypeReferences || []);
+            emitTripleSlashDirectives(node.hasNoDefaultLib, node.syntheticFileReferences || [], node.syntheticTypeReferences || []);
         }
 
         function emitTripleSlashDirectivesIfNeeded(node: SourceFile) {
-            if (node.isDeclarationFile) emitTripleSlashDirectives(node.referencedFiles, node.typeReferenceDirectives);
+            if (node.isDeclarationFile) emitTripleSlashDirectives(node.hasNoDefaultLib, node.referencedFiles, node.typeReferenceDirectives);
         }
 
-        function emitTripleSlashDirectives(files: ReadonlyArray<FileReference>, types: ReadonlyArray<FileReference>) {
+        function emitTripleSlashDirectives(hasNoDefaultLib: boolean, files: ReadonlyArray<FileReference>, types: ReadonlyArray<FileReference>) {
+            if (hasNoDefaultLib) {
+                write(`/// <reference no-default-lib="true"/>`);
+                writeLine();
+            }
+            if (currentSourceFile && currentSourceFile.moduleName) {
+                write(`/// <amd-module name="${currentSourceFile.moduleName}" />`);
+                writeLine();
+            }
+            if (currentSourceFile && currentSourceFile.amdDependencies) {
+                for (const dep of currentSourceFile.amdDependencies) {
+                    if (dep.name) {
+                        write(`/// <amd-dependency name="${dep.name}" path="${dep.path}" />`);
+                    }
+                    else {
+                        write(`/// <amd-dependency path="${dep.path}" />`);
+                    }
+                    writeLine();
+                }
+            }
             for (const directive of files) {
                 write(`/// <reference path="${directive.fileName}" />`);
                 writeLine();
@@ -2494,7 +2520,7 @@ namespace ts {
         function emitSourceFileWorker(node: SourceFile) {
             const statements = node.statements;
             pushNameGenerationScope(node);
-            emitHelpersIndirect(node);
+            emitHelpers(node);
             const index = findIndex(statements, statement => !isPrologueDirective(statement));
             emitTripleSlashDirectivesIfNeeded(node);
             emitList(node, statements, ListFormat.MultiLine, index === -1 ? statements.length : index);
@@ -3237,10 +3263,16 @@ namespace ts {
          * or within the NameGenerator.
          */
         function isUniqueName(name: string): boolean {
-            return !(hasGlobalName && hasGlobalName(name))
-                && !currentSourceFile.identifiers.has(name)
+            return isFileLevelUniqueName(name)
                 && !generatedNames.has(name)
                 && !(reservedNames && reservedNames.has(name));
+        }
+
+        /**
+         * Returns a value indicating whether a name is unique globally or within the current file.
+         */
+        function isFileLevelUniqueName(name: string) {
+            return ts.isFileLevelUniqueName(currentSourceFile, name, hasGlobalName);
         }
 
         /**
@@ -3300,9 +3332,9 @@ namespace ts {
          * makeUniqueName are guaranteed to never conflict.
          * If `optimistic` is set, the first instance will use 'baseName' verbatim instead of 'baseName_1'
          */
-        function makeUniqueName(baseName: string, optimistic?: boolean): string {
+        function makeUniqueName(baseName: string, checkFn: (name: string) => boolean = isUniqueName, optimistic?: boolean): string {
             if (optimistic) {
-                if (isUniqueName(baseName)) {
+                if (checkFn(baseName)) {
                     generatedNames.set(baseName, true);
                     return baseName;
                 }
@@ -3314,12 +3346,16 @@ namespace ts {
             let i = 1;
             while (true) {
                 const generatedName = baseName + i;
-                if (isUniqueName(generatedName)) {
+                if (checkFn(generatedName)) {
                     generatedNames.set(generatedName, true);
                     return generatedName;
                 }
                 i++;
             }
+        }
+
+        function makeFileLevelOptmiisticUniqueName(name: string) {
+            return makeUniqueName(name, isFileLevelUniqueName, /*optimistic*/ true);
         }
 
         /**
@@ -3400,9 +3436,11 @@ namespace ts {
                 case GeneratedIdentifierFlags.Loop:
                     return makeTempVariableName(TempFlags._i, !!(name.autoGenerateFlags & GeneratedIdentifierFlags.ReservedInNestedScopes));
                 case GeneratedIdentifierFlags.Unique:
-                    return makeUniqueName(idText(name));
-                case GeneratedIdentifierFlags.OptimisticUnique:
-                    return makeUniqueName(idText(name), /*optimistic*/ true);
+                    return makeUniqueName(
+                        idText(name),
+                        (name.autoGenerateFlags & GeneratedIdentifierFlags.FileLevel) ? isFileLevelUniqueName : isUniqueName,
+                        !!(name.autoGenerateFlags & GeneratedIdentifierFlags.Optimistic)
+                    );
             }
 
             Debug.fail("Unsupported GeneratedIdentifierKind.");

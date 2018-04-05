@@ -1132,8 +1132,8 @@ namespace ts.FindAllReferences.Core {
             if (componentType.symbol && componentType.symbol.getFlags() & (SymbolFlags.Class | SymbolFlags.Interface)) {
                 result.push(componentType.symbol);
             }
-            if (componentType.getFlags() & TypeFlags.UnionOrIntersection) {
-                getSymbolsForClassAndInterfaceComponents(<UnionOrIntersectionType>componentType, result);
+            if (componentType.isUnionOrIntersection()) {
+                getSymbolsForClassAndInterfaceComponents(componentType, result);
             }
         }
         return result;
@@ -1438,7 +1438,7 @@ namespace ts.FindAllReferences.Core {
 
                 // Add symbol of properties/methods of the same name in base classes and implemented interfaces definitions
                 if (!implementations && rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                    getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.name, result, /*previousIterationSymbolsCache*/ createSymbolTable(), checker);
+                    getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.name, checker, result);
                 }
             }
         }
@@ -1458,27 +1458,22 @@ namespace ts.FindAllReferences.Core {
      * @param previousIterationSymbolsCache a cache of symbol from previous iterations of calling this function to prevent infinite revisiting of the same symbol.
      *                                The value of previousIterationSymbol is undefined when the function is first called.
      */
-    function getPropertySymbolsFromBaseTypes(symbol: Symbol, propertyName: string, result: Push<Symbol>, previousIterationSymbolsCache: SymbolTable, checker: TypeChecker): void {
-        // If the current symbol is the same as the previous-iteration symbol, we can just return the symbol that has already been visited
-        // This is particularly important for the following cases, so that we do not infinitely visit the same symbol.
-        // For example:
-        //      interface C extends C {
-        //          /*findRef*/propName: string;
-        //      }
-        // The first time getPropertySymbolsFromBaseTypes is called when finding-all-references at propName,
-        // the symbol argument will be the symbol of an interface "C" and previousIterationSymbol is undefined,
-        // the function will add any found symbol of the property-name, then its sub-routine will call
-        // getPropertySymbolsFromBaseTypes again to walk up any base types to prevent revisiting already
-        // visited symbol, interface "C", the sub-routine will pass the current symbol as previousIterationSymbol.
-        if (!symbol || previousIterationSymbolsCache.has(symbol.escapedName)) {
-            return;
-        }
+    function getPropertySymbolsFromBaseTypes(symbol: Symbol, propertyName: string, checker: TypeChecker, result: Symbol[] = []): Symbol[] {
+        const seen = createMap<true>();
+        recur(symbol);
+        return result;
 
-        if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+        function recur(symbol: Symbol): void {
+            // Use `addToSeen` to ensure we don't infinitely recurse in this situation:
+            //      interface C extends C {
+            //          /*findRef*/propName: string;
+            //      }
+            if (!(symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) || !addToSeen(seen, getSymbolId(symbol))) return;
+
             for (const declaration of symbol.declarations) {
                 for (const typeReference of getAllSuperTypeNodes(declaration)) {
                     const type = checker.getTypeAtLocation(typeReference);
-                    if (!type) continue;
+                    if (!(type && type.symbol)) continue;
 
                     const propertySymbol = checker.getPropertyOfType(type, propertyName);
                     if (propertySymbol) {
@@ -1486,8 +1481,7 @@ namespace ts.FindAllReferences.Core {
                     }
 
                     // Visit the typeReference as well to see if it directly or indirectly use that property
-                    previousIterationSymbolsCache.set(symbol.escapedName, symbol);
-                    getPropertySymbolsFromBaseTypes(type.symbol, propertyName, result, previousIterationSymbolsCache, checker);
+                    recur(type.symbol);
                 }
             }
         }
@@ -1559,9 +1553,7 @@ namespace ts.FindAllReferences.Core {
                         return undefined;
                     }
 
-                    const result: Symbol[] = [];
-                    getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.name, result, /*previousIterationSymbolsCache*/ createSymbolTable(), checker);
-                    return result.some(search.includes) ? rootSymbol : undefined;
+                    return getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.name, checker).some(search.includes) ? rootSymbol : undefined;
                 }
 
                 return undefined;
@@ -1569,25 +1561,13 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
-    function getNameFromObjectLiteralElement(node: ObjectLiteralElement): string {
-        if (node.name.kind === SyntaxKind.ComputedPropertyName) {
-            const nameExpression = node.name.expression;
-            // treat computed property names where expression is string/numeric literal as just string/numeric literal
-            if (isStringOrNumericLiteral(nameExpression)) {
-                return nameExpression.text;
-            }
-            return undefined;
-        }
-        return getTextOfIdentifierOrLiteral(node.name);
-    }
-
     /** Gets all symbols for one property. Does not get symbols for every property. */
     function getPropertySymbolsFromContextualType(node: ObjectLiteralElement, checker: TypeChecker): ReadonlyArray<Symbol> {
         const contextualType = checker.getContextualType(<ObjectLiteralExpression>node.parent);
-        const name = getNameFromObjectLiteralElement(node);
+        const name = getNameFromPropertyName(node.name);
         const symbol = contextualType && name && contextualType.getProperty(name);
         return symbol ? [symbol] :
-            contextualType && contextualType.flags & TypeFlags.Union ? mapDefined((<UnionType>contextualType).types, t => t.getProperty(name)) : emptyArray;
+            contextualType && contextualType.isUnion() ? mapDefined(contextualType.types, t => t.getProperty(name)) : emptyArray;
     }
 
     /**
@@ -1667,20 +1647,11 @@ namespace ts.FindAllReferences.Core {
      */
     function getParentSymbolsOfPropertyAccess(location: Node, symbol: Symbol, checker: TypeChecker): Symbol[] | undefined {
         const propertyAccessExpression = getPropertyAccessExpressionFromRightHandSide(location);
-        if (!propertyAccessExpression) {
-            return undefined;
-        }
-
-        const localParentType = checker.getTypeAtLocation(propertyAccessExpression.expression);
-        if (!localParentType) {
-            return undefined;
-        }
-
-        if (localParentType.symbol && localParentType.symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) && localParentType.symbol !== symbol.parent) {
-            return [localParentType.symbol];
-        }
-        else if (localParentType.flags & TypeFlags.UnionOrIntersection) {
-            return getSymbolsForClassAndInterfaceComponents(<UnionOrIntersectionType>localParentType);
-        }
+        const localParentType = propertyAccessExpression && checker.getTypeAtLocation(propertyAccessExpression.expression);
+        return localParentType && localParentType.symbol && localParentType.symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) && localParentType.symbol !== symbol.parent
+            ? [localParentType.symbol]
+            : localParentType && localParentType.isUnionOrIntersection()
+            ? getSymbolsForClassAndInterfaceComponents(localParentType)
+            : undefined;
     }
 }

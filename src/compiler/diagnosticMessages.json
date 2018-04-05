@@ -27,6 +27,10 @@
         "category": "Error",
         "code": 1012
     },
+    "A rest parameter or binding pattern may not have a trailing comma.": {
+        "category": "Error",
+        "code": 1013
+    },
     "A rest parameter must be last in a parameter list.": {
         "category": "Error",
         "code": 1014
@@ -950,6 +954,18 @@
     "'infer' declarations are only permitted in the 'extends' clause of a conditional type.": {
         "category": "Error",
         "code": 1338
+    },
+    "Module '{0}' does not refer to a value, but is used as a value here.": {
+        "category": "Error",
+        "code": 1339
+    },
+    "Module '{0}' does not refer to a type, but is used as a type here.": {
+        "category": "Error",
+        "code": 1340
+    },
+    "Type arguments cannot be used here.": {
+        "category": "Error",
+        "code": 1342
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1987,6 +2003,14 @@
     "Enum declarations can only merge with namespace or other enum declarations.": {
         "category": "Error",
         "code": 2567
+    },
+    "Type '{0}' is not an array type. Use compiler option '--downlevelIteration' to allow iterating of iterators.": {
+        "category": "Error",
+        "code": 2568
+    },
+    "Type '{0}' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators.": {
+        "category": "Error",
+        "code": 2569
     },
 
     "JSX element attributes type '{0}' may not be a union type.": {
@@ -3494,6 +3518,14 @@
         "category": "Error",
         "code": 6192,
         "unused": true
+    },
+    "Found 1 error.": {
+        "category": "Message",
+        "code": 6193
+    },
+    "Found {0} errors.": {
+        "category": "Message",
+        "code": 6194
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

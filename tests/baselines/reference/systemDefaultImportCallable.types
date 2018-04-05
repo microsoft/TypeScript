@@ -13,7 +13,7 @@ declare module core {
     };
 }
 declare module "core-js/fn/string/repeat" {
->"core-js/fn/string/repeat" : typeof "core-js/fn/string/repeat"
+>"core-js/fn/string/repeat" : typeof import("core-js/fn/string/repeat")
 
     var repeat: typeof core.String.repeat;
 >repeat : (text: string, count: number) => string

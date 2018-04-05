@@ -1,0 +1,16 @@
+tests/cases/compiler/classMergedWithInterfaceMultipleBasesNoError.ts(8,30): error TS2448: Block-scoped variable 'handleIntersection' used before its declaration.
+
+
+==== tests/cases/compiler/classMergedWithInterfaceMultipleBasesNoError.ts (1 errors) ====
+    interface Bar { }
+    interface Baz { }
+    interface Q { }
+    interface Foo extends Bar, Baz { }
+    class Foo { }
+    
+    export default class extends Foo {
+        readonly observer = this.handleIntersection;
+                                 ~~~~~~~~~~~~~~~~~~
+!!! error TS2448: Block-scoped variable 'handleIntersection' used before its declaration.
+        readonly handleIntersection = () => { }
+    }

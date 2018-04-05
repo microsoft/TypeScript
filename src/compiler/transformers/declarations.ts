@@ -135,9 +135,11 @@ namespace ts {
             if (node.kind === SyntaxKind.Bundle) {
                 isBundledEmit = true;
                 const refs = createMap<SourceFile>();
+                let hasNoDefaultLib = false;
                 const bundle = createBundle(map(node.sourceFiles,
                     sourceFile => {
                         if (sourceFile.isDeclarationFile || isSourceFileJavaScript(sourceFile)) return; // Omit declaration files from bundle results, too
+                        hasNoDefaultLib = hasNoDefaultLib || sourceFile.hasNoDefaultLib;
                         currentSourceFile = sourceFile;
                         enclosingDeclaration = sourceFile;
                         possibleImports = undefined;
@@ -154,16 +156,17 @@ namespace ts {
                                 [createModifier(SyntaxKind.DeclareKeyword)],
                                 createLiteral(getResolvedExternalModuleName(context.getEmitHost(), sourceFile)),
                                 createModuleBlock(setTextRange(createNodeArray(filterCandidateImports(statements)), sourceFile.statements))
-                            )], /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ []);
+                            )], /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false);
                             return newFile;
                         }
                         needsDeclare = true;
                         const updated = visitNodes(sourceFile.statements, visitDeclarationStatements);
-                        return updateSourceFileNode(sourceFile, updated, /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ []);
+                        return updateSourceFileNode(sourceFile, updated, /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false);
                     }
                 ));
                 bundle.syntheticFileReferences = [];
                 bundle.syntheticTypeReferences = getFileReferencesForUsedTypeReferences();
+                bundle.hasNoDefaultLib = hasNoDefaultLib;
                 const outputFilePath = getDirectoryPath(normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath));
                 const referenceVisitor = mapReferencesIntoArray(bundle.syntheticFileReferences as FileReference[], outputFilePath);
                 refs.forEach(referenceVisitor);
@@ -188,17 +191,30 @@ namespace ts {
             refs.forEach(referenceVisitor);
             const statements = visitNodes(node.statements, visitDeclarationStatements);
             let combinedStatements = setTextRange(createNodeArray(filterCandidateImports(statements)), node.statements);
+            const emittedImports = filter(combinedStatements, isAnyImportSyntax);
             if (isExternalModule(node) && !resultHasExternalModuleIndicator) {
                 combinedStatements = setTextRange(createNodeArray([...combinedStatements, createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports([]), /*moduleSpecifier*/ undefined)]), combinedStatements);
             }
-            const updated = updateSourceFileNode(node, combinedStatements, /*isDeclarationFile*/ true, references, getFileReferencesForUsedTypeReferences());
+            const updated = updateSourceFileNode(node, combinedStatements, /*isDeclarationFile*/ true, references, getFileReferencesForUsedTypeReferences(), node.hasNoDefaultLib);
             return updated;
 
             function getFileReferencesForUsedTypeReferences() {
-                return necessaryTypeRefernces ? map(arrayFrom(necessaryTypeRefernces.keys()), getFileReferenceForTypeName) : [];
+                return necessaryTypeRefernces ? mapDefined(arrayFrom(necessaryTypeRefernces.keys()), getFileReferenceForTypeName) : [];
             }
 
-            function getFileReferenceForTypeName(typeName: string): FileReference {
+            function getFileReferenceForTypeName(typeName: string): FileReference | undefined {
+                // Elide type references for which we have imports
+                for (const importStatement of emittedImports) {
+                    if (isImportEqualsDeclaration(importStatement) && isExternalModuleReference(importStatement.moduleReference)) {
+                        const expr = importStatement.moduleReference.expression;
+                        if (isStringLiteralLike(expr) && expr.text === typeName) {
+                            return undefined;
+                        }
+                    }
+                    else if (isImportDeclaration(importStatement) && isStringLiteral(importStatement.moduleSpecifier) && importStatement.moduleSpecifier.text === typeName) {
+                        return undefined;
+                    }
+                }
                 return { fileName: typeName, pos: -1, end: -1 };
             }
 
@@ -434,9 +450,9 @@ namespace ts {
             return setCommentRange(updated, getCommentRange(original));
         }
 
-        function rewriteModuleSpecifier<T extends Node>(parent: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration, input: T): T | StringLiteral {
+        function rewriteModuleSpecifier<T extends Node>(parent: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode, input: T): T | StringLiteral {
             if (!input) return;
-            resultHasExternalModuleIndicator = resultHasExternalModuleIndicator || parent.kind !== SyntaxKind.ModuleDeclaration;
+            resultHasExternalModuleIndicator = resultHasExternalModuleIndicator || (parent.kind !== SyntaxKind.ModuleDeclaration && parent.kind !== SyntaxKind.ImportType);
             if (input.kind === SyntaxKind.StringLiteral && isBundledEmit) {
                 const newName = getExternalModuleNameFromDeclaration(context.getEmitHost(), resolver, parent);
                 if (newName) {
@@ -598,7 +614,7 @@ namespace ts {
             if (isMethodDeclaration(input) || isMethodSignature(input)) {
                 if (hasModifier(input, ModifierFlags.Private)) {
                     if (input.symbol && input.symbol.declarations && input.symbol.declarations[0] !== input) return; // Elide all but the first overload
-                    return cleanup(createProperty(/*decorators*/undefined, input.modifiers, input.name, /*questionToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined));
+                    return cleanup(createProperty(/*decorators*/undefined, ensureModifiers(input), input.name, /*questionToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined));
                 }
             }
 
@@ -748,6 +764,16 @@ namespace ts {
                     }
                     case SyntaxKind.ConstructorType: {
                         return cleanup(updateConstructorTypeNode(input, visitNodes(input.typeParameters, visitDeclarationSubtree), updateParamsList(input, input.parameters), visitNode(input.type, visitDeclarationSubtree)));
+                    }
+                    case SyntaxKind.ImportType: {
+                        if (!isLiteralImportTypeNode(input)) return cleanup(input);
+                        return cleanup(updateImportTypeNode(
+                            input,
+                            updateLiteralTypeNode(input.argument, rewriteModuleSpecifier(input, input.argument.literal)),
+                            input.qualifier,
+                            visitNodes(input.typeArguments, visitDeclarationSubtree, isTypeNode),
+                            input.isTypeOf
+                        ));
                     }
                     default: Debug.assertNever(input, `Attempted to process unhandled node kind: ${(ts as any).SyntaxKind[(input as any).kind]}`);
                 }
@@ -1248,7 +1274,8 @@ namespace ts {
         | TypeReferenceNode
         | ConditionalTypeNode
         | FunctionTypeNode
-        | ConstructorTypeNode;
+        | ConstructorTypeNode
+        | ImportTypeNode;
 
     function isProcessedComponent(node: Node): node is ProcessedComponent {
         switch (node.kind) {
@@ -1269,6 +1296,7 @@ namespace ts {
             case SyntaxKind.ConditionalType:
             case SyntaxKind.FunctionType:
             case SyntaxKind.ConstructorType:
+            case SyntaxKind.ImportType:
             return true;
         }
         return false;

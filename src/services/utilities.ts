@@ -1216,6 +1216,17 @@ namespace ts {
         }
         return result;
     }
+
+    export function skipConstraint(type: Type): Type {
+        return type.isTypeParameter() ? type.getConstraint() : type;
+    }
+
+    export function getNameFromPropertyName(name: PropertyName): string | undefined {
+        return name.kind === SyntaxKind.ComputedPropertyName
+            // treat computed property names where expression is string/numeric literal as just string/numeric literal
+            ? isStringOrNumericLiteral(name.expression) ? name.expression.text : undefined
+            : getTextOfIdentifierOrLiteral(name);
+    }
 }
 
 // Display-part writer helpers

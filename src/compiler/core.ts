@@ -2036,7 +2036,7 @@ namespace ts {
         return compilerOptions.target || ScriptTarget.ES3;
     }
 
-    export function getEmitModuleKind(compilerOptions: CompilerOptions) {
+    export function getEmitModuleKind(compilerOptions: {module?: CompilerOptions["module"], target?: CompilerOptions["target"]}) {
         return typeof compilerOptions.module === "number" ?
             compilerOptions.module :
             getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
@@ -2911,7 +2911,7 @@ namespace ts {
             return value;
         }
 
-        export function assertEachDefined<T, A extends ReadonlyArray<T>>(value: A, message: string): A {
+        export function assertEachDefined<T, A extends ReadonlyArray<T>>(value: A, message?: string): A {
             for (const v of value) {
                 assertDefined(v, message);
             }

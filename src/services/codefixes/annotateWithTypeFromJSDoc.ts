@@ -50,19 +50,19 @@ namespace ts.codefix {
             for (const param of decl.parameters) {
                 if (!param.type) {
                     const paramType = getJSDocType(param);
-                    if (paramType) changes.insertTypeAnnotation(sourceFile, param, transformJSDocType(paramType));
+                    if (paramType) changes.tryInsertTypeAnnotation(sourceFile, param, transformJSDocType(paramType));
                 }
             }
             if (needParens) changes.insertNodeAfter(sourceFile, last(decl.parameters), createToken(SyntaxKind.CloseParenToken));
             if (!decl.type) {
                 const returnType = getJSDocReturnType(decl);
-                if (returnType) changes.insertTypeAnnotation(sourceFile, decl, transformJSDocType(returnType));
+                if (returnType) changes.tryInsertTypeAnnotation(sourceFile, decl, transformJSDocType(returnType));
             }
         }
         else {
             const jsdocType = Debug.assertDefined(getJSDocType(decl)); // If not defined, shouldn't have been an error to fix
             Debug.assert(!decl.type); // If defined, shouldn't have been an error to fix.
-            changes.insertTypeAnnotation(sourceFile, decl, transformJSDocType(jsdocType));
+            changes.tryInsertTypeAnnotation(sourceFile, decl, transformJSDocType(jsdocType));
         }
     }
 
