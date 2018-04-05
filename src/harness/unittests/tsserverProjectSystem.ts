@@ -1314,6 +1314,109 @@ namespace ts.projectSystem {
 
         });
 
+        describe("ignoreConfigFiles", () => {
+            it("external project including config file", () => {
+                const file1 = {
+                    path: "/a/b/f1.ts",
+                    content: "let x =1;"
+                };
+                const config1 = {
+                    path: "/a/b/tsconfig.json",
+                    content: JSON.stringify(
+                        {
+                            compilerOptions: {},
+                            files: ["f1.ts"]
+                        }
+                    )
+                };
+
+                const externalProjectName = "externalproject";
+                const host = createServerHost([file1, config1]);
+                const projectService = createProjectService(host, { useSingleInferredProject: true }, { syntaxOnly: true });
+                projectService.openExternalProject({
+                    rootFiles: toExternalFiles([file1.path, config1.path]),
+                    options: {},
+                    projectFileName: externalProjectName
+                });
+
+                checkNumberOfProjects(projectService, { externalProjects: 1 });
+                const proj = projectService.externalProjects[0];
+                assert.isDefined(proj);
+
+                assert.isTrue(proj.fileExists(file1.path));
+            });
+
+            it("loose file included in config file (openClientFile)", () => {
+                const file1 = {
+                    path: "/a/b/f1.ts",
+                    content: "let x =1;"
+                };
+                const config1 = {
+                    path: "/a/b/tsconfig.json",
+                    content: JSON.stringify(
+                        {
+                            compilerOptions: {},
+                            files: ["f1.ts"]
+                        }
+                    )
+                };
+
+                const host = createServerHost([file1, config1]);
+                const projectService = createProjectService(host, { useSingleInferredProject: true }, { syntaxOnly: true });
+                projectService.openClientFile(file1.path, file1.content);
+
+                checkNumberOfProjects(projectService, { inferredProjects: 1 });
+                const proj = projectService.inferredProjects[0];
+                assert.isDefined(proj);
+
+                assert.isTrue(proj.fileExists(file1.path));
+            });
+
+            it("loose file included in config file (applyCodeChanges)", () => {
+                const file1 = {
+                    path: "/a/b/f1.ts",
+                    content: "let x =1;"
+                };
+                const config1 = {
+                    path: "/a/b/tsconfig.json",
+                    content: JSON.stringify(
+                        {
+                            compilerOptions: {},
+                            files: ["f1.ts"]
+                        }
+                    )
+                };
+
+                const host = createServerHost([file1, config1]);
+                const projectService = createProjectService(host, { useSingleInferredProject: true }, { syntaxOnly: true });
+                projectService.applyChangesInOpenFiles([{ fileName: file1.path, content: file1.content }], [], []);
+
+                checkNumberOfProjects(projectService, { inferredProjects: 1 });
+                const proj = projectService.inferredProjects[0];
+                assert.isDefined(proj);
+
+                assert.isTrue(proj.fileExists(file1.path));
+            });
+        });
+
+        it("disable inferred project", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "let x =1;"
+            };
+
+            const host = createServerHost([file1]);
+            const projectService = createProjectService(host, { useSingleInferredProject: true }, { syntaxOnly: true });
+
+            projectService.openClientFile(file1.path, file1.content);
+
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            const proj = projectService.inferredProjects[0];
+            assert.isDefined(proj);
+
+            assert.isFalse(proj.languageServiceEnabled);
+        });
+
         it("reload regular file after closing", () => {
             const f1 = {
                 path: "/a/b/app.ts",
@@ -3965,7 +4068,7 @@ namespace ts.projectSystem {
             const folderPath = "/a/b/projects/temp";
             const file1: FileOrFolder = {
                 path: `${folderPath}/a.ts`,
-                content: 'import f = require("pad")'
+                content: 'import f = require("pad"); f;'
             };
             const files = [file1, libFile];
             const host = createServerHost(files);

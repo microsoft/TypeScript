@@ -1132,8 +1132,8 @@ namespace ts.FindAllReferences.Core {
             if (componentType.symbol && componentType.symbol.getFlags() & (SymbolFlags.Class | SymbolFlags.Interface)) {
                 result.push(componentType.symbol);
             }
-            if (componentType.getFlags() & TypeFlags.UnionOrIntersection) {
-                getSymbolsForClassAndInterfaceComponents(<UnionOrIntersectionType>componentType, result);
+            if (componentType.isUnionOrIntersection()) {
+                getSymbolsForClassAndInterfaceComponents(componentType, result);
             }
         }
         return result;
@@ -1375,7 +1375,7 @@ namespace ts.FindAllReferences.Core {
     function populateSearchSymbolSet(symbol: Symbol, location: Node, checker: TypeChecker, implementations: boolean): Symbol[] {
         const result: Symbol[] = [];
         forEachRelatedSymbol<void>(symbol, location, checker,
-            sym => { result.push(sym); },
+            (sym, root, base) => { result.push(base || root || sym); },
             parameterProperties => { result.push(...parameterProperties); },
             /*allowBaseTypes*/ () => !implementations,
             /*includeShorthandDestructuring*/ false);
@@ -1384,7 +1384,7 @@ namespace ts.FindAllReferences.Core {
 
     function forEachRelatedSymbol<T>(
         symbol: Symbol, location: Node, checker: TypeChecker,
-        cbSymbol: (symbol: Symbol, originalSymbol?: Symbol, isBaseType?: boolean) => T | undefined,
+        cbSymbol: (symbol: Symbol, rootSymbol?: Symbol, baseSymbol?: Symbol) => T | undefined,
         cbParameterProperties: (s: Symbol[]) => T | undefined,
         allowBaseTypes: (rootSymbol: Symbol) => boolean,
         includeShorthandDestructuring: boolean,
@@ -1441,11 +1441,17 @@ namespace ts.FindAllReferences.Core {
         return bindingElementPropertySymbol && fromRoot(bindingElementPropertySymbol);
 
         function fromRoot(sym: Symbol): T | undefined {
+            // If this is a union property:
+            //   - In populateSearchSymbolsSet we will add all the symbols from all its source symbols in all unioned types.
+            //   - In findRelatedSymbol, we will just use the union symbol if any source symbol is included in the search.
+            // If the symbol is an instantiation from a another symbol (e.g. widened symbol):
+            //   - In populateSearchSymbolsSet, add the root the list
+            //   - In findRelatedSymbol, return the source symbol if that is in the search. (Do not return the instantiation symbol.)
             return firstDefined(checker.getRootSymbols(sym), rootSymbol =>
-                cbSymbol(rootSymbol, sym)
+                cbSymbol(sym, rootSymbol)
                 // Add symbol of properties/methods of the same name in base classes and implemented interfaces definitions
                 || (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface) && allowBaseTypes(rootSymbol)
-                    ? getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.name, checker, base => cbSymbol(base, rootSymbol, /*isBaseType*/ true))
+                    ? getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.name, checker, base => cbSymbol(sym, rootSymbol, base))
                     : undefined));
         }
     }
@@ -1481,9 +1487,9 @@ namespace ts.FindAllReferences.Core {
     function getRelatedSymbol(search: Search, referenceSymbol: Symbol, referenceLocation: Node, state: State): Symbol | undefined {
         const { checker } = state;
         return forEachRelatedSymbol(referenceSymbol, referenceLocation, checker,
-            (sym, original, isBaseType) => search.includes(sym)
+            (sym, rootSymbol, baseSymbol) => search.includes(baseSymbol || rootSymbol || sym)
                 // For a base type, use the symbol for the derived type. For a synthetic (e.g. union) property, use the union symbol.
-                ? isBaseType || original && getCheckFlags(original) & CheckFlags.Synthetic ? original : sym
+                ? rootSymbol && !(getCheckFlags(sym) & CheckFlags.Synthetic) ? rootSymbol : sym
                 : undefined,
             paramProps => referenceSymbol.flags & SymbolFlags.FunctionScopedVariable
                 ? getRelatedSymbol(search, find(paramProps, x => !!(x.flags & SymbolFlags.Property))!, referenceLocation, state)
@@ -1493,25 +1499,13 @@ namespace ts.FindAllReferences.Core {
             /*includeShorthandDestructuring*/ true);
     }
 
-    function getNameFromObjectLiteralElement(node: ObjectLiteralElement): string {
-        if (node.name.kind === SyntaxKind.ComputedPropertyName) {
-            const nameExpression = node.name.expression;
-            // treat computed property names where expression is string/numeric literal as just string/numeric literal
-            if (isStringOrNumericLiteral(nameExpression)) {
-                return nameExpression.text;
-            }
-            return undefined;
-        }
-        return getTextOfIdentifierOrLiteral(node.name);
-    }
-
     /** Gets all symbols for one property. Does not get symbols for every property. */
     function getPropertySymbolsFromContextualType(node: ObjectLiteralElement, checker: TypeChecker): ReadonlyArray<Symbol> {
         const contextualType = checker.getContextualType(<ObjectLiteralExpression>node.parent);
-        const name = getNameFromObjectLiteralElement(node);
+        const name = getNameFromPropertyName(node.name);
         const symbol = contextualType && name && contextualType.getProperty(name);
         return symbol ? [symbol] :
-            contextualType && contextualType.flags & TypeFlags.Union ? mapDefined((<UnionType>contextualType).types, t => t.getProperty(name)) : emptyArray;
+            contextualType && contextualType.isUnion() ? mapDefined(contextualType.types, t => t.getProperty(name)) : emptyArray;
     }
 
     /**
@@ -1594,8 +1588,8 @@ namespace ts.FindAllReferences.Core {
         const localParentType = propertyAccessExpression && checker.getTypeAtLocation(propertyAccessExpression.expression);
         return localParentType && localParentType.symbol && localParentType.symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) && localParentType.symbol !== symbol.parent
             ? [localParentType.symbol]
-            : localParentType && localParentType.flags & TypeFlags.UnionOrIntersection
-            ? getSymbolsForClassAndInterfaceComponents(<UnionOrIntersectionType>localParentType)
+            : localParentType && localParentType.isUnionOrIntersection()
+            ? getSymbolsForClassAndInterfaceComponents(localParentType)
             : undefined;
     }
 }

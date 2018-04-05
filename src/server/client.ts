@@ -353,11 +353,11 @@ namespace ts.server {
             return this.getDiagnostics(file, CommandNames.SuggestionDiagnosticsSync);
         }
 
-        private getDiagnostics(file: string, command: CommandNames) {
+        private getDiagnostics(file: string, command: CommandNames): Diagnostic[] {
             const request = this.processRequest<protocol.SyntacticDiagnosticsSyncRequest | protocol.SemanticDiagnosticsSyncRequest | protocol.SuggestionDiagnosticsSyncRequest>(command, { file, includeLinePosition: true });
             const response = this.processResponse<protocol.SyntacticDiagnosticsSyncResponse | protocol.SemanticDiagnosticsSyncResponse | protocol.SuggestionDiagnosticsSyncResponse>(request);
 
-            return (<protocol.DiagnosticWithLinePosition[]>response.body).map(entry => {
+            return (<protocol.DiagnosticWithLinePosition[]>response.body).map((entry): Diagnostic => {
                 const category = firstDefined(Object.keys(DiagnosticCategory), id =>
                     isString(id) && entry.category === id.toLowerCase() ? (<any>DiagnosticCategory)[id] : undefined);
                 return {
@@ -366,7 +366,8 @@ namespace ts.server {
                     length: entry.length,
                     messageText: entry.message,
                     category: Debug.assertDefined(category, "convertDiagnostic: category should not be undefined"),
-                    code: entry.code
+                    code: entry.code,
+                    reportsUnnecessary: entry.reportsUnnecessary,
                 };
             });
         }

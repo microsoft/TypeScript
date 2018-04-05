@@ -2,6 +2,8 @@
 
 // Tests that we use the name "foo".
 
+// @module: esnext
+
 // @Filename: /a.ts
 ////const foo = 0;
 ////export default foo;

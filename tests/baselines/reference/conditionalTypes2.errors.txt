@@ -10,9 +10,21 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(25,5): error TS23
   Types of property 'foo' are incompatible.
     Type 'A extends string ? keyof A : A' is not assignable to type 'B extends string ? keyof B : B'.
       Type 'A' is not assignable to type 'B'.
+tests/cases/conformance/types/conditional/conditionalTypes2.ts(73,12): error TS2345: Argument of type 'Extract<Extract<T, Foo>, Bar>' is not assignable to parameter of type '{ foo: string; bat: string; }'.
+  Type 'Bar & Extract<T, Foo>' is not assignable to type '{ foo: string; bat: string; }'.
+    Property 'bat' is missing in type 'Bar & Foo'.
+      Type 'Extract<Foo & T, Bar>' is not assignable to type '{ foo: string; bat: string; }'.
+        Type 'Bar & Foo & T' is not assignable to type '{ foo: string; bat: string; }'.
+          Property 'bat' is missing in type 'Bar & Foo'.
+tests/cases/conformance/types/conditional/conditionalTypes2.ts(74,12): error TS2345: Argument of type 'Extract<T, Foo & Bar>' is not assignable to parameter of type '{ foo: string; bat: string; }'.
+  Type 'Foo & Bar & T' is not assignable to type '{ foo: string; bat: string; }'.
+    Property 'bat' is missing in type 'Foo & Bar'.
+tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2345: Argument of type 'Extract2<T, Foo, Bar>' is not assignable to parameter of type '{ foo: string; bat: string; }'.
+  Type 'T extends Bar ? T : never' is not assignable to type '{ foo: string; bat: string; }'.
+    Type 'Bar & Foo & T' is not assignable to type '{ foo: string; bat: string; }'.
 
 
-==== tests/cases/conformance/types/conditional/conditionalTypes2.ts (4 errors) ====
+==== tests/cases/conformance/types/conditional/conditionalTypes2.ts (7 errors) ====
     interface Covariant<T> {
         foo: T extends string ? T : number;
     }
@@ -56,6 +68,71 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(25,5): error TS23
 !!! error TS2322:       Type 'A' is not assignable to type 'B'.
     }
     
+    // Extract<T, Function> is a T that is known to be a Function
+    function isFunction<T>(value: T): value is Extract<T, Function> {
+        return typeof value === "function";
+    }
+    
+    function getFunction<T>(item: T) {
+        if (isFunction(item)) {
+            return item;
+        }
+        throw new Error();
+    }
+    
+    function f10<T>(x: T) {
+        if (isFunction(x)) {
+            const f: Function = x;
+            const t: T = x;
+        }
+    }
+    
+    function f11(x: string | (() => string) | undefined) {
+        if (isFunction(x)) {
+            x();
+        }
+    }
+    
+    function f12(x: string | (() => string) | undefined) {
+        const f = getFunction(x);  // () => string
+        f();
+    }
+    
+    type Foo = { foo: string };
+    type Bar = { bar: string };
+    
+    declare function fooBar(x: { foo: string, bar: string }): void;
+    declare function fooBat(x: { foo: string, bat: string }): void;
+    
+    type Extract2<T, U, V> = T extends U ? T extends V ? T : never : never;
+    
+    function f20<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>) {
+        fooBar(x);
+        fooBar(y);
+        fooBar(z);
+    }
+    
+    function f21<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>) {
+        fooBat(x);  // Error
+               ~
+!!! error TS2345: Argument of type 'Extract<Extract<T, Foo>, Bar>' is not assignable to parameter of type '{ foo: string; bat: string; }'.
+!!! error TS2345:   Type 'Bar & Extract<T, Foo>' is not assignable to type '{ foo: string; bat: string; }'.
+!!! error TS2345:     Property 'bat' is missing in type 'Bar & Foo'.
+!!! error TS2345:       Type 'Extract<Foo & T, Bar>' is not assignable to type '{ foo: string; bat: string; }'.
+!!! error TS2345:         Type 'Bar & Foo & T' is not assignable to type '{ foo: string; bat: string; }'.
+!!! error TS2345:           Property 'bat' is missing in type 'Bar & Foo'.
+        fooBat(y);  // Error
+               ~
+!!! error TS2345: Argument of type 'Extract<T, Foo & Bar>' is not assignable to parameter of type '{ foo: string; bat: string; }'.
+!!! error TS2345:   Type 'Foo & Bar & T' is not assignable to type '{ foo: string; bat: string; }'.
+!!! error TS2345:     Property 'bat' is missing in type 'Foo & Bar'.
+        fooBat(z);  // Error
+               ~
+!!! error TS2345: Argument of type 'Extract2<T, Foo, Bar>' is not assignable to parameter of type '{ foo: string; bat: string; }'.
+!!! error TS2345:   Type 'T extends Bar ? T : never' is not assignable to type '{ foo: string; bat: string; }'.
+!!! error TS2345:     Type 'Bar & Foo & T' is not assignable to type '{ foo: string; bat: string; }'.
+    }
+    
     // Repros from #22860
     
     class Opt<T> {
@@ -87,4 +164,42 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(25,5): error TS23
         bat: B1<B1<T>>;
         boom: T extends any ? true : true
     }
+    
+    // Repro from #22899
+    
+    declare function toString1(value: object | Function): string ;
+    declare function toString2(value: Function): string ;
+    
+    function foo<T>(value: T) {
+        if (isFunction(value)) {
+            toString1(value);
+            toString2(value);
+        }
+    }
+    
+    // Repro from #23052
+    
+    type A<T, V, E> =
+      T extends object
+        ? { [Q in { [P in keyof T]: T[P] extends V ? P : P; }[keyof T]]: A<T[Q], V, E>; }
+        : T extends V ? T : never;
+    
+    type B<T, V> =
+      T extends object
+        ? { [Q in { [P in keyof T]: T[P] extends V ? P : P; }[keyof T]]: B<T[Q], V>; }
+        : T extends V ? T : never;
+    
+    type C<T, V, E> =
+      { [Q in { [P in keyof T]: T[P] extends V ? P : P; }[keyof T]]: C<T[Q], V, E>; };
+    
+    // Repro from #23100
+    
+    type A2<T, V, E> =
+        T extends object ? T extends any[] ? T : { [Q in keyof T]: A2<T[Q], V, E>; } : T;
+    
+    type B2<T, V> =
+        T extends object ? T extends any[] ? T : { [Q in keyof T]: B2<T[Q], V>; } : T;
+    
+    type C2<T, V, E> =
+        T extends object ? { [Q in keyof T]: C2<T[Q], V, E>; } : T;
     

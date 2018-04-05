@@ -201,14 +201,6 @@ declare namespace FourSlashInterface {
         assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
         completionsAt(markerName: string | ReadonlyArray<string>, completions: ReadonlyArray<string | { name: string, insertText?: string, replacementSpan?: Range }>, options?: CompletionsAtOptions): void;
-        completionsAndDetailsAt(
-            markerName: string,
-            completions: {
-                excludes?: ReadonlyArray<string>,
-                //TODO: better type
-                entries: ReadonlyArray<{ entry: any, details: any }>,
-            },
-        ): void; //TODO: better type
         applyCodeActionFromCompletion(markerName: string, options: {
             name: string,
             source?: string,
@@ -526,6 +518,7 @@ declare namespace FourSlashInterface {
         /** @default `test.ranges()[0]` */
         range?: Range;
         code: number;
+        unused?: true;
     }
     interface VerifyDocumentHighlightsOptions {
         filesToSearch?: ReadonlyArray<string>;

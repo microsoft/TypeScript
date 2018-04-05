@@ -360,12 +360,21 @@ namespace ts.textChanges {
         }
 
         /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
-        public insertTypeAnnotation(sourceFile: SourceFile, node: TypeAnnotatable, type: TypeNode): void {
-            const end = (isFunctionLike(node)
-                // If no `)`, is an arrow function `x => x`, so use the end of the first parameter
-                ? findChildOfKind(node, SyntaxKind.CloseParenToken, sourceFile) || first(node.parameters)
-                : node.kind !== SyntaxKind.VariableDeclaration && node.questionToken ? node.questionToken : node.name).end;
-            this.insertNodeAt(sourceFile, end, type, { prefix: ": " });
+        public tryInsertTypeAnnotation(sourceFile: SourceFile, node: TypeAnnotatable, type: TypeNode): void {
+            let endNode: Node;
+            if (isFunctionLike(node)) {
+                endNode = findChildOfKind(node, SyntaxKind.CloseParenToken, sourceFile);
+                if (!endNode) {
+                    if (!isArrowFunction(node)) return; // Function missing parentheses, give up
+                    // If no `)`, is an arrow function `x => x`, so use the end of the first parameter
+                    endNode = first(node.parameters);
+                }
+            }
+            else {
+                endNode = node.kind !== SyntaxKind.VariableDeclaration && node.questionToken ? node.questionToken : node.name;
+            }
+
+            this.insertNodeAt(sourceFile, endNode.end, type, { prefix: ": " });
         }
 
         public insertTypeParameters(sourceFile: SourceFile, node: SignatureDeclaration, typeParameters: ReadonlyArray<TypeParameterDeclaration>): void {
@@ -654,8 +663,9 @@ namespace ts.textChanges {
                     ? indentation
                     : formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, prefix === newLineCharacter || getLineStartPositionForPosition(pos, sourceFile) === pos);
             if (delta === undefined) {
-                delta = formatting.SmartIndenter.shouldIndentChildNode(nodeIn) ? (formatOptions.indentSize || 0) : 0;
+                delta = formatting.SmartIndenter.shouldIndentChildNode(formatContext.options, nodeIn) ? (formatOptions.indentSize || 0) : 0;
             }
+
             const file: SourceFileLike = { text, getLineAndCharacterOfPosition(pos) { return getLineAndCharacterOfPosition(this, pos); } };
             const changes = formatting.formatNodeGivenIndentation(node, file, sourceFile.languageVariant, initialIndentation, delta, formatContext);
             return applyChanges(text, changes);
