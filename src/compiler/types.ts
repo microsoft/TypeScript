@@ -3361,6 +3361,7 @@ namespace ts {
         members?: SymbolTable;                  // Class, interface or object literal instance members
         exports?: SymbolTable;                  // Module exports
         globalExports?: SymbolTable;            // Conditional global UMD exports
+        nameType?: Type;                        // Type associated with a late-bound symbol
         /* @internal */ id?: number;            // Unique id (used to look up SymbolLinks)
         /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
         /* @internal */ parent?: Symbol;        // Parent symbol
@@ -3428,7 +3429,6 @@ namespace ts {
     export interface TransientSymbol extends Symbol, SymbolLinks {
         checkFlags: CheckFlags;
         isRestParameter?: boolean;
-        nameType?: Type;  // Type associated with a late-bound symbol
     }
 
     /* @internal */
@@ -4029,10 +4029,10 @@ namespace ts {
 
     /* @internal */
     export interface WideningContext {
-        parent?: WideningContext;            // Parent context
-        propertyName?: __String;             // Name of property in parent
-        siblings?: Type[];                   // Types of siblings
-        resolvedPropertyNames?: __String[];  // Property names occurring in sibling object literals
+        parent?: WideningContext;       // Parent context
+        propertyName?: __String;        // Name of property in parent
+        siblings?: Type[];              // Types of siblings
+        resolvedProperties?: Symbol[];  // Properties occurring in sibling object literals
     }
 
     /* @internal */

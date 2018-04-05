@@ -3793,9 +3793,9 @@ namespace ts {
                         return "(Anonymous function)";
                 }
             }
-            if (isTransientSymbol(symbol)) {
-                const nameType = (<TransientSymbol>symbol).nameType;
-                if (nameType && nameType.flags & TypeFlags.StringLiteral && !isIdentifierText((<StringLiteralType>nameType).value, compilerOptions.target)) {
+            const nameType = symbol.nameType;
+            if (nameType) {
+                if (nameType.flags & TypeFlags.StringLiteral && !isIdentifierText((<StringLiteralType>nameType).value, compilerOptions.target)) {
                     return `"${escapeString((<StringLiteralType>nameType).value, CharacterCodes.doubleQuote)}"`;
                 }
                 if (nameType && nameType.flags & TypeFlags.UniqueESSymbol) {
@@ -6003,6 +6003,7 @@ namespace ts {
                 const checkFlags = CheckFlags.ReverseMapped | (readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0);
                 const inferredProp = createSymbol(SymbolFlags.Property | prop.flags & optionalMask, prop.escapedName, checkFlags) as ReverseMappedSymbol;
                 inferredProp.declarations = prop.declarations;
+                inferredProp.nameType = prop.nameType;
                 inferredProp.propertyType = getTypeOfSymbol(prop);
                 inferredProp.mappedType = type.mappedType;
                 members.set(prop.escapedName, inferredProp);
@@ -6027,8 +6028,8 @@ namespace ts {
             if (constraintDeclaration.kind === SyntaxKind.TypeOperator &&
                 (<TypeOperatorNode>constraintDeclaration).operator === SyntaxKind.KeyOfKeyword) {
                 // We have a { [P in keyof T]: X }
-                for (const propertySymbol of getPropertiesOfType(modifiersType)) {
-                    addMemberForKeyType(getLiteralTypeFromPropertyName(propertySymbol), propertySymbol);
+                for (const prop of getPropertiesOfType(modifiersType)) {
+                    addMemberForKeyType(getLiteralTypeFromPropertyName(prop), undefined, prop);
                 }
                 if (modifiersType.flags & TypeFlags.Any || getIndexInfoOfType(modifiersType, IndexKind.String)) {
                     addMemberForKeyType(stringType);
@@ -6044,14 +6045,7 @@ namespace ts {
             }
             setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, undefined);
 
-            function addMemberForKeyType(t: Type, propertySymbolOrIndex?: Symbol | number) {
-                let propertySymbol: Symbol;
-                // forEachType delegates to forEach, which calls with a numeric second argument
-                //  the type system currently doesn't catch this incompatibility, so we annotate
-                //  the function ourselves to indicate the runtime behavior and deal with it here
-                if (typeof propertySymbolOrIndex === "object") {
-                    propertySymbol = propertySymbolOrIndex;
-                }
+            function addMemberForKeyType(t: Type, _index?: number, origin?: Symbol) {
                 // Create a mapper from T to the current iteration type constituent. Then, if the
                 // mapped type is itself an instantiated type, combine the iteration mapper with the
                 // instantiation mapper.
@@ -6060,7 +6054,7 @@ namespace ts {
                 // If the current iteration type constituent is a string literal type, create a property.
                 // Otherwise, for type string create a string index signature.
                 if (t.flags & TypeFlags.StringLiteral) {
-                    const propName = getLateBoundNameFromType(t as LiteralType | UniqueESSymbolType);
+                    const propName = getLateBoundNameFromType(t as LiteralType);
                     const modifiersProp = getPropertyOfType(modifiersType, propName);
                     const isOptional = !!(templateModifiers & MappedTypeModifiers.IncludeOptional ||
                         !(templateModifiers & MappedTypeModifiers.ExcludeOptional) && modifiersProp && modifiersProp.flags & SymbolFlags.Optional);
@@ -6073,9 +6067,9 @@ namespace ts {
                     prop.type = strictNullChecks && isOptional && !isTypeAssignableTo(undefinedType, propType) ? getOptionalType(propType) :
                         strictNullChecks && !isOptional && modifiersProp && modifiersProp.flags & SymbolFlags.Optional ? getTypeWithFacts(propType, TypeFacts.NEUndefined) :
                         propType;
-                    if (propertySymbol) {
-                        prop.syntheticOrigin = propertySymbol;
-                        prop.declarations = propertySymbol.declarations;
+                    if (origin) {
+                        prop.syntheticOrigin = origin;
+                        prop.declarations = origin.declarations;
                     }
                     prop.nameType = t;
                     members.set(propName, prop);
@@ -6529,6 +6523,7 @@ namespace ts {
                 }
                 propTypes.push(type);
             }
+            // !!!
             const result = createSymbol(SymbolFlags.Property | commonFlags, name, syntheticFlag | checkFlags);
             result.containingType = containingType;
             result.declarations = declarations;
@@ -8116,11 +8111,7 @@ namespace ts {
             if (getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.NonPublicAccessibilityModifier || isKnownSymbol(prop)) {
                 return neverType;
             }
-            const symbol = getLateBoundSymbol(prop);
-            if (isTransientSymbol(symbol) && symbol.nameType) {
-                return symbol.nameType;
-            }
-            return getLiteralType(symbolName(prop));
+            return getLateBoundSymbol(prop).nameType || getLiteralType(symbolName(prop));
         }
 
         function getLiteralTypeFromPropertyNames(type: Type) {
@@ -8681,6 +8672,7 @@ namespace ts {
                         result.leftSpread = leftProp;
                         result.rightSpread = rightProp;
                         result.declarations = declarations;
+                        result.nameType = leftProp.nameType;
                         members.set(leftProp.escapedName, result);
                     }
                 }
@@ -8709,6 +8701,7 @@ namespace ts {
             const result = createSymbol(flags, prop.escapedName);
             result.type = getTypeOfSymbol(prop);
             result.declarations = prop.declarations;
+            result.nameType = prop.nameType;
             result.syntheticOrigin = prop;
             return result;
         }
@@ -9054,12 +9047,12 @@ namespace ts {
             if (symbol.valueDeclaration) {
                 result.valueDeclaration = symbol.valueDeclaration;
             }
+            if (symbol.nameType) {
+                result.nameType = symbol.nameType;
+            }
             if (isTransientSymbol(symbol)) {
                 if (symbol.isRestParameter) {
                     result.isRestParameter = symbol.isRestParameter;
-                }
-                if (symbol.nameType) {
-                    result.nameType = symbol.nameType;
                 }
             }
             return result;
@@ -10772,8 +10765,7 @@ namespace ts {
                         continue;
                     }
                     // Skip over symbol-named members
-                    const nameType = getLiteralTypeFromPropertyName(prop);
-                    if (nameType !== undefined && !(isRelatedTo(nameType, stringType) || isRelatedTo(nameType, numberType))) {
+                    if (prop.nameType && prop.nameType.flags & TypeFlags.UniqueESSymbol) {
                         continue;
                     }
                     if (kind === IndexKind.String || isNumericLiteralName(prop.escapedName)) {
@@ -11376,6 +11368,9 @@ namespace ts {
             if (source.valueDeclaration) {
                 symbol.valueDeclaration = source.valueDeclaration;
             }
+            if (source.nameType) {
+                symbol.nameType = source.nameType;
+            }
             return symbol;
         }
 
@@ -11418,7 +11413,7 @@ namespace ts {
         }
 
         function createWideningContext(parent: WideningContext, propertyName: __String, siblings: Type[]): WideningContext {
-            return { parent, propertyName, siblings, resolvedPropertyNames: undefined };
+            return { parent, propertyName, siblings, resolvedProperties: undefined };
         }
 
         function getSiblingsOfContext(context: WideningContext): Type[] {
@@ -11439,19 +11434,19 @@ namespace ts {
             return context.siblings;
         }
 
-        function getPropertyNamesOfContext(context: WideningContext): __String[] {
-            if (!context.resolvedPropertyNames) {
-                const names = createMap<boolean>() as UnderscoreEscapedMap<boolean>;
+        function getPropertiesOfContext(context: WideningContext): Symbol[] {
+            if (!context.resolvedProperties) {
+                const names = createMap<Symbol>() as UnderscoreEscapedMap<Symbol>;
                 for (const t of getSiblingsOfContext(context)) {
                     if (isObjectLiteralType(t) && !(getObjectFlags(t) & ObjectFlags.ContainsSpread)) {
                         for (const prop of getPropertiesOfType(t)) {
-                            names.set(prop.escapedName, true);
+                            names.set(prop.escapedName, prop);
                         }
                     }
                 }
-                context.resolvedPropertyNames = arrayFrom(names.keys());
+                context.resolvedProperties = arrayFrom(names.values());
             }
-            return context.resolvedPropertyNames;
+            return context.resolvedProperties;
         }
 
         function getWidenedProperty(prop: Symbol, context: WideningContext): Symbol {
@@ -11461,18 +11456,14 @@ namespace ts {
             return widened === original ? prop : createSymbolWithType(prop, widened);
         }
 
-        function getUndefinedProperty(name: __String) {
-            const cached = undefinedProperties.get(name);
+        function getUndefinedProperty(prop: Symbol) {
+            const cached = undefinedProperties.get(prop.escapedName);
             if (cached) {
                 return cached;
             }
-            const result = createSymbol(SymbolFlags.Property | SymbolFlags.Optional, name);
-            result.type = undefinedType;
-            const associatedKeyType = getLiteralType(unescapeLeadingUnderscores(name));
-            if (associatedKeyType.flags & TypeFlags.StringLiteral) {
-                result.nameType = associatedKeyType;
-            }
-            undefinedProperties.set(name, result);
+            const result = createSymbolWithType(prop, undefinedType);
+            result.flags |= SymbolFlags.Optional;
+            undefinedProperties.set(prop.escapedName, result);
             return result;
         }
 
@@ -11484,9 +11475,9 @@ namespace ts {
                 members.set(prop.escapedName, prop.flags & SymbolFlags.Property ? getWidenedProperty(prop, context) : prop);
             }
             if (context) {
-                for (const name of getPropertyNamesOfContext(context)) {
-                    if (!members.has(name)) {
-                        members.set(name, getUndefinedProperty(name));
+                for (const prop of getPropertiesOfContext(context)) {
+                    if (!members.has(prop.escapedName)) {
+                        members.set(prop.escapedName, getUndefinedProperty(prop));
                     }
                 }
             }
