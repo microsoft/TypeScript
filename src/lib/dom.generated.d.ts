@@ -3972,7 +3972,7 @@ interface Document extends Node, GlobalEventHandlers, ParentNode, DocumentEvent 
     /**
      * Retrieves a value that indicates the current state of the object.
      */
-    readonly readyState: string;
+    readonly readyState: DocumentReadyState;
     /**
      * Gets the URL of the location that referred the user to the current page.
      */
@@ -4231,6 +4231,7 @@ interface Document extends Node, GlobalEventHandlers, ParentNode, DocumentEvent 
      */
     queryCommandValue(commandId: string): string;
     releaseEvents(): void;
+    updateSettings(): void;
     webkitCancelFullScreen(): void;
     webkitExitFullscreen(): void;
     /**
@@ -4722,12 +4723,12 @@ interface FileReaderEventMap {
 
 interface FileReader extends EventTarget {
     readonly error: DOMException | null;
-    onabort: ((this: FileReader, ev: ProgressEvent) => any) | null;
-    onerror: ((this: FileReader, ev: ProgressEvent) => any) | null;
-    onload: ((this: FileReader, ev: ProgressEvent) => any) | null;
-    onloadend: ((this: FileReader, ev: ProgressEvent) => any) | null;
-    onloadstart: ((this: FileReader, ev: ProgressEvent) => any) | null;
-    onprogress: ((this: FileReader, ev: ProgressEvent) => any) | null;
+    onabort: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
+    onerror: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
+    onload: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
+    onloadend: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
+    onloadstart: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
+    onprogress: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
     readonly readyState: number;
     readonly result: any;
     abort(): void;
@@ -4751,6 +4752,10 @@ declare var FileReader: {
     readonly EMPTY: number;
     readonly LOADING: number;
 };
+
+interface FileReaderProgressEvent extends ProgressEvent {
+    readonly target: FileReader | null;
+}
 
 interface FocusEvent extends UIEvent {
     readonly relatedTarget: EventTarget;
@@ -6251,7 +6256,7 @@ interface HTMLInputElement extends HTMLElement {
     /**
      * Returns a FileList object on a file type input object.
      */
-    readonly files: FileList | null;
+    files: FileList | null;
     /**
      * Retrieves a reference to the form that the object is embedded in.
      */
@@ -8872,6 +8877,7 @@ declare var MediaEncryptedEvent: {
 
 interface MediaError {
     readonly code: number;
+    readonly message: string;
     readonly msExtendedCode: number;
     readonly MEDIA_ERR_ABORTED: number;
     readonly MEDIA_ERR_DECODE: number;
@@ -9354,6 +9360,7 @@ interface Node extends EventTarget {
     readonly baseURI: string | null;
     readonly childNodes: NodeListOf<Node & ChildNode>;
     readonly firstChild: Node | null;
+    readonly isConnected: boolean;
     readonly lastChild: Node | null;
     readonly localName: string | null;
     readonly namespaceURI: string | null;
@@ -9682,6 +9689,12 @@ declare var PannerNode: {
 };
 
 interface ParentNode {
+    readonly childElementCount: number;
+    readonly firstElementChild: Element | null;
+    readonly lastElementChild: Element | null;
+}
+
+interface ParentNode {
     readonly children: HTMLCollection;
     querySelector<K extends keyof HTMLElementTagNameMap>(selectors: K): HTMLElementTagNameMap[K] | null;
     querySelector<K extends keyof SVGElementTagNameMap>(selectors: K): SVGElementTagNameMap[K] | null;
@@ -9689,12 +9702,6 @@ interface ParentNode {
     querySelectorAll<K extends keyof HTMLElementTagNameMap>(selectors: K): NodeListOf<HTMLElementTagNameMap[K]>;
     querySelectorAll<K extends keyof SVGElementTagNameMap>(selectors: K): NodeListOf<SVGElementTagNameMap[K]>;
     querySelectorAll<E extends Element = Element>(selectors: string): NodeListOf<E>;
-}
-
-interface ParentNode {
-    readonly childElementCount: number;
-    readonly firstElementChild: Element | null;
-    readonly lastElementChild: Element | null;
 }
 
 interface Path2D extends CanvasPathMethods {
@@ -12851,6 +12858,7 @@ interface SourceBuffer extends EventTarget {
     readonly audioTracks: AudioTrackList;
     readonly buffered: TimeRanges;
     mode: AppendMode;
+    readonly textTracks: TextTrackList;
     timestampOffset: number;
     readonly updating: boolean;
     readonly videoTracks: VideoTrackList;
@@ -13958,24 +13966,24 @@ interface WebGLRenderingContext {
     texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, width: number, height: number, format: number, type: number, pixels: ArrayBufferView | null): void;
     texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, pixels: ImageBitmap | ImageData | HTMLVideoElement | HTMLImageElement | HTMLCanvasElement): void;
     uniform1f(location: WebGLUniformLocation | null, x: number): void;
-    uniform1fv(location: WebGLUniformLocation, v: Float32Array | ArrayLike<number>): void;
+    uniform1fv(location: WebGLUniformLocation | null, v: Float32Array | ArrayLike<number>): void;
     uniform1i(location: WebGLUniformLocation | null, x: number): void;
-    uniform1iv(location: WebGLUniformLocation, v: Int32Array | ArrayLike<number>): void;
+    uniform1iv(location: WebGLUniformLocation | null, v: Int32Array | ArrayLike<number>): void;
     uniform2f(location: WebGLUniformLocation | null, x: number, y: number): void;
-    uniform2fv(location: WebGLUniformLocation, v: Float32Array | ArrayLike<number>): void;
+    uniform2fv(location: WebGLUniformLocation | null, v: Float32Array | ArrayLike<number>): void;
     uniform2i(location: WebGLUniformLocation | null, x: number, y: number): void;
-    uniform2iv(location: WebGLUniformLocation, v: Int32Array | ArrayLike<number>): void;
+    uniform2iv(location: WebGLUniformLocation | null, v: Int32Array | ArrayLike<number>): void;
     uniform3f(location: WebGLUniformLocation | null, x: number, y: number, z: number): void;
-    uniform3fv(location: WebGLUniformLocation, v: Float32Array | ArrayLike<number>): void;
+    uniform3fv(location: WebGLUniformLocation | null, v: Float32Array | ArrayLike<number>): void;
     uniform3i(location: WebGLUniformLocation | null, x: number, y: number, z: number): void;
-    uniform3iv(location: WebGLUniformLocation, v: Int32Array | ArrayLike<number>): void;
+    uniform3iv(location: WebGLUniformLocation | null, v: Int32Array | ArrayLike<number>): void;
     uniform4f(location: WebGLUniformLocation | null, x: number, y: number, z: number, w: number): void;
-    uniform4fv(location: WebGLUniformLocation, v: Float32Array | ArrayLike<number>): void;
+    uniform4fv(location: WebGLUniformLocation | null, v: Float32Array | ArrayLike<number>): void;
     uniform4i(location: WebGLUniformLocation | null, x: number, y: number, z: number, w: number): void;
-    uniform4iv(location: WebGLUniformLocation, v: Int32Array | ArrayLike<number>): void;
-    uniformMatrix2fv(location: WebGLUniformLocation, transpose: boolean, value: Float32Array | ArrayLike<number>): void;
-    uniformMatrix3fv(location: WebGLUniformLocation, transpose: boolean, value: Float32Array | ArrayLike<number>): void;
-    uniformMatrix4fv(location: WebGLUniformLocation, transpose: boolean, value: Float32Array | ArrayLike<number>): void;
+    uniform4iv(location: WebGLUniformLocation | null, v: Int32Array | ArrayLike<number>): void;
+    uniformMatrix2fv(location: WebGLUniformLocation | null, transpose: boolean, value: Float32Array | ArrayLike<number>): void;
+    uniformMatrix3fv(location: WebGLUniformLocation | null, transpose: boolean, value: Float32Array | ArrayLike<number>): void;
+    uniformMatrix4fv(location: WebGLUniformLocation | null, transpose: boolean, value: Float32Array | ArrayLike<number>): void;
     useProgram(program: WebGLProgram | null): void;
     validateProgram(program: WebGLProgram | null): void;
     vertexAttrib1f(indx: number, x: number): void;
@@ -14791,6 +14799,8 @@ declare var WheelEvent: {
 
 interface WindowEventMap extends GlobalEventHandlersEventMap {
     "abort": UIEvent;
+    "afterprint": Event;
+    "beforeprint": Event;
     "beforeunload": BeforeUnloadEvent;
     "blur": FocusEvent;
     "canplay": Event;
@@ -14922,6 +14932,8 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     readonly navigator: Navigator;
     offscreenBuffering: string | boolean;
     onabort: ((this: Window, ev: UIEvent) => any) | null;
+    onafterprint: ((this: Window, ev: Event) => any) | null;
+    onbeforeprint: ((this: Window, ev: Event) => any) | null;
     onbeforeunload: ((this: Window, ev: BeforeUnloadEvent) => any) | null;
     onblur: ((this: Window, ev: FocusEvent) => any) | null;
     oncanplay: ((this: Window, ev: Event) => any) | null;
@@ -15019,7 +15031,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     onvrdisplaypointerunrestricted: ((this: Window, ev: Event) => any) | null;
     onvrdisplaypresentchange: ((this: Window, ev: Event) => any) | null;
     onwaiting: ((this: Window, ev: Event) => any) | null;
-    readonly opener: any;
+    opener: any;
     readonly orientation: string | number;
     readonly outerHeight: number;
     readonly outerWidth: number;
@@ -15732,6 +15744,8 @@ declare const name: never;
 declare var navigator: Navigator;
 declare var offscreenBuffering: string | boolean;
 declare var onabort: ((this: Window, ev: UIEvent) => any) | null;
+declare var onafterprint: ((this: Window, ev: Event) => any) | null;
+declare var onbeforeprint: ((this: Window, ev: Event) => any) | null;
 declare var onbeforeunload: ((this: Window, ev: BeforeUnloadEvent) => any) | null;
 declare var onblur: ((this: Window, ev: FocusEvent) => any) | null;
 declare var oncanplay: ((this: Window, ev: Event) => any) | null;
@@ -15976,6 +15990,7 @@ type ChannelCountMode = "max" | "clamped-max" | "explicit";
 type ChannelInterpretation = "speakers" | "discrete";
 type DisplayCaptureSurfaceType = "monitor" | "window" | "application" | "browser";
 type DistanceModelType = "linear" | "inverse" | "exponential";
+type DocumentReadyState = "loading" | "interactive" | "complete";
 type EndOfStreamError = "network" | "decode";
 type ExpandGranularity = "character" | "word" | "sentence" | "textedit";
 type GamepadHand = "" | "left" | "right";

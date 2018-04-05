@@ -41,13 +41,13 @@ Outer.app.SomeView = (function () {
 
 })();
 Outer.app.Inner = class {
->Outer.app.Inner = class {    constructor() {        /** @type {number} */        this.y = 12;    }} : typeof (Anonymous class)
->Outer.app.Inner : typeof (Anonymous class)
+>Outer.app.Inner = class {    constructor() {        /** @type {number} */        this.y = 12;    }} : typeof Inner
+>Outer.app.Inner : typeof Inner
 >Outer.app : typeof __object
 >Outer : typeof __object
 >app : typeof __object
->Inner : typeof (Anonymous class)
->class {    constructor() {        /** @type {number} */        this.y = 12;    }} : typeof (Anonymous class)
+>Inner : typeof Inner
+>class {    constructor() {        /** @type {number} */        this.y = 12;    }} : typeof Inner
 
     constructor() {
         /** @type {number} */
@@ -60,17 +60,17 @@ Outer.app.Inner = class {
     }
 }
 var example = new Outer.app.Inner();
->example : (Anonymous class)
->new Outer.app.Inner() : (Anonymous class)
->Outer.app.Inner : typeof (Anonymous class)
+>example : Inner
+>new Outer.app.Inner() : Inner
+>Outer.app.Inner : typeof Inner
 >Outer.app : typeof __object
 >Outer : typeof __object
 >app : typeof __object
->Inner : typeof (Anonymous class)
+>Inner : typeof Inner
 
 example.y;
 >example.y : number
->example : (Anonymous class)
+>example : Inner
 >y : number
 
 /** @param {number} k */
@@ -141,26 +141,26 @@ var app = new Outer.app.Application();
 >Application : () => void
 
 var inner = new Outer.app.Inner();
->inner : (Anonymous class)
->new Outer.app.Inner() : (Anonymous class)
->Outer.app.Inner : typeof (Anonymous class)
+>inner : Inner
+>new Outer.app.Inner() : Inner
+>Outer.app.Inner : typeof Inner
 >Outer.app : typeof __object
 >Outer : typeof __object
 >app : typeof __object
->Inner : typeof (Anonymous class)
+>Inner : typeof Inner
 
 inner.y;
 >inner.y : number
->inner : (Anonymous class)
+>inner : Inner
 >y : number
 
 /** @type {Outer.app.Inner} */
 var x;
->x : (Anonymous class)
+>x : Inner
 
 x.y;
 >x.y : number
->x : (Anonymous class)
+>x : Inner
 >y : number
 
 Outer.app.statische(101); // Infinity, duh

@@ -696,8 +696,6 @@ namespace ts {
                                     // If we are not reducing and we have a truthy result, return it.
                                     return accumulator;
                                 }
-
-                                hasPendingCommentRange = false;
                             }
 
                             pendingPos = startPos;

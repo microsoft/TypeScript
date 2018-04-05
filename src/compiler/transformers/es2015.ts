@@ -561,7 +561,7 @@ namespace ts {
         }
 
         function returnCapturedThis(node: Node): ReturnStatement {
-            return setOriginalNode(createReturn(createIdentifier("_this")), node);
+            return setOriginalNode(createReturn(createFileLevelUniqueName("_this")), node);
         }
 
         function visitReturnStatement(node: ReturnStatement): Statement {
@@ -779,7 +779,7 @@ namespace ts {
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
-                extendsClauseElement ? [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "_super")] : [],
+                extendsClauseElement ? [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, createFileLevelUniqueName("_super"))] : [],
                 /*type*/ undefined,
                 transformClassBody(node, extendsClauseElement)
             );
@@ -978,7 +978,7 @@ namespace ts {
                 && !(constructor && isSufficientlyCoveredByReturnStatements(constructor.body))) {
                 statements.push(
                     createReturn(
-                        createIdentifier("_this")
+                        createFileLevelUniqueName("_this")
                     )
                 );
             }
@@ -1142,11 +1142,11 @@ namespace ts {
             return createLogicalOr(
                 createLogicalAnd(
                     createStrictInequality(
-                        createIdentifier("_super"),
+                        createFileLevelUniqueName("_super"),
                         createNull()
                     ),
                     createFunctionApply(
-                        createIdentifier("_super"),
+                        createFileLevelUniqueName("_super"),
                         createActualThis(),
                         createIdentifier("arguments"),
                     )
@@ -1452,7 +1452,7 @@ namespace ts {
                 /*modifiers*/ undefined,
                 createVariableDeclarationList([
                     createVariableDeclaration(
-                        "_this",
+                        createFileLevelUniqueName("_this"),
                         /*type*/ undefined,
                         initializer
                     )
@@ -1517,7 +1517,7 @@ namespace ts {
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([
                         createVariableDeclaration(
-                            "_newTarget",
+                            createFileLevelUniqueName("_newTarget"),
                             /*type*/ undefined,
                             newTarget
                         )
@@ -3490,7 +3490,7 @@ namespace ts {
                             actualThis
                         );
                     resultingCall = assignToCapturedThis
-                        ? createAssignment(createIdentifier("_this"), initializer)
+                        ? createAssignment(createFileLevelUniqueName("_this"), initializer)
                         : initializer;
                 }
                 return setOriginalNode(resultingCall, node);
@@ -3811,8 +3811,8 @@ namespace ts {
         function visitSuperKeyword(isExpressionOfCall: boolean): LeftHandSideExpression {
             return hierarchyFacts & HierarchyFacts.NonStaticClassElement
                 && !isExpressionOfCall
-                    ? createPropertyAccess(createIdentifier("_super"), "prototype")
-                    : createIdentifier("_super");
+                    ? createPropertyAccess(createFileLevelUniqueName("_super"), "prototype")
+                    : createFileLevelUniqueName("_super");
         }
 
         function visitMetaProperty(node: MetaProperty) {
@@ -3823,7 +3823,7 @@ namespace ts {
                 else {
                     hierarchyFacts |= HierarchyFacts.NewTarget;
                 }
-                return createIdentifier("_newTarget");
+                return createFileLevelUniqueName("_newTarget");
             }
             return node;
         }
@@ -4000,7 +4000,7 @@ namespace ts {
         function substituteThisKeyword(node: PrimaryExpression): PrimaryExpression {
             if (enabledSubstitutions & ES2015SubstitutionFlags.CapturedThis
                 && hierarchyFacts & HierarchyFacts.CapturesThis) {
-                return setTextRange(createIdentifier("_this"), node);
+                return setTextRange(createFileLevelUniqueName("_this"), node);
             }
             return node;
         }
@@ -4052,7 +4052,7 @@ namespace ts {
             /*typeArguments*/ undefined,
             [
                 name,
-                createIdentifier("_super")
+                createFileLevelUniqueName("_super")
             ]
         );
     }

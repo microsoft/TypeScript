@@ -431,9 +431,7 @@ namespace ts {
             return this.checker.getIndexTypeOfType(this, IndexKind.Number);
         }
         getBaseTypes(): BaseType[] | undefined {
-            return this.flags & TypeFlags.Object && this.objectFlags & (ObjectFlags.Class | ObjectFlags.Interface)
-                ? this.checker.getBaseTypes(<InterfaceType><Type>this)
-                : undefined;
+            return this.isClassOrInterface() ? this.checker.getBaseTypes(this) : undefined;
         }
         getNonNullableType(): Type {
             return this.checker.getNonNullableType(this);
@@ -443,6 +441,34 @@ namespace ts {
         }
         getDefault(): Type | undefined {
             return this.checker.getDefaultFromTypeParameter(this);
+        }
+
+        isUnion(): this is UnionType {
+            return !!(this.flags & TypeFlags.Union);
+        }
+        isIntersection(): this is IntersectionType {
+            return !!(this.flags & TypeFlags.Intersection);
+        }
+        isUnionOrIntersection(): this is UnionOrIntersectionType {
+            return !!(this.flags & TypeFlags.UnionOrIntersection);
+        }
+        isLiteral(): this is LiteralType {
+            return !!(this.flags & TypeFlags.Literal);
+        }
+        isStringLiteral(): this is StringLiteralType {
+            return !!(this.flags & TypeFlags.StringLiteral);
+        }
+        isNumberLiteral(): this is NumberLiteralType {
+            return !!(this.flags & TypeFlags.NumberLiteral);
+        }
+        isTypeParameter(): this is TypeParameter {
+            return !!(this.flags & TypeFlags.TypeParameter);
+        }
+        isClassOrInterface(): this is InterfaceType {
+            return !!(getObjectFlags(this) & ObjectFlags.ClassOrInterface);
+        }
+        isClass(): this is InterfaceType {
+            return !!(getObjectFlags(this) & ObjectFlags.Class);
         }
     }
 
@@ -653,8 +679,8 @@ namespace ts {
 
             function getDeclarationName(declaration: Declaration) {
                 const name = getNameOfDeclaration(declaration);
-                return name && (isPropertyNameLiteral(name) ? getTextOfIdentifierOrLiteral(name) :
-                    name.kind === SyntaxKind.ComputedPropertyName && isPropertyAccessExpression(name.expression) ? name.expression.name.text : undefined);
+                return name && (isComputedPropertyName(name) && isPropertyAccessExpression(name.expression) ? name.expression.name.text
+                    : isPropertyName(name) ? getNameFromPropertyName(name) : undefined);
             }
 
             function visit(node: Node): void {
@@ -1126,8 +1152,10 @@ namespace ts {
         };
     }
 
-    export function createLanguageService(host: LanguageServiceHost,
-        documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
+    export function createLanguageService(
+        host: LanguageServiceHost,
+        documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory()),
+        syntaxOnly = false): LanguageService {
 
         const syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         let program: Program;
@@ -1162,6 +1190,8 @@ namespace ts {
         }
 
         function synchronizeHostData(): void {
+            Debug.assert(!syntaxOnly);
+
             // perform fast check if host supports it
             if (host.getProjectVersion) {
                 const hostProjectVersion = host.getProjectVersion();
@@ -1337,6 +1367,11 @@ namespace ts {
         }
 
         function getProgram(): Program {
+            if (syntaxOnly) {
+                Debug.assert(program === undefined);
+                return undefined;
+            }
+
             synchronizeHostData();
 
             return program;
@@ -1404,12 +1439,10 @@ namespace ts {
             synchronizeHostData();
             return Completions.getCompletionsAtPosition(
                 host,
-                program.getTypeChecker(),
+                program,
                 log,
-                program.getCompilerOptions(),
                 getValidSourceFile(fileName),
                 position,
-                program.getSourceFiles(),
                 fullPreferences);
         }
 
@@ -1418,11 +1451,9 @@ namespace ts {
             return Completions.getCompletionEntryDetails(
                 program,
                 log,
-                program.getCompilerOptions(),
                 getValidSourceFile(fileName),
                 position,
                 { name, source },
-                program.getSourceFiles(),
                 host,
                 formattingOptions && formatting.getFormatContext(formattingOptions),
                 getCanonicalFileName,
@@ -1431,14 +1462,7 @@ namespace ts {
 
         function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol {
             synchronizeHostData();
-            return Completions.getCompletionEntrySymbol(
-                program.getTypeChecker(),
-                log,
-                program.getCompilerOptions(),
-                getValidSourceFile(fileName),
-                position,
-                { name, source },
-                program.getSourceFiles());
+            return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source });
         }
 
         function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
