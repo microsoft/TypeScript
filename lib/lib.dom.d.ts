@@ -13429,6 +13429,10 @@ interface URLSearchParams {
      */
     delete(name: string): void;
     /**
+     * Returns an iterator over the key/value pairs.
+     */
+    entries(): IterableIterator<[string, string]>;
+    /**
      * Returns the first value associated to the given search parameter.
      */
     get(name: string): string | null;
@@ -13441,9 +13445,23 @@ interface URLSearchParams {
      */
     has(name: string): boolean;
     /**
+     * Returns an iterator over the keys.
+     */
+    keys(): IterableIterator<string>;
+    /**
      * Sets the value associated to a given search parameter to the given value. If there were several values, delete the others.
      */
     set(name: string, value: string): void;
+    /**
+     * Returns a string suitable for use in a URL.
+     */
+    toString(): string;
+    /**
+     * Returns an iterator over the values.
+     */
+    values(): IterableIterator<string>;
+    /** Iterator */
+    [Symbol.iterator](): IterableIterator<number>;
 }
 
 declare var URLSearchParams: {
