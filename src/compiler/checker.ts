@@ -2063,6 +2063,9 @@ namespace ts {
                     if (initializer) {
                         namespace = getSymbolOfNode(initializer);
                     }
+                    if (!namespace) {
+                        return undefined;
+                    }
                     if (namespace.valueDeclaration &&
                         isVariableDeclaration(namespace.valueDeclaration) &&
                         namespace.valueDeclaration.initializer &&
