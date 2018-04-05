@@ -137,7 +137,9 @@ namespace ts.Completions.PathCompletions {
             if (directories) {
                 for (const directory of directories) {
                     const directoryName = getBaseFileName(normalizePath(directory));
-                    result.push(nameAndKind(directoryName, ScriptElementKind.directory));
+                    if (directoryName !== "@types") {
+                        result.push(nameAndKind(directoryName, ScriptElementKind.directory));
+                    }
                 }
             }
         }
@@ -181,19 +183,19 @@ namespace ts.Completions.PathCompletions {
             result.push(nameAndKind(ambientName, ScriptElementKind.externalModuleName));
         }
 
+        getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, result);
+
         if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs) {
             // If looking for a global package name, don't just include everything in `node_modules` because that includes dependencies' own dependencies.
             // (But do if we didn't find anything, e.g. 'package.json' missing.)
             let foundGlobal = false;
             if (fragmentDirectory === undefined) {
-                const oldLength = result.length;
-                getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, result);
                 for (const moduleName of enumerateNodeModulesVisibleToScript(host, scriptPath)) {
                     if (!result.some(entry => entry.name === moduleName)) {
+                        foundGlobal = true;
                         result.push(nameAndKind(moduleName, ScriptElementKind.externalModuleName));
                     }
                 }
-                foundGlobal = result.length !== oldLength;
             }
             if (!foundGlobal) {
                 forEachAncestorDirectory(scriptPath, ancestor => {
