@@ -3399,7 +3399,6 @@ namespace ts {
         enumKind?: EnumKind;                // Enum declaration classification
         originatingImport?: ImportDeclaration | ImportCall; // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
         lateSymbol?: Symbol;                // Late-bound symbol for a computed property
-        nameType?: Type;                    // Type associate with a late-bound or mapped type property symbol's name
     }
 
     /* @internal */
@@ -3429,6 +3428,7 @@ namespace ts {
     export interface TransientSymbol extends Symbol, SymbolLinks {
         checkFlags: CheckFlags;
         isRestParameter?: boolean;
+        nameType?: Type;  // Type associated with a late-bound symbol
     }
 
     /* @internal */

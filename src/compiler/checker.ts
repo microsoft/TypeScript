@@ -3793,10 +3793,13 @@ namespace ts {
                         return "(Anonymous function)";
                 }
             }
-            if ((symbol as TransientSymbol).nameType && (symbol as TransientSymbol).nameType.flags & TypeFlags.StringLiteral) {
-                const stringValue = ((symbol as TransientSymbol).nameType as StringLiteralType).value;
-                if (!isIdentifierText(stringValue, compilerOptions.target)) {
-                    return `"${escapeString(stringValue, CharacterCodes.doubleQuote)}"`;
+            if (isTransientSymbol(symbol)) {
+                const nameType = (<TransientSymbol>symbol).nameType;
+                if (nameType && nameType.flags & TypeFlags.StringLiteral && !isIdentifierText((<StringLiteralType>nameType).value, compilerOptions.target)) {
+                    return `"${escapeString((<StringLiteralType>nameType).value, CharacterCodes.doubleQuote)}"`;
+                }
+                if (nameType && nameType.flags & TypeFlags.UniqueESSymbol) {
+                    return `[${getNameOfSymbolAsWritten((<UniqueESSymbolType>nameType).symbol, context)}]`;
                 }
             }
             return symbolName(symbol);
@@ -5539,7 +5542,7 @@ namespace ts {
          * @param lateSymbols The late-bound symbols of the parent.
          * @param decl The member to bind.
          */
-        function lateBindMember(parent: Symbol, earlySymbols: SymbolTable | undefined, lateSymbols: SymbolTable, decl: LateBoundDeclaration) {
+        function lateBindMember(parent: Symbol, earlySymbols: SymbolTable | undefined, lateSymbols: UnderscoreEscapedMap<TransientSymbol>, decl: LateBoundDeclaration) {
             Debug.assert(!!decl.symbol, "The member is expected to have a symbol.");
             const links = getNodeLinks(decl);
             if (!links.resolvedSymbol) {
@@ -5568,13 +5571,7 @@ namespace ts {
                         error(decl.name || decl, Diagnostics.Duplicate_declaration_0, name);
                         lateSymbol = createSymbol(SymbolFlags.None, memberName, CheckFlags.Late);
                     }
-
-                    const symbolLinks = getSymbolLinks(lateSymbol);
-                    if (!symbolLinks.nameType) {
-                        // Retain link to name type so that it can be reused later
-                        symbolLinks.nameType = type;
-                    }
-
+                    lateSymbol.nameType = type;
                     addDeclarationToLateBoundSymbol(lateSymbol, decl, symbolFlags);
                     if (lateSymbol.parent) {
                         Debug.assert(lateSymbol.parent === parent, "Existing symbol parent should match new one");
@@ -5602,7 +5599,7 @@ namespace ts {
                 links[resolutionKind] = earlySymbols || emptySymbols;
 
                 // fill in any as-yet-unresolved late-bound members.
-                const lateSymbols = createSymbolTable();
+                const lateSymbols = createMap() as UnderscoreEscapedMap<TransientSymbol>;
                 for (const decl of symbol.declarations) {
                     const members = getMembersOfDeclaration(decl);
                     if (members) {
@@ -8116,18 +8113,14 @@ namespace ts {
         }
 
         function getLiteralTypeFromPropertyName(prop: Symbol) {
-            const links = getSymbolLinks(getLateBoundSymbol(prop));
-            if (!links.nameType) {
-                if (links.target && links.target !== unknownSymbol && links.target !== resolvingSymbol && links.target.escapedName === prop.escapedName) {
-                    links.nameType = getLiteralTypeFromPropertyName(links.target);
-                }
-                else {
-                    links.nameType = getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.NonPublicAccessibilityModifier || isKnownSymbol(prop) ?
-                        neverType :
-                        getLiteralType(symbolName(prop));
-                }
+            if (getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.NonPublicAccessibilityModifier || isKnownSymbol(prop)) {
+                return neverType;
             }
-            return links.nameType;
+            const symbol = getLateBoundSymbol(prop);
+            if (isTransientSymbol(symbol) && symbol.nameType) {
+                return symbol.nameType;
+            }
+            return getLiteralType(symbolName(prop));
         }
 
         function getLiteralTypeFromPropertyNames(type: Type) {
@@ -9061,8 +9054,13 @@ namespace ts {
             if (symbol.valueDeclaration) {
                 result.valueDeclaration = symbol.valueDeclaration;
             }
-            if ((symbol as TransientSymbol).isRestParameter) {
-                result.isRestParameter = (symbol as TransientSymbol).isRestParameter;
+            if (isTransientSymbol(symbol)) {
+                if (symbol.isRestParameter) {
+                    result.isRestParameter = symbol.isRestParameter;
+                }
+                if (symbol.nameType) {
+                    result.nameType = symbol.nameType;
+                }
             }
             return result;
         }
