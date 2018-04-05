@@ -3753,6 +3753,8 @@ namespace ts {
         /* @internal */
         resolvedIndexType: IndexType;
         /* @internal */
+        resolvedDeclaredIndexType: IndexType;
+        /* @internal */
         resolvedBaseConstraint: Type;
         /* @internal */
         couldContainTypeVariables: boolean;
@@ -3839,6 +3841,8 @@ namespace ts {
         resolvedBaseConstraint?: Type;
         /* @internal */
         resolvedIndexType?: IndexType;
+        /* @internal */
+        resolvedDeclaredIndexType?: IndexType;
     }
 
     // Type parameters (TypeFlags.TypeParameter)
@@ -3870,6 +3874,8 @@ namespace ts {
 
     // keyof T types (TypeFlags.Index)
     export interface IndexType extends InstantiableType {
+        /* @internal */
+        isDeclaredType?: boolean;
         type: InstantiableType | UnionOrIntersectionType;
     }
 
