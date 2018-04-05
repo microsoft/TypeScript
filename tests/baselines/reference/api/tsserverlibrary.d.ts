@@ -8077,7 +8077,7 @@ declare namespace ts.server {
          * @param fileContent is a known version of the file content that is more up to date than the one on disk
          */
         openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind, projectRootPath?: string): OpenConfiguredProjectResult;
-        private findExternalProjetContainingOpenScriptInfo;
+        private findExternalProjectContainingOpenScriptInfo;
         openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult;
         /**
          * Close file whose contents is managed by the client
