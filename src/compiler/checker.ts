@@ -6208,7 +6208,12 @@ namespace ts {
         }
 
         function getDefaultConstraintOfConditionalType(type: ConditionalType) {
-            return getUnionType([getTrueTypeFromConditionalType(type), getFalseTypeFromConditionalType(type)]);
+            if (!type.resolvedDefaultConstraint) {
+                const rootTrueType = type.root.trueType;
+                const rootTrueConstraint = rootTrueType.flags & TypeFlags.Substitution ? (<SubstitutionType>rootTrueType).substitute : rootTrueType;
+                type.resolvedDefaultConstraint = getUnionType([instantiateType(rootTrueConstraint, type.combinedMapper || type.mapper), getFalseTypeFromConditionalType(type)]);
+            }
+            return type.resolvedDefaultConstraint;
         }
 
         function getConstraintOfDistributiveConditionalType(type: ConditionalType): Type {
@@ -6221,7 +6226,10 @@ namespace ts {
                 const constraint = getConstraintOfType(type.checkType);
                 if (constraint) {
                     const mapper = createTypeMapper([<TypeParameter>type.root.checkType], [constraint]);
-                    return getConditionalTypeInstantiation(type, combineTypeMappers(mapper, type.mapper));
+                    const instantiated = getConditionalTypeInstantiation(type, combineTypeMappers(mapper, type.mapper));
+                    if (!(instantiated.flags & TypeFlags.Never)) {
+                        return instantiated;
+                    }
                 }
             }
             return undefined;
@@ -7393,7 +7401,7 @@ namespace ts {
 
         function getConstrainedTypeVariable(typeVariable: TypeVariable, node: Node) {
             let constraints: Type[];
-            while (isPartOfTypeNode(node)) {
+            while (node && !isStatement(node)) {
                 const parent = node.parent;
                 if (parent.kind === SyntaxKind.ConditionalType && node === (<ConditionalTypeNode>parent).trueType) {
                     const constraint = getImpliedConstraint(typeVariable, (<ConditionalTypeNode>parent).checkType, (<ConditionalTypeNode>parent).extendsType);
@@ -8338,16 +8346,19 @@ namespace ts {
             // If this is a distributive conditional type and the check type is generic we need to defer
             // resolution of the conditional type such that a later instantiation will properly distribute
             // over union types.
-            if (!root.isDistributive || !maybeTypeOfKind(checkType, TypeFlags.Instantiable)) {
-                let combinedMapper: TypeMapper;
-                if (root.inferTypeParameters) {
-                    const context = createInferenceContext(root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);
+            const isDeferred = root.isDistributive && maybeTypeOfKind(checkType, TypeFlags.Instantiable);
+            let combinedMapper: TypeMapper;
+            if (root.inferTypeParameters) {
+                const context = createInferenceContext(root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);
+                if (!isDeferred) {
                     // We don't want inferences from constraints as they may cause us to eagerly resolve the
                     // conditional type instead of deferring resolution. Also, we always want strict function
                     // types rules (i.e. proper contravariance) for inferences.
                     inferTypes(context.inferences, checkType, extendsType, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
-                    combinedMapper = combineTypeMappers(mapper, context);
                 }
+                combinedMapper = combineTypeMappers(mapper, context);
+            }
+            if (!isDeferred) {
                 // Return union of trueType and falseType for 'any' since it matches anything
                 if (checkType.flags & TypeFlags.Any) {
                     return getUnionType([instantiateType(root.trueType, combinedMapper || mapper), instantiateType(root.falseType, mapper)]);
@@ -8376,6 +8387,7 @@ namespace ts {
             result.checkType = erasedCheckType;
             result.extendsType = extendsType;
             result.mapper = mapper;
+            result.combinedMapper = combinedMapper;
             result.aliasSymbol = root.aliasSymbol;
             result.aliasTypeArguments = instantiateTypes(root.aliasTypeArguments, mapper);
             return result;
@@ -8401,13 +8413,28 @@ namespace ts {
             return result;
         }
 
+        function isPossiblyReferencedInConditionalType(tp: TypeParameter, node: Node) {
+            if (isTypeParameterPossiblyReferenced(tp, node)) {
+                return true;
+            }
+            while (node) {
+                if (node.kind === SyntaxKind.ConditionalType) {
+                    if (isTypeParameterPossiblyReferenced(tp, (<ConditionalTypeNode>node).extendsType)) {
+                        return true;
+                    }
+                }
+                node = node.parent;
+            }
+            return false;
+        }
+
         function getTypeFromConditionalTypeNode(node: ConditionalTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 const checkType = getTypeFromTypeNode(node.checkType);
                 const aliasTypeArguments = getAliasTypeArgumentsForTypeNode(node);
                 const allOuterTypeParameters = getOuterTypeParameters(node, /*includeThisTypes*/ true);
-                const outerTypeParameters = aliasTypeArguments ? allOuterTypeParameters : filter(allOuterTypeParameters, tp => isTypeParameterPossiblyReferenced(tp, node));
+                const outerTypeParameters = aliasTypeArguments ? allOuterTypeParameters : filter(allOuterTypeParameters, tp => isPossiblyReferencedInConditionalType(tp, node));
                 const root: ConditionalRoot = {
                     node,
                     checkType,
@@ -8951,6 +8978,11 @@ namespace ts {
             return type;
         }
 
+        function maybeTypeParameterReference(node: Node) {
+            return !(node.kind === SyntaxKind.QualifiedName ||
+                node.parent.kind === SyntaxKind.TypeReference && (<TypeReferenceNode>node.parent).typeArguments && node === (<TypeReferenceNode>node.parent).typeName);
+        }
+
         function isTypeParameterPossiblyReferenced(tp: TypeParameter, node: Node) {
             // If the type parameter doesn't have exactly one declaration, if there are invening statement blocks
             // between the node and the type parameter declaration, if the node contains actual references to the
@@ -8967,7 +8999,8 @@ namespace ts {
                     case SyntaxKind.ThisType:
                         return tp.isThisType;
                     case SyntaxKind.Identifier:
-                        return !tp.isThisType && isPartOfTypeNode(node) && getTypeFromTypeNode(<TypeNode>node) === tp;
+                        return !tp.isThisType && isPartOfTypeNode(node) && maybeTypeParameterReference(node) &&
+                            getTypeFromTypeNode(<TypeNode>node) === tp;
                     case SyntaxKind.TypeQuery:
                         return true;
                 }

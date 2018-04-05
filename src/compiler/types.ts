@@ -3848,7 +3848,11 @@ namespace ts {
         resolvedTrueType?: Type;
         resolvedFalseType?: Type;
         /* @internal */
+        resolvedDefaultConstraint?: Type;
+        /* @internal */
         mapper?: TypeMapper;
+        /* @internal */
+        combinedMapper?: TypeMapper;
     }
 
     // Type parameter substitution (TypeFlags.Substitution)
