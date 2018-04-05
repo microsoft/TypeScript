@@ -975,6 +975,9 @@
       <Item ItemId=";Add_initializers_to_all_uninitialized_properties_95027" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add initializers to all uninitialized properties]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ajouter des initialiseurs à toutes les propriétés non initialisées]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1023,6 +1026,9 @@
       <Item ItemId=";Add_undefined_type_to_all_uninitialized_properties_95029" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add undefined type to all uninitialized properties]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ajouter un type non défini à toutes les propriétés non initialisées]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2673,6 +2679,9 @@
       <Item ItemId=";Delete_all_unused_declarations_95024" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Delete all unused declarations]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Supprimer toutes les déclarations inutilisées]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4047,6 +4056,9 @@
       <Item ItemId=";Implement_all_unimplemented_interfaces_95032" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Implement all unimplemented interfaces]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Implémenter toutes les interfaces non implémentées]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
