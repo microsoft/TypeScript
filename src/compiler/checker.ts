@@ -2096,9 +2096,15 @@ namespace ts {
                         const moduleName = (namespace.valueDeclaration.initializer as CallExpression).arguments[0] as StringLiteral;
                         const moduleSym = resolveExternalModuleName(moduleName, moduleName);
                         if (moduleSym) {
-                            const resolvedModuleSymbol = resolveExternalModuleSymbol(moduleSym);
-                            if (resolvedModuleSymbol) {
-                                namespace = resolvedModuleSymbol;
+                            if (moduleSym.exports.has(InternalSymbolName.ExportEquals as __String) && moduleSym.exports.size > 1) {
+                                Debug.assert(!!(moduleSym.valueDeclaration as SourceFile).commonJsModuleIndicator);
+                                namespace = combineCommonJsSymbol(moduleSym);
+                            }
+                            else {
+                                const resolvedModuleSymbol = resolveExternalModuleSymbol(moduleSym);
+                                if (resolvedModuleSymbol) {
+                                    namespace = resolvedModuleSymbol;
+                                }
                             }
                         }
                     }
@@ -4350,7 +4356,8 @@ namespace ts {
                     return unknownType;
                 }
 
-                if (isPropertyAccessExpression(expression.left) && expression.left.expression.kind === SyntaxKind.ThisKeyword) {
+                const special = getSpecialPropertyAssignmentKind(expression);
+                if (special === SpecialPropertyAssignmentKind.ThisProperty) {
                     const thisContainer = getThisContainer(expression, /*includeArrowFunctions*/ false);
                     // Properties defined in a constructor (or javascript constructor function) don't get undefined added.
                     // Function expressions that are assigned to the prototype count as methods.
@@ -4380,7 +4387,17 @@ namespace ts {
                 }
                 else if (!jsDocType) {
                     // If we don't have an explicit JSDoc type, get the type from the expression.
-                    const type = getWidenedLiteralType(checkExpressionCached(expression.right));
+                    let type = getWidenedLiteralType(checkExpressionCached(expression.right));
+
+                    if (getObjectFlags(type) & ObjectFlags.Anonymous &&
+                        special === SpecialPropertyAssignmentKind.ModuleExports &&
+                        symbol.escapedName === InternalSymbolName.ExportEquals) {
+                        const o = resolveStructuredTypeMembers(type as AnonymousType);
+                        const members = createSymbolTable();
+                        copyEntries(o.members, members);
+                        copyEntries(symbol.exports, members);
+                        type = createAnonymousType(symbol, members, o.callSignatures, o.constructSignatures, o.stringIndexInfo, o.numberIndexInfo);
+                    }
                     let anyedType = type;
                     if (isEmptyArrayLiteralType(type)) {
                         anyedType = anyArrayType;
@@ -6992,6 +7009,10 @@ namespace ts {
         function resolveExternalModuleTypeByLiteral(name: StringLiteral) {
             const moduleSym = resolveExternalModuleName(name, name);
             if (moduleSym) {
+                if (moduleSym.exports.has(InternalSymbolName.ExportEquals as __String) && moduleSym.exports.size > 1) {
+                    Debug.assert(!!(moduleSym.valueDeclaration as SourceFile).commonJsModuleIndicator);
+                    return getTypeOfSymbol(combineCommonJsSymbol(moduleSym));
+                }
                 const resolvedModuleSymbol = resolveExternalModuleSymbol(moduleSym);
                 if (resolvedModuleSymbol) {
                     return getTypeOfSymbol(resolvedModuleSymbol);
@@ -6999,6 +7020,18 @@ namespace ts {
             }
 
             return anyType;
+        }
+
+        function combineCommonJsSymbol(moduleSym: Symbol): Symbol {
+            const combined = cloneSymbol(moduleSym.exports.get(InternalSymbolName.ExportEquals));
+            moduleSym.exports.forEach((s,name) => {
+                if (name === InternalSymbolName.ExportEquals) return;
+                if (!combined.exports.has(name) || combined.exports.get(name).valueDeclaration.pos > s.valueDeclaration.pos) {
+                    combined.exports.set(name, s);
+                }
+            });
+            return combined;
+
         }
 
         function getThisTypeOfSignature(signature: Signature): Type | undefined {
@@ -24568,7 +24601,7 @@ namespace ts {
                 const exportEqualsSymbol = moduleSymbol.exports.get("export=" as __String);
                 if (exportEqualsSymbol && hasExportedMembers(moduleSymbol)) {
                     const declaration = getDeclarationOfAliasSymbol(exportEqualsSymbol) || exportEqualsSymbol.valueDeclaration;
-                    if (!isTopLevelInExternalModuleAugmentation(declaration)) {
+                    if (!isTopLevelInExternalModuleAugmentation(declaration) && !isInJavaScriptFile(declaration)) {
                         error(declaration, Diagnostics.An_export_assignment_cannot_be_used_in_a_module_with_other_exported_elements);
                     }
                 }
