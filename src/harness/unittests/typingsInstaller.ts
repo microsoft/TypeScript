@@ -1590,4 +1590,70 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.inferredProjects[0], [f1.path]);
         });
     });
+
+    describe("recomputing resolutions of unresolved imports", () => {
+        const globalTypingsCacheLocation = "/tmp";
+        function verifyUnresolvedImportResolutions(appContents: string, typingNames: string[], typingFiles: FileOrFolder[]) {
+            const app: FileOrFolder = {
+                path: "/a/b/app.js",
+                content: `${appContents}import * as x from "fooo";`
+            };
+            const fooo: FileOrFolder = {
+                path: "/a/b/node_modules/fooo/index.d.ts",
+                content: `export var x: string;`
+            };
+            const host = createServerHost([app, fooo]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { globalTypingsCacheLocation, typesRegistry: createTypesRegistry("foo") });
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
+                    executeCommand(this, host, typingNames, typingFiles, cb);
+                }
+            })();
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.openClientFile(app.path);
+            projectService.checkNumberOfProjects({ inferredProjects: 1 });
+
+            const proj = projectService.inferredProjects[0];
+            checkProjectActualFiles(proj, [app.path, fooo.path]);
+            assert.equal(proj.resolutionCache.resolvedModuleNames.get(app.path).get("fooo").resolvedModule.resolvedFileName, fooo.path);
+
+            installer.installAll(/*expectedCount*/ 1);
+            host.checkTimeoutQueueLengthAndRun(2);
+            assert.isUndefined(proj.resolutionCache.resolvedModuleNames.get(app.path).get("fooo").isInvalidated);
+            checkProjectActualFiles(proj, typingFiles.map(f => f.path).concat(app.path, fooo.path));
+        }
+
+        it("correctly invalidate the resolutions with typing names", () => {
+            verifyUnresolvedImportResolutions('import * as a from "foo";', ["foo"], [{
+                path: `${globalTypingsCacheLocation}/node_modules/foo/index.d.ts`,
+                content: "export function a(): void;"
+            }]);
+        });
+
+        it("correctly invalidate the resolutions with typing names that are trimmed", () => {
+            const foo: FileOrFolder = {
+                path: `${globalTypingsCacheLocation}/node_modules/foo/index.d.ts`,
+                content: "export {}"
+            };
+            const fooAA: FileOrFolder = {
+                path: `${globalTypingsCacheLocation}/node_modules/foo/a/a.d.ts`,
+                content: "export function a (): void;"
+            };
+            const fooAB: FileOrFolder = {
+                path: `${globalTypingsCacheLocation}/node_modules/foo/a/b.d.ts`,
+                content: "export function b (): void;"
+            };
+            const fooAC: FileOrFolder = {
+                path: `${globalTypingsCacheLocation}/node_modules/foo/a/c.d.ts`,
+                content: "export function c (): void;"
+            };
+            verifyUnresolvedImportResolutions(`
+                    import * as a from "foo/a/a";
+                    import * as b from "foo/a/b";
+                    import * as c from "foo/a/c";
+            `, ["foo"], [foo, fooAA, fooAB, fooAC]);
+        });
+    });
 }

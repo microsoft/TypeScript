@@ -25,6 +25,9 @@ namespace ts {
         closeTypeRootsWatch(): void;
 
         clear(): void;
+
+        // For test only
+        resolvedModuleNames: Map<Map<ResolvedModuleWithFailedLookupLocations>>;
     }
 
     interface ResolutionWithFailedLookupLocations {
@@ -133,7 +136,8 @@ namespace ts {
             createHasInvalidatedResolution,
             updateTypeRootsWatch,
             closeTypeRootsWatch,
-            clear
+            clear,
+            resolvedModuleNames
         };
 
         function getResolvedModule(resolution: ResolvedModuleWithFailedLookupLocations) {
@@ -633,14 +637,20 @@ namespace ts {
             return allFilesHaveInvalidatedResolution || filesWithInvalidatedResolutions && filesWithInvalidatedResolutions.size !== invalidatedFilesCount;
         }
 
-        function invalidateResolutionCacheName<T extends ResolutionWithFailedLookupLocations>(resolutions: Map<T>, name: string) {
-            const resolution = resolutions.get(name);
-            if (resolution) {
-                resolution.isInvalidated = true;
-            }
+        function invalidateResolutionCacheNameStart<T extends ResolutionWithFailedLookupLocations>(resolutions: Map<T>, name: string) {
+            resolutions.forEach((resolution, key) => {
+                key = key.trim();
+                if (name === key || startsWith(key, name + "/")) {
+                    resolution.isInvalidated = true;
+                }
+            });
         }
 
         function invalidateResolutionNames(fileToNames: Map<ReadonlyArray<string>>) {
+            if (allFilesHaveInvalidatedResolution) {
+                return;
+            }
+
             fileToNames.forEach((names, filePath) => {
                 if (!names.length) {
                     return;
@@ -652,8 +662,8 @@ namespace ts {
                 }
                 (filesWithInvalidatedResolutions || (filesWithInvalidatedResolutions = createMap<true>())).set(filePath as Path, true);
                 names.forEach(name => {
-                    invalidateResolutionCacheName(moduleResolutionsInFile, name);
-                    invalidateResolutionCacheName(typeReferenceResolutionsInFile, name);
+                    invalidateResolutionCacheNameStart(moduleResolutionsInFile, name);
+                    invalidateResolutionCacheNameStart(typeReferenceResolutionsInFile, name);
                 });
             });
         }
