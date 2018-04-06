@@ -24655,7 +24655,6 @@ namespace ts {
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
-                    return checkSignatureDeclaration(<SignatureDeclaration>node);
                 case SyntaxKind.IndexSignature:
                     return checkSignatureDeclaration(<SignatureDeclaration>node);
                 case SyntaxKind.MethodDeclaration:
@@ -24775,8 +24774,6 @@ namespace ts {
                 case SyntaxKind.ExportAssignment:
                     return checkExportAssignment(<ExportAssignment>node);
                 case SyntaxKind.EmptyStatement:
-                    checkGrammarStatementInAmbientContext(node);
-                    return;
                 case SyntaxKind.DebuggerStatement:
                     checkGrammarStatementInAmbientContext(node);
                     return;
