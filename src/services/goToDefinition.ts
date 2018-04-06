@@ -161,23 +161,10 @@ namespace ts.GoToDefinition {
     function getDefinitionInfoForIndexSignatures(node: Node, checker: TypeChecker): DefinitionInfo[] | undefined {
         if (!isPropertyAccessExpression(node.parent) || node.parent.name !== node) return;
         const type = checker.getTypeAtLocation(node.parent.expression);
-        if (!type.getStringIndexType()) return undefined;
-        const result: DefinitionInfo[] = [];
-        for (const root of getRootSymbolsOfType(type, checker)) {
-            for (const decl of root.declarations) {
-                if (!isObjectTypeDeclaration(decl)) continue;
-                for (const member of decl.members) {
-                    if (isIndexSignatureDeclaration(member)) {
-                        result.push(createDefinitionFromSignatureDeclaration(checker, member));
-                    }
-                }
-            }
-        }
-        return result;
-    }
-
-    function getRootSymbolsOfType(type: Type, checker: TypeChecker): ReadonlyArray<Symbol> {
-        return flatMap(type.isUnionOrIntersection() ? type.types : [type], t => t.symbol ? checker.getRootSymbols(t.symbol) : emptyArray);
+        return mapDefined(type.isUnionOrIntersection() ? type.types : [type], nonUnionType => {
+            const info = checker.getIndexInfoOfType(nonUnionType, IndexKind.String);
+            return info && createDefinitionFromSignatureDeclaration(checker, info.declaration);
+        });
     }
 
     // Go to the original declaration for cases:
