@@ -2012,7 +2012,10 @@
         "category": "Error",
         "code": 2569
     },
-
+    "Property '{0}' does not exist on type '{1}'. Did you forget to use 'await'?": {
+        "category": "Error",
+        "code": 2570
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
