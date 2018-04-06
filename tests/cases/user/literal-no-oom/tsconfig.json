@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "target": "es6",
+        "lib": ["esnext", "dom"],
         "types": []
     }
 }

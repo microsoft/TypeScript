@@ -1,7 +1,8 @@
 Exit Code: 1
 Standard output:
-node_modules/npm/bin/npm-cli.js(6,13): error TS2551: Property 'echo' does not exist on type '{ Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: nu...'. Did you mean 'Echo'?
-node_modules/npm/bin/npm-cli.js(13,13): error TS2551: Property 'quit' does not exist on type '{ Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: nu...'. Did you mean 'Quit'?
+node_modules/npm/bin/npm-cli.js(5,14): error TS2304: Cannot find name 'WScript'.
+node_modules/npm/bin/npm-cli.js(6,5): error TS2304: Cannot find name 'WScript'.
+node_modules/npm/bin/npm-cli.js(13,5): error TS2304: Cannot find name 'WScript'.
 node_modules/npm/bin/npm-cli.js(30,23): error TS2307: Cannot find module '../package.json'.
 node_modules/npm/bin/npm-cli.js(54,7): error TS2339: Property 'argv' does not exist on type 'EventEmitter'.
 node_modules/npm/bin/npm-cli.js(55,11): error TS2339: Property 'deref' does not exist on type 'EventEmitter'.
@@ -9,7 +10,6 @@ node_modules/npm/bin/npm-cli.js(55,21): error TS2339: Property 'argv' does not e
 node_modules/npm/bin/npm-cli.js(55,35): error TS2339: Property 'command' does not exist on type 'EventEmitter'.
 node_modules/npm/bin/npm-cli.js(55,49): error TS2339: Property 'argv' does not exist on type 'EventEmitter'.
 node_modules/npm/bin/npm-cli.js(59,21): error TS2339: Property 'version' does not exist on type 'EventEmitter'.
-node_modules/npm/bin/npm-cli.js(60,25): error TS2339: Property 'exit' does not exist on type '(er: any) => void'.
 node_modules/npm/bin/npm-cli.js(64,9): error TS2339: Property 'command' does not exist on type 'EventEmitter'.
 node_modules/npm/bin/npm-cli.js(66,9): error TS2339: Property 'argv' does not exist on type 'EventEmitter'.
 node_modules/npm/bin/npm-cli.js(69,35): error TS2339: Property 'version' does not exist on type 'EventEmitter'.
@@ -40,7 +40,6 @@ node_modules/npm/lib/adduser.js(44,9): error TS2339: Property 'config' does not 
 node_modules/npm/lib/adduser.js(45,20): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/adduser.js(46,9): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/adduser.js(47,9): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/auth/legacy.js(11,36): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
 node_modules/npm/lib/auth/legacy.js(12,30): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/auth/legacy.js(35,16): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/auth/legacy.js(69,33): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
@@ -125,7 +124,6 @@ node_modules/npm/lib/config/bin-links.js(26,11): error TS2339: Property 'globalD
 node_modules/npm/lib/config/bin-links.js(27,11): error TS2339: Property 'bin' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config/bin-links.js(28,11): error TS2339: Property 'globalBin' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config/bin-links.js(30,16): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config/cmd-list.js(117,33): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/lib/config/core.js(17,1): error TS2323: Cannot redeclare exported variable 'loaded'.
 node_modules/npm/lib/config/core.js(18,1): error TS2323: Cannot redeclare exported variable 'rootConf'.
 node_modules/npm/lib/config/core.js(19,1): error TS2323: Cannot redeclare exported variable 'usingBuiltin'.
@@ -161,7 +159,6 @@ node_modules/npm/lib/config/core.js(340,10): error TS2339: Property 'emit' does 
 node_modules/npm/lib/config/core.js(416,29): error TS2345: Argument of type '(orig: string, esc: any, name: any) => string | undefined' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
   Type 'string | undefined' is not assignable to type 'string'.
     Type 'undefined' is not assignable to type 'string'.
-node_modules/npm/lib/config/fetch-opts.js(38,26): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/lib/config/gentle-fs.js(16,11): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config/gentle-fs.js(17,11): error TS2339: Property 'globalPrefix' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config/gentle-fs.js(18,11): error TS2339: Property 'dir' does not exist on type 'EventEmitter'.
@@ -186,7 +183,6 @@ node_modules/npm/lib/config/lifecycle.js(23,24): error TS2339: Property 'config'
 node_modules/npm/lib/config/lifecycle.js(24,35): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config/lifecycle.js(25,23): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config/lifecycle.js(26,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config/lifecycle.js(30,28): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/lib/config/pacote.js(23,26): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config/pacote.js(24,13): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config/pacote.js(25,15): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
@@ -216,16 +212,12 @@ node_modules/npm/lib/config/pacote.js(51,20): error TS2339: Property 'config' do
 node_modules/npm/lib/config/pacote.js(53,16): error TS2339: Property 'modes' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config/pacote.js(54,16): error TS2339: Property 'modes' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config/pacote.js(55,16): error TS2339: Property 'modes' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config/pacote.js(59,12): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/lib/config/pacote.js(62,7): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config/pacote.js(81,19): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config/pacote.js(84,31): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config/pacote.js(89,19): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config/pacote.js(90,38): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config/pacote.js(110,60): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/dedupe.js(10,41): error TS2339: Property 'Installer' does not exist on type 'typeof install'.
-node_modules/npm/lib/dedupe.js(17,54): error TS2339: Property 'sortActions' does not exist on type '(oldTree: any, newTree: any, differences: any, log: any, next: any, ...args: any[]) => void'.
-node_modules/npm/lib/dedupe.js(24,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/npm/lib/dedupe.js(35,32): error TS2339: Property 'dir' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/dedupe.js(37,11): error TS2339: Property 'command' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/dedupe.js(38,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
@@ -251,8 +243,6 @@ node_modules/npm/lib/dedupe.js(90,17): error TS2339: Property 'finishTracker' do
 node_modules/npm/lib/dedupe.js(91,29): error TS2339: Property 'differences' does not exist on type 'Deduper'.
 node_modules/npm/lib/dedupe.js(92,29): error TS2339: Property 'differences' does not exist on type 'Deduper'.
 node_modules/npm/lib/dedupe.js(92,47): error TS2339: Property 'todo' does not exist on type 'Deduper'.
-node_modules/npm/lib/dedupe.js(115,28): error TS2304: Cannot find name 'Set'.
-node_modules/npm/lib/dedupe.js(129,34): error TS2304: Cannot find name 'Set'.
 node_modules/npm/lib/deprecate.js(15,27): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/deprecate.js(24,9): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/deprecate.js(44,29): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
@@ -282,7 +272,6 @@ node_modules/npm/lib/edit.js(27,28): error TS2339: Property 'dir' does not exist
 node_modules/npm/lib/edit.js(32,11): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/explore.js(21,30): error TS2339: Property 'dir' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/explore.js(37,16): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/fetch-package-metadata.js(34,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/npm/lib/fetch-package-metadata.js(34,50): error TS2339: Property 'limit' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/fetch-package-metadata.js(52,9): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/npm/lib/fetch-package-metadata.js(70,18): error TS2339: Property 'code' does not exist on type 'Error'.
@@ -322,7 +311,6 @@ node_modules/npm/lib/help.js(199,22): error TS2339: Property 'commands' does not
 node_modules/npm/lib/init.js(16,22): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/init.js(17,25): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/init.js(31,31): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(15,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/npm/lib/install.js(181,36): error TS2339: Property 'globalDir' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install.js(183,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install.js(185,17): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
@@ -337,7 +325,6 @@ node_modules/npm/lib/install.js(234,34): error TS2339: Property 'config' does no
 node_modules/npm/lib/install.js(235,63): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install.js(236,51): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install.js(238,85): error TS2339: Property 'globalDir' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(254,18): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
 node_modules/npm/lib/install.js(266,26): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install.js(267,9): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install.js(270,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
@@ -347,22 +334,16 @@ node_modules/npm/lib/install.js(271,7): error TS2684: The 'this' context of type
 node_modules/npm/lib/install.js(336,25): error TS2339: Property 'failing' does not exist on type 'Installer'.
 node_modules/npm/lib/install.js(365,18): error TS2345: Argument of type '"time"' is not assignable to parameter of type '"warning"'.
 node_modules/npm/lib/install.js(372,16): error TS2345: Argument of type '"timeEnd"' is not assignable to parameter of type '"warning"'.
-node_modules/npm/lib/install.js(390,61): error TS2339: Property 'flatNameFromTree' does not exist on type '(tree: any, ...args: any[]) => { [x: string]: any; }'.
-node_modules/npm/lib/install.js(406,27): error TS2304: Cannot find name 'Set'.
-node_modules/npm/lib/install.js(460,34): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/lib/install.js(523,40): error TS2339: Property 'globalPrefix' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(528,28): error TS2339: Property 'noExceptions' does not exist on type '(content: any) => any'.
 node_modules/npm/lib/install.js(601,12): error TS2339: Property 'failing' does not exist on type 'Installer'.
 node_modules/npm/lib/install.js(618,12): error TS2339: Property 'failing' does not exist on type 'Installer'.
 node_modules/npm/lib/install.js(637,12): error TS2339: Property 'failing' does not exist on type 'Installer'.
 node_modules/npm/lib/install.js(678,12): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/npm/lib/install.js(679,12): error TS2339: Property 'errno' does not exist on type 'Error'.
-node_modules/npm/lib/install.js(706,18): error TS2339: Property 'andInflate' does not exist on type '(child: any, next: any) => void'.
 node_modules/npm/lib/install.js(739,32): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install.js(745,12): error TS2339: Property 'failing' does not exist on type 'Installer'.
 node_modules/npm/lib/install.js(757,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install.js(759,18): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(773,26): error TS2304: Cannot find name 'Set'.
 node_modules/npm/lib/install.js(877,26): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
 node_modules/npm/lib/install.js(884,26): error TS2345: Argument of type '{ [x: string]: any; action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
 node_modules/npm/lib/install.js(886,25): error TS2345: Argument of type '{ [x: string]: any; action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
@@ -370,80 +351,46 @@ node_modules/npm/lib/install.js(888,27): error TS2345: Argument of type '{ [x: s
 node_modules/npm/lib/install.js(890,25): error TS2345: Argument of type '{ [x: string]: any; action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
 node_modules/npm/lib/install.js(892,27): error TS2345: Argument of type '{ [x: string]: any; action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
 node_modules/npm/lib/install.js(936,8): error TS2454: Variable 'previousPath' is used before being assigned.
-node_modules/npm/lib/install.js(963,18): error TS2304: Cannot find name 'Set'.
 node_modules/npm/lib/install.js(974,53): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(985,18): error TS2304: Cannot find name 'Set'.
 node_modules/npm/lib/install.js(996,53): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/access-error.js(4,18): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/npm/lib/install/action/build.js(10,50): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/action/extract.js(39,40): error TS2339: Property 'limit' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/action/extract.js(81,9): error TS2322: Type 'string' is not assignable to type 'any[]'.
-node_modules/npm/lib/install/action/finalize.js(18,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/npm/lib/install/action/finalize.js(96,61): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
-node_modules/npm/lib/install/action/global-install.js(4,45): error TS2339: Property 'Installer' does not exist on type 'typeof install'.
 node_modules/npm/lib/install/action/global-install.js(9,37): error TS2339: Property 'globalDir' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/action/global-install.js(10,7): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/action/global-install.js(14,9): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/action/global-link.js(7,7): error TS2339: Property 'link' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/action/move.js(8,43): error TS2339: Property 'rmStuff' does not exist on type '{ (args: any, silent: any, cb: any): void; usage: string; }'.
 node_modules/npm/lib/install/action/refresh-package-json.js(31,43): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/action/remove.js(25,37): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/action/remove.js(25,51): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/action/unbuild.js(5,62): error TS2339: Property 'rmStuff' does not exist on type '{ (args: any, silent: any, cb: any): void; usage: string; }'.
-node_modules/npm/lib/install/actions.js(7,66): error TS2339: Property 'isInstallable' does not exist on type '(idealTree: any, args: any, next: any, ...args: any[]) => void'.
 node_modules/npm/lib/install/actions.js(126,24): error TS2339: Property 'limit' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/actions.js(168,16): error TS2345: Argument of type '"time"' is not assignable to parameter of type '"warning"'.
 node_modules/npm/lib/install/actions.js(171,16): error TS2345: Argument of type '"timeEnd"' is not assignable to parameter of type '"warning"'.
 node_modules/npm/lib/install/and-add-parent-to-errors.js(9,10): error TS2339: Property 'parent' does not exist on type 'Error'.
-node_modules/npm/lib/install/and-finish-tracker.js(4,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/npm/lib/install/check-permissions.js(36,9): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/copy-tree.js(9,54): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/lib/install/decompose-actions.js(35,30): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/deps.js(23,53): error TS2339: Property 'flatNameFromTree' does not exist on type '(tree: any, ...args: any[]) => { [x: string]: any; }'.
-node_modules/npm/lib/install/deps.js(26,51): error TS2339: Property 'isInstallable' does not exist on type '(idealTree: any, args: any, next: any, ...args: any[]) => void'.
-node_modules/npm/lib/install/deps.js(88,25): error TS2304: Cannot find name 'Set'.
 node_modules/npm/lib/install/deps.js(243,15): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/deps.js(298,14): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/deps.js(299,29): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/deps.js(342,25): error TS2304: Cannot find name 'Set'.
 node_modules/npm/lib/install/deps.js(434,27): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/deps.js(435,18): error TS2304: Cannot find name 'Set'.
-node_modules/npm/lib/install/deps.js(472,99): error TS2339: Property 'now' does not exist on type '(tracker: any, cb: any) => (...args: any[]) => void'.
 node_modules/npm/lib/install/deps.js(479,14): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/deps.js(490,62): error TS2339: Property 'now' does not exist on type '(tracker: any, cb: any) => (...args: any[]) => void'.
-node_modules/npm/lib/install/deps.js(502,18): error TS2304: Cannot find name 'Set'.
-node_modules/npm/lib/install/deps.js(545,22): error TS2339: Property 'andInflate' does not exist on type '(child: any, next: any) => void'.
-node_modules/npm/lib/install/deps.js(564,20): error TS2304: Cannot find name 'Set'.
 node_modules/npm/lib/install/deps.js(580,9): error TS2339: Property 'code' does not exist on type 'Error'.
-node_modules/npm/lib/install/deps.js(692,44): error TS2304: Cannot find name 'Set'.
 node_modules/npm/lib/install/deps.js(795,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/deps.js(796,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/diff-trees.js(110,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/npm/lib/install/diff-trees.js(233,26): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/diff-trees.js(234,34): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/diff-trees.js(234,62): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/diff-trees.js(235,33): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/diff-trees.js(236,33): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/diff-trees.js(237,52): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/exists.js(8,3): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/npm/lib/install/exists.js(20,21): error TS2339: Property 'F_OK' does not exist on type 'typeof import("fs")'.
-node_modules/npm/lib/install/flatten-tree.js(5,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/npm/lib/install/flatten-tree.js(11,18): error TS2304: Cannot find name 'Set'.
 node_modules/npm/lib/install/flatten-tree.js(16,15): error TS2532: Object is possibly 'undefined'.
 node_modules/npm/lib/install/flatten-tree.js(18,16): error TS2532: Object is possibly 'undefined'.
 node_modules/npm/lib/install/inflate-shrinkwrap.js(29,12): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/inflate-shrinkwrap.js(29,45): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/inflate-shrinkwrap.js(41,23): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
-node_modules/npm/lib/install/is-only-dev.js(13,25): error TS2304: Cannot find name 'Set'.
-node_modules/npm/lib/install/is-only-optional.js(7,25): error TS2304: Cannot find name 'Set'.
-node_modules/npm/lib/install/mutate-into-logical-tree.js(30,29): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/npm/lib/install/mutate-into-logical-tree.js(73,35): error TS2304: Cannot find name 'Set'.
 node_modules/npm/lib/install/mutate-into-logical-tree.js(137,86): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/node.js(57,19): error TS2304: Cannot find name 'Set'.
 node_modules/npm/lib/install/read-shrinkwrap.js(11,46): error TS2339: Property 'lockfileVersion' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/read-shrinkwrap.js(15,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/npm/lib/install/read-shrinkwrap.js(105,17): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
-node_modules/npm/lib/install/save.js(3,54): error TS2339: Property 'createShrinkwrap' does not exist on type '{ (args: any, silent: any, cb: any): void; usage: string; }'.
 node_modules/npm/lib/install/save.js(48,12): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/save.js(48,45): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/save.js(56,24): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
@@ -455,7 +402,6 @@ node_modules/npm/lib/install/save.js(144,26): error TS2339: Property 'config' do
 node_modules/npm/lib/install/save.js(147,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/save.js(149,18): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/save.js(151,18): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/validate-args.js(11,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/npm/lib/install/validate-args.js(13,19): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/validate-args.js(41,19): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/validate-args.js(42,25): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
@@ -469,7 +415,6 @@ node_modules/npm/lib/install/validate-tree.js(62,15): error TS2339: Property 'co
 node_modules/npm/lib/install/validate-tree.js(70,25): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/validate-tree.js(74,13): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/npm/lib/install/validate-tree.js(89,15): error TS2339: Property 'code' does not exist on type 'Error'.
-node_modules/npm/lib/install/writable.js(10,3): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/npm/lib/install/writable.js(22,21): error TS2339: Property 'W_OK' does not exist on type 'typeof import("fs")'.
 node_modules/npm/lib/link.js(25,17): error TS2339: Property 'globalDir' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/link.js(39,9): error TS2339: Property 'code' does not exist on type 'Error'.
@@ -500,11 +445,8 @@ node_modules/npm/lib/logout.js(28,11): error TS2339: Property 'registry' does no
 node_modules/npm/lib/logout.js(38,10): error TS2554: Expected 0-1 arguments, but got 3.
 node_modules/npm/lib/ls.js(7,18): error TS2539: Cannot assign to '"/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/ls"' because it is not a variable.
 node_modules/npm/lib/ls.js(37,30): error TS2339: Property 'dir' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/ls.js(41,20): error TS2339: Property 'andInflate' does not exist on type '(child: any, next: any) => void'.
-node_modules/npm/lib/ls.js(77,36): error TS2339: Property 'asReadInstalled' does not exist on type '(tree: any, ...args: any[]) => any'.
 node_modules/npm/lib/ls.js(88,18): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/ls.js(89,18): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/ls.js(92,20): error TS2304: Cannot find name 'Set'.
 node_modules/npm/lib/ls.js(102,18): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/ls.js(132,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/ls.js(132,66): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
@@ -514,8 +456,6 @@ node_modules/npm/lib/ls.js(152,11): error TS2339: Property 'config' does not exi
 node_modules/npm/lib/ls.js(180,22): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/ls.js(191,52): error TS2339: Property 'globalDir' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/ls.js(254,22): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/ls.js(273,18): error TS2304: Cannot find name 'Set'.
-node_modules/npm/lib/ls.js(283,32): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/lib/ls.js(357,40): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/ls.js(362,26): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/ls.js(365,15): error TS2339: Property 'color' does not exist on type 'EventEmitter'.
@@ -534,8 +474,9 @@ node_modules/npm/lib/ls.js(522,18): error TS2339: Property 'config' does not exi
 node_modules/npm/lib/ls.js(528,19): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/ls.js(538,12): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/ls.js(544,56): error TS2339: Property 'globalDir' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/npm.js(5,13): error TS2551: Property 'echo' does not exist on type '{ Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: nu...'. Did you mean 'Echo'?
-node_modules/npm/lib/npm.js(12,13): error TS2551: Property 'quit' does not exist on type '{ Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: nu...'. Did you mean 'Quit'?
+node_modules/npm/lib/npm.js(4,14): error TS2304: Cannot find name 'WScript'.
+node_modules/npm/lib/npm.js(5,5): error TS2304: Cannot find name 'WScript'.
+node_modules/npm/lib/npm.js(12,5): error TS2304: Cannot find name 'WScript'.
 node_modules/npm/lib/npm.js(30,14): error TS2345: Argument of type '"log"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/lib/npm.js(58,7): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/npm.js(68,7): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
@@ -584,7 +525,6 @@ node_modules/npm/lib/npm.js(435,33): error TS2339: Property 'config' does not ex
 node_modules/npm/lib/npm.js(441,34): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/npm.js(456,13): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/outdated.js(36,16): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/outdated.js(50,18): error TS2304: Cannot find name 'Set'.
 node_modules/npm/lib/outdated.js(71,30): error TS2339: Property 'dir' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/outdated.js(74,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/outdated.js(74,49): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
@@ -623,7 +563,6 @@ node_modules/npm/lib/owner.js(223,28): error TS2339: Property 'config' does not 
 node_modules/npm/lib/owner.js(226,11): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/owner.js(246,37): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/owner.js(254,15): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/pack.js(37,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/npm/lib/pack.js(87,32): error TS2339: Property 'tmp' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/pack.js(95,15): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/pack.js(115,36): error TS2339: Property 'tmp' does not exist on type 'EventEmitter'.
@@ -643,24 +582,8 @@ node_modules/npm/lib/profile.js(81,20): error TS2339: Property 'config' does not
 node_modules/npm/lib/profile.js(82,19): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/profile.js(83,14): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/profile.js(85,21): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/profile.js(108,24): error TS2339: Property 'withPromise' does not exist on type '(prefix: any, cb: any) => (...args: any[]) => void'.
-node_modules/npm/lib/profile.js(158,12): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
-node_modules/npm/lib/profile.js(161,12): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
-node_modules/npm/lib/profile.js(166,12): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
-node_modules/npm/lib/profile.js(193,26): error TS2339: Property 'withPromise' does not exist on type '(prefix: any, cb: any) => (...args: any[]) => void'.
-node_modules/npm/lib/profile.js(220,12): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
-node_modules/npm/lib/profile.js(224,12): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
-node_modules/npm/lib/profile.js(231,12): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
 node_modules/npm/lib/profile.js(249,13): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/profile.js(250,46): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/profile.js(259,26): error TS2339: Property 'withPromise' does not exist on type '(prefix: any, cb: any) => (...args: any[]) => void'.
-node_modules/npm/lib/profile.js(263,30): error TS2339: Property 'withPromise' does not exist on type '(prefix: any, cb: any) => (...args: any[]) => void'.
-node_modules/npm/lib/profile.js(273,26): error TS2339: Property 'withPromise' does not exist on type '(prefix: any, cb: any) => (...args: any[]) => void'.
-node_modules/npm/lib/profile.js(301,24): error TS2339: Property 'withPromise' does not exist on type '(prefix: any, cb: any) => (...args: any[]) => void'.
-node_modules/npm/lib/profile.js(314,30): error TS2339: Property 'withPromise' does not exist on type '(prefix: any, cb: any) => (...args: any[]) => void'.
-node_modules/npm/lib/profile.js(329,14): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
-node_modules/npm/lib/prune.js(3,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/npm/lib/prune.js(12,41): error TS2339: Property 'Installer' does not exist on type 'typeof install'.
 node_modules/npm/lib/prune.js(23,22): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/prune.js(24,33): error TS2339: Property 'run' does not exist on type 'Pruner'.
 node_modules/npm/lib/prune.js(36,17): error TS2339: Property 'progress' does not exist on type 'Pruner'.
@@ -674,9 +597,7 @@ node_modules/npm/lib/prune.js(61,32): error TS2339: Property 'idealTree' does no
 node_modules/npm/lib/prune.js(62,27): error TS2339: Property 'idealTree' does not exist on type 'Pruner'.
 node_modules/npm/lib/publish.js(45,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/publish.js(62,11): error TS2339: Property 'code' does not exist on type 'Error'.
-node_modules/npm/lib/publish.js(79,15): error TS2339: Property 'prepareDirectory' does not exist on type '{ (args: any, silent: any, cb: any): void; usage: string; completion: (opts: any, cb: any, ...arg...'.
 node_modules/npm/lib/publish.js(86,36): error TS2339: Property 'tmp' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/publish.js(88,19): error TS2339: Property 'packDirectory' does not exist on type '{ (args: any, silent: any, cb: any): void; usage: string; completion: (opts: any, cb: any, ...arg...'.
 node_modules/npm/lib/publish.js(102,34): error TS2339: Property 'tmp' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/publish.js(126,9): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/publish.js(127,9): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
@@ -688,7 +609,6 @@ node_modules/npm/lib/rebuild.js(20,26): error TS2339: Property 'config' does not
 node_modules/npm/lib/rebuild.js(21,21): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/rebuild.js(26,24): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/rebuild.js(35,7): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/rebuild.js(46,25): error TS2304: Cannot find name 'Set'.
 node_modules/npm/lib/repo.js(35,30): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/root.js(13,27): error TS2339: Property 'dir' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/root.js(14,44): error TS2339: Property 'dir' does not exist on type 'EventEmitter'.
@@ -721,7 +641,6 @@ node_modules/npm/lib/search.js(71,20): error TS2339: Property 'config' does not 
 node_modules/npm/lib/search.js(72,16): error TS2339: Property 'color' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/search.js(82,28): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/search.js(82,55): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/search/all-package-metadata.js(29,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/npm/lib/search/all-package-metadata.js(33,30): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/search/all-package-metadata.js(36,35): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/search/all-package-metadata.js(146,7): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
@@ -733,13 +652,11 @@ node_modules/npm/lib/search/format-package-stream.js(130,63): error TS2339: Prop
 node_modules/npm/lib/set.js(8,22): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/set.js(12,7): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/shrinkwrap.js(30,29): error TS2339: Property 'lockfileVersion' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/shrinkwrap.js(36,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/npm/lib/shrinkwrap.js(36,18): error TS2539: Cannot assign to '"/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/shrinkwrap"' because it is not a variable.
 node_modules/npm/lib/shrinkwrap.js(48,22): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/shrinkwrap.js(49,22): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/shrinkwrap.js(53,38): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/shrinkwrap.js(60,34): error TS2339: Property 'localPrefix' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/shrinkwrap.js(104,25): error TS2304: Cannot find name 'Set'.
 node_modules/npm/lib/shrinkwrap.js(115,13): error TS2339: Property 'version' does not exist on type '{}'.
 node_modules/npm/lib/shrinkwrap.js(117,15): error TS2339: Property 'bundled' does not exist on type '{}'.
 node_modules/npm/lib/shrinkwrap.js(120,17): error TS2339: Property 'resolved' does not exist on type '{}'.
@@ -752,7 +669,6 @@ node_modules/npm/lib/shrinkwrap.js(135,15): error TS2339: Property 'requires' do
 node_modules/npm/lib/shrinkwrap.js(138,17): error TS2339: Property 'requires' does not exist on type '{}'.
 node_modules/npm/lib/shrinkwrap.js(142,15): error TS2339: Property 'dependencies' does not exist on type '{}'.
 node_modules/npm/lib/shrinkwrap.js(143,30): error TS2339: Property 'dependencies' does not exist on type '{}'.
-node_modules/npm/lib/shrinkwrap.js(214,24): error TS2304: Cannot find name 'Set'.
 node_modules/npm/lib/star.js(24,15): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/star.js(25,15): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/star.js(26,21): error TS2339: Property 'command' does not exist on type 'EventEmitter'.
@@ -770,12 +686,8 @@ node_modules/npm/lib/token.js(82,20): error TS2339: Property 'config' does not e
 node_modules/npm/lib/token.js(83,19): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/token.js(84,14): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/token.js(86,21): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/token.js(104,24): error TS2339: Property 'withPromise' does not exist on type '(prefix: any, cb: any) => (...args: any[]) => void'.
-node_modules/npm/lib/token.js(148,24): error TS2339: Property 'withPromise' does not exist on type '(prefix: any, cb: any) => (...args: any[]) => void'.
 node_modules/npm/lib/token.js(186,20): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/token.js(187,24): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/token.js(198,30): error TS2339: Property 'withPromise' does not exist on type '(prefix: any, cb: any) => (...args: any[]) => void'.
-node_modules/npm/lib/unbuild.js(1,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/npm/lib/unbuild.js(30,33): error TS2339: Property 'root' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/unbuild.js(33,37): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/unbuild.js(33,51): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
@@ -784,8 +696,6 @@ node_modules/npm/lib/unbuild.js(62,17): error TS2339: Property 'dir' does not ex
 node_modules/npm/lib/unbuild.js(76,27): error TS2339: Property 'bin' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/unbuild.js(96,12): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/unbuild.js(99,34): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/uninstall.js(4,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/npm/lib/uninstall.js(11,43): error TS2339: Property 'Installer' does not exist on type 'typeof install'.
 node_modules/npm/lib/uninstall.js(27,24): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/uninstall.js(31,21): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/uninstall.js(32,32): error TS2339: Property 'globalDir' does not exist on type 'EventEmitter'.
@@ -793,6 +703,7 @@ node_modules/npm/lib/uninstall.js(33,19): error TS2339: Property 'prefix' does n
 node_modules/npm/lib/uninstall.js(40,42): error TS2339: Property 'run' does not exist on type 'Uninstaller'.
 node_modules/npm/lib/uninstall.js(43,31): error TS2339: Property 'localPrefix' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/uninstall.js(46,50): error TS2339: Property 'run' does not exist on type 'Uninstaller'.
+node_modules/npm/lib/uninstall.js(51,27): error TS2507: Type 'typeof Installer' is not a constructor function type.
 node_modules/npm/lib/uninstall.js(70,36): error TS2339: Property 'idealTree' does not exist on type 'Uninstaller'.
 node_modules/npm/lib/unpublish.js(17,7): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/unpublish.js(23,31): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
@@ -804,7 +715,6 @@ node_modules/npm/lib/unpublish.js(71,49): error TS2339: Property 'localPrefix' d
 node_modules/npm/lib/unpublish.js(74,33): error TS2339: Property 'localPrefix' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/unpublish.js(97,58): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/unpublish.js(97,70): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/update.js(8,43): error TS2339: Property 'Installer' does not exist on type 'typeof install'.
 node_modules/npm/lib/update.js(10,41): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/update.js(17,25): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/update.js(25,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
@@ -819,7 +729,6 @@ node_modules/npm/lib/utils/completion/installed-shallow.js(22,11): error TS2339:
 node_modules/npm/lib/utils/completion/installed-shallow.js(57,28): error TS2339: Property 'dir' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/completion/installed-shallow.js(66,23): error TS2339: Property 'globalDir' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/completion/installed-shallow.js(79,14): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/utils/error-handler.js(2,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/npm/lib/utils/error-handler.js(12,21): error TS2339: Property 'rollbacks' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/error-handler.js(23,36): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/error-handler.js(29,16): error TS2339: Property 'version' does not exist on type 'EventEmitter'.
@@ -851,7 +760,6 @@ node_modules/npm/lib/utils/error-handler.js(216,42): error TS2339: Property 'err
 node_modules/npm/lib/utils/error-handler.js(231,34): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/error-handler.js(236,7): error TS2322: Type 'string' is not assignable to type 'any[]'.
 node_modules/npm/lib/utils/error-message.js(66,37): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/utils/error-message.js(67,65): error TS2339: Property '_isDiff' does not exist on type '(child: any, next: any) => void'.
 node_modules/npm/lib/utils/error-message.js(295,24): error TS2339: Property 'version' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/error-message.js(296,25): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/gently-rm.js(4,1): error TS2539: Cannot assign to '"/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/utils/gently-rm"' because it is not a variable.
@@ -880,17 +788,13 @@ node_modules/npm/lib/utils/metrics.js(61,31): error TS2345: Argument of type 'Bu
 node_modules/npm/lib/utils/metrics.js(62,7): error TS2339: Property 'load' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/metrics.js(64,9): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/metrics.js(65,9): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/utils/module-name.js(4,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/npm/lib/utils/parse-json.js(3,17): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/npm/lib/utils/parse-json.js(7,11): error TS2339: Property 'noExceptions' does not exist on type '(content: any) => any'.
 node_modules/npm/lib/utils/perf.js(9,12): error TS2345: Argument of type '"time"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/lib/utils/perf.js(10,12): error TS2345: Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/lib/utils/perf.js(21,18): error TS2345: Argument of type '"timing"' is not assignable to parameter of type '"removeListener"'.
-node_modules/npm/lib/utils/pulse-till-done.js(20,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/npm/lib/utils/read-local-package.js(1,1): error TS2539: Cannot assign to '"/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/utils/read-local-package"' because it is not a variable.
 node_modules/npm/lib/utils/read-local-package.js(7,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/read-local-package.js(9,29): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/utils/read-user-info.js(44,14): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
 node_modules/npm/lib/utils/spawn.js(26,8): error TS2339: Property 'file' does not exist on type 'Error'.
 node_modules/npm/lib/utils/spawn.js(34,10): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/npm/lib/utils/spawn.js(35,10): error TS2339: Property 'errno' does not exist on type 'Error'.
@@ -903,7 +807,6 @@ node_modules/npm/lib/utils/spawn.js(47,10): error TS2339: Property 'kill' does n
 node_modules/npm/lib/utils/temp-filename.js(6,29): error TS2339: Property 'tmp' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/usage.js(8,21): error TS2345: Argument of type 'string' is not assignable to parameter of type 'ConcatArray<never>'.
 node_modules/npm/lib/version.js(24,27): error TS2339: Property 'version' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/version.js(30,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/npm/lib/version.js(82,22): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/version.js(97,12): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/version.js(104,19): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
@@ -955,11 +858,9 @@ node_modules/npm/test/broken-under-nyc-and-travis/lifecycle-path.js(7,20): error
 node_modules/npm/test/broken-under-nyc-and-travis/lifecycle-path.js(18,23): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
 node_modules/npm/test/broken-under-nyc-and-travis/whoami.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/common-tap.js(5,21): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/test/common-tap.js(5,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/common-tap.js(10,3): error TS2322: Type '(...args: any[]) => void' is not assignable to type 'typeof setImmediate'.
   Property '__promisify__' is missing in type '(...args: any[]) => void'.
-node_modules/npm/test/common-tap.js(58,44): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/test/common-tap.js(170,17): error TS2339: Property '_storage' does not exist on type 'Environment'.
 node_modules/npm/test/common-tap.js(176,31): error TS2339: Property '_storage' does not exist on type 'Environment'.
 node_modules/npm/test/common-tap.js(187,12): error TS2339: Property '_storage' does not exist on type 'Environment'.
@@ -977,8 +878,9 @@ node_modules/npm/test/need-npm5-update/legacy-array-bin.js(11,21): error TS2307:
 node_modules/npm/test/need-npm5-update/legacy-dir-bin.js(2,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/need-npm5-update/legacy-dir-bin.js(11,21): error TS2307: Cannot find module 'tacks'.
 node_modules/npm/test/need-npm5-update/legacy-npm-self-install.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/need-npm5-update/legacy-npm-self-install.js(12,21): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/test/need-npm5-update/legacy-npm-self-install.js(12,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
+node_modules/npm/test/need-npm5-update/legacy-npm-self-install.js(48,3): error TS2322: Type 'null' is not assignable to type 'string | undefined'.
+node_modules/npm/test/need-npm5-update/legacy-npm-self-install.js(49,3): error TS2322: Type 'null' is not assignable to type 'string | undefined'.
 node_modules/npm/test/need-npm5-update/legacy-optional-deps.js(4,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/need-npm5-update/legacy-optional-deps.js(8,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/need-npm5-update/legacy-optional-deps.js(12,21): error TS2307: Cannot find module 'tacks'.
@@ -1030,7 +932,6 @@ node_modules/npm/test/need-npm5-update/outdated-private.js(65,13): error TS2339:
 node_modules/npm/test/need-npm5-update/outdated-private.js(68,15): error TS2339: Property 'outdated' does not exist on type 'EventEmitter'.
 node_modules/npm/test/need-npm5-update/outdated-symlink.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/need-npm5-update/outdated-symlink.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/need-npm5-update/outdated-symlink.js(13,21): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/test/need-npm5-update/outdated-symlink.js(13,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/need-npm5-update/peer-deps-invalid.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/need-npm5-update/peer-deps-invalid.js(8,20): error TS2307: Cannot find module 'tap'.
@@ -1039,7 +940,6 @@ node_modules/npm/test/need-npm5-update/peer-deps-invalid.js(80,13): error TS2339
 node_modules/npm/test/need-npm5-update/peer-deps-toplevel.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/need-npm5-update/peer-deps-toplevel.js(4,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/need-npm5-update/peer-deps-toplevel.js(5,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/need-npm5-update/peer-deps-toplevel.js(8,21): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/test/need-npm5-update/peer-deps-toplevel.js(8,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/need-npm5-update/peer-deps-without-package-json.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/need-npm5-update/peer-deps-without-package-json.js(8,20): error TS2307: Cannot find module 'tap'.
@@ -1049,13 +949,11 @@ node_modules/npm/test/need-npm5-update/rm-linked.js(5,20): error TS2307: Cannot 
 node_modules/npm/test/need-npm5-update/shrinkwrap-complete-except-dev.js(4,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/need-npm5-update/shrinkwrap-complete-except-dev.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/need-npm5-update/shrinkwrap-complete-except-dev.js(6,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/need-npm5-update/shrinkwrap-complete-except-dev.js(9,21): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/test/need-npm5-update/shrinkwrap-complete-except-dev.js(9,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/need-npm5-update/shrinkwrap-dev-dep-cycle.js(4,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/need-npm5-update/shrinkwrap-dev-dep-cycle.js(5,21): error TS2307: Cannot find module 'tacks'.
 node_modules/npm/test/need-npm5-update/shrinkwrap-dev-dep-cycle.js(76,23): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 node_modules/npm/test/network/git-cache-locking.js(1,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/network/git-cache-locking.js(9,27): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/test/network/git-cache-locking.js(9,53): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/network/git-cache-no-hooks.js(1,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/network/legacy-bundled-git.js(2,20): error TS2307: Cannot find module 'tap'.
@@ -1063,7 +961,6 @@ node_modules/npm/test/network/legacy-bundled-git.js(11,21): error TS2307: Cannot
 node_modules/npm/test/network/legacy-url-dep.js(2,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/network/legacy-url-dep.js(10,21): error TS2307: Cannot find module 'tacks'.
 node_modules/npm/test/network/registry.js(5,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/network/registry.js(29,21): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/test/network/registry.js(29,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/tap/00-check-mock-dep.js(12,20): error TS2307: Cannot find module 'npm-registry-mock/package.json'.
 node_modules/npm/test/tap/00-check-mock-dep.js(13,19): error TS2307: Cannot find module '../../package.json'.
@@ -1109,18 +1006,14 @@ node_modules/npm/test/tap/adduser-saml.js(5,18): error TS2307: Cannot find modul
 node_modules/npm/test/tap/adduser-saml.js(7,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/all-package-metadata-cache-stream-unit.js(4,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/all-package-metadata-cache-stream-unit.js(9,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/all-package-metadata-cache-stream-unit.js(12,83): error TS2339: Property '_createCacheEntryStream' does not exist on type '(staleness: any) => any'.
 node_modules/npm/test/tap/all-package-metadata-entry-stream-unit.js(5,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/all-package-metadata-entry-stream-unit.js(9,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/all-package-metadata-entry-stream-unit.js(11,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/all-package-metadata-entry-stream-unit.js(14,78): error TS2339: Property '_createEntryStream' does not exist on type '(staleness: any) => any'.
 node_modules/npm/test/tap/all-package-metadata-entry-stream-unit.js(33,9): error TS2339: Property 'load' does not exist on type 'EventEmitter'.
 node_modules/npm/test/tap/all-package-metadata-update-stream-unit.js(5,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/all-package-metadata-update-stream-unit.js(9,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/all-package-metadata-update-stream-unit.js(12,84): error TS2339: Property '_createEntryUpdateStream' does not exist on type '(staleness: any) => any'.
 node_modules/npm/test/tap/all-package-metadata-update-stream-unit.js(31,9): error TS2339: Property 'load' does not exist on type 'EventEmitter'.
 node_modules/npm/test/tap/all-package-metadata-write-stream-unit.js(5,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/all-package-metadata-write-stream-unit.js(12,83): error TS2339: Property '_createCacheWriteStream' does not exist on type '(staleness: any) => any'.
 node_modules/npm/test/tap/all-package-metadata-write-stream-unit.js(34,7): error TS2339: Property 'load' does not exist on type 'EventEmitter'.
 node_modules/npm/test/tap/all-package-metadata-write-stream-unit.js(66,33): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 node_modules/npm/test/tap/all-package-metadata-write-stream-unit.js(98,33): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
@@ -1137,12 +1030,10 @@ node_modules/npm/test/tap/all-package-metadata.js(175,31): error TS2345: Argumen
 node_modules/npm/test/tap/anon-cli-metrics.js(5,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/anon-cli-metrics.js(6,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/anon-cli-metrics.js(7,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/anon-cli-metrics.js(10,21): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/test/tap/anon-cli-metrics.js(10,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/tap/auto-prune.js(3,22): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/auto-prune.js(4,20): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/auto-prune.js(5,23): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/auto-prune.js(8,23): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/test/tap/auto-prune.js(8,49): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/tap/bearer-token-check.js(9,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/bin.js(2,20): error TS2307: Cannot find module 'tap'.
@@ -1166,8 +1057,6 @@ node_modules/npm/test/tap/bundled-dependencies.js(2,20): error TS2307: Cannot fi
 node_modules/npm/test/tap/bundled-dependencies.js(12,21): error TS2307: Cannot find module 'tacks'.
 node_modules/npm/test/tap/bundled-no-add-to-move.js(2,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/bundled-no-add-to-move.js(42,7): error TS2339: Property 'load' does not exist on type 'EventEmitter'.
-node_modules/npm/test/tap/bundled-no-add-to-move.js(44,64): error TS2339: Property '_diffTrees' does not exist on type '(oldTree: any, newTree: any, differences: any, log: any, next: any, ...args: any[]) => void'.
-node_modules/npm/test/tap/bundled-no-add-to-move.js(45,66): error TS2339: Property 'sortActions' does not exist on type '(oldTree: any, newTree: any, differences: any, log: any, next: any, ...args: any[]) => void'.
 node_modules/npm/test/tap/bundled-transitive-deps.js(4,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/bundled-transitive-deps.js(5,21): error TS2307: Cannot find module 'tacks'.
 node_modules/npm/test/tap/bundled-transitive-deps.js(74,7): error TS2339: Property 'load' does not exist on type 'EventEmitter'.
@@ -1179,10 +1068,6 @@ node_modules/npm/test/tap/check-engine-reqs.js(4,20): error TS2307: Cannot find 
 node_modules/npm/test/tap/check-install-self.js(4,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/check-os-reqs.js(4,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/check-permissions.js(4,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/check-permissions.js(6,57): error TS2339: Property 'fsAccessImplementation' does not exist on type '(dir: any, done: any) => void'.
-node_modules/npm/test/tap/check-permissions.js(7,65): error TS2339: Property 'fsOpenImplementation' does not exist on type '(dir: any, done: any) => void'.
-node_modules/npm/test/tap/check-permissions.js(8,53): error TS2339: Property 'fsAccessImplementation' does not exist on type '(dir: any, done: any) => void'.
-node_modules/npm/test/tap/check-permissions.js(9,61): error TS2339: Property 'fsStatImplementation' does not exist on type '(dir: any, done: any) => void'.
 node_modules/npm/test/tap/ci-header.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/ci-header.js(4,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/ci-header.js(5,21): error TS2307: Cannot find module 'tacks'.
@@ -1208,7 +1093,6 @@ node_modules/npm/test/tap/config-certfile.js(5,20): error TS2307: Cannot find mo
 node_modules/npm/test/tap/config-credentials.js(1,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/config-edit.js(6,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/config-envReplace.js(6,22): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/config-envReplace.js(30,24): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/test/tap/config-list.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/config-malformed.js(1,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/config-meta.js(7,20): error TS2307: Cannot find module 'tap'.
@@ -1236,7 +1120,6 @@ node_modules/npm/test/tap/correct-mkdir.js(132,3): error TS2322: Type '999' is n
 node_modules/npm/test/tap/cruft-test.js(6,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/debug-logs.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/debug-logs.js(4,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/debug-logs.js(9,21): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/test/tap/debug-logs.js(9,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/tap/dedupe-scoped.js(6,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/dedupe.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'typeof import("path")'.
@@ -1267,7 +1150,6 @@ node_modules/npm/test/tap/gently-rm-cmdshims.js(4,20): error TS2307: Cannot find
 node_modules/npm/test/tap/gently-rm-cmdshims.js(107,7): error TS2339: Property 'load' does not exist on type 'EventEmitter'.
 node_modules/npm/test/tap/gently-rm-linked-module.js(6,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/gently-rm-linked-module.js(8,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/gently-rm-linked-module.js(12,21): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/test/tap/gently-rm-linked-module.js(12,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/tap/gently-rm-overeager.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/gently-rm-symlinked-global-dir.js(5,20): error TS2307: Cannot find module 'tap'.
@@ -1350,12 +1232,10 @@ node_modules/npm/test/tap/install-noargs-dev.js(8,20): error TS2307: Cannot find
 node_modules/npm/test/tap/install-noargs-dev.js(56,32): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 node_modules/npm/test/tap/install-noargs-dev.js(83,32): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 node_modules/npm/test/tap/install-order.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-order.js(3,62): error TS2339: Property 'sortActions' does not exist on type '(oldTree: any, newTree: any, differences: any, log: any, next: any, ...args: any[]) => void'.
 node_modules/npm/test/tap/install-package-json-order.js(1,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/install-package-lock-only.js(4,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/install-package-lock-only.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/install-package-lock-only.js(6,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/install-package-lock-only.js(9,21): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/test/tap/install-package-lock-only.js(9,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/tap/install-parse-error.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/install-parse-error.js(4,21): error TS2307: Cannot find module 'tacks'.
@@ -1379,7 +1259,6 @@ node_modules/npm/test/tap/install-scoped-link.js(4,40): error TS2339: Property '
 node_modules/npm/test/tap/install-scoped-link.js(9,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/install-scoped-with-bundled-dependency.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/install-scoped-with-bundled-dependency.js(4,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/install-scoped-with-bundled-dependency.js(7,21): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/test/tap/install-scoped-with-bundled-dependency.js(7,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/tap/install-scoped-with-peer-dependency.js(7,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/install-shrinkwrapped-git.js(7,20): error TS2307: Cannot find module 'tap'.
@@ -1397,7 +1276,6 @@ node_modules/npm/test/tap/invalid-dep-version-filtering.js(4,18): error TS2307: 
 node_modules/npm/test/tap/invalid-dep-version-filtering.js(6,21): error TS2307: Cannot find module 'tacks'.
 node_modules/npm/test/tap/is-fs-access-available.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/is-fs-access-available.js(4,29): error TS2307: Cannot find module 'require-inject'.
-node_modules/npm/test/tap/is-fs-access-available.js(6,21): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/test/tap/is-fs-access-available.js(6,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/tap/is-registry.js(2,22): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/it.js(6,18): error TS2307: Cannot find module 'npm-registry-mock'.
@@ -1427,7 +1305,6 @@ node_modules/npm/test/tap/locker.js(61,7): error TS2339: Property 'load' does no
 node_modules/npm/test/tap/lockfile-http-deps.js(4,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/lockfile-http-deps.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/lockfile-http-deps.js(6,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/lockfile-http-deps.js(9,21): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/test/tap/lockfile-http-deps.js(9,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/tap/lockfile-http-deps.js(81,35): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 node_modules/npm/test/tap/logout-scoped.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
@@ -1588,7 +1465,6 @@ node_modules/npm/test/tap/repo.js(2,18): error TS2307: Cannot find module 'npm-r
 node_modules/npm/test/tap/repo.js(4,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/retry-on-stale-cache.js(3,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/retry-on-stale-cache.js(4,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/retry-on-stale-cache.js(6,21): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/test/tap/retry-on-stale-cache.js(6,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/tap/retry-on-stale-cache.js(7,21): error TS2307: Cannot find module 'tacks'.
 node_modules/npm/test/tap/run-script-filter-private.js(6,20): error TS2307: Cannot find module 'tap'.
@@ -1601,7 +1477,6 @@ node_modules/npm/test/tap/scope-header.js(3,20): error TS2307: Cannot find modul
 node_modules/npm/test/tap/scope-header.js(4,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/scope-header.js(5,21): error TS2307: Cannot find module 'tacks'.
 node_modules/npm/test/tap/scripts-whitespace-windows.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/scripts-whitespace-windows.js(38,21): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/test/tap/scripts-whitespace-windows.js(38,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/tap/search.all-package-search.js(3,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/search.all-package-search.js(7,20): error TS2307: Cannot find module 'tap'.
@@ -1618,12 +1493,10 @@ node_modules/npm/test/tap/semver-doc.js(1,20): error TS2307: Cannot find module 
 node_modules/npm/test/tap/shared-linked.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/shared-linked.js(4,21): error TS2307: Cannot find module 'tacks'.
 node_modules/npm/test/tap/shared-linked.js(9,18): error TS2307: Cannot find module 'npm-registry-mock'.
-node_modules/npm/test/tap/shared-linked.js(10,21): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/test/tap/shared-linked.js(10,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/tap/shrinkwrap-_auth.js(12,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/shrinkwrap-default-dev.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/shrinkwrap-default-dev.js(5,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/shrinkwrap-default-dev.js(8,21): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/test/tap/shrinkwrap-default-dev.js(8,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/tap/shrinkwrap-default-dev.js(85,28): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 node_modules/npm/test/tap/shrinkwrap-dev-dependency.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
@@ -1641,7 +1514,6 @@ node_modules/npm/test/tap/shrinkwrap-global-auth.js(12,20): error TS2307: Cannot
 node_modules/npm/test/tap/shrinkwrap-lifecycle-cwd.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/shrinkwrap-lifecycle-cwd.js(4,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/shrinkwrap-lifecycle-cwd.js(5,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/shrinkwrap-lifecycle-cwd.js(8,21): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/test/tap/shrinkwrap-lifecycle-cwd.js(8,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/tap/shrinkwrap-lifecycle.js(7,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/shrinkwrap-local-dependency.js(1,20): error TS2307: Cannot find module 'tap'.
@@ -1652,7 +1524,6 @@ node_modules/npm/test/tap/shrinkwrap-optional-dependency.js(5,18): error TS2307:
 node_modules/npm/test/tap/shrinkwrap-optional-dependency.js(8,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/shrinkwrap-optional-platform.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/shrinkwrap-optional-platform.js(4,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/shrinkwrap-optional-platform.js(7,21): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/test/tap/shrinkwrap-optional-platform.js(7,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/tap/shrinkwrap-optional-property.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/shrinkwrap-optional-property.js(8,20): error TS2307: Cannot find module 'tap'.
@@ -1695,7 +1566,6 @@ node_modules/npm/test/tap/tag-version-prefix.js(8,20): error TS2307: Cannot find
 node_modules/npm/test/tap/tag-version-prefix.js(24,7): error TS2339: Property 'load' does not exist on type 'EventEmitter'.
 node_modules/npm/test/tap/tagged-version-matching.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/tagged-version-matching.js(4,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/tagged-version-matching.js(8,21): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/test/tap/tagged-version-matching.js(8,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/tap/team.js(1,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/team.js(3,20): error TS2307: Cannot find module 'tap'.
@@ -1705,7 +1575,6 @@ node_modules/npm/test/tap/tree-style.js(3,20): error TS2307: Cannot find module 
 node_modules/npm/test/tap/umask-lifecycle.js(6,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/uninstall-in-reverse.js(2,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/uninstall-in-reverse.js(3,29): error TS2307: Cannot find module 'require-inject'.
-node_modules/npm/test/tap/uninstall-in-reverse.js(27,51): error TS2339: Property 'Installer' does not exist on type 'typeof install'.
 node_modules/npm/test/tap/uninstall-link-clean.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'typeof import("path")'.
 node_modules/npm/test/tap/uninstall-link-clean.js(7,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/uninstall-package.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
@@ -1724,8 +1593,6 @@ node_modules/npm/test/tap/unit-deps-removeObsoleteDep.js(40,26): error TS2345: A
 node_modules/npm/test/tap/unit-deps-replaceModule.js(2,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/unit-deps-replaceModule.js(6,7): error TS2339: Property 'load' does not exist on type 'EventEmitter'.
 node_modules/npm/test/tap/unit-module-name.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/unit-module-name.js(6,38): error TS2339: Property 'test' does not exist on type '(tree: any) => any'.
-node_modules/npm/test/tap/unit-module-name.js(19,31): error TS2339: Property 'test' does not exist on type '(tree: any) => any'.
 node_modules/npm/test/tap/unit-package-id.js(2,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/unit-token-validate-cidr.js(2,22): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/unit-token-validate-cidr.js(3,31): error TS2307: Cannot find module 'require-inject'.
@@ -1735,12 +1602,10 @@ node_modules/npm/test/tap/unsupported.js(2,20): error TS2307: Cannot find module
 node_modules/npm/test/tap/update-examples.js(2,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/update-examples.js(6,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/update-examples.js(10,29): error TS2307: Cannot find module 'require-inject'.
-node_modules/npm/test/tap/update-examples.js(128,22): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
 node_modules/npm/test/tap/update-path.js(2,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/update-path.js(3,29): error TS2307: Cannot find module 'require-inject'.
 node_modules/npm/test/tap/upgrade-lifecycles.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/upgrade-lifecycles.js(4,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/upgrade-lifecycles.js(7,21): error TS2339: Property 'assign' does not exist on type 'ObjectConstructor'.
 node_modules/npm/test/tap/upgrade-lifecycles.js(7,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/tap/url-dependencies.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/url-dependencies.js(8,20): error TS2307: Cannot find module 'tap'.
@@ -1757,14 +1622,8 @@ node_modules/npm/test/tap/version-commit-hooks.js(19,7): error TS2339: Property 
 node_modules/npm/test/tap/version-commit-hooks.js(23,16): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/test/tap/version-commit-hooks.js(29,7): error TS2339: Property 'load' does not exist on type 'EventEmitter'.
 node_modules/npm/test/tap/version-commit-hooks.js(30,9): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/test/tap/version-commit-hooks.js(33,25): error TS2339: Property 'buildCommitArgs' does not exist on type '{ (args: any, silent: any, cb_: any): any; usage: string; }'.
-node_modules/npm/test/tap/version-commit-hooks.js(34,25): error TS2339: Property 'buildCommitArgs' does not exist on type '{ (args: any, silent: any, cb_: any): any; usage: string; }'.
-node_modules/npm/test/tap/version-commit-hooks.js(35,25): error TS2339: Property 'buildCommitArgs' does not exist on type '{ (args: any, silent: any, cb_: any): any; usage: string; }'.
 node_modules/npm/test/tap/version-commit-hooks.js(45,7): error TS2339: Property 'load' does not exist on type 'EventEmitter'.
 node_modules/npm/test/tap/version-commit-hooks.js(46,9): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/test/tap/version-commit-hooks.js(49,25): error TS2339: Property 'buildCommitArgs' does not exist on type '{ (args: any, silent: any, cb_: any): any; usage: string; }'.
-node_modules/npm/test/tap/version-commit-hooks.js(50,25): error TS2339: Property 'buildCommitArgs' does not exist on type '{ (args: any, silent: any, cb_: any): any; usage: string; }'.
-node_modules/npm/test/tap/version-commit-hooks.js(51,25): error TS2339: Property 'buildCommitArgs' does not exist on type '{ (args: any, silent: any, cb_: any): any; usage: string; }'.
 node_modules/npm/test/tap/version-consistent-newlines.js(4,22): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/version-consistent-newlines.js(11,31): error TS2307: Cannot find module 'require-inject'.
 node_modules/npm/test/tap/version-consistent-newlines.js(20,7): error TS2339: Property 'load' does not exist on type 'EventEmitter'.

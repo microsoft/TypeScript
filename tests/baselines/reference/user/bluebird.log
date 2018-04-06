@@ -17,11 +17,6 @@ node_modules/bluebird/js/browser/bluebird.core.js(124,21): error TS2300: Duplica
 node_modules/bluebird/js/browser/bluebird.core.js(126,21): error TS2300: Duplicate identifier 'invokeLater'.
 node_modules/bluebird/js/browser/bluebird.core.js(138,21): error TS2300: Duplicate identifier 'invoke'.
 node_modules/bluebird/js/browser/bluebird.core.js(148,21): error TS2300: Duplicate identifier 'settlePromises'.
-node_modules/bluebird/js/browser/bluebird.core.js(190,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/bluebird/js/browser/bluebird.core.js(265,12): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
-node_modules/bluebird/js/browser/bluebird.core.js(265,43): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
-node_modules/bluebird/js/browser/bluebird.core.js(267,15): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
-node_modules/bluebird/js/browser/bluebird.core.js(267,37): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
 node_modules/bluebird/js/browser/bluebird.core.js(681,17): error TS2403: Subsequent variable declarations must have the same type.  Variable 'event' must be of type 'CustomEvent<any>', but here has type 'Event'.
 node_modules/bluebird/js/browser/bluebird.core.js(687,26): error TS2339: Property 'detail' does not exist on type 'Event'.
 node_modules/bluebird/js/browser/bluebird.core.js(1068,46): error TS2554: Expected 0 arguments, but got 1.
@@ -60,18 +55,12 @@ node_modules/bluebird/js/browser/bluebird.core.js(2607,10): error TS2339: Proper
 node_modules/bluebird/js/browser/bluebird.core.js(2748,14): error TS2339: Property '_attachExtraTrace' does not exist on type 'Promise'.
 node_modules/bluebird/js/browser/bluebird.core.js(2776,14): error TS2339: Property '_ensurePossibleRejectionHandled' does not exist on type 'Promise'.
 node_modules/bluebird/js/browser/bluebird.core.js(2816,10): error TS2339: Property '_clearCancellationData' does not exist on type 'Promise'.
-node_modules/bluebird/js/browser/bluebird.core.js(2891,25): error TS2304: Cannot find name 'Map'.
 node_modules/bluebird/js/browser/bluebird.core.js(2951,18): error TS2339: Property '_resolveEmptyArray' does not exist on type 'PromiseArray'.
 node_modules/bluebird/js/browser/bluebird.core.js(2989,30): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/bluebird/js/browser/bluebird.core.js(2991,30): error TS2554: Expected 0 arguments, but got 1.
 node_modules/bluebird/js/browser/bluebird.core.js(3165,31): error TS2339: Property 'standalone' does not exist on type 'Navigator'.
 node_modules/bluebird/js/browser/bluebird.core.js(3165,52): error TS2339: Property 'cordova' does not exist on type 'Window'.
 node_modules/bluebird/js/browser/bluebird.core.js(3599,5): error TS7027: Unreachable code detected.
-node_modules/bluebird/js/browser/bluebird.core.js(3687,34): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
-node_modules/bluebird/js/browser/bluebird.core.js(3688,22): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
-node_modules/bluebird/js/browser/bluebird.core.js(3720,16): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
-node_modules/bluebird/js/browser/bluebird.core.js(3722,31): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
-node_modules/bluebird/js/browser/bluebird.core.js(3724,24): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
 node_modules/bluebird/js/browser/bluebird.core.js(3761,25): error TS2304: Cannot find name 'chrome'.
 node_modules/bluebird/js/browser/bluebird.core.js(3761,51): error TS2304: Cannot find name 'chrome'.
 node_modules/bluebird/js/browser/bluebird.core.js(3762,25): error TS2304: Cannot find name 'chrome'.
@@ -90,17 +79,12 @@ node_modules/bluebird/js/browser/bluebird.js(29,415): error TS2304: Cannot find 
 node_modules/bluebird/js/browser/bluebird.js(29,521): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/bluebird/js/browser/bluebird.js(29,694): error TS2304: Cannot find name '_dereq_'.
 node_modules/bluebird/js/browser/bluebird.js(29,715): error TS2304: Cannot find name '_dereq_'.
-node_modules/bluebird/js/browser/bluebird.js(31,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 node_modules/bluebird/js/browser/bluebird.js(144,21): error TS2300: Duplicate identifier 'invokeLater'.
 node_modules/bluebird/js/browser/bluebird.js(145,21): error TS2300: Duplicate identifier 'invoke'.
 node_modules/bluebird/js/browser/bluebird.js(146,21): error TS2300: Duplicate identifier 'settlePromises'.
 node_modules/bluebird/js/browser/bluebird.js(148,21): error TS2300: Duplicate identifier 'invokeLater'.
 node_modules/bluebird/js/browser/bluebird.js(160,21): error TS2300: Duplicate identifier 'invoke'.
 node_modules/bluebird/js/browser/bluebird.js(170,21): error TS2300: Duplicate identifier 'settlePromises'.
-node_modules/bluebird/js/browser/bluebird.js(287,12): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
-node_modules/bluebird/js/browser/bluebird.js(287,43): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
-node_modules/bluebird/js/browser/bluebird.js(289,15): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
-node_modules/bluebird/js/browser/bluebird.js(289,37): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
 node_modules/bluebird/js/browser/bluebird.js(828,17): error TS2403: Subsequent variable declarations must have the same type.  Variable 'event' must be of type 'CustomEvent<any>', but here has type 'Event'.
 node_modules/bluebird/js/browser/bluebird.js(834,26): error TS2339: Property 'detail' does not exist on type 'Event'.
 node_modules/bluebird/js/browser/bluebird.js(1215,46): error TS2554: Expected 0 arguments, but got 1.
@@ -156,7 +140,6 @@ node_modules/bluebird/js/browser/bluebird.js(3255,10): error TS2339: Property '_
 node_modules/bluebird/js/browser/bluebird.js(3396,14): error TS2339: Property '_attachExtraTrace' does not exist on type 'Promise'.
 node_modules/bluebird/js/browser/bluebird.js(3424,14): error TS2339: Property '_ensurePossibleRejectionHandled' does not exist on type 'Promise'.
 node_modules/bluebird/js/browser/bluebird.js(3464,10): error TS2339: Property '_clearCancellationData' does not exist on type 'Promise'.
-node_modules/bluebird/js/browser/bluebird.js(3554,25): error TS2304: Cannot find name 'Map'.
 node_modules/bluebird/js/browser/bluebird.js(3614,18): error TS2339: Property '_resolveEmptyArray' does not exist on type 'PromiseArray'.
 node_modules/bluebird/js/browser/bluebird.js(3652,30): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/bluebird/js/browser/bluebird.js(3654,30): error TS2554: Expected 0 arguments, but got 1.
@@ -165,8 +148,6 @@ node_modules/bluebird/js/browser/bluebird.js(3823,13): error TS2403: Subsequent 
 node_modules/bluebird/js/browser/bluebird.js(3979,17): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/bluebird/js/browser/bluebird.js(3982,24): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/bluebird/js/browser/bluebird.js(3994,12): error TS2722: Cannot invoke an object which is possibly 'undefined'.
-node_modules/bluebird/js/browser/bluebird.js(4054,12): error TS2304: Cannot find name 'Map'.
-node_modules/bluebird/js/browser/bluebird.js(4054,41): error TS2304: Cannot find name 'Map'.
 node_modules/bluebird/js/browser/bluebird.js(4111,10): error TS2339: Property '_values' does not exist on type 'PropertiesPromiseArray'.
 node_modules/bluebird/js/browser/bluebird.js(4112,32): error TS2339: Property '_totalResolved' does not exist on type 'PropertiesPromiseArray'.
 node_modules/bluebird/js/browser/bluebird.js(4113,31): error TS2339: Property '_length' does not exist on type 'PropertiesPromiseArray'.
@@ -223,11 +204,6 @@ node_modules/bluebird/js/browser/bluebird.js(4707,23): error TS2339: Property 'p
 node_modules/bluebird/js/browser/bluebird.js(5090,20): error TS2339: Property 'doDispose' does not exist on type 'Disposer'.
 node_modules/bluebird/js/browser/bluebird.js(5109,23): error TS2339: Property 'data' does not exist on type 'FunctionDisposer'.
 node_modules/bluebird/js/browser/bluebird.js(5441,5): error TS7027: Unreachable code detected.
-node_modules/bluebird/js/browser/bluebird.js(5529,34): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
-node_modules/bluebird/js/browser/bluebird.js(5530,22): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
-node_modules/bluebird/js/browser/bluebird.js(5562,16): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
-node_modules/bluebird/js/browser/bluebird.js(5564,31): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
-node_modules/bluebird/js/browser/bluebird.js(5566,24): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
 node_modules/bluebird/js/browser/bluebird.js(5603,25): error TS2304: Cannot find name 'chrome'.
 node_modules/bluebird/js/browser/bluebird.js(5603,51): error TS2304: Cannot find name 'chrome'.
 node_modules/bluebird/js/browser/bluebird.js(5604,25): error TS2304: Cannot find name 'chrome'.
@@ -242,11 +218,7 @@ node_modules/bluebird/js/release/async.js(94,21): error TS2300: Duplicate identi
 node_modules/bluebird/js/release/async.js(96,21): error TS2300: Duplicate identifier 'invokeLater'.
 node_modules/bluebird/js/release/async.js(108,21): error TS2300: Duplicate identifier 'invoke'.
 node_modules/bluebird/js/release/async.js(118,21): error TS2300: Duplicate identifier 'settlePromises'.
-node_modules/bluebird/js/release/async.js(160,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-node_modules/bluebird/js/release/bluebird.js(3,12): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
-node_modules/bluebird/js/release/bluebird.js(3,43): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
-node_modules/bluebird/js/release/bluebird.js(5,15): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
-node_modules/bluebird/js/release/bluebird.js(5,37): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bluebird/js/release/bluebird.js(5,15): error TS2365: Operator '===' cannot be applied to types 'PromiseConstructor' and 'typeof Promise'.
 node_modules/bluebird/js/release/bluebird.js(10,10): error TS2339: Property 'noConflict' does not exist on type 'typeof Promise'.
 node_modules/bluebird/js/release/catch_filter.js(27,28): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: {}) => string[]) | ((o: any) => string[])' has no compatible call signatures.
 node_modules/bluebird/js/release/debuggability.js(18,20): error TS2365: Operator '!=' cannot be applied to types 'string | undefined' and 'number'.
@@ -263,9 +235,9 @@ node_modules/bluebird/js/release/debuggability.js(745,37): error TS2339: Propert
 node_modules/bluebird/js/release/debuggability.js(784,38): error TS2339: Property 'stack' does not exist on type 'CapturedTrace'.
 node_modules/bluebird/js/release/debuggability.js(793,25): error TS2554: Expected 0 arguments, but got 1.
 node_modules/bluebird/js/release/errors.js(10,49): error TS2350: Only a void function can be called with the 'new' keyword.
-node_modules/bluebird/js/release/errors.js(46,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: any, p: string, attributes: PropertyDescriptor & ThisType<any>) => any) | ((o: any, key: any...' has no compatible call signatures.
+node_modules/bluebird/js/release/errors.js(46,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ (o: any, p: string, attributes: PropertyDescriptor & ThisType<any>): any; (o: any, propertyKey:...' has no compatible call signatures.
 node_modules/bluebird/js/release/errors.js(92,18): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; } | ((obj...' has no compatible call signatures.
-node_modules/bluebird/js/release/errors.js(99,5): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: any, p: string, attributes: PropertyDescriptor & ThisType<any>) => any) | ((o: any, key: any...' has no compatible call signatures.
+node_modules/bluebird/js/release/errors.js(99,5): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ (o: any, p: string, attributes: PropertyDescriptor & ThisType<any>): any; (o: any, propertyKey:...' has no compatible call signatures.
 node_modules/bluebird/js/release/generators.js(159,21): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 node_modules/bluebird/js/release/generators.js(190,15): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 node_modules/bluebird/js/release/generators.js(208,15): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -291,7 +263,7 @@ node_modules/bluebird/js/release/promise.js(4,12): error TS2351: Cannot use 'new
 node_modules/bluebird/js/release/promise.js(7,24): error TS2339: Property 'PromiseInspection' does not exist on type 'typeof Promise'.
 node_modules/bluebird/js/release/promise.js(10,27): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 node_modules/bluebird/js/release/promise.js(20,32): error TS2322: Type 'null' is not assignable to type 'Domain'.
-node_modules/bluebird/js/release/promise.js(33,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: any, p: string, attributes: PropertyDescriptor & ThisType<any>) => any) | ((o: any, key: any...' has no compatible call signatures.
+node_modules/bluebird/js/release/promise.js(33,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ (o: any, p: string, attributes: PropertyDescriptor & ThisType<any>): any; (o: any, propertyKey:...' has no compatible call signatures.
 node_modules/bluebird/js/release/promise.js(62,15): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 node_modules/bluebird/js/release/promise.js(65,15): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 node_modules/bluebird/js/release/promise.js(123,14): error TS2339: Property '_warn' does not exist on type 'Promise'.
@@ -323,8 +295,6 @@ node_modules/bluebird/js/release/promise.js(506,19): error TS2351: Cannot use 'n
 node_modules/bluebird/js/release/promise.js(630,14): error TS2339: Property '_attachExtraTrace' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(658,14): error TS2339: Property '_ensurePossibleRejectionHandled' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(698,10): error TS2339: Property '_clearCancellationData' does not exist on type 'Promise'.
-node_modules/bluebird/js/release/promise.js(772,27): error TS2339: Property 'firstLineError' does not exist on type 'typeof Async'.
-node_modules/bluebird/js/release/promise_array.js(11,25): error TS2304: Cannot find name 'Map'.
 node_modules/bluebird/js/release/promise_array.js(71,18): error TS2339: Property '_resolveEmptyArray' does not exist on type 'PromiseArray'.
 node_modules/bluebird/js/release/promise_array.js(109,30): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/bluebird/js/release/promise_array.js(111,30): error TS2554: Expected 0 arguments, but got 1.
@@ -338,8 +308,6 @@ node_modules/bluebird/js/release/promisify.js(252,24): error TS2722: Cannot invo
 node_modules/bluebird/js/release/promisify.js(264,12): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/bluebird/js/release/promisify.js(270,15): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 node_modules/bluebird/js/release/promisify.js(285,15): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-node_modules/bluebird/js/release/props.js(8,12): error TS2304: Cannot find name 'Map'.
-node_modules/bluebird/js/release/props.js(8,41): error TS2304: Cannot find name 'Map'.
 node_modules/bluebird/js/release/props.js(47,20): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: {}) => string[]) | ((o: any) => string[])' has no compatible call signatures.
 node_modules/bluebird/js/release/props.js(65,10): error TS2339: Property '_values' does not exist on type 'PropertiesPromiseArray'.
 node_modules/bluebird/js/release/props.js(66,32): error TS2339: Property '_totalResolved' does not exist on type 'PropertiesPromiseArray'.
@@ -398,16 +366,11 @@ node_modules/bluebird/js/release/some.js(133,23): error TS2339: Property 'promis
 node_modules/bluebird/js/release/using.js(78,20): error TS2339: Property 'doDispose' does not exist on type 'Disposer'.
 node_modules/bluebird/js/release/using.js(97,23): error TS2339: Property 'data' does not exist on type 'FunctionDisposer'.
 node_modules/bluebird/js/release/using.js(223,15): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-node_modules/bluebird/js/release/util.js(97,5): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: any, p: string, attributes: PropertyDescriptor & ThisType<any>) => any) | ((o: any, key: any...' has no compatible call signatures.
+node_modules/bluebird/js/release/util.js(97,5): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ (o: any, p: string, attributes: PropertyDescriptor & ThisType<any>): any; (o: any, propertyKey:...' has no compatible call signatures.
 node_modules/bluebird/js/release/util.js(201,5): error TS7027: Unreachable code detected.
 node_modules/bluebird/js/release/util.js(247,28): error TS2554: Expected 0 arguments, but got 2.
-node_modules/bluebird/js/release/util.js(275,17): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: any, p: string, attributes: PropertyDescriptor & ThisType<any>) => any) | ((o: any, key: any...' has no compatible call signatures.
-node_modules/bluebird/js/release/util.js(275,45): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: any, p: string) => PropertyDescriptor | undefined) | ((o: any, key: any) => { [x: string]: a...' has no compatible call signatures.
-node_modules/bluebird/js/release/util.js(289,34): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
-node_modules/bluebird/js/release/util.js(290,22): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
-node_modules/bluebird/js/release/util.js(322,16): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
-node_modules/bluebird/js/release/util.js(324,31): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
-node_modules/bluebird/js/release/util.js(326,24): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+node_modules/bluebird/js/release/util.js(275,17): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ (o: any, p: string, attributes: PropertyDescriptor & ThisType<any>): any; (o: any, propertyKey:...' has no compatible call signatures.
+node_modules/bluebird/js/release/util.js(275,45): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ (o: any, p: string): PropertyDescriptor | undefined; (o: any, propertyKey: PropertyKey): Proper...' has no compatible call signatures.
 node_modules/bluebird/js/release/util.js(363,25): error TS2304: Cannot find name 'chrome'.
 node_modules/bluebird/js/release/util.js(363,51): error TS2304: Cannot find name 'chrome'.
 node_modules/bluebird/js/release/util.js(364,25): error TS2304: Cannot find name 'chrome'.
