@@ -4108,8 +4108,14 @@ namespace ts {
     }
 
     export interface ProjectReference {
+        /** A normalized path on disk */
         path: string;
+        /** The path as the user originally wrote it */
+        originalPath: string;
+        /** True if the output of this reference should be prepended to the output of this project. Only valid for --outFile compilations */
         prepend?: boolean;
+        /** True if it is intended that this reference form a circularity */
+        circular?: boolean;
     }
 
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
@@ -4183,7 +4189,6 @@ namespace ts {
         /* @internal */ pretty?: DiagnosticStyle;
         reactNamespace?: string;
         jsxFactory?: string;
-        references?: ProjectReference[];
         composite?: boolean;
         removeComments?: boolean;
         rootDir?: string;
@@ -4291,6 +4296,7 @@ namespace ts {
         options: CompilerOptions;
         typeAcquisition?: TypeAcquisition;
         fileNames: string[];
+        projectReferences?: ReadonlyArray<ProjectReference>;
         raw?: any;
         errors: Diagnostic[];
         wildcardDirectories?: MapLike<WatchDirectoryFlags>;
@@ -4306,6 +4312,7 @@ namespace ts {
     /* @internal */
     export interface ConfigFileSpecs {
         filesSpecs: ReadonlyArray<string>;
+        referencesSpecs: ReadonlyArray<ProjectReference> | undefined;
         /**
          * Present to report errors (user specified specs), validatedIncludeSpecs are used for file name matching
          */
@@ -4321,8 +4328,18 @@ namespace ts {
 
     export interface ExpandResult {
         fileNames: string[];
+        projectReferences: ReadonlyArray<ProjectReference> | undefined;
         wildcardDirectories: MapLike<WatchDirectoryFlags>;
         /* @internal */ spec: ConfigFileSpecs;
+    }
+
+    export interface CreateProgramOptions {
+        rootNames: ReadonlyArray<string>;
+        options: CompilerOptions;
+        projectReferences?: ReadonlyArray<ProjectReference>;
+        host?: CompilerHost;
+        oldProgram?: Program;
+        configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>;
     }
 
     /* @internal */
@@ -4845,7 +4862,7 @@ namespace ts {
 
         isEmitBlocked(emitFileName: string): boolean;
 
-        getPrependNodes(): PrependNode[];
+        getPrependNodes(): ReadonlyArray<PrependNode>;
 
         writeFile: WriteFileCallback;
     }

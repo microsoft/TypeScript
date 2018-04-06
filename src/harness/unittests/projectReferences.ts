@@ -52,11 +52,11 @@ namespace ts {
             const configFileName = combineAllPaths("/", key, sp.configFileName || "tsconfig.json");
             const options = {
                 compilerOptions: {
-                    references: (sp.references || []).map(r => ({ path: r })),
                     composite: true,
                     outDir: "bin",
                     ...sp.options
                 },
+                references: (sp.references || []).map(r => ({ path: r })),
                 ...sp.config
             };
             const configContent = JSON.stringify(options);
@@ -80,7 +80,12 @@ namespace ts {
         assert(config && !error, flattenDiagnosticMessageText(error && error.messageText, "\n"));
         const file = parseJsonConfigFileContent(config, host.configHost, getDirectoryPath(entryPointConfigFileName), {}, entryPointConfigFileName);
         file.options.configFilePath = entryPointConfigFileName;
-        const prog = createProgram(file.fileNames, file.options, host);
+        const prog = createProgram({
+            rootNames: file.fileNames,
+            options: file.options,
+            host,
+            projectReferences: file.projectReferences
+        });
         checkResult(prog, host);
     }
 
@@ -99,23 +104,6 @@ namespace ts {
             testProjectReferences(spec, "/primary/tsconfig.json", prog => {
                 assert.isTrue(!!prog, "Program should exist");
                 assertNoErrors("Sanity check should not produce errors", prog.getOptionsDiagnostics());
-            });
-        });
-
-        it("can detect a circularity error", () => {
-            const spec: TestSpecification = {
-                "/primary": {
-                    files: { "/primary/a.ts": emptyModule },
-                    references: ["../secondary"]
-                },
-                "/secondary": {
-                    files: { "/secondary/b.ts": moduleImporting("../primary/a") },
-                    references: ["../primary"]
-                }
-            };
-            testProjectReferences(spec, "/primary/tsconfig.json", prog => {
-                assert.isTrue(!!prog, "Program should exist");
-                assertHasError("Should detect a circular error", prog.getOptionsDiagnostics(), Diagnostics.Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0);
             });
         });
     });
@@ -155,6 +143,7 @@ namespace ts {
                     references: ["../primary"]
                 }
             };
+            debugger;
             testProjectReferences(spec, "/reference/tsconfig.json", program => {
                 const errs = program.getOptionsDiagnostics();
                 assertHasError("Reports an error about 'composite' not being set", errs, Diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true);
@@ -177,35 +166,6 @@ namespace ts {
             testProjectReferences(spec, "/primary/tsconfig.json", program => {
                 const errs = program.getOptionsDiagnostics();
                 assertHasError("Reports an error about b.ts not being in the list", errs, Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern);
-            });
-        });
-    });
-
-    /**
-     * Circularity checking
-     */
-    describe("project-references circularity checking", () => {
-        // Bare cycle with relative paths tested in sanity check block
-        it("detects an indirected cycle", () => {
-            const spec: TestSpecification = {
-                "/alpha": {
-                    files: { "/alpha/a.ts": emptyModule },
-                    references: ["../beta"]
-                },
-                "/beta": {
-                    files: { "/beta/b.ts": moduleImporting("../alpha/a") },
-                    references: ["../gamma"]
-                },
-                "/gamma": {
-                    files: { "/gamma/a.ts": emptyModule },
-                    references: ["../alpha"],
-
-                }
-            };
-
-            testProjectReferences(spec, "/alpha/tsconfig.json", program => {
-                const errs = program.getOptionsDiagnostics();
-                assertHasError("Reports an error about the circular diagnsotic", errs, Diagnostics.Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0);
             });
         });
     });

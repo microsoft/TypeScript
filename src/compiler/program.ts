@@ -337,7 +337,7 @@ namespace ts {
             const categoryColor = getCategoryFormat(diagnostic.category);
             const category = DiagnosticCategory[diagnostic.category].toLowerCase();
             output += formatColorAndReset(category, categoryColor);
-            output += formatColorAndReset(` TS${ diagnostic.code }: `, ForegroundColorEscapeSequences.Grey);
+            output += formatColorAndReset(` TS${diagnostic.code}: `, ForegroundColorEscapeSequences.Grey);
             output += flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine());
 
             if (diagnostic.file) {
@@ -479,6 +479,16 @@ namespace ts {
         );
     }
 
+    function createCreateProgramOptions(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): CreateProgramOptions {
+        return {
+            rootNames,
+            options,
+            host,
+            oldProgram,
+            configFileParsingDiagnostics
+        };
+    }
+
     /**
      * Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
      * that represent a compilation unit.
@@ -493,7 +503,13 @@ namespace ts {
      * @param configFileParsingDiagnostics - error during config file parsing
      * @returns A 'Program' object.
      */
-    export function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program {
+    export function createProgram(createProgramOptions: CreateProgramOptions): Program;
+    export function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program;
+    export function createProgram(rootNamesOrOptions: ReadonlyArray<string> | CreateProgramOptions, _options?: CompilerOptions, _host?: CompilerHost, _oldProgram?: Program, _configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program {
+        const createProgramOptions = isArray(rootNamesOrOptions) ? createCreateProgramOptions(rootNamesOrOptions, _options, _host, _oldProgram, _configFileParsingDiagnostics) : rootNamesOrOptions;
+        const { rootNames, options, configFileParsingDiagnostics, projectReferences } = createProgramOptions;
+        let { host, oldProgram } = createProgramOptions;
+
         let program: Program;
         let files: SourceFile[] = [];
         let commonSourceDirectory: string;
@@ -539,6 +555,7 @@ namespace ts {
         // Map storing if there is emit blocking diagnostics for given input
         const hasEmitBlockingDiagnostics = createMap<boolean>();
         let _compilerOptionsObjectLiteralSyntax: ObjectLiteralExpression;
+        let _referencesArrayLiteralSyntax: ArrayLiteralExpression;
 
         let moduleResolutionCache: ModuleResolutionCache;
         let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string, reusedNames?: string[]) => ResolvedModuleFull[];
@@ -584,11 +601,18 @@ namespace ts {
         // used to track cases when two file names differ only in casing
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createMap<SourceFile>() : undefined;
 
-        const referencedProjectOutFiles: Path[] = [];
-        const projectReferenceRedirects = createProjectReferenceRedirects(options);
-        checkProjectReferenceGraph();
-        for (const referencedProjectFile of referencedProjectOutFiles) {
-            processSourceFile(referencedProjectFile, /*isDefaultLib*/ false, /*packageId*/ undefined);
+        // A parallel array to projectReferences storing the results of reading in the referenced tsconfig files
+        const resolvedProjectReferences: ParsedCommandLine[] = [];
+        const projectReferenceRedirects: Map<string> = createMap();
+        if (projectReferences) {
+            for (const ref of projectReferences) {
+                const parsedRef = parseProjectReferenceConfigFile(ref);
+                resolvedProjectReferences.push(parsedRef);
+                if (parsedRef.options.outFile) {
+                    processSourceFile(parsedRef.options.outFile, /*isDefaultLib*/ false, /*packageId*/ undefined);
+                }
+                addProjectReferenceRedirects(parsedRef, projectReferenceRedirects);
+            }
         }
 
         const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
@@ -1122,20 +1146,22 @@ namespace ts {
         }
 
         function getPrependNodes(): PrependNode[] {
-            if (!options.references) {
+            if (!projectReferences) {
                 return emptyArray;
             }
 
             const nodes: PrependNode[] = [];
-            walkProjectReferenceGraph(host, options, (_file, proj, opts) => {
-                if (opts.prepend) {
-                    const dtsFilename = changeExtension(proj.outFile, ".d.ts");
-                    const js = host.readFile(proj.outFile) || `/* Input file ${proj.outFile} was missing */\r\n`;
-                    const dts = host.readFile(dtsFilename) || `/* Input file ${proj.dtsFilename} was missing */\r\n`;
+            for (let i = 0; i < projectReferences.length; i++) {
+                const ref = projectReferences[i];
+                const resolvedRef = resolvedProjectReferences[i];
+                if (ref.prepend) {
+                    const dtsFilename = changeExtension(resolvedRef.options.outFile, ".d.ts");
+                    const js = host.readFile(resolvedRef.options.outFile) || `/* Input file ${resolvedRef.options.outFile} was missing */\r\n`;
+                    const dts = host.readFile(dtsFilename) || `/* Input file ${dtsFilename} was missing */\r\n`;
                     const node = createPrepend(js, dts);
                     nodes.push(node);
                 }
-            });
+            }
             return nodes;
         }
 
@@ -2119,67 +2145,14 @@ namespace ts {
             return allFilesBelongToPath;
         }
 
-        function createProjectReferenceRedirects(rootOptions: CompilerOptions): Map<string> {
-            const result = createMap<string>();
-            const handledProjects = createMap<true>();
-
-            walkProjectReferenceGraph(host, rootOptions, createMapping);
-
-            function createMapping(resolvedFile: string, referencedProject: CompilerOptions, reference: ProjectReference) {
-                const rootDir = normalizePath(referencedProject.rootDir || getDirectoryPath(resolvedFile));
-                result.set(rootDir, referencedProject.outDir);
-                // If this project uses outFile, add the outFile .d.ts to our compilation
-                // Note: We don't enumerate the input files to try to find corresponding .d.ts
-                // files because we can't know from the outside whether they're modules or not
-                if (referencedProject.outFile) {
-                    const outFile = combinePaths(referencedProject.outDir, changeExtension(referencedProject.outFile, ".d.ts"));
-                    referencedProjectOutFiles.push(toPath(outFile));
-                    if (reference.prepend) {
-                        // Don't recurse - it'll cause multi-level outfile compilations
-                        // to get duplicate definitions from the up-up-stream .d.ts!
-                        return;
-                    }
-                }
-
-                // Circularity check
-                resolvedFile = normalizePath(resolvedFile);
-                if (!handledProjects.has(resolvedFile)) {
-                    handledProjects.set(resolvedFile, true);
-                    walkProjectReferenceGraph(host, referencedProject, createMapping);
-                }
-            }
-            return result;
+        function parseProjectReferenceConfigFile(ref: ProjectReference): ParsedCommandLine {
+            const refPath = resolveProjectReferencePath(host, ref);
+            return getParsedCommandLineOfConfigFile(refPath, {}, parseConfigHostFromCompilerHost(host));
         }
 
-        function checkProjectReferenceGraph() {
-            // Checks the following conditions:
-            //  * Any referenced project has project: true
-            //  * No circularities exist
-
-            const illegalRefs = createMap<true>();
-            const cycleName: string[] = [options.configFilePath || host.getCurrentDirectory()];
-
-            walkProjectReferenceGraph(host, options, checkReference);
-
-            function checkReference(fileName: string, opts: CompilerOptions) {
-                const normalizedPath = normalizePath(fileName);
-                if (illegalRefs.has(normalizedPath)) {
-                    createDiagnosticForOptionName(Diagnostics.Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0, cycleName.map(normalizePath).map(s => host.getNewLine() + "    " + s).join(" -> "));
-                    return;
-                }
-                if (opts === undefined) {
-                    Debug.fail("Options cannot be undefined");
-                    return;
-                }
-                if (!opts.composite) {
-                    createDiagnosticForOptionName(Diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true, fileName);
-                }
-                illegalRefs.set(normalizedPath, true);
-                cycleName.push(normalizedPath);
-                walkProjectReferenceGraph(host, opts, checkReference);
-                cycleName.pop();
-                illegalRefs.delete(normalizedPath);
-            }
+        function addProjectReferenceRedirects(referencedProject: ParsedCommandLine, target: Map<string>) {
+            const rootDir = normalizePath(referencedProject.options.rootDir || getDirectoryPath(referencedProject.options.configFilePath));
+            target.set(rootDir, referencedProject.options.outDir);
         }
 
         function verifyCompilerOptions() {
@@ -2217,6 +2190,23 @@ namespace ts {
             if (options.composite) {
                 if (options.declaration === false) {
                     createDiagnosticForOptionName(Diagnostics.Projects_may_not_disable_declaration_emit, "declaration");
+                }
+            }
+
+            if (projectReferences) {
+                for (let i = 0; i < projectReferences.length; i++) {
+                    const ref = projectReferences[i];
+                    const resolvedRef = resolvedProjectReferences[i];
+                    if (resolvedRef === undefined) {
+                        createDiagnosticForReference(i, Diagnostics.File_0_does_not_exist, ref.path);
+                        continue;
+                    }
+                    if (!resolvedRef.options.composite) {
+                        createDiagnosticForReference(i, Diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true, ref.path);
+                    }
+                    if (resolvedRef.options.declaration === false) {
+                        createDiagnosticForReference(i, Diagnostics.Referenced_project_0_must_have_declaration_Colon_true, ref.path);
+                    }
                 }
             }
 
@@ -2469,6 +2459,16 @@ namespace ts {
             createDiagnosticForOption(/*onKey*/ false, option1, /*option2*/ undefined, message, arg0);
         }
 
+        function createDiagnosticForReference(index: number, message: DiagnosticMessage, arg0?: string | number) {
+            const referencesSyntax = getProjectReferencesSyntax();
+            if (referencesSyntax) {
+                if (createOptionDiagnosticInArrayLiteralSyntax(referencesSyntax, index, message, arg0)) {
+                    return;
+                }
+            }
+            programDiagnostics.add(createCompilerDiagnostic(message, arg0));
+        }
+
         function createDiagnosticForOption(onKey: boolean, option1: string, option2: string, message: DiagnosticMessage, arg0: string | number, arg1?: string | number, arg2?: string | number) {
             const compilerOptionsObjectLiteralSyntax = getCompilerOptionsObjectLiteralSyntax();
             const needCompilerDiagnostic = !compilerOptionsObjectLiteralSyntax ||
@@ -2477,6 +2477,21 @@ namespace ts {
             if (needCompilerDiagnostic) {
                 programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1, arg2));
             }
+        }
+
+        function getProjectReferencesSyntax(): ArrayLiteralExpression | null {
+            if (_referencesArrayLiteralSyntax === undefined) {
+                _referencesArrayLiteralSyntax = null; // tslint:disable-line:no-null-keyword
+                if (options.configFile && options.configFile.jsonObject) {
+                    for (const prop of getPropertyAssignment(options.configFile.jsonObject, "references")) {
+                        if (isArrayLiteralExpression(prop.initializer)) {
+                            _referencesArrayLiteralSyntax = prop.initializer;
+                            break;
+                        }
+                    }
+                }
+            }
+            return _referencesArrayLiteralSyntax;
         }
 
         function getCompilerOptionsObjectLiteralSyntax() {
@@ -2500,6 +2515,14 @@ namespace ts {
                 programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile, onKey ? prop.name : prop.initializer, message, arg0, arg1, arg2));
             }
             return !!props.length;
+        }
+
+        function createOptionDiagnosticInArrayLiteralSyntax(arrayLiteral: ArrayLiteralExpression, index: number, message: DiagnosticMessage, arg0: string | number, arg1?: string | number, arg2?: string | number): boolean {
+            if (arrayLiteral.elements.length <= index) {
+                // Out-of-bounds
+                return false;
+            }
+            programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile, arrayLiteral.elements[index], message, arg0, arg1, arg2));
         }
 
         function blockEmittingOfFile(emitFileName: string, diag: Diagnostic) {
@@ -2543,22 +2566,25 @@ namespace ts {
         }
     }
 
-    function parseConfigHostFromCompilerHost(host: CompilerHost): ParseConfigHost {
+    function parseConfigHostFromCompilerHost(host: CompilerHost): ParseConfigFileHost {
         return {
             fileExists: host.fileExists,
             readDirectory: () => [],
             readFile: host.readFile,
-            useCaseSensitiveFileNames: host.useCaseSensitiveFileNames()
+            useCaseSensitiveFileNames: host.useCaseSensitiveFileNames(),
+            getCurrentDirectory: host.getCurrentDirectory,
+            onUnRecoverableConfigFileDiagnostic: () => undefined
         };
     }
 
+    /*
     export function getProjectReferenceFileNames(host: CompilerHost, rootOptions: CompilerOptions): string[] | undefined {
-        if (rootOptions.references === undefined) {
+        if (rootOptions.projectReferences === undefined) {
             return [];
         }
 
         const result: string[] = [];
-        for (const ref of rootOptions.references) {
+        for (const ref of rootOptions.projectReferences) {
             const refPath = resolveProjectReferencePath(host, rootOptions.configFilePath, ref);
             if (!refPath || !host.fileExists(refPath)) {
                 return undefined;
@@ -2567,16 +2593,19 @@ namespace ts {
         }
         return result;
     }
+    */
 
-    function resolveProjectReferencePath(host: CompilerHost, referencingConfigFilePath: string, ref: ProjectReference): string | undefined {
-        const rootPath = referencingConfigFilePath ? getDirectoryPath(normalizeSlashes(referencingConfigFilePath)) : host.getCurrentDirectory();
-        let refPath = combinePaths(rootPath, ref.path);
-        if (!host.fileExists(refPath)) {
-            refPath = combinePaths(refPath, "tsconfig.json");
+    /**
+     * Returns the target config filename of a project reference
+     */
+    function resolveProjectReferencePath(host: CompilerHost, ref: ProjectReference): string | undefined {
+        if (!host.fileExists(ref.path)) {
+            return combinePaths(ref.path, "tsconfig.json");
         }
-        return refPath;
+        return ref.path;
     }
 
+    /*
     export function walkProjectReferenceGraph(host: CompilerHost, rootOptions: CompilerOptions,
         callback: (resolvedFile: string, referencedProject: CompilerOptions, settings: ProjectReference) => void,
         errorCallback?: (failedLocation: string) => void) {
@@ -2599,13 +2628,14 @@ namespace ts {
                 continue;
             }
             const referenceJsonSource = parseJsonText(refPath, text);
-            const cmdLine = parseJsonSourceFileConfigFileContent(referenceJsonSource, configHost, getDirectoryPath(refPath), /*existingOptions*/ undefined, refPath);
+            const cmdLine = parseJsonSourceFileConfigFileContent(referenceJsonSource, configHost, getDirectoryPath(refPath), undefined, refPath);
             cmdLine.options.configFilePath = refPath;
             if (cmdLine.options) {
                 callback(refPath, cmdLine.options, ref);
             }
         }
     }
+    */
 
     /* @internal */
     /**
