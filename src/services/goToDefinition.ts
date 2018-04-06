@@ -163,7 +163,7 @@ namespace ts.GoToDefinition {
         const type = checker.getTypeAtLocation(node.parent.expression);
         return mapDefined(type.isUnionOrIntersection() ? type.types : [type], nonUnionType => {
             const info = checker.getIndexInfoOfType(nonUnionType, IndexKind.String);
-            return info && createDefinitionFromSignatureDeclaration(checker, info.declaration);
+            return info && info.declaration && createDefinitionFromSignatureDeclaration(checker, info.declaration);
         });
     }
 
