@@ -141,12 +141,15 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(p, [file1.path, tsconfig.path]);
+            checkWatchedFiles(host, [tsconfig.path, libFile.path, packageJson.path, "/a/b/bower_components", "/a/b/node_modules"]);
 
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             host.checkTimeoutQueueLengthAndRun(2);
             checkProjectActualFiles(p, [file1.path, jquery.path, tsconfig.path]);
+            // should not watch jquery
+            checkWatchedFiles(host, [tsconfig.path, libFile.path, packageJson.path, "/a/b/bower_components", "/a/b/node_modules"]);
         });
 
         it("inferred project (typings installed)", () => {
