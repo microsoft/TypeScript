@@ -548,10 +548,11 @@ namespace ts.server {
                 else {
                     if (this.pendingEnsureProjectForOpenFiles) {
                         this.ensureProjectForOpenFiles();
+
+                        // Send the event to notify that there were background project updates
+                        // send current list of open files
+                        this.sendProjectsUpdatedInBackgroundEvent();
                     }
-                    // Send the event to notify that there were background project updates
-                    // send current list of open files
-                    this.sendProjectsUpdatedInBackgroundEvent();
                 }
             });
         }
