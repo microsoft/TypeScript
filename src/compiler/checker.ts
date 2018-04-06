@@ -2216,7 +2216,22 @@ namespace ts {
         // An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
         // and an external module with no 'export =' declaration resolves to the module itself.
         function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol {
-            return moduleSymbol && getMergedSymbol(resolveSymbol(moduleSymbol.exports.get(InternalSymbolName.ExportEquals), dontResolveAlias)) || moduleSymbol;
+            return moduleSymbol && getMergedSymbol(resolveSymbol(getCommonJsExportEquals(moduleSymbol), dontResolveAlias)) || moduleSymbol;
+        }
+
+        function getCommonJsExportEquals(moduleSymbol: Symbol): Symbol {
+            const exported = moduleSymbol.exports.get(InternalSymbolName.ExportEquals);
+            if (!exported || !exported.exports || moduleSymbol.exports.size === 1) {
+                return exported;
+            }
+            const merged = cloneSymbol(exported);
+            moduleSymbol.exports.forEach((s, name) => {
+                if (name === InternalSymbolName.ExportEquals) return;
+                if (!merged.exports.has(name)) {
+                    merged.exports.set(name, s);
+                }
+            });
+            return merged;
         }
 
         // An external module with an 'export =' declaration may be referenced as an ES6 module provided the 'export ='
@@ -4350,7 +4365,8 @@ namespace ts {
                     return unknownType;
                 }
 
-                if (isPropertyAccessExpression(expression.left) && expression.left.expression.kind === SyntaxKind.ThisKeyword) {
+                const special = getSpecialPropertyAssignmentKind(expression);
+                if (special === SpecialPropertyAssignmentKind.ThisProperty) {
                     const thisContainer = getThisContainer(expression, /*includeArrowFunctions*/ false);
                     // Properties defined in a constructor (or javascript constructor function) don't get undefined added.
                     // Function expressions that are assigned to the prototype count as methods.
@@ -4380,7 +4396,33 @@ namespace ts {
                 }
                 else if (!jsDocType) {
                     // If we don't have an explicit JSDoc type, get the type from the expression.
-                    const type = getWidenedLiteralType(checkExpressionCached(expression.right));
+                    let type = getWidenedLiteralType(checkExpressionCached(expression.right));
+
+                    if (getObjectFlags(type) & ObjectFlags.Anonymous &&
+                        special === SpecialPropertyAssignmentKind.ModuleExports &&
+                        symbol.escapedName === InternalSymbolName.ExportEquals) {
+                        const exportedType = resolveStructuredTypeMembers(type as AnonymousType);
+                        const members = createSymbolTable();
+                        copyEntries(exportedType.members, members);
+                        symbol.exports.forEach((s, name) => {
+                            if (members.has(name)) {
+                                const exportedMember = exportedType.members.get(name);
+                                const union = createSymbol(s.flags | exportedMember.flags, name);
+                                union.type = getUnionType([getTypeOfSymbol(s), getTypeOfSymbol(exportedMember)]);
+                                members.set(name, union);
+                            }
+                            else {
+                                members.set(name, s);
+                            }
+                        });
+                        type = createAnonymousType(
+                            exportedType.symbol,
+                            members,
+                            exportedType.callSignatures,
+                            exportedType.constructSignatures,
+                            exportedType.stringIndexInfo,
+                            exportedType.numberIndexInfo);
+                    }
                     let anyedType = type;
                     if (isEmptyArrayLiteralType(type)) {
                         anyedType = anyArrayType;
@@ -24574,7 +24616,7 @@ namespace ts {
                 const exportEqualsSymbol = moduleSymbol.exports.get("export=" as __String);
                 if (exportEqualsSymbol && hasExportedMembers(moduleSymbol)) {
                     const declaration = getDeclarationOfAliasSymbol(exportEqualsSymbol) || exportEqualsSymbol.valueDeclaration;
-                    if (!isTopLevelInExternalModuleAugmentation(declaration)) {
+                    if (!isTopLevelInExternalModuleAugmentation(declaration) && !isInJavaScriptFile(declaration)) {
                         error(declaration, Diagnostics.An_export_assignment_cannot_be_used_in_a_module_with_other_exported_elements);
                     }
                 }
