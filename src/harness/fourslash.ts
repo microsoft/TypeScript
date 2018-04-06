@@ -980,7 +980,7 @@ namespace FourSlash {
         private _checker: ts.TypeChecker;
 
         private getProgram(): ts.Program {
-            return this._program || (this._program = this.languageService.getProgram());
+            return this._program || (this._program = this.languageService.getProgram()!); // TODO: GH#18217
         }
 
         private getChecker() {
@@ -1634,7 +1634,7 @@ Actual: ${stringify(fullActual)}`);
 
                         if (emitOutput.emitSkipped) {
                             resultString += "Diagnostics:" + Harness.IO.newLine();
-                            const diagnostics = ts.getPreEmitDiagnostics(this.languageService.getProgram());
+                            const diagnostics = ts.getPreEmitDiagnostics(this.languageService.getProgram()!); // TODO: GH#18217
                             for (const diagnostic of diagnostics) {
                                 if (!ts.isString(diagnostic.messageText)) {
                                     let chainedMessage: ts.DiagnosticMessageChain | undefined = diagnostic.messageText;

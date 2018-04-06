@@ -131,7 +131,7 @@ namespace ts.server {
         // wrapper over the real language service that will suppress all semantic operations
         protected languageService: LanguageService;
 
-        public languageServiceEnabled = true;
+        public languageServiceEnabled: boolean;
 
         readonly trace?: (s: string) => void;
         readonly realpath?: (path: string) => string;
@@ -240,6 +240,8 @@ namespace ts.server {
                 this.compilerOptions.allowNonTsExtensions = true;
             }
 
+            this.languageServiceEnabled = !projectService.syntaxOnly;
+
             this.setInternalCompilerOptionsForEmittingJsFiles();
             const host = this.projectService.host;
             if (this.projectService.logger.loggingEnabled()) {
@@ -255,7 +257,7 @@ namespace ts.server {
 
             // Use the current directory as resolution root only if the project created using current directory string
             this.resolutionCache = createResolutionCache(this, currentDirectory && this.currentDirectory, /*logChangesWhenResolvingModule*/ true);
-            this.languageService = createLanguageService(this, this.documentRegistry);
+            this.languageService = createLanguageService(this, this.documentRegistry, projectService.syntaxOnly);
             if (lastFileExceededProgramSize) {
                 this.disableLanguageService(lastFileExceededProgramSize);
             }
@@ -506,7 +508,7 @@ namespace ts.server {
         }
 
         enableLanguageService() {
-            if (this.languageServiceEnabled) {
+            if (this.languageServiceEnabled || this.projectService.syntaxOnly) {
                 return;
             }
             this.languageServiceEnabled = true;
@@ -518,6 +520,7 @@ namespace ts.server {
             if (!this.languageServiceEnabled) {
                 return;
             }
+            Debug.assert(!this.projectService.syntaxOnly);
             this.languageService.cleanupSemanticCache();
             this.languageServiceEnabled = false;
             this.lastFileExceededProgramSize = lastFileExceededProgramSize;
@@ -870,14 +873,16 @@ namespace ts.server {
             const start = timestamp();
             this.hasInvalidatedResolution = this.resolutionCache.createHasInvalidatedResolution();
             this.resolutionCache.startCachingPerDirectoryResolution();
-            this.program = this.languageService.getProgram();
+            this.program = this.languageService.getProgram()!; // TODO: GH#18217
             this.dirty = false;
             this.resolutionCache.finishCachingPerDirectoryResolution();
+
+            Debug.assert(oldProgram === undefined || this.program !== undefined);
 
             // bump up the version if
             // - oldProgram is not set - this is a first time updateGraph is called
             // - newProgram is different from the old program and structure of the old program was not reused.
-            const hasChanges = !oldProgram || (this.program !== oldProgram && !(oldProgram.structureIsReused! & StructureIsReused.Completely));
+            const hasChanges = this.program && (!oldProgram || (this.program !== oldProgram && !(oldProgram.structureIsReused! & StructureIsReused.Completely)));
             this.hasChangedAutomaticTypeDirectiveNames = false;
             if (hasChanges) {
                 if (oldProgram) {

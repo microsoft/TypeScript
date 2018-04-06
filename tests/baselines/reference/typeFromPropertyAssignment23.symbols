@@ -40,3 +40,38 @@ D.prototype.foo = () =>  {
     this.n = 'not checked, so no error'
 }
 
+// post-class prototype assignments are trying to show that these properties are abstract
+class Module {
+>Module : Symbol(Module, Decl(a.js, 17, 1))
+}
+Module.prototype.identifier = undefined
+>Module.prototype.identifier : Symbol(Module.identifier, Decl(a.js, 21, 1))
+>Module.prototype : Symbol(Module.identifier, Decl(a.js, 21, 1))
+>Module : Symbol(Module, Decl(a.js, 17, 1))
+>prototype : Symbol(Module.prototype)
+>identifier : Symbol(Module.identifier, Decl(a.js, 21, 1))
+>undefined : Symbol(undefined)
+
+Module.prototype.size = null
+>Module.prototype.size : Symbol(Module.size, Decl(a.js, 22, 39))
+>Module.prototype : Symbol(Module.size, Decl(a.js, 22, 39))
+>Module : Symbol(Module, Decl(a.js, 17, 1))
+>prototype : Symbol(Module.prototype)
+>size : Symbol(Module.size, Decl(a.js, 22, 39))
+
+class NormalModule extends Module {
+>NormalModule : Symbol(NormalModule, Decl(a.js, 23, 28))
+>Module : Symbol(Module, Decl(a.js, 17, 1))
+
+    identifier() {
+>identifier : Symbol(NormalModule.identifier, Decl(a.js, 25, 35))
+
+        return 'normal'
+    }
+    size() {
+>size : Symbol(NormalModule.size, Decl(a.js, 28, 5))
+
+        return 0
+    }
+}
+

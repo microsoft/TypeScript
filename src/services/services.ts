@@ -1152,8 +1152,10 @@ namespace ts {
         };
     }
 
-    export function createLanguageService(host: LanguageServiceHost,
-        documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
+    export function createLanguageService(
+        host: LanguageServiceHost,
+        documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory()),
+        syntaxOnly = false): LanguageService {
 
         const syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         let program: Program;
@@ -1188,6 +1190,8 @@ namespace ts {
         }
 
         function synchronizeHostData(): void {
+            Debug.assert(!syntaxOnly);
+
             // perform fast check if host supports it
             if (host.getProjectVersion) {
                 const hostProjectVersion = host.getProjectVersion();
@@ -1362,7 +1366,12 @@ namespace ts {
             }
         }
 
-        function getProgram(): Program {
+        function getProgram(): Program | undefined {
+            if (syntaxOnly) {
+                Debug.assert(program === undefined);
+                return undefined;
+            }
+
             synchronizeHostData();
 
             return program;
@@ -2205,7 +2214,7 @@ namespace ts {
                 file,
                 startPosition,
                 endPosition,
-                program: getProgram(),
+                program: getProgram()!, // TODO: GH#18217
                 host,
                 formatContext: formatting.getFormatContext(formatOptions!), // TODO: GH#18217
                 cancellationToken,

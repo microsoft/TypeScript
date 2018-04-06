@@ -514,6 +514,7 @@ namespace ts.server {
                 logger,
                 canUseEvents: true,
                 suppressDiagnosticEvents,
+                syntaxOnly,
                 globalPlugins,
                 pluginProbeLocations,
                 allowLocalPluginLoads,
@@ -946,6 +947,7 @@ namespace ts.server {
     const useInferredProjectPerProjectRoot = hasArgument("--useInferredProjectPerProjectRoot");
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
     const suppressDiagnosticEvents = hasArgument("--suppressDiagnosticEvents");
+    const syntaxOnly = hasArgument("--syntaxOnly");
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
 
     logger.info(`Starting TS Server`);

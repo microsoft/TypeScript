@@ -311,6 +311,7 @@ namespace ts.server {
         pluginProbeLocations?: ReadonlyArray<string>;
         allowLocalPluginLoads?: boolean;
         typesMapLocation?: string;
+        syntaxOnly?: boolean;
     }
 
     function getDetailWatchInfo(watchType: WatchType, project: Project | undefined) {
@@ -400,6 +401,8 @@ namespace ts.server {
         public readonly allowLocalPluginLoads: boolean;
         public readonly typesMapLocation: string | undefined;
 
+        public readonly syntaxOnly?: boolean;
+
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects = createMap<true>();
 
@@ -420,6 +423,7 @@ namespace ts.server {
             this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray;
             this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
             this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(this.getExecutingFilePath(), "../typesMap.json") : opts.typesMapLocation;
+            this.syntaxOnly = opts.syntaxOnly;
 
             Debug.assert(!!this.host.createHash, "'ServerHost.createHash' is required for ProjectService");
             if (this.host.realpath) {
@@ -1197,6 +1201,11 @@ namespace ts.server {
         private forEachConfigFileLocation(info: ScriptInfo,
             action: (configFileName: NormalizedPath, canonicalConfigFilePath: string) => boolean | void,
             projectRootPath?: NormalizedPath) {
+
+            if (this.syntaxOnly) {
+                return undefined;
+            }
+
             let searchPath = asNormalizedPath(getDirectoryPath(info.fileName));
 
             while (!projectRootPath || containsPath(projectRootPath, searchPath, this.currentDirectory, !this.host.useCaseSensitiveFileNames)) {
@@ -2002,9 +2011,9 @@ namespace ts.server {
             let configFileName: NormalizedPath | undefined;
             let configFileErrors: ReadonlyArray<Diagnostic> | undefined;
 
-            const info = this.getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName, projectRootPath ? this.getNormalizedAbsolutePath(projectRootPath) : this.currentDirectory, fileContent, scriptKind, hasMixedContent)!;
+            const info = this.getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName, projectRootPath ? this.getNormalizedAbsolutePath(projectRootPath) : this.currentDirectory, fileContent, scriptKind, hasMixedContent)!; // TODO: GH#18217
             let project: ConfiguredProject | ExternalProject | undefined = this.findExternalProjetContainingOpenScriptInfo(info);
-            if (!project) {
+            if (!project && !this.syntaxOnly) { // Checking syntaxOnly is an optimization
                 configFileName = this.getConfigFileNameForFile(info, projectRootPath);
                 if (configFileName) {
                     project = this.findConfiguredProjectByProjectName(configFileName);
@@ -2310,7 +2319,7 @@ namespace ts.server {
             for (const file of proj.rootFiles) {
                 const normalized = toNormalizedPath(file.fileName);
                 if (getBaseConfigFileName(normalized)) {
-                    if (this.host.fileExists(normalized)) {
+                    if (!this.syntaxOnly && this.host.fileExists(normalized)) {
                         (tsConfigFiles || (tsConfigFiles = [])).push(normalized);
                     }
                 }

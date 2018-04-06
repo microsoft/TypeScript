@@ -297,6 +297,7 @@ namespace ts.server {
         eventHandler?: ProjectServiceEventHandler;
         /** Has no effect if eventHandler is also specified. */
         suppressDiagnosticEvents?: boolean;
+        syntaxOnly?: boolean;
         throttleWaitMilliseconds?: number;
 
         globalPlugins?: ReadonlyArray<string>;
@@ -359,7 +360,8 @@ namespace ts.server {
                 suppressDiagnosticEvents: this.suppressDiagnosticEvents,
                 globalPlugins: opts.globalPlugins,
                 pluginProbeLocations: opts.pluginProbeLocations,
-                allowLocalPluginLoads: opts.allowLocalPluginLoads
+                allowLocalPluginLoads: opts.allowLocalPluginLoads,
+                syntaxOnly: opts.syntaxOnly,
             };
             this.projectService = new ProjectService(settings);
             this.gcTimer = new GcTimer(this.host, /*delay*/ 7000, this.logger);

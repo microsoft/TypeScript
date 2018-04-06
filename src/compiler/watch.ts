@@ -31,12 +31,19 @@ namespace ts {
         };
     }
 
+    /** @internal */
+    export const nonClearingMessageCodes: number[] = [
+        Diagnostics.Compilation_complete_Watching_for_file_changes.code,
+        Diagnostics.Found_1_error.code,
+        Diagnostics.Found_0_errors.code
+    ];
+
     function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic, options: CompilerOptions) {
         if (system.clearScreen &&
             !options.preserveWatchOutput &&
-            diagnostic.code !== Diagnostics.Compilation_complete_Watching_for_file_changes.code &&
             !options.extendedDiagnostics &&
-            !options.diagnostics) {
+            !options.diagnostics &&
+            !contains(nonClearingMessageCodes, diagnostic.code)) {
             system.clearScreen();
         }
     }
@@ -115,10 +122,12 @@ namespace ts {
         emit(): EmitResult;
     }
 
+    export type ReportEmitErrorSummary = (errorCount: number) => void;
+
     /**
      * Helper that emit files, report diagnostics and lists emitted and/or source files depending on compiler options
      */
-    export function emitFilesAndReportErrors(program: ProgramToEmitFilesAndReportErrors, reportDiagnostic: DiagnosticReporter, writeFileName?: (s: string) => void) {
+    export function emitFilesAndReportErrors(program: ProgramToEmitFilesAndReportErrors, reportDiagnostic: DiagnosticReporter, writeFileName?: (s: string) => void, reportSummary?: ReportEmitErrorSummary) {
         // First get and report any syntactic errors.
         const diagnostics = program.getConfigFileParsingDiagnostics().slice();
         const configFileParsingDiagnosticsLength = diagnostics.length;
@@ -159,6 +168,10 @@ namespace ts {
             }
         }
 
+        if (reportSummary) {
+            reportSummary(diagnostics.filter(diagnostic => diagnostic.category === DiagnosticCategory.Error).length);
+        }
+
         if (emitSkipped && diagnostics.length > 0) {
             // If the emitter didn't emit anything, then pass that value along.
             return ExitStatus.DiagnosticsPresent_OutputsSkipped;
@@ -184,6 +197,7 @@ namespace ts {
         let host: DirectoryStructureHost = system;
         const useCaseSensitiveFileNames = () => system.useCaseSensitiveFileNames;
         const writeFileName = (s: string) => system.write(s + system.newLine);
+        const onWatchStatusChange = reportWatchStatus || createWatchStatusReporter(system);
         return {
             useCaseSensitiveFileNames,
             getNewLine: () => system.newLine,
@@ -202,7 +216,7 @@ namespace ts {
             setTimeout: system.setTimeout ? ((callback, ms, ...args: any[]) => system.setTimeout!.call(system, callback, ms, ...args)) : noop,
             clearTimeout: system.clearTimeout ? (timeoutId => system.clearTimeout!(timeoutId)) : noop,
             trace: s => system.write(s),
-            onWatchStatusChange: reportWatchStatus || createWatchStatusReporter(system),
+            onWatchStatusChange,
             createDirectory: path => system.createDirectory(path),
             writeFile: (path, data, writeByteOrderMark) => system.writeFile(path, data, writeByteOrderMark),
             onCachedDirectoryStructureHostCreate: cacheHost => host = cacheHost || system,
@@ -216,7 +230,19 @@ namespace ts {
         }
 
         function emitFilesAndReportErrorUsingBuilder(builderProgram: BuilderProgram) {
-            emitFilesAndReportErrors(builderProgram, reportDiagnostic!, writeFileName); // TODO: GH#18217
+            const compilerOptions = builderProgram.getCompilerOptions();
+            const newLine = getNewLineCharacter(compilerOptions, () => system.newLine);
+
+            const reportSummary = (errorCount: number) => {
+                if (errorCount === 1) {
+                    onWatchStatusChange(createCompilerDiagnostic(Diagnostics.Found_1_error, errorCount), newLine, compilerOptions);
+                }
+                else {
+                    onWatchStatusChange(createCompilerDiagnostic(Diagnostics.Found_0_errors, errorCount, errorCount), newLine, compilerOptions);
+                }
+            };
+
+            emitFilesAndReportErrors(builderProgram, reportDiagnostic!, writeFileName, reportSummary); // TODO: GH#18217
         }
     }
 

@@ -157,7 +157,7 @@ namespace ts {
             const host = projectSystem.createServerHost(includeLib ? [f, projectSystem.libFile] : [f]); // libFile is expensive to parse repeatedly - only test when required
             const projectService = projectSystem.createProjectService(host);
             projectService.openClientFile(f.path);
-            const program = projectService.inferredProjects[0].getLanguageService().getProgram();
+            const program = projectService.inferredProjects[0].getLanguageService().getProgram()!;
             return program;
         }
 
@@ -181,7 +181,7 @@ namespace ts {
             const host = projectSystem.createServerHost([f, projectSystem.libFile]);
             const projectService = projectSystem.createProjectService(host);
             projectService.openClientFile(f.path);
-            const program = projectService.inferredProjects[0].getLanguageService().getProgram();
+            const program = projectService.inferredProjects[0].getLanguageService().getProgram()!;
             const sourceFile = program.getSourceFile(f.path)!;
             const context: RefactorContext = {
                 cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
