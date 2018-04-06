@@ -131,6 +131,8 @@ node_modules/uglify-js/lib/scope.js(466,15): error TS2554: Expected 0 arguments,
 node_modules/uglify-js/lib/scope.js(491,15): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/sourcemap.js(56,25): error TS2304: Cannot find name 'MOZ_SourceMap'.
 node_modules/uglify-js/lib/sourcemap.js(60,40): error TS2304: Cannot find name 'MOZ_SourceMap'.
+node_modules/uglify-js/lib/utils.js(73,38): error TS2339: Property 'message' does not exist on type 'PropertyDescriptor'.
+node_modules/uglify-js/lib/utils.js(74,29): error TS2339: Property 'name' does not exist on type 'PropertyDescriptor'.
 node_modules/uglify-js/tools/exit.js(2,12): error TS2454: Variable 'process' is used before being assigned.
 node_modules/uglify-js/tools/exit.js(3,1): error TS2454: Variable 'process' is used before being assigned.
 node_modules/uglify-js/tools/exit.js(5,13): error TS2339: Property 'once' does not exist on type 'typeof process'.

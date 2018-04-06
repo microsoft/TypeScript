@@ -3,7 +3,7 @@
         "outDir": "./built",
         "allowJs": true,
         "checkJs": true,
-        "lib": ["dom", "es2017"],
+        "lib": ["esnext", "dom"],
         "types": []
     },
     "include": [
