@@ -1,20 +1,23 @@
 === tests/cases/conformance/salsa/a.js ===
 /// <reference path='./requires.d.ts' />
 var mod1 = require('./mod1')
->mod1 : { (): void; f: (a: number) => void; }
->require('./mod1') : { (): void; f: (a: number) => void; }
+>mod1 : number
+>require('./mod1') : number
 >require : (name: string) => any
 >'./mod1' : "./mod1"
 
-mod1()
->mod1() : void
->mod1 : { (): void; f: (a: number) => void; }
+mod1.toFixed(12)
+>mod1.toFixed(12) : string
+>mod1.toFixed : (fractionDigits?: number) => string
+>mod1 : number
+>toFixed : (fractionDigits?: number) => string
+>12 : 12
 
-mod1.f() // error, not enough arguments
->mod1.f() : void
->mod1.f : (a: number) => void
->mod1 : { (): void; f: (a: number) => void; }
->f : (a: number) => void
+mod1.f() // error, 'f' is not a property on 'number'
+>mod1.f() : any
+>mod1.f : any
+>mod1 : number
+>f : any
 
 === tests/cases/conformance/salsa/requires.d.ts ===
 declare var module: { exports: any };
@@ -27,21 +30,19 @@ declare function require(name: string): any;
 
 === tests/cases/conformance/salsa/mod1.js ===
 /// <reference path='./requires.d.ts' />
-module.exports = function () { }
->module.exports = function () { } : () => void
+module.exports = 1
+>module.exports = 1 : 1
 >module.exports : any
 >module : { exports: any; }
 >exports : any
->function () { } : () => void
+>1 : 1
 
-/** @param {number} a */
-module.exports.f = function (a) { }
->module.exports.f = function (a) { } : (a: number) => void
+module.exports.f = function () { }
+>module.exports.f = function () { } : () => void
 >module.exports.f : any
 >module.exports : any
 >module : { exports: any; }
 >exports : any
 >f : any
->function (a) { } : (a: number) => void
->a : number
+>function () { } : () => void
 
