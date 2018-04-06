@@ -2098,7 +2098,7 @@ namespace ts {
                         if (moduleSym) {
                             if (moduleSym.exports.has(InternalSymbolName.ExportEquals as __String) && moduleSym.exports.size > 1) {
                                 Debug.assert(!!(moduleSym.valueDeclaration as SourceFile).commonJsModuleIndicator);
-                                namespace = combineCommonJsSymbol(moduleSym);
+                                namespace = mergeCommonJsExportEquals(moduleSym);
                             }
                             else {
                                 const resolvedModuleSymbol = resolveExternalModuleSymbol(moduleSym);
@@ -4392,11 +4392,27 @@ namespace ts {
                     if (getObjectFlags(type) & ObjectFlags.Anonymous &&
                         special === SpecialPropertyAssignmentKind.ModuleExports &&
                         symbol.escapedName === InternalSymbolName.ExportEquals) {
-                        const o = resolveStructuredTypeMembers(type as AnonymousType);
+                        const exportedType = resolveStructuredTypeMembers(type as AnonymousType);
                         const members = createSymbolTable();
-                        copyEntries(o.members, members);
-                        copyEntries(symbol.exports, members);
-                        type = createAnonymousType(o.symbol, members, o.callSignatures, o.constructSignatures, o.stringIndexInfo, o.numberIndexInfo);
+                        copyEntries(exportedType.members, members);
+                        symbol.exports.forEach((s, name) => {
+                            if (members.has(name)) {
+                                const exportedMember = exportedType.members.get(name);
+                                const union = createSymbol(s.flags | exportedMember.flags, name);
+                                union.type = getUnionType([getTypeOfSymbol(s), getTypeOfSymbol(exportedMember)]);
+                                members.set(name, union);
+                            }
+                            else {
+                                members.set(name, s);
+                            }
+                        });
+                        type = createAnonymousType(
+                            exportedType.symbol,
+                            members,
+                            exportedType.callSignatures,
+                            exportedType.constructSignatures,
+                            exportedType.stringIndexInfo,
+                            exportedType.numberIndexInfo);
                     }
                     let anyedType = type;
                     if (isEmptyArrayLiteralType(type)) {
@@ -7011,7 +7027,7 @@ namespace ts {
             if (moduleSym) {
                 if (moduleSym.exports.has(InternalSymbolName.ExportEquals as __String) && moduleSym.exports.size > 1) {
                     Debug.assert(!!(moduleSym.valueDeclaration as SourceFile).commonJsModuleIndicator);
-                    return getTypeOfSymbol(combineCommonJsSymbol(moduleSym));
+                    return getTypeOfSymbol(mergeCommonJsExportEquals(moduleSym));
                 }
                 const resolvedModuleSymbol = resolveExternalModuleSymbol(moduleSym);
                 if (resolvedModuleSymbol) {
@@ -7022,11 +7038,11 @@ namespace ts {
             return anyType;
         }
 
-        function combineCommonJsSymbol(moduleSym: Symbol): Symbol {
+        function mergeCommonJsExportEquals(moduleSym: Symbol): Symbol {
             const combined = cloneSymbol(moduleSym.exports.get(InternalSymbolName.ExportEquals));
-            moduleSym.exports.forEach((s,name) => {
+            moduleSym.exports.forEach((s, name) => {
                 if (name === InternalSymbolName.ExportEquals) return;
-                if (!combined.exports.has(name) || combined.exports.get(name).valueDeclaration.pos > s.valueDeclaration.pos) {
+                if (!combined.exports.has(name)) {
                     combined.exports.set(name, s);
                 }
             });
