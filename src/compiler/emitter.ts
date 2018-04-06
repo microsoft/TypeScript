@@ -4,6 +4,7 @@
 /// <reference path="comments.ts" />
 
 namespace ts {
+    const infoExtension = ".tsbundleinfo";
     const brackets = createBracketsMap();
 
     /*@internal*/
@@ -49,7 +50,7 @@ namespace ts {
             const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
             const declarationFilePath = (forceDtsPaths || options.declaration) ? removeFileExtension(jsFilePath) + Extension.Dts : undefined;
             const declarationMapPath = getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
-            const bundleInfoPath = options.references && jsFilePath && (removeFileExtension(jsFilePath) + ".bundle_info");
+            const bundleInfoPath = options.references && jsFilePath && (removeFileExtension(jsFilePath) + infoExtension);
             return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, bundleInfoPath };
         }
         else {
@@ -400,14 +401,14 @@ namespace ts {
                 case EmitHint.Expression:
                     Debug.assert(isExpression(node), "Expected an Expression node.");
                     break;
-                case EmitHint.Prepend:
-                    Debug.assert(node.kind === SyntaxKind.Prepend, "Expected an Prepend node.");
+                case EmitHint.UnparsedSource:
+                    Debug.assert(node.kind === SyntaxKind.UnparsedSource, "Expected an UnparsedSource node.");
                     break;
             }
             switch (node.kind) {
                 case SyntaxKind.SourceFile: return printFile(<SourceFile>node);
                 case SyntaxKind.Bundle: return printBundle(<Bundle>node);
-                case SyntaxKind.Prepend: return printPrepend(<PrependNode>node);
+                case SyntaxKind.UnparsedSource: return printUnparsedSource(<UnparsedSource>node);
             }
             writeNode(hint, node, sourceFile, beginPrint());
             return endPrint();
@@ -428,8 +429,8 @@ namespace ts {
             return endPrint();
         }
 
-        function printPrepend(prepend: PrependNode): string {
-            writePrepend(prepend, beginPrint());
+        function printUnparsedSource(unparsed: UnparsedSource): string {
+            writeUnparsedSource(unparsed, beginPrint());
             return endPrint();
         }
 
@@ -463,7 +464,7 @@ namespace ts {
             emitShebangIfNeeded(bundle);
             emitPrologueDirectivesIfNeeded(bundle);
             for (const prepend of bundle.prepends) {
-                print(EmitHint.Prepend, prepend, /*sourceFile*/ undefined);
+                print(EmitHint.UnparsedSource, prepend, /*sourceFile*/ undefined);
             }
 
             if (bundleInfo) {
@@ -479,10 +480,10 @@ namespace ts {
             writer = previousWriter;
         }
 
-        function writePrepend(prepend: PrependNode, output: EmitTextWriter) {
+        function writeUnparsedSource(unparsed: UnparsedSource, output: EmitTextWriter) {
             const previousWriter = writer;
             setWriter(output);
-            print(EmitHint.Prepend, prepend, /*sourceFile*/ undefined);
+            print(EmitHint.UnparsedSource, unparsed, /*sourceFile*/ undefined);
             reset();
             writer = previousWriter;
         }
@@ -592,7 +593,7 @@ namespace ts {
                 case EmitHint.IdentifierName: return pipelineEmitIdentifierName(node);
                 case EmitHint.Expression: return pipelineEmitExpression(node);
                 case EmitHint.MappedTypeParameter: return emitMappedTypeParameter(cast(node, isTypeParameterDeclaration));
-                case EmitHint.Prepend:
+                case EmitHint.UnparsedSource:
                 case EmitHint.Unspecified: return pipelineEmitUnspecified(node);
                 default:
                     assertTypeIsNever(hint);
@@ -634,8 +635,8 @@ namespace ts {
                 case SyntaxKind.TemplateMiddle:
                 case SyntaxKind.TemplateTail:
                     return emitLiteral(<LiteralExpression>node);
-                case SyntaxKind.Prepend:
-                    return emitPrepend(<PrependNode>node);
+                case SyntaxKind.UnparsedSource:
+                    return emitUnparsedSource(<UnparsedSource>node);
 
                 // Identifiers
                 case SyntaxKind.Identifier:
@@ -1030,9 +1031,9 @@ namespace ts {
             }
         }
 
-        // SyntaxKind.Prepend
-        function emitPrepend(prepend: PrependNode) {
-            write(prepend.javascriptText);
+        // SyntaxKind.UnparsedSource
+        function emitUnparsedSource(unparsed: UnparsedSource) {
+            write(unparsed.javascriptText);
         }
 
         //

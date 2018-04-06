@@ -1145,12 +1145,12 @@ namespace ts {
             };
         }
 
-        function getPrependNodes(): PrependNode[] {
+        function getPrependNodes(): UnparsedSource[] {
             if (!projectReferences) {
                 return emptyArray;
             }
 
-            const nodes: PrependNode[] = [];
+            const nodes: UnparsedSource[] = [];
             for (let i = 0; i < projectReferences.length; i++) {
                 const ref = projectReferences[i];
                 const resolvedRef = resolvedProjectReferences[i];
@@ -2203,9 +2203,6 @@ namespace ts {
                     }
                     if (!resolvedRef.options.composite) {
                         createDiagnosticForReference(i, Diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true, ref.path);
-                    }
-                    if (resolvedRef.options.declaration === false) {
-                        createDiagnosticForReference(i, Diagnostics.Referenced_project_0_must_have_declaration_Colon_true, ref.path);
                     }
                 }
             }

@@ -2531,22 +2531,22 @@ namespace ts {
             : node;
     }
 
-    export function createBundle(sourceFiles: ReadonlyArray<SourceFile>, prepends: ReadonlyArray<PrependNode> = emptyArray) {
+    export function createBundle(sourceFiles: ReadonlyArray<SourceFile>, prepends: ReadonlyArray<UnparsedSource> = emptyArray) {
         const node = <Bundle>createNode(SyntaxKind.Bundle);
         node.prepends = prepends;
         node.sourceFiles = sourceFiles;
         return node;
     }
 
-    export function createPrepend(javascript: string, declaration: string): PrependNode {
-        const node = <PrependNode>createNode(SyntaxKind.Prepend);
+    export function createPrepend(javascript: string, declaration: string): UnparsedSource {
+        const node = <UnparsedSource>createNode(SyntaxKind.UnparsedSource);
         node.javascriptText = javascript;
         node.declarationText = declaration;
         return node;
     }
 
-    export function updateBundle(node: Bundle, sourceFiles: ReadonlyArray<SourceFile>, prepends: ReadonlyArray<PrependNode> = emptyArray) {
-        if (node.sourceFiles !== sourceFiles) {
+    export function updateBundle(node: Bundle, sourceFiles: ReadonlyArray<SourceFile>, prepends: ReadonlyArray<UnparsedSource> = emptyArray) {
+        if (node.sourceFiles !== sourceFiles || node.prepends !== prepends) {
             return createBundle(sourceFiles, prepends);
         }
         return node;

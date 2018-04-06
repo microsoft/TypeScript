@@ -396,7 +396,7 @@ namespace ts {
         // Top-level nodes
         SourceFile,
         Bundle,
-        Prepend,
+        UnparsedSource,
 
         // JSDoc nodes
         JSDocTypeExpression,
@@ -2594,14 +2594,14 @@ namespace ts {
 
     export interface Bundle extends Node {
         kind: SyntaxKind.Bundle;
-        prepends: ReadonlyArray<PrependNode>;
+        prepends: ReadonlyArray<UnparsedSource>;
         sourceFiles: ReadonlyArray<SourceFile>;
         /* @internal */ syntheticFileReferences?: ReadonlyArray<FileReference>;
         /* @internal */ syntheticTypeReferences?: ReadonlyArray<FileReference>;
     }
 
-    export interface PrependNode extends Node {
-        kind: SyntaxKind.Prepend;
+    export interface UnparsedSource extends Node {
+        kind: SyntaxKind.UnparsedSource;
         javascriptText: string;
         declarationText: string;
     }
@@ -4845,7 +4845,7 @@ namespace ts {
         Expression,          // Emitting an Expression
         IdentifierName,      // Emitting an IdentifierName
         MappedTypeParameter, // Emitting a TypeParameterDeclaration inside of a MappedTypeNode
-        Prepend,             // Emitting a literal node from a prior emit output of a referenced project
+        UnparsedSource,             // Emitting a literal node from a prior emit output of a referenced project
         Unspecified,         // Emitting an otherwise unspecified node
     }
 
@@ -4862,7 +4862,7 @@ namespace ts {
 
         isEmitBlocked(emitFileName: string): boolean;
 
-        getPrependNodes(): ReadonlyArray<PrependNode>;
+        getPrependNodes(): ReadonlyArray<UnparsedSource>;
 
         writeFile: WriteFileCallback;
     }
