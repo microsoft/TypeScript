@@ -7200,15 +7200,15 @@ namespace ts {
             return symbol.members.get(InternalSymbolName.Index);
         }
 
-        function getIndexDeclarationOfSymbol(symbol: Symbol, kind: IndexKind): SignatureDeclaration {
+        function getIndexDeclarationOfSymbol(symbol: Symbol, kind: IndexKind): IndexSignatureDeclaration {
             const syntaxKind = kind === IndexKind.Number ? SyntaxKind.NumberKeyword : SyntaxKind.StringKeyword;
             const indexSymbol = getIndexSymbol(symbol);
             if (indexSymbol) {
                 for (const decl of indexSymbol.declarations) {
-                    const node = <SignatureDeclaration>decl;
+                    const node = cast(decl, isIndexSignatureDeclaration);
                     if (node.parameters.length === 1) {
                         const parameter = node.parameters[0];
-                        if (parameter && parameter.type && parameter.type.kind === syntaxKind) {
+                        if (parameter.type && parameter.type.kind === syntaxKind) {
                             return node;
                         }
                     }
@@ -7218,7 +7218,7 @@ namespace ts {
             return undefined;
         }
 
-        function createIndexInfo(type: Type, isReadonly: boolean, declaration?: SignatureDeclaration): IndexInfo {
+        function createIndexInfo(type: Type, isReadonly: boolean, declaration?: IndexSignatureDeclaration): IndexInfo {
             return { type, isReadonly, declaration };
         }
 
