@@ -2015,6 +2015,7 @@ declare namespace ts {
         members?: SymbolTable;
         exports?: SymbolTable;
         globalExports?: SymbolTable;
+        nameType?: Type;
     }
     enum InternalSymbolName {
         Call = "__call",
