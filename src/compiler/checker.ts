@@ -2096,15 +2096,9 @@ namespace ts {
                         const moduleName = (namespace.valueDeclaration.initializer as CallExpression).arguments[0] as StringLiteral;
                         const moduleSym = resolveExternalModuleName(moduleName, moduleName);
                         if (moduleSym) {
-                            if (moduleSym.exports.has(InternalSymbolName.ExportEquals as __String) && moduleSym.exports.size > 1) {
-                                Debug.assert(!!(moduleSym.valueDeclaration as SourceFile).commonJsModuleIndicator);
-                                namespace = mergeCommonJsExportEquals(moduleSym);
-                            }
-                            else {
-                                const resolvedModuleSymbol = resolveExternalModuleSymbol(moduleSym);
-                                if (resolvedModuleSymbol) {
-                                    namespace = resolvedModuleSymbol;
-                                }
+                            const resolvedModuleSymbol = resolveExternalModuleSymbol(moduleSym);
+                            if (resolvedModuleSymbol) {
+                                namespace = resolvedModuleSymbol;
                             }
                         }
                     }
@@ -2222,7 +2216,22 @@ namespace ts {
         // An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
         // and an external module with no 'export =' declaration resolves to the module itself.
         function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol {
-            return moduleSymbol && getMergedSymbol(resolveSymbol(moduleSymbol.exports.get(InternalSymbolName.ExportEquals), dontResolveAlias)) || moduleSymbol;
+            return moduleSymbol && getMergedSymbol(resolveSymbol(getCommonJsExportEquals(moduleSymbol), dontResolveAlias)) || moduleSymbol;
+        }
+
+        function getCommonJsExportEquals(moduleSymbol: Symbol): Symbol {
+            const exported = moduleSymbol.exports.get(InternalSymbolName.ExportEquals);
+            if (!exported || !exported.exports || moduleSymbol.exports.size === 1) {
+                return exported;
+            }
+            const merged = cloneSymbol(exported);
+            moduleSymbol.exports.forEach((s, name) => {
+                if (name === InternalSymbolName.ExportEquals) return;
+                if (!merged.exports.has(name)) {
+                    merged.exports.set(name, s);
+                }
+            });
+            return merged;
         }
 
         // An external module with an 'export =' declaration may be referenced as an ES6 module provided the 'export ='
@@ -7025,10 +7034,6 @@ namespace ts {
         function resolveExternalModuleTypeByLiteral(name: StringLiteral) {
             const moduleSym = resolveExternalModuleName(name, name);
             if (moduleSym) {
-                if (moduleSym.exports.has(InternalSymbolName.ExportEquals as __String) && moduleSym.exports.size > 1) {
-                    Debug.assert(!!(moduleSym.valueDeclaration as SourceFile).commonJsModuleIndicator);
-                    return getTypeOfSymbol(mergeCommonJsExportEquals(moduleSym));
-                }
                 const resolvedModuleSymbol = resolveExternalModuleSymbol(moduleSym);
                 if (resolvedModuleSymbol) {
                     return getTypeOfSymbol(resolvedModuleSymbol);
@@ -7036,18 +7041,6 @@ namespace ts {
             }
 
             return anyType;
-        }
-
-        function mergeCommonJsExportEquals(moduleSym: Symbol): Symbol {
-            const combined = cloneSymbol(moduleSym.exports.get(InternalSymbolName.ExportEquals));
-            moduleSym.exports.forEach((s, name) => {
-                if (name === InternalSymbolName.ExportEquals) return;
-                if (!combined.exports.has(name)) {
-                    combined.exports.set(name, s);
-                }
-            });
-            return combined;
-
         }
 
         function getThisTypeOfSignature(signature: Signature): Type | undefined {
