@@ -44,8 +44,8 @@ namespace ts {
 
     /* @internal */
     export const enum Comparison {
-        LessThan = -1,
-        EqualTo = 0,
+        LessThan    = -1,
+        EqualTo     = 0,
         GreaterThan = 1
     }
 
@@ -469,24 +469,24 @@ namespace ts {
     }
 
     export const enum NodeFlags {
-        None = 0,
-        Let = 1 << 0,  // Variable declaration
-        Const = 1 << 1,  // Variable declaration
-        NestedNamespace = 1 << 2,  // Namespace declaration
-        Synthesized = 1 << 3,  // Node was synthesized during transformation
-        Namespace = 1 << 4,  // Namespace declaration
-        ExportContext = 1 << 5,  // Export context (initialized by binding)
-        ContainsThis = 1 << 6,  // Interface contains references to "this"
-        HasImplicitReturn = 1 << 7,  // If function implicitly returns on one of codepaths (initialized by binding)
-        HasExplicitReturn = 1 << 8,  // If function has explicit reachable return on one of codepaths (initialized by binding)
+        None               = 0,
+        Let                = 1 << 0,  // Variable declaration
+        Const              = 1 << 1,  // Variable declaration
+        NestedNamespace    = 1 << 2,  // Namespace declaration
+        Synthesized        = 1 << 3,  // Node was synthesized during transformation
+        Namespace          = 1 << 4,  // Namespace declaration
+        ExportContext      = 1 << 5,  // Export context (initialized by binding)
+        ContainsThis       = 1 << 6,  // Interface contains references to "this"
+        HasImplicitReturn  = 1 << 7,  // If function implicitly returns on one of codepaths (initialized by binding)
+        HasExplicitReturn  = 1 << 8,  // If function has explicit reachable return on one of codepaths (initialized by binding)
         GlobalAugmentation = 1 << 9,  // Set if module declaration is an augmentation for the global scope
-        HasAsyncFunctions = 1 << 10, // If the file has async functions (initialized by binding)
-        DisallowInContext = 1 << 11, // If node was parsed in a context where 'in-expressions' are not allowed
-        YieldContext = 1 << 12, // If node was parsed in the 'yield' context created when parsing a generator
-        DecoratorContext = 1 << 13, // If node was parsed as part of a decorator
-        AwaitContext = 1 << 14, // If node was parsed in the 'await' context created when parsing an async function
-        ThisNodeHasError = 1 << 15, // If the parser encountered an error when parsing the code that created this node
-        JavaScriptFile = 1 << 16, // If node was parsed in a JavaScript
+        HasAsyncFunctions  = 1 << 10, // If the file has async functions (initialized by binding)
+        DisallowInContext  = 1 << 11, // If node was parsed in a context where 'in-expressions' are not allowed
+        YieldContext       = 1 << 12, // If node was parsed in the 'yield' context created when parsing a generator
+        DecoratorContext   = 1 << 13, // If node was parsed as part of a decorator
+        AwaitContext       = 1 << 14, // If node was parsed in the 'await' context created when parsing an async function
+        ThisNodeHasError   = 1 << 15, // If the parser encountered an error when parsing the code that created this node
+        JavaScriptFile     = 1 << 16, // If node was parsed in a JavaScript
         ThisNodeOrAnySubNodesHasError = 1 << 17, // If this node or any of its children had an error
         HasAggregatedChildData = 1 << 18, // If we've computed data from children and cached it in this node
 
@@ -500,10 +500,10 @@ namespace ts {
         // we guarantee that users won't have to pay the price of walking the tree if a dynamic import isn't used.
         /* @internal */
         PossiblyContainsDynamicImport = 1 << 19,
-        JSDoc = 1 << 20, // If node was parsed inside jsdoc
-        /* @internal */ Ambient = 1 << 21, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
+        JSDoc              = 1 << 20, // If node was parsed inside jsdoc
+        /* @internal */ Ambient =         1 << 21, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
         /* @internal */ InWithStatement = 1 << 22, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
-        JsonFile = 1 << 23, // If node was parsed in a Json
+        JsonFile           = 1 << 23, // If node was parsed in a Json
 
         BlockScoped = Let | Const,
 
@@ -518,19 +518,19 @@ namespace ts {
     }
 
     export const enum ModifierFlags {
-        None = 0,
-        Export = 1 << 0,  // Declarations
-        Ambient = 1 << 1,  // Declarations
-        Public = 1 << 2,  // Property/Method
-        Private = 1 << 3,  // Property/Method
-        Protected = 1 << 4,  // Property/Method
-        Static = 1 << 5,  // Property/Method
-        Readonly = 1 << 6,  // Property/Method
-        Abstract = 1 << 7,  // Class/Method/ConstructSignature
-        Async = 1 << 8,  // Property/Method/Function
-        Default = 1 << 9,  // Function/Class (export default declaration)
-        Const = 1 << 11, // Variable declaration
-        HasComputedFlags = 1 << 29, // Modifier flags have been computed
+        None =               0,
+        Export =             1 << 0,  // Declarations
+        Ambient =            1 << 1,  // Declarations
+        Public =             1 << 2,  // Property/Method
+        Private =            1 << 3,  // Property/Method
+        Protected =          1 << 4,  // Property/Method
+        Static =             1 << 5,  // Property/Method
+        Readonly =           1 << 6,  // Property/Method
+        Abstract =           1 << 7,  // Class/Method/ConstructSignature
+        Async =              1 << 8,  // Property/Method/Function
+        Default =            1 << 9,  // Function/Class (export default declaration)
+        Const =              1 << 11, // Variable declaration
+        HasComputedFlags =   1 << 29, // Modifier flags have been computed
 
         AccessibilityModifier = Public | Private | Protected,
         // Accessibility modifiers and 'readonly' can be attached to a parameter in a constructor to make it a property.
@@ -1057,16 +1057,16 @@ namespace ts {
 
     export interface KeywordTypeNode extends TypeNode {
         kind: SyntaxKind.AnyKeyword
-        | SyntaxKind.NumberKeyword
-        | SyntaxKind.ObjectKeyword
-        | SyntaxKind.BooleanKeyword
-        | SyntaxKind.StringKeyword
-        | SyntaxKind.SymbolKeyword
-        | SyntaxKind.ThisKeyword
-        | SyntaxKind.VoidKeyword
-        | SyntaxKind.UndefinedKeyword
-        | SyntaxKind.NullKeyword
-        | SyntaxKind.NeverKeyword;
+            | SyntaxKind.NumberKeyword
+            | SyntaxKind.ObjectKeyword
+            | SyntaxKind.BooleanKeyword
+            | SyntaxKind.StringKeyword
+            | SyntaxKind.SymbolKeyword
+            | SyntaxKind.ThisKeyword
+            | SyntaxKind.VoidKeyword
+            | SyntaxKind.UndefinedKeyword
+            | SyntaxKind.NullKeyword
+            | SyntaxKind.NeverKeyword;
     }
 
     export interface ImportTypeNode extends NodeWithTypeArguments {
@@ -2402,19 +2402,19 @@ namespace ts {
     }
 
     export const enum FlowFlags {
-        Unreachable = 1 << 0,  // Unreachable code
-        Start = 1 << 1,  // Start of flow graph
-        BranchLabel = 1 << 2,  // Non-looping junction
-        LoopLabel = 1 << 3,  // Looping junction
-        Assignment = 1 << 4,  // Assignment
-        TrueCondition = 1 << 5,  // Condition known to be true
+        Unreachable    = 1 << 0,  // Unreachable code
+        Start          = 1 << 1,  // Start of flow graph
+        BranchLabel    = 1 << 2,  // Non-looping junction
+        LoopLabel      = 1 << 3,  // Looping junction
+        Assignment     = 1 << 4,  // Assignment
+        TrueCondition  = 1 << 5,  // Condition known to be true
         FalseCondition = 1 << 6,  // Condition known to be false
-        SwitchClause = 1 << 7,  // Switch statement clause
-        ArrayMutation = 1 << 8,  // Potential array mutation
-        Referenced = 1 << 9,  // Referenced as antecedent once
-        Shared = 1 << 10, // Referenced as antecedent more than once
-        PreFinally = 1 << 11, // Injected edge that links pre-finally label and pre-try flow
-        AfterFinally = 1 << 12, // Injected edge that links post-finally flow with the rest of the graph
+        SwitchClause   = 1 << 7,  // Switch statement clause
+        ArrayMutation  = 1 << 8,  // Potential array mutation
+        Referenced     = 1 << 9,  // Referenced as antecedent once
+        Shared         = 1 << 10, // Referenced as antecedent more than once
+        PreFinally     = 1 << 11, // Injected edge that links pre-finally label and pre-try flow
+        AfterFinally   = 1 << 12, // Injected edge that links post-finally flow with the rest of the graph
         Label = BranchLabel | LoopLabel,
         Condition = TrueCondition | FalseCondition
     }
