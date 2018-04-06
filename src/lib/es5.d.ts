@@ -772,8 +772,7 @@ interface Date {
 
 interface DateConstructor {
     new(): Date;
-    new(value: number): Date;
-    new(value: string): Date;
+    new(value: number | string): Date;
     new(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date;
     (): string;
     readonly prototype: Date;
