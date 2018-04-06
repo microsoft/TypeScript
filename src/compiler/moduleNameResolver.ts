@@ -1034,7 +1034,7 @@ namespace ts {
         const onlyRecordFailures = !directoryProbablyExists(getDirectoryPath(file), state.host);
         const fromFile = tryFile(file, failedLookupLocations, onlyRecordFailures, state);
         if (fromFile) {
-            const resolved = fromFile && resolvedIfExtensionMatches(extensions, fromFile);
+            const resolved = resolvedIfExtensionMatches(extensions, fromFile);
             if (resolved) {
                 return resolved;
             }
