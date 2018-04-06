@@ -8,6 +8,7 @@
 ////const a = require("a").a;
 ////const [a, b] = require("c").d;
 ////const [a, b] = require("c").a; // Test that we avoid shadowing the earlier local variable 'a' from 'const [a,b] = d;'.
+////x; a; b;
 
 verify.codeFix({
     description: "Convert to ES6 module",
@@ -18,5 +19,6 @@ import { a } from "a";
 import { d } from "c";
 const [a, b] = d;
 import { a as _a } from "c";
-const [a, b] = _a; // Test that we avoid shadowing the earlier local variable 'a' from 'const [a,b] = d;'.`,
+const [a, b] = _a; // Test that we avoid shadowing the earlier local variable 'a' from 'const [a,b] = d;'.
+x; a; b;`,
 });

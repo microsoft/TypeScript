@@ -3282,7 +3282,8 @@
     },
     "'{0}' is declared but its value is never read.": {
         "category": "Error",
-        "code": 6133
+        "code": 6133,
+        "unused": true
     },
     "Report errors on unused locals.": {
         "category": "Message",
@@ -3302,7 +3303,8 @@
     },
     "Property '{0}' is declared but its value is never read.": {
         "category": "Error",
-        "code": 6138
+        "code": 6138,
+        "unused": true
     },
     "Import emit helpers from 'tslib'.": {
         "category": "Message",
@@ -3514,7 +3516,8 @@
     },
     "All imports in import declaration are unused.": {
         "category": "Error",
-        "code": 6192
+        "code": 6192,
+        "unused": true
     },
     "Found 1 error.": {
         "category": "Message",
@@ -3602,7 +3605,8 @@
     },
     "Unused label.": {
         "category": "Error",
-        "code": 7028
+        "code": 7028,
+        "unused": true
     },
     "Fallthrough case in switch.": {
         "category": "Error",

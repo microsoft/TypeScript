@@ -1374,26 +1374,37 @@ namespace ts.FindAllReferences.Core {
     // For certain symbol kinds, we need to include other symbols in the search set.
     // This is not needed when searching for re-exports.
     function populateSearchSymbolSet(symbol: Symbol, location: Node, checker: TypeChecker, implementations: boolean): Symbol[] {
-        // The search set contains at least the current symbol
         const result: Symbol[] = [];
+        forEachRelatedSymbol<void>(symbol, location, checker,
+            (sym, root, base) => { result.push(base || root || sym); },
+            parameterProperties => { result.push(...parameterProperties); },
+            /*allowBaseTypes*/ () => !implementations,
+            /*includeShorthandDestructuring*/ false);
+        return result;
+    }
 
+    function forEachRelatedSymbol<T>(
+        symbol: Symbol, location: Node, checker: TypeChecker,
+        cbSymbol: (symbol: Symbol, rootSymbol?: Symbol, baseSymbol?: Symbol) => T | undefined,
+        cbParameterProperties: (s: Symbol[]) => T | undefined,
+        allowBaseTypes: (rootSymbol: Symbol) => boolean,
+        includeShorthandDestructuring: boolean,
+    ): T | undefined {
         const containingObjectLiteralElement = getContainingObjectLiteralElement(location);
         if (containingObjectLiteralElement) {
-            // If the location is name of property symbol from object literal destructuring pattern
-            // Search the property symbol
-            //      for ( { property: p2 } of elems) { }
-            if (containingObjectLiteralElement.kind !== SyntaxKind.ShorthandPropertyAssignment) {
-                const propertySymbol = getPropertySymbolOfDestructuringAssignment(location, checker);
-                if (propertySymbol) {
-                    result.push(propertySymbol);
-                }
-            }
-
             // If the location is in a context sensitive location (i.e. in an object literal) try
             // to get a contextual type for it, and add the property symbol from the contextual
             // type to the search set
-            for (const contextualSymbol of getPropertySymbolsFromContextualType(containingObjectLiteralElement, checker)) {
-                addRootSymbols(contextualSymbol);
+            const res = firstDefined(getPropertySymbolsFromContextualType(containingObjectLiteralElement, checker), fromRoot);
+            if (res) return res;
+
+            // If the location is name of property symbol from object literal destructuring pattern
+            // Search the property symbol
+            //      for ( { property: p2 } of elems) { }
+            if (includeShorthandDestructuring || containingObjectLiteralElement.kind !== SyntaxKind.ShorthandPropertyAssignment) {
+                const propertySymbol = getPropertySymbolOfDestructuringAssignment(location, checker);
+                const res = propertySymbol && cbSymbol(propertySymbol);
+                if (res) return res;
             }
 
             /* Because in short-hand property assignment, location has two meaning : property name and as value of the property
@@ -1408,47 +1419,42 @@ namespace ts.FindAllReferences.Core {
              * will be included correctly.
              */
             const shorthandValueSymbol = checker.getShorthandAssignmentValueSymbol(location.parent);
-            if (shorthandValueSymbol) {
-                result.push(shorthandValueSymbol);
-            }
+            const res1 = shorthandValueSymbol && cbSymbol(shorthandValueSymbol);
+            if (res1) return res1;
         }
+
+        const res = fromRoot(symbol);
+        if (res) return res;
 
         // If the symbol.valueDeclaration is a property parameter declaration,
         // we should include both parameter declaration symbol and property declaration symbol
         // Parameter Declaration symbol is only visible within function scope, so the symbol is stored in constructor.locals.
         // Property Declaration symbol is a member of the class, so the symbol is stored in its class Declaration.symbol.members
-        addRange(result, getParameterPropertySymbols(symbol, checker));
+        if (symbol.valueDeclaration && isParameter(symbol.valueDeclaration) && isParameterPropertyDeclaration(symbol.valueDeclaration)) {
+            const paramProps = checker.getSymbolsOfParameterPropertyDeclaration(symbol.valueDeclaration, symbol.name);
+            const res = paramProps && cbParameterProperties(paramProps);
+            if (res) return res;
+        }
 
         // If this is symbol of binding element without propertyName declaration in Object binding pattern
         // Include the property in the search
         const bindingElementPropertySymbol = getPropertySymbolOfObjectBindingPatternWithoutPropertyName(symbol, checker);
-        if (bindingElementPropertySymbol) {
-            result.push(bindingElementPropertySymbol);
-            addRootSymbols(bindingElementPropertySymbol);
-        }
+        return bindingElementPropertySymbol && fromRoot(bindingElementPropertySymbol);
 
-        addRootSymbols(symbol);
-
-        return result;
-
-        function addRootSymbols(sym: Symbol): void {
-            // If this is a union property, add all the symbols from all its source symbols in all unioned types.
-            // If the symbol is an instantiation from a another symbol (e.g. widened symbol) , add the root the list
-            for (const rootSymbol of checker.getRootSymbols(sym)) {
-                result.push(rootSymbol);
-
+        function fromRoot(sym: Symbol): T | undefined {
+            // If this is a union property:
+            //   - In populateSearchSymbolsSet we will add all the symbols from all its source symbols in all unioned types.
+            //   - In findRelatedSymbol, we will just use the union symbol if any source symbol is included in the search.
+            // If the symbol is an instantiation from a another symbol (e.g. widened symbol):
+            //   - In populateSearchSymbolsSet, add the root the list
+            //   - In findRelatedSymbol, return the source symbol if that is in the search. (Do not return the instantiation symbol.)
+            return firstDefined(checker.getRootSymbols(sym), rootSymbol =>
+                cbSymbol(sym, rootSymbol)
                 // Add symbol of properties/methods of the same name in base classes and implemented interfaces definitions
-                if (!implementations && rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                    getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.name, checker, result);
-                }
-            }
+                || (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface) && allowBaseTypes(rootSymbol)
+                    ? getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.name, checker, base => cbSymbol(sym, rootSymbol, base))
+                    : undefined));
         }
-    }
-
-    function getParameterPropertySymbols(symbol: Symbol, checker: TypeChecker): ReadonlyArray<Symbol> | undefined {
-        return symbol.valueDeclaration && isParameter(symbol.valueDeclaration) && isParameterPropertyDeclaration(symbol.valueDeclaration)
-            ? checker.getSymbolsOfParameterPropertyDeclaration(symbol.valueDeclaration, symbol.name)
-            : undefined;
     }
 
     /**
@@ -1459,107 +1465,39 @@ namespace ts.FindAllReferences.Core {
      * @param previousIterationSymbolsCache a cache of symbol from previous iterations of calling this function to prevent infinite revisiting of the same symbol.
      *                                The value of previousIterationSymbol is undefined when the function is first called.
      */
-    function getPropertySymbolsFromBaseTypes(symbol: Symbol, propertyName: string, checker: TypeChecker, result: Symbol[] = []): Symbol[] {
+    function getPropertySymbolsFromBaseTypes<T>(symbol: Symbol, propertyName: string, checker: TypeChecker, cb: (symbol: Symbol) => T | undefined): T | undefined {
         const seen = createMap<true>();
-        recur(symbol);
-        return result;
+        return recur(symbol);
 
-        function recur(symbol: Symbol): void {
+        function recur(symbol: Symbol): T | undefined {
             // Use `addToSeen` to ensure we don't infinitely recurse in this situation:
             //      interface C extends C {
             //          /*findRef*/propName: string;
             //      }
             if (!(symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) || !addToSeen(seen, getSymbolId(symbol))) return;
 
-            for (const declaration of symbol.declarations!) {
-                for (const typeReference of getAllSuperTypeNodes(declaration)) {
-                    const type = checker.getTypeAtLocation(typeReference);
-                    if (!(type && type.symbol)) continue;
-
-                    const propertySymbol = checker.getPropertyOfType(type, propertyName);
-                    if (propertySymbol) {
-                        result.push(...checker.getRootSymbols(propertySymbol));
-                    }
-
-                    // Visit the typeReference as well to see if it directly or indirectly use that property
-                    recur(type.symbol);
-                }
-            }
+            return firstDefined(symbol.declarations, declaration => firstDefined(getAllSuperTypeNodes(declaration), typeReference => {
+                const type = checker.getTypeAtLocation(typeReference);
+                const propertySymbol = type && type.symbol && checker.getPropertyOfType(type, propertyName);
+                // Visit the typeReference as well to see if it directly or indirectly uses that property
+                return propertySymbol && (firstDefined(checker.getRootSymbols(propertySymbol), cb) || recur(type!.symbol!));
+            }));
         }
     }
 
     function getRelatedSymbol(search: Search, referenceSymbol: Symbol, referenceLocation: Node, state: State): Symbol | undefined {
         const { checker } = state;
-        if (search.includes(referenceSymbol)) {
-            return referenceSymbol;
-        }
-
-        if (referenceSymbol.flags & SymbolFlags.FunctionScopedVariable) {
-            Debug.assert(!(referenceSymbol.flags & SymbolFlags.Property));
-            const paramProps = getParameterPropertySymbols(referenceSymbol, checker);
-            if (paramProps) {
-                return getRelatedSymbol(search, find(paramProps, x => !!(x.flags & SymbolFlags.Property))!, referenceLocation, state);
-            }
-        }
-
-        // If the reference location is in an object literal, try to get the contextual type for the
-        // object literal, lookup the property symbol in the contextual type, and use this symbol to
-        // compare to our searchSymbol
-        const containingObjectLiteralElement = getContainingObjectLiteralElement(referenceLocation);
-        if (containingObjectLiteralElement) {
-            const contextualSymbol = firstDefined(getPropertySymbolsFromContextualType(containingObjectLiteralElement, checker), findRootSymbol);
-            if (contextualSymbol) {
-                return contextualSymbol;
-            }
-
-            // If the reference location is the name of property from object literal destructuring pattern
-            // Get the property symbol from the object literal's type and look if thats the search symbol
-            // In below eg. get 'property' from type of elems iterating type
-            //      for ( { property: p2 } of elems) { }
-            const propertySymbol = getPropertySymbolOfDestructuringAssignment(referenceLocation, checker);
-            if (propertySymbol && search.includes(propertySymbol)) {
-                return propertySymbol;
-            }
-        }
-
-        // If the reference location is the binding element and doesn't have property name
-        // then include the binding element in the related symbols
-        //      let { a } : { a };
-        const bindingElementPropertySymbol = getPropertySymbolOfObjectBindingPatternWithoutPropertyName(referenceSymbol, checker);
-        if (bindingElementPropertySymbol) {
-            const fromBindingElement = findRootSymbol(bindingElementPropertySymbol);
-            if (fromBindingElement) return fromBindingElement;
-        }
-
-        return findRootSymbol(referenceSymbol);
-
-        function findRootSymbol(sym: Symbol): Symbol | undefined {
-            // Unwrap symbols to get to the root (e.g. transient symbols as a result of widening)
-            // Or a union property, use its underlying unioned symbols
-            return firstDefined(checker.getRootSymbols(sym), rootSymbol => {
-                // if it is in the list, then we are done
-                if (search.includes(rootSymbol)) {
-                    // For a root symbol that is a component of a union or intersection, use the original (union/intersection) symbol.
-                    // That we when a symbol references the whole union we avoid claiming it references some particular member of the union.
-                    // For a transient symbol we want to use the root symbol instead.
-                    return getCheckFlags(sym) & CheckFlags.Synthetic ? sym : rootSymbol;
-                }
-
-                // Finally, try all properties with the same name in any type the containing type extended or implemented, and
-                // see if any is in the list. If we were passed a parent symbol, only include types that are subtypes of the
-                // parent symbol
-                if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                    // Parents will only be defined if implementations is true
-                    if (search.parents && !some(search.parents, parent => explicitlyInheritsFrom(rootSymbol.parent!, parent, state.inheritsFromCache, checker))) {
-                        return undefined;
-                    }
-
-                    return getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.name, checker).some(search.includes) ? rootSymbol : undefined;
-                }
-
-                return undefined;
-            });
-        }
+        return forEachRelatedSymbol(referenceSymbol, referenceLocation, checker,
+            (sym, rootSymbol, baseSymbol) => search.includes(baseSymbol || rootSymbol || sym)
+                // For a base type, use the symbol for the derived type. For a synthetic (e.g. union) property, use the union symbol.
+                ? rootSymbol && !(getCheckFlags(sym) & CheckFlags.Synthetic) ? rootSymbol : sym
+                : undefined,
+            paramProps => referenceSymbol.flags & SymbolFlags.FunctionScopedVariable
+                ? getRelatedSymbol(search, find(paramProps, x => !!(x.flags & SymbolFlags.Property))!, referenceLocation, state)
+                : undefined,
+            /*allowBaseTypes*/ rootSymbol =>
+                !(search.parents && !some(search.parents, parent => explicitlyInheritsFrom(rootSymbol.parent!, parent, state.inheritsFromCache, checker))),
+            /*includeShorthandDestructuring*/ true);
     }
 
     /** Gets all symbols for one property. Does not get symbols for every property. */

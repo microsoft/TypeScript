@@ -1635,6 +1635,7 @@ namespace ts {
             messageText: text,
             category: message.category,
             code: message.code,
+            reportsUnnecessary: message.unused,
         };
     }
 
@@ -1664,7 +1665,8 @@ namespace ts {
 
             messageText: text,
             category: message.category,
-            code: message.code
+            code: message.code,
+            reportsUnnecessary: message.unused,
         };
     }
 
@@ -1676,7 +1678,7 @@ namespace ts {
 
             code: chain.code,
             category: chain.category,
-            messageText: chain.next ? chain : chain.messageText
+            messageText: chain.next ? chain : chain.messageText,
         };
     }
 

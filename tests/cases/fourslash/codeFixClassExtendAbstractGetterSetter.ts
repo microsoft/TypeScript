@@ -1,8 +1,6 @@
 /// <reference path='fourslash.ts' />
 
 ////abstract class A {
-////    private _a: string;
-////
 ////    abstract get a(): number | string;
 ////    abstract get b(): this;
 ////    abstract get c(): A;
@@ -25,8 +23,6 @@ verify.codeFix({
     // TODO: GH#18795
     newFileContent:
 `abstract class A {
-    private _a: string;
-
     abstract get a(): number | string;
     abstract get b(): this;
     abstract get c(): A;
