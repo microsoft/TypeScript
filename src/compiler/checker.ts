@@ -8108,10 +8108,16 @@ namespace ts {
         }
 
         function getLiteralTypeFromPropertyName(prop: Symbol) {
-            if (getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.NonPublicAccessibilityModifier || isKnownSymbol(prop)) {
-                return neverType;
+            if (!(getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.NonPublicAccessibilityModifier)) {
+                const nameType = getLateBoundSymbol(prop).nameType;
+                if (nameType) {
+                    return nameType.flags & TypeFlags.StringLiteral ? nameType : neverType;
+                }
+                if (!isKnownSymbol(prop)) {
+                    return getLiteralType(symbolName(prop));
+                }
             }
-            return getLateBoundSymbol(prop).nameType || getLiteralType(symbolName(prop));
+            return neverType;
         }
 
         function getLiteralTypeFromPropertyNames(type: Type) {
