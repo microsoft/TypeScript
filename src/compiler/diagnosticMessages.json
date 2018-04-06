@@ -3501,10 +3501,7 @@
         "category": "Message",
         "code": 6300
     },
-    "Referenced project '{0}' must have 'declaration': true": {
-        "category": "Error",
-        "code": 6301
-    },
+
     "Enable project compilation": {
         "category": "Message",
         "code": 6302
