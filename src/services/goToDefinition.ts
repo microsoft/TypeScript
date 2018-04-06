@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.GoToDefinition {
-    export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number): DefinitionInfo[] {
+    export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number): DefinitionInfo[] | undefined {
         const reference = getReferenceAtPosition(sourceFile, position, program);
         if (reference) {
             return [getDefinitionInfoForFileReference(reference.fileName, reference.file.fileName)];
@@ -29,7 +29,7 @@ namespace ts.GoToDefinition {
         // Could not find a symbol e.g. node is string or number keyword,
         // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
         if (!symbol) {
-            return undefined;
+            return getDefinitionInfoForIndexSignatures(node, typeChecker);
         }
 
         // If this is an alias, and the request came at the declaration location
@@ -155,6 +155,29 @@ namespace ts.GoToDefinition {
         const textSpan = createTextSpan(node.getStart(), node.getWidth());
 
         return { definitions, textSpan };
+    }
+
+    // At 'x.foo', see if the type of 'x' has an index signature, and if so find its declarations.
+    function getDefinitionInfoForIndexSignatures(node: Node, checker: TypeChecker): DefinitionInfo[] | undefined {
+        if (!isPropertyAccessExpression(node.parent) || node.parent.name !== node) return;
+        const type = checker.getTypeAtLocation(node.parent.expression);
+        if (!type.getStringIndexType()) return undefined;
+        const result: DefinitionInfo[] = [];
+        for (const root of getRootSymbolsOfType(type, checker)) {
+            for (const decl of root.declarations) {
+                if (!isObjectTypeDeclaration(decl)) continue;
+                for (const member of decl.members) {
+                    if (isIndexSignatureDeclaration(member)) {
+                        result.push(createDefinitionFromSignatureDeclaration(checker, member));
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    function getRootSymbolsOfType(type: Type, checker: TypeChecker): ReadonlyArray<Symbol> {
+        return flatMap(type.isUnionOrIntersection() ? type.types : [type], t => t.symbol ? checker.getRootSymbols(t.symbol) : emptyArray);
     }
 
     // Go to the original declaration for cases:
