@@ -2322,7 +2322,7 @@ namespace ts {
     }
 
     export function fileExtensionIs(path: string, extension: string): boolean {
-        return path.length > extension.length && endsWith(path, extension);
+        return path.length >= extension.length && endsWith(path, extension);
     }
 
     export function fileExtensionIsOneOf(path: string, extensions: ReadonlyArray<string>): boolean {
@@ -2666,16 +2666,22 @@ namespace ts {
     export const supportedJavascriptExtensions: ReadonlyArray<Extension> = [Extension.Js, Extension.Jsx];
     const allSupportedExtensions: ReadonlyArray<Extension> = [...supportedTypeScriptExtensions, ...supportedJavascriptExtensions];
 
-    export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: ReadonlyArray<JsFileExtensionInfo>): ReadonlyArray<string> {
-        const needAllExtensions = options && options.allowJs;
-        if (!extraFileExtensions || extraFileExtensions.length === 0 || !needAllExtensions) {
-            return needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions;
+    export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ReadonlyArray<string> {
+        const needJsExtensions = options && options.allowJs;
+        let extensions: string[] = needJsExtensions ? [...allSupportedExtensions] : [...supportedTypeScriptExtensions];
+
+        if (extraFileExtensions) {
+            extensions = [
+                ...extensions,
+                ...extraFileExtensions.filter(x => x.scriptKind === ScriptKind.Deferred || needJsExtensions && isJavaScriptLike(x.scriptKind)).map(x => x.extension),
+            ];
         }
-        return deduplicate(
-            [...allSupportedExtensions, ...extraFileExtensions.map(e => e.extension)],
-            equateStringsCaseSensitive,
-            compareStringsCaseSensitive
-        );
+
+        return deduplicate(extensions, equateStringsCaseSensitive, compareStringsCaseSensitive);
+    }
+
+    function isJavaScriptLike(scriptKind: ScriptKind): boolean {
+        return scriptKind === ScriptKind.JS || scriptKind === ScriptKind.JSX;
     }
 
     export function hasJavaScriptFileExtension(fileName: string) {
@@ -2686,7 +2692,7 @@ namespace ts {
         return forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
-    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: ReadonlyArray<JsFileExtensionInfo>) {
+    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: ReadonlyArray<FileExtensionInfo>) {
         if (!fileName) { return false; }
 
         for (const extension of getSupportedExtensions(compilerOptions, extraFileExtensions)) {

@@ -202,7 +202,7 @@ namespace ts.server {
         formatCodeOptions: FormatCodeSettings;
         preferences: UserPreferences;
         hostInfo: string;
-        extraFileExtensions?: JsFileExtensionInfo[];
+        extraFileExtensions?: FileExtensionInfo[];
     }
 
     export interface OpenConfiguredProjectResult {
@@ -212,8 +212,8 @@ namespace ts.server {
 
     interface FilePropertyReader<T> {
         getFileName(f: T): string;
-        getScriptKind(f: T, extraFileExtensions?: JsFileExtensionInfo[]): ScriptKind;
-        hasMixedContent(f: T, extraFileExtensions: JsFileExtensionInfo[]): boolean;
+        getScriptKind(f: T, extraFileExtensions?: FileExtensionInfo[]): ScriptKind;
+        hasMixedContent(f: T, extraFileExtensions: FileExtensionInfo[]): boolean;
     }
 
     const fileNamePropertyReader: FilePropertyReader<string> = {
@@ -2404,6 +2404,16 @@ namespace ts.server {
                 this.externalProjectToConfiguredProjectMap.delete(proj.projectFileName);
                 this.createExternalProject(proj.projectFileName, rootFiles, proj.options, proj.typeAcquisition, excludedFiles);
             }
+        }
+
+        hasDeferredExtension() {
+            for (const extension of this.hostConfiguration.extraFileExtensions) {
+                if (extension.scriptKind === ScriptKind.Deferred) {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
