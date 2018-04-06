@@ -25493,9 +25493,6 @@ namespace ts {
         }
 
         function getShorthandAssignmentValueSymbol(location: Node): Symbol {
-            // The function returns a value symbol of an identifier in the short-hand property assignment.
-            // This is necessary as an identifier in short-hand property assignment can contains two meaning:
-            // property name and property value.
             if (location && location.kind === SyntaxKind.ShorthandPropertyAssignment) {
                 return resolveEntityName((<ShorthandPropertyAssignment>location).name, SymbolFlags.Value | SymbolFlags.Alias);
             }
