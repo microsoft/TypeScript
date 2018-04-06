@@ -97,28 +97,22 @@ namespace ts {
         };
     }
 
-    export function createPatternMatcher(pattern: string): PatternMatcher {
+    export function createPatternMatcher(pattern: string): PatternMatcher | undefined {
         // We'll often see the same candidate string many times when searching (For example, when
         // we see the name of a module that is used everywhere, or the name of an overload).  As
         // such, we cache the information we compute about the candidate for the life of this
         // pattern matcher so we don't have to compute it multiple times.
         const stringToWordSpans = createMap<TextSpan[]>();
 
-        pattern = pattern.trim();
-
-        const dotSeparatedSegments = pattern.split(".").map(p => createSegment(p.trim()));
-        const invalidPattern = dotSeparatedSegments.length === 0 || forEach(dotSeparatedSegments, segmentIsInvalid);
+        const dotSeparatedSegments = pattern.trim().split(".").map(p => createSegment(p.trim()));
+        // A segment is considered invalid if we couldn't find any words in it.
+        if (dotSeparatedSegments.some(segment => !segment.subWordTextChunks.length)) return undefined;
 
         return {
-            getMatches: (containers, candidate) => skipMatch(candidate) ? undefined : getMatches(containers, candidate, dotSeparatedSegments, stringToWordSpans),
-            getMatchesForLastSegmentOfPattern: candidate => skipMatch(candidate) ? undefined : matchSegment(candidate, lastOrUndefined(dotSeparatedSegments), stringToWordSpans),
+            getMatches: (containers, candidate) => getMatches(containers, candidate, dotSeparatedSegments, stringToWordSpans),
+            getMatchesForLastSegmentOfPattern: candidate => matchSegment(candidate, last(dotSeparatedSegments), stringToWordSpans),
             patternContainsDots: dotSeparatedSegments.length > 1
         };
-
-        // Quick checks so we can bail out when asked to match a candidate.
-        function skipMatch(candidate: string) {
-            return invalidPattern || !candidate;
-        }
     }
 
     function getMatches(candidateContainers: ReadonlyArray<string>, candidate: string, dotSeparatedSegments: ReadonlyArray<Segment>, stringToWordSpans: Map<TextSpan[]>): PatternMatch[] | undefined {
@@ -379,11 +373,6 @@ namespace ts {
             totalTextChunk: createTextChunk(text),
             subWordTextChunks: breakPatternIntoTextChunks(text)
         };
-    }
-
-    // A segment is considered invalid if we couldn't find any words in it.
-    function segmentIsInvalid(segment: Segment) {
-        return segment.subWordTextChunks.length === 0;
     }
 
     function isUpperCaseLetter(ch: number) {
