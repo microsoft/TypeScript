@@ -1,6 +1,8 @@
 /// <reference path='fourslash.ts' />
-
+// @allowJs: true
+// @Filename: a.js
 //// const A = {
+////     _a: 2,
 ////     /*a*/a/*b*/: 1
 //// };
 
@@ -10,12 +12,13 @@ edit.applyRefactor({
     actionName: "Generate 'get' and 'set' accessors",
     actionDescription: "Generate 'get' and 'set' accessors",
     newContent: `const A = {
-    /*RENAME*/_a: 1,
+    _a: 2,
+    /*RENAME*/_a_1: 1,
     get a() {
-        return this._a;
+        return this._a_1;
     },
     set a(value) {
-        this._a = value;
+        this._a_1 = value;
     },
 };`,
 });

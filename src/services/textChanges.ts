@@ -319,7 +319,7 @@ namespace ts.textChanges {
         public replacePropertyAssignment(sourceFile: SourceFile, oldNode: PropertyAssignment, newNode: PropertyAssignment) {
             return this.replaceNode(sourceFile, oldNode, newNode, {
                 suffix: "," + this.newLineCharacter
-            })
+            });
         }
 
         private insertNodeAt(sourceFile: SourceFile, pos: number, newNode: Node, options: InsertNodeOptions = {}) {
@@ -469,7 +469,7 @@ namespace ts.textChanges {
                 return { prefix: ", " };
             }
             else if (isPropertyAssignment(node)) {
-                return { suffix: "," + this.newLineCharacter }
+                return { suffix: "," + this.newLineCharacter };
             }
             else if (isParameter(node)) {
                 return {};
