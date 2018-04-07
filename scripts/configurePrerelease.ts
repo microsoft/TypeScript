@@ -12,8 +12,8 @@ interface PackageJson {
 function main(): void {
     const sys = ts.sys;
     if (sys.args.length < 3) {
-        sys.write("Usage:" + sys.newLine)
-        sys.write("\tnode configureNightly.js <dev|insiders> <package.json location> <file containing version>" + sys.newLine);
+        sys.write("Usage:" + sys.newLine);
+        sys.write("\tnode configurePrerelease.js <dev|insiders> <package.json location> <file containing version>" + sys.newLine);
         return;
     }
 
@@ -44,12 +44,12 @@ function main(): void {
     // Finally write the changes to disk.
     // Modify the package.json structure
     packageJsonValue.version = `${majorMinor}.${prereleasePatch}`;
-    sys.writeFile(packageJsonFilePath, JSON.stringify(packageJsonValue, /*replacer:*/ undefined, /*space:*/ 4))
+    sys.writeFile(packageJsonFilePath, JSON.stringify(packageJsonValue, /*replacer:*/ undefined, /*space:*/ 4));
     sys.writeFile(tsFilePath, modifiedTsFileContents);
 }
 
 function updateTsFile(tsFilePath: string, tsFileContents: string, majorMinor: string, patch: string, nightlyPatch: string): string {
-    const majorMinorRgx = /export const versionMajorMinor = "(\d+\.\d+)"/;
+    const majorMinorRgx = /export const versionMajorMinor: string = "(\d+\.\d+)"/;
     const majorMinorMatch = majorMinorRgx.exec(tsFileContents);
     ts.Debug.assert(majorMinorMatch !== null, "", () => `The file seems to no longer have a string matching '${majorMinorRgx}'.`);
     const parsedMajorMinor = majorMinorMatch[1];
