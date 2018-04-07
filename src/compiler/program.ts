@@ -330,13 +330,15 @@ namespace ts {
                     context += resetEscapeSequence;
                 }
 
-                output += host.getNewLine();
-                output += `${relativeFileName}(${firstLine + 1},${firstLineChar + 1}): `;
+                output += formatColorAndReset(relativeFileName, ForegroundColorEscapeSequences.Cyan);
+                output += ":";
+                output += formatColorAndReset(`${firstLine + 1}`, ForegroundColorEscapeSequences.Yellow);
+                output += ":";
+                output += formatColorAndReset(`${firstLineChar + 1}`, ForegroundColorEscapeSequences.Yellow);
+                output += " - ";
             }
 
-            const categoryColor = getCategoryFormat(diagnostic.category);
-            const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-            output += formatColorAndReset(category, categoryColor);
+            output += formatColorAndReset(diagnosticCategoryName(diagnostic), getCategoryFormat(diagnostic.category));
             output += formatColorAndReset(` TS${diagnostic.code}: `, ForegroundColorEscapeSequences.Grey);
             output += flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine());
 
@@ -608,10 +610,12 @@ namespace ts {
             for (const ref of projectReferences) {
                 const parsedRef = parseProjectReferenceConfigFile(ref);
                 resolvedProjectReferences.push(parsedRef);
-                if (parsedRef.options.outFile) {
-                    processSourceFile(parsedRef.options.outFile, /*isDefaultLib*/ false, /*packageId*/ undefined);
+                if (parsedRef) {
+                    if (parsedRef.options.outFile) {
+                        processSourceFile(parsedRef.options.outFile, /*isDefaultLib*/ false, /*packageId*/ undefined);
+                    }
+                    addProjectReferenceRedirects(parsedRef, projectReferenceRedirects);
                 }
-                addProjectReferenceRedirects(parsedRef, projectReferenceRedirects);
             }
         }
 
@@ -730,17 +734,23 @@ namespace ts {
         function getCommonSourceDirectory() {
             if (commonSourceDirectory === undefined) {
                 const emittedFiles = filter(files, file => sourceFileMayBeEmitted(file, options, isSourceFileFromExternalLibrary));
-                if (options.composite) {
-                    // Project compilations never infer their root from the input source paths
-                    commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir || getDirectoryPath(normalizeSlashes(options.configFilePath)), currentDirectory);
-                }
-                else if (options.rootDir && checkSourceFilesBelongToPath(emittedFiles, options.rootDir)) {
-                    // If a rootDir is specified and is valid use it as the commonSourceDirectory
+                if (options.rootDir) {
+                    // If a rootDir is specified use it as the commonSourceDirectory
                     commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, currentDirectory);
+                }
+                else if (options.composite) {
+                    // Project compilations never infer their root from the input source paths
+                    Debug.assert(!!options.configFilePath);
+                    commonSourceDirectory = getDirectoryPath(normalizeSlashes(options.configFilePath));
+                }
+
+                if (commonSourceDirectory) {
+                    checkSourceFilesBelongToPath(emittedFiles, commonSourceDirectory);
                 }
                 else {
                     commonSourceDirectory = computeCommonSourceDirectory(emittedFiles);
                 }
+
                 if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {
                     // Make sure directory path ends with directory separator so this string can directly
                     // used to replace with "" to get the relative path of the source file and the relative path doesn't
@@ -2204,6 +2214,16 @@ namespace ts {
                     if (!resolvedRef.options.composite) {
                         createDiagnosticForReference(i, Diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true, ref.path);
                     }
+                    if (ref.prepend) {
+                        if (resolvedRef.options.outFile) {
+                            if (!host.fileExists(resolvedRef.options.outFile)) {
+                                createDiagnosticForReference(i, Diagnostics.Output_file_0_from_project_1_does_not_exist, resolvedRef.options.outFile, ref.path);
+                            }
+                        }
+                        else {
+                            createDiagnosticForReference(i, Diagnostics.Cannot_prepend_project_0_because_it_does_not_have_outFile_set, ref.path);
+                        }
+                    }
                 }
             }
 
@@ -2456,14 +2476,14 @@ namespace ts {
             createDiagnosticForOption(/*onKey*/ false, option1, /*option2*/ undefined, message, arg0);
         }
 
-        function createDiagnosticForReference(index: number, message: DiagnosticMessage, arg0?: string | number) {
+        function createDiagnosticForReference(index: number, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number) {
             const referencesSyntax = getProjectReferencesSyntax();
             if (referencesSyntax) {
-                if (createOptionDiagnosticInArrayLiteralSyntax(referencesSyntax, index, message, arg0)) {
+                if (createOptionDiagnosticInArrayLiteralSyntax(referencesSyntax, index, message, arg0, arg1)) {
                     return;
                 }
             }
-            programDiagnostics.add(createCompilerDiagnostic(message, arg0));
+            programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1));
         }
 
         function createDiagnosticForOption(onKey: boolean, option1: string, option2: string, message: DiagnosticMessage, arg0: string | number, arg1?: string | number, arg2?: string | number) {

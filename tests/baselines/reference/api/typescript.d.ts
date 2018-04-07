@@ -336,7 +336,7 @@ declare namespace ts {
         EnumMember = 271,
         SourceFile = 272,
         Bundle = 273,
-        Prepend = 274,
+        UnparsedSource = 274,
         JSDocTypeExpression = 275,
         JSDocAllType = 276,
         JSDocUnknownType = 277,
@@ -1635,11 +1635,11 @@ declare namespace ts {
     }
     interface Bundle extends Node {
         kind: SyntaxKind.Bundle;
-        prepends: ReadonlyArray<PrependNode>;
+        prepends: ReadonlyArray<UnparsedSource>;
         sourceFiles: ReadonlyArray<SourceFile>;
     }
-    interface PrependNode extends Node {
-        kind: SyntaxKind.Prepend;
+    interface UnparsedSource extends Node {
+        kind: SyntaxKind.UnparsedSource;
         javascriptText: string;
         declarationText: string;
     }
@@ -2308,7 +2308,7 @@ declare namespace ts {
         /** A normalized path on disk */
         path: string;
         /** The path as the user originally wrote it */
-        originalPath: string;
+        originalPath?: string;
         /** True if the output of this reference should be prepended to the output of this project. Only valid for --outFile compilations */
         prepend?: boolean;
         /** True if it is intended that this reference form a circularity */
@@ -2620,7 +2620,7 @@ declare namespace ts {
         Expression = 1,
         IdentifierName = 2,
         MappedTypeParameter = 3,
-        Prepend = 4,
+        UnparsedSource = 4,
         Unspecified = 5
     }
     interface TransformationContext {
@@ -3714,9 +3714,9 @@ declare namespace ts {
     function updatePartiallyEmittedExpression(node: PartiallyEmittedExpression, expression: Expression): PartiallyEmittedExpression;
     function createCommaList(elements: ReadonlyArray<Expression>): CommaListExpression;
     function updateCommaList(node: CommaListExpression, elements: ReadonlyArray<Expression>): CommaListExpression;
-    function createBundle(sourceFiles: ReadonlyArray<SourceFile>, prepends?: ReadonlyArray<PrependNode>): Bundle;
-    function createPrepend(javascript: string, declaration: string): PrependNode;
-    function updateBundle(node: Bundle, sourceFiles: ReadonlyArray<SourceFile>, prepends?: ReadonlyArray<PrependNode>): Bundle;
+    function createBundle(sourceFiles: ReadonlyArray<SourceFile>, prepends?: ReadonlyArray<UnparsedSource>): Bundle;
+    function createPrepend(javascript: string, declaration: string): UnparsedSource;
+    function updateBundle(node: Bundle, sourceFiles: ReadonlyArray<SourceFile>, prepends?: ReadonlyArray<UnparsedSource>): Bundle;
     function createImmediatelyInvokedFunctionExpression(statements: Statement[]): CallExpression;
     function createImmediatelyInvokedFunctionExpression(statements: Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
     function createImmediatelyInvokedArrowFunction(statements: Statement[]): CallExpression;

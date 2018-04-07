@@ -3526,6 +3526,14 @@
         "category": "Error",
         "code": 6307
     },
+    "Cannot prepend project '{0}' because it does not have 'outFile' set": {
+        "category": "Error",
+        "code": 6308
+    },
+    "Output file '{0}' from project '{1}' does not exist": {
+        "category": "Error",
+        "code": 6309
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

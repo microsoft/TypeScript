@@ -4,7 +4,7 @@
 namespace ts {
     interface TestProjectSpecification {
         configFileName?: string;
-        references?: string[];
+        references?: ReadonlyArray<string | ProjectReference>;
         files: { [fileName: string]: string };
         outputFiles?: { [fileName: string]: string };
         config?: object;
@@ -56,7 +56,12 @@ namespace ts {
                     outDir: "bin",
                     ...sp.options
                 },
-                references: (sp.references || []).map(r => ({ path: r })),
+                references: (sp.references || []).map(r => {
+                    if (typeof r === "string") {
+                        return { path: r };
+                    }
+                    return r;
+                }),
                 ...sp.config
             };
             const configContent = JSON.stringify(options);
@@ -143,7 +148,6 @@ namespace ts {
                     references: ["../primary"]
                 }
             };
-            debugger;
             testProjectReferences(spec, "/reference/tsconfig.json", program => {
                 const errs = program.getOptionsDiagnostics();
                 assertHasError("Reports an error about 'composite' not being set", errs, Diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true);
@@ -166,6 +170,52 @@ namespace ts {
             testProjectReferences(spec, "/primary/tsconfig.json", program => {
                 const errs = program.getOptionsDiagnostics();
                 assertHasError("Reports an error about b.ts not being in the list", errs, Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern);
+            });
+        });
+
+        it("errors when the referenced project doesn't exist", () => {
+            const spec: TestSpecification = {
+                "/primary": {
+                    files: { "/primary/a.ts": emptyModule },
+                    references: ["../foo"]
+                }
+            };
+            testProjectReferences(spec, "/primary/tsconfig.json", program => {
+                const errs = program.getOptionsDiagnostics();
+                assertHasError("Reports an error about a missing file", errs, Diagnostics.File_0_does_not_exist);
+            });
+        });
+
+        it("errors when a prepended project reference doesn't set outFile", () => {
+            const spec: TestSpecification = {
+                "/primary": {
+                    files: { "/primary/a.ts": emptyModule },
+                    references: [{ path: "../someProj", prepend: true }]
+                },
+                "/someProj": {
+                    files: { "/someProj/b.ts": "const x = 100;" }
+                }
+            };
+            testProjectReferences(spec, "/primary/tsconfig.json", program => {
+                const errs = program.getOptionsDiagnostics();
+                assertHasError("Reports an error about outFile not being set", errs, Diagnostics.Cannot_prepend_project_0_because_it_does_not_have_outFile_set);
+            });
+        });
+
+        it("errors when a prepended project reference output doesn't exist", () => {
+            const spec: TestSpecification = {
+                "/primary": {
+                    files: { "/primary/a.ts": "const y = x;" },
+                    references: [{ path: "../someProj", prepend: true }]
+                },
+                "/someProj": {
+                    files: { "/someProj/b.ts": "const x = 100;" },
+                    options: { outFile: "foo.js" }
+                }
+            };
+            testProjectReferences(spec, "/primary/tsconfig.json", program => {
+                const errs = program.getOptionsDiagnostics();
+                assertHasError("Reports an error about outFile being missing", errs, Diagnostics.Output_file_0_from_project_1_does_not_exist);
             });
         });
     });
