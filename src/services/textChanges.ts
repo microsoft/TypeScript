@@ -316,6 +316,12 @@ namespace ts.textChanges {
             return this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, startNode, endNode, options), newNodes, options);
         }
 
+        public replacePropertyAssignment(sourceFile: SourceFile, oldNode: PropertyAssignment, newNode: PropertyAssignment) {
+            return this.replaceNode(sourceFile, oldNode, newNode, {
+                suffix: "," + this.newLineCharacter
+            })
+        }
+
         private insertNodeAt(sourceFile: SourceFile, pos: number, newNode: Node, options: InsertNodeOptions = {}) {
             this.replaceRange(sourceFile, createTextRange(pos), newNode, options);
         }
@@ -461,6 +467,9 @@ namespace ts.textChanges {
             }
             else if (isVariableDeclaration(node)) {
                 return { prefix: ", " };
+            }
+            else if (isPropertyAssignment(node)) {
+                return { suffix: "," + this.newLineCharacter }
             }
             else if (isParameter(node)) {
                 return {};

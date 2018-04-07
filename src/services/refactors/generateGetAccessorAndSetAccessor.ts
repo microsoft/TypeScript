@@ -4,17 +4,20 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     const actionDescription = Diagnostics.Generate_get_and_set_accessors.message;
     registerRefactor(actionName, { getEditsForAction, getAvailableActions });
 
-    type AccepedDeclaration = ParameterDeclaration | PropertyDeclaration;
+    type AccepedDeclaration = ParameterDeclaration | PropertyDeclaration | PropertyAssignment;
+    type AccepedNameTypes = Identifier | StringLiteral;
+    type ContainerDeclation = ClassLikeDeclaration | ObjectLiteralExpression;
 
     interface DeclarationInfo {
-        classLikeContainer: ClassLikeDeclaration;
+        container: ContainerDeclation;
         isStatic: boolean;
+        type: TypeNode | undefined;
     }
 
     interface Info extends DeclarationInfo {
         declaration: AccepedDeclaration;
-        fieldName: string;
-        accessorName: string;
+        fieldName: AccepedNameTypes;
+        accessorName: AccepedNameTypes;
     }
 
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
@@ -40,22 +43,23 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         if (!fieldInfo) return undefined;
 
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
-        const { isStatic, fieldName, accessorName, classLikeContainer, declaration } = fieldInfo;
+        const { isStatic, fieldName, accessorName, type, container, declaration } = fieldInfo;
 
         const accessorModifiers = getAccessorModifiers(declaration, isStatic);
         const fieldModifiers = getFieldModifiers(isStatic);
 
-        const getAccessor = generateGetAccessor(fieldName, accessorName, accessorModifiers, declaration, isStatic, classLikeContainer);
-        const setAccessor = generateSetAccessor(fieldName, accessorName, accessorModifiers, declaration, isStatic, classLikeContainer);
+        const getAccessor = generateGetAccessor(fieldName, accessorName, type, accessorModifiers, isStatic, container);
+        const setAccessor = generateSetAccessor(fieldName, accessorName, type, accessorModifiers, isStatic, container);
 
-        updateFieldDeclaration(changeTracker, file, declaration, fieldName, fieldModifiers, classLikeContainer);
+        updateFieldDeclaration(changeTracker, file, declaration, fieldName, fieldModifiers, container);
 
-        insertAccessor(changeTracker, file, getAccessor, declaration, classLikeContainer);
-        insertAccessor(changeTracker, file, setAccessor, declaration, classLikeContainer);
+        insertAccessor(changeTracker, file, getAccessor, declaration, container);
+        insertAccessor(changeTracker, file, setAccessor, declaration, container);
 
         const edits = changeTracker.getChanges();
         const renameFilename = file.fileName;
-        const renameLocation = getRenameLocation(edits, renameFilename, fieldName, /*isDeclaredBeforeUse*/ false);
+        const renameLocationOffset = isIdentifier(fieldName) ? 0 : -1;
+        const renameLocation = renameLocationOffset + getRenameLocation(edits, renameFilename, fieldName.text, /*isDeclaredBeforeUse*/ false);
         return { renameFilename, renameLocation, edits };
     }
 
@@ -74,12 +78,17 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
                 isStatic ? createToken(SyntaxKind.StaticKeyword) : undefined));
     }
 
+    function isConvertableName (name: DeclarationName): name is AccepedNameTypes {
+        return isIdentifier(name) || isStringLiteral(name);
+    }
+
     function getPropertyDeclarationInfo(propertyDeclaration: PropertyDeclaration): DeclarationInfo | undefined {
         if (!isClassLike(propertyDeclaration.parent) || !propertyDeclaration.parent.members) return undefined;
 
         return {
             isStatic: hasStaticModifier(propertyDeclaration),
-            classLikeContainer: propertyDeclaration.parent
+            type: propertyDeclaration.type,
+            container: propertyDeclaration.parent
         };
     }
 
@@ -88,45 +97,72 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
 
         return {
             isStatic: false,
-            classLikeContainer: parameterDeclaration.parent.parent
+            type: parameterDeclaration.type,
+            container: parameterDeclaration.parent.parent
         };
+    }
+
+    function getPropertyAssignmentDeclarationInfo(propertyAssignment: PropertyAssignment): DeclarationInfo | undefined {
+        return {
+            isStatic: false,
+            type: undefined,
+            container: propertyAssignment.parent
+        };
+    }
+
+    function getDeclarationInfo(declaration: AccepedDeclaration) {
+        if (isPropertyDeclaration(declaration)) {
+            return getPropertyDeclarationInfo(declaration);
+        }
+        else if (isPropertyAssignment(declaration)) {
+            return getPropertyAssignmentDeclarationInfo(declaration);
+        }
+        else {
+            return getParameterPropertyDeclarationInfo(declaration);
+        }
     }
 
     function getConvertibleFieldAtPosition(file: SourceFile, startPosition: number): Info | undefined {
         const node = getTokenAtPosition(file, startPosition, /*includeJsDocComment*/ false);
-        const declaration = <ParameterDeclaration | PropertyDeclaration>findAncestor(node.parent, or(isParameterPropertyDeclaration, isPropertyDeclaration));
+        const declaration = <AccepedDeclaration>findAncestor(node.parent, or(isParameterPropertyDeclaration, isPropertyDeclaration, isPropertyAssignment));
         // make sure propertyDeclaration have AccessibilityModifier or Static Modifier
         const meaning = ModifierFlags.AccessibilityModifier | ModifierFlags.Static;
-        if (!declaration || !isIdentifier(declaration.name) || (getModifierFlags(declaration) | meaning) !== meaning) return undefined;
+        if (!declaration || !isConvertableName(declaration.name) || (getModifierFlags(declaration) | meaning) !== meaning) return undefined;
 
-        const info = isPropertyDeclaration(declaration) ? getPropertyDeclarationInfo(declaration) : getParameterPropertyDeclarationInfo(declaration);
+        const info = getDeclarationInfo(declaration);
         return {
             ...info,
             declaration,
-            fieldName: getUniqueName(`_${(<Identifier>declaration.name).text}`, file.text),
-            accessorName: (<Identifier>declaration.name).text
+            fieldName: createAccessorName(getUniqueName(`_${declaration.name.text}`, file.text), declaration.name),
+            accessorName: createAccessorName(declaration.name.text, declaration.name)
         };
     }
 
-    function generateGetAccessor(fieldName: string, accessorName: string, modifiers: ModifiersArray, propertyDeclaration: AccepedDeclaration, isStatic: boolean, classLikeContainer: ClassLikeDeclaration) {
+    function createAccessorName (name: string, originalName: AccepedNameTypes) {
+        return isIdentifier(originalName) ? createIdentifier(name) : createLiteral(name);
+    }
+
+    function createAccessorAccessExpression (fieldName: AccepedNameTypes, isStatic: boolean, container: ContainerDeclation) {
+        const leftHead = isStatic ? (<ClassLikeDeclaration>container).name : createThis();
+        return isIdentifier(fieldName) ? createPropertyAccess(leftHead, fieldName) : createElementAccess(leftHead, createLiteral(fieldName));
+    }
+
+    function generateGetAccessor(fieldName: AccepedNameTypes, accessorName: AccepedNameTypes, type: TypeNode, modifiers: ModifiersArray, isStatic: boolean, container: ContainerDeclation) {
         return createGetAccessor(
             /*decorators*/ undefined,
             modifiers,
             accessorName,
             /*parameters*/ undefined,
-            propertyDeclaration.type,
+            type,
             createBlock([
                 createReturn(
-                    createPropertyAccess(
-                        isStatic ? classLikeContainer.name : createThis(),
-                        fieldName
-                    )
+                    createAccessorAccessExpression(fieldName, isStatic, container)
                 )
             ], /*multiLine*/ true)
         );
     }
 
-    function generateSetAccessor(fieldName: string, accessorName: string, modifiers: ModifiersArray, propertyDeclaration: AccepedDeclaration, isStatic: boolean, classLikeContainer: ClassLikeDeclaration) {
+    function generateSetAccessor(fieldName: AccepedNameTypes, accessorName: AccepedNameTypes, type: TypeNode, modifiers: ModifiersArray, isStatic: boolean, container: ContainerDeclation) {
         return createSetAccessor(
             /*decorators*/ undefined,
             modifiers,
@@ -137,15 +173,12 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
                 /*dotDotDotToken*/ undefined,
                 createIdentifier("value"),
                 /*questionToken*/ undefined,
-                propertyDeclaration.type
+                type
             )],
             createBlock([
                 createStatement(
                     createAssignment(
-                        createPropertyAccess(
-                            isStatic ? classLikeContainer.name : createThis(),
-                            fieldName
-                        ),
+                        createAccessorAccessExpression(fieldName, isStatic, container),
                         createIdentifier("value")
                     )
                 )
@@ -153,7 +186,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         );
     }
 
-    function updatePropertyDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: PropertyDeclaration, fieldName: string, modifiers: ModifiersArray) {
+    function updatePropertyDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: PropertyDeclaration, fieldName: AccepedNameTypes, modifiers: ModifiersArray) {
         const property = updateProperty(
             declaration,
             declaration.decorators,
@@ -167,7 +200,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         changeTracker.replaceNode(file, declaration, property);
     }
 
-    function updateParameterPropertyDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: ParameterDeclaration, fieldName: string, modifiers: ModifiersArray, classLikeContainer: ClassLikeDeclaration) {
+    function updateParameterPropertyDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: ParameterDeclaration, fieldName: AccepedNameTypes, modifiers: ModifiersArray, classLikeContainer: ClassLikeDeclaration) {
         const property = createProperty(
             declaration.decorators,
             modifiers,
@@ -181,14 +214,26 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         changeTracker.deleteNodeInList(file, declaration);
     }
 
-
-    function updateFieldDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: AccepedDeclaration, fieldName: string, modifiers: ModifiersArray, classLikeContainer: ClassLikeDeclaration) {
-        isPropertyDeclaration(declaration)
-            ? updatePropertyDeclaration(changeTracker, file, declaration, fieldName, modifiers)
-            : updateParameterPropertyDeclaration(changeTracker, file, declaration, fieldName, modifiers, classLikeContainer);
+    function updatePropertyAssignmentDeclaration (changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: PropertyAssignment, fieldName: AccepedNameTypes) {
+        const assignment = updatePropertyAssignment(declaration, fieldName, declaration.initializer);
+        changeTracker.replacePropertyAssignment(file, declaration, assignment);
     }
 
-    function insertAccessor(changeTracker: textChanges.ChangeTracker, file: SourceFile, accessor: AccessorDeclaration, declaration: AccepedDeclaration, classLikeContainer: ClassLikeDeclaration) {
-        isPropertyDeclaration(declaration) ? changeTracker.insertNodeAfter(file, declaration, accessor) : changeTracker.insertNodeAtClassStart(file, classLikeContainer, accessor);
+    function updateFieldDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: AccepedDeclaration, fieldName: AccepedNameTypes, modifiers: ModifiersArray, container: ContainerDeclation) {
+        if (isPropertyDeclaration(declaration)) {
+            updatePropertyDeclaration(changeTracker, file, declaration, fieldName, modifiers);
+        }
+        else if (isPropertyAssignment(declaration)) {
+            updatePropertyAssignmentDeclaration(changeTracker, file, declaration, fieldName);
+        }
+        else {
+            updateParameterPropertyDeclaration(changeTracker, file, declaration, fieldName, modifiers, <ClassLikeDeclaration>container);
+        }
+    }
+
+    function insertAccessor(changeTracker: textChanges.ChangeTracker, file: SourceFile, accessor: AccessorDeclaration, declaration: AccepedDeclaration, container: ContainerDeclation) {
+        isParameterPropertyDeclaration(declaration)
+            ? changeTracker.insertNodeAtClassStart(file, <ClassLikeDeclaration>container, accessor)
+            : changeTracker.insertNodeAfter(file, declaration, accessor);
     }
 }
