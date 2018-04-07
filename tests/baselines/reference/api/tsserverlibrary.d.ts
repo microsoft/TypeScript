@@ -7934,6 +7934,7 @@ declare namespace ts.server {
         readonly useSingleInferredProject: boolean;
         readonly useInferredProjectPerProjectRoot: boolean;
         readonly typingsInstaller: ITypingsInstaller;
+        private readonly globalCacheLocationDirectoryPath;
         readonly throttleWaitMilliseconds?: number;
         private readonly eventHandler?;
         private readonly suppressDiagnosticEvents?;
