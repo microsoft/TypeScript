@@ -15,5 +15,5 @@ __decorate([
     AnyDecorator(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", typeof Promise === "function" && Promise || Object)
+    __metadata("design:returntype", Promise)
 ], Foo.prototype, "foobar", null);

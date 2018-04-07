@@ -1794,11 +1794,11 @@ namespace ts {
          * @param node The node that should have its return type serialized.
          */
         function serializeReturnTypeOfNode(node: Node): SerializedTypeNode {
-            if (isFunctionLike(node) && node.type) {
-                return serializeTypeNode(node.type);
-            }
-            else if (isAsyncFunction(node)) {
+            if (isAsyncFunction(node)) {
                 return createIdentifier("Promise");
+            }
+            else if (isFunctionLike(node) && node.type) {
+                return serializeTypeNode(node.type);
             }
 
             return createVoidZero();
@@ -1991,17 +1991,6 @@ namespace ts {
                     return createIdentifier("Promise");
 
                 case TypeReferenceSerializationKind.ObjectType:
-                    if (isIdentifier(node.typeName) && node.typeName.escapedText === "Promise") {
-                        return createLogicalOr(
-                            createLogicalAnd(
-                                createTypeCheck(createIdentifier("Promise"), "function"),
-                                createIdentifier("Promise")
-                            ),
-                            createIdentifier("Object")
-                        );
-                    }
-                    // make 'no-switch-case-fall-through' happy
-                    return createIdentifier("Object");
                 default:
                     return createIdentifier("Object");
             }
