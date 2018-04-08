@@ -1,0 +1,10 @@
+=== tests/cases/compiler/declarationEmitPrivateAsync.ts ===
+export class Foo {
+>Foo : Foo
+
+    private async baz() {
+>baz : () => Promise<void>
+
+        return;
+    }
+}

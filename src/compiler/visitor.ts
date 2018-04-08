@@ -398,6 +398,14 @@ namespace ts {
                 return updateInferTypeNode(<InferTypeNode>node,
                     visitNode((<InferTypeNode>node).typeParameter, visitor, isTypeParameterDeclaration));
 
+            case SyntaxKind.ImportType:
+                return updateImportTypeNode(<ImportTypeNode>node,
+                    visitNode((<ImportTypeNode>node).argument, visitor, isTypeNode),
+                    visitNode((<ImportTypeNode>node).qualifier, visitor, isEntityName),
+                    visitNodes((<ImportTypeNode>node).typeArguments, visitor, isTypeNode),
+                    (<ImportTypeNode>node).isTypeOf
+                );
+
             case SyntaxKind.ParenthesizedType:
                 return updateParenthesizedType(<ParenthesizedTypeNode>node,
                     visitNode((<ParenthesizedTypeNode>node).type, visitor, isTypeNode));
@@ -821,11 +829,13 @@ namespace ts {
             case SyntaxKind.JsxSelfClosingElement:
                 return updateJsxSelfClosingElement(<JsxSelfClosingElement>node,
                     visitNode((<JsxSelfClosingElement>node).tagName, visitor, isJsxTagNameExpression),
+                    nodesVisitor((<JsxSelfClosingElement>node).typeArguments, visitor, isTypeNode),
                     visitNode((<JsxSelfClosingElement>node).attributes, visitor, isJsxAttributes));
 
             case SyntaxKind.JsxOpeningElement:
                 return updateJsxOpeningElement(<JsxOpeningElement>node,
                     visitNode((<JsxOpeningElement>node).tagName, visitor, isJsxTagNameExpression),
+                    nodesVisitor((<JsxSelfClosingElement>node).typeArguments, visitor, isTypeNode),
                     visitNode((<JsxOpeningElement>node).attributes, visitor, isJsxAttributes));
 
             case SyntaxKind.JsxClosingElement:
@@ -1544,11 +1554,11 @@ namespace ts {
     export namespace Debug {
         let isDebugInfoEnabled = false;
 
-        export const failBadSyntaxKind = shouldAssert(AssertionLevel.Normal)
-            ? (node: Node, message?: string): void => fail(
+        export function failBadSyntaxKind(node: Node, message?: string): never {
+            return fail(
                 `${message || "Unexpected node."}\r\nNode ${formatSyntaxKind(node.kind)} was unexpected.`,
-                failBadSyntaxKind)
-            : noop;
+                failBadSyntaxKind);
+        }
 
         export const assertEachNode = shouldAssert(AssertionLevel.Normal)
             ? (nodes: Node[], test: (node: Node) => boolean, message?: string): void => assert(

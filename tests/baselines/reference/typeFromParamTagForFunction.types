@@ -11,7 +11,7 @@ declare var module: any, exports: any;
 exports.A = function () {
 >exports.A = function () {    this.x = 1;} : () => void
 >exports.A : () => void
->exports : typeof "tests/cases/conformance/salsa/a-ext"
+>exports : typeof import("tests/cases/conformance/salsa/a-ext")
 >A : () => void
 >function () {    this.x = 1;} : () => void
 
@@ -27,7 +27,7 @@ exports.A = function () {
 === tests/cases/conformance/salsa/a.js ===
 const { A } = require("./a-ext");
 >A : () => void
->require("./a-ext") : typeof "tests/cases/conformance/salsa/a-ext"
+>require("./a-ext") : typeof import("tests/cases/conformance/salsa/a-ext")
 >require : (id: string) => any
 >"./a-ext" : "./a-ext"
 
@@ -43,7 +43,7 @@ function a(p) { p.x; }
 exports.B = class {
 >exports.B = class {    constructor() {        this.x = 1;    }} : typeof (Anonymous class)
 >exports.B : typeof (Anonymous class)
->exports : typeof "tests/cases/conformance/salsa/b-ext"
+>exports : typeof import("tests/cases/conformance/salsa/b-ext")
 >B : typeof (Anonymous class)
 >class {    constructor() {        this.x = 1;    }} : typeof (Anonymous class)
 
@@ -60,7 +60,7 @@ exports.B = class {
 === tests/cases/conformance/salsa/b.js ===
 const { B } = require("./b-ext");
 >B : typeof (Anonymous class)
->require("./b-ext") : typeof "tests/cases/conformance/salsa/b-ext"
+>require("./b-ext") : typeof import("tests/cases/conformance/salsa/b-ext")
 >require : (id: string) => any
 >"./b-ext" : "./b-ext"
 
@@ -87,7 +87,7 @@ export function C() {
 === tests/cases/conformance/salsa/c.js ===
 const { C } = require("./c-ext");
 >C : () => void
->require("./c-ext") : typeof "tests/cases/conformance/salsa/c-ext"
+>require("./c-ext") : typeof import("tests/cases/conformance/salsa/c-ext")
 >require : (id: string) => any
 >"./c-ext" : "./c-ext"
 
@@ -116,7 +116,7 @@ export var D = function() {
 === tests/cases/conformance/salsa/d.js ===
 const { D } = require("./d-ext");
 >D : () => void
->require("./d-ext") : typeof "tests/cases/conformance/salsa/d-ext"
+>require("./d-ext") : typeof import("tests/cases/conformance/salsa/d-ext")
 >require : (id: string) => any
 >"./d-ext" : "./d-ext"
 
@@ -145,7 +145,7 @@ export class E {
 === tests/cases/conformance/salsa/e.js ===
 const { E } = require("./e-ext");
 >E : typeof E
->require("./e-ext") : typeof "tests/cases/conformance/salsa/e-ext"
+>require("./e-ext") : typeof import("tests/cases/conformance/salsa/e-ext")
 >require : (id: string) => any
 >"./e-ext" : "./e-ext"
 

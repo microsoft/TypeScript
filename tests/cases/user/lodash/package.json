@@ -1,0 +1,11 @@
+{
+  "name": "lodash-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "lodash": "^4.17.5"
+  }
+}
