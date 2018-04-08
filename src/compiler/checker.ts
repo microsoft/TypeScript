@@ -26767,6 +26767,10 @@ namespace ts {
         }
 
         function checkGrammarBindingElement(node: BindingElement) {
+            if (checkGrammarForInvalidQuestionMark(node.questionToken, Diagnostics.Property_in_destructuring_not_be_marked_optional)) {
+                grammarErrorOnNode(node.questionToken, Diagnostics.Property_in_destructuring_not_be_marked_optional);
+                return true;
+            }
             if (node.dotDotDotToken) {
                 const elements = node.parent.elements;
                 if (node !== last(elements)) {

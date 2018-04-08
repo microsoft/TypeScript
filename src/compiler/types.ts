@@ -848,6 +848,7 @@ namespace ts {
         parent?: BindingPattern;
         propertyName?: PropertyName;        // Binding property name (in object binding pattern)
         dotDotDotToken?: DotDotDotToken;    // Present on rest element (in object binding pattern)
+        questionToken?: QuestionToken;
         name: BindingName;                  // Declared binding element name
         initializer?: Expression;           // Optional initializer
     }
