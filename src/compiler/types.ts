@@ -912,6 +912,7 @@ namespace ts {
         kind: SyntaxKind.ShorthandPropertyAssignment;
         name: Identifier;
         questionToken?: QuestionToken;
+        exclamationToken?: ExclamationToken;
         // used when ObjectLiteralExpression is used in ObjectAssignmentPattern
         // it is grammar error to appear in actual object initializer
         equalsToken?: Token<SyntaxKind.EqualsToken>;
@@ -970,6 +971,7 @@ namespace ts {
 
         asteriskToken?: AsteriskToken;
         questionToken?: QuestionToken;
+        exclamationToken?: ExclamationToken;
         body?: Block | Expression;
     }
 
