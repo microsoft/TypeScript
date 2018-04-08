@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(2,7): error TS1339: Property in destructuring not be marked optional.
+tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(2,7): error TS1343: Property in destructuring not be marked optional.
 tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(3,5): error TS2322: Type '{ i: number; }' is not assignable to type 'string | number'.
   Type '{ i: number; }' is not assignable to type 'number'.
 tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(3,6): error TS2459: Type 'string | number' has no property 'i' and no string index signature.
@@ -14,7 +14,7 @@ tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAs
     // Error
     var {h?} = { h?: 1 };
           ~
-!!! error TS1339: Property in destructuring not be marked optional.
+!!! error TS1343: Property in destructuring not be marked optional.
     var {i}: string | number = { i: 2 };
         ~~~
 !!! error TS2322: Type '{ i: number; }' is not assignable to type 'string | number'.
