@@ -1963,31 +1963,32 @@ new AnotherSampleClass({});
 >AnotherSampleClass : Symbol(AnotherSampleClass, Decl(keyofAndIndexedAccess.ts, 540, 54))
 
 // Positive repro from #17166
-function f3<T, K extends keyof T>(t: T, k: K, tk: T[K]): void {
+function f3<T, K extends Extract<keyof T, string>>(t: T, k: K, tk: T[K]): void {
 >f3 : Symbol(f3, Decl(keyofAndIndexedAccess.ts, 552, 27))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 555, 12))
 >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 555, 14))
+>Extract : Symbol(Extract, Decl(lib.d.ts, --, --))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 555, 12))
->t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 555, 34))
+>t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 555, 51))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 555, 12))
->k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 555, 39))
+>k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 555, 56))
 >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 555, 14))
->tk : Symbol(tk, Decl(keyofAndIndexedAccess.ts, 555, 45))
+>tk : Symbol(tk, Decl(keyofAndIndexedAccess.ts, 555, 62))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 555, 12))
 >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 555, 14))
 
     for (let key in t) {
 >key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 556, 12))
->t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 555, 34))
+>t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 555, 51))
 
         key = k // ok, K ==> keyof T
 >key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 556, 12))
->k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 555, 39))
+>k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 555, 56))
 
         t[key] = tk; // ok, T[K] ==> T[keyof T]
->t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 555, 34))
+>t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 555, 51))
 >key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 556, 12))
->tk : Symbol(tk, Decl(keyofAndIndexedAccess.ts, 555, 45))
+>tk : Symbol(tk, Decl(keyofAndIndexedAccess.ts, 555, 62))
     }
 }
 

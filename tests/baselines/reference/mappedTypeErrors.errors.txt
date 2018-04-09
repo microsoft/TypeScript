@@ -1,7 +1,8 @@
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(19,20): error TS2313: Type parameter 'P' has a circular constraint.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(20,20): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(21,20): error TS2322: Type 'Date' is not assignable to type 'string'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(22,19): error TS2344: Type 'Date' does not satisfy the constraint 'string'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(21,20): error TS2322: Type 'Date' is not assignable to type 'string | number | symbol'.
+  Type 'Date' is not assignable to type 'symbol'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(22,19): error TS2344: Type 'Date' does not satisfy the constraint 'string | number | symbol'.
+  Type 'Date' is not assignable to type 'symbol'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(25,24): error TS2344: Type '"foo"' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(26,24): error TS2344: Type '"name" | "foo"' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
   Type '"foo"' is not assignable to type '"name" | "width" | "height" | "visible"'.
@@ -45,11 +46,12 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(129,5): error TS2322: T
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(130,5): error TS2322: Type '{ a: string; }' is not assignable to type '{ [x: string]: any; a?: number | undefined; }'.
   Types of property 'a' are incompatible.
     Type 'string' is not assignable to type 'number | undefined'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(136,16): error TS2322: Type 'T' is not assignable to type 'string'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(136,16): error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
+  Type 'T' is not assignable to type 'symbol'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(136,21): error TS2536: Type 'P' cannot be used to index type 'T'.
 
 
-==== tests/cases/conformance/types/mapped/mappedTypeErrors.ts (26 errors) ====
+==== tests/cases/conformance/types/mapped/mappedTypeErrors.ts (25 errors) ====
     interface Shape {
         name: string;
         width: number;
@@ -72,14 +74,14 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(136,21): error TS2536: 
                        ~
 !!! error TS2313: Type parameter 'P' has a circular constraint.
     type T01 = { [P in number]: string };  // Error
-                       ~~~~~~
-!!! error TS2322: Type 'number' is not assignable to type 'string'.
     type T02 = { [P in Date]: number };  // Error
                        ~~~~
-!!! error TS2322: Type 'Date' is not assignable to type 'string'.
+!!! error TS2322: Type 'Date' is not assignable to type 'string | number | symbol'.
+!!! error TS2322:   Type 'Date' is not assignable to type 'symbol'.
     type T03 = Record<Date, number>;  // Error
                       ~~~~
-!!! error TS2344: Type 'Date' does not satisfy the constraint 'string'.
+!!! error TS2344: Type 'Date' does not satisfy the constraint 'string | number | symbol'.
+!!! error TS2344:   Type 'Date' is not assignable to type 'symbol'.
     
     type T10 = Pick<Shape, "name">;
     type T11 = Pick<Shape, "foo">;  // Error
@@ -258,7 +260,8 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(136,21): error TS2536: 
         pf: {[P in F]?: T[P]},
         pt: {[P in T]?: T[P]}, // note: should be in keyof T
                    ~
-!!! error TS2322: Type 'T' is not assignable to type 'string'.
+!!! error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
+!!! error TS2322:   Type 'T' is not assignable to type 'symbol'.
                         ~~~~
 !!! error TS2536: Type 'P' cannot be used to index type 'T'.
     };

@@ -59,10 +59,10 @@ const enum E { A, B, C }
 >C : E.C
 
 type K00 = keyof any;  // string
->K00 : string
+>K00 : string | number | symbol
 
 type K01 = keyof string;  // "toString" | "charAt" | ...
->K01 : "length" | "toString" | "concat" | "slice" | "indexOf" | "lastIndexOf" | "charAt" | "charCodeAt" | "localeCompare" | "match" | "replace" | "search" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr" | "valueOf"
+>K01 : number | "length" | "toString" | "concat" | "slice" | "indexOf" | "lastIndexOf" | "charAt" | "charCodeAt" | "localeCompare" | "match" | "replace" | "search" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr" | "valueOf"
 
 type K02 = keyof number;  // "toString" | "toFixed" | "toExponential" | ...
 >K02 : "toString" | "toLocaleString" | "valueOf" | "toFixed" | "toExponential" | "toPrecision"
@@ -88,11 +88,11 @@ type K10 = keyof Shape;  // "name" | "width" | "height" | "visible"
 >Shape : Shape
 
 type K11 = keyof Shape[];  // "length" | "toString" | ...
->K11 : "length" | "toString" | "toLocaleString" | "push" | "pop" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
+>K11 : number | "length" | "toString" | "toLocaleString" | "push" | "pop" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
 >Shape : Shape
 
 type K12 = keyof Dictionary<Shape>;  // string
->K12 : string
+>K12 : string | number | symbol
 >Dictionary : Dictionary<T>
 >Shape : Shape
 
@@ -108,7 +108,7 @@ type K15 = keyof E;  // "toString" | "toFixed" | "toExponential" | ...
 >E : E
 
 type K16 = keyof [string, number];  // "0" | "1" | "length" | "toString" | ...
->K16 : "0" | "1" | "length" | "toString" | "toLocaleString" | "push" | "pop" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
+>K16 : number | "0" | "1" | "length" | "toString" | "toLocaleString" | "push" | "pop" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
 
 type K17 = keyof (Shape | Item);  // "name"
 >K17 : "name"
@@ -121,7 +121,7 @@ type K18 = keyof (Shape & Item);  // "name" | "width" | "height" | "visible" | "
 >Item : Item
 
 type K19 = keyof NumericallyIndexed<Shape> // never
->K19 : never
+>K19 : number
 >NumericallyIndexed : NumericallyIndexed<T>
 >Shape : Shape
 
@@ -136,7 +136,7 @@ type K20 = KeyOf<Shape>;  // "name" | "width" | "height" | "visible"
 >Shape : Shape
 
 type K21 = KeyOf<Dictionary<Shape>>;  // string
->K21 : string
+>K21 : string | number | symbol
 >KeyOf : keyof T
 >Dictionary : Dictionary<T>
 >Shape : Shape
@@ -825,7 +825,7 @@ function f54<T>(obj: T, key: keyof T) {
 >T : T
 
     for (let s in obj[key]) {
->s : keyof T[keyof T]
+>s : Extract<keyof T[keyof T], string>
 >obj[key] : T[keyof T]
 >obj : T
 >key : keyof T
@@ -850,7 +850,7 @@ function f55<T, K extends keyof T>(obj: T, key: K) {
 >K : K
 
     for (let s in obj[key]) {
->s : keyof T[K]
+>s : Extract<keyof T[K], string>
 >obj[key] : T[K]
 >obj : T
 >key : K
@@ -873,17 +873,17 @@ function f60<T>(source: T, target: T) {
 >T : T
 
     for (let k in source) {
->k : keyof T
+>k : Extract<keyof T, string>
 >source : T
 
         target[k] = source[k];
->target[k] = source[k] : T[keyof T]
->target[k] : T[keyof T]
+>target[k] = source[k] : T[Extract<keyof T, string>]
+>target[k] : T[Extract<keyof T, string>]
 >target : T
->k : keyof T
->source[k] : T[keyof T]
+>k : Extract<keyof T, string>
+>source[k] : T[Extract<keyof T, string>]
 >source : T
->k : keyof T
+>k : Extract<keyof T, string>
     }
 }
 
@@ -2295,10 +2295,11 @@ new AnotherSampleClass({});
 >{} : {}
 
 // Positive repro from #17166
-function f3<T, K extends keyof T>(t: T, k: K, tk: T[K]): void {
->f3 : <T, K extends keyof T>(t: T, k: K, tk: T[K]) => void
+function f3<T, K extends Extract<keyof T, string>>(t: T, k: K, tk: T[K]): void {
+>f3 : <T, K extends Extract<keyof T, string>>(t: T, k: K, tk: T[K]) => void
 >T : T
 >K : K
+>Extract : Extract<T, U>
 >T : T
 >t : T
 >T : T
@@ -2309,19 +2310,19 @@ function f3<T, K extends keyof T>(t: T, k: K, tk: T[K]): void {
 >K : K
 
     for (let key in t) {
->key : keyof T
+>key : Extract<keyof T, string>
 >t : T
 
         key = k // ok, K ==> keyof T
 >key = k : K
->key : keyof T
+>key : Extract<keyof T, string>
 >k : K
 
         t[key] = tk; // ok, T[K] ==> T[keyof T]
 >t[key] = tk : T[K]
->t[key] : T[keyof T]
+>t[key] : T[Extract<keyof T, string>]
 >t : T
->key : keyof T
+>key : Extract<keyof T, string>
 >tk : T[K]
     }
 }

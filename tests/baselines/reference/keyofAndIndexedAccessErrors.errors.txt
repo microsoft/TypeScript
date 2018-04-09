@@ -28,19 +28,22 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(76,5): error 
     Type 'T' is not assignable to type 'U'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(77,5): error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof (T | U)'.
   Type 'keyof T' is not assignable to type 'keyof (T | U)'.
-    Type 'string' is not assignable to type 'keyof (T | U)'.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(86,9): error TS2322: Type 'keyof T' is not assignable to type 'K'.
-  Type 'string' is not assignable to type 'K'.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(88,9): error TS2322: Type 'T[keyof T]' is not assignable to type 'T[K]'.
-  Type 'keyof T' is not assignable to type 'K'.
+    Type 'string | number | symbol' is not assignable to type 'keyof (T | U)'.
+      Type 'string' is not assignable to type 'keyof (T | U)'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(86,9): error TS2322: Type 'Extract<keyof T, string>' is not assignable to type 'K'.
+  Type 'string & keyof T' is not assignable to type 'K'.
+    Type 'string' is not assignable to type 'K'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(88,9): error TS2322: Type 'T[Extract<keyof T, string>]' is not assignable to type 'T[K]'.
+  Type 'Extract<keyof T, string>' is not assignable to type 'K'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(91,5): error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
   Type 'T' is not assignable to type 'U'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(94,5): error TS2322: Type 'T[J]' is not assignable to type 'U[J]'.
   Type 'T' is not assignable to type 'U'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(97,5): error TS2322: Type 'T[K]' is not assignable to type 'T[J]'.
   Type 'K' is not assignable to type 'J'.
-    Type 'keyof T' is not assignable to type 'J'.
-      Type 'string' is not assignable to type 'J'.
+    Type 'Extract<keyof T, string>' is not assignable to type 'J'.
+      Type 'string & keyof T' is not assignable to type 'J'.
+        Type 'string' is not assignable to type 'J'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(100,5): error TS2322: Type 'T[K]' is not assignable to type 'U[J]'.
   Type 'T' is not assignable to type 'U'.
 
@@ -178,24 +181,26 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(100,5): error
         ~~
 !!! error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof (T | U)'.
 !!! error TS2322:   Type 'keyof T' is not assignable to type 'keyof (T | U)'.
-!!! error TS2322:     Type 'string' is not assignable to type 'keyof (T | U)'.
+!!! error TS2322:     Type 'string | number | symbol' is not assignable to type 'keyof (T | U)'.
+!!! error TS2322:       Type 'string' is not assignable to type 'keyof (T | U)'.
         k2 = k1;
     }
     
     // Repro from #17166
-    function f3<T, K extends keyof T, U extends T, J extends K>(
+    function f3<T, K extends Extract<keyof T, string>, U extends T, J extends K>(
         t: T, k: K, tk: T[K], u: U, j: J, uk: U[K], tj: T[J], uj: U[J]): void {
         for (let key in t) {
             key = k // ok, K ==> keyof T
             k = key // error, keyof T =/=> K
             ~
-!!! error TS2322: Type 'keyof T' is not assignable to type 'K'.
-!!! error TS2322:   Type 'string' is not assignable to type 'K'.
+!!! error TS2322: Type 'Extract<keyof T, string>' is not assignable to type 'K'.
+!!! error TS2322:   Type 'string & keyof T' is not assignable to type 'K'.
+!!! error TS2322:     Type 'string' is not assignable to type 'K'.
             t[key] = tk; // ok, T[K] ==> T[keyof T]
             tk = t[key]; // error, T[keyof T] =/=> T[K]
             ~~
-!!! error TS2322: Type 'T[keyof T]' is not assignable to type 'T[K]'.
-!!! error TS2322:   Type 'keyof T' is not assignable to type 'K'.
+!!! error TS2322: Type 'T[Extract<keyof T, string>]' is not assignable to type 'T[K]'.
+!!! error TS2322:   Type 'Extract<keyof T, string>' is not assignable to type 'K'.
         }
         tk = uk;
         uk = tk; // error
@@ -214,8 +219,9 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(100,5): error
         ~~
 !!! error TS2322: Type 'T[K]' is not assignable to type 'T[J]'.
 !!! error TS2322:   Type 'K' is not assignable to type 'J'.
-!!! error TS2322:     Type 'keyof T' is not assignable to type 'J'.
-!!! error TS2322:       Type 'string' is not assignable to type 'J'.
+!!! error TS2322:     Type 'Extract<keyof T, string>' is not assignable to type 'J'.
+!!! error TS2322:       Type 'string & keyof T' is not assignable to type 'J'.
+!!! error TS2322:         Type 'string' is not assignable to type 'J'.
     
         tk = uj;
         uj = tk; // error
