@@ -1,12 +1,12 @@
 {
     "kind": "JSDocComment",
     "pos": 0,
-    "end": 56,
+    "end": 66,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
             "pos": 6,
-            "end": 53,
+            "end": 63,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 6,
@@ -21,16 +21,16 @@
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 34,
-                "end": 53,
+                "end": 63,
                 "type": {
                     "kind": "JSDocTypeLiteral",
                     "pos": 34,
-                    "end": 53,
+                    "end": 63,
                     "jsDocPropertyTags": [
                         {
                             "kind": "JSDocParameterTag",
                             "pos": 34,
-                            "end": 53,
+                            "end": 54,
                             "atToken": {
                                 "kind": "AtToken",
                                 "pos": 34,
@@ -70,7 +70,8 @@
                                 }
                             },
                             "isNameFirst": false,
-                            "isBracketed": false
+                            "isBracketed": false,
+                            "comment": "Doc for f"
                         }
                     ]
                 }
@@ -87,6 +88,6 @@
         },
         "length": 1,
         "pos": 6,
-        "end": 53
+        "end": 63
     }
 }

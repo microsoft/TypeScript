@@ -309,7 +309,7 @@ namespace ts {
                 parsesCorrectly("Nested @param tags",
 `/**
 * @param {object} o Doc doc
-* @param {string} o.f
+* @param {string} o.f Doc for f
 */`);
             });
         });
