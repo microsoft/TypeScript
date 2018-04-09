@@ -1,0 +1,125 @@
+error TS2468: Cannot find global value 'Promise'.
+tests/cases/conformance/es2019/importMeta/example.ts(2,2): error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your `--lib` option.
+tests/cases/conformance/es2019/importMeta/example.ts(3,59): error TS1135: Argument expression expected.
+tests/cases/conformance/es2019/importMeta/example.ts(3,65): error TS1135: Argument expression expected.
+tests/cases/conformance/es2019/importMeta/example.ts(3,66): error TS2448: Block-scoped variable 'meta' used before its declaration.
+tests/cases/conformance/es2019/importMeta/example.ts(6,9): error TS2451: Cannot redeclare block-scoped variable 'size'.
+tests/cases/conformance/es2019/importMeta/example.ts(6,16): error TS1109: Expression expected.
+tests/cases/conformance/es2019/importMeta/example.ts(6,22): error TS1134: Variable declaration expected.
+tests/cases/conformance/es2019/importMeta/example.ts(6,27): error TS1005: ',' expected.
+tests/cases/conformance/es2019/importMeta/example.ts(6,41): error TS1005: ',' expected.
+tests/cases/conformance/es2019/importMeta/example.ts(6,49): error TS1005: ',' expected.
+tests/cases/conformance/es2019/importMeta/example.ts(6,50): error TS2451: Cannot redeclare block-scoped variable 'size'.
+tests/cases/conformance/es2019/importMeta/example.ts(6,55): error TS1005: ',' expected.
+tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts(1,16): error TS1109: Expression expected.
+tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts(1,22): error TS1134: Variable declaration expected.
+tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts(2,16): error TS1109: Expression expected.
+tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts(2,22): error TS1134: Variable declaration expected.
+tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts(3,16): error TS1109: Expression expected.
+tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts(3,22): error TS1134: Variable declaration expected.
+tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts(3,23): error TS1134: Variable declaration expected.
+tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts(3,29): error TS1134: Variable declaration expected.
+tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts(3,30): error TS1134: Variable declaration expected.
+tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts(3,36): error TS1134: Variable declaration expected.
+tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts(1,15): error TS1109: Expression expected.
+tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts(1,21): error TS1134: Variable declaration expected.
+tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts(2,15): error TS1109: Expression expected.
+tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts(2,21): error TS1134: Variable declaration expected.
+tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts(3,15): error TS1109: Expression expected.
+tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts(3,21): error TS1134: Variable declaration expected.
+tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts(3,22): error TS1134: Variable declaration expected.
+tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts(3,28): error TS1134: Variable declaration expected.
+tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts(3,29): error TS1134: Variable declaration expected.
+tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts(3,35): error TS1134: Variable declaration expected.
+
+
+!!! error TS2468: Cannot find global value 'Promise'.
+==== tests/cases/conformance/es2019/importMeta/example.ts (12 errors) ====
+    // Adapted from https://github.com/tc39/proposal-import-meta/tree/c3902a9ffe2e69a7ac42c19d7ea74cbdcea9b7fb#example
+    (async () => {
+     ~~~~~~~~~~~~~
+!!! error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your `--lib` option.
+      const response = await fetch(new URL("../hamsters.jpg", import.meta.url).toString());
+                                                              ~~~~~~
+!!! error TS1135: Argument expression expected.
+                                                                    ~
+!!! error TS1135: Argument expression expected.
+                                                                     ~~~~
+!!! error TS2448: Block-scoped variable 'meta' used before its declaration.
+      const blob = await response.blob();
+    
+      const size = import.meta.scriptElement.dataset.size || 300;
+            ~~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'size'.
+                   ~~~~~~
+!!! error TS1109: Expression expected.
+                         ~
+!!! error TS1134: Variable declaration expected.
+                              ~
+!!! error TS1005: ',' expected.
+                                            ~
+!!! error TS1005: ',' expected.
+                                                    ~
+!!! error TS1005: ',' expected.
+                                                     ~~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'size'.
+                                                          ~~
+!!! error TS1005: ',' expected.
+    
+      const image = new Image();
+      image.src = URL.createObjectURL(blob);
+      image.width = image.height = size;
+    
+      document.body.appendChild(image);
+    })();
+    
+==== tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts (10 errors) ====
+    export let x = import.meta;
+                   ~~~~~~
+!!! error TS1109: Expression expected.
+                         ~
+!!! error TS1134: Variable declaration expected.
+    export let y = import.metal;
+                   ~~~~~~
+!!! error TS1109: Expression expected.
+                         ~
+!!! error TS1134: Variable declaration expected.
+    export let z = import.import.import.malkovich;
+                   ~~~~~~
+!!! error TS1109: Expression expected.
+                         ~
+!!! error TS1134: Variable declaration expected.
+                          ~~~~~~
+!!! error TS1134: Variable declaration expected.
+                                ~
+!!! error TS1134: Variable declaration expected.
+                                 ~~~~~~
+!!! error TS1134: Variable declaration expected.
+                                       ~
+!!! error TS1134: Variable declaration expected.
+    
+==== tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts (10 errors) ====
+    let globalA = import.meta;
+                  ~~~~~~
+!!! error TS1109: Expression expected.
+                        ~
+!!! error TS1134: Variable declaration expected.
+    let globalB = import.metal;
+                  ~~~~~~
+!!! error TS1109: Expression expected.
+                        ~
+!!! error TS1134: Variable declaration expected.
+    let globalC = import.import.import.malkovich;
+                  ~~~~~~
+!!! error TS1109: Expression expected.
+                        ~
+!!! error TS1134: Variable declaration expected.
+                         ~~~~~~
+!!! error TS1134: Variable declaration expected.
+                               ~
+!!! error TS1134: Variable declaration expected.
+                                ~~~~~~
+!!! error TS1134: Variable declaration expected.
+                                      ~
+!!! error TS1134: Variable declaration expected.
+    
