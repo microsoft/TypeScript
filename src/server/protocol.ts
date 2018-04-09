@@ -2172,6 +2172,8 @@ namespace ts.server.protocol {
          */
         category: string;
 
+        reportsUnnecessary?: {};
+
         /**
          * The error code of the diagnostic message.
          */

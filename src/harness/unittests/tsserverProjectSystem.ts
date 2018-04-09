@@ -4131,10 +4131,10 @@ namespace ts.projectSystem {
             checkErrorMessage(session, "semanticDiag", { file: file1.path, diagnostics: [] });
         });
 
-        it("info diagnostics", () => {
+        it("suggestion diagnostics", () => {
             const file: FileOrFolder = {
                 path: "/a.js",
-                content: 'require("b")',
+                content: "function f(p) {}",
             };
 
             const host = createServerHost([file]);
@@ -4177,7 +4177,7 @@ namespace ts.projectSystem {
             checkErrorMessage(session, "suggestionDiag", {
                 file: file.path,
                 diagnostics: [
-                    createDiagnostic({ line: 1, offset: 1 }, { line: 1, offset: 13 }, Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES6_module)
+                    createDiagnostic({ line: 1, offset: 12 }, { line: 1, offset: 13 }, Diagnostics._0_is_declared_but_its_value_is_never_read, ["p"], "suggestion", /*reportsUnnecssary*/ true)
                 ],
             });
             checkCompleteEvent(session, 2, expectedSequenceId);
@@ -4241,8 +4241,8 @@ namespace ts.projectSystem {
             session.clearMessages();
         });
 
-        function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: ReadonlyArray<string> = []): protocol.Diagnostic {
-            return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category: diagnosticCategoryName(message), source: undefined };
+        function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: ReadonlyArray<string> = [], category = diagnosticCategoryName(message), reportsUnnecessary?: {}): protocol.Diagnostic {
+            return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category, reportsUnnecessary, source: undefined };
         }
     });
 
