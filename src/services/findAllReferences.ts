@@ -1422,7 +1422,7 @@ namespace ts.FindAllReferences.Core {
         if (symbol.valueDeclaration && isParameterPropertyDeclaration(symbol.valueDeclaration)) {
             // For a parameter property, now try on the other symbol (property if this was a parameter, parameter if this was a property).
             const paramProps = checker.getSymbolsOfParameterPropertyDeclaration(cast(symbol.valueDeclaration, isParameter), symbol.name);
-            Debug.assert(paramProps.length === 2 && !!(paramProps[0].flags & SymbolFlags.FunctionScopedVariable)); // is [parameter, property]
+            Debug.assert(paramProps.length === 2 && !!(paramProps[0].flags & SymbolFlags.FunctionScopedVariable) && !!(paramProps[1].flags & SymbolFlags.Property)); // is [parameter, property]
             return fromRoot(symbol.flags & SymbolFlags.FunctionScopedVariable ? paramProps[1] : paramProps[0]);
         }
 
