@@ -141,12 +141,15 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(p, [file1.path, tsconfig.path]);
+            checkWatchedFiles(host, [tsconfig.path, libFile.path, packageJson.path, "/a/b/bower_components", "/a/b/node_modules"]);
 
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             host.checkTimeoutQueueLengthAndRun(2);
             checkProjectActualFiles(p, [file1.path, jquery.path, tsconfig.path]);
+            // should not watch jquery
+            checkWatchedFiles(host, [tsconfig.path, libFile.path, packageJson.path, "/a/b/bower_components", "/a/b/node_modules"]);
         });
 
         it("inferred project (typings installed)", () => {
@@ -188,7 +191,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(p, [file1.path]);
 
             installer.installAll(/*expectedCount*/ 1);
-
+            host.checkTimeoutQueueLengthAndRun(2);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             checkProjectActualFiles(p, [file1.path, jquery.path]);
         });
@@ -961,6 +964,7 @@ namespace ts.projectSystem {
             assert.isTrue(host.fileExists(node.path), "typings for 'node' should be created");
             assert.isTrue(host.fileExists(commander.path), "typings for 'commander' should be created");
 
+            host.checkTimeoutQueueLengthAndRun(2);
             checkProjectActualFiles(service.inferredProjects[0], [file.path, node.path, commander.path]);
         });
 
@@ -1106,7 +1110,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(p, [file1.path]);
 
             installer.installAll(/*expectedCount*/ 1);
-
+            host.checkTimeoutQueueLengthAndRun(2);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             checkProjectActualFiles(p, [file1.path, jquery.path]);
         });

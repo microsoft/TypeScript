@@ -137,8 +137,9 @@ namespace ts.Completions.PathCompletions {
             if (directories) {
                 for (const directory of directories) {
                     const directoryName = getBaseFileName(normalizePath(directory));
-
-                    result.push(nameAndKind(directoryName, ScriptElementKind.directory));
+                    if (directoryName !== "@types") {
+                        result.push(nameAndKind(directoryName, ScriptElementKind.directory));
+                    }
                 }
             }
         }
@@ -177,19 +178,33 @@ namespace ts.Completions.PathCompletions {
             }
         }
 
-        if (compilerOptions.moduleResolution === ModuleResolutionKind.NodeJs) {
-            forEachAncestorDirectory(scriptPath, ancestor => {
-                const nodeModules = combinePaths(ancestor, "node_modules");
-                if (host.directoryExists!(nodeModules)) { // TODO: GH#18217
-                    getCompletionEntriesForDirectoryFragment(fragment, nodeModules, fileExtensions, /*includeExtensions*/ false, host, /*exclude*/ undefined, result);
-                }
-            });
+        const fragmentDirectory = containsSlash(fragment) ? getDirectoryPath(fragment) : undefined;
+        for (const ambientName of getAmbientModuleCompletions(fragment, fragmentDirectory, typeChecker)) {
+            result.push(nameAndKind(ambientName, ScriptElementKind.externalModuleName));
         }
 
         getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, result);
 
-        for (const moduleName of enumeratePotentialNonRelativeModules(fragment, scriptPath, compilerOptions, typeChecker, host)) {
-            result.push(nameAndKind(moduleName, ScriptElementKind.externalModuleName));
+        if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs) {
+            // If looking for a global package name, don't just include everything in `node_modules` because that includes dependencies' own dependencies.
+            // (But do if we didn't find anything, e.g. 'package.json' missing.)
+            let foundGlobal = false;
+            if (fragmentDirectory === undefined) {
+                for (const moduleName of enumerateNodeModulesVisibleToScript(host, scriptPath)) {
+                    if (!result.some(entry => entry.name === moduleName)) {
+                        foundGlobal = true;
+                        result.push(nameAndKind(moduleName, ScriptElementKind.externalModuleName));
+                    }
+                }
+            }
+            if (!foundGlobal) {
+                forEachAncestorDirectory(scriptPath, ancestor => {
+                    const nodeModules = combinePaths(ancestor, "node_modules");
+                    if (tryDirectoryExists(host, nodeModules)) {
+                        getCompletionEntriesForDirectoryFragment(fragment, nodeModules, fileExtensions, /*includeExtensions*/ false, host, /*exclude*/ undefined, result);
+                    }
+                });
+            }
         }
 
         return result;
@@ -228,7 +243,7 @@ namespace ts.Completions.PathCompletions {
         const normalizedPrefixDirectory = getDirectoryPath(normalizedPrefix);
         const normalizedPrefixBase = getBaseFileName(normalizedPrefix);
 
-        const fragmentHasPath = stringContains(fragment, directorySeparator);
+        const fragmentHasPath = containsSlash(fragment);
 
         // Try and expand the prefix to include any path from the fragment so that we can limit the readDirectory call
         const expandedPrefixDirectory = fragmentHasPath ? combinePaths(normalizedPrefixDirectory, normalizedPrefixBase + getDirectoryPath(fragment)) : normalizedPrefixDirectory;
@@ -262,45 +277,19 @@ namespace ts.Completions.PathCompletions {
         return path[0] === directorySeparator ? path.slice(1) : path;
     }
 
-    function enumeratePotentialNonRelativeModules(fragment: string, scriptPath: string, options: CompilerOptions, typeChecker: TypeChecker, host: LanguageServiceHost): string[] {
-        // Check If this is a nested module
-        const isNestedModule = stringContains(fragment, directorySeparator);
-        const moduleNameFragment = isNestedModule ? fragment.substr(0, fragment.lastIndexOf(directorySeparator)) : undefined;
-
+    function getAmbientModuleCompletions(fragment: string, fragmentDirectory: string | undefined, checker: TypeChecker): ReadonlyArray<string> {
         // Get modules that the type checker picked up
-        const ambientModules = map(typeChecker.getAmbientModules(), sym => stripQuotes(sym.name));
-        let nonRelativeModuleNames = filter(ambientModules, moduleName => startsWith(moduleName, fragment));
+        const ambientModules = checker.getAmbientModules().map(sym => stripQuotes(sym.name));
+        const nonRelativeModuleNames = ambientModules.filter(moduleName => startsWith(moduleName, fragment));
 
         // Nested modules of the form "module-name/sub" need to be adjusted to only return the string
         // after the last '/' that appears in the fragment because that's where the replacement span
         // starts
-        if (isNestedModule) {
-            const moduleNameWithSeperator = ensureTrailingDirectorySeparator(moduleNameFragment!);
-            nonRelativeModuleNames = map(nonRelativeModuleNames, nonRelativeModuleName => {
-                return removePrefix(nonRelativeModuleName, moduleNameWithSeperator);
-            });
+        if (fragmentDirectory !== undefined) {
+            const moduleNameWithSeperator = ensureTrailingDirectorySeparator(fragmentDirectory);
+            return nonRelativeModuleNames.map(nonRelativeModuleName => removePrefix(nonRelativeModuleName, moduleNameWithSeperator));
         }
-
-
-        if (!options.moduleResolution || options.moduleResolution === ModuleResolutionKind.NodeJs) {
-            for (const visibleModule of enumerateNodeModulesVisibleToScript(host, scriptPath)!) { // TODO: GH#18217
-                if (!isNestedModule) {
-                    nonRelativeModuleNames.push(visibleModule.moduleName);
-                }
-                else if (startsWith(visibleModule.moduleName, moduleNameFragment!)) { // TODO: GH#18217
-                    const nestedFiles = tryReadDirectory(host, visibleModule.moduleDir, supportedTypeScriptExtensions, /*exclude*/ undefined, /*include*/ ["./*"]);
-                    if (nestedFiles) {
-                        for (let f of nestedFiles) {
-                            f = normalizePath(f);
-                            const nestedModule = removeFileExtension(getBaseFileName(f));
-                            nonRelativeModuleNames.push(nestedModule);
-                        }
-                    }
-                }
-            }
-        }
-
-        return deduplicate<string>(nonRelativeModuleNames, equateStringsCaseSensitive, compareStringsCaseSensitive);
+        return nonRelativeModuleNames;
     }
 
     export function getTripleSlashReferenceCompletion(sourceFile: SourceFile, position: number, compilerOptions: CompilerOptions, host: LanguageServiceHost): ReadonlyArray<PathCompletion> | undefined {
@@ -390,48 +379,16 @@ namespace ts.Completions.PathCompletions {
         return paths;
     }
 
-    function enumerateNodeModulesVisibleToScript(host: LanguageServiceHost, scriptPath: string): VisibleModuleInfo[] | undefined {
-        const result: VisibleModuleInfo[] = [];
+    function enumerateNodeModulesVisibleToScript(host: LanguageServiceHost, scriptPath: string): ReadonlyArray<string> {
+        if (!host.readFile || !host.fileExists) return emptyArray;
 
-        if (host.readFile && host.fileExists) {
-            for (const packageJson of findPackageJsons(scriptPath, host)) {
-                const contents = tryReadingPackageJson(packageJson);
-                if (!contents) {
-                    return;
-                }
-
-                const nodeModulesDir = combinePaths(getDirectoryPath(packageJson), "node_modules");
-                const foundModuleNames: string[] = [];
-
-                // Provide completions for all non @types dependencies
-                for (const key of nodeModulesDependencyKeys) {
-                    addPotentialPackageNames(contents[key], foundModuleNames);
-                }
-
-                for (const moduleName of foundModuleNames) {
-                    const moduleDir = combinePaths(nodeModulesDir, moduleName);
-                    result.push({
-                        moduleName,
-                        moduleDir
-                    });
-                }
-            }
-        }
-
-        return result;
-
-        function tryReadingPackageJson(filePath: string) {
-            try {
-                const fileText = tryReadFile(host, filePath);
-                return fileText ? JSON.parse(fileText) : undefined;
-            }
-            catch (e) {
-                return undefined;
-            }
-        }
-
-        function addPotentialPackageNames(dependencies: any, result: string[]) {
-            if (dependencies) {
+        const result: string[] = [];
+        for (const packageJson of findPackageJsons(scriptPath, host)) {
+            const contents = readJson(packageJson, host as { readFile: (filename: string) => string | undefined }); // Cast to assert that readFile is defined
+            // Provide completions for all non @types dependencies
+            for (const key of nodeModulesDependencyKeys) {
+                const dependencies: object | undefined = (contents as any)[key];
+                if (!dependencies) continue;
                 for (const dep in dependencies) {
                     if (dependencies.hasOwnProperty(dep) && !startsWith(dep, "@types/")) {
                         result.push(dep);
@@ -439,6 +396,7 @@ namespace ts.Completions.PathCompletions {
                 }
             }
         }
+        return result;
     }
 
     // Replace everything after the last directory seperator that appears
@@ -484,11 +442,6 @@ namespace ts.Completions.PathCompletions {
      */
     const tripleSlashDirectiveFragmentRegex = /^(\/\/\/\s*<reference\s+(path|types)\s*=\s*(?:'|"))([^\3"]*)$/;
 
-    interface VisibleModuleInfo {
-        moduleName: string;
-        moduleDir: string;
-    }
-
     const nodeModulesDependencyKeys = ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"];
 
     function tryGetDirectories(host: LanguageServiceHost, directoryName: string): string[] {
@@ -497,10 +450,6 @@ namespace ts.Completions.PathCompletions {
 
     function tryReadDirectory(host: LanguageServiceHost, path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>): ReadonlyArray<string> {
         return tryIOAndConsumeErrors(host, host.readDirectory, path, extensions, exclude, include) || emptyArray;
-    }
-
-    function tryReadFile(host: LanguageServiceHost, path: string): string | undefined {
-        return tryIOAndConsumeErrors(host, host.readFile, path);
     }
 
     function tryFileExists(host: LanguageServiceHost, path: string): boolean {
@@ -521,5 +470,9 @@ namespace ts.Completions.PathCompletions {
         }
         catch { /*ignore*/ }
         return undefined;
+    }
+
+    function containsSlash(fragment: string) {
+        return stringContains(fragment, directorySeparator);
     }
 }

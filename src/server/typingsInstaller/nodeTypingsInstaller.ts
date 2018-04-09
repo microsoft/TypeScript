@@ -21,7 +21,7 @@ namespace ts.server.typingsInstaller {
         }
         writeLine = (text: string) => {
             try {
-                fs.appendFileSync(this.logFile!, text + sys.newLine); // TODO: GH#18217
+                fs.appendFileSync(this.logFile!, `[${nowString()}] ${text}${sys.newLine}`); // TODO: GH#18217
             }
             catch (e) {
                 this.logEnabled = false;

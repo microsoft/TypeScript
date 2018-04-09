@@ -212,12 +212,6 @@ namespace ts.server {
         }
     }
 
-    // E.g. "12:34:56.789"
-    function nowString() {
-        const d = new Date();
-        return `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}.${d.getMilliseconds()}`;
-    }
-
     interface QueuedOperation {
         operationId: string;
         operation: () => void;

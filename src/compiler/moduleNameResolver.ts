@@ -117,7 +117,8 @@ namespace ts {
         }
     }
 
-    function readJson(path: string, host: ModuleResolutionHost): PackageJson {
+    /* @internal */
+    export function readJson(path: string, host: { readFile(fileName: string): string | undefined }): object {
         try {
             const jsonText = host.readFile(path);
             return jsonText ? JSON.parse(jsonText) : {};
@@ -299,7 +300,7 @@ namespace ts {
                             // `types-publisher` sometimes creates packages with `"typings": null` for packages that don't provide their own types.
                             // See `createNotNeededPackageJSON` in the types-publisher` repo.
                             // tslint:disable-next-line:no-null-keyword
-                            const isNotNeededPackage = host.fileExists(packageJsonPath) && readJson(packageJsonPath, host).typings === null;
+                            const isNotNeededPackage = host.fileExists(packageJsonPath) && (readJson(packageJsonPath, host) as PackageJson).typings === null;
                             if (!isNotNeededPackage) {
                                 // Return just the type directive names
                                 result.push(getBaseFileName(normalized));
@@ -982,7 +983,7 @@ namespace ts {
         const directoryExists = !onlyRecordFailures && directoryProbablyExists(nodeModuleDirectory, host);
         const packageJsonPath = pathToPackageJson(nodeModuleDirectory);
         if (directoryExists && host.fileExists(packageJsonPath)) {
-            const packageJsonContent = readJson(packageJsonPath, host);
+            const packageJsonContent = readJson(packageJsonPath, host) as PackageJson;
             if (subModuleName === "") { // looking up the root - need to handle types/typings/main redirects for subModuleName
                 const path = tryReadPackageJsonFields(/*readTypes*/ true, packageJsonContent, nodeModuleDirectory, state);
                 if (typeof path === "string") {
@@ -1033,7 +1034,7 @@ namespace ts {
         const onlyRecordFailures = !directoryProbablyExists(getDirectoryPath(file), state.host);
         const fromFile = tryFile(file, failedLookupLocations, onlyRecordFailures, state);
         if (fromFile) {
-            const resolved = fromFile && resolvedIfExtensionMatches(extensions, fromFile);
+            const resolved = resolvedIfExtensionMatches(extensions, fromFile);
             if (resolved) {
                 return resolved;
             }
