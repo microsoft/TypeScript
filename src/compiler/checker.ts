@@ -72,6 +72,7 @@ namespace ts {
         const strictPropertyInitialization = getStrictOptionValue(compilerOptions, "strictPropertyInitialization");
         const noImplicitAny = getStrictOptionValue(compilerOptions, "noImplicitAny");
         const noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
+        const keyofStringsOnly = true; // !!compilerOptions.keyofStringsOnly;
 
         const emitResolver = createResolver();
         const nodeBuilder = createNodeBuilder();
@@ -346,6 +347,9 @@ namespace ts {
         const silentNeverType = createIntrinsicType(TypeFlags.Never, "never");
         const implicitNeverType = createIntrinsicType(TypeFlags.Never, "never");
         const nonPrimitiveType = createIntrinsicType(TypeFlags.NonPrimitive, "object");
+        const stringNumberType = getUnionType([stringType, numberType]);
+        const stringNumberSymbolType = getUnionType([stringType, numberType, esSymbolType]);
+        const keyofConstraintType = keyofStringsOnly ? stringType : stringNumberSymbolType;
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
@@ -420,6 +424,7 @@ namespace ts {
         let deferredGlobalAsyncIteratorType: GenericType;
         let deferredGlobalAsyncIterableIteratorType: GenericType;
         let deferredGlobalTemplateStringsArrayType: ObjectType;
+        let deferredGlobalExtractSymbol: Symbol;
 
         let deferredNodes: Node[];
         let deferredUnusedIdentifierNodes: Node[];
@@ -4207,7 +4212,7 @@ namespace ts {
             // right hand expression is of a type parameter type.
             if (isVariableDeclaration(declaration) && declaration.parent.parent.kind === SyntaxKind.ForInStatement) {
                 const indexType = getIndexType(checkNonNullExpression(declaration.parent.parent.expression));
-                return indexType.flags & (TypeFlags.TypeParameter | TypeFlags.Index) ? indexType : stringType;
+                return indexType.flags & (TypeFlags.TypeParameter | TypeFlags.Index) ? getExtractStringType(indexType) : stringType;
             }
 
             if (isVariableDeclaration(declaration) && declaration.parent.parent.kind === SyntaxKind.ForOfStatement) {
@@ -6015,6 +6020,7 @@ namespace ts {
         function resolveMappedTypeMembers(type: MappedType) {
             const members: SymbolTable = createSymbolTable();
             let stringIndexInfo: IndexInfo;
+            let numberIndexInfo: IndexInfo;
             // Resolve upfront such that recursive references see an empty object type.
             setStructuredTypeMembers(type, emptySymbols, emptyArray, emptyArray, undefined, undefined);
             // In { [P in K]: T }, we refer to P as the type parameter type, K as the constraint type,
@@ -6025,14 +6031,18 @@ namespace ts {
             const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
             const templateModifiers = getMappedTypeModifiers(type);
             const constraintDeclaration = type.declaration.typeParameter.constraint;
+            const include = keyofStringsOnly ? TypeFlags.StringLiteral : TypeFlags.StringOrNumberLiteralOrUnique;
             if (constraintDeclaration.kind === SyntaxKind.TypeOperator &&
                 (<TypeOperatorNode>constraintDeclaration).operator === SyntaxKind.KeyOfKeyword) {
                 // We have a { [P in keyof T]: X }
                 for (const prop of getPropertiesOfType(modifiersType)) {
-                    addMemberForKeyType(getLiteralTypeFromPropertyName(prop), undefined, prop);
+                    addMemberForKeyType(getLiteralTypeFromPropertyName(prop, include), undefined, prop);
                 }
                 if (modifiersType.flags & TypeFlags.Any || getIndexInfoOfType(modifiersType, IndexKind.String)) {
                     addMemberForKeyType(stringType);
+                }
+                if (!keyofStringsOnly && getIndexInfoOfType(modifiersType, IndexKind.Number)) {
+                    addMemberForKeyType(numberType);
                 }
             }
             else {
@@ -6043,7 +6053,7 @@ namespace ts {
                 const iterationType = keyType.flags & TypeFlags.Index ? getIndexType(getApparentType((<IndexType>keyType).type)) : keyType;
                 forEachType(iterationType, addMemberForKeyType);
             }
-            setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, undefined);
+            setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
 
             function addMemberForKeyType(t: Type, _index?: number, origin?: Symbol) {
                 // Create a mapper from T to the current iteration type constituent. Then, if the
@@ -6076,6 +6086,9 @@ namespace ts {
                 }
                 else if (t.flags & (TypeFlags.Any | TypeFlags.String)) {
                     stringIndexInfo = createIndexInfo(propType, !!(templateModifiers & MappedTypeModifiers.IncludeReadonly));
+                }
+                else if (t.flags & TypeFlags.Number) {
+                    numberIndexInfo = createIndexInfo(propType, !!(templateModifiers & MappedTypeModifiers.IncludeReadonly));
                 }
             }
         }
@@ -6468,6 +6481,7 @@ namespace ts {
                 t.flags & TypeFlags.BooleanLike ? globalBooleanType :
                 t.flags & TypeFlags.ESSymbolLike ? getGlobalESSymbolType(/*reportErrors*/ languageVersion >= ScriptTarget.ES2015) :
                 t.flags & TypeFlags.NonPrimitive ? emptyObjectType :
+                t.flags & TypeFlags.Index ? keyofConstraintType :
                 t;
         }
 
@@ -7665,6 +7679,10 @@ namespace ts {
             return symbol && <GenericType>getTypeOfGlobalSymbol(symbol, arity);
         }
 
+        function getGlobalExtractSymbol(): Symbol {
+            return deferredGlobalExtractSymbol || (deferredGlobalExtractSymbol = getGlobalSymbol("Extract" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0));
+        }
+
         /**
          * Instantiates a global type that is generic with some element type, and returns that instantiation.
          */
@@ -8107,11 +8125,11 @@ namespace ts {
             return type.resolvedIndexType;
         }
 
-        function getLiteralTypeFromPropertyName(prop: Symbol) {
+        function getLiteralTypeFromPropertyName(prop: Symbol, include: TypeFlags) {
             if (!(getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.NonPublicAccessibilityModifier)) {
                 const nameType = getLateBoundSymbol(prop).nameType;
                 if (nameType) {
-                    return nameType.flags & TypeFlags.StringLiteral ? nameType : neverType;
+                    return nameType.flags & include ? nameType : neverType;
                 }
                 if (!isKnownSymbol(prop)) {
                     return getLiteralType(symbolName(prop));
@@ -8120,8 +8138,25 @@ namespace ts {
             return neverType;
         }
 
-        function getLiteralTypeFromPropertyNames(type: Type) {
-            return getUnionType(map(getPropertiesOfType(type), getLiteralTypeFromPropertyName));
+        function getLiteralTypeFromPropertyNames(type: Type, include: TypeFlags) {
+            return getUnionType(map(getPropertiesOfType(type), t => getLiteralTypeFromPropertyName(t, include)));
+        }
+
+        function getNonEnumNumberIndexInfo(type: Type) {
+            const numberIndexInfo = getIndexInfoOfType(type, IndexKind.Number);
+            return numberIndexInfo !== enumNumberIndexInfo ? numberIndexInfo : undefined;
+        }
+
+        function getStringOnlyIndexType(type: Type) {
+            return type.flags & TypeFlags.Any || getIndexInfoOfType(type, IndexKind.String) ? stringType :
+                getLiteralTypeFromPropertyNames(type, TypeFlags.StringLiteral);
+        }
+
+        function getStringNumberSymbolIndexType(type: Type) {
+            return type.flags & TypeFlags.Any ? stringNumberSymbolType :
+                getIndexInfoOfType(type, IndexKind.String) ? getUnionType([stringNumberType, getLiteralTypeFromPropertyNames(type, TypeFlags.UniqueESSymbol)]) :
+                getNonEnumNumberIndexInfo(type) ? getUnionType([numberType, getLiteralTypeFromPropertyNames(type, TypeFlags.StringLiteral | TypeFlags.UniqueESSymbol)]) :
+                getLiteralTypeFromPropertyNames(type, TypeFlags.StringLiteral | TypeFlags.NumberLiteral | TypeFlags.UniqueESSymbol);
         }
 
         function getIndexType(type: Type): Type {
@@ -8129,12 +8164,19 @@ namespace ts {
                 maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
                 type === wildcardType ? wildcardType :
-                type.flags & TypeFlags.Any || getIndexInfoOfType(type, IndexKind.String) ? stringType :
-                getLiteralTypeFromPropertyNames(type);
+                keyofStringsOnly ? getStringOnlyIndexType(type) : getStringNumberSymbolIndexType(type);
+        }
+
+        function getExtractStringType(type: Type) {
+            if (keyofStringsOnly) {
+                return type;
+            }
+            const extractTypeAlias = getGlobalExtractSymbol();
+            return extractTypeAlias ? getTypeAliasInstantiation(extractTypeAlias, [type, stringType]) : stringType;
         }
 
         function getIndexTypeOrString(type: Type): Type {
-            const indexType = getIndexType(type);
+            const indexType = getExtractStringType(getIndexType(type));
             return indexType.flags & TypeFlags.Never ? stringType : indexType;
         }
 
@@ -8632,7 +8674,7 @@ namespace ts {
             if (right.flags & TypeFlags.Union) {
                 return mapType(right, t => getSpreadType(left, t, symbol, typeFlags, objectFlags));
             }
-            if (right.flags & (TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.EnumLike | TypeFlags.NonPrimitive)) {
+            if (right.flags & (TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.EnumLike | TypeFlags.NonPrimitive | TypeFlags.Index)) {
                 return left;
             }
 
@@ -10377,6 +10419,12 @@ namespace ts {
                             errorInfo = saveErrorInfo;
                             return result;
                         }
+                    }
+                }
+                else if (source.flags & TypeFlags.Index) {
+                    if (result = isRelatedTo(keyofConstraintType, target, reportErrors)) {
+                        errorInfo = saveErrorInfo;
+                        return result;
                     }
                 }
                 else if (source.flags & TypeFlags.Conditional) {
@@ -15190,7 +15238,7 @@ namespace ts {
                 // type, and any union of these types (like string | number).
                 if (links.resolvedType.flags & TypeFlags.Nullable ||
                     !isTypeAssignableToKind(links.resolvedType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbolLike) &&
-                    !isTypeAssignableTo(links.resolvedType, getUnionType([stringType, numberType, esSymbolType]))) {
+                    !isTypeAssignableTo(links.resolvedType, stringNumberSymbolType)) {
                     error(node, Diagnostics.A_computed_property_name_must_be_of_type_string_number_symbol_or_any);
                 }
                 else {
@@ -20841,7 +20889,7 @@ namespace ts {
 
             const type = <MappedType>getTypeFromMappedTypeNode(node);
             const constraintType = getConstraintTypeFromMappedType(type);
-            checkTypeAssignableTo(constraintType, stringType, node.typeParameter.constraint);
+            checkTypeAssignableTo(constraintType, keyofConstraintType, node.typeParameter.constraint);
         }
 
         function checkTypeOperator(node: TypeOperatorNode) {
