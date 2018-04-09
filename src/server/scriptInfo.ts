@@ -398,14 +398,14 @@ namespace ts.server {
                 if (!this.formatSettings) {
                     this.formatSettings = getDefaultFormatCodeSettings(this.host);
                 }
-                mergeMapLikes(this.formatSettings, formatSettings);
+                this.formatSettings = mergeMapLikes(this.formatSettings, formatSettings);
             }
 
             if (preferences) {
                 if (!this.preferences) {
-                    this.preferences = clone(defaultPreferences);
+                    this.preferences = defaultPreferences;
                 }
-                mergeMapLikes(this.preferences, preferences);
+                this.preferences = mergeMapLikes(this.preferences, preferences);
             }
         }
 

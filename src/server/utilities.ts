@@ -83,12 +83,15 @@ namespace ts.server {
         };
     }
 
-    export function mergeMapLikes<T extends object>(target: T, source: Partial<T>): void {
+    /* @internal */
+    export function mergeMapLikes<T extends object>(target: T, source: Partial<T>): T {
+        const result = clone(target);
         for (const key in source) {
             if (hasProperty(source, key)) {
-                target[key] = source[key];
+                result[key] = source[key];
             }
         }
+        return result;
     }
 
     export type NormalizedPath = string & { __normalizedPathTag: any };
