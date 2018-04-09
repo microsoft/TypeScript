@@ -72,7 +72,7 @@ namespace ts {
         const strictPropertyInitialization = getStrictOptionValue(compilerOptions, "strictPropertyInitialization");
         const noImplicitAny = getStrictOptionValue(compilerOptions, "noImplicitAny");
         const noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
-        const keyofStringsOnly = true; // !!compilerOptions.keyofStringsOnly;
+        const keyofStringsOnly = !!compilerOptions.keyofStringsOnly;
 
         const emitResolver = createResolver();
         const nodeBuilder = createNodeBuilder();
@@ -347,7 +347,6 @@ namespace ts {
         const silentNeverType = createIntrinsicType(TypeFlags.Never, "never");
         const implicitNeverType = createIntrinsicType(TypeFlags.Never, "never");
         const nonPrimitiveType = createIntrinsicType(TypeFlags.NonPrimitive, "object");
-        const stringNumberType = getUnionType([stringType, numberType]);
         const stringNumberSymbolType = getUnionType([stringType, numberType, esSymbolType]);
         const keyofConstraintType = keyofStringsOnly ? stringType : stringNumberSymbolType;
 
@@ -8147,24 +8146,15 @@ namespace ts {
             return numberIndexInfo !== enumNumberIndexInfo ? numberIndexInfo : undefined;
         }
 
-        function getStringOnlyIndexType(type: Type) {
-            return type.flags & TypeFlags.Any || getIndexInfoOfType(type, IndexKind.String) ? stringType :
-                getLiteralTypeFromPropertyNames(type, TypeFlags.StringLiteral);
-        }
-
-        function getStringNumberSymbolIndexType(type: Type) {
-            return type.flags & TypeFlags.Any ? stringNumberSymbolType :
-                getIndexInfoOfType(type, IndexKind.String) ? getUnionType([stringNumberType, getLiteralTypeFromPropertyNames(type, TypeFlags.UniqueESSymbol)]) :
-                getNonEnumNumberIndexInfo(type) ? getUnionType([numberType, getLiteralTypeFromPropertyNames(type, TypeFlags.StringLiteral | TypeFlags.UniqueESSymbol)]) :
-                getLiteralTypeFromPropertyNames(type, TypeFlags.StringLiteral | TypeFlags.NumberLiteral | TypeFlags.UniqueESSymbol);
-        }
-
         function getIndexType(type: Type): Type {
             return type.flags & TypeFlags.Intersection ? getUnionType(map((<IntersectionType>type).types, t => getIndexType(t))) :
                 maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
                 type === wildcardType ? wildcardType :
-                keyofStringsOnly ? getStringOnlyIndexType(type) : getStringNumberSymbolIndexType(type);
+                type.flags & TypeFlags.Any || getIndexInfoOfType(type, IndexKind.String) ? keyofConstraintType :
+                keyofStringsOnly ? getLiteralTypeFromPropertyNames(type, TypeFlags.StringLiteral) :
+                getNonEnumNumberIndexInfo(type) ? getUnionType([numberType, getLiteralTypeFromPropertyNames(type, TypeFlags.StringLiteral | TypeFlags.UniqueESSymbol)]) :
+                getLiteralTypeFromPropertyNames(type, TypeFlags.StringLiteral | TypeFlags.NumberLiteral | TypeFlags.UniqueESSymbol);
         }
 
         function getExtractStringType(type: Type) {
