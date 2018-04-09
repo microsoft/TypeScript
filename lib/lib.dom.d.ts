@@ -4978,6 +4978,10 @@ interface HTMLAnchorElement extends HTMLElement, HTMLHyperlinkElementUtils {
      */
     rel: string;
     /**
+     * Returns a live DOMTokenList containing the set of link types indicating the relationship between the resource represented by the <a> element and the current document.
+     */
+    readonly relList: DOMTokenList;
+    /**
      * Sets or retrieves the relationship between the object and the destination of the link.
      */
     /** @deprecated */
