@@ -43,12 +43,16 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(143,5): error TS
     Type 'T' is not assignable to type 'U'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(148,5): error TS2322: Type '{ [P in keyof T]: T[P]; }' is not assignable to type '{ [P in keyof U]: U[P]; }'.
   Type 'keyof U' is not assignable to type 'keyof T'.
+    Type 'string' is not assignable to type 'keyof T'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(153,5): error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in keyof T]: T[P]; }'.
   Type 'keyof T' is not assignable to type 'K'.
+    Type 'string' is not assignable to type 'K'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(158,5): error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in keyof U]: U[P]; }'.
   Type 'keyof U' is not assignable to type 'K'.
+    Type 'string' is not assignable to type 'K'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(163,5): error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in keyof T]: U[P]; }'.
   Type 'keyof T' is not assignable to type 'K'.
+    Type 'string' is not assignable to type 'K'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in K]: U[P]; }'.
   Type 'T[P]' is not assignable to type 'U[P]'.
     Type 'T' is not assignable to type 'U'.
@@ -272,6 +276,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         ~
 !!! error TS2322: Type '{ [P in keyof T]: T[P]; }' is not assignable to type '{ [P in keyof U]: U[P]; }'.
 !!! error TS2322:   Type 'keyof U' is not assignable to type 'keyof T'.
+!!! error TS2322:     Type 'string' is not assignable to type 'keyof T'.
     }
     
     function f73<T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in keyof T]: T[P] }) {
@@ -280,6 +285,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         ~
 !!! error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in keyof T]: T[P]; }'.
 !!! error TS2322:   Type 'keyof T' is not assignable to type 'K'.
+!!! error TS2322:     Type 'string' is not assignable to type 'K'.
     }
     
     function f74<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in keyof U]: U[P] }) {
@@ -288,6 +294,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         ~
 !!! error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in keyof U]: U[P]; }'.
 !!! error TS2322:   Type 'keyof U' is not assignable to type 'K'.
+!!! error TS2322:     Type 'string' is not assignable to type 'K'.
     }
     
     function f75<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in keyof T]: U[P] }) {
@@ -296,6 +303,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         ~
 !!! error TS2322: Type '{ [P in K]: T[P]; }' is not assignable to type '{ [P in keyof T]: U[P]; }'.
 !!! error TS2322:   Type 'keyof T' is not assignable to type 'K'.
+!!! error TS2322:     Type 'string' is not assignable to type 'K'.
     }
     
     function f76<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in K]: U[P] }) {

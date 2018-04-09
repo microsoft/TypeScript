@@ -125,14 +125,14 @@ interface P {
 }
 
 type NonIndexableUnion2 = string | number;
->NonIndexableUnion2 : NonIndexableUnion2
+>NonIndexableUnion2 : string | number
 
 interface Q {
 >Q : Q
 
     [u: NonIndexableUnion2]: A;
->u : NonIndexableUnion2
->NonIndexableUnion2 : NonIndexableUnion2
+>u : string | number
+>NonIndexableUnion2 : string | number
 >A : A
 }
 
