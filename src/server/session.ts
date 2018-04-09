@@ -484,7 +484,7 @@ namespace ts.server {
             this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSyntacticDiagnostics(file), "syntaxDiag");
         }
 
-        private infoCheck(file: NormalizedPath, project: Project) {
+        private suggestionCheck(file: NormalizedPath, project: Project) {
             this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSuggestionDiagnostics(file), "suggestionDiag");
         }
 
@@ -537,7 +537,7 @@ namespace ts.server {
                     }
                     else {
                         next.immediate(() => {
-                            this.infoCheck(fileName, project);
+                            this.suggestionCheck(fileName, project);
                             goNext();
                         });
                     }

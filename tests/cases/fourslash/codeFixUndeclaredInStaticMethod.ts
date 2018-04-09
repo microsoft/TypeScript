@@ -48,7 +48,7 @@ verify.codeFix({
 
 verify.codeFix({
     description: "Declare static property 'prop2'",
-    index: 0,
+    index: 1, // fix at index 0 is to change the spelling to 'prop1'
     newRangeContent: `
     static prop2: string;
     static prop1: number;
