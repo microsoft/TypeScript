@@ -447,10 +447,7 @@ namespace ts.textChanges {
         }
 
         public insertNodeAfter(sourceFile: SourceFile, after: Node, newNode: Node): this {
-            if (isStatementButNotDeclaration(after) ||
-                after.kind === SyntaxKind.PropertyDeclaration ||
-                after.kind === SyntaxKind.PropertySignature ||
-                after.kind === SyntaxKind.MethodSignature) {
+            if (needSemicolonBetween(after, newNode)) {
                 // check if previous statement ends with semicolon
                 // if not - insert semicolon to preserve the code from changing the meaning due to ASI
                 if (sourceFile.text.charCodeAt(after.end - 1) !== CharacterCodes.semicolon) {
@@ -465,7 +462,7 @@ namespace ts.textChanges {
             if (isClassDeclaration(node) || isModuleDeclaration(node)) {
                 return { prefix: this.newLineCharacter, suffix: this.newLineCharacter };
             }
-            else if (isStatement(node) || isClassElement(node) || isTypeElement(node)) {
+            else if (isStatement(node) || isClassOrTypeElement(node)) {
                 return { suffix: this.newLineCharacter };
             }
             else if (isVariableDeclaration(node)) {
@@ -892,5 +889,10 @@ namespace ts.textChanges {
 
     export function isValidLocationToAddComment(sourceFile: SourceFile, position: number) {
         return !isInComment(sourceFile, position) && !isInString(sourceFile, position) && !isInTemplateString(sourceFile, position);
+    }
+
+    function needSemicolonBetween(a: Node, b: Node): boolean {
+        return (isPropertySignature(a) || isPropertyDeclaration(a)) && isClassOrTypeElement(b) && b.name.kind === SyntaxKind.ComputedPropertyName
+            || isStatementButNotDeclaration(a) && isStatementButNotDeclaration(b); // TODO: only if b would start with a `(` or `[`
     }
 }

@@ -5629,6 +5629,10 @@ namespace ts {
             || kind === SyntaxKind.MissingDeclaration;
     }
 
+    export function isClassOrTypeElement(node: Node): node is ClassElement | TypeElement {
+        return isTypeElement(node) || isClassElement(node);
+    }
+
     export function isObjectLiteralElementLike(node: Node): node is ObjectLiteralElementLike {
         const kind = node.kind;
         return kind === SyntaxKind.PropertyAssignment
