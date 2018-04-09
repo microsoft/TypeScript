@@ -305,6 +305,12 @@ namespace ts {
  * @param x hi
 < > still part of the previous comment
  */`);
+
+                parsesCorrectly("Nested @param tags",
+`/**
+* @param {object} o Doc doc
+* @param {string} o.f
+*/`);
             });
         });
         describe("getFirstToken", () => {
