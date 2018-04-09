@@ -21,14 +21,14 @@ const aRanges = [a0, a1];
 const bRanges = [b0, c2];
 const cRanges = [c0, c1];
 
-const bGroup = { definition: "import b = require('./a')", ranges: bRanges }
+const bGroup = { definition: "(alias) class b\nimport b = require('./a')", ranges: bRanges }
 
 verify.referenceGroups(aRanges, [
     { definition: "class A", ranges: aRanges },
     bGroup
 ]);
 verify.referenceGroups(b0, [bGroup]);
-verify.referenceGroups(c2, [{ ...bGroup, definition: "(alias) new b.b(): b.b\nimport b.b = require('./a')"}]);
+verify.referenceGroups(c2, [{ ...bGroup, definition: "(alias) class b\nimport b = require('./a')"}]);
 verify.singleReferenceGroup("import b = require('./b')", cRanges);
 
 verify.rangesAreRenameLocations(aRanges);

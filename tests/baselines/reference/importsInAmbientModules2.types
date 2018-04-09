@@ -4,6 +4,8 @@ export default class C {}
 
 === tests/cases/compiler/main.ts ===
 declare module "M" {
+>"M" : typeof import("M")
+
     import C from "external"
 >C : typeof C
 }

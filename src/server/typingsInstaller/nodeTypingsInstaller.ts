@@ -1,4 +1,3 @@
-/// <reference path="typingsInstaller.ts"/>
 /// <reference types="node" />
 
 namespace ts.server.typingsInstaller {
@@ -22,7 +21,7 @@ namespace ts.server.typingsInstaller {
         }
         writeLine = (text: string) => {
             try {
-                fs.appendFileSync(this.logFile, text + sys.newLine);
+                fs.appendFileSync(this.logFile, `[${nowString()}] ${text}${sys.newLine}`);
             }
             catch (e) {
                 this.logEnabled = false;
@@ -41,15 +40,15 @@ namespace ts.server.typingsInstaller {
     }
 
     interface TypesRegistryFile {
-        entries: MapLike<void>;
+        entries: MapLike<MapLike<string>>;
     }
 
-    function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypingHost, log: Log): Map<void> {
+    function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypingHost, log: Log): Map<MapLike<string>> {
         if (!host.fileExists(typesRegistryFilePath)) {
             if (log.isEnabled()) {
                 log.writeLine(`Types registry file '${typesRegistryFilePath}' does not exist`);
             }
-            return createMap<void>();
+            return createMap<MapLike<string>>();
         }
         try {
             const content = <TypesRegistryFile>JSON.parse(host.readFile(typesRegistryFilePath));
@@ -59,13 +58,13 @@ namespace ts.server.typingsInstaller {
             if (log.isEnabled()) {
                 log.writeLine(`Error when loading types registry file '${typesRegistryFilePath}': ${(<Error>e).message}, ${(<Error>e).stack}`);
             }
-            return createMap<void>();
+            return createMap<MapLike<string>>();
         }
     }
 
-    const TypesRegistryPackageName = "types-registry";
+    const typesRegistryPackageName = "types-registry";
     function getTypesRegistryFileLocation(globalTypingsCacheLocation: string): string {
-        return combinePaths(normalizeSlashes(globalTypingsCacheLocation), `node_modules/${TypesRegistryPackageName}/index.json`);
+        return combinePaths(normalizeSlashes(globalTypingsCacheLocation), `node_modules/${typesRegistryPackageName}/index.json`);
     }
 
     interface ExecSyncOptions {
@@ -77,7 +76,7 @@ namespace ts.server.typingsInstaller {
     export class NodeTypingsInstaller extends TypingsInstaller {
         private readonly nodeExecSync: ExecSync;
         private readonly npmPath: string;
-        readonly typesRegistry: Map<void>;
+        readonly typesRegistry: Map<MapLike<string>>;
 
         private delayedInitializationError: InitializationFailedResponse | undefined;
 
@@ -105,16 +104,16 @@ namespace ts.server.typingsInstaller {
 
             try {
                 if (this.log.isEnabled()) {
-                    this.log.writeLine(`Updating ${TypesRegistryPackageName} npm package...`);
+                    this.log.writeLine(`Updating ${typesRegistryPackageName} npm package...`);
                 }
-                this.execSyncAndLog(`${this.npmPath} install --ignore-scripts ${TypesRegistryPackageName}`, { cwd: globalTypingsCacheLocation });
+                this.execSyncAndLog(`${this.npmPath} install --ignore-scripts ${typesRegistryPackageName}`, { cwd: globalTypingsCacheLocation });
                 if (this.log.isEnabled()) {
-                    this.log.writeLine(`Updated ${TypesRegistryPackageName} npm package`);
+                    this.log.writeLine(`Updated ${typesRegistryPackageName} npm package`);
                 }
             }
             catch (e) {
                 if (this.log.isEnabled()) {
-                    this.log.writeLine(`Error updating ${TypesRegistryPackageName} package: ${(<Error>e).message}`);
+                    this.log.writeLine(`Error updating ${typesRegistryPackageName} package: ${(<Error>e).message}`);
                 }
                 // store error info to report it later when it is known that server is already listening to events from typings installer
                 this.delayedInitializationError = {
@@ -141,7 +140,7 @@ namespace ts.server.typingsInstaller {
                         this.closeProject(req);
                         break;
                     case "typesRegistry": {
-                        const typesRegistry: { [key: string]: void } = {};
+                        const typesRegistry: { [key: string]: MapLike<string> } = {};
                         this.typesRegistry.forEach((value, key) => {
                             typesRegistry[key] = value;
                         });
@@ -150,17 +149,17 @@ namespace ts.server.typingsInstaller {
                         break;
                     }
                     case "installPackage": {
-                        const { fileName, packageName, projectRootPath } = req;
+                        const { fileName, packageName, projectName, projectRootPath } = req;
                         const cwd = getDirectoryOfPackageJson(fileName, this.installTypingHost) || projectRootPath;
                         if (cwd) {
                             this.installWorker(-1, [packageName], cwd, success => {
                                 const message = success ? `Package ${packageName} installed.` : `There was an error installing ${packageName}.`;
-                                const response: PackageInstalledResponse = { kind: EventPackageInstalled, success, message };
+                                const response: PackageInstalledResponse = { kind: ActionPackageInstalled, projectName, success, message };
                                 this.sendResponse(response);
                             });
                         }
                         else {
-                            const response: PackageInstalledResponse = { kind: EventPackageInstalled, success: false, message: "Could not determine a project root path." };
+                            const response: PackageInstalledResponse = { kind: ActionPackageInstalled, projectName, success: false, message: "Could not determine a project root path." };
                             this.sendResponse(response);
                         }
                         break;
@@ -222,11 +221,11 @@ namespace ts.server.typingsInstaller {
         });
     }
 
-    const logFilePath = findArgument(server.Arguments.LogFile);
-    const globalTypingsCacheLocation = findArgument(server.Arguments.GlobalCacheLocation);
-    const typingSafeListLocation = findArgument(server.Arguments.TypingSafeListLocation);
-    const typesMapLocation = findArgument(server.Arguments.TypesMapLocation);
-    const npmLocation = findArgument(server.Arguments.NpmLocation);
+    const logFilePath = findArgument(Arguments.LogFile);
+    const globalTypingsCacheLocation = findArgument(Arguments.GlobalCacheLocation);
+    const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation);
+    const typesMapLocation = findArgument(Arguments.TypesMapLocation);
+    const npmLocation = findArgument(Arguments.NpmLocation);
 
     const log = new FileLog(logFilePath);
     if (log.isEnabled()) {
@@ -243,7 +242,7 @@ namespace ts.server.typingsInstaller {
     const installer = new NodeTypingsInstaller(globalTypingsCacheLocation, typingSafeListLocation, typesMapLocation, npmLocation, /*throttleLimit*/5, log);
     installer.listen();
 
-    function indent(newline: string, string: string): string {
-        return `${newline}    ` + string.replace(/\r?\n/, `${newline}    `);
+    function indent(newline: string, str: string): string {
+        return `${newline}    ` + str.replace(/\r?\n/, `${newline}    `);
     }
 }

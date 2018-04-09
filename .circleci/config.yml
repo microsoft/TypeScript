@@ -1,0 +1,50 @@
+workflows:
+  version: 2
+  main:
+    jobs:
+      - node9
+      - node8
+      - node6
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 8 * * *"
+          filters:
+            branches:
+              only: master
+    jobs:
+      - node9:
+          context: nightlies
+      - node8:
+          context: nightlies
+      - node6:
+          context: nightlies
+
+base: &base
+  environment:
+    - workerCount: 4
+    - timeout: 400000
+  steps:
+    - checkout
+    - run: |
+        git submodule update --init --recursive
+        npm uninstall typescript --no-save
+        npm uninstall tslint --no-save
+        npm install
+        #npm update Appeared in Jenkins only
+        npm test
+
+version: 2
+jobs:
+  node9:
+    docker:
+      - image: circleci/node:9
+    <<: *base
+  node8:
+    docker:
+      - image: circleci/node:8
+    <<: *base
+  node6:
+    docker:
+      - image: circleci/node:6
+    <<: *base

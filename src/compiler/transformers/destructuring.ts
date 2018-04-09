@@ -70,7 +70,13 @@ namespace ts {
 
         if (value) {
             value = visitNode(value, visitor, isExpression);
-            if (needsValue) {
+
+            if (isIdentifier(value) && bindingOrAssignmentElementAssignsToName(node, value.escapedText)) {
+                // If the right-hand value of the assignment is also an assignment target then
+                // we need to cache the right-hand value.
+                value = ensureIdentifier(flattenContext, value, /*reuseIdentifierExpressions*/ false, location);
+            }
+            else if (needsValue) {
                 // If the right-hand value of the destructuring assignment needs to be preserved (as
                 // is the case when the destructuring assignment is part of a larger expression),
                 // then we need to cache the right-hand value.
@@ -123,6 +129,27 @@ namespace ts {
         }
     }
 
+    function bindingOrAssignmentElementAssignsToName(element: BindingOrAssignmentElement, escapedName: __String): boolean {
+        const target = getTargetOfBindingOrAssignmentElement(element);
+        if (isBindingOrAssignmentPattern(target)) {
+            return bindingOrAssignmentPatternAssignsToName(target, escapedName);
+        }
+        else if (isIdentifier(target)) {
+            return target.escapedText === escapedName;
+        }
+        return false;
+    }
+
+    function bindingOrAssignmentPatternAssignsToName(pattern: BindingOrAssignmentPattern, escapedName: __String): boolean {
+        const elements = getElementsOfBindingOrAssignmentPattern(pattern);
+        for (const element of elements) {
+            if (bindingOrAssignmentElementAssignsToName(element, escapedName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Flattens a VariableDeclaration or ParameterDeclaration to one or more variable declarations.
      *
@@ -157,6 +184,17 @@ namespace ts {
             createArrayBindingOrAssignmentElement: makeBindingElement,
             visitor
         };
+
+        if (isVariableDeclaration(node)) {
+            let initializer = getInitializerOfBindingOrAssignmentElement(node);
+            if (initializer && isIdentifier(initializer) && bindingOrAssignmentElementAssignsToName(node, initializer.escapedText)) {
+                // If the right-hand value of the assignment is also an assignment target then
+                // we need to cache the right-hand value.
+                initializer = ensureIdentifier(flattenContext, initializer, /*reuseIdentifierExpressions*/ false, initializer);
+                node = updateVariableDeclaration(node, node.name, node.type, initializer);
+            }
+        }
+
         flattenBindingOrAssignmentElement(flattenContext, node, rval, node, skipInitializer);
         if (pendingExpressions) {
             const temp = createTempVariable(/*recordTempVariable*/ undefined);

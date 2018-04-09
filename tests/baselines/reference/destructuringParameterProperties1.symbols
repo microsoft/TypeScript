@@ -78,6 +78,7 @@ c3 = new C3({x: 0, "y": "y", z: true});
 >c3 : Symbol(c3, Decl(destructuringParameterProperties1.ts, 26, 3))
 >C3 : Symbol(C3, Decl(destructuringParameterProperties1.ts, 12, 52))
 >x : Symbol(x, Decl(destructuringParameterProperties1.ts, 27, 13))
+>"y" : Symbol("y", Decl(destructuringParameterProperties1.ts, 27, 18))
 >z : Symbol(z, Decl(destructuringParameterProperties1.ts, 27, 28))
 
 var [c3_x, c3_y, c3_z] = [c3.x, c3.y, c3.z];

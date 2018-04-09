@@ -6,8 +6,13 @@ export default R = {
 >R : Symbol(R, Decl(m1.ts, 0, 3))
 
     "__": 20,
+>"__" : Symbol("__", Decl(m1.ts, 1, 20))
+
     "_": 10
+>"_" : Symbol("_", Decl(m1.ts, 2, 13))
+
     "___": 30
+>"___" : Symbol("___", Decl(m1.ts, 3, 11))
 }
 
 === tests/cases/conformance/es6/modules/m2.ts ===

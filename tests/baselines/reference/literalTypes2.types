@@ -262,7 +262,7 @@ function f3() {
 >c6 : { kind: 123; }
 >kind : 123
 >{ kind: 123 } : { kind: 123; }
->kind : number
+>kind : 123
 >123 : 123
 
     const c7: [1 | 2, "foo" | "bar"] = [1, "bar"];
@@ -412,9 +412,9 @@ function f4() {
 >a : 0 | 1
 >b : "foo" | "bar"
 >{ a: 1, b: "foo" } : { a: 1; b: "foo"; }
->a : number
+>a : 1
 >1 : 1
->b : string
+>b : "foo"
 >"foo" : "foo"
 
     let x1 = { a: 1, b: "foo" };
@@ -430,9 +430,9 @@ function f4() {
 >a : 0 | 1
 >b : "foo" | "bar"
 >{ a: 1, b: "foo" } : { a: 1; b: "foo"; }
->a : number
+>a : 1
 >1 : 1
->b : string
+>b : "foo"
 >"foo" : "foo"
 }
 
@@ -487,11 +487,11 @@ function f6() {
 >c3 : "foo" | "bar"
 >"foo" : "foo"
 >{ c1: false, c2: 1, c3: "bar" } : { c1?: false; c2?: 1; c3?: "bar"; }
->c1 : boolean
+>c1 : false
 >false : false
->c2 : number
+>c2 : 1
 >1 : 1
->c3 : string
+>c3 : "bar"
 >"bar" : "bar"
 
     let { x1 = true, x2 = 0, x3 = "foo" } = { x1: false, x2: 1, x3: "bar" };
@@ -502,7 +502,7 @@ function f6() {
 >x3 : string
 >"foo" : "foo"
 >{ x1: false, x2: 1, x3: "bar" } : { x1?: false; x2?: number; x3?: string; }
->x1 : boolean
+>x1 : false
 >false : false
 >x2 : number
 >1 : 1

@@ -4,9 +4,11 @@ tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDi
 tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDifferentConstraints.ts(14,15): error TS2428: All declarations of 'B' must have identical type parameters.
 tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDifferentConstraints.ts(32,22): error TS2428: All declarations of 'A' must have identical type parameters.
 tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDifferentConstraints.ts(38,22): error TS2428: All declarations of 'A' must have identical type parameters.
+tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDifferentConstraints.ts(53,11): error TS2428: All declarations of 'C' must have identical type parameters.
+tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDifferentConstraints.ts(57,11): error TS2428: All declarations of 'C' must have identical type parameters.
 
 
-==== tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDifferentConstraints.ts (6 errors) ====
+==== tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDifferentConstraints.ts (8 errors) ====
     interface A<T extends Date> {
               ~
 !!! error TS2428: All declarations of 'A' must have identical type parameters.
@@ -60,3 +62,28 @@ tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDi
             y: T;
         }
     }
+    
+    interface B<T extends number> {
+      u: T;
+      v: Constraint<T>; // ok
+    }
+    
+    interface B<T> { // ok
+      x: T;
+      y: Constraint<T>; // ok
+    }
+    
+    interface C<T> {
+              ~
+!!! error TS2428: All declarations of 'C' must have identical type parameters.
+      x: T;
+    }
+    
+    interface C<T extends number> { // error
+              ~
+!!! error TS2428: All declarations of 'C' must have identical type parameters.
+      y: T;
+    }
+    
+    interface Constraint<T extends number> {}
+    

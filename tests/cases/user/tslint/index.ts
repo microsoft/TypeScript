@@ -1,0 +1,1 @@
+import tslint = require("tslint");

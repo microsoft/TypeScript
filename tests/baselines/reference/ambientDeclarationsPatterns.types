@@ -28,23 +28,31 @@ foo(fileText);
 
 === tests/cases/conformance/ambient/declarations.d.ts ===
 declare module "foo*baz" {
+>"foo*baz" : typeof import("foo*baz")
+
     export function foo(s: string): void;
 >foo : (s: string) => void
 >s : string
 }
 // Augmentations still work
 declare module "foo*baz" {
+>"foo*baz" : typeof import("foo*baz")
+
     export const baz: string;
 >baz : string
 }
 
 // Longest prefix wins
 declare module "foos*" {
+>"foos*" : typeof import("foos*")
+
     export const foos: string;
 >foos : string
 }
 
 declare module "*!text" {
+>"*!text" : typeof import("*!text")
+
     const x: string;
 >x : string
 

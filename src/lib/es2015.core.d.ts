@@ -50,10 +50,16 @@ interface ArrayConstructor {
     /**
      * Creates an array from an array-like object.
      * @param arrayLike An array-like object to convert to an array.
+     */
+    from<T>(arrayLike: ArrayLike<T>): T[];
+
+    /**
+     * Creates an array from an iterable object.
+     * @param arrayLike An array-like object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T, U = T>(arrayLike: ArrayLike<T>, mapfn?: (v: T, k: number) => U, thisArg?: any): U[];
+    from<T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[];
 
     /**
      * Returns a new array from a set of elements.
@@ -63,7 +69,7 @@ interface ArrayConstructor {
 }
 
 interface DateConstructor {
-    new (value: Date): Date;
+    new (value: number | string | Date): Date;
 }
 
 interface Function {
@@ -112,8 +118,9 @@ interface Math {
     log1p(x: number): number;
 
     /**
-     * Returns the result of (e^x - 1) of x (e raised to the power of x, where e is the base of
-     * the natural logarithms).
+     * Returns the result of (e^x - 1), which is an implementation-dependent approximation to
+     * subtracting 1 from the exponential function of x (e raised to the power of x, where e
+     * is the base of the natural logarithms).
      * @param x A numeric expression.
      */
     expm1(x: number): number;
@@ -443,7 +450,7 @@ interface String {
 
     /**
      * Returns a String value that is made from count copies appended together. If count is 0,
-     * T is the empty String is returned.
+     * the empty string is returned.
      * @param count number of copies to append
      */
     repeat(count: number): string;

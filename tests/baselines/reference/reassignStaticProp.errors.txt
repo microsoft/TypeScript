@@ -1,5 +1,5 @@
 tests/cases/compiler/reassignStaticProp.ts(5,12): error TS2300: Duplicate identifier 'bar'.
-tests/cases/compiler/reassignStaticProp.ts(5,12): error TS2403: Subsequent variable declarations must have the same type.  Variable 'bar' must be of type 'number', but here has type 'string'.
+tests/cases/compiler/reassignStaticProp.ts(5,12): error TS2717: Subsequent property declarations must have the same type.  Property 'bar' must be of type 'number', but here has type 'string'.
 
 
 ==== tests/cases/compiler/reassignStaticProp.ts (2 errors) ====
@@ -11,7 +11,7 @@ tests/cases/compiler/reassignStaticProp.ts(5,12): error TS2403: Subsequent varia
                ~~~
 !!! error TS2300: Duplicate identifier 'bar'.
                ~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'bar' must be of type 'number', but here has type 'string'.
+!!! error TS2717: Subsequent property declarations must have the same type.  Property 'bar' must be of type 'number', but here has type 'string'.
      
     }
      

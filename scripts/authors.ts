@@ -164,7 +164,7 @@ namespace Commands {
             }
         });
     };
-    listAuthors.description = "List known and unknown authors for a given spec";
+    listAuthors.description = "List known and unknown authors for a given spec, e.g. 'node authors.js listAuthors origin/release-2.6..origin/release-2.7'";
 }
 
 var args = process.argv.slice(2);

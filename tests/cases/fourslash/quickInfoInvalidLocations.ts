@@ -1,35 +1,35 @@
 /// <reference path='fourslash.ts' />
 
 
-////inter/*invlaid1*/face IFoo {
+////inter/*invalid1*/face IFoo {
 ////    new(): IFoo;
 ////    [indexer: string]: number;
 ////    method(value: number): string;
 ////    property: string;
-/////*invlaid2*/}
+/////*invalid2*/}
 ////
-////cl/*invlaid3*/ass bar imple/*invlaid4*/ments IFoo {
-////    constructor(   /*invlaid5*/  ) {
+////cl/*invalid3*/ass bar imple/*invalid4*/ments IFoo {
+////    constructor(   /*invalid5*/  ) {
 ////
 ////    }
 ////
-////    pu/*invlaid6*/blic method(value: string): string {
-////        retu/*invlaid7*/rn null;
+////    pu/*invalid6*/blic method(value: string): string {
+////        retu/*invalid7*/rn null;
 ////    }
 ////
-////    public property: string  /*invlaid8*/= "string";
+////    public property: string  /*invalid8*/= "string";
 ////
-////    public ge/*invlaid9*/t value() {
+////    public ge/*invalid9*/t value() {
 ////        return 0;
 ////    }
 ////}
 ////
 ////
-////mod/*invlaid10*/ule m1 {
-////    va/*invlaid11*/r varibale = 0;
+////mod/*invalid10*/ule m1 {
+////    va/*invalid11*/r varibale = 0;
 ////
-////    func/*invlaid12*/tion foo(arg1: number) {
-////        ret/*invlaid13*/urn string;
+////    function foo(arg1: number) {
+////        ret/*invalid13*/urn string;
 ////    }
 ////
 ////    class foo {
@@ -40,7 +40,7 @@
 ////        value1: "string",
 ////        value2: {
 ////            value21: number
-////        /*invlaid14*/}
+////        /*invalid14*/}
 ////    };
 ////}
 

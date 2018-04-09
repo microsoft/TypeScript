@@ -3,7 +3,7 @@ var yield;
 >yield : any
 
 function* g() {
->g : () => IterableIterator<0>
+>g : () => IterableIterator<number>
 
     yield 0;
 >yield 0 : any

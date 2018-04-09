@@ -1,0 +1,700 @@
+=== tests/cases/conformance/types/conditional/inferTypes1.ts ===
+type Unpacked<T> =
+>Unpacked : Unpacked<T>
+>T : T
+
+    T extends (infer U)[] ? U :
+>T : T
+>U : U
+>U : U
+
+    T extends (...args: any[]) => infer U ? U :
+>T : T
+>args : any[]
+>U : U
+>U : U
+
+    T extends Promise<infer U> ? U :
+>T : T
+>Promise : Promise<T>
+>U : U
+>U : U
+
+    T;
+>T : T
+
+type T00 = Unpacked<string>;  // string
+>T00 : string
+>Unpacked : Unpacked<T>
+
+type T01 = Unpacked<string[]>;  // string
+>T01 : string
+>Unpacked : Unpacked<T>
+
+type T02 = Unpacked<() => string>;  // string
+>T02 : string
+>Unpacked : Unpacked<T>
+
+type T03 = Unpacked<Promise<string>>;  // string
+>T03 : string
+>Unpacked : Unpacked<T>
+>Promise : Promise<T>
+
+type T04 = Unpacked<Unpacked<Promise<string>[]>>;  // string
+>T04 : string
+>Unpacked : Unpacked<T>
+>Unpacked : Unpacked<T>
+>Promise : Promise<T>
+
+type T05 = Unpacked<any>;  // any
+>T05 : any
+>Unpacked : Unpacked<T>
+
+type T06 = Unpacked<never>;  // never
+>T06 : never
+>Unpacked : Unpacked<T>
+
+function f1(s: string) {
+>f1 : (s: string) => { a: number; b: string; }
+>s : string
+
+    return { a: 1, b: s };
+>{ a: 1, b: s } : { a: number; b: string; }
+>a : number
+>1 : 1
+>b : string
+>s : string
+}
+
+class C {
+>C : C
+
+    x = 0;
+>x : number
+>0 : 0
+
+    y = 0;
+>y : number
+>0 : 0
+}
+
+type T10 = ReturnType<() => string>;  // string
+>T10 : string
+>ReturnType : ReturnType<T>
+
+type T11 = ReturnType<(s: string) => void>;  // void
+>T11 : void
+>ReturnType : ReturnType<T>
+>s : string
+
+type T12 = ReturnType<(<T>() => T)>;  // {}
+>T12 : {}
+>ReturnType : ReturnType<T>
+>T : T
+>T : T
+
+type T13 = ReturnType<(<T extends U, U extends number[]>() => T)>;  // number[]
+>T13 : number[]
+>ReturnType : ReturnType<T>
+>T : T
+>U : U
+>U : U
+>T : T
+
+type T14 = ReturnType<typeof f1>;  // { a: number, b: string }
+>T14 : { a: number; b: string; }
+>ReturnType : ReturnType<T>
+>f1 : (s: string) => { a: number; b: string; }
+
+type T15 = ReturnType<any>;  // any
+>T15 : any
+>ReturnType : ReturnType<T>
+
+type T16 = ReturnType<never>;  // never
+>T16 : never
+>ReturnType : ReturnType<T>
+
+type T17 = ReturnType<string>;  // Error
+>T17 : any
+>ReturnType : ReturnType<T>
+
+type T18 = ReturnType<Function>;  // Error
+>T18 : any
+>ReturnType : ReturnType<T>
+>Function : Function
+
+type U10 = InstanceType<typeof C>;  // C
+>U10 : C
+>InstanceType : InstanceType<T>
+>C : typeof C
+
+type U11 = InstanceType<any>;  // any
+>U11 : any
+>InstanceType : InstanceType<T>
+
+type U12 = InstanceType<never>;  // never
+>U12 : never
+>InstanceType : InstanceType<T>
+
+type U13 = InstanceType<string>;  // Error
+>U13 : any
+>InstanceType : InstanceType<T>
+
+type U14 = InstanceType<Function>;  // Error
+>U14 : any
+>InstanceType : InstanceType<T>
+>Function : Function
+
+type ArgumentType<T extends (x: any) => any> = T extends (a: infer A) => any ? A : any;
+>ArgumentType : ArgumentType<T>
+>T : T
+>x : any
+>T : T
+>a : A
+>A : A
+>A : A
+
+type T20 = ArgumentType<() => void>;  // {}
+>T20 : {}
+>ArgumentType : ArgumentType<T>
+
+type T21 = ArgumentType<(x: string) => number>;  // string
+>T21 : string
+>ArgumentType : ArgumentType<T>
+>x : string
+
+type T22 = ArgumentType<(x?: string) => number>;  // string | undefined
+>T22 : string | undefined
+>ArgumentType : ArgumentType<T>
+>x : string | undefined
+
+type T23 = ArgumentType<(...args: string[]) => number>;  // string
+>T23 : string
+>ArgumentType : ArgumentType<T>
+>args : string[]
+
+type T24 = ArgumentType<(x: string, y: string) => number>;  // Error
+>T24 : any
+>ArgumentType : ArgumentType<T>
+>x : string
+>y : string
+
+type T25 = ArgumentType<Function>;  // Error
+>T25 : any
+>ArgumentType : ArgumentType<T>
+>Function : Function
+
+type T26 = ArgumentType<any>;  // any
+>T26 : any
+>ArgumentType : ArgumentType<T>
+
+type T27 = ArgumentType<never>;  // never
+>T27 : never
+>ArgumentType : ArgumentType<T>
+
+type X1<T extends { x: any, y: any }> = T extends { x: infer X, y: infer Y } ? [X, Y] : any;
+>X1 : X1<T>
+>T : T
+>x : any
+>y : any
+>T : T
+>x : X
+>X : X
+>y : Y
+>Y : Y
+>X : X
+>Y : Y
+
+type T30 = X1<{ x: any, y: any }>;  // [any, any]
+>T30 : [any, any]
+>X1 : X1<T>
+>x : any
+>y : any
+
+type T31 = X1<{ x: number, y: string }>;  // [number, string]
+>T31 : [number, string]
+>X1 : X1<T>
+>x : number
+>y : string
+
+type T32 = X1<{ x: number, y: string, z: boolean }>;  // [number, string]
+>T32 : [number, string]
+>X1 : X1<T>
+>x : number
+>y : string
+>z : boolean
+
+type X2<T> = T extends { a: infer U, b: infer U } ? U : never;
+>X2 : X2<T>
+>T : T
+>T : T
+>a : U
+>U : U
+>b : U
+>U : U
+>U : U
+
+type T40 = X2<{}>;  // never
+>T40 : never
+>X2 : X2<T>
+
+type T41 = X2<{ a: string }>;  // never
+>T41 : never
+>X2 : X2<T>
+>a : string
+
+type T42 = X2<{ a: string, b: string }>;  // string
+>T42 : string
+>X2 : X2<T>
+>a : string
+>b : string
+
+type T43 = X2<{ a: number, b: string }>;  // string | number
+>T43 : string | number
+>X2 : X2<T>
+>a : number
+>b : string
+
+type T44 = X2<{ a: number, b: string, c: boolean }>;  // string | number
+>T44 : string | number
+>X2 : X2<T>
+>a : number
+>b : string
+>c : boolean
+
+type X3<T> = T extends { a: (x: infer U) => void, b: (x: infer U) => void } ? U : never;
+>X3 : X3<T>
+>T : T
+>T : T
+>a : (x: U) => void
+>x : U
+>U : U
+>b : (x: U) => void
+>x : U
+>U : U
+>U : U
+
+type T50 = X3<{}>;  // never
+>T50 : never
+>X3 : X3<T>
+
+type T51 = X3<{ a: (x: string) => void }>;  // never
+>T51 : never
+>X3 : X3<T>
+>a : (x: string) => void
+>x : string
+
+type T52 = X3<{ a: (x: string) => void, b: (x: string) => void }>;  // string
+>T52 : string
+>X3 : X3<T>
+>a : (x: string) => void
+>x : string
+>b : (x: string) => void
+>x : string
+
+type T53 = X3<{ a: (x: number) => void, b: (x: string) => void }>;  // string & number
+>T53 : number & string
+>X3 : X3<T>
+>a : (x: number) => void
+>x : number
+>b : (x: string) => void
+>x : string
+
+type T54 = X3<{ a: (x: number) => void, b: () => void }>;  // number
+>T54 : number
+>X3 : X3<T>
+>a : (x: number) => void
+>x : number
+>b : () => void
+
+type T60 = infer U;  // Error
+>T60 : U
+>U : U
+
+type T61<T> = infer A extends infer B ? infer C : infer D;  // Error
+>T61 : T61<T>
+>T : T
+>A : A
+>B : B
+>C : C
+>D : D
+
+type T62<T> = U extends (infer U)[] ? U : U;  // Error
+>T62 : any
+>T : T
+>U : No type information available!
+>U : U
+>U : U
+>U : No type information available!
+
+type T63<T> = T extends (infer A extends infer B ? infer C : infer D) ? string : number;
+>T63 : T63<T>
+>T : T
+>T : T
+>A : A
+>B : B
+>C : C
+>D : D
+
+type T70<T extends string> = { x: T };
+>T70 : T70<T>
+>T : T
+>x : T
+>T : T
+
+type T71<T> = T extends T70<infer U> ? T70<U> : never;
+>T71 : T71<T>
+>T : T
+>T : T
+>T70 : T70<T>
+>U : U
+>T70 : T70<T>
+>U : U
+
+type T72<T extends number> = { y: T };
+>T72 : T72<T>
+>T : T
+>y : T
+>T : T
+
+type T73<T> = T extends T72<infer U> ? T70<U> : never;  // Error
+>T73 : T73<T>
+>T : T
+>T : T
+>T72 : T72<T>
+>U : U
+>T70 : T70<T>
+>U : U
+
+type T74<T extends number, U extends string> = { x: T, y: U };
+>T74 : T74<T, U>
+>T : T
+>U : U
+>x : T
+>T : T
+>y : U
+>U : U
+
+type T75<T> = T extends T74<infer U, infer U> ? T70<U> | T72<U> | T74<U, U> : never;
+>T75 : T75<T>
+>T : T
+>T : T
+>T74 : T74<T, U>
+>U : U
+>U : U
+>T70 : T70<T>
+>U : U
+>T72 : T72<T>
+>U : U
+>T74 : T74<T, U>
+>U : U
+>U : U
+
+type T76<T extends T[], U extends T> = { x: T };
+>T76 : T76<T, U>
+>T : T
+>T : T
+>U : U
+>T : T
+>x : T
+>T : T
+
+type T77<T> = T extends T76<infer X, infer Y> ? T76<X, Y> : never;
+>T77 : T77<T>
+>T : T
+>T : T
+>T76 : T76<T, U>
+>X : X
+>Y : Y
+>T76 : T76<T, U>
+>X : X
+>Y : Y
+
+type T78<T> = T extends T76<infer X, infer X> ? T76<X, X> : never;
+>T78 : T78<T>
+>T : T
+>T : T
+>T76 : T76<T, U>
+>X : X
+>X : X
+>T76 : T76<T, U>
+>X : X
+>X : X
+
+type Foo<T extends string, U extends T> = [T, U];
+>Foo : [T, U]
+>T : T
+>U : U
+>T : T
+>T : T
+>U : U
+
+type Bar<T> = T extends Foo<infer X, infer Y> ? Foo<X, Y> : never;
+>Bar : Bar<T>
+>T : T
+>T : T
+>Foo : [T, U]
+>X : X
+>Y : Y
+>Foo : [T, U]
+>X : X
+>Y : Y
+
+type T90 = Bar<[string, string]>;  // [string, string]
+>T90 : [string, string]
+>Bar : Bar<T>
+
+type T91 = Bar<[string, "a"]>;  // [string, "a"]
+>T91 : [string, "a"]
+>Bar : Bar<T>
+
+type T92 = Bar<[string, "a"] & { x: string }>;  // [string, "a"]
+>T92 : [string, "a"]
+>Bar : Bar<T>
+>x : string
+
+type T93 = Bar<["a", string]>;  // never
+>T93 : never
+>Bar : Bar<T>
+
+type T94 = Bar<[number, number]>;  // never
+>T94 : never
+>Bar : Bar<T>
+
+// Example from #21496
+
+type JsonifiedObject<T extends object> = { [K in keyof T]: Jsonified<T[K]> };
+>JsonifiedObject : JsonifiedObject<T>
+>T : T
+>K : K
+>T : T
+>Jsonified : Jsonified<T>
+>T : T
+>K : K
+
+type Jsonified<T> =
+>Jsonified : Jsonified<T>
+>T : T
+
+    T extends string | number | boolean | null ? T
+>T : T
+>null : null
+>T : T
+
+    : T extends undefined | Function ? never // undefined and functions are removed
+>T : T
+>Function : Function
+
+    : T extends { toJSON(): infer R } ? R // toJSON is called if it exists (e.g. Date)
+>T : T
+>toJSON : () => R
+>R : R
+>R : R
+
+    : T extends object ? JsonifiedObject<T>
+>T : T
+>JsonifiedObject : JsonifiedObject<T>
+>T : T
+
+    : "what is this";
+
+type Example = {
+>Example : Example
+
+    str: "literalstring",
+>str : "literalstring"
+
+    fn: () => void,
+>fn : () => void
+
+    date: Date,
+>date : Date
+>Date : Date
+
+    customClass: MyClass,
+>customClass : MyClass
+>MyClass : MyClass
+
+    obj: {
+>obj : { prop: "property"; clz: MyClass; nested: { attr: Date; }; }
+
+        prop: "property",
+>prop : "property"
+
+        clz: MyClass,
+>clz : MyClass
+>MyClass : MyClass
+
+        nested: { attr: Date }
+>nested : { attr: Date; }
+>attr : Date
+>Date : Date
+
+    },
+}
+
+declare class MyClass {
+>MyClass : MyClass
+
+    toJSON(): "correct";
+>toJSON : () => "correct"
+}
+
+type JsonifiedExample = Jsonified<Example>;
+>JsonifiedExample : JsonifiedObject<Example>
+>Jsonified : Jsonified<T>
+>Example : Example
+
+declare let ex: JsonifiedExample;
+>ex : JsonifiedObject<Example>
+>JsonifiedExample : JsonifiedObject<Example>
+
+const z1: "correct" = ex.customClass;
+>z1 : "correct"
+>ex.customClass : "correct"
+>ex : JsonifiedObject<Example>
+>customClass : "correct"
+
+const z2: string = ex.obj.nested.attr;
+>z2 : string
+>ex.obj.nested.attr : string
+>ex.obj.nested : JsonifiedObject<{ attr: Date; }>
+>ex.obj : JsonifiedObject<{ prop: "property"; clz: MyClass; nested: { attr: Date; }; }>
+>ex : JsonifiedObject<Example>
+>obj : JsonifiedObject<{ prop: "property"; clz: MyClass; nested: { attr: Date; }; }>
+>nested : JsonifiedObject<{ attr: Date; }>
+>attr : string
+
+// Repros from #21631
+
+type A1<T, U extends A1<any, any>> = [T, U];
+>A1 : [T, U]
+>T : T
+>U : U
+>A1 : [T, U]
+>T : T
+>U : U
+
+type B1<S> = S extends A1<infer T, infer U> ? [T, U] : never;
+>B1 : B1<S>
+>S : S
+>S : S
+>A1 : [T, U]
+>T : T
+>U : U
+>T : T
+>U : U
+
+type A2<T, U extends void> = [T, U];
+>A2 : [T, U]
+>T : T
+>U : U
+>T : T
+>U : U
+
+type B2<S> = S extends A2<infer T, infer U> ? [T, U] : never;
+>B2 : B2<S>
+>S : S
+>S : S
+>A2 : [T, U]
+>T : T
+>U : U
+>T : T
+>U : U
+
+type C2<S, U extends void> = S extends A2<infer T, U> ? [T, U] : never;
+>C2 : C2<S, U>
+>S : S
+>U : U
+>S : S
+>A2 : [T, U]
+>T : T
+>U : U
+>T : T
+>U : U
+
+// Repro from #21735
+
+type A<T> = T extends string ? { [P in T]: void; } : T;
+>A : A<T>
+>T : T
+>T : T
+>P : P
+>T : T
+>T : T
+
+type B<T> = string extends T ? { [P in T]: void; } : T;  // Error
+>B : B<T>
+>T : T
+>T : T
+>P : P
+>T : T
+>T : T
+
+// Repro from #22302
+
+type MatchingKeys<T, U, K extends keyof T = keyof T> =
+>MatchingKeys : MatchingKeys<T, U, K>
+>T : T
+>U : U
+>K : K
+>T : T
+>T : T
+
+    K extends keyof T ? T[K] extends U ? K : never : never;
+>K : K
+>T : T
+>T : T
+>K : K
+>U : U
+>K : K
+
+type VoidKeys<T> = MatchingKeys<T, void>;
+>VoidKeys : MatchingKeys<T, void, keyof T>
+>T : T
+>MatchingKeys : MatchingKeys<T, U, K>
+>T : T
+
+interface test {
+>test : test
+
+    a: 1,
+>a : 1
+
+    b: void
+>b : void
+}
+
+type T80 = MatchingKeys<test, void>;
+>T80 : "b"
+>MatchingKeys : MatchingKeys<T, U, K>
+>test : test
+
+type T81 = VoidKeys<test>;
+>T81 : "b"
+>VoidKeys : MatchingKeys<T, void, keyof T>
+>test : test
+
+// Repro from #22221
+
+type MustBeString<T extends string> = T;
+>MustBeString : T
+>T : T
+>T : T
+
+type EnsureIsString<T> = T extends MustBeString<infer U> ? U : never;
+>EnsureIsString : EnsureIsString<T>
+>T : T
+>T : T
+>MustBeString : T
+>U : U
+>U : U
+
+type Test1 = EnsureIsString<"hello">;  // "hello"
+>Test1 : "hello"
+>EnsureIsString : EnsureIsString<T>
+
+type Test2 = EnsureIsString<42>;  // never
+>Test2 : never
+>EnsureIsString : EnsureIsString<T>
+

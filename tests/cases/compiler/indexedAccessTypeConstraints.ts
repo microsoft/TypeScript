@@ -11,7 +11,7 @@ type Data<T> = {
 };
 
 class Parent<M> {
-    private data: Data<M>;
+    constructor(private data: Data<M>) {}
     getData(): Data<M> {
         return this.data;
     }

@@ -1,7 +1,7 @@
 tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts(1,18): error TS2300: Duplicate identifier '_'.
-tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts(1,41): error TS2304: Cannot find name '_'.
+tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts(1,41): error TS2709: Cannot use namespace '_' as a type.
 tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts(2,18): error TS2300: Duplicate identifier '_'.
-tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts(2,34): error TS2304: Cannot find name '_'.
+tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts(2,34): error TS2709: Cannot use namespace '_' as a type.
 tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts(4,16): error TS2300: Duplicate identifier '_'.
 tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts(15,15): error TS2300: Duplicate identifier '_'.
 tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts(21,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -12,12 +12,12 @@ tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts(21
                      ~
 !!! error TS2300: Duplicate identifier '_'.
                                             ~
-!!! error TS2304: Cannot find name '_'.
+!!! error TS2709: Cannot use namespace '_' as a type.
     declare function _<T>(value: T): _<T>;
                      ~
 !!! error TS2300: Duplicate identifier '_'.
                                      ~
-!!! error TS2304: Cannot find name '_'.
+!!! error TS2709: Cannot use namespace '_' as a type.
     
     declare module _ {
                    ~

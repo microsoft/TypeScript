@@ -11,6 +11,8 @@ declare namespace ts.server {
 
     type RequireResult = { module: {}, error: undefined } | { module: undefined, error: { stack?: string, message?: string } };
     export interface ServerHost extends System {
+        watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
+        watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         clearTimeout(timeoutId: any): void;
         setImmediate(callback: (...args: any[]) => void, ...args: any[]): any;
@@ -18,10 +20,6 @@ declare namespace ts.server {
         gc?(): void;
         trace?(s: string): void;
         require?(initialPath: string, moduleName: string): RequireResult;
-    }
-
-    export interface SortedArray<T> extends Array<T> {
-        " __sortedArrayBrand": any;
     }
 
     export interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
@@ -53,7 +51,7 @@ declare namespace ts.server {
         readonly kind: "typesRegistry";
     }
 
-    export interface InstallPackageRequest {
+    export interface InstallPackageRequest extends TypingInstallerRequestWithProjectName {
         readonly kind: "installPackage";
         readonly fileName: Path;
         readonly packageName: string;
@@ -62,14 +60,14 @@ declare namespace ts.server {
 
     export type ActionSet = "action::set";
     export type ActionInvalidate = "action::invalidate";
+    export type ActionPackageInstalled = "action::packageInstalled";
     export type EventTypesRegistry = "event::typesRegistry";
-    export type EventPackageInstalled = "event::packageInstalled";
     export type EventBeginInstallTypes = "event::beginInstallTypes";
     export type EventEndInstallTypes = "event::endInstallTypes";
     export type EventInitializationFailed = "event::initializationFailed";
 
     export interface TypingInstallerResponse {
-        readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | EventPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
+        readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
     }
     /* @internal */
     export type TypingInstallerResponseUnion = SetTypings | InvalidateCachedTypings | TypesRegistryResponse | PackageInstalledResponse | InstallTypes | InitializationFailedResponse;
@@ -77,12 +75,11 @@ declare namespace ts.server {
     /* @internal */
     export interface TypesRegistryResponse extends TypingInstallerResponse {
         readonly kind: EventTypesRegistry;
-        readonly typesRegistry: MapLike<void>;
+        readonly typesRegistry: MapLike<MapLike<string>>;
     }
 
-    /* @internal */
-    export interface PackageInstalledResponse extends TypingInstallerResponse {
-        readonly kind: EventPackageInstalled;
+    export interface PackageInstalledResponse extends ProjectResponse {
+        readonly kind: ActionPackageInstalled;
         readonly success: boolean;
         readonly message: string;
     }

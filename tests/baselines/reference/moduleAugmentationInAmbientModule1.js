@@ -36,3 +36,4 @@ x.foo().x;
 
 //// [main.d.ts]
 /// <reference path="O.d.ts" />
+export {};

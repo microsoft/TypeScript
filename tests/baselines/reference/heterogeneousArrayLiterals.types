@@ -22,13 +22,13 @@ var c = [1, '', null]; // {}[]
 
 var d = [{}, 1]; // {}[]
 >d : {}[]
->[{}, 1] : {}[]
+>[{}, 1] : (number | {})[]
 >{} : {}
 >1 : 1
 
 var e = [{}, Object]; // {}[]
 >e : {}[]
->[{}, Object] : {}[]
+>[{}, Object] : (ObjectConstructor | {})[]
 >{} : {}
 >Object : ObjectConstructor
 
@@ -48,7 +48,7 @@ var g = [[1], ['']]; // {}[]
 >'' : ""
 
 var h = [{ foo: 1, bar: '' }, { foo: 2 }]; // {foo: number}[]
->h : ({ foo: number; bar: string; } | { foo: number; })[]
+>h : ({ foo: number; bar: string; } | { foo: number; bar?: undefined; })[]
 >[{ foo: 1, bar: '' }, { foo: 2 }] : ({ foo: number; bar: string; } | { foo: number; })[]
 >{ foo: 1, bar: '' } : { foo: number; bar: string; }
 >foo : number
@@ -60,7 +60,7 @@ var h = [{ foo: 1, bar: '' }, { foo: 2 }]; // {foo: number}[]
 >2 : 2
 
 var i = [{ foo: 1, bar: '' }, { foo: '' }]; // {}[]
->i : ({ foo: number; bar: string; } | { foo: string; })[]
+>i : ({ foo: number; bar: string; } | { foo: string; bar?: undefined; })[]
 >[{ foo: 1, bar: '' }, { foo: '' }] : ({ foo: number; bar: string; } | { foo: string; })[]
 >{ foo: 1, bar: '' } : { foo: number; bar: string; }
 >foo : number
@@ -145,7 +145,7 @@ module Derived {
 >Derived : typeof Derived
 
     var h = [{ foo: base, basear: derived }, { foo: base }]; // {foo: Base}[]
->h : ({ foo: Base; basear: Derived; } | { foo: Base; })[]
+>h : ({ foo: Base; basear: Derived; } | { foo: Base; basear?: undefined; })[]
 >[{ foo: base, basear: derived }, { foo: base }] : ({ foo: Base; basear: Derived; } | { foo: Base; })[]
 >{ foo: base, basear: derived } : { foo: Base; basear: Derived; }
 >foo : Base
@@ -157,7 +157,7 @@ module Derived {
 >base : Base
 
     var i = [{ foo: base, basear: derived }, { foo: derived }]; // {foo: Derived}[]
->i : ({ foo: Base; basear: Derived; } | { foo: Derived; })[]
+>i : ({ foo: Base; basear: Derived; } | { foo: Derived; basear?: undefined; })[]
 >[{ foo: base, basear: derived }, { foo: derived }] : ({ foo: Base; basear: Derived; } | { foo: Derived; })[]
 >{ foo: base, basear: derived } : { foo: Base; basear: Derived; }
 >foo : Base

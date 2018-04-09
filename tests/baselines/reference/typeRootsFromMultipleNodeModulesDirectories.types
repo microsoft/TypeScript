@@ -17,18 +17,24 @@ x + y + z;
 
 === /node_modules/@types/dopey/index.d.ts ===
 declare module "xyz" {
+>"xyz" : typeof import("xyz")
+
     export const x: number;
 >x : number
 }
 
 === /foo/node_modules/@types/grumpy/index.d.ts ===
 declare module "pdq" {
+>"pdq" : typeof import("pdq")
+
     export const y: number; 
 >y : number
 }
 
 === /foo/node_modules/@types/sneezy/index.d.ts ===
 declare module "abc" {
+>"abc" : typeof import("abc")
+
     export const z: number;
 >z : number
 }

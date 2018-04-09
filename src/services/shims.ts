@@ -24,6 +24,17 @@ let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { return
 
 /* @internal */
 namespace ts {
+    interface DiscoverTypingsInfo {
+        fileNames: string[];                            // The file names that belong to the same project.
+        projectRootPath: string;                        // The path to the project root directory
+        safeListPath: string;                           // The path used to retrieve the safe list
+        packageNameToTypingLocation: Map<JsTyping.CachedTyping>;       // The map of package names to their cached typing locations and installed versions
+        typeAcquisition: TypeAcquisition;               // Used to customize the type acquisition process
+        compilerOptions: CompilerOptions;               // Used as a source for typing inference
+        unresolvedImports: ReadonlyArray<string>;       // List of unresolved module ids from imports
+        typesRegistry: ReadonlyMap<MapLike<string>>;    // The map of available typings in npm to maps of TS versions to their latest supported versions
+    }
+
     export interface ScriptSnapshotShim {
         /** Gets a portion of the script snapshot specified by [start, end). */
         getText(start: number, end: number): string;
@@ -106,7 +117,7 @@ namespace ts {
     ///
     // Note: This is being using by the host (VS) and is marshaled back and forth.
     // When changing this make sure the changes are reflected in the managed side as well
-    export interface IFileReference {
+    export interface ShimsFileReference {
         path: string;
         position: number;
         length: number;
@@ -133,6 +144,7 @@ namespace ts {
 
         getSyntacticDiagnostics(fileName: string): string;
         getSemanticDiagnostics(fileName: string): string;
+        getSuggestionDiagnostics(fileName: string): string;
         getCompilerOptionsDiagnostics(): string;
 
         getSyntacticClassifications(fileName: string, start: number, length: number): string;
@@ -140,8 +152,8 @@ namespace ts {
         getEncodedSyntacticClassifications(fileName: string, start: number, length: number): string;
         getEncodedSemanticClassifications(fileName: string, start: number, length: number): string;
 
-        getCompletionsAtPosition(fileName: string, position: number): string;
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: string/*Services.FormatCodeOptions*/): string;
+        getCompletionsAtPosition(fileName: string, position: number, preferences: UserPreferences | undefined): string;
+        getCompletionEntryDetails(fileName: string, position: number, entryName: string, formatOptions: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined, preferences: UserPreferences | undefined): string;
 
         getQuickInfoAtPosition(fileName: string, position: number): string;
 
@@ -169,6 +181,8 @@ namespace ts {
          * Or undefined value if no definition can be found.
          */
         getDefinitionAtPosition(fileName: string, position: number): string;
+
+        getDefinitionAndBoundSpan(fileName: string, position: number): string;
 
         /**
          * Returns a JSON-encoded value of the type:
@@ -328,7 +342,7 @@ namespace ts {
             // if shimHost is a COM object then property check will become method call with no arguments.
             // 'in' does not have this effect.
             if ("getModuleResolutionsForFile" in this.shimHost) {
-                this.resolveModuleNames = (moduleNames: string[], containingFile: string) => {
+                this.resolveModuleNames = (moduleNames: string[], containingFile: string): ResolvedModuleFull[] => {
                     const resolutionsInFile = <MapLike<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile(containingFile));
                     return map(moduleNames, name => {
                         const result = getProperty(resolutionsInFile, name);
@@ -568,12 +582,13 @@ namespace ts {
         }
     }
 
-    interface RealizedDiagnostic {
+    export interface RealizedDiagnostic {
         message: string;
         start: number;
         length: number;
         category: string;
         code: number;
+        unused?: {};
     }
     export function realizeDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, newLine: string): RealizedDiagnostic[] {
         return diagnostics.map(d => realizeDiagnostic(d, newLine));
@@ -584,8 +599,7 @@ namespace ts {
             message: flattenDiagnosticMessageText(diagnostic.messageText, newLine),
             start: diagnostic.start,
             length: diagnostic.length,
-            /// TODO: no need for the tolowerCase call
-            category: DiagnosticCategory[diagnostic.category].toLowerCase(),
+            category: diagnosticCategoryName(diagnostic),
             code: diagnostic.code
         };
     }
@@ -650,7 +664,7 @@ namespace ts {
 
         private realizeDiagnostics(diagnostics: ReadonlyArray<Diagnostic>): { message: string; start: number; length: number; category: string; }[] {
             const newLine = getNewLineOrDefaultFromHost(this.host);
-            return ts.realizeDiagnostics(diagnostics, newLine);
+            return realizeDiagnostics(diagnostics, newLine);
         }
 
         public getSyntacticClassifications(fileName: string, start: number, length: number): string {
@@ -701,6 +715,10 @@ namespace ts {
                     const diagnostics = this.languageService.getSemanticDiagnostics(fileName);
                     return this.realizeDiagnostics(diagnostics);
                 });
+        }
+
+        public getSuggestionDiagnostics(fileName: string): string {
+            return this.forwardJSONCall(`getSuggestionDiagnostics('${fileName}')`, () => this.realizeDiagnostics(this.languageService.getSuggestionDiagnostics(fileName)));
         }
 
         public getCompilerOptionsDiagnostics(): string {
@@ -769,6 +787,17 @@ namespace ts {
             return this.forwardJSONCall(
                 `getDefinitionAtPosition('${fileName}', ${position})`,
                 () => this.languageService.getDefinitionAtPosition(fileName, position)
+            );
+        }
+
+        /**
+         * Computes the definition location and file for the symbol
+         * at the requested position.
+         */
+        public getDefinitionAndBoundSpan(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                `getDefinitionAndBoundSpan('${fileName}', ${position})`,
+                () => this.languageService.getDefinitionAndBoundSpan(fileName, position)
             );
         }
 
@@ -885,20 +914,20 @@ namespace ts {
          * to provide at the given source position and providing a member completion
          * list if requested.
          */
-        public getCompletionsAtPosition(fileName: string, position: number) {
+        public getCompletionsAtPosition(fileName: string, position: number, preferences: UserPreferences | undefined) {
             return this.forwardJSONCall(
-                `getCompletionsAtPosition('${fileName}', ${position})`,
-                () => this.languageService.getCompletionsAtPosition(fileName, position)
+                `getCompletionsAtPosition('${fileName}', ${position}, ${preferences})`,
+                () => this.languageService.getCompletionsAtPosition(fileName, position, preferences)
             );
         }
 
         /** Get a string based representation of a completion list entry details */
-        public getCompletionEntryDetails(fileName: string, position: number, entryName: string, options: string/*Services.FormatCodeOptions*/) {
+        public getCompletionEntryDetails(fileName: string, position: number, entryName: string, formatOptions: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined, preferences: UserPreferences | undefined) {
             return this.forwardJSONCall(
                 `getCompletionEntryDetails('${fileName}', ${position}, '${entryName}')`,
                 () => {
-                    const localOptions: ts.FormatCodeOptions = JSON.parse(options);
-                    return this.languageService.getCompletionEntryDetails(fileName, position, entryName, localOptions);
+                    const localOptions: FormatCodeOptions = formatOptions === undefined ? undefined : JSON.parse(formatOptions);
+                    return this.languageService.getCompletionEntryDetails(fileName, position, entryName, localOptions, source, preferences);
                 }
             );
         }
@@ -907,7 +936,7 @@ namespace ts {
             return this.forwardJSONCall(
                 `getFormattingEditsForRange('${fileName}', ${start}, ${end})`,
                 () => {
-                    const localOptions: ts.FormatCodeOptions = JSON.parse(options);
+                    const localOptions: FormatCodeOptions = JSON.parse(options);
                     return this.languageService.getFormattingEditsForRange(fileName, start, end, localOptions);
                 });
         }
@@ -916,7 +945,7 @@ namespace ts {
             return this.forwardJSONCall(
                 `getFormattingEditsForDocument('${fileName}')`,
                 () => {
-                    const localOptions: ts.FormatCodeOptions = JSON.parse(options);
+                    const localOptions: FormatCodeOptions = JSON.parse(options);
                     return this.languageService.getFormattingEditsForDocument(fileName, localOptions);
                 });
         }
@@ -925,7 +954,7 @@ namespace ts {
             return this.forwardJSONCall(
                 `getFormattingEditsAfterKeystroke('${fileName}', ${position}, '${key}')`,
                 () => {
-                    const localOptions: ts.FormatCodeOptions = JSON.parse(options);
+                    const localOptions: FormatCodeOptions = JSON.parse(options);
                     return this.languageService.getFormattingEditsAfterKeystroke(fileName, position, key, localOptions);
                 });
         }
@@ -1070,7 +1099,7 @@ namespace ts {
                 `getPreProcessedFileInfo('${fileName}')`,
                 () => {
                     // for now treat files as JavaScript
-                    const result = preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
+                    const result = preProcessFile(getSnapshotText(sourceTextSnapshot), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
                     return {
                         referencedFiles: this.convertFileReferences(result.referencedFiles),
                         importedFiles: this.convertFileReferences(result.importedFiles),
@@ -1091,11 +1120,11 @@ namespace ts {
             );
         }
 
-        private convertFileReferences(refs: FileReference[]): IFileReference[] {
+        private convertFileReferences(refs: FileReference[]): ShimsFileReference[] {
             if (!refs) {
                 return undefined;
             }
-            const result: IFileReference[] = [];
+            const result: ShimsFileReference[] = [];
             for (const ref of refs) {
                 result.push({
                     path: normalizeSlashes(ref.fileName),
@@ -1110,9 +1139,7 @@ namespace ts {
             return this.forwardJSONCall(
                 `getTSConfigFileInfo('${fileName}')`,
                 () => {
-                    const text = sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength());
-
-                    const result = parseJsonText(fileName, text);
+                    const result = parseJsonText(fileName, getSnapshotText(sourceTextSnapshot));
                     const normalizedFileName = normalizeSlashes(fileName);
                     const configFile = parseJsonSourceFileConfigFileContent(result, this.host, getDirectoryPath(normalizedFileName), /*existingOptions*/ {}, normalizedFileName);
 
@@ -1148,7 +1175,8 @@ namespace ts {
                     this.safeList,
                     info.packageNameToTypingLocation,
                     info.typeAcquisition,
-                    info.unresolvedImports);
+                    info.unresolvedImports,
+                    info.typesRegistry);
             });
         }
     }
@@ -1170,7 +1198,7 @@ namespace ts {
                     this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory());
                 }
                 const hostAdapter = new LanguageServiceShimHostAdapter(host);
-                const languageService = createLanguageService(hostAdapter, this.documentRegistry);
+                const languageService = createLanguageService(hostAdapter, this.documentRegistry, /*syntaxOnly*/ false);
                 return new LanguageServiceShimObject(this, host, languageService);
             }
             catch (err) {

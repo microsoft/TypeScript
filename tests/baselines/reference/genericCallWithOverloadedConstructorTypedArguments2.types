@@ -63,8 +63,8 @@ module GenericParameter {
 >T : T
 
     var r6 = foo5(a); // ok
->r6 : { new (x: any): string; new (x: number): any; }
->foo5(a) : { new (x: any): string; new (x: number): any; }
+>r6 : { new (x: {}): string; new (x: number): {}; }
+>foo5(a) : { new (x: {}): string; new (x: number): {}; }
 >foo5 : <T>(cb: { new (x: T): string; new (x: number): T; }) => { new (x: T): string; new (x: number): T; }
 >a : new <T>(x: T) => T
 
@@ -115,8 +115,8 @@ module GenericParameter {
     }
 
     var r13 = foo7(1, a); // ok
->r13 : { new (x: any): string; new (x: any, y?: any): string; }
->foo7(1, a) : { new (x: any): string; new (x: any, y?: any): string; }
+>r13 : { new (x: {}): string; new (x: {}, y?: {}): string; }
+>foo7(1, a) : { new (x: {}): string; new (x: {}, y?: {}): string; }
 >foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
 >1 : 1
 >a : new <T>(x: T) => T
@@ -131,8 +131,8 @@ module GenericParameter {
 >T : T
 
     var r14 = foo7(1, c); // ok
->r14 : { new (x: any): string; new (x: any, y?: any): string; }
->foo7(1, c) : { new (x: any): string; new (x: any, y?: any): string; }
+>r14 : { new (x: {}): string; new (x: {}, y?: {}): string; }
+>foo7(1, c) : { new (x: {}): string; new (x: {}, y?: {}): string; }
 >foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
 >1 : 1
 >c : { new <T>(x: T): number; new <T>(x: number): T; }

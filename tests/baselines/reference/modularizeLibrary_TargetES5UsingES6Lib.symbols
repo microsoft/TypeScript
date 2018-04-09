@@ -7,9 +7,9 @@ function f(x: number, y: number, z: number) {
 >z : Symbol(z, Decl(modularizeLibrary_TargetES5UsingES6Lib.ts, 1, 32))
 
     return Array.from(arguments);
->Array.from : Symbol(ArrayConstructor.from, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array.from : Symbol(ArrayConstructor.from, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->from : Symbol(ArrayConstructor.from, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>from : Symbol(ArrayConstructor.from, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >arguments : Symbol(arguments)
 }
 
@@ -90,6 +90,7 @@ var o = {
 >a : Symbol(a, Decl(modularizeLibrary_TargetES5UsingES6Lib.ts, 38, 9))
 
     [Symbol.hasInstance](value: any) {
+>[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(modularizeLibrary_TargetES5UsingES6Lib.ts, 39, 9))
 >Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 >hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
@@ -173,6 +174,7 @@ const o1 = {
 >o1 : Symbol(o1, Decl(modularizeLibrary_TargetES5UsingES6Lib.ts, 75, 5))
 
     [Symbol.hasInstance](value: any) {
+>[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(modularizeLibrary_TargetES5UsingES6Lib.ts, 75, 12))
 >Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 >hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

@@ -100,11 +100,11 @@
 >{ value: constructor, writable: true, configurable: true, enumerable: true } : { value: any; writable: true; configurable: true; enumerable: true; }
 >value : any
 >constructor : any
->writable : boolean
+>writable : true
 >true : true
->configurable : boolean
+>configurable : true
 >true : true
->enumerable : boolean
+>enumerable : true
 >true : true
 
                 if (instanceMembers) {

@@ -1,4 +1,4 @@
-tests/cases/compiler/moduleWithValuesAsType.ts(5,8): error TS2304: Cannot find name 'A'.
+tests/cases/compiler/moduleWithValuesAsType.ts(5,8): error TS2709: Cannot use namespace 'A' as a type.
 
 
 ==== tests/cases/compiler/moduleWithValuesAsType.ts (1 errors) ====
@@ -8,4 +8,4 @@ tests/cases/compiler/moduleWithValuesAsType.ts(5,8): error TS2304: Cannot find n
     
     var a: A; // no error
            ~
-!!! error TS2304: Cannot find name 'A'.
+!!! error TS2709: Cannot use namespace 'A' as a type.

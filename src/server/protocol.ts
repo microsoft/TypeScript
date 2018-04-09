@@ -1,3 +1,5 @@
+// tslint:disable no-unnecessary-qualifier
+
 /**
  * Declaration module describing the TypeScript Server protocol
  */
@@ -15,12 +17,17 @@ namespace ts.server.protocol {
         /* @internal */
         CompletionsFull = "completions-full",
         CompletionDetails = "completionEntryDetails",
+        /* @internal */
+        CompletionDetailsFull = "completionEntryDetails-full",
         CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList",
         CompileOnSaveEmitFile = "compileOnSaveEmitFile",
         Configure = "configure",
         Definition = "definition",
         /* @internal */
         DefinitionFull = "definition-full",
+        DefinitionAndBoundSpan = "definitionAndBoundSpan",
+        /* @internal */
+        DefinitionAndBoundSpanFull = "definitionAndBoundSpan-full",
         Implementation = "implementation",
         /* @internal */
         ImplementationFull = "implementation-full",
@@ -37,6 +44,7 @@ namespace ts.server.protocol {
         GeterrForProject = "geterrForProject",
         SemanticDiagnosticsSync = "semanticDiagnosticsSync",
         SyntacticDiagnosticsSync = "syntacticDiagnosticsSync",
+        SuggestionDiagnosticsSync = "suggestionDiagnosticsSync",
         NavBar = "navbar",
         /* @internal */
         NavBarFull = "navbar-full",
@@ -45,6 +53,7 @@ namespace ts.server.protocol {
         NavtoFull = "navto-full",
         NavTree = "navtree",
         NavTreeFull = "navtree-full",
+        /** @deprecated */
         Occurrences = "occurrences",
         DocumentHighlights = "documentHighlights",
         /* @internal */
@@ -66,6 +75,7 @@ namespace ts.server.protocol {
         SignatureHelp = "signatureHelp",
         /* @internal */
         SignatureHelpFull = "signatureHelp-full",
+        Status = "status",
         TypeDefinition = "typeDefinition",
         ProjectInfo = "projectInfo",
         ReloadProjects = "reloadProjects",
@@ -81,8 +91,9 @@ namespace ts.server.protocol {
         EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full",
         /* @internal */
         Cleanup = "cleanup",
+        GetOutliningSpans = "getOutliningSpans",
         /* @internal */
-        OutliningSpans = "outliningSpans",
+        GetOutliningSpansFull = "outliningSpans", // Full command name is different for backward compatibility purposes
         TodoComments = "todoComments",
         Indentation = "indentation",
         DocCommentTemplate = "docCommentTemplate",
@@ -94,15 +105,22 @@ namespace ts.server.protocol {
         BreakpointStatement = "breakpointStatement",
         CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects",
         GetCodeFixes = "getCodeFixes",
-        ApplyCodeActionCommand = "applyCodeActionCommand",
         /* @internal */
         GetCodeFixesFull = "getCodeFixes-full",
+        GetCombinedCodeFix = "getCombinedCodeFix",
+        /* @internal */
+        GetCombinedCodeFixFull = "getCombinedCodeFix-full",
+        ApplyCodeActionCommand = "applyCodeActionCommand",
         GetSupportedCodeFixes = "getSupportedCodeFixes",
 
         GetApplicableRefactors = "getApplicableRefactors",
         GetEditsForRefactor = "getEditsForRefactor",
         /* @internal */
         GetEditsForRefactorFull = "getEditsForRefactor-full",
+
+        OrganizeImports = "organizeImports",
+        /* @internal */
+        OrganizeImportsFull = "organizeImports-full",
 
         // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
     }
@@ -211,6 +229,24 @@ namespace ts.server.protocol {
         projectFileName?: string;
     }
 
+    export interface StatusRequest extends Request {
+        command: CommandTypes.Status;
+    }
+
+    export interface StatusResponseBody {
+        /**
+         * The TypeScript version (`ts.version`).
+         */
+        version: string;
+    }
+
+    /**
+     * Response to StatusRequest
+     */
+    export interface StatusResponse extends Response {
+        body: StatusResponseBody;
+    }
+
     /**
      * Requests a JS Doc comment template for a given position
      */
@@ -268,17 +304,48 @@ namespace ts.server.protocol {
     /**
      * Request to obtain outlining spans in file.
      */
-    /* @internal */
     export interface OutliningSpansRequest extends FileRequest {
-        command: CommandTypes.OutliningSpans;
+        command: CommandTypes.GetOutliningSpans;
+    }
+
+    export interface OutliningSpan {
+        /** The span of the document to actually collapse. */
+        textSpan: TextSpan;
+
+        /** The span of the document to display when the user hovers over the collapsed span. */
+        hintSpan: TextSpan;
+
+        /** The text to display in the editor for the collapsed region. */
+        bannerText: string;
+
+        /**
+         * Whether or not this region should be automatically collapsed when
+         * the 'Collapse to Definitions' command is invoked.
+         */
+        autoCollapse: boolean;
+    }
+
+    /**
+     * Response to OutliningSpansRequest request.
+     */
+    export interface OutliningSpansResponse extends Response {
+        body?: OutliningSpan[];
+    }
+
+    /**
+     * Request to obtain outlining spans in file.
+     */
+    /* @internal */
+    export interface OutliningSpansRequestFull extends FileRequest {
+        command: CommandTypes.GetOutliningSpansFull;
     }
 
     /**
      * Response to OutliningSpansRequest request.
      */
     /* @internal */
-    export interface OutliningSpansResponse extends Response {
-        body?: OutliningSpan[];
+    export interface OutliningSpansResponseFull extends Response {
+        body?: ts.OutliningSpan[];
     }
 
     /**
@@ -388,6 +455,8 @@ namespace ts.server.protocol {
         endLocation: Location;
         category: string;
         code: number;
+        /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
+        reportsUnnecessary?: {};
     }
 
     /**
@@ -521,11 +590,41 @@ namespace ts.server.protocol {
     }
 
     /**
+     * Organize imports by:
+     *   1) Removing unused imports
+     *   2) Coalescing imports from the same module
+     *   3) Sorting imports
+     */
+    export interface OrganizeImportsRequest extends Request {
+        command: CommandTypes.OrganizeImports;
+        arguments: OrganizeImportsRequestArgs;
+    }
+
+    export type OrganizeImportsScope = GetCombinedCodeFixScope;
+
+    export interface OrganizeImportsRequestArgs {
+        scope: OrganizeImportsScope;
+    }
+
+    export interface OrganizeImportsResponse extends Response {
+        edits: ReadonlyArray<FileCodeEdits>;
+    }
+
+    /**
      * Request for the available codefixes at a specific position.
      */
     export interface CodeFixRequest extends Request {
         command: CommandTypes.GetCodeFixes;
         arguments: CodeFixRequestArgs;
+    }
+
+    export interface GetCombinedCodeFixRequest extends Request {
+        command: CommandTypes.GetCombinedCodeFix;
+        arguments: GetCombinedCodeFixRequestArgs;
+    }
+
+    export interface GetCombinedCodeFixResponse extends Response {
+        body: CombinedCodeActions;
     }
 
     export interface ApplyCodeActionCommandRequest extends Request {
@@ -577,10 +676,21 @@ namespace ts.server.protocol {
         /**
          * Errorcodes we want to get the fixes for.
          */
-        errorCodes?: number[];
+        errorCodes?: ReadonlyArray<number>;
     }
 
-    export interface ApplyCodeActionCommandRequestArgs extends FileRequestArgs {
+    export interface GetCombinedCodeFixRequestArgs {
+        scope: GetCombinedCodeFixScope;
+        fixId: {};
+    }
+
+    export interface GetCombinedCodeFixScope {
+        type: "file";
+        args: FileRequestArgs;
+    }
+
+    export interface ApplyCodeActionCommandRequestArgs {
+        /** May also be an array of commands. */
         command: {};
     }
 
@@ -708,11 +818,20 @@ namespace ts.server.protocol {
         file: string;
     }
 
+    export interface DefinitionInfoAndBoundSpan {
+        definitions: ReadonlyArray<FileSpan>;
+        textSpan: TextSpan;
+    }
+
     /**
      * Definition response message.  Gives text range for definition.
      */
     export interface DefinitionResponse extends Response {
         body?: FileSpan[];
+    }
+
+    export interface DefinitionInfoAndBoundSpanReponse extends Response {
+        body?: DefinitionInfoAndBoundSpan;
     }
 
     /**
@@ -748,6 +867,7 @@ namespace ts.server.protocol {
     }
 
     /**
+     * @deprecated
      * Get occurrences request; value of command field is
      * "occurrences". Return response giving spans that are relevant
      * in the file at a given line and column.
@@ -756,6 +876,7 @@ namespace ts.server.protocol {
         command: CommandTypes.Occurrences;
     }
 
+    /** @deprecated */
     export interface OccurrencesResponseItem extends FileSpan {
         /**
          * True if the occurrence is a write location, false otherwise.
@@ -768,6 +889,7 @@ namespace ts.server.protocol {
         isInString?: true;
     }
 
+    /** @deprecated */
     export interface OccurrencesResponse extends Response {
         body?: OccurrencesResponseItem[];
     }
@@ -1048,11 +1170,14 @@ namespace ts.server.protocol {
          * Current set of compiler options for project
          */
         options: ts.CompilerOptions;
-
         /**
          * true if project language service is disabled
          */
         languageServiceDisabled: boolean;
+        /**
+         * Filename of the last file analyzed before disabling the language service. undefined, if the language service is enabled.
+         */
+        lastFileExceededProgramSize: string | undefined;
     }
 
     /**
@@ -1143,6 +1268,8 @@ namespace ts.server.protocol {
          * The format options to use during formatting and other code editing features.
          */
         formatOptions?: FormatCodeSettings;
+
+        preferences?: UserPreferences;
 
         /**
          * The host's additional supported .js file extensions
@@ -1553,7 +1680,7 @@ namespace ts.server.protocol {
 
     export interface CodeFixResponse extends Response {
         /** The code actions that are available */
-        body?: CodeAction[];
+        body?: CodeFixAction[];
     }
 
     export interface CodeAction {
@@ -1563,6 +1690,21 @@ namespace ts.server.protocol {
         changes: FileCodeEdits[];
         /** A command is an opaque object that should be passed to `ApplyCodeActionCommandRequestArgs` without modification.  */
         commands?: {}[];
+    }
+
+    export interface CombinedCodeActions {
+        changes: ReadonlyArray<FileCodeEdits>;
+        commands?: ReadonlyArray<{}>;
+    }
+
+    export interface CodeFixAction extends CodeAction {
+        /**
+         * If present, one may call 'getCombinedCodeFix' with this fixId.
+         * This may be omitted to indicate that the code fix can't be applied in a group.
+         */
+        fixId?: {};
+        /** Should be present if and only if 'fixId' is. */
+        fixAllDescription?: string;
     }
 
     /**
@@ -1605,6 +1747,14 @@ namespace ts.server.protocol {
          * Optional prefix to apply to possible completions.
          */
         prefix?: string;
+        /**
+         * @deprecated Use UserPreferences.includeCompletionsForModuleExports
+         */
+        includeExternalModuleExports?: boolean;
+        /**
+         * @deprecated Use UserPreferences.includeCompletionsWithInsertText
+         */
+        includeInsertTextCompletions?: boolean;
     }
 
     /**
@@ -1625,7 +1775,12 @@ namespace ts.server.protocol {
         /**
          * Names of one or more entries for which to obtain details.
          */
-        entryNames: string[];
+        entryNames: (string | CompletionEntryIdentifier)[];
+    }
+
+    export interface CompletionEntryIdentifier {
+        name: string;
+        source: string;
     }
 
     /**
@@ -1676,8 +1831,15 @@ namespace ts.server.protocol {
          */
         sortText: string;
         /**
-         * An optional span that indicates the text to be replaced by this completion item. If present,
-         * this span should be used instead of the default one.
+         * Text to insert instead of `name`.
+         * This is used to support bracketed completions; If `name` might be "a-b" but `insertText` would be `["a-b"]`,
+         * coupled with `replacementSpan` to replace a dotted access with a bracket access.
+         */
+        insertText?: string;
+        /**
+         * An optional span that indicates the text to be replaced by this completion item.
+         * If present, this span should be used instead of the default one.
+         * It will be set if the required span differs from the one generated by the default replacement behavior.
          */
         replacementSpan?: TextSpan;
         /**
@@ -1685,6 +1847,16 @@ namespace ts.server.protocol {
          * made to avoid errors. The CompletionEntryDetails will have these actions.
          */
         hasAction?: true;
+        /**
+         * Identifier (not necessarily human-readable) identifying where this completion came from.
+         */
+        source?: string;
+        /**
+         * If true, this completion should be highlighted as recommended. There will only be one of these.
+         * This will be set when we know the user should write an expression with a certain type and that type is an enum or constructable class.
+         * Then either that enum/class or a namespace containing it will be the recommended symbol.
+         */
+        isRecommended?: true;
     }
 
     /**
@@ -1722,6 +1894,11 @@ namespace ts.server.protocol {
          * The associated code actions for this entry
          */
         codeActions?: CodeAction[];
+
+        /**
+         * Human-readable description of the `source` from the CompletionEntry.
+         */
+        source?: SymbolDisplayPart[];
     }
 
     export interface CompletionsResponse extends Response {
@@ -1872,6 +2049,14 @@ namespace ts.server.protocol {
         body?: Diagnostic[] | DiagnosticWithLinePosition[];
     }
 
+    export interface SuggestionDiagnosticsSyncRequest extends FileRequest {
+        command: CommandTypes.SuggestionDiagnosticsSync;
+        arguments: SuggestionDiagnosticsSyncRequestArgs;
+    }
+
+    export type SuggestionDiagnosticsSyncRequestArgs = SemanticDiagnosticsSyncRequestArgs;
+    export type SuggestionDiagnosticsSyncResponse = SemanticDiagnosticsSyncResponse;
+
     /**
      * Synchronous request for syntactic diagnostics of one file.
      */
@@ -1983,7 +2168,7 @@ namespace ts.server.protocol {
         text: string;
 
         /**
-         * The category of the diagnostic message, e.g. "error" vs. "warning"
+         * The category of the diagnostic message, e.g. "error", "warning", or "suggestion".
          */
         category: string;
 
@@ -2017,8 +2202,10 @@ namespace ts.server.protocol {
         diagnostics: Diagnostic[];
     }
 
+    export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag";
+
     /**
-     * Event message for "syntaxDiag" and "semanticDiag" event types.
+     * Event message for DiagnosticEventKind event types.
      * These events provide syntactic and semantic errors for a file.
      */
     export interface DiagnosticEvent extends Event {
@@ -2447,6 +2634,22 @@ namespace ts.server.protocol {
         insertSpaceBeforeFunctionParenthesis?: boolean;
         placeOpenBraceOnNewLineForFunctions?: boolean;
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
+        insertSpaceBeforeTypeAnnotation?: boolean;
+    }
+
+    export interface UserPreferences {
+        readonly quotePreference?: "double" | "single";
+        /**
+         * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
+         * This affects lone identifier completions but not completions on the right hand side of `obj.`.
+         */
+        readonly includeCompletionsForModuleExports?: boolean;
+        /**
+         * If enabled, the completion list will include completions with invalid identifier names.
+         * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
+         */
+        readonly includeCompletionsWithInsertText?: boolean;
+        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
     }
 
     export interface CompilerOptions {

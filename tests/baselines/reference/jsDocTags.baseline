@@ -2,13 +2,13 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 981
+      "position": 977
     },
     "quickInfo": {
       "kind": "constructor",
       "kindModifiers": "",
       "textSpan": {
-        "start": 981,
+        "start": 977,
         "length": 3
       },
       "displayParts": [
@@ -78,19 +78,19 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 985
+      "position": 981
     }
   },
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 989
+      "position": 985
     },
     "quickInfo": {
       "kind": "class",
       "kindModifiers": "",
       "textSpan": {
-        "start": 989,
+        "start": 985,
         "length": 3
       },
       "displayParts": [
@@ -124,13 +124,13 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 993
+      "position": 989
     },
     "quickInfo": {
       "kind": "method",
       "kindModifiers": "static",
       "textSpan": {
-        "start": 993,
+        "start": 989,
         "length": 7
       },
       "displayParts": [
@@ -200,19 +200,19 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 1001
+      "position": 997
     }
   },
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 1008
+      "position": 1004
     },
     "quickInfo": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {
-        "start": 1008,
+        "start": 1004,
         "length": 7
       },
       "displayParts": [
@@ -268,8 +268,7 @@
       "documentation": [],
       "tags": [
         {
-          "name": "mytag",
-          "text": ""
+          "name": "mytag"
         }
       ]
     }
@@ -277,19 +276,19 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 1016
+      "position": 1012
     }
   },
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 1023
+      "position": 1019
     },
     "quickInfo": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {
-        "start": 1023,
+        "start": 1019,
         "length": 7
       },
       "displayParts": [
@@ -343,25 +342,30 @@
         }
       ],
       "documentation": [],
-      "tags": []
+      "tags": [
+        {
+          "name": "returns",
+          "text": "a value"
+        }
+      ]
     }
   },
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 1031
+      "position": 1027
     }
   },
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 1038
+      "position": 1034
     },
     "quickInfo": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {
-        "start": 1038,
+        "start": 1034,
         "length": 7
       },
       "displayParts": [
@@ -433,8 +437,15 @@
       "documentation": [],
       "tags": [
         {
-          "name": "mytag",
-          "text": ""
+          "name": "param",
+          "text": "foo A value."
+        },
+        {
+          "name": "returns",
+          "text": "Another value"
+        },
+        {
+          "name": "mytag"
         }
       ]
     }
@@ -442,13 +453,13 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 1053
+      "position": 1049
     },
     "quickInfo": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
-        "start": 1053,
+        "start": 1049,
         "length": 9
       },
       "displayParts": [
@@ -505,13 +516,13 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 1068
+      "position": 1064
     },
     "quickInfo": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
-        "start": 1068,
+        "start": 1064,
         "length": 9
       },
       "displayParts": [
@@ -567,12 +578,10 @@
           "text": "here all the comments are on a new line"
         },
         {
-          "name": "mytag3",
-          "text": ""
+          "name": "mytag3"
         },
         {
-          "name": "mytag",
-          "text": ""
+          "name": "mytag"
         }
       ]
     }
@@ -580,13 +589,13 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 1083
+      "position": 1079
     },
     "quickInfo": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {
-        "start": 1083,
+        "start": 1079,
         "length": 7
       },
       "displayParts": [
@@ -642,8 +651,7 @@
       "documentation": [],
       "tags": [
         {
-          "name": "mytag",
-          "text": ""
+          "name": "mytag"
         }
       ]
     }
@@ -651,13 +659,13 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTags.ts",
-      "position": 1104
+      "position": 1100
     },
     "quickInfo": {
       "kind": "",
       "kindModifiers": "",
       "textSpan": {
-        "start": 1098,
+        "start": 1094,
         "length": 6
       },
       "displayParts": [

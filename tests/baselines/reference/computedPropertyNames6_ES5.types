@@ -13,14 +13,17 @@ var v = {
 >{    [p1]: 0,    [p2]: 1,    [p3]: 2} : { [x: string]: number; }
 
     [p1]: 0,
+>[p1] : number
 >p1 : string | number
 >0 : 0
 
     [p2]: 1,
+>[p2] : number
 >p2 : number | number[]
 >1 : 1
 
     [p3]: 2
+>[p3] : number
 >p3 : string | boolean
 >2 : 2
 }

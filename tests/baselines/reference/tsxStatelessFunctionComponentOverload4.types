@@ -96,6 +96,7 @@ const c7 = <OneThing {...obj2} yy />;  // Should error as there is extra attribu
 declare function TestingOneThing(j: {"extra-data": string}): JSX.Element;
 >TestingOneThing : { (j: { "extra-data": string; }): JSX.Element; (n: { yy: string; direction?: number; }): JSX.Element; }
 >j : { "extra-data": string; }
+>"extra-data" : string
 >JSX : any
 >Element : JSX.Element
 

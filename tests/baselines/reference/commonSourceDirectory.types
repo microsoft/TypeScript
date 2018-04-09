@@ -20,6 +20,8 @@ export const x = 0;
 
 === /types/bar.d.ts ===
 declare module "bar" {
+>"bar" : typeof import("bar")
+
     export const y = 0;
 >y : 0
 >0 : 0

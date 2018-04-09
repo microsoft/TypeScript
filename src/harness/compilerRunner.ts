@@ -148,7 +148,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
             // Source maps?
             it("Correct sourcemap content for " + fileName, () => {
-                if (options.sourceMap || options.inlineSourceMap) {
+                if (options.sourceMap || options.inlineSourceMap || options.declarationMap) {
                     Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".sourcemap.txt"), () => {
                         const record = result.getSourceMapRecord();
                         if ((options.noEmitOnError && result.errors.length !== 0) || record === undefined) {
@@ -211,8 +211,8 @@ class CompilerBaselineRunner extends RunnerBase {
             this.emit = false;
 
             const opts = this.options.split(",");
-            for (let i = 0; i < opts.length; i++) {
-                switch (opts[i]) {
+            for (const opt of opts) {
+                switch (opt) {
                     case "emit":
                         this.emit = true;
                         break;

@@ -67,7 +67,10 @@ namespace ts.server {
             this.lineMap = undefined;
         }
 
-        /** returns true if text changed */
+        /**
+         * Set the contents as newText
+         * returns true if text changed
+         */
         public reload(newText: string) {
             Debug.assert(newText !== undefined);
 
@@ -87,29 +90,29 @@ namespace ts.server {
             }
         }
 
-        /** returns true if text changed */
-        public reloadFromDisk() {
-            let reloaded = false;
-            if (!this.pendingReloadFromDisk && !this.ownFileText) {
-                reloaded = this.reload(this.getFileText());
-                this.ownFileText = true;
-            }
+        /**
+         * Reads the contents from tempFile(if supplied) or own file and sets it as contents
+         * returns true if text changed
+         */
+        public reloadWithFileText(tempFileName?: string) {
+            const reloaded = this.reload(this.getFileText(tempFileName));
+            this.ownFileText = !tempFileName || tempFileName === this.fileName;
             return reloaded;
+        }
+
+        /**
+         * Reloads the contents from the file if there is no pending reload from disk or the contents of file are same as file text
+         * returns true if text changed
+         */
+        public reloadFromDisk() {
+            if (!this.pendingReloadFromDisk && !this.ownFileText) {
+                return this.reloadWithFileText();
+            }
+            return false;
         }
 
         public delayReloadFromFileIntoText() {
             this.pendingReloadFromDisk = true;
-        }
-
-        /** returns true if text changed */
-        public reloadFromFile(tempFileName: string) {
-            let reloaded = false;
-            // Reload if different file or we dont know if we are working with own file text
-            if (tempFileName !== this.fileName || !this.ownFileText) {
-                reloaded = this.reload(this.getFileText(tempFileName));
-                this.ownFileText = !tempFileName || tempFileName === this.fileName;
-            }
-            return reloaded;
         }
 
         public getSnapshot(): IScriptSnapshot {
@@ -173,15 +176,19 @@ namespace ts.server {
                 return this.switchToScriptVersionCache();
             }
 
-            // Else if the svc is uptodate with the text, we are good
-            return !this.pendingReloadFromDisk && this.svc;
+            // If there is pending reload from the disk then, reload the text
+            if (this.pendingReloadFromDisk) {
+                this.reloadWithFileText();
+            }
+
+            // At this point if svc is present its valid
+            return this.svc;
         }
 
         private getOrLoadText() {
             if (this.text === undefined || this.pendingReloadFromDisk) {
                 Debug.assert(!this.svc || this.pendingReloadFromDisk, "ScriptVersionCache should not be set when reloading from disk");
-                this.reload(this.getFileText());
-                this.ownFileText = true;
+                this.reloadWithFileText();
             }
             return this.text;
         }
@@ -194,7 +201,7 @@ namespace ts.server {
 
     /*@internal*/
     export function isDynamicFileName(fileName: NormalizedPath) {
-        return getBaseFileName(fileName)[0] === "^";
+        return fileName[0] === "^" || getBaseFileName(fileName)[0] === "^";
     }
 
     export class ScriptInfo {
@@ -202,7 +209,8 @@ namespace ts.server {
          * All projects that include this file
          */
         readonly containingProjects: Project[] = [];
-        private formatCodeSettings: FormatCodeSettings;
+        private formatSettings: FormatCodeSettings | undefined;
+        private preferences: UserPreferences | undefined;
 
         /* @internal */
         fileWatcher: FileWatcher;
@@ -210,6 +218,10 @@ namespace ts.server {
 
         /*@internal*/
         readonly isDynamic: boolean;
+
+        /*@internal*/
+        /** Set to real path if path is different from info.path */
+        private realpath: Path | undefined;
 
         constructor(
             private readonly host: ServerHost,
@@ -222,6 +234,7 @@ namespace ts.server {
             this.textStorage = new TextStorage(host, fileName);
             if (hasMixedContent || this.isDynamic) {
                 this.textStorage.reload("");
+                this.realpath = this.path;
             }
             this.scriptKind = scriptKind
                 ? scriptKind
@@ -246,9 +259,9 @@ namespace ts.server {
             }
         }
 
-        public close() {
+        public close(fileExists = true) {
             this.textStorage.isOpen = false;
-            if (this.isDynamicOrHasMixedContent()) {
+            if (this.isDynamicOrHasMixedContent() || !fileExists) {
                 if (this.textStorage.reload("")) {
                     this.markContainingProjectsAsDirty();
                 }
@@ -262,14 +275,40 @@ namespace ts.server {
             return this.textStorage.getSnapshot();
         }
 
-        getFormatCodeSettings() {
-            return this.formatCodeSettings;
+        private ensureRealPath() {
+            if (this.realpath === undefined) {
+                // Default is just the path
+                this.realpath = this.path;
+                if (this.host.realpath) {
+                    Debug.assert(!!this.containingProjects.length);
+                    const project = this.containingProjects[0];
+                    const realpath = this.host.realpath(this.path);
+                    if (realpath) {
+                        this.realpath = project.toPath(realpath);
+                        // If it is different from this.path, add to the map
+                        if (this.realpath !== this.path) {
+                            project.projectService.realpathToScriptInfos.add(this.realpath, this);
+                        }
+                    }
+                }
+            }
         }
+
+        /*@internal*/
+        getRealpathIfDifferent(): Path | undefined {
+            return this.realpath && this.realpath !== this.path ? this.realpath : undefined;
+        }
+
+        getFormatCodeSettings(): FormatCodeSettings { return this.formatSettings; }
+        getPreferences(): UserPreferences { return this.preferences; }
 
         attachToProject(project: Project): boolean {
             const isNew = !this.isAttached(project);
             if (isNew) {
                 this.containingProjects.push(project);
+                if (!project.getCompilerOptions().preserveSymlinks) {
+                    this.ensureRealPath();
+                }
             }
             return isNew;
         }
@@ -311,7 +350,7 @@ namespace ts.server {
         detachAllProjects() {
             for (const p of this.containingProjects) {
                 if (p.projectKind === ProjectKind.Configured) {
-                    (p.directoryStructureHost as CachedDirectoryStructureHost).addOrDeleteFile(this.fileName, this.path, FileWatcherEventKind.Deleted);
+                    p.getCachedDirectoryStructureHost().addOrDeleteFile(this.fileName, this.path, FileWatcherEventKind.Deleted);
                 }
                 const isInfoRoot = p.isRoot(this);
                 // detach is unnecessary since we'll clean the list of containing projects anyways
@@ -354,12 +393,19 @@ namespace ts.server {
             }
         }
 
-        setFormatOptions(formatSettings: FormatCodeSettings): void {
+        setOptions(formatSettings: FormatCodeSettings, preferences: UserPreferences): void {
             if (formatSettings) {
-                if (!this.formatCodeSettings) {
-                    this.formatCodeSettings = getDefaultFormatCodeSettings(this.host);
+                if (!this.formatSettings) {
+                    this.formatSettings = getDefaultFormatCodeSettings(this.host);
                 }
-                mergeMapLikes(this.formatCodeSettings, formatSettings);
+                mergeMapLikes(this.formatSettings, formatSettings);
+            }
+
+            if (preferences) {
+                if (!this.preferences) {
+                    this.preferences = clone(defaultPreferences);
+                }
+                mergeMapLikes(this.preferences, preferences);
             }
         }
 
@@ -368,8 +414,7 @@ namespace ts.server {
         }
 
         saveTo(fileName: string) {
-            const snap = this.textStorage.getSnapshot();
-            this.host.writeFile(fileName, snap.getText(0, snap.getLength()));
+            this.host.writeFile(fileName, getSnapshotText(this.textStorage.getSnapshot()));
         }
 
         /*@internal*/
@@ -385,7 +430,7 @@ namespace ts.server {
                 this.markContainingProjectsAsDirty();
             }
             else {
-                if (this.textStorage.reloadFromFile(tempFileName)) {
+                if (this.textStorage.reloadWithFileText(tempFileName)) {
                     this.markContainingProjectsAsDirty();
                 }
             }

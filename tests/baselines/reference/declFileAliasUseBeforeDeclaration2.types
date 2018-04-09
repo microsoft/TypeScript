@@ -1,5 +1,7 @@
 === tests/cases/compiler/declFileAliasUseBeforeDeclaration2.ts ===
 declare module "test" {
+>"test" : typeof import("test")
+
     module A {
 >A : typeof A
 

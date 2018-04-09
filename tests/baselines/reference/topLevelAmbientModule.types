@@ -13,6 +13,8 @@ var z = foo.x + 10;
 
 === tests/cases/conformance/externalModules/foo_0.ts ===
 declare module "foo" {
+>"foo" : typeof import("foo")
+
 	export var x: number;
 >x : number
 }

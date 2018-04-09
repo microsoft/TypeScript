@@ -169,6 +169,18 @@ function f76<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P i
     y = x;  // Error
 }
 
+function f80<T>(t: T): Partial<T> {
+    return t;
+}
+
+function f81<T, K extends keyof T>(t: T, k: K): Partial<T[K]> {
+    return t[k];
+}
+
+function f82<T, K1 extends keyof T, K2 extends keyof T[K1]>(t: T, k1: K1, k2: K2): Partial<T[K1][K2]> {
+    return t[k1][k2];
+}
+
 
 //// [mappedTypeRelationships.js]
 function f1(x, k) {
@@ -289,6 +301,15 @@ function f76(x, y) {
     x = y;
     y = x; // Error
 }
+function f80(t) {
+    return t;
+}
+function f81(t, k) {
+    return t[k];
+}
+function f82(t, k1, k2) {
+    return t[k1][k2];
+}
 
 
 //// [mappedTypeRelationships.d.ts]
@@ -369,3 +390,6 @@ declare function f76<T, U extends T, K extends keyof T>(x: {
 }, y: {
     [P in K]: U[P];
 }): void;
+declare function f80<T>(t: T): Partial<T>;
+declare function f81<T, K extends keyof T>(t: T, k: K): Partial<T[K]>;
+declare function f82<T, K1 extends keyof T, K2 extends keyof T[K1]>(t: T, k1: K1, k2: K2): Partial<T[K1][K2]>;

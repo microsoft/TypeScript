@@ -95,7 +95,7 @@ async function * f13() {
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldWithValueIsOk.ts ===
 async function * f14() {
->f14 : () => AsyncIterableIterator<1>
+>f14 : () => AsyncIterableIterator<number>
 
     yield 1;
 >yield 1 : any
@@ -111,7 +111,7 @@ async function * f15() {
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldStarWithValueIsOk.ts ===
 async function * f16() {
->f16 : () => AsyncIterableIterator<undefined>
+>f16 : () => AsyncIterableIterator<any>
 
     yield * [];
 >yield * [] : any
@@ -162,6 +162,7 @@ async function * f21() {
     const x = { [yield]: 1 };
 >x : { [x: number]: number; }
 >{ [yield]: 1 } : { [x: number]: number; }
+>[yield] : number
 >yield : any
 >1 : 1
 }

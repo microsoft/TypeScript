@@ -9,7 +9,7 @@
  * @param {...*} args The arguments to invoke `func` with.
  * @returns {*} Returns the result of `func`.
  */
-function apply(func, thisArg, args) {
+function apply(func, thisArg, ...args) {
 >apply : Symbol(apply, Decl(_apply.js, 0, 0))
 >func : Symbol(func, Decl(_apply.js, 10, 15))
 >thisArg : Symbol(thisArg, Decl(_apply.js, 10, 20))

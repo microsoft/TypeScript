@@ -7,6 +7,8 @@ interface Base {
 >a : number
 
     1: {
+>1 : { a: number; b: number; }
+
         a: number; b: number;
 >a : number
 >b : number
@@ -27,6 +29,8 @@ interface Derived extends Base {
     };
     // error
     2: {
+>2 : { a: number; }
+
         a: number;
 >a : number
     }
