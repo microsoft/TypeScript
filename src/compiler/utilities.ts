@@ -546,6 +546,17 @@ namespace ts {
         }
     }
 
+    export function isLateVisibilityPaintedStatement(node: Node): node is LateVisibilityPaintedStatement {
+        switch (node.kind) {
+            case SyntaxKind.ImportDeclaration:
+            case SyntaxKind.ImportEqualsDeclaration:
+            case SyntaxKind.VariableStatement:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     export function isAnyImportOrReExport(node: Node): node is AnyImportOrReExport {
         return isAnyImportSyntax(node) || isExportDeclaration(node);
     }
