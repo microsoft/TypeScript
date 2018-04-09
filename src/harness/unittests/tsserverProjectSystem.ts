@@ -4131,7 +4131,7 @@ namespace ts.projectSystem {
             checkErrorMessage(session, "semanticDiag", { file: file1.path, diagnostics: [] });
         });
 
-        it("info diagnostics", () => {
+        it("suggestion diagnostics", () => {
             const file: FileOrFolder = {
                 path: "/a.js",
                 content: 'require("b")',
@@ -4180,6 +4180,57 @@ namespace ts.projectSystem {
                     createDiagnostic({ line: 1, offset: 1 }, { line: 1, offset: 13 }, Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES6_module)
                 ],
             });
+            checkCompleteEvent(session, 2, expectedSequenceId);
+            session.clearMessages();
+        });
+
+        it("disable suggestion diagnostics", () => {
+            const file: FileOrFolder = {
+                path: "/a.js",
+                content: 'require("b")',
+            };
+
+            const host = createServerHost([file]);
+            const session = createSession(host, { canUseEvents: true });
+            const service = session.getProjectService();
+
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: server.CommandNames.Open,
+                arguments: { file: file.path, fileContent: file.content },
+            });
+
+            session.executeCommandSeq<protocol.ConfigureRequest>({
+                command: server.CommandNames.Configure,
+                arguments: {
+                    preferences: { disableSuggestions: true }
+                },
+            });
+
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            session.clearMessages();
+            const expectedSequenceId = session.getNextSeq();
+            host.checkTimeoutQueueLengthAndRun(2);
+
+            checkProjectUpdatedInBackgroundEvent(session, [file.path]);
+            session.clearMessages();
+
+            session.executeCommandSeq<protocol.GeterrRequest>({
+                command: server.CommandNames.Geterr,
+                arguments: {
+                    delay: 0,
+                    files: [file.path],
+                }
+            });
+
+            host.checkTimeoutQueueLengthAndRun(1);
+
+            checkErrorMessage(session, "syntaxDiag", { file: file.path, diagnostics: [] }, /*isMostRecent*/ true);
+            session.clearMessages();
+
+            host.runQueuedImmediateCallbacks(1);
+
+            checkErrorMessage(session, "semanticDiag", { file: file.path, diagnostics: [] });
+            // No suggestion event, we're done.
             checkCompleteEvent(session, 2, expectedSequenceId);
             session.clearMessages();
         });
