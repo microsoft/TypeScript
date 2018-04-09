@@ -2246,6 +2246,8 @@ namespace ts {
      * Adds a trailing directory separator to a path, if it does not already have one.
      * @param path The path.
      */
+    export function ensureTrailingDirectorySeparator(path: Path): Path;
+    export function ensureTrailingDirectorySeparator(path: string): string;
     export function ensureTrailingDirectorySeparator(path: string) {
         if (path.charAt(path.length - 1) !== directorySeparator) {
             return path + directorySeparator;

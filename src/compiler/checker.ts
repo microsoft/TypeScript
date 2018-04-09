@@ -2216,7 +2216,22 @@ namespace ts {
         // An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
         // and an external module with no 'export =' declaration resolves to the module itself.
         function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol {
-            return moduleSymbol && getMergedSymbol(resolveSymbol(moduleSymbol.exports.get(InternalSymbolName.ExportEquals), dontResolveAlias)) || moduleSymbol;
+            return moduleSymbol && getMergedSymbol(resolveSymbol(getCommonJsExportEquals(moduleSymbol), dontResolveAlias)) || moduleSymbol;
+        }
+
+        function getCommonJsExportEquals(moduleSymbol: Symbol): Symbol {
+            const exported = moduleSymbol.exports.get(InternalSymbolName.ExportEquals);
+            if (!exported || !exported.exports || moduleSymbol.exports.size === 1) {
+                return exported;
+            }
+            const merged = cloneSymbol(exported);
+            moduleSymbol.exports.forEach((s, name) => {
+                if (name === InternalSymbolName.ExportEquals) return;
+                if (!merged.exports.has(name)) {
+                    merged.exports.set(name, s);
+                }
+            });
+            return merged;
         }
 
         // An external module with an 'export =' declaration may be referenced as an ES6 module provided the 'export ='
@@ -4350,7 +4365,8 @@ namespace ts {
                     return unknownType;
                 }
 
-                if (isPropertyAccessExpression(expression.left) && expression.left.expression.kind === SyntaxKind.ThisKeyword) {
+                const special = getSpecialPropertyAssignmentKind(expression);
+                if (special === SpecialPropertyAssignmentKind.ThisProperty) {
                     const thisContainer = getThisContainer(expression, /*includeArrowFunctions*/ false);
                     // Properties defined in a constructor (or javascript constructor function) don't get undefined added.
                     // Function expressions that are assigned to the prototype count as methods.
@@ -4380,7 +4396,33 @@ namespace ts {
                 }
                 else if (!jsDocType) {
                     // If we don't have an explicit JSDoc type, get the type from the expression.
-                    const type = getWidenedLiteralType(checkExpressionCached(expression.right));
+                    let type = getWidenedLiteralType(checkExpressionCached(expression.right));
+
+                    if (getObjectFlags(type) & ObjectFlags.Anonymous &&
+                        special === SpecialPropertyAssignmentKind.ModuleExports &&
+                        symbol.escapedName === InternalSymbolName.ExportEquals) {
+                        const exportedType = resolveStructuredTypeMembers(type as AnonymousType);
+                        const members = createSymbolTable();
+                        copyEntries(exportedType.members, members);
+                        symbol.exports.forEach((s, name) => {
+                            if (members.has(name)) {
+                                const exportedMember = exportedType.members.get(name);
+                                const union = createSymbol(s.flags | exportedMember.flags, name);
+                                union.type = getUnionType([getTypeOfSymbol(s), getTypeOfSymbol(exportedMember)]);
+                                members.set(name, union);
+                            }
+                            else {
+                                members.set(name, s);
+                            }
+                        });
+                        type = createAnonymousType(
+                            exportedType.symbol,
+                            members,
+                            exportedType.callSignatures,
+                            exportedType.constructSignatures,
+                            exportedType.stringIndexInfo,
+                            exportedType.numberIndexInfo);
+                    }
                     let anyedType = type;
                     if (isEmptyArrayLiteralType(type)) {
                         anyedType = anyArrayType;
@@ -7158,15 +7200,15 @@ namespace ts {
             return symbol.members.get(InternalSymbolName.Index);
         }
 
-        function getIndexDeclarationOfSymbol(symbol: Symbol, kind: IndexKind): SignatureDeclaration {
+        function getIndexDeclarationOfSymbol(symbol: Symbol, kind: IndexKind): IndexSignatureDeclaration {
             const syntaxKind = kind === IndexKind.Number ? SyntaxKind.NumberKeyword : SyntaxKind.StringKeyword;
             const indexSymbol = getIndexSymbol(symbol);
             if (indexSymbol) {
                 for (const decl of indexSymbol.declarations) {
-                    const node = <SignatureDeclaration>decl;
+                    const node = cast(decl, isIndexSignatureDeclaration);
                     if (node.parameters.length === 1) {
                         const parameter = node.parameters[0];
-                        if (parameter && parameter.type && parameter.type.kind === syntaxKind) {
+                        if (parameter.type && parameter.type.kind === syntaxKind) {
                             return node;
                         }
                     }
@@ -7176,7 +7218,7 @@ namespace ts {
             return undefined;
         }
 
-        function createIndexInfo(type: Type, isReadonly: boolean, declaration?: SignatureDeclaration): IndexInfo {
+        function createIndexInfo(type: Type, isReadonly: boolean, declaration?: IndexSignatureDeclaration): IndexInfo {
             return { type, isReadonly, declaration };
         }
 
@@ -16616,12 +16658,18 @@ namespace ts {
                     }
                 }
             }
-            const suggestion = getSuggestionForNonexistentProperty(propNode, containingType);
-            if (suggestion !== undefined) {
-                errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, declarationNameToString(propNode), typeToString(containingType), suggestion);
+            const promisedType = getPromisedTypeOfPromise(containingType);
+            if (promisedType && getPropertyOfType(promisedType, propNode.escapedText)) {
+                errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_forget_to_use_await, declarationNameToString(propNode), typeToString(containingType));
             }
             else {
-                errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(containingType));
+                const suggestion = getSuggestionForNonexistentProperty(propNode, containingType);
+                if (suggestion !== undefined) {
+                    errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, declarationNameToString(propNode), typeToString(containingType), suggestion);
+                }
+                else {
+                    errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(containingType));
+                }
             }
             diagnostics.add(createDiagnosticForNodeFromMessageChain(propNode, errorInfo));
         }
@@ -24568,7 +24616,7 @@ namespace ts {
                 const exportEqualsSymbol = moduleSymbol.exports.get("export=" as __String);
                 if (exportEqualsSymbol && hasExportedMembers(moduleSymbol)) {
                     const declaration = getDeclarationOfAliasSymbol(exportEqualsSymbol) || exportEqualsSymbol.valueDeclaration;
-                    if (!isTopLevelInExternalModuleAugmentation(declaration)) {
+                    if (!isTopLevelInExternalModuleAugmentation(declaration) && !isInJavaScriptFile(declaration)) {
                         error(declaration, Diagnostics.An_export_assignment_cannot_be_used_in_a_module_with_other_exported_elements);
                     }
                 }
@@ -24649,7 +24697,6 @@ namespace ts {
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
-                    return checkSignatureDeclaration(<SignatureDeclaration>node);
                 case SyntaxKind.IndexSignature:
                     return checkSignatureDeclaration(<SignatureDeclaration>node);
                 case SyntaxKind.MethodDeclaration:
@@ -24769,8 +24816,6 @@ namespace ts {
                 case SyntaxKind.ExportAssignment:
                     return checkExportAssignment(<ExportAssignment>node);
                 case SyntaxKind.EmptyStatement:
-                    checkGrammarStatementInAmbientContext(node);
-                    return;
                 case SyntaxKind.DebuggerStatement:
                     checkGrammarStatementInAmbientContext(node);
                     return;
@@ -25448,9 +25493,6 @@ namespace ts {
         }
 
         function getShorthandAssignmentValueSymbol(location: Node): Symbol {
-            // The function returns a value symbol of an identifier in the short-hand property assignment.
-            // This is necessary as an identifier in short-hand property assignment can contains two meaning:
-            // property name and property value.
             if (location && location.kind === SyntaxKind.ShorthandPropertyAssignment) {
                 return resolveEntityName((<ShorthandPropertyAssignment>location).name, SymbolFlags.Value | SymbolFlags.Alias);
             }

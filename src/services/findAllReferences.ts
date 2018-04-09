@@ -1376,8 +1376,7 @@ namespace ts.FindAllReferences.Core {
         const result: Symbol[] = [];
         forEachRelatedSymbol<void>(symbol, location, checker,
             (sym, root, base) => { result.push(base || root || sym); },
-            /*allowBaseTypes*/ () => !implementations,
-            /*includeShorthandDestructuring*/ false);
+            /*allowBaseTypes*/ () => !implementations);
         return result;
     }
 
@@ -1385,7 +1384,6 @@ namespace ts.FindAllReferences.Core {
         symbol: Symbol, location: Node, checker: TypeChecker,
         cbSymbol: (symbol: Symbol, rootSymbol?: Symbol, baseSymbol?: Symbol) => T | undefined,
         allowBaseTypes: (rootSymbol: Symbol) => boolean,
-        includeShorthandDestructuring: boolean,
     ): T | undefined {
         const containingObjectLiteralElement = getContainingObjectLiteralElement(location);
         if (containingObjectLiteralElement) {
@@ -1398,11 +1396,9 @@ namespace ts.FindAllReferences.Core {
             // If the location is name of property symbol from object literal destructuring pattern
             // Search the property symbol
             //      for ( { property: p2 } of elems) { }
-            if (includeShorthandDestructuring || containingObjectLiteralElement.kind !== SyntaxKind.ShorthandPropertyAssignment) {
-                const propertySymbol = getPropertySymbolOfDestructuringAssignment(location, checker);
-                const res = propertySymbol && cbSymbol(propertySymbol);
-                if (res) return res;
-            }
+            const propertySymbol = getPropertySymbolOfDestructuringAssignment(location, checker);
+            const res1 = propertySymbol && cbSymbol(propertySymbol);
+            if (res1) return res1;
 
             /* Because in short-hand property assignment, location has two meaning : property name and as value of the property
              * When we do findAllReference at the position of the short-hand property assignment, we would want to have references to position of
@@ -1416,8 +1412,8 @@ namespace ts.FindAllReferences.Core {
              * will be included correctly.
              */
             const shorthandValueSymbol = checker.getShorthandAssignmentValueSymbol(location.parent);
-            const res1 = shorthandValueSymbol && cbSymbol(shorthandValueSymbol);
-            if (res1) return res1;
+            const res2 = shorthandValueSymbol && cbSymbol(shorthandValueSymbol);
+            if (res2) return res2;
         }
 
         const res = fromRoot(symbol);
@@ -1487,8 +1483,7 @@ namespace ts.FindAllReferences.Core {
                 ? rootSymbol && !(getCheckFlags(sym) & CheckFlags.Synthetic) ? rootSymbol : sym
                 : undefined,
             /*allowBaseTypes*/ rootSymbol =>
-                !(search.parents && !some(search.parents, parent => explicitlyInheritsFrom(rootSymbol.parent, parent, state.inheritsFromCache, checker))),
-            /*includeShorthandDestructuring*/ true);
+                !(search.parents && !some(search.parents, parent => explicitlyInheritsFrom(rootSymbol.parent, parent, state.inheritsFromCache, checker))));
     }
 
     /** Gets all symbols for one property. Does not get symbols for every property. */
