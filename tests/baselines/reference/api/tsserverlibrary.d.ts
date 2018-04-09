@@ -7337,7 +7337,7 @@ declare namespace ts.server {
         private doOutput;
         private semanticCheck;
         private syntacticCheck;
-        private infoCheck;
+        private suggestionCheck;
         private sendDiagnosticsEvent;
         /** It is the caller's responsibility to verify that `!this.suppressDiagnosticEvents`. */
         private updateErrorCheck;
