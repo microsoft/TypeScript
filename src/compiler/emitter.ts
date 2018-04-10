@@ -112,9 +112,6 @@ namespace ts {
         });
 
         let bundleInfo: BundleInfo = createDefaultBundleInfo();
-        let currentSourceFile: SourceFile;
-        let bundledHelpers: Map<boolean>;
-        let isOwnFileEmit: boolean;
         let emitSkipped = false;
 
         // Emit each output file
@@ -230,8 +227,6 @@ namespace ts {
             mapRecorder.initialize(jsFilePath, sourceMapFilePath || "", sourceFileOrBundle, sourceMapDataList);
 
             if (bundle) {
-                bundledHelpers = createMap<boolean>();
-                isOwnFileEmit = false;
                 printer.writeBundle(bundle, writer, bundleInfo);
             }
             else {
@@ -263,9 +258,6 @@ namespace ts {
             mapRecorder.reset();
             writer.clear();
 
-            currentSourceFile = undefined;
-            bundledHelpers = undefined;
-            isOwnFileEmit = false;
             bundleInfo = createDefaultBundleInfo();
         }
 
