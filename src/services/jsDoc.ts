@@ -55,26 +55,15 @@ namespace ts.JsDoc {
         // from Array<T> - Array<string> and Array<number>
         const documentationComment: SymbolDisplayPart[] = [];
         forEachUnique(declarations, declaration => {
-            for (const { comment } of getCommentHavingNodes(declaration)) {
-                if (comment === undefined) continue;
+            forEachJSDoc(declaration, ({comment}) => {
+                if (comment === undefined) return;
                 if (documentationComment.length) {
                     documentationComment.push(lineBreakPart());
                 }
                 documentationComment.push(textPart(comment));
-            }
+            });
         });
         return documentationComment;
-    }
-
-    function getCommentHavingNodes(declaration: Declaration): ReadonlyArray<JSDoc | JSDocTag> {
-        switch (declaration.kind) {
-            case SyntaxKind.JSDocPropertyTag:
-                return [declaration as JSDocPropertyTag];
-            case SyntaxKind.JSDocTypedefTag:
-                return [(declaration as JSDocTypedefTag).parent];
-            default:
-                return getJSDocCommentsAndTags(declaration);
-        }
     }
 
     export function getJsDocTagsFromDeclarations(declarations?: Declaration[]): JSDocTagInfo[] {

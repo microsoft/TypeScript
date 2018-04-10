@@ -6756,8 +6756,8 @@ namespace ts {
             return isInJavaScriptFile(node) && (
                 // node.type should only be a JSDocOptionalType when node is a parameter of a JSDocFunctionType
                 node.type && node.type.kind === SyntaxKind.JSDocOptionalType
-                || getJSDocParameterTags(node).some(({ isBracketed, typeExpression }) =>
-                    isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType));
+                    || some(node.jsdocParamTags, ({ isBracketed, typeExpression }) =>
+                        isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType));
         }
 
         function tryFindAmbientModule(moduleName: string, withAugmentations: boolean) {
@@ -21865,7 +21865,7 @@ namespace ts {
 
         function checkJSDocParameterTag(node: JSDocParameterTag) {
             checkSourceElement(node.typeExpression);
-            if (!getParameterSymbolFromJSDoc(node)) {
+            if (!node.symbol) {
                 const decl = getHostSignatureFromJSDoc(node);
                 // don't issue an error for invalid hosts -- just functions --
                 // and give a better error message when the host function mentions `arguments`
@@ -21881,7 +21881,7 @@ namespace ts {
                         !isArrayType(getTypeFromTypeNode(node.typeExpression.type))) {
                         error(node.name,
                               Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name_It_would_match_arguments_if_it_had_an_array_type,
-                              idText(node.name.kind === SyntaxKind.QualifiedName ? node.name.right : node.name));
+                              idText(getLeftmostName(node.name)));
                     }
                 }
             }
@@ -24862,7 +24862,7 @@ namespace ts {
                 return;
             }
 
-            const param = getParameterSymbolFromJSDoc(paramTag);
+            const param = paramTag.symbol;
             if (!param) {
                 // We will error in `checkJSDocParameterTag`.
                 return;
@@ -24890,7 +24890,7 @@ namespace ts {
                     Because `a` will just be of type `number | undefined`. A synthetic `...args` will also be added, which *will* get an array type.
                     */
                     const lastParamDeclaration = lastOrUndefined(host.parameters);
-                    const symbol = getParameterSymbolFromJSDoc(paramTag);
+                    const symbol = paramTag.symbol;
                     if (!lastParamDeclaration ||
                         symbol && lastParamDeclaration.symbol === symbol && isRestParameter(lastParamDeclaration)) {
                         return createArrayType(type);
@@ -25344,7 +25344,7 @@ namespace ts {
             }
 
             if (entityName.parent!.kind === SyntaxKind.JSDocParameterTag) {
-                return getParameterSymbolFromJSDoc(entityName.parent as JSDocParameterTag);
+                return entityName.parent.symbol;
             }
 
             if (entityName.parent.kind === SyntaxKind.TypeParameter && entityName.parent.parent.kind === SyntaxKind.JSDocTemplateTag) {

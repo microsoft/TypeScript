@@ -1,0 +1,12 @@
+=== /a.js ===
+/**
+ * @param {{ x: number, y: string }} p
+ * @param {number} m
+ */
+function f({ x, y }, m) {
+>f : Symbol(f, Decl(a.js, 0, 0))
+>x : Symbol(x, Decl(a.js, 4, 12))
+>y : Symbol(y, Decl(a.js, 4, 15))
+>m : Symbol(m, Decl(a.js, 4, 20))
+}
+

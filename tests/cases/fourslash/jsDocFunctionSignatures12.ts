@@ -9,5 +9,5 @@
 ////function f1(o) {
 ////    o/**/;
 ////}
-goTo.marker();
-verify.quickInfoIs("(parameter) o: any");
+
+verify.quickInfoAt("", `(parameter) o: any`);
