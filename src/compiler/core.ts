@@ -1268,10 +1268,7 @@ namespace ts {
         });
     }
 
-    export function assign<T1 extends MapLike<{}>, T2, T3>(t: T1, arg1: T2, arg2: T3): T1 & T2 & T3;
-    export function assign<T1 extends MapLike<{}>, T2>(t: T1, arg1: T2): T1 & T2;
-    export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]): any;
-    export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]) {
+    export function assign<T extends object>(t: T, ...args: T[]) {
         for (const arg of args) {
             for (const p in arg) {
                 if (hasProperty(arg, p)) {

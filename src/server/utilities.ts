@@ -86,11 +86,7 @@ namespace ts.server {
     /* @internal */
     export function mergeMapLikes<T extends object>(target: T, source: Partial<T>): T {
         const result = clone(target);
-        for (const key in source) {
-            if (hasProperty(source, key)) {
-                result[key] = source[key];
-            }
-        }
+        assign(result, source);
         return result;
     }
 

@@ -397,8 +397,11 @@ namespace ts.server {
             if (formatSettings) {
                 if (!this.formatSettings) {
                     this.formatSettings = getDefaultFormatCodeSettings(this.host);
+                    assign(this.formatSettings, formatSettings);
                 }
-                this.formatSettings = mergeMapLikes(this.formatSettings, formatSettings);
+                else {
+                    this.formatSettings = mergeMapLikes(this.formatSettings, formatSettings);
+                }
             }
 
             if (preferences) {
