@@ -18702,10 +18702,7 @@ namespace ts {
             }
 
             if (node.keywordToken === SyntaxKind.ImportKeyword) {
-                const file = getSourceFileOfNode(node);
-                Debug.assert(!!(file.flags & NodeFlags.PossiblyContainsImportMeta), "Containing file is missing import meta node flag.");
-                Debug.assert(!!file.externalModuleIndicator, "Containing file should be a module.");
-                return node.name.escapedText === "meta" ? getGlobalImportMetaType() : unknownType;
+                return checkImportMetaProperty(node);
             }
         }
 
@@ -18723,6 +18720,16 @@ namespace ts {
                 const symbol = getSymbolOfNode(container);
                 return getTypeOfSymbol(symbol);
             }
+        }
+
+        function checkImportMetaProperty(node: MetaProperty) {
+            if (languageVersion < ScriptTarget.ESNext && modulekind < ModuleKind.ESNext) {
+                error(node, Diagnostics.The_import_meta_meta_property_is_only_allowed_using_ESNext_for_the_target_and_module_compiler_options);
+            }
+            const file = getSourceFileOfNode(node);
+            Debug.assert(!!(file.flags & NodeFlags.PossiblyContainsImportMeta), "Containing file is missing import meta node flag.");
+            Debug.assert(!!file.externalModuleIndicator, "Containing file should be a module.");
+            return node.name.escapedText === "meta" ? getGlobalImportMetaType() : unknownType;
         }
 
         function getTypeOfParameter(symbol: Symbol) {

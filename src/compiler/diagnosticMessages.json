@@ -967,6 +967,10 @@
         "category": "Error",
         "code": 1342
     },
+    "The 'import.meta' meta-property is only allowed using 'ESNext' for the 'target' and 'module' compiler options.": {
+        "category": "Error",
+        "code": 1343
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
