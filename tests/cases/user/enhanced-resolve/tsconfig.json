@@ -9,6 +9,7 @@
         "checkJs": true,
         "types": ["node"],
         "lib": ["esnext", "dom"],
+        "target": "esnext",
     },
     "include": ["node_modules/enhanced-resolve"]
 }

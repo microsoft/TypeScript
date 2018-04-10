@@ -253,7 +253,6 @@ node_modules/webpack/lib/WebpackOptionsValidationError.js(309,5): error TS2345: 
 node_modules/webpack/lib/debug/ProfilingPlugin.js(2,28): error TS2307: Cannot find module 'chrome-trace-event'.
 node_modules/webpack/lib/debug/ProfilingPlugin.js(3,33): error TS2307: Cannot find module 'schema-utils'.
 node_modules/webpack/lib/debug/ProfilingPlugin.js(4,24): error TS2307: Cannot find module '../../schemas/plugins/debug/ProfilingPlugin.json'.
-node_modules/webpack/lib/debug/ProfilingPlugin.js(326,56): error TS8024: JSDoc '@param' tag has name 'opts', but there is no parameter with that name.
 node_modules/webpack/lib/dependencies/AMDDefineDependencyParserPlugin.js(296,8): error TS2339: Property 'localModule' does not exist on type 'AMDDefineDependency'.
 node_modules/webpack/lib/dependencies/AMDRequireDependenciesBlockParserPlugin.js(226,5): error TS2532: Object is possibly 'undefined'.
 node_modules/webpack/lib/dependencies/AMDRequireDependenciesBlockParserPlugin.js(226,9): error TS2339: Property 'functionBindThis' does not exist on type 'AMDRequireDependenciesBlock'.
