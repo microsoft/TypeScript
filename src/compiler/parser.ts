@@ -6128,7 +6128,7 @@ namespace ts {
                 || node.kind === SyntaxKind.ExportDeclaration
                 || isMetaProperty(node) && node.keywordToken === SyntaxKind.ImportKeyword && node.name.escapedText === "meta"
                     ? node
-                    : undefined
+                    : undefined;
         }
 
         function walkTreeForExternalModuleIndicators(node: Node): Node {
