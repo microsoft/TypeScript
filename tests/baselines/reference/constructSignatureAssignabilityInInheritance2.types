@@ -108,7 +108,7 @@ interface A { // T
 >Base : Base
 
     a12: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
->a12 : new (x: Base[], y: Derived2[]) => Derived[]
+>a12 : new (x: Base[], y: Derived2[]) => Array<Derived>
 >x : Base[]
 >Array : T[]
 >Base : Base
@@ -119,7 +119,7 @@ interface A { // T
 >Derived : Derived
 
     a13: new (x: Array<Base>, y: Array<Derived>) => Array<Derived>;
->a13 : new (x: Base[], y: Derived[]) => Derived[]
+>a13 : new (x: Base[], y: Derived[]) => Array<Derived>
 >x : Base[]
 >Array : T[]
 >Base : Base
@@ -330,7 +330,7 @@ interface I extends A {
 >T : T
 
     a12: new <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>; // ok, less specific parameter type
->a12 : new <T extends Base[]>(x: Base[], y: T) => Derived[]
+>a12 : new <T extends Base[]>(x: Base[], y: T) => Array<Derived>
 >T : T
 >Array : T[]
 >Base : Base

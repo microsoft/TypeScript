@@ -25,7 +25,7 @@ async function f1(): Promise<void> { }
 >Promise : Promise<T>
 
 async function f3(): MyPromise<void> { }
->f3 : () => Promise<void>
+>f3 : () => MyPromise<void>
 >MyPromise : Promise<T>
 
 let f4 = async function() { }
@@ -38,8 +38,8 @@ let f5 = async function(): Promise<void> { }
 >Promise : Promise<T>
 
 let f6 = async function(): MyPromise<void> { }
->f6 : () => Promise<void>
->async function(): MyPromise<void> { } : () => Promise<void>
+>f6 : () => MyPromise<void>
+>async function(): MyPromise<void> { } : () => MyPromise<void>
 >MyPromise : Promise<T>
 
 let f7 = async () => { };
@@ -52,8 +52,8 @@ let f8 = async (): Promise<void> => { };
 >Promise : Promise<T>
 
 let f9 = async (): MyPromise<void> => { };
->f9 : () => Promise<void>
->async (): MyPromise<void> => { } : () => Promise<void>
+>f9 : () => MyPromise<void>
+>async (): MyPromise<void> => { } : () => MyPromise<void>
 >MyPromise : Promise<T>
 
 let f10 = async () => p;
@@ -73,14 +73,14 @@ let f12 = async (): Promise<number> => mp;
 >mp : Promise<number>
 
 let f13 = async (): MyPromise<number> => p;
->f13 : () => Promise<number>
->async (): MyPromise<number> => p : () => Promise<number>
+>f13 : () => MyPromise<number>
+>async (): MyPromise<number> => p : () => MyPromise<number>
 >MyPromise : Promise<T>
 >p : Promise<number>
 
 let o = {
->o : { m1(): Promise<void>; m2(): Promise<void>; m3(): Promise<void>; }
->{	async m1() { },	async m2(): Promise<void> { },	async m3(): MyPromise<void> { }} : { m1(): Promise<void>; m2(): Promise<void>; m3(): Promise<void>; }
+>o : { m1(): Promise<void>; m2(): Promise<void>; m3(): MyPromise<void>; }
+>{	async m1() { },	async m2(): Promise<void> { },	async m3(): MyPromise<void> { }} : { m1(): Promise<void>; m2(): Promise<void>; m3(): MyPromise<void>; }
 
 	async m1() { },
 >m1 : () => Promise<void>
@@ -90,7 +90,7 @@ let o = {
 >Promise : Promise<T>
 
 	async m3(): MyPromise<void> { }
->m3 : () => Promise<void>
+>m3 : () => MyPromise<void>
 >MyPromise : Promise<T>
 
 };
@@ -106,7 +106,7 @@ class C {
 >Promise : Promise<T>
 
 	async m3(): MyPromise<void> { }
->m3 : () => Promise<void>
+>m3 : () => MyPromise<void>
 >MyPromise : Promise<T>
 
 	static async m4() { }
@@ -117,7 +117,7 @@ class C {
 >Promise : Promise<T>
 
 	static async m6(): MyPromise<void> { }
->m6 : () => Promise<void>
+>m6 : () => MyPromise<void>
 >MyPromise : Promise<T>
 }
 

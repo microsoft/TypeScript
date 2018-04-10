@@ -7,7 +7,7 @@ export interface A {
 >A : A
 
     x: () => typeof $
->x : () => { x: number; }
+>x : () => typeof $
 >$ : { x: number; }
 }
 

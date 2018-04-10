@@ -20,7 +20,7 @@ declare function invalidRestArgType(...arg: (unique symbol)[]): void;
 >arg : symbol[]
 
 declare function invalidReturnType(): unique symbol;
->invalidReturnType : () => symbol
+>invalidReturnType : () => unique symbol
 
 declare function invalidThisType(this: unique symbol): void;
 >invalidThisType : (this: symbol) => void
@@ -61,7 +61,7 @@ class InvalidClass {
 >args : symbol[]
 
     invalidReturnType(): unique symbol { return; }
->invalidReturnType : () => symbol
+>invalidReturnType : () => unique symbol
 
     invalidThisType(this: unique symbol): void { return; }
 >invalidThisType : (this: symbol) => void
@@ -99,7 +99,7 @@ class InvalidClass {
 >args : symbol[]
 
     static invalidStaticReturnType(): unique symbol { return; }
->invalidStaticReturnType : () => symbol
+>invalidStaticReturnType : () => unique symbol
 
     static invalidStaticThisType(this: unique symbol): void { return; }
 >invalidStaticThisType : (this: symbol) => void
@@ -142,7 +142,7 @@ interface InvalidInterface {
 >args : symbol[]
 
     invalidReturnType(): unique symbol;
->invalidReturnType : () => symbol
+>invalidReturnType : () => unique symbol
 
     invalidThisType(this: unique symbol);
 >invalidThisType : (this: symbol) => any
@@ -178,7 +178,7 @@ type InvalidTypeLiteral = {
 >args : symbol[]
 
     invalidReturnType(): unique symbol;
->invalidReturnType : () => symbol
+>invalidReturnType : () => unique symbol
 
     invalidThisType(this: unique symbol);
 >invalidThisType : (this: symbol) => any

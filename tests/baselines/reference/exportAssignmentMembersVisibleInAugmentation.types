@@ -17,7 +17,7 @@ declare module "foo" {
 >"foo" : typeof foo
 
     export function f(): T; // OK
->f : () => number
+>f : () => T
 >T : number
 }
 

@@ -2797,7 +2797,7 @@ namespace ts {
             }
         }
 
-        function isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult {
+        function resolveNameFromEntityName(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node) {
             // get symbol of the first identifier of the entityName
             let meaning: SymbolFlags;
             if (entityName.parent.kind === SyntaxKind.TypeQuery ||
@@ -2819,9 +2819,14 @@ namespace ts {
 
             const firstIdentifier = getFirstIdentifier(entityName);
             const symbol = resolveName(enclosingDeclaration, firstIdentifier.escapedText, meaning, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false);
+            return symbol;
+        }
 
+        function isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node, shouldComputeAliasToMakeVisible: boolean = true): SymbolVisibilityResult {
+            const symbol = resolveNameFromEntityName(entityName, enclosingDeclaration);
+            const firstIdentifier = getFirstIdentifier(entityName);
             // Verify if the symbol is accessible
-            return (symbol && hasVisibleDeclarations(symbol, /*shouldComputeAliasToMakeVisible*/ true)) || {
+            return (symbol && hasVisibleDeclarations(symbol, shouldComputeAliasToMakeVisible)) || {
                 accessibility: SymbolAccessibility.NotAccessible,
                 errorSymbolName: getTextOfNode(firstIdentifier),
                 errorNode: firstIdentifier
@@ -3473,7 +3478,14 @@ namespace ts {
                 }
                 else {
                     const returnType = getReturnTypeOfSignature(signature);
-                    returnTypeNode = returnType && typeToTypeNodeHelper(returnType, context);
+                    const originalReturnTypeNode = signature.declaration && getEffectiveReturnTypeNode(signature.declaration);
+                    // If there's a return type node on the signature and it will resolve the same way in the new context, we should reuse it, rather than build a new one
+                    if (originalReturnTypeNode && returnType && !(originalReturnTypeNode.flags & NodeFlags.JSDoc) && getTypeFromTypeNode(originalReturnTypeNode) === returnType && !forEachChild(originalReturnTypeNode, checkEmbdeddedReferencesInaccesible)) {
+                        returnTypeNode = getDeepSynthesizedCloneAndPaintVisibility(originalReturnTypeNode);
+                    }
+                    else {
+                        returnTypeNode = returnType && typeToTypeNodeHelper(returnType, context);
+                    }
                 }
                 if (context.flags & NodeBuilderFlags.SuppressAnyReturnType) {
                     if (returnTypeNode && returnTypeNode.kind === SyntaxKind.AnyKeyword) {
@@ -3484,6 +3496,39 @@ namespace ts {
                     returnTypeNode = createKeywordTypeNode(SyntaxKind.AnyKeyword);
                 }
                 return createSignatureDeclaration(kind, typeParameters, parameters, returnTypeNode, typeArguments);
+
+                function getDeepSynthesizedCloneAndPaintVisibility<T extends Node>(node: T | undefined): T | undefined {
+                    if (isEntityName(node) || isEntityNameExpression(node)) {
+                        // Paint visible aliases required for copied nodes (so required imports are not elided)
+                        isEntityNameVisible(node, context.enclosingDeclaration);
+                    }
+                    if (isIdentifier(node)) {
+                        const clone = getSynthesizedClone(node);
+                        const typeAt = getTypeOfNode(node);
+                        if (typeAt && typeAt.symbol) {
+                            clone.symbol = typeAt.symbol; // Used by quickinfo for richer metadata, would be set by `symbolToName` if not reusing input nodes
+                        }
+                        return clone;
+                    }
+                    return visitEachChild(node, getDeepSynthesizedCloneAndPaintVisibility, nullTransformationContext);
+                }
+
+                function checkEmbdeddedReferencesInaccesible<T extends Node>(node: T): boolean {
+                    if (isEntityName(node) || isEntityNameExpression(node)) {
+                        // Check that the name resolves to the same thing in both locations
+                        const originalTarget = resolveNameFromEntityName(node, node);
+                        const potentialTarget = resolveNameFromEntityName(node, context.enclosingDeclaration);
+                        if (originalTarget !== potentialTarget) {
+                            return true;
+                        }
+                        // And that the symbol it resolves to is accessible
+                        const result = isEntityNameVisible(node, context.enclosingDeclaration, /*shouldComputeAliasesToMakeVisible*/ false);
+                        if (result.accessibility !== SymbolAccessibility.Accessible) {
+                            return true;
+                        }
+                    }
+                    return forEachChild(node, checkEmbdeddedReferencesInaccesible);
+                }
             }
 
             function typeParameterToDeclaration(type: TypeParameter, context: NodeBuilderContext, constraint = getConstraintFromTypeParameter(type)): TypeParameterDeclaration {

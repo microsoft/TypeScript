@@ -55,7 +55,7 @@ class C implements I<number> {
     [Symbol.species](): number {
         throw new Error("Method not implemented.");
     }
-    [Symbol.split](str: string, limit?: number): {} {
+    [Symbol.split](str: string, limit?: number): string[] {
         throw new Error("Method not implemented.");
     }
     [Symbol.toPrimitive](hint: "number"): number;

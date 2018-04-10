@@ -12,7 +12,7 @@ class X<T> {
 >T : T
 
     p1: () => X;
->p1 : () => any
+>p1 : () => X
 >X : X<T>
 }
 var a: X<number>;
@@ -74,7 +74,7 @@ class X6<T> {
 >T : T
 
     p6: () => Y;
->p6 : () => any
+>p6 : () => Y
 >Y : Y<T>
 }
 var a6: X6<number>;

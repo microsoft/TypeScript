@@ -6,7 +6,7 @@ declare namespace JSX {
 >Element : Element
 
         render(): Element | string | false;
->render : () => string | false | Element
+>render : () => Element | string | false
 >Element : Element
 >false : false
     }

@@ -37,13 +37,13 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     Type 'T' is not assignable to type '{ foo: string; bar: string; }'.
       Type 'Base' is not assignable to type '{ foo: string; bar: string; }'.
         Property 'bar' is missing in type 'Base'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(80,1): error TS2322: Type 'new (x: Base[], y: Derived2[]) => Derived[]' is not assignable to type 'new <T extends Base[]>(x: Base[], y: T) => Derived[]'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(80,1): error TS2322: Type 'new (x: Base[], y: Derived2[]) => Array<Derived>' is not assignable to type 'new <T extends Base[]>(x: Base[], y: T) => Array<Derived>'.
   Types of parameters 'y' and 'y' are incompatible.
     Type 'T' is not assignable to type 'Derived2[]'.
       Type 'Base[]' is not assignable to type 'Derived2[]'.
         Type 'Base' is not assignable to type 'Derived2'.
           Property 'baz' is missing in type 'Base'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(83,1): error TS2322: Type 'new (x: Base[], y: Derived[]) => Derived[]' is not assignable to type 'new <T extends Derived[]>(x: Base[], y: T) => T'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(83,1): error TS2322: Type 'new (x: Base[], y: Derived[]) => Array<Derived>' is not assignable to type 'new <T extends Derived[]>(x: Base[], y: T) => T'.
   Type 'Derived[]' is not assignable to type 'T'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(86,1): error TS2322: Type 'new (x: { a: string; b: number; }) => Object' is not assignable to type 'new <T>(x: { a: T; b: T; }) => T'.
   Types of parameters 'x' and 'x' are incompatible.
@@ -184,7 +184,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     a12 = b12; // ok
     b12 = a12; // ok
     ~~~
-!!! error TS2322: Type 'new (x: Base[], y: Derived2[]) => Derived[]' is not assignable to type 'new <T extends Base[]>(x: Base[], y: T) => Derived[]'.
+!!! error TS2322: Type 'new (x: Base[], y: Derived2[]) => Array<Derived>' is not assignable to type 'new <T extends Base[]>(x: Base[], y: T) => Array<Derived>'.
 !!! error TS2322:   Types of parameters 'y' and 'y' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'Derived2[]'.
 !!! error TS2322:       Type 'Base[]' is not assignable to type 'Derived2[]'.
@@ -194,7 +194,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     a13 = b13; // ok
     b13 = a13; // ok
     ~~~
-!!! error TS2322: Type 'new (x: Base[], y: Derived[]) => Derived[]' is not assignable to type 'new <T extends Derived[]>(x: Base[], y: T) => T'.
+!!! error TS2322: Type 'new (x: Base[], y: Derived[]) => Array<Derived>' is not assignable to type 'new <T extends Derived[]>(x: Base[], y: T) => T'.
 !!! error TS2322:   Type 'Derived[]' is not assignable to type 'T'.
     var b14: new <T>(x: { a: T; b: T }) => T; 
     a14 = b14; // ok

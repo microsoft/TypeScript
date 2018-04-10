@@ -3,7 +3,7 @@ interface A {}
 >A : A
 
 function factory(a: any): {new(): Object} {
->factory : (a: any) => new () => Object
+>factory : (a: any) => {    new (): Object;}
 >a : any
 >Object : Object
 
@@ -14,6 +14,6 @@ function factory(a: any): {new(): Object} {
 class C extends factory(A) {}
 >C : C
 >factory(A) : Object
->factory : (a: any) => new () => Object
+>factory : (a: any) => {    new (): Object;}
 >A : any
 

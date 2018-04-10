@@ -40,32 +40,32 @@ class Three<T, U, V>{
 }
 
 function A1(): One { return null; }
->A1 : () => any
+>A1 : () => One
 >One : One<T>
 >null : null
 
 function A2(): Two { return null; }
->A2 : () => any
+>A2 : () => Two
 >Two : Two<T, U>
 >null : null
 
 function A3(): Three { return null; }
->A3 : () => any
+>A3 : () => Three
 >Three : Three<T, U, V>
 >null : null
 
 function B1(): Two<number> { return null; }
->B1 : () => any
+>B1 : () => Two<number>
 >Two : Two<T, U>
 >null : null
 
 function B2(): Three<string> { return null; }
->B2 : () => any
+>B2 : () => Three<string>
 >Three : Three<T, U, V>
 >null : null
 
 function B3(): Three<string, number> { return null; }
->B3 : () => any
+>B3 : () => Three<string, number>
 >Three : Three<T, U, V>
 >null : null
 
@@ -73,32 +73,32 @@ class C {
 >C : C
 
     A1(): One { return null; }
->A1 : () => any
+>A1 : () => One
 >One : One<T>
 >null : null
 
     A2(): Two { return null; }
->A2 : () => any
+>A2 : () => Two
 >Two : Two<T, U>
 >null : null
 
     A3(): Three { return null; }
->A3 : () => any
+>A3 : () => Three
 >Three : Three<T, U, V>
 >null : null
 
     B1(): Two<number> { return null; }
->B1 : () => any
+>B1 : () => Two<number>
 >Two : Two<T, U>
 >null : null
 
     B2(): Three<string> { return null; }
->B2 : () => any
+>B2 : () => Three<string>
 >Three : Three<T, U, V>
 >null : null
 
     B3(): Three<string, number> { return null; }
->B3 : () => any
+>B3 : () => Three<string, number>
 >Three : Three<T, U, V>
 >null : null
 }
@@ -108,31 +108,31 @@ class D<T> {
 >T : T
 
     A2(): Two<T> { return null; }
->A2 : () => any
+>A2 : () => Two<T>
 >Two : Two<T, U>
 >T : T
 >null : null
 
     A3(): Three<T> { return null; }
->A3 : () => any
+>A3 : () => Three<T>
 >Three : Three<T, U, V>
 >T : T
 >null : null
 
     B1(): Two<T> { return null; }
->B1 : () => any
+>B1 : () => Two<T>
 >Two : Two<T, U>
 >T : T
 >null : null
 
     B2(): Three<T> { return null; }
->B2 : () => any
+>B2 : () => Three<T>
 >Three : Three<T, U, V>
 >T : T
 >null : null
 
     B3(): Three<string, T> { return null; }
->B3 : () => any
+>B3 : () => Three<string, T>
 >Three : Three<T, U, V>
 >T : T
 >null : null
@@ -161,7 +161,7 @@ class X<T>
 >T : T
 {
     p1: () => X;
->p1 : () => any
+>p1 : () => X
 >X : X<T>
 
     p2: { [idx: number]: X }
@@ -183,7 +183,7 @@ class X<T>
 >X : X<T>
 
     p6: () => Y;
->p6 : () => any
+>p6 : () => Y
 >Y : Y<T>
 
     p7: { [idx: number]: Y }
@@ -206,10 +206,10 @@ class X<T>
 }
 
 declare var a: {
->a : { p1: () => any; p2: { [idx: number]: any; }; p3: any[]; p4: I<any>; p5: any; p6: () => any; p7: { [idx: number]: any; }; p8: any[]; p9: I<any>; pa: any; }
+>a : { p1: () => X; p2: { [idx: number]: any; }; p3: any[]; p4: I<any>; p5: any; p6: () => Y; p7: { [idx: number]: any; }; p8: any[]; p9: I<any>; pa: any; }
 
     p1: () => X;
->p1 : () => any
+>p1 : () => X
 >X : X<T>
 
     p2: { [idx: number]: X }
@@ -231,7 +231,7 @@ declare var a: {
 >X : X<T>
 
     p6: () => Y;
->p6 : () => any
+>p6 : () => Y
 >Y : Y<T>
 
     p7: { [idx: number]: Y }

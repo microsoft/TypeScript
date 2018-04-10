@@ -28,8 +28,8 @@ function g() { return undefined; }
 >undefined : undefined
 
 var b: () => typeof b;
->b : () => any
->b : () => any
+>b : () => typeof b
+>b : () => typeof b
 
 function b1() {
 >b1 : () => typeof b1
