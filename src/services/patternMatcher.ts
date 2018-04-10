@@ -119,12 +119,10 @@ namespace ts {
         // First, check that the last part of the dot separated pattern matches the name of the
         // candidate.  If not, then there's no point in proceeding and doing the more
         // expensive work.
-        const candidateMatch = matchSegment(candidate, lastOrUndefined(dotSeparatedSegments), stringToWordSpans);
+        const candidateMatch = matchSegment(candidate, last(dotSeparatedSegments), stringToWordSpans);
         if (!candidateMatch) {
             return undefined;
         }
-
-        candidateContainers = candidateContainers || [];
 
         // -1 because the last part was checked against the name, and only the rest
         // of the parts are checked against the container.
