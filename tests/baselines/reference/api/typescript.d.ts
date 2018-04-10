@@ -2275,7 +2275,7 @@ declare namespace ts {
         category: DiagnosticCategory;
         code: number;
         message: string;
-        unused?: {};
+        reportsUnnecessary?: {};
     }
     /**
      * A linked list of formatted diagnostic messages to be used as part of a multiline message.

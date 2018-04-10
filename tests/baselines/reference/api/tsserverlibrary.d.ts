@@ -2275,7 +2275,7 @@ declare namespace ts {
         category: DiagnosticCategory;
         code: number;
         message: string;
-        unused?: {};
+        reportsUnnecessary?: {};
     }
     /**
      * A linked list of formatted diagnostic messages to be used as part of a multiline message.
@@ -6758,6 +6758,7 @@ declare namespace ts.server.protocol {
          * The category of the diagnostic message, e.g. "error", "warning", or "suggestion".
          */
         category: string;
+        reportsUnnecessary?: {};
         /**
          * The error code of the diagnostic message.
          */

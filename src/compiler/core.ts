@@ -1606,7 +1606,7 @@ namespace ts {
             messageText: text,
             category: message.category,
             code: message.code,
-            reportsUnnecessary: message.unused,
+            reportsUnnecessary: message.reportsUnnecessary,
         };
     }
 
@@ -1637,7 +1637,7 @@ namespace ts {
             messageText: text,
             category: message.category,
             code: message.code,
-            reportsUnnecessary: message.unused,
+            reportsUnnecessary: message.reportsUnnecessary,
         };
     }
 
