@@ -3122,8 +3122,8 @@ namespace ts {
         return (arg: T) => f(arg) && g(arg);
     }
 
-    export function or<T>(f: (arg: T) => boolean, g: (arg: T) => boolean) {
-        return (arg: T) => f(arg) || g(arg);
+    export function or<T>(f: (arg: T) => boolean, g: (arg: T) => boolean, ...others: ((arg: T) => boolean)[]) {
+        return (arg: T) => f(arg) || g(arg) || others.some(f => f(arg));
     }
 
     export function assertTypeIsNever(_: never): void { } // tslint:disable-line no-empty

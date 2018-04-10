@@ -4161,5 +4161,9 @@
     "Convert all constructor functions to classes": {
         "category": "Message",
         "code": 95045
+    },
+    "Generate 'get' and 'set' accessors": {
+        "category": "Message",
+        "code": 95046
     }
 }
