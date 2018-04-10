@@ -4632,11 +4632,21 @@ namespace ts {
      * parameters by name and binding patterns do not have a name.
      */
     export function getJSDocParameterTags(param: ParameterDeclaration): ReadonlyArray<JSDocParameterTag> {
-        if (param.name && isIdentifier(param.name)) {
-            const name = param.name.escapedText;
-            return getJSDocTags(param.parent).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && isIdentifier(tag.name) && tag.name.escapedText === name);
+        if (param.name) {
+            if (isIdentifier(param.name)) {
+                const name = param.name.escapedText;
+                return getJSDocTags(param.parent).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && isIdentifier(tag.name) && tag.name.escapedText === name);
+            }
+            else {
+                const i = param.parent.parameters.indexOf(param);
+                Debug.assert(i > -1, "Parameters should always be in their parents' parameter list");
+                const paramTags = getJSDocTags(param.parent).filter(isJSDocParameterTag);
+                if (i < paramTags.length) {
+                    return [paramTags[i]];
+                }
+            }
         }
-        // a binding pattern doesn't have a name, so it's not possible to match it a JSDoc parameter, which is identified by name
+        // return empty array for: out-of-order binding patterns and JSDoc function syntax, which has un-named parameters
         return emptyArray;
     }
 
