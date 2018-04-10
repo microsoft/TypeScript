@@ -343,15 +343,11 @@ describe("PatternMatcher", () => {
         });
 
         it("BlankPattern", () => {
-            const matches = getAllMatches("AddMetadataReference", "");
-
-            assert.isTrue(matches === undefined);
+            assertInvalidPattern("");
         });
 
         it("WhitespaceOnlyPattern", () => {
-            const matches = getAllMatches("AddMetadataReference", " ");
-
-            assert.isTrue(matches === undefined);
+            assertInvalidPattern(" ");
         });
 
         it("EachWordSeparately1", () => {
@@ -448,6 +444,10 @@ describe("PatternMatcher", () => {
             assert.isTrue(match === undefined);
         });
     });
+
+    function assertInvalidPattern(pattern: string) {
+        assert.equal(ts.createPatternMatcher(pattern), undefined);
+    }
 
     function getFirstMatch(candidate: string, pattern: string): ts.PatternMatch {
         const matches = ts.createPatternMatcher(pattern).getMatchesForLastSegmentOfPattern(candidate);
