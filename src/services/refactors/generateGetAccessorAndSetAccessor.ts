@@ -47,8 +47,10 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         const { isStatic, fieldName, accessorName, type, container, declaration } = fieldInfo;
 
         const isInClassLike = isClassLike(container);
-        const accessorModifiers = getAccessorModifiers(isJS, declaration, isStatic, isInClassLike);
-        const fieldModifiers = getFieldModifiers(isJS, isStatic, isInClassLike);
+        const accessorModifiers = isInClassLike
+            ? !declaration.modifiers || getModifierFlags(declaration) & ModifierFlags.Private ? getModifiers(isJS, isStatic, SyntaxKind.PublicKeyword) : declaration.modifiers
+            : undefined;
+        const fieldModifiers = isInClassLike ? getModifiers(isJS, isStatic, SyntaxKind.PrivateKeyword) : undefined;
 
         updateFieldDeclaration(changeTracker, file, declaration, fieldName, fieldModifiers, container);
 
@@ -78,24 +80,9 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         return isIdentifier(fieldName) ? createPropertyAccess(leftHead, fieldName) : createElementAccess(leftHead, createLiteral(fieldName));
     }
 
-    function getAccessorModifiers(isJS: boolean, declaration: AccepedDeclaration, isStatic: boolean, isClassLike: boolean): NodeArray<Modifier> | undefined {
-        if (!isClassLike) return undefined;
-
-        if (!declaration.modifiers || getModifierFlags(declaration) & ModifierFlags.Private) {
-            const modifiers = append<Modifier>(
-                !isJS ? [createToken(SyntaxKind.PublicKeyword)] : undefined,
-                isStatic ? createToken(SyntaxKind.StaticKeyword) : undefined
-            );
-            return modifiers && createNodeArray(modifiers);
-        }
-        return declaration.modifiers;
-    }
-
-    function getFieldModifiers(isJS: boolean, isStatic: boolean, isClassLike: boolean): NodeArray<Modifier> | undefined {
-        if (!isClassLike) return undefined;
-
+    function getModifiers(isJS: boolean, isStatic: boolean, accessModifier: SyntaxKind.PublicKeyword | SyntaxKind.PrivateKeyword): NodeArray<Modifier> {
         const modifiers = append<Modifier>(
-            !isJS ? [createToken(SyntaxKind.PrivateKeyword)] : undefined,
+            !isJS ? [createToken(accessModifier) as Token<SyntaxKind.PublicKeyword> | Token<SyntaxKind.PrivateKeyword>] : undefined,
             isStatic ? createToken(SyntaxKind.StaticKeyword) : undefined
         );
         return modifiers && createNodeArray(modifiers);
