@@ -79,22 +79,26 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     }
 
     function getAccessorModifiers(isJS: boolean, declaration: AccepedDeclaration, isStatic: boolean, isClassLike: boolean): NodeArray<Modifier> | undefined {
-        if (isJS || !isClassLike) return undefined;
+        if (!isClassLike) return undefined;
 
         if (!declaration.modifiers || getModifierFlags(declaration) & ModifierFlags.Private) {
-            return createNodeArray(
-                append<Modifier>([createToken(SyntaxKind.PublicKeyword)],
-                    isStatic ? createToken(SyntaxKind.StaticKeyword) : undefined));
+            const modifiers = append<Modifier>(
+                !isJS ? [createToken(SyntaxKind.PublicKeyword)] : undefined,
+                isStatic ? createToken(SyntaxKind.StaticKeyword) : undefined
+            );
+            return modifiers && createNodeArray(modifiers);
         }
         return declaration.modifiers;
     }
 
     function getFieldModifiers(isJS: boolean, isStatic: boolean, isClassLike: boolean): NodeArray<Modifier> | undefined {
-        if (isJS || !isClassLike) return undefined;
+        if (!isClassLike) return undefined;
 
-        return createNodeArray(
-            append<Modifier>([createToken(SyntaxKind.PrivateKeyword)],
-                isStatic ? createToken(SyntaxKind.StaticKeyword) : undefined));
+        const modifiers = append<Modifier>(
+            !isJS ? [createToken(SyntaxKind.PrivateKeyword)] : undefined,
+            isStatic ? createToken(SyntaxKind.StaticKeyword) : undefined
+        );
+        return modifiers && createNodeArray(modifiers);
     }
 
     function getPropertyDeclarationInfo(propertyDeclaration: PropertyDeclaration): DeclarationInfo | undefined {
