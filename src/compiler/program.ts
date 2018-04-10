@@ -2162,7 +2162,13 @@ namespace ts {
 
         function addProjectReferenceRedirects(referencedProject: ParsedCommandLine, target: Map<string>) {
             const rootDir = normalizePath(referencedProject.options.rootDir || getDirectoryPath(referencedProject.options.configFilePath));
-            target.set(rootDir, referencedProject.options.outDir);
+            target.set(rootDir, getDeclarationOutputDirectory(referencedProject));
+        }
+
+        function getDeclarationOutputDirectory(proj: ParsedCommandLine) {
+            return proj.options.declarationDir ||
+                proj.options.outDir ||
+                getDirectoryPath(proj.options.configFilePath);
         }
 
         function verifyCompilerOptions() {
@@ -2594,24 +2600,6 @@ namespace ts {
         };
     }
 
-    /*
-    export function getProjectReferenceFileNames(host: CompilerHost, rootOptions: CompilerOptions): string[] | undefined {
-        if (rootOptions.projectReferences === undefined) {
-            return [];
-        }
-
-        const result: string[] = [];
-        for (const ref of rootOptions.projectReferences) {
-            const refPath = resolveProjectReferencePath(host, rootOptions.configFilePath, ref);
-            if (!refPath || !host.fileExists(refPath)) {
-                return undefined;
-            }
-            result.push(refPath);
-        }
-        return result;
-    }
-    */
-
     /**
      * Returns the target config filename of a project reference
      */
@@ -2621,38 +2609,6 @@ namespace ts {
         }
         return ref.path;
     }
-
-    /*
-    export function walkProjectReferenceGraph(host: CompilerHost, rootOptions: CompilerOptions,
-        callback: (resolvedFile: string, referencedProject: CompilerOptions, settings: ProjectReference) => void,
-        errorCallback?: (failedLocation: string) => void) {
-        if (rootOptions.references === undefined) return;
-
-        const references = getProjectReferenceFileNames(host, rootOptions);
-        if (references === undefined) {
-            return;
-        }
-
-        const configHost = parseConfigHostFromCompilerHost(host);
-        for (const ref of rootOptions.references) {
-            const refPath = resolveProjectReferencePath(host, rootOptions.configFilePath, ref);
-            const text = host.readFile(refPath);
-            if (!text) {
-                // Failed to read a referenced tsconfig file
-                if (errorCallback) {
-                    errorCallback(refPath);
-                }
-                continue;
-            }
-            const referenceJsonSource = parseJsonText(refPath, text);
-            const cmdLine = parseJsonSourceFileConfigFileContent(referenceJsonSource, configHost, getDirectoryPath(refPath), undefined, refPath);
-            cmdLine.options.configFilePath = refPath;
-            if (cmdLine.options) {
-                callback(refPath, cmdLine.options, ref);
-            }
-        }
-    }
-    */
 
     /* @internal */
     /**

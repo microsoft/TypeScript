@@ -4845,7 +4845,6 @@ namespace ts {
         Expression,          // Emitting an Expression
         IdentifierName,      // Emitting an IdentifierName
         MappedTypeParameter, // Emitting a TypeParameterDeclaration inside of a MappedTypeNode
-        UnparsedSource,             // Emitting a literal node from a prior emit output of a referenced project
         Unspecified,         // Emitting an otherwise unspecified node
     }
 

@@ -401,9 +401,6 @@ namespace ts {
                 case EmitHint.Expression:
                     Debug.assert(isExpression(node), "Expected an Expression node.");
                     break;
-                case EmitHint.UnparsedSource:
-                    Debug.assert(node.kind === SyntaxKind.UnparsedSource, "Expected an UnparsedSource node.");
-                    break;
             }
             switch (node.kind) {
                 case SyntaxKind.SourceFile: return printFile(<SourceFile>node);
@@ -464,7 +461,7 @@ namespace ts {
             emitShebangIfNeeded(bundle);
             emitPrologueDirectivesIfNeeded(bundle);
             for (const prepend of bundle.prepends) {
-                print(EmitHint.UnparsedSource, prepend, /*sourceFile*/ undefined);
+                print(EmitHint.Unspecified, prepend, /*sourceFile*/ undefined);
             }
 
             if (bundleInfo) {
@@ -483,7 +480,7 @@ namespace ts {
         function writeUnparsedSource(unparsed: UnparsedSource, output: EmitTextWriter) {
             const previousWriter = writer;
             setWriter(output);
-            print(EmitHint.UnparsedSource, unparsed, /*sourceFile*/ undefined);
+            print(EmitHint.Unspecified, unparsed, /*sourceFile*/ undefined);
             reset();
             writer = previousWriter;
         }
@@ -593,7 +590,6 @@ namespace ts {
                 case EmitHint.IdentifierName: return pipelineEmitIdentifierName(node);
                 case EmitHint.Expression: return pipelineEmitExpression(node);
                 case EmitHint.MappedTypeParameter: return emitMappedTypeParameter(cast(node, isTypeParameterDeclaration));
-                case EmitHint.UnparsedSource:
                 case EmitHint.Unspecified: return pipelineEmitUnspecified(node);
                 default:
                     assertTypeIsNever(hint);

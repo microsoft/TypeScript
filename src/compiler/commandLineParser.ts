@@ -243,6 +243,7 @@ namespace ts {
         {
             name: "composite",
             type: "boolean",
+            isTSConfigOnly: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Enable_project_compilation,
         },
