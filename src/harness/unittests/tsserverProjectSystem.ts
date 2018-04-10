@@ -4184,6 +4184,57 @@ namespace ts.projectSystem {
             session.clearMessages();
         });
 
+        it("disable suggestion diagnostics", () => {
+            const file: FileOrFolder = {
+                path: "/a.js",
+                content: 'require("b")',
+            };
+
+            const host = createServerHost([file]);
+            const session = createSession(host, { canUseEvents: true });
+            const service = session.getProjectService();
+
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: server.CommandNames.Open,
+                arguments: { file: file.path, fileContent: file.content },
+            });
+
+            session.executeCommandSeq<protocol.ConfigureRequest>({
+                command: server.CommandNames.Configure,
+                arguments: {
+                    preferences: { disableSuggestions: true }
+                },
+            });
+
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            session.clearMessages();
+            const expectedSequenceId = session.getNextSeq();
+            host.checkTimeoutQueueLengthAndRun(2);
+
+            checkProjectUpdatedInBackgroundEvent(session, [file.path]);
+            session.clearMessages();
+
+            session.executeCommandSeq<protocol.GeterrRequest>({
+                command: server.CommandNames.Geterr,
+                arguments: {
+                    delay: 0,
+                    files: [file.path],
+                }
+            });
+
+            host.checkTimeoutQueueLengthAndRun(1);
+
+            checkErrorMessage(session, "syntaxDiag", { file: file.path, diagnostics: [] }, /*isMostRecent*/ true);
+            session.clearMessages();
+
+            host.runQueuedImmediateCallbacks(1);
+
+            checkErrorMessage(session, "semanticDiag", { file: file.path, diagnostics: [] });
+            // No suggestion event, we're done.
+            checkCompleteEvent(session, 2, expectedSequenceId);
+            session.clearMessages();
+        });
+
         it("suppressed diagnostic events", () => {
             const file: FileOrFolder = {
                 path: "/a.ts",
