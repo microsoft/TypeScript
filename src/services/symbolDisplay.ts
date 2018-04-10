@@ -201,7 +201,7 @@ namespace ts.SymbolDisplay {
                             // If it is call or construct signature of lambda's write type name
                             displayParts.push(punctuationPart(SyntaxKind.ColonToken));
                             displayParts.push(spacePart());
-                            if (!(type.flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.Anonymous) && type.symbol) {
+                            if (!(getObjectFlags(type) & ObjectFlags.Anonymous) && type.symbol) {
                                 addRange(displayParts, symbolToDisplayParts(typeChecker, type.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.AllowAnyNodeKind | SymbolFormatFlags.WriteTypeParametersOrArguments));
                                 displayParts.push(lineBreakPart());
                             }

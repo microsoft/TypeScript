@@ -189,6 +189,10 @@ namespace ts {
                     visitNode(cbNode, (<ConditionalTypeNode>node).falseType);
             case SyntaxKind.InferType:
                 return visitNode(cbNode, (<InferTypeNode>node).typeParameter);
+            case SyntaxKind.ImportType:
+                return visitNode(cbNode, (<ImportTypeNode>node).argument) ||
+                    visitNode(cbNode, (<ImportTypeNode>node).qualifier) ||
+                    visitNodes(cbNode, cbNodes, (<ImportTypeNode>node).typeArguments);
             case SyntaxKind.ParenthesizedType:
             case SyntaxKind.TypeOperator:
                 return visitNode(cbNode, (<ParenthesizedTypeNode | TypeOperatorNode>node).type);
@@ -2733,6 +2737,28 @@ namespace ts {
             return finishNode(node);
         }
 
+        function isStartOfTypeOfImportType() {
+            nextToken();
+            return token() === SyntaxKind.ImportKeyword;
+        }
+
+        function parseImportType(): ImportTypeNode {
+            sourceFile.flags |= NodeFlags.PossiblyContainsDynamicImport;
+            const node = createNode(SyntaxKind.ImportType) as ImportTypeNode;
+            if (parseOptional(SyntaxKind.TypeOfKeyword)) {
+                node.isTypeOf = true;
+            }
+            parseExpected(SyntaxKind.ImportKeyword);
+            parseExpected(SyntaxKind.OpenParenToken);
+            node.argument = parseType();
+            parseExpected(SyntaxKind.CloseParenToken);
+            if (parseOptional(SyntaxKind.DotToken)) {
+                node.qualifier = parseEntityName(/*allowReservedWords*/ true, Diagnostics.Type_expected);
+            }
+            node.typeArguments = tryParseTypeArguments();
+            return finishNode(node);
+        }
+
         function nextTokenIsNumericLiteral() {
             return nextToken() === SyntaxKind.NumericLiteral;
         }
@@ -2780,13 +2806,15 @@ namespace ts {
                     }
                 }
                 case SyntaxKind.TypeOfKeyword:
-                    return parseTypeQuery();
+                    return lookAhead(isStartOfTypeOfImportType) ? parseImportType() : parseTypeQuery();
                 case SyntaxKind.OpenBraceToken:
                     return lookAhead(isStartOfMappedType) ? parseMappedType() : parseTypeLiteral();
                 case SyntaxKind.OpenBracketToken:
                     return parseTupleType();
                 case SyntaxKind.OpenParenToken:
                     return parseParenthesizedType();
+                case SyntaxKind.ImportKeyword:
+                    return parseImportType();
                 default:
                     return parseTypeReference();
             }
@@ -2822,6 +2850,7 @@ namespace ts {
                 case SyntaxKind.ExclamationToken:
                 case SyntaxKind.DotDotDotToken:
                 case SyntaxKind.InferKeyword:
+                case SyntaxKind.ImportKeyword:
                     return true;
                 case SyntaxKind.MinusToken:
                     return !inStartOfParameter && lookAhead(nextTokenIsNumericLiteral);
@@ -6332,8 +6361,8 @@ namespace ts {
                             case "arg":
                             case "argument":
                             case "param":
-                                tag = parseParameterOrPropertyTag(atToken, tagName, PropertyLikeParse.Parameter);
-                                break;
+                                addTag(parseParameterOrPropertyTag(atToken, tagName, PropertyLikeParse.Parameter, indent));
+                                return;
                             case "return":
                             case "returns":
                                 tag = parseReturnTag(atToken, tagName);
@@ -6482,7 +6511,7 @@ namespace ts {
                     }
                 }
 
-                function parseParameterOrPropertyTag(atToken: AtToken, tagName: Identifier, target: PropertyLikeParse): JSDocParameterTag | JSDocPropertyTag {
+                function parseParameterOrPropertyTag(atToken: AtToken, tagName: Identifier, target: PropertyLikeParse, indent: number | undefined): JSDocParameterTag | JSDocPropertyTag {
                     let typeExpression = tryParseTypeExpression();
                     let isNameFirst = !typeExpression;
                     skipWhitespace();
@@ -6497,6 +6526,8 @@ namespace ts {
                     const result = target === PropertyLikeParse.Parameter ?
                         <JSDocParameterTag>createNode(SyntaxKind.JSDocParameterTag, atToken.pos) :
                         <JSDocPropertyTag>createNode(SyntaxKind.JSDocPropertyTag, atToken.pos);
+                    let comment: string | undefined;
+                    if (indent !== undefined) comment = parseTagComments(indent + scanner.getStartPos() - atToken.pos);
                     const nestedTypeLiteral = parseNestedTypeLiteral(typeExpression, name, target);
                     if (nestedTypeLiteral) {
                         typeExpression = nestedTypeLiteral;
@@ -6508,6 +6539,7 @@ namespace ts {
                     result.name = name;
                     result.isNameFirst = isNameFirst;
                     result.isBracketed = isBracketed;
+                    result.comment = comment;
                     return finishNode(result);
                 }
 
@@ -6754,7 +6786,7 @@ namespace ts {
                     if (target !== t) {
                         return false;
                     }
-                    const tag = parseParameterOrPropertyTag(atToken, tagName, target);
+                    const tag = parseParameterOrPropertyTag(atToken, tagName, target, /*indent*/ undefined);
                     tag.comment = parseTagComments(tag.end - tag.pos);
                     return tag;
                 }

@@ -347,30 +347,10 @@ namespace ts {
         }
 
         getDocumentationComment(checker: TypeChecker | undefined): SymbolDisplayPart[] {
-            if (this.documentationComment === undefined) {
-                if (this.declarations) {
-                    this.documentationComment = JsDoc.getJsDocCommentsFromDeclarations(this.declarations);
-
-                    if (this.documentationComment.length === 0 || this.declarations.some(hasJSDocInheritDocTag)) {
-                        if (checker) {
-                            for (const declaration of this.declarations) {
-                                const inheritedDocs = findInheritedJSDocComments(declaration, this.getName(), checker);
-                                if (inheritedDocs.length > 0) {
-                                    if (this.documentationComment.length > 0) {
-                                        inheritedDocs.push(lineBreakPart());
-                                    }
-                                    this.documentationComment = concatenate(inheritedDocs, this.documentationComment);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-                else {
-                    this.documentationComment = [];
-                }
+            if (!this.documentationComment) {
+                this.documentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding inherited docs
+                this.documentationComment = getDocumentationComment(this.declarations, checker);
             }
-
             return this.documentationComment;
         }
 
@@ -451,9 +431,7 @@ namespace ts {
             return this.checker.getIndexTypeOfType(this, IndexKind.Number);
         }
         getBaseTypes(): BaseType[] | undefined {
-            return this.flags & TypeFlags.Object && this.objectFlags & (ObjectFlags.Class | ObjectFlags.Interface)
-                ? this.checker.getBaseTypes(<InterfaceType><Type>this)
-                : undefined;
+            return this.isClassOrInterface() ? this.checker.getBaseTypes(this) : undefined;
         }
         getNonNullableType(): Type {
             return this.checker.getNonNullableType(this);
@@ -463,6 +441,34 @@ namespace ts {
         }
         getDefault(): Type | undefined {
             return this.checker.getDefaultFromTypeParameter(this);
+        }
+
+        isUnion(): this is UnionType {
+            return !!(this.flags & TypeFlags.Union);
+        }
+        isIntersection(): this is IntersectionType {
+            return !!(this.flags & TypeFlags.Intersection);
+        }
+        isUnionOrIntersection(): this is UnionOrIntersectionType {
+            return !!(this.flags & TypeFlags.UnionOrIntersection);
+        }
+        isLiteral(): this is LiteralType {
+            return !!(this.flags & TypeFlags.Literal);
+        }
+        isStringLiteral(): this is StringLiteralType {
+            return !!(this.flags & TypeFlags.StringLiteral);
+        }
+        isNumberLiteral(): this is NumberLiteralType {
+            return !!(this.flags & TypeFlags.NumberLiteral);
+        }
+        isTypeParameter(): this is TypeParameter {
+            return !!(this.flags & TypeFlags.TypeParameter);
+        }
+        isClassOrInterface(): this is InterfaceType {
+            return !!(getObjectFlags(this) & ObjectFlags.ClassOrInterface);
+        }
+        isClass(): this is InterfaceType {
+            return !!(getObjectFlags(this) & ObjectFlags.Class);
         }
     }
 
@@ -504,27 +510,7 @@ namespace ts {
         }
 
         getDocumentationComment(): SymbolDisplayPart[] {
-            if (this.documentationComment === undefined) {
-                if (this.declaration) {
-                    this.documentationComment = JsDoc.getJsDocCommentsFromDeclarations([this.declaration]);
-
-                    if (this.documentationComment.length === 0 || hasJSDocInheritDocTag(this.declaration)) {
-                        const inheritedDocs = findInheritedJSDocComments(this.declaration, this.declaration.symbol.getName(), this.checker);
-                        if (this.documentationComment.length > 0) {
-                            inheritedDocs.push(lineBreakPart());
-                        }
-                        this.documentationComment = concatenate(
-                            inheritedDocs,
-                            this.documentationComment
-                        );
-                    }
-                }
-                else {
-                    this.documentationComment = [];
-                }
-            }
-
-            return this.documentationComment;
+            return this.documentationComment || (this.documentationComment = getDocumentationComment(singleElementArray(this.declaration), this.checker));
         }
 
         getJsDocTags(): JSDocTagInfo[] {
@@ -545,6 +531,20 @@ namespace ts {
         return getJSDocTags(node).some(tag => tag.tagName.text === "inheritDoc");
     }
 
+    function getDocumentationComment(declarations: ReadonlyArray<Declaration> | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
+        if (!declarations) return emptyArray;
+
+        let doc = JsDoc.getJsDocCommentsFromDeclarations(declarations);
+        if (doc.length === 0 || declarations.some(hasJSDocInheritDocTag)) {
+            for (const declaration of declarations) {
+                const inheritedDocs = findInheritedJSDocComments(declaration, declaration.symbol.name, checker);
+                // TODO: GH#16312 Return a ReadonlyArray, avoid copying inheritedDocs
+                if (inheritedDocs) doc = doc.length === 0 ? inheritedDocs.slice() : inheritedDocs.concat(lineBreakPart(), doc);
+            }
+        }
+        return doc;
+    }
+
     /**
      * Attempts to find JSDoc comments for possibly-inherited properties.  Checks superclasses then traverses
      * implemented interfaces until a symbol is found with the same name and with documentation.
@@ -553,23 +553,12 @@ namespace ts {
      * @param typeChecker A TypeChecker, used to find inherited properties.
      * @returns A filled array of documentation comments if any were found, otherwise an empty array.
      */
-    function findInheritedJSDocComments(declaration: Declaration, propertyName: string, typeChecker: TypeChecker): SymbolDisplayPart[] {
-        let foundDocs = false;
-        return flatMap(declaration.parent ? getAllSuperTypeNodes(declaration.parent) : emptyArray, superTypeNode => {
-            if (foundDocs) {
-                return emptyArray;
-            }
+    function findInheritedJSDocComments(declaration: Declaration, propertyName: string, typeChecker: TypeChecker): ReadonlyArray<SymbolDisplayPart> | undefined {
+        return firstDefined(declaration.parent ? getAllSuperTypeNodes(declaration.parent) : emptyArray, superTypeNode => {
             const superType = typeChecker.getTypeAtLocation(superTypeNode);
-            if (!superType) {
-                return emptyArray;
-            }
-            const baseProperty = typeChecker.getPropertyOfType(superType, propertyName);
-            if (!baseProperty) {
-                return emptyArray;
-            }
-            const inheritedDocs = baseProperty.getDocumentationComment(typeChecker);
-            foundDocs = inheritedDocs.length > 0;
-            return inheritedDocs;
+            const baseProperty = superType && typeChecker.getPropertyOfType(superType, propertyName);
+            const inheritedDocs = baseProperty && baseProperty.getDocumentationComment(typeChecker);
+            return inheritedDocs && inheritedDocs.length ? inheritedDocs : undefined;
         });
     }
 
@@ -690,8 +679,8 @@ namespace ts {
 
             function getDeclarationName(declaration: Declaration) {
                 const name = getNameOfDeclaration(declaration);
-                return name && (isPropertyNameLiteral(name) ? getTextOfIdentifierOrLiteral(name) :
-                    name.kind === SyntaxKind.ComputedPropertyName && isPropertyAccessExpression(name.expression) ? name.expression.name.text : undefined);
+                return name && (isComputedPropertyName(name) && isPropertyAccessExpression(name.expression) ? name.expression.name.text
+                    : isPropertyName(name) ? getNameFromPropertyName(name) : undefined);
             }
 
             function visit(node: Node): void {
@@ -1163,8 +1152,10 @@ namespace ts {
         };
     }
 
-    export function createLanguageService(host: LanguageServiceHost,
-        documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
+    export function createLanguageService(
+        host: LanguageServiceHost,
+        documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory()),
+        syntaxOnly = false): LanguageService {
 
         const syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         let program: Program;
@@ -1199,6 +1190,8 @@ namespace ts {
         }
 
         function synchronizeHostData(): void {
+            Debug.assert(!syntaxOnly);
+
             // perform fast check if host supports it
             if (host.getProjectVersion) {
                 const hostProjectVersion = host.getProjectVersion();
@@ -1374,6 +1367,11 @@ namespace ts {
         }
 
         function getProgram(): Program {
+            if (syntaxOnly) {
+                Debug.assert(program === undefined);
+                return undefined;
+            }
+
             synchronizeHostData();
 
             return program;
@@ -1441,12 +1439,10 @@ namespace ts {
             synchronizeHostData();
             return Completions.getCompletionsAtPosition(
                 host,
-                program.getTypeChecker(),
+                program,
                 log,
-                program.getCompilerOptions(),
                 getValidSourceFile(fileName),
                 position,
-                program.getSourceFiles(),
                 fullPreferences);
         }
 
@@ -1455,11 +1451,9 @@ namespace ts {
             return Completions.getCompletionEntryDetails(
                 program,
                 log,
-                program.getCompilerOptions(),
                 getValidSourceFile(fileName),
                 position,
                 { name, source },
-                program.getSourceFiles(),
                 host,
                 formattingOptions && formatting.getFormatContext(formattingOptions),
                 getCanonicalFileName,
@@ -1468,14 +1462,7 @@ namespace ts {
 
         function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol {
             synchronizeHostData();
-            return Completions.getCompletionEntrySymbol(
-                program.getTypeChecker(),
-                log,
-                program.getCompilerOptions(),
-                getValidSourceFile(fileName),
-                position,
-                { name, source },
-                program.getSourceFiles());
+            return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source });
         }
 
         function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
@@ -1544,8 +1531,8 @@ namespace ts {
             return checker.getSymbolAtLocation(node);
         }
 
-
-        const sourceMapCommentRegExp = /^\/\/[@#] sourceMappingURL=(.+)$/gm;
+        // Sometimes tools can sometimes see the following line as a source mapping url comment, so we mangle it a bit (the [M])
+        const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)$/gm;
         const base64UrlRegExp = /^data:(?:application\/json(?:;charset=[uU][tT][fF]-8);base64,([A-Za-z0-9+\/=]+)$)?/;
         function scanForSourcemapURL(fileName: string) {
             const mappedFile = sourcemappedFileCache.get(toPath(fileName, currentDirectory, getCanonicalFileName));

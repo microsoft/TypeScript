@@ -33,4 +33,11 @@ namespace ts.server {
             ? sys.args[index + 1]
             : undefined;
     }
+
+    /*@internal*/
+    export function nowString() {
+        // E.g. "12:34:56.789"
+        const d = new Date();
+        return `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}.${d.getMilliseconds()}`;
+    }
 }

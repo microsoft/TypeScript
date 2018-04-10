@@ -328,7 +328,7 @@ namespace ts.formatting {
                 break;
             }
 
-            if (SmartIndenter.shouldIndentChildNode(n, child)) {
+            if (SmartIndenter.shouldIndentChildNode(options, n, child, sourceFile)) {
                 return options.indentSize;
             }
 
@@ -470,7 +470,7 @@ namespace ts.formatting {
             parentDynamicIndentation: DynamicIndentation,
             effectiveParentStartLine: number
         ): { indentation: number, delta: number } {
-            const delta = SmartIndenter.shouldIndentChildNode(node) ? options.indentSize : 0;
+            const delta = SmartIndenter.shouldIndentChildNode(options, node) ? options.indentSize : 0;
 
             if (effectiveParentStartLine === startLine) {
                 // if node is located on the same line with the parent
@@ -514,7 +514,7 @@ namespace ts.formatting {
                     if ((<MethodDeclaration>node).asteriskToken) {
                         return SyntaxKind.AsteriskToken;
                     }
-                    // falls through
+                // falls through
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.Parameter:
                     return getNameOfDeclaration(<Declaration>node).kind;
@@ -541,9 +541,9 @@ namespace ts.formatting {
                 getIndentation: () => indentation,
                 getDelta,
                 recomputeIndentation: lineAdded => {
-                    if (node.parent && SmartIndenter.shouldIndentChildNode(node.parent, node)) {
+                    if (node.parent && SmartIndenter.shouldIndentChildNode(options, node.parent, node, sourceFile)) {
                         indentation += lineAdded ? options.indentSize : -options.indentSize;
-                        delta = SmartIndenter.shouldIndentChildNode(node) ? options.indentSize : 0;
+                        delta = SmartIndenter.shouldIndentChildNode(options, node) ? options.indentSize : 0;
                     }
                 }
             };
@@ -583,7 +583,7 @@ namespace ts.formatting {
 
             function getDelta(child: TextRangeWithKind) {
                 // Delta value should be zero when the node explicitly prevents indentation of the child node
-                return SmartIndenter.nodeWillIndentChild(node, child, /*indentByDefault*/ true) ? delta : 0;
+                return SmartIndenter.nodeWillIndentChild(options, node, child, sourceFile, /*indentByDefault*/ true) ? delta : 0;
             }
         }
 

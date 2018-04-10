@@ -1402,12 +1402,21 @@ namespace ts {
             return Array(paddingLength + 1).join(" ");
         }
 
+        function isAllowedOption({ category, name }: CommandLineOption): boolean {
+            // Skip options which do not have a category or have category `Command_line_Options`
+            // Exclude all possible `Advanced_Options` in tsconfig.json which were NOT defined in command line
+            return category !== undefined
+                && category !== Diagnostics.Command_line_Options
+                && (category !== Diagnostics.Advanced_Options || compilerOptionsMap.has(name));
+        }
+
         function writeConfigurations() {
             // Filter applicable options to place in the file
             const categorizedOptions = createMultiMap<CommandLineOption>();
             for (const option of optionDeclarations) {
                 const { category } = option;
-                if (category !== undefined && category !== Diagnostics.Command_line_Options && category !== Diagnostics.Advanced_Options) {
+
+                if (isAllowedOption(option)) {
                     categorizedOptions.add(getLocaleSpecificMessage(category), option);
                 }
             }

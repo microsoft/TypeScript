@@ -1317,3 +1317,57 @@ type Extracted<Struct> = {
 >K : Symbol(K, Decl(conditionalTypes1.ts, 338, 5))
 }
 
+// Repro from #22985
+
+type RecursivePartial<T> = {
+>RecursivePartial : Symbol(RecursivePartial, Decl(conditionalTypes1.ts, 339, 1))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 343, 22))
+
+  [P in keyof T]?: T[P] extends Array<any> ? {[index: number]: RecursivePartial<T[P][0]>} :
+>P : Symbol(P, Decl(conditionalTypes1.ts, 344, 3))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 343, 22))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 343, 22))
+>P : Symbol(P, Decl(conditionalTypes1.ts, 344, 3))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>index : Symbol(index, Decl(conditionalTypes1.ts, 344, 47))
+>RecursivePartial : Symbol(RecursivePartial, Decl(conditionalTypes1.ts, 339, 1))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 343, 22))
+>P : Symbol(P, Decl(conditionalTypes1.ts, 344, 3))
+
+    T[P] extends object ? RecursivePartial<T[P]> : T[P];
+>T : Symbol(T, Decl(conditionalTypes1.ts, 343, 22))
+>P : Symbol(P, Decl(conditionalTypes1.ts, 344, 3))
+>RecursivePartial : Symbol(RecursivePartial, Decl(conditionalTypes1.ts, 339, 1))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 343, 22))
+>P : Symbol(P, Decl(conditionalTypes1.ts, 344, 3))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 343, 22))
+>P : Symbol(P, Decl(conditionalTypes1.ts, 344, 3))
+
+};
+
+declare function assign<T>(o: T, a: RecursivePartial<T>): void;
+>assign : Symbol(assign, Decl(conditionalTypes1.ts, 346, 2))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 348, 24))
+>o : Symbol(o, Decl(conditionalTypes1.ts, 348, 27))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 348, 24))
+>a : Symbol(a, Decl(conditionalTypes1.ts, 348, 32))
+>RecursivePartial : Symbol(RecursivePartial, Decl(conditionalTypes1.ts, 339, 1))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 348, 24))
+
+var a = {o: 1, b: 2, c: [{a: 1, c: '213'}]}
+>a : Symbol(a, Decl(conditionalTypes1.ts, 350, 3))
+>o : Symbol(o, Decl(conditionalTypes1.ts, 350, 9))
+>b : Symbol(b, Decl(conditionalTypes1.ts, 350, 14))
+>c : Symbol(c, Decl(conditionalTypes1.ts, 350, 20))
+>a : Symbol(a, Decl(conditionalTypes1.ts, 350, 26))
+>c : Symbol(c, Decl(conditionalTypes1.ts, 350, 31))
+
+assign(a, {o: 2, c: {0: {a: 2, c: '213123'}}})
+>assign : Symbol(assign, Decl(conditionalTypes1.ts, 346, 2))
+>a : Symbol(a, Decl(conditionalTypes1.ts, 350, 3))
+>o : Symbol(o, Decl(conditionalTypes1.ts, 351, 11))
+>c : Symbol(c, Decl(conditionalTypes1.ts, 351, 16))
+>0 : Symbol(0, Decl(conditionalTypes1.ts, 351, 21))
+>a : Symbol(a, Decl(conditionalTypes1.ts, 351, 25))
+>c : Symbol(c, Decl(conditionalTypes1.ts, 351, 30))
+

@@ -12,4 +12,4 @@ verify.rangeAfterCodeFix(`class C {
     doStuff() {
         this.state;
     }
-}`, /*includeWhiteSpace*/false, /*errorCode*/ undefined, /*index*/ 2);
+}`, /*includeWhiteSpace*/false, /*errorCode*/ undefined, /*index*/ 0);

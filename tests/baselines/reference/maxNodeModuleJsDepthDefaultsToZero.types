@@ -16,7 +16,7 @@ foo.y // ignored from shortid/index.js
 
 === /typings/index.d.ts ===
 declare module "shortid" {
->"shortid" : typeof "shortid"
+>"shortid" : typeof import("shortid")
 
     export var x: number;
 >x : number

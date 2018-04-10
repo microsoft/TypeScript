@@ -155,6 +155,7 @@ var harnessSources = harnessCoreSources.concat([
     "transform.ts",
     "customTransforms.ts",
     "programMissingFiles.ts",
+    "programNoParseFalsyFileNames.ts",
     "symbolWalker.ts",
     "languageService.ts",
     "publicApi.ts",

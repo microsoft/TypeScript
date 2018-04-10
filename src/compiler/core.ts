@@ -1606,6 +1606,7 @@ namespace ts {
             messageText: text,
             category: message.category,
             code: message.code,
+            reportsUnnecessary: message.reportsUnnecessary,
         };
     }
 
@@ -1635,7 +1636,8 @@ namespace ts {
 
             messageText: text,
             category: message.category,
-            code: message.code
+            code: message.code,
+            reportsUnnecessary: message.reportsUnnecessary,
         };
     }
 
@@ -1647,7 +1649,7 @@ namespace ts {
 
             code: chain.code,
             category: chain.category,
-            messageText: chain.next ? chain : chain.messageText
+            messageText: chain.next ? chain : chain.messageText,
         };
     }
 
@@ -2046,7 +2048,7 @@ namespace ts {
         return compilerOptions.target || ScriptTarget.ES3;
     }
 
-    export function getEmitModuleKind(compilerOptions: CompilerOptions) {
+    export function getEmitModuleKind(compilerOptions: {module?: CompilerOptions["module"], target?: CompilerOptions["target"]}) {
         return typeof compilerOptions.module === "number" ?
             compilerOptions.module :
             getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
@@ -2263,6 +2265,8 @@ namespace ts {
      * Adds a trailing directory separator to a path, if it does not already have one.
      * @param path The path.
      */
+    export function ensureTrailingDirectorySeparator(path: Path): Path;
+    export function ensureTrailingDirectorySeparator(path: string): string;
     export function ensureTrailingDirectorySeparator(path: string) {
         if (path.charAt(path.length - 1) !== directorySeparator) {
             return path + directorySeparator;
@@ -2928,7 +2932,7 @@ namespace ts {
             return value;
         }
 
-        export function assertEachDefined<T, A extends ReadonlyArray<T>>(value: A, message: string): A {
+        export function assertEachDefined<T, A extends ReadonlyArray<T>>(value: A, message?: string): A {
             for (const v of value) {
                 assertDefined(v, message);
             }

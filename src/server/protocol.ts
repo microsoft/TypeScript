@@ -455,6 +455,8 @@ namespace ts.server.protocol {
         endLocation: Location;
         category: string;
         code: number;
+        /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
+        reportsUnnecessary?: {};
     }
 
     /**
@@ -2169,6 +2171,8 @@ namespace ts.server.protocol {
          * The category of the diagnostic message, e.g. "error", "warning", or "suggestion".
          */
         category: string;
+
+        reportsUnnecessary?: {};
 
         /**
          * The error code of the diagnostic message.
