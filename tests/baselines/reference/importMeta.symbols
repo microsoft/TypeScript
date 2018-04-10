@@ -6,7 +6,6 @@
 >fetch : Symbol(fetch, Decl(lib.dom.d.ts, --, --))
 >new URL("../hamsters.jpg", import.meta.url).toString : Symbol(URL.toString, Decl(lib.dom.d.ts, --, --))
 >URL : Symbol(URL, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
->meta : Symbol(meta, Decl(example.ts, 5, 22))
 >toString : Symbol(URL.toString, Decl(lib.dom.d.ts, --, --))
 
   const blob = await response.blob();
@@ -17,10 +16,6 @@
 
   const size = import.meta.scriptElement.dataset.size || 300;
 >size : Symbol(size, Decl(example.ts, 5, 7))
->meta : Symbol(meta, Decl(example.ts, 5, 22))
->scriptElement : Symbol(scriptElement, Decl(example.ts, 5, 27))
->dataset : Symbol(dataset, Decl(example.ts, 5, 41))
->size : Symbol(size, Decl(example.ts, 5, 49))
 
   const image = new Image();
 >image : Symbol(image, Decl(example.ts, 7, 7))
@@ -57,26 +52,20 @@
 === tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts ===
 export let x = import.meta;
 >x : Symbol(x, Decl(moduleLookingFile01.ts, 0, 10))
->meta : Symbol(meta, Decl(moduleLookingFile01.ts, 0, 22))
 
 export let y = import.metal;
 >y : Symbol(y, Decl(moduleLookingFile01.ts, 1, 10))
->metal : Symbol(metal, Decl(moduleLookingFile01.ts, 1, 22))
 
 export let z = import.import.import.malkovich;
 >z : Symbol(z, Decl(moduleLookingFile01.ts, 2, 10))
->malkovich : Symbol(malkovich, Decl(moduleLookingFile01.ts, 2, 36))
 
 === tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts ===
 let globalA = import.meta;
 >globalA : Symbol(globalA, Decl(scriptLookingFile01.ts, 0, 3))
->meta : Symbol(meta, Decl(scriptLookingFile01.ts, 0, 21))
 
 let globalB = import.metal;
 >globalB : Symbol(globalB, Decl(scriptLookingFile01.ts, 1, 3))
->metal : Symbol(metal, Decl(scriptLookingFile01.ts, 1, 21))
 
 let globalC = import.import.import.malkovich;
 >globalC : Symbol(globalC, Decl(scriptLookingFile01.ts, 2, 3))
->malkovich : Symbol(malkovich, Decl(scriptLookingFile01.ts, 2, 35))
 

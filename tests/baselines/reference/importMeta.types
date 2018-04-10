@@ -15,7 +15,8 @@
 >new URL("../hamsters.jpg", import.meta.url) : URL
 >URL : { new (url: string, base?: string | URL): URL; prototype: URL; createObjectURL(object: any, options?: ObjectURLOptions): string; revokeObjectURL(url: string): void; }
 >"../hamsters.jpg" : "../hamsters.jpg"
->meta.url : any
+>import.meta.url : any
+>import.meta : ImportMeta
 >meta : any
 >url : any
 >toString : () => string
@@ -30,13 +31,15 @@
 
   const size = import.meta.scriptElement.dataset.size || 300;
 >size : any
-> : any
+>import.meta.scriptElement.dataset.size || 300 : any
+>import.meta.scriptElement.dataset.size : any
+>import.meta.scriptElement.dataset : any
+>import.meta.scriptElement : any
+>import.meta : ImportMeta
 >meta : any
 >scriptElement : any
 >dataset : any
 >size : any
->|| 300 : any
-> : any
 >300 : 300
 
   const image = new Image();
@@ -79,33 +82,41 @@
 
 === tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts ===
 export let x = import.meta;
->x : any
-> : any
+>x : ImportMeta
+>import.meta : ImportMeta
 >meta : any
 
 export let y = import.metal;
 >y : any
-> : any
+>import.metal : any
 >metal : any
 
 export let z = import.import.import.malkovich;
 >z : any
-> : any
+>import.import.import.malkovich : any
+>import.import.import : any
+>import.import : any
+>import : any
+>import : any
 >malkovich : any
 
 === tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts ===
 let globalA = import.meta;
->globalA : any
-> : any
+>globalA : ImportMeta
+>import.meta : ImportMeta
 >meta : any
 
 let globalB = import.metal;
 >globalB : any
-> : any
+>import.metal : any
 >metal : any
 
 let globalC = import.import.import.malkovich;
 >globalC : any
-> : any
+>import.import.import.malkovich : any
+>import.import.import : any
+>import.import : any
+>import : any
+>import : any
 >malkovich : any
 
