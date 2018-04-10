@@ -4646,7 +4646,7 @@ namespace ts {
                 }
             }
         }
-        // return empty array for: incorrect binding patterns and JSDoc function syntax, which has un-named parameters
+        // return empty array for: out-of-order binding patterns and JSDoc function syntax, which has un-named parameters
         return emptyArray;
     }
 
