@@ -21871,6 +21871,10 @@ namespace ts {
                 // and give a better error message when the host function mentions `arguments`
                 // but the tag doesn't have an array type
                 if (decl) {
+                    const i = getJSDocTags(decl).filter(isJSDocParameterTag).indexOf(node);
+                    if (i > -1 && i < decl.parameters.length && isBindingPattern(decl.parameters[i].name)) {
+                        return;
+                    }
                     if (!containsArgumentsReference(decl)) {
                         error(node.name,
                             Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name,
