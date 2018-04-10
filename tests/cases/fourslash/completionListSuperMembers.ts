@@ -23,13 +23,16 @@
 ////    }
 ////}
 
-
-goTo.marker();
-verify.not.completionListContains("publicProperty");
-verify.completionListContains("publicInstanceMethod");
-// No statics
-verify.not.completionListContains("publicStaticProperty");
-verify.not.completionListContains("publicStaticMethod");
-// No privates
-verify.not.completionListContains("privateProperty");
-verify.not.completionListContains("privateInstanceMethod");
+verify.completions({
+    at: "",
+    includes: "publicInstanceMethod",
+    excludes: [
+        "publicProperty",
+        // No statics
+        "publicStaticProperty",
+        "publicStaticMethod",
+        // No privates
+        "privateProperty",
+        "privateInstanceMethod",
+    ]
+});

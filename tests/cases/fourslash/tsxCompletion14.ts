@@ -22,23 +22,7 @@
 //// var x3 = <Exp.Thing /*3*/ ></Exp.Thing>;
 //// var x4 = <Exp.M.SFCComp /*4*/ ></Exp.M.SFCComp>;
 
-
-goTo.marker("1");
-verify.completionListCount(2);
-verify.completionListContains('ONE');
-verify.completionListContains('TWO');
-
-goTo.marker("2");
-verify.completionListCount(2);
-verify.completionListContains("Three");
-verify.completionListContains("Four");
-
-goTo.marker("3");
-verify.completionListCount(2);
-verify.completionListContains('ONE');
-verify.completionListContains('TWO');
-
-goTo.marker("4");
-verify.completionListCount(2);
-verify.completionListContains("Three");
-verify.completionListContains("Four");
+verify.completions(
+    { at: ["1", "3"], are: ["ONE", "TWO"] },
+    { at: ["2", "4"], are: ["Three", "Four"] },
+);

@@ -14,18 +14,14 @@
 ////    }
 ////}
 
-goTo.marker('1');
-verify.completionListContains('f');
-verify.completionListContains('foo');
+verify.completions({ at: "1", includes: ["f", "foo"] });
 edit.insert('foo(1);');
 
-goTo.marker('2');
-verify.completionListContains('x');
+verify.completions({ at: "2", includes: "x" });
 
 verify.quickInfoAt("3", "(local var) r: C<number>");
 
-goTo.marker('4');
-verify.completionListContains('x');
+verify.completions({ at: "4", includes: "x" });
 edit.insert('x;');
 
 verify.quickInfoAt("5", "(local var) r2: number");

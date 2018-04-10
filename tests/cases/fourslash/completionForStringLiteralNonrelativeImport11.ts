@@ -21,18 +21,16 @@
 // @Filename: node_modules/module-from-node/index.ts
 //// /*module1*/
 
-
-
 const kinds = ["import_as", "import_equals", "require"];
-
-for (const kind of kinds) {
-    goTo.marker(kind + "0");
-
-    verify.completionListContains("module");
-    verify.not.completionListItemsCountIsGreaterThan(1);
-
-    goTo.marker(kind + "1");
-
-    verify.completionListContains("index");
-    verify.not.completionListItemsCountIsGreaterThan(1);
-}
+verify.completions(
+    {
+        at: kinds.map(k => `${k}0`),
+        are: "module",
+        isNewIdentifierLocation: true,
+    },
+    {
+        at: kinds.map(k => `${k}1`),
+        are: "index",
+        isNewIdentifierLocation: true,
+    },
+)

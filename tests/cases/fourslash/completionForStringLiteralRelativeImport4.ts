@@ -23,30 +23,22 @@
 
 
 // @Filename: f1.ts
-//// /*f1*/
+////
 // @Filename: f2.tsx
-//// /*f2*/
+////
 // @Filename: folder/f1.ts
-//// /*subf1*/
+////
 // @Filename: f3.js
-//// /*f3*/
+////
 // @Filename: f4.jsx
-//// /*f4*/
+////
 // @Filename: e1.ts
-//// /*e1*/
+////
 // @Filename: e2.js
-//// /*e2*/
+////
 
-const kinds = ["import_as", "import_equals", "require"];
-
-for (const kind of kinds) {
-    goTo.marker(kind + "0");
-
-    verify.completionListContains("module0");
-    verify.completionListContains("module1");
-    verify.completionListContains("module2");
-    verify.completionListContains("more");
-
-    // Should not contain itself
-    verify.not.completionListItemsCountIsGreaterThan(4);
-}
+verify.completions({
+    at: test.markerNames(),
+    are: ["module1", "module2", "more", "module0"],
+    isNewIdentifierLocation: true,
+});

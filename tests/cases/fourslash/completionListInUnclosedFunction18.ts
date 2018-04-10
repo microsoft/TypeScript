@@ -8,17 +8,4 @@
 ////        var v = (p: MyType) => y + /*1*/
 ////}
 
-goTo.marker("1");
-
-verify.completionListContains("foo");
-verify.completionListContains("x");
-verify.completionListContains("y");
-verify.completionListContains("z");
-
-verify.completionListContains("bar");
-verify.completionListContains("a");
-verify.completionListContains("b");
-verify.completionListContains("c");
-
-verify.completionListContains("v");
-verify.completionListContains("p");
+verify.completions({ at: "1", includes: ["foo", "x", "y", "z", "bar", "a", "b", "c", "v", "p"] });
