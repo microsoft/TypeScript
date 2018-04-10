@@ -25,6 +25,18 @@ let globalA = import.meta;
 let globalB = import.metal;
 let globalC = import.import.import.malkovich;
 
+//// [assignmentTargets.ts]
+export const foo: ImportMeta = import.meta.blah = import.meta.blue = import.meta;
+import.meta = foo;
+
+// @Filename augmentations.ts
+declare global {
+  interface ImportMeta {
+    wellKnownProperty: { a: number, b: string, c: boolean };
+  }
+}
+
+const { a, b, c } = import.meta.wellKnownProperty;
 
 //// [example.js]
 // Adapted from https://github.com/tc39/proposal-import-meta/tree/c3902a9ffe2e69a7ac42c19d7ea74cbdcea9b7fb#example
@@ -45,3 +57,7 @@ export let z = import.import.import.malkovich;
 let globalA = import.meta;
 let globalB = import.metal;
 let globalC = import.import.import.malkovich;
+//// [assignmentTargets.js]
+export const foo = import.meta.blah = import.meta.blue = import.meta;
+import.meta = foo;
+const { a, b, c } = import.meta.wellKnownProperty;

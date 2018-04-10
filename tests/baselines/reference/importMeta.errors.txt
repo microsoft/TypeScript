@@ -1,4 +1,5 @@
 error TS2468: Cannot find global value 'Promise'.
+tests/cases/conformance/es2019/importMeta/assignmentTargets.ts(2,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 tests/cases/conformance/es2019/importMeta/example.ts(2,2): error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your `--lib` option.
 tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts(2,23): error TS17012: 'metal' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
 tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts(3,23): error TS17012: 'import' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
@@ -42,3 +43,17 @@ tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts(3,22): error TS
                          ~~~~~~
 !!! error TS17012: 'import' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
     
+==== tests/cases/conformance/es2019/importMeta/assignmentTargets.ts (1 errors) ====
+    export const foo: ImportMeta = import.meta.blah = import.meta.blue = import.meta;
+    import.meta = foo;
+    ~~~~~~~~~~~
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+    
+    // @Filename augmentations.ts
+    declare global {
+      interface ImportMeta {
+        wellKnownProperty: { a: number, b: string, c: boolean };
+      }
+    }
+    
+    const { a, b, c } = import.meta.wellKnownProperty;
