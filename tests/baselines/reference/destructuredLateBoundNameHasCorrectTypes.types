@@ -25,3 +25,14 @@ void computed;
 >void computed : undefined
 >computed : string
 
+const notPresent = "prop2";
+>notPresent : "prop2"
+>"prop2" : "prop2"
+
+let { [notPresent]: computed2 } = { prop: "b" };
+>notPresent : "prop2"
+>computed2 : any
+>{ prop: "b" } : { prop: string; }
+>prop : string
+>"b" : "b"
+

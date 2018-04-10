@@ -19,3 +19,11 @@ let { [named]: computed } = { prop: "b" };
 void computed;
 >computed : Symbol(computed, Decl(destructuredLateBoundNameHasCorrectTypes.ts, 5, 5))
 
+const notPresent = "prop2";
+>notPresent : Symbol(notPresent, Decl(destructuredLateBoundNameHasCorrectTypes.ts, 8, 5))
+
+let { [notPresent]: computed2 } = { prop: "b" };
+>notPresent : Symbol(notPresent, Decl(destructuredLateBoundNameHasCorrectTypes.ts, 8, 5))
+>computed2 : Symbol(computed2, Decl(destructuredLateBoundNameHasCorrectTypes.ts, 10, 5))
+>prop : Symbol(prop, Decl(destructuredLateBoundNameHasCorrectTypes.ts, 10, 35))
+
