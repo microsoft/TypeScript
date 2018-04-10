@@ -4174,14 +4174,17 @@ namespace ts {
                 else {
                     // Use explicitly specified property name ({ p: xxx } form), or otherwise the implied name ({ p } form)
                     const name = declaration.propertyName || <Identifier>declaration.name;
-                    if (isComputedNonLiteralName(name)) {
-                        // computed properties with non-literal names are treated as 'any'
+                    const isLate = isLateBindableName(name);
+                    const isWellKnown = isComputedPropertyName(name) && isWellKnownSymbolSyntactically(name.expression);
+                    if (!isLate && !isWellKnown && isComputedNonLiteralName(name)) {
                         return anyType;
                     }
 
                     // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
                     // or otherwise the type of the string index signature.
-                    const text = getTextOfPropertyName(name);
+                    const text = isLate ? getLateBoundNameFromType(checkComputedPropertyName(name as ComputedPropertyName) as LiteralType | UniqueESSymbolType) :
+                        isWellKnown ? getPropertyNameForKnownSymbolName(idText(((name as ComputedPropertyName).expression as PropertyAccessExpression).name)) :
+                        getTextOfPropertyName(name);
 
                     // Relax null check on ambient destructuring parameters, since the parameters have no implementation and are just documentation
                     if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
