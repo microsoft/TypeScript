@@ -4639,11 +4639,10 @@ namespace ts {
             }
             else {
                 const i = param.parent.parameters.indexOf(param);
-                if (i > -1) {
-                    const paramTags = getJSDocTags(param.parent).filter(isJSDocParameterTag);
-                    if (i < paramTags.length) {
-                        return [paramTags[i]];
-                    }
+                Debug.assert(i > -1, "Parameters should always be in their parents' parameter list");
+                const paramTags = getJSDocTags(param.parent).filter(isJSDocParameterTag);
+                if (i < paramTags.length) {
+                    return [paramTags[i]];
                 }
             }
         }
