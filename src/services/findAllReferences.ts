@@ -708,7 +708,8 @@ namespace ts.FindAllReferences.Core {
         if (!symbol) return true; // Be lenient with invalid code.
         return getPossibleSymbolReferencePositions(sourceFile, symbol.name).some(position => {
             const token = tryCast(getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true), isIdentifier);
-            return token && token !== definition && token.escapedText === definition.escapedText && checker.getSymbolAtLocation(token) === symbol;
+            return token && token !== definition && token.escapedText === definition.escapedText
+                && (checker.getSymbolAtLocation(token) === symbol || checker.getShorthandAssignmentValueSymbol(token.parent) === symbol);
         });
     }
 
