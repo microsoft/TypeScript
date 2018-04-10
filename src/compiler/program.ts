@@ -1164,7 +1164,7 @@ namespace ts {
             for (let i = 0; i < projectReferences.length; i++) {
                 const ref = projectReferences[i];
                 const resolvedRef = resolvedProjectReferences[i];
-                if (ref.prepend) {
+                if (ref.prepend && resolvedRef && resolvedRef.options) {
                     const dtsFilename = changeExtension(resolvedRef.options.outFile, ".d.ts");
                     const js = host.readFile(resolvedRef.options.outFile) || `/* Input file ${resolvedRef.options.outFile} was missing */\r\n`;
                     const dts = host.readFile(dtsFilename) || `/* Input file ${dtsFilename} was missing */\r\n`;
