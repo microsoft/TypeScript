@@ -400,7 +400,7 @@ namespace ts.server {
                     assign(this.formatSettings, formatSettings);
                 }
                 else {
-                    this.formatSettings = mergeMapLikes(this.formatSettings, formatSettings);
+                    this.formatSettings = { ...this.formatSettings, ...formatSettings };
                 }
             }
 
@@ -408,7 +408,7 @@ namespace ts.server {
                 if (!this.preferences) {
                     this.preferences = defaultPreferences;
                 }
-                this.preferences = mergeMapLikes(this.preferences, preferences);
+                this.preferences = { ...this.preferences, ...preferences };
             }
         }
 
