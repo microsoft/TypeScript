@@ -50,7 +50,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         const accessorModifiers = getAccessorModifiers(isJS, declaration, isStatic, isInClassLike);
         const fieldModifiers = getFieldModifiers(isJS, isStatic, isInClassLike);
 
-        updateFieldDeclaration(changeTracker, file, declaration, fieldName, fieldModifiers, container);
+        updateFieldDeclaration(changeTracker, file, declaration, fieldName, fieldModifiers);
 
         const getAccessor = generateGetAccessor(fieldName, accessorName, type, accessorModifiers, isStatic, container);
         const setAccessor = generateSetAccessor(fieldName, accessorName, type, accessorModifiers, isStatic, container);
@@ -61,7 +61,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         const edits = changeTracker.getChanges();
         const renameFilename = file.fileName;
         const renameLocationOffset = isIdentifier(fieldName) ? 0 : -1;
-        const renameLocation = renameLocationOffset + getRenameLocation(edits, renameFilename, fieldName.text, /*isDeclaredBeforeUse*/ false);
+        const renameLocation = renameLocationOffset + getRenameLocation(edits, renameFilename, fieldName.text, /*preferLastLocation*/ isParameter(declaration));
         return { renameFilename, renameLocation, edits };
     }
 
@@ -213,26 +213,12 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         changeTracker.replaceNode(file, declaration, property);
     }
 
-    function updateParameterPropertyDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: ParameterDeclaration, fieldName: AccepedNameType, modifiers: ModifiersArray | undefined, classLikeContainer: ClassLikeDeclaration) {
-        const property = createProperty(
-            declaration.decorators,
-            modifiers,
-            fieldName,
-            declaration.questionToken,
-            declaration.type,
-            declaration.initializer
-        );
-
-        changeTracker.insertNodeAtClassStart(file, classLikeContainer, property);
-        changeTracker.deleteNodeInList(file, declaration);
-    }
-
     function updatePropertyAssignmentDeclaration (changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: PropertyAssignment, fieldName: AccepedNameType) {
         const assignment = updatePropertyAssignment(declaration, fieldName, declaration.initializer);
         changeTracker.replacePropertyAssignment(file, declaration, assignment);
     }
 
-    function updateFieldDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: AccepedDeclaration, fieldName: AccepedNameType, modifiers: ModifiersArray | undefined, container: ContainerDeclation) {
+    function updateFieldDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: AccepedDeclaration, fieldName: AccepedNameType, modifiers: ModifiersArray | undefined) {
         if (isPropertyDeclaration(declaration)) {
             updatePropertyDeclaration(changeTracker, file, declaration, fieldName, modifiers);
         }
@@ -240,7 +226,8 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
             updatePropertyAssignmentDeclaration(changeTracker, file, declaration, fieldName);
         }
         else {
-            updateParameterPropertyDeclaration(changeTracker, file, declaration, fieldName, modifiers, <ClassLikeDeclaration>container);
+            changeTracker.replaceNode(file, declaration,
+                updateParameter(declaration, declaration.decorators, modifiers, declaration.dotDotDotToken, cast(fieldName, isIdentifier), declaration.questionToken, declaration.type, declaration.initializer));
         }
     }
 
