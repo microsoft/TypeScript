@@ -1377,7 +1377,6 @@ namespace ts.FindAllReferences.Core {
         const result: Symbol[] = [];
         forEachRelatedSymbol<void>(symbol, location, checker,
             (sym, root, base) => { result.push(base || root || sym); },
-            parameterProperties => { result.push(...parameterProperties); },
             /*allowBaseTypes*/ () => !implementations);
         return result;
     }
@@ -1385,7 +1384,6 @@ namespace ts.FindAllReferences.Core {
     function forEachRelatedSymbol<T>(
         symbol: Symbol, location: Node, checker: TypeChecker,
         cbSymbol: (symbol: Symbol, rootSymbol?: Symbol, baseSymbol?: Symbol) => T | undefined,
-        cbParameterProperties: (s: Symbol[]) => T | undefined,
         allowBaseTypes: (rootSymbol: Symbol) => boolean,
     ): T | undefined {
         const containingObjectLiteralElement = getContainingObjectLiteralElement(location);
@@ -1422,14 +1420,11 @@ namespace ts.FindAllReferences.Core {
         const res = fromRoot(symbol);
         if (res) return res;
 
-        // If the symbol.valueDeclaration is a property parameter declaration,
-        // we should include both parameter declaration symbol and property declaration symbol
-        // Parameter Declaration symbol is only visible within function scope, so the symbol is stored in constructor.locals.
-        // Property Declaration symbol is a member of the class, so the symbol is stored in its class Declaration.symbol.members
-        if (symbol.valueDeclaration && isParameter(symbol.valueDeclaration) && isParameterPropertyDeclaration(symbol.valueDeclaration)) {
-            const paramProps = checker.getSymbolsOfParameterPropertyDeclaration(symbol.valueDeclaration, symbol.name);
-            const res = paramProps && cbParameterProperties(paramProps);
-            if (res) return res;
+        if (symbol.valueDeclaration && isParameterPropertyDeclaration(symbol.valueDeclaration)) {
+            // For a parameter property, now try on the other symbol (property if this was a parameter, parameter if this was a property).
+            const paramProps = checker.getSymbolsOfParameterPropertyDeclaration(cast(symbol.valueDeclaration, isParameter), symbol.name);
+            Debug.assert(paramProps.length === 2 && !!(paramProps[0].flags & SymbolFlags.FunctionScopedVariable) && !!(paramProps[1].flags & SymbolFlags.Property)); // is [parameter, property]
+            return fromRoot(symbol.flags & SymbolFlags.FunctionScopedVariable ? paramProps[1] : paramProps[0]);
         }
 
         // If this is symbol of binding element without propertyName declaration in Object binding pattern
@@ -1487,9 +1482,6 @@ namespace ts.FindAllReferences.Core {
             (sym, rootSymbol, baseSymbol) => search.includes(baseSymbol || rootSymbol || sym)
                 // For a base type, use the symbol for the derived type. For a synthetic (e.g. union) property, use the union symbol.
                 ? rootSymbol && !(getCheckFlags(sym) & CheckFlags.Synthetic) ? rootSymbol : sym
-                : undefined,
-            paramProps => referenceSymbol.flags & SymbolFlags.FunctionScopedVariable
-                ? getRelatedSymbol(search, find(paramProps, x => !!(x.flags & SymbolFlags.Property))!, referenceLocation, state)
                 : undefined,
             /*allowBaseTypes*/ rootSymbol =>
                 !(search.parents && !some(search.parents, parent => explicitlyInheritsFrom(rootSymbol.parent!, parent, state.inheritsFromCache, checker))));

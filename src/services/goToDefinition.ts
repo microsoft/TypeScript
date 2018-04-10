@@ -30,7 +30,7 @@ namespace ts.GoToDefinition {
         // Could not find a symbol e.g. node is string or number keyword,
         // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
         if (!symbol) {
-            return undefined;
+            return getDefinitionInfoForIndexSignatures(node, typeChecker);
         }
 
         // If this is an alias, and the request came at the declaration location
@@ -156,6 +156,16 @@ namespace ts.GoToDefinition {
         const textSpan = createTextSpan(node.getStart(), node.getWidth());
 
         return { definitions, textSpan };
+    }
+
+    // At 'x.foo', see if the type of 'x' has an index signature, and if so find its declarations.
+    function getDefinitionInfoForIndexSignatures(node: Node, checker: TypeChecker): DefinitionInfo[] | undefined {
+        if (!isPropertyAccessExpression(node.parent) || node.parent.name !== node) return;
+        const type = checker.getTypeAtLocation(node.parent.expression)!;
+        return mapDefined(type.isUnionOrIntersection() ? type.types : [type], nonUnionType => {
+            const info = checker.getIndexInfoOfType(nonUnionType, IndexKind.String);
+            return info && info.declaration && createDefinitionFromSignatureDeclaration(checker, info.declaration);
+        });
     }
 
     // Go to the original declaration for cases:
