@@ -22,10 +22,19 @@ namespace ts.DocumentHighlights {
     }
 
     function getSemanticDocumentHighlights(position: number, node: Node, program: Program, cancellationToken: CancellationToken, sourceFilesToSearch: ReadonlyArray<SourceFile>): DocumentHighlights[] | undefined {
-        const referenceEntries = FindAllReferences.getReferenceEntriesForNode(position, node, program, sourceFilesToSearch, cancellationToken);
+        const sourceFilesSet = arrayToSet(sourceFilesToSearch, f => f.fileName);
+        const referenceEntries = FindAllReferences.getReferenceEntriesForNode(position, node, program, sourceFilesToSearch, cancellationToken, /*options*/ undefined, sourceFilesSet);
         if (!referenceEntries) return undefined;
         const map = arrayToMultiMap(referenceEntries.map(FindAllReferences.toHighlightSpan), e => e.fileName, e => e.span);
-        return arrayFrom(map.entries(), ([fileName, highlightSpans]) => ({ fileName, highlightSpans }));
+        return arrayFrom(map.entries(), ([fileName, highlightSpans]) => {
+            if (!sourceFilesSet.has(fileName)) {
+                Debug.assert(program.redirectTargetsSet.has(fileName));
+                const redirectTarget = program.getSourceFile(fileName);
+                const redirect = find(sourceFilesToSearch, f => f.redirectInfo && f.redirectInfo.redirectTarget === redirectTarget)!;
+                fileName = redirect.fileName;
+            }
+            return { fileName, highlightSpans };
+        });
     }
 
     function getSyntacticDocumentHighlights(node: Node, sourceFile: SourceFile): DocumentHighlights[] {

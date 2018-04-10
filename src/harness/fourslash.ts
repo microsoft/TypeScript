@@ -1087,7 +1087,7 @@ namespace FourSlash {
                 const searchFileNames = startFile === fileName ? [startFile] : [startFile, fileName];
                 const highlights = this.getDocumentHighlightsAtCurrentPosition(searchFileNames);
                 if (!highlights.every(dh => ts.contains(searchFileNames, dh.fileName))) {
-                    this.raiseError(`When asking for document highlights only in file ${searchFileNames}, got document highlights in ${unique(highlights, dh => dh.fileName)}`);
+                    this.raiseError(`When asking for document highlights only in files ${searchFileNames}, got document highlights in ${unique(highlights, dh => dh.fileName)}`);
                 }
             }
         }

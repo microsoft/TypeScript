@@ -11,4 +11,6 @@
 // @Filename: referencesForGlobals_2.ts
 ////import f = require("[|foo|]");
 
-verify.singleReferenceGroup('module "foo"');
+const ranges = test.ranges();
+const [r0, r1] = ranges;
+verify.referenceGroups(ranges, [{ definition: 'module "foo"', ranges: [r1, r0] }]);
