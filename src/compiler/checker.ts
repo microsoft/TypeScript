@@ -434,6 +434,7 @@ namespace ts {
         let deferredGlobalAsyncIteratorType: GenericType;
         let deferredGlobalAsyncIterableIteratorType: GenericType;
         let deferredGlobalTemplateStringsArrayType: ObjectType;
+        let deferredGlobalImportMetaType: ObjectType;
 
         let deferredNodes: Node[];
         const allPotentiallyUnusedIdentifiers = createMap<ReadonlyArray<PotentiallyUnusedIdentifier>>(); // key is file name
@@ -7706,6 +7707,10 @@ namespace ts {
 
         function getGlobalTemplateStringsArrayType() {
             return deferredGlobalTemplateStringsArrayType || (deferredGlobalTemplateStringsArrayType = getGlobalType("TemplateStringsArray" as __String, /*arity*/ 0, /*reportErrors*/ true)) || emptyObjectType;
+        }
+
+        function getGlobalImportMetaType() {
+            return deferredGlobalImportMetaType || (deferredGlobalImportMetaType = getGlobalType("ImportMeta" as __String, /*arity*/ 0, /*reportErrors*/ true)) || emptyObjectType;
         }
 
         function getGlobalESSymbolConstructorSymbol(reportErrors: boolean) {
@@ -18691,6 +18696,20 @@ namespace ts {
 
         function checkMetaProperty(node: MetaProperty) {
             checkGrammarMetaProperty(node);
+
+            if (node.keywordToken === SyntaxKind.NewKeyword) {
+                return checkNewTargetMetaProperty(node);
+            }
+
+            if (node.keywordToken === SyntaxKind.ImportKeyword) {
+                const file = getSourceFileOfNode(node);
+                Debug.assert(!!(file.flags & NodeFlags.PossiblyContainsImportMeta), "Containing file is missing import meta node flag.");
+                Debug.assert(!!file.externalModuleIndicator, "Containing file should be a module.");
+                return node.name.escapedText === "meta" ? getGlobalImportMetaType() : unknownType;
+            }
+        }
+
+        function checkNewTargetMetaProperty(node: MetaProperty) {
             const container = getNewTargetContainer(node);
             if (!container) {
                 error(node, Diagnostics.Meta_property_0_is_only_allowed_in_the_body_of_a_function_declaration_function_expression_or_constructor, "new.target");
@@ -27554,10 +27573,18 @@ namespace ts {
         }
 
         function checkGrammarMetaProperty(node: MetaProperty) {
-            if (node.keywordToken === SyntaxKind.NewKeyword) {
-                if (node.name.escapedText !== "target") {
-                    return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2, node.name.escapedText, tokenToString(node.keywordToken), "target");
-                }
+            const escapedText = node.name.escapedText;
+            switch (node.keywordToken) {
+                case SyntaxKind.NewKeyword:
+                    if (escapedText !== "target") {
+                        return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2, node.name.escapedText, tokenToString(node.keywordToken), "target");
+                    }
+                    break;
+                case SyntaxKind.ImportKeyword:
+                    if (escapedText !== "meta") {
+                        return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2, node.name.escapedText, tokenToString(node.keywordToken), "meta");
+                    }
+                    break;
             }
         }
 
