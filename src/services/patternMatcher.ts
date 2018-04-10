@@ -38,7 +38,7 @@ namespace ts {
         // Fully checks a candidate, with an dotted container, against the search pattern.
         // The candidate must match the last part of the search pattern, and the dotted container
         // must match the preceding segments of the pattern.
-        getMatches(candidateContainers: string[], candidate: string): PatternMatch[] | undefined;
+        getMatches(candidateContainers: ReadonlyArray<string> | undefined, candidate: string): PatternMatch[] | undefined;
 
         // Whether or not the pattern contained dots or not.  Clients can use this to determine
         // If they should call getMatches, or if getMatchesForLastSegmentOfPattern is sufficient.
@@ -115,16 +115,16 @@ namespace ts {
         };
     }
 
-    function getMatches(candidateContainers: ReadonlyArray<string>, candidate: string, dotSeparatedSegments: ReadonlyArray<Segment>, stringToWordSpans: Map<TextSpan[]>): PatternMatch[] | undefined {
+    function getMatches(candidateContainers: ReadonlyArray<string> | undefined, candidate: string, dotSeparatedSegments: ReadonlyArray<Segment>, stringToWordSpans: Map<TextSpan[]>): PatternMatch[] | undefined {
         // First, check that the last part of the dot separated pattern matches the name of the
         // candidate.  If not, then there's no point in proceeding and doing the more
         // expensive work.
-        const candidateMatch = matchSegment(candidate, lastOrUndefined(dotSeparatedSegments), stringToWordSpans);
+        const candidateMatch = matchSegment(candidate, last(dotSeparatedSegments), stringToWordSpans);
         if (!candidateMatch) {
             return undefined;
         }
 
-        candidateContainers = candidateContainers || [];
+        candidateContainers = candidateContainers || emptyArray;
 
         // -1 because the last part was checked against the name, and only the rest
         // of the parts are checked against the container.
