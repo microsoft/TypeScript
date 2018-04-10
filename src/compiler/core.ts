@@ -1268,10 +1268,7 @@ namespace ts {
         });
     }
 
-    export function assign<T1 extends MapLike<{}>, T2, T3>(t: T1, arg1: T2, arg2: T3): T1 & T2 & T3;
-    export function assign<T1 extends MapLike<{}>, T2>(t: T1, arg1: T2): T1 & T2;
-    export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]): any;
-    export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]) {
+    export function assign<T extends object>(t: T, ...args: T[]) {
         for (const arg of args) {
             for (const p in arg) {
                 if (hasProperty(arg, p)) {
@@ -1606,6 +1603,7 @@ namespace ts {
             messageText: text,
             category: message.category,
             code: message.code,
+            reportsUnnecessary: message.reportsUnnecessary,
         };
     }
 
@@ -1635,7 +1633,8 @@ namespace ts {
 
             messageText: text,
             category: message.category,
-            code: message.code
+            code: message.code,
+            reportsUnnecessary: message.reportsUnnecessary,
         };
     }
 
@@ -1647,7 +1646,7 @@ namespace ts {
 
             code: chain.code,
             category: chain.category,
-            messageText: chain.next ? chain : chain.messageText
+            messageText: chain.next ? chain : chain.messageText,
         };
     }
 
@@ -2248,6 +2247,8 @@ namespace ts {
      * Adds a trailing directory separator to a path, if it does not already have one.
      * @param path The path.
      */
+    export function ensureTrailingDirectorySeparator(path: Path): Path;
+    export function ensureTrailingDirectorySeparator(path: string): string;
     export function ensureTrailingDirectorySeparator(path: string) {
         if (path.charAt(path.length - 1) !== directorySeparator) {
             return path + directorySeparator;
@@ -3122,8 +3123,8 @@ namespace ts {
         return (arg: T) => f(arg) && g(arg);
     }
 
-    export function or<T>(f: (arg: T) => boolean, g: (arg: T) => boolean) {
-        return (arg: T) => f(arg) || g(arg);
+    export function or<T>(f: (arg: T) => boolean, g: (arg: T) => boolean, ...others: ((arg: T) => boolean)[]) {
+        return (arg: T) => f(arg) || g(arg) || others.some(f => f(arg));
     }
 
     export function assertTypeIsNever(_: never): void { } // tslint:disable-line no-empty

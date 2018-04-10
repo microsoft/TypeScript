@@ -80,6 +80,7 @@ namespace ts.server {
             text: flattenDiagnosticMessageText(diag.messageText, "\n"),
             code: diag.code,
             category: diagnosticCategoryName(diag),
+            reportsUnnecessary: diag.reportsUnnecessary,
             source: diag.source
         };
     }
@@ -96,8 +97,8 @@ namespace ts.server {
         const text = flattenDiagnosticMessageText(diag.messageText, "\n");
         const { code, source } = diag;
         const category = diagnosticCategoryName(diag);
-        return includeFileName ? { start, end, text, code, category, source, fileName: diag.file && diag.file.fileName } :
-            { start, end, text, code, category, source };
+        return includeFileName ? { start, end, text, code, category, source, reportsUnnecessary: diag.reportsUnnecessary, fileName: diag.file && diag.file.fileName } :
+            { start, end, text, code, category, reportsUnnecessary: diag.reportsUnnecessary, source };
     }
 
     export interface PendingErrorCheck {
@@ -297,6 +298,7 @@ namespace ts.server {
         eventHandler?: ProjectServiceEventHandler;
         /** Has no effect if eventHandler is also specified. */
         suppressDiagnosticEvents?: boolean;
+        syntaxOnly?: boolean;
         throttleWaitMilliseconds?: number;
 
         globalPlugins?: ReadonlyArray<string>;
@@ -359,7 +361,8 @@ namespace ts.server {
                 suppressDiagnosticEvents: this.suppressDiagnosticEvents,
                 globalPlugins: opts.globalPlugins,
                 pluginProbeLocations: opts.pluginProbeLocations,
-                allowLocalPluginLoads: opts.allowLocalPluginLoads
+                allowLocalPluginLoads: opts.allowLocalPluginLoads,
+                syntaxOnly: opts.syntaxOnly,
             };
             this.projectService = new ProjectService(settings);
             this.gcTimer = new GcTimer(this.host, /*delay*/ 7000, this.logger);
@@ -482,7 +485,7 @@ namespace ts.server {
             this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSyntacticDiagnostics(file), "syntaxDiag");
         }
 
-        private infoCheck(file: NormalizedPath, project: Project) {
+        private suggestionCheck(file: NormalizedPath, project: Project) {
             this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSuggestionDiagnostics(file), "suggestionDiag");
         }
 
@@ -525,12 +528,20 @@ namespace ts.server {
                         return;
                     }
 
-                    next.immediate(() => {
-                        this.infoCheck(fileName, project);
+                    const goNext = () => {
                         if (checkList.length > index) {
                             next.delay(followMs, checkOne);
                         }
-                    });
+                    };
+                    if (this.getPreferences(fileName).disableSuggestions) {
+                        goNext();
+                    }
+                    else {
+                        next.immediate(() => {
+                            this.suggestionCheck(fileName, project);
+                            goNext();
+                        });
+                    }
                 });
             };
 

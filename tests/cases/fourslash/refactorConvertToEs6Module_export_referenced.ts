@@ -11,9 +11,11 @@
 ////exports.y;
 ////
 ////exports.z = 2;
-////function f(z) {
-////    exports.z;
+////exports.f = function(z) {
+////    z;
 ////}
+
+// TODO: GH#22492 Should be a able access `exports.z` inside `exports.f`
 
 verify.codeFix({
     description: "Convert to ES6 module",
@@ -26,9 +28,8 @@ const _y = y;
 export { _y as y };
 _y;
 
-const _z = 2;
-export { _z as z };
-function f(z) {
-    _z;
+export const z = 2;
+export function f(z) {
+    z;
 }`,
 });

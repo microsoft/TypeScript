@@ -211,12 +211,6 @@ namespace ts.server {
         }
     }
 
-    // E.g. "12:34:56.789"
-    function nowString() {
-        const d = new Date();
-        return `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}.${d.getMilliseconds()}`;
-    }
-
     interface QueuedOperation {
         operationId: string;
         operation: () => void;
@@ -513,6 +507,7 @@ namespace ts.server {
                 logger,
                 canUseEvents: true,
                 suppressDiagnosticEvents,
+                syntaxOnly,
                 globalPlugins,
                 pluginProbeLocations,
                 allowLocalPluginLoads,
@@ -945,6 +940,7 @@ namespace ts.server {
     const useInferredProjectPerProjectRoot = hasArgument("--useInferredProjectPerProjectRoot");
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
     const suppressDiagnosticEvents = hasArgument("--suppressDiagnosticEvents");
+    const syntaxOnly = hasArgument("--syntaxOnly");
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
 
     logger.info(`Starting TS Server`);

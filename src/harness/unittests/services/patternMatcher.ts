@@ -249,11 +249,11 @@ describe("PatternMatcher", () => {
         });
 
         it("BlankPattern", () => {
-            assertSegmentMatch("AddMetadataReference", "", undefined);
+            assertInvalidPattern("");
         });
 
         it("WhitespaceOnlyPattern", () => {
-            assertSegmentMatch("AddMetadataReference", " ", undefined);
+            assertInvalidPattern(" ");
         });
 
         it("EachWordSeparately1", () => {
@@ -322,6 +322,10 @@ describe("PatternMatcher", () => {
 
     function assertSegmentMatch(candidate: string, pattern: string, expected: ts.PatternMatch | undefined): void {
         assert.deepEqual(ts.createPatternMatcher(pattern).getMatchForLastSegmentOfPattern(candidate), expected);
+    }
+
+    function assertInvalidPattern(pattern: string) {
+        assert.equal(ts.createPatternMatcher(pattern), undefined);
     }
 
     function assertFullMatch(dottedContainer: string, candidate: string, pattern: string, expected: ts.PatternMatch | undefined): void {

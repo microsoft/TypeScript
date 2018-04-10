@@ -397,15 +397,18 @@ namespace ts.server {
             if (formatSettings) {
                 if (!this.formatSettings) {
                     this.formatSettings = getDefaultFormatCodeSettings(this.host);
+                    assign(this.formatSettings, formatSettings);
                 }
-                mergeMapLikes(this.formatSettings, formatSettings);
+                else {
+                    this.formatSettings = { ...this.formatSettings, ...formatSettings };
+                }
             }
 
             if (preferences) {
                 if (!this.preferences) {
-                    this.preferences = clone(defaultPreferences);
+                    this.preferences = defaultPreferences;
                 }
-                mergeMapLikes(this.preferences, preferences);
+                this.preferences = { ...this.preferences, ...preferences };
             }
         }
 

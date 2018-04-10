@@ -83,14 +83,6 @@ namespace ts.server {
         };
     }
 
-    export function mergeMapLikes<T extends object>(target: T, source: Partial<T>): void {
-        for (const key in source) {
-            if (hasProperty(source, key)) {
-                target[key] = source[key];
-            }
-        }
-    }
-
     export type NormalizedPath = string & { __normalizedPathTag: any };
 
     export function toNormalizedPath(fileName: string): NormalizedPath {

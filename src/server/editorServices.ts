@@ -311,6 +311,7 @@ namespace ts.server {
         pluginProbeLocations?: ReadonlyArray<string>;
         allowLocalPluginLoads?: boolean;
         typesMapLocation?: string;
+        syntaxOnly?: boolean;
     }
 
     function getDetailWatchInfo(watchType: WatchType, project: Project | undefined) {
@@ -391,6 +392,7 @@ namespace ts.server {
         public readonly useSingleInferredProject: boolean;
         public readonly useInferredProjectPerProjectRoot: boolean;
         public readonly typingsInstaller: ITypingsInstaller;
+        private readonly globalCacheLocationDirectoryPath: Path;
         public readonly throttleWaitMilliseconds?: number;
         private readonly eventHandler?: ProjectServiceEventHandler;
         private readonly suppressDiagnosticEvents?: boolean;
@@ -399,6 +401,8 @@ namespace ts.server {
         public readonly pluginProbeLocations: ReadonlyArray<string>;
         public readonly allowLocalPluginLoads: boolean;
         public readonly typesMapLocation: string | undefined;
+
+        public readonly syntaxOnly?: boolean;
 
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects = createMap<true>();
@@ -420,6 +424,7 @@ namespace ts.server {
             this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray;
             this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
             this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(this.getExecutingFilePath(), "../typesMap.json") : opts.typesMapLocation;
+            this.syntaxOnly = opts.syntaxOnly;
 
             Debug.assert(!!this.host.createHash, "'ServerHost.createHash' is required for ProjectService");
             if (this.host.realpath) {
@@ -427,6 +432,8 @@ namespace ts.server {
             }
             this.currentDirectory = this.host.getCurrentDirectory();
             this.toCanonicalFileName = createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
+            this.globalCacheLocationDirectoryPath = this.typingsInstaller.globalTypingsCacheLocation &&
+                ensureTrailingDirectorySeparator(this.toPath(this.typingsInstaller.globalTypingsCacheLocation));
             this.throttledOperations = new ThrottledOperations(this.host, this.logger);
 
             if (this.typesMapLocation) {
@@ -544,10 +551,11 @@ namespace ts.server {
                 else {
                     if (this.pendingEnsureProjectForOpenFiles) {
                         this.ensureProjectForOpenFiles();
+
+                        // Send the event to notify that there were background project updates
+                        // send current list of open files
+                        this.sendProjectsUpdatedInBackgroundEvent();
                     }
-                    // Send the event to notify that there were background project updates
-                    // send current list of open files
-                    this.sendProjectsUpdatedInBackgroundEvent();
                 }
             });
         }
@@ -638,7 +646,6 @@ namespace ts.server {
                 return undefined;
             }
             if (isInferredProjectName(projectName)) {
-                this.ensureProjectStructuresUptoDate();
                 return findProjectByName(projectName, this.inferredProjects);
             }
             return this.findExternalProjectByProjectName(projectName) || this.findConfiguredProjectByProjectName(toNormalizedPath(projectName));
@@ -1197,6 +1204,11 @@ namespace ts.server {
         private forEachConfigFileLocation(info: ScriptInfo,
             action: (configFileName: NormalizedPath, canonicalConfigFilePath: string) => boolean | void,
             projectRootPath?: NormalizedPath) {
+
+            if (this.syntaxOnly) {
+                return undefined;
+            }
+
             let searchPath = asNormalizedPath(getDirectoryPath(info.fileName));
 
             while (!projectRootPath || containsPath(projectRootPath, searchPath, this.currentDirectory, !this.host.useCaseSensitiveFileNames)) {
@@ -1729,7 +1741,10 @@ namespace ts.server {
         private watchClosedScriptInfo(info: ScriptInfo) {
             Debug.assert(!info.fileWatcher);
             // do not watch files with mixed content - server doesn't know how to interpret it
-            if (!info.isDynamicOrHasMixedContent()) {
+            // do not watch files in the global cache location
+            if (!info.isDynamicOrHasMixedContent() &&
+                (!this.globalCacheLocationDirectoryPath ||
+                    !startsWith(info.path, this.globalCacheLocationDirectoryPath))) {
                 const { fileName } = info;
                 info.fileWatcher = this.watchFactory.watchFilePath(
                     this.host,
@@ -1827,11 +1842,11 @@ namespace ts.server {
                     this.logger.info(`Host information ${args.hostInfo}`);
                 }
                 if (args.formatOptions) {
-                    mergeMapLikes(this.hostConfiguration.formatCodeOptions, convertFormatOptions(args.formatOptions));
+                    this.hostConfiguration.formatCodeOptions = { ...this.hostConfiguration.formatCodeOptions, ...convertFormatOptions(args.formatOptions) };
                     this.logger.info("Format host information updated");
                 }
                 if (args.preferences) {
-                    mergeMapLikes(this.hostConfiguration.preferences, args.preferences);
+                    this.hostConfiguration.preferences = { ...this.hostConfiguration.preferences, ...args.preferences };
                 }
                 if (args.extraFileExtensions) {
                     this.hostConfiguration.extraFileExtensions = args.extraFileExtensions;
@@ -1987,15 +2002,12 @@ namespace ts.server {
             return this.openClientFileWithNormalizedPath(toNormalizedPath(fileName), fileContent, scriptKind, /*hasMixedContent*/ false, projectRootPath ? toNormalizedPath(projectRootPath) : undefined);
         }
 
-        private findExternalProjetContainingOpenScriptInfo(info: ScriptInfo): ExternalProject {
-            for (const proj of this.externalProjects) {
-                // Ensure project structure is uptodate to check if info is present in external project
+        private findExternalProjectContainingOpenScriptInfo(info: ScriptInfo): ExternalProject | undefined {
+            return find(this.externalProjects, proj => {
+                // Ensure project structure is up-to-date to check if info is present in external project
                 proj.updateGraph();
-                if (proj.containsScriptInfo(info)) {
-                    return proj;
-                }
-            }
-            return undefined;
+                return proj.containsScriptInfo(info);
+            });
         }
 
         openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult {
@@ -2003,8 +2015,8 @@ namespace ts.server {
             let configFileErrors: ReadonlyArray<Diagnostic>;
 
             const info = this.getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName, projectRootPath ? this.getNormalizedAbsolutePath(projectRootPath) : this.currentDirectory, fileContent, scriptKind, hasMixedContent);
-            let project: ConfiguredProject | ExternalProject = this.findExternalProjetContainingOpenScriptInfo(info);
-            if (!project) {
+            let project: ConfiguredProject | ExternalProject | undefined = this.findExternalProjectContainingOpenScriptInfo(info);
+            if (!project && !this.syntaxOnly) { // Checking syntaxOnly is an optimization
                 configFileName = this.getConfigFileNameForFile(info, projectRootPath);
                 if (configFileName) {
                     project = this.findConfiguredProjectByProjectName(configFileName);
@@ -2309,7 +2321,7 @@ namespace ts.server {
             for (const file of proj.rootFiles) {
                 const normalized = toNormalizedPath(file.fileName);
                 if (getBaseConfigFileName(normalized)) {
-                    if (this.host.fileExists(normalized)) {
+                    if (!this.syntaxOnly && this.host.fileExists(normalized)) {
                         (tsConfigFiles || (tsConfigFiles = [])).push(normalized);
                     }
                 }

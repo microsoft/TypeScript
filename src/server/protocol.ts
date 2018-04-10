@@ -455,6 +455,8 @@ namespace ts.server.protocol {
         endLocation: Location;
         category: string;
         code: number;
+        /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
+        reportsUnnecessary?: {};
     }
 
     /**
@@ -2170,6 +2172,8 @@ namespace ts.server.protocol {
          */
         category: string;
 
+        reportsUnnecessary?: {};
+
         /**
          * The error code of the diagnostic message.
          */
@@ -2636,6 +2640,7 @@ namespace ts.server.protocol {
     }
 
     export interface UserPreferences {
+        readonly disableSuggestions?: boolean;
         readonly quotePreference?: "double" | "single";
         /**
          * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
