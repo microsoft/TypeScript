@@ -2822,7 +2822,7 @@ namespace ts {
             return symbol;
         }
 
-        function isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node, shouldComputeAliasToMakeVisible: boolean = true): SymbolVisibilityResult {
+        function isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node, shouldComputeAliasToMakeVisible = true): SymbolVisibilityResult {
             const symbol = resolveNameFromEntityName(entityName, enclosingDeclaration);
             const firstIdentifier = getFirstIdentifier(entityName);
             // Verify if the symbol is accessible
