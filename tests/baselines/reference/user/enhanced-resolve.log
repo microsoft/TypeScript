@@ -16,10 +16,6 @@ node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(209,4): error TS2322:
 node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(220,4): error TS2322: Type 'null' is not assignable to type '(path: any) => any'.
 node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(224,23): error TS2322: Type 'null' is not assignable to type '(path: any, callback: any) => void'.
 node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(227,27): error TS2322: Type 'null' is not assignable to type '(path: any) => any'.
-node_modules/enhanced-resolve/lib/NodeJsInputFileSystem.js(7,20): error TS2307: Cannot find module 'graceful-fs'.
-node_modules/enhanced-resolve/lib/Resolver.js(43,24): error TS2507: Type 'typeof Tapable' is not a constructor function type.
-node_modules/enhanced-resolve/lib/Resolver.js(53,8): error TS2339: Property '_pluginCompat' does not exist on type 'Resolver'.
-node_modules/enhanced-resolve/lib/Resolver.js(62,8): error TS2339: Property '_pluginCompat' does not exist on type 'Resolver'.
 node_modules/enhanced-resolve/lib/Resolver.js(162,17): error TS2339: Property 'push' does not exist on type 'Set<any>'.
 node_modules/enhanced-resolve/lib/Resolver.js(178,11): error TS2339: Property 'details' does not exist on type 'Error'.
 node_modules/enhanced-resolve/lib/Resolver.js(179,11): error TS2339: Property 'missing' does not exist on type 'Error'.
@@ -28,60 +24,6 @@ node_modules/enhanced-resolve/lib/concord.js(75,30): error TS2531: Object is pos
 node_modules/enhanced-resolve/lib/concord.js(76,17): error TS2531: Object is possibly 'null'.
 node_modules/enhanced-resolve/lib/createInnerCallback.js(16,20): error TS2339: Property 'stack' does not exist on type '(...args: any[]) => any'.
 node_modules/enhanced-resolve/lib/createInnerCallback.js(17,20): error TS2339: Property 'missing' does not exist on type '(...args: any[]) => any'.
-node_modules/memory-fs/lib/normalize.js(83,47): error TS2345: Argument of type 'any[]' is not assignable to parameter of type 'string'.
-node_modules/tapable/lib/AsyncSeriesBailHook.js(12,30): error TS2345: Argument of type '{ onError: (i: any, err: any, next: any, doneBreak: any) => any; onResult: (i: any, result: any, ...' is not assignable to parameter of type '{ onError: any; onResult: any; onDone: any; rethrowIfPossible: any; }'.
-  Property 'rethrowIfPossible' is missing in type '{ onError: (i: any, err: any, next: any, doneBreak: any) => any; onResult: (i: any, result: any, ...'.
-node_modules/tapable/lib/AsyncSeriesHook.js(12,30): error TS2345: Argument of type '{ onError: (i: any, err: any, next: any, doneBreak: any) => any; onDone: any; }' is not assignable to parameter of type '{ onError: any; onResult: any; onDone: any; rethrowIfPossible: any; }'.
-  Property 'onResult' is missing in type '{ onError: (i: any, err: any, next: any, doneBreak: any) => any; onDone: any; }'.
-node_modules/tapable/lib/Hook.js(91,45): error TS2551: Property '_withOptions' does not exist on type 'Hook'. Did you mean 'withOptions'?
-node_modules/tapable/lib/Hook.js(92,21): error TS2339: Property '_withOptionsBase' does not exist on type 'Hook'.
-node_modules/tapable/lib/HookCodeFactory.js(15,10): error TS2532: Object is possibly 'undefined'.
-node_modules/tapable/lib/HookCodeFactory.js(17,81): error TS2339: Property 'content' does not exist on type 'HookCodeFactory'.
-node_modules/tapable/lib/HookCodeFactory.js(24,35): error TS2345: Argument of type '{ after: string; }' is not assignable to parameter of type '{ before: any; after: any; } | undefined'.
-  Type '{ after: string; }' is not assignable to type '{ before: any; after: any; }'.
-    Property 'before' is missing in type '{ after: string; }'.
-node_modules/tapable/lib/HookCodeFactory.js(26,52): error TS2339: Property 'content' does not exist on type 'HookCodeFactory'.
-node_modules/tapable/lib/HookCodeFactory.js(37,18): error TS2339: Property 'content' does not exist on type 'HookCodeFactory'.
-node_modules/tapable/lib/HookCodeFactory.js(60,63): error TS2304: Cannot find name 'Tap'.
-node_modules/tapable/lib/HookCodeFactory.js(60,89): error TS2304: Cannot find name 'Interceptor'.
-node_modules/tapable/lib/HookCodeFactory.js(64,24): error TS2339: Property 'args' does not exist on type '{ type: "async" | "sync" | "promise"; taps: any[]; interceptors: any[]; }'.
-node_modules/tapable/lib/HookCodeFactory.js(75,6): error TS2532: Object is possibly 'undefined'.
-node_modules/tapable/lib/HookCodeFactory.js(79,22): error TS2532: Object is possibly 'undefined'.
-node_modules/tapable/lib/HookCodeFactory.js(80,24): error TS2532: Object is possibly 'undefined'.
-node_modules/tapable/lib/HookCodeFactory.js(82,57): error TS2345: Argument of type '{ before: string | undefined; }' is not assignable to parameter of type '{ before: any; after: any; } | undefined'.
-  Type '{ before: string | undefined; }' is not assignable to type '{ before: any; after: any; }'.
-    Property 'after' is missing in type '{ before: string | undefined; }'.
-node_modules/tapable/lib/HookCodeFactory.js(91,20): error TS2532: Object is possibly 'undefined'.
-node_modules/tapable/lib/HookCodeFactory.js(99,22): error TS2532: Object is possibly 'undefined'.
-node_modules/tapable/lib/HookCodeFactory.js(100,24): error TS2532: Object is possibly 'undefined'.
-node_modules/tapable/lib/HookCodeFactory.js(110,15): error TS2532: Object is possibly 'undefined'.
-node_modules/tapable/lib/HookCodeFactory.js(118,67): error TS2345: Argument of type '{ before: string | undefined; }' is not assignable to parameter of type '{ before: any; after: any; } | undefined'.
-  Type '{ before: string | undefined; }' is not assignable to type '{ before: any; after: any; }'.
-    Property 'after' is missing in type '{ before: string | undefined; }'.
-node_modules/tapable/lib/HookCodeFactory.js(122,42): error TS2345: Argument of type '{ before: string | undefined; }' is not assignable to parameter of type '{ before: any; after: any; } | undefined'.
-  Type '{ before: string | undefined; }' is not assignable to type '{ before: any; after: any; }'.
-    Property 'after' is missing in type '{ before: string | undefined; }'.
-node_modules/tapable/lib/HookCodeFactory.js(167,41): error TS2345: Argument of type '{ before: string | undefined; }' is not assignable to parameter of type '{ before: any; after: any; } | undefined'.
-  Type '{ before: string | undefined; }' is not assignable to type '{ before: any; after: any; }'.
-    Property 'after' is missing in type '{ before: string | undefined; }'.
-node_modules/tapable/lib/HookCodeFactory.js(187,6): error TS2532: Object is possibly 'undefined'.
-node_modules/tapable/lib/HookCodeFactory.js(189,22): error TS2532: Object is possibly 'undefined'.
-node_modules/tapable/lib/HookCodeFactory.js(191,12): error TS2532: Object is possibly 'undefined'.
-node_modules/tapable/lib/HookCodeFactory.js(214,6): error TS2532: Object is possibly 'undefined'.
-node_modules/tapable/lib/HookCodeFactory.js(216,20): error TS2532: Object is possibly 'undefined'.
-node_modules/tapable/lib/HookCodeFactory.js(225,22): error TS2532: Object is possibly 'undefined'.
-node_modules/tapable/lib/HookCodeFactory.js(226,24): error TS2532: Object is possibly 'undefined'.
-node_modules/tapable/lib/HookCodeFactory.js(228,57): error TS2345: Argument of type '{ before: string | undefined; }' is not assignable to parameter of type '{ before: any; after: any; } | undefined'.
-  Type '{ before: string | undefined; }' is not assignable to type '{ before: any; after: any; }'.
-    Property 'after' is missing in type '{ before: string | undefined; }'.
-node_modules/tapable/lib/HookCodeFactory.js(266,6): error TS2532: Object is possibly 'undefined'.
-node_modules/tapable/lib/HookCodeFactory.js(271,29): error TS2532: Object is possibly 'undefined'.
-node_modules/tapable/lib/HookCodeFactory.js(277,22): error TS2532: Object is possibly 'undefined'.
-node_modules/tapable/lib/HookCodeFactory.js(291,12): error TS2554: Expected 0-2 arguments, but got 4.
-node_modules/tapable/lib/HookCodeFactory.js(316,9): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-node_modules/tapable/lib/HookCodeFactory.js(316,17): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-node_modules/tapable/lib/SyncHook.js(12,30): error TS2345: Argument of type '{ onError: (i: any, err: any) => any; onDone: any; rethrowIfPossible: any; }' is not assignable to parameter of type '{ onError: any; onResult: any; onDone: any; rethrowIfPossible: any; }'.
-  Property 'onResult' is missing in type '{ onError: (i: any, err: any) => any; onDone: any; rethrowIfPossible: any; }'.
 
 
 
