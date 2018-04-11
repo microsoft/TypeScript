@@ -3277,6 +3277,7 @@ namespace ts {
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[];
         isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
         getJsxFactoryEntity(location?: Node): EntityName;
+        getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
     }
 
     export const enum SymbolFlags {

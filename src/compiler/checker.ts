@@ -3623,7 +3623,14 @@ namespace ts {
                 return typeParameterNodes;
             }
 
-            function symbolToTypeNode(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags): TypeQueryNode | TypeReferenceNode | ImportTypeNode {
+            function getAccessTypeSplitNode(top: IndexedAccessTypeNode): IndexedAccessTypeNode {
+                if (isIndexedAccessTypeNode(top.objectType)) {
+                    return getAccessTypeSplitNode(top.objectType);
+                }
+                return top;
+            }
+
+            function symbolToTypeNode(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags): TypeNode {
                 const chain = lookupSymbolChain(symbol, context, meaning);
 
                 context.flags |= NodeBuilderFlags.InInitialEntityName;
@@ -3633,15 +3640,26 @@ namespace ts {
                 const isTypeOf = meaning === SymbolFlags.Value;
                 if (ambientModuleSymbolRegex.test(rootName)) {
                     // module is root, must use `ImportTypeNode`
-                    const nonRootParts = chain.length > 1 ? createEntityNameFromSymbolChain(chain, chain.length - 1, 1) : undefined;
+                    const nonRootParts = chain.length > 1 ? createAccessFromSymbolChain(chain, chain.length - 1, 1) : undefined;
                     const typeParameterNodes = lookupTypeParameterNodes(chain, 0, context);
-                    return createImportTypeNode(createLiteralTypeNode(createLiteral(rootName.substring(1, rootName.length - 1))), nonRootParts, typeParameterNodes as ReadonlyArray<TypeNode>, isTypeOf);
+                    const lit = createLiteralTypeNode(createLiteral(rootName.substring(1, rootName.length - 1)));
+                    if (isEntityName(nonRootParts)) {
+                        return createImportTypeNode(lit, nonRootParts, typeParameterNodes as ReadonlyArray<TypeNode>, isTypeOf);
+                    }
+                    else {
+                        const splitNode = getAccessTypeSplitNode(nonRootParts);
+                        const qualifier = (splitNode.objectType as TypeReferenceNode).typeName;
+                        return createIndexedAccessTypeNode(createImportTypeNode(lit, qualifier, typeParameterNodes as ReadonlyArray<TypeNode>, isTypeOf), splitNode.indexType);
+                    }
                 }
 
-                const entityName = createEntityNameFromSymbolChain(chain, chain.length - 1, 0);
+                const entityName = createAccessFromSymbolChain(chain, chain.length - 1, 0);
+                if (isIndexedAccessTypeNode(entityName)) {
+                    return entityName; // Indexed accesses can never be `typeof`
+                }
                 return isTypeOf ? createTypeQueryNode(entityName) : createTypeReferenceNode(entityName, /*typeArguments*/ undefined);
 
-                function createEntityNameFromSymbolChain(chain: Symbol[], index: number, stopper: number): EntityName {
+                function createAccessFromSymbolChain(chain: Symbol[], index: number, stopper: number): EntityName | IndexedAccessTypeNode {
                     const typeParameterNodes = lookupTypeParameterNodes(chain, index, context);
                     const symbol = chain[index];
 
@@ -3652,10 +3670,30 @@ namespace ts {
                     if (index === 0) {
                         context.flags ^= NodeBuilderFlags.InInitialEntityName;
                     }
+
+                    const parent = chain[index - 1];
+                    if (parent && getMembersOfSymbol(parent) && getMembersOfSymbol(parent).get(symbol.escapedName) === symbol) {
+                        // Should use an indexed access
+                        const LHS = createAccessFromSymbolChain(chain, index - 1, stopper);
+                        if (isIndexedAccessTypeNode(LHS)) {
+                            return createIndexedAccessTypeNode(LHS, createLiteralTypeNode(createLiteral(symbolName)));
+                        }
+                        else {
+                            return createIndexedAccessTypeNode(createTypeReferenceNode(LHS, typeParameterNodes as ReadonlyArray<TypeNode>), createLiteralTypeNode(createLiteral(symbolName)));
+                        }
+                    }
+
                     const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
                     identifier.symbol = symbol;
 
-                    return index > stopper ? createQualifiedName(createEntityNameFromSymbolChain(chain, index - 1, stopper), identifier) : identifier;
+                    if (index > stopper) {
+                        const LHS = createAccessFromSymbolChain(chain, index - 1, stopper);
+                        if (!isEntityName(LHS)) {
+                            return Debug.fail("Impossible construct - an export of an indexed access cannot be reachable");
+                        }
+                        return createQualifiedName(LHS, identifier);
+                    }
+                    return identifier;
                 }
             }
 
@@ -26241,7 +26279,22 @@ namespace ts {
                     const symbol = node && getSymbolOfNode(node);
                     return !!(symbol && getCheckFlags(symbol) & CheckFlags.Late);
                 },
-                getJsxFactoryEntity: location => location ? (getJsxNamespace(location), (getSourceFileOfNode(location).localJsxFactory || _jsxFactoryEntity)) : _jsxFactoryEntity
+                getJsxFactoryEntity: location => location ? (getJsxNamespace(location), (getSourceFileOfNode(location).localJsxFactory || _jsxFactoryEntity)) : _jsxFactoryEntity,
+                getAllAccessorDeclarations(accessor: AccessorDeclaration): AllAccessorDeclarations {
+                    accessor = getParseTreeNode(accessor, isGetOrSetAccessorDeclaration);
+                    const otherKind = accessor.kind === SyntaxKind.SetAccessor ? SyntaxKind.GetAccessor : SyntaxKind.SetAccessor;
+                    const otherAccessor = getDeclarationOfKind<AccessorDeclaration>(getSymbolOfNode(accessor), otherKind);
+                    const firstAccessor = otherAccessor && (otherAccessor.pos < accessor.pos) ? otherAccessor : accessor;
+                    const secondAccessor = otherAccessor && (otherAccessor.pos < accessor.pos) ? accessor : otherAccessor;
+                    const setAccessor = accessor.kind === SyntaxKind.SetAccessor ? accessor : otherAccessor;
+                    const getAccessor = accessor.kind === SyntaxKind.GetAccessor ? accessor : otherAccessor;
+                    return {
+                        firstAccessor,
+                        secondAccessor,
+                        setAccessor,
+                        getAccessor
+                    };
+                }
             };
 
             function isInHeritageClause(node: PropertyAccessEntityNameExpression) {

@@ -4855,6 +4855,11 @@ namespace ts {
         return node.kind === SyntaxKind.IndexSignature;
     }
 
+    /* @internal */
+    export function isGetOrSetAccessorDeclaration(node: Node): node is AccessorDeclaration {
+        return node.kind === SyntaxKind.SetAccessor || node.kind === SyntaxKind.GetAccessor;
+    }
+
     // Type
 
     export function isTypePredicateNode(node: Node): node is TypePredicateNode {

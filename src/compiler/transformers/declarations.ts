@@ -594,7 +594,7 @@ namespace ts {
         }
 
         function needsScopeMarker(result: LateVisibilityPaintedStatement) {
-            return !isAnyImportOrReExport(result) && !isExportAssignment(result) && !hasModifier(result, ModifierFlags.Export);
+            return !isAnyImportOrReExport(result) && !isExportAssignment(result) && !hasModifier(result, ModifierFlags.Export) && !isAmbientModule(result);
         }
 
         function visitDeclarationSubtree(input: Node): VisitResult<Node> {
@@ -1160,7 +1160,7 @@ namespace ts {
         }
 
         function ensureAccessor(node: AccessorDeclaration): PropertyDeclaration | undefined {
-            const accessors = getAllAccessorDeclarations((node.parent as ClassDeclaration).members, node);
+            const accessors = resolver.getAllAccessorDeclarations(node);
             if (node.kind !== accessors.firstAccessor.kind) {
                 return;
             }
