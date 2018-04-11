@@ -92,7 +92,7 @@ type K11 = keyof Shape[];  // "length" | "toString" | ...
 >Shape : Shape
 
 type K12 = keyof Dictionary<Shape>;  // string
->K12 : string | number | symbol
+>K12 : string | number
 >Dictionary : Dictionary<T>
 >Shape : Shape
 
@@ -136,7 +136,7 @@ type K20 = KeyOf<Shape>;  // "name" | "width" | "height" | "visible"
 >Shape : Shape
 
 type K21 = KeyOf<Dictionary<Shape>>;  // string
->K21 : string | number | symbol
+>K21 : string | number
 >KeyOf : keyof T
 >Dictionary : Dictionary<T>
 >Shape : Shape
@@ -756,12 +756,13 @@ function f51<T, K extends keyof T>(k: K, s: string) {
 >k : K
 }
 
-function f52<T>(obj: { [x: string]: boolean }, k: keyof T, s: string, n: number) {
->f52 : <T>(obj: { [x: string]: boolean; }, k: keyof T, s: string, n: number) => void
+function f52<T>(obj: { [x: string]: boolean }, k: Exclude<keyof T, symbol>, s: string, n: number) {
+>f52 : <T>(obj: { [x: string]: boolean; }, k: Exclude<keyof T, symbol>, s: string, n: number) => void
 >T : T
 >obj : { [x: string]: boolean; }
 >x : string
->k : keyof T
+>k : Exclude<keyof T, symbol>
+>Exclude : Exclude<T, U>
 >T : T
 >s : string
 >n : number
@@ -779,16 +780,17 @@ function f52<T>(obj: { [x: string]: boolean }, k: keyof T, s: string, n: number)
 >n : number
 
     const x3 = obj[k];
->x3 : { [x: string]: boolean; }[keyof T]
->obj[k] : { [x: string]: boolean; }[keyof T]
+>x3 : { [x: string]: boolean; }[Exclude<keyof T, symbol>]
+>obj[k] : { [x: string]: boolean; }[Exclude<keyof T, symbol>]
 >obj : { [x: string]: boolean; }
->k : keyof T
+>k : Exclude<keyof T, symbol>
 }
 
-function f53<T, K extends keyof T>(obj: { [x: string]: boolean }, k: K, s: string, n: number) {
->f53 : <T, K extends keyof T>(obj: { [x: string]: boolean; }, k: K, s: string, n: number) => void
+function f53<T, K extends Exclude<keyof T, symbol>>(obj: { [x: string]: boolean }, k: K, s: string, n: number) {
+>f53 : <T, K extends Exclude<keyof T, symbol>>(obj: { [x: string]: boolean; }, k: K, s: string, n: number) => void
 >T : T
 >K : K
+>Exclude : Exclude<T, U>
 >T : T
 >obj : { [x: string]: boolean; }
 >x : string

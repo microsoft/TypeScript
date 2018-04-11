@@ -651,25 +651,26 @@ function f51<T, K extends keyof T>(k: K, s: string) {
 >k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 184, 35))
 }
 
-function f52<T>(obj: { [x: string]: boolean }, k: keyof T, s: string, n: number) {
+function f52<T>(obj: { [x: string]: boolean }, k: Exclude<keyof T, symbol>, s: string, n: number) {
 >f52 : Symbol(f52, Decl(keyofAndIndexedAccess.ts, 187, 1))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 189, 13))
 >obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 189, 16))
 >x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 189, 24))
 >k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 189, 46))
+>Exclude : Symbol(Exclude, Decl(lib.d.ts, --, --))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 189, 13))
->s : Symbol(s, Decl(keyofAndIndexedAccess.ts, 189, 58))
->n : Symbol(n, Decl(keyofAndIndexedAccess.ts, 189, 69))
+>s : Symbol(s, Decl(keyofAndIndexedAccess.ts, 189, 75))
+>n : Symbol(n, Decl(keyofAndIndexedAccess.ts, 189, 86))
 
     const x1 = obj[s];
 >x1 : Symbol(x1, Decl(keyofAndIndexedAccess.ts, 190, 9))
 >obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 189, 16))
->s : Symbol(s, Decl(keyofAndIndexedAccess.ts, 189, 58))
+>s : Symbol(s, Decl(keyofAndIndexedAccess.ts, 189, 75))
 
     const x2 = obj[n];
 >x2 : Symbol(x2, Decl(keyofAndIndexedAccess.ts, 191, 9))
 >obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 189, 16))
->n : Symbol(n, Decl(keyofAndIndexedAccess.ts, 189, 69))
+>n : Symbol(n, Decl(keyofAndIndexedAccess.ts, 189, 86))
 
     const x3 = obj[k];
 >x3 : Symbol(x3, Decl(keyofAndIndexedAccess.ts, 192, 9))
@@ -677,32 +678,33 @@ function f52<T>(obj: { [x: string]: boolean }, k: keyof T, s: string, n: number)
 >k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 189, 46))
 }
 
-function f53<T, K extends keyof T>(obj: { [x: string]: boolean }, k: K, s: string, n: number) {
+function f53<T, K extends Exclude<keyof T, symbol>>(obj: { [x: string]: boolean }, k: K, s: string, n: number) {
 >f53 : Symbol(f53, Decl(keyofAndIndexedAccess.ts, 193, 1))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 195, 13))
 >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 195, 15))
+>Exclude : Symbol(Exclude, Decl(lib.d.ts, --, --))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 195, 13))
->obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 195, 35))
->x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 195, 43))
->k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 195, 65))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 195, 52))
+>x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 195, 60))
+>k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 195, 82))
 >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 195, 15))
->s : Symbol(s, Decl(keyofAndIndexedAccess.ts, 195, 71))
->n : Symbol(n, Decl(keyofAndIndexedAccess.ts, 195, 82))
+>s : Symbol(s, Decl(keyofAndIndexedAccess.ts, 195, 88))
+>n : Symbol(n, Decl(keyofAndIndexedAccess.ts, 195, 99))
 
     const x1 = obj[s];
 >x1 : Symbol(x1, Decl(keyofAndIndexedAccess.ts, 196, 9))
->obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 195, 35))
->s : Symbol(s, Decl(keyofAndIndexedAccess.ts, 195, 71))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 195, 52))
+>s : Symbol(s, Decl(keyofAndIndexedAccess.ts, 195, 88))
 
     const x2 = obj[n];
 >x2 : Symbol(x2, Decl(keyofAndIndexedAccess.ts, 197, 9))
->obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 195, 35))
->n : Symbol(n, Decl(keyofAndIndexedAccess.ts, 195, 82))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 195, 52))
+>n : Symbol(n, Decl(keyofAndIndexedAccess.ts, 195, 99))
 
     const x3 = obj[k];
 >x3 : Symbol(x3, Decl(keyofAndIndexedAccess.ts, 198, 9))
->obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 195, 35))
->k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 195, 65))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 195, 52))
+>k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 195, 82))
 }
 
 function f54<T>(obj: T, key: keyof T) {
