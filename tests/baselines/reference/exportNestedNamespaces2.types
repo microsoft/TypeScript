@@ -10,7 +10,7 @@ exports.formatters = {}
 === tests/cases/conformance/salsa/first.js ===
 exports = require('./mod')
 >exports = require('./mod') : typeof import("tests/cases/conformance/salsa/mod")
->exports : any
+>exports : typeof import("tests/cases/conformance/salsa/first")
 >require('./mod') : typeof import("tests/cases/conformance/salsa/mod")
 >require : any
 >'./mod' : "./mod"
@@ -31,7 +31,7 @@ exports.formatters.j = function (v) {
 === tests/cases/conformance/salsa/second.js ===
 exports = require('./mod')
 >exports = require('./mod') : typeof import("tests/cases/conformance/salsa/mod")
->exports : any
+>exports : typeof import("tests/cases/conformance/salsa/second")
 >require('./mod') : typeof import("tests/cases/conformance/salsa/mod")
 >require : any
 >'./mod' : "./mod"
