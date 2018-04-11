@@ -25,8 +25,7 @@ namespace ts.codefix {
         }
 
         const declaration = declarations[0];
-        // Clone name to remove leading trivia.
-        const name = getSynthesizedDeepClone(getNameOfDeclaration(declaration)) as PropertyName;
+        const name = getSynthesizedDeepCloneWithoutTrivia(getNameOfDeclaration(declaration)) as PropertyName;
         const visibilityModifier = createVisibilityModifier(getModifierFlags(declaration));
         const modifiers = visibilityModifier ? createNodeArray([visibilityModifier]) : undefined;
         const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
@@ -69,7 +68,7 @@ namespace ts.codefix {
 
                 for (const signature of signatures) {
                     // Need to ensure nodes are fresh each time so they can have different positions.
-                    outputMethod(signature, getSynthesizedDeepClones(modifiers), getSynthesizedDeepClone(name));
+                    outputMethod(signature, getSynthesizedDeepClones(modifiers), getSynthesizedDeepCloneWithoutTrivia(name));
                 }
 
                 if (declarations.length > signatures.length) {
@@ -104,7 +103,7 @@ namespace ts.codefix {
     }
 
     function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined): NodeArray<T> | undefined {
-        return nodes && createNodeArray(nodes.map(getSynthesizedDeepClone));
+        return nodes && createNodeArray(nodes.map(getSynthesizedDeepCloneWithoutTrivia));
     }
 
     export function createMethodFromCallExpression(

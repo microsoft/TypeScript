@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 ////interface I<T> { x: T; }
-////class C implements I<number> {[| |]}
+////class C implements I<number> { }
 
 verify.codeFix({
     description: "Implement interface 'I<number>'",
