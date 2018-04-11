@@ -256,6 +256,15 @@ const o = { x };
 `
                 });
 
+            testOrganizeImports("Unused_false_positive_export_shorthand",
+            {
+                    path: "/test.ts",
+                    content: `
+import { x } from "a";
+export { x };
+`
+                });
+
             testOrganizeImports("MoveToTop",
                 {
                     path: "/test.ts",
