@@ -3643,8 +3643,8 @@ namespace ts {
                     const nonRootParts = chain.length > 1 ? createAccessFromSymbolChain(chain, chain.length - 1, 1) : undefined;
                     const typeParameterNodes = lookupTypeParameterNodes(chain, 0, context);
                     const lit = createLiteralTypeNode(createLiteral(rootName.substring(1, rootName.length - 1)));
-                    if (isEntityName(nonRootParts)) {
-                        return createImportTypeNode(lit, nonRootParts, typeParameterNodes as ReadonlyArray<TypeNode>, isTypeOf);
+                    if (!nonRootParts || isEntityName(nonRootParts)) {
+                        return createImportTypeNode(lit, nonRootParts as EntityName, typeParameterNodes as ReadonlyArray<TypeNode>, isTypeOf);
                     }
                     else {
                         const splitNode = getAccessTypeSplitNode(nonRootParts);

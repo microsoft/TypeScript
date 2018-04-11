@@ -1,6 +1,4 @@
-EmitSkipped: true
-Diagnostics:
-  Exported variable 'foo' has or is using private name 'C'.
+EmitSkipped: false
 FileName : /tests/cases/fourslash/inputFile.js
 var M;
 (function (M) {
@@ -11,4 +9,10 @@ var M;
     }());
     M.foo = new C();
 })(M || (M = {}));
+FileName : /tests/cases/fourslash/inputFile.d.ts
+declare module M {
+    class C {
+    }
+    var foo: C;
+}
 
