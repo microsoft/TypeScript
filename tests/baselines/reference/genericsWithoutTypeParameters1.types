@@ -102,7 +102,7 @@ class A<T> { }
 >T : T
 
 function f<T>(x: T): A {
->f : <T>(x: T) => any
+>f : <T>(x: T) => A
 >T : T
 >x : T
 >T : T

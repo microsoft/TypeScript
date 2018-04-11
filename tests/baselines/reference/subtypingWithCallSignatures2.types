@@ -21,7 +21,7 @@ class OtherDerived extends Base { bing: string; }
 >bing : string
 
 declare function foo1(a: (x: number) => number[]): typeof a;
->foo1 : { (a: (x: number) => number[]): (x: number) => number[]; (a: any): any; }
+>foo1 : { (a: (x: number) => number[]): typeof a; (a: any): any; }
 >a : (x: number) => number[]
 >x : number
 >a : (x: number) => number[]
@@ -31,7 +31,7 @@ declare function foo1(a: any): any;
 >a : any
 
 declare function foo2(a: (x: number) => string[]): typeof a;
->foo2 : { (a: (x: number) => string[]): (x: number) => string[]; (a: any): any; }
+>foo2 : { (a: (x: number) => string[]): typeof a; (a: any): any; }
 >a : (x: number) => string[]
 >x : number
 >a : (x: number) => string[]
@@ -41,7 +41,7 @@ declare function foo2(a: any): any;
 >a : any
 
 declare function foo3(a: (x: number) => void): typeof a;
->foo3 : { (a: (x: number) => void): (x: number) => void; (a: any): any; }
+>foo3 : { (a: (x: number) => void): typeof a; (a: any): any; }
 >a : (x: number) => void
 >x : number
 >a : (x: number) => void
@@ -51,7 +51,7 @@ declare function foo3(a: any): any;
 >a : any
 
 declare function foo4(a: (x: string, y: number) => string): typeof a;
->foo4 : { (a: (x: string, y: number) => string): (x: string, y: number) => string; (a: any): any; }
+>foo4 : { (a: (x: string, y: number) => string): typeof a; (a: any): any; }
 >a : (x: string, y: number) => string
 >x : string
 >y : number
@@ -62,7 +62,7 @@ declare function foo4(a: any): any;
 >a : any
 
 declare function foo5(a: (x: (arg: string) => number) => string): typeof a;
->foo5 : { (a: (x: (arg: string) => number) => string): (x: (arg: string) => number) => string; (a: any): any; }
+>foo5 : { (a: (x: (arg: string) => number) => string): typeof a; (a: any): any; }
 >a : (x: (arg: string) => number) => string
 >x : (arg: string) => number
 >arg : string
@@ -73,7 +73,7 @@ declare function foo5(a: any): any;
 >a : any
 
 declare function foo6(a: (x: (arg: Base) => Derived) => Base): typeof a;
->foo6 : { (a: (x: (arg: Base) => Derived) => Base): (x: (arg: Base) => Derived) => Base; (a: any): any; }
+>foo6 : { (a: (x: (arg: Base) => Derived) => Base): typeof a; (a: any): any; }
 >a : (x: (arg: Base) => Derived) => Base
 >x : (arg: Base) => Derived
 >arg : Base
@@ -87,7 +87,7 @@ declare function foo6(a: any): any;
 >a : any
 
 declare function foo7(a: (x: (arg: Base) => Derived) => (r: Base) => Derived): typeof a;
->foo7 : { (a: (x: (arg: Base) => Derived) => (r: Base) => Derived): (x: (arg: Base) => Derived) => (r: Base) => Derived; (a: any): any; }
+>foo7 : { (a: (x: (arg: Base) => Derived) => (r: Base) => Derived): typeof a; (a: any): any; }
 >a : (x: (arg: Base) => Derived) => (r: Base) => Derived
 >x : (arg: Base) => Derived
 >arg : Base
@@ -103,7 +103,7 @@ declare function foo7(a: any): any;
 >a : any
 
 declare function foo8(a: (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived): typeof a;
->foo8 : { (a: (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived): (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived; (a: any): any; }
+>foo8 : { (a: (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived): typeof a; (a: any): any; }
 >a : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
 >x : (arg: Base) => Derived
 >arg : Base
@@ -123,7 +123,7 @@ declare function foo8(a: any): any;
 >a : any
 
 declare function foo9(a: (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived): typeof a;
->foo9 : { (a: (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived): (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived; (a: any): any; }
+>foo9 : { (a: (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived): typeof a; (a: any): any; }
 >a : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
 >x : (arg: Base) => Derived
 >arg : Base
@@ -143,7 +143,7 @@ declare function foo9(a: any): any;
 >a : any
 
 declare function foo10(a: (...x: Derived[]) => Derived): typeof a;
->foo10 : { (a: (...x: Derived[]) => Derived): (...x: Derived[]) => Derived; (a: any): any; }
+>foo10 : { (a: (...x: Derived[]) => Derived): typeof a; (a: any): any; }
 >a : (...x: Derived[]) => Derived
 >x : Derived[]
 >Derived : Derived
@@ -155,7 +155,7 @@ declare function foo10(a: any): any;
 >a : any
 
 declare function foo11(a: (x: { foo: string }, y: { foo: string; bar: string }) => Base): typeof a;
->foo11 : { (a: (x: { foo: string; }, y: { foo: string; bar: string; }) => Base): (x: { foo: string; }, y: { foo: string; bar: string; }) => Base; (a: any): any; }
+>foo11 : { (a: (x: { foo: string; }, y: { foo: string; bar: string; }) => Base): typeof a; (a: any): any; }
 >a : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 >x : { foo: string; }
 >foo : string
@@ -170,8 +170,8 @@ declare function foo11(a: any): any;
 >a : any
 
 declare function foo12(a: (x: Array<Base>, y: Array<Derived2>) => Array<Derived>): typeof a;
->foo12 : { (a: (x: Base[], y: Derived2[]) => Derived[]): (x: Base[], y: Derived2[]) => Derived[]; (a: any): any; }
->a : (x: Base[], y: Derived2[]) => Derived[]
+>foo12 : { (a: (x: Base[], y: Derived2[]) => Array<Derived>): typeof a; (a: any): any; }
+>a : (x: Base[], y: Derived2[]) => Array<Derived>
 >x : Base[]
 >Array : T[]
 >Base : Base
@@ -180,15 +180,15 @@ declare function foo12(a: (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
 >Derived2 : Derived2
 >Array : T[]
 >Derived : Derived
->a : (x: Base[], y: Derived2[]) => Derived[]
+>a : (x: Base[], y: Derived2[]) => Array<Derived>
 
 declare function foo12(a: any): any;
->foo12 : { (a: (x: Base[], y: Derived2[]) => Derived[]): (x: Base[], y: Derived2[]) => Derived[]; (a: any): any; }
+>foo12 : { (a: (x: Base[], y: Derived2[]) => Array<Derived>): (x: Base[], y: Derived2[]) => Array<Derived>; (a: any): any; }
 >a : any
 
 declare function foo13(a: (x: Array<Base>, y: Array<Derived>) => Array<Derived>): typeof a;
->foo13 : { (a: (x: Base[], y: Derived[]) => Derived[]): (x: Base[], y: Derived[]) => Derived[]; (a: any): any; }
->a : (x: Base[], y: Derived[]) => Derived[]
+>foo13 : { (a: (x: Base[], y: Derived[]) => Array<Derived>): typeof a; (a: any): any; }
+>a : (x: Base[], y: Derived[]) => Array<Derived>
 >x : Base[]
 >Array : T[]
 >Base : Base
@@ -197,14 +197,14 @@ declare function foo13(a: (x: Array<Base>, y: Array<Derived>) => Array<Derived>)
 >Derived : Derived
 >Array : T[]
 >Derived : Derived
->a : (x: Base[], y: Derived[]) => Derived[]
+>a : (x: Base[], y: Derived[]) => Array<Derived>
 
 declare function foo13(a: any): any;
->foo13 : { (a: (x: Base[], y: Derived[]) => Derived[]): (x: Base[], y: Derived[]) => Derived[]; (a: any): any; }
+>foo13 : { (a: (x: Base[], y: Derived[]) => Array<Derived>): (x: Base[], y: Derived[]) => Array<Derived>; (a: any): any; }
 >a : any
 
 declare function foo14(a: (x: { a: string; b: number }) => Object): typeof a;
->foo14 : { (a: (x: { a: string; b: number; }) => Object): (x: { a: string; b: number; }) => Object; (a: any): any; }
+>foo14 : { (a: (x: { a: string; b: number; }) => Object): typeof a; (a: any): any; }
 >a : (x: { a: string; b: number; }) => Object
 >x : { a: string; b: number; }
 >a : string
@@ -217,7 +217,7 @@ declare function foo14(a: any): any;
 >a : any
 
 declare function foo15(a: { 
->foo15 : { (a: { (x: number): number[]; (x: string): string[]; }): { (x: number): number[]; (x: string): string[]; }; (a: any): any; }
+>foo15 : { (a: { (x: number): number[]; (x: string): string[]; }): typeof a; (a: any): any; }
 >a : { (x: number): number[]; (x: string): string[]; }
 
     (x: number): number[];
@@ -234,7 +234,7 @@ declare function foo15(a: any): any;
 >a : any
 
 declare function foo16(a: {
->foo16 : { (a: { <T extends Derived>(x: T): number[]; <U extends Base>(x: U): number[]; }): { <T extends Derived>(x: T): number[]; <U extends Base>(x: U): number[]; }; (a: any): any; }
+>foo16 : { (a: { <T extends Derived>(x: T): number[]; <U extends Base>(x: U): number[]; }): typeof a; (a: any): any; }
 >a : { <T extends Derived>(x: T): number[]; <U extends Base>(x: U): number[]; }
 
     <T extends Derived>(x: T): number[];
@@ -257,7 +257,7 @@ declare function foo16(a: any): any;
 >a : any
 
 declare function foo17(a: {
->foo17 : { (a: { (x: (a: number) => number): number[]; (x: (a: string) => string): string[]; }): { (x: (a: number) => number): number[]; (x: (a: string) => string): string[]; }; (a: any): any; }
+>foo17 : { (a: { (x: (a: number) => number): number[]; (x: (a: string) => string): string[]; }): typeof a; (a: any): any; }
 >a : { (x: (a: number) => number): number[]; (x: (a: string) => string): string[]; }
 
     (x: (a: number) => number): number[];
@@ -276,7 +276,7 @@ declare function foo17(a: any): any;
 >a : any
 
 declare function foo18(a: {
->foo18 : { (a: { (x: { (a: number): number; (a: string): string; }): any[]; (x: { (a: boolean): boolean; (a: Date): Date; }): any[]; }): { (x: { (a: number): number; (a: string): string; }): any[]; (x: { (a: boolean): boolean; (a: Date): Date; }): any[]; }; (a: any): any; }
+>foo18 : { (a: { (x: { (a: number): number; (a: string): string; }): any[]; (x: { (a: boolean): boolean; (a: Date): Date; }): any[]; }): typeof a; (a: any): any; }
 >a : { (x: { (a: number): number; (a: string): string; }): any[]; (x: { (a: boolean): boolean; (a: Date): Date; }): any[]; }
 
     (x: {
@@ -802,9 +802,9 @@ var r12arg2 = (x: Array<Base>, y: Array<Derived2>) => <Array<Derived>>null;
 >null : null
 
 var r12 = foo12(r12arg1); // any
->r12 : (x: Base[], y: Derived2[]) => Derived[]
->foo12(r12arg1) : (x: Base[], y: Derived2[]) => Derived[]
->foo12 : { (a: (x: Base[], y: Derived2[]) => Derived[]): (x: Base[], y: Derived2[]) => Derived[]; (a: any): any; }
+>r12 : (x: Base[], y: Derived2[]) => Array<Derived>
+>foo12(r12arg1) : (x: Base[], y: Derived2[]) => Array<Derived>
+>foo12 : { (a: (x: Base[], y: Derived2[]) => Array<Derived>): (x: Base[], y: Derived2[]) => Array<Derived>; (a: any): any; }
 >r12arg1 : <T extends Base[]>(x: Base[], y: T) => Derived[]
 
 var r12a = [r12arg1, r12arg2];
@@ -847,9 +847,9 @@ var r13arg2 = (x: Array<Base>, y: Array<Derived>) => <Array<Derived>>null;
 >null : null
 
 var r13 = foo13(r13arg1); // any
->r13 : (x: Base[], y: Derived[]) => Derived[]
->foo13(r13arg1) : (x: Base[], y: Derived[]) => Derived[]
->foo13 : { (a: (x: Base[], y: Derived[]) => Derived[]): (x: Base[], y: Derived[]) => Derived[]; (a: any): any; }
+>r13 : (x: Base[], y: Derived[]) => Array<Derived>
+>foo13(r13arg1) : (x: Base[], y: Derived[]) => Array<Derived>
+>foo13 : { (a: (x: Base[], y: Derived[]) => Array<Derived>): (x: Base[], y: Derived[]) => Array<Derived>; (a: any): any; }
 >r13arg1 : <T extends Derived[]>(x: Base[], y: T) => T
 
 var r13a = [r13arg1, r13arg2];

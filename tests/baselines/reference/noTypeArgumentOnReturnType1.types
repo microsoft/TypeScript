@@ -4,7 +4,7 @@ class A<T>{
 >T : T
  
  foo(): A{
->foo : () => any
+>foo : () => A
 >A : A<T>
 
   return null;

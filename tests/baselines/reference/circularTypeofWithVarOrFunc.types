@@ -16,14 +16,14 @@ type typeAlias2 = typeof varOfAliasedType2;
 >varOfAliasedType2 : any
 
 function func(): typeAlias3 { return null; }
->func : () => any
+>func : () => typeAlias3
 >typeAlias3 : any
 >null : null
 
 var varOfAliasedType3 = func();
 >varOfAliasedType3 : any
 >func() : any
->func : () => any
+>func : () => typeAlias3
 
 type typeAlias3 = typeof varOfAliasedType3;
 >typeAlias3 : any

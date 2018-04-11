@@ -10,7 +10,7 @@ interface IAsyncEnumerator<T> {
 >T : T
 
     next1(): Promise<T | AsyncEnumeratorDone>;
->next1 : () => Promise<AsyncEnumeratorDone | T>
+>next1 : () => Promise<T | AsyncEnumeratorDone>
 >Promise : Promise<T>
 >T : T
 >AsyncEnumeratorDone : AsyncEnumeratorDone
@@ -23,7 +23,7 @@ interface IAsyncEnumerator<T> {
 >AsyncEnumeratorDone : AsyncEnumeratorDone
 
     next3(): Promise<T | {}>;
->next3 : () => Promise<{} | T>
+>next3 : () => Promise<T | {}>
 >Promise : Promise<T>
 >T : T
 

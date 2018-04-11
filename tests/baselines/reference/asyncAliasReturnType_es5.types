@@ -6,6 +6,6 @@ type PromiseAlias<T> = Promise<T>;
 >T : T
 
 async function f(): PromiseAlias<void> {
->f : () => Promise<void>
+>f : () => PromiseAlias<void>
 >PromiseAlias : Promise<T>
 }

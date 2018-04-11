@@ -60,7 +60,7 @@ declare module "./f1" {
 >A : A
 
         foo(): B;
->foo : () => any
+>foo : () => B
 >B : any
 
         bar(): I;

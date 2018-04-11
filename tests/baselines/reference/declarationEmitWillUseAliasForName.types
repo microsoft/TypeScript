@@ -1,0 +1,22 @@
+=== tests/cases/compiler/a.ts ===
+export interface I { x: number; }
+>I : I
+>x : number
+
+export type J = I;
+>J : I
+>I : I
+
+=== tests/cases/compiler/b.ts ===
+import { J } from './a';
+>J : any
+
+export const f = (): J => ({ x: 0 });
+>f : () => J
+>(): J => ({ x: 0 }) : () => J
+>J : I
+>({ x: 0 }) : { x: number; }
+>{ x: 0 } : { x: number; }
+>x : number
+>0 : 0
+

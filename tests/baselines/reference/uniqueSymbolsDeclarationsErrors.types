@@ -9,11 +9,11 @@ interface I { readonly readonlyType: unique symbol; }
 // not allowed when emitting declarations
 
 export const obj = {
->obj : { method1(p: unique symbol): unique symbol; method2(p: unique symbol): unique symbol; }
->{    method1(p: typeof s): typeof s {        return p;    },    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : { method1(p: unique symbol): unique symbol; method2(p: unique symbol): unique symbol; }
+>obj : { method1(p: unique symbol): typeof s; method2(p: unique symbol): unique symbol; }
+>{    method1(p: typeof s): typeof s {        return p;    },    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : { method1(p: unique symbol): typeof s; method2(p: unique symbol): unique symbol; }
 
     method1(p: typeof s): typeof s {
->method1 : (p: unique symbol) => unique symbol
+>method1 : (p: unique symbol) => typeof s
 >p : unique symbol
 >s : unique symbol
 >s : unique symbol
@@ -38,7 +38,7 @@ export const classExpression = class {
 >class {    method1(p: typeof s): typeof s {        return p;    }    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : typeof classExpression
 
     method1(p: typeof s): typeof s {
->method1 : (p: unique symbol) => unique symbol
+>method1 : (p: unique symbol) => typeof s
 >p : unique symbol
 >s : unique symbol
 >s : unique symbol

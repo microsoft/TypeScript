@@ -1953,7 +1953,7 @@ type MethodDescriptor = {
 }
 
 declare function dispatchMethod<M extends MethodDescriptor>(name: M['name'], args: M['args']): M['returnValue'];
->dispatchMethod : <M extends MethodDescriptor>(name: M["name"], args: M["args"]) => M["returnValue"]
+>dispatchMethod : <M extends MethodDescriptor>(name: M["name"], args: M["args"]) => M['returnValue']
 >M : M
 >MethodDescriptor : MethodDescriptor
 >name : M["name"]

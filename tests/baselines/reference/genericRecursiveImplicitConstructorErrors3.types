@@ -9,7 +9,7 @@ module TypeScript {
 >C : C
 
         static create<A,B,C>(arg1: any, arg2?: any, arg3?: any): MemberName {
->create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => any
+>create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => MemberName
 >A : A
 >B : B
 >C : C
@@ -138,9 +138,9 @@ module TypeScript {
 
                 return MemberName.create(elementMemberName, "", "[]");
 >MemberName.create(elementMemberName, "", "[]") : any
->MemberName.create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => any
+>MemberName.create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => MemberName
 >MemberName : typeof MemberName
->create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => any
+>create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => MemberName
 >elementMemberName : any
 >"" : ""
 >"[]" : "[]"

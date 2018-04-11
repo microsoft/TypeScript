@@ -287,9 +287,9 @@ module Harness {
             var bugs = content.match(/\bbug (\d+)/i);
 >bugs : RegExpMatchArray
 >content.match(/\bbug (\d+)/i) : RegExpMatchArray
->content.match : (regexp: string | RegExp) => RegExpMatchArray
+>content.match : (regexp: string | RegExp) => RegExpMatchArray | null
 >content : string
->match : (regexp: string | RegExp) => RegExpMatchArray
+>match : (regexp: string | RegExp) => RegExpMatchArray | null
 >/\bbug (\d+)/i : RegExp
 
             if (bugs) {
@@ -4940,11 +4940,11 @@ module Harness {
                         var match = errorLines[i].match(/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/);
 >match : RegExpMatchArray
 >errorLines[i].match(/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/) : RegExpMatchArray
->errorLines[i].match : (regexp: string | RegExp) => RegExpMatchArray
+>errorLines[i].match : (regexp: string | RegExp) => RegExpMatchArray | null
 >errorLines[i] : string
 >errorLines : string[]
 >i : number
->match : (regexp: string | RegExp) => RegExpMatchArray
+>match : (regexp: string | RegExp) => RegExpMatchArray | null
 >/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/ : RegExp
 
                         if (match) {
@@ -5374,9 +5374,9 @@ module Harness {
 >filename : string
 >path.match(/[^\/]*$/)[0] : string
 >path.match(/[^\/]*$/) : RegExpMatchArray
->path.match : (regexp: string | RegExp) => RegExpMatchArray
+>path.match : (regexp: string | RegExp) => RegExpMatchArray | null
 >path : string
->match : (regexp: string | RegExp) => RegExpMatchArray
+>match : (regexp: string | RegExp) => RegExpMatchArray | null
 >/[^\/]*$/ : RegExp
 >0 : 0
 
@@ -5562,13 +5562,13 @@ module Harness {
 >unitName : string
 >switchToForwardSlashes(lastUnit.name).match(/[^\/]*$/)[0] : string
 >switchToForwardSlashes(lastUnit.name).match(/[^\/]*$/) : RegExpMatchArray
->switchToForwardSlashes(lastUnit.name).match : (regexp: string | RegExp) => RegExpMatchArray
+>switchToForwardSlashes(lastUnit.name).match : (regexp: string | RegExp) => RegExpMatchArray | null
 >switchToForwardSlashes(lastUnit.name) : string
 >switchToForwardSlashes : (path: string) => string
 >lastUnit.name : string
 >lastUnit : TestCaseParser.TestUnitData
 >name : string
->match : (regexp: string | RegExp) => RegExpMatchArray
+>match : (regexp: string | RegExp) => RegExpMatchArray | null
 >/[^\/]*$/ : RegExp
 >0 : 0
 
@@ -6084,9 +6084,9 @@ module Harness {
                     var isRef = line.match(/reference\spath='(\w*_?\w*\.?d?\.ts)'/);
 >isRef : RegExpMatchArray
 >line.match(/reference\spath='(\w*_?\w*\.?d?\.ts)'/) : RegExpMatchArray
->line.match : (regexp: string | RegExp) => RegExpMatchArray
+>line.match : (regexp: string | RegExp) => RegExpMatchArray | null
 >line : string
->match : (regexp: string | RegExp) => RegExpMatchArray
+>match : (regexp: string | RegExp) => RegExpMatchArray | null
 >/reference\spath='(\w*_?\w*\.?d?\.ts)'/ : RegExp
 
                     if (isRef) {
@@ -7840,9 +7840,9 @@ module Harness {
 >path : string
 >path.match(/[^\/]*$/)[0] : string
 >path.match(/[^\/]*$/) : RegExpMatchArray
->path.match : (regexp: string | RegExp) => RegExpMatchArray
+>path.match : (regexp: string | RegExp) => RegExpMatchArray | null
 >path : string
->match : (regexp: string | RegExp) => RegExpMatchArray
+>match : (regexp: string | RegExp) => RegExpMatchArray | null
 >/[^\/]*$/ : RegExp
 >0 : 0
 >callback : (error: Error, result: any) => void

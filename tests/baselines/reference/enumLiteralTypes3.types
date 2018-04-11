@@ -446,7 +446,7 @@ function f7(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 }
 
 function f10(x: Yes): Yes {
->f10 : (x: Choice.Yes) => Choice.Yes
+>f10 : (x: Choice.Yes) => Yes
 >x : Choice.Yes
 >Yes : Choice.Yes
 >Yes : Choice.Yes
@@ -508,7 +508,7 @@ function f11(x: YesNo): YesNo {
 }
 
 function f12(x: UnknownYesNo): UnknownYesNo {
->f12 : (x: Choice) => Choice
+>f12 : (x: Choice) => UnknownYesNo
 >x : Choice
 >UnknownYesNo : Choice
 >UnknownYesNo : Choice

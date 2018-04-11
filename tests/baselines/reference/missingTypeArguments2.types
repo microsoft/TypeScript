@@ -4,7 +4,7 @@ class A<T> { }
 >T : T
 
 var x: () => A;
->x : () => any
+>x : () => A
 >A : A<T>
 
 (a: A) => { };
@@ -18,7 +18,7 @@ var y: A<A>;
 >A : A<T>
 
 (): A => null;
->(): A => null : () => any
+>(): A => null : () => A
 >A : A<T>
 >null : null
 

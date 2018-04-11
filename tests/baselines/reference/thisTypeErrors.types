@@ -10,7 +10,7 @@ var x3: this[];
 >x3 : any[]
 
 function f1(x: this): this {
->f1 : (x: any) => any
+>f1 : (x: any) => this
 >x : any
 
     var y: this;
@@ -28,18 +28,18 @@ interface I1 {
 >x : any
 
     b: { (): this };
->b : () => any
+>b : () => this
 
     c: { new (): this };
->c : new () => any
+>c : new () => this
 
     d: { [x: string]: this };
 >d : { [x: string]: any; }
 >x : string
 
     e: { f(x: this): this };
->e : { f(x: any): any; }
->f : (x: any) => any
+>e : { f(x: any): this; }
+>f : (x: any) => this
 >x : any
 }
 
@@ -51,18 +51,18 @@ class C1 {
 >x : any
 
     b: { (): this };
->b : () => any
+>b : () => this
 
     c: { new (): this };
->c : new () => any
+>c : new () => this
 
     d: { [x: string]: this };
 >d : { [x: string]: any; }
 >x : string
 
     e: { f(x: this): this };
->e : { f(x: any): any; }
->f : (x: any) => any
+>e : { f(x: any): this; }
+>f : (x: any) => this
 >x : any
 }
 
@@ -78,7 +78,7 @@ class C2 {
 >undefined : undefined
 
     static foo(x: this): this {
->foo : (x: any) => any
+>foo : (x: any) => this
 >x : any
 
         return undefined;
@@ -101,11 +101,11 @@ class C3 {
 >C3 : C3
 
     x1 = {
->x1 : { g(x: any): any; }
->{        g(x: this): this {            return undefined;        }    } : { g(x: any): any; }
+>x1 : { g(x: any): this; }
+>{        g(x: this): this {            return undefined;        }    } : { g(x: any): this; }
 
         g(x: this): this {
->g : (x: any) => any
+>g : (x: any) => this
 >x : any
 
             return undefined;
@@ -116,18 +116,18 @@ class C3 {
 >f : () => void
 
         function g(x: this): this {
->g : (x: any) => any
+>g : (x: any) => this
 >x : any
 
             return undefined;
 >undefined : undefined
         }
         let x2 = {
->x2 : { h(x: any): any; }
->{            h(x: this): this {                return undefined;            }        } : { h(x: any): any; }
+>x2 : { h(x: any): this; }
+>{            h(x: this): this {                return undefined;            }        } : { h(x: any): this; }
 
             h(x: this): this {
->h : (x: any) => any
+>h : (x: any) => this
 >x : any
 
                 return undefined;
