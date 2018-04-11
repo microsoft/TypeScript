@@ -3221,6 +3221,14 @@ namespace ts {
         errorModuleName?: string; // If the symbol is not visible from module, module's name
     }
 
+    /* @internal */
+    export interface AllAccessorDeclarations {
+        firstAccessor: AccessorDeclaration;
+        secondAccessor: AccessorDeclaration;
+        getAccessor: AccessorDeclaration;
+        setAccessor: AccessorDeclaration;
+    }
+
     /** Indicates how to serialize the name for a TypeReferenceNode when emitting decorator metadata */
     /* @internal */
     export enum TypeReferenceSerializationKind {

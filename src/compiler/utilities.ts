@@ -2980,13 +2980,6 @@ namespace ts {
         return id.originalKeywordKind === SyntaxKind.ThisKeyword;
     }
 
-    export interface AllAccessorDeclarations {
-        firstAccessor: AccessorDeclaration;
-        secondAccessor: AccessorDeclaration;
-        getAccessor: AccessorDeclaration;
-        setAccessor: AccessorDeclaration;
-    }
-
     export function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration): AllAccessorDeclarations {
         let firstAccessor: AccessorDeclaration;
         let secondAccessor: AccessorDeclaration;
