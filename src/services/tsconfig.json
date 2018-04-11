@@ -107,6 +107,7 @@
         "codefixes/useDefaultImport.ts",
         "codefixes/fixes.ts",
         "refactors/extractSymbol.ts",
+        "refactors/generateGetAccessorAndSetAccessor.ts",
         "refactors/refactors.ts",
         "sourcemaps.ts",
         "services.ts",
