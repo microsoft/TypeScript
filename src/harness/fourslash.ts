@@ -1081,8 +1081,20 @@ namespace FourSlash {
             }
         }
 
+        private verifyDocumentHighlightsRespectFilesList(files: ReadonlyArray<string>): void {
+            const startFile = this.activeFile.fileName;
+            for (const fileName of files) {
+                const searchFileNames = startFile === fileName ? [startFile] : [startFile, fileName];
+                const highlights = this.getDocumentHighlightsAtCurrentPosition(searchFileNames);
+                if (!highlights.every(dh => ts.contains(searchFileNames, dh.fileName))) {
+                    this.raiseError(`When asking for document highlights only in files ${searchFileNames}, got document highlights in ${unique(highlights, dh => dh.fileName)}`);
+                }
+            }
+        }
+
         public verifyReferencesOf(range: Range, references: Range[]) {
             this.goToRangeStart(range);
+            this.verifyDocumentHighlightsRespectFilesList(unique(references, e => e.fileName));
             this.verifyReferencesAre(references);
         }
 
@@ -1094,7 +1106,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyReferenceGroups(starts: string | string[] | Range | Range[], parts: FourSlashInterface.ReferenceGroup[]): void {
+        public verifyReferenceGroups(starts: string | string[] | Range | Range[], parts: FourSlashInterface.ReferenceGroup[] | undefined): void {
             interface ReferenceGroupJson {
                 definition: string | { text: string, range: ts.TextSpan };
                 references: ts.ReferenceEntry[];
@@ -1128,6 +1140,10 @@ namespace FourSlash {
                     };
                 });
                 this.assertObjectsEqual(fullActual, fullExpected);
+
+                if (parts) {
+                    this.verifyDocumentHighlightsRespectFilesList(unique(ts.flatMap(parts, p => p.ranges), r => r.fileName));
+                }
             }
         }
 
