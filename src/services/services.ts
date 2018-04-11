@@ -1663,20 +1663,17 @@ namespace ts {
 
         /// References and Occurrences
         function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
-            const canonicalFileName = getCanonicalFileName(normalizeSlashes(fileName));
-            return flatMap(getDocumentHighlights(fileName, position, [fileName]), entry => entry.highlightSpans.map<ReferenceEntry>(highlightSpan => {
-                Debug.assert(getCanonicalFileName(normalizeSlashes(entry.fileName)) === canonicalFileName); // Get occurrences only supports reporting occurrences for the file queried.
-                return {
-                    fileName: entry.fileName,
-                    textSpan: highlightSpan.textSpan,
-                    isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
-                    isDefinition: false,
-                    isInString: highlightSpan.isInString,
-                };
-            }));
+            return flatMap(getDocumentHighlights(fileName, position, [fileName]), entry => entry.highlightSpans.map<ReferenceEntry>(highlightSpan => ({
+                fileName: entry.fileName,
+                textSpan: highlightSpan.textSpan,
+                isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
+                isDefinition: false,
+                isInString: highlightSpan.isInString,
+            })));
         }
 
         function getDocumentHighlights(fileName: string, position: number, filesToSearch: ReadonlyArray<string>): DocumentHighlights[] {
+            Debug.assert(contains(filesToSearch, fileName));
             synchronizeHostData();
             const sourceFilesToSearch = map(filesToSearch, f => Debug.assertDefined(program.getSourceFile(f)));
             const sourceFile = getValidSourceFile(fileName);

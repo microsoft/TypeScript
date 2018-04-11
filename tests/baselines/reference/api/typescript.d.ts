@@ -3010,7 +3010,7 @@ declare namespace ts {
      */
     function collapseTextChangeRangesAcrossMultipleVersions(changes: ReadonlyArray<TextChangeRange>): TextChangeRange;
     function getTypeParameterOwner(d: Declaration): Declaration;
-    function isParameterPropertyDeclaration(node: Node): boolean;
+    function isParameterPropertyDeclaration(node: Node): node is ParameterDeclaration;
     function isEmptyBindingPattern(node: BindingName): node is BindingPattern;
     function isEmptyBindingElement(node: BindingElement): boolean;
     function getCombinedModifierFlags(node: Node): ModifierFlags;
@@ -4369,6 +4369,7 @@ declare namespace ts {
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
     }
     interface UserPreferences {
+        readonly disableSuggestions?: boolean;
         readonly quotePreference?: "double" | "single";
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;

@@ -523,12 +523,20 @@ namespace ts.server {
                         return;
                     }
 
-                    next.immediate(() => {
-                        this.suggestionCheck(fileName, project);
+                    const goNext = () => {
                         if (checkList.length > index) {
                             next.delay(followMs, checkOne);
                         }
-                    });
+                    };
+                    if (this.getPreferences(fileName).disableSuggestions) {
+                        goNext();
+                    }
+                    else {
+                        next.immediate(() => {
+                            this.suggestionCheck(fileName, project);
+                            goNext();
+                        });
+                    }
                 });
             };
 

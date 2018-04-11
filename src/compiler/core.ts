@@ -1265,10 +1265,7 @@ namespace ts {
         });
     }
 
-    export function assign<T1 extends MapLike<{}>, T2, T3>(t: T1, arg1: T2, arg2: T3): T1 & T2 & T3;
-    export function assign<T1 extends MapLike<{}>, T2>(t: T1, arg1: T2): T1 & T2;
-    export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]): any;
-    export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]) {
+    export function assign<T extends object>(t: T, ...args: T[]) {
         for (const arg of args) {
             for (const p in arg) {
                 if (hasProperty(arg, p)) {
@@ -1722,6 +1719,10 @@ namespace ts {
      */
     export function compareValues(a: number, b: number) {
         return compareComparableValues(a, b);
+    }
+
+    export function min<T>(a: T, b: T, compare: Comparer<T>): T {
+        return compare(a, b) === Comparison.LessThan ? a : b;
     }
 
     /**
@@ -3119,8 +3120,8 @@ namespace ts {
         return (arg: T) => f(arg) && g(arg);
     }
 
-    export function or<T>(f: (arg: T) => boolean, g: (arg: T) => boolean) {
-        return (arg: T) => f(arg) || g(arg);
+    export function or<T>(f: (arg: T) => boolean, g: (arg: T) => boolean): (arg: T) => boolean {
+        return arg => f(arg) || g(arg);
     }
 
     export function assertTypeIsNever(_: never): void { } // tslint:disable-line no-empty

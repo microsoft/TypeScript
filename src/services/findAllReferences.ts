@@ -41,7 +41,7 @@ namespace ts.FindAllReferences {
 
     export function findReferencedSymbols(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, sourceFile: SourceFile, position: number): ReferencedSymbol[] | undefined {
         const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
-        const referencedSymbols = Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, /*options*/ {});
+        const referencedSymbols = Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken);
         const checker = program.getTypeChecker();
         return !referencedSymbols || !referencedSymbols.length ? undefined : mapDefined<SymbolAndEntries, ReferencedSymbol>(referencedSymbols, ({ definition, references }) =>
             // Only include referenced symbols that have a valid definition.
@@ -86,8 +86,8 @@ namespace ts.FindAllReferences {
         return map(flattenEntries(Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, options)), toReferenceEntry);
     }
 
-    export function getReferenceEntriesForNode(position: number, node: Node, program: Program, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken, options: Options = {}): Entry[] | undefined {
-        return flattenEntries(Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, options));
+    export function getReferenceEntriesForNode(position: number, node: Node, program: Program, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken, options: Options = {}, sourceFilesSet: ReadonlyMap<true> = arrayToSet(sourceFiles, f => f.fileName)): Entry[] | undefined {
+        return flattenEntries(Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, options, sourceFilesSet));
     }
 
     function flattenEntries(referenceSymbols: SymbolAndEntries[]): Entry[] {
@@ -229,10 +229,10 @@ namespace ts.FindAllReferences {
 /* @internal */
 namespace ts.FindAllReferences.Core {
     /** Core find-all-references algorithm. Handles special cases before delegating to `getReferencedSymbolsForSymbol`. */
-    export function getReferencedSymbolsForNode(position: number, node: Node, program: Program, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken, options: Options = {}): SymbolAndEntries[] | undefined {
+    export function getReferencedSymbolsForNode(position: number, node: Node, program: Program, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken, options: Options = {}, sourceFilesSet: ReadonlyMap<true> = arrayToSet(sourceFiles, f => f.fileName)): SymbolAndEntries[] | undefined {
         if (isSourceFile(node)) {
             const reference = GoToDefinition.getReferenceAtPosition(node, position, program);
-            return reference && getReferencedSymbolsForModule(program, program.getTypeChecker().getMergedSymbol(reference.file.symbol), sourceFiles);
+            return reference && getReferencedSymbolsForModule(program, program.getTypeChecker().getMergedSymbol(reference.file.symbol), sourceFiles, sourceFilesSet);
         }
 
         if (!options.implementations) {
@@ -252,10 +252,10 @@ namespace ts.FindAllReferences.Core {
         }
 
         if (symbol.flags & SymbolFlags.Module && isModuleReferenceLocation(node)) {
-            return getReferencedSymbolsForModule(program, symbol, sourceFiles);
+            return getReferencedSymbolsForModule(program, symbol, sourceFiles, sourceFilesSet);
         }
 
-        return getReferencedSymbolsForSymbol(symbol, node, sourceFiles, checker, cancellationToken, options);
+        return getReferencedSymbolsForSymbol(symbol, node, sourceFiles, sourceFilesSet, checker, cancellationToken, options);
     }
 
     function isModuleReferenceLocation(node: Node): boolean {
@@ -275,7 +275,7 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
-    function getReferencedSymbolsForModule(program: Program, symbol: Symbol, sourceFiles: ReadonlyArray<SourceFile>): SymbolAndEntries[] {
+    function getReferencedSymbolsForModule(program: Program, symbol: Symbol, sourceFiles: ReadonlyArray<SourceFile>, sourceFilesSet: ReadonlyMap<true>): SymbolAndEntries[] {
         Debug.assert(!!symbol.valueDeclaration);
 
         const references = findModuleReferences(program, sourceFiles, symbol).map<Entry>(reference => {
@@ -297,7 +297,9 @@ namespace ts.FindAllReferences.Core {
                     // Don't include the source file itself. (This may not be ideal behavior, but awkward to include an entire file as a reference.)
                     break;
                 case SyntaxKind.ModuleDeclaration:
-                    references.push({ type: "node", node: (decl as ModuleDeclaration).name });
+                    if (sourceFilesSet.has(decl.getSourceFile().fileName)) {
+                        references.push({ type: "node", node: (decl as ModuleDeclaration).name });
+                    }
                     break;
                 default:
                     Debug.fail("Expected a module symbol to be declared by a SourceFile or ModuleDeclaration.");
@@ -337,14 +339,14 @@ namespace ts.FindAllReferences.Core {
     }
 
     /** Core find-all-references algorithm for a normal symbol. */
-    function getReferencedSymbolsForSymbol(symbol: Symbol, node: Node, sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cancellationToken: CancellationToken, options: Options): SymbolAndEntries[] {
+    function getReferencedSymbolsForSymbol(symbol: Symbol, node: Node, sourceFiles: ReadonlyArray<SourceFile>, sourceFilesSet: ReadonlyMap<true>, checker: TypeChecker, cancellationToken: CancellationToken, options: Options): SymbolAndEntries[] {
         symbol = skipPastExportOrImportSpecifierOrUnion(symbol, node, checker) || symbol;
 
         // Compute the meaning from the location and the symbol it references
         const searchMeaning = getIntersectingMeaningFromDeclarations(node, symbol);
 
         const result: SymbolAndEntries[] = [];
-        const state = new State(sourceFiles, getSpecialSearchKind(node), checker, cancellationToken, searchMeaning, options, result);
+        const state = new State(sourceFiles, sourceFilesSet, getSpecialSearchKind(node), checker, cancellationToken, searchMeaning, options, result);
 
         if (node.kind === SyntaxKind.DefaultKeyword) {
             addReference(node, symbol, state);
@@ -467,10 +469,9 @@ namespace ts.FindAllReferences.Core {
          */
         readonly markSeenReExportRHS = nodeSeenTracker();
 
-        private readonly includedSourceFiles: Map<true>;
-
         constructor(
             readonly sourceFiles: ReadonlyArray<SourceFile>,
+            readonly sourceFilesSet: ReadonlyMap<true>,
             /** True if we're searching for constructor references. */
             readonly specialSearchKind: SpecialSearchKind,
             readonly checker: TypeChecker,
@@ -478,17 +479,16 @@ namespace ts.FindAllReferences.Core {
             readonly searchMeaning: SemanticMeaning,
             readonly options: Options,
             private readonly result: Push<SymbolAndEntries>) {
-            this.includedSourceFiles = arrayToSet(sourceFiles, s => s.fileName);
         }
 
         includesSourceFile(sourceFile: SourceFile): boolean {
-            return this.includedSourceFiles.has(sourceFile.fileName);
+            return this.sourceFilesSet.has(sourceFile.fileName);
         }
 
         private importTracker: ImportTracker | undefined;
         /** Gets every place to look for references of an exported symbols. See `ImportsResult` in `importTracker.ts` for more documentation. */
         getImportSearches(exportSymbol: Symbol, exportInfo: ExportInfo): ImportsResult {
-            if (!this.importTracker) this.importTracker = createImportTracker(this.sourceFiles, this.checker, this.cancellationToken);
+            if (!this.importTracker) this.importTracker = createImportTracker(this.sourceFiles, this.sourceFilesSet, this.checker, this.cancellationToken);
             return this.importTracker(exportSymbol, exportInfo, this.options.isForRename);
         }
 
