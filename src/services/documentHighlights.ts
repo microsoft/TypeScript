@@ -32,6 +32,7 @@ namespace ts.DocumentHighlights {
                 const redirectTarget = program.getSourceFile(fileName);
                 const redirect = find(sourceFilesToSearch, f => f.redirectInfo && f.redirectInfo.redirectTarget === redirectTarget)!;
                 fileName = redirect.fileName;
+                Debug.assert(sourceFilesSet.has(fileName));
             }
             return { fileName, highlightSpans };
         });
