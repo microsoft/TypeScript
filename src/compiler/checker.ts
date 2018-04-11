@@ -1,7 +1,3 @@
-/// <reference path="moduleNameResolver.ts"/>
-/// <reference path="binder.ts"/>
-/// <reference path="symbolWalker.ts" />
-
 /* @internal */
 namespace ts {
     const ambientModuleSymbolRegex = /^".+"$/;
