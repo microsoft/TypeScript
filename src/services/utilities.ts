@@ -1488,8 +1488,18 @@ namespace ts {
         return visited;
     }
 
+    export function getSynthesizedDeepCloneWithoutTrivia<T extends Node>(node: T): T {
+       const clone = getSynthesizedDeepClone(node);
+       suppressLeadingAndTrailingTrivia(clone);
+       return clone;
+    }
+
     export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined): NodeArray<T> | undefined {
         return nodes && createNodeArray(nodes.map(getSynthesizedDeepClone), nodes.hasTrailingComma);
+    }
+
+    export function getSynthesizedDeepClonesWithoutTrivia<T extends Node>(nodes: NodeArray<T> | undefined): NodeArray<T> | undefined {
+        return nodes && createNodeArray(nodes.map(getSynthesizedDeepCloneWithoutTrivia), nodes.hasTrailingComma);
     }
 
     /**
