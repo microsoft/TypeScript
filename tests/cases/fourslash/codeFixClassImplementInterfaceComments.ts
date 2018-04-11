@@ -38,7 +38,7 @@ verify.codeFix({
 class C implements N.I {
     /** property prefix */ a /** colon prefix */: N.E.a;
     /** property prefix */ b /** colon prefix */: N.E;
-    /**method signature prefix */ foo /**open angle prefix */<X>(a: X): string {
+    /**method signature prefix */ foo /**open angle prefix */<X>(a: X): string /** semicolon prefix */ {
         throw new Error("Method not implemented.");
     }
 }`,

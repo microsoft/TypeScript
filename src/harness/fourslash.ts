@@ -2240,9 +2240,7 @@ Actual: ${stringify(fullActual)}`);
 
         public verifyCurrentFileContent(text: string) {
             const actual = this.getFileContent(this.activeFile.fileName);
-            if (actual !== text) {
-                throw new Error(`verifyCurrentFileContent failed:\n${showTextDiff(text, actual)}`);
-            }
+            assert.equal(text, actual);
         }
 
         public verifyTextAtCaretIs(text: string) {
