@@ -240,6 +240,7 @@ namespace ts.codefix {
         preferences: UserPreferences,
     ): ReadonlyArray<NewImportInfo> {
         const { baseUrl, paths, rootDirs } = compilerOptions;
+        const moduleResolutionKind = getEmitModuleResolutionKind(compilerOptions);
         const addJsExtension = usesJsExtensionOnImports(sourceFile);
         const choicesForEachExportingModule = flatMap<SymbolExportInfo, NewImportInfo[]>(moduleSymbols, ({ moduleSymbol, importKind }) => {
             const modulePathsGroups = getAllModulePaths(program, moduleSymbol.valueDeclaration.getSourceFile()).map(moduleFileName => {
@@ -252,7 +253,7 @@ namespace ts.codefix {
                     return [global];
                 }
 
-                const relativePath = removeExtensionAndIndexPostFix(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName), compilerOptions, addJsExtension);
+                const relativePath = removeExtensionAndIndexPostFix(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName), moduleResolutionKind, addJsExtension);
                 if (!baseUrl || preferences.importModuleSpecifierPreference === "relative") {
                     return [relativePath];
                 }
@@ -262,7 +263,7 @@ namespace ts.codefix {
                     return [relativePath];
                 }
 
-                const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, compilerOptions, addJsExtension);
+                const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, moduleResolutionKind, addJsExtension);
                 if (paths) {
                     const fromPaths = tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
                     if (fromPaths) {
@@ -390,7 +391,8 @@ namespace ts.codefix {
         return firstDefined(roots, unNormalizedTypeRoot => {
             const typeRoot = toPath(unNormalizedTypeRoot, /*basePath*/ undefined, getCanonicalFileName);
             if (startsWith(moduleFileName, typeRoot)) {
-                return removeExtensionAndIndexPostFix(moduleFileName.substring(typeRoot.length + 1), options, addJsExtension);
+                // For a type definition, we can strip `/index` even with classic resolution.
+                return removeExtensionAndIndexPostFix(moduleFileName.substring(typeRoot.length + 1), ModuleResolutionKind.NodeJs, addJsExtension);
             }
         });
     }
@@ -527,11 +529,11 @@ namespace ts.codefix {
         });
     }
 
-    function removeExtensionAndIndexPostFix(fileName: string, options: CompilerOptions, addJsExtension: boolean): string {
+    function removeExtensionAndIndexPostFix(fileName: string, moduleResolutionKind: ModuleResolutionKind, addJsExtension: boolean): string {
         const noExtension = removeFileExtension(fileName);
         return addJsExtension
             ? noExtension + ".js"
-            : getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeJs
+            : moduleResolutionKind === ModuleResolutionKind.NodeJs
                 ? removeSuffix(noExtension, "/index")
                 : noExtension;
     }
