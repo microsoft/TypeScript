@@ -3198,7 +3198,15 @@ namespace ts {
     export type RequireOrImportCall = CallExpression & { arguments: [StringLiteralLike] };
 
     /* @internal */
-    export type LateVisibilityPaintedStatement = AnyImportSyntax | VariableStatement;
+    export type LateVisibilityPaintedStatement =
+        | AnyImportSyntax
+        | VariableStatement
+        | ClassDeclaration
+        | FunctionDeclaration
+        | ModuleDeclaration
+        | TypeAliasDeclaration
+        | InterfaceDeclaration
+        | EnumDeclaration;
 
     /* @internal */
     export interface SymbolVisibilityResult {

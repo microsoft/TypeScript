@@ -2777,6 +2777,11 @@ namespace ts {
                         isDeclarationVisible(declaration.parent.parent.parent)) {
                         return addVisibleAlias(declaration, declaration.parent.parent);
                     }
+                    else if (isLateVisibilityPaintedStatement(declaration) // unexported top-level statement
+                        && !hasModifier(declaration, ModifierFlags.Export)
+                        && isDeclarationVisible(declaration.parent)) {
+                        return addVisibleAlias(declaration, declaration);
+                    }
 
                     // Declaration is not visible
                     return false;

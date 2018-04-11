@@ -551,6 +551,12 @@ namespace ts {
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.VariableStatement:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.ModuleDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.EnumDeclaration:
                 return true;
             default:
                 return false;
