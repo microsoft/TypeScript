@@ -1,5 +1,3 @@
-/// <reference path="./importTracker.ts" />
-
 /* @internal */
 namespace ts.FindAllReferences {
     export interface SymbolAndEntries {
