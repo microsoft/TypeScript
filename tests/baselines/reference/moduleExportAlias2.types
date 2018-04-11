@@ -1,9 +1,9 @@
 === tests/cases/conformance/salsa/index.js ===
-/// <reference path='./types.d.ts'/>
+/// <reference path='node.d.ts' />
 const C = require("./semver")
 >C : typeof C
 >require("./semver") : typeof C
->require : any
+>require : (name: string) => any
 >"./semver" : "./semver"
 
 var two = C.f(1)
@@ -14,28 +14,38 @@ var two = C.f(1)
 >f : (n: any) => any
 >1 : 1
 
-=== tests/cases/conformance/salsa/types.d.ts ===
-declare var require: any;
->require : any
+var c = new C
+>c : C
+>new C : C
+>C : typeof C
 
-declare var module: any;
->module : any
+=== tests/cases/conformance/salsa/node.d.ts ===
+declare function require(name: string): any;
+>require : (name: string) => any
+>name : string
+
+declare var exports: any;
+>exports : any
+
+declare var module: { exports: any };
+>module : { exports: any; }
+>exports : any
 
 === tests/cases/conformance/salsa/semver.js ===
-/// <reference path='./types.d.ts'/>
+/// <reference path='node.d.ts' />
 exports = module.exports = C
 >exports = module.exports = C : typeof C
 >exports : typeof import("tests/cases/conformance/salsa/semver")
 >module.exports = C : typeof C
 >module.exports : any
->module : any
+>module : { exports: any; }
 >exports : any
 >C : typeof C
 
-C.f = n => n + 1
->C.f = n => n + 1 : (n: any) => any
->C.f : (n: any) => any
->C : typeof C
+exports.f = n => n + 1
+>exports.f = n => n + 1 : (n: any) => any
+>exports.f : (n: any) => any
+>exports : typeof import("tests/cases/conformance/salsa/semver")
 >f : (n: any) => any
 >n => n + 1 : (n: any) => any
 >n : any
