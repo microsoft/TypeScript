@@ -1,6 +1,5 @@
 Exit Code: 1
 Standard output:
-node_modules/npmlog/log.js(5,11): error TS2539: Cannot assign to '"/home/nathansa/ts/tests/cases/user/npmlog/node_modules/npmlog/log"' because it is not a variable.
 node_modules/npmlog/log.js(16,14): error TS2339: Property 'gauge' does not exist on type 'PropertyDescriptor'.
 node_modules/npmlog/log.js(16,26): error TS2339: Property 'gauge' does not exist on type 'PropertyDescriptor'.
 node_modules/npmlog/log.js(25,5): error TS2339: Property 'useColor' does not exist on type 'EventEmitter'.

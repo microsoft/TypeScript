@@ -62,7 +62,6 @@ node_modules/npm/lib/build.js(95,32): error TS2339: Property 'config' does not e
 node_modules/npm/lib/build.js(101,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/build.js(106,12): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/cache.js(16,34): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/cache.js(40,1): error TS2539: Cannot assign to '"/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/cache"' because it is not a variable.
 node_modules/npm/lib/cache.js(49,30): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/cache.js(69,35): error TS2339: Property 'cache' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/cache.js(70,12): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
@@ -442,7 +441,6 @@ node_modules/npm/lib/logout.js(17,7): error TS2339: Property 'config' does not e
 node_modules/npm/lib/logout.js(23,26): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/logout.js(28,11): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/logout.js(38,10): error TS2554: Expected 0-1 arguments, but got 3.
-node_modules/npm/lib/ls.js(7,18): error TS2539: Cannot assign to '"/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/ls"' because it is not a variable.
 node_modules/npm/lib/ls.js(37,30): error TS2339: Property 'dir' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/ls.js(88,18): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/ls.js(89,18): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
@@ -625,7 +623,6 @@ node_modules/npm/lib/run-script.js(77,21): error TS2345: Argument of type 'strin
 node_modules/npm/lib/run-script.js(94,13): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/run-script.js(99,13): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/run-script.js(148,22): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/search.js(3,18): error TS2539: Cannot assign to '"/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/search"' because it is not a variable.
 node_modules/npm/lib/search.js(25,22): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/search.js(26,34): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/search.js(27,40): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
@@ -650,7 +647,6 @@ node_modules/npm/lib/search/format-package-stream.js(130,63): error TS2339: Prop
 node_modules/npm/lib/set.js(8,22): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/set.js(12,7): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/shrinkwrap.js(30,29): error TS2339: Property 'lockfileVersion' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/shrinkwrap.js(36,18): error TS2539: Cannot assign to '"/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/shrinkwrap"' because it is not a variable.
 node_modules/npm/lib/shrinkwrap.js(48,22): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/shrinkwrap.js(49,22): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/shrinkwrap.js(53,38): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
@@ -760,13 +756,10 @@ node_modules/npm/lib/utils/error-handler.js(236,7): error TS2322: Type 'string' 
 node_modules/npm/lib/utils/error-message.js(66,37): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/error-message.js(295,24): error TS2339: Property 'version' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/error-message.js(296,25): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/utils/gently-rm.js(4,1): error TS2539: Cannot assign to '"/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/utils/gently-rm"' because it is not a variable.
 node_modules/npm/lib/utils/git.js(9,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/is-windows-bash.js(3,53): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
-node_modules/npm/lib/utils/lifecycle-cmd.js(1,1): error TS2539: Cannot assign to '"/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/utils/lifecycle-cmd"' because it is not a variable.
 node_modules/npm/lib/utils/lifecycle-cmd.js(8,9): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/utils/lifecycle.js(1,1): error TS2539: Cannot assign to '"/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/utils/lifecycle"' because it is not a variable.
 node_modules/npm/lib/utils/locker.js(16,23): error TS2339: Property 'cache' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/locker.js(22,29): error TS2339: Property 'cache' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/locker.js(27,18): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
@@ -790,7 +783,6 @@ node_modules/npm/lib/utils/parse-json.js(7,11): error TS2339: Property 'noExcept
 node_modules/npm/lib/utils/perf.js(9,12): error TS2345: Argument of type '"time"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/lib/utils/perf.js(10,12): error TS2345: Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/lib/utils/perf.js(21,18): error TS2345: Argument of type '"timing"' is not assignable to parameter of type '"removeListener"'.
-node_modules/npm/lib/utils/read-local-package.js(1,1): error TS2539: Cannot assign to '"/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/utils/read-local-package"' because it is not a variable.
 node_modules/npm/lib/utils/read-local-package.js(7,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/read-local-package.js(9,29): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/spawn.js(26,8): error TS2339: Property 'file' does not exist on type 'Error'.

@@ -387,7 +387,6 @@ node_modules/webpack/lib/web/JsonpMainTemplate.runtime.js(31,37): error TS2304: 
 node_modules/webpack/lib/web/JsonpMainTemplatePlugin.js(7,39): error TS2307: Cannot find module 'tapable'.
 node_modules/webpack/lib/webpack.js(14,38): error TS2307: Cannot find module '../schemas/WebpackOptions.json'.
 node_modules/webpack/lib/webpack.js(16,25): error TS2307: Cannot find module '../package.json'.
-node_modules/webpack/lib/webpack.js(63,1): error TS2539: Cannot assign to '"/home/nathansa/ts/tests/cases/user/webpack/node_modules/webpack/lib/webpack"' because it is not a variable.
 node_modules/webpack/lib/webworker/WebWorkerChunkTemplatePlugin.js(7,34): error TS2307: Cannot find module 'webpack-sources'.
 node_modules/webpack/lib/webworker/WebWorkerHotUpdateChunkTemplatePlugin.js(6,34): error TS2307: Cannot find module 'webpack-sources'.
 node_modules/webpack/lib/webworker/WebWorkerMainTemplate.runtime.js(9,3): error TS2304: Cannot find name 'hotAddUpdateChunk'.
