@@ -35,7 +35,7 @@ namespace ts.codefix {
 
     function createCodeAction(descriptionDiagnostic: DiagnosticMessage, diagnosticArgs: [string, string], changes: FileTextChanges[]): CodeFixAction {
         // TODO: GH#20315
-        return createCodeFixActionNoFixId(changes, [descriptionDiagnostic, ...diagnosticArgs] as [DiagnosticMessage, string, string]);
+        return createCodeFixActionNoFixId("import", changes, [descriptionDiagnostic, ...diagnosticArgs] as [DiagnosticMessage, string, string]);
     }
 
     function convertToImportCodeFixContext(context: CodeFixContext, symbolToken: Node, symbolName: string): ImportCodeFixContext {

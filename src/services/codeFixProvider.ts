@@ -34,16 +34,16 @@ namespace ts {
                 : getLocaleSpecificMessage(diag);
         }
 
-        export function createCodeFixActionNoFixId(changes: FileTextChanges[], description: DiagnosticAndArguments) {
-            return createCodeFixActionWorker(diagnosticToString(description), changes, /*fixId*/ undefined, /*fixAllDescription*/ undefined);
+        export function createCodeFixActionNoFixId(fixName: string, changes: FileTextChanges[], description: DiagnosticAndArguments) {
+            return createCodeFixActionWorker(fixName, diagnosticToString(description), changes, /*fixId*/ undefined, /*fixAllDescription*/ undefined);
         }
 
-        export function createCodeFixAction(changes: FileTextChanges[], description: DiagnosticAndArguments, fixId: {}, fixAllDescription: DiagnosticAndArguments, command?: CodeActionCommand): CodeFixAction {
-            return createCodeFixActionWorker(diagnosticToString(description), changes, fixId, diagnosticToString(fixAllDescription), command);
+        export function createCodeFixAction(fixName: string, changes: FileTextChanges[], description: DiagnosticAndArguments, fixId: {}, fixAllDescription: DiagnosticAndArguments, command?: CodeActionCommand): CodeFixAction {
+            return createCodeFixActionWorker(fixName, diagnosticToString(description), changes, fixId, diagnosticToString(fixAllDescription), command);
         }
 
-        function createCodeFixActionWorker(description: string, changes: FileTextChanges[], fixId?: {}, fixAllDescription?: string, command?: CodeActionCommand): CodeFixAction {
-            return { description, changes, fixId, fixAllDescription, commands: command ? [command] : undefined };
+        function createCodeFixActionWorker(fixName: string, description: string, changes: FileTextChanges[], fixId?: {}, fixAllDescription?: string, command?: CodeActionCommand): CodeFixAction {
+            return { fixName, description, changes, fixId, fixAllDescription, commands: command ? [command] : undefined };
         }
 
         export function registerCodeFix(reg: CodeFixRegistration) {
