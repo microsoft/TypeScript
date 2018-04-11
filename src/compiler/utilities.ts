@@ -3686,7 +3686,8 @@ namespace ts {
      * @param pos The start position.
      * @param end The end position.
      */
-    export function createRange(pos: number, end: number): TextRange {
+    export function createRange(pos: number, end: number = pos, noAssert = false): TextRange {
+        Debug.assert(noAssert || end >= pos);
         return { pos, end };
     }
 
@@ -3696,8 +3697,8 @@ namespace ts {
      * @param range A TextRange.
      * @param end The new end position.
      */
-    export function moveRangeEnd(range: TextRange, end: number): TextRange {
-        return createRange(range.pos, end);
+    export function moveRangeEnd(range: TextRange, end: number, noAssert = false): TextRange {
+        return createRange(range.pos, end, noAssert);
     }
 
     /**
@@ -4109,12 +4110,6 @@ namespace ts {
         }
 
         return { start, length };
-    }
-
-    /* @internal */
-    export function createTextRange(pos: number, end: number = pos): TextRange {
-        Debug.assert(end >= pos);
-        return { pos, end };
     }
 
     export function createTextSpanFromBounds(start: number, end: number) {
