@@ -22,7 +22,7 @@ namespace ts.codefix {
 
             function fix(type: Type, fixId: string, fixAllDescription: DiagnosticMessage): CodeFixAction {
                 const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, typeNode, type, checker));
-                return createCodeFixAction(changes, [Diagnostics.Change_0_to_1, original, checker.typeToString(type)], fixId, fixAllDescription);
+                return createCodeFixAction("jdocTypes", changes, [Diagnostics.Change_0_to_1, original, checker.typeToString(type)], fixId, fixAllDescription);
             }
         },
         fixIds: [fixIdPlain, fixIdNullable],
