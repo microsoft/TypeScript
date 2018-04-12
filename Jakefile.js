@@ -368,6 +368,8 @@ task("lib", libraryTargets);
 // Generate diagnostics
 var processDiagnosticMessagesJs = path.join(scriptsDirectory, "processDiagnosticMessages.js");
 var processDiagnosticMessagesTs = path.join(scriptsDirectory, "processDiagnosticMessages.ts");
+var processDiagnosticMessagesSources = filesFromConfig("./scripts/processDiagnosticMessages.tsconfig.json");
+
 var diagnosticMessagesJson = path.join(compilerDirectory, "diagnosticMessages.json");
 var diagnosticInfoMapTs = path.join(compilerDirectory, "diagnosticInformationMap.generated.ts");
 var generatedDiagnosticMessagesJSON = path.join(compilerDirectory, "diagnosticMessages.generated.json");
@@ -377,8 +379,8 @@ file(processDiagnosticMessagesTs);
 
 // processDiagnosticMessages script
 compileFile(processDiagnosticMessagesJs,
-    [processDiagnosticMessagesTs],
-    [processDiagnosticMessagesTs],
+    processDiagnosticMessagesSources,
+    processDiagnosticMessagesSources,
     [],
     /*useBuiltCompiler*/ false);
 
