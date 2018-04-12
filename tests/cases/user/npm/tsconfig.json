@@ -8,7 +8,7 @@
         "allowJs": true,
         "checkJs": true,
         "types": ["node"],
-        "lib": ["esnext", "dom"],
+        "lib": ["esnext", "dom", "scripthost"],
     },
     "include": ["node_modules/npm"]
 }

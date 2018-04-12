@@ -10,6 +10,7 @@ namespace ts.NavigateTo {
 
     export function getNavigateToItems(sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number | undefined, excludeDtsFiles: boolean): NavigateToItem[] {
         const patternMatcher = createPatternMatcher(searchValue);
+        if (!patternMatcher) return emptyArray;
         let rawItems: RawNavigateToItem[] = [];
 
         // Search the declarations in all files and output matched NavigateToItem into array of NavigateToItem[]
@@ -35,28 +36,24 @@ namespace ts.NavigateTo {
     function getItemsFromNamedDeclaration(patternMatcher: PatternMatcher, name: string, declarations: ReadonlyArray<Declaration>, checker: TypeChecker, fileName: string, rawItems: Push<RawNavigateToItem>): void {
         // First do a quick check to see if the name of the declaration matches the
         // last portion of the (possibly) dotted name they're searching for.
-        const matches = patternMatcher.getMatchesForLastSegmentOfPattern(name);
-
-        if (!matches) {
+        const match = patternMatcher.getMatchForLastSegmentOfPattern(name);
+        if (!match) {
             return; // continue to next named declarations
         }
 
         for (const declaration of declarations) {
-            if (!shouldKeepItem(declaration, checker)) {
-                continue;
-            }
+            if (!shouldKeepItem(declaration, checker)) continue;
 
-            // It was a match! If the pattern has dots in it, then also see if the
-            // declaration container matches as well.
-            let containerMatches: ReadonlyArray<PatternMatch> | undefined = matches;
             if (patternMatcher.patternContainsDots) {
-                containerMatches = patternMatcher.getMatches(getContainers(declaration), name);
-                if (!containerMatches) {
-                    continue;
+                const fullMatch = patternMatcher.getFullMatch(getContainers(declaration)!, name); // TODO: GH#18217
+                if (fullMatch) {
+                    rawItems.push({ name, fileName, matchKind: fullMatch.kind, isCaseSensitive: fullMatch.isCaseSensitive, declaration });
                 }
             }
-
-            rawItems.push({ name, fileName, matchKind: Math.min(...matches.map(m => m.kind)), isCaseSensitive: matches.every(m => m.isCaseSensitive), declaration });
+            else {
+                // If the pattern has dots in it, then also see if the declaration container matches as well.
+                rawItems.push({ name, fileName, matchKind: match.kind, isCaseSensitive: match.isCaseSensitive, declaration });
+            }
         }
     }
 
