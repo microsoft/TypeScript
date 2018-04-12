@@ -7294,7 +7294,6 @@ namespace ts.projectSystem {
             const host = createServerHost(files);
             const session = createSession(host);
             const projectService = session.getProjectService();
-            debugger;
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: protocol.CommandTypes.Open,
                 arguments: {

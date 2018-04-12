@@ -89,7 +89,18 @@ namespace ts.server {
         private plugins: PluginModule[] = [];
 
         /*@internal*/
+        /**
+         * This is map from files to unresolved imports in it
+         * Maop does not contain entries for files that do not have unresolved imports
+         * This helps in containing the set of files to invalidate
+         */
         cachedUnresolvedImportsPerFile = createMap<ReadonlyArray<string>>();
+
+        /**
+         * This is the set that has entry to true if file doesnt contain any unresolved import
+         */
+        private filesWithNoUnresolvedImports = createMap<true>();
+
         /*@internal*/
         lastCachedUnresolvedImportsList: SortedReadonlyArray<string>;
         /*@internal*/
@@ -143,7 +154,8 @@ namespace ts.server {
         /*@internal*/
         hasChangedAutomaticTypeDirectiveNames = false;
 
-        private typingFiles: SortedReadonlyArray<string>;
+        /*@internal*/
+        typingFiles: SortedReadonlyArray<string> = emptyArray;
 
         private readonly cancellationToken: ThrottledCancellationToken;
 
@@ -554,6 +566,7 @@ namespace ts.server {
             this.resolutionCache.clear();
             this.resolutionCache = undefined;
             this.cachedUnresolvedImportsPerFile = undefined;
+            this.filesWithNoUnresolvedImports = undefined;
             this.directoryStructureHost = undefined;
 
             // Clean up file watchers waiting for missing files
@@ -714,6 +727,7 @@ namespace ts.server {
             else {
                 this.resolutionCache.invalidateResolutionOfFile(info.path);
             }
+            this.filesWithNoUnresolvedImports.delete(info.path);
             this.cachedUnresolvedImportsPerFile.delete(info.path);
 
             if (detachFromProject) {
@@ -735,16 +749,21 @@ namespace ts.server {
         }
 
         /* @internal */
-        private extractUnresolvedImportsFromSourceFile(file: SourceFile, result: Push<string>, ambientModules: string[]) {
+        private extractUnresolvedImportsFromSourceFile(file: SourceFile, result: string[] | undefined, ambientModules: string[]): string[] | undefined {
+            // No unresolve imports in this file
+            if (this.filesWithNoUnresolvedImports.has(file.path)) {
+                return result;
+            }
+
             const cached = this.cachedUnresolvedImportsPerFile.get(file.path);
             if (cached) {
                 // found cached result - use it and return
                 for (const f of cached) {
-                    result.push(f);
+                    (result || (result = [])).push(f);
                 }
-                return;
+                return result;
             }
-            let unresolvedImports: string[];
+            let unresolvedImports: string[] | undefined;
             if (file.resolvedModules) {
                 file.resolvedModules.forEach((resolvedModule, name) => {
                     // pick unresolved non-relative names
@@ -760,11 +779,17 @@ namespace ts.server {
                             trimmed = trimmed.substr(0, i);
                         }
                         (unresolvedImports || (unresolvedImports = [])).push(trimmed);
-                        result.push(trimmed);
+                        (result || (result = [])).push(trimmed);
                     }
                 });
             }
-            this.cachedUnresolvedImportsPerFile.set(file.path, unresolvedImports || emptyArray);
+            if (unresolvedImports) {
+                this.cachedUnresolvedImportsPerFile.set(file.path, unresolvedImports);
+            }
+            else {
+                this.filesWithNoUnresolvedImports.set(file.path, true);
+            }
+            return result;
 
             function isAmbientlyDeclaredModule(name: string) {
                 return ambientModules.some(m => m === name);
@@ -778,7 +803,7 @@ namespace ts.server {
         updateGraph(): boolean {
             this.resolutionCache.startRecordingFilesWithChangedResolutions();
 
-            let hasChanges = this.updateGraphWorker();
+            const hasChanges = this.updateGraphWorker();
             const hasMoreOrLessScriptInfos = this.hasMoreOrLessScriptInfos;
             this.hasMoreOrLessScriptInfos = false;
 
@@ -787,6 +812,7 @@ namespace ts.server {
             for (const file of changedFiles) {
                 // delete cached information for changed files
                 this.cachedUnresolvedImportsPerFile.delete(file);
+                this.filesWithNoUnresolvedImports.delete(file);
             }
 
             // update builder only if language service is enabled
@@ -799,20 +825,15 @@ namespace ts.server {
                 // (can reuse cached imports for files that were not changed)
                 // 4. compilation settings were changed in the way that might affect module resolution - drop all caches and collect all data from the scratch
                 if (hasChanges || changedFiles.length) {
-                    const result: string[] = [];
+                    let result: string[] | undefined;
                     const ambientModules = this.program.getTypeChecker().getAmbientModules().map(mod => stripQuotes(mod.getName()));
                     for (const sourceFile of this.program.getSourceFiles()) {
-                        this.extractUnresolvedImportsFromSourceFile(sourceFile, result, ambientModules);
+                        result = this.extractUnresolvedImportsFromSourceFile(sourceFile, result, ambientModules);
                     }
-                    this.lastCachedUnresolvedImportsList = toDeduplicatedSortedArray(result);
+                    this.lastCachedUnresolvedImportsList = result ? toDeduplicatedSortedArray(result) : emptyArray;
                 }
 
-                const cachedTypings = this.projectService.typingsCache.getTypingsForProject(this, this.lastCachedUnresolvedImportsList, hasMoreOrLessScriptInfos);
-                if (!arrayIsEqualTo(this.typingFiles, cachedTypings)) {
-                    this.typingFiles = cachedTypings;
-                    this.markAsDirty();
-                    hasChanges = this.updateGraphWorker() || hasChanges;
-                }
+                this.projectService.typingsCache.enqueueInstallTypingsForProject(this, this.lastCachedUnresolvedImportsList, hasMoreOrLessScriptInfos);
             }
             else {
                 this.lastCachedUnresolvedImportsList = undefined;
@@ -822,6 +843,13 @@ namespace ts.server {
                 this.projectStructureVersion++;
             }
             return !hasChanges;
+        }
+
+        /*@internal*/
+        updateTypingFiles(typingFiles: SortedReadonlyArray<string>) {
+            this.typingFiles = typingFiles;
+            // Invalidate files with unresolved imports
+            this.resolutionCache.setFilesWithInvalidatedNonRelativeUnresolvedImports(this.cachedUnresolvedImportsPerFile);
         }
 
         /* @internal */
@@ -959,15 +987,14 @@ namespace ts.server {
         setCompilerOptions(compilerOptions: CompilerOptions) {
             if (compilerOptions) {
                 compilerOptions.allowNonTsExtensions = true;
-                if (changesAffectModuleResolution(this.compilerOptions, compilerOptions)) {
-                    // reset cached unresolved imports if changes in compiler options affected module resolution
-                    this.cachedUnresolvedImportsPerFile.clear();
-                    this.lastCachedUnresolvedImportsList = undefined;
-                }
                 const oldOptions = this.compilerOptions;
                 this.compilerOptions = compilerOptions;
                 this.setInternalCompilerOptionsForEmittingJsFiles();
                 if (changesAffectModuleResolution(oldOptions, compilerOptions)) {
+                    // reset cached unresolved imports if changes in compiler options affected module resolution
+                    this.cachedUnresolvedImportsPerFile.clear();
+                    this.filesWithNoUnresolvedImports.clear();
+                    this.lastCachedUnresolvedImportsList = undefined;
                     this.resolutionCache.clear();
                 }
                 this.markAsDirty();

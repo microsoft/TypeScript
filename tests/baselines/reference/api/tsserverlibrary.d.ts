@@ -7643,6 +7643,10 @@ declare namespace ts.server {
         private externalFiles;
         private missingFilesMap;
         private plugins;
+        /**
+         * This is the set that has entry to true if file doesnt contain any unresolved import
+         */
+        private filesWithNoUnresolvedImports;
         private lastFileExceededProgramSize;
         protected languageService: LanguageService;
         languageServiceEnabled: boolean;
@@ -7673,7 +7677,6 @@ declare namespace ts.server {
          * This property is different from projectStructureVersion since in most cases edits don't affect set of files in the project
          */
         private projectStateVersion;
-        private typingFiles;
         private readonly cancellationToken;
         isNonTsProject(): boolean;
         isJsOnlyProject(): boolean;
