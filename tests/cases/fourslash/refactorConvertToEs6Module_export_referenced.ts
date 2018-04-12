@@ -19,7 +19,6 @@
 
 verify.codeFix({
     description: "Convert to ES6 module",
-    // TODO: GH#22492
     newFileContent:
 `export const x = 0;
 x;

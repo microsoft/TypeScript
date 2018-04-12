@@ -252,7 +252,7 @@ namespace ts.codefix {
             changes.replaceNodeWithNodes(sourceFile, assignment.parent, newNodes);
         }
         else {
-            convertExportsDotXEquals(assignment, sourceFile, changes);
+            convertExportsPropertyAssignment(assignment, sourceFile, changes);
         }
     }
 
@@ -300,7 +300,7 @@ namespace ts.codefix {
         return makeExportDeclaration([createExportSpecifier(/*propertyName*/ undefined, "default")], moduleSpecifier);
     }
 
-    function convertExportsDotXEquals({ left, right, parent }: BinaryExpression & { left: PropertyAccessExpression }, sourceFile: SourceFile, changes: textChanges.ChangeTracker): void {
+    function convertExportsPropertyAssignment({ left, right, parent }: BinaryExpression & { left: PropertyAccessExpression }, sourceFile: SourceFile, changes: textChanges.ChangeTracker): void {
         const name = left.name.text;
         if ((isFunctionExpression(right) || isArrowFunction(right) || isClassExpression(right)) && (!right.name || right.name.text === name)) {
             // `exports.f = function() {}` -> `export function f() {}` -- Replace `exports.f = ` with `export `, and insert the name after `function`.
