@@ -1459,11 +1459,13 @@ namespace ts {
      * WARNING: This is an expensive operation and is only intended to be used in refactorings
      * and code fixes (because those are triggered by explicit user actions).
      */
-    export function getSynthesizedDeepClone<T extends Node>(node: T | undefined): T | undefined {
-        if (node === undefined) {
-            return undefined;
-        }
+    export function getSynthesizedDeepClone<T extends Node>(node: T | undefined, includeTrivia = true): T | undefined {
+        const clone = node && getSynthesizedDeepCloneWorker(node);
+        if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
+        return clone;
+    }
 
+    function getSynthesizedDeepCloneWorker<T extends Node>(node: T): T | undefined {
         const visited = visitEachChild(node, getSynthesizedDeepClone, nullTransformationContext);
         if (visited === node) {
             // This only happens for leaf nodes - internal nodes always see their children change.
@@ -1474,28 +1476,18 @@ namespace ts {
             else if (isNumericLiteral(clone)) {
                 clone.numericLiteralFlags = (node as any).numericLiteralFlags;
             }
-            clone.pos = node.pos;
-            clone.end = node.end;
-            return clone;
+            return setTextRange(clone, node);
         }
 
         // PERF: As an optimization, rather than calling getSynthesizedClone, we'll update
         // the new node created by visitEachChild with the extra changes getSynthesizedClone
         // would have made.
-
         visited.parent = undefined;
-
         return visited;
     }
 
-    export function getSynthesizedDeepCloneWithoutTrivia<T extends Node>(node: T): T {
-        const clone = getSynthesizedDeepClone(node);
-        suppressLeadingAndTrailingTrivia(clone);
-        return clone;
-    }
-
-    export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined): NodeArray<T> | undefined {
-        return nodes && createNodeArray(nodes.map(getSynthesizedDeepClone), nodes.hasTrailingComma);
+    export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia = true): NodeArray<T> | undefined {
+        return nodes && createNodeArray(nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)), nodes.hasTrailingComma);
     }
 
     /**

@@ -25,7 +25,7 @@ namespace ts.codefix {
         }
 
         const declaration = declarations[0];
-        const name = getSynthesizedDeepCloneWithoutTrivia(getNameOfDeclaration(declaration)) as PropertyName;
+        const name = getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
         const visibilityModifier = createVisibilityModifier(getModifierFlags(declaration));
         const modifiers = visibilityModifier ? createNodeArray([visibilityModifier]) : undefined;
         const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
@@ -68,7 +68,7 @@ namespace ts.codefix {
 
                 for (const signature of signatures) {
                     // Need to ensure nodes are fresh each time so they can have different positions.
-                    outputMethod(signature, getSynthesizedDeepClones(modifiers), getSynthesizedDeepCloneWithoutTrivia(name));
+                    outputMethod(signature, getSynthesizedDeepClones(modifiers, /*includeTrivia*/ false), getSynthesizedDeepClone(name, /*includeTrivia*/ false));
                 }
 
                 if (declarations.length > signatures.length) {
@@ -100,10 +100,6 @@ namespace ts.codefix {
         signatureDeclaration.questionToken = optional ? createToken(SyntaxKind.QuestionToken) : undefined;
         signatureDeclaration.body = body;
         return signatureDeclaration;
-    }
-
-    function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined): NodeArray<T> | undefined {
-        return nodes && createNodeArray(nodes.map(getSynthesizedDeepCloneWithoutTrivia));
     }
 
     export function createMethodFromCallExpression(

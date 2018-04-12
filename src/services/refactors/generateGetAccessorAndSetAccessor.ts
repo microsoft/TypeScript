@@ -4,20 +4,20 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     const actionDescription = Diagnostics.Generate_get_and_set_accessors.message;
     registerRefactor(actionName, { getEditsForAction, getAvailableActions });
 
-    type AccepedDeclaration = ParameterDeclaration | PropertyDeclaration | PropertyAssignment;
-    type AccepedNameType = Identifier | StringLiteral;
-    type ContainerDeclation = ClassLikeDeclaration | ObjectLiteralExpression;
+    type AcceptedDeclaration = ParameterDeclaration | PropertyDeclaration | PropertyAssignment;
+    type AcceptedNameType = Identifier | StringLiteral;
+    type ContainerDeclaration = ClassLikeDeclaration | ObjectLiteralExpression;
 
     interface DeclarationInfo {
-        container: ContainerDeclation;
+        container: ContainerDeclaration;
         isStatic: boolean;
         type: TypeNode | undefined;
     }
 
     interface Info extends DeclarationInfo {
-        declaration: AccepedDeclaration;
-        fieldName: AccepedNameType;
-        accessorName: AccepedNameType;
+        declaration: AcceptedDeclaration;
+        fieldName: AcceptedNameType;
+        accessorName: AcceptedNameType;
     }
 
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
@@ -47,8 +47,10 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         const { isStatic, fieldName, accessorName, type, container, declaration } = fieldInfo;
 
         const isInClassLike = isClassLike(container);
-        const accessorModifiers = getAccessorModifiers(isJS, declaration, isStatic, isInClassLike);
-        const fieldModifiers = getFieldModifiers(isJS, isStatic, isInClassLike);
+        const accessorModifiers = isInClassLike
+            ? !declaration.modifiers || getModifierFlags(declaration) & ModifierFlags.Private ? getModifiers(isJS, isStatic, SyntaxKind.PublicKeyword) : declaration.modifiers
+            : undefined;
+        const fieldModifiers = isInClassLike ? getModifiers(isJS, isStatic, SyntaxKind.PrivateKeyword) : undefined;
 
         updateFieldDeclaration(changeTracker, file, declaration, fieldName, fieldModifiers, container);
 
@@ -65,37 +67,26 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         return { renameFilename, renameLocation, edits };
     }
 
-    function isConvertableName (name: DeclarationName): name is AccepedNameType {
+    function isConvertableName (name: DeclarationName): name is AcceptedNameType {
         return isIdentifier(name) || isStringLiteral(name);
     }
 
-    function createPropertyName (name: string, originalName: AccepedNameType) {
+    function isAcceptedDeclaration(node: Node): node is AcceptedDeclaration {
+        return isParameterPropertyDeclaration(node) || isPropertyDeclaration(node) || isPropertyAssignment(node);
+    }
+
+    function createPropertyName (name: string, originalName: AcceptedNameType) {
         return isIdentifier(originalName) ? createIdentifier(name) : createLiteral(name);
     }
 
-    function createAccessorAccessExpression (fieldName: AccepedNameType, isStatic: boolean, container: ContainerDeclation) {
+    function createAccessorAccessExpression (fieldName: AcceptedNameType, isStatic: boolean, container: ContainerDeclaration) {
         const leftHead = isStatic ? (<ClassLikeDeclaration>container).name : createThis();
         return isIdentifier(fieldName) ? createPropertyAccess(leftHead, fieldName) : createElementAccess(leftHead, createLiteral(fieldName));
     }
 
-    function getAccessorModifiers(isJS: boolean, declaration: AccepedDeclaration, isStatic: boolean, isClassLike: boolean): NodeArray<Modifier> | undefined {
-        if (!isClassLike) return undefined;
-
-        if (!declaration.modifiers || getModifierFlags(declaration) & ModifierFlags.Private) {
-            const modifiers = append<Modifier>(
-                !isJS ? [createToken(SyntaxKind.PublicKeyword)] : undefined,
-                isStatic ? createToken(SyntaxKind.StaticKeyword) : undefined
-            );
-            return modifiers && createNodeArray(modifiers);
-        }
-        return declaration.modifiers;
-    }
-
-    function getFieldModifiers(isJS: boolean, isStatic: boolean, isClassLike: boolean): NodeArray<Modifier> | undefined {
-        if (!isClassLike) return undefined;
-
+    function getModifiers(isJS: boolean, isStatic: boolean, accessModifier: SyntaxKind.PublicKeyword | SyntaxKind.PrivateKeyword): NodeArray<Modifier> {
         const modifiers = append<Modifier>(
-            !isJS ? [createToken(SyntaxKind.PrivateKeyword)] : undefined,
+            !isJS ? [createToken(accessModifier) as Token<SyntaxKind.PublicKeyword> | Token<SyntaxKind.PrivateKeyword>] : undefined,
             isStatic ? createToken(SyntaxKind.StaticKeyword) : undefined
         );
         return modifiers && createNodeArray(modifiers);
@@ -129,7 +120,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         };
     }
 
-    function getDeclarationInfo(declaration: AccepedDeclaration) {
+    function getDeclarationInfo(declaration: AcceptedDeclaration) {
         if (isPropertyDeclaration(declaration)) {
             return getPropertyDeclarationInfo(declaration);
         }
@@ -143,7 +134,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
 
     function getConvertibleFieldAtPosition(file: SourceFile, startPosition: number): Info | undefined {
         const node = getTokenAtPosition(file, startPosition, /*includeJsDocComment*/ false);
-        const declaration = <AccepedDeclaration>findAncestor(node.parent, or(isParameterPropertyDeclaration, isPropertyDeclaration, isPropertyAssignment));
+        const declaration = findAncestor(node.parent, isAcceptedDeclaration);
         // make sure propertyDeclaration have AccessibilityModifier or Static Modifier
         const meaning = ModifierFlags.AccessibilityModifier | ModifierFlags.Static;
         if (!declaration || !isConvertableName(declaration.name) || (getModifierFlags(declaration) | meaning) !== meaning) return undefined;
@@ -160,7 +151,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         };
     }
 
-    function generateGetAccessor(fieldName: AccepedNameType, accessorName: AccepedNameType, type: TypeNode, modifiers: ModifiersArray | undefined, isStatic: boolean, container: ContainerDeclation) {
+    function generateGetAccessor(fieldName: AcceptedNameType, accessorName: AcceptedNameType, type: TypeNode, modifiers: ModifiersArray | undefined, isStatic: boolean, container: ContainerDeclaration) {
         return createGetAccessor(
             /*decorators*/ undefined,
             modifiers,
@@ -175,7 +166,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         );
     }
 
-    function generateSetAccessor(fieldName: AccepedNameType, accessorName: AccepedNameType, type: TypeNode, modifiers: ModifiersArray | undefined, isStatic: boolean, container: ContainerDeclation) {
+    function generateSetAccessor(fieldName: AcceptedNameType, accessorName: AcceptedNameType, type: TypeNode, modifiers: ModifiersArray | undefined, isStatic: boolean, container: ContainerDeclaration) {
         return createSetAccessor(
             /*decorators*/ undefined,
             modifiers,
@@ -199,7 +190,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         );
     }
 
-    function updatePropertyDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: PropertyDeclaration, fieldName: AccepedNameType, modifiers: ModifiersArray | undefined) {
+    function updatePropertyDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: PropertyDeclaration, fieldName: AcceptedNameType, modifiers: ModifiersArray | undefined) {
         const property = updateProperty(
             declaration,
             declaration.decorators,
@@ -213,7 +204,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         changeTracker.replaceNode(file, declaration, property);
     }
 
-    function updateParameterPropertyDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: ParameterDeclaration, fieldName: AccepedNameType, modifiers: ModifiersArray | undefined, classLikeContainer: ClassLikeDeclaration) {
+    function updateParameterPropertyDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: ParameterDeclaration, fieldName: AcceptedNameType, modifiers: ModifiersArray | undefined, classLikeContainer: ClassLikeDeclaration) {
         const property = createProperty(
             declaration.decorators,
             modifiers,
@@ -227,12 +218,12 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         changeTracker.deleteNodeInList(file, declaration);
     }
 
-    function updatePropertyAssignmentDeclaration (changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: PropertyAssignment, fieldName: AccepedNameType) {
+    function updatePropertyAssignmentDeclaration (changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: PropertyAssignment, fieldName: AcceptedNameType) {
         const assignment = updatePropertyAssignment(declaration, fieldName, declaration.initializer);
         changeTracker.replacePropertyAssignment(file, declaration, assignment);
     }
 
-    function updateFieldDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: AccepedDeclaration, fieldName: AccepedNameType, modifiers: ModifiersArray | undefined, container: ContainerDeclation) {
+    function updateFieldDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: AcceptedDeclaration, fieldName: AcceptedNameType, modifiers: ModifiersArray | undefined, container: ContainerDeclaration) {
         if (isPropertyDeclaration(declaration)) {
             updatePropertyDeclaration(changeTracker, file, declaration, fieldName, modifiers);
         }
@@ -244,7 +235,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         }
     }
 
-    function insertAccessor(changeTracker: textChanges.ChangeTracker, file: SourceFile, accessor: AccessorDeclaration, declaration: AccepedDeclaration, container: ContainerDeclation) {
+    function insertAccessor(changeTracker: textChanges.ChangeTracker, file: SourceFile, accessor: AccessorDeclaration, declaration: AcceptedDeclaration, container: ContainerDeclaration) {
         isParameterPropertyDeclaration(declaration)
             ? changeTracker.insertNodeAtClassStart(file, <ClassLikeDeclaration>container, accessor)
             : changeTracker.insertNodeAfter(file, declaration, accessor);
