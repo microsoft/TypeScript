@@ -1,7 +1,3 @@
-/// <reference path="program.ts"/>
-/// <reference path="watch.ts"/>
-/// <reference path="commandLineParser.ts"/>
-
 namespace ts {
     interface Statistic {
         name: string;

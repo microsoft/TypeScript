@@ -21,3 +21,7 @@
 [submodule "tests/cases/user/create-react-app/create-react-app"]
 	path = tests/cases/user/create-react-app/create-react-app
 	url = https://github.com/facebook/create-react-app.git
+[submodule "tests/cases/user/webpack/webpack"]
+	path = tests/cases/user/webpack/webpack 
+        url = https://github.com/webpack/webpack.git
+	ignore = all

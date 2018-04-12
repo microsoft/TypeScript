@@ -1,4 +1,3 @@
-/// <reference path="program.ts" />
 namespace ts {
     export interface EmitOutput {
         outputFiles: OutputFile[];

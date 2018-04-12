@@ -1,6 +1,3 @@
-/// <reference path="../factory.ts" />
-/// <reference path="../visitor.ts" />
-
 /*@internal*/
 namespace ts {
     export function transformES2016(context: TransformationContext) {
