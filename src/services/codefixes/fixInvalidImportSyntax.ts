@@ -1,5 +1,7 @@
 /* @internal */
 namespace ts.codefix {
+    const fixName = "invalidImportSyntax";
+
     registerCodeFix({
         errorCodes: [Diagnostics.A_namespace_style_import_cannot_be_called_or_constructed_and_will_cause_a_failure_at_runtime.code],
         getCodeActions: getActionsForInvalidImport
@@ -43,7 +45,7 @@ namespace ts.codefix {
 
     function createAction(context: CodeFixContext, sourceFile: SourceFile, node: Node, replacement: Node): CodeFixAction {
         const changes = textChanges.ChangeTracker.with(context, t => t.replaceNode(sourceFile, node, replacement));
-        return createCodeFixActionNoFixId(changes, [Diagnostics.Replace_import_with_0, changes[0].textChanges[0].newText]);
+        return createCodeFixActionNoFixId("invalidImportSyntax", changes, [Diagnostics.Replace_import_with_0, changes[0].textChanges[0].newText]);
     }
 
     registerCodeFix({
@@ -72,7 +74,7 @@ namespace ts.codefix {
             addRange(fixes, getCodeFixesForImportDeclaration(context, relatedImport));
         }
         const changes = textChanges.ChangeTracker.with(context, t => t.replaceNode(sourceFile, expr, createPropertyAccess(expr, "default"), {}));
-        fixes.push(createCodeFixActionNoFixId(changes, Diagnostics.Use_synthetic_default_member));
+        fixes.push(createCodeFixActionNoFixId(fixName, changes, Diagnostics.Use_synthetic_default_member));
         return fixes;
     }
 }

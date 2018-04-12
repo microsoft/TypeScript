@@ -34,7 +34,7 @@ namespace ts.codefix {
             let declaration: Declaration | undefined;
             const changes = textChanges.ChangeTracker.with(context, changes => { declaration = doChange(changes, sourceFile, token, errorCode, program, cancellationToken); });
             return changes.length === 0 ? undefined
-                : [createCodeFixAction(changes, [getDiagnostic(errorCode, token), getNameOfDeclaration(declaration!).getText(sourceFile)], fixId, Diagnostics.Infer_all_types_from_usage)];
+                : [createCodeFixAction(fixId, changes, [getDiagnostic(errorCode, token), getNameOfDeclaration(declaration!).getText(sourceFile)], fixId, Diagnostics.Infer_all_types_from_usage)];
         },
         fixIds: [fixId],
         getAllCodeActions(context) {
