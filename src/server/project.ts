@@ -92,6 +92,8 @@ namespace ts.server {
         cachedUnresolvedImportsPerFile = createMap<ReadonlyArray<string>>();
         /*@internal*/
         lastCachedUnresolvedImportsList: SortedReadonlyArray<string>;
+        /*@internal*/
+        hasMoreOrLessScriptInfos = false;
 
         private lastFileExceededProgramSize: string | undefined;
 
@@ -777,6 +779,8 @@ namespace ts.server {
             this.resolutionCache.startRecordingFilesWithChangedResolutions();
 
             let hasChanges = this.updateGraphWorker();
+            const hasMoreOrLessScriptInfos = this.hasMoreOrLessScriptInfos;
+            this.hasMoreOrLessScriptInfos = false;
 
             const changedFiles: ReadonlyArray<Path> = this.resolutionCache.finishRecordingFilesWithChangedResolutions() || emptyArray;
 
@@ -803,7 +807,7 @@ namespace ts.server {
                     this.lastCachedUnresolvedImportsList = toDeduplicatedSortedArray(result);
                 }
 
-                const cachedTypings = this.projectService.typingsCache.getTypingsForProject(this, this.lastCachedUnresolvedImportsList, hasChanges);
+                const cachedTypings = this.projectService.typingsCache.getTypingsForProject(this, this.lastCachedUnresolvedImportsList, hasMoreOrLessScriptInfos);
                 if (!arrayIsEqualTo(this.typingFiles, cachedTypings)) {
                     this.typingFiles = cachedTypings;
                     this.markAsDirty();
