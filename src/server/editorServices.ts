@@ -312,7 +312,8 @@ namespace ts.server {
 
     export class ProjectService {
 
-        public readonly typingsCache: TypingsCache;
+        /*@internal*/
+        readonly typingsCache: TypingsCache;
 
         private readonly documentRegistry: DocumentRegistry;
 
@@ -523,12 +524,16 @@ namespace ts.server {
             }
             switch (response.kind) {
                 case ActionSet:
-                    project.resolutionCache.clear();
-                    this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typeAcquisition, response.unresolvedImports, response.typings);
+                    const typings = toSortedArray(response.typings);
+                    this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typeAcquisition, response.unresolvedImports, typings);
+                    if (!project.updateTypingFiles(typings)) {
+                        return;
+                    }
                     break;
+
                 case ActionInvalidate:
-                    project.resolutionCache.clear();
                     this.typingsCache.deleteTypingsForProject(response.projectName);
+                    project.resolutionCache.invalidateAllResolutions();
                     break;
             }
             this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);

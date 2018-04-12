@@ -10,6 +10,8 @@ namespace ts {
 
         invalidateResolutionOfFile(filePath: Path): void;
         removeResolutionsOfFile(filePath: Path): void;
+        invalidateResolutionNames(fileToNames: Map<ReadonlyArray<string>>): void;
+        invalidateAllResolutions(): void;
         createHasInvalidatedResolution(forceAllFilesAsInvalidated?: boolean): HasInvalidatedResolution;
 
         startCachingPerDirectoryResolution(): void;
@@ -19,6 +21,9 @@ namespace ts {
         closeTypeRootsWatch(): void;
 
         clear(): void;
+
+        // For test only
+        resolvedModuleNames: Map<Map<ResolvedModuleWithFailedLookupLocations>>;
     }
 
     interface ResolutionWithFailedLookupLocations {
@@ -122,10 +127,13 @@ namespace ts {
             resolveTypeReferenceDirectives,
             removeResolutionsOfFile,
             invalidateResolutionOfFile,
+            invalidateResolutionNames,
+            invalidateAllResolutions,
             createHasInvalidatedResolution,
             updateTypeRootsWatch,
             closeTypeRootsWatch,
-            clear
+            clear,
+            resolvedModuleNames
         };
 
         function getResolvedModule(resolution: ResolvedModuleWithFailedLookupLocations) {
@@ -284,7 +292,7 @@ namespace ts {
                 if (oldResolution === newResolution) {
                     return true;
                 }
-                if (!oldResolution || !newResolution || oldResolution.isInvalidated) {
+                if (!oldResolution || !newResolution) {
                     return false;
                 }
                 const oldResult = getResolutionWithResolvedFileName(oldResolution);
@@ -536,6 +544,9 @@ namespace ts {
                 }
                 resolutions.forEach((resolution, name) => {
                     if (seenInDir.has(name)) {
+                        if (resolution.isInvalidated) {
+                            filesWithInvalidatedResolutions.set(containingFilePath, true);
+                        }
                         return;
                     }
                     seenInDir.set(name, true);
@@ -546,6 +557,11 @@ namespace ts {
                     }
                 });
             });
+        }
+
+        function invalidateAllResolutions() {
+            // Invalidate everything
+            allFilesHaveInvalidatedResolution = true;
         }
 
         function hasReachedResolutionIterationLimit() {
@@ -559,7 +575,7 @@ namespace ts {
             // If more than maxNumberOfFilesToIterateForInvalidation present,
             // just invalidated all files and recalculate the resolutions for files instead
             if (hasReachedResolutionIterationLimit()) {
-                allFilesHaveInvalidatedResolution = true;
+                invalidateAllResolutions();
                 return;
             }
             invalidateResolutionCache(resolvedModuleNames, isInvalidatedResolution, getResolvedModule);
@@ -615,6 +631,37 @@ namespace ts {
                 hasChangedFailedLookupLocation
             );
             return allFilesHaveInvalidatedResolution || filesWithInvalidatedResolutions && filesWithInvalidatedResolutions.size !== invalidatedFilesCount;
+        }
+
+        function invalidateResolutionCacheNameStart<T extends ResolutionWithFailedLookupLocations>(resolutions: Map<T>, name: string) {
+            resolutions.forEach((resolution, key) => {
+                key = key.trim();
+                if (name === key || startsWith(key, name + "/")) {
+                    resolution.isInvalidated = true;
+                }
+            });
+        }
+
+        function invalidateResolutionNames(fileToNames: Map<ReadonlyArray<string>>) {
+            if (allFilesHaveInvalidatedResolution) {
+                return;
+            }
+
+            fileToNames.forEach((names, filePath) => {
+                if (!names.length) {
+                    return;
+                }
+                const moduleResolutionsInFile = resolvedModuleNames.get(filePath);
+                const typeReferenceResolutionsInFile = resolvedTypeReferenceDirectives.get(filePath);
+                if (!moduleResolutionsInFile && !typeReferenceResolutionsInFile) {
+                    return;
+                }
+                (filesWithInvalidatedResolutions || (filesWithInvalidatedResolutions = createMap<true>())).set(filePath as Path, true);
+                names.forEach(name => {
+                    invalidateResolutionCacheNameStart(moduleResolutionsInFile, name);
+                    invalidateResolutionCacheNameStart(typeReferenceResolutionsInFile, name);
+                });
+            });
         }
 
         function closeTypeRootsWatch() {

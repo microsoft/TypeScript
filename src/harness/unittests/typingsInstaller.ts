@@ -17,7 +17,7 @@ namespace ts.projectSystem {
     class Installer extends TestTypingsInstaller {
         constructor(host: server.ServerHost, p?: InstallerParams, log?: TI.Log) {
             super(
-                (p && p.globalTypingsCacheLocation) || "/a/data",
+                (p && p.globalTypingsCacheLocation) || typingsCacheLocation,
                 (p && p.throttleLimit) || 5,
                 host,
                 (p && p.typesRegistry),
@@ -999,14 +999,14 @@ namespace ts.projectSystem {
             proj.updateGraph();
 
             assert.deepEqual(
-                proj.getCachedUnresolvedImportsPerFile_TestOnly().get(<Path>f1.path),
+                proj.cachedUnresolvedImportsPerFile.get(f1.path),
                 ["foo", "foo", "foo", "@bar/router", "@bar/common", "@bar/common"]
             );
 
             installer.installAll(/*expectedCount*/ 1);
         });
 
-        it("should recompute resolutions after typings are installed", () => {
+        it("cached unresolved typings are not recomputed if program structure did not change", () => {
             const host = createServerHost([]);
             const session = createSession(host);
             const f = {
@@ -1016,25 +1016,20 @@ namespace ts.projectSystem {
                 import * as cmd from "commander
                 `
             };
-            const openRequest: server.protocol.OpenRequest = {
-                seq: 1,
-                type: "request",
+            session.executeCommandSeq<server.protocol.OpenRequest>({
                 command: server.protocol.CommandTypes.Open,
                 arguments: {
                     file: f.path,
                     fileContent: f.content
                 }
-            };
-            session.executeCommand(openRequest);
+            });
             const projectService = session.getProjectService();
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             const proj = projectService.inferredProjects[0];
-            const version1 = proj.getCachedUnresolvedImportsPerFile_TestOnly().getVersion();
+            const version1 = proj.lastCachedUnresolvedImportsList;
 
             // make a change that should not affect the structure of the program
-            const changeRequest: server.protocol.ChangeRequest = {
-                seq: 2,
-                type: "request",
+            session.executeCommandSeq<server.protocol.ChangeRequest>({
                 command: server.protocol.CommandTypes.Change,
                 arguments: {
                     file: f.path,
@@ -1044,11 +1039,18 @@ namespace ts.projectSystem {
                     endLine: 2,
                     endOffset: 0
                 }
-            };
-            session.executeCommand(changeRequest);
-            host.checkTimeoutQueueLengthAndRun(2); // This enqueues the updategraph and refresh inferred projects
-            const version2 = proj.getCachedUnresolvedImportsPerFile_TestOnly().getVersion();
-            assert.notEqual(version1, version2, "set of unresolved imports should change");
+            });
+            // ensure the change takes place
+            session.executeCommandSeq<server.protocol.QuickInfoRequest>({
+                command: server.protocol.CommandTypes.Quickinfo,
+                arguments: {
+                    file: f.path,
+                    line: 4,
+                    offset: 5
+                }
+            });
+            const version2 = proj.lastCachedUnresolvedImportsList;
+            assert.strictEqual(version1, version2, "set of unresolved imports should not change");
         });
 
         it("expired cache entry (inferred project, should install typings)", () => {
@@ -1269,7 +1271,6 @@ namespace ts.projectSystem {
             const finish = logger.finish();
             assert.deepEqual(finish, [
                 'Inferred typings from file names: ["jquery","chroma-js"]',
-                "Inferred typings from unresolved imports: []",
                 'Result: {"cachedTypingPaths":[],"newTypingNames":["jquery","chroma-js"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}',
             ], finish.join("\r\n"));
             assert.deepEqual(result.newTypingNames, ["jquery", "chroma-js"]);
@@ -1336,7 +1337,6 @@ namespace ts.projectSystem {
             assert.deepEqual(logger.finish(), [
                 'Searching for typing names in /node_modules; all files: ["/node_modules/a/package.json"]',
                 '    Found package names: ["a"]',
-                "Inferred typings from unresolved imports: []",
                 'Result: {"cachedTypingPaths":[],"newTypingNames":["a"],"filesToWatch":["/bower_components","/node_modules"]}',
             ]);
             assert.deepEqual(result, {
@@ -1591,6 +1591,72 @@ namespace ts.projectSystem {
             assert.isFalse(endEvent.installSuccess);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             checkProjectActualFiles(projectService.inferredProjects[0], [f1.path]);
+        });
+    });
+
+    describe("recomputing resolutions of unresolved imports", () => {
+        const globalTypingsCacheLocation = "/tmp";
+        function verifyUnresolvedImportResolutions(appContents: string, typingNames: string[], typingFiles: FileOrFolder[]) {
+            const app: FileOrFolder = {
+                path: "/a/b/app.js",
+                content: `${appContents}import * as x from "fooo";`
+            };
+            const fooo: FileOrFolder = {
+                path: "/a/b/node_modules/fooo/index.d.ts",
+                content: `export var x: string;`
+            };
+            const host = createServerHost([app, fooo]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { globalTypingsCacheLocation, typesRegistry: createTypesRegistry("foo") });
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
+                    executeCommand(this, host, typingNames, typingFiles, cb);
+                }
+            })();
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.openClientFile(app.path);
+            projectService.checkNumberOfProjects({ inferredProjects: 1 });
+
+            const proj = projectService.inferredProjects[0];
+            checkProjectActualFiles(proj, [app.path, fooo.path]);
+            assert.equal(proj.resolutionCache.resolvedModuleNames.get(app.path).get("fooo").resolvedModule.resolvedFileName, fooo.path);
+
+            installer.installAll(/*expectedCount*/ 1);
+            host.checkTimeoutQueueLengthAndRun(2);
+            assert.isUndefined(proj.resolutionCache.resolvedModuleNames.get(app.path).get("fooo").isInvalidated);
+            checkProjectActualFiles(proj, typingFiles.map(f => f.path).concat(app.path, fooo.path));
+        }
+
+        it("correctly invalidate the resolutions with typing names", () => {
+            verifyUnresolvedImportResolutions('import * as a from "foo";', ["foo"], [{
+                path: `${globalTypingsCacheLocation}/node_modules/foo/index.d.ts`,
+                content: "export function a(): void;"
+            }]);
+        });
+
+        it("correctly invalidate the resolutions with typing names that are trimmed", () => {
+            const foo: FileOrFolder = {
+                path: `${globalTypingsCacheLocation}/node_modules/foo/index.d.ts`,
+                content: "export {}"
+            };
+            const fooAA: FileOrFolder = {
+                path: `${globalTypingsCacheLocation}/node_modules/foo/a/a.d.ts`,
+                content: "export function a (): void;"
+            };
+            const fooAB: FileOrFolder = {
+                path: `${globalTypingsCacheLocation}/node_modules/foo/a/b.d.ts`,
+                content: "export function b (): void;"
+            };
+            const fooAC: FileOrFolder = {
+                path: `${globalTypingsCacheLocation}/node_modules/foo/a/c.d.ts`,
+                content: "export function c (): void;"
+            };
+            verifyUnresolvedImportResolutions(`
+                    import * as a from "foo/a/a";
+                    import * as b from "foo/a/b";
+                    import * as c from "foo/a/c";
+            `, ["foo"], [foo, fooAA, fooAB, fooAC]);
         });
     });
 }

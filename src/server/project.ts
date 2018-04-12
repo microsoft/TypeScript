@@ -55,34 +55,6 @@ namespace ts.server {
         projectErrors: ReadonlyArray<Diagnostic>;
     }
 
-    export class UnresolvedImportsMap {
-        readonly perFileMap = createMap<ReadonlyArray<string>>();
-        private version = 0;
-
-        public clear() {
-            this.perFileMap.clear();
-            this.version = 0;
-        }
-
-        public getVersion() {
-            return this.version;
-        }
-
-        public remove(path: Path) {
-            this.perFileMap.delete(path);
-            this.version++;
-        }
-
-        public get(path: Path) {
-            return this.perFileMap.get(path);
-        }
-
-        public set(path: Path, value: ReadonlyArray<string>) {
-            this.perFileMap.set(path, value);
-            this.version++;
-        }
-    }
-
     export interface PluginCreateInfo {
         project: Project;
         languageService: LanguageService;
@@ -116,8 +88,18 @@ namespace ts.server {
         private missingFilesMap: Map<FileWatcher>;
         private plugins: PluginModule[] = [];
 
-        private cachedUnresolvedImportsPerFile = new UnresolvedImportsMap();
-        private lastCachedUnresolvedImportsList: SortedReadonlyArray<string>;
+        private filesWithNoUnresolvedImports = createMap<true>();
+
+        /*@internal*/
+        /**
+         * This is the map from files to unresolved imports in it.
+         * Map doesnot contain entry if there are no unresolvedImports in the file
+         * This helps in not iterating through all files to invalidate them when typings are installed
+         */
+        cachedUnresolvedImportsPerFile = createMap<ReadonlyArray<string>>();
+
+        /*@internal*/
+        lastCachedUnresolvedImportsList: SortedReadonlyArray<string>;
 
         private lastFileExceededProgramSize: string | undefined;
 
@@ -134,6 +116,9 @@ namespace ts.server {
 
         /*@internal*/
         resolutionCache: ResolutionCache;
+
+        /*@internal*/
+        hasStructureChange = false;
 
         private builderState: BuilderState | undefined;
         /**
@@ -167,7 +152,7 @@ namespace ts.server {
         /*@internal*/
         hasChangedAutomaticTypeDirectiveNames = false;
 
-        private typingFiles: SortedReadonlyArray<string>;
+        private typingFiles: SortedReadonlyArray<string> = emptyArray;
 
         private readonly cancellationToken: ThrottledCancellationToken;
 
@@ -179,10 +164,6 @@ namespace ts.server {
         public isJsOnlyProject() {
             this.updateGraph();
             return hasOneOrMoreJsAndNoTsFiles(this);
-        }
-
-        public getCachedUnresolvedImportsPerFile_TestOnly() {
-            return this.cachedUnresolvedImportsPerFile;
         }
 
         public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} {
@@ -259,13 +240,11 @@ namespace ts.server {
         }
 
         isKnownTypesPackageName(name: string): boolean {
-            return this.typingsCache.isKnownTypesPackageName(name);
+            return this.projectService.typingsCache.isKnownTypesPackageName(name);
         }
+
         installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult> {
-            return this.typingsCache.installPackage({ ...options, projectName: this.projectName, projectRootPath: this.toPath(this.currentDirectory) });
-        }
-        private get typingsCache(): TypingsCache {
-            return this.projectService.typingsCache;
+            return this.projectService.typingsCache.installPackage({ ...options, projectName: this.projectName, projectRootPath: this.toPath(this.currentDirectory) });
         }
 
         // Method of LanguageServiceHost
@@ -581,6 +560,7 @@ namespace ts.server {
             this.builderState = undefined;
             this.resolutionCache.clear();
             this.resolutionCache = undefined;
+            this.filesWithNoUnresolvedImports = undefined;
             this.cachedUnresolvedImportsPerFile = undefined;
             this.directoryStructureHost = undefined;
 
@@ -742,7 +722,8 @@ namespace ts.server {
             else {
                 this.resolutionCache.invalidateResolutionOfFile(info.path);
             }
-            this.cachedUnresolvedImportsPerFile.remove(info.path);
+            this.filesWithNoUnresolvedImports.delete(info.path);
+            this.cachedUnresolvedImportsPerFile.delete(info.path);
 
             if (detachFromProject) {
                 info.detachFromProject(this);
@@ -763,14 +744,18 @@ namespace ts.server {
         }
 
         /* @internal */
-        private extractUnresolvedImportsFromSourceFile(file: SourceFile, result: Push<string>, ambientModules: string[]) {
+        private extractUnresolvedImportsFromSourceFile(file: SourceFile, ambientModules: string[], allUnresolvedImports: string[] | undefined): string[] | undefined {
+            if (this.filesWithNoUnresolvedImports.has(file.path)) {
+                return allUnresolvedImports;
+            }
+
             const cached = this.cachedUnresolvedImportsPerFile.get(file.path);
             if (cached) {
                 // found cached result - use it and return
                 for (const f of cached) {
-                    result.push(f);
+                    (allUnresolvedImports || (allUnresolvedImports = [])).push(f);
                 }
-                return;
+                return allUnresolvedImports;
             }
             let unresolvedImports: string[];
             if (file.resolvedModules) {
@@ -788,15 +773,21 @@ namespace ts.server {
                             trimmed = trimmed.substr(0, i);
                         }
                         (unresolvedImports || (unresolvedImports = [])).push(trimmed);
-                        result.push(trimmed);
+                        (allUnresolvedImports || (allUnresolvedImports = [])).push(trimmed);
                     }
                 });
             }
-            this.cachedUnresolvedImportsPerFile.set(file.path, unresolvedImports || emptyArray);
+            if (unresolvedImports) {
+                this.cachedUnresolvedImportsPerFile.set(file.path, unresolvedImports);
+            }
+            else {
+                this.filesWithNoUnresolvedImports.set(file.path, true);
+            }
 
             function isAmbientlyDeclaredModule(name: string) {
                 return ambientModules.some(m => m === name);
             }
+            return allUnresolvedImports;
         }
 
         /**
@@ -806,14 +797,17 @@ namespace ts.server {
         updateGraph(): boolean {
             this.resolutionCache.startRecordingFilesWithChangedResolutions();
 
-            let hasChanges = this.updateGraphWorker();
+            const hasChanges = this.updateGraphWorker();
 
             const changedFiles: ReadonlyArray<Path> = this.resolutionCache.finishRecordingFilesWithChangedResolutions() || emptyArray;
-
             for (const file of changedFiles) {
                 // delete cached information for changed files
-                this.cachedUnresolvedImportsPerFile.remove(file);
+                this.cachedUnresolvedImportsPerFile.delete(file);
+                this.filesWithNoUnresolvedImports.delete(file);
             }
+
+            const hasMoreOrLessFiles = this.hasStructureChange;
+            this.hasStructureChange = false;
 
             // update builder only if language service is enabled
             // otherwise tell it to drop its internal state
@@ -825,29 +819,40 @@ namespace ts.server {
                 // (can reuse cached imports for files that were not changed)
                 // 4. compilation settings were changed in the way that might affect module resolution - drop all caches and collect all data from the scratch
                 if (hasChanges || changedFiles.length) {
-                    const result: string[] = [];
+                    let result: string[] | undefined ;
                     const ambientModules = this.program.getTypeChecker().getAmbientModules().map(mod => stripQuotes(mod.getName()));
                     for (const sourceFile of this.program.getSourceFiles()) {
-                        this.extractUnresolvedImportsFromSourceFile(sourceFile, result, ambientModules);
+                        result = this.extractUnresolvedImportsFromSourceFile(sourceFile, ambientModules, result);
                     }
-                    this.lastCachedUnresolvedImportsList = toDeduplicatedSortedArray(result);
+                    this.lastCachedUnresolvedImportsList = result ? toDeduplicatedSortedArray(result) : emptyArray;
                 }
-
-                const cachedTypings = this.projectService.typingsCache.getTypingsForProject(this, this.lastCachedUnresolvedImportsList, hasChanges);
-                if (!arrayIsEqualTo(this.typingFiles, cachedTypings)) {
-                    this.typingFiles = cachedTypings;
-                    this.markAsDirty();
-                    hasChanges = this.updateGraphWorker() || hasChanges;
-                }
+                this.projectService.typingsCache.enqueueInstallTypingsForProject(this, this.lastCachedUnresolvedImportsList, hasMoreOrLessFiles);
             }
             else {
-                this.lastCachedUnresolvedImportsList = undefined;
+                this.lastCachedUnresolvedImportsList = emptyArray;
             }
 
             if (hasChanges) {
                 this.projectStructureVersion++;
             }
             return !hasChanges;
+        }
+
+        /*@internal*/
+        updateTypingFiles(typingFiles: SortedReadonlyArray<string>) {
+            if (arrayIsEqualTo(this.typingFiles, typingFiles)) {
+                return false;
+            }
+
+            this.typingFiles = typingFiles;
+            if (this.lastCachedUnresolvedImportsList.length) {
+                this.writeLog(`Starting invalidateResolutionNames: Project: ${this.getProjectName()}`);
+                const start = timestamp();
+                this.resolutionCache.invalidateResolutionNames(this.cachedUnresolvedImportsPerFile);
+                const elapsed = timestamp() - start;
+                this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} Elapsed: ${elapsed}ms`);
+            }
+            return true;
         }
 
         /* @internal */
@@ -985,16 +990,15 @@ namespace ts.server {
         setCompilerOptions(compilerOptions: CompilerOptions) {
             if (compilerOptions) {
                 compilerOptions.allowNonTsExtensions = true;
-                if (changesAffectModuleResolution(this.compilerOptions, compilerOptions)) {
-                    // reset cached unresolved imports if changes in compiler options affected module resolution
-                    this.cachedUnresolvedImportsPerFile.clear();
-                    this.lastCachedUnresolvedImportsList = undefined;
-                }
                 const oldOptions = this.compilerOptions;
                 this.compilerOptions = compilerOptions;
                 this.setInternalCompilerOptionsForEmittingJsFiles();
                 if (changesAffectModuleResolution(oldOptions, compilerOptions)) {
-                    this.resolutionCache.clear();
+                    // reset cached unresolved imports if changes in compiler options affected module resolution
+                    this.cachedUnresolvedImportsPerFile.clear();
+                    this.filesWithNoUnresolvedImports.clear();
+                    this.lastCachedUnresolvedImportsList = undefined;
+                    this.resolutionCache.invalidateAllResolutions();
                 }
                 this.markAsDirty();
             }

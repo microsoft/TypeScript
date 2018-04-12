@@ -7,7 +7,7 @@ namespace ts.projectSystem {
     const nullCancellationToken = server.nullCancellationToken;
 
     function createTestTypingsInstaller(host: server.ServerHost) {
-        return new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);
+        return new TestTypingsInstaller(typingsCacheLocation, /*throttleLimit*/5, host);
     }
 
     describe("CompileOnSave affected list", () => {

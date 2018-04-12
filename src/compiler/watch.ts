@@ -591,7 +591,7 @@ namespace ts {
             if (hasChangedCompilerOptions) {
                 newLine = updateNewLine();
                 if (program && changesAffectModuleResolution(program.getCompilerOptions(), compilerOptions)) {
-                    resolutionCache.clear();
+                    resolutionCache.invalidateAllResolutions();
                 }
             }
 
