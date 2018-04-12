@@ -2075,7 +2075,7 @@ namespace ts {
                     const firstDeclaration = firstOrUndefined(declarations);
                     if (firstDeclaration) {
                         const lastDeclaration = lastOrUndefined(declarations);
-                        setSourceMapRange(declarationList, createRange(firstDeclaration.pos, lastDeclaration.end));
+                        setSourceMapRange(declarationList, createRange(firstDeclaration.pos, lastDeclaration.end, /*noAssert*/ true)); // TODO: GH#23370
                     }
                 }
 
