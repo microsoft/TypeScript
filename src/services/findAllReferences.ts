@@ -40,7 +40,7 @@ namespace ts.FindAllReferences {
     }
 
     export function findReferencedSymbols(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, sourceFile: SourceFile, position: number): ReferencedSymbol[] | undefined {
-        const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
+        const node = getTouchingPropertyName(sourceFile, position);
         const referencedSymbols = Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken);
         const checker = program.getTypeChecker();
         return !referencedSymbols || !referencedSymbols.length ? undefined : mapDefined<SymbolAndEntries, ReferencedSymbol>(referencedSymbols, ({ definition, references }) =>
@@ -49,8 +49,7 @@ namespace ts.FindAllReferences {
     }
 
     export function getImplementationsAtPosition(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, sourceFile: SourceFile, position: number): ImplementationLocation[] {
-        // A node in a JSDoc comment can't have an implementation anyway.
-        const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ false);
+        const node = getTouchingPropertyName(sourceFile, position);
         const referenceEntries = getImplementationReferenceEntries(program, cancellationToken, sourceFiles, node, position);
         const checker = program.getTypeChecker();
         return map(referenceEntries, entry => toImplementationLocation(entry, checker));
@@ -82,7 +81,7 @@ namespace ts.FindAllReferences {
     }
 
     export function findReferencedEntries(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, sourceFile: SourceFile, position: number, options?: Options): ReferenceEntry[] | undefined {
-        const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
+        const node = getTouchingPropertyName(sourceFile, position);
         return map(flattenEntries(Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, options)), toReferenceEntry);
     }
 
@@ -705,7 +704,7 @@ namespace ts.FindAllReferences.Core {
         const symbol = checker.getSymbolAtLocation(definition);
         if (!symbol) return true; // Be lenient with invalid code.
         return getPossibleSymbolReferencePositions(sourceFile, symbol.name).some(position => {
-            const token = tryCast(getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true), isIdentifier);
+            const token = tryCast(getTouchingPropertyName(sourceFile, position), isIdentifier);
             if (!token || token === definition || token.escapedText !== definition.escapedText) return false;
             const referenceSymbol = checker.getSymbolAtLocation(token);
             return referenceSymbol === symbol
@@ -715,7 +714,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     function getPossibleSymbolReferenceNodes(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): ReadonlyArray<Node> {
-        return getPossibleSymbolReferencePositions(sourceFile, symbolName, container).map(pos => getTouchingPropertyName(sourceFile, pos, /*includeJsDocComment*/ true));
+        return getPossibleSymbolReferencePositions(sourceFile, symbolName, container).map(pos => getTouchingPropertyName(sourceFile, pos));
     }
 
     function getPossibleSymbolReferencePositions(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): ReadonlyArray<number> {
@@ -815,7 +814,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     function getReferencesAtLocation(sourceFile: SourceFile, position: number, search: Search, state: State, addReferencesHere: boolean): void {
-        const referenceLocation = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
+        const referenceLocation = getTouchingPropertyName(sourceFile, position);
 
         if (!isValidReferencePosition(referenceLocation, search.text)) {
             // This wasn't the start of a token.  Check to see if it might be a
