@@ -2929,6 +2929,7 @@ declare namespace ts {
         getTokenText(): string;
         getTokenValue(): string;
         hasExtendedUnicodeEscape(): boolean;
+        hasPrecedingDot(): boolean;
         hasPrecedingLineBreak(): boolean;
         isIdentifier(): boolean;
         isReservedWord(): boolean;

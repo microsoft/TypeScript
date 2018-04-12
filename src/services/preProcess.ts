@@ -78,7 +78,7 @@ namespace ts {
          */
         function tryConsumeImport(): boolean {
             let token = scanner.getToken();
-            if (token === SyntaxKind.ImportKeyword) {
+            if (token === SyntaxKind.ImportKeyword && !scanner.hasPrecedingDot()) {
                 token = nextToken();
                 if (token === SyntaxKind.OpenParenToken) {
                     token = nextToken();
@@ -292,6 +292,9 @@ namespace ts {
             //    export {a as b} from "mod"
             //    export import i = require("mod")
             //    (for JavaScript files) require("mod")
+
+            // Do not look for:
+            //    AnySymbol.import("mod")
 
             while (true) {
                 if (scanner.getToken() === SyntaxKind.EndOfFileToken) {

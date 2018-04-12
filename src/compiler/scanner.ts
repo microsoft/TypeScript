@@ -22,6 +22,7 @@ namespace ts {
         getTokenText(): string;
         getTokenValue(): string;
         hasExtendedUnicodeEscape(): boolean;
+        hasPrecedingDot(): boolean;
         hasPrecedingLineBreak(): boolean;
         isIdentifier(): boolean;
         isReservedWord(): boolean;
@@ -833,6 +834,7 @@ namespace ts {
             getTokenText: () => text.substring(tokenPos, pos),
             getTokenValue: () => tokenValue,
             hasExtendedUnicodeEscape: () => (tokenFlags & TokenFlags.ExtendedUnicodeEscape) !== 0,
+            hasPrecedingDot: () => (tokenFlags & TokenFlags.PrecedingDot) !== 0,
             hasPrecedingLineBreak: () => (tokenFlags & TokenFlags.PrecedingLineBreak) !== 0,
             isIdentifier: () => token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord,
             isReservedWord: () => token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord,
@@ -1469,6 +1471,7 @@ namespace ts {
                         pos++;
                         return token = SyntaxKind.MinusToken;
                     case CharacterCodes.dot:
+                        tokenFlags |= TokenFlags.PrecedingDot;
                         if (isDigit(text.charCodeAt(pos + 1))) {
                             tokenValue = scanNumber();
                             return token = SyntaxKind.NumericLiteral;
