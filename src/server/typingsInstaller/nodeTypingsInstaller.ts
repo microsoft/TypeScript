@@ -184,9 +184,8 @@ namespace ts.server.typingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`#${requestId} with arguments'${JSON.stringify(packageNames)}'.`);
             }
-            const command = `${this.npmPath} install --ignore-scripts ${packageNames.join(" ")} --save-dev --user-agent="typesInstaller/${version}"`;
             const start = Date.now();
-            const hasError = this.execSyncAndLog(command, { cwd });
+            const hasError = installNpmPackages(this.npmPath, version, packageNames, command => this.execSyncAndLog(command, { cwd }));
             if (this.log.isEnabled()) {
                 this.log.writeLine(`npm install #${requestId} took: ${Date.now() - start} ms`);
             }
