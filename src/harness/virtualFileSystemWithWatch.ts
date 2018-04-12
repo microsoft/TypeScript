@@ -851,6 +851,14 @@ interface Array<T> {}`
             this.addFileOrFolderInFolder(baseFolder, folder);
         }
 
+        createDirectoryRecursively(directoryName: string) {
+            const parent = getDirectoryPath(removeTrailingDirectorySeparator(directoryName));
+            if (!this.directoryExists(parent)) {
+                this.createDirectoryRecursively(parent);
+            }
+            this.createDirectory(directoryName);
+        }
+
         writeFile(path: string, content: string): void {
             const file = this.toFile({ path, content });
 

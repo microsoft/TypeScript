@@ -7,8 +7,11 @@ namespace ts.server {
     }
 
     /* @internal */
+    export type Mutable<T> = { -readonly [K in keyof T]: T[K]; };
+
+    /* @internal */
     export function countEachFileTypes(infos: ScriptInfo[]): FileStats {
-        const result = { js: 0, jsx: 0, ts: 0, tsx: 0, dts: 0 };
+        const result: Mutable<FileStats> = { js: 0, jsx: 0, ts: 0, tsx: 0, dts: 0 };
         for (const info of infos) {
             switch (info.scriptKind) {
                 case ScriptKind.JS:

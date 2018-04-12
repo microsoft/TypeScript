@@ -11,7 +11,7 @@ namespace ts.server {
         enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void;
         attach(projectService: ProjectService): void;
         onProjectClosed(p: Project): void;
-        readonly globalTypingsCacheLocation: string;
+        readonly globalTypingsCacheLocation: string | undefined;
     }
 
     export const nullTypingsInstaller: ITypingsInstaller = {
@@ -85,6 +85,10 @@ namespace ts.server {
         private readonly perProjectCache: Map<TypingsCacheEntry> = createMap<TypingsCacheEntry>();
 
         constructor(private readonly installer: ITypingsInstaller) {
+        }
+
+        get globalTypingsCacheLocation(): string | undefined {
+            return this.installer.globalTypingsCacheLocation;
         }
 
         isKnownTypesPackageName(name: string): boolean {

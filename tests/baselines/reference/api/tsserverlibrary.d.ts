@@ -7633,7 +7633,7 @@ declare namespace ts.server {
         enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void;
         attach(projectService: ProjectService): void;
         onProjectClosed(p: Project): void;
-        readonly globalTypingsCacheLocation: string;
+        readonly globalTypingsCacheLocation: string | undefined;
     }
     const nullTypingsInstaller: ITypingsInstaller;
 }
@@ -7864,6 +7864,7 @@ declare namespace ts.server {
     const ConfigFileDiagEvent = "configFileDiag";
     const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
     const ProjectInfoTelemetryEvent = "projectInfo";
+    const OpenFilesInfoTelemetryEvent = "openFilesInfo";
     interface ProjectsUpdatedInBackgroundEvent {
         eventName: typeof ProjectsUpdatedInBackgroundEvent;
         data: {
@@ -7912,6 +7913,13 @@ declare namespace ts.server {
         /** TypeScript version used by the server. */
         readonly version: string;
     }
+    interface OpenFilesInfoTelemetryEvent {
+        readonly eventName: typeof OpenFilesInfoTelemetryEvent;
+        readonly data: OpenFilesInfoTelemetryEventData;
+    }
+    interface OpenFilesInfoTelemetryEventData {
+        readonly stats: OpenFileStats;
+    }
     interface ProjectInfoTypeAcquisitionData {
         readonly enable: boolean;
         readonly include: boolean;
@@ -7924,7 +7932,11 @@ declare namespace ts.server {
         readonly tsx: number;
         readonly dts: number;
     }
-    type ProjectServiceEvent = ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent;
+    interface OpenFileStats {
+        readonly js: number;
+        readonly checkJs: number;
+    }
+    type ProjectServiceEvent = ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFilesInfoTelemetryEvent;
     type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
     interface SafeList {
         [name: string]: {
@@ -8037,6 +8049,7 @@ declare namespace ts.server {
         readonly syntaxOnly?: boolean;
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects;
+        private hasSentOpenFileTelemetry;
         constructor(opts: ProjectServiceOptions);
         toPath(fileName: string): Path;
         private loadTypesMap;
@@ -8180,6 +8193,7 @@ declare namespace ts.server {
         openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind, projectRootPath?: string): OpenConfiguredProjectResult;
         private findExternalProjectContainingOpenScriptInfo;
         openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult;
+        private telemetryOnOpenFile;
         /**
          * Close file whose contents is managed by the client
          * @param filename is absolute pathname

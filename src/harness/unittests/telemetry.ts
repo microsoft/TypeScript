@@ -42,7 +42,7 @@ namespace ts.projectSystem {
             const et = new TestServerEventManager([...files, notIncludedFile, tsconfig]);
             et.service.openClientFile(files[0].path);
             et.assertProjectInfoTelemetryEvent({
-                fileStats: { ts: 2, tsx: 1, js: 1, jsx: 1, dts: 1 },
+                fileStats: fileStats({ ts: 2, tsx: 1, js: 1, jsx: 1, dts: 1 }),
                 compilerOptions,
                 include: true,
             });
@@ -234,9 +234,26 @@ namespace ts.projectSystem {
                 languageServiceEnabled: false,
             });
         });
+
+        it("open files telemetry", () => {
+            const ajs = makeFile("/a.js", "// @ts-check\nconst x = 0;");
+            const bjs = makeFile("/b.js");
+            const et = new TestServerEventManager([ajs, bjs]);
+            const globalTypingsCache = et.service.typingsCache.globalTypingsCacheLocation;
+            et.host.createDirectoryRecursively(globalTypingsCache);
+            et.host.writeFile(server.openFileStatsFileName(globalTypingsCache), JSON.stringify({ js: 13, checkJs: 10 }));
+
+            // Must open a file for the event to be sent.
+            et.service.openClientFile(ajs.path);
+            et.assertOpenFilesTelemetryEvent({ js: 13, checkJs: 10 });
+
+            et.service.openClientFile(bjs.path);
+            et.assertNoOpenFilesTelemetryEvent();
+            assert.deepEqual(JSON.parse(et.host.readFile(server.openFileStatsFileName(globalTypingsCache))), { js: 2, checkJs: 1 });
+        });
     });
 
     function makeFile(path: string, content: {} = ""): FileOrFolder {
-        return { path, content: isString(content) ? "" : JSON.stringify(content) };
+        return { path, content: isString(content) ? content : JSON.stringify(content) };
     }
 }
