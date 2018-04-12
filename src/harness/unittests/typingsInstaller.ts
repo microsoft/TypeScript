@@ -999,7 +999,7 @@ namespace ts.projectSystem {
             proj.updateGraph();
 
             assert.deepEqual(
-                proj.getCachedUnresolvedImportsPerFile_TestOnly().get(<Path>f1.path),
+                proj.cachedUnresolvedImportsPerFile.get(<Path>f1.path),
                 ["foo", "foo", "foo", "@bar/router", "@bar/common", "@bar/common"]
             );
 
@@ -1029,7 +1029,7 @@ namespace ts.projectSystem {
             const projectService = session.getProjectService();
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             const proj = projectService.inferredProjects[0];
-            const version1 = proj.getCachedUnresolvedImportsPerFile_TestOnly().getVersion();
+            const version1 = proj.lastCachedUnresolvedImportsList;
 
             // make a change that should not affect the structure of the program
             const changeRequest: server.protocol.ChangeRequest = {
@@ -1047,7 +1047,7 @@ namespace ts.projectSystem {
             };
             session.executeCommand(changeRequest);
             host.checkTimeoutQueueLengthAndRun(2); // This enqueues the updategraph and refresh inferred projects
-            const version2 = proj.getCachedUnresolvedImportsPerFile_TestOnly().getVersion();
+            const version2 = proj.lastCachedUnresolvedImportsList;
             assert.notEqual(version1, version2, "set of unresolved imports should change");
         });
 

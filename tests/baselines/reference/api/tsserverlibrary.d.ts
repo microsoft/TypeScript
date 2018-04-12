@@ -7611,15 +7611,6 @@ declare namespace ts.server {
     }
     function allRootFilesAreJsOrDts(project: Project): boolean;
     function allFilesAreJsOrDts(project: Project): boolean;
-    class UnresolvedImportsMap {
-        readonly perFileMap: Map<ReadonlyArray<string>>;
-        private version;
-        clear(): void;
-        getVersion(): number;
-        remove(path: Path): void;
-        get(path: Path): ReadonlyArray<string>;
-        set(path: Path, value: ReadonlyArray<string>): void;
-    }
     interface PluginCreateInfo {
         project: Project;
         languageService: LanguageService;
@@ -7652,8 +7643,6 @@ declare namespace ts.server {
         private externalFiles;
         private missingFilesMap;
         private plugins;
-        private cachedUnresolvedImportsPerFile;
-        private lastCachedUnresolvedImportsList;
         private lastFileExceededProgramSize;
         protected languageService: LanguageService;
         languageServiceEnabled: boolean;
@@ -7688,7 +7677,6 @@ declare namespace ts.server {
         private readonly cancellationToken;
         isNonTsProject(): boolean;
         isJsOnlyProject(): boolean;
-        getCachedUnresolvedImportsPerFile_TestOnly(): UnresolvedImportsMap;
         static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {};
         isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;

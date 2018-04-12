@@ -55,34 +55,6 @@ namespace ts.server {
         projectErrors: ReadonlyArray<Diagnostic>;
     }
 
-    export class UnresolvedImportsMap {
-        readonly perFileMap = createMap<ReadonlyArray<string>>();
-        private version = 0;
-
-        public clear() {
-            this.perFileMap.clear();
-            this.version = 0;
-        }
-
-        public getVersion() {
-            return this.version;
-        }
-
-        public remove(path: Path) {
-            this.perFileMap.delete(path);
-            this.version++;
-        }
-
-        public get(path: Path) {
-            return this.perFileMap.get(path);
-        }
-
-        public set(path: Path, value: ReadonlyArray<string>) {
-            this.perFileMap.set(path, value);
-            this.version++;
-        }
-    }
-
     export interface PluginCreateInfo {
         project: Project;
         languageService: LanguageService;
@@ -116,8 +88,10 @@ namespace ts.server {
         private missingFilesMap: Map<FileWatcher>;
         private plugins: PluginModule[] = [];
 
-        private cachedUnresolvedImportsPerFile = new UnresolvedImportsMap();
-        private lastCachedUnresolvedImportsList: SortedReadonlyArray<string>;
+        /*@internal*/
+        cachedUnresolvedImportsPerFile = createMap<ReadonlyArray<string>>();
+        /*@internal*/
+        lastCachedUnresolvedImportsList: SortedReadonlyArray<string>;
 
         private lastFileExceededProgramSize: string | undefined;
 
@@ -179,10 +153,6 @@ namespace ts.server {
         public isJsOnlyProject() {
             this.updateGraph();
             return hasOneOrMoreJsAndNoTsFiles(this);
-        }
-
-        public getCachedUnresolvedImportsPerFile_TestOnly() {
-            return this.cachedUnresolvedImportsPerFile;
         }
 
         public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} {
@@ -742,7 +712,7 @@ namespace ts.server {
             else {
                 this.resolutionCache.invalidateResolutionOfFile(info.path);
             }
-            this.cachedUnresolvedImportsPerFile.remove(info.path);
+            this.cachedUnresolvedImportsPerFile.delete(info.path);
 
             if (detachFromProject) {
                 info.detachFromProject(this);
@@ -812,7 +782,7 @@ namespace ts.server {
 
             for (const file of changedFiles) {
                 // delete cached information for changed files
-                this.cachedUnresolvedImportsPerFile.remove(file);
+                this.cachedUnresolvedImportsPerFile.delete(file);
             }
 
             // update builder only if language service is enabled
