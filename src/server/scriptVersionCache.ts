@@ -1,7 +1,3 @@
-/// <reference path="..\compiler\commandLineParser.ts" />
-/// <reference path="..\services\services.ts" />
-/// <reference path="session.ts" />
-
 /*@internal*/
 namespace ts.server {
     const lineCollectionCapacity = 4;

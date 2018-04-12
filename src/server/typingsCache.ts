@@ -1,5 +1,3 @@
-/// <reference path="project.ts"/>
-
 namespace ts.server {
     export interface InstallPackageOptionsWithProject extends InstallPackageOptions {
         projectName: string;
