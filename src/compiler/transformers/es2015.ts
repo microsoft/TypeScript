@@ -1874,7 +1874,7 @@ namespace ts {
                 // for the statement list we synthesize when we down-level an arrow function with
                 // an expression function body. This prevents both comments and source maps from
                 // being emitted for the end position only.
-                statementsLocation = moveRangeEnd(body, -1, /*noAssert*/ true);
+                statementsLocation = moveRangeEnd(body, -1);
 
                 const equalsGreaterThanToken = (<ArrowFunction>node).equalsGreaterThanToken;
                 if (!nodeIsSynthesized(equalsGreaterThanToken) && !nodeIsSynthesized(body)) {
@@ -2328,7 +2328,7 @@ namespace ts {
                                     node.initializer
                                 )
                             ),
-                            moveRangeEnd(node.initializer, -1, /*noAssert*/ true)
+                            moveRangeEnd(node.initializer, -1)
                         )
                     );
                 }
@@ -2343,7 +2343,7 @@ namespace ts {
                 }
                 else {
                     assignment.end = node.initializer.end;
-                    statements.push(setTextRange(createStatement(visitNode(assignment, visitor, isExpression)), moveRangeEnd(node.initializer, -1, /*noAssert*/ true)));
+                    statements.push(setTextRange(createStatement(visitNode(assignment, visitor, isExpression)), moveRangeEnd(node.initializer, -1)));
                 }
             }
 
