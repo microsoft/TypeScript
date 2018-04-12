@@ -21,3 +21,4 @@
 [submodule "tests/cases/user/webpack/webpack"]
 	path = tests/cases/user/webpack/webpack
 	url = https://github.com/webpack/webpack.git
+	ignore = all
