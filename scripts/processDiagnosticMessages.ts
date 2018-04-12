@@ -1,6 +1,3 @@
-/// <reference path="../src/compiler/sys.ts" />
-/// <reference path="../src/compiler/core.ts" />
-
 interface DiagnosticDetails {
     category: string;
     code: number;
