@@ -13,8 +13,6 @@
 // limitations under the License.
 //
 
-/// <reference path='services.ts' />
-
 /* @internal */
 let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { return this; })();
 

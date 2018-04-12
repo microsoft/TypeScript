@@ -1,6 +1,3 @@
-/// <reference path="formatting.ts"/>
-/// <reference path="..\..\compiler\scanner.ts"/>
-
 /* @internal */
 namespace ts.formatting {
     const standardScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, LanguageVariant.Standard);

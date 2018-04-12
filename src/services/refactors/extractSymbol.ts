@@ -1,6 +1,3 @@
-/// <reference path="../refactorProvider.ts" />
-/// <reference path="../../compiler/checker.ts" />
-
 /* @internal */
 namespace ts.refactor.extractSymbol {
     const refactorName = "Extract Symbol";

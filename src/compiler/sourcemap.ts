@@ -1,5 +1,3 @@
-/// <reference path="checker.ts"/>
-
 /* @internal */
 namespace ts {
     export interface SourceMapWriter {

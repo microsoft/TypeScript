@@ -1,5 +1,3 @@
-/// <reference path="scriptVersionCache.ts"/>
-
 namespace ts.server {
 
     /* @internal */

@@ -1,7 +1,3 @@
-/// <reference path="checker.ts" />
-/// <reference path="factory.ts" />
-/// <reference path="utilities.ts" />
-
 namespace ts {
     const isTypeNodeOrTypeParameterDeclaration = or(isTypeNode, isTypeParameterDeclaration);
 

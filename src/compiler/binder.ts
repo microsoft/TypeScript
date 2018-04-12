@@ -1,6 +1,3 @@
-/// <reference path="utilities.ts"/>
-/// <reference path="parser.ts"/>
-
 /* @internal */
 namespace ts {
     export const enum ModuleInstanceState {

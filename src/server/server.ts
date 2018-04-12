@@ -1,8 +1,5 @@
 // tslint:disable no-unnecessary-type-assertion (TODO: tslint can't find node types)
 
-/// <reference path="shared.ts" />
-/// <reference path="session.ts" />
-
 namespace ts.server {
     const childProcess: {
         fork(modulePath: string, args: string[], options?: { execArgv: string[], env?: MapLike<string> }): NodeChildProcess;

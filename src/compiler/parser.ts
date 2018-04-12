@@ -1,6 +1,3 @@
-/// <reference path="utilities.ts"/>
-/// <reference path="scanner.ts"/>
-
 namespace ts {
     const enum SignatureFlags {
         None = 0,

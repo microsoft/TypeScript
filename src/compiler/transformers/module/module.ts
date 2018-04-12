@@ -1,7 +1,3 @@
-/// <reference path="../../factory.ts" />
-/// <reference path="../../visitor.ts" />
-/// <reference path="../destructuring.ts" />
-
 /*@internal*/
 namespace ts {
     export function transformModule(context: TransformationContext) {

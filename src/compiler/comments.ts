@@ -1,5 +1,3 @@
-/// <reference path="sourcemap.ts" />
-
 /* @internal */
 namespace ts {
     export interface CommentWriter {

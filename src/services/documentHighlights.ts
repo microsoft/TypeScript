@@ -1,11 +1,11 @@
 /* @internal */
 namespace ts.DocumentHighlights {
     export function getDocumentHighlights(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: ReadonlyArray<SourceFile>): DocumentHighlights[] | undefined {
-        const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ true);
-        const { parent } = node;
-        if (parent && (isJsxOpeningElement(parent) && parent.tagName === node || isJsxClosingElement(parent))) {
+        const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
+
+        if (node.parent && (isJsxOpeningElement(node.parent) && node.parent.tagName === node || isJsxClosingElement(node.parent))) {
             // For a JSX element, just highlight the matching tag, not all references.
-            const { openingElement, closingElement } = parent.parent;
+            const { openingElement, closingElement } = node.parent.parent;
             const highlightSpans = [openingElement, closingElement].map(({ tagName }) => getHighlightSpanForNode(tagName, sourceFile));
             return [{ fileName: sourceFile.fileName, highlightSpans }];
         }

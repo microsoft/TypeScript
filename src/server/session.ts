@@ -1,8 +1,3 @@
-/// <reference path="..\compiler\commandLineParser.ts" />
-/// <reference path="..\services\services.ts" />
-/// <reference path="protocol.ts" />
-/// <reference path="editorServices.ts" />
-
 namespace ts.server {
     interface StackTraceError extends Error {
         stack?: string;

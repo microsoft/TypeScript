@@ -1,5 +1,3 @@
-/// <reference path="builderState.ts" />
-
 /*@internal*/
 namespace ts {
     /**

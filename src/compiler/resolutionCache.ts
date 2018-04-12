@@ -1,7 +1,3 @@
-/// <reference path="types.ts"/>
-/// <reference path="core.ts"/>
-/// <reference path="watchUtilities.ts"/>
-
 /*@internal*/
 namespace ts {
     /** This is the cache of module/typedirectives resolution that can be retained across program */

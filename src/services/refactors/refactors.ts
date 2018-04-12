@@ -1,2 +1,1 @@
-/// <reference path="extractSymbol.ts" />
-/// <reference path="generateGetAccessorAndSetAccessor.ts" />
+// Please delete me later.
