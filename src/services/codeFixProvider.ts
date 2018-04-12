@@ -24,7 +24,7 @@ namespace ts {
     }
 
     export namespace codefix {
-        const codeFixRegistrations: CodeFixRegistration[][] = [];
+        const errorCodeToFixes = createMultiMap<CodeFixRegistration>();
         const fixIdToRegistration = createMap<CodeFixRegistration>();
 
         type DiagnosticAndArguments = DiagnosticMessage | [DiagnosticMessage, string] | [DiagnosticMessage, string, string];
@@ -48,12 +48,7 @@ namespace ts {
 
         export function registerCodeFix(reg: CodeFixRegistration) {
             for (const error of reg.errorCodes) {
-                let registrations = codeFixRegistrations[error];
-                if (!registrations) {
-                    registrations = [];
-                    codeFixRegistrations[error] = registrations;
-                }
-                registrations.push(reg);
+                errorCodeToFixes.add(String(error), reg);
             }
             if (reg.fixIds) {
                 for (const fixId of reg.fixIds) {
@@ -63,29 +58,12 @@ namespace ts {
             }
         }
 
-        export function getSupportedErrorCodes() {
-            return Object.keys(codeFixRegistrations);
+        export function getSupportedErrorCodes(): string[] {
+            return arrayFrom(errorCodeToFixes.keys());
         }
 
         export function getFixes(context: CodeFixContext): CodeFixAction[] {
-            const fixes = codeFixRegistrations[context.errorCode];
-            const allActions: CodeFixAction[] = [];
-
-            forEach(fixes, f => {
-                const actions = f.getCodeActions(context);
-                if (actions && actions.length > 0) {
-                    for (const action of actions) {
-                        if (action === undefined) {
-                            context.host.log(`Action for error code ${context.errorCode} added an invalid action entry; please log a bug`);
-                        }
-                        else {
-                            allActions.push(action);
-                        }
-                    }
-                }
-            });
-
-            return allActions;
+            return flatMap(errorCodeToFixes.get(String(context.errorCode)) || emptyArray, f => f.getCodeActions(context));
         }
 
         export function getAllFixes(context: CodeFixAllContext): CombinedCodeActions {
