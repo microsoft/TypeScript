@@ -846,6 +846,8 @@ namespace ts {
         exclamationToken?: ExclamationToken;  // Optional definite assignment assertion
         type?: TypeNode;                      // Optional type annotation
         initializer?: Expression;             // Optional initializer
+        resolvedValue?: Expression;
+        couldResolved?: boolean;
     }
 
     export interface VariableDeclarationList extends Node {
