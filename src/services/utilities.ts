@@ -627,18 +627,12 @@ namespace ts {
         return syntaxList;
     }
 
-    /* Gets the token whose text has range [start, end) and
-     * position >= start and (position < end or (position === end && token is keyword or identifier))
-     */
-    export function getTouchingWord(sourceFile: SourceFile, position: number, includeJsDocComment: boolean): Node {
-        return getTouchingToken(sourceFile, position, includeJsDocComment, n => isWord(n.kind));
-    }
-
-    /* Gets the token whose text has range [start, end) and position >= start
-     * and (position < end or (position === end && token is keyword or identifier or numeric/string literal))
+    /**
+     * Gets the token whose text has range [start, end) and
+     * position >= start and (position < end or (position === end && token is literal or keyword or identifier))
      */
     export function getTouchingPropertyName(sourceFile: SourceFile, position: number, includeJsDocComment: boolean): Node {
-        return getTouchingToken(sourceFile, position, includeJsDocComment, n => isPropertyName(n.kind));
+        return getTouchingToken(sourceFile, position, includeJsDocComment, n => isPropertyNameLiteral(n) || isKeyword(n.kind));
     }
 
     /**
@@ -1057,14 +1051,6 @@ namespace ts {
         }
 
         return undefined;
-    }
-
-    export function isWord(kind: SyntaxKind): boolean {
-        return kind === SyntaxKind.Identifier || isKeyword(kind);
-    }
-
-    function isPropertyName(kind: SyntaxKind): boolean {
-        return kind === SyntaxKind.StringLiteral || kind === SyntaxKind.NumericLiteral || isWord(kind);
     }
 
     export function isComment(kind: SyntaxKind): boolean {
