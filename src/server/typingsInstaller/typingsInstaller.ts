@@ -30,6 +30,31 @@ namespace ts.server.typingsInstaller {
         }
     }
 
+    /*@internal*/
+    export function installNpmPackages(npmPath: string, tsVersion: string, packageNames: string[], install: (command: string) => boolean) {
+        let hasError = false;
+        for (let remaining = packageNames.length; remaining > 0;) {
+            const result = getNpmCommandForInstallation(npmPath, tsVersion, packageNames, remaining);
+            remaining = result.remaining;
+            hasError = install(result.command) || hasError;
+        }
+        return hasError;
+    }
+
+    /*@internal*/
+    export function getNpmCommandForInstallation(npmPath: string, tsVersion: string, packageNames: string[], remaining: number) {
+        const sliceStart = packageNames.length - remaining;
+        let command: string, toSlice = remaining;
+        while (true) {
+            command = `${npmPath} install --ignore-scripts ${(toSlice === packageNames.length ? packageNames : packageNames.slice(sliceStart, sliceStart + toSlice)).join(" ")} --save-dev --user-agent="typesInstaller/${tsVersion}"`;
+            if (command.length < 8000) {
+                break;
+            }
+
+            toSlice = toSlice - Math.floor(toSlice / 2);
+        }
+        return { command, remaining: remaining - toSlice };
+    }
 
     export type RequestCompletedAction = (success: boolean) => void;
     interface PendingRequest {
