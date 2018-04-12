@@ -704,9 +704,8 @@ namespace ts.FindAllReferences.Core {
     export function isSymbolReferencedInFile(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile) {
         const symbol = checker.getSymbolAtLocation(definition);
         if (!symbol) return true; // Be lenient with invalid code.
-        return getPossibleSymbolReferencePositions(sourceFile, symbol.name).some(position => {
-            const token = tryCast(getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true), isIdentifier);
-            if (!token || token === definition || token.escapedText !== definition.escapedText) return false;
+        return getPossibleSymbolReferenceNodes(sourceFile, symbol.name).some(token => {
+            if (!isIdentifier(token) || token === definition || token.escapedText !== definition.escapedText) return false;
             const referenceSymbol = checker.getSymbolAtLocation(token);
             return referenceSymbol === symbol
                 || checker.getShorthandAssignmentValueSymbol(token.parent) === symbol
