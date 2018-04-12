@@ -247,6 +247,24 @@ import D from "lib";
                 },
                 libFile);
 
+            testOrganizeImports("Unused_false_positive_shorthand_assignment",
+            {
+                    path: "/test.ts",
+                    content: `
+import { x } from "a";
+const o = { x };
+`
+                });
+
+            testOrganizeImports("Unused_false_positive_export_shorthand",
+            {
+                    path: "/test.ts",
+                    content: `
+import { x } from "a";
+export { x };
+`
+                });
+
             testOrganizeImports("MoveToTop",
                 {
                     path: "/test.ts",

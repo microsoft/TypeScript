@@ -10,5 +10,9 @@
         "types": ["node"],
         "lib": ["esnext", "dom"],
     },
-    "include": ["node_modules/bcryptjs"]
+    "include": [
+        "node_modules/bcryptjs/scripts",
+        "node_modules/bcryptjs/src",
+        "node_modules/bcryptjs/tests"
+    ]
 }

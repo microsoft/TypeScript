@@ -8,7 +8,7 @@ namespace ts.codefix {
             const { host, sourceFile, span: { start } } = context;
             const packageName = getTypesPackageNameToInstall(host, sourceFile, start);
             return packageName === undefined ? []
-                : [createCodeFixAction(/*changes*/ [], [Diagnostics.Install_0, packageName], fixId, Diagnostics.Install_all_missing_types_packages, getCommand(sourceFile.fileName, packageName))];
+                : [createCodeFixAction(fixId, /*changes*/ [], [Diagnostics.Install_0, packageName], fixId, Diagnostics.Install_all_missing_types_packages, getCommand(sourceFile.fileName, packageName))];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (_, diag, commands) => {

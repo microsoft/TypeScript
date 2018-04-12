@@ -706,8 +706,16 @@ namespace ts.FindAllReferences.Core {
         if (!symbol) return true; // Be lenient with invalid code.
         return getPossibleSymbolReferencePositions(sourceFile, symbol.name).some(position => {
             const token = tryCast(getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true), isIdentifier);
-            return token && token !== definition && token.escapedText === definition.escapedText && checker.getSymbolAtLocation(token) === symbol;
+            if (!token || token === definition || token.escapedText !== definition.escapedText) return false;
+            const referenceSymbol = checker.getSymbolAtLocation(token);
+            return referenceSymbol === symbol
+                || checker.getShorthandAssignmentValueSymbol(token.parent) === symbol
+                || isExportSpecifier(token.parent) && getLocalSymbolForExportSpecifier(token, referenceSymbol, token.parent, checker) === symbol;
         });
+    }
+
+    function getPossibleSymbolReferenceNodes(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): ReadonlyArray<Node> {
+        return getPossibleSymbolReferencePositions(sourceFile, symbolName, container).map(pos => getTouchingPropertyName(sourceFile, pos, /*includeJsDocComment*/ true));
     }
 
     function getPossibleSymbolReferencePositions(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): ReadonlyArray<number> {
@@ -748,11 +756,9 @@ namespace ts.FindAllReferences.Core {
     function getLabelReferencesInNode(container: Node, targetLabel: Identifier): SymbolAndEntries[] {
         const sourceFile = container.getSourceFile();
         const labelName = targetLabel.text;
-        const references = mapDefined(getPossibleSymbolReferencePositions(sourceFile, labelName, container), position => {
-            const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ false);
+        const references = mapDefined(getPossibleSymbolReferenceNodes(sourceFile, labelName, container), node =>
             // Only pick labels that are either the target label, or have a target that is the target label
-            return node && (node === targetLabel || (isJumpStatementTarget(node) && getTargetLabel(node, labelName) === targetLabel)) ? nodeEntry(node) : undefined;
-        });
+            node === targetLabel || (isJumpStatementTarget(node) && getTargetLabel(node, labelName) === targetLabel) ? nodeEntry(node) : undefined);
         return [{ definition: { type: "label", node: targetLabel }, references }];
     }
 
@@ -782,10 +788,8 @@ namespace ts.FindAllReferences.Core {
     function getAllReferencesForKeyword(sourceFiles: ReadonlyArray<SourceFile>, keywordKind: SyntaxKind, cancellationToken: CancellationToken): SymbolAndEntries[] {
         const references = flatMap(sourceFiles, sourceFile => {
             cancellationToken.throwIfCancellationRequested();
-            return mapDefined(getPossibleSymbolReferencePositions(sourceFile, tokenToString(keywordKind), sourceFile), position => {
-                const referenceLocation = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
-                return referenceLocation.kind === keywordKind ? nodeEntry(referenceLocation) : undefined;
-            });
+            return mapDefined(getPossibleSymbolReferenceNodes(sourceFile, tokenToString(keywordKind), sourceFile), referenceLocation =>
+                referenceLocation.kind === keywordKind ? nodeEntry(referenceLocation) : undefined);
         });
         return references.length ? [{ definition: { type: "keyword", node: references[0].node }, references }] : undefined;
     }
@@ -1249,9 +1253,8 @@ namespace ts.FindAllReferences.Core {
         }
 
         const sourceFile = searchSpaceNode.getSourceFile();
-        const references = mapDefined(getPossibleSymbolReferencePositions(sourceFile, "super", searchSpaceNode), position => {
-            const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ false);
-            if (!node || node.kind !== SyntaxKind.SuperKeyword) {
+        const references = mapDefined(getPossibleSymbolReferenceNodes(sourceFile, "super", searchSpaceNode), node => {
+            if (node.kind !== SyntaxKind.SuperKeyword) {
                 return;
             }
 
@@ -1301,12 +1304,30 @@ namespace ts.FindAllReferences.Core {
                 return undefined;
         }
 
-        const references: Entry[] = [];
-        for (const sourceFile of searchSpaceNode.kind === SyntaxKind.SourceFile ? sourceFiles : [searchSpaceNode.getSourceFile()]) {
+        const references = flatMap(searchSpaceNode.kind === SyntaxKind.SourceFile ? sourceFiles : [searchSpaceNode.getSourceFile()], sourceFile => {
             cancellationToken.throwIfCancellationRequested();
-            const positions = getPossibleSymbolReferencePositions(sourceFile, "this", isSourceFile(searchSpaceNode) ? sourceFile : searchSpaceNode);
-            getThisReferencesInFile(sourceFile, searchSpaceNode.kind === SyntaxKind.SourceFile ? sourceFile : searchSpaceNode, positions, staticFlag, references);
-        }
+            return getPossibleSymbolReferenceNodes(sourceFile, "this", isSourceFile(searchSpaceNode) ? sourceFile : searchSpaceNode).filter(node => {
+                if (!isThis(node)) {
+                    return false;
+                }
+                const container = getThisContainer(node, /* includeArrowFunctions */ false);
+                switch (searchSpaceNode.kind) {
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.FunctionDeclaration:
+                        return searchSpaceNode.symbol === container.symbol;
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
+                        return isObjectLiteralMethod(searchSpaceNode) && searchSpaceNode.symbol === container.symbol;
+                    case SyntaxKind.ClassExpression:
+                    case SyntaxKind.ClassDeclaration:
+                        // Make sure the container belongs to the same class
+                        // and has the appropriate static modifier from the original container.
+                        return container.parent && searchSpaceNode.symbol === container.parent.symbol && (getModifierFlags(container) & ModifierFlags.Static) === staticFlag;
+                    case SyntaxKind.SourceFile:
+                        return container.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>container);
+                }
+            });
+        }).map(n => nodeEntry(n));
 
         return [{
             definition: { type: "this", node: thisOrSuperKeyword },
@@ -1314,52 +1335,11 @@ namespace ts.FindAllReferences.Core {
         }];
     }
 
-    function getThisReferencesInFile(sourceFile: SourceFile, searchSpaceNode: Node, possiblePositions: ReadonlyArray<number>, staticFlag: ModifierFlags, result: Push<Entry>): void {
-        forEach(possiblePositions, position => {
-            const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ false);
-            if (!node || !isThis(node)) {
-                return;
-            }
-
-            const container = getThisContainer(node, /* includeArrowFunctions */ false);
-
-            switch (searchSpaceNode.kind) {
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.FunctionDeclaration:
-                    if (searchSpaceNode.symbol === container.symbol) {
-                        result.push(nodeEntry(node));
-                    }
-                    break;
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.MethodSignature:
-                    if (isObjectLiteralMethod(searchSpaceNode) && searchSpaceNode.symbol === container.symbol) {
-                        result.push(nodeEntry(node));
-                    }
-                    break;
-                case SyntaxKind.ClassExpression:
-                case SyntaxKind.ClassDeclaration:
-                    // Make sure the container belongs to the same class
-                    // and has the appropriate static modifier from the original container.
-                    if (container.parent && searchSpaceNode.symbol === container.parent.symbol && (getModifierFlags(container) & ModifierFlags.Static) === staticFlag) {
-                        result.push(nodeEntry(node));
-                    }
-                    break;
-                case SyntaxKind.SourceFile:
-                    if (container.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>container)) {
-                        result.push(nodeEntry(node));
-                    }
-                    break;
-            }
-        });
-    }
-
     function getReferencesForStringLiteral(node: StringLiteral, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken): SymbolAndEntries[] {
         const references = flatMap(sourceFiles, sourceFile => {
             cancellationToken.throwIfCancellationRequested();
-            return mapDefined(getPossibleSymbolReferencePositions(sourceFile, node.text), position => {
-                const ref = tryCast(getTouchingWord(sourceFile, position, /*includeJsDocComment*/ false), isStringLiteral);
-                return ref && ref.text === node.text ? nodeEntry(ref, /*isInString*/ true) : undefined;
-            });
+            return mapDefined(getPossibleSymbolReferenceNodes(sourceFile, node.text), ref =>
+                isStringLiteral(ref) && ref.text === node.text ? nodeEntry(ref, /*isInString*/ true) : undefined);
         });
 
         return [{

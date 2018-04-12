@@ -6323,4 +6323,9 @@ namespace ts {
     export function isStringLiteralLike(node: Node): node is StringLiteralLike {
         return node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
+
+    /** @internal */
+    export function isNamedImportsOrExports(node: Node): node is NamedImportsOrExports {
+        return node.kind === SyntaxKind.NamedImports || node.kind === SyntaxKind.NamedExports;
+    }
 }
