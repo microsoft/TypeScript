@@ -2012,7 +2012,10 @@
         "category": "Error",
         "code": 2569
     },
-
+    "Property '{0}' does not exist on type '{1}'. Did you forget to use 'await'?": {
+        "category": "Error",
+        "code": 2570
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -3287,7 +3290,7 @@
     "'{0}' is declared but its value is never read.": {
         "category": "Error",
         "code": 6133,
-        "unused": true
+        "reportsUnnecessary": true
     },
     "Report errors on unused locals.": {
         "category": "Message",
@@ -3308,7 +3311,7 @@
     "Property '{0}' is declared but its value is never read.": {
         "category": "Error",
         "code": 6138,
-        "unused": true
+        "reportsUnnecessary": true
     },
     "Import emit helpers from 'tslib'.": {
         "category": "Message",
@@ -3521,7 +3524,7 @@
     "All imports in import declaration are unused.": {
         "category": "Error",
         "code": 6192,
-        "unused": true
+        "reportsUnnecessary": true
     },
     "Found 1 error.": {
         "category": "Message",
@@ -3615,7 +3618,7 @@
     "Unused label.": {
         "category": "Error",
         "code": 7028,
-        "unused": true
+        "reportsUnnecessary": true
     },
     "Fallthrough case in switch.": {
         "category": "Error",
@@ -4167,5 +4170,9 @@
     "Convert all constructor functions to classes": {
         "category": "Message",
         "code": 95045
+    },
+    "Generate 'get' and 'set' accessors": {
+        "category": "Message",
+        "code": 95046
     }
 }

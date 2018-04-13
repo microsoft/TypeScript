@@ -18,3 +18,7 @@
 	path = tests/cases/user/TypeScript-WeChat-Starter/TypeScript-WeChat-Starter
 	url = https://github.com/Microsoft/TypeScript-WeChat-Starter.git
 	ignore = all
+[submodule "tests/cases/user/webpack/webpack"]
+	path = tests/cases/user/webpack/webpack 
+        url = https://github.com/webpack/webpack.git
+	ignore = all

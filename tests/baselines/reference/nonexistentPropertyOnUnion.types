@@ -1,0 +1,13 @@
+=== tests/cases/compiler/nonexistentPropertyOnUnion.ts ===
+function f(x: string | Promise<string>) {
+>f : (x: string | Promise<string>) => void
+>x : string | Promise<string>
+>Promise : Promise<T>
+
+    x.toLowerCase();
+>x.toLowerCase() : any
+>x.toLowerCase : any
+>x : string | Promise<string>
+>toLowerCase : any
+}
+

@@ -1,8 +1,3 @@
-/// <reference path="..\compiler\commandLineParser.ts" />
-/// <reference path="..\services\services.ts" />
-/// <reference path="protocol.ts" />
-/// <reference path="editorServices.ts" />
-
 namespace ts.server {
     interface StackTraceError extends Error {
         stack?: string;
@@ -80,6 +75,7 @@ namespace ts.server {
             text: flattenDiagnosticMessageText(diag.messageText, "\n"),
             code: diag.code,
             category: diagnosticCategoryName(diag),
+            reportsUnnecessary: diag.reportsUnnecessary,
             source: diag.source
         };
     }
@@ -96,8 +92,8 @@ namespace ts.server {
         const text = flattenDiagnosticMessageText(diag.messageText, "\n");
         const { code, source } = diag;
         const category = diagnosticCategoryName(diag);
-        return includeFileName ? { start, end, text, code, category, source, fileName: diag.file && diag.file.fileName } :
-            { start, end, text, code, category, source };
+        return includeFileName ? { start, end, text, code, category, source, reportsUnnecessary: diag.reportsUnnecessary, fileName: diag.file && diag.file.fileName } :
+            { start, end, text, code, category, reportsUnnecessary: diag.reportsUnnecessary, source };
     }
 
     export interface PendingErrorCheck {
@@ -484,7 +480,7 @@ namespace ts.server {
             this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSyntacticDiagnostics(file), "syntaxDiag");
         }
 
-        private infoCheck(file: NormalizedPath, project: Project) {
+        private suggestionCheck(file: NormalizedPath, project: Project) {
             this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSuggestionDiagnostics(file), "suggestionDiag");
         }
 
@@ -527,12 +523,20 @@ namespace ts.server {
                         return;
                     }
 
-                    next.immediate(() => {
-                        this.infoCheck(fileName, project);
+                    const goNext = () => {
                         if (checkList.length > index) {
                             next.delay(followMs, checkOne);
                         }
-                    });
+                    };
+                    if (this.getPreferences(fileName).disableSuggestions) {
+                        goNext();
+                    }
+                    else {
+                        next.immediate(() => {
+                            this.suggestionCheck(fileName, project);
+                            goNext();
+                        });
+                    }
                 });
             };
 
@@ -1659,7 +1663,7 @@ namespace ts.server {
             }
         }
 
-        private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.CodeAction> | ReadonlyArray<CodeAction> {
+        private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.CodeFixAction> | ReadonlyArray<CodeFixAction> {
             if (args.errorCodes.length === 0) {
                 return undefined;
             }
@@ -1669,15 +1673,7 @@ namespace ts.server {
             const { startPosition, endPosition } = this.getStartAndEndPosition(args, scriptInfo);
 
             const codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes, this.getFormatOptions(file), this.getPreferences(file));
-            if (!codeActions) {
-                return undefined;
-            }
-            if (simplifiedResult) {
-                return codeActions.map(codeAction => this.mapCodeAction(project, codeAction));
-            }
-            else {
-                return codeActions;
-            }
+            return simplifiedResult ? codeActions.map(codeAction => this.mapCodeFixAction(project, codeAction)) : codeActions;
         }
 
         private getCombinedCodeFix({ scope, fixId }: protocol.GetCombinedCodeFixRequestArgs, simplifiedResult: boolean): protocol.CombinedCodeActions | CombinedCodeActions {
@@ -1725,9 +1721,12 @@ namespace ts.server {
             return { startPosition, endPosition };
         }
 
-        private mapCodeAction(project: Project, { description, changes: unmappedChanges, commands, fixId, fixAllDescription }: CodeFixAction): protocol.CodeFixAction {
-            const changes = unmappedChanges.map(change => this.mapTextChangesToCodeEditsUsingScriptinfo(change, project.getScriptInfoForNormalizedPath(toNormalizedPath(change.fileName))));
-            return { description, changes, commands, fixId, fixAllDescription };
+        private mapCodeAction(project: Project, { description, changes, commands }: CodeAction): protocol.CodeAction {
+            return { description, changes: this.mapTextChangesToCodeEdits(project, changes), commands };
+        }
+
+        private mapCodeFixAction(project: Project, { fixName, description, changes, commands, fixId, fixAllDescription }: CodeFixAction): protocol.CodeFixAction {
+            return { fixName, description, changes: this.mapTextChangesToCodeEdits(project, changes), commands, fixId, fixAllDescription };
         }
 
         private mapTextChangesToCodeEdits(project: Project, textChanges: ReadonlyArray<FileTextChanges>): protocol.FileCodeEdits[] {

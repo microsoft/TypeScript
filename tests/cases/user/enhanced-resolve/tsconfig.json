@@ -8,6 +8,9 @@
         "allowJs": true,
         "checkJs": true,
         "types": ["node"],
+        "lib": ["esnext", "dom"],
+        "module": "CommonJS",
+        "target": "esnext",
     },
     "include": ["node_modules/enhanced-resolve"]
 }

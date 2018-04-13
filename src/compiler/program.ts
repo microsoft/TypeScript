@@ -1,7 +1,3 @@
-/// <reference path="sys.ts" />
-/// <reference path="emitter.ts" />
-/// <reference path="core.ts" />
-
 namespace ts {
     const ignoreDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-ignore)?)/;
 
@@ -577,7 +573,6 @@ namespace ts {
         const packageIdToSourceFile = createMap<SourceFile>();
         // Maps from a SourceFile's `.path` to the name of the package it was imported with.
         let sourceFileToPackageName = createMap<string>();
-        // See `sourceFileIsRedirectedTo`.
         let redirectTargetsSet = createMap<true>();
 
         const filesByName = createMap<SourceFile | undefined>();

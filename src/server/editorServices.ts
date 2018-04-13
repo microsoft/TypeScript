@@ -1,11 +1,3 @@
-/// <reference path="..\compiler\commandLineParser.ts" />
-/// <reference path="..\services\services.ts" />
-/// <reference path="utilities.ts" />
-/// <reference path="session.ts" />
-/// <reference path="scriptVersionCache.ts"/>
-/// <reference path="project.ts"/>
-/// <reference path="typingsCache.ts"/>
-
 namespace ts.server {
     export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
 
@@ -392,6 +384,7 @@ namespace ts.server {
         public readonly useSingleInferredProject: boolean;
         public readonly useInferredProjectPerProjectRoot: boolean;
         public readonly typingsInstaller: ITypingsInstaller;
+        private readonly globalCacheLocationDirectoryPath: Path;
         public readonly throttleWaitMilliseconds?: number;
         private readonly eventHandler?: ProjectServiceEventHandler;
         private readonly suppressDiagnosticEvents?: boolean;
@@ -431,6 +424,8 @@ namespace ts.server {
             }
             this.currentDirectory = this.host.getCurrentDirectory();
             this.toCanonicalFileName = createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
+            this.globalCacheLocationDirectoryPath = this.typingsInstaller.globalTypingsCacheLocation &&
+                ensureTrailingDirectorySeparator(this.toPath(this.typingsInstaller.globalTypingsCacheLocation));
             this.throttledOperations = new ThrottledOperations(this.host, this.logger);
 
             if (this.typesMapLocation) {
@@ -548,10 +543,11 @@ namespace ts.server {
                 else {
                     if (this.pendingEnsureProjectForOpenFiles) {
                         this.ensureProjectForOpenFiles();
+
+                        // Send the event to notify that there were background project updates
+                        // send current list of open files
+                        this.sendProjectsUpdatedInBackgroundEvent();
                     }
-                    // Send the event to notify that there were background project updates
-                    // send current list of open files
-                    this.sendProjectsUpdatedInBackgroundEvent();
                 }
             });
         }
@@ -642,7 +638,6 @@ namespace ts.server {
                 return undefined;
             }
             if (isInferredProjectName(projectName)) {
-                this.ensureProjectStructuresUptoDate();
                 return findProjectByName(projectName, this.inferredProjects);
             }
             return this.findExternalProjectByProjectName(projectName) || this.findConfiguredProjectByProjectName(toNormalizedPath(projectName));
@@ -1738,7 +1733,10 @@ namespace ts.server {
         private watchClosedScriptInfo(info: ScriptInfo) {
             Debug.assert(!info.fileWatcher);
             // do not watch files with mixed content - server doesn't know how to interpret it
-            if (!info.isDynamicOrHasMixedContent()) {
+            // do not watch files in the global cache location
+            if (!info.isDynamicOrHasMixedContent() &&
+                (!this.globalCacheLocationDirectoryPath ||
+                    !startsWith(info.path, this.globalCacheLocationDirectoryPath))) {
                 const { fileName } = info;
                 info.fileWatcher = this.watchFactory.watchFilePath(
                     this.host,
@@ -1836,11 +1834,11 @@ namespace ts.server {
                     this.logger.info(`Host information ${args.hostInfo}`);
                 }
                 if (args.formatOptions) {
-                    mergeMapLikes(this.hostConfiguration.formatCodeOptions, convertFormatOptions(args.formatOptions));
+                    this.hostConfiguration.formatCodeOptions = { ...this.hostConfiguration.formatCodeOptions, ...convertFormatOptions(args.formatOptions) };
                     this.logger.info("Format host information updated");
                 }
                 if (args.preferences) {
-                    mergeMapLikes(this.hostConfiguration.preferences, args.preferences);
+                    this.hostConfiguration.preferences = { ...this.hostConfiguration.preferences, ...args.preferences };
                 }
                 if (args.extraFileExtensions) {
                     this.hostConfiguration.extraFileExtensions = args.extraFileExtensions;

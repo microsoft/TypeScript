@@ -1,9 +1,3 @@
-/// <reference path="sys.ts"/>
-/// <reference path="types.ts"/>
-/// <reference path="core.ts"/>
-/// <reference path="diagnosticInformationMap.generated.ts"/>
-/// <reference path="parser.ts"/>
-
 namespace ts {
     /* @internal */
     export const compileOnSaveCommandLineOption: CommandLineOption = { name: "compileOnSave", type: "boolean" };
