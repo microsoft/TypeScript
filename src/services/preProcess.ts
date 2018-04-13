@@ -13,6 +13,7 @@ namespace ts {
         const importedFiles: FileReference[] = [];
         let ambientExternalModules: { ref: FileReference, depth: number }[];
         let braceNesting = 0;
+        let lastTokenWasDot = false;
         // assume that text represent an external module if it contains at least one top level import/export
         // ambient modules that are found inside external modules are interpreted as module augmentations
         let externalModule = false;
@@ -25,6 +26,7 @@ namespace ts {
             else if (token === SyntaxKind.CloseBraceToken) {
                 braceNesting--;
             }
+            lastTokenWasDot = token === SyntaxKind.DotToken;
             return token;
         }
 
@@ -78,7 +80,7 @@ namespace ts {
          */
         function tryConsumeImport(): boolean {
             let token = scanner.getToken();
-            if (token === SyntaxKind.ImportKeyword && !scanner.hasPrecedingDot()) {
+            if (token === SyntaxKind.ImportKeyword && !lastTokenWasDot) {
                 token = nextToken();
                 if (token === SyntaxKind.OpenParenToken) {
                     token = nextToken();

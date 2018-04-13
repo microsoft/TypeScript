@@ -1585,7 +1585,6 @@ namespace ts {
         BinarySpecifier = 1 << 7,   // e.g. `0b0110010000000000`
         OctalSpecifier = 1 << 8,    // e.g. `0o777`
         ContainsSeparator = 1 << 9, // e.g. `0b1100_0101`
-        PrecedingDot = 1 << 10,
         BinaryOrOctalSpecifier = BinarySpecifier | OctalSpecifier,
         NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinarySpecifier | OctalSpecifier | ContainsSeparator
     }
