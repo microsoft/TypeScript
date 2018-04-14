@@ -27,7 +27,7 @@ namespace ts {
     function shouldBePretty(options: CompilerOptions) {
         if ((typeof options.pretty === "undefined" && typeof options.diagnosticStyle === "undefined") || options.diagnosticStyle === DiagnosticStyle.Auto) {
             return !!sys.writeOutputIsTty && sys.writeOutputIsTty();
-    }
+        }
         return options.diagnosticStyle === DiagnosticStyle.Pretty || options.pretty;
     }
 
