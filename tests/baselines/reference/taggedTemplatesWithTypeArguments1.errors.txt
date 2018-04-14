@@ -1,0 +1,82 @@
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(9,18): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'string'.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(9,20): error TS2693: 'Stuff' only refers to a type, but is being used as a value here.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(22,20): error TS2693: 'Stuff' only refers to a type, but is being used as a value here.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(22,50): error TS1005: ',' expected.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(39,18): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'string'.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(39,30): error TS2693: 'Stuff' only refers to a type, but is being used as a value here.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(39,53): error TS1128: Declaration or statement expected.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(40,3): error TS2339: Property 'returnedProp' does not exist on type 'boolean'.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(41,3): error TS2339: Property 'returnedProp' does not exist on type 'boolean'.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(42,3): error TS2339: Property 'returnedProp' does not exist on type 'boolean'.
+
+
+==== tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts (10 errors) ====
+    declare function f<T>(strs: TemplateStringsArray, ...callbacks: Array<(x: T) => any>): void;
+    
+    interface Stuff {
+        x: number;
+        y: string;
+        z: boolean;
+    }
+    
+    export const a = f<Stuff> `
+                     ~~~~~~~~~~
+                       ~~~~~
+!!! error TS2693: 'Stuff' only refers to a type, but is being used as a value here.
+        hello
+    ~~~~~~~~~
+        ${stuff => stuff.x}
+    ~~~~~~~~~~~~~~~~~~~~~~~
+        brave
+    ~~~~~~~~~
+        ${stuff => stuff.y}
+    ~~~~~~~~~~~~~~~~~~~~~~~
+        world
+    ~~~~~~~~~
+        ${stuff => stuff.z}
+    ~~~~~~~~~~~~~~~~~~~~~~~
+    `;
+    ~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'string'.
+    
+    declare function g<Input, T, U, V>(
+        strs: TemplateStringsArray,
+        t: (i: Input) => T, u: (i: Input) => U, v: (i: Input) => V): T | U | V;
+    
+    export const b = g<Stuff, number, string, boolean> `
+                       ~~~~~
+!!! error TS2693: 'Stuff' only refers to a type, but is being used as a value here.
+                                                     ~
+!!! error TS1005: ',' expected.
+        hello
+        ${stuff => stuff.x}
+        brave
+        ${stuff => stuff.y}
+        world
+        ${stuff => stuff.z}
+    `;
+    
+    declare let obj: {
+        prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => {
+            returnedObjProp: {
+                lastOne: T
+            }
+        }
+    }
+    
+    export const c = obj["prop"]<Stuff> `${(input) => { ...input }}`
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'string'.
+                                 ~~~~~
+!!! error TS2693: 'Stuff' only refers to a type, but is being used as a value here.
+                                                        ~~~
+!!! error TS1128: Declaration or statement expected.
+    c.returnedProp.x;
+      ~~~~~~~~~~~~
+!!! error TS2339: Property 'returnedProp' does not exist on type 'boolean'.
+    c.returnedProp.y;
+      ~~~~~~~~~~~~
+!!! error TS2339: Property 'returnedProp' does not exist on type 'boolean'.
+    c.returnedProp.z;
+      ~~~~~~~~~~~~
+!!! error TS2339: Property 'returnedProp' does not exist on type 'boolean'.

@@ -1,0 +1,181 @@
+=== tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts ===
+declare function f<T>(strs: TemplateStringsArray, ...callbacks: Array<(x: T) => any>): void;
+>f : <T>(strs: TemplateStringsArray, ...callbacks: ((x: T) => any)[]) => void
+>T : T
+>strs : TemplateStringsArray
+>TemplateStringsArray : TemplateStringsArray
+>callbacks : ((x: T) => any)[]
+>Array : T[]
+>x : T
+>T : T
+
+interface Stuff {
+>Stuff : Stuff
+
+    x: number;
+>x : number
+
+    y: string;
+>y : string
+
+    z: boolean;
+>z : boolean
+}
+
+export const a = f<Stuff> `
+>a : boolean
+>f<Stuff> `    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : boolean
+>f<Stuff : boolean
+>f : <T>(strs: TemplateStringsArray, ...callbacks: ((x: T) => any)[]) => void
+>Stuff : any
+>`    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : string
+
+    hello
+    ${stuff => stuff.x}
+>stuff => stuff.x : (stuff: any) => any
+>stuff : any
+>stuff.x : any
+>stuff : any
+>x : any
+
+    brave
+    ${stuff => stuff.y}
+>stuff => stuff.y : (stuff: any) => any
+>stuff : any
+>stuff.y : any
+>stuff : any
+>y : any
+
+    world
+    ${stuff => stuff.z}
+>stuff => stuff.z : (stuff: any) => any
+>stuff : any
+>stuff.z : any
+>stuff : any
+>z : any
+
+`;
+
+declare function g<Input, T, U, V>(
+>g : <Input, T, U, V>(strs: TemplateStringsArray, t: (i: Input) => T, u: (i: Input) => U, v: (i: Input) => V) => T | U | V
+>Input : Input
+>T : T
+>U : U
+>V : V
+
+    strs: TemplateStringsArray,
+>strs : TemplateStringsArray
+>TemplateStringsArray : TemplateStringsArray
+
+    t: (i: Input) => T, u: (i: Input) => U, v: (i: Input) => V): T | U | V;
+>t : (i: Input) => T
+>i : Input
+>Input : Input
+>T : T
+>u : (i: Input) => U
+>i : Input
+>Input : Input
+>U : U
+>v : (i: Input) => V
+>i : Input
+>Input : Input
+>V : V
+>T : T
+>U : U
+>V : V
+
+export const b = g<Stuff, number, string, boolean> `
+>b : boolean
+>g<Stuff : boolean
+>g : <Input, T, U, V>(strs: TemplateStringsArray, t: (i: Input) => T, u: (i: Input) => U, v: (i: Input) => V) => T | U | V
+>Stuff : any
+>number : any
+>string : any
+>boolean : any
+>> `    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : boolean
+> : any
+>`    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : string
+
+    hello
+    ${stuff => stuff.x}
+>stuff => stuff.x : (stuff: any) => any
+>stuff : any
+>stuff.x : any
+>stuff : any
+>x : any
+
+    brave
+    ${stuff => stuff.y}
+>stuff => stuff.y : (stuff: any) => any
+>stuff : any
+>stuff.y : any
+>stuff : any
+>y : any
+
+    world
+    ${stuff => stuff.z}
+>stuff => stuff.z : (stuff: any) => any
+>stuff : any
+>stuff.z : any
+>stuff : any
+>z : any
+
+`;
+
+declare let obj: {
+>obj : { prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: { lastOne: T; }; }; }
+
+    prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => {
+>prop : <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: { lastOne: T; }; }
+>T : T
+>strs : TemplateStringsArray
+>TemplateStringsArray : TemplateStringsArray
+>x : (input: T) => T
+>input : T
+>T : T
+>T : T
+
+        returnedObjProp: {
+>returnedObjProp : { lastOne: T; }
+
+            lastOne: T
+>lastOne : T
+>T : T
+        }
+    }
+}
+
+export const c = obj["prop"]<Stuff> `${(input) => { ...input }}`
+>c : boolean
+>obj["prop"]<Stuff> `${(input) => { ...input }}` : boolean
+>obj["prop"]<Stuff : boolean
+>obj["prop"] : <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: { lastOne: T; }; }
+>obj : { prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: { lastOne: T; }; }; }
+>"prop" : "prop"
+>Stuff : any
+>`${(input) => { ...input }}` : string
+>(input) => { ...input } : (input: any) => void
+>input : any
+>input : any
+
+c.returnedProp.x;
+>c.returnedProp.x : any
+>c.returnedProp : any
+>c : boolean
+>returnedProp : any
+>x : any
+
+c.returnedProp.y;
+>c.returnedProp.y : any
+>c.returnedProp : any
+>c : boolean
+>returnedProp : any
+>y : any
+
+c.returnedProp.z;
+>c.returnedProp.z : any
+>c.returnedProp : any
+>c : boolean
+>returnedProp : any
+>z : any
+
