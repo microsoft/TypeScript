@@ -1,16 +1,18 @@
-tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(9,18): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'string'.
-tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(9,20): error TS2693: 'Stuff' only refers to a type, but is being used as a value here.
-tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(22,20): error TS2693: 'Stuff' only refers to a type, but is being used as a value here.
-tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(22,50): error TS1005: ',' expected.
-tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(39,18): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'string'.
-tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(39,30): error TS2693: 'Stuff' only refers to a type, but is being used as a value here.
-tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(39,53): error TS1128: Declaration or statement expected.
-tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(40,3): error TS2339: Property 'returnedProp' does not exist on type 'boolean'.
-tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(41,3): error TS2339: Property 'returnedProp' does not exist on type 'boolean'.
-tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(42,3): error TS2339: Property 'returnedProp' does not exist on type 'boolean'.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(11,22): error TS2339: Property 'x' does not exist on type '{}'.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(13,22): error TS2339: Property 'y' does not exist on type '{}'.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(15,22): error TS2339: Property 'z' does not exist on type '{}'.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(24,22): error TS2339: Property 'x' does not exist on type '{}'.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(26,22): error TS2339: Property 'y' does not exist on type '{}'.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(28,22): error TS2339: Property 'z' does not exist on type '{}'.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(38,19): error TS2339: Property 'x' does not exist on type '{}'.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(39,19): error TS2339: Property 'y' does not exist on type '{}'.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(40,19): error TS2339: Property 'z' does not exist on type '{}'.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(43,19): error TS2339: Property 'x' does not exist on type '{}'.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(44,19): error TS2339: Property 'y' does not exist on type '{}'.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(45,19): error TS2339: Property 'z' does not exist on type '{}'.
 
 
-==== tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts (10 errors) ====
+==== tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts (12 errors) ====
     declare function f<T>(strs: TemplateStringsArray, ...callbacks: Array<(x: T) => any>): void;
     
     interface Stuff {
@@ -20,63 +22,63 @@ tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts(42,3)
     }
     
     export const a = f<Stuff> `
-                     ~~~~~~~~~~
-                       ~~~~~
-!!! error TS2693: 'Stuff' only refers to a type, but is being used as a value here.
         hello
-    ~~~~~~~~~
         ${stuff => stuff.x}
-    ~~~~~~~~~~~~~~~~~~~~~~~
+                         ~
+!!! error TS2339: Property 'x' does not exist on type '{}'.
         brave
-    ~~~~~~~~~
         ${stuff => stuff.y}
-    ~~~~~~~~~~~~~~~~~~~~~~~
+                         ~
+!!! error TS2339: Property 'y' does not exist on type '{}'.
         world
-    ~~~~~~~~~
         ${stuff => stuff.z}
-    ~~~~~~~~~~~~~~~~~~~~~~~
+                         ~
+!!! error TS2339: Property 'z' does not exist on type '{}'.
     `;
-    ~
-!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'string'.
     
     declare function g<Input, T, U, V>(
         strs: TemplateStringsArray,
         t: (i: Input) => T, u: (i: Input) => U, v: (i: Input) => V): T | U | V;
     
     export const b = g<Stuff, number, string, boolean> `
-                       ~~~~~
-!!! error TS2693: 'Stuff' only refers to a type, but is being used as a value here.
-                                                     ~
-!!! error TS1005: ',' expected.
         hello
         ${stuff => stuff.x}
+                         ~
+!!! error TS2339: Property 'x' does not exist on type '{}'.
         brave
         ${stuff => stuff.y}
+                         ~
+!!! error TS2339: Property 'y' does not exist on type '{}'.
         world
         ${stuff => stuff.z}
+                         ~
+!!! error TS2339: Property 'z' does not exist on type '{}'.
     `;
     
     declare let obj: {
         prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => {
-            returnedObjProp: {
-                lastOne: T
-            }
+            returnedObjProp: T
         }
     }
     
-    export const c = obj["prop"]<Stuff> `${(input) => { ...input }}`
-                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'string'.
-                                 ~~~~~
-!!! error TS2693: 'Stuff' only refers to a type, but is being used as a value here.
-                                                        ~~~
-!!! error TS1128: Declaration or statement expected.
-    c.returnedProp.x;
-      ~~~~~~~~~~~~
-!!! error TS2339: Property 'returnedProp' does not exist on type 'boolean'.
-    c.returnedProp.y;
-      ~~~~~~~~~~~~
-!!! error TS2339: Property 'returnedProp' does not exist on type 'boolean'.
-    c.returnedProp.z;
-      ~~~~~~~~~~~~
-!!! error TS2339: Property 'returnedProp' does not exist on type 'boolean'.
+    export let c = obj["prop"]<Stuff> `${(input) => ({ ...input })}`
+    c.returnedObjProp.x;
+                      ~
+!!! error TS2339: Property 'x' does not exist on type '{}'.
+    c.returnedObjProp.y;
+                      ~
+!!! error TS2339: Property 'y' does not exist on type '{}'.
+    c.returnedObjProp.z;
+                      ~
+!!! error TS2339: Property 'z' does not exist on type '{}'.
+    
+    c = obj.prop<Stuff> `${(input) => ({ ...input })}`
+    c.returnedObjProp.x;
+                      ~
+!!! error TS2339: Property 'x' does not exist on type '{}'.
+    c.returnedObjProp.y;
+                      ~
+!!! error TS2339: Property 'y' does not exist on type '{}'.
+    c.returnedObjProp.z;
+                      ~
+!!! error TS2339: Property 'z' does not exist on type '{}'.

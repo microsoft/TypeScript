@@ -31,19 +31,22 @@ export const b = g<Stuff, number, string, boolean> `
 
 declare let obj: {
     prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => {
-        returnedObjProp: {
-            lastOne: T
-        }
+        returnedObjProp: T
     }
 }
 
-export const c = obj["prop"]<Stuff> `${(input) => { ...input }}`
-c.returnedProp.x;
-c.returnedProp.y;
-c.returnedProp.z;
+export let c = obj["prop"]<Stuff> `${(input) => ({ ...input })}`
+c.returnedObjProp.x;
+c.returnedObjProp.y;
+c.returnedObjProp.z;
+
+c = obj.prop<Stuff> `${(input) => ({ ...input })}`
+c.returnedObjProp.x;
+c.returnedObjProp.y;
+c.returnedObjProp.z;
 
 //// [taggedTemplatesWithTypeArguments1.js]
-export const a = f < Stuff > `
+export const a = f<Stuff> `
     hello
     ${stuff => stuff.x}
     brave
@@ -51,8 +54,7 @@ export const a = f < Stuff > `
     world
     ${stuff => stuff.z}
 `;
-export const b = g < Stuff, number, string, boolean;
- > `
+export const b = g<Stuff, number, string, boolean> `
     hello
     ${stuff => stuff.x}
     brave
@@ -60,7 +62,11 @@ export const b = g < Stuff, number, string, boolean;
     world
     ${stuff => stuff.z}
 `;
-export const c = obj["prop"] < Stuff > `${(input) => { input; }}`;
-c.returnedProp.x;
-c.returnedProp.y;
-c.returnedProp.z;
+export let c = obj["prop"]<Stuff> `${(input) => ({ ...input })}`;
+c.returnedObjProp.x;
+c.returnedObjProp.y;
+c.returnedObjProp.z;
+c = obj.prop<Stuff> `${(input) => ({ ...input })}`;
+c.returnedObjProp.x;
+c.returnedObjProp.y;
+c.returnedObjProp.z;
