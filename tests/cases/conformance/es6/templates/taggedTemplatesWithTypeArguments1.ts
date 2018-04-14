@@ -32,13 +32,16 @@ export const b = g<Stuff, number, string, boolean> `
 
 declare let obj: {
     prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => {
-        returnedObjProp: {
-            lastOne: T
-        }
+        returnedObjProp: T
     }
 }
 
-export const c = obj["prop"]<Stuff> `${(input) => { ...input }}`
-c.returnedProp.x;
-c.returnedProp.y;
-c.returnedProp.z;
+export let c = obj["prop"]<Stuff> `${(input) => ({ ...input })}`
+c.returnedObjProp.x;
+c.returnedObjProp.y;
+c.returnedObjProp.z;
+
+c = obj.prop<Stuff> `${(input) => ({ ...input })}`
+c.returnedObjProp.x;
+c.returnedObjProp.y;
+c.returnedObjProp.z;
