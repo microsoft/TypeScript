@@ -1032,17 +1032,19 @@ namespace ts {
             : node;
     }
 
-    export function createTaggedTemplate(tag: Expression, template: TemplateLiteral) {
+    export function createTaggedTemplate(tag: Expression, typeArguments: NodeArray<TypeNode>, template: TemplateLiteral) {
         const node = <TaggedTemplateExpression>createSynthesizedNode(SyntaxKind.TaggedTemplateExpression);
         node.tag = parenthesizeForAccess(tag);
+        node.typeArguments = typeArguments;
         node.template = template;
         return node;
     }
 
-    export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, template: TemplateLiteral) {
+    export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, typeArguments: NodeArray<TypeNode>, template: TemplateLiteral) {
         return node.tag !== tag
+            || node.typeArguments !== typeArguments
             || node.template !== template
-            ? updateNode(createTaggedTemplate(tag, template), node)
+            ? updateNode(createTaggedTemplate(tag, typeArguments, template), node)
             : node;
     }
 
