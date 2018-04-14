@@ -13,14 +13,12 @@ namespace ts {
         const importedFiles: FileReference[] = [];
         let ambientExternalModules: { ref: FileReference, depth: number }[];
         let braceNesting = 0;
-        let lastToken: SyntaxKind;
         // assume that text represent an external module if it contains at least one top level import/export
         // ambient modules that are found inside external modules are interpreted as module augmentations
         let externalModule = false;
 
         function nextToken() {
             const token = scanner.scan();
-            lastToken = token;
             if (token === SyntaxKind.OpenBraceToken) {
                 braceNesting++;
             }
@@ -79,9 +77,8 @@ namespace ts {
          * Returns true if at least one token was consumed from the stream
          */
         function tryConsumeImport(): boolean {
-            const lastTokenWasDot = lastToken === SyntaxKind.DotToken;
             let token = scanner.getToken();
-            if (token === SyntaxKind.ImportKeyword && !lastTokenWasDot) {
+            if (token === SyntaxKind.ImportKeyword) {
                 token = nextToken();
                 if (token === SyntaxKind.OpenParenToken) {
                     token = nextToken();
@@ -300,8 +297,13 @@ namespace ts {
             //    AnySymbol.import("mod")
 
             while (true) {
-                if (scanner.getToken() === SyntaxKind.EndOfFileToken) {
+                const token = scanner.getToken();
+                if (token === SyntaxKind.EndOfFileToken) {
                     break;
+                }
+                if (token === SyntaxKind.DotToken) {
+                    nextToken(); // jump over anything directly following the dot
+                    nextToken();
                 }
 
                 // check if at least one of alternative have moved scanner forward
