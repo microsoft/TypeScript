@@ -223,6 +223,7 @@ namespace ts {
                     visitNodes(cbNode, cbNodes, (<CallExpression>node).arguments);
             case SyntaxKind.TaggedTemplateExpression:
                 return visitNode(cbNode, (<TaggedTemplateExpression>node).tag) ||
+                    visitNodes(cbNode, cbNodes, (<TaggedTemplateExpression>node).typeArguments) ||
                     visitNode(cbNode, (<TaggedTemplateExpression>node).template);
             case SyntaxKind.TypeAssertionExpression:
                 return visitNode(cbNode, (<TypeAssertion>node).type) ||
@@ -4362,18 +4363,28 @@ namespace ts {
                     continue;
                 }
 
-                if (token() === SyntaxKind.NoSubstitutionTemplateLiteral || token() === SyntaxKind.TemplateHead) {
-                    const tagExpression = <TaggedTemplateExpression>createNode(SyntaxKind.TaggedTemplateExpression, expression.pos);
-                    tagExpression.tag = expression;
-                    tagExpression.template = token() === SyntaxKind.NoSubstitutionTemplateLiteral
-                        ? <NoSubstitutionTemplateLiteral>parseLiteralNode()
-                        : parseTemplateExpression();
-                    expression = finishNode(tagExpression);
+                if (isTemplateStartOfTaggedTemplate()) {
+                    expression = parseTaggedTemplateRest(expression, /*typeArguments*/ undefined);
                     continue;
                 }
 
                 return <MemberExpression>expression;
             }
+
+        }
+
+        function isTemplateStartOfTaggedTemplate() {
+            return token() === SyntaxKind.NoSubstitutionTemplateLiteral || token() === SyntaxKind.TemplateHead;
+        }
+
+        function parseTaggedTemplateRest(tag: LeftHandSideExpression, typeArguments: NodeArray<TypeNode> | undefined) {
+            const tagExpression = <TaggedTemplateExpression>createNode(SyntaxKind.TaggedTemplateExpression, tag.pos);
+            tagExpression.tag = tag;
+            tagExpression.typeArguments = typeArguments;
+            tagExpression.template = token() === SyntaxKind.NoSubstitutionTemplateLiteral
+                ? <NoSubstitutionTemplateLiteral>parseLiteralNode()
+                : parseTemplateExpression();
+            return finishNode(tagExpression);
         }
 
         function parseCallExpressionRest(expression: LeftHandSideExpression): LeftHandSideExpression {
@@ -4387,6 +4398,11 @@ namespace ts {
                     const typeArguments = tryParse(parseTypeArgumentsInExpression);
                     if (!typeArguments) {
                         return expression;
+                    }
+
+                    if (isTemplateStartOfTaggedTemplate()) {
+                        expression = parseTaggedTemplateRest(expression, typeArguments);
+                        continue;
                     }
 
                     const callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
@@ -4436,8 +4452,10 @@ namespace ts {
         function canFollowTypeArgumentsInExpression(): boolean {
             switch (token()) {
                 case SyntaxKind.OpenParenToken:                 // foo<x>(
-                // this case are the only case where this token can legally follow a type argument
-                // list.  So we definitely want to treat this as a type arg list.
+                case SyntaxKind.NoSubstitutionTemplateLiteral:  // foo<T> `...`
+                case SyntaxKind.TemplateHead:                   // foo<T> `...${100}...`
+                // these are the only tokens can legally follow a type argument
+                // list. So we definitely want to treat them as type arg lists.
 
                 case SyntaxKind.DotToken:                       // foo<x>.
                 case SyntaxKind.CloseParenToken:                // foo<x>)
