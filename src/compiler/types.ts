@@ -4193,7 +4193,8 @@ namespace ts {
         preserveSymlinks?: boolean;
         /* @internal */ preserveWatchOutput?: boolean;
         project?: string;
-        /* @internal */ pretty?: DiagnosticStyle;
+        /* @internal */ pretty?: boolean;
+        /* @internal */ diagnosticStyle?: DiagnosticStyle;
         reactNamespace?: string;
         jsxFactory?: string;
         removeComments?: boolean;
@@ -4293,8 +4294,9 @@ namespace ts {
 
     /* @internal */
     export const enum DiagnosticStyle {
-        Simple,
+        Auto,
         Pretty,
+        Simple,
     }
 
     /** Either a parsed command line or a parsed tsconfig.json */
