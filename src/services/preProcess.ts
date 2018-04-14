@@ -13,7 +13,7 @@ namespace ts {
         const importedFiles: FileReference[] = [];
         let ambientExternalModules: { ref: FileReference, depth: number }[];
         let braceNesting = 0;
-        let lastToken: SyntaxKind = null;
+        let lastToken: SyntaxKind;
         // assume that text represent an external module if it contains at least one top level import/export
         // ambient modules that are found inside external modules are interpreted as module augmentations
         let externalModule = false;
