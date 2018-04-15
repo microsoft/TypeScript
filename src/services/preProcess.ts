@@ -306,8 +306,7 @@ namespace ts {
             //    AnySymbol.nested.import("mod")
 
             while (true) {
-                const token = scanner.getToken();
-                if (token === SyntaxKind.EndOfFileToken) {
+                if (scanner.getToken() === SyntaxKind.EndOfFileToken) {
                     break;
                 }
 
