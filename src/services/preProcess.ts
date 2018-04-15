@@ -12,20 +12,25 @@ namespace ts {
         };
         const importedFiles: FileReference[] = [];
         let ambientExternalModules: { ref: FileReference, depth: number }[];
+        let lastToken: SyntaxKind;
+        let currentToken: SyntaxKind;
         let braceNesting = 0;
         // assume that text represent an external module if it contains at least one top level import/export
         // ambient modules that are found inside external modules are interpreted as module augmentations
         let externalModule = false;
 
         function nextToken() {
-            const token = scanner.scan();
-            if (token === SyntaxKind.OpenBraceToken) {
+            if (currentToken) {
+                lastToken = currentToken;
+            }
+            currentToken = scanner.scan();
+            if (currentToken === SyntaxKind.OpenBraceToken) {
                 braceNesting++;
             }
-            else if (token === SyntaxKind.CloseBraceToken) {
+            else if (currentToken === SyntaxKind.CloseBraceToken) {
                 braceNesting--;
             }
-            return token;
+            return currentToken;
         }
 
         function getFileReference() {
@@ -77,6 +82,9 @@ namespace ts {
          * Returns true if at least one token was consumed from the stream
          */
         function tryConsumeImport(): boolean {
+            if (lastToken === SyntaxKind.DotToken) {
+                return false;
+            }
             let token = scanner.getToken();
             if (token === SyntaxKind.ImportKeyword) {
                 token = nextToken();
@@ -295,15 +303,12 @@ namespace ts {
 
             // Do not look for:
             //    AnySymbol.import("mod")
+            //    AnySymbol.nested.import("mod")
 
             while (true) {
                 const token = scanner.getToken();
                 if (token === SyntaxKind.EndOfFileToken) {
                     break;
-                }
-                if (token === SyntaxKind.DotToken) {
-                    nextToken(); // jump over anything directly following the dot
-                    nextToken();
                 }
 
                 // check if at least one of alternative have moved scanner forward
