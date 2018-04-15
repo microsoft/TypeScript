@@ -4684,9 +4684,23 @@ namespace ts {
                 return finishNode(node);
             }
 
+            let expression: MemberExpression = parsePrimaryExpression();
+            let typeArguments;
+            while (true) {
+                expression = parseMemberExpressionRest(expression);
+                typeArguments = tryParse(parseTypeArgumentsInExpression);
+                if (isTemplateStartOfTaggedTemplate()) {
+                    Debug.assert(!!typeArguments,
+                        "Expected a type argument list; all plain tagged template starts should be consumed in 'parseMemberExpressionRest'");
+                    expression = parseTaggedTemplateRest(expression, typeArguments);
+                    typeArguments = undefined;
+                }
+                break;
+            }
+
             const node = <NewExpression>createNode(SyntaxKind.NewExpression, fullStart);
-            node.expression = parseMemberExpressionOrHigher();
-            node.typeArguments = tryParse(parseTypeArgumentsInExpression);
+            node.expression = expression;
+            node.typeArguments = typeArguments;
             if (node.typeArguments || token() === SyntaxKind.OpenParenToken) {
                 node.arguments = parseArgumentList();
             }
