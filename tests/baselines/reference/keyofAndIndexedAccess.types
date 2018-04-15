@@ -92,7 +92,7 @@ type K11 = keyof Shape[];  // "length" | "toString" | ...
 >Shape : Shape
 
 type K12 = keyof Dictionary<Shape>;  // string
->K12 : string | number
+>K12 : string | number | symbol
 >Dictionary : Dictionary<T>
 >Shape : Shape
 
@@ -136,7 +136,7 @@ type K20 = KeyOf<Shape>;  // "name" | "width" | "height" | "visible"
 >Shape : Shape
 
 type K21 = KeyOf<Dictionary<Shape>>;  // string
->K21 : string | number
+>K21 : string | number | symbol
 >KeyOf : keyof T
 >Dictionary : Dictionary<T>
 >Shape : Shape
