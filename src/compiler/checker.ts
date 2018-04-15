@@ -6268,18 +6268,10 @@ namespace ts {
         }
 
         function getConstraintOfIndexedAccess(type: IndexedAccessType) {
-            const transformed = getSimplifiedIndexedAccessType(type);
-            if (transformed) {
-                return transformed;
-            }
-            const baseObjectType = getBaseConstraintOfType(type.objectType);
-            const baseIndexType = getBaseConstraintOfType(type.indexType);
-            if (baseIndexType === stringType && !getIndexInfoOfType(baseObjectType || type.objectType, IndexKind.String)) {
-                // getIndexedAccessType returns `any` for X[string] where X doesn't have an index signature.
-                // to avoid this, return `undefined`.
-                return undefined;
-            }
-            return baseObjectType || baseIndexType ? getIndexedAccessType(baseObjectType || type.objectType, baseIndexType || type.indexType) : undefined;
+            const objectType = getBaseConstraintOfType(type.objectType) || type.objectType;
+            const indexType = getBaseConstraintOfType(type.indexType) || type.indexType;
+            const constraint = !isGenericObjectType(objectType) && !isGenericIndexType(indexType) ? getIndexedAccessType(objectType, indexType) : undefined;
+            return constraint && constraint !== unknownType ? constraint : undefined;
         }
 
         function getDefaultConstraintOfConditionalType(type: ConditionalType) {
@@ -6326,7 +6318,7 @@ namespace ts {
         function getBaseConstraintOfType(type: Type): Type {
             const constraint = getBaseConstraintOfInstantiableNonPrimitiveUnionOrIntersection(type);
             if (!constraint && type.flags & TypeFlags.Index) {
-                return stringType;
+                return keyofConstraintType;
             }
             return constraint;
         }
@@ -6361,7 +6353,7 @@ namespace ts {
                     circular = true;
                     return undefined;
                 }
-                const result = computeBaseConstraint(t);
+                const result = computeBaseConstraint(getSimplifiedType(t));
                 if (!popTypeResolution()) {
                     circular = true;
                     return undefined;
@@ -6390,13 +6382,9 @@ namespace ts {
                             undefined;
                 }
                 if (t.flags & TypeFlags.Index) {
-                    return stringType;
+                    return keyofConstraintType;
                 }
                 if (t.flags & TypeFlags.IndexedAccess) {
-                    const transformed = getSimplifiedIndexedAccessType(<IndexedAccessType>t);
-                    if (transformed) {
-                        return getBaseConstraint(transformed);
-                    }
                     const baseObjectType = getBaseConstraint((<IndexedAccessType>t).objectType);
                     const baseIndexType = getBaseConstraint((<IndexedAccessType>t).indexType);
                     const baseIndexedAccess = baseObjectType && baseIndexType ? getIndexedAccessType(baseObjectType, baseIndexType) : undefined;
@@ -6520,26 +6508,30 @@ namespace ts {
             if (props.length === 1 && !(checkFlags & CheckFlags.Partial)) {
                 return props[0];
             }
-            const propTypes: Type[] = [];
-            const declarations: Declaration[] = [];
+            let declarations: Declaration[];
             let commonType: Type;
+            let nameType: Type;
+            let propTypes: Type[] = [];
+            let first = true;
             for (const prop of props) {
-                if (prop.declarations) {
-                    addRange(declarations, prop.declarations);
-                }
+                declarations = addRange(declarations, prop.declarations);
                 const type = getTypeOfSymbol(prop);
-                if (!commonType) {
+                if (first) {
                     commonType = type;
+                    nameType = prop.nameType;
+                    first = false;
                 }
-                else if (type !== commonType) {
+                else {
+                    if (type !== commonType) {
                     checkFlags |= CheckFlags.HasNonUniformType;
+                }
                 }
                 propTypes.push(type);
             }
-            // !!!
             const result = createSymbol(SymbolFlags.Property | commonFlags, name, syntheticFlag | checkFlags);
             result.containingType = containingType;
             result.declarations = declarations;
+            result.nameType = nameType;
             result.type = isUnion ? getUnionType(propTypes) : getIntersectionType(propTypes);
             return result;
         }
@@ -8151,9 +8143,8 @@ namespace ts {
                 maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
                 type === wildcardType ? wildcardType :
-                type.flags & TypeFlags.Any ? keyofConstraintType :
-                keyofStringsOnly ? getIndexInfoOfType(type, IndexKind.String) ? stringType : getLiteralTypeFromPropertyNames(type, TypeFlags.StringLiteral) :
-                getIndexInfoOfType(type, IndexKind.String) ? getUnionType([stringType, numberType, getLiteralTypeFromPropertyNames(type, TypeFlags.UniqueESSymbol)]) :
+                type.flags & TypeFlags.Any || getIndexInfoOfType(type, IndexKind.String) ? keyofConstraintType :
+                keyofStringsOnly ? getLiteralTypeFromPropertyNames(type, TypeFlags.StringLiteral) :
                 getNonEnumNumberIndexInfo(type) ? getUnionType([numberType, getLiteralTypeFromPropertyNames(type, TypeFlags.StringLiteral | TypeFlags.UniqueESSymbol)]) :
                 getLiteralTypeFromPropertyNames(type, TypeFlags.StringLiteral | TypeFlags.NumberLiteral | TypeFlags.UniqueESSymbol);
         }
@@ -8256,9 +8247,8 @@ namespace ts {
                 else {
                     error(indexNode, Diagnostics.Type_0_cannot_be_used_as_an_index_type, typeToString(indexType));
                 }
-                return unknownType;
             }
-            return anyType;
+            return unknownType;
         }
 
         function isGenericObjectType(type: Type): boolean {
@@ -8285,8 +8275,12 @@ namespace ts {
             return getObjectFlags(type) & ObjectFlags.Mapped && getTemplateTypeFromMappedType(type as MappedType) === neverType;
         }
 
+        function getSimplifiedType(type: Type): Type {
+            return type.flags & TypeFlags.IndexedAccess ? getSimplifiedIndexedAccessType(<IndexedAccessType>type) : type;
+        }
+
         // Transform an indexed access to a simpler form, if possible. Return the simpler form, or return
-        // undefined if no transformation is possible.
+        // the type itself if no transformation is possible.
         function getSimplifiedIndexedAccessType(type: IndexedAccessType): Type {
             const objectType = type.objectType;
             if (objectType.flags & TypeFlags.Intersection && isGenericObjectType(objectType)) {
@@ -8306,7 +8300,7 @@ namespace ts {
                         }
                     }
                     return getUnionType([
-                        getIndexedAccessType(getIntersectionType(regularTypes), type.indexType),
+                        getSimplifiedType(getIndexedAccessType(getIntersectionType(regularTypes), type.indexType)),
                         getIntersectionType(stringIndexTypes)
                     ]);
                 }
@@ -8316,13 +8310,13 @@ namespace ts {
                 // eventually anyway, but it easier to reason about.
                 if (some((<IntersectionType>objectType).types, isMappedTypeToNever)) {
                     const nonNeverTypes = filter((<IntersectionType>objectType).types, t => !isMappedTypeToNever(t));
-                    return getIndexedAccessType(getIntersectionType(nonNeverTypes), type.indexType);
+                    return getSimplifiedType(getIndexedAccessType(getIntersectionType(nonNeverTypes), type.indexType));
                 }
             }
-
             // If the object type is a mapped type { [P in K]: E }, where K is generic, instantiate E using a mapper
             // that substitutes the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we
-            // construct the type Box<T[X]>.
+            // construct the type Box<T[X]>. We do not further simplify the result because mapped types can be recursive
+            // and we might never terminate.
             if (isGenericMappedType(objectType)) {
                 return substituteIndexedMappedType(objectType, type);
             }
@@ -8332,7 +8326,7 @@ namespace ts {
                     return substituteIndexedMappedType(constraint, type);
                 }
             }
-            return undefined;
+            return type;
         }
 
         function substituteIndexedMappedType(objectType: MappedType, type: IndexedAccessType) {
@@ -9887,6 +9881,12 @@ namespace ts {
                 if (target.flags & TypeFlags.Substitution) {
                     target = (<SubstitutionType>target).typeVariable;
                 }
+                if (source.flags & TypeFlags.IndexedAccess) {
+                    source = getSimplifiedType(source);
+                }
+                if (target.flags & TypeFlags.IndexedAccess) {
+                    target = getSimplifiedType(target);
+                }
 
                 // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
                 if (source === target) return Ternary.True;
@@ -10346,9 +10346,9 @@ namespace ts {
                     }
                 }
                 else if (target.flags & TypeFlags.IndexedAccess) {
-                    // A type S is related to a type T[K] if S is related to A[K], where K is string-like and
-                    // A is the apparent type of T.
-                    const constraint = getConstraintForRelation(<IndexedAccessType>target);
+                    // A type S is related to a type T[K] if S is related to C, where C is the
+                    // constraint of T[K]
+                    const constraint = getConstraintForRelation(target);
                     if (constraint) {
                         if (result = isRelatedTo(source, constraint, reportErrors)) {
                             errorInfo = saveErrorInfo;
@@ -10361,20 +10361,20 @@ namespace ts {
                     const template = getTemplateTypeFromMappedType(target);
                     const modifiers = getMappedTypeModifiers(target);
                     if (!(modifiers & MappedTypeModifiers.ExcludeOptional)) {
-                    if (template.flags & TypeFlags.IndexedAccess && (<IndexedAccessType>template).objectType === source &&
-                        (<IndexedAccessType>template).indexType === getTypeParameterFromMappedType(target)) {
-                        return Ternary.True;
-                    }
-                    // A source type T is related to a target type { [P in keyof T]: X } if T[P] is related to X.
-                    if (!isGenericMappedType(source) && getConstraintTypeFromMappedType(target) === getIndexType(source)) {
-                        const indexedAccessType = getIndexedAccessType(source, getTypeParameterFromMappedType(target));
-                        const templateType = getTemplateTypeFromMappedType(target);
-                        if (result = isRelatedTo(indexedAccessType, templateType, reportErrors)) {
-                            errorInfo = saveErrorInfo;
-                            return result;
+                        if (template.flags & TypeFlags.IndexedAccess && (<IndexedAccessType>template).objectType === source &&
+                            (<IndexedAccessType>template).indexType === getTypeParameterFromMappedType(target)) {
+                            return Ternary.True;
+                        }
+                        // A source type T is related to a target type { [P in keyof T]: X } if T[P] is related to X.
+                        if (!isGenericMappedType(source) && getConstraintTypeFromMappedType(target) === getIndexType(source)) {
+                            const indexedAccessType = getIndexedAccessType(source, getTypeParameterFromMappedType(target));
+                            const templateType = getTemplateTypeFromMappedType(target);
+                            if (result = isRelatedTo(indexedAccessType, templateType, reportErrors)) {
+                                errorInfo = saveErrorInfo;
+                                return result;
+                            }
                         }
                     }
-                }
                 }
 
                 if (source.flags & TypeFlags.TypeParameter) {
@@ -10393,20 +10393,21 @@ namespace ts {
                     }
                 }
                 else if (source.flags & TypeFlags.IndexedAccess) {
-                    // A type S[K] is related to a type T if A[K] is related to T, where K is string-like and
-                    // A is the apparent type of S.
-                    const constraint = getConstraintForRelation(<IndexedAccessType>source);
-                    if (constraint) {
-                        if (result = isRelatedTo(constraint, target, reportErrors)) {
-                            errorInfo = saveErrorInfo;
-                            return result;
-                        }
-                    }
-                    else if (target.flags & TypeFlags.IndexedAccess) {
+                    if (target.flags & TypeFlags.IndexedAccess) {
+                        // A type S[K] is related to a type T[J] if S is related to T and K is related to J.
                         if (result = isRelatedTo((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType, reportErrors)) {
                             result &= isRelatedTo((<IndexedAccessType>source).indexType, (<IndexedAccessType>target).indexType, reportErrors);
                         }
                         if (result) {
+                            errorInfo = saveErrorInfo;
+                            return result;
+                        }
+                    }
+                    // A type S[K] is related to a type T if C is related to T, where C is the
+                    // constraint of S[K].
+                    const constraint = getConstraintForRelation(<IndexedAccessType>source);
+                    if (constraint) {
+                        if (result = isRelatedTo(constraint, target, reportErrors)) {
                             errorInfo = saveErrorInfo;
                             return result;
                         }
@@ -19917,7 +19918,8 @@ namespace ts {
                     // this a literal context for literals of that primitive type. For example, given a
                     // type parameter 'T extends string', infer string literal types for T.
                     const constraint = getBaseConstraintOfType(contextualType) || emptyObjectType;
-                    return constraint.flags & TypeFlags.String && maybeTypeOfKind(candidateType, TypeFlags.StringLiteral) ||
+                    return constraint === keyofConstraintType && maybeTypeOfKind(candidateType, TypeFlags.StringLiteral | TypeFlags.NumberLiteral | TypeFlags.UniqueESSymbol) ||
+                        constraint.flags & TypeFlags.String && maybeTypeOfKind(candidateType, TypeFlags.StringLiteral) ||
                         constraint.flags & TypeFlags.Number && maybeTypeOfKind(candidateType, TypeFlags.NumberLiteral) ||
                         constraint.flags & TypeFlags.Boolean && maybeTypeOfKind(candidateType, TypeFlags.BooleanLiteral) ||
                         constraint.flags & TypeFlags.ESSymbol && maybeTypeOfKind(candidateType, TypeFlags.UniqueESSymbol) ||
