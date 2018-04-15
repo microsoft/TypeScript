@@ -1,0 +1,66 @@
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(13,11): error TS2350: Only a void function can be called with the 'new' keyword.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(13,11): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(13,27): error TS1005: '(' expected.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(13,27): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(13,60): error TS1005: ')' expected.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(15,11): error TS2350: Only a void function can be called with the 'new' keyword.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(15,11): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(15,27): error TS1005: '(' expected.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(15,27): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(15,68): error TS1005: ')' expected.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(17,11): error TS2350: Only a void function can be called with the 'new' keyword.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(17,11): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(17,27): error TS1005: '(' expected.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(17,27): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(17,68): error TS1005: ')' expected.
+
+
+==== tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts (15 errors) ====
+    export interface SomethingTaggable {
+        <T>(t: TemplateStringsArray, ...args: T[]): SomethingNewable;
+    }
+    
+    export interface SomethingNewable {
+        new <T>(...args: T[]): any;
+    }
+    
+    declare const tag: SomethingTaggable;
+    
+    const a = new tag `${100} ${200}`<string>("hello", "world");
+    
+    const b = new tag<number> `${"hello"} ${"world"}`(100, 200);
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2350: Only a void function can be called with the 'new' keyword.
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+                              ~~~
+!!! error TS1005: '(' expected.
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures.
+                                                               ~
+!!! error TS1005: ')' expected.
+    
+    const c = new tag<number> `${100} ${200}`<string>("hello", "world");
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2350: Only a void function can be called with the 'new' keyword.
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+                              ~~~
+!!! error TS1005: '(' expected.
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures.
+                                                                       ~
+!!! error TS1005: ')' expected.
+    
+    const d = new tag<number> `${"hello"} ${"world"}`<string>(100, 200);
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2350: Only a void function can be called with the 'new' keyword.
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+                              ~~~
+!!! error TS1005: '(' expected.
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures.
+                                                                       ~
+!!! error TS1005: ')' expected.
+    
