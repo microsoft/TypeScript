@@ -3187,13 +3187,14 @@ namespace ts {
     export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
 
     /* @internal */
-    export type AnyImportOrReExport = AnyImportSyntax | ExportDeclaration;
+    export type AnyImportOrReExport = AnyImportSyntax | ExportDeclaration | ImportTypeNode;
 
     /* @internal */
     export type AnyValidImportOrReExport =
         | (ImportDeclaration | ExportDeclaration) & { moduleSpecifier: StringLiteral }
         | ImportEqualsDeclaration & { moduleReference: ExternalModuleReference & { expression: StringLiteral } }
-        | RequireOrImportCall;
+        | RequireOrImportCall
+        | ImportTypeNode & { argument: LiteralType };
 
     /* @internal */
     export type RequireOrImportCall = CallExpression & { arguments: [StringLiteralLike] };

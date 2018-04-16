@@ -215,6 +215,10 @@ namespace ts.FindAllReferences {
                 return;
             }
 
+            if (decl.kind === SyntaxKind.ImportType) {
+                return;
+            }
+
             // Ignore if there's a grammar error
             if (decl.moduleSpecifier.kind !== SyntaxKind.StringLiteral) {
                 return;
