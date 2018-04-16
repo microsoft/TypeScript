@@ -362,20 +362,11 @@ const builtGeneratedDiagnosticMessagesJSON = path.join(builtLocalDirectory, "dia
 
 // processDiagnosticMessages script
 gulp.task(processDiagnosticMessagesJs, /*help*/ false, [], () => {
-    const settings: tsc.Settings = getCompilerSettings({
-        target: "es5",
-        declaration: false,
-        removeComments: true,
-        noResolve: false,
-        stripInternal: false,
-        outFile: processDiagnosticMessagesJs
-    }, /*useBuiltCompiler*/ false);
-    return gulp.src(processDiagnosticMessagesTs)
+    const diagsProject = tsc.createProject('./scripts/processDiagnosticMessages.tsconfig.json');
+    return diagsProject.src()
         .pipe(newer(processDiagnosticMessagesJs))
-        .pipe(sourcemaps.init())
-        .pipe(tsc(settings))
-        .pipe(sourcemaps.write("."))
-        .pipe(gulp.dest("."));
+        .pipe(diagsProject())
+        .pipe(gulp.dest(scriptsDirectory));
 });
 
 // The generated diagnostics map; built for the compiler and for the "generate-diagnostics" task
