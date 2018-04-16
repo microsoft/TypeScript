@@ -493,7 +493,7 @@ namespace ts.textChanges {
                 }
                 else {
                     // `x => {}` -> `function f(x) {}`
-                    this.insertText(sourceFile, first(node.parameters).getStart(sourceFile), `function ${name} (`);
+                    this.insertText(sourceFile, first(node.parameters).getStart(sourceFile), `function ${name}(`);
                     // Replacing full range of arrow to get rid of the leading space -- replace ` =>` with `)`
                     this.replaceRange(sourceFile, arrow, createToken(SyntaxKind.CloseParenToken));
                 }
