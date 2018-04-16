@@ -20,9 +20,7 @@ namespace ts {
         let externalModule = false;
 
         function nextToken() {
-            if (currentToken) {
-                lastToken = currentToken;
-            }
+            lastToken = currentToken;
             currentToken = scanner.scan();
             if (currentToken === SyntaxKind.OpenBraceToken) {
                 braceNesting++;
