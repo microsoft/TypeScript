@@ -3,7 +3,7 @@
 // @allowJs: true
 
 // @Filename: /a.js
-////[|exports.f = function() {}|];
+////[|exports.f|] = function() {};
 ////exports.C = class {};
 ////exports.x = 0;
 ////exports.a1 = () => {};
