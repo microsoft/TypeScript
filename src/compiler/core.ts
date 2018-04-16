@@ -2668,14 +2668,15 @@ namespace ts {
 
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ReadonlyArray<string> {
         const needJsExtensions = options && options.allowJs;
-        let extensions: string[] = needJsExtensions ? [...allSupportedExtensions] : [...supportedTypeScriptExtensions];
 
-        if (extraFileExtensions) {
-            extensions = [
-                ...extensions,
-                ...extraFileExtensions.filter(x => x.scriptKind === ScriptKind.Deferred || needJsExtensions && isJavaScriptLike(x.scriptKind)).map(x => x.extension),
-            ];
+        if (!extraFileExtensions || extraFileExtensions.length === 0) {
+            return needJsExtensions ? allSupportedExtensions : supportedTypeScriptExtensions;
         }
+
+        const extensions = [
+            ...needJsExtensions ? allSupportedExtensions : supportedTypeScriptExtensions,
+            ...extraFileExtensions.filter(x => x.scriptKind === ScriptKind.Deferred || needJsExtensions && isJavaScriptLike(x.scriptKind)).map(x => x.extension)
+        ];
 
         return deduplicate(extensions, equateStringsCaseSensitive, compareStringsCaseSensitive);
     }
