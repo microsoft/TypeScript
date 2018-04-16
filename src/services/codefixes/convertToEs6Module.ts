@@ -13,7 +13,7 @@ namespace ts.codefix {
                 }
             });
             // No support for fix-all since this applies to the whole file at once anyway.
-            return [createCodeFixActionNoFixId(changes, Diagnostics.Convert_to_ES6_module)];
+            return [createCodeFixActionNoFixId("convertToEs6Module", changes, Diagnostics.Convert_to_ES6_module)];
         },
     });
 
@@ -114,8 +114,8 @@ namespace ts.codefix {
                         return false;
                     }
                     case SyntaxKind.BinaryExpression: {
-                        const { left, operatorToken, right } = expression as BinaryExpression;
-                        return operatorToken.kind === SyntaxKind.EqualsToken && convertAssignment(sourceFile, checker, statement as ExpressionStatement, left, right, changes, exports);
+                        const { operatorToken } = expression as BinaryExpression;
+                        return operatorToken.kind === SyntaxKind.EqualsToken && convertAssignment(sourceFile, checker, expression as BinaryExpression, changes, exports);
                     }
                 }
             }
@@ -144,7 +144,7 @@ namespace ts.codefix {
                 return convertPropertyAccessImport(name, initializer.name.text, initializer.expression.arguments[0], identifiers);
             }
             else {
-                // Move it out to its own variable statement.
+                // Move it out to its own variable statement. (This will not be used if `!foundImport`)
                 return createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([decl], declarationList.flags));
             }
         });
@@ -177,12 +177,11 @@ namespace ts.codefix {
     function convertAssignment(
         sourceFile: SourceFile,
         checker: TypeChecker,
-        statement: ExpressionStatement,
-        left: Expression,
-        right: Expression,
+        assignment: BinaryExpression,
         changes: textChanges.ChangeTracker,
         exports: ExportRenames,
     ): ModuleExportsChanged {
+        const { left, right } = assignment;
         if (!isPropertyAccessExpression(left)) {
             return false;
         }
@@ -190,7 +189,7 @@ namespace ts.codefix {
         if (isExportsOrModuleExportsOrAlias(sourceFile, left)) {
             if (isExportsOrModuleExportsOrAlias(sourceFile, right)) {
                 // `const alias = module.exports;` or `module.exports = alias;` can be removed.
-                changes.deleteNode(sourceFile, statement);
+                changes.deleteNode(sourceFile, assignment.parent);
             }
             else {
                 let newNodes = isObjectLiteralExpression(right) ? tryChangeModuleExportsObject(right) : undefined;
@@ -198,12 +197,12 @@ namespace ts.codefix {
                 if (!newNodes) {
                     ([newNodes, changedToDefaultExport] = convertModuleExportsToExportDefault(right, checker));
                 }
-                changes.replaceNodeWithNodes(sourceFile, statement, newNodes);
+                changes.replaceNodeWithNodes(sourceFile, assignment.parent, newNodes);
                 return changedToDefaultExport;
             }
         }
         else if (isExportsOrModuleExportsOrAlias(sourceFile, left.expression)) {
-            convertNamedExport(sourceFile, statement, left.name, right, changes, exports);
+            convertNamedExport(sourceFile, assignment as BinaryExpression & { left: PropertyAccessExpression }, changes, exports);
         }
 
         return false;
@@ -223,7 +222,7 @@ namespace ts.codefix {
                 case SyntaxKind.SpreadAssignment:
                     return undefined;
                 case SyntaxKind.PropertyAssignment:
-                    return !isIdentifier(prop.name) ? undefined : convertExportsDotXEquals(prop.name.text, prop.initializer);
+                    return !isIdentifier(prop.name) ? undefined : convertExportsDotXEquals_replaceNode(prop.name.text, prop.initializer);
                 case SyntaxKind.MethodDeclaration:
                     return !isIdentifier(prop.name) ? undefined : functionExpressionToDeclaration(prop.name.text, [createToken(SyntaxKind.ExportKeyword)], prop);
                 default:
@@ -234,14 +233,12 @@ namespace ts.codefix {
 
     function convertNamedExport(
         sourceFile: SourceFile,
-        statement: Statement,
-        propertyName: Identifier,
-        right: Expression,
+        assignment: BinaryExpression & { left: PropertyAccessExpression },
         changes: textChanges.ChangeTracker,
         exports: ExportRenames,
     ): void {
         // If "originalKeywordKind" was set, this is e.g. `exports.
-        const { text } = propertyName;
+        const { text } = assignment.left.name;
         const rename = exports.get(text);
         if (rename !== undefined) {
             /*
@@ -249,13 +246,13 @@ namespace ts.codefix {
             export { _class as class };
             */
             const newNodes = [
-                makeConst(/*modifiers*/ undefined, rename, right),
+                makeConst(/*modifiers*/ undefined, rename, assignment.right),
                 makeExportDeclaration([createExportSpecifier(rename, text)]),
             ];
-            changes.replaceNodeWithNodes(sourceFile, statement, newNodes);
+            changes.replaceNodeWithNodes(sourceFile, assignment.parent, newNodes);
         }
         else {
-            changes.replaceNode(sourceFile, statement, convertExportsDotXEquals(text, right));
+            convertExportsPropertyAssignment(assignment, sourceFile, changes);
         }
     }
 
@@ -303,7 +300,27 @@ namespace ts.codefix {
         return makeExportDeclaration([createExportSpecifier(/*propertyName*/ undefined, "default")], moduleSpecifier);
     }
 
-    function convertExportsDotXEquals(name: string | undefined, exported: Expression): Statement {
+    function convertExportsPropertyAssignment({ left, right, parent }: BinaryExpression & { left: PropertyAccessExpression }, sourceFile: SourceFile, changes: textChanges.ChangeTracker): void {
+        const name = left.name.text;
+        if ((isFunctionExpression(right) || isArrowFunction(right) || isClassExpression(right)) && (!right.name || right.name.text === name)) {
+            // `exports.f = function() {}` -> `export function f() {}` -- Replace `exports.f = ` with `export `, and insert the name after `function`.
+            changes.replaceRange(sourceFile, { pos: left.getStart(sourceFile), end: right.getStart(sourceFile) }, createToken(SyntaxKind.ExportKeyword), { suffix: " " });
+
+            if (!right.name) changes.insertName(sourceFile, right, name);
+
+            const semi = findChildOfKind(parent, SyntaxKind.SemicolonToken, sourceFile);
+            if (semi) changes.deleteNode(sourceFile, semi, { useNonAdjustedEndPosition: true });
+        }
+        else {
+            // `exports.f = function g() {}` -> `export const f = function g() {}` -- just replace `exports.` with `export const `
+            changes.replaceNodeRangeWithNodes(sourceFile, left.expression, findChildOfKind(left, SyntaxKind.DotToken, sourceFile)!,
+                [createToken(SyntaxKind.ExportKeyword), createToken(SyntaxKind.ConstKeyword)],
+                { joiner: " ", suffix: " " });
+        }
+    }
+
+    // TODO: GH#22492 this will cause an error if a change has been made inside the body of the node.
+    function convertExportsDotXEquals_replaceNode(name: string | undefined, exported: Expression): Statement {
         const modifiers = [createToken(SyntaxKind.ExportKeyword)];
         switch (exported.kind) {
             case SyntaxKind.FunctionExpression: {

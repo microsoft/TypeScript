@@ -1,6 +1,3 @@
-/// <reference path="shared.ts" />
-/// <reference path="session.ts" />
-
 namespace ts.server {
     const childProcess: {
         fork(modulePath: string, args: string[], options?: { execArgv: string[], env?: MapLike<string> }): NodeChildProcess;
@@ -209,12 +206,6 @@ namespace ts.server {
                 console.warn(s);
             }
         }
-    }
-
-    // E.g. "12:34:56.789"
-    function nowString() {
-        const d = new Date();
-        return `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}.${d.getMilliseconds()}`;
     }
 
     interface QueuedOperation {

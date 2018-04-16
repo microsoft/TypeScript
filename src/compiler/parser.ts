@@ -1,6 +1,3 @@
-/// <reference path="utilities.ts"/>
-/// <reference path="scanner.ts"/>
-
 namespace ts {
     const enum SignatureFlags {
         None = 0,
@@ -6361,8 +6358,8 @@ namespace ts {
                             case "arg":
                             case "argument":
                             case "param":
-                                tag = parseParameterOrPropertyTag(atToken, tagName, PropertyLikeParse.Parameter);
-                                break;
+                                addTag(parseParameterOrPropertyTag(atToken, tagName, PropertyLikeParse.Parameter, indent));
+                                return;
                             case "return":
                             case "returns":
                                 tag = parseReturnTag(atToken, tagName);
@@ -6511,7 +6508,7 @@ namespace ts {
                     }
                 }
 
-                function parseParameterOrPropertyTag(atToken: AtToken, tagName: Identifier, target: PropertyLikeParse): JSDocParameterTag | JSDocPropertyTag {
+                function parseParameterOrPropertyTag(atToken: AtToken, tagName: Identifier, target: PropertyLikeParse, indent: number | undefined): JSDocParameterTag | JSDocPropertyTag {
                     let typeExpression = tryParseTypeExpression();
                     let isNameFirst = !typeExpression;
                     skipWhitespace();
@@ -6526,6 +6523,8 @@ namespace ts {
                     const result = target === PropertyLikeParse.Parameter ?
                         <JSDocParameterTag>createNode(SyntaxKind.JSDocParameterTag, atToken.pos) :
                         <JSDocPropertyTag>createNode(SyntaxKind.JSDocPropertyTag, atToken.pos);
+                    let comment: string | undefined;
+                    if (indent !== undefined) comment = parseTagComments(indent + scanner.getStartPos() - atToken.pos);
                     const nestedTypeLiteral = parseNestedTypeLiteral(typeExpression, name, target);
                     if (nestedTypeLiteral) {
                         typeExpression = nestedTypeLiteral;
@@ -6537,6 +6536,7 @@ namespace ts {
                     result.name = name;
                     result.isNameFirst = isNameFirst;
                     result.isBracketed = isBracketed;
+                    result.comment = comment;
                     return finishNode(result);
                 }
 
@@ -6783,7 +6783,7 @@ namespace ts {
                     if (target !== t) {
                         return false;
                     }
-                    const tag = parseParameterOrPropertyTag(atToken, tagName, target);
+                    const tag = parseParameterOrPropertyTag(atToken, tagName, target, /*indent*/ undefined);
                     tag.comment = parseTagComments(tag.end - tag.pos);
                     return tag;
                 }
@@ -7600,7 +7600,7 @@ namespace ts {
     const tripleSlashXMLCommentStartRegEx = /^\/\/\/\s*<(\S+)\s.*?\/>/im;
     const singleLinePragmaRegEx = /^\/\/\/?\s*@(\S+)\s*(.*)\s*$/im;
     function extractPragmas(pragmas: PragmaPsuedoMapEntry[], range: CommentRange, text: string) {
-        const tripleSlash = tripleSlashXMLCommentStartRegEx.exec(text);
+        const tripleSlash = range.kind === SyntaxKind.SingleLineCommentTrivia && tripleSlashXMLCommentStartRegEx.exec(text);
         if (tripleSlash) {
             const name = tripleSlash[1].toLowerCase() as keyof PragmaPsuedoMap; // Technically unsafe cast, but we do it so the below check to make it safe typechecks
             const pragma = commentPragmas[name] as PragmaDefinition;
@@ -7637,15 +7637,17 @@ namespace ts {
             return;
         }
 
-        const singleLine = singleLinePragmaRegEx.exec(text);
+        const singleLine = range.kind === SyntaxKind.SingleLineCommentTrivia && singleLinePragmaRegEx.exec(text);
         if (singleLine) {
             return addPragmaForMatch(pragmas, range, PragmaKindFlags.SingleLine, singleLine);
         }
 
-        const multiLinePragmaRegEx = /\s*@(\S+)\s*(.*)\s*$/gim; // Defined inline since it uses the "g" flag, which keeps a persistent index (for iterating)
-        let multiLineMatch: RegExpExecArray;
-        while (multiLineMatch = multiLinePragmaRegEx.exec(text)) {
-            addPragmaForMatch(pragmas, range, PragmaKindFlags.MultiLine, multiLineMatch);
+        if (range.kind === SyntaxKind.MultiLineCommentTrivia) {
+            const multiLinePragmaRegEx = /\s*@(\S+)\s*(.*)\s*$/gim; // Defined inline since it uses the "g" flag, which keeps a persistent index (for iterating)
+            let multiLineMatch: RegExpExecArray;
+            while (multiLineMatch = multiLinePragmaRegEx.exec(text)) {
+                addPragmaForMatch(pragmas, range, PragmaKindFlags.MultiLine, multiLineMatch);
+            }
         }
     }
 

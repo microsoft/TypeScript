@@ -1,1 +1,1 @@
-/// <reference path="extractSymbol.ts" />
+// Please delete me later.

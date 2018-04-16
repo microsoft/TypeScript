@@ -1,7 +1,3 @@
-/// <reference path="../factory.ts" />
-/// <reference path="../visitor.ts" />
-/// <reference path="./esnext.ts" />
-
 /*@internal*/
 namespace ts {
     export function transformJsx(context: TransformationContext) {

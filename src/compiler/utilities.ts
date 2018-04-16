@@ -1,5 +1,3 @@
-/// <reference path="sys.ts" />
-
 /* @internal */
 namespace ts {
     export const resolvingEmptyArray: never[] = [] as never[];
@@ -540,6 +538,17 @@ namespace ts {
         switch (node.kind) {
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ImportEqualsDeclaration:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    export function isLateVisibilityPaintedStatement(node: Node): node is LateVisibilityPaintedStatement {
+        switch (node.kind) {
+            case SyntaxKind.ImportDeclaration:
+            case SyntaxKind.ImportEqualsDeclaration:
+            case SyntaxKind.VariableStatement:
                 return true;
             default:
                 return false;
@@ -3028,6 +3037,10 @@ namespace ts {
         return (node as HasType).type || (isInJavaScriptFile(node) ? getJSDocType(node) : undefined);
     }
 
+    export function getTypeAnnotationNode(node: Node): TypeNode | undefined {
+        return (node as HasType).type;
+    }
+
     /**
      * Gets the effective return type annotation of a signature. If the node was parsed in a
      * JavaScript file, gets the return type annotation from JSDoc.
@@ -4262,8 +4275,9 @@ namespace ts {
         }
     }
 
-    export function isParameterPropertyDeclaration(node: Node): boolean {
-        return hasModifier(node, ModifierFlags.ParameterPropertyModifier) && node.parent.kind === SyntaxKind.Constructor && isClassLike(node.parent.parent);
+    export type ParameterPropertyDeclaration = ParameterDeclaration & { parent: ConstructorDeclaration, name: Identifier };
+    export function isParameterPropertyDeclaration(node: Node): node is ParameterPropertyDeclaration {
+        return hasModifier(node, ModifierFlags.ParameterPropertyModifier) && node.parent.kind === SyntaxKind.Constructor;
     }
 
     export function isEmptyBindingPattern(node: BindingName): node is BindingPattern {
@@ -4621,11 +4635,21 @@ namespace ts {
      * parameters by name and binding patterns do not have a name.
      */
     export function getJSDocParameterTags(param: ParameterDeclaration): ReadonlyArray<JSDocParameterTag> {
-        if (param.name && isIdentifier(param.name)) {
-            const name = param.name.escapedText;
-            return getJSDocTags(param.parent).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && isIdentifier(tag.name) && tag.name.escapedText === name);
+        if (param.name) {
+            if (isIdentifier(param.name)) {
+                const name = param.name.escapedText;
+                return getJSDocTags(param.parent).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && isIdentifier(tag.name) && tag.name.escapedText === name);
+            }
+            else {
+                const i = param.parent.parameters.indexOf(param);
+                Debug.assert(i > -1, "Parameters should always be in their parents' parameter list");
+                const paramTags = getJSDocTags(param.parent).filter(isJSDocParameterTag);
+                if (i < paramTags.length) {
+                    return [paramTags[i]];
+                }
+            }
         }
-        // a binding pattern doesn't have a name, so it's not possible to match it a JSDoc parameter, which is identified by name
+        // return empty array for: out-of-order binding patterns and JSDoc function syntax, which has un-named parameters
         return emptyArray;
     }
 
@@ -5618,6 +5642,10 @@ namespace ts {
             || kind === SyntaxKind.MissingDeclaration;
     }
 
+    export function isClassOrTypeElement(node: Node): node is ClassElement | TypeElement {
+        return isTypeElement(node) || isClassElement(node);
+    }
+
     export function isObjectLiteralElementLike(node: Node): node is ObjectLiteralElementLike {
         const kind = node.kind;
         return kind === SyntaxKind.PropertyAssignment
@@ -6299,5 +6327,10 @@ namespace ts {
 
     export function isStringLiteralLike(node: Node): node is StringLiteralLike {
         return node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
+    }
+
+    /** @internal */
+    export function isNamedImportsOrExports(node: Node): node is NamedImportsOrExports {
+        return node.kind === SyntaxKind.NamedImports || node.kind === SyntaxKind.NamedExports;
     }
 }

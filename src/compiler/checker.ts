@@ -1,7 +1,3 @@
-/// <reference path="moduleNameResolver.ts"/>
-/// <reference path="binder.ts"/>
-/// <reference path="symbolWalker.ts" />
-
 /* @internal */
 namespace ts {
     const ambientModuleSymbolRegex = /^".+"$/;
@@ -2216,7 +2212,22 @@ namespace ts {
         // An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
         // and an external module with no 'export =' declaration resolves to the module itself.
         function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol {
-            return moduleSymbol && getMergedSymbol(resolveSymbol(moduleSymbol.exports.get(InternalSymbolName.ExportEquals), dontResolveAlias)) || moduleSymbol;
+            return moduleSymbol && getMergedSymbol(resolveSymbol(getCommonJsExportEquals(moduleSymbol), dontResolveAlias)) || moduleSymbol;
+        }
+
+        function getCommonJsExportEquals(moduleSymbol: Symbol): Symbol {
+            const exported = moduleSymbol.exports.get(InternalSymbolName.ExportEquals);
+            if (!exported || !exported.exports || moduleSymbol.exports.size === 1) {
+                return exported;
+            }
+            const merged = cloneSymbol(exported);
+            moduleSymbol.exports.forEach((s, name) => {
+                if (name === InternalSymbolName.ExportEquals) return;
+                if (!merged.exports.has(name)) {
+                    merged.exports.set(name, s);
+                }
+            });
+            return merged;
         }
 
         // An external module with an 'export =' declaration may be referenced as an ES6 module provided the 'export ='
@@ -2740,7 +2751,7 @@ namespace ts {
         }
 
         function hasVisibleDeclarations(symbol: Symbol, shouldComputeAliasToMakeVisible: boolean): SymbolVisibilityResult {
-            let aliasesToMakeVisible: AnyImportSyntax[];
+            let aliasesToMakeVisible: LateVisibilityPaintedStatement[];
             if (forEach(symbol.declarations, declaration => !getIsDeclarationVisible(declaration))) {
                 return undefined;
             }
@@ -2754,21 +2765,30 @@ namespace ts {
                     const anyImportSyntax = getAnyImportSyntax(declaration);
                     if (anyImportSyntax &&
                         !hasModifier(anyImportSyntax, ModifierFlags.Export) && // import clause without export
-                        isDeclarationVisible(<Declaration>anyImportSyntax.parent)) {
-                        // In function "buildTypeDisplay" where we decide whether to write type-alias or serialize types,
-                        // we want to just check if type- alias is accessible or not but we don't care about emitting those alias at that time
-                        // since we will do the emitting later in trackSymbol.
-                        if (shouldComputeAliasToMakeVisible) {
-                            getNodeLinks(declaration).isVisible = true;
-                            aliasesToMakeVisible = appendIfUnique(aliasesToMakeVisible, anyImportSyntax);
-                        }
-                        return true;
+                        isDeclarationVisible(anyImportSyntax.parent)) {
+                        return addVisibleAlias(declaration, anyImportSyntax);
+                    }
+                    else if (isVariableDeclaration(declaration) && isVariableStatement(declaration.parent.parent) &&
+                        !hasModifier(declaration.parent.parent, ModifierFlags.Export) && // unexported variable statement
+                        isDeclarationVisible(declaration.parent.parent.parent)) {
+                        return addVisibleAlias(declaration, declaration.parent.parent);
                     }
 
                     // Declaration is not visible
                     return false;
                 }
 
+                return true;
+            }
+
+            function addVisibleAlias(declaration: Declaration, aliasingStatement: LateVisibilityPaintedStatement) {
+                // In function "buildTypeDisplay" where we decide whether to write type-alias or serialize types,
+                // we want to just check if type- alias is accessible or not but we don't care about emitting those alias at that time
+                // since we will do the emitting later in trackSymbol.
+                if (shouldComputeAliasToMakeVisible) {
+                    getNodeLinks(declaration).isVisible = true;
+                    aliasesToMakeVisible = appendIfUnique(aliasesToMakeVisible, aliasingStatement);
+                }
                 return true;
             }
         }
@@ -3835,7 +3855,7 @@ namespace ts {
             return symbolName(symbol);
         }
 
-        function isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean {
+        function isDeclarationVisible(node: Node): boolean {
             if (node) {
                 const links = getNodeLinks(node);
                 if (links.isVisible === undefined) {
@@ -3849,7 +3869,7 @@ namespace ts {
             function determineIfDeclarationIsVisible() {
                 switch (node.kind) {
                     case SyntaxKind.BindingElement:
-                        return isDeclarationVisible(<Declaration>node.parent.parent);
+                        return isDeclarationVisible(node.parent.parent);
                     case SyntaxKind.VariableDeclaration:
                         if (isBindingPattern((node as VariableDeclaration).name) &&
                             !((node as VariableDeclaration).name as BindingPattern).elements.length) {
@@ -3875,7 +3895,7 @@ namespace ts {
                             return isGlobalSourceFile(parent);
                         }
                         // Exported members/ambient module elements (exception import declaration) are visible if parent is visible
-                        return isDeclarationVisible(<Declaration>parent);
+                        return isDeclarationVisible(parent);
 
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.PropertySignature:
@@ -3905,7 +3925,7 @@ namespace ts {
                     case SyntaxKind.UnionType:
                     case SyntaxKind.IntersectionType:
                     case SyntaxKind.ParenthesizedType:
-                        return isDeclarationVisible(<Declaration>node.parent);
+                        return isDeclarationVisible(node.parent);
 
                     // Default binding, import specifier and namespace import is visible
                     // only on demand so by default it is not visible
@@ -4150,14 +4170,17 @@ namespace ts {
                 else {
                     // Use explicitly specified property name ({ p: xxx } form), or otherwise the implied name ({ p } form)
                     const name = declaration.propertyName || <Identifier>declaration.name;
-                    if (isComputedNonLiteralName(name)) {
-                        // computed properties with non-literal names are treated as 'any'
+                    const isLate = isLateBindableName(name);
+                    const isWellKnown = isComputedPropertyName(name) && isWellKnownSymbolSyntactically(name.expression);
+                    if (!isLate && !isWellKnown && isComputedNonLiteralName(name)) {
                         return anyType;
                     }
 
                     // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
                     // or otherwise the type of the string index signature.
-                    const text = getTextOfPropertyName(name);
+                    const text = isLate ? getLateBoundNameFromType(checkComputedPropertyName(name as ComputedPropertyName) as LiteralType | UniqueESSymbolType) :
+                        isWellKnown ? getPropertyNameForKnownSymbolName(idText(((name as ComputedPropertyName).expression as PropertyAccessExpression).name)) :
+                        getTextOfPropertyName(name);
 
                     // Relax null check on ambient destructuring parameters, since the parameters have no implementation and are just documentation
                     if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
@@ -4343,14 +4366,15 @@ namespace ts {
             for (const declaration of symbol.declarations) {
                 let declarationInConstructor = false;
                 const expression = declaration.kind === SyntaxKind.BinaryExpression ? <BinaryExpression>declaration :
-                    declaration.kind === SyntaxKind.PropertyAccessExpression ? <BinaryExpression>getAncestor(declaration, SyntaxKind.BinaryExpression) :
+                    declaration.kind === SyntaxKind.PropertyAccessExpression ? cast(declaration.parent, isBinaryExpression) :
                         undefined;
 
                 if (!expression) {
                     return unknownType;
                 }
 
-                if (isPropertyAccessExpression(expression.left) && expression.left.expression.kind === SyntaxKind.ThisKeyword) {
+                const special = getSpecialPropertyAssignmentKind(expression);
+                if (special === SpecialPropertyAssignmentKind.ThisProperty) {
                     const thisContainer = getThisContainer(expression, /*includeArrowFunctions*/ false);
                     // Properties defined in a constructor (or javascript constructor function) don't get undefined added.
                     // Function expressions that are assigned to the prototype count as methods.
@@ -4380,7 +4404,33 @@ namespace ts {
                 }
                 else if (!jsDocType) {
                     // If we don't have an explicit JSDoc type, get the type from the expression.
-                    const type = getWidenedLiteralType(checkExpressionCached(expression.right));
+                    let type = getWidenedLiteralType(checkExpressionCached(expression.right));
+
+                    if (getObjectFlags(type) & ObjectFlags.Anonymous &&
+                        special === SpecialPropertyAssignmentKind.ModuleExports &&
+                        symbol.escapedName === InternalSymbolName.ExportEquals) {
+                        const exportedType = resolveStructuredTypeMembers(type as AnonymousType);
+                        const members = createSymbolTable();
+                        copyEntries(exportedType.members, members);
+                        symbol.exports.forEach((s, name) => {
+                            if (members.has(name)) {
+                                const exportedMember = exportedType.members.get(name);
+                                const union = createSymbol(s.flags | exportedMember.flags, name);
+                                union.type = getUnionType([getTypeOfSymbol(s), getTypeOfSymbol(exportedMember)]);
+                                members.set(name, union);
+                            }
+                            else {
+                                members.set(name, s);
+                            }
+                        });
+                        type = createAnonymousType(
+                            exportedType.symbol,
+                            members,
+                            exportedType.callSignatures,
+                            exportedType.constructSignatures,
+                            exportedType.stringIndexInfo,
+                            exportedType.numberIndexInfo);
+                    }
                     let anyedType = type;
                     if (isEmptyArrayLiteralType(type)) {
                         anyedType = anyArrayType;
@@ -7158,15 +7208,15 @@ namespace ts {
             return symbol.members.get(InternalSymbolName.Index);
         }
 
-        function getIndexDeclarationOfSymbol(symbol: Symbol, kind: IndexKind): SignatureDeclaration {
+        function getIndexDeclarationOfSymbol(symbol: Symbol, kind: IndexKind): IndexSignatureDeclaration {
             const syntaxKind = kind === IndexKind.Number ? SyntaxKind.NumberKeyword : SyntaxKind.StringKeyword;
             const indexSymbol = getIndexSymbol(symbol);
             if (indexSymbol) {
                 for (const decl of indexSymbol.declarations) {
-                    const node = <SignatureDeclaration>decl;
+                    const node = cast(decl, isIndexSignatureDeclaration);
                     if (node.parameters.length === 1) {
                         const parameter = node.parameters[0];
-                        if (parameter && parameter.type && parameter.type.kind === syntaxKind) {
+                        if (parameter.type && parameter.type.kind === syntaxKind) {
                             return node;
                         }
                     }
@@ -7176,7 +7226,7 @@ namespace ts {
             return undefined;
         }
 
-        function createIndexInfo(type: Type, isReadonly: boolean, declaration?: SignatureDeclaration): IndexInfo {
+        function createIndexInfo(type: Type, isReadonly: boolean, declaration?: IndexSignatureDeclaration): IndexInfo {
             return { type, isReadonly, declaration };
         }
 
@@ -13828,7 +13878,8 @@ namespace ts {
             const assignmentKind = getAssignmentTargetKind(node);
 
             if (assignmentKind) {
-                if (!(localOrExportSymbol.flags & SymbolFlags.Variable)) {
+                if (!(localOrExportSymbol.flags & SymbolFlags.Variable) &&
+                    !(isInJavaScriptFile(node) && localOrExportSymbol.flags & SymbolFlags.ValueModule)) {
                     error(node, Diagnostics.Cannot_assign_to_0_because_it_is_not_a_variable, symbolToString(symbol));
                     return unknownType;
                 }
@@ -16616,12 +16667,18 @@ namespace ts {
                     }
                 }
             }
-            const suggestion = getSuggestionForNonexistentProperty(propNode, containingType);
-            if (suggestion !== undefined) {
-                errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, declarationNameToString(propNode), typeToString(containingType), suggestion);
+            const promisedType = getPromisedTypeOfPromise(containingType);
+            if (promisedType && getPropertyOfType(promisedType, propNode.escapedText)) {
+                errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_forget_to_use_await, declarationNameToString(propNode), typeToString(containingType));
             }
             else {
-                errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(containingType));
+                const suggestion = getSuggestionForNonexistentProperty(propNode, containingType);
+                if (suggestion !== undefined) {
+                    errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, declarationNameToString(propNode), typeToString(containingType), suggestion);
+                }
+                else {
+                    errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(containingType));
+                }
             }
             diagnostics.add(createDiagnosticForNodeFromMessageChain(propNode, errorInfo));
         }
@@ -19033,6 +19090,9 @@ namespace ts {
 
             const links = getNodeLinks(node);
             const type = getTypeOfSymbol(node.symbol);
+            if (isTypeAny(type)) {
+                return type;
+            }
 
             // Check if function expression is contextually typed and assign parameter types if so.
             if (!(links.flags & NodeCheckFlags.ContextChecked)) {
@@ -19795,8 +19855,9 @@ namespace ts {
                     //    VarExpr = ValueExpr
                     // requires VarExpr to be classified as a reference
                     // A compound assignment furthermore requires VarExpr to be classified as a reference (section 4.1)
-                    // and the type of the non - compound operation to be assignable to the type of VarExpr.
-                    if (checkReferenceExpression(left, Diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access)) {
+                    // and the type of the non-compound operation to be assignable to the type of VarExpr.
+                    if (checkReferenceExpression(left, Diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access)
+                        && (!isIdentifier(left) || unescapeLeadingUnderscores(left.escapedText) !== "exports")) {
                         // to avoid cascading errors check assignability only if 'isReference' check succeeded and no errors were reported
                         checkTypeAssignableTo(valueType, leftType, left, /*headMessage*/ undefined);
                     }
@@ -21814,6 +21875,10 @@ namespace ts {
                 // and give a better error message when the host function mentions `arguments`
                 // but the tag doesn't have an array type
                 if (decl) {
+                    const i = getJSDocTags(decl).filter(isJSDocParameterTag).indexOf(node);
+                    if (i > -1 && i < decl.parameters.length && isBindingPattern(decl.parameters[i].name)) {
+                        return;
+                    }
                     if (!containsArgumentsReference(decl)) {
                         error(node.name,
                             Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name,
@@ -24568,7 +24633,7 @@ namespace ts {
                 const exportEqualsSymbol = moduleSymbol.exports.get("export=" as __String);
                 if (exportEqualsSymbol && hasExportedMembers(moduleSymbol)) {
                     const declaration = getDeclarationOfAliasSymbol(exportEqualsSymbol) || exportEqualsSymbol.valueDeclaration;
-                    if (!isTopLevelInExternalModuleAugmentation(declaration)) {
+                    if (!isTopLevelInExternalModuleAugmentation(declaration) && !isInJavaScriptFile(declaration)) {
                         error(declaration, Diagnostics.An_export_assignment_cannot_be_used_in_a_module_with_other_exported_elements);
                     }
                 }
@@ -24649,7 +24714,6 @@ namespace ts {
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
-                    return checkSignatureDeclaration(<SignatureDeclaration>node);
                 case SyntaxKind.IndexSignature:
                     return checkSignatureDeclaration(<SignatureDeclaration>node);
                 case SyntaxKind.MethodDeclaration:
@@ -24769,8 +24833,6 @@ namespace ts {
                 case SyntaxKind.ExportAssignment:
                     return checkExportAssignment(<ExportAssignment>node);
                 case SyntaxKind.EmptyStatement:
-                    checkGrammarStatementInAmbientContext(node);
-                    return;
                 case SyntaxKind.DebuggerStatement:
                     checkGrammarStatementInAmbientContext(node);
                     return;
@@ -25448,9 +25510,6 @@ namespace ts {
         }
 
         function getShorthandAssignmentValueSymbol(location: Node): Symbol {
-            // The function returns a value symbol of an identifier in the short-hand property assignment.
-            // This is necessary as an identifier in short-hand property assignment can contains two meaning:
-            // property name and property value.
             if (location && location.kind === SyntaxKind.ShorthandPropertyAssignment) {
                 return resolveEntityName((<ShorthandPropertyAssignment>location).name, SymbolFlags.Value | SymbolFlags.Alias);
             }

@@ -27,11 +27,4 @@
 // @Filename: ambient.ts
 //// declare module "fake-module/other"
 
-const kinds = ["import_as", "import_equals", "require"];
-
-for (const kind of kinds) {
-    goTo.marker(kind + "0");
-    verify.completionListContains("repeated");
-    verify.completionListContains("other");
-    verify.not.completionListItemsCountIsGreaterThan(2);
-}
+verify.completionsAt(["import_as0", "import_equals0", "require0"], ["other", "repeated"], { isNewIdentifierLocation: true })
