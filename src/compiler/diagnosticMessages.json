@@ -4280,5 +4280,17 @@
     "Remove all unused labels": {
         "category": "Message",
         "code": 95054
+    },
+    "Convert arrow function": {
+        "category": "Message",
+        "code": 95055
+    },
+    "Add braces to arrow function": {
+        "category": "Message",
+        "code": 95056
+    },
+    "Remove braces from arrow function": {
+        "category": "Message",
+        "code": 95057
     }
 }

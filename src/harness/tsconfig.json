@@ -121,6 +121,7 @@
         "../services/refactors/extractSymbol.ts",
         "../services/refactors/generateGetAccessorAndSetAccessor.ts",
         "../services/refactors/moveToNewFile.ts",
+        "../services/refactors/convertArrowFunction.ts",
         "../services/sourcemaps.ts",
         "../services/services.ts",
         "../services/breakpoints.ts",
