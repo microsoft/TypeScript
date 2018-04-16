@@ -3231,7 +3231,7 @@ Actual: ${stringify(fullActual)}`);
 
                 const availableNames: string[] = [];
                 const result = ts.forEach(this.testData.files, file => {
-                    const fn = file.fileName;
+                    const fn = ts.normalizePath(file.fileName);
                     if (fn) {
                         if (fn === name) {
                             return file;
