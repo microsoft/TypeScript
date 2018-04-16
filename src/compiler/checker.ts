@@ -6035,7 +6035,7 @@ namespace ts {
                 (<TypeOperatorNode>constraintDeclaration).operator === SyntaxKind.KeyOfKeyword) {
                 // We have a { [P in keyof T]: X }
                 for (const prop of getPropertiesOfType(modifiersType)) {
-                    addMemberForKeyType(getLiteralTypeFromPropertyName(prop, include), undefined, prop);
+                    addMemberForKeyType(getLiteralTypeFromPropertyName(prop, include), /*_index*/ undefined, prop);
                 }
                 if (modifiersType.flags & TypeFlags.Any || getIndexInfoOfType(modifiersType, IndexKind.String)) {
                     addMemberForKeyType(stringType);
@@ -6062,7 +6062,7 @@ namespace ts {
                 const propType = instantiateType(templateType, templateMapper);
                 // If the current iteration type constituent is a string literal type, create a property.
                 // Otherwise, for type string create a string index signature.
-                if (t.flags & TypeFlags.StringLiteral) {
+                if (t.flags & TypeFlags.StringOrNumberLiteralOrUnique) {
                     const propName = getLateBoundNameFromType(t as LiteralType);
                     const modifiersProp = getPropertyOfType(modifiersType, propName);
                     const isOptional = !!(templateModifiers & MappedTypeModifiers.IncludeOptional ||
@@ -6511,7 +6511,7 @@ namespace ts {
             let declarations: Declaration[];
             let commonType: Type;
             let nameType: Type;
-            let propTypes: Type[] = [];
+            const propTypes: Type[] = [];
             let first = true;
             for (const prop of props) {
                 declarations = addRange(declarations, prop.declarations);
@@ -8146,7 +8146,7 @@ namespace ts {
                 type.flags & TypeFlags.Any || getIndexInfoOfType(type, IndexKind.String) ? keyofConstraintType :
                 keyofStringsOnly ? getLiteralTypeFromPropertyNames(type, TypeFlags.StringLiteral) :
                 getNonEnumNumberIndexInfo(type) ? getUnionType([numberType, getLiteralTypeFromPropertyNames(type, TypeFlags.StringLiteral | TypeFlags.UniqueESSymbol)]) :
-                getLiteralTypeFromPropertyNames(type, TypeFlags.StringLiteral | TypeFlags.NumberLiteral | TypeFlags.UniqueESSymbol);
+                getLiteralTypeFromPropertyNames(type, TypeFlags.StringOrNumberLiteralOrUnique);
         }
 
         function getExtractStringType(type: Type) {
