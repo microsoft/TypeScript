@@ -1,6 +1,3 @@
-/// <reference path="core.ts"/>
-/// <reference path="utilities.ts"/>
-
 namespace ts {
     function createSynthesizedNode(kind: SyntaxKind): Node {
         const node = createNode(kind, -1, -1);

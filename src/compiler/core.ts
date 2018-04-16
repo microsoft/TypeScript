@@ -1,6 +1,3 @@
-/// <reference path="types.ts"/>
-/// <reference path="performance.ts" />
-
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
@@ -1314,12 +1311,13 @@ namespace ts {
      * the same key with the given 'makeKey' function, then the element with the higher
      * index in the array will be the one associated with the produced key.
      */
-    export function arrayToMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => string): Map<T>;
-    export function arrayToMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => string, makeValue: (value: T) => U): Map<U>;
-    export function arrayToMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => string, makeValue: (value: T) => T | U = identity): Map<T | U> {
+    export function arrayToMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => string | undefined): Map<T>;
+    export function arrayToMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => string | undefined, makeValue: (value: T) => U): Map<U>;
+    export function arrayToMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => string | undefined, makeValue: (value: T) => T | U = identity): Map<T | U> {
         const result = createMap<T | U>();
         for (const value of array) {
-            result.set(makeKey(value), makeValue(value));
+            const key = makeKey(value);
+            if (key !== undefined) result.set(key, makeValue(value));
         }
         return result;
     }
@@ -1340,8 +1338,9 @@ namespace ts {
      * @param array the array of input elements.
      */
     export function arrayToSet(array: ReadonlyArray<string>): Map<true>;
-    export function arrayToSet<T>(array: ReadonlyArray<T>, makeKey: (value: T) => string): Map<true>;
-    export function arrayToSet(array: ReadonlyArray<any>, makeKey?: (value: any) => string): Map<true> {
+    export function arrayToSet<T>(array: ReadonlyArray<T>, makeKey: (value: T) => string | undefined): Map<true>;
+    export function arrayToSet<T>(array: ReadonlyArray<T>, makeKey: (value: T) => __String | undefined): UnderscoreEscapedMap<true>;
+    export function arrayToSet(array: ReadonlyArray<any>, makeKey?: (value: any) => string | __String | undefined): Map<true> | UnderscoreEscapedMap<true> {
         return arrayToMap<any, true>(array, makeKey || (s => s), () => true);
     }
 
@@ -1722,6 +1721,10 @@ namespace ts {
      */
     export function compareValues(a: number, b: number) {
         return compareComparableValues(a, b);
+    }
+
+    export function min<T>(a: T, b: T, compare: Comparer<T>): T {
+        return compare(a, b) === Comparison.LessThan ? a : b;
     }
 
     /**
@@ -3119,8 +3122,8 @@ namespace ts {
         return (arg: T) => f(arg) && g(arg);
     }
 
-    export function or<T>(f: (arg: T) => boolean, g: (arg: T) => boolean, ...others: ((arg: T) => boolean)[]) {
-        return (arg: T) => f(arg) || g(arg) || others.some(f => f(arg));
+    export function or<T>(f: (arg: T) => boolean, g: (arg: T) => boolean): (arg: T) => boolean {
+        return arg => f(arg) || g(arg);
     }
 
     export function assertTypeIsNever(_: never): void { } // tslint:disable-line no-empty

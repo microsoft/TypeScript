@@ -25,7 +25,7 @@ declare var module: any;
 /// <reference path='./types.d.ts'/>
 exports = module.exports = C
 >exports = module.exports = C : typeof C
->exports : any
+>exports : typeof import("tests/cases/conformance/salsa/semver")
 >module.exports = C : typeof C
 >module.exports : any
 >module : any

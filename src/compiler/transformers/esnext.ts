@@ -1,7 +1,3 @@
-/// <reference path="../factory.ts" />
-/// <reference path="../visitor.ts" />
-/// <reference path="es2017.ts" />
-
 /*@internal*/
 namespace ts {
     const enum ESNextSubstitutionFlags {

@@ -1,37 +1,3 @@
-/// <reference path="..\compiler\program.ts"/>
-/// <reference path="..\compiler\commandLineParser.ts"/>
-
-/// <reference path='types.ts' />
-/// <reference path='utilities.ts' />
-/// <reference path='breakpoints.ts' />
-/// <reference path='classifier.ts' />
-/// <reference path='completions.ts' />
-/// <reference path='documentHighlights.ts' />
-/// <reference path='documentRegistry.ts' />
-/// <reference path='findAllReferences.ts' />
-/// <reference path='goToDefinition.ts' />
-/// <reference path='jsDoc.ts' />
-/// <reference path='jsTyping.ts' />
-/// <reference path='navigateTo.ts' />
-/// <reference path='navigationBar.ts' />
-/// <reference path='organizeImports.ts' />
-/// <reference path='outliningElementsCollector.ts' />
-/// <reference path='patternMatcher.ts' />
-/// <reference path='preProcess.ts' />
-/// <reference path='rename.ts' />
-/// <reference path='signatureHelp.ts' />
-/// <reference path='suggestionDiagnostics.ts' />
-/// <reference path='symbolDisplay.ts' />
-/// <reference path='transpile.ts' />
-/// <reference path='formatting\formatting.ts' />
-/// <reference path='formatting\smartIndenter.ts' />
-/// <reference path='textChanges.ts' />
-/// <reference path='codeFixProvider.ts' />
-/// <reference path='refactorProvider.ts' />
-/// <reference path='codefixes\fixes.ts' />
-/// <reference path='refactors\refactors.ts' />
-/// <reference path="sourcemaps.ts" />
-
 namespace ts {
     /** The version of the language service API */
     export const servicesVersion = "0.8";
@@ -1697,20 +1663,17 @@ namespace ts {
 
         /// References and Occurrences
         function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
-            const canonicalFileName = getCanonicalFileName(normalizeSlashes(fileName));
-            return flatMap(getDocumentHighlights(fileName, position, [fileName]), entry => entry.highlightSpans.map<ReferenceEntry>(highlightSpan => {
-                Debug.assert(getCanonicalFileName(normalizeSlashes(entry.fileName)) === canonicalFileName); // Get occurrences only supports reporting occurrences for the file queried.
-                return {
-                    fileName: entry.fileName,
-                    textSpan: highlightSpan.textSpan,
-                    isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
-                    isDefinition: false,
-                    isInString: highlightSpan.isInString,
-                };
-            }));
+            return flatMap(getDocumentHighlights(fileName, position, [fileName]), entry => entry.highlightSpans.map<ReferenceEntry>(highlightSpan => ({
+                fileName: entry.fileName,
+                textSpan: highlightSpan.textSpan,
+                isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
+                isDefinition: false,
+                isInString: highlightSpan.isInString,
+            })));
         }
 
         function getDocumentHighlights(fileName: string, position: number, filesToSearch: ReadonlyArray<string>): DocumentHighlights[] {
+            Debug.assert(contains(filesToSearch, fileName));
             synchronizeHostData();
             const sourceFilesToSearch = map(filesToSearch, f => Debug.assertDefined(program.getSourceFile(f)));
             const sourceFile = getValidSourceFile(fileName);

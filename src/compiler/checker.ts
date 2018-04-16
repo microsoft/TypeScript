@@ -1,7 +1,3 @@
-/// <reference path="moduleNameResolver.ts"/>
-/// <reference path="binder.ts"/>
-/// <reference path="symbolWalker.ts" />
-
 /* @internal */
 namespace ts {
     const ambientModuleSymbolRegex = /^".+"$/;
@@ -4174,14 +4170,17 @@ namespace ts {
                 else {
                     // Use explicitly specified property name ({ p: xxx } form), or otherwise the implied name ({ p } form)
                     const name = declaration.propertyName || <Identifier>declaration.name;
-                    if (isComputedNonLiteralName(name)) {
-                        // computed properties with non-literal names are treated as 'any'
+                    const isLate = isLateBindableName(name);
+                    const isWellKnown = isComputedPropertyName(name) && isWellKnownSymbolSyntactically(name.expression);
+                    if (!isLate && !isWellKnown && isComputedNonLiteralName(name)) {
                         return anyType;
                     }
 
                     // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
                     // or otherwise the type of the string index signature.
-                    const text = getTextOfPropertyName(name);
+                    const text = isLate ? getLateBoundNameFromType(checkComputedPropertyName(name as ComputedPropertyName) as LiteralType | UniqueESSymbolType) :
+                        isWellKnown ? getPropertyNameForKnownSymbolName(idText(((name as ComputedPropertyName).expression as PropertyAccessExpression).name)) :
+                        getTextOfPropertyName(name);
 
                     // Relax null check on ambient destructuring parameters, since the parameters have no implementation and are just documentation
                     if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
@@ -4367,7 +4366,7 @@ namespace ts {
             for (const declaration of symbol.declarations) {
                 let declarationInConstructor = false;
                 const expression = declaration.kind === SyntaxKind.BinaryExpression ? <BinaryExpression>declaration :
-                    declaration.kind === SyntaxKind.PropertyAccessExpression ? <BinaryExpression>getAncestor(declaration, SyntaxKind.BinaryExpression) :
+                    declaration.kind === SyntaxKind.PropertyAccessExpression ? cast(declaration.parent, isBinaryExpression) :
                         undefined;
 
                 if (!expression) {
@@ -13879,7 +13878,8 @@ namespace ts {
             const assignmentKind = getAssignmentTargetKind(node);
 
             if (assignmentKind) {
-                if (!(localOrExportSymbol.flags & SymbolFlags.Variable)) {
+                if (!(localOrExportSymbol.flags & SymbolFlags.Variable) &&
+                    !(isInJavaScriptFile(node) && localOrExportSymbol.flags & SymbolFlags.ValueModule)) {
                     error(node, Diagnostics.Cannot_assign_to_0_because_it_is_not_a_variable, symbolToString(symbol));
                     return unknownType;
                 }
@@ -19090,6 +19090,9 @@ namespace ts {
 
             const links = getNodeLinks(node);
             const type = getTypeOfSymbol(node.symbol);
+            if (isTypeAny(type)) {
+                return type;
+            }
 
             // Check if function expression is contextually typed and assign parameter types if so.
             if (!(links.flags & NodeCheckFlags.ContextChecked)) {
@@ -19852,8 +19855,9 @@ namespace ts {
                     //    VarExpr = ValueExpr
                     // requires VarExpr to be classified as a reference
                     // A compound assignment furthermore requires VarExpr to be classified as a reference (section 4.1)
-                    // and the type of the non - compound operation to be assignable to the type of VarExpr.
-                    if (checkReferenceExpression(left, Diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access)) {
+                    // and the type of the non-compound operation to be assignable to the type of VarExpr.
+                    if (checkReferenceExpression(left, Diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access)
+                        && (!isIdentifier(left) || unescapeLeadingUnderscores(left.escapedText) !== "exports")) {
                         // to avoid cascading errors check assignability only if 'isReference' check succeeded and no errors were reported
                         checkTypeAssignableTo(valueType, leftType, left, /*headMessage*/ undefined);
                     }
