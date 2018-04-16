@@ -793,7 +793,7 @@ namespace ts.server {
         private getDocumentHighlights(args: protocol.DocumentHighlightsRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.DocumentHighlightsItem> | ReadonlyArray<DocumentHighlights> {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
-            const documentHighlights = project.getLanguageService().getDocumentHighlights(file, position, args.filesToSearch);
+            const documentHighlights = project.getLanguageService().getDocumentHighlights(file, position, map(args.filesToSearch, toNormalizedPath));
 
             if (!documentHighlights) {
                 return emptyArray;
