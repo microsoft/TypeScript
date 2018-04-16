@@ -1,6 +1,3 @@
-/// <reference path="shared.ts" />
-/// <reference path="session.ts" />
-
 namespace ts.server {
     const childProcess: {
         fork(modulePath: string, args: string[], options?: { execArgv: string[], env?: MapLike<string> }): NodeChildProcess;
@@ -209,12 +206,6 @@ namespace ts.server {
                 console.warn(s);
             }
         }
-    }
-
-    // E.g. "12:34:56.789"
-    function nowString() {
-        const d = new Date();
-        return `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}.${d.getMilliseconds()}`;
     }
 
     interface QueuedOperation {
@@ -513,6 +504,7 @@ namespace ts.server {
                 logger,
                 canUseEvents: true,
                 suppressDiagnosticEvents,
+                syntaxOnly,
                 globalPlugins,
                 pluginProbeLocations,
                 allowLocalPluginLoads,
@@ -594,11 +586,12 @@ namespace ts.server {
         const len = args.length - 1;
         for (let i = 0; i < len; i += 2) {
             const option = args[i];
-            const value = args[i + 1];
+            const { value, extraPartCounter } = getEntireValue(i + 1);
+            i += extraPartCounter;
             if (option && value) {
                 switch (option) {
                     case "-file":
-                        logEnv.file = stripQuotes(value);
+                        logEnv.file = value;
                         break;
                     case "-level":
                         const level = getLogLevel(value);
@@ -614,6 +607,21 @@ namespace ts.server {
             }
         }
         return logEnv;
+
+        function getEntireValue(initialIndex: number) {
+            let pathStart = args[initialIndex];
+            let extraPartCounter = 0;
+            if (pathStart.charCodeAt(0) === CharacterCodes.doubleQuote &&
+                pathStart.charCodeAt(pathStart.length - 1) !== CharacterCodes.doubleQuote) {
+                for (let i = initialIndex + 1; i < args.length; i++) {
+                    pathStart += " ";
+                    pathStart += args[i];
+                    extraPartCounter++;
+                    if (pathStart.charCodeAt(pathStart.length - 1) === CharacterCodes.doubleQuote) break;
+                }
+            }
+            return { value: stripQuotes(pathStart), extraPartCounter };
+        }
     }
 
     function getLogLevel(level: string) {
@@ -929,6 +937,7 @@ namespace ts.server {
     const useInferredProjectPerProjectRoot = hasArgument("--useInferredProjectPerProjectRoot");
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
     const suppressDiagnosticEvents = hasArgument("--suppressDiagnosticEvents");
+    const syntaxOnly = hasArgument("--syntaxOnly");
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
 
     logger.info(`Starting TS Server`);

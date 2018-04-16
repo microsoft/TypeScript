@@ -1,5 +1,6 @@
 /* @internal */
 namespace ts.codefix {
+    const fixName = "strictClassInitialization";
     const fixIdAddDefiniteAssignmentAssertions = "addMissingPropertyDefiniteAssignmentAssertions";
     const fixIdAddUndefinedType = "addMissingPropertyUndefinedType";
     const fixIdAddInitializer = "addMissingPropertyInitializer";
@@ -53,7 +54,7 @@ namespace ts.codefix {
 
     function getActionForAddMissingDefiniteAssignmentAssertion (context: CodeFixContext, propertyDeclaration: PropertyDeclaration): CodeFixAction {
         const changes = textChanges.ChangeTracker.with(context, t => addDefiniteAssignmentAssertion(t, context.sourceFile, propertyDeclaration));
-        return createCodeFixAction(changes, [Diagnostics.Add_definite_assignment_assertion_to_property_0, propertyDeclaration.getText()], fixIdAddDefiniteAssignmentAssertions, Diagnostics.Add_definite_assignment_assertions_to_all_uninitialized_properties);
+        return createCodeFixAction(fixName, changes, [Diagnostics.Add_definite_assignment_assertion_to_property_0, propertyDeclaration.getText()], fixIdAddDefiniteAssignmentAssertions, Diagnostics.Add_definite_assignment_assertions_to_all_uninitialized_properties);
     }
 
     function addDefiniteAssignmentAssertion(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration): void {
@@ -71,7 +72,7 @@ namespace ts.codefix {
 
     function getActionForAddMissingUndefinedType (context: CodeFixContext, propertyDeclaration: PropertyDeclaration): CodeFixAction {
         const changes = textChanges.ChangeTracker.with(context, t => addUndefinedType(t, context.sourceFile, propertyDeclaration));
-        return createCodeFixAction(changes, [Diagnostics.Add_undefined_type_to_property_0, propertyDeclaration.name.getText()], fixIdAddUndefinedType, Diagnostics.Add_undefined_type_to_all_uninitialized_properties);
+        return createCodeFixAction(fixName, changes, [Diagnostics.Add_undefined_type_to_property_0, propertyDeclaration.name.getText()], fixIdAddUndefinedType, Diagnostics.Add_undefined_type_to_all_uninitialized_properties);
     }
 
     function addUndefinedType(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration): void {
@@ -86,7 +87,7 @@ namespace ts.codefix {
         if (!initializer) return undefined;
 
         const changes = textChanges.ChangeTracker.with(context, t => addInitializer(t, context.sourceFile, propertyDeclaration, initializer));
-        return createCodeFixAction(changes, [Diagnostics.Add_initializer_to_property_0, propertyDeclaration.name.getText()], fixIdAddInitializer, Diagnostics.Add_initializers_to_all_uninitialized_properties);
+        return createCodeFixAction(fixName, changes, [Diagnostics.Add_initializer_to_property_0, propertyDeclaration.name.getText()], fixIdAddInitializer, Diagnostics.Add_initializers_to_all_uninitialized_properties);
     }
 
     function addInitializer (changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration, initializer: Expression): void {
@@ -116,13 +117,13 @@ namespace ts.codefix {
         else if (type.flags & TypeFlags.Boolean) {
             return createFalse();
         }
-        else if (type.flags & TypeFlags.Literal) {
-            return createLiteral((<LiteralType>type).value);
+        else if (type.isLiteral()) {
+            return createLiteral(type.value);
         }
-        else if (type.flags & TypeFlags.Union) {
-            return firstDefined((<UnionType>type).types, t => getDefaultValueFromType(checker, t));
+        else if (type.isUnion()) {
+            return firstDefined(type.types, t => getDefaultValueFromType(checker, t));
         }
-        else if (getObjectFlags(type) & ObjectFlags.Class) {
+        else if (type.isClass()) {
             const classDeclaration = getClassLikeDeclarationOfSymbol(type.symbol);
             if (!classDeclaration || hasModifier(classDeclaration, ModifierFlags.Abstract)) return undefined;
 

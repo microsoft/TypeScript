@@ -1,0 +1,117 @@
+=== tests/cases/conformance/jsdoc/0.js ===
+// Object literal syntax
+/**
+ * @param {{a: string, b: string}} obj
+ * @param {string} x
+ */
+function good1({a, b}, x) {}
+>good1 : Symbol(good1, Decl(0.js, 0, 0))
+>a : Symbol(a, Decl(0.js, 5, 16))
+>b : Symbol(b, Decl(0.js, 5, 18))
+>x : Symbol(x, Decl(0.js, 5, 22))
+
+/**
+ * @param {{a: string, b: string}} obj
+ * @param {{c: number, d: number}} OBJECTION
+ */
+function good2({a, b}, {c, d}) {}
+>good2 : Symbol(good2, Decl(0.js, 5, 28))
+>a : Symbol(a, Decl(0.js, 10, 16))
+>b : Symbol(b, Decl(0.js, 10, 18))
+>c : Symbol(c, Decl(0.js, 10, 24))
+>d : Symbol(d, Decl(0.js, 10, 26))
+
+/**
+ * @param {number} x
+ * @param {{a: string, b: string}} obj
+ * @param {string} y
+ */
+function good3(x, {a, b}, y) {}
+>good3 : Symbol(good3, Decl(0.js, 10, 33))
+>x : Symbol(x, Decl(0.js, 16, 15))
+>a : Symbol(a, Decl(0.js, 16, 19))
+>b : Symbol(b, Decl(0.js, 16, 21))
+>y : Symbol(y, Decl(0.js, 16, 25))
+
+/**
+ * @param {{a: string, b: string}} obj
+ */
+function good4({a, b}) {}
+>good4 : Symbol(good4, Decl(0.js, 16, 31))
+>a : Symbol(a, Decl(0.js, 20, 16))
+>b : Symbol(b, Decl(0.js, 20, 18))
+
+// nested object syntax
+/**
+ * @param {Object} obj
+ * @param {string} obj.a - this is like the saddest way to specify a type
+ * @param {string} obj.b - but it sure does allow a lot of documentation
+ * @param {string} x
+ */
+function good5({a, b}, x) {}
+>good5 : Symbol(good5, Decl(0.js, 20, 25))
+>a : Symbol(a, Decl(0.js, 29, 16))
+>b : Symbol(b, Decl(0.js, 29, 18))
+>x : Symbol(x, Decl(0.js, 29, 22))
+
+/**
+ * @param {Object} obj
+ * @param {string} obj.a
+ * @param {string} obj.b - but it sure does allow a lot of documentation
+ * @param {Object} OBJECTION - documentation here too
+ * @param {string} OBJECTION.c
+ * @param {string} OBJECTION.d - meh
+ */
+function good6({a, b}, {c, d}) {}
+>good6 : Symbol(good6, Decl(0.js, 29, 28))
+>a : Symbol(a, Decl(0.js, 38, 16))
+>b : Symbol(b, Decl(0.js, 38, 18))
+>c : Symbol(c, Decl(0.js, 38, 24))
+>d : Symbol(d, Decl(0.js, 38, 26))
+
+/**
+ * @param {number} x
+ * @param {Object} obj
+ * @param {string} obj.a
+ * @param {string} obj.b
+ * @param {string} y
+ */
+function good7(x, {a, b}, y) {}
+>good7 : Symbol(good7, Decl(0.js, 38, 33))
+>x : Symbol(x, Decl(0.js, 46, 15))
+>a : Symbol(a, Decl(0.js, 46, 19))
+>b : Symbol(b, Decl(0.js, 46, 21))
+>y : Symbol(y, Decl(0.js, 46, 25))
+
+/**
+ * @param {Object} obj
+ * @param {string} obj.a
+ * @param {string} obj.b
+ */
+function good8({a, b}) {}
+>good8 : Symbol(good8, Decl(0.js, 46, 31))
+>a : Symbol(a, Decl(0.js, 52, 16))
+>b : Symbol(b, Decl(0.js, 52, 18))
+
+/**
+ * @param {object} obj - this type gets ignored
+ * @param {string} obj.a
+ * @param {string} obj.b - and x's type gets used for both parameters
+ * @param {string} x
+ */
+function bad1(x, {a, b}) {}
+>bad1 : Symbol(bad1, Decl(0.js, 52, 25))
+>x : Symbol(x, Decl(0.js, 60, 14))
+>a : Symbol(a, Decl(0.js, 60, 18))
+>b : Symbol(b, Decl(0.js, 60, 20))
+
+/**
+ * @param {string} y - here, y's type gets ignored but obj's is fine
+ * @param {{a: string, b: string}} obj
+ */
+function bad2(x, {a, b}) {}
+>bad2 : Symbol(bad2, Decl(0.js, 60, 27))
+>x : Symbol(x, Decl(0.js, 65, 14))
+>a : Symbol(a, Decl(0.js, 65, 18))
+>b : Symbol(b, Decl(0.js, 65, 20))
+

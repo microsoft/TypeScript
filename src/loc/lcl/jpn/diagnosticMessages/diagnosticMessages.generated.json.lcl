@@ -642,6 +642,9 @@
       <Item ItemId=";A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma_1013" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A rest parameter or binding pattern may not have a trailing comma.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[rest パラメーターまたはバインド パターンに末尾のコンマがない可能性があります。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -903,18 +906,27 @@
       <Item ItemId=";Add_all_missing_async_modifiers_95041" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add all missing 'async' modifiers]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[不足しているすべての 'async' 修飾子を追加します]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Add_all_missing_members_95022" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add all missing members]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[不足しているすべてのメンバーを追加します]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Add_all_missing_super_calls_95039" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add all missing super calls]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[不足しているすべての super の呼び出しを追加します]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -939,6 +951,9 @@
       <Item ItemId=";Add_definite_assignment_assertions_to_all_uninitialized_properties_95028" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add definite assignment assertions to all uninitialized properties]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[初期化されていないすべてのプロパティに限定代入アサーションを追加します]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -966,6 +981,9 @@
       <Item ItemId=";Add_initializers_to_all_uninitialized_properties_95027" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add initializers to all uninitialized properties]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[初期化されていないすべてのプロパティに初期化子を追加します]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -984,6 +1002,9 @@
       <Item ItemId=";Add_this_to_all_unresolved_variables_matching_a_member_name_95037" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add 'this.' to all unresolved variables matching a member name]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[メンバー名と一致するすべての未解決の変数に 'this.' を追加します]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1002,18 +1023,27 @@
       <Item ItemId=";Add_to_all_uncalled_decorators_95044" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add '()' to all uncalled decorators]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[呼び出されていないすべてのデコレーターに '()' を追加します]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Add_ts_ignore_to_all_error_messages_95042" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add '@ts-ignore' to all error messages]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[すべてのエラー メッセージに '@ts-ignore' を追加します]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Add_undefined_type_to_all_uninitialized_properties_95029" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add undefined type to all uninitialized properties]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[初期化されていないすべてのプロパティに未定義の型を追加します]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1524,6 +1554,9 @@
       <Item ItemId=";Annotate_everything_with_types_from_JSDoc_95043" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Annotate everything with types from JSDoc]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[すべてに JSDoc の型で注釈を付けます]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2151,18 +2184,27 @@
       <Item ItemId=";Change_all_extended_interfaces_to_implements_95038" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Change all extended interfaces to 'implements']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[拡張されたすべてのインターフェイスを 'implements' に変更します]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Change_all_jsdoc_style_types_to_TypeScript_95030" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Change all jsdoc-style types to TypeScript]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[jsdoc スタイルのすべての型を TypeScript に変更します]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Change_all_jsdoc_style_types_to_TypeScript_and_add_undefined_to_nullable_types_95031" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Change all jsdoc-style types to TypeScript (and add '| undefined' to nullable types)]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[jsdoc スタイルのすべての型を TypeScript に変更します (さらに、'| undefined' を null 許容型に追加します)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2475,12 +2517,18 @@
       <Item ItemId=";Convert_all_constructor_functions_to_classes_95045" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert all constructor functions to classes]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[すべてのコンストラクター関数をクラスに変換します]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Convert_all_to_default_imports_95035" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert all to default imports]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[すべてを既定のインポートに変換します]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2664,6 +2712,9 @@
       <Item ItemId=";Delete_all_unused_declarations_95024" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Delete all unused declarations]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[未使用の宣言をすべて削除します]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3714,6 +3765,27 @@
       <Item ItemId=";Fix_all_detected_spelling_errors_95026" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Fix all detected spelling errors]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[検出されたすべてのスペル ミスを修正します]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Found_0_errors_6194" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Found {0} errors.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{0} 件のエラーが見つかりました。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Found_1_error_6193" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Found 1 error.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[1 件のエラーが見つかりました。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3821,6 +3893,15 @@
           <Val><![CDATA[Function overload must not be static.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[関数のオーバーロードは静的にはできせん。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Generate_get_and_set_accessors_95046" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Generate 'get' and 'set' accessors]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['get' および 'set' アクセサーの生成]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4032,12 +4113,18 @@
       <Item ItemId=";Implement_all_inherited_abstract_classes_95040" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Implement all inherited abstract classes]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[継承されたすべての抽象クラスを実装します]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Implement_all_unimplemented_interfaces_95032" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Implement all unimplemented interfaces]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[実装されていないすべてのインターフェイスを実装します]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4239,6 +4326,9 @@
       <Item ItemId=";Infer_all_types_from_usage_95023" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Infer all types from usage]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[使用法からすべての型を推論します]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4356,6 +4446,9 @@
       <Item ItemId=";Install_all_missing_types_packages_95033" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Install all missing types packages]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[不足しているすべての型のパッケージをインストールします]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4851,6 +4944,9 @@
       <Item ItemId=";Make_all_super_calls_the_first_statement_in_their_constructor_95036" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Make all 'super()' calls the first statement in their constructor]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[すべての 'super()' 呼び出しをそのコンストラクターの最初のステートメントにします]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4950,12 +5046,18 @@
       <Item ItemId=";Module_0_does_not_refer_to_a_type_but_is_used_as_a_type_here_1340" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' does not refer to a type, but is used as a type here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[モジュール '{0}' は型を参照していませんが、ここでは型として使用されています。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Module_0_does_not_refer_to_a_value_but_is_used_as_a_value_here_1339" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' does not refer to a value, but is used as a value here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[モジュール '{0}' は値を参照していませんが、ここでは値として使用されています。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5853,6 +5955,9 @@
       <Item ItemId=";Prefix_all_unused_declarations_with_where_possible_95025" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Prefix all unused declarations with '_' where possible]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[可能な場合は、使用されていないすべての宣言にプレフィックスとして '_' を付けます]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5906,6 +6011,15 @@
           <Val><![CDATA[Property '{0}' does not exist on type '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[プロパティ '{0}' は型 '{1}' に存在しません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Property_0_does_not_exist_on_type_1_Did_you_forget_to_use_await_2570" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Property '{0}' does not exist on type '{1}'. Did you forget to use 'await'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[型 '{1}' にプロパティ '{0}' は存在しません。'await' を使用していない可能性があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6756,6 +6870,9 @@
       <Item ItemId=";Rewrite_all_as_indexed_access_types_95034" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Rewrite all as indexed access types]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[すべてをインデックス付きアクセス型として書き換えます]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7500,6 +7617,9 @@
       <Item ItemId=";The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter_but_2407" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['for...in' ステートメントの右側には、'any' 型、オブジェクト型、型パラメーターを指定する必要がありますが、ここでは型 '{0}' が指定されています。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7821,6 +7941,9 @@
       <Item ItemId=";Type_0_is_not_an_array_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators_2568" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is not an array type. Use compiler option '--downlevelIteration' to allow iterating of iterators.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[型 '{0}' は配列型ではありません。反復子の反復を許可するには、コンパイラ オプション '--downlevelIteration' を使用します。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7836,6 +7959,9 @@
       <Item ItemId=";Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterati_2569" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[型 '{0}' は配列型でも文字列型でもありません。反復子の反復を許可するには、コンパイラ オプション '--downlevelIteration' を使用します。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7896,12 +8022,18 @@
       <Item ItemId=";Type_0_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator_2504" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' must have a '[Symbol.asyncIterator]5D;()' method that returns an async iterator.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[型 '{0}' には、非同期反復子を返す '[Symbol.asyncIterator]5D;()' メソッドが必要です。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Type_0_must_have_a_Symbol_iterator_method_that_returns_an_iterator_2488" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' must have a '[Symbol.iterator]5D;()' method that returns an iterator.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[型 '{0}' には、反復子を返す '[Symbol.iterator]5D;()' メソッドが必要です。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7986,6 +8118,9 @@
       <Item ItemId=";Type_arguments_cannot_be_used_here_1342" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type arguments cannot be used here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ここで型引数は使用できません。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>

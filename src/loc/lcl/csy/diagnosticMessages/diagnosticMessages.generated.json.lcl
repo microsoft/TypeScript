@@ -648,6 +648,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma_1013" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A rest parameter or binding pattern may not have a trailing comma.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Parametr rest nebo vzor vazby nesmí mít na konci čárku.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";A_return_statement_can_only_be_used_within_a_function_body_1108" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A 'return' statement can only be used within a function body.]]></Val>
@@ -906,18 +915,27 @@
       <Item ItemId=";Add_all_missing_async_modifiers_95041" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add all missing 'async' modifiers]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Přidat všechny chybějící modifikátory async]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Add_all_missing_members_95022" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add all missing members]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Přidat všechny chybějící členy]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Add_all_missing_super_calls_95039" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add all missing super calls]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Přidat všechna chybějící volání pomocí super]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -942,6 +960,9 @@
       <Item ItemId=";Add_definite_assignment_assertions_to_all_uninitialized_properties_95028" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add definite assignment assertions to all uninitialized properties]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Přidat kontrolní výrazy jednoznačného přiřazení do všech neinicializovaných vlastností]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -969,6 +990,9 @@
       <Item ItemId=";Add_initializers_to_all_uninitialized_properties_95027" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add initializers to all uninitialized properties]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Přidat inicializátory do všech neinicializovaných vlastností]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -987,6 +1011,9 @@
       <Item ItemId=";Add_this_to_all_unresolved_variables_matching_a_member_name_95037" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add 'this.' to all unresolved variables matching a member name]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Přidat this. do všech nerozpoznaných proměnných odpovídajících názvu členu]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1005,18 +1032,27 @@
       <Item ItemId=";Add_to_all_uncalled_decorators_95044" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add '()' to all uncalled decorators]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Přidat () do všech nevolaných dekorátorů]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Add_ts_ignore_to_all_error_messages_95042" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add '@ts-ignore' to all error messages]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Přidat @ts-ignore do všech chybových zpráv]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Add_undefined_type_to_all_uninitialized_properties_95029" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add undefined type to all uninitialized properties]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Přidat nedefinovaný typ do všech neinicializovaných vlastností]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1527,6 +1563,9 @@
       <Item ItemId=";Annotate_everything_with_types_from_JSDoc_95043" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Annotate everything with types from JSDoc]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Vše s typy z JSDoc opatřit poznámkami]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2154,18 +2193,27 @@
       <Item ItemId=";Change_all_extended_interfaces_to_implements_95038" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Change all extended interfaces to 'implements']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Změnit všechna rozšířená rozhraní na implements]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Change_all_jsdoc_style_types_to_TypeScript_95030" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Change all jsdoc-style types to TypeScript]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Změnit všechny typy jsdoc-style na TypeScript]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Change_all_jsdoc_style_types_to_TypeScript_and_add_undefined_to_nullable_types_95031" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Change all jsdoc-style types to TypeScript (and add '| undefined' to nullable types)]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Změnit všechny typy jsdoc-style na TypeScript (a přidat | undefined do typů s možnou hodnotou null)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2478,12 +2526,18 @@
       <Item ItemId=";Convert_all_constructor_functions_to_classes_95045" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert all constructor functions to classes]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Převést všechny funkce konstruktoru na třídy]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Convert_all_to_default_imports_95035" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert all to default imports]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Převést vše na výchozí importy]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2667,6 +2721,9 @@
       <Item ItemId=";Delete_all_unused_declarations_95024" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Delete all unused declarations]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Odstranit všechny nepoužívané deklarace]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3717,6 +3774,27 @@
       <Item ItemId=";Fix_all_detected_spelling_errors_95026" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Fix all detected spelling errors]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Opravit všechny zjištěné pravopisné chyby]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Found_0_errors_6194" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Found {0} errors.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Našel se tento počet chyb: {0}.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Found_1_error_6193" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Found 1 error.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Našla se 1 chyba.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3824,6 +3902,15 @@
           <Val><![CDATA[Function overload must not be static.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Přetížení funkce nesmí být statické.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Generate_get_and_set_accessors_95046" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Generate 'get' and 'set' accessors]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Generovat přístupové objekty get a set]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4035,12 +4122,18 @@
       <Item ItemId=";Implement_all_inherited_abstract_classes_95040" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Implement all inherited abstract classes]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Implementovat všechny zděděné abstraktní třídy]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Implement_all_unimplemented_interfaces_95032" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Implement all unimplemented interfaces]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Implementovat všechna neimplementovaná rozhraní]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4242,6 +4335,9 @@
       <Item ItemId=";Infer_all_types_from_usage_95023" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Infer all types from usage]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Odvodit všechny typy z použití]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4359,6 +4455,9 @@
       <Item ItemId=";Install_all_missing_types_packages_95033" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Install all missing types packages]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Nainstalovat všechny chybějící balíčky typů]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4854,6 +4953,9 @@
       <Item ItemId=";Make_all_super_calls_the_first_statement_in_their_constructor_95036" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Make all 'super()' calls the first statement in their constructor]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Nastavit všechna volání metody super() prvním příkazem v jejich konstruktoru]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4946,6 +5048,24 @@
           <Val><![CDATA[Modifiers cannot appear here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Tady nejde použít modifikátory.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Module_0_does_not_refer_to_a_type_but_is_used_as_a_type_here_1340" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Module '{0}' does not refer to a type, but is used as a type here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Modul {0} neodkazuje na typ, ale používá se tady jako typ.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Module_0_does_not_refer_to_a_value_but_is_used_as_a_value_here_1339" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Module '{0}' does not refer to a value, but is used as a value here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Modul {0} neodkazuje na hodnotu, ale používá se tady jako hodnota.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5844,6 +5964,9 @@
       <Item ItemId=";Prefix_all_unused_declarations_with_where_possible_95025" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Prefix all unused declarations with '_' where possible]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Přidat příponu _ ke všem nepoužívaným deklaracím tam, kde je to možné]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5897,6 +6020,15 @@
           <Val><![CDATA[Property '{0}' does not exist on type '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Vlastnost {0} v typu {1} neexistuje.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Property_0_does_not_exist_on_type_1_Did_you_forget_to_use_await_2570" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Property '{0}' does not exist on type '{1}'. Did you forget to use 'await'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Vlastnost {0} v typu {1} neexistuje. Nezapomněli jste použít await?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6747,6 +6879,9 @@
       <Item ItemId=";Rewrite_all_as_indexed_access_types_95034" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Rewrite all as indexed access types]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Přepsat vše jako indexované typy přístupu]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7488,11 +7623,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter_2407" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter_but_2407" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.]]></Val>
+          <Val><![CDATA[The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Pravá strana příkazu for...in musí být typu any, typem objektu nebo parametrem typu.]]></Val>
+            <Val><![CDATA[Pravá strana příkazu for...in musí být typu any, typem objektu nebo parametrem typu, ale tady má typ {0}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7812,11 +7947,29 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Type_0_is_not_an_array_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators_2568" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type '{0}' is not an array type. Use compiler option '--downlevelIteration' to allow iterating of iterators.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Typ {0} není typem pole. Pokud chcete povolit iteraci iterátorů, použijte možnost kompilátoru --downlevelIteration.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Type_0_is_not_an_array_type_or_a_string_type_2495" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is not an array type or a string type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Typ {0} není typem pole nebo řetězce.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterati_2569" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type '{0}' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Typ {0} není typem pole ani typem řetězce. Pokud chcete povolit iteraci iterátorů, použijte možnost kompilátoru --downlevelIteration.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7871,6 +8024,24 @@
           <Val><![CDATA[Type '{0}' is not generic.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Typ {0} není obecný.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_0_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator_2504" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type '{0}' must have a '[Symbol.asyncIterator]5D;()' method that returns an async iterator.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Typ {0} musí mít metodu [Symbol.asyncIterator]5D;(), která vrací asynchronní iterátor.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_0_must_have_a_Symbol_iterator_method_that_returns_an_iterator_2488" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type '{0}' must have a '[Symbol.iterator]5D;()' method that returns an iterator.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Typ {0} musí mít metodu [Symbol.iterator]5D;(), která vrací iterátor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7953,6 +8124,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Type_arguments_cannot_be_used_here_1342" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type arguments cannot be used here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Argumenty typu tady nejde použít.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Type_declaration_files_to_be_included_in_compilation_6124" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type declaration files to be included in compilation.]]></Val>
@@ -7976,24 +8156,6 @@
           <Val><![CDATA[Type is referenced directly or indirectly in the fulfillment callback of its own 'then' method.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Typ se přímo nebo nepřímo odkazuje ve zpětném volání jeho vlastní metody then při splnění.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Type_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator_2504" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Type must have a '[Symbol.asyncIterator]5D;()' method that returns an async iterator.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Typ musí mít metodu [Symbol.asyncIterator]5D;(), která vrací asynchronní iterátor.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Type_must_have_a_Symbol_iterator_method_that_returns_an_iterator_2488" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Type must have a '[Symbol.iterator]5D;()' method that returns an iterator.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Typ musí mít metodu [Symbol.iterator]5D;(), která vrací iterátor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

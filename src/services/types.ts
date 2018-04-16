@@ -52,6 +52,16 @@ namespace ts {
         getNonNullableType(): Type;
         getConstraint(): Type | undefined;
         getDefault(): Type | undefined;
+
+        isUnion(): this is UnionType;
+        isIntersection(): this is IntersectionType;
+        isUnionOrIntersection(): this is UnionOrIntersectionType;
+        isLiteral(): this is LiteralType;
+        isStringLiteral(): this is StringLiteralType;
+        isNumberLiteral(): this is NumberLiteralType;
+        isTypeParameter(): this is TypeParameter;
+        isClassOrInterface(): this is InterfaceType;
+        isClass(): this is InterfaceType;
     }
 
     export interface Signature {
@@ -218,6 +228,7 @@ namespace ts {
     }
 
     export interface UserPreferences {
+        readonly disableSuggestions?: boolean;
         readonly quotePreference?: "double" | "single";
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
@@ -435,6 +446,8 @@ namespace ts {
     }
 
     export interface CodeFixAction extends CodeAction {
+        /** Short name to identify the fix, for use by telemetry. */
+        fixName: string;
         /**
          * If present, one may call 'getCombinedCodeFix' with this fixId.
          * This may be omitted to indicate that the code fix can't be applied in a group.

@@ -496,3 +496,58 @@ type C<T, V, E> =
 >V : Symbol(V, Decl(conditionalTypes2.ts, 133, 9))
 >E : Symbol(E, Decl(conditionalTypes2.ts, 133, 12))
 
+// Repro from #23100
+
+type A2<T, V, E> =
+>A2 : Symbol(A2, Decl(conditionalTypes2.ts, 134, 82))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 138, 8))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 138, 10))
+>E : Symbol(E, Decl(conditionalTypes2.ts, 138, 13))
+
+    T extends object ? T extends any[] ? T : { [Q in keyof T]: A2<T[Q], V, E>; } : T;
+>T : Symbol(T, Decl(conditionalTypes2.ts, 138, 8))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 138, 8))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 138, 8))
+>Q : Symbol(Q, Decl(conditionalTypes2.ts, 139, 48))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 138, 8))
+>A2 : Symbol(A2, Decl(conditionalTypes2.ts, 134, 82))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 138, 8))
+>Q : Symbol(Q, Decl(conditionalTypes2.ts, 139, 48))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 138, 10))
+>E : Symbol(E, Decl(conditionalTypes2.ts, 138, 13))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 138, 8))
+
+type B2<T, V> =
+>B2 : Symbol(B2, Decl(conditionalTypes2.ts, 139, 85))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 141, 8))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 141, 10))
+
+    T extends object ? T extends any[] ? T : { [Q in keyof T]: B2<T[Q], V>; } : T;
+>T : Symbol(T, Decl(conditionalTypes2.ts, 141, 8))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 141, 8))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 141, 8))
+>Q : Symbol(Q, Decl(conditionalTypes2.ts, 142, 48))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 141, 8))
+>B2 : Symbol(B2, Decl(conditionalTypes2.ts, 139, 85))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 141, 8))
+>Q : Symbol(Q, Decl(conditionalTypes2.ts, 142, 48))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 141, 10))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 141, 8))
+
+type C2<T, V, E> =
+>C2 : Symbol(C2, Decl(conditionalTypes2.ts, 142, 82))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 144, 8))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 144, 10))
+>E : Symbol(E, Decl(conditionalTypes2.ts, 144, 13))
+
+    T extends object ? { [Q in keyof T]: C2<T[Q], V, E>; } : T;
+>T : Symbol(T, Decl(conditionalTypes2.ts, 144, 8))
+>Q : Symbol(Q, Decl(conditionalTypes2.ts, 145, 26))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 144, 8))
+>C2 : Symbol(C2, Decl(conditionalTypes2.ts, 142, 82))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 144, 8))
+>Q : Symbol(Q, Decl(conditionalTypes2.ts, 145, 26))
+>V : Symbol(V, Decl(conditionalTypes2.ts, 144, 10))
+>E : Symbol(E, Decl(conditionalTypes2.ts, 144, 13))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 144, 8))
+

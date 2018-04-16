@@ -147,7 +147,7 @@ module.exports.func4 = function () { };
 var multipleDeclarationAlias1 = exports = module.exports;
 >multipleDeclarationAlias1 : any
 >exports = module.exports : any
->exports : any
+>exports : typeof import("tests/cases/conformance/salsa/b")
 >module.exports : any
 >module : any
 >exports : any
@@ -212,7 +212,7 @@ var multipleDeclarationAlias5 = module.exports = exports = {};
 >module : any
 >exports : any
 >exports = {} : {}
->exports : any
+>exports : typeof import("tests/cases/conformance/salsa/b")
 >{} : {}
 
 multipleDeclarationAlias5.func9 = function () { };
@@ -225,7 +225,7 @@ multipleDeclarationAlias5.func9 = function () { };
 var multipleDeclarationAlias6 = exports = module.exports = {};
 >multipleDeclarationAlias6 : { [x: string]: any; }
 >exports = module.exports = {} : { [x: string]: any; }
->exports : any
+>exports : typeof import("tests/cases/conformance/salsa/b")
 >module.exports = {} : { [x: string]: any; }
 >module.exports : any
 >module : any
@@ -241,7 +241,7 @@ multipleDeclarationAlias6.func10 = function () { };
 
 exports = module.exports = someOtherVariable = {};
 >exports = module.exports = someOtherVariable = {} : {}
->exports : any
+>exports : typeof import("tests/cases/conformance/salsa/b")
 >module.exports = someOtherVariable = {} : {}
 >module.exports : any
 >module : any
@@ -268,7 +268,7 @@ module.exports.func12 = function () { };
 
 exports = module.exports = someOtherVariable = {};
 >exports = module.exports = someOtherVariable = {} : {}
->exports : any
+>exports : typeof import("tests/cases/conformance/salsa/b")
 >module.exports = someOtherVariable = {} : {}
 >module.exports : any
 >module : any
@@ -295,7 +295,7 @@ module.exports.func12 = function () { };
 
 exports = module.exports = {};
 >exports = module.exports = {} : { [x: string]: any; }
->exports : any
+>exports : typeof import("tests/cases/conformance/salsa/b")
 >module.exports = {} : { [x: string]: any; }
 >module.exports : any
 >module : any
@@ -320,7 +320,7 @@ module.exports.func14 = function () { };
 
 exports = module.exports = {};
 >exports = module.exports = {} : { [x: string]: any; }
->exports : any
+>exports : typeof import("tests/cases/conformance/salsa/b")
 >module.exports = {} : { [x: string]: any; }
 >module.exports : any
 >module : any
@@ -349,7 +349,7 @@ module.exports = exports = {};
 >module : any
 >exports : any
 >exports = {} : {}
->exports : any
+>exports : typeof import("tests/cases/conformance/salsa/b")
 >{} : {}
 
 exports.func17 = function () { };

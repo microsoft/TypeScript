@@ -1,5 +1,5 @@
 tests/cases/conformance/jsx/file.tsx(3,12): error TS2608: The global type 'JSX.ElementAttributesProperty' may not have more than one property.
-tests/cases/conformance/jsx/file.tsx(11,7): error TS2322: Type '{ x: number; }' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(11,2): error TS2322: Type '{ x: number; }' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
@@ -16,6 +16,6 @@ tests/cases/conformance/jsx/file.tsx(11,7): error TS2322: Type '{ x: number; }' 
     }
     var Obj1: Obj1type;
     <Obj1 x={10} />; // Error
-          ~~~~~~
+     ~~~~
 !!! error TS2322: Type '{ x: number; }' is not assignable to type 'string'.
     

@@ -1,6 +1,3 @@
-/// <reference path="types.ts"/>
-/// <reference path="performance.ts" />
-
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
@@ -1268,10 +1265,7 @@ namespace ts {
         });
     }
 
-    export function assign<T1 extends MapLike<{}>, T2, T3>(t: T1, arg1: T2, arg2: T3): T1 & T2 & T3;
-    export function assign<T1 extends MapLike<{}>, T2>(t: T1, arg1: T2): T1 & T2;
-    export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]): any;
-    export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]) {
+    export function assign<T extends object>(t: T, ...args: T[]) {
         for (const arg of args) {
             for (const p in arg) {
                 if (hasProperty(arg, p)) {
@@ -1317,12 +1311,13 @@ namespace ts {
      * the same key with the given 'makeKey' function, then the element with the higher
      * index in the array will be the one associated with the produced key.
      */
-    export function arrayToMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => string): Map<T>;
-    export function arrayToMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => string, makeValue: (value: T) => U): Map<U>;
-    export function arrayToMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => string, makeValue: (value: T) => T | U = identity): Map<T | U> {
+    export function arrayToMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => string | undefined): Map<T>;
+    export function arrayToMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => string | undefined, makeValue: (value: T) => U): Map<U>;
+    export function arrayToMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => string | undefined, makeValue: (value: T) => T | U = identity): Map<T | U> {
         const result = createMap<T | U>();
         for (const value of array) {
-            result.set(makeKey(value), makeValue(value));
+            const key = makeKey(value);
+            if (key !== undefined) result.set(key, makeValue(value));
         }
         return result;
     }
@@ -1343,8 +1338,9 @@ namespace ts {
      * @param array the array of input elements.
      */
     export function arrayToSet(array: ReadonlyArray<string>): Map<true>;
-    export function arrayToSet<T>(array: ReadonlyArray<T>, makeKey: (value: T) => string): Map<true>;
-    export function arrayToSet(array: ReadonlyArray<any>, makeKey?: (value: any) => string): Map<true> {
+    export function arrayToSet<T>(array: ReadonlyArray<T>, makeKey: (value: T) => string | undefined): Map<true>;
+    export function arrayToSet<T>(array: ReadonlyArray<T>, makeKey: (value: T) => __String | undefined): UnderscoreEscapedMap<true>;
+    export function arrayToSet(array: ReadonlyArray<any>, makeKey?: (value: any) => string | __String | undefined): Map<true> | UnderscoreEscapedMap<true> {
         return arrayToMap<any, true>(array, makeKey || (s => s), () => true);
     }
 
@@ -1606,6 +1602,7 @@ namespace ts {
             messageText: text,
             category: message.category,
             code: message.code,
+            reportsUnnecessary: message.reportsUnnecessary,
         };
     }
 
@@ -1635,7 +1632,8 @@ namespace ts {
 
             messageText: text,
             category: message.category,
-            code: message.code
+            code: message.code,
+            reportsUnnecessary: message.reportsUnnecessary,
         };
     }
 
@@ -1647,7 +1645,7 @@ namespace ts {
 
             code: chain.code,
             category: chain.category,
-            messageText: chain.next ? chain : chain.messageText
+            messageText: chain.next ? chain : chain.messageText,
         };
     }
 
@@ -1723,6 +1721,10 @@ namespace ts {
      */
     export function compareValues(a: number, b: number) {
         return compareComparableValues(a, b);
+    }
+
+    export function min<T>(a: T, b: T, compare: Comparer<T>): T {
+        return compare(a, b) === Comparison.LessThan ? a : b;
     }
 
     /**
@@ -2244,6 +2246,8 @@ namespace ts {
      * Adds a trailing directory separator to a path, if it does not already have one.
      * @param path The path.
      */
+    export function ensureTrailingDirectorySeparator(path: Path): Path;
+    export function ensureTrailingDirectorySeparator(path: string): string;
     export function ensureTrailingDirectorySeparator(path: string) {
         if (path.charAt(path.length - 1) !== directorySeparator) {
             return path + directorySeparator;
@@ -3118,8 +3122,8 @@ namespace ts {
         return (arg: T) => f(arg) && g(arg);
     }
 
-    export function or<T>(f: (arg: T) => boolean, g: (arg: T) => boolean) {
-        return (arg: T) => f(arg) || g(arg);
+    export function or<T>(f: (arg: T) => boolean, g: (arg: T) => boolean): (arg: T) => boolean {
+        return arg => f(arg) || g(arg);
     }
 
     export function assertTypeIsNever(_: never): void { } // tslint:disable-line no-empty

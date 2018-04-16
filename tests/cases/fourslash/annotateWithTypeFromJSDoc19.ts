@@ -6,6 +6,7 @@
 //// * @param {T} b
 //// */
 ////function f(a, b) {
+////    return a || b;
 ////}
 
 verify.codeFix({
@@ -17,5 +18,6 @@ verify.codeFix({
  * @param {T} b
  */
 function f<T>(a: number, b: T) {
+    return a || b;
 }`,
 });

@@ -12,10 +12,10 @@ namespace ts.FindAllReferences {
     export type ImportTracker = (exportSymbol: Symbol, exportInfo: ExportInfo, isForRename: boolean) => ImportsResult;
 
     /** Creates the imports map and returns an ImportTracker that uses it. Call this lazily to avoid calling `getDirectImportsMap` unnecessarily.  */
-    export function createImportTracker(sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cancellationToken: CancellationToken): ImportTracker {
+    export function createImportTracker(sourceFiles: ReadonlyArray<SourceFile>, sourceFilesSet: ReadonlyMap<true>, checker: TypeChecker, cancellationToken: CancellationToken): ImportTracker {
         const allDirectImports = getDirectImportsMap(sourceFiles, checker, cancellationToken);
         return (exportSymbol, exportInfo, isForRename) => {
-            const { directImports, indirectUsers } = getImportersForExport(sourceFiles, allDirectImports, exportInfo, checker, cancellationToken);
+            const { directImports, indirectUsers } = getImportersForExport(sourceFiles, sourceFilesSet, allDirectImports, exportInfo, checker, cancellationToken);
             return { indirectUsers, ...getSearchesFromDirectImports(directImports, exportSymbol, exportInfo.exportKind, checker, isForRename) };
         };
     }
@@ -39,6 +39,7 @@ namespace ts.FindAllReferences {
     /** Returns import statements that directly reference the exporting module, and a list of files that may access the module through a namespace. */
     function getImportersForExport(
         sourceFiles: ReadonlyArray<SourceFile>,
+        sourceFilesSet: ReadonlyMap<true>,
         allDirectImports: Map<ImporterOrCallExpression[]>,
         { exportingModuleSymbol, exportKind }: ExportInfo,
         checker: TypeChecker,
@@ -62,7 +63,7 @@ namespace ts.FindAllReferences {
 
             // Module augmentations may use this module's exports without importing it.
             for (const decl of exportingModuleSymbol.declarations) {
-                if (isExternalModuleAugmentation(decl)) {
+                if (isExternalModuleAugmentation(decl) && sourceFilesSet.has(decl.getSourceFile().fileName)) {
                     addIndirectUser(decl);
                 }
             }

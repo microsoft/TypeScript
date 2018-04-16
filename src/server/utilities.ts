@@ -1,6 +1,3 @@
-/// <reference path="types.ts" />
-/// <reference path="shared.ts" />
-
 namespace ts.server {
     export enum LogLevel {
         terse,
@@ -81,14 +78,6 @@ namespace ts.server {
             placeOpenBraceOnNewLineForFunctions: false,
             placeOpenBraceOnNewLineForControlBlocks: false,
         };
-    }
-
-    export function mergeMapLikes<T extends object>(target: T, source: Partial<T>): void {
-        for (const key in source) {
-            if (hasProperty(source, key)) {
-                target[key] = (<T>source)[key];
-            }
-        }
     }
 
     export type NormalizedPath = string & { __normalizedPathTag: any };

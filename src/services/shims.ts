@@ -13,8 +13,6 @@
 // limitations under the License.
 //
 
-/// <reference path='services.ts' />
-
 /* @internal */
 let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { return this; })();
 
@@ -588,6 +586,7 @@ namespace ts {
         length: number;
         category: string;
         code: number;
+        unused?: {};
     }
     export function realizeDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, newLine: string): RealizedDiagnostic[] {
         return diagnostics.map(d => realizeDiagnostic(d, newLine));
@@ -1197,7 +1196,7 @@ namespace ts {
                     this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory());
                 }
                 const hostAdapter = new LanguageServiceShimHostAdapter(host);
-                const languageService = createLanguageService(hostAdapter, this.documentRegistry);
+                const languageService = createLanguageService(hostAdapter, this.documentRegistry, /*syntaxOnly*/ false);
                 return new LanguageServiceShimObject(this, host, languageService);
             }
             catch (err) {

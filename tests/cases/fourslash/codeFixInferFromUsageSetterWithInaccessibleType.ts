@@ -8,7 +8,7 @@
 
 // @Filename: /b.ts
 ////export class C {
-////    [|set x(val) {}|]
+////    [|set x(val) { val; }|]
 ////    method() { this.x = import("./a"); }
 ////}
 

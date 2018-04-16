@@ -4747,12 +4747,12 @@ interface FileReaderEventMap {
 
 interface FileReader extends EventTarget {
     readonly error: DOMException | null;
-    onabort: ((this: FileReader, ev: ProgressEvent) => any) | null;
-    onerror: ((this: FileReader, ev: ProgressEvent) => any) | null;
-    onload: ((this: FileReader, ev: ProgressEvent) => any) | null;
-    onloadend: ((this: FileReader, ev: ProgressEvent) => any) | null;
-    onloadstart: ((this: FileReader, ev: ProgressEvent) => any) | null;
-    onprogress: ((this: FileReader, ev: ProgressEvent) => any) | null;
+    onabort: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
+    onerror: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
+    onload: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
+    onloadend: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
+    onloadstart: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
+    onprogress: ((this: FileReader, ev: FileReaderProgressEvent) => any) | null;
     readonly readyState: number;
     readonly result: any;
     abort(): void;
@@ -4776,6 +4776,10 @@ declare var FileReader: {
     readonly EMPTY: number;
     readonly LOADING: number;
 };
+
+interface FileReaderProgressEvent extends ProgressEvent {
+    readonly target: FileReader | null;
+}
 
 interface FocusEvent extends UIEvent {
     readonly relatedTarget: EventTarget;
@@ -8897,6 +8901,7 @@ declare var MediaEncryptedEvent: {
 
 interface MediaError {
     readonly code: number;
+    readonly message: string;
     readonly msExtendedCode: number;
     readonly MEDIA_ERR_ABORTED: number;
     readonly MEDIA_ERR_DECODE: number;
@@ -9379,6 +9384,7 @@ interface Node extends EventTarget {
     readonly baseURI: string | null;
     readonly childNodes: NodeListOf<Node & ChildNode>;
     readonly firstChild: Node | null;
+    readonly isConnected: boolean;
     readonly lastChild: Node | null;
     readonly localName: string | null;
     readonly namespaceURI: string | null;
@@ -9707,6 +9713,12 @@ declare var PannerNode: {
 };
 
 interface ParentNode {
+    readonly childElementCount: number;
+    readonly firstElementChild: Element | null;
+    readonly lastElementChild: Element | null;
+}
+
+interface ParentNode {
     readonly children: HTMLCollection;
     querySelector<K extends keyof HTMLElementTagNameMap>(selectors: K): HTMLElementTagNameMap[K] | null;
     querySelector<K extends keyof SVGElementTagNameMap>(selectors: K): SVGElementTagNameMap[K] | null;
@@ -9714,12 +9726,6 @@ interface ParentNode {
     querySelectorAll<K extends keyof HTMLElementTagNameMap>(selectors: K): NodeListOf<HTMLElementTagNameMap[K]>;
     querySelectorAll<K extends keyof SVGElementTagNameMap>(selectors: K): NodeListOf<SVGElementTagNameMap[K]>;
     querySelectorAll<E extends Element = Element>(selectors: string): NodeListOf<E>;
-}
-
-interface ParentNode {
-    readonly childElementCount: number;
-    readonly firstElementChild: Element | null;
-    readonly lastElementChild: Element | null;
 }
 
 interface Path2D extends CanvasPathMethods {
@@ -13983,24 +13989,24 @@ interface WebGLRenderingContext {
     texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, width: number, height: number, format: number, type: number, pixels: ArrayBufferView | null): void;
     texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, pixels: ImageBitmap | ImageData | HTMLVideoElement | HTMLImageElement | HTMLCanvasElement): void;
     uniform1f(location: WebGLUniformLocation | null, x: number): void;
-    uniform1fv(location: WebGLUniformLocation, v: Float32Array | ArrayLike<number>): void;
+    uniform1fv(location: WebGLUniformLocation | null, v: Float32Array | ArrayLike<number>): void;
     uniform1i(location: WebGLUniformLocation | null, x: number): void;
-    uniform1iv(location: WebGLUniformLocation, v: Int32Array | ArrayLike<number>): void;
+    uniform1iv(location: WebGLUniformLocation | null, v: Int32Array | ArrayLike<number>): void;
     uniform2f(location: WebGLUniformLocation | null, x: number, y: number): void;
-    uniform2fv(location: WebGLUniformLocation, v: Float32Array | ArrayLike<number>): void;
+    uniform2fv(location: WebGLUniformLocation | null, v: Float32Array | ArrayLike<number>): void;
     uniform2i(location: WebGLUniformLocation | null, x: number, y: number): void;
-    uniform2iv(location: WebGLUniformLocation, v: Int32Array | ArrayLike<number>): void;
+    uniform2iv(location: WebGLUniformLocation | null, v: Int32Array | ArrayLike<number>): void;
     uniform3f(location: WebGLUniformLocation | null, x: number, y: number, z: number): void;
-    uniform3fv(location: WebGLUniformLocation, v: Float32Array | ArrayLike<number>): void;
+    uniform3fv(location: WebGLUniformLocation | null, v: Float32Array | ArrayLike<number>): void;
     uniform3i(location: WebGLUniformLocation | null, x: number, y: number, z: number): void;
-    uniform3iv(location: WebGLUniformLocation, v: Int32Array | ArrayLike<number>): void;
+    uniform3iv(location: WebGLUniformLocation | null, v: Int32Array | ArrayLike<number>): void;
     uniform4f(location: WebGLUniformLocation | null, x: number, y: number, z: number, w: number): void;
-    uniform4fv(location: WebGLUniformLocation, v: Float32Array | ArrayLike<number>): void;
+    uniform4fv(location: WebGLUniformLocation | null, v: Float32Array | ArrayLike<number>): void;
     uniform4i(location: WebGLUniformLocation | null, x: number, y: number, z: number, w: number): void;
-    uniform4iv(location: WebGLUniformLocation, v: Int32Array | ArrayLike<number>): void;
-    uniformMatrix2fv(location: WebGLUniformLocation, transpose: boolean, value: Float32Array | ArrayLike<number>): void;
-    uniformMatrix3fv(location: WebGLUniformLocation, transpose: boolean, value: Float32Array | ArrayLike<number>): void;
-    uniformMatrix4fv(location: WebGLUniformLocation, transpose: boolean, value: Float32Array | ArrayLike<number>): void;
+    uniform4iv(location: WebGLUniformLocation | null, v: Int32Array | ArrayLike<number>): void;
+    uniformMatrix2fv(location: WebGLUniformLocation | null, transpose: boolean, value: Float32Array | ArrayLike<number>): void;
+    uniformMatrix3fv(location: WebGLUniformLocation | null, transpose: boolean, value: Float32Array | ArrayLike<number>): void;
+    uniformMatrix4fv(location: WebGLUniformLocation | null, transpose: boolean, value: Float32Array | ArrayLike<number>): void;
     useProgram(program: WebGLProgram | null): void;
     validateProgram(program: WebGLProgram | null): void;
     vertexAttrib1f(indx: number, x: number): void;
@@ -15044,7 +15050,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     onvrdisplaypointerunrestricted: ((this: Window, ev: Event) => any) | null;
     onvrdisplaypresentchange: ((this: Window, ev: Event) => any) | null;
     onwaiting: ((this: Window, ev: Event) => any) | null;
-    readonly opener: any;
+    opener: any;
     readonly orientation: string | number;
     readonly outerHeight: number;
     readonly outerWidth: number;

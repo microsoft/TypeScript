@@ -3,6 +3,6 @@
 //// export interface Foo {
 ////   bar: string;
 //// }
-//// const x: [|Foo.bar|] = ""
+//// export const x: [|Foo.bar|] = ""
 
 verify.rangeAfterCodeFix(`Foo["bar"]`);

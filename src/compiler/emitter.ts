@@ -1,8 +1,3 @@
-/// <reference path="checker.ts" />
-/// <reference path="transformer.ts" />
-/// <reference path="sourcemap.ts" />
-/// <reference path="comments.ts" />
-
 namespace ts {
     const brackets = createBracketsMap();
 
@@ -615,7 +610,7 @@ namespace ts {
                     return emitMappedType(<MappedTypeNode>node);
                 case SyntaxKind.LiteralType:
                     return emitLiteralType(<LiteralTypeNode>node);
-                case SyntaxKind.ImportTypeNode:
+                case SyntaxKind.ImportType:
                     return emitImportTypeNode(<ImportTypeNode>node);
                 case SyntaxKind.JSDocAllType:
                     write("*");

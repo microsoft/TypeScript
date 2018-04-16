@@ -18,11 +18,4 @@
 // @Filename: package.json
 //// { "dependencies": { "@types/module-y": "latest" } }
 
-const kinds = ["types_ref", "import_as", "import_equals", "require"];
-
-for (const kind of kinds) {
-    goTo.marker(kind + "0");
-    verify.completionListContains("module-x");
-    verify.completionListContains("module-y");
-    verify.not.completionListItemsCountIsGreaterThan(2);
-}
+verify.completionsAt(["types_ref0", "import_as0", "import_equals0", "require0"], ["module-x", "module-y"], { isNewIdentifierLocation: true });

@@ -1,5 +1,3 @@
-/// <reference path="session.ts" />
-
 namespace ts.server {
     export interface SessionClientHost extends LanguageServiceHost {
         writeMessage(message: string): void;
@@ -353,11 +351,11 @@ namespace ts.server {
             return this.getDiagnostics(file, CommandNames.SuggestionDiagnosticsSync);
         }
 
-        private getDiagnostics(file: string, command: CommandNames) {
+        private getDiagnostics(file: string, command: CommandNames): Diagnostic[] {
             const request = this.processRequest<protocol.SyntacticDiagnosticsSyncRequest | protocol.SemanticDiagnosticsSyncRequest | protocol.SuggestionDiagnosticsSyncRequest>(command, { file, includeLinePosition: true });
             const response = this.processResponse<protocol.SyntacticDiagnosticsSyncResponse | protocol.SemanticDiagnosticsSyncResponse | protocol.SuggestionDiagnosticsSyncResponse>(request);
 
-            return (<protocol.DiagnosticWithLinePosition[]>response.body).map(entry => {
+            return (<protocol.DiagnosticWithLinePosition[]>response.body).map((entry): Diagnostic => {
                 const category = firstDefined(Object.keys(DiagnosticCategory), id =>
                     isString(id) && entry.category === id.toLowerCase() ? (<any>DiagnosticCategory)[id] : undefined);
                 return {
@@ -366,7 +364,8 @@ namespace ts.server {
                     length: entry.length,
                     messageText: entry.message,
                     category: Debug.assertDefined(category, "convertDiagnostic: category should not be undefined"),
-                    code: entry.code
+                    code: entry.code,
+                    reportsUnnecessary: entry.reportsUnnecessary,
                 };
             });
         }
@@ -557,7 +556,8 @@ namespace ts.server {
             const request = this.processRequest<protocol.CodeFixRequest>(CommandNames.GetCodeFixes, args);
             const response = this.processResponse<protocol.CodeFixResponse>(request);
 
-            return response.body.map(({ description, changes, fixId, fixAllDescription }) => ({ description, changes: this.convertChanges(changes, file), fixId, fixAllDescription }));
+            return response.body.map<CodeFixAction>(({ fixName, description, changes, commands, fixId, fixAllDescription }) =>
+                ({ fixName, description, changes: this.convertChanges(changes, file), commands: commands as CodeActionCommand[], fixId, fixAllDescription }));
         }
 
         getCombinedCodeFix = notImplemented;

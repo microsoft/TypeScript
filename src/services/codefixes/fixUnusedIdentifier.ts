@@ -1,5 +1,6 @@
 /* @internal */
 namespace ts.codefix {
+    const fixName = "unusedIdentifier";
     const fixIdPrefix = "unusedIdentifier_prefix";
     const fixIdDelete = "unusedIdentifier_delete";
     const errorCodes = [
@@ -14,7 +15,7 @@ namespace ts.codefix {
             const importDecl = tryGetFullImport(sourceFile, context.span.start);
             if (importDecl) {
                 const changes = textChanges.ChangeTracker.with(context, t => t.deleteNode(sourceFile, importDecl));
-                return [createCodeFixAction(changes, [Diagnostics.Remove_import_from_0, showModuleSpecifier(importDecl)], fixIdDelete, Diagnostics.Delete_all_unused_declarations)];
+                return [createCodeFixAction(fixName, changes, [Diagnostics.Remove_import_from_0, showModuleSpecifier(importDecl)], fixIdDelete, Diagnostics.Delete_all_unused_declarations)];
             }
 
             const token = getToken(sourceFile, textSpanEnd(context.span));
@@ -22,12 +23,12 @@ namespace ts.codefix {
 
             const deletion = textChanges.ChangeTracker.with(context, t => tryDeleteDeclaration(t, sourceFile, token));
             if (deletion.length) {
-                result.push(createCodeFixAction(deletion, [Diagnostics.Remove_declaration_for_Colon_0, token.getText(sourceFile)], fixIdDelete, Diagnostics.Delete_all_unused_declarations));
+                result.push(createCodeFixAction(fixName, deletion, [Diagnostics.Remove_declaration_for_Colon_0, token.getText(sourceFile)], fixIdDelete, Diagnostics.Delete_all_unused_declarations));
             }
 
             const prefix = textChanges.ChangeTracker.with(context, t => tryPrefixDeclaration(t, errorCode, sourceFile, token));
             if (prefix.length) {
-                result.push(createCodeFixAction(prefix, [Diagnostics.Prefix_0_with_an_underscore, token.getText(sourceFile)], fixIdPrefix, Diagnostics.Prefix_all_unused_declarations_with_where_possible));
+                result.push(createCodeFixAction(fixName, prefix, [Diagnostics.Prefix_0_with_an_underscore, token.getText(sourceFile)], fixIdPrefix, Diagnostics.Prefix_all_unused_declarations_with_where_possible));
             }
 
             return result;

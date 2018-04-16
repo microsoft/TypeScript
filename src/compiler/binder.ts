@@ -1,6 +1,3 @@
-/// <reference path="utilities.ts"/>
-/// <reference path="parser.ts"/>
-
 /* @internal */
 namespace ts {
     export const enum ModuleInstanceState {
@@ -288,10 +285,6 @@ namespace ts {
                     }
                     Debug.fail("Unknown binary declaration kind");
                     break;
-
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.ClassDeclaration:
-                    return (hasModifier(node, ModifierFlags.Default) ? InternalSymbolName.Default : undefined);
                 case SyntaxKind.JSDocFunctionType:
                     return (isJSDocConstructSignature(node) ? InternalSymbolName.New : InternalSymbolName.Call);
                 case SyntaxKind.Parameter:
@@ -403,7 +396,7 @@ namespace ts {
                                 // 1. multiple export default of class declaration or function declaration by checking NodeFlags.Default
                                 // 2. multiple export default of export assignment. This one doesn't have NodeFlags.Default on (as export default doesn't considered as modifiers)
                                 if (symbol.declarations && symbol.declarations.length &&
-                                    (isDefaultExport || (node.kind === SyntaxKind.ExportAssignment && !(<ExportAssignment>node).isExportEquals))) {
+                                    (node.kind === SyntaxKind.ExportAssignment && !(<ExportAssignment>node).isExportEquals)) {
                                     message = Diagnostics.A_module_cannot_have_multiple_default_exports;
                                 }
                             }
@@ -459,6 +452,9 @@ namespace ts {
                 if (node.kind === SyntaxKind.JSDocTypedefTag) Debug.assert(isInJavaScriptFile(node)); // We shouldn't add symbols for JSDoc nodes if not in a JS file.
                 const isJSDocTypedefInJSDocNamespace = isJSDocTypedefTag(node) && node.name && node.name.kind === SyntaxKind.Identifier && node.name.isInJSDocNamespace;
                 if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) || isJSDocTypedefInJSDocNamespace) {
+                    if (hasModifier(node, ModifierFlags.Default) && !getDeclarationName(node)) {
+                        return declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes); // No local symbol for an unnamed default!
+                    }
                     const exportKind = symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0;
                     const local = declareSymbol(container.locals, /*parent*/ undefined, node, exportKind, symbolExcludes);
                     local.exportSymbol = declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
