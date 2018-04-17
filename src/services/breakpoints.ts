@@ -94,7 +94,7 @@ namespace ts.BreakpointResolver {
                         }
                         // falls through
                     case SyntaxKind.ModuleBlock:
-                        return spanInBlock(<Block>node);
+                        return spanInBlock(<ModuleBlock>node);
 
                     case SyntaxKind.CatchClause:
                         return spanInBlock((<CatchClause>node).block);
@@ -462,10 +462,10 @@ namespace ts.BreakpointResolver {
                 return spanInNode(nodeForSpanInBlock);
             }
 
-            function spanInBlock(block: Block): TextSpan {
+            function spanInBlock(block: Block | ModuleBlock): TextSpan {
                 switch (block.parent.kind) {
                     case SyntaxKind.ModuleDeclaration:
-                        if (getModuleInstanceState(block.parent as ModuleDeclaration) !== ModuleInstanceState.Instantiated) {
+                        if (getModuleInstanceState(block.parent) !== ModuleInstanceState.Instantiated) {
                             return undefined;
                         }
                         // falls through

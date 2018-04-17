@@ -767,11 +767,8 @@ namespace ts {
     }
 
     export interface DeclarationStatement extends NamedDeclaration, Statement {
+        parent?: Statement["parent"];
         name?: Identifier | StringLiteral | NumericLiteral;
-    }
-
-    export interface DeclarationStatementOnly extends DeclarationStatement, StatementOnly {
-        parent?: StatementOnly["parent"];
     }
 
     export interface ComputedPropertyName extends Node {
@@ -828,10 +825,12 @@ namespace ts {
 
     export interface CallSignatureDeclaration extends SignatureDeclarationBase, TypeElement {
         kind: SyntaxKind.CallSignature;
+        parent?: TypeElement["parent"];
     }
 
     export interface ConstructSignatureDeclaration extends SignatureDeclarationBase, TypeElement {
         kind: SyntaxKind.ConstructSignature;
+        parent?: TypeElement["parent"];
     }
 
     export type BindingName = Identifier | BindingPattern;
@@ -883,7 +882,7 @@ namespace ts {
 
     export interface PropertyDeclaration extends ClassElement, JSDocContainer {
         kind: SyntaxKind.PropertyDeclaration;
-        parent: ClassLikeDeclaration;
+        parent?: ClassLikeDeclaration;
         name: PropertyName;
         questionToken?: QuestionToken;      // Present for use with reporting a grammar error
         exclamationToken?: ExclamationToken;
@@ -893,6 +892,7 @@ namespace ts {
 
     export interface ObjectLiteralElement extends NamedDeclaration {
         _objectLiteralBrandBrand: any;
+        parent?: ObjectLiteralExpression | JsxAttributes | ClassLikeDeclaration; // MethodDeclaration is an ObjectLiteralElement but may be a ClassElement
         name?: PropertyName;
     }
 
@@ -989,9 +989,9 @@ namespace ts {
     /** @deprecated Use SignatureDeclaration */
     export type FunctionLike = SignatureDeclaration;
 
-    export interface FunctionDeclaration extends FunctionLikeDeclarationBase, DeclarationStatementOnly {
+    export interface FunctionDeclaration extends FunctionLikeDeclarationBase, DeclarationStatement {
         kind: SyntaxKind.FunctionDeclaration;
-        parent?: DeclarationStatementOnly["parent"];
+        parent?: DeclarationStatement["parent"];
         name?: Identifier;
         body?: FunctionBody;
     }
@@ -1857,16 +1857,16 @@ namespace ts {
 
     export interface Statement extends Node {
         _statementBrand: any;
-    }
-
-    /** Type for statements that appear only in statement position. */
-    export interface StatementOnly extends Statement {
-        parent?: BlockLike | IterationStatementLike | IfStatement | WithStatement | LabeledStatement;
+        parent?: BlockLike | IterationStatementLike | IfStatement | WithStatement | LabeledStatement | CaseClause
+            // These nodes can appear in statement context, or in some other contexts.
+            | ModuleDeclaration["parent"]
+            // For Block:
+            | FunctionLike | TryStatement | CatchClause;
     }
 
     // Represents a statement that is elided as part of a transformation to emit comments on a
     // not-emitted node.
-    export interface NotEmittedStatement extends StatementOnly {
+    export interface NotEmittedStatement extends Statement {
         kind: SyntaxKind.NotEmittedStatement;
     }
 
@@ -1874,7 +1874,7 @@ namespace ts {
      * Marks the end of transformed declaration to properly emit exports.
      */
     /* @internal */
-    export interface EndOfDeclarationMarker extends StatementOnly {
+    export interface EndOfDeclarationMarker extends Statement {
         kind: SyntaxKind.EndOfDeclarationMarker;
     }
 
@@ -1890,19 +1890,19 @@ namespace ts {
      * Marks the beginning of a merged transformed declaration.
      */
     /* @internal */
-    export interface MergeDeclarationMarker extends StatementOnly {
+    export interface MergeDeclarationMarker extends Statement {
         kind: SyntaxKind.MergeDeclarationMarker;
     }
 
-    export interface EmptyStatement extends StatementOnly {
+    export interface EmptyStatement extends Statement {
         kind: SyntaxKind.EmptyStatement;
     }
 
-    export interface DebuggerStatement extends StatementOnly {
+    export interface DebuggerStatement extends Statement {
         kind: SyntaxKind.DebuggerStatement;
     }
 
-    export interface MissingDeclaration extends DeclarationStatement, ClassElement, ObjectLiteralElement, TypeElement {
+    export interface MissingDeclaration extends DeclarationStatement {
         kind: SyntaxKind.MissingDeclaration;
         name?: Identifier;
     }
@@ -1915,12 +1915,12 @@ namespace ts {
         /*@internal*/ multiLine?: boolean;
     }
 
-    export interface VariableStatement extends StatementOnly, JSDocContainer {
+    export interface VariableStatement extends Statement, JSDocContainer {
         kind: SyntaxKind.VariableStatement;
         declarationList: VariableDeclarationList;
     }
 
-    export interface ExpressionStatement extends StatementOnly, JSDocContainer {
+    export interface ExpressionStatement extends Statement, JSDocContainer {
         kind: SyntaxKind.ExpressionStatement;
         expression: Expression;
     }
@@ -1930,7 +1930,7 @@ namespace ts {
         expression: StringLiteral;
     }
 
-    export interface IfStatement extends StatementOnly {
+    export interface IfStatement extends Statement {
         kind: SyntaxKind.IfStatement;
         expression: Expression;
         thenStatement: Statement;
@@ -1939,7 +1939,7 @@ namespace ts {
 
     export type IterationStatementLike = DoStatement | WhileStatement | ForStatement | ForInOrOfStatement;
 
-    export interface IterationStatement extends StatementOnly {
+    export interface IterationStatement extends Statement {
         statement: Statement;
     }
 
@@ -1977,30 +1977,30 @@ namespace ts {
         expression: Expression;
     }
 
-    export interface BreakStatement extends StatementOnly {
+    export interface BreakStatement extends Statement {
         kind: SyntaxKind.BreakStatement;
         label?: Identifier;
     }
 
-    export interface ContinueStatement extends StatementOnly {
+    export interface ContinueStatement extends Statement {
         kind: SyntaxKind.ContinueStatement;
         label?: Identifier;
     }
 
     export type BreakOrContinueStatement = BreakStatement | ContinueStatement;
 
-    export interface ReturnStatement extends StatementOnly {
+    export interface ReturnStatement extends Statement {
         kind: SyntaxKind.ReturnStatement;
         expression?: Expression;
     }
 
-    export interface WithStatement extends StatementOnly {
+    export interface WithStatement extends Statement {
         kind: SyntaxKind.WithStatement;
         expression: Expression;
         statement: Statement;
     }
 
-    export interface SwitchStatement extends StatementOnly {
+    export interface SwitchStatement extends Statement {
         kind: SyntaxKind.SwitchStatement;
         expression: Expression;
         caseBlock: CaseBlock;
@@ -2028,18 +2028,18 @@ namespace ts {
 
     export type CaseOrDefaultClause = CaseClause | DefaultClause;
 
-    export interface LabeledStatement extends StatementOnly, JSDocContainer {
+    export interface LabeledStatement extends Statement, JSDocContainer {
         kind: SyntaxKind.LabeledStatement;
         label: Identifier;
         statement: Statement;
     }
 
-    export interface ThrowStatement extends StatementOnly {
+    export interface ThrowStatement extends Statement {
         kind: SyntaxKind.ThrowStatement;
         expression: Expression;
     }
 
-    export interface TryStatement extends StatementOnly {
+    export interface TryStatement extends Statement {
         kind: SyntaxKind.TryStatement;
         tryBlock: Block;
         catchClause?: CatchClause;
@@ -2065,9 +2065,9 @@ namespace ts {
         members: NodeArray<ClassElement>;
     }
 
-    export interface ClassDeclaration extends ClassLikeDeclarationBase, DeclarationStatementOnly {
+    export interface ClassDeclaration extends ClassLikeDeclarationBase, DeclarationStatement {
         kind: SyntaxKind.ClassDeclaration;
-        parent?: DeclarationStatementOnly["parent"];
+        parent?: DeclarationStatement["parent"];
         /** May be undefined in `export default class { ... }`. */
         name?: Identifier;
     }
@@ -2086,10 +2086,11 @@ namespace ts {
     export interface TypeElement extends NamedDeclaration {
         _typeElementBrand: any;
         name?: PropertyName;
+        parent?: ObjectTypeDeclaration;
         questionToken?: QuestionToken;
     }
 
-    export interface InterfaceDeclaration extends DeclarationStatementOnly, JSDocContainer {
+    export interface InterfaceDeclaration extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.InterfaceDeclaration;
         name: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
@@ -2104,7 +2105,7 @@ namespace ts {
         types: NodeArray<ExpressionWithTypeArguments>;
     }
 
-    export interface TypeAliasDeclaration extends DeclarationStatementOnly, JSDocContainer {
+    export interface TypeAliasDeclaration extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.TypeAliasDeclaration;
         name: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
@@ -2120,7 +2121,7 @@ namespace ts {
         initializer?: Expression;
     }
 
-    export interface EnumDeclaration extends DeclarationStatementOnly, JSDocContainer {
+    export interface EnumDeclaration extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.EnumDeclaration;
         name: Identifier;
         members: NodeArray<EnumMember>;
@@ -2135,7 +2136,7 @@ namespace ts {
 
     export interface ModuleDeclaration extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.ModuleDeclaration;
-        parent?: ModuleBlock | SourceFile;
+        parent?: ModuleBlock | ModuleDeclaration | SourceFile;
         name: ModuleName;
         body?: ModuleBody | JSDocNamespaceDeclaration;
     }
@@ -2167,7 +2168,7 @@ namespace ts {
      * - import x = require("mod");
      * - import x = M.x;
      */
-    export interface ImportEqualsDeclaration extends DeclarationStatementOnly, JSDocContainer {
+    export interface ImportEqualsDeclaration extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.ImportEqualsDeclaration;
         parent?: SourceFile | ModuleBlock;
         name: Identifier;
@@ -2187,7 +2188,7 @@ namespace ts {
     // import "mod"  => importClause = undefined, moduleSpecifier = "mod"
     // In rest of the cases, module specifier is string literal corresponding to module
     // ImportClause information is shown at its declaration below.
-    export interface ImportDeclaration extends StatementOnly {
+    export interface ImportDeclaration extends Statement {
         kind: SyntaxKind.ImportDeclaration;
         parent?: SourceFile | ModuleBlock;
         importClause?: ImportClause;
@@ -2216,12 +2217,12 @@ namespace ts {
         name: Identifier;
     }
 
-    export interface NamespaceExportDeclaration extends DeclarationStatementOnly {
+    export interface NamespaceExportDeclaration extends DeclarationStatement {
         kind: SyntaxKind.NamespaceExportDeclaration;
         name: Identifier;
     }
 
-    export interface ExportDeclaration extends DeclarationStatementOnly {
+    export interface ExportDeclaration extends DeclarationStatement {
         kind: SyntaxKind.ExportDeclaration;
         parent?: SourceFile | ModuleBlock;
         /** Will not be assigned in the case of `export * from "foo";` */
@@ -2264,7 +2265,7 @@ namespace ts {
      * This is either an `export =` or an `export default` declaration.
      * Unless `isExportEquals` is set, this node was parsed as an `export default`.
      */
-    export interface ExportAssignment extends DeclarationStatementOnly {
+    export interface ExportAssignment extends DeclarationStatement {
         kind: SyntaxKind.ExportAssignment;
         parent?: SourceFile;
         isExportEquals?: boolean;
