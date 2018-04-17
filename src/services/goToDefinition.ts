@@ -224,7 +224,7 @@ namespace ts.GoToDefinition {
     }
 
     /** Creates a DefinitionInfo from a Declaration, using the declaration's name if possible. */
-    function createDefinitionInfo(declaration: Declaration, checker: TypeChecker, symbol: Symbol, node: Node): DefinitionInfo {//symbolKind: ScriptElementKind, symbolName: string, containerName: string): DefinitionInfo {
+    function createDefinitionInfo(declaration: Declaration, checker: TypeChecker, symbol: Symbol, node: Node): DefinitionInfo {
         const symbolName = checker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
         const symbolKind = SymbolDisplay.getSymbolKind(checker, symbol, node);
         const containerName = symbol.parent ? checker.symbolToString(symbol.parent, node) : "";
