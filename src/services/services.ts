@@ -1673,7 +1673,7 @@ namespace ts {
         }
 
         function getDocumentHighlights(fileName: string, position: number, filesToSearch: ReadonlyArray<string>): DocumentHighlights[] {
-            Debug.assert(contains(map(filesToSearch, normalizePath), fileName));
+            Debug.assert(filesToSearch.some(f => normalizePath(f) === fileName));
             synchronizeHostData();
             const sourceFilesToSearch = map(filesToSearch, f => Debug.assertDefined(program.getSourceFile(f)));
             const sourceFile = getValidSourceFile(fileName);
