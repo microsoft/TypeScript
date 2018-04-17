@@ -4370,7 +4370,6 @@ namespace ts {
 
                 return <MemberExpression>expression;
             }
-
         }
 
         function isTemplateStartOfTaggedTemplate() {
