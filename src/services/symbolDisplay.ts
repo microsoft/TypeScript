@@ -26,6 +26,15 @@ namespace ts.SymbolDisplay {
     }
 
     function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker: TypeChecker, symbol: Symbol, location: Node): ScriptElementKind {
+        const roots = typeChecker.getRootSymbols(symbol);
+        // If this is a method from a mapped type, leave as a method so long as it still has a call signature.
+        if (roots.length === 1
+            && first(roots).flags & SymbolFlags.Method
+            // Ensure the mapped version is still a method, as opposed to `{ [K in keyof I]: number }`.
+            && typeChecker.getTypeOfSymbolAtLocation(symbol, location).getNonNullableType().getCallSignatures().length !== 0) {
+            return ScriptElementKind.memberFunctionElement;
+        }
+
         if (typeChecker.isUndefinedSymbol(symbol)) {
             return ScriptElementKind.variableElement;
         }
