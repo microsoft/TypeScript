@@ -4281,7 +4281,7 @@
         "category": "Message",
         "code": 95054
     },
-    "Convert arrow function": {
+    "Add or remove braces in an arrow function": {
         "category": "Message",
         "code": 95055
     },

@@ -6,4 +6,4 @@
 //// };
 
 goTo.select("a", "b");
-verify.not.refactorAvailable("Convert arrow function");
+verify.not.refactorAvailable("Add or remove braces in an arrow function");

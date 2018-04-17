@@ -114,7 +114,7 @@
         "refactors/extractSymbol.ts",
         "refactors/generateGetAccessorAndSetAccessor.ts",
         "refactors/moveToNewFile.ts",
-        "refactors/convertArrowFunction.ts",
+        "refactors/addOrRemoveBracesToArrowFunction.ts",
         "sourcemaps.ts",
         "services.ts",
         "breakpoints.ts",

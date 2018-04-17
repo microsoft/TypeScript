@@ -1,7 +1,7 @@
 /* @internal */
-namespace ts.refactor.convertArrowFunction {
-    const refactorName = "Convert arrow function";
-    const refactorDescription = Diagnostics.Convert_arrow_function.message;
+namespace ts.refactor.addOrRemoveBracesToArrowFunction {
+    const refactorName = "Add or remove braces in an arrow function";
+    const refactorDescription = Diagnostics.Add_or_remove_braces_in_an_arrow_function.message;
     const addBracesActionName = "Add braces to arrow function";
     const removeBracesActionName = "Remove braces from arrow function";
     const addBracesActionDescription = Diagnostics.Add_braces_to_arrow_function.message;
@@ -19,21 +19,19 @@ namespace ts.refactor.convertArrowFunction {
         const info = getConvertibleArrowFunctionAtPosition(file, startPosition);
         if (!info) return undefined;
 
-        const actions: RefactorActionInfo[] = [
-            info.addBraces ?
-                {
-                    name: addBracesActionName,
-                    description: addBracesActionDescription
-                } : {
-                    name: removeBracesActionName,
-                    description: removeBracesActionDescription
-                }
-        ];
-
         return [{
             name: refactorName,
             description: refactorDescription,
-            actions
+            actions: [
+                info.addBraces ?
+                    {
+                        name: addBracesActionName,
+                        description: addBracesActionDescription
+                    } : {
+                        name: removeBracesActionName,
+                        description: removeBracesActionDescription
+                    }
+            ]
         }];
     }
 
@@ -42,9 +40,18 @@ namespace ts.refactor.convertArrowFunction {
         const info = getConvertibleArrowFunctionAtPosition(file, startPosition);
         if (!info) return undefined;
 
-        const { addBraces, expression, container } = info;
+        const { expression, container } = info;
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
-        updateBraces(changeTracker, file, container, expression, addBraces);
+
+        if (_actionName === addBracesActionName) {
+            addBraces(changeTracker, file, container, expression);
+        }
+        else if (_actionName === removeBracesActionName) {
+            removeBraces(changeTracker, file, container, expression);
+        }
+        else {
+            Debug.fail("invalid action");
+        }
 
         return {
             renameFilename: undefined,
@@ -53,9 +60,18 @@ namespace ts.refactor.convertArrowFunction {
         };
     }
 
-    function updateBraces(changeTracker: textChanges.ChangeTracker, file: SourceFile, container: ArrowFunction, expression: Expression, addBraces: boolean) {
-        const body = addBraces ? createBlock([createReturn(expression)]) : expression;
+    function addBraces(changeTracker: textChanges.ChangeTracker, file: SourceFile, container: ArrowFunction, expression: Expression) {
+        updateBraces(changeTracker, file, container, createBlock([createReturn(expression)]));
+    }
 
+    function removeBraces(changeTracker: textChanges.ChangeTracker, file: SourceFile, container: ArrowFunction, expression: Expression) {
+        if (!isLiteralExpression(expression) && !isIdentifier(expression) && !isParenthesizedExpression(expression) && expression.kind !== SyntaxKind.NullKeyword) {
+            expression = createParen(expression);
+        }
+        updateBraces(changeTracker, file, container, expression);
+    }
+
+    function updateBraces(changeTracker: textChanges.ChangeTracker, file: SourceFile, container: ArrowFunction, body: ConciseBody) {
         const arrowFunction = updateArrowFunction(
             container,
             container.modifiers,
@@ -78,12 +94,15 @@ namespace ts.refactor.convertArrowFunction {
                 expression: container.body
             };
         }
-        else if (container.body.statements.length === 1 && isReturnStatement(first(container.body.statements))) {
-            return {
-                container,
-                addBraces: false,
-                expression: (<ReturnStatement>first(container.body.statements)).expression
-            };
+        else if (container.body.statements.length === 1) {
+            const firstStatement = first(container.body.statements);
+            if (isReturnStatement(firstStatement)) {
+                return {
+                    container,
+                    addBraces: false,
+                    expression: firstStatement.expression
+                };
+            }
         }
         return undefined;
     }
