@@ -585,6 +585,7 @@ declare namespace ts {
     }
     interface PropertyDeclaration extends ClassElement, JSDocContainer {
         kind: SyntaxKind.PropertyDeclaration;
+        parent: ClassLikeDeclaration;
         name: PropertyName;
         questionToken?: QuestionToken;
         exclamationToken?: ExclamationToken;
@@ -3010,7 +3011,11 @@ declare namespace ts {
      */
     function collapseTextChangeRangesAcrossMultipleVersions(changes: ReadonlyArray<TextChangeRange>): TextChangeRange;
     function getTypeParameterOwner(d: Declaration): Declaration;
-    function isParameterPropertyDeclaration(node: Node): node is ParameterDeclaration;
+    type ParameterPropertyDeclaration = ParameterDeclaration & {
+        parent: ConstructorDeclaration;
+        name: Identifier;
+    };
+    function isParameterPropertyDeclaration(node: Node): node is ParameterPropertyDeclaration;
     function isEmptyBindingPattern(node: BindingName): node is BindingPattern;
     function isEmptyBindingElement(node: BindingElement): boolean;
     function getCombinedModifierFlags(node: Node): ModifierFlags;
@@ -4526,6 +4531,8 @@ declare namespace ts {
         commands?: CodeActionCommand[];
     }
     interface CodeFixAction extends CodeAction {
+        /** Short name to identify the fix, for use by telemetry. */
+        fixName: string;
         /**
          * If present, one may call 'getCombinedCodeFix' with this fixId.
          * This may be omitted to indicate that the code fix can't be applied in a group.
@@ -6609,6 +6616,8 @@ declare namespace ts.server.protocol {
         commands?: ReadonlyArray<{}>;
     }
     interface CodeFixAction extends CodeAction {
+        /** Short name to identify the fix, for use by telemetry. */
+        fixName: string;
         /**
          * If present, one may call 'getCombinedCodeFix' with this fixId.
          * This may be omitted to indicate that the code fix can't be applied in a group.
@@ -8336,6 +8345,7 @@ declare namespace ts.server {
         private applyCodeActionCommand;
         private getStartAndEndPosition;
         private mapCodeAction;
+        private mapCodeFixAction;
         private mapTextChangesToCodeEdits;
         private mapTextChangesToCodeEditsUsingScriptinfo;
         private convertTextChangeToCodeEdit;

@@ -112,17 +112,15 @@
         "../services/codefixes/fixInvalidImportSyntax.ts",
         "../services/codefixes/fixStrictClassInitialization.ts",
         "../services/codefixes/useDefaultImport.ts",
-        "../services/codefixes/fixes.ts",
         "../services/refactors/extractSymbol.ts",
         "../services/refactors/generateGetAccessorAndSetAccessor.ts",
-        "../services/refactors/refactors.ts",
         "../services/sourcemaps.ts",
         "../services/services.ts",
         "../services/breakpoints.ts",
         "../services/transform.ts",
         "../services/shims.ts",
 
-        "../server/typingsinstaller/typingsinstaller.ts",
+        "../server/typingsInstaller/typingsInstaller.ts",
 
         "../server/types.ts",
         "../server/shared.ts",
