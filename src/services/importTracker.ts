@@ -33,7 +33,7 @@ namespace ts.FindAllReferences {
     interface AmbientModuleDeclaration extends ModuleDeclaration { body?: ModuleBlock; }
     type SourceFileLike = SourceFile | AmbientModuleDeclaration;
     // Identifier for the case of `const x = require("y")`.
-    type Importer = AnyImportOrReExport | Identifier;
+    type Importer = AnyImportOrReExport | ImportTypeNode | Identifier;
     type ImporterOrCallExpression = Importer | CallExpression;
 
     /** Returns import statements that directly reference the exporting module, and a list of files that may access the module through a namespace. */
@@ -212,6 +212,10 @@ namespace ts.FindAllReferences {
 
             if (decl.kind === SyntaxKind.Identifier) {
                 handleNamespaceImportLike(decl);
+                return;
+            }
+
+            if (decl.kind === SyntaxKind.ImportType) {
                 return;
             }
 

@@ -1710,8 +1710,10 @@ namespace ts {
                 return (node.parent as ExternalModuleReference).parent as AnyValidImportOrReExport;
             case SyntaxKind.CallExpression:
                 return node.parent as AnyValidImportOrReExport;
+            case SyntaxKind.LiteralType:
+                return cast(node.parent.parent, isImportTypeNode) as ImportTypeNode & { argument: LiteralType };
             default:
-                return Debug.fail(Debug.showSyntaxKind(node));
+                return Debug.fail(Debug.showSyntaxKind(node.parent));
         }
     }
 
@@ -4924,6 +4926,10 @@ namespace ts {
 
     export function isLiteralTypeNode(node: Node): node is LiteralTypeNode {
         return node.kind === SyntaxKind.LiteralType;
+    }
+
+    export function isImportTypeNode(node: Node): node is ImportTypeNode {
+        return node.kind === SyntaxKind.ImportType;
     }
 
     // Binding patterns
