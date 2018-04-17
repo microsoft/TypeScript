@@ -1,0 +1,30 @@
+tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(2,15): error TS7017: Element implicitly has an 'any' type because type '{ prop: string; }' has no index signature.
+tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(10,15): error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
+tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(16,15): error TS7017: Element implicitly has an 'any' type because type '{ [idx: string]: string; }' has no index signature.
+
+
+==== tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts (3 errors) ====
+    let named = "foo";
+    let {[named]: prop} = {prop: "foo"};
+                  ~~~~
+!!! error TS7017: Element implicitly has an 'any' type because type '{ prop: string; }' has no index signature.
+    void prop;
+    
+    const numIndexed: {[idx: number]: string} = null as any;
+    const strIndexed: {[idx: string]: string} = null as any;
+    
+    let numed = 6;
+    
+    let {[named]: prop2} = numIndexed;
+                  ~~~~~
+!!! error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
+    void prop2;
+    let {[numed]: prop3} = numIndexed;
+    void prop3;
+    let {[named]: prop4} = strIndexed;
+    void prop4;
+    let {[numed]: prop5} = strIndexed;
+                  ~~~~~
+!!! error TS7017: Element implicitly has an 'any' type because type '{ [idx: string]: string; }' has no index signature.
+    void prop5;
+    

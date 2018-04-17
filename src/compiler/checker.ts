@@ -4173,7 +4173,23 @@ namespace ts {
                     const isLate = isLateBindableName(name);
                     const isWellKnown = isComputedPropertyName(name) && isWellKnownSymbolSyntactically(name.expression);
                     if (!isLate && !isWellKnown && isComputedNonLiteralName(name)) {
-                        return anyType;
+                        const exprType = checkExpression((name as ComputedPropertyName).expression);
+                        let indexerType: Type;
+                        if (isTypeAssignableToKind(exprType, TypeFlags.NumberLike)) {
+                            indexerType = getIndexTypeOfType(parentType, IndexKind.Number);
+                        }
+                        else if (isTypeAssignableToKind(exprType, TypeFlags.StringLike)) {
+                            indexerType = getIndexTypeOfType(parentType, IndexKind.String);
+                        }
+                        if (!indexerType && noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors) {
+                            if (getIndexTypeOfType(parentType, IndexKind.Number)) {
+                                error(declaration, Diagnostics.Element_implicitly_has_an_any_type_because_index_expression_is_not_of_type_number);
+                            }
+                            else {
+                                error(declaration, Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature, typeToString(parentType));
+                            }
+                        }
+                        return indexerType || anyType;
                     }
 
                     // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
