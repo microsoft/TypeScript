@@ -215,8 +215,8 @@ for (const i in libraryTargets) {
             .pipe(gulp.dest(".")));
 }
 
-const configureNightlyJs = path.join(scriptsDirectory, "configurePrerelease.js");
-const configureNightlyTs = path.join(scriptsDirectory, "configurePrerelease.ts");
+const configurePreleleaseJs = path.join(scriptsDirectory, "configurePrerelease.js");
+const configurePreleleaseTs = path.join(scriptsDirectory, "configurePrerelease.ts");
 const packageJson = "package.json";
 const versionFile = path.join(compilerDirectory, "core.ts");
 
@@ -301,7 +301,7 @@ function getCompilerSettings(base: tsc.Settings, useBuiltCompiler?: boolean): ts
     return copy;
 }
 
-gulp.task(configureNightlyJs, /*help*/ false, [], () => {
+gulp.task(configurePreleleaseJs, /*help*/ false, [], () => {
     const settings: tsc.Settings = {
         declaration: false,
         removeComments: true,
@@ -309,7 +309,7 @@ gulp.task(configureNightlyJs, /*help*/ false, [], () => {
         stripInternal: false,
         module: "commonjs"
     };
-    return gulp.src(configureNightlyTs)
+    return gulp.src(configurePreleleaseTs)
         .pipe(sourcemaps.init())
         .pipe(tsc(settings))
         .pipe(sourcemaps.write("."))
@@ -318,8 +318,8 @@ gulp.task(configureNightlyJs, /*help*/ false, [], () => {
 
 
 // Nightly management tasks
-gulp.task("configure-nightly", "Runs scripts/configurePrerelease.ts to prepare a build for nightly publishing", [configureNightlyJs], (done) => {
-    exec(host, [configureNightlyJs, "dev", packageJson, versionFile], done, done);
+gulp.task("configure-nightly", "Runs scripts/configurePrerelease.ts to prepare a build for nightly publishing", [configurePreleleaseJs], (done) => {
+    exec(host, [configurePreleleaseJs, "dev", packageJson, versionFile], done, done);
 });
 gulp.task("publish-nightly", "Runs `npm publish --tag next` to create a new nightly build on npm", ["LKG"], () => {
     return runSequence("clean", "useDebugMode", "runtests-parallel", (done) => {
