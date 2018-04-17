@@ -424,7 +424,8 @@ namespace ts.FindAllReferences.Core {
         readonly text: string;
         readonly escapedText: __String;
         /** Only set if `options.implementations` is true. These are the symbols checked to get the implementations of a property access. */
-        readonly parents: Symbol[] | undefined;
+        readonly parents: ReadonlyArray<Symbol> | undefined;
+        readonly allSearchSymbols: ReadonlyArray<Symbol>;
 
         /**
          * Whether a symbol is in the search set.
@@ -500,14 +501,11 @@ namespace ts.FindAllReferences.Core {
             // here appears to be intentional).
             const {
                 text = stripQuotes(unescapeLeadingUnderscores((getLocalSymbolForExportDefault(symbol) || symbol).escapedName)),
-                allSearchSymbols,
+                allSearchSymbols = [symbol],
             } = searchOptions;
             const escapedText = escapeLeadingUnderscores(text);
             const parents = this.options.implementations ? getParentSymbolsOfPropertyAccess(location, symbol, this.checker) : undefined;
-            return {
-                symbol, comingFrom, text, escapedText, parents,
-                includes: referenceSymbol => allSearchSymbols ? contains(allSearchSymbols, referenceSymbol) : referenceSymbol === symbol,
-            };
+            return { symbol, comingFrom, text, escapedText, parents, allSearchSymbols, includes: sym => contains(allSearchSymbols, sym) };
         }
 
         private readonly symbolIdToReferences: Entry[][] = [];
@@ -534,13 +532,17 @@ namespace ts.FindAllReferences.Core {
         }
 
         // Source file ID → symbol ID → Whether the symbol has been searched for in the source file.
-        private readonly sourceFileToSeenSymbols: true[][] = [];
+        private readonly sourceFileToSeenSymbols: Map<true>[] = [];
         /** Returns `true` the first time we search for a symbol in a file and `false` afterwards. */
-        markSearchedSymbol(sourceFile: SourceFile, symbol: Symbol): boolean {
+        markSearchedSymbols(sourceFile: SourceFile, symbols: ReadonlyArray<Symbol>): boolean {
             const sourceId = getNodeId(sourceFile);
-            const symbolId = getSymbolId(symbol);
-            const seenSymbols = this.sourceFileToSeenSymbols[sourceId] || (this.sourceFileToSeenSymbols[sourceId] = []);
-            return !seenSymbols[symbolId] && (seenSymbols[symbolId] = true);
+            const seenSymbols = this.sourceFileToSeenSymbols[sourceId] || (this.sourceFileToSeenSymbols[sourceId] = createMap<true>());
+
+            let anyNewSymbols = false;
+            for (const sym of symbols) {
+                anyNewSymbols = addToSeen(seenSymbols, getSymbolId(sym)) || anyNewSymbols;
+            }
+            return anyNewSymbols;
         }
     }
 
@@ -805,7 +807,7 @@ namespace ts.FindAllReferences.Core {
      * searchLocation: a node where the search value
      */
     function getReferencesInContainer(container: Node, sourceFile: SourceFile, search: Search, state: State, addReferencesHere: boolean): void {
-        if (!state.markSearchedSymbol(sourceFile, search.symbol)) {
+        if (!state.markSearchedSymbols(sourceFile, search.allSearchSymbols)) {
             return;
         }
 

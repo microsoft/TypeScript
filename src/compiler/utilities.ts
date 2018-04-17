@@ -3051,6 +3051,10 @@ namespace ts {
         return (node as HasType).type || (isInJavaScriptFile(node) ? getJSDocType(node) : undefined);
     }
 
+    export function getTypeAnnotationNode(node: Node): TypeNode | undefined {
+        return (node as HasType).type;
+    }
+
     /**
      * Gets the effective return type annotation of a signature. If the node was parsed in a
      * JavaScript file, gets the return type annotation from JSDoc.
@@ -4285,8 +4289,9 @@ namespace ts {
         }
     }
 
-    export function isParameterPropertyDeclaration(node: Node): node is ParameterDeclaration {
-        return hasModifier(node, ModifierFlags.ParameterPropertyModifier) && node.parent.kind === SyntaxKind.Constructor && isClassLike(node.parent.parent);
+    export type ParameterPropertyDeclaration = ParameterDeclaration & { parent: ConstructorDeclaration, name: Identifier };
+    export function isParameterPropertyDeclaration(node: Node): node is ParameterPropertyDeclaration {
+        return hasModifier(node, ModifierFlags.ParameterPropertyModifier) && node.parent.kind === SyntaxKind.Constructor;
     }
 
     export function isEmptyBindingPattern(node: BindingName): node is BindingPattern {

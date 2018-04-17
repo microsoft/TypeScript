@@ -12,20 +12,23 @@ namespace ts {
         };
         const importedFiles: FileReference[] = [];
         let ambientExternalModules: { ref: FileReference, depth: number }[] | undefined;
+        let lastToken: SyntaxKind;
+        let currentToken: SyntaxKind;
         let braceNesting = 0;
         // assume that text represent an external module if it contains at least one top level import/export
         // ambient modules that are found inside external modules are interpreted as module augmentations
         let externalModule = false;
 
         function nextToken() {
-            const token = scanner.scan();
-            if (token === SyntaxKind.OpenBraceToken) {
+            lastToken = currentToken;
+            currentToken = scanner.scan();
+            if (currentToken === SyntaxKind.OpenBraceToken) {
                 braceNesting++;
             }
-            else if (token === SyntaxKind.CloseBraceToken) {
+            else if (currentToken === SyntaxKind.CloseBraceToken) {
                 braceNesting--;
             }
-            return token;
+            return currentToken;
         }
 
         function getFileReference() {
@@ -77,6 +80,9 @@ namespace ts {
          * Returns true if at least one token was consumed from the stream
          */
         function tryConsumeImport(): boolean {
+            if (lastToken === SyntaxKind.DotToken) {
+                return false;
+            }
             let token = scanner.getToken();
             if (token === SyntaxKind.ImportKeyword) {
                 token = nextToken();
@@ -292,6 +298,10 @@ namespace ts {
             //    export {a as b} from "mod"
             //    export import i = require("mod")
             //    (for JavaScript files) require("mod")
+
+            // Do not look for:
+            //    AnySymbol.import("mod")
+            //    AnySymbol.nested.import("mod")
 
             while (true) {
                 if (scanner.getToken() === SyntaxKind.EndOfFileToken) {
