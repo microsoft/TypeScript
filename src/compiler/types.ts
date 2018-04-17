@@ -3187,7 +3187,7 @@ namespace ts {
     export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
 
     /* @internal */
-    export type AnyImportOrReExport = AnyImportSyntax | ExportDeclaration | ImportTypeNode;
+    export type AnyImportOrReExport = AnyImportSyntax | ExportDeclaration;
 
     /* @internal */
     export type AnyValidImportOrReExport =
