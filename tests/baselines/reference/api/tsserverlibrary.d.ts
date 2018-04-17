@@ -7643,10 +7643,6 @@ declare namespace ts.server {
         private externalFiles;
         private missingFilesMap;
         private plugins;
-        /**
-         * This is the set that has entry to true if file doesnt contain any unresolved import
-         */
-        private filesWithNoUnresolvedImports;
         private lastFileExceededProgramSize;
         protected languageService: LanguageService;
         languageServiceEnabled: boolean;
@@ -7666,10 +7662,10 @@ declare namespace ts.server {
          */
         private lastReportedVersion;
         /**
-         * Current project structure version.
+         * Current project's program version. (incremented everytime new program is created that is not complete reuse from the old one)
          * This property is changed in 'updateGraph' based on the set of files in program
          */
-        private projectStructureVersion;
+        private projectProgramVersion;
         /**
          * Current version of the project state. It is changed when:
          * - new root file was added/removed

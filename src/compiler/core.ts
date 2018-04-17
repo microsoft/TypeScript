@@ -2988,7 +2988,7 @@ namespace ts {
 
     /** Remove the *first* occurrence of `item` from the array. */
     export function unorderedRemoveItem<T>(array: T[], item: T) {
-        unorderedRemoveFirstItemWhere(array, element => element === item);
+        return unorderedRemoveFirstItemWhere(array, element => element === item);
     }
 
     /** Remove the *first* element satisfying `predicate`. */

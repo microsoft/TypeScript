@@ -304,7 +304,7 @@ namespace ts.server {
             const isNew = !this.isAttached(project);
             if (isNew) {
                 this.containingProjects.push(project);
-                project.hasMoreOrLessScriptInfos = true;
+                project.setHasMoreOrLessFiles();
                 if (!project.getCompilerOptions().preserveSymlinks) {
                     this.ensureRealPath();
                 }
@@ -329,23 +329,23 @@ namespace ts.server {
                     return;
                 case 1:
                     if (this.containingProjects[0] === project) {
-                        project.hasMoreOrLessScriptInfos = true;
+                        project.setHasMoreOrLessFiles();
                         this.containingProjects.pop();
                     }
                     break;
                 case 2:
                     if (this.containingProjects[0] === project) {
-                        project.hasMoreOrLessScriptInfos = true;
+                        project.setHasMoreOrLessFiles();
                         this.containingProjects[0] = this.containingProjects.pop();
                     }
                     else if (this.containingProjects[1] === project) {
-                        project.hasMoreOrLessScriptInfos = true;
+                        project.setHasMoreOrLessFiles();
                         this.containingProjects.pop();
                     }
                     break;
                 default:
                     if (unorderedRemoveItem(this.containingProjects, project)) {
-                        project.hasMoreOrLessScriptInfos = true;
+                        project.setHasMoreOrLessFiles();
                     }
                     break;
             }
