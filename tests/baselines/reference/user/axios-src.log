@@ -1,22 +1,5 @@
 Exit Code: 1
 Standard output:
-examples/server.js(81,30): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
-  Type 'undefined' is not assignable to type 'string'.
-examples/server.js(85,31): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
-  Type 'undefined' is not assignable to type 'string'.
-examples/server.js(89,35): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
-  Type 'undefined' is not assignable to type 'string'.
-examples/server.js(93,36): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
-  Type 'undefined' is not assignable to type 'string'.
-examples/server.js(105,18): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
-  Type 'undefined' is not assignable to type 'string'.
-examples/server.js(110,15): error TS2532: Object is possibly 'undefined'.
-examples/server.js(116,27): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
-  Type 'undefined' is not assignable to type 'string'.
-examples/server.js(117,44): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
-  Type 'undefined' is not assignable to type 'string'.
-examples/server.js(125,64): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
-  Type 'undefined' is not assignable to type 'string'.
 lib/adapters/http.js(12,19): error TS2307: Cannot find module './../../package.json'.
 lib/adapters/http.js(83,22): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
@@ -55,11 +38,6 @@ lib/helpers/btoa.js(31,13): error TS2532: Object is possibly 'undefined'.
 lib/helpers/cookies.js(16,56): error TS2551: Property 'toGMTString' does not exist on type 'Date'. Did you mean 'toUTCString'?
 lib/utils.js(244,20): error TS8029: JSDoc '@param' tag has name 'obj1', but there is no parameter with that name. It would match 'arguments' if it had an array type.
 lib/utils.js(268,20): error TS8029: JSDoc '@param' tag has name 'obj1', but there is no parameter with that name. It would match 'arguments' if it had an array type.
-sandbox/client.js(13,7): error TS2339: Property 'get' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/axios-src/axios-src/index")'.
-sandbox/client.js(18,7): error TS2339: Property 'post' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/axios-src/axios-src/index")'.
-sandbox/server.js(20,26): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
-  Type 'undefined' is not assignable to type 'string'.
-../tsconfig.json(15,9): error TS1005: ',' expected.
 
 
 

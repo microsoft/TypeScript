@@ -10,9 +10,5 @@
         "types": ["node"],
         "lib": ["esnext", "dom"],
     },
-    "include": [
-        "axios-src/examples"
-        "axios-src/lib",
-        "axios-src/sandbox",
-        ]
+    "include": ["axios-src/lib"]
 }
