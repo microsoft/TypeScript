@@ -15984,6 +15984,25 @@ namespace ts {
             return undefined;
         }
 
+        function getInstantiatedJsxSignatures(openingLikeElement: JsxOpeningLikeElement, elementType: Type, reportErrors?: boolean) {
+            // Resolve the signatures, preferring constructor
+            let signatures = getSignaturesOfType(elementType, SignatureKind.Construct);
+            if (signatures.length === 0) {
+                // No construct signatures, try call signatures
+                signatures = getSignaturesOfType(elementType, SignatureKind.Call);
+                if (signatures.length === 0) {
+                    // We found no signatures at all, which is an error
+                    if (reportErrors) {
+                        error(openingLikeElement.tagName, Diagnostics.JSX_element_type_0_does_not_have_any_construct_or_call_signatures, getTextOfNode(openingLikeElement.tagName));
+                    }
+                    return;
+                }
+            }
+
+            // Instantiate in context of source type
+            return instantiateJsxSignatures(openingLikeElement, signatures);
+        }
+
         /**
          * Resolve attributes type of the given opening-like element. The attributes type is a type of attributes associated with the given elementType.
          * For instance:
@@ -16046,20 +16065,10 @@ namespace ts {
 
             // Get the element instance type (the result of newing or invoking this tag)
 
-            // Resolve the signatures, preferring constructor
-            let signatures = getSignaturesOfType(elementType, SignatureKind.Construct);
-            if (signatures.length === 0) {
-                // No construct signatures, try call signatures
-                signatures = getSignaturesOfType(elementType, SignatureKind.Call);
-                if (signatures.length === 0) {
-                    // We found no signatures at all, which is an error
-                    error(openingLikeElement.tagName, Diagnostics.JSX_element_type_0_does_not_have_any_construct_or_call_signatures, getTextOfNode(openingLikeElement.tagName));
-                    return unknownType;
-                }
+            const instantiatedSignatures = getInstantiatedJsxSignatures(openingLikeElement, elementType, /*reportErrors*/ true);
+            if (!length(instantiatedSignatures)) {
+                return unknownType;
             }
-
-            // Instantiate in context of source type
-            const instantiatedSignatures = instantiateJsxSignatures(openingLikeElement, signatures);
             const elemInstanceType = getUnionType(map(instantiatedSignatures, getReturnTypeOfSignature), UnionReduction.Subtype);
 
             // If we should include all stateless attributes type, then get all attributes type from all stateless function signature.
@@ -17749,11 +17758,11 @@ namespace ts {
 
             let typeArguments: NodeArray<TypeNode>;
 
-            if (!isTaggedTemplate && !isDecorator && !isJsxOpeningOrSelfClosingElement) {
-                typeArguments = (<CallExpression>node).typeArguments;
+            if (!isTaggedTemplate && !isDecorator) {
+                typeArguments = (<CallExpression | JsxOpeningLikeElement>node).typeArguments;
 
                 // We already perform checking on the type arguments on the class declaration itself.
-                if ((<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword) {
+                if (isJsxOpeningOrSelfClosingElement || (<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword) {
                     forEach(typeArguments, checkSourceElement);
                 }
             }
@@ -18342,30 +18351,6 @@ namespace ts {
          */
         function getResolvedJsxStatelessFunctionSignature(openingLikeElement: JsxOpeningLikeElement, elementType: Type, candidatesOutArray: Signature[]): Signature | undefined {
             Debug.assert(!(elementType.flags & TypeFlags.Union));
-            return resolveStatelessJsxOpeningLikeElement(openingLikeElement, elementType, candidatesOutArray);
-        }
-
-        /**
-         * Try treating a given opening-like element as stateless function component and resolve a tagName to a function signature.
-         * @param openingLikeElement an JSX opening-like element we want to try resolve its stateless function if possible
-         * @param elementType a type of the opening-like JSX element, a result of resolving tagName in opening-like element.
-         * @param candidatesOutArray an array of signature to be filled in by the function. It is passed by signature help in the language service;
-         *                           the function will fill it up with appropriate candidate signatures
-         * @return a resolved signature if we can find function matching function signature through resolve call or a first signature in the list of functions.
-         *         otherwise return undefined if tag-name of the opening-like element doesn't have call signatures
-         */
-        function resolveStatelessJsxOpeningLikeElement(openingLikeElement: JsxOpeningLikeElement, elementType: Type, candidatesOutArray: Signature[]): Signature | undefined {
-            // If this function is called from language service, elementType can be a union type. This is not possible if the function is called from compiler (see: resolveCustomJsxElementAttributesType)
-            if (elementType.flags & TypeFlags.Union) {
-                const types = (elementType as UnionType).types;
-                let result: Signature;
-                for (const type of types) {
-                    result = result || resolveStatelessJsxOpeningLikeElement(openingLikeElement, type, candidatesOutArray);
-                }
-
-                return result;
-            }
-
             const callSignatures = elementType && getSignaturesOfType(elementType, SignatureKind.Call);
             if (callSignatures && callSignatures.length > 0) {
                 return resolveCall(openingLikeElement, callSignatures, candidatesOutArray);
@@ -18387,7 +18372,18 @@ namespace ts {
                 case SyntaxKind.JsxOpeningElement:
                 case SyntaxKind.JsxSelfClosingElement:
                     // This code-path is called by language service
-                    return resolveStatelessJsxOpeningLikeElement(node, checkExpression(node.tagName), candidatesOutArray) || unknownSignature;
+                    const exprTypes = checkExpression(node.tagName);
+                    return forEachType(exprTypes, exprType => {
+                        const sfcResult = getResolvedJsxStatelessFunctionSignature(node, exprType, candidatesOutArray);
+                        if (sfcResult && sfcResult !== unknownSignature) {
+                            return sfcResult;
+                        }
+                        const sigs = getInstantiatedJsxSignatures(node, exprType);
+                        if (candidatesOutArray && length(sigs)) {
+                            candidatesOutArray.push(...sigs);
+                        }
+                        return length(sigs) ? sigs[0] : unknownSignature;
+                    }) || unknownSignature;
             }
             Debug.assertNever(node, "Branch in 'resolveSignature' should be unreachable.");
         }
