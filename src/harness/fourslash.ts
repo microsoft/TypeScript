@@ -842,6 +842,7 @@ namespace FourSlash {
 
             const actualCompletions = this.getCompletionListAtCaret(options);
             if (!actualCompletions) {
+                if (expected === undefined) return;
                 this.raiseError(`No completions at position '${this.currentCaretPosition}'.`);
             }
 
@@ -4646,10 +4647,12 @@ namespace FourSlashInterface {
 
     export type ExpectedCompletionEntry = string | { name: string, insertText?: string, replacementSpan?: FourSlash.Range };
     export interface CompletionsAtOptions extends Partial<ts.UserPreferences> {
+        triggerCharacter?: string;
         isNewIdentifierLocation?: boolean;
     }
 
     export interface VerifyCompletionListContainsOptions extends ts.UserPreferences {
+        triggerCharacter?: string;
         sourceDisplay: string;
         isRecommended?: true;
         insertText?: string;

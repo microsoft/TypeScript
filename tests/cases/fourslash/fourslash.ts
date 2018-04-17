@@ -157,6 +157,7 @@ declare namespace FourSlashInterface {
             spanIndex?: number,
             hasAction?: boolean,
             options?: UserPreferences & {
+                triggerCharacter?: string,
                 sourceDisplay?: string,
                 isRecommended?: true,
                 insertText?: string,
@@ -530,6 +531,7 @@ declare namespace FourSlashInterface {
         importModuleSpecifierPreference?: "relative" | "non-relative";
     }
     interface CompletionsAtOptions extends UserPreferences {
+        triggerCharacter?: string;
         isNewIdentifierLocation?: boolean;
     }
 }

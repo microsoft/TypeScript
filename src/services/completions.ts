@@ -25,7 +25,7 @@ namespace ts.Completions {
 
     const enum GlobalsSearch { Continue, Success, Fail }
 
-    export function getCompletionsAtPosition(host: LanguageServiceHost, program: Program, log: Log, sourceFile: SourceFile, position: number, preferences: UserPreferences): CompletionInfo | undefined {
+    export function getCompletionsAtPosition(host: LanguageServiceHost, program: Program, log: Log, sourceFile: SourceFile, position: number, preferences: UserPreferences, triggerCharacter: string | undefined): CompletionInfo | undefined {
         const typeChecker = program.getTypeChecker();
         const compilerOptions = program.getCompilerOptions();
         if (isInReferenceComment(sourceFile, position)) {
@@ -34,6 +34,7 @@ namespace ts.Completions {
         }
 
         const contextToken = findPrecedingToken(position, sourceFile);
+        if (isInvalidTrigger(triggerCharacter, contextToken, position)) return undefined;
 
         if (isInString(sourceFile, position, contextToken)) {
             return !contextToken || !isStringLiteralLike(contextToken)
@@ -2196,5 +2197,28 @@ namespace ts.Completions {
 
     function hasIndexSignature(type: Type): boolean {
         return !!type.getStringIndexType() || !!type.getNumberIndexType();
+    }
+
+    function isInvalidTrigger(triggerCharacter: string | undefined, contextToken: Node, position: number): boolean {
+        switch (triggerCharacter) {
+            case '"':
+            case "'":
+            case "`":
+                switch (contextToken.kind) {
+                    case SyntaxKind.StringLiteral:
+                    case SyntaxKind.NoSubstitutionTemplateLiteral:
+                    case SyntaxKind.TemplateExpression:
+                    case SyntaxKind.TaggedTemplateExpression:
+                        break;
+                    default:
+                        Debug.fail();
+                }
+                return position === contextToken.parent.end;
+            case "<":
+                Debug.assert(contextToken.kind === SyntaxKind.LessThanToken);
+                return contextToken.parent.kind === SyntaxKind.BinaryExpression;
+            default:
+                return false;
+        }
     }
 }
