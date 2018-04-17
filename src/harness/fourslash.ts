@@ -2910,10 +2910,6 @@ Actual: ${stringify(fullActual)}`);
         }
 
         private verifyDocumentHighlights(expectedRanges: Range[], fileNames: ReadonlyArray<string> = [this.activeFile.fileName]) {
-            expectedRanges = ts.map(expectedRanges, r => {
-                r.fileName = ts.normalizePath(r.fileName);
-                return r;
-            });
             fileNames = ts.map(fileNames, ts.normalizePath);
             const documentHighlights = this.getDocumentHighlightsAtCurrentPosition(fileNames) || [];
 
@@ -2924,7 +2920,7 @@ Actual: ${stringify(fullActual)}`);
             }
 
             for (const fileName of fileNames) {
-                const expectedRangesInFile = expectedRanges.filter(r => r.fileName === fileName);
+                const expectedRangesInFile = expectedRanges.filter(r => ts.normalizePath(r.fileName) === fileName);
                 const highlights = ts.find(documentHighlights, dh => dh.fileName === fileName);
                 const spansInFile = highlights ? highlights.highlightSpans.sort((s1, s2) => s1.textSpan.start - s2.textSpan.start) : [];
 
