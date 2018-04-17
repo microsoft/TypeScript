@@ -178,7 +178,7 @@ namespace ts.SymbolDisplay {
                     }
                     else if (symbolFlags & SymbolFlags.Alias) {
                         symbolKind = ScriptElementKind.alias;
-                        pushTypePart(symbolKind);
+                        pushSymbolKind(symbolKind);
                         displayParts.push(spacePart());
                         if (useConstructSignatures) {
                             displayParts.push(keywordPart(SyntaxKind.NewKeyword));
@@ -258,7 +258,7 @@ namespace ts.SymbolDisplay {
                 // Special case for class expressions because we would like to indicate that
                 // the class name is local to the class body (similar to function expression)
                 //      (local class) class <className>
-                pushTypePart(ScriptElementKind.localClassElement);
+                pushSymbolKind(ScriptElementKind.localClassElement);
             }
             else {
                 // Class declaration has name which is not local.
@@ -531,7 +531,7 @@ namespace ts.SymbolDisplay {
 
         function addAliasPrefixIfNecessary() {
             if (alias) {
-                pushTypePart(ScriptElementKind.alias);
+                pushSymbolKind(ScriptElementKind.alias);
                 displayParts.push(spacePart());
             }
         }
@@ -554,7 +554,7 @@ namespace ts.SymbolDisplay {
         function addPrefixForAnyFunctionOrVar(symbol: Symbol, symbolKind: string) {
             prefixNextMeaning();
             if (symbolKind) {
-                pushTypePart(symbolKind);
+                pushSymbolKind(symbolKind);
                 if (symbol && !some(symbol.declarations, d => isArrowFunction(d) || (isFunctionExpression(d) || isClassExpression(d)) && !d.name)) {
                     displayParts.push(spacePart());
                     addFullSymbolName(symbol);
@@ -562,7 +562,7 @@ namespace ts.SymbolDisplay {
             }
         }
 
-        function pushTypePart(symbolKind: string) {
+        function pushSymbolKind(symbolKind: string) {
             switch (symbolKind) {
                 case ScriptElementKind.variableElement:
                 case ScriptElementKind.functionElement:
