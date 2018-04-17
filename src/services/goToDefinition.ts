@@ -50,7 +50,7 @@ namespace ts.GoToDefinition {
         // assignment. This case and others are handled by the following code.
         if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
             const shorthandSymbol = typeChecker.getShorthandAssignmentValueSymbol(symbol.valueDeclaration);
-            return shorthandSymbol ? shorthandSymbol.declarations.map(decl => createDefinitionInfo(decl, typeChecker, shorthandSymbol, node)) : emptyArray;
+            return shorthandSymbol ? shorthandSymbol.declarations.map(decl => createDefinitionInfo(decl, typeChecker, shorthandSymbol, node)) : [];
         }
 
         // If the node is the name of a BindingElement within an ObjectBindingPattern instead of just returning the
