@@ -76,7 +76,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                     args.push("--types", types.join(","));
                 }
                 args.push("--noEmit");
-                if (additionalArgs && additionalArgs.length) args.push(...additionalArgs);
+                args.push(...additionalArgs);
                 Harness.Baseline.runBaseline(`${cls.kind()}/${directoryName}.log`, () => {
                     return cls.report(cp.spawnSync(`node`, args, { cwd, timeout, shell: true }), cwd);
                 });
