@@ -45,7 +45,7 @@ namespace ts {
     }
 
     /** @internal */
-    const screenStartingMessageCodes: number[] = [
+    export const screenStartingMessageCodes: number[] = [
         Diagnostics.Starting_compilation_in_watch_mode.code,
         Diagnostics.File_change_detected_Starting_incremental_compilation.code,
     ];

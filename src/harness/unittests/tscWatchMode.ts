@@ -124,7 +124,10 @@ namespace ts.tscWatch {
         }
 
         function getWatchDiagnosticWithoutDate(diagnostic: Diagnostic) {
-            return ` - ${flattenDiagnosticMessageText(diagnostic.messageText, host.newLine)}${host.newLine + host.newLine + host.newLine}`;
+            const newLines = contains(screenStartingMessageCodes, diagnostic.code)
+                ? `${host.newLine}${host.newLine}`
+                : host.newLine;
+            return ` - ${flattenDiagnosticMessageText(diagnostic.messageText, host.newLine)}${newLines}`;
         }
     }
 
