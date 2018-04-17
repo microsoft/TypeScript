@@ -16,6 +16,7 @@ interface UserConfig {
 abstract class ExternalCompileRunnerBase extends RunnerBase {
     abstract testDir: string;
     abstract report(result: ExecResult, cwd: string): string;
+    additionalArgs: string[] = [];
     enumerateTestFiles() {
         return Harness.IO.getDirectories(this.testDir);
     }
@@ -36,6 +37,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
         // tslint:disable-next-line:no-this-assignment
         const cls = this;
         const timeout = 600_000; // 10 minutes
+        const additionalArgs = this.additionalArgs;
         describe(directoryName, function(this: Mocha.ISuiteCallbackContext) {
             this.timeout(timeout);
             const cp = require("child_process");
@@ -74,6 +76,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                     args.push("--types", types.join(","));
                 }
                 args.push("--noEmit");
+                if (additionalArgs && additionalArgs.length) args.push(...additionalArgs);
                 Harness.Baseline.runBaseline(`${cls.kind()}/${directoryName}.log`, () => {
                     return cls.report(cp.spawnSync(`node`, args, { cwd, timeout, shell: true }), cwd);
                 });
@@ -102,6 +105,7 @@ ${result.stderr.toString().replace(/\r\n/g, "\n")}`;
 class DefinitelyTypedRunner extends ExternalCompileRunnerBase {
     readonly testDir = "../DefinitelyTyped/types/";
     workingDirectory = this.testDir;
+    additionalArgs = ["--skipLibCheck"];
     kind(): TestRunnerKind {
         return "dt";
     }
