@@ -129,25 +129,24 @@ namespace ts.codefix {
         const { declarationList } = statement;
         let foundImport = false;
         const newNodes = flatMap(declarationList.declarations, decl => {
-            const { name } = decl;
-            const initializer = decl.initializer!; // TODO: GH#18217
-            if (isExportsOrModuleExportsOrAlias(sourceFile, initializer)) {
-                // `const alias = module.exports;` can be removed.
-                foundImport = true;
-                return [];
+            const { name, initializer } = decl;
+            if (initializer) {
+                if (isExportsOrModuleExportsOrAlias(sourceFile, initializer)) {
+                    // `const alias = module.exports;` can be removed.
+                    foundImport = true;
+                    return [];
+                }
+                else if (isRequireCall(initializer, /*checkArgumentIsStringLiteralLike*/ true)) {
+                    foundImport = true;
+                    return convertSingleImport(sourceFile, name, initializer.arguments[0], changes, checker, identifiers, target);
+                }
+                else if (isPropertyAccessExpression(initializer) && isRequireCall(initializer.expression, /*checkArgumentIsStringLiteralLike*/ true)) {
+                    foundImport = true;
+                    return convertPropertyAccessImport(name, initializer.name.text, initializer.expression.arguments[0], identifiers);
+                }
             }
-            if (isRequireCall(initializer, /*checkArgumentIsStringLiteralLike*/ true)) {
-                foundImport = true;
-                return convertSingleImport(sourceFile, name, initializer.arguments[0], changes, checker, identifiers, target);
-            }
-            else if (isPropertyAccessExpression(initializer) && isRequireCall(initializer.expression, /*checkArgumentIsStringLiteralLike*/ true)) {
-                foundImport = true;
-                return convertPropertyAccessImport(name, initializer.name.text, initializer.expression.arguments[0], identifiers);
-            }
-            else {
-                // Move it out to its own variable statement. (This will not be used if `!foundImport`)
-                return createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([decl], declarationList.flags));
-            }
+            // Move it out to its own variable statement. (This will not be used if `!foundImport`)
+            return createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([decl], declarationList.flags));
         });
         if (foundImport) {
             // useNonAdjustedEndPosition to ensure we don't eat the newline after the statement.

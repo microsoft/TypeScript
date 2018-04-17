@@ -2943,10 +2943,6 @@
         "category": "Message",
         "code": 6040
     },
-    "Compilation complete. Watching for file changes.": {
-        "category": "Message",
-        "code": 6042
-    },
     "Generates corresponding '.map' file.": {
         "category": "Message",
         "code": 6043
@@ -3522,11 +3518,11 @@
         "code": 6192,
         "reportsUnnecessary": true
     },
-    "Found 1 error.": {
+    "Found 1 error. Watching for file changes.": {
         "category": "Message",
         "code": 6193
     },
-    "Found {0} errors.": {
+    "Found {0} errors. Watching for file changes.": {
         "category": "Message",
         "code": 6194
     },

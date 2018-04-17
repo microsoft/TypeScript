@@ -29,9 +29,8 @@ namespace ts {
 
     /** @internal */
     export const nonClearingMessageCodes: number[] = [
-        Diagnostics.Compilation_complete_Watching_for_file_changes.code,
-        Diagnostics.Found_1_error.code,
-        Diagnostics.Found_0_errors.code
+        Diagnostics.Found_1_error_Watching_for_file_changes.code,
+        Diagnostics.Found_0_errors_Watching_for_file_changes.code
     ];
 
     function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic, options: CompilerOptions) {
@@ -231,10 +230,10 @@ namespace ts {
 
             const reportSummary = (errorCount: number) => {
                 if (errorCount === 1) {
-                    onWatchStatusChange(createCompilerDiagnostic(Diagnostics.Found_1_error, errorCount), newLine, compilerOptions);
+                    onWatchStatusChange(createCompilerDiagnostic(Diagnostics.Found_1_error_Watching_for_file_changes, errorCount), newLine, compilerOptions);
                 }
                 else {
-                    onWatchStatusChange(createCompilerDiagnostic(Diagnostics.Found_0_errors, errorCount, errorCount), newLine, compilerOptions);
+                    onWatchStatusChange(createCompilerDiagnostic(Diagnostics.Found_0_errors_Watching_for_file_changes, errorCount, errorCount), newLine, compilerOptions);
                 }
             };
 
@@ -647,7 +646,7 @@ namespace ts {
             if (host.afterProgramCreate) {
                 host.afterProgramCreate(builderProgram);
             }
-            reportWatchDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes);
+
             return builderProgram;
         }
 
