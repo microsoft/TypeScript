@@ -549,6 +549,10 @@ namespace ts.SymbolDisplay {
             const fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
                 SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing | SymbolFormatFlags.AllowAnyNodeKind);
             addRange(displayParts, fullSymbolDisplayParts);
+
+            if (symbol.flags & SymbolFlags.Optional) {
+                displayParts.push(punctuationPart(SyntaxKind.QuestionToken));
+            }
         }
 
         function addPrefixForAnyFunctionOrVar(symbol: Symbol, symbolKind: string) {
