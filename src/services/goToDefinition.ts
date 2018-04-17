@@ -203,23 +203,10 @@ namespace ts.GoToDefinition {
             if (!signatureDeclarations) {
                 return undefined;
             }
-            const declarations = signatureDeclarations.filter(selectConstructors ? isConstructorDeclaration : isSignatureDeclaration);
+            const declarations = signatureDeclarations.filter(selectConstructors ? isConstructorDeclaration : isFunctionLike);
             return declarations.length
                 ? [createDefinitionInfo(find(declarations, d => !!(<FunctionLikeDeclaration>d).body) || last(declarations), typeChecker, symbol, node)]
                 : undefined;
-        }
-    }
-
-    function isSignatureDeclaration(node: Node): boolean {
-        switch (node.kind) {
-            case SyntaxKind.Constructor:
-            case SyntaxKind.ConstructSignature:
-            case SyntaxKind.FunctionDeclaration:
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.MethodSignature:
-                return true;
-            default:
-                return false;
         }
     }
 
@@ -278,13 +265,7 @@ namespace ts.GoToDefinition {
     function tryGetSignatureDeclaration(typeChecker: TypeChecker, node: Node): SignatureDeclaration | undefined {
         const callLike = getAncestorCallLikeExpression(node);
         const signature = callLike && typeChecker.getResolvedSignature(callLike);
-        if (signature) {
-            const decl = signature.declaration;
-            if (decl && isSignatureDeclaration(decl)) {
-                return decl;
-            }
-        }
         // Don't go to a function type, go to the value having that type.
-        return undefined;
+        return tryCast(signature && signature.declaration, (d): d is SignatureDeclaration => isFunctionLike(d) && !isFunctionTypeNode(d));
     }
 }
