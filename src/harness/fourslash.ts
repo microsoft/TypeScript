@@ -2910,6 +2910,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         private verifyDocumentHighlights(expectedRanges: Range[], fileNames: ReadonlyArray<string> = [this.activeFile.fileName]) {
+            fileNames = ts.map(fileNames, ts.normalizePath);
             const documentHighlights = this.getDocumentHighlightsAtCurrentPosition(fileNames) || [];
 
             for (const dh of documentHighlights) {
@@ -2919,7 +2920,7 @@ Actual: ${stringify(fullActual)}`);
             }
 
             for (const fileName of fileNames) {
-                const expectedRangesInFile = expectedRanges.filter(r => r.fileName === fileName);
+                const expectedRangesInFile = expectedRanges.filter(r => ts.normalizePath(r.fileName) === fileName);
                 const highlights = ts.find(documentHighlights, dh => dh.fileName === fileName);
                 const spansInFile = highlights ? highlights.highlightSpans.sort((s1, s2) => s1.textSpan.start - s2.textSpan.start) : [];
 
@@ -3219,14 +3220,14 @@ Actual: ${stringify(fullActual)}`);
                 }
             }
             else if (ts.isString(indexOrName)) {
-                let name = indexOrName;
+                let name = ts.normalizePath(indexOrName);
 
                 // names are stored in the compiler with this relative path, this allows people to use goTo.file on just the fileName
                 name = name.indexOf("/") === -1 ? (this.basePath + "/" + name) : name;
 
                 const availableNames: string[] = [];
                 const result = ts.forEach(this.testData.files, file => {
-                    const fn = file.fileName;
+                    const fn = ts.normalizePath(file.fileName);
                     if (fn) {
                         if (fn === name) {
                             return file;
