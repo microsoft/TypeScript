@@ -4176,7 +4176,7 @@ namespace ts {
                         const exprType = checkExpression((name as ComputedPropertyName).expression);
                         let indexerType: Type;
                         if (isTypeAssignableToKind(exprType, TypeFlags.NumberLike)) {
-                            indexerType = getIndexTypeOfType(parentType, IndexKind.Number);
+                            indexerType = getIndexTypeOfType(parentType, IndexKind.Number) || getIndexTypeOfType(parentType, IndexKind.String);
                         }
                         else if (isTypeAssignableToKind(exprType, TypeFlags.StringLike)) {
                             indexerType = getIndexTypeOfType(parentType, IndexKind.String);

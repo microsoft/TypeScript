@@ -59,10 +59,10 @@ void prop4;
 
 let {[numed]: prop5} = strIndexed;
 >numed : number
->prop5 : any
+>prop5 : string
 >strIndexed : { [idx: string]: string; }
 
 void prop5;
 >void prop5 : undefined
->prop5 : any
+>prop5 : string
 
