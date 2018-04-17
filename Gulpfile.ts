@@ -216,8 +216,8 @@ for (const i in libraryTargets) {
             .pipe(gulp.dest(".")));
 }
 
-const configureNightlyJs = path.join(scriptsDirectory, "configureNightly.js");
-const configureNightlyTs = path.join(scriptsDirectory, "configureNightly.ts");
+const configurePreleleaseJs = path.join(scriptsDirectory, "configurePrerelease.js");
+const configurePreleleaseTs = path.join(scriptsDirectory, "configurePrerelease.ts");
 const packageJson = "package.json";
 const versionFile = path.join(compilerDirectory, "core.ts");
 
@@ -302,24 +302,25 @@ function getCompilerSettings(base: tsc.Settings, useBuiltCompiler?: boolean): ts
     return copy;
 }
 
-gulp.task(configureNightlyJs, /*help*/ false, [], () => {
+gulp.task(configurePreleleaseJs, /*help*/ false, [], () => {
     const settings: tsc.Settings = {
         declaration: false,
         removeComments: true,
         noResolve: false,
         stripInternal: false,
+        module: "commonjs"
     };
-    return gulp.src(configureNightlyTs)
+    return gulp.src(configurePreleleaseTs)
         .pipe(sourcemaps.init())
         .pipe(tsc(settings))
-        .pipe(sourcemaps.write(path.dirname(configureNightlyJs)))
-        .pipe(gulp.dest(path.dirname(configureNightlyJs)));
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest("./scripts"));
 });
 
 
 // Nightly management tasks
-gulp.task("configure-nightly", "Runs scripts/configureNightly.ts to prepare a build for nightly publishing", [configureNightlyJs], (done) => {
-    exec(host, [configureNightlyJs, packageJson, versionFile], done, done);
+gulp.task("configure-nightly", "Runs scripts/configurePrerelease.ts to prepare a build for nightly publishing", [configurePreleleaseJs], (done) => {
+    exec(host, [configurePreleleaseJs, "dev", packageJson, versionFile], done, done);
 });
 gulp.task("publish-nightly", "Runs `npm publish --tag next` to create a new nightly build on npm", ["LKG"], () => {
     return runSequence("clean", "useDebugMode", "runtests-parallel", (done) => {
@@ -363,20 +364,11 @@ const builtGeneratedDiagnosticMessagesJSON = path.join(builtLocalDirectory, "dia
 
 // processDiagnosticMessages script
 gulp.task(processDiagnosticMessagesJs, /*help*/ false, [], () => {
-    const settings: tsc.Settings = getCompilerSettings({
-        target: "es5",
-        declaration: false,
-        removeComments: true,
-        noResolve: false,
-        stripInternal: false,
-        outFile: processDiagnosticMessagesJs
-    }, /*useBuiltCompiler*/ false);
-    return gulp.src(processDiagnosticMessagesTs)
+    const diagsProject = tsc.createProject('./scripts/processDiagnosticMessages.tsconfig.json');
+    return diagsProject.src()
         .pipe(newer(processDiagnosticMessagesJs))
-        .pipe(sourcemaps.init())
-        .pipe(tsc(settings))
-        .pipe(sourcemaps.write("."))
-        .pipe(gulp.dest("."));
+        .pipe(diagsProject())
+        .pipe(gulp.dest(scriptsDirectory));
 });
 
 // The generated diagnostics map; built for the compiler and for the "generate-diagnostics" task

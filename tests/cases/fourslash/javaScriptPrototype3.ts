@@ -15,6 +15,6 @@ goTo.marker();
 edit.insert('.');
 
 // Check members of the function
-verify.completionListContains('foo', undefined, undefined, 'property');
-verify.completionListContains('bar', undefined, undefined, 'property');
+verify.completionListContains('foo', undefined, undefined, 'method');
+verify.completionListContains('bar', undefined, undefined, 'method');
 verify.completionListContains('qua', undefined, undefined, 'property');

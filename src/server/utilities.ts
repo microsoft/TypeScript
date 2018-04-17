@@ -1,6 +1,3 @@
-/// <reference path="types.ts" />
-/// <reference path="shared.ts" />
-
 namespace ts.server {
     export enum LogLevel {
         terse,
@@ -81,14 +78,6 @@ namespace ts.server {
             placeOpenBraceOnNewLineForFunctions: false,
             placeOpenBraceOnNewLineForControlBlocks: false,
         };
-    }
-
-    export function mergeMapLikes<T extends object>(target: T, source: Partial<T>): void {
-        for (const key in source) {
-            if (hasProperty(source, key)) {
-                target[key] = source[key];
-            }
-        }
     }
 
     export type NormalizedPath = string & { __normalizedPathTag: any };
@@ -262,36 +251,6 @@ namespace ts.server {
     }
     function isNonDuplicateInSortedArray<T>(value: T, index: number, array: T[]) {
         return index === 0 || value !== array[index - 1];
-    }
-
-    export function enumerateInsertsAndDeletes<T>(newItems: SortedReadonlyArray<T>, oldItems: SortedReadonlyArray<T>, inserted: (newItem: T) => void, deleted: (oldItem: T) => void, comparer: Comparer<T>) {
-        let newIndex = 0;
-        let oldIndex = 0;
-        const newLen = newItems.length;
-        const oldLen = oldItems.length;
-        while (newIndex < newLen && oldIndex < oldLen) {
-            const newItem = newItems[newIndex];
-            const oldItem = oldItems[oldIndex];
-            const compareResult = comparer(newItem, oldItem);
-            if (compareResult === Comparison.LessThan) {
-                inserted(newItem);
-                newIndex++;
-            }
-            else if (compareResult === Comparison.GreaterThan) {
-                deleted(oldItem);
-                oldIndex++;
-            }
-            else {
-                newIndex++;
-                oldIndex++;
-            }
-        }
-        while (newIndex < newLen) {
-            inserted(newItems[newIndex++]);
-        }
-        while (oldIndex < oldLen) {
-            deleted(oldItems[oldIndex++]);
-        }
     }
 
     /* @internal */

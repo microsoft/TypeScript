@@ -1,7 +1,3 @@
-/// <reference path="../factory.ts" />
-/// <reference path="../visitor.ts" />
-/// <reference path="./destructuring.ts" />
-
 /*@internal*/
 namespace ts {
     /**
@@ -324,8 +320,7 @@ namespace ts {
                     return node;
 
                 default:
-                    Debug.failBadSyntaxKind(node);
-                    return undefined;
+                    return Debug.failBadSyntaxKind(node);
             }
         }
 
@@ -531,8 +526,7 @@ namespace ts {
                     return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
 
                 default:
-                    Debug.failBadSyntaxKind(node);
-                    return visitEachChild(node, visitor, context);
+                    return Debug.failBadSyntaxKind(node);
             }
         }
 
@@ -1780,7 +1774,7 @@ namespace ts {
             return createArrayLiteral(expressions);
         }
 
-        function getParametersOfDecoratedDeclaration(node: FunctionLike, container: ClassLikeDeclaration) {
+        function getParametersOfDecoratedDeclaration(node: SignatureDeclaration, container: ClassLikeDeclaration) {
             if (container && node.kind === SyntaxKind.GetAccessor) {
                 const { setAccessor } = getAllAccessorDeclarations(container.members, <AccessorDeclaration>node);
                 if (setAccessor) {
@@ -1870,10 +1864,8 @@ namespace ts {
                             return createIdentifier("Boolean");
 
                         default:
-                            Debug.failBadSyntaxKind((<LiteralTypeNode>node).literal);
-                            break;
+                            return Debug.failBadSyntaxKind((<LiteralTypeNode>node).literal);
                     }
-                    break;
 
                 case SyntaxKind.NumberKeyword:
                     return createIdentifier("Number");
@@ -1900,8 +1892,7 @@ namespace ts {
                     break;
 
                 default:
-                    Debug.failBadSyntaxKind(node);
-                    break;
+                    return Debug.failBadSyntaxKind(node);
             }
 
             return createIdentifier("Object");

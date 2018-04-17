@@ -1,0 +1,16 @@
+=== tests/cases/compiler/declarationEmitPrivateSymbolCausesVarDeclarationToBeEmitted.ts ===
+const _data = Symbol('data');
+>_data : unique symbol
+>Symbol('data') : unique symbol
+>Symbol : SymbolConstructor
+>'data' : "data"
+
+export class User {
+>User : User
+
+    private [_data] : any;
+>[_data] : any
+>_data : unique symbol
+
+};
+

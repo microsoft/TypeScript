@@ -1,0 +1,34 @@
+=== tests/cases/compiler/extensions.ts ===
+/// <reference no-default-lib="true"/>
+class Foo {
+>Foo : Foo
+
+    public: string;
+>public : string
+}
+=== tests/cases/compiler/core.ts ===
+interface Array<T> {}
+>Array : T[]
+>T : T
+
+interface Boolean {}
+>Boolean : Boolean
+
+interface Function {}
+>Function : Function
+
+interface IArguments {}
+>IArguments : IArguments
+
+interface Number {}
+>Number : Number
+
+interface Object {}
+>Object : Object
+
+interface RegExp {}
+>RegExp : RegExp
+
+interface String {}
+>String : String
+

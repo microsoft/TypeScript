@@ -149,7 +149,7 @@ namespace Utils {
             path = "tests/" + path;
         }
 
-        let content: string = undefined;
+        let content: string;
         try {
             content = Harness.IO.readFile(Harness.userSpecifiedRoot + path);
         }
@@ -1641,14 +1641,15 @@ namespace Harness {
         }
 
         export function doSourcemapBaseline(baselinePath: string, options: ts.CompilerOptions, result: compiler.CompilationResult, harnessSettings: TestCaseParser.CompilerSettings) {
+            const declMaps = ts.getAreDeclarationMapsEnabled(options);
             if (options.inlineSourceMap) {
-                if (result.maps.size > 0) {
+                if (result.maps.size > 0 && !declMaps) {
                     throw new Error("No sourcemap files should be generated if inlineSourceMaps was set.");
                 }
                 return;
             }
-            else if (options.sourceMap) {
-                if (result.maps.size !== result.js.size) {
+            else if (options.sourceMap || declMaps) {
+                if (result.maps.size !== (result.js.size * (declMaps && options.sourceMap ? 2 : 1))) {
                     throw new Error("Number of sourcemap files should be same as js files.");
                 }
 
@@ -1830,9 +1831,9 @@ namespace Harness {
             const lines = Utils.splitContentByNewlines(code);
 
             // Stuff related to the subfile we're parsing
-            let currentFileContent: string = undefined;
+            let currentFileContent: string;
             let currentFileOptions: any = {};
-            let currentFileName: any = undefined;
+            let currentFileName: any;
             let refs: string[] = [];
 
             for (const line of lines) {

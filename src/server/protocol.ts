@@ -91,8 +91,9 @@ namespace ts.server.protocol {
         EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full",
         /* @internal */
         Cleanup = "cleanup",
+        GetOutliningSpans = "getOutliningSpans",
         /* @internal */
-        OutliningSpans = "outliningSpans",
+        GetOutliningSpansFull = "outliningSpans", // Full command name is different for backward compatibility purposes
         TodoComments = "todoComments",
         Indentation = "indentation",
         DocCommentTemplate = "docCommentTemplate",
@@ -303,17 +304,48 @@ namespace ts.server.protocol {
     /**
      * Request to obtain outlining spans in file.
      */
-    /* @internal */
     export interface OutliningSpansRequest extends FileRequest {
-        command: CommandTypes.OutliningSpans;
+        command: CommandTypes.GetOutliningSpans;
+    }
+
+    export interface OutliningSpan {
+        /** The span of the document to actually collapse. */
+        textSpan: TextSpan;
+
+        /** The span of the document to display when the user hovers over the collapsed span. */
+        hintSpan: TextSpan;
+
+        /** The text to display in the editor for the collapsed region. */
+        bannerText: string;
+
+        /**
+         * Whether or not this region should be automatically collapsed when
+         * the 'Collapse to Definitions' command is invoked.
+         */
+        autoCollapse: boolean;
+    }
+
+    /**
+     * Response to OutliningSpansRequest request.
+     */
+    export interface OutliningSpansResponse extends Response {
+        body?: OutliningSpan[];
+    }
+
+    /**
+     * Request to obtain outlining spans in file.
+     */
+    /* @internal */
+    export interface OutliningSpansRequestFull extends FileRequest {
+        command: CommandTypes.GetOutliningSpansFull;
     }
 
     /**
      * Response to OutliningSpansRequest request.
      */
     /* @internal */
-    export interface OutliningSpansResponse extends Response {
-        body?: OutliningSpan[];
+    export interface OutliningSpansResponseFull extends Response {
+        body?: ts.OutliningSpan[];
     }
 
     /**
@@ -423,6 +455,8 @@ namespace ts.server.protocol {
         endLocation: Location;
         category: string;
         code: number;
+        /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
+        reportsUnnecessary?: {};
     }
 
     /**
@@ -1235,6 +1269,8 @@ namespace ts.server.protocol {
          */
         formatOptions?: FormatCodeSettings;
 
+        preferences?: UserPreferences;
+
         /**
          * The host's additional supported .js file extensions
          */
@@ -1662,11 +1698,15 @@ namespace ts.server.protocol {
     }
 
     export interface CodeFixAction extends CodeAction {
+        /** Short name to identify the fix, for use by telemetry. */
+        fixName: string;
         /**
          * If present, one may call 'getCombinedCodeFix' with this fixId.
          * This may be omitted to indicate that the code fix can't be applied in a group.
          */
         fixId?: {};
+        /** Should be present if and only if 'fixId' is. */
+        fixAllDescription?: string;
     }
 
     /**
@@ -1710,15 +1750,13 @@ namespace ts.server.protocol {
          */
         prefix?: string;
         /**
-         * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
-         * This affects lone identifier completions but not completions on the right hand side of `obj.`.
+         * @deprecated Use UserPreferences.includeCompletionsForModuleExports
          */
-        includeExternalModuleExports: boolean;
+        includeExternalModuleExports?: boolean;
         /**
-         * If enabled, the completion list will include completions with invalid identifier names.
-         * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
+         * @deprecated Use UserPreferences.includeCompletionsWithInsertText
          */
-        includeInsertTextCompletions: boolean;
+        includeInsertTextCompletions?: boolean;
     }
 
     /**
@@ -2135,6 +2173,8 @@ namespace ts.server.protocol {
          * The category of the diagnostic message, e.g. "error", "warning", or "suggestion".
          */
         category: string;
+
+        reportsUnnecessary?: {};
 
         /**
          * The error code of the diagnostic message.
@@ -2599,6 +2639,22 @@ namespace ts.server.protocol {
         placeOpenBraceOnNewLineForFunctions?: boolean;
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
         insertSpaceBeforeTypeAnnotation?: boolean;
+    }
+
+    export interface UserPreferences {
+        readonly disableSuggestions?: boolean;
+        readonly quotePreference?: "double" | "single";
+        /**
+         * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
+         * This affects lone identifier completions but not completions on the right hand side of `obj.`.
+         */
+        readonly includeCompletionsForModuleExports?: boolean;
+        /**
+         * If enabled, the completion list will include completions with invalid identifier names.
+         * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
+         */
+        readonly includeCompletionsWithInsertText?: boolean;
+        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
     }
 
     export interface CompilerOptions {

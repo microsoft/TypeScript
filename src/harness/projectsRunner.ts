@@ -361,7 +361,7 @@ namespace project {
                     rootFiles.unshift(sourceFile.fileName);
                 }
                 else if (!(compilerOptions.outFile || compilerOptions.out)) {
-                    let emitOutputFilePathWithoutExtension: string = undefined;
+                    let emitOutputFilePathWithoutExtension: string;
                     if (compilerOptions.outDir) {
                         let sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, compilerResult.program.getCurrentDirectory());
                         sourceFilePath = sourceFilePath.replace(compilerResult.program.getCommonSourceDirectory(), "");

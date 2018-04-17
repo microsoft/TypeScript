@@ -220,7 +220,7 @@ class CompilerTest {
     }
 
     public verifySourceMapRecord() {
-        if (this.options.sourceMap || this.options.inlineSourceMap) {
+        if (this.options.sourceMap || this.options.inlineSourceMap || this.options.declarationMap) {
             Harness.Baseline.runBaseline(this.justName.replace(/\.tsx?$/, ".sourcemap.txt"), () => {
                 const record = utils.removeTestPathPrefixes(this.result.getSourceMapRecord());
                 if ((this.options.noEmitOnError && this.result.diagnostics.length !== 0) || record === undefined) {

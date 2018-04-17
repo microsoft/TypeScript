@@ -435,14 +435,31 @@ namespace Harness.SourceMapRecorder {
         }
     }
 
-    export function getSourceMapRecord(sourceMapDataList: ReadonlyArray<ts.SourceMapData>, program: ts.Program, jsFiles: Iterable<documents.TextDocument>) {
+    export function getSourceMapRecord(sourceMapDataList: ReadonlyArray<ts.SourceMapData>, program: ts.Program, jsFiles: ReadonlyArray<documents.TextDocument>, declarationFiles: ReadonlyArray<documents.TextDocument>) {
         const sourceMapRecorder = new Compiler.WriterAggregator();
-        const generatedFiles = Array.from(jsFiles);
+
         for (let i = 0; i < sourceMapDataList.length; i++) {
             const sourceMapData = sourceMapDataList[i];
             let prevSourceFile: ts.SourceFile;
+            let currentFile: documents.TextDocument;
+            if (ts.endsWith(sourceMapData.sourceMapFile, ts.Extension.Dts)) {
+                if (sourceMapDataList.length > jsFiles.length) {
+                    currentFile = declarationFiles[Math.floor(i / 2)]; // When both kinds of source map are present, they alternate js/dts
+                }
+                else {
+                    currentFile = declarationFiles[i];
+                }
+            }
+            else {
+                if (sourceMapDataList.length > jsFiles.length) {
+                    currentFile = jsFiles[Math.floor(i / 2)];
+                }
+                else {
+                    currentFile = jsFiles[i];
+                }
+            }
 
-            SourceMapSpanWriter.initializeSourceMapSpanWriter(sourceMapRecorder, sourceMapData, generatedFiles[i]);
+            SourceMapSpanWriter.initializeSourceMapSpanWriter(sourceMapRecorder, sourceMapData, currentFile);
             for (const decodedSourceMapping of sourceMapData.sourceMapDecodedMappings) {
                 const currentSourceFile = program.getSourceFile(sourceMapData.inputSourceFileNames[decodedSourceMapping.sourceIndex]);
                 if (currentSourceFile !== prevSourceFile) {

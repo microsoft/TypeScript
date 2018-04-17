@@ -1,7 +1,3 @@
-/// <reference path="program.ts"/>
-/// <reference path="watch.ts"/>
-/// <reference path="commandLineParser.ts"/>
-
 namespace ts {
     interface Statistic {
         name: string;
@@ -22,7 +18,7 @@ namespace ts {
     }
 
     let reportDiagnostic = createDiagnosticReporter(sys);
-    function udpateReportDiagnostic(options: CompilerOptions) {
+    function updateReportDiagnostic(options: CompilerOptions) {
         if (options.pretty) {
             reportDiagnostic = createDiagnosticReporter(sys, /*pretty*/ true);
         }
@@ -111,17 +107,17 @@ namespace ts {
         const commandLineOptions = commandLine.options;
         if (configFileName) {
             const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, sys, reportDiagnostic);
-            udpateReportDiagnostic(configParseResult.options);
+            updateReportDiagnostic(configParseResult.options);
             if (isWatchSet(configParseResult.options)) {
                 reportWatchModeWithoutSysSupport();
                 createWatchOfConfigFile(configParseResult, commandLineOptions);
             }
             else {
-                performCompilation(configParseResult.fileNames, configParseResult.options);
+                performCompilation(configParseResult.fileNames, configParseResult.options, getConfigFileParsingDiagnostics(configParseResult));
             }
         }
         else {
-            udpateReportDiagnostic(commandLineOptions);
+            updateReportDiagnostic(commandLineOptions);
             if (isWatchSet(commandLineOptions)) {
                 reportWatchModeWithoutSysSupport();
                 createWatchOfFilesAndCompilerOptions(commandLine.fileNames, commandLineOptions);
@@ -139,11 +135,11 @@ namespace ts {
         }
     }
 
-    function performCompilation(rootFileNames: string[], compilerOptions: CompilerOptions) {
+    function performCompilation(rootFileNames: string[], compilerOptions: CompilerOptions, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) {
         const compilerHost = createCompilerHost(compilerOptions);
         enableStatistics(compilerOptions);
 
-        const program = createProgram(rootFileNames, compilerOptions, compilerHost);
+        const program = createProgram(rootFileNames, compilerOptions, compilerHost, /*oldProgram*/ undefined, configFileParsingDiagnostics);
         const exitStatus = emitFilesAndReportErrors(program, reportDiagnostic, s => sys.write(s + sys.newLine));
         reportStatistics(program);
         return sys.exit(exitStatus);
@@ -169,10 +165,7 @@ namespace ts {
     function createWatchOfConfigFile(configParseResult: ParsedCommandLine, optionsToExtend: CompilerOptions) {
         const watchCompilerHost = createWatchCompilerHostOfConfigFile(configParseResult.options.configFilePath, optionsToExtend, sys, /*createProgram*/ undefined, reportDiagnostic, createWatchStatusReporter(configParseResult.options));
         updateWatchCompilationHost(watchCompilerHost);
-        watchCompilerHost.rootFiles = configParseResult.fileNames;
-        watchCompilerHost.options = configParseResult.options;
-        watchCompilerHost.configFileSpecs = configParseResult.configFileSpecs;
-        watchCompilerHost.configFileWildCardDirectories = configParseResult.wildcardDirectories;
+        watchCompilerHost.configFileParsingResult = configParseResult;
         createWatchProgram(watchCompilerHost);
     }
 
@@ -399,4 +392,9 @@ if (ts.Debug.isDebugging) {
 if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
     ts.sys.tryEnableSourceMapsForHost();
 }
+
+if (ts.sys.setBlocking) {
+    ts.sys.setBlocking();
+}
+
 ts.executeCommandLine(ts.sys.args);

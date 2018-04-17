@@ -88,10 +88,9 @@ var typingsInstallerSources = filesFromConfig(path.join(serverDirectory, "typing
 var watchGuardSources = filesFromConfig(path.join(serverDirectory, "watchGuard/tsconfig.json"));
 var serverSources = filesFromConfig(path.join(serverDirectory, "tsconfig.json"));
 var languageServiceLibrarySources = filesFromConfig(path.join(serverDirectory, "tsconfig.library.json"));
+var harnessSources = filesFromConfig("./src/harness/tsconfig.json");
 
 var typesMapOutputPath = path.join(builtLocalDirectory, 'typesMap.json');
-
-var harnessSources = filesFromConfig("./src/harness/tsconfig.json");
 
 var es2015LibrarySources = [
     "es2015.core.d.ts",
@@ -449,6 +448,8 @@ task("lib", libraryTargets);
 // Generate diagnostics
 var processDiagnosticMessagesJs = path.join(scriptsDirectory, "processDiagnosticMessages.js");
 var processDiagnosticMessagesTs = path.join(scriptsDirectory, "processDiagnosticMessages.ts");
+var processDiagnosticMessagesSources = filesFromConfig("./scripts/processDiagnosticMessages.tsconfig.json");
+
 var diagnosticMessagesJson = path.join(compilerDirectory, "diagnosticMessages.json");
 var diagnosticInfoMapTs = path.join(compilerDirectory, "diagnosticInformationMap.generated.ts");
 var generatedDiagnosticMessagesJSON = path.join(compilerDirectory, "diagnosticMessages.generated.json");
@@ -458,8 +459,8 @@ file(processDiagnosticMessagesTs);
 
 // processDiagnosticMessages script
 compileFile(processDiagnosticMessagesJs,
-    [processDiagnosticMessagesTs],
-    [processDiagnosticMessagesTs],
+    processDiagnosticMessagesSources,
+    processDiagnosticMessagesSources,
     [],
     /*useBuiltCompiler*/ false);
 
@@ -569,7 +570,7 @@ compileFile(/*outfile*/configurePrereleaseJs,
             /*prereqs*/[configurePrereleaseTs],
             /*prefixes*/[],
             /*useBuiltCompiler*/ false,
-    { noOutFile: false, generateDeclarations: false, keepComments: false, noResolve: false, stripInternal: false });
+    { noOutFile: true, generateDeclarations: false, keepComments: false, noResolve: false, stripInternal: false });
 
 task("setDebugMode", function () {
     useDebugMode = true;

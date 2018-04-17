@@ -34,6 +34,7 @@ sourceFile:ES5For-of33.ts
 12>                                         ^
 13>                                          ^
 14>                                           ^^^^^^^^^^^^^^^^
+15>                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >
 2 >    for (var v of 
 3 >         
@@ -48,6 +49,7 @@ sourceFile:ES5For-of33.ts
 12>                                         ]
 13>                                          
 14>                                           
+15>                                                           ) 
 1 >Emitted(12, 5) Source(1, 1) + SourceIndex(0)
 2 >Emitted(12, 10) Source(1, 15) + SourceIndex(0)
 3 >Emitted(12, 14) Source(1, 15) + SourceIndex(0)
@@ -62,6 +64,7 @@ sourceFile:ES5For-of33.ts
 12>Emitted(12, 43) Source(1, 30) + SourceIndex(0)
 13>Emitted(12, 44) Source(1, 30) + SourceIndex(0)
 14>Emitted(12, 60) Source(1, 30) + SourceIndex(0)
+15>Emitted(12, 88) Source(1, 32) + SourceIndex(0)
 ---
 >>>        var v = _b.value;
 1 >^^^^^^^^

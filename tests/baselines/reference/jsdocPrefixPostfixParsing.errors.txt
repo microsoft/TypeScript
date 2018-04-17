@@ -1,13 +1,12 @@
-tests/cases/conformance/jsdoc/prefixPostfix.js(8,13): error TS8028: JSDoc '...' may only appear in the last parameter of a signature.
+tests/cases/conformance/jsdoc/prefixPostfix.js(8,12): error TS1014: A rest parameter must be last in a parameter list.
 tests/cases/conformance/jsdoc/prefixPostfix.js(9,12): error TS1014: A rest parameter must be last in a parameter list.
 tests/cases/conformance/jsdoc/prefixPostfix.js(10,12): error TS1014: A rest parameter must be last in a parameter list.
 tests/cases/conformance/jsdoc/prefixPostfix.js(11,12): error TS1014: A rest parameter must be last in a parameter list.
 tests/cases/conformance/jsdoc/prefixPostfix.js(12,12): error TS1014: A rest parameter must be last in a parameter list.
 tests/cases/conformance/jsdoc/prefixPostfix.js(13,12): error TS1014: A rest parameter must be last in a parameter list.
-tests/cases/conformance/jsdoc/prefixPostfix.js(14,12): error TS1014: A rest parameter must be last in a parameter list.
 
 
-==== tests/cases/conformance/jsdoc/prefixPostfix.js (7 errors) ====
+==== tests/cases/conformance/jsdoc/prefixPostfix.js (6 errors) ====
     /**
      * @param {number![]} x - number[]
      * @param {!number[]} y - number[]
@@ -15,9 +14,6 @@ tests/cases/conformance/jsdoc/prefixPostfix.js(14,12): error TS1014: A rest para
      * @param {number?[]} a - (number | null)[]
      * @param {?number[]} b - number[] | null
      * @param {(number[])?} c - number[] | null
-     * @param {?...number} d - number[] | null
-                ~~~~~~~~~
-!!! error TS8028: JSDoc '...' may only appear in the last parameter of a signature.
      * @param {...?number} e - (number | null)[]
                ~~~~~~~~~~
 !!! error TS1014: A rest parameter must be last in a parameter list.
@@ -38,6 +34,6 @@ tests/cases/conformance/jsdoc/prefixPostfix.js(14,12): error TS1014: A rest para
 !!! error TS1014: A rest parameter must be last in a parameter list.
      * @param {...number?[]!} k - (number[] | null)[]
      */
-    function f(x, y, z, a, b, c, d, e, f, g, h, i, j, k) {
+    function f(x, y, z, a, b, c, e, f, g, h, i, j, k) {
     }
     

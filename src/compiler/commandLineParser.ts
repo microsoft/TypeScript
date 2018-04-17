@@ -1,9 +1,3 @@
-/// <reference path="sys.ts"/>
-/// <reference path="types.ts"/>
-/// <reference path="core.ts"/>
-/// <reference path="diagnosticInformationMap.generated.ts"/>
-/// <reference path="parser.ts"/>
-
 namespace ts {
     /* @internal */
     export const compileOnSaveCommandLineOption: CommandLineOption = { name: "compileOnSave", type: "boolean" };
@@ -193,6 +187,13 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Generates_corresponding_d_ts_file,
+        },
+        {
+            name: "declarationMap",
+            type: "boolean",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Basic_Options,
+            description: Diagnostics.Generates_a_sourcemap_for_each_corresponding_d_ts_file,
         },
         {
             name: "emitDeclarationOnly",
@@ -1334,12 +1335,21 @@ namespace ts {
             return Array(paddingLength + 1).join(" ");
         }
 
+        function isAllowedOption({ category, name }: CommandLineOption): boolean {
+            // Skip options which do not have a category or have category `Command_line_Options`
+            // Exclude all possible `Advanced_Options` in tsconfig.json which were NOT defined in command line
+            return category !== undefined
+                && category !== Diagnostics.Command_line_Options
+                && (category !== Diagnostics.Advanced_Options || compilerOptionsMap.has(name));
+        }
+
         function writeConfigurations() {
             // Filter applicable options to place in the file
             const categorizedOptions = createMultiMap<CommandLineOption>();
             for (const option of optionDeclarations) {
                 const { category } = option;
-                if (category !== undefined && category !== Diagnostics.Command_line_Options && category !== Diagnostics.Advanced_Options) {
+
+                if (isAllowedOption(option)) {
                     categorizedOptions.add(getLocaleSpecificMessage(category), option);
                 }
             }
@@ -2029,7 +2039,7 @@ namespace ts {
     export function getFileNamesFromConfigSpecs(spec: ConfigFileSpecs, basePath: string, options: CompilerOptions, host: ParseConfigHost, extraFileExtensions: ReadonlyArray<JsFileExtensionInfo> = []): ExpandResult {
         basePath = normalizePath(basePath);
 
-        const keyMapper = host.useCaseSensitiveFileNames ? caseSensitiveKeyMapper : caseInsensitiveKeyMapper;
+        const keyMapper = host.useCaseSensitiveFileNames ? identity : toLowerCase;
 
         // Literal file names (provided via the "files" array in tsconfig.json) are stored in a
         // file map with a possibly case insensitive key. We use this map later when when including
@@ -2231,24 +2241,6 @@ namespace ts {
             const lowerPriorityPath = keyMapper(changeExtension(file, lowerPriorityExtension));
             wildcardFiles.delete(lowerPriorityPath);
         }
-    }
-
-    /**
-     * Gets a case sensitive key.
-     *
-     * @param key The original key.
-     */
-    function caseSensitiveKeyMapper(key: string) {
-        return key;
-    }
-
-    /**
-     * Gets a case insensitive key.
-     *
-     * @param key The original key.
-     */
-    function caseInsensitiveKeyMapper(key: string) {
-        return key.toLowerCase();
     }
 
     /**

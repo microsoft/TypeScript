@@ -1,6 +1,6 @@
 === tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts ===
 declare module "fs" {
->"fs" : typeof "fs"
+>"fs" : typeof import("fs")
 
     export class File {
 >File : File

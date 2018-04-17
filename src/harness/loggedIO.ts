@@ -87,9 +87,9 @@ interface PlaybackControl {
 }
 
 namespace Playback {
-    let recordLog: IoLog = undefined;
-    let replayLog: IoLog = undefined;
-    let replayFilesRead: ts.Map<IoLogFile> | undefined = undefined;
+    let recordLog: IoLog;
+    let replayLog: IoLog;
+    let replayFilesRead: ts.Map<IoLogFile> | undefined;
     let recordLogFileNameBase = "";
 
     interface Memoized<T> {

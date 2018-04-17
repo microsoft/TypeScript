@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts" />
 
+// @module: esnext
+
 // @Filename: /a.ts
 // Not included:
 ////export function abcde() {}

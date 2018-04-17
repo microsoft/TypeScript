@@ -1,4 +1,3 @@
-///<reference path='services.ts' />
 /* @internal */
 namespace ts.SignatureHelp {
     export const enum ArgumentListKind {

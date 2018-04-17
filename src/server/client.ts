@@ -1,5 +1,3 @@
-/// <reference path="session.ts" />
-
 namespace ts.server {
     export interface SessionClientHost extends LanguageServiceHost {
         writeMessage(message: string): void;
@@ -169,8 +167,9 @@ namespace ts.server {
             };
         }
 
-        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): CompletionInfo {
-            const args: protocol.CompletionsRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), ...options };
+        getCompletionsAtPosition(fileName: string, position: number, _preferences: UserPreferences | undefined): CompletionInfo {
+            // Not passing along 'preferences' because server should already have those from the 'configure' command
+            const args: protocol.CompletionsRequestArgs = this.createFileLocationRequestArgs(fileName, position);
 
             const request = this.processRequest<protocol.CompletionsRequest>(CommandNames.Completions, args);
             const response = this.processResponse<protocol.CompletionsResponse>(request);
@@ -352,11 +351,11 @@ namespace ts.server {
             return this.getDiagnostics(file, CommandNames.SuggestionDiagnosticsSync);
         }
 
-        private getDiagnostics(file: string, command: CommandNames) {
+        private getDiagnostics(file: string, command: CommandNames): Diagnostic[] {
             const request = this.processRequest<protocol.SyntacticDiagnosticsSyncRequest | protocol.SemanticDiagnosticsSyncRequest | protocol.SuggestionDiagnosticsSyncRequest>(command, { file, includeLinePosition: true });
             const response = this.processResponse<protocol.SyntacticDiagnosticsSyncResponse | protocol.SemanticDiagnosticsSyncResponse | protocol.SuggestionDiagnosticsSyncResponse>(request);
 
-            return (<protocol.DiagnosticWithLinePosition[]>response.body).map(entry => {
+            return (<protocol.DiagnosticWithLinePosition[]>response.body).map((entry): Diagnostic => {
                 const category = firstDefined(Object.keys(DiagnosticCategory), id =>
                     isString(id) && entry.category === id.toLowerCase() ? (<any>DiagnosticCategory)[id] : undefined);
                 return {
@@ -365,7 +364,8 @@ namespace ts.server {
                     length: entry.length,
                     messageText: entry.message,
                     category: Debug.assertDefined(category, "convertDiagnostic: category should not be undefined"),
-                    code: entry.code
+                    code: entry.code,
+                    reportsUnnecessary: entry.reportsUnnecessary,
                 };
             });
         }
@@ -522,8 +522,16 @@ namespace ts.server {
             }));
         }
 
-        getOutliningSpans(_fileName: string): OutliningSpan[] {
-            return notImplemented();
+        getOutliningSpans(file: string): OutliningSpan[] {
+            const request = this.processRequest<protocol.OutliningSpansRequest>(CommandNames.GetOutliningSpans, { file });
+            const response = this.processResponse<protocol.OutliningSpansResponse>(request);
+
+            return response.body.map<OutliningSpan>(item => ({
+                textSpan: this.decodeSpan(item.textSpan, file),
+                hintSpan: this.decodeSpan(item.hintSpan, file),
+                bannerText: item.bannerText,
+                autoCollapse: item.autoCollapse
+            }));
         }
 
         getTodoComments(_fileName: string, _descriptors: TodoCommentDescriptor[]): TodoComment[] {
@@ -548,7 +556,8 @@ namespace ts.server {
             const request = this.processRequest<protocol.CodeFixRequest>(CommandNames.GetCodeFixes, args);
             const response = this.processResponse<protocol.CodeFixResponse>(request);
 
-            return response.body.map(({ description, changes, fixId }) => ({ description, changes: this.convertChanges(changes, file), fixId }));
+            return response.body.map<CodeFixAction>(({ fixName, description, changes, commands, fixId, fixAllDescription }) =>
+                ({ fixName, description, changes: this.convertChanges(changes, file), commands: commands as CodeActionCommand[], fixId, fixAllDescription }));
         }
 
         getCombinedCodeFix = notImplemented;
@@ -607,7 +616,7 @@ namespace ts.server {
             const edits: FileTextChanges[] = this.convertCodeEditsToTextChanges(response.body.edits);
 
             const renameFilename: string | undefined = response.body.renameFilename;
-            let renameLocation: number | undefined = undefined;
+            let renameLocation: number | undefined;
             if (renameFilename !== undefined) {
                 renameLocation = this.lineOffsetToPosition(renameFilename, response.body.renameLocation);
             }

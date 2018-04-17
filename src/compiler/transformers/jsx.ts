@@ -1,7 +1,3 @@
-/// <reference path="../factory.ts" />
-/// <reference path="../visitor.ts" />
-/// <reference path="./esnext.ts" />
-
 /*@internal*/
 namespace ts {
     export function transformJsx(context: TransformationContext) {
@@ -72,8 +68,7 @@ namespace ts {
                     return visitJsxFragment(node, /*isChild*/ true);
 
                 default:
-                    Debug.failBadSyntaxKind(node);
-                    return undefined;
+                    return Debug.failBadSyntaxKind(node);
             }
         }
 
@@ -182,7 +177,7 @@ namespace ts {
                 return visitJsxExpression(node);
             }
             else {
-                Debug.failBadSyntaxKind(node);
+                return Debug.failBadSyntaxKind(node);
             }
         }
 

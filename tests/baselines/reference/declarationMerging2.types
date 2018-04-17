@@ -15,7 +15,7 @@ export class A {
 === tests/cases/compiler/b.ts ===
 export {}
 declare module "./a" {
->"./a" : typeof "tests/cases/compiler/a"
+>"./a" : typeof import("tests/cases/compiler/a")
 
     interface A {
 >A : A

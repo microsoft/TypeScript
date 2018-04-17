@@ -1,7 +1,3 @@
-/// <reference path="../factory.ts" />
-/// <reference path="../visitor.ts" />
-/// <reference path="es2017.ts" />
-
 /*@internal*/
 namespace ts {
     const enum ESNextSubstitutionFlags {
@@ -303,6 +299,11 @@ namespace ts {
                     addRange(statements, node.statement.statements);
                     bodyLocation = node.statement;
                     statementsLocation = node.statement.statements;
+                }
+                else if (node.statement) {
+                    append(statements, node.statement);
+                    bodyLocation = node.statement;
+                    statementsLocation = node.statement;
                 }
                 return updateForOf(
                     node,
@@ -887,8 +888,7 @@ namespace ts {
         name: "typescript:await",
         scoped: false,
         text: `
-            var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
-        `
+            var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }`
     };
 
     function createAwaitHelper(context: TransformationContext, expression: Expression) {
@@ -910,8 +910,7 @@ namespace ts {
                 function fulfill(value) { resume("next", value); }
                 function reject(value) { resume("throw", value); }
                 function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
-            };
-        `
+            };`
     };
 
     function createAsyncGeneratorHelper(context: TransformationContext, generatorFunc: FunctionExpression) {
@@ -940,8 +939,7 @@ namespace ts {
                 var i, p;
                 return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
                 function verb(n, f) { if (o[n]) i[n] = function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; }; }
-            };
-        `
+            };`
     };
 
     function createAsyncDelegatorHelper(context: TransformationContext, expression: Expression, location?: TextRange) {
@@ -965,8 +963,7 @@ namespace ts {
                 if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
                 var m = o[Symbol.asyncIterator];
                 return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
-            };
-        `
+            };`
     };
 
     function createAsyncValuesHelper(context: TransformationContext, expression: Expression, location?: TextRange) {

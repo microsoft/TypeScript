@@ -359,6 +359,8 @@ namespace ts {
                     case SpecialPropertyAssignmentKind.Property:
                         // static method / property
                         return isFunctionExpression(right) ? ScriptElementKind.memberFunctionElement : ScriptElementKind.memberVariableElement;
+                    case SpecialPropertyAssignmentKind.Prototype:
+                        return ScriptElementKind.localClassElement;
                     default: {
                         assertTypeIsNever(kind);
                         return ScriptElementKind.unknown;
@@ -625,18 +627,12 @@ namespace ts {
         return syntaxList;
     }
 
-    /* Gets the token whose text has range [start, end) and
-     * position >= start and (position < end or (position === end && token is keyword or identifier))
-     */
-    export function getTouchingWord(sourceFile: SourceFile, position: number, includeJsDocComment: boolean): Node {
-        return getTouchingToken(sourceFile, position, includeJsDocComment, n => isWord(n.kind));
-    }
-
-    /* Gets the token whose text has range [start, end) and position >= start
-     * and (position < end or (position === end && token is keyword or identifier or numeric/string literal))
+    /**
+     * Gets the token whose text has range [start, end) and
+     * position >= start and (position < end or (position === end && token is literal or keyword or identifier))
      */
     export function getTouchingPropertyName(sourceFile: SourceFile, position: number, includeJsDocComment: boolean): Node {
-        return getTouchingToken(sourceFile, position, includeJsDocComment, n => isPropertyName(n.kind));
+        return getTouchingToken(sourceFile, position, includeJsDocComment, n => isPropertyNameLiteral(n) || isKeyword(n.kind));
     }
 
     /**
@@ -888,6 +884,114 @@ namespace ts {
         return isTemplateLiteralKind(token.kind) && position > token.getStart(sourceFile);
     }
 
+    export function findPrecedingMatchingToken(token: Node, matchingTokenKind: SyntaxKind, sourceFile: SourceFile) {
+        const tokenKind = token.kind;
+        let remainingMatchingTokens = 0;
+        while (true) {
+            token = findPrecedingToken(token.getFullStart(), sourceFile);
+            if (!token) {
+                return undefined;
+            }
+
+            if (token.kind === matchingTokenKind) {
+                if (remainingMatchingTokens === 0) {
+                    return token;
+                }
+
+                remainingMatchingTokens--;
+            }
+            else if (token.kind === tokenKind) {
+                remainingMatchingTokens++;
+            }
+        }
+    }
+
+    export function isPossiblyTypeArgumentPosition(token: Node, sourceFile: SourceFile) {
+        // This function determines if the node could be type argument position
+        // Since during editing, when type argument list is not complete,
+        // the tree could be of any shape depending on the tokens parsed before current node,
+        // scanning of the previous identifier followed by "<" before current node would give us better result
+        // Note that we also balance out the already provided type arguments, arrays, object literals while doing so
+        let remainingLessThanTokens = 0;
+        while (token) {
+            switch (token.kind) {
+                case SyntaxKind.LessThanToken:
+                    // Found the beginning of the generic argument expression
+                    token = findPrecedingToken(token.getFullStart(), sourceFile);
+                    const tokenIsIdentifier = token && isIdentifier(token);
+                    if (!remainingLessThanTokens || !tokenIsIdentifier) {
+                        return tokenIsIdentifier;
+                    }
+                    remainingLessThanTokens--;
+                    break;
+
+                case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+                    remainingLessThanTokens = + 3;
+                    break;
+
+                case SyntaxKind.GreaterThanGreaterThanToken:
+                    remainingLessThanTokens = + 2;
+                    break;
+
+                case SyntaxKind.GreaterThanToken:
+                    remainingLessThanTokens++;
+                    break;
+
+                case SyntaxKind.CloseBraceToken:
+                    // This can be object type, skip untill we find the matching open brace token
+                    // Skip untill the matching open brace token
+                    token = findPrecedingMatchingToken(token, SyntaxKind.OpenBraceToken, sourceFile);
+                    if (!token) return false;
+                    break;
+
+                case SyntaxKind.CloseParenToken:
+                    // This can be object type, skip untill we find the matching open brace token
+                    // Skip untill the matching open brace token
+                    token = findPrecedingMatchingToken(token, SyntaxKind.OpenParenToken, sourceFile);
+                    if (!token) return false;
+                    break;
+
+                case SyntaxKind.CloseBracketToken:
+                    // This can be object type, skip untill we find the matching open brace token
+                    // Skip untill the matching open brace token
+                    token = findPrecedingMatchingToken(token, SyntaxKind.OpenBracketToken, sourceFile);
+                    if (!token) return false;
+                    break;
+
+                // Valid tokens in a type name. Skip.
+                case SyntaxKind.CommaToken:
+                case SyntaxKind.EqualsGreaterThanToken:
+
+                case SyntaxKind.Identifier:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+
+                case SyntaxKind.TypeOfKeyword:
+                case SyntaxKind.ExtendsKeyword:
+                case SyntaxKind.KeyOfKeyword:
+                case SyntaxKind.DotToken:
+                case SyntaxKind.BarToken:
+                case SyntaxKind.QuestionToken:
+                case SyntaxKind.ColonToken:
+                    break;
+
+                default:
+                    if (isTypeNode(token)) {
+                        break;
+                    }
+
+                    // Invalid token in type
+                    return false;
+            }
+
+            token = findPrecedingToken(token.getFullStart(), sourceFile);
+        }
+
+        return false;
+    }
+
     /**
      * Returns true if the cursor at position in sourceFile is within a comment.
      *
@@ -947,14 +1051,6 @@ namespace ts {
         }
 
         return undefined;
-    }
-
-    export function isWord(kind: SyntaxKind): boolean {
-        return kind === SyntaxKind.Identifier || isKeyword(kind);
-    }
-
-    function isPropertyName(kind: SyntaxKind): boolean {
-        return kind === SyntaxKind.StringLiteral || kind === SyntaxKind.NumericLiteral || isWord(kind);
     }
 
     export function isComment(kind: SyntaxKind): boolean {
@@ -1095,16 +1191,6 @@ namespace ts {
         };
     }
 
-    /** Add a value to a set, and return true if it wasn't already present. */
-    export function addToSeen(seen: Map<true>, key: string | number): boolean {
-        key = String(key);
-        if (seen.has(key)) {
-            return false;
-        }
-        seen.set(key, true);
-        return true;
-    }
-
     export function getSnapshotText(snap: IScriptSnapshot): string {
         return snap.getText(0, snap.getLength());
     }
@@ -1115,6 +1201,17 @@ namespace ts {
             result += str;
         }
         return result;
+    }
+
+    export function skipConstraint(type: Type): Type {
+        return type.isTypeParameter() ? type.getConstraint() : type;
+    }
+
+    export function getNameFromPropertyName(name: PropertyName): string | undefined {
+        return name.kind === SyntaxKind.ComputedPropertyName
+            // treat computed property names where expression is string/numeric literal as just string/numeric literal
+            ? isStringOrNumericLiteral(name.expression) ? name.expression.text : undefined
+            : getTextOfIdentifierOrLiteral(name);
     }
 }
 
@@ -1348,11 +1445,13 @@ namespace ts {
      * WARNING: This is an expensive operation and is only intended to be used in refactorings
      * and code fixes (because those are triggered by explicit user actions).
      */
-    export function getSynthesizedDeepClone<T extends Node>(node: T | undefined): T | undefined {
-        if (node === undefined) {
-            return undefined;
-        }
+    export function getSynthesizedDeepClone<T extends Node>(node: T | undefined, includeTrivia = true): T | undefined {
+        const clone = node && getSynthesizedDeepCloneWorker(node);
+        if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
+        return clone;
+    }
 
+    function getSynthesizedDeepCloneWorker<T extends Node>(node: T): T | undefined {
         const visited = visitEachChild(node, getSynthesizedDeepClone, nullTransformationContext);
         if (visited === node) {
             // This only happens for leaf nodes - internal nodes always see their children change.
@@ -1363,22 +1462,18 @@ namespace ts {
             else if (isNumericLiteral(clone)) {
                 clone.numericLiteralFlags = (node as any).numericLiteralFlags;
             }
-            clone.pos = node.pos;
-            clone.end = node.end;
-            return clone;
+            return setTextRange(clone, node);
         }
 
         // PERF: As an optimization, rather than calling getSynthesizedClone, we'll update
         // the new node created by visitEachChild with the extra changes getSynthesizedClone
         // would have made.
-
         visited.parent = undefined;
-
         return visited;
     }
 
-    export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined): NodeArray<T> | undefined {
-        return nodes && createNodeArray(nodes.map(getSynthesizedDeepClone), nodes.hasTrailingComma);
+    export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia = true): NodeArray<T> | undefined {
+        return nodes && createNodeArray(nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)), nodes.hasTrailingComma);
     }
 
     /**
@@ -1386,37 +1481,74 @@ namespace ts {
      */
     /* @internal */
     export function suppressLeadingAndTrailingTrivia(node: Node) {
-        Debug.assert(node !== undefined);
+        suppressLeadingTrivia(node);
+        suppressTrailingTrivia(node);
+    }
 
-        suppressLeading(node);
-        suppressTrailing(node);
+    /**
+     * Sets EmitFlags to suppress leading trivia on the node.
+     */
+    /* @internal */
+    export function suppressLeadingTrivia(node: Node) {
+        addEmitFlagsRecursively(node, EmitFlags.NoLeadingComments, getFirstChild);
+    }
 
-        function suppressLeading(node: Node) {
-            addEmitFlags(node, EmitFlags.NoLeadingComments);
+    /**
+     * Sets EmitFlags to suppress trailing trivia on the node.
+     */
+    /* @internal */
+    export function suppressTrailingTrivia(node: Node) {
+        addEmitFlagsRecursively(node, EmitFlags.NoTrailingComments, getLastChild);
+    }
 
-            const firstChild = forEachChild(node, child => child);
-            if (firstChild) {
-                suppressLeading(firstChild);
-            }
+    function addEmitFlagsRecursively(node: Node, flag: EmitFlags, getChild: (n: Node) => Node) {
+        addEmitFlags(node, flag);
+        const child = getChild(node);
+        if (child) addEmitFlagsRecursively(child, flag, getChild);
+    }
+
+    function getFirstChild(node: Node): Node | undefined {
+        return node.forEachChild(child => child);
+    }
+
+    /* @internal */
+    export function getUniqueName(baseName: string, fileText: string): string {
+        let nameText = baseName;
+        for (let i = 1; stringContains(fileText, nameText); i++) {
+            nameText = `${baseName}_${i}`;
         }
+        return nameText;
+    }
 
-        function suppressTrailing(node: Node) {
-            addEmitFlags(node, EmitFlags.NoTrailingComments);
+    /**
+     * @return The index of the (only) reference to the extracted symbol.  We want the cursor
+     * to be on the reference, rather than the declaration, because it's closer to where the
+     * user was before extracting it.
+     */
+    /* @internal */
+    export function getRenameLocation(edits: ReadonlyArray<FileTextChanges>, renameFilename: string, name: string, isDeclaredBeforeUse: boolean): number {
+        let delta = 0;
+        let lastPos = -1;
+        for (const { fileName, textChanges } of edits) {
+            Debug.assert(fileName === renameFilename);
+            for (const change of textChanges) {
+                const { span, newText } = change;
+                const index = newText.indexOf(name);
+                if (index !== -1) {
+                    lastPos = span.start + delta + index;
 
-            let lastChild: Node = undefined;
-            forEachChild(
-                node,
-                child => (lastChild = child, undefined),
-                children => {
-                    // As an optimization, jump straight to the end of the list.
-                    if (children.length) {
-                        lastChild = last(children);
+                    // If the reference comes first, return immediately.
+                    if (!isDeclaredBeforeUse) {
+                        return lastPos;
                     }
-                    return undefined;
-                });
-            if (lastChild) {
-                suppressTrailing(lastChild);
+                }
+                delta += newText.length - span.length;
             }
         }
+
+        // If the declaration comes first, return the position of the last occurrence.
+        Debug.assert(isDeclaredBeforeUse);
+        Debug.assert(lastPos >= 0);
+        return lastPos;
     }
 }
