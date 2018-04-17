@@ -21,7 +21,7 @@ namespace ts.OutliningElementsCollector {
             if (span) out.push(span);
 
             depthRemaining--;
-            if (isIfStatement(n) && isIfStatement(n.elseStatement)) {
+            if (isIfStatement(n) && n.elseStatement && isIfStatement(n.elseStatement)) {
                 // Consider an 'else if' to be on the same depth as the 'if'.
                 walk(n.expression);
                 walk(n.thenStatement);
