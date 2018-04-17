@@ -1192,7 +1192,7 @@ namespace ts.server {
 
         addRoot(info: ScriptInfo) {
             Debug.assert(info.isScriptOpen());
-            this.projectService.startWatchingConfigFilesForInferredProjectRoot(info, this.projectService.openFiles.get(info.path));
+            this.projectService.startWatchingConfigFilesForInferredProjectRoot(info);
             if (!this._isJsInferredProject && info.isJavaScript()) {
                 this.toggleJsInferredProject(/*isJsInferredProject*/ true);
             }
