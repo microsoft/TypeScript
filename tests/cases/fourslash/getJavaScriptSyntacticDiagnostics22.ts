@@ -4,4 +4,4 @@
 // @Filename: a.js
 //// function foo(...a) {}
 
-verify.getSemanticDiagnostics(`[]`);
+verify.getSemanticDiagnostics([]);

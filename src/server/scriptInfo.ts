@@ -1,5 +1,3 @@
-/// <reference path="scriptVersionCache.ts"/>
-
 namespace ts.server {
 
     /* @internal */
@@ -176,8 +174,13 @@ namespace ts.server {
                 return this.switchToScriptVersionCache();
             }
 
-            // Else if the svc is uptodate with the text, we are good
-            return !this.pendingReloadFromDisk && this.svc;
+            // If there is pending reload from the disk then, reload the text
+            if (this.pendingReloadFromDisk) {
+                this.reloadWithFileText();
+            }
+
+            // At this point if svc is present its valid
+            return this.svc;
         }
 
         private getOrLoadText() {
@@ -204,7 +207,8 @@ namespace ts.server {
          * All projects that include this file
          */
         readonly containingProjects: Project[] = [];
-        private formatCodeSettings: FormatCodeSettings;
+        private formatSettings: FormatCodeSettings | undefined;
+        private preferences: UserPreferences | undefined;
 
         /* @internal */
         fileWatcher: FileWatcher;
@@ -293,9 +297,8 @@ namespace ts.server {
             return this.realpath && this.realpath !== this.path ? this.realpath : undefined;
         }
 
-        getFormatCodeSettings() {
-            return this.formatCodeSettings;
-        }
+        getFormatCodeSettings(): FormatCodeSettings { return this.formatSettings; }
+        getPreferences(): UserPreferences { return this.preferences; }
 
         attachToProject(project: Project): boolean {
             const isNew = !this.isAttached(project);
@@ -388,12 +391,22 @@ namespace ts.server {
             }
         }
 
-        setFormatOptions(formatSettings: FormatCodeSettings): void {
+        setOptions(formatSettings: FormatCodeSettings, preferences: UserPreferences): void {
             if (formatSettings) {
-                if (!this.formatCodeSettings) {
-                    this.formatCodeSettings = getDefaultFormatCodeSettings(this.host);
+                if (!this.formatSettings) {
+                    this.formatSettings = getDefaultFormatCodeSettings(this.host);
+                    assign(this.formatSettings, formatSettings);
                 }
-                mergeMapLikes(this.formatCodeSettings, formatSettings);
+                else {
+                    this.formatSettings = { ...this.formatSettings, ...formatSettings };
+                }
+            }
+
+            if (preferences) {
+                if (!this.preferences) {
+                    this.preferences = defaultPreferences;
+                }
+                this.preferences = { ...this.preferences, ...preferences };
             }
         }
 

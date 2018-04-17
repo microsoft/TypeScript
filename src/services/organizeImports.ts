@@ -11,48 +11,69 @@ namespace ts.OrganizeImports {
         sourceFile: SourceFile,
         formatContext: formatting.FormatContext,
         host: LanguageServiceHost,
-        program: Program) {
-
-        // TODO (https://github.com/Microsoft/TypeScript/issues/10020): sort *within* ambient modules (find using isAmbientModule)
-
-        // All of the old ImportDeclarations in the file, in syntactic order.
-        const oldImportDecls = sourceFile.statements.filter(isImportDeclaration);
-
-        if (oldImportDecls.length === 0) {
-            return [];
-        }
-
-        const oldImportGroups = group(oldImportDecls, importDecl => getExternalModuleName(importDecl.moduleSpecifier));
-
-        const sortedImportGroups = stableSort(oldImportGroups, (group1, group2) =>
-            compareModuleSpecifiers(group1[0].moduleSpecifier, group2[0].moduleSpecifier));
-
-        const newImportDecls = flatMap(sortedImportGroups, importGroup =>
-            getExternalModuleName(importGroup[0].moduleSpecifier)
-                ? coalesceImports(removeUnusedImports(importGroup, sourceFile, program))
-                : importGroup);
+        program: Program,
+        _preferences: UserPreferences,
+    ) {
 
         const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext });
 
-        // Delete or replace the first import.
-        if (newImportDecls.length === 0) {
-            changeTracker.deleteNode(sourceFile, oldImportDecls[0]);
-        }
-        else {
-            // Note: Delete the surrounding trivia because it will have been retained in newImportDecls.
-            changeTracker.replaceNodeWithNodes(sourceFile, oldImportDecls[0], newImportDecls, {
-                useNonAdjustedStartPosition: false,
-                useNonAdjustedEndPosition: false,
-                suffix: getNewLineOrDefaultFromHost(host, formatContext.options),
-            });
-        }
+        // All of the old ImportDeclarations in the file, in syntactic order.
+        const topLevelImportDecls = sourceFile.statements.filter(isImportDeclaration);
+        organizeImportsWorker(topLevelImportDecls);
 
-        // Delete any subsequent imports.
-        for (let i = 1; i < oldImportDecls.length; i++) {
-            changeTracker.deleteNode(sourceFile, oldImportDecls[i]);
+        for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
+            const ambientModuleBody = getModuleBlock(ambientModule as ModuleDeclaration);
+            const ambientModuleImportDecls = ambientModuleBody.statements.filter(isImportDeclaration);
+            organizeImportsWorker(ambientModuleImportDecls);
         }
 
         return changeTracker.getChanges();
+
+        function organizeImportsWorker(oldImportDecls: ReadonlyArray<ImportDeclaration>) {
+            if (length(oldImportDecls) === 0) {
+                return;
+            }
+
+            // Special case: normally, we'd expect leading and trailing trivia to follow each import
+            // around as it's sorted.  However, we do not want this to happen for leading trivia
+            // on the first import because it is probably the header comment for the file.
+            // Consider: we could do a more careful check that this trivia is actually a header,
+            // but the consequences of being wrong are very minor.
+            suppressLeadingTrivia(oldImportDecls[0]);
+
+            const oldImportGroups = group(oldImportDecls, importDecl => getExternalModuleName(importDecl.moduleSpecifier));
+            const sortedImportGroups = stableSort(oldImportGroups, (group1, group2) => compareModuleSpecifiers(group1[0].moduleSpecifier, group2[0].moduleSpecifier));
+            const newImportDecls = flatMap(sortedImportGroups, importGroup =>
+                getExternalModuleName(importGroup[0].moduleSpecifier)
+                    ? coalesceImports(removeUnusedImports(importGroup, sourceFile, program))
+                    : importGroup);
+
+            // Delete or replace the first import.
+            if (newImportDecls.length === 0) {
+                changeTracker.deleteNode(sourceFile, oldImportDecls[0], {
+                    useNonAdjustedStartPosition: true, // Leave header comment in place
+                    useNonAdjustedEndPosition: false,
+                });
+            }
+            else {
+                // Note: Delete the surrounding trivia because it will have been retained in newImportDecls.
+                changeTracker.replaceNodeWithNodes(sourceFile, oldImportDecls[0], newImportDecls, {
+                    useNonAdjustedStartPosition: true, // Leave header comment in place
+                    useNonAdjustedEndPosition: false,
+                    suffix: getNewLineOrDefaultFromHost(host, formatContext.options),
+                });
+            }
+
+            // Delete any subsequent imports.
+            for (let i = 1; i < oldImportDecls.length; i++) {
+                changeTracker.deleteNode(sourceFile, oldImportDecls[i]);
+            }
+        }
+    }
+
+    function getModuleBlock(moduleDecl: ModuleDeclaration): ModuleBlock | undefined {
+        const body = moduleDecl.body;
+        return body && !isIdentifier(body) && (isModuleBlock(body) ? body : getModuleBlock(body));
     }
 
     function removeUnusedImports(oldImports: ReadonlyArray<ImportDeclaration>, sourceFile: SourceFile, program: Program) {
@@ -87,7 +108,7 @@ namespace ts.OrganizeImports {
                 }
                 else {
                     // List of named imports
-                    const newElements = namedBindings.elements.filter(e => isDeclarationUsed(e.propertyName || e.name));
+                    const newElements = namedBindings.elements.filter(e => isDeclarationUsed(e.name));
                     if (newElements.length < namedBindings.elements.length) {
                         namedBindings = newElements.length
                             ? updateNamedImports(namedBindings, newElements)
@@ -104,30 +125,13 @@ namespace ts.OrganizeImports {
         return usedImports;
 
         function isDeclarationUsed(identifier: Identifier) {
-            const symbol = typeChecker.getSymbolAtLocation(identifier);
-
-            // Be lenient with invalid code.
-            if (symbol === undefined) {
-                return true;
-            }
-
             // The JSX factory symbol is always used.
-            if (jsxContext && symbol.name === jsxNamespace) {
-                return true;
-            }
-
-            const entries = FindAllReferences.getReferenceEntriesForNode(identifier.pos, identifier, program, [sourceFile], {
-                isCancellationRequested: () => false,
-                throwIfCancellationRequested: () => { /*noop*/ },
-            }).filter(e => e.type === "node" && e.node.getSourceFile() === sourceFile);
-            return entries.length > 1;
+            return jsxContext && (identifier.text === jsxNamespace) || FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile);
         }
     }
 
     function getExternalModuleName(specifier: Expression) {
-        return isStringLiteral(specifier) || isNoSubstitutionTemplateLiteral(specifier)
-            ? specifier.text
-            : undefined;
+        return isStringLiteralLike(specifier) ? specifier.text : undefined;
     }
 
     /* @internal */ // Internal for testing

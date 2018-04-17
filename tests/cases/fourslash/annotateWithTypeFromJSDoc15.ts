@@ -11,10 +11,13 @@
 //// * @param {Array<number>} epsilon
 //// * @param {promise<String>} zeta
 //// */
-////function f(/*1*/x, /*2*/y, /*3*/z, /*4*/alpha, /*5*/beta, /*6*/gamma, /*7*/delta, /*8*/epsilon, /*9*/zeta) {
+////function f(x, y, z, alpha, beta, gamma, delta, epsilon, zeta) {
+////    x; y; z; alpha; beta; gamma; delta; epsilon; zeta;
 ////}
-verify.applicableRefactorAvailableAtMarker('9');
-verify.fileAfterApplyingRefactorAtMarker('9',
+
+verify.codeFix({
+    description: "Annotate with type from JSDoc",
+    newFileContent:
 `/**
  * @param {Boolean} x
  * @param {String} y
@@ -27,4 +30,6 @@ verify.fileAfterApplyingRefactorAtMarker('9',
  * @param {promise<String>} zeta
  */
 function f(x: boolean, y: string, z: number, alpha: object, beta: Date, gamma: Promise<any>, delta: Array<any>, epsilon: Array<number>, zeta: Promise<string>) {
-}`, 'Annotate with type from JSDoc', 'annotate');
+    x; y; z; alpha; beta; gamma; delta; epsilon; zeta;
+}`,
+});

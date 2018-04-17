@@ -11,7 +11,7 @@ namespace ts.codefix {
                 return undefined;
             }
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, token));
-            return [{ description: getLocaleSpecificMessage(Diagnostics.Add_this_to_unresolved_variable), changes, fixId }];
+            return [createCodeFixAction(fixId, changes, Diagnostics.Add_this_to_unresolved_variable, fixId, Diagnostics.Add_this_to_all_unresolved_variables_matching_a_member_name)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
@@ -30,6 +30,6 @@ namespace ts.codefix {
         }
         // TODO (https://github.com/Microsoft/TypeScript/issues/21246): use shared helper
         suppressLeadingAndTrailingTrivia(token);
-        changes.replaceNode(sourceFile, token, createPropertyAccess(createThis(), token), textChanges.useNonAdjustedPositions);
+        changes.replaceNode(sourceFile, token, createPropertyAccess(createThis(), token));
     }
 }

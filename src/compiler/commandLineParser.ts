@@ -1,9 +1,3 @@
-/// <reference path="sys.ts"/>
-/// <reference path="types.ts"/>
-/// <reference path="core.ts"/>
-/// <reference path="diagnosticInformationMap.generated.ts"/>
-/// <reference path="parser.ts"/>
-
 namespace ts {
     /* @internal */
     export const compileOnSaveCommandLineOption: CommandLineOption = { name: "compileOnSave", type: "boolean" };
@@ -61,6 +55,13 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Stylize_errors_and_messages_using_color_and_context_experimental
+        },
+        {
+            name: "preserveWatchOutput",
+            type: "boolean",
+            showInSimplifiedHelpView: false,
+            category: Diagnostics.Command_line_Options,
+            description: Diagnostics.Whether_to_keep_outdated_console_output_in_watch_mode_instead_of_clearing_the_screen,
         },
         {
             name: "watch",
@@ -144,9 +145,10 @@ namespace ts {
                     "es2017.string": "lib.es2017.string.d.ts",
                     "es2017.intl": "lib.es2017.intl.d.ts",
                     "es2017.typedarrays": "lib.es2017.typedarrays.d.ts",
+                    "es2018.promise": "lib.es2018.promise.d.ts",
+                    "es2018.regexp": "lib.es2018.regexp.d.ts",
                     "esnext.array": "lib.esnext.array.d.ts",
                     "esnext.asynciterable": "lib.esnext.asynciterable.d.ts",
-                    "esnext.promise": "lib.esnext.promise.d.ts",
                 }),
             },
             showInSimplifiedHelpView: true,
@@ -185,6 +187,13 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Generates_corresponding_d_ts_file,
+        },
+        {
+            name: "declarationMap",
+            type: "boolean",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Basic_Options,
+            description: Diagnostics.Generates_a_sourcemap_for_each_corresponding_d_ts_file,
         },
         {
             name: "emitDeclarationOnly",
@@ -1326,12 +1335,21 @@ namespace ts {
             return Array(paddingLength + 1).join(" ");
         }
 
+        function isAllowedOption({ category, name }: CommandLineOption): boolean {
+            // Skip options which do not have a category or have category `Command_line_Options`
+            // Exclude all possible `Advanced_Options` in tsconfig.json which were NOT defined in command line
+            return category !== undefined
+                && category !== Diagnostics.Command_line_Options
+                && (category !== Diagnostics.Advanced_Options || compilerOptionsMap.has(name));
+        }
+
         function writeConfigurations() {
             // Filter applicable options to place in the file
             const categorizedOptions = createMultiMap<CommandLineOption>();
             for (const option of optionDeclarations) {
                 const { category } = option;
-                if (category !== undefined && category !== Diagnostics.Command_line_Options && category !== Diagnostics.Advanced_Options) {
+
+                if (isAllowedOption(option)) {
                     categorizedOptions.add(getLocaleSpecificMessage(category), option);
                 }
             }
@@ -1731,7 +1749,7 @@ namespace ts {
     function getExtendedConfig(
         sourceFile: JsonSourceFile,
         extendedConfigPath: string,
-        host: ts.ParseConfigHost,
+        host: ParseConfigHost,
         basePath: string,
         resolutionStack: string[],
         errors: Push<Diagnostic>,
@@ -2021,7 +2039,7 @@ namespace ts {
     export function getFileNamesFromConfigSpecs(spec: ConfigFileSpecs, basePath: string, options: CompilerOptions, host: ParseConfigHost, extraFileExtensions: ReadonlyArray<JsFileExtensionInfo> = []): ExpandResult {
         basePath = normalizePath(basePath);
 
-        const keyMapper = host.useCaseSensitiveFileNames ? caseSensitiveKeyMapper : caseInsensitiveKeyMapper;
+        const keyMapper = host.useCaseSensitiveFileNames ? identity : toLowerCase;
 
         // Literal file names (provided via the "files" array in tsconfig.json) are stored in a
         // file map with a possibly case insensitive key. We use this map later when when including
@@ -2107,7 +2125,7 @@ namespace ts {
         }
     }
 
-    function specToDiagnostic(spec: string, allowTrailingRecursion: boolean): ts.DiagnosticMessage | undefined {
+    function specToDiagnostic(spec: string, allowTrailingRecursion: boolean): DiagnosticMessage | undefined {
         if (!allowTrailingRecursion && invalidTrailingRecursionPattern.test(spec)) {
             return Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0;
         }
@@ -2134,7 +2152,7 @@ namespace ts {
         //  /a/b/a?z    - Watch /a/b directly to catch any new file matching a?z
         const rawExcludeRegex = getRegularExpressionForWildcard(exclude, path, "exclude");
         const excludeRegex = rawExcludeRegex && new RegExp(rawExcludeRegex, useCaseSensitiveFileNames ? "" : "i");
-        const wildcardDirectories: ts.MapLike<WatchDirectoryFlags> = {};
+        const wildcardDirectories: MapLike<WatchDirectoryFlags> = {};
         if (include !== undefined) {
             const recursiveKeys: string[] = [];
             for (const file of include) {
@@ -2226,30 +2244,12 @@ namespace ts {
     }
 
     /**
-     * Gets a case sensitive key.
-     *
-     * @param key The original key.
-     */
-    function caseSensitiveKeyMapper(key: string) {
-        return key;
-    }
-
-    /**
-     * Gets a case insensitive key.
-     *
-     * @param key The original key.
-     */
-    function caseInsensitiveKeyMapper(key: string) {
-        return key.toLowerCase();
-    }
-
-    /**
      * Produces a cleaned version of compiler options with personally identifiying info (aka, paths) removed.
      * Also converts enum values back to strings.
      */
     /* @internal */
-    export function convertCompilerOptionsForTelemetry(opts: ts.CompilerOptions): ts.CompilerOptions {
-        const out: ts.CompilerOptions = {};
+    export function convertCompilerOptionsForTelemetry(opts: CompilerOptions): CompilerOptions {
+        const out: CompilerOptions = {};
         for (const key in opts) {
             if (opts.hasOwnProperty(key)) {
                 const type = getOptionFromName(key);
@@ -2273,9 +2273,9 @@ namespace ts {
                 return typeof value === "boolean" ? value : "";
             case "list":
                 const elementType = (option as CommandLineOptionOfListType).element;
-                return ts.isArray(value) ? value.map(v => getOptionValueWithEmptyStrings(v, elementType)) : "";
+                return isArray(value) ? value.map(v => getOptionValueWithEmptyStrings(v, elementType)) : "";
             default:
-                return ts.forEachEntry(option.type, (optionEnumValue, optionStringValue) => {
+                return forEachEntry(option.type, (optionEnumValue, optionStringValue) => {
                     if (optionEnumValue === value) {
                         return optionStringValue;
                     }

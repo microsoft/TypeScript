@@ -26,9 +26,9 @@ class C {
         }
         this.inMultiple = 0;
 >this.inMultiple = 0 : 0
->this.inMultiple : string | number | boolean
+>this.inMultiple : number
 >this : this
->inMultiple : string | number | boolean
+>inMultiple : number
 >0 : 0
     }
     method() {
@@ -46,6 +46,13 @@ class C {
 >this : this
 >inMethod : string | number | undefined
 >0 : 0
+
+            this.inMethodNullable = null;
+>this.inMethodNullable = null : null
+>this.inMethodNullable : any
+>this : this
+>inMethodNullable : any
+>null : null
         }
         else {
             this.inMethod = "string"
@@ -54,12 +61,26 @@ class C {
 >this : this
 >inMethod : string | number | undefined
 >"string" : "string"
+
+            this.inMethodNullable = undefined;
+>this.inMethodNullable = undefined : undefined
+>this.inMethodNullable : any
+>this : this
+>inMethodNullable : any
+>undefined : undefined
         }
         this.inMultiple = "string";
 >this.inMultiple = "string" : "string"
->this.inMultiple : string | number | boolean
+>this.inMultiple : number
 >this : this
->inMultiple : string | number | boolean
+>inMultiple : number
+>"string" : "string"
+
+        this.inMultipleMethods = "string";
+>this.inMultipleMethods = "string" : "string"
+>this.inMultipleMethods : string | boolean | undefined
+>this : this
+>inMultipleMethods : string | boolean | undefined
 >"string" : "string"
 
         var action = () => {
@@ -115,9 +136,16 @@ class C {
         }
         this.inMultiple = false;
 >this.inMultiple = false : false
->this.inMultiple : string | number | boolean
+>this.inMultiple : number
 >this : this
->inMultiple : string | number | boolean
+>inMultiple : number
+>false : false
+
+        this.inMultipleMethods = false;
+>this.inMultipleMethods = false : false
+>this.inMultipleMethods : string | boolean | undefined
+>this : this
+>inMultipleMethods : string | boolean | undefined
 >false : false
     }
     set() {
@@ -352,11 +380,32 @@ var stringOrNumberOrUndefined = c.inNestedArrowFunction
 var stringOrNumberOrBoolean: string | number | boolean;
 >stringOrNumberOrBoolean : string | number | boolean
 
-var stringOrNumberOrBoolean = c.inMultiple;
->stringOrNumberOrBoolean : string | number | boolean
->c.inMultiple : string | number | boolean
+var number: number;
+>number : number
+
+var number = c.inMultiple;
+>number : number
+>c.inMultiple : number
 >c : C
->inMultiple : string | number | boolean
+>inMultiple : number
+
+var stringOrBooleanOrUndefined : string | boolean | undefined;
+>stringOrBooleanOrUndefined : string | boolean | undefined
+
+var stringOrBooleanOrUndefined = c.inMultipleMethods;
+>stringOrBooleanOrUndefined : string | boolean | undefined
+>c.inMultipleMethods : string | boolean | undefined
+>c : C
+>inMultipleMethods : string | boolean | undefined
+
+var any: any;
+>any : any
+
+var any = c.inMethodNullable;
+>any : any
+>c.inMethodNullable : any
+>c : C
+>inMethodNullable : any
 
 
 var stringOrNumberOrUndefined = C.inStaticMethod;

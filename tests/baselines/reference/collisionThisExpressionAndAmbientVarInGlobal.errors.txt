@@ -1,9 +1,0 @@
-tests/cases/compiler/collisionThisExpressionAndAmbientVarInGlobal.ts(3,1): error TS2400: Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.
-
-
-==== tests/cases/compiler/collisionThisExpressionAndAmbientVarInGlobal.ts (1 errors) ====
-    declare var _this: number; // no error as no code gen
-    var f = () => this;
-    _this = 10; // Error
-    ~~~~~
-!!! error TS2400: Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.

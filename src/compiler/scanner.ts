@@ -1,6 +1,3 @@
-/// <reference path="core.ts"/>
-/// <reference path="diagnosticInformationMap.generated.ts"/>
-
 namespace ts {
     export type ErrorCallback = (message: DiagnosticMessage, length: number) => void;
 
@@ -33,8 +30,8 @@ namespace ts {
         reScanTemplateToken(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
-        reScanJsxToken(): SyntaxKind;
-        scanJsxToken(): SyntaxKind;
+        reScanJsxToken(): JsxTokenSyntaxKind;
+        scanJsxToken(): JsxTokenSyntaxKind;
         scanJSDocToken(): JsDocSyntaxKind;
         scan(): SyntaxKind;
         getText(): string;
@@ -330,7 +327,7 @@ namespace ts {
         return result;
     }
 
-    export function getPositionOfLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number {
+    export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number): number {
         return computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character, sourceFile.text);
     }
 
@@ -696,8 +693,6 @@ namespace ts {
                                     // If we are not reducing and we have a truthy result, return it.
                                     return accumulator;
                                 }
-
-                                hasPendingCommentRange = false;
                             }
 
                             pendingPos = startPos;
@@ -1836,12 +1831,12 @@ namespace ts {
             return token = scanTemplateAndSetTokenValue();
         }
 
-        function reScanJsxToken(): SyntaxKind {
+        function reScanJsxToken(): JsxTokenSyntaxKind {
             pos = tokenPos = startPos;
             return token = scanJsxToken();
         }
 
-        function scanJsxToken(): SyntaxKind {
+        function scanJsxToken(): JsxTokenSyntaxKind {
             startPos = tokenPos = pos;
 
             if (pos >= end) {
@@ -1974,6 +1969,13 @@ namespace ts {
                     return token = SyntaxKind.CommaToken;
                 case CharacterCodes.dot:
                     return token = SyntaxKind.DotToken;
+                case CharacterCodes.backtick:
+                    while (pos < end && text.charCodeAt(pos) !== CharacterCodes.backtick) {
+                        pos++;
+                    }
+                    tokenValue = text.substring(tokenPos + 1, pos);
+                    pos++;
+                    return token = SyntaxKind.NoSubstitutionTemplateLiteral;
             }
 
             if (isIdentifierStart(ch, ScriptTarget.Latest)) {

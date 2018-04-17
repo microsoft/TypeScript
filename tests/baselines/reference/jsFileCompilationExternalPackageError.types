@@ -22,7 +22,7 @@ var a = 10;
 exports.a = 10;
 >exports.a = 10 : 10
 >exports.a : number
->exports : typeof "tests/cases/compiler/node_modules/c"
+>exports : typeof import("tests/cases/compiler/node_modules/c")
 >a : number
 >10 : 10
 

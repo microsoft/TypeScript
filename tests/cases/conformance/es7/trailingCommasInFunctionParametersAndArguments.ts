@@ -6,6 +6,9 @@ f1(1,);
 
 function f2(...args,) {}
 
+// Allowed for ambient declarations
+declare function f25(...args,): void;
+
 f2(...[],);
 
 // Not confused by overloads

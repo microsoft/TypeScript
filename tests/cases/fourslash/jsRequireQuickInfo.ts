@@ -7,4 +7,4 @@
 // @Filename: b.js
 ////exports.x = 0;
 
-verify.quickInfoAt("",'const x: typeof "/tests/cases/fourslash/b"');
+verify.quickInfoAt("",'const x: typeof import("/tests/cases/fourslash/b")');

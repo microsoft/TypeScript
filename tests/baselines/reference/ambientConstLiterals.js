@@ -51,7 +51,7 @@ declare function f<T>(x: T): T;
 declare enum E {
     A = 0,
     B = 1,
-    C = 2,
+    C = 2
 }
 declare const c1 = "abc";
 declare const c2 = 123;

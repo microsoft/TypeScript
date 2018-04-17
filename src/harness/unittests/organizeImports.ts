@@ -193,9 +193,19 @@ export const Other = 1;
                     content: "function F() { }",
                 };
                 const languageService = makeLanguageService(testFile);
-                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatOptions);
+                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatOptions, defaultPreferences);
                 assert.isEmpty(changes);
             });
+
+            testOrganizeImports("Renamed_used",
+                {
+                    path: "/test.ts",
+                    content: `
+import { F1 as EffOne, F2 as EffTwo } from "lib";
+EffOne();
+`,
+                },
+                libFile);
 
             testOrganizeImports("Simple",
                 {
@@ -236,6 +246,24 @@ import D from "lib";
 `,
                 },
                 libFile);
+
+            testOrganizeImports("Unused_false_positive_shorthand_assignment",
+            {
+                    path: "/test.ts",
+                    content: `
+import { x } from "a";
+const o = { x };
+`
+                });
+
+            testOrganizeImports("Unused_false_positive_export_shorthand",
+            {
+                    path: "/test.ts",
+                    content: `
+import { x } from "a";
+export { x };
+`
+                });
 
             testOrganizeImports("MoveToTop",
                 {
@@ -329,6 +357,65 @@ F1();
                 },
                 libFile);
 
+            testOrganizeImports("UnusedHeaderComment",
+                {
+                    path: "/test.ts",
+                    content: `
+// Header
+import { F1 } from "lib";
+`,
+                },
+                libFile);
+
+            testOrganizeImports("SortHeaderComment",
+                {
+                    path: "/test.ts",
+                    content: `
+// Header
+import "lib2";
+import "lib1";
+`,
+                },
+                { path: "/lib1.ts", content: "" },
+                { path: "/lib2.ts", content: "" });
+
+            testOrganizeImports("AmbientModule",
+                {
+                    path: "/test.ts",
+                    content: `
+declare module "mod" {
+    import { F1 } from "lib";
+    import * as NS from "lib";
+    import { F2 } from "lib";
+
+    function F(f1: {} = F1, f2: {} = F2) {}
+}
+`,
+                },
+                libFile);
+
+            testOrganizeImports("TopLevelAndAmbientModule",
+                {
+                    path: "/test.ts",
+                    content: `
+import D from "lib";
+
+declare module "mod" {
+    import { F1 } from "lib";
+    import * as NS from "lib";
+    import { F2 } from "lib";
+
+    function F(f1: {} = F1, f2: {} = F2) {}
+}
+
+import E from "lib";
+import "lib";
+
+D();
+`,
+                },
+                libFile);
+
             testOrganizeImports("JsxFactoryUsed",
                 {
                     path: "/test.tsx",
@@ -366,7 +453,7 @@ import { React, Other } from "react";
             function runBaseline(baselinePath: string, testFile: TestFSWithWatch.FileOrFolder, ...otherFiles: TestFSWithWatch.FileOrFolder[]) {
                 const { path: testPath, content: testContent } = testFile;
                 const languageService = makeLanguageService(testFile, ...otherFiles);
-                const changes = languageService.organizeImports({ type: "file", fileName: testPath }, testFormatOptions);
+                const changes = languageService.organizeImports({ type: "file", fileName: testPath }, testFormatOptions, defaultPreferences);
                 assert.equal(changes.length, 1);
                 assert.equal(changes[0].fileName, testPath);
 

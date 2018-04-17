@@ -8,35 +8,35 @@ Common.Item = class I {}
 >I : typeof I
 
 Common.Object = class extends Common.Item {}
->Common.Object = class extends Common.Item {} : typeof (Anonymous class)
->Common.Object : typeof (Anonymous class)
+>Common.Object = class extends Common.Item {} : typeof Object
+>Common.Object : typeof Object
 >Common : typeof Common
->Object : typeof (Anonymous class)
->class extends Common.Item {} : typeof (Anonymous class)
+>Object : typeof Object
+>class extends Common.Item {} : typeof Object
 >Common.Item : I
 >Common : typeof Common
 >Item : typeof I
 
 Workspace.Object = class extends Common.Object {}
->Workspace.Object = class extends Common.Object {} : typeof (Anonymous class)
->Workspace.Object : typeof (Anonymous class)
+>Workspace.Object = class extends Common.Object {} : typeof Object
+>Workspace.Object : typeof Object
 >Workspace : typeof Workspace
->Object : typeof (Anonymous class)
->class extends Common.Object {} : typeof (Anonymous class)
->Common.Object : (Anonymous class)
+>Object : typeof Object
+>class extends Common.Object {} : typeof Object
+>Common.Object : Object
 >Common : typeof Common
->Object : typeof (Anonymous class)
+>Object : typeof Object
 
 /** @type {Workspace.Object} */
 var am;
->am : (Anonymous class)
+>am : Object
 
 === tests/cases/conformance/salsa/roots.js ===
 var Common = {};
 >Common : typeof Common
->{} : { [x: string]: any; }
+>{} : { [x: string]: any; Item: typeof I; Object: typeof Object; }
 
 var Workspace = {};
 >Workspace : typeof Workspace
->{} : { [x: string]: any; }
+>{} : { [x: string]: any; Object: typeof Object; }
 

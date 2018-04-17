@@ -1,11 +1,3 @@
-// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0.
-// See LICENSE.txt in the project root for complete license information.
-
-/// <reference path='../compiler/types.ts' />
-/// <reference path='../compiler/core.ts' />
-/// <reference path='../compiler/commandLineParser.ts' />
-/// <reference path='../services/semver.ts' />
-
 /* @internal */
 namespace ts.JsTyping {
 
@@ -33,8 +25,8 @@ namespace ts.JsTyping {
     }
 
     /* @internal */
-    export function isTypingUpToDate(cachedTyping: JsTyping.CachedTyping, availableTypingVersions: MapLike<string>) {
-        const availableVersion = Semver.parse(getProperty(availableTypingVersions, `ts${ts.versionMajorMinor}`) || getProperty(availableTypingVersions, "latest"));
+    export function isTypingUpToDate(cachedTyping: CachedTyping, availableTypingVersions: MapLike<string>) {
+        const availableVersion = Semver.parse(getProperty(availableTypingVersions, `ts${versionMajorMinor}`) || getProperty(availableTypingVersions, "latest"));
         return !availableVersion.greaterThan(cachedTyping.version);
     }
 
@@ -318,7 +310,7 @@ namespace ts.JsTyping {
             case PackageNameValidationResult.NameContainsNonURISafeCharacters:
                 return `Package name '${typing}' contains non URI safe characters`;
             case PackageNameValidationResult.Ok:
-                throw Debug.fail(); // Shouldn't have called this.
+                return Debug.fail(); // Shouldn't have called this.
             default:
                 Debug.assertNever(result);
         }

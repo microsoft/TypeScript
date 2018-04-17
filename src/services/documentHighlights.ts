@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.DocumentHighlights {
     export function getDocumentHighlights(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: ReadonlyArray<SourceFile>): DocumentHighlights[] | undefined {
-        const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ true);
+        const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
 
         if (node.parent && (isJsxOpeningElement(node.parent) && node.parent.tagName === node || isJsxClosingElement(node.parent))) {
             // For a JSX element, just highlight the matching tag, not all references.
@@ -22,19 +22,25 @@ namespace ts.DocumentHighlights {
     }
 
     function getSemanticDocumentHighlights(position: number, node: Node, program: Program, cancellationToken: CancellationToken, sourceFilesToSearch: ReadonlyArray<SourceFile>): DocumentHighlights[] | undefined {
-        const referenceEntries = FindAllReferences.getReferenceEntriesForNode(position, node, program, sourceFilesToSearch, cancellationToken);
+        const sourceFilesSet = arrayToSet(sourceFilesToSearch, f => f.fileName);
+        const referenceEntries = FindAllReferences.getReferenceEntriesForNode(position, node, program, sourceFilesToSearch, cancellationToken, /*options*/ undefined, sourceFilesSet);
         if (!referenceEntries) return undefined;
         const map = arrayToMultiMap(referenceEntries.map(FindAllReferences.toHighlightSpan), e => e.fileName, e => e.span);
-        return arrayFrom(map.entries(), ([fileName, highlightSpans]) => ({ fileName, highlightSpans }));
+        return arrayFrom(map.entries(), ([fileName, highlightSpans]) => {
+            if (!sourceFilesSet.has(fileName)) {
+                Debug.assert(program.redirectTargetsSet.has(fileName));
+                const redirectTarget = program.getSourceFile(fileName);
+                const redirect = find(sourceFilesToSearch, f => f.redirectInfo && f.redirectInfo.redirectTarget === redirectTarget)!;
+                fileName = redirect.fileName;
+                Debug.assert(sourceFilesSet.has(fileName));
+            }
+            return { fileName, highlightSpans };
+        });
     }
 
     function getSyntacticDocumentHighlights(node: Node, sourceFile: SourceFile): DocumentHighlights[] {
         const highlightSpans = getHighlightSpans(node, sourceFile);
-        if (!highlightSpans || highlightSpans.length === 0) {
-            return undefined;
-        }
-
-        return [{ fileName: sourceFile.fileName, highlightSpans }];
+        return highlightSpans && [{ fileName: sourceFile.fileName, highlightSpans }];
     }
 
     function getHighlightSpans(node: Node, sourceFile: SourceFile): HighlightSpan[] | undefined {
