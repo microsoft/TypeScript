@@ -12372,14 +12372,13 @@ namespace ts {
                     inferredType = getTypeFromInference(inference);
                 }
 
-                inferredType = getWidenedUniqueESSymbolType(inferredType);
                 inference.inferredType = inferredType;
 
                 const constraint = getConstraintOfTypeParameter(inference.typeParameter);
                 if (constraint) {
                     const instantiatedConstraint = instantiateType(constraint, context);
                     if (!context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
-                        inference.inferredType = inferredType = getWidenedUniqueESSymbolType(instantiatedConstraint);
+                        inference.inferredType = inferredType = instantiatedConstraint;
                     }
                 }
             }
