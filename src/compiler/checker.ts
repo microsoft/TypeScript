@@ -13534,10 +13534,6 @@ namespace ts {
                     return type;
                 }
                 const clauseTypes = switchTypes.slice(clauseStart, clauseEnd);
-                if (some(clauseTypes, isNotUnitTypeOrNever)) {
-                    // Only clauses containing only unit types can be narrowed
-                    return type;
-                }
                 const hasDefaultClause = clauseStart === clauseEnd || contains(clauseTypes, neverType);
                 const discriminantType = getUnionType(clauseTypes);
                 const caseType =

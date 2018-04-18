@@ -68,7 +68,7 @@ function f2(x: 0 | 1 | 2) {
 >oneOrTwo : 1 | 2
 
             x;
->x : 0 | 1 | 2
+>x : 1 | 2
 
             break;
         default:

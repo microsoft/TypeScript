@@ -50,8 +50,8 @@ export const narrowToLiterals = (str: string) => {
   };
   
   export const narrowToStringOrNumber = (str: string | number, someNumber: number) => {
->narrowToStringOrNumber : (str: string | number, someNumber: number) => string | number
->(str: string | number, someNumber: number) => {    switch (str) {      case 'abc': {        // inferred type should be `abc`        return str;      }      case someNumber: {        // inferred type should be `number`        return str;      }      default:        return 'defaultValue';    }  } : (str: string | number, someNumber: number) => string | number
+>narrowToStringOrNumber : (str: string | number, someNumber: number) => number | "abc" | "defaultValue"
+>(str: string | number, someNumber: number) => {    switch (str) {      case 'abc': {        // inferred type should be `abc`        return str;      }      case someNumber: {        // inferred type should be `number`        return str;      }      default:        return 'defaultValue';    }  } : (str: string | number, someNumber: number) => number | "abc" | "defaultValue"
 >str : string | number
 >someNumber : number
 
@@ -70,7 +70,7 @@ export const narrowToLiterals = (str: string) => {
 
         // inferred type should be `number`
         return str;
->str : string | number
+>str : number
       }
       default:
         return 'defaultValue';
