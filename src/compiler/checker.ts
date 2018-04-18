@@ -23532,21 +23532,21 @@ namespace ts {
             }
         }
 
-        function areTypeParametersIdentical(declarations: ReadonlyArray<ClassDeclaration | InterfaceDeclaration>, typeParameters: TypeParameter[]) {
-            const maxTypeArgumentCount = length(typeParameters);
-            const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
+        function areTypeParametersIdentical(declarations: ReadonlyArray<ClassDeclaration | InterfaceDeclaration>, targetParameters: TypeParameter[]) {
+            const maxTypeArgumentCount = length(targetParameters);
+            const minTypeArgumentCount = getMinTypeArgumentCount(targetParameters);
 
             for (const declaration of declarations) {
                 // If this declaration has too few or too many type parameters, we report an error
-                const typeParameters = getEffectiveTypeParameterDeclarations(declaration);
-                const numTypeParameters = length(typeParameters);
+                const sourceParameters = getEffectiveTypeParameterDeclarations(declaration);
+                const numTypeParameters = length(sourceParameters);
                 if (numTypeParameters < minTypeArgumentCount || numTypeParameters > maxTypeArgumentCount) {
                     return false;
                 }
 
                 for (let i = 0; i < numTypeParameters; i++) {
-                    const source = typeParameters[i];
-                    const target = typeParameters[i];
+                    const source = sourceParameters[i];
+                    const target = targetParameters[i];
 
                     // If the type parameter node does not have the same as the resolved type
                     // parameter at this position, we report an error.
