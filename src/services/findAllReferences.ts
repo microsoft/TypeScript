@@ -129,9 +129,7 @@ namespace ts.FindAllReferences {
         })();
 
         const { node, name, kind, displayParts } = info;
-        const sourceFile = node.getSourceFile();
-        const textSpan = getTextSpan(isComputedPropertyName(node) ? node.expression : node, sourceFile);
-        return { containerKind: ScriptElementKind.unknown, containerName: "", fileName: sourceFile.fileName, kind, name, textSpan, displayParts };
+        return { containerKind: ScriptElementKind.unknown, containerName: "", kind, name, displayParts, ...getTextSpanAndFileName(isComputedPropertyName(node) ? node.expression : node) };
     }
 
     function getDefinitionKindAndDisplayParts(symbol: Symbol, checker: TypeChecker, node: Node): { displayParts: SymbolDisplayPart[], kind: ScriptElementKind } {
@@ -149,20 +147,19 @@ namespace ts.FindAllReferences {
 
         const { node, isInString } = entry;
         return {
-            fileName: node.getSourceFile().fileName,
-            textSpan: getTextSpan(node),
             isWriteAccess: isWriteAccessForReference(node),
             isDefinition: node.kind === SyntaxKind.DefaultKeyword
                 || isAnyDeclarationName(node)
                 || isLiteralComputedPropertyDeclarationName(node),
-            isInString
+            isInString,
+            ...getTextSpanAndFileName(node),
         };
     }
 
     function toImplementationLocation(entry: Entry, checker: TypeChecker): ImplementationLocation {
         if (entry.type === "node") {
             const { node } = entry;
-            return { textSpan: getTextSpan(node), fileName: node.getSourceFile().fileName, ...implementationKindDisplayParts(node, checker) };
+            return { ...getTextSpanAndFileName(node), ...implementationKindDisplayParts(node, checker) };
         }
         else {
             const { textSpan, fileName } = entry;
@@ -199,17 +196,22 @@ namespace ts.FindAllReferences {
         }
 
         const { node, isInString } = entry;
-        const fileName = entry.node.getSourceFile().fileName;
+        const sourceFile = node.getSourceFile();
         const writeAccess = isWriteAccessForReference(node);
         const span: HighlightSpan = {
-            textSpan: getTextSpan(node),
+            textSpan: getTextSpan(node, sourceFile),
             kind: writeAccess ? HighlightSpanKind.writtenReference : HighlightSpanKind.reference,
             isInString
         };
-        return { fileName, span };
+        return { fileName: sourceFile.fileName, span };
     }
 
-    function getTextSpan(node: Node, sourceFile?: SourceFile): TextSpan {
+    function getTextSpanAndFileName(node: Node): { textSpan: TextSpan, fileName: string } {
+        const sourceFile = node.getSourceFile();
+        return { textSpan: getTextSpan(node, sourceFile), fileName: sourceFile.fileName };
+    }
+
+    function getTextSpan(node: Node, sourceFile: SourceFile): TextSpan {
         let start = node.getStart(sourceFile);
         let end = node.getEnd();
         if (node.kind === SyntaxKind.StringLiteral) {
