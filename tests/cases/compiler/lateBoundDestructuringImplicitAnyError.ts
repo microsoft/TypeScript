@@ -1,3 +1,4 @@
+// @lib: es6
 // @noImplicitAny: true
 let named = "foo";
 let {[named]: prop} = {prop: "foo"};
@@ -8,6 +9,8 @@ const strIndexed: {[idx: string]: string} = null as any;
 
 let numed = 6;
 
+const symed = Symbol()
+
 let {[named]: prop2} = numIndexed;
 void prop2;
 let {[numed]: prop3} = numIndexed;
@@ -16,3 +19,7 @@ let {[named]: prop4} = strIndexed;
 void prop4;
 let {[numed]: prop5} = strIndexed;
 void prop5;
+let {[symed]: prop6} = numIndexed;
+void prop6;
+let {[symed]: prop7} = strIndexed;
+void prop7;

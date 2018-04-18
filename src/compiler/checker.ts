@@ -4174,13 +4174,7 @@ namespace ts {
                     const isWellKnown = isComputedPropertyName(name) && isWellKnownSymbolSyntactically(name.expression);
                     if (!isLate && !isWellKnown && isComputedNonLiteralName(name)) {
                         const exprType = checkExpression((name as ComputedPropertyName).expression);
-                        let indexerType: Type;
-                        if (isTypeAssignableToKind(exprType, TypeFlags.NumberLike)) {
-                            indexerType = getIndexTypeOfType(parentType, IndexKind.Number) || getIndexTypeOfType(parentType, IndexKind.String);
-                        }
-                        else if (isTypeAssignableToKind(exprType, TypeFlags.StringLike)) {
-                            indexerType = getIndexTypeOfType(parentType, IndexKind.String);
-                        }
+                        const indexerType = isTypeAssignableToKind(exprType, TypeFlags.NumberLike) && getIndexTypeOfType(parentType, IndexKind.Number) || getIndexTypeOfType(parentType, IndexKind.String);
                         if (!indexerType && noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors) {
                             if (getIndexTypeOfType(parentType, IndexKind.Number)) {
                                 error(declaration, Diagnostics.Element_implicitly_has_an_any_type_because_index_expression_is_not_of_type_number);

@@ -1,8 +1,9 @@
 tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(2,15): error TS7017: Element implicitly has an 'any' type because type '{ prop: string; }' has no index signature.
-tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(10,15): error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
+tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(12,15): error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
+tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(20,6): error TS2459: Type '{ [idx: number]: string; }' has no property '[symed]' and no string index signature.
 
 
-==== tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts (2 errors) ====
+==== tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts (3 errors) ====
     let named = "foo";
     let {[named]: prop} = {prop: "foo"};
                   ~~~~
@@ -14,6 +15,8 @@ tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(10,15): error TS7
     
     let numed = 6;
     
+    const symed = Symbol()
+    
     let {[named]: prop2} = numIndexed;
                   ~~~~~
 !!! error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
@@ -24,4 +27,10 @@ tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(10,15): error TS7
     void prop4;
     let {[numed]: prop5} = strIndexed;
     void prop5;
+    let {[symed]: prop6} = numIndexed;
+         ~~~~~~~
+!!! error TS2459: Type '{ [idx: number]: string; }' has no property '[symed]' and no string index signature.
+    void prop6;
+    let {[symed]: prop7} = strIndexed;
+    void prop7;
     

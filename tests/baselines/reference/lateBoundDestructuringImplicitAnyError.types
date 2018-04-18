@@ -30,6 +30,11 @@ let numed = 6;
 >numed : number
 >6 : 6
 
+const symed = Symbol()
+>symed : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
 let {[named]: prop2} = numIndexed;
 >named : string
 >prop2 : any
@@ -65,4 +70,22 @@ let {[numed]: prop5} = strIndexed;
 void prop5;
 >void prop5 : undefined
 >prop5 : string
+
+let {[symed]: prop6} = numIndexed;
+>symed : unique symbol
+>prop6 : any
+>numIndexed : { [idx: number]: string; }
+
+void prop6;
+>void prop6 : undefined
+>prop6 : any
+
+let {[symed]: prop7} = strIndexed;
+>symed : unique symbol
+>prop7 : string
+>strIndexed : { [idx: string]: string; }
+
+void prop7;
+>void prop7 : undefined
+>prop7 : string
 
