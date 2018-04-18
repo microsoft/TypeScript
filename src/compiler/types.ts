@@ -4194,7 +4194,6 @@ namespace ts {
         /* @internal */ preserveWatchOutput?: boolean;
         project?: string;
         /* @internal */ pretty?: boolean;
-        /* @internal */ diagnosticStyle?: DiagnosticStyle;
         reactNamespace?: string;
         jsxFactory?: string;
         removeComments?: boolean;
@@ -4290,13 +4289,6 @@ namespace ts {
     export const enum LanguageVariant {
         Standard,
         JSX,
-    }
-
-    /* @internal */
-    export const enum DiagnosticStyle {
-        Auto,
-        Pretty,
-        Simple,
     }
 
     /** Either a parsed command line or a parsed tsconfig.json */

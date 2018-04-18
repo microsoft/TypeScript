@@ -25,10 +25,10 @@ namespace ts {
     }
 
     function shouldBePretty(options: CompilerOptions) {
-        if ((typeof options.pretty === "undefined" && typeof options.diagnosticStyle === "undefined") || options.diagnosticStyle === DiagnosticStyle.Auto) {
+        if ((typeof options.pretty === "undefined")) {
             return !!sys.writeOutputIsTty && sys.writeOutputIsTty();
         }
-        return options.diagnosticStyle === DiagnosticStyle.Pretty || options.pretty;
+        return options.pretty;
     }
 
     function padLeft(s: string, length: number) {

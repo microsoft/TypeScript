@@ -57,14 +57,6 @@ namespace ts {
             description: Diagnostics.Stylize_errors_and_messages_using_color_and_context_experimental
         },
         {
-            name: "diagnosticStyle",
-            type: createMapFromTemplate({
-                auto: DiagnosticStyle.Auto,
-                pretty: DiagnosticStyle.Pretty,
-                simple: DiagnosticStyle.Simple,
-            }),
-        },
-        {
             name: "preserveWatchOutput",
             type: "boolean",
             showInSimplifiedHelpView: false,
