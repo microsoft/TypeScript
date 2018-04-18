@@ -53,7 +53,7 @@ namespace vpath {
     export function validate(path: string, flags: ValidationFlags = ValidationFlags.RelativeOrAbsolute) {
         const components = parse(path);
         const trailing = hasTrailingSeparator(path);
-        if (!validateComponents(components, flags, trailing)) throw new vfs.IOError("ENOENT", "scandir", path);
+        if (!validateComponents(components, flags, trailing)) throw new vfs.IOError("ENOENT");
         return components.length > 1 && trailing ? format(reduce(components)) + sep : format(reduce(components));
     }
 

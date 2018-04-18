@@ -148,7 +148,7 @@ namespace vfsutils {
         }
         for (const document of documents) {
             fs.mkdirpSync(vpath.dirname(document.file));
-            fs.writeFileSync(document.file, document.text, { encoding: "utf8", flag: options && options.overwrite ? "w" : "wx" });
+            fs.writeFileSync(document.file, document.text, "utf8");
             fs.filemeta(document.file).set("document", document);
             // Add symlinks
             const symlink = document.meta.get("symlink");
