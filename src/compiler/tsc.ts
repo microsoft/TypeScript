@@ -25,8 +25,8 @@ namespace ts {
     }
 
     function shouldBePretty(options: CompilerOptions) {
-        if ((typeof options.pretty === "undefined")) {
-            return !!sys.writeOutputIsTty && sys.writeOutputIsTty();
+        if (typeof options.pretty === "undefined") {
+            return !!sys.writeOutputIsTTY && sys.writeOutputIsTTY();
         }
         return options.pretty;
     }

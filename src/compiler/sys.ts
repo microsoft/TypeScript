@@ -428,7 +428,7 @@ namespace ts {
         newLine: string;
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
-        writeOutputIsTty?(): boolean;
+        writeOutputIsTTY?(): boolean;
         readFile(path: string, encoding?: string): string | undefined;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
@@ -562,7 +562,7 @@ namespace ts {
                 write(s: string): void {
                     process.stdout.write(s);
                 },
-                writeOutputIsTty() {
+                writeOutputIsTTY() {
                     return process.stdout.isTTY;
                 },
                 readFile,
