@@ -2061,10 +2061,10 @@ namespace ts {
             let symbol: Symbol;
             if (name.kind === SyntaxKind.Identifier) {
                 const message = meaning === namespaceMeaning ? Diagnostics.Cannot_find_namespace_0 : Diagnostics.Cannot_find_name_0;
-
-                symbol = resolveName(location || name, name.escapedText, meaning, ignoreErrors ? undefined : message, name, /*isUse*/ true);
+                const secondarySymbol = resolveEntityNameFromJSPrototype(name, meaning);
+                symbol = resolveName(location || name, name.escapedText, meaning, ignoreErrors || secondarySymbol ? undefined : message, name, /*isUse*/ true);
                 if (!symbol) {
-                    return undefined;
+                    return secondarySymbol;
                 }
             }
             else if (name.kind === SyntaxKind.QualifiedName || name.kind === SyntaxKind.PropertyAccessExpression) {
@@ -2113,6 +2113,18 @@ namespace ts {
             }
             Debug.assert((getCheckFlags(symbol) & CheckFlags.Instantiated) === 0, "Should never get an instantiated symbol here.");
             return (symbol.flags & meaning) || dontResolveAlias ? symbol : resolveAlias(symbol);
+        }
+
+        function resolveEntityNameFromJSPrototype(name: Identifier, meaning: SymbolFlags) {
+            if (isJSDocTypeReference(name.parent) && isJSDocTag(name.parent.parent.parent)) {
+                const host = getJSDocHost(name.parent.parent.parent as JSDocTag);
+                if (isExpressionStatement(host) &&
+                    isBinaryExpression(host.expression) &&
+                    getSpecialPropertyAssignmentKind(host.expression) === SpecialPropertyAssignmentKind.PrototypeProperty) {
+                    const secondaryLocation = getSymbolOfNode(host.expression.left).parent.valueDeclaration;
+                    return resolveName(secondaryLocation, name.escapedText, meaning, /*nameNotFoundMessage*/ undefined, name, /*isUse*/ true);
+                }
+            }
         }
 
         function resolveExternalModuleName(location: Node, moduleReferenceExpression: Expression): Symbol {
@@ -7548,7 +7560,7 @@ namespace ts {
             return constraints ? getSubstitutionType(typeVariable, getIntersectionType(append(constraints, typeVariable))) : typeVariable;
         }
 
-        function isJSDocTypeReference(node: NodeWithTypeArguments): node is TypeReferenceNode {
+        function isJSDocTypeReference(node: Node): node is TypeReferenceNode {
             return node.flags & NodeFlags.JSDoc && node.kind === SyntaxKind.TypeReference;
         }
 
@@ -9171,7 +9183,7 @@ namespace ts {
                 // aren't the right hand side of a generic type alias declaration we optimize by reducing the
                 // set of type parameters to those that are possibly referenced in the literal.
                 const declaration = symbol.declarations[0];
-                const outerTypeParameters = getOuterTypeParameters(declaration, /*includeThisTypes*/ true) || emptyArray;
+                const outerTypeParameters = (isJavaScriptConstructor(declaration) ? getTypeParametersFromDeclaration(declaration as DeclarationWithTypeParameters) : getOuterTypeParameters(declaration, /*includeThisTypes*/ true)) || emptyArray;
                 typeParameters = symbol.flags & SymbolFlags.TypeLiteral && !target.aliasTypeArguments ?
                     filter(outerTypeParameters, tp => isTypeParameterPossiblyReferenced(tp, declaration)) :
                     outerTypeParameters;
@@ -18534,7 +18546,7 @@ namespace ts {
                     }
                     const type = funcSymbol && getJavaScriptClassType(funcSymbol);
                     if (type) {
-                        return type;
+                        return signature.target ? instantiateType(type, signature.mapper) : type;
                     }
                     if (noImplicitAny) {
                         error(node, Diagnostics.new_expression_whose_target_lacks_a_construct_signature_implicitly_has_an_any_type);
