@@ -1554,8 +1554,8 @@ namespace ts {
 
         function isTypeParameterSymbolDeclaredInContainer(symbol: Symbol, container: Node) {
             for (const decl of symbol.declarations) {
-                // bzzzt: short-circuit (TODO: Actually find the host and see if it's the container)
-                if (decl.kind === SyntaxKind.TypeParameter && (decl.parent === container || decl.parent.kind === SyntaxKind.JSDocTemplateTag)) {
+                const parent = isJSDocTemplateTag(decl.parent) ? getJSDocHost(decl.parent) : decl.parent;
+                if (decl.kind === SyntaxKind.TypeParameter && parent === container) {
                     return true;
                 }
             }
