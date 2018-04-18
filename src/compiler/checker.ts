@@ -11336,6 +11336,10 @@ namespace ts {
             return !!getPropertyOfType(type, "0" as __String);
         }
 
+        function isNotUnitTypeOrNever(type: Type): boolean {
+            return !(type.flags & (TypeFlags.Unit | TypeFlags.Never));
+        }
+
         function isUnitType(type: Type): boolean {
             return !!(type.flags & TypeFlags.Unit);
         }
@@ -12817,8 +12821,7 @@ namespace ts {
 
         function getTypeOfSwitchClause(clause: CaseClause | DefaultClause) {
             if (clause.kind === SyntaxKind.CaseClause) {
-                const caseType = getRegularTypeOfLiteralType(getTypeOfExpression(clause.expression));
-                return isUnitType(caseType) ? caseType : undefined;
+                return getRegularTypeOfLiteralType(getTypeOfExpression(clause.expression));
             }
             return neverType;
         }
@@ -12826,15 +12829,9 @@ namespace ts {
         function getSwitchClauseTypes(switchStatement: SwitchStatement): Type[] {
             const links = getNodeLinks(switchStatement);
             if (!links.switchTypes) {
-                // If all case clauses specify expressions that have unit types, we return an array
-                // of those unit types. Otherwise we return an empty array.
                 links.switchTypes = [];
                 for (const clause of switchStatement.caseBlock.clauses) {
-                    const type = getTypeOfSwitchClause(clause);
-                    if (type === undefined) {
-                        return links.switchTypes = emptyArray;
-                    }
-                    links.switchTypes.push(type);
+                    links.switchTypes.push(getTypeOfSwitchClause(clause));
                 }
             }
             return links.switchTypes;
@@ -13537,6 +13534,10 @@ namespace ts {
                     return type;
                 }
                 const clauseTypes = switchTypes.slice(clauseStart, clauseEnd);
+                if (some(clauseTypes, isNotUnitTypeOrNever)) {
+                    // Only clauses containing only unit types can be narrowed
+                    return type;
+                }
                 const hasDefaultClause = clauseStart === clauseEnd || contains(clauseTypes, neverType);
                 const discriminantType = getUnionType(clauseTypes);
                 const caseType =
@@ -18953,7 +18954,7 @@ namespace ts {
                 return false;
             }
             const switchTypes = getSwitchClauseTypes(node);
-            if (!switchTypes.length) {
+            if (!switchTypes.length || some(switchTypes, isNotUnitTypeOrNever)) {
                 return false;
             }
             return eachTypeContainedIn(mapType(type, getRegularTypeOfLiteralType), switchTypes);
