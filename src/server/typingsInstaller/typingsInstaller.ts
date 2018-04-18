@@ -69,8 +69,13 @@ namespace ts.server.typingsInstaller {
         return base === "package.json" || base === "bower.json";
     }
 
-    function isInNodeModulesOrBowerComponents(f: string) {
-        return stringContains(f, "/node_modules/") || stringContains(f, "/bower_components/");
+    function getDirectoryExcludingNodeModulesOrBowerComponents(f: string) {
+        const indexOfNodeModules = f.indexOf("/node_modules/");
+        const indexOfBowerComponents = f.indexOf("/bower_components/");
+        const subStrLength = indexOfNodeModules === -1 || indexOfBowerComponents === -1 ?
+            Math.max(indexOfNodeModules, indexOfBowerComponents) :
+            Math.min(indexOfNodeModules, indexOfBowerComponents);
+        return subStrLength === -1 ? f : f.substr(0, subStrLength);
     }
 
     type ProjectWatchers = Map<FileWatcher> & { isInvoked?: boolean; };
@@ -478,12 +483,7 @@ namespace ts.server.typingsInstaller {
                 }
 
                 // Get path without node_modules and bower_components
-                let pathToWatch = getDirectoryPath(filePath);
-                while (isInNodeModulesOrBowerComponents(pathToWatch)) {
-                    pathToWatch = getDirectoryPath(pathToWatch);
-                }
-
-                createProjectWatcher(pathToWatch, createProjectDirectoryWatcher);
+                createProjectWatcher(getDirectoryExcludingNodeModulesOrBowerComponents(getDirectoryPath(filePath)), createProjectDirectoryWatcher);
             }
 
             // Remove unused watches
