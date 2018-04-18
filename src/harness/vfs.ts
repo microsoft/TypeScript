@@ -12,17 +12,6 @@ namespace vfs {
     const S_IFCHR           = 0o020000; // character device
     const S_IFIFO           = 0o010000; // FIFO
 
-    // file mode bits
-    const S_ISUID           = 0o004000; // set-user-ID bit
-    const S_ISGID           = 0o002000; // set-group-ID bit
-
-    // file permission bits
-    const S_IRUSR           = 0o000400; // read by owner
-    const S_IWUSR           = 0o000200; // write by owner
-    const S_IRWXU           = 0o000700; // read/write/execute by owner
-    const S_IRWXG           = 0o000070; // read/write/execute by group
-    const S_IRWXO           = 0o000007; // read/write/execute by others
-
     const O_ACCMODE         = 0o00000003;
     const O_RDONLY          = 0o00000000;
     const O_WRONLY          = 0o00000001;
@@ -37,10 +26,8 @@ namespace vfs {
     const O_NOFOLLOW        = 0o00400000;
 
     const F_OK              = 0o00000000; // path is visible to the current process
-    const X_OK              = 0o00000001; // path can be executed or searched by the current process
     const W_OK              = 0o00000002; // path can be written to by the current process
     const R_OK              = 0o00000004; // path can be read by the current process
-    const RWX_OK            = R_OK | W_OK | X_OK;
 
     let devCount = 0; // A monotonically increasing count of device ids
     let inoCount = 0; // A monotonically increasing count of inodes
@@ -56,8 +43,6 @@ namespace vfs {
         /** Gets the comparison function used to compare two paths. */
         public readonly stringComparer: (a: string, b: string) => number;
 
-        private static _portableFilenameCharSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789._-";
-
         // lazy-initialized state that should be mutable even if the FileSystem is frozen.
         private _lazy: {
             links?: core.SortedMap<string, Inode>;
@@ -66,21 +51,15 @@ namespace vfs {
         } = {};
 
         private _cwd: string; // current working directory
-        private _uid: number;
-        private _gid: number;
-        private _umask: number;
         private _time: number | Date | (() => number | Date);
         private _openFiles = new Map<number, OpenFileDescription>();
         private _shadowRoot: FileSystem | undefined;
         private _dirStack: string[] | undefined;
 
         constructor(ignoreCase: boolean, options: FileSystemOptions = {}) {
-            const { uid = 0, gid = 0, umask = 0o022, time = -1, files, meta } = options;
+            const { time = -1, files, meta } = options;
             this.ignoreCase = ignoreCase;
             this.stringComparer = this.ignoreCase ? vpath.compareCaseInsensitive : vpath.compareCaseSensitive;
-            this._uid = uid;
-            this._gid = gid;
-            this._umask = umask;
             this._time = time;
 
             if (meta) {
@@ -154,12 +133,7 @@ namespace vfs {
         public shadow(ignoreCase = this.ignoreCase) {
             if (!this.isReadonly) throw new Error("Cannot shadow a mutable file system.");
             if (ignoreCase && !this.ignoreCase) throw new Error("Cannot create a case-insensitive file system from a case-sensitive one.");
-            const fs = new FileSystem(ignoreCase, {
-                uid: this._uid,
-                gid: this._gid,
-                umask: this._umask,
-                time: this._time,
-            });
+            const fs = new FileSystem(ignoreCase, { time: this._time });
             fs._shadowRoot = this;
             fs._cwd = this._cwd;
             return fs;
@@ -181,63 +155,6 @@ namespace vfs {
                 node.meta = new core.Metadata(parentMeta);
             }
             return node.meta;
-        }
-
-        /**
-         * Gets the user ID to use for file system access.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/getuid.html
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/geteuid.html
-         */
-        public getuid() {
-            return this._uid;
-        }
-
-        /**
-         * Sets the user ID to use for file system access.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/setuid.html
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/seteuid.html
-         */
-        public setuid(value: number) {
-            if (this.isReadonly) throw new IOError("EPERM", "setuid");
-            this._uid = value;
-        }
-
-        /**
-         * Gets the group ID to use for file system access.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/getgid.html
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/getegid.html
-         */
-        public getgid() {
-            return this._gid;
-        }
-
-        /**
-         * Sets the group ID to use for file system access.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/setgid.html
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/setegid.html
-         */
-        public setgid(value: number) {
-            if (this.isReadonly) throw new IOError("EPERM", "setgid");
-            this._gid = value;
-        }
-
-        /**
-         * Gets or sets the virtual process's file mode creation mask (umask)
-         * to `mask & 0o777` and returns the previous value of the mask.
-         *
-         * @link http://man7.org/linux/man-pages/man2/umask.2.html
-         */
-        public umask(value?: number): number {
-            if (value !== undefined && this.isReadonly) throw new IOError("EPERM", "umask");
-            const result = this._umask;
-            if (value !== undefined) {
-                this._umask = value;
-            }
-            return result;
         }
 
         /**
@@ -266,7 +183,6 @@ namespace vfs {
             if (!this._cwd) throw new Error("The current working directory has not been set.");
             const { node } = this._find(this._cwd) || _throw(new IOError("ENOENT", "getcwd"));
             if (!isDirectoryInode(node)) throw new IOError("ENOTDIR", "getcwd");
-            if (!this._access(node, X_OK)) throw new IOError("EPERM", "getcwd");
             return this._cwd;
         }
 
@@ -341,367 +257,29 @@ namespace vfs {
         }
 
         /**
-         * Checks whether the calling process can access the file `path`. If `path` is a symbolic link, it is dereferenced.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/access.html
-         */
-        public access(path: string, callback: (err: Error | null) => void): void;
-        /**
-         * Checks whether the calling process can access the file `path`. If `path` is a symbolic link, it is dereferenced.
-         * @param mode One or more of the constants `F_OK`, `R_OK`, `W_OK`, or `X_OK`.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/access.html
-         */
-        public access(path: string, mode: number | undefined, callback: (err: Error | null) => void): void;
-        public access(path: string, modeOrCallback: number | typeof callback, callback?: (err: Error | null) => void) {
-            let mode: number | undefined;
-            if (typeof modeOrCallback === "function") callback = modeOrCallback;
-            else if (typeof modeOrCallback === "number") mode = modeOrCallback;
-            if (!callback) throw new IOError("EINVAL");
-            try {
-                this.accessSync(path, mode);
-                process.nextTick(callback, /*e*/ null);
-            }
-            catch (e) {
-                process.nextTick(callback, e);
-            }
-        }
-
-        /**
-         * Checks whether the calling process can access the file `path`. If `path` is a symbolic link, it is dereferenced.
-         * @param mode One or more of the constants `F_OK`, `R_OK`, `W_OK`, or `X_OK`.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/access.html
-         */
-        public accessSync(path: string, mode: number = F_OK) {
-            path = this._resolve(path);
-            if (!isFinite(mode) || (mode & ~RWX_OK)) throw new IOError("EINVAL", "access", path);
-            const { node } = this._find(path) || _throw(new IOError("ENOENT", "access", path));
-            if (!this._access(node, mode)) throw new IOError("EACCES", "access", path);
-        }
-
-        private _access(node: Inode, mode: number) {
-            let flags = (node.mode & S_IRWXO) >> 0;
-            if (this.getgid() === node.gid) flags |= (node.mode & S_IRWXG) >> 3;
-            if (this.getuid() === node.uid) flags |= (node.mode & S_IRWXU) >> 6;
-            return (flags & mode) === mode;
-        }
-
-        /**
          * Changes the permissions of a file. If `path` is a symbolic link, it is dereferenced.
          *
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/chmod.html
-         */
-        public chmod(path: string, mode: number, callback: (err: Error | null) => void) {
-            try {
-                this.chmodSync(path, mode);
-                process.nextTick(callback, /*e*/ null);
-            }
-            catch (e) {
-                process.nextTick(callback, e);
-            }
-        }
-
-        /**
-         * Changes the permissions of a file. If `path` is a symbolic link, it is dereferenced.
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/chmod.html
+         * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public chmodSync(path: string, mode: number) {
             path = this._resolve(path);
-            this._chmod("chmod", this._find(path) || _throw(new IOError("ENOENT", "chmod", path)), mode, path);
-        }
 
-        /**
-         * Changes the permissions of a file. Like `chmod`, except symbolic links are not dereferenced.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/chmod.html
-         */
-        public lchmod(path: string, mode: number, callback: (err: Error | null) => void) {
-            try {
-                this.lchmodSync(path, mode);
-                process.nextTick(callback, /*e*/ null);
-            }
-            catch (e) {
-                process.nextTick(callback, e);
-            }
-        }
-
-        /**
-         * Changes the permissions of a file. Like `chmod`, except symbolic links are not dereferenced.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/chmod.html
-         */
-        public lchmodSync(path: string, mode: number) {
-            path = this._resolve(path);
-            this._chmod("lchmod", this._lfind(path) || _throw(new IOError("ENOENT", "lchmod", path)), mode, path);
-        }
-
-        /**
-         * Changes the permissions of an open file
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/fchmod.html
-         */
-        public fchmod(fd: number, mode: number, callback: (err: Error | null) => void) {
-            try {
-                this.fchmodSync(fd, mode);
-                process.nextTick(callback, /*e*/ null);
-            }
-            catch (e) {
-                process.nextTick(callback, e);
-            }
-        }
-
-        /**
-         * Changes the permissions of an open file
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/fchmod.html
-         */
-        public fchmodSync(fd: number, mode: number) {
-            this._chmod("fchmod", this._file("fchmod", fd), mode);
-        }
-
-        private _chmod(syscall: string, entry: FileDescription, mode: number, path?: string) {
-            if (!isFinite(mode)) throw new IOError("EINVAL", syscall, path);
-            if (this._uid !== 0 && this._uid !== entry.node.uid) throw new IOError("EPERM", syscall, path);
-            if (this.isReadonly) throw new IOError("EROFS", syscall, path);
+            const entry = this._find(path) || _throw(new IOError("ENOENT", "chmod", path));
+            if (!isFinite(mode)) throw new IOError("EINVAL", "chmod", path);
+            if (this.isReadonly) throw new IOError("EROFS", "chmod", path);
 
             entry.node.mode = (entry.node.mode & S_IFMT) | (mode & 0o7777);
             entry.node.ctimeMs = this.time();
         }
 
         /**
-         * Changes the ownership of a file. If `path` is a symbolic link, it is dereferenced.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/chown.html
-         */
-        public chown(path: string, uid: number, gid: number, callback: (err: Error | null) => void) {
-            try {
-                this.chownSync(path, uid, gid);
-                process.nextTick(callback, /*e*/ null);
-            }
-            catch (e) {
-                process.nextTick(callback, e);
-            }
-        }
-
-        /**
-         * Changes the ownership of a file. If `path` is a symbolic link, it is dereferenced.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/chown.html
-         */
-        public chownSync(path: string, uid: number, gid: number) {
-            path = this._resolve(path);
-            this._chown("chown", this._find(path) || _throw(new IOError("ENOENT", "chown", path)), uid, gid, path);
-        }
-
-        /**
-         * Changes the ownership of a file.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/lchown.html
-         */
-        public lchown(path: string, uid: number, gid: number, callback: (err: Error | null) => void) {
-            try {
-                this.lchownSync(path, uid, gid);
-                process.nextTick(callback, /*e*/ null);
-            }
-            catch (e) {
-                process.nextTick(callback, e);
-            }
-        }
-
-        /**
-         * Changes the ownership of a file.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/lchown.html
-         */
-        public lchownSync(path: string, uid: number, gid: number) {
-            path = this._resolve(path);
-            this._chown("lchown", this._lfind(path) || _throw(new IOError("ENOENT", "lchown", path)), uid, gid, path);
-        }
-
-        /**
-         * Changes the ownership of an open file.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/fchown.html
-         */
-        public fchown(fd: number, uid: number, gid: number, callback: (err: Error | null) => void) {
-            try {
-                this.fchownSync(fd, uid, gid);
-                process.nextTick(callback, /*e*/ null);
-            }
-            catch (e) {
-                process.nextTick(callback, e);
-            }
-        }
-
-        /**
-         * Changes the ownership of an open file.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/fchown.html
-         */
-        public fchownSync(fd: number, uid: number, gid: number) {
-            this._chown("fchown", this._file("fchown", fd), uid, gid);
-        }
-
-        private _chown(syscall: string, entry: FileDescription, uid: number, gid: number, path?: string) {
-            if (!isFinite(uid) || !isFinite(gid)) throw new IOError("EINVAL", syscall, path);
-            if (uid === entry.node.uid) uid = -1;
-            if (gid === entry.node.gid) gid = -1;
-            if (uid === -1 && gid === -1) return;
-            if (uid !== -1 && this._uid !== 0) throw new IOError("EPERM", syscall, path);
-            if (gid !== -1 && this._uid !== 0 && this._uid !== entry.node.uid) throw new IOError("EPERM", syscall, path);
-            if (this.isReadonly) throw new IOError("EROFS", syscall, path);
-
-            if (uid !== -1) entry.node.uid = uid;
-            if (gid !== -1) entry.node.gid = gid;
-            entry.node.mode &= ~(S_ISGID | S_ISUID);
-            entry.node.ctimeMs = this.time();
-        }
-
-        /**
-         * Sets file access and modification times. If `path` is a symbolic link, it is dereferenced.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/utimes.html
-         */
-        public utimes(path: string, atime: number | Date, mtime: number | Date, callback: (err: Error | null) => void) {
-            try {
-                this.utimesSync(path, atime, mtime);
-                process.nextTick(callback, /*e*/ null);
-            }
-            catch (e) {
-                process.nextTick(callback, e);
-            }
-        }
-
-        /**
-         * Sets file access and modification times. If `path` is a symbolic link, it is dereferenced.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/utimes.html
-         */
-        public utimesSync(path: string, atime: number | Date, mtime: number | Date) {
-            path = this._resolve(path);
-            this._utimes("utimes", this._find(path) || _throw(new IOError("ENOENT", "utimes", path)), atime, mtime, path);
-        }
-
-        /**
-         * Sets file access and modification times. If `path` is a symbolic link, it is not dereferenced.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/utimes.html
-         */
-        public lutimes(path: string, atime: number | Date, mtime: number | Date, callback: (err: Error | null) => void) {
-            try {
-                this.lutimesSync(path, atime, mtime);
-                process.nextTick(callback, /*e*/ null);
-            }
-            catch (e) {
-                process.nextTick(callback, e);
-            }
-        }
-
-        /**
-         * Sets file access and modification times. If `path` is a symbolic link, it is not dereferenced.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/utimes.html
-         */
-        public lutimesSync(path: string, atime: number | Date, mtime: number | Date) {
-            path = this._resolve(path);
-            this._utimes("lutimes", this._lfind(path) || _throw(new IOError("ENOENT", "lutimes", path)), atime, mtime, path);
-        }
-
-        /**
-         * Sets file access and modification times.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/futimes.html
-         */
-        public futimes(fd: number, atime: number | Date, mtime: number | Date, callback: (err: Error | null) => void) {
-            try {
-                this.futimesSync(fd, atime, mtime);
-                process.nextTick(callback, /*e*/ null);
-            }
-            catch (e) {
-                process.nextTick(callback, e);
-            }
-        }
-
-        /**
-         * Sets file access and modification times.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/futimes.html
-         */
-        public futimesSync(fd: number, atime: number | Date, mtime: number | Date) {
-            this._utimes("futimes", this._file("futimes", fd), atime, mtime);
-        }
-
-        private _utimes(syscall: string, entry: FileDescription, atime: number | Date, mtime: number | Date, path?: string) {
-            if (this.isReadonly) throw new IOError("EROFS", syscall, path);
-            const atimeMs = typeof atime === "number" ? atime : atime.getTime();
-            const mtimeMs = typeof mtime === "number" ? mtime : mtime.getTime();
-            if (!isFinite(atimeMs) || !isFinite(mtimeMs)) throw new IOError("EINVAL", syscall, path);
-
-            entry.node.atimeMs = atimeMs;
-            entry.node.mtimeMs = mtimeMs;
-            entry.node.ctimeMs = this.time();
-        }
-
-        public fsync(fd: number, callback: (err: Error | null) => void): void {
-            try {
-                this.fsyncSync(fd);
-                process.nextTick(callback, /*e*/ null);
-            }
-            catch (e) {
-                process.nextTick(callback, e);
-            }
-        }
-
-        public fsyncSync(fd: number): void {
-            this._fsync(this._file("fsync", fd, "file"), /*metadata*/ true);
-        }
-
-        public fdatasync(fd: number, callback: (err: Error | null) => void): void {
-            try {
-                this.fdatasyncSync(fd);
-                process.nextTick(callback, /*e*/ null);
-            }
-            catch (e) {
-                process.nextTick(callback, e);
-            }
-        }
-
-        public fdatasyncSync(fd: number): void {
-            this._fsync(this._file("fsyncdata", fd, "file"), /*metadata*/ false);
-        }
-
-        private _fsync(entry: OpenFileDescription, metadata: boolean) {
-            if (isFileInode(entry.node) && entry.buffer && entry.buffer !== entry.node.buffer) {
-                const time = this.time();
-                entry.node.buffer = entry.buffer;
-                entry.node.mtimeMs = time;
-                entry.node.ctimeMs = time;
-                if (metadata) {
-                    entry.node.size = entry.node.buffer.byteLength;
-                }
-            }
-        }
-
-        /**
          * Get file status. If `path` is a symbolic link, it is dereferenced.
          *
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/stat.html
-         */
-        public stat(path: string, callback: (err: Error | null, stats: Stats | null) => void) {
-            try {
-                process.nextTick(callback, /*e*/ null, this.statSync(path));
-            }
-            catch (e) {
-                process.nextTick(callback, e, /*stats*/ null);
-            }
-        }
-
-        /**
-         * Get file status. If `path` is a symbolic link, it is dereferenced.
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/stat.html
+         * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public statSync(path: string) {
             path = this._resolve(path);
@@ -712,20 +290,8 @@ namespace vfs {
          * Get file status.
          *
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/lstat.html
-         */
-        public lstat(path: string, callback: (err: Error | null, stats: Stats | null) => void) {
-            try {
-                process.nextTick(callback, /*e*/ null, this.lstatSync(path));
-            }
-            catch (e) {
-                process.nextTick(callback, e, /*stats*/ null);
-            }
-        }
-
-        /**
-         * Get file status.
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/lstat.html
+         * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public lstatSync(path: string) {
             path = this._resolve(path);
@@ -736,20 +302,8 @@ namespace vfs {
          * Get file status.
          *
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/fstat.html
-         */
-        public fstat(fd: number, callback: (err: Error | null, stats: Stats | null) => void) {
-            try {
-                process.nextTick(callback, /*e*/ null, this.fstatSync(fd));
-            }
-            catch (e) {
-                process.nextTick(callback, e, /*stats*/ null);
-            }
-        }
-
-        /**
-         * Get file status.
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/fstat.html
+         * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public fstatSync(fd: number) {
             return this._stat("fstat", this._file("fstat", fd));
@@ -762,8 +316,6 @@ namespace vfs {
                 node.ino,
                 node.mode,
                 node.nlink,
-                node.uid,
-                node.gid,
                 /*rdev*/ 0,
                 /*size*/ isFileInode(node) ? this._getSize(node) : isSymlinkInode(node) ? node.symlink.length : 0,
                 /*blksize*/ 4096,
@@ -775,6 +327,12 @@ namespace vfs {
             );
         }
 
+        /**
+         * Scan file system entries along a path. If `path` is a symbolic link, it is dereferenced.
+         * @param path The path at which to start the scan.
+         * @param axis The axis along which to traverse.
+         * @param traversal The traversal scheme to use.
+         */
         public scanSync(path: string, axis: Axis, traversal: Traversal) {
             path = this._resolve(path);
             const results: string[] = [];
@@ -782,6 +340,12 @@ namespace vfs {
             return results;
         }
 
+        /**
+         * Scan file system entries along a path.
+         * @param path The path at which to start the scan.
+         * @param axis The axis along which to traverse.
+         * @param traversal The traversal scheme to use.
+         */
         public lscanSync(path: string, axis: Axis, traversal: Traversal) {
             path = this._resolve(path);
             const results: string[] = [];
@@ -825,57 +389,14 @@ namespace vfs {
          * Read a directory. If `path` is a symbolic link, it is dereferenced.
          *
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/readdir.html
-         */
-        public readdir(path: string, callback: (err: Error | null, files: string[] | null) => void) {
-            try {
-                process.nextTick(callback, /*e*/ null, this.readdirSync(path));
-            }
-            catch (e) {
-                process.nextTick(callback, e, /*files*/ null);
-            }
-        }
-
-        /**
-         * Read a directory. If `path` is a symbolic link, it is dereferenced.
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/readdir.html
+         * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public readdirSync(path: string) {
             path = this._resolve(path);
             const { node } = this._find(path) || _throw(new IOError("ENOENT", "readdir", path));
             if (!isDirectoryInode(node)) throw new IOError("ENOTDIR", "readdir", path);
-            if (!this._access(node, R_OK)) throw new IOError("EACCES", "readdir", path);
             return Array.from(this._getLinks(node).keys());
-        }
-
-        /**
-         * Mounts a physical or virtual file system at a location in this virtual file system.
-         *
-         * @param source The path in the physical (or other virtual) file system.
-         * @param target The path in this virtual file system.
-         * @param resolver An object used to resolve files in `source`.
-         */
-        public mount(source: string, target: string, resolver: FileSystemResolver, callback: (err: Error | null) => void): void;
-        /**
-         * Mounts a physical or virtual file system at a location in this virtual file system.
-         *
-         * @param source The path in the physical (or other virtual) file system.
-         * @param target The path in this virtual file system.
-         * @param resolver An object used to resolve files in `source`.
-         */
-        public mount(source: string, target: string, resolver: FileSystemResolver, mode: number | undefined, callback: (err: Error | null) => void): void;
-        public mount(source: string, target: string, resolver: FileSystemResolver, modeOrCallback: number | typeof callback, callback?: (err: Error | null) => void) {
-            let mode: number | undefined;
-            if (typeof modeOrCallback === "function") callback = modeOrCallback;
-            else if (typeof modeOrCallback === "number") mode = modeOrCallback;
-            if (typeof callback !== "function") throw new IOError("EINVAL");
-            try {
-                this.mountSync(source, target, resolver, mode);
-                process.nextTick(callback, /*e*/ null);
-            }
-            catch (e) {
-                process.nextTick(callback, e);
-            }
         }
 
         /**
@@ -895,13 +416,11 @@ namespace vfs {
 
             // special case for FS root
             if (this.stringComparer(vpath.dirname(target), target) === 0) {
-                if (this.getuid() !== 0) throw new IOError("EPERM", "mount", source, target);
                 name = target;
             }
             else {
                 const entry = this._find(vpath.dirname(target)) || _throw(new IOError("ENOENT", "mount", source, target));
                 if (!isDirectoryInode(entry.node)) throw new IOError("ENOTDIR", "mount", source, target);
-                if (!this._access(entry.node, W_OK)) throw new IOError("EACCES", "mount", source, target);
                 parent = entry.node;
                 name = vpath.basename(target);
             }
@@ -912,7 +431,7 @@ namespace vfs {
 
             const node = parent
                 ? this._mknod(parent.dev, S_IFDIR, mode)
-                : this._mknod(++devCount, S_IFDIR, mode, /*uid*/ 0, /*gid*/ 0, /*umask*/ 0o000);
+                : this._mknod(++devCount, S_IFDIR, mode, /*umask*/ 0o000);
 
             node.source = source;
             node.resolver = resolver;
@@ -931,32 +450,8 @@ namespace vfs {
          * Make a directory.
          *
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/mkdir.html
-         */
-        public mkdir(path: string, callback: (error: Error | null) => void): void;
-        /**
-         * Make a directory.
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/mkdir.html
-         */
-        public mkdir(path: string, mode: number | undefined, callback: (error: Error | null) => void): void;
-        public mkdir(path: string, modeOrCallback: number | typeof callback, callback?: (error: Error | null) => void) {
-            let mode: number | undefined;
-            if (typeof modeOrCallback === "function") callback = modeOrCallback;
-            else if (typeof modeOrCallback === "number") mode = modeOrCallback;
-            if (typeof callback !== "function") throw new IOError("EINVAL");
-            try {
-                this.mkdirSync(path, mode);
-                process.nextTick(callback, /*e*/ null);
-            }
-            catch (e) {
-                process.nextTick(callback, e);
-            }
-        }
-
-        /**
-         * Make a directory.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/mkdir.html
+         * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public mkdirSync(path: string, mode = 0o777) {
             path = this._resolve(path);
@@ -968,13 +463,11 @@ namespace vfs {
 
             // special case for FS root
             if (this.stringComparer(vpath.dirname(path), path) === 0) {
-                if (this.getuid() !== 0) throw new IOError("EPERM", "mkdir", path);
                 name = path;
             }
             else {
                 const parentEntry = this._find(vpath.dirname(path)) || _throw(new IOError("ENOENT", "mkdir", path));
                 if (!isDirectoryInode(parentEntry.node)) throw new IOError("ENOTDIR", "mkdir", path);
-                if (!this._access(parentEntry.node, W_OK)) throw new IOError("EACCES", "mkdir", path);
                 parent = parentEntry.node;
                 name = vpath.basename(path);
             }
@@ -985,12 +478,7 @@ namespace vfs {
 
             const node = parent
                 ? this._mknod(parent.dev, S_IFDIR, mode)
-                : this._mknod(++devCount, S_IFDIR, mode, /*uid*/ 0, /*gid*/ 0, /*umask*/ 0o000);
-
-            if (parent && parent.mode & S_ISGID) {
-                node.mode |= S_ISGID;
-                node.gid = parent.gid;
-            }
+                : this._mknod(++devCount, S_IFDIR, mode, /*umask*/ 0o000);
 
             this._addLink(parent, links, name, node);
 
@@ -999,28 +487,6 @@ namespace vfs {
             }
             else if (!this._cwd) {
                 this._cwd = name;
-            }
-        }
-
-        /**
-         * Make a directory and all of its parent paths (if they don't exist).
-         */
-        public mkdirp(path: string, callback: (error: Error | null) => void): void;
-        /**
-         * Make a directory and all of its parent paths (if they don't exist).
-         */
-        public mkdirp(path: string, mode: number | undefined, callback: (error: Error | null) => void): void;
-        public mkdirp(path: string, modeOrCallback: number | typeof callback, callback?: (error: Error | null) => void) {
-            let mode: number | undefined;
-            if (typeof modeOrCallback === "function") callback = modeOrCallback;
-            else if (typeof modeOrCallback === "number") mode = modeOrCallback;
-            if (typeof callback !== "function") throw new IOError("EINVAL");
-            try {
-                this.mkdirpSync(path, mode);
-                process.nextTick(callback, /*e*/ null);
-            }
-            catch (e) {
-                process.nextTick(callback, e);
             }
         }
 
@@ -1047,21 +513,8 @@ namespace vfs {
          * Remove a directory.
          *
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/rmdir.html
-         */
-        public rmdir(path: string, callback: (err: Error | null) => void) {
-            try {
-                this.rmdirSync(path);
-                process.nextTick(callback, /*e*/ null);
-            }
-            catch (e) {
-                process.nextTick(callback, e);
-            }
-        }
-
-        /**
-         * Remove a directory.
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/rmdir.html
+         * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public rmdirSync(path: string) {
             path = this._resolve(path);
@@ -1069,7 +522,6 @@ namespace vfs {
             const { parent, node } = this._find(path) || _throw(new IOError("ENOENT", "rmdir", path));
             if (!isDirectoryInode(node)) throw new IOError("ENOTDIR", "rmdir", path);
             if (this._getLinks(node).size !== 0) throw new IOError("ENOTEMPTY", "rmdir", path);
-            if (!this._access(parent, W_OK)) throw new IOError("EACCES", "mkdir", path);
             if (this.isReadonly) throw new IOError("EROFS", "rmdir", path);
 
             const name = vpath.basename(path);
@@ -1083,24 +535,11 @@ namespace vfs {
         }
 
         /**
-         * Link one file to another file.
+         * Link one file to another file (also known as a "hard link").
          *
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/link.html
-         */
-        public link(oldpath: string, newpath: string, callback: (err: Error | null) => void) {
-            try {
-                this.linkSync(oldpath, newpath);
-                process.nextTick(callback, /*e*/ null);
-            }
-            catch (e) {
-                process.nextTick(callback, e);
-            }
-        }
-
-        /**
-         * Link one file to another file.
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/link.html
+         * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public linkSync(oldpath: string, newpath: string) {
             oldpath = this._resolve(oldpath);
@@ -1116,7 +555,6 @@ namespace vfs {
             const newBasename = vpath.basename(newpath);
 
             if (newParentLinks.has(newBasename)) throw new IOError("EEXIST", "link", oldpath, newpath);
-            if (!this._access(newParent, W_OK)) throw new IOError("EACCES", "link", oldpath, newpath);
             if (this.isReadonly) throw new IOError("EROFS", "link", oldpath, newpath);
 
             this._addLink(newParent, newParentLinks, newBasename, node);
@@ -1131,28 +569,14 @@ namespace vfs {
          * Remove a directory entry.
          *
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/unlink.html
-         */
-        public unlink(path: string, callback: (err: Error | null) => void) {
-            try {
-                this.unlinkSync(path);
-                process.nextTick(callback, /*e*/ null);
-            }
-            catch (e) {
-                process.nextTick(callback, e);
-            }
-        }
-
-        /**
-         * Remove a directory entry.
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/unlink.html
+         * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public unlinkSync(path: string) {
             path = this._resolve(path);
 
             const { parent, node, basename } = this._lfind(path) || _throw(new IOError("ENOENT", "unlink", path));
             if (isDirectoryInode(node)) throw new IOError("EISDIR", "unlink", path);
-            if (!this._access(parent, W_OK)) throw new IOError("EACCES", "unlink", path);
             if (this.isReadonly) throw new IOError("EROFS", "unlink", path);
 
             const links = this._getLinks(parent);
@@ -1165,24 +589,11 @@ namespace vfs {
         }
 
         /**
-         * Rename a file
+         * Rename a file.
          *
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/rename.html
-         */
-        public rename(oldpath: string, newpath: string, callback: (err: Error | null) => void) {
-            try {
-                this.renameSync(oldpath, newpath);
-                process.nextTick(callback, /*e*/ null);
-            }
-            catch (e) {
-                process.nextTick(callback, e);
-            }
-        }
-
-        /**
-         * Rename a file
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/rename.html
+         * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public renameSync(oldpath: string, newpath: string) {
             oldpath = this._resolve(oldpath);
@@ -1205,8 +616,6 @@ namespace vfs {
                 }
             }
 
-            if (!this._access(oldParent, W_OK)) throw new IOError("EACCES", "rename", oldpath, newpath);
-            if (!this._access(newParent, W_OK)) throw new IOError("EACCES", "rename", oldpath, newpath);
             if (this.isReadonly) throw new IOError("EROFS", "rename", oldpath, newpath);
 
             const time = this.time();
@@ -1225,24 +634,11 @@ namespace vfs {
         }
 
         /**
-         * Make a symbolic link
+         * Make a symbolic link.
          *
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/symlink.html
-         */
-        public symlink(target: string, linkpath: string, callback: (err: Error | null) => void) {
-            try {
-                this.symlinkSync(target, linkpath);
-                process.nextTick(callback, /*e*/ null);
-            }
-            catch (e) {
-                process.nextTick(callback, e);
-            }
-        }
-
-        /**
-         * Make a symbolic link
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/symlink.html
+         * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public symlinkSync(target: string, linkpath: string) {
             target = vpath.validate(target, vpath.ValidationFlags.RelativeOrAbsolute);
@@ -1256,7 +652,6 @@ namespace vfs {
             const parentLinks = this._getLinks(parent);
 
             if (parentLinks.has(basename)) throw new IOError("EEXIST", "symlink", target, linkpath);
-            if (!this._access(parent, W_OK)) throw new IOError("EACCES", "symlink", target, linkpath);
             if (this.isReadonly) throw new IOError("EROFS", "symlink", target, linkpath);
 
             const node = this._mknod(parent.dev, S_IFLNK, 0o666);
@@ -1269,23 +664,11 @@ namespace vfs {
         }
 
         /**
-         * Read the contents of a symbolic link
+         * Read the contents of a symbolic link.
          *
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/readlink.html
-         */
-        public readlink(path: string, callback: (err: Error | null, path: string | null) => void) {
-            try {
-                process.nextTick(callback, /*e*/ null, this.readlinkSync(path));
-            }
-            catch (e) {
-                process.nextTick(callback, e, /*path*/ null);
-            }
-        }
-
-        /**
-         * Read the contents of a symbolic link
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/readlink.html
+         * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public readlinkSync(path: string) {
             path = this._resolve(path);
@@ -1297,23 +680,11 @@ namespace vfs {
         }
 
         /**
-         * Resolve a pathname
+         * Resolve a pathname.
          *
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/realpath.html
-         */
-        public realpath(path: string, callback: (err: Error | null, path: string | null) => void) {
-            try {
-                process.nextTick(callback, /*e*/ null, this.realpathSync(path));
-            }
-            catch (e) {
-                process.nextTick(callback, e, /*path*/ null);
-            }
-        }
-
-        /**
-         * Resolve a pathname
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/realpath.html
+         * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public realpathSync(path: string) {
             path = this._resolve(path);
@@ -1322,41 +693,17 @@ namespace vfs {
         }
 
         /**
-         * Open a file
+         * Open a file.
          *
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/open.html
-         */
-        public open(path: string, flags: string | number, callback: (err: Error | null, fd: number | null) => void): void;
-        /**
-         * Open a file
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/open.html
-         */
-        public open(path: string, flags: string | number, mode: number, callback: (err: Error | null, fd: number | null) => void): void;
-        public open(path: string, flags: string | number, modeOrCallback: number | typeof callback, callback?: (err: Error | null, fd: number | null) => void) {
-            let mode: number | undefined;
-            if (typeof modeOrCallback === "function") callback = modeOrCallback;
-            else if (typeof modeOrCallback === "number") mode = modeOrCallback;
-            if (typeof callback !== "function") throw new IOError("EINVAL");
-            try {
-                process.nextTick(callback, /*e*/ null, this.openSync(path, flags, mode));
-            }
-            catch (e) {
-                process.nextTick(callback, e, /*fd*/ null);
-            }
-        }
-
-        /**
-         * Open a file
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/open.html
+         * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public openSync(path: string, flags: string | number, mode = 0o666): number {
             path = this._resolve(path);
             flags = parseFlags(flags);
             if (!isFinite(flags) || !isFinite(mode)) throw new IOError("EINVAL", "open", path);
 
-            const read = (flags & O_ACCMODE) !== O_WRONLY;
             const write = flags & O_ACCMODE && flags & O_CREAT | O_TRUNC;
             if (write && this.isReadonly) throw new IOError("EROFS", "open", path);
 
@@ -1374,15 +721,9 @@ namespace vfs {
                 parent = entry.node;
 
                 if (!isDirectoryInode(parent)) throw new IOError("ENOTDIR", "open", path);
-                if (!this._access(parent, W_OK)) throw new IOError("EACCES", "open", path);
 
                 node = this._mknod(parent.dev, S_IFREG, mode);
                 node.buffer = Buffer.allocUnsafe(0);
-                if (parent.mode & S_ISGID) {
-                    node.mode |= S_ISGID;
-                    node.gid = parent.gid;
-                }
-
                 const links = this._getLinks(parent);
                 this._addLink(parent, links, basename, node);
 
@@ -1397,8 +738,6 @@ namespace vfs {
 
             if (flags & O_DIRECTORY && isFileInode(node)) throw new IOError("ENOTDIR", "open", path);
             if (write && isDirectoryInode(node)) throw new IOError("EISDIR", "open", path);
-            if (write && !this._access(node, W_OK)) throw new IOError("EACCES", "open", path);
-            if (read && !this._access(node, R_OK)) throw new IOError("EACCES", "open", path);
 
             const file: OpenFileDescription = {
                 fd: ++fdCount,
@@ -1428,21 +767,8 @@ namespace vfs {
          * Close a file descriptor.
          *
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/close.html#
-         */
-        public close(fd: number, callback: (err: Error | null) => void) {
-            try {
-                this.closeSync(fd);
-                process.nextTick(callback, /*e*/ null);
-            }
-            catch (e) {
-                process.nextTick(callback, e);
-            }
-        }
-
-        /**
-         * Close a file descriptor.
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/close.html#
+         * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public closeSync(fd: number) {
             const entry = this._file("close", fd);
@@ -1454,20 +780,8 @@ namespace vfs {
          * Read from a file.
          *
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/read.html
-         */
-        public read(fd: number, buffer: Buffer, offset: number, length: number, position: number | undefined, callback: (err: Error | null, bytesRead: number | null, buffer: Buffer) => void) {
-            try {
-                process.nextTick(callback, /*e*/ null, this.readSync(fd, buffer, offset, length, position), buffer);
-            }
-            catch (e) {
-                process.nextTick(callback, e, /*bytesRead*/ null, buffer);
-            }
-        }
-
-        /**
-         * Read from a file.
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/read.html
+         * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public readSync(fd: number, buffer: Buffer, offset: number, length: number, position?: number | null) {
             if (typeof position !== "number") position = -1;
@@ -1486,43 +800,20 @@ namespace vfs {
 
         /**
          * Read from a file.
-         */
-        public readFile(path: string | number, callback: (error: Error | null, data: string | Buffer | null) => void): void;
-        /**
-         * Read from a file.
-         */
-        public readFile(path: string | number, options: { encoding?: null, flag?: string | number } | null | undefined, callback: (error: Error | null, data: Buffer | null) => void): void;
-        /**
-         * Read from a file.
-         */
-        public readFile(path: string | number, options: { encoding: string, flag?: string | number } | string, callback: (error: Error | null, data: string | null) => void): void;
-        /**
-         * Read from a file.
-         */
-        public readFile(path: string | number, options: { encoding?: string | null, flag?: string | number } | string | null | undefined, callback: (error: Error | null, data: string | Buffer | null) => void): void;
-        public readFile(path: string | number, optionsOrCallback: { encoding?: string | null, flag?: string | number } | string | null | undefined | typeof callback, callback?: ((error: Error | null, data: string | null) => void) | ((error: Error | null, data: Buffer | null) => void)) {
-            let options: { encoding?: string | null, flag?: string | number } | string | null | undefined;
-            if (typeof optionsOrCallback === "function") callback = optionsOrCallback;
-            else options = optionsOrCallback;
-            if (typeof callback !== "function") throw new IOError("EINVAL");
-            try {
-                process.nextTick(callback, /*e*/ null, this.readFileSync(path, options));
-            }
-            catch (e) {
-                process.nextTick(callback, e, /*data*/ null);
-            }
-        }
-
-        /**
-         * Read from a file.
+         *
+         * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public readFileSync(path: string | number, options?: { encoding?: null, flag?: string | number } | null): Buffer;
         /**
          * Read from a file.
+         *
+         * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public readFileSync(path: string | number, options: { encoding: string, flag?: string | number } | string): string;
         /**
          * Read from a file.
+         *
+         * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public readFileSync(path: string | number, options?: { encoding?: string | null, flag?: string | number } | string | null): string | Buffer;
         public readFileSync(path: string | number, options: { encoding?: string | null, flag?: string | number } | string | null = {}) {
@@ -1552,72 +843,16 @@ namespace vfs {
          * Write to a file.
          *
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/write.html
-         */
-        public write(fd: number, buffer: Buffer, callback: (error: Error | null, bytesWritten: number | null, buffer: Buffer) => void): void;
-        /**
-         * Write to a file.
          *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/write.html
-         */
-        public write(fd: number, buffer: Buffer, offset: number | undefined, callback: (error: Error | null, bytesWritten: number | null, buffer: Buffer) => void): void;
-        /**
-         * Write to a file.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/write.html
-         */
-        public write(fd: number, buffer: Buffer, offset: number | undefined, length: number | undefined, callback: (error: Error | null, bytesWritten: number | null, buffer: Buffer) => void): void;
-        /**
-         * Write to a file.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/write.html
-         */
-        public write(fd: number, buffer: Buffer, offset: number | undefined, length: number | undefined, position: number | undefined, callback: (error: Error | null, bytesWritten: number | null, buffer: Buffer) => void): void;
-        /**
-         * Write to a file.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/write.html
-         */
-        public write(fd: number, text: string, callback: (error: Error | null, bytesWritten: number | null, text: string) => void): void;
-        /**
-         * Write to a file.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/write.html
-         */
-        public write(fd: number, text: string, position: number | null | undefined, callback: (error: Error | null, bytesWritten: number | null, text: string) => void): void;
-        /**
-         * Write to a file.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/write.html
-         */
-        public write(fd: number, text: string, position: number | null | undefined, encoding: string | undefined, callback: (error: Error | null, bytesWritten: number | null, text: string) => void): void;
-        public write(fd: number, buffer: Buffer | string, offset?: number | null | typeof callback, length?: number | string | typeof callback, position?: number | typeof callback, callback?: ((error: Error | null, bytesWritten: number | null, buffer: Buffer) => void) | ((error: Error | null, bytesWritten: number | null, buffer: string) => void)) {
-            if (typeof offset === "function") callback = offset;
-            else if (typeof length === "function") callback = length;
-            else if (typeof position === "function") callback = position;
-            if (typeof callback !== "function") throw new IOError("EINVAL");
-            try {
-                if (Buffer.isBuffer(buffer)) {
-                    process.nextTick(callback, /*e*/ null, this.writeSync(fd, buffer, typeof offset === "number" ? offset : undefined, typeof length === "number" ? length : undefined, typeof position === "number" ? position : undefined), buffer);
-                }
-                else {
-                    process.nextTick(callback, /*e*/ null, this.writeSync(fd, buffer, typeof offset === "number" ? offset : undefined, typeof length === "string" ? length : undefined));
-                }
-            }
-            catch (e) {
-                process.nextTick(callback, e, /*bytesWritten*/ null, buffer);
-            }
-        }
-
-        /**
-         * Write to a file.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/write.html
+         * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public writeSync(fd: number, buffer: Buffer, offset?: number, length?: number, position?: number | null): number;
         /**
          * Write to a file.
          *
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/write.html
+         *
+         * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public writeSync(fd: number, text: string, position?: number | null, encoding?: string): number;
         public writeSync(fd: number, buffer: Buffer | string, offset?: number | null, length?: number | string, position?: number | null) {
@@ -1659,57 +894,9 @@ namespace vfs {
         }
 
         /**
-         * Append to a file.
-         */
-        public appendFile(path: string | number, data: string | Buffer, callback: (error: Error | null) => void): void;
-        /**
-         * Append to a file.
-         */
-        public appendFile(path: string | number, data: string | Buffer, options: { encoding?: string | null, mode?: number, flag?: string | number } | string | null | undefined, callback: (error: Error | null) => void): void;
-        public appendFile(path: string | number, data: string | Buffer, options: { encoding?: string | null, mode?: number, flag?: string | number } | string | null | typeof callback | undefined, callback?: (error: Error | null) => void) {
-            if (typeof options === "function") callback = options;
-            if (typeof callback !== "function") throw new IOError("EINVAL");
-            try {
-                this.appendFileSync(path, data, typeof options !== "function" ? options : undefined);
-                process.nextTick(callback, /*e*/ null);
-            }
-            catch (e) {
-                process.nextTick(callback, e);
-            }
-        }
-
-        /**
-         * Append to a file.
-         */
-        public appendFileSync(path: string | number, data: string | Buffer, options: { encoding?: string | null, mode?: number, flag?: string | number } | string | null = {}) {
-            if (options === null) options = { encoding: null };
-            else if (typeof options === "string") options = { encoding: options };
-            const { encoding, mode = 0o666, flag = "a" } = options;
-            this.writeFileSync(path, data, { encoding, mode, flag });
-        }
-
-        /**
          * Write to a file.
-         */
-        public writeFile(path: string | number, data: string | Buffer, callback: (error: Error | null) => void): void;
-        /**
-         * Write to a file.
-         */
-        public writeFile(path: string | number, data: string | Buffer, options: { encoding?: string | null, mode?: number, flag?: string | number } | string | null | undefined, callback: (error: Error | null) => void): void;
-        public writeFile(path: string | number, data: string | Buffer, options: { encoding?: string | null, mode?: number, flag?: string | number } | string | null | typeof callback | undefined, callback?: (error: Error | null) => void) {
-            if (typeof options === "function") callback = options;
-            if (typeof callback !== "function") throw new IOError("EINVAL");
-            try {
-                this.writeFileSync(path, data, typeof options !== "function" ? options : undefined);
-                process.nextTick(callback, /*e*/ null);
-            }
-            catch (e) {
-                process.nextTick(callback, e);
-            }
-        }
-
-        /**
-         * Write to a file.
+         *
+         * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public writeFileSync(path: string | number, data: string | Buffer, options: { encoding?: string | null, mode?: number, flag?: string | number } | string | null = {}) {
             if (options === null) options = { encoding: null };
@@ -1732,160 +919,8 @@ namespace vfs {
         }
 
         /**
-         * Truncate a file.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/truncate.html
+         * Print diagnostic information about the structure of the file system to the console.
          */
-        public truncate(path: string, callback: (error: Error | null) => void): void;
-        /**
-         * Truncate a file to a specified length.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/truncate.html
-         */
-        public truncate(path: string, length: number | undefined, callback: (error: Error | null) => void): void;
-        public truncate(path: string, length: number | typeof callback | undefined, callback?: (error: Error | null) => void) {
-            if (typeof length === "function") callback = length;
-            if (typeof callback !== "function") throw new IOError("EINVAL");
-            try {
-                this.truncateSync(path, typeof length !== "function" ? length : undefined);
-                process.nextTick(callback, /*e*/ null);
-            }
-            catch (e) {
-                process.nextTick(callback, e);
-            }
-        }
-
-        /**
-         * Truncate a file to a specified length.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/truncate.html
-         */
-        public truncateSync(path: string, length = 0) {
-            path = this._resolve(path);
-            this._truncate("truncate", this._find(path) || _throw(new IOError("ENOENT", "truncate", path)), length);
-        }
-
-        /**
-         * Truncate a file.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/ftruncate.html
-         */
-        public ftruncate(fd: number, callback: (error: Error | null) => void): void;
-        /**
-         * Truncate a file to a specified length.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/ftruncate.html
-         */
-        public ftruncate(fd: number, length: number | undefined, callback: (error: Error | null) => void): void;
-        public ftruncate(fd: number, length: number | typeof callback | undefined, callback?: (error: Error | null) => void) {
-            if (typeof length === "function") callback = length, length = undefined;
-            if (typeof callback !== "function") throw new IOError("EINVAL");
-            try {
-                this.ftruncateSync(fd, typeof length !== "function" ? length : undefined);
-                process.nextTick(callback, /*e*/ null);
-            }
-            catch (e) {
-                process.nextTick(callback, e);
-            }
-        }
-
-        /**
-         * Truncate a file to a specified length.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/ftruncate.html
-         */
-        public ftruncateSync(fd: number, length = 0) {
-            this._truncate("ftruncate", this._file("ftruncate", fd, "file", W_OK), length);
-        }
-
-        private _truncate(syscall: string, entry: FileDescription<Inode>, length: number, path?: string) {
-            if (!isFinite(length)) throw new IOError("EINVAL", syscall, path);
-            if (!isFileInode(entry.node)) throw new IOError("ENOENT", syscall, path);
-            if (this.isReadonly) throw new IOError("EROFS", syscall, path);
-
-            if (this._getSize(entry.node) !== length) {
-                this._resize(entry.node, entry.node, length);
-            }
-
-            entry.node.mtimeMs = this.time();
-        }
-
-        /**
-         * Makes a temporary directory.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/mkdtemp.html
-         */
-        public mkdtemp(template: string, callback: (error: Error | null, folder: string | null) => void) {
-            try {
-                process.nextTick(callback, /*e*/ null, this.mkdtempSync(template));
-            }
-            catch (e) {
-                process.nextTick(callback, e, /*folder*/ null);
-            }
-        }
-
-        /**
-         * Makes a temporary directory.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/mkdtemp.html
-         */
-        public mkdtempSync(template: string) {
-            this.mkdirSync(this._mktemp("mkdtemp", template));
-        }
-
-        /**
-         * Makes a temporary file, returning a file descriptor.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/mkstemp.html
-         */
-        public mkstemp(template: string, callback: (error: Error | null, fd: number | null) => void) {
-            try {
-                process.nextTick(callback, /*e*/ null, this.mkstempSync(template));
-            }
-            catch (e) {
-                process.nextTick(callback, e, /*fd*/ null);
-            }
-        }
-
-        /**
-         * Makes a temporary file, returning a file descriptor.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/mkstemp.html
-         */
-        public mkstempSync(template: string) {
-            return this.openSync(this._mktemp("mkstemp", template), O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
-        }
-
-        private _mktemp(syscall: string, template: string) {
-            if (this.isReadonly) throw new IOError("EROFS", syscall, template);
-
-            template = this._resolve(template);
-            if (vpath.hasTrailingSeparator(template)) throw new IOError("EINVAL", syscall, template);
-
-            const basename = vpath.basename(template);
-            let count = 0;
-            for (let i = basename.length - 1; i >= 0; i--) {
-                if (basename.charAt(i) !== "X") break;
-                count++;
-            }
-            if (count < 6) throw new IOError("EINVAL", syscall, template);
-
-            const { node: parent, path } = this._find(vpath.dirname(template)) || _throw(new IOError("ENOENT", syscall, template));
-            if (!isDirectoryInode(parent)) throw new IOError("ENOTDIR", syscall, template);
-            if (!this._access(parent, W_OK)) throw new IOError("EACCES", syscall, template);
-
-            const parentLinks = this._getLinks(parent);
-            const prefix = basename.slice(0, basename.length - count);
-            while (true) {
-                let suffix = "";
-                while (suffix.length < count) {
-                    suffix += FileSystem._portableFilenameCharSet.charAt(Math.floor(Math.random() * FileSystem._portableFilenameCharSet.length));
-                }
-                const name = prefix + suffix;
-                if (!parentLinks.has(name)) return vpath.combine(path, name);
-            }
-        }
-
         public debugPrint(): void {
             let result = "";
             const printLinks = (dirname: string | undefined, links: core.SortedMap<string, Inode>) => {
@@ -1917,17 +952,15 @@ namespace vfs {
             console.log(result);
         }
 
-        private _mknod(dev: number, type: typeof S_IFREG, mode: number, uid?: number, gid?: number, umask?: number): FileInode;
-        private _mknod(dev: number, type: typeof S_IFDIR, mode: number, uid?: number, gid?: number, umask?: number): DirectoryInode;
-        private _mknod(dev: number, type: typeof S_IFLNK, mode: number, uid?: number, gid?: number, umask?: number): SymlinkInode;
-        private _mknod(dev: number, type: number, mode: number, uid = this.getuid(), gid = this.getgid(), umask = this.umask()) {
+        private _mknod(dev: number, type: typeof S_IFREG, mode: number, umask?: number): FileInode;
+        private _mknod(dev: number, type: typeof S_IFDIR, mode: number, umask?: number): DirectoryInode;
+        private _mknod(dev: number, type: typeof S_IFLNK, mode: number, umask?: number): SymlinkInode;
+        private _mknod(dev: number, type: number, mode: number, umask = 0o022) {
             const timestamp = this.time();
             return <Inode>{
                 dev,
                 ino: ++inoCount,
                 mode: (mode & ~S_IFMT & ~umask & 0o7777) | (type & S_IFMT),
-                uid,
-                gid,
                 atimeMs: timestamp,
                 mtimeMs: timestamp,
                 ctimeMs: timestamp,
@@ -1935,6 +968,18 @@ namespace vfs {
                 nlink: 0,
                 incomingLinks: new Map<DirectoryInode, core.SortedSet<string>>(),
             };
+        }
+
+        private _fsync(entry: OpenFileDescription, metadata: boolean) {
+            if (isFileInode(entry.node) && entry.buffer && entry.buffer !== entry.node.buffer) {
+                const time = this.time();
+                entry.node.buffer = entry.buffer;
+                entry.node.mtimeMs = time;
+                entry.node.ctimeMs = time;
+                if (metadata) {
+                    entry.node.size = entry.node.buffer.byteLength;
+                }
+            }
         }
 
         private _addLink(parent: DirectoryInode | undefined, links: core.SortedMap<string, Inode>, name: string, node: Inode) {
@@ -2032,8 +1077,6 @@ namespace vfs {
                     dev: root.dev,
                     ino: root.ino,
                     mode: root.mode,
-                    uid: root.uid,
-                    gid: root.gid,
                     atimeMs: root.atimeMs,
                     mtimeMs: root.mtimeMs,
                     ctimeMs: root.ctimeMs,
@@ -2176,7 +1219,6 @@ namespace vfs {
                 }
 
                 if (isDirectoryInode(node)) {
-                    if (!this._access(node, X_OK)) throw new IOError("EACCES", "scandir", path);
                     links = this._getLinks(node);
                     parent = node;
                     step++;
@@ -2187,18 +1229,6 @@ namespace vfs {
             }
 
             return undefined;
-        }
-
-        private _resize(node: FileInode, entry: { buffer: Buffer | undefined }, size: number) {
-            if (!entry.buffer) {
-                entry.buffer = this._getBuffer(node);
-            }
-            const oldSize = entry.buffer.byteLength;
-            if (entry.buffer.byteLength !== size) {
-                const oldBuffer = entry.buffer;
-                entry.buffer = size < oldSize ? Buffer.allocUnsafe(size) : Buffer.alloc(size);
-                oldBuffer.copy(entry.buffer, 0, 0, Math.min(oldSize, size));
-            }
         }
 
         private _resolve(path: string) {
@@ -2235,8 +1265,7 @@ namespace vfs {
         }
 
         private _applyFileExtendedOptions(path: string, entry: Directory | File | Symlink | Mount) {
-            const { uid = -1, gid = -1, mode, meta } = entry;
-            if (uid !== -1 || gid !== -1) this.chownSync(path, uid, gid);
+            const { mode, meta } = entry;
             if (mode !== undefined) this.chmodSync(path, mode);
             if (meta !== undefined) {
                 const filemeta = this.filemeta(path);
@@ -2248,7 +1277,7 @@ namespace vfs {
 
         private _applyFilesWorker(files: FileSet, dirname: string, deferred: [Symlink | Link | Mount, string][]) {
             for (const key of Object.keys(files)) {
-                const value = this._normalizeFileMapEntry(files[key]);
+                const value = this._normalizeFileSetEntry(files[key]);
                 const path = dirname ? vpath.resolve(dirname, key) : key;
                 vpath.validate(path, vpath.ValidationFlags.Absolute);
                 if (value === null || value === undefined) {
@@ -2276,7 +1305,7 @@ namespace vfs {
             }
         }
 
-        private _normalizeFileMapEntry(value: FileSet[string]) {
+        private _normalizeFileSetEntry(value: FileSet[string]) {
             if (value === undefined ||
                 value === null ||
                 value instanceof Directory ||
@@ -2291,9 +1320,6 @@ namespace vfs {
     }
 
     export interface FileSystemOptions {
-        uid?: number;
-        gid?: number;
-        umask?: number;
         time?: number | Date | (() => number | Date);
         files?: FileSet;
         cwd?: string;
@@ -2311,11 +1337,6 @@ namespace vfs {
         statSync(path: string): { mode: number; size: number; };
         readdirSync(path: string): string[];
         readFileSync(path: string): Buffer;
-    }
-
-    export interface FileSystemTimers {
-        setInterval(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
-        clearInterval(handle: any): void;
     }
 
     export class Stats {
@@ -2339,14 +1360,14 @@ namespace vfs {
         public birthtime: Date;
 
         constructor();
-        constructor(dev: number, ino: number, mode: number, nlink: number, uid: number, gid: number, rdev: number, size: number, blksize: number, blocks: number, atimeMs: number, mtimeMs: number, ctimeMs: number, birthtimeMs: number);
-        constructor(dev = 0, ino = 0, mode = 0, nlink = 0, uid = 0, gid = 0, rdev = 0, size = 0, blksize = 0, blocks = 0, atimeMs = 0, mtimeMs = 0, ctimeMs = 0, birthtimeMs = 0) {
+        constructor(dev: number, ino: number, mode: number, nlink: number, rdev: number, size: number, blksize: number, blocks: number, atimeMs: number, mtimeMs: number, ctimeMs: number, birthtimeMs: number);
+        constructor(dev = 0, ino = 0, mode = 0, nlink = 0, rdev = 0, size = 0, blksize = 0, blocks = 0, atimeMs = 0, mtimeMs = 0, ctimeMs = 0, birthtimeMs = 0) {
             this.dev = dev;
             this.ino = ino;
             this.mode = mode;
             this.nlink = nlink;
-            this.uid = uid;
-            this.gid = gid;
+            this.uid = 0;
+            this.gid = 0;
             this.rdev = rdev;
             this.size = size;
             this.blksize = blksize;
@@ -2412,6 +1433,9 @@ namespace vfs {
         }
     }
 
+    /**
+     * A template used to populate files, directories, links, etc. in a virtual file system.
+     */
     export interface FileSet {
         [name: string]: DirectoryLike | FileLike | Link | Symlink | Mount | null | undefined;
     }
@@ -2419,41 +1443,33 @@ namespace vfs {
     export type DirectoryLike = FileSet | Directory;
     export type FileLike = File | Buffer | string;
 
-    /** Extended options for a directory in a `FileMap` */
+    /** Extended options for a directory in a `FileSet` */
     export class Directory {
         public readonly files: FileSet;
-        public readonly uid: number | undefined;
-        public readonly gid: number | undefined;
         public readonly mode: number | undefined;
         public readonly meta: Record<string, any> | undefined;
-        constructor(files: FileSet, { uid, gid, mode, meta }: { uid?: number, gid?: number, mode?: number, meta?: Record<string, any> } = {}) {
+        constructor(files: FileSet, { mode, meta }: { mode?: number, meta?: Record<string, any> } = {}) {
             this.files = files;
-            this.uid = uid;
-            this.gid = gid;
             this.mode = mode;
             this.meta = meta;
         }
     }
 
-    /** Extended options for a file in a `FileMap` */
+    /** Extended options for a file in a `FileSet` */
     export class File {
         public readonly data: Buffer | string;
         public readonly encoding: string | undefined;
-        public readonly uid: number | undefined;
-        public readonly gid: number | undefined;
         public readonly mode: number | undefined | undefined;
         public readonly meta: Record<string, any> | undefined;
-        constructor(data: Buffer | string, { uid, gid, mode, meta, encoding }: { encoding?: string, uid?: number, gid?: number, mode?: number, meta?: Record<string, any> } = {}) {
+        constructor(data: Buffer | string, { mode, meta, encoding }: { encoding?: string, mode?: number, meta?: Record<string, any> } = {}) {
             this.data = data;
             this.encoding = encoding;
-            this.uid = uid;
-            this.gid = gid;
             this.mode = mode;
             this.meta = meta;
         }
     }
 
-    /** Extended options for a hard link in a `FileMap` */
+    /** Extended options for a hard link in a `FileSet` */
     export class Link {
         public readonly path: string;
         constructor(path: string) {
@@ -2461,35 +1477,27 @@ namespace vfs {
         }
     }
 
-    /** Extended options for a symbolic link in a `FileMap` */
+    /** Extended options for a symbolic link in a `FileSet` */
     export class Symlink {
         public readonly symlink: string;
-        public readonly uid: number | undefined;
-        public readonly gid: number | undefined;
         public readonly mode: number | undefined;
         public readonly meta: Record<string, any> | undefined;
-        constructor(symlink: string, { uid, gid, mode, meta }: { uid?: number, gid?: number, mode?: number, meta?: Record<string, any> } = {}) {
+        constructor(symlink: string, { mode, meta }: { mode?: number, meta?: Record<string, any> } = {}) {
             this.symlink = symlink;
-            this.uid = uid;
-            this.gid = gid;
             this.mode = mode;
             this.meta = meta;
         }
     }
 
-    /** Extended options for mounting a virtual copy of an external file system via a `FileMap` */
+    /** Extended options for mounting a virtual copy of an external file system via a `FileSet` */
     export class Mount {
         public readonly source: string;
         public readonly resolver: FileSystemResolver;
-        public readonly uid: number | undefined;
-        public readonly gid: number | undefined;
         public readonly mode: number | undefined;
         public readonly meta: Record<string, any> | undefined;
-        constructor(source: string, resolver: FileSystemResolver, { uid, gid, mode, meta }: { uid?: number, gid?: number, mode?: number, meta?: Record<string, any> } = {}) {
+        constructor(source: string, resolver: FileSystemResolver, { mode, meta }: { mode?: number, meta?: Record<string, any> } = {}) {
             this.source = source;
             this.resolver = resolver;
-            this.uid = uid;
-            this.gid = gid;
             this.mode = mode;
             this.meta = meta;
         }
@@ -2503,8 +1511,6 @@ namespace vfs {
         dev: number; // device id
         ino: number; // inode id
         mode: number; // file mode
-        uid: number; // owner user id
-        gid: number; // owner group id
         atimeMs: number; // access time
         mtimeMs: number; // modified time
         ctimeMs: number; // status change time
