@@ -9183,10 +9183,15 @@ namespace ts {
                 // aren't the right hand side of a generic type alias declaration we optimize by reducing the
                 // set of type parameters to those that are possibly referenced in the literal.
                 const declaration = symbol.declarations[0];
-                const outerTypeParameters = (isJavaScriptConstructor(declaration) ? getTypeParametersFromDeclaration(declaration as DeclarationWithTypeParameters) : getOuterTypeParameters(declaration, /*includeThisTypes*/ true)) || emptyArray;
+                let outerTypeParameters = getOuterTypeParameters(declaration, /*includeThisTypes*/ true);
+                if (isJavaScriptConstructor(declaration)) {
+                    const templateTagParameters = getTypeParametersFromDeclaration(declaration as DeclarationWithTypeParameters);
+                    outerTypeParameters = addRange(outerTypeParameters, templateTagParameters);
+                }
+                typeParameters = outerTypeParameters || emptyArray;
                 typeParameters = symbol.flags & SymbolFlags.TypeLiteral && !target.aliasTypeArguments ?
-                    filter(outerTypeParameters, tp => isTypeParameterPossiblyReferenced(tp, declaration)) :
-                    outerTypeParameters;
+                    filter(typeParameters, tp => isTypeParameterPossiblyReferenced(tp, declaration)) :
+                    typeParameters;
                 links.outerTypeParameters = typeParameters;
                 if (typeParameters.length) {
                     links.instantiations = createMap<Type>();
