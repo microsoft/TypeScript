@@ -83,6 +83,7 @@ namespace ts.server.typingsInstaller {
         private safeList: JsTyping.SafeList | undefined;
         readonly pendingRunRequests: PendingRequest[] = [];
         private readonly toCanonicalFileName: GetCanonicalFileName;
+        private readonly globalCacheCanonicalPackageJsonPath: string;
 
         private installRunCount = 1;
         private inFlightRequestCount = 0;
@@ -97,6 +98,7 @@ namespace ts.server.typingsInstaller {
             private readonly throttleLimit: number,
             protected readonly log = nullLog) {
             this.toCanonicalFileName = createGetCanonicalFileName(installTypingHost.useCaseSensitiveFileNames);
+            this.globalCacheCanonicalPackageJsonPath = combinePaths(this.toCanonicalFileName(globalCachePath), "package.json");
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Global cache location '${globalCachePath}', safe file path '${safeListPath}', types map path ${typesMapLocation}`);
             }
@@ -440,7 +442,7 @@ namespace ts.server.typingsInstaller {
                         return;
                     }
                     f = this.toCanonicalFileName(f);
-                    if (isPackageOrBowerJson(f) && f !== this.toCanonicalFileName(combinePaths(this.globalCachePath, "package.json"))) {
+                    if (f !== this.globalCacheCanonicalPackageJsonPath && isPackageOrBowerJson(f)) {
                         watchers.isInvoked = true;
                         this.sendResponse({ projectName, kind: ActionInvalidate });
                     }
