@@ -7,6 +7,7 @@ tests/cases/conformance/jsx/file.tsx(22,13): error TS2558: Expected 1 type argum
 tests/cases/conformance/jsx/file.tsx(24,12): error TS1099: Type argument list cannot be empty.
 tests/cases/conformance/jsx/file.tsx(26,12): error TS1099: Type argument list cannot be empty.
 tests/cases/conformance/jsx/file.tsx(39,14): error TS2344: Type 'Prop' does not satisfy the constraint '{ a: string; }'.
+tests/cases/conformance/jsx/file.tsx(39,14): error TS2344: Type 'Prop' does not satisfy the constraint '{ a: string; }'.
   Types of property 'a' are incompatible.
     Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/jsx/file.tsx(39,20): error TS2326: Types of property 'a' are incompatible.
@@ -24,7 +25,7 @@ tests/cases/conformance/jsx/file.tsx(53,47): error TS2326: Types of property 'b'
   Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (16 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (17 errors) ====
     import React = require('react');
     
     interface Prop {
@@ -78,6 +79,8 @@ tests/cases/conformance/jsx/file.tsx(53,47): error TS2326: Types of property 'b'
     x = <MyComp2<{a: string, b: string}> a="a" b="b"></MyComp2>; // OK
     
     x = <MyComp2<Prop> a={10} b="hi" />; // error
+                 ~~~~
+!!! error TS2344: Type 'Prop' does not satisfy the constraint '{ a: string; }'.
                  ~~~~
 !!! error TS2344: Type 'Prop' does not satisfy the constraint '{ a: string; }'.
 !!! error TS2344:   Types of property 'a' are incompatible.

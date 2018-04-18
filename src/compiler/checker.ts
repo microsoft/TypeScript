@@ -386,6 +386,7 @@ namespace ts {
         const unknownSignature = createSignature(undefined, undefined, undefined, emptyArray, unknownType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         const resolvingSignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         const silentNeverSignature = createSignature(undefined, undefined, undefined, emptyArray, silentNeverType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
+        const resolvingSignaturesArray = [resolvingSignature];
 
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
         const jsObjectLiteralIndexInfo = createIndexInfo(anyType, /*isReadonly*/ false);
@@ -14986,8 +14987,13 @@ namespace ts {
                 }
             }
 
-            if (context.typeArguments) {
-                signatures = mapDefined(signatures, s => getJsxSignatureTypeArgumentInstantiation(s, context, isJs));
+            const links = getNodeLinks(context);
+            if (links.resolvedSignatures && links.resolvedSignatures !== resolvingSignaturesArray) {
+                signatures = links.resolvedSignatures;
+            }
+            else if (!links.resolvedSignatures) {
+                links.resolvedSignatures = resolvingSignaturesArray;
+                links.resolvedSignatures = signatures = instantiateJsxSignatures(context, signatures);
             }
 
             return getUnionType(map(signatures, ctor ? t => getJsxPropsTypeFromClassType(t, isJs, context, /*reportErrors*/ false) : t => getJsxPropsTypeFromCallSignature(t, context)), UnionReduction.None);
