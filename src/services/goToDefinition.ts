@@ -49,18 +49,9 @@ namespace ts.GoToDefinition {
         // go to the declaration of the property name (in this case stay at the same position). However, if go-to-definition
         // is performed at the location of property access, we would like to go to definition of the property in the short-hand
         // assignment. This case and others are handled by the following code.
-        if (parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
+        if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
             const shorthandSymbol = typeChecker.getShorthandAssignmentValueSymbol(symbol.valueDeclaration!);
-            if (!shorthandSymbol) {
-                return [];
-            }
-
-            const shorthandDeclarations = shorthandSymbol.getDeclarations();
-            const shorthandSymbolKind = SymbolDisplay.getSymbolKind(typeChecker, shorthandSymbol, node);
-            const shorthandSymbolName = typeChecker.symbolToString(shorthandSymbol);
-            const shorthandContainerName = typeChecker.symbolToString(symbol.parent!, node);
-            return map(shorthandDeclarations,
-                declaration => createDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
+            return shorthandSymbol ? shorthandSymbol.declarations!.map(decl => createDefinitionInfo(decl, typeChecker, shorthandSymbol, node)) : [];
         }
 
         // If the node is the name of a BindingElement within an ObjectBindingPattern instead of just returning the
@@ -192,8 +183,7 @@ namespace ts.GoToDefinition {
     }
 
     function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node: Node): DefinitionInfo[] | undefined {
-        const { symbolName, symbolKind, containerName } = getSymbolInfo(typeChecker, symbol, node);
-        return getConstructSignatureDefinition() || getCallSignatureDefinition() || map(symbol.declarations, declaration => createDefinitionInfo(declaration, symbolKind, symbolName, containerName));
+        return getConstructSignatureDefinition() || getCallSignatureDefinition() || map(symbol.declarations, declaration => createDefinitionInfo(declaration, typeChecker, symbol, node));
 
         function getConstructSignatureDefinition(): DefinitionInfo[] | undefined {
             // Applicable only if we are in a new expression, or we are on a constructor declaration
@@ -214,33 +204,24 @@ namespace ts.GoToDefinition {
             if (!signatureDeclarations) {
                 return undefined;
             }
-            const declarations = signatureDeclarations.filter(selectConstructors ? isConstructorDeclaration : isSignatureDeclaration);
+            const declarations = signatureDeclarations.filter(selectConstructors ? isConstructorDeclaration : isFunctionLike);
             return declarations.length
-                ? [createDefinitionInfo(find(declarations, d => !!(<FunctionLikeDeclaration>d).body) || last(declarations), symbolKind, symbolName, containerName)]
+                ? [createDefinitionInfo(find(declarations, d => !!(<FunctionLikeDeclaration>d).body) || last(declarations), typeChecker, symbol, node)]
                 : undefined;
         }
     }
 
-    function isSignatureDeclaration(node: Node): boolean {
-        switch (node.kind) {
-            case SyntaxKind.Constructor:
-            case SyntaxKind.ConstructSignature:
-            case SyntaxKind.FunctionDeclaration:
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.MethodSignature:
-                return true;
-            default:
-                return false;
-        }
-    }
-
     /** Creates a DefinitionInfo from a Declaration, using the declaration's name if possible. */
-    function createDefinitionInfo(node: Declaration, symbolKind: ScriptElementKind, symbolName: string, containerName: string): DefinitionInfo {
-        return createDefinitionInfoFromName(getNameOfDeclaration(node) || node, symbolKind, symbolName, containerName);
+    function createDefinitionInfo(declaration: Declaration, checker: TypeChecker, symbol: Symbol, node: Node): DefinitionInfo {
+        const symbolName = checker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
+        const symbolKind = SymbolDisplay.getSymbolKind(checker, symbol, node);
+        const containerName = symbol.parent ? checker.symbolToString(symbol.parent, node) : "";
+        return createDefinitionInfoFromName(declaration, symbolKind, symbolName, containerName);
     }
 
     /** Creates a DefinitionInfo directly from the name of a declaration. */
-    function createDefinitionInfoFromName(name: Node, symbolKind: ScriptElementKind, symbolName: string, containerName: string): DefinitionInfo {
+    function createDefinitionInfoFromName(declaration: Declaration, symbolKind: ScriptElementKind, symbolName: string, containerName: string): DefinitionInfo {
+        const name = getNameOfDeclaration(declaration) || declaration;
         const sourceFile = name.getSourceFile();
         return {
             fileName: sourceFile.fileName,
@@ -252,26 +233,12 @@ namespace ts.GoToDefinition {
         };
     }
 
-    function getSymbolInfo(typeChecker: TypeChecker, symbol: Symbol, node: Node) {
-        return {
-            symbolName: typeChecker.symbolToString(symbol), // Do not get scoped name, just the name of the symbol
-            symbolKind: SymbolDisplay.getSymbolKind(typeChecker, symbol, node),
-            containerName: symbol.parent ? typeChecker.symbolToString(symbol.parent, node) : ""
-        };
-    }
-
     function createDefinitionFromSignatureDeclaration(typeChecker: TypeChecker, decl: SignatureDeclaration): DefinitionInfo {
-        const { symbolName, symbolKind, containerName } = getSymbolInfo(typeChecker, decl.symbol!, decl);
-        return createDefinitionInfo(decl, symbolKind, symbolName, containerName);
+        return createDefinitionInfo(decl, typeChecker, decl.symbol!, decl);
     }
 
     export function findReferenceInPosition(refs: ReadonlyArray<FileReference>, pos: number): FileReference | undefined {
-        for (const ref of refs) {
-            if (ref.pos <= pos && pos <= ref.end) {
-                return ref;
-            }
-        }
-        return undefined;
+        return find(refs, ref => ref.pos <= pos && pos <= ref.end);
     }
 
     function getDefinitionInfoForFileReference(name: string, targetFileName: string): DefinitionInfo {
@@ -299,13 +266,7 @@ namespace ts.GoToDefinition {
     function tryGetSignatureDeclaration(typeChecker: TypeChecker, node: Node): SignatureDeclaration | undefined {
         const callLike = getAncestorCallLikeExpression(node);
         const signature = callLike && typeChecker.getResolvedSignature(callLike);
-        if (signature) {
-            const decl = signature.declaration;
-            if (decl && isSignatureDeclaration(decl)) {
-                return decl;
-            }
-        }
         // Don't go to a function type, go to the value having that type.
-        return undefined;
+        return tryCast(signature && signature.declaration, (d): d is SignatureDeclaration => isFunctionLike(d) && !isFunctionTypeNode(d));
     }
 }

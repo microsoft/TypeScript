@@ -24524,7 +24524,10 @@ namespace ts {
                             checkImportBinding(importClause.namedBindings);
                         }
                         else {
-                            forEach(importClause.namedBindings.elements, checkImportBinding);
+                            const moduleExisted = resolveExternalModuleName(node, node.moduleSpecifier);
+                            if (moduleExisted) {
+                                forEach(importClause.namedBindings.elements, checkImportBinding);
+                            }
                         }
                     }
                 }

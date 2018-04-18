@@ -1717,8 +1717,10 @@ namespace ts {
                 return (node.parent as ExternalModuleReference).parent as AnyValidImportOrReExport;
             case SyntaxKind.CallExpression:
                 return node.parent as AnyValidImportOrReExport;
+            case SyntaxKind.LiteralType:
+                return cast(node.parent.parent, isImportTypeNode) as ImportTypeNode & { argument: LiteralType };
             default:
-                return Debug.fail(Debug.showSyntaxKind(node));
+                return Debug.fail(Debug.showSyntaxKind(node.parent));
         }
     }
 
@@ -4943,6 +4945,10 @@ namespace ts {
         return node.kind === SyntaxKind.LiteralType;
     }
 
+    export function isImportTypeNode(node: Node): node is ImportTypeNode {
+        return node.kind === SyntaxKind.ImportType;
+    }
+
     // Binding patterns
 
     export function isObjectBindingPattern(node: Node): node is ObjectBindingPattern {
@@ -5622,8 +5628,7 @@ namespace ts {
             || kind === SyntaxKind.GetAccessor
             || kind === SyntaxKind.SetAccessor
             || kind === SyntaxKind.IndexSignature
-            || kind === SyntaxKind.SemicolonClassElement
-            || kind === SyntaxKind.MissingDeclaration;
+            || kind === SyntaxKind.SemicolonClassElement;
     }
 
     export function isClassLike(node: Node): node is ClassLikeDeclaration {
@@ -5654,8 +5659,7 @@ namespace ts {
             || kind === SyntaxKind.CallSignature
             || kind === SyntaxKind.PropertySignature
             || kind === SyntaxKind.MethodSignature
-            || kind === SyntaxKind.IndexSignature
-            || kind === SyntaxKind.MissingDeclaration;
+            || kind === SyntaxKind.IndexSignature;
     }
 
     export function isClassOrTypeElement(node: Node): node is ClassElement | TypeElement {
@@ -5669,8 +5673,7 @@ namespace ts {
             || kind === SyntaxKind.SpreadAssignment
             || kind === SyntaxKind.MethodDeclaration
             || kind === SyntaxKind.GetAccessor
-            || kind === SyntaxKind.SetAccessor
-            || kind === SyntaxKind.MissingDeclaration;
+            || kind === SyntaxKind.SetAccessor;
     }
 
     // Type

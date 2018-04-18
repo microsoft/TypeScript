@@ -66,7 +66,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                     if (fs.existsSync(path.join(cwd, "node_modules"))) {
                         require("del").sync(path.join(cwd, "node_modules"), { force: true });
                     }
-                    const install = cp.spawnSync(`npm`, ["i"], { cwd, timeout: timeout / 2, shell: true, stdio }); // NPM shouldn't take the entire timeout - if it takes a long time, it should be terminated and we should log the failure
+                    const install = cp.spawnSync(`npm`, ["i", "--ignore-scripts"], { cwd, timeout: timeout / 2, shell: true, stdio }); // NPM shouldn't take the entire timeout - if it takes a long time, it should be terminated and we should log the failure
                     if (install.status !== 0) throw new Error(`NPM Install for ${directoryName} failed: ${install.stderr.toString()}`);
                 }
                 const args = [path.join(__dirname, "tsc.js")];

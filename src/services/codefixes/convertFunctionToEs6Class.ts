@@ -36,7 +36,7 @@ namespace ts.codefix {
                 precedingNode = ctorDeclaration.parent.parent;
                 newClassDeclaration = createClassFromVariableDeclaration(ctorDeclaration as VariableDeclaration);
                 if ((<VariableDeclarationList>ctorDeclaration.parent).declarations.length === 1) {
-                    copyComments(precedingNode, newClassDeclaration, sourceFile);
+                    copyComments(precedingNode, newClassDeclaration!, sourceFile); // TODO: GH#18217
                     deleteNode(precedingNode);
                 }
                 else {
