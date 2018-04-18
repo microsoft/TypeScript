@@ -1624,6 +1624,9 @@ namespace ts {
                     collectDynamicImportOrRequireCalls(node);
                 }
             }
+            if ((file.flags & NodeFlags.PossiblyContainsDynamicImport) || isJavaScriptFile) {
+                collectDynamicImportOrRequireCalls(file.endOfFileToken);
+            }
 
             file.imports = imports || emptyArray;
             file.moduleAugmentations = moduleAugmentations || emptyArray;
