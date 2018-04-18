@@ -2677,7 +2677,7 @@ namespace ts {
 
         const extensions = [
             ...needJsExtensions ? allSupportedExtensions : supportedTypeScriptExtensions,
-            ...extraFileExtensions.filter(x => x.scriptKind === ScriptKind.Deferred || needJsExtensions && isJavaScriptLike(x.scriptKind)).map(x => x.extension)
+            ...mapDefined(extraFileExtensions, x => x.scriptKind === ScriptKind.Deferred || needJsExtensions && isJavaScriptLike(x.scriptKind) ? x.extension : undefined)
         ];
 
         return deduplicate(extensions, equateStringsCaseSensitive, compareStringsCaseSensitive);

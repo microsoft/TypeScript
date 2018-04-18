@@ -4066,6 +4066,8 @@ namespace ts {
         Prototype,
     }
 
+    export type JsFileExtensionInfo = FileExtensionInfo;
+
     export interface FileExtensionInfo {
         extension: string;
         isMixedContent: boolean;
