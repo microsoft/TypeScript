@@ -1102,7 +1102,7 @@ namespace ts.FindAllReferences.Core {
 
         // If we got a type reference, try and see if the reference applies to any expressions that can implement an interface
         // Find the first node whose parent isn't a type node -- i.e., the highest type node.
-        const typeNode = findAncestor(refNode.parent, a => !isQualifiedName(a.parent) && !isTypeNode(a.parent) && !isTypeElement(a.parent));
+        const typeNode = findAncestor(refNode, a => !isQualifiedName(a.parent) && !isTypeNode(a.parent) && !isTypeElement(a.parent));
         const typeHavingNode = typeNode.parent;
         if (hasType(typeHavingNode) && typeHavingNode.type === typeNode && state.markSeenContainingTypeReference(typeHavingNode)) {
             if (hasInitializer(typeHavingNode)) {
