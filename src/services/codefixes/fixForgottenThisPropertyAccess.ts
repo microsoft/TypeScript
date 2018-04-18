@@ -1,7 +1,10 @@
 /* @internal */
 namespace ts.codefix {
     const fixId = "forgottenThisPropertyAccess";
-    const errorCodes = [Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0.code];
+    const errorCodes = [
+        Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0.code,
+        Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0.code,
+    ];
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
