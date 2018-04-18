@@ -21865,6 +21865,11 @@ namespace ts {
                 // If the node had `@property` tags, `typeExpression` would have been set to the first property tag.
                 error(node.name, Diagnostics.JSDoc_typedef_tag_should_either_have_a_type_annotation_or_be_followed_by_property_or_member_tags);
             }
+
+            if (node.name) {
+                checkTypeNameIsReserved(node.name, Diagnostics.Type_alias_name_cannot_be_0);
+            }
+            checkSourceElement(node.typeExpression);
         }
 
         function checkJSDocParameterTag(node: JSDocParameterTag) {
@@ -24765,6 +24770,7 @@ namespace ts {
                 case SyntaxKind.JSDocNullableType:
                 case SyntaxKind.JSDocAllType:
                 case SyntaxKind.JSDocUnknownType:
+                case SyntaxKind.JSDocTypeLiteral:
                     checkJSDocTypeIsInJsFile(node);
                     forEachChild(node, checkSourceElement);
                     return;
