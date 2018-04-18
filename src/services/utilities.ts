@@ -1,7 +1,7 @@
 /* @internal */ // Don't expose that we use this
 // Based on lib.es6.d.ts
 interface PromiseConstructor {
-    new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): Promise<T>;
+    new <T>(executor: (resolve: T extends void ? (value?: PromiseLike<void>) => void : (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): Promise<T>;
     reject(reason: any): Promise<never>;
     all<T>(values: (T | PromiseLike<T>)[]): Promise<T[]>;
 }
