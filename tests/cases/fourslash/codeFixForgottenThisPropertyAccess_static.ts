@@ -1,17 +1,25 @@
 /// <reference path='fourslash.ts' />
 
 ////class C {
-////    static m() {
-////        m();
-////    }
+////    static m() { m(); }
+////    n() { m(); }
 ////}
 
 verify.codeFix({
-    description: "Add 'this.' to unresolved variable",
+    description: "Add 'C.' to unresolved variable",
+    index: 0,
     newFileContent:
 `class C {
-    static m() {
-        this.m();
-    }
+    static m() { C.m(); }
+    n() { m(); }
+}`
+});
+
+verify.codeFix({
+    description: "Add 'C.' to unresolved variable",
+    newFileContent:
+`class C {
+    static m() { C.m(); }
+    n() { C.m(); }
 }`
 });
