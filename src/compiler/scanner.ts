@@ -1,6 +1,3 @@
-/// <reference path="core.ts"/>
-/// <reference path="diagnosticInformationMap.generated.ts"/>
-
 namespace ts {
     export type ErrorCallback = (message: DiagnosticMessage, length: number) => void;
 
@@ -330,7 +327,7 @@ namespace ts {
         return result;
     }
 
-    export function getPositionOfLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number {
+    export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number): number {
         return computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character, sourceFile.text);
     }
 
@@ -696,8 +693,6 @@ namespace ts {
                                     // If we are not reducing and we have a truthy result, return it.
                                     return accumulator;
                                 }
-
-                                hasPendingCommentRange = false;
                             }
 
                             pendingPos = startPos;

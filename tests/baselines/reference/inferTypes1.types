@@ -327,6 +327,15 @@ type T62<T> = U extends (infer U)[] ? U : U;  // Error
 >U : U
 >U : No type information available!
 
+type T63<T> = T extends (infer A extends infer B ? infer C : infer D) ? string : number;
+>T63 : T63<T>
+>T : T
+>T : T
+>A : A
+>B : B
+>C : C
+>D : D
+
 type T70<T extends string> = { x: T };
 >T70 : T70<T>
 >T : T

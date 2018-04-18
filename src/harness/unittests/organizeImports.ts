@@ -197,6 +197,16 @@ export const Other = 1;
                 assert.isEmpty(changes);
             });
 
+            testOrganizeImports("Renamed_used",
+                {
+                    path: "/test.ts",
+                    content: `
+import { F1 as EffOne, F2 as EffTwo } from "lib";
+EffOne();
+`,
+                },
+                libFile);
+
             testOrganizeImports("Simple",
                 {
                     path: "/test.ts",
@@ -236,6 +246,24 @@ import D from "lib";
 `,
                 },
                 libFile);
+
+            testOrganizeImports("Unused_false_positive_shorthand_assignment",
+            {
+                    path: "/test.ts",
+                    content: `
+import { x } from "a";
+const o = { x };
+`
+                });
+
+            testOrganizeImports("Unused_false_positive_export_shorthand",
+            {
+                    path: "/test.ts",
+                    content: `
+import { x } from "a";
+export { x };
+`
+                });
 
             testOrganizeImports("MoveToTop",
                 {
@@ -328,6 +356,28 @@ F1();
 `,
                 },
                 libFile);
+
+            testOrganizeImports("UnusedHeaderComment",
+                {
+                    path: "/test.ts",
+                    content: `
+// Header
+import { F1 } from "lib";
+`,
+                },
+                libFile);
+
+            testOrganizeImports("SortHeaderComment",
+                {
+                    path: "/test.ts",
+                    content: `
+// Header
+import "lib2";
+import "lib1";
+`,
+                },
+                { path: "/lib1.ts", content: "" },
+                { path: "/lib2.ts", content: "" });
 
             testOrganizeImports("AmbientModule",
                 {

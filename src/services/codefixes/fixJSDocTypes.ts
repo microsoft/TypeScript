@@ -12,19 +12,17 @@ namespace ts.codefix {
             if (!info) return undefined;
             const { typeNode, type } = info;
             const original = typeNode.getText(sourceFile);
-            const actions = [fix(type, fixIdPlain)];
+            const actions = [fix(type, fixIdPlain, Diagnostics.Change_all_jsdoc_style_types_to_TypeScript)];
             if (typeNode.kind === SyntaxKind.JSDocNullableType) {
                 // for nullable types, suggest the flow-compatible `T | null | undefined`
                 // in addition to the jsdoc/closure-compatible `T | null`
-                actions.push(fix(checker.getNullableType(type, TypeFlags.Undefined), fixIdNullable));
+                actions.push(fix(checker.getNullableType(type, TypeFlags.Undefined), fixIdNullable, Diagnostics.Change_all_jsdoc_style_types_to_TypeScript_and_add_undefined_to_nullable_types));
             }
             return actions;
 
-            function fix(type: Type, fixId: string): CodeFixAction {
-                const newText = checker.typeToString(type);
-                const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Change_0_to_1), [original, newText]);
+            function fix(type: Type, fixId: string, fixAllDescription: DiagnosticMessage): CodeFixAction {
                 const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, typeNode, type, checker));
-                return { description, changes, fixId };
+                return createCodeFixAction("jdocTypes", changes, [Diagnostics.Change_0_to_1, original, checker.typeToString(type)], fixId, fixAllDescription);
             }
         },
         fixIds: [fixIdPlain, fixIdNullable],

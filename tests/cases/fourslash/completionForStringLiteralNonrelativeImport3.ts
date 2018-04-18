@@ -27,12 +27,4 @@
 // @Filename: node_modules/fake-module/repeated.jsx
 //// /*repeatedjsx*/
 
-const kinds = ["import_as", "import_equals", "require"];
-
-for (const kind of kinds) {
-    goTo.marker(kind + "0");
-    verify.completionListContains("ts");
-    verify.completionListContains("tsx");
-    verify.completionListContains("dts");
-    verify.not.completionListItemsCountIsGreaterThan(3);
-}
+verify.completionsAt(["import_as0", "import_equals0", "require0"], ["dts", "js", "jsx", "repeated", "ts", "tsx"], { isNewIdentifierLocation: true });

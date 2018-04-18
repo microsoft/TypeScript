@@ -284,6 +284,7 @@ namespace ts {
         IndexedAccessType,
         MappedType,
         LiteralType,
+        ImportType,
         // Binding patterns
         ObjectBindingPattern,
         ArrayBindingPattern,
@@ -445,7 +446,7 @@ namespace ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypePredicate,
-        LastTypeNode = LiteralType,
+        LastTypeNode = ImportType,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
@@ -699,12 +700,13 @@ namespace ts {
         Loop = 2,                           // Automatically generated identifier with a preference for '_i'.
         Unique = 3,                         // Unique name based on the 'text' property.
         Node = 4,                           // Unique name based on the node in the 'original' property.
-        OptimisticUnique = 5,               // Unique name based on the 'text' property, first instance won't use '_#' if there's no conflict
         KindMask = 7,                       // Mask to extract the kind of identifier from its flags.
 
         // Flags
         SkipNameGenerationScope = 1 << 3,   // Should skip a name generation scope when generating the name for this identifier
         ReservedInNestedScopes = 1 << 4,    // Reserve the generated name in nested scopes
+        Optimistic = 1 << 5,                // First instance won't use '_#' if there's no conflict
+        FileLevel = 1 << 6,                 // Use only the file identifiers list and not generated names to search for conflicts
     }
 
     export interface Identifier extends PrimaryExpression, Declaration {
@@ -877,6 +879,7 @@ namespace ts {
 
     export interface PropertyDeclaration extends ClassElement, JSDocContainer {
         kind: SyntaxKind.PropertyDeclaration;
+        parent: ClassLikeDeclaration;
         name: PropertyName;
         questionToken?: QuestionToken;      // Present for use with reporting a grammar error
         exclamationToken?: ExclamationToken;
@@ -990,7 +993,7 @@ namespace ts {
 
     export interface MethodSignature extends SignatureDeclarationBase, TypeElement {
         kind: SyntaxKind.MethodSignature;
-        parent?: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
+        parent?: ObjectTypeDeclaration;
         name: PropertyName;
     }
 
@@ -1045,7 +1048,7 @@ namespace ts {
 
     export interface IndexSignatureDeclaration extends SignatureDeclarationBase, ClassElement, TypeElement {
         kind: SyntaxKind.IndexSignature;
-        parent?: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
+        parent?: ObjectTypeDeclaration;
     }
 
     export interface TypeNode extends Node {
@@ -1066,6 +1069,16 @@ namespace ts {
             | SyntaxKind.NeverKeyword;
     }
 
+    export interface ImportTypeNode extends NodeWithTypeArguments {
+        kind: SyntaxKind.ImportType;
+        isTypeOf?: boolean;
+        argument: TypeNode;
+        qualifier?: EntityName;
+    }
+
+    /* @internal */
+    export type LiteralImportTypeNode = ImportTypeNode & { argument: LiteralTypeNode & { literal: StringLiteral } };
+
     export interface ThisTypeNode extends TypeNode {
         kind: SyntaxKind.ThisType;
     }
@@ -1080,12 +1093,15 @@ namespace ts {
         kind: SyntaxKind.ConstructorType;
     }
 
+    export interface NodeWithTypeArguments extends TypeNode {
+        typeArguments?: NodeArray<TypeNode>;
+    }
+
     export type TypeReferenceType = TypeReferenceNode | ExpressionWithTypeArguments;
 
-    export interface TypeReferenceNode extends TypeNode {
+    export interface TypeReferenceNode extends NodeWithTypeArguments {
         kind: SyntaxKind.TypeReference;
         typeName: EntityName;
-        typeArguments?: NodeArray<TypeNode>;
     }
 
     export interface TypePredicateNode extends TypeNode {
@@ -1695,11 +1711,10 @@ namespace ts {
         expression: ImportExpression;
     }
 
-    export interface ExpressionWithTypeArguments extends TypeNode {
+    export interface ExpressionWithTypeArguments extends NodeWithTypeArguments {
         kind: SyntaxKind.ExpressionWithTypeArguments;
         parent?: HeritageClause;
         expression: LeftHandSideExpression;
-        typeArguments?: NodeArray<TypeNode>;
     }
 
     export interface NewExpression extends PrimaryExpression, Declaration {
@@ -1768,6 +1783,7 @@ namespace ts {
         kind: SyntaxKind.JsxOpeningElement;
         parent?: JsxElement;
         tagName: JsxTagNameExpression;
+        typeArguments?: NodeArray<TypeNode>;
         attributes: JsxAttributes;
     }
 
@@ -1775,6 +1791,7 @@ namespace ts {
     export interface JsxSelfClosingElement extends PrimaryExpression {
         kind: SyntaxKind.JsxSelfClosingElement;
         tagName: JsxTagNameExpression;
+        typeArguments?: NodeArray<TypeNode>;
         attributes: JsxAttributes;
     }
 
@@ -2023,6 +2040,8 @@ namespace ts {
         variableDeclaration?: VariableDeclaration;
         block: Block;
     }
+
+    export type ObjectTypeDeclaration = ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
 
     export type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag;
 
@@ -2509,7 +2528,7 @@ namespace ts {
         /**
          * If two source files are for the same version of the same package, one will redirect to the other.
          * (See `createRedirectSourceFile` in program.ts.)
-         * The redirect will have this set. The other will not have anything set, but see Program#sourceFileIsRedirectedTo.
+         * The redirect will have this set. The redirected-to source file will be in `redirectTargetsSet`.
          */
         /* @internal */ redirectInfo?: RedirectInfo | undefined;
 
@@ -2586,6 +2605,7 @@ namespace ts {
         sourceFiles: ReadonlyArray<SourceFile>;
         /* @internal */ syntheticFileReferences?: ReadonlyArray<FileReference>;
         /* @internal */ syntheticTypeReferences?: ReadonlyArray<FileReference>;
+        /* @internal */ hasNoDefaultLib?: boolean;
     }
 
     export interface JsonSourceFile extends SourceFile {
@@ -2667,6 +2687,7 @@ namespace ts {
         getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
         getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
         getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getConfigFileParsingDiagnostics(): ReadonlyArray<Diagnostic>;
 
         /**
          * Gets a type checker that can be used to semantically analyze source files in the program.
@@ -2774,7 +2795,7 @@ namespace ts {
         getCompilerOptions(): CompilerOptions;
 
         getSourceFiles(): ReadonlyArray<SourceFile>;
-        getSourceFile(fileName: string): SourceFile;
+        getSourceFile(fileName: string): SourceFile | undefined;
         getResolvedTypeReferenceDirectives(): ReadonlyMap<ResolvedTypeReferenceDirective>;
     }
 
@@ -2819,6 +2840,10 @@ namespace ts {
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolAtLocation(node: Node): Symbol | undefined;
         getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: string): Symbol[];
+        /**
+         * The function returns the value (local variable) symbol of an identifier in the short-hand property assignment.
+         * This is necessary as an identifier in short-hand property assignment can contains two meaning: property name and property value.
+         */
         getShorthandAssignmentValueSymbol(location: Node): Symbol | undefined;
         getExportSpecifierLocalTargetSymbol(location: ExportSpecifier): Symbol | undefined;
         /**
@@ -2870,9 +2895,9 @@ namespace ts {
         /* @internal */ getMergedSymbol(symbol: Symbol): Symbol;
 
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
-        isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
+        isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): boolean;
         /** Exclude accesses to private properties or methods with a `this` parameter that `type` doesn't satisfy. */
-        /* @internal */ isValidPropertyAccessForCompletions(node: PropertyAccessExpression, type: Type, property: Symbol): boolean;
+        /* @internal */ isValidPropertyAccessForCompletions(node: PropertyAccessExpression | ImportTypeNode, type: Type, property: Symbol): boolean;
         /** Follow all aliases to get the original symbol. */
         getAliasedSymbol(symbol: Symbol): Symbol;
         /** Follow a *single* alias to get the immediately aliased symbol. */
@@ -2895,6 +2920,7 @@ namespace ts {
         getApparentType(type: Type): Type;
         getSuggestionForNonexistentProperty(node: Identifier, containingType: Type): string | undefined;
         getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
+        getSuggestionForNonexistentModule(node: Identifier, target: Symbol): string | undefined;
         getBaseConstraintOfType(type: Type): Type | undefined;
         getDefaultFromTypeParameter(type: Type): Type | undefined;
 
@@ -3167,15 +3193,19 @@ namespace ts {
     export type AnyValidImportOrReExport =
         | (ImportDeclaration | ExportDeclaration) & { moduleSpecifier: StringLiteral }
         | ImportEqualsDeclaration & { moduleReference: ExternalModuleReference & { expression: StringLiteral } }
-        | RequireOrImportCall;
+        | RequireOrImportCall
+        | ImportTypeNode & { argument: LiteralType };
 
     /* @internal */
     export type RequireOrImportCall = CallExpression & { arguments: [StringLiteralLike] };
 
     /* @internal */
+    export type LateVisibilityPaintedStatement = AnyImportSyntax | VariableStatement;
+
+    /* @internal */
     export interface SymbolVisibilityResult {
         accessibility: SymbolAccessibility;
-        aliasesToMakeVisible?: AnyImportSyntax[]; // aliases that need to have this symbol visible
+        aliasesToMakeVisible?: LateVisibilityPaintedStatement[]; // aliases that need to have this symbol visible
         errorSymbolName?: string; // Optional symbol name that results in error
         errorNode?: Node; // optional node that results in error
     }
@@ -3236,7 +3266,7 @@ namespace ts {
         isOptionalParameter(node: ParameterDeclaration): boolean;
         moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
         isArgumentsLocalBinding(node: Identifier): boolean;
-        getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration): SourceFile;
+        getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode): SourceFile;
         getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): string[];
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[];
         isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
@@ -3732,6 +3762,8 @@ namespace ts {
         /* @internal */
         resolvedIndexType: IndexType;
         /* @internal */
+        resolvedDeclaredIndexType: IndexType;
+        /* @internal */
         resolvedBaseConstraint: Type;
         /* @internal */
         couldContainTypeVariables: boolean;
@@ -3818,6 +3850,8 @@ namespace ts {
         resolvedBaseConstraint?: Type;
         /* @internal */
         resolvedIndexType?: IndexType;
+        /* @internal */
+        resolvedDeclaredIndexType?: IndexType;
     }
 
     // Type parameters (TypeFlags.TypeParameter)
@@ -3845,8 +3879,12 @@ namespace ts {
         constraint?: Type;
     }
 
+    export type TypeVariable = TypeParameter | IndexedAccessType;
+
     // keyof T types (TypeFlags.Index)
     export interface IndexType extends InstantiableType {
+        /* @internal */
+        isDeclaredType?: boolean;
         type: InstantiableType | UnionOrIntersectionType;
     }
 
@@ -3872,18 +3910,22 @@ namespace ts {
         resolvedTrueType?: Type;
         resolvedFalseType?: Type;
         /* @internal */
+        resolvedDefaultConstraint?: Type;
+        /* @internal */
         mapper?: TypeMapper;
+        /* @internal */
+        combinedMapper?: TypeMapper;
     }
 
     // Type parameter substitution (TypeFlags.Substitution)
-    // Substitution types are created for type parameter references that occur in the true branch
-    // of a conditional type. For example, in 'T extends string ? Foo<T> : Bar<T>', the reference to
-    // T in Foo<T> is resolved as a substitution type that substitutes 'string & T' for T. Thus, if
-    // Foo has a 'string' constraint on its type parameter, T will satisfy it. Substitution types
-    // disappear upon instantiation (just like type parameters).
+    // Substitution types are created for type parameters or indexed access types that occur in the
+    // true branch of a conditional type. For example, in 'T extends string ? Foo<T> : Bar<T>', the
+    // reference to T in Foo<T> is resolved as a substitution type that substitutes 'string & T' for T.
+    // Thus, if Foo has a 'string' constraint on its type parameter, T will satisfy it. Substitution
+    // types disappear upon instantiation (just like type parameters).
     export interface SubstitutionType extends InstantiableType {
-        typeParameter: TypeParameter;  // Target type parameter
-        substitute: Type;              // Type to substitute for type parameter
+        typeVariable: TypeVariable;  // Target type variable
+        substitute: Type;            // Type to substitute for type parameter
     }
 
     export const enum SignatureKind {
@@ -3935,7 +3977,7 @@ namespace ts {
     export interface IndexInfo {
         type: Type;
         isReadonly: boolean;
-        declaration?: SignatureDeclaration;
+        declaration?: IndexSignatureDeclaration;
     }
 
     /* @internal */
@@ -4036,6 +4078,7 @@ namespace ts {
         category: DiagnosticCategory;
         code: number;
         message: string;
+        reportsUnnecessary?: {};
     }
 
     /**
@@ -4057,6 +4100,8 @@ namespace ts {
         length: number | undefined;
         messageText: string | DiagnosticMessageChain;
         category: DiagnosticCategory;
+        /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
+        reportsUnnecessary?: {};
         code: number;
         source?: string;
     }
@@ -4099,6 +4144,7 @@ namespace ts {
         /** configFile is set as non enumerable property so as to avoid checking of json source files */
         /* @internal */ readonly configFile?: JsonSourceFile;
         declaration?: boolean;
+        declarationMap?: boolean;
         emitDeclarationOnly?: boolean;
         declarationDir?: string;
         /* @internal */ diagnostics?: boolean;
@@ -4741,11 +4787,16 @@ namespace ts {
     }
 
     export interface EmitHelper {
-        readonly name: string;      // A unique name for this helper.
-        readonly scoped: boolean;   // Indicates whether the helper MUST be emitted in the current scope.
-        readonly text: string;      // ES3-compatible raw script text.
-        readonly priority?: number; // Helpers with a higher priority are emitted earlier than other helpers on the node.
+        readonly name: string;                                          // A unique name for this helper.
+        readonly scoped: boolean;                                       // Indicates whether the helper MUST be emitted in the current scope.
+        readonly text: string | ((node: EmitHelperUniqueNameCallback) => string);  // ES3-compatible raw script text, or a function yielding such a string
+        readonly priority?: number;                                     // Helpers with a higher priority are emitted earlier than other helpers on the node.
     }
+
+    /* @internal */
+    export type UniqueNameHandler = (baseName: string, checkFn?: (name: string) => boolean, optimistic?: boolean) => string;
+
+    export type EmitHelperUniqueNameCallback = (name: string) => string;
 
     /**
      * Used by the checker, this enum keeps track of external emit helpers that should be type
@@ -5010,7 +5061,6 @@ namespace ts {
         /*@internal*/ onEmitSourceMapOfNode?: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
         /*@internal*/ onEmitSourceMapOfToken?: (node: Node, token: SyntaxKind, writer: (s: string) => void, pos: number, emitCallback: (token: SyntaxKind, writer: (s: string) => void, pos: number) => number) => number;
         /*@internal*/ onEmitSourceMapOfPosition?: (pos: number) => void;
-        /*@internal*/ onEmitHelpers?: (node: Node, writeLines: (text: string) => void) => void;
         /*@internal*/ onSetSourceFile?: (node: SourceFile) => void;
         /*@internal*/ onBeforeEmitNodeArray?: (nodes: NodeArray<any>) => void;
         /*@internal*/ onAfterEmitNodeArray?: (nodes: NodeArray<any>) => void;
@@ -5022,6 +5072,9 @@ namespace ts {
         removeComments?: boolean;
         newLine?: NewLineKind;
         omitTrailingSemicolon?: boolean;
+        noEmitHelpers?: boolean;
+        /*@internal*/ module?: CompilerOptions["module"];
+        /*@internal*/ target?: CompilerOptions["target"];
         /*@internal*/ sourceMap?: boolean;
         /*@internal*/ inlineSourceMap?: boolean;
         /*@internal*/ extendedDiagnostics?: boolean;
@@ -5080,14 +5133,7 @@ namespace ts {
         // Otherwise, returns all the diagnostics (global and file associated) in this collection.
         getDiagnostics(fileName?: string): Diagnostic[];
 
-        // Gets a count of how many times this collection has been modified.  This value changes
-        // each time 'add' is called (regardless of whether or not an equivalent diagnostic was
-        // already in the collection).  As such, it can be used as a simple way to tell if any
-        // operation caused diagnostics to be returned by storing and comparing the return value
-        // of this method before/after the operation is performed.
-        getModificationCount(): number;
-
-        /* @internal */ reattachFileDiagnostics(newFile: SourceFile): void;
+        reattachFileDiagnostics(newFile: SourceFile): void;
     }
 
     // SyntaxKind.SyntaxList
@@ -5159,7 +5205,7 @@ namespace ts {
         VariableDeclarationList = CommaDelimited | SpaceBetweenSiblings | SingleLine,
         SingleLineFunctionBodyStatements = SingleLine | SpaceBetweenSiblings | SpaceBetweenBraces,
         MultiLineFunctionBodyStatements = MultiLine,
-        ClassHeritageClauses = SingleLine | SpaceBetweenSiblings,
+        ClassHeritageClauses = SingleLine,
         ClassMembers = Indented | MultiLine,
         InterfaceMembers = Indented | MultiLine,
         EnumMembers = CommaDelimited | Indented | MultiLine,

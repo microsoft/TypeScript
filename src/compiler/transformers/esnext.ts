@@ -1,7 +1,3 @@
-/// <reference path="../factory.ts" />
-/// <reference path="../visitor.ts" />
-/// <reference path="es2017.ts" />
-
 /*@internal*/
 namespace ts {
     const enum ESNextSubstitutionFlags {
@@ -303,6 +299,11 @@ namespace ts {
                     addRange(statements, node.statement.statements);
                     bodyLocation = node.statement;
                     statementsLocation = node.statement.statements;
+                }
+                else if (node.statement) {
+                    append(statements, node.statement);
+                    bodyLocation = node.statement;
+                    statementsLocation = node.statement;
                 }
                 return updateForOf(
                     node,

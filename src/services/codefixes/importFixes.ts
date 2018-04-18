@@ -33,10 +33,9 @@ namespace ts.codefix {
         preferences: UserPreferences;
     }
 
-    function createCodeAction(descriptionDiagnostic: DiagnosticMessage, diagnosticArgs: string[], changes: FileTextChanges[]): CodeFixAction {
-        const description = formatMessage.apply(undefined, [undefined, descriptionDiagnostic].concat(<any[]>diagnosticArgs));
+    function createCodeAction(descriptionDiagnostic: DiagnosticMessage, diagnosticArgs: [string, string], changes: FileTextChanges[]): CodeFixAction {
         // TODO: GH#20315
-        return { description, changes, fixId: undefined };
+        return createCodeFixActionNoFixId("import", changes, [descriptionDiagnostic, ...diagnosticArgs] as [DiagnosticMessage, string, string]);
     }
 
     function convertToImportCodeFixContext(context: CodeFixContext, symbolToken: Node, symbolName: string): ImportCodeFixContext {
@@ -99,18 +98,18 @@ namespace ts.codefix {
         symbolToken: Node | undefined,
         preferences: UserPreferences,
     ): { readonly moduleSpecifier: string, readonly codeAction: CodeAction } {
-        const exportInfos = getAllReExportingModules(exportedSymbol, checker, allSourceFiles);
+        const exportInfos = getAllReExportingModules(exportedSymbol, symbolName, checker, allSourceFiles);
         Debug.assert(exportInfos.some(info => info.moduleSymbol === moduleSymbol));
         // We sort the best codefixes first, so taking `first` is best for completions.
         const moduleSpecifier = first(getNewImportInfos(program, sourceFile, exportInfos, compilerOptions, getCanonicalFileName, host, preferences)).moduleSpecifier;
         const ctx: ImportCodeFixContext = { host, program, checker, compilerOptions, sourceFile, formatContext, symbolName, getCanonicalFileName, symbolToken, preferences };
         return { moduleSpecifier, codeAction: first(getCodeActionsForImport(exportInfos, ctx)) };
     }
-    function getAllReExportingModules(exportedSymbol: Symbol, checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>): ReadonlyArray<SymbolExportInfo> {
+    function getAllReExportingModules(exportedSymbol: Symbol, symbolName: string, checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>): ReadonlyArray<SymbolExportInfo> {
         const result: SymbolExportInfo[] = [];
         forEachExternalModule(checker, allSourceFiles, moduleSymbol => {
             for (const exported of checker.getExportsOfModule(moduleSymbol)) {
-                if (skipAlias(exported, checker) === exportedSymbol) {
+                if (exported.escapedName === InternalSymbolName.Default || exported.name === symbolName && skipAlias(exported, checker) === exportedSymbol) {
                     const isDefaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol) === exported;
                     result.push({ moduleSymbol, importKind: isDefaultExport ? ImportKind.Default : ImportKind.Named });
                 }
@@ -241,6 +240,7 @@ namespace ts.codefix {
         preferences: UserPreferences,
     ): ReadonlyArray<NewImportInfo> {
         const { baseUrl, paths, rootDirs } = compilerOptions;
+        const moduleResolutionKind = getEmitModuleResolutionKind(compilerOptions);
         const addJsExtension = usesJsExtensionOnImports(sourceFile);
         const choicesForEachExportingModule = flatMap<SymbolExportInfo, NewImportInfo[]>(moduleSymbols, ({ moduleSymbol, importKind }) => {
             const modulePathsGroups = getAllModulePaths(program, moduleSymbol.valueDeclaration.getSourceFile()).map(moduleFileName => {
@@ -253,7 +253,7 @@ namespace ts.codefix {
                     return [global];
                 }
 
-                const relativePath = removeExtensionAndIndexPostFix(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName), compilerOptions, addJsExtension);
+                const relativePath = removeExtensionAndIndexPostFix(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName), moduleResolutionKind, addJsExtension);
                 if (!baseUrl || preferences.importModuleSpecifierPreference === "relative") {
                     return [relativePath];
                 }
@@ -263,7 +263,7 @@ namespace ts.codefix {
                     return [relativePath];
                 }
 
-                const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, compilerOptions, addJsExtension);
+                const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, moduleResolutionKind, addJsExtension);
                 if (paths) {
                     const fromPaths = tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
                     if (fromPaths) {
@@ -391,7 +391,8 @@ namespace ts.codefix {
         return firstDefined(roots, unNormalizedTypeRoot => {
             const typeRoot = toPath(unNormalizedTypeRoot, /*basePath*/ undefined, getCanonicalFileName);
             if (startsWith(moduleFileName, typeRoot)) {
-                return removeExtensionAndIndexPostFix(moduleFileName.substring(typeRoot.length + 1), options, addJsExtension);
+                // For a type definition, we can strip `/index` even with classic resolution.
+                return removeExtensionAndIndexPostFix(moduleFileName.substring(typeRoot.length + 1), ModuleResolutionKind.NodeJs, addJsExtension);
             }
         });
     }
@@ -528,11 +529,11 @@ namespace ts.codefix {
         });
     }
 
-    function removeExtensionAndIndexPostFix(fileName: string, options: CompilerOptions, addJsExtension: boolean): string {
+    function removeExtensionAndIndexPostFix(fileName: string, moduleResolutionKind: ModuleResolutionKind, addJsExtension: boolean): string {
         const noExtension = removeFileExtension(fileName);
         return addJsExtension
             ? noExtension + ".js"
-            : getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeJs
+            : moduleResolutionKind === ModuleResolutionKind.NodeJs
                 ? removeSuffix(noExtension, "/index")
                 : noExtension;
     }
@@ -640,13 +641,13 @@ namespace ts.codefix {
         return createCodeAction(Diagnostics.Change_0_to_1, [symbolName, `${namespacePrefix}.${symbolName}`], changes);
     }
 
-    function getImportCodeActions(context: CodeFixContext): CodeAction[] {
+    function getImportCodeActions(context: CodeFixContext): CodeFixAction[] {
         return context.errorCode === Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code
             ? getActionsForUMDImport(context)
             : getActionsForNonUMDImport(context);
     }
 
-    function getActionsForUMDImport(context: CodeFixContext): CodeAction[] {
+    function getActionsForUMDImport(context: CodeFixContext): CodeFixAction[] {
         const token = getTokenAtPosition(context.sourceFile, context.span.start, /*includeJsDocComment*/ false);
         const checker = context.program.getTypeChecker();
 
@@ -702,18 +703,18 @@ namespace ts.codefix {
         }
     }
 
-    function getActionsForNonUMDImport(context: CodeFixContext): CodeAction[] {
+    function getActionsForNonUMDImport(context: CodeFixContext): CodeFixAction[] | undefined {
         // This will always be an Identifier, since the diagnostics we fix only fail on identifiers.
         const { sourceFile, span, program, cancellationToken } = context;
         const checker = program.getTypeChecker();
         const symbolToken = getTokenAtPosition(sourceFile, span.start, /*includeJsDocComment*/ false);
-        const isJsxNamespace = isJsxOpeningLikeElement(symbolToken.parent) && symbolToken.parent.tagName === symbolToken;
-        if (!isJsxNamespace && !isIdentifier(symbolToken)) {
-            return undefined;
-        }
-        const symbolName = isJsxNamespace ? checker.getJsxNamespace() : (<Identifier>symbolToken).text;
-        const allSourceFiles = program.getSourceFiles();
-        const compilerOptions = program.getCompilerOptions();
+        // If we're at `<Foo/>`, we must check if `Foo` is already in scope, and if so, get an import for `React` instead.
+        const symbolName = isJsxOpeningLikeElement(symbolToken.parent)
+            && symbolToken.parent.tagName === symbolToken
+            && (!isIdentifier(symbolToken) || isIntrinsicJsxName(symbolToken.text) || checker.resolveName(symbolToken.text, symbolToken, SymbolFlags.All, /*excludeGlobals*/ false))
+            ? checker.getJsxNamespace()
+            : isIdentifier(symbolToken) ? symbolToken.text : undefined;
+        if (!symbolName) return undefined;
 
         // "default" is a keyword and not a legal identifier for the import, so we don't expect it here
         Debug.assert(symbolName !== "default");
@@ -725,7 +726,7 @@ namespace ts.codefix {
         function addSymbol(moduleSymbol: Symbol, exportedSymbol: Symbol, importKind: ImportKind): void {
             originalSymbolToExportInfos.add(getUniqueSymbolId(exportedSymbol, checker).toString(), { moduleSymbol, importKind });
         }
-        forEachExternalModuleToImportFrom(checker, sourceFile, allSourceFiles, moduleSymbol => {
+        forEachExternalModuleToImportFrom(checker, sourceFile, program.getSourceFiles(), moduleSymbol => {
             cancellationToken.throwIfCancellationRequested();
 
             // check the default export
@@ -735,7 +736,7 @@ namespace ts.codefix {
                 if ((
                         localSymbol && localSymbol.escapedName === symbolName ||
                         getEscapedNameForExportDefault(defaultExport) === symbolName ||
-                        moduleSymbolToValidIdentifier(moduleSymbol, compilerOptions.target) === symbolName
+                        moduleSymbolToValidIdentifier(moduleSymbol, program.getCompilerOptions().target) === symbolName
                     ) && checkSymbolHasMeaning(localSymbol || defaultExport, currentTokenMeaning)) {
                     addSymbol(moduleSymbol, localSymbol || defaultExport, ImportKind.Default);
                 }

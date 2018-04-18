@@ -37,5 +37,5 @@ export interface Thing { n: typeof x }
 >x : number
 
 export as namespace Foo;
->Foo : typeof "tests/cases/conformance/externalModules/foo"
+>Foo : typeof import("tests/cases/conformance/externalModules/foo")
 

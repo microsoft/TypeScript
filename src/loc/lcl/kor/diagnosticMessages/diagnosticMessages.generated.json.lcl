@@ -639,6 +639,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma_1013" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A rest parameter or binding pattern may not have a trailing comma.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[rest 매개 변수 또는 바인딩 패턴에 후행 쉼표를 사용할 수 없습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";A_return_statement_can_only_be_used_within_a_function_body_1108" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A 'return' statement can only be used within a function body.]]></Val>
@@ -894,6 +903,33 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_all_missing_async_modifiers_95041" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add all missing 'async' modifiers]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[누락된 모든 'async' 한정자 추가]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_all_missing_members_95022" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add all missing members]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[누락된 모든 멤버 추가]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_all_missing_super_calls_95039" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add all missing super calls]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[누락된 모든 super 호출 추가]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Add_async_modifier_to_containing_function_90029" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add async modifier to containing function]]></Val>
@@ -908,6 +944,15 @@
           <Val><![CDATA[Add definite assignment assertion to property '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' 속성에 한정된 할당 어설션 추가]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_definite_assignment_assertions_to_all_uninitialized_properties_95028" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add definite assignment assertions to all uninitialized properties]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[초기화되지 않은 모든 속성에 한정된 할당 어설션 추가]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -933,6 +978,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_initializers_to_all_uninitialized_properties_95027" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add initializers to all uninitialized properties]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[초기화되지 않은 모든 속성에 이니셜라이저 추가]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Add_missing_super_call_90001" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add missing 'super()' call]]></Val>
@@ -945,6 +999,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_this_to_all_unresolved_variables_matching_a_member_name_95037" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add 'this.' to all unresolved variables matching a member name]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[멤버 이름과 일치하는 모든 확인되지 않은 변수에 'this.' 추가]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Add_this_to_unresolved_variable_90008" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add 'this.' to unresolved variable]]></Val>
@@ -954,6 +1017,33 @@
           <Prev Cat="Text">
             <Val><![CDATA[Add 'this.' to unresolved variable.]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_to_all_uncalled_decorators_95044" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add '()' to all uncalled decorators]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[호출되지 않는 모든 데코레이터에 '()' 추가]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_ts_ignore_to_all_error_messages_95042" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add '@ts-ignore' to all error messages]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[모든 오류 메시지에 '@ts-ignore' 추가]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_undefined_type_to_all_uninitialized_properties_95029" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add undefined type to all uninitialized properties]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[초기화되지 않은 모든 속성에 정의되지 않은 형식 추가]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1457,6 +1547,15 @@
           <Val><![CDATA[An unary expression with the '{0}' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[지수 식의 왼쪽에는 '{0}' 연산자가 있는 단항 식을 사용할 수 없습니다. 식을 괄호로 묶는 것이 좋습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Annotate_everything_with_types_from_JSDoc_95043" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Annotate everything with types from JSDoc]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[JSDoc의 형식을 사용하여 모든 항목에 주석 달기]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2082,6 +2181,33 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Change_all_extended_interfaces_to_implements_95038" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Change all extended interfaces to 'implements']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[확장된 모든 인터페이스를 'implements'로 변경]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Change_all_jsdoc_style_types_to_TypeScript_95030" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Change all jsdoc-style types to TypeScript]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[모든 jsdoc-style 형식을 TypeScript로 변경]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Change_all_jsdoc_style_types_to_TypeScript_and_add_undefined_to_nullable_types_95031" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Change all jsdoc-style types to TypeScript (and add '| undefined' to nullable types)]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[모든 jsdoc-style 형식을 TypeScript로 변경(그리고 nullable 형식에 '| undefined' 추가)]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Change_extends_to_implements_90003" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Change 'extends' to 'implements']]></Val>
@@ -2388,6 +2514,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Convert_all_constructor_functions_to_classes_95045" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert all constructor functions to classes]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[모든 생성자 함수를 클래스로 변환]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_all_to_default_imports_95035" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert all to default imports]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[모든 항목을 기본 가져오기로 변환]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Convert_function_0_to_class_95002" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert function '{0}' to class]]></Val>
@@ -2561,6 +2705,15 @@
           <Val><![CDATA[Default export of the module has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[모듈의 기본 내보내기에서 전용 이름 '{0}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Delete_all_unused_declarations_95024" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Delete all unused declarations]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[사용하지 않는 선언 모두 삭제]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3609,6 +3762,33 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Fix_all_detected_spelling_errors_95026" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Fix all detected spelling errors]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[검색된 맞춤법 오류 모두 수정]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Found_0_errors_6194" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Found {0} errors.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{0}개 오류가 발견되었습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Found_1_error_6193" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Found 1 error.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[1개 오류가 발견되었습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Found_package_json_at_0_6099" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Found 'package.json' at '{0}'.]]></Val>
@@ -3713,6 +3893,24 @@
           <Val><![CDATA[Function overload must not be static.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[함수 오버로드는 정적이 아니어야 합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Generate_get_and_set_accessors_95046" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Generate 'get' and 'set' accessors]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['get' 및 'set' 접근자 생성]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Generates_a_sourcemap_for_each_corresponding_d_ts_file_6000" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Generates a sourcemap for each corresponding '.d.ts' file.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[해당하는 각 '.d.ts' 파일의 sourcemap을 생성합니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3912,6 +4110,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Implement_all_inherited_abstract_classes_95040" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Implement all inherited abstract classes]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[상속된 추상 클래스 모두 구현]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Implement_all_unimplemented_interfaces_95032" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Implement all unimplemented interfaces]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[구현되지 않은 인터페이스 모두 구현]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Implement_inherited_abstract_class_90007" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Implement inherited abstract class]]></Val>
@@ -4107,6 +4323,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Infer_all_types_from_usage_95023" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Infer all types from usage]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[사용량에서 모든 형식 유추]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Infer_parameter_types_from_usage_95012" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Infer parameter types from usage]]></Val>
@@ -4214,6 +4439,15 @@
           <Val><![CDATA[Install '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' 설치]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Install_all_missing_types_packages_95033" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Install all missing types packages]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[누락된 형식 패키지 모두 설치]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4707,6 +4941,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Make_all_super_calls_the_first_statement_in_their_constructor_95036" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Make all 'super()' calls the first statement in their constructor]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[모든 'super()' 호출을 생성자의 첫 번째 문으로 만들기]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Make_super_call_the_first_statement_in_the_constructor_90002" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Make 'super()' call the first statement in the constructor]]></Val>
@@ -4796,6 +5039,24 @@
           <Val><![CDATA[Modifiers cannot appear here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[한정자를 여기에 표시할 수 없습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Module_0_does_not_refer_to_a_type_but_is_used_as_a_type_here_1340" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Module '{0}' does not refer to a type, but is used as a type here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[모듈 '{0}'은(는) 형식을 참조하지 않지만, 여기에서 형식으로 사용됩니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Module_0_does_not_refer_to_a_value_but_is_used_as_a_value_here_1339" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Module '{0}' does not refer to a value, but is used as a value here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[모듈 '{0}'은(는) 값을 참조하지 않지만, 여기에서 값으로 사용됩니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5277,6 +5538,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Option_0_cannot_be_specified_without_specifying_option_1_or_option_2_5069" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Option '{0}' cannot be specified without specifying option '{1}' or option '{2}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{1}' 또는 '{2}' 옵션을 지정하지 않고 '{0}' 옵션을 지정할 수 없습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Option_0_should_have_array_of_strings_as_a_value_6103" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Option '{0}' should have array of strings as a value.]]></Val>
@@ -5682,6 +5952,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Prefix_all_unused_declarations_with_where_possible_95025" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Prefix all unused declarations with '_' where possible]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[가능한 경우 사용하지 않는 모든 선언에 '_'을 접두사로 추가]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Print_names_of_files_part_of_the_compilation_6155" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Print names of files part of the compilation.]]></Val>
@@ -5732,6 +6011,15 @@
           <Val><![CDATA[Property '{0}' does not exist on type '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{1}' 형식에 '{0}' 속성이 없습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Property_0_does_not_exist_on_type_1_Did_you_forget_to_use_await_2570" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Property '{0}' does not exist on type '{1}'. Did you forget to use 'await'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[속성 '{0}'이(가) '{1}' 형식에 없습니다. 'await' 사용을 잊으셨나요?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6579,6 +6867,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Rewrite_all_as_indexed_access_types_95034" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Rewrite all as indexed access types]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[인덱싱된 액세스 형식으로 모두 다시 작성]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Rewrite_as_the_indexed_access_type_0_90026" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Rewrite as the indexed access type '{0}']]></Val>
@@ -7317,11 +7614,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter_2407" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter_but_2407" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.]]></Val>
+          <Val><![CDATA[The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['for...in' 문 오른쪽은 'any' 형식, 개체 형식 또는 형식 매개 변수여야 합니다.]]></Val>
+            <Val><![CDATA['for...in' 문 오른쪽은 'any' 형식, 개체 형식 또는 형식 매개 변수여야 하는데, 여기에 '{0}' 형식이 있습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7641,11 +7938,29 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Type_0_is_not_an_array_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators_2568" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type '{0}' is not an array type. Use compiler option '--downlevelIteration' to allow iterating of iterators.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' 형식이 배열 형식이 아닙니다. 컴파일러 옵션 '-downlevelIteration'을 사용하여 반복기의 반복을 허용하세요.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Type_0_is_not_an_array_type_or_a_string_type_2495" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is not an array type or a string type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' 형식은 배열 형식 또는 문자열 형식이 아닙니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterati_2569" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type '{0}' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' 형식이 배열 형식 또는 문자열 형식이 아닙니다. 컴파일러 옵션 '-downlevelIteration'을 사용하여 반복기의 반복을 허용하세요.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7700,6 +8015,24 @@
           <Val><![CDATA[Type '{0}' is not generic.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' 형식이 제네릭이 아닙니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_0_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator_2504" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type '{0}' must have a '[Symbol.asyncIterator]5D;()' method that returns an async iterator.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' 형식에는 비동기 반복기를 반환하는 '[Symbol.asyncIterator]5D;()' 메서드가 있어야 합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_0_must_have_a_Symbol_iterator_method_that_returns_an_iterator_2488" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type '{0}' must have a '[Symbol.iterator]5D;()' method that returns an iterator.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' 형식에는 반복기를 반환하는 '[Symbol.iterator]5D;()' 메서드가 있어야 합니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7782,6 +8115,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Type_arguments_cannot_be_used_here_1342" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type arguments cannot be used here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[형식 인수를 여기에 사용할 수 없습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Type_declaration_files_to_be_included_in_compilation_6124" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type declaration files to be included in compilation.]]></Val>
@@ -7805,24 +8147,6 @@
           <Val><![CDATA[Type is referenced directly or indirectly in the fulfillment callback of its own 'then' method.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[형식은 자체 'then' 메서드의 처리 콜백에서 직간접적으로 참조됩니다.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Type_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator_2504" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Type must have a '[Symbol.asyncIterator]5D;()' method that returns an async iterator.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[형식에는 비동기 반복기를 반환하는 '[Symbol.asyncIterator]5D;()' 메서드가 있어야 합니다.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Type_must_have_a_Symbol_iterator_method_that_returns_an_iterator_2488" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Type must have a '[Symbol.iterator]5D;()' method that returns an iterator.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[형식에는 반복기를 반환하는 '[Symbol.iterator]5D;()' 메서드가 있어야 합니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

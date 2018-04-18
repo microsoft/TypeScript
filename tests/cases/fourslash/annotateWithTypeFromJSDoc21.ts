@@ -4,19 +4,20 @@
 //// * @return {number}
 //// */
 ////function [|f|](x, y) {
+////    return x + y;
 ////}
 ////
 /////**
 //// * @return {number}
 //// */
 ////function g(x, y): number {
-////    return 0;
+////    return x + y;
 ////}
 /////**
 //// * @param {number} x
 //// */
 ////function h(x: number, y): number {
-////    return 0;
+////    return x + y;
 ////}
 ////
 /////**
@@ -24,13 +25,14 @@
 //// * @param {string} y
 //// */
 ////function i(x: number, y: string) {
+////    return x + y;
 ////}
 /////**
 //// * @param {number} x
 //// * @return {boolean}
 //// */
 ////function j(x: number, y): boolean {
-////    return true;
+////    return x < y;
 ////}
 
 // Only first location triggers a suggestion
@@ -41,24 +43,26 @@ verify.getSuggestionDiagnostics([{
 
 verify.codeFix({
     description: "Annotate with type from JSDoc",
-   newFileContent:
+    errorCode: 80004,
+    newFileContent:
 `/**
  * @return {number}
  */
 function f(x, y): number {
+    return x + y;
 }
 
 /**
  * @return {number}
  */
 function g(x, y): number {
-    return 0;
+    return x + y;
 }
 /**
  * @param {number} x
  */
 function h(x: number, y): number {
-    return 0;
+    return x + y;
 }
 
 /**
@@ -66,12 +70,13 @@ function h(x: number, y): number {
  * @param {string} y
  */
 function i(x: number, y: string) {
+    return x + y;
 }
 /**
  * @param {number} x
  * @return {boolean}
  */
 function j(x: number, y): boolean {
-    return true;
+    return x < y;
 }`,
 });

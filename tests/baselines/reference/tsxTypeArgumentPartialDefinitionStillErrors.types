@@ -1,0 +1,32 @@
+=== tests/cases/compiler/file.tsx ===
+declare namespace JSX {
+>JSX : any
+
+    interface Element {
+>Element : Element
+
+        render(): Element | string | false;
+>render : () => string | false | Element
+>Element : Element
+>false : false
+    }
+}
+
+function SFC<T>(props: Record<string, T>) {
+>SFC : <T>(props: Record<string, T>) => string
+>T : T
+>props : Record<string, T>
+>Record : Record<K, T>
+>T : T
+
+    return '';
+>'' : ""
+}
+
+<SFC<string> prop={1}></SFC>; // should error
+><SFC<string> prop={1}></SFC> : JSX.Element
+>SFC : <T>(props: Record<string, T>) => string
+>prop : number
+>1 : 1
+>SFC : <T>(props: Record<string, T>) => string
+

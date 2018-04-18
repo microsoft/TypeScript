@@ -1,8 +1,3 @@
-/// <reference path="..\compiler\commandLineParser.ts" />
-/// <reference path="..\services\services.ts" />
-/// <reference path="protocol.ts" />
-/// <reference path="editorServices.ts" />
-
 namespace ts.server {
     interface StackTraceError extends Error {
         stack?: string;
@@ -80,6 +75,7 @@ namespace ts.server {
             text: flattenDiagnosticMessageText(diag.messageText, "\n"),
             code: diag.code,
             category: diagnosticCategoryName(diag),
+            reportsUnnecessary: diag.reportsUnnecessary,
             source: diag.source
         };
     }
@@ -96,8 +92,8 @@ namespace ts.server {
         const text = flattenDiagnosticMessageText(diag.messageText, "\n");
         const { code, source } = diag;
         const category = diagnosticCategoryName(diag);
-        return includeFileName ? { start, end, text, code, category, source, fileName: diag.file && diag.file.fileName } :
-            { start, end, text, code, category, source };
+        return includeFileName ? { start, end, text, code, category, source, reportsUnnecessary: diag.reportsUnnecessary, fileName: diag.file && diag.file.fileName } :
+            { start, end, text, code, category, reportsUnnecessary: diag.reportsUnnecessary, source };
     }
 
     export interface PendingErrorCheck {
@@ -295,6 +291,9 @@ namespace ts.server {
          */
         canUseEvents: boolean;
         eventHandler?: ProjectServiceEventHandler;
+        /** Has no effect if eventHandler is also specified. */
+        suppressDiagnosticEvents?: boolean;
+        syntaxOnly?: boolean;
         throttleWaitMilliseconds?: number;
 
         globalPlugins?: ReadonlyArray<string>;
@@ -318,6 +317,7 @@ namespace ts.server {
         protected logger: Logger;
 
         protected canUseEvents: boolean;
+        private suppressDiagnosticEvents?: boolean;
         private eventHandler: ProjectServiceEventHandler;
 
         constructor(opts: SessionOptions) {
@@ -328,6 +328,7 @@ namespace ts.server {
             this.hrtime = opts.hrtime;
             this.logger = opts.logger;
             this.canUseEvents = opts.canUseEvents;
+            this.suppressDiagnosticEvents = opts.suppressDiagnosticEvents;
 
             const { throttleWaitMilliseconds } = opts;
 
@@ -352,9 +353,11 @@ namespace ts.server {
                 typingsInstaller: this.typingsInstaller,
                 throttleWaitMilliseconds,
                 eventHandler: this.eventHandler,
+                suppressDiagnosticEvents: this.suppressDiagnosticEvents,
                 globalPlugins: opts.globalPlugins,
                 pluginProbeLocations: opts.pluginProbeLocations,
-                allowLocalPluginLoads: opts.allowLocalPluginLoads
+                allowLocalPluginLoads: opts.allowLocalPluginLoads,
+                syntaxOnly: opts.syntaxOnly,
             };
             this.projectService = new ProjectService(settings);
             this.gcTimer = new GcTimer(this.host, /*delay*/ 7000, this.logger);
@@ -401,11 +404,12 @@ namespace ts.server {
         private projectsUpdatedInBackgroundEvent(openFiles: string[]): void {
             this.projectService.logger.info(`got projects updated in background, updating diagnostics for ${openFiles}`);
             if (openFiles.length) {
-                const checkList = this.createCheckList(openFiles);
+                if (!this.suppressDiagnosticEvents) {
+                    const checkList = this.createCheckList(openFiles);
 
-                // For now only queue error checking for open files. We can change this to include non open files as well
-                this.errorCheck.startNew(next => this.updateErrorCheck(next, checkList, 100, /*requireOpen*/ true));
-
+                    // For now only queue error checking for open files. We can change this to include non open files as well
+                    this.errorCheck.startNew(next => this.updateErrorCheck(next, checkList, 100, /*requireOpen*/ true));
+                }
 
                 // Send project changed event
                 this.event<protocol.ProjectsUpdatedInBackgroundEventBody>({
@@ -476,7 +480,7 @@ namespace ts.server {
             this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSyntacticDiagnostics(file), "syntaxDiag");
         }
 
-        private infoCheck(file: NormalizedPath, project: Project) {
+        private suggestionCheck(file: NormalizedPath, project: Project) {
             this.sendDiagnosticsEvent(file, project, project.getLanguageService().getSuggestionDiagnostics(file), "suggestionDiag");
         }
 
@@ -489,7 +493,10 @@ namespace ts.server {
             }
         }
 
+        /** It is the caller's responsibility to verify that `!this.suppressDiagnosticEvents`. */
         private updateErrorCheck(next: NextStep, checkList: PendingErrorCheck[], ms: number, requireOpen = true) {
+            Debug.assert(!this.suppressDiagnosticEvents); // Caller's responsibility
+
             const seq = this.changeSeq;
             const followMs = Math.min(ms, 200);
 
@@ -516,12 +523,20 @@ namespace ts.server {
                         return;
                     }
 
-                    next.immediate(() => {
-                        this.infoCheck(fileName, project);
+                    const goNext = () => {
                         if (checkList.length > index) {
                             next.delay(followMs, checkOne);
                         }
-                    });
+                    };
+                    if (this.getPreferences(fileName).disableSuggestions) {
+                        goNext();
+                    }
+                    else {
+                        next.immediate(() => {
+                            this.suggestionCheck(fileName, project);
+                            goNext();
+                        });
+                    }
                 });
             };
 
@@ -1379,6 +1394,10 @@ namespace ts.server {
         }
 
         private getDiagnostics(next: NextStep, delay: number, fileNames: string[]): void {
+            if (this.suppressDiagnosticEvents) {
+                return;
+            }
+
             const checkList = this.createCheckList(fileNames);
             if (checkList.length > 0) {
                 this.updateErrorCheck(next, checkList, delay);
@@ -1644,7 +1663,7 @@ namespace ts.server {
             }
         }
 
-        private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.CodeAction> | ReadonlyArray<CodeAction> {
+        private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.CodeFixAction> | ReadonlyArray<CodeFixAction> {
             if (args.errorCodes.length === 0) {
                 return undefined;
             }
@@ -1654,15 +1673,7 @@ namespace ts.server {
             const { startPosition, endPosition } = this.getStartAndEndPosition(args, scriptInfo);
 
             const codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes, this.getFormatOptions(file), this.getPreferences(file));
-            if (!codeActions) {
-                return undefined;
-            }
-            if (simplifiedResult) {
-                return codeActions.map(codeAction => this.mapCodeAction(project, codeAction));
-            }
-            else {
-                return codeActions;
-            }
+            return simplifiedResult ? codeActions.map(codeAction => this.mapCodeFixAction(project, codeAction)) : codeActions;
         }
 
         private getCombinedCodeFix({ scope, fixId }: protocol.GetCombinedCodeFixRequestArgs, simplifiedResult: boolean): protocol.CombinedCodeActions | CombinedCodeActions {
@@ -1710,9 +1721,12 @@ namespace ts.server {
             return { startPosition, endPosition };
         }
 
-        private mapCodeAction(project: Project, { description, changes: unmappedChanges, commands, fixId }: CodeFixAction): protocol.CodeFixAction {
-            const changes = unmappedChanges.map(change => this.mapTextChangesToCodeEditsUsingScriptinfo(change, project.getScriptInfoForNormalizedPath(toNormalizedPath(change.fileName))));
-            return { description, changes, commands, fixId };
+        private mapCodeAction(project: Project, { description, changes, commands }: CodeAction): protocol.CodeAction {
+            return { description, changes: this.mapTextChangesToCodeEdits(project, changes), commands };
+        }
+
+        private mapCodeFixAction(project: Project, { fixName, description, changes, commands, fixId, fixAllDescription }: CodeFixAction): protocol.CodeFixAction {
+            return { fixName, description, changes: this.mapTextChangesToCodeEdits(project, changes), commands, fixId, fixAllDescription };
         }
 
         private mapTextChangesToCodeEdits(project: Project, textChanges: ReadonlyArray<FileTextChanges>): protocol.FileCodeEdits[] {
@@ -1748,6 +1762,10 @@ namespace ts.server {
         }
 
         private getDiagnosticsForProject(next: NextStep, delay: number, fileName: string): void {
+            if (this.suppressDiagnosticEvents) {
+                return;
+            }
+
             const { fileNames, languageServiceDisabled } = this.getProjectInfoWorker(fileName, /*projectFileName*/ undefined, /*needFileNameList*/ true, /*excludeConfigFiles*/ true);
             if (languageServiceDisabled) {
                 return;

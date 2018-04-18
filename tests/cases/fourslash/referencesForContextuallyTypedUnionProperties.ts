@@ -44,21 +44,8 @@ verify.referenceGroups(bCommon, [
     { definition: "(property) B.common: number", ranges: [bCommon] },
     { definition: "(property) common: string | number", ranges: unionRefs },
 ]);
-
-unionRefs.forEach((unionRef, idx) => {
-    const type = unionRef.marker.data.type;
-    const last2 = [
-        { definition: `(property) common: string | number`, ranges: unionRefs.filter(u => u != unionRef) },
-        { definition: `(property) common: ${type}`, ranges: [unionRef] },
-    ];
-    if (idx === 0) {
-        const tmp = last2[0];
-        last2[0] = last2[1];
-        last2[1] = tmp;
-    }
-    verify.referenceGroups(unionRef, [
-        { definition: "(property) A.common: string", ranges: [aCommon] },
-        { definition: "(property) B.common: number", ranges: [bCommon] },
-        ...last2,
-    ]);
-});
+verify.referenceGroups(unionRefs, [
+    { definition: "(property) A.common: string", ranges: [aCommon] },
+    { definition: "(property) B.common: number", ranges: [bCommon] },
+    { definition: `(property) common: string | number`, ranges: unionRefs },
+]);

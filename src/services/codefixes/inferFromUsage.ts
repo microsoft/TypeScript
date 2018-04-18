@@ -33,10 +33,8 @@ namespace ts.codefix {
             const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
             let declaration!: Declaration;
             const changes = textChanges.ChangeTracker.with(context, changes => { declaration = doChange(changes, sourceFile, token, errorCode, program, cancellationToken); });
-            if (changes.length === 0) return undefined;
-            const name = getNameOfDeclaration(declaration).getText();
-            const description = formatStringFromArgs(getLocaleSpecificMessage(getDiagnostic(errorCode, token)), [name]);
-            return [{ description, changes, fixId }];
+            return changes.length === 0 ? undefined
+                : [createCodeFixAction(fixId, changes, [getDiagnostic(errorCode, token), getNameOfDeclaration(declaration).getText(sourceFile)], fixId, Diagnostics.Infer_all_types_from_usage)];
         },
         fixIds: [fixId],
         getAllCodeActions(context) {
@@ -60,7 +58,7 @@ namespace ts.codefix {
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, errorCode: number, program: Program, cancellationToken: CancellationToken, seenFunctions?: Map<true>): Declaration | undefined {
-        if (!isAllowedTokenKind(token.kind)) {
+        if (!isParameterPropertyModifier(token.kind) && token.kind !== SyntaxKind.Identifier && token.kind !== SyntaxKind.DotDotDotToken) {
             return undefined;
         }
 
@@ -127,20 +125,6 @@ namespace ts.codefix {
         }
     }
 
-    function isAllowedTokenKind(kind: SyntaxKind): boolean {
-        switch (kind) {
-            case SyntaxKind.Identifier:
-            case SyntaxKind.DotDotDotToken:
-            case SyntaxKind.PublicKeyword:
-            case SyntaxKind.PrivateKeyword:
-            case SyntaxKind.ProtectedKeyword:
-            case SyntaxKind.ReadonlyKeyword:
-                return true;
-            default:
-                return false;
-        }
-    }
-
     function annotateVariableDeclaration(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: VariableDeclaration | PropertyDeclaration | PropertySignature, program: Program, cancellationToken: CancellationToken): void {
         if (isIdentifier(declaration.name)) {
             annotate(changes, sourceFile, declaration, inferTypeForVariableFromUsage(declaration.name, program, cancellationToken), program);
@@ -189,7 +173,7 @@ namespace ts.codefix {
 
     function annotate(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: textChanges.TypeAnnotatable, type: Type | undefined, program: Program): void {
         const typeNode = type && getTypeNodeIfAccessible(type, declaration, program.getTypeChecker());
-        if (typeNode) changes.insertTypeAnnotation(sourceFile, declaration, typeNode);
+        if (typeNode) changes.tryInsertTypeAnnotation(sourceFile, declaration, typeNode);
     }
 
     function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, checker: TypeChecker): TypeNode | undefined {

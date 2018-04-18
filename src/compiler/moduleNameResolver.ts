@@ -1,6 +1,3 @@
-/// <reference path="core.ts" />
-/// <reference path="diagnosticInformationMap.generated.ts" />
-
 namespace ts {
     /* @internal */
     export function trace(host: ModuleResolutionHost, message: DiagnosticMessage, ...args: any[]): void;
@@ -117,7 +114,8 @@ namespace ts {
         }
     }
 
-    function readJson(path: string, host: ModuleResolutionHost): PackageJson {
+    /* @internal */
+    export function readJson(path: string, host: { readFile(fileName: string): string | undefined }): object {
         try {
             const jsonText = host.readFile(path);
             return jsonText ? JSON.parse(jsonText) : {};
@@ -300,7 +298,7 @@ namespace ts {
                             // `types-publisher` sometimes creates packages with `"typings": null` for packages that don't provide their own types.
                             // See `createNotNeededPackageJSON` in the types-publisher` repo.
                             // tslint:disable-next-line:no-null-keyword
-                            const isNotNeededPackage = host.fileExists(packageJsonPath) && readJson(packageJsonPath, host).typings === null;
+                            const isNotNeededPackage = host.fileExists(packageJsonPath) && (readJson(packageJsonPath, host) as PackageJson).typings === null;
                             if (!isNotNeededPackage) {
                                 // Return just the type directive names
                                 result.push(getBaseFileName(normalized));
@@ -794,6 +792,7 @@ namespace ts {
         if (traceEnabled) {
             trace(host, Diagnostics.Resolving_real_path_for_0_result_1, path, real);
         }
+        Debug.assert(host.fileExists(real), `${path} linked to nonexistent file ${real}`); // tslint:disable-line
         return real;
     }
 
@@ -982,7 +981,7 @@ namespace ts {
         const directoryExists = !onlyRecordFailures && directoryProbablyExists(nodeModuleDirectory, host);
         const packageJsonPath = pathToPackageJson(nodeModuleDirectory);
         if (directoryExists && host.fileExists(packageJsonPath)) {
-            const packageJsonContent = readJson(packageJsonPath, host);
+            const packageJsonContent = readJson(packageJsonPath, host) as PackageJson;
             if (subModuleName === "") { // looking up the root - need to handle types/typings/main redirects for subModuleName
                 const path = tryReadPackageJsonFields(/*readTypes*/ true, packageJsonContent, nodeModuleDirectory, state);
                 if (typeof path === "string") {
@@ -1033,7 +1032,7 @@ namespace ts {
         const onlyRecordFailures = !directoryProbablyExists(getDirectoryPath(file), state.host);
         const fromFile = tryFile(file, failedLookupLocations, onlyRecordFailures, state);
         if (fromFile) {
-            const resolved = fromFile && resolvedIfExtensionMatches(extensions, fromFile);
+            const resolved = resolvedIfExtensionMatches(extensions, fromFile);
             if (resolved) {
                 return resolved;
             }
@@ -1118,7 +1117,7 @@ namespace ts {
         const perModuleNameCache = cache && cache.getOrCreateCacheForModuleName(moduleName);
         return forEachAncestorDirectory(normalizeSlashes(directory), ancestorDirectory => {
             if (getBaseFileName(ancestorDirectory) !== "node_modules") {
-                const resolutionFromCache = tryFindNonRelativeModuleNameInCache(perModuleNameCache, moduleName, ancestorDirectory, state.traceEnabled, state.host);
+                const resolutionFromCache = tryFindNonRelativeModuleNameInCache(perModuleNameCache, moduleName, ancestorDirectory, state.traceEnabled, state.host, failedLookupLocations);
                 if (resolutionFromCache) {
                     return resolutionFromCache;
                 }
@@ -1196,12 +1195,13 @@ namespace ts {
             typesPackageName;
     }
 
-    function tryFindNonRelativeModuleNameInCache(cache: PerModuleNameCache | undefined, moduleName: string, containingDirectory: string, traceEnabled: boolean, host: ModuleResolutionHost): SearchResult<Resolved> {
+    function tryFindNonRelativeModuleNameInCache(cache: PerModuleNameCache | undefined, moduleName: string, containingDirectory: string, traceEnabled: boolean, host: ModuleResolutionHost, failedLookupLocations: Push<string>): SearchResult<Resolved> {
         const result = cache && cache.get(containingDirectory);
         if (result) {
             if (traceEnabled) {
                 trace(host, Diagnostics.Resolution_for_module_0_was_found_in_cache_from_location_1, moduleName, containingDirectory);
             }
+            failedLookupLocations.push(...result.failedLookupLocations);
             return { value: result.resolvedModule && { path: result.resolvedModule.resolvedFileName, extension: result.resolvedModule.extension, packageId: result.resolvedModule.packageId } };
         }
     }
@@ -1226,7 +1226,7 @@ namespace ts {
             if (!isExternalModuleNameRelative(moduleName)) {
                 // Climb up parent directories looking for a module.
                 const resolved = forEachAncestorDirectory(containingDirectory, directory => {
-                    const resolutionFromCache = tryFindNonRelativeModuleNameInCache(perModuleNameCache, moduleName, directory, traceEnabled, host);
+                    const resolutionFromCache = tryFindNonRelativeModuleNameInCache(perModuleNameCache, moduleName, directory, traceEnabled, host, failedLookupLocations);
                     if (resolutionFromCache) {
                         return resolutionFromCache;
                     }

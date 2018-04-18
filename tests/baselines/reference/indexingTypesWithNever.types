@@ -1,0 +1,404 @@
+=== tests/cases/compiler/indexingTypesWithNever.ts ===
+type TestObj = {
+>TestObj : TestObj
+
+  a: string;
+>a : string
+
+  b: number;
+>b : number
+
+};
+
+// Should be never but without an error
+type Result1 = TestObj[never];
+>Result1 : never
+>TestObj : TestObj
+
+type EmptyObj = {};
+>EmptyObj : EmptyObj
+
+// Should be never but without an error
+type Result2 = EmptyObj[keyof EmptyObj];
+>Result2 : never
+>EmptyObj : EmptyObj
+>EmptyObj : EmptyObj
+
+declare function genericFn1<T>(obj: T): T[never];
+>genericFn1 : <T>(obj: T) => T[never]
+>T : T
+>obj : T
+>T : T
+>T : T
+
+// Should be never
+const result3 = genericFn1({ c: "ctest", d: "dtest" });
+>result3 : never
+>genericFn1({ c: "ctest", d: "dtest" }) : never
+>genericFn1 : <T>(obj: T) => T[never]
+>{ c: "ctest", d: "dtest" } : { c: string; d: string; }
+>c : string
+>"ctest" : "ctest"
+>d : string
+>"dtest" : "dtest"
+
+declare function genericFn2<T extends { [ind: string]: string }>(
+>genericFn2 : <T extends { [ind: string]: string; }>(obj: T) => T[never]
+>T : T
+>ind : string
+
+  obj: T
+>obj : T
+>T : T
+
+): T[never];
+>T : T
+
+// Should be never
+const result4 = genericFn2({ e: "etest", f: "ftest" });
+>result4 : never
+>genericFn2({ e: "etest", f: "ftest" }) : never
+>genericFn2 : <T extends { [ind: string]: string; }>(obj: T) => T[never]
+>{ e: "etest", f: "ftest" } : { e: string; f: string; }
+>e : string
+>"etest" : "etest"
+>f : string
+>"ftest" : "ftest"
+
+declare function genericFn3<
+>genericFn3 : <T extends { [K in keyof T]: T[K]; }, U extends keyof T, V extends keyof T>(obj: T, u: U, v: V) => T[U & V]
+
+  T extends { [K in keyof T]: T[K] },
+>T : T
+>K : K
+>T : T
+>T : T
+>K : K
+
+  U extends keyof T,
+>U : U
+>T : T
+
+  V extends keyof T
+>V : V
+>T : T
+
+>(obj: T, u: U, v: V): T[U & V];
+>obj : T
+>T : T
+>u : U
+>U : U
+>v : V
+>V : V
+>T : T
+>U : U
+>V : V
+
+// Should be never
+const result5 = genericFn3({ g: "gtest", h: "htest" }, "g", "h"); // 'g' & 'h' will reduce to never
+>result5 : any
+>genericFn3({ g: "gtest", h: "htest" }, "g", "h") : any
+>genericFn3 : <T extends { [K in keyof T]: T[K]; }, U extends keyof T, V extends keyof T>(obj: T, u: U, v: V) => T[U & V]
+>{ g: "gtest", h: "htest" } : { g: string; h: string; }
+>g : string
+>"gtest" : "gtest"
+>h : string
+>"htest" : "htest"
+>"g" : "g"
+>"h" : "h"
+
+
+declare const obj: {a: string, b: number}
+>obj : { a: string; b: number; }
+>a : string
+>b : number
+
+declare const key: never
+>key : never
+
+const result6 = obj[key]
+>result6 : never
+>obj[key] : never
+>obj : { a: string; b: number; }
+>key : never
+
+// Expanded examples from https://github.com/Microsoft/TypeScript/issues/21988
+type RequiredPropNames<T> = {
+>RequiredPropNames : { [P in keyof T]-?: undefined extends T[P] ? never : P; }[keyof T]
+>T : T
+
+  [P in keyof T]-?: undefined extends T[P] ? never : P
+>P : P
+>T : T
+>T : T
+>P : P
+>P : P
+
+}[keyof T];
+>T : T
+
+type OptionalPropNames<T> = {
+>OptionalPropNames : { [P in keyof T]-?: undefined extends T[P] ? P : never; }[keyof T]
+>T : T
+
+  [P in keyof T]-?: undefined extends T[P] ? P : never
+>P : P
+>T : T
+>T : T
+>P : P
+>P : P
+
+}[keyof T];
+>T : T
+
+type RequiredProps<T> = { [P in RequiredPropNames<T>]: T[P] };
+>RequiredProps : RequiredProps<T>
+>T : T
+>P : P
+>RequiredPropNames : { [P in keyof T]-?: undefined extends T[P] ? never : P; }[keyof T]
+>T : T
+>T : T
+>P : P
+
+type OptionalProps<T> = { [P in OptionalPropNames<T>]?: T[P] };
+>OptionalProps : OptionalProps<T>
+>T : T
+>P : P
+>OptionalPropNames : { [P in keyof T]-?: undefined extends T[P] ? P : never; }[keyof T]
+>T : T
+>T : T
+>P : P
+
+type Match<Exp, Act> = [Exp] extends [Act]
+>Match : Match<Exp, Act>
+>Exp : Exp
+>Act : Act
+>Exp : Exp
+>Act : Act
+
+  ? ([Act] extends [Exp] ? "Match" : "Did not match 2")
+>Act : Act
+>Exp : Exp
+
+  : "Did not match 1";
+
+type ExpectType<Exp, Act> = Match<Exp, Act> extends "Match"
+>ExpectType : ExpectType<Exp, Act>
+>Exp : Exp
+>Act : Act
+>Match : Match<Exp, Act>
+>Exp : Exp
+>Act : Act
+
+  ? ({} extends Exp ? Match<Required<Exp>, Required<Act>> : "Match")
+>Exp : Exp
+>Match : Match<Exp, Act>
+>Required : Required<T>
+>Exp : Exp
+>Required : Required<T>
+>Act : Act
+
+  : "Did not match";
+
+type P3 = { a: string; b: number; c?: boolean };
+>P3 : P3
+>a : string
+>b : number
+>c : boolean | undefined
+
+type P2 = { a: string; c?: boolean };
+>P2 : P2
+>a : string
+>c : boolean | undefined
+
+type P1 = { c?: boolean };
+>P1 : P1
+>c : boolean | undefined
+
+type P0 = {};
+>P0 : P0
+
+type P3Names = RequiredPropNames<P3>; // expect 'a' | 'b'
+>P3Names : "a" | "b"
+>RequiredPropNames : { [P in keyof T]-?: undefined extends T[P] ? never : P; }[keyof T]
+>P3 : P3
+
+type P2Names = RequiredPropNames<P2>; // expect 'a'
+>P2Names : "a"
+>RequiredPropNames : { [P in keyof T]-?: undefined extends T[P] ? never : P; }[keyof T]
+>P2 : P2
+
+type P1Names = RequiredPropNames<P1>; // expect never
+>P1Names : never
+>RequiredPropNames : { [P in keyof T]-?: undefined extends T[P] ? never : P; }[keyof T]
+>P1 : P1
+
+type P0Names = RequiredPropNames<P0>; // expect never
+>P0Names : never
+>RequiredPropNames : { [P in keyof T]-?: undefined extends T[P] ? never : P; }[keyof T]
+>P0 : P0
+
+declare const p3NameTest: ExpectType<"a" | "b", P3Names>;
+>p3NameTest : "Match"
+>ExpectType : ExpectType<Exp, Act>
+>P3Names : "a" | "b"
+
+declare const p2NameTest: ExpectType<"a", P2Names>;
+>p2NameTest : "Match"
+>ExpectType : ExpectType<Exp, Act>
+>P2Names : "a"
+
+declare const p1NameTest: ExpectType<never, P1Names>;
+>p1NameTest : "Match"
+>ExpectType : ExpectType<Exp, Act>
+>P1Names : never
+
+declare const p0NameTest: ExpectType<never, P0Names>;
+>p0NameTest : "Match"
+>ExpectType : ExpectType<Exp, Act>
+>P0Names : never
+
+type P3Props = RequiredProps<P3>; // expect { a: string; b: number }
+>P3Props : RequiredProps<P3>
+>RequiredProps : RequiredProps<T>
+>P3 : P3
+
+type P2Props = RequiredProps<P2>; // expect { a: string; }
+>P2Props : RequiredProps<P2>
+>RequiredProps : RequiredProps<T>
+>P2 : P2
+
+type P1Props = RequiredProps<P1>; // expect {}
+>P1Props : RequiredProps<P1>
+>RequiredProps : RequiredProps<T>
+>P1 : P1
+
+type P0Props = RequiredProps<P0>; // expect {}
+>P0Props : RequiredProps<P0>
+>RequiredProps : RequiredProps<T>
+>P0 : P0
+
+declare const p3Test: ExpectType<{ a: string; b: number }, P3Props>;
+>p3Test : "Match"
+>ExpectType : ExpectType<Exp, Act>
+>a : string
+>b : number
+>P3Props : RequiredProps<P3>
+
+declare const p2Test: ExpectType<{ a: string }, P2Props>;
+>p2Test : "Match"
+>ExpectType : ExpectType<Exp, Act>
+>a : string
+>P2Props : RequiredProps<P2>
+
+declare const p1Test: ExpectType<{}, P1Props>;
+>p1Test : "Match"
+>ExpectType : ExpectType<Exp, Act>
+>P1Props : RequiredProps<P1>
+
+declare const p0Test: ExpectType<{}, P0Props>;
+>p0Test : "Match"
+>ExpectType : ExpectType<Exp, Act>
+>P0Props : RequiredProps<P0>
+
+type O3 = { a?: string; b?: number; c: boolean };
+>O3 : O3
+>a : string | undefined
+>b : number | undefined
+>c : boolean
+
+type O2 = { a?: string; c: boolean };
+>O2 : O2
+>a : string | undefined
+>c : boolean
+
+type O1 = { c: boolean };
+>O1 : O1
+>c : boolean
+
+type O0 = {};
+>O0 : O0
+
+type O3Names = OptionalPropNames<O3>; // expect 'a' | 'b'
+>O3Names : "a" | "b"
+>OptionalPropNames : { [P in keyof T]-?: undefined extends T[P] ? P : never; }[keyof T]
+>O3 : O3
+
+type O2Names = OptionalPropNames<O2>; // expect 'a'
+>O2Names : "a"
+>OptionalPropNames : { [P in keyof T]-?: undefined extends T[P] ? P : never; }[keyof T]
+>O2 : O2
+
+type O1Names = OptionalPropNames<O1>; // expect never
+>O1Names : never
+>OptionalPropNames : { [P in keyof T]-?: undefined extends T[P] ? P : never; }[keyof T]
+>O1 : O1
+
+type O0Names = OptionalPropNames<O0>; // expect never
+>O0Names : never
+>OptionalPropNames : { [P in keyof T]-?: undefined extends T[P] ? P : never; }[keyof T]
+>O0 : O0
+
+declare const o3NameTest: ExpectType<"a" | "b", O3Names>;
+>o3NameTest : "Match"
+>ExpectType : ExpectType<Exp, Act>
+>O3Names : "a" | "b"
+
+declare const o2NameTest: ExpectType<"a", O2Names>;
+>o2NameTest : "Match"
+>ExpectType : ExpectType<Exp, Act>
+>O2Names : "a"
+
+declare const o1NameTest: ExpectType<never, O1Names>;
+>o1NameTest : "Match"
+>ExpectType : ExpectType<Exp, Act>
+>O1Names : never
+
+declare const o0NameTest: ExpectType<never, O0Names>;
+>o0NameTest : "Match"
+>ExpectType : ExpectType<Exp, Act>
+>O0Names : never
+
+type O3Props = OptionalProps<O3>; // expect { a?: string | undefined; b?: number | undefined }
+>O3Props : OptionalProps<O3>
+>OptionalProps : OptionalProps<T>
+>O3 : O3
+
+type O2Props = OptionalProps<O2>; // expect { a?: string | undefined; }
+>O2Props : OptionalProps<O2>
+>OptionalProps : OptionalProps<T>
+>O2 : O2
+
+type O1Props = OptionalProps<O1>; // expect {}
+>O1Props : OptionalProps<O1>
+>OptionalProps : OptionalProps<T>
+>O1 : O1
+
+type O0Props = OptionalProps<O0>; // expect {}
+>O0Props : OptionalProps<O0>
+>OptionalProps : OptionalProps<T>
+>O0 : O0
+
+declare const o3Test: ExpectType<{ a?: string; b?: number }, O3Props>;
+>o3Test : "Match"
+>ExpectType : ExpectType<Exp, Act>
+>a : string | undefined
+>b : number | undefined
+>O3Props : OptionalProps<O3>
+
+declare const o2Test: ExpectType<{ a?: string }, O2Props>;
+>o2Test : "Match"
+>ExpectType : ExpectType<Exp, Act>
+>a : string | undefined
+>O2Props : OptionalProps<O2>
+
+declare const o1Test: ExpectType<{}, O1Props>;
+>o1Test : "Match"
+>ExpectType : ExpectType<Exp, Act>
+>O1Props : OptionalProps<O1>
+
+declare const o0Test: ExpectType<{}, O0Props>;
+>o0Test : "Match"
+>ExpectType : ExpectType<Exp, Act>
+>O0Props : OptionalProps<O0>
+

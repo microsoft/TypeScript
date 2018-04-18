@@ -1,6 +1,3 @@
-/// <reference path="../refactorProvider.ts" />
-/// <reference path="../../compiler/checker.ts" />
-
 /* @internal */
 namespace ts.refactor.extractSymbol {
     const refactorName = "Extract Symbol";
@@ -701,14 +698,6 @@ namespace ts.refactor.extractSymbol {
         Global,
     }
 
-    function getUniqueName(baseName: string, fileText: string): string {
-        let nameText = baseName;
-        for (let i = 1; stringContains(fileText, nameText); i++) {
-            nameText = `${baseName}_${i}`;
-        }
-        return nameText;
-    }
-
     /**
      * Result of 'extractRange' operation for a specific scope.
      * Stores either a list of changes that should be applied to extract a range or a list of errors
@@ -1053,7 +1042,7 @@ namespace ts.refactor.extractSymbol {
             changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariable, /*blankLineBetween*/ true);
 
             // Consume
-            changeTracker.replaceNode(context.file, node, localReference, textChanges.useNonAdjustedPositions);
+            changeTracker.replaceNode(context.file, node, localReference);
         }
         else {
             const newVariableDeclaration = createVariableDeclaration(localNameText, variableType, initializer);
@@ -1070,7 +1059,7 @@ namespace ts.refactor.extractSymbol {
 
                 // Consume
                 const localReference = createIdentifier(localNameText);
-                changeTracker.replaceNode(context.file, node, localReference, textChanges.useNonAdjustedPositions);
+                changeTracker.replaceNode(context.file, node, localReference);
             }
             else if (node.parent.kind === SyntaxKind.ExpressionStatement && scope === findAncestor(node, isScope)) {
                 // If the parent is an expression statement and the target scope is the immediately enclosing one,
@@ -1078,7 +1067,7 @@ namespace ts.refactor.extractSymbol {
                 const newVariableStatement = createVariableStatement(
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([newVariableDeclaration], NodeFlags.Const));
-                changeTracker.replaceNode(context.file, node.parent, newVariableStatement, textChanges.useNonAdjustedPositions);
+                changeTracker.replaceNode(context.file, node.parent, newVariableStatement);
             }
             else {
                 const newVariableStatement = createVariableStatement(
@@ -1101,7 +1090,7 @@ namespace ts.refactor.extractSymbol {
                 }
                 else {
                     const localReference = createIdentifier(localNameText);
-                    changeTracker.replaceNode(context.file, node, localReference, textChanges.useNonAdjustedPositions);
+                    changeTracker.replaceNode(context.file, node, localReference);
                 }
             }
         }
@@ -1127,37 +1116,6 @@ namespace ts.refactor.extractSymbol {
             prevNode = node;
             node = node.parent;
         }
-    }
-
-    /**
-     * @return The index of the (only) reference to the extracted symbol.  We want the cursor
-     * to be on the reference, rather than the declaration, because it's closer to where the
-     * user was before extracting it.
-     */
-    function getRenameLocation(edits: ReadonlyArray<FileTextChanges>, renameFilename: string, functionNameText: string, isDeclaredBeforeUse: boolean): number {
-        let delta = 0;
-        let lastPos = -1;
-        for (const { fileName, textChanges } of edits) {
-            Debug.assert(fileName === renameFilename);
-            for (const change of textChanges) {
-                const { span, newText } = change;
-                const index = newText.indexOf(functionNameText);
-                if (index !== -1) {
-                    lastPos = span.start + delta + index;
-
-                    // If the reference comes first, return immediately.
-                    if (!isDeclaredBeforeUse) {
-                        return lastPos;
-                    }
-                }
-                delta += newText.length - span.length;
-            }
-        }
-
-        // If the declaration comes first, return the position of the last occurrence.
-        Debug.assert(isDeclaredBeforeUse);
-        Debug.assert(lastPos >= 0);
-        return lastPos;
     }
 
     function getFirstDeclaration(type: Type): Declaration | undefined {
@@ -1600,8 +1558,8 @@ namespace ts.refactor.extractSymbol {
             const {visitedTypes} = symbolWalker.walkType(type);
 
             for (const visitedType of visitedTypes) {
-                if (visitedType.flags & TypeFlags.TypeParameter) {
-                    allTypeParameterUsages.set(visitedType.id.toString(), visitedType as TypeParameter);
+                if (visitedType.isTypeParameter()) {
+                    allTypeParameterUsages.set(visitedType.id.toString(), visitedType);
                 }
             }
         }

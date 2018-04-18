@@ -8,9 +8,8 @@ namespace ts.codefix {
             const { sourceFile, span: { start } } = context;
             const info = getInfo(sourceFile, start);
             if (!info) return undefined;
-            const description = getLocaleSpecificMessage(Diagnostics.Convert_to_default_import);
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, info));
-            return [{ description, changes, fixId }];
+            return [createCodeFixAction(fixId, changes, Diagnostics.Convert_to_default_import, fixId, Diagnostics.Convert_all_to_default_imports)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
@@ -38,6 +37,6 @@ namespace ts.codefix {
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, info: Info): void {
-        changes.replaceNode(sourceFile, info.importNode, makeImportDeclaration(info.name, /*namedImports*/ undefined, info.moduleSpecifier), textChanges.useNonAdjustedPositions);
+        changes.replaceNode(sourceFile, info.importNode, makeImportDeclaration(info.name, /*namedImports*/ undefined, info.moduleSpecifier));
     }
 }

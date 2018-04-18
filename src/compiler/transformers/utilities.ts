@@ -60,7 +60,7 @@ namespace ts {
                     // import * as x from "mod"
                     // import { x, y } from "mod"
                     externalImports.push(<ImportDeclaration>node);
-                    hasImportStarOrImportDefault = getImportNeedsImportStarHelper(<ImportDeclaration>node) || getImportNeedsImportDefaultHelper(<ImportDeclaration>node);
+                    hasImportStarOrImportDefault = hasImportStarOrImportDefault || getImportNeedsImportStarHelper(<ImportDeclaration>node) || getImportNeedsImportDefaultHelper(<ImportDeclaration>node);
                     break;
 
                 case SyntaxKind.ImportEqualsDeclaration:
@@ -218,5 +218,21 @@ namespace ts {
             expression.kind === SyntaxKind.NumericLiteral ||
             isKeyword(expression.kind) ||
             isIdentifier(expression);
+    }
+
+    /**
+     * @param input Template string input strings
+     * @param args Names which need to be made file-level unique
+     */
+    export function helperString(input: TemplateStringsArray, ...args: string[]) {
+        return (uniqueName: EmitHelperUniqueNameCallback) => {
+            let result = "";
+            for (let i = 0; i < args.length; i++) {
+                result += input[i];
+                result += uniqueName(args[i]);
+            }
+            result += input[input.length - 1];
+            return result;
+        };
     }
 }
