@@ -34,13 +34,14 @@ namespace ts.codefix {
 
             case SyntaxKind.VariableDeclaration:
                 precedingNode = ctorDeclaration.parent.parent;
+                newClassDeclaration = createClassFromVariableDeclaration(ctorDeclaration as VariableDeclaration);
                 if ((<VariableDeclarationList>ctorDeclaration.parent).declarations.length === 1) {
+                    copyComments(precedingNode, newClassDeclaration, sourceFile);
                     deleteNode(precedingNode);
                 }
                 else {
                     deleteNode(ctorDeclaration, /*inList*/ true);
                 }
-                newClassDeclaration = createClassFromVariableDeclaration(ctorDeclaration as VariableDeclaration);
                 break;
         }
 

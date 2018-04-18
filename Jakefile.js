@@ -491,7 +491,7 @@ compileFile(/*outfile*/configurePrereleaseJs,
             /*prereqs*/[configurePrereleaseTs],
             /*prefixes*/[],
             /*useBuiltCompiler*/ false,
-    { noOutFile: false, generateDeclarations: false, keepComments: false, noResolve: false, stripInternal: false });
+    { noOutFile: true, generateDeclarations: false, keepComments: false, noResolve: false, stripInternal: false });
 
 task("setDebugMode", function () {
     useDebugMode = true;

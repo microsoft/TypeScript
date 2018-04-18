@@ -634,7 +634,8 @@ namespace ts.server {
                 code: d.code,
                 source: d.source,
                 startLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start),
-                endLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start + d.length)
+                endLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start + d.length),
+                reportsUnnecessary: d.reportsUnnecessary
             });
         }
 

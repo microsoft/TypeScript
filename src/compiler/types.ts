@@ -1892,7 +1892,7 @@ namespace ts {
         kind: SyntaxKind.DebuggerStatement;
     }
 
-    export interface MissingDeclaration extends DeclarationStatement, ClassElement, ObjectLiteralElement, TypeElement {
+    export interface MissingDeclaration extends DeclarationStatement {
         kind: SyntaxKind.MissingDeclaration;
         name?: Identifier;
     }
@@ -3193,7 +3193,8 @@ namespace ts {
     export type AnyValidImportOrReExport =
         | (ImportDeclaration | ExportDeclaration) & { moduleSpecifier: StringLiteral }
         | ImportEqualsDeclaration & { moduleReference: ExternalModuleReference & { expression: StringLiteral } }
-        | RequireOrImportCall;
+        | RequireOrImportCall
+        | ImportTypeNode & { argument: LiteralType };
 
     /* @internal */
     export type RequireOrImportCall = CallExpression & { arguments: [StringLiteralLike] };

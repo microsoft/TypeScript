@@ -3887,6 +3887,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Generate_get_and_set_accessors_95046" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Generate 'get' and 'set' accessors]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Gerar acessadores 'get' e 'set']]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Generates_a_sourcemap_for_each_corresponding_d_ts_file_6000" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Generates a sourcemap for each corresponding '.d.ts' file.]]></Val>
@@ -5996,6 +6005,9 @@
       <Item ItemId=";Property_0_does_not_exist_on_type_1_Did_you_forget_to_use_await_2570" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' does not exist on type '{1}'. Did you forget to use 'await'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[A propriedade '{0}' não existe no tipo '{1}'. Você esqueceu de usar 'await'?]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>

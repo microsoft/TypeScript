@@ -312,7 +312,8 @@ namespace ts.server {
 
     export class ProjectService {
 
-        public readonly typingsCache: TypingsCache;
+        /*@internal*/
+        readonly typingsCache: TypingsCache;
 
         private readonly documentRegistry: DocumentRegistry;
 
@@ -523,13 +524,13 @@ namespace ts.server {
             }
             switch (response.kind) {
                 case ActionSet:
-                    project.resolutionCache.clear();
-                    this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typeAcquisition, response.unresolvedImports, response.typings);
+                    // Update the typing files and update the project
+                    project.updateTypingFiles(this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typeAcquisition, response.unresolvedImports, response.typings));
                     break;
                 case ActionInvalidate:
-                    project.resolutionCache.clear();
-                    this.typingsCache.deleteTypingsForProject(response.projectName);
-                    break;
+                    // Do not clear resolution cache, there was changes detected in typings, so enque typing request and let it get us correct results
+                    this.typingsCache.enqueueInstallTypingsForProject(project, project.lastCachedUnresolvedImportsList, /*forceRefresh*/ true);
+                    return;
             }
             this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
         }
