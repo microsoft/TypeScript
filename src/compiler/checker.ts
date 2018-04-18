@@ -14988,12 +14988,16 @@ namespace ts {
             }
 
             const links = getNodeLinks(context);
-            if (links.resolvedSignatures && links.resolvedSignatures !== resolvingSignaturesArray) {
-                signatures = links.resolvedSignatures;
+            if (!links.resolvedSignatures) {
+                links.resolvedSignatures = createMap();
             }
-            else if (!links.resolvedSignatures) {
-                links.resolvedSignatures = resolvingSignaturesArray;
-                links.resolvedSignatures = signatures = instantiateJsxSignatures(context, signatures);
+            const cacheKey = "" + getTypeId(valueType);
+            if (links.resolvedSignatures.get(cacheKey) && links.resolvedSignatures.get(cacheKey) !== resolvingSignaturesArray) {
+                signatures = links.resolvedSignatures.get(cacheKey);
+            }
+            else if (!links.resolvedSignatures.get(cacheKey)) {
+                links.resolvedSignatures.set(cacheKey, resolvingSignaturesArray);
+                links.resolvedSignatures.set(cacheKey, signatures = instantiateJsxSignatures(context, signatures));
             }
 
             return getUnionType(map(signatures, ctor ? t => getJsxPropsTypeFromClassType(t, isJs, context, /*reportErrors*/ false) : t => getJsxPropsTypeFromCallSignature(t, context)), UnionReduction.None);
@@ -15991,6 +15995,19 @@ namespace ts {
         }
 
         function getInstantiatedJsxSignatures(openingLikeElement: JsxOpeningLikeElement, elementType: Type, reportErrors?: boolean) {
+            const links = getNodeLinks(openingLikeElement);
+            if (!links.resolvedSignatures) {
+                links.resolvedSignatures = createMap();
+            }
+            const cacheKey = "" + getTypeId(elementType);
+            if (links.resolvedSignatures.get(cacheKey) && links.resolvedSignatures.get(cacheKey) === resolvingSignaturesArray) {
+                return;
+            }
+            else if (links.resolvedSignatures.get(cacheKey)) {
+                return links.resolvedSignatures.get(cacheKey);
+            }
+
+            links.resolvedSignatures.set(cacheKey, resolvingSignaturesArray);
             // Resolve the signatures, preferring constructor
             let signatures = getSignaturesOfType(elementType, SignatureKind.Construct);
             if (signatures.length === 0) {
@@ -16006,7 +16023,9 @@ namespace ts {
             }
 
             // Instantiate in context of source type
-            return instantiateJsxSignatures(openingLikeElement, signatures);
+            const results = instantiateJsxSignatures(openingLikeElement, signatures);
+            links.resolvedSignatures.set(cacheKey, results);
+            return results;
         }
 
         /**
