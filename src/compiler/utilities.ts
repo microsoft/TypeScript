@@ -5612,8 +5612,7 @@ namespace ts {
             || kind === SyntaxKind.GetAccessor
             || kind === SyntaxKind.SetAccessor
             || kind === SyntaxKind.IndexSignature
-            || kind === SyntaxKind.SemicolonClassElement
-            || kind === SyntaxKind.MissingDeclaration;
+            || kind === SyntaxKind.SemicolonClassElement;
     }
 
     export function isClassLike(node: Node): node is ClassLikeDeclaration {
@@ -5644,8 +5643,7 @@ namespace ts {
             || kind === SyntaxKind.CallSignature
             || kind === SyntaxKind.PropertySignature
             || kind === SyntaxKind.MethodSignature
-            || kind === SyntaxKind.IndexSignature
-            || kind === SyntaxKind.MissingDeclaration;
+            || kind === SyntaxKind.IndexSignature;
     }
 
     export function isClassOrTypeElement(node: Node): node is ClassElement | TypeElement {
@@ -5659,8 +5657,7 @@ namespace ts {
             || kind === SyntaxKind.SpreadAssignment
             || kind === SyntaxKind.MethodDeclaration
             || kind === SyntaxKind.GetAccessor
-            || kind === SyntaxKind.SetAccessor
-            || kind === SyntaxKind.MissingDeclaration;
+            || kind === SyntaxKind.SetAccessor;
     }
 
     // Type
