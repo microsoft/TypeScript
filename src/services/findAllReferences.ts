@@ -1102,57 +1102,37 @@ namespace ts.FindAllReferences.Core {
         }
 
         // If we got a type reference, try and see if the reference applies to any expressions that can implement an interface
-        const containingTypeReference = getContainingTypeReference(refNode);
-        if (containingTypeReference && state.markSeenContainingTypeReference(containingTypeReference)) {
-            const parent = containingTypeReference.parent;
-            if (hasType(parent) && parent.type === containingTypeReference && hasInitializer(parent) && isImplementationExpression(parent.initializer)) {
-                addReference(parent.initializer);
+        // Find the first node whose parent isn't a type node -- i.e., the highest type node.
+        const typeNode = findAncestor(refNode, a => !isQualifiedName(a.parent) && !isTypeNode(a.parent) && !isTypeElement(a.parent));
+        const typeHavingNode = typeNode.parent;
+        if (hasType(typeHavingNode) && typeHavingNode.type === typeNode && state.markSeenContainingTypeReference(typeHavingNode)) {
+            if (hasInitializer(typeHavingNode)) {
+                addIfImplementation(typeHavingNode.initializer);
             }
-            else if (isFunctionLike(parent) && parent.type === containingTypeReference && (parent as FunctionLikeDeclaration).body) {
-                const body = (parent as FunctionLikeDeclaration).body;
+            else if (isFunctionLike(typeHavingNode) && (typeHavingNode as FunctionLikeDeclaration).body) {
+                const body = (typeHavingNode as FunctionLikeDeclaration).body;
                 if (body.kind === SyntaxKind.Block) {
                     forEachReturnStatement(<Block>body, returnStatement => {
-                        if (returnStatement.expression && isImplementationExpression(returnStatement.expression)) {
-                            addReference(returnStatement.expression);
-                        }
+                        if (returnStatement.expression) addIfImplementation(returnStatement.expression);
                     });
                 }
-                else if (isImplementationExpression(body)) {
-                    addReference(body);
+                else {
+                    addIfImplementation(body);
                 }
             }
-            else if (isAssertionExpression(parent) && isImplementationExpression(parent.expression)) {
-                addReference(parent.expression);
+            else if (isAssertionExpression(typeHavingNode)) {
+                addIfImplementation(typeHavingNode.expression);
             }
+        }
+
+        function addIfImplementation(e: Expression): void {
+            if (isImplementationExpression(e)) addReference(e);
         }
     }
 
-    function getContainingTypeReference(node: Node): Node {
-        let topLevelTypeReference: Node;
-
-        while (node) {
-            if (isTypeNode(node)) {
-                topLevelTypeReference = node;
-            }
-            node = node.parent;
-        }
-
-        return topLevelTypeReference;
-    }
-
-    function getContainingClassIfInHeritageClause(node: Node): ClassLikeDeclaration {
-        if (node && node.parent) {
-            if (node.kind === SyntaxKind.ExpressionWithTypeArguments
-                && node.parent.kind === SyntaxKind.HeritageClause
-                && isClassLike(node.parent.parent)) {
-                return node.parent.parent;
-            }
-
-            else if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PropertyAccessExpression) {
-                return getContainingClassIfInHeritageClause(node.parent);
-            }
-        }
-        return undefined;
+    function getContainingClassIfInHeritageClause(node: Node): ClassLikeDeclaration | InterfaceDeclaration {
+        return isIdentifier(node) || isPropertyAccessExpression(node) ? getContainingClassIfInHeritageClause(node.parent)
+            : isExpressionWithTypeArguments(node) ? tryCast(node.parent.parent, isClassLike) : undefined;
     }
 
     /**
