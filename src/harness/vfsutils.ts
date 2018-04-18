@@ -1,6 +1,6 @@
 /// <reference path="./harness.ts" />
 /// <reference path="./vpath.ts" />
-/// <reference path="./core.ts" />
+/// <reference path="./core/strings.ts" />
 /// <reference path="./utils.ts" />
 /// <reference path="./documents.ts" />
 /// <reference path="./vfs.ts" />
@@ -251,81 +251,6 @@ namespace vfsutils {
     export function writeFile(fs: vfs.FileSystem, path: string, content: string, writeByteOrderMark?: boolean) {
         fs.mkdirpSync(vpath.dirname(path));
         fs.writeFileSync(path, writeByteOrderMark ? core.addUTF8ByteOrderMark(content) : content);
-    }
-
-    export function watchFile(fs: vfs.FileSystem, path: string, callback: ts.FileWatcherCallback): ts.FileWatcher {
-        path = vpath.resolve(fs.cwd(), path);
-
-        let prevStats = getStats(fs, path) || new vfs.Stats();
-        let exists = fileExists(fs, path);
-        return fsWatch(fs, path, fileExists, () => {
-            const currStats = getStats(fs, path) || new vfs.Stats();
-            const currTime = currStats.mtimeMs;
-            const prevTime = prevStats.mtimeMs;
-
-            const eventKind = currTime !== 0 && prevTime === 0 ? ts.FileWatcherEventKind.Created :
-                currTime === 0 && prevTime !== 0 ? ts.FileWatcherEventKind.Deleted :
-                ts.FileWatcherEventKind.Changed;
-
-            if (eventKind === ts.FileWatcherEventKind.Created && !exists) {
-                // file was created (via open()) but hasn't yet been written (via write())
-                exists = true;
-                return;
-            }
-
-            if (eventKind === ts.FileWatcherEventKind.Changed && currTime <= prevTime) {
-                // no change
-                return;
-            }
-
-            exists = eventKind !== ts.FileWatcherEventKind.Deleted;
-            prevStats = currStats;
-            callback(path, eventKind);
-        });
-    }
-
-    export function watchDirectory(fs: vfs.FileSystem, path: string, callback: ts.DirectoryWatcherCallback, recursive?: boolean): ts.FileWatcher {
-        path = vpath.resolve(fs.cwd(), path);
-        return fsWatch(fs, path, directoryExists, (eventType, filename) => {
-            if (eventType === "rename") callback(filename ? vpath.resolve(path, filename) : path);
-        }, recursive);
-    }
-
-    function fsWatch(fs: vfs.FileSystem, path: string, exists: (fs: vfs.FileSystem, path: string) => boolean, callback: (eventType: string, filename: string) => void, recursive?: boolean): ts.FileWatcher {
-        let watcher = !exists(fs, path) ?
-            watchMissing() :
-            watchPresent();
-
-        return {
-            close() {
-                watcher.close();
-            }
-        };
-
-        function watchPresent(): ts.FileWatcher {
-            const dirWatcher = fs.watch(path, { recursive }, callback);
-            dirWatcher.on("error", () => {
-                if (!exists(fs, path)) {
-                    watcher.close();
-                    watcher = watchMissing();
-                    callback("rename", "");
-                }
-            });
-            return dirWatcher;
-        }
-
-        function watchMissing(): ts.FileWatcher {
-            const dirname = vpath.dirname(path);
-            if (dirname === path) throw new Error("ENOENT: path not found.");
-            const basename = vpath.basename(path);
-            return fsWatch(fs, dirname, directoryExists, (eventType, filename) => {
-                if (eventType === "rename" && fs.stringComparer(basename, filename) === 0 && exists(fs, path)) {
-                    watcher.close();
-                    watcher = watchPresent();
-                    callback("rename", "");
-                }
-            });
-        }
     }
 
     const typeScriptExtensions: ReadonlyArray<string> = [".ts", ".tsx"];

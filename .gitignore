@@ -46,7 +46,6 @@ scripts/importDefinitelyTypedTests/importDefinitelyTypedTests.js
 scripts/generateLocalizedDiagnosticMessages.js
 scripts/*.js.map
 scripts/typings/
-scripts/*/dist
 coverage/
 internal/
 **/.DS_Store

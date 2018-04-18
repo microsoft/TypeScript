@@ -133,10 +133,13 @@
         "../server/session.ts",
         "../server/scriptVersionCache.ts",
 
-        "assert.ts",
+        "./core/functions.ts",
+        "./core/comparers.ts",
+        "./core/collections.ts",
+        "./core/strings.ts",
         "core.ts",
+
         "utils.ts",
-        "events.ts",
         "documents.ts",
         "vpath.ts",
         "vfs.ts",

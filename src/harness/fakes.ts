@@ -1,5 +1,4 @@
 /// <reference path="./core.ts" />
-/// <reference path="./assert.ts" />
 /// <reference path="./utils.ts" />
 /// <reference path="./vfs.ts" />
 
@@ -111,12 +110,12 @@ namespace fakes {
             return vfsutils.getFileSize(this.vfs, path);
         }
 
-        public watchFile(path: string, cb: ts.FileWatcherCallback) {
-            return vfsutils.watchFile(this.vfs, path, cb);
+        public watchFile(_path: string, _cb: ts.FileWatcherCallback): ts.FileWatcher {
+            return { close(): void { /*ignored*/ } };
         }
 
-        public watchDirectory(path: string, cb: ts.DirectoryWatcherCallback, recursive?: boolean): ts.FileWatcher {
-            return vfsutils.watchDirectory(this.vfs, path, cb, recursive);
+        public watchDirectory(_path: string, _cb: ts.DirectoryWatcherCallback, _recursive?: boolean): ts.FileWatcher {
+            return { close(): void { /*ignored*/ } };
         }
 
         public resolvePath(path: string) {
@@ -132,7 +131,7 @@ namespace fakes {
         }
 
         public createHash(data: string): string {
-            return core.sha1(data);
+            return data;
         }
 
         public realpath(path: string) {

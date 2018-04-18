@@ -43,7 +43,7 @@ const constEnumCaptureRegexp = /^(\s*)(export )?const enum (\S+) {(\s*)$/gm;
 const constEnumReplacement = "$1$2enum $3 {$4";
 
 const cmdLineOptions = minimist(process.argv.slice(2), {
-    boolean: ["debug", "inspect", "light", "colors", "lint", "soft", "bail"],
+    boolean: ["debug", "inspect", "light", "colors", "lint", "soft"],
     string: ["browser", "tests", "host", "reporter", "stackTraceLimit", "timeout"],
     alias: {
         "b": "browser",
@@ -67,7 +67,6 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         runners: process.env.runners || process.env.runner || process.env.ru,
         light: process.env.light === undefined || process.env.light !== "false",
         reporter: process.env.reporter || process.env.r,
-        bail: false,
         lint: process.env.lint || true,
         workers: process.env.workerCount || os.cpus().length,
     }
@@ -577,7 +576,7 @@ gulp.task(specMd, /*help*/ false, [word2mdJs], (done) => {
 
 gulp.task("generate-spec", "Generates a Markdown version of the Language Specification", [specMd]);
 
-gulp.task("clean", "Cleans the compiler output, declare files, and tests", ["clean:private-packages"], () => {
+gulp.task("clean", "Cleans the compiler output, declare files, and tests", [], () => {
     return del([builtDirectory]);
 });
 
@@ -603,37 +602,10 @@ gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUse
     return runSequence("LKGInternal", "VerifyLKG");
 });
 
-function compilePrivatePackage(packageName: string) {
-    const project = tsc.createProject(`scripts/${packageName}/tsconfig.json`, getCompilerSettings({}, /*useBuiltCompiler*/ false));
-    return project.src()
-        .pipe(sourcemaps.init())
-        .pipe(newer(`scripts/${packageName}/dist/index.js`))
-        .pipe(project())
-        .pipe(sourcemaps.write(".", <any>{ sourceRoot: "../src", includeContent: false, destPath: `scripts/${packageName}/dist` }))
-        .pipe(gulp.dest(`scripts/${packageName}/dist`));
-}
-
-function cleanPrivatePackage(packageName: string) {
-    return del([`scripts/${packageName}/dist`]);
-}
-
-gulp.task("vfs-core", () => compilePrivatePackage("vfs-core"));
-gulp.task("vfs-errors", () => compilePrivatePackage("vfs-errors"));
-gulp.task("vfs-path", ["vfs-core", "vfs-errors"], () => compilePrivatePackage("vfs-path"));
-gulp.task("vfs", ["vfs-core", "vfs-errors", "vfs-path"], () => compilePrivatePackage("vfs"));
-gulp.task("harness-core", ["vfs-core"], () => compilePrivatePackage("harness-core"));
-gulp.task("private-packages", ["vfs", "harness-core"]);
-
-gulp.task("clean:vfs-core", () => cleanPrivatePackage("vfs-core"));
-gulp.task("clean:vfs-errors", () => cleanPrivatePackage("vfs-errors"));
-gulp.task("clean:vfs-path", ["clean:vfs-core", "clean:vfs-errors"], () => cleanPrivatePackage("vfs-path"));
-gulp.task("clean:vfs", ["clean:vfs-core", "clean:vfs-errors", "clean:vfs-path"], () => cleanPrivatePackage("vfs"));
-gulp.task("clean:harness-core", ["clean:vfs-core"], () => cleanPrivatePackage("harness-core"));
-gulp.task("clean:private-packages", ["clean:vfs", "clean:harness-core"]);
 
 // Task to build the tests infrastructure using the built compiler
 const run = path.join(builtLocalDirectory, "run.js");
-gulp.task(run, /*help*/ false, [servicesFile, tsserverLibraryFile, "private-packages"], () => {
+gulp.task(run, /*help*/ false, [servicesFile, tsserverLibraryFile], () => {
     const testProject = tsc.createProject("src/harness/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
     return testProject.src()
         .pipe(newer(run))
@@ -672,7 +644,7 @@ function restoreSavedNodeEnv() {
     process.env.NODE_ENV = savedNodeEnv;
 }
 
-function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: (e?: any) => void, noExit?: boolean) {
+function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: (e?: any) => void) {
     const lintFlag = cmdLineOptions.lint;
     cleanTestDirs((err) => {
         if (err) { console.error(err); failWithStatus(err, 1); }
@@ -683,7 +655,6 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
         const runners = cmdLineOptions.runners;
         const light = cmdLineOptions.light;
         const stackTraceLimit = cmdLineOptions.stackTraceLimit;
-        const bail = cmdLineOptions.bail;
         const testConfigFile = "test.config";
         if (fs.existsSync(testConfigFile)) {
             fs.unlinkSync(testConfigFile);
@@ -736,9 +707,6 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
             else {
                 args.push("-t", testTimeout);
             }
-            if (bail) {
-                args.push("--bail");
-            }
             args.push(run);
             setNodeEnvToDevelopment();
             exec(mocha, args, lintThenFinish, finish);
@@ -752,10 +720,8 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
     });
 
     function failWithStatus(err?: any, status?: number) {
-        if (!noExit) {
-            if (err || status) {
-                process.exit(typeof status === "number" ? status : 2);
-            }
+        if (err || status) {
+            process.exit(typeof status === "number" ? status : 2);
         }
         done();
     }
@@ -1149,5 +1115,5 @@ gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: 
 gulp.task("default", "Runs 'local'", ["local"]);
 
 gulp.task("watch", "Watches the src/ directory for changes and executes runtests-parallel.", [], () => {
-    gulp.watch(["src/**/*.*"], ["runtests-parallel"]);
+    gulp.watch("src/**/*.*", ["runtests-parallel"]);
 });

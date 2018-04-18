@@ -51,15 +51,10 @@
         "@types/source-map-support": "latest",
         "@types/through2": "latest",
         "@types/xml2js": "^0.4.0",
-        "@typescript/vfs-core": "file:scripts/vfs-core",
-        "@typescript/vfs-errors": "file:scripts/vfs-errors",
-        "@typescript/vfs-path": "file:scripts/vfs-path",
-        "@typescript/vfs": "file:scripts/vfs",
-        "@typescript/harness-core": "file:scripts/harness-core",
+        "xml2js": "^0.4.19",
         "browser-resolve": "^1.11.2",
         "browserify": "latest",
         "chai": "latest",
-        "chalk": "latest",
         "convert-source-map": "latest",
         "del": "latest",
         "gulp": "3.X",
@@ -85,9 +80,9 @@
         "travis-fold": "latest",
         "ts-node": "latest",
         "tslint": "latest",
-        "typescript": "next",
         "vinyl": "latest",
-        "xml2js": "^0.4.19"
+        "chalk": "latest",
+        "typescript": "next"
     },
     "scripts": {
         "pretest": "jake tests",
