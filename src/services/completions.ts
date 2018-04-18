@@ -2199,7 +2199,7 @@ namespace ts.Completions {
         return !!type.getStringIndexType() || !!type.getNumberIndexType();
     }
 
-    function isInvalidTrigger(triggerCharacter: string | undefined, contextToken: Node, position: number): boolean {
+    function isInvalidTrigger(sourceFile: SourceFile, triggerCharacter: string | undefined, contextToken: Node, position: number): boolean {
         switch (triggerCharacter) {
             case '"':
             case "'":
@@ -2209,11 +2209,12 @@ namespace ts.Completions {
                     case SyntaxKind.NoSubstitutionTemplateLiteral:
                     case SyntaxKind.TemplateExpression:
                     case SyntaxKind.TaggedTemplateExpression:
-                        break;
+                        // Don't automatically bring up completions at closing quote
+                        return position === contextToken.parent.end;
                     default:
-                        Debug.fail();
+                        if (!isInComment(sourceFile, position, contextToken)) Debug.failBadSyntaxKind(contextToken);
+                        return true;
                 }
-                return position === contextToken.parent.end;
             case "<":
                 Debug.assert(contextToken.kind === SyntaxKind.LessThanToken);
                 return contextToken.parent.kind === SyntaxKind.BinaryExpression;
