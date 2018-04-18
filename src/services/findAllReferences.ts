@@ -1030,10 +1030,6 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
-    function getPropertyAccessExpressionFromRightHandSide(node: Node): PropertyAccessExpression {
-        return isRightSideOfPropertyAccess(node) && <PropertyAccessExpression>node.parent;
-    }
-
     /**
      * `classSymbol` is the class where the constructor was defined.
      * Reference the constructor and all calls to `new this()`.
@@ -1131,18 +1127,6 @@ namespace ts.FindAllReferences.Core {
         function addIfImplementation(e: Expression): void {
             if (isImplementationExpression(e)) addReference(e);
         }
-    }
-
-    function getSymbolsForClassAndInterfaceComponents(type: UnionOrIntersectionType, result: Symbol[] = []): Symbol[] {
-        for (const componentType of type.types) {
-            if (componentType.symbol && componentType.symbol.getFlags() & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                result.push(componentType.symbol);
-            }
-            if (componentType.isUnionOrIntersection()) {
-                getSymbolsForClassAndInterfaceComponents(componentType, result);
-            }
-        }
-        return result;
     }
 
     function getContainingClassIfInHeritageClause(node: Node): ClassLikeDeclaration | InterfaceDeclaration {
@@ -1442,7 +1426,7 @@ namespace ts.FindAllReferences.Core {
                 ? rootSymbol && !(getCheckFlags(sym) & CheckFlags.Synthetic) ? rootSymbol : sym
                 : undefined,
             /*allowBaseTypes*/ rootSymbol =>
-                !(search.parents && !some(search.parents, parent => explicitlyInheritsFrom(rootSymbol.parent, parent, state.inheritsFromCache, checker))));
+                !(search.parents && !search.parents.some(parent => explicitlyInheritsFrom(rootSymbol.parent, parent, state.inheritsFromCache, checker))));
     }
 
     /** Gets all symbols for one property. Does not get symbols for every property. */
@@ -1529,13 +1513,11 @@ namespace ts.FindAllReferences.Core {
      * symbol may have a different parent symbol if the local type's symbol does not declare the property
      * being accessed (i.e. it is declared in some parent class or interface)
      */
-    function getParentSymbolsOfPropertyAccess(location: Node, symbol: Symbol, checker: TypeChecker): Symbol[] | undefined {
-        const propertyAccessExpression = getPropertyAccessExpressionFromRightHandSide(location);
-        const localParentType = propertyAccessExpression && checker.getTypeAtLocation(propertyAccessExpression.expression);
-        return localParentType && localParentType.symbol && localParentType.symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) && localParentType.symbol !== symbol.parent
-            ? [localParentType.symbol]
-            : localParentType && localParentType.isUnionOrIntersection()
-            ? getSymbolsForClassAndInterfaceComponents(localParentType)
-            : undefined;
+    function getParentSymbolsOfPropertyAccess(location: Node, symbol: Symbol, checker: TypeChecker): ReadonlyArray<Symbol> | undefined {
+        const propertyAccessExpression = isRightSideOfPropertyAccess(location) ? <PropertyAccessExpression>location.parent : undefined;
+        const lhsType = propertyAccessExpression && checker.getTypeAtLocation(propertyAccessExpression.expression);
+        const res = mapDefined(lhsType && (lhsType.isUnionOrIntersection() ? lhsType.types : lhsType.symbol === symbol.parent ? undefined : [lhsType]), t =>
+            t.symbol && t.symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) ? t.symbol : undefined);
+        return res.length === 0 ? undefined : res;
     }
 }
