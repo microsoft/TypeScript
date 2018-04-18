@@ -99,7 +99,7 @@ namespace ts.server {
         /*@internal*/
         lastCachedUnresolvedImportsList: SortedReadonlyArray<string>;
         /*@internal*/
-        private hasMoreOrLessFiles = false;
+        private hasAddedorRemovedFiles = false;
 
         private lastFileExceededProgramSize: string | undefined;
 
@@ -777,8 +777,8 @@ namespace ts.server {
         }
 
         /* @internal */
-        setHasMoreOrLessFiles() {
-            this.hasMoreOrLessFiles = true;
+        onFileAddedOrRemoved() {
+            this.hasAddedorRemovedFiles = true;
         }
 
         /**
@@ -789,8 +789,8 @@ namespace ts.server {
             this.resolutionCache.startRecordingFilesWithChangedResolutions();
 
             const hasNewProgram = this.updateGraphWorker();
-            const hasMoreOrLessFiles = this.hasMoreOrLessFiles;
-            this.hasMoreOrLessFiles = false;
+            const hasAddedorRemovedFiles = this.hasAddedorRemovedFiles;
+            this.hasAddedorRemovedFiles = false;
 
             const changedFiles: ReadonlyArray<Path> = this.resolutionCache.finishRecordingFilesWithChangedResolutions() || emptyArray;
 
@@ -820,7 +820,7 @@ namespace ts.server {
                     this.lastCachedUnresolvedImportsList = result ? toDeduplicatedSortedArray(result) : emptyArray;
                 }
 
-                this.projectService.typingsCache.enqueueInstallTypingsForProject(this, this.lastCachedUnresolvedImportsList, hasMoreOrLessFiles);
+                this.projectService.typingsCache.enqueueInstallTypingsForProject(this, this.lastCachedUnresolvedImportsList, hasAddedorRemovedFiles);
             }
             else {
                 this.lastCachedUnresolvedImportsList = undefined;
