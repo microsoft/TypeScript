@@ -8191,16 +8191,17 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getIndexTypeForGenericType(type: InstantiableType | UnionOrIntersectionType, includeDeclaredTypes?: boolean) {
-            const cacheLocation = includeDeclaredTypes ? "resolvedDeclaredIndexType" : "resolvedIndexType";
-            if (!type[cacheLocation]) {
-                type[cacheLocation] = <IndexType>createType(TypeFlags.Index);
-                type[cacheLocation].type = type;
-                if (includeDeclaredTypes) {
-                    type[cacheLocation].isDeclaredType = true;
-                }
-            }
-            return type[cacheLocation];
+        function createIndexType(type: InstantiableType | UnionOrIntersectionType, stringsOnly: boolean) {
+            const result = <IndexType>createType(TypeFlags.Index);
+            result.type = type;
+            result.stringsOnly = stringsOnly;
+            return result;
+        }
+
+        function getIndexTypeForGenericType(type: InstantiableType | UnionOrIntersectionType, stringsOnly: boolean) {
+            return stringsOnly ?
+                type.resolvedStringIndexType || (type.resolvedStringIndexType = createIndexType(type, /*stringsOnly*/ true)) :
+                type.resolvedIndexType || (type.resolvedIndexType = createIndexType(type, /*stringsOnly*/ false));
         }
 
         function getLiteralTypeFromPropertyName(prop: Symbol, include: TypeFlags) {
@@ -8225,13 +8226,13 @@ namespace ts {
             return numberIndexInfo !== enumNumberIndexInfo ? numberIndexInfo : undefined;
         }
 
-        function getIndexType(type: Type, includeDeclaredTypes?: boolean): Type {
-            return type.flags & TypeFlags.Intersection ? getUnionType(map((<IntersectionType>type).types, t => getIndexType(t, includeDeclaredTypes))) :
-                maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type, includeDeclaredTypes) :
+        function getIndexType(type: Type, stringsOnly = keyofStringsOnly): Type {
+            return type.flags & TypeFlags.Intersection ? getUnionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly))) :
+                maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type, stringsOnly) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
                 type === wildcardType ? wildcardType :
                 type.flags & TypeFlags.Any ? keyofConstraintType :
-                keyofStringsOnly ? getIndexInfoOfType(type, IndexKind.String) ? stringType : getLiteralTypeFromPropertyNames(type, TypeFlags.StringLiteral) :
+                stringsOnly ? getIndexInfoOfType(type, IndexKind.String) ? stringType : getLiteralTypeFromPropertyNames(type, TypeFlags.StringLiteral) :
                 getIndexInfoOfType(type, IndexKind.String) ? getUnionType([stringType, numberType, getLiteralTypeFromPropertyNames(type, TypeFlags.UniqueESSymbol)]) :
                 getNonEnumNumberIndexInfo(type) ? getUnionType([numberType, getLiteralTypeFromPropertyNames(type, TypeFlags.StringLiteral | TypeFlags.UniqueESSymbol)]) :
                 getLiteralTypeFromPropertyNames(type, TypeFlags.StringOrNumberLiteralOrUnique);
@@ -10438,7 +10439,7 @@ namespace ts {
                     // constraint of T.
                     const constraint = getConstraintForRelation((<IndexType>target).type);
                     if (constraint) {
-                        if (result = isRelatedTo(source, getIndexType(constraint, (target as IndexType).isDeclaredType), reportErrors)) {
+                        if (result = isRelatedTo(source, getIndexType(constraint, (target as IndexType).stringsOnly), reportErrors)) {
                             return result;
                         }
                     }
@@ -21010,7 +21011,7 @@ namespace ts {
             // Check if the index type is assignable to 'keyof T' for the object type.
             const objectType = (<IndexedAccessType>type).objectType;
             const indexType = (<IndexedAccessType>type).indexType;
-            if (isTypeAssignableTo(indexType, getIndexType(objectType, /*includeDeclaredTypes*/ true))) {
+            if (isTypeAssignableTo(indexType, getIndexType(objectType, /*stringsOnly*/ false))) {
                 if (accessNode.kind === SyntaxKind.ElementAccessExpression && isAssignmentTarget(accessNode) &&
                     getObjectFlags(objectType) & ObjectFlags.Mapped && getMappedTypeModifiers(<MappedType>objectType) & MappedTypeModifiers.IncludeReadonly) {
                     error(accessNode, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(objectType));

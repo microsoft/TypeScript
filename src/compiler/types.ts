@@ -3761,7 +3761,7 @@ namespace ts {
         /* @internal */
         resolvedIndexType: IndexType;
         /* @internal */
-        resolvedDeclaredIndexType: IndexType;
+        resolvedStringIndexType: IndexType;
         /* @internal */
         resolvedBaseConstraint: Type;
         /* @internal */
@@ -3850,7 +3850,7 @@ namespace ts {
         /* @internal */
         resolvedIndexType?: IndexType;
         /* @internal */
-        resolvedDeclaredIndexType?: IndexType;
+        resolvedStringIndexType?: IndexType;
     }
 
     // Type parameters (TypeFlags.TypeParameter)
@@ -3882,9 +3882,9 @@ namespace ts {
 
     // keyof T types (TypeFlags.Index)
     export interface IndexType extends InstantiableType {
-        /* @internal */
-        isDeclaredType?: boolean;
         type: InstantiableType | UnionOrIntersectionType;
+        /* @internal */
+        stringsOnly: boolean;
     }
 
     export interface ConditionalRoot {
