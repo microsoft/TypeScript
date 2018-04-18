@@ -1642,4 +1642,20 @@ namespace ts {
         Debug.assert(lastPos >= 0);
         return lastPos;
     }
+
+    export function copyComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, explicitKind?: CommentKind, explicitHtnl?: boolean) {
+        forEachLeadingCommentRange(sourceFile.text, sourceNode.pos, (pos, end, kind, htnl) => {
+            if (kind === SyntaxKind.MultiLineCommentTrivia) {
+                // Remove leading /*
+                pos += 2;
+                // Remove trailing */
+                end -= 2;
+            }
+            else {
+                // Remove leading //
+                pos += 2;
+            }
+            addSyntheticLeadingComment(targetNode, explicitKind || kind, sourceFile.text.slice(pos, end), explicitHtnl !== undefined ?  explicitHtnl : htnl);
+        });
+    }
 }

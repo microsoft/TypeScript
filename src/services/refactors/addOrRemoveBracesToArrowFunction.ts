@@ -9,7 +9,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
 
     interface Info {
-        container: ArrowFunction;
+        func: ArrowFunction;
         expression: Expression;
         addBraces: boolean;
     }
@@ -35,23 +35,30 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         }];
     }
 
-    function getEditsForAction(context: RefactorContext, _actionName: string): RefactorEditInfo | undefined {
+    function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const { file, startPosition } = context;
         const info = getConvertibleArrowFunctionAtPosition(file, startPosition);
         if (!info) return undefined;
 
-        const { expression, container } = info;
+        const { expression, func } = info;
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
 
-        if (_actionName === addBracesActionName) {
-            addBraces(changeTracker, file, container, expression);
+        let body: ConciseBody;
+        if (actionName === addBracesActionName) {
+            const returnStatement = createReturn(expression);
+            body = createBlock([returnStatement]);
+            copyComments(expression, returnStatement, file, SyntaxKind.SingleLineCommentTrivia, true);
         }
-        else if (_actionName === removeBracesActionName) {
-            removeBraces(changeTracker, file, container, expression);
+        else if (actionName === removeBracesActionName) {
+            const returnStatement = <ReturnStatement>expression.parent;
+            body = needsParentheses(expression) ? createParen(expression) : expression;
+            copyComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, false);
         }
         else {
-            Debug.fail("invalid action");
+            Debug.fail('invalid action');
         }
+
+        updateBody(changeTracker, file, func, body);
 
         return {
             renameFilename: undefined,
@@ -60,18 +67,13 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         };
     }
 
-    function addBraces(changeTracker: textChanges.ChangeTracker, file: SourceFile, container: ArrowFunction, expression: Expression) {
-        updateBraces(changeTracker, file, container, createBlock([createReturn(expression)]));
+    function needsParentheses(expression: Expression) {
+        if (isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken) return true;
+        if (isObjectLiteralExpression(expression)) return true;
+        return false;
     }
 
-    function removeBraces(changeTracker: textChanges.ChangeTracker, file: SourceFile, container: ArrowFunction, expression: Expression) {
-        if (!isLiteralExpression(expression) && !isIdentifier(expression) && !isParenthesizedExpression(expression) && expression.kind !== SyntaxKind.NullKeyword) {
-            expression = createParen(expression);
-        }
-        updateBraces(changeTracker, file, container, expression);
-    }
-
-    function updateBraces(changeTracker: textChanges.ChangeTracker, file: SourceFile, container: ArrowFunction, body: ConciseBody) {
+    function updateBody(changeTracker: textChanges.ChangeTracker, file: SourceFile, container: ArrowFunction, body: ConciseBody) {
         const arrowFunction = updateArrowFunction(
             container,
             container.modifiers,
@@ -84,21 +86,22 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
 
     function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number): Info | undefined {
         const node = getTokenAtPosition(file, startPosition, /*includeJsDocComment*/ false);
-        const container = getContainingFunction(node);
-        if (!container || !isArrowFunction(container)) return undefined;
+        const func = getContainingFunction(node);
+        if (!func || !isArrowFunction(func)) return undefined;
 
-        if (isExpression(container.body)) {
+        if (isExpression(func.body)) {
             return {
-                container,
+                func,
                 addBraces: true,
-                expression: container.body
+                expression: func.body
             };
         }
-        else if (container.body.statements.length === 1) {
-            const firstStatement = first(container.body.statements);
+        else if (func.body.statements.length === 1) {
+            const firstStatement = first(func.body.statements);
             if (isReturnStatement(firstStatement)) {
+
                 return {
-                    container,
+                    func,
                     addBraces: false,
                     expression: firstStatement.expression
                 };
