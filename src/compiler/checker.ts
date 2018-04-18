@@ -4898,8 +4898,7 @@ namespace ts {
         // in-place and returns the same array.
         function appendTypeParameters(typeParameters: TypeParameter[], declarations: ReadonlyArray<TypeParameterDeclaration>): TypeParameter[] {
             for (const declaration of declarations) {
-                const tp = getDeclaredTypeOfTypeParameter(getSymbolOfNode(declaration));
-                typeParameters = appendIfUnique(typeParameters, tp);
+                typeParameters = appendIfUnique(typeParameters, getDeclaredTypeOfTypeParameter(getSymbolOfNode(declaration)));
             }
             return typeParameters;
         }
@@ -4959,9 +4958,9 @@ namespace ts {
                 if (node.kind === SyntaxKind.InterfaceDeclaration || node.kind === SyntaxKind.ClassDeclaration ||
                     node.kind === SyntaxKind.ClassExpression || node.kind === SyntaxKind.TypeAliasDeclaration) {
                     const declaration = <InterfaceDeclaration | TypeAliasDeclaration>node;
-                    const tp = getEffectiveTypeParameterDeclarations(declaration);
-                    if (tp) {
-                        result = appendTypeParameters(result, tp);
+                    const typeParameters = getEffectiveTypeParameterDeclarations(declaration);
+                    if (typeParameters) {
+                        result = appendTypeParameters(result, typeParameters);
                     }
                 }
             }
@@ -5457,10 +5456,10 @@ namespace ts {
          */
         function isThislessFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
             const returnType = getEffectiveReturnTypeNode(node);
-            const tp = getEffectiveTypeParameterDeclarations(node);
+            const typeParameters = getEffectiveTypeParameterDeclarations(node);
             return (node.kind === SyntaxKind.Constructor || (returnType && isThislessType(returnType))) &&
                 node.parameters.every(isThislessVariableLikeDeclaration) &&
-                (!tp || tp.every(isThislessTypeParameter));
+                (!typeParameters || typeParameters.every(isThislessTypeParameter));
         }
 
         /**
@@ -6738,8 +6737,7 @@ namespace ts {
         function getTypeParametersFromDeclaration(declaration: DeclarationWithTypeParameters): TypeParameter[] {
             let result: TypeParameter[];
             forEach(getEffectiveTypeParameterDeclarations(declaration), node => {
-                const tp = getDeclaredTypeOfTypeParameter(node.symbol);
-                result = appendIfUnique(result, tp);
+                result = appendIfUnique(result, getDeclaredTypeOfTypeParameter(node.symbol));
             });
             return result;
         }
@@ -22158,9 +22156,9 @@ namespace ts {
         ): void {
             // Only report errors on the last declaration for the type parameter container;
             // this ensures that all uses have been accounted for.
-            const tp = getEffectiveTypeParameterDeclarations(node);
-            if (!(node.flags & NodeFlags.Ambient) && tp && last(getSymbolOfNode(node)!.declarations) === node) {
-                for (const typeParameter of tp) {
+            const typeParameters = getEffectiveTypeParameterDeclarations(node);
+            if (!(node.flags & NodeFlags.Ambient) && typeParameters && last(getSymbolOfNode(node)!.declarations) === node) {
+                for (const typeParameter of typeParameters) {
                     if (!(getMergedSymbol(typeParameter.symbol).isReferenced & SymbolFlags.TypeParameter) && !isIdentifierThatStartsWithUnderScore(typeParameter.name)) {
                         addDiagnostic(UnusedKind.Parameter, createDiagnosticForNode(typeParameter.name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(typeParameter.symbol)));
                     }
@@ -23540,14 +23538,14 @@ namespace ts {
 
             for (const declaration of declarations) {
                 // If this declaration has too few or too many type parameters, we report an error
-                const tp = getEffectiveTypeParameterDeclarations(declaration);
-                const numTypeParameters = length(tp);
+                const typeParameters = getEffectiveTypeParameterDeclarations(declaration);
+                const numTypeParameters = length(typeParameters);
                 if (numTypeParameters < minTypeArgumentCount || numTypeParameters > maxTypeArgumentCount) {
                     return false;
                 }
 
                 for (let i = 0; i < numTypeParameters; i++) {
-                    const source = tp[i];
+                    const source = typeParameters[i];
                     const target = typeParameters[i];
 
                     // If the type parameter node does not have the same as the resolved type
