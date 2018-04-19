@@ -5192,25 +5192,17 @@ namespace ts {
          * and if none of the base interfaces have a "this" type.
          */
         function isThislessInterface(symbol: Symbol): boolean {
-            for (const declaration of symbol.declarations) {
-                if (declaration.kind === SyntaxKind.InterfaceDeclaration) {
-                    if (declaration.flags & NodeFlags.ContainsThis) {
-                        return false;
-                    }
-                    const baseTypeNodes = getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration);
-                    if (baseTypeNodes) {
-                        for (const node of baseTypeNodes) {
-                            if (isEntityNameExpression(node.expression)) {
-                                const baseSymbol = resolveEntityName(node.expression, SymbolFlags.Type, /*ignoreErrors*/ true);
-                                if (!baseSymbol || !(baseSymbol.flags & SymbolFlags.Interface) || getDeclaredTypeOfClassOrInterface(baseSymbol).thisType) {
-                                    return false;
-                                }
-                            }
-                        }
-                    }
-                }
+            return !symbol.declarations.some(declaration =>
+                isInterfaceDeclaration(declaration) && (
+                    !!(declaration.flags & NodeFlags.ContainsThis)
+                    || some(getInterfaceBaseTypeNodes(declaration), n => !isThislessBaseType(n))));
+        }
+        function isThislessBaseType({ expression }: ExpressionWithTypeArguments): boolean {
+            if (!isEntityNameExpression(expression)) {
+                return true;
             }
-            return true;
+            const baseSymbol = resolveEntityName(expression, SymbolFlags.Type, /*ignoreErrors*/ true);
+            return baseSymbol && baseSymbol.flags & SymbolFlags.Interface && !getDeclaredTypeOfClassOrInterface(baseSymbol).thisType;
         }
 
         function getDeclaredTypeOfClassOrInterface(symbol: Symbol): InterfaceType {
@@ -5429,14 +5421,9 @@ namespace ts {
                 case SyntaxKind.ArrayType:
                     return isThislessType((<ArrayTypeNode>node).elementType);
                 case SyntaxKind.TypeReference:
-                    return !(node as TypeReferenceNode).typeArguments || (node as TypeReferenceNode).typeArguments.every(isThislessType);
+                    return every((node as TypeReferenceNode).typeArguments, isThislessType);
             }
-            return false;
-        }
-
-        /** A type parameter is thisless if its contraint is thisless, or if it has no constraint. */
-        function isThislessTypeParameter(node: TypeParameterDeclaration) {
-            return !node.constraint || isThislessType(node.constraint);
+            return false; // TODO: GH#20034
         }
 
         /**
@@ -5455,9 +5442,10 @@ namespace ts {
          */
         function isThislessFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
             const returnType = getEffectiveReturnTypeNode(node);
-            return (node.kind === SyntaxKind.Constructor || (returnType && isThislessType(returnType))) &&
+            return returnType && isThislessType(returnType) &&
                 node.parameters.every(isThislessVariableLikeDeclaration) &&
-                (!node.typeParameters || node.typeParameters.every(isThislessTypeParameter));
+                // A type parameter is thisless if its contraint is thisless, or if it has no constraint.
+                every(node.typeParameters, tp => !tp.constraint || isThislessType(tp.constraint));
         }
 
         /**
@@ -5468,21 +5456,25 @@ namespace ts {
          * assumed not to be free of "this" references.
          */
         function isThisless(symbol: Symbol): boolean {
-            if (symbol.declarations && symbol.declarations.length === 1) {
-                const declaration = symbol.declarations[0];
-                if (declaration) {
-                    switch (declaration.kind) {
-                        case SyntaxKind.PropertyDeclaration:
-                        case SyntaxKind.PropertySignature:
-                            return isThislessVariableLikeDeclaration(<VariableLikeDeclaration>declaration);
-                        case SyntaxKind.MethodDeclaration:
-                        case SyntaxKind.MethodSignature:
-                        case SyntaxKind.Constructor:
-                            return isThislessFunctionLikeDeclaration(<FunctionLikeDeclaration>declaration);
-                    }
-                }
+            const declaration = singleOrUndefined(symbol.declarations);
+            if (!declaration) return false;
+            switch (declaration.kind) {
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                    return isThislessVariableLikeDeclaration(<VariableLikeDeclaration>declaration);
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.Constructor:
+                    return isThislessFunctionLikeDeclaration(<FunctionLikeDeclaration>declaration);
+                case SyntaxKind.Parameter:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.BinaryExpression:
+                case SyntaxKind.PropertyAccessExpression: // See `tests/cases/fourslash/renameJsThisProperty05` and 06
+                    return false; // TODO: GH#20034
+                default:
+                    throw Debug.failBadSyntaxKind(declaration);
             }
-            return false;
         }
 
         // The mappingThisOnly flag indicates that the only type parameter being mapped is "this". When the flag is true,
