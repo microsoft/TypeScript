@@ -18,6 +18,7 @@ namespace ts.SignatureHelp {
 
     export function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, cancellationToken: CancellationToken): SignatureHelpItems {
         const typeChecker = program.getTypeChecker();
+        typeChecker.setCancellationToken(cancellationToken);
 
         // Decide whether to show signature help
         const startingToken = findTokenOnLeftOfPosition(sourceFile, position);

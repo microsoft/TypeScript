@@ -2997,6 +2997,8 @@ namespace ts {
          * Others are added in computeSuggestionDiagnostics.
          */
         /* @internal */ getSuggestionDiagnostics(file: SourceFile): ReadonlyArray<Diagnostic>;
+
+        setCancellationToken(token: CancellationToken): void;
     }
 
     /* @internal */

@@ -324,6 +324,10 @@ namespace ts {
                     return diagnostics;
                 }
             },
+
+            setCancellationToken: token => {
+                cancellationToken = token;
+            }
         };
 
         const tupleTypes: GenericType[] = [];
@@ -2958,6 +2962,9 @@ namespace ts {
             }
 
             function typeToTypeNodeHelper(type: Type, context: NodeBuilderContext): TypeNode {
+                if (cancellationToken && cancellationToken.throwIfCancellationRequested) {
+                    cancellationToken.throwIfCancellationRequested();
+                }
                 const inTypeAlias = context.flags & NodeBuilderFlags.InTypeAlias;
                 context.flags &= ~NodeBuilderFlags.InTypeAlias;
 
