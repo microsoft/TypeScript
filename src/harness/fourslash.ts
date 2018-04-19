@@ -2103,14 +2103,11 @@ Actual: ${stringify(fullActual)}`);
                 this.raiseError("verifyRangesInImplementationList failed - expected to find at least one implementation location but got 0");
             }
 
-            for (let i = 0; i < implementations.length; i++) {
-                for (let j = 0; j < implementations.length; j++) {
-                    if (i !== j && implementationsAreEqual(implementations[i], implementations[j])) {
-                        const { textSpan, fileName } = implementations[i];
-                        const end = textSpan.start + textSpan.length;
-                        this.raiseError(`Duplicate implementations returned for range (${textSpan.start}, ${end}) in ${fileName}`);
-                    }
-                }
+            const duplicate = findDuplicatedElement(implementations, implementationsAreEqual);
+            if (duplicate) {
+                const { textSpan, fileName } = duplicate;
+                const end = textSpan.start + textSpan.length;
+                this.raiseError(`Duplicate implementations returned for range (${textSpan.start}, ${end}) in ${fileName}`);
             }
 
             const ranges = this.getRanges();
@@ -3756,6 +3753,16 @@ ${code}
 
     function stripWhitespace(s: string): string {
         return s.replace(/\s/g, "");
+    }
+
+    function findDuplicatedElement<T>(a: ReadonlyArray<T>, equal: (a: T, b: T) => boolean): T | undefined {
+        for (let i = 0; i < a.length; i++) {
+            for (let j = i + 1; j < a.length; j++) {
+                if (equal(a[i], a[j])) {
+                    return a[i];
+                }
+            }
+        }
     }
 }
 

@@ -10,6 +10,7 @@ namespace ts {
 
         invalidateResolutionOfFile(filePath: Path): void;
         removeResolutionsOfFile(filePath: Path): void;
+        setFilesWithInvalidatedNonRelativeUnresolvedImports(filesWithUnresolvedImports: Map<ReadonlyArray<string>>): void;
         createHasInvalidatedResolution(forceAllFilesAsInvalidated?: boolean): HasInvalidatedResolution;
 
         startCachingPerDirectoryResolution(): void;
@@ -74,6 +75,7 @@ namespace ts {
     export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootDirForResolution: string | undefined, logChangesWhenResolvingModule: boolean): ResolutionCache {
         let filesWithChangedSetOfUnresolvedImports: Path[] | undefined;
         let filesWithInvalidatedResolutions: Map<true> | undefined;
+        let filesWithInvalidatedNonRelativeUnresolvedImports: Map<ReadonlyArray<string>> | undefined;
         let allFilesHaveInvalidatedResolution = false;
 
         const getCurrentDirectory = memoize(() => resolutionHost.getCurrentDirectory!()); // TODO: GH#18217
@@ -122,6 +124,7 @@ namespace ts {
             resolveTypeReferenceDirectives,
             removeResolutionsOfFile,
             invalidateResolutionOfFile,
+            setFilesWithInvalidatedNonRelativeUnresolvedImports,
             createHasInvalidatedResolution,
             updateTypeRootsWatch,
             closeTypeRootsWatch,
@@ -165,6 +168,16 @@ namespace ts {
             return collected;
         }
 
+        function isFileWithInvalidatedNonRelativeUnresolvedImports(path: Path): boolean {
+            if (!filesWithInvalidatedNonRelativeUnresolvedImports) {
+                return false;
+            }
+
+            // Invalidated if file has unresolved imports
+            const value = filesWithInvalidatedNonRelativeUnresolvedImports.get(path);
+            return !!value && !!value.length;
+        }
+
         function createHasInvalidatedResolution(forceAllFilesAsInvalidated?: boolean): HasInvalidatedResolution {
             if (allFilesHaveInvalidatedResolution || forceAllFilesAsInvalidated) {
                 // Any file asked would have invalidated resolution
@@ -173,7 +186,8 @@ namespace ts {
             }
             const collected = filesWithInvalidatedResolutions;
             filesWithInvalidatedResolutions = undefined;
-            return path => !!collected && collected.has(path);
+            return path => (!!collected && collected.has(path)) ||
+                isFileWithInvalidatedNonRelativeUnresolvedImports(path);
         }
 
         function clearPerDirectoryResolutions() {
@@ -184,6 +198,7 @@ namespace ts {
 
         function finishCachingPerDirectoryResolution() {
             allFilesHaveInvalidatedResolution = false;
+            filesWithInvalidatedNonRelativeUnresolvedImports = undefined;
             directoryWatchesOfFailedLookups.forEach((watcher, path) => {
                 if (watcher.refCount === 0) {
                     directoryWatchesOfFailedLookups.delete(path);
@@ -237,13 +252,15 @@ namespace ts {
 
             const resolvedModules: R[] = [];
             const compilerOptions = resolutionHost.getCompilationSettings();
-
+            const hasInvalidatedNonRelativeUnresolvedImport = logChanges && isFileWithInvalidatedNonRelativeUnresolvedImports(path);
             const seenNamesInFile = createMap<true>();
             for (const name of names) {
                 let resolution = resolutionsInFile.get(name);
                 // Resolution is valid if it is present and not invalidated
                 if (!seenNamesInFile.has(name) &&
-                    allFilesHaveInvalidatedResolution || !resolution || resolution.isInvalidated) {
+                    allFilesHaveInvalidatedResolution || !resolution || resolution.isInvalidated ||
+                    // If the name is unresolved import that was invalidated, recalculate
+                    (hasInvalidatedNonRelativeUnresolvedImport && !isExternalModuleNameRelative(name) && !getResolutionWithResolvedFileName(resolution))) {
                     const existingResolution = resolution;
                     const resolutionInDirectory = perDirectoryResolution.get(name);
                     if (resolutionInDirectory) {
@@ -284,7 +301,7 @@ namespace ts {
                 if (oldResolution === newResolution) {
                     return true;
                 }
-                if (!oldResolution || !newResolution || oldResolution.isInvalidated) {
+                if (!oldResolution || !newResolution) {
                     return false;
                 }
                 const oldResult = getResolutionWithResolvedFileName(oldResolution);
@@ -575,6 +592,11 @@ namespace ts {
                     return !!result && resolutionHost.toPath(result.resolvedFileName!) === filePath; // TODO: GH#18217
                 }
             );
+        }
+
+        function setFilesWithInvalidatedNonRelativeUnresolvedImports(filesMap: Map<ReadonlyArray<string>>) {
+            Debug.assert(filesWithInvalidatedNonRelativeUnresolvedImports === filesMap || filesWithInvalidatedNonRelativeUnresolvedImports === undefined);
+            filesWithInvalidatedNonRelativeUnresolvedImports = filesMap;
         }
 
         function invalidateResolutionOfFailedLookupLocation(fileOrDirectoryPath: Path, isCreatingWatchedDirectory: boolean) {

@@ -1625,6 +1625,9 @@ namespace ts {
                     collectDynamicImportOrRequireCalls(node);
                 }
             }
+            if ((file.flags & NodeFlags.PossiblyContainsDynamicImport) || isJavaScriptFile) {
+                collectDynamicImportOrRequireCalls(file.endOfFileToken);
+            }
 
             file.imports = imports || emptyArray;
             file.moduleAugmentations = moduleAugmentations || emptyArray;
@@ -2005,7 +2008,8 @@ namespace ts {
                         && !options.noResolve
                         && i < file.imports.length
                         && !elideImport
-                        && !(isJsFile && !options.allowJs);
+                        && !(isJsFile && !options.allowJs)
+                        && (isInJavaScriptFile(file.imports[i]) || !(file.imports[i].flags & NodeFlags.JSDoc));
 
                     if (elideImport) {
                         modulesWithElidedImports.set(file.path, true);

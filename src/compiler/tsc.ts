@@ -19,9 +19,16 @@ namespace ts {
 
     let reportDiagnostic = createDiagnosticReporter(sys);
     function updateReportDiagnostic(options: CompilerOptions) {
-        if (options.pretty) {
+        if (shouldBePretty(options)) {
             reportDiagnostic = createDiagnosticReporter(sys, /*pretty*/ true);
         }
+    }
+
+    function shouldBePretty(options: CompilerOptions) {
+        if (typeof options.pretty === "undefined") {
+            return !!sys.writeOutputIsTTY && sys.writeOutputIsTTY();
+        }
+        return options.pretty;
     }
 
     function padLeft(s: string, length: number) {
@@ -159,7 +166,7 @@ namespace ts {
     }
 
     function createWatchStatusReporter(options: CompilerOptions) {
-        return ts.createWatchStatusReporter(sys, !!options.pretty);
+        return ts.createWatchStatusReporter(sys, shouldBePretty(options));
     }
 
     function createWatchOfConfigFile(configParseResult: ParsedCommandLine, optionsToExtend: CompilerOptions) {

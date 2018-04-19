@@ -10,7 +10,7 @@ interface PromiseConstructor {
      * a resolve callback used resolve the promise with a value or the result of another promise,
      * and a reject callback used to reject the promise with a provided reason or error.
      */
-    new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): Promise<T>;
+    new <T>(executor: (resolve: [T] extends [void] ? (value?: T | PromiseLike<T>) => void : (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): Promise<T>;
 
     /**
      * Creates a Promise that is resolved with an array of results when all of the provided Promises
@@ -177,14 +177,7 @@ interface PromiseConstructor {
      * @param reason The reason the promise was rejected.
      * @returns A new rejected Promise.
      */
-    reject(reason: any): Promise<never>;
-
-    /**
-     * Creates a new rejected promise for the provided reason.
-     * @param reason The reason the promise was rejected.
-     * @returns A new rejected Promise.
-     */
-    reject<T>(reason: any): Promise<T>;
+    reject<T = never>(reason?: any): Promise<T>;
 
     /**
      * Creates a new resolved promise for the provided value.

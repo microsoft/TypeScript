@@ -24,7 +24,7 @@ namespace ts.server {
         globalTypingsCacheLocation: undefined! // TODO: GH#18217
     };
 
-    class TypingsCacheEntry {
+    interface TypingsCacheEntry {
         readonly typeAcquisition: TypeAcquisition;
         readonly compilerOptions: CompilerOptions;
         readonly typings: SortedReadonlyArray<string>;
@@ -80,6 +80,7 @@ namespace ts.server {
         return !arrayIsEqualTo(imports1, imports2);
     }
 
+    /*@internal*/
     export class TypingsCache {
         private readonly perProjectCache: Map<TypingsCacheEntry> = createMap<TypingsCacheEntry>();
 
@@ -94,15 +95,14 @@ namespace ts.server {
             return this.installer.installPackage(options);
         }
 
-        getTypingsForProject(project: Project, unresolvedImports: SortedReadonlyArray<string> | undefined, forceRefresh: boolean): SortedReadonlyArray<string> {
+        enqueueInstallTypingsForProject(project: Project, unresolvedImports: SortedReadonlyArray<string> | undefined, forceRefresh: boolean) {
             const typeAcquisition = project.getTypeAcquisition();
 
             if (!typeAcquisition || !typeAcquisition.enable) {
-                return <any>emptyArray;
+                return;
             }
 
             const entry = this.perProjectCache.get(project.getProjectName());
-            const result: SortedReadonlyArray<string> = entry ? entry.typings : <any>emptyArray;
             if (forceRefresh ||
                 !entry ||
                 typeAcquisitionChanged(typeAcquisition, entry.typeAcquisition) ||
@@ -113,28 +113,25 @@ namespace ts.server {
                 this.perProjectCache.set(project.getProjectName(), {
                     compilerOptions: project.getCompilationSettings(),
                     typeAcquisition,
-                    typings: result,
+                    typings: entry ? entry.typings : emptyArray,
                     unresolvedImports,
                     poisoned: true
                 });
                 // something has been changed, issue a request to update typings
                 this.installer.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
             }
-            return result;
         }
 
         updateTypingsForProject(projectName: string, compilerOptions: CompilerOptions, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, newTypings: string[]) {
+            const typings = toSortedArray(newTypings);
             this.perProjectCache.set(projectName, {
                 compilerOptions,
                 typeAcquisition,
-                typings: toSortedArray(newTypings),
+                typings,
                 unresolvedImports,
                 poisoned: false
             });
-        }
-
-        deleteTypingsForProject(projectName: string) {
-            this.perProjectCache.delete(projectName);
+            return !typeAcquisition || !typeAcquisition.enable ? emptyArray : typings;
         }
 
         onProjectClosed(project: Project) {

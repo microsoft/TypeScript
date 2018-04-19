@@ -64,11 +64,13 @@ namespace ts.server.typingsInstaller {
         onRequestCompleted: RequestCompletedAction;
     }
 
+    type ProjectWatchers = Map<FileWatcher> & { isInvoked?: boolean; };
+
     export abstract class TypingsInstaller {
         private readonly packageNameToTypingLocation: Map<JsTyping.CachedTyping> = createMap<JsTyping.CachedTyping>();
         private readonly missingTypingsSet: Map<true> = createMap<true>();
         private readonly knownCachesSet: Map<true> = createMap<true>();
-        private readonly projectWatchers = createMap<Map<FileWatcher>>();
+        private readonly projectWatchers = createMap<ProjectWatchers>();
         private safeList: JsTyping.SafeList | undefined;
         readonly pendingRunRequests: PendingRequest[] = [];
 
@@ -378,8 +380,8 @@ namespace ts.server.typingsInstaller {
                 this.projectWatchers.set(projectName, watchers);
             }
 
+            watchers.isInvoked = false;
             // handler should be invoked once for the entire set of files since it will trigger full rediscovery of typings
-            let isInvoked = false;
             const isLoggingEnabled = this.log.isEnabled();
             mutateMap(
                 watchers,
@@ -392,11 +394,11 @@ namespace ts.server.typingsInstaller {
                         }
                         const watcher = this.installTypingHost.watchFile!(file, (f, eventKind) => { // TODO: GH#18217
                             if (isLoggingEnabled) {
-                                this.log.writeLine(`FileWatcher:: Triggered with ${f} eventKind: ${FileWatcherEventKind[eventKind]}:: WatchInfo: ${file}:: handler is already invoked '${isInvoked}'`);
+                                this.log.writeLine(`FileWatcher:: Triggered with ${f} eventKind: ${FileWatcherEventKind[eventKind]}:: WatchInfo: ${file}:: handler is already invoked '${watchers!.isInvoked}'`);
                             }
-                            if (!isInvoked) {
+                            if (!watchers!.isInvoked) {
+                                watchers!.isInvoked = true;
                                 this.sendResponse({ projectName, kind: ActionInvalidate });
-                                isInvoked = true;
                             }
                         }, /*pollingInterval*/ 2000);
                         return isLoggingEnabled ? {
