@@ -2998,7 +2998,7 @@ namespace ts {
          */
         /* @internal */ getSuggestionDiagnostics(file: SourceFile): ReadonlyArray<Diagnostic>;
 
-        setCancellationToken(token: CancellationToken): void;
+        runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
     }
 
     /* @internal */

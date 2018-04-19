@@ -325,8 +325,14 @@ namespace ts {
                 }
             },
 
-            setCancellationToken: token => {
-                cancellationToken = token;
+            runWithCancellationToken: (token, callback) => {
+                try {
+                    cancellationToken = token;
+                    return callback(checker);
+                }
+                finally {
+                    cancellationToken = undefined;
+                }
             }
         };
 
