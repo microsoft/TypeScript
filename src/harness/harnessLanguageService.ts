@@ -117,8 +117,8 @@ namespace Harness.LanguageService {
     }
 
     export abstract class LanguageServiceAdapterHost {
-        public typesRegistry: ts.Map<void> | undefined;
         public readonly vfs = new vfs.FileSystem(/*ignoreCase*/ true, { cwd: virtualFileSystemRoot });
+        public typesRegistry: ts.Map<void> | undefined;
         private scriptInfos: core.SortedMap<string, ScriptInfo>;
 
         constructor(protected cancellationToken = DefaultHostCancellationToken.instance,
@@ -139,17 +139,6 @@ namespace Harness.LanguageService {
                     fileNames.push(scriptInfo.fileName);
                 }
             });
-            // this.vfs.scanSync("/", "descendants-or-self", {
-            //     accept: (path, stats) => {
-            //         if (stats.isFile()) {
-            //             const scriptInfo = this.vfs.filemeta(path).get("scriptInfo") as ScriptInfo;
-            //             if (scriptInfo && scriptInfo.isRootFile) {
-            //                 fileNames.push(scriptInfo.fileName);
-            //             }
-            //         }
-            //         return false;
-            //     }
-            // });
             return fileNames;
         }
 

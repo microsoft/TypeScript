@@ -276,7 +276,7 @@ namespace FourSlash {
 
             if (configFileName) {
                 const baseDir = ts.normalizePath(ts.getDirectoryPath(configFileName));
-                const host = new compiler.ParseConfigHost(vfsutils.createFromMap(baseDir, /*ignoreCase*/ true, this.inputFiles));
+                const host = new fakes.ParseConfigHost(vfsutils.createFromMap(baseDir, /*ignoreCase*/ true, this.inputFiles));
 
                 const configJsonObj = ts.parseConfigFileTextToJson(configFileName, this.inputFiles.get(configFileName));
                 assert.isTrue(configJsonObj.config !== undefined);

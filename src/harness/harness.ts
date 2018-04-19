@@ -1248,7 +1248,7 @@ namespace Harness {
             }
 
             return compiler.compileFiles(
-                new compiler.CompilerHost(
+                new fakes.CompilerHost(
                     vfsutils.createFromDocuments(
                         useCaseSensitiveFileNames,
                         inputFiles.concat(otherFiles).map(documents.TextDocument.fromTestFile),

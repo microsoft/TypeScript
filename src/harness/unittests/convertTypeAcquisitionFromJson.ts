@@ -45,7 +45,7 @@ namespace ts {
             const result = parseJsonText(configFileName, fileText);
             assert(!result.parseDiagnostics.length);
             assert(!!result.endOfFileToken);
-            const host: ParseConfigHost = new compiler.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: "/apath/" }));
+            const host: ParseConfigHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: "/apath/" }));
             const { typeAcquisition: actualTypeAcquisition, errors: actualParseErrors } = parseJsonSourceFileConfigFileContent(result, host, "/apath/", /*existingOptions*/ undefined, configFileName);
             verifyAcquisition(actualTypeAcquisition, expectedResult);
 

@@ -1,6 +1,5 @@
 /// <reference path="..\harness.ts" />
 /// <reference path="tsserverProjectSystem.ts" />
-/// <reference path="../fakes.ts" />
 
 namespace ts {
     interface Range {
@@ -111,7 +110,7 @@ namespace ts {
 
         function runBaseline(extension: Extension) {
             const path = "/a" + extension;
-            const program = makeProgram(path, t.source, includeLib);
+            const program = makeProgram({ path, content: t.source }, includeLib);
 
             if (hasSyntacticDiagnostics(program)) {
                 // Don't bother generating JS baselines for inputs that aren't valid JS.
@@ -147,19 +146,17 @@ namespace ts {
                     const newTextWithRename = newText.slice(0, renameLocation) + "/*RENAME*/" + newText.slice(renameLocation);
                     data.push(newTextWithRename);
 
-                    const diagProgram = makeProgram(path, newText, includeLib);
+                    const diagProgram = makeProgram({ path, content: newText }, includeLib);
                     assert.isFalse(hasSyntacticDiagnostics(diagProgram));
                 }
                 return data.join(newLineCharacter);
             });
         }
 
-        function makeProgram(path: string, content: string, includeLib?: boolean) {
-            // libFile is expensive to parse repeatedly - only test when required
-            const fs = new vfs.FileSystem(/*ignoreCase*/ true, { files: { [path]: content } });
-            const host = new fakes.ServerHost(fs, { lib: includeLib });
+        function makeProgram(f: { path: string, content: string }, includeLib?: boolean) {
+            const host = projectSystem.createServerHost(includeLib ? [f, projectSystem.libFile] : [f]); // libFile is expensive to parse repeatedly - only test when required
             const projectService = projectSystem.createProjectService(host);
-            projectService.openClientFile(path);
+            projectService.openClientFile(f.path);
             const program = projectService.inferredProjects[0].getLanguageService().getProgram();
             return program;
         }
@@ -177,12 +174,15 @@ namespace ts {
             if (!selectionRange) {
                 throw new Error(`Test ${caption} does not specify selection range`);
             }
-            const fs = new vfs.FileSystem(/*ignoreCase*/ true, { files: { "/a.ts": t.source } });
-            const host = new fakes.ServerHost(fs, { lib: true });
+            const f = {
+                path: "/a.ts",
+                content: t.source
+            };
+            const host = projectSystem.createServerHost([f, projectSystem.libFile]);
             const projectService = projectSystem.createProjectService(host);
-            projectService.openClientFile("/a.ts");
+            projectService.openClientFile(f.path);
             const program = projectService.inferredProjects[0].getLanguageService().getProgram();
-            const sourceFile = program.getSourceFile("/a.ts");
+            const sourceFile = program.getSourceFile(f.path);
             const context: RefactorContext = {
                 cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
                 program,

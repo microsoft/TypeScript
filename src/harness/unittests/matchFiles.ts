@@ -5,7 +5,7 @@
 namespace ts {
     const caseInsensitiveBasePath = "c:/dev/";
     const caseInsensitiveTsconfigPath = "c:/dev/tsconfig.json";
-    const caseInsensitiveHost = new compiler.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
+    const caseInsensitiveHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
         "c:/dev/a.ts": "",
         "c:/dev/a.d.ts": "",
         "c:/dev/a.js": "",
@@ -32,7 +32,7 @@ namespace ts {
     }}));
 
     const caseSensitiveBasePath = "/dev/";
-    const caseSensitiveHost = new compiler.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: caseSensitiveBasePath, files: {
+    const caseSensitiveHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: caseSensitiveBasePath, files: {
         "/dev/a.ts": "",
         "/dev/a.d.ts": "",
         "/dev/a.js": "",
@@ -56,7 +56,7 @@ namespace ts {
         "/dev/js/b.js": "",
     }}));
 
-    const caseInsensitiveMixedExtensionHost = new compiler.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
+    const caseInsensitiveMixedExtensionHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
         "c:/dev/a.ts": "",
         "c:/dev/a.d.ts": "",
         "c:/dev/a.js": "",
@@ -70,7 +70,7 @@ namespace ts {
         "c:/dev/f.other": "",
     }}));
 
-    const caseInsensitiveCommonFoldersHost = new compiler.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
+    const caseInsensitiveCommonFoldersHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
         "c:/dev/a.ts": "",
         "c:/dev/a.d.ts": "",
         "c:/dev/a.js": "",
@@ -81,7 +81,7 @@ namespace ts {
         "c:/dev/jspm_packages/a.ts": "",
     }}));
 
-    const caseInsensitiveDottedFoldersHost = new compiler.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
+    const caseInsensitiveDottedFoldersHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
         "c:/dev/x/d.ts": "",
         "c:/dev/x/y/d.ts": "",
         "c:/dev/x/y/.e.ts": "",
@@ -92,13 +92,13 @@ namespace ts {
         "c:/dev/g.min.js/.g/g.ts": "",
     }}));
 
-    const caseInsensitiveOrderingDiffersWithCaseHost = new compiler.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
+    const caseInsensitiveOrderingDiffersWithCaseHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
         "c:/dev/xylophone.ts": "",
         "c:/dev/Yosemite.ts": "",
         "c:/dev/zebra.ts": "",
     }}));
 
-    const caseSensitiveOrderingDiffersWithCaseHost = new compiler.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: caseSensitiveBasePath, files: {
+    const caseSensitiveOrderingDiffersWithCaseHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: caseSensitiveBasePath, files: {
         "/dev/xylophone.ts": "",
         "/dev/Yosemite.ts": "",
         "/dev/zebra.ts": "",

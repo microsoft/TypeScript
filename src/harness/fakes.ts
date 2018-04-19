@@ -9,76 +9,63 @@
 namespace fakes {
     const processExitSentinel = new Error("System exit");
 
-    export interface ServerHostOptions {
-        /**
-         * The virtual path to tsc.js. If not specified, a default of `"/.ts/tsc.js"` is used.
-         */
+    export interface SystemOptions {
         executingFilePath?: string;
         newLine?: "\r\n" | "\n";
-        safeList?: boolean;
-        lib?: boolean;
-        dos?: boolean;
+        env?: Record<string, string>;
     }
 
-    export class ServerHost implements ts.server.ServerHost, ts.FormatDiagnosticsHost {
+    /**
+     * A fake `ts.System` that leverages a virtual file system.
+     */
+    export class System implements ts.System {
         public readonly vfs: vfs.FileSystem;
+        public readonly args: string[] = [];
+        public readonly output: string[] = [];
+        public readonly newLine: string;
+        public readonly useCaseSensitiveFileNames: boolean;
         public exitCode: number;
-        private readonly _output: string[] = [];
-        private readonly _executingFilePath: string;
-        private readonly _getCanonicalFileName: (file: string) => string;
 
-        constructor(vfs: vfs.FileSystem, options: ServerHostOptions = {}) {
-            const {
-                dos = false,
-                executingFilePath = dos
-                    ? vfsutils.dosTscPath
-                    : vfsutils.tscPath,
-                newLine = "\n",
-                safeList = false,
-                lib = false,
-            } = options;
+        private readonly _executingFilePath: string | undefined;
+        private readonly _env: Record<string, string> | undefined;
 
+        constructor(vfs: vfs.FileSystem, { executingFilePath, newLine = "\n", env }: SystemOptions = {}) {
             this.vfs = vfs.isReadonly ? vfs.shadow() : vfs;
             this.useCaseSensitiveFileNames = !this.vfs.ignoreCase;
             this.newLine = newLine;
             this._executingFilePath = executingFilePath;
-            this._getCanonicalFileName = ts.createGetCanonicalFileName(this.useCaseSensitiveFileNames);
-
-            if (safeList) {
-                const safelistPath = dos ? vfsutils.dosSafelistPath : vfsutils.safelistPath;
-                this.vfs.mkdirpSync(vpath.dirname(safelistPath));
-                this.vfs.writeFileSync(safelistPath, vfsutils.safelistContent);
-            }
-
-            if (lib) {
-                const libPath = dos ? vfsutils.dosLibPath : vfsutils.libPath;
-                this.vfs.mkdirpSync(vpath.dirname(libPath));
-                this.vfs.writeFileSync(libPath, vfsutils.emptyLibContent);
-            }
+            this._env = env;
         }
 
-        // #region System members
-        public readonly newLine: string;
-        public readonly useCaseSensitiveFileNames: boolean;
-
         public write(message: string) {
-            this._output.push(message);
+            this.output.push(message);
         }
 
         public readFile(path: string) {
-            return vfsutils.readFile(this.vfs, path);
+            try {
+                const content = this.vfs.readFileSync(path, "utf8");
+                return content === undefined ? undefined :
+                    vpath.extname(path) === ".json" ? utils.removeComments(core.removeByteOrderMark(content), utils.CommentRemoval.leadingAndTrailing) :
+                    core.removeByteOrderMark(content);
+            }
+            catch {
+                return undefined;
+            }
         }
 
         public writeFile(path: string, data: string, writeByteOrderMark?: boolean): void {
-            vfsutils.writeFile(this.vfs, path, data, writeByteOrderMark);
+            this.vfs.mkdirpSync(vpath.dirname(path));
+            this.vfs.writeFileSync(path, writeByteOrderMark ? core.addUTF8ByteOrderMark(data) : data);
         }
 
         public fileExists(path: string) {
-            return vfsutils.fileExists(this.vfs, path);
+            const stats = this._getStats(path);
+            return stats ? stats.isFile() : false;
         }
 
         public directoryExists(path: string) {
-            return vfsutils.directoryExists(this.vfs, path);
+            const stats = this._getStats(path);
+            return stats ? stats.isDirectory() : false;
         }
 
         public createDirectory(path: string): void {
@@ -90,12 +77,38 @@ namespace fakes {
         }
 
         public getDirectories(path: string) {
-            return vfsutils.getDirectories(this.vfs, path);
+            const result: string[] = [];
+            try {
+                for (const file of this.vfs.readdirSync(path)) {
+                    if (this.vfs.statSync(vpath.combine(path, file)).isDirectory()) {
+                        result.push(file);
+                    }
+                }
+            }
+            catch { /*ignore*/ }
+            return result;
         }
 
         public readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
-            return ts.matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.vfs.cwd(), depth, path => {
-                return vfsutils.getAccessibleFileSystemEntries(this.vfs, path);
+            return ts.matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, path => {
+                const files: string[] = [];
+                const directories: string[] = [];
+                try {
+                    for (const file of this.vfs.readdirSync(path)) {
+                        try {
+                            const stats = this.vfs.statSync(vpath.combine(path, file));
+                            if (stats.isFile()) {
+                                files.push(file);
+                            }
+                            else if (stats.isDirectory()) {
+                                directories.push(file);
+                            }
+                        }
+                        catch { /*ignored*/ }
+                    }
+                }
+                catch { /*ignored*/ }
+                return { files, directories };
             });
         }
 
@@ -104,18 +117,9 @@ namespace fakes {
             throw processExitSentinel;
         }
 
-        public readonly args: string[] = [];
-
         public getFileSize(path: string) {
-            return vfsutils.getFileSize(this.vfs, path);
-        }
-
-        public watchFile(_path: string, _cb: ts.FileWatcherCallback): ts.FileWatcher {
-            return { close(): void { /*ignored*/ } };
-        }
-
-        public watchDirectory(_path: string, _cb: ts.DirectoryWatcherCallback, _recursive?: boolean): ts.FileWatcher {
-            return { close(): void { /*ignored*/ } };
+            const stats = this._getStats(path);
+            return stats && stats.isFile() ? stats.size : 0;
         }
 
         public resolvePath(path: string) {
@@ -123,11 +127,13 @@ namespace fakes {
         }
 
         public getExecutingFilePath() {
+            if (this._executingFilePath === undefined) return ts.notImplemented();
             return this._executingFilePath;
         }
 
         public getModifiedTime(path: string) {
-            return vfsutils.getModifiedTime(this.vfs, path);
+            const stats = this._getStats(path);
+            return stats ? stats.mtime : undefined;
         }
 
         public createHash(data: string): string {
@@ -143,38 +149,231 @@ namespace fakes {
             }
         }
 
-        public getEnvironmentVariable(_name: string): string | undefined {
-            return undefined;
+        public getEnvironmentVariable(name: string): string | undefined {
+            return this._env && this._env[name];
         }
 
-        public setTimeout(_callback: (...args: any[]) => void, _timeout: number, ..._args: any[]) {
-            return ts.notImplemented();
+        private _getStats(path: string) {
+            try {
+                return this.vfs.statSync(path);
+            }
+            catch {
+                return undefined;
+            }
+        }
+    }
+
+    /**
+     * A fake `ts.ParseConfigHost` that leverages a virtual file system.
+     */
+    export class ParseConfigHost implements ts.ParseConfigHost {
+        public readonly sys: System;
+
+        constructor(sys: System | vfs.FileSystem) {
+            if (sys instanceof vfs.FileSystem) sys = new System(sys);
+            this.sys = sys;
         }
 
-        public clearTimeout(_timeoutId: any): void {
-            return ts.notImplemented();
-        }
-        // #endregion System members
-
-        // #region FormatDiagnosticsHost members
-        public getNewLine() {
-            return this.newLine;
+        public get vfs() {
+            return this.sys.vfs;
         }
 
-        public getCanonicalFileName(fileName: string) {
-            return this._getCanonicalFileName(fileName);
-        }
-        // #endregion FormatDiagnosticsHost members
-
-        // #region ServerHost members
-        public setImmediate(_callback: (...args: any[]) => void, ..._args: any[]): any {
-            return ts.notImplemented();
+        public get useCaseSensitiveFileNames() {
+            return this.sys.useCaseSensitiveFileNames;
         }
 
-        public clearImmediate(_timeoutId: any): void {
-            return ts.notImplemented();
+        public fileExists(fileName: string): boolean {
+            return this.sys.fileExists(fileName);
         }
-        // #endregion ServerHost members
+
+        public directoryExists(directoryName: string): boolean {
+            return this.sys.directoryExists(directoryName);
+        }
+
+        public readFile(path: string): string | undefined {
+            return this.sys.readFile(path);
+        }
+
+        public readDirectory(path: string, extensions: string[], excludes: string[], includes: string[], depth: number): string[] {
+            return this.sys.readDirectory(path, extensions, excludes, includes, depth);
+        }
+    }
+
+    /**
+     * A fake `ts.CompilerHost` that leverages a virtual file system.
+     */
+    export class CompilerHost implements ts.CompilerHost {
+        public readonly sys: System;
+        public readonly defaultLibLocation: string;
+        public readonly outputs: documents.TextDocument[] = [];
+        public readonly traces: string[] = [];
+        public readonly shouldAssertInvariants = !Harness.lightMode;
+
+        private _setParentNodes: boolean;
+        private _sourceFiles: core.SortedMap<string, ts.SourceFile>;
+        private _parseConfigHost: ParseConfigHost;
+        private _newLine: string;
+
+        constructor(sys: System | vfs.FileSystem, options: ts.CompilerOptions, setParentNodes = false) {
+            if (sys instanceof vfs.FileSystem) sys = new System(sys, { newLine: "\r\n" });
+            this.sys = sys;
+            this.defaultLibLocation = sys.vfs.meta.get("defaultLibLocation") || "";
+            this._newLine = ts.getNewLineCharacter(options, () => this.sys.newLine);
+            this._sourceFiles = new core.SortedMap<string, ts.SourceFile>({ comparer: sys.vfs.stringComparer, sort: "insertion" });
+            this._setParentNodes = setParentNodes;
+        }
+
+        public get vfs() {
+            return this.sys.vfs;
+        }
+
+        public get parseConfigHost() {
+            return this._parseConfigHost || (this._parseConfigHost = new ParseConfigHost(this.sys));
+        }
+
+        public getCurrentDirectory(): string {
+            return this.sys.getCurrentDirectory();
+        }
+
+        public useCaseSensitiveFileNames(): boolean {
+            return this.sys.useCaseSensitiveFileNames;
+        }
+
+        public getNewLine(): string {
+            return this._newLine;
+        }
+
+        public getCanonicalFileName(fileName: string): string {
+            return this.sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
+        }
+
+        public fileExists(fileName: string): boolean {
+            return this.sys.fileExists(fileName);
+        }
+
+        public directoryExists(directoryName: string): boolean {
+            return this.sys.directoryExists(directoryName);
+        }
+
+        public getDirectories(path: string): string[] {
+            return this.sys.getDirectories(path);
+        }
+
+        public readFile(path: string): string | undefined {
+            return this.sys.readFile(path);
+        }
+
+        public writeFile(fileName: string, content: string, writeByteOrderMark: boolean) {
+            if (writeByteOrderMark) content = core.addUTF8ByteOrderMark(content);
+            this.sys.writeFile(fileName, content);
+
+            const document = new documents.TextDocument(fileName, content);
+            document.meta.set("fileName", fileName);
+            this.vfs.filemeta(fileName).set("document", document);
+            const index = this.outputs.findIndex(output => this.vfs.stringComparer(document.file, output.file) === 0);
+            if (index < 0) {
+                this.outputs.push(document);
+            }
+            else {
+                this.outputs[index] = document;
+            }
+        }
+
+        public trace(s: string): void {
+            this.traces.push(s);
+        }
+
+        public realpath(path: string): string {
+            return this.sys.realpath(path);
+        }
+
+        public getDefaultLibLocation(): string {
+            return vpath.resolve(this.getCurrentDirectory(), this.defaultLibLocation);
+        }
+
+        public getDefaultLibFileName(options: ts.CompilerOptions): string {
+            // return vpath.resolve(this.getDefaultLibLocation(), ts.getDefaultLibFileName(options));
+
+            // TODO(rbuckton): This patches the baseline to replace lib.es5.d.ts with lib.d.ts.
+            // This is only to make the PR for this change easier to read. A follow-up PR will
+            // revert this change and accept the new baselines.
+            // See https://github.com/Microsoft/TypeScript/pull/20763#issuecomment-352553264
+            return vpath.resolve(this.getDefaultLibLocation(), getDefaultLibFileName(options));
+            function getDefaultLibFileName(options: ts.CompilerOptions) {
+                switch (options.target) {
+                    case ts.ScriptTarget.ESNext:
+                    case ts.ScriptTarget.ES2017:
+                        return "lib.es2017.d.ts";
+                    case ts.ScriptTarget.ES2016:
+                        return "lib.es2016.d.ts";
+                    case ts.ScriptTarget.ES2015:
+                        return "lib.es2015.d.ts";
+
+                    default:
+                        return "lib.d.ts";
+                }
+            }
+        }
+
+        public getSourceFile(fileName: string, languageVersion: number): ts.SourceFile | undefined {
+            const canonicalFileName = this.getCanonicalFileName(vpath.resolve(this.getCurrentDirectory(), fileName));
+            const existing = this._sourceFiles.get(canonicalFileName);
+            if (existing) return existing;
+
+            const content = this.readFile(canonicalFileName);
+            if (content === undefined) return undefined;
+
+            // A virtual file system may shadow another existing virtual file system. This
+            // allows us to reuse a common virtual file system structure across multiple
+            // tests. If a virtual file is a shadow, it is likely that the file will be
+            // reused across multiple tests. In that case, we cache the SourceFile we parse
+            // so that it can be reused across multiple tests to avoid the cost of
+            // repeatedly parsing the same file over and over (such as lib.d.ts).
+            const cacheKey = this.vfs.shadowRoot && `SourceFile[languageVersion=${languageVersion},setParentNodes=${this._setParentNodes}]`;
+            if (cacheKey) {
+                const meta = this.vfs.filemeta(canonicalFileName);
+                const sourceFileFromMetadata = meta.get(cacheKey) as ts.SourceFile | undefined;
+                if (sourceFileFromMetadata) {
+                    this._sourceFiles.set(canonicalFileName, sourceFileFromMetadata);
+                    return sourceFileFromMetadata;
+                }
+            }
+
+            const parsed = ts.createSourceFile(fileName, content, languageVersion, this._setParentNodes || this.shouldAssertInvariants);
+            if (this.shouldAssertInvariants) {
+                Utils.assertInvariants(parsed, /*parent*/ undefined);
+            }
+
+            this._sourceFiles.set(canonicalFileName, parsed);
+
+            if (cacheKey) {
+                // store the cached source file on the unshadowed file with the same version.
+                const stats = this.vfs.statSync(canonicalFileName);
+
+                let fs = this.vfs;
+                while (fs.shadowRoot) {
+                    try {
+                        const shadowRootStats = fs.shadowRoot.statSync(canonicalFileName);
+                        if (shadowRootStats.dev !== stats.dev ||
+                            shadowRootStats.ino !== stats.ino ||
+                            shadowRootStats.mtimeMs !== stats.mtimeMs) {
+                            break;
+                        }
+
+                        fs = fs.shadowRoot;
+                    }
+                    catch {
+                        break;
+                    }
+                }
+
+                if (fs !== this.vfs) {
+                    fs.filemeta(canonicalFileName).set(cacheKey, parsed);
+                }
+            }
+
+            return parsed;
+        }
     }
 }
 

@@ -5,229 +5,19 @@
 /// <reference path="./vfs.ts" />
 /// <reference path="./vfsutils.ts" />
 /// <reference path="./utils.ts" />
+/// <reference path="./fakes.ts" />
 
 // NOTE: The contents of this file are all exported from the namespace 'compiler'. This is to
 //       support the eventual conversion of harness into a modular system.
 
 namespace compiler {
-    /**
-     * A `ts.CompilerHost` that leverages a virtual file system.
-     */
-    export class CompilerHost implements ts.CompilerHost {
-        public readonly vfs: vfs.FileSystem;
-        public readonly defaultLibLocation: string;
-        public readonly outputs: documents.TextDocument[] = [];
-        public readonly traces: string[] = [];
-        public readonly shouldAssertInvariants = !Harness.lightMode;
-
-        private _setParentNodes: boolean;
-        private _sourceFiles: core.SortedMap<string, ts.SourceFile>;
-        private _newLine: string;
-        private _parseConfigHost: ParseConfigHost;
-
-        constructor(vfs: vfs.FileSystem, options: ts.CompilerOptions, setParentNodes = false) {
-            this.vfs = vfs;
-            this.defaultLibLocation = vfs.meta.get("defaultLibLocation") || "";
-            this._sourceFiles = new core.SortedMap<string, ts.SourceFile>({ comparer: this.vfs.stringComparer, sort: "insertion" });
-            this._newLine = options.newLine === ts.NewLineKind.LineFeed ? "\n" : "\r\n";
-            this._setParentNodes = setParentNodes;
-        }
-
-        public get parseConfigHost() {
-            return this._parseConfigHost || (this._parseConfigHost = new ParseConfigHost(this.vfs));
-        }
-
-        public getCurrentDirectory(): string {
-            return this.vfs.cwd();
-        }
-
-        public useCaseSensitiveFileNames(): boolean {
-            return !this.vfs.ignoreCase;
-        }
-
-        public getNewLine(): string {
-            return this._newLine;
-        }
-
-        public getCanonicalFileName(fileName: string): string {
-            return this.vfs.ignoreCase ? fileName.toLowerCase() : fileName;
-        }
-
-        public fileExists(fileName: string): boolean {
-            return vfsutils.fileExists(this.vfs, fileName);
-        }
-
-        public directoryExists(directoryName: string): boolean {
-            return vfsutils.directoryExists(this.vfs, directoryName);
-        }
-
-        public getDirectories(path: string): string[] {
-            return vfsutils.getDirectories(this.vfs, path);
-        }
-
-        public readFile(path: string): string | undefined {
-            if (path.endsWith("lib.d.ts")) debugger;
-            return vfsutils.readFile(this.vfs, path);
-        }
-
-        public writeFile(fileName: string, content: string, writeByteOrderMark: boolean) {
-            if (writeByteOrderMark) content = core.addUTF8ByteOrderMark(content);
-            vfsutils.writeFile(this.vfs, fileName, content);
-            const document = new documents.TextDocument(fileName, content);
-            document.meta.set("fileName", fileName);
-            this.vfs.filemeta(fileName).set("document", document);
-            const index = this.outputs.findIndex(output => this.vfs.stringComparer(document.file, output.file) === 0);
-            if (index < 0) {
-                this.outputs.push(document);
-            }
-            else {
-                this.outputs[index] = document;
-            }
-        }
-
-        public trace(s: string): void {
-            this.traces.push(s);
-        }
-
-        public realpath(path: string): string {
-            return this.vfs.realpathSync(path);
-        }
-
-        public getDefaultLibLocation(): string {
-            return vpath.resolve(this.vfs.cwd(), this.defaultLibLocation);
-        }
-
-        public getDefaultLibFileName(options: ts.CompilerOptions): string {
-            // return vpath.resolve(this.getDefaultLibLocation(), ts.getDefaultLibFileName(options));
-
-            // TODO(rbuckton): This patches the baseline to replace lib.es5.d.ts with lib.d.ts.
-            // This is only to make the PR for this change easier to read. A follow-up PR will
-            // revert this change and accept the new baselines.
-            // See https://github.com/Microsoft/TypeScript/pull/20763#issuecomment-352553264
-            return vpath.resolve(this.getDefaultLibLocation(), getDefaultLibFileName(options));
-            function getDefaultLibFileName(options: ts.CompilerOptions) {
-                switch (options.target) {
-                    case ts.ScriptTarget.ESNext:
-                    case ts.ScriptTarget.ES2017:
-                        return "lib.es2017.d.ts";
-                    case ts.ScriptTarget.ES2016:
-                        return "lib.es2016.d.ts";
-                    case ts.ScriptTarget.ES2015:
-                        return "lib.es2015.d.ts";
-
-                    default:
-                        return "lib.d.ts";
-                }
-            }
-        }
-
-        public getSourceFile(fileName: string, languageVersion: number): ts.SourceFile | undefined {
-            const canonicalFileName = this.getCanonicalFileName(vpath.resolve(this.vfs.cwd(), fileName));
-            const existing = this._sourceFiles.get(canonicalFileName);
-            if (existing) return existing;
-
-            const content = this.readFile(canonicalFileName);
-            if (content === undefined) return undefined;
-
-            // A virtual file system may shadow another existing virtual file system. This
-            // allows us to reuse a common virtual file system structure across multiple
-            // tests. If a virtual file is a shadow, it is likely that the file will be
-            // reused across multiple tests. In that case, we cache the SourceFile we parse
-            // so that it can be reused across multiple tests to avoid the cost of
-            // repeatedly parsing the same file over and over (such as lib.d.ts).
-            const cacheKey = this.vfs.shadowRoot && `SourceFile[languageVersion=${languageVersion},setParentNodes=${this._setParentNodes}]`;
-            if (cacheKey) {
-                const meta = this.vfs.filemeta(canonicalFileName);
-                const sourceFileFromMetadata = meta.get(cacheKey) as ts.SourceFile | undefined;
-                if (sourceFileFromMetadata) {
-                    this._sourceFiles.set(canonicalFileName, sourceFileFromMetadata);
-                    return sourceFileFromMetadata;
-                }
-            }
-
-            const parsed = ts.createSourceFile(fileName, content, languageVersion, this._setParentNodes || this.shouldAssertInvariants);
-            if (this.shouldAssertInvariants) {
-                Utils.assertInvariants(parsed, /*parent*/ undefined);
-            }
-
-            this._sourceFiles.set(canonicalFileName, parsed);
-
-            if (cacheKey) {
-                // store the cached source file on the unshadowed file with the same version.
-                const stats = this.vfs.statSync(canonicalFileName);
-
-                let fs = this.vfs;
-                while (fs.shadowRoot) {
-                    try {
-                        const shadowRootStats = fs.shadowRoot.statSync(canonicalFileName);
-                        if (shadowRootStats.dev !== stats.dev ||
-                            shadowRootStats.ino !== stats.ino ||
-                            shadowRootStats.mtimeMs !== stats.mtimeMs) {
-                            break;
-                        }
-
-                        fs = fs.shadowRoot;
-                    }
-                    catch {
-                        break;
-                    }
-                }
-
-                if (fs !== this.vfs) {
-                    fs.filemeta(canonicalFileName).set(cacheKey, parsed);
-                }
-            }
-
-            return parsed;
-        }
-    }
-
-    /**
-     * A `ts.ParseConfigHost` that leverages a virtual file system.
-     */
-    export class ParseConfigHost implements ts.ParseConfigHost {
-        public readonly vfs: vfs.FileSystem;
-
-        constructor(vfs: vfs.FileSystem) {
-            this.vfs = vfs;
-        }
-
-        public get useCaseSensitiveFileNames() {
-            return !this.vfs.ignoreCase;
-        }
-
-        public fileExists(fileName: string): boolean {
-            return vfsutils.fileExists(this.vfs, fileName);
-        }
-
-        public directoryExists(directoryName: string): boolean {
-            return vfsutils.directoryExists(this.vfs, directoryName);
-        }
-
-        public readFile(path: string): string | undefined {
-            return vfsutils.readFile(this.vfs, path);
-        }
-
-        public readDirectory(path: string, extensions: string[], excludes: string[], includes: string[], depth: number): string[] {
-            return ts.matchFiles(
-                path,
-                extensions,
-                excludes,
-                includes,
-                !this.vfs.ignoreCase,
-                this.vfs.cwd(),
-                depth,
-                path => vfsutils.getAccessibleFileSystemEntries(this.vfs, path));
-        }
-    }
-
     export interface Project {
         file: string;
         config?: ts.ParsedCommandLine;
         errors?: ts.Diagnostic[];
     }
 
-    export function readProject(host: ParseConfigHost, project: string | undefined, existingOptions?: ts.CompilerOptions): Project | undefined {
+    export function readProject(host: fakes.ParseConfigHost, project: string | undefined, existingOptions?: ts.CompilerOptions): Project | undefined {
         if (project) {
             project = host.vfs.stringComparer(vpath.basename(project), "tsconfig.json") === 0 ? project :
                 vpath.combine(project, "tsconfig.json");
@@ -265,7 +55,7 @@ namespace compiler {
     }
 
     export class CompilationResult {
-        public readonly host: CompilerHost;
+        public readonly host: fakes.CompilerHost;
         public readonly program: ts.Program | undefined;
         public readonly result: ts.EmitResult | undefined;
         public readonly options: ts.CompilerOptions;
@@ -277,7 +67,7 @@ namespace compiler {
         private _inputs: documents.TextDocument[] = [];
         private _inputsAndOutputs: core.SortedMap<string, CompilationOutput>;
 
-        constructor(host: CompilerHost, options: ts.CompilerOptions, program: ts.Program | undefined, result: ts.EmitResult | undefined, diagnostics: ts.Diagnostic[]) {
+        constructor(host: fakes.CompilerHost, options: ts.CompilerOptions, program: ts.Program | undefined, result: ts.EmitResult | undefined, diagnostics: ts.Diagnostic[]) {
             this.host = host;
             this.program = program;
             this.result = result;
@@ -438,7 +228,7 @@ namespace compiler {
         }
     }
 
-    export function compileFiles(host: CompilerHost, rootFiles: string[] | undefined, compilerOptions: ts.CompilerOptions): CompilationResult {
+    export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | undefined, compilerOptions: ts.CompilerOptions): CompilationResult {
         if (compilerOptions.project || !rootFiles || rootFiles.length === 0) {
             const project = readProject(host.parseConfigHost, compilerOptions.project, compilerOptions);
             if (project) {

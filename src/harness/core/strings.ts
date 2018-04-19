@@ -15,16 +15,12 @@ namespace core {
     }
 
     export function getByteOrderMarkLength(text: string): number {
-        if (text.length >= 2) {
+        if (text.length >= 1) {
             const ch0 = text.charCodeAt(0);
-            const ch1 = text.charCodeAt(1);
-            if ((ch0 === 0xff && ch1 === 0xfe) ||
-                (ch0 === 0xfe && ch1 === 0xff)) {
-                return 2;
-            }
-            if (text.length >= 3 && ch0 === 0xef && ch1 === 0xbb && text.charCodeAt(2) === 0xbf) {
-                return 3;
-            }
+            if (ch0 === 0xfeff) return 1;
+            if (ch0 === 0xfe) return text.length >= 2 && text.charCodeAt(1) === 0xff ? 2 : 0;
+            if (ch0 === 0xff) return text.length >= 2 && text.charCodeAt(1) === 0xfe ? 2 : 0;
+            if (ch0 === 0xef) return text.length >= 3 && text.charCodeAt(1) === 0xbb && text.charCodeAt(2) === 0xbf ? 3 : 0;
         }
         return 0;
     }

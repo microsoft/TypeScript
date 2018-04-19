@@ -36,7 +36,7 @@ namespace ts {
             "/// <reference path=\"nonexistent4\"/>\n"   // No extension
         );
 
-        const testCompilerHost = new compiler.CompilerHost(
+        const testCompilerHost = new fakes.CompilerHost(
             vfsutils.createFromDocuments(
                 /*useCaseSensitiveFileNames*/ false,
                 [emptyFile, referenceFile],

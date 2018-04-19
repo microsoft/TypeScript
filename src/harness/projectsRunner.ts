@@ -72,17 +72,17 @@ namespace project {
         }
     }
 
-    class ProjectCompilerHost extends compiler.CompilerHost {
+    class ProjectCompilerHost extends fakes.CompilerHost {
         private _testCase: ProjectRunnerTestCase & ts.CompilerOptions;
         private _projectParseConfigHost: ProjectParseConfigHost;
 
-        constructor(vfs: vfs.FileSystem, compilerOptions: ts.CompilerOptions, _testCaseJustName: string, testCase: ProjectRunnerTestCase & ts.CompilerOptions, _moduleKind: ts.ModuleKind) {
-            super(vfs, compilerOptions);
+        constructor(sys: fakes.System | vfs.FileSystem, compilerOptions: ts.CompilerOptions, _testCaseJustName: string, testCase: ProjectRunnerTestCase & ts.CompilerOptions, _moduleKind: ts.ModuleKind) {
+            super(sys, compilerOptions);
             this._testCase = testCase;
         }
 
-        public get parseConfigHost(): compiler.ParseConfigHost {
-            return this._projectParseConfigHost || (this._projectParseConfigHost = new ProjectParseConfigHost(this.vfs, this._testCase));
+        public get parseConfigHost(): fakes.ParseConfigHost {
+            return this._projectParseConfigHost || (this._projectParseConfigHost = new ProjectParseConfigHost(this.sys, this._testCase));
         }
 
         public getDefaultLibFileName(_options: ts.CompilerOptions) {
@@ -90,11 +90,11 @@ namespace project {
         }
     }
 
-    class ProjectParseConfigHost extends compiler.ParseConfigHost {
+    class ProjectParseConfigHost extends fakes.ParseConfigHost {
         private _testCase: ProjectRunnerTestCase & ts.CompilerOptions;
 
-        constructor(vfs: vfs.FileSystem, testCase: ProjectRunnerTestCase & ts.CompilerOptions) {
-            super(vfs);
+        constructor(sys: fakes.System, testCase: ProjectRunnerTestCase & ts.CompilerOptions) {
+            super(sys);
             this._testCase = testCase;
         }
 
@@ -149,7 +149,7 @@ namespace project {
             if (configFileName) {
                 const result = ts.readJsonConfigFile(configFileName, path => vfsutils.readFile(this.vfs, path));
                 configFileSourceFiles.push(result);
-                const configParseHost = new ProjectParseConfigHost(this.vfs, this.testCase);
+                const configParseHost = new ProjectParseConfigHost(new fakes.System(this.vfs), this.testCase);
                 const configParseResult = ts.parseJsonSourceFileConfigFileContent(result, configParseHost, ts.getDirectoryPath(configFileName), this.compilerOptions);
                 inputFiles = configParseResult.fileNames;
                 this.compilerOptions = configParseResult.options;

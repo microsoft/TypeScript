@@ -115,10 +115,10 @@ namespace ts {
     }
 
     const caseInsensitiveBasePath = "c:/dev/";
-    const caseInsensitiveHost = new compiler.ParseConfigHost(createFileSystem(/*ignoreCase*/ true, caseInsensitiveBasePath, "c:/"));
+    const caseInsensitiveHost = new fakes.ParseConfigHost(createFileSystem(/*ignoreCase*/ true, caseInsensitiveBasePath, "c:/"));
 
     const caseSensitiveBasePath = "/dev/";
-    const caseSensitiveHost = new compiler.ParseConfigHost(createFileSystem(/*ignoreCase*/ false, caseSensitiveBasePath, "/"));
+    const caseSensitiveHost = new fakes.ParseConfigHost(createFileSystem(/*ignoreCase*/ false, caseSensitiveBasePath, "/"));
 
     function verifyDiagnostics(actual: Diagnostic[], expected: {code: number, category: DiagnosticCategory, messageText: string}[]) {
         assert.isTrue(expected.length === actual.length, `Expected error: ${JSON.stringify(expected)}. Actual error: ${JSON.stringify(actual)}.`);
@@ -132,7 +132,7 @@ namespace ts {
     }
 
     describe("configurationExtension", () => {
-        forEach<[string, string, compiler.ParseConfigHost], void>([
+        forEach<[string, string, fakes.ParseConfigHost], void>([
             ["under a case insensitive host", caseInsensitiveBasePath, caseInsensitiveHost],
             ["under a case sensitive host", caseSensitiveBasePath, caseSensitiveHost]
         ], ([testName, basePath, host]) => {
