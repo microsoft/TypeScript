@@ -70,3 +70,20 @@ const d = new tag<number> `${"hello"} ${"world"}`<string>(100, 200);
 >100 : 100
 >200 : 200
 
+/**
+ * Testing ASI. This should never parse as
+ *
+ * ```ts
+ * new tag<number>;
+ * `hello${369}`();
+ * ```
+ */
+const e = new tag<number>
+>e : any
+>new tag<number>`hello`() : any
+>tag<number>`hello` : SomethingNewable
+>tag : SomethingTaggable
+
+`hello`();
+>`hello` : "hello"
+

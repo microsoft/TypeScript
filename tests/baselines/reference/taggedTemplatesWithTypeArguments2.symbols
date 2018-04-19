@@ -40,3 +40,16 @@ const d = new tag<number> `${"hello"} ${"world"}`<string>(100, 200);
 >d : Symbol(d, Decl(taggedTemplatesWithTypeArguments2.ts, 16, 5))
 >tag : Symbol(tag, Decl(taggedTemplatesWithTypeArguments2.ts, 8, 13))
 
+/**
+ * Testing ASI. This should never parse as
+ *
+ * ```ts
+ * new tag<number>;
+ * `hello${369}`();
+ * ```
+ */
+const e = new tag<number>
+>e : Symbol(e, Decl(taggedTemplatesWithTypeArguments2.ts, 26, 5))
+>tag : Symbol(tag, Decl(taggedTemplatesWithTypeArguments2.ts, 8, 13))
+
+`hello`();
