@@ -141,7 +141,19 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(p, [file1.path, tsconfig.path]);
-            checkWatchedFiles(host, [tsconfig.path, libFile.path, packageJson.path, "/a/b/bower_components", "/a/b/node_modules"]);
+
+            const expectedWatchedFiles = createMap<number>();
+            expectedWatchedFiles.set(tsconfig.path, 1); // tsserver
+            expectedWatchedFiles.set(libFile.path, 1); // tsserver
+            expectedWatchedFiles.set(packageJson.path, 1); // typing installer
+            checkWatchedFilesDetailed(host, expectedWatchedFiles);
+
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+
+            const expectedWatchedDirectoriesRecursive = createMap<number>();
+            expectedWatchedDirectoriesRecursive.set("/a/b", 2); // TypingInstaller and wild card
+            expectedWatchedDirectoriesRecursive.set("/a/b/node_modules/@types", 1); // type root watch
+            checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesRecursive, /*recursive*/ true);
 
             installer.installAll(/*expectedCount*/ 1);
 
@@ -149,7 +161,9 @@ namespace ts.projectSystem {
             host.checkTimeoutQueueLengthAndRun(2);
             checkProjectActualFiles(p, [file1.path, jquery.path, tsconfig.path]);
             // should not watch jquery
-            checkWatchedFiles(host, [tsconfig.path, libFile.path, packageJson.path, "/a/b/bower_components", "/a/b/node_modules"]);
+            checkWatchedFilesDetailed(host, expectedWatchedFiles);
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+            checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesRecursive, /*recursive*/ true);
         });
 
         it("inferred project (typings installed)", () => {
@@ -827,7 +841,17 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(p, [app.path, jsconfig.path]);
-            checkWatchedFiles(host, [jsconfig.path, "/bower_components", "/node_modules", libFile.path]);
+
+            const watchedFilesExpected = createMap<number>();
+            watchedFilesExpected.set(jsconfig.path, 1); // project files
+            watchedFilesExpected.set(libFile.path, 1); // project files
+            checkWatchedFilesDetailed(host, watchedFilesExpected);
+
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+
+            const watchedRecursiveDirectoriesExpected = createMap<number>();
+            watchedRecursiveDirectoriesExpected.set("/", 2); // wild card + type installer
+            checkWatchedDirectoriesDetailed(host, watchedRecursiveDirectoriesExpected, /*recursive*/ true);
 
             installer.installAll(/*expectedCount*/ 1);
 
