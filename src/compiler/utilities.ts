@@ -1818,10 +1818,8 @@ namespace ts {
 
         function getJSDocCommentsAndTagsWorker(node: Node): void {
             const parent = node.parent;
-            if (parent &&
-                (parent.kind === SyntaxKind.PropertyAssignment ||
-                 parent.kind === SyntaxKind.PropertyDeclaration ||
-                 getNestedModuleDeclaration(parent))) {
+            if (!parent) return;
+            if (parent.kind === SyntaxKind.PropertyAssignment || parent.kind === SyntaxKind.PropertyDeclaration || getNestedModuleDeclaration(parent)) {
                 getJSDocCommentsAndTagsWorker(parent);
             }
             // Try to recognize this pattern when node is initializer of variable declaration and JSDoc comments are on containing variable statement.
@@ -1830,16 +1828,18 @@ namespace ts {
             //   * @returns {number}
             //   */
             // var x = function(name) { return name.length; }
-            if (parent && parent.parent &&
+            if (parent.parent &&
                 (getSingleVariableOfVariableStatement(parent.parent) === node || getSourceOfAssignment(parent.parent))) {
                 getJSDocCommentsAndTagsWorker(parent.parent);
             }
-            if (parent && parent.parent && parent.parent.parent &&
-                (getSingleInitializerOfVariableStatementOrPropertyDeclaration(parent.parent.parent) === node || getSourceOfDefaultedAssignment(parent.parent.parent))) {
+            if (parent.parent && parent.parent.parent &&
+                (getSingleVariableOfVariableStatement(parent.parent.parent)
+                    || getSingleInitializerOfVariableStatementOrPropertyDeclaration(parent.parent.parent) === node
+                    || getSourceOfDefaultedAssignment(parent.parent.parent))) {
                 getJSDocCommentsAndTagsWorker(parent.parent.parent);
             }
             if (isBinaryExpression(node) && getSpecialPropertyAssignmentKind(node) !== SpecialPropertyAssignmentKind.None ||
-                parent && isBinaryExpression(parent) && getSpecialPropertyAssignmentKind(parent) !== SpecialPropertyAssignmentKind.None ||
+                isBinaryExpression(parent) && getSpecialPropertyAssignmentKind(parent) !== SpecialPropertyAssignmentKind.None ||
                 node.kind === SyntaxKind.PropertyAccessExpression && node.parent && node.parent.kind === SyntaxKind.ExpressionStatement) {
                 getJSDocCommentsAndTagsWorker(parent);
             }
