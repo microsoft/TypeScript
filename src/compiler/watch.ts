@@ -50,8 +50,8 @@ namespace ts {
         Diagnostics.File_change_detected_Starting_incremental_compilation.code,
     ];
 
-    function getPlainDiagnosticPrecedingNewLines(diagnostic: Diagnostic, newLine: string): string {
-        return contains(screenStartingMessageCodes, diagnostic.code)
+    function getPlainDiagnosticPrecedingNewLines(diagnostic: Diagnostic, newLine: string, preserveWatchOutput?: boolean): string {
+        return !preserveWatchOutput && contains(screenStartingMessageCodes, diagnostic.code)
             ? ""
             : newLine;
     }
@@ -75,7 +75,7 @@ namespace ts {
             } :
             (diagnostic, newLine, options) => {
                 clearScreenIfNotWatchingForFileChanges(system, diagnostic, options);
-                let output = `${getPlainDiagnosticPrecedingNewLines(diagnostic, newLine)}${new Date().toLocaleTimeString()} - `;
+                let output = `${getPlainDiagnosticPrecedingNewLines(diagnostic, newLine, options.preserveWatchOutput)}${new Date().toLocaleTimeString()} - `;
                 output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${getPlainDiagnosticFollowingNewLines(diagnostic, newLine)}`;
                 system.write(output);
             };
