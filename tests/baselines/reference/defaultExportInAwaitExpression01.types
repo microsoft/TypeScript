@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/modules/a.ts ===
-const x = new Promise( ( resolve, reject ) => { resolve( {} ); } );
+const x = new Promise<{}>( ( resolve, reject ) => { resolve( {} ); } );
 >x : Promise<{}>
->new Promise( ( resolve, reject ) => { resolve( {} ); } ) : Promise<{}>
+>new Promise<{}>( ( resolve, reject ) => { resolve( {} ); } ) : Promise<{}>
 >Promise : PromiseConstructor
 >( resolve, reject ) => { resolve( {} ); } : (resolve: (value: {} | PromiseLike<{}>) => void, reject: (reason?: any) => void) => void
 >resolve : (value: {} | PromiseLike<{}>) => void

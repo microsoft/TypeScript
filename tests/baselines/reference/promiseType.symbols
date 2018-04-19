@@ -1089,3 +1089,16 @@ const pc9 = p.then(() => Promise.reject("1"), () => Promise.reject(1));
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
 
+new Promise((resolve, reject) => {
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>resolve : Symbol(resolve, Decl(promiseType.ts, 219, 13))
+>reject : Symbol(reject, Decl(promiseType.ts, 219, 21))
+
+    if (1) resolve();
+>resolve : Symbol(resolve, Decl(promiseType.ts, 219, 13))
+
+    else reject();
+>reject : Symbol(reject, Decl(promiseType.ts, 219, 21))
+
+});
+
