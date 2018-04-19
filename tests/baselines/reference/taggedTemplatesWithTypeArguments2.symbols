@@ -53,3 +53,31 @@ const e = new tag<number>
 >tag : Symbol(tag, Decl(taggedTemplatesWithTypeArguments2.ts, 8, 13))
 
 `hello`();
+
+class SomeBase<A, B, C> {
+>SomeBase : Symbol(SomeBase, Decl(taggedTemplatesWithTypeArguments2.ts, 27, 10))
+>A : Symbol(A, Decl(taggedTemplatesWithTypeArguments2.ts, 29, 15))
+>B : Symbol(B, Decl(taggedTemplatesWithTypeArguments2.ts, 29, 17))
+>C : Symbol(C, Decl(taggedTemplatesWithTypeArguments2.ts, 29, 20))
+
+    a!: A; b!: B; c!: C;
+>a : Symbol(SomeBase.a, Decl(taggedTemplatesWithTypeArguments2.ts, 29, 25))
+>A : Symbol(A, Decl(taggedTemplatesWithTypeArguments2.ts, 29, 15))
+>b : Symbol(SomeBase.b, Decl(taggedTemplatesWithTypeArguments2.ts, 30, 10))
+>B : Symbol(B, Decl(taggedTemplatesWithTypeArguments2.ts, 29, 17))
+>c : Symbol(SomeBase.c, Decl(taggedTemplatesWithTypeArguments2.ts, 30, 17))
+>C : Symbol(C, Decl(taggedTemplatesWithTypeArguments2.ts, 29, 20))
+}
+
+class SomeDerived<T> extends SomeBase<number, string, T> {
+>SomeDerived : Symbol(SomeDerived, Decl(taggedTemplatesWithTypeArguments2.ts, 31, 1))
+>T : Symbol(T, Decl(taggedTemplatesWithTypeArguments2.ts, 33, 18))
+>SomeBase : Symbol(SomeBase, Decl(taggedTemplatesWithTypeArguments2.ts, 27, 10))
+>T : Symbol(T, Decl(taggedTemplatesWithTypeArguments2.ts, 33, 18))
+
+    constructor() {
+        super<number, string, T> `hello world`;
+>super : Symbol(SomeBase, Decl(taggedTemplatesWithTypeArguments2.ts, 27, 10))
+>T : Symbol(T, Decl(taggedTemplatesWithTypeArguments2.ts, 33, 18))
+    }
+}

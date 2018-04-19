@@ -87,3 +87,34 @@ const e = new tag<number>
 `hello`();
 >`hello` : "hello"
 
+class SomeBase<A, B, C> {
+>SomeBase : SomeBase<A, B, C>
+>A : A
+>B : B
+>C : C
+
+    a!: A; b!: B; c!: C;
+>a : A
+>A : A
+>b : B
+>B : B
+>c : C
+>C : C
+}
+
+class SomeDerived<T> extends SomeBase<number, string, T> {
+>SomeDerived : SomeDerived<T>
+>T : T
+>SomeBase : SomeBase<number, string, T>
+>T : T
+
+    constructor() {
+        super<number, string, T> `hello world`;
+>super<number, string, T> `hello world` : any
+>super : any
+>super : SomeBase<number, string, T>
+> : any
+>T : T
+>`hello world` : "hello world"
+    }
+}
