@@ -119,8 +119,10 @@ declare namespace ts.server {
 
     /* @internal */
     export interface InstallTypingHost extends JsTyping.TypingResolutionHost {
+        useCaseSensitiveFileNames: boolean;
         writeFile(path: string, content: string): void;
         createDirectory(path: string): void;
         watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
+        watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
     }
 }

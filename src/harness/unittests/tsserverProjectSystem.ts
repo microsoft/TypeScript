@@ -13,7 +13,9 @@ namespace ts.projectSystem {
     export import checkArray = TestFSWithWatch.checkArray;
     export import libFile = TestFSWithWatch.libFile;
     export import checkWatchedFiles = TestFSWithWatch.checkWatchedFiles;
-    import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
+    export import checkWatchedFilesDetailed = TestFSWithWatch.checkWatchedFilesDetailed;
+    export import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
+    export import checkWatchedDirectoriesDetailed = TestFSWithWatch.checkWatchedDirectoriesDetailed;
     import safeList = TestFSWithWatch.safeList;
 
     export const customTypesMap = {
@@ -7294,7 +7296,6 @@ namespace ts.projectSystem {
             const host = createServerHost(files);
             const session = createSession(host);
             const projectService = session.getProjectService();
-            debugger;
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: protocol.CommandTypes.Open,
                 arguments: {
@@ -7822,8 +7823,8 @@ namespace ts.projectSystem {
 
                 checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
 
-                TestFSWithWatch.checkMultiMapKeyCount("watchedFiles", host.watchedFiles, expectedWatchedFiles);
-                TestFSWithWatch.checkMultiMapKeyCount("watchedDirectories", host.watchedDirectories, expectedWatchedDirectories);
+                checkWatchedFilesDetailed(host, expectedWatchedFiles);
+                checkWatchedDirectoriesDetailed(host, expectedWatchedDirectories, /*recursive*/ false);
                 checkProjectActualFiles(project, fileNames);
             }
         }

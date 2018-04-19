@@ -1051,6 +1051,7 @@ declare namespace ts {
     interface TaggedTemplateExpression extends MemberExpression {
         kind: SyntaxKind.TaggedTemplateExpression;
         tag: LeftHandSideExpression;
+        typeArguments?: NodeArray<TypeNode>;
         template: TemplateLiteral;
     }
     type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement;
@@ -1160,7 +1161,7 @@ declare namespace ts {
     interface DebuggerStatement extends Statement {
         kind: SyntaxKind.DebuggerStatement;
     }
-    interface MissingDeclaration extends DeclarationStatement, ClassElement, ObjectLiteralElement, TypeElement {
+    interface MissingDeclaration extends DeclarationStatement {
         kind: SyntaxKind.MissingDeclaration;
         name?: Identifier;
     }
@@ -2889,6 +2890,7 @@ declare namespace ts {
         newLine: string;
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
+        writeOutputIsTTY?(): boolean;
         readFile(path: string, encoding?: string): string | undefined;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
@@ -3169,6 +3171,7 @@ declare namespace ts {
     function isIndexedAccessTypeNode(node: Node): node is IndexedAccessTypeNode;
     function isMappedTypeNode(node: Node): node is MappedTypeNode;
     function isLiteralTypeNode(node: Node): node is LiteralTypeNode;
+    function isImportTypeNode(node: Node): node is ImportTypeNode;
     function isObjectBindingPattern(node: Node): node is ObjectBindingPattern;
     function isArrayBindingPattern(node: Node): node is ArrayBindingPattern;
     function isBindingElement(node: Node): node is BindingElement;
@@ -3522,7 +3525,9 @@ declare namespace ts {
     function createNew(expression: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<Expression> | undefined): NewExpression;
     function updateNew(node: NewExpression, expression: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<Expression> | undefined): NewExpression;
     function createTaggedTemplate(tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
+    function createTaggedTemplate(tag: Expression, typeArguments: ReadonlyArray<TypeNode>, template: TemplateLiteral): TaggedTemplateExpression;
     function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
+    function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, typeArguments: ReadonlyArray<TypeNode>, template: TemplateLiteral): TaggedTemplateExpression;
     function createTypeAssertion(type: TypeNode, expression: Expression): TypeAssertion;
     function updateTypeAssertion(node: TypeAssertion, type: TypeNode, expression: Expression): TypeAssertion;
     function createParen(expression: Expression): ParenthesizedExpression;

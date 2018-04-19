@@ -1727,6 +1727,7 @@ namespace ts {
     export interface TaggedTemplateExpression extends MemberExpression {
         kind: SyntaxKind.TaggedTemplateExpression;
         tag: LeftHandSideExpression;
+        typeArguments?: NodeArray<TypeNode>;
         template: TemplateLiteral;
     }
 
@@ -1892,7 +1893,7 @@ namespace ts {
         kind: SyntaxKind.DebuggerStatement;
     }
 
-    export interface MissingDeclaration extends DeclarationStatement, ClassElement, ObjectLiteralElement, TypeElement {
+    export interface MissingDeclaration extends DeclarationStatement {
         kind: SyntaxKind.MissingDeclaration;
         name?: Identifier;
     }
@@ -3193,7 +3194,8 @@ namespace ts {
     export type AnyValidImportOrReExport =
         | (ImportDeclaration | ExportDeclaration) & { moduleSpecifier: StringLiteral }
         | ImportEqualsDeclaration & { moduleReference: ExternalModuleReference & { expression: StringLiteral } }
-        | RequireOrImportCall;
+        | RequireOrImportCall
+        | ImportTypeNode & { argument: LiteralType };
 
     /* @internal */
     export type RequireOrImportCall = CallExpression & { arguments: [StringLiteralLike] };
@@ -4194,7 +4196,7 @@ namespace ts {
         preserveSymlinks?: boolean;
         /* @internal */ preserveWatchOutput?: boolean;
         project?: string;
-        /* @internal */ pretty?: DiagnosticStyle;
+        /* @internal */ pretty?: boolean;
         reactNamespace?: string;
         jsxFactory?: string;
         removeComments?: boolean;
@@ -4290,12 +4292,6 @@ namespace ts {
     export const enum LanguageVariant {
         Standard,
         JSX,
-    }
-
-    /* @internal */
-    export const enum DiagnosticStyle {
-        Simple,
-        Pretty,
     }
 
     /** Either a parsed command line or a parsed tsconfig.json */

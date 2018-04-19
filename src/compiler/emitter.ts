@@ -1463,6 +1463,7 @@ namespace ts {
 
         function emitTaggedTemplateExpression(node: TaggedTemplateExpression) {
             emitExpression(node.tag);
+            emitTypeArguments(node, node.typeArguments);
             writeSpace();
             emitExpression(node.template);
         }

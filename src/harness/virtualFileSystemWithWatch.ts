@@ -179,8 +179,16 @@ interface Array<T> {}`
         checkMapKeys("watchedFiles", host.watchedFiles, expectedFiles);
     }
 
-    export function checkWatchedDirectories(host: TestServerHost, expectedDirectories: string[], recursive = false) {
+    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: Map<number>) {
+        checkMultiMapKeyCount("watchedFiles", host.watchedFiles, expectedFiles);
+    }
+
+    export function checkWatchedDirectories(host: TestServerHost, expectedDirectories: string[], recursive: boolean) {
         checkMapKeys(`watchedDirectories${recursive ? " recursive" : ""}`, recursive ? host.watchedDirectoriesRecursive : host.watchedDirectories, expectedDirectories);
+    }
+
+    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: Map<number>, recursive: boolean) {
+        checkMultiMapKeyCount(`watchedDirectories${recursive ? " recursive" : ""}`, recursive ? host.watchedDirectoriesRecursive : host.watchedDirectories, expectedDirectories);
     }
 
     export function checkOutputContains(host: TestServerHost, expected: ReadonlyArray<string>) {
