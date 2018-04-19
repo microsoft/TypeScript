@@ -834,6 +834,10 @@ namespace ts.server {
 
         /*@internal*/
         updateTypingFiles(typingFiles: SortedReadonlyArray<string>) {
+            enumerateInsertsAndDeletes(typingFiles, this.typingFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
+                /*inserted*/ noop,
+                removed => this.detachScriptInfoFromProject(removed)
+            );
             this.typingFiles = typingFiles;
             // Invalidate files with unresolved imports
             this.resolutionCache.setFilesWithInvalidatedNonRelativeUnresolvedImports(this.cachedUnresolvedImportsPerFile);
@@ -894,7 +898,7 @@ namespace ts.server {
 
             const oldExternalFiles = this.externalFiles || emptyArray as SortedReadonlyArray<string>;
             this.externalFiles = this.getExternalFiles();
-            enumerateInsertsAndDeletes(this.externalFiles, oldExternalFiles, compareStringsCaseSensitive,
+            enumerateInsertsAndDeletes(this.externalFiles, oldExternalFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
                 // Ensure a ScriptInfo is created for new external files. This is performed indirectly
                 // by the LSHost for files in the program when the program is retrieved above but
                 // the program doesn't contain external files so this must be done explicitly.
