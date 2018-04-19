@@ -478,6 +478,7 @@ namespace ts {
             case SyntaxKind.TaggedTemplateExpression:
                 return updateTaggedTemplate(<TaggedTemplateExpression>node,
                     visitNode((<TaggedTemplateExpression>node).tag, visitor, isExpression),
+                    visitNodes((<TaggedTemplateExpression>node).typeArguments, visitor, isExpression),
                     visitNode((<TaggedTemplateExpression>node).template, visitor, isTemplateLiteral));
 
             case SyntaxKind.TypeAssertionExpression:
