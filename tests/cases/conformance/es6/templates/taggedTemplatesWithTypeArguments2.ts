@@ -29,3 +29,13 @@ const d = new tag<number> `${"hello"} ${"world"}`<string>(100, 200);
  */
 const e = new tag<number>
 `hello`();
+
+class SomeBase<A, B, C> {
+    a!: A; b!: B; c!: C;
+}
+
+class SomeDerived<T> extends SomeBase<number, string, T> {
+    constructor() {
+        super<number, string, T> `hello world`;
+    }
+}
