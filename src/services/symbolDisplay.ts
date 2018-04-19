@@ -126,7 +126,7 @@ namespace ts.SymbolDisplay {
 
         const displayParts: SymbolDisplayPart[] = [];
         let documentation: SymbolDisplayPart[] | undefined;
-        let tags: JSDocTagInfo[] | undefined;
+        let tags: JSDocTagInfo[];
         const symbolFlags = getCombinedLocalAndExportSymbolFlags(symbol);
         let symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location);
         let hasAddedSymbolInfo = false;
@@ -134,6 +134,7 @@ namespace ts.SymbolDisplay {
         let type: Type | undefined;
         let printer: Printer;
         let documentationFromAlias: SymbolDisplayPart[] | undefined;
+        let tagsFromAlias: JSDocTagInfo[] | undefined;
 
         // Class at constructor site need to be shown as constructor apart from property,method, vars
         if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Class || symbolFlags & SymbolFlags.Alias) {
@@ -396,6 +397,7 @@ namespace ts.SymbolDisplay {
                         displayParts.push(...resolvedInfo.displayParts);
                         displayParts.push(lineBreakPart());
                         documentationFromAlias = resolvedInfo.documentation;
+                        tagsFromAlias = resolvedInfo.tags;
                     }
                 }
             }
@@ -521,8 +523,11 @@ namespace ts.SymbolDisplay {
         if (documentation.length === 0 && documentationFromAlias) {
             documentation = documentationFromAlias;
         }
+        if (tags!.length === 0 && tagsFromAlias) {
+            tags = tagsFromAlias;
+        }
 
-        return { displayParts, documentation, symbolKind, tags };
+        return { displayParts, documentation, symbolKind, tags: tags! };
 
         function getPrinter() {
             if (!printer) {

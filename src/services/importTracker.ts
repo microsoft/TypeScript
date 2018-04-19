@@ -254,8 +254,8 @@ namespace ts.FindAllReferences {
                 }
 
                 // 'default' might be accessed as a named import `{ default as foo }`.
-                if (!isForRename && exportKind === ExportKind.Default) {
-                    searchForNamedImport(namedBindings as NamedImports | undefined); // tslint:disable-line no-unnecessary-type-assertion (TODO: GH#18217)
+                if (exportKind === ExportKind.Default) {
+                    searchForNamedImport(namedBindings);
                 }
             }
         }
@@ -286,7 +286,9 @@ namespace ts.FindAllReferences {
                 if (propertyName) {
                     // This is `import { foo as bar } from "./a"` or `export { foo as bar } from "./a"`. `foo` isn't a local in the file, so just add it as a single reference.
                     singleReferences.push(propertyName);
-                    if (!isForRename) { // If renaming `foo`, don't touch `bar`, just `foo`.
+                    // If renaming `{ foo as bar }`, don't touch `bar`, just `foo`.
+                    // But do rename `foo` in ` { default as foo }` if that's the original export name.
+                    if (!isForRename || name.escapedText === exportSymbol.escapedName) {
                         // Search locally for `bar`.
                         addSearch(name, checker.getSymbolAtLocation(name)!);
                     }
