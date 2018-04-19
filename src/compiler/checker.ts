@@ -1921,13 +1921,13 @@ namespace ts {
                 resolveEntityName(node.propertyName || node.name, meaning, /*ignoreErrors*/ false, dontResolveAlias);
         }
 
-        function getTargetOfExportAssignment(node: ExportAssignment, dontResolveAlias: boolean): Symbol | undefined {
-            const aliasLike = resolveEntityName(<EntityNameExpression>node.expression, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, /*ignoreErrors*/ true, dontResolveAlias);
+        function getTargetOfExportAssignment(expression: Expression, dontResolveAlias: boolean): Symbol | undefined {
+            const aliasLike = resolveEntityName(<EntityNameExpression>expression, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, /*ignoreErrors*/ true, dontResolveAlias);
             if (aliasLike) {
                 return aliasLike;
             }
-            checkExpression(node.expression);
-            return getNodeLinks(node.expression).resolvedSymbol;
+            checkExpression(expression);
+            return getNodeLinks(expression).resolvedSymbol;
         }
 
         function getTargetOfAliasDeclaration(node: Declaration, dontRecursivelyResolve?: boolean): Symbol | undefined {
@@ -1943,9 +1943,11 @@ namespace ts {
                 case SyntaxKind.ExportSpecifier:
                     return getTargetOfExportSpecifier(<ExportSpecifier>node, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, dontRecursivelyResolve);
                 case SyntaxKind.ExportAssignment:
-                    return getTargetOfExportAssignment(<ExportAssignment>node, dontRecursivelyResolve);
+                    return getTargetOfExportAssignment((<ExportAssignment>node).expression, dontRecursivelyResolve);
                 case SyntaxKind.NamespaceExportDeclaration:
                     return getTargetOfNamespaceExportDeclaration(<NamespaceExportDeclaration>node, dontRecursivelyResolve);
+                case SyntaxKind.BinaryExpression:
+                    return getTargetOfExportAssignment((node as BinaryExpression).right, dontRecursivelyResolve);
             }
         }
 
@@ -8662,6 +8664,9 @@ namespace ts {
                 else {
                     if (moduleSymbol.flags & targetMeaning) {
                         resolveImportSymbolType(node, links, moduleSymbol, targetMeaning);
+                    }
+                    else if (node.flags & NodeFlags.JSDoc && moduleSymbol.flags & SymbolFlags.Value) {
+                        resolveImportSymbolType(node, links, moduleSymbol, SymbolFlags.Value);
                     }
                     else {
                         error(node, targetMeaning === SymbolFlags.Value ? Diagnostics.Module_0_does_not_refer_to_a_value_but_is_used_as_a_value_here : Diagnostics.Module_0_does_not_refer_to_a_type_but_is_used_as_a_type_here, moduleName);

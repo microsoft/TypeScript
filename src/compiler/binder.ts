@@ -2321,7 +2321,12 @@ namespace ts {
 
             // 'module.exports = expr' assignment
             setCommonJsModuleIndicator(node);
-            declareSymbol(file.symbol.exports, file.symbol, node, SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.ValueModule, SymbolFlags.None);
+            const flags = isEntityNameExpression(node.right)
+            // An export default clause with an EntityNameExpression exports all meanings of that identifier
+                ? SymbolFlags.Alias
+            // An export default clause with any other expression exports a value
+                : SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.ValueModule;
+            declareSymbol(file.symbol.exports, file.symbol, node, flags, SymbolFlags.None);
         }
 
         function bindThisPropertyAssignment(node: BinaryExpression | PropertyAccessExpression) {
