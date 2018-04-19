@@ -1,9 +1,10 @@
 /* @internal */
 namespace ts.codefix {
     const fixId = "forgottenThisPropertyAccess";
+    const didYouMeanStaticMemberCode = Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0.code;
     const errorCodes = [
         Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0.code,
-        Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0.code,
+        didYouMeanStaticMemberCode,
     ];
     registerCodeFix({
         errorCodes,
@@ -25,7 +26,8 @@ namespace ts.codefix {
     interface Info { readonly node: Identifier; readonly className: string | undefined; }
     function getInfo(sourceFile: SourceFile, pos: number, diagCode: number): Info | undefined {
         const node = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
-        return isIdentifier(node) ? { node, className: diagCode === errorCodes[1] ? getContainingClass(node).name.text : undefined } : undefined;
+        if (!isIdentifier(node)) return undefined;
+        return { node, className: diagCode === didYouMeanStaticMemberCode ? getContainingClass(node).name.text : undefined };
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { node, className }: Info): void {
