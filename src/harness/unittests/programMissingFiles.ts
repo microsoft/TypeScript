@@ -37,10 +37,10 @@ namespace ts {
         );
 
         const testCompilerHost = new fakes.CompilerHost(
-            vfsutils.createFromDocuments(
-                /*useCaseSensitiveFileNames*/ false,
-                [emptyFile, referenceFile],
-                { currentDirectory: "d:\\pretend\\" }),
+            vfs.FileSystem.createFromFileSystem(
+                Harness.IO,
+                /*ignoreCase*/ true,
+                { documents: [emptyFile, referenceFile], cwd: "d:\\pretend\\" }),
             { newLine: NewLineKind.LineFeed });
 
         it("handles no missing root files", () => {

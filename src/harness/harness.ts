@@ -21,7 +21,6 @@
 /// <reference path="sourceMapRecorder.ts"/>
 /// <reference path="runnerbase.ts"/>
 /// <reference path="./vfs.ts" />
-/// <reference path="./vfsutils.ts" />
 /// <reference types="node" />
 /// <reference types="mocha" />
 /// <reference types="chai" />
@@ -525,15 +524,10 @@ namespace Harness {
         getExecutingFilePath(): string;
         exit(exitCode?: number): void;
         readDirectory(path: string, extension?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
-        getAccessibleFileSystemEntries(dirname: string): FileSystemEntries;
+        getAccessibleFileSystemEntries(dirname: string): ts.FileSystemEntries;
         tryEnableSourceMapsForHost?(): void;
         getEnvironmentVariable?(name: string): string;
         getMemoryUsage?(): number;
-    }
-
-    export interface FileSystemEntries {
-        files: string[];
-        directories: string[];
     }
 
     export let IO: IO;
@@ -591,7 +585,7 @@ namespace Harness {
             return filesInFolder(path);
         }
 
-        function getAccessibleFileSystemEntries(dirname: string): FileSystemEntries {
+        function getAccessibleFileSystemEntries(dirname: string): ts.FileSystemEntries {
             try {
                 const entries: string[] = fs.readdirSync(dirname || ".").sort(ts.sys.useCaseSensitiveFileNames ? ts.compareStringsCaseSensitive : ts.compareStringsCaseInsensitive);
                 const files: string[] = [];
@@ -944,20 +938,22 @@ namespace Harness {
 
         function readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[], depth?: number) {
             const fs = new vfs.FileSystem(!useCaseSensitiveFileNames(), { cwd: path, files: { [path]: { } } });
+            const sys = new fakes.System(fs);
             for (const file of IO.listFiles(path)) {
                 fs.mkdirpSync(vpath.dirname(file));
                 fs.writeFileSync(file, "");
             }
-            return ts.matchFiles(path, extension, exclude, include, useCaseSensitiveFileNames(), /*currentDirectory*/ "", depth, path => vfsutils.getAccessibleFileSystemEntries(fs, path));
+            return sys.readDirectory(path, extension, exclude, include, depth);
         }
 
-        function getAccessibleFileSystemEntries(dirname: string): FileSystemEntries {
+        function getAccessibleFileSystemEntries(dirname: string): ts.FileSystemEntries {
             const fs = new vfs.FileSystem(!useCaseSensitiveFileNames(), { cwd: dirname, files: { [dirname]: {} } });
+            const sys = new fakes.System(fs);
             for (const file of IO.listFiles(path)) {
                 fs.mkdirpSync(vpath.dirname(file));
                 fs.writeFileSync(file, "");
             }
-            return vfsutils.getAccessibleFileSystemEntries(fs, dirname);
+            return sys.getAccessibleFileSystemEntries(dirname);
         }
 
         return {
@@ -1220,7 +1216,7 @@ namespace Harness {
             options.skipDefaultLibCheck = typeof options.skipDefaultLibCheck === "undefined" ? true : options.skipDefaultLibCheck;
 
             if (typeof currentDirectory === "undefined") {
-                currentDirectory = vfsutils.srcFolder;
+                currentDirectory = vfs.srcFolder;
             }
 
             // Parse settings
@@ -1237,27 +1233,20 @@ namespace Harness {
             // Files from built\local that are requested by test "@includeBuiltFiles" to be in the context.
             // Treat them as library files, so include them in build, but not in baselines.
             if (options.includeBuiltFile) {
-                programFileNames.push(vpath.combine(vfsutils.builtFolder, options.includeBuiltFile));
+                programFileNames.push(vpath.combine(vfs.builtFolder, options.includeBuiltFile));
             }
 
             // Files from tests\lib that are requested by "@libFiles"
             if (options.libFiles) {
                 for (const fileName of options.libFiles.split(",")) {
-                    programFileNames.push(vpath.combine(vfsutils.testLibFolder, fileName));
+                    programFileNames.push(vpath.combine(vfs.testLibFolder, fileName));
                 }
             }
 
-            return compiler.compileFiles(
-                new fakes.CompilerHost(
-                    vfsutils.createFromDocuments(
-                        useCaseSensitiveFileNames,
-                        inputFiles.concat(otherFiles).map(documents.TextDocument.fromTestFile),
-                        { currentDirectory, overwrite: true }
-                    ),
-                    options
-                ),
-                programFileNames,
-                options);
+            const docs = inputFiles.concat(otherFiles).map(documents.TextDocument.fromTestFile);
+            const fs = vfs.FileSystem.createFromFileSystem(IO, !useCaseSensitiveFileNames, { documents: docs, cwd: currentDirectory });
+            const host = new fakes.CompilerHost(fs, options);
+            return compiler.compileFiles(host, programFileNames, options);
         }
 
         export interface DeclarationCompilationContext {
@@ -1298,10 +1287,10 @@ namespace Harness {
             }
 
             function addDtsFile(file: TestFile, dtsFiles: TestFile[]) {
-                if (vfsutils.isDeclaration(file.unitName)) {
+                if (vpath.isDeclaration(file.unitName)) {
                     dtsFiles.push(file);
                 }
-                else if (vfsutils.isTypeScript(file.unitName)) {
+                else if (vpath.isTypeScript(file.unitName)) {
                     const declFile = findResultCodeFile(file.unitName);
                     if (declFile && !findUnit(declFile.file, declInputFiles) && !findUnit(declFile.file, declOtherFiles)) {
                         dtsFiles.push({ unitName: declFile.file, content: core.removeByteOrderMark(declFile.text) });
@@ -2114,7 +2103,7 @@ namespace Harness {
 
     export function isBuiltFile(filePath: string): boolean {
         return filePath.indexOf(libFolder) === 0 ||
-            filePath.indexOf(vpath.addTrailingSeparator(vfsutils.builtFolder)) === 0;
+            filePath.indexOf(vpath.addTrailingSeparator(vfs.builtFolder)) === 0;
     }
 
     export function getDefaultLibraryFile(filePath: string, io: IO): Compiler.TestFile {

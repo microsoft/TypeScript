@@ -29,7 +29,7 @@ namespace fakes {
         private readonly _executingFilePath: string | undefined;
         private readonly _env: Record<string, string> | undefined;
 
-        constructor(vfs: vfs.FileSystem, { executingFilePath, newLine = "\n", env }: SystemOptions = {}) {
+        constructor(vfs: vfs.FileSystem, { executingFilePath, newLine = "\r\n", env }: SystemOptions = {}) {
             this.vfs = vfs.isReadonly ? vfs.shadow() : vfs;
             this.useCaseSensitiveFileNames = !this.vfs.ignoreCase;
             this.newLine = newLine;
@@ -46,7 +46,7 @@ namespace fakes {
                 const content = this.vfs.readFileSync(path, "utf8");
                 return content === undefined ? undefined :
                     vpath.extname(path) === ".json" ? utils.removeComments(core.removeByteOrderMark(content), utils.CommentRemoval.leadingAndTrailing) :
-                    core.removeByteOrderMark(content);
+                        core.removeByteOrderMark(content);
             }
             catch {
                 return undefined;
@@ -90,26 +90,28 @@ namespace fakes {
         }
 
         public readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
-            return ts.matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, path => {
-                const files: string[] = [];
-                const directories: string[] = [];
-                try {
-                    for (const file of this.vfs.readdirSync(path)) {
-                        try {
-                            const stats = this.vfs.statSync(vpath.combine(path, file));
-                            if (stats.isFile()) {
-                                files.push(file);
-                            }
-                            else if (stats.isDirectory()) {
-                                directories.push(file);
-                            }
+            return ts.matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, path => this.getAccessibleFileSystemEntries(path));
+        }
+
+        public getAccessibleFileSystemEntries(path: string): ts.FileSystemEntries {
+            const files: string[] = [];
+            const directories: string[] = [];
+            try {
+                for (const file of this.vfs.readdirSync(path)) {
+                    try {
+                        const stats = this.vfs.statSync(vpath.combine(path, file));
+                        if (stats.isFile()) {
+                            files.push(file);
                         }
-                        catch { /*ignored*/ }
+                        else if (stats.isDirectory()) {
+                            directories.push(file);
+                        }
                     }
+                    catch { /*ignored*/ }
                 }
-                catch { /*ignored*/ }
-                return { files, directories };
-            });
+            }
+            catch { /*ignored*/ }
+            return { files, directories };
         }
 
         public exit(exitCode?: number) {
@@ -214,8 +216,8 @@ namespace fakes {
         private _parseConfigHost: ParseConfigHost;
         private _newLine: string;
 
-        constructor(sys: System | vfs.FileSystem, options: ts.CompilerOptions, setParentNodes = false) {
-            if (sys instanceof vfs.FileSystem) sys = new System(sys, { newLine: "\r\n" });
+        constructor(sys: System | vfs.FileSystem, options = ts.getDefaultCompilerOptions(), setParentNodes = false) {
+            if (sys instanceof vfs.FileSystem) sys = new System(sys);
             this.sys = sys;
             this.defaultLibLocation = sys.vfs.meta.get("defaultLibLocation") || "";
             this._newLine = ts.getNewLineCharacter(options, () => this.sys.newLine);

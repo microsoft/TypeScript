@@ -1,5 +1,20 @@
 // tslint:disable:no-null-keyword
 namespace vfs {
+    /**
+     * Posix-style path to the TypeScript compiler build outputs (including tsc.js, lib.d.ts, etc.)
+     */
+    export const builtFolder = "/.ts";
+
+    /**
+     * Posix-style path to additional test libraries
+     */
+    export const testLibFolder = "/.lib";
+
+    /**
+     * Posix-style path to sources under test
+     */
+    export const srcFolder = "/.src";
+
     // file type
     const S_IFMT            = 0o170000; // file type
     const S_IFSOCK          = 0o140000; // socket
@@ -107,7 +122,43 @@ namespace vfs {
         }
 
         /**
-         * Gets a shadow of this file system.
+         * Create a virtual file system from a physical file system using the following path mappings:
+         *
+         *  - `/.ts` is a directory mapped to `${workspaceRoot}/built/local`
+         *  - `/.lib` is a directory mapped to `${workspaceRoot}/tests/lib`
+         *  - `/.src` is a virtual directory to be used for tests.
+         *
+         * Unless overridden, `/.src` will be the current working directory for the virtual file system.
+         */
+        public static createFromFileSystem(host: FileSystemResolverHost, ignoreCase: boolean, { documents, cwd }: FileSystemCreateOptions = {}) {
+            const fs = getBuiltLocal(host, ignoreCase).shadow();
+            if (cwd) {
+                fs.mkdirpSync(cwd);
+                fs.chdir(cwd);
+            }
+            if (documents) {
+                for (const document of documents) {
+                    fs.mkdirpSync(vpath.dirname(document.file));
+                    fs.writeFileSync(document.file, document.text, "utf8");
+                    fs.filemeta(document.file).set("document", document);
+                    // Add symlinks
+                    const symlink = document.meta.get("symlink");
+                    if (symlink) {
+                        for (const link of symlink.split(",").map(link => link.trim())) {
+                            fs.mkdirpSync(vpath.dirname(link));
+                            fs.symlinkSync(document.file, link);
+                            fs.filemeta(link).set("document", document);
+                        }
+                    }
+                }
+            }
+            return fs;
+        }
+
+        /**
+         * Gets a shadow copy of this file system. Changes to the shadow copy do not affect the
+         * original, allowing multiple copies of the same core file system without multiple copies
+         * of the same data.
          */
         public shadow(ignoreCase = this.ignoreCase) {
             if (!this.isReadonly) throw new Error("Cannot shadow a mutable file system.");
@@ -124,7 +175,7 @@ namespace vfs {
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/time.html
          */
         public time(value?: number | Date | (() => number | Date)): number {
-            if (value !== undefined && this.isReadonly) throw new IOError("EPERM");
+            if (value !== undefined && this.isReadonly) throw createIOError("EPERM");
             let result = this._time;
             if (typeof result === "function") result = result();
             if (typeof result === "object") result = result.getTime();
@@ -141,7 +192,7 @@ namespace vfs {
          */
         public filemeta(path: string): core.Metadata {
             const { node } = this._walk(this._resolve(path));
-            if (!node) throw new IOError("ENOENT");
+            if (!node) throw createIOError("ENOENT");
             return this._filemeta(node);
         }
 
@@ -161,8 +212,8 @@ namespace vfs {
         public cwd() {
             if (!this._cwd) throw new Error("The current working directory has not been set.");
             const { node } = this._walk(this._cwd);
-            if (!node) throw new IOError("ENOENT");
-            if (!isDirectory(node)) throw new IOError("ENOTDIR");
+            if (!node) throw createIOError("ENOENT");
+            if (!isDirectory(node)) throw createIOError("ENOTDIR");
             return this._cwd;
         }
 
@@ -172,11 +223,11 @@ namespace vfs {
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/chdir.html
          */
         public chdir(path: string) {
-            if (this.isReadonly) throw new IOError("EPERM");
+            if (this.isReadonly) throw createIOError("EPERM");
             path = this._resolve(path);
             const { node } = this._walk(path);
-            if (!node) throw new IOError("ENOENT");
-            if (!isDirectory(node)) throw new IOError("ENOTDIR");
+            if (!node) throw createIOError("ENOENT");
+            if (!isDirectory(node)) throw createIOError("ENOTDIR");
             this._cwd = path;
         }
 
@@ -184,7 +235,7 @@ namespace vfs {
          * Pushes the current directory onto the directory stack and changes the current working directory to the supplied path.
          */
         public pushd(path?: string) {
-            if (this.isReadonly) throw new IOError("EPERM");
+            if (this.isReadonly) throw createIOError("EPERM");
             if (path) path = this._resolve(path);
             if (this._cwd) {
                 if (!this._dirStack) this._dirStack = [];
@@ -199,7 +250,7 @@ namespace vfs {
          * Pops the previous directory from the location stack and changes the current directory to that directory.
          */
         public popd() {
-            if (this.isReadonly) throw new IOError("EPERM");
+            if (this.isReadonly) throw createIOError("EPERM");
             const path = this._dirStack && this._dirStack.pop();
             if (path) {
                 this.chdir(path);
@@ -279,12 +330,12 @@ namespace vfs {
          * @param resolver An object used to resolve files in `source`.
          */
         public mountSync(source: string, target: string, resolver: FileSystemResolver) {
-            if (this.isReadonly) throw new IOError("EROFS");
+            if (this.isReadonly) throw createIOError("EROFS");
 
             source = vpath.validate(source, vpath.ValidationFlags.Absolute);
 
             const { parent, links, node: existingNode, basename } = this._walk(this._resolve(target), /*noFollow*/ true);
-            if (existingNode) throw new IOError("EEXIST");
+            if (existingNode) throw createIOError("EEXIST");
 
             const time = this.time();
             const node = this._mknod(parent ? parent.dev : ++devCount, S_IFDIR, /*mode*/ 0o777, time);
@@ -394,7 +445,7 @@ namespace vfs {
 
         private _stat(entry: WalkResult) {
             const node = entry.node;
-            if (!node) throw new IOError("ENOENT");
+            if (!node) throw createIOError("ENOENT");
             return new Stats(
                 node.dev,
                 node.ino,
@@ -420,8 +471,8 @@ namespace vfs {
          */
         public readdirSync(path: string) {
             const { node } = this._walk(this._resolve(path));
-            if (!node) throw new IOError("ENOENT");
-            if (!isDirectory(node)) throw new IOError("ENOTDIR");
+            if (!node) throw createIOError("ENOENT");
+            if (!isDirectory(node)) throw createIOError("ENOTDIR");
             return Array.from(this._getLinks(node).keys());
         }
 
@@ -433,10 +484,10 @@ namespace vfs {
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public mkdirSync(path: string) {
-            if (this.isReadonly) throw new IOError("EROFS");
+            if (this.isReadonly) throw createIOError("EROFS");
 
             const { parent, links, node: existingNode, basename } = this._walk(this._resolve(path), /*noFollow*/ true);
-            if (existingNode) throw new IOError("EEXIST");
+            if (existingNode) throw createIOError("EEXIST");
 
             const time = this.time();
             const node = this._mknod(parent ? parent.dev : ++devCount, S_IFDIR, /*mode*/ 0o777, time);
@@ -451,13 +502,13 @@ namespace vfs {
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public rmdirSync(path: string) {
-            if (this.isReadonly) throw new IOError("EROFS");
+            if (this.isReadonly) throw createIOError("EROFS");
             path = this._resolve(path);
 
             const { parent, links, node, basename } = this._walk(path, /*noFollow*/ true);
-            if (!parent) throw new IOError("EPERM");
-            if (!isDirectory(node)) throw new IOError("ENOTDIR");
-            if (this._getLinks(node).size !== 0) throw new IOError("ENOTEMPTY");
+            if (!parent) throw createIOError("EPERM");
+            if (!isDirectory(node)) throw createIOError("ENOTDIR");
+            if (this._getLinks(node).size !== 0) throw createIOError("ENOTEMPTY");
 
             this._removeLink(parent, links, basename, node);
         }
@@ -470,15 +521,15 @@ namespace vfs {
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public linkSync(oldpath: string, newpath: string) {
-            if (this.isReadonly) throw new IOError("EROFS");
+            if (this.isReadonly) throw createIOError("EROFS");
 
             const { node } = this._walk(this._resolve(oldpath));
-            if (!node) throw new IOError("ENOENT");
-            if (isDirectory(node)) throw new IOError("EPERM");
+            if (!node) throw createIOError("ENOENT");
+            if (isDirectory(node)) throw createIOError("EPERM");
 
             const { parent, links, basename, node: existingNode } = this._walk(this._resolve(newpath), /*noFollow*/ true);
-            if (!parent) throw new IOError("EPERM");
-            if (existingNode) throw new IOError("EEXIST");
+            if (!parent) throw createIOError("EPERM");
+            if (existingNode) throw createIOError("EEXIST");
 
             this._addLink(parent, links, basename, node);
         }
@@ -491,12 +542,12 @@ namespace vfs {
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public unlinkSync(path: string) {
-            if (this.isReadonly) throw new IOError("EROFS");
+            if (this.isReadonly) throw createIOError("EROFS");
 
             const { parent, links, node, basename } = this._walk(this._resolve(path), /*noFollow*/ true);
-            if (!parent) throw new IOError("EPERM");
-            if (!node) throw new IOError("ENOENT");
-            if (isDirectory(node)) throw new IOError("EISDIR");
+            if (!parent) throw createIOError("EPERM");
+            if (!node) throw createIOError("ENOENT");
+            if (isDirectory(node)) throw createIOError("EISDIR");
 
             this._removeLink(parent, links, basename, node);
         }
@@ -509,23 +560,23 @@ namespace vfs {
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public renameSync(oldpath: string, newpath: string) {
-            if (this.isReadonly) throw new IOError("EROFS");
+            if (this.isReadonly) throw createIOError("EROFS");
 
             const { parent: oldParent, links: oldParentLinks, node, basename: oldBasename } = this._walk(this._resolve(oldpath), /*noFollow*/ true);
-            if (!oldParent) throw new IOError("EPERM");
-            if (!node) throw new IOError("ENOENT");
+            if (!oldParent) throw createIOError("EPERM");
+            if (!node) throw createIOError("ENOENT");
 
             const { parent: newParent, links: newParentLinks, node: existingNode, basename: newBasename } = this._walk(this._resolve(newpath), /*noFollow*/ true);
-            if (!newParent) throw new IOError("EPERM");
+            if (!newParent) throw createIOError("EPERM");
 
             const time = this.time();
             if (existingNode) {
                 if (isDirectory(node)) {
-                    if (!isDirectory(existingNode)) throw new IOError("ENOTDIR");
-                    if (this._getLinks(existingNode).size > 0) throw new IOError("ENOTEMPTY");
+                    if (!isDirectory(existingNode)) throw createIOError("ENOTDIR");
+                    if (this._getLinks(existingNode).size > 0) throw createIOError("ENOTEMPTY");
                 }
                 else {
-                    if (isDirectory(existingNode)) throw new IOError("EISDIR");
+                    if (isDirectory(existingNode)) throw createIOError("EISDIR");
                 }
                 this._removeLink(newParent, newParentLinks, newBasename, existingNode, time);
             }
@@ -541,30 +592,16 @@ namespace vfs {
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public symlinkSync(target: string, linkpath: string) {
-            if (this.isReadonly) throw new IOError("EROFS");
+            if (this.isReadonly) throw createIOError("EROFS");
 
             const { parent, links, node: existingNode, basename } = this._walk(this._resolve(linkpath), /*noFollow*/ true);
-            if (!parent) throw new IOError("EPERM");
-            if (existingNode) throw new IOError("EEXIST");
+            if (!parent) throw createIOError("EPERM");
+            if (existingNode) throw createIOError("EEXIST");
 
             const time = this.time();
             const node = this._mknod(parent.dev, S_IFLNK, /*mode*/ 0o666, time);
             node.symlink = vpath.validate(target, vpath.ValidationFlags.RelativeOrAbsolute);
             this._addLink(parent, links, basename, node, time);
-        }
-
-        /**
-         * Read the contents of a symbolic link.
-         *
-         * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/readlink.html
-         *
-         * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
-         */
-        public readlinkSync(path: string) {
-            const { node } = this._walk(this._resolve(path), /*noFollow*/ true);
-            if (!node) throw new IOError("ENOENT");
-            if (!isSymlink(node)) throw new IOError("EINVAL");
-            return node.symlink;
         }
 
         /**
@@ -599,9 +636,9 @@ namespace vfs {
         public readFileSync(path: string, encoding?: string | null): string | Buffer;
         public readFileSync(path: string, encoding: string | null = null) {
             const { node } = this._walk(this._resolve(path));
-            if (!node) throw new IOError("ENOENT");
-            if (isDirectory(node)) throw new IOError("EISDIR");
-            if (!isFile(node)) throw new IOError("EBADF");
+            if (!node) throw createIOError("ENOENT");
+            if (isDirectory(node)) throw createIOError("EISDIR");
+            if (!isFile(node)) throw createIOError("EBADF");
 
             const buffer = this._getBuffer(node).slice();
             return encoding ? buffer.toString(encoding) : buffer;
@@ -613,10 +650,10 @@ namespace vfs {
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
         public writeFileSync(path: string, data: string | Buffer, encoding: string | null = null) {
-            if (this.isReadonly) throw new IOError("EROFS");
+            if (this.isReadonly) throw createIOError("EROFS");
 
             const { parent, links, node: existingNode, basename } = this._walk(this._resolve(path), /*noFollow*/ false);
-            if (!parent) throw new IOError("EPERM");
+            if (!parent) throw createIOError("EPERM");
 
             const time = this.time();
             let node = existingNode;
@@ -625,8 +662,8 @@ namespace vfs {
                 this._addLink(parent, links, basename, node, time);
             }
 
-            if (isDirectory(node)) throw new IOError("EISDIR");
-            if (!isFile(node)) throw new IOError("EBADF");
+            if (isDirectory(node)) throw createIOError("EISDIR");
+            if (!isFile(node)) throw createIOError("EBADF");
             node.buffer = Buffer.isBuffer(data) ? data.slice() : Buffer.from("" + data, encoding || "utf8");
             node.size = node.buffer.byteLength;
             node.mtimeMs = time;
@@ -807,7 +844,7 @@ namespace vfs {
             let step = 0;
             let depth = 0;
             while (true) {
-                if (depth >= 40) throw new IOError("ELOOP");
+                if (depth >= 40) throw createIOError("ELOOP");
                 const lastStep = step === components.length - 1;
                 const basename = components[step];
                 const node = links.get(basename);
@@ -815,7 +852,7 @@ namespace vfs {
                     return { realpath: vpath.format(components), basename, parent, links, node };
                 }
                 if (node === undefined) {
-                    throw new IOError("ENOENT");
+                    throw createIOError("ENOENT");
                 }
                 if (isSymlink(node)) {
                     const dirname = vpath.format(components.slice(0, step));
@@ -833,7 +870,7 @@ namespace vfs {
                     step++;
                     continue;
                 }
-                throw new IOError("ENOTDIR");
+                throw createIOError("ENOTDIR");
             }
         }
 
@@ -928,16 +965,34 @@ namespace vfs {
     }
 
     export interface FileSystemOptions {
+        // Sets the initial timestamp for new files and directories, or the function used
+        // to calculate timestamps.
         time?: number | Date | (() => number | Date);
+
+        // A set of file system entries to initially add to the file system.
         files?: FileSet;
+
+        // Sets the initial working directory for the file system.
         cwd?: string;
+
+        // Sets initial metadata attached to the file system.
         meta?: Record<string, any>;
+    }
+
+    export interface FileSystemCreateOptions {
+        // Sets the documents to add to the file system.
+        documents?: ReadonlyArray<documents.TextDocument>;
+
+        // Sets the initial working directory for the file system.
+        cwd?: string;
     }
 
     export type Axis = "ancestors" | "ancestors-or-self" | "self" | "descendants-or-self" | "descendants";
 
     export interface Traversal {
+        /** A function called to choose whether to continue to traverse to either ancestors or descendants. */
         traverse?(path: string, stats: Stats): boolean;
+        /** A function called to choose whether to accept a path as part of the result. */
         accept?(path: string, stats: Stats): boolean;
     }
 
@@ -945,6 +1000,38 @@ namespace vfs {
         statSync(path: string): { mode: number; size: number; };
         readdirSync(path: string): string[];
         readFileSync(path: string): Buffer;
+    }
+
+    export interface FileSystemResolverHost {
+        useCaseSensitiveFileNames(): boolean;
+        getAccessibleFileSystemEntries(path: string): ts.FileSystemEntries;
+        directoryExists(path: string): boolean;
+        fileExists(path: string): boolean;
+        getFileSize(path: string): number;
+        readFile(path: string): string;
+    }
+
+    export function createResolver(host: FileSystemResolverHost): FileSystemResolver {
+        return {
+            readdirSync(path: string): string[] {
+                const { files, directories } = host.getAccessibleFileSystemEntries(path);
+                return directories.concat(files);
+            },
+            statSync(path: string): { mode: number; size: number; } {
+                if (host.directoryExists(path)) {
+                    return { mode: S_IFDIR | 0o777, size: 0 };
+                }
+                else if (host.fileExists(path)) {
+                    return { mode: S_IFREG | 0o666, size: host.getFileSize(path) };
+                }
+                else {
+                    throw new Error("ENOENT: path does not exist");
+                }
+            },
+            readFileSync(path: string): Buffer {
+                return Buffer.from(host.readFile(path), "utf8");
+            }
+        };
     }
 
     export class Stats {
@@ -1015,14 +1102,10 @@ namespace vfs {
         EROFS: "file system is read-only"
     });
 
-    export class IOError extends Error {
-        public readonly code: string;
-
-        constructor(code: keyof typeof IOErrorMessages) {
-            super(`${code}: ${IOErrorMessages[code]}`);
-            this.name = "Error";
-            this.code = code;
-        }
+    export function createIOError(code: keyof typeof IOErrorMessages) {
+        const err: NodeJS.ErrnoException = new Error(`${code}: ${IOErrorMessages[code]}`);
+        err.code = code;
+        return err;
     }
 
     /**
@@ -1155,6 +1238,56 @@ namespace vfs {
         parent: DirectoryInode | undefined;
         links: core.SortedMap<string, Inode> | undefined;
         node: Inode | undefined;
+    }
+
+    // TODO(rbuckton): This patches the baseline to replace lib.d.ts with lib.es5.d.ts.
+    // This is only to make the PR for this change easier to read. A follow-up PR will
+    // revert this change and accept the new baselines.
+    // See https://github.com/Microsoft/TypeScript/pull/20763#issuecomment-352553264
+    function patchResolver(io: FileSystemResolverHost, resolver: FileSystemResolver): FileSystemResolver {
+        const libFile = vpath.combine(__dirname, "lib.d.ts");
+        const es5File = vpath.combine(__dirname, "lib.es5.d.ts");
+        const stringComparer = io.useCaseSensitiveFileNames() ? vpath.compareCaseSensitive : vpath.compareCaseInsensitive;
+        return {
+            readdirSync: path => resolver.readdirSync(path),
+            statSync: path => resolver.statSync(fixPath(path)),
+            readFileSync: (path) => resolver.readFileSync(fixPath(path))
+        };
+
+        function fixPath(path: string) {
+            return stringComparer(path, libFile) === 0 ? es5File : path;
+        }
+    }
+
+    let builtLocalHost: FileSystemResolverHost | undefined;
+    let builtLocalCI: FileSystem | undefined;
+    let builtLocalCS: FileSystem | undefined;
+
+    function getBuiltLocal(host: FileSystemResolverHost, ignoreCase: boolean): FileSystem {
+        if (builtLocalHost !== host) {
+            builtLocalCI = undefined;
+            builtLocalCS = undefined;
+            builtLocalHost = host;
+        }
+        if (!builtLocalCI) {
+            const resolver = createResolver(host);
+            builtLocalCI = new FileSystem(/*ignoreCase*/ true, {
+                files: {
+                    [builtFolder]: new Mount(__dirname, patchResolver(host, resolver)),
+                    [testLibFolder]: new Mount(vpath.resolve(__dirname, "../../tests/lib"), resolver),
+                    [srcFolder]: {}
+                },
+                cwd: srcFolder,
+                meta: { defaultLibLocation: builtFolder }
+            });
+            builtLocalCI.makeReadonly();
+        }
+        if (ignoreCase) return builtLocalCI;
+        if (!builtLocalCS) {
+            builtLocalCS = builtLocalCI.shadow(/*ignoreCase*/ false);
+            builtLocalCS.makeReadonly();
+        }
+        return builtLocalCS;
     }
 }
 // tslint:enable:no-null-keyword

@@ -153,7 +153,7 @@ namespace ts {
             });
         }
 
-        function makeProgram(f: { path: string, content: string }, includeLib?: boolean) {
+        function makeProgram(f: {path: string, content: string }, includeLib?: boolean) {
             const host = projectSystem.createServerHost(includeLib ? [f, projectSystem.libFile] : [f]); // libFile is expensive to parse repeatedly - only test when required
             const projectService = projectSystem.createProjectService(host);
             projectService.openClientFile(f.path);

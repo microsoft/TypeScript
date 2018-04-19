@@ -117,13 +117,17 @@ namespace Harness.LanguageService {
     }
 
     export abstract class LanguageServiceAdapterHost {
-        public readonly vfs = new vfs.FileSystem(/*ignoreCase*/ true, { cwd: virtualFileSystemRoot });
+        public readonly sys = new fakes.System(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: virtualFileSystemRoot }));
         public typesRegistry: ts.Map<void> | undefined;
         private scriptInfos: core.SortedMap<string, ScriptInfo>;
 
         constructor(protected cancellationToken = DefaultHostCancellationToken.instance,
             protected settings = ts.getDefaultCompilerOptions()) {
             this.scriptInfos = new core.SortedMap({ comparer: this.vfs.stringComparer, sort: "insertion" });
+        }
+
+        public get vfs() {
+            return this.sys.vfs;
         }
 
         public getNewLine(): string {
@@ -191,7 +195,7 @@ namespace Harness.LanguageService {
         getCancellationToken() { return this.cancellationToken; }
 
         getDirectories(path: string): string[] {
-            return vfsutils.getDirectories(this.vfs, path);
+            return this.sys.getDirectories(path);
         }
 
         getCurrentDirectory(): string { return virtualFileSystemRoot; }
@@ -215,27 +219,23 @@ namespace Harness.LanguageService {
         }
 
         directoryExists(dirName: string): boolean {
-            return vfsutils.directoryExists(this.vfs, dirName);
+            return this.sys.directoryExists(dirName);
         }
 
         fileExists(fileName: string): boolean {
-            return vfsutils.fileExists(this.vfs, fileName);
+            return this.sys.fileExists(fileName);
         }
 
         readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
-            return ts.matchFiles(path, extensions, exclude, include,
-                /*useCaseSensitiveFileNames*/ false,
-                this.getCurrentDirectory(),
-                depth,
-                (p) => vfsutils.getAccessibleFileSystemEntries(this.vfs, p));
+            return this.sys.readDirectory(path, extensions, exclude, include, depth);
         }
 
         readFile(path: string): string | undefined {
-            return vfsutils.readFile(this.vfs, path);
+            return this.sys.readFile(path);
         }
 
         realpath(path: string): string {
-            return this.vfs.realpathSync(path);
+            return this.sys.realpath(path);
         }
 
         getTypeRootsVersion() {

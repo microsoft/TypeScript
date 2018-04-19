@@ -1,9 +1,10 @@
 /// <reference path="harness.ts" />
 /// <reference path="runnerbase.ts" />
 /// <reference path="./vpath.ts" />
+/// <reference path="./vfs.ts" />
 /// <reference path="./documents.ts" />
 /// <reference path="./compiler.ts" />
-/// <reference path="./vfsutils.ts" />
+/// <reference path="./fakes.ts" />
 
 namespace project {
     // Test case is json of below type in tests/cases/project/
@@ -100,7 +101,7 @@ namespace project {
 
         public readDirectory(path: string, extensions: string[], excludes: string[], includes: string[], depth: number): string[] {
             const result = super.readDirectory(path, extensions, excludes, includes, depth);
-            const projectRoot = vpath.resolve(vfsutils.srcFolder, this._testCase.projectRoot);
+            const projectRoot = vpath.resolve(vfs.srcFolder, this._testCase.projectRoot);
             return result.map(item => vpath.relative(
                 projectRoot,
                 vpath.resolve(projectRoot, item),
@@ -123,7 +124,7 @@ namespace project {
     class ProjectTestCase {
         private testCase: ProjectRunnerTestCase & ts.CompilerOptions;
         private testCaseJustName: string;
-        private vfs: vfs.FileSystem;
+        private sys: fakes.System;
         private compilerOptions: ts.CompilerOptions;
         private compilerResult: BatchCompileProjectTestCaseResult;
 
@@ -131,7 +132,7 @@ namespace project {
             this.testCase = testCase;
             this.testCaseJustName = testCaseFileName.replace(/^.*[\\\/]/, "").replace(/\.json/, "");
             this.compilerOptions = createCompilerOptions(testCase, moduleKind);
-            this.vfs = vfs.shadow();
+            this.sys = new fakes.System(vfs);
 
             let configFileName: string;
             let inputFiles = testCase.inputFiles;
@@ -141,22 +142,22 @@ namespace project {
                 assert(!inputFiles || inputFiles.length === 0, "cannot specify input files and project option together");
             }
             else if (!inputFiles || inputFiles.length === 0) {
-                configFileName = ts.findConfigFile("", path => vfsutils.fileExists(this.vfs, path));
+                configFileName = ts.findConfigFile("", path => this.sys.fileExists(path));
             }
 
             let errors: ts.Diagnostic[];
             const configFileSourceFiles: ts.SourceFile[] = [];
             if (configFileName) {
-                const result = ts.readJsonConfigFile(configFileName, path => vfsutils.readFile(this.vfs, path));
+                const result = ts.readJsonConfigFile(configFileName, path => this.sys.readFile(path));
                 configFileSourceFiles.push(result);
-                const configParseHost = new ProjectParseConfigHost(new fakes.System(this.vfs), this.testCase);
+                const configParseHost = new ProjectParseConfigHost(this.sys, this.testCase);
                 const configParseResult = ts.parseJsonSourceFileConfigFileContent(result, configParseHost, ts.getDirectoryPath(configFileName), this.compilerOptions);
                 inputFiles = configParseResult.fileNames;
                 this.compilerOptions = configParseResult.options;
                 errors = result.parseDiagnostics.concat(configParseResult.errors);
             }
 
-            const compilerHost = new ProjectCompilerHost(this.vfs, this.compilerOptions, this.testCaseJustName, this.testCase, moduleKind);
+            const compilerHost = new ProjectCompilerHost(this.sys, this.compilerOptions, this.testCaseJustName, this.testCase, moduleKind);
             const projectCompilerResult = this.compileProjectFiles(moduleKind, configFileSourceFiles, () => inputFiles, compilerHost, this.compilerOptions);
 
             this.compilerResult = {
@@ -168,6 +169,10 @@ namespace project {
                 outputFiles: compilerHost.outputs,
                 errors: errors ? ts.concatenate(errors, projectCompilerResult.errors) : projectCompilerResult.errors,
             };
+        }
+
+        private get vfs() {
+            return this.sys.vfs;
         }
 
         public static getConfigurations(testCaseFileName: string): ProjectTestConfiguration[] {
@@ -188,10 +193,10 @@ namespace project {
                 assert(false, "Testcase: " + testCaseFileName + " does not contain valid json format: " + e.message);
             }
 
-            const fs = vfsutils.createFromFileSystem(/*useCaseSensitiveFileNames*/ true);
-            fs.mountSync(vpath.resolve(__dirname, "../../tests"), vpath.combine(vfsutils.srcFolder, "tests"), vfsutils.createResolver(Harness.IO));
-            fs.mkdirpSync(vpath.combine(vfsutils.srcFolder, testCase.projectRoot));
-            fs.chdir(vpath.combine(vfsutils.srcFolder, testCase.projectRoot));
+            const fs = vfs.FileSystem.createFromFileSystem(Harness.IO, /*ignoreCase*/ false);
+            fs.mountSync(vpath.resolve(__dirname, "../../tests"), vpath.combine(vfs.srcFolder, "tests"), vfs.createResolver(Harness.IO));
+            fs.mkdirpSync(vpath.combine(vfs.srcFolder, testCase.projectRoot));
+            fs.chdir(vpath.combine(vfs.srcFolder, testCase.projectRoot));
             fs.makeReadonly();
 
             return [
@@ -355,7 +360,7 @@ namespace project {
             const rootFiles: string[] = [];
             ts.forEach(compilerResult.program.getSourceFiles(), sourceFile => {
                 if (sourceFile.isDeclarationFile) {
-                    if (!vfsutils.isDefaultLibrary(sourceFile.fileName)) {
+                    if (!vpath.isDefaultLibrary(sourceFile.fileName)) {
                         allInputFiles.unshift(new documents.TextDocument(sourceFile.fileName, sourceFile.text));
                     }
                     rootFiles.unshift(sourceFile.fileName);
@@ -388,8 +393,9 @@ namespace project {
                 }
             });
 
-            const _vfs = vfsutils.createFromDocuments(/*useCaseSensitiveFileNames*/ true, allInputFiles, {
-                currentDirectory: vpath.combine(vfsutils.srcFolder, this.testCase.projectRoot)
+            const _vfs = vfs.FileSystem.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, {
+                documents: allInputFiles,
+                cwd: vpath.combine(vfs.srcFolder, this.testCase.projectRoot)
             });
 
             // Dont allow config files since we are compiling existing source options
@@ -438,11 +444,11 @@ namespace project {
             moduleResolution: ts.ModuleResolutionKind.Classic,
             module: moduleKind,
             mapRoot: testCase.resolveMapRoot && testCase.mapRoot
-                ? vpath.resolve(vfsutils.srcFolder, testCase.mapRoot)
+                ? vpath.resolve(vfs.srcFolder, testCase.mapRoot)
                 : testCase.mapRoot,
 
             sourceRoot: testCase.resolveSourceRoot && testCase.sourceRoot
-                ? vpath.resolve(vfsutils.srcFolder, testCase.sourceRoot)
+                ? vpath.resolve(vfs.srcFolder, testCase.sourceRoot)
                 : testCase.sourceRoot
         };
 

@@ -1,6 +1,5 @@
 /// <reference path="../harness.ts" />
 /// <reference path="../vfs.ts" />
-/// <reference path="../vfsutils.ts" />
 /// <reference path="../compiler.ts" />
 
 namespace ts {

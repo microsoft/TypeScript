@@ -143,7 +143,6 @@
         "documents.ts",
         "vpath.ts",
         "vfs.ts",
-        "vfsutils.ts",
         "compiler.ts",
         "fakes.ts",
 

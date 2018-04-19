@@ -3,7 +3,6 @@
 /// <reference path="./core.ts" />
 /// <reference path="./vpath.ts" />
 /// <reference path="./vfs.ts" />
-/// <reference path="./vfsutils.ts" />
 /// <reference path="./utils.ts" />
 /// <reference path="./fakes.ts" />
 
@@ -79,13 +78,13 @@ namespace compiler {
             const dts = this.dts = new core.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
             const maps = this.maps = new core.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
             for (const document of this.host.outputs) {
-                if (vfsutils.isJavaScript(document.file)) {
+                if (vpath.isJavaScript(document.file)) {
                     js.set(document.file, document);
                 }
-                else if (vfsutils.isDeclaration(document.file)) {
+                else if (vpath.isDeclaration(document.file)) {
                     dts.set(document.file, document);
                 }
-                else if (vfsutils.isSourceMap(document.file)) {
+                else if (vpath.isSourceMap(document.file)) {
                     maps.set(document.file, document);
                 }
             }
@@ -100,7 +99,7 @@ namespace compiler {
                         if (sourceFile) {
                             const input = new documents.TextDocument(sourceFile.fileName, sourceFile.text);
                             this._inputs.push(input);
-                            if (!vfsutils.isDeclaration(sourceFile.fileName)) {
+                            if (!vpath.isDeclaration(sourceFile.fileName)) {
                                 inputs.push(input);
                             }
                         }
@@ -126,7 +125,7 @@ namespace compiler {
                         if (sourceFile) {
                             const input = new documents.TextDocument(sourceFile.fileName, sourceFile.text);
                             this._inputs.push(input);
-                            if (!vfsutils.isDeclaration(sourceFile.fileName)) {
+                            if (!vpath.isDeclaration(sourceFile.fileName)) {
                                 const extname = ts.getOutputExtension(sourceFile, this.options);
                                 const outputs: CompilationOutput = {
                                     inputs: [input],
@@ -198,7 +197,7 @@ namespace compiler {
         }
 
         public getSourceMap(path: string): documents.SourceMap | undefined {
-            if (this.options.noEmit || vfsutils.isDeclaration(path)) return undefined;
+            if (this.options.noEmit || vpath.isDeclaration(path)) return undefined;
             if (this.options.inlineSourceMap) {
                 const document = this.getOutput(path, "js");
                 return document && documents.SourceMap.fromSource(document.text);

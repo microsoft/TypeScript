@@ -276,7 +276,13 @@ namespace FourSlash {
 
             if (configFileName) {
                 const baseDir = ts.normalizePath(ts.getDirectoryPath(configFileName));
-                const host = new fakes.ParseConfigHost(vfsutils.createFromMap(baseDir, /*ignoreCase*/ true, this.inputFiles));
+                const files: vfs.FileSet = { [baseDir]: {} };
+                this.inputFiles.forEach((data, path) => {
+                    const scriptInfo = new Harness.LanguageService.ScriptInfo(path, undefined, /*isRootFile*/ false);
+                    files[path] = new vfs.File(data, { meta: { scriptInfo } });
+                });
+                const fs = new vfs.FileSystem(/*ignoreCase*/ true, { cwd: baseDir, files });
+                const host = new fakes.ParseConfigHost(fs);
 
                 const configJsonObj = ts.parseConfigFileTextToJson(configFileName, this.inputFiles.get(configFileName));
                 assert.isTrue(configJsonObj.config !== undefined);
