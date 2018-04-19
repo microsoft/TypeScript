@@ -1584,3 +1584,21 @@ const pc9 = p.then(() => Promise.reject("1"), () => Promise.reject(1));
 >reject : <T = never>(reason?: any) => Promise<T>
 >1 : 1
 
+new Promise((resolve, reject) => {
+>new Promise((resolve, reject) => {    if (1) resolve();    else reject();}) : Promise<void>
+>Promise : PromiseConstructor
+>(resolve, reject) => {    if (1) resolve();    else reject();} : (resolve: (value?: void | PromiseLike<void>) => void, reject: (reason?: any) => void) => void
+>resolve : (value?: void | PromiseLike<void>) => void
+>reject : (reason?: any) => void
+
+    if (1) resolve();
+>1 : 1
+>resolve() : void
+>resolve : (value?: void | PromiseLike<void>) => void
+
+    else reject();
+>reject() : void
+>reject : (reason?: any) => void
+
+});
+

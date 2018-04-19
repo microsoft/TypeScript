@@ -31,10 +31,10 @@ export class BrokenClass {
 >populateItems : Symbol(populateItems, Decl(file1.ts, 12, 7))
 >order : Symbol(order, Decl(file1.ts, 12, 25))
 
-      return new Promise((resolve, reject) => {
+      return new Promise<{}>((resolve, reject) => {
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->resolve : Symbol(resolve, Decl(file1.ts, 13, 26))
->reject : Symbol(reject, Decl(file1.ts, 13, 34))
+>resolve : Symbol(resolve, Decl(file1.ts, 13, 30))
+>reject : Symbol(reject, Decl(file1.ts, 13, 38))
 
         this.doStuff(order.id)
 >this.doStuff(order.id)          .then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
@@ -52,7 +52,7 @@ export class BrokenClass {
 >items : Symbol(items, Decl(file1.ts, 15, 17))
 
             resolve(order);
->resolve : Symbol(resolve, Decl(file1.ts, 13, 26))
+>resolve : Symbol(resolve, Decl(file1.ts, 13, 30))
 >order : Symbol(order, Decl(file1.ts, 12, 25))
 
           });

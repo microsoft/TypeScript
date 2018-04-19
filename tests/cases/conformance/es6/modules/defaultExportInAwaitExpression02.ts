@@ -1,7 +1,7 @@
 // @target: ES6
 // @module: commonjs
 // @filename: a.ts
-const x = new Promise( ( resolve, reject ) => { resolve( {} ); } );
+const x = new Promise<{}>( ( resolve, reject ) => { resolve( {} ); } );
 export default x;
 
 // @filename: b.ts
