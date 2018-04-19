@@ -1423,7 +1423,9 @@ namespace ts {
                 host,
                 formattingOptions && formatting.getFormatContext(formattingOptions),
                 getCanonicalFileName,
-                preferences);
+                preferences,
+                cancellationToken,
+            );
         }
 
         function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol {
@@ -1473,7 +1475,7 @@ namespace ts {
                 return undefined;
             }
 
-            const { symbolKind, displayParts, documentation, tags } = typeChecker.runWithCancellationToken(cancellationToken, typeChecker => 
+            const { symbolKind, displayParts, documentation, tags } = typeChecker.runWithCancellationToken(cancellationToken, typeChecker =>
                 SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(node), node)
             );
             return {
