@@ -11336,7 +11336,7 @@ namespace ts {
             return !!getPropertyOfType(type, "0" as __String);
         }
 
-        function isNotUnitTypeOrNever(type: Type): boolean {
+        function isNeitherUnitTypeNorNever(type: Type): boolean {
             return !(type.flags & (TypeFlags.Unit | TypeFlags.Never));
         }
 
@@ -18950,7 +18950,7 @@ namespace ts {
                 return false;
             }
             const switchTypes = getSwitchClauseTypes(node);
-            if (!switchTypes.length || some(switchTypes, isNotUnitTypeOrNever)) {
+            if (!switchTypes.length || some(switchTypes, isNeitherUnitTypeNorNever)) {
                 return false;
             }
             return eachTypeContainedIn(mapType(type, getRegularTypeOfLiteralType), switchTypes);
