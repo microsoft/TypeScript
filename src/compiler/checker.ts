@@ -17749,15 +17749,11 @@ namespace ts {
 
             let typeArguments: NodeArray<TypeNode>;
 
-            if (isTaggedTemplate) {
-                typeArguments = (node as TaggedTemplateExpression).typeArguments;
-                forEach(typeArguments, checkSourceElement);
-            }
-            else if (!isDecorator && !isJsxOpeningOrSelfClosingElement) {
+            if (!isDecorator && !isJsxOpeningOrSelfClosingElement) {
                 typeArguments = (<CallExpression>node).typeArguments;
 
                 // We already perform checking on the type arguments on the class declaration itself.
-                if ((<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword) {
+                if (isTaggedTemplate || (<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword) {
                     forEach(typeArguments, checkSourceElement);
                 }
             }
