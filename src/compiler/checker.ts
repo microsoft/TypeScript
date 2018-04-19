@@ -2214,19 +2214,28 @@ namespace ts {
         // An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
         // and an external module with no 'export =' declaration resolves to the module itself.
         function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol {
-            return moduleSymbol && getMergedSymbol(resolveSymbol(getCommonJsExportEquals(moduleSymbol), dontResolveAlias)) || moduleSymbol;
+            return moduleSymbol && getMergedSymbol(getCommonJsExportEquals(resolveSymbol(moduleSymbol.exports.get(InternalSymbolName.ExportEquals), dontResolveAlias), moduleSymbol)) || moduleSymbol;
         }
 
-        function getCommonJsExportEquals(moduleSymbol: Symbol): Symbol {
-            const exported = moduleSymbol.exports.get(InternalSymbolName.ExportEquals);
-            if (!exported || !exported.exports || moduleSymbol.exports.size === 1) {
+        function getCommonJsExportEquals(exported: Symbol, moduleSymbol: Symbol): Symbol {
+            if (!exported || moduleSymbol.exports.size === 1) {
                 return exported;
             }
             const merged = cloneSymbol(exported);
+            if (merged.exports === undefined) {
+                merged.flags = merged.flags | SymbolFlags.ValueModule;
+                merged.exports = createSymbolTable();
+            }
+            // TODO: ??? mergeSymbolTable(merged.exports, moduleSymbol.exports); // except export= of course
             moduleSymbol.exports.forEach((s, name) => {
                 if (name === InternalSymbolName.ExportEquals) return;
                 if (!merged.exports.has(name)) {
                     merged.exports.set(name, s);
+                }
+                else {
+                    const ms = cloneSymbol(merged.exports.get(name));
+                    mergeSymbol(ms, s);
+                    merged.exports.set(name, ms);
                 }
             });
             return merged;
@@ -8666,6 +8675,7 @@ namespace ts {
                         resolveImportSymbolType(node, links, moduleSymbol, targetMeaning);
                     }
                     else if (node.flags & NodeFlags.JSDoc && moduleSymbol.flags & SymbolFlags.Value) {
+                        // TODO: Should this really be needed to avoid the error?
                         resolveImportSymbolType(node, links, moduleSymbol, SymbolFlags.Value);
                     }
                     else {
