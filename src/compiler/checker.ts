@@ -2061,10 +2061,10 @@ namespace ts {
             let symbol: Symbol;
             if (name.kind === SyntaxKind.Identifier) {
                 const message = meaning === namespaceMeaning ? Diagnostics.Cannot_find_namespace_0 : Diagnostics.Cannot_find_name_0;
-                const secondarySymbol = resolveEntityNameFromJSPrototype(name, meaning);
-                symbol = resolveName(location || name, name.escapedText, meaning, ignoreErrors || secondarySymbol ? undefined : message, name, /*isUse*/ true);
+                const symbolFromJSPrototype = isInJavaScriptFile(name) && resolveEntityNameFromJSPrototype(name, meaning);
+                symbol = resolveName(location || name, name.escapedText, meaning, ignoreErrors || symbolFromJSPrototype ? undefined : message, name, /*isUse*/ true);
                 if (!symbol) {
-                    return secondarySymbol;
+                    return symbolFromJSPrototype;
                 }
             }
             else if (name.kind === SyntaxKind.QualifiedName || name.kind === SyntaxKind.PropertyAccessExpression) {
