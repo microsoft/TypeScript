@@ -63,6 +63,7 @@
         "navigateTo.ts",
         "navigationBar.ts",
         "organizeImports.ts",
+        "../services/renameFile.ts",
         "outliningElementsCollector.ts",
         "patternMatcher.ts",
         "preProcess.ts",

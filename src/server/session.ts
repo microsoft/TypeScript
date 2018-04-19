@@ -1664,6 +1664,12 @@ namespace ts.server {
             }
         }
 
+        private renameFile(args: protocol.RenameFileRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileCodeEdits> | ReadonlyArray<FileTextChanges> {
+            const { file, project } = this.getFileAndProject(args);
+            const changes = project.getLanguageService().renameFile(args.oldFilePath, args.newFilePath, this.getFormatOptions(file));
+            return simplifiedResult ? this.mapTextChangesToCodeEdits(project, changes) : changes;
+        }
+
         private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.CodeFixAction> | ReadonlyArray<CodeFixAction> {
             if (args.errorCodes.length === 0) {
                 return undefined;
@@ -2117,7 +2123,13 @@ namespace ts.server {
             },
             [CommandNames.OrganizeImportsFull]: (request: protocol.OrganizeImportsRequest) => {
                 return this.requiredResponse(this.organizeImports(request.arguments, /*simplifiedResult*/ false));
-            }
+            },
+            [CommandNames.RenameFile]: (request: protocol.RenameFileRequest) => {
+                return this.requiredResponse(this.renameFile(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.RenameFileFull]: (request: protocol.RenameFileRequest) => {
+                return this.requiredResponse(this.renameFile(request.arguments, /*simplifiedResult*/ false));
+            },
         });
 
         public addProtocolHandler(command: string, handler: (request: protocol.Request) => HandlerResponse) {

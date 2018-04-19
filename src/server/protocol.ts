@@ -121,6 +121,9 @@ namespace ts.server.protocol {
         OrganizeImports = "organizeImports",
         /* @internal */
         OrganizeImportsFull = "organizeImports-full",
+        RenameFile = "renameFile",
+        /* @internal */
+        RenameFileFull = "renameFile-full",
 
         // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
     }
@@ -607,6 +610,22 @@ namespace ts.server.protocol {
     }
 
     export interface OrganizeImportsResponse extends Response {
+        edits: ReadonlyArray<FileCodeEdits>;
+    }
+
+    export interface RenameFileRequest extends Request {
+        command: CommandTypes.RenameFile;
+        arguments: RenameFileRequestArgs;
+    }
+
+    // Note: The file from FileRequestArgs is just any file in the project.
+    // We will generate code changes for every file in that project, so the choice is arbitrary.
+    export interface RenameFileRequestArgs extends FileRequestArgs {
+        readonly oldFilePath: string;
+        readonly newFilePath: string;
+    }
+
+    export interface RenameFileResponse extends Response {
         edits: ReadonlyArray<FileCodeEdits>;
     }
 

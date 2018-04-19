@@ -334,6 +334,7 @@ namespace ts {
         getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange, preferences: UserPreferences | undefined): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined): RefactorEditInfo | undefined;
         organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): ReadonlyArray<FileTextChanges>;
+        renameFile(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges>;
 
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
 

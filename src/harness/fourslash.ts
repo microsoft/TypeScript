@@ -3279,6 +3279,15 @@ Actual: ${stringify(fullActual)}`);
         private static textSpansEqual(a: ts.TextSpan, b: ts.TextSpan) {
             return a && b && a.start === b.start && a.length === b.length;
         }
+
+        public renameFile(options: FourSlashInterface.RenameFileOptions): void {
+            const changes = this.languageService.renameFile(options.oldPath, options.newPath, this.formatCodeSettings);
+            this.applyChanges(changes);
+            for (const fileName in options.newFileContents) {
+                this.openFile(fileName);
+                this.verifyCurrentFileContent(options.newFileContents[fileName]);
+            }
+        }
     }
 
     export function runFourSlashTest(basePath: string, testType: FourSlashTestType, fileName: string) {
@@ -4370,6 +4379,10 @@ namespace FourSlashInterface {
         public allRangesAppearInImplementationList(markerName: string) {
             this.state.verifyRangesInImplementationList(markerName);
         }
+
+        public renameFile(options: RenameFileOptions) {
+            this.state.renameFile(options);
+        }
     }
 
     export class Edit {
@@ -4709,5 +4722,11 @@ namespace FourSlashInterface {
         message: string;
         range?: FourSlash.Range;
         code: number;
+    }
+
+    export interface RenameFileOptions {
+        readonly oldPath: string;
+        readonly newPath: string;
+        readonly newFileContents: { readonly [fileName: string]: string };
     }
 }

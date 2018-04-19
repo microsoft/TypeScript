@@ -528,6 +528,9 @@ namespace Harness.LanguageService {
         organizeImports(_scope: ts.OrganizeImportsScope, _formatOptions: ts.FormatCodeSettings): ReadonlyArray<ts.FileTextChanges> {
             throw new Error("Not supported on the shim.");
         }
+        renameFile(): ReadonlyArray<ts.FileTextChanges> {
+            throw new Error("Not supported on the shim.");
+        }
         getEmitOutput(fileName: string): ts.EmitOutput {
             return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));
         }

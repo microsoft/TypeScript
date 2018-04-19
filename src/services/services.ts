@@ -1128,7 +1128,6 @@ namespace ts {
         let lastProjectVersion: string;
         let lastTypesRootVersion = 0;
 
-        const useCaseSensitivefileNames = host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames();
         const cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
 
         const currentDirectory = host.getCurrentDirectory();
@@ -1145,7 +1144,8 @@ namespace ts {
             }
         }
 
-        const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitivefileNames);
+        const useCaseSensitiveFileNames = hostUsesCaseSensitiveFileNames(host);
+        const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
 
         function getValidSourceFile(fileName: string): SourceFile {
             const sourceFile = program.getSourceFile(fileName);
@@ -1202,7 +1202,7 @@ namespace ts {
                 getSourceFileByPath: getOrCreateSourceFileByPath,
                 getCancellationToken: () => cancellationToken,
                 getCanonicalFileName,
-                useCaseSensitiveFileNames: () => useCaseSensitivefileNames,
+                useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 getNewLine: () => getNewLineCharacter(newSettings, () => getNewLineOrDefaultFromHost(host)),
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: noop,
@@ -1950,6 +1950,10 @@ namespace ts {
             return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences);
         }
 
+        function renameFile(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges> {
+            return ts.renameFile(getProgram(), oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions));
+        }
+
         function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         function applyCodeActionCommand(action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
         function applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
@@ -2250,6 +2254,7 @@ namespace ts {
             getCombinedCodeFix,
             applyCodeActionCommand,
             organizeImports,
+            renameFile,
             getEmitOutput,
             getNonBoundSourceFile,
             getSourceFile,
