@@ -2266,6 +2266,7 @@ declare namespace ts {
         AlwaysStrict = 64,
         PriorityImpliesCombination = 28
     }
+    /** @deprecated Use FileExtensionInfo instead. */
     type JsFileExtensionInfo = FileExtensionInfo;
     interface FileExtensionInfo {
         extension: string;

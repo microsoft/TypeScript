@@ -4067,6 +4067,7 @@ namespace ts {
         Prototype,
     }
 
+    /** @deprecated Use FileExtensionInfo instead. */
     export type JsFileExtensionInfo = FileExtensionInfo;
 
     export interface FileExtensionInfo {

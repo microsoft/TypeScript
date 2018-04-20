@@ -3135,6 +3135,48 @@ namespace ts.projectSystem {
             });
 
         });
+
+        it("includes deferred files in the project context", () => {
+            const file1 = {
+                path: "/a.deferred",
+                content: "const a = 1;"
+            };
+            // Deferred extensions should not affect JS files.
+            const file2 = {
+                path: "/b.js",
+                content: "const b = 1;"
+            };
+            const tsconfig = {
+                path: "/tsconfig.json",
+                content: ""
+            };
+
+            const host = createServerHost([file1, file2, tsconfig]);
+            const session = createSession(host);
+            const projectService = session.getProjectService();
+
+            // Configure the deferred extension.
+            const extraFileExtensions = [{ extension: ".deferred", scriptKind: ScriptKind.Deferred, isMixedContent: true }];
+            const configureHostRequest = makeSessionRequest<protocol.ConfigureRequestArguments>(CommandNames.Configure, { extraFileExtensions });
+            session.executeCommand(configureHostRequest);
+
+            // Open external project
+            const projectName = "/proj1";
+            projectService.openExternalProject({
+                projectFileName: projectName,
+                rootFiles: toExternalFiles([file1.path, file2.path, tsconfig.path]),
+                options: {}
+            });
+
+            // Assert
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+
+            const configuredProject = configuredProjectAt(projectService, 0);
+            checkProjectActualFiles(configuredProject, [file1.path, tsconfig.path]);
+
+            // Allow allowNonTsExtensions will be set to true for deferred extensions.
+            assert.isTrue(configuredProject.getCompilerOptions().allowNonTsExtensions);
+        });
     });
 
     describe("tsserverProjectSystem Proper errors", () => {
