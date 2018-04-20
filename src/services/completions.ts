@@ -34,7 +34,7 @@ namespace ts.Completions {
         }
 
         const contextToken = findPrecedingToken(position, sourceFile);
-        if (isInvalidTrigger(triggerCharacter, contextToken, position)) return undefined;
+        if (triggerCharacter && !isValidTrigger(sourceFile, triggerCharacter, contextToken, position)) return undefined;
 
         if (isInString(sourceFile, position, contextToken)) {
             return !contextToken || !isStringLiteralLike(contextToken)
@@ -2199,25 +2199,28 @@ namespace ts.Completions {
         return !!type.getStringIndexType() || !!type.getNumberIndexType();
     }
 
-    function isInvalidTrigger(sourceFile: SourceFile, triggerCharacter: string | undefined, contextToken: Node, position: number): boolean {
+    function isValidTrigger(sourceFile: SourceFile, triggerCharacter: string, contextToken: Node, position: number): boolean {
         switch (triggerCharacter) {
             case '"':
             case "'":
             case "`":
-                switch (contextToken.kind) {
-                    case SyntaxKind.StringLiteral:
-                    case SyntaxKind.NoSubstitutionTemplateLiteral:
-                    case SyntaxKind.TemplateExpression:
-                    case SyntaxKind.TaggedTemplateExpression:
-                        // Don't automatically bring up completions at closing quote
-                        return position === contextToken.parent.end;
-                    default:
-                        if (!isInComment(sourceFile, position, contextToken)) Debug.failBadSyntaxKind(contextToken);
-                        return true;
-                }
+                // Only automatically bring up completions if this is an opening quote.
+                return isStringLiteralOrTemplate(contextToken) && position === contextToken.getStart(sourceFile) + 1;
             case "<":
                 Debug.assert(contextToken.kind === SyntaxKind.LessThanToken);
-                return contextToken.parent.kind === SyntaxKind.BinaryExpression;
+                return contextToken.parent.kind !== SyntaxKind.BinaryExpression;
+            default:
+                return Debug.fail(triggerCharacter);
+        }
+    }
+
+    function isStringLiteralOrTemplate(node: Node): node is StringLiteralLike | TemplateExpression | TaggedTemplateExpression {
+        switch (node.kind) {
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+            case SyntaxKind.TemplateExpression:
+            case SyntaxKind.TaggedTemplateExpression:
+                return true;
             default:
                 return false;
         }

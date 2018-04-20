@@ -5,6 +5,7 @@
 ////const x: "a" | "b" = "/*openQuote*/"/*closeQuote*/;
 ////const y: 'a' | 'b' = '/*openSingleQuote*/'/*closeSingleQuote*/;
 ////const z: 'a' | 'b' = `/*openTemplate*/`/*closeTemplate*/;
+////const q: "`a`" | "`b`" = "`/*openTemplateInQuote*/a`/*closeTemplateInQuote*/";
 
 // @Filename: /a.tsx
 ////declare namespace JSX {
@@ -24,6 +25,9 @@ verify.completionsAt("closeSingleQuote", undefined, { triggerCharacter: "'" });
 
 verify.completionsAt("openTemplate", ["a", "b"], { triggerCharacter: "`" });
 verify.completionsAt("closeTemplate", undefined, { triggerCharacter: "`" });
+
+verify.completionsAt("openTemplateInQuote", undefined, { triggerCharacter: '`' });
+verify.completionsAt("closeTemplateInQuote", undefined, { triggerCharacter: '`' });
 
 goTo.marker("openTag");
 verify.completionListContains("div", undefined, undefined, undefined, undefined, undefined, { triggerCharacter: "<" });
