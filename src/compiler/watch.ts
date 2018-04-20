@@ -35,7 +35,7 @@ namespace ts {
     ];
 
     /**
-     * @returns Whether the screen was cleared. 
+     * @returns Whether the screen was cleared.
      */
     function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic, options: CompilerOptions): boolean {
         if (system.clearScreen &&
