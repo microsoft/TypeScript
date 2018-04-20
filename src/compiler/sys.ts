@@ -317,16 +317,20 @@ namespace ts {
         const newTime = modifiedTime.getTime();
         if (oldTime !== newTime) {
             watchedFile.mtime = modifiedTime;
-            const eventKind = oldTime === 0
-                ? FileWatcherEventKind.Created
-                : newTime === 0
-                    ? FileWatcherEventKind.Deleted
-                    : FileWatcherEventKind.Changed;
-            watchedFile.callback(watchedFile.fileName, eventKind);
+            watchedFile.callback(watchedFile.fileName, getFileWatcherEventKind(oldTime, newTime));
             return true;
         }
 
         return false;
+    }
+
+    /*@internal*/
+    export function getFileWatcherEventKind(oldTime: number, newTime: number) {
+        return oldTime === 0
+            ? FileWatcherEventKind.Created
+            : newTime === 0
+                ? FileWatcherEventKind.Deleted
+                : FileWatcherEventKind.Changed;
     }
 
     /*@internal*/

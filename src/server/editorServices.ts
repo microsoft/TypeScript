@@ -251,7 +251,8 @@ namespace ts.server {
         ClosedScriptInfo = "Closed Script info",
         ConfigFileForInferredRoot = "Config file for the inferred project root",
         FailedLookupLocation = "Directory of Failed lookup locations in module resolution",
-        TypeRoots = "Type root directory"
+        TypeRoots = "Type root directory",
+        ScriptInfoInNodeModules = "node_modules for closed script infos",
     }
 
     const enum ConfigFileWatcherStatus {
@@ -306,6 +307,10 @@ namespace ts.server {
         syntaxOnly?: boolean;
     }
 
+    interface ScriptInfoInNodeModulesWatcher extends FileWatcher {
+        refCount: number;
+    }
+
     function getDetailWatchInfo(watchType: WatchType, project: Project | undefined) {
         return `Project: ${project ? project.getProjectName() : ""} WatchType: ${watchType}`;
     }
@@ -325,6 +330,7 @@ namespace ts.server {
          * Container of all known scripts
          */
         private readonly filenameToScriptInfo = createMap<ScriptInfo>();
+        private readonly scriptInfoInNodeModulesWatchers = createMap <ScriptInfoInNodeModulesWatcher>();
         /**
          * Map to the real path of the infos
          */
@@ -1742,16 +1748,86 @@ namespace ts.server {
             if (!info.isDynamicOrHasMixedContent() &&
                 (!this.globalCacheLocationDirectoryPath ||
                     !startsWith(info.path, this.globalCacheLocationDirectoryPath))) {
-                const { fileName } = info;
-                info.fileWatcher = this.watchFactory.watchFilePath(
-                    this.host,
-                    fileName,
-                    (fileName, eventKind, path) => this.onSourceFileChanged(fileName, eventKind, path),
-                    PollingInterval.Medium,
-                    info.path,
-                    WatchType.ClosedScriptInfo
-                );
+
+                const indexOfNodeModules = info.path.indexOf("/node_modules/");
+                if (indexOfNodeModules === -1) {
+                    info.fileWatcher = this.watchFactory.watchFilePath(
+                        this.host,
+                        info.fileName,
+                        (fileName, eventKind, path) => this.onSourceFileChanged(fileName, eventKind, path),
+                        PollingInterval.Medium,
+                        info.path,
+                        WatchType.ClosedScriptInfo
+                    );
+                }
+                else {
+                    info.mTime = this.getModifiedTime(info);
+                    info.fileWatcher = this.watchClosedScriptInfoInNodeModules(info.path.substr(0, indexOfNodeModules) as Path);
+                }
             }
+        }
+
+
+        private watchClosedScriptInfoInNodeModules(dir: Path): ScriptInfoInNodeModulesWatcher {
+            // Watch only directory
+            const existing = this.scriptInfoInNodeModulesWatchers.get(dir);
+            if (existing) {
+                existing.refCount++;
+                return existing;
+            }
+
+            const watchDir = dir + "/node_modules" as Path;
+            let watcher = this.watchFactory.watchDirectory(
+                this.host,
+                watchDir,
+                (fileOrDirectory) => {
+                    const fileOrDirectoryPath = this.toPath(fileOrDirectory);
+                    if (fileOrDirectoryPath.indexOf("/.staging") || fileOrDirectoryPath.indexOf("/.bin")) return;
+                    // Has extension
+                    Debug.assert(result.refCount > 0);
+                    if (watchDir === fileOrDirectoryPath) {
+                        this.refreshScriptInfosInDirectory(watchDir);
+                    }
+                    else {
+                        this.refreshScriptInfosInDirectory(hasExtension(fileOrDirectoryPath) ? getDirectoryPath(fileOrDirectoryPath) : fileOrDirectoryPath);
+                    }
+                },
+                WatchDirectoryFlags.Recursive,
+                WatchType.ScriptInfoInNodeModules
+            );
+            const result: ScriptInfoInNodeModulesWatcher = {
+                close: () => {
+                    if (result.refCount === 1) {
+                        watcher.close();
+                        watcher = undefined;
+                        this.scriptInfoInNodeModulesWatchers.delete(dir);
+                    }
+                    else {
+                        result.refCount--;
+                    }
+                },
+                refCount: 1
+            };
+            this.scriptInfoInNodeModulesWatchers.set(dir, result);
+            return result;
+        }
+
+        private getModifiedTime(info: ScriptInfo) {
+            return (this.host.getModifiedTime(info.path) || new Date()).getTime();
+        }
+
+        private refreshScriptInfosInDirectory(dir: Path) {
+            dir = dir + directorySeparator as Path;
+            this.filenameToScriptInfo.forEach(info => {
+                if (startsWith(info.path, dir)) {
+                    const mTime = this.getModifiedTime(info);
+                    if (mTime !== info.mTime) {
+                        const eventKind = getFileWatcherEventKind(info.mTime, mTime);
+                        info.mTime = mTime;
+                        this.onSourceFileChanged(info.fileName, eventKind, info.path);
+                    }
+                }
+            });
         }
 
         private stopWatchingScriptInfo(info: ScriptInfo) {

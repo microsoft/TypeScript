@@ -221,6 +221,9 @@ namespace ts.server {
         /** Set to real path if path is different from info.path */
         private realpath: Path | undefined;
 
+        /*@internal*/
+        mTime: number;
+
         constructor(
             private readonly host: ServerHost,
             readonly fileName: NormalizedPath,
