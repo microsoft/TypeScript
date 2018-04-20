@@ -8206,12 +8206,15 @@ namespace ts {
 
         function getLiteralTypeFromPropertyName(prop: Symbol, include: TypeFlags) {
             if (!(getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.NonPublicAccessibilityModifier)) {
-                const nameType = getLateBoundSymbol(prop).nameType;
-                if (nameType) {
-                    return nameType.flags & include ? nameType : neverType;
+                let type = getLateBoundSymbol(prop).nameType;
+                if (!type && !isKnownSymbol(prop)) {
+                    const name = getNameOfDeclaration(prop.valueDeclaration);
+                    type = name && isNumericLiteral(name) ? getLiteralType(+name.text) :
+                        name && name.kind === SyntaxKind.ComputedPropertyName && isNumericLiteral(name.expression) ? getLiteralType(+name.expression.text) :
+                        getLiteralType(symbolName(prop));
                 }
-                if (!isKnownSymbol(prop)) {
-                    return getLiteralType(symbolName(prop));
+                if (type && type.flags & include) {
+                    return type;
                 }
             }
             return neverType;
@@ -15369,6 +15372,7 @@ namespace ts {
             let patternWithComputedProperties = false;
             let hasComputedStringProperty = false;
             let hasComputedNumberProperty = false;
+
             if (isInJSFile && node.properties.length === 0) {
                 // an empty JS object literal that nonetheless has members is a JS namespace
                 const symbol = getSymbolOfNode(node);
@@ -15384,47 +15388,28 @@ namespace ts {
             for (let i = 0; i < node.properties.length; i++) {
                 const memberDecl = node.properties[i];
                 let member = getSymbolOfNode(memberDecl);
-                let literalName: __String | undefined;
+                const computedNameType = memberDecl.name && memberDecl.name.kind === SyntaxKind.ComputedPropertyName && !isWellKnownSymbolSyntactically(memberDecl.name.expression) ?
+                    checkComputedPropertyName(memberDecl.name) : undefined;
                 if (memberDecl.kind === SyntaxKind.PropertyAssignment ||
                     memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ||
                     isObjectLiteralMethod(memberDecl)) {
-                    let jsdocType: Type;
+                    let type = memberDecl.kind === SyntaxKind.PropertyAssignment ? checkPropertyAssignment(memberDecl, checkMode) :
+                        memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ? checkExpressionForMutableLocation(memberDecl.name, checkMode) :
+                        checkObjectLiteralMethod(memberDecl, checkMode);
                     if (isInJSFile) {
-                        jsdocType = getTypeForDeclarationFromJSDocComment(memberDecl);
-                    }
-
-                    let type: Type;
-                    if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
-                        if (memberDecl.name.kind === SyntaxKind.ComputedPropertyName) {
-                            const t = checkComputedPropertyName(memberDecl.name);
-                            if (t.flags & TypeFlags.Literal) {
-                                literalName = escapeLeadingUnderscores("" + (t as LiteralType).value);
-                            }
+                        const jsDocType = getTypeForDeclarationFromJSDocComment(memberDecl);
+                        if (jsDocType) {
+                            checkTypeAssignableTo(type, jsDocType, memberDecl);
+                            type = jsDocType;
                         }
-                        type = checkPropertyAssignment(memberDecl, checkMode);
                     }
-                    else if (memberDecl.kind === SyntaxKind.MethodDeclaration) {
-                        type = checkObjectLiteralMethod(memberDecl, checkMode);
-                    }
-                    else {
-                        Debug.assert(memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment);
-                        type = checkExpressionForMutableLocation(memberDecl.name, checkMode);
-                    }
-
-                    if (jsdocType) {
-                        checkTypeAssignableTo(type, jsdocType, memberDecl);
-                        type = jsdocType;
-                    }
-
                     typeFlags |= type.flags;
-
-                    const nameType = hasLateBindableName(memberDecl) ? checkComputedPropertyName(memberDecl.name) : undefined;
-                    const hasLateBoundName = nameType && isTypeUsableAsLateBoundName(nameType);
-                    const prop = hasLateBoundName
-                        ? createSymbol(SymbolFlags.Property | member.flags, getLateBoundNameFromType(nameType as LiteralType | UniqueESSymbolType), CheckFlags.Late)
-                        : createSymbol(SymbolFlags.Property | member.flags, literalName || member.escapedName);
-
-                    if (hasLateBoundName) {
+                    const nameType = computedNameType && computedNameType.flags & TypeFlags.StringOrNumberLiteralOrUnique ?
+                        <LiteralType | UniqueESSymbolType>computedNameType : undefined;
+                    const prop = nameType ?
+                        createSymbol(SymbolFlags.Property | member.flags, getLateBoundNameFromType(nameType), CheckFlags.Late) :
+                        createSymbol(SymbolFlags.Property | member.flags, member.escapedName);
+                    if (nameType) {
                         prop.nameType = nameType;
                     }
 
@@ -15436,9 +15421,6 @@ namespace ts {
                             (memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment && memberDecl.objectAssignmentInitializer);
                         if (isOptional) {
                             prop.flags |= SymbolFlags.Optional;
-                        }
-                        if (!literalName && hasDynamicName(memberDecl)) {
-                            patternWithComputedProperties = true;
                         }
                     }
                     else if (contextualTypeHasPattern && !(getObjectFlags(contextualType) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
@@ -15495,12 +15477,17 @@ namespace ts {
                     checkNodeDeferred(memberDecl);
                 }
 
-                if (!literalName && hasNonBindableDynamicName(memberDecl)) {
-                    if (isNumericName(memberDecl.name)) {
-                        hasComputedNumberProperty = true;
-                    }
-                    else {
-                        hasComputedStringProperty = true;
+                if (computedNameType && !(computedNameType.flags & TypeFlags.StringOrNumberLiteralOrUnique)) {
+                    if (isTypeAssignableTo(computedNameType, stringNumberSymbolType)) {
+                        if (isTypeAssignableTo(computedNameType, numberType)) {
+                            hasComputedNumberProperty = true;
+                        }
+                        else {
+                            hasComputedStringProperty = true;
+                        }
+                        if (inDestructuringPattern) {
+                            patternWithComputedProperties = true;
+                        }
                     }
                 }
                 else {
