@@ -2076,10 +2076,7 @@ namespace ts {
     }
 
     export function getEmitDeclarations(compilerOptions: CompilerOptions): boolean {
-        if (compilerOptions.composite) {
-            return true;
-        }
-        return !!compilerOptions.declaration;
+        return !!(compilerOptions.declaration || compilerOptions.composite);
     }
 
     export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "strictPropertyInitialization" | "alwaysStrict";
