@@ -8677,9 +8677,6 @@ namespace ts {
                     if (moduleSymbol.flags & targetMeaning) {
                         resolveImportSymbolType(node, links, moduleSymbol, targetMeaning);
                     }
-                    else if (node.flags & NodeFlags.JSDoc && moduleSymbol.flags & SymbolFlags.Value) {
-                        resolveImportSymbolType(node, links, moduleSymbol, SymbolFlags.Value);
-                    }
                     else {
                         error(node, targetMeaning === SymbolFlags.Value ? Diagnostics.Module_0_does_not_refer_to_a_value_but_is_used_as_a_value_here : Diagnostics.Module_0_does_not_refer_to_a_type_but_is_used_as_a_type_here, moduleName);
                         links.resolvedSymbol = unknownSymbol;
