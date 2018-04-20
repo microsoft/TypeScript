@@ -632,6 +632,10 @@ namespace ts.server {
             return notImplemented();
         }
 
+        getEditsForFileRename() {
+            return notImplemented();
+        }
+
         private convertCodeEditsToTextChanges(edits: protocol.FileCodeEdits[]): FileTextChanges[] {
             return edits.map(edit => {
                 const fileName = edit.fileName;

@@ -2212,6 +2212,15 @@ namespace ts {
         return absolutePath;
     }
 
+    export function getRelativePath(path: string, directoryPath: string, getCanonicalFileName: GetCanonicalFileName) {
+        const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
+        return ensurePathIsRelative(relativePath);
+    }
+
+    export function ensurePathIsRelative(path: string): string {
+        return !pathIsRelative(path) ? "./" + path : path;
+    }
+
     export function getBaseFileName(path: string) {
         if (path === undefined) {
             return undefined;
