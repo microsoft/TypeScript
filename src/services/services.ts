@@ -1950,8 +1950,8 @@ namespace ts {
             return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences);
         }
 
-        function renameFile(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges> {
-            return ts.renameFile(getProgram(), oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions));
+        function getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges> {
+            return ts.getEditsForFileRename(getProgram(), oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions));
         }
 
         function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
@@ -2254,7 +2254,7 @@ namespace ts {
             getCombinedCodeFix,
             applyCodeActionCommand,
             organizeImports,
-            renameFile,
+            getEditsForFileRename,
             getEmitOutput,
             getNonBoundSourceFile,
             getSourceFile,

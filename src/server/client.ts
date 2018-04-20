@@ -632,7 +632,7 @@ namespace ts.server {
             return notImplemented();
         }
 
-        renameFile() {
+        getEditsForFileRename() {
             return notImplemented();
         }
 

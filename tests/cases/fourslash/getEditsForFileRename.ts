@@ -9,7 +9,7 @@
 // @Filename: /src/foo/a.ts
 ////import old from "../old";
 
-verify.renameFile({
+verify.getEditsForFileRename({
     oldPath: "/src/old.ts",
     newPath: "/src/new.ts",
     newFileContents: {

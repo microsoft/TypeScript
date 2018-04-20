@@ -1664,9 +1664,9 @@ namespace ts.server {
             }
         }
 
-        private renameFile(args: protocol.RenameFileRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileCodeEdits> | ReadonlyArray<FileTextChanges> {
+        private getEditsForFileRename(args: protocol.GetEditsForFileRenameRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileCodeEdits> | ReadonlyArray<FileTextChanges> {
             const { file, project } = this.getFileAndProject(args);
-            const changes = project.getLanguageService().renameFile(args.oldFilePath, args.newFilePath, this.getFormatOptions(file));
+            const changes = project.getLanguageService().getEditsForFileRename(args.oldFilePath, args.newFilePath, this.getFormatOptions(file));
             return simplifiedResult ? this.mapTextChangesToCodeEdits(project, changes) : changes;
         }
 
@@ -2124,11 +2124,11 @@ namespace ts.server {
             [CommandNames.OrganizeImportsFull]: (request: protocol.OrganizeImportsRequest) => {
                 return this.requiredResponse(this.organizeImports(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.RenameFile]: (request: protocol.RenameFileRequest) => {
-                return this.requiredResponse(this.renameFile(request.arguments, /*simplifiedResult*/ true));
+            [CommandNames.GetEditsForFileRename]: (request: protocol.GetEditsForFileRenameRequest) => {
+                return this.requiredResponse(this.getEditsForFileRename(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.RenameFileFull]: (request: protocol.RenameFileRequest) => {
-                return this.requiredResponse(this.renameFile(request.arguments, /*simplifiedResult*/ false));
+            [CommandNames.GetEditsForFileRenameFull]: (request: protocol.GetEditsForFileRenameRequest) => {
+                return this.requiredResponse(this.getEditsForFileRename(request.arguments, /*simplifiedResult*/ false));
             },
         });
 

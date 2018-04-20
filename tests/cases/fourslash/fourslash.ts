@@ -344,7 +344,7 @@ declare namespace FourSlashInterface {
         getSuggestionDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         ProjectInfo(expected: string[]): void;
         allRangesAppearInImplementationList(markerName: string): void;
-        renameFile(options: {
+        getEditsForFileRename(options: {
             oldPath: string;
             newPath: string;
             newFileContents: { [fileName: string]: string };

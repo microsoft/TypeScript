@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts {
-    export function renameFile(program: Program, oldFilePath: string, newFilePath: string, host: LanguageServiceHost, formatContext: formatting.FormatContext): ReadonlyArray<FileTextChanges> {
+    export function getEditsForFileRename(program: Program, oldFilePath: string, newFilePath: string, host: LanguageServiceHost, formatContext: formatting.FormatContext): ReadonlyArray<FileTextChanges> {
         const pathUpdater = getPathUpdater(oldFilePath, newFilePath, host);
         return textChanges.ChangeTracker.with({ host, formatContext }, changeTracker => {
             const importsToUpdate = getImportsToUpdate(program, oldFilePath);

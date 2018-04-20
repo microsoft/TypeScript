@@ -3280,8 +3280,8 @@ Actual: ${stringify(fullActual)}`);
             return a && b && a.start === b.start && a.length === b.length;
         }
 
-        public renameFile(options: FourSlashInterface.RenameFileOptions): void {
-            const changes = this.languageService.renameFile(options.oldPath, options.newPath, this.formatCodeSettings);
+        public getEditsForFileRename(options: FourSlashInterface.GetEditsForFileRenameOptions): void {
+            const changes = this.languageService.getEditsForFileRename(options.oldPath, options.newPath, this.formatCodeSettings);
             this.applyChanges(changes);
             for (const fileName in options.newFileContents) {
                 this.openFile(fileName);
@@ -4380,8 +4380,8 @@ namespace FourSlashInterface {
             this.state.verifyRangesInImplementationList(markerName);
         }
 
-        public renameFile(options: RenameFileOptions) {
-            this.state.renameFile(options);
+        public getEditsForFileRename(options: GetEditsForFileRenameOptions) {
+            this.state.getEditsForFileRename(options);
         }
     }
 
@@ -4724,7 +4724,7 @@ namespace FourSlashInterface {
         code: number;
     }
 
-    export interface RenameFileOptions {
+    export interface GetEditsForFileRenameOptions {
         readonly oldPath: string;
         readonly newPath: string;
         readonly newFileContents: { readonly [fileName: string]: string };
