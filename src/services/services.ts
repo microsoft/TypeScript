@@ -1409,7 +1409,8 @@ namespace ts {
                 log,
                 getValidSourceFile(fileName),
                 position,
-                fullPreferences);
+                fullPreferences,
+                options.triggerCharacter);
         }
 
         function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = defaultPreferences): CompletionEntryDetails {
