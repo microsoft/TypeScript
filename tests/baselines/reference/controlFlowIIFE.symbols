@@ -108,3 +108,51 @@ if (!test) {
 >slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
 
 })();
+
+// Repro from #23565
+
+function f4() {
+>f4 : Symbol(f4, Decl(controlFlowIIFE.ts, 45, 5))
+
+    let v: number;
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 50, 7))
+
+    (function() {
+        v = 1;
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 50, 7))
+
+    })();
+    v;
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 50, 7))
+}
+
+function f5() {
+>f5 : Symbol(f5, Decl(controlFlowIIFE.ts, 55, 1))
+
+    let v: number;
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 58, 7))
+
+    (function*() {
+        yield 1;
+        v = 1;
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 58, 7))
+
+    })();
+    v; // still undefined
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 58, 7))
+}
+
+function f6() {
+>f6 : Symbol(f6, Decl(controlFlowIIFE.ts, 64, 1))
+
+    let v: number;
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 67, 7))
+
+    (async function() {
+        v = await 1;
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 67, 7))
+
+    })();
+    v; // still undefined
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 67, 7))
+}
