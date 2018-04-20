@@ -666,9 +666,6 @@ namespace ts {
             }
         }
 
-        // unconditionally set moduleResolutionCache to undefined to avoid unnecessary leaks
-        moduleResolutionCache = undefined;
-
         // Release any files we have acquired in the old program but are
         // not part of the new program.
         if (oldProgram && host.onReleaseOldSourceFile) {

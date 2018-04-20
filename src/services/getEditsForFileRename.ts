@@ -36,7 +36,7 @@ namespace ts {
                 if (checker.getSymbolAtLocation(importStringLiteral)) continue;
 
                 const resolved = program.getResolvedModuleWithFailedLookupLocationsFromCache(importStringLiteral.text, sourceFile.fileName);
-                if (contains(resolved.failedLookupLocations, oldFilePath)) {
+                if (resolved && contains(resolved.failedLookupLocations, oldFilePath)) {
                     result.push({ sourceFile, toUpdate: importStringLiteral });
                 }
             }
