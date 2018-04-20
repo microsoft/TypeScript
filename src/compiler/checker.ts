@@ -1921,8 +1921,9 @@ namespace ts {
                 resolveEntityName(node.propertyName || node.name, meaning, /*ignoreErrors*/ false, dontResolveAlias);
         }
 
-        function getTargetOfExportAssignment(expression: Expression, dontResolveAlias: boolean): Symbol | undefined {
-            const aliasLike = resolveEntityName(<EntityNameExpression>expression, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, /*ignoreErrors*/ true, dontResolveAlias);
+        function getTargetOfExportAssignment(node: ExportAssignment | BinaryExpression, dontResolveAlias: boolean): Symbol | undefined {
+            const expression = (isExportAssignment(node) ? node.expression : node.right) as EntityNameExpression;
+            const aliasLike = resolveEntityName(expression, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, /*ignoreErrors*/ true, dontResolveAlias);
             if (aliasLike) {
                 return aliasLike;
             }
@@ -1943,11 +1944,10 @@ namespace ts {
                 case SyntaxKind.ExportSpecifier:
                     return getTargetOfExportSpecifier(<ExportSpecifier>node, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, dontRecursivelyResolve);
                 case SyntaxKind.ExportAssignment:
-                    return getTargetOfExportAssignment((<ExportAssignment>node).expression, dontRecursivelyResolve);
+                case SyntaxKind.BinaryExpression:
+                    return getTargetOfExportAssignment((<ExportAssignment | BinaryExpression>node), dontRecursivelyResolve);
                 case SyntaxKind.NamespaceExportDeclaration:
                     return getTargetOfNamespaceExportDeclaration(<NamespaceExportDeclaration>node, dontRecursivelyResolve);
-                case SyntaxKind.BinaryExpression:
-                    return getTargetOfExportAssignment((node as BinaryExpression).right, dontRecursivelyResolve);
             }
         }
 
@@ -8665,7 +8665,6 @@ namespace ts {
                         resolveImportSymbolType(node, links, moduleSymbol, targetMeaning);
                     }
                     else if (node.flags & NodeFlags.JSDoc && moduleSymbol.flags & SymbolFlags.Value) {
-                        // TODO: Should this really be needed to avoid the error?
                         resolveImportSymbolType(node, links, moduleSymbol, SymbolFlags.Value);
                     }
                     else {
