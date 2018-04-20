@@ -181,9 +181,9 @@ function f5() {
 >v : number
 
     (function*() {
->(function*() {        yield 1;        v = 1;    })() : {}
->(function*() {        yield 1;        v = 1;    }) : () => {}
->function*() {        yield 1;        v = 1;    } : () => {}
+>(function*() {        yield 1;        v = 1;    })() : IterableIterator<number>
+>(function*() {        yield 1;        v = 1;    }) : () => IterableIterator<number>
+>function*() {        yield 1;        v = 1;    } : () => IterableIterator<number>
 
         yield 1;
 >yield 1 : any

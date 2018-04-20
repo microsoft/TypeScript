@@ -1,4 +1,5 @@
 // @strictNullChecks: true
+// @target: ES2017
 
 declare function getStringOrNumber(): string | number;
 
