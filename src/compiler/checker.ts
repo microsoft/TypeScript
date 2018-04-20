@@ -2226,18 +2226,8 @@ namespace ts {
                 merged.flags = merged.flags | SymbolFlags.ValueModule;
                 merged.exports = createSymbolTable();
             }
-            // TODO: ??? mergeSymbolTable(merged.exports, moduleSymbol.exports); // except export= of course
-            moduleSymbol.exports.forEach((s, name) => {
-                if (name === InternalSymbolName.ExportEquals) return;
-                if (!merged.exports.has(name)) {
-                    merged.exports.set(name, s);
-                }
-                else {
-                    const ms = cloneSymbol(merged.exports.get(name));
-                    mergeSymbol(ms, s);
-                    merged.exports.set(name, ms);
-                }
-            });
+            mergeSymbolTable(merged.exports, moduleSymbol.exports);
+            merged.exports.delete(InternalSymbolName.ExportEquals);
             return merged;
         }
 
