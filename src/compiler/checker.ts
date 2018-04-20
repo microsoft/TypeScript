@@ -3645,10 +3645,9 @@ namespace ts {
                 return typeParameterNodes;
             }
 
-            function lookupTypeParameterNodes(chain: Symbol[], index: number, context: NodeBuilderContext) {
+            function lookupTypeParameterNodes(chain: Symbol[], index: number, context: NodeBuilderContext): { typeArgumentNodes: ReadonlyArray<TypeArgument> | undefined, typeParameterNodes: ReadonlyArray<TypeParameterDeclaration> | undefined } {
                 Debug.assert(chain && 0 <= index && index < chain.length);
                 const symbol = chain[index];
-                let typeParameterNodes: ReadonlyArray<TypeNode> | ReadonlyArray<TypeParameterDeclaration> | undefined;
                 if (context.flags & NodeBuilderFlags.WriteTypeParametersInQualifiedName && index < (chain.length - 1)) {
                     const parentSymbol = symbol;
                     const nextSymbol = chain[index + 1];
@@ -3656,13 +3655,13 @@ namespace ts {
                         const params = getTypeParametersOfClassOrInterface(
                             parentSymbol.flags & SymbolFlags.Alias ? resolveAlias(parentSymbol) : parentSymbol
                         );
-                        typeParameterNodes = mapToTypeNodes(map(params, (nextSymbol as TransientSymbol).mapper), context);
+                        return { typeArgumentNodes: mapToTypeNodes(map(params, (nextSymbol as TransientSymbol).mapper), context), typeParameterNodes: undefined };
                     }
                     else {
-                        typeParameterNodes = typeParametersToTypeParameterDeclarations(symbol, context);
+                        return { typeArgumentNodes: undefined, typeParameterNodes: typeParametersToTypeParameterDeclarations(symbol, context) };
                     }
                 }
-                return typeParameterNodes;
+                return { typeArgumentNodes: undefined, typeParameterNodes: undefined };
             }
 
             function symbolToTypeNode(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags): TypeQueryNode | TypeReferenceNode | ImportTypeNode {
@@ -3676,15 +3675,15 @@ namespace ts {
                 if (ambientModuleSymbolRegex.test(rootName)) {
                     // module is root, must use `ImportTypeNode`
                     const nonRootParts = chain.length > 1 ? createEntityNameFromSymbolChain(chain, chain.length - 1, 1) : undefined;
-                    const typeParameterNodes = lookupTypeParameterNodes(chain, 0, context);
-                    return createImportTypeNode(createLiteralTypeNode(createLiteral(rootName.substring(1, rootName.length - 1))), nonRootParts, typeParameterNodes as ReadonlyArray<TypeNode>, isTypeOf);
+                    const { typeArgumentNodes } = lookupTypeParameterNodes(chain, 0, context);
+                    return createImportTypeNode(createLiteralTypeNode(createLiteral(rootName.substring(1, rootName.length - 1))), nonRootParts, typeArgumentNodes, isTypeOf);
                 }
 
                 const entityName = createEntityNameFromSymbolChain(chain, chain.length - 1, 0);
                 return isTypeOf ? createTypeQueryNode(entityName) : createTypeReferenceNode(entityName, /*typeArguments*/ undefined);
 
                 function createEntityNameFromSymbolChain(chain: Symbol[], index: number, stopper: number): EntityName {
-                    const typeParameterNodes = lookupTypeParameterNodes(chain, index, context);
+                    const { typeArgumentNodes, typeParameterNodes } = lookupTypeParameterNodes(chain, index, context);
                     const symbol = chain[index];
 
                     if (index === 0) {
@@ -3694,7 +3693,7 @@ namespace ts {
                     if (index === 0) {
                         context.flags ^= NodeBuilderFlags.InInitialEntityName;
                     }
-                    const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                    const identifier = setEmitFlags(createIdentifier(symbolName, typeArgumentNodes, typeParameterNodes), EmitFlags.NoAsciiEscaping);
                     identifier.symbol = symbol;
 
                     return index > stopper ? createQualifiedName(createEntityNameFromSymbolChain(chain, index - 1, stopper), identifier) : identifier;
@@ -3714,7 +3713,7 @@ namespace ts {
                 return createEntityNameFromSymbolChain(chain, chain.length - 1);
 
                 function createEntityNameFromSymbolChain(chain: Symbol[], index: number): EntityName {
-                    const typeParameterNodes = lookupTypeParameterNodes(chain, index, context);
+                    const { typeArgumentNodes, typeParameterNodes } = lookupTypeParameterNodes(chain, index, context);
                     const symbol = chain[index];
 
                     if (index === 0) {
@@ -3724,7 +3723,7 @@ namespace ts {
                     if (index === 0) {
                         context.flags ^= NodeBuilderFlags.InInitialEntityName;
                     }
-                    const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                    const identifier = setEmitFlags(createIdentifier(symbolName, typeArgumentNodes, typeParameterNodes), EmitFlags.NoAsciiEscaping);
                     identifier.symbol = symbol;
 
                     return index > 0 ? createQualifiedName(createEntityNameFromSymbolChain(chain, index - 1), identifier) : identifier;
@@ -3737,7 +3736,8 @@ namespace ts {
                 return createExpressionFromSymbolChain(chain, chain.length - 1);
 
                 function createExpressionFromSymbolChain(chain: Symbol[], index: number): Expression {
-                    const typeParameterNodes = lookupTypeParameterNodes(chain, index, context);
+                    const { typeArgumentNodes, typeParameterNodes } = lookupTypeParameterNodes(chain, index, context);
+
                     const symbol = chain[index];
 
                     if (index === 0) {
@@ -3750,7 +3750,7 @@ namespace ts {
                     let firstChar = symbolName.charCodeAt(0);
                     const canUsePropertyAccess = isIdentifierStart(firstChar, languageVersion);
                     if (index === 0 || canUsePropertyAccess) {
-                        const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                        const identifier = setEmitFlags(createIdentifier(symbolName, typeArgumentNodes, typeParameterNodes), EmitFlags.NoAsciiEscaping);
                         identifier.symbol = symbol;
 
                         return index > 0 ? createPropertyAccess(createExpressionFromSymbolChain(chain, index - 1), identifier) : identifier;
@@ -3769,7 +3769,7 @@ namespace ts {
                             expression = createLiteral(+symbolName);
                         }
                         if (!expression) {
-                            expression = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                            expression = setEmitFlags(createIdentifier(symbolName, typeArgumentNodes, typeParameterNodes), EmitFlags.NoAsciiEscaping);
                             expression.symbol = symbol;
                         }
                         return createElementAccess(createExpressionFromSymbolChain(chain, index - 1), expression);
@@ -5061,17 +5061,16 @@ namespace ts {
             return getClassExtendsHeritageClauseElement(decl);
         }
 
-        function getConstructorsForTypeArguments(type: Type, typeArgumentNodes: ReadonlyArray<TypeNode>, location: Node): Signature[] {
+        function getConstructorsForTypeArguments(type: Type, typeArgumentNodes: ReadonlyArray<TypeArgument>, location: Node): Signature[] {
             const typeArgCount = length(typeArgumentNodes);
             const isJavaScript = isInJavaScriptFile(location);
             return filter(getSignaturesOfType(type, SignatureKind.Construct),
-                sig => (isJavaScript || typeArgCount >= getMinTypeArgumentCount(sig.typeParameters)) && typeArgCount <= length(sig.typeParameters));
+                sig => (isJavaScript || typeArgCount >= getMinTypeArgumentCount(typeArgumentNodes, sig.typeParameters)) && typeArgCount <= length(sig.typeParameters));
         }
 
-        function getInstantiatedConstructorsForTypeArguments(type: Type, typeArgumentNodes: ReadonlyArray<TypeNode>, location: Node): Signature[] {
+        function getInstantiatedConstructorsForTypeArguments(type: Type, typeArgumentNodes: ReadonlyArray<TypeArgument>, location: Node): Signature[] {
             const signatures = getConstructorsForTypeArguments(type, typeArgumentNodes, location);
-            const typeArguments = map(typeArgumentNodes, getTypeFromTypeNode);
-            return sameMap(signatures, sig => some(sig.typeParameters) ? getSignatureInstantiation(sig, typeArguments, isInJavaScriptFile(location)) : sig);
+            return sameMap(signatures, sig => some(sig.typeParameters) ? getSignatureInstantiation(sig, getTypeArgumentsFromTypeArgumentList(typeArgumentNodes, sig.typeParameters), isInJavaScriptFile(location)) : sig);
         }
 
         /**
@@ -5143,7 +5142,7 @@ namespace ts {
                 return type.resolvedBaseTypes = emptyArray;
             }
             const baseTypeNode = getBaseTypeNodeOfClass(type);
-            const typeArgs = typeArgumentsFromTypeReferenceNode(baseTypeNode);
+            forEach(baseTypeNode.typeArguments, checkTypeArgument);
             let baseType: Type;
             const originalBaseType = baseConstructorType && baseConstructorType.symbol ? getDeclaredTypeOfSymbol(baseConstructorType.symbol) : undefined;
             if (baseConstructorType.symbol && baseConstructorType.symbol.flags & SymbolFlags.Class &&
@@ -5151,7 +5150,7 @@ namespace ts {
                 // When base constructor type is a class with no captured type arguments we know that the constructors all have the same type parameters as the
                 // class and all return the instance type of the class. There is no need for further checks and we can apply the
                 // type arguments in the same manner as a type reference to get the same error reporting experience.
-                baseType = getTypeFromClassOrInterfaceReference(baseTypeNode, baseConstructorType.symbol, typeArgs);
+                baseType = getTypeFromClassOrInterfaceReference(baseTypeNode, baseConstructorType.symbol, baseTypeNode.typeArguments);
             }
             else if (baseConstructorType.flags & TypeFlags.Any) {
                 baseType = baseConstructorType;
@@ -5910,11 +5909,11 @@ namespace ts {
             }
             const baseTypeNode = getBaseTypeNodeOfClass(classType);
             const isJavaScript = isInJavaScriptFile(baseTypeNode);
-            const typeArguments = typeArgumentsFromTypeReferenceNode(baseTypeNode);
-            const typeArgCount = length(typeArguments);
             const result: Signature[] = [];
             for (const baseSig of baseSignatures) {
-                const minTypeArgumentCount = getMinTypeArgumentCount(baseSig.typeParameters);
+                const typeArguments = typeArgumentsFromTypeReferenceNode(baseTypeNode, baseSig.typeParameters);
+                const typeArgCount = length(typeArguments);
+                const minTypeArgumentCount = getMinTypeArgumentCount(baseTypeNode.typeArguments, baseSig.typeParameters);
                 const typeParamCount = length(baseSig.typeParameters);
                 if (isJavaScript || typeArgCount >= minTypeArgumentCount && typeArgCount <= typeParamCount) {
                     const sig = typeParamCount ? createSignatureInstantiation(baseSig, fillMissingTypeArguments(typeArguments, baseSig.typeParameters, minTypeArgumentCount, isJavaScript)) : cloneSignature(baseSig);
@@ -6871,7 +6870,8 @@ namespace ts {
          * Gets the minimum number of type arguments needed to satisfy all non-optional type
          * parameters.
          */
-        function getMinTypeArgumentCount(typeParameters: TypeParameter[] | undefined): number {
+        function getMinTypeArgumentCount(typeArguments: ReadonlyArray<TypeArgument> | undefined, typeParameters: TypeParameter[] | undefined): number {
+            if (some(typeArguments, isNamedTypeArgument)) return 0;
             let minTypeArgumentCount = 0;
             if (typeParameters) {
                 for (let i = 0; i < typeParameters.length; i++) {
@@ -7185,7 +7185,7 @@ namespace ts {
         }
 
         function getSignatureInstantiation(signature: Signature, typeArguments: Type[], isJavascript: boolean): Signature {
-            typeArguments = fillMissingTypeArguments(typeArguments, signature.typeParameters, getMinTypeArgumentCount(signature.typeParameters), isJavascript);
+            typeArguments = fillMissingTypeArguments(typeArguments, signature.typeParameters, getMinTypeArgumentCount(/*typeArguments*/ undefined, signature.typeParameters), isJavascript);
             const instantiations = signature.instantiations || (signature.instantiations = createMap<Signature>());
             const id = getTypeListId(typeArguments);
             let instantiation = instantiations.get(id);
@@ -7296,7 +7296,9 @@ namespace ts {
         }
 
         function getConstraintDeclaration(type: TypeParameter) {
-            return type.symbol && getDeclarationOfKind<TypeParameterDeclaration>(type.symbol, SyntaxKind.TypeParameter).constraint;
+            if (!type.symbol) return;
+            const decl = getDeclarationOfKind<TypeParameterDeclaration>(type.symbol, SyntaxKind.TypeParameter);
+            return decl && decl.constraint;
         }
 
         function getInferredTypeParameterConstraint(typeParameter: TypeParameter) {
@@ -7421,12 +7423,12 @@ namespace ts {
         /**
          * Get type from type-reference that reference to class or interface
          */
-        function getTypeFromClassOrInterfaceReference(node: NodeWithTypeArguments, symbol: Symbol, typeArgs: Type[]): Type {
+        function getTypeFromClassOrInterfaceReference(node: NodeWithTypeArguments, symbol: Symbol, typeArgNodes: ReadonlyArray<TypeArgument>): Type {
             const type = <InterfaceType>getDeclaredTypeOfSymbol(getMergedSymbol(symbol));
             const typeParameters = type.localTypeParameters;
             if (typeParameters) {
                 const numTypeArguments = length(node.typeArguments);
-                const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
+                const minTypeArgumentCount = getMinTypeArgumentCount(typeArgNodes, typeParameters);
                 const isJs = isInJavaScriptFile(node);
                 const isJsImplicitAny = !noImplicitAny && isJs;
                 if (!isJsImplicitAny && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
@@ -7448,6 +7450,7 @@ namespace ts {
                 // In a type reference, the outer type parameters of the referenced class or interface are automatically
                 // supplied as type arguments and the type reference only specifies arguments for the local type parameters
                 // of the class or interface.
+                const typeArgs = getTypeArgumentsFromTypeArgumentList(typeArgNodes, typeParameters);
                 const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(typeArgs, typeParameters, minTypeArgumentCount, isJs));
                 return createTypeReference(<GenericType>type, typeArguments);
             }
@@ -7461,7 +7464,7 @@ namespace ts {
             const id = getTypeListId(typeArguments);
             let instantiation = links.instantiations.get(id);
             if (!instantiation) {
-                links.instantiations.set(id, instantiation = instantiateType(type, createTypeMapper(typeParameters, fillMissingTypeArguments(typeArguments, typeParameters, getMinTypeArgumentCount(typeParameters), isInJavaScriptFile(symbol.valueDeclaration)))));
+                links.instantiations.set(id, instantiation = instantiateType(type, createTypeMapper(typeParameters, fillMissingTypeArguments(typeArguments, typeParameters, getMinTypeArgumentCount(/*typeArguments*/ undefined, typeParameters), isInJavaScriptFile(symbol.valueDeclaration)))));
             }
             return instantiation;
         }
@@ -7471,12 +7474,12 @@ namespace ts {
          * references to the type parameters of the alias. We replace those with the actual type arguments by instantiating the
          * declared type. Instantiations are cached using the type identities of the type arguments as the key.
          */
-        function getTypeFromTypeAliasReference(node: NodeWithTypeArguments, symbol: Symbol, typeArguments: Type[]): Type {
+        function getTypeFromTypeAliasReference(node: NodeWithTypeArguments, symbol: Symbol, typeArgumentNodes: ReadonlyArray<TypeArgument>): Type {
             const type = getDeclaredTypeOfSymbol(symbol);
             const typeParameters = getSymbolLinks(symbol).typeParameters;
             if (typeParameters) {
                 const numTypeArguments = length(node.typeArguments);
-                const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
+                const minTypeArgumentCount = getMinTypeArgumentCount(node.typeArguments, typeParameters);
                 if (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length) {
                     error(node,
                         minTypeArgumentCount === typeParameters.length
@@ -7487,7 +7490,7 @@ namespace ts {
                         typeParameters.length);
                     return unknownType;
                 }
-                return getTypeAliasInstantiation(symbol, typeArguments);
+                return getTypeAliasInstantiation(symbol, getTypeArgumentsFromTypeArgumentList(typeArgumentNodes, typeParameters));
             }
             return checkNoTypeArguments(node, symbol) ? type : unknownType;
             }
@@ -7518,7 +7521,8 @@ namespace ts {
         }
 
         function getTypeReferenceType(node: NodeWithTypeArguments, symbol: Symbol) {
-            const typeArguments = typeArgumentsFromTypeReferenceNode(node); // Do unconditionally so we mark type arguments as referenced.
+            const typeArguments = node.typeArguments;
+            forEach(typeArguments, checkTypeArgument);
             if (symbol === unknownSymbol) {
                 return unknownType;
             }
@@ -7555,13 +7559,13 @@ namespace ts {
             return valueType;
         }
 
-        function getTypeReferenceTypeWorker(node: NodeWithTypeArguments, symbol: Symbol, typeArguments: Type[]): Type | undefined {
+        function getTypeReferenceTypeWorker(node: NodeWithTypeArguments, symbol: Symbol, typeArgumentNodes: ReadonlyArray<TypeArgument>): Type | undefined {
             if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                return getTypeFromClassOrInterfaceReference(node, symbol, typeArguments);
+                return getTypeFromClassOrInterfaceReference(node, symbol, typeArgumentNodes);
             }
 
             if (symbol.flags & SymbolFlags.TypeAlias) {
-                return getTypeFromTypeAliasReference(node, symbol, typeArguments);
+                return getTypeFromTypeAliasReference(node, symbol, typeArgumentNodes);
             }
 
             if (symbol.flags & SymbolFlags.Function &&
@@ -7650,8 +7654,8 @@ namespace ts {
                     case "Object":
                         if (typeArgs && typeArgs.length === 2) {
                             if (isJSDocIndexSignature(node)) {
-                                const indexed = getTypeFromTypeNode(typeArgs[0]);
-                                const target = getTypeFromTypeNode(typeArgs[1]);
+                                const indexed = getTypeFromTypeNode(typeArgs[0] as TypeNode);
+                                const target = getTypeFromTypeNode(typeArgs[1] as TypeNode);
                                 const index = createIndexInfo(target, /*isReadonly*/ false);
                                 return createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, indexed === stringType && index, indexed === numberType && index);
                             }
@@ -7690,8 +7694,8 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function typeArgumentsFromTypeReferenceNode(node: NodeWithTypeArguments): Type[] {
-            return map(node.typeArguments, getTypeFromTypeNode);
+        function typeArgumentsFromTypeReferenceNode(node: NodeWithTypeArguments, targets: NodeArray<TypeParameterDeclaration> | ReadonlyArray<TypeParameter>): Type[] {
+            return getTypeArgumentsFromTypeArgumentList(node.typeArguments, targets);
         }
 
         function getTypeFromTypeQueryNode(node: TypeQueryNode): Type {
@@ -8986,6 +8990,53 @@ namespace ts {
                 links.resolvedType = getThisType(node);
             }
             return links.resolvedType;
+        }
+
+        function getSyntheticInferTypeForName(targetName: __String, targetConstraint: Type | undefined): Type {
+            const param = createType(TypeFlags.TypeParameter) as TypeParameter;
+            param.constraint = targetConstraint || noConstraintType;
+            const symbol = createSymbol(SymbolFlags.TypeParameter, targetName, CheckFlags.ImpliedInferDecl);
+            param.symbol = symbol;
+            symbol.declaredType = param;
+            return param;
+        }
+
+        function getTypeArgumentsFromTypeArgumentList(nodes: ReadonlyArray<TypeArgument>, targets: ReadonlyArray<TypeParameterDeclaration> | ReadonlyArray<TypeParameter>) {
+            if (!nodes) return;
+            const results: Type[] = [];
+            const named = createMap() as UnderscoreEscapedMap<NamedTypeArgument>;
+            for (const node of nodes) {
+                if (!isNamedTypeArgument(node)) {
+                    results.push(getTypeFromTypeNode(node));
+                }
+                else {
+                    named.set(node.name.escapedText, node);
+                }
+            }
+            if (named.size > 0 && targets) {
+                const positionalCount = results.length;
+                const remainingTargets = targets.slice(positionalCount);
+                for (const target of remainingTargets) {
+                    let targetName: __String;
+                    let targetConstraint: Type;
+                    if (((target as Node).kind && isTypeParameterDeclaration(target as Node))) {
+                        targetName = (target as TypeParameterDeclaration).name.escapedText;
+                        getTypeParametersFromDeclaration
+                        targetConstraint = getConstraintFromTypeParameter(getDeclaredTypeOfTypeParameter((target as TypeParameterDeclaration).symbol));
+                    }
+                    else {
+                        targetName = (target as TypeParameter).symbol.escapedName;
+                        targetConstraint = getConstraintFromTypeParameter((target as TypeParameter));
+                    }
+                    const provided = named.get(targetName);
+                    results.push(provided ? getTypeFromTypeNode(provided.type) : getSyntheticInferTypeForName(targetName, targetConstraint));
+                }
+            }
+            return results;
+        }
+
+        function checkTypeArgument(node: TypeArgument): void {
+            getTypeFromTypeNode(isNamedTypeArgument(node) ? node.type : node); // return type unneeded - used to setup caches and mark referenced-ness
         }
 
         function getTypeFromTypeNode(node: TypeNode): Type {
@@ -15090,7 +15141,7 @@ namespace ts {
             }
 
             if (context.typeArguments) {
-                signatures = mapDefined(signatures, s => getJsxSignatureTypeArgumentInstantiation(s, context, isJs));
+                signatures = mapDefined(signatures, s => getJsxSignatureTypeArgumentInstantiation(s, context, isJs, /*performPartialInference*/ false));
             }
 
             return getUnionType(map(signatures, ctor ? t => getJsxPropsTypeFromClassType(t, isJs, context, /*reportErrors*/ false) : t => getJsxPropsTypeFromCallSignature(t, context)), UnionReduction.None);
@@ -15141,7 +15192,7 @@ namespace ts {
                     const hostClassType = getReturnTypeOfSignature(sig);
                     apparentAttributesType = intersectTypes(
                         typeParams
-                            ? createTypeReference(<GenericType>intrinsicClassAttribs, fillMissingTypeArguments([hostClassType], typeParams, getMinTypeArgumentCount(typeParams), isJs))
+                            ? createTypeReference(<GenericType>intrinsicClassAttribs, fillMissingTypeArguments([hostClassType], typeParams, getMinTypeArgumentCount(/*typeArguments*/ undefined, typeParams), isJs))
                             : intrinsicClassAttribs,
                         apparentAttributesType
                     );
@@ -15863,7 +15914,7 @@ namespace ts {
             for (const signature of signatures) {
                 if (signature.typeParameters) {
                     const isJavascript = isInJavaScriptFile(node);
-                    const typeArgumentInstantiated = getJsxSignatureTypeArgumentInstantiation(signature, node, isJavascript, /*reportErrors*/ false);
+                    const typeArgumentInstantiated = getJsxSignatureTypeArgumentInstantiation(signature, node, isJavascript, /*performPartialInference*/ true);
                     if (typeArgumentInstantiated) {
                         hasTypeArgumentError = false;
                         instantiatedSignatures.push(typeArgumentInstantiated);
@@ -15893,18 +15944,27 @@ namespace ts {
             return instantiatedSignatures;
         }
 
-        function getJsxSignatureTypeArgumentInstantiation(signature: Signature, node: JsxOpeningLikeElement, isJavascript: boolean, reportErrors?: boolean) {
+        function getJsxSignatureTypeArgumentInstantiation(signature: Signature, node: JsxOpeningLikeElement, isJavascript: boolean, performPartialInference: boolean) {
             if (!node.typeArguments) {
                 return;
             }
             if (!hasCorrectTypeArgumentArity(signature, node.typeArguments)) {
                 return;
             }
-            const args = checkTypeArguments(signature, node.typeArguments, reportErrors);
+            const args = checkTypeArguments(signature, node.typeArguments, /*reportErrors*/ false);
             if (!args) {
                 return;
             }
-            return getSignatureInstantiation(signature, args, isJavascript);
+            const finalized = performPartialInference ? getPartialInferenceResult(args, signature, isJavascript, performJsxInferenceHandler) : instantiateList(args, impliedInferTypeConstraintMapper, instantiateType);
+            return getSignatureInstantiation(signature, finalized, isJavascript);
+
+            function performJsxInferenceHandler(sig: Signature, context: InferenceContext) {
+                return inferJsxTypeArguments(sig, node, context);
+            }
+        }
+
+        function impliedInferTypeConstraintMapper(type: Type) {
+            return isImpliedInferType(type) ? (getConstraintFromTypeParameter(type as TypeParameter) || emptyObjectType) : type;
         }
 
         function getJsxNamespaceAt(location: Node) {
@@ -17179,7 +17239,7 @@ namespace ts {
 
         function hasCorrectArity(node: CallLikeExpression, args: ReadonlyArray<Expression>, signature: Signature, signatureHelpTrailingComma = false) {
             let argCount: number;            // Apparent number of arguments we will have in this call
-            let typeArguments: NodeArray<TypeNode>;  // Type arguments (undefined if none)
+            let typeArguments: NodeArray<TypeArgument>;  // Type arguments (undefined if none)
             let callIsIncomplete: boolean;           // In incomplete call we want to be lenient when we have too few arguments
             let spreadArgIndex = -1;
 
@@ -17251,11 +17311,11 @@ namespace ts {
             return callIsIncomplete || hasEnoughArguments;
         }
 
-        function hasCorrectTypeArgumentArity(signature: Signature, typeArguments: NodeArray<TypeNode> | undefined) {
+        function hasCorrectTypeArgumentArity(signature: Signature, typeArguments: NodeArray<TypeArgument> | undefined) {
             // If the user supplied type arguments, but the number of type arguments does not match
             // the declared number of type parameters, the call has an incorrect arity.
             const numTypeParameters = length(signature.typeParameters);
-            const minTypeArgumentCount = getMinTypeArgumentCount(signature.typeParameters);
+            const minTypeArgumentCount = getMinTypeArgumentCount(typeArguments, signature.typeParameters);
             return !typeArguments ||
                 (typeArguments.length >= minTypeArgumentCount && typeArguments.length <= numTypeParameters);
         }
@@ -17387,12 +17447,13 @@ namespace ts {
             return getInferredTypes(context);
         }
 
-        function checkTypeArguments(signature: Signature, typeArgumentNodes: ReadonlyArray<TypeNode>, reportErrors: boolean, headMessage?: DiagnosticMessage): Type[] | false {
+        function checkTypeArguments(signature: Signature, typeArgumentNodes: ReadonlyArray<TypeArgument>, reportErrors: boolean, headMessage?: DiagnosticMessage): Type[] | false {
             const isJavascript = isInJavaScriptFile(signature.declaration);
             const typeParameters = signature.typeParameters;
-            const typeArgumentTypes = fillMissingTypeArguments(map(typeArgumentNodes, getTypeFromTypeNode), typeParameters, getMinTypeArgumentCount(typeParameters), isJavascript);
+            const typeArgumentTypes = fillMissingTypeArguments(getTypeArgumentsFromTypeArgumentList(typeArgumentNodes, typeParameters), typeParameters, getMinTypeArgumentCount(typeArgumentNodes, typeParameters), isJavascript);
             let mapper: TypeMapper;
             for (let i = 0; i < typeArgumentNodes.length; i++) {
+                // TODO (weswigham): handle named type arguments
                 Debug.assert(typeParameters[i] !== undefined, "Should not call checkTypeArguments with too many type arguments");
                 const constraint = getConstraintOfTypeParameter(typeParameters[i]);
                 if (!constraint) continue;
@@ -17818,11 +17879,11 @@ namespace ts {
             }
         }
 
-        function getTypeArgumentArityError(node: Node, signatures: Signature[], typeArguments: NodeArray<TypeNode>) {
+        function getTypeArgumentArityError(node: Node, signatures: Signature[], typeArguments: NodeArray<TypeArgument>) {
             let min = Infinity;
             let max = -Infinity;
             for (const sig of signatures) {
-                min = Math.min(min, getMinTypeArgumentCount(sig.typeParameters));
+                min = Math.min(min, getMinTypeArgumentCount(typeArguments, sig.typeParameters));
                 max = Math.max(max, length(sig.typeParameters));
             }
             const paramCount = min === max ? min : min + "-" + max;
@@ -17834,7 +17895,7 @@ namespace ts {
             const isDecorator = node.kind === SyntaxKind.Decorator;
             const isJsxOpeningOrSelfClosingElement = isJsxOpeningLikeElement(node);
 
-            let typeArguments: NodeArray<TypeNode>;
+            let typeArguments: NodeArray<TypeArgument>;
 
             if (!isDecorator && !isJsxOpeningOrSelfClosingElement) {
                 typeArguments = (<CallExpression>node).typeArguments;
@@ -18048,10 +18109,11 @@ namespace ts {
                         candidate = originalCandidate;
                         if (candidate.typeParameters) {
                             let typeArgumentTypes: Type[];
+                            const isJavascript = isInJavaScriptFile(candidate.declaration);
                             if (typeArguments) {
                                 const typeArgumentResult = checkTypeArguments(candidate, typeArguments, /*reportErrors*/ false);
                                 if (typeArgumentResult) {
-                                    typeArgumentTypes = typeArgumentResult;
+                                    typeArgumentTypes = getPartialInferenceResult(typeArgumentResult, candidate, isJavascript, performStandardInferenceHandler);
                                 }
                                 else {
                                     candidateForTypeArgumentError = originalCandidate;
@@ -18061,7 +18123,6 @@ namespace ts {
                             else {
                                 typeArgumentTypes = inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
                             }
-                            const isJavascript = isInJavaScriptFile(candidate.declaration);
                             candidate = getSignatureInstantiation(candidate, typeArgumentTypes, isJavascript);
                         }
                         if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
@@ -18084,6 +18145,27 @@ namespace ts {
 
                 return undefined;
             }
+
+            function performStandardInferenceHandler(signature: Signature, context: InferenceContext) {
+                return inferTypeArguments(node, signature, args, excludeArgument, context);
+            }
+        }
+
+        function getPartialInferenceResult(typeArgumentResult: Type[], candidate: Signature, isJavascript: boolean, performInferenceHandler: (signature: Signature, context: InferenceContext) => Type[]) {
+            const inferTypes = filter(typeArgumentResult, isImpliedInferType);
+            if (length(inferTypes)) {
+                // There are implied inferences we must make, despite having type arguments
+                const uninferedInstantiation = getSignatureInstantiation(candidate, typeArgumentResult, isJavascript);
+                const context = createInferenceContext(inferTypes as TypeParameter[], uninferedInstantiation, isJavascript ? InferenceFlags.AnyDefault : InferenceFlags.None);
+                const inferences = performInferenceHandler(uninferedInstantiation, context);
+                const resultMapper = createTypeMapper(inferTypes, inferences);
+                return instantiateList(typeArgumentResult, resultMapper, instantiateType);
+            }
+            return typeArgumentResult;
+        }
+
+        function isImpliedInferType(type: Type) {
+            return type.symbol && !!(getCheckFlags(type.symbol) & CheckFlags.ImpliedInferDecl);
         }
 
         function getLongestCandidateIndex(candidates: Signature[], argsCount: number): number {
@@ -20957,8 +21039,8 @@ namespace ts {
         }
 
         function getEffectiveTypeArguments(node: TypeReferenceNode | ExpressionWithTypeArguments, typeParameters: TypeParameter[]) {
-            return fillMissingTypeArguments(map(node.typeArguments, getTypeFromTypeNode), typeParameters,
-                getMinTypeArgumentCount(typeParameters), isInJavaScriptFile(node));
+            return fillMissingTypeArguments(getTypeArgumentsFromTypeArgumentList(node.typeArguments, typeParameters), typeParameters,
+                getMinTypeArgumentCount(node.typeArguments, typeParameters), isInJavaScriptFile(node));
         }
 
         function checkTypeArgumentConstraints(node: TypeReferenceNode | ExpressionWithTypeArguments, typeParameters: TypeParameter[]): boolean {
@@ -23637,7 +23719,7 @@ namespace ts {
 
         function areTypeParametersIdentical(declarations: ReadonlyArray<ClassDeclaration | InterfaceDeclaration>, targetParameters: TypeParameter[]) {
             const maxTypeArgumentCount = length(targetParameters);
-            const minTypeArgumentCount = getMinTypeArgumentCount(targetParameters);
+            const minTypeArgumentCount = getMinTypeArgumentCount(/*typeArguments*/ undefined, targetParameters);
 
             for (const declaration of declarations) {
                 // If this declaration has too few or too many type parameters, we report an error
@@ -27016,7 +27098,7 @@ namespace ts {
             return checkGrammarDecoratorsAndModifiers(node) || checkGrammarIndexSignatureParameters(node);
         }
 
-        function checkGrammarForAtLeastOneTypeArgument(node: Node, typeArguments: NodeArray<TypeNode>): boolean {
+        function checkGrammarForAtLeastOneTypeArgument(node: Node, typeArguments: NodeArray<TypeArgument>): boolean {
             if (typeArguments && typeArguments.length === 0) {
                 const sourceFile = getSourceFileOfNode(node);
                 const start = typeArguments.pos - "<".length;
@@ -27025,9 +27107,26 @@ namespace ts {
             }
         }
 
-        function checkGrammarTypeArguments(node: Node, typeArguments: NodeArray<TypeNode>): boolean {
+        function checkGrammarForNamedTypeArguments(typeArguments: NodeArray<TypeArgument>): boolean {
+            if (!typeArguments) return;
+            let hasSeenNamedArg = false;
+            let errored = false;
+            for (const arg of typeArguments) {
+                const isNamed = isNamedTypeArgument(arg);
+                if (hasSeenNamedArg && !isNamed) {
+                    errored = grammarErrorOnNode(arg, Diagnostics._0_expected, "named type argument") || errored;
+                }
+                if (isNamed) {
+                    hasSeenNamedArg = true;
+                }
+            }
+            return errored;
+        }
+
+        function checkGrammarTypeArguments(node: Node, typeArguments: NodeArray<TypeArgument>): boolean {
             return checkGrammarForDisallowedTrailingComma(typeArguments) ||
-                checkGrammarForAtLeastOneTypeArgument(node, typeArguments);
+                checkGrammarForAtLeastOneTypeArgument(node, typeArguments) ||
+                checkGrammarForNamedTypeArguments(typeArguments);
         }
 
         function checkGrammarForOmittedArgument(args: NodeArray<Expression>): boolean {

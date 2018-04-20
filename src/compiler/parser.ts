@@ -144,6 +144,9 @@ namespace ts {
                     visitNodes(cbNode, cbNodes, (<SignatureDeclaration>node).typeParameters) ||
                     visitNodes(cbNode, cbNodes, (<SignatureDeclaration>node).parameters) ||
                     visitNode(cbNode, (<SignatureDeclaration>node).type);
+            case SyntaxKind.NamedTypeArgument:
+                return visitNode(cbNode, (<NamedTypeArgument>node).name) ||
+                visitNode(cbNode, (<NamedTypeArgument>node).type);
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.MethodSignature:
             case SyntaxKind.Constructor:
@@ -2191,7 +2194,7 @@ namespace ts {
             const node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference);
             node.typeName = parseEntityName(/*allowReservedWords*/ true, Diagnostics.Type_expected);
             if (!scanner.hasPrecedingLineBreak() && token() === SyntaxKind.LessThanToken) {
-                node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
+                node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseNamedTypeArgumentOrType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
             }
             return finishNode(node);
         }
@@ -3035,6 +3038,27 @@ namespace ts {
             if (token() === SyntaxKind.IsKeyword && !scanner.hasPrecedingLineBreak()) {
                 nextToken();
                 return id;
+            }
+        }
+
+        function isNamedTypeArgumentStart() {
+            return token() === SyntaxKind.Identifier && nextToken() === SyntaxKind.EqualsToken;
+        }
+
+        function parseNamedTypeArgument(): NamedTypeArgument {
+            const node = createNode(SyntaxKind.NamedTypeArgument) as NamedTypeArgument;
+            node.name = parseIdentifier();
+            parseExpected(SyntaxKind.EqualsToken);
+            node.type = parseType();
+            return finishNode(node);
+        }
+
+        function parseNamedTypeArgumentOrType(): TypeArgument {
+            if (lookAhead(isNamedTypeArgumentStart)) {
+                return parseNamedTypeArgument();
+            }
+            else {
+                return parseType();
             }
         }
 
@@ -4377,7 +4401,7 @@ namespace ts {
             return token() === SyntaxKind.NoSubstitutionTemplateLiteral || token() === SyntaxKind.TemplateHead;
         }
 
-        function parseTaggedTemplateRest(tag: LeftHandSideExpression, typeArguments: NodeArray<TypeNode> | undefined) {
+        function parseTaggedTemplateRest(tag: LeftHandSideExpression, typeArguments: NodeArray<TypeArgument> | undefined) {
             const tagExpression = <TaggedTemplateExpression>createNode(SyntaxKind.TaggedTemplateExpression, tag.pos);
             tagExpression.tag = tag;
             tagExpression.typeArguments = typeArguments;
@@ -4436,7 +4460,7 @@ namespace ts {
                 return undefined;
             }
 
-            const typeArguments = parseDelimitedList(ParsingContext.TypeArguments, parseType);
+            const typeArguments = parseDelimitedList(ParsingContext.TypeArguments, parseNamedTypeArgumentOrType);
             if (!parseExpected(SyntaxKind.GreaterThanToken)) {
                 // If it doesn't have the closing `>` then it's definitely not an type argument list.
                 return undefined;
@@ -5771,9 +5795,9 @@ namespace ts {
             return finishNode(node);
         }
 
-        function tryParseTypeArguments(): NodeArray<TypeNode> | undefined {
+        function tryParseTypeArguments(): NodeArray<TypeArgument> | undefined {
             return token() === SyntaxKind.LessThanToken
-               ? parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken)
+               ? parseBracketedList(ParsingContext.TypeArguments, parseNamedTypeArgumentOrType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken)
                : undefined;
         }
 

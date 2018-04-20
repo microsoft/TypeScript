@@ -961,7 +961,13 @@ namespace ts {
             return (<ArrayTypeNode>node).elementType;
         }
         else if (node && node.kind === SyntaxKind.TypeReference) {
-            return singleOrUndefined((<TypeReferenceNode>node).typeArguments);
+            const argumentNode = singleOrUndefined((<TypeReferenceNode>node).typeArguments);
+            if (isNamedTypeArgument(argumentNode)) {
+                return argumentNode.type;
+            }
+            else {
+                return argumentNode;
+            }
         }
         else {
             return undefined;
@@ -1474,6 +1480,7 @@ namespace ts {
             isIdentifier(node.typeName) &&
             node.typeName.escapedText === "Object" &&
             node.typeArguments && node.typeArguments.length === 2 &&
+            node.typeArguments[1].kind !== SyntaxKind.NamedTypeArgument &&
             (node.typeArguments[0].kind === SyntaxKind.StringKeyword || node.typeArguments[0].kind === SyntaxKind.NumberKeyword);
     }
 
@@ -4851,6 +4858,10 @@ namespace ts {
         return node.kind === SyntaxKind.ConstructSignature;
     }
 
+    export function isNamedTypeArgument(node: Node): node is NamedTypeArgument {
+        return node.kind === SyntaxKind.NamedTypeArgument;
+    }
+
     export function isIndexSignatureDeclaration(node: Node): node is IndexSignatureDeclaration {
         return node.kind === SyntaxKind.IndexSignature;
     }
@@ -5693,6 +5704,10 @@ namespace ts {
      */
     export function isTypeNode(node: Node): node is TypeNode {
         return isTypeNodeKind(node.kind);
+    }
+
+    export function isTypeArgument(node: Node): node is TypeArgument {
+        return isTypeNodeKind(node.kind) || isNamedTypeArgument(node);
     }
 
     export function isFunctionOrConstructorTypeNode(node: Node): node is FunctionTypeNode | ConstructorTypeNode {
