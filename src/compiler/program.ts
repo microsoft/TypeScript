@@ -604,17 +604,17 @@ namespace ts {
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createMap<SourceFile>() : undefined;
 
         // A parallel array to projectReferences storing the results of reading in the referenced tsconfig files
-        const resolvedProjectReferences: ParsedCommandLine[] = [];
+        const resolvedProjectReferences: { commandLine: ParsedCommandLine; sourceFile: SourceFile }[] = [];
         const projectReferenceRedirects: Map<string> = createMap();
         if (projectReferences) {
             for (const ref of projectReferences) {
                 const parsedRef = parseProjectReferenceConfigFile(ref);
                 resolvedProjectReferences.push(parsedRef);
                 if (parsedRef) {
-                    if (parsedRef.options.outFile) {
-                        processSourceFile(parsedRef.options.outFile, /*isDefaultLib*/ false, /*packageId*/ undefined);
+                    if (parsedRef.commandLine.options.outFile) {
+                        processSourceFile(parsedRef.commandLine.options.outFile, /*isDefaultLib*/ false, /*packageId*/ undefined);
                     }
-                    addProjectReferenceRedirects(parsedRef, projectReferenceRedirects);
+                    addProjectReferenceRedirects(parsedRef.commandLine, projectReferenceRedirects);
                 }
             }
         }
@@ -741,7 +741,6 @@ namespace ts {
                 }
                 else if (options.composite) {
                     // Project compilations never infer their root from the input source paths
-                    Debug.assert(!!options.configFilePath);
                     commonSourceDirectory = getDirectoryPath(normalizeSlashes(options.configFilePath));
                 }
 
@@ -951,6 +950,26 @@ namespace ts {
 
             if (!arrayIsEqualTo(options.types, oldOptions.types)) {
                 return oldProgram.structureIsReused = StructureIsReused.Not;
+            }
+
+            // Check if any referenced project tsconfig files are different
+            if (createProgramOptions.projectReferences) {
+                for (let i = 0; i < createProgramOptions.projectReferences.length; i++) {
+                    const oldRef = resolvedProjectReferences[i];
+                    if (oldRef) {
+                        const newRef = parseProjectReferenceConfigFile(createProgramOptions.projectReferences[i]);
+                        if (!newRef || newRef.sourceFile !== oldRef.sourceFile) {
+                            // Resolved project reference has gone missing or changed
+                            return oldProgram.structureIsReused = StructureIsReused.Not;
+                        }
+                    }
+                    else {
+                        // A previously-unresolved reference may be resolved now
+                        if (parseProjectReferenceConfigFile(createProgramOptions.projectReferences[i]) !== undefined) {
+                            return oldProgram.structureIsReused = StructureIsReused.Not;
+                        }
+                    }
+                }
             }
 
             // check if program source files has changed in the way that can affect structure of the program
@@ -1164,10 +1183,10 @@ namespace ts {
             const nodes: UnparsedSource[] = [];
             for (let i = 0; i < projectReferences.length; i++) {
                 const ref = projectReferences[i];
-                const resolvedRef = resolvedProjectReferences[i];
-                if (ref.prepend && resolvedRef && resolvedRef.options) {
-                    const dtsFilename = changeExtension(resolvedRef.options.outFile, ".d.ts");
-                    const js = host.readFile(resolvedRef.options.outFile) || `/* Input file ${resolvedRef.options.outFile} was missing */\r\n`;
+                const resolvedRefOpts = resolvedProjectReferences[i].commandLine;
+                if (ref.prepend && resolvedRefOpts && resolvedRefOpts.options) {
+                    const dtsFilename = changeExtension(resolvedRefOpts.options.outFile, ".d.ts");
+                    const js = host.readFile(resolvedRefOpts.options.outFile) || `/* Input file ${resolvedRefOpts.options.outFile} was missing */\r\n`;
                     const dts = host.readFile(dtsFilename) || `/* Input file ${dtsFilename} was missing */\r\n`;
                     const node = createPrepend(js, dts);
                     nodes.push(node);
@@ -2166,9 +2185,17 @@ namespace ts {
             return allFilesBelongToPath;
         }
 
-        function parseProjectReferenceConfigFile(ref: ProjectReference): ParsedCommandLine {
+        function parseProjectReferenceConfigFile(ref: ProjectReference): { commandLine: ParsedCommandLine, sourceFile: SourceFile } | undefined {
+            // The actual filename (i.e. add "/tsconfig.json" if necessary)
             const refPath = resolveProjectReferencePath(host, ref);
-            return getParsedCommandLineOfConfigFile(refPath, {}, parseConfigHostFromCompilerHost(host));
+            // An absolute path pointing to the containing directory of the config file
+            const basePath = getNormalizedAbsolutePath(getDirectoryPath(refPath), host.getCurrentDirectory());
+            const sourceFile = host.getSourceFile(refPath, ScriptTarget.Latest);
+            if (sourceFile === undefined) {
+                return undefined;
+            }
+            const commandLine = parseJsonSourceFileConfigFileContent(sourceFile, parseConfigHostFromCompilerHost(host), basePath, /*existingOptions*/ undefined, refPath);
+            return { commandLine, sourceFile };
         }
 
         function addProjectReferenceRedirects(referencedProject: ParsedCommandLine, target: Map<string>) {
@@ -2223,18 +2250,18 @@ namespace ts {
             if (projectReferences) {
                 for (let i = 0; i < projectReferences.length; i++) {
                     const ref = projectReferences[i];
-                    const resolvedRef = resolvedProjectReferences[i];
-                    if (resolvedRef === undefined) {
+                    const resolvedRefOpts = resolvedProjectReferences[i] && resolvedProjectReferences[i].commandLine.options;
+                    if (resolvedRefOpts === undefined) {
                         createDiagnosticForReference(i, Diagnostics.File_0_does_not_exist, ref.path);
                         continue;
                     }
-                    if (!resolvedRef.options.composite) {
+                    if (!resolvedRefOpts.composite) {
                         createDiagnosticForReference(i, Diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true, ref.path);
                     }
                     if (ref.prepend) {
-                        if (resolvedRef.options.outFile) {
-                            if (!host.fileExists(resolvedRef.options.outFile)) {
-                                createDiagnosticForReference(i, Diagnostics.Output_file_0_from_project_1_does_not_exist, resolvedRef.options.outFile, ref.path);
+                        if (resolvedRefOpts.outFile) {
+                            if (!host.fileExists(resolvedRefOpts.outFile)) {
+                                createDiagnosticForReference(i, Diagnostics.Output_file_0_from_project_1_does_not_exist, resolvedRefOpts.outFile, ref.path);
                             }
                         }
                         else {

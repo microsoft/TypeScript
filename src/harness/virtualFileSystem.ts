@@ -270,6 +270,10 @@ namespace Utils {
             if (content === undefined) {
                 return undefined;
             }
+            if (fileName.endsWith(".json")) {
+                return ts.parseJsonText(fileName, content);
+            }
+
             return ts.createSourceFile(fileName, content, languageVersion);
         }
         getDefaultLibFileName(options: ts.CompilerOptions): string {

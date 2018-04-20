@@ -994,9 +994,8 @@ namespace ts {
      */
     export function parseConfigFileTextToJson(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
         const jsonSourceFile = parseJsonText(fileName, jsonText);
-        const config = convertToObject(jsonSourceFile, jsonSourceFile.parseDiagnostics);
         return {
-            config,
+            config: convertToObject(jsonSourceFile, jsonSourceFile.parseDiagnostics),
             error: jsonSourceFile.parseDiagnostics.length ? jsonSourceFile.parseDiagnostics[0] : undefined
         };
     }
@@ -1615,8 +1614,8 @@ namespace ts {
                             references.push({
                                 path: getNormalizedAbsolutePath(ref.path, basePath),
                                 originalPath: ref.path,
-                                prepend: ref.prepend || false,
-                                circular: ref.circular || false
+                                prepend: ref.prepend,
+                                circular: ref.circular
                             });
                         }
                     }
