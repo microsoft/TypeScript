@@ -1833,9 +1833,9 @@ namespace ts {
                 getJSDocCommentsAndTagsWorker(parent.parent);
             }
             if (parent.parent && parent.parent.parent &&
-                (getSingleVariableOfVariableStatement(parent.parent.parent)
-                    || getSingleInitializerOfVariableStatementOrPropertyDeclaration(parent.parent.parent) === node
-                    || getSourceOfDefaultedAssignment(parent.parent.parent))) {
+                (getSingleVariableOfVariableStatement(parent.parent.parent) ||
+                    getSingleInitializerOfVariableStatementOrPropertyDeclaration(parent.parent.parent) === node ||
+                    getSourceOfDefaultedAssignment(parent.parent.parent))) {
                 getJSDocCommentsAndTagsWorker(parent.parent.parent);
             }
             if (isBinaryExpression(node) && getSpecialPropertyAssignmentKind(node) !== SpecialPropertyAssignmentKind.None ||
