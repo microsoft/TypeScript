@@ -2061,7 +2061,7 @@ namespace ts {
             let symbol: Symbol;
             if (name.kind === SyntaxKind.Identifier) {
                 const message = meaning === namespaceMeaning ? Diagnostics.Cannot_find_namespace_0 : Diagnostics.Cannot_find_name_0;
-                const symbolFromJSPrototype = isInJavaScriptFile(name) && resolveEntityNameFromJSPrototype(name, meaning);
+                const symbolFromJSPrototype = isInJavaScriptFile(name) ? resolveEntityNameFromJSPrototype(name, meaning) : undefined;
                 symbol = resolveName(location || name, name.escapedText, meaning, ignoreErrors || symbolFromJSPrototype ? undefined : message, name, /*isUse*/ true);
                 if (!symbol) {
                     return symbolFromJSPrototype;
