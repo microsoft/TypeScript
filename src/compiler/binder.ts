@@ -2322,11 +2322,7 @@ namespace ts {
             // 'module.exports = expr' assignment
             setCommonJsModuleIndicator(node);
             const flags = isEntityNameExpression(node.right)
-            // An export default clause with an EntityNameExpression exports all meanings of that identifier
-                ? SymbolFlags.Alias
-            // An export default clause with any other expression exports a value
-            // TODO: (1) might not need the last two flags
-            // TODO: (2) if not, should just be able to call bindExportAssignment
+                ? SymbolFlags.Alias // An export= with an EntityNameExpression exports all meanings of that identifier
                 : SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.ValueModule;
             declareSymbol(file.symbol.exports, file.symbol, node, flags, SymbolFlags.None);
         }

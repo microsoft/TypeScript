@@ -7495,7 +7495,6 @@ namespace ts {
                 return unknownType;
             }
 
-            // TODO: This might not be needed anymore? (Maybe)
             // A jsdoc TypeReference may have resolved to a value (as opposed to a type). If
             // the symbol is a constructor function, return the inferred class type; otherwise,
             // the type of this reference is just the type of the value we resolved to.
