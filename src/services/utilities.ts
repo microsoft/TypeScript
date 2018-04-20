@@ -1218,6 +1218,14 @@ namespace ts {
             ? isStringOrNumericLiteral(name.expression) ? name.expression.text : undefined
             : getTextOfIdentifierOrLiteral(name);
     }
+
+    export function hostUsesCaseSensitiveFileNames(host: LanguageServiceHost): boolean {
+        return host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : false;
+    }
+
+    export function hostGetCanonicalFileName(host: LanguageServiceHost): GetCanonicalFileName {
+        return createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host));
+    }
 }
 
 // Display-part writer helpers

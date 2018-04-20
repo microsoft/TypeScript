@@ -365,8 +365,12 @@ namespace ts.textChanges {
             this.insertText(sourceFile, token.getStart(sourceFile), text);
         }
 
+        public replaceRangeWithText(sourceFile: SourceFile, range: TextRange, text: string) {
+            this.changes.push({ kind: ChangeKind.Text, sourceFile, range, text });
+        }
+
         private insertText(sourceFile: SourceFile, pos: number, text: string): void {
-            this.changes.push({ kind: ChangeKind.Text, sourceFile, range: { pos, end: pos }, text });
+            this.replaceRangeWithText(sourceFile, createTextRange(pos), text);
         }
 
         /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */

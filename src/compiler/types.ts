@@ -2332,7 +2332,7 @@ namespace ts {
     }
 
     export interface JSDocTag extends Node {
-        parent: JSDoc;
+        parent: JSDoc | JSDocTypeLiteral;
         atToken: AtToken;
         tagName: Identifier;
         comment: string | undefined;
@@ -2726,6 +2726,8 @@ namespace ts {
         /* @internal */ redirectTargetsSet: Map<true>;
         /** Is the file emitted file */
         /* @internal */ isEmittedFile(file: string): boolean;
+
+        /* @internal */ getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
     }
 
     /* @internal */

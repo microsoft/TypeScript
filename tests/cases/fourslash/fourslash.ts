@@ -157,6 +157,7 @@ declare namespace FourSlashInterface {
             spanIndex?: number,
             hasAction?: boolean,
             options?: UserPreferences & {
+                triggerCharacter?: string,
                 sourceDisplay?: string,
                 isRecommended?: true,
                 insertText?: string,
@@ -344,6 +345,11 @@ declare namespace FourSlashInterface {
         getSuggestionDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         ProjectInfo(expected: string[]): void;
         allRangesAppearInImplementationList(markerName: string): void;
+        getEditsForFileRename(options: {
+            oldPath: string;
+            newPath: string;
+            newFileContents: { [fileName: string]: string };
+        });
     }
     class edit {
         backspace(count?: number): void;
@@ -530,6 +536,7 @@ declare namespace FourSlashInterface {
         importModuleSpecifierPreference?: "relative" | "non-relative";
     }
     interface CompletionsAtOptions extends UserPreferences {
+        triggerCharacter?: string;
         isNewIdentifierLocation?: boolean;
     }
 }

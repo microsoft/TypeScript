@@ -39,7 +39,6 @@ namespace ts.codefix {
     }
 
     function convertToImportCodeFixContext(context: CodeFixContext, symbolToken: Node, symbolName: string): ImportCodeFixContext {
-        const useCaseSensitiveFileNames = context.host.useCaseSensitiveFileNames ? context.host.useCaseSensitiveFileNames() : false;
         const { program } = context;
         const checker = program.getTypeChecker();
 
@@ -51,7 +50,7 @@ namespace ts.codefix {
             checker,
             compilerOptions: program.getCompilerOptions(),
             cachedImportDeclarations: [],
-            getCanonicalFileName: createGetCanonicalFileName(useCaseSensitiveFileNames),
+            getCanonicalFileName: createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(context.host)),
             symbolName,
             symbolToken,
             preferences: context.preferences,
@@ -545,11 +544,6 @@ namespace ts.codefix {
 
     function isPathRelativeToParent(path: string): boolean {
         return startsWith(path, "..");
-    }
-
-    function getRelativePath(path: string, directoryPath: string, getCanonicalFileName: GetCanonicalFileName) {
-        const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
-        return !pathIsRelative(relativePath) ? "./" + relativePath : relativePath;
     }
 
     function getCodeActionsForAddImport(
