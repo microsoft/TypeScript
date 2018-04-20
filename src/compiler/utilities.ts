@@ -1888,6 +1888,9 @@ namespace ts {
     }
 
     export function getJSDocHost(node: JSDocTag): HasJSDoc {
+        while (node.parent.kind === SyntaxKind.JSDocTypeLiteral) {
+            node = node.parent.parent.parent as JSDocParameterTag;
+        }
         Debug.assert(node.parent!.kind === SyntaxKind.JSDocComment);
         return node.parent!.parent!;
     }
