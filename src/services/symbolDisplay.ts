@@ -126,7 +126,7 @@ namespace ts.SymbolDisplay {
 
         const displayParts: SymbolDisplayPart[] = [];
         let documentation: SymbolDisplayPart[] | undefined;
-        let tags: JSDocTagInfo[];
+        let tags: JSDocTagInfo[] | undefined;
         const symbolFlags = getCombinedLocalAndExportSymbolFlags(symbol);
         let symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location);
         let hasAddedSymbolInfo = false;

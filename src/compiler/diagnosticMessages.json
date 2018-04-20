@@ -3914,7 +3914,7 @@
         "category": "Message",
         "code": 90007
     },
-    "Add 'this.' to unresolved variable": {
+    "Add '{0}.' to unresolved variable": {
         "category": "Message",
         "code": 90008
     },
@@ -4122,7 +4122,7 @@
         "category": "Message",
         "code": 95036
     },
-    "Add 'this.' to all unresolved variables matching a member name": {
+    "Add qualifier to all unresolved variables matching a member name": {
         "category": "Message",
         "code": 95037
     },
