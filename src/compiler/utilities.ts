@@ -1892,7 +1892,7 @@ namespace ts {
             node = node.parent.parent.parent as JSDocParameterTag;
         }
         Debug.assert(node.parent!.kind === SyntaxKind.JSDocComment);
-        return (node.parent! as JSDoc).parent!;
+        return node.parent!.parent!;
     }
 
     export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { parent: JSDocTemplateTag }): TypeParameterDeclaration | undefined {
