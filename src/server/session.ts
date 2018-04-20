@@ -1287,6 +1287,7 @@ namespace ts.server {
 
             const completions = project.getLanguageService().getCompletionsAtPosition(file, position, {
                 ...this.getPreferences(file),
+                triggerCharacter: args.triggerCharacter,
                 includeExternalModuleExports: args.includeExternalModuleExports,
                 includeInsertTextCompletions: args.includeInsertTextCompletions
             });

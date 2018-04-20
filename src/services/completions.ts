@@ -25,7 +25,7 @@ namespace ts.Completions {
 
     const enum GlobalsSearch { Continue, Success, Fail }
 
-    export function getCompletionsAtPosition(host: LanguageServiceHost, program: Program, log: Log, sourceFile: SourceFile, position: number, preferences: UserPreferences): CompletionInfo | undefined {
+    export function getCompletionsAtPosition(host: LanguageServiceHost, program: Program, log: Log, sourceFile: SourceFile, position: number, preferences: UserPreferences, triggerCharacter: string | undefined): CompletionInfo | undefined {
         const typeChecker = program.getTypeChecker();
         const compilerOptions = program.getCompilerOptions();
         if (isInReferenceComment(sourceFile, position)) {
@@ -34,6 +34,7 @@ namespace ts.Completions {
         }
 
         const contextToken = findPrecedingToken(position, sourceFile);
+        if (triggerCharacter && !isValidTrigger(sourceFile, triggerCharacter, contextToken, position)) return undefined;
 
         if (isInString(sourceFile, position, contextToken)) {
             return !contextToken || !isStringLiteralLike(contextToken)
@@ -2196,5 +2197,32 @@ namespace ts.Completions {
 
     function hasIndexSignature(type: Type): boolean {
         return !!type.getStringIndexType() || !!type.getNumberIndexType();
+    }
+
+    function isValidTrigger(sourceFile: SourceFile, triggerCharacter: string, contextToken: Node, position: number): boolean {
+        switch (triggerCharacter) {
+            case '"':
+            case "'":
+            case "`":
+                // Only automatically bring up completions if this is an opening quote.
+                return isStringLiteralOrTemplate(contextToken) && position === contextToken.getStart(sourceFile) + 1;
+            case "<":
+                // Opening JSX tag
+                return contextToken.kind === SyntaxKind.LessThanToken && contextToken.parent.kind !== SyntaxKind.BinaryExpression;
+            default:
+                return Debug.fail(triggerCharacter);
+        }
+    }
+
+    function isStringLiteralOrTemplate(node: Node): node is StringLiteralLike | TemplateExpression | TaggedTemplateExpression {
+        switch (node.kind) {
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+            case SyntaxKind.TemplateExpression:
+            case SyntaxKind.TaggedTemplateExpression:
+                return true;
+            default:
+                return false;
+        }
     }
 }

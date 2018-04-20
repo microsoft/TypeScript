@@ -33,14 +33,32 @@ namespace ts {
         Diagnostics.Found_0_errors_Watching_for_file_changes.code
     ];
 
-    function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic, options: CompilerOptions) {
+    /**
+     * @returns Whether the screen was cleared.
+     */
+    function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic, options: CompilerOptions): boolean {
         if (system.clearScreen &&
             !options.preserveWatchOutput &&
             !options.extendedDiagnostics &&
             !options.diagnostics &&
             !contains(nonClearingMessageCodes, diagnostic.code)) {
             system.clearScreen();
+            return true;
         }
+
+        return false;
+    }
+
+    /** @internal */
+    export const screenStartingMessageCodes: number[] = [
+        Diagnostics.Starting_compilation_in_watch_mode.code,
+        Diagnostics.File_change_detected_Starting_incremental_compilation.code,
+    ];
+
+    function getPlainDiagnosticFollowingNewLines(diagnostic: Diagnostic, newLine: string): string {
+        return contains(screenStartingMessageCodes, diagnostic.code)
+            ? newLine + newLine
+            : newLine;
     }
 
     /**
@@ -51,13 +69,19 @@ namespace ts {
             (diagnostic, newLine, options) => {
                 clearScreenIfNotWatchingForFileChanges(system, diagnostic, options);
                 let output = `[${formatColorAndReset(new Date().toLocaleTimeString(), ForegroundColorEscapeSequences.Grey)}] `;
-                output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine + newLine}`;
+                output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine}`;
                 system.write(output);
             } :
             (diagnostic, newLine, options) => {
-                clearScreenIfNotWatchingForFileChanges(system, diagnostic, options);
-                let output = new Date().toLocaleTimeString() + " - ";
-                output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine + newLine}`;
+                let output = "";
+
+                if (!clearScreenIfNotWatchingForFileChanges(system, diagnostic, options)) {
+                    output += newLine;
+                }
+
+                output += `${new Date().toLocaleTimeString()} - `;
+                output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${getPlainDiagnosticFollowingNewLines(diagnostic, newLine)}`;
+
                 system.write(output);
             };
     }

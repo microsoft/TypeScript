@@ -1749,6 +1749,7 @@ namespace ts.server.protocol {
          * Optional prefix to apply to possible completions.
          */
         prefix?: string;
+        triggerCharacter?: string;
         /**
          * @deprecated Use UserPreferences.includeCompletionsForModuleExports
          */

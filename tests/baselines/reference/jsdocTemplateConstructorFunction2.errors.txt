@@ -1,0 +1,28 @@
+tests/cases/conformance/jsdoc/templateTagWithNestedTypeLiteral.js(21,1): error TS2322: Type 'false' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/jsdoc/templateTagWithNestedTypeLiteral.js (1 errors) ====
+    /**
+     * @template {T}
+     * @param {T} t
+     */
+    function Zet(t) {
+        /** @type {T} */
+        this.u
+        this.t = t
+    }
+    /**
+     * @param {T} v
+     * @param {object} o
+     * @param {T} o.nested
+     */
+    Zet.prototype.add = function(v, o) {
+        this.u = v || o.nested
+        return this.u
+    }
+    var z = new Zet(1)
+    z.t = 2
+    z.u = false
+    ~~~
+!!! error TS2322: Type 'false' is not assignable to type 'number'.
+    

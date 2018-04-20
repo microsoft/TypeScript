@@ -134,6 +134,7 @@ namespace ts.SymbolDisplay {
         let type: Type;
         let printer: Printer;
         let documentationFromAlias: SymbolDisplayPart[];
+        let tagsFromAlias: JSDocTagInfo[];
 
         // Class at constructor site need to be shown as constructor apart from property,method, vars
         if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Class || symbolFlags & SymbolFlags.Alias) {
@@ -396,6 +397,7 @@ namespace ts.SymbolDisplay {
                         displayParts.push(...resolvedInfo.displayParts);
                         displayParts.push(lineBreakPart());
                         documentationFromAlias = resolvedInfo.documentation;
+                        tagsFromAlias = resolvedInfo.tags;
                     }
                 }
             }
@@ -520,6 +522,9 @@ namespace ts.SymbolDisplay {
 
         if (documentation.length === 0 && documentationFromAlias) {
             documentation = documentationFromAlias;
+        }
+        if (tags.length === 0 && tagsFromAlias) {
+            tags = tagsFromAlias;
         }
 
         return { displayParts, documentation, symbolKind, tags };

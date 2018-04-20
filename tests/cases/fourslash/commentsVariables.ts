@@ -59,8 +59,8 @@ verify.currentSignatureHelpDocCommentIs("foos comment");
 verify.quickInfoAt("5q", "function foo(): void", "foos comment");
 
 goTo.marker('6');
-verify.currentSignatureHelpDocCommentIs("");
-verify.quickInfoAt("6q", "var fooVar: () => void");
+verify.currentSignatureHelpDocCommentIs("fooVar comment");
+verify.quickInfoAt("6q", "var fooVar: () => void", "fooVar comment");
 
 goTo.marker('7');
 verify.completionListContains("foo", "function foo(): void", "foos comment");
@@ -71,9 +71,9 @@ verify.currentSignatureHelpDocCommentIs("foos comment");
 verify.quickInfoAt("8q", "function foo(): void", "foos comment");
 
 goTo.marker('9');
-verify.currentSignatureHelpDocCommentIs("");
+verify.currentSignatureHelpDocCommentIs("fooVar comment");
 verify.quickInfos({
-    "9q": "var fooVar: () => void",
+    "9q": ["var fooVar: () => void", "fooVar comment"],
     "9aq": ["var fooVar: () => void", "fooVar comment"]
 });
 
