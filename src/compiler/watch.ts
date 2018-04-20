@@ -34,14 +34,20 @@ namespace ts {
         Diagnostics.Found_0_errors.code
     ];
 
-    function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic, options: CompilerOptions) {
+    /**
+     * @returns Whether the screen was cleared. 
+     */
+    function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic, options: CompilerOptions): boolean {
         if (system.clearScreen &&
             !options.preserveWatchOutput &&
             !options.extendedDiagnostics &&
             !options.diagnostics &&
             !contains(nonClearingMessageCodes, diagnostic.code)) {
             system.clearScreen();
+            return true;
         }
+
+        return false;
     }
 
     /** @internal */
@@ -49,12 +55,6 @@ namespace ts {
         Diagnostics.Starting_compilation_in_watch_mode.code,
         Diagnostics.File_change_detected_Starting_incremental_compilation.code,
     ];
-
-    function getPlainDiagnosticPrecedingNewLines(diagnostic: Diagnostic, newLine: string, preserveWatchOutput?: boolean): string {
-        return !preserveWatchOutput && contains(screenStartingMessageCodes, diagnostic.code)
-            ? ""
-            : newLine;
-    }
 
     function getPlainDiagnosticFollowingNewLines(diagnostic: Diagnostic, newLine: string): string {
         return contains(screenStartingMessageCodes, diagnostic.code)
@@ -74,8 +74,10 @@ namespace ts {
                 system.write(output);
             } :
             (diagnostic, newLine, options) => {
-                clearScreenIfNotWatchingForFileChanges(system, diagnostic, options);
-                let output = `${getPlainDiagnosticPrecedingNewLines(diagnostic, newLine, options.preserveWatchOutput)}${new Date().toLocaleTimeString()} - `;
+                if (!clearScreenIfNotWatchingForFileChanges(system, diagnostic, options)) {
+                    system.write(newLine);
+                }
+                let output = `${new Date().toLocaleTimeString()} - `;
                 output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${getPlainDiagnosticFollowingNewLines(diagnostic, newLine)}`;
                 system.write(output);
             };
