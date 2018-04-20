@@ -2933,11 +2933,7 @@ namespace ts {
     }
 
     export function getFirstConstructorWithBody(node: ClassLikeDeclaration): ConstructorDeclaration {
-        return forEach(node.members, member => {
-            if (member.kind === SyntaxKind.Constructor && nodeIsPresent((<ConstructorDeclaration>member).body)) {
-                return <ConstructorDeclaration>member;
-            }
-        });
+        return find(node.members, (member): member is ConstructorDeclaration => isConstructorDeclaration(member) && nodeIsPresent(member.body));
     }
 
     function getSetAccessorValueParameter(accessor: SetAccessorDeclaration): ParameterDeclaration | undefined {
