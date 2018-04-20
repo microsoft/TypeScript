@@ -2207,8 +2207,8 @@ namespace ts.Completions {
                 // Only automatically bring up completions if this is an opening quote.
                 return isStringLiteralOrTemplate(contextToken) && position === contextToken.getStart(sourceFile) + 1;
             case "<":
-                Debug.assert(contextToken.kind === SyntaxKind.LessThanToken);
-                return contextToken.parent.kind !== SyntaxKind.BinaryExpression;
+                // Opening JSX tag
+                return contextToken.kind === SyntaxKind.LessThanToken && contextToken.parent.kind !== SyntaxKind.BinaryExpression;
             default:
                 return Debug.fail(triggerCharacter);
         }

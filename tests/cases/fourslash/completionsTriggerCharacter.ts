@@ -7,6 +7,8 @@
 ////const z: 'a' | 'b' = `/*openTemplate*/`/*closeTemplate*/;
 ////const q: "`a`" | "`b`" = "`/*openTemplateInQuote*/a`/*closeTemplateInQuote*/";
 
+////// "/*quoteInComment*/ </*lessInComment*/
+
 // @Filename: /a.tsx
 ////declare namespace JSX {
 ////    interface Element {}
@@ -28,6 +30,9 @@ verify.completionsAt("closeTemplate", undefined, { triggerCharacter: "`" });
 
 verify.completionsAt("openTemplateInQuote", undefined, { triggerCharacter: '`' });
 verify.completionsAt("closeTemplateInQuote", undefined, { triggerCharacter: '`' });
+
+verify.completionsAt("quoteInComment", undefined, { triggerCharacter: '"' });
+verify.completionsAt("lessInComment", undefined, { triggerCharacter: "<" });
 
 goTo.marker("openTag");
 verify.completionListContains("div", undefined, undefined, undefined, undefined, undefined, { triggerCharacter: "<" });
