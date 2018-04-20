@@ -74,11 +74,15 @@ namespace ts {
                 system.write(output);
             } :
             (diagnostic, newLine, options) => {
+                let output = "";
+
                 if (!clearScreenIfNotWatchingForFileChanges(system, diagnostic, options)) {
-                    system.write(newLine);
+                    output += newLine;
                 }
-                let output = `${new Date().toLocaleTimeString()} - `;
+
+                output += `${new Date().toLocaleTimeString()} - `;
                 output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${getPlainDiagnosticFollowingNewLines(diagnostic, newLine)}`;
+
                 system.write(output);
             };
     }
