@@ -586,6 +586,7 @@ declare namespace ts {
     }
     interface PropertyDeclaration extends ClassElement, JSDocContainer {
         kind: SyntaxKind.PropertyDeclaration;
+        parent: ClassLikeDeclaration;
         name: PropertyName;
         questionToken?: QuestionToken;
         exclamationToken?: ExclamationToken;
@@ -1051,6 +1052,7 @@ declare namespace ts {
     interface TaggedTemplateExpression extends MemberExpression {
         kind: SyntaxKind.TaggedTemplateExpression;
         tag: LeftHandSideExpression;
+        typeArguments?: NodeArray<TypeNode>;
         template: TemplateLiteral;
     }
     type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement;
@@ -1160,7 +1162,7 @@ declare namespace ts {
     interface DebuggerStatement extends Statement {
         kind: SyntaxKind.DebuggerStatement;
     }
-    interface MissingDeclaration extends DeclarationStatement, ClassElement, ObjectLiteralElement, TypeElement {
+    interface MissingDeclaration extends DeclarationStatement {
         kind: SyntaxKind.MissingDeclaration;
         name?: Identifier;
     }
@@ -1493,7 +1495,7 @@ declare namespace ts {
         comment: string | undefined;
     }
     interface JSDocTag extends Node {
-        parent: JSDoc;
+        parent: JSDoc | JSDocTypeLiteral;
         atToken: AtToken;
         tagName: Identifier;
         comment: string | undefined;
@@ -2916,6 +2918,7 @@ declare namespace ts {
         newLine: string;
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
+        writeOutputIsTTY?(): boolean;
         readFile(path: string, encoding?: string): string | undefined;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
@@ -3038,7 +3041,11 @@ declare namespace ts {
      */
     function collapseTextChangeRangesAcrossMultipleVersions(changes: ReadonlyArray<TextChangeRange>): TextChangeRange;
     function getTypeParameterOwner(d: Declaration): Declaration;
-    function isParameterPropertyDeclaration(node: Node): boolean;
+    type ParameterPropertyDeclaration = ParameterDeclaration & {
+        parent: ConstructorDeclaration;
+        name: Identifier;
+    };
+    function isParameterPropertyDeclaration(node: Node): node is ParameterPropertyDeclaration;
     function isEmptyBindingPattern(node: BindingName): node is BindingPattern;
     function isEmptyBindingElement(node: BindingElement): boolean;
     function getCombinedModifierFlags(node: Node): ModifierFlags;
@@ -3192,6 +3199,7 @@ declare namespace ts {
     function isIndexedAccessTypeNode(node: Node): node is IndexedAccessTypeNode;
     function isMappedTypeNode(node: Node): node is MappedTypeNode;
     function isLiteralTypeNode(node: Node): node is LiteralTypeNode;
+    function isImportTypeNode(node: Node): node is ImportTypeNode;
     function isObjectBindingPattern(node: Node): node is ObjectBindingPattern;
     function isArrayBindingPattern(node: Node): node is ArrayBindingPattern;
     function isBindingElement(node: Node): node is BindingElement;
@@ -3422,6 +3430,7 @@ declare namespace ts {
         set(directory: string, result: ResolvedModuleWithFailedLookupLocations): void;
     }
     function createModuleResolutionCache(currentDirectory: string, getCanonicalFileName: (s: string) => string): ModuleResolutionCache;
+    function resolveModuleNameFromCache(moduleName: string, containingFile: string, cache: ModuleResolutionCache): ResolvedModuleWithFailedLookupLocations | undefined;
     function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache): ResolvedModuleWithFailedLookupLocations;
     function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache): ResolvedModuleWithFailedLookupLocations;
     function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: NonRelativeModuleNameResolutionCache): ResolvedModuleWithFailedLookupLocations;
@@ -3545,7 +3554,9 @@ declare namespace ts {
     function createNew(expression: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<Expression> | undefined): NewExpression;
     function updateNew(node: NewExpression, expression: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<Expression> | undefined): NewExpression;
     function createTaggedTemplate(tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
+    function createTaggedTemplate(tag: Expression, typeArguments: ReadonlyArray<TypeNode>, template: TemplateLiteral): TaggedTemplateExpression;
     function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
+    function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, typeArguments: ReadonlyArray<TypeNode>, template: TemplateLiteral): TaggedTemplateExpression;
     function createTypeAssertion(type: TypeNode, expression: Expression): TypeAssertion;
     function updateTypeAssertion(node: TypeAssertion, type: TypeNode, expression: Expression): TypeAssertion;
     function createParen(expression: Expression): ParenthesizedExpression;
@@ -4409,6 +4420,7 @@ declare namespace ts {
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
     }
     interface UserPreferences {
+        readonly disableSuggestions?: boolean;
         readonly quotePreference?: "double" | "single";
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
@@ -4475,6 +4487,7 @@ declare namespace ts {
         getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange, preferences: UserPreferences | undefined): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined): RefactorEditInfo | undefined;
         organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): ReadonlyArray<FileTextChanges>;
+        getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges>;
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
         getProgram(): Program;
         dispose(): void;
@@ -4484,8 +4497,9 @@ declare namespace ts {
         fileName: string;
     }
     type OrganizeImportsScope = CombinedCodeFixScope;
-    /** @deprecated Use UserPreferences */
     interface GetCompletionsAtPositionOptions extends UserPreferences {
+        /** If the editor is asking for completions because a certain character was typed, and not because the user explicitly requested them, this should be set. */
+        triggerCharacter?: string;
         /** @deprecated Use includeCompletionsForModuleExports */
         includeExternalModuleExports?: boolean;
         /** @deprecated Use includeCompletionsWithInsertText */
@@ -4565,6 +4579,8 @@ declare namespace ts {
         commands?: CodeActionCommand[];
     }
     interface CodeFixAction extends CodeAction {
+        /** Short name to identify the fix, for use by telemetry. */
+        fixName: string;
         /**
          * If present, one may call 'getCombinedCodeFix' with this fixId.
          * This may be omitted to indicate that the code fix can't be applied in a group.

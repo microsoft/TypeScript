@@ -1,8 +1,3 @@
-/// <reference path="checker.ts" />
-/// <reference path="transformer.ts" />
-/// <reference path="sourcemap.ts" />
-/// <reference path="comments.ts" />
-
 namespace ts {
     const infoExtension = ".tsbundleinfo";
     const brackets = createBracketsMap();
@@ -1518,6 +1513,7 @@ namespace ts {
 
         function emitTaggedTemplateExpression(node: TaggedTemplateExpression) {
             emitExpression(node.tag);
+            emitTypeArguments(node, node.typeArguments);
             writeSpace();
             emitExpression(node.template);
         }

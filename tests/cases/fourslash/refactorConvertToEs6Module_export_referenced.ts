@@ -12,7 +12,7 @@
 ////
 ////exports.z = 2;
 ////exports.f = function(z) {
-////    z;
+////    exports.z; z;
 ////}
 
 // TODO: GH#22492 Should be a able access `exports.z` inside `exports.f`
@@ -28,8 +28,9 @@ const _y = y;
 export { _y as y };
 _y;
 
-export const z = 2;
+const _z = 2;
+export { _z as z };
 export function f(z) {
-    z;
+    _z; z;
 }`,
 });

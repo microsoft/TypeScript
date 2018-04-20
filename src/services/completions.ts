@@ -1,5 +1,3 @@
-/// <reference path="./pathCompletions.ts" />
-
 /* @internal */
 namespace ts.Completions {
     export type Log = (message: string) => void;
@@ -27,7 +25,7 @@ namespace ts.Completions {
 
     const enum GlobalsSearch { Continue, Success, Fail }
 
-    export function getCompletionsAtPosition(host: LanguageServiceHost, program: Program, log: Log, sourceFile: SourceFile, position: number, preferences: UserPreferences): CompletionInfo | undefined {
+    export function getCompletionsAtPosition(host: LanguageServiceHost, program: Program, log: Log, sourceFile: SourceFile, position: number, preferences: UserPreferences, triggerCharacter: string | undefined): CompletionInfo | undefined {
         const typeChecker = program.getTypeChecker();
         const compilerOptions = program.getCompilerOptions();
         if (isInReferenceComment(sourceFile, position)) {
@@ -36,6 +34,7 @@ namespace ts.Completions {
         }
 
         const contextToken = findPrecedingToken(position, sourceFile);
+        if (triggerCharacter && !isValidTrigger(sourceFile, triggerCharacter, contextToken, position)) return undefined;
 
         if (isInString(sourceFile, position, contextToken)) {
             return !contextToken || !isStringLiteralLike(contextToken)
@@ -844,7 +843,7 @@ namespace ts.Completions {
 
         // Check if the caret is at the end of an identifier; this is a partial identifier that we want to complete: e.g. a.toS|
         // Skip this partial identifier and adjust the contextToken to the token that precedes it.
-        if (contextToken && position <= contextToken.end && isWord(contextToken.kind)) {
+        if (contextToken && position <= contextToken.end && (isIdentifier(contextToken) || isKeyword(contextToken.kind))) {
             const start = timestamp();
             contextToken = findPrecedingToken(contextToken.getFullStart(), sourceFile, /*startNode*/ undefined, insideJsDocTagTypeExpression);
             log("getCompletionData: Get previous token 2: " + (timestamp() - start));
@@ -1555,32 +1554,22 @@ namespace ts.Completions {
          * @returns true if 'symbols' was successfully populated; false otherwise.
          */
         function tryGetImportOrExportClauseCompletionSymbols(): GlobalsSearch {
-            const namedImportsOrExports = tryGetNamedImportsOrExportsForCompletion(contextToken);
-            if (!namedImportsOrExports) return undefined;
+            // `import { |` or `import { a as 0, | }`
+            const namedImportsOrExports = contextToken && (contextToken.kind === SyntaxKind.OpenBraceToken || contextToken.kind === SyntaxKind.CommaToken)
+                ? tryCast(contextToken.parent, isNamedImportsOrExports) : undefined;
+            if (!namedImportsOrExports) return GlobalsSearch.Continue;
 
             // cursor is in an import clause
             // try to show exported member for imported module
-            const declarationKind = namedImportsOrExports.kind === SyntaxKind.NamedImports ?
-                SyntaxKind.ImportDeclaration :
-                SyntaxKind.ExportDeclaration;
-            const importOrExportDeclaration = <ImportDeclaration | ExportDeclaration>getAncestor(namedImportsOrExports, declarationKind);
-            const moduleSpecifier = importOrExportDeclaration.moduleSpecifier;
-
-            if (!moduleSpecifier) {
-                return GlobalsSearch.Fail;
-            }
+            const { moduleSpecifier } = namedImportsOrExports.kind === SyntaxKind.NamedImports ? namedImportsOrExports.parent.parent : namedImportsOrExports.parent;
+            const moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(moduleSpecifier);
+            if (!moduleSpecifierSymbol) return GlobalsSearch.Fail;
 
             completionKind = CompletionKind.MemberLike;
             isNewIdentifierLocation = false;
-
-            const moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(moduleSpecifier);
-            if (!moduleSpecifierSymbol) {
-                symbols = emptyArray;
-                return GlobalsSearch.Fail;
-            }
-
             const exports = typeChecker.getExportsAndPropertiesOfModule(moduleSpecifierSymbol);
-            symbols = filterNamedImportOrExportCompletionItems(exports, namedImportsOrExports.elements);
+            const existing = arrayToSet<ImportOrExportSpecifier>(namedImportsOrExports.elements, n => isCurrentlyEditingNode(n) ? undefined : (n.propertyName || n.name).escapedText);
+            symbols = exports.filter(e => e.escapedName !== InternalSymbolName.Default && !existing.get(e.escapedName));
             return GlobalsSearch.Success;
         }
 
@@ -1642,26 +1631,6 @@ namespace ts.Completions {
                             return parent;
                         }
                         break;
-                }
-            }
-
-            return undefined;
-        }
-
-        /**
-         * Returns the containing list of named imports or exports of a context token,
-         * on the condition that one exists and that the context implies completion should be given.
-         */
-        function tryGetNamedImportsOrExportsForCompletion(contextToken: Node): NamedImportsOrExports {
-            if (contextToken) {
-                switch (contextToken.kind) {
-                    case SyntaxKind.OpenBraceToken:  // import { |
-                    case SyntaxKind.CommaToken:      // import { a as 0, |
-                        switch (contextToken.parent.kind) {
-                            case SyntaxKind.NamedImports:
-                            case SyntaxKind.NamedExports:
-                                return <NamedImportsOrExports>contextToken.parent;
-                        }
                 }
             }
 
@@ -1909,31 +1878,6 @@ namespace ts.Completions {
             }
 
             return false;
-        }
-
-        /**
-         * Filters out completion suggestions for named imports or exports.
-         *
-         * @param exportsOfModule          The list of symbols which a module exposes.
-         * @param namedImportsOrExports    The list of existing import/export specifiers in the import/export clause.
-         *
-         * @returns Symbols to be suggested at an import/export clause, barring those whose named imports/exports
-         *          do not occur at the current position and have not otherwise been typed.
-         */
-        function filterNamedImportOrExportCompletionItems(exportsOfModule: Symbol[], namedImportsOrExports: ReadonlyArray<ImportOrExportSpecifier>): Symbol[] {
-            const existingImportsOrExports = createUnderscoreEscapedMap<boolean>();
-
-            for (const element of namedImportsOrExports) {
-                // If this is the current item we are editing right now, do not filter it out
-                if (isCurrentlyEditingNode(element)) {
-                    continue;
-                }
-
-                const name = element.propertyName || element.name;
-                existingImportsOrExports.set(name.escapedText, true);
-            }
-
-            return exportsOfModule.filter(e => e.escapedName !== InternalSymbolName.Default && !existingImportsOrExports.get(e.escapedName));
         }
 
         /**
@@ -2253,5 +2197,32 @@ namespace ts.Completions {
 
     function hasIndexSignature(type: Type): boolean {
         return !!type.getStringIndexType() || !!type.getNumberIndexType();
+    }
+
+    function isValidTrigger(sourceFile: SourceFile, triggerCharacter: string, contextToken: Node, position: number): boolean {
+        switch (triggerCharacter) {
+            case '"':
+            case "'":
+            case "`":
+                // Only automatically bring up completions if this is an opening quote.
+                return isStringLiteralOrTemplate(contextToken) && position === contextToken.getStart(sourceFile) + 1;
+            case "<":
+                // Opening JSX tag
+                return contextToken.kind === SyntaxKind.LessThanToken && contextToken.parent.kind !== SyntaxKind.BinaryExpression;
+            default:
+                return Debug.fail(triggerCharacter);
+        }
+    }
+
+    function isStringLiteralOrTemplate(node: Node): node is StringLiteralLike | TemplateExpression | TaggedTemplateExpression {
+        switch (node.kind) {
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+            case SyntaxKind.TemplateExpression:
+            case SyntaxKind.TaggedTemplateExpression:
+                return true;
+            default:
+                return false;
+        }
     }
 }

@@ -125,7 +125,7 @@ namespace Utils {
 
         addFile(path: string, content?: Harness.LanguageService.ScriptInfo) {
             const absolutePath = ts.normalizePath(ts.getNormalizedAbsolutePath(path, this.currentDirectory));
-            const fileName = ts.getBaseFileName(path);
+            const fileName = ts.getBaseFileName(absolutePath);
             const directoryPath = ts.getDirectoryPath(absolutePath);
             const directory = this.addDirectory(directoryPath);
             return directory ? directory.addFile(fileName, content) : undefined;

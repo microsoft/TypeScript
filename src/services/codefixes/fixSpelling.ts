@@ -15,7 +15,7 @@ namespace ts.codefix {
             const { node, suggestion } = info;
             const { target } = context.host.getCompilationSettings();
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node, suggestion, target));
-            return [createCodeFixAction(changes, [Diagnostics.Change_spelling_to_0, suggestion], fixId, Diagnostics.Fix_all_detected_spelling_errors)];
+            return [createCodeFixAction("spelling", changes, [Diagnostics.Change_spelling_to_0, suggestion], fixId, Diagnostics.Fix_all_detected_spelling_errors)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {

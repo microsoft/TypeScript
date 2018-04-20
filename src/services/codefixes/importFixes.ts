@@ -35,11 +35,10 @@ namespace ts.codefix {
 
     function createCodeAction(descriptionDiagnostic: DiagnosticMessage, diagnosticArgs: [string, string], changes: FileTextChanges[]): CodeFixAction {
         // TODO: GH#20315
-        return createCodeFixActionNoFixId(changes, [descriptionDiagnostic, ...diagnosticArgs] as [DiagnosticMessage, string, string]);
+        return createCodeFixActionNoFixId("import", changes, [descriptionDiagnostic, ...diagnosticArgs] as [DiagnosticMessage, string, string]);
     }
 
     function convertToImportCodeFixContext(context: CodeFixContext, symbolToken: Node, symbolName: string): ImportCodeFixContext {
-        const useCaseSensitiveFileNames = context.host.useCaseSensitiveFileNames ? context.host.useCaseSensitiveFileNames() : false;
         const { program } = context;
         const checker = program.getTypeChecker();
 
@@ -51,7 +50,7 @@ namespace ts.codefix {
             checker,
             compilerOptions: program.getCompilerOptions(),
             cachedImportDeclarations: [],
-            getCanonicalFileName: createGetCanonicalFileName(useCaseSensitiveFileNames),
+            getCanonicalFileName: createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(context.host)),
             symbolName,
             symbolToken,
             preferences: context.preferences,
@@ -240,6 +239,7 @@ namespace ts.codefix {
         preferences: UserPreferences,
     ): ReadonlyArray<NewImportInfo> {
         const { baseUrl, paths, rootDirs } = compilerOptions;
+        const moduleResolutionKind = getEmitModuleResolutionKind(compilerOptions);
         const addJsExtension = usesJsExtensionOnImports(sourceFile);
         const choicesForEachExportingModule = flatMap<SymbolExportInfo, NewImportInfo[]>(moduleSymbols, ({ moduleSymbol, importKind }) => {
             const modulePathsGroups = getAllModulePaths(program, moduleSymbol.valueDeclaration.getSourceFile()).map(moduleFileName => {
@@ -252,7 +252,7 @@ namespace ts.codefix {
                     return [global];
                 }
 
-                const relativePath = removeExtensionAndIndexPostFix(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName), compilerOptions, addJsExtension);
+                const relativePath = removeExtensionAndIndexPostFix(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName), moduleResolutionKind, addJsExtension);
                 if (!baseUrl || preferences.importModuleSpecifierPreference === "relative") {
                     return [relativePath];
                 }
@@ -262,7 +262,7 @@ namespace ts.codefix {
                     return [relativePath];
                 }
 
-                const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, compilerOptions, addJsExtension);
+                const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, moduleResolutionKind, addJsExtension);
                 if (paths) {
                     const fromPaths = tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
                     if (fromPaths) {
@@ -390,7 +390,8 @@ namespace ts.codefix {
         return firstDefined(roots, unNormalizedTypeRoot => {
             const typeRoot = toPath(unNormalizedTypeRoot, /*basePath*/ undefined, getCanonicalFileName);
             if (startsWith(moduleFileName, typeRoot)) {
-                return removeExtensionAndIndexPostFix(moduleFileName.substring(typeRoot.length + 1), options, addJsExtension);
+                // For a type definition, we can strip `/index` even with classic resolution.
+                return removeExtensionAndIndexPostFix(moduleFileName.substring(typeRoot.length + 1), ModuleResolutionKind.NodeJs, addJsExtension);
             }
         });
     }
@@ -527,11 +528,11 @@ namespace ts.codefix {
         });
     }
 
-    function removeExtensionAndIndexPostFix(fileName: string, options: CompilerOptions, addJsExtension: boolean): string {
+    function removeExtensionAndIndexPostFix(fileName: string, moduleResolutionKind: ModuleResolutionKind, addJsExtension: boolean): string {
         const noExtension = removeFileExtension(fileName);
         return addJsExtension
             ? noExtension + ".js"
-            : getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeJs
+            : moduleResolutionKind === ModuleResolutionKind.NodeJs
                 ? removeSuffix(noExtension, "/index")
                 : noExtension;
     }
@@ -543,11 +544,6 @@ namespace ts.codefix {
 
     function isPathRelativeToParent(path: string): boolean {
         return startsWith(path, "..");
-    }
-
-    function getRelativePath(path: string, directoryPath: string, getCanonicalFileName: GetCanonicalFileName) {
-        const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
-        return !pathIsRelative(relativePath) ? "./" + relativePath : relativePath;
     }
 
     function getCodeActionsForAddImport(

@@ -1,11 +1,3 @@
-/// <reference path="..\compiler\commandLineParser.ts" />
-/// <reference path="..\services\services.ts" />
-/// <reference path="utilities.ts" />
-/// <reference path="session.ts" />
-/// <reference path="scriptVersionCache.ts"/>
-/// <reference path="project.ts"/>
-/// <reference path="typingsCache.ts"/>
-
 namespace ts.server {
     export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
 
@@ -320,7 +312,8 @@ namespace ts.server {
 
     export class ProjectService {
 
-        public readonly typingsCache: TypingsCache;
+        /*@internal*/
+        readonly typingsCache: TypingsCache;
 
         private readonly documentRegistry: DocumentRegistry;
 
@@ -531,13 +524,13 @@ namespace ts.server {
             }
             switch (response.kind) {
                 case ActionSet:
-                    project.resolutionCache.clear();
-                    this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typeAcquisition, response.unresolvedImports, response.typings);
+                    // Update the typing files and update the project
+                    project.updateTypingFiles(this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typeAcquisition, response.unresolvedImports, response.typings));
                     break;
                 case ActionInvalidate:
-                    project.resolutionCache.clear();
-                    this.typingsCache.deleteTypingsForProject(response.projectName);
-                    break;
+                    // Do not clear resolution cache, there was changes detected in typings, so enque typing request and let it get us correct results
+                    this.typingsCache.enqueueInstallTypingsForProject(project, project.lastCachedUnresolvedImportsList, /*forceRefresh*/ true);
+                    return;
             }
             this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
         }
@@ -1842,11 +1835,11 @@ namespace ts.server {
                     this.logger.info(`Host information ${args.hostInfo}`);
                 }
                 if (args.formatOptions) {
-                    mergeMapLikes(this.hostConfiguration.formatCodeOptions, convertFormatOptions(args.formatOptions));
+                    this.hostConfiguration.formatCodeOptions = { ...this.hostConfiguration.formatCodeOptions, ...convertFormatOptions(args.formatOptions) };
                     this.logger.info("Format host information updated");
                 }
                 if (args.preferences) {
-                    mergeMapLikes(this.hostConfiguration.preferences, args.preferences);
+                    this.hostConfiguration.preferences = { ...this.hostConfiguration.preferences, ...args.preferences };
                 }
                 if (args.extraFileExtensions) {
                     this.hostConfiguration.extraFileExtensions = args.extraFileExtensions;

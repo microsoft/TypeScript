@@ -842,6 +842,7 @@ namespace FourSlash {
 
             const actualCompletions = this.getCompletionListAtCaret(options);
             if (!actualCompletions) {
+                if (expected === undefined) return;
                 this.raiseError(`No completions at position '${this.currentCaretPosition}'.`);
             }
 
@@ -1081,8 +1082,20 @@ namespace FourSlash {
             }
         }
 
+        private verifyDocumentHighlightsRespectFilesList(files: ReadonlyArray<string>): void {
+            const startFile = this.activeFile.fileName;
+            for (const fileName of files) {
+                const searchFileNames = startFile === fileName ? [startFile] : [startFile, fileName];
+                const highlights = this.getDocumentHighlightsAtCurrentPosition(searchFileNames);
+                if (!highlights.every(dh => ts.contains(searchFileNames, dh.fileName))) {
+                    this.raiseError(`When asking for document highlights only in files ${searchFileNames}, got document highlights in ${unique(highlights, dh => dh.fileName)}`);
+                }
+            }
+        }
+
         public verifyReferencesOf(range: Range, references: Range[]) {
             this.goToRangeStart(range);
+            this.verifyDocumentHighlightsRespectFilesList(unique(references, e => e.fileName));
             this.verifyReferencesAre(references);
         }
 
@@ -1094,7 +1107,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyReferenceGroups(starts: string | string[] | Range | Range[], parts: FourSlashInterface.ReferenceGroup[]): void {
+        public verifyReferenceGroups(starts: string | string[] | Range | Range[], parts: FourSlashInterface.ReferenceGroup[] | undefined): void {
             interface ReferenceGroupJson {
                 definition: string | { text: string, range: ts.TextSpan };
                 references: ts.ReferenceEntry[];
@@ -1128,6 +1141,10 @@ namespace FourSlash {
                     };
                 });
                 this.assertObjectsEqual(fullActual, fullExpected);
+
+                if (parts) {
+                    this.verifyDocumentHighlightsRespectFilesList(unique(ts.flatMap(parts, p => p.ranges), r => r.fileName));
+                }
             }
         }
 
@@ -2087,14 +2104,11 @@ Actual: ${stringify(fullActual)}`);
                 this.raiseError("verifyRangesInImplementationList failed - expected to find at least one implementation location but got 0");
             }
 
-            for (let i = 0; i < implementations.length; i++) {
-                for (let j = 0; j < implementations.length; j++) {
-                    if (i !== j && implementationsAreEqual(implementations[i], implementations[j])) {
-                        const { textSpan, fileName } = implementations[i];
-                        const end = textSpan.start + textSpan.length;
-                        this.raiseError(`Duplicate implementations returned for range (${textSpan.start}, ${end}) in ${fileName}`);
-                    }
-                }
+            const duplicate = findDuplicatedElement(implementations, implementationsAreEqual);
+            if (duplicate) {
+                const { textSpan, fileName } = duplicate;
+                const end = textSpan.start + textSpan.length;
+                this.raiseError(`Duplicate implementations returned for range (${textSpan.start}, ${end}) in ${fileName}`);
             }
 
             const ranges = this.getRanges();
@@ -2894,6 +2908,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         private verifyDocumentHighlights(expectedRanges: Range[], fileNames: ReadonlyArray<string> = [this.activeFile.fileName]) {
+            fileNames = ts.map(fileNames, ts.normalizePath);
             const documentHighlights = this.getDocumentHighlightsAtCurrentPosition(fileNames) || [];
 
             for (const dh of documentHighlights) {
@@ -2903,7 +2918,7 @@ Actual: ${stringify(fullActual)}`);
             }
 
             for (const fileName of fileNames) {
-                const expectedRangesInFile = expectedRanges.filter(r => r.fileName === fileName);
+                const expectedRangesInFile = expectedRanges.filter(r => ts.normalizePath(r.fileName) === fileName);
                 const highlights = ts.find(documentHighlights, dh => dh.fileName === fileName);
                 const spansInFile = highlights ? highlights.highlightSpans.sort((s1, s2) => s1.textSpan.start - s2.textSpan.start) : [];
 
@@ -3203,14 +3218,14 @@ Actual: ${stringify(fullActual)}`);
                 }
             }
             else if (ts.isString(indexOrName)) {
-                let name = indexOrName;
+                let name = ts.normalizePath(indexOrName);
 
                 // names are stored in the compiler with this relative path, this allows people to use goTo.file on just the fileName
                 name = name.indexOf("/") === -1 ? (this.basePath + "/" + name) : name;
 
                 const availableNames: string[] = [];
                 const result = ts.forEach(this.testData.files, file => {
-                    const fn = file.fileName;
+                    const fn = ts.normalizePath(file.fileName);
                     if (fn) {
                         if (fn === name) {
                             return file;
@@ -3264,6 +3279,15 @@ Actual: ${stringify(fullActual)}`);
 
         private static textSpansEqual(a: ts.TextSpan, b: ts.TextSpan) {
             return a && b && a.start === b.start && a.length === b.length;
+        }
+
+        public getEditsForFileRename(options: FourSlashInterface.GetEditsForFileRenameOptions): void {
+            const changes = this.languageService.getEditsForFileRename(options.oldPath, options.newPath, this.formatCodeSettings);
+            this.applyChanges(changes);
+            for (const fileName in options.newFileContents) {
+                this.openFile(fileName);
+                this.verifyCurrentFileContent(options.newFileContents[fileName]);
+            }
         }
     }
 
@@ -3738,6 +3762,16 @@ ${code}
 
     function stripWhitespace(s: string): string {
         return s.replace(/\s/g, "");
+    }
+
+    function findDuplicatedElement<T>(a: ReadonlyArray<T>, equal: (a: T, b: T) => boolean): T {
+        for (let i = 0; i < a.length; i++) {
+            for (let j = i + 1; j < a.length; j++) {
+                if (equal(a[i], a[j])) {
+                    return a[i];
+                }
+            }
+        }
     }
 }
 
@@ -4346,6 +4380,10 @@ namespace FourSlashInterface {
         public allRangesAppearInImplementationList(markerName: string) {
             this.state.verifyRangesInImplementationList(markerName);
         }
+
+        public getEditsForFileRename(options: GetEditsForFileRenameOptions) {
+            this.state.getEditsForFileRename(options);
+        }
     }
 
     export class Edit {
@@ -4629,10 +4667,12 @@ namespace FourSlashInterface {
 
     export type ExpectedCompletionEntry = string | { name: string, insertText?: string, replacementSpan?: FourSlash.Range };
     export interface CompletionsAtOptions extends Partial<ts.UserPreferences> {
+        triggerCharacter?: string;
         isNewIdentifierLocation?: boolean;
     }
 
     export interface VerifyCompletionListContainsOptions extends ts.UserPreferences {
+        triggerCharacter?: string;
         sourceDisplay: string;
         isRecommended?: true;
         insertText?: string;
@@ -4685,5 +4725,11 @@ namespace FourSlashInterface {
         message: string;
         range?: FourSlash.Range;
         code: number;
+    }
+
+    export interface GetEditsForFileRenameOptions {
+        readonly oldPath: string;
+        readonly newPath: string;
+        readonly newFileContents: { readonly [fileName: string]: string };
     }
 }

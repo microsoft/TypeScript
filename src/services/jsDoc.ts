@@ -365,13 +365,10 @@ namespace ts.JsDoc {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
                 return (<FunctionExpression>rightHandSide).parameters;
-            case SyntaxKind.ClassExpression:
-                for (const member of (<ClassExpression>rightHandSide).members) {
-                    if (member.kind === SyntaxKind.Constructor) {
-                        return (<ConstructorDeclaration>member).parameters;
-                    }
-                }
-                break;
+            case SyntaxKind.ClassExpression: {
+                const ctr = find((rightHandSide as ClassExpression).members, isConstructorDeclaration);
+                return ctr && ctr.parameters;
+            }
         }
 
         return emptyArray;

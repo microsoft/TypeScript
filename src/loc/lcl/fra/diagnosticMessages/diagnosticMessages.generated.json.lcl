@@ -2397,15 +2397,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Compilation_complete_Watching_for_file_changes_6042" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Compilation complete. Watching for file changes.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Fin de la compilation. Détection des changements apportés au fichier.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Compile_the_project_given_the_path_to_its_configuration_file_or_to_a_folder_with_a_tsconfig_json_6020" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Compile the project given the path to its configuration file, or to a folder with a 'tsconfig.json'.]]></Val>
@@ -3780,6 +3771,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Found_0_errors_Watching_for_file_changes_6194" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Found {0} errors. Watching for file changes.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{0} erreurs trouvées. Changements de fichier sous surveillance.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Found_1_error_Watching_for_file_changes_6193" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Found 1 error. Watching for file changes.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[1 erreur trouvée. Changements de fichier sous surveillance.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Found_package_json_at_0_6099" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Found 'package.json' at '{0}'.]]></Val>
@@ -3884,6 +3893,15 @@
           <Val><![CDATA[Function overload must not be static.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[La surcharge de fonction ne doit pas être statique.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Generate_get_and_set_accessors_95046" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Generate 'get' and 'set' accessors]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Générer les accesseurs 'get' et 'set']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5993,6 +6011,15 @@
           <Val><![CDATA[Property '{0}' does not exist on type '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[La propriété '{0}' n'existe pas sur le type '{1}'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Property_0_does_not_exist_on_type_1_Did_you_forget_to_use_await_2570" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Property '{0}' does not exist on type '{1}'. Did you forget to use 'await'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La propriété '{0}' n'existe pas sur le type '{1}'. Avez-vous oublié d'utiliser 'await' ?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

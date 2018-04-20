@@ -1,6 +1,3 @@
-/// <reference path="types.ts"/>
-/// <reference path="performance.ts" />
-
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
@@ -1268,10 +1265,7 @@ namespace ts {
         });
     }
 
-    export function assign<T1 extends MapLike<{}>, T2, T3>(t: T1, arg1: T2, arg2: T3): T1 & T2 & T3;
-    export function assign<T1 extends MapLike<{}>, T2>(t: T1, arg1: T2): T1 & T2;
-    export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]): any;
-    export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]) {
+    export function assign<T extends object>(t: T, ...args: T[]) {
         for (const arg of args) {
             for (const p in arg) {
                 if (hasProperty(arg, p)) {
@@ -1317,12 +1311,13 @@ namespace ts {
      * the same key with the given 'makeKey' function, then the element with the higher
      * index in the array will be the one associated with the produced key.
      */
-    export function arrayToMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => string): Map<T>;
-    export function arrayToMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => string, makeValue: (value: T) => U): Map<U>;
-    export function arrayToMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => string, makeValue: (value: T) => T | U = identity): Map<T | U> {
+    export function arrayToMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => string | undefined): Map<T>;
+    export function arrayToMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => string | undefined, makeValue: (value: T) => U): Map<U>;
+    export function arrayToMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => string | undefined, makeValue: (value: T) => T | U = identity): Map<T | U> {
         const result = createMap<T | U>();
         for (const value of array) {
-            result.set(makeKey(value), makeValue(value));
+            const key = makeKey(value);
+            if (key !== undefined) result.set(key, makeValue(value));
         }
         return result;
     }
@@ -1343,8 +1338,9 @@ namespace ts {
      * @param array the array of input elements.
      */
     export function arrayToSet(array: ReadonlyArray<string>): Map<true>;
-    export function arrayToSet<T>(array: ReadonlyArray<T>, makeKey: (value: T) => string): Map<true>;
-    export function arrayToSet(array: ReadonlyArray<any>, makeKey?: (value: any) => string): Map<true> {
+    export function arrayToSet<T>(array: ReadonlyArray<T>, makeKey: (value: T) => string | undefined): Map<true>;
+    export function arrayToSet<T>(array: ReadonlyArray<T>, makeKey: (value: T) => __String | undefined): UnderscoreEscapedMap<true>;
+    export function arrayToSet(array: ReadonlyArray<any>, makeKey?: (value: any) => string | __String | undefined): Map<true> | UnderscoreEscapedMap<true> {
         return arrayToMap<any, true>(array, makeKey || (s => s), () => true);
     }
 
@@ -1725,6 +1721,10 @@ namespace ts {
      */
     export function compareValues(a: number, b: number) {
         return compareComparableValues(a, b);
+    }
+
+    export function min<T>(a: T, b: T, compare: Comparer<T>): T {
+        return compare(a, b) === Comparison.LessThan ? a : b;
     }
 
     /**
@@ -2229,6 +2229,15 @@ namespace ts {
         }
 
         return absolutePath;
+    }
+
+    export function getRelativePath(path: string, directoryPath: string, getCanonicalFileName: GetCanonicalFileName) {
+        const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
+        return ensurePathIsRelative(relativePath);
+    }
+
+    export function ensurePathIsRelative(path: string): string {
+        return !pathIsRelative(path) ? "./" + path : path;
     }
 
     export function getBaseFileName(path: string) {
@@ -3006,18 +3015,19 @@ namespace ts {
     }
 
     /** Remove the *first* occurrence of `item` from the array. */
-    export function unorderedRemoveItem<T>(array: T[], item: T): void {
-        unorderedRemoveFirstItemWhere(array, element => element === item);
+    export function unorderedRemoveItem<T>(array: T[], item: T) {
+        return unorderedRemoveFirstItemWhere(array, element => element === item);
     }
 
     /** Remove the *first* element satisfying `predicate`. */
-    function unorderedRemoveFirstItemWhere<T>(array: T[], predicate: (element: T) => boolean): void {
+    function unorderedRemoveFirstItemWhere<T>(array: T[], predicate: (element: T) => boolean) {
         for (let i = 0; i < array.length; i++) {
             if (predicate(array[i])) {
                 unorderedRemoveItemAt(array, i);
-                break;
+                return true;
             }
         }
+        return false;
     }
 
     export type GetCanonicalFileName = (fileName: string) => string;
@@ -3141,8 +3151,8 @@ namespace ts {
         return (arg: T) => f(arg) && g(arg);
     }
 
-    export function or<T>(f: (arg: T) => boolean, g: (arg: T) => boolean) {
-        return (arg: T) => f(arg) || g(arg);
+    export function or<T>(f: (arg: T) => boolean, g: (arg: T) => boolean): (arg: T) => boolean {
+        return arg => f(arg) || g(arg);
     }
 
     export function assertTypeIsNever(_: never): void { } // tslint:disable-line no-empty
