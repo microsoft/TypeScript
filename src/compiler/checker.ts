@@ -1568,7 +1568,7 @@ namespace ts {
                 return false;
             }
 
-            const container = getThisContainer(errorLocation, /*includeArrowFunctions*/ true);
+            const container = getThisContainer(errorLocation, /*includeArrowFunctions*/ false);
             let location = container;
             while (location) {
                 if (isClassLike(location.parent)) {
