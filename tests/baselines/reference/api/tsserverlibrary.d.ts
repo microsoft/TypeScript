@@ -8067,7 +8067,6 @@ declare namespace ts.server {
          * @param info The file that has been closed or newly configured
          */
         private closeOpenFile;
-        private deleteOrphanScriptInfoNotInAnyProject;
         private deleteScriptInfo;
         private configFileExists;
         private setConfigFileExistenceByNewConfiguredProject;
@@ -8124,6 +8123,7 @@ declare namespace ts.server {
         private sendConfigFileDiagEvent;
         private getOrCreateInferredProjectForProjectRootPathIfEnabled;
         private getOrCreateSingleInferredProjectIfEnabled;
+        private getOrCreateSingleInferredWithoutProjectRoot;
         private createInferredProject;
         getScriptInfo(uncheckedFileName: string): ScriptInfo;
         private watchClosedScriptInfo;

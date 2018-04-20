@@ -591,6 +591,11 @@ namespace ts.server {
             return this.rootFiles && this.rootFiles.length > 0;
         }
 
+        /*@internal*/
+        isOrphan() {
+            return false;
+        }
+
         getRootFiles() {
             return this.rootFiles && this.rootFiles.map(info => info.fileName);
         }
@@ -1174,6 +1179,10 @@ namespace ts.server {
         readonly projectRootPath: string | undefined;
 
         /*@internal*/
+        /** stored only if their is no projectRootPath and this isnt single inferred project */
+        readonly canonicalCurrentDirectory: string | undefined;
+
+        /*@internal*/
         constructor(
             projectService: ProjectService,
             documentRegistry: DocumentRegistry,
@@ -1191,6 +1200,9 @@ namespace ts.server {
                 projectService.host,
                 currentDirectory);
             this.projectRootPath = projectRootPath && projectService.toCanonicalFileName(projectRootPath);
+            if (!projectRootPath && !projectService.useSingleInferredProject) {
+                this.canonicalCurrentDirectory = projectService.toCanonicalFileName(this.currentDirectory);
+            }
             this.enableGlobalPlugins();
         }
 
@@ -1211,6 +1223,11 @@ namespace ts.server {
                     this.toggleJsInferredProject(/*isJsInferredProject*/ false);
                 }
             }
+        }
+
+        /*@internal*/
+        isOrphan() {
+            return !this.hasRoots();
         }
 
         isProjectWithSingleRoot() {
