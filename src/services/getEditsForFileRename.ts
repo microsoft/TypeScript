@@ -3,27 +3,41 @@ namespace ts {
     export function getEditsForFileRename(program: Program, oldFilePath: string, newFilePath: string, host: LanguageServiceHost, formatContext: formatting.FormatContext): ReadonlyArray<FileTextChanges> {
         const pathUpdater = getPathUpdater(oldFilePath, newFilePath, host);
         return textChanges.ChangeTracker.with({ host, formatContext }, changeTracker => {
-            const importsToUpdate = getImportsToUpdate(program, oldFilePath);
-            for (const importToUpdate of importsToUpdate) {
-                const newPath = pathUpdater(importToUpdate.text);
+            for (const { sourceFile, toUpdate } of getImportsToUpdate(program, oldFilePath)) {
+                const newPath = pathUpdater(isRef(toUpdate) ? toUpdate.fileName : toUpdate.text);
                 if (newPath !== undefined) {
-                    changeTracker.replaceNode(importToUpdate.getSourceFile(), importToUpdate, updateStringLiteralLike(importToUpdate, newPath));
+                    const range = isRef(toUpdate) ? toUpdate : createTextRange(toUpdate.getStart(sourceFile) + 1, toUpdate.end - 1);
+                    changeTracker.replaceRangeWithText(sourceFile, range, isRef(toUpdate) ? newPath : removeFileExtension(newPath));
                 }
             }
         });
     }
 
-    function getImportsToUpdate(program: Program, oldFilePath: string): ReadonlyArray<StringLiteralLike> {
+    interface ToUpdate {
+        readonly sourceFile: SourceFile;
+        readonly toUpdate: StringLiteralLike | FileReference;
+    }
+    function isRef(toUpdate: StringLiteralLike | FileReference): toUpdate is FileReference {
+        return "fileName" in toUpdate;
+    }
+
+    function getImportsToUpdate(program: Program, oldFilePath: string): ReadonlyArray<ToUpdate> {
         const checker = program.getTypeChecker();
-        const result: StringLiteralLike[] = [];
-        for (const file of program.getSourceFiles()) {
-            for (const importStringLiteral of file.imports) {
+        const result: ToUpdate[] = [];
+        for (const sourceFile of program.getSourceFiles()) {
+            for (const ref of sourceFile.referencedFiles) {
+                if (!program.getSourceFileFromReference(sourceFile, ref) && resolveTripleslashReference(ref.fileName, sourceFile.fileName) === oldFilePath) {
+                    result.push({ sourceFile, toUpdate: ref });
+                }
+            }
+
+            for (const importStringLiteral of sourceFile.imports) {
                 // If it resolved to something already, ignore.
                 if (checker.getSymbolAtLocation(importStringLiteral)) continue;
 
-                const resolved = program.getResolvedModuleWithFailedLookupLocationsFromCache(importStringLiteral.text, file.fileName);
+                const resolved = program.getResolvedModuleWithFailedLookupLocationsFromCache(importStringLiteral.text, sourceFile.fileName);
                 if (contains(resolved.failedLookupLocations, oldFilePath)) {
-                    result.push(importStringLiteral);
+                    result.push({ sourceFile, toUpdate: importStringLiteral });
                 }
             }
         }
@@ -32,14 +46,10 @@ namespace ts {
 
     function getPathUpdater(oldFilePath: string, newFilePath: string, host: LanguageServiceHost): (oldPath: string) => string | undefined {
         // Get the relative path from old to new location, and append it on to the end of imports and normalize.
-        const rel = removeFileExtension(getRelativePath(newFilePath, getDirectoryPath(oldFilePath), createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host))));
+        const rel = getRelativePath(newFilePath, getDirectoryPath(oldFilePath), createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host)));
         return oldPath => {
             if (!pathIsRelative(oldPath)) return;
             return ensurePathIsRelative(normalizePath(combinePaths(getDirectoryPath(oldPath), rel)));
         };
-    }
-
-    function updateStringLiteralLike(old: StringLiteralLike, newText: string): StringLiteralLike {
-        return old.kind === SyntaxKind.StringLiteral ? createLiteral(newText, /*isSingleQuote*/ old.singleQuote) : createNoSubstitutionTemplateLiteral(newText);
     }
 }

@@ -1,20 +1,23 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: /a.ts
+/////// <reference path="./src/old.ts" />
 ////import old from "./src/old";
 
 // @Filename: /src/a.ts
+/////// <reference path="./old.ts" />
 ////import old from "./old";
 
 // @Filename: /src/foo/a.ts
+/////// <reference path="../old.ts" />
 ////import old from "../old";
 
 verify.getEditsForFileRename({
     oldPath: "/src/old.ts",
     newPath: "/src/new.ts",
     newFileContents: {
-        "/a.ts": 'import old from "./src/new";',
-        "/src/a.ts": 'import old from "./new";',
-        "/src/foo/a.ts": 'import old from "../new";',
+        "/a.ts": '/// <reference path="./src/new.ts" />\nimport old from "./src/new";',
+        "/src/a.ts": '/// <reference path="./new.ts" />\nimport old from "./new";',
+        "/src/foo/a.ts": '/// <reference path="../new.ts" />\nimport old from "../new";',
     },
 });
