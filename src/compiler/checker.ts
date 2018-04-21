@@ -5290,6 +5290,16 @@ namespace ts {
             return links.declaredType;
         }
 
+        function isStringConcatExpression(expr: Node): boolean {
+            if (expr.kind === SyntaxKind.StringLiteral) {
+                return true;
+            }
+            else if (expr.kind === SyntaxKind.BinaryExpression) {
+                return isStringConcatExpression((<BinaryExpression>expr).left) && isStringConcatExpression((<BinaryExpression>expr).right);
+            }
+            return false;
+        }
+
         function isLiteralEnumMember(member: EnumMember) {
             const expr = member.initializer;
             if (!expr) {
@@ -5304,6 +5314,8 @@ namespace ts {
                         (<PrefixUnaryExpression>expr).operand.kind === SyntaxKind.NumericLiteral;
                 case SyntaxKind.Identifier:
                     return nodeIsMissing(expr) || !!getSymbolOfNode(member.parent).exports.get((<Identifier>expr).escapedText);
+                case SyntaxKind.BinaryExpression:
+                    return isStringConcatExpression(expr);
                 default:
                     return false;
             }
@@ -24089,6 +24101,9 @@ namespace ts {
                                 case SyntaxKind.PercentToken: return left % right;
                                 case SyntaxKind.AsteriskAsteriskToken: return left ** right;
                             }
+                        }
+                        else if (typeof left === "string" && typeof right === "string" && (<BinaryExpression>expr).operatorToken.kind === SyntaxKind.PlusToken) {
+                            return left + right;
                         }
                         break;
                     case SyntaxKind.StringLiteral:
