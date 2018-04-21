@@ -5629,7 +5629,7 @@ namespace ts {
          * @param lateSymbols The late-bound symbols of the parent.
          * @param decl The member to bind.
          */
-        function lateBindMember(parent: Symbol, earlySymbols: SymbolTable | undefined, lateSymbols: UnderscoreEscapedMap<TransientSymbol>, decl: LateBoundDeclaration) {
+        function lateBindMember(parent: Symbol, earlySymbols: SymbolTable | undefined, lateSymbols: SymbolTable, decl: LateBoundDeclaration) {
             Debug.assert(!!decl.symbol, "The member is expected to have a symbol.");
             const links = getNodeLinks(decl);
             if (!links.resolvedSymbol) {
@@ -5686,7 +5686,7 @@ namespace ts {
                 links[resolutionKind] = earlySymbols || emptySymbols;
 
                 // fill in any as-yet-unresolved late-bound members.
-                const lateSymbols = createMap() as UnderscoreEscapedMap<TransientSymbol>;
+                const lateSymbols = createSymbolTable();
                 for (const decl of symbol.declarations) {
                     const members = getMembersOfDeclaration(decl);
                     if (members) {
@@ -6606,8 +6606,8 @@ namespace ts {
                 }
                 else {
                     if (type !== commonType) {
-                    checkFlags |= CheckFlags.HasNonUniformType;
-                }
+                        checkFlags |= CheckFlags.HasNonUniformType;
+                    }
                 }
                 propTypes.push(type);
             }
