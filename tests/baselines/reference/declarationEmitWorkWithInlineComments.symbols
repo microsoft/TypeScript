@@ -1,0 +1,11 @@
+=== tests/cases/conformance/declarationEmit/declarationEmitWorkWithInlineComments.ts ===
+export class Foo {
+>Foo : Symbol(Foo, Decl(declarationEmitWorkWithInlineComments.ts, 0, 0))
+
+  constructor(/** @internal */ public bar: string) { }  
+>bar : Symbol(Foo.bar, Decl(declarationEmitWorkWithInlineComments.ts, 1, 14))
+
+  /** @internal */ zoo: string;
+>zoo : Symbol(Foo.zoo, Decl(declarationEmitWorkWithInlineComments.ts, 1, 54))
+}
+
