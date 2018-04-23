@@ -8,7 +8,7 @@ function F<T>() {
 >T : T
 
   for (var a in expr) {
->a : keyof T
+>a : Extract<keyof T, string>
 >expr : T
   }
 }

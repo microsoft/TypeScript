@@ -4,9 +4,9 @@ class A { }
 
 A.hasOwnProperty('foo');
 >A.hasOwnProperty('foo') : boolean
->A.hasOwnProperty : (v: string) => boolean
+>A.hasOwnProperty : (v: string | number | symbol) => boolean
 >A : typeof A
->hasOwnProperty : (v: string) => boolean
+>hasOwnProperty : (v: string | number | symbol) => boolean
 >'foo' : "foo"
 
 class B {
@@ -16,9 +16,9 @@ class B {
 }
 B.hasOwnProperty('foo');
 >B.hasOwnProperty('foo') : boolean
->B.hasOwnProperty : (v: string) => boolean
+>B.hasOwnProperty : (v: string | number | symbol) => boolean
 >B : typeof B
->hasOwnProperty : (v: string) => boolean
+>hasOwnProperty : (v: string | number | symbol) => boolean
 >'foo' : "foo"
 
 

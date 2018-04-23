@@ -1888,6 +1888,9 @@ namespace ts {
     }
 
     export function getJSDocHost(node: JSDocTag): HasJSDoc {
+        while (node.parent.kind === SyntaxKind.JSDocTypeLiteral) {
+            node = node.parent.parent.parent as JSDocParameterTag;
+        }
         Debug.assert(node.parent!.kind === SyntaxKind.JSDocComment);
         return node.parent!.parent!;
     }
@@ -2137,11 +2140,13 @@ namespace ts {
             node.kind === SyntaxKind.NamespaceImport ||
             node.kind === SyntaxKind.ImportSpecifier ||
             node.kind === SyntaxKind.ExportSpecifier ||
-            node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(<ExportAssignment>node);
+            node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(<ExportAssignment>node) ||
+            isBinaryExpression(node) && getSpecialPropertyAssignmentKind(node) === SpecialPropertyAssignmentKind.ModuleExports;
     }
 
-    export function exportAssignmentIsAlias(node: ExportAssignment): boolean {
-        return isEntityNameExpression(node.expression);
+    export function exportAssignmentIsAlias(node: ExportAssignment | BinaryExpression): boolean {
+        const e = isExportAssignment(node) ? node.expression : node.right;
+        return isEntityNameExpression(e) || isClassExpression(e);
     }
 
     export function getClassExtendsHeritageClauseElement(node: ClassLikeDeclaration | InterfaceDeclaration) {

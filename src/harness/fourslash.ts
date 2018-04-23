@@ -276,13 +276,9 @@ namespace FourSlash {
             if (configFileName) {
                 const baseDir = ts.normalizePath(ts.getDirectoryPath(configFileName));
                 const host = new Utils.MockParseConfigHost(baseDir, /*ignoreCase*/ false, this.inputFiles);
-
-                const configJsonObj = ts.parseConfigFileTextToJson(configFileName, this.inputFiles.get(configFileName));
-                assert.isTrue(configJsonObj.config !== undefined);
-
-                compilationOptions = ts.parseJsonConfigFileContent(configJsonObj.config, host, baseDir, compilationOptions, configFileName).options;
+                const jsonSourceFile = ts.parseJsonText(configFileName, this.inputFiles.get(configFileName));
+                compilationOptions = ts.parseJsonSourceFileConfigFileContent(jsonSourceFile, host, baseDir, compilationOptions, configFileName).options;
             }
-
 
             if (compilationOptions.typeRoots) {
                 compilationOptions.typeRoots = compilationOptions.typeRoots.map(p => ts.getNormalizedAbsolutePath(p, this.basePath));
@@ -842,6 +838,7 @@ namespace FourSlash {
 
             const actualCompletions = this.getCompletionListAtCaret(options);
             if (!actualCompletions) {
+                if (expected === undefined) return;
                 this.raiseError(`No completions at position '${this.currentCaretPosition}'.`);
             }
 
@@ -2422,14 +2419,7 @@ Actual: ${stringify(fullActual)}`);
         public applyCodeActionFromCompletion(markerName: string, options: FourSlashInterface.VerifyCompletionActionOptions) {
             this.goToMarker(markerName);
 
-            const actualCompletion = this.getCompletionListAtCaret({ ...ts.defaultPreferences, includeCompletionsForModuleExports: true }).entries.find(e =>
-                e.name === options.name && e.source === options.source);
-
-            if (!actualCompletion.hasAction) {
-                this.raiseError(`Completion for ${options.name} does not have an associated action.`);
-            }
-
-            const details = this.getCompletionEntryDetails(options.name, actualCompletion.source, options.preferences);
+            const details = this.getCompletionEntryDetails(options.name, options.source, options.preferences);
             if (details.codeActions.length !== 1) {
                 this.raiseError(`Expected one code action, got ${details.codeActions.length}`);
             }
@@ -3278,6 +3268,15 @@ Actual: ${stringify(fullActual)}`);
 
         private static textSpansEqual(a: ts.TextSpan, b: ts.TextSpan) {
             return a && b && a.start === b.start && a.length === b.length;
+        }
+
+        public getEditsForFileRename(options: FourSlashInterface.GetEditsForFileRenameOptions): void {
+            const changes = this.languageService.getEditsForFileRename(options.oldPath, options.newPath, this.formatCodeSettings);
+            this.applyChanges(changes);
+            for (const fileName in options.newFileContents) {
+                this.openFile(fileName);
+                this.verifyCurrentFileContent(options.newFileContents[fileName]);
+            }
         }
     }
 
@@ -4370,6 +4369,10 @@ namespace FourSlashInterface {
         public allRangesAppearInImplementationList(markerName: string) {
             this.state.verifyRangesInImplementationList(markerName);
         }
+
+        public getEditsForFileRename(options: GetEditsForFileRenameOptions) {
+            this.state.getEditsForFileRename(options);
+        }
     }
 
     export class Edit {
@@ -4653,10 +4656,12 @@ namespace FourSlashInterface {
 
     export type ExpectedCompletionEntry = string | { name: string, insertText?: string, replacementSpan?: FourSlash.Range };
     export interface CompletionsAtOptions extends Partial<ts.UserPreferences> {
+        triggerCharacter?: string;
         isNewIdentifierLocation?: boolean;
     }
 
     export interface VerifyCompletionListContainsOptions extends ts.UserPreferences {
+        triggerCharacter?: string;
         sourceDisplay: string;
         isRecommended?: true;
         insertText?: string;
@@ -4709,5 +4714,11 @@ namespace FourSlashInterface {
         message: string;
         range?: FourSlash.Range;
         code: number;
+    }
+
+    export interface GetEditsForFileRenameOptions {
+        readonly oldPath: string;
+        readonly newPath: string;
+        readonly newFileContents: { readonly [fileName: string]: string };
     }
 }

@@ -3526,6 +3526,10 @@
         "category": "Message",
         "code": 6194
     },
+    "Resolve 'keyof' to string valued property names only (no numbers or symbols).": {
+        "category": "Message",
+        "code": 6195
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
