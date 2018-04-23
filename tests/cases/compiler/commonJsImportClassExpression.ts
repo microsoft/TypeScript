@@ -1,5 +1,5 @@
 // @Filename: mod1.ts
-export = class Chunk {
+export = class {
     chunk = 1
 }
 

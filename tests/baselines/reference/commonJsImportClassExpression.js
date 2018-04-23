@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/commonJsImportClassExpression.ts] ////
 
 //// [mod1.ts]
-export = class Chunk {
+export = class {
     chunk = 1
 }
 
@@ -14,10 +14,10 @@ c.chunk;
 //// [mod1.js]
 "use strict";
 module.exports = /** @class */ (function () {
-    function Chunk() {
+    function class_1() {
         this.chunk = 1;
     }
-    return Chunk;
+    return class_1;
 }());
 //// [use.js]
 "use strict";

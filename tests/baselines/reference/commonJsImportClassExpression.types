@@ -12,9 +12,8 @@ c.chunk;
 >chunk : number
 
 === tests/cases/compiler/mod1.ts ===
-export = class Chunk {
->class Chunk {    chunk = 1} : typeof Chunk
->Chunk : typeof Chunk
+export = class {
+>class {    chunk = 1} : typeof (Anonymous class)
 
     chunk = 1
 >chunk : number

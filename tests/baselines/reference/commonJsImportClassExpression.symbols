@@ -7,15 +7,13 @@ declare var c: Chunk;
 >Chunk : Symbol(Chunk, Decl(use.ts, 0, 0))
 
 c.chunk;
->c.chunk : Symbol(Chunk.chunk, Decl(mod1.ts, 0, 22))
+>c.chunk : Symbol(Chunk.chunk, Decl(mod1.ts, 0, 16))
 >c : Symbol(c, Decl(use.ts, 1, 11))
->chunk : Symbol(Chunk.chunk, Decl(mod1.ts, 0, 22))
+>chunk : Symbol(Chunk.chunk, Decl(mod1.ts, 0, 16))
 
 === tests/cases/compiler/mod1.ts ===
-export = class Chunk {
->Chunk : Symbol(Chunk, Decl(mod1.ts, 0, 8))
-
+export = class {
     chunk = 1
->chunk : Symbol(Chunk.chunk, Decl(mod1.ts, 0, 22))
+>chunk : Symbol((Anonymous class).chunk, Decl(mod1.ts, 0, 16))
 }
 
