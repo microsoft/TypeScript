@@ -97,16 +97,24 @@ namespace ts.codefix {
         symbolToken: Node | undefined,
         preferences: UserPreferences,
     ): { readonly moduleSpecifier: string, readonly codeAction: CodeAction } {
-        const exportInfos = getAllReExportingModules(exportedSymbol, symbolName, checker, allSourceFiles);
+        const exportInfos = getAllReExportingModules(exportedSymbol, symbolName, sourceFile, checker, allSourceFiles);
         Debug.assert(exportInfos.some(info => info.moduleSymbol === moduleSymbol));
         // We sort the best codefixes first, so taking `first` is best for completions.
         const moduleSpecifier = first(getNewImportInfos(program, sourceFile, exportInfos, compilerOptions, getCanonicalFileName, host, preferences)).moduleSpecifier;
         const ctx: ImportCodeFixContext = { host, program, checker, compilerOptions, sourceFile, formatContext, symbolName, getCanonicalFileName, symbolToken, preferences };
         return { moduleSpecifier, codeAction: first(getCodeActionsForImport(exportInfos, ctx)) };
     }
-    function getAllReExportingModules(exportedSymbol: Symbol, symbolName: string, checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>): ReadonlyArray<SymbolExportInfo> {
+    function getAllReExportingModules(exportedSymbol: Symbol, symbolName: string, sourceFile: SourceFile, checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>): ReadonlyArray<SymbolExportInfo> {
         const result: SymbolExportInfo[] = [];
-        forEachExternalModule(checker, allSourceFiles, moduleSymbol => {
+        forEachExternalModule(checker, allSourceFiles, (moduleSymbol, moduleFile) => {
+            // Ignore something in `./index` or `../index` if it's not the original exporting module.
+            if (moduleFile &&
+                exportedSymbol.parent !== moduleSymbol &&
+                removeFileExtension(getBaseFileName(moduleFile.fileName)) === "index" &&
+                startsWith(sourceFile.fileName, getDirectoryPath(moduleFile.fileName))) {
+                return;
+            }
+
             for (const exported of checker.getExportsOfModule(moduleSymbol)) {
                 if (exported.escapedName === InternalSymbolName.Default || exported.name === symbolName && skipAlias(exported, checker) === exportedSymbol) {
                     const isDefaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol) === exported;
