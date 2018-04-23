@@ -15403,7 +15403,12 @@ namespace ts {
                     }
                     else {
                         Debug.assert(memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment);
-                        type = checkExpressionForMutableLocation(memberDecl.name, checkMode);
+                        if (memberDecl.type) {
+                            type = getTypeFromTypeNode(memberDecl.type);
+                        }
+                        else {
+                            type = checkExpressionForMutableLocation(memberDecl.name, checkMode);
+                        }
                     }
 
                     if (jsdocType) {

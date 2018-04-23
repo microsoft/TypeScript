@@ -1,0 +1,127 @@
+=== tests/cases/compiler/shorthandPropertyAssignmentsAsExpression.ts ===
+interface Valid {
+>Valid : Valid
+
+	general: number;
+>general : number
+
+	specific: 0;
+>specific : 0
+
+	optional?: 1;
+>optional : 1
+}
+
+const general = 2;
+>general : 2
+>2 : 2
+
+let specific = 0;
+>specific : number
+>0 : 0
+
+const valid = { general, specific };
+>valid : { general: number; specific: number; }
+>{ general, specific } : { general: number; specific: number; }
+>general : number
+>specific : number
+
+specific = 2;
+>specific = 2 : 2
+>specific : number
+>2 : 2
+
+const expressionValid = {
+>expressionValid : { general: number; specific: 0; }
+>{	general,	specific as 0,} : { general: number; specific: 0; }
+
+	general,
+>general : number
+
+	specific as 0,
+>specific : 0
+
+};
+
+const invalid = { general, specific };
+>invalid : { general: number; specific: number; }
+>{ general, specific } : { general: number; specific: number; }
+>general : number
+>specific : number
+
+const optional = 3;
+>optional : 3
+>3 : 3
+
+const veryInvalid = {
+>veryInvalid : { general: number; specific: number; optional: number; }
+>{	general,	specific,	optional as number | undefined,} : { general: number; specific: number; optional: number; }
+
+	general,
+>general : number
+
+	specific,
+>specific : number
+
+	optional as number | undefined,
+>optional : number
+
+};
+
+interface ContainsValid {
+>ContainsValid : ContainsValid
+
+	required: Valid;
+>required : Valid
+>Valid : Valid
+
+	optional?: Valid;
+>optional : Valid
+>Valid : Valid
+}
+
+const fullContains: ContainsValid = {
+>fullContains : ContainsValid
+>ContainsValid : ContainsValid
+>{	required: {} as Valid,	optional: {} as Valid,} : { required: Valid; optional: Valid; }
+
+	required: {} as Valid,
+>required : Valid
+>{} as Valid : Valid
+>{} : {}
+>Valid : Valid
+
+	optional: {} as Valid,
+>optional : Valid
+>{} as Valid : Valid
+>{} : {}
+>Valid : Valid
+
+};
+
+const invalidContains: ContainsValid = {
+>invalidContains : ContainsValid
+>ContainsValid : ContainsValid
+>{	required: 7 as Valid,} : { required: Valid; }
+
+	required: 7 as Valid,
+>required : Valid
+>7 as Valid : Valid
+>7 : 7
+>Valid : Valid
+
+};
+
+const extraContains: ContainsValid = {
+>extraContains : ContainsValid
+>ContainsValid : ContainsValid
+>{	extra: number as Valid,} : { extra: Valid; }
+
+	extra: number as Valid,
+>extra : Valid
+>number as Valid : Valid
+>number : any
+>Valid : Valid
+
+};
+
