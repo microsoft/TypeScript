@@ -9,7 +9,7 @@ namespace ts.SymbolDisplay {
 
         const flags = getCombinedLocalAndExportSymbolFlags(symbol);
         if (flags & SymbolFlags.Class) {
-            const callExpressionLike = getCallExpressionLike(location, symbol);
+            const callExpressionLike = getCallExpressionLike(climbParentPropertyAccesses(location), symbol);
             return callExpressionLike && shouldUseConstructSignatures(callExpressionLike) ? ScriptElementKind.constructorImplementationElement
                 : getDeclarationOfKind(symbol, SyntaxKind.ClassExpression) ? ScriptElementKind.localClassElement : ScriptElementKind.classElement;
         }
@@ -147,13 +147,7 @@ namespace ts.SymbolDisplay {
             let signature: Signature;
             type = isThisExpression ? typeChecker.getTypeAtLocation(location) : typeChecker.getTypeOfSymbolAtLocation(symbol.exportSymbol || symbol, location);
 
-            if (location.parent && location.parent.kind === SyntaxKind.PropertyAccessExpression) {
-                const right = (<PropertyAccessExpression>location.parent).name;
-                // Either the location is on the right of a property access, or on the left and the right is missing
-                if (right === location || (right && right.getFullWidth() === 0)) {
-                    location = location.parent;
-                }
-            }
+            location = climbParentPropertyAccesses(location);
 
             // try get the call/construct signature from the type if it matches
             const callExpressionLike = getCallExpressionLike(location, symbol);
@@ -654,5 +648,16 @@ namespace ts.SymbolDisplay {
     }
     function shouldUseConstructSignatures(callExpressionLike: CallExpressionLike): boolean {
         return callExpressionLike.kind === SyntaxKind.NewExpression || (isCallExpression(callExpressionLike) && callExpressionLike.expression.kind === SyntaxKind.SuperKeyword);
+    }
+
+    function climbParentPropertyAccesses(node: Node): Node {
+        if (node.parent && isPropertyAccessExpression(node.parent)) {
+            const { name } = node.parent;
+            // Either the location is on the right of a property access, or on the left and the right is missing
+            if (node === name || (name && name.getFullWidth() === 0)) {
+                return node.parent;
+            }
+        }
+        return node;
     }
 }
