@@ -1,15 +1,14 @@
 /// <reference path='fourslash.ts' />
 
 // @allowJs: true
-// @target: esnext
 
 // @Filename: /a.js
-////const x = require("x");
-////x.y;
+////exports.x = 0;
+
+// @Filename: /b.js
+////export const y = 0;
 
 verify.codeFix({
     description: "Convert to ES6 module",
-    newFileContent:
-`import { y } from "x";
-y;`,
+    newFileContent: "export const x = 0;",
 });
