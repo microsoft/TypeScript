@@ -1843,7 +1843,7 @@ namespace ts {
                 return valueSymbol;
             }
             const result = createSymbol(valueSymbol.flags | typeSymbol.flags, valueSymbol.escapedName);
-            result.declarations = concatenate(valueSymbol.declarations, typeSymbol.declarations);
+            result.declarations = deduplicate(concatenate(valueSymbol.declarations, typeSymbol.declarations), equateValues);
             result.parent = valueSymbol.parent || typeSymbol.parent;
             if (valueSymbol.valueDeclaration) result.valueDeclaration = valueSymbol.valueDeclaration;
             if (typeSymbol.members) result.members = typeSymbol.members;
@@ -1878,7 +1878,7 @@ namespace ts {
 
                     let symbolFromVariable: Symbol | undefined;
                     // First check if module was specified with "export=". If so, get the member from the resolved type
-                    if (moduleSymbol && moduleSymbol.exports && moduleSymbol.exports.get("export=" as __String)) {
+                    if (moduleSymbol && moduleSymbol.exports && moduleSymbol.exports.get(InternalSymbolName.ExportEquals)) {
                         symbolFromVariable = getPropertyOfType(getTypeOfSymbol(targetSymbol), name.escapedText);
                     }
                     else {
@@ -1891,7 +1891,7 @@ namespace ts {
                     if (!symbolFromModule && allowSyntheticDefaultImports && name.escapedText === InternalSymbolName.Default) {
                         symbolFromModule = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias) || resolveSymbol(moduleSymbol, dontResolveAlias);
                     }
-                    const symbol = symbolFromModule && symbolFromVariable ?
+                    const symbol = symbolFromModule && symbolFromVariable && symbolFromModule !== symbolFromVariable ?
                         combineValueAndTypeSymbols(symbolFromVariable, symbolFromModule) :
                         symbolFromModule || symbolFromVariable;
                     if (!symbol) {
@@ -5305,6 +5305,16 @@ namespace ts {
             return links.declaredType;
         }
 
+        function isStringConcatExpression(expr: Node): boolean {
+            if (expr.kind === SyntaxKind.StringLiteral) {
+                return true;
+            }
+            else if (expr.kind === SyntaxKind.BinaryExpression) {
+                return isStringConcatExpression((<BinaryExpression>expr).left) && isStringConcatExpression((<BinaryExpression>expr).right);
+            }
+            return false;
+        }
+
         function isLiteralEnumMember(member: EnumMember) {
             const expr = member.initializer;
             if (!expr) {
@@ -5319,6 +5329,8 @@ namespace ts {
                         (<PrefixUnaryExpression>expr).operand.kind === SyntaxKind.NumericLiteral;
                 case SyntaxKind.Identifier:
                     return nodeIsMissing(expr) || !!getSymbolOfNode(member.parent)!.exports!.get((<Identifier>expr).escapedText);
+                case SyntaxKind.BinaryExpression:
+                    return isStringConcatExpression(expr);
                 default:
                     return false;
             }
@@ -24148,6 +24160,9 @@ namespace ts {
                                 case SyntaxKind.PercentToken: return left % right;
                                 case SyntaxKind.AsteriskAsteriskToken: return left ** right;
                             }
+                        }
+                        else if (typeof left === "string" && typeof right === "string" && (<BinaryExpression>expr).operatorToken.kind === SyntaxKind.PlusToken) {
+                            return left + right;
                         }
                         break;
                     case SyntaxKind.StringLiteral:
