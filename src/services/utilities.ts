@@ -1149,6 +1149,10 @@ namespace ts {
         return createTextSpanFromBounds(range.pos, range.end);
     }
 
+    export function createTextRangeFromSpan(span: TextSpan): TextRange {
+        return createTextRange(span.start, span.start + span.length);
+    }
+
     export function createTextChangeFromStartLength(start: number, length: number, newText: string): TextChange {
         return createTextChange(createTextSpan(start, length), newText);
     }
@@ -1227,6 +1231,36 @@ namespace ts {
 
     export function hostGetCanonicalFileName(host: LanguageServiceHost): GetCanonicalFileName {
         return createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host));
+    }
+
+    export function makeImportIfNecessary(defaultImport: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: string): ImportDeclaration | undefined {
+        return defaultImport || namedImports && namedImports.length ? makeImport(defaultImport, namedImports, moduleSpecifier) : undefined;
+    }
+
+    export function makeImport(defaultImport: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: string | Expression): ImportDeclaration {
+        return createImportDeclaration(
+            /*decorators*/ undefined,
+            /*modifiers*/ undefined,
+            defaultImport || namedImports
+                ? createImportClause(defaultImport, namedImports && namedImports.length ? createNamedImports(namedImports) : undefined)
+                : undefined,
+            typeof moduleSpecifier === "string" ? createLiteral(moduleSpecifier) : moduleSpecifier);
+    }
+
+    export function symbolNameNoDefault(symbol: Symbol): string | undefined {
+        const escaped = symbolEscapedNameNoDefault(symbol);
+        return escaped === undefined ? undefined : unescapeLeadingUnderscores(escaped);
+    }
+
+    export function symbolEscapedNameNoDefault(symbol: Symbol): __String | undefined {
+        if (symbol.escapedName !== InternalSymbolName.Default) {
+            return symbol.escapedName;
+        }
+
+        return firstDefined(symbol.declarations, decl => {
+            const name = getNameOfDeclaration(decl);
+            return name && name.kind === SyntaxKind.Identifier ? name.escapedText : undefined;
+        });
     }
 }
 

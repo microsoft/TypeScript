@@ -2950,9 +2950,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public verifyApplicableRefactorAvailableAtMarker(negative: boolean, markerName: string) {
-            const marker = this.getMarkerByName(markerName);
-            const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, marker.position, ts.defaultPreferences);
-            const isAvailable = applicableRefactors && applicableRefactors.length > 0;
+            const isAvailable = this.getApplicableRefactors(this.getMarkerByName(markerName).position).length > 0;
             if (negative && isAvailable) {
                 this.raiseError(`verifyApplicableRefactorAvailableAtMarker failed - expected no refactor at marker ${markerName} but found some.`);
             }
@@ -2969,9 +2967,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public verifyRefactorAvailable(negative: boolean, name: string, actionName?: string) {
-            const selection = this.getSelection();
-
-            let refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, selection, ts.defaultPreferences) || [];
+            let refactors = this.getApplicableRefactors(this.getSelection());
             refactors = refactors.filter(r => r.name === name && (actionName === undefined || r.actions.some(a => a.name === actionName)));
             const isAvailable = refactors.length > 0;
 
@@ -2991,10 +2987,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public verifyRefactor({ name, actionName, refactors }: FourSlashInterface.VerifyRefactorOptions) {
-            const selection = this.getSelection();
-
-            const actualRefactors = (this.languageService.getApplicableRefactors(this.activeFile.fileName, selection, ts.defaultPreferences) || ts.emptyArray)
-                .filter(r => r.name === name && r.actions.some(a => a.name === actionName));
+            const actualRefactors = this.getApplicableRefactors(this.getSelection()).filter(r => r.name === name && r.actions.some(a => a.name === actionName));
             this.assertObjectsEqual(actualRefactors, refactors);
         }
 
@@ -3004,8 +2997,7 @@ Actual: ${stringify(fullActual)}`);
                 throw new Error("Exactly one refactor range is allowed per test.");
             }
 
-            const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, ts.first(ranges), ts.defaultPreferences);
-            const isAvailable = applicableRefactors && applicableRefactors.length > 0;
+            const isAvailable = this.getApplicableRefactors(ts.first(ranges)).length > 0;
             if (negative && isAvailable) {
                 this.raiseError(`verifyApplicableRefactorAvailableForRange failed - expected no refactor but found some.`);
             }
@@ -3016,7 +3008,7 @@ Actual: ${stringify(fullActual)}`);
 
         public applyRefactor({ refactorName, actionName, actionDescription, newContent: newContentWithRenameMarker }: FourSlashInterface.ApplyRefactorOptions) {
             const range = this.getSelection();
-            const refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, range, ts.defaultPreferences);
+            const refactors = this.getApplicableRefactors(range);
             const refactorsWithName = refactors.filter(r => r.name === refactorName);
             if (refactorsWithName.length === 0) {
                 this.raiseError(`The expected refactor: ${refactorName} is not available at the marker location.\nAvailable refactors: ${refactors.map(r => r.name)}`);
@@ -3062,7 +3054,38 @@ Actual: ${stringify(fullActual)}`);
                     return { renamePosition, newContent };
                 }
             }
+        }
 
+        public moveToNewFile(options: FourSlashInterface.MoveToNewFileOptions): void {
+            assert(this.getRanges().length === 1);
+            const range = this.getRanges()[0];
+            const refactor = ts.find(this.getApplicableRefactors(range), r => r.name === "Move to new file");
+            assert(refactor.actions.length === 1);
+            const action = ts.first(refactor.actions);
+            assert(action.name === "Move to new file" && action.description === "Move to new file");
+
+            const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, this.formatCodeSettings, range, refactor.name, action.name, ts.defaultPreferences);
+            for (const edit of editInfo.edits) {
+                const newContent = options.newFileContents[edit.fileName];
+                if (newContent === undefined) {
+                    this.raiseError(`There was an edit in ${edit.fileName} but new content was not specified.`);
+                }
+                if (this.testData.files.some(f => f.fileName === edit.fileName)) {
+                    this.applyEdits(edit.fileName, edit.textChanges, /*isFormattingEdit*/ false);
+                    this.openFile(edit.fileName);
+                    this.verifyCurrentFileContent(newContent);
+                }
+                else {
+                    assert(edit.textChanges.length === 1);
+                    const change = ts.first(edit.textChanges);
+                    assert.deepEqual(change.span, ts.createTextSpan(0, 0));
+                    assert.equal(change.newText, newContent, `Content for ${edit.fileName}`);
+                }
+            }
+
+            for (const fileName in options.newFileContents) {
+                assert(editInfo.edits.some(e => e.fileName === fileName));
+            }
         }
 
         public verifyFileAfterApplyingRefactorAtMarker(
@@ -3277,6 +3300,10 @@ Actual: ${stringify(fullActual)}`);
                 this.openFile(fileName);
                 this.verifyCurrentFileContent(options.newFileContents[fileName]);
             }
+        }
+
+        private getApplicableRefactors(positionOrRange: number | ts.TextRange): ReadonlyArray<ts.ApplicableRefactorInfo> {
+            return this.languageService.getApplicableRefactors(this.activeFile.fileName, positionOrRange, ts.defaultPreferences) || ts.emptyArray;
         }
     }
 
@@ -4373,6 +4400,10 @@ namespace FourSlashInterface {
         public getEditsForFileRename(options: GetEditsForFileRenameOptions) {
             this.state.getEditsForFileRename(options);
         }
+
+        public moveToNewFile(options: MoveToNewFileOptions): void {
+            this.state.moveToNewFile(options);
+        }
     }
 
     export class Edit {
@@ -4719,6 +4750,10 @@ namespace FourSlashInterface {
     export interface GetEditsForFileRenameOptions {
         readonly oldPath: string;
         readonly newPath: string;
+        readonly newFileContents: { readonly [fileName: string]: string };
+    }
+
+    export interface MoveToNewFileOptions {
         readonly newFileContents: { readonly [fileName: string]: string };
     }
 }

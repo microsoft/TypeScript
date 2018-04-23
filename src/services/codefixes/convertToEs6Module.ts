@@ -507,15 +507,6 @@ namespace ts.codefix {
             : makeImport(/*name*/ undefined, [makeImportSpecifier(propertyName, localName)], moduleSpecifier);
     }
 
-    function makeImport(name: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: StringLiteralLike): ImportDeclaration {
-        return makeImportDeclaration(name, namedImports, moduleSpecifier);
-    }
-
-    export function makeImportDeclaration(name: Identifier, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: Expression) {
-        const importClause = (name || namedImports) && createImportClause(name, namedImports && createNamedImports(namedImports));
-        return createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, importClause, moduleSpecifier);
-    }
-
     function makeImportSpecifier(propertyName: string | undefined, name: string): ImportSpecifier {
         return createImportSpecifier(propertyName !== undefined && propertyName !== name ? createIdentifier(propertyName) : undefined, createIdentifier(name));
     }

@@ -248,7 +248,7 @@ namespace ts.FindAllReferences {
                 const { name } = importClause;
                 // If a default import has the same name as the default export, allow to rename it.
                 // Given `import f` and `export default function f`, we will rename both, but for `import g` we will rename just that.
-                if (name && (!isForRename || name.escapedText === symbolName(exportSymbol))) {
+                if (name && (!isForRename || name.escapedText === symbolEscapedNameNoDefault(exportSymbol))) {
                     const defaultImportAlias = checker.getSymbolAtLocation(name);
                     addSearch(name, defaultImportAlias);
                 }
@@ -534,7 +534,7 @@ namespace ts.FindAllReferences {
             // If the import has a different name than the export, do not continue searching.
             // If `importedName` is undefined, do continue searching as the export is anonymous.
             // (All imports returned from this function will be ignored anyway if we are in rename and this is a not a named export.)
-            const importedName = symbolName(importedSymbol);
+            const importedName = symbolEscapedNameNoDefault(importedSymbol);
             if (importedName === undefined || importedName === InternalSymbolName.Default || importedName === symbol.escapedName) {
                 return { kind: ImportExport.Import, symbol: importedSymbol, ...isImport };
             }
@@ -604,17 +604,6 @@ namespace ts.FindAllReferences {
         const exportingModuleSymbol = checker.getMergedSymbol(moduleSymbol); // Need to get merged symbol in case there's an augmentation.
         // `export` may appear in a namespace. In that case, just rely on global search.
         return isExternalModuleSymbol(exportingModuleSymbol) ? { exportingModuleSymbol, exportKind } : undefined;
-    }
-
-    function symbolName(symbol: Symbol): __String | undefined {
-        if (symbol.escapedName !== InternalSymbolName.Default) {
-            return symbol.escapedName;
-        }
-
-        return forEach(symbol.declarations, decl => {
-            const name = getNameOfDeclaration(decl);
-            return name && name.kind === SyntaxKind.Identifier && name.escapedText;
-        });
     }
 
     /** If at an export specifier, go to the symbol it refers to. */

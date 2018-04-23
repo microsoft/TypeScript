@@ -211,6 +211,7 @@ namespace ts.textChanges {
 
     export class ChangeTracker {
         private readonly changes: Change[] = [];
+        private readonly newFiles: { readonly oldFile: SourceFile, readonly fileName: string, readonly statements: ReadonlyArray<Statement> }[] = [];
         private readonly deletedNodesInLists: true[] = []; // Stores ids of nodes in lists that we already deleted. Used to avoid deleting `, ` twice in `a, b`.
         private readonly classesWithNodesInsertedAtStart = createMap<ClassDeclaration>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
 
@@ -517,6 +518,10 @@ namespace ts.textChanges {
             }
         }
 
+        public insertExportModifier(sourceFile: SourceFile, node: DeclarationStatement | VariableStatement): void {
+            this.insertText(sourceFile, node.getStart(sourceFile), "export ");
+        }
+
         /**
          * This function should be used to insert nodes in lists when nodes don't carry separators as the part of the node range,
          * i.e. arguments in arguments lists, parameters in parameter lists etc.
@@ -654,7 +659,15 @@ namespace ts.textChanges {
          */
         public getChanges(validate?: ValidateNonFormattedText): FileTextChanges[] {
             this.finishClassesWithNodesInsertedAtStart();
-            return changesToText.getTextChangesFromChanges(this.changes, this.newLineCharacter, this.formatContext, validate);
+            const changes = changesToText.getTextChangesFromChanges(this.changes, this.newLineCharacter, this.formatContext, validate);
+            for (const { oldFile, fileName, statements } of this.newFiles) {
+                changes.push(changesToText.newFileChanges(oldFile, fileName, statements, this.newLineCharacter));
+            }
+            return changes;
+        }
+
+        public createNewFile(oldFile: SourceFile, fileName: string, statements: ReadonlyArray<Statement>) {
+            this.newFiles.push({ oldFile, fileName, statements });
         }
     }
 
@@ -679,6 +692,11 @@ namespace ts.textChanges {
                     createTextChange(createTextSpanFromRange(c.range), computeNewText(c, sourceFile, newLineCharacter, formatContext, validate)));
                 return { fileName: sourceFile.fileName, textChanges };
             });
+        }
+
+        export function newFileChanges(oldFile: SourceFile, fileName: string, statements: ReadonlyArray<Statement>, newLineCharacter: string): FileTextChanges {
+            const text = statements.map(s => getNonformattedText(s, oldFile, newLineCharacter).text).join(newLineCharacter);
+            return { fileName, textChanges: [createTextChange(createTextSpan(0, 0), text)] };
         }
 
         function computeNewText(change: Change, sourceFile: SourceFile, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText): string {

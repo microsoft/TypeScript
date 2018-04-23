@@ -311,8 +311,8 @@ namespace ts {
     }
 
     /** Works like Array.prototype.findIndex, returning `-1` if no element satisfying the predicate is found. */
-    export function findIndex<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): number {
-        for (let i = 0; i < array.length; i++) {
+    export function findIndex<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean, startIndex = 0): number {
+        for (let i = startIndex; i < array.length; i++) {
             if (predicate(array[i], i)) {
                 return i;
             }
