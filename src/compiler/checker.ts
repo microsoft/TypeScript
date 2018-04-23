@@ -1926,13 +1926,17 @@ namespace ts {
                 resolveEntityName(node.propertyName || node.name, meaning, /*ignoreErrors*/ false, dontResolveAlias);
         }
 
-        function getTargetOfExportAssignment(node: ExportAssignment, dontResolveAlias: boolean): Symbol | undefined {
-            const aliasLike = resolveEntityName(<EntityNameExpression>node.expression, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, /*ignoreErrors*/ true, dontResolveAlias);
+        function getTargetOfExportAssignment(node: ExportAssignment | BinaryExpression, dontResolveAlias: boolean): Symbol | undefined {
+            const expression = (isExportAssignment(node) ? node.expression : node.right) as EntityNameExpression | ClassExpression;
+            if (isClassExpression(expression)) {
+                return checkExpression(expression).symbol;
+            }
+            const aliasLike = resolveEntityName(expression, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, /*ignoreErrors*/ true, dontResolveAlias);
             if (aliasLike) {
                 return aliasLike;
             }
-            checkExpression(node.expression);
-            return getNodeLinks(node.expression).resolvedSymbol;
+            checkExpression(expression);
+            return getNodeLinks(expression).resolvedSymbol;
         }
 
         function getTargetOfAliasDeclaration(node: Declaration, dontRecursivelyResolve?: boolean): Symbol | undefined {
@@ -1948,7 +1952,8 @@ namespace ts {
                 case SyntaxKind.ExportSpecifier:
                     return getTargetOfExportSpecifier(<ExportSpecifier>node, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, dontRecursivelyResolve);
                 case SyntaxKind.ExportAssignment:
-                    return getTargetOfExportAssignment(<ExportAssignment>node, dontRecursivelyResolve);
+                case SyntaxKind.BinaryExpression:
+                    return getTargetOfExportAssignment((<ExportAssignment | BinaryExpression>node), dontRecursivelyResolve);
                 case SyntaxKind.NamespaceExportDeclaration:
                     return getTargetOfNamespaceExportDeclaration(<NamespaceExportDeclaration>node, dontRecursivelyResolve);
             }
@@ -2229,19 +2234,27 @@ namespace ts {
         // An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
         // and an external module with no 'export =' declaration resolves to the module itself.
         function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol {
-            return moduleSymbol && getMergedSymbol(resolveSymbol(getCommonJsExportEquals(moduleSymbol), dontResolveAlias)) || moduleSymbol;
+            return moduleSymbol && getMergedSymbol(getCommonJsExportEquals(resolveSymbol(moduleSymbol.exports.get(InternalSymbolName.ExportEquals), dontResolveAlias), moduleSymbol)) || moduleSymbol;
         }
 
-        function getCommonJsExportEquals(moduleSymbol: Symbol): Symbol {
-            const exported = moduleSymbol.exports.get(InternalSymbolName.ExportEquals);
-            if (!exported || !exported.exports || moduleSymbol.exports.size === 1) {
+        function getCommonJsExportEquals(exported: Symbol, moduleSymbol: Symbol): Symbol {
+            if (!exported || moduleSymbol.exports.size === 1) {
                 return exported;
             }
             const merged = cloneSymbol(exported);
+            if (merged.exports === undefined) {
+                merged.flags = merged.flags | SymbolFlags.ValueModule;
+                merged.exports = createSymbolTable();
+            }
             moduleSymbol.exports.forEach((s, name) => {
                 if (name === InternalSymbolName.ExportEquals) return;
                 if (!merged.exports.has(name)) {
                     merged.exports.set(name, s);
+                }
+                else {
+                    const ms = cloneSymbol(merged.exports.get(name));
+                    mergeSymbol(ms, s);
+                    merged.exports.set(name, ms);
                 }
             });
             return merged;
