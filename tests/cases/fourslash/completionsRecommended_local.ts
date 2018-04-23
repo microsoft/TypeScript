@@ -24,7 +24,7 @@ goTo.eachMarker(["c0", "c1"], (_, idx) => {
         "Cls",
         idx === 0 ? "constructor Cls(): Cls" : "class Cls",
         "",
-        "class",
+        idx === 0 ? "constructor" : "class",
         undefined,
         undefined, {
         isRecommended: true,
@@ -33,5 +33,5 @@ goTo.eachMarker(["c0", "c1"], (_, idx) => {
 
 goTo.eachMarker(["a0", "a1"], (_, idx) => {
     // Not recommended, because it's an abstract class
-    verify.completionListContains("Abs", idx == 0 ? "constructor Abs(): Abs" : "class Abs", "", "class");
+    verify.completionListContains("Abs", idx == 0 ? "constructor Abs(): Abs" : "class Abs", "", idx === 0 ? "constructor" : "class");
 });

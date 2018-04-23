@@ -23,7 +23,7 @@ goTo.eachMarker(["b0", "b1"], (_, idx) => {
         { name: "Cls", source: "/a" },
         idx === 0 ? "constructor Cls(): Cls" : "class Cls",
         "",
-        "class",
+        idx === 0 ? "constructor" : "class",
         undefined,
         /*hasAction*/ true, {
         includeExternalModuleExports: true,
