@@ -1032,17 +1032,32 @@ namespace ts {
             : node;
     }
 
-    export function createTaggedTemplate(tag: Expression, template: TemplateLiteral) {
+    export function createTaggedTemplate(tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
+    export function createTaggedTemplate(tag: Expression, typeArguments: ReadonlyArray<TypeNode>, template: TemplateLiteral): TaggedTemplateExpression;
+    /** @internal */
+    export function createTaggedTemplate(tag: Expression, typeArgumentsOrTemplate: ReadonlyArray<TypeNode> | TemplateLiteral, template?: TemplateLiteral): TaggedTemplateExpression;
+    export function createTaggedTemplate(tag: Expression, typeArgumentsOrTemplate: ReadonlyArray<TypeNode> | TemplateLiteral, template?: TemplateLiteral) {
         const node = <TaggedTemplateExpression>createSynthesizedNode(SyntaxKind.TaggedTemplateExpression);
         node.tag = parenthesizeForAccess(tag);
-        node.template = template;
+        if (template) {
+            node.typeArguments = asNodeArray(typeArgumentsOrTemplate as ReadonlyArray<TypeNode>);
+            node.template = template!;
+        }
+        else {
+            node.typeArguments = undefined;
+            node.template = typeArgumentsOrTemplate as TemplateLiteral;
+        }
         return node;
     }
 
-    export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, template: TemplateLiteral) {
+    export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
+    export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, typeArguments: ReadonlyArray<TypeNode>, template: TemplateLiteral): TaggedTemplateExpression;
+    export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, typeArgumentsOrTemplate: ReadonlyArray<TypeNode> | TemplateLiteral, template?: TemplateLiteral) {
         return node.tag !== tag
-            || node.template !== template
-            ? updateNode(createTaggedTemplate(tag, template), node)
+            || (template
+                ? node.typeArguments !== typeArgumentsOrTemplate || node.template !== template
+                : node.typeArguments !== undefined || node.template !== typeArgumentsOrTemplate)
+            ? updateNode(createTaggedTemplate(tag, typeArgumentsOrTemplate, template), node)
             : node;
     }
 

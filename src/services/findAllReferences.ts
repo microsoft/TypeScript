@@ -558,7 +558,10 @@ namespace ts.FindAllReferences.Core {
         if (singleReferences.length) {
             const addRef = state.referenceAdder(exportSymbol);
             for (const singleRef of singleReferences) {
-                addRef(singleRef);
+                // At `default` in `import { default as x }` or `export { default as x }`, do add a reference, but do not rename.
+                if (!(state.options.isForRename && (isExportSpecifier(singleRef.parent) || isImportSpecifier(singleRef.parent)) && singleRef.escapedText === InternalSymbolName.Default)) {
+                    addRef(singleRef);
+                }
             }
         }
 
@@ -890,7 +893,10 @@ namespace ts.FindAllReferences.Core {
         }
 
         if (!propertyName) {
-            addRef();
+            // Don't rename at `export { default } from "m";`. (but do continue to search for imports of the re-export)
+            if (!(state.options.isForRename && name.escapedText === InternalSymbolName.Default)) {
+                addRef();
+            }
         }
         else if (referenceLocation === propertyName) {
             // For `export { foo as bar } from "baz"`, "`foo`" will be added from the singleReferences for import searches of the original export.
@@ -1011,21 +1017,17 @@ namespace ts.FindAllReferences.Core {
 
     function addClassStaticThisReferences(referenceLocation: Node, search: Search, state: State): void {
         addReference(referenceLocation, search.symbol, state);
-        if (!state.options.isForRename && isClassLike(referenceLocation.parent)) {
-            Debug.assert(referenceLocation.parent.name === referenceLocation);
-            // This is the class declaration.
-            addStaticThisReferences(referenceLocation.parent, state.referenceAdder(search.symbol));
-        }
-    }
-
-    function addStaticThisReferences(classLike: ClassLikeDeclaration, pusher: (node: Node) => void): void {
+        const classLike = referenceLocation.parent;
+        if (state.options.isForRename || !isClassLike(classLike)) return;
+        Debug.assert(classLike.name === referenceLocation);
+        const addRef = state.referenceAdder(search.symbol);
         for (const member of classLike.members) {
             if (!(isMethodOrAccessor(member) && hasModifier(member, ModifierFlags.Static))) {
                 continue;
             }
             member.body.forEachChild(function cb(node) {
                 if (node.kind === SyntaxKind.ThisKeyword) {
-                    pusher(node);
+                    addRef(node);
                 }
                 else if (!isFunctionLike(node)) {
                     node.forEachChild(cb);
