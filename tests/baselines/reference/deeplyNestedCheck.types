@@ -16,9 +16,10 @@ interface Snapshot<T> extends DataSnapshot {
 >T : T
 >DataSnapshot : DataSnapshot<X>
 
-  child<U extends keyof T>(path: U): Snapshot<T[U]>;
->child : <U extends keyof T>(path: U) => Snapshot<T[U]>
+  child<U extends Extract<keyof T, string>>(path: U): Snapshot<T[U]>;
+>child : <U extends Extract<keyof T, string>>(path: U) => Snapshot<T[U]>
 >U : U
+>Extract : Extract<T, U>
 >T : T
 >path : U
 >U : U

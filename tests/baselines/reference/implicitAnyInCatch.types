@@ -22,7 +22,7 @@ class C {
 >temp : () => void
 
         for (var x in this) {
->x : keyof this
+>x : Extract<keyof this, string>
 >this : this
         }
     }

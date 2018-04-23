@@ -413,6 +413,9 @@ namespace ts.SymbolDisplay {
                     displayParts.push(spacePart());
                     displayParts.push(keywordPart((symbol.declarations[0] as ExportAssignment).isExportEquals ? SyntaxKind.EqualsToken : SyntaxKind.DefaultKeyword));
                     break;
+                case SyntaxKind.ExportSpecifier:
+                    displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
+                    break;
                 default:
                     displayParts.push(keywordPart(SyntaxKind.ImportKeyword));
             }

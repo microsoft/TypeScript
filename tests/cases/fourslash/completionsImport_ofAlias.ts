@@ -19,10 +19,9 @@
 // @Filename: /b.ts
 ////fo/**/
 
-// TODO: https://github.com/Microsoft/TypeScript/issues/14003
 verify.completions({
     at: "",
-    includes: { name: "foo", source: "/a", sourceDisplay: "./a", text: "(alias) const foo: 0\nimport foo", kind: "alias", hasAction: true },
+    includes: { name: "foo", source: "/a", sourceDisplay: "./a", text: "(alias) const foo: 0\nexport foo", kind: "alias", hasAction: true },
     excludes: [{ name: "foo", source: "/a_reexport" }, { name: "foo", source: "/a_reexport_2" }],
     preferences: { includeCompletionsForModuleExports: true },
 });
