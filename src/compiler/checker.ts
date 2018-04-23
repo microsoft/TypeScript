@@ -13474,6 +13474,18 @@ namespace ts {
                         if (containsMatchingReferenceDiscriminant(reference, left) || containsMatchingReferenceDiscriminant(reference, right)) {
                             return declaredType;
                         }
+                        if (isPropertyAccessExpression(left) && idText(left.name) === "constructor") {
+                            return narrowTypeByConstructor(type, expr.right, operator, assumeTrue);
+                        }
+                        if (isPropertyAccessExpression(right) && idText(right.name) === "constructor") {
+                            return narrowTypeByConstructor(type, expr.left, operator, assumeTrue);
+                        }
+                        if (isElementAccessExpression(left) && isStringLiteralLike(left.argumentExpression) && left.argumentExpression.text === "constructor") {
+                            return narrowTypeByConstructor(type, expr.right, operator, assumeTrue);
+                        }
+                        if (isElementAccessExpression(right) && isStringLiteralLike(right.argumentExpression) && right.argumentExpression.text === "constructor") {
+                            return narrowTypeByConstructor(type, expr.left, operator, assumeTrue);
+                        }
                         break;
                     case SyntaxKind.InstanceOfKeyword:
                         return narrowTypeByInstanceof(type, expr, assumeTrue);
@@ -13493,7 +13505,7 @@ namespace ts {
                 if (type.flags & TypeFlags.Any) {
                     return type;
                 }
-                if (operator === SyntaxKind.ExclamationEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) {
+                if (isExclamationEqualsOrExclamationEqualsEqualsKind(operator)) {
                     assumeTrue = !assumeTrue;
                 }
                 const valueType = getTypeOfExpression(value);
@@ -13523,6 +13535,22 @@ namespace ts {
                 return type;
             }
 
+            function narrowTypeByConstructor(type: Type, expr: Expression, operator: SyntaxKind, assumeTrue: boolean): Type {
+                if (!assumeTrue || isExclamationEqualsOrExclamationEqualsEqualsKind(operator)) return type;
+
+                const rightType = getTypeOfExpression(expr);
+                if (!isTypeSubtypeOf(rightType, globalFunctionType)) return type;
+
+                const prototypeProperty = getPropertyOfType(rightType, "prototype" as __String);
+                if (!prototypeProperty) return type;
+
+                const prototypePropertyType = getTypeOfSymbol(prototypeProperty);
+                const targetType = !isTypeAny(prototypePropertyType) ? prototypePropertyType : undefined;
+                if (!targetType || isTypeAny(type) && (targetType === globalObjectType || targetType === globalFunctionType)) return type;
+
+                return getNarrowedType(type, targetType, assumeTrue, isTypeDerivedFrom);
+            }
+
             function narrowTypeByTypeof(type: Type, typeOfExpr: TypeOfExpression, operator: SyntaxKind, literal: LiteralExpression, assumeTrue: boolean): Type {
                 // We have '==', '!=', '====', or !==' operator with 'typeof xxx' and string literal operands
                 const target = getReferenceCandidate(typeOfExpr.expression);
@@ -13534,7 +13562,7 @@ namespace ts {
                     }
                     return type;
                 }
-                if (operator === SyntaxKind.ExclamationEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) {
+                if (isExclamationEqualsOrExclamationEqualsEqualsKind(operator)) {
                     assumeTrue = !assumeTrue;
                 }
                 if (assumeTrue && !(type.flags & TypeFlags.Union)) {

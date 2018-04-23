@@ -6335,4 +6335,9 @@ namespace ts {
     export function isNamedImportsOrExports(node: Node): node is NamedImportsOrExports {
         return node.kind === SyntaxKind.NamedImports || node.kind === SyntaxKind.NamedExports;
     }
+
+    /** @internal */
+    export function isExclamationEqualsOrExclamationEqualsEqualsKind(kind: SyntaxKind): boolean {
+        return kind === SyntaxKind.ExclamationEqualsToken || kind === SyntaxKind.ExclamationEqualsEqualsToken;
+    }
 }

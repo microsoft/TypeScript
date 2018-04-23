@@ -1,0 +1,204 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardConstructor.ts ===
+class C1 {
+>C1 : C1
+
+    p1: string;
+>p1 : string
+}
+class C2 {
+>C2 : C2
+
+    p2: number;
+>p2 : number
+}
+class D1 extends C1 {
+>D1 : D1
+>C1 : C1
+
+    p3: number;
+>p3 : number
+}
+class C3 {
+>C3 : C3
+
+    p4: number;
+>p4 : number
+}
+class D2 extends D1 {
+>D2 : D2
+>D1 : D1
+
+    p5: number
+>p5 : number
+}
+
+var a: C1;
+>a : C1
+>C1 : C1
+
+if (a.constructor === D1) {
+>a.constructor === D1 : boolean
+>a.constructor : Function
+>a : C1
+>constructor : Function
+>D1 : typeof D1
+
+    a.p3;
+>a.p3 : number & D1
+>a : D1
+>p3 : number & D1
+}
+if (a.constructor == D1) {
+>a.constructor == D1 : boolean
+>a.constructor : Function
+>a : C1
+>constructor : Function
+>D1 : typeof D1
+
+    a.p3;
+>a.p3 : number & D1
+>a : D1
+>p3 : number & D1
+}
+if (D1 === a.constructor) {
+>D1 === a.constructor : boolean
+>D1 : typeof D1
+>a.constructor : Function
+>a : C1
+>constructor : Function
+
+    a.p3;
+>a.p3 : number & D1
+>a : D1
+>p3 : number & D1
+}
+if (a["constructor"] === D1) {
+>a["constructor"] === D1 : boolean
+>a["constructor"] : Function
+>a : C1
+>"constructor" : "constructor"
+>D1 : typeof D1
+
+    a.p3;
+>a.p3 : number & D1
+>a : D1
+>p3 : number & D1
+}
+if (D1 === a["constructor"]) {
+>D1 === a["constructor"] : boolean
+>D1 : typeof D1
+>a["constructor"] : Function
+>a : C1
+>"constructor" : "constructor"
+
+    a.p3;
+>a.p3 : number & D1
+>a : D1
+>p3 : number & D1
+}
+
+var b: C1;
+>b : C1
+>C1 : C1
+
+if (b.constructor === D2) {
+>b.constructor === D2 : boolean
+>b.constructor : Function
+>b : C1
+>constructor : Function
+>D2 : typeof D2
+
+    b.p3;
+>b.p3 : number & D2
+>b : D2
+>p3 : number & D2
+
+    b.p5;
+>b.p5 : number & D2
+>b : D2
+>p5 : number & D2
+}
+
+var ctor3: C1 | C2;
+>ctor3 : C1 | C2
+>C1 : C1
+>C2 : C2
+
+if (ctor3.constructor ===  C1) {
+>ctor3.constructor ===  C1 : boolean
+>ctor3.constructor : Function
+>ctor3 : C1 | C2
+>constructor : Function
+>C1 : typeof C1
+
+    ctor3.p1; // C1
+>ctor3.p1 : string & C1
+>ctor3 : C1
+>p1 : string & C1
+}
+else {
+    ctor3.p2; // C2
+>ctor3.p2 : any
+>ctor3 : C1 | C2
+>p2 : any
+}
+
+if (ctor3.constructor !==  C1) {
+>ctor3.constructor !==  C1 : boolean
+>ctor3.constructor : Function
+>ctor3 : C1 | C2
+>constructor : Function
+>C1 : typeof C1
+
+    ctor3.p2; // C1
+>ctor3.p2 : any
+>ctor3 : C1 | C2
+>p2 : any
+}
+else {
+    ctor3.p1; // C2
+>ctor3.p1 : any
+>ctor3 : C1 | C2
+>p1 : any
+}
+
+var ctor4: C1 | C2 | C3;
+>ctor4 : C1 | C2 | C3
+>C1 : C1
+>C2 : C2
+>C3 : C3
+
+if (ctor4.constructor ===  C1) {
+>ctor4.constructor ===  C1 : boolean
+>ctor4.constructor : Function
+>ctor4 : C1 | C2 | C3
+>constructor : Function
+>C1 : typeof C1
+
+    ctor4.p1; // C1
+>ctor4.p1 : string & C1
+>ctor4 : C1
+>p1 : string & C1
+}
+else if (ctor4.constructor ===  C2) {
+>ctor4.constructor ===  C2 : boolean
+>ctor4.constructor : Function
+>ctor4 : C1 | C2 | C3
+>constructor : Function
+>C2 : typeof C2
+
+    ctor4.p2; // C2
+>ctor4.p2 : number & C2
+>ctor4 : C2
+>p2 : number & C2
+}
+else {
+    ctor4.p4; // C3
+>ctor4.p4 : any
+>ctor4 : C1 | C2 | C3
+>p4 : any
+}
+
+
+
+

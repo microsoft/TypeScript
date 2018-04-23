@@ -1,0 +1,184 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardConstructor.ts ===
+class C1 {
+>C1 : Symbol(C1, Decl(typeGuardConstructor.ts, 0, 0))
+
+    p1: string;
+>p1 : Symbol(C1.p1, Decl(typeGuardConstructor.ts, 0, 10))
+}
+class C2 {
+>C2 : Symbol(C2, Decl(typeGuardConstructor.ts, 2, 1))
+
+    p2: number;
+>p2 : Symbol(C2.p2, Decl(typeGuardConstructor.ts, 3, 10))
+}
+class D1 extends C1 {
+>D1 : Symbol(D1, Decl(typeGuardConstructor.ts, 5, 1))
+>C1 : Symbol(C1, Decl(typeGuardConstructor.ts, 0, 0))
+
+    p3: number;
+>p3 : Symbol(D1.p3, Decl(typeGuardConstructor.ts, 6, 21))
+}
+class C3 {
+>C3 : Symbol(C3, Decl(typeGuardConstructor.ts, 8, 1))
+
+    p4: number;
+>p4 : Symbol(C3.p4, Decl(typeGuardConstructor.ts, 9, 10))
+}
+class D2 extends D1 {
+>D2 : Symbol(D2, Decl(typeGuardConstructor.ts, 11, 1))
+>D1 : Symbol(D1, Decl(typeGuardConstructor.ts, 5, 1))
+
+    p5: number
+>p5 : Symbol(D2.p5, Decl(typeGuardConstructor.ts, 12, 21))
+}
+
+var a: C1;
+>a : Symbol(a, Decl(typeGuardConstructor.ts, 16, 3))
+>C1 : Symbol(C1, Decl(typeGuardConstructor.ts, 0, 0))
+
+if (a.constructor === D1) {
+>a.constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>a : Symbol(a, Decl(typeGuardConstructor.ts, 16, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>D1 : Symbol(D1, Decl(typeGuardConstructor.ts, 5, 1))
+
+    a.p3;
+>a.p3 : Symbol(D1.p3, Decl(typeGuardConstructor.ts, 6, 21))
+>a : Symbol(a, Decl(typeGuardConstructor.ts, 16, 3))
+>p3 : Symbol(D1.p3, Decl(typeGuardConstructor.ts, 6, 21))
+}
+if (a.constructor == D1) {
+>a.constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>a : Symbol(a, Decl(typeGuardConstructor.ts, 16, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>D1 : Symbol(D1, Decl(typeGuardConstructor.ts, 5, 1))
+
+    a.p3;
+>a.p3 : Symbol(D1.p3, Decl(typeGuardConstructor.ts, 6, 21))
+>a : Symbol(a, Decl(typeGuardConstructor.ts, 16, 3))
+>p3 : Symbol(D1.p3, Decl(typeGuardConstructor.ts, 6, 21))
+}
+if (D1 === a.constructor) {
+>D1 : Symbol(D1, Decl(typeGuardConstructor.ts, 5, 1))
+>a.constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>a : Symbol(a, Decl(typeGuardConstructor.ts, 16, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+
+    a.p3;
+>a.p3 : Symbol(D1.p3, Decl(typeGuardConstructor.ts, 6, 21))
+>a : Symbol(a, Decl(typeGuardConstructor.ts, 16, 3))
+>p3 : Symbol(D1.p3, Decl(typeGuardConstructor.ts, 6, 21))
+}
+if (a["constructor"] === D1) {
+>a : Symbol(a, Decl(typeGuardConstructor.ts, 16, 3))
+>"constructor" : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>D1 : Symbol(D1, Decl(typeGuardConstructor.ts, 5, 1))
+
+    a.p3;
+>a.p3 : Symbol(D1.p3, Decl(typeGuardConstructor.ts, 6, 21))
+>a : Symbol(a, Decl(typeGuardConstructor.ts, 16, 3))
+>p3 : Symbol(D1.p3, Decl(typeGuardConstructor.ts, 6, 21))
+}
+if (D1 === a["constructor"]) {
+>D1 : Symbol(D1, Decl(typeGuardConstructor.ts, 5, 1))
+>a : Symbol(a, Decl(typeGuardConstructor.ts, 16, 3))
+>"constructor" : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+
+    a.p3;
+>a.p3 : Symbol(D1.p3, Decl(typeGuardConstructor.ts, 6, 21))
+>a : Symbol(a, Decl(typeGuardConstructor.ts, 16, 3))
+>p3 : Symbol(D1.p3, Decl(typeGuardConstructor.ts, 6, 21))
+}
+
+var b: C1;
+>b : Symbol(b, Decl(typeGuardConstructor.ts, 33, 3))
+>C1 : Symbol(C1, Decl(typeGuardConstructor.ts, 0, 0))
+
+if (b.constructor === D2) {
+>b.constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>b : Symbol(b, Decl(typeGuardConstructor.ts, 33, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>D2 : Symbol(D2, Decl(typeGuardConstructor.ts, 11, 1))
+
+    b.p3;
+>b.p3 : Symbol(D1.p3, Decl(typeGuardConstructor.ts, 6, 21))
+>b : Symbol(b, Decl(typeGuardConstructor.ts, 33, 3))
+>p3 : Symbol(D1.p3, Decl(typeGuardConstructor.ts, 6, 21))
+
+    b.p5;
+>b.p5 : Symbol(D2.p5, Decl(typeGuardConstructor.ts, 12, 21))
+>b : Symbol(b, Decl(typeGuardConstructor.ts, 33, 3))
+>p5 : Symbol(D2.p5, Decl(typeGuardConstructor.ts, 12, 21))
+}
+
+var ctor3: C1 | C2;
+>ctor3 : Symbol(ctor3, Decl(typeGuardConstructor.ts, 39, 3))
+>C1 : Symbol(C1, Decl(typeGuardConstructor.ts, 0, 0))
+>C2 : Symbol(C2, Decl(typeGuardConstructor.ts, 2, 1))
+
+if (ctor3.constructor ===  C1) {
+>ctor3.constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>ctor3 : Symbol(ctor3, Decl(typeGuardConstructor.ts, 39, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>C1 : Symbol(C1, Decl(typeGuardConstructor.ts, 0, 0))
+
+    ctor3.p1; // C1
+>ctor3.p1 : Symbol(C1.p1, Decl(typeGuardConstructor.ts, 0, 10))
+>ctor3 : Symbol(ctor3, Decl(typeGuardConstructor.ts, 39, 3))
+>p1 : Symbol(C1.p1, Decl(typeGuardConstructor.ts, 0, 10))
+}
+else {
+    ctor3.p2; // C2
+>ctor3 : Symbol(ctor3, Decl(typeGuardConstructor.ts, 39, 3))
+}
+
+if (ctor3.constructor !==  C1) {
+>ctor3.constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>ctor3 : Symbol(ctor3, Decl(typeGuardConstructor.ts, 39, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>C1 : Symbol(C1, Decl(typeGuardConstructor.ts, 0, 0))
+
+    ctor3.p2; // C1
+>ctor3 : Symbol(ctor3, Decl(typeGuardConstructor.ts, 39, 3))
+}
+else {
+    ctor3.p1; // C2
+>ctor3 : Symbol(ctor3, Decl(typeGuardConstructor.ts, 39, 3))
+}
+
+var ctor4: C1 | C2 | C3;
+>ctor4 : Symbol(ctor4, Decl(typeGuardConstructor.ts, 54, 3))
+>C1 : Symbol(C1, Decl(typeGuardConstructor.ts, 0, 0))
+>C2 : Symbol(C2, Decl(typeGuardConstructor.ts, 2, 1))
+>C3 : Symbol(C3, Decl(typeGuardConstructor.ts, 8, 1))
+
+if (ctor4.constructor ===  C1) {
+>ctor4.constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>ctor4 : Symbol(ctor4, Decl(typeGuardConstructor.ts, 54, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>C1 : Symbol(C1, Decl(typeGuardConstructor.ts, 0, 0))
+
+    ctor4.p1; // C1
+>ctor4.p1 : Symbol(C1.p1, Decl(typeGuardConstructor.ts, 0, 10))
+>ctor4 : Symbol(ctor4, Decl(typeGuardConstructor.ts, 54, 3))
+>p1 : Symbol(C1.p1, Decl(typeGuardConstructor.ts, 0, 10))
+}
+else if (ctor4.constructor ===  C2) {
+>ctor4.constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>ctor4 : Symbol(ctor4, Decl(typeGuardConstructor.ts, 54, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>C2 : Symbol(C2, Decl(typeGuardConstructor.ts, 2, 1))
+
+    ctor4.p2; // C2
+>ctor4.p2 : Symbol(C2.p2, Decl(typeGuardConstructor.ts, 3, 10))
+>ctor4 : Symbol(ctor4, Decl(typeGuardConstructor.ts, 54, 3))
+>p2 : Symbol(C2.p2, Decl(typeGuardConstructor.ts, 3, 10))
+}
+else {
+    ctor4.p4; // C3
+>ctor4 : Symbol(ctor4, Decl(typeGuardConstructor.ts, 54, 3))
+}
+
+
+
+
