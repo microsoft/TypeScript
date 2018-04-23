@@ -3380,6 +3380,7 @@ namespace ts {
         /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
         /* @internal */ parent?: Symbol;        // Parent symbol
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
+        /* @internal */ nameType?: Type;        // Type associated with a late-bound symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
         /* @internal */ isReferenced?: SymbolFlags; // True if the symbol is referenced elsewhere. Keeps track of the meaning of a reference in case a symbol is both a type parameter and parameter.
         /* @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
@@ -3414,7 +3415,6 @@ namespace ts {
         enumKind?: EnumKind;                // Enum declaration classification
         originatingImport?: ImportDeclaration | ImportCall; // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
         lateSymbol?: Symbol;                // Late-bound symbol for a computed property
-        nameType?: Type;                    // Type associate with a late-bound or mapped type property symbol's name
     }
 
     /* @internal */
@@ -3611,7 +3611,7 @@ namespace ts {
         Intrinsic = Any | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
         /* @internal */
         Primitive = String | Number | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol,
-        StringLike = String | StringLiteral | Index,
+        StringLike = String | StringLiteral,
         NumberLike = Number | NumberLiteral | Enum,
         BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
@@ -3768,7 +3768,7 @@ namespace ts {
         /* @internal */
         resolvedIndexType: IndexType;
         /* @internal */
-        resolvedDeclaredIndexType: IndexType;
+        resolvedStringIndexType: IndexType;
         /* @internal */
         resolvedBaseConstraint: Type;
         /* @internal */
@@ -3857,7 +3857,7 @@ namespace ts {
         /* @internal */
         resolvedIndexType?: IndexType;
         /* @internal */
-        resolvedDeclaredIndexType?: IndexType;
+        resolvedStringIndexType?: IndexType;
     }
 
     // Type parameters (TypeFlags.TypeParameter)
@@ -3889,9 +3889,9 @@ namespace ts {
 
     // keyof T types (TypeFlags.Index)
     export interface IndexType extends InstantiableType {
-        /* @internal */
-        isDeclaredType?: boolean;
         type: InstantiableType | UnionOrIntersectionType;
+        /* @internal */
+        stringsOnly: boolean;
     }
 
     export interface ConditionalRoot {
@@ -4050,10 +4050,10 @@ namespace ts {
 
     /* @internal */
     export interface WideningContext {
-        parent: WideningContext | undefined;  // Parent context
-        propertyName?: __String;             // Name of property in parent
-        siblings?: Type[];                   // Types of siblings
-        resolvedPropertyNames?: __String[];  // Property names occurring in sibling object literals
+        parent?: WideningContext;       // Parent context
+        propertyName?: __String;        // Name of property in parent
+        siblings?: Type[];              // Types of siblings
+        resolvedProperties?: Symbol[];  // Properties occurring in sibling object literals
     }
 
     /* @internal */
@@ -4168,6 +4168,7 @@ namespace ts {
         inlineSources?: boolean;
         isolatedModules?: boolean;
         jsx?: JsxEmit;
+        keyofStringsOnly?: boolean;
         lib?: string[];
         /*@internal*/listEmittedFiles?: boolean;
         /*@internal*/listFiles?: boolean;

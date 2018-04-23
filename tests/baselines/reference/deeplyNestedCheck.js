@@ -6,7 +6,7 @@ interface DataSnapshot<X = {}> {
 }
 
 interface Snapshot<T> extends DataSnapshot {
-  child<U extends keyof T>(path: U): Snapshot<T[U]>;
+  child<U extends Extract<keyof T, string>>(path: U): Snapshot<T[U]>;
 }
 
 
