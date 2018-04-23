@@ -1,0 +1,4 @@
+=== tests/cases/compiler/arrayLiteralContextualLiteralUnion.ts ===
+const x: 'a' | 'a'[] = ['a'];
+>x : Symbol(x, Decl(arrayLiteralContextualLiteralUnion.ts, 0, 5))
+

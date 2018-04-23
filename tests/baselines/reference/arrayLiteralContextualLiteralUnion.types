@@ -1,0 +1,6 @@
+=== tests/cases/compiler/arrayLiteralContextualLiteralUnion.ts ===
+const x: 'a' | 'a'[] = ['a'];
+>x : "a" | "a"[]
+>['a'] : ["a"]
+>'a' : "a"
+

@@ -6526,6 +6526,27 @@ namespace ts {
             return type.resolvedApparentType || (type.resolvedApparentType = getTypeWithThisArgument(type, type, /*apparentType*/ true));
         }
 
+        function createStringLiteralApparentProperties(type: StringLiteralType): Type {
+            const propTable = createSymbolTable();
+            const possibleMembers: Type[] = [];
+            for (let i = 0; i < type.value.length; i++) {
+                const propName = "" + i as __String;
+                const prop = createSymbol(SymbolFlags.Property, propName);
+                prop.type = getLiteralType(type.value[i]);
+                propTable.set(propName, prop);
+                possibleMembers.push(prop.type);
+            }
+            if (strictNullChecks) {
+                possibleMembers.push(undefinedType);
+            }
+            copyEntries(resolveStructuredTypeMembers(globalStringType).members, propTable);
+            return createAnonymousType(type.symbol, propTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, createIndexInfo(getUnionType(possibleMembers), /*isReadonly*/ true));
+        }
+
+        function getStringLiteralApparentProperties(type: StringLiteralType) {
+            return type.resolvedApparentType || (type.resolvedApparentType = createStringLiteralApparentProperties(type));
+        }
+
         function getResolvedTypeParameterDefault(typeParameter: TypeParameter): Type | undefined {
             if (!typeParameter.default) {
                 if (typeParameter.target) {
@@ -6581,6 +6602,7 @@ namespace ts {
         function getApparentType(type: Type): Type {
             const t = type.flags & TypeFlags.Instantiable ? getBaseConstraintOfType(type) || emptyObjectType : type;
             return t.flags & TypeFlags.Intersection ? getApparentTypeOfIntersectionType(<IntersectionType>t) :
+                t.flags & TypeFlags.StringLiteral ? getStringLiteralApparentProperties(t as StringLiteralType) :
                 t.flags & TypeFlags.StringLike ? globalStringType :
                 t.flags & TypeFlags.NumberLike ? globalNumberType :
                 t.flags & TypeFlags.BooleanLike ? globalBooleanType :
