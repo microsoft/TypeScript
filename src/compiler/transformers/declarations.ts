@@ -966,6 +966,7 @@ namespace ts {
                         const oldDiag = getSymbolAccessibilityDiagnostic;
                         parameterProperties = compact(flatMap(ctor.parameters, param => {
                             if (!hasModifier(param, ModifierFlags.ParameterPropertyModifier)) return;
+                            if (shouldStripInternalParameterProperty(param)) return;
                             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(param);
                             if (param.name.kind === SyntaxKind.Identifier) {
                                 return preserveJsDoc(createProperty(
@@ -1148,6 +1149,12 @@ namespace ts {
                 }
             }
             return false;
+        }
+
+        // shouldStripInternal does not work with constructor parameters. This variant does.
+        function shouldStripInternalParameterProperty(param: ParameterDeclaration) {
+            return param.jsDoc && param.jsDoc.some(doc =>
+                doc.tags.some(tag => getTextOfNode(tag) === "@internal"));
         }
 
         function ensureModifiers(node: Node, privateDeclaration?: boolean): ReadonlyArray<Modifier> {

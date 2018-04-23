@@ -1,0 +1,9 @@
+=== tests/cases/compiler/stripInternalParameterProperty.ts ===
+export class C {
+>C : C
+
+    constructor(/** @internal */ public foo, public bar) {}
+>foo : any
+>bar : any
+}
+
