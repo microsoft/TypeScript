@@ -482,7 +482,7 @@ declare const constInitToLReadonlyTypeWithTypeQuery: typeof l.readonlyType;
 declare const constInitToLReadonlyNestedTypeWithTypeQuery: typeof l.nested.readonlyNestedType;
 declare const constInitToLReadonlyTypeWithIndexedAccess: L["readonlyType"];
 declare const constInitToLReadonlyNestedTypeWithIndexedAccess: L["nested"]["readonlyNestedType"];
-declare const promiseForConstCall: Promise<symbol>;
+declare const promiseForConstCall: Promise<typeof constCall>;
 declare const arrayOfConstCall: symbol[];
 declare const s: unique symbol;
 declare namespace N {
