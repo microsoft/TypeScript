@@ -888,11 +888,11 @@ function f60<T>(source: T, target: T) {
 }
 
 function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) {
->f70 : (func: <T, U>(k1: keyof (T | U), k2: keyof T | keyof U) => void) => void
->func : <T, U>(k1: keyof (T | U), k2: keyof T | keyof U) => void
+>f70 : (func: <T, U>(k1: keyof T & keyof U, k2: keyof T | keyof U) => void) => void
+>func : <T, U>(k1: keyof T & keyof U, k2: keyof T | keyof U) => void
 >T : T
 >U : U
->k1 : keyof (T | U)
+>k1 : keyof T & keyof U
 >T : T
 >U : U
 >k2 : keyof T | keyof U
@@ -901,7 +901,7 @@ function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) {
 
     func<{ a: any, b: any }, { a: any, c: any }>('a', 'a');
 >func<{ a: any, b: any }, { a: any, c: any }>('a', 'a') : void
->func : <T, U>(k1: keyof (T | U), k2: keyof T | keyof U) => void
+>func : <T, U>(k1: keyof T & keyof U, k2: keyof T | keyof U) => void
 >a : any
 >b : any
 >a : any
@@ -911,7 +911,7 @@ function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) {
 
     func<{ a: any, b: any }, { a: any, c: any }>('a', 'b');
 >func<{ a: any, b: any }, { a: any, c: any }>('a', 'b') : void
->func : <T, U>(k1: keyof (T | U), k2: keyof T | keyof U) => void
+>func : <T, U>(k1: keyof T & keyof U, k2: keyof T | keyof U) => void
 >a : any
 >b : any
 >a : any
@@ -921,7 +921,7 @@ function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) {
 
     func<{ a: any, b: any }, { a: any, c: any }>('a', 'c');
 >func<{ a: any, b: any }, { a: any, c: any }>('a', 'c') : void
->func : <T, U>(k1: keyof (T | U), k2: keyof T | keyof U) => void
+>func : <T, U>(k1: keyof T & keyof U, k2: keyof T | keyof U) => void
 >a : any
 >b : any
 >a : any
@@ -1095,8 +1095,8 @@ function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[
 }
 
 function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]) {
->f74 : (func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]) => void
->func : <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]
+>f74 : (func: <T, U, K extends keyof T & keyof U>(x: T, y: U, k: K) => (T | U)[K]) => void
+>func : <T, U, K extends keyof T & keyof U>(x: T, y: U, k: K) => (T | U)[K]
 >T : T
 >U : U
 >K : K
@@ -1115,7 +1115,7 @@ function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[
     let a = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'a');  // number
 >a : number
 >func({ a: 1, b: "hello" }, { a: 2, b: true }, 'a') : number
->func : <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]
+>func : <T, U, K extends keyof T & keyof U>(x: T, y: U, k: K) => (T | U)[K]
 >{ a: 1, b: "hello" } : { a: number; b: string; }
 >a : number
 >1 : 1
@@ -1131,7 +1131,7 @@ function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[
     let b = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b');  // string | boolean
 >b : string | boolean
 >func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b') : string | boolean
->func : <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]
+>func : <T, U, K extends keyof T & keyof U>(x: T, y: U, k: K) => (T | U)[K]
 >{ a: 1, b: "hello" } : { a: number; b: string; }
 >a : number
 >1 : 1
@@ -2340,5 +2340,75 @@ type Predicates<TaggedRecord> = {
 >variant : any
 >TaggedRecord : TaggedRecord
 >T : T
+}
+
+
+// Repro from #23618
+
+type DBBoolTable<K extends string> = { [k in K]: 0 | 1 } 
+>DBBoolTable : DBBoolTable<K>
+>K : K
+>k : k
+>K : K
+
+enum Flag {
+>Flag : Flag
+
+    FLAG_1 = "flag_1",
+>FLAG_1 : Flag.FLAG_1
+>"flag_1" : "flag_1"
+
+    FLAG_2 = "flag_2"
+>FLAG_2 : Flag.FLAG_2
+>"flag_2" : "flag_2"
+}
+
+type SimpleDBRecord<Flag extends string> = { staticField: number } & DBBoolTable<Flag>
+>SimpleDBRecord : SimpleDBRecord<Flag>
+>Flag : Flag
+>staticField : number
+>DBBoolTable : DBBoolTable<K>
+>Flag : Flag
+
+function getFlagsFromSimpleRecord<Flag extends string>(record: SimpleDBRecord<Flag>, flags: Flag[]) {
+>getFlagsFromSimpleRecord : <Flag extends string>(record: SimpleDBRecord<Flag>, flags: Flag[]) => SimpleDBRecord<Flag>[Flag]
+>Flag : Flag
+>record : SimpleDBRecord<Flag>
+>SimpleDBRecord : SimpleDBRecord<Flag>
+>Flag : Flag
+>flags : Flag[]
+>Flag : Flag
+
+    return record[flags[0]];
+>record[flags[0]] : SimpleDBRecord<Flag>[Flag]
+>record : SimpleDBRecord<Flag>
+>flags[0] : Flag
+>flags : Flag[]
+>0 : 0
+}
+
+type DynamicDBRecord<Flag extends string> = ({ dynamicField: number } | { dynamicField: string }) & DBBoolTable<Flag>
+>DynamicDBRecord : DynamicDBRecord<Flag>
+>Flag : Flag
+>dynamicField : number
+>dynamicField : string
+>DBBoolTable : DBBoolTable<K>
+>Flag : Flag
+
+function getFlagsFromDynamicRecord<Flag extends string>(record: DynamicDBRecord<Flag>, flags: Flag[]) {
+>getFlagsFromDynamicRecord : <Flag extends string>(record: DynamicDBRecord<Flag>, flags: Flag[]) => DynamicDBRecord<Flag>[Flag]
+>Flag : Flag
+>record : DynamicDBRecord<Flag>
+>DynamicDBRecord : DynamicDBRecord<Flag>
+>Flag : Flag
+>flags : Flag[]
+>Flag : Flag
+
+    return record[flags[0]];
+>record[flags[0]] : DynamicDBRecord<Flag>[Flag]
+>record : DynamicDBRecord<Flag>
+>flags[0] : Flag
+>flags : Flag[]
+>0 : 0
 }
 
