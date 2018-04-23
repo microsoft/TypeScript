@@ -8252,7 +8252,8 @@ namespace ts {
         }
 
         function getIndexType(type: Type, includeDeclaredTypes?: boolean): Type {
-            return type.flags & TypeFlags.Intersection ? getUnionType(map((<IntersectionType>type).types, t => getIndexType(t, includeDeclaredTypes))) :
+            return type.flags & TypeFlags.Union ? getIntersectionType(map((<IntersectionType>type).types, t => getIndexType(t, includeDeclaredTypes))) :
+                type.flags & TypeFlags.Intersection ? getUnionType(map((<IntersectionType>type).types, t => getIndexType(t, includeDeclaredTypes))) :
                 maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type, includeDeclaredTypes) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
                 type === wildcardType ? wildcardType :
