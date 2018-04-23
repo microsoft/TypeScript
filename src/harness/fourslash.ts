@@ -858,8 +858,7 @@ namespace FourSlash {
             const actualByName = ts.createMap<ts.CompletionEntry>();
             for (const entry of actualCompletions.entries) {
                 if (actualByName.has(entry.name)) {
-                    // TODO: GH#23587
-                    if (entry.name !== "undefined" && entry.name !== "require") this.raiseError(`Duplicate completions for ${entry.name}`);
+                    this.raiseError(`Duplicate completions for ${entry.name}`);
                 }
                 else {
                     actualByName.set(entry.name, entry);
