@@ -22138,7 +22138,8 @@ namespace ts {
             }
 
             if (!isRemovedPropertyFromObjectSpread(node.kind === SyntaxKind.Identifier ? node.parent : node)) {
-                addDiagnostic(UnusedKind.Local, createDiagnosticForNodeSpan(getSourceFileOfNode(declaration), declaration, node, Diagnostics._0_is_declared_but_its_value_is_never_read, name));
+                const message = isTypeDeclaration(declaration) ? Diagnostics._0_is_declared_but_not_used : Diagnostics._0_is_declared_but_its_value_is_never_read;
+                addDiagnostic(UnusedKind.Local, createDiagnosticForNodeSpan(getSourceFileOfNode(declaration), declaration, node, message, name));
             }
         }
 
