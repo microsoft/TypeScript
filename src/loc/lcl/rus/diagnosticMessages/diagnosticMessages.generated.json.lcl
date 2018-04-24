@@ -1010,6 +1010,9 @@
       <Item ItemId=";Add_qualifier_to_all_unresolved_variables_matching_a_member_name_95037" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add qualifier to all unresolved variables matching a member name]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Добавить квалификатор ко всем неразрешенным переменным, соответствующим имени члена]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
