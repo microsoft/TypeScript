@@ -208,7 +208,7 @@ namespace ts {
     /**
      * Creates the watch compiler host that can be extended with config file or root file names and options host
      */
-    function createWatchCompilerHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system = sys, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHost<T> {
+    function createWatchCompilerHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system = sys, createProgram: CreateProgram<T> | undefined, reportDiagnostic: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHost<T> {
         if (!createProgram) {
             createProgram = createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>;
         }
@@ -261,7 +261,7 @@ namespace ts {
                 }
             };
 
-            emitFilesAndReportErrors(builderProgram, reportDiagnostic!, writeFileName, reportSummary); // TODO: GH#18217
+            emitFilesAndReportErrors(builderProgram, reportDiagnostic, writeFileName, reportSummary);
         }
     }
 
@@ -277,9 +277,9 @@ namespace ts {
      * Creates the watch compiler host from system for config file in watch mode
      */
     export function createWatchCompilerHostOfConfigFile<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(configFileName: string, optionsToExtend: CompilerOptions | undefined, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHostOfConfigFile<T> {
-        reportDiagnostic = reportDiagnostic || createDiagnosticReporter(system);
-        const host = createWatchCompilerHost(system, createProgram, reportDiagnostic, reportWatchStatus) as WatchCompilerHostOfConfigFile<T>;
-        host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, reportDiagnostic!, diagnostic);
+        const diagnosticReporter = reportDiagnostic || createDiagnosticReporter(system);
+        const host = createWatchCompilerHost(system, createProgram, diagnosticReporter, reportWatchStatus) as WatchCompilerHostOfConfigFile<T>;
+        host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, diagnosticReporter, diagnostic);
         host.configFileName = configFileName;
         host.optionsToExtend = optionsToExtend;
         return host;
@@ -487,7 +487,7 @@ namespace ts {
         let timerToUpdateProgram: any;                                      // timer callback to recompile the program
 
         const sourceFilesCache = createMap<HostFileInfo>();                 // Cache that stores the source file and version info
-        let missingFilePathsRequestedForRelease: Path[] | undefined;                    // These paths are held temparirly so that we can remove the entry from source file cache if the file is not tracked by missing files
+        let missingFilePathsRequestedForRelease: Path[] | undefined;        // These paths are held temparirly so that we can remove the entry from source file cache if the file is not tracked by missing files
         let hasChangedCompilerOptions = false;                              // True if the compiler options have changed between compilations
         let hasChangedAutomaticTypeDirectiveNames = false;                  // True if the automatic type directives have changed
 
