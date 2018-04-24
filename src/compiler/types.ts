@@ -803,7 +803,7 @@ namespace ts {
         name?: PropertyName;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         parameters: NodeArray<ParameterDeclaration>;
-        type: TypeNode | undefined;
+        type?: TypeNode;
         /* @internal */ typeArguments?: NodeArray<TypeNode>; // Used for quick info, replaces typeParameters for instantiated signatures
     }
 
@@ -905,7 +905,7 @@ namespace ts {
         kind: SyntaxKind.PropertyAssignment;
         name: PropertyName;
         questionToken?: QuestionToken;
-        initializer: Expression | undefined;
+        initializer?: Expression;
     }
 
     export interface ShorthandPropertyAssignment extends ObjectLiteralElement, JSDocContainer {
@@ -2025,7 +2025,7 @@ namespace ts {
 
     export interface ThrowStatement extends Statement {
         kind: SyntaxKind.ThrowStatement;
-        expression: Expression | undefined;
+        expression?: Expression;
     }
 
     export interface TryStatement extends Statement {
@@ -2139,7 +2139,7 @@ namespace ts {
 
     export interface JSDocNamespaceDeclaration extends ModuleDeclaration {
         name: Identifier;
-        body: JSDocNamespaceBody | undefined;
+        body?: JSDocNamespaceBody;
     }
 
     export interface ModuleBlock extends Node, Statement {
@@ -2327,15 +2327,15 @@ namespace ts {
     export interface JSDoc extends Node {
         kind: SyntaxKind.JSDocComment;
         parent: HasJSDoc;
-        tags: NodeArray<JSDocTag> | undefined;
-        comment: string | undefined;
+        tags?: NodeArray<JSDocTag>;
+        comment?: string;
     }
 
     export interface JSDocTag extends Node {
         parent: JSDoc | JSDocTypeLiteral;
         atToken: AtToken;
         tagName: Identifier;
-        comment: string | undefined;
+        comment?: string;
     }
 
     export interface JSDocUnknownTag extends JSDocTag {
@@ -2362,12 +2362,12 @@ namespace ts {
 
     export interface JSDocReturnTag extends JSDocTag {
         kind: SyntaxKind.JSDocReturnTag;
-        typeExpression: JSDocTypeExpression | undefined;
+        typeExpression?: JSDocTypeExpression;
     }
 
     export interface JSDocTypeTag extends JSDocTag {
         kind: SyntaxKind.JSDocTypeTag;
-        typeExpression: JSDocTypeExpression | undefined;
+        typeExpression?: JSDocTypeExpression;
     }
 
     export interface JSDocTypedefTag extends JSDocTag, NamedDeclaration {
@@ -2492,7 +2492,7 @@ namespace ts {
 
     export interface AmdDependency {
         path: string;
-        name: string | undefined;
+        name?: string;
     }
 
     /* @internal */
@@ -2531,10 +2531,10 @@ namespace ts {
          * (See `createRedirectSourceFile` in program.ts.)
          * The redirect will have this set. The redirected-to source file will be in `redirectTargetsSet`.
          */
-        /* @internal */ redirectInfo?: RedirectInfo | undefined;
+        /* @internal */ redirectInfo?: RedirectInfo;
 
         amdDependencies: ReadonlyArray<AmdDependency>;
-        moduleName: string | undefined;
+        moduleName?: string;
         referencedFiles: ReadonlyArray<FileReference>;
         typeReferenceDirectives: ReadonlyArray<FileReference>;
         languageVariant: LanguageVariant;
@@ -2558,9 +2558,9 @@ namespace ts {
         /* @internal */ scriptKind: ScriptKind;
 
         // The first node that causes this file to be an external module
-        /* @internal */ externalModuleIndicator: Node | undefined;
+        /* @internal */ externalModuleIndicator?: Node;
         // The first node that causes this file to be a CommonJS module
-        /* @internal */ commonJsModuleIndicator: Node | undefined;
+        /* @internal */ commonJsModuleIndicator?: Node;
 
         /* @internal */ identifiers: Map<string>; // Map from a string to an interned string
         /* @internal */ nodeCount: number;
@@ -2587,14 +2587,14 @@ namespace ts {
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
-        /* @internal */ resolvedModules: Map<ResolvedModuleFull | undefined> | undefined;
+        /* @internal */ resolvedModules?: Map<ResolvedModuleFull | undefined>;
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         /* @internal */ imports: ReadonlyArray<StringLiteralLike>;
         // Identifier only if `declare global`
         /* @internal */ moduleAugmentations: ReadonlyArray<StringLiteral | Identifier>;
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
         /* @internal */ ambientModuleNames: ReadonlyArray<string>;
-        /* @internal */ checkJsDirective: CheckJsDirective | undefined;
+        /* @internal */ checkJsDirective?: CheckJsDirective;
         /* @internal */ version: string;
         /* @internal */ pragmas: PragmaMap;
         /* @internal */ localJsxNamespace?: __String;
@@ -3709,7 +3709,7 @@ namespace ts {
         typeParameters: TypeParameter[] | undefined;      // Type parameters (undefined if non-generic)
         outerTypeParameters: TypeParameter[] | undefined; // Outer type parameters (undefined if none)
         localTypeParameters: TypeParameter[] | undefined; // Local type parameters (undefined if none)
-        thisType: TypeParameter | undefined;             // The "this" type (undefined if none)
+        thisType: TypeParameter | undefined;              // The "this" type (undefined if none)
         /* @internal */
         resolvedBaseConstructorType?: Type;               // Resolved base constructor type of class
         /* @internal */
@@ -3723,8 +3723,8 @@ namespace ts {
         declaredProperties: Symbol[];                   // Declared members
         declaredCallSignatures: Signature[];            // Declared call signatures
         declaredConstructSignatures: Signature[];       // Declared construct signatures
-        declaredStringIndexInfo: IndexInfo | undefined; // Declared string indexing info
-        declaredNumberIndexInfo: IndexInfo | undefined; // Declared numeric indexing info
+        declaredStringIndexInfo?: IndexInfo; // Declared string indexing info
+        declaredNumberIndexInfo?: IndexInfo; // Declared numeric indexing info
     }
 
     /**
@@ -3901,11 +3901,11 @@ namespace ts {
         trueType: Type;
         falseType: Type;
         isDistributive: boolean;
-        inferTypeParameters: TypeParameter[] | undefined;
+        inferTypeParameters?: TypeParameter[];
         outerTypeParameters?: TypeParameter[];
         instantiations?: Map<Type>;
-        aliasSymbol: Symbol | undefined;
-        aliasTypeArguments: Type[] | undefined;
+        aliasSymbol?: Symbol;
+        aliasTypeArguments?: Type[];
     }
 
     // T extends U ? X : Y (TypeFlags.Conditional)
@@ -3947,12 +3947,12 @@ namespace ts {
         thisParameter?: Symbol;             // symbol of this-type parameter
         /* @internal */
         // See comment in `instantiateSignature` for why these are set lazily.
-        resolvedReturnType: Type | undefined; // Lazily set by `getReturnTypeOfSignature`.
+        resolvedReturnType?: Type;          // Lazily set by `getReturnTypeOfSignature`.
         /* @internal */
         // Lazily set by `getTypePredicateOfSignature`.
         // `undefined` indicates a type predicate that has not yet been computed.
         // Uses a special `noTypePredicate` sentinel value to indicate that there is no type predicate. This looks like a TypePredicate at runtime to avoid polymorphism.
-        resolvedTypePredicate: TypePredicate | undefined;
+        resolvedTypePredicate?: TypePredicate;
         /* @internal */
         minArgumentCount: number;           // Number of non-optional parameters
         /* @internal */
@@ -4006,8 +4006,8 @@ namespace ts {
         typeParameter: TypeParameter;            // Type parameter for which inferences are being made
         candidates: Type[] | undefined;          // Candidates in covariant positions (or undefined)
         contraCandidates: Type[] | undefined;    // Candidates in contravariant positions (or undefined)
-        inferredType: Type | undefined;          // Cache for resolved inferred type
-        priority: InferencePriority | undefined; // Priority of current inference set
+        inferredType?: Type;                     // Cache for resolved inferred type
+        priority?: InferencePriority;            // Priority of current inference set
         topLevel: boolean;                       // True if all inferences are to top level occurrences
         isFixed: boolean;                        // True if inferences are fixed
     }
@@ -4042,7 +4042,7 @@ namespace ts {
     /* @internal */
     export interface InferenceContext extends TypeMapper {
         typeParameters: TypeParameter[];    // Type parameters for which inferences are made
-        signature: Signature | undefined;   // Generic signature for which inferences are made (if any)
+        signature?: Signature;              // Generic signature for which inferences are made (if any)
         inferences: InferenceInfo[];        // Inferences made for each type parameter
         flags: InferenceFlags;              // Inference flags
         compareTypes: TypeComparer;         // Type comparer function
@@ -4319,17 +4319,17 @@ namespace ts {
 
     /* @internal */
     export interface ConfigFileSpecs {
-        filesSpecs: ReadonlyArray<string> | undefined;
+        filesSpecs?: ReadonlyArray<string>;
         /**
          * Present to report errors (user specified specs), validatedIncludeSpecs are used for file name matching
          */
-        includeSpecs: ReadonlyArray<string> | undefined;
+        includeSpecs?: ReadonlyArray<string>;
         /**
          * Present to report errors (user specified specs), validatedExcludeSpecs are used for file name matching
          */
-        excludeSpecs: ReadonlyArray<string> | undefined;
-        validatedIncludeSpecs: ReadonlyArray<string> | undefined;
-        validatedExcludeSpecs: ReadonlyArray<string> | undefined;
+        excludeSpecs?: ReadonlyArray<string>;
+        validatedIncludeSpecs?: ReadonlyArray<string>;
+        validatedExcludeSpecs?: ReadonlyArray<string>;
         wildcardDirectories: MapLike<WatchDirectoryFlags>;
     }
 
