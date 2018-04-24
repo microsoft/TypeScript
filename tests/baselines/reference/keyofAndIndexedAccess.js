@@ -575,6 +575,24 @@ type Helper2<T> = { [K in keyof T]: Extract<T[K], { prop: any }> };
 type Example2<T> = { [K in keyof Helper2<T>]: Helper2<T>[K]["prop"] };
 type Result2 = Example2<{ 1: { prop: string }; 2: { prop: number } }>;
 
+// Repro from #23618
+
+type DBBoolTable<K extends string> = { [k in K]: 0 | 1 } 
+enum Flag {
+    FLAG_1 = "flag_1",
+    FLAG_2 = "flag_2"
+}
+
+type SimpleDBRecord<Flag extends string> = { staticField: number } & DBBoolTable<Flag>
+function getFlagsFromSimpleRecord<Flag extends string>(record: SimpleDBRecord<Flag>, flags: Flag[]) {
+    return record[flags[0]];
+}
+
+type DynamicDBRecord<Flag extends string> = ({ dynamicField: number } | { dynamicField: string }) & DBBoolTable<Flag>
+function getFlagsFromDynamicRecord<Flag extends string>(record: DynamicDBRecord<Flag>, flags: Flag[]) {
+    return record[flags[0]];
+}
+
 
 //// [keyofAndIndexedAccess.js]
 var __extends = (this && this.__extends) || (function () {
@@ -957,6 +975,17 @@ function f3(t, k, tk) {
         t[key] = tk; // ok, T[K] ==> T[keyof T]
     }
 }
+var Flag;
+(function (Flag) {
+    Flag["FLAG_1"] = "flag_1";
+    Flag["FLAG_2"] = "flag_2";
+})(Flag || (Flag = {}));
+function getFlagsFromSimpleRecord(record, flags) {
+    return record[flags[0]];
+}
+function getFlagsFromDynamicRecord(record, flags) {
+    return record[flags[0]];
+}
 
 
 //// [keyofAndIndexedAccess.d.ts]
@@ -1252,3 +1281,20 @@ declare type Result2 = Example2<{
         prop: number;
     };
 }>;
+declare type DBBoolTable<K extends string> = {
+    [k in K]: 0 | 1;
+};
+declare enum Flag {
+    FLAG_1 = "flag_1",
+    FLAG_2 = "flag_2"
+}
+declare type SimpleDBRecord<Flag extends string> = {
+    staticField: number;
+} & DBBoolTable<Flag>;
+declare function getFlagsFromSimpleRecord<Flag extends string>(record: SimpleDBRecord<Flag>, flags: Flag[]): SimpleDBRecord<Flag>[Flag];
+declare type DynamicDBRecord<Flag extends string> = ({
+    dynamicField: number;
+} | {
+    dynamicField: string;
+}) & DBBoolTable<Flag>;
+declare function getFlagsFromDynamicRecord<Flag extends string>(record: DynamicDBRecord<Flag>, flags: Flag[]): DynamicDBRecord<Flag>[Flag];

@@ -8268,7 +8268,8 @@ namespace ts {
         }
 
         function getIndexType(type: Type, stringsOnly = keyofStringsOnly): Type {
-            return type.flags & TypeFlags.Intersection ? getUnionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly))) :
+            return type.flags & TypeFlags.Union ? getIntersectionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly))) :
+                type.flags & TypeFlags.Intersection ? getUnionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly))) :
                 maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type, stringsOnly) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
                 type === wildcardType ? wildcardType :
@@ -22186,7 +22187,8 @@ namespace ts {
             }
 
             if (!isRemovedPropertyFromObjectSpread(node.kind === SyntaxKind.Identifier ? node.parent : node)) {
-                addDiagnostic(UnusedKind.Local, createDiagnosticForNodeSpan(getSourceFileOfNode(declaration), declaration, node, Diagnostics._0_is_declared_but_its_value_is_never_read, name));
+                const message = isTypeDeclaration(declaration) ? Diagnostics._0_is_declared_but_never_used : Diagnostics._0_is_declared_but_its_value_is_never_read;
+                addDiagnostic(UnusedKind.Local, createDiagnosticForNodeSpan(getSourceFileOfNode(declaration), declaration, node, message, name));
             }
         }
 

@@ -2059,3 +2059,64 @@ type Result2 = Example2<{ 1: { prop: string }; 2: { prop: number } }>;
 >2 : Symbol(2, Decl(keyofAndIndexedAccess.ts, 574, 46))
 >prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 574, 51))
 
+// Repro from #23618
+
+type DBBoolTable<K extends string> = { [k in K]: 0 | 1 } 
+>DBBoolTable : Symbol(DBBoolTable, Decl(keyofAndIndexedAccess.ts, 574, 70))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 578, 17))
+>k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 578, 40))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 578, 17))
+
+enum Flag {
+>Flag : Symbol(Flag, Decl(keyofAndIndexedAccess.ts, 578, 56))
+
+    FLAG_1 = "flag_1",
+>FLAG_1 : Symbol(Flag.FLAG_1, Decl(keyofAndIndexedAccess.ts, 579, 11))
+
+    FLAG_2 = "flag_2"
+>FLAG_2 : Symbol(Flag.FLAG_2, Decl(keyofAndIndexedAccess.ts, 580, 22))
+}
+
+type SimpleDBRecord<Flag extends string> = { staticField: number } & DBBoolTable<Flag>
+>SimpleDBRecord : Symbol(SimpleDBRecord, Decl(keyofAndIndexedAccess.ts, 582, 1))
+>Flag : Symbol(Flag, Decl(keyofAndIndexedAccess.ts, 584, 20))
+>staticField : Symbol(staticField, Decl(keyofAndIndexedAccess.ts, 584, 44))
+>DBBoolTable : Symbol(DBBoolTable, Decl(keyofAndIndexedAccess.ts, 574, 70))
+>Flag : Symbol(Flag, Decl(keyofAndIndexedAccess.ts, 584, 20))
+
+function getFlagsFromSimpleRecord<Flag extends string>(record: SimpleDBRecord<Flag>, flags: Flag[]) {
+>getFlagsFromSimpleRecord : Symbol(getFlagsFromSimpleRecord, Decl(keyofAndIndexedAccess.ts, 584, 86))
+>Flag : Symbol(Flag, Decl(keyofAndIndexedAccess.ts, 585, 34))
+>record : Symbol(record, Decl(keyofAndIndexedAccess.ts, 585, 55))
+>SimpleDBRecord : Symbol(SimpleDBRecord, Decl(keyofAndIndexedAccess.ts, 582, 1))
+>Flag : Symbol(Flag, Decl(keyofAndIndexedAccess.ts, 585, 34))
+>flags : Symbol(flags, Decl(keyofAndIndexedAccess.ts, 585, 84))
+>Flag : Symbol(Flag, Decl(keyofAndIndexedAccess.ts, 585, 34))
+
+    return record[flags[0]];
+>record : Symbol(record, Decl(keyofAndIndexedAccess.ts, 585, 55))
+>flags : Symbol(flags, Decl(keyofAndIndexedAccess.ts, 585, 84))
+}
+
+type DynamicDBRecord<Flag extends string> = ({ dynamicField: number } | { dynamicField: string }) & DBBoolTable<Flag>
+>DynamicDBRecord : Symbol(DynamicDBRecord, Decl(keyofAndIndexedAccess.ts, 587, 1))
+>Flag : Symbol(Flag, Decl(keyofAndIndexedAccess.ts, 589, 21))
+>dynamicField : Symbol(dynamicField, Decl(keyofAndIndexedAccess.ts, 589, 46))
+>dynamicField : Symbol(dynamicField, Decl(keyofAndIndexedAccess.ts, 589, 73))
+>DBBoolTable : Symbol(DBBoolTable, Decl(keyofAndIndexedAccess.ts, 574, 70))
+>Flag : Symbol(Flag, Decl(keyofAndIndexedAccess.ts, 589, 21))
+
+function getFlagsFromDynamicRecord<Flag extends string>(record: DynamicDBRecord<Flag>, flags: Flag[]) {
+>getFlagsFromDynamicRecord : Symbol(getFlagsFromDynamicRecord, Decl(keyofAndIndexedAccess.ts, 589, 117))
+>Flag : Symbol(Flag, Decl(keyofAndIndexedAccess.ts, 590, 35))
+>record : Symbol(record, Decl(keyofAndIndexedAccess.ts, 590, 56))
+>DynamicDBRecord : Symbol(DynamicDBRecord, Decl(keyofAndIndexedAccess.ts, 587, 1))
+>Flag : Symbol(Flag, Decl(keyofAndIndexedAccess.ts, 590, 35))
+>flags : Symbol(flags, Decl(keyofAndIndexedAccess.ts, 590, 86))
+>Flag : Symbol(Flag, Decl(keyofAndIndexedAccess.ts, 590, 35))
+
+    return record[flags[0]];
+>record : Symbol(record, Decl(keyofAndIndexedAccess.ts, 590, 56))
+>flags : Symbol(flags, Decl(keyofAndIndexedAccess.ts, 590, 86))
+}
+
