@@ -975,7 +975,7 @@ namespace ts {
         function emitIdentifier(node: Identifier) {
             const writeText = node.symbol ? writeSymbol : write;
             writeText(getTextOfNode(node, /*includeTrivia*/ false), node.symbol!);
-            emitList(node, node.typeArguments!, ListFormat.TypeParameters); // Call emitList directly since it could be an array of TypeParameterDeclarations _or_ type arguments
+            emitList(node, node.typeArguments, ListFormat.TypeParameters); // Call emitList directly since it could be an array of TypeParameterDeclarations _or_ type arguments
         }
 
         //
@@ -1457,7 +1457,7 @@ namespace ts {
             writeSpace();
             emitExpression(node.expression);
             emitTypeArguments(node, node.typeArguments);
-            emitExpressionList(node, node.arguments!, ListFormat.NewExpressionArguments);
+            emitExpressionList(node, node.arguments, ListFormat.NewExpressionArguments);
         }
 
         function emitTaggedTemplateExpression(node: TaggedTemplateExpression) {
@@ -2723,7 +2723,7 @@ namespace ts {
             emitNodeList(emit, parentNode, children, format, start, count);
         }
 
-        function emitExpressionList(parentNode: TextRange, children: NodeArray<Node>, format: ListFormat, start?: number, count?: number) {
+        function emitExpressionList(parentNode: TextRange, children: NodeArray<Node> | undefined, format: ListFormat, start?: number, count?: number) {
             emitNodeList(emitExpression, parentNode, children, format, start, count);
         }
 
