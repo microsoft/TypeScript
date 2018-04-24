@@ -2100,11 +2100,12 @@ declare namespace ts {
         Unit = 13536,
         StringOrNumberLiteral = 96,
         PossiblyFalsy = 14574,
-        StringLike = 524322,
+        StringLike = 34,
         NumberLike = 84,
         BooleanLike = 136,
         EnumLike = 272,
         ESSymbolLike = 1536,
+        VoidLike = 6144,
         UnionOrIntersection = 393216,
         StructuredType = 458752,
         TypeVariable = 1081344,
@@ -2340,6 +2341,7 @@ declare namespace ts {
         inlineSources?: boolean;
         isolatedModules?: boolean;
         jsx?: JsxEmit;
+        keyofStringsOnly?: boolean;
         lib?: string[];
         locale?: string;
         mapRoot?: string;

@@ -96,7 +96,7 @@ function f20<T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U,
 }
 
 // Repro from #17166
-function f3<T, K extends keyof T, U extends T, J extends K>(
+function f3<T, K extends Extract<keyof T, string>, U extends T, J extends K>(
     t: T, k: K, tk: T[K], u: U, j: J, uk: U[K], tj: T[J], uj: U[J]): void {
     for (let key in t) {
         key = k // ok, K ==> keyof T
