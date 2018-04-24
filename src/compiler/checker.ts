@@ -10482,11 +10482,14 @@ namespace ts {
                         }
                     }
                     // A type S is assignable to keyof T if S is assignable to keyof C, where C is the
-                    // constraint of T.
-                    const constraint = getConstraintForRelation((<IndexType>target).type);
-                    if (constraint) {
-                        if (result = isRelatedTo(source, getIndexType(constraint, (target as IndexType).stringsOnly), reportErrors)) {
-                            return result;
+                    // simplified form of T or, if T doesn't simplify, the constraint of T.
+                    if (relation !== definitelyAssignableRelation) {
+                        const simplified = getSimplifiedType((<IndexType>target).type);
+                        const constraint = simplified !== (<IndexType>target).type ? simplified : getConstraintOfType((<IndexType>target).type);
+                        if (constraint) {
+                            if (result = isRelatedTo(source, getIndexType(constraint, (target as IndexType).stringsOnly), reportErrors)) {
+                                return result;
+                            }
                         }
                     }
                 }
