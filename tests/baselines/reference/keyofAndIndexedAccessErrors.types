@@ -242,62 +242,128 @@ function f10(shape: Shape) {
 >10 : 10
 }
 
-function f20<T, U>(k1: keyof (T | U), k2: keyof (T & U), o1: T | U, o2: T & U) {
->f20 : <T, U>(k1: keyof T & keyof U, k2: keyof T | keyof U, o1: T | U, o2: T & U) => void
+function f20<T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U, k3: keyof (T & U), k4: keyof T | keyof U) {
+>f20 : <T, U>(x: T | U, y: T & U, k1: keyof T & keyof U, k2: keyof T & keyof U, k3: keyof T | keyof U, k4: keyof T | keyof U) => void
+>T : T
+>U : U
+>x : T | U
+>T : T
+>U : U
+>y : T & U
 >T : T
 >U : U
 >k1 : keyof T & keyof U
 >T : T
 >U : U
->k2 : keyof T | keyof U
+>k2 : keyof T & keyof U
 >T : T
 >U : U
->o1 : T | U
+>k3 : keyof T | keyof U
 >T : T
 >U : U
->o2 : T & U
+>k4 : keyof T | keyof U
 >T : T
 >U : U
 
-    o1[k1];
->o1[k1] : (T | U)[keyof T & keyof U]
->o1 : T | U
+    x[k1];
+>x[k1] : (T | U)[keyof T & keyof U]
+>x : T | U
 >k1 : keyof T & keyof U
 
-    o1[k2];   // Error
->o1[k2] : (T | U)[keyof T | keyof U]
->o1 : T | U
->k2 : keyof T | keyof U
+    x[k2];
+>x[k2] : (T | U)[keyof T & keyof U]
+>x : T | U
+>k2 : keyof T & keyof U
 
-    o2[k1];
->o2[k1] : (T & U)[keyof T & keyof U]
->o2 : T & U
+    x[k3];  // Error
+>x[k3] : (T | U)[keyof T | keyof U]
+>x : T | U
+>k3 : keyof T | keyof U
+
+    x[k4];  // Error
+>x[k4] : (T | U)[keyof T | keyof U]
+>x : T | U
+>k4 : keyof T | keyof U
+
+    y[k1];
+>y[k1] : (T & U)[keyof T & keyof U]
+>y : T & U
 >k1 : keyof T & keyof U
 
-    o2[k2];
->o2[k2] : (T & U)[keyof T | keyof U]
->o2 : T & U
->k2 : keyof T | keyof U
+    y[k2];
+>y[k2] : (T & U)[keyof T & keyof U]
+>y : T & U
+>k2 : keyof T & keyof U
 
-    o1 = o2;
->o1 = o2 : T & U
->o1 : T | U
->o2 : T & U
+    y[k3];
+>y[k3] : (T & U)[keyof T | keyof U]
+>y : T & U
+>k3 : keyof T | keyof U
 
-    o2 = o1;  // Error
->o2 = o1 : T | U
->o2 : T & U
->o1 : T | U
+    y[k4];
+>y[k4] : (T & U)[keyof T | keyof U]
+>y : T & U
+>k4 : keyof T | keyof U
 
-    k1 = k2;  // Error
->k1 = k2 : keyof T | keyof U
+    k1 = k2;
+>k1 = k2 : keyof T & keyof U
 >k1 : keyof T & keyof U
->k2 : keyof T | keyof U
+>k2 : keyof T & keyof U
+
+    k1 = k3;  // Error
+>k1 = k3 : keyof T | keyof U
+>k1 : keyof T & keyof U
+>k3 : keyof T | keyof U
+
+    k1 = k4;  // Error
+>k1 = k4 : keyof T | keyof U
+>k1 : keyof T & keyof U
+>k4 : keyof T | keyof U
 
     k2 = k1;
 >k2 = k1 : keyof T & keyof U
->k2 : keyof T | keyof U
+>k2 : keyof T & keyof U
 >k1 : keyof T & keyof U
+
+    k2 = k3;  // Error
+>k2 = k3 : keyof T | keyof U
+>k2 : keyof T & keyof U
+>k3 : keyof T | keyof U
+
+    k2 = k4;  // Error
+>k2 = k4 : keyof T | keyof U
+>k2 : keyof T & keyof U
+>k4 : keyof T | keyof U
+
+    k3 = k1;
+>k3 = k1 : keyof T & keyof U
+>k3 : keyof T | keyof U
+>k1 : keyof T & keyof U
+
+    k3 = k2;
+>k3 = k2 : keyof T & keyof U
+>k3 : keyof T | keyof U
+>k2 : keyof T & keyof U
+
+    k3 = k4;
+>k3 = k4 : keyof T | keyof U
+>k3 : keyof T | keyof U
+>k4 : keyof T | keyof U
+
+    k4 = k1;
+>k4 = k1 : keyof T & keyof U
+>k4 : keyof T | keyof U
+>k1 : keyof T & keyof U
+
+    k4 = k2;
+>k4 = k2 : keyof T & keyof U
+>k4 : keyof T | keyof U
+>k2 : keyof T & keyof U
+
+    k4 = k3;
+>k4 = k3 : keyof T | keyof U
+>k4 : keyof T | keyof U
+>k3 : keyof T | keyof U
 }
 
 // Repro from #17166

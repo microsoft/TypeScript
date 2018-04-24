@@ -2345,3 +2345,72 @@ type Predicates<TaggedRecord> = {
 >T : T
 }
 
+// Repro from #23618
+
+type DBBoolTable<K extends string> = { [k in K]: 0 | 1 } 
+>DBBoolTable : DBBoolTable<K>
+>K : K
+>k : k
+>K : K
+
+enum Flag {
+>Flag : Flag
+
+    FLAG_1 = "flag_1",
+>FLAG_1 : Flag.FLAG_1
+>"flag_1" : "flag_1"
+
+    FLAG_2 = "flag_2"
+>FLAG_2 : Flag.FLAG_2
+>"flag_2" : "flag_2"
+}
+
+type SimpleDBRecord<Flag extends string> = { staticField: number } & DBBoolTable<Flag>
+>SimpleDBRecord : SimpleDBRecord<Flag>
+>Flag : Flag
+>staticField : number
+>DBBoolTable : DBBoolTable<K>
+>Flag : Flag
+
+function getFlagsFromSimpleRecord<Flag extends string>(record: SimpleDBRecord<Flag>, flags: Flag[]) {
+>getFlagsFromSimpleRecord : <Flag extends string>(record: SimpleDBRecord<Flag>, flags: Flag[]) => SimpleDBRecord<Flag>[Flag]
+>Flag : Flag
+>record : SimpleDBRecord<Flag>
+>SimpleDBRecord : SimpleDBRecord<Flag>
+>Flag : Flag
+>flags : Flag[]
+>Flag : Flag
+
+    return record[flags[0]];
+>record[flags[0]] : SimpleDBRecord<Flag>[Flag]
+>record : SimpleDBRecord<Flag>
+>flags[0] : Flag
+>flags : Flag[]
+>0 : 0
+}
+
+type DynamicDBRecord<Flag extends string> = ({ dynamicField: number } | { dynamicField: string }) & DBBoolTable<Flag>
+>DynamicDBRecord : DynamicDBRecord<Flag>
+>Flag : Flag
+>dynamicField : number
+>dynamicField : string
+>DBBoolTable : DBBoolTable<K>
+>Flag : Flag
+
+function getFlagsFromDynamicRecord<Flag extends string>(record: DynamicDBRecord<Flag>, flags: Flag[]) {
+>getFlagsFromDynamicRecord : <Flag extends string>(record: DynamicDBRecord<Flag>, flags: Flag[]) => DynamicDBRecord<Flag>[Flag]
+>Flag : Flag
+>record : DynamicDBRecord<Flag>
+>DynamicDBRecord : DynamicDBRecord<Flag>
+>Flag : Flag
+>flags : Flag[]
+>Flag : Flag
+
+    return record[flags[0]];
+>record[flags[0]] : DynamicDBRecord<Flag>[Flag]
+>record : DynamicDBRecord<Flag>
+>flags[0] : Flag
+>flags : Flag[]
+>0 : 0
+}
+
