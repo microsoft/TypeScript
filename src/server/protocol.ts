@@ -1196,7 +1196,7 @@ namespace ts.server.protocol {
         /**
          * Filename of the last file analyzed before disabling the language service. undefined, if the language service is enabled.
          */
-        lastFileExceededProgramSize: string | undefined;
+        lastFileExceededProgramSize?: string;
     }
 
     /**
@@ -1802,7 +1802,7 @@ namespace ts.server.protocol {
 
     export interface CompletionEntryIdentifier {
         name: string;
-        source: string | undefined;
+        source?: string;
     }
 
     /**
@@ -1905,12 +1905,12 @@ namespace ts.server.protocol {
         /**
          * Documentation strings for the symbol.
          */
-        documentation: SymbolDisplayPart[] | undefined;
+        documentation?: SymbolDisplayPart[];
 
         /**
          * JSDoc tags for the symbol.
          */
-        tags: JSDocTagInfo[] | undefined;
+        tags?: JSDocTagInfo[];
 
         /**
          * The associated code actions for this entry
