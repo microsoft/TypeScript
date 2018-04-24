@@ -1213,6 +1213,21 @@ namespace ts {
             ? isStringOrNumericLiteral(name.expression) ? name.expression.text : undefined
             : getTextOfIdentifierOrLiteral(name);
     }
+
+    export function programContainsEs6Modules(program: Program): boolean {
+        return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!s.externalModuleIndicator);
+    }
+    export function compilerOptionsIndicateEs6Modules(compilerOptions: CompilerOptions): boolean {
+        return !!compilerOptions.module || compilerOptions.target >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
+    }
+
+    export function hostUsesCaseSensitiveFileNames(host: LanguageServiceHost): boolean {
+        return host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : false;
+    }
+
+    export function hostGetCanonicalFileName(host: LanguageServiceHost): GetCanonicalFileName {
+        return createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host));
+    }
 }
 
 // Display-part writer helpers

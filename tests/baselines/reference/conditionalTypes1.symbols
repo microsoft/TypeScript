@@ -1186,10 +1186,10 @@ function f50() {
 
 // Repro from #21862
 
-type OldDiff<T extends string, U extends string> = (
+type OldDiff<T extends keyof any, U extends keyof any> = (
 >OldDiff : Symbol(OldDiff, Decl(conditionalTypes1.ts, 298, 1))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 302, 13))
->U : Symbol(U, Decl(conditionalTypes1.ts, 302, 30))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 302, 33))
 
     & { [P in T]: P; }
 >P : Symbol(P, Decl(conditionalTypes1.ts, 303, 9))
@@ -1198,7 +1198,7 @@ type OldDiff<T extends string, U extends string> = (
 
     & { [P in U]: never; }
 >P : Symbol(P, Decl(conditionalTypes1.ts, 304, 9))
->U : Symbol(U, Decl(conditionalTypes1.ts, 302, 30))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 302, 33))
 
     & { [x: string]: never; }
 >x : Symbol(x, Decl(conditionalTypes1.ts, 305, 9))

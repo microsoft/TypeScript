@@ -1014,21 +1014,17 @@ namespace ts.FindAllReferences.Core {
 
     function addClassStaticThisReferences(referenceLocation: Node, search: Search, state: State): void {
         addReference(referenceLocation, search.symbol, state);
-        if (!state.options.isForRename && isClassLike(referenceLocation.parent)) {
-            Debug.assert(referenceLocation.parent.name === referenceLocation);
-            // This is the class declaration.
-            addStaticThisReferences(referenceLocation.parent, state.referenceAdder(search.symbol));
-        }
-    }
-
-    function addStaticThisReferences(classLike: ClassLikeDeclaration, pusher: (node: Node) => void): void {
+        const classLike = referenceLocation.parent;
+        if (state.options.isForRename || !isClassLike(classLike)) return;
+        Debug.assert(classLike.name === referenceLocation);
+        const addRef = state.referenceAdder(search.symbol);
         for (const member of classLike.members) {
             if (!(isMethodOrAccessor(member) && hasModifier(member, ModifierFlags.Static))) {
                 continue;
             }
             member.body.forEachChild(function cb(node) {
                 if (node.kind === SyntaxKind.ThisKeyword) {
-                    pusher(node);
+                    addRef(node);
                 }
                 else if (!isFunctionLike(node)) {
                     node.forEachChild(cb);
