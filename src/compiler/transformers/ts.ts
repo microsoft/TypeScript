@@ -1386,7 +1386,7 @@ namespace ts {
             }
 
             const { firstAccessor, secondAccessor, setAccessor } = getAllAccessorDeclarations(node.members, accessor);
-            const firstAccessorWithDecorators = firstAccessor!.decorators ? firstAccessor : secondAccessor && secondAccessor.decorators ? secondAccessor : undefined;
+            const firstAccessorWithDecorators = firstAccessor.decorators ? firstAccessor : secondAccessor && secondAccessor.decorators ? secondAccessor : undefined;
             if (!firstAccessorWithDecorators || accessor !== firstAccessorWithDecorators) {
                 return undefined;
             }

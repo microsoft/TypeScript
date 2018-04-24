@@ -26627,7 +26627,7 @@ namespace ts {
             }
             else if (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor) {
                 const accessors = getAllAccessorDeclarations((<ClassDeclaration>node.parent).members, <AccessorDeclaration>node);
-                if (accessors.firstAccessor!.decorators && node === accessors.secondAccessor) {
+                if (accessors.firstAccessor.decorators && node === accessors.secondAccessor) {
                     return grammarErrorOnFirstToken(node, Diagnostics.Decorators_cannot_be_applied_to_multiple_get_Slashset_accessors_of_the_same_name);
                 }
             }

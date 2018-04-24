@@ -1173,7 +1173,7 @@ namespace ts {
 
         function ensureAccessor(node: AccessorDeclaration): PropertyDeclaration | undefined {
             const accessors = getAllAccessorDeclarations((node.parent as ClassDeclaration).members, node);
-            if (node.kind !== accessors.firstAccessor!.kind) {
+            if (node.kind !== accessors.firstAccessor.kind) {
                 return;
             }
             let accessorType = getTypeAnnotationFromAccessor(node);

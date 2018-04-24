@@ -2986,16 +2986,15 @@ namespace ts {
         return id.originalKeywordKind === SyntaxKind.ThisKeyword;
     }
 
-    // TODO: GH#18217 These are frequently asserted to be defined
     export interface AllAccessorDeclarations {
-        firstAccessor: AccessorDeclaration | undefined;
+        firstAccessor: AccessorDeclaration;
         secondAccessor: AccessorDeclaration | undefined;
         getAccessor: AccessorDeclaration | undefined;
         setAccessor: AccessorDeclaration | undefined;
     }
 
     export function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration): AllAccessorDeclarations {
-        let firstAccessor: AccessorDeclaration | undefined;
+        let firstAccessor!: AccessorDeclaration;
         let secondAccessor: AccessorDeclaration | undefined;
         let getAccessor: AccessorDeclaration | undefined;
         let setAccessor: AccessorDeclaration | undefined;
