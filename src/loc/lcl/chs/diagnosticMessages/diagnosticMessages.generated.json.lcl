@@ -903,6 +903,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_0_to_unresolved_variable_90008" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add '{0}.' to unresolved variable]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[将“{0}.”添加到未解析的变量]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Add_all_missing_async_modifiers_95041" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add all missing 'async' modifiers]]></Val>
@@ -999,24 +1008,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Add_this_to_all_unresolved_variables_matching_a_member_name_95037" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Add_qualifier_to_all_unresolved_variables_matching_a_member_name_95037" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add 'this.' to all unresolved variables matching a member name]]></Val>
+          <Val><![CDATA[Add qualifier to all unresolved variables matching a member name]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[将 "this." 添加到匹配成员名称的所有未解析变量]]></Val>
+            <Val><![CDATA[将限定符添加到匹配成员名称的所有未解析变量]]></Val>
           </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Add_this_to_unresolved_variable_90008" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Add 'this.' to unresolved variable]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[向未解析的变量添加 "this."]]></Val>
-          </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Add 'this.' to unresolved variable.]]></Val>
-          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6504,6 +6501,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[在位置“{1}”的缓存中找到模块“{0}”的解析。]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Resolve_keyof_to_string_valued_property_names_only_no_numbers_or_symbols_6195" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Resolve 'keyof' to string valued property names only (no numbers or symbols).]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>

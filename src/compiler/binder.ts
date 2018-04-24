@@ -2222,14 +2222,14 @@ namespace ts {
             bindAnonymousDeclaration(file, SymbolFlags.ValueModule, `"${removeFileExtension(file.fileName)}"` as __String);
         }
 
-        function bindExportAssignment(node: ExportAssignment | BinaryExpression) {
+        function bindExportAssignment(node: ExportAssignment) {
             if (!container.symbol || !container.symbol.exports) {
                 // Export assignment in some sort of block construct
                 bindAnonymousDeclaration(node, SymbolFlags.Alias, getDeclarationName(node)!);
             }
             else {
                 const flags = node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(node)
-                    // An export default clause with an EntityNameExpression exports all meanings of that identifier
+                    // An export default clause with an EntityNameExpression or a class expression exports all meanings of that identifier or expression;
                     ? SymbolFlags.Alias
                     // An export default clause with any other expression exports a value
                     : SymbolFlags.Property;
@@ -2324,7 +2324,10 @@ namespace ts {
 
             // 'module.exports = expr' assignment
             setCommonJsModuleIndicator(node);
-            declareSymbol(file.symbol!.exports!, file.symbol, node, SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.ValueModule, SymbolFlags.None);
+            const flags = exportAssignmentIsAlias(node)
+                ? SymbolFlags.Alias // An export= with an EntityNameExpression or a ClassExpression exports all meanings of that identifier or class
+                : SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.ValueModule;
+            declareSymbol(file.symbol!.exports!, file.symbol, node, flags, SymbolFlags.None);
         }
 
         function bindThisPropertyAssignment(node: BinaryExpression | PropertyAccessExpression) {

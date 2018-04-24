@@ -1203,14 +1203,11 @@ namespace ts.Completions {
             // If already using commonjs, don't introduce ES6.
             if (sourceFile.commonJsModuleIndicator) return false;
             // If some file is using ES6 modules, assume that it's OK to add more.
-            if (program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!s.externalModuleIndicator)) {
-                return true;
-            }
+            if (programContainsEs6Modules(program)) return true;
             // For JS, stay on the safe side.
             if (isSourceFileJavaScript(sourceFile)) return false;
             // If module transpilation is enabled or we're targeting es6 or above, or not emitting, OK.
-            const compilerOptions = program.getCompilerOptions();
-            return !!compilerOptions.module || compilerOptions.target! >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
+            return compilerOptionsIndicateEs6Modules(program.getCompilerOptions());
         }
 
         function isSnippetScope(scopeNode: Node): boolean {

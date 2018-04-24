@@ -5,7 +5,7 @@ namespace ts {
         const checker = program.getDiagnosticsProducingTypeChecker();
         const diags: Diagnostic[] = [];
 
-        if (sourceFile.commonJsModuleIndicator) {
+        if (sourceFile.commonJsModuleIndicator && (programContainsEs6Modules(program) || compilerOptionsIndicateEs6Modules(program.getCompilerOptions()))) {
             diags.push(createDiagnosticForNode(getErrorNodeFromCommonJsIndicator(sourceFile.commonJsModuleIndicator), Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES6_module));
         }
 
