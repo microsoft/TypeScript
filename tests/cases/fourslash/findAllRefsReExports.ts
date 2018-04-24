@@ -22,9 +22,9 @@
 verify.noErrors();
 const [foo0, foo1, bar0, foo2, defaultC, defaultD, bar1, baz0, defaultE, bang0, boom0, bar2, baz1, bang1, boom1] = test.ranges();
 const a = { definition: "function foo(): void", ranges: [foo0, foo1, foo2] };
-const b = { definition: "(alias) function bar(): void\nimport bar", ranges: [bar0] };
-const c = { definition: "(alias) function foo(): void\nimport default", ranges: [defaultC, defaultE] };
-const d = { definition: "(alias) function foo(): void\nimport default", ranges: [defaultD] };
+const b = { definition: "(alias) function bar(): void\nexport bar", ranges: [bar0] };
+const c = { definition: "(alias) function foo(): void\nexport default", ranges: [defaultC, defaultE] };
+const d = { definition: "(alias) function foo(): void\nexport default", ranges: [defaultD] };
 const eBar = { definition: "(alias) function bar(): void\nimport bar", ranges: [bar1, bar2] };
 const eBaz = { definition: "(alias) function baz(): void\nimport baz", ranges: [baz0, baz1] };
 const eBang = { definition: "(alias) function bang(): void\nimport bang", ranges: [bang0, bang1] };

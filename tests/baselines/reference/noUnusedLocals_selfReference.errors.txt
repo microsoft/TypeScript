@@ -1,9 +1,9 @@
 tests/cases/compiler/noUnusedLocals_selfReference.ts(3,1): error TS6133: 'f' is declared but its value is never read.
 tests/cases/compiler/noUnusedLocals_selfReference.ts(5,5): error TS6133: 'g' is declared but its value is never read.
-tests/cases/compiler/noUnusedLocals_selfReference.ts(9,1): error TS6195: 'C' is declared but not used.
-tests/cases/compiler/noUnusedLocals_selfReference.ts(12,1): error TS6195: 'E' is declared but not used.
-tests/cases/compiler/noUnusedLocals_selfReference.ts(13,1): error TS6195: 'I' is declared but not used.
-tests/cases/compiler/noUnusedLocals_selfReference.ts(14,1): error TS6195: 'T' is declared but not used.
+tests/cases/compiler/noUnusedLocals_selfReference.ts(9,1): error TS6196: 'C' is declared but never used.
+tests/cases/compiler/noUnusedLocals_selfReference.ts(12,1): error TS6196: 'E' is declared but never used.
+tests/cases/compiler/noUnusedLocals_selfReference.ts(13,1): error TS6196: 'I' is declared but never used.
+tests/cases/compiler/noUnusedLocals_selfReference.ts(14,1): error TS6196: 'T' is declared but never used.
 tests/cases/compiler/noUnusedLocals_selfReference.ts(15,1): error TS6133: 'N' is declared but its value is never read.
 tests/cases/compiler/noUnusedLocals_selfReference.ts(22,19): error TS6133: 'm' is declared but its value is never read.
 
@@ -23,18 +23,18 @@ tests/cases/compiler/noUnusedLocals_selfReference.ts(22,19): error TS6133: 'm' i
     }
     class C {
     ~~~~~~~
-!!! error TS6195: 'C' is declared but not used.
+!!! error TS6196: 'C' is declared but never used.
         m() { C; }
     }
     enum E { A = 0, B = E.A }
     ~~~~~~
-!!! error TS6195: 'E' is declared but not used.
+!!! error TS6196: 'E' is declared but never used.
     interface I { x: I };
     ~~~~~~~~~~~
-!!! error TS6195: 'I' is declared but not used.
+!!! error TS6196: 'I' is declared but never used.
     type T = { x: T };
     ~~~~~~
-!!! error TS6195: 'T' is declared but not used.
+!!! error TS6196: 'T' is declared but never used.
     namespace N { N; }
     ~~~~~~~~~~~
 !!! error TS6133: 'N' is declared but its value is never read.

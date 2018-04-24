@@ -10,11 +10,11 @@ tests/cases/compiler/unusedIdentifiersConsolidated1.ts(17,13): error TS6133: 'un
 tests/cases/compiler/unusedIdentifiersConsolidated1.ts(24,13): error TS6133: 'unUsedPrivateFunction' is declared but its value is never read.
 tests/cases/compiler/unusedIdentifiersConsolidated1.ts(37,11): error TS6133: 'numberRegexp' is declared but its value is never read.
 tests/cases/compiler/unusedIdentifiersConsolidated1.ts(44,17): error TS6133: 'unUsedPrivateFunction' is declared but its value is never read.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(57,5): error TS6195: 'usedLocallyInterface2' is declared but not used.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(64,5): error TS6195: 'dummy' is declared but not used.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(67,5): error TS6195: 'unusedInterface' is declared but not used.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(79,5): error TS6195: 'class3' is declared but not used.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(99,5): error TS6195: 'interface5' is declared but not used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(57,5): error TS6196: 'usedLocallyInterface2' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(64,5): error TS6196: 'dummy' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(67,5): error TS6196: 'unusedInterface' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(79,5): error TS6196: 'class3' is declared but never used.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(99,5): error TS6196: 'interface5' is declared but never used.
 
 
 ==== tests/cases/compiler/unusedIdentifiersConsolidated1.ts (17 errors) ====
@@ -100,7 +100,7 @@ tests/cases/compiler/unusedIdentifiersConsolidated1.ts(99,5): error TS6195: 'int
     
         interface usedLocallyInterface2 {
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS6195: 'usedLocallyInterface2' is declared but not used.
+!!! error TS6196: 'usedLocallyInterface2' is declared but never used.
             someFunction(s1: string): void;
         }
     
@@ -109,12 +109,12 @@ tests/cases/compiler/unusedIdentifiersConsolidated1.ts(99,5): error TS6195: 'int
     
         class dummy implements usedLocallyInterface {
         ~~~~~~~~~~~
-!!! error TS6195: 'dummy' is declared but not used.
+!!! error TS6196: 'dummy' is declared but never used.
         }
     
         interface unusedInterface {
         ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS6195: 'unusedInterface' is declared but not used.
+!!! error TS6196: 'unusedInterface' is declared but never used.
         }
     }
     
@@ -128,7 +128,7 @@ tests/cases/compiler/unusedIdentifiersConsolidated1.ts(99,5): error TS6195: 'int
     
         class class3 {
         ~~~~~~~~~~~~
-!!! error TS6195: 'class3' is declared but not used.
+!!! error TS6196: 'class3' is declared but never used.
         }
     
         export class class4 {
@@ -150,6 +150,6 @@ tests/cases/compiler/unusedIdentifiersConsolidated1.ts(99,5): error TS6195: 'int
     
         interface interface5 {
         ~~~~~~~~~~~~~~~~~~~~
-!!! error TS6195: 'interface5' is declared but not used.
+!!! error TS6196: 'interface5' is declared but never used.
         }
     }

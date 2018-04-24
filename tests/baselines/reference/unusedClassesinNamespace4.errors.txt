@@ -1,4 +1,4 @@
-tests/cases/compiler/unusedClassesinNamespace4.ts(10,5): error TS6195: 'c3' is declared but not used.
+tests/cases/compiler/unusedClassesinNamespace4.ts(10,5): error TS6196: 'c3' is declared but never used.
 
 
 ==== tests/cases/compiler/unusedClassesinNamespace4.ts (1 errors) ====
@@ -13,7 +13,7 @@ tests/cases/compiler/unusedClassesinNamespace4.ts(10,5): error TS6195: 'c3' is d
     
         class c3 extends c1 {
         ~~~~~~~~
-!!! error TS6195: 'c3' is declared but not used.
+!!! error TS6196: 'c3' is declared but never used.
     
         }
     }

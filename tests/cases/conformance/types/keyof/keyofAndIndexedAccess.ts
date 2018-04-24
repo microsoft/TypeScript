@@ -190,13 +190,13 @@ function f51<T, K extends keyof T>(k: K, s: string) {
     const x2 = k as string;
 }
 
-function f52<T>(obj: { [x: string]: boolean }, k: keyof T, s: string, n: number) {
+function f52<T>(obj: { [x: string]: boolean }, k: Exclude<keyof T, symbol>, s: string, n: number) {
     const x1 = obj[s];
     const x2 = obj[n];
     const x3 = obj[k];
 }
 
-function f53<T, K extends keyof T>(obj: { [x: string]: boolean }, k: K, s: string, n: number) {
+function f53<T, K extends Exclude<keyof T, symbol>>(obj: { [x: string]: boolean }, k: K, s: string, n: number) {
     const x1 = obj[s];
     const x2 = obj[n];
     const x3 = obj[k];
@@ -556,7 +556,7 @@ class AnotherSampleClass<T> extends SampleClass<T & Foo> {
 new AnotherSampleClass({});
 
 // Positive repro from #17166
-function f3<T, K extends keyof T>(t: T, k: K, tk: T[K]): void {
+function f3<T, K extends Extract<keyof T, string>>(t: T, k: K, tk: T[K]): void {
     for (let key in t) {
         key = k // ok, K ==> keyof T
         t[key] = tk; // ok, T[K] ==> T[keyof T]
