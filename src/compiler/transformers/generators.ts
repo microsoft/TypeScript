@@ -731,7 +731,7 @@ namespace ts {
 
                         target = updateElementAccess(<ElementAccessExpression>left,
                             cacheExpression(visitNode((<ElementAccessExpression>left).expression, visitor, isLeftHandSideExpression)),
-                            cacheExpression(visitNode((<ElementAccessExpression>left).argumentExpression!, visitor, isExpression))
+                            cacheExpression(visitNode((<ElementAccessExpression>left).argumentExpression, visitor, isExpression))
                         );
                         break;
 
@@ -1089,7 +1089,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitElementAccessExpression(node: ElementAccessExpression) {
-            if (containsYield(node.argumentExpression!)) {
+            if (containsYield(node.argumentExpression)) {
                 // [source]
                 //      a = x[yield];
                 //

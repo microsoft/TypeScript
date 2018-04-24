@@ -1685,7 +1685,7 @@ namespace ts {
     export interface ElementAccessExpression extends MemberExpression {
         kind: SyntaxKind.ElementAccessExpression;
         expression: LeftHandSideExpression;
-        argumentExpression?: Expression;
+        argumentExpression: Expression;
     }
 
     export interface SuperElementAccessExpression extends ElementAccessExpression {

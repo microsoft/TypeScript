@@ -3536,7 +3536,7 @@ namespace ts {
                 if (!compilerOptions.removeComments) {
                     const propertyName = isPropertyAccessExpression(node)
                         ? declarationNameToString(node.name)
-                        : getTextOfNode(node.argumentExpression!);
+                        : getTextOfNode(node.argumentExpression);
 
                     addSyntheticTrailingComment(substitute, SyntaxKind.MultiLineCommentTrivia, ` ${propertyName} `);
                 }

@@ -794,7 +794,7 @@ namespace ts {
         function substituteElementAccessExpression(node: ElementAccessExpression) {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return createSuperAccessInAsyncMethod(
-                    node.argumentExpression!,
+                    node.argumentExpression,
                     node
                 );
             }

@@ -4543,7 +4543,7 @@ namespace ts {
                     case SyntaxKind.PropertyAccessExpression:
                         return (expr as PropertyAccessExpression).name;
                     case SyntaxKind.ElementAccessExpression:
-                        const arg = (expr as ElementAccessExpression).argumentExpression!;
+                        const arg = (expr as ElementAccessExpression).argumentExpression;
                         if (isIdentifier(arg)) {
                             return arg;
                         }

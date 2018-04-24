@@ -48,7 +48,7 @@ namespace ts {
                 target = setTextRange(
                     createElementAccess(
                         setTextRange(createAssignment(expressionTemp, left.expression), left.expression),
-                        setTextRange(createAssignment(argumentExpressionTemp, left.argumentExpression!), left.argumentExpression)
+                        setTextRange(createAssignment(argumentExpressionTemp, left.argumentExpression), left.argumentExpression)
                     ),
                     left
                 );

@@ -986,7 +986,7 @@ namespace ts {
             : node;
     }
 
-    export function createElementAccess(expression: Expression, index: number | Expression | undefined) {
+    export function createElementAccess(expression: Expression, index: number | Expression) {
         const node = <ElementAccessExpression>createSynthesizedNode(SyntaxKind.ElementAccessExpression);
         node.expression = parenthesizeForAccess(expression);
         node.argumentExpression = asExpression(index);
@@ -2684,7 +2684,7 @@ namespace ts {
         return isString(name) ? createIdentifier(name) : name;
     }
 
-    function asExpression(value: string | number | Expression | undefined) {
+    function asExpression(value: string | number | Expression) {
         return isString(value) || typeof value === "number" ? createLiteral(value) : value;
     }
 

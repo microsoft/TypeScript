@@ -8341,7 +8341,7 @@ namespace ts {
         function getPropertyTypeForIndexType(objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode | undefined, cacheSymbol: boolean) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode : undefined;
             const propName = isTypeUsableAsLateBoundName(indexType) ? getLateBoundNameFromType(indexType) :
-                accessExpression && checkThatExpressionIsProperSymbolReference(accessExpression.argumentExpression!, indexType, /*reportError*/ false) ?
+                accessExpression && checkThatExpressionIsProperSymbolReference(accessExpression.argumentExpression, indexType, /*reportError*/ false) ?
                     getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>accessExpression.argumentExpression).name)) :
                     undefined;
             if (propName !== undefined) {
@@ -13136,7 +13136,7 @@ namespace ts {
                 (<BinaryExpression>parent.parent).operatorToken.kind === SyntaxKind.EqualsToken &&
                 (<BinaryExpression>parent.parent).left === parent &&
                 !isAssignmentTarget(parent.parent) &&
-                isTypeAssignableToKind(getTypeOfExpression((<ElementAccessExpression>parent).argumentExpression!), TypeFlags.NumberLike);
+                isTypeAssignableToKind(getTypeOfExpression((<ElementAccessExpression>parent).argumentExpression), TypeFlags.NumberLike);
             return isLengthPushOrUnshift || isElementAssignment;
         }
 
@@ -13327,7 +13327,7 @@ namespace ts {
                                 }
                             }
                             else {
-                                const indexType = getTypeOfExpression((<ElementAccessExpression>node.left).argumentExpression!);
+                                const indexType = getTypeOfExpression((<ElementAccessExpression>node.left).argumentExpression);
                                 if (isTypeAssignableToKind(indexType, TypeFlags.NumberLike)) {
                                     evolvedType = addEvolvingArrayElementType(evolvedType, node.right);
                                 }
@@ -24231,7 +24231,7 @@ namespace ts {
                                     name = ex.name.escapedText;
                                 }
                                 else {
-                                    const argument = ex.argumentExpression!;
+                                    const argument = ex.argumentExpression;
                                     Debug.assert(isLiteralExpression(argument));
                                     name = escapeLeadingUnderscores((argument as LiteralExpression).text);
                                 }
@@ -24263,7 +24263,7 @@ namespace ts {
             return node.kind === SyntaxKind.Identifier ||
                 node.kind === SyntaxKind.PropertyAccessExpression && isConstantMemberAccess((<PropertyAccessExpression>node).expression) ||
                 node.kind === SyntaxKind.ElementAccessExpression && isConstantMemberAccess((<ElementAccessExpression>node).expression) &&
-                    (<ElementAccessExpression>node).argumentExpression!.kind === SyntaxKind.StringLiteral;
+                    (<ElementAccessExpression>node).argumentExpression.kind === SyntaxKind.StringLiteral;
         }
 
         function checkEnumDeclaration(node: EnumDeclaration) {
