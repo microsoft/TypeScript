@@ -6428,6 +6428,26 @@ namespace ts {
             return getConstraintOfDistributiveConditionalType(type) || getDefaultConstraintOfConditionalType(type);
         }
 
+        function getUnionConstraintOfIntersection(type: IntersectionType) {
+            let constraints: Type[];
+            for (const t of type.types) {
+                if (t.flags & TypeFlags.Instantiable) {
+                    const baseConstraint = getBaseConstraintOfType(t);
+                    if (!(baseConstraint.flags & TypeFlags.Union)) {
+                        return undefined;
+                    }
+                    constraints = append(constraints, baseConstraint);
+                }
+            }
+            if (constraints) {
+                const constraint = getIntersectionType(constraints);
+                if (constraint.flags & TypeFlags.Union) {
+                    return constraint;
+                }
+            }
+            return undefined;
+        }
+
         function getBaseConstraintOfInstantiableNonPrimitiveUnionOrIntersection(type: Type) {
             if (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.UnionOrIntersection)) {
                 const constraint = getResolvedBaseConstraint(<InstantiableType | UnionOrIntersectionType>type);
@@ -10123,6 +10143,21 @@ namespace ts {
                     if (!result && (source.flags & TypeFlags.StructuredOrInstantiable || target.flags & TypeFlags.StructuredOrInstantiable)) {
                         if (result = recursiveTypeRelatedTo(source, target, reportErrors)) {
                             errorInfo = saveErrorInfo;
+                        }
+                    }
+                    if (!result && source.flags & TypeFlags.Intersection && target.flags & TypeFlags.Union) {
+                        // The combined constraint of an intersection type is the intersection of the constraints of
+                        // the constituents. Since we break down union types before intersection types, if the target
+                        // type is a union type and the source type is an intersection type with a combined constraint
+                        // that is a union type, we need an extra check to see if the combined constraint is related to
+                        // the target. For example, given two type variables T and U, each with the constraint
+                        // 'string | number', the combined constraint of 'T & U' is 'string | number' and we need to
+                        // check this constraint against the union on the target side.
+                        const constraint = getUnionConstraintOfIntersection(<IntersectionType>source);
+                        if (constraint) {
+                            if (result = isRelatedTo(constraint, target, reportErrors)) {
+                                errorInfo = saveErrorInfo;
+                            }
                         }
                     }
                 }
