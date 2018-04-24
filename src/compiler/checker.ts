@@ -7917,8 +7917,13 @@ namespace ts {
             return binarySearch(types, type, getTypeId, compareValues) >= 0;
         }
 
-        // Return true if the given intersection type contains (a) more than one unit type or (b) an object
-        // type and a nullable type (null or undefined).
+        // Return true if the given intersection type contains
+        // more than one unit type or,
+        // an object type and a nullable type (null or undefined), or
+        // a string-like type and a non-string-like primitive type, or
+        // a number-like type and a non-number-like primitive type, or
+        // a symbol-like type and a non-symbol-like primitive type, or
+        // a void-like type and a non-void-like primitive type.
         function isEmptyIntersectionType(type: IntersectionType) {
             let combined: TypeFlags = 0;
             for (const t of type.types) {
@@ -7926,7 +7931,11 @@ namespace ts {
                     return true;
                 }
                 combined |= t.flags;
-                if (combined & TypeFlags.Nullable && combined & (TypeFlags.Object | TypeFlags.NonPrimitive)) {
+                if (combined & TypeFlags.Nullable && combined & (TypeFlags.Object | TypeFlags.NonPrimitive) ||
+                    combined & TypeFlags.StringLike && combined & (TypeFlags.Primitive & ~TypeFlags.StringLike) ||
+                    combined & TypeFlags.NumberLike && combined & (TypeFlags.Primitive & ~TypeFlags.NumberLike) ||
+                    combined & TypeFlags.ESSymbolLike && combined & (TypeFlags.Primitive & ~TypeFlags.ESSymbolLike) ||
+                    combined & TypeFlags.VoidLike && combined & (TypeFlags.Primitive & ~TypeFlags.VoidLike)) {
                     return true;
                 }
             }
