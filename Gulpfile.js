@@ -66,10 +66,10 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
 
 const noop = () => {}; // tslint:disable-line no-empty
 /**
- * @param {string} cmd 
- * @param {string[]} args 
- * @param {() => void} complete 
- * @param {(e: *, status: number) => void} error 
+ * @param {string} cmd
+ * @param {string[]} args
+ * @param {() => void} complete
+ * @param {(e: *, status: number) => void} error
  */
 function exec(cmd, args, complete = noop, error = noop) {
     console.log(`${cmd} ${args.join(" ")}`);
@@ -82,7 +82,7 @@ function exec(cmd, args, complete = noop, error = noop) {
 }
 
 /**
- * @param {string} cmd 
+ * @param {string} cmd
  */
 function possiblyQuote(cmd) {
     return cmd.indexOf(" ") >= 0 ? `"${cmd}"` : cmd;
@@ -222,8 +222,8 @@ const packageJson = "package.json";
 const versionFile = path.join(compilerDirectory, "core.ts");
 
 /**
- * @param {string | string[]} source 
- * @param {string | string[]} dest 
+ * @param {string | string[]} source
+ * @param {string | string[]} dest
  * @returns {boolean}
  */
 function needsUpdate(source, dest) {
@@ -290,7 +290,7 @@ function needsUpdate(source, dest) {
 }
 
 /**
- * @param {tsc.Settings} base 
+ * @param {tsc.Settings} base
  * @param {boolean=} useBuiltCompiler
  * @returns {tsc.Settings}
  */
@@ -442,7 +442,7 @@ const nodeStandaloneDefinitionsFile = path.join(builtLocalDirectory, "typescript
 /** @type {string} */
 let copyrightContent;
 /**
- * @param {boolean} outputCopyright 
+ * @param {boolean} outputCopyright
  */
 function prependCopyright(outputCopyright = !useDebugMode) {
     return insert.prepend(outputCopyright ? (copyrightContent || (copyrightContent = fs.readFileSync(copyright).toString())) : "");
@@ -666,9 +666,9 @@ function restoreSavedNodeEnv() {
 }
 
 /**
- * @param {string} defaultReporter 
- * @param {boolean} runInParallel 
- * @param {(e?: any) => void} done 
+ * @param {string} defaultReporter
+ * @param {boolean} runInParallel
+ * @param {(e?: any) => void} done
  */
 function runConsoleTests(defaultReporter, runInParallel, done) {
     const lintFlag = cmdLineOptions.lint;
@@ -746,8 +746,8 @@ function runConsoleTests(defaultReporter, runInParallel, done) {
     });
 
     /**
-     * @param {any=} err 
-     * @param {number=} status 
+     * @param {any=} err
+     * @param {number=} status
      */
     function failWithStatus(err, status) {
         if (err || status) {
@@ -766,8 +766,8 @@ function runConsoleTests(defaultReporter, runInParallel, done) {
     }
 
     /**
-     * @param {any=} error 
-     * @param {number=} errorStatus 
+     * @param {any=} error
+     * @param {number=} errorStatus
      */
     function finish(error, errorStatus) {
         restoreSavedNodeEnv();
@@ -800,7 +800,7 @@ const nodeServerOutFile = "tests/webTestServer.js";
 const nodeServerInFile = "tests/webTestServer.ts";
 gulp.task(nodeServerOutFile, /*help*/ false, [servicesFile], () => {
     /** @type {tsc.Settings} */
-    const settings = getCompilerSettings({ module: "commonjs" }, /*useBuiltCompiler*/ true);
+    const settings = getCompilerSettings({ module: "commonjs", target: "es2015" }, /*useBuiltCompiler*/ true);
     return gulp.src(nodeServerInFile)
         .pipe(newer(nodeServerOutFile))
         .pipe(sourcemaps.init())
@@ -885,7 +885,7 @@ gulp.task("browserify", "Runs browserify on run.js to produce a file suitable fo
 });
 
 /**
- * @param {(e?: any) => void} done 
+ * @param {(e?: any) => void} done
  */
 function cleanTestDirs(done) {
     // Clean the local baselines & Rwc baselines directories
@@ -905,13 +905,13 @@ function cleanTestDirs(done) {
 
 /**
  * used to pass data from jake command line directly to run.js
- * @param {string} tests 
- * @param {string} runners 
- * @param {boolean} light 
- * @param {string=} taskConfigsFolder 
- * @param {number=} workerCount 
- * @param {string=} stackTraceLimit 
- * @param {number=} timeout 
+ * @param {string} tests
+ * @param {string} runners
+ * @param {boolean} light
+ * @param {string=} taskConfigsFolder
+ * @param {number=} workerCount
+ * @param {string=} stackTraceLimit
+ * @param {number=} timeout
  */
 function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, timeout) {
     const testConfigContents = JSON.stringify({

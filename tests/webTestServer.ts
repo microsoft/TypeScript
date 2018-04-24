@@ -1,4 +1,5 @@
 /// <reference types="node" />
+// tslint:disable:no-null-keyword
 
 import http = require("http");
 import fs = require("fs");
@@ -8,510 +9,20 @@ import URL = url.URL;
 import child_process = require("child_process");
 import os = require("os");
 import crypto = require("crypto");
+import { Readable, Writable } from "stream";
+import { isBuffer, isString, isObject } from "util";
+import { install, getErrorSource } from "source-map-support";
+
+install();
 
 const port = 8888; // harness.ts and webTestResults.html depend on this exact port number.
-const baseUrl = new URL(`http://localhost:8888/`);
+const baseUrl = new URL(`http://localhost:${port}/`);
 const rootDir = path.dirname(__dirname);
 const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
 
 let browser = "IE";
 let grep: string | undefined;
 let verbose = false;
-
-interface HttpContent {
-    headers: any;
-    content: string;
-}
-
-namespace HttpContent {
-    export function create(headers: object = {}, content?: string) {
-        return { headers, content };
-    }
-
-    export function clone(content: HttpContent): HttpContent {
-        return content && create(HttpHeaders.clone(content.headers), content.content);
-    }
-
-    export function forMediaType(mediaType: string | string[], content: string): HttpContent {
-        return create({ "Content-Type": mediaType, "Content-Length": Buffer.byteLength(content, "utf8") }, content);
-    }
-
-    export function text(content: string): HttpContent {
-        return forMediaType("text/plain", content);
-    }
-
-    export function json(content: any): HttpContent {
-        return forMediaType("application/json", JSON.stringify(content));
-    }
-}
-
-namespace HttpHeaders {
-    export function clone(headers: http.OutgoingHttpHeaders) {
-        return { ...headers };
-    }
-
-    export function getCacheControl(headers: http.IncomingHttpHeaders | http.OutgoingHttpHeaders) {
-        let cacheControl = headers["Cache-Control"];
-        let noCache = false;
-        let noStore = false;
-        let maxAge: number = undefined;
-        let maxStale: number = undefined;
-        let minFresh: number = undefined;
-        if (typeof cacheControl === "string") cacheControl = [cacheControl];
-        if (Array.isArray(cacheControl)) {
-            for (const directive of cacheControl) {
-                if (directive === "no-cache") noCache = true;
-                else if (directive === "no-store") noStore = true;
-                else if (directive === "max-stale") maxStale = Infinity;
-                else if (/^no-cache=/.test(directive)) noCache = true;
-                else if (/^max-age=/.test(directive)) maxAge = +directive.slice(8).trim();
-                else if (/^min-fresh=/.test(directive)) minFresh = +directive.slice(10).trim();
-                else if (/^max-stale=/.test(directive)) maxStale = +directive.slice(10).trim();
-            }
-        }
-        return { noCache, noStore, maxAge, maxStale, minFresh };
-    }
-
-    export function getExpires(headers: http.IncomingHttpHeaders | http.OutgoingHttpHeaders) {
-        const expires = headers["Expires"];
-        if (typeof expires !== "string") return Infinity;
-        return new Date(expires).getTime();
-    }
-
-    export function getIfConditions(headers: http.IncomingHttpHeaders): { ifMatch: "*" | string[], ifNoneMatch: "*" | string[], ifModifiedSince: Date, ifUnmodifiedSince: Date } {
-        const ifMatch = toMatch(headers["If-Match"]);
-        const ifNoneMatch = toMatch(headers["If-None-Match"]);
-        const ifModifiedSince = toDate(headers["If-Modified-Since"]);
-        const ifUnmodifiedSince = toDate(headers["If-Unmodified-Since"]);
-        return { ifMatch, ifNoneMatch, ifModifiedSince, ifUnmodifiedSince };
-
-        function toMatch(value: string | string[]) {
-            return typeof value === "string" && value !== "*" ? [value] : value;
-        }
-
-        function toDate(value: string | string[]) {
-            return value ? new Date(Array.isArray(value) ? value[0] : value) : undefined;
-        }
-    }
-
-    export function combine(left: http.OutgoingHttpHeaders, right: http.OutgoingHttpHeaders) {
-        return left && right ? { ...left, ...right } :
-            left ? { ...left } :
-            right ? { ...right } :
-            {};
-    }
-}
-
-interface HttpRequestMessage {
-    url: url.URL;
-    method: string;
-    headers: http.IncomingHttpHeaders;
-    content?: HttpContent;
-    file?: string;
-    stats?: fs.Stats;
-}
-
-namespace HttpRequestMessage {
-    export function create(method: string, url: URL | string, headers: http.IncomingHttpHeaders, content?: HttpContent) {
-        return { method, url: typeof url === "string" ? new URL(url, baseUrl) : url, headers, content };
-    }
-
-    export function getFile(message: HttpRequestMessage) {
-        return message.file || (message.file = path.join(rootDir, decodeURIComponent(message.url.pathname)));
-    }
-
-    export function getStats(message: HttpRequestMessage, throwErrors?: boolean) {
-        return message.stats || (message.stats = throwErrors ? fs.statSync(getFile(message)) : tryStat(getFile(message)));
-    }
-
-    export function readRequest(req: http.ServerRequest) {
-        return new Promise<HttpRequestMessage>((resolve, reject) => {
-            let entityData: string | undefined;
-            req.setEncoding("utf8");
-            req.on("data", (data: string) => {
-                if (entityData === undefined) {
-                    entityData = data;
-                }
-                else {
-                    entityData += data;
-                }
-            });
-            req.on("end", () => {
-                const content = entityData !== undefined
-                    ? HttpContent.forMediaType(req.headers["Content-Type"], entityData)
-                    : undefined;
-                resolve(HttpRequestMessage.create(req.method, req.url, req.headers, content));
-            });
-            req.on("error", reject);
-        });
-    }
-}
-
-interface HttpResponseMessage {
-    statusCode?: number;
-    statusMessage?: string;
-    headers: http.OutgoingHttpHeaders;
-    content?: HttpContent;
-}
-
-namespace HttpResponseMessage {
-    export function create(statusCode: number, headers: http.OutgoingHttpHeaders = {}, content?: HttpContent) {
-        return { statusCode, headers, content };
-    }
-
-    export function clone(message: HttpResponseMessage): HttpResponseMessage {
-        return {
-            statusCode: message.statusCode,
-            statusMessage: message.statusMessage,
-            headers: HttpHeaders.clone(message.headers),
-            content: HttpContent.clone(message.content)
-        };
-    }
-
-    export function ok(headers: http.OutgoingHttpHeaders, content: HttpContent | undefined): HttpResponseMessage;
-    export function ok(content?: HttpContent): HttpResponseMessage;
-    export function ok(contentOrHeaders: http.OutgoingHttpHeaders | HttpContent | undefined, content?: HttpContent): HttpResponseMessage {
-        let headers: http.OutgoingHttpHeaders;
-        if (!content) {
-            content = <HttpContent>contentOrHeaders;
-            headers = {};
-        }
-        return create(200, headers, content);
-    }
-
-    export function created(location?: string, etag?: string): HttpResponseMessage {
-        return create(201, { "Location": location, "ETag": etag });
-    }
-
-    export function noContent(headers?: http.OutgoingHttpHeaders): HttpResponseMessage {
-        return create(204, headers);
-    }
-
-    export function notModified(): HttpResponseMessage {
-        return create(304);
-    }
-
-    export function badRequest(): HttpResponseMessage {
-        return create(400);
-    }
-
-    export function notFound(): HttpResponseMessage {
-        return create(404);
-    }
-
-    export function methodNotAllowed(allowedMethods: string[]): HttpResponseMessage {
-        return create(405, { "Allow": allowedMethods });
-    }
-
-    export function preconditionFailed(): HttpResponseMessage {
-        return create(412);
-    }
-
-    export function unsupportedMediaType(): HttpResponseMessage {
-        return create(415);
-    }
-
-    export function internalServerError(content?: HttpContent): HttpResponseMessage {
-        return create(500, {}, content);
-    }
-
-    export function notImplemented(): HttpResponseMessage {
-        return create(501);
-    }
-
-    export function setHeaders(obj: HttpResponseMessage | HttpContent, headers: http.OutgoingHttpHeaders) {
-        Object.assign(obj.headers, headers);
-    }
-
-    export function writeResponse(message: HttpResponseMessage, response: http.ServerResponse) {
-        const content = message.content;
-        const headers = HttpHeaders.combine(message.headers, content && content.headers);
-        response.writeHead(message.statusCode, message.statusMessage || http.STATUS_CODES[message.statusCode], headers);
-        response.end(content && content.content, "utf8");
-    }
-}
-
-namespace HttpFileMessageHandler {
-    function handleGetRequest(request: HttpRequestMessage): HttpResponseMessage {
-        const file = HttpRequestMessage.getFile(request);
-        const stat = HttpRequestMessage.getStats(request);
-        const etag = ETag.compute(stat);
-        const headers: http.OutgoingHttpHeaders = {
-            "Last-Modified": stat.mtime.toUTCString(),
-            "ETag": etag
-        };
-
-        let content: HttpContent | undefined;
-        if (stat.isFile()) {
-            if (request.method === "HEAD") {
-                headers["Content-Type"] = guessMediaType(file);
-                headers["Content-Length"] = stat.size;
-            }
-            else {
-                content = HttpContent.forMediaType(guessMediaType(file), fs.readFileSync(file, "utf8"));
-            }
-        }
-        else {
-            return HttpResponseMessage.notFound();
-        }
-
-        return HttpResponseMessage.ok(headers, content);
-    }
-
-    function handlePutRequest(request: HttpRequestMessage): HttpResponseMessage {
-        if (request.headers["Content-Encoding"]) return HttpResponseMessage.unsupportedMediaType();
-        if (request.headers["Content-Range"]) return HttpResponseMessage.notImplemented();
-
-        const file = toLocalPath(request.url);
-        const exists = fs.existsSync(file);
-        mkdir(path.dirname(file));
-        fs.writeFileSync(file, request.content, "utf8");
-        return exists ? HttpResponseMessage.noContent() : HttpResponseMessage.created();
-    }
-
-    function handleDeleteRequest(request: HttpRequestMessage): HttpResponseMessage {
-        const file = HttpRequestMessage.getFile(request);
-        const stats = HttpRequestMessage.getStats(request);
-        if (stats.isFile()) {
-            fs.unlinkSync(file);
-        }
-        else if (stats.isDirectory()) {
-            fs.rmdirSync(file);
-        }
-
-        return HttpResponseMessage.noContent();
-    }
-
-    function handleOptionsRequest(request: HttpRequestMessage): HttpResponseMessage {
-        return HttpResponseMessage.noContent({
-            "X-Case-Sensitivity": useCaseSensitiveFileNames ? "CS" : "CI"
-        });
-    }
-
-    function handleRequestCore(request: HttpRequestMessage): HttpResponseMessage {
-        switch (request.method) {
-            case "HEAD":
-            case "GET":
-                return handleGetRequest(request);
-            case "PUT":
-                return handlePutRequest(request);
-            case "DELETE":
-                return handleDeleteRequest(request);
-            case "OPTIONS":
-                return handleOptionsRequest(request);
-            default:
-                return HttpResponseMessage.methodNotAllowed(["HEAD", "GET", "PUT", "DELETE", "OPTIONS"]);
-        }
-    }
-
-    export function handleRequest(request: HttpRequestMessage): HttpResponseMessage {
-        let response = HttpCache.get(request);
-        if (!response) HttpCache.set(request, response = handleRequestCore(request));
-        return response;
-    }
-}
-
-namespace HttpApiMessageHandler {
-    function handleResolveRequest(request: HttpRequestMessage): HttpResponseMessage {
-        if (!request.content) return HttpResponseMessage.badRequest();
-        const localPath = path.resolve(rootDir, request.content.content);
-        const relativePath = toURLPath(localPath);
-        return relativePath === undefined
-            ? HttpResponseMessage.badRequest()
-            : HttpResponseMessage.ok(HttpContent.text(relativePath));
-    }
-
-    function handleListFilesRequest(request: HttpRequestMessage): HttpResponseMessage {
-        if (!request.content) return HttpResponseMessage.badRequest();
-        const localPath = path.resolve(rootDir, request.content.content);
-        const files: string[] = [];
-        visit(localPath, files);
-        return HttpResponseMessage.ok(HttpContent.json(files));
-
-        function visit(dirname: string, results: string[]) {
-            const { files, directories } = getAccessibleFileSystemEntries(dirname);
-            for (const file of files) {
-                results.push(toURLPath(path.join(dirname, file)));
-            }
-            for (const directory of directories) {
-                visit(path.join(dirname, directory), results);
-            }
-        }
-    }
-
-    function handleDirectoryExistsRequest(request: HttpRequestMessage): HttpResponseMessage {
-        if (!request.content) return HttpResponseMessage.badRequest();
-        const localPath = path.resolve(rootDir, request.content.content);
-        return HttpResponseMessage.ok(HttpContent.json(directoryExists(localPath)));
-    }
-
-    function handlePostRequest(request: HttpRequestMessage): HttpResponseMessage {
-        switch (request.url.pathname) {
-            case "/api/resolve":
-                return handleResolveRequest(request);
-            case "/api/listFiles":
-                return handleListFilesRequest(request);
-            case "/api/directoryExists":
-                return handleDirectoryExistsRequest(request);
-            default:
-                return HttpResponseMessage.notFound();
-        }
-    }
-
-    export function handleRequest(request: HttpRequestMessage): HttpResponseMessage {
-        switch (request.method) {
-            case "POST":
-                return handlePostRequest(request);
-            default:
-                return HttpResponseMessage.methodNotAllowed(["POST"]);
-        }
-    }
-
-    export function match(request: HttpRequestMessage) {
-        return /^\/api\//.test(request.url.pathname);
-    }
-}
-
-namespace HttpMessageHandler {
-    export function handleRequest(request: HttpRequestMessage): HttpResponseMessage {
-        const { ifMatch, ifNoneMatch, ifModifiedSince, ifUnmodifiedSince } = HttpHeaders.getIfConditions(request.headers);
-        const stats = HttpRequestMessage.getStats(request, /*throwErrors*/ false);
-        if (stats) {
-            const etag = ETag.compute(stats);
-            if (ifNoneMatch) {
-                if (ETag.matches(etag, ifNoneMatch)) {
-                    return HttpResponseMessage.notModified();
-                }
-            }
-            else if (ifModifiedSince && stats.mtime.getTime() <= ifModifiedSince.getTime()) {
-                return HttpResponseMessage.notModified();
-            }
-
-            if (ifMatch && !ETag.matches(etag, ifMatch)) {
-                return HttpResponseMessage.preconditionFailed();
-            }
-
-            if (ifUnmodifiedSince && stats.mtime.getTime() > ifUnmodifiedSince.getTime()) {
-                return HttpResponseMessage.preconditionFailed();
-            }
-        }
-        else if (ifMatch === "*") {
-            return HttpResponseMessage.preconditionFailed();
-        }
-
-        if (HttpApiMessageHandler.match(request)) {
-            return HttpApiMessageHandler.handleRequest(request);
-        }
-        else {
-            return HttpFileMessageHandler.handleRequest(request);
-        }
-    }
-
-    export function handleError(e: any): HttpResponseMessage {
-        switch (e.code) {
-            case "ENOENT": return HttpResponseMessage.notFound();
-            default: return HttpResponseMessage.internalServerError(HttpContent.text(e.toString()));
-        }
-    }
-}
-
-namespace HttpCache {
-    interface CacheEntry {
-        timestamp: number;
-        expires: number;
-        response: HttpResponseMessage;
-    }
-
-    const cache: Record<string, CacheEntry> = Object.create(null);
-
-    export function get(request: HttpRequestMessage) {
-        if (request.method !== "GET" && request.method !== "HEAD") return undefined;
-
-        const cacheControl = HttpHeaders.getCacheControl(request.headers);
-        if (cacheControl.noCache) return undefined;
-
-        const entry = cache[request.url.toString()];
-        if (!entry) return undefined;
-
-        const age = (Date.now() - entry.timestamp) / 1000;
-        const lifetime = (entry.expires - Date.now()) / 1000;
-
-        if (cacheControl.maxAge !== undefined && cacheControl.maxAge < age) return undefined;
-        if (lifetime >= 0) {
-            if (cacheControl.minFresh !== undefined && cacheControl.minFresh < lifetime) return undefined;
-        }
-        else {
-            if (cacheControl.maxStale === undefined || cacheControl.maxStale < -lifetime) {
-                return undefined;
-            }
-        }
-
-        if (request.method === "GET" && !entry.response.content) {
-            return undefined; // partial response
-        }
-
-        const response = HttpResponseMessage.clone(entry.response);
-        response.headers["Age"] = Math.floor(age);
-        return response;
-    }
-
-    export function set(request: HttpRequestMessage, response: HttpResponseMessage) {
-        if (request.method !== "GET" && request.method !== "HEAD") return response;
-
-        const cacheControl = HttpHeaders.getCacheControl(request.headers);
-        if (cacheControl.noCache) return response;
-        if (cacheControl.noStore) return response;
-
-        const timestamp = Date.now();
-        const expires = HttpHeaders.getExpires(response.headers);
-        const age = (Date.now() - timestamp) / 1000;
-        const lifetime = (expires - Date.now()) / 1000;
-
-        if (cacheControl.maxAge !== undefined && cacheControl.maxAge < age) return response;
-        if (lifetime >= 0) {
-            if (cacheControl.minFresh !== undefined && cacheControl.minFresh < lifetime) return response;
-        }
-        else {
-            if (cacheControl.maxStale === undefined || cacheControl.maxStale < -lifetime) return response;
-        }
-
-        cache[request.url.toString()] = {
-            timestamp,
-            expires,
-            response: HttpResponseMessage.clone(response)
-        };
-
-        response.headers["Age"] = Math.floor(age);
-        return response;
-    }
-
-    function cleanupCache() {
-        for (const url in cache) {
-            const entry = cache[url];
-            if (entry.expires < Date.now()) delete cache[url];
-        }
-    }
-
-    setInterval(cleanupCache, 60000).unref();
-}
-
-namespace ETag {
-    export function compute(stats: fs.Stats) {
-        return JSON.stringify(crypto
-            .createHash("sha1")
-            .update(JSON.stringify({
-                dev: stats.dev,
-                ino: stats.ino,
-                mtime: stats.mtimeMs,
-                size: stats.size
-            }))
-            .digest("base64"));
-    }
-
-    export function matches(etag: string | undefined, condition: "*" | string[]) {
-        return etag && condition === "*" || condition.indexOf(etag) >= 0;
-    }
-}
 
 function isFileSystemCaseSensitive(): boolean {
     // win32\win64 are case insensitive platforms
@@ -552,57 +63,215 @@ function hasTrailingSeparator(pathname: string) {
     return ch === "/" || ch === "\\";
 }
 
-function toLocalPath(url: url.URL) {
+function toServerPath(url: url.URL | string) {
+    if (typeof url === "string") url = new URL(url, baseUrl);
     const pathname = decodeURIComponent(url.pathname);
     return path.join(rootDir, pathname);
 }
 
-function toURLPath(pathname: string) {
+function toClientPath(pathname: string) {
     pathname = normalizeSlashes(pathname);
     pathname = trimLeadingSeparator(pathname);
 
-    const resolvedPath = path.resolve(rootDir, pathname);
-    if (resolvedPath.slice(0, rootDir.length) !== rootDir) {
+    const serverPath = path.resolve(rootDir, pathname);
+    if (serverPath.slice(0, rootDir.length) !== rootDir) {
         return undefined;
     }
 
-    let relativePath = resolvedPath.slice(rootDir.length);
-    relativePath = ensureLeadingSeparator(relativePath);
-    relativePath = normalizeSlashes(relativePath);
-    return relativePath;
+    let clientPath = serverPath.slice(rootDir.length);
+    clientPath = ensureLeadingSeparator(clientPath);
+    clientPath = normalizeSlashes(clientPath);
+    return clientPath;
 }
 
-function directoryExists(dirname: string) {
-    const stat = tryStat(dirname);
-    return !!stat && stat.isDirectory();
-}
-
-function mkdir(dirname: string) {
-    try {
-        fs.mkdirSync(dirname);
+declare module "http" {
+    interface IncomingHttpHeaders {
+        "if-match"?: string;
+        "if-none-match"?: string;
+        "if-modified-since"?: string;
+        "if-unmodified-since"?: string;
+        "accept-charset"?: string;
+        "accept-encoding"?: string;
+        "range"?: string;
     }
-    catch (e) {
-        if (e.code === "EEXIST") {
-            return;
+}
+
+function getQuality<T extends { quality?: number }>(value: T) {
+    return value.quality === undefined ? 1 : value.quality;
+}
+
+function bestMatch<T, TPattern extends { quality?: number }>(value: T, patterns: TPattern[], isMatch: (value: T, pattern: TPattern) => boolean) {
+    let match: TPattern | undefined;
+    for (const pattern of patterns) {
+        if (!isMatch(value, pattern)) continue;
+        if (match === undefined || getQuality(pattern) > getQuality(match)) {
+            match = pattern;
         }
-        if (e.code === "ENOENT") {
+    }
+    return match;
+}
+
+const mediaTypeParser = /^([^\/]+)\/([^\/;]+)(?:;(.*))?$/;
+
+interface MediaType {
+    type: string;
+    subtype: string;
+    parameters: Record<string, string>;
+    charset?: string;
+    quality?: number;
+}
+
+function parseMediaType(mediaType: string): MediaType {
+    const match = mediaTypeParser.exec(mediaType);
+    if (!match) throw new Error("Invalid media type");
+    const type = match[1].trim();
+    const subtype = match[2].trim();
+    if (type === "*" && subtype !== "*") throw new Error("Invalid media type");
+    const parameters: Record<string, string> = {};
+    let charset: string | undefined;
+    let quality: number | undefined;
+    if (match[3]) {
+        for (const parameter of match[3].split(";")) {
+            const pair = parameter.split("=");
+            const name = pair[0].trim();
+            const value = pair[1].trim();
+            parameters[name] = value;
+            if (name === "charset") charset = value;
+            if (name === "q") quality = +value;
+        }
+    }
+    return { type, subtype, parameters, charset, quality };
+}
+
+function parseMediaTypes(value: string) {
+    const mediaTypes: MediaType[] = [];
+    for (const mediaRange of value.split(",")) {
+        mediaTypes.push(parseMediaType(mediaRange));
+    }
+    return mediaTypes;
+}
+
+function matchesMediaType(mediaType: MediaType, mediaTypePattern: MediaType) {
+    if (mediaTypePattern.type === "*") return true;
+    if (mediaTypePattern.type === mediaType.type) {
+        if (mediaTypePattern.subtype === "*") return true;
+        if (mediaTypePattern.subtype === mediaType.subtype) return true;
+    }
+    return false;
+}
+
+interface StringWithQuality {
+    value: string;
+    quality?: number;
+}
+
+const stringWithQualityParser = /^([^;]+)(;\s*q\s*=\s*([^\s]+)\s*)?$/;
+
+function parseStringWithQuality(value: string) {
+    const match = stringWithQualityParser.exec(value);
+    if (!match) throw new Error("Invalid header value");
+    return { value: match[1].trim(), quality: match[2] ? +match[2] : undefined };
+}
+
+function parseStringsWithQuality(value: string) {
+    const charsets: StringWithQuality[] = [];
+    for (const charset of value.split(",")) {
+        charsets.push(parseStringWithQuality(charset));
+    }
+    return charsets;
+}
+
+function matchesCharSet(charset: string, charsetPattern: StringWithQuality) {
+    return charsetPattern.value === "*" || charsetPattern.value === charset;
+}
+
+function computeETag(stats: fs.Stats) {
+    return JSON.stringify(crypto
+        .createHash("sha1")
+        .update(JSON.stringify({
+            dev: stats.dev,
+            ino: stats.ino,
+            mtime: stats.mtimeMs,
+            size: stats.size
+        }))
+        .digest("base64"));
+}
+
+function tryParseETags(value: string | undefined): "*" | string[] | undefined {
+    if (!value) return undefined;
+    if (value === "*") return value;
+    const etags: string[] = [];
+    for (const etag of value.split(",")) {
+        etags.push(etag.trim());
+    }
+    return etags;
+}
+
+function matchesETag(etag: string | undefined, condition: "*" | string[] | undefined) {
+    if (!condition) return true;
+    if (!etag) return false;
+    return condition === "*" || condition.indexOf(etag) >= 0;
+}
+
+function tryParseDate(value: string | undefined) {
+    return value ? new Date(value) : undefined;
+}
+
+interface ByteRange {
+    start: number;
+    end: number;
+}
+
+const byteRangeParser = /^\s*(\d+)\s*-\s*(\d+)\s*$/;
+
+function tryParseByteRange(value: string, contentLength: number): ByteRange | undefined {
+    const match = byteRangeParser.exec(value);
+    const firstBytePos = match && match[1] ? +match[1] : undefined;
+    const lastBytePos = match && match[2] ? +match[2] : undefined;
+    if (firstBytePos !== undefined && lastBytePos !== undefined) {
+        if (lastBytePos < firstBytePos) return undefined;
+        return { start: firstBytePos, end: lastBytePos + 1 };
+    }
+    if (firstBytePos !== undefined) return { start: firstBytePos, end: contentLength };
+    if (lastBytePos !== undefined) return { start: contentLength - lastBytePos, end: contentLength };
+    return undefined;
+}
+
+function tryParseByteRanges(value: string, contentLength: number): ByteRange[] | undefined {
+    if (!value.startsWith("bytes=")) return;
+    const ranges: ByteRange[] = [];
+    for (const range of value.slice(6).split(",")) {
+        const byteRange = tryParseByteRange(range, contentLength);
+        if (byteRange === undefined) return undefined;
+        if (byteRange.start >= contentLength) continue;
+        ranges.push(byteRange);
+    }
+    return ranges;
+}
+
+function once<T extends (...args: any[]) => void>(callback: T): T;
+function once(callback: (...args: any[]) => void) {
+    let called = false;
+    return (...args: any[]) => {
+        if (called) return;
+        called = true;
+        callback(...args);
+    };
+}
+
+function mkdirp(dirname: string, callback: (err: NodeJS.ErrnoException | null) => void) {
+    fs.mkdir(dirname, err => {
+        if (err && err.code === "EEXIST") err = null;
+        if (err && err.code === "ENOENT") {
             const parentdir = path.dirname(dirname);
-            if (!parentdir || parentdir === dirname) throw e;
-            mkdir(parentdir);
-            fs.mkdirSync(dirname);
-            return;
+            if (!parentdir || parentdir === dirname) return callback(err);
+            return mkdirp(parentdir, err => {
+                if (err) return callback(err);
+                return fs.mkdir(dirname, callback);
+            });
         }
-        throw e;
-    }
-}
-
-function tryStat(pathname: string) {
-    try {
-        return fs.statSync(pathname);
-    }
-    catch (e) {
-        return undefined;
-    }
+        return callback(err);
+    });
 }
 
 function getAccessibleFileSystemEntries(pathname: string) {
@@ -640,80 +309,433 @@ function getAccessibleFileSystemEntries(pathname: string) {
     }
 }
 
-function log(msg: string) {
-    if (verbose) {
-        console.log(msg);
-    }
-}
-
 function guessMediaType(pathname: string) {
     switch (path.extname(pathname).toLowerCase()) {
-        case ".html": return "text/html";
-        case ".css": return "text/css";
-        case ".js": return "application/javascript";
-        case ".ts": return "text/plain";
-        case ".json": return "text/plain";
-        default: return "binary";
+        case ".html": return "text/html; charset=utf-8";
+        case ".css": return "text/css; charset=utf-8";
+        case ".js": return "application/javascript; charset=utf-8";
+        case ".mjs": return "application/javascript; charset=utf-8";
+        case ".jsx": return "text/jsx; charset=utf-8";
+        case ".ts": return "text/plain; charset=utf-8";
+        case ".tsx": return "text/plain; charset=utf-8";
+        case ".json": return "text/plain; charset=utf-8";
+        case ".map": return "application/json; charset=utf-8";
+        default: return "application/octet-stream";
     }
 }
 
-function printHelp() {
-    console.log("Runs an http server on port 8888, looking for tests folder in the current directory\n");
-    console.log("Syntax: node webTestServer.js [browser] [tests] [--verbose]\n");
-    console.log("Options:");
-    console.log(" <browser>     The browser to launch. One of 'IE', 'chrome', or 'none' (default 'IE').");
-    console.log(" <tests>       A regular expression to pass to Mocha.");
-    console.log(" --verbose     Enables verbose logging.")
+function readContent(req: http.ServerRequest, callback: (err: NodeJS.ErrnoException | null, content: string | null) => void) {
+    const chunks: Buffer[] = [];
+    const done = once((err: NodeJS.ErrnoException | null) => {
+        if (err) return callback(err, /*content*/ null);
+        let content: string | null = null;
+        try {
+            content = Buffer.concat(chunks).toString("utf8");
+        }
+        catch (e) {
+            err = e;
+        }
+        return callback(err, content);
+    });
+    req.on("data", chunk => chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk, "utf8")));
+    req.on("error", err => done(err));
+    req.on("end", () => done(/*err*/ null));
 }
 
-function parseCommandLine(args: string[]) {
-    let offset = 0;
-    for (let i = 0; i < args.length; i++) {
-        const arg = args[i];
-        const argLower = arg.toLowerCase();
-        if (argLower === "--help") {
-            printHelp();
+function saveToFile(file: string, readable: Readable, callback: (err: NodeJS.ErrnoException | null) => void) {
+    callback = once(callback);
+    const writable = fs.createWriteStream(file, { autoClose: true });
+    writable.on("error", err => callback(err));
+    readable.on("end", () => callback(/*err*/ null));
+    readable.pipe(writable, { end: true });
+}
+
+function sendContent(res: http.ServerResponse, statusCode: number, content: string | Buffer, contentType: string): void;
+function sendContent(res: http.ServerResponse, statusCode: number, content: Readable, contentType: string, contentLength: number): void;
+function sendContent(res: http.ServerResponse, statusCode: number, content: string | Buffer | Readable, contentType: string, contentLength?: number) {
+    res.statusCode = statusCode;
+    res.setHeader("Content-Type", contentType);
+    if (isString(content)) {
+        res.setHeader("Content-Length", Buffer.byteLength(content, "utf8"));
+        res.end(content, "utf8");
+    }
+    else if (isBuffer(content)) {
+        res.setHeader("Content-Length", content.byteLength);
+        res.end(content);
+    }
+    else {
+        if (contentLength !== undefined) res.setHeader("Content-Length", contentLength);
+        content.on("error", e => sendInternalServerError(res, e));
+        content.pipe(res, { end: true });
+    }
+}
+
+function sendJson(res: http.ServerResponse, statusCode: number, value: any) {
+    try {
+        sendContent(res, statusCode, JSON.stringify(value), "application/json; charset=utf-8");
+    }
+    catch (e) {
+        sendInternalServerError(res, e);
+    }
+}
+
+function sendCreated(res: http.ServerResponse, location?: string, etag?: string) {
+    res.statusCode = 201;
+    if (location) res.setHeader("Location", location);
+    if (etag) res.setHeader("ETag", etag);
+    res.end();
+}
+
+function sendNoContent(res: http.ServerResponse) {
+    res.statusCode = 204;
+    res.end();
+}
+
+function sendFound(res: http.ServerResponse, location: string) {
+    res.statusCode = 302;
+    res.setHeader("Location", location);
+    res.end();
+}
+
+function sendNotModified(res: http.ServerResponse) {
+    res.statusCode = 304;
+    res.end();
+}
+
+function sendBadRequest(res: http.ServerResponse) {
+    res.statusCode = 400;
+    res.end();
+}
+
+function sendNotFound(res: http.ServerResponse) {
+    res.statusCode = 404;
+    res.end();
+}
+
+function sendMethodNotAllowed(res: http.ServerResponse, allowedMethods: string[]) {
+    res.statusCode = 405;
+    res.setHeader("Allow", allowedMethods);
+    res.end();
+}
+
+function sendNotAcceptable(res: http.ServerResponse) {
+    res.statusCode = 406;
+    res.end();
+}
+
+function sendPreconditionFailed(res: http.ServerResponse) {
+    res.statusCode = 412;
+    res.end();
+}
+
+function sendUnsupportedMediaType(res: http.ServerResponse) {
+    res.statusCode = 415;
+    res.end();
+}
+
+function sendRangeNotSatisfiable(res: http.ServerResponse) {
+    res.statusCode = 416;
+    res.end();
+}
+
+function sendInternalServerError(res: http.ServerResponse, error: Error) {
+    console.error(error);
+    return sendContent(res, /*statusCode*/ 500, error.stack, "text/plain; charset=utf8");
+}
+
+function sendNotImplemented(res: http.ServerResponse) {
+    res.statusCode = 501;
+    res.end();
+}
+
+function shouldIgnoreCache(url: URL) {
+    switch (url.pathname) {
+        case "/built/local/bundle.js":
+        case "/built/local/bundle.js.map":
+            return true;
+        default:
             return false;
-        }
-        else if (argLower === "--verbose") {
-            verbose = true;
-        }
-        else {
-            if (offset === 0) {
-                browser = arg;
+    }
+}
+
+function isAcceptable(req: http.ServerRequest, contentType: string) {
+    const mediaType = parseMediaType(contentType);
+    return isAcceptableMediaType(req, mediaType)
+        && isAcceptableCharSet(req, mediaType)
+        && isAcceptableEncoding(req);
+}
+
+function isAcceptableMediaType(req: http.ServerRequest, mediaType: MediaType) {
+    if (!req.headers.accept) return true;
+    const acceptedMediaType = bestMatch(mediaType, parseMediaTypes(req.headers.accept), matchesMediaType);
+    return acceptedMediaType ? getQuality(acceptedMediaType) > 0 : false;
+}
+
+function isAcceptableCharSet(req: http.ServerRequest, mediaType: MediaType) {
+    if (!req.headers["accept-charset"]) return true;
+    const acceptedCharSet = bestMatch(mediaType.charset || "utf-8", parseStringsWithQuality(req.headers["accept-charset"]), matchesCharSet);
+    return acceptedCharSet ? getQuality(acceptedCharSet) > 0 : false;
+}
+
+function isAcceptableEncoding(req: http.ServerRequest) {
+    if (!req.headers["accept-encoding"]) return true;
+    const acceptedEncoding = bestMatch(/*value*/ undefined, parseStringsWithQuality(req.headers["accept-encoding"]), (_, pattern) => pattern.value === "*" || pattern.value === "identity");
+    return acceptedEncoding ? getQuality(acceptedEncoding) > 0 : true;
+}
+
+function shouldSendNotModified(req: http.ServerRequest, stats: fs.Stats, etag: string) {
+    const ifNoneMatch = tryParseETags(req.headers["if-none-match"]);
+    if (ifNoneMatch) return matchesETag(etag, ifNoneMatch);
+
+    const ifModifiedSince = tryParseDate(req.headers["if-modified-since"]);
+    if (ifModifiedSince) return stats.mtime.getTime() <= ifModifiedSince.getTime();
+
+    return false;
+}
+
+function shouldSendPreconditionFailed(req: http.ServerRequest, stats: fs.Stats, etag: string) {
+    const ifMatch = tryParseETags(req.headers["if-match"]);
+    if (ifMatch && !matchesETag(etag, ifMatch)) return true;
+
+    const ifUnmodifiedSince = tryParseDate(req.headers["if-unmodified-since"]);
+    if (ifUnmodifiedSince && stats.mtime.getTime() > ifUnmodifiedSince.getTime()) return true;
+
+    return false;
+}
+
+function handleGetRequest(req: http.ServerRequest, res: http.ServerResponse) {
+    const url = new URL(req.url, baseUrl);
+    if (url.pathname === "/") {
+        url.pathname = "/tests/webTestResults.html";
+        return sendFound(res, url.toString());
+    }
+
+    const file = toServerPath(url);
+    fs.stat(file, (err, stats) => {
+        try {
+            if (err) {
+                if (err.code === "ENOENT") return sendNotFound(res);
+                return sendInternalServerError(res, err);
             }
-            else if (offset === 1) {
-                grep = arg;
+            if (stats && stats.isFile()) {
+                const contentType = guessMediaType(file);
+                if (!isAcceptable(req, contentType)) return sendNotAcceptable(res);
+
+                const etag = computeETag(stats);
+                if (shouldSendNotModified(req, stats, etag)) return sendNotModified(res);
+                if (shouldSendPreconditionFailed(req, stats, etag)) return sendPreconditionFailed(res);
+
+                if (shouldIgnoreCache(url)) res.setHeader("Cache-Control", "no-store");
+                res.setHeader("Last-Modified", stats.mtime.toUTCString());
+                res.setHeader("ETag", etag);
+                res.setHeader("Content-Type", contentType);
+                res.setHeader("Accept-Ranges", "bytes");
+
+                const ranges = req.headers.range && tryParseByteRanges(req.headers.range, stats.size);
+                if (ranges && ranges.length === 0) return sendRangeNotSatisfiable(res);
+
+                let start: number | undefined;
+                let end: number | undefined;
+                if (ranges && ranges.length === 1) {
+                    start = ranges[0].start;
+                    end = ranges[0].end;
+                    if (start >= stats.size || end > stats.size) return sendRangeNotSatisfiable(res);
+                    res.statusCode = 206;
+                    res.setHeader("Content-Length", end - start);
+                    res.setHeader("Content-Range", `bytes ${start}-${end - 1}/${stats.size}`);
+                }
+                else {
+                    res.statusCode = 200;
+                    res.setHeader("Content-Length", stats.size);
+                }
+                if (req.method === "HEAD") return res.end();
+                const readable = fs.createReadStream(file, { start, end, autoClose: true });
+                readable.on("error", err => sendInternalServerError(res, err));
+                readable.pipe(res, { end: true });
             }
             else {
-                console.log(`Unrecognized argument: ${arg}\n`);
-                return false;
+                if (req.headers["if-match"] === "*") return sendPreconditionFailed(res);
+                return sendNotFound(res);
             }
-            offset++;
+        }
+        catch (e) {
+            return sendInternalServerError(res, e);
+        }
+    });
+}
+
+function handlePutRequest(req: http.ServerRequest, res: http.ServerResponse) {
+    if (req.headers["content-encoding"]) return sendUnsupportedMediaType(res);
+    if (req.headers["content-range"]) return sendNotImplemented(res);
+    const file = toServerPath(req.url);
+    fs.stat(file, (err, stats) => {
+        try {
+            if (err && err.code !== "ENOENT") return sendInternalServerError(res, err);
+            if (stats && !stats.isFile()) return sendMethodNotAllowed(res, []);
+            return mkdirp(path.dirname(file), err => {
+                if (err) return sendInternalServerError(res, err);
+                try {
+                    const writable = fs.createWriteStream(file, { autoClose: true });
+                    writable.on("error", err => sendInternalServerError(res, err));
+                    writable.on("finish", () => {
+                        if (stats) return sendNoContent(res);
+                        fs.stat(file, (err, stats) => {
+                            if (err) return sendInternalServerError(res, err);
+                            return sendCreated(res, toClientPath(file), computeETag(stats));
+                        });
+                    });
+                    req.pipe(writable, { end: true });
+                    return;
+                }
+                catch (e) {
+                    return sendInternalServerError(res, e);
+                }
+            });
+        }
+        catch (e) {
+            return sendInternalServerError(res, e);
+        }
+    });
+}
+
+function handleDeleteRequest(req: http.ServerRequest, res: http.ServerResponse) {
+    const file = toServerPath(req.url);
+    fs.stat(file, (err, stats) => {
+        try {
+            if (err && err.code !== "ENOENT") return sendInternalServerError(res, err);
+            if (!stats) return sendNotFound(res);
+            if (stats.isFile()) return fs.unlink(file, handleResult);
+            if (stats.isDirectory()) return fs.rmdir(file, handleResult);
+            return sendNotFound(res);
+            function handleResult(err: NodeJS.ErrnoException) {
+                if (err && err.code !== "ENOENT") return sendInternalServerError(res, err);
+                if (err) return sendNotFound(res);
+                return sendNoContent(res);
+            }
+        }
+        catch (e) {
+            return sendInternalServerError(res, e);
+        }
+    });
+}
+
+function handleOptionsRequest(req: http.ServerRequest, res: http.ServerResponse) {
+    res.setHeader("X-Case-Sensitivity", useCaseSensitiveFileNames ? "CS" : "CI");
+    return sendNoContent(res);
+}
+
+function handleApiResolve(req: http.ServerRequest, res: http.ServerResponse) {
+    readContent(req, (err, content) => {
+        try {
+            if (err) return sendInternalServerError(res, err);
+            if (!content) return sendBadRequest(res);
+            const serverPath = toServerPath(content);
+            const clientPath = toClientPath(serverPath);
+            if (clientPath === undefined) return sendBadRequest(res);
+            return sendContent(res, /*statusCode*/ 200, clientPath, /*contentType*/ "text/plain;charset=utf-8");
+        }
+        catch (e) {
+            return sendInternalServerError(res, e);
+        }
+    });
+}
+
+function handleApiListFiles(req: http.ServerRequest, res: http.ServerResponse) {
+    readContent(req, (err, content) => {
+        try {
+            if (err) return sendInternalServerError(res, err);
+            if (!content) return sendBadRequest(res);
+            const serverPath = toServerPath(content);
+            const files: string[] = [];
+            visit(serverPath, content, files);
+            return sendJson(res, /*statusCode*/ 200, files);
+            function visit(dirname: string, relative: string, results: string[]) {
+                const { files, directories } = getAccessibleFileSystemEntries(dirname);
+                for (const file of files) {
+                    results.push(path.join(relative, file));
+                }
+                for (const directory of directories) {
+                    visit(path.join(dirname, directory), path.join(relative, directory), results);
+                }
+            }
+        }
+        catch (e) {
+            return sendInternalServerError(res, e);
+        }
+    });
+}
+
+function handleApiDirectoryExists(req: http.ServerRequest, res: http.ServerResponse) {
+    readContent(req, (err, content) => {
+        try {
+            if (err) return sendInternalServerError(res, err);
+            if (!content) return sendBadRequest(res);
+            const serverPath = toServerPath(content);
+            fs.stat(serverPath, (err, stats) => {
+                try {
+                    if (err && err.code !== "ENOENT") return sendInternalServerError(res, err);
+                    return sendJson(res, /*statusCode*/ 200, !!stats && stats.isDirectory());
+                }
+                catch (e) {
+                    return sendInternalServerError(res, e);
+                }
+            });
+        }
+        catch (e) {
+            return sendInternalServerError(res, e);
+        }
+    });
+}
+
+function handleApiGetAccessibleFileSystemEntries(req: http.ServerRequest, res: http.ServerResponse) {
+    readContent(req, (err, content) => {
+        try {
+            if (err) return sendInternalServerError(res, err);
+            if (!content) return sendBadRequest(res);
+            const serverPath = toServerPath(content);
+            return sendJson(res, /*statusCode*/ 200, getAccessibleFileSystemEntries(serverPath));
+        }
+        catch (e) {
+            return sendInternalServerError(res, e);
+        }
+    });
+}
+
+function handlePostRequest(req: http.ServerRequest, res: http.ServerResponse) {
+    // API responses should not be cached
+    res.setHeader("Cache-Control", "no-cache");
+    switch (new URL(req.url, baseUrl).pathname) {
+        case "/api/resolve": return handleApiResolve(req, res);
+        case "/api/listFiles": return handleApiListFiles(req, res);
+        case "/api/directoryExists": return handleApiDirectoryExists(req, res);
+        case "/api/getAccessibleFileSystemEntries": return handleApiGetAccessibleFileSystemEntries(req, res);
+        default: return sendMethodNotAllowed(res, ["HEAD", "GET", "PUT", "DELETE", "OPTIONS"]);
+    }
+}
+
+function handleRequest(req: http.ServerRequest, res: http.ServerResponse) {
+    try {
+        switch (req.method) {
+            case "HEAD":
+            case "GET": return handleGetRequest(req, res);
+            case "PUT": return handlePutRequest(req, res);
+            case "POST": return handlePostRequest(req, res);
+            case "DELETE": return handleDeleteRequest(req, res);
+            case "OPTIONS": return handleOptionsRequest(req, res);
+            default: return sendMethodNotAllowed(res, ["HEAD", "GET", "PUT", "POST", "DELETE"]);
         }
     }
-
-    if (browser !== "IE" && browser !== "chrome") {
-        console.log(`Unrecognized browser '${browser}', expected 'IE' or 'chrome'.`);
-        return false;
+    catch (e) {
+        return sendInternalServerError(res, e);
     }
-
-    return true;
 }
 
 function startServer() {
     console.log(`Static file server running at\n  => http://localhost:${port}/\nCTRL + C to shutdown`);
-    http.createServer((serverRequest: http.ServerRequest, serverResponse: http.ServerResponse) => {
-        log(`${serverRequest.method} ${serverRequest.url}`);
-        HttpRequestMessage
-            .readRequest(serverRequest)
-            .then(HttpMessageHandler.handleRequest)
-            .catch(HttpMessageHandler.handleError)
-            .then(response => HttpResponseMessage.writeResponse(response, serverResponse));
-    }).listen(port);
+    return http.createServer(handleRequest).listen(port);
 }
 
-function startClient() {
+function startClient(server: http.Server) {
     let browserPath: string;
     if (browser === "none") {
         return;
@@ -755,16 +777,66 @@ function startClient() {
     console.log(`Using browser: ${browserPath}`);
 
     const queryString = grep ? `?grep=${grep}` : "";
-    child_process.spawn(browserPath, [`http://localhost:${port}/tests/webTestResults.html${queryString}`], {
+    const child = child_process.spawn(browserPath, [`http://localhost:${port}/tests/webTestResults.html${queryString}`], {
         stdio: "inherit"
     });
+    child.on("exit", () => server.close());
+}
+
+function printHelp() {
+    console.log("Runs an http server on port 8888, looking for tests folder in the current directory\n");
+    console.log("Syntax: node webTestServer.js [browser] [tests] [--verbose]\n");
+    console.log("Options:");
+    console.log(" <browser>     The browser to launch. One of 'IE', 'chrome', or 'none' (default 'IE').");
+    console.log(" <tests>       A regular expression to pass to Mocha.");
+    console.log(" --verbose     Enables verbose logging.");
+}
+
+function parseCommandLine(args: string[]) {
+    let offset = 0;
+    for (const arg of args) {
+        const argLower = arg.toLowerCase();
+        if (argLower === "--help") {
+            printHelp();
+            return false;
+        }
+        else if (argLower === "--verbose") {
+            verbose = true;
+        }
+        else {
+            if (offset === 0) {
+                browser = arg;
+            }
+            else if (offset === 1) {
+                grep = arg;
+            }
+            else {
+                console.log(`Unrecognized argument: ${arg}\n`);
+                return false;
+            }
+            offset++;
+        }
+    }
+
+    if (browser !== "IE" && browser !== "chrome" && browser !== "none") {
+        console.log(`Unrecognized browser '${browser}', expected 'IE' or 'chrome'.`);
+        return false;
+    }
+
+    return true;
+}
+
+function log(msg: string) {
+    if (verbose) {
+        console.log(msg);
+    }
 }
 
 function main() {
     if (parseCommandLine(process.argv.slice(2))) {
-        startServer();
-        startClient();
+        startClient(startServer());
     }
 }
 
 main();
+// tslint:enable:no-null-keyword

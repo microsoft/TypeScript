@@ -522,6 +522,7 @@ namespace Harness {
         log(text: string): void;
         args(): string[];
         getExecutingFilePath(): string;
+        getWorkspaceRoot(): string;
         exit(exitCode?: number): void;
         readDirectory(path: string, extension?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
         getAccessibleFileSystemEntries(dirname: string): ts.FileSystemEntries;
@@ -645,6 +646,7 @@ namespace Harness {
             log: s => console.log(s),
             args: () => ts.sys.args,
             getExecutingFilePath: () => ts.sys.getExecutingFilePath(),
+            getWorkspaceRoot: () => vpath.resolve(__dirname, "../.."),
             exit: exitCode => ts.sys.exit(exitCode),
             readDirectory: (path, extension, exclude, include, depth) => ts.sys.readDirectory(path, extension, exclude, include, depth),
             getAccessibleFileSystemEntries,
@@ -676,9 +678,9 @@ namespace Harness {
     function createBrowserIO(): IO {
         const serverRoot = new URL("http://localhost:8888/");
 
-        class HttpHeaders extends Map<string, string | string[]> {
+        class HttpHeaders extends core.SortedMap<string, string | string[]> {
             constructor(template?: Record<string, string | string[]>) {
-                super();
+                super(core.compareStringsCaseInsensitive);
                 if (template) {
                     for (const key in template) {
                         if (ts.hasProperty(template, key)) {
@@ -854,9 +856,9 @@ namespace Harness {
         function send(request: HttpRequestMessage): HttpResponseMessage {
             const xhr = new XMLHttpRequest();
             try {
+                xhr.open(request.method, request.url.toString(), /*async*/ false);
                 request.writeRequestHeaders(xhr);
                 xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-                xhr.open(request.method, request.url.toString(), /*async*/ false);
                 xhr.send(request.content && request.content.content);
                 while (xhr.readyState !== 4); // block until ready
                 return HttpResponseMessage.readResponseMessage(xhr);
@@ -903,8 +905,7 @@ namespace Harness {
 
         function directoryExists(path: string): boolean {
             const response = send(HttpRequestMessage.post(new URL("/api/directoryExists", serverRoot), HttpContent.text(path)));
-            return HttpResponseMessage.hasSuccessStatusCode(response)
-                && (response.content && response.content.content) === "true";
+            return hasJsonContent(response) && JSON.parse(response.content.content) as boolean;
         }
 
         function deleteFile(path: string) {
@@ -929,31 +930,22 @@ namespace Harness {
             }
 
             const response = send(HttpRequestMessage.post(new URL("/api/listFiles", serverRoot), HttpContent.text(dirname)));
-            return HttpResponseMessage.hasSuccessStatusCode(response)
-                && response.content
-                && response.content.headers.get("Content-Type") === "application/json"
-                    ? JSON.parse(response.content.content)
-                    : [];
+            return hasJsonContent(response) ? JSON.parse(response.content.content) : [];
         }
 
         function readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[], depth?: number) {
-            const fs = new vfs.FileSystem(!useCaseSensitiveFileNames(), { cwd: path, files: { [path]: { } } });
-            const sys = new fakes.System(fs);
-            for (const file of IO.listFiles(path)) {
-                fs.mkdirpSync(vpath.dirname(file));
-                fs.writeFileSync(file, "");
-            }
-            return sys.readDirectory(path, extension, exclude, include, depth);
+            return ts.matchFiles(path, extension, exclude, include, useCaseSensitiveFileNames(), "", depth, getAccessibleFileSystemEntries);
         }
 
         function getAccessibleFileSystemEntries(dirname: string): ts.FileSystemEntries {
-            const fs = new vfs.FileSystem(!useCaseSensitiveFileNames(), { cwd: dirname, files: { [dirname]: {} } });
-            const sys = new fakes.System(fs);
-            for (const file of IO.listFiles(path)) {
-                fs.mkdirpSync(vpath.dirname(file));
-                fs.writeFileSync(file, "");
-            }
-            return sys.getAccessibleFileSystemEntries(dirname);
+            const response = send(HttpRequestMessage.post(new URL("/api/getAccessibleFileSystemEntries", serverRoot), HttpContent.text(dirname)));
+            return hasJsonContent(response) ? JSON.parse(response.content.content) : { files: [], directories: [] };
+        }
+
+        function hasJsonContent(response: HttpResponseMessage): response is HttpResponseMessage & { content: HttpContent } {
+            return HttpResponseMessage.hasSuccessStatusCode(response)
+                && !!response.content
+                && /^application\/json(;.*)$/.test("" + response.content.headers.get("Content-Type"));
         }
 
         return {
@@ -976,7 +968,8 @@ namespace Harness {
             getExecutingFilePath: () => "",
             exit: () => {}, // tslint:disable-line no-empty
             readDirectory,
-            getAccessibleFileSystemEntries
+            getAccessibleFileSystemEntries,
+            getWorkspaceRoot: () => "/"
         };
     }
 
@@ -2003,7 +1996,7 @@ namespace Harness {
                 }
 
                 const parentDirectory = IO.directoryName(dirName);
-                if (parentDirectory !== "") {
+                if (parentDirectory !== "" && parentDirectory !== dirName) {
                     createDirectoryStructure(parentDirectory);
                 }
                 IO.createDirectory(dirName);

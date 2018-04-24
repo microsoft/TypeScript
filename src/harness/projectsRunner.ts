@@ -194,7 +194,7 @@ namespace project {
             }
 
             const fs = vfs.FileSystem.createFromFileSystem(Harness.IO, /*ignoreCase*/ false);
-            fs.mountSync(vpath.resolve(__dirname, "../../tests"), vpath.combine(vfs.srcFolder, "tests"), vfs.createResolver(Harness.IO));
+            fs.mountSync(vpath.resolve(Harness.IO.getWorkspaceRoot(), "tests"), vpath.combine(vfs.srcFolder, "tests"), vfs.createResolver(Harness.IO));
             fs.mkdirpSync(vpath.combine(vfs.srcFolder, testCase.projectRoot));
             fs.chdir(vpath.combine(vfs.srcFolder, testCase.projectRoot));
             fs.makeReadonly();

@@ -1009,6 +1009,7 @@ namespace vfs {
         fileExists(path: string): boolean;
         getFileSize(path: string): number;
         readFile(path: string): string;
+        getWorkspaceRoot(): string;
     }
 
     export function createResolver(host: FileSystemResolverHost): FileSystemResolver {
@@ -1244,10 +1245,10 @@ namespace vfs {
     // This is only to make the PR for this change easier to read. A follow-up PR will
     // revert this change and accept the new baselines.
     // See https://github.com/Microsoft/TypeScript/pull/20763#issuecomment-352553264
-    function patchResolver(io: FileSystemResolverHost, resolver: FileSystemResolver): FileSystemResolver {
-        const libFile = vpath.combine(__dirname, "lib.d.ts");
-        const es5File = vpath.combine(__dirname, "lib.es5.d.ts");
-        const stringComparer = io.useCaseSensitiveFileNames() ? vpath.compareCaseSensitive : vpath.compareCaseInsensitive;
+    function patchResolver(host: FileSystemResolverHost, resolver: FileSystemResolver): FileSystemResolver {
+        const libFile = vpath.combine(host.getWorkspaceRoot(), "built/local/lib.d.ts");
+        const es5File = vpath.combine(host.getWorkspaceRoot(), "built/local/lib.es5.d.ts");
+        const stringComparer = host.useCaseSensitiveFileNames() ? vpath.compareCaseSensitive : vpath.compareCaseInsensitive;
         return {
             readdirSync: path => resolver.readdirSync(path),
             statSync: path => resolver.statSync(fixPath(path)),
@@ -1273,8 +1274,8 @@ namespace vfs {
             const resolver = createResolver(host);
             builtLocalCI = new FileSystem(/*ignoreCase*/ true, {
                 files: {
-                    [builtFolder]: new Mount(__dirname, patchResolver(host, resolver)),
-                    [testLibFolder]: new Mount(vpath.resolve(__dirname, "../../tests/lib"), resolver),
+                    [builtFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "built/local"), patchResolver(host, resolver)),
+                    [testLibFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "tests/lib"), resolver),
                     [srcFolder]: {}
                 },
                 cwd: srcFolder,

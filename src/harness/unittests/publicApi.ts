@@ -14,12 +14,11 @@ describe("Public APIs", () => {
         });
 
         it("should compile", () => {
-            const testFile: Harness.Compiler.TestFile = {
-                unitName: builtFile,
-                content: fileContent
-            };
-            const inputFiles = [testFile];
-            const result = Harness.Compiler.compileFiles(inputFiles, [], /*harnessSettings*/ undefined, /*options*/ {}, /*currentDirectory*/ undefined);
+            const fs = vfs.FileSystem.createFromFileSystem(Harness.IO, /*ignoreCase*/ false);
+            fs.linkSync(`${vfs.builtFolder}/${fileName}`, `${vfs.srcFolder}/${fileName}`);
+            const sys = new fakes.System(fs);
+            const host = new fakes.CompilerHost(sys);
+            const result = compiler.compileFiles(host, [`${vfs.srcFolder}/${fileName}`], {});
             assert(!result.diagnostics || !result.diagnostics.length, Harness.Compiler.minimalDiagnosticsToString(result.diagnostics, /*pretty*/ true));
         });
     }
