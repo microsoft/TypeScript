@@ -34,19 +34,19 @@ type T02 = keyof keyof Object;
 >Object : Object
 
 type T03 = keyof keyof keyof Object;
->T03 : "toString" | "toLocaleString" | "valueOf"
+>T03 : "toString" | "valueOf" | ("toString" & number) | ("toLocaleString" & number) | ("valueOf" & number) | ("toFixed" & number) | ("toExponential" & number) | ("toPrecision" & number)
 >Object : Object
 
 type T04 = keyof keyof keyof keyof Object;
->T04 : number | "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
+>T04 : number | "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr" | ("toString" & number) | ("valueOf" & number) | (number & "length") | (number & "toString") | (number & "toLocaleString") | (number & "valueOf") | (number & "charAt") | (number & "charCodeAt") | (number & "concat") | (number & "indexOf") | (number & "lastIndexOf") | (number & "localeCompare") | (number & "match") | (number & "replace") | (number & "search") | (number & "slice") | (number & "split") | (number & "substring") | (number & "toLowerCase") | (number & "toLocaleLowerCase") | (number & "toUpperCase") | (number & "toLocaleUpperCase") | (number & "trim") | (number & "substr") | (number & "toFixed") | (number & "toExponential") | (number & "toPrecision") | ("length" & number) | ("charAt" & number) | ("charCodeAt" & number) | ("concat" & number) | ("indexOf" & number) | ("lastIndexOf" & number) | ("localeCompare" & number) | ("match" & number) | ("replace" & number) | ("search" & number) | ("slice" & number) | ("split" & number) | ("substring" & number) | ("toLowerCase" & number) | ("toLocaleLowerCase" & number) | ("toUpperCase" & number) | ("toLocaleUpperCase" & number) | ("trim" & number) | ("substr" & number)
 >Object : Object
 
 type T05 = keyof keyof keyof keyof keyof Object;
->T05 : "toString" | "toLocaleString" | "valueOf"
+>T05 : "toString" | "valueOf" | ("toString" & number) | ("toLocaleString" & number) | ("valueOf" & number) | ("toFixed" & number) | ("toExponential" & number) | ("toPrecision" & number)
 >Object : Object
 
 type T06 = keyof keyof keyof keyof keyof keyof Object;
->T06 : number | "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
+>T06 : number | "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr" | ("toString" & number) | ("valueOf" & number) | (number & "length") | (number & "toString") | (number & "toLocaleString") | (number & "valueOf") | (number & "charAt") | (number & "charCodeAt") | (number & "concat") | (number & "indexOf") | (number & "lastIndexOf") | (number & "localeCompare") | (number & "match") | (number & "replace") | (number & "search") | (number & "slice") | (number & "split") | (number & "substring") | (number & "toLowerCase") | (number & "toLocaleLowerCase") | (number & "toUpperCase") | (number & "toLocaleUpperCase") | (number & "trim") | (number & "substr") | (number & "toFixed") | (number & "toExponential") | (number & "toPrecision") | ("length" & number) | ("charAt" & number) | ("charCodeAt" & number) | ("concat" & number) | ("indexOf" & number) | ("lastIndexOf" & number) | ("localeCompare" & number) | ("match" & number) | ("replace" & number) | ("search" & number) | ("slice" & number) | ("split" & number) | ("substring" & number) | ("toLowerCase" & number) | ("toLocaleLowerCase" & number) | ("toUpperCase" & number) | ("toLocaleUpperCase" & number) | ("trim" & number) | ("substr" & number)
 >Object : Object
 
 type T10 = Shape["name"];
@@ -243,10 +243,10 @@ function f10(shape: Shape) {
 }
 
 function f20<T, U>(k1: keyof (T | U), k2: keyof (T & U), o1: T | U, o2: T & U) {
->f20 : <T, U>(k1: keyof (T | U), k2: keyof T | keyof U, o1: T | U, o2: T & U) => void
+>f20 : <T, U>(k1: keyof T & keyof U, k2: keyof T | keyof U, o1: T | U, o2: T & U) => void
 >T : T
 >U : U
->k1 : keyof (T | U)
+>k1 : keyof T & keyof U
 >T : T
 >U : U
 >k2 : keyof T | keyof U
@@ -260,9 +260,9 @@ function f20<T, U>(k1: keyof (T | U), k2: keyof (T & U), o1: T | U, o2: T & U) {
 >U : U
 
     o1[k1];
->o1[k1] : (T | U)[keyof (T | U)]
+>o1[k1] : (T | U)[keyof T & keyof U]
 >o1 : T | U
->k1 : keyof (T | U)
+>k1 : keyof T & keyof U
 
     o1[k2];   // Error
 >o1[k2] : (T | U)[keyof T | keyof U]
@@ -270,9 +270,9 @@ function f20<T, U>(k1: keyof (T | U), k2: keyof (T & U), o1: T | U, o2: T & U) {
 >k2 : keyof T | keyof U
 
     o2[k1];
->o2[k1] : (T & U)[keyof (T | U)]
+>o2[k1] : (T & U)[keyof T & keyof U]
 >o2 : T & U
->k1 : keyof (T | U)
+>k1 : keyof T & keyof U
 
     o2[k2];
 >o2[k2] : (T & U)[keyof T | keyof U]
@@ -291,13 +291,13 @@ function f20<T, U>(k1: keyof (T | U), k2: keyof (T & U), o1: T | U, o2: T & U) {
 
     k1 = k2;  // Error
 >k1 = k2 : keyof T | keyof U
->k1 : keyof (T | U)
+>k1 : keyof T & keyof U
 >k2 : keyof T | keyof U
 
     k2 = k1;
->k2 = k1 : keyof (T | U)
+>k2 = k1 : keyof T & keyof U
 >k2 : keyof T | keyof U
->k1 : keyof (T | U)
+>k1 : keyof T & keyof U
 }
 
 // Repro from #17166

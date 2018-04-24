@@ -26,10 +26,14 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(72,5): error 
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(76,5): error TS2322: Type 'T | U' is not assignable to type 'T & U'.
   Type 'T' is not assignable to type 'T & U'.
     Type 'T' is not assignable to type 'U'.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(77,5): error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof (T | U)'.
-  Type 'keyof T' is not assignable to type 'keyof (T | U)'.
-    Type 'string | number | symbol' is not assignable to type 'keyof (T | U)'.
-      Type 'string' is not assignable to type 'keyof (T | U)'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(77,5): error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
+  Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
+    Type 'string | number | symbol' is not assignable to type 'keyof T & keyof U'.
+      Type 'string' is not assignable to type 'keyof T & keyof U'.
+        Type 'string' is not assignable to type 'keyof T'.
+          Type 'keyof T' is not assignable to type 'keyof U'.
+            Type 'string | number | symbol' is not assignable to type 'keyof U'.
+              Type 'string' is not assignable to type 'keyof U'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(86,9): error TS2322: Type 'Extract<keyof T, string>' is not assignable to type 'K'.
   Type 'string & keyof T' is not assignable to type 'K'.
     Type 'string' is not assignable to type 'K'.
@@ -179,10 +183,14 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(100,5): error
 !!! error TS2322:     Type 'T' is not assignable to type 'U'.
         k1 = k2;  // Error
         ~~
-!!! error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof (T | U)'.
-!!! error TS2322:   Type 'keyof T' is not assignable to type 'keyof (T | U)'.
-!!! error TS2322:     Type 'string | number | symbol' is not assignable to type 'keyof (T | U)'.
-!!! error TS2322:       Type 'string' is not assignable to type 'keyof (T | U)'.
+!!! error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:   Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:     Type 'string | number | symbol' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:       Type 'string' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:         Type 'string' is not assignable to type 'keyof T'.
+!!! error TS2322:           Type 'keyof T' is not assignable to type 'keyof U'.
+!!! error TS2322:             Type 'string | number | symbol' is not assignable to type 'keyof U'.
+!!! error TS2322:               Type 'string' is not assignable to type 'keyof U'.
         k2 = k1;
     }
     
