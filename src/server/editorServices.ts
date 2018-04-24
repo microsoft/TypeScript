@@ -310,6 +310,10 @@ namespace ts.server {
         return `Project: ${project ? project.getProjectName() : ""} WatchType: ${watchType}`;
     }
 
+    function updateProjectIfDirty(project: Project) {
+        return project.dirty && project.updateGraph();
+    }
+
     export class ProjectService {
 
         /*@internal*/
@@ -673,7 +677,7 @@ namespace ts.server {
             let hasChanges = this.pendingEnsureProjectForOpenFiles;
             this.pendingProjectUpdates.clear();
             const updateGraph = (project: Project) => {
-                hasChanges = this.updateProjectIfDirty(project) || hasChanges;
+                hasChanges = updateProjectIfDirty(project) || hasChanges;
             };
 
             this.externalProjects.forEach(updateGraph);
@@ -682,10 +686,6 @@ namespace ts.server {
             if (hasChanges) {
                 this.ensureProjectForOpenFiles();
             }
-        }
-
-        private updateProjectIfDirty(project: Project) {
-            return project.dirty && project.updateGraph();
         }
 
         getFormatCodeOptions(file: NormalizedPath) {
@@ -1980,7 +1980,7 @@ namespace ts.server {
                 }
             });
             this.pendingEnsureProjectForOpenFiles = false;
-            this.inferredProjects.forEach(p => this.updateProjectIfDirty(p));
+            this.inferredProjects.forEach(updateProjectIfDirty);
 
             this.logger.info("Structure after ensureProjectForOpenFiles:");
             this.printProjects();
@@ -2027,7 +2027,7 @@ namespace ts.server {
                     }
                     else {
                         // Ensure project is ready to check if it contains opened script info
-                        project.updateGraph();
+                        updateProjectIfDirty(project);
                     }
                 }
             }
@@ -2035,6 +2035,11 @@ namespace ts.server {
             // Project we have at this point is going to be updated since its either found through
             // - external project search, which updates the project before checking if info is present in it
             // - configured project - either created or updated to ensure we know correct status of info
+
+            // At this point we need to ensure that containing projects of the info are uptodate
+            // This will ensure that later question of info.isOrphan() will return correct answer
+            // and we correctly create inferred project for the info
+            info.containingProjects.forEach(updateProjectIfDirty);
 
             // At this point if file is part of any any configured or external project, then it would be present in the containing projects
             // So if it still doesnt have any containing projects, it needs to be part of inferred project

@@ -8050,7 +8050,6 @@ declare namespace ts.server {
          *   ensure that each open script info has project
          */
         private ensureProjectStructuresUptoDate;
-        private updateProjectIfDirty;
         getFormatCodeOptions(file: NormalizedPath): FormatCodeSettings;
         getPreferences(file: NormalizedPath): UserPreferences;
         private onSourceFileChanged;
