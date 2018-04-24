@@ -2680,8 +2680,8 @@ namespace ts {
             return false;
         }
 
-        function isTypeSymbolAccessible(typeSymbol: Symbol, enclosingDeclaration: Node): boolean {
-            const access = isSymbolAccessible(typeSymbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false);
+        function isTypeSymbolAccessible(typeSymbol: Symbol, enclosingDeclaration: Node, acceptLocal = false): boolean {
+            const access = isSymbolAccessible(typeSymbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false, acceptLocal);
             return access.accessibility === SymbolAccessibility.Accessible;
         }
 
@@ -2698,7 +2698,7 @@ namespace ts {
          * @param meaning a SymbolFlags to check if such meaning of the symbol is accessible
          * @param shouldComputeAliasToMakeVisible a boolean value to indicate whether to return aliases to be mark visible in case the symbol is accessible
          */
-        function isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, shouldComputeAliasesToMakeVisible: boolean): SymbolAccessibilityResult {
+        function isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, shouldComputeAliasesToMakeVisible: boolean, acceptLocal = false): SymbolAccessibilityResult {
             if (symbol && enclosingDeclaration && !(symbol.flags & SymbolFlags.TypeParameter)) {
                 const initialSymbol = symbol;
                 let meaningToLook = meaning;
@@ -2708,6 +2708,11 @@ namespace ts {
                     if (accessibleSymbolChain) {
                         const hasAccessibleDeclarations = hasVisibleDeclarations(accessibleSymbolChain[0], shouldComputeAliasesToMakeVisible);
                         if (!hasAccessibleDeclarations) {
+                            if (acceptLocal) {
+                                return {
+                                    accessibility: SymbolAccessibility.Accessible,
+                                };
+                            }
                             return {
                                 accessibility: SymbolAccessibility.NotAccessible,
                                 errorSymbolName: symbolToString(initialSymbol, enclosingDeclaration, meaning),
@@ -3069,7 +3074,8 @@ namespace ts {
                     // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
-                if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
+                if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope ||
+                    isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration, !!(context.flags & NodeBuilderFlags.UseLocalAliases)))) {
                     const name = symbolToTypeReferenceName(type.aliasSymbol);
                     const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
                     return createTypeReferenceNode(name, typeArgumentNodes);
