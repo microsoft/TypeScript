@@ -155,7 +155,7 @@ namespace ts {
         referencedFiles: FileReference[];
         typeReferenceDirectives: FileReference[];
         importedFiles: FileReference[];
-        ambientExternalModules: string[] | undefined;
+        ambientExternalModules?: string[];
         isLibFile: boolean;
     }
 
@@ -460,7 +460,7 @@ namespace ts {
 
     export interface CombinedCodeActions {
         changes: ReadonlyArray<FileTextChanges>;
-        commands: ReadonlyArray<CodeActionCommand> | undefined;
+        commands?: ReadonlyArray<CodeActionCommand>;
     }
 
     // Publicly, this type is just `{}`. Internally it is a union of all the actions we use.
@@ -522,8 +522,8 @@ namespace ts {
      */
     export interface RefactorEditInfo {
         edits: FileTextChanges[];
-        renameFilename: string | undefined;
-        renameLocation: number | undefined;
+        renameFilename?: string ;
+        renameLocation?: number;
         commands?: CodeActionCommand[];
     }
 
@@ -659,7 +659,7 @@ namespace ts {
     }
 
     export interface DefinitionInfoAndBoundSpan {
-        definitions: ReadonlyArray<DefinitionInfo> | undefined;
+        definitions?: ReadonlyArray<DefinitionInfo>;
         textSpan: TextSpan;
     }
 
@@ -711,14 +711,14 @@ namespace ts {
         kind: ScriptElementKind;
         kindModifiers: string;
         textSpan: TextSpan;
-        displayParts: SymbolDisplayPart[] | undefined;
-        documentation: SymbolDisplayPart[] | undefined;
-        tags: JSDocTagInfo[] | undefined;
+        displayParts?: SymbolDisplayPart[];
+        documentation?: SymbolDisplayPart[];
+        tags?: JSDocTagInfo[];
     }
 
     export interface RenameInfo {
         canRename: boolean;
-        localizedErrorMessage: string | undefined;
+        localizedErrorMessage?: string;
         displayName: string;
         fullDisplayName: string;
         kind: ScriptElementKind;
@@ -777,7 +777,7 @@ namespace ts {
     export interface CompletionEntry {
         name: string;
         kind: ScriptElementKind;
-        kindModifiers: string | undefined; // see ScriptElementKindModifier, comma separated
+        kindModifiers?: string; // see ScriptElementKindModifier, comma separated
         sortText: string;
         insertText?: string;
         /**
@@ -796,8 +796,8 @@ namespace ts {
         kind: ScriptElementKind;
         kindModifiers: string;   // see ScriptElementKindModifier, comma separated
         displayParts: SymbolDisplayPart[];
-        documentation: SymbolDisplayPart[] | undefined;
-        tags: JSDocTagInfo[] | undefined;
+        documentation?: SymbolDisplayPart[];
+        tags?: JSDocTagInfo[];
         codeActions?: CodeAction[];
         source?: SymbolDisplayPart[];
     }
