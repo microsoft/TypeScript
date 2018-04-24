@@ -3530,6 +3530,11 @@
         "category": "Message",
         "code": 6195
     },
+    "'{0}' is declared but never used.": {
+        "category": "Error",
+        "code": 6196,
+        "reportsUnnecessary": true
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
