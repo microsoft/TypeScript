@@ -20130,7 +20130,7 @@ namespace ts {
         }
 
         function getContextNode(node: Expression): Node {
-            if (node.kind === SyntaxKind.JsxAttributes) {
+            if (node.kind === SyntaxKind.JsxAttributes && node.parent.kind === SyntaxKind.JsxOpeningElement) {
                 return node.parent.parent; // Needs to be the root JsxElement, so it encompasses the attributes _and_ the children (which are essentially part of the attributes)
             }
             return node;

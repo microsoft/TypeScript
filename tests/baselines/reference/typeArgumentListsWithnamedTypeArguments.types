@@ -67,7 +67,7 @@ interface ComponentProps<T, U> {
 >y : U
 >U : U
 
-    cb: (props: this) => void;
+    cb(props: this): void;
 >cb : (props: this) => void
 >props : this
 }
@@ -144,7 +144,6 @@ const jsx1 = <Component<T = number, U = string> x={12} y="" cb={props => void (p
 >props : ComponentProps<number, string>
 >y : string
 >toUpperCase : () => string
-
 
 // Out of order
 
@@ -260,4 +259,55 @@ const jsx3 = <Component<number, U = string> x={12} y="" cb={props => void (props
 
 // With partial inference
 
+const instance4 = new Foo<U = string>(0, "");
+>instance4 : Foo<number, string>
+>new Foo<U = string>(0, "") : Foo<number, string>
+>Foo : typeof Foo
+>U : any
+>0 : 0
+>"" : ""
+
+const result4 = foo<U = string>(0, "");
+>result4 : [number, string]
+>foo<U = string>(0, "") : [number, string]
+>foo : <T, U>(x: T, y: U) => [T, U]
+>U : any
+>0 : 0
+>"" : ""
+
+const tagged4 = tag<U = string>`tags ${12} ${""}`;
+>tagged4 : (string | number)[]
+>tag<U = string>`tags ${12} ${""}` : (string | number)[]
+>tag : <T, U>(x: TemplateStringsArray, ...args: (T | U)[]) => (T | U)[]
+>U : any
+>`tags ${12} ${""}` : string
+>12 : 12
+>"" : ""
+
+const jsx4 = <Component<U = string> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} />;
+>jsx4 : JSX.Element
+><Component<U = string> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} /> : JSX.Element
+>Component : <T, U>(x: ComponentProps<T, U>) => JSX.Element
+>U : any
+>x : number
+>12 : 12
+>y : string
+>cb : (props: ComponentProps<number, string>) => any
+>props => void (props.x.toFixed() + props.y.toUpperCase()) : (props: ComponentProps<number, string>) => any
+>props : ComponentProps<number, string>
+>void (props.x.toFixed() + props.y.toUpperCase()) : undefined
+>(props.x.toFixed() + props.y.toUpperCase()) : string
+>props.x.toFixed() + props.y.toUpperCase() : string
+>props.x.toFixed() : string
+>props.x.toFixed : (fractionDigits?: number) => string
+>props.x : number
+>props : ComponentProps<number, string>
+>x : number
+>toFixed : (fractionDigits?: number) => string
+>props.y.toUpperCase() : string
+>props.y.toUpperCase : () => string
+>props.y : string
+>props : ComponentProps<number, string>
+>y : string
+>toUpperCase : () => string
 

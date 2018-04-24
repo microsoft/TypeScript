@@ -17,7 +17,7 @@ function tag<T, U>(x: TemplateStringsArray, ...args: (T | U)[]) { return args; }
 interface ComponentProps<T, U> {
     x: T;
     y: U;
-    cb: (props: this) => void;
+    cb(props: this): void;
 }
 
 function Component<T, U>(x: ComponentProps<T, U>) {
@@ -30,7 +30,6 @@ const instance1 = new Foo<T = number, U = string>(0, "");
 const result1 = foo<T = number, U = string>(0, "");
 const tagged1 = tag<T = number, U = string>`tags ${12} ${""}`;
 const jsx1 = <Component<T = number, U = string> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} />;
-
 
 // Out of order
 
@@ -48,6 +47,10 @@ const jsx3 = <Component<number, U = string> x={12} y="" cb={props => void (props
 
 // With partial inference
 
+const instance4 = new Foo<U = string>(0, "");
+const result4 = foo<U = string>(0, "");
+const tagged4 = tag<U = string>`tags ${12} ${""}`;
+const jsx4 = <Component<U = string> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} />;
 
 
 //// [typeArgumentListsWithnamedTypeArguments.js]
@@ -89,3 +92,7 @@ var result3 = foo(0, "");
 var tagged3 = tag(__makeTemplateObject(["tags ", " ", ""], ["tags ", " ", ""]), 12, "");
 var jsx3 = React.createElement(Component, { x: 12, y: "", cb: function (props) { return void (props.x.toFixed() + props.y.toUpperCase()); } });
 // With partial inference
+var instance4 = new Foo(0, "");
+var result4 = foo(0, "");
+var tagged4 = tag(__makeTemplateObject(["tags ", " ", ""], ["tags ", " ", ""]), 12, "");
+var jsx4 = React.createElement(Component, { x: 12, y: "", cb: function (props) { return void (props.x.toFixed() + props.y.toUpperCase()); } });
