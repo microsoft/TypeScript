@@ -505,8 +505,13 @@ interface TemplateStringsArray extends ReadonlyArray<string> {
     readonly raw: ReadonlyArray<string>;
 }
 
+/**
+ * The type of `import.meta`.
+ * 
+ * If you need to declare that a given property exists on `import.meta`,
+ * this type may be augmented via interface merging.
+ */
 interface ImportMeta {
-    [propertyName: string]: any;
 }
 
 interface Math {
