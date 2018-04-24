@@ -1333,7 +1333,7 @@ namespace ts.server {
                 configHasFilesProperty: parsedCommandLine.raw.files !== undefined,
                 configHasIncludeProperty: parsedCommandLine.raw.include !== undefined,
                 configHasExcludeProperty: parsedCommandLine.raw.exclude !== undefined,
-                wildcardDirectories: createMapFromTemplate(parsedCommandLine.wildcardDirectories),
+                wildcardDirectories: createMapFromTemplate(parsedCommandLine.wildcardDirectories!), // TODO: GH#18217
                 typeAcquisition: parsedCommandLine.typeAcquisition,
                 compileOnSave: parsedCommandLine.compileOnSave
             };

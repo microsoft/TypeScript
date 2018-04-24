@@ -59,14 +59,14 @@ namespace ts {
         return result;
     }
 
-    export function createMapFromTemplate<T>(template?: MapLike<T>): Map<T> {
+    export function createMapFromTemplate<T>(template: MapLike<T>): Map<T> {
         const map: Map<T> = new MapCtr<T>();
 
         // Copies keys/values from template. Note that for..in will not throw if
         // template is undefined, and instead will just exit the loop.
-        for (const key in template!) {
+        for (const key in template) {
             if (hasOwnProperty.call(template, key)) {
-                map.set(key, template![key]);
+                map.set(key, template[key]);
             }
         }
 
