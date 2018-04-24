@@ -627,10 +627,10 @@ namespace ts {
      *      return value of the callback.
      */
     function iterateCommentRanges<T, U>(reduce: boolean, text: string, pos: number, trailing: boolean, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T, memo: U | undefined) => U, state: T, initial?: U): U | undefined {
-        let pendingPos: number | undefined;
-        let pendingEnd: number | undefined;
-        let pendingKind: CommentKind | undefined;
-        let pendingHasTrailingNewLine: boolean | undefined;
+        let pendingPos!: number;
+        let pendingEnd!: number;
+        let pendingKind!: CommentKind;
+        let pendingHasTrailingNewLine!: boolean;
         let hasPendingCommentRange = false;
         let collecting = trailing || pos === 0;
         let accumulator = initial;
@@ -688,7 +688,7 @@ namespace ts {
 
                         if (collecting) {
                             if (hasPendingCommentRange) {
-                                accumulator = cb(pendingPos!, pendingEnd!, pendingKind!, pendingHasTrailingNewLine!, state, accumulator);
+                                accumulator = cb(pendingPos, pendingEnd, pendingKind, pendingHasTrailingNewLine, state, accumulator);
                                 if (!reduce && accumulator) {
                                     // If we are not reducing and we have a truthy result, return it.
                                     return accumulator;
@@ -718,7 +718,7 @@ namespace ts {
         }
 
         if (hasPendingCommentRange) {
-            accumulator = cb(pendingPos!, pendingEnd!, pendingKind!, pendingHasTrailingNewLine!, state, accumulator);
+            accumulator = cb(pendingPos, pendingEnd, pendingKind, pendingHasTrailingNewLine, state, accumulator);
         }
 
         return accumulator;
@@ -820,7 +820,7 @@ namespace ts {
         let tokenPos: number;
 
         let token: SyntaxKind;
-        let tokenValue: string | undefined;
+        let tokenValue!: string;
         let tokenFlags: TokenFlags;
 
         setText(text, start, length);
@@ -831,7 +831,7 @@ namespace ts {
             getToken: () => token,
             getTokenPos: () => tokenPos,
             getTokenText: () => text.substring(tokenPos, pos),
-            getTokenValue: () => tokenValue!,
+            getTokenValue: () => tokenValue,
             hasExtendedUnicodeEscape: () => (tokenFlags & TokenFlags.ExtendedUnicodeEscape) !== 0,
             hasPrecedingLineBreak: () => (tokenFlags & TokenFlags.PrecedingLineBreak) !== 0,
             isIdentifier: () => token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord,
@@ -1284,11 +1284,11 @@ namespace ts {
 
         function getIdentifierToken(): SyntaxKind {
             // Reserved words are between 2 and 11 characters long and start with a lowercase letter
-            const len = tokenValue!.length;
+            const len = tokenValue.length;
             if (len >= 2 && len <= 11) {
-                const ch = tokenValue!.charCodeAt(0);
+                const ch = tokenValue.charCodeAt(0);
                 if (ch >= CharacterCodes.a && ch <= CharacterCodes.z) {
-                    token = textToToken.get(tokenValue!)!;
+                    token = textToToken.get(tokenValue)!;
                     if (token !== undefined) {
                         return token;
                     }
@@ -2074,7 +2074,7 @@ namespace ts {
             startPos = textPos;
             tokenPos = textPos;
             token = SyntaxKind.Unknown;
-            tokenValue = undefined;
+            tokenValue = undefined!;
             tokenFlags = 0;
         }
     }
