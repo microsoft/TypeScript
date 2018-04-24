@@ -3894,6 +3894,10 @@
         "category": "Suggestion",
         "code": 80004
     },
+    "This non-null assertion operator is unnecessary for type '{1}'": {
+        "category": "Suggestion",
+        "code": 80005
+    },
 
     "Add missing 'super()' call": {
         "category": "Message",
@@ -4170,5 +4174,13 @@
     "Generate 'get' and 'set' accessors": {
         "category": "Message",
         "code": 95046
+    },
+    "Remove unnecessary non-null assertion operator": {
+        "category": "Message",
+        "code": 95047
+    },
+    "Remove all unnecessary non-null assertion operators": {
+        "category": "Message",
+        "code": 95048
     }
 }

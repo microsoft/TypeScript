@@ -16551,13 +16551,18 @@ namespace ts {
             undefinedDiagnostic?: DiagnosticMessage,
             nullOrUndefinedDiagnostic?: DiagnosticMessage,
         ) {
-            return checkNonNullType(
-                checkExpression(node),
+            const originalType = checkExpression(node);
+            const nonNullType = checkNonNullType(
+                originalType,
                 node,
                 nullDiagnostic,
                 undefinedDiagnostic,
                 nullOrUndefinedDiagnostic
             );
+            if (strictNullChecks && originalType === nonNullType) {
+                error(node, Diagnostics.This_non_null_assertion_operator_is_unnecessary_for_type_1, typeToString(originalType));
+            }
+            return nonNullType
         }
 
         function checkNonNullType(

@@ -106,6 +106,7 @@
         "codefixes/fixInvalidImportSyntax.ts",
         "codefixes/fixStrictClassInitialization.ts",
         "codefixes/useDefaultImport.ts",
+        "codefixes/removeUnnecessaryNonNullAssertion.ts",
         "refactors/extractSymbol.ts",
         "refactors/generateGetAccessorAndSetAccessor.ts",
         "sourcemaps.ts",
