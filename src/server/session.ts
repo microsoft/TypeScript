@@ -1904,16 +1904,16 @@ namespace ts.server {
                 return this.requiredResponse(this.getImplementation(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.References]: (request: protocol.FileLocationRequest) => {
-                return this.requiredResponse(this.getReferences(request.arguments, /*simplifiedResult*/ true)!); // TODO: GH#18217
+                return this.requiredResponse(this.getReferences(request.arguments, /*simplifiedResult*/ true));
             },
             [CommandNames.ReferencesFull]: (request: protocol.FileLocationRequest) => {
-                return this.requiredResponse(this.getReferences(request.arguments, /*simplifiedResult*/ false)!); // TODO: GH#18217
+                return this.requiredResponse(this.getReferences(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.Rename]: (request: protocol.Request) => {
-                return this.requiredResponse(this.getRenameLocations(request.arguments, /*simplifiedResult*/ true)!); // TODO: GH#18217
+                return this.requiredResponse(this.getRenameLocations(request.arguments, /*simplifiedResult*/ true));
             },
             [CommandNames.RenameLocationsFull]: (request: protocol.RenameRequest) => {
-                return this.requiredResponse(this.getRenameLocations(request.arguments, /*simplifiedResult*/ false)!); // TODO: GH#18217
+                return this.requiredResponse(this.getRenameLocations(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.RenameInfoFull]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getRenameInfo(request.arguments));
@@ -1927,10 +1927,10 @@ namespace ts.server {
                 return this.notRequired();
             },
             [CommandNames.Quickinfo]: (request: protocol.QuickInfoRequest) => {
-                return this.requiredResponse(this.getQuickInfoWorker(request.arguments, /*simplifiedResult*/ true)!); // TODO: GH#18217
+                return this.requiredResponse(this.getQuickInfoWorker(request.arguments, /*simplifiedResult*/ true));
             },
             [CommandNames.QuickinfoFull]: (request: protocol.QuickInfoRequest) => {
-                return this.requiredResponse(this.getQuickInfoWorker(request.arguments, /*simplifiedResult*/ false)!); // TODO: GH#18217
+                return this.requiredResponse(this.getQuickInfoWorker(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.GetOutliningSpans]: (request: protocol.FileRequest) => {
                 return this.requiredResponse(this.getOutliningSpans(request.arguments, /*simplifiedResult*/ true));
@@ -1960,10 +1960,10 @@ namespace ts.server {
                 return this.requiredResponse(this.getSpanOfEnclosingComment(request.arguments));
             },
             [CommandNames.Format]: (request: protocol.FormatRequest) => {
-                return this.requiredResponse(this.getFormattingEditsForRange(request.arguments)!); // TODO: GH#18217
+                return this.requiredResponse(this.getFormattingEditsForRange(request.arguments));
             },
             [CommandNames.Formatonkey]: (request: protocol.FormatOnKeyRequest) => {
-                return this.requiredResponse(this.getFormattingEditsAfterKeystroke(request.arguments)!); // TODO: GH#18217
+                return this.requiredResponse(this.getFormattingEditsAfterKeystroke(request.arguments));
             },
             [CommandNames.FormatFull]: (request: protocol.FormatRequest) => {
                 return this.requiredResponse(this.getFormattingEditsForDocumentFull(request.arguments));
@@ -1975,10 +1975,10 @@ namespace ts.server {
                 return this.requiredResponse(this.getFormattingEditsForRangeFull(request.arguments));
             },
             [CommandNames.Completions]: (request: protocol.CompletionsRequest) => {
-                return this.requiredResponse(this.getCompletions(request.arguments, /*simplifiedResult*/ true)!); // TODO: GH#18217
+                return this.requiredResponse(this.getCompletions(request.arguments, /*simplifiedResult*/ true));
             },
             [CommandNames.CompletionsFull]: (request: protocol.CompletionsRequest) => {
-                return this.requiredResponse(this.getCompletions(request.arguments, /*simplifiedResult*/ false)!); // TODO: GH#18217
+                return this.requiredResponse(this.getCompletions(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.CompletionDetails]: (request: protocol.CompletionDetailsRequest) => {
                 return this.requiredResponse(this.getCompletionEntryDetails(request.arguments, /*simplifiedResult*/ true));
@@ -1993,10 +1993,10 @@ namespace ts.server {
                 return this.requiredResponse(this.emitFile(request.arguments));
             },
             [CommandNames.SignatureHelp]: (request: protocol.SignatureHelpRequest) => {
-                return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ true)!); // TODO: GH#18217
+                return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ true));
             },
             [CommandNames.SignatureHelpFull]: (request: protocol.SignatureHelpRequest) => {
-                return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ false)!); // TODO: GH#18217
+                return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.CompilerOptionsDiagnosticsFull]: (request: protocol.CompilerOptionsDiagnosticsRequest) => {
                 return this.requiredResponse(this.getCompilerOptionsDiagnostics(request.arguments));
@@ -2055,22 +2055,22 @@ namespace ts.server {
                 return this.requiredResponse(this.getNavigateToItems(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.Brace]: (request: protocol.FileLocationRequest) => {
-                return this.requiredResponse(this.getBraceMatching(request.arguments, /*simplifiedResult*/ true)!); // TODO: GH#18217
+                return this.requiredResponse(this.getBraceMatching(request.arguments, /*simplifiedResult*/ true));
             },
             [CommandNames.BraceFull]: (request: protocol.FileLocationRequest) => {
-                return this.requiredResponse(this.getBraceMatching(request.arguments, /*simplifiedResult*/ false)!); // TODO: GH#18217
+                return this.requiredResponse(this.getBraceMatching(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.NavBar]: (request: protocol.FileRequest) => {
-                return this.requiredResponse(this.getNavigationBarItems(request.arguments, /*simplifiedResult*/ true)!); // TODO: GH#18217
+                return this.requiredResponse(this.getNavigationBarItems(request.arguments, /*simplifiedResult*/ true));
             },
             [CommandNames.NavBarFull]: (request: protocol.FileRequest) => {
-                return this.requiredResponse(this.getNavigationBarItems(request.arguments, /*simplifiedResult*/ false)!); // TODO: GH#18217
+                return this.requiredResponse(this.getNavigationBarItems(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.NavTree]: (request: protocol.FileRequest) => {
-                return this.requiredResponse(this.getNavigationTree(request.arguments, /*simplifiedResult*/ true)!); // TODO: GH#18217
+                return this.requiredResponse(this.getNavigationTree(request.arguments, /*simplifiedResult*/ true));
             },
             [CommandNames.NavTreeFull]: (request: protocol.FileRequest) => {
-                return this.requiredResponse(this.getNavigationTree(request.arguments, /*simplifiedResult*/ false)!); // TODO: GH#18217
+                return this.requiredResponse(this.getNavigationTree(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.Occurrences]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getOccurrences(request.arguments));
@@ -2093,10 +2093,10 @@ namespace ts.server {
                 return this.notRequired();
             },
             [CommandNames.GetCodeFixes]: (request: protocol.CodeFixRequest) => {
-                return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ true)!); // TODO: GH#18217
+                return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ true));
             },
             [CommandNames.GetCodeFixesFull]: (request: protocol.CodeFixRequest) => {
-                return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ false)!); // TODO: GH#18217
+                return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.GetCombinedCodeFix]: (request: protocol.GetCombinedCodeFixRequest) => {
                 return this.requiredResponse(this.getCombinedCodeFix(request.arguments, /*simplifiedResult*/ true));
