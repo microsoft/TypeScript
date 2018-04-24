@@ -1,11 +1,6 @@
-/// <reference path="./core.ts" />
-/// <reference path="./utils.ts" />
-/// <reference path="./vfs.ts" />
-
-// NOTE: The contents of this file are all exported from the namespace 'fakes'. This is to
-//       support the eventual conversion of harness into a modular system.
-
-// harness fakes
+/**
+ * Fake implementations of various compiler dependencies.
+ */
 namespace fakes {
     const processExitSentinel = new Error("System exit");
 
@@ -45,8 +40,8 @@ namespace fakes {
             try {
                 const content = this.vfs.readFileSync(path, "utf8");
                 return content === undefined ? undefined :
-                    vpath.extname(path) === ".json" ? utils.removeComments(core.removeByteOrderMark(content), utils.CommentRemoval.leadingAndTrailing) :
-                        core.removeByteOrderMark(content);
+                    vpath.extname(path) === ".json" ? utils.removeComments(utils.removeByteOrderMark(content), utils.CommentRemoval.leadingAndTrailing) :
+                        utils.removeByteOrderMark(content);
             }
             catch {
                 return undefined;
@@ -55,7 +50,7 @@ namespace fakes {
 
         public writeFile(path: string, data: string, writeByteOrderMark?: boolean): void {
             this.vfs.mkdirpSync(vpath.dirname(path));
-            this.vfs.writeFileSync(path, writeByteOrderMark ? core.addUTF8ByteOrderMark(data) : data);
+            this.vfs.writeFileSync(path, writeByteOrderMark ? utils.addUTF8ByteOrderMark(data) : data);
         }
 
         public fileExists(path: string) {
@@ -212,7 +207,7 @@ namespace fakes {
         public readonly shouldAssertInvariants = !Harness.lightMode;
 
         private _setParentNodes: boolean;
-        private _sourceFiles: core.SortedMap<string, ts.SourceFile>;
+        private _sourceFiles: collections.SortedMap<string, ts.SourceFile>;
         private _parseConfigHost: ParseConfigHost;
         private _newLine: string;
 
@@ -221,7 +216,7 @@ namespace fakes {
             this.sys = sys;
             this.defaultLibLocation = sys.vfs.meta.get("defaultLibLocation") || "";
             this._newLine = ts.getNewLineCharacter(options, () => this.sys.newLine);
-            this._sourceFiles = new core.SortedMap<string, ts.SourceFile>({ comparer: sys.vfs.stringComparer, sort: "insertion" });
+            this._sourceFiles = new collections.SortedMap<string, ts.SourceFile>({ comparer: sys.vfs.stringComparer, sort: "insertion" });
             this._setParentNodes = setParentNodes;
         }
 
@@ -266,7 +261,7 @@ namespace fakes {
         }
 
         public writeFile(fileName: string, content: string, writeByteOrderMark: boolean) {
-            if (writeByteOrderMark) content = core.addUTF8ByteOrderMark(content);
+            if (writeByteOrderMark) content = utils.addUTF8ByteOrderMark(content);
             this.sys.writeFile(fileName, content);
 
             const document = new documents.TextDocument(fileName, content);

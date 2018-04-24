@@ -1,5 +1,4 @@
-/// <reference path="./functions.ts" />
-namespace core {
+namespace collections {
     export interface SortOptions<T> {
         comparer: (a: T, b: T) => number;
         sort: "insertion" | "comparison";
@@ -43,16 +42,16 @@ namespace core {
         }
 
         public has(key: K) {
-            return binarySearch(this._keys, key, identity, this._comparer) >= 0;
+            return ts.binarySearch(this._keys, key, ts.identity, this._comparer) >= 0;
         }
 
         public get(key: K) {
-            const index = binarySearch(this._keys, key, identity, this._comparer);
+            const index = ts.binarySearch(this._keys, key, ts.identity, this._comparer);
             return index >= 0 ? this._values[index] : undefined;
         }
 
         public set(key: K, value: V) {
-            const index = binarySearch(this._keys, key, identity, this._comparer);
+            const index = ts.binarySearch(this._keys, key, ts.identity, this._comparer);
             if (index >= 0) {
                 this._values[index] = value;
             }
@@ -67,12 +66,12 @@ namespace core {
         }
 
         public delete(key: K) {
-            const index = binarySearch(this._keys, key, identity, this._comparer);
+            const index = ts.binarySearch(this._keys, key, ts.identity, this._comparer);
             if (index >= 0) {
                 this.writePreamble();
-                removeAt(this._keys, index);
-                removeAt(this._values, index);
-                if (this._order) removeAt(this._order, index);
+                ts.orderedRemoveItemAt(this._keys, index);
+                ts.orderedRemoveItemAt(this._values, index);
+                if (this._order) ts.orderedRemoveItemAt(this._order, index);
                 this.writePostScript();
                 return true;
             }
@@ -208,226 +207,6 @@ namespace core {
                     .sort((x, y) => order[x] - order[y]);
             }
             return undefined;
-        }
-    }
-
-    export class SortedSet<T> {
-        private _comparer: (a: T, b: T) => number;
-        private _values: T[] = [];
-        private _order: number[] | undefined;
-        private _version = 0;
-        private _copyOnWrite = false;
-
-        constructor(comparer: ((a: T, b: T) => number) | SortOptions<T>, iterable?: Iterable<T>) {
-            this._comparer = typeof comparer === "object" ? comparer.comparer : comparer;
-            this._order = typeof comparer === "object" && comparer.sort === "insertion" ? [] : undefined;
-
-            if (iterable) {
-                const iterator = getIterator(iterable);
-                try {
-                    for (let i = nextResult(iterator); i; i = nextResult(iterator)) {
-                        const value = i.value;
-                        this.add(value);
-                    }
-                }
-                finally {
-                    closeIterator(iterator);
-                }
-            }
-        }
-
-        public get size() {
-            return this._values.length;
-        }
-
-        public get comparer() {
-            return this._comparer;
-        }
-
-        public get [Symbol.toStringTag]() {
-            return "SortedSet";
-        }
-
-        public has(value: T) {
-            return binarySearch(this._values, value, identity, this._comparer) >= 0;
-        }
-
-        public add(value: T) {
-            const index = binarySearch(this._values, value, identity, this._comparer);
-            if (index < 0) {
-                this.writePreamble();
-                insertAt(this._values, ~index, value);
-                if (this._order) insertAt(this._order, ~index, this._version);
-                this.writePostScript();
-            }
-            return this;
-        }
-
-        public delete(value: T) {
-            const index = binarySearch(this._values, value, identity, this._comparer);
-            if (index >= 0) {
-                this.writePreamble();
-                removeAt(this._values, index);
-                if (this._order) removeAt(this._order, index);
-                this.writePostScript();
-                return true;
-            }
-            return false;
-        }
-
-        public clear() {
-            if (this.size > 0) {
-                this.writePreamble();
-                this._values.length = 0;
-                if (this._order) this._order.length = 0;
-                this.writePostScript();
-            }
-        }
-
-        public forEach(callback: (value: T, key: T, collection: this) => void, thisArg?: any) {
-            const values = this._values;
-            const indices = this.getIterationOrder();
-            const version = this._version;
-            this._copyOnWrite = true;
-            try {
-                if (indices) {
-                    for (const i of indices) {
-                        callback.call(thisArg, values[i], values[i], this);
-                    }
-                }
-                else {
-                    for (const value of values) {
-                        callback.call(thisArg, value, value, this);
-                    }
-                }
-            }
-            finally {
-                if (version === this._version) {
-                    this._copyOnWrite = false;
-                }
-            }
-        }
-
-        public keys() {
-            return this.values();
-        }
-
-        public * values() {
-            const values = this._values;
-            const indices = this.getIterationOrder();
-            const version = this._version;
-            this._copyOnWrite = true;
-            try {
-                if (indices) {
-                    for (const i of indices) {
-                        yield values[i];
-                    }
-                }
-                else {
-                    for (const value of values) {
-                        yield value;
-                    }
-                }
-            }
-            finally {
-                if (version === this._version) {
-                    this._copyOnWrite = false;
-                }
-            }
-        }
-
-        public * entries() {
-            const values = this._values;
-            const indices = this.getIterationOrder();
-            const version = this._version;
-            this._copyOnWrite = true;
-            try {
-                if (indices) {
-                    for (const i of indices) {
-                        yield [values[i], values[i]] as [T, T];
-                    }
-                }
-                else {
-                    for (const value of values) {
-                        yield [value, value] as [T, T];
-                    }
-                }
-            }
-            finally {
-                if (version === this._version) {
-                    this._copyOnWrite = false;
-                }
-            }
-        }
-
-        public [Symbol.iterator]() {
-            return this.values();
-        }
-
-        private writePreamble() {
-            if (this._copyOnWrite) {
-                this._values = this._values.slice();
-                if (this._order) this._order = this._order.slice();
-                this._copyOnWrite = false;
-            }
-        }
-
-        private writePostScript() {
-            this._version++;
-        }
-
-        private getIterationOrder() {
-            if (this._order) {
-                const order = this._order;
-                return this._order
-                    .map((_, i) => i)
-                    .sort((x, y) => order[x] - order[y]);
-            }
-            return undefined;
-        }
-    }
-
-    export function binarySearch<T, U>(array: ReadonlyArray<T>, value: T, keySelector: (v: T) => U, keyComparer: (a: U, b: U) => number, offset?: number): number {
-        if (!array || array.length === 0) {
-            return -1;
-        }
-
-        let low = offset || 0;
-        let high = array.length - 1;
-        const key = keySelector(value);
-        while (low <= high) {
-            const middle = low + ((high - low) >> 1);
-            const midKey = keySelector(array[middle]);
-            const result = keyComparer(midKey, key);
-            if (result < 0) {
-                low = middle + 1;
-            }
-            else if (result > 0) {
-                high = middle - 1;
-            }
-            else {
-                return middle;
-            }
-        }
-
-        return ~low;
-    }
-
-    export function removeAt<T>(array: T[], index: number): void {
-        if (index < 0 || index >= array.length) {
-            return;
-        }
-        else if (index === 0) {
-            array.shift();
-        }
-        else if (index === array.length - 1) {
-            array.pop();
-        }
-        else {
-            for (let i = index; i < array.length - 1; i++) {
-                array[i] = array[i + 1];
-            }
-            array.length--;
         }
     }
 

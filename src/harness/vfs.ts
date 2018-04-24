@@ -40,9 +40,9 @@ namespace vfs {
 
         // lazy-initialized state that should be mutable even if the FileSystem is frozen.
         private _lazy: {
-            links?: core.SortedMap<string, Inode>;
+            links?: collections.SortedMap<string, Inode>;
             shadows?: Map<number, Inode>;
-            meta?: core.Metadata;
+            meta?: collections.Metadata;
         } = {};
 
         private _cwd: string; // current working directory
@@ -68,16 +68,16 @@ namespace vfs {
 
             let cwd = options.cwd;
             if ((!cwd || !vpath.isRoot(cwd)) && this._lazy.links) {
-                const iterator = core.getIterator(this._lazy.links.keys());
+                const iterator = collections.getIterator(this._lazy.links.keys());
                 try {
-                    for (let i = core.nextResult(iterator); i; i = core.nextResult(iterator)) {
+                    for (let i = collections.nextResult(iterator); i; i = collections.nextResult(iterator)) {
                         const name = i.value;
                         cwd = cwd ? vpath.resolve(name, cwd) : name;
                         break;
                     }
                 }
                 finally {
-                    core.closeIterator(iterator);
+                    collections.closeIterator(iterator);
                 }
             }
 
@@ -92,9 +92,9 @@ namespace vfs {
         /**
          * Gets metadata for this `FileSystem`.
          */
-        public get meta(): core.Metadata {
+        public get meta(): collections.Metadata {
             if (!this._lazy.meta) {
-                this._lazy.meta = new core.Metadata(this._shadowRoot ? this._shadowRoot.meta : undefined);
+                this._lazy.meta = new collections.Metadata(this._shadowRoot ? this._shadowRoot.meta : undefined);
             }
             return this._lazy.meta;
         }
@@ -119,40 +119,6 @@ namespace vfs {
          */
         public get shadowRoot() {
             return this._shadowRoot;
-        }
-
-        /**
-         * Create a virtual file system from a physical file system using the following path mappings:
-         *
-         *  - `/.ts` is a directory mapped to `${workspaceRoot}/built/local`
-         *  - `/.lib` is a directory mapped to `${workspaceRoot}/tests/lib`
-         *  - `/.src` is a virtual directory to be used for tests.
-         *
-         * Unless overridden, `/.src` will be the current working directory for the virtual file system.
-         */
-        public static createFromFileSystem(host: FileSystemResolverHost, ignoreCase: boolean, { documents, cwd }: FileSystemCreateOptions = {}) {
-            const fs = getBuiltLocal(host, ignoreCase).shadow();
-            if (cwd) {
-                fs.mkdirpSync(cwd);
-                fs.chdir(cwd);
-            }
-            if (documents) {
-                for (const document of documents) {
-                    fs.mkdirpSync(vpath.dirname(document.file));
-                    fs.writeFileSync(document.file, document.text, "utf8");
-                    fs.filemeta(document.file).set("document", document);
-                    // Add symlinks
-                    const symlink = document.meta.get("symlink");
-                    if (symlink) {
-                        for (const link of symlink.split(",").map(link => link.trim())) {
-                            fs.mkdirpSync(vpath.dirname(link));
-                            fs.symlinkSync(document.file, link);
-                            fs.filemeta(link).set("document", document);
-                        }
-                    }
-                }
-            }
-            return fs;
         }
 
         /**
@@ -190,16 +156,16 @@ namespace vfs {
          * Gets the metadata object for a path.
          * @param path
          */
-        public filemeta(path: string): core.Metadata {
+        public filemeta(path: string): collections.Metadata {
             const { node } = this._walk(this._resolve(path));
             if (!node) throw createIOError("ENOENT");
             return this._filemeta(node);
         }
 
-        private _filemeta(node: Inode): core.Metadata {
+        private _filemeta(node: Inode): collections.Metadata {
             if (!node.meta) {
                 const parentMeta = node.shadowRoot && this._shadowRoot && this._shadowRoot._filemeta(node.shadowRoot);
-                node.meta = new core.Metadata(parentMeta);
+                node.meta = new collections.Metadata(parentMeta);
             }
             return node.meta;
         }
@@ -390,10 +356,10 @@ namespace vfs {
          */
         public debugPrint(): void {
             let result = "";
-            const printLinks = (dirname: string | undefined, links: core.SortedMap<string, Inode>) => {
-                const iterator = core.getIterator(links);
+            const printLinks = (dirname: string | undefined, links: collections.SortedMap<string, Inode>) => {
+                const iterator = collections.getIterator(links);
                 try {
-                    for (let i = core.nextResult(iterator); i; i = core.nextResult(iterator)) {
+                    for (let i = collections.nextResult(iterator); i; i = collections.nextResult(iterator)) {
                         const [name, node] = i.value;
                         const path = dirname ? vpath.combine(dirname, name) : name;
                         const marker = vpath.compare(this._cwd, path, this.ignoreCase) === 0 ? "*" : " ";
@@ -412,7 +378,7 @@ namespace vfs {
                     }
                 }
                 finally {
-                    core.closeIterator(iterator);
+                    collections.closeIterator(iterator);
                 }
             };
             printLinks(/*dirname*/ undefined, this._getRootLinks());
@@ -686,7 +652,7 @@ namespace vfs {
             };
         }
 
-        private _addLink(parent: DirectoryInode | undefined, links: core.SortedMap<string, Inode>, name: string, node: Inode, time = this.time()) {
+        private _addLink(parent: DirectoryInode | undefined, links: collections.SortedMap<string, Inode>, name: string, node: Inode, time = this.time()) {
             links.set(name, node);
             node.nlink++;
             node.ctimeMs = time;
@@ -694,14 +660,14 @@ namespace vfs {
             if (!parent && !this._cwd) this._cwd = name;
         }
 
-        private _removeLink(parent: DirectoryInode | undefined, links: core.SortedMap<string, Inode>, name: string, node: Inode, time = this.time()) {
+        private _removeLink(parent: DirectoryInode | undefined, links: collections.SortedMap<string, Inode>, name: string, node: Inode, time = this.time()) {
             links.delete(name);
             node.nlink--;
             node.ctimeMs = time;
             if (parent) parent.mtimeMs = time;
         }
 
-        private _replaceLink(oldParent: DirectoryInode, oldLinks: core.SortedMap<string, Inode>, oldName: string, newParent: DirectoryInode, newLinks: core.SortedMap<string, Inode>, newName: string, node: Inode, time: number) {
+        private _replaceLink(oldParent: DirectoryInode, oldLinks: collections.SortedMap<string, Inode>, oldName: string, newParent: DirectoryInode, newLinks: collections.SortedMap<string, Inode>, newName: string, node: Inode, time: number) {
             if (oldParent !== newParent) {
                 this._removeLink(oldParent, oldLinks, oldName, node, time);
                 this._addLink(newParent, newLinks, newName, node, time);
@@ -716,7 +682,7 @@ namespace vfs {
 
         private _getRootLinks() {
             if (!this._lazy.links) {
-                this._lazy.links = new core.SortedMap<string, Inode>(this.stringComparer);
+                this._lazy.links = new collections.SortedMap<string, Inode>(this.stringComparer);
                 if (this._shadowRoot) {
                     this._copyShadowLinks(this._shadowRoot._getRootLinks(), this._lazy.links);
                 }
@@ -727,7 +693,7 @@ namespace vfs {
 
         private _getLinks(node: DirectoryInode) {
             if (!node.links) {
-                const links = new core.SortedMap<string, Inode>(this.stringComparer);
+                const links = new collections.SortedMap<string, Inode>(this.stringComparer);
                 const { source, resolver } = node;
                 if (source && resolver) {
                     node.source = undefined;
@@ -786,16 +752,16 @@ namespace vfs {
             return shadow;
         }
 
-        private _copyShadowLinks(source: ReadonlyMap<string, Inode>, target: core.SortedMap<string, Inode>) {
-            const iterator = core.getIterator(source);
+        private _copyShadowLinks(source: ReadonlyMap<string, Inode>, target: collections.SortedMap<string, Inode>) {
+            const iterator = collections.getIterator(source);
             try {
-                for (let i = core.nextResult(iterator); i; i = core.nextResult(iterator)) {
+                for (let i = collections.nextResult(iterator); i; i = collections.nextResult(iterator)) {
                     const [name, root] = i.value;
                     target.set(name, this._getShadow(root));
                 }
             }
             finally {
-                core.closeIterator(iterator);
+                collections.closeIterator(iterator);
             }
         }
 
@@ -1035,6 +1001,40 @@ namespace vfs {
         };
     }
 
+    /**
+     * Create a virtual file system from a physical file system using the following path mappings:
+     *
+     *  - `/.ts` is a directory mapped to `${workspaceRoot}/built/local`
+     *  - `/.lib` is a directory mapped to `${workspaceRoot}/tests/lib`
+     *  - `/.src` is a virtual directory to be used for tests.
+     *
+     * Unless overridden, `/.src` will be the current working directory for the virtual file system.
+     */
+    export function createFromFileSystem(host: FileSystemResolverHost, ignoreCase: boolean, { documents, cwd }: FileSystemCreateOptions = {}) {
+        const fs = getBuiltLocal(host, ignoreCase).shadow();
+        if (cwd) {
+            fs.mkdirpSync(cwd);
+            fs.chdir(cwd);
+        }
+        if (documents) {
+            for (const document of documents) {
+                fs.mkdirpSync(vpath.dirname(document.file));
+                fs.writeFileSync(document.file, document.text, "utf8");
+                fs.filemeta(document.file).set("document", document);
+                // Add symlinks
+                const symlink = document.meta.get("symlink");
+                if (symlink) {
+                    for (const link of symlink.split(",").map(link => link.trim())) {
+                        fs.mkdirpSync(vpath.dirname(link));
+                        fs.symlinkSync(document.file, link);
+                        fs.filemeta(link).set("document", document);
+                    }
+                }
+            }
+        }
+        return fs;
+    }
+
     export class Stats {
         public dev: number;
         public ino: number;
@@ -1188,7 +1188,7 @@ namespace vfs {
         source?: string;
         resolver?: FileSystemResolver;
         shadowRoot?: FileInode;
-        meta?: core.Metadata;
+        meta?: collections.Metadata;
     }
 
     interface DirectoryInode {
@@ -1200,11 +1200,11 @@ namespace vfs {
         ctimeMs: number; // status change time
         birthtimeMs: number; // creation time
         nlink: number; // number of hard links
-        links?: core.SortedMap<string, Inode>;
+        links?: collections.SortedMap<string, Inode>;
         source?: string;
         resolver?: FileSystemResolver;
         shadowRoot?: DirectoryInode;
-        meta?: core.Metadata;
+        meta?: collections.Metadata;
     }
 
     interface SymlinkInode {
@@ -1218,7 +1218,7 @@ namespace vfs {
         nlink: number; // number of hard links
         symlink?: string;
         shadowRoot?: SymlinkInode;
-        meta?: core.Metadata;
+        meta?: collections.Metadata;
     }
 
     function isFile(node: Inode | undefined): node is FileInode {
@@ -1237,7 +1237,7 @@ namespace vfs {
         realpath: string;
         basename: string;
         parent: DirectoryInode | undefined;
-        links: core.SortedMap<string, Inode> | undefined;
+        links: collections.SortedMap<string, Inode> | undefined;
         node: Inode | undefined;
     }
 

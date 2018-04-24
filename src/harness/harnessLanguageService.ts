@@ -119,11 +119,11 @@ namespace Harness.LanguageService {
     export abstract class LanguageServiceAdapterHost {
         public readonly sys = new fakes.System(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: virtualFileSystemRoot }));
         public typesRegistry: ts.Map<void> | undefined;
-        private scriptInfos: core.SortedMap<string, ScriptInfo>;
+        private scriptInfos: collections.SortedMap<string, ScriptInfo>;
 
         constructor(protected cancellationToken = DefaultHostCancellationToken.instance,
             protected settings = ts.getDefaultCompilerOptions()) {
-            this.scriptInfos = new core.SortedMap({ comparer: this.vfs.stringComparer, sort: "insertion" });
+            this.scriptInfos = new collections.SortedMap({ comparer: this.vfs.stringComparer, sort: "insertion" });
         }
 
         public get vfs() {

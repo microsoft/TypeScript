@@ -193,7 +193,7 @@ namespace project {
                 assert(false, "Testcase: " + testCaseFileName + " does not contain valid json format: " + e.message);
             }
 
-            const fs = vfs.FileSystem.createFromFileSystem(Harness.IO, /*ignoreCase*/ false);
+            const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false);
             fs.mountSync(vpath.resolve(Harness.IO.getWorkspaceRoot(), "tests"), vpath.combine(vfs.srcFolder, "tests"), vfs.createResolver(Harness.IO));
             fs.mkdirpSync(vpath.combine(vfs.srcFolder, testCase.projectRoot));
             fs.chdir(vpath.combine(vfs.srcFolder, testCase.projectRoot));
@@ -393,7 +393,7 @@ namespace project {
                 }
             });
 
-            const _vfs = vfs.FileSystem.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, {
+            const _vfs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, {
                 documents: allInputFiles,
                 cwd: vpath.combine(vfs.srcFolder, this.testCase.projectRoot)
             });

@@ -317,7 +317,7 @@ namespace Harness.SourceMapRecorder {
             const startPos = lineMap[line];
             const endPos = lineMap[line + 1];
             const text = code.substring(startPos, endPos);
-            return line === 0 ? core.removeByteOrderMark(text) : text;
+            return line === 0 ? utils.removeByteOrderMark(text) : text;
         }
 
         function writeJsFileLines(endJsLine: number) {

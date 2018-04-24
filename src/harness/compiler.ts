@@ -1,14 +1,6 @@
-/// <reference path="./harness.ts" />
-/// <reference path="./documents.ts" />
-/// <reference path="./core.ts" />
-/// <reference path="./vpath.ts" />
-/// <reference path="./vfs.ts" />
-/// <reference path="./utils.ts" />
-/// <reference path="./fakes.ts" />
-
-// NOTE: The contents of this file are all exported from the namespace 'compiler'. This is to
-//       support the eventual conversion of harness into a modular system.
-
+/**
+ * Test harness compiler functionality.
+ */
 namespace compiler {
     export interface Project {
         file: string;
@@ -64,7 +56,7 @@ namespace compiler {
         public readonly maps: ReadonlyMap<string, documents.TextDocument>;
 
         private _inputs: documents.TextDocument[] = [];
-        private _inputsAndOutputs: core.SortedMap<string, CompilationOutput>;
+        private _inputsAndOutputs: collections.SortedMap<string, CompilationOutput>;
 
         constructor(host: fakes.CompilerHost, options: ts.CompilerOptions, program: ts.Program | undefined, result: ts.EmitResult | undefined, diagnostics: ts.Diagnostic[]) {
             this.host = host;
@@ -74,9 +66,9 @@ namespace compiler {
             this.options = program ? program.getCompilerOptions() : options;
 
             // collect outputs
-            const js = this.js = new core.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
-            const dts = this.dts = new core.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
-            const maps = this.maps = new core.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
+            const js = this.js = new collections.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
+            const dts = this.dts = new collections.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
+            const maps = this.maps = new collections.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
             for (const document of this.host.outputs) {
                 if (vpath.isJavaScript(document.file)) {
                     js.set(document.file, document);
@@ -90,7 +82,7 @@ namespace compiler {
             }
 
             // correlate inputs and outputs
-            this._inputsAndOutputs = new core.SortedMap<string, CompilationOutput>({ comparer: this.vfs.stringComparer, sort: "insertion" });
+            this._inputsAndOutputs = new collections.SortedMap<string, CompilationOutput>({ comparer: this.vfs.stringComparer, sort: "insertion" });
             if (program) {
                 if (this.options.out || this.options.outFile) {
                     const outFile = vpath.resolve(this.vfs.cwd(), this.options.outFile || this.options.out);

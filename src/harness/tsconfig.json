@@ -134,12 +134,7 @@
         "../server/session.ts",
         "../server/scriptVersionCache.ts",
 
-        "./core/functions.ts",
-        "./core/comparers.ts",
-        "./core/collections.ts",
-        "./core/strings.ts",
-        "core.ts",
-
+        "collections.ts",
         "utils.ts",
         "documents.ts",
         "vpath.ts",

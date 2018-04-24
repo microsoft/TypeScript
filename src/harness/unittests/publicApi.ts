@@ -14,7 +14,7 @@ describe("Public APIs", () => {
         });
 
         it("should compile", () => {
-            const fs = vfs.FileSystem.createFromFileSystem(Harness.IO, /*ignoreCase*/ false);
+            const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false);
             fs.linkSync(`${vfs.builtFolder}/${fileName}`, `${vfs.srcFolder}/${fileName}`);
             const sys = new fakes.System(fs);
             const host = new fakes.CompilerHost(sys);

@@ -1,8 +1,6 @@
-/// <reference path="./core.ts" />
-
-// NOTE: The contents of this file are all exported from the namespace 'utils'. This is to
-//       support the eventual conversion of harness into a modular system.
-
+/**
+ * Common utilities
+ */
 namespace utils {
     const leadingCommentRegExp = /^(\s*\/\*[^]*?\*\/\s*|\s*\/\/[^\r\n\u2028\u2029]*[\r\n\u2028\u2029]*)+/;
     const trailingCommentRegExp = /(\s*\/\*[^]*?\*\/\s*|\s*\/\/[^\r\n\u2028\u2029]*[\r\n\u2028\u2029]*)+$/;
@@ -32,28 +30,6 @@ namespace utils {
     const testPathPrefixRegExp = /\/\.(ts|lib|src)\//g;
     export function removeTestPathPrefixes(text: string) {
         return text !== undefined ? text.replace(testPathPrefixRegExp, "") : undefined;
-    }
-
-    /**
-     * SameValueZero (from ECMAScript spec), which has stricter equality sematics than "==" or "===".
-     */
-    export function is(x: any, y: any) {
-        return (x === y) ? (x !== 0 || 1 / x === 1 / y) : (x !== x && y !== y);
-    }
-
-    export interface Theory {
-        title: string;
-        args: any[];
-    }
-
-    export function theory(name: string, data: (Theory | any[])[], callback: (...args: any[]) => any) {
-        describe(name, () => {
-            for (const theory of data) {
-                const title = Array.isArray(theory) ? theory.toString() : theory.title;
-                const args = Array.isArray(theory) ? theory : theory.args;
-                it(title, () => callback(...args));
-            }
-        });
     }
 
     /**
@@ -112,14 +88,27 @@ namespace utils {
         return indentation;
     }
 
-    export function checkFileNames(caption: string, actualFileNames: ReadonlyArray<string>, expectedFileNames: string[]) {
-        assert.equal(actualFileNames.length, expectedFileNames.length, `${caption}: incorrect actual number of files, expected ${expectedFileNames}, got ${actualFileNames}`);
-        for (const f of expectedFileNames) {
-            assert.isTrue(actualFileNames.indexOf(f) >= 0, `${caption}: expected to find ${f} in ${actualFileNames}`);
-        }
-    }
-
     export function toUtf8(text: string): string {
         return new Buffer(text).toString("utf8");
+    }
+
+    export function getByteOrderMarkLength(text: string): number {
+        if (text.length >= 1) {
+            const ch0 = text.charCodeAt(0);
+            if (ch0 === 0xfeff) return 1;
+            if (ch0 === 0xfe) return text.length >= 2 && text.charCodeAt(1) === 0xff ? 2 : 0;
+            if (ch0 === 0xff) return text.length >= 2 && text.charCodeAt(1) === 0xfe ? 2 : 0;
+            if (ch0 === 0xef) return text.length >= 3 && text.charCodeAt(1) === 0xbb && text.charCodeAt(2) === 0xbf ? 3 : 0;
+        }
+        return 0;
+    }
+
+    export function removeByteOrderMark(text: string): string {
+        const length = getByteOrderMarkLength(text);
+        return length ? text.slice(length) : text;
+    }
+
+    export function addUTF8ByteOrderMark(text: string) {
+        return getByteOrderMarkLength(text) === 0 ? "\u00EF\u00BB\u00BF" + text : text;
     }
 }

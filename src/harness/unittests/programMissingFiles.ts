@@ -37,7 +37,7 @@ namespace ts {
         );
 
         const testCompilerHost = new fakes.CompilerHost(
-            vfs.FileSystem.createFromFileSystem(
+            vfs.createFromFileSystem(
                 Harness.IO,
                 /*ignoreCase*/ true,
                 { documents: [emptyFile, referenceFile], cwd: "d:\\pretend\\" }),

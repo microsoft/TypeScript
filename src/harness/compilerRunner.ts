@@ -273,8 +273,8 @@ class CompilerTest {
     }
 
     private makeUnitName(name: string, root: string) {
-        const path = ts.toPath(name, root, core.identity);
-        const pathStart = ts.toPath(Harness.IO.getCurrentDirectory(), "", core.identity);
+        const path = ts.toPath(name, root, ts.identity);
+        const pathStart = ts.toPath(Harness.IO.getCurrentDirectory(), "", ts.identity);
         return pathStart ? path.replace(pathStart, "/") : path;
     }
 

@@ -678,9 +678,9 @@ namespace Harness {
     function createBrowserIO(): IO {
         const serverRoot = new URL("http://localhost:8888/");
 
-        class HttpHeaders extends core.SortedMap<string, string | string[]> {
+        class HttpHeaders extends collections.SortedMap<string, string | string[]> {
             constructor(template?: Record<string, string | string[]>) {
-                super(core.compareStringsCaseInsensitive);
+                super(ts.compareStringsCaseInsensitive);
                 if (template) {
                     for (const key in template) {
                         if (ts.hasProperty(template, key)) {
@@ -1237,7 +1237,7 @@ namespace Harness {
             }
 
             const docs = inputFiles.concat(otherFiles).map(documents.TextDocument.fromTestFile);
-            const fs = vfs.FileSystem.createFromFileSystem(IO, !useCaseSensitiveFileNames, { documents: docs, cwd: currentDirectory });
+            const fs = vfs.createFromFileSystem(IO, !useCaseSensitiveFileNames, { documents: docs, cwd: currentDirectory });
             const host = new fakes.CompilerHost(fs, options);
             return compiler.compileFiles(host, programFileNames, options);
         }
@@ -1286,7 +1286,7 @@ namespace Harness {
                 else if (vpath.isTypeScript(file.unitName)) {
                     const declFile = findResultCodeFile(file.unitName);
                     if (declFile && !findUnit(declFile.file, declInputFiles) && !findUnit(declFile.file, declOtherFiles)) {
-                        dtsFiles.push({ unitName: declFile.file, content: core.removeByteOrderMark(declFile.text) });
+                        dtsFiles.push({ unitName: declFile.file, content: utils.removeByteOrderMark(declFile.text) });
                     }
                 }
             }
@@ -1733,7 +1733,7 @@ namespace Harness {
             const dupeCase = ts.createMap<number>();
             // Yield them
             for (const outputFile of files) {
-                yield [checkDuplicatedFileName(outputFile.file, dupeCase), "/*====== " + outputFile.file + " ======*/\r\n" + core.removeByteOrderMark(outputFile.text)];
+                yield [checkDuplicatedFileName(outputFile.file, dupeCase), "/*====== " + outputFile.file + " ======*/\r\n" + utils.removeByteOrderMark(outputFile.text)];
             }
 
             function cleanName(fn: string) {

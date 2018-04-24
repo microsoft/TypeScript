@@ -1,5 +1,3 @@
-/// <reference path="./core.ts" />
-
 // NOTE: The contents of this file are all exported from the namespace 'documents'. This is to
 //       support the eventual conversion of harness into a modular system.
 
@@ -9,7 +7,7 @@ namespace documents {
         public readonly file: string;
         public readonly text: string;
 
-        private _lineStarts: core.LineStarts | undefined;
+        private _lineStarts: ReadonlyArray<number> | undefined;
         private _testFile: Harness.Compiler.TestFile | undefined;
 
         constructor(file: string, text: string, meta?: Map<string, string>) {
@@ -18,8 +16,8 @@ namespace documents {
             this.meta = meta || new Map<string, string>();
         }
 
-        public get lineStarts(): core.LineStarts {
-            return this._lineStarts || (this._lineStarts = core.computeLineStarts(this.text));
+        public get lineStarts(): ReadonlyArray<number> {
+            return this._lineStarts || (this._lineStarts = ts.computeLineStarts(this.text));
         }
 
         public static fromTestFile(file: Harness.Compiler.TestFile) {
