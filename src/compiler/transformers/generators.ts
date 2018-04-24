@@ -293,7 +293,7 @@ namespace ts {
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
-            if (node.isDeclarationFile || (node.transformFlags! & TransformFlags.ContainsGenerator) === 0) {
+            if (node.isDeclarationFile || (node.transformFlags & TransformFlags.ContainsGenerator) === 0) {
                 return node;
             }
 
@@ -374,10 +374,10 @@ namespace ts {
                 case SyntaxKind.ReturnStatement:
                     return visitReturnStatement(<ReturnStatement>node);
                 default:
-                    if (node.transformFlags! & TransformFlags.ContainsYield) {
+                    if (node.transformFlags & TransformFlags.ContainsYield) {
                         return visitJavaScriptContainingYield(node);
                     }
-                    else if (node.transformFlags! & (TransformFlags.ContainsGenerator | TransformFlags.ContainsHoistedDeclarationOrCompletion)) {
+                    else if (node.transformFlags & (TransformFlags.ContainsGenerator | TransformFlags.ContainsHoistedDeclarationOrCompletion)) {
                         return visitEachChild(node, visitor, context);
                     }
                     else {
@@ -617,7 +617,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitVariableStatement(node: VariableStatement): Statement | undefined {
-            if (node.transformFlags! & TransformFlags.ContainsYield) {
+            if (node.transformFlags & TransformFlags.ContainsYield) {
                 transformAndEmitVariableDeclarationList(node.declarationList);
                 return undefined;
             }
@@ -1925,7 +1925,7 @@ namespace ts {
         }
 
         function containsYield(node: Node | undefined): boolean {
-            return !!node && (node.transformFlags! & TransformFlags.ContainsYield) !== 0;
+            return !!node && (node.transformFlags & TransformFlags.ContainsYield) !== 0;
         }
 
         function countInitialNodesWithoutYield(nodes: NodeArray<Node>) {

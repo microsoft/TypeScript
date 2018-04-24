@@ -53,7 +53,7 @@ namespace ts {
          * @param node The SourceFile node.
          */
         function transformSourceFile(node: SourceFile) {
-            if (node.isDeclarationFile || !(isEffectiveExternalModule(node, compilerOptions) || node.transformFlags! & TransformFlags.ContainsDynamicImport)) {
+            if (node.isDeclarationFile || !(isEffectiveExternalModule(node, compilerOptions) || node.transformFlags & TransformFlags.ContainsDynamicImport)) {
                 return node;
             }
 
@@ -524,7 +524,7 @@ namespace ts {
         function importCallExpressionVisitor(node: Expression): VisitResult<Expression> {
             // This visitor does not need to descend into the tree if there is no dynamic import,
             // as export/import statements are only transformed at the top level of a file.
-            if (!(node.transformFlags! & TransformFlags.ContainsDynamicImport)) {
+            if (!(node.transformFlags & TransformFlags.ContainsDynamicImport)) {
                 return node;
             }
 
@@ -538,7 +538,7 @@ namespace ts {
 
         function visitImportCallExpression(node: ImportCall): Expression {
             const argument = visitNode(firstOrUndefined(node.arguments), importCallExpressionVisitor);
-            const containsLexicalThis = !!(node.transformFlags! & TransformFlags.ContainsLexicalThis);
+            const containsLexicalThis = !!(node.transformFlags & TransformFlags.ContainsLexicalThis);
             switch (compilerOptions.module) {
                 case ModuleKind.AMD:
                     return createImportCallExpressionAMD(argument, containsLexicalThis);

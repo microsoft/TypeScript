@@ -344,7 +344,7 @@ namespace ts {
         }
 
         function shouldVisitNode(node: Node): boolean {
-            return (node.transformFlags! & TransformFlags.ContainsES2015) !== 0
+            return (node.transformFlags & TransformFlags.ContainsES2015) !== 0
                 || convertedLoopState !== undefined
                 || (hierarchyFacts & HierarchyFacts.ConstructorWithCapturedSuper && (isStatement(node) || (node.kind === SyntaxKind.Block)))
                 || (isIterationStatement(node, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatementBody(node))
@@ -1102,7 +1102,7 @@ namespace ts {
             // but only if the constructor itself doesn't use 'this' elsewhere.
             if (superCallExpression
                 && statementOffset === ctorStatements.length - 1
-                && !(ctor.transformFlags! & (TransformFlags.ContainsLexicalThis | TransformFlags.ContainsCapturedLexicalThis))) {
+                && !(ctor.transformFlags & (TransformFlags.ContainsLexicalThis | TransformFlags.ContainsCapturedLexicalThis))) {
                 const returnStatement = createReturn(superCallExpression);
 
                 if (superCallExpression.kind !== SyntaxKind.BinaryExpression
@@ -1211,7 +1211,7 @@ namespace ts {
          * @param node A function-like node.
          */
         function shouldAddDefaultValueAssignments(node: FunctionLikeDeclaration): boolean {
-            return (node.transformFlags! & TransformFlags.ContainsDefaultValueAssignments) !== 0;
+            return (node.transformFlags & TransformFlags.ContainsDefaultValueAssignments) !== 0;
         }
 
         /**
@@ -1438,7 +1438,7 @@ namespace ts {
          * @param node A node.
          */
         function addCaptureThisForNodeIfNeeded(statements: Statement[], node: Node): void {
-            if (node.transformFlags! & TransformFlags.ContainsCapturedLexicalThis && node.kind !== SyntaxKind.ArrowFunction) {
+            if (node.transformFlags & TransformFlags.ContainsCapturedLexicalThis && node.kind !== SyntaxKind.ArrowFunction) {
                 captureThisForNode(statements, node, createThis());
             }
         }
@@ -1694,7 +1694,7 @@ namespace ts {
          * @param node An ArrowFunction node.
          */
         function visitArrowFunction(node: ArrowFunction) {
-            if (node.transformFlags! & TransformFlags.ContainsLexicalThis) {
+            if (node.transformFlags & TransformFlags.ContainsLexicalThis) {
                 enableSubstitutionsForCapturedThis();
             }
             const savedConvertedLoopState = convertedLoopState;
@@ -1730,7 +1730,7 @@ namespace ts {
             convertedLoopState = undefined;
 
             const parameters = visitParameterList(node.parameters, visitor, context);
-            const body = node.transformFlags! & TransformFlags.ES2015
+            const body = node.transformFlags & TransformFlags.ES2015
                 ? transformFunctionBody(node)
                 : visitFunctionBodyDownLevel(node);
             const name = hierarchyFacts & HierarchyFacts.NewTarget
@@ -1761,7 +1761,7 @@ namespace ts {
             convertedLoopState = undefined;
             const ancestorFacts = enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
             const parameters = visitParameterList(node.parameters, visitor, context);
-            const body = node.transformFlags! & TransformFlags.ES2015
+            const body = node.transformFlags & TransformFlags.ES2015
                 ? transformFunctionBody(node)
                 : visitFunctionBodyDownLevel(node);
             const name = hierarchyFacts & HierarchyFacts.NewTarget
@@ -2051,7 +2051,7 @@ namespace ts {
          * @param node A VariableDeclarationList node.
          */
         function visitVariableDeclarationList(node: VariableDeclarationList): VariableDeclarationList {
-            if (node.transformFlags! & TransformFlags.ES2015) {
+            if (node.transformFlags & TransformFlags.ES2015) {
                 if (node.flags & NodeFlags.BlockScoped) {
                     enableSubstitutionsForBlockScopedBindings();
                 }
@@ -2065,7 +2065,7 @@ namespace ts {
                 setTextRange(declarationList, node);
                 setCommentRange(declarationList, node);
 
-                if (node.transformFlags! & TransformFlags.ContainsBindingPattern
+                if (node.transformFlags & TransformFlags.ContainsBindingPattern
                     && (isBindingPattern(node.declarations[0].name) || isBindingPattern(last(node.declarations).name))) {
                     // If the first or last declaration is a binding pattern, we need to modify
                     // the source map range for the declaration list.
@@ -2559,7 +2559,7 @@ namespace ts {
             let numInitialPropertiesWithoutYield = numProperties;
             for (let i = 0; i < numProperties; i++) {
                 const property = properties[i];
-                if ((property.transformFlags! & TransformFlags.ContainsYield && hierarchyFacts & HierarchyFacts.AsyncFunctionBody)
+                if ((property.transformFlags & TransformFlags.ContainsYield && hierarchyFacts & HierarchyFacts.AsyncFunctionBody)
                     && i < numInitialPropertiesWithoutYield) {
                     numInitialPropertiesWithoutYield = i;
                 }
@@ -2722,7 +2722,7 @@ namespace ts {
                 loopBody = createBlock([loopBody], /*multiline*/ true);
             }
 
-            const containsYield = (node.statement.transformFlags! & TransformFlags.ContainsYield) !== 0;
+            const containsYield = (node.statement.transformFlags & TransformFlags.ContainsYield) !== 0;
             const isAsyncBlockContainingAwait = containsYield && (hierarchyFacts & HierarchyFacts.AsyncFunctionBody) !== 0;
 
             let loopBodyFlags: EmitFlags = 0;
@@ -3191,7 +3191,7 @@ namespace ts {
             const ancestorFacts = enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
             let updated: AccessorDeclaration;
             const parameters = visitParameterList(node.parameters, visitor, context);
-            const body = node.transformFlags! & (TransformFlags.ContainsCapturedLexicalThis | TransformFlags.ContainsES2015)
+            const body = node.transformFlags & (TransformFlags.ContainsCapturedLexicalThis | TransformFlags.ContainsES2015)
                 ? transformFunctionBody(node)
                 : visitFunctionBodyDownLevel(node);
             if (node.kind === SyntaxKind.GetAccessor) {
@@ -3243,7 +3243,7 @@ namespace ts {
          * @param node An ArrayLiteralExpression node.
          */
         function visitArrayLiteralExpression(node: ArrayLiteralExpression): Expression {
-            if (node.transformFlags! & TransformFlags.ES2015) {
+            if (node.transformFlags & TransformFlags.ES2015) {
                 // We are here because we contain a SpreadElementExpression.
                 return transformAndSpreadElements(node.elements, /*needsUniqueCopy*/ true, !!node.multiLine, /*hasTrailingComma*/ !!node.elements.hasTrailingComma);
             }
@@ -3260,7 +3260,7 @@ namespace ts {
                 return visitTypeScriptClassWrapper(node);
             }
 
-            if (node.transformFlags! & TransformFlags.ES2015) {
+            if (node.transformFlags & TransformFlags.ES2015) {
                 return visitCallExpressionWithPotentialCapturedThisAssignment(node, /*assignToCapturedThis*/ true);
             }
 
@@ -3427,7 +3427,7 @@ namespace ts {
         function visitCallExpressionWithPotentialCapturedThisAssignment(node: CallExpression, assignToCapturedThis: boolean): CallExpression | BinaryExpression {
             // We are here either because SuperKeyword was used somewhere in the expression, or
             // because we contain a SpreadElementExpression.
-            if (node.transformFlags! & TransformFlags.ContainsSpread ||
+            if (node.transformFlags & TransformFlags.ContainsSpread ||
                 node.expression.kind === SyntaxKind.SuperKeyword ||
                 isSuperProperty(skipOuterExpressions(node.expression))) {
 
@@ -3437,7 +3437,7 @@ namespace ts {
                 }
 
                 let resultingCall: CallExpression | BinaryExpression;
-                if (node.transformFlags! & TransformFlags.ContainsSpread) {
+                if (node.transformFlags & TransformFlags.ContainsSpread) {
                     // [source]
                     //      f(...a, b)
                     //      x.m(...a, b)
@@ -3500,7 +3500,7 @@ namespace ts {
          * @param node A NewExpression node.
          */
         function visitNewExpression(node: NewExpression): LeftHandSideExpression {
-            if (node.transformFlags! & TransformFlags.ContainsSpread) {
+            if (node.transformFlags & TransformFlags.ContainsSpread) {
                 // We are here because we contain a SpreadElementExpression.
                 // [source]
                 //      new C(...a)

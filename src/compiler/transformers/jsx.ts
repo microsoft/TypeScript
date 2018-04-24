@@ -23,7 +23,7 @@ namespace ts {
         }
 
         function visitor(node: Node): VisitResult<Node> {
-            if (node.transformFlags! & TransformFlags.ContainsJsx) {
+            if (node.transformFlags & TransformFlags.ContainsJsx) {
                 return visitorWorker(node);
             }
             else {

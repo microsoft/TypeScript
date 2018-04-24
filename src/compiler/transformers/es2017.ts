@@ -53,7 +53,7 @@ namespace ts {
         }
 
         function visitor(node: Node): VisitResult<Node> {
-            if ((node.transformFlags! & TransformFlags.ContainsES2017) === 0) {
+            if ((node.transformFlags & TransformFlags.ContainsES2017) === 0) {
                 return node;
             }
 

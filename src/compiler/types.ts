@@ -562,11 +562,11 @@ namespace ts {
         kind: SyntaxKind;
         flags: NodeFlags;
         /* @internal */ modifierFlagsCache?: ModifierFlags;
-        /* @internal */ transformFlags?: TransformFlags;
+        /* @internal */ transformFlags: TransformFlags;       // Flags for transforms, possibly undefined
         decorators?: NodeArray<Decorator>;                    // Array of decorators (in document order)
         modifiers?: ModifiersArray;                           // Array of modifiers
         /* @internal */ id?: number;                          // Unique id (used to look up NodeLinks)
-        parent: Node;                                        // Parent node (initialized by binding)
+        parent: Node;                                         // Parent node (initialized by binding)
         /* @internal */ original?: Node;                      // The original node if this is an updated node.
         /* @internal */ symbol?: Symbol;                      // Symbol declared by node (initialized by binding)
         /* @internal */ locals?: SymbolTable;                 // Locals associated with node (initialized by binding)
@@ -655,7 +655,7 @@ namespace ts {
 
     export interface NodeArray<T extends Node> extends ReadonlyArray<T>, TextRange {
         hasTrailingComma?: boolean;
-        /* @internal */ transformFlags?: TransformFlags;
+        /* @internal */ transformFlags: TransformFlags;   // Flags for transforms, possibly undefined
     }
 
     export interface Token<TKind extends SyntaxKind> extends Node {

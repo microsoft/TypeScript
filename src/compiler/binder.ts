@@ -578,11 +578,11 @@ namespace ts {
             if (skipTransformFlagAggregation) {
                 bindChildrenWorker(node);
             }
-            else if (node.transformFlags! & TransformFlags.HasComputedFlags) {
+            else if (node.transformFlags & TransformFlags.HasComputedFlags) {
                 skipTransformFlagAggregation = true;
                 bindChildrenWorker(node);
                 skipTransformFlagAggregation = false;
-                subtreeTransformFlags |= node.transformFlags! & ~getTransformFlagsSubtreeExclusions(node.kind);
+                subtreeTransformFlags |= node.transformFlags & ~getTransformFlagsSubtreeExclusions(node.kind);
             }
             else {
                 const savedSubtreeTransformFlags = subtreeTransformFlags;
@@ -611,7 +611,7 @@ namespace ts {
                 let nodeArrayFlags = TransformFlags.None;
                 for (const node of nodes) {
                     bindFunction(node);
-                    nodeArrayFlags |= node.transformFlags! & ~TransformFlags.HasComputedFlags;
+                    nodeArrayFlags |= node.transformFlags & ~TransformFlags.HasComputedFlags;
                 }
                 nodes.transformFlags = nodeArrayFlags | TransformFlags.HasComputedFlags;
                 subtreeTransformFlags |= savedSubtreeTransformFlags;
@@ -1954,7 +1954,7 @@ namespace ts {
                 }
                 parent = saveParent;
             }
-            else if (!skipTransformFlagAggregation && (node.transformFlags! & TransformFlags.HasComputedFlags) === 0) {
+            else if (!skipTransformFlagAggregation && (node.transformFlags & TransformFlags.HasComputedFlags) === 0) {
                 subtreeTransformFlags |= computeTransformFlagsForNode(node, 0);
             }
             inStrictMode = saveInStrictMode;
@@ -2864,13 +2864,13 @@ namespace ts {
         }
 
         if (subtreeFlags & TransformFlags.ContainsSpread
-            || (expression.transformFlags! & (TransformFlags.Super | TransformFlags.ContainsSuper))) {
+            || (expression.transformFlags & (TransformFlags.Super | TransformFlags.ContainsSuper))) {
             // If the this node contains a SpreadExpression, or is a super call, then it is an ES6
             // node.
             transformFlags |= TransformFlags.AssertES2015;
             // super property or element accesses could be inside lambdas, etc, and need a captured `this`,
             // while super keyword for super calls (indicated by TransformFlags.Super) does not (since it can only be top-level in a constructor)
-            if (expression.transformFlags! & TransformFlags.ContainsSuper) {
+            if (expression.transformFlags & TransformFlags.ContainsSuper) {
                 transformFlags |= TransformFlags.ContainsLexicalThis;
             }
         }
@@ -3399,7 +3399,7 @@ namespace ts {
         // If the expression of an expression statement is a destructuring assignment,
         // then we treat the statement as ES6 so that we can indicate that we do not
         // need to hold on to the right-hand side.
-        if (node.expression.transformFlags! & TransformFlags.DestructuringAssignment) {
+        if (node.expression.transformFlags & TransformFlags.DestructuringAssignment) {
             transformFlags |= TransformFlags.AssertES2015;
         }
 

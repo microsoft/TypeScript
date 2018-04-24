@@ -184,11 +184,11 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitorWorker(node: Node): VisitResult<Node> {
-            if (node.transformFlags! & TransformFlags.TypeScript) {
+            if (node.transformFlags & TransformFlags.TypeScript) {
                 // This node is explicitly marked as TypeScript, so we should transform the node.
                 return visitTypeScript(node);
             }
-            else if (node.transformFlags! & TransformFlags.ContainsTypeScript) {
+            else if (node.transformFlags & TransformFlags.ContainsTypeScript) {
                 // This node contains TypeScript, so we should visit its children.
                 return visitEachChild(node, visitor, context);
             }
@@ -229,7 +229,7 @@ namespace ts {
                 // As the type information we would attempt to lookup to perform ellision is potentially unavailable for the synthesized nodes
                 // We do not reuse `visitorWorker`, as the ellidable statement syntax kinds are technically unrecognized by the switch-case in `visitTypeScript`,
                 // and will trigger debug failures when debug verbosity is turned up
-                if (node.transformFlags! & TransformFlags.ContainsTypeScript) {
+                if (node.transformFlags & TransformFlags.ContainsTypeScript) {
                     // This node contains TypeScript, so we should visit its children.
                     return visitEachChild(node, visitor, context);
                 }
@@ -273,12 +273,12 @@ namespace ts {
                 // do not emit ES6 imports and exports since they are illegal inside a namespace
                 return undefined;
            }
-           else if (node.transformFlags! & TransformFlags.TypeScript || hasModifier(node, ModifierFlags.Export)) {
+           else if (node.transformFlags & TransformFlags.TypeScript || hasModifier(node, ModifierFlags.Export)) {
                 // This node is explicitly marked as TypeScript, or is exported at the namespace
                 // level, so we should transform the node.
                 return visitTypeScript(node);
             }
-            else if (node.transformFlags! & TransformFlags.ContainsTypeScript) {
+            else if (node.transformFlags & TransformFlags.ContainsTypeScript) {
                 // This node contains TypeScript, so we should visit its children.
                 return visitEachChild(node, visitor, context);
             }
@@ -945,7 +945,7 @@ namespace ts {
             // If there is a property assignment, we need to emit constructor whether users define it or not
             // If there is no property assignment, we can omit constructor if users do not define it
             const hasInstancePropertyWithInitializer = forEach(node.members, isInstanceInitializedProperty);
-            const hasParameterPropertyAssignments = node.transformFlags! & TransformFlags.ContainsParameterPropertyAssignments;
+            const hasParameterPropertyAssignments = node.transformFlags & TransformFlags.ContainsParameterPropertyAssignments;
             const constructor = getFirstConstructorWithBody(node);
 
             // If the class does not contain nodes that require a synthesized constructor,

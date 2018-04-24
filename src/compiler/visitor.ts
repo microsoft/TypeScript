@@ -1501,8 +1501,8 @@ namespace ts {
         if (node === undefined) {
             return TransformFlags.None;
         }
-        if (node.transformFlags! & TransformFlags.HasComputedFlags) {
-            return node.transformFlags! & ~getTransformFlagsSubtreeExclusions(node.kind);
+        if (node.transformFlags & TransformFlags.HasComputedFlags) {
+            return node.transformFlags & ~getTransformFlagsSubtreeExclusions(node.kind);
         }
         const subtreeFlags = aggregateTransformFlagsForSubtree(node);
         return computeTransformFlagsForNode(node, subtreeFlags);
@@ -1516,7 +1516,7 @@ namespace ts {
         let nodeArrayFlags = TransformFlags.None;
         for (const node of nodes) {
             subtreeFlags |= aggregateTransformFlagsForNode(node);
-            nodeArrayFlags |= node.transformFlags! & ~TransformFlags.HasComputedFlags;
+            nodeArrayFlags |= node.transformFlags & ~TransformFlags.HasComputedFlags;
         }
         nodes.transformFlags = nodeArrayFlags | TransformFlags.HasComputedFlags;
         return subtreeFlags;

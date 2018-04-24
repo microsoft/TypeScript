@@ -201,6 +201,7 @@ namespace ts {
         public flags: NodeFlags;
         public parent: Node;
         public jsDocComments: JSDoc[];
+        public transformFlags: TransformFlags;
 
         constructor(pos: number, end: number) {
             // Set properties in same order as NodeObject

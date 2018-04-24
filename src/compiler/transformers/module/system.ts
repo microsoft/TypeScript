@@ -47,7 +47,7 @@ namespace ts {
          * @param node The SourceFile node.
          */
         function transformSourceFile(node: SourceFile) {
-            if (node.isDeclarationFile || !(isEffectiveExternalModule(node, compilerOptions) || node.transformFlags! & TransformFlags.ContainsDynamicImport)) {
+            if (node.isDeclarationFile || !(isEffectiveExternalModule(node, compilerOptions) || node.transformFlags & TransformFlags.ContainsDynamicImport)) {
                 return node;
             }
 
@@ -1463,14 +1463,14 @@ namespace ts {
          * @param node The node to visit.
          */
         function destructuringAndImportCallVisitor(node: Node): VisitResult<Node> {
-            if (node.transformFlags! & TransformFlags.DestructuringAssignment
+            if (node.transformFlags & TransformFlags.DestructuringAssignment
                 && node.kind === SyntaxKind.BinaryExpression) {
                 return visitDestructuringAssignment(<DestructuringAssignment>node);
             }
             else if (isImportCall(node)) {
                 return visitImportCallExpression(node);
             }
-            else if ((node.transformFlags! & TransformFlags.ContainsDestructuringAssignment) || (node.transformFlags! & TransformFlags.ContainsDynamicImport)) {
+            else if ((node.transformFlags & TransformFlags.ContainsDestructuringAssignment) || (node.transformFlags & TransformFlags.ContainsDynamicImport)) {
                 return visitEachChild(node, destructuringAndImportCallVisitor, context);
             }
             else {
