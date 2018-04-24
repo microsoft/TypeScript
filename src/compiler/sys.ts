@@ -456,7 +456,7 @@ namespace ts {
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
         realpath?(path: string): string;
-        /*@internal*/ getEnvironmentVariable(name: string): string | undefined;
+        /*@internal*/ getEnvironmentVariable(name: string): string;
         /*@internal*/ tryEnableSourceMapsForHost?(): void;
         /*@internal*/ debugMode?: boolean;
         setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
@@ -1155,7 +1155,7 @@ namespace ts {
 
     if (sys && sys.getEnvironmentVariable) {
         setCustomPollingValues(sys);
-        Debug.currentAssertionLevel = /^development$/i.test(sys.getEnvironmentVariable("NODE_ENV")!)
+        Debug.currentAssertionLevel = /^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"))
             ? AssertionLevel.Normal
             : AssertionLevel.None;
     }
