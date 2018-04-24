@@ -100,10 +100,10 @@ namespace ts {
                 return value;
             }
 
-            expressions!.push(value);
+            expressions.push(value);
         }
 
-        return aggregateTransformFlags(inlineExpressions(expressions!)) || createOmittedExpression(); // TODO: GH#18217
+        return aggregateTransformFlags(inlineExpressions(expressions!)) || createOmittedExpression();
 
         function emitExpression(expression: Expression) {
             // NOTE: this completely disables source maps, but aligns with the behavior of

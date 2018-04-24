@@ -180,7 +180,7 @@ namespace ts {
         const declarations = context.endLexicalEnvironment();
         if (some(declarations)) {
             const block = convertToFunctionBody(updated);
-            const statements = mergeLexicalEnvironment(block.statements, declarations!);
+            const statements = mergeLexicalEnvironment(block.statements, declarations);
             return updateBlock(block, statements);
         }
         return updated;

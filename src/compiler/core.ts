@@ -695,7 +695,8 @@ namespace ts {
         });
         return result;
     }
-
+    export function some<T>(array: ReadonlyArray<T> | undefined): array is ReadonlyArray<T>;
+    export function some<T>(array: ReadonlyArray<T> | undefined, predicate: (value: T) => boolean): boolean;
     export function some<T>(array: ReadonlyArray<T> | undefined, predicate?: (value: T) => boolean): boolean {
         if (array) {
             if (predicate) {

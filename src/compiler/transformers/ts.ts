@@ -2133,8 +2133,8 @@ namespace ts {
             if (expr) { // expr only exists if `name` is a computed property name
                 // Inline any pending expressions from previous elided or relocated computed property name expressions in order to preserve execution order
                 if (some(pendingExpressions)) {
-                    expr = inlineExpressions([...pendingExpressions!, expr]);
-                    pendingExpressions!.length = 0;
+                    expr = inlineExpressions([...pendingExpressions, expr]);
+                    pendingExpressions.length = 0;
                 }
                 return updateComputedPropertyName(name as ComputedPropertyName, expr);
             }

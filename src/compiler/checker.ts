@@ -3439,7 +3439,7 @@ namespace ts {
             function mapToTypeNodes(types: Type[] | undefined, context: NodeBuilderContext): TypeNode[] | undefined {
                 if (some(types)) {
                     const result = [];
-                    for (const type of types!) {
+                    for (const type of types) {
                         const typeNode = typeToTypeNodeHelper(type, context);
                         if (typeNode) {
                             result.push(typeNode);

@@ -2909,7 +2909,7 @@ namespace ts {
     export function addEmitHelpers<T extends Node>(node: T, helpers: EmitHelper[] | undefined): T {
         if (some(helpers)) {
             const emitNode = getOrCreateEmitNode(node);
-            for (const helper of helpers!) {
+            for (const helper of helpers) {
                 emitNode.helpers = appendIfUnique(emitNode.helpers, helper);
             }
         }
@@ -2948,14 +2948,14 @@ namespace ts {
 
         const targetEmitNode = getOrCreateEmitNode(target);
         let helpersRemoved = 0;
-        for (let i = 0; i < sourceEmitHelpers!.length; i++) {
-            const helper = sourceEmitHelpers![i];
+        for (let i = 0; i < sourceEmitHelpers.length; i++) {
+            const helper = sourceEmitHelpers[i];
             if (predicate(helper)) {
                 helpersRemoved++;
                 targetEmitNode.helpers = appendIfUnique(targetEmitNode.helpers, helper);
             }
             else if (helpersRemoved > 0) {
-                sourceEmitHelpers![i - helpersRemoved] = helper;
+                sourceEmitHelpers[i - helpersRemoved] = helper;
             }
         }
 
@@ -4244,8 +4244,8 @@ namespace ts {
     export function parenthesizeTypeParameters(typeParameters: ReadonlyArray<TypeNode> | undefined) {
         if (some(typeParameters)) {
             const params: TypeNode[] = [];
-            for (let i = 0; i < typeParameters!.length; ++i) {
-                const entry = typeParameters![i];
+            for (let i = 0; i < typeParameters.length; ++i) {
+                const entry = typeParameters[i];
                 params.push(i === 0 && isFunctionOrConstructorTypeNode(entry) && entry.typeParameters ?
                     createParenthesizedType(entry) :
                     entry);
