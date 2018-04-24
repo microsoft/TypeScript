@@ -1,0 +1,268 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 0, 0))
+
+    interface Element {}
+>Element : Symbol(Element, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 0, 20))
+}
+declare namespace React {
+>React : Symbol(React, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 2, 1))
+
+    export function createElement(x: any, p: any, ...children: any[]): JSX.Element;
+>createElement : Symbol(createElement, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 3, 25))
+>x : Symbol(x, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 4, 34))
+>p : Symbol(p, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 4, 41))
+>children : Symbol(children, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 4, 49))
+>JSX : Symbol(JSX, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 0, 0))
+>Element : Symbol(JSX.Element, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 0, 20))
+}
+
+class Foo<T, U> {
+>Foo : Symbol(Foo, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 5, 1))
+>T : Symbol(T, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 7, 10))
+>U : Symbol(U, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 7, 12))
+
+    constructor(public prop1: T, public prop2: U) {}
+>prop1 : Symbol(Foo.prop1, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 8, 16))
+>T : Symbol(T, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 7, 10))
+>prop2 : Symbol(Foo.prop2, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 8, 32))
+>U : Symbol(U, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 7, 12))
+}
+
+function foo<T, U>(x: T, y: U): [T, U] { return [x, y]; }
+>foo : Symbol(foo, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 9, 1))
+>T : Symbol(T, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 11, 13))
+>U : Symbol(U, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 11, 15))
+>x : Symbol(x, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 11, 19))
+>T : Symbol(T, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 11, 13))
+>y : Symbol(y, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 11, 24))
+>U : Symbol(U, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 11, 15))
+>T : Symbol(T, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 11, 13))
+>U : Symbol(U, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 11, 15))
+>x : Symbol(x, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 11, 19))
+>y : Symbol(y, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 11, 24))
+
+function tag<T, U>(x: TemplateStringsArray, ...args: (T | U)[]) { return args; }
+>tag : Symbol(tag, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 11, 57))
+>T : Symbol(T, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 13, 13))
+>U : Symbol(U, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 13, 15))
+>x : Symbol(x, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 13, 19))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.d.ts, --, --))
+>args : Symbol(args, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 13, 43))
+>T : Symbol(T, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 13, 13))
+>U : Symbol(U, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 13, 15))
+>args : Symbol(args, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 13, 43))
+
+interface ComponentProps<T, U> {
+>ComponentProps : Symbol(ComponentProps, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 13, 80))
+>T : Symbol(T, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 15, 25))
+>U : Symbol(U, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 15, 27))
+
+    x: T;
+>x : Symbol(ComponentProps.x, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 15, 32))
+>T : Symbol(T, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 15, 25))
+
+    y: U;
+>y : Symbol(ComponentProps.y, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 16, 9))
+>U : Symbol(U, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 15, 27))
+
+    cb(props: this): void;
+>cb : Symbol(ComponentProps.cb, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 17, 9))
+>props : Symbol(props, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 18, 7))
+}
+
+function Component<T, U>(x: ComponentProps<T, U>) {
+>Component : Symbol(Component, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 19, 1))
+>T : Symbol(T, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 21, 19))
+>U : Symbol(U, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 21, 21))
+>x : Symbol(x, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 21, 25))
+>ComponentProps : Symbol(ComponentProps, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 13, 80))
+>T : Symbol(T, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 21, 19))
+>U : Symbol(U, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 21, 21))
+
+    return <h></h>;
+}
+
+// Does not reference valid param
+
+const instance1 = new Foo<number, Q = string>(0, "");
+>instance1 : Symbol(instance1, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 27, 5))
+>Foo : Symbol(Foo, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 5, 1))
+
+const result1 = foo<number, Q = string>(0, "");
+>result1 : Symbol(result1, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 28, 5))
+>foo : Symbol(foo, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 9, 1))
+
+const tagged1 = tag<number, Q = string>`tags ${12} ${""}`;
+>tagged1 : Symbol(tagged1, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 29, 5))
+>tag : Symbol(tag, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 11, 57))
+
+const jsx1 = <Component<number, Q = string> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} />;
+>jsx1 : Symbol(jsx1, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 30, 5))
+>Component : Symbol(Component, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 19, 1))
+>x : Symbol(x, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 30, 43))
+>y : Symbol(y, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 30, 50))
+>cb : Symbol(cb, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 30, 55))
+>props : Symbol(props, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 30, 60))
+>props.x.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>props.x : Symbol(ComponentProps.x, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 15, 32))
+>props : Symbol(props, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 30, 60))
+>x : Symbol(ComponentProps.x, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 15, 32))
+>toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>props.y.toUpperCase : Symbol(String.toUpperCase, Decl(lib.d.ts, --, --))
+>props.y : Symbol(ComponentProps.y, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 16, 9))
+>props : Symbol(props, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 30, 60))
+>y : Symbol(ComponentProps.y, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 16, 9))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.d.ts, --, --))
+
+type A = Foo<number, Q = string>;
+>A : Symbol(A, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 30, 122))
+>Foo : Symbol(Foo, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 5, 1))
+
+// Duplicates positional
+
+const instance2 = new Foo<number, T = string>(0, "");
+>instance2 : Symbol(instance2, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 35, 5))
+>Foo : Symbol(Foo, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 5, 1))
+
+const result2 = foo<number, T = string>(0, "");
+>result2 : Symbol(result2, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 36, 5))
+>foo : Symbol(foo, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 9, 1))
+
+const tagged2 = tag<number, T = string>`tags ${12} ${""}`;
+>tagged2 : Symbol(tagged2, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 37, 5))
+>tag : Symbol(tag, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 11, 57))
+
+const jsx2 = <Component<number, T = string> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} />;
+>jsx2 : Symbol(jsx2, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 38, 5))
+>Component : Symbol(Component, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 19, 1))
+>x : Symbol(x, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 38, 43))
+>y : Symbol(y, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 38, 50))
+>cb : Symbol(cb, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 38, 55))
+>props : Symbol(props, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 38, 60))
+>props.x.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>props.x : Symbol(ComponentProps.x, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 15, 32))
+>props : Symbol(props, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 38, 60))
+>x : Symbol(ComponentProps.x, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 15, 32))
+>toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>props.y.toUpperCase : Symbol(String.toUpperCase, Decl(lib.d.ts, --, --))
+>props.y : Symbol(ComponentProps.y, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 16, 9))
+>props : Symbol(props, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 38, 60))
+>y : Symbol(ComponentProps.y, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 16, 9))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.d.ts, --, --))
+
+type B = Foo<number, T = string>;
+>B : Symbol(B, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 38, 122))
+>Foo : Symbol(Foo, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 5, 1))
+
+// Duplicates other named
+
+const instance3 = new Foo<T = number, T = string>(0, "");
+>instance3 : Symbol(instance3, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 43, 5))
+>Foo : Symbol(Foo, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 5, 1))
+
+const result3 = foo<T = number, T = string>(0, "");
+>result3 : Symbol(result3, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 44, 5))
+>foo : Symbol(foo, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 9, 1))
+
+const tagged3 = tag<T = number, T = string>`tags ${12} ${""}`;
+>tagged3 : Symbol(tagged3, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 45, 5))
+>tag : Symbol(tag, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 11, 57))
+
+const jsx3 = <Component<T = number, T = string> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} />;
+>jsx3 : Symbol(jsx3, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 46, 5))
+>Component : Symbol(Component, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 19, 1))
+>x : Symbol(x, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 46, 47))
+>y : Symbol(y, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 46, 54))
+>cb : Symbol(cb, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 46, 59))
+>props : Symbol(props, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 46, 64))
+>props.x : Symbol(ComponentProps.x, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 15, 32))
+>props : Symbol(props, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 46, 64))
+>x : Symbol(ComponentProps.x, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 15, 32))
+>props.y.toUpperCase : Symbol(String.toUpperCase, Decl(lib.d.ts, --, --))
+>props.y : Symbol(ComponentProps.y, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 16, 9))
+>props : Symbol(props, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 46, 64))
+>y : Symbol(ComponentProps.y, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 16, 9))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.d.ts, --, --))
+
+type C = Foo<T = number, T = string>;
+>C : Symbol(C, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 46, 126))
+>Foo : Symbol(Foo, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 5, 1))
+
+// Too many arguments
+
+const instance4 = new Foo<T = number, U = string, W = never>(0, "");
+>instance4 : Symbol(instance4, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 51, 5))
+>Foo : Symbol(Foo, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 5, 1))
+
+const result4 = foo<T = number, U = string, W = never>(0, "");
+>result4 : Symbol(result4, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 52, 5))
+>foo : Symbol(foo, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 9, 1))
+
+const tagged4 = tag<T = number, U = string, W = never>`tags ${12} ${""}`;
+>tagged4 : Symbol(tagged4, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 53, 5))
+>tag : Symbol(tag, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 11, 57))
+
+const jsx4 = <Component<T = number, U = string, W = never> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} />;
+>jsx4 : Symbol(jsx4, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 54, 5))
+>Component : Symbol(Component, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 19, 1))
+>x : Symbol(x, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 54, 58))
+>y : Symbol(y, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 54, 65))
+>cb : Symbol(cb, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 54, 70))
+>props : Symbol(props, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 54, 75))
+>props.x.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>props.x : Symbol(ComponentProps.x, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 15, 32))
+>props : Symbol(props, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 54, 75))
+>x : Symbol(ComponentProps.x, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 15, 32))
+>toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>props.y.toUpperCase : Symbol(String.toUpperCase, Decl(lib.d.ts, --, --))
+>props.y : Symbol(ComponentProps.y, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 16, 9))
+>props : Symbol(props, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 54, 75))
+>y : Symbol(ComponentProps.y, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 16, 9))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.d.ts, --, --))
+
+type D = Foo<T = number, U = string, W = never>;
+>D : Symbol(D, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 54, 137))
+>Foo : Symbol(Foo, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 5, 1))
+
+// Positional after named
+
+const instance5 = new Foo<U = string, number>(0, "");
+>instance5 : Symbol(instance5, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 59, 5))
+>Foo : Symbol(Foo, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 5, 1))
+
+const result5 = foo<U = string, number>(0, "");
+>result5 : Symbol(result5, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 60, 5))
+>foo : Symbol(foo, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 9, 1))
+
+const tagged5 = tag<U = string, number>`tags ${12} ${""}`;
+>tagged5 : Symbol(tagged5, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 61, 5))
+>tag : Symbol(tag, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 11, 57))
+
+const jsx5 = <Component<U = string, number> x={12} y="" cb={props => void (props.x.toFixed() + props.y.toUpperCase())} />;
+>jsx5 : Symbol(jsx5, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 62, 5))
+>Component : Symbol(Component, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 19, 1))
+>x : Symbol(x, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 62, 43))
+>y : Symbol(y, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 62, 50))
+>cb : Symbol(cb, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 62, 55))
+>props : Symbol(props, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 62, 60))
+>props.x.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>props.x : Symbol(ComponentProps.x, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 15, 32))
+>props : Symbol(props, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 62, 60))
+>x : Symbol(ComponentProps.x, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 15, 32))
+>toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>props.y.toUpperCase : Symbol(String.toUpperCase, Decl(lib.d.ts, --, --))
+>props.y : Symbol(ComponentProps.y, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 16, 9))
+>props : Symbol(props, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 62, 60))
+>y : Symbol(ComponentProps.y, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 16, 9))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.d.ts, --, --))
+
+type E = Foo<U = string, number>;
+>E : Symbol(E, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 62, 122))
+>Foo : Symbol(Foo, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 5, 1))
+
+// Typespace only - does not provide enough arguments
+type F = Foo<U = number>;
+>F : Symbol(F, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 63, 33))
+>Foo : Symbol(Foo, Decl(typeArgumentListsWithNamedTypeArgumentErrors.tsx, 5, 1))
+

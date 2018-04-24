@@ -971,6 +971,34 @@
         "category": "Error",
         "code": 1342
     },
+    "Positional type arguments cannot follow named type arguments.": {
+        "category": "Error",
+        "code": 1343
+    },
+    "Named type argument conflicts with positional type argument at index '{0}'.": {
+        "category": "Error",
+        "code": 1344
+    },
+    "Positional type argument conflicts with named type argument '{0}'.": {
+        "category": "Error",
+        "code": 1345
+    },
+    "Signature has no type argument named '{0}'.": {
+        "category": "Error",
+        "code": 1346
+    },
+    "No signature has all named type arguments.": {
+        "category": "Error",
+        "code": 1347
+    },
+    "No signature matches all named and positional type arguments.": {
+        "category": "Error",
+        "code": 1348
+    },
+    "No signature has a type argument named '{0}'.": {
+        "category": "Error",
+        "code": 1349
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

@@ -5186,6 +5186,7 @@ namespace ts {
                 // partial instantiation of the members without the base types fully resolved
                 (type as Type as ResolvedType).members = undefined;
             }
+            checkTypespaceTypeArgumentsForCorrectness(baseTypeNode.typeArguments, getSignaturesOfType(baseType, SignatureKind.Construct));
             return type.resolvedBaseTypes = [baseType];
         }
 
@@ -7428,7 +7429,8 @@ namespace ts {
             const typeParameters = type.localTypeParameters;
             if (typeParameters) {
                 const numTypeArguments = length(node.typeArguments);
-                const minTypeArgumentCount = getMinTypeArgumentCount(typeArgNodes, typeParameters);
+                // Pass `undefined` for typeArguments because no inference is done here, so even if there are named args, all args must be supplied
+                const minTypeArgumentCount = getMinTypeArgumentCount(/*typeArguments*/ undefined, typeParameters);
                 const isJs = isInJavaScriptFile(node);
                 const isJsImplicitAny = !noImplicitAny && isJs;
                 if (!isJsImplicitAny && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
@@ -7447,6 +7449,9 @@ namespace ts {
                         return unknownType;
                     }
                 }
+                if (!hasMatchesForAllNamedTypeArguments(typeParameters, node.typeArguments)) {
+                    Debug.assert(issueNamedTypeParameterError(node.typeArguments, typeParameters), "Type had mismatched named arg, but couldn't calculate an error");
+                }
                 // In a type reference, the outer type parameters of the referenced class or interface are automatically
                 // supplied as type arguments and the type reference only specifies arguments for the local type parameters
                 // of the class or interface.
@@ -7455,7 +7460,7 @@ namespace ts {
                 return createTypeReference(<GenericType>type, typeArguments);
             }
             return checkNoTypeArguments(node, symbol) ? type : unknownType;
-            }
+        }
 
         function getTypeAliasInstantiation(symbol: Symbol, typeArguments: Type[]): Type {
             const type = getDeclaredTypeOfSymbol(symbol);
@@ -7474,12 +7479,13 @@ namespace ts {
          * references to the type parameters of the alias. We replace those with the actual type arguments by instantiating the
          * declared type. Instantiations are cached using the type identities of the type arguments as the key.
          */
-        function getTypeFromTypeAliasReference(node: NodeWithTypeArguments, symbol: Symbol, typeArgumentNodes: ReadonlyArray<TypeArgument>): Type {
+        function getTypeFromTypeAliasReference(node: NodeWithTypeArguments, symbol: Symbol, typeArgumentNodes: NodeArray<TypeArgument>): Type {
             const type = getDeclaredTypeOfSymbol(symbol);
             const typeParameters = getSymbolLinks(symbol).typeParameters;
             if (typeParameters) {
                 const numTypeArguments = length(node.typeArguments);
-                const minTypeArgumentCount = getMinTypeArgumentCount(node.typeArguments, typeParameters);
+                // Pass `undefined` for typeArguments because no inference is done here, so even if there are named args, all args must be supplied
+                const minTypeArgumentCount = getMinTypeArgumentCount(/*typeArguments*/ undefined, typeParameters);
                 if (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length) {
                     error(node,
                         minTypeArgumentCount === typeParameters.length
@@ -7490,10 +7496,13 @@ namespace ts {
                         typeParameters.length);
                     return unknownType;
                 }
+                if (!hasMatchesForAllNamedTypeArguments(typeParameters, typeArgumentNodes)) {
+                    Debug.assert(issueNamedTypeParameterError(typeArgumentNodes, typeParameters), "Type had mismatched named arg, but couldn't calculate an error");
+                }
                 return getTypeAliasInstantiation(symbol, getTypeArgumentsFromTypeArgumentList(typeArgumentNodes, typeParameters));
             }
             return checkNoTypeArguments(node, symbol) ? type : unknownType;
-            }
+        }
 
         function getTypeReferenceName(node: TypeReferenceType): EntityNameOrEntityNameExpression | undefined {
             switch (node.kind) {
@@ -7559,7 +7568,7 @@ namespace ts {
             return valueType;
         }
 
-        function getTypeReferenceTypeWorker(node: NodeWithTypeArguments, symbol: Symbol, typeArgumentNodes: ReadonlyArray<TypeArgument>): Type | undefined {
+        function getTypeReferenceTypeWorker(node: NodeWithTypeArguments, symbol: Symbol, typeArgumentNodes: NodeArray<TypeArgument>): Type | undefined {
             if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                 return getTypeFromClassOrInterfaceReference(node, symbol, typeArgumentNodes);
             }
@@ -9037,6 +9046,16 @@ namespace ts {
 
         function checkTypeArgument(node: TypeArgument): void {
             getTypeFromTypeNode(isNamedTypeArgument(node) ? node.type : node); // return type unneeded - used to setup caches and mark referenced-ness
+        }
+
+        function checkTypespaceTypeArgumentsForCorrectness(nodes: NodeArray<TypeArgument> | undefined, signatures: ReadonlyArray<Signature>) {
+            if (!length(nodes)) return;
+            for (const sig of signatures) {
+                if (hasCorrectTypeArgumentArity(sig, nodes) && hasMatchesForAllNamedTypeArguments(sig.typeParameters, nodes)) {
+                    return;
+                }
+            }
+            issueTypeArgumentArityError(nodes[0], signatures, nodes);
         }
 
         function getTypeFromTypeNode(node: TypeNode): Type {
@@ -15920,7 +15939,7 @@ namespace ts {
                         instantiatedSignatures.push(typeArgumentInstantiated);
                     }
                     else {
-                        if (node.typeArguments && hasCorrectTypeArgumentArity(signature, node.typeArguments)) {
+                        if (node.typeArguments && hasCorrectTypeArgumentArity(signature, node.typeArguments) && hasMatchesForAllNamedTypeArguments(signature.typeParameters, node.typeArguments)) {
                             candidateForTypeArgumentError = signature;
                         }
                         const inferenceContext = createInferenceContext(signature.typeParameters, signature, /*flags*/ isJavascript ? InferenceFlags.AnyDefault : InferenceFlags.None);
@@ -15938,7 +15957,7 @@ namespace ts {
                 }
                 // Length check to avoid issuing an arity error on length=0, the "Type argument list cannot be empty" grammar error alone is fine
                 else if (node.typeArguments.length !== 0) {
-                    diagnostics.add(getTypeArgumentArityError(node, signatures, node.typeArguments));
+                    issueTypeArgumentArityError(node, signatures, node.typeArguments);
                 }
             }
             return instantiatedSignatures;
@@ -15948,7 +15967,7 @@ namespace ts {
             if (!node.typeArguments) {
                 return;
             }
-            if (!hasCorrectTypeArgumentArity(signature, node.typeArguments)) {
+            if (!hasCorrectTypeArgumentArity(signature, node.typeArguments) || !hasMatchesForAllNamedTypeArguments(signature.typeParameters, node.typeArguments)) {
                 return;
             }
             const args = checkTypeArguments(signature, node.typeArguments, /*reportErrors*/ false);
@@ -17237,80 +17256,6 @@ namespace ts {
             return -1;
         }
 
-        function hasCorrectArity(node: CallLikeExpression, args: ReadonlyArray<Expression>, signature: Signature, signatureHelpTrailingComma = false) {
-            let argCount: number;            // Apparent number of arguments we will have in this call
-            let typeArguments: NodeArray<TypeArgument>;  // Type arguments (undefined if none)
-            let callIsIncomplete: boolean;           // In incomplete call we want to be lenient when we have too few arguments
-            let spreadArgIndex = -1;
-
-            if (isJsxOpeningLikeElement(node)) {
-                // The arity check will be done in "checkApplicableSignatureForJsxOpeningLikeElement".
-                return true;
-            }
-
-            if (node.kind === SyntaxKind.TaggedTemplateExpression) {
-                // Even if the call is incomplete, we'll have a missing expression as our last argument,
-                // so we can say the count is just the arg list length
-                argCount = args.length;
-                typeArguments = undefined;
-
-                if (node.template.kind === SyntaxKind.TemplateExpression) {
-                    // If a tagged template expression lacks a tail literal, the call is incomplete.
-                    // Specifically, a template only can end in a TemplateTail or a Missing literal.
-                    const lastSpan = lastOrUndefined(node.template.templateSpans);
-                    Debug.assert(lastSpan !== undefined); // we should always have at least one span.
-                    callIsIncomplete = nodeIsMissing(lastSpan.literal) || !!lastSpan.literal.isUnterminated;
-                }
-                else {
-                    // If the template didn't end in a backtick, or its beginning occurred right prior to EOF,
-                    // then this might actually turn out to be a TemplateHead in the future;
-                    // so we consider the call to be incomplete.
-                    const templateLiteral = <LiteralExpression>node.template;
-                    Debug.assert(templateLiteral.kind === SyntaxKind.NoSubstitutionTemplateLiteral);
-                    callIsIncomplete = !!templateLiteral.isUnterminated;
-                }
-            }
-            else if (node.kind === SyntaxKind.Decorator) {
-                typeArguments = undefined;
-                argCount = getEffectiveArgumentCount(node, /*args*/ undefined, signature);
-            }
-            else {
-                if (!node.arguments) {
-                    // This only happens when we have something of the form: 'new C'
-                    Debug.assert(node.kind === SyntaxKind.NewExpression);
-
-                    return signature.minArgumentCount === 0;
-                }
-
-                argCount = signatureHelpTrailingComma ? args.length + 1 : args.length;
-
-                // If we are missing the close parenthesis, the call is incomplete.
-                callIsIncomplete = node.arguments.end === node.end;
-
-                typeArguments = node.typeArguments;
-                spreadArgIndex = getSpreadArgumentIndex(args);
-            }
-
-            if (!hasCorrectTypeArgumentArity(signature, typeArguments)) {
-                return false;
-            }
-
-            // If a spread argument is present, check that it corresponds to a rest parameter or at least that it's in the valid range.
-            if (spreadArgIndex >= 0) {
-                return isRestParameterIndex(signature, spreadArgIndex) ||
-                    signature.minArgumentCount <= spreadArgIndex && spreadArgIndex < signature.parameters.length;
-            }
-
-            // Too many arguments implies incorrect arity.
-            if (!signature.hasRestParameter && argCount > signature.parameters.length) {
-                return false;
-            }
-
-            // If the call is incomplete, we should skip the lower bound check.
-            const hasEnoughArguments = argCount >= signature.minArgumentCount;
-            return callIsIncomplete || hasEnoughArguments;
-        }
-
         function hasCorrectTypeArgumentArity(signature: Signature, typeArguments: NodeArray<TypeArgument> | undefined) {
             // If the user supplied type arguments, but the number of type arguments does not match
             // the declared number of type parameters, the call has an incorrect arity.
@@ -17318,6 +17263,22 @@ namespace ts {
             const minTypeArgumentCount = getMinTypeArgumentCount(typeArguments, signature.typeParameters);
             return !typeArguments ||
                 (typeArguments.length >= minTypeArgumentCount && typeArguments.length <= numTypeParameters);
+        }
+
+        function hasMatchesForAllNamedTypeArguments(typeParameters: ReadonlyArray<TypeParameter> | undefined, typeArguments: NodeArray<TypeArgument> | undefined) {
+            if (!typeArguments) return true;
+            // Additionally, only select overloads where there exists a match for any named type arguments supplied
+            const namedArgs = filter(typeArguments, isNamedTypeArgument);
+            if (!length(namedArgs)) return true;
+            const positionalCutoff = typeArguments.length - namedArgs.length;
+            const validTargetSlice = typeParameters && typeParameters.slice(positionalCutoff);
+            for (const arg of namedArgs) {
+                if (!some(validTargetSlice, p => p.symbol.escapedName === arg.name.escapedText)) {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         // If type has a single call signature and no other members, return that signature. Otherwise, return undefined.
@@ -17453,7 +17414,6 @@ namespace ts {
             const typeArgumentTypes = fillMissingTypeArguments(getTypeArgumentsFromTypeArgumentList(typeArgumentNodes, typeParameters), typeParameters, getMinTypeArgumentCount(typeArgumentNodes, typeParameters), isJavascript);
             let mapper: TypeMapper;
             for (let i = 0; i < typeArgumentNodes.length; i++) {
-                // TODO (weswigham): handle named type arguments
                 Debug.assert(typeParameters[i] !== undefined, "Should not call checkTypeArguments with too many type arguments");
                 const constraint = getConstraintOfTypeParameter(typeParameters[i]);
                 if (!constraint) continue;
@@ -17879,7 +17839,29 @@ namespace ts {
             }
         }
 
-        function getTypeArgumentArityError(node: Node, signatures: Signature[], typeArguments: NodeArray<TypeArgument>) {
+        function issueNamedTypeParameterError(typeArguments: ReadonlyArray<TypeArgument>, typeParameters: ReadonlyArray<TypeParameter>) {
+            let issuedError = false;
+            const named = filter(typeArguments, isNamedTypeArgument);
+            const positionalCount = typeArguments.length - named.length;
+            nameLoop: for (const namedArg of named) {
+                for (let i = 0; i < typeParameters.length; i++) {
+                    const param = typeParameters[i];
+                    if (param.symbol.escapedName === namedArg.name.escapedText) {
+                        if (i < positionalCount) {
+                            issuedError = true;
+                            error(namedArg.name, Diagnostics.Named_type_argument_conflicts_with_positional_type_argument_at_index_0, i);
+                            error(typeArguments[i], Diagnostics.Positional_type_argument_conflicts_with_named_type_argument_0, idText(namedArg.name));
+                        }
+                        continue nameLoop;
+                    };
+                }
+                issuedError = true;
+                error(namedArg.name, Diagnostics.Signature_has_no_type_argument_named_0, idText(namedArg.name));
+            }
+            return issuedError;
+        }
+
+        function issueTypeArgumentArityError(node: Node, signatures: ReadonlyArray<Signature>, typeArguments: NodeArray<TypeArgument>): void {
             let min = Infinity;
             let max = -Infinity;
             for (const sig of signatures) {
@@ -17887,7 +17869,33 @@ namespace ts {
                 max = Math.max(max, length(sig.typeParameters));
             }
             const paramCount = min === max ? min : min + "-" + max;
-            return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, paramCount, typeArguments.length);
+            if (typeArguments.length >= min && typeArguments.length <= max && some(typeArguments, isNamedTypeArgument)) {
+                // Instead of arity, remark on the lack of a signature with matching named and positional type arguments
+                let issuedNameSpecificError = false;
+                const named = filter(typeArguments, isNamedTypeArgument);
+                const sigsWithTypeParameters = filter(signatures, s => !!length(s.typeParameters));
+                const positionalCount = typeArguments.length - named.length;
+                if (sigsWithTypeParameters.length === 1) {
+                    issuedNameSpecificError = issueNamedTypeParameterError(typeArguments, sigsWithTypeParameters[0].typeParameters);
+                }
+                else {
+                    argLoop: for (const namedArg of named) {
+                        for (const sig of signatures) {
+                            if (!sig.typeParameters) continue;
+                            for (const param of sig.typeParameters) {
+                                if (param.symbol.escapedName === namedArg.name.escapedText) continue argLoop;
+                            }
+                        }
+                        issuedNameSpecificError = true;
+                        error(namedArg.name, Diagnostics.No_signature_has_a_type_argument_named_0, idText(namedArg.name));
+                    }
+                }
+                if (!issuedNameSpecificError) {
+                    diagnostics.add(createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, positionalCount > 0 ? Diagnostics.No_signature_has_all_named_type_arguments : Diagnostics.No_signature_matches_all_named_and_positional_type_arguments));
+                }
+                return;
+            }
+            diagnostics.add(createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, paramCount, typeArguments.length));
         }
 
         function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], fallbackError?: DiagnosticMessage): Signature {
@@ -17970,6 +17978,7 @@ namespace ts {
             //
             let candidateForArgumentError: Signature;
             let candidateForTypeArgumentError: Signature;
+            let hadTypeArgumentArityApplicableSignature: boolean;
             let result: Signature;
 
             // If we are in signature help, a trailing comma indicates that we intend to provide another argument,
@@ -18016,8 +18025,8 @@ namespace ts {
             else if (candidateForTypeArgumentError) {
                 checkTypeArguments(candidateForTypeArgumentError, (node as CallExpression | TaggedTemplateExpression).typeArguments, /*reportErrors*/ true, fallbackError);
             }
-            else if (typeArguments && every(signatures, sig => length(sig.typeParameters) !== typeArguments.length)) {
-                diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments));
+            else if (typeArguments && !hadTypeArgumentArityApplicableSignature) {
+                issueTypeArgumentArityError(node, signatures, typeArguments);
             }
             else if (args) {
                 let min = Number.POSITIVE_INFINITY;
@@ -18148,6 +18157,81 @@ namespace ts {
 
             function performStandardInferenceHandler(signature: Signature, context: InferenceContext) {
                 return inferTypeArguments(node, signature, args, excludeArgument, context);
+            }
+
+            function hasCorrectArity(node: CallLikeExpression, args: ReadonlyArray<Expression>, signature: Signature, signatureHelpTrailingComma = false) {
+                let argCount: number;            // Apparent number of arguments we will have in this call
+                let typeArguments: NodeArray<TypeArgument>;  // Type arguments (undefined if none)
+                let callIsIncomplete: boolean;           // In incomplete call we want to be lenient when we have too few arguments
+                let spreadArgIndex = -1;
+    
+                if (isJsxOpeningLikeElement(node)) {
+                    // The arity check will be done in "checkApplicableSignatureForJsxOpeningLikeElement".
+                    return true;
+                }
+    
+                if (node.kind === SyntaxKind.TaggedTemplateExpression) {
+                    // Even if the call is incomplete, we'll have a missing expression as our last argument,
+                    // so we can say the count is just the arg list length
+                    argCount = args.length;
+                    typeArguments = node.typeArguments;
+    
+                    if (node.template.kind === SyntaxKind.TemplateExpression) {
+                        // If a tagged template expression lacks a tail literal, the call is incomplete.
+                        // Specifically, a template only can end in a TemplateTail or a Missing literal.
+                        const lastSpan = lastOrUndefined(node.template.templateSpans);
+                        Debug.assert(lastSpan !== undefined); // we should always have at least one span.
+                        callIsIncomplete = nodeIsMissing(lastSpan.literal) || !!lastSpan.literal.isUnterminated;
+                    }
+                    else {
+                        // If the template didn't end in a backtick, or its beginning occurred right prior to EOF,
+                        // then this might actually turn out to be a TemplateHead in the future;
+                        // so we consider the call to be incomplete.
+                        const templateLiteral = <LiteralExpression>node.template;
+                        Debug.assert(templateLiteral.kind === SyntaxKind.NoSubstitutionTemplateLiteral);
+                        callIsIncomplete = !!templateLiteral.isUnterminated;
+                    }
+                }
+                else if (node.kind === SyntaxKind.Decorator) {
+                    typeArguments = undefined;
+                    argCount = getEffectiveArgumentCount(node, /*args*/ undefined, signature);
+                }
+                else {
+                    if (!node.arguments) {
+                        // This only happens when we have something of the form: 'new C'
+                        Debug.assert(node.kind === SyntaxKind.NewExpression);
+    
+                        return signature.minArgumentCount === 0;
+                    }
+    
+                    argCount = signatureHelpTrailingComma ? args.length + 1 : args.length;
+    
+                    // If we are missing the close parenthesis, the call is incomplete.
+                    callIsIncomplete = node.arguments.end === node.end;
+    
+                    typeArguments = node.typeArguments;
+                    spreadArgIndex = getSpreadArgumentIndex(args);
+                }
+    
+                if (!hasCorrectTypeArgumentArity(signature, typeArguments) || !hasMatchesForAllNamedTypeArguments(signature.typeParameters, typeArguments)) {
+                    return false;
+                }
+                hadTypeArgumentArityApplicableSignature = true;
+    
+                // If a spread argument is present, check that it corresponds to a rest parameter or at least that it's in the valid range.
+                if (spreadArgIndex >= 0) {
+                    return isRestParameterIndex(signature, spreadArgIndex) ||
+                        signature.minArgumentCount <= spreadArgIndex && spreadArgIndex < signature.parameters.length;
+                }
+    
+                // Too many arguments implies incorrect arity.
+                if (!signature.hasRestParameter && argCount > signature.parameters.length) {
+                    return false;
+                }
+    
+                // If the call is incomplete, we should skip the lower bound check.
+                const hasEnoughArguments = argCount >= signature.minArgumentCount;
+                return callIsIncomplete || hasEnoughArguments;
             }
         }
 
@@ -27109,15 +27193,26 @@ namespace ts {
 
         function checkGrammarForNamedTypeArguments(typeArguments: NodeArray<TypeArgument>): boolean {
             if (!typeArguments) return;
-            let hasSeenNamedArg = false;
             let errored = false;
+            const nameMap = createUnderscoreEscapedMap<NamedTypeArgument | "err">();
             for (const arg of typeArguments) {
                 const isNamed = isNamedTypeArgument(arg);
+                const hasSeenNamedArg = !!nameMap.size;
                 if (hasSeenNamedArg && !isNamed) {
-                    errored = grammarErrorOnNode(arg, Diagnostics._0_expected, "named type argument") || errored;
+                    errored = grammarErrorOnNode(arg, Diagnostics.Positional_type_arguments_cannot_follow_named_type_arguments) || errored;
                 }
                 if (isNamed) {
-                    hasSeenNamedArg = true;
+                    const name = (arg as NamedTypeArgument).name.escapedText;
+                    const existingValue = nameMap.get(name);
+                    if (existingValue) {
+                        if (typeof existingValue !== "string") {
+                            errored = grammarErrorOnNode(existingValue.name, Diagnostics.Duplicate_identifier_0, name) || errored;
+                            nameMap.set(name, "err");
+                        }
+                        errored = grammarErrorOnNode((arg as NamedTypeArgument).name, Diagnostics.Duplicate_identifier_0, name) || errored;
+                        continue;
+                    }
+                    nameMap.set(name, arg as NamedTypeArgument);
                 }
             }
             return errored;
