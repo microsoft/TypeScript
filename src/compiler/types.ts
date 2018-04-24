@@ -2790,8 +2790,8 @@ namespace ts {
         emitSkipped: boolean;
         /** Contains declaration emit diagnostics */
         diagnostics: ReadonlyArray<Diagnostic>;
-        emittedFiles: string[]; // Array of files the compiler wrote to disk
-        /* @internal */ sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
+        emittedFiles?: string[]; // Array of files the compiler wrote to disk
+        /* @internal */ sourceMaps?: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }
 
     /* @internal */

@@ -1148,7 +1148,7 @@ namespace ts {
 
             if (!emitOnlyDtsFiles) {
                 if (options.noEmit) {
-                    return { diagnostics: declarationDiagnostics, sourceMaps: undefined!, emittedFiles: undefined!, emitSkipped: true }; // TODO: GH#18217
+                    return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
                 }
 
                 // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
@@ -1169,8 +1169,8 @@ namespace ts {
                     if (diagnostics.length > 0 || declarationDiagnostics.length > 0) {
                         return {
                             diagnostics: concatenate(diagnostics, declarationDiagnostics),
-                            sourceMaps: undefined!,
-                            emittedFiles: undefined!,
+                            sourceMaps: undefined,
+                            emittedFiles: undefined,
                             emitSkipped: true
                         };
                     }

@@ -109,8 +109,8 @@ namespace ts {
         return {
             emitSkipped,
             diagnostics: emitterDiagnostics.getDiagnostics(),
-            emittedFiles: emittedFilesList!, // TODO: GH#18217
-            sourceMaps: sourceMapDataList!, // TODO: GH#18217
+            emittedFiles: emittedFilesList,
+            sourceMaps: sourceMapDataList,
         };
 
         function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) {
