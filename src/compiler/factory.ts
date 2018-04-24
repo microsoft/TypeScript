@@ -2960,7 +2960,7 @@ namespace ts {
         }
 
         if (helpersRemoved > 0) {
-            sourceEmitHelpers!.length -= helpersRemoved;
+            sourceEmitHelpers.length -= helpersRemoved;
         }
     }
 

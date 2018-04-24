@@ -316,10 +316,10 @@ namespace ts {
             else if (inGeneratorFunctionBody) {
                 return visitJavaScriptInGeneratorFunctionBody(node);
             }
-            else if (transformFlags! & TransformFlags.Generator) {
+            else if (transformFlags & TransformFlags.Generator) {
                 return visitGenerator(node);
             }
-            else if (transformFlags! & TransformFlags.ContainsGenerator) {
+            else if (transformFlags & TransformFlags.ContainsGenerator) {
                 return visitEachChild(node, visitor, context);
             }
             else {

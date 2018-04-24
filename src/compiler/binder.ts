@@ -2981,7 +2981,7 @@ namespace ts {
 
         // If the expression of a ParenthesizedExpression is a destructuring assignment,
         // then the ParenthesizedExpression is a destructuring assignment.
-        if (expressionTransformFlags! & TransformFlags.DestructuringAssignment) {
+        if (expressionTransformFlags & TransformFlags.DestructuringAssignment) {
             transformFlags |= TransformFlags.DestructuringAssignment;
         }
 
@@ -3324,7 +3324,7 @@ namespace ts {
 
         // If an ElementAccessExpression starts with a super keyword, then it is
         // ES6 syntax, and requires a lexical `this` binding.
-        if (expressionFlags! & TransformFlags.Super) {
+        if (expressionFlags & TransformFlags.Super) {
             transformFlags &= ~TransformFlags.Super;
             transformFlags |= TransformFlags.ContainsSuper;
         }
@@ -3362,7 +3362,7 @@ namespace ts {
         else {
             transformFlags = subtreeFlags;
 
-            if (declarationListTransformFlags! & TransformFlags.ContainsBindingPattern) {
+            if (declarationListTransformFlags & TransformFlags.ContainsBindingPattern) {
                 transformFlags |= TransformFlags.AssertES2015;
             }
         }

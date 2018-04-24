@@ -23176,7 +23176,7 @@ namespace ts {
                     return undefined;
                 }
 
-                const returnType = getUnionType(map(signatures!, getReturnTypeOfSignature), UnionReduction.Subtype);
+                const returnType = getUnionType(map(signatures, getReturnTypeOfSignature), UnionReduction.Subtype);
                 const iteratedType = getIteratedTypeOfIterator(returnType, errorNode, /*isAsyncIterator*/ !!asyncMethodType);
                 if (checkAssignability && errorNode && iteratedType) {
                     // If `checkAssignability` was specified, we were called from
