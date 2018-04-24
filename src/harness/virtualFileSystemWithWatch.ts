@@ -892,7 +892,7 @@ interface Array<T> {}`
             throw new Error(this.exitMessage);
         }
         getEnvironmentVariable(name: string) {
-            return this.environmentVariables && this.environmentVariables.get(name);
+            return this.environmentVariables && this.environmentVariables.get(name) || "";
         }
     }
 }

@@ -684,7 +684,7 @@ namespace Harness.LanguageService {
             return [];
         }
 
-        getEnvironmentVariable(name: string): string | undefined {
+        getEnvironmentVariable(name: string): string {
             return ts.sys.getEnvironmentVariable(name);
         }
 
