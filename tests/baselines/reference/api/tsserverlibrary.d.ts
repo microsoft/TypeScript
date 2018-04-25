@@ -1619,6 +1619,13 @@ declare namespace ts {
         path: string;
         name: string;
     }
+    /**
+     * Subset of properties from SourceFile that are used in multiple utility functions
+     */
+    interface SourceFileLike {
+        readonly text: string;
+        lineMap?: ReadonlyArray<number>;
+    }
     interface SourceFile extends Declaration {
         kind: SyntaxKind.SourceFile;
         statements: NodeArray<Statement>;
@@ -2011,7 +2018,8 @@ declare namespace ts {
         HasMembers = 6240,
         BlockScoped = 418,
         PropertyOrAccessor = 98308,
-        ClassMember = 106500
+        ClassMember = 106500,
+        Classifiable = 2885600
     }
     interface Symbol {
         flags: SymbolFlags;
@@ -2122,6 +2130,9 @@ declare namespace ts {
         pattern?: DestructuringPattern;
         aliasSymbol?: Symbol;
         aliasTypeArguments?: Type[];
+    }
+    interface IntrinsicType extends Type {
+        intrinsicName: string;
     }
     interface LiteralType extends Type {
         value: string | number;
@@ -2247,6 +2258,8 @@ declare namespace ts {
         declaration?: SignatureDeclaration;
         typeParameters?: TypeParameter[];
         parameters: Symbol[];
+        resolvedReturnType: Type | undefined;
+        resolvedTypePredicate: TypePredicate | undefined;
     }
     enum IndexKind {
         String = 0,
@@ -2965,6 +2978,10 @@ declare namespace ts {
     }
     function tokenToString(t: SyntaxKind): string | undefined;
     function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number): number;
+    /**
+     * We assume the first line starts at position 0 and 'position' is non-negative.
+     */
+    function computeLineAndCharacterOfPosition(lineStarts: ReadonlyArray<number>, position: number): LineAndCharacter;
     function getLineAndCharacterOfPosition(sourceFile: SourceFileLike, position: number): LineAndCharacter;
     function isWhiteSpaceLike(ch: number): boolean;
     /** Does not include line breaks. For that, see isWhiteSpaceLike. */
@@ -2975,9 +2992,9 @@ declare namespace ts {
     function forEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state: T): U | undefined;
     function forEachTrailingCommentRange<U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean) => U): U | undefined;
     function forEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state: T): U | undefined;
-    function reduceEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial: U): U;
+    function reduceEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial: U, inline?: boolean): U;
     function reduceEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial: U): U;
-    function getLeadingCommentRanges(text: string, pos: number): CommentRange[] | undefined;
+    function getLeadingCommentRanges(text: string, pos: number, inline?: boolean): CommentRange[] | undefined;
     function getTrailingCommentRanges(text: string, pos: number): CommentRange[] | undefined;
     /** Optionally, get the shebang */
     function getShebang(text: string): string | undefined;
@@ -3324,6 +3341,11 @@ declare namespace ts {
     function isCallLikeExpression(node: Node): node is CallLikeExpression;
     function isCallOrNewExpression(node: Node): node is CallExpression | NewExpression;
     function isTemplateLiteral(node: Node): node is TemplateLiteral;
+    /**
+     * Determines whether a node is an expression based only on its kind.
+     * Use `isExpressionNode` if not in transforms.
+     */
+    function isExpression(node: Node): node is Expression;
     function isAssertionExpression(node: Node): node is AssertionExpression;
     function isIterationStatement(node: Node, lookInLabeledStatements: false): node is IterationStatement;
     function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement | LabeledStatement;
@@ -3362,6 +3384,10 @@ declare namespace ts {
     function parseJsonText(fileName: string, sourceText: string): JsonSourceFile;
     function isExternalModule(file: SourceFile): boolean;
     function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
+    function parseJSDocTypeExpressionForTests(content: string, start?: number, length?: number): {
+        jsDocTypeExpression: JSDocTypeExpression;
+        diagnostics: Diagnostic[];
+    };
 }
 declare namespace ts {
     interface GetEffectiveTypeRootsHost {
@@ -3929,6 +3955,12 @@ declare namespace ts {
      * @returns A 'Program' object.
      */
     function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program;
+    /**
+     * Returns a DiagnosticMessage if we won't include a resolved module due to its extension.
+     * The DiagnosticMessage's parameters are the imported module name, and the filename it resolved to.
+     * This returns a diagnostic even if the module will be an untyped module.
+     */
+    function getResolutionDiagnostic(options: CompilerOptions, { extension }: ResolvedModuleFull): DiagnosticMessage | undefined;
 }
 declare namespace ts {
     interface EmitOutput {
@@ -4242,7 +4274,9 @@ declare namespace ts {
         getChildCount(sourceFile?: SourceFile): number;
         getChildAt(index: number, sourceFile?: SourceFile): Node;
         getChildren(sourceFile?: SourceFile): Node[];
+        getChildren(sourceFile?: SourceFileLike): Node[];
         getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
+        getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number;
         getFullStart(): number;
         getEnd(): number;
         getWidth(sourceFile?: SourceFile): number;
@@ -5046,6 +5080,11 @@ declare namespace ts {
         jsxAttributeStringLiteralValue = 24
     }
 }
+interface PromiseConstructor {
+    new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): Promise<T>;
+    reject(reason: any): Promise<never>;
+    all<T>(values: (T | PromiseLike<T>)[]): Promise<T[]>;
+}
 declare namespace ts {
     function createClassifier(): Classifier;
 }
@@ -5145,7 +5184,18 @@ declare namespace ts {
     function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean, scriptKind?: ScriptKind): SourceFile;
     let disableIncrementalParsing: boolean;
     function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
+    /** A cancellation that throttles calls to the host */
+    class ThrottledCancellationToken implements CancellationToken {
+        private hostCancellationToken;
+        private readonly throttleWaitMilliseconds;
+        private lastCancellationCheckTime;
+        constructor(hostCancellationToken: HostCancellationToken, throttleWaitMilliseconds?: number);
+        isCancellationRequested(): boolean;
+        throwIfCancellationRequested(): void;
+    }
     function createLanguageService(host: LanguageServiceHost, documentRegistry?: DocumentRegistry, syntaxOnly?: boolean): LanguageService;
+    /** Names in the name table are escaped, so an identifier `__foo` will have a name table entry `___foo`. */
+    function getNameTable(sourceFile: SourceFile): UnderscoreEscapedMap<number>;
     /**
      * Get the path of the default library files (lib.d.ts) as distributed with the typescript
      * node package.
@@ -7581,6 +7631,8 @@ declare namespace ts.server {
         private formatSettings;
         private preferences;
         private textStorage;
+        /** Set to real path if path is different from info.path */
+        private realpath;
         constructor(host: ServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path);
         isScriptOpen(): boolean;
         open(newText: string): void;
@@ -7658,7 +7710,6 @@ declare namespace ts.server {
      */
     type ProjectRoot = ScriptInfo | NormalizedPath;
     abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
-        readonly projectName: string;
         readonly projectKind: ProjectKind;
         readonly projectService: ProjectService;
         private documentRegistry;
@@ -7670,6 +7721,12 @@ declare namespace ts.server {
         private externalFiles;
         private missingFilesMap;
         private plugins;
+        /**
+         * This is map from files to unresolved imports in it
+         * Maop does not contain entries for files that do not have unresolved imports
+         * This helps in containing the set of files to invalidate
+         */
+        cachedUnresolvedImportsPerFile: Map<ReadonlyArray<string>>;
         private lastFileExceededProgramSize;
         protected languageService: LanguageService;
         languageServiceEnabled: boolean;
@@ -8366,6 +8423,7 @@ declare namespace ts.server {
         response?: {};
         responseRequired?: boolean;
     }
+    function getLocationInNewDocument(oldText: string, renameFilename: string, renameLocation: number, edits: ReadonlyArray<FileTextChanges>): protocol.Location;
 }
 
 export = ts;
