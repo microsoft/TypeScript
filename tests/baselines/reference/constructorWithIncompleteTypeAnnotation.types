@@ -929,6 +929,7 @@ module TypeScriptAllInOne {
 >rest : any
 >string[] : any
 >string : any
+> : any
 >&         public : number
 > : any
 
