@@ -65,7 +65,7 @@ namespace ts.codefix {
         const classDeclaration = symbol && symbol.declarations && find(symbol.declarations, isClassLike);
         if (!classDeclaration) return undefined;
 
-        const makeStatic = (leftExpressionType as TypeReference).target !== checker.getDeclaredTypeOfSymbol(symbol!);
+        const makeStatic = (leftExpressionType as TypeReference).target !== checker.getDeclaredTypeOfSymbol(symbol);
         const classDeclarationSourceFile = classDeclaration.getSourceFile();
         const inJs = isSourceFileJavaScript(classDeclarationSourceFile);
         const call = tryCast(parent.parent, isCallExpression);

@@ -974,7 +974,7 @@ namespace ts {
 
         function emitIdentifier(node: Identifier) {
             const writeText = node.symbol ? writeSymbol : write;
-            writeText(getTextOfNode(node, /*includeTrivia*/ false), node.symbol!);
+            writeText(getTextOfNode(node, /*includeTrivia*/ false), node.symbol);
             emitList(node, node.typeArguments, ListFormat.TypeParameters); // Call emitList directly since it could be an array of TypeParameterDeclarations _or_ type arguments
         }
 

@@ -799,7 +799,7 @@ namespace ts.codefix {
         }
         for (const sourceFile of allSourceFiles) {
             if (isExternalOrCommonJsModule(sourceFile)) {
-                cb(sourceFile.symbol!, sourceFile);
+                cb(sourceFile.symbol, sourceFile);
             }
         }
     }

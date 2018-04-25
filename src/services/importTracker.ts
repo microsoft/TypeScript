@@ -167,7 +167,7 @@ namespace ts.FindAllReferences {
                 return;
             }
 
-            const moduleSymbol = checker.getMergedSymbol(sourceFileLike.symbol!);
+            const moduleSymbol = checker.getMergedSymbol(sourceFileLike.symbol);
             Debug.assert(!!(moduleSymbol.flags & SymbolFlags.Module));
             const directImports = getDirectImports(moduleSymbol);
             if (directImports) {
@@ -490,7 +490,7 @@ namespace ts.FindAllReferences {
 
             function getExportAssignmentExport(ex: ExportAssignment): ExportedSymbol {
                 // Get the symbol for the `export =` node; its parent is the module it's the export of.
-                const exportingModuleSymbol = Debug.assertDefined(ex.symbol!.parent, "Expected export symbol to have a parent");
+                const exportingModuleSymbol = Debug.assertDefined(ex.symbol.parent, "Expected export symbol to have a parent");
                 const exportKind = ex.isExportEquals ? ExportKind.ExportEquals : ExportKind.Default;
                 return { kind: ImportExport.Export, symbol, exportInfo: { exportingModuleSymbol, exportKind } };
             }
@@ -632,7 +632,7 @@ namespace ts.FindAllReferences {
     }
 
     function getContainingModuleSymbol(importer: Importer, checker: TypeChecker): Symbol {
-        return checker.getMergedSymbol(getSourceFileLikeForImportDeclaration(importer).symbol!);
+        return checker.getMergedSymbol(getSourceFileLikeForImportDeclaration(importer).symbol);
     }
 
     function getSourceFileLikeForImportDeclaration(node: ImporterOrCallExpression): SourceFileLike {

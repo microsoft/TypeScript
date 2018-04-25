@@ -444,7 +444,7 @@ namespace ts.SignatureHelp {
             });
 
             return {
-                name: typeParameter.symbol!.name,
+                name: typeParameter.symbol.name,
                 documentation: emptyArray,
                 displayParts,
                 isOptional: false

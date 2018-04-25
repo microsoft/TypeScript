@@ -125,13 +125,13 @@ namespace ts.codefix {
             return firstDefined(type.types, t => getDefaultValueFromType(checker, t));
         }
         else if (type.isClass()) {
-            const classDeclaration = getClassLikeDeclarationOfSymbol(type.symbol!);
+            const classDeclaration = getClassLikeDeclarationOfSymbol(type.symbol);
             if (!classDeclaration || hasModifier(classDeclaration, ModifierFlags.Abstract)) return undefined;
 
             const constructorDeclaration = getFirstConstructorWithBody(classDeclaration);
             if (constructorDeclaration && constructorDeclaration.parameters.length) return undefined;
 
-            return createNew(createIdentifier(type.symbol!.name), /*typeArguments*/ undefined, /*argumentsArray*/ undefined);
+            return createNew(createIdentifier(type.symbol.name), /*typeArguments*/ undefined, /*argumentsArray*/ undefined);
         }
         return undefined;
     }

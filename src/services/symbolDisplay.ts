@@ -184,7 +184,7 @@ namespace ts.SymbolDisplay {
                     if (useConstructSignatures && (symbolFlags & SymbolFlags.Class)) {
                         // Constructor
                         symbolKind = ScriptElementKind.constructorImplementationElement;
-                        addPrefixForAnyFunctionOrVar(type!.symbol!, symbolKind);
+                        addPrefixForAnyFunctionOrVar(type!.symbol, symbolKind);
                     }
                     else if (symbolFlags & SymbolFlags.Alias) {
                         symbolKind = ScriptElementKind.alias;
@@ -212,7 +212,7 @@ namespace ts.SymbolDisplay {
                             displayParts.push(punctuationPart(SyntaxKind.ColonToken));
                             displayParts.push(spacePart());
                             if (!(getObjectFlags(type!) & ObjectFlags.Anonymous) && type!.symbol) {
-                                addRange(displayParts, symbolToDisplayParts(typeChecker, type!.symbol!, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.AllowAnyNodeKind | SymbolFormatFlags.WriteTypeParametersOrArguments));
+                                addRange(displayParts, symbolToDisplayParts(typeChecker, type!.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.AllowAnyNodeKind | SymbolFormatFlags.WriteTypeParametersOrArguments));
                                 displayParts.push(lineBreakPart());
                             }
                             if (useConstructSignatures) {
@@ -249,12 +249,12 @@ namespace ts.SymbolDisplay {
                     if (functionDeclaration.kind === SyntaxKind.Constructor) {
                         // show (constructor) Type(...) signature
                         symbolKind = ScriptElementKind.constructorImplementationElement;
-                        addPrefixForAnyFunctionOrVar(type!.symbol!, symbolKind);
+                        addPrefixForAnyFunctionOrVar(type!.symbol, symbolKind);
                     }
                     else {
                         // (function/method) symbol(..signature)
                         addPrefixForAnyFunctionOrVar(functionDeclaration.kind === SyntaxKind.CallSignature &&
-                            !(type!.symbol!.flags & SymbolFlags.TypeLiteral || type!.symbol!.flags & SymbolFlags.ObjectLiteral) ? type!.symbol! : symbol, symbolKind);
+                            !(type!.symbol.flags & SymbolFlags.TypeLiteral || type!.symbol.flags & SymbolFlags.ObjectLiteral) ? type!.symbol : symbol, symbolKind);
                     }
 
                     addSignatureDisplayParts(signature, allSignatures);
@@ -342,7 +342,7 @@ namespace ts.SymbolDisplay {
                             displayParts.push(spacePart());
                         }
                         else if (declaration.kind !== SyntaxKind.CallSignature && (<SignatureDeclaration>declaration).name) {
-                            addFullSymbolName(declaration.symbol!);
+                            addFullSymbolName(declaration.symbol);
                         }
                         addRange(displayParts, signatureToDisplayParts(typeChecker, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
                     }
@@ -353,8 +353,8 @@ namespace ts.SymbolDisplay {
                         addInPrefix();
                         displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
                         displayParts.push(spacePart());
-                        addFullSymbolName(declaration.symbol!);
-                        writeTypeParametersOfSymbol(declaration.symbol!, sourceFile);
+                        addFullSymbolName(declaration.symbol);
+                        writeTypeParametersOfSymbol(declaration.symbol, sourceFile);
                     }
                 }
             }

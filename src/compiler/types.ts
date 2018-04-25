@@ -568,7 +568,7 @@ namespace ts {
         /* @internal */ id?: number;                          // Unique id (used to look up NodeLinks)
         parent: Node;                                         // Parent node (initialized by binding)
         /* @internal */ original?: Node;                      // The original node if this is an updated node.
-        /* @internal */ symbol?: Symbol;                      // Symbol declared by node (initialized by binding)
+        /* @internal */ symbol: Symbol;                       // Symbol declared by node (initialized by binding)
         /* @internal */ locals?: SymbolTable;                 // Locals associated with node (initialized by binding)
         /* @internal */ nextContainer?: Node;                 // Next container in declaration order (initialized by binding)
         /* @internal */ localSymbol?: Symbol;                 // Local symbol declared by node (initialized by binding only for exported nodes)
@@ -3371,8 +3371,8 @@ namespace ts {
     export interface Symbol {
         flags: SymbolFlags;                     // Symbol flags
         escapedName: __String;                  // Name of symbol
-        declarations: Declaration[];           // Declarations associated with this symbol
-        valueDeclaration: Declaration;         // First value declaration of the symbol
+        declarations: Declaration[];            // Declarations associated with this symbol
+        valueDeclaration: Declaration;          // First value declaration of the symbol
         members?: SymbolTable;                  // Class, interface or object literal instance members
         exports?: SymbolTable;                  // Module exports
         globalExports?: SymbolTable;            // Conditional global UMD exports
@@ -3642,7 +3642,7 @@ namespace ts {
         flags: TypeFlags;                // Flags
         /* @internal */ id: number;      // Unique ID
         /* @internal */ checker: TypeChecker;
-        symbol?: Symbol;                 // Symbol associated with type (if any)
+        symbol: Symbol;                  // Symbol associated with type (if any)
         pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
         aliasSymbol?: Symbol;            // Alias associated with type
         aliasTypeArguments?: Type[];     // Alias type arguments (if any)

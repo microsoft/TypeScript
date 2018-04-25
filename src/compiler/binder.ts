@@ -427,7 +427,7 @@ namespace ts {
             const hasExportModifier = getCombinedModifierFlags(node) & ModifierFlags.Export;
             if (symbolFlags & SymbolFlags.Alias) {
                 if (node.kind === SyntaxKind.ExportSpecifier || (node.kind === SyntaxKind.ImportEqualsDeclaration && hasExportModifier)) {
-                    return declareSymbol(container.symbol!.exports!, container.symbol!, node, symbolFlags, symbolExcludes);
+                    return declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes);
                 }
                 else {
                     return declareSymbol(container.locals!, /*parent*/ undefined, node, symbolFlags, symbolExcludes);
@@ -453,11 +453,11 @@ namespace ts {
                 const isJSDocTypedefInJSDocNamespace = isJSDocTypedefTag(node) && node.name && node.name.kind === SyntaxKind.Identifier && node.name.isInJSDocNamespace;
                 if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) || isJSDocTypedefInJSDocNamespace) {
                     if (hasModifier(node, ModifierFlags.Default) && !getDeclarationName(node)) {
-                        return declareSymbol(container.symbol!.exports!, container.symbol, node, symbolFlags, symbolExcludes); // No local symbol for an unnamed default!
+                        return declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes); // No local symbol for an unnamed default!
                     }
                     const exportKind = symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0;
                     const local = declareSymbol(container.locals!, /*parent*/ undefined, node, exportKind, symbolExcludes);
-                    local.exportSymbol = declareSymbol(container.symbol!.exports!, container.symbol, node, symbolFlags, symbolExcludes);
+                    local.exportSymbol = declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes);
                     node.localSymbol = local;
                     return local;
                 }
@@ -1523,7 +1523,7 @@ namespace ts {
                     return declareClassMember(node, symbolFlags, symbolExcludes);
 
                 case SyntaxKind.EnumDeclaration:
-                    return declareSymbol(container.symbol!.exports!, container.symbol, node, symbolFlags, symbolExcludes);
+                    return declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes);
 
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.JSDocTypeLiteral:
@@ -1535,7 +1535,7 @@ namespace ts {
                     // container, and are never in scope otherwise (even inside the body of the
                     // object / type / interface declaring them). An exception is type parameters,
                     // which are in scope without qualification (similar to 'locals').
-                    return declareSymbol(container.symbol!.members!, container.symbol, node, symbolFlags, symbolExcludes);
+                    return declareSymbol(container.symbol.members!, container.symbol, node, symbolFlags, symbolExcludes);
 
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
@@ -1565,8 +1565,8 @@ namespace ts {
 
         function declareClassMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
             return hasModifier(node, ModifierFlags.Static)
-                ? declareSymbol(container.symbol!.exports!, container.symbol, node, symbolFlags, symbolExcludes)
-                : declareSymbol(container.symbol!.members!, container.symbol, node, symbolFlags, symbolExcludes);
+                ? declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes)
+                : declareSymbol(container.symbol.members!, container.symbol, node, symbolFlags, symbolExcludes);
         }
 
         function declareSourceFileMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
@@ -1626,7 +1626,7 @@ namespace ts {
             else {
                 const state = declareModuleSymbol(node);
                 if (state !== ModuleInstanceState.NonInstantiated) {
-                    const symbol = node.symbol!;
+                    const { symbol } = node;
                     // if module was already merged with some function, class or non-const enum, treat it as non-const-enum-only
                     symbol.constEnumOnlyModule = (!(symbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.RegularEnum)))
                         // Current must be `const enum` only
@@ -2262,8 +2262,8 @@ namespace ts {
                 }
             }
 
-            file.symbol!.globalExports = file.symbol!.globalExports || createSymbolTable();
-            declareSymbol(file.symbol!.globalExports!, file.symbol, node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
+            file.symbol.globalExports = file.symbol.globalExports || createSymbolTable();
+            declareSymbol(file.symbol.globalExports, file.symbol, node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
         }
 
         function bindExportDeclaration(node: ExportDeclaration) {
@@ -2327,7 +2327,7 @@ namespace ts {
             const flags = exportAssignmentIsAlias(node)
                 ? SymbolFlags.Alias // An export= with an EntityNameExpression or a ClassExpression exports all meanings of that identifier or class
                 : SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.ValueModule;
-            declareSymbol(file.symbol!.exports!, file.symbol, node, flags, SymbolFlags.None);
+            declareSymbol(file.symbol.exports!, file.symbol, node, flags, SymbolFlags.None);
         }
 
         function bindThisPropertyAssignment(node: BinaryExpression | PropertyAccessExpression) {
@@ -2336,7 +2336,7 @@ namespace ts {
             switch (thisContainer.kind) {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
-                    let constructorSymbol = thisContainer.symbol!;
+                    let constructorSymbol = thisContainer.symbol;
                     // For `f.prototype.m = function() { this.x = 0; }`, `this.x = 0` should modify `f`'s members, not the function expression.
                     if (isBinaryExpression(thisContainer.parent) && thisContainer.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
                         const l = thisContainer.parent.left;
@@ -2361,7 +2361,7 @@ namespace ts {
                     // this.foo assignment in a JavaScript class
                     // Bind this property to the containing class
                     const containingClass = thisContainer.parent;
-                    const symbolTable = hasModifier(thisContainer, ModifierFlags.Static) ? containingClass.symbol!.exports! : containingClass.symbol!.members!;
+                    const symbolTable = hasModifier(thisContainer, ModifierFlags.Static) ? containingClass.symbol.exports! : containingClass.symbol.members!;
                     declareSymbol(symbolTable, containingClass.symbol, node, SymbolFlags.Property, SymbolFlags.None, /*isReplaceableByMethod*/ true);
                     break;
                 case SyntaxKind.SourceFile:
@@ -2534,7 +2534,7 @@ namespace ts {
                 }
             }
 
-            const symbol = node.symbol!;
+            const { symbol } = node;
 
             // TypeScript 1.0 spec (April 2014): 8.4
             // Every class automatically contains a static property member named 'prototype', the
@@ -2608,7 +2608,7 @@ namespace ts {
             // containing class.
             if (isParameterPropertyDeclaration(node)) {
                 const classDeclaration = <ClassLikeDeclaration>node.parent.parent;
-                declareSymbol(classDeclaration.symbol!.members!, classDeclaration.symbol, node, SymbolFlags.Property | (node.questionToken ? SymbolFlags.Optional : SymbolFlags.None), SymbolFlags.PropertyExcludes);
+                declareSymbol(classDeclaration.symbol.members!, classDeclaration.symbol, node, SymbolFlags.Property | (node.questionToken ? SymbolFlags.Optional : SymbolFlags.None), SymbolFlags.PropertyExcludes);
             }
         }
 

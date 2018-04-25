@@ -41,7 +41,7 @@ export default function foo(a: number, b: Bar): void {}`, (file, checker) => {
                 foundCount++;
                 return true;
             });
-            const symbols = checker.getExportsOfModule(file.symbol!);
+            const symbols = checker.getExportsOfModule(file.symbol);
             for (const symbol of symbols) {
                 walker.walkSymbol(symbol);
             }

@@ -505,7 +505,7 @@ namespace ts {
         let doc = JsDoc.getJsDocCommentsFromDeclarations(declarations);
         if (doc.length === 0 || declarations.some(hasJSDocInheritDocTag)) {
             for (const declaration of declarations) {
-                const inheritedDocs = findInheritedJSDocComments(declaration, declaration.symbol!.name, checker!); // TODO: GH#18217
+                const inheritedDocs = findInheritedJSDocComments(declaration, declaration.symbol.name, checker!); // TODO: GH#18217
                 // TODO: GH#16312 Return a ReadonlyArray, avoid copying inheritedDocs
                 if (inheritedDocs) doc = doc.length === 0 ? inheritedDocs.slice() : inheritedDocs.concat(lineBreakPart(), doc);
             }

@@ -377,7 +377,7 @@ namespace ts.refactor.extractSymbol {
                         (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.cannotExtractExportedEntity));
                         return true;
                     }
-                    declarations.push(node.symbol!);
+                    declarations.push(node.symbol);
                 }
 
                 // Some things can't be extracted in certain situations
@@ -872,7 +872,7 @@ namespace ts.refactor.extractSymbol {
 
                     typeElements.push(createPropertySignature(
                         /*modifiers*/ undefined,
-                        /*name*/ variableDeclaration.symbol!.name,
+                        /*name*/ variableDeclaration.symbol.name,
                         /*questionToken*/ undefined,
                         /*type*/ variableType,
                         /*initializer*/ undefined));
@@ -907,7 +907,7 @@ namespace ts.refactor.extractSymbol {
                     newNodes.push(createVariableStatement(
                         /*modifiers*/ undefined,
                         createVariableDeclarationList(
-                            [createVariableDeclaration(variableDeclaration.symbol!.name, getTypeDeepCloneUnionUndefined(variableDeclaration.type))],
+                            [createVariableDeclaration(variableDeclaration.symbol.name, getTypeDeepCloneUnionUndefined(variableDeclaration.type))],
                             flags)));
                 }
             }
@@ -1319,7 +1319,7 @@ namespace ts.refactor.extractSymbol {
         exposedVariableDeclarations: ReadonlyArray<VariableDeclaration>,
         writes: ReadonlyArray<UsageEntry> | undefined
     ): ShorthandPropertyAssignment[] {
-        const variableAssignments = map(exposedVariableDeclarations, v => createShorthandPropertyAssignment(v.symbol!.name));
+        const variableAssignments = map(exposedVariableDeclarations, v => createShorthandPropertyAssignment(v.symbol.name));
         const writeAssignments = map(writes, w => createShorthandPropertyAssignment(w.symbol.name));
 
         // TODO: GH#18217 `variableAssignments` not possibly undefined!
@@ -1704,7 +1704,7 @@ namespace ts.refactor.extractSymbol {
                 const decl = find(visibleDeclarationsInExtractedRange, d => d.symbol === sym);
                 if (decl) {
                     if (isVariableDeclaration(decl)) {
-                        const idString = decl.symbol!.id!.toString();
+                        const idString = decl.symbol.id!.toString();
                         if (!exposedVariableSymbolSet.has(idString)) {
                             exposedVariableDeclarations.push(decl);
                             exposedVariableSymbolSet.set(idString, true);

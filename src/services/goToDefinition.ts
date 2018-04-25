@@ -32,7 +32,7 @@ namespace ts.GoToDefinition {
             const sigInfo = createDefinitionFromSignatureDeclaration(typeChecker, calledDeclaration);
             // For a function, if this is the original function definition, return just sigInfo.
             // If this is the original constructor definition, parent is the class.
-            return typeChecker.getRootSymbols(symbol).some(s => calledDeclaration.symbol === s || calledDeclaration.symbol!.parent === s)
+            return typeChecker.getRootSymbols(symbol).some(s => calledDeclaration.symbol === s || calledDeclaration.symbol.parent === s)
                 ? [sigInfo]
                 : [sigInfo, ...getDefinitionFromSymbol(typeChecker, symbol, node)!];
         }
@@ -242,7 +242,7 @@ namespace ts.GoToDefinition {
     }
 
     function createDefinitionFromSignatureDeclaration(typeChecker: TypeChecker, decl: SignatureDeclaration): DefinitionInfo {
-        return createDefinitionInfo(decl, typeChecker, decl.symbol!, decl);
+        return createDefinitionInfo(decl, typeChecker, decl.symbol, decl);
     }
 
     export function findReferenceInPosition(refs: ReadonlyArray<FileReference>, pos: number): FileReference | undefined {

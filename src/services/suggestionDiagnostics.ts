@@ -16,8 +16,7 @@ namespace ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                     if (isJsFile) {
-                        const symbol = node.symbol!;
-                        if (symbol.members && (symbol.members.size > 0)) {
+                        if (node.symbol.members && (node.symbol.members.size > 0)) {
                             diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration));
                         }
                     }

@@ -1617,7 +1617,7 @@ namespace ts.Completions {
                 // List of property symbols of base type that are not private and already implemented
                 const baseSymbols = flatMap(getAllSuperTypeNodes(decl), baseTypeNode => {
                     const type = typeChecker.getTypeAtLocation(baseTypeNode)!; // TODO: GH#18217
-                    return typeChecker.getPropertiesOfType(classElementModifierFlags & ModifierFlags.Static ? typeChecker.getTypeOfSymbolAtLocation(type.symbol!, decl) : type);
+                    return typeChecker.getPropertiesOfType(classElementModifierFlags & ModifierFlags.Static ? typeChecker.getTypeOfSymbolAtLocation(type.symbol, decl) : type);
                 });
                 symbols = filterClassMembersList(baseSymbols, decl.members, classElementModifierFlags);
             }

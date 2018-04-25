@@ -233,7 +233,7 @@ namespace ts.FindAllReferences.Core {
     export function getReferencedSymbolsForNode(position: number, node: Node, program: Program, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken, options: Options = {}, sourceFilesSet: ReadonlyMap<true> = arrayToSet(sourceFiles, f => f.fileName)): SymbolAndEntries[] | undefined {
         if (isSourceFile(node)) {
             const reference = GoToDefinition.getReferenceAtPosition(node, position, program);
-            return reference && getReferencedSymbolsForModule(program, program.getTypeChecker().getMergedSymbol(reference.file.symbol!), sourceFiles, sourceFilesSet);
+            return reference && getReferencedSymbolsForModule(program, program.getTypeChecker().getMergedSymbol(reference.file.symbol), sourceFiles, sourceFilesSet);
         }
 
         if (!options.implementations) {
@@ -1062,8 +1062,7 @@ namespace ts.FindAllReferences.Core {
 
     /** Find references to `super` in the constructor of an extending class.  */
     function findSuperConstructorAccesses(cls: ClassLikeDeclaration, addNode: (node: Node) => void): void {
-        const symbol = cls.symbol!;
-        const ctr = symbol.members!.get(InternalSymbolName.Constructor);
+        const ctr = cls.symbol.members!.get(InternalSymbolName.Constructor);
         if (!ctr) {
             return;
         }
@@ -1235,7 +1234,7 @@ namespace ts.FindAllReferences.Core {
             return container && (ModifierFlags.Static & getModifierFlags(container)) === staticFlag && container.parent.symbol === searchSpaceNode.symbol ? nodeEntry(node) : undefined;
         });
 
-        return [{ definition: { type: "symbol", symbol: searchSpaceNode.symbol! }, references }];
+        return [{ definition: { type: "symbol", symbol: searchSpaceNode.symbol }, references }];
     }
 
     function getReferencesForThisKeyword(thisOrSuperKeyword: Node, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken): SymbolAndEntries[] | undefined {
@@ -1417,7 +1416,7 @@ namespace ts.FindAllReferences.Core {
                 const type = checker.getTypeAtLocation(typeReference);
                 const propertySymbol = type && type.symbol && checker.getPropertyOfType(type, propertyName);
                 // Visit the typeReference as well to see if it directly or indirectly uses that property
-                return propertySymbol && (firstDefined(checker.getRootSymbols(propertySymbol), cb) || recur(type!.symbol!));
+                return propertySymbol && (firstDefined(checker.getRootSymbols(propertySymbol), cb) || recur(type!.symbol));
             }));
         }
     }
