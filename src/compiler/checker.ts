@@ -6428,22 +6428,43 @@ namespace ts {
             return getConstraintOfDistributiveConditionalType(type) || getDefaultConstraintOfConditionalType(type);
         }
 
-        function getUnionConstraintOfIntersection(type: IntersectionType) {
+        function getUnionConstraintOfIntersection(type: IntersectionType, targetIsUnion: boolean) {
             let constraints: Type[];
+            let hasDisjointDomainType = false;
             for (const t of type.types) {
                 if (t.flags & TypeFlags.Instantiable) {
-                    const baseConstraint = getBaseConstraintOfType(t);
-                    if (!(baseConstraint.flags & TypeFlags.Union)) {
-                        return undefined;
+                    // We keep following constraints as long as we have an instantiable type that is known
+                    // not to be circular or infinite (hence we stop on index access types).
+                    let constraint = getConstraintOfType(t);
+                    while (constraint && constraint.flags & (TypeFlags.TypeParameter | TypeFlags.Index | TypeFlags.Conditional)) {
+                        constraint = getConstraintOfType(constraint);
                     }
-                    constraints = append(constraints, baseConstraint);
+                    if (constraint) {
+                        // A constraint that isn't a union type implies that the final type would be a non-union
+                        // type as well. Since non-union constraints are of no interest, we can exit here.
+                        if (!(constraint.flags & TypeFlags.Union)) {
+                            return undefined;
+                        }
+                        constraints = append(constraints, constraint);
+                    }
+                }
+                else if (t.flags & TypeFlags.DisjointDomains) {
+                    hasDisjointDomainType = true;
                 }
             }
-            if (constraints) {
-                const constraint = getIntersectionType(constraints);
-                if (constraint.flags & TypeFlags.Union) {
-                    return constraint;
+            // If the target is a union type or if we are intersecting with types belonging to one of the
+            // disjoint domans, we may end up producing a constraint that hasn't been examined before.
+            if (constraints && (targetIsUnion || hasDisjointDomainType)) {
+                if (hasDisjointDomainType) {
+                    // We add any types belong to one of the disjoint domans because they might cause the final
+                    // intersection operation to reduce the union constraints.
+                    for (const t of type.types) {
+                        if (t.flags & TypeFlags.DisjointDomains) {
+                            constraints = append(constraints, t);
+                        }
+                    }
                 }
+                return getIntersectionType(constraints);
             }
             return undefined;
         }
@@ -7920,10 +7941,11 @@ namespace ts {
         // Return true if the given intersection type contains
         // more than one unit type or,
         // an object type and a nullable type (null or undefined), or
-        // a string-like type and a non-string-like primitive type, or
-        // a number-like type and a non-number-like primitive type, or
-        // a symbol-like type and a non-symbol-like primitive type, or
-        // a void-like type and a non-void-like primitive type.
+        // a string-like type and a type known to be non-string-like, or
+        // a number-like type and a type known to be non-number-like, or
+        // a symbol-like type and a type known to be non-symbol-like, or
+        // a void-like type and a type known to be non-void-like, or
+        // a non-primitive type and a type known to be primitive.
         function isEmptyIntersectionType(type: IntersectionType) {
             let combined: TypeFlags = 0;
             for (const t of type.types) {
@@ -7932,10 +7954,11 @@ namespace ts {
                 }
                 combined |= t.flags;
                 if (combined & TypeFlags.Nullable && combined & (TypeFlags.Object | TypeFlags.NonPrimitive) ||
-                    combined & TypeFlags.StringLike && combined & (TypeFlags.Primitive & ~TypeFlags.StringLike) ||
-                    combined & TypeFlags.NumberLike && combined & (TypeFlags.Primitive & ~TypeFlags.NumberLike) ||
-                    combined & TypeFlags.ESSymbolLike && combined & (TypeFlags.Primitive & ~TypeFlags.ESSymbolLike) ||
-                    combined & TypeFlags.VoidLike && combined & (TypeFlags.Primitive & ~TypeFlags.VoidLike)) {
+                    combined & TypeFlags.NonPrimitive && combined & (TypeFlags.DisjointDomains & ~TypeFlags.NonPrimitive) ||
+                    combined & TypeFlags.StringLike && combined & (TypeFlags.DisjointDomains & ~TypeFlags.StringLike) ||
+                    combined & TypeFlags.NumberLike && combined & (TypeFlags.DisjointDomains & ~TypeFlags.NumberLike) ||
+                    combined & TypeFlags.ESSymbolLike && combined & (TypeFlags.DisjointDomains & ~TypeFlags.ESSymbolLike) ||
+                    combined & TypeFlags.VoidLike && combined & (TypeFlags.DisjointDomains & ~TypeFlags.VoidLike)) {
                     return true;
                 }
             }
@@ -10154,19 +10177,21 @@ namespace ts {
                             errorInfo = saveErrorInfo;
                         }
                     }
-                    if (!result && source.flags & TypeFlags.Intersection && target.flags & TypeFlags.Union) {
-                        // The combined constraint of an intersection type is the intersection of the constraints of
-                        // the constituents. Since we break down union types before intersection types, if the target
-                        // type is a union type and the source type is an intersection type with a combined constraint
-                        // that is a union type, we need an extra check to see if the combined constraint is related to
-                        // the target. For example, given two type variables T and U, each with the constraint
-                        // 'string | number', the combined constraint of 'T & U' is 'string | number' and we need to
-                        // check this constraint against the union on the target side.
-                        const constraint = getUnionConstraintOfIntersection(<IntersectionType>source);
-                        if (constraint) {
-                            if (result = isRelatedTo(constraint, target, reportErrors)) {
-                                errorInfo = saveErrorInfo;
-                            }
+                }
+                if (!result && source.flags & TypeFlags.Intersection) {
+                    // The combined constraint of an intersection type is the intersection of the constraints of
+                    // the constituents. When an intersection type contains instantiable types with union type
+                    // constraints, there are situations where we need to examine the combined constraint. One is
+                    // when the target is a union type. Another is when the intersection contains types belonging
+                    // to one of the disjoint domains. For example, given type variables T and U, each with the
+                    // constraint 'string | number', the combined constraint of 'T & U' is 'string | number' and
+                    // we need to check this constraint against a union on the target side. Also, given a type
+                    // variable V constrained to 'string | number', 'V & number' has a combined constraint of
+                    // 'string & number | number & number' which reduces to just 'number'.
+                    const constraint = getUnionConstraintOfIntersection(<IntersectionType>source, !!(target.flags & TypeFlags.Union));
+                    if (constraint) {
+                        if (result = isRelatedTo(constraint, target, reportErrors)) {
+                            errorInfo = saveErrorInfo;
                         }
                     }
                 }
