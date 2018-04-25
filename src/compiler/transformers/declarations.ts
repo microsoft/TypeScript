@@ -965,7 +965,7 @@ namespace ts {
                     if (ctor) {
                         const oldDiag = getSymbolAccessibilityDiagnostic;
                         parameterProperties = compact(flatMap(ctor.parameters, param => {
-                            if (!hasModifier(param, ModifierFlags.ParameterPropertyModifier) || shouldStripInternal(param, /* isInline */ true)) return;
+                            if (!hasModifier(param, ModifierFlags.ParameterPropertyModifier) || shouldStripInternal(param)) return;
                             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(param);
                             if (param.name.kind === SyntaxKind.Identifier) {
                                 return preserveJsDoc(createProperty(
@@ -1140,13 +1140,16 @@ namespace ts {
             return stringContains(comment, "@internal");
         }
 
-        function shouldStripInternal(node: Node, isInline?: boolean) {
+        function shouldStripInternal(node: Node) {
             if (stripInternal && node) {
-                const commentRanges = isInline
-                    ? getTrailingCommentRangesOfNode(getParseTreeNode(node), currentSourceFile)
-                    : getLeadingCommentRangesOfNode(getParseTreeNode(node), currentSourceFile);
-                if (forEach(commentRanges, hasInternalAnnotation)) {
-                    return true;
+                node = getParseTreeNode(node);
+                const leadingCommentRanges = getLeadingCommentRangesOfNode(node, currentSourceFile);
+                if (leadingCommentRanges && leadingCommentRanges.length) {
+                    return hasInternalAnnotation(last(leadingCommentRanges));
+                }
+                const trailingCommentRanges = getTrailingCommentRangesOfNode(node, currentSourceFile);
+                if (trailingCommentRanges && trailingCommentRanges.length) {
+                    return hasInternalAnnotation(last(trailingCommentRanges));
                 }
             }
             return false;

@@ -2,10 +2,38 @@
 export class Foo {
 >Foo : Foo
 
-  constructor(/** @internal */ public bar: string) { }  
->bar : string
+  constructor(
+    /** @internal */
+    public isInternal1: string,
+>isInternal1 : string
 
-  /** @internal */ zoo: string;
->zoo : string
+    /** @internal */ public isInternal2: string, /** @internal */
+>isInternal2 : string
+
+    public isInternal3: string,
+>isInternal3 : string
+
+    // @internal
+    public isInternal4: string,
+>isInternal4 : string
+
+    // @internal
+    /** @internal */
+    public isInternal5: string,
+>isInternal5 : string
+
+    /* @internal */ public isInternal6: string, /** @internal */
+>isInternal6 : string
+
+    // next line
+    public notInternal1: string,
+>notInternal1 : string
+
+    // @internal
+    /* next line */
+    public notInternal2: string
+>notInternal2 : string
+
+  ) { }
 }
 
