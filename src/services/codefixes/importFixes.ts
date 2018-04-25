@@ -145,7 +145,7 @@ namespace ts.codefix {
                 if (namespace) {
                     const moduleSymbol = context.checker.getAliasedSymbol(context.checker.getSymbolAtLocation(namespace)!);
                     if (moduleSymbol && moduleSymbol.exports!.has(escapeLeadingUnderscores(context.symbolName))) {
-                        useExisting.push(getCodeActionForUseExistingNamespaceImport(namespace.text, context, context.symbolToken as Identifier));
+                        useExisting.push(getCodeActionForUseExistingNamespaceImport(namespace.text, context, context.symbolToken));
                     }
                 }
             }
