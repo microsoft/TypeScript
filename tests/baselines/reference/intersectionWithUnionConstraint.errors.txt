@@ -62,6 +62,18 @@ tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts(12
     
     type T1 = (string | number | undefined) & (string | null | undefined);  // string | undefined
     
+    function f3<T extends string | number | undefined>(x: T & (number | object | undefined)) {
+        const y: number | undefined = x;
+    }
+    
+    function f4<T extends string | number>(x: T & (number | object)) {
+        const y: number = x;
+    }
+    
+    function f5<T, U extends keyof T>(x: keyof T & U) {
+        let y: keyof any = x;
+    }
+    
     // Repro from #23648
     
     type Example<T, U> = { [K in keyof T]: K extends keyof U ? UnexpectedError<K> : NoErrorHere<K> }

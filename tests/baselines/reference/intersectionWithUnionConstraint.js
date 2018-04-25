@@ -15,6 +15,18 @@ function f2<T extends string | number | undefined, U extends string | null | und
 
 type T1 = (string | number | undefined) & (string | null | undefined);  // string | undefined
 
+function f3<T extends string | number | undefined>(x: T & (number | object | undefined)) {
+    const y: number | undefined = x;
+}
+
+function f4<T extends string | number>(x: T & (number | object)) {
+    const y: number = x;
+}
+
+function f5<T, U extends keyof T>(x: keyof T & U) {
+    let y: keyof any = x;
+}
+
 // Repro from #23648
 
 type Example<T, U> = { [K in keyof T]: K extends keyof U ? UnexpectedError<K> : NoErrorHere<K> }
@@ -36,4 +48,13 @@ function f2(x) {
     var y4 = x; // Error
     var y5 = x; // Error
     var y6 = x; // Error
+}
+function f3(x) {
+    var y = x;
+}
+function f4(x) {
+    var y = x;
+}
+function f5(x) {
+    var y = x;
 }

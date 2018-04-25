@@ -54,6 +54,42 @@ type T1 = (string | number | undefined) & (string | null | undefined);  // strin
 >T1 : string | undefined
 >null : null
 
+function f3<T extends string | number | undefined>(x: T & (number | object | undefined)) {
+>f3 : <T extends string | number | undefined>(x: (T & undefined) | (T & number) | (T & object)) => void
+>T : T
+>x : (T & undefined) | (T & number) | (T & object)
+>T : T
+
+    const y: number | undefined = x;
+>y : number | undefined
+>x : (T & undefined) | (T & number) | (T & object)
+}
+
+function f4<T extends string | number>(x: T & (number | object)) {
+>f4 : <T extends string | number>(x: (T & number) | (T & object)) => void
+>T : T
+>x : (T & number) | (T & object)
+>T : T
+
+    const y: number = x;
+>y : number
+>x : (T & number) | (T & object)
+}
+
+function f5<T, U extends keyof T>(x: keyof T & U) {
+>f5 : <T, U extends keyof T>(x: keyof T & U) => void
+>T : T
+>U : U
+>T : T
+>x : keyof T & U
+>T : T
+>U : U
+
+    let y: keyof any = x;
+>y : string | number | symbol
+>x : keyof T & U
+}
+
 // Repro from #23648
 
 type Example<T, U> = { [K in keyof T]: K extends keyof U ? UnexpectedError<K> : NoErrorHere<K> }
