@@ -6115,6 +6115,7 @@ namespace ts.projectSystem {
                 });
                 forEachAncestorDirectory(getDirectoryPath(root.path), ancestor => {
                     locations.push(
+                        combinePaths(ancestor, `${module}.mjs`),
                         combinePaths(ancestor, `${module}.js`),
                         combinePaths(ancestor, `${module}.jsx`)
                     );

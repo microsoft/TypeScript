@@ -81,8 +81,8 @@ class ProjectRunner extends RunnerBase {
             return moduleKind === ts.ModuleKind.AMD
                 ? "amd"
                 : moduleKind === ts.ModuleKind.CommonJS
-                ? "node"
-                : "none";
+                    ? "node"
+                    : "none";
         }
 
         // Project baselines verified go in project/testCaseName/moduleKind/
@@ -312,6 +312,13 @@ class ProjectRunner extends RunnerBase {
                     : Harness.IO.resolvePath(ts.normalizeSlashes(testCase.projectRoot) + "/" + ts.normalizeSlashes(fileName));
 
                 const currentDirectory = getCurrentDirectory();
+                const outExt = compilerOptions.target === ts.ScriptTarget.ESNext
+                    && compilerOptions.module === ts.ModuleKind.ESNext
+                    && compilerOptions.esModuleInterop
+                    && compilerOptions.allowSyntheticDefaultImports
+                    ? ts.Extension.Mjs : ts.Extension.Js;
+                const mapExt = `${outExt}.map`;
+
                 // compute file name relative to current directory (expanded project root)
                 let diskRelativeName = ts.getRelativePathToDirectoryOrUrl(currentDirectory, diskFileName, currentDirectory, Harness.Compiler.getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
                 if (ts.isRootedDiskPath(diskRelativeName) || diskRelativeName.substr(0, 3) === "../") {
@@ -319,8 +326,8 @@ class ProjectRunner extends RunnerBase {
                     // we need to instead create files that can live in the project reference folder
                     // but make sure extension of these files matches with the fileName the compiler asked to write
                     diskRelativeName = "diskFile" + nonSubfolderDiskFiles +
-                    (Harness.Compiler.isDTS(fileName) ? ts.Extension.Dts :
-                    Harness.Compiler.isJS(fileName) ? ts.Extension.Js : ".js.map");
+                        (Harness.Compiler.isDTS(fileName) ? ts.Extension.Dts :
+                            Harness.Compiler.isJS(fileName) ? outExt : mapExt);
                     nonSubfolderDiskFiles++;
                 }
 

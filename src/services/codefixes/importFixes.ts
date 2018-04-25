@@ -213,7 +213,7 @@ namespace ts.codefix {
     }
 
     function usesJsExtensionOnImports(sourceFile: SourceFile): boolean {
-        return firstDefined(sourceFile.imports, ({ text }) => pathIsRelative(text) ? fileExtensionIs(text, Extension.Js) : undefined) || false;
+        return firstDefined(sourceFile.imports, ({ text }) => pathIsRelative(text) ? fileExtensionIsOneOf(text, [Extension.Mjs, Extension.Js]) : undefined) || false;
     }
 
     function createImportClauseOfKind(kind: ImportKind.Default | ImportKind.Named | ImportKind.Namespace, symbolName: string) {
@@ -729,10 +729,10 @@ namespace ts.codefix {
             if (defaultExport) {
                 const localSymbol = getLocalSymbolForExportDefault(defaultExport);
                 if ((
-                        localSymbol && localSymbol.escapedName === symbolName ||
-                        getEscapedNameForExportDefault(defaultExport) === symbolName ||
-                        moduleSymbolToValidIdentifier(moduleSymbol, program.getCompilerOptions().target) === symbolName
-                    ) && checkSymbolHasMeaning(localSymbol || defaultExport, currentTokenMeaning)) {
+                    localSymbol && localSymbol.escapedName === symbolName ||
+                    getEscapedNameForExportDefault(defaultExport) === symbolName ||
+                    moduleSymbolToValidIdentifier(moduleSymbol, program.getCompilerOptions().target) === symbolName
+                ) && checkSymbolHasMeaning(localSymbol || defaultExport, currentTokenMeaning)) {
                     addSymbol(moduleSymbol, localSymbol || defaultExport, ImportKind.Default);
                 }
             }

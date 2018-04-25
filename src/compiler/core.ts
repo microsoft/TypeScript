@@ -743,9 +743,9 @@ namespace ts {
     export function deduplicate<T>(array: ReadonlyArray<T>, equalityComparer: EqualityComparer<T>, comparer?: Comparer<T>): T[] {
         return !array ? undefined :
             array.length === 0 ? [] :
-            array.length === 1 ? array.slice() :
-            comparer ? deduplicateRelational(array, equalityComparer, comparer) :
-            deduplicateEquality(array, equalityComparer);
+                array.length === 1 ? array.slice() :
+                    comparer ? deduplicateRelational(array, equalityComparer, comparer) :
+                        deduplicateEquality(array, equalityComparer);
     }
 
     /**
@@ -1008,15 +1008,17 @@ namespace ts {
 
     export function arrayIterator<T>(array: ReadonlyArray<T>): Iterator<T> {
         let i = 0;
-        return { next: () => {
-            if (i === array.length) {
-                return { value: undefined as never, done: true };
+        return {
+            next: () => {
+                if (i === array.length) {
+                    return { value: undefined as never, done: true };
+                }
+                else {
+                    i++;
+                    return { value: array[i - 1], done: false };
+                }
             }
-            else {
-                i++;
-                return { value: array[i - 1], done: false };
-            }
-        }};
+        };
     }
 
     /**
@@ -1710,9 +1712,9 @@ namespace ts {
     function compareComparableValues(a: string | number, b: string | number) {
         return a === b ? Comparison.EqualTo :
             a === undefined ? Comparison.LessThan :
-            b === undefined ? Comparison.GreaterThan :
-            a < b ? Comparison.LessThan :
-            Comparison.GreaterThan;
+                b === undefined ? Comparison.GreaterThan :
+                    a < b ? Comparison.LessThan :
+                        Comparison.GreaterThan;
     }
 
     /**
@@ -1882,8 +1884,8 @@ namespace ts {
     export function compareProperties<T, K extends keyof T>(a: T, b: T, key: K, comparer: Comparer<T[K]>) {
         return a === b ? Comparison.EqualTo :
             a === undefined ? Comparison.LessThan :
-            b === undefined ? Comparison.GreaterThan :
-            comparer(a[key], b[key]);
+                b === undefined ? Comparison.GreaterThan :
+                    comparer(a[key], b[key]);
     }
 
     function getDiagnosticFileName(diagnostic: Diagnostic): string {
@@ -2036,7 +2038,7 @@ namespace ts {
         return compilerOptions.target || ScriptTarget.ES3;
     }
 
-    export function getEmitModuleKind(compilerOptions: {module?: CompilerOptions["module"], target?: CompilerOptions["target"]}) {
+    export function getEmitModuleKind(compilerOptions: { module?: CompilerOptions["module"], target?: CompilerOptions["target"] }) {
         return typeof compilerOptions.module === "number" ?
             compilerOptions.module :
             getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
@@ -2653,6 +2655,8 @@ namespace ts {
     export function getScriptKindFromFileName(fileName: string): ScriptKind {
         const ext = fileName.substr(fileName.lastIndexOf("."));
         switch (ext.toLowerCase()) {
+            case Extension.Mjs:
+                return ScriptKind.JS;
             case Extension.Js:
                 return ScriptKind.JS;
             case Extension.Jsx:
@@ -2674,7 +2678,7 @@ namespace ts {
     export const supportedTypeScriptExtensions: ReadonlyArray<Extension> = [Extension.Ts, Extension.Tsx, Extension.Dts];
     /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
     export const supportedTypescriptExtensionsForExtractExtension: ReadonlyArray<Extension> = [Extension.Dts, Extension.Ts, Extension.Tsx];
-    export const supportedJavascriptExtensions: ReadonlyArray<Extension> = [Extension.Js, Extension.Jsx];
+    export const supportedJavascriptExtensions: ReadonlyArray<Extension> = [Extension.Mjs, Extension.Js, Extension.Jsx];
     const allSupportedExtensions: ReadonlyArray<Extension> = [...supportedTypeScriptExtensions, ...supportedJavascriptExtensions];
 
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: ReadonlyArray<JsFileExtensionInfo>): ReadonlyArray<string> {
@@ -2760,7 +2764,7 @@ namespace ts {
         }
     }
 
-    const extensionsToRemove = [Extension.Dts, Extension.Ts, Extension.Js, Extension.Tsx, Extension.Jsx];
+    const extensionsToRemove = [Extension.Dts, Extension.Ts, Extension.Mjs, Extension.Js, Extension.Tsx, Extension.Jsx];
     export function removeFileExtension(path: string): string {
         for (const ext of extensionsToRemove) {
             const extensionless = tryRemoveExtension(path, ext);
@@ -2822,7 +2826,7 @@ namespace ts {
         }
     }
 
-    function Signature() {} // tslint:disable-line no-empty
+    function Signature() { } // tslint:disable-line no-empty
 
     function Node(this: Node, kind: SyntaxKind, pos: number, end: number) {
         this.pos = pos;

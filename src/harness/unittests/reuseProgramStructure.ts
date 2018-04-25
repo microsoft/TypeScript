@@ -467,8 +467,10 @@ namespace ts {
                         "File 'node_modules/@types/a/index.d.ts' does not exist.",
                         "Loading module 'a' from 'node_modules' folder, target file type 'JavaScript'.",
                         "File 'node_modules/a/package.json' does not exist.",
+                        "File 'node_modules/a.mjs' does not exist.",
                         "File 'node_modules/a.js' does not exist.",
                         "File 'node_modules/a.jsx' does not exist.",
+                        "File 'node_modules/a/index.mjs' does not exist.",
                         "File 'node_modules/a/index.js' does not exist.",
                         "File 'node_modules/a/index.jsx' does not exist.",
                         "======== Module name 'a' was not resolved. ========"
@@ -533,10 +535,13 @@ namespace ts {
                     "File '/node_modules/@types/fs/package.json' does not exist.",
                     "File '/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/node_modules/@types/fs/index.d.ts' does not exist.",
+                    "File '/a/b/fs.mjs' does not exist.",
                     "File '/a/b/fs.js' does not exist.",
                     "File '/a/b/fs.jsx' does not exist.",
+                    "File '/a/fs.mjs' does not exist.",
                     "File '/a/fs.js' does not exist.",
                     "File '/a/fs.jsx' does not exist.",
+                    "File '/fs.mjs' does not exist.",
                     "File '/fs.js' does not exist.",
                     "File '/fs.jsx' does not exist.",
                     "======== Module name 'fs' was not resolved. ========",
@@ -575,10 +580,13 @@ namespace ts {
                     "File '/node_modules/@types/fs/package.json' does not exist.",
                     "File '/node_modules/@types/fs.d.ts' does not exist.",
                     "File '/node_modules/@types/fs/index.d.ts' does not exist.",
+                    "File '/a/b/fs.mjs' does not exist.",
                     "File '/a/b/fs.js' does not exist.",
                     "File '/a/b/fs.jsx' does not exist.",
+                    "File '/a/fs.mjs' does not exist.",
                     "File '/a/fs.js' does not exist.",
                     "File '/a/fs.jsx' does not exist.",
+                    "File '/fs.mjs' does not exist.",
                     "File '/fs.js' does not exist.",
                     "File '/fs.jsx' does not exist.",
                     "======== Module name 'fs' was not resolved. ========",
@@ -596,10 +604,10 @@ namespace ts {
                 {
                     name: "f1.ts",
                     text:
-                    SourceText.New(
-                        `/// <reference path="a1.ts"/>${newLine}/// <reference types="typerefs1"/>${newLine}/// <reference no-default-lib="true"/>`,
-                        `import { B } from './b1';${newLine}export let BB = B;`,
-                        "declare module './b1' { interface B { y: string; } }")
+                        SourceText.New(
+                            `/// <reference path="a1.ts"/>${newLine}/// <reference types="typerefs1"/>${newLine}/// <reference no-default-lib="true"/>`,
+                            `import { B } from './b1';${newLine}export let BB = B;`,
+                            "declare module './b1' { interface B { y: string; } }")
                 },
                 {
                     name: "f2.ts",

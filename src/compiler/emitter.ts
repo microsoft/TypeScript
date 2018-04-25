@@ -77,7 +77,11 @@ namespace ts {
                 return Extension.Jsx;
             }
         }
-        return Extension.Js;
+        return options.target === ScriptTarget.ESNext
+            && options.module === ModuleKind.ESNext
+            && options.esModuleInterop
+            && options.allowSyntheticDefaultImports
+            && Extension.Mjs || Extension.Js;
     }
 
     /*@internal*/
@@ -3236,10 +3240,10 @@ namespace ts {
                     pushNameGenerationScope(/*node*/ undefined);
                     tempFlags = savedTempFlags;
                     return result;
-                  }
-                  else {
+                }
+                else {
                     return generateNameCached(getNodeForGeneratedName(name));
-                  }
+                }
             }
             else {
                 // Auto, Loop, and Unique names are cached based on their unique

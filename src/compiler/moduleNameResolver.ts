@@ -932,7 +932,7 @@ namespace ts {
             case Extensions.TypeScript:
                 return tryExtension(Extension.Ts) || tryExtension(Extension.Tsx) || tryExtension(Extension.Dts);
             case Extensions.JavaScript:
-                return tryExtension(Extension.Js) || tryExtension(Extension.Jsx);
+                return tryExtension(Extension.Mjs) || tryExtension(Extension.Js) || tryExtension(Extension.Jsx);
         }
 
         function tryExtension(ext: Extension): PathAndExtension | undefined {
@@ -996,7 +996,7 @@ namespace ts {
                 else {
                     const jsPath = tryReadPackageJsonFields(/*readTypes*/ false, packageJsonContent, nodeModuleDirectory, state);
                     if (typeof jsPath === "string") {
-                        subModuleName = removeExtension(removeExtension(jsPath.substring(nodeModuleDirectory.length + 1), Extension.Js), Extension.Jsx) + Extension.Dts;
+                        subModuleName = removeExtension(removeExtension(removeExtension(jsPath.substring(nodeModuleDirectory.length + 1), Extension.Mjs), Extension.Js), Extension.Jsx) + Extension.Dts;
                     }
                     else {
                         subModuleName = "index.d.ts";
@@ -1068,7 +1068,7 @@ namespace ts {
     function extensionIsOk(extensions: Extensions, extension: Extension): boolean {
         switch (extensions) {
             case Extensions.JavaScript:
-                return extension === Extension.Js || extension === Extension.Jsx;
+                return extension === Extension.Mjs || extension === Extension.Js || extension === Extension.Jsx;
             case Extensions.TypeScript:
                 return extension === Extension.Ts || extension === Extension.Tsx || extension === Extension.Dts;
             case Extensions.DtsOnly:
