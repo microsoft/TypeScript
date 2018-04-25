@@ -35,6 +35,7 @@ module TypeScript {
 >new Type[] : any
 >Type[] : any
 >Type : any
+> : any
 
                 for (var i = 0, len = typeLinks.length; i < len; i++) {
 >i : number
