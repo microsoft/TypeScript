@@ -304,14 +304,13 @@ namespace Utils {
                 o.containsParseError = true;
             }
 
-            ts.forEach(Object.getOwnPropertyNames(n), propertyName => {
+            for (const propertyName of Object.getOwnPropertyNames(n) as ReadonlyArray<keyof ts.SourceFile | keyof ts.Identifier>) {
                 switch (propertyName) {
                     case "parent":
                     case "symbol":
                     case "locals":
                     case "localSymbol":
                     case "kind":
-                    case "semanticDiagnostics":
                     case "id":
                     case "nodeCount":
                     case "symbolCount":
@@ -334,7 +333,6 @@ namespace Utils {
                         }
                         break;
 
-                    case "referenceDiagnostics":
                     case "parseDiagnostics":
                         o[propertyName] = convertDiagnostics((<any>n)[propertyName]);
                         break;
@@ -355,9 +353,7 @@ namespace Utils {
                     default:
                         o[propertyName] = (<any>n)[propertyName];
                 }
-
-                return undefined;
-            });
+            }
 
             return o;
         }

@@ -325,6 +325,16 @@ namespace ts {
                     return diagnostics;
                 }
             },
+
+            runWithCancellationToken: (token, callback) => {
+                try {
+                    cancellationToken = token;
+                    return callback(checker);
+                }
+                finally {
+                    cancellationToken = undefined;
+                }
+            }
         };
 
         const tupleTypes: GenericType[] = [];
@@ -2130,14 +2140,22 @@ namespace ts {
             return (symbol.flags & meaning) || dontResolveAlias ? symbol : resolveAlias(symbol);
         }
 
+        /**
+         * For prototype-property methods like `A.prototype.m = function () ...`, try to resolve names in the scope of `A` too.
+         * Note that prototype-property assignment to locations outside the current file (eg globals) doesn't work, so
+         * name resolution won't work either.
+         */
         function resolveEntityNameFromJSPrototype(name: Identifier, meaning: SymbolFlags) {
             if (isJSDocTypeReference(name.parent) && isJSDocTag(name.parent.parent.parent)) {
                 const host = getJSDocHost(name.parent.parent.parent as JSDocTag);
                 if (isExpressionStatement(host) &&
                     isBinaryExpression(host.expression) &&
                     getSpecialPropertyAssignmentKind(host.expression) === SpecialPropertyAssignmentKind.PrototypeProperty) {
-                    const secondaryLocation = getSymbolOfNode(host.expression.left)!.parent!.valueDeclaration;
-                    return resolveName(secondaryLocation, name.escapedText, meaning, /*nameNotFoundMessage*/ undefined, name, /*isUse*/ true);
+                    const symbol = getSymbolOfNode(host.expression.left);
+                    if (symbol) {
+                        const secondaryLocation = symbol.parent!.valueDeclaration;
+                        return resolveName(secondaryLocation, name.escapedText, meaning, /*nameNotFoundMessage*/ undefined, name, /*isUse*/ true);
+                    }
                 }
             }
         }
@@ -3000,6 +3018,9 @@ namespace ts {
             }
 
             function typeToTypeNodeHelper(type: Type, context: NodeBuilderContext): TypeNode | undefined {
+                if (cancellationToken && cancellationToken.throwIfCancellationRequested) {
+                    cancellationToken.throwIfCancellationRequested();
+                }
                 const inTypeAlias = context.flags & NodeBuilderFlags.InTypeAlias;
                 context.flags &= ~NodeBuilderFlags.InTypeAlias;
 

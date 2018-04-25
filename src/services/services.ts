@@ -553,7 +553,6 @@ namespace ts {
         public typeReferenceDirectives: FileReference[];
 
         public syntacticDiagnostics: Diagnostic[];
-        public referenceDiagnostics: Diagnostic[];
         public parseDiagnostics: Diagnostic[];
         public bindDiagnostics: Diagnostic[];
 
@@ -1432,7 +1431,9 @@ namespace ts {
                 host,
                 (formattingOptions && formatting.getFormatContext(formattingOptions))!, // TODO: GH#18217
                 getCanonicalFileName,
-                preferences);
+                preferences,
+                cancellationToken,
+            );
         }
 
         function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol | undefined {
@@ -1473,7 +1474,7 @@ namespace ts {
                             kind: ScriptElementKind.unknown,
                             kindModifiers: ScriptElementKindModifier.none,
                             textSpan: createTextSpanFromNode(node, sourceFile),
-                            displayParts: typeToDisplayParts(typeChecker, type, getContainerNode(node)),
+                            displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(node))),
                             documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
                             tags: type.symbol ? type.symbol.getJsDocTags() : undefined
                         };
@@ -1482,7 +1483,9 @@ namespace ts {
                 return undefined;
             }
 
-            const { symbolKind, displayParts, documentation, tags } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(node), node);
+            const { symbolKind, displayParts, documentation, tags } = typeChecker.runWithCancellationToken(cancellationToken, typeChecker =>
+                SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(node), node)
+            );
             return {
                 kind: symbolKind,
                 kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),

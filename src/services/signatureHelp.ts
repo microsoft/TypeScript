@@ -41,16 +41,16 @@ namespace ts.SignatureHelp {
             // We didn't have any sig help items produced by the TS compiler.  If this is a JS
             // file, then see if we can figure out anything better.
             if (isSourceFileJavaScript(sourceFile)) {
-                return createJavaScriptSignatureHelpItems(argumentInfo, program);
+                return createJavaScriptSignatureHelpItems(argumentInfo, program, cancellationToken);
             }
 
             return undefined;
         }
 
-        return createSignatureHelpItems(candidates, resolvedSignature!, argumentInfo, typeChecker);
+        return typeChecker.runWithCancellationToken(cancellationToken, typeChecker => createSignatureHelpItems(candidates, resolvedSignature!, argumentInfo, typeChecker));
     }
 
-    function createJavaScriptSignatureHelpItems(argumentInfo: ArgumentListInfo, program: Program): SignatureHelpItems | undefined {
+    function createJavaScriptSignatureHelpItems(argumentInfo: ArgumentListInfo, program: Program, cancellationToken: CancellationToken): SignatureHelpItems | undefined {
         if (argumentInfo.invocation.kind !== SyntaxKind.CallExpression) {
             return undefined;
         }
@@ -76,7 +76,7 @@ namespace ts.SignatureHelp {
                         if (type) {
                             const callSignatures = type.getCallSignatures();
                             if (callSignatures && callSignatures.length) {
-                                return createSignatureHelpItems(callSignatures, callSignatures[0], argumentInfo, typeChecker);
+                                return typeChecker.runWithCancellationToken(cancellationToken, typeChecker => createSignatureHelpItems(callSignatures, callSignatures[0], argumentInfo, typeChecker));
                             }
                         }
                     }

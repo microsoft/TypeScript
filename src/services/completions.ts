@@ -534,6 +534,7 @@ namespace ts.Completions {
         formatContext: formatting.FormatContext,
         getCanonicalFileName: GetCanonicalFileName,
         preferences: UserPreferences,
+        cancellationToken: CancellationToken,
     ): CompletionEntryDetails | undefined {
         const typeChecker = program.getTypeChecker();
         const compilerOptions = program.getCompilerOptions();
@@ -544,7 +545,7 @@ namespace ts.Completions {
             const stringLiteralCompletions = !contextToken || !isStringLiteralLike(contextToken)
                 ? undefined
                 : getStringLiteralCompletionEntries(sourceFile, contextToken, position, typeChecker, compilerOptions, host);
-            return stringLiteralCompletions && stringLiteralCompletionDetails(name, contextToken!, stringLiteralCompletions, sourceFile, typeChecker); // TODO: GH#18217
+            return stringLiteralCompletions && stringLiteralCompletionDetails(name, contextToken!, stringLiteralCompletions, sourceFile, typeChecker, cancellationToken); // TODO: GH#18217
         }
 
         // Compute all the completion symbols again.
@@ -566,7 +567,7 @@ namespace ts.Completions {
             case "symbol": {
                 const { symbol, location, symbolToOriginInfoMap, previousToken } = symbolCompletion;
                 const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(symbolToOriginInfoMap, symbol, program, typeChecker, host, compilerOptions, sourceFile, previousToken, formatContext, getCanonicalFileName, program.getSourceFiles(), preferences);
-                return createCompletionDetailsForSymbol(symbol, typeChecker, sourceFile, location!, codeActions, sourceDisplay); // TODO: GH#18217
+                return createCompletionDetailsForSymbol(symbol, typeChecker, sourceFile, location!, cancellationToken, codeActions, sourceDisplay); // TODO: GH#18217
             }
             case "none":
                 // Didn't find a symbol with this name.  See if we can find a keyword instead.
@@ -574,12 +575,15 @@ namespace ts.Completions {
         }
     }
 
-    function createCompletionDetailsForSymbol(symbol: Symbol, checker: TypeChecker, sourceFile: SourceFile, location: Node, codeActions?: CodeAction[], sourceDisplay?: SymbolDisplayPart[]): CompletionEntryDetails {
-        const { displayParts, documentation, symbolKind, tags } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, sourceFile, location, location, SemanticMeaning.All);
+    function createCompletionDetailsForSymbol(symbol: Symbol, checker: TypeChecker, sourceFile: SourceFile, location: Node, cancellationToken: CancellationToken, codeActions?: CodeAction[], sourceDisplay?: SymbolDisplayPart[]): CompletionEntryDetails {
+        const { displayParts, documentation, symbolKind, tags } =
+            checker.runWithCancellationToken(cancellationToken, checker =>
+                SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, sourceFile, location, location, SemanticMeaning.All)
+            );
         return createCompletionDetails(symbol.name, SymbolDisplay.getSymbolModifiers(symbol), symbolKind, displayParts, documentation, tags, codeActions, sourceDisplay);
     }
 
-    function stringLiteralCompletionDetails(name: string, location: Node, completion: StringLiteralCompletion, sourceFile: SourceFile, checker: TypeChecker): CompletionEntryDetails | undefined {
+    function stringLiteralCompletionDetails(name: string, location: Node, completion: StringLiteralCompletion, sourceFile: SourceFile, checker: TypeChecker, cancellationToken: CancellationToken): CompletionEntryDetails | undefined {
         switch (completion.kind) {
             case StringLiteralCompletionKind.Paths: {
                 const match = find(completion.paths, p => p.name === name);
@@ -587,7 +591,7 @@ namespace ts.Completions {
             }
             case StringLiteralCompletionKind.Properties: {
                 const match = find(completion.symbols, s => s.name === name);
-                return match && createCompletionDetailsForSymbol(match, checker, sourceFile, location);
+                return match && createCompletionDetailsForSymbol(match, checker, sourceFile, location, cancellationToken);
             }
             case StringLiteralCompletionKind.Types:
                 return find(completion.types, t => t.value === name) ? createCompletionDetails(name, ScriptElementKindModifier.none, ScriptElementKind.typeElement, [textPart(name)]) : undefined;
