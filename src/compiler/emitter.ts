@@ -2997,6 +2997,8 @@ namespace ts {
             }
         }
 
+        function writeTokenText(token: SyntaxKind, writer: (s: string) => void): void;
+        function writeTokenText(token: SyntaxKind, writer: (s: string) => void, pos: number): number;
         function writeTokenText(token: SyntaxKind, writer: (s: string) => void, pos?: number): number {
             const tokenString = tokenToString(token)!;
             writer(tokenString);
