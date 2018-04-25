@@ -3931,7 +3931,7 @@ declare namespace ts {
      * @param configFileParsingDiagnostics - error during config file parsing
      * @returns A 'Program' object.
      */
-    function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, compilerHost?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program;
+    function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program;
 }
 declare namespace ts {
     interface EmitOutput {
