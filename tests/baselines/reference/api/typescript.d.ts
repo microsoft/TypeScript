@@ -2119,7 +2119,7 @@ declare namespace ts {
     type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
     interface Type {
         flags: TypeFlags;
-        symbol?: Symbol;
+        symbol: Symbol;
         pattern?: DestructuringPattern;
         aliasSymbol?: Symbol;
         aliasTypeArguments?: Type[];
@@ -2572,6 +2572,7 @@ declare namespace ts {
         skipTrivia?: (pos: number) => number;
     }
     enum EmitFlags {
+        None = 0,
         SingleLine = 1,
         AdviseOnEmitNode = 2,
         NoSubstitution = 4,

@@ -3628,7 +3628,7 @@ namespace ts {
          * @param node A string literal.
          */
         function visitNumericLiteral(node: NumericLiteral) {
-            if (node.numericLiteralFlags! & TokenFlags.BinaryOrOctalSpecifier) {
+            if (node.numericLiteralFlags & TokenFlags.BinaryOrOctalSpecifier) {
                 return setTextRange(createNumericLiteral(node.text), node);
             }
             return node;

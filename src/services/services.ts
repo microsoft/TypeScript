@@ -17,6 +17,7 @@ namespace ts {
         public end: number;
         public flags: NodeFlags;
         public parent: Node;
+        public symbol: Symbol;
         public jsDoc: JSDoc[];
         public original: Node;
         public transformFlags: TransformFlags;
@@ -200,6 +201,7 @@ namespace ts {
         public end: number;
         public flags: NodeFlags;
         public parent: Node;
+        public symbol: Symbol;
         public jsDocComments: JSDoc[];
         public transformFlags: TransformFlags;
 
@@ -332,6 +334,7 @@ namespace ts {
     }
 
     class TokenObject<TKind extends SyntaxKind> extends TokenOrIdentifierObject implements Token<TKind> {
+        public symbol: Symbol;
         public kind: TKind;
 
         constructor(kind: TKind, pos: number, end: number) {
@@ -343,6 +346,8 @@ namespace ts {
     class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
         public kind: SyntaxKind.Identifier;
         public escapedText: __String;
+        public symbol: Symbol;
+        public autoGenerateFlags: GeneratedIdentifierFlags;
         _primaryExpressionBrand: any;
         _memberExpressionBrand: any;
         _leftHandSideExpressionBrand: any;
@@ -366,7 +371,7 @@ namespace ts {
         flags: TypeFlags;
         objectFlags?: ObjectFlags;
         id: number;
-        symbol?: Symbol;
+        symbol: Symbol;
         constructor(checker: TypeChecker, flags: TypeFlags) {
             this.checker = checker;
             this.flags = flags;

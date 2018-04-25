@@ -334,7 +334,7 @@ namespace ts {
 
             if (node) {
                 const emitNode = node.emitNode;
-                const emitFlags = emitNode && emitNode.flags;
+                const emitFlags = emitNode && emitNode.flags || EmitFlags.None;
                 const range = emitNode && emitNode.sourceMapRange;
                 const { pos, end } = range || node;
                 let source = range && range.source;
@@ -344,14 +344,14 @@ namespace ts {
                 if (source) setSourceFile(source);
 
                 if (node.kind !== SyntaxKind.NotEmittedStatement
-                    && (emitFlags! & EmitFlags.NoLeadingSourceMap) === 0
+                    && (emitFlags & EmitFlags.NoLeadingSourceMap) === 0
                     && pos >= 0) {
                     emitPos(skipSourceTrivia(pos));
                 }
 
                 if (source) setSourceFile(oldSource);
 
-                if (emitFlags! & EmitFlags.NoNestedSourceMaps) {
+                if (emitFlags & EmitFlags.NoNestedSourceMaps) {
                     disabled = true;
                     emitCallback(hint, node);
                     disabled = false;
@@ -363,7 +363,7 @@ namespace ts {
                 if (source) setSourceFile(source);
 
                 if (node.kind !== SyntaxKind.NotEmittedStatement
-                    && (emitFlags! & EmitFlags.NoTrailingSourceMap) === 0
+                    && (emitFlags & EmitFlags.NoTrailingSourceMap) === 0
                     && end >= 0) {
                     emitPos(end);
                 }
@@ -386,18 +386,18 @@ namespace ts {
             }
 
             const emitNode = node && node.emitNode;
-            const emitFlags = emitNode && emitNode.flags;
+            const emitFlags = emitNode && emitNode.flags || EmitFlags.None;
             const range = emitNode && emitNode.tokenSourceMapRanges && emitNode.tokenSourceMapRanges[token];
 
             tokenPos = skipSourceTrivia(range ? range.pos : tokenPos);
-            if ((emitFlags! & EmitFlags.NoTokenLeadingSourceMaps) === 0 && tokenPos >= 0) {
+            if ((emitFlags & EmitFlags.NoTokenLeadingSourceMaps) === 0 && tokenPos >= 0) {
                 emitPos(tokenPos);
             }
 
             tokenPos = emitCallback(token, writer, tokenPos);
 
             if (range) tokenPos = range.end;
-            if ((emitFlags! & EmitFlags.NoTokenTrailingSourceMaps) === 0 && tokenPos >= 0) {
+            if ((emitFlags & EmitFlags.NoTokenTrailingSourceMaps) === 0 && tokenPos >= 0) {
                 emitPos(tokenPos);
             }
 

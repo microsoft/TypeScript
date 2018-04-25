@@ -1872,7 +1872,7 @@ namespace ts {
         }
 
         function checkStrictModeNumericLiteral(node: NumericLiteral) {
-            if (inStrictMode && node.numericLiteralFlags! & TokenFlags.Octal) {
+            if (inStrictMode && node.numericLiteralFlags & TokenFlags.Octal) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode));
             }
         }
@@ -3507,7 +3507,7 @@ namespace ts {
                 break;
 
             case SyntaxKind.NumericLiteral:
-                if ((<NumericLiteral>node).numericLiteralFlags! & TokenFlags.BinaryOrOctalSpecifier) {
+                if ((<NumericLiteral>node).numericLiteralFlags & TokenFlags.BinaryOrOctalSpecifier) {
                     transformFlags |= TransformFlags.AssertES2015;
                 }
                 break;

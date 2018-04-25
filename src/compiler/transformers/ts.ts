@@ -897,7 +897,7 @@ namespace ts {
                     // record an alias as the class name is not in scope for statics.
                     enableSubstitutionForClassAliases();
                     const alias = getSynthesizedClone(temp);
-                    alias.autoGenerateFlags! &= ~GeneratedIdentifierFlags.ReservedInNestedScopes;
+                    alias.autoGenerateFlags &= ~GeneratedIdentifierFlags.ReservedInNestedScopes;
                     classAliases[getOriginalNodeId(node)] = alias;
                 }
 

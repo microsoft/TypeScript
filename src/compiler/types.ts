@@ -1593,7 +1593,7 @@ namespace ts {
     export interface NumericLiteral extends LiteralExpression {
         kind: SyntaxKind.NumericLiteral;
         /* @internal */
-        numericLiteralFlags?: TokenFlags;
+        numericLiteralFlags: TokenFlags;
     }
 
     export interface TemplateHead extends LiteralLikeNode {
@@ -3543,7 +3543,7 @@ namespace ts {
 
     /* @internal */
     export interface NodeLinks {
-        flags?: NodeCheckFlags;           // Set of flags specific to Node
+        flags: NodeCheckFlags;           // Set of flags specific to Node
         resolvedType?: Type;              // Cached type of type node
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
         resolvedSymbol?: Symbol;          // Cached name resolution result
@@ -3553,7 +3553,7 @@ namespace ts {
         isVisible?: boolean;              // Is this node visible
         containsArgumentsReference?: boolean; // Whether a function-like declaration contains an 'arguments' reference
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
-        jsxFlags?: JsxFlags;              // flags for knowing what kind of element/attributes we're dealing with
+        jsxFlags: JsxFlags;              // flags for knowing what kind of element/attributes we're dealing with
         resolvedJsxElementAttributesType?: Type;  // resolved element attributes type of a JSX openinglike element
         resolvedJsxElementAllAttributesType?: Type;  // resolved all element attributes type of a JSX openinglike element
         hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
@@ -4744,7 +4744,7 @@ namespace ts {
     /* @internal */
     export interface EmitNode {
         annotatedNodes?: Node[];                 // Tracks Parse-tree nodes with EmitNodes for eventual cleanup.
-        flags?: EmitFlags;                       // Flags that customize emit
+        flags: EmitFlags;                       // Flags that customize emit
         leadingComments?: SynthesizedComment[];  // Synthesized leading comments
         trailingComments?: SynthesizedComment[]; // Synthesized trailing comments
         commentRange?: TextRange;                // The text range to use when emitting leading or trailing comments
@@ -4757,6 +4757,7 @@ namespace ts {
     }
 
     export const enum EmitFlags {
+        None = 0,
         SingleLine = 1 << 0,                    // The contents of this node should be emitted on a single line.
         AdviseOnEmitNode = 1 << 1,              // The printer should invoke the onEmitNode callback when printing this node.
         NoSubstitution = 1 << 2,                // Disables further substitution of an expression.

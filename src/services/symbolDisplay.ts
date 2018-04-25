@@ -600,8 +600,8 @@ namespace ts.SymbolDisplay {
             }
         }
 
-        function addSignatureDisplayParts(signature: Signature, allSignatures: Signature[], flags?: TypeFormatFlags) {
-            addRange(displayParts, signatureToDisplayParts(typeChecker, signature, enclosingDeclaration, flags! | TypeFormatFlags.WriteTypeArgumentsOfSignature));
+        function addSignatureDisplayParts(signature: Signature, allSignatures: Signature[], flags = TypeFormatFlags.None) {
+            addRange(displayParts, signatureToDisplayParts(typeChecker, signature, enclosingDeclaration, flags | TypeFormatFlags.WriteTypeArgumentsOfSignature));
             if (allSignatures.length > 1) {
                 displayParts.push(spacePart());
                 displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));

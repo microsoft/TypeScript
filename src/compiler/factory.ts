@@ -138,9 +138,9 @@ namespace ts {
 
     /** Create a unique temporary variable. */
     export function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined): Identifier;
-    /* @internal */ export function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, reservedInNestedScopes: boolean): Identifier; // tslint:disable-line unified-signatures
-    export function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, reservedInNestedScopes?: boolean): Identifier {
-        const name = createIdentifier("");
+    /* @internal */ export function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, reservedInNestedScopes: boolean): GeneratedIdentifier; // tslint:disable-line unified-signatures
+    export function createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, reservedInNestedScopes?: boolean): GeneratedIdentifier {
+        const name = createIdentifier("") as GeneratedIdentifier;
         name.autoGenerateFlags = GeneratedIdentifierFlags.Auto;
         name.autoGenerateId = nextAutoGenerateId;
         nextAutoGenerateId++;
@@ -171,9 +171,11 @@ namespace ts {
         return name;
     }
 
+    /* @internal */ export function createOptimisticUniqueName(text: string): GeneratedIdentifier;
     /** Create a unique name based on the supplied text. */
-    export function createOptimisticUniqueName(text: string): Identifier {
-        const name = createIdentifier(text);
+    export function createOptimisticUniqueName(text: string): Identifier;
+    export function createOptimisticUniqueName(text: string): GeneratedIdentifier {
+        const name = createIdentifier(text) as GeneratedIdentifier;
         name.autoGenerateFlags = GeneratedIdentifierFlags.Unique | GeneratedIdentifierFlags.Optimistic;
         name.autoGenerateId = nextAutoGenerateId;
         nextAutoGenerateId++;
@@ -183,7 +185,7 @@ namespace ts {
     /** Create a unique name based on the supplied text. This does not consider names injected by the transformer. */
     export function createFileLevelUniqueName(text: string): Identifier {
         const name = createOptimisticUniqueName(text);
-        name.autoGenerateFlags! |= GeneratedIdentifierFlags.FileLevel;
+        name.autoGenerateFlags |= GeneratedIdentifierFlags.FileLevel;
         return name;
     }
 
@@ -1763,9 +1765,9 @@ namespace ts {
             : node;
     }
 
-    export function createVariableDeclarationList(declarations: ReadonlyArray<VariableDeclaration>, flags?: NodeFlags) {
+    export function createVariableDeclarationList(declarations: ReadonlyArray<VariableDeclaration>, flags = NodeFlags.None) {
         const node = <VariableDeclarationList>createSynthesizedNode(SyntaxKind.VariableDeclarationList);
-        node.flags |= flags! & NodeFlags.BlockScoped;
+        node.flags |= flags & NodeFlags.BlockScoped;
         node.declarations = createNodeArray(declarations);
         return node;
     }
@@ -1947,9 +1949,9 @@ namespace ts {
             : node;
     }
 
-    export function createModuleDeclaration(decorators: ReadonlyArray<Decorator> | undefined, modifiers: ReadonlyArray<Modifier> | undefined, name: ModuleName, body: ModuleBody | undefined, flags?: NodeFlags) {
+    export function createModuleDeclaration(decorators: ReadonlyArray<Decorator> | undefined, modifiers: ReadonlyArray<Modifier> | undefined, name: ModuleName, body: ModuleBody | undefined, flags = NodeFlags.None) {
         const node = <ModuleDeclaration>createSynthesizedNode(SyntaxKind.ModuleDeclaration);
-        node.flags |= flags! & (NodeFlags.Namespace | NodeFlags.NestedNamespace | NodeFlags.GlobalAugmentation);
+        node.flags |= flags & (NodeFlags.Namespace | NodeFlags.NestedNamespace | NodeFlags.GlobalAugmentation);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
         node.name = name;
@@ -2505,7 +2507,7 @@ namespace ts {
     /* @internal */
     export function createEndOfDeclarationMarker(original: Node) {
         const node = <EndOfDeclarationMarker>createSynthesizedNode(SyntaxKind.EndOfDeclarationMarker);
-        node.emitNode = {};
+        node.emitNode = {} as EmitNode;
         node.original = original;
         return node;
     }
@@ -2517,7 +2519,7 @@ namespace ts {
     /* @internal */
     export function createMergeDeclarationMarker(original: Node) {
         const node = <MergeDeclarationMarker>createSynthesizedNode(SyntaxKind.MergeDeclarationMarker);
-        node.emitNode = {};
+        node.emitNode = {} as EmitNode;
         node.original = original;
         return node;
     }
@@ -2724,21 +2726,21 @@ namespace ts {
      * various transient transformation properties.
      */
     /* @internal */
-    export function getOrCreateEmitNode(node: Node) {
+    export function getOrCreateEmitNode(node: Node): EmitNode {
         if (!node.emitNode) {
             if (isParseTreeNode(node)) {
                 // To avoid holding onto transformation artifacts, we keep track of any
                 // parse tree node we are annotating. This allows us to clean them up after
                 // all transformations have completed.
                 if (node.kind === SyntaxKind.SourceFile) {
-                    return node.emitNode = { annotatedNodes: [node] };
+                    return node.emitNode = { annotatedNodes: [node] } as EmitNode;
                 }
 
                 const sourceFile = getSourceFileOfNode(node);
                 getOrCreateEmitNode(sourceFile).annotatedNodes!.push(node);
             }
 
-            node.emitNode = {};
+            node.emitNode = {} as EmitNode;
         }
 
         return node.emitNode;
@@ -2766,7 +2768,7 @@ namespace ts {
     /* @internal */
     export function addEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags) {
         const emitNode = getOrCreateEmitNode(node);
-        emitNode.flags = emitNode.flags! | emitFlags;
+        emitNode.flags = emitNode.flags | emitFlags;
         return node;
     }
 
@@ -2994,7 +2996,7 @@ namespace ts {
             helpers,
             startsOnNewLine,
         } = sourceEmitNode;
-        if (!destEmitNode) destEmitNode = {};
+        if (!destEmitNode) destEmitNode = {} as EmitNode;
         // We are using `.slice()` here in case `destEmitNode.leadingComments` is pushed to later.
         if (leadingComments) destEmitNode.leadingComments = addRange(leadingComments.slice(), destEmitNode.leadingComments);
         if (trailingComments) destEmitNode.trailingComments = addRange(trailingComments.slice(), destEmitNode.trailingComments);
@@ -3061,7 +3063,7 @@ namespace ts {
                     : createElementAccess(target, memberName),
                 memberName
             );
-            getOrCreateEmitNode(expression).flags! |= EmitFlags.NoNestedSourceMaps;
+            getOrCreateEmitNode(expression).flags |= EmitFlags.NoNestedSourceMaps;
             return expression;
         }
     }
@@ -3705,13 +3707,13 @@ namespace ts {
         return getName(node, allowComments, allowSourceMaps);
     }
 
-    function getName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags?: EmitFlags) {
+    function getName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags: EmitFlags = 0) {
         const nodeName = getNameOfDeclaration(node);
         if (nodeName && isIdentifier(nodeName) && !isGeneratedIdentifier(nodeName)) {
             const name = getMutableClone(nodeName);
-            emitFlags! |= getEmitFlags(nodeName);
-            if (!allowSourceMaps) emitFlags! |= EmitFlags.NoSourceMap;
-            if (!allowComments) emitFlags! |= EmitFlags.NoComments;
+            emitFlags |= getEmitFlags(nodeName);
+            if (!allowSourceMaps) emitFlags |= EmitFlags.NoSourceMap;
+            if (!allowComments) emitFlags |= EmitFlags.NoComments;
             if (emitFlags) setEmitFlags(name, emitFlags);
             return name;
         }
