@@ -491,7 +491,7 @@ namespace ts {
      * @param configFileParsingDiagnostics - error during config file parsing
      * @returns A 'Program' object.
      */
-    export function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, compilerHost?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program {
+    export function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host = createCompilerHost(options), oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program {
         let program: Program;
         let files: SourceFile[] = [];
         let commonSourceDirectory: string;
@@ -524,8 +524,6 @@ namespace ts {
         const sourceFilesFoundSearchingNodeModules = createMap<boolean>();
 
         performance.mark("beforeProgram");
-
-        const host = compilerHost || createCompilerHost(options);
 
         let skipDefaultLib = options.noLib;
         const getDefaultLibraryFileName = memoize(() => host.getDefaultLibFileName(options));
