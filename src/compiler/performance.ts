@@ -5,8 +5,8 @@ namespace ts {
     export const timestamp = typeof performance !== "undefined" && performance.now ? () => performance.now() : Date.now ? Date.now : () => +(new Date());
 }
 
-/*@internal*/
 /** Performance measurements for the compiler. */
+/*@internal*/
 namespace ts.performance {
     declare const onProfilerEvent: { (markName: string): void; profiler: boolean; };
 
