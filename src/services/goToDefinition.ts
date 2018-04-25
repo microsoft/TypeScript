@@ -43,8 +43,8 @@ namespace ts.GoToDefinition {
         // is performed at the location of property access, we would like to go to definition of the property in the short-hand
         // assignment. This case and others are handled by the following code.
         if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
-            const shorthandSymbol = typeChecker.getShorthandAssignmentValueSymbol(symbol.valueDeclaration!);
-            return shorthandSymbol ? shorthandSymbol.declarations!.map(decl => createDefinitionInfo(decl, typeChecker, shorthandSymbol, node)) : [];
+            const shorthandSymbol = typeChecker.getShorthandAssignmentValueSymbol(symbol.valueDeclaration);
+            return shorthandSymbol ? shorthandSymbol.declarations.map(decl => createDefinitionInfo(decl, typeChecker, shorthandSymbol, node)) : [];
         }
 
         // If the node is the name of a BindingElement within an ObjectBindingPattern instead of just returning the
@@ -158,7 +158,7 @@ namespace ts.GoToDefinition {
         // get the aliased symbol instead. This allows for goto def on an import e.g.
         //   import {A, B} from "mod";
         // to jump to the implementation directly.
-        if (symbol && symbol.flags & SymbolFlags.Alias && shouldSkipAlias(node, symbol.declarations![0])) {
+        if (symbol && symbol.flags & SymbolFlags.Alias && shouldSkipAlias(node, symbol.declarations[0])) {
             const aliased = checker.getAliasedSymbol(symbol);
             if (aliased.declarations) {
                 return aliased;
@@ -197,7 +197,7 @@ namespace ts.GoToDefinition {
             // Applicable only if we are in a new expression, or we are on a constructor declaration
             // and in either case the symbol has a construct signature definition, i.e. class
             if (symbol.flags & SymbolFlags.Class && (isNewExpressionTarget(node) || node.kind === SyntaxKind.ConstructorKeyword)) {
-                const cls = find(symbol.declarations!, isClassLike) || Debug.fail("Expected declaration to have at least one class-like declaration");
+                const cls = find(symbol.declarations, isClassLike) || Debug.fail("Expected declaration to have at least one class-like declaration");
                 return getSignatureDefinition(cls.members, /*selectConstructors*/ true);
             }
         }

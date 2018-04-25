@@ -441,7 +441,7 @@ namespace ts {
 
     /** Given a symbol for a module, checks that it is a shorthand ambient module. */
     export function isShorthandAmbientModuleSymbol(moduleSymbol: Symbol): boolean {
-        return isShorthandAmbientModule(moduleSymbol.valueDeclaration!);
+        return isShorthandAmbientModule(moduleSymbol.valueDeclaration);
     }
 
     function isShorthandAmbientModule(node: Node): boolean {
@@ -3451,11 +3451,11 @@ namespace ts {
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
-        return isExportDefaultSymbol(symbol) ? symbol.declarations![0].localSymbol : undefined;
+        return isExportDefaultSymbol(symbol) ? symbol.declarations[0].localSymbol : undefined;
     }
 
     function isExportDefaultSymbol(symbol: Symbol): boolean {
-        return symbol && length(symbol.declarations) > 0 && hasModifier(symbol.declarations![0], ModifierFlags.Default);
+        return symbol && length(symbol.declarations) > 0 && hasModifier(symbol.declarations[0], ModifierFlags.Default);
     }
 
     /** Return ".ts", ".d.ts", or ".tsx", if that is the extension. */
@@ -3996,7 +3996,7 @@ namespace ts {
     }
 
     export function getClassLikeDeclarationOfSymbol(symbol: Symbol): ClassLikeDeclaration | undefined {
-        return find(symbol.declarations!, isClassLike);
+        return find(symbol.declarations, isClassLike);
     }
 
     export function getObjectFlags(type: Type): ObjectFlags {

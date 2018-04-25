@@ -44,7 +44,7 @@ namespace ts.codefix {
         // so duplicates cannot occur.
         const implementedType = checker.getTypeAtLocation(implementedTypeNode) as InterfaceType;
         const implementedTypeSymbols = checker.getPropertiesOfType(implementedType);
-        const nonPrivateMembers = implementedTypeSymbols.filter(symbol => !(getModifierFlags(symbol.valueDeclaration!) & ModifierFlags.Private));
+        const nonPrivateMembers = implementedTypeSymbols.filter(symbol => !(getModifierFlags(symbol.valueDeclaration) & ModifierFlags.Private));
 
         const classType = checker.getTypeAtLocation(classDeclaration)!;
 

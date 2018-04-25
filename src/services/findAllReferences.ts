@@ -135,7 +135,7 @@ namespace ts.FindAllReferences {
 
     function getDefinitionKindAndDisplayParts(symbol: Symbol, checker: TypeChecker, node: Node): { displayParts: SymbolDisplayPart[], kind: ScriptElementKind } {
         const meaning = Core.getIntersectingMeaningFromDeclarations(node, symbol);
-        const enclosingDeclaration = firstOrUndefined(symbol.declarations!) || node;
+        const enclosingDeclaration = firstOrUndefined(symbol.declarations) || node;
         const { displayParts, symbolKind } =
             SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, enclosingDeclaration.getSourceFile(), enclosingDeclaration, enclosingDeclaration, meaning);
         return { displayParts, kind: symbolKind };
@@ -292,7 +292,7 @@ namespace ts.FindAllReferences.Core {
             }
         });
 
-        for (const decl of symbol.declarations!) {
+        for (const decl of symbol.declarations) {
             switch (decl.kind) {
                 case SyntaxKind.SourceFile:
                     // Don't include the source file itself. (This may not be ideal behavior, but awkward to include an entire file as a reference.)
@@ -590,7 +590,7 @@ namespace ts.FindAllReferences.Core {
 
     // Go to the symbol we imported from and find references for it.
     function searchForImportedSymbol(symbol: Symbol, state: State): void {
-        for (const declaration of symbol.declarations!) {
+        for (const declaration of symbol.declarations) {
             const exportingFile = declaration.getSourceFile();
             // Need to search in the file even if it's not in the search-file set, because it might export the symbol.
             getReferencesInSourceFile(exportingFile, state.createSearch(declaration, symbol, ImportExport.Import), state, state.includesSourceFile(exportingFile));
@@ -968,7 +968,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     function getReferenceForShorthandProperty({ flags, valueDeclaration }: Symbol, search: Search, state: State): void {
-        const shorthandValueSymbol = state.checker.getShorthandAssignmentValueSymbol(valueDeclaration!)!;
+        const shorthandValueSymbol = state.checker.getShorthandAssignmentValueSymbol(valueDeclaration)!;
         /*
          * Because in short-hand property assignment, an identifier which stored as name of the short-hand property assignment
          * has two meanings: property name and property value. Therefore when we do findAllReference at the position where
@@ -977,7 +977,7 @@ namespace ts.FindAllReferences.Core {
          * position of property accessing, the referenceEntry of such position will be handled in the first case.
          */
         if (!(flags & SymbolFlags.Transient) && search.includes(shorthandValueSymbol)) {
-            addReference(getNameOfDeclaration(valueDeclaration!), shorthandValueSymbol, state);
+            addReference(getNameOfDeclaration(valueDeclaration), shorthandValueSymbol, state);
         }
     }
 
@@ -1039,7 +1039,7 @@ namespace ts.FindAllReferences.Core {
      * Reference the constructor and all calls to `new this()`.
      */
     function findOwnConstructorReferences(classSymbol: Symbol, sourceFile: SourceFile, addNode: (node: Node) => void): void {
-        for (const decl of classSymbol.members!.get(InternalSymbolName.Constructor)!.declarations!) { // TODO: GH#18217
+        for (const decl of classSymbol.members!.get(InternalSymbolName.Constructor)!.declarations) {
             const ctrKeyword = findChildOfKind(decl, SyntaxKind.ConstructorKeyword, sourceFile)!;
             Debug.assert(decl.kind === SyntaxKind.Constructor && !!ctrKeyword);
             addNode(ctrKeyword);
@@ -1068,7 +1068,7 @@ namespace ts.FindAllReferences.Core {
             return;
         }
 
-        for (const decl of ctr.declarations!) {
+        for (const decl of ctr.declarations) {
             Debug.assert(decl.kind === SyntaxKind.Constructor);
             const body = (<ConstructorDeclaration>decl).body;
             if (body) {
@@ -1189,7 +1189,7 @@ namespace ts.FindAllReferences.Core {
         // Set the key so that we don't infinitely recurse
         cachedResults.set(key, false);
 
-        const inherits = symbol.declarations!.some(declaration =>
+        const inherits = symbol.declarations.some(declaration =>
             getAllSuperTypeNodes(declaration).some(typeReference => {
                 const type = checker.getTypeAtLocation(typeReference);
                 return !!type && !!type.symbol && explicitlyInheritsFrom(type.symbol, parent, cachedResults, checker);
@@ -1486,7 +1486,7 @@ namespace ts.FindAllReferences.Core {
 
     export function getReferenceEntriesForShorthandPropertyAssignment(node: Node, checker: TypeChecker, addReference: (node: Node) => void): void {
         const refSymbol = checker.getSymbolAtLocation(node)!;
-        const shorthandSymbol = checker.getShorthandAssignmentValueSymbol(refSymbol.valueDeclaration!);
+        const shorthandSymbol = checker.getShorthandAssignmentValueSymbol(refSymbol.valueDeclaration);
 
         if (shorthandSymbol) {
             for (const declaration of shorthandSymbol.getDeclarations()!) {

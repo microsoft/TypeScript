@@ -2017,8 +2017,8 @@ declare namespace ts {
     interface Symbol {
         flags: SymbolFlags;
         escapedName: __String;
-        declarations?: Declaration[];
-        valueDeclaration?: Declaration;
+        declarations: Declaration[];
+        valueDeclaration: Declaration;
         members?: SymbolTable;
         exports?: SymbolTable;
         globalExports?: SymbolTable;

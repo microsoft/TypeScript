@@ -62,7 +62,7 @@ namespace ts.FindAllReferences {
             }
 
             // Module augmentations may use this module's exports without importing it.
-            for (const decl of exportingModuleSymbol.declarations!) {
+            for (const decl of exportingModuleSymbol.declarations) {
                 if (isExternalModuleAugmentation(decl) && sourceFilesSet.has(decl.getSourceFile().fileName)) {
                     addIndirectUser(decl);
                 }
@@ -335,7 +335,7 @@ namespace ts.FindAllReferences {
         const refs: ModuleReference[] = [];
         const checker = program.getTypeChecker();
         for (const referencingFile of sourceFiles) {
-            const searchSourceFile = searchModuleSymbol.valueDeclaration!;
+            const searchSourceFile = searchModuleSymbol.valueDeclaration;
             if (searchSourceFile.kind === SyntaxKind.SourceFile) {
                 for (const ref of referencingFile.referencedFiles) {
                     if (program.getSourceFileFromReference(referencingFile, ref) === searchSourceFile) {
@@ -447,7 +447,7 @@ namespace ts.FindAllReferences {
                 if (parent.kind === SyntaxKind.PropertyAccessExpression) {
                     // When accessing an export of a JS module, there's no alias. The symbol will still be flagged as an export even though we're at the use.
                     // So check that we are at the declaration.
-                    return symbol.declarations!.some(d => d === parent) && isBinaryExpression(grandParent)
+                    return symbol.declarations.some(d => d === parent) && isBinaryExpression(grandParent)
                         ? getSpecialPropertyExport(grandParent, /*useLhsSymbol*/ false)
                         : undefined;
                 }
@@ -557,7 +557,7 @@ namespace ts.FindAllReferences {
             return Debug.assertDefined(checker.getImmediateAliasedSymbol(importedSymbol));
         }
 
-        const decl = importedSymbol.valueDeclaration!;
+        const decl = importedSymbol.valueDeclaration;
         if (isExportAssignment(decl)) { // `export = class {}`
             return Debug.assertDefined(decl.expression.symbol);
         }

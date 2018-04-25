@@ -21,7 +21,7 @@ namespace ts.codefix {
             return undefined;
         }
 
-        const ctorDeclaration = ctorSymbol.valueDeclaration!;
+        const ctorDeclaration = ctorSymbol.valueDeclaration;
 
         let precedingNode: Node | undefined;
         let newClassDeclaration: ClassDeclaration | undefined;

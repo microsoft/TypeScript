@@ -162,7 +162,7 @@ namespace ts.SymbolDisplay {
             else if (isCallExpressionTarget(location) || isNewExpressionTarget(location)) {
                 callExpressionLike = <CallExpression | NewExpression>location.parent;
             }
-            else if (location.parent && isJsxOpeningLikeElement(location.parent) && isFunctionLike(symbol.valueDeclaration!)) {
+            else if (location.parent && isJsxOpeningLikeElement(location.parent) && isFunctionLike(symbol.valueDeclaration)) {
                 callExpressionLike = location.parent;
             }
 
@@ -234,7 +234,7 @@ namespace ts.SymbolDisplay {
                 // get the signature from the declaration and write it
                 const functionDeclaration = <FunctionLike>location.parent;
                 // Use function declaration to write the signatures only if the symbol corresponding to this declaration
-                const locationIsSymbolDeclaration = find(symbol.declarations!, declaration => // TODO: GH#18217
+                const locationIsSymbolDeclaration = find(symbol.declarations, declaration =>
                     declaration === (location.kind === SyntaxKind.ConstructorKeyword ? functionDeclaration.parent : functionDeclaration));
 
                 if (locationIsSymbolDeclaration) {
@@ -362,7 +362,7 @@ namespace ts.SymbolDisplay {
         if (symbolFlags & SymbolFlags.EnumMember) {
             symbolKind = ScriptElementKind.enumMemberElement;
             addPrefixForAnyFunctionOrVar(symbol, "enum member");
-            const declaration = symbol.declarations![0];
+            const declaration = symbol.declarations[0];
             if (declaration.kind === SyntaxKind.EnumMember) {
                 const constantValue = typeChecker.getConstantValue(<EnumMember>declaration);
                 if (constantValue !== undefined) {
@@ -402,7 +402,7 @@ namespace ts.SymbolDisplay {
                 }
             }
 
-            switch (symbol.declarations![0].kind) {
+            switch (symbol.declarations[0].kind) {
                 case SyntaxKind.NamespaceExportDeclaration:
                     displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
                     displayParts.push(spacePart());
@@ -411,7 +411,7 @@ namespace ts.SymbolDisplay {
                 case SyntaxKind.ExportAssignment:
                     displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
                     displayParts.push(spacePart());
-                    displayParts.push(keywordPart((symbol.declarations![0] as ExportAssignment).isExportEquals ? SyntaxKind.EqualsToken : SyntaxKind.DefaultKeyword));
+                    displayParts.push(keywordPart((symbol.declarations[0] as ExportAssignment).isExportEquals ? SyntaxKind.EqualsToken : SyntaxKind.DefaultKeyword));
                     break;
                 case SyntaxKind.ExportSpecifier:
                     displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
@@ -503,7 +503,7 @@ namespace ts.SymbolDisplay {
                 // there documentation comments might be attached to the right hand side symbol of their declarations.
                 // The pattern of such special property access is that the parent symbol is the symbol of the file.
                 if (symbol.parent && forEach(symbol.parent.declarations, declaration => declaration.kind === SyntaxKind.SourceFile)) {
-                    for (const declaration of symbol.declarations!) {
+                    for (const declaration of symbol.declarations) {
                         if (!declaration.parent || declaration.parent.kind !== SyntaxKind.BinaryExpression) {
                             continue;
                         }

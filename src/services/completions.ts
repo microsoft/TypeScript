@@ -514,7 +514,7 @@ namespace ts.Completions {
     function getSymbolName(symbol: Symbol, origin: SymbolOriginInfo | undefined, target: ScriptTarget): string {
         return origin && origin.type === "export" && origin.isDefaultExport && symbol.escapedName === InternalSymbolName.Default
             // Name of "export default foo;" is "foo". Name of "export default 0" is the filename converted to camelCase.
-            ? firstDefined(symbol.declarations!, d => isExportAssignment(d) && isIdentifier(d.expression) ? d.expression.text : undefined) // TODO: GH#18217
+            ? firstDefined(symbol.declarations, d => isExportAssignment(d) && isIdentifier(d.expression) ? d.expression.text : undefined)
                 || codefix.moduleSymbolToValidIdentifier(origin.moduleSymbol, target)
             : symbol.name;
     }
@@ -748,7 +748,7 @@ namespace ts.Completions {
     }
 
     function isModuleSymbol(symbol: Symbol): boolean {
-        return symbol.declarations!.some(d => d.kind === SyntaxKind.SourceFile);
+        return symbol.declarations.some(d => d.kind === SyntaxKind.SourceFile);
     }
 
     function getCompletionData(
@@ -1043,7 +1043,7 @@ namespace ts.Completions {
                         }
 
                         // If the module is merged with a value, we must get the type of the class and add its propertes (for inherited static methods).
-                        if (!isTypeLocation && symbol.declarations!.some(d => d.kind !== SyntaxKind.SourceFile && d.kind !== SyntaxKind.ModuleDeclaration && d.kind !== SyntaxKind.EnumDeclaration)) {
+                        if (!isTypeLocation && symbol.declarations.some(d => d.kind !== SyntaxKind.SourceFile && d.kind !== SyntaxKind.ModuleDeclaration && d.kind !== SyntaxKind.EnumDeclaration)) {
                             addTypeProperties(typeChecker.getTypeOfSymbolAtLocation(symbol, node));
                         }
 

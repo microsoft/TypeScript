@@ -1013,7 +1013,7 @@ namespace FourSlash {
         }
 
         private verifySymbol(symbol: ts.Symbol, declarationRanges: Range[]) {
-            const declarations = symbol.declarations!;
+            const { declarations } = symbol;
             if (declarations.length !== declarationRanges.length) {
                 this.raiseError(`Expected to get ${declarationRanges.length} declarations, got ${declarations.length}`);
             }

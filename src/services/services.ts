@@ -278,7 +278,8 @@ namespace ts {
     class SymbolObject implements Symbol {
         flags: SymbolFlags;
         escapedName: __String;
-        declarations?: Declaration[];
+        declarations: Declaration[];
+        valueDeclaration: Declaration;
 
         // Undefined is used to indicate the value has not been computed. If, after computing, the
         // symbol has no doc comment, then the empty array will be returned.

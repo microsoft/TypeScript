@@ -231,7 +231,7 @@ namespace ts {
             }
 
             if (symbolFlags & SymbolFlags.Value) {
-                const valueDeclaration = symbol.valueDeclaration;
+                const { valueDeclaration } = symbol;
                 if (!valueDeclaration ||
                     (valueDeclaration.kind !== node.kind && valueDeclaration.kind === SyntaxKind.ModuleDeclaration)) {
                     // other kinds of value declarations take precedence over modules
@@ -2551,7 +2551,7 @@ namespace ts {
                 if (node.name) {
                     node.name.parent = node;
                 }
-                file.bindDiagnostics.push(createDiagnosticForNode(symbolExport.declarations![0], Diagnostics.Duplicate_identifier_0, symbolName(prototypeSymbol)));
+                file.bindDiagnostics.push(createDiagnosticForNode(symbolExport.declarations[0], Diagnostics.Duplicate_identifier_0, symbolName(prototypeSymbol)));
             }
             symbol.exports!.set(prototypeSymbol.escapedName, prototypeSymbol);
             prototypeSymbol.parent = symbol;

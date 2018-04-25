@@ -251,7 +251,7 @@ namespace ts.codefix {
         const moduleResolutionKind = getEmitModuleResolutionKind(compilerOptions);
         const addJsExtension = usesJsExtensionOnImports(sourceFile);
         const choicesForEachExportingModule = flatMap<SymbolExportInfo, NewImportInfo[]>(moduleSymbols, ({ moduleSymbol, importKind }) => {
-            const modulePathsGroups = getAllModulePaths(program, moduleSymbol.valueDeclaration!.getSourceFile()).map(moduleFileName => {
+            const modulePathsGroups = getAllModulePaths(program, moduleSymbol.valueDeclaration.getSourceFile()).map(moduleFileName => {
                 const sourceDirectory = getDirectoryPath(sourceFile.fileName);
                 const global = tryGetModuleNameFromAmbientModule(moduleSymbol)
                     || tryGetModuleNameFromTypeRoots(compilerOptions, host, getCanonicalFileName, moduleFileName, addJsExtension)
@@ -346,7 +346,7 @@ namespace ts.codefix {
     }
 
     function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol): string | undefined {
-        const decl = moduleSymbol.valueDeclaration!;
+        const decl = moduleSymbol.valueDeclaration;
         if (isModuleDeclaration(decl) && isStringLiteral(decl.name)) {
             return decl.name.text;
         }
