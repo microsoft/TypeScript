@@ -119,6 +119,12 @@ namespace ts.codefix {
     }
 
     function getCodeActionsForImport(exportInfos: ReadonlyArray<SymbolExportInfo>, context: ImportCodeFixContext): CodeFixAction[] {
+        const result: CodeFixAction[] = [];
+        getCodeActionsForImport_separateExistingAndNew(exportInfos, context, result, result);
+        return result;
+    }
+
+    function getCodeActionsForImport_separateExistingAndNew(exportInfos: ReadonlyArray<SymbolExportInfo>, context: ImportCodeFixContext, useExisting: Push<CodeFixAction>, addNew: Push<CodeFixAction>): void {
         const existingImports = flatMap(exportInfos, info =>
             getImportDeclarations(info, context.checker, context.sourceFile, context.cachedImportDeclarations));
         // It is possible that multiple import statements with the same specifier exist in the file.
@@ -133,16 +139,18 @@ namespace ts.codefix {
         //     1. change "member3" to "ns.member3"
         //     2. add "member3" to the second import statement's import list
         // and it is up to the user to decide which one fits best.
-        const useExistingImportActions = !context.symbolToken || !isIdentifier(context.symbolToken) ? emptyArray : mapDefined(existingImports, ({ declaration }) => {
-            const namespace = getNamespaceImportName(declaration);
-            if (namespace) {
-                const moduleSymbol = context.checker.getAliasedSymbol(context.checker.getSymbolAtLocation(namespace));
-                if (moduleSymbol && moduleSymbol.exports.has(escapeLeadingUnderscores(context.symbolName))) {
-                    return getCodeActionForUseExistingNamespaceImport(namespace.text, context, context.symbolToken as Identifier);
+        if (context.symbolToken && isIdentifier(context.symbolToken)) {
+            for (const { declaration } of existingImports) {
+                const namespace = getNamespaceImportName(declaration);
+                if (namespace) {
+                    const moduleSymbol = context.checker.getAliasedSymbol(context.checker.getSymbolAtLocation(namespace));
+                    if (moduleSymbol && moduleSymbol.exports.has(escapeLeadingUnderscores(context.symbolName))) {
+                        useExisting.push(getCodeActionForUseExistingNamespaceImport(namespace.text, context, context.symbolToken));
+                    }
                 }
             }
-        });
-        return [...useExistingImportActions, ...getCodeActionsForAddImport(exportInfos, context, existingImports)];
+        }
+        getCodeActionsForAddImport(exportInfos, context, existingImports, useExisting, addNew);
     }
 
     function getNamespaceImportName(declaration: AnyImportSyntax): Identifier | undefined {
@@ -551,7 +559,9 @@ namespace ts.codefix {
         exportInfos: ReadonlyArray<SymbolExportInfo>,
         ctx: ImportCodeFixContext,
         existingImports: ReadonlyArray<ExistingImportInfo>,
-    ): CodeFixAction[] {
+        useExisting: Push<CodeFixAction>,
+        addNew: Push<CodeFixAction>,
+    ): void {
         const fromExistingImport = firstDefined(existingImports, ({ declaration, importKind }) => {
             if (declaration.kind === SyntaxKind.ImportDeclaration && declaration.importClause) {
                 const changes = tryUpdateExistingImport(ctx, isImportClause(declaration.importClause) && declaration.importClause || undefined, importKind);
@@ -562,14 +572,17 @@ namespace ts.codefix {
             }
         });
         if (fromExistingImport) {
-            return [fromExistingImport];
+            useExisting.push(fromExistingImport);
+            return;
         }
 
         const existingDeclaration = firstDefined(existingImports, newImportInfoFromExistingSpecifier);
         const newImportInfos = existingDeclaration
             ? [existingDeclaration]
             : getNewImportInfos(ctx.program, ctx.sourceFile, exportInfos, ctx.compilerOptions, ctx.getCanonicalFileName, ctx.host, ctx.preferences);
-        return newImportInfos.map(info => getCodeActionForNewImport(ctx, info));
+        for (const info of newImportInfos) {
+            addNew.push(getCodeActionForNewImport(ctx, info));
+        }
     }
 
     function newImportInfoFromExistingSpecifier({ declaration, importKind }: ExistingImportInfo): NewImportInfo | undefined {
@@ -760,7 +773,12 @@ namespace ts.codefix {
             }
         });
 
-        return arrayFrom(flatMapIterator(originalSymbolToExportInfos.values(), exportInfos => getCodeActionsForImport(exportInfos, convertToImportCodeFixContext(context, symbolToken, symbolName))));
+        const addToExistingDeclaration: CodeFixAction[] = [];
+        const addNewDeclaration: CodeFixAction[] = [];
+        originalSymbolToExportInfos.forEach(exportInfos => {
+            getCodeActionsForImport_separateExistingAndNew(exportInfos, convertToImportCodeFixContext(context, symbolToken, symbolName), addToExistingDeclaration, addNewDeclaration);
+        });
+        return [...addToExistingDeclaration, ...addNewDeclaration];
     }
 
     function checkSymbolHasMeaning({ declarations }: Symbol, meaning: SemanticMeaning): boolean {
