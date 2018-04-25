@@ -10,19 +10,22 @@ namespace ts {
         `;
         it("can cancel signature help mid-request", () => {
             verifyOperationCancelledAfter(file, 4, service => // Two calls are top-level in services, one is the root type, and the second should be for the parameter type
-                service.getSignatureHelpItems("file.ts", file.lastIndexOf("f"))
+                service.getSignatureHelpItems("file.ts", file.lastIndexOf("f")),
+                r => assert.exists(r.items[0])
             );
         });
 
         it("can cancel find all references mid-request", () => {
             verifyOperationCancelledAfter(file, 3, service => // Two calls are top-level in services, one is the root type
-                service.findReferences("file.ts", file.lastIndexOf("o"))
+                service.findReferences("file.ts", file.lastIndexOf("o")),
+                r => assert.exists(r[0].definition)
             );
         });
 
         it("can cancel quick info mid-request", () => {
             verifyOperationCancelledAfter(file, 1, service => // The LS doesn't do any top-level checks on the token for quickinfo, so the first check is within the checker
-                service.getQuickInfoAtPosition("file.ts", file.lastIndexOf("o"))
+                service.getQuickInfoAtPosition("file.ts", file.lastIndexOf("o")),
+                r => assert.exists(r.displayParts)
             );
         });
 
@@ -49,23 +52,30 @@ namespace ts {
                 placeOpenBraceOnNewLineForControlBlocks: false,
             };
             verifyOperationCancelledAfter(file, 1, service => // The LS doesn't do any top-level checks on the token for completion entry details, so the first check is within the checker
-                service.getCompletionEntryDetails("file.ts", file.lastIndexOf("f"), "foo", options, /*content*/ undefined, {})
+                service.getCompletionEntryDetails("file.ts", file.lastIndexOf("f"), "foo", options, /*content*/ undefined, {}),
+                r => assert.exists(r.displayParts)
             );
         });
     });
 
-    function verifyOperationCancelledAfter(content: string, cancelAfter: number, operation: (service: LanguageService) => void) {
+    function verifyOperationCancelledAfter<T>(content: string, cancelAfter: number, operation: (service: LanguageService) => T, validator: (arg: T) => void) {
         let checks = 0;
         const token: HostCancellationToken = {
             isCancellationRequested() {
                 checks++;
-                return checks >= cancelAfter;
+                const result = checks >= cancelAfter;
+                if (result) {
+                    checks = -Infinity; // Cancel just once, then disable cancellation, effectively
+                }
+                return result;
             }
         };
         const adapter = new Harness.LanguageService.NativeLanguageServiceAdapter(token);
         const host = adapter.getHost();
         host.addScript("file.ts", content, /*isRootFile*/ true);
-        assertCancelled(() => operation(adapter.getLanguageService()));
+        const service = adapter.getLanguageService();
+        assertCancelled(() => operation(service));
+        validator(operation(service));
     }
 
     /**
