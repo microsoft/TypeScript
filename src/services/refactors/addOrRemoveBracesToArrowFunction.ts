@@ -46,12 +46,14 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         let body: ConciseBody;
         if (actionName === addBracesActionName) {
             const returnStatement = createReturn(expression);
-            body = createBlock([returnStatement]);
-            copyComments(expression, returnStatement, file, SyntaxKind.SingleLineCommentTrivia, true);
+            body = createBlock([returnStatement], /* multiLine */ true);
+            suppressLeadingAndTrailingTrivia(expression);
+            copyComments(expression, returnStatement, file, SyntaxKind.MultiLineCommentTrivia, true, true);
         }
         else if (actionName === removeBracesActionName) {
             const returnStatement = <ReturnStatement>expression.parent;
             body = needsParentheses(expression) ? createParen(expression) : expression;
+            suppressLeadingAndTrailingTrivia(returnStatement);
             copyComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, false);
         }
         else {
@@ -99,7 +101,6 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         else if (func.body.statements.length === 1) {
             const firstStatement = first(func.body.statements);
             if (isReturnStatement(firstStatement)) {
-
                 return {
                     func,
                     addBraces: false,

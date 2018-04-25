@@ -1,6 +1,8 @@
 /// <reference path='fourslash.ts' />
 
-//// const foo = /*a*/a/*b*/ => 1;
+//// const foo = /*a*/a/*b*/ =>
+////     /* expression comment */
+////     a + 1
 
 goTo.select("a", "b");
 edit.applyRefactor({
@@ -8,6 +10,7 @@ edit.applyRefactor({
     actionName: "Add braces to arrow function",
     actionDescription: "Add braces to arrow function",
     newContent: `const foo = a => {
-    return 1;
-};`,
+    /* expression comment */
+    return a + 1;
+}`,
 });

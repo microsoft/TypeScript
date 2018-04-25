@@ -7,5 +7,7 @@ edit.applyRefactor({
     refactorName: "Add or remove braces in an arrow function",
     actionName: "Add braces to arrow function",
     actionDescription: "Add braces to arrow function",
-    newContent: `const foo = a => { return (1, 2, 3); };`,
+    newContent: `const foo = a => {
+    return (1, 2, 3);
+};`,
 });

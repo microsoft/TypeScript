@@ -1643,7 +1643,7 @@ namespace ts {
         return lastPos;
     }
 
-    export function copyComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, explicitKind?: CommentKind, explicitHtnl?: boolean) {
+    export function copyComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, explicitKind?: CommentKind, explicitHtnl?: boolean, inline?: boolean) {
         forEachLeadingCommentRange(sourceFile.text, sourceNode.pos, (pos, end, kind, htnl) => {
             if (kind === SyntaxKind.MultiLineCommentTrivia) {
                 // Remove leading /*
@@ -1655,7 +1655,7 @@ namespace ts {
                 // Remove leading //
                 pos += 2;
             }
-            addSyntheticLeadingComment(targetNode, explicitKind || kind, sourceFile.text.slice(pos, end), explicitHtnl !== undefined ?  explicitHtnl : htnl);
-        });
+            addSyntheticLeadingComment(targetNode, explicitKind || kind, sourceFile.text.slice(pos, end), explicitHtnl !== undefined ? explicitHtnl : htnl);
+        }, undefined, inline)
     }
 }
