@@ -760,8 +760,8 @@ namespace ts {
         name: ComputedPropertyName;
     }
 
-    /* @internal */
     // A declaration that supports late-binding (used in checker)
+    /* @internal */
     export interface LateBoundDeclaration extends DynamicNamedDeclaration {
         name: LateBoundName;
     }
@@ -775,8 +775,8 @@ namespace ts {
         expression: Expression;
     }
 
-    /* @internal */
     // A name that supports late-binding (used in checker)
+    /* @internal */
     export interface LateBoundName extends ComputedPropertyName {
         expression: EntityNameExpression;
     }
@@ -3781,8 +3781,8 @@ namespace ts {
 
     export type StructuredType = ObjectType | UnionType | IntersectionType;
 
-    /* @internal */
     // An instantiated anonymous type has a target and a mapper
+    /* @internal */
     export interface AnonymousType extends ObjectType {
         target?: AnonymousType;  // Instantiation target
         mapper?: TypeMapper;     // Instantiation mapper
@@ -3808,8 +3808,8 @@ namespace ts {
         mappedType: MappedType;
     }
 
-    /* @internal */
     // Resolved object, union, or intersection type
+    /* @internal */
     export interface ResolvedType extends ObjectType, UnionOrIntersectionType {
         members: SymbolTable;              // Properties by name
         properties: Symbol[];              // Properties

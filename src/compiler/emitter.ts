@@ -1,7 +1,6 @@
 namespace ts {
     const brackets = createBracketsMap();
 
-    /*@internal*/
     /**
      * Iterates over the source files that are expected to have an emit output.
      *
@@ -11,6 +10,7 @@ namespace ts {
      *   If an array, the full list of source files to emit.
      *   Else, calls `getSourceFilesToEmit` with the (optional) target source file to determine the list of source files to emit.
      */
+    /*@internal*/
     export function forEachEmittedFile<T>(
         host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) => T,
         sourceFilesOrTargetSourceFile?: ReadonlyArray<SourceFile> | SourceFile,
@@ -80,8 +80,8 @@ namespace ts {
         return Extension.Js;
     }
 
-    /*@internal*/
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
+    /*@internal*/
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean, transformers?: TransformerFactory<SourceFile>[]): EmitResult {
         const compilerOptions = host.getCompilerOptions();
         const sourceMapDataList: SourceMapData[] = (compilerOptions.sourceMap || compilerOptions.inlineSourceMap || getAreDeclarationMapsEnabled(compilerOptions)) ? [] : undefined;
