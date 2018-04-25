@@ -2720,7 +2720,7 @@ namespace ts {
 
         function parseLiteralTypeNode(negative?: boolean): LiteralTypeNode {
             const node = createNode(SyntaxKind.LiteralType) as LiteralTypeNode;
-            let unaryMinusExpression: PrefixUnaryExpression | undefined;
+            let unaryMinusExpression!: PrefixUnaryExpression;
             if (negative) {
                 unaryMinusExpression = createNode(SyntaxKind.PrefixUnaryExpression) as PrefixUnaryExpression;
                 unaryMinusExpression.operator = SyntaxKind.MinusToken;
@@ -2730,9 +2730,9 @@ namespace ts {
                 ? parseTokenNode<BooleanLiteral>()
                 : parseLiteralLikeNode(token()) as LiteralExpression;
             if (negative) {
-                unaryMinusExpression!.operand = expression;
-                finishNode(unaryMinusExpression!);
-                expression = unaryMinusExpression!;
+                unaryMinusExpression.operand = expression;
+                finishNode(unaryMinusExpression);
+                expression = unaryMinusExpression;
             }
             node.literal = expression;
             return finishNode(node);
@@ -4802,7 +4802,7 @@ namespace ts {
             const awaitToken = parseOptionalToken(SyntaxKind.AwaitKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
 
-            let initializer: VariableDeclarationList | Expression | undefined;
+            let initializer!: VariableDeclarationList | Expression;
             if (token() !== SyntaxKind.SemicolonToken) {
                 if (token() === SyntaxKind.VarKeyword || token() === SyntaxKind.LetKeyword || token() === SyntaxKind.ConstKeyword) {
                     initializer = parseVariableDeclarationList(/*inForStatementInitializer*/ true);
@@ -4815,14 +4815,14 @@ namespace ts {
             if (awaitToken ? parseExpected(SyntaxKind.OfKeyword) : parseOptional(SyntaxKind.OfKeyword)) {
                 const forOfStatement = <ForOfStatement>createNode(SyntaxKind.ForOfStatement, pos);
                 forOfStatement.awaitModifier = awaitToken;
-                forOfStatement.initializer = initializer!;
+                forOfStatement.initializer = initializer;
                 forOfStatement.expression = allowInAnd(parseAssignmentExpressionOrHigher);
                 parseExpected(SyntaxKind.CloseParenToken);
                 forOrForInOrForOfStatement = forOfStatement;
             }
             else if (parseOptional(SyntaxKind.InKeyword)) {
                 const forInStatement = <ForInStatement>createNode(SyntaxKind.ForInStatement, pos);
-                forInStatement.initializer = initializer!;
+                forInStatement.initializer = initializer;
                 forInStatement.expression = allowInAnd(parseExpression);
                 parseExpected(SyntaxKind.CloseParenToken);
                 forOrForInOrForOfStatement = forInStatement;
