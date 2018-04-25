@@ -3069,7 +3069,7 @@ namespace ts {
                     receiver,
                     visitNode(property.name, visitor, isPropertyName)
                 ),
-                visitNode(property.initializer!, visitor, isExpression)
+                visitNode(property.initializer, visitor, isExpression)
             );
             setTextRange(expression, property);
             if (startsOnNewLine) {

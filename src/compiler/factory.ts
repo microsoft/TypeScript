@@ -3576,7 +3576,7 @@ namespace ts {
                 setTextRange(
                     createAssignment(
                         createMemberAccessForPropertyName(receiver, property.name, /*location*/ property.name),
-                        property.initializer! // TODO: GH#18217
+                        property.initializer
                     ),
                     property
                 ),
@@ -4529,7 +4529,7 @@ namespace ts {
             // `1` in `({ a: b = 1 } = ...)`
             // `1` in `({ a: {b} = 1 } = ...)`
             // `1` in `({ a: [b] = 1 } = ...)`
-            const initializer = bindingElement.initializer!; // TODO: GH#18217
+            const initializer = bindingElement.initializer;
             return isAssignmentExpression(initializer, /*excludeCompoundAssignment*/ true)
                 ? initializer.right
                 : undefined;

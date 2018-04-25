@@ -2291,7 +2291,7 @@ namespace ts {
             let needCompilerDiagnostic = true;
             const pathsSyntax = getOptionPathsSyntax();
             for (const pathProp of pathsSyntax) {
-                if (isObjectLiteralExpression(pathProp.initializer!)) { // TODO: GH#18217
+                if (isObjectLiteralExpression(pathProp.initializer)) {
                     for (const keyProps of getPropertyAssignment(pathProp.initializer as ObjectLiteralExpression, key)) {
                         const initializer = keyProps.initializer!;
                         if (isArrayLiteralExpression(initializer) && initializer.elements.length > valueIndex) {
@@ -2311,7 +2311,7 @@ namespace ts {
             let needCompilerDiagnostic = true;
             const pathsSyntax = getOptionPathsSyntax();
             for (const pathProp of pathsSyntax) {
-                if (isObjectLiteralExpression(pathProp.initializer!) && // TODO: GH#18217
+                if (isObjectLiteralExpression(pathProp.initializer) &&
                     createOptionDiagnosticInObjectLiteralSyntax(
                         pathProp.initializer as ObjectLiteralExpression, onKey, key, /*key2*/ undefined,
                         message, arg0)) {
@@ -2354,7 +2354,7 @@ namespace ts {
                 _compilerOptionsObjectLiteralSyntax = null; // tslint:disable-line:no-null-keyword
                 if (options.configFile && options.configFile.jsonObject) {
                     for (const prop of getPropertyAssignment(options.configFile.jsonObject, "compilerOptions")) {
-                        if (isObjectLiteralExpression(prop.initializer!)) { // TODO: GH#18217
+                        if (isObjectLiteralExpression(prop.initializer)) {
                             _compilerOptionsObjectLiteralSyntax = prop.initializer as ObjectLiteralExpression;
                             break;
                         }
@@ -2367,7 +2367,7 @@ namespace ts {
         function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage, arg0: string | number, arg1?: string | number, arg2?: string | number): boolean {
             const props = getPropertyAssignment(objectLiteral, key1, key2);
             for (const prop of props) {
-                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, onKey ? prop.name : prop.initializer!, message, arg0, arg1, arg2));
+                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, onKey ? prop.name : prop.initializer, message, arg0, arg1, arg2));
             }
             return !!props.length;
         }

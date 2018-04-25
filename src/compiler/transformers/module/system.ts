@@ -1540,7 +1540,7 @@ namespace ts {
                 return hasExportedReferenceInDestructuringTarget(node.name);
             }
             else if (isPropertyAssignment(node)) {
-                return hasExportedReferenceInDestructuringTarget(node.initializer!);
+                return hasExportedReferenceInDestructuringTarget(node.initializer);
             }
             else if (isIdentifier(node)) {
                 const container = resolver.getReferencedExportContainer(node);

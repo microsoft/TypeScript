@@ -9479,7 +9479,7 @@ namespace ts {
                     return (<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken &&
                         (isContextSensitive((<BinaryExpression>node).left) || isContextSensitive((<BinaryExpression>node).right));
                 case SyntaxKind.PropertyAssignment:
-                    return isContextSensitive((<PropertyAssignment>node).initializer!);
+                    return isContextSensitive((<PropertyAssignment>node).initializer);
                 case SyntaxKind.ParenthesizedExpression:
                     return isContextSensitive((<ParenthesizedExpression>node).expression);
                 case SyntaxKind.JsxAttributes:
@@ -14957,7 +14957,7 @@ namespace ts {
                 if (!prop.symbol) continue;
                 if (prop.kind !== SyntaxKind.PropertyAssignment) continue;
                 if (isDiscriminantProperty(contextualType, prop.symbol!.escapedName)) {
-                    const discriminatingType = getTypeOfNode(prop.initializer!)!; // TODO: GH#18217
+                    const discriminatingType = getTypeOfNode(prop.initializer)!; // TODO: GH#18217
                     for (const type of (contextualType as UnionType).types) {
                         const targetType = getTypeOfPropertyOfType(type, prop.symbol!.escapedName);
                         if (targetType && checkTypeAssignableTo(discriminatingType, targetType, /*errorNode*/ undefined)) {
@@ -15502,7 +15502,7 @@ namespace ts {
                         // If object literal is an assignment pattern and if the assignment pattern specifies a default value
                         // for the property, make the property optional.
                         const isOptional =
-                            (memberDecl.kind === SyntaxKind.PropertyAssignment && hasDefaultValue(memberDecl.initializer!)) ||
+                            (memberDecl.kind === SyntaxKind.PropertyAssignment && hasDefaultValue(memberDecl.initializer)) ||
                             (memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment && memberDecl.objectAssignmentInitializer);
                         if (isOptional) {
                             prop.flags |= SymbolFlags.Optional;
@@ -19576,7 +19576,7 @@ namespace ts {
                     }
                     else {
                         // non-shorthand property assignments should always have initializers
-                        return checkDestructuringAssignment(property.initializer!, type);
+                        return checkDestructuringAssignment(property.initializer, type);
                     }
                 }
                 else {
@@ -20197,7 +20197,7 @@ namespace ts {
                 checkComputedPropertyName(node.name);
             }
 
-            return checkExpressionForMutableLocation(node.initializer!, checkMode);
+            return checkExpressionForMutableLocation(node.initializer, checkMode);
         }
 
         function checkObjectLiteralMethod(node: MethodDeclaration, checkMode?: CheckMode): Type {

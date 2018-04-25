@@ -97,7 +97,7 @@ namespace ts {
         function substitutePropertyAssignment(node: PropertyAssignment): PropertyAssignment {
             const literalName = isIdentifier(node.name) && trySubstituteReservedName(node.name);
             if (literalName) {
-                return updatePropertyAssignment(node, literalName, node.initializer!);
+                return updatePropertyAssignment(node, literalName, node.initializer);
             }
             return node;
         }

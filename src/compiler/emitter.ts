@@ -2420,7 +2420,7 @@ namespace ts {
             //          }
             // "comment1" is not considered to be leading comment for node.initializer
             // but rather a trailing comment on the previous node.
-            const initializer = node.initializer!;
+            const initializer = node.initializer;
             if (emitTrailingCommentsOfPosition && (getEmitFlags(initializer) & EmitFlags.NoLeadingComments) === 0) {
                 const commentRange = getCommentRange(initializer);
                 emitTrailingCommentsOfPosition(commentRange.pos);

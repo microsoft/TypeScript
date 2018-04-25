@@ -887,7 +887,7 @@ namespace ts {
             case SyntaxKind.PropertyAssignment:
                 return updatePropertyAssignment(<PropertyAssignment>node,
                     visitNode((<PropertyAssignment>node).name, visitor, isPropertyName),
-                    visitNode((<PropertyAssignment>node).initializer!, visitor, isExpression));
+                    visitNode((<PropertyAssignment>node).initializer, visitor, isExpression));
 
             case SyntaxKind.ShorthandPropertyAssignment:
                 return updateShorthandPropertyAssignment(<ShorthandPropertyAssignment>node,

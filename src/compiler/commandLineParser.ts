@@ -1103,7 +1103,7 @@ namespace ts {
                 if (extraKeyDiagnosticMessage && !option) {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.name, extraKeyDiagnosticMessage, keyText));
                 }
-                const value = convertPropertyValueToJson(element.initializer!, option); // TODO: GH#18217
+                const value = convertPropertyValueToJson(element.initializer, option);
                 if (typeof keyText !== "undefined") {
                     result[keyText] = value;
                     // Notify key value set, if user asked for it
@@ -1120,11 +1120,11 @@ namespace ts {
                         else if (knownOptions === knownRootOptions) {
                             if (isValidOptionValue) {
                                 // Notify about the valid root key value being set
-                                jsonConversionNotifier.onSetValidOptionKeyValueInRoot(keyText, element.name, value, element.initializer!);
+                                jsonConversionNotifier.onSetValidOptionKeyValueInRoot(keyText, element.name, value, element.initializer);
                             }
                             else if (!option) {
                                 // Notify about the unknown root key value being set
-                                jsonConversionNotifier.onSetUnknownOptionKeyValueInRoot(keyText, element.name, value, element.initializer!);
+                                jsonConversionNotifier.onSetUnknownOptionKeyValueInRoot(keyText, element.name, value, element.initializer);
                             }
                         }
                     }
@@ -2116,7 +2116,7 @@ namespace ts {
         function createDiagnostic(message: DiagnosticMessage, spec: string): Diagnostic {
             if (jsonSourceFile && jsonSourceFile.jsonObject) {
                 for (const property of getPropertyAssignment(jsonSourceFile.jsonObject, specKey)) {
-                    const initializer = property.initializer!;
+                    const initializer = property.initializer;
                     if (isArrayLiteralExpression(initializer)) {
                         for (const element of initializer.elements) {
                             if (isStringLiteral(element) && element.text === spec) {
