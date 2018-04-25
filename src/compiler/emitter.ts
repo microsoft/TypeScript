@@ -3121,17 +3121,17 @@ namespace ts {
             }
         }
 
-        function synthesizedNodeStartsOnNewLine(node: Node, format?: ListFormat) {
+        function synthesizedNodeStartsOnNewLine(node: Node, format: ListFormat) {
             if (nodeIsSynthesized(node)) {
                 const startsOnNewLine = getStartsOnNewLine(node);
                 if (startsOnNewLine === undefined) {
-                    return (format! & ListFormat.PreferNewLine) !== 0;
+                    return (format & ListFormat.PreferNewLine) !== 0;
                 }
 
                 return startsOnNewLine;
             }
 
-            return (format! & ListFormat.PreferNewLine) !== 0;
+            return (format & ListFormat.PreferNewLine) !== 0;
         }
 
         function needsIndentation(parent: Node, node1: Node, node2: Node): boolean {
