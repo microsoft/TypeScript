@@ -536,7 +536,7 @@ declare namespace ts {
         name?: PropertyName;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         parameters: NodeArray<ParameterDeclaration>;
-        type: TypeNode | undefined;
+        type?: TypeNode;
     }
     type SignatureDeclaration = CallSignatureDeclaration | ConstructSignatureDeclaration | MethodSignature | IndexSignatureDeclaration | FunctionTypeNode | ConstructorTypeNode | JSDocFunctionType | FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | AccessorDeclaration | FunctionExpression | ArrowFunction;
     interface CallSignatureDeclaration extends SignatureDeclarationBase, TypeElement {
@@ -602,7 +602,7 @@ declare namespace ts {
         kind: SyntaxKind.PropertyAssignment;
         name: PropertyName;
         questionToken?: QuestionToken;
-        initializer: Expression | undefined;
+        initializer: Expression;
     }
     interface ShorthandPropertyAssignment extends ObjectLiteralElement, JSDocContainer {
         parent: ObjectLiteralExpression;
@@ -1019,7 +1019,7 @@ declare namespace ts {
     interface ElementAccessExpression extends MemberExpression {
         kind: SyntaxKind.ElementAccessExpression;
         expression: LeftHandSideExpression;
-        argumentExpression?: Expression;
+        argumentExpression: Expression;
     }
     interface SuperElementAccessExpression extends ElementAccessExpression {
         expression: SuperExpression;
@@ -1262,7 +1262,7 @@ declare namespace ts {
     }
     interface ThrowStatement extends Statement {
         kind: SyntaxKind.ThrowStatement;
-        expression: Expression | undefined;
+        expression?: Expression;
     }
     interface TryStatement extends Statement {
         kind: SyntaxKind.TryStatement;
@@ -1349,7 +1349,7 @@ declare namespace ts {
     type JSDocNamespaceBody = Identifier | JSDocNamespaceDeclaration;
     interface JSDocNamespaceDeclaration extends ModuleDeclaration {
         name: Identifier;
-        body: JSDocNamespaceBody | undefined;
+        body?: JSDocNamespaceBody;
     }
     interface ModuleBlock extends Node, Statement {
         kind: SyntaxKind.ModuleBlock;
@@ -1490,14 +1490,14 @@ declare namespace ts {
     interface JSDoc extends Node {
         kind: SyntaxKind.JSDocComment;
         parent: HasJSDoc;
-        tags: NodeArray<JSDocTag> | undefined;
-        comment: string | undefined;
+        tags?: NodeArray<JSDocTag>;
+        comment?: string;
     }
     interface JSDocTag extends Node {
         parent: JSDoc | JSDocTypeLiteral;
         atToken: AtToken;
         tagName: Identifier;
-        comment: string | undefined;
+        comment?: string;
     }
     interface JSDocUnknownTag extends JSDocTag {
         kind: SyntaxKind.JSDocTag;
@@ -1521,11 +1521,11 @@ declare namespace ts {
     }
     interface JSDocReturnTag extends JSDocTag {
         kind: SyntaxKind.JSDocReturnTag;
-        typeExpression: JSDocTypeExpression | undefined;
+        typeExpression?: JSDocTypeExpression;
     }
     interface JSDocTypeTag extends JSDocTag {
         kind: SyntaxKind.JSDocTypeTag;
-        typeExpression: JSDocTypeExpression | undefined;
+        typeExpression?: JSDocTypeExpression;
     }
     interface JSDocTypedefTag extends JSDocTag, NamedDeclaration {
         parent: JSDoc;
@@ -1617,7 +1617,7 @@ declare namespace ts {
     }
     interface AmdDependency {
         path: string;
-        name: string | undefined;
+        name?: string;
     }
     interface SourceFile extends Declaration {
         kind: SyntaxKind.SourceFile;
@@ -1626,7 +1626,7 @@ declare namespace ts {
         fileName: string;
         text: string;
         amdDependencies: ReadonlyArray<AmdDependency>;
-        moduleName: string | undefined;
+        moduleName?: string;
         referencedFiles: ReadonlyArray<FileReference>;
         typeReferenceDirectives: ReadonlyArray<FileReference>;
         languageVariant: LanguageVariant;
@@ -1748,7 +1748,7 @@ declare namespace ts {
         emitSkipped: boolean;
         /** Contains declaration emit diagnostics */
         diagnostics: ReadonlyArray<Diagnostic>;
-        emittedFiles: string[];
+        emittedFiles?: string[];
     }
     interface TypeChecker {
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
@@ -2172,8 +2172,8 @@ declare namespace ts {
         declaredProperties: Symbol[];
         declaredCallSignatures: Signature[];
         declaredConstructSignatures: Signature[];
-        declaredStringIndexInfo: IndexInfo | undefined;
-        declaredNumberIndexInfo: IndexInfo | undefined;
+        declaredStringIndexInfo?: IndexInfo;
+        declaredNumberIndexInfo?: IndexInfo;
     }
     /**
      * Type references (ObjectFlags.Reference). When a class or interface has type parameters or
@@ -2223,11 +2223,11 @@ declare namespace ts {
         trueType: Type;
         falseType: Type;
         isDistributive: boolean;
-        inferTypeParameters: TypeParameter[] | undefined;
+        inferTypeParameters?: TypeParameter[];
         outerTypeParameters?: TypeParameter[];
         instantiations?: Map<Type>;
-        aliasSymbol: Symbol | undefined;
-        aliasTypeArguments: Type[] | undefined;
+        aliasSymbol?: Symbol;
+        aliasTypeArguments?: Type[];
     }
     interface ConditionalType extends InstantiableType {
         root: ConditionalRoot;
@@ -3523,7 +3523,7 @@ declare namespace ts {
     function updateObjectLiteral(node: ObjectLiteralExpression, properties: ReadonlyArray<ObjectLiteralElementLike>): ObjectLiteralExpression;
     function createPropertyAccess(expression: Expression, name: string | Identifier | undefined): PropertyAccessExpression;
     function updatePropertyAccess(node: PropertyAccessExpression, expression: Expression, name: Identifier): PropertyAccessExpression;
-    function createElementAccess(expression: Expression, index: number | Expression | undefined): ElementAccessExpression;
+    function createElementAccess(expression: Expression, index: number | Expression): ElementAccessExpression;
     function updateElementAccess(node: ElementAccessExpression, expression: Expression, argumentExpression: Expression): ElementAccessExpression;
     function createCall(expression: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<Expression> | undefined): CallExpression;
     function updateCall(node: CallExpression, expression: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<Expression>): CallExpression;
@@ -3931,7 +3931,7 @@ declare namespace ts {
      * @param configFileParsingDiagnostics - error during config file parsing
      * @returns A 'Program' object.
      */
-    function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program;
+    function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, compilerHost?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program;
 }
 declare namespace ts {
     interface EmitOutput {
@@ -4342,7 +4342,7 @@ declare namespace ts {
         referencedFiles: FileReference[];
         typeReferenceDirectives: FileReference[];
         importedFiles: FileReference[];
-        ambientExternalModules: string[] | undefined;
+        ambientExternalModules?: string[];
         isLibFile: boolean;
     }
     interface HostCancellationToken {
@@ -4554,7 +4554,7 @@ declare namespace ts {
     }
     interface CombinedCodeActions {
         changes: ReadonlyArray<FileTextChanges>;
-        commands: ReadonlyArray<CodeActionCommand> | undefined;
+        commands?: ReadonlyArray<CodeActionCommand>;
     }
     type CodeActionCommand = InstallPackageAction;
     interface InstallPackageAction {
@@ -4604,8 +4604,8 @@ declare namespace ts {
      */
     interface RefactorEditInfo {
         edits: FileTextChanges[];
-        renameFilename: string | undefined;
-        renameLocation: number | undefined;
+        renameFilename?: string;
+        renameLocation?: number;
         commands?: CodeActionCommand[];
     }
     interface TextInsertion {
@@ -4722,7 +4722,7 @@ declare namespace ts {
         containerName: string;
     }
     interface DefinitionInfoAndBoundSpan {
-        definitions: ReadonlyArray<DefinitionInfo> | undefined;
+        definitions?: ReadonlyArray<DefinitionInfo>;
         textSpan: TextSpan;
     }
     interface ReferencedSymbolDefinitionInfo extends DefinitionInfo {
@@ -4768,13 +4768,13 @@ declare namespace ts {
         kind: ScriptElementKind;
         kindModifiers: string;
         textSpan: TextSpan;
-        displayParts: SymbolDisplayPart[] | undefined;
-        documentation: SymbolDisplayPart[] | undefined;
-        tags: JSDocTagInfo[] | undefined;
+        displayParts?: SymbolDisplayPart[];
+        documentation?: SymbolDisplayPart[];
+        tags?: JSDocTagInfo[];
     }
     interface RenameInfo {
         canRename: boolean;
-        localizedErrorMessage: string | undefined;
+        localizedErrorMessage?: string;
         displayName: string;
         fullDisplayName: string;
         kind: ScriptElementKind;
@@ -4826,7 +4826,7 @@ declare namespace ts {
     interface CompletionEntry {
         name: string;
         kind: ScriptElementKind;
-        kindModifiers: string | undefined;
+        kindModifiers?: string;
         sortText: string;
         insertText?: string;
         /**
@@ -4844,8 +4844,8 @@ declare namespace ts {
         kind: ScriptElementKind;
         kindModifiers: string;
         displayParts: SymbolDisplayPart[];
-        documentation: SymbolDisplayPart[] | undefined;
-        tags: JSDocTagInfo[] | undefined;
+        documentation?: SymbolDisplayPart[];
+        tags?: JSDocTagInfo[];
         codeActions?: CodeAction[];
         source?: SymbolDisplayPart[];
     }
@@ -6717,7 +6717,7 @@ declare namespace ts.server.protocol {
     }
     interface CompletionEntryIdentifier {
         name: string;
-        source: string | undefined;
+        source?: string;
     }
     /**
      * Completion entry details request; value of command field is
@@ -6814,11 +6814,11 @@ declare namespace ts.server.protocol {
         /**
          * Documentation strings for the symbol.
          */
-        documentation: SymbolDisplayPart[] | undefined;
+        documentation?: SymbolDisplayPart[];
         /**
          * JSDoc tags for the symbol.
          */
-        tags: JSDocTagInfo[] | undefined;
+        tags?: JSDocTagInfo[];
         /**
          * The associated code actions for this entry
          */
