@@ -965,7 +965,7 @@ namespace ts {
                     if (ctor) {
                         const oldDiag = getSymbolAccessibilityDiagnostic;
                         parameterProperties = compact(flatMap(ctor.parameters, param => {
-                            if (!hasModifier(param, ModifierFlags.ParameterPropertyModifier) || shouldStripInternal(param)) return;
+                            if (!hasModifier(param, ModifierFlags.ParameterPropertyModifier) || shouldStripInternal(param, /* inline */ true)) return;
                             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(param);
                             if (param.name.kind === SyntaxKind.Identifier) {
                                 return preserveJsDoc(createProperty(
@@ -1140,17 +1140,10 @@ namespace ts {
             return stringContains(comment, "@internal");
         }
 
-        function shouldStripInternal(node: Node) {
+        function shouldStripInternal(node: Node, inline?: boolean) {
             if (stripInternal && node) {
-                node = getParseTreeNode(node);
-                const leadingCommentRanges = getLeadingCommentRangesOfNode(node, currentSourceFile);
-                if (leadingCommentRanges && leadingCommentRanges.length) {
-                    return hasInternalAnnotation(last(leadingCommentRanges));
-                }
-                const trailingCommentRanges = getTrailingCommentRangesOfNode(node, currentSourceFile);
-                if (trailingCommentRanges && trailingCommentRanges.length) {
-                    return hasInternalAnnotation(last(trailingCommentRanges));
-                }
+                const leadingCommentRanges = getLeadingCommentRangesOfNode(getParseTreeNode(node), currentSourceFile, inline);
+                return length(leadingCommentRanges) && hasInternalAnnotation(last(leadingCommentRanges));
             }
             return false;
         }

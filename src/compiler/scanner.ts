@@ -626,13 +626,13 @@ namespace ts {
      * @returns If "reduce" is true, the accumulated value. If "reduce" is false, the first truthy
      *      return value of the callback.
      */
-    function iterateCommentRanges<T, U>(reduce: boolean, text: string, pos: number, trailing: boolean, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial?: U): U {
+    function iterateCommentRanges<T, U>(reduce: boolean, text: string, pos: number, trailing: boolean, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial?: U, inline?: boolean): U {
         let pendingPos: number;
         let pendingEnd: number;
         let pendingKind: CommentKind;
         let pendingHasTrailingNewLine: boolean;
         let hasPendingCommentRange = false;
-        let collecting = trailing || pos === 0;
+        let collecting = inline || trailing || pos === 0;
         let accumulator = initial;
         scan: while (pos >= 0 && pos < text.length) {
             const ch = text.charCodeAt(pos);
@@ -736,8 +736,8 @@ namespace ts {
         return iterateCommentRanges(/*reduce*/ false, text, pos, /*trailing*/ true, cb, state);
     }
 
-    export function reduceEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial: U) {
-        return iterateCommentRanges(/*reduce*/ true, text, pos, /*trailing*/ false, cb, state, initial);
+    export function reduceEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial: U, inline?: boolean) {
+        return iterateCommentRanges(/*reduce*/ true, text, pos, /*trailing*/ false, cb, state, initial, inline);
     }
 
     export function reduceEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial: U) {
@@ -753,8 +753,8 @@ namespace ts {
         return comments;
     }
 
-    export function getLeadingCommentRanges(text: string, pos: number): CommentRange[] | undefined {
-        return reduceEachLeadingCommentRange(text, pos, appendCommentRange, /*state*/ undefined, /*initial*/ undefined);
+    export function getLeadingCommentRanges(text: string, pos: number, inline?: boolean): CommentRange[] | undefined {
+        return reduceEachLeadingCommentRange(text, pos, appendCommentRange, /*state*/ undefined, /*initial*/ undefined, inline);
     }
 
     export function getTrailingCommentRanges(text: string, pos: number): CommentRange[] | undefined {

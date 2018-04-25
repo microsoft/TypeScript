@@ -754,12 +754,8 @@ namespace ts {
             && (<ExpressionStatement>node).expression.kind === SyntaxKind.StringLiteral;
     }
 
-    export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode: SourceFile) {
-        return node.kind !== SyntaxKind.JsxText ? getLeadingCommentRanges(sourceFileOfNode.text, node.pos) : undefined;
-    }
-
-    export function getTrailingCommentRangesOfNode(node: Node, sourceFileOfNode: SourceFile) {
-        return node.kind !== SyntaxKind.JsxText ? getTrailingCommentRanges(sourceFileOfNode.text, node.pos) : undefined;
+    export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode: SourceFile, inline?: boolean) {
+        return node.kind !== SyntaxKind.JsxText ? getLeadingCommentRanges(sourceFileOfNode.text, node.pos, inline) : undefined;
     }
 
     export function getJSDocCommentRanges(node: Node, text: string) {
