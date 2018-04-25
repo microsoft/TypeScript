@@ -3076,7 +3076,7 @@ namespace ts {
             }
         }
 
-        function shouldWriteSeparatingLineTerminator(previousNode: Node | undefined, nextNode: Node | undefined, format: ListFormat) {
+        function shouldWriteSeparatingLineTerminator(previousNode: Node | undefined, nextNode: Node, format: ListFormat) {
             if (format & ListFormat.MultiLine) {
                 return true;
             }
@@ -3092,7 +3092,7 @@ namespace ts {
                 }
             }
             else {
-                return getStartsOnNewLine(nextNode!); // TODO: GH#18217
+                return getStartsOnNewLine(nextNode);
             }
         }
 
