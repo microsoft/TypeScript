@@ -3,4 +3,5 @@ new Foo[]();
 >new Foo[]() : any
 >Foo[] : any
 >Foo : any
+> : any
 
