@@ -222,7 +222,7 @@ namespace ts.codefix {
                 case SyntaxKind.SpreadAssignment:
                     return undefined;
                 case SyntaxKind.PropertyAssignment:
-                    return !isIdentifier(prop.name) ? undefined : convertExportsDotXEquals_replaceNode(prop.name.text, prop.initializer!); // TODO: GH#18217
+                    return !isIdentifier(prop.name) ? undefined : convertExportsDotXEquals_replaceNode(prop.name.text, prop.initializer);
                 case SyntaxKind.MethodDeclaration:
                     return !isIdentifier(prop.name) ? undefined : functionExpressionToDeclaration(prop.name.text, [createToken(SyntaxKind.ExportKeyword)], prop);
                 default:

@@ -178,7 +178,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     }
 
     function updatePropertyAssignmentDeclaration (changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: PropertyAssignment, fieldName: AcceptedNameType) {
-        const assignment = updatePropertyAssignment(declaration, fieldName, declaration.initializer!); // TODO: GH#18217
+        const assignment = updatePropertyAssignment(declaration, fieldName, declaration.initializer);
         changeTracker.replacePropertyAssignment(file, declaration, assignment);
     }
 
