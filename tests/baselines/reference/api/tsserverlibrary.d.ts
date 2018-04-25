@@ -2526,6 +2526,7 @@ declare namespace ts {
         Ts = ".ts",
         Tsx = ".tsx",
         Dts = ".d.ts",
+        Mjs = ".mjs",
         Js = ".js",
         Jsx = ".jsx",
         Json = ".json"

@@ -29,9 +29,11 @@
     "'package.json' does not have a 'typings' field.",
     "'package.json' has 'types' field 'foo.js' that references '/node_modules/foo/foo.js'.",
     "Found 'package.json' at '/node_modules/foo/package.json'.",
+    "File '/node_modules/foo.mjs' does not exist.",
     "File '/node_modules/foo.js' does not exist.",
     "File '/node_modules/foo.jsx' does not exist.",
     "'package.json' does not have a 'main' field.",
+    "File '/node_modules/foo/index.mjs' does not exist.",
     "File '/node_modules/foo/index.js' does not exist.",
     "File '/node_modules/foo/index.jsx' does not exist.",
     "======== Module name 'foo' was not resolved. ========"

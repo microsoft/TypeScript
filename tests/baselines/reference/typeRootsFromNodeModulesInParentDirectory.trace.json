@@ -9,6 +9,7 @@
     "File '/node_modules/@types/xyz.d.ts' does not exist.",
     "Loading module 'xyz' from 'node_modules' folder, target file type 'JavaScript'.",
     "Directory '/src/node_modules' does not exist, skipping all lookups in it.",
+    "File '/node_modules/xyz.mjs' does not exist.",
     "File '/node_modules/xyz.js' does not exist.",
     "File '/node_modules/xyz.jsx' does not exist.",
     "======== Module name 'xyz' was not resolved. ========",
