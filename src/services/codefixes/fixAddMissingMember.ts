@@ -23,7 +23,7 @@ namespace ts.codefix {
             const seenNames = createMap<true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const { program, preferences } = context;
-                const info = getInfo(diag.file!, diag.start!, program.getTypeChecker());
+                const info = getInfo(diag.file, diag.start, program.getTypeChecker());
                 if (!info) return;
                 const { classDeclaration, classDeclarationSourceFile, inJs, makeStatic, token, call } = info;
                 if (!addToSeen(seenNames, token.text)) {

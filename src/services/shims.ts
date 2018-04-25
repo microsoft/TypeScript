@@ -1146,7 +1146,7 @@ namespace ts {
                         typeAcquisition: configFile.typeAcquisition,
                         files: configFile.fileNames,
                         raw: configFile.raw,
-                        errors: realizeDiagnostics(result.parseDiagnostics.concat(configFile.errors), "\r\n")
+                        errors: realizeDiagnostics([...result.parseDiagnostics, ...configFile.errors], "\r\n")
                     };
                 });
         }

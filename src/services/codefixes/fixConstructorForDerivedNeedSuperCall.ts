@@ -12,7 +12,7 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) =>
-            doChange(changes, context.sourceFile, getNode(diag.file, diag.start!))),
+            doChange(changes, context.sourceFile, getNode(diag.file, diag.start))),
     });
 
     function getNode(sourceFile: SourceFile, pos: number): ConstructorDeclaration {

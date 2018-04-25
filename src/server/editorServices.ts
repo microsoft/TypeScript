@@ -1309,7 +1309,7 @@ namespace ts.server {
             if (!result.endOfFileToken) {
                 result.endOfFileToken = <EndOfFileToken>{ kind: SyntaxKind.EndOfFileToken };
             }
-            const errors = result.parseDiagnostics;
+            const errors = result.parseDiagnostics as Diagnostic[];
             const parsedCommandLine = parseJsonSourceFileConfigFileContent(
                 result,
                 cachedDirectoryStructureHost,

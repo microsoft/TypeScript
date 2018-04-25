@@ -2569,16 +2569,16 @@ namespace ts {
 
         // File-level diagnostics reported by the parser (includes diagnostics about /// references
         // as well as code diagnostics).
-        /* @internal */ parseDiagnostics: Diagnostic[];
+        /* @internal */ parseDiagnostics: DiagnosticWithLocation[];
 
         // File-level diagnostics reported by the binder.
-        /* @internal */ bindDiagnostics: Diagnostic[];
+        /* @internal */ bindDiagnostics: DiagnosticWithLocation[];
 
         // File-level JSDoc diagnostics reported by the JSDoc parser
-        /* @internal */ jsDocDiagnostics?: Diagnostic[];
+        /* @internal */ jsDocDiagnostics?: DiagnosticWithLocation[];
 
         // Stores additional file-level diagnostics reported by the program
-        /* @internal */ additionalSyntacticDiagnostics?: ReadonlyArray<Diagnostic>;
+        /* @internal */ additionalSyntacticDiagnostics?: ReadonlyArray<DiagnosticWithLocation>;
 
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.
@@ -2685,9 +2685,9 @@ namespace ts {
 
         getOptionsDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
         getGlobalDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
-        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
-        getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
-        getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<DiagnosticWithLocation>;
+        getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<DiagnosticWithLocation>;
+        getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<DiagnosticWithLocation>;
         getConfigFileParsingDiagnostics(): ReadonlyArray<Diagnostic>;
 
         /**
@@ -2999,7 +2999,7 @@ namespace ts {
          * Does *not* get *all* suggestion diagnostics, just the ones that were convenient to report in the checker.
          * Others are added in computeSuggestionDiagnostics.
          */
-        /* @internal */ getSuggestionDiagnostics(file: SourceFile): ReadonlyArray<Diagnostic>;
+        /* @internal */ getSuggestionDiagnostics(file: SourceFile): ReadonlyArray<DiagnosticWithLocation>;
 
         /**
          * Depending on the operation performed, it may be appropriate to throw away the checker
@@ -4115,6 +4115,11 @@ namespace ts {
         code: number;
         source?: string;
     }
+    export interface DiagnosticWithLocation extends Diagnostic {
+        file: SourceFile;
+        start: number;
+        length: number;
+    }
 
     export enum DiagnosticCategory {
         Warning,
@@ -5136,7 +5141,8 @@ namespace ts {
 
         // If fileName is provided, gets all the diagnostics associated with that file name.
         // Otherwise, returns all the diagnostics (global and file associated) in this collection.
-        getDiagnostics(fileName?: string): Diagnostic[];
+        getDiagnostics(fileName: string): DiagnosticWithLocation[];
+        getDiagnostics(): Diagnostic[];
 
         reattachFileDiagnostics(newFile: SourceFile): void;
     }

@@ -37,7 +37,7 @@ namespace ts.codefix {
         fixIds: [fixIdPrefix, fixIdDelete],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
             const { sourceFile } = context;
-            const token = findPrecedingToken(textSpanEnd(diag), diag.file!);
+            const token = findPrecedingToken(textSpanEnd(diag), diag.file);
             switch (context.fixId) {
                 case fixIdPrefix:
                     if (isIdentifier(token) && canPrefix(token)) {
@@ -45,7 +45,7 @@ namespace ts.codefix {
                     }
                     break;
                 case fixIdDelete:
-                    const importDecl = tryGetFullImport(diag.file!, diag.start!);
+                    const importDecl = tryGetFullImport(diag.file, diag.start);
                     if (importDecl) {
                         changes.deleteNode(sourceFile, importDecl);
                     }

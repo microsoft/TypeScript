@@ -545,10 +545,10 @@ namespace ts {
         public referencedFiles: FileReference[];
         public typeReferenceDirectives: FileReference[];
 
-        public syntacticDiagnostics: Diagnostic[];
-        public referenceDiagnostics: Diagnostic[];
-        public parseDiagnostics: Diagnostic[];
-        public bindDiagnostics: Diagnostic[];
+        public syntacticDiagnostics: ReadonlyArray<DiagnosticWithLocation>;
+        public referenceDiagnostics: ReadonlyArray<DiagnosticWithLocation>;
+        public parseDiagnostics: DiagnosticWithLocation[];
+        public bindDiagnostics: DiagnosticWithLocation[];
 
         public isDeclarationFile: boolean;
         public isDefaultLib: boolean;
@@ -1357,7 +1357,7 @@ namespace ts {
         }
 
         /// Diagnostics
-        function getSyntacticDiagnostics(fileName: string): Diagnostic[] {
+        function getSyntacticDiagnostics(fileName: string): DiagnosticWithLocation[] {
             synchronizeHostData();
 
             return program.getSyntacticDiagnostics(getValidSourceFile(fileName), cancellationToken).slice();
@@ -1367,7 +1367,7 @@ namespace ts {
          * getSemanticDiagnostics return array of Diagnostics. If '-d' is not enabled, only report semantic errors
          * If '-d' enabled, report both semantic and emitter errors
          */
-        function getSemanticDiagnostics(fileName: string): Diagnostic[] {
+        function getSemanticDiagnostics(fileName: string): DiagnosticWithLocation[] {
             synchronizeHostData();
 
             const targetSourceFile = getValidSourceFile(fileName);
@@ -1385,7 +1385,7 @@ namespace ts {
             return [...semanticDiagnostics, ...declarationDiagnostics];
         }
 
-        function getSuggestionDiagnostics(fileName: string): Diagnostic[] {
+        function getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[] {
             synchronizeHostData();
             return computeSuggestionDiagnostics(getValidSourceFile(fileName), program);
         }

@@ -17,7 +17,7 @@ namespace ts.codefix {
         getAllCodeActions: context => {
             const seenClassDeclarations = createMap<true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
-                const classDeclaration = getClass(diag.file!, diag.start!);
+                const classDeclaration = getClass(diag.file, diag.start);
                 if (addToSeen(seenClassDeclarations, getNodeId(classDeclaration))) {
                     addMissingMembers(classDeclaration, context.sourceFile, context.program.getTypeChecker(), changes, context.preferences);
                 }

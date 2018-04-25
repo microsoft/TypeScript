@@ -13,8 +13,8 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-            const info = getInfo(diag.file!, diag.start!);
-            if (info) doChange(changes, diag.file!, info);
+            const info = getInfo(diag.file, diag.start);
+            if (info) doChange(changes, diag.file, info);
         }),
     });
 
