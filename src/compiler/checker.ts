@@ -5165,6 +5165,10 @@ namespace ts {
                     return type.resolvedBaseTypes = emptyArray;
                 }
                 baseType = getReturnTypeOfSignature(constructors[0]);
+                if (!isInJavaScriptFile(baseTypeNode)) {
+                    // Skip in JS files, as their type arguments can only be supplied via an augments tag, which will have arity errors issued via other code paths
+                    checkTypespaceTypeArgumentsForCorrectness(baseTypeNode.typeArguments, getSignaturesOfType(baseConstructorType, SignatureKind.Construct));
+                }
             }
 
             if (baseType === unknownType) {
@@ -5186,7 +5190,6 @@ namespace ts {
                 // partial instantiation of the members without the base types fully resolved
                 (type as Type as ResolvedType).members = undefined;
             }
-            checkTypespaceTypeArgumentsForCorrectness(baseTypeNode.typeArguments, getSignaturesOfType(baseType, SignatureKind.Construct));
             return type.resolvedBaseTypes = [baseType];
         }
 
@@ -9030,7 +9033,6 @@ namespace ts {
                     let targetConstraint: Type;
                     if (((target as Node).kind && isTypeParameterDeclaration(target as Node))) {
                         targetName = (target as TypeParameterDeclaration).name.escapedText;
-                        getTypeParametersFromDeclaration
                         targetConstraint = getConstraintFromTypeParameter(getDeclaredTypeOfTypeParameter((target as TypeParameterDeclaration).symbol));
                     }
                     else {
@@ -17853,7 +17855,7 @@ namespace ts {
                             error(typeArguments[i], Diagnostics.Positional_type_argument_conflicts_with_named_type_argument_0, idText(namedArg.name));
                         }
                         continue nameLoop;
-                    };
+                    }
                 }
                 issuedError = true;
                 error(namedArg.name, Diagnostics.Signature_has_no_type_argument_named_0, idText(namedArg.name));
@@ -18164,18 +18166,18 @@ namespace ts {
                 let typeArguments: NodeArray<TypeArgument>;  // Type arguments (undefined if none)
                 let callIsIncomplete: boolean;           // In incomplete call we want to be lenient when we have too few arguments
                 let spreadArgIndex = -1;
-    
+
                 if (isJsxOpeningLikeElement(node)) {
                     // The arity check will be done in "checkApplicableSignatureForJsxOpeningLikeElement".
                     return true;
                 }
-    
+
                 if (node.kind === SyntaxKind.TaggedTemplateExpression) {
                     // Even if the call is incomplete, we'll have a missing expression as our last argument,
                     // so we can say the count is just the arg list length
                     argCount = args.length;
                     typeArguments = node.typeArguments;
-    
+
                     if (node.template.kind === SyntaxKind.TemplateExpression) {
                         // If a tagged template expression lacks a tail literal, the call is incomplete.
                         // Specifically, a template only can end in a TemplateTail or a Missing literal.
@@ -18200,35 +18202,35 @@ namespace ts {
                     if (!node.arguments) {
                         // This only happens when we have something of the form: 'new C'
                         Debug.assert(node.kind === SyntaxKind.NewExpression);
-    
+
                         return signature.minArgumentCount === 0;
                     }
-    
+
                     argCount = signatureHelpTrailingComma ? args.length + 1 : args.length;
-    
+
                     // If we are missing the close parenthesis, the call is incomplete.
                     callIsIncomplete = node.arguments.end === node.end;
-    
+
                     typeArguments = node.typeArguments;
                     spreadArgIndex = getSpreadArgumentIndex(args);
                 }
-    
+
                 if (!hasCorrectTypeArgumentArity(signature, typeArguments) || !hasMatchesForAllNamedTypeArguments(signature.typeParameters, typeArguments)) {
                     return false;
                 }
                 hadTypeArgumentArityApplicableSignature = true;
-    
+
                 // If a spread argument is present, check that it corresponds to a rest parameter or at least that it's in the valid range.
                 if (spreadArgIndex >= 0) {
                     return isRestParameterIndex(signature, spreadArgIndex) ||
                         signature.minArgumentCount <= spreadArgIndex && spreadArgIndex < signature.parameters.length;
                 }
-    
+
                 // Too many arguments implies incorrect arity.
                 if (!signature.hasRestParameter && argCount > signature.parameters.length) {
                     return false;
                 }
-    
+
                 // If the call is incomplete, we should skip the lower bound check.
                 const hasEnoughArguments = argCount >= signature.minArgumentCount;
                 return callIsIncomplete || hasEnoughArguments;
