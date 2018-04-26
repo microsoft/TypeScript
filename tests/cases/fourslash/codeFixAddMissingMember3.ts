@@ -11,6 +11,7 @@ verify.codeFix({
     index: 0,
     newFileContent: `class C {
     static foo: number;
+
     static method() {
         this.foo = 10;
     }

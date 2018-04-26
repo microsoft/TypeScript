@@ -6,7 +6,7 @@
 ////    method(a: string): Function;
 ////    method(a: string | number, b?: string | number): boolean | Function { return a + b as any; }
 ////}
-////class C implements A {[| |]}
+////class C implements A { }
 
 verify.codeFix({
     description: "Implement interface 'A'",
