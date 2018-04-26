@@ -9037,10 +9037,8 @@ namespace ts {
                         param = target as TypeParameter;
                     }
                     const targetName = param.symbol.escapedName;
-                    const targetConstraint = getConstraintFromTypeParameter(param);
-                    const targetDefault = getResolvedTypeParameterDefault(param);
                     const provided = named.get(targetName);
-                    results.push(provided ? getTypeFromTypeNode(provided.type) : getSyntheticInferType(targetName, targetConstraint, targetDefault));
+                    results.push(provided ? getTypeFromTypeNode(provided.type) : getSyntheticInferType(targetName, getConstraintFromTypeParameter(param), getResolvedTypeParameterDefault(param)));
                 }
             }
             return results;
