@@ -1,0 +1,126 @@
+=== tests/cases/conformance/es6/spread/objectLiteralSpreadWIthDuplicateIdentifier.ts ===
+interface Point { x: number; y?: number }
+>Point : Point
+>x : number
+>y : number | undefined
+
+const x = 1
+>x : 1
+>1 : 1
+
+const y = 1
+>y : 1
+>1 : 1
+
+const foo: Point = { x: 1, y: 2 }
+>foo : Point
+>Point : Point
+>{ x: 1, y: 2 } : { x: number; y: number; }
+>x : number
+>1 : 1
+>y : number
+>2 : 2
+
+const a: Point = { y, y: 1, ...foo}
+>a : Point
+>Point : Point
+>{ y, y: 1, ...foo} : { x: number; y: number; }
+>y : number
+>y : number
+>1 : 1
+>foo : Point
+
+const b: Point = { x, x: 1, ...foo}
+>b : Point
+>Point : Point
+>{ x, x: 1, ...foo} : { x: number; y?: number | undefined; }
+>x : number
+>x : number
+>1 : 1
+>foo : Point
+
+const c: Point = { y, y: 1, ...{ x: 1, y: 1}}
+>c : Point
+>Point : Point
+>{ y, y: 1, ...{ x: 1, y: 1}} : { x: number; y: number; }
+>y : number
+>y : number
+>1 : 1
+>{ x: 1, y: 1} : { x: number; y: number; }
+>x : number
+>1 : 1
+>y : number
+>1 : 1
+
+const d: Point = { x, x: 1, ...{ x: 1, y: 1}}
+>d : Point
+>Point : Point
+>{ x, x: 1, ...{ x: 1, y: 1}} : { x: number; y: number; }
+>x : number
+>x : number
+>1 : 1
+>{ x: 1, y: 1} : { x: number; y: number; }
+>x : number
+>1 : 1
+>y : number
+>1 : 1
+
+
+class PointBar { x: number; y?: number }
+>PointBar : PointBar
+>x : number
+>y : number | undefined
+
+const bar: PointBar = { x: 1, y: 2 }
+>bar : PointBar
+>PointBar : PointBar
+>{ x: 1, y: 2 } : { x: number; y: number; }
+>x : number
+>1 : 1
+>y : number
+>2 : 2
+
+const e: PointBar = { y, y: 1, ...bar}
+>e : PointBar
+>PointBar : PointBar
+>{ y, y: 1, ...bar} : { x: number; y: number; }
+>y : number
+>y : number
+>1 : 1
+>bar : PointBar
+
+const f: PointBar = { x, x: 1, ...bar}
+>f : PointBar
+>PointBar : PointBar
+>{ x, x: 1, ...bar} : { x: number; y?: number | undefined; }
+>x : number
+>x : number
+>1 : 1
+>bar : PointBar
+
+const g: PointBar = { y, y: 1, ...{ x: 1, y: 1}}
+>g : PointBar
+>PointBar : PointBar
+>{ y, y: 1, ...{ x: 1, y: 1}} : { x: number; y: number; }
+>y : number
+>y : number
+>1 : 1
+>{ x: 1, y: 1} : { x: number; y: number; }
+>x : number
+>1 : 1
+>y : number
+>1 : 1
+
+const h: PointBar = { x, x: 1, ...{ x: 1, y: 1}}
+>h : PointBar
+>PointBar : PointBar
+>{ x, x: 1, ...{ x: 1, y: 1}} : { x: number; y: number; }
+>x : number
+>x : number
+>1 : 1
+>{ x: 1, y: 1} : { x: number; y: number; }
+>x : number
+>1 : 1
+>y : number
+>1 : 1
+

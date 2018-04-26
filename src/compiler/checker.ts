@@ -27132,6 +27132,23 @@ namespace ts {
             }
         }
 
+        function checkGrammarForDuplicateIdentifier(properties: ReadonlyArray<ObjectLiteralElement>, spread: SpreadAssignment, spreadIndex: number) {
+            const type = getTypeOfExpression(spread.expression);
+            if (type && type.flags & TypeFlags.Object) {
+                const resolvedObjectType = resolveStructuredTypeMembers(type as StructuredType);
+                for (let i = 0; i < spreadIndex; ++i) {
+                    const prop = properties[i];
+                    if (!isSpreadAssignment(prop)) {
+                        const propName = getTextOfPropertyName(prop.name);
+                        const spreadSymbol = resolvedObjectType.members.get(propName)
+                        if (spreadSymbol && !hasQuestionToken(spreadSymbol.valueDeclaration)) {
+                            grammarErrorOnNode(prop, Diagnostics.Duplicate_identifier_0, propName);
+                        }
+                    }
+                }
+            }
+        }
+
         function checkGrammarObjectLiteralExpression(node: ObjectLiteralExpression, inDestructuring: boolean) {
             const enum Flags {
                 Property = 1,
@@ -27141,8 +27158,13 @@ namespace ts {
             }
             const seen = createUnderscoreEscapedMap<Flags>();
 
-            for (const prop of node.properties) {
+            for (let index = 0; index < node.properties.length; ++index) {
+                const prop = node.properties[index];
+
                 if (prop.kind === SyntaxKind.SpreadAssignment) {
+                    if (strictNullChecks) {
+                        checkGrammarForDuplicateIdentifier(node.properties, <SpreadAssignment>prop, index);
+                    }
                     continue;
                 }
                 const name = prop.name;

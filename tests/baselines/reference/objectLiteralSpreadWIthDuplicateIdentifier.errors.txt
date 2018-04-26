@@ -1,0 +1,80 @@
+tests/cases/conformance/es6/spread/objectLiteralSpreadWIthDuplicateIdentifier.ts(5,23): error TS2300: Duplicate identifier 'y'.
+tests/cases/conformance/es6/spread/objectLiteralSpreadWIthDuplicateIdentifier.ts(6,20): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/es6/spread/objectLiteralSpreadWIthDuplicateIdentifier.ts(6,23): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/es6/spread/objectLiteralSpreadWIthDuplicateIdentifier.ts(6,23): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/es6/spread/objectLiteralSpreadWIthDuplicateIdentifier.ts(7,20): error TS2300: Duplicate identifier 'y'.
+tests/cases/conformance/es6/spread/objectLiteralSpreadWIthDuplicateIdentifier.ts(7,23): error TS2300: Duplicate identifier 'y'.
+tests/cases/conformance/es6/spread/objectLiteralSpreadWIthDuplicateIdentifier.ts(7,23): error TS2300: Duplicate identifier 'y'.
+tests/cases/conformance/es6/spread/objectLiteralSpreadWIthDuplicateIdentifier.ts(8,20): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/es6/spread/objectLiteralSpreadWIthDuplicateIdentifier.ts(8,23): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/es6/spread/objectLiteralSpreadWIthDuplicateIdentifier.ts(8,23): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/es6/spread/objectLiteralSpreadWIthDuplicateIdentifier.ts(13,26): error TS2300: Duplicate identifier 'y'.
+tests/cases/conformance/es6/spread/objectLiteralSpreadWIthDuplicateIdentifier.ts(14,23): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/es6/spread/objectLiteralSpreadWIthDuplicateIdentifier.ts(14,26): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/es6/spread/objectLiteralSpreadWIthDuplicateIdentifier.ts(14,26): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/es6/spread/objectLiteralSpreadWIthDuplicateIdentifier.ts(15,23): error TS2300: Duplicate identifier 'y'.
+tests/cases/conformance/es6/spread/objectLiteralSpreadWIthDuplicateIdentifier.ts(15,26): error TS2300: Duplicate identifier 'y'.
+tests/cases/conformance/es6/spread/objectLiteralSpreadWIthDuplicateIdentifier.ts(15,26): error TS2300: Duplicate identifier 'y'.
+tests/cases/conformance/es6/spread/objectLiteralSpreadWIthDuplicateIdentifier.ts(16,23): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/es6/spread/objectLiteralSpreadWIthDuplicateIdentifier.ts(16,26): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/es6/spread/objectLiteralSpreadWIthDuplicateIdentifier.ts(16,26): error TS2300: Duplicate identifier 'x'.
+
+
+==== tests/cases/conformance/es6/spread/objectLiteralSpreadWIthDuplicateIdentifier.ts (20 errors) ====
+    interface Point { x: number; y?: number }
+    const x = 1
+    const y = 1
+    const foo: Point = { x: 1, y: 2 }
+    const a: Point = { y, y: 1, ...foo}
+                          ~
+!!! error TS2300: Duplicate identifier 'y'.
+    const b: Point = { x, x: 1, ...foo}
+                       ~
+!!! error TS2300: Duplicate identifier 'x'.
+                          ~
+!!! error TS2300: Duplicate identifier 'x'.
+                          ~~~~
+!!! error TS2300: Duplicate identifier 'x'.
+    const c: Point = { y, y: 1, ...{ x: 1, y: 1}}
+                       ~
+!!! error TS2300: Duplicate identifier 'y'.
+                          ~
+!!! error TS2300: Duplicate identifier 'y'.
+                          ~~~~
+!!! error TS2300: Duplicate identifier 'y'.
+    const d: Point = { x, x: 1, ...{ x: 1, y: 1}}
+                       ~
+!!! error TS2300: Duplicate identifier 'x'.
+                          ~
+!!! error TS2300: Duplicate identifier 'x'.
+                          ~~~~
+!!! error TS2300: Duplicate identifier 'x'.
+    
+    
+    class PointBar { x: number; y?: number }
+    const bar: PointBar = { x: 1, y: 2 }
+    const e: PointBar = { y, y: 1, ...bar}
+                             ~
+!!! error TS2300: Duplicate identifier 'y'.
+    const f: PointBar = { x, x: 1, ...bar}
+                          ~
+!!! error TS2300: Duplicate identifier 'x'.
+                             ~
+!!! error TS2300: Duplicate identifier 'x'.
+                             ~~~~
+!!! error TS2300: Duplicate identifier 'x'.
+    const g: PointBar = { y, y: 1, ...{ x: 1, y: 1}}
+                          ~
+!!! error TS2300: Duplicate identifier 'y'.
+                             ~
+!!! error TS2300: Duplicate identifier 'y'.
+                             ~~~~
+!!! error TS2300: Duplicate identifier 'y'.
+    const h: PointBar = { x, x: 1, ...{ x: 1, y: 1}}
+                          ~
+!!! error TS2300: Duplicate identifier 'x'.
+                             ~
+!!! error TS2300: Duplicate identifier 'x'.
+                             ~~~~
+!!! error TS2300: Duplicate identifier 'x'.
+    
