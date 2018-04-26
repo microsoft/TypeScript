@@ -1,6 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @allowJs: true
+// @target: esnext
 
 // @Filename: /a.js
 ////const x = /*a*/require/*b*/("x");

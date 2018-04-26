@@ -1,6 +1,5 @@
 Exit Code: 1
 Standard output:
-node_modules/debug/src/browser.js(7,1): error TS2539: Cannot assign to '"/home/nathansa/ts/tests/cases/user/debug/node_modules/debug/src/browser"' because it is not a variable.
 node_modules/debug/src/browser.js(13,41): error TS2304: Cannot find name 'chrome'.
 node_modules/debug/src/browser.js(14,41): error TS2304: Cannot find name 'chrome'.
 node_modules/debug/src/browser.js(15,21): error TS2304: Cannot find name 'chrome'.
@@ -12,7 +11,6 @@ node_modules/debug/src/browser.js(73,9): error TS2551: Property 'formatters' doe
 node_modules/debug/src/browser.js(96,21): error TS2339: Property 'humanize' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/debug/node_modules/debug/src/browser")'.
 node_modules/debug/src/browser.js(178,9): error TS2339: Property 'enable' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/debug/node_modules/debug/src/browser")'.
 node_modules/debug/src/browser.js(187,13): error TS2304: Cannot find name 'LocalStorage'.
-node_modules/debug/src/debug.js(9,1): error TS2539: Cannot assign to '"/home/nathansa/ts/tests/cases/user/debug/node_modules/debug/src/debug"' because it is not a variable.
 node_modules/debug/src/debug.js(25,1): error TS2323: Cannot redeclare exported variable 'names'.
 node_modules/debug/src/debug.js(26,1): error TS2323: Cannot redeclare exported variable 'skips'.
 node_modules/debug/src/debug.js(46,13): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'.
@@ -34,7 +32,6 @@ node_modules/debug/src/debug.js(156,3): error TS2323: Cannot redeclare exported 
 node_modules/debug/src/debug.js(217,12): error TS2304: Cannot find name 'Mixed'.
 node_modules/debug/src/debug.js(218,13): error TS2304: Cannot find name 'Mixed'.
 node_modules/debug/src/index.js(6,47): error TS2339: Property 'type' does not exist on type 'Process'.
-node_modules/debug/src/node.js(14,1): error TS2539: Cannot assign to '"/home/nathansa/ts/tests/cases/user/debug/node_modules/debug/src/node"' because it is not a variable.
 node_modules/debug/src/node.js(26,1): error TS2323: Cannot redeclare exported variable 'colors'.
 node_modules/debug/src/node.js(31,5): error TS2323: Cannot redeclare exported variable 'colors'.
 node_modules/debug/src/node.js(60,39): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.

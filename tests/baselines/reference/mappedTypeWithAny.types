@@ -11,7 +11,7 @@ type ItemMap<T> = { [P in keyof T]: Item };
 >Item : Item
 
 declare let x0: keyof any;
->x0 : string
+>x0 : string | number | symbol
 
 declare let x1: { [P in any]: Item };
 >x1 : { [x: string]: Item; }

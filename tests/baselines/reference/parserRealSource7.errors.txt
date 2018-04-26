@@ -2,7 +2,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(4,21): error TS6
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(12,38): error TS2304: Cannot find name 'ASTList'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(12,62): error TS2304: Cannot find name 'TypeLink'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(16,37): error TS2552: Cannot find name 'TypeLink'. Did you mean 'typeLink'?
-tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(16,45): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(16,46): error TS1011: An element access expression should take an argument.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(21,36): error TS2552: Cannot find name 'TypeLink'. Did you mean 'typeLink'?
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(29,29): error TS2304: Cannot find name 'Type'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(29,45): error TS2304: Cannot find name 'TypeDeclaration'.
@@ -328,8 +328,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(828,13): error T
                     baseTypeLinks = new TypeLink[];
                                         ~~~~~~~~
 !!! error TS2552: Cannot find name 'TypeLink'. Did you mean 'typeLink'?
-                                                ~~
-!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+                                                 
+!!! error TS1011: An element access expression should take an argument.
                 }
                 for (var i = 0; i < len; i++) {
                     var baseExpr = bases.members[i];

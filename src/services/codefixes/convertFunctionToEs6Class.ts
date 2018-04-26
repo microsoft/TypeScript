@@ -6,7 +6,7 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions(context: CodeFixContext) {
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, context.span.start, context.program.getTypeChecker()));
-            return [createCodeFixAction(changes, Diagnostics.Convert_function_to_an_ES2015_class, fixId, Diagnostics.Convert_all_constructor_functions_to_classes)];
+            return [createCodeFixAction(fixId, changes, Diagnostics.Convert_function_to_an_ES2015_class, fixId, Diagnostics.Convert_all_constructor_functions_to_classes)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => doChange(changes, err.file!, err.start, context.program.getTypeChecker())),
@@ -34,13 +34,14 @@ namespace ts.codefix {
 
             case SyntaxKind.VariableDeclaration:
                 precedingNode = ctorDeclaration.parent.parent;
+                newClassDeclaration = createClassFromVariableDeclaration(ctorDeclaration as VariableDeclaration);
                 if ((<VariableDeclarationList>ctorDeclaration.parent).declarations.length === 1) {
+                    copyComments(precedingNode, newClassDeclaration, sourceFile);
                     deleteNode(precedingNode);
                 }
                 else {
                     deleteNode(ctorDeclaration, /*inList*/ true);
                 }
-                newClassDeclaration = createClassFromVariableDeclaration(ctorDeclaration as VariableDeclaration);
                 break;
         }
 

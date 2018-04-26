@@ -121,6 +121,9 @@ namespace ts.server.protocol {
         OrganizeImports = "organizeImports",
         /* @internal */
         OrganizeImportsFull = "organizeImports-full",
+        GetEditsForFileRename = "getEditsForFileRename",
+        /* @internal */
+        GetEditsForFileRenameFull = "getEditsForFileRename-full",
 
         // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
     }
@@ -607,6 +610,22 @@ namespace ts.server.protocol {
     }
 
     export interface OrganizeImportsResponse extends Response {
+        edits: ReadonlyArray<FileCodeEdits>;
+    }
+
+    export interface GetEditsForFileRenameRequest extends Request {
+        command: CommandTypes.GetEditsForFileRename;
+        arguments: GetEditsForFileRenameRequestArgs;
+    }
+
+    // Note: The file from FileRequestArgs is just any file in the project.
+    // We will generate code changes for every file in that project, so the choice is arbitrary.
+    export interface GetEditsForFileRenameRequestArgs extends FileRequestArgs {
+        readonly oldFilePath: string;
+        readonly newFilePath: string;
+    }
+
+    export interface GetEditsForFileRenameResponse extends Response {
         edits: ReadonlyArray<FileCodeEdits>;
     }
 
@@ -1698,6 +1717,8 @@ namespace ts.server.protocol {
     }
 
     export interface CodeFixAction extends CodeAction {
+        /** Short name to identify the fix, for use by telemetry. */
+        fixName: string;
         /**
          * If present, one may call 'getCombinedCodeFix' with this fixId.
          * This may be omitted to indicate that the code fix can't be applied in a group.
@@ -1747,6 +1768,7 @@ namespace ts.server.protocol {
          * Optional prefix to apply to possible completions.
          */
         prefix?: string;
+        triggerCharacter?: string;
         /**
          * @deprecated Use UserPreferences.includeCompletionsForModuleExports
          */
@@ -2171,6 +2193,8 @@ namespace ts.server.protocol {
          * The category of the diagnostic message, e.g. "error", "warning", or "suggestion".
          */
         category: string;
+
+        reportsUnnecessary?: {};
 
         /**
          * The error code of the diagnostic message.
@@ -2638,6 +2662,7 @@ namespace ts.server.protocol {
     }
 
     export interface UserPreferences {
+        readonly disableSuggestions?: boolean;
         readonly quotePreference?: "double" | "single";
         /**
          * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
