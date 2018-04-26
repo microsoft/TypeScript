@@ -41,49 +41,34 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         if (!info) return undefined;
 
         const { expression, func } = info;
-        const changeTracker = textChanges.ChangeTracker.fromContext(context);
 
         let body: ConciseBody;
         if (actionName === addBracesActionName) {
             const returnStatement = createReturn(expression);
             body = createBlock([returnStatement], /* multiLine */ true);
-            suppressLeadingAndTrailingTrivia(expression);
+            suppressLeadingAndTrailingTrivia(body);
             copyComments(expression, returnStatement, file, SyntaxKind.MultiLineCommentTrivia, true, true);
         }
         else if (actionName === removeBracesActionName) {
             const returnStatement = <ReturnStatement>expression.parent;
             body = needsParentheses(expression) ? createParen(expression) : expression;
-            suppressLeadingAndTrailingTrivia(returnStatement);
+            suppressLeadingAndTrailingTrivia(body);
             copyComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, false);
         }
         else {
             Debug.fail('invalid action');
         }
 
-        updateBody(changeTracker, file, func, body);
-
-        return {
-            renameFilename: undefined,
-            renameLocation: undefined,
-            edits: changeTracker.getChanges()
-        };
+        const edits = textChanges.ChangeTracker.with(context, t => updateBody(t, file, func, body));
+        return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
     function needsParentheses(expression: Expression) {
-        if (isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken) return true;
-        if (isObjectLiteralExpression(expression)) return true;
-        return false;
+        return isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken || isObjectLiteralExpression(expression);
     }
 
     function updateBody(changeTracker: textChanges.ChangeTracker, file: SourceFile, container: ArrowFunction, body: ConciseBody) {
-        const arrowFunction = updateArrowFunction(
-            container,
-            container.modifiers,
-            container.typeParameters,
-            container.parameters,
-            container.type,
-            body);
-        changeTracker.replaceNode(file, container, arrowFunction);
+        changeTracker.replaceNode(file, container.body, body);
     }
 
     function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number): Info | undefined {
