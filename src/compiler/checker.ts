@@ -7300,8 +7300,7 @@ namespace ts {
         }
 
         function getConstraintDeclaration(type: TypeParameter) {
-            if (!type.symbol) return;
-            const decl = getDeclarationOfKind<TypeParameterDeclaration>(type.symbol, SyntaxKind.TypeParameter);
+            const decl = type.symbol && getDeclarationOfKind<TypeParameterDeclaration>(type.symbol, SyntaxKind.TypeParameter);
             return decl && decl.constraint;
         }
 
