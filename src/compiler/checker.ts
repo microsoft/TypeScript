@@ -4443,7 +4443,7 @@ namespace ts {
                 const special = getSpecialPropertyAssignmentKind(expression);
                 if (special === SpecialPropertyAssignmentKind.ThisProperty) {
                     const thisContainer = getThisContainer(expression, /*includeArrowFunctions*/ false);
-                    // Properties defined in a constructor (or javascript constructor function) don't get undefined added.
+                    // Properties defined in a constructor (or base constructor, or javascript constructor function) don't get undefined added.
                     // Function expressions that are assigned to the prototype count as methods.
                     declarationInConstructor = thisContainer.kind === SyntaxKind.Constructor ||
                         thisContainer.kind === SyntaxKind.FunctionDeclaration ||
@@ -4513,8 +4513,15 @@ namespace ts {
             }
             let type = jsDocType;
             if (!type) {
-                // use only the constructor types unless only null | undefined (including widening variants) were assigned there
-                const sourceTypes = constructorTypes && constructorTypes.some(t => !!(t.flags & ~(TypeFlags.Nullable | TypeFlags.ContainsWideningType))) ? constructorTypes : types;
+                // use only the constructor types unless they were only assigned null | undefined (including widening variants)
+                if (definedInMethod) {
+                    const propType = getTypeOfSpecialPropertyOfBaseType(symbol);
+                    if (propType) {
+                        (constructorTypes || (constructorTypes = [])).push(propType);
+                        definedInConstructor = true;
+                    }
+                }
+                const sourceTypes = some(constructorTypes, t => !!(t.flags & ~(TypeFlags.Nullable | TypeFlags.ContainsWideningType))) ? constructorTypes! : types; // TODO: GH#18217
                 type = getUnionType(sourceTypes, UnionReduction.Subtype);
             }
             const widened = getWidenedType(addOptionality(type, definedInMethod && !definedInConstructor));
@@ -4527,6 +4534,20 @@ namespace ts {
             return widened;
         }
 
+        /** check for definition in base class if any declaration is in a class */
+        function getTypeOfSpecialPropertyOfBaseType(specialProperty: Symbol) {
+            const parentDeclaration = forEach(specialProperty.declarations, d => {
+                const parent = getThisContainer(d, /*includeArrowFunctions*/ false).parent;
+                return isClassLike(parent) && parent;
+            });
+            if (parentDeclaration) {
+                const classType = getDeclaredTypeOfSymbol(getSymbolOfNode(parentDeclaration)!) as InterfaceType;
+                const baseClassType = classType && getBaseTypes(classType)[0];
+                if (baseClassType) {
+                    return getTypeOfPropertyOfType(baseClassType, specialProperty.escapedName);
+                }
+            }
+        }
 
         // Return the type implied by a binding pattern element. This is the type of the initializer of the element if
         // one is present. Otherwise, if the element is itself a binding pattern, it is the type implied by the binding
@@ -7316,7 +7337,8 @@ namespace ts {
         }
 
         function getConstraintDeclaration(type: TypeParameter) {
-            return type.symbol && getDeclarationOfKind<TypeParameterDeclaration>(type.symbol, SyntaxKind.TypeParameter)!.constraint;
+            const decl = type.symbol && getDeclarationOfKind<TypeParameterDeclaration>(type.symbol, SyntaxKind.TypeParameter);
+            return decl && decl.constraint;
         }
 
         function getInferredTypeParameterConstraint(typeParameter: TypeParameter) {
