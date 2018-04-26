@@ -129,6 +129,9 @@ namespace ts.formatting {
             // template string
             rule("NoSpaceBetweenTagAndTemplateString", SyntaxKind.Identifier, [SyntaxKind.NoSubstitutionTemplateLiteral, SyntaxKind.TemplateHead], [isNonJsxSameLineTokenContext], RuleAction.Delete),
 
+            // No space between closing parenthesis and template string
+            rule("NoSpaceBetweenCloseParenAndTemplateString", SyntaxKind.CloseParenToken, SyntaxKind.NoSubstitutionTemplateLiteral, [isNonJsxSameLineTokenContext], RuleAction.Delete),
+
             // JSX opening elements
             rule("SpaceBeforeJsxAttribute", anyToken, SyntaxKind.Identifier, [isNextTokenParentJsxAttribute, isNonJsxSameLineTokenContext], RuleAction.Space),
             rule("SpaceBeforeSlashInJsxOpeningElement", anyToken, SyntaxKind.SlashToken, [isJsxSelfClosingElementContext, isNonJsxSameLineTokenContext], RuleAction.Space),
