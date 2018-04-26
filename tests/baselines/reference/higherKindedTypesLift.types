@@ -1,0 +1,106 @@
+=== tests/cases/compiler/higherKindedTypesLift.ts ===
+interface FMap<FA, FB> {
+>FMap : FMap<FA, FB>
+>FA : FA
+>FB : FB
+
+    (fmapfa: FA): FB
+>fmapfa : FA
+>FA : FA
+>FB : FB
+}
+
+
+interface StaticFunctor<CS<_TS>> {
+>StaticFunctor : StaticFunctor<CS>
+>CS : CS
+>_TS : _TS
+
+    <AS, BS>(csas: CS<AS>, fmapstatic: FMap<AS, BS>): CS<BS>;
+>AS : AS
+>BS : BS
+>csas : CS
+>CS : CS
+>AS : AS
+>fmapstatic : FMap<AS, BS>
+>FMap : FMap<FA, FB>
+>AS : AS
+>BS : BS
+>CS : CS
+>BS : BS
+}
+
+
+interface LiftedResult<LC<_LT>> {
+>LiftedResult : LiftedResult<LC>
+>LC : LC
+>_LT : _LT
+
+    <LA, LB>(lmap: FMap<LA,LB>): FMap<LC<LA>,LC<LB>>
+>LA : LA
+>LB : LB
+>lmap : FMap<LA, LB>
+>FMap : FMap<FA, FB>
+>LA : LA
+>LB : LB
+>FMap : FMap<FA, FB>
+>LC : LC
+>LA : LA
+>LC : LC
+>LB : LB
+}
+
+declare function lift<C<_T>>(fToLift: StaticFunctor<C>): LiftedResult<C>
+>lift : <C>(fToLift: StaticFunctor<C>) => LiftedResult<C>
+>C : C
+>_T : _T
+>fToLift : StaticFunctor<C>
+>StaticFunctor : StaticFunctor<CS>
+>C : C
+>LiftedResult : LiftedResult<LC>
+>C : C
+
+
+declare const myArrayFunctor: StaticFunctor<Array>
+>myArrayFunctor : StaticFunctor<T[]>
+>StaticFunctor : StaticFunctor<CS>
+>Array : T[]
+
+const liftedArray = lift(myArrayFunctor);
+>liftedArray : LiftedResult<T[]>
+>lift(myArrayFunctor) : LiftedResult<T[]>
+>lift : <C>(fToLift: StaticFunctor<C>) => LiftedResult<C>
+>myArrayFunctor : StaticFunctor<T[]>
+
+declare function stringLength(strarg: string): number
+>stringLength : (strarg: string) => number
+>strarg : string
+
+const liftedStringLength = liftedArray(stringLength);
+>liftedStringLength : FMap<string[], number[]>
+>liftedArray(stringLength) : FMap<string[], number[]>
+>liftedArray : LiftedResult<T[]>
+>stringLength : (strarg: string) => number
+
+declare const arrayOfStrings: Array<string>;
+>arrayOfStrings : string[]
+>Array : T[]
+
+const result = liftedStringLength(arrayOfStrings);
+>result : number[]
+>liftedStringLength(arrayOfStrings) : number[]
+>liftedStringLength : FMap<string[], number[]>
+>arrayOfStrings : string[]
+
+const expectedType: Array<number> = result;
+>expectedType : number[]
+>Array : T[]
+>result : number[]
+
+const expectError = liftedStringLength(result)
+>expectError : number[]
+>liftedStringLength(result) : number[]
+>liftedStringLength : FMap<string[], number[]>
+>result : number[]
+
+

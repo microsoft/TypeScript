@@ -1,0 +1,40 @@
+=== tests/cases/compiler/higherKindedTypesExpectedErrors.ts ===
+interface Functor<FX<_TX>, AX> {
+>Functor : Symbol(Functor, Decl(higherKindedTypesExpectedErrors.ts, 0, 0))
+>FX : Symbol(FX, Decl(higherKindedTypesExpectedErrors.ts, 0, 18))
+>_TX : Symbol(_TX, Decl(higherKindedTypesExpectedErrors.ts, 0, 21))
+>AX : Symbol(AX, Decl(higherKindedTypesExpectedErrors.ts, 0, 26))
+
+    map<BX>(fmapx: (fmapxax: AX) => BX): FX<BX>;
+>map : Symbol(Functor.map, Decl(higherKindedTypesExpectedErrors.ts, 0, 32))
+>BX : Symbol(BX, Decl(higherKindedTypesExpectedErrors.ts, 1, 8))
+>fmapx : Symbol(fmapx, Decl(higherKindedTypesExpectedErrors.ts, 1, 12))
+>fmapxax : Symbol(fmapxax, Decl(higherKindedTypesExpectedErrors.ts, 1, 20))
+>AX : Symbol(AX, Decl(higherKindedTypesExpectedErrors.ts, 0, 26))
+>BX : Symbol(BX, Decl(higherKindedTypesExpectedErrors.ts, 1, 8))
+>FX : Symbol(FX, Decl(higherKindedTypesExpectedErrors.ts, 0, 18))
+>BX : Symbol(BX, Decl(higherKindedTypesExpectedErrors.ts, 1, 8))
+}
+
+// Expect error since array doesn't have xVal property
+interface FunctorX<A> extends Functor<FunctorX, A> {
+>FunctorX : Symbol(FunctorX, Decl(higherKindedTypesExpectedErrors.ts, 2, 1))
+>A : Symbol(A, Decl(higherKindedTypesExpectedErrors.ts, 5, 19))
+>Functor : Symbol(Functor, Decl(higherKindedTypesExpectedErrors.ts, 0, 0))
+>FunctorX : Symbol(FunctorX, Decl(higherKindedTypesExpectedErrors.ts, 2, 1))
+>A : Symbol(A, Decl(higherKindedTypesExpectedErrors.ts, 5, 19))
+
+    map<B>(f: (a: A) => B): Array<B>;
+>map : Symbol(FunctorX.map, Decl(higherKindedTypesExpectedErrors.ts, 5, 52))
+>B : Symbol(B, Decl(higherKindedTypesExpectedErrors.ts, 6, 8))
+>f : Symbol(f, Decl(higherKindedTypesExpectedErrors.ts, 6, 11))
+>a : Symbol(a, Decl(higherKindedTypesExpectedErrors.ts, 6, 15))
+>A : Symbol(A, Decl(higherKindedTypesExpectedErrors.ts, 5, 19))
+>B : Symbol(B, Decl(higherKindedTypesExpectedErrors.ts, 6, 8))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>B : Symbol(B, Decl(higherKindedTypesExpectedErrors.ts, 6, 8))
+
+    xVal: string;
+>xVal : Symbol(FunctorX.xVal, Decl(higherKindedTypesExpectedErrors.ts, 6, 37))
+}
+

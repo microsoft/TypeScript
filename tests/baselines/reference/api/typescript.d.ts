@@ -532,6 +532,7 @@ declare namespace ts {
         kind: SyntaxKind.TypeParameter;
         parent: DeclarationWithTypeParameters | InferTypeNode;
         name: Identifier;
+        typeParameters?: NodeArray<TypeParameterDeclaration>;
         constraint?: TypeNode;
         default?: TypeNode;
         expression?: Expression;
@@ -1282,7 +1283,9 @@ declare namespace ts {
         block: Block;
     }
     type ObjectTypeDeclaration = ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
-    type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag | JSDocTypedefTag | JSDocCallbackTag | JSDocSignature;
+
+    type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | TypeParameterDeclaration | JSDocTemplateTag | JSDocTypedefTag | JSDocCallbackTag | JSDocSignature;
+
     interface ClassLikeDeclarationBase extends NamedDeclaration, JSDocContainer {
         kind: SyntaxKind.ClassDeclaration | SyntaxKind.ClassExpression;
         name?: Identifier;

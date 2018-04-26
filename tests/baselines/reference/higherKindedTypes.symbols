@@ -1,0 +1,231 @@
+=== tests/cases/compiler/higherKindedTypes.ts ===
+interface Functor<Container<_T>, A> {
+>Functor : Symbol(Functor, Decl(higherKindedTypes.ts, 0, 0))
+>Container : Symbol(Container, Decl(higherKindedTypes.ts, 0, 18))
+>_T : Symbol(_T, Decl(higherKindedTypes.ts, 0, 28))
+>A : Symbol(A, Decl(higherKindedTypes.ts, 0, 32))
+
+    map<B>(f: (a: A) => B): Container<B>;
+>map : Symbol(Functor.map, Decl(higherKindedTypes.ts, 0, 37))
+>B : Symbol(B, Decl(higherKindedTypes.ts, 1, 8))
+>f : Symbol(f, Decl(higherKindedTypes.ts, 1, 11))
+>a : Symbol(a, Decl(higherKindedTypes.ts, 1, 15))
+>A : Symbol(A, Decl(higherKindedTypes.ts, 0, 32))
+>B : Symbol(B, Decl(higherKindedTypes.ts, 1, 8))
+>Container : Symbol(Container, Decl(higherKindedTypes.ts, 0, 18))
+>B : Symbol(B, Decl(higherKindedTypes.ts, 1, 8))
+}
+
+interface FunctorX<A> extends Functor<FunctorX, A> {
+>FunctorX : Symbol(FunctorX, Decl(higherKindedTypes.ts, 2, 1))
+>A : Symbol(A, Decl(higherKindedTypes.ts, 4, 19))
+>Functor : Symbol(Functor, Decl(higherKindedTypes.ts, 0, 0))
+>FunctorX : Symbol(FunctorX, Decl(higherKindedTypes.ts, 2, 1))
+>A : Symbol(A, Decl(higherKindedTypes.ts, 4, 19))
+
+    map<B>(f: (a: A) => B): FunctorX<B>;
+>map : Symbol(FunctorX.map, Decl(higherKindedTypes.ts, 4, 52))
+>B : Symbol(B, Decl(higherKindedTypes.ts, 5, 8))
+>f : Symbol(f, Decl(higherKindedTypes.ts, 5, 11))
+>a : Symbol(a, Decl(higherKindedTypes.ts, 5, 15))
+>A : Symbol(A, Decl(higherKindedTypes.ts, 4, 19))
+>B : Symbol(B, Decl(higherKindedTypes.ts, 5, 8))
+>FunctorX : Symbol(FunctorX, Decl(higherKindedTypes.ts, 2, 1))
+>B : Symbol(B, Decl(higherKindedTypes.ts, 5, 8))
+
+    xVal: string;
+>xVal : Symbol(FunctorX.xVal, Decl(higherKindedTypes.ts, 5, 40))
+}
+
+interface FunctorY<A> extends Functor<FunctorY, A> {
+>FunctorY : Symbol(FunctorY, Decl(higherKindedTypes.ts, 7, 1))
+>A : Symbol(A, Decl(higherKindedTypes.ts, 9, 19))
+>Functor : Symbol(Functor, Decl(higherKindedTypes.ts, 0, 0))
+>FunctorY : Symbol(FunctorY, Decl(higherKindedTypes.ts, 7, 1))
+>A : Symbol(A, Decl(higherKindedTypes.ts, 9, 19))
+
+    map<B>(f: (a: A) => B): FunctorY<B>;
+>map : Symbol(FunctorY.map, Decl(higherKindedTypes.ts, 9, 52))
+>B : Symbol(B, Decl(higherKindedTypes.ts, 10, 8))
+>f : Symbol(f, Decl(higherKindedTypes.ts, 10, 11))
+>a : Symbol(a, Decl(higherKindedTypes.ts, 10, 15))
+>A : Symbol(A, Decl(higherKindedTypes.ts, 9, 19))
+>B : Symbol(B, Decl(higherKindedTypes.ts, 10, 8))
+>FunctorY : Symbol(FunctorY, Decl(higherKindedTypes.ts, 7, 1))
+>B : Symbol(B, Decl(higherKindedTypes.ts, 10, 8))
+
+    yVal: A;
+>yVal : Symbol(FunctorY.yVal, Decl(higherKindedTypes.ts, 10, 40))
+>A : Symbol(A, Decl(higherKindedTypes.ts, 9, 19))
+}
+
+declare const initialX: FunctorX<string>;
+>initialX : Symbol(initialX, Decl(higherKindedTypes.ts, 14, 13))
+>FunctorX : Symbol(FunctorX, Decl(higherKindedTypes.ts, 2, 1))
+
+declare const initialY: FunctorY<string>;
+>initialY : Symbol(initialY, Decl(higherKindedTypes.ts, 15, 13))
+>FunctorY : Symbol(FunctorY, Decl(higherKindedTypes.ts, 7, 1))
+
+const resultX1 = initialX.map(val => val.length);
+>resultX1 : Symbol(resultX1, Decl(higherKindedTypes.ts, 17, 5))
+>initialX.map : Symbol(FunctorX.map, Decl(higherKindedTypes.ts, 4, 52))
+>initialX : Symbol(initialX, Decl(higherKindedTypes.ts, 14, 13))
+>map : Symbol(FunctorX.map, Decl(higherKindedTypes.ts, 4, 52))
+>val : Symbol(val, Decl(higherKindedTypes.ts, 17, 30))
+>val.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>val : Symbol(val, Decl(higherKindedTypes.ts, 17, 30))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
+
+const expectX1: FunctorX<number> = resultX1;
+>expectX1 : Symbol(expectX1, Decl(higherKindedTypes.ts, 18, 5))
+>FunctorX : Symbol(FunctorX, Decl(higherKindedTypes.ts, 2, 1))
+>resultX1 : Symbol(resultX1, Decl(higherKindedTypes.ts, 17, 5))
+
+const resultY1 = initialY.map(val => val.length);
+>resultY1 : Symbol(resultY1, Decl(higherKindedTypes.ts, 20, 5))
+>initialY.map : Symbol(FunctorY.map, Decl(higherKindedTypes.ts, 9, 52))
+>initialY : Symbol(initialY, Decl(higherKindedTypes.ts, 15, 13))
+>map : Symbol(FunctorY.map, Decl(higherKindedTypes.ts, 9, 52))
+>val : Symbol(val, Decl(higherKindedTypes.ts, 20, 30))
+>val.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>val : Symbol(val, Decl(higherKindedTypes.ts, 20, 30))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
+
+const expectY1: FunctorY<number> = resultY1;
+>expectY1 : Symbol(expectY1, Decl(higherKindedTypes.ts, 21, 5))
+>FunctorY : Symbol(FunctorY, Decl(higherKindedTypes.ts, 7, 1))
+>resultY1 : Symbol(resultY1, Decl(higherKindedTypes.ts, 20, 5))
+
+const resultX2 = initialX.map(val => [val]);
+>resultX2 : Symbol(resultX2, Decl(higherKindedTypes.ts, 23, 5))
+>initialX.map : Symbol(FunctorX.map, Decl(higherKindedTypes.ts, 4, 52))
+>initialX : Symbol(initialX, Decl(higherKindedTypes.ts, 14, 13))
+>map : Symbol(FunctorX.map, Decl(higherKindedTypes.ts, 4, 52))
+>val : Symbol(val, Decl(higherKindedTypes.ts, 23, 30))
+>val : Symbol(val, Decl(higherKindedTypes.ts, 23, 30))
+
+const expectX2: FunctorX<string[]> = resultX2;
+>expectX2 : Symbol(expectX2, Decl(higherKindedTypes.ts, 24, 5))
+>FunctorX : Symbol(FunctorX, Decl(higherKindedTypes.ts, 2, 1))
+>resultX2 : Symbol(resultX2, Decl(higherKindedTypes.ts, 23, 5))
+
+const resultY2 = initialY.map(val => [val]);
+>resultY2 : Symbol(resultY2, Decl(higherKindedTypes.ts, 26, 5))
+>initialY.map : Symbol(FunctorY.map, Decl(higherKindedTypes.ts, 9, 52))
+>initialY : Symbol(initialY, Decl(higherKindedTypes.ts, 15, 13))
+>map : Symbol(FunctorY.map, Decl(higherKindedTypes.ts, 9, 52))
+>val : Symbol(val, Decl(higherKindedTypes.ts, 26, 30))
+>val : Symbol(val, Decl(higherKindedTypes.ts, 26, 30))
+
+const expectY2: FunctorY<string[]> = resultY2;
+>expectY2 : Symbol(expectY2, Decl(higherKindedTypes.ts, 27, 5))
+>FunctorY : Symbol(FunctorY, Decl(higherKindedTypes.ts, 7, 1))
+>resultY2 : Symbol(resultY2, Decl(higherKindedTypes.ts, 26, 5))
+    
+
+function staticMap<F<_T> extends Functor<F, _T>, A, B>(fa: F<A>, f: (a: A) => B): F<B> {
+>staticMap : Symbol(staticMap, Decl(higherKindedTypes.ts, 27, 46))
+>F : Symbol(F, Decl(higherKindedTypes.ts, 30, 19))
+>_T : Symbol(_T, Decl(higherKindedTypes.ts, 30, 21))
+>Functor : Symbol(Functor, Decl(higherKindedTypes.ts, 0, 0))
+>F : Symbol(F, Decl(higherKindedTypes.ts, 30, 19))
+>_T : Symbol(_T, Decl(higherKindedTypes.ts, 30, 21))
+>A : Symbol(A, Decl(higherKindedTypes.ts, 30, 48))
+>B : Symbol(B, Decl(higherKindedTypes.ts, 30, 51))
+>fa : Symbol(fa, Decl(higherKindedTypes.ts, 30, 55))
+>F : Symbol(F, Decl(higherKindedTypes.ts, 30, 19))
+>A : Symbol(A, Decl(higherKindedTypes.ts, 30, 48))
+>f : Symbol(f, Decl(higherKindedTypes.ts, 30, 64))
+>a : Symbol(a, Decl(higherKindedTypes.ts, 30, 69))
+>A : Symbol(A, Decl(higherKindedTypes.ts, 30, 48))
+>B : Symbol(B, Decl(higherKindedTypes.ts, 30, 51))
+>F : Symbol(F, Decl(higherKindedTypes.ts, 30, 19))
+>B : Symbol(B, Decl(higherKindedTypes.ts, 30, 51))
+
+    const result = fa.map(f);
+>result : Symbol(result, Decl(higherKindedTypes.ts, 31, 9))
+>fa.map : Symbol(Functor.map, Decl(higherKindedTypes.ts, 0, 37))
+>fa : Symbol(fa, Decl(higherKindedTypes.ts, 30, 55))
+>map : Symbol(Functor.map, Decl(higherKindedTypes.ts, 0, 37))
+>f : Symbol(f, Decl(higherKindedTypes.ts, 30, 64))
+
+    return result;
+>result : Symbol(result, Decl(higherKindedTypes.ts, 31, 9))
+}
+
+function staticMapBadImplementation<F<_T> extends Functor<F, _T>, A, B>(fa: F<A>, f: (a: A) => B): F<B> {
+>staticMapBadImplementation : Symbol(staticMapBadImplementation, Decl(higherKindedTypes.ts, 33, 1))
+>F : Symbol(F, Decl(higherKindedTypes.ts, 35, 36))
+>_T : Symbol(_T, Decl(higherKindedTypes.ts, 35, 38))
+>Functor : Symbol(Functor, Decl(higherKindedTypes.ts, 0, 0))
+>F : Symbol(F, Decl(higherKindedTypes.ts, 35, 36))
+>_T : Symbol(_T, Decl(higherKindedTypes.ts, 35, 38))
+>A : Symbol(A, Decl(higherKindedTypes.ts, 35, 65))
+>B : Symbol(B, Decl(higherKindedTypes.ts, 35, 68))
+>fa : Symbol(fa, Decl(higherKindedTypes.ts, 35, 72))
+>F : Symbol(F, Decl(higherKindedTypes.ts, 35, 36))
+>A : Symbol(A, Decl(higherKindedTypes.ts, 35, 65))
+>f : Symbol(f, Decl(higherKindedTypes.ts, 35, 81))
+>a : Symbol(a, Decl(higherKindedTypes.ts, 35, 86))
+>A : Symbol(A, Decl(higherKindedTypes.ts, 35, 65))
+>B : Symbol(B, Decl(higherKindedTypes.ts, 35, 68))
+>F : Symbol(F, Decl(higherKindedTypes.ts, 35, 36))
+>B : Symbol(B, Decl(higherKindedTypes.ts, 35, 68))
+
+    return fa;
+>fa : Symbol(fa, Decl(higherKindedTypes.ts, 35, 72))
+}
+
+const resultX3 = staticMap(initialX, val => val.length);
+>resultX3 : Symbol(resultX3, Decl(higherKindedTypes.ts, 39, 5))
+>staticMap : Symbol(staticMap, Decl(higherKindedTypes.ts, 27, 46))
+>initialX : Symbol(initialX, Decl(higherKindedTypes.ts, 14, 13))
+>val : Symbol(val, Decl(higherKindedTypes.ts, 39, 36))
+>val.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>val : Symbol(val, Decl(higherKindedTypes.ts, 39, 36))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
+
+const expectX3: FunctorX<number> = resultX3;
+>expectX3 : Symbol(expectX3, Decl(higherKindedTypes.ts, 40, 5))
+>FunctorX : Symbol(FunctorX, Decl(higherKindedTypes.ts, 2, 1))
+>resultX3 : Symbol(resultX3, Decl(higherKindedTypes.ts, 39, 5))
+
+const resultY3 = staticMap(initialY, val => val.length);
+>resultY3 : Symbol(resultY3, Decl(higherKindedTypes.ts, 42, 5))
+>staticMap : Symbol(staticMap, Decl(higherKindedTypes.ts, 27, 46))
+>initialY : Symbol(initialY, Decl(higherKindedTypes.ts, 15, 13))
+>val : Symbol(val, Decl(higherKindedTypes.ts, 42, 36))
+>val.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>val : Symbol(val, Decl(higherKindedTypes.ts, 42, 36))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
+
+const expectY3: FunctorY<number> = resultY3;
+>expectY3 : Symbol(expectY3, Decl(higherKindedTypes.ts, 43, 5))
+>FunctorY : Symbol(FunctorY, Decl(higherKindedTypes.ts, 7, 1))
+>resultY3 : Symbol(resultY3, Decl(higherKindedTypes.ts, 42, 5))
+
+const resultX4 = staticMap(initialX, val => [val]);
+>resultX4 : Symbol(resultX4, Decl(higherKindedTypes.ts, 45, 5))
+>staticMap : Symbol(staticMap, Decl(higherKindedTypes.ts, 27, 46))
+>initialX : Symbol(initialX, Decl(higherKindedTypes.ts, 14, 13))
+>val : Symbol(val, Decl(higherKindedTypes.ts, 45, 36))
+>val : Symbol(val, Decl(higherKindedTypes.ts, 45, 36))
+
+const expectX4: FunctorX<string[]> = resultX4;
+>expectX4 : Symbol(expectX4, Decl(higherKindedTypes.ts, 46, 5))
+>FunctorX : Symbol(FunctorX, Decl(higherKindedTypes.ts, 2, 1))
+>resultX4 : Symbol(resultX4, Decl(higherKindedTypes.ts, 45, 5))
+
+const resultY4 = staticMap(initialY, val => [val]);
+>resultY4 : Symbol(resultY4, Decl(higherKindedTypes.ts, 48, 5))
+>staticMap : Symbol(staticMap, Decl(higherKindedTypes.ts, 27, 46))
+>initialY : Symbol(initialY, Decl(higherKindedTypes.ts, 15, 13))
+>val : Symbol(val, Decl(higherKindedTypes.ts, 48, 36))
+>val : Symbol(val, Decl(higherKindedTypes.ts, 48, 36))
+
+const expectY4: FunctorY<string[]> = resultY4;
+>expectY4 : Symbol(expectY4, Decl(higherKindedTypes.ts, 49, 5))
+>FunctorY : Symbol(FunctorY, Decl(higherKindedTypes.ts, 7, 1))
+>resultY4 : Symbol(resultY4, Decl(higherKindedTypes.ts, 48, 5))
+

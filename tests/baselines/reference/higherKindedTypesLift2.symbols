@@ -1,0 +1,368 @@
+=== tests/cases/compiler/higherKindedTypesLift2.ts ===
+export interface FMap<FA, FB> {
+>FMap : Symbol(FMap, Decl(higherKindedTypesLift2.ts, 0, 0))
+>FA : Symbol(FA, Decl(higherKindedTypesLift2.ts, 0, 22))
+>FB : Symbol(FB, Decl(higherKindedTypesLift2.ts, 0, 25))
+
+    (fmapfa: FA): FB
+>fmapfa : Symbol(fmapfa, Decl(higherKindedTypesLift2.ts, 1, 5))
+>FA : Symbol(FA, Decl(higherKindedTypesLift2.ts, 0, 22))
+>FB : Symbol(FB, Decl(higherKindedTypesLift2.ts, 0, 25))
+}
+
+interface Bounded<
+>Bounded : Symbol(Bounded, Decl(higherKindedTypesLift2.ts, 2, 1))
+
+    BC<_BCT> extends Bound<BC, _BCT>,
+>BC : Symbol(BC, Decl(higherKindedTypesLift2.ts, 4, 18))
+>_BCT : Symbol(_BCT, Decl(higherKindedTypesLift2.ts, 5, 7))
+>Bound : Symbol(Bound, Decl(higherKindedTypesLift2.ts, 5, 37))
+>BC : Symbol(BC, Decl(higherKindedTypesLift2.ts, 4, 18))
+>_BCT : Symbol(_BCT, Decl(higherKindedTypesLift2.ts, 5, 7))
+
+    Bound<
+>Bound : Symbol(Bound, Decl(higherKindedTypesLift2.ts, 5, 37))
+
+        _BC<__BCT>,
+>_BC : Symbol(_BC, Decl(higherKindedTypesLift2.ts, 6, 10))
+>__BCT : Symbol(__BCT, Decl(higherKindedTypesLift2.ts, 7, 12))
+
+        _BT
+>_BT : Symbol(_BT, Decl(higherKindedTypesLift2.ts, 7, 19))
+
+    >,
+    BT extends BTBound,
+>BT : Symbol(BT, Decl(higherKindedTypesLift2.ts, 9, 6))
+>BTBound : Symbol(BTBound, Decl(higherKindedTypesLift2.ts, 10, 23))
+
+    BTBound = BT
+>BTBound : Symbol(BTBound, Decl(higherKindedTypesLift2.ts, 10, 23))
+>BT : Symbol(BT, Decl(higherKindedTypesLift2.ts, 9, 6))
+
+> {}
+
+interface Functor<CX<_TX extends AXBound> extends Functor<CX, AX, AXBound>, AX extends AXBound, AXBound = AX> extends Bounded<CX, Functor, AX, AXBound> {
+>Functor : Symbol(Functor, Decl(higherKindedTypesLift2.ts, 12, 4))
+>CX : Symbol(CX, Decl(higherKindedTypesLift2.ts, 14, 18))
+>_TX : Symbol(_TX, Decl(higherKindedTypesLift2.ts, 14, 21))
+>AXBound : Symbol(AXBound, Decl(higherKindedTypesLift2.ts, 14, 95))
+>Functor : Symbol(Functor, Decl(higherKindedTypesLift2.ts, 12, 4))
+>CX : Symbol(CX, Decl(higherKindedTypesLift2.ts, 14, 18))
+>AX : Symbol(AX, Decl(higherKindedTypesLift2.ts, 14, 75))
+>AXBound : Symbol(AXBound, Decl(higherKindedTypesLift2.ts, 14, 95))
+>AX : Symbol(AX, Decl(higherKindedTypesLift2.ts, 14, 75))
+>AXBound : Symbol(AXBound, Decl(higherKindedTypesLift2.ts, 14, 95))
+>AXBound : Symbol(AXBound, Decl(higherKindedTypesLift2.ts, 14, 95))
+>AX : Symbol(AX, Decl(higherKindedTypesLift2.ts, 14, 75))
+>Bounded : Symbol(Bounded, Decl(higherKindedTypesLift2.ts, 2, 1))
+>CX : Symbol(CX, Decl(higherKindedTypesLift2.ts, 14, 18))
+>Functor : Symbol(Functor, Decl(higherKindedTypesLift2.ts, 12, 4))
+>AX : Symbol(AX, Decl(higherKindedTypesLift2.ts, 14, 75))
+>AXBound : Symbol(AXBound, Decl(higherKindedTypesLift2.ts, 14, 95))
+
+    map<BX>(fmapx: (fmapxax: AX) => BX): CX<BX>;
+>map : Symbol(Functor.map, Decl(higherKindedTypesLift2.ts, 14, 153))
+>BX : Symbol(BX, Decl(higherKindedTypesLift2.ts, 15, 8))
+>fmapx : Symbol(fmapx, Decl(higherKindedTypesLift2.ts, 15, 12))
+>fmapxax : Symbol(fmapxax, Decl(higherKindedTypesLift2.ts, 15, 20))
+>AX : Symbol(AX, Decl(higherKindedTypesLift2.ts, 14, 75))
+>BX : Symbol(BX, Decl(higherKindedTypesLift2.ts, 15, 8))
+>CX : Symbol(CX, Decl(higherKindedTypesLift2.ts, 14, 18))
+>BX : Symbol(BX, Decl(higherKindedTypesLift2.ts, 15, 8))
+}
+
+interface FunctorFoo<AFoo> extends Functor<FunctorFoo, AFoo> {
+>FunctorFoo : Symbol(FunctorFoo, Decl(higherKindedTypesLift2.ts, 16, 1))
+>AFoo : Symbol(AFoo, Decl(higherKindedTypesLift2.ts, 18, 21))
+>Functor : Symbol(Functor, Decl(higherKindedTypesLift2.ts, 12, 4))
+>FunctorFoo : Symbol(FunctorFoo, Decl(higherKindedTypesLift2.ts, 16, 1))
+>AFoo : Symbol(AFoo, Decl(higherKindedTypesLift2.ts, 18, 21))
+
+    map<BFoo>(fmapfoo: FMap<AFoo, BFoo>): FunctorFoo<BFoo>;
+>map : Symbol(FunctorFoo.map, Decl(higherKindedTypesLift2.ts, 18, 62))
+>BFoo : Symbol(BFoo, Decl(higherKindedTypesLift2.ts, 19, 8))
+>fmapfoo : Symbol(fmapfoo, Decl(higherKindedTypesLift2.ts, 19, 14))
+>FMap : Symbol(FMap, Decl(higherKindedTypesLift2.ts, 0, 0))
+>AFoo : Symbol(AFoo, Decl(higherKindedTypesLift2.ts, 18, 21))
+>BFoo : Symbol(BFoo, Decl(higherKindedTypesLift2.ts, 19, 8))
+>FunctorFoo : Symbol(FunctorFoo, Decl(higherKindedTypesLift2.ts, 16, 1))
+>BFoo : Symbol(BFoo, Decl(higherKindedTypesLift2.ts, 19, 8))
+
+    fooVal: AFoo
+>fooVal : Symbol(FunctorFoo.fooVal, Decl(higherKindedTypesLift2.ts, 19, 59))
+>AFoo : Symbol(AFoo, Decl(higherKindedTypesLift2.ts, 18, 21))
+}
+
+interface StaticFunctor<
+>StaticFunctor : Symbol(StaticFunctor, Decl(higherKindedTypesLift2.ts, 21, 1))
+
+    SC<_T extends SCTBound> extends SCBound<SC, _T> & Bounded<SC, SCBound, _T, SCTBound>,
+>SC : Symbol(SC, Decl(higherKindedTypesLift2.ts, 23, 24))
+>_T : Symbol(_T, Decl(higherKindedTypesLift2.ts, 24, 7))
+>SCTBound : Symbol(SCTBound, Decl(higherKindedTypesLift2.ts, 28, 6))
+>SCBound : Symbol(SCBound, Decl(higherKindedTypesLift2.ts, 24, 89))
+>SC : Symbol(SC, Decl(higherKindedTypesLift2.ts, 23, 24))
+>_T : Symbol(_T, Decl(higherKindedTypesLift2.ts, 24, 7))
+>Bounded : Symbol(Bounded, Decl(higherKindedTypesLift2.ts, 2, 1))
+>SC : Symbol(SC, Decl(higherKindedTypesLift2.ts, 23, 24))
+>SCBound : Symbol(SCBound, Decl(higherKindedTypesLift2.ts, 24, 89))
+>_T : Symbol(_T, Decl(higherKindedTypesLift2.ts, 24, 7))
+>SCTBound : Symbol(SCTBound, Decl(higherKindedTypesLift2.ts, 28, 6))
+
+    SCBound<
+>SCBound : Symbol(SCBound, Decl(higherKindedTypesLift2.ts, 24, 89))
+
+     _BC<__BCT>,
+>_BC : Symbol(_BC, Decl(higherKindedTypesLift2.ts, 25, 12))
+>__BCT : Symbol(__BCT, Decl(higherKindedTypesLift2.ts, 26, 9))
+
+     _BT
+>_BT : Symbol(_BT, Decl(higherKindedTypesLift2.ts, 26, 16))
+
+    >,
+    SCTBound = {}
+>SCTBound : Symbol(SCTBound, Decl(higherKindedTypesLift2.ts, 28, 6))
+
+> {
+    <AS, BS>(fa2: SC<AS>, fmap2: FMap<AS,BS>): SC<BS>
+>AS : Symbol(AS, Decl(higherKindedTypesLift2.ts, 31, 5))
+>BS : Symbol(BS, Decl(higherKindedTypesLift2.ts, 31, 8))
+>fa2 : Symbol(fa2, Decl(higherKindedTypesLift2.ts, 31, 13))
+>SC : Symbol(SC, Decl(higherKindedTypesLift2.ts, 23, 24))
+>AS : Symbol(AS, Decl(higherKindedTypesLift2.ts, 31, 5))
+>fmap2 : Symbol(fmap2, Decl(higherKindedTypesLift2.ts, 31, 25))
+>FMap : Symbol(FMap, Decl(higherKindedTypesLift2.ts, 0, 0))
+>AS : Symbol(AS, Decl(higherKindedTypesLift2.ts, 31, 5))
+>BS : Symbol(BS, Decl(higherKindedTypesLift2.ts, 31, 8))
+>SC : Symbol(SC, Decl(higherKindedTypesLift2.ts, 23, 24))
+>BS : Symbol(BS, Decl(higherKindedTypesLift2.ts, 31, 8))
+}
+
+
+declare function staticMap<C1<_T1 extends T1Bound> extends Functor<C1, T1Bound, T1Bound>, T1Bound, A1, B1>(fa1: C1<A1>, fmap1: FMap<A1, B1>): C1<B1>;
+>staticMap : Symbol(staticMap, Decl(higherKindedTypesLift2.ts, 32, 1))
+>C1 : Symbol(C1, Decl(higherKindedTypesLift2.ts, 35, 27))
+>_T1 : Symbol(_T1, Decl(higherKindedTypesLift2.ts, 35, 30))
+>T1Bound : Symbol(T1Bound, Decl(higherKindedTypesLift2.ts, 35, 89))
+>Functor : Symbol(Functor, Decl(higherKindedTypesLift2.ts, 12, 4))
+>C1 : Symbol(C1, Decl(higherKindedTypesLift2.ts, 35, 27))
+>T1Bound : Symbol(T1Bound, Decl(higherKindedTypesLift2.ts, 35, 89))
+>T1Bound : Symbol(T1Bound, Decl(higherKindedTypesLift2.ts, 35, 89))
+>T1Bound : Symbol(T1Bound, Decl(higherKindedTypesLift2.ts, 35, 89))
+>A1 : Symbol(A1, Decl(higherKindedTypesLift2.ts, 35, 98))
+>B1 : Symbol(B1, Decl(higherKindedTypesLift2.ts, 35, 102))
+>fa1 : Symbol(fa1, Decl(higherKindedTypesLift2.ts, 35, 107))
+>C1 : Symbol(C1, Decl(higherKindedTypesLift2.ts, 35, 27))
+>A1 : Symbol(A1, Decl(higherKindedTypesLift2.ts, 35, 98))
+>fmap1 : Symbol(fmap1, Decl(higherKindedTypesLift2.ts, 35, 119))
+>FMap : Symbol(FMap, Decl(higherKindedTypesLift2.ts, 0, 0))
+>A1 : Symbol(A1, Decl(higherKindedTypesLift2.ts, 35, 98))
+>B1 : Symbol(B1, Decl(higherKindedTypesLift2.ts, 35, 102))
+>C1 : Symbol(C1, Decl(higherKindedTypesLift2.ts, 35, 27))
+>B1 : Symbol(B1, Decl(higherKindedTypesLift2.ts, 35, 102))
+
+
+interface LiftedResult<
+>LiftedResult : Symbol(LiftedResult, Decl(higherKindedTypesLift2.ts, 35, 149))
+
+    LC<_LT extends LRTBound> extends LRCBound<LC, _LT> & Bounded<LC, LRCBound, _LT, LRTBound>,
+>LC : Symbol(LC, Decl(higherKindedTypesLift2.ts, 38, 23))
+>_LT : Symbol(_LT, Decl(higherKindedTypesLift2.ts, 39, 7))
+>LRTBound : Symbol(LRTBound, Decl(higherKindedTypesLift2.ts, 43, 5))
+>LRCBound : Symbol(LRCBound, Decl(higherKindedTypesLift2.ts, 39, 94))
+>LC : Symbol(LC, Decl(higherKindedTypesLift2.ts, 38, 23))
+>_LT : Symbol(_LT, Decl(higherKindedTypesLift2.ts, 39, 7))
+>Bounded : Symbol(Bounded, Decl(higherKindedTypesLift2.ts, 2, 1))
+>LC : Symbol(LC, Decl(higherKindedTypesLift2.ts, 38, 23))
+>LRCBound : Symbol(LRCBound, Decl(higherKindedTypesLift2.ts, 39, 94))
+>_LT : Symbol(_LT, Decl(higherKindedTypesLift2.ts, 39, 7))
+>LRTBound : Symbol(LRTBound, Decl(higherKindedTypesLift2.ts, 43, 5))
+
+    LRCBound<
+>LRCBound : Symbol(LRCBound, Decl(higherKindedTypesLift2.ts, 39, 94))
+
+    _BC<__BCT>,
+>_BC : Symbol(_BC, Decl(higherKindedTypesLift2.ts, 40, 13))
+>__BCT : Symbol(__BCT, Decl(higherKindedTypesLift2.ts, 41, 8))
+
+    _BT
+>_BT : Symbol(_BT, Decl(higherKindedTypesLift2.ts, 41, 15))
+
+   >,
+   LRTBound 
+>LRTBound : Symbol(LRTBound, Decl(higherKindedTypesLift2.ts, 43, 5))
+
+> {
+    <LA, LB>(lmap: FMap<LA,LB>): LiftedResult2<LC, LA, LB, LRCBound>
+>LA : Symbol(LA, Decl(higherKindedTypesLift2.ts, 46, 5))
+>LB : Symbol(LB, Decl(higherKindedTypesLift2.ts, 46, 8))
+>lmap : Symbol(lmap, Decl(higherKindedTypesLift2.ts, 46, 13))
+>FMap : Symbol(FMap, Decl(higherKindedTypesLift2.ts, 0, 0))
+>LA : Symbol(LA, Decl(higherKindedTypesLift2.ts, 46, 5))
+>LB : Symbol(LB, Decl(higherKindedTypesLift2.ts, 46, 8))
+>LiftedResult2 : Symbol(LiftedResult2, Decl(higherKindedTypesLift2.ts, 47, 1))
+>LC : Symbol(LC, Decl(higherKindedTypesLift2.ts, 38, 23))
+>LA : Symbol(LA, Decl(higherKindedTypesLift2.ts, 46, 5))
+>LB : Symbol(LB, Decl(higherKindedTypesLift2.ts, 46, 8))
+>LRCBound : Symbol(LRCBound, Decl(higherKindedTypesLift2.ts, 39, 94))
+}
+
+interface LiftedResult2<
+>LiftedResult2 : Symbol(LiftedResult2, Decl(higherKindedTypesLift2.ts, 47, 1))
+
+    LC2<_LT extends LA2 | LB2> extends LRC2Bound<LC2, _LT> & Bounded<LC2, LRC2Bound, _LT, LA2 | LB2>, 
+>LC2 : Symbol(LC2, Decl(higherKindedTypesLift2.ts, 49, 24))
+>_LT : Symbol(_LT, Decl(higherKindedTypesLift2.ts, 50, 8))
+>LA2 : Symbol(LA2, Decl(higherKindedTypesLift2.ts, 50, 101))
+>LB2 : Symbol(LB2, Decl(higherKindedTypesLift2.ts, 51, 8))
+>LRC2Bound : Symbol(LRC2Bound, Decl(higherKindedTypesLift2.ts, 52, 8))
+>LC2 : Symbol(LC2, Decl(higherKindedTypesLift2.ts, 49, 24))
+>_LT : Symbol(_LT, Decl(higherKindedTypesLift2.ts, 50, 8))
+>Bounded : Symbol(Bounded, Decl(higherKindedTypesLift2.ts, 2, 1))
+>LC2 : Symbol(LC2, Decl(higherKindedTypesLift2.ts, 49, 24))
+>LRC2Bound : Symbol(LRC2Bound, Decl(higherKindedTypesLift2.ts, 52, 8))
+>_LT : Symbol(_LT, Decl(higherKindedTypesLift2.ts, 50, 8))
+>LA2 : Symbol(LA2, Decl(higherKindedTypesLift2.ts, 50, 101))
+>LB2 : Symbol(LB2, Decl(higherKindedTypesLift2.ts, 51, 8))
+
+    LA2,
+>LA2 : Symbol(LA2, Decl(higherKindedTypesLift2.ts, 50, 101))
+
+    LB2,
+>LB2 : Symbol(LB2, Decl(higherKindedTypesLift2.ts, 51, 8))
+
+    LRC2Bound<
+>LRC2Bound : Symbol(LRC2Bound, Decl(higherKindedTypesLift2.ts, 52, 8))
+
+        _BC<__BCT>,
+>_BC : Symbol(_BC, Decl(higherKindedTypesLift2.ts, 53, 14))
+>__BCT : Symbol(__BCT, Decl(higherKindedTypesLift2.ts, 54, 12))
+
+        _BT
+>_BT : Symbol(_BT, Decl(higherKindedTypesLift2.ts, 54, 19))
+
+    >,
+    > extends FMap<LC2<LA2>, LC2<LB2>>{}
+>FMap : Symbol(FMap, Decl(higherKindedTypesLift2.ts, 0, 0))
+>LC2 : Symbol(LC2, Decl(higherKindedTypesLift2.ts, 49, 24))
+>LA2 : Symbol(LA2, Decl(higherKindedTypesLift2.ts, 50, 101))
+>LC2 : Symbol(LC2, Decl(higherKindedTypesLift2.ts, 49, 24))
+>LB2 : Symbol(LB2, Decl(higherKindedTypesLift2.ts, 51, 8))
+
+declare function lift<
+>lift : Symbol(lift, Decl(higherKindedTypesLift2.ts, 57, 40))
+
+    C<_T extends ActTBound> extends ActBound & Bounded<C, ActBound, _T, ActTBound>,
+>C : Symbol(C, Decl(higherKindedTypesLift2.ts, 59, 22))
+>_T : Symbol(_T, Decl(higherKindedTypesLift2.ts, 60, 6))
+>ActTBound : Symbol(ActTBound, Decl(higherKindedTypesLift2.ts, 61, 13))
+>ActBound : Symbol(ActBound, Decl(higherKindedTypesLift2.ts, 60, 83))
+>Bounded : Symbol(Bounded, Decl(higherKindedTypesLift2.ts, 2, 1))
+>C : Symbol(C, Decl(higherKindedTypesLift2.ts, 59, 22))
+>ActBound : Symbol(ActBound, Decl(higherKindedTypesLift2.ts, 60, 83))
+>_T : Symbol(_T, Decl(higherKindedTypesLift2.ts, 60, 6))
+>ActTBound : Symbol(ActTBound, Decl(higherKindedTypesLift2.ts, 61, 13))
+
+    ActBound,
+>ActBound : Symbol(ActBound, Decl(higherKindedTypesLift2.ts, 60, 83))
+
+    ActTBound
+>ActTBound : Symbol(ActTBound, Decl(higherKindedTypesLift2.ts, 61, 13))
+
+>
+(fToLift: StaticFunctor<C, ActBound, ActTBound>): LiftedResult<C, ActBound, ActTBound>
+>fToLift : Symbol(fToLift, Decl(higherKindedTypesLift2.ts, 64, 1))
+>StaticFunctor : Symbol(StaticFunctor, Decl(higherKindedTypesLift2.ts, 21, 1))
+>C : Symbol(C, Decl(higherKindedTypesLift2.ts, 59, 22))
+>ActBound : Symbol(ActBound, Decl(higherKindedTypesLift2.ts, 60, 83))
+>ActTBound : Symbol(ActTBound, Decl(higherKindedTypesLift2.ts, 61, 13))
+>LiftedResult : Symbol(LiftedResult, Decl(higherKindedTypesLift2.ts, 35, 149))
+>C : Symbol(C, Decl(higherKindedTypesLift2.ts, 59, 22))
+>ActBound : Symbol(ActBound, Decl(higherKindedTypesLift2.ts, 60, 83))
+>ActTBound : Symbol(ActTBound, Decl(higherKindedTypesLift2.ts, 61, 13))
+
+interface StartVal {
+>StartVal : Symbol(StartVal, Decl(higherKindedTypesLift2.ts, 64, 86))
+
+    startVal: string
+>startVal : Symbol(StartVal.startVal, Decl(higherKindedTypesLift2.ts, 66, 20))
+}
+
+interface EndVal {
+>EndVal : Symbol(EndVal, Decl(higherKindedTypesLift2.ts, 68, 1))
+
+    endVal: number
+>endVal : Symbol(EndVal.endVal, Decl(higherKindedTypesLift2.ts, 70, 18))
+}
+
+
+declare const fooObj: FunctorFoo<StartVal>
+>fooObj : Symbol(fooObj, Decl(higherKindedTypesLift2.ts, 75, 13))
+>FunctorFoo : Symbol(FunctorFoo, Decl(higherKindedTypesLift2.ts, 16, 1))
+>StartVal : Symbol(StartVal, Decl(higherKindedTypesLift2.ts, 64, 86))
+
+declare function stringLength(strarg: StartVal): EndVal
+>stringLength : Symbol(stringLength, Decl(higherKindedTypesLift2.ts, 75, 42))
+>strarg : Symbol(strarg, Decl(higherKindedTypesLift2.ts, 76, 30))
+>StartVal : Symbol(StartVal, Decl(higherKindedTypesLift2.ts, 64, 86))
+>EndVal : Symbol(EndVal, Decl(higherKindedTypesLift2.ts, 68, 1))
+
+const liftedStaticMap = lift(staticMap);
+>liftedStaticMap : Symbol(liftedStaticMap, Decl(higherKindedTypesLift2.ts, 78, 5))
+>lift : Symbol(lift, Decl(higherKindedTypesLift2.ts, 57, 40))
+>staticMap : Symbol(staticMap, Decl(higherKindedTypesLift2.ts, 32, 1))
+
+const liftedStringLength = liftedStaticMap(stringLength);
+>liftedStringLength : Symbol(liftedStringLength, Decl(higherKindedTypesLift2.ts, 79, 5))
+>liftedStaticMap : Symbol(liftedStaticMap, Decl(higherKindedTypesLift2.ts, 78, 5))
+>stringLength : Symbol(stringLength, Decl(higherKindedTypesLift2.ts, 75, 42))
+
+const result = liftedStringLength(fooObj);
+>result : Symbol(result, Decl(higherKindedTypesLift2.ts, 80, 5))
+>liftedStringLength : Symbol(liftedStringLength, Decl(higherKindedTypesLift2.ts, 79, 5))
+>fooObj : Symbol(fooObj, Decl(higherKindedTypesLift2.ts, 75, 13))
+
+const expectedType: FunctorFoo<EndVal> = result;
+>expectedType : Symbol(expectedType, Decl(higherKindedTypesLift2.ts, 81, 5))
+>FunctorFoo : Symbol(FunctorFoo, Decl(higherKindedTypesLift2.ts, 16, 1))
+>EndVal : Symbol(EndVal, Decl(higherKindedTypesLift2.ts, 68, 1))
+>result : Symbol(result, Decl(higherKindedTypesLift2.ts, 80, 5))
+
+const expectError = liftedStringLength(result)
+>expectError : Symbol(expectError, Decl(higherKindedTypesLift2.ts, 82, 5))
+>liftedStringLength : Symbol(liftedStringLength, Decl(higherKindedTypesLift2.ts, 79, 5))
+>result : Symbol(result, Decl(higherKindedTypesLift2.ts, 80, 5))
+
+
+declare const declaredStaticFunctor: StaticFunctor<Functor, Functor>
+>declaredStaticFunctor : Symbol(declaredStaticFunctor, Decl(higherKindedTypesLift2.ts, 85, 13))
+>StaticFunctor : Symbol(StaticFunctor, Decl(higherKindedTypesLift2.ts, 21, 1))
+>Functor : Symbol(Functor, Decl(higherKindedTypesLift2.ts, 12, 4))
+>Functor : Symbol(Functor, Decl(higherKindedTypesLift2.ts, 12, 4))
+
+const liftedDeclaredStaticFunctor = lift(declaredStaticFunctor);
+>liftedDeclaredStaticFunctor : Symbol(liftedDeclaredStaticFunctor, Decl(higherKindedTypesLift2.ts, 86, 5))
+>lift : Symbol(lift, Decl(higherKindedTypesLift2.ts, 57, 40))
+>declaredStaticFunctor : Symbol(declaredStaticFunctor, Decl(higherKindedTypesLift2.ts, 85, 13))
+
+const liftedDeclaredStringLength = liftedDeclaredStaticFunctor(stringLength)
+>liftedDeclaredStringLength : Symbol(liftedDeclaredStringLength, Decl(higherKindedTypesLift2.ts, 87, 5))
+>liftedDeclaredStaticFunctor : Symbol(liftedDeclaredStaticFunctor, Decl(higherKindedTypesLift2.ts, 86, 5))
+>stringLength : Symbol(stringLength, Decl(higherKindedTypesLift2.ts, 75, 42))
+
+const declaredResult = liftedDeclaredStringLength(fooObj);
+>declaredResult : Symbol(declaredResult, Decl(higherKindedTypesLift2.ts, 88, 5))
+>liftedDeclaredStringLength : Symbol(liftedDeclaredStringLength, Decl(higherKindedTypesLift2.ts, 87, 5))
+>fooObj : Symbol(fooObj, Decl(higherKindedTypesLift2.ts, 75, 13))
+
+const expectedTypeDeclared: FunctorFoo<EndVal> = declaredResult;
+>expectedTypeDeclared : Symbol(expectedTypeDeclared, Decl(higherKindedTypesLift2.ts, 89, 5))
+>FunctorFoo : Symbol(FunctorFoo, Decl(higherKindedTypesLift2.ts, 16, 1))
+>EndVal : Symbol(EndVal, Decl(higherKindedTypesLift2.ts, 68, 1))
+>declaredResult : Symbol(declaredResult, Decl(higherKindedTypesLift2.ts, 88, 5))
+
+const expectErrorDeclared = liftedDeclaredStringLength(declaredResult)
+>expectErrorDeclared : Symbol(expectErrorDeclared, Decl(higherKindedTypesLift2.ts, 90, 5))
+>liftedDeclaredStringLength : Symbol(liftedDeclaredStringLength, Decl(higherKindedTypesLift2.ts, 87, 5))
+>declaredResult : Symbol(declaredResult, Decl(higherKindedTypesLift2.ts, 88, 5))
+

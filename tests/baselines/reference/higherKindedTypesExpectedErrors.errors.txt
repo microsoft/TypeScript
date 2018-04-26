@@ -1,0 +1,24 @@
+tests/cases/compiler/higherKindedTypesExpectedErrors.ts(6,11): error TS2430: Interface 'FunctorX<A>' incorrectly extends interface 'Functor<FunctorX<A>, A>'.
+  Types of property 'map' are incompatible.
+    Type '<B>(f: (a: A) => B) => B[]' is not assignable to type '<BX>(fmapx: (fmapxax: A) => BX) => FunctorX<BX>'.
+      Type 'BX[]' is not assignable to type 'FunctorX<BX>'.
+        Property 'xVal' is missing in type 'BX[]'.
+
+
+==== tests/cases/compiler/higherKindedTypesExpectedErrors.ts (1 errors) ====
+    interface Functor<FX<_TX>, AX> {
+        map<BX>(fmapx: (fmapxax: AX) => BX): FX<BX>;
+    }
+    
+    // Expect error since array doesn't have xVal property
+    interface FunctorX<A> extends Functor<FunctorX, A> {
+              ~~~~~~~~
+!!! error TS2430: Interface 'FunctorX<A>' incorrectly extends interface 'Functor<FunctorX<A>, A>'.
+!!! error TS2430:   Types of property 'map' are incompatible.
+!!! error TS2430:     Type '<B>(f: (a: A) => B) => B[]' is not assignable to type '<BX>(fmapx: (fmapxax: A) => BX) => FunctorX<BX>'.
+!!! error TS2430:       Type 'BX[]' is not assignable to type 'FunctorX<BX>'.
+!!! error TS2430:         Property 'xVal' is missing in type 'BX[]'.
+        map<B>(f: (a: A) => B): Array<B>;
+        xVal: string;
+    }
+    

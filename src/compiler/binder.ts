@@ -2713,6 +2713,12 @@ namespace ts {
                     bindAnonymousDeclaration(node, SymbolFlags.TypeParameter, getDeclarationName(node)!); // TODO: GH#18217
                 }
             }
+            else if (node.parent.kind === SyntaxKind.TypeParameter) {
+                if (!node.parent.locals) {
+                    node.parent.locals = createSymbolTable();
+                }
+                declareSymbol(node.parent.locals, node.parent.symbol, node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
+            }
             else {
                 declareSymbolAndAddToSymbolTable(node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
             }
