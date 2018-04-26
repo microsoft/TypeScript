@@ -9004,9 +9004,10 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getSyntheticInferTypeForName(targetName: __String, targetConstraint: Type | undefined): Type {
+        function getSyntheticInferType(targetName: __String, targetConstraint: Type | undefined, targetDefault: Type | undefined): Type {
             const param = createType(TypeFlags.TypeParameter) as TypeParameter;
             param.constraint = targetConstraint || noConstraintType;
+            param.default = targetDefault || noConstraintType;
             const symbol = createSymbol(SymbolFlags.TypeParameter, targetName, CheckFlags.ImpliedInferDecl);
             param.symbol = symbol;
             symbol.declaredType = param;
@@ -9029,18 +9030,18 @@ namespace ts {
                 const positionalCount = results.length;
                 const remainingTargets = targets.slice(positionalCount);
                 for (const target of remainingTargets) {
-                    let targetName: __String;
-                    let targetConstraint: Type;
+                    let param: TypeParameter;
                     if (((target as Node).kind && isTypeParameterDeclaration(target as Node))) {
-                        targetName = (target as TypeParameterDeclaration).name.escapedText;
-                        targetConstraint = getConstraintFromTypeParameter(getDeclaredTypeOfTypeParameter((target as TypeParameterDeclaration).symbol));
+                        param = getDeclaredTypeOfTypeParameter((target as TypeParameterDeclaration).symbol);
                     }
                     else {
-                        targetName = (target as TypeParameter).symbol.escapedName;
-                        targetConstraint = getConstraintFromTypeParameter((target as TypeParameter));
+                        param = target as TypeParameter;
                     }
+                    const targetName = param.symbol.escapedName;
+                    const targetConstraint = getConstraintFromTypeParameter(param);
+                    const targetDefault = getResolvedTypeParameterDefault(param);
                     const provided = named.get(targetName);
-                    results.push(provided ? getTypeFromTypeNode(provided.type) : getSyntheticInferTypeForName(targetName, targetConstraint));
+                    results.push(provided ? getTypeFromTypeNode(provided.type) : getSyntheticInferType(targetName, targetConstraint, targetDefault));
                 }
             }
             return results;
