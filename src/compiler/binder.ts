@@ -450,8 +450,7 @@ namespace ts {
                 //       and this case is specially handled. Module augmentations should only be merged with original module definition
                 //       and should never be merged directly with other augmentation, and the latter case would be possible if automatic merge is allowed.
                 if (node.kind === SyntaxKind.JSDocTypedefTag) Debug.assert(isInJavaScriptFile(node)); // We shouldn't add symbols for JSDoc nodes if not in a JS file.
-                const isJSDocTypedefInJSDocNamespace = isJSDocTypedefTag(node) && node.name && node.name.kind === SyntaxKind.Identifier && node.name.isInJSDocNamespace;
-                if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) || isJSDocTypedefInJSDocNamespace) {
+                if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) || isJSDocTypedefTag(node)) {
                     if (hasModifier(node, ModifierFlags.Default) && !getDeclarationName(node)) {
                         return declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes); // No local symbol for an unnamed default!
                     }
@@ -1727,7 +1726,7 @@ namespace ts {
                     declareModuleMember(node, symbolFlags, symbolExcludes);
                     break;
                 case SyntaxKind.SourceFile:
-                    if (isExternalModule(<SourceFile>container)) {
+                    if (isExternalOrCommonJsModule(<SourceFile>container)) {
                         declareModuleMember(node, symbolFlags, symbolExcludes);
                         break;
                     }
@@ -2211,7 +2210,7 @@ namespace ts {
 
         function bindSourceFileIfExternalModule() {
             setExportContextFlag(file);
-            if (isExternalModule(file)) {
+            if (isExternalOrCommonJsModule(file)) {
                 bindSourceFileAsExternalModule();
             }
         }
