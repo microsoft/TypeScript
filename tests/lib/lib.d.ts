@@ -456,6 +456,9 @@ interface StringConstructor {
 declare var String: StringConstructor;
 
 interface Boolean {
+    /** Returns a string representation of a boolean. */
+    toString(): string;
+
     /** Returns the primitive value of the specified object. */
     valueOf(): boolean;
 }
