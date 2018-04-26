@@ -13548,7 +13548,7 @@ namespace ts {
                 const targetType = !isTypeAny(prototypePropertyType) ? prototypePropertyType : undefined;
                 if (!targetType || isTypeAny(type) && (targetType === globalObjectType || targetType === globalFunctionType)) return type;
 
-                return getNarrowedType(type, targetType, assumeTrue, isTypeDerivedFrom);
+                return getNarrowedType(type, targetType, assumeTrue, areTypesComparable);
             }
 
             function narrowTypeByTypeof(type: Type, typeOfExpr: TypeOfExpression, operator: SyntaxKind, literal: LiteralExpression, assumeTrue: boolean): Type {

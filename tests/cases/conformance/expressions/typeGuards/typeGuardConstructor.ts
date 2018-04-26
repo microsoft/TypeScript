@@ -63,5 +63,19 @@ else {
     ctor4.p4; // C3
 }
 
+var x: number | "hello" | "world" | true | 1[] | undefined;
+if (x.constructor === String) {
+  x.length;
+}
 
+if (x.constructor === Number) {
+    x.toFixed();
+}
 
+if (x.constructor === Boolean) {
+    const b = x;
+}
+
+if(x.constructor === Array) {
+    const c = x[0];
+}

@@ -86,6 +86,20 @@ tests/cases/conformance/expressions/typeGuards/typeGuardConstructor.ts(63,11): e
 !!! error TS2339:   Property 'p4' does not exist on type 'C1'.
     }
     
+    var x: number | "hello" | "world" | true | 1[] | undefined;
+    if (x.constructor === String) {
+      x.length;
+    }
     
+    if (x.constructor === Number) {
+        x.toFixed();
+    }
     
+    if (x.constructor === Boolean) {
+        const b = x;
+    }
+    
+    if(x.constructor === Array) {
+        const c = x[0];
+    }
     

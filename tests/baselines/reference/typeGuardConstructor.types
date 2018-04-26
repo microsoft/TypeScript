@@ -199,6 +199,60 @@ else {
 >p4 : any
 }
 
+var x: number | "hello" | "world" | true | 1[] | undefined;
+>x : number | true | "hello" | "world" | 1[]
+>true : true
 
+if (x.constructor === String) {
+>x.constructor === String : boolean
+>x.constructor : Function
+>x : number | true | "hello" | "world" | 1[]
+>constructor : Function
+>String : StringConstructor
 
+  x.length;
+>x.length : number & String
+>x : "hello" | "world"
+>length : number & String
+}
+
+if (x.constructor === Number) {
+>x.constructor === Number : boolean
+>x.constructor : Function
+>x : number | true | "hello" | "world" | 1[]
+>constructor : Function
+>Number : NumberConstructor
+
+    x.toFixed();
+>x.toFixed() : string
+>x.toFixed : (fractionDigits?: number) => string
+>x : number
+>toFixed : (fractionDigits?: number) => string
+}
+
+if (x.constructor === Boolean) {
+>x.constructor === Boolean : boolean
+>x.constructor : Function
+>x : number | true | "hello" | "world" | 1[]
+>constructor : Function
+>Boolean : BooleanConstructor
+
+    const b = x;
+>b : true
+>x : true
+}
+
+if(x.constructor === Array) {
+>x.constructor === Array : boolean
+>x.constructor : Function
+>x : number | true | "hello" | "world" | 1[]
+>constructor : Function
+>Array : ArrayConstructor
+
+    const c = x[0];
+>c : 1
+>x[0] : 1
+>x : 1[]
+>0 : 0
+}
 

@@ -179,6 +179,52 @@ else {
 >ctor4 : Symbol(ctor4, Decl(typeGuardConstructor.ts, 54, 3))
 }
 
+var x: number | "hello" | "world" | true | 1[] | undefined;
+>x : Symbol(x, Decl(typeGuardConstructor.ts, 65, 3))
 
+if (x.constructor === String) {
+>x.constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardConstructor.ts, 65, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
+  x.length;
+>x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardConstructor.ts, 65, 3))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
+}
+
+if (x.constructor === Number) {
+>x.constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardConstructor.ts, 65, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+    x.toFixed();
+>x.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardConstructor.ts, 65, 3))
+>toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+}
+
+if (x.constructor === Boolean) {
+>x.constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardConstructor.ts, 65, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>Boolean : Symbol(Boolean, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+    const b = x;
+>b : Symbol(b, Decl(typeGuardConstructor.ts, 75, 9))
+>x : Symbol(x, Decl(typeGuardConstructor.ts, 65, 3))
+}
+
+if(x.constructor === Array) {
+>x.constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardConstructor.ts, 65, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+    const c = x[0];
+>c : Symbol(c, Decl(typeGuardConstructor.ts, 79, 9))
+>x : Symbol(x, Decl(typeGuardConstructor.ts, 65, 3))
+}
 
