@@ -2,6 +2,7 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentLists
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(29,29): error TS1346: Signature has no type argument named 'Q'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(30,29): error TS1346: Signature has no type argument named 'Q'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(31,33): error TS1346: Signature has no type argument named 'Q'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(32,14): error TS1350: No value provided for required type argument 'U'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(32,22): error TS1346: Signature has no type argument named 'Q'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(36,27): error TS1345: Positional type argument conflicts with named type argument 'T'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(36,35): error TS1344: Named type argument conflicts with positional type argument at index '0'.
@@ -12,6 +13,7 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentLists
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(39,25): error TS1345: Positional type argument conflicts with named type argument 'T'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(39,33): error TS1344: Named type argument conflicts with positional type argument at index '0'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(40,14): error TS1345: Positional type argument conflicts with named type argument 'T'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(40,14): error TS1350: No value provided for required type argument 'U'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(40,22): error TS1344: Named type argument conflicts with positional type argument at index '0'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(44,27): error TS2300: Duplicate identifier 'T'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(44,39): error TS2300: Duplicate identifier 'T'.
@@ -30,6 +32,7 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentLists
         Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(47,88): error TS2339: Property 'toFixed' does not exist on type 'string'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(48,14): error TS2300: Duplicate identifier 'T'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(48,14): error TS1350: No value provided for required type argument 'U'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(48,26): error TS2300: Duplicate identifier 'T'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(52,27): error TS2558: Expected 0-2 type arguments, but got 3.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(53,21): error TS2558: Expected 0-2 type arguments, but got 3.
@@ -44,7 +47,7 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentLists
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx(67,10): error TS2314: Generic type 'Foo<T, U>' requires 2 type argument(s).
 
 
-==== tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx (40 errors) ====
+==== tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentErrors.tsx (43 errors) ====
     declare module JSX {
         interface Element {}
     }
@@ -85,6 +88,8 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentLists
                                     ~
 !!! error TS1346: Signature has no type argument named 'Q'.
     type A = Foo<number, Q = string>;
+                 ~~~~~~~~~~~~~~~~~~
+!!! error TS1350: No value provided for required type argument 'U'.
                          ~
 !!! error TS1346: Signature has no type argument named 'Q'.
     
@@ -113,6 +118,8 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentLists
     type B = Foo<number, T = string>;
                  ~~~~~~
 !!! error TS1345: Positional type argument conflicts with named type argument 'T'.
+                 ~~~~~~~~~~~~~~~~~~
+!!! error TS1350: No value provided for required type argument 'U'.
                          ~
 !!! error TS1344: Named type argument conflicts with positional type argument at index '0'.
     
@@ -153,6 +160,8 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentLists
     type C = Foo<T = number, T = string>;
                  ~
 !!! error TS2300: Duplicate identifier 'T'.
+                 ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1350: No value provided for required type argument 'U'.
                              ~
 !!! error TS2300: Duplicate identifier 'T'.
     

@@ -999,6 +999,10 @@
         "category": "Error",
         "code": 1349
     },
+    "No value provided for required type argument '{0}'.": {
+        "category": "Error",
+        "code": 1350
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

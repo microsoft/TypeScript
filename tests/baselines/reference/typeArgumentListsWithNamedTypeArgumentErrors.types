@@ -142,7 +142,7 @@ const jsx1 = <Component<number, Q = string> x={12} y="" cb={props => void (props
 >toUpperCase : () => string
 
 type A = Foo<number, Q = string>;
->A : Foo<number, U>
+>A : Foo<number, {}>
 >Foo : Foo<T, U>
 >Q : any
 
@@ -201,7 +201,7 @@ const jsx2 = <Component<number, T = string> x={12} y="" cb={props => void (props
 >toUpperCase : () => string
 
 type B = Foo<number, T = string>;
->B : Foo<number, U>
+>B : Foo<number, {}>
 >Foo : Foo<T, U>
 >T : any
 
@@ -264,7 +264,7 @@ const jsx3 = <Component<T = number, T = string> x={12} y="" cb={props => void (p
 >toUpperCase : () => string
 
 type C = Foo<T = number, T = string>;
->C : Foo<string, U>
+>C : Foo<string, {}>
 >Foo : Foo<T, U>
 >T : any
 >T : any
