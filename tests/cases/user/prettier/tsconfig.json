@@ -9,6 +9,9 @@
         "checkJs": true,
         "types": ["node"],
         "lib": ["esnext", "dom"],
+        "target": "esnext",
+        "module": "commonjs",
+        "pretty": false,
     },
     "include": ["prettier/src"]
 }
