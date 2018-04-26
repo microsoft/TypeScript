@@ -27140,7 +27140,7 @@ namespace ts {
                     const prop = properties[i];
                     if (!isSpreadAssignment(prop)) {
                         const propName = getTextOfPropertyName(prop.name);
-                        const spreadSymbol = resolvedObjectType.members.get(propName)
+                        const spreadSymbol = resolvedObjectType.members.get(propName);
                         if (spreadSymbol && !hasQuestionToken(spreadSymbol.valueDeclaration)) {
                             grammarErrorOnNode(prop, Diagnostics.Duplicate_identifier_0, propName);
                         }
@@ -27163,7 +27163,7 @@ namespace ts {
 
                 if (prop.kind === SyntaxKind.SpreadAssignment) {
                     if (strictNullChecks) {
-                        checkGrammarForDuplicateIdentifier(node.properties, <SpreadAssignment>prop, index);
+                        checkGrammarForDuplicateIdentifier(node.properties, prop, index);
                     }
                     continue;
                 }
