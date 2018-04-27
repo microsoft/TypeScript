@@ -27220,6 +27220,16 @@ namespace ts {
                 let currentKind: Flags;
                 switch (prop.kind) {
                     case SyntaxKind.PropertyAssignment:
+                        if (isClassExpression(prop.initializer)) {
+                            const n = prop.name;
+                            const sn = getTextOfPropertyName(n);
+                            const symbol = resolveName(n, sn, SymbolFlags.Type, undefined, sn, /*isUse*/ false);
+                            if (symbol) {
+                                grammarErrorOnNode(symbol.declarations[0], Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(sn));
+                                return grammarErrorOnNode(n, Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(sn));
+                            }
+                        }
+                       // falls through
                     case SyntaxKind.ShorthandPropertyAssignment:
                         // Grammar checking for computedPropertyName and shorthandPropertyAssignment
                         checkGrammarForInvalidQuestionMark(prop.questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);

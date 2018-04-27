@@ -2324,7 +2324,10 @@ namespace ts {
                 return s;
             });
             if (symbol) {
-                declareSymbol(symbol.exports, symbol, lhs, SymbolFlags.Property | SymbolFlags.ExportValue, SymbolFlags.None);
+                const flags = isClassExpression(node.right) ?
+                    SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.Class :
+                    SymbolFlags.Property | SymbolFlags.ExportValue;
+                declareSymbol(symbol.exports, symbol, lhs, flags, SymbolFlags.None);
             }
         }
 
