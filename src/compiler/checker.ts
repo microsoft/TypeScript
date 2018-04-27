@@ -1485,16 +1485,18 @@ namespace ts {
                 }
             }
             if (!result) {
-                if (originalLocation && isInJavaScriptFile(originalLocation) && originalLocation.parent && isRequireCall(originalLocation.parent, /*checkArgumentIsStringLiteralLike*/ false)) {
-                    return requireSymbol;
-                }
-                if (originalLocation && isInJavaScriptFile(originalLocation) && isIdentifier(originalLocation) && originalLocation.escapedText === "module") {
-                    // TODO: Collapse conditions
-                    // TODO: check special property assignment kind before return moduleSymbol
-                    return moduleSymbol;
-                }
-                if (originalLocation && isInJavaScriptFile(originalLocation) && isIdentifier(originalLocation) && originalLocation.escapedText === "exports") {
-                    return exportsSymbol;
+                if (originalLocation && isInJavaScriptFile(originalLocation) && originalLocation.parent) {
+                    if (isRequireCall(originalLocation.parent, /*checkArgumentIsStringLiteralLike*/ false)) {
+                        return requireSymbol;
+                    }
+                    if (isIdentifier(originalLocation) && isPropertyAccessExpression(originalLocation.parent)) {
+                        if (originalLocation.escapedText === "module" && originalLocation.parent.name.escapedText === "exports") {
+                            return moduleSymbol;
+                        }
+                        if (originalLocation.escapedText === "exports") {
+                            return exportsSymbol;
+                        }
+                    }
                 }
             }
             if (!result) {
@@ -18766,7 +18768,6 @@ namespace ts {
             if (!isIdentifier(node.expression)) return Debug.fail();
             const resolvedRequire = resolveName(node.expression, node.expression.escapedText, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
             if (resolvedRequire === requireSymbol) {
-                // TODO: Error here (or in caller) in a Typescript file with the suggestion
                 return true;
             }
             // project includes symbol named 'require' - make sure that it is ambient and local non-alias
