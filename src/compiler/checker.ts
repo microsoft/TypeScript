@@ -6677,7 +6677,15 @@ namespace ts {
             let nameType: Type;
             const propTypes: Type[] = [];
             let first = true;
+            let commonValueDeclaration: Declaration;
+            let hasNonUniformValueDeclaration = false;
             for (const prop of props) {
+                if (!commonValueDeclaration) {
+                    commonValueDeclaration = prop.valueDeclaration;
+                }
+                else if (prop.valueDeclaration !== commonValueDeclaration) {
+                    hasNonUniformValueDeclaration = true;
+                }
                 declarations = addRange(declarations, prop.declarations);
                 const type = getTypeOfSymbol(prop);
                 if (first) {
@@ -6694,6 +6702,9 @@ namespace ts {
             }
             const result = createSymbol(SymbolFlags.Property | commonFlags, name, syntheticFlag | checkFlags);
             result.containingType = containingType;
+            if (!hasNonUniformValueDeclaration && commonValueDeclaration) {
+                result.valueDeclaration = commonValueDeclaration;
+            }
             result.declarations = declarations;
             result.nameType = nameType;
             result.type = isUnion ? getUnionType(propTypes) : getIntersectionType(propTypes);
@@ -10774,13 +10785,14 @@ namespace ts {
                             const sourcePropFlags = getDeclarationModifierFlagsFromSymbol(sourceProp);
                             const targetPropFlags = getDeclarationModifierFlagsFromSymbol(targetProp);
                             if (sourcePropFlags & ModifierFlags.Private || targetPropFlags & ModifierFlags.Private) {
-                                if (getCheckFlags(sourceProp) & CheckFlags.ContainsPrivate) {
+                                const hasDifferingDeclarations = sourceProp.valueDeclaration !== targetProp.valueDeclaration;
+                                if (getCheckFlags(sourceProp) & CheckFlags.ContainsPrivate && hasDifferingDeclarations) {
                                     if (reportErrors) {
                                         reportError(Diagnostics.Property_0_has_conflicting_declarations_and_is_inaccessible_in_type_1, symbolToString(sourceProp), typeToString(source));
                                     }
                                     return Ternary.False;
                                 }
-                                if (sourceProp.valueDeclaration !== targetProp.valueDeclaration) {
+                                if (hasDifferingDeclarations) {
                                     if (reportErrors) {
                                         if (sourcePropFlags & ModifierFlags.Private && targetPropFlags & ModifierFlags.Private) {
                                             reportError(Diagnostics.Types_have_separate_declarations_of_a_private_property_0, symbolToString(targetProp));
