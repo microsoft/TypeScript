@@ -966,9 +966,8 @@ namespace ts {
                         const oldDiag = getSymbolAccessibilityDiagnostic;
                         let previousSibling: Node;
                         parameterProperties = compact(flatMap(ctor.parameters, (param) => {
-                            const shouldStrip = shouldStripInternalParameter(param, previousSibling);
-                            previousSibling = param;
-                            if (!hasModifier(param, ModifierFlags.ParameterPropertyModifier) || shouldStrip) return;
+                            const prev = previousSibling;
+                            if (!hasModifier(param, ModifierFlags.ParameterPropertyModifier) || shouldStripInternalParameter((previousSibling = param), prev)) return;
                             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(param);
                             if (param.name.kind === SyntaxKind.Identifier) {
                                 return preserveJsDoc(createProperty(
@@ -1155,7 +1154,7 @@ namespace ts {
 
         function shouldStripInternalParameter(node: Node, previousSibling: Node | undefined) {
             if (stripInternal && node) {
-                node = getParseTreeNode(node)
+                node = getParseTreeNode(node);
                 const text = currentSourceFile.text;
                 const commentRanges = previousSibling
                     ? concatenate(
