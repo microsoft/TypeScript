@@ -1,17 +1,4 @@
 namespace vpath {
-    /**
-     * Virtual path separator.
-     */
-    export import sep = ts.directorySeparator;
-
-    /**
-     * Normalize path separators.
-     */
-    export import normalizeSeparators = ts.normalizeSlashes;
-    // export function normalizeSeparators(path: string): string {
-    //     return ts.normalizeSlashes(path);
-    // }
-
     const invalidRootComponentRegExp = /^(?!(\/|\/\/\w+\/|[a-zA-Z]:\/?|)$)/;
     const invalidNavigableComponentRegExp = /[:*?"<>|]/;
     const invalidNonNavigableComponentRegExp = /^\.{1,2}$|[:*?"<>|]/;
@@ -93,103 +80,26 @@ namespace vpath {
         return true;
     }
 
-    const absolutePathRegExp = /^[\\/]([\\/](.*?[\\/](.*?[\\/])?)?)?|^[a-zA-Z]:[\\/]?|^\w+:\/{2}[^\\/]*\/?/;
+    import getRootLength = ts.getRootLength;
 
-    // NOTE: this differs from `ts.getRootLength` in that it doesn't support URIs.
-    function getRootLength(path: string) {
-        const match = absolutePathRegExp.exec(path);
-        return match ? match[0].length : 0;
-    }
-
-    /**
-     * Determines whether a path is an absolute path (e.g. starts with `/`, `\\`, or a dos path
-     * like `c:`).
-     */
+    export import sep = ts.directorySeparator;
+    export import normalizeSeparators = ts.normalizeSlashes;
     export import isAbsolute = ts.isRootedDiskPath;
-    // export function isAbsolute(path: string) {
-    //     return absolutePathRegExp.test(path);
-    // }
-
-    /**
-     * Determines whether a path consists only of a path root.
-     */
-    export function isRoot(path: string) {
-        const rootLength = getRootLength(path);
-        return rootLength > 0 && rootLength === path.length;
-    }
-
-    const trailingSeperatorRegExp = /[\\/]$/;
-
-    /**
-     * Determines whether a path has a trailing separator (`/`).
-     */
-    export function hasTrailingSeparator(path: string) {
-        return trailingSeperatorRegExp.test(path) && !isRoot(path);
-    }
-
-    /**
-     * Adds a trailing separator (`/`) to a path if it doesn't have one.
-     */
+    export import isRoot = ts.isDiskPathRoot;
+    export import hasTrailingSeparator = ts.hasTrailingDirectorySeparator;
     export import addTrailingSeparator = ts.ensureTrailingDirectorySeparator;
-    // export function addTrailingSeparator(path: string) {
-    //     return !trailingSeperatorRegExp.test(path) && path ? path + "/" : path;
-    // }
-
-    /**
-     * Removes a trailing separator (`/`) from a path if it has one.
-     */
     export import removeTrailingSeparator = ts.removeTrailingDirectorySeparator;
-    // export function removeTrailingSeparator(path: string) {
-    //     return trailingSeperatorRegExp.test(path) && !isRoot(path) ? path.slice(0, -1) : path;
-    // }
-
-    function reduce(components: ReadonlyArray<string>) {
-        const normalized = [components[0]];
-        for (let i = 1; i < components.length; i++) {
-            const component = components[i];
-            if (component === ".") continue;
-            if (component === "..") {
-                if (normalized.length > 1) {
-                    if (normalized[normalized.length - 1] !== "..") {
-                        normalized.pop();
-                        continue;
-                    }
-                }
-                else if (normalized[0]) continue;
-            }
-            normalized.push(component);
-        }
-        return normalized;
-    }
+    export import normalize = ts.normalizePath;
+    export import combine = ts.combinePaths;
+    export import parse = ts.getPathComponents;
+    export import reduce = ts.reducePathComponents;
+    export import format = ts.getNormalizedPathFromPathComponents;
 
     /**
-     * Normalize a path containing path traversal components (`.` or `..`).
+     * Combines and normalizes two paths.
      */
-    export function normalize(path: string): string {
-        const components = reduce(parse(path));
-        return components.length > 1 && hasTrailingSeparator(path) ? format(components) + sep : format(components);
-    }
-
-    /**
-     * Combines two or more paths. If a path is absolute, it replaces any previous path.
-     */
-    export function combine(path: string, ...paths: string[]) {
-        path = normalizeSeparators(path);
-        for (const name of paths) {
-            path = ts.combinePaths(path, normalizeSeparators(name));
-            // name = normalizeSeparators(name);
-            // if (name.length === 0) continue;
-            // path = path.length === 0 || isAbsolute(name) ? name :
-            //     addTrailingSeparator(path) + name;
-        }
-        return path;
-    }
-
-    /**
-     * Combines and normalizes two or more paths.
-     */
-    export function resolve(path: string, ...paths: string[]) {
-        return normalize(combine(path, ...paths));
+    export function resolve(path1: string, path2: string) {
+        return normalize(combine(path1, path2));
     }
 
     // NOTE: this differs from `ts.getRelativePathToDirectoryOrUrl` in that it requires both paths
@@ -320,32 +230,6 @@ namespace vpath {
     // NOTE: this differs from `containsPath` in compiler/core.ts due to the behavior of `parse`.
     export function beneath(ancestor: string, descendant: string, ignoreCase: boolean) {
         return ignoreCase ? beneathCaseInsensitive(ancestor, descendant) : beneathCaseSensitive(ancestor, descendant);
-    }
-
-    /**
-     * Parse a path into a root component and zero or more path segments.
-     * If the path is relative, the root component is `""`.
-     * If the path is absolute, the root component includes the first path separator (`/`).
-     */
-    // NOTE: this differs from `ts.getNormalizedPathComponents` due to the fact that `parse` does
-    // not automatically normalize relative paths and does not perform path normalization. This is
-    // necessary to support proper path navigation in `vfs`.
-    export function parse(path: string) {
-        path = normalizeSeparators(path);
-        const rootLength = getRootLength(path);
-        const root = path.substring(0, rootLength);
-        const rest = path.substring(rootLength).split(/\/+/g);
-        if (rest.length && !rest[rest.length - 1]) rest.pop();
-        return [root, ...rest.map(component => component.trim())];
-    }
-
-    /**
-     * Formats a parsed path consisting of a root component and zero or more path segments.
-     */
-    // NOTE: this differs from `ts.getNormalizedPathFromPathComponents` in that this function
-    // always returns a string.
-    export function format(components: ReadonlyArray<string>) {
-        return components.length ? components[0] + components.slice(1).join(sep) : "";
     }
 
     /**

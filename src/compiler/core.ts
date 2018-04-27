@@ -1928,6 +1928,9 @@ namespace ts {
         return text1 ? Comparison.GreaterThan : Comparison.LessThan;
     }
 
+    /**
+     * Normalize path separators.
+     */
     export function normalizeSlashes(path: string): string {
         return path.replace(/\\/g, "/");
     }
@@ -1968,27 +1971,6 @@ namespace ts {
      * we expect the host to correctly handle paths in our specified format.
      */
     export const directorySeparator = "/";
-    const directorySeparatorCharCode = CharacterCodes.slash;
-    function getNormalizedParts(normalizedSlashedPath: string, rootLength: number): string[] {
-        const parts = normalizedSlashedPath.substr(rootLength).split(directorySeparator);
-        const normalized: string[] = [];
-        for (const part of parts) {
-            if (part !== ".") {
-                if (part === ".." && normalized.length > 0 && lastOrUndefined(normalized) !== "..") {
-                    normalized.pop();
-                }
-                else {
-                    // A part may be an empty string (which is 'falsy') if the path had consecutive slashes,
-                    // e.g. "path//file.ts".  Drop these before re-joining the parts.
-                    if (part) {
-                        normalized.push(part);
-                    }
-                }
-            }
-        }
-
-        return normalized;
-    }
 
     export function normalizePath(path: string): string {
         return normalizePathAndParts(path).path;
@@ -1996,21 +1978,14 @@ namespace ts {
 
     export function normalizePathAndParts(path: string): { path: string, parts: string[] } {
         path = normalizeSlashes(path);
-        const rootLength = getRootLength(path);
-        const root = path.substr(0, rootLength);
-        const parts = getNormalizedParts(path, rootLength);
+        const [root, ...parts] = reducePathComponents(getPathComponents(path));
         if (parts.length) {
             const joinedParts = root + parts.join(directorySeparator);
-            return { path: pathEndsWithDirectorySeparator(path) ? joinedParts + directorySeparator : joinedParts, parts };
+            return { path: hasTrailingDirectorySeparator(path) ? joinedParts + directorySeparator : joinedParts, parts };
         }
         else {
             return { path: root, parts };
         }
-    }
-
-    /** A path ending with '/' refers to a directory only, never a file. */
-    export function pathEndsWithDirectorySeparator(path: string): boolean {
-        return path.charCodeAt(path.length - 1) === directorySeparatorCharCode;
     }
 
     /**
@@ -2085,8 +2060,20 @@ namespace ts {
         return true;
     }
 
+    /**
+     * Determines whether a path is an absolute path (e.g. starts with `/`, or a dos path
+     * like `c:`, `c:\` or `c:/`).
+     */
     export function isRootedDiskPath(path: string) {
         return path && getRootLength(path) !== 0;
+    }
+
+    /**
+     * Determines whether a path consists only of a path root.
+     */
+    export function isDiskPathRoot(path: string) {
+        const rootLength = getRootLength(path);
+        return rootLength > 0 && rootLength === path.length;
     }
 
     export function convertToRelativePath(absoluteOrRelativePath: string, basePath: string, getCanonicalFileName: (path: string) => string): string {
@@ -2095,31 +2082,66 @@ namespace ts {
             : getRelativePathToDirectoryOrUrl(basePath, absoluteOrRelativePath, basePath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
     }
 
-    function normalizedPathComponents(path: string, rootLength: number) {
-        const normalizedParts = getNormalizedParts(path, rootLength);
-        return [path.substr(0, rootLength)].concat(normalizedParts);
+    function pathComponents(path: string, rootLength: number) {
+        const root = path.substring(0, rootLength);
+        const rest = path.substring(rootLength).split(directorySeparator);
+        if (rest.length && !lastOrUndefined(rest)) rest.pop();
+        return [root, ...rest];
     }
 
-    export function getNormalizedPathComponents(path: string, currentDirectory: string) {
-        path = normalizeSlashes(path);
-        let rootLength = getRootLength(path);
-        if (rootLength === 0) {
-            // If the path is not rooted it is relative to current directory
-            path = combinePaths(normalizeSlashes(currentDirectory), path);
-            rootLength = getRootLength(path);
-        }
+    /**
+     * Parse a path into an array containing a root component (at index 0) and zero or more path
+     * components (at indices > 0). The result is not normalized.
+     * If the path is relative, the root component is `""`.
+     * If the path is absolute, the root component includes the first path separator (`/`).
+     */
+    export function getPathComponents(path: string, currentDirectory = "") {
+        path = combinePaths(currentDirectory, path);
+        const rootLength = getRootLength(path);
+        return pathComponents(path, rootLength);
+    }
 
-        return normalizedPathComponents(path, rootLength);
+    export function reducePathComponents(components: ReadonlyArray<string>) {
+        const reduced = [components[0]];
+        for (let i = 1; i < components.length; i++) {
+            const component = components[i];
+            if (component === ".") continue;
+            if (component === "..") {
+                if (reduced.length > 1) {
+                    if (reduced[reduced.length - 1] !== "..") {
+                        reduced.pop();
+                        continue;
+                    }
+                }
+                else if (reduced[0]) continue;
+            }
+            reduced.push(component);
+        }
+        return reduced;
+    }
+
+    /**
+     * Parse a path into an array containing a root component (at index 0) and zero or more path
+     * components (at indices > 0). The result is normalized.
+     * If the path is relative, the root component is `""`.
+     * If the path is absolute, the root component includes the first path separator (`/`).
+     */
+    export function getNormalizedPathComponents(path: string, currentDirectory: string) {
+        return reducePathComponents(getPathComponents(path, currentDirectory));
     }
 
     export function getNormalizedAbsolutePath(fileName: string, currentDirectory: string) {
         return getNormalizedPathFromPathComponents(getNormalizedPathComponents(fileName, currentDirectory));
     }
 
+    /**
+     * Formats a parsed path consisting of a root component and zero or more path segments.
+     */
     export function getNormalizedPathFromPathComponents(pathComponents: ReadonlyArray<string>) {
         if (pathComponents && pathComponents.length) {
             return pathComponents[0] + pathComponents.slice(1).join(directorySeparator);
         }
+        return "";
     }
 
     function getNormalizedPathComponentsOfUrl(url: string) {
@@ -2153,7 +2175,7 @@ namespace ts {
             // Found the "/" after the website.com so the root is length of http://www.website.com/
             // and get components after the root normally like any other folder components
             rootLength = indexOfNextSlash + 1;
-            return normalizedPathComponents(url, rootLength);
+            return reducePathComponents(pathComponents(url, rootLength));
         }
         else {
             // Can't find the host assume the rest of the string as component
@@ -2229,12 +2251,26 @@ namespace ts {
         return i < 0 ? path : path.substring(i + 1);
     }
 
+    /**
+     * Combines two paths. If a path is absolute, it replaces any previous path.
+     */
     export function combinePaths(path1: string, path2: string): string {
+        if (path1) path1 = normalizeSlashes(path1);
+        if (path2) path2 = normalizeSlashes(path2);
         if (!(path1 && path1.length)) return path2;
         if (!(path2 && path2.length)) return path1;
         if (getRootLength(path2) !== 0) return path2;
-        if (path1.charAt(path1.length - 1) === directorySeparator) return path1 + path2;
+        if (hasTrailingDirectorySeparator(path1)) return path1 + path2;
         return path1 + directorySeparator + path2;
+    }
+
+    /**
+     * Determines whether a path has a trailing separator (`/` or `\\`).
+     */
+    export function hasTrailingDirectorySeparator(path: string) {
+        if (path.length === 0) return false;
+        const ch = path.charCodeAt(path.length - 1);
+        return ch === CharacterCodes.slash || ch === CharacterCodes.backslash;
     }
 
     /**
@@ -2244,7 +2280,7 @@ namespace ts {
     export function removeTrailingDirectorySeparator(path: Path): Path;
     export function removeTrailingDirectorySeparator(path: string): string;
     export function removeTrailingDirectorySeparator(path: string) {
-        if (path.charAt(path.length - 1) === directorySeparator) {
+        if (hasTrailingDirectorySeparator(path)) {
             return path.substr(0, path.length - 1);
         }
 
@@ -2258,7 +2294,7 @@ namespace ts {
     export function ensureTrailingDirectorySeparator(path: Path): Path;
     export function ensureTrailingDirectorySeparator(path: string): string;
     export function ensureTrailingDirectorySeparator(path: string) {
-        if (path.charAt(path.length - 1) !== directorySeparator) {
+        if (!hasTrailingDirectorySeparator(path)) {
             return path + directorySeparator;
         }
 
