@@ -879,6 +879,7 @@ namespace ts {
 
     export interface PropertyDeclaration extends ClassElement, JSDocContainer {
         kind: SyntaxKind.PropertyDeclaration;
+        parent: ClassLikeDeclaration;
         name: PropertyName;
         questionToken?: QuestionToken;      // Present for use with reporting a grammar error
         exclamationToken?: ExclamationToken;
@@ -1684,7 +1685,7 @@ namespace ts {
     export interface ElementAccessExpression extends MemberExpression {
         kind: SyntaxKind.ElementAccessExpression;
         expression: LeftHandSideExpression;
-        argumentExpression?: Expression;
+        argumentExpression: Expression;
     }
 
     export interface SuperElementAccessExpression extends ElementAccessExpression {
@@ -1726,6 +1727,7 @@ namespace ts {
     export interface TaggedTemplateExpression extends MemberExpression {
         kind: SyntaxKind.TaggedTemplateExpression;
         tag: LeftHandSideExpression;
+        typeArguments?: NodeArray<TypeNode>;
         template: TemplateLiteral;
     }
 
@@ -1891,7 +1893,7 @@ namespace ts {
         kind: SyntaxKind.DebuggerStatement;
     }
 
-    export interface MissingDeclaration extends DeclarationStatement, ClassElement, ObjectLiteralElement, TypeElement {
+    export interface MissingDeclaration extends DeclarationStatement {
         kind: SyntaxKind.MissingDeclaration;
         name?: Identifier;
     }
@@ -2330,7 +2332,7 @@ namespace ts {
     }
 
     export interface JSDocTag extends Node {
-        parent: JSDoc;
+        parent: JSDoc | JSDocTypeLiteral;
         atToken: AtToken;
         tagName: Identifier;
         comment: string | undefined;
@@ -2527,7 +2529,7 @@ namespace ts {
         /**
          * If two source files are for the same version of the same package, one will redirect to the other.
          * (See `createRedirectSourceFile` in program.ts.)
-         * The redirect will have this set. The other will not have anything set, but see Program#sourceFileIsRedirectedTo.
+         * The redirect will have this set. The redirected-to source file will be in `redirectTargetsSet`.
          */
         /* @internal */ redirectInfo?: RedirectInfo | undefined;
 
@@ -2723,6 +2725,8 @@ namespace ts {
         /* @internal */ redirectTargetsSet: Map<true>;
         /** Is the file emitted file */
         /* @internal */ isEmittedFile(file: string): boolean;
+
+        /* @internal */ getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
     }
 
     /* @internal */
@@ -2839,6 +2843,10 @@ namespace ts {
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolAtLocation(node: Node): Symbol | undefined;
         getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: string): Symbol[];
+        /**
+         * The function returns the value (local variable) symbol of an identifier in the short-hand property assignment.
+         * This is necessary as an identifier in short-hand property assignment can contains two meaning: property name and property value.
+         */
         getShorthandAssignmentValueSymbol(location: Node): Symbol | undefined;
         getExportSpecifierLocalTargetSymbol(location: ExportSpecifier): Symbol | undefined;
         /**
@@ -2992,6 +3000,13 @@ namespace ts {
          * Others are added in computeSuggestionDiagnostics.
          */
         /* @internal */ getSuggestionDiagnostics(file: SourceFile): ReadonlyArray<Diagnostic>;
+
+        /**
+         * Depending on the operation performed, it may be appropriate to throw away the checker
+         * if the cancellation token is triggered. Typically, if it is used for error checking
+         * and the operation is cancelled, then it should be discarded, otherwise it is safe to keep.
+         */
+        runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
     }
 
     /* @internal */
@@ -3188,15 +3203,19 @@ namespace ts {
     export type AnyValidImportOrReExport =
         | (ImportDeclaration | ExportDeclaration) & { moduleSpecifier: StringLiteral }
         | ImportEqualsDeclaration & { moduleReference: ExternalModuleReference & { expression: StringLiteral } }
-        | RequireOrImportCall;
+        | RequireOrImportCall
+        | ImportTypeNode & { argument: LiteralType };
 
     /* @internal */
     export type RequireOrImportCall = CallExpression & { arguments: [StringLiteralLike] };
 
     /* @internal */
+    export type LateVisibilityPaintedStatement = AnyImportSyntax | VariableStatement;
+
+    /* @internal */
     export interface SymbolVisibilityResult {
         accessibility: SymbolAccessibility;
-        aliasesToMakeVisible?: AnyImportSyntax[]; // aliases that need to have this symbol visible
+        aliasesToMakeVisible?: LateVisibilityPaintedStatement[]; // aliases that need to have this symbol visible
         errorSymbolName?: string; // Optional symbol name that results in error
         errorNode?: Node; // optional node that results in error
     }
@@ -3365,6 +3384,7 @@ namespace ts {
         /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
         /* @internal */ parent?: Symbol;        // Parent symbol
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
+        /* @internal */ nameType?: Type;        // Type associated with a late-bound symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
         /* @internal */ isReferenced?: SymbolFlags; // True if the symbol is referenced elsewhere. Keeps track of the meaning of a reference in case a symbol is both a type parameter and parameter.
         /* @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
@@ -3399,7 +3419,6 @@ namespace ts {
         enumKind?: EnumKind;                // Enum declaration classification
         originatingImport?: ImportDeclaration | ImportCall; // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
         lateSymbol?: Symbol;                // Late-bound symbol for a computed property
-        nameType?: Type;                    // Type associate with a late-bound or mapped type property symbol's name
     }
 
     /* @internal */
@@ -3596,7 +3615,7 @@ namespace ts {
         Intrinsic = Any | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
         /* @internal */
         Primitive = String | Number | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol,
-        StringLike = String | StringLiteral | Index,
+        StringLike = String | StringLiteral,
         NumberLike = Number | NumberLiteral | Enum,
         BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
@@ -3753,7 +3772,7 @@ namespace ts {
         /* @internal */
         resolvedIndexType: IndexType;
         /* @internal */
-        resolvedDeclaredIndexType: IndexType;
+        resolvedStringIndexType: IndexType;
         /* @internal */
         resolvedBaseConstraint: Type;
         /* @internal */
@@ -3842,7 +3861,7 @@ namespace ts {
         /* @internal */
         resolvedIndexType?: IndexType;
         /* @internal */
-        resolvedDeclaredIndexType?: IndexType;
+        resolvedStringIndexType?: IndexType;
     }
 
     // Type parameters (TypeFlags.TypeParameter)
@@ -3874,9 +3893,9 @@ namespace ts {
 
     // keyof T types (TypeFlags.Index)
     export interface IndexType extends InstantiableType {
-        /* @internal */
-        isDeclaredType?: boolean;
         type: InstantiableType | UnionOrIntersectionType;
+        /* @internal */
+        stringsOnly: boolean;
     }
 
     export interface ConditionalRoot {
@@ -3968,7 +3987,7 @@ namespace ts {
     export interface IndexInfo {
         type: Type;
         isReadonly: boolean;
-        declaration?: SignatureDeclaration;
+        declaration?: IndexSignatureDeclaration;
     }
 
     /* @internal */
@@ -4035,10 +4054,10 @@ namespace ts {
 
     /* @internal */
     export interface WideningContext {
-        parent?: WideningContext;            // Parent context
-        propertyName?: __String;             // Name of property in parent
-        siblings?: Type[];                   // Types of siblings
-        resolvedPropertyNames?: __String[];  // Property names occurring in sibling object literals
+        parent?: WideningContext;       // Parent context
+        propertyName?: __String;        // Name of property in parent
+        siblings?: Type[];              // Types of siblings
+        resolvedProperties?: Symbol[];  // Properties occurring in sibling object literals
     }
 
     /* @internal */
@@ -4069,6 +4088,7 @@ namespace ts {
         category: DiagnosticCategory;
         code: number;
         message: string;
+        reportsUnnecessary?: {};
     }
 
     /**
@@ -4090,6 +4110,8 @@ namespace ts {
         length: number | undefined;
         messageText: string | DiagnosticMessageChain;
         category: DiagnosticCategory;
+        /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
+        reportsUnnecessary?: {};
         code: number;
         source?: string;
     }
@@ -4150,6 +4172,7 @@ namespace ts {
         inlineSources?: boolean;
         isolatedModules?: boolean;
         jsx?: JsxEmit;
+        keyofStringsOnly?: boolean;
         lib?: string[];
         /*@internal*/listEmittedFiles?: boolean;
         /*@internal*/listFiles?: boolean;
@@ -4183,7 +4206,7 @@ namespace ts {
         preserveSymlinks?: boolean;
         /* @internal */ preserveWatchOutput?: boolean;
         project?: string;
-        /* @internal */ pretty?: DiagnosticStyle;
+        /* @internal */ pretty?: boolean;
         reactNamespace?: string;
         jsxFactory?: string;
         removeComments?: boolean;
@@ -4279,12 +4302,6 @@ namespace ts {
     export const enum LanguageVariant {
         Standard,
         JSX,
-    }
-
-    /* @internal */
-    export const enum DiagnosticStyle {
-        Simple,
-        Pretty,
     }
 
     /** Either a parsed command line or a parsed tsconfig.json */

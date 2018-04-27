@@ -7,6 +7,6 @@ interface A {
 ===MODIFIED===
 
 interface A {
-    x();
+    x()
     [1]: any;
 }

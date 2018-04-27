@@ -26,6 +26,15 @@ namespace ts.SymbolDisplay {
     }
 
     function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker: TypeChecker, symbol: Symbol, location: Node): ScriptElementKind {
+        const roots = typeChecker.getRootSymbols(symbol);
+        // If this is a method from a mapped type, leave as a method so long as it still has a call signature.
+        if (roots.length === 1
+            && first(roots).flags & SymbolFlags.Method
+            // Ensure the mapped version is still a method, as opposed to `{ [K in keyof I]: number }`.
+            && typeChecker.getTypeOfSymbolAtLocation(symbol, location).getNonNullableType().getCallSignatures().length !== 0) {
+            return ScriptElementKind.memberFunctionElement;
+        }
+
         if (typeChecker.isUndefinedSymbol(symbol)) {
             return ScriptElementKind.variableElement;
         }
@@ -125,6 +134,7 @@ namespace ts.SymbolDisplay {
         let type: Type;
         let printer: Printer;
         let documentationFromAlias: SymbolDisplayPart[];
+        let tagsFromAlias: JSDocTagInfo[];
 
         // Class at constructor site need to be shown as constructor apart from property,method, vars
         if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Class || symbolFlags & SymbolFlags.Alias) {
@@ -178,7 +188,7 @@ namespace ts.SymbolDisplay {
                     }
                     else if (symbolFlags & SymbolFlags.Alias) {
                         symbolKind = ScriptElementKind.alias;
-                        pushTypePart(symbolKind);
+                        pushSymbolKind(symbolKind);
                         displayParts.push(spacePart());
                         if (useConstructSignatures) {
                             displayParts.push(keywordPart(SyntaxKind.NewKeyword));
@@ -258,7 +268,7 @@ namespace ts.SymbolDisplay {
                 // Special case for class expressions because we would like to indicate that
                 // the class name is local to the class body (similar to function expression)
                 //      (local class) class <className>
-                pushTypePart(ScriptElementKind.localClassElement);
+                pushSymbolKind(ScriptElementKind.localClassElement);
             }
             else {
                 // Class declaration has name which is not local.
@@ -387,6 +397,7 @@ namespace ts.SymbolDisplay {
                         displayParts.push(...resolvedInfo.displayParts);
                         displayParts.push(lineBreakPart());
                         documentationFromAlias = resolvedInfo.documentation;
+                        tagsFromAlias = resolvedInfo.tags;
                     }
                 }
             }
@@ -401,6 +412,9 @@ namespace ts.SymbolDisplay {
                     displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
                     displayParts.push(spacePart());
                     displayParts.push(keywordPart((symbol.declarations[0] as ExportAssignment).isExportEquals ? SyntaxKind.EqualsToken : SyntaxKind.DefaultKeyword));
+                    break;
+                case SyntaxKind.ExportSpecifier:
+                    displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
                     break;
                 default:
                     displayParts.push(keywordPart(SyntaxKind.ImportKeyword));
@@ -512,6 +526,9 @@ namespace ts.SymbolDisplay {
         if (documentation.length === 0 && documentationFromAlias) {
             documentation = documentationFromAlias;
         }
+        if (tags.length === 0 && tagsFromAlias) {
+            tags = tagsFromAlias;
+        }
 
         return { displayParts, documentation, symbolKind, tags };
 
@@ -531,7 +548,7 @@ namespace ts.SymbolDisplay {
 
         function addAliasPrefixIfNecessary() {
             if (alias) {
-                pushTypePart(ScriptElementKind.alias);
+                pushSymbolKind(ScriptElementKind.alias);
                 displayParts.push(spacePart());
             }
         }
@@ -549,12 +566,16 @@ namespace ts.SymbolDisplay {
             const fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
                 SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing | SymbolFormatFlags.AllowAnyNodeKind);
             addRange(displayParts, fullSymbolDisplayParts);
+
+            if (symbol.flags & SymbolFlags.Optional) {
+                displayParts.push(punctuationPart(SyntaxKind.QuestionToken));
+            }
         }
 
         function addPrefixForAnyFunctionOrVar(symbol: Symbol, symbolKind: string) {
             prefixNextMeaning();
             if (symbolKind) {
-                pushTypePart(symbolKind);
+                pushSymbolKind(symbolKind);
                 if (symbol && !some(symbol.declarations, d => isArrowFunction(d) || (isFunctionExpression(d) || isClassExpression(d)) && !d.name)) {
                     displayParts.push(spacePart());
                     addFullSymbolName(symbol);
@@ -562,7 +583,7 @@ namespace ts.SymbolDisplay {
             }
         }
 
-        function pushTypePart(symbolKind: string) {
+        function pushSymbolKind(symbolKind: string) {
             switch (symbolKind) {
                 case ScriptElementKind.variableElement:
                 case ScriptElementKind.functionElement:

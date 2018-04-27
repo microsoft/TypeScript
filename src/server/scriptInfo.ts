@@ -1,5 +1,3 @@
-/// <reference path="scriptVersionCache.ts"/>
-
 namespace ts.server {
 
     /* @internal */
@@ -306,6 +304,7 @@ namespace ts.server {
             const isNew = !this.isAttached(project);
             if (isNew) {
                 this.containingProjects.push(project);
+                project.onFileAddedOrRemoved();
                 if (!project.getCompilerOptions().preserveSymlinks) {
                     this.ensureRealPath();
                 }
@@ -330,19 +329,24 @@ namespace ts.server {
                     return;
                 case 1:
                     if (this.containingProjects[0] === project) {
+                        project.onFileAddedOrRemoved();
                         this.containingProjects.pop();
                     }
                     break;
                 case 2:
                     if (this.containingProjects[0] === project) {
+                        project.onFileAddedOrRemoved();
                         this.containingProjects[0] = this.containingProjects.pop();
                     }
                     else if (this.containingProjects[1] === project) {
+                        project.onFileAddedOrRemoved();
                         this.containingProjects.pop();
                     }
                     break;
                 default:
-                    unorderedRemoveItem(this.containingProjects, project);
+                    if (unorderedRemoveItem(this.containingProjects, project)) {
+                        project.onFileAddedOrRemoved();
+                    }
                     break;
             }
         }
@@ -397,15 +401,18 @@ namespace ts.server {
             if (formatSettings) {
                 if (!this.formatSettings) {
                     this.formatSettings = getDefaultFormatCodeSettings(this.host);
+                    assign(this.formatSettings, formatSettings);
                 }
-                mergeMapLikes(this.formatSettings, formatSettings);
+                else {
+                    this.formatSettings = { ...this.formatSettings, ...formatSettings };
+                }
             }
 
             if (preferences) {
                 if (!this.preferences) {
-                    this.preferences = clone(defaultPreferences);
+                    this.preferences = defaultPreferences;
                 }
-                mergeMapLikes(this.preferences, preferences);
+                this.preferences = { ...this.preferences, ...preferences };
             }
         }
 

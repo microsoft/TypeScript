@@ -627,18 +627,12 @@ namespace ts {
         return syntaxList;
     }
 
-    /* Gets the token whose text has range [start, end) and
-     * position >= start and (position < end or (position === end && token is keyword or identifier))
-     */
-    export function getTouchingWord(sourceFile: SourceFile, position: number, includeJsDocComment: boolean): Node {
-        return getTouchingToken(sourceFile, position, includeJsDocComment, n => isWord(n.kind));
-    }
-
-    /* Gets the token whose text has range [start, end) and position >= start
-     * and (position < end or (position === end && token is keyword or identifier or numeric/string literal))
+    /**
+     * Gets the token whose text has range [start, end) and
+     * position >= start and (position < end or (position === end && token is literal or keyword or identifier))
      */
     export function getTouchingPropertyName(sourceFile: SourceFile, position: number, includeJsDocComment: boolean): Node {
-        return getTouchingToken(sourceFile, position, includeJsDocComment, n => isPropertyName(n.kind));
+        return getTouchingToken(sourceFile, position, includeJsDocComment, n => isPropertyNameLiteral(n) || isKeyword(n.kind));
     }
 
     /**
@@ -1059,14 +1053,6 @@ namespace ts {
         return undefined;
     }
 
-    export function isWord(kind: SyntaxKind): boolean {
-        return kind === SyntaxKind.Identifier || isKeyword(kind);
-    }
-
-    function isPropertyName(kind: SyntaxKind): boolean {
-        return kind === SyntaxKind.StringLiteral || kind === SyntaxKind.NumericLiteral || isWord(kind);
-    }
-
     export function isComment(kind: SyntaxKind): boolean {
         return kind === SyntaxKind.SingleLineCommentTrivia || kind === SyntaxKind.MultiLineCommentTrivia;
     }
@@ -1226,6 +1212,21 @@ namespace ts {
             // treat computed property names where expression is string/numeric literal as just string/numeric literal
             ? isStringOrNumericLiteral(name.expression) ? name.expression.text : undefined
             : getTextOfIdentifierOrLiteral(name);
+    }
+
+    export function programContainsEs6Modules(program: Program): boolean {
+        return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!s.externalModuleIndicator);
+    }
+    export function compilerOptionsIndicateEs6Modules(compilerOptions: CompilerOptions): boolean {
+        return !!compilerOptions.module || compilerOptions.target >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
+    }
+
+    export function hostUsesCaseSensitiveFileNames(host: LanguageServiceHost): boolean {
+        return host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : false;
+    }
+
+    export function hostGetCanonicalFileName(host: LanguageServiceHost): GetCanonicalFileName {
+        return createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host));
     }
 }
 
@@ -1459,11 +1460,13 @@ namespace ts {
      * WARNING: This is an expensive operation and is only intended to be used in refactorings
      * and code fixes (because those are triggered by explicit user actions).
      */
-    export function getSynthesizedDeepClone<T extends Node>(node: T | undefined): T | undefined {
-        if (node === undefined) {
-            return undefined;
-        }
+    export function getSynthesizedDeepClone<T extends Node>(node: T | undefined, includeTrivia = true): T | undefined {
+        const clone = node && getSynthesizedDeepCloneWorker(node);
+        if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
+        return clone;
+    }
 
+    function getSynthesizedDeepCloneWorker<T extends Node>(node: T): T | undefined {
         const visited = visitEachChild(node, getSynthesizedDeepClone, nullTransformationContext);
         if (visited === node) {
             // This only happens for leaf nodes - internal nodes always see their children change.
@@ -1474,22 +1477,18 @@ namespace ts {
             else if (isNumericLiteral(clone)) {
                 clone.numericLiteralFlags = (node as any).numericLiteralFlags;
             }
-            clone.pos = node.pos;
-            clone.end = node.end;
-            return clone;
+            return setTextRange(clone, node);
         }
 
         // PERF: As an optimization, rather than calling getSynthesizedClone, we'll update
         // the new node created by visitEachChild with the extra changes getSynthesizedClone
         // would have made.
-
         visited.parent = undefined;
-
         return visited;
     }
 
-    export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined): NodeArray<T> | undefined {
-        return nodes && createNodeArray(nodes.map(getSynthesizedDeepClone), nodes.hasTrailingComma);
+    export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia = true): NodeArray<T> | undefined {
+        return nodes && createNodeArray(nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)), nodes.hasTrailingComma);
     }
 
     /**
@@ -1525,5 +1524,46 @@ namespace ts {
 
     function getFirstChild(node: Node): Node | undefined {
         return node.forEachChild(child => child);
+    }
+
+    /* @internal */
+    export function getUniqueName(baseName: string, fileText: string): string {
+        let nameText = baseName;
+        for (let i = 1; stringContains(fileText, nameText); i++) {
+            nameText = `${baseName}_${i}`;
+        }
+        return nameText;
+    }
+
+    /**
+     * @return The index of the (only) reference to the extracted symbol.  We want the cursor
+     * to be on the reference, rather than the declaration, because it's closer to where the
+     * user was before extracting it.
+     */
+    /* @internal */
+    export function getRenameLocation(edits: ReadonlyArray<FileTextChanges>, renameFilename: string, name: string, isDeclaredBeforeUse: boolean): number {
+        let delta = 0;
+        let lastPos = -1;
+        for (const { fileName, textChanges } of edits) {
+            Debug.assert(fileName === renameFilename);
+            for (const change of textChanges) {
+                const { span, newText } = change;
+                const index = newText.indexOf(name);
+                if (index !== -1) {
+                    lastPos = span.start + delta + index;
+
+                    // If the reference comes first, return immediately.
+                    if (!isDeclaredBeforeUse) {
+                        return lastPos;
+                    }
+                }
+                delta += newText.length - span.length;
+            }
+        }
+
+        // If the declaration comes first, return the position of the last occurrence.
+        Debug.assert(isDeclaredBeforeUse);
+        Debug.assert(lastPos >= 0);
+        return lastPos;
     }
 }

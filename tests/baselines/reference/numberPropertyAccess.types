@@ -13,9 +13,9 @@ var a = x.toExponential();
 var b = x.hasOwnProperty('toFixed');
 >b : boolean
 >x.hasOwnProperty('toFixed') : boolean
->x.hasOwnProperty : (v: string) => boolean
+>x.hasOwnProperty : (v: string | number | symbol) => boolean
 >x : number
->hasOwnProperty : (v: string) => boolean
+>hasOwnProperty : (v: string | number | symbol) => boolean
 >'toFixed' : "toFixed"
 
 var c = x['toExponential']();
@@ -28,7 +28,7 @@ var c = x['toExponential']();
 var d = x['hasOwnProperty']('toFixed');
 >d : boolean
 >x['hasOwnProperty']('toFixed') : boolean
->x['hasOwnProperty'] : (v: string) => boolean
+>x['hasOwnProperty'] : (v: string | number | symbol) => boolean
 >x : number
 >'hasOwnProperty' : "hasOwnProperty"
 >'toFixed' : "toFixed"

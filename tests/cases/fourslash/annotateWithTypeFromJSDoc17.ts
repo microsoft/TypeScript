@@ -3,7 +3,7 @@
 ////    /**
 ////     * @param {number} x - the first parameter
 ////     */
-////    constructor(x) {
+////    constructor(readonly x) {
 ////    }
 ////}
 
@@ -14,7 +14,7 @@ verify.codeFix({
     /**
      * @param {number} x - the first parameter
      */
-    constructor(x: number) {
+    constructor(readonly x: number) {
     }
 }`,
 });

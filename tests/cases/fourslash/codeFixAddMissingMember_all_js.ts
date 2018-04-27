@@ -21,6 +21,7 @@ verify.codeFixAll({
     y() {
         throw new Error("Method not implemented.");
     }
+
     constructor() {
         this.x = undefined;
     }

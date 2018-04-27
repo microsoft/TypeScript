@@ -3,7 +3,7 @@ function x(o: object, k: PropertyKey) { }
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 >o : Symbol(o, Decl(decoratorsOnComputedProperties.ts, 0, 11))
 >k : Symbol(k, Decl(decoratorsOnComputedProperties.ts, 0, 21))
->PropertyKey : Symbol(PropertyKey, Decl(lib.es2015.core.d.ts, --, --))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
 
 let i = 0;
 >i : Symbol(i, Decl(decoratorsOnComputedProperties.ts, 1, 3))

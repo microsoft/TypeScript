@@ -13,8 +13,6 @@
 // limitations under the License.
 //
 
-/// <reference path='services.ts' />
-
 /* @internal */
 let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { return this; })();
 
@@ -588,6 +586,7 @@ namespace ts {
         length: number;
         category: string;
         code: number;
+        unused?: {};
     }
     export function realizeDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, newLine: string): RealizedDiagnostic[] {
         return diagnostics.map(d => realizeDiagnostic(d, newLine));
@@ -913,7 +912,7 @@ namespace ts {
          * to provide at the given source position and providing a member completion
          * list if requested.
          */
-        public getCompletionsAtPosition(fileName: string, position: number, preferences: UserPreferences | undefined) {
+        public getCompletionsAtPosition(fileName: string, position: number, preferences: GetCompletionsAtPositionOptions | undefined) {
             return this.forwardJSONCall(
                 `getCompletionsAtPosition('${fileName}', ${position}, ${preferences})`,
                 () => this.languageService.getCompletionsAtPosition(fileName, position, preferences)

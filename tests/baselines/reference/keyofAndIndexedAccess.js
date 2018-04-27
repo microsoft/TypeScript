@@ -188,13 +188,13 @@ function f51<T, K extends keyof T>(k: K, s: string) {
     const x2 = k as string;
 }
 
-function f52<T>(obj: { [x: string]: boolean }, k: keyof T, s: string, n: number) {
+function f52<T>(obj: { [x: string]: boolean }, k: Exclude<keyof T, symbol>, s: string, n: number) {
     const x1 = obj[s];
     const x2 = obj[n];
     const x3 = obj[k];
 }
 
-function f53<T, K extends keyof T>(obj: { [x: string]: boolean }, k: K, s: string, n: number) {
+function f53<T, K extends Exclude<keyof T, symbol>>(obj: { [x: string]: boolean }, k: K, s: string, n: number) {
     const x1 = obj[s];
     const x2 = obj[n];
     const x3 = obj[k];
@@ -554,7 +554,7 @@ class AnotherSampleClass<T> extends SampleClass<T & Foo> {
 new AnotherSampleClass({});
 
 // Positive repro from #17166
-function f3<T, K extends keyof T>(t: T, k: K, tk: T[K]): void {
+function f3<T, K extends Extract<keyof T, string>>(t: T, k: K, tk: T[K]): void {
     for (let key in t) {
         key = k // ok, K ==> keyof T
         t[key] = tk; // ok, T[K] ==> T[keyof T]
@@ -564,6 +564,24 @@ function f3<T, K extends keyof T>(t: T, k: K, tk: T[K]): void {
 // # 21185
 type Predicates<TaggedRecord> = {
   [T in keyof TaggedRecord]: (variant: TaggedRecord[keyof TaggedRecord]) => variant is TaggedRecord[T]
+}
+
+// Repro from #23618
+
+type DBBoolTable<K extends string> = { [k in K]: 0 | 1 } 
+enum Flag {
+    FLAG_1 = "flag_1",
+    FLAG_2 = "flag_2"
+}
+
+type SimpleDBRecord<Flag extends string> = { staticField: number } & DBBoolTable<Flag>
+function getFlagsFromSimpleRecord<Flag extends string>(record: SimpleDBRecord<Flag>, flags: Flag[]) {
+    return record[flags[0]];
+}
+
+type DynamicDBRecord<Flag extends string> = ({ dynamicField: number } | { dynamicField: string }) & DBBoolTable<Flag>
+function getFlagsFromDynamicRecord<Flag extends string>(record: DynamicDBRecord<Flag>, flags: Flag[]) {
+    return record[flags[0]];
 }
 
 
@@ -948,6 +966,17 @@ function f3(t, k, tk) {
         t[key] = tk; // ok, T[K] ==> T[keyof T]
     }
 }
+var Flag;
+(function (Flag) {
+    Flag["FLAG_1"] = "flag_1";
+    Flag["FLAG_2"] = "flag_2";
+})(Flag || (Flag = {}));
+function getFlagsFromSimpleRecord(record, flags) {
+    return record[flags[0]];
+}
+function getFlagsFromDynamicRecord(record, flags) {
+    return record[flags[0]];
+}
 
 
 //// [keyofAndIndexedAccess.d.ts]
@@ -1048,8 +1077,8 @@ declare function f50<T>(k: keyof T, s: string): void;
 declare function f51<T, K extends keyof T>(k: K, s: string): void;
 declare function f52<T>(obj: {
     [x: string]: boolean;
-}, k: keyof T, s: string, n: number): void;
-declare function f53<T, K extends keyof T>(obj: {
+}, k: Exclude<keyof T, symbol>, s: string, n: number): void;
+declare function f53<T, K extends Exclude<keyof T, symbol>>(obj: {
     [x: string]: boolean;
 }, k: K, s: string, n: number): void;
 declare function f54<T>(obj: T, key: keyof T): void;
@@ -1208,7 +1237,24 @@ declare class AnotherSampleClass<T> extends SampleClass<T & Foo> {
     constructor(props: T);
     brokenMethod(): void;
 }
-declare function f3<T, K extends keyof T>(t: T, k: K, tk: T[K]): void;
+declare function f3<T, K extends Extract<keyof T, string>>(t: T, k: K, tk: T[K]): void;
 declare type Predicates<TaggedRecord> = {
     [T in keyof TaggedRecord]: (variant: TaggedRecord[keyof TaggedRecord]) => variant is TaggedRecord[T];
 };
+declare type DBBoolTable<K extends string> = {
+    [k in K]: 0 | 1;
+};
+declare enum Flag {
+    FLAG_1 = "flag_1",
+    FLAG_2 = "flag_2"
+}
+declare type SimpleDBRecord<Flag extends string> = {
+    staticField: number;
+} & DBBoolTable<Flag>;
+declare function getFlagsFromSimpleRecord<Flag extends string>(record: SimpleDBRecord<Flag>, flags: Flag[]): SimpleDBRecord<Flag>[Flag];
+declare type DynamicDBRecord<Flag extends string> = ({
+    dynamicField: number;
+} | {
+    dynamicField: string;
+}) & DBBoolTable<Flag>;
+declare function getFlagsFromDynamicRecord<Flag extends string>(record: DynamicDBRecord<Flag>, flags: Flag[]): DynamicDBRecord<Flag>[Flag];

@@ -157,6 +157,7 @@ declare namespace FourSlashInterface {
             spanIndex?: number,
             hasAction?: boolean,
             options?: UserPreferences & {
+                triggerCharacter?: string,
                 sourceDisplay?: string,
                 isRecommended?: true,
                 insertText?: string,
@@ -338,12 +339,17 @@ declare namespace FourSlashInterface {
         verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: {
             start: number;
             length: number;
-        }, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: ts.JSDocTagInfo[]): void;
+        }, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: { name: string, text?: string }[]): void;
         getSyntacticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSemanticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSuggestionDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         ProjectInfo(expected: string[]): void;
         allRangesAppearInImplementationList(markerName: string): void;
+        getEditsForFileRename(options: {
+            oldPath: string;
+            newPath: string;
+            newFileContents: { [fileName: string]: string };
+        });
     }
     class edit {
         backspace(count?: number): void;
@@ -518,6 +524,7 @@ declare namespace FourSlashInterface {
         /** @default `test.ranges()[0]` */
         range?: Range;
         code: number;
+        unused?: true;
     }
     interface VerifyDocumentHighlightsOptions {
         filesToSearch?: ReadonlyArray<string>;
@@ -529,6 +536,7 @@ declare namespace FourSlashInterface {
         importModuleSpecifierPreference?: "relative" | "non-relative";
     }
     interface CompletionsAtOptions extends UserPreferences {
+        triggerCharacter?: string;
         isNewIdentifierLocation?: boolean;
     }
 }

@@ -1,11 +1,3 @@
-/// <reference path="..\compiler\commandLineParser.ts" />
-/// <reference path="..\services\services.ts" />
-/// <reference path="utilities.ts" />
-/// <reference path="session.ts" />
-/// <reference path="scriptVersionCache.ts"/>
-/// <reference path="project.ts"/>
-/// <reference path="typingsCache.ts"/>
-
 namespace ts.server {
     export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
 
@@ -318,9 +310,14 @@ namespace ts.server {
         return `Project: ${project ? project.getProjectName() : ""} WatchType: ${watchType}`;
     }
 
+    function updateProjectIfDirty(project: Project) {
+        return project.dirty && project.updateGraph();
+    }
+
     export class ProjectService {
 
-        public readonly typingsCache: TypingsCache;
+        /*@internal*/
+        readonly typingsCache: TypingsCache;
 
         private readonly documentRegistry: DocumentRegistry;
 
@@ -392,6 +389,7 @@ namespace ts.server {
         public readonly useSingleInferredProject: boolean;
         public readonly useInferredProjectPerProjectRoot: boolean;
         public readonly typingsInstaller: ITypingsInstaller;
+        private readonly globalCacheLocationDirectoryPath: Path;
         public readonly throttleWaitMilliseconds?: number;
         private readonly eventHandler?: ProjectServiceEventHandler;
         private readonly suppressDiagnosticEvents?: boolean;
@@ -431,6 +429,8 @@ namespace ts.server {
             }
             this.currentDirectory = this.host.getCurrentDirectory();
             this.toCanonicalFileName = createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
+            this.globalCacheLocationDirectoryPath = this.typingsInstaller.globalTypingsCacheLocation &&
+                ensureTrailingDirectorySeparator(this.toPath(this.typingsInstaller.globalTypingsCacheLocation));
             this.throttledOperations = new ThrottledOperations(this.host, this.logger);
 
             if (this.typesMapLocation) {
@@ -528,13 +528,13 @@ namespace ts.server {
             }
             switch (response.kind) {
                 case ActionSet:
-                    project.resolutionCache.clear();
-                    this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typeAcquisition, response.unresolvedImports, response.typings);
+                    // Update the typing files and update the project
+                    project.updateTypingFiles(this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typeAcquisition, response.unresolvedImports, response.typings));
                     break;
                 case ActionInvalidate:
-                    project.resolutionCache.clear();
-                    this.typingsCache.deleteTypingsForProject(response.projectName);
-                    break;
+                    // Do not clear resolution cache, there was changes detected in typings, so enque typing request and let it get us correct results
+                    this.typingsCache.enqueueInstallTypingsForProject(project, project.lastCachedUnresolvedImportsList, /*forceRefresh*/ true);
+                    return;
             }
             this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
         }
@@ -548,10 +548,11 @@ namespace ts.server {
                 else {
                     if (this.pendingEnsureProjectForOpenFiles) {
                         this.ensureProjectForOpenFiles();
+
+                        // Send the event to notify that there were background project updates
+                        // send current list of open files
+                        this.sendProjectsUpdatedInBackgroundEvent();
                     }
-                    // Send the event to notify that there were background project updates
-                    // send current list of open files
-                    this.sendProjectsUpdatedInBackgroundEvent();
                 }
             });
         }
@@ -642,7 +643,6 @@ namespace ts.server {
                 return undefined;
             }
             if (isInferredProjectName(projectName)) {
-                this.ensureProjectStructuresUptoDate();
                 return findProjectByName(projectName, this.inferredProjects);
             }
             return this.findExternalProjectByProjectName(projectName) || this.findConfiguredProjectByProjectName(toNormalizedPath(projectName));
@@ -677,7 +677,7 @@ namespace ts.server {
             let hasChanges = this.pendingEnsureProjectForOpenFiles;
             this.pendingProjectUpdates.clear();
             const updateGraph = (project: Project) => {
-                hasChanges = this.updateProjectIfDirty(project) || hasChanges;
+                hasChanges = updateProjectIfDirty(project) || hasChanges;
             };
 
             this.externalProjects.forEach(updateGraph);
@@ -686,10 +686,6 @@ namespace ts.server {
             if (hasChanges) {
                 this.ensureProjectForOpenFiles();
             }
-        }
-
-        private updateProjectIfDirty(project: Project) {
-            return project.dirty && project.updateGraph();
         }
 
         getFormatCodeOptions(file: NormalizedPath) {
@@ -1738,7 +1734,10 @@ namespace ts.server {
         private watchClosedScriptInfo(info: ScriptInfo) {
             Debug.assert(!info.fileWatcher);
             // do not watch files with mixed content - server doesn't know how to interpret it
-            if (!info.isDynamicOrHasMixedContent()) {
+            // do not watch files in the global cache location
+            if (!info.isDynamicOrHasMixedContent() &&
+                (!this.globalCacheLocationDirectoryPath ||
+                    !startsWith(info.path, this.globalCacheLocationDirectoryPath))) {
                 const { fileName } = info;
                 info.fileWatcher = this.watchFactory.watchFilePath(
                     this.host,
@@ -1836,11 +1835,11 @@ namespace ts.server {
                     this.logger.info(`Host information ${args.hostInfo}`);
                 }
                 if (args.formatOptions) {
-                    mergeMapLikes(this.hostConfiguration.formatCodeOptions, convertFormatOptions(args.formatOptions));
+                    this.hostConfiguration.formatCodeOptions = { ...this.hostConfiguration.formatCodeOptions, ...convertFormatOptions(args.formatOptions) };
                     this.logger.info("Format host information updated");
                 }
                 if (args.preferences) {
-                    mergeMapLikes(this.hostConfiguration.preferences, args.preferences);
+                    this.hostConfiguration.preferences = { ...this.hostConfiguration.preferences, ...args.preferences };
                 }
                 if (args.extraFileExtensions) {
                     this.hostConfiguration.extraFileExtensions = args.extraFileExtensions;
@@ -1981,7 +1980,7 @@ namespace ts.server {
                 }
             });
             this.pendingEnsureProjectForOpenFiles = false;
-            this.inferredProjects.forEach(p => this.updateProjectIfDirty(p));
+            this.inferredProjects.forEach(updateProjectIfDirty);
 
             this.logger.info("Structure after ensureProjectForOpenFiles:");
             this.printProjects();
@@ -2028,7 +2027,7 @@ namespace ts.server {
                     }
                     else {
                         // Ensure project is ready to check if it contains opened script info
-                        project.updateGraph();
+                        updateProjectIfDirty(project);
                     }
                 }
             }
@@ -2036,6 +2035,11 @@ namespace ts.server {
             // Project we have at this point is going to be updated since its either found through
             // - external project search, which updates the project before checking if info is present in it
             // - configured project - either created or updated to ensure we know correct status of info
+
+            // At this point we need to ensure that containing projects of the info are uptodate
+            // This will ensure that later question of info.isOrphan() will return correct answer
+            // and we correctly create inferred project for the info
+            info.containingProjects.forEach(updateProjectIfDirty);
 
             // At this point if file is part of any any configured or external project, then it would be present in the containing projects
             // So if it still doesnt have any containing projects, it needs to be part of inferred project

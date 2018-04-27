@@ -23,6 +23,10 @@
         "category": "Error",
         "code": 1010
     },
+    "An element access expression should take an argument.": {
+        "category": "Error",
+        "code": 1011
+    },
     "Unexpected token.": {
         "category": "Error",
         "code": 1012
@@ -2012,7 +2016,10 @@
         "category": "Error",
         "code": 2569
     },
-
+    "Property '{0}' does not exist on type '{1}'. Did you forget to use 'await'?": {
+        "category": "Error",
+        "code": 2570
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2940,10 +2947,6 @@
         "category": "Message",
         "code": 6040
     },
-    "Compilation complete. Watching for file changes.": {
-        "category": "Message",
-        "code": 6042
-    },
     "Generates corresponding '.map' file.": {
         "category": "Message",
         "code": 6043
@@ -3282,7 +3285,8 @@
     },
     "'{0}' is declared but its value is never read.": {
         "category": "Error",
-        "code": 6133
+        "code": 6133,
+        "reportsUnnecessary": true
     },
     "Report errors on unused locals.": {
         "category": "Message",
@@ -3302,7 +3306,8 @@
     },
     "Property '{0}' is declared but its value is never read.": {
         "category": "Error",
-        "code": 6138
+        "code": 6138,
+        "reportsUnnecessary": true
     },
     "Import emit helpers from 'tslib'.": {
         "category": "Message",
@@ -3514,15 +3519,25 @@
     },
     "All imports in import declaration are unused.": {
         "category": "Error",
-        "code": 6192
+        "code": 6192,
+        "reportsUnnecessary": true
     },
-    "Found 1 error.": {
+    "Found 1 error. Watching for file changes.": {
         "category": "Message",
         "code": 6193
     },
-    "Found {0} errors.": {
+    "Found {0} errors. Watching for file changes.": {
         "category": "Message",
         "code": 6194
+    },
+    "Resolve 'keyof' to string valued property names only (no numbers or symbols).": {
+        "category": "Message",
+        "code": 6195
+    },
+    "'{0}' is declared but never used.": {
+        "category": "Error",
+        "code": 6196,
+        "reportsUnnecessary": true
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -3602,7 +3617,8 @@
     },
     "Unused label.": {
         "category": "Error",
-        "code": 7028
+        "code": 7028,
+        "reportsUnnecessary": true
     },
     "Fallthrough case in switch.": {
         "category": "Error",
@@ -3911,7 +3927,7 @@
         "category": "Message",
         "code": 90007
     },
-    "Add 'this.' to unresolved variable": {
+    "Add '{0}.' to unresolved variable": {
         "category": "Message",
         "code": 90008
     },
@@ -4119,7 +4135,7 @@
         "category": "Message",
         "code": 95036
     },
-    "Add 'this.' to all unresolved variables matching a member name": {
+    "Add qualifier to all unresolved variables matching a member name": {
         "category": "Message",
         "code": 95037
     },
@@ -4154,5 +4170,9 @@
     "Convert all constructor functions to classes": {
         "category": "Message",
         "code": 95045
+    },
+    "Generate 'get' and 'set' accessors": {
+        "category": "Message",
+        "code": 95046
     }
 }
