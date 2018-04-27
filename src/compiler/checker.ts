@@ -4180,7 +4180,7 @@ namespace ts {
                 const isPrivate = getDeclarationModifierFlagsFromSymbol(prop) & (ModifierFlags.Private | ModifierFlags.Protected);
                 const isSetOnlyAccessor = prop.flags & SymbolFlags.SetAccessor && !(prop.flags & SymbolFlags.GetAccessor);
                 if (!inNamesToRemove && !isPrivate && !isClassMethod(prop) && !isSetOnlyAccessor) {
-                    members.set(prop.escapedName, prop);
+                    members.set(prop.escapedName, getNonReadonlySymbol(prop));
                 }
             }
             const stringIndexInfo = getIndexInfoOfType(source, IndexKind.String);
