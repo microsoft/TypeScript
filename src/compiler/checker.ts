@@ -9011,11 +9011,12 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getSyntheticInferType(targetName: __String, targetConstraint: Type | undefined, targetDefault: Type | undefined): Type {
+        function getSyntheticInferType(target: TypeParameter): Type {
+            // This type is just used as a marker that inference must occur for these positions and should never *actually* be checked
+            // - getPartialInferenceResult should ensure they're always mapped out of the resulting list.
             const param = createType(TypeFlags.TypeParameter) as TypeParameter;
-            param.constraint = targetConstraint || noConstraintType;
-            param.default = targetDefault || noConstraintType;
-            const symbol = createSymbol(SymbolFlags.TypeParameter, targetName, CheckFlags.ImpliedInferDecl);
+            param.target = target;
+            const symbol = createSymbol(SymbolFlags.TypeParameter, target.symbol.escapedName, CheckFlags.ImpliedInferDecl);
             param.symbol = symbol;
             symbol.declaredType = param;
             return param;
@@ -9076,8 +9077,7 @@ namespace ts {
                 if (!node && target) {
                     const param = getTypeParameterFromTypeParameterOrTypeParameterDeclaration(target);
                     if (allowInferTypes) {
-                        const targetName = param.symbol.escapedName;
-                        results[i] = getSyntheticInferType(targetName, getConstraintFromTypeParameter(param), getResolvedTypeParameterDefault(param));
+                        results[i] = getSyntheticInferType(param);
                     }
                     else {
                         const defaultType = getDefaultForMissingTypeArgument(param, isInJavaScriptFile(node));
@@ -9088,7 +9088,7 @@ namespace ts {
                             results[i] = instantiateType(defaultType, createTypeMapper(typeParameters, results));
                         }
                         else {
-                            // TODO: issue error?
+                            // This case is an error case, which should have an error issued by `hasEnoughPositionalArguments`
                             results[i] = getBaseConstraintOfType(param) || emptyObjectType;
                         }
                     }
