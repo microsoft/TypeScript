@@ -964,8 +964,11 @@ namespace ts {
                     let parameterProperties: PropertyDeclaration[];
                     if (ctor) {
                         const oldDiag = getSymbolAccessibilityDiagnostic;
-                        parameterProperties = compact(flatMap(ctor.parameters, param => {
-                            if (!hasModifier(param, ModifierFlags.ParameterPropertyModifier) || shouldStripInternal(param, /* inline */ true)) return;
+                        let previousSibling: Node;
+                        parameterProperties = compact(flatMap(ctor.parameters, (param) => {
+                            const shouldStrip = shouldStripInternalParameter(param, previousSibling);
+                            previousSibling = param;
+                            if (!hasModifier(param, ModifierFlags.ParameterPropertyModifier) || shouldStrip) return;
                             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(param);
                             if (param.name.kind === SyntaxKind.Identifier) {
                                 return preserveJsDoc(createProperty(
@@ -1140,10 +1143,30 @@ namespace ts {
             return stringContains(comment, "@internal");
         }
 
-        function shouldStripInternal(node: Node, inline?: boolean) {
+        function shouldStripInternal(node: Node) {
             if (stripInternal && node) {
-                const leadingCommentRanges = getLeadingCommentRangesOfNode(getParseTreeNode(node), currentSourceFile, inline);
-                return length(leadingCommentRanges) && hasInternalAnnotation(last(leadingCommentRanges));
+                const leadingCommentRanges = getLeadingCommentRangesOfNode(getParseTreeNode(node), currentSourceFile);
+                if (forEach(leadingCommentRanges, hasInternalAnnotation)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function shouldStripInternalParameter(node: Node, previousSibling: Node | undefined) {
+            if (stripInternal && node) {
+                node = getParseTreeNode(node)
+                const text = currentSourceFile.text;
+                const commentRanges = previousSibling
+                    ? concatenate(
+                        // to handle
+                        // ... parameters, /* @internal */
+                        // public param: string
+                        getTrailingCommentRanges(text, skipTrivia(text, previousSibling.end + 1, /* stopAfterLineBreak */ false, /* stopAtComments */ true)),
+                        getLeadingCommentRanges(text, node.pos)
+                    )
+                    : getTrailingCommentRanges(text, skipTrivia(text, node.pos, /* stopAfterLineBreak */ false, /* stopAtComments */ true));
+                return length(commentRanges) && hasInternalAnnotation(last(commentRanges));
             }
             return false;
         }

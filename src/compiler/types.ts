@@ -760,8 +760,8 @@ namespace ts {
         name: ComputedPropertyName;
     }
 
-    // A declaration that supports late-binding (used in checker)
     /* @internal */
+    // A declaration that supports late-binding (used in checker)
     export interface LateBoundDeclaration extends DynamicNamedDeclaration {
         name: LateBoundName;
     }
@@ -775,8 +775,8 @@ namespace ts {
         expression: Expression;
     }
 
-    // A name that supports late-binding (used in checker)
     /* @internal */
+    // A name that supports late-binding (used in checker)
     export interface LateBoundName extends ComputedPropertyName {
         expression: EntityNameExpression;
     }
@@ -3781,8 +3781,8 @@ namespace ts {
 
     export type StructuredType = ObjectType | UnionType | IntersectionType;
 
-    // An instantiated anonymous type has a target and a mapper
     /* @internal */
+    // An instantiated anonymous type has a target and a mapper
     export interface AnonymousType extends ObjectType {
         target?: AnonymousType;  // Instantiation target
         mapper?: TypeMapper;     // Instantiation mapper
@@ -3808,8 +3808,8 @@ namespace ts {
         mappedType: MappedType;
     }
 
-    // Resolved object, union, or intersection type
     /* @internal */
+    // Resolved object, union, or intersection type
     export interface ResolvedType extends ObjectType, UnionOrIntersectionType {
         members: SymbolTable;              // Properties by name
         properties: Symbol[];              // Properties
@@ -3819,10 +3819,10 @@ namespace ts {
         numberIndexInfo?: IndexInfo;       // Numeric indexing info
     }
 
+    /* @internal */
     // Object literals are initially marked fresh. Freshness disappears following an assignment,
     // before a type assertion, or when an object literal's type is widened. The regular
     // version of a fresh type is identical except for the TypeFlags.FreshObjectLiteral flag.
-    /* @internal */
     export interface FreshObjectLiteralType extends ResolvedType {
         regularType: ResolvedType;  // Regular version of fresh type
     }
