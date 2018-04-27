@@ -1,5 +1,5 @@
 === tests/cases/conformance/types/rest/objectRestReadonly.ts ===
-// #23374
+// #23734
 type ObjType = {
 >ObjType : Symbol(ObjType, Decl(objectRestReadonly.ts, 0, 0))
 

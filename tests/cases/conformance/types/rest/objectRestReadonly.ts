@@ -1,4 +1,4 @@
-// #23374
+// #23734
 type ObjType = {
   foo: string
   baz: string
