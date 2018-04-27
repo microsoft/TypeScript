@@ -48,6 +48,7 @@ module TypeScript {
 >new TypeLink[] : any
 >TypeLink[] : any
 >TypeLink : any
+> : any
             }
             for (var i = 0; i < len; i++) {
 >i : number

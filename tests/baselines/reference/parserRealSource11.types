@@ -853,6 +853,7 @@ module TypeScript {
 >new AST[] : any
 >AST[] : any
 >AST : typeof AST
+> : any
 
         constructor () {
             super(NodeType.List);
@@ -4642,6 +4643,7 @@ module TypeScript {
 >new Identifier[] : any
 >Identifier[] : any
 >Identifier : typeof Identifier
+> : any
             }
             this.envids[this.envids.length] = id;
 >this.envids[this.envids.length] = id : Identifier
@@ -4724,6 +4726,7 @@ module TypeScript {
 >new Identifier[] : any
 >Identifier[] : any
 >Identifier : typeof Identifier
+> : any
             }
             var id = new Identifier(sym.name);
 >id : Identifier
