@@ -103,3 +103,15 @@ tests/cases/conformance/expressions/typeGuards/typeGuardConstructor.ts(63,11): e
         const c = x[0];
     }
     
+    
+    class Bar {
+        a: string
+    }
+    
+    class Baz {
+        a: string
+    }
+    var bar: Bar | Baz;
+    if (bar.constructor === Baz) {
+        const baz = bar
+    }

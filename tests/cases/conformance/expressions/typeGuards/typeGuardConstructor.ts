@@ -79,3 +79,16 @@ if (x.constructor === Boolean) {
 if(x.constructor === Array) {
     const c = x[0];
 }
+
+
+class Bar {
+    a: string
+}
+
+class Baz {
+    a: string
+}
+var bar: Bar | Baz;
+if (bar.constructor === Baz) {
+    const baz = bar
+}

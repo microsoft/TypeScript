@@ -13548,7 +13548,11 @@ namespace ts {
                 const targetType = !isTypeAny(prototypePropertyType) ? prototypePropertyType : undefined;
                 if (!targetType || isTypeAny(type) && (targetType === globalObjectType || targetType === globalFunctionType)) return type;
 
-                return getNarrowedType(type, targetType, assumeTrue, areTypesComparable);
+                return getNarrowedType(type, targetType, assumeTrue, isConstructedBy);
+
+                function isConstructedBy(source: Type, target: Type) {
+                    return source.flags & TypeFlags.Primitive ? areTypesComparable(source, target) : isTypeDerivedFrom(source, target);
+                }
             }
 
             function narrowTypeByTypeof(type: Type, typeOfExpr: TypeOfExpression, operator: SyntaxKind, literal: LiteralExpression, assumeTrue: boolean): Type {

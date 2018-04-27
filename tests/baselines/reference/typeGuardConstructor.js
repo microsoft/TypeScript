@@ -82,6 +82,18 @@ if(x.constructor === Array) {
 }
 
 
+class Bar {
+    a: string
+}
+
+class Baz {
+    a: string
+}
+var bar: Bar | Baz;
+if (bar.constructor === Baz) {
+    const baz = bar
+}
+
 //// [typeGuardConstructor.js]
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -178,4 +190,18 @@ if (x.constructor === Boolean) {
 }
 if (x.constructor === Array) {
     var c = x[0];
+}
+var Bar = /** @class */ (function () {
+    function Bar() {
+    }
+    return Bar;
+}());
+var Baz = /** @class */ (function () {
+    function Baz() {
+    }
+    return Baz;
+}());
+var bar;
+if (bar.constructor === Baz) {
+    var baz = bar;
 }

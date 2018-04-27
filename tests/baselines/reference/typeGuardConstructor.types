@@ -256,3 +256,33 @@ if(x.constructor === Array) {
 >0 : 0
 }
 
+
+class Bar {
+>Bar : Bar
+
+    a: string
+>a : string
+}
+
+class Baz {
+>Baz : Baz
+
+    a: string
+>a : string
+}
+var bar: Bar | Baz;
+>bar : Bar | Baz
+>Bar : Bar
+>Baz : Baz
+
+if (bar.constructor === Baz) {
+>bar.constructor === Baz : boolean
+>bar.constructor : Function
+>bar : Bar | Baz
+>constructor : Function
+>Baz : typeof Baz
+
+    const baz = bar
+>baz : Baz
+>bar : Baz
+}

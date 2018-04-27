@@ -228,3 +228,32 @@ if(x.constructor === Array) {
 >x : Symbol(x, Decl(typeGuardConstructor.ts, 65, 3))
 }
 
+
+class Bar {
+>Bar : Symbol(Bar, Decl(typeGuardConstructor.ts, 80, 1))
+
+    a: string
+>a : Symbol(Bar.a, Decl(typeGuardConstructor.ts, 83, 11))
+}
+
+class Baz {
+>Baz : Symbol(Baz, Decl(typeGuardConstructor.ts, 85, 1))
+
+    a: string
+>a : Symbol(Baz.a, Decl(typeGuardConstructor.ts, 87, 11))
+}
+var bar: Bar | Baz;
+>bar : Symbol(bar, Decl(typeGuardConstructor.ts, 90, 3))
+>Bar : Symbol(Bar, Decl(typeGuardConstructor.ts, 80, 1))
+>Baz : Symbol(Baz, Decl(typeGuardConstructor.ts, 85, 1))
+
+if (bar.constructor === Baz) {
+>bar.constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>bar : Symbol(bar, Decl(typeGuardConstructor.ts, 90, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>Baz : Symbol(Baz, Decl(typeGuardConstructor.ts, 85, 1))
+
+    const baz = bar
+>baz : Symbol(baz, Decl(typeGuardConstructor.ts, 92, 9))
+>bar : Symbol(bar, Decl(typeGuardConstructor.ts, 90, 3))
+}
