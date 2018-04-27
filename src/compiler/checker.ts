@@ -19912,6 +19912,22 @@ namespace ts {
                     }
                     if (!isTypeEqualityComparableTo(leftType, rightType) && !isTypeEqualityComparableTo(rightType, leftType)) {
                         reportOperatorError();
+                        const leftDeclaredType = getDeclaredTypeOfReference(left) || leftType;
+                        const rightDeclaredType = getDeclaredTypeOfReference(right) || rightType;
+                        if (isTypeEqualityComparableTo(leftDeclaredType, rightDeclaredType) || isTypeEqualityComparableTo(rightDeclaredType, leftDeclaredType)) {
+                            if (leftDeclaredType === leftType) {
+                                error(errorNode || operatorToken,
+                                    Diagnostics.Earlier_code_in_this_block_narrowed_type_0_to_1_making_this_operation_invalid,
+                                    typeToString(rightDeclaredType),
+                                    typeToString(rightType));
+                            }
+                            else {
+                                error(errorNode || operatorToken,
+                                    Diagnostics.Earlier_code_in_this_block_narrowed_type_0_to_1_making_this_operation_invalid,
+                                    typeToString(leftDeclaredType),
+                                    typeToString(leftType));
+                            }
+                        }
                     }
                     return booleanType;
                 case SyntaxKind.InstanceOfKeyword:

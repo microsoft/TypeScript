@@ -2352,6 +2352,10 @@
         "category": "Error",
         "code": 2724
     },
+    "Earlier code in this block narrowed type '{0}' to '{1}' making this operation invalid.": {
+        "category": "Error",
+        "code": 2725
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000

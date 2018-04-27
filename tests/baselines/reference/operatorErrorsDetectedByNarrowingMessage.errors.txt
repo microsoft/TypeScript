@@ -1,0 +1,97 @@
+tests/cases/compiler/operatorErrorsDetectedByNarrowingMessage.ts(13,9): error TS2365: Operator '===' cannot be applied to types 'Keys.Shift' and 'Keys.Tab'.
+tests/cases/compiler/operatorErrorsDetectedByNarrowingMessage.ts(13,9): error TS2725: Earlier code in this block narrowed type 'Keys' to 'Keys.Shift' making this operation invalid.
+tests/cases/compiler/operatorErrorsDetectedByNarrowingMessage.ts(28,12): error TS2365: Operator '===' cannot be applied to types 'string' and 'number'.
+tests/cases/compiler/operatorErrorsDetectedByNarrowingMessage.ts(28,12): error TS2725: Earlier code in this block narrowed type 'string | number' to 'string' making this operation invalid.
+tests/cases/compiler/operatorErrorsDetectedByNarrowingMessage.ts(47,12): error TS2365: Operator '===' cannot be applied to types 'number' and 'string'.
+tests/cases/compiler/operatorErrorsDetectedByNarrowingMessage.ts(47,12): error TS2725: Earlier code in this block narrowed type 'string | number' to 'string' making this operation invalid.
+tests/cases/compiler/operatorErrorsDetectedByNarrowingMessage.ts(55,9): error TS2365: Operator '===' cannot be applied to types 'false' and 'true'.
+tests/cases/compiler/operatorErrorsDetectedByNarrowingMessage.ts(55,9): error TS2725: Earlier code in this block narrowed type 'boolean' to 'false' making this operation invalid.
+tests/cases/compiler/operatorErrorsDetectedByNarrowingMessage.ts(60,9): error TS2365: Operator '===' cannot be applied to types 'false' and 'true'.
+tests/cases/compiler/operatorErrorsDetectedByNarrowingMessage.ts(60,9): error TS2725: Earlier code in this block narrowed type 'boolean' to 'false' making this operation invalid.
+
+
+==== tests/cases/compiler/operatorErrorsDetectedByNarrowingMessage.ts (10 errors) ====
+    const enum Keys {
+        Tab = 10,
+        Shift = 13
+    }
+    
+    function enumType() {
+        let key: Keys;
+    
+        if (key === Keys.Tab) {
+            return;
+        }
+    
+        if (key === Keys.Tab || key === Keys.Shift) {
+            ~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '===' cannot be applied to types 'Keys.Shift' and 'Keys.Tab'.
+            ~~~~~~~~~~~~~~~~
+!!! error TS2725: Earlier code in this block narrowed type 'Keys' to 'Keys.Shift' making this operation invalid.
+            return;
+        }
+    }
+    
+    
+    function unionType() {
+        let x!: string | number;
+        let y!: string | number;
+        if (typeof x === 'number') {
+            return;
+        }
+        if (typeof y === 'string') {
+            return;
+        }
+        return x === y;
+               ~~~~~~~
+!!! error TS2365: Operator '===' cannot be applied to types 'string' and 'number'.
+               ~~~~~~~
+!!! error TS2725: Earlier code in this block narrowed type 'string | number' to 'string' making this operation invalid.
+    }
+    
+    interface Left {
+        kind: 'left'
+        data: number;
+    }
+    
+    interface Right {
+        kind: 'right'
+        data: string;
+    }
+    
+    function discriminatedType() {
+        let x!: Left;
+        let y!: Left | Right;
+        if (y.kind === 'left') {
+            return;
+        }
+        return x.data === y.data;
+               ~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '===' cannot be applied to types 'number' and 'string'.
+               ~~~~~~~~~~~~~~~~~
+!!! error TS2725: Earlier code in this block narrowed type 'string | number' to 'string' making this operation invalid.
+    }
+    
+    
+    function booleanType(bar: boolean) {
+        if (bar === true) {
+            return "true";
+        }
+        if (bar === true) {
+            ~~~~~~~~~~~~
+!!! error TS2365: Operator '===' cannot be applied to types 'false' and 'true'.
+            ~~~~~~~~~~~~
+!!! error TS2725: Earlier code in this block narrowed type 'boolean' to 'false' making this operation invalid.
+            return "false";
+        }
+    
+        const f: boolean = false;
+        if (f === true) {
+            ~~~~~~~~~~
+!!! error TS2365: Operator '===' cannot be applied to types 'false' and 'true'.
+            ~~~~~~~~~~
+!!! error TS2725: Earlier code in this block narrowed type 'boolean' to 'false' making this operation invalid.
+            return "false";
+        }
+    }
+    
