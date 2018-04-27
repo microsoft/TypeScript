@@ -68,7 +68,7 @@ type K02 = keyof number;  // "toString" | "toFixed" | "toExponential" | ...
 >K02 : "toString" | "toLocaleString" | "valueOf" | "toFixed" | "toExponential" | "toPrecision"
 
 type K03 = keyof boolean;  // "valueOf"
->K03 : "valueOf"
+>K03 : "toString" | "valueOf"
 
 type K04 = keyof void;  // never
 >K04 : never

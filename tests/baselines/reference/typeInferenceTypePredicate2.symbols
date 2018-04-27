@@ -12,7 +12,7 @@
     .map(thing => thing.toString());
 >map : Symbol(Array.map, Decl(lib.d.ts, --, --))
 >thing : Symbol(thing, Decl(typeInferenceTypePredicate2.ts, 2, 9))
->thing.toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>thing.toString : Symbol(Boolean.toString, Decl(lib.d.ts, --, --))
 >thing : Symbol(thing, Decl(typeInferenceTypePredicate2.ts, 2, 9))
->toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Boolean.toString, Decl(lib.d.ts, --, --))
 
