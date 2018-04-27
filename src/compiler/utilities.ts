@@ -758,10 +758,6 @@ namespace ts {
         return node.kind !== SyntaxKind.JsxText ? getLeadingCommentRanges(sourceFileOfNode.text, node.pos) : undefined;
     }
 
-    export function getTrailingCommentRangesOfNode(node: Node, sourceFileOfNode: SourceFile) {
-        return node.kind !== SyntaxKind.JsxText ? getTrailingCommentRanges(sourceFileOfNode.text, node.pos) : undefined;
-    }
-
     export function getJSDocCommentRanges(node: Node, text: string) {
         const commentRanges = (node.kind === SyntaxKind.Parameter ||
             node.kind === SyntaxKind.TypeParameter ||
