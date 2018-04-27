@@ -75,6 +75,7 @@ namespace ts {
         const undefinedSymbol = createSymbol(SymbolFlags.Property, "undefined" as __String);
         undefinedSymbol.declarations = [];
         const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as __String);
+        const requireSymbol = createSymbol(SymbolFlags.Property, "require" as __String);
 
         /** This will be set during calls to `getResolvedSignature` where services determines an apparent number of arguments greater than what is actually provided. */
         let apparentArgumentCount: number | undefined;
@@ -1475,6 +1476,9 @@ namespace ts {
                     if ((lastLocation as SourceFile).commonJsModuleIndicator && name === "exports") {
                         return lastLocation.symbol;
                     }
+                }
+                if (originalLocation && isInJavaScriptFile(originalLocation) && originalLocation.parent && isRequireCall(originalLocation.parent, /*checkArgumentIsStringLiteralLike*/ false)) { // or maybe originalLocation.parent ?
+                    return requireSymbol;
                 }
 
                 if (!excludeGlobals) {
@@ -4670,6 +4674,9 @@ namespace ts {
                 // Handle prototype property
                 if (symbol.flags & SymbolFlags.Prototype) {
                     return links.type = getTypeOfPrototypeProperty(symbol);
+                }
+                if (symbol === requireSymbol) {
+                    return links.type = anyType; // should be fine, we'll pick it up later
                 }
                 // Handle catch clause variables
                 const declaration = symbol.valueDeclaration;
