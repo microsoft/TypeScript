@@ -2345,6 +2345,55 @@ type Predicates<TaggedRecord> = {
 >T : T
 }
 
+// Repros from #23592
+
+type Example<T extends { [K in keyof T]: { prop: any } }> = { [K in keyof T]: T[K]["prop"] };
+>Example : Example<T>
+>T : T
+>K : K
+>T : T
+>prop : any
+>K : K
+>T : T
+>T : T
+>K : K
+
+type Result = Example<{ a: { prop: string }; b: { prop: number } }>;
+>Result : Example<{ a: { prop: string; }; b: { prop: number; }; }>
+>Example : Example<T>
+>a : { prop: string; }
+>prop : string
+>b : { prop: number; }
+>prop : number
+
+type Helper2<T> = { [K in keyof T]: Extract<T[K], { prop: any }> };
+>Helper2 : Helper2<T>
+>T : T
+>K : K
+>T : T
+>Extract : Extract<T, U>
+>T : T
+>K : K
+>prop : any
+
+type Example2<T> = { [K in keyof Helper2<T>]: Helper2<T>[K]["prop"] };
+>Example2 : Example2<T>
+>T : T
+>K : K
+>Helper2 : Helper2<T>
+>T : T
+>Helper2 : Helper2<T>
+>T : T
+>K : K
+
+type Result2 = Example2<{ 1: { prop: string }; 2: { prop: number } }>;
+>Result2 : Example2<{ 1: { prop: string; }; 2: { prop: number; }; }>
+>Example2 : Example2<T>
+>1 : { prop: string; }
+>prop : string
+>2 : { prop: number; }
+>prop : number
+
 // Repro from #23618
 
 type DBBoolTable<K extends string> = { [k in K]: 0 | 1 } 
