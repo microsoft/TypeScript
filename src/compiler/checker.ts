@@ -2118,14 +2118,22 @@ namespace ts {
             return (symbol.flags & meaning) || dontResolveAlias ? symbol : resolveAlias(symbol);
         }
 
+        /**
+         * For prototype-property methods like `A.prototype.m = function () ...`, try to resolve names in the scope of `A` too.
+         * Note that prototype-property assignment to locations outside the current file (eg globals) doesn't work, so
+         * name resolution won't work either.
+         */
         function resolveEntityNameFromJSPrototype(name: Identifier, meaning: SymbolFlags) {
             if (isJSDocTypeReference(name.parent) && isJSDocTag(name.parent.parent.parent)) {
                 const host = getJSDocHost(name.parent.parent.parent as JSDocTag);
                 if (isExpressionStatement(host) &&
                     isBinaryExpression(host.expression) &&
                     getSpecialPropertyAssignmentKind(host.expression) === SpecialPropertyAssignmentKind.PrototypeProperty) {
-                    const secondaryLocation = getSymbolOfNode(host.expression.left).parent.valueDeclaration;
-                    return resolveName(secondaryLocation, name.escapedText, meaning, /*nameNotFoundMessage*/ undefined, name, /*isUse*/ true);
+                    const symbol = getSymbolOfNode(host.expression.left);
+                    if (symbol) {
+                        const secondaryLocation = symbol.parent.valueDeclaration;
+                        return resolveName(secondaryLocation, name.escapedText, meaning, /*nameNotFoundMessage*/ undefined, name, /*isUse*/ true);
+                    }
                 }
             }
         }
@@ -4156,7 +4164,7 @@ namespace ts {
                 const isPrivate = getDeclarationModifierFlagsFromSymbol(prop) & (ModifierFlags.Private | ModifierFlags.Protected);
                 const isSetOnlyAccessor = prop.flags & SymbolFlags.SetAccessor && !(prop.flags & SymbolFlags.GetAccessor);
                 if (!inNamesToRemove && !isPrivate && !isClassMethod(prop) && !isSetOnlyAccessor) {
-                    members.set(prop.escapedName, prop);
+                    members.set(prop.escapedName, getNonReadonlySymbol(prop));
                 }
             }
             const stringIndexInfo = getIndexInfoOfType(source, IndexKind.String);
@@ -4406,7 +4414,7 @@ namespace ts {
                 const special = getSpecialPropertyAssignmentKind(expression);
                 if (special === SpecialPropertyAssignmentKind.ThisProperty) {
                     const thisContainer = getThisContainer(expression, /*includeArrowFunctions*/ false);
-                    // Properties defined in a constructor (or javascript constructor function) don't get undefined added.
+                    // Properties defined in a constructor (or base constructor, or javascript constructor function) don't get undefined added.
                     // Function expressions that are assigned to the prototype count as methods.
                     declarationInConstructor = thisContainer.kind === SyntaxKind.Constructor ||
                         thisContainer.kind === SyntaxKind.FunctionDeclaration ||
@@ -4476,7 +4484,14 @@ namespace ts {
             }
             let type = jsDocType;
             if (!type) {
-                // use only the constructor types unless only null | undefined (including widening variants) were assigned there
+                // use only the constructor types unless they were only assigned null | undefined (including widening variants)
+                if (definedInMethod) {
+                    const propType = getTypeOfSpecialPropertyOfBaseType(symbol);
+                    if (propType) {
+                        (constructorTypes || (constructorTypes = [])).push(propType);
+                        definedInConstructor = true;
+                    }
+                }
                 const sourceTypes = some(constructorTypes, t => !!(t.flags & ~(TypeFlags.Nullable | TypeFlags.ContainsWideningType))) ? constructorTypes : types;
                 type = getUnionType(sourceTypes, UnionReduction.Subtype);
             }
@@ -4490,6 +4505,20 @@ namespace ts {
             return widened;
         }
 
+        /** check for definition in base class if any declaration is in a class */
+        function getTypeOfSpecialPropertyOfBaseType(specialProperty: Symbol) {
+            const parentDeclaration = forEach(specialProperty.declarations, d => {
+                const parent = getThisContainer(d, /*includeArrowFunctions*/ false).parent;
+                return isClassLike(parent) && parent;
+            });
+            if (parentDeclaration) {
+                const classType = getDeclaredTypeOfSymbol(getSymbolOfNode(parentDeclaration)) as InterfaceType;
+                const baseClassType = classType && getBaseTypes(classType)[0];
+                if (baseClassType) {
+                    return getTypeOfPropertyOfType(baseClassType, specialProperty.escapedName);
+                }
+            }
+        }
 
         // Return the type implied by a binding pattern element. This is the type of the initializer of the element if
         // one is present. Otherwise, if the element is itself a binding pattern, it is the type implied by the binding
@@ -6425,6 +6454,47 @@ namespace ts {
             return getConstraintOfDistributiveConditionalType(type) || getDefaultConstraintOfConditionalType(type);
         }
 
+        function getUnionConstraintOfIntersection(type: IntersectionType, targetIsUnion: boolean) {
+            let constraints: Type[];
+            let hasDisjointDomainType = false;
+            for (const t of type.types) {
+                if (t.flags & TypeFlags.Instantiable) {
+                    // We keep following constraints as long as we have an instantiable type that is known
+                    // not to be circular or infinite (hence we stop on index access types).
+                    let constraint = getConstraintOfType(t);
+                    while (constraint && constraint.flags & (TypeFlags.TypeParameter | TypeFlags.Index | TypeFlags.Conditional)) {
+                        constraint = getConstraintOfType(constraint);
+                    }
+                    if (constraint) {
+                        // A constraint that isn't a union type implies that the final type would be a non-union
+                        // type as well. Since non-union constraints are of no interest, we can exit here.
+                        if (!(constraint.flags & TypeFlags.Union)) {
+                            return undefined;
+                        }
+                        constraints = append(constraints, constraint);
+                    }
+                }
+                else if (t.flags & TypeFlags.DisjointDomains) {
+                    hasDisjointDomainType = true;
+                }
+            }
+            // If the target is a union type or if we are intersecting with types belonging to one of the
+            // disjoint domans, we may end up producing a constraint that hasn't been examined before.
+            if (constraints && (targetIsUnion || hasDisjointDomainType)) {
+                if (hasDisjointDomainType) {
+                    // We add any types belong to one of the disjoint domans because they might cause the final
+                    // intersection operation to reduce the union constraints.
+                    for (const t of type.types) {
+                        if (t.flags & TypeFlags.DisjointDomains) {
+                            constraints = append(constraints, t);
+                        }
+                    }
+                }
+                return getIntersectionType(constraints);
+            }
+            return undefined;
+        }
+
         function getBaseConstraintOfInstantiableNonPrimitiveUnionOrIntersection(type: Type) {
             if (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.UnionOrIntersection)) {
                 const constraint = getResolvedBaseConstraint(<InstantiableType | UnionOrIntersectionType>type);
@@ -6632,7 +6702,15 @@ namespace ts {
             let nameType: Type;
             const propTypes: Type[] = [];
             let first = true;
+            let commonValueDeclaration: Declaration;
+            let hasNonUniformValueDeclaration = false;
             for (const prop of props) {
+                if (!commonValueDeclaration) {
+                    commonValueDeclaration = prop.valueDeclaration;
+                }
+                else if (prop.valueDeclaration !== commonValueDeclaration) {
+                    hasNonUniformValueDeclaration = true;
+                }
                 declarations = addRange(declarations, prop.declarations);
                 const type = getTypeOfSymbol(prop);
                 if (first) {
@@ -6649,6 +6727,9 @@ namespace ts {
             }
             const result = createSymbol(SymbolFlags.Property | commonFlags, name, syntheticFlag | checkFlags);
             result.containingType = containingType;
+            if (!hasNonUniformValueDeclaration && commonValueDeclaration) {
+                result.valueDeclaration = commonValueDeclaration;
+            }
             result.declarations = declarations;
             result.nameType = nameType;
             result.type = isUnion ? getUnionType(propTypes) : getIntersectionType(propTypes);
@@ -7272,7 +7353,8 @@ namespace ts {
         }
 
         function getConstraintDeclaration(type: TypeParameter) {
-            return type.symbol && getDeclarationOfKind<TypeParameterDeclaration>(type.symbol, SyntaxKind.TypeParameter).constraint;
+            const decl = type.symbol && getDeclarationOfKind<TypeParameterDeclaration>(type.symbol, SyntaxKind.TypeParameter);
+            return decl && decl.constraint;
         }
 
         function getInferredTypeParameterConstraint(typeParameter: TypeParameter) {
@@ -7894,8 +7976,14 @@ namespace ts {
             return binarySearch(types, type, getTypeId, compareValues) >= 0;
         }
 
-        // Return true if the given intersection type contains (a) more than one unit type or (b) an object
-        // type and a nullable type (null or undefined).
+        // Return true if the given intersection type contains
+        // more than one unit type or,
+        // an object type and a nullable type (null or undefined), or
+        // a string-like type and a type known to be non-string-like, or
+        // a number-like type and a type known to be non-number-like, or
+        // a symbol-like type and a type known to be non-symbol-like, or
+        // a void-like type and a type known to be non-void-like, or
+        // a non-primitive type and a type known to be primitive.
         function isEmptyIntersectionType(type: IntersectionType) {
             let combined: TypeFlags = 0;
             for (const t of type.types) {
@@ -7903,7 +7991,12 @@ namespace ts {
                     return true;
                 }
                 combined |= t.flags;
-                if (combined & TypeFlags.Nullable && combined & (TypeFlags.Object | TypeFlags.NonPrimitive)) {
+                if (combined & TypeFlags.Nullable && combined & (TypeFlags.Object | TypeFlags.NonPrimitive) ||
+                    combined & TypeFlags.NonPrimitive && combined & (TypeFlags.DisjointDomains & ~TypeFlags.NonPrimitive) ||
+                    combined & TypeFlags.StringLike && combined & (TypeFlags.DisjointDomains & ~TypeFlags.StringLike) ||
+                    combined & TypeFlags.NumberLike && combined & (TypeFlags.DisjointDomains & ~TypeFlags.NumberLike) ||
+                    combined & TypeFlags.ESSymbolLike && combined & (TypeFlags.DisjointDomains & ~TypeFlags.ESSymbolLike) ||
+                    combined & TypeFlags.VoidLike && combined & (TypeFlags.DisjointDomains & ~TypeFlags.VoidLike)) {
                     return true;
                 }
             }
@@ -10131,6 +10224,23 @@ namespace ts {
                         }
                     }
                 }
+                if (!result && source.flags & TypeFlags.Intersection) {
+                    // The combined constraint of an intersection type is the intersection of the constraints of
+                    // the constituents. When an intersection type contains instantiable types with union type
+                    // constraints, there are situations where we need to examine the combined constraint. One is
+                    // when the target is a union type. Another is when the intersection contains types belonging
+                    // to one of the disjoint domains. For example, given type variables T and U, each with the
+                    // constraint 'string | number', the combined constraint of 'T & U' is 'string | number' and
+                    // we need to check this constraint against a union on the target side. Also, given a type
+                    // variable V constrained to 'string | number', 'V & number' has a combined constraint of
+                    // 'string & number | number & number' which reduces to just 'number'.
+                    const constraint = getUnionConstraintOfIntersection(<IntersectionType>source, !!(target.flags & TypeFlags.Union));
+                    if (constraint) {
+                        if (result = isRelatedTo(constraint, target, reportErrors)) {
+                            errorInfo = saveErrorInfo;
+                        }
+                    }
+                }
 
                 isIntersectionConstituent = saveIsIntersectionConstituent;
 
@@ -10488,11 +10598,14 @@ namespace ts {
                         }
                     }
                     // A type S is assignable to keyof T if S is assignable to keyof C, where C is the
-                    // constraint of T.
-                    const constraint = getConstraintForRelation((<IndexType>target).type);
-                    if (constraint) {
-                        if (result = isRelatedTo(source, getIndexType(constraint, (target as IndexType).stringsOnly), reportErrors)) {
-                            return result;
+                    // simplified form of T or, if T doesn't simplify, the constraint of T.
+                    if (relation !== definitelyAssignableRelation) {
+                        const simplified = getSimplifiedType((<IndexType>target).type);
+                        const constraint = simplified !== (<IndexType>target).type ? simplified : getConstraintOfType((<IndexType>target).type);
+                        if (constraint) {
+                            if (result = isRelatedTo(source, getIndexType(constraint, (target as IndexType).stringsOnly), reportErrors)) {
+                                return result;
+                            }
                         }
                     }
                 }
@@ -10736,13 +10849,14 @@ namespace ts {
                             const sourcePropFlags = getDeclarationModifierFlagsFromSymbol(sourceProp);
                             const targetPropFlags = getDeclarationModifierFlagsFromSymbol(targetProp);
                             if (sourcePropFlags & ModifierFlags.Private || targetPropFlags & ModifierFlags.Private) {
-                                if (getCheckFlags(sourceProp) & CheckFlags.ContainsPrivate) {
+                                const hasDifferingDeclarations = sourceProp.valueDeclaration !== targetProp.valueDeclaration;
+                                if (getCheckFlags(sourceProp) & CheckFlags.ContainsPrivate && hasDifferingDeclarations) {
                                     if (reportErrors) {
                                         reportError(Diagnostics.Property_0_has_conflicting_declarations_and_is_inaccessible_in_type_1, symbolToString(sourceProp), typeToString(source));
                                     }
                                     return Ternary.False;
                                 }
-                                if (sourceProp.valueDeclaration !== targetProp.valueDeclaration) {
+                                if (hasDifferingDeclarations) {
                                     if (reportErrors) {
                                         if (sourcePropFlags & ModifierFlags.Private && targetPropFlags & ModifierFlags.Private) {
                                             reportError(Diagnostics.Types_have_separate_declarations_of_a_private_property_0, symbolToString(targetProp));

@@ -34,3 +34,7 @@
 	path = tests/cases/user/axios-src/axios-src
 	url = https://github.com/axios/axios.git
         ignore = all
+[submodule "tests/cases/user/prettier/prettier"]
+	path = tests/cases/user/prettier/prettier
+	url = https://github.com/prettier/prettier.git
+        ignore = all

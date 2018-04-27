@@ -17,6 +17,7 @@ edit.applyRefactor({
     protected set a(value: string) {
         this._a = value;
     }
+
     constructor() { }
 }`,
 });

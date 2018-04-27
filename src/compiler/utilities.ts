@@ -1889,7 +1889,13 @@ namespace ts {
 
     export function getJSDocHost(node: JSDocTag): HasJSDoc {
         while (node.parent.kind === SyntaxKind.JSDocTypeLiteral) {
-            node = node.parent.parent.parent as JSDocParameterTag;
+            if (node.parent.parent.kind === SyntaxKind.JSDocTypedefTag) {
+                node = node.parent.parent as JSDocTypedefTag;
+            }
+            else {
+                // node.parent.parent is a type expression, child of a parameter type
+                node = node.parent.parent.parent as JSDocParameterTag;
+            }
         }
         Debug.assert(node.parent!.kind === SyntaxKind.JSDocComment);
         return node.parent!.parent!;
@@ -4025,12 +4031,14 @@ namespace ts {
     }
 
     /** Add a value to a set, and return true if it wasn't already present. */
-    export function addToSeen(seen: Map<true>, key: string | number): boolean {
+    export function addToSeen(seen: Map<true>, key: string | number): boolean;
+    export function addToSeen<T>(seen: Map<T>, key: string | number, value: T): boolean;
+    export function addToSeen<T>(seen: Map<T>, key: string | number, value: T = true as any): boolean {
         key = String(key);
         if (seen.has(key)) {
             return false;
         }
-        seen.set(key, true);
+        seen.set(key, value);
         return true;
     }
 

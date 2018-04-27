@@ -546,7 +546,6 @@ namespace ts {
         public typeReferenceDirectives: FileReference[];
 
         public syntacticDiagnostics: Diagnostic[];
-        public referenceDiagnostics: Diagnostic[];
         public parseDiagnostics: Diagnostic[];
         public bindDiagnostics: Diagnostic[];
 
