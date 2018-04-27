@@ -325,6 +325,16 @@ namespace ts {
                     return diagnostics;
                 }
             },
+
+            runWithCancellationToken: (token, callback) => {
+                try {
+                    cancellationToken = token;
+                    return callback(checker);
+                }
+                finally {
+                    cancellationToken = undefined;
+                }
+            }
         };
 
         const tupleTypes: GenericType[] = [];
@@ -2124,14 +2134,22 @@ namespace ts {
             return (symbol.flags & meaning) || dontResolveAlias ? symbol : resolveAlias(symbol);
         }
 
+        /**
+         * For prototype-property methods like `A.prototype.m = function () ...`, try to resolve names in the scope of `A` too.
+         * Note that prototype-property assignment to locations outside the current file (eg globals) doesn't work, so
+         * name resolution won't work either.
+         */
         function resolveEntityNameFromJSPrototype(name: Identifier, meaning: SymbolFlags) {
             if (isJSDocTypeReference(name.parent) && isJSDocTag(name.parent.parent.parent)) {
                 const host = getJSDocHost(name.parent.parent.parent as JSDocTag);
                 if (isExpressionStatement(host) &&
                     isBinaryExpression(host.expression) &&
                     getSpecialPropertyAssignmentKind(host.expression) === SpecialPropertyAssignmentKind.PrototypeProperty) {
-                    const secondaryLocation = getSymbolOfNode(host.expression.left).parent.valueDeclaration;
-                    return resolveName(secondaryLocation, name.escapedText, meaning, /*nameNotFoundMessage*/ undefined, name, /*isUse*/ true);
+                    const symbol = getSymbolOfNode(host.expression.left);
+                    if (symbol) {
+                        const secondaryLocation = symbol.parent.valueDeclaration;
+                        return resolveName(secondaryLocation, name.escapedText, meaning, /*nameNotFoundMessage*/ undefined, name, /*isUse*/ true);
+                    }
                 }
             }
         }
@@ -2988,6 +3006,9 @@ namespace ts {
             }
 
             function typeToTypeNodeHelper(type: Type, context: NodeBuilderContext): TypeNode {
+                if (cancellationToken && cancellationToken.throwIfCancellationRequested) {
+                    cancellationToken.throwIfCancellationRequested();
+                }
                 const inTypeAlias = context.flags & NodeBuilderFlags.InTypeAlias;
                 context.flags &= ~NodeBuilderFlags.InTypeAlias;
 
@@ -4409,7 +4430,7 @@ namespace ts {
                 const special = getSpecialPropertyAssignmentKind(expression);
                 if (special === SpecialPropertyAssignmentKind.ThisProperty) {
                     const thisContainer = getThisContainer(expression, /*includeArrowFunctions*/ false);
-                    // Properties defined in a constructor (or javascript constructor function) don't get undefined added.
+                    // Properties defined in a constructor (or base constructor, or javascript constructor function) don't get undefined added.
                     // Function expressions that are assigned to the prototype count as methods.
                     declarationInConstructor = thisContainer.kind === SyntaxKind.Constructor ||
                         thisContainer.kind === SyntaxKind.FunctionDeclaration ||
@@ -4479,7 +4500,14 @@ namespace ts {
             }
             let type = jsDocType;
             if (!type) {
-                // use only the constructor types unless only null | undefined (including widening variants) were assigned there
+                // use only the constructor types unless they were only assigned null | undefined (including widening variants)
+                if (definedInMethod) {
+                    const propType = getTypeOfSpecialPropertyOfBaseType(symbol);
+                    if (propType) {
+                        (constructorTypes || (constructorTypes = [])).push(propType);
+                        definedInConstructor = true;
+                    }
+                }
                 const sourceTypes = some(constructorTypes, t => !!(t.flags & ~(TypeFlags.Nullable | TypeFlags.ContainsWideningType))) ? constructorTypes : types;
                 type = getUnionType(sourceTypes, UnionReduction.Subtype);
             }
@@ -4493,6 +4521,20 @@ namespace ts {
             return widened;
         }
 
+        /** check for definition in base class if any declaration is in a class */
+        function getTypeOfSpecialPropertyOfBaseType(specialProperty: Symbol) {
+            const parentDeclaration = forEach(specialProperty.declarations, d => {
+                const parent = getThisContainer(d, /*includeArrowFunctions*/ false).parent;
+                return isClassLike(parent) && parent;
+            });
+            if (parentDeclaration) {
+                const classType = getDeclaredTypeOfSymbol(getSymbolOfNode(parentDeclaration)) as InterfaceType;
+                const baseClassType = classType && getBaseTypes(classType)[0];
+                if (baseClassType) {
+                    return getTypeOfPropertyOfType(baseClassType, specialProperty.escapedName);
+                }
+            }
+        }
 
         // Return the type implied by a binding pattern element. This is the type of the initializer of the element if
         // one is present. Otherwise, if the element is itself a binding pattern, it is the type implied by the binding
@@ -6635,7 +6677,15 @@ namespace ts {
             let nameType: Type;
             const propTypes: Type[] = [];
             let first = true;
+            let commonValueDeclaration: Declaration;
+            let hasNonUniformValueDeclaration = false;
             for (const prop of props) {
+                if (!commonValueDeclaration) {
+                    commonValueDeclaration = prop.valueDeclaration;
+                }
+                else if (prop.valueDeclaration !== commonValueDeclaration) {
+                    hasNonUniformValueDeclaration = true;
+                }
                 declarations = addRange(declarations, prop.declarations);
                 const type = getTypeOfSymbol(prop);
                 if (first) {
@@ -6652,6 +6702,9 @@ namespace ts {
             }
             const result = createSymbol(SymbolFlags.Property | commonFlags, name, syntheticFlag | checkFlags);
             result.containingType = containingType;
+            if (!hasNonUniformValueDeclaration && commonValueDeclaration) {
+                result.valueDeclaration = commonValueDeclaration;
+            }
             result.declarations = declarations;
             result.nameType = nameType;
             result.type = isUnion ? getUnionType(propTypes) : getIntersectionType(propTypes);
@@ -7275,7 +7328,8 @@ namespace ts {
         }
 
         function getConstraintDeclaration(type: TypeParameter) {
-            return type.symbol && getDeclarationOfKind<TypeParameterDeclaration>(type.symbol, SyntaxKind.TypeParameter).constraint;
+            const decl = type.symbol && getDeclarationOfKind<TypeParameterDeclaration>(type.symbol, SyntaxKind.TypeParameter);
+            return decl && decl.constraint;
         }
 
         function getInferredTypeParameterConstraint(typeParameter: TypeParameter) {
@@ -8268,7 +8322,8 @@ namespace ts {
         }
 
         function getIndexType(type: Type, stringsOnly = keyofStringsOnly): Type {
-            return type.flags & TypeFlags.Intersection ? getUnionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly))) :
+            return type.flags & TypeFlags.Union ? getIntersectionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly))) :
+                type.flags & TypeFlags.Intersection ? getUnionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly))) :
                 maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type, stringsOnly) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
                 type === wildcardType ? wildcardType :
@@ -10730,13 +10785,14 @@ namespace ts {
                             const sourcePropFlags = getDeclarationModifierFlagsFromSymbol(sourceProp);
                             const targetPropFlags = getDeclarationModifierFlagsFromSymbol(targetProp);
                             if (sourcePropFlags & ModifierFlags.Private || targetPropFlags & ModifierFlags.Private) {
-                                if (getCheckFlags(sourceProp) & CheckFlags.ContainsPrivate) {
+                                const hasDifferingDeclarations = sourceProp.valueDeclaration !== targetProp.valueDeclaration;
+                                if (getCheckFlags(sourceProp) & CheckFlags.ContainsPrivate && hasDifferingDeclarations) {
                                     if (reportErrors) {
                                         reportError(Diagnostics.Property_0_has_conflicting_declarations_and_is_inaccessible_in_type_1, symbolToString(sourceProp), typeToString(source));
                                     }
                                     return Ternary.False;
                                 }
-                                if (sourceProp.valueDeclaration !== targetProp.valueDeclaration) {
+                                if (hasDifferingDeclarations) {
                                     if (reportErrors) {
                                         if (sourcePropFlags & ModifierFlags.Private && targetPropFlags & ModifierFlags.Private) {
                                             reportError(Diagnostics.Types_have_separate_declarations_of_a_private_property_0, symbolToString(targetProp));
@@ -22183,7 +22239,8 @@ namespace ts {
             }
 
             if (!isRemovedPropertyFromObjectSpread(node.kind === SyntaxKind.Identifier ? node.parent : node)) {
-                addDiagnostic(UnusedKind.Local, createDiagnosticForNodeSpan(getSourceFileOfNode(declaration), declaration, node, Diagnostics._0_is_declared_but_its_value_is_never_read, name));
+                const message = isTypeDeclaration(declaration) ? Diagnostics._0_is_declared_but_never_used : Diagnostics._0_is_declared_but_its_value_is_never_read;
+                addDiagnostic(UnusedKind.Local, createDiagnosticForNodeSpan(getSourceFileOfNode(declaration), declaration, node, message, name));
             }
         }
 

@@ -4,7 +4,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(9,48): error TS2
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(9,67): error TS2304: Cannot find name 'SymbolScope'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(10,30): error TS2304: Cannot find name 'Type'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(12,35): error TS2304: Cannot find name 'Type'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(12,39): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(12,40): error TS1011: An element access expression should take an argument.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(29,36): error TS2304: Cannot find name 'SymbolScope'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(29,55): error TS2304: Cannot find name 'Type'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(67,54): error TS2304: Cannot find name 'SignatureGroup'.
@@ -58,8 +58,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(200,48): error T
                     extendsList = new Type[];
                                       ~~~~
 !!! error TS2304: Cannot find name 'Type'.
-                                          ~~
-!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+                                           
+!!! error TS1011: An element access expression should take an argument.
                     for (var i = 0, len = typeLinks.length; i < len; i++) {
                         var typeLink = typeLinks[i];
                         this.checker.resolvingBases = true;
