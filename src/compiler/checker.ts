@@ -4228,6 +4228,12 @@ namespace ts {
                     const isWellKnown = isComputedPropertyName(name) && isWellKnownSymbolSyntactically(name.expression);
                     if (!isLate && !isWellKnown && isComputedNonLiteralName(name)) {
                         const exprType = checkExpression((name as ComputedPropertyName).expression);
+                        if (isTypeAssignableToKind(exprType, TypeFlags.ESSymbolLike)) {
+                            if (noImplicitAny) {
+                                error(declaration, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(exprType), typeToString(parentType));
+                            }
+                            return anyType;
+                        }
                         const indexerType = isTypeAssignableToKind(exprType, TypeFlags.NumberLike) && getIndexTypeOfType(parentType, IndexKind.Number) || getIndexTypeOfType(parentType, IndexKind.String);
                         if (!indexerType && noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors) {
                             if (getIndexTypeOfType(parentType, IndexKind.Number)) {
@@ -4242,13 +4248,20 @@ namespace ts {
 
                     // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
                     // or otherwise the type of the string index signature.
-                    const text = isLate ? getLateBoundNameFromType(checkComputedPropertyName(name as ComputedPropertyName) as LiteralType | UniqueESSymbolType) :
+                    const nameType = isLate && checkComputedPropertyName(name as ComputedPropertyName) as LiteralType | UniqueESSymbolType;
+                    const text = isLate ? getLateBoundNameFromType(nameType) :
                         isWellKnown ? getPropertyNameForKnownSymbolName(idText(((name as ComputedPropertyName).expression as PropertyAccessExpression).name)) :
                         getTextOfPropertyName(name);
 
                     // Relax null check on ambient destructuring parameters, since the parameters have no implementation and are just documentation
                     if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
                         parentType = getNonNullableType(parentType);
+                    }
+                    if (isLate && nameType && !getPropertyOfType(parentType, text) && isTypeAssignableToKind(nameType, TypeFlags.ESSymbolLike)) {
+                        if (noImplicitAny) {
+                            error(declaration, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(nameType), typeToString(parentType));
+                        }
+                        return anyType;
                     }
                     const declaredType = getConstraintForLocation(getTypeOfPropertyOfType(parentType, text), declaration.name);
                     type = declaredType && getFlowTypeOfReference(declaration, declaredType) ||

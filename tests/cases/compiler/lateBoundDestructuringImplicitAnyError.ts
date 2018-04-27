@@ -9,7 +9,8 @@ const strIndexed: {[idx: string]: string} = null as any;
 
 let numed = 6;
 
-const symed = Symbol()
+const symed = Symbol();
+let symed2 = Symbol();
 
 let {[named]: prop2} = numIndexed;
 void prop2;
@@ -23,3 +24,7 @@ let {[symed]: prop6} = numIndexed;
 void prop6;
 let {[symed]: prop7} = strIndexed;
 void prop7;
+let {[symed2]: prop8} = numIndexed;
+void prop8;
+let {[symed2]: prop9} = strIndexed;
+void prop9;
