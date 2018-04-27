@@ -3636,7 +3636,15 @@ namespace ts {
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
         /* @internal */
         PropagatingFlags = ContainsWideningType | ContainsObjectLiteral | ContainsAnyFunctionType,
+        // The following flags are used for different purposes during union and intersection type construction
         /* @internal */
+        NonWideningType = ContainsWideningType,
+        /* @internal */
+        Wildcard = ContainsObjectLiteral,
+        /* @internal */
+        EmptyObject = ContainsAnyFunctionType,
+        /* @internal */
+        ConstructionFlags = NonWideningType | Wildcard | EmptyObject
     }
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
