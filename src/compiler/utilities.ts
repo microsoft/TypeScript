@@ -6337,7 +6337,7 @@ namespace ts {
     }
 
     /** @internal */
-    export function isExclamationEqualsOrExclamationEqualsEqualsKind(kind: SyntaxKind): boolean {
+    export function isNegatedEqualityToken(kind: SyntaxKind): boolean {
         return kind === SyntaxKind.ExclamationEqualsToken || kind === SyntaxKind.ExclamationEqualsEqualsToken;
     }
 }

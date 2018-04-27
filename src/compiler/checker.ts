@@ -13505,7 +13505,7 @@ namespace ts {
                 if (type.flags & TypeFlags.Any) {
                     return type;
                 }
-                if (isExclamationEqualsOrExclamationEqualsEqualsKind(operator)) {
+                if (isNegatedEqualityToken(operator)) {
                     assumeTrue = !assumeTrue;
                 }
                 const valueType = getTypeOfExpression(value);
@@ -13536,7 +13536,7 @@ namespace ts {
             }
 
             function narrowTypeByConstructor(type: Type, expr: Expression, operator: SyntaxKind, assumeTrue: boolean): Type {
-                if (!assumeTrue || isExclamationEqualsOrExclamationEqualsEqualsKind(operator)) return type;
+                if (!assumeTrue || isNegatedEqualityToken(operator)) return type;
 
                 const rightType = getTypeOfExpression(expr);
                 if (!isTypeSubtypeOf(rightType, globalFunctionType)) return type;
@@ -13566,7 +13566,7 @@ namespace ts {
                     }
                     return type;
                 }
-                if (isExclamationEqualsOrExclamationEqualsEqualsKind(operator)) {
+                if (isNegatedEqualityToken(operator)) {
                     assumeTrue = !assumeTrue;
                 }
                 if (assumeTrue && !(type.flags & TypeFlags.Union)) {
