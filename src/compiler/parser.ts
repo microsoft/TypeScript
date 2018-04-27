@@ -6116,19 +6116,6 @@ namespace ts {
                     || node.kind === SyntaxKind.ExportDeclaration
                     ? node
                     : undefined);
-            if (isInJavaScriptFile(sourceFile) && !sourceFile.externalModuleIndicator) {
-                sourceFile.commonJsModuleIndicator = forEach(sourceFile.statements, isCommonJsModuleIndicator);
-            }
-        }
-
-        function isCommonJsModuleIndicator(statement: Statement) {
-            if (isExpressionStatement(statement) && isBinaryExpression(statement.expression)) {
-                const special = getSpecialPropertyAssignmentKind(statement.expression);
-                if (special === SpecialPropertyAssignmentKind.ModuleExports ||
-                    special === SpecialPropertyAssignmentKind.ExportsProperty) {
-                    return statement.expression.left;
-                }
-            }
         }
 
         const enum ParsingContext {

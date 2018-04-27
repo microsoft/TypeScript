@@ -118,6 +118,7 @@ namespace ts {
         let thisParentContainer: Node; // Container one level up
         let blockScopeContainer: Node;
         let lastContainer: Node;
+        let delayedTypedefs: { typedef: JSDocTypedefTag, container: Node, lastContainer: Node, blockScopeContainer: Node, parent: Node }[];
         let seenThisKeyword: boolean;
 
         // state used by control flow analysis
@@ -176,6 +177,7 @@ namespace ts {
                 bind(file);
                 file.symbolCount = symbolCount;
                 file.classifiableNames = classifiableNames;
+                delayedBindJSDocTypedefTag();
             }
 
             file = undefined;
@@ -186,6 +188,7 @@ namespace ts {
             thisParentContainer = undefined;
             blockScopeContainer = undefined;
             lastContainer = undefined;
+            delayedTypedefs = undefined;
             seenThisKeyword = false;
             currentFlow = undefined;
             currentBreakTarget = undefined;
@@ -1744,6 +1747,24 @@ namespace ts {
             bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
         }
 
+        function delayedBindJSDocTypedefTag() {
+            if (!delayedTypedefs) {
+                return;
+            }
+            const saveContainer = container;
+            const saveLastContainer = lastContainer;
+            const saveBlockScopeContainer = blockScopeContainer;
+            const saveParent = parent;
+            for (const delay of delayedTypedefs) {
+                ({ container, lastContainer, blockScopeContainer, parent } = delay);
+                bindBlockScopedDeclaration(delay.typedef, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+            }
+            container = saveContainer;
+            lastContainer = saveLastContainer;
+            blockScopeContainer = saveBlockScopeContainer;
+            parent = saveParent;
+        }
+
         // The binder visits every node in the syntax tree so it is a convenient place to perform a single localized
         // check for reserved words used as identifiers in strict mode code.
         function checkStrictModeIdentifier(node: Identifier) {
@@ -2193,7 +2214,7 @@ namespace ts {
                 case SyntaxKind.JSDocTypedefTag: {
                     const { fullName } = node as JSDocTypedefTag;
                     if (!fullName || fullName.kind === SyntaxKind.Identifier) {
-                        return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                        (delayedTypedefs || (delayedTypedefs = [])).push({ typedef: node as JSDocTypedefTag, container, lastContainer, blockScopeContainer, parent });
                     }
                     break;
                 }
@@ -2210,7 +2231,7 @@ namespace ts {
 
         function bindSourceFileIfExternalModule() {
             setExportContextFlag(file);
-            if (isExternalOrCommonJsModule(file)) {
+            if (isExternalModule(file)) {
                 bindSourceFileAsExternalModule();
             }
         }
