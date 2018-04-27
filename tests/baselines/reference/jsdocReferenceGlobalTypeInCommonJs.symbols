@@ -1,6 +1,7 @@
 === tests/cases/compiler/a.js ===
 const other = require('./other');
 >other : Symbol(other, Decl(a.js, 0, 5))
+>require : Symbol(require)
 >'./other' : Symbol("tests/cases/compiler/other", Decl(other.d.ts, 0, 0))
 
 /** @type {Puppeteer.Keyboard} */
