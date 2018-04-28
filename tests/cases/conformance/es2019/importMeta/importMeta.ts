@@ -1,5 +1,6 @@
 
 // @target: esnext
+// @module: esnext
 // @lib: es5,dom
 
 // @Filename: example.ts
