@@ -971,6 +971,10 @@
         "category": "Error",
         "code": 1342
     },
+    "Property in destructuring not be marked optional.": {
+        "category": "Error",
+        "code": 1343
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

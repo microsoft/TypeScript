@@ -573,6 +573,7 @@ declare namespace ts {
         parent?: BindingPattern;
         propertyName?: PropertyName;
         dotDotDotToken?: DotDotDotToken;
+        questionToken?: QuestionToken;
         name: BindingName;
         initializer?: Expression;
     }

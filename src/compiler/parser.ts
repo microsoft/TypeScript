@@ -131,6 +131,7 @@ namespace ts {
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
                     visitNode(cbNode, (<BindingElement>node).dotDotDotToken) ||
+                    visitNode(cbNode, (<BindingElement>node).questionToken) ||
                     visitNode(cbNode, (<BindingElement>node).propertyName) ||
                     visitNode(cbNode, (<BindingElement>node).name) ||
                     visitNode(cbNode, (<BindingElement>node).initializer);
@@ -5331,6 +5332,10 @@ namespace ts {
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
             const tokenIsIdentifier = isIdentifier();
             const propertyName = parsePropertyName();
+            if (token() === SyntaxKind.QuestionToken) {
+                parseErrorAtCurrentToken(Diagnostics.Property_in_destructuring_not_be_marked_optional);
+                nextToken();
+            }
             if (tokenIsIdentifier && token() !== SyntaxKind.ColonToken) {
                 node.name = <Identifier>propertyName;
             }
