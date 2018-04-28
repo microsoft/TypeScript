@@ -18812,7 +18812,7 @@ namespace ts {
         }
 
         function checkImportMetaProperty(node: MetaProperty) {
-            if (languageVersion < ScriptTarget.ESNext && moduleKind < ModuleKind.ESNext) {
+            if (languageVersion < ScriptTarget.ESNext || moduleKind < ModuleKind.ESNext) {
                 error(node, Diagnostics.The_import_meta_meta_property_is_only_allowed_using_ESNext_for_the_target_and_module_compiler_options);
             }
             const file = getSourceFileOfNode(node);
