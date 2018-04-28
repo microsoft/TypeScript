@@ -6139,14 +6139,11 @@ namespace ts {
         }
 
         function setExternalModuleIndicator(sourceFile: SourceFile) {
-            // Usually we'd like to avoid a full tree walk, but it's possible
-            // that we have a deeper external module indicator (e.g. `import.meta`,
-            // and possibly nested import statements in the future).
-            // Ideally the first few statements will be an import/export anyway.
+            // Try to use the first top-level import/export when available, then
+            // fall back to looking for an 'import.meta' somewhere in the tree if necessary.
             sourceFile.externalModuleIndicator =
-                !(sourceFile.flags & NodeFlags.PossiblyContainsImportMeta) ?
-                    forEach(sourceFile.statements, isAnExternalModuleIndicatorNode) :
-                    walkTreeForExternalModuleIndicators(sourceFile);
+                    forEach(sourceFile.statements, isAnExternalModuleIndicatorNode) ||
+                    getImportMetaIfNecessary(sourceFile);
         }
 
         function isAnExternalModuleIndicatorNode(node: Node) {
@@ -6155,13 +6152,22 @@ namespace ts {
                 || node.kind === SyntaxKind.ImportDeclaration
                 || node.kind === SyntaxKind.ExportAssignment
                 || node.kind === SyntaxKind.ExportDeclaration
-                || isMetaProperty(node) && node.keywordToken === SyntaxKind.ImportKeyword && node.name.escapedText === "meta"
                     ? node
                     : undefined;
         }
 
+        function getImportMetaIfNecessary(sourceFile: SourceFile) {
+            return sourceFile.flags & NodeFlags.PossiblyContainsImportMeta ?
+                walkTreeForExternalModuleIndicators(sourceFile) :
+                undefined;
+        }
+
         function walkTreeForExternalModuleIndicators(node: Node): Node {
-            return isAnExternalModuleIndicatorNode(node) ? node : forEachChild(node, walkTreeForExternalModuleIndicators);
+            return isImportMeta(node) ? node : forEachChild(node, walkTreeForExternalModuleIndicators);
+        }
+
+        function isImportMeta(node: Node): boolean {
+            return isMetaProperty(node) && node.keywordToken === SyntaxKind.ImportKeyword && node.name.escapedText === "meta";
         }
 
         const enum ParsingContext {

@@ -2564,7 +2564,11 @@ namespace ts {
         languageVersion: ScriptTarget;
         /* @internal */ scriptKind: ScriptKind;
 
-        // The first node that causes this file to be an external module
+        /**
+         * The first "most obvious" node that makes a file an external module.
+         * This is intended to be the first top-level import/export,
+         * but could be arbitrarily nested (e.g. `import.meta`).
+         */
         /* @internal */ externalModuleIndicator: Node;
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator: Node;
