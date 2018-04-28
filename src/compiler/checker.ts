@@ -8250,7 +8250,7 @@ namespace ts {
             return includes;
         }
 
-        function removeRedundantPrimtiveTypes(types: Type[], includes: TypeFlags) {
+        function removeRedundantPrimitiveTypes(types: Type[], includes: TypeFlags) {
             let i = types.length;
             while (i > 0) {
                 i--;
@@ -8264,6 +8264,7 @@ namespace ts {
                 }
             }
         }
+
         // We normalize combinations of intersection and union types based on the distributive property of the '&'
         // operator. Specifically, because X & (A | B) is equivalent to X & A | X & B, we can transform intersection
         // types with union type constituents into equivalent union types with intersection type constituents and
@@ -8289,7 +8290,7 @@ namespace ts {
             if (includes & TypeFlags.String && includes & TypeFlags.StringLiteral ||
                 includes & TypeFlags.Number && includes & TypeFlags.NumberLiteral ||
                 includes & TypeFlags.ESSymbol && includes & TypeFlags.UniqueESSymbol) {
-                removeRedundantPrimtiveTypes(typeSet, includes);
+                removeRedundantPrimitiveTypes(typeSet, includes);
             }
             if (includes & TypeFlags.EmptyObject && !(includes & TypeFlags.Object)) {
                 typeSet.push(emptyObjectType);
