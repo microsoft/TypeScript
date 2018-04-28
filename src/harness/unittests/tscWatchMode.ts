@@ -2235,16 +2235,17 @@ declare module "fs" {
                 "CreatingProgramWith::\n",
                 "  roots: [\"f.ts\"]\n",
                 "  options: {\"extendedDiagnostics\":true}\n",
-                "FileWatcher:: Added:: WatchInfo: f.ts 250 \n",
-                "FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 \n"
+                "FileWatcher:: Added:: WatchInfo: f.ts 250 Source file\n",
+                "FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 Source file\n"
             ]);
 
             file.content = "//";
             host.reloadFS(files);
             host.runQueuedTimeoutCallbacks();
             checkOutputErrorsIncremental(host, emptyArray, disableConsoleClear, options.extendedDiagnostics && [
-                "FileWatcher:: Triggered with /f.ts1:: WatchInfo: f.ts 250 \n",
-                "Elapsed:: 0ms FileWatcher:: Triggered with /f.ts1:: WatchInfo: f.ts 250 \n"
+                "FileWatcher:: Triggered with /f.ts1:: WatchInfo: f.ts 250 Source file\n",
+                "Scheduling update\n",
+                "Elapsed:: 0ms FileWatcher:: Triggered with /f.ts1:: WatchInfo: f.ts 250 Source file\n"
             ], options.extendedDiagnostics && [
                 "Synchronizing program\n",
                 "CreatingProgramWith::\n",
