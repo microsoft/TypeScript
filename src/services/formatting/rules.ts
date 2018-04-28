@@ -126,11 +126,8 @@ namespace ts.formatting {
             rule("SpaceBetweenAsyncAndOpenParen", SyntaxKind.AsyncKeyword, SyntaxKind.OpenParenToken, [isArrowFunctionContext, isNonJsxSameLineTokenContext], RuleAction.Space),
             rule("SpaceBetweenAsyncAndFunctionKeyword", SyntaxKind.AsyncKeyword, SyntaxKind.FunctionKeyword, [isNonJsxSameLineTokenContext], RuleAction.Space),
 
-            // template string
-            rule("NoSpaceBetweenTagAndTemplateString", SyntaxKind.Identifier, [SyntaxKind.NoSubstitutionTemplateLiteral, SyntaxKind.TemplateHead], [isNonJsxSameLineTokenContext], RuleAction.Delete),
-
-            // No space between closing parenthesis and template string
-            rule("NoSpaceBetweenCloseParenAndTemplateString", SyntaxKind.CloseParenToken, SyntaxKind.NoSubstitutionTemplateLiteral, [isNonJsxSameLineTokenContext], RuleAction.Delete),
+            // Template string
+            rule("NoSpaceBetweenTagAndTemplateString", [SyntaxKind.Identifier, SyntaxKind.CloseParenToken], [SyntaxKind.NoSubstitutionTemplateLiteral, SyntaxKind.TemplateHead], [isNonJsxSameLineTokenContext], RuleAction.Delete),
 
             // JSX opening elements
             rule("SpaceBeforeJsxAttribute", anyToken, SyntaxKind.Identifier, [isNextTokenParentJsxAttribute, isNonJsxSameLineTokenContext], RuleAction.Space),
