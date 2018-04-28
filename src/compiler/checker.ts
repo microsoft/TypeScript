@@ -618,22 +618,6 @@ namespace ts {
             Both = Source | Target,
         }
 
-        const enum TypeIncludes {
-            Any = 1 << 0,
-            Undefined = 1 << 1,
-            Null = 1 << 2,
-            Never = 1 << 3,
-            NonWideningType = 1 << 4,
-            String = 1 << 5,
-            Number = 1 << 6,
-            ESSymbol = 1 << 7,
-            LiteralOrUniqueESSymbol = 1 << 8,
-            ObjectType = 1 << 9,
-            EmptyObject = 1 << 10,
-            Union = 1 << 11,
-            Wildcard = 1 << 12,
-        }
-
         const enum MembersOrExportsResolutionKind {
             resolvedExports = "resolvedExports",
             resolvedMembers = "resolvedMembers"
@@ -8047,35 +8031,31 @@ namespace ts {
             return false;
         }
 
-        function addTypeToUnion(typeSet: Type[], includes: TypeIncludes, type: Type) {
+        function addTypeToUnion(typeSet: Type[], includes: TypeFlags, type: Type) {
             const flags = type.flags;
             if (flags & TypeFlags.Union) {
-                includes = addTypesToUnion(typeSet, includes, (<UnionType>type).types);
+                return addTypesToUnion(typeSet, includes, (<UnionType>type).types);
             }
-            else if (flags & TypeFlags.Any) {
-                includes |= TypeIncludes.Any;
-                if (type === wildcardType) includes |= TypeIncludes.Wildcard;
-            }
-            else if (!strictNullChecks && flags & TypeFlags.Nullable) {
-                if (flags & TypeFlags.Undefined) includes |= TypeIncludes.Undefined;
-                if (flags & TypeFlags.Null) includes |= TypeIncludes.Null;
-                if (!(flags & TypeFlags.ContainsWideningType)) includes |= TypeIncludes.NonWideningType;
-            }
-            else if (!(flags & TypeFlags.Never || flags & TypeFlags.Intersection && isEmptyIntersectionType(<IntersectionType>type))) {
-                // We ignore 'never' types in unions. Likewise, we ignore intersections of unit types as they are
-                // another form of 'never' (in that they have an empty value domain). We could in theory turn
-                // intersections of unit types into 'never' upon construction, but deferring the reduction makes it
-                // easier to reason about their origin.
-                if (flags & TypeFlags.String) includes |= TypeIncludes.String;
-                if (flags & TypeFlags.Number) includes |= TypeIncludes.Number;
-                if (flags & TypeFlags.ESSymbol) includes |= TypeIncludes.ESSymbol;
-                if (flags & TypeFlags.StringOrNumberLiteralOrUnique) includes |= TypeIncludes.LiteralOrUniqueESSymbol;
-                const len = typeSet.length;
-                const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues);
-                if (index < 0) {
-                    if (!(flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.Anonymous &&
-                        type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && containsIdenticalType(typeSet, type))) {
-                        typeSet.splice(~index, 0, type);
+            // We ignore 'never' types in unions. Likewise, we ignore intersections of unit types as they are
+            // another form of 'never' (in that they have an empty value domain). We could in theory turn
+            // intersections of unit types into 'never' upon construction, but deferring the reduction makes it
+            // easier to reason about their origin.
+            if (!(flags & TypeFlags.Never || flags & TypeFlags.Intersection && isEmptyIntersectionType(<IntersectionType>type))) {
+                includes |= flags & ~TypeFlags.ConstructionFlags;
+                if (flags & TypeFlags.Any) {
+                    if (type === wildcardType) includes |= TypeFlags.Wildcard;
+                }
+                else if (!strictNullChecks && flags & TypeFlags.Nullable) {
+                    if (!(flags & TypeFlags.ContainsWideningType)) includes |= TypeFlags.NonWideningType;
+                }
+                else {
+                    const len = typeSet.length;
+                    const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues);
+                    if (index < 0) {
+                        if (!(flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.Anonymous &&
+                            type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && containsIdenticalType(typeSet, type))) {
+                            typeSet.splice(~index, 0, type);
+                        }
                     }
                 }
             }
@@ -8084,7 +8064,7 @@ namespace ts {
 
         // Add the given types to the given type set. Order is preserved, duplicates are removed,
         // and nested types of the given kind are flattened into the set.
-        function addTypesToUnion(typeSet: Type[], includes: TypeIncludes, types: Type[]): TypeIncludes {
+        function addTypesToUnion(typeSet: Type[], includes: TypeFlags, types: Type[]): TypeFlags {
             for (const type of types) {
                 includes = addTypeToUnion(typeSet, includes, type);
             }
@@ -8141,15 +8121,15 @@ namespace ts {
             }
         }
 
-        function removeRedundantLiteralTypes(types: Type[], includes: TypeIncludes) {
+        function removeRedundantLiteralTypes(types: Type[], includes: TypeFlags) {
             let i = types.length;
             while (i > 0) {
                 i--;
                 const t = types[i];
                 const remove =
-                    t.flags & TypeFlags.StringLiteral && includes & TypeIncludes.String ||
-                    t.flags & TypeFlags.NumberLiteral && includes & TypeIncludes.Number ||
-                    t.flags & TypeFlags.UniqueESSymbol && includes & TypeIncludes.ESSymbol ||
+                    t.flags & TypeFlags.StringLiteral && includes & TypeFlags.String ||
+                    t.flags & TypeFlags.NumberLiteral && includes & TypeFlags.Number ||
+                    t.flags & TypeFlags.UniqueESSymbol && includes & TypeFlags.ESSymbol ||
                     t.flags & TypeFlags.StringOrNumberLiteral && t.flags & TypeFlags.FreshLiteral && containsType(types, (<LiteralType>t).regularType);
                 if (remove) {
                     orderedRemoveItemAt(types, i);
@@ -8173,12 +8153,12 @@ namespace ts {
             }
             const typeSet: Type[] = [];
             const includes = addTypesToUnion(typeSet, 0, types);
-            if (includes & TypeIncludes.Any) {
-                return includes & TypeIncludes.Wildcard ? wildcardType : anyType;
+            if (includes & TypeFlags.Any) {
+                return includes & TypeFlags.Wildcard ? wildcardType : anyType;
             }
             switch (unionReduction) {
                 case UnionReduction.Literal:
-                    if (includes & TypeIncludes.LiteralOrUniqueESSymbol) {
+                    if (includes & TypeFlags.StringOrNumberLiteralOrUnique) {
                         removeRedundantLiteralTypes(typeSet, includes);
                     }
                     break;
@@ -8187,8 +8167,8 @@ namespace ts {
                     break;
             }
             if (typeSet.length === 0) {
-                return includes & TypeIncludes.Null ? includes & TypeIncludes.NonWideningType ? nullType : nullWideningType :
-                    includes & TypeIncludes.Undefined ? includes & TypeIncludes.NonWideningType ? undefinedType : undefinedWideningType :
+                return includes & TypeFlags.Null ? includes & TypeFlags.NonWideningType ? nullType : nullWideningType :
+                    includes & TypeFlags.Undefined ? includes & TypeFlags.NonWideningType ? undefinedType : undefinedWideningType :
                         neverType;
             }
             return getUnionTypeFromSortedList(typeSet, aliasSymbol, aliasTypeArguments);
@@ -8266,30 +8246,23 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function addTypeToIntersection(typeSet: Type[], includes: TypeIncludes, type: Type) {
+        function addTypeToIntersection(typeSet: Type[], includes: TypeFlags, type: Type) {
             const flags = type.flags;
             if (flags & TypeFlags.Intersection) {
-                includes = addTypesToIntersection(typeSet, includes, (<IntersectionType>type).types);
+                return addTypesToIntersection(typeSet, includes, (<IntersectionType>type).types);
             }
-            else if (flags & TypeFlags.Any) {
-                includes |= TypeIncludes.Any;
-                if (type === wildcardType) includes |= TypeIncludes.Wildcard;
+            if (getObjectFlags(type) & ObjectFlags.Anonymous && isEmptyObjectType(type)) {
+                includes |= TypeFlags.EmptyObject;
             }
-            else if (flags & TypeFlags.Never) {
-                includes |= TypeIncludes.Never;
-            }
-            else if (getObjectFlags(type) & ObjectFlags.Anonymous && isEmptyObjectType(type)) {
-                includes |= TypeIncludes.EmptyObject;
-            }
-            else if ((strictNullChecks || !(flags & TypeFlags.Nullable)) && !contains(typeSet, type)) {
-                if (flags & TypeFlags.Object) {
-                    includes |= TypeIncludes.ObjectType;
+            else {
+                includes |= flags & ~TypeFlags.ConstructionFlags;
+                if (flags & TypeFlags.Any) {
+                    if (type === wildcardType) includes |= TypeFlags.Wildcard;
                 }
-                if (flags & TypeFlags.Union) {
-                    includes |= TypeIncludes.Union;
-                }
-                if (!(flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.Anonymous &&
-                    type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && containsIdenticalType(typeSet, type))) {
+                else if ((strictNullChecks || !(flags & TypeFlags.Nullable)) && !contains(typeSet, type) &&
+                    !(flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.Anonymous &&
+                    type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) &&
+                    containsIdenticalType(typeSet, type))) {
                     typeSet.push(type);
                 }
             }
@@ -8298,11 +8271,26 @@ namespace ts {
 
         // Add the given types to the given type set. Order is preserved, freshness is removed from literal
         // types, duplicates are removed, and nested types of the given kind are flattened into the set.
-        function addTypesToIntersection(typeSet: Type[], includes: TypeIncludes, types: Type[]) {
+        function addTypesToIntersection(typeSet: Type[], includes: TypeFlags, types: Type[]) {
             for (const type of types) {
                 includes = addTypeToIntersection(typeSet, includes, getRegularTypeOfLiteralType(type));
             }
             return includes;
+        }
+
+        function removeRedundantPrimitiveTypes(types: Type[], includes: TypeFlags) {
+            let i = types.length;
+            while (i > 0) {
+                i--;
+                const t = types[i];
+                const remove =
+                    t.flags & TypeFlags.String && includes & TypeFlags.StringLiteral ||
+                    t.flags & TypeFlags.Number && includes & TypeFlags.NumberLiteral ||
+                    t.flags & TypeFlags.ESSymbol && includes & TypeFlags.UniqueESSymbol;
+                if (remove) {
+                    orderedRemoveItemAt(types, i);
+                }
+            }
         }
 
         // We normalize combinations of intersection and union types based on the distributive property of the '&'
@@ -8321,19 +8309,24 @@ namespace ts {
             }
             const typeSet: Type[] = [];
             const includes = addTypesToIntersection(typeSet, 0, types);
-            if (includes & TypeIncludes.Never) {
+            if (includes & TypeFlags.Never) {
                 return neverType;
             }
-            if (includes & TypeIncludes.Any) {
-                return includes & TypeIncludes.Wildcard ? wildcardType : anyType;
+            if (includes & TypeFlags.Any) {
+                return includes & TypeFlags.Wildcard ? wildcardType : anyType;
             }
-            if (includes & TypeIncludes.EmptyObject && !(includes & TypeIncludes.ObjectType)) {
+            if (includes & TypeFlags.String && includes & TypeFlags.StringLiteral ||
+                includes & TypeFlags.Number && includes & TypeFlags.NumberLiteral ||
+                includes & TypeFlags.ESSymbol && includes & TypeFlags.UniqueESSymbol) {
+                removeRedundantPrimitiveTypes(typeSet, includes);
+            }
+            if (includes & TypeFlags.EmptyObject && !(includes & TypeFlags.Object)) {
                 typeSet.push(emptyObjectType);
             }
             if (typeSet.length === 1) {
                 return typeSet[0];
             }
-            if (includes & TypeIncludes.Union) {
+            if (includes & TypeFlags.Union) {
                 // We are attempting to construct a type of the form X & (A | B) & Y. Transform this into a type of
                 // the form X & A & Y | X & B & Y and recursively reduce until no union type constituents remain.
                 const unionIndex = findIndex(typeSet, t => (t.flags & TypeFlags.Union) !== 0);
