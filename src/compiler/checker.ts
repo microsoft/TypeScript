@@ -10670,23 +10670,8 @@ namespace ts {
                     }
                 }
 
-                if (source.flags & TypeFlags.TypeParameter) {
-                    let constraint = getConstraintForRelation(<TypeParameter>source);
-                    // A type parameter with no constraint is not related to the non-primitive object type.
-                    if (constraint || !(target.flags & TypeFlags.NonPrimitive)) {
-                        if (!constraint || constraint.flags & TypeFlags.Any) {
-                            constraint = emptyObjectType;
-                        }
-                        // Report constraint errors only if the constraint is not the empty object type
-                        const reportConstraintErrors = reportErrors && constraint !== emptyObjectType;
-                        if (result = isRelatedTo(constraint, target, reportConstraintErrors)) {
-                            errorInfo = saveErrorInfo;
-                            return result;
-                        }
-                    }
-                }
-                else if (source.flags & TypeFlags.IndexedAccess) {
-                    if (target.flags & TypeFlags.IndexedAccess) {
+                if (source.flags & TypeFlags.TypeVariable) {
+                    if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {
                         // A type S[K] is related to a type T[J] if S is related to T and K is related to J.
                         if (result = isRelatedTo((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType, reportErrors)) {
                             result &= isRelatedTo((<IndexedAccessType>source).indexType, (<IndexedAccessType>target).indexType, reportErrors);
@@ -10696,11 +10681,15 @@ namespace ts {
                             return result;
                         }
                     }
-                    // A type S[K] is related to a type T if C is related to T, where C is the
-                    // constraint of S[K].
-                    const constraint = getConstraintForRelation(<IndexedAccessType>source);
-                    if (constraint) {
-                        if (result = isRelatedTo(constraint, target, reportErrors)) {
+                    let constraint = getConstraintForRelation(<TypeParameter>source);
+                    // A type variable with no constraint is not related to the non-primitive object type.
+                    if (constraint || !(target.flags & TypeFlags.NonPrimitive)) {
+                        if (!constraint || constraint.flags & TypeFlags.Any) {
+                            constraint = emptyObjectType;
+                        }
+                        // Report constraint errors only if the constraint is not the empty object type
+                        const reportConstraintErrors = reportErrors && constraint !== emptyObjectType;
+                        if (result = isRelatedTo(constraint, target, reportConstraintErrors)) {
                             errorInfo = saveErrorInfo;
                             return result;
                         }
