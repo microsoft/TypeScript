@@ -460,7 +460,7 @@ namespace ts.server {
         }
 
         isOrphan() {
-            return this.containingProjects.length === 0;
+            return !forEach(this.containingProjects, p => !p.isOrphan());
         }
 
         /**

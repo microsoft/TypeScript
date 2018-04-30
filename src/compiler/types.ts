@@ -490,19 +490,21 @@ namespace ts {
         ThisNodeOrAnySubNodesHasError = 1 << 17, // If this node or any of its children had an error
         HasAggregatedChildData = 1 << 18, // If we've computed data from children and cached it in this node
 
-        // This flag will be set when the parser encounters a dynamic import expression so that module resolution
-        // will not have to walk the tree if the flag is not set. However, this flag is just a approximation because
-        // once it is set, the flag never gets cleared (hence why it's named "PossiblyContainsDynamicImport").
-        // During editing, if dynamic import is removed, incremental parsing will *NOT* update this flag. This means that the tree will always be traversed
-        // during module resolution. However, the removal operation should not occur often and in the case of the
+        // These flags will be set when the parser encounters a dynamic import expression or 'import.meta' to avoid
+        // walking the tree if the flags are not set. However, these flags are just a approximation
+        // (hence why it's named "PossiblyContainsDynamicImport") because once set, the flags never get cleared.
+        // During editing, if a dynamic import is removed, incremental parsing will *NOT* clear this flag.
+        // This means that the tree will always be traversed during module resolution, or when looking for external module indicators.
+        // However, the removal operation should not occur often and in the case of the
         // removal, it is likely that users will add the import anyway.
         // The advantage of this approach is its simplicity. For the case of batch compilation,
         // we guarantee that users won't have to pay the price of walking the tree if a dynamic import isn't used.
-        /* @internal */
-        PossiblyContainsDynamicImport = 1 << 19,
-        JSDoc =              1 << 20, // If node was parsed inside jsdoc
-        /* @internal */ Ambient =         1 << 21, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
-        /* @internal */ InWithStatement = 1 << 22, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
+        /* @internal */ PossiblyContainsDynamicImport = 1 << 19,
+        /* @internal */ PossiblyContainsImportMeta    = 1 << 20,
+
+        JSDoc                                         = 1 << 21, // If node was parsed inside jsdoc
+        /* @internal */ Ambient                       = 1 << 22, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
+        /* @internal */ InWithStatement               = 1 << 23, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
 
         BlockScoped = Let | Const,
 
@@ -514,6 +516,11 @@ namespace ts {
 
         // Exclude these flags when parsing a Type
         TypeExcludesFlags = YieldContext | AwaitContext,
+
+        // Represents all flags that are potentially set once and
+        // never cleared on SourceFiles which get re-used in between incremental parses.
+        // See the comment above on `PossiblyContainsDynamicImport` and `PossiblyContainsImportMeta`.
+        /* @internal */ PermanentlySetIncrementalFlags = PossiblyContainsDynamicImport | PossiblyContainsImportMeta,
     }
 
     export const enum ModifierFlags {
@@ -1756,7 +1763,7 @@ namespace ts {
     //       for the same reasons we treat NewExpression as a PrimaryExpression.
     export interface MetaProperty extends PrimaryExpression {
         kind: SyntaxKind.MetaProperty;
-        keywordToken: SyntaxKind.NewKeyword;
+        keywordToken: SyntaxKind.NewKeyword | SyntaxKind.ImportKeyword;
         name: Identifier;
     }
 
@@ -2557,7 +2564,11 @@ namespace ts {
         languageVersion: ScriptTarget;
         /* @internal */ scriptKind: ScriptKind;
 
-        // The first node that causes this file to be an external module
+        /**
+         * The first "most obvious" node that makes a file an external module.
+         * This is intended to be the first top-level import/export,
+         * but could be arbitrarily nested (e.g. `import.meta`).
+         */
         /* @internal */ externalModuleIndicator: Node;
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator: Node;
@@ -3620,6 +3631,9 @@ namespace ts {
         BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
         ESSymbolLike = ESSymbol | UniqueESSymbol,
+        VoidLike = Void | Undefined,
+        /* @internal */
+        DisjointDomains = NonPrimitive | StringLike | NumberLike | BooleanLike | ESSymbolLike | VoidLike | Null,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
         TypeVariable = TypeParameter | IndexedAccess,
@@ -3636,7 +3650,15 @@ namespace ts {
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
         /* @internal */
         PropagatingFlags = ContainsWideningType | ContainsObjectLiteral | ContainsAnyFunctionType,
+        // The following flags are used for different purposes during union and intersection type construction
         /* @internal */
+        NonWideningType = ContainsWideningType,
+        /* @internal */
+        Wildcard = ContainsObjectLiteral,
+        /* @internal */
+        EmptyObject = ContainsAnyFunctionType,
+        /* @internal */
+        ConstructionFlags = NonWideningType | Wildcard | EmptyObject
     }
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;

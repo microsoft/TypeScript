@@ -698,7 +698,7 @@ namespace ts {
                         createWatchDirectoryUsing(dynamicPollingWatchFile || createDynamicPriorityPollingWatchFile({ getModifiedTime, setTimeout })) :
                         watchDirectoryUsingFsWatch;
                 const watchDirectoryRecursively = createRecursiveDirectoryWatcher({
-                    filePathComparer: useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
+                    filePathComparer: getStringComparer(!useCaseSensitiveFileNames),
                     directoryExists,
                     getAccessibleSortedChildDirectories: path => getAccessibleFileSystemEntries(path).directories,
                     watchDirectory,
