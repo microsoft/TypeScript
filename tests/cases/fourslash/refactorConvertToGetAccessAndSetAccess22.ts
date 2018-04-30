@@ -18,6 +18,7 @@ edit.applyRefactor({
     public set a(value: string) {
         this._a = value;
     }
+
     public a_1: number;
     constructor() { }
 }`,

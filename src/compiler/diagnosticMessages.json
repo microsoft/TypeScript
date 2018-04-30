@@ -23,6 +23,10 @@
         "category": "Error",
         "code": 1010
     },
+    "An element access expression should take an argument.": {
+        "category": "Error",
+        "code": 1011
+    },
     "Unexpected token.": {
         "category": "Error",
         "code": 1012
@@ -966,6 +970,10 @@
     "Type arguments cannot be used here.": {
         "category": "Error",
         "code": 1342
+    },
+    "The 'import.meta' meta-property is only allowed using 'ESNext' for the 'target' and 'module' compiler options.": {
+        "category": "Error",
+        "code": 1343
     },
 
     "Duplicate identifier '{0}'.": {
@@ -2947,10 +2955,6 @@
         "category": "Message",
         "code": 6040
     },
-    "Compilation complete. Watching for file changes.": {
-        "category": "Message",
-        "code": 6042
-    },
     "Generates corresponding '.map' file.": {
         "category": "Message",
         "code": 6043
@@ -3526,17 +3530,26 @@
         "code": 6192,
         "reportsUnnecessary": true
     },
-    "Found 1 error.": {
+    "Found 1 error. Watching for file changes.": {
         "category": "Message",
         "code": 6193
     },
-    "Found {0} errors.": {
+    "Found {0} errors. Watching for file changes.": {
         "category": "Message",
         "code": 6194
     },
-    "Resolve module name imported with '.json' extension to the json source file.": {
+    "Resolve 'keyof' to string valued property names only (no numbers or symbols).": {
         "category": "Message",
         "code": 6195
+    },
+    "'{0}' is declared but never used.": {
+        "category": "Error",
+        "code": 6196,
+        "reportsUnnecessary": true
+    },
+    "Resolve module name imported with '.json' extension to the json source file.": {
+        "category": "Message",
+        "code": 6197
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
@@ -3927,7 +3940,7 @@
         "category": "Message",
         "code": 90007
     },
-    "Add 'this.' to unresolved variable": {
+    "Add '{0}.' to unresolved variable": {
         "category": "Message",
         "code": 90008
     },
@@ -4135,7 +4148,7 @@
         "category": "Message",
         "code": 95036
     },
-    "Add 'this.' to all unresolved variables matching a member name": {
+    "Add qualifier to all unresolved variables matching a member name": {
         "category": "Message",
         "code": 95037
     },

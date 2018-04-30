@@ -13,7 +13,9 @@ namespace ts.projectSystem {
     export import checkArray = TestFSWithWatch.checkArray;
     export import libFile = TestFSWithWatch.libFile;
     export import checkWatchedFiles = TestFSWithWatch.checkWatchedFiles;
-    import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
+    export import checkWatchedFilesDetailed = TestFSWithWatch.checkWatchedFilesDetailed;
+    export import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
+    export import checkWatchedDirectoriesDetailed = TestFSWithWatch.checkWatchedDirectoriesDetailed;
     import safeList = TestFSWithWatch.safeList;
 
     export const customTypesMap = {
@@ -478,6 +480,10 @@ namespace ts.projectSystem {
         checkNthEvent(session, server.toEvent(eventName, diagnostics), 0, isMostRecent);
     }
 
+    function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: ReadonlyArray<string> = [], category = diagnosticCategoryName(message), reportsUnnecessary?: {}): protocol.Diagnostic {
+        return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category, reportsUnnecessary, source: undefined };
+    }
+
     function checkCompleteEvent(session: TestSession, numberOfCurrentEvents: number, expectedSequenceId: number, isMostRecent = true): void {
         checkNthEvent(session, server.toEvent("requestCompleted", { request_seq: expectedSequenceId }), numberOfCurrentEvents - 1, isMostRecent);
     }
@@ -494,7 +500,7 @@ namespace ts.projectSystem {
 
     function checkNthEvent(session: TestSession, expectedEvent: protocol.Event, index: number, isMostRecent: boolean) {
         const events = session.events;
-        assert.deepEqual(events[index], expectedEvent);
+        assert.deepEqual(events[index], expectedEvent, `Expected ${JSON.stringify(expectedEvent)} at ${index} in ${JSON.stringify(events)}`);
 
         const outputs = session.host.getOutput();
         assert.equal(outputs[index], server.formatMessage(expectedEvent, nullLogger, Utils.byteLength, session.host.newLine));
@@ -3331,6 +3337,89 @@ namespace ts.projectSystem {
             checkCompleteEvent(session, 1, expectedSequenceId);
             session.clearMessages();
         });
+
+        it("Reports errors correctly when file referenced by inferred project root, is opened right after closing the root file", () => {
+            const projectRoot = "/user/username/projects/myproject";
+            const app: FileOrFolder = {
+                path: `${projectRoot}/src/client/app.js`,
+                content: ""
+            };
+            const serverUtilities: FileOrFolder = {
+                path: `${projectRoot}/src/server/utilities.js`,
+                content: `function getHostName() { return "hello"; } export { getHostName };`
+            };
+            const backendTest: FileOrFolder = {
+                path: `${projectRoot}/test/backend/index.js`,
+                content: `import { getHostName } from '../../src/server/utilities';export default getHostName;`
+            };
+            const files = [libFile, app, serverUtilities, backendTest];
+            const host = createServerHost(files);
+            const session = createSession(host, { useInferredProjectPerProjectRoot: true, canUseEvents: true });
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: protocol.CommandTypes.Open,
+                arguments: {
+                    file: app.path,
+                    projectRootPath: projectRoot
+                }
+            });
+            const service = session.getProjectService();
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            const project = service.inferredProjects[0];
+            checkProjectActualFiles(project, [libFile.path, app.path]);
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: protocol.CommandTypes.Open,
+                arguments: {
+                    file: backendTest.path,
+                    projectRootPath: projectRoot
+                }
+            });
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            checkProjectActualFiles(project, files.map(f => f.path));
+            checkErrors([backendTest.path, app.path]);
+            session.executeCommandSeq<protocol.CloseRequest>({
+                command: protocol.CommandTypes.Close,
+                arguments: {
+                    file: backendTest.path
+                }
+            });
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: protocol.CommandTypes.Open,
+                arguments: {
+                    file: serverUtilities.path,
+                    projectRootPath: projectRoot
+                }
+            });
+            checkErrors([serverUtilities.path, app.path]);
+
+            function checkErrors(openFiles: [string, string]) {
+                const expectedSequenceId = session.getNextSeq();
+                session.executeCommandSeq<protocol.GeterrRequest>({
+                    command: protocol.CommandTypes.Geterr,
+                    arguments: {
+                        delay: 0,
+                        files: openFiles
+                    }
+                });
+
+                for (const openFile of openFiles) {
+                    session.clearMessages();
+                    host.checkTimeoutQueueLength(3);
+                    host.runQueuedTimeoutCallbacks(host.getNextTimeoutId() - 1);
+
+                    checkErrorMessage(session, "syntaxDiag", { file: openFile, diagnostics: [] });
+                    session.clearMessages();
+
+                    host.runQueuedImmediateCallbacks();
+                    checkErrorMessage(session, "semanticDiag", { file: openFile, diagnostics: [] });
+                    session.clearMessages();
+
+                    host.runQueuedImmediateCallbacks(1);
+                    checkErrorMessage(session, "suggestionDiag", { file: openFile, diagnostics: [] });
+                }
+                checkCompleteEvent(session, 2, expectedSequenceId);
+                session.clearMessages();
+            }
+        });
     });
 
     describe("tsserverProjectSystem autoDiscovery", () => {
@@ -4291,10 +4380,6 @@ namespace ts.projectSystem {
 
             session.clearMessages();
         });
-
-        function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: ReadonlyArray<string> = [], category = diagnosticCategoryName(message), reportsUnnecessary?: {}): protocol.Diagnostic {
-            return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category, reportsUnnecessary, source: undefined };
-        }
     });
 
     describe("tsserverProjectSystem Configure file diagnostics events", () => {
@@ -7294,7 +7379,6 @@ namespace ts.projectSystem {
             const host = createServerHost(files);
             const session = createSession(host);
             const projectService = session.getProjectService();
-            debugger;
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: protocol.CommandTypes.Open,
                 arguments: {
@@ -7822,8 +7906,8 @@ namespace ts.projectSystem {
 
                 checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
 
-                TestFSWithWatch.checkMultiMapKeyCount("watchedFiles", host.watchedFiles, expectedWatchedFiles);
-                TestFSWithWatch.checkMultiMapKeyCount("watchedDirectories", host.watchedDirectories, expectedWatchedDirectories);
+                checkWatchedFilesDetailed(host, expectedWatchedFiles);
+                checkWatchedDirectoriesDetailed(host, expectedWatchedDirectories, /*recursive*/ false);
                 checkProjectActualFiles(project, fileNames);
             }
         }

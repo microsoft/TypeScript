@@ -29,19 +29,36 @@ namespace ts {
 
     /** @internal */
     export const nonClearingMessageCodes: number[] = [
-        Diagnostics.Compilation_complete_Watching_for_file_changes.code,
-        Diagnostics.Found_1_error.code,
-        Diagnostics.Found_0_errors.code
+        Diagnostics.Found_1_error_Watching_for_file_changes.code,
+        Diagnostics.Found_0_errors_Watching_for_file_changes.code
     ];
 
-    function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic, options: CompilerOptions) {
+    /**
+     * @returns Whether the screen was cleared.
+     */
+    function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic, options: CompilerOptions): boolean {
         if (system.clearScreen &&
             !options.preserveWatchOutput &&
             !options.extendedDiagnostics &&
             !options.diagnostics &&
             !contains(nonClearingMessageCodes, diagnostic.code)) {
             system.clearScreen();
+            return true;
         }
+
+        return false;
+    }
+
+    /** @internal */
+    export const screenStartingMessageCodes: number[] = [
+        Diagnostics.Starting_compilation_in_watch_mode.code,
+        Diagnostics.File_change_detected_Starting_incremental_compilation.code,
+    ];
+
+    function getPlainDiagnosticFollowingNewLines(diagnostic: Diagnostic, newLine: string): string {
+        return contains(screenStartingMessageCodes, diagnostic.code)
+            ? newLine + newLine
+            : newLine;
     }
 
     /**
@@ -52,13 +69,19 @@ namespace ts {
             (diagnostic, newLine, options) => {
                 clearScreenIfNotWatchingForFileChanges(system, diagnostic, options);
                 let output = `[${formatColorAndReset(new Date().toLocaleTimeString(), ForegroundColorEscapeSequences.Grey)}] `;
-                output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine + newLine}`;
+                output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine}`;
                 system.write(output);
             } :
             (diagnostic, newLine, options) => {
-                clearScreenIfNotWatchingForFileChanges(system, diagnostic, options);
-                let output = new Date().toLocaleTimeString() + " - ";
-                output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine + newLine}`;
+                let output = "";
+
+                if (!clearScreenIfNotWatchingForFileChanges(system, diagnostic, options)) {
+                    output += newLine;
+                }
+
+                output += `${new Date().toLocaleTimeString()} - `;
+                output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${getPlainDiagnosticFollowingNewLines(diagnostic, newLine)}`;
+
                 system.write(output);
             };
     }
@@ -231,10 +254,10 @@ namespace ts {
 
             const reportSummary = (errorCount: number) => {
                 if (errorCount === 1) {
-                    onWatchStatusChange(createCompilerDiagnostic(Diagnostics.Found_1_error, errorCount), newLine, compilerOptions);
+                    onWatchStatusChange(createCompilerDiagnostic(Diagnostics.Found_1_error_Watching_for_file_changes, errorCount), newLine, compilerOptions);
                 }
                 else {
-                    onWatchStatusChange(createCompilerDiagnostic(Diagnostics.Found_0_errors, errorCount, errorCount), newLine, compilerOptions);
+                    onWatchStatusChange(createCompilerDiagnostic(Diagnostics.Found_0_errors_Watching_for_file_changes, errorCount, errorCount), newLine, compilerOptions);
                 }
             };
 
@@ -602,9 +625,19 @@ namespace ts {
                     builderProgram = createProgram(/*rootNames*/ undefined, /*options*/ undefined, compilerHost, builderProgram, configFileParsingDiagnostics);
                     hasChangedConfigFileParsingErrors = false;
                 }
-                return builderProgram;
+            }
+            else {
+                createNewProgram(program, hasInvalidatedResolution);
             }
 
+            if (host.afterProgramCreate) {
+                host.afterProgramCreate(builderProgram);
+            }
+
+            return builderProgram;
+        }
+
+        function createNewProgram(program: Program, hasInvalidatedResolution: HasInvalidatedResolution) {
             // Compile the program
             if (watchLogLevel !== WatchLogLevel.None) {
                 writeLog("CreatingProgramWith::");
@@ -640,12 +673,6 @@ namespace ts {
                 }
                 missingFilePathsRequestedForRelease = undefined;
             }
-
-            if (host.afterProgramCreate) {
-                host.afterProgramCreate(builderProgram);
-            }
-            reportWatchDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes);
-            return builderProgram;
         }
 
         function updateRootFileNames(files: string[]) {

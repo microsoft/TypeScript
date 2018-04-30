@@ -4,17 +4,14 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     const actionDescription = Diagnostics.Generate_get_and_set_accessors.message;
     registerRefactor(actionName, { getEditsForAction, getAvailableActions });
 
-    type AcceptedDeclaration = ParameterDeclaration | PropertyDeclaration | PropertyAssignment;
+    type AcceptedDeclaration = ParameterPropertyDeclaration | PropertyDeclaration | PropertyAssignment;
     type AcceptedNameType = Identifier | StringLiteral;
     type ContainerDeclaration = ClassLikeDeclaration | ObjectLiteralExpression;
 
-    interface DeclarationInfo {
+    interface Info {
         container: ContainerDeclaration;
         isStatic: boolean;
         type: TypeNode | undefined;
-    }
-
-    interface Info extends DeclarationInfo {
         declaration: AcceptedDeclaration;
         fieldName: AcceptedNameType;
         accessorName: AcceptedNameType;
@@ -92,46 +89,6 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         return modifiers && createNodeArray(modifiers);
     }
 
-    function getPropertyDeclarationInfo(propertyDeclaration: PropertyDeclaration): DeclarationInfo | undefined {
-        if (!isClassLike(propertyDeclaration.parent) || !propertyDeclaration.parent.members) return undefined;
-
-        return {
-            isStatic: hasStaticModifier(propertyDeclaration),
-            type: propertyDeclaration.type,
-            container: propertyDeclaration.parent
-        };
-    }
-
-    function getParameterPropertyDeclarationInfo(parameterDeclaration: ParameterDeclaration): DeclarationInfo | undefined {
-        if (!isClassLike(parameterDeclaration.parent.parent) || !parameterDeclaration.parent.parent.members) return undefined;
-
-        return {
-            isStatic: false,
-            type: parameterDeclaration.type,
-            container: parameterDeclaration.parent.parent
-        };
-    }
-
-    function getPropertyAssignmentDeclarationInfo(propertyAssignment: PropertyAssignment): DeclarationInfo | undefined {
-        return {
-            isStatic: false,
-            type: undefined,
-            container: propertyAssignment.parent
-        };
-    }
-
-    function getDeclarationInfo(declaration: AcceptedDeclaration) {
-        if (isPropertyDeclaration(declaration)) {
-            return getPropertyDeclarationInfo(declaration);
-        }
-        else if (isPropertyAssignment(declaration)) {
-            return getPropertyAssignmentDeclarationInfo(declaration);
-        }
-        else {
-            return getParameterPropertyDeclarationInfo(declaration);
-        }
-    }
-
     function getConvertibleFieldAtPosition(file: SourceFile, startPosition: number): Info | undefined {
         const node = getTokenAtPosition(file, startPosition, /*includeJsDocComment*/ false);
         const declaration = findAncestor(node.parent, isAcceptedDeclaration);
@@ -139,15 +96,17 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         const meaning = ModifierFlags.AccessibilityModifier | ModifierFlags.Static;
         if (!declaration || !isConvertableName(declaration.name) || (getModifierFlags(declaration) | meaning) !== meaning) return undefined;
 
-        const info = getDeclarationInfo(declaration);
         const fieldName = createPropertyName(getUniqueName(`_${declaration.name.text}`, file.text), declaration.name);
+        const accessorName = createPropertyName(declaration.name.text, declaration.name);
         suppressLeadingAndTrailingTrivia(fieldName);
         suppressLeadingAndTrailingTrivia(declaration);
         return {
-            ...info,
+            isStatic: hasStaticModifier(declaration),
+            type: getTypeAnnotationNode(declaration),
+            container: declaration.kind === SyntaxKind.Parameter ? declaration.parent.parent : declaration.parent,
             declaration,
             fieldName,
-            accessorName: createPropertyName(declaration.name.text, declaration.name)
+            accessorName,
         };
     }
 

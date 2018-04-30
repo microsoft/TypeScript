@@ -2212,6 +2212,15 @@ namespace ts {
         return absolutePath;
     }
 
+    export function getRelativePath(path: string, directoryPath: string, getCanonicalFileName: GetCanonicalFileName) {
+        const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
+        return ensurePathIsRelative(relativePath);
+    }
+
+    export function ensurePathIsRelative(path: string): string {
+        return !pathIsRelative(path) ? "./" + path : path;
+    }
+
     export function getBaseFileName(path: string) {
         if (path === undefined) {
             return undefined;
@@ -2987,18 +2996,19 @@ namespace ts {
     }
 
     /** Remove the *first* occurrence of `item` from the array. */
-    export function unorderedRemoveItem<T>(array: T[], item: T): void {
-        unorderedRemoveFirstItemWhere(array, element => element === item);
+    export function unorderedRemoveItem<T>(array: T[], item: T) {
+        return unorderedRemoveFirstItemWhere(array, element => element === item);
     }
 
     /** Remove the *first* element satisfying `predicate`. */
-    function unorderedRemoveFirstItemWhere<T>(array: T[], predicate: (element: T) => boolean): void {
+    function unorderedRemoveFirstItemWhere<T>(array: T[], predicate: (element: T) => boolean) {
         for (let i = 0; i < array.length; i++) {
             if (predicate(array[i])) {
                 unorderedRemoveItemAt(array, i);
-                break;
+                return true;
             }
         }
+        return false;
     }
 
     export type GetCanonicalFileName = (fileName: string) => string;

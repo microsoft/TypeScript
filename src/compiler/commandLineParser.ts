@@ -679,6 +679,12 @@ namespace ts {
             description: Diagnostics.Disable_strict_checking_of_generic_signatures_in_function_types,
         },
         {
+            name: "keyofStringsOnly",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Resolve_keyof_to_string_valued_property_names_only_no_numbers_or_symbols,
+        },
+        {
             // A list of plugins to load in the language service
             name: "plugins",
             type: "list",
@@ -2127,19 +2133,10 @@ namespace ts {
         });
 
         function createDiagnostic(message: DiagnosticMessage, spec: string): Diagnostic {
-            const jsonObjectLiteral = getTsConfigObjectLiteralExpression(jsonSourceFile);
-            if (jsonObjectLiteral) {
-                for (const property of getPropertyAssignment(jsonObjectLiteral, specKey)) {
-                    if (isArrayLiteralExpression(property.initializer)) {
-                        for (const element of property.initializer.elements) {
-                            if (isStringLiteral(element) && element.text === spec) {
-                                return createDiagnosticForNodeInSourceFile(jsonSourceFile, element, message, spec);
-                            }
-                        }
-                    }
-                }
-            }
-            return createCompilerDiagnostic(message, spec);
+            const element = getTsConfigPropArrayElementValue(jsonSourceFile, specKey, spec);
+            return element ?
+                createDiagnosticForNodeInSourceFile(jsonSourceFile, element, message, spec) :
+                createCompilerDiagnostic(message, spec);
         }
     }
 
