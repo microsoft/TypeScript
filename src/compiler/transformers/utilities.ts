@@ -34,7 +34,8 @@ namespace ts {
     }
 
     export function getImportNeedsImportStarHelper(node: ImportDeclaration) {
-        return !!getNamespaceDeclarationNode(node) || (getNamedImportCount(node) > 1 && containsDefaultReference(node.importClause.namedBindings));
+        const minNamed = isDefaultImport(node) ? 0 : 1;
+        return !!getNamespaceDeclarationNode(node) || (getNamedImportCount(node) > minNamed && (!minNamed || containsDefaultReference(node.importClause.namedBindings)));
     }
 
     export function getImportNeedsImportDefaultHelper(node: ImportDeclaration) {
