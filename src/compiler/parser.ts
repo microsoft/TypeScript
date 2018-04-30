@@ -702,7 +702,6 @@ namespace ts {
             initializeState(sourceText, languageVersion, syntaxCursor, ScriptKind.JSON);
             // Set source file so that errors will be reported with this file name
             sourceFile = createSourceFile(fileName, ScriptTarget.ES2015, ScriptKind.JSON, /*isDeclaration*/ false);
-            const result = sourceFile as JsonSourceFile;
 
             // Prime the scanner.
             nextToken();
@@ -751,6 +750,7 @@ namespace ts {
             }
 
             sourceFile.parseDiagnostics = parseDiagnostics;
+            const result = sourceFile as JsonSourceFile;
             clearState();
             return result;
         }
