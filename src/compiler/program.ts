@@ -1916,12 +1916,19 @@ namespace ts {
                 return file;
             }
 
+            let redirectedPath: string | undefined;
             if (refFile) {
                 const redirect = getProjectReferenceRedirect(fileName);
                 if (redirect) {
                     ((refFile.redirectedReferences || (refFile.redirectedReferences = [])) as string[]).push(fileName);
+                    fileName = redirect;
+                    // Once we start redirecting to a file, we can potentially come back to it
+                    // via a back-reference from another file in the .d.ts folder. If that happens we'll
+                    // end up trying to add it to the program *again* because we were tracking it via its
+                    // original (un-redirected) name. So we have to map both the original path and the redirected path
+                    // to the source file we're about to find/create
+                    redirectedPath = toPath(redirect);
                 }
-                fileName = redirect || fileName;
             }
 
             // We haven't looked for this file, do so now and cache result
@@ -1956,6 +1963,10 @@ namespace ts {
             }
 
             filesByName.set(path, file);
+            if (redirectedPath) {
+                filesByName.set(redirectedPath, file);
+            }
+
             if (file) {
                 sourceFilesFoundSearchingNodeModules.set(path, currentNodeModulesDepth > 0);
                 file.path = path;
@@ -2188,7 +2199,7 @@ namespace ts {
             const refPath = resolveProjectReferencePath(host, ref);
             // An absolute path pointing to the containing directory of the config file
             const basePath = getNormalizedAbsolutePath(getDirectoryPath(refPath), host.getCurrentDirectory());
-            const sourceFile = host.getSourceFile(refPath, ScriptTarget.Latest);
+            const sourceFile = host.getSourceFile(refPath, ScriptTarget.JSON);
             if (sourceFile === undefined) {
                 return undefined;
             }

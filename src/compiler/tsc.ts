@@ -120,7 +120,7 @@ namespace ts {
                 createWatchOfConfigFile(configParseResult, commandLineOptions);
             }
             else {
-                performCompilation(configParseResult.fileNames, configParseResult.options, getConfigFileParsingDiagnostics(configParseResult));
+                performCompilation(configParseResult.fileNames, configParseResult.projectReferences, configParseResult.options, getConfigFileParsingDiagnostics(configParseResult));
             }
         }
         else {
@@ -130,7 +130,7 @@ namespace ts {
                 createWatchOfFilesAndCompilerOptions(commandLine.fileNames, commandLineOptions);
             }
             else {
-                performCompilation(commandLine.fileNames, commandLineOptions);
+                performCompilation(commandLine.fileNames, /*references*/ undefined, commandLineOptions);
             }
         }
     }
@@ -142,11 +142,18 @@ namespace ts {
         }
     }
 
-    function performCompilation(rootFileNames: string[], compilerOptions: CompilerOptions, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) {
-        const compilerHost = createCompilerHost(compilerOptions);
-        enableStatistics(compilerOptions);
+    function performCompilation(rootNames: string[], projectReferences: ReadonlyArray<ProjectReference> | undefined, options: CompilerOptions, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) {
+        const host = createCompilerHost(options);
+        enableStatistics(options);
 
-        const program = createProgram(rootFileNames, compilerOptions, compilerHost, /*oldProgram*/ undefined, configFileParsingDiagnostics);
+        const programOptions: CreateProgramOptions = {
+            rootNames,
+            options,
+            projectReferences,
+            host,
+            configFileParsingDiagnostics
+        };
+        const program = createProgram(programOptions);
         const exitStatus = emitFilesAndReportErrors(program, reportDiagnostic, s => sys.write(s + sys.newLine));
         reportStatistics(program);
         return sys.exit(exitStatus);

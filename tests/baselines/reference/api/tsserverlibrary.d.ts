@@ -2457,6 +2457,7 @@ declare namespace ts {
         ES2017 = 4,
         ES2018 = 5,
         ESNext = 6,
+        JSON = 100,
         Latest = 6
     }
     enum LanguageVariant {

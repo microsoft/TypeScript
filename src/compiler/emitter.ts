@@ -532,7 +532,7 @@ namespace ts {
                 case EmitHint.MappedTypeParameter: return emitMappedTypeParameter(cast(node, isTypeParameterDeclaration));
                 case EmitHint.Unspecified: return pipelineEmitUnspecified(node);
                 default:
-                    assertTypeIsNever(hint);
+                    return Debug.assertNever(hint, `Unhandled EmitHint: ${(ts as any).EmitHint ? (ts as any).EmitHint[hint] : hint }`);
             }
         }
 

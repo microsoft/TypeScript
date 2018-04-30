@@ -1909,7 +1909,7 @@ namespace ts {
         const options = getDefaultCompilerOptions(configFileName);
         convertOptionsFromJson(optionDeclarations, jsonOptions, basePath, options, Diagnostics.Unknown_compiler_option_0, errors);
         if (configFileName) {
-            options.configFilePath = configFileName;
+            options.configFilePath = normalizeSlashes(configFileName);
         }
         return options;
     }

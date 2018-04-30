@@ -4314,12 +4314,13 @@ namespace ts {
         ES2017 = 4,
         ES2018 = 5,
         ESNext = 6,
+        JSON = 100,
         Latest = ESNext,
     }
 
     export const enum LanguageVariant {
         Standard,
-        JSX,
+        JSX
     }
 
     /** Either a parsed command line or a parsed tsconfig.json */
