@@ -38,6 +38,6 @@ _2["default"].aIndex;
 "use strict";
 exports.__esModule = true;
 var __1 = require("..");
-var _1 = require("../");
+var __2 = require("../");
 __1["default"].a;
-_1["default"].aIndex;
+__2["default"].aIndex;

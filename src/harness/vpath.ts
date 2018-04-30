@@ -1,7 +1,33 @@
 namespace vpath {
+    export import sep = ts.directorySeparator;
+    export import normalizeSeparators = ts.normalizeSlashes;
+    export import isAbsolute = ts.isRootedDiskPath;
+    export import isRoot = ts.isDiskPathRoot;
+    export import hasTrailingSeparator = ts.hasTrailingDirectorySeparator;
+    export import addTrailingSeparator = ts.ensureTrailingDirectorySeparator;
+    export import removeTrailingSeparator = ts.removeTrailingDirectorySeparator;
+    export import normalize = ts.normalizePath;
+    export import combine = ts.combinePaths;
+    export import parse = ts.getPathComponents;
+    export import reduce = ts.reducePathComponents;
+    export import format = ts.getPathFromPathComponents;
+    export import resolve = ts.resolvePath;
+    export import compare = ts.comparePaths;
+    export import compareCaseSensitive = ts.comparePathsCaseSensitive;
+    export import compareCaseInsensitive = ts.comparePathsCaseInsensitive;
+    export import dirname = ts.getDirectoryPath;
+    export import basename = ts.getBaseFileName;
+    export import extname = ts.getAnyExtensionFromPath;
+    export import relative = ts.getRelativePath;
+    export import beneath = ts.containsPath;
+    export import changeExtension = ts.changeAnyExtension;
+    export import isTypeScript = ts.hasTypeScriptFileExtension;
+    export import isJavaScript = ts.hasJavaScriptFileExtension;
+
     const invalidRootComponentRegExp = /^(?!(\/|\/\/\w+\/|[a-zA-Z]:\/?|)$)/;
     const invalidNavigableComponentRegExp = /[:*?"<>|]/;
     const invalidNonNavigableComponentRegExp = /^\.{1,2}$|[:*?"<>|]/;
+    const extRegExp = /\.\w+$/;
 
     export const enum ValidationFlags {
         None = 0,
@@ -30,17 +56,6 @@ namespace vpath {
 
         /** Path may only be a filename */
         Basename = RequireBasename | AllowExtname,
-    }
-
-    export function valid(path: string, flags: ValidationFlags = ValidationFlags.RelativeOrAbsolute) {
-        return validateComponents(parse(path), flags, hasTrailingSeparator(path));
-    }
-
-    export function validate(path: string, flags: ValidationFlags = ValidationFlags.RelativeOrAbsolute) {
-        const components = parse(path);
-        const trailing = hasTrailingSeparator(path);
-        if (!validateComponents(components, flags, trailing)) throw vfs.createIOError("ENOENT");
-        return components.length > 1 && trailing ? format(reduce(components)) + sep : format(reduce(components));
     }
 
     function validateComponents(components: string[], flags: ValidationFlags, hasTrailingSeparator: boolean) {
@@ -80,244 +95,11 @@ namespace vpath {
         return true;
     }
 
-    import getRootLength = ts.getRootLength;
-
-    export import sep = ts.directorySeparator;
-    export import normalizeSeparators = ts.normalizeSlashes;
-    export import isAbsolute = ts.isRootedDiskPath;
-    export import isRoot = ts.isDiskPathRoot;
-    export import hasTrailingSeparator = ts.hasTrailingDirectorySeparator;
-    export import addTrailingSeparator = ts.ensureTrailingDirectorySeparator;
-    export import removeTrailingSeparator = ts.removeTrailingDirectorySeparator;
-    export import normalize = ts.normalizePath;
-    export import combine = ts.combinePaths;
-    export import parse = ts.getPathComponents;
-    export import reduce = ts.reducePathComponents;
-    export import format = ts.getNormalizedPathFromPathComponents;
-
-    /**
-     * Combines and normalizes two paths.
-     */
-    export function resolve(path1: string, path2: string) {
-        return normalize(combine(path1, path2));
-    }
-
-    // NOTE: this differs from `ts.getRelativePathToDirectoryOrUrl` in that it requires both paths
-    // are already absolute and does not perform "canonicalization".
-    function relativeWorker(from: string, to: string, stringEqualityComparer: (a: string, b: string) => boolean) {
-        if (!isAbsolute(from)) throw new Error("Path not absolute");
-        if (!isAbsolute(to)) throw new Error("Path not absolute");
-
-        const fromComponents = reduce(parse(from));
-        const toComponents = reduce(parse(to));
-
-        let start: number;
-        for (start = 0; start < fromComponents.length && start < toComponents.length; start++) {
-            if (!stringEqualityComparer(fromComponents[start], toComponents[start])) {
-                break;
-            }
-        }
-
-        if (start === 0 || (start === 1 && fromComponents[0] === "/")) {
-            return format(toComponents);
-        }
-
-        const components = toComponents.slice(start);
-        for (; start < fromComponents.length; start++) {
-            components.unshift("..");
-        }
-
-        return format(["", ...components]);
-    }
-
-    function relativeCaseSensitive(from: string, to: string) {
-        return relativeWorker(from, to, ts.equateStringsCaseSensitive);
-    }
-
-    function relativeCaseInsensitive(from: string, to: string) {
-        return relativeWorker(from, to, ts.equateStringsCaseInsensitive);
-    }
-
-    /**
-     * Gets a relative path that can be used to traverse between `from` and `to`.
-     */
-    // NOTE: this differs from `ts.getRelativePathToDirectoryOrUrl` in that it requires both paths
-    // are already absolute and does not perform "canonicalization".
-    export function relative(from: string, to: string, ignoreCase: boolean) {
-        return ignoreCase ? relativeCaseInsensitive(from, to) : relativeCaseSensitive(from, to);
-    }
-
-    // NOTE: this differs from `ts.comparePaths` due to the behavior of `parse`.
-    function compareWorker(a: string, b: string, stringComparer: (a: string, b: string) => number) {
-        if (a === b) return 0;
-        a = removeTrailingSeparator(a);
-        b = removeTrailingSeparator(b);
-        if (a === b) return 0;
-        const aComponents = reduce(parse(a));
-        const bComponents = reduce(parse(b));
-        const len = Math.min(aComponents.length, bComponents.length);
-        for (let i = 0; i < len; i++) {
-            const result = stringComparer(aComponents[i], bComponents[i]);
-            if (result !== 0) return result;
-        }
-        return ts.compareValues(aComponents.length, bComponents.length);
-    }
-
-    /**
-     * Performs a case-sensitive comparison of two paths.
-     */
-    export function compareCaseSensitive(a: string, b: string) {
-        return compareWorker(a, b, ts.compareStringsCaseSensitive);
-    }
-
-    /**
-     * Performs a case-insensitive comparison of two paths.
-     */
-    export function compareCaseInsensitive(a: string, b: string) {
-        return compareWorker(a, b, ts.compareStringsCaseInsensitive);
-    }
-
-    /**
-     * Compare two paths.
-     */
-    // NOTE: this differs from `ts.comparePaths` due to the behavior of `parse`.
-    export function compare(a: string, b: string, ignoreCase: boolean) {
-        return ignoreCase ? compareCaseInsensitive(a, b) : compareCaseSensitive(a, b);
-    }
-
-    /**
-     * Determines whether two paths are equal.
-     */
-    export function equals(a: string, b: string, ignoreCase: boolean) {
-        if (!isAbsolute(a)) throw new Error("Path not absolute");
-        if (!isAbsolute(b)) throw new Error("Path not absolute");
-        if (a === b) return true;
-        a = removeTrailingSeparator(a);
-        b = removeTrailingSeparator(b);
-        if (a === b) return true;
-        a = normalize(a);
-        b = normalize(b);
-        if (a === b) return true;
-        return ignoreCase && a.toUpperCase() === b.toUpperCase();
-    }
-
-    // NOTE: this differs from `ts.containsPath` due to the behavior of `parse`.
-    function beneathWorker(ancestor: string, descendant: string, stringEqualityComparer: (a: string, b: string) => boolean) {
-        if (!isAbsolute(ancestor)) throw new Error("Path not absolute");
-        if (!isAbsolute(descendant)) throw new Error("Path not absolute");
-        const ancestorComponents = reduce(parse(ancestor));
-        const descendantComponents = reduce(parse(descendant));
-        if (descendantComponents.length < ancestorComponents.length) return false;
-        for (let i = 0; i < ancestorComponents.length; i++) {
-            if (!stringEqualityComparer(ancestorComponents[i], descendantComponents[i])) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    function beneathCaseSensitive(ancestor: string, descendant: string) {
-        return beneathWorker(ancestor, descendant, ts.equateStringsCaseSensitive);
-    }
-
-    function beneathCaseInsensitive(ancestor: string, descendant: string) {
-        return beneathWorker(ancestor, descendant, ts.equateStringsCaseInsensitive);
-    }
-
-    /**
-     * Determines whether the path `descendant` is beneath the path `ancestor`.
-     */
-    // NOTE: this differs from `containsPath` in compiler/core.ts due to the behavior of `parse`.
-    export function beneath(ancestor: string, descendant: string, ignoreCase: boolean) {
-        return ignoreCase ? beneathCaseInsensitive(ancestor, descendant) : beneathCaseSensitive(ancestor, descendant);
-    }
-
-    /**
-     * Gets the parent directory name of a path.
-     */
-    // NOTE: this differs from `ts.getDirectoryPath` due to the behavior of `getRootLength`.
-    export function dirname(path: string) {
-        path = normalizeSeparators(path);
-        path = removeTrailingSeparator(path);
-        return path.substr(0, Math.max(getRootLength(path), path.lastIndexOf(sep)));
-    }
-
-    /**
-     * Gets the portion of a path following the last separator (`/`).
-     */
-    export function basename(path: string): string;
-    /**
-     * Gets the portion of a path following the last separator (`/`).
-     * If the base name has any one of the provided extensions, it is removed.
-     */
-    export function basename(path: string, extensions: string | ReadonlyArray<string>, ignoreCase: boolean): string;
-    // NOTE: this differs from `ts.getBaseFileName` in that this function handles extensions in a
-    // fashion similar to the NodeJS `path.basename` function as well as handles case sensitivity.
-    export function basename(path: string, extensions?: string | ReadonlyArray<string>, ignoreCase?: boolean) {
-        path = normalizeSeparators(path);
-        path = removeTrailingSeparator(path);
-        const name = path.substr(Math.max(getRootLength(path), path.lastIndexOf(sep) + 1));
-        const extension = extensions !== undefined && ignoreCase !== undefined ? extname(path, extensions, ignoreCase) : undefined;
-        return extension ? name.slice(0, name.length - extension.length) : name;
-    }
-
-    function extnameWorker(path: string, extensions: string | ReadonlyArray<string>, stringEqualityComparer: (a: string, b: string) => boolean) {
-        const manyExtensions = Array.isArray(extensions) ? extensions : undefined;
-        const singleExtension = Array.isArray(extensions) ? undefined : extensions;
-        const length = manyExtensions ? manyExtensions.length : 1;
-        for (let i = 0; i < length; i++) {
-            let extension = manyExtensions ? manyExtensions[i] : singleExtension;
-            if (!extension.startsWith(".")) extension = "." + extension;
-            if (path.length >= extension.length && path.charAt(path.length - extension.length) === ".") {
-                const pathExtension = path.slice(path.length - extension.length);
-                if (stringEqualityComparer(pathExtension, extension)) {
-                    return pathExtension;
-                }
-            }
-        }
-        return "";
-    }
-
-    const extRegExp = /\.\w+$/;
-
-    /**
-     * Gets the file extension for a path.
-     */
-    export function extname(path: string): string;
-    /**
-     * Gets the file extension for a path, provided it is one of the provided extensions.
-     */
-    export function extname(path: string, extensions: string | ReadonlyArray<string>, ignoreCase: boolean): string;
-    // NOTE: this differs from `ts.getAnyExtensionFromPath` in that this function allows you to
-    // restrict extensions and handle case sensitivity
-    export function extname(path: string, extensions?: string | ReadonlyArray<string>, ignoreCase?: boolean) {
-        if (extensions) {
-            return extnameWorker(path, extensions, ignoreCase ? ts.equateStringsCaseInsensitive : ts.equateStringsCaseSensitive);
-        }
-
-        const match = extRegExp.exec(path);
-        return match ? match[0] : "";
-    }
-
-    export function changeExtension(path: string, ext: string): string;
-    export function changeExtension(path: string, ext: string, extensions: string | ReadonlyArray<string>, ignoreCase: boolean): string;
-    // NOTE: this differs from `ts.changeExtension` in that this function allows you to
-    // specify extensions and handle case sensitivity
-    export function changeExtension(path: string, ext: string, extensions?: string | ReadonlyArray<string>, ignoreCase?: boolean) {
-        const pathext = extensions !== undefined && ignoreCase !== undefined ? extname(path, extensions, ignoreCase) : extname(path);
-        return pathext ? path.slice(0, path.length - pathext.length) + (ext.startsWith(".") ? ext : "." + ext) : path;
-    }
-
-    const typeScriptExtensions: ReadonlyArray<string> = [".ts", ".tsx"];
-
-    export function isTypeScript(path: string) {
-        return extname(path, typeScriptExtensions, /*ignoreCase*/ false).length > 0;
-    }
-
-    const javaScriptExtensions: ReadonlyArray<string> = [".js", ".jsx"];
-
-    export function isJavaScript(path: string) {
-        return extname(path, javaScriptExtensions, /*ignoreCase*/ false).length > 0;
+    export function validate(path: string, flags: ValidationFlags = ValidationFlags.RelativeOrAbsolute) {
+        const components = parse(path);
+        const trailing = hasTrailingSeparator(path);
+        if (!validateComponents(components, flags, trailing)) throw vfs.createIOError("ENOENT");
+        return components.length > 1 && trailing ? format(reduce(components)) + sep : format(reduce(components));
     }
 
     export function isDeclaration(path: string) {

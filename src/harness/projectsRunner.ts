@@ -210,7 +210,9 @@ namespace project {
             const ignoreCase = this.vfs.ignoreCase;
             const resolutionInfo: ProjectRunnerTestCaseResolutionInfo & ts.CompilerOptions = JSON.parse(JSON.stringify(this.testCase));
             resolutionInfo.resolvedInputFiles = this.compilerResult.program.getSourceFiles()
-                .map(input => utils.removeTestPathPrefixes(vpath.isAbsolute(input.fileName) ? vpath.relative(cwd, input.fileName, ignoreCase) : input.fileName));
+                .map(({ fileName: input }) => vpath.beneath(vfs.builtFolder, input, this.vfs.ignoreCase) || vpath.beneath(vfs.testLibFolder, input, this.vfs.ignoreCase) ? utils.removeTestPathPrefixes(input) :
+                    vpath.isAbsolute(input) ? vpath.relative(cwd, input, ignoreCase) :
+                    input);
 
             resolutionInfo.emittedFiles = this.compilerResult.outputFiles
                 .map(output => output.meta.get("fileName") || output.file)
@@ -255,7 +257,7 @@ namespace project {
                             nonSubfolderDiskFiles++;
                         }
 
-                        const content = output.text.replace(/\/\/?\.src\//g, "/");
+                        const content = utils.removeTestPathPrefixes(output.text, /*retainTrailingDirectorySeparator*/ true);
                         Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + diskRelativeName, () => content);
                     }
                     catch (e) {

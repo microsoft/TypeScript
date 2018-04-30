@@ -27,9 +27,9 @@ namespace utils {
         }
     }
 
-    const testPathPrefixRegExp = /\/\.(ts|lib|src)\//g;
-    export function removeTestPathPrefixes(text: string) {
-        return text !== undefined ? text.replace(testPathPrefixRegExp, "") : undefined;
+    const testPathPrefixRegExp = /(?:(file:\/{3})|\/)\.(ts|lib|src)\//g;
+    export function removeTestPathPrefixes(text: string, retainTrailingDirectorySeparator?: boolean) {
+        return text !== undefined ? text.replace(testPathPrefixRegExp, (_, scheme) => scheme || (retainTrailingDirectorySeparator ? "/" : "")) : undefined;
     }
 
     /**

@@ -332,22 +332,34 @@ namespace vfs {
             }
         }
 
+        private _depth: string[] = [];
+
         /**
          * Make a directory and all of its parent paths (if they don't exist).
          */
         public mkdirpSync(path: string) {
-            path = this._resolve(path);
             try {
+                this._depth.push(path);
+                path = this._resolve(path);
                 this.mkdirSync(path);
             }
             catch (e) {
                 if (e.code === "ENOENT") {
+                    if (this._depth.length > 10) {
+                        console.log(`path: ${path}`);
+                        console.log(`dirname: ${vpath.dirname(path)}`);
+                        console.log(this._depth);
+                        throw e;
+                    }
                     this.mkdirpSync(vpath.dirname(path));
                     this.mkdirSync(path);
                 }
                 else if (e.code !== "EEXIST") {
                     throw e;
                 }
+            }
+            finally {
+                this._depth.pop();
             }
         }
 
