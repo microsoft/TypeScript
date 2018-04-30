@@ -46,7 +46,7 @@ namespace ts {
                     value = node.right;
                 }
                 else {
-                    return value;
+                    return visitNode(value, visitor, isExpression);
                 }
             }
         }

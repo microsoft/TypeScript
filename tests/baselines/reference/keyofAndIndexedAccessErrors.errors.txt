@@ -44,6 +44,7 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(87,5): error 
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(103,9): error TS2322: Type 'Extract<keyof T, string>' is not assignable to type 'K'.
   Type 'string & keyof T' is not assignable to type 'K'.
     Type 'string' is not assignable to type 'K'.
+      Type 'string' is not assignable to type 'K'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(105,9): error TS2322: Type 'T[Extract<keyof T, string>]' is not assignable to type 'T[K]'.
   Type 'Extract<keyof T, string>' is not assignable to type 'K'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(108,5): error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
@@ -55,6 +56,7 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(114,5): error
     Type 'Extract<keyof T, string>' is not assignable to type 'J'.
       Type 'string & keyof T' is not assignable to type 'J'.
         Type 'string' is not assignable to type 'J'.
+          Type 'string' is not assignable to type 'J'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(117,5): error TS2322: Type 'T[K]' is not assignable to type 'U[J]'.
   Type 'T' is not assignable to type 'U'.
 
@@ -238,6 +240,7 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(117,5): error
 !!! error TS2322: Type 'Extract<keyof T, string>' is not assignable to type 'K'.
 !!! error TS2322:   Type 'string & keyof T' is not assignable to type 'K'.
 !!! error TS2322:     Type 'string' is not assignable to type 'K'.
+!!! error TS2322:       Type 'string' is not assignable to type 'K'.
             t[key] = tk; // ok, T[K] ==> T[keyof T]
             tk = t[key]; // error, T[keyof T] =/=> T[K]
             ~~
@@ -264,6 +267,7 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(117,5): error
 !!! error TS2322:     Type 'Extract<keyof T, string>' is not assignable to type 'J'.
 !!! error TS2322:       Type 'string & keyof T' is not assignable to type 'J'.
 !!! error TS2322:         Type 'string' is not assignable to type 'J'.
+!!! error TS2322:           Type 'string' is not assignable to type 'J'.
     
         tk = uj;
         uj = tk; // error
