@@ -1889,7 +1889,13 @@ namespace ts {
 
     export function getJSDocHost(node: JSDocTag): HasJSDoc {
         while (node.parent.kind === SyntaxKind.JSDocTypeLiteral) {
-            node = node.parent.parent.parent as JSDocParameterTag;
+            if (node.parent.parent.kind === SyntaxKind.JSDocTypedefTag) {
+                node = node.parent.parent as JSDocTypedefTag;
+            }
+            else {
+                // node.parent.parent is a type expression, child of a parameter type
+                node = node.parent.parent.parent as JSDocParameterTag;
+            }
         }
         Debug.assert(node.parent!.kind === SyntaxKind.JSDocComment);
         return node.parent!.parent!;
@@ -2140,11 +2146,13 @@ namespace ts {
             node.kind === SyntaxKind.NamespaceImport ||
             node.kind === SyntaxKind.ImportSpecifier ||
             node.kind === SyntaxKind.ExportSpecifier ||
-            node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(<ExportAssignment>node);
+            node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(<ExportAssignment>node) ||
+            isBinaryExpression(node) && getSpecialPropertyAssignmentKind(node) === SpecialPropertyAssignmentKind.ModuleExports;
     }
 
-    export function exportAssignmentIsAlias(node: ExportAssignment): boolean {
-        return isEntityNameExpression(node.expression);
+    export function exportAssignmentIsAlias(node: ExportAssignment | BinaryExpression): boolean {
+        const e = isExportAssignment(node) ? node.expression : node.right;
+        return isEntityNameExpression(e) || isClassExpression(e);
     }
 
     export function getClassExtendsHeritageClauseElement(node: ClassLikeDeclaration | InterfaceDeclaration) {
@@ -4024,12 +4032,14 @@ namespace ts {
     }
 
     /** Add a value to a set, and return true if it wasn't already present. */
-    export function addToSeen(seen: Map<true>, key: string | number): boolean {
+    export function addToSeen(seen: Map<true>, key: string | number): boolean;
+    export function addToSeen<T>(seen: Map<T>, key: string | number, value: T): boolean;
+    export function addToSeen<T>(seen: Map<T>, key: string | number, value: T = true as any): boolean {
         key = String(key);
         if (seen.has(key)) {
             return false;
         }
-        seen.set(key, true);
+        seen.set(key, value);
         return true;
     }
 

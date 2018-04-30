@@ -23,6 +23,10 @@
         "category": "Error",
         "code": 1010
     },
+    "An element access expression should take an argument.": {
+        "category": "Error",
+        "code": 1011
+    },
     "Unexpected token.": {
         "category": "Error",
         "code": 1012
@@ -966,6 +970,10 @@
     "Type arguments cannot be used here.": {
         "category": "Error",
         "code": 1342
+    },
+    "The 'import.meta' meta-property is only allowed using 'ESNext' for the 'target' and 'module' compiler options.": {
+        "category": "Error",
+        "code": 1343
     },
 
     "Duplicate identifier '{0}'.": {
@@ -3525,6 +3533,15 @@
     "Found {0} errors. Watching for file changes.": {
         "category": "Message",
         "code": 6194
+    },
+    "Resolve 'keyof' to string valued property names only (no numbers or symbols).": {
+        "category": "Message",
+        "code": 6195
+    },
+    "'{0}' is declared but never used.": {
+        "category": "Error",
+        "code": 6196,
+        "reportsUnnecessary": true
     },
 
     "Projects to reference": {

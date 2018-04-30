@@ -896,6 +896,9 @@
       <Item ItemId=";Add_0_to_unresolved_variable_90008" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add '{0}.' to unresolved variable]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Dodaj „{0}.” do nierozpoznanej zmiennej]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -998,6 +1001,9 @@
       <Item ItemId=";Add_qualifier_to_all_unresolved_variables_matching_a_member_name_95037" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add qualifier to all unresolved variables matching a member name]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Dodaj kwalifikator do wszystkich nierozpoznanych zmiennych pasujących do nazwy składowej]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1231,6 +1237,15 @@
           <Val><![CDATA[An async iterator must have a 'next()' method.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Iterator asynchroniczny musi mieć metodę „next()”.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";An_element_access_expression_should_take_an_argument_1011" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An element access expression should take an argument.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Wyrażenie dostępu do elementu powinno przyjmować argument.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6485,6 +6500,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Resolve_keyof_to_string_valued_property_names_only_no_numbers_or_symbols_6195" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Resolve 'keyof' to string valued property names only (no numbers or symbols).]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Rozwiązuj elementy „keyof” tylko do nazw właściwości mających jako wartość ciągi (nie liczby czy symbole).]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Resolving_from_node_modules_folder_6118" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Resolving from node_modules folder...]]></Val>
@@ -8731,6 +8755,15 @@
           <Val><![CDATA['{0}' is declared but its value is never read.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Element „{0}” jest zadeklarowany, ale jego wartość nie jest nigdy odczytywana.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_declared_but_never_used_6196" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is declared but never used.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Element „{0}” jest zadeklarowany, ale nie jest nigdy używany.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

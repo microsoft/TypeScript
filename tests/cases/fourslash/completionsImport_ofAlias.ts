@@ -21,9 +21,7 @@
 
 goTo.marker("");
 const options = { includeExternalModuleExports: true, sourceDisplay: "./a" };
-// TODO: https://github.com/Microsoft/TypeScript/issues/14003
-//TODO: verify that there's only one!
-verify.completionListContains({ name: "foo", source: "/a" }, "(alias) const foo: 0\nimport foo", "", "alias", /*spanIndex*/ undefined, /*hasAction*/ true, options);
+verify.completionListContains({ name: "foo", source: "/a" }, "(alias) const foo: 0\nexport foo", "", "alias", /*spanIndex*/ undefined, /*hasAction*/ true, options);
 verify.not.completionListContains({ name: "foo", source: "/a_reexport" }, undefined, undefined, undefined, undefined, undefined, options);
 verify.not.completionListContains({ name: "foo", source: "/a_reexport_2" }, undefined, undefined, undefined, undefined, undefined, options);
 

@@ -40,7 +40,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(151,57): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(155,26): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(184,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(192,32): error TS2304: Cannot find name 'SymbolScope'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(193,40): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(193,41): error TS1011: An element access expression should take an argument.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(196,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(199,42): error TS2304: Cannot find name 'ControlFlowContext'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(219,33): error TS2304: Cannot find name 'NodeType'.
@@ -215,7 +215,6 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(838,24): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(841,61): error TS2304: Cannot find name 'TypeSymbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(850,52): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(863,36): error TS2304: Cannot find name 'TypeFlow'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(867,29): error TS1015: Parameter cannot have question mark and initializer.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(868,38): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(877,40): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(891,27): error TS2304: Cannot find name 'VarFlags'.
@@ -252,9 +251,9 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1004,44): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1004,67): error TS2304: Cannot find name 'FncFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1005,57): error TS2304: Cannot find name 'FncFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1007,47): error TS2304: Cannot find name 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1009,45): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1009,46): error TS1011: An element access expression should take an argument.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1022,32): error TS2304: Cannot find name 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1024,47): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1024,48): error TS1011: An element access expression should take an argument.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1032,36): error TS2304: Cannot find name 'ControlFlowContext'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1033,29): error TS2304: Cannot find name 'BasicBlock'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1034,28): error TS2304: Cannot find name 'BasicBlock'.
@@ -517,7 +516,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,30): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts (517 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts (516 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
@@ -795,8 +794,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                                    ~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'SymbolScope'.
             public members: AST[] = new AST[];
-                                           ~~
-!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+                                            
+!!! error TS1011: An element access expression should take an argument.
     
             constructor () {
                 super(NodeType.List);
@@ -1819,8 +1818,6 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
             }
     
             public getAliasName(aliasAST?: AST = this.alias) : string {
-                                ~~~~~~~~
-!!! error TS1015: Parameter cannot have question mark and initializer.
                 if (aliasAST.nodeType == NodeType.Name) {
                                          ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
@@ -2035,8 +2032,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
 !!! error TS2304: Cannot find name 'Symbol'.
                 if (this.envids == null) {
                     this.envids = new Identifier[];
-                                                ~~
-!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+                                                 
+!!! error TS1011: An element access expression should take an argument.
                 }
                 this.envids[this.envids.length] = id;
                 var outerFnc = this.enclosingFnc;
@@ -2054,8 +2051,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
 !!! error TS2304: Cannot find name 'Symbol'.
                 if (this.jumpRefs == null) {
                     this.jumpRefs = new Identifier[];
-                                                  ~~
-!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+                                                   
+!!! error TS1011: An element access expression should take an argument.
                 }
                 var id = new Identifier(sym.name);
                 this.jumpRefs[this.jumpRefs.length] = id;

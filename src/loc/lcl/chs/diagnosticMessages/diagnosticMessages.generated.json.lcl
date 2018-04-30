@@ -903,6 +903,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_0_to_unresolved_variable_90008" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add '{0}.' to unresolved variable]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[将“{0}.”添加到未解析的变量]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Add_all_missing_async_modifiers_95041" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add all missing 'async' modifiers]]></Val>
@@ -999,24 +1008,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Add_this_to_all_unresolved_variables_matching_a_member_name_95037" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Add_qualifier_to_all_unresolved_variables_matching_a_member_name_95037" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add 'this.' to all unresolved variables matching a member name]]></Val>
+          <Val><![CDATA[Add qualifier to all unresolved variables matching a member name]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[将 "this." 添加到匹配成员名称的所有未解析变量]]></Val>
+            <Val><![CDATA[将限定符添加到匹配成员名称的所有未解析变量]]></Val>
           </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Add_this_to_unresolved_variable_90008" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Add 'this.' to unresolved variable]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[向未解析的变量添加 "this."]]></Val>
-          </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Add 'this.' to unresolved variable.]]></Val>
-          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1250,6 +1247,15 @@
           <Val><![CDATA[An async iterator must have a 'next()' method.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[异步迭代器必须具有 "next()" 方法。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";An_element_access_expression_should_take_an_argument_1011" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An element access expression should take an argument.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[元素访问表达式应采用参数。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6507,6 +6513,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Resolve_keyof_to_string_valued_property_names_only_no_numbers_or_symbols_6195" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Resolve 'keyof' to string valued property names only (no numbers or symbols).]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[只将 "keyof" 解析为字符串值的属性名称(不含数字或符号)。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Resolving_from_node_modules_folder_6118" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Resolving from node_modules folder...]]></Val>
@@ -8753,6 +8768,15 @@
           <Val><![CDATA['{0}' is declared but its value is never read.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[已声明“{0}”，但从未读取其值。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_declared_but_never_used_6196" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is declared but never used.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[“{0}”已声明，但从未使用过。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

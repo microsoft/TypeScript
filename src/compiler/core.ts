@@ -1762,6 +1762,10 @@ namespace ts {
         return compareComparableValues(a, b);
     }
 
+    export function getStringComparer(ignoreCase?: boolean) {
+        return ignoreCase ? compareStringsCaseInsensitive : compareStringsCaseSensitive;
+    }
+
     /**
      * Creates a string comparer for use with string collation in the UI.
      */
@@ -2290,7 +2294,7 @@ namespace ts {
         const aComponents = getNormalizedPathComponents(a, currentDirectory);
         const bComponents = getNormalizedPathComponents(b, currentDirectory);
         const sharedLength = Math.min(aComponents.length, bComponents.length);
-        const comparer = ignoreCase ? compareStringsCaseInsensitive : compareStringsCaseSensitive;
+        const comparer = getStringComparer(ignoreCase);
         for (let i = 0; i < sharedLength; i++) {
             const result = comparer(aComponents[i], bComponents[i]);
             if (result !== Comparison.EqualTo) {
@@ -2631,7 +2635,7 @@ namespace ts {
             }
 
             // Sort the offsets array using either the literal or canonical path representations.
-            includeBasePaths.sort(useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive);
+            includeBasePaths.sort(getStringComparer(!useCaseSensitiveFileNames));
 
             // Iterate over each include base path and include unique base paths that are not a
             // subpath of an existing base path

@@ -905,6 +905,9 @@
       <Item ItemId=";Add_0_to_unresolved_variable_90008" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add '{0}.' to unresolved variable]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Добавить "{0}." к неразрешенной переменной]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1007,6 +1010,9 @@
       <Item ItemId=";Add_qualifier_to_all_unresolved_variables_matching_a_member_name_95037" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add qualifier to all unresolved variables matching a member name]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Добавить квалификатор ко всем неразрешенным переменным, соответствующим имени члена]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1240,6 +1246,15 @@
           <Val><![CDATA[An async iterator must have a 'next()' method.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[В асинхронном итераторе должен быть метод next().]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";An_element_access_expression_should_take_an_argument_1011" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An element access expression should take an argument.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Выражение доступа к элементу должно принимать аргумент.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6497,6 +6512,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Resolve_keyof_to_string_valued_property_names_only_no_numbers_or_symbols_6195" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Resolve 'keyof' to string valued property names only (no numbers or symbols).]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Разрешать "keyof" только в имена свойств со строковым значением (не числа и не символы).]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Resolving_from_node_modules_folder_6118" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Resolving from node_modules folder...]]></Val>
@@ -8743,6 +8767,15 @@
           <Val><![CDATA['{0}' is declared but its value is never read.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Свойство "{0}" объявлено, но его значение не было прочитано.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_declared_but_never_used_6196" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is declared but never used.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{0}" объявлен, но никогда не использовался.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

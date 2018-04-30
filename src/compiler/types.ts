@@ -491,19 +491,21 @@ namespace ts {
         ThisNodeOrAnySubNodesHasError = 1 << 17, // If this node or any of its children had an error
         HasAggregatedChildData = 1 << 18, // If we've computed data from children and cached it in this node
 
-        // This flag will be set when the parser encounters a dynamic import expression so that module resolution
-        // will not have to walk the tree if the flag is not set. However, this flag is just a approximation because
-        // once it is set, the flag never gets cleared (hence why it's named "PossiblyContainsDynamicImport").
-        // During editing, if dynamic import is removed, incremental parsing will *NOT* update this flag. This means that the tree will always be traversed
-        // during module resolution. However, the removal operation should not occur often and in the case of the
+        // These flags will be set when the parser encounters a dynamic import expression or 'import.meta' to avoid
+        // walking the tree if the flags are not set. However, these flags are just a approximation
+        // (hence why it's named "PossiblyContainsDynamicImport") because once set, the flags never get cleared.
+        // During editing, if a dynamic import is removed, incremental parsing will *NOT* clear this flag.
+        // This means that the tree will always be traversed during module resolution, or when looking for external module indicators.
+        // However, the removal operation should not occur often and in the case of the
         // removal, it is likely that users will add the import anyway.
         // The advantage of this approach is its simplicity. For the case of batch compilation,
         // we guarantee that users won't have to pay the price of walking the tree if a dynamic import isn't used.
-        /* @internal */
-        PossiblyContainsDynamicImport = 1 << 19,
-        JSDoc =              1 << 20, // If node was parsed inside jsdoc
-        /* @internal */ Ambient =         1 << 21, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
-        /* @internal */ InWithStatement = 1 << 22, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
+        /* @internal */ PossiblyContainsDynamicImport = 1 << 19,
+        /* @internal */ PossiblyContainsImportMeta    = 1 << 20,
+
+        JSDoc                                         = 1 << 21, // If node was parsed inside jsdoc
+        /* @internal */ Ambient                       = 1 << 22, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
+        /* @internal */ InWithStatement               = 1 << 23, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
 
         BlockScoped = Let | Const,
 
@@ -515,6 +517,11 @@ namespace ts {
 
         // Exclude these flags when parsing a Type
         TypeExcludesFlags = YieldContext | AwaitContext,
+
+        // Represents all flags that are potentially set once and
+        // never cleared on SourceFiles which get re-used in between incremental parses.
+        // See the comment above on `PossiblyContainsDynamicImport` and `PossiblyContainsImportMeta`.
+        /* @internal */ PermanentlySetIncrementalFlags = PossiblyContainsDynamicImport | PossiblyContainsImportMeta,
     }
 
     export const enum ModifierFlags {
@@ -1686,7 +1693,7 @@ namespace ts {
     export interface ElementAccessExpression extends MemberExpression {
         kind: SyntaxKind.ElementAccessExpression;
         expression: LeftHandSideExpression;
-        argumentExpression?: Expression;
+        argumentExpression: Expression;
     }
 
     export interface SuperElementAccessExpression extends ElementAccessExpression {
@@ -1757,7 +1764,7 @@ namespace ts {
     //       for the same reasons we treat NewExpression as a PrimaryExpression.
     export interface MetaProperty extends PrimaryExpression {
         kind: SyntaxKind.MetaProperty;
-        keywordToken: SyntaxKind.NewKeyword;
+        keywordToken: SyntaxKind.NewKeyword | SyntaxKind.ImportKeyword;
         name: Identifier;
     }
 
@@ -2558,7 +2565,11 @@ namespace ts {
         languageVersion: ScriptTarget;
         /* @internal */ scriptKind: ScriptKind;
 
-        // The first node that causes this file to be an external module
+        /**
+         * The first "most obvious" node that makes a file an external module.
+         * This is intended to be the first top-level import/export,
+         * but could be arbitrarily nested (e.g. `import.meta`).
+         */
         /* @internal */ externalModuleIndicator: Node;
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator: Node;
@@ -3014,6 +3025,13 @@ namespace ts {
          * Others are added in computeSuggestionDiagnostics.
          */
         /* @internal */ getSuggestionDiagnostics(file: SourceFile): ReadonlyArray<Diagnostic>;
+
+        /**
+         * Depending on the operation performed, it may be appropriate to throw away the checker
+         * if the cancellation token is triggered. Typically, if it is used for error checking
+         * and the operation is cancelled, then it should be discarded, otherwise it is safe to keep.
+         */
+        runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
     }
 
     /* @internal */
@@ -3391,6 +3409,7 @@ namespace ts {
         /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
         /* @internal */ parent?: Symbol;        // Parent symbol
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
+        /* @internal */ nameType?: Type;        // Type associated with a late-bound symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
         /* @internal */ isReferenced?: SymbolFlags; // True if the symbol is referenced elsewhere. Keeps track of the meaning of a reference in case a symbol is both a type parameter and parameter.
         /* @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
@@ -3425,7 +3444,6 @@ namespace ts {
         enumKind?: EnumKind;                // Enum declaration classification
         originatingImport?: ImportDeclaration | ImportCall; // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
         lateSymbol?: Symbol;                // Late-bound symbol for a computed property
-        nameType?: Type;                    // Type associate with a late-bound or mapped type property symbol's name
     }
 
     /* @internal */
@@ -3622,11 +3640,14 @@ namespace ts {
         Intrinsic = Any | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
         /* @internal */
         Primitive = String | Number | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol,
-        StringLike = String | StringLiteral | Index,
+        StringLike = String | StringLiteral,
         NumberLike = Number | NumberLiteral | Enum,
         BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
         ESSymbolLike = ESSymbol | UniqueESSymbol,
+        VoidLike = Void | Undefined,
+        /* @internal */
+        DisjointDomains = NonPrimitive | StringLike | NumberLike | BooleanLike | ESSymbolLike | VoidLike | Null,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
         TypeVariable = TypeParameter | IndexedAccess,
@@ -3643,7 +3664,15 @@ namespace ts {
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
         /* @internal */
         PropagatingFlags = ContainsWideningType | ContainsObjectLiteral | ContainsAnyFunctionType,
+        // The following flags are used for different purposes during union and intersection type construction
         /* @internal */
+        NonWideningType = ContainsWideningType,
+        /* @internal */
+        Wildcard = ContainsObjectLiteral,
+        /* @internal */
+        EmptyObject = ContainsAnyFunctionType,
+        /* @internal */
+        ConstructionFlags = NonWideningType | Wildcard | EmptyObject
     }
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
@@ -3779,7 +3808,7 @@ namespace ts {
         /* @internal */
         resolvedIndexType: IndexType;
         /* @internal */
-        resolvedDeclaredIndexType: IndexType;
+        resolvedStringIndexType: IndexType;
         /* @internal */
         resolvedBaseConstraint: Type;
         /* @internal */
@@ -3868,7 +3897,7 @@ namespace ts {
         /* @internal */
         resolvedIndexType?: IndexType;
         /* @internal */
-        resolvedDeclaredIndexType?: IndexType;
+        resolvedStringIndexType?: IndexType;
     }
 
     // Type parameters (TypeFlags.TypeParameter)
@@ -3900,9 +3929,9 @@ namespace ts {
 
     // keyof T types (TypeFlags.Index)
     export interface IndexType extends InstantiableType {
-        /* @internal */
-        isDeclaredType?: boolean;
         type: InstantiableType | UnionOrIntersectionType;
+        /* @internal */
+        stringsOnly: boolean;
     }
 
     export interface ConditionalRoot {
@@ -4061,10 +4090,10 @@ namespace ts {
 
     /* @internal */
     export interface WideningContext {
-        parent?: WideningContext;            // Parent context
-        propertyName?: __String;             // Name of property in parent
-        siblings?: Type[];                   // Types of siblings
-        resolvedPropertyNames?: __String[];  // Property names occurring in sibling object literals
+        parent?: WideningContext;       // Parent context
+        propertyName?: __String;        // Name of property in parent
+        siblings?: Type[];              // Types of siblings
+        resolvedProperties?: Symbol[];  // Properties occurring in sibling object literals
     }
 
     /* @internal */
@@ -4190,6 +4219,7 @@ namespace ts {
         inlineSources?: boolean;
         isolatedModules?: boolean;
         jsx?: JsxEmit;
+        keyofStringsOnly?: boolean;
         lib?: string[];
         /*@internal*/listEmittedFiles?: boolean;
         /*@internal*/listFiles?: boolean;
