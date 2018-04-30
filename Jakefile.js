@@ -127,7 +127,8 @@ var es2017LibrarySourceMap = es2017LibrarySource.map(function (source) {
 
 var es2018LibrarySource = [
     "es2018.regexp.d.ts",
-    "es2018.promise.d.ts"
+    "es2018.promise.d.ts",
+    "es2018.intl.d.ts"
 ];
 
 var es2018LibrarySourceMap = es2018LibrarySource.map(function (source) {
