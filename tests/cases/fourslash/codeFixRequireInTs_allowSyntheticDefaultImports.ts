@@ -2,10 +2,15 @@
 
 // @allowSyntheticDefaultImports: true
 
-// @Filename: /a.ts
+////export {};
 ////const a = [|require("a")|];
+////a;
 
 verify.codeFix({
     description: "Convert 'require' to 'import'",
-    newFileContent: `import a from "a";`,
+    newFileContent:
+// TODO: GH#23781
+`export {};
+    import a from "a";
+a;`,
 });
