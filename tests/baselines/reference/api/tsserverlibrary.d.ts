@@ -4397,6 +4397,7 @@ declare namespace ts {
         getScriptKind?(fileName: string): ScriptKind;
         getScriptVersion(fileName: string): string;
         getScriptSnapshot(fileName: string): IScriptSnapshot | undefined;
+        getProjectReferences?(): ReadonlyArray<ProjectReference> | undefined;
         getLocalizedDiagnosticMessages?(): any;
         getCancellationToken?(): HostCancellationToken;
         getCurrentDirectory(): string;
@@ -5381,6 +5382,7 @@ declare namespace ts.server {
         configHasFilesProperty: boolean;
         configHasIncludeProperty: boolean;
         configHasExcludeProperty: boolean;
+        projectReferences: ReadonlyArray<ProjectReference> | undefined;
         /**
          * these fields can be present in the project file
          */
@@ -7752,6 +7754,7 @@ declare namespace ts.server {
         getCompilerOptions(): CompilerOptions;
         getNewLine(): string;
         getProjectVersion(): string;
+        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined;
         getScriptFileNames(): string[];
         private getOrCreateScriptInfoAndAttachToProject;
         getScriptKind(fileName: string): ScriptKind;
@@ -7851,6 +7854,7 @@ declare namespace ts.server {
      */
     class ConfiguredProject extends Project {
         compileOnSaveEnabled: boolean;
+        private projectReferences;
         private typeAcquisition;
         private directoriesWatchedForWildcards;
         readonly canonicalConfigFilePath: NormalizedPath;
@@ -7863,6 +7867,8 @@ declare namespace ts.server {
          */
         updateGraph(): boolean;
         getConfigFilePath(): NormalizedPath;
+        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined;
+        updateReferences(refs: ReadonlyArray<ProjectReference> | undefined): void;
         enablePlugins(): void;
         /**
          * Get the errors that dont have any file name associated

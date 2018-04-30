@@ -607,7 +607,8 @@ namespace ts {
                 resolvedProjectReferences.push(parsedRef);
                 if (parsedRef) {
                     if (parsedRef.commandLine.options.outFile) {
-                        processSourceFile(parsedRef.commandLine.options.outFile, /*isDefaultLib*/ false, /*packageId*/ undefined);
+                        const dtsOutfile = changeExtension(parsedRef.commandLine.options.outFile, ".d.ts");
+                        processSourceFile(dtsOutfile, /*isDefaultLib*/ false, /*packageId*/ undefined);
                     }
                     addProjectReferenceRedirects(parsedRef.commandLine, projectReferenceRedirects);
                 }
@@ -1179,6 +1180,9 @@ namespace ts {
                 const ref = projectReferences[i];
                 const resolvedRefOpts = resolvedProjectReferences[i].commandLine;
                 if (ref.prepend && resolvedRefOpts && resolvedRefOpts.options) {
+                    // Upstream project didn't have outFile set -- skip (error will have been issued earlier)
+                    if (!resolvedRefOpts.options.outFile) continue;
+
                     const dtsFilename = changeExtension(resolvedRefOpts.options.outFile, ".d.ts");
                     const js = host.readFile(resolvedRefOpts.options.outFile) || `/* Input file ${resolvedRefOpts.options.outFile} was missing */\r\n`;
                     const dts = host.readFile(dtsFilename) || `/* Input file ${dtsFilename} was missing */\r\n`;
@@ -2031,6 +2035,10 @@ namespace ts {
         function processTypeReferenceDirectives(file: SourceFile) {
             // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
             const typeDirectives = map(file.typeReferenceDirectives, ref => ref.fileName.toLocaleLowerCase());
+            if (!typeDirectives) {
+                return;
+            }
+
             const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeDirectives, file.fileName);
 
             for (let i = 0; i < typeDirectives.length; i++) {
@@ -2199,10 +2207,11 @@ namespace ts {
             const refPath = resolveProjectReferencePath(host, ref);
             // An absolute path pointing to the containing directory of the config file
             const basePath = getNormalizedAbsolutePath(getDirectoryPath(refPath), host.getCurrentDirectory());
-            const sourceFile = host.getSourceFile(refPath, ScriptTarget.JSON);
+            const sourceFile = host.getSourceFile(refPath, ScriptTarget.JSON) as JsonSourceFile;
             if (sourceFile === undefined) {
                 return undefined;
             }
+
             const commandLine = parseJsonSourceFileConfigFileContent(sourceFile, parseConfigHostFromCompilerHost(host), basePath, /*existingOptions*/ undefined, refPath);
             return { commandLine, sourceFile };
         }
