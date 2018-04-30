@@ -21,7 +21,9 @@ verify.codeFix({
     description: "Convert to ES6 module",
     newFileContent:
 `export function f() {}
-export class C {}
+const _C = class {
+};
+export { _C as C };
 export const x = 0;
 export function a1() {}
 export function a2() { return 0; }

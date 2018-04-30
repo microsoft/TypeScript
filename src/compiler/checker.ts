@@ -7626,23 +7626,38 @@ namespace ts {
                 return unknownType;
             }
 
-            // A jsdoc TypeReference may have resolved to a value (as opposed to a type). If
-            // the symbol is a constructor function, return the inferred class type; otherwise,
-            // the type of this reference is just the type of the value we resolved to.
-            const assignedType = getAssignedClassType(symbol);
-            const valueType = getTypeOfSymbol(symbol);
-            const referenceType = valueType.symbol && !isInferredClassType(valueType) && getTypeReferenceTypeWorker(node, valueType.symbol, typeArguments);
-            if (referenceType || assignedType) {
-                return referenceType && assignedType ? getIntersectionType([assignedType, referenceType]) : referenceType || assignedType;
+            const jsdocType = getJSDocTypeReference(node, symbol, typeArguments);
+            if (jsdocType) {
+                return jsdocType;
             }
 
             // Resolve the type reference as a Type for the purpose of reporting errors.
             resolveTypeReferenceName(getTypeReferenceName(node), SymbolFlags.Type);
-            return valueType;
+            return getTypeOfSymbol(symbol);
+        }
+
+        /**
+         * A jsdoc TypeReference may have resolved to a value (as opposed to a type). If
+         * the symbol is a constructor function, return the inferred class type; otherwise,
+         * the type of this reference is just the type of the value we resolved to.
+         */
+        function getJSDocTypeReference(node: NodeWithTypeArguments, symbol: Symbol, typeArguments: Type[]): Type | undefined {
+            const assignedType = getAssignedClassType(symbol);
+            const valueType = getTypeOfSymbol(symbol);
+            const referenceType = valueType.symbol && valueType.symbol !== symbol && !isInferredClassType(valueType) && getTypeReferenceTypeWorker(node, valueType.symbol, typeArguments);
+            if (referenceType || assignedType) {
+                return referenceType && assignedType ? getIntersectionType([assignedType, referenceType]) : referenceType || assignedType;
+            }
         }
 
         function getTypeReferenceTypeWorker(node: NodeWithTypeArguments, symbol: Symbol, typeArguments: Type[]): Type | undefined {
             if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                if (symbol.valueDeclaration && isBinaryExpression(symbol.valueDeclaration.parent)) {
+                    const jsdocType = getJSDocTypeReference(node, symbol, typeArguments);
+                    if (jsdocType) {
+                        return jsdocType;
+                    }
+                }
                 return getTypeFromClassOrInterfaceReference(node, symbol, typeArguments);
             }
 
@@ -20031,6 +20046,7 @@ namespace ts {
                         getUnionType([removeDefinitelyFalsyTypes(leftType), rightType], UnionReduction.Subtype) :
                         leftType;
                 case SyntaxKind.EqualsToken:
+                    checkSpecialAssignment(left, right);
                     checkAssignmentOperator(rightType);
                     return getRegularTypeOfObjectLiteral(rightType);
                 case SyntaxKind.CommaToken:
@@ -20038,6 +20054,24 @@ namespace ts {
                         error(left, Diagnostics.Left_side_of_comma_operator_is_unused_and_has_no_side_effects);
                     }
                     return rightType;
+            }
+
+            function checkSpecialAssignment(left: Node, right: Expression) {
+                const special = getSpecialPropertyAssignmentKind(left.parent as BinaryExpression);
+                if (special === SpecialPropertyAssignmentKind.ModuleExports) {
+                    const rightType = checkExpression(right, checkMode);
+                    for (const prop of getPropertiesOfObjectType(rightType)) {
+                        const propType = getTypeOfSymbol(prop);
+                        if (propType.symbol && propType.symbol.flags & SymbolFlags.Class) {
+                            const name = prop.escapedName;
+                            const symbol = resolveName(prop.valueDeclaration, name, SymbolFlags.Type, undefined, name, /*isUse*/ false);
+                            if (symbol) {
+                                grammarErrorOnNode(symbol.declarations[0], Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(name));
+                                return grammarErrorOnNode(prop.valueDeclaration, Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(name));
+                            }
+                        }
+                    }
+                }
             }
 
             function isEvalNode(node: Expression) {
