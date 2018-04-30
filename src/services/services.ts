@@ -2093,16 +2093,16 @@ namespace ts {
                             descriptor = descriptors[i];
                         }
                     }
-                    Debug.assert(descriptor !== undefined);
+                    if (descriptor === undefined) return Debug.fail();
 
                     // We don't want to match something like 'TODOBY', so we make sure a non
                     // letter/digit follows the match.
-                    if (isLetterOrDigit(fileContents.charCodeAt(matchPosition + descriptor!.text.length))) {
+                    if (isLetterOrDigit(fileContents.charCodeAt(matchPosition + descriptor.text.length))) {
                         continue;
                     }
 
                     const message = matchArray[2];
-                    result.push({ descriptor: descriptor!, message, position: matchPosition });
+                    result.push({ descriptor, message, position: matchPosition });
                 }
             }
 

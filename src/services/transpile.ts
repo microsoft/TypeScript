@@ -106,9 +106,9 @@ namespace ts {
         // Emit
         program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ undefined, transpileOptions.transformers);
 
-        Debug.assert(outputText !== undefined, "Output generation failed");
+        if (outputText === undefined) return Debug.fail("Output generation failed");
 
-        return { outputText: outputText!, diagnostics, sourceMapText };
+        return { outputText, diagnostics, sourceMapText };
     }
 
     /*

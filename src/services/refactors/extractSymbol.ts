@@ -1277,8 +1277,8 @@ namespace ts.refactor.extractSymbol {
             prevMember = member;
         }
 
-        Debug.assert(prevMember !== undefined); // If the loop didn't return, then it did set prevMember.
-        return prevMember!;
+        if (prevMember === undefined) return Debug.fail(); // If the loop didn't return, then it did set prevMember.
+        return prevMember;
     }
 
     function getNodeToInsertConstantBefore(node: Node, scope: Scope): Statement {

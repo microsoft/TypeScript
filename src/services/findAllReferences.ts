@@ -920,8 +920,8 @@ namespace ts.FindAllReferences.Core {
         if (!(referenceLocation === propertyName && state.options.isForRename)) {
             const exportKind = referenceLocation.originalKeywordKind === SyntaxKind.DefaultKeyword ? ExportKind.Default : ExportKind.Named;
             const exportInfo = getExportInfo(referenceSymbol, exportKind, state.checker);
-            Debug.assert(!!exportInfo);
-            searchForImportsOfExport(referenceLocation, referenceSymbol, exportInfo!, state);
+            if (!exportInfo) return Debug.fail();
+            searchForImportsOfExport(referenceLocation, referenceSymbol, exportInfo, state);
         }
 
         // At `export { x } from "foo"`, also search for the imported symbol `"foo".x`.

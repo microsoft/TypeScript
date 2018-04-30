@@ -330,8 +330,8 @@ namespace ts.SymbolDisplay {
             else {
                 // Method/function type parameter
                 const decl = getDeclarationOfKind(symbol, SyntaxKind.TypeParameter);
-                Debug.assert(decl !== undefined);
-                const declaration = decl!.parent;
+                if (decl === undefined) return Debug.fail();
+                const declaration = decl.parent;
 
                 if (declaration) {
                     if (isFunctionLikeKind(declaration.kind)) {

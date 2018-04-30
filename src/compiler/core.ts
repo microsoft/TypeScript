@@ -2952,8 +2952,8 @@ namespace ts {
         }
 
         export function assertDefined<T>(value: T | null | undefined, message?: string): T {
-            assert(value !== undefined && value !== null, message);
-            return value!;
+            if (value === undefined || value === null) return fail(message);
+            return value;
         }
 
         export function assertEachDefined<T, A extends ReadonlyArray<T>>(value: A, message?: string): A {

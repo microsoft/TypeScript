@@ -3761,7 +3761,7 @@ namespace ts {
     }
 
     export function convertFunctionDeclarationToExpression(node: FunctionDeclaration) {
-        Debug.assert(!!node.body);
+        if (!node.body) return Debug.fail();
         const updated = createFunctionExpression(
             node.modifiers,
             node.asteriskToken,
@@ -3769,7 +3769,7 @@ namespace ts {
             node.typeParameters,
             node.parameters,
             node.type,
-            node.body! // TODO: GH#18217
+            node.body
         );
         setOriginalNode(updated, node);
         setTextRange(updated, node);

@@ -2041,14 +2041,14 @@ namespace ts {
          */
         function endBlock(): CodeBlock {
             const block = peekBlock();
-            Debug.assert(block !== undefined, "beginBlock was never called.");
+            if (block === undefined) return Debug.fail("beginBlock was never called.");
 
             const index = blockActions!.length;
             blockActions![index] = BlockAction.Close;
             blockOffsets![index] = operations ? operations.length : 0;
-            blocks![index] = block!;
+            blocks![index] = block;
             blockStack!.pop();
-            return block!;
+            return block;
         }
 
         /**

@@ -210,8 +210,8 @@ namespace ts.BuilderState {
             return false;
         }
 
-        const info = state.fileInfos.get(sourceFile.path)!;
-        Debug.assert(!!info);
+        const info = state.fileInfos.get(sourceFile.path);
+        if (!info) return Debug.fail();
 
         const prevSignature = info.signature;
         let latestSignature: string;

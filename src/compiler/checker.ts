@@ -101,8 +101,8 @@ namespace ts {
             },
             getSymbolsOfParameterPropertyDeclaration: (parameterIn, parameterName) => {
                 const parameter = getParseTreeNode(parameterIn, isParameter);
-                Debug.assert(parameter !== undefined, "Cannot get symbols of a synthetic parameter that cannot be resolved to a parse-tree node.");
-                return getSymbolsOfParameterPropertyDeclaration(parameter!, escapeLeadingUnderscores(parameterName));
+                if (parameter === undefined) return Debug.fail("Cannot get symbols of a synthetic parameter that cannot be resolved to a parse-tree node.");
+                return getSymbolsOfParameterPropertyDeclaration(parameter, escapeLeadingUnderscores(parameterName));
             },
             getDeclaredTypeOfSymbol,
             getPropertiesOfType,
@@ -229,8 +229,8 @@ namespace ts {
                 const links = getSymbolLinks(symbol);
                 if (!links.immediateTarget) {
                     const node = getDeclarationOfAliasSymbol(symbol);
-                    Debug.assert(!!node);
-                    links.immediateTarget = getTargetOfAliasDeclaration(node!, /*dontRecursivelyResolve*/ true);
+                    if (!node) return Debug.fail();
+                    links.immediateTarget = getTargetOfAliasDeclaration(node, /*dontRecursivelyResolve*/ true);
                 }
 
                 return links.immediateTarget;
@@ -1994,8 +1994,8 @@ namespace ts {
             const links = getSymbolLinks(symbol);
             if (!links.target) {
                 links.target = resolvingSymbol;
-                const node = getDeclarationOfAliasSymbol(symbol)!;
-                Debug.assert(!!node);
+                const node = getDeclarationOfAliasSymbol(symbol);
+                if (!node) return Debug.fail();
                 const target = getTargetOfAliasDeclaration(node);
                 if (links.target === resolvingSymbol) {
                     links.target = target || unknownSymbol;
@@ -2030,8 +2030,8 @@ namespace ts {
             const links = getSymbolLinks(symbol);
             if (!links.referenced) {
                 links.referenced = true;
-                const node = getDeclarationOfAliasSymbol(symbol)!;
-                Debug.assert(!!node);
+                const node = getDeclarationOfAliasSymbol(symbol);
+                if (!node) return Debug.fail();
                 if (node.kind === SyntaxKind.ExportAssignment) {
                     // export default <symbol>
                     checkExpressionCached((<ExportAssignment>node).expression);
@@ -2928,11 +2928,11 @@ namespace ts {
 
         function typeToString(type: Type, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.AllowUniqueESSymbolType, writer: EmitTextWriter = createTextWriter("")): string {
             const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors, writer);
-            Debug.assert(typeNode !== undefined, "should always get typenode");
+            if (typeNode === undefined) return Debug.fail("should always get typenode");
             const options = { removeComments: true };
             const printer = createPrinter(options);
             const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
-            printer.writeNode(EmitHint.Unspecified, typeNode!, /*sourceFile*/ sourceFile, writer);
+            printer.writeNode(EmitHint.Unspecified, typeNode, /*sourceFile*/ sourceFile, writer);
             const result = writer.getText();
 
             const maxLength = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation ? undefined : 100;
@@ -10278,8 +10278,8 @@ namespace ts {
                                 // We know *exactly* where things went wrong when comparing the types.
                                 // Use this property as the error node as this will be more helpful in
                                 // reasoning about what went wrong.
-                                Debug.assert(!!errorNode);
-                                if (isJsxAttributes(errorNode!) || isJsxOpeningLikeElement(errorNode!)) {
+                                if (!errorNode) return Debug.fail();
+                                if (isJsxAttributes(errorNode) || isJsxOpeningLikeElement(errorNode)) {
                                     // JsxAttributes has an object-literal flag and undergo same type-assignablity check as normal object-literal.
                                     // However, using an object-literal error message will be very confusing to the users so we give different a message.
                                     reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(prop), typeToString(target));
@@ -21703,8 +21703,8 @@ namespace ts {
             const thenFunction = getTypeOfPropertyOfType(type, "then" as __String);
             if (thenFunction && getSignaturesOfType(thenFunction, SignatureKind.Call).length > 0) {
                 if (errorNode) {
-                    Debug.assert(!!diagnosticMessage);
-                    error(errorNode, diagnosticMessage!);
+                    if (!diagnosticMessage) return Debug.fail();
+                    error(errorNode, diagnosticMessage);
                 }
                 return undefined;
             }

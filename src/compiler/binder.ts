@@ -2507,9 +2507,9 @@ namespace ts {
                 return action(e, lookupSymbolForPropertyAccess(e));
             }
             else {
-                const s = getJSInitializerSymbol(forEachIdentifierInEntityName(e.expression, action))!;
-                Debug.assert(!!s && !!s.exports);
-                return action(e.name, s.exports!.get(e.name.escapedText));
+                const s = getJSInitializerSymbol(forEachIdentifierInEntityName(e.expression, action));
+                if (!s || !s.exports) return Debug.fail();
+                return action(e.name, s.exports.get(e.name.escapedText));
             }
         }
 
