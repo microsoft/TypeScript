@@ -6,7 +6,7 @@
 // @Filename: /x.ts
 ////
 
-// @Filename: /x0.ts
+// @Filename: /x.1.ts
 ////
 
 verify.moveToNewFile({
@@ -14,7 +14,7 @@ verify.moveToNewFile({
         "/a.ts":
 ``,
 
-        "/x00.ts":
+        "/x.2.ts":
 `export const x = 0;`,
     },
 });

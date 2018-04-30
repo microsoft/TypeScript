@@ -9,5 +9,5 @@
 
 for (const range of test.ranges()) {
     goTo.selectRange(range);
-    verify.not.refactorAvailable("Move to new file")
+    verify.not.refactorAvailable("Move to a new file")
 }

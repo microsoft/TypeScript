@@ -1262,6 +1262,17 @@ namespace ts {
             return name && name.kind === SyntaxKind.Identifier ? name.escapedText : undefined;
         });
     }
+
+    export function getPropertySymbolFromBindingElement(checker: TypeChecker, bindingElement: BindingElement & { name: Identifier }) {
+        const typeOfPattern = checker.getTypeAtLocation(bindingElement.parent);
+        const propSymbol = typeOfPattern && checker.getPropertyOfType(typeOfPattern, bindingElement.name.text);
+        if (propSymbol && propSymbol.flags & SymbolFlags.Accessor) {
+            // See GH#16922
+            Debug.assert(!!(propSymbol.flags & SymbolFlags.Transient));
+            return (propSymbol as TransientSymbol).target;
+        }
+        return propSymbol;
+    }
 }
 
 // Display-part writer helpers

@@ -3059,10 +3059,10 @@ Actual: ${stringify(fullActual)}`);
         public moveToNewFile(options: FourSlashInterface.MoveToNewFileOptions): void {
             assert(this.getRanges().length === 1);
             const range = this.getRanges()[0];
-            const refactor = ts.find(this.getApplicableRefactors(range), r => r.name === "Move to new file");
+            const refactor = ts.find(this.getApplicableRefactors(range), r => r.name === "Move to a new file");
             assert(refactor.actions.length === 1);
             const action = ts.first(refactor.actions);
-            assert(action.name === "Move to new file" && action.description === "Move to new file");
+            assert(action.name === "Move to a new file" && action.description === "Move to a new file");
 
             const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, this.formatCodeSettings, range, refactor.name, action.name, ts.defaultPreferences);
             for (const edit of editInfo.edits) {

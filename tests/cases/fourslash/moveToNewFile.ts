@@ -4,7 +4,7 @@
 ////import { a, b } from "./other";
 ////const p = 0;
 ////[|const y = p + b;|]
-////y;
+////a; y;
 
 verify.moveToNewFile({
     newFileContents: {
@@ -13,7 +13,7 @@ verify.moveToNewFile({
 
 import { a } from "./other";
 export const p = 0;
-y;`,
+a; y;`,
 
         "/y.ts":
 `import { b } from "./other";

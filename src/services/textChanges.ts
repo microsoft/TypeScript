@@ -458,7 +458,17 @@ namespace ts.textChanges {
             this.insertNodeAt(sourceFile, cls.members.pos, newElement, { indentation, prefix, suffix });
         }
 
-        public insertNodeAfter(sourceFile: SourceFile, after: Node, newNode: Node): this {
+        public insertNodeAfter(sourceFile: SourceFile, after: Node, newNode: Node): void {
+            const endPosition = this.insertNodeAfterWorker(sourceFile, after, newNode);
+            this.insertNodeAt(sourceFile, endPosition, newNode, this.getInsertNodeAfterOptions(after));
+        }
+
+        public insertNodesAfter(sourceFile: SourceFile, after: Node, newNodes: ReadonlyArray<Node>): void {
+            const endPosition = this.insertNodeAfterWorker(sourceFile, after, first(newNodes));
+            this.insertNodesAt(sourceFile, endPosition, newNodes, this.getInsertNodeAfterOptions(after));
+        }
+
+        private insertNodeAfterWorker(sourceFile: SourceFile, after: Node, newNode: Node): number {
             if (needSemicolonBetween(after, newNode)) {
                 // check if previous statement ends with semicolon
                 // if not - insert semicolon to preserve the code from changing the meaning due to ASI
@@ -466,8 +476,7 @@ namespace ts.textChanges {
                     this.replaceRange(sourceFile, createTextRange(after.end), createToken(SyntaxKind.SemicolonToken));
                 }
             }
-            const endPosition = getAdjustedEndPosition(sourceFile, after, {});
-            return this.replaceRange(sourceFile, createTextRange(endPosition), newNode, this.getInsertNodeAfterOptions(after));
+            return getAdjustedEndPosition(sourceFile, after, {});
         }
 
         private getInsertNodeAfterOptions(node: Node): InsertNodeOptions {
