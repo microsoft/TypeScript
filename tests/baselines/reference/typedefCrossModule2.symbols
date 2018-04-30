@@ -1,6 +1,7 @@
 === tests/cases/conformance/jsdoc/use.js ===
 var mod = require('./mod1.js');
 >mod : Symbol(mod, Decl(use.js, 0, 3))
+>require : Symbol(require)
 >'./mod1.js' : Symbol("tests/cases/conformance/jsdoc/mod1", Decl(mod1.js, 0, 0))
 
 /** @type {import("./mod1.js").Baz} */

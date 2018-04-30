@@ -75,6 +75,8 @@ namespace ts {
         const undefinedSymbol = createSymbol(SymbolFlags.Property, "undefined" as __String);
         undefinedSymbol.declarations = [];
         const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as __String);
+        const requireSymbol = createSymbol(SymbolFlags.Property, "require" as __String);
+        const moduleSymbol = createSymbol(SymbolFlags.Property, "module" as __String);
 
         /** This will be set during calls to `getResolvedSignature` where services determines an apparent number of arguments greater than what is actually provided. */
         let apparentArgumentCount: number | undefined;
@@ -1470,7 +1472,17 @@ namespace ts {
                     result = lookup(globals, name, meaning);
                 }
             }
-
+            if (!result) {
+                if (originalLocation && isInJavaScriptFile(originalLocation) && originalLocation.parent) {
+                    if (isRequireCall(originalLocation.parent, /*checkArgumentIsStringLiteralLike*/ false)) {
+                        return requireSymbol;
+                    }
+                    if (isIdentifier(originalLocation) && isPropertyAccessExpression(originalLocation.parent) &&
+                        originalLocation.escapedText === "module" && originalLocation.parent.name.escapedText === "exports") {
+                        return moduleSymbol;
+                    }
+                }
+            }
             if (!result) {
                 if (nameNotFoundMessage) {
                     if (!errorLocation ||
@@ -4682,6 +4694,10 @@ namespace ts {
                 // Handle prototype property
                 if (symbol.flags & SymbolFlags.Prototype) {
                     return links.type = getTypeOfPrototypeProperty(symbol);
+                }
+                // CommonsJS require/module/exports all have type any.
+                if (symbol === requireSymbol || symbol === moduleSymbol) {
+                    return links.type = anyType;
                 }
                 // Handle catch clause variables
                 const declaration = symbol.valueDeclaration;
@@ -18856,11 +18872,10 @@ namespace ts {
             // Make sure require is not a local function
             if (!isIdentifier(node.expression)) return Debug.fail();
             const resolvedRequire = resolveName(node.expression, node.expression.escapedText, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
-            if (!resolvedRequire) {
-                // project does not contain symbol named 'require' - assume commonjs require
+            if (resolvedRequire === requireSymbol) {
                 return true;
             }
-            // project includes symbol named 'require' - make sure that it it ambient and local non-alias
+            // project includes symbol named 'require' - make sure that it is ambient and local non-alias
             if (resolvedRequire.flags & SymbolFlags.Alias) {
                 return false;
             }
