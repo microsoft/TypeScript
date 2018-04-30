@@ -19930,6 +19930,7 @@ namespace ts {
                         getUnionType([removeDefinitelyFalsyTypes(leftType), rightType], UnionReduction.Subtype) :
                         leftType;
                 case SyntaxKind.EqualsToken:
+                    checkSpecialAssignment(left, right);
                     checkAssignmentOperator(rightType);
                     return getRegularTypeOfObjectLiteral(rightType);
                 case SyntaxKind.CommaToken:
@@ -19937,6 +19938,24 @@ namespace ts {
                         error(left, Diagnostics.Left_side_of_comma_operator_is_unused_and_has_no_side_effects);
                     }
                     return rightType;
+            }
+
+            function checkSpecialAssignment(left: Node, right: Expression) {
+                const special = getSpecialPropertyAssignmentKind(left.parent as BinaryExpression);
+                if (special === SpecialPropertyAssignmentKind.ModuleExports) {
+                    const rightType = checkExpression(right, checkMode);
+                    for (const prop of getPropertiesOfObjectType(rightType)) {
+                        const propType = getTypeOfSymbol(prop);
+                        if (propType.symbol && propType.symbol.flags & SymbolFlags.Class) {
+                            const name = prop.escapedName;
+                            const symbol = resolveName(prop.valueDeclaration, name, SymbolFlags.Type, undefined, name, /*isUse*/ false);
+                            if (symbol) {
+                                grammarErrorOnNode(symbol.declarations[0], Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(name));
+                                return grammarErrorOnNode(prop.valueDeclaration, Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(name));
+                            }
+                        }
+                    }
+                }
             }
 
             function isEvalNode(node: Expression) {
@@ -27235,16 +27254,6 @@ namespace ts {
                 let currentKind: Flags;
                 switch (prop.kind) {
                     case SyntaxKind.PropertyAssignment:
-                        if (isClassExpression(prop.initializer)) {
-                            const n = prop.name;
-                            const sn = getTextOfPropertyName(n);
-                            const symbol = resolveName(n, sn, SymbolFlags.Type, undefined, sn, /*isUse*/ false);
-                            if (symbol) {
-                                grammarErrorOnNode(symbol.declarations[0], Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(sn));
-                                return grammarErrorOnNode(n, Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(sn));
-                            }
-                        }
-                       // falls through
                     case SyntaxKind.ShorthandPropertyAssignment:
                         // Grammar checking for computedPropertyName and shorthandPropertyAssignment
                         checkGrammarForInvalidQuestionMark(prop.questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);

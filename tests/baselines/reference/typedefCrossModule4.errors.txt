@@ -1,0 +1,17 @@
+tests/cases/conformance/jsdoc/mod3.js(1,5): error TS2300: Duplicate identifier 'Foo'.
+tests/cases/conformance/jsdoc/mod3.js(3,1): error TS2304: Cannot find name 'module'.
+tests/cases/conformance/jsdoc/mod3.js(3,20): error TS2300: Duplicate identifier 'Foo'.
+
+
+==== tests/cases/conformance/jsdoc/mod3.js (3 errors) ====
+    /** @typedef {number} Foo */
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'Foo'.
+    class Bar { }
+    module.exports = { Foo: Bar };
+    ~~~~~~
+!!! error TS2304: Cannot find name 'module'.
+                       ~~~~~~~~
+!!! error TS2300: Duplicate identifier 'Foo'.
+    
+    

@@ -1,27 +1,25 @@
-tests/cases/conformance/jsdoc/mod1.js(5,23): error TS2300: Duplicate identifier 'Foo'.
-tests/cases/conformance/jsdoc/mod1.js(6,7): error TS2300: Duplicate identifier 'Foo'.
-tests/cases/conformance/jsdoc/mod1.js(8,23): error TS2300: Duplicate identifier 'Bar'.
-tests/cases/conformance/jsdoc/mod1.js(9,9): error TS2300: Duplicate identifier 'Bar'.
+tests/cases/conformance/jsdoc/mod1.js(3,23): error TS2300: Duplicate identifier 'Foo'.
+tests/cases/conformance/jsdoc/mod1.js(4,7): error TS2300: Duplicate identifier 'Foo'.
+tests/cases/conformance/jsdoc/mod1.js(6,23): error TS2300: Duplicate identifier 'Bar'.
+tests/cases/conformance/jsdoc/mod1.js(7,9): error TS2300: Duplicate identifier 'Bar'.
+tests/cases/conformance/jsdoc/mod1.js(9,5): error TS2300: Duplicate identifier 'Baz'.
+tests/cases/conformance/jsdoc/mod1.js(10,1): error TS2304: Cannot find name 'module'.
 tests/cases/conformance/jsdoc/mod1.js(11,5): error TS2300: Duplicate identifier 'Baz'.
-tests/cases/conformance/jsdoc/mod1.js(13,5): error TS2300: Duplicate identifier 'Baz'.
+tests/cases/conformance/jsdoc/mod1.js(23,1): error TS2304: Cannot find name 'module'.
+tests/cases/conformance/jsdoc/use.js(1,11): error TS2304: Cannot find name 'require'.
 
 
-==== tests/cases/conformance/jsdoc/use.js (0 errors) ====
+==== tests/cases/conformance/jsdoc/use.js (1 errors) ====
     var mod = require('./mod1.js');
+              ~~~~~~~
+!!! error TS2304: Cannot find name 'require'.
     /** @type {import("./mod1.js").Baz} */
     var b;
     /** @type {mod.Baz} */
     var bb;
     var bbb = new mod.Baz();
     
-==== tests/cases/conformance/jsdoc/commonjs.d.ts (0 errors) ====
-    declare function require(name: string): any;
-    declare var module: { exports: any};
-    declare var exports: any;
-    
-==== tests/cases/conformance/jsdoc/mod1.js (6 errors) ====
-    /// <reference path="./commonjs.d.ts"/>
-    
+==== tests/cases/conformance/jsdoc/mod1.js (8 errors) ====
     // error
     
     /** @typedef {number} Foo */
@@ -42,8 +40,10 @@ tests/cases/conformance/jsdoc/mod1.js(13,5): error TS2300: Duplicate identifier 
         ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'Baz'.
     module.exports = {
+    ~~~~~~
+!!! error TS2304: Cannot find name 'module'.
         Baz: class { }
-        ~~~
+        ~~~~~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'Baz'.
     }
     
@@ -57,6 +57,8 @@ tests/cases/conformance/jsdoc/mod1.js(13,5): error TS2300: Duplicate identifier 
     
     /** @typedef {number} Quack */
     module.exports = {
+    ~~~~~~
+!!! error TS2304: Cannot find name 'module'.
         Quack: 2
     }
     

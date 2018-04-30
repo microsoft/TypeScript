@@ -2,7 +2,7 @@
 var mod = require('./mod1.js');
 >mod : { [x: string]: any; Baz: any; Bar: typeof Bar; Quid: any; } | { [x: string]: any; Quack: any; Bar: typeof Bar; Quid: any; }
 >require('./mod1.js') : { [x: string]: any; Baz: any; Bar: typeof Bar; Quid: any; } | { [x: string]: any; Quack: any; Bar: typeof Bar; Quid: any; }
->require : (name: string) => any
+>require : any
 >'./mod1.js' : "./mod1.js"
 
 /** @type {import("./mod1.js").Baz} */
@@ -20,21 +20,7 @@ var bbb = new mod.Baz();
 >mod : { [x: string]: any; Baz: any; Bar: typeof Bar; Quid: any; } | { [x: string]: any; Quack: any; Bar: typeof Bar; Quid: any; }
 >Baz : any
 
-=== tests/cases/conformance/jsdoc/commonjs.d.ts ===
-declare function require(name: string): any;
->require : (name: string) => any
->name : string
-
-declare var module: { exports: any};
->module : { exports: any; }
->exports : any
-
-declare var exports: any;
->exports : any
-
 === tests/cases/conformance/jsdoc/mod1.js ===
-/// <reference path="./commonjs.d.ts"/>
-
 // error
 
 /** @typedef {number} Foo */
@@ -53,7 +39,7 @@ exports.Bar = class { }
 module.exports = {
 >module.exports = {    Baz: class { }} : { [x: string]: any; Baz: typeof Baz; }
 >module.exports : any
->module : { exports: any; }
+>module : any
 >exports : any
 >{    Baz: class { }} : { [x: string]: any; Baz: typeof Baz; }
 
@@ -81,7 +67,7 @@ exports.Quid = 2;
 module.exports = {
 >module.exports = {    Quack: 2} : { [x: string]: any; Quack: number; }
 >module.exports : any
->module : { exports: any; }
+>module : any
 >exports : any
 >{    Quack: 2} : { [x: string]: any; Quack: number; }
 

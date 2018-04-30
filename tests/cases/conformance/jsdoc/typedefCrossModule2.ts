@@ -1,13 +1,7 @@
 // @noEmit: true
 // @allowJs: true
 // @checkJs: true
-// @Filename: commonjs.d.ts
-declare function require(name: string): any;
-declare var module: { exports: any};
-declare var exports: any;
-
 // @Filename: mod1.js
-/// <reference path="./commonjs.d.ts"/>
 
 // error
 
