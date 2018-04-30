@@ -625,9 +625,19 @@ namespace ts {
                     builderProgram = createProgram(/*rootNames*/ undefined, /*options*/ undefined, compilerHost, builderProgram, configFileParsingDiagnostics);
                     hasChangedConfigFileParsingErrors = false;
                 }
-                return builderProgram;
+            }
+            else {
+                createNewProgram(program, hasInvalidatedResolution);
             }
 
+            if (host.afterProgramCreate) {
+                host.afterProgramCreate(builderProgram);
+            }
+
+            return builderProgram;
+        }
+
+        function createNewProgram(program: Program, hasInvalidatedResolution: HasInvalidatedResolution) {
             // Compile the program
             if (watchLogLevel !== WatchLogLevel.None) {
                 writeLog("CreatingProgramWith::");
@@ -663,12 +673,6 @@ namespace ts {
                 }
                 missingFilePathsRequestedForRelease = undefined;
             }
-
-            if (host.afterProgramCreate) {
-                host.afterProgramCreate(builderProgram);
-            }
-
-            return builderProgram;
         }
 
         function updateRootFileNames(files: string[]) {

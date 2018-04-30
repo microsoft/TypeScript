@@ -418,6 +418,28 @@ namespace ts.tscWatch {
             checkProgramRootFiles(watch(), [commonFile1.path]);
         });
 
+        it("works correctly when config file is changed but its content havent", () => {
+            const configFile: FileOrFolder = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {},
+                    "files": ["${commonFile1.path}", "${commonFile2.path}"]
+                }`
+            };
+            const files = [libFile, commonFile1, commonFile2, configFile];
+            const host = createWatchedSystem(files);
+            const watch = createWatchOfConfigFile(configFile.path, host);
+
+            checkProgramActualFiles(watch(), [libFile.path, commonFile1.path, commonFile2.path]);
+            checkOutputErrorsInitial(host, emptyArray);
+
+            host.modifyFile(configFile.path, configFile.content);
+            host.checkTimeoutQueueLengthAndRun(1); // reload the configured project
+
+            checkProgramActualFiles(watch(), [libFile.path, commonFile1.path, commonFile2.path]);
+            checkOutputErrorsIncremental(host, emptyArray);
+        });
+
         it("files explicitly excluded in config file", () => {
             const configFile: FileOrFolder = {
                 path: "/a/b/tsconfig.json",
