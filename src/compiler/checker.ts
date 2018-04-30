@@ -77,7 +77,6 @@ namespace ts {
         const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as __String);
         const requireSymbol = createSymbol(SymbolFlags.Property, "require" as __String);
         const moduleSymbol = createSymbol(SymbolFlags.Property, "module" as __String);
-        const exportsSymbol = createSymbol(SymbolFlags.Property, "exports" as __String);
 
         /** This will be set during calls to `getResolvedSignature` where services determines an apparent number of arguments greater than what is actually provided. */
         let apparentArgumentCount: number | undefined;
@@ -1478,13 +1477,9 @@ namespace ts {
                     if (isRequireCall(originalLocation.parent, /*checkArgumentIsStringLiteralLike*/ false)) {
                         return requireSymbol;
                     }
-                    if (isIdentifier(originalLocation) && isPropertyAccessExpression(originalLocation.parent)) {
-                        if (originalLocation.escapedText === "module" && originalLocation.parent.name.escapedText === "exports") {
-                            return moduleSymbol;
-                        }
-                        if (originalLocation.escapedText === "exports") {
-                            return exportsSymbol;
-                        }
+                    if (isIdentifier(originalLocation) && isPropertyAccessExpression(originalLocation.parent) &&
+                        originalLocation.escapedText === "module" && originalLocation.parent.name.escapedText === "exports") {
+                        return moduleSymbol;
                     }
                 }
             }
@@ -4701,7 +4696,7 @@ namespace ts {
                     return links.type = getTypeOfPrototypeProperty(symbol);
                 }
                 // CommonsJS require/module/exports all have type any.
-                if (symbol === requireSymbol || symbol === moduleSymbol || symbol === exportsSymbol) {
+                if (symbol === requireSymbol || symbol === moduleSymbol) {
                     return links.type = anyType;
                 }
                 // Handle catch clause variables
