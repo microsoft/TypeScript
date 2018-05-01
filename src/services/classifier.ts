@@ -708,10 +708,10 @@ namespace ts {
                             processJSDocTemplateTag(<JSDocTemplateTag>tag);
                             break;
                         case SyntaxKind.JSDocTypeTag:
-                            processElement((<JSDocTypeTag>tag).type);
+                            processElement((<JSDocTypeTag>tag).typeExpression);
                             break;
                         case SyntaxKind.JSDocReturnTag:
-                            processElement((<JSDocReturnTag>tag).type);
+                            processElement((<JSDocReturnTag>tag).typeExpression);
                             break;
                     }
 
@@ -732,10 +732,10 @@ namespace ts {
                     pos = tag.name.end;
                 }
 
-                if (tag.type) {
-                    pushCommentRange(pos, tag.type.pos - pos);
-                    processElement(tag.type);
-                    pos = tag.type.end;
+                if (tag.typeExpression) {
+                    pushCommentRange(pos, tag.typeExpression.pos - pos);
+                    processElement(tag.typeExpression);
+                    pos = tag.typeExpression.end;
                 }
 
                 if (!tag.isNameFirst) {

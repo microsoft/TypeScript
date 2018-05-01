@@ -4708,8 +4708,8 @@ namespace ts {
                 if (declaration.kind === SyntaxKind.ExportAssignment) {
                     return links.type = checkExpression((<ExportAssignment>declaration).expression);
                 }
-                if (isInJavaScriptFile(declaration) && isJSDocPropertyLikeTag(declaration) && declaration.type) {
-                    return links.type = getTypeFromTypeNode(declaration.type.type);
+                if (isInJavaScriptFile(declaration) && isJSDocPropertyLikeTag(declaration) && declaration.typeExpression) {
+                    return links.type = getTypeFromTypeNode(declaration.typeExpression.type);
                 }
                 // Handle variable, parameter or property
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
@@ -6911,8 +6911,8 @@ namespace ts {
             return isInJavaScriptFile(node) && (
                 // node.type should only be a JSDocOptionalType when node is a parameter of a JSDocFunctionType
                 node.type && node.type.kind === SyntaxKind.JSDocOptionalType
-                || getJSDocParameterTags(node).some(({ isBracketed, type }) =>
-                    isBracketed || !!type && type.type.kind === SyntaxKind.JSDocOptionalType));
+                || getJSDocParameterTags(node).some(({ isBracketed, typeExpression }) =>
+                    isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType));
         }
 
         function tryFindAmbientModule(moduleName: string, withAugmentations: boolean) {
@@ -7105,7 +7105,7 @@ namespace ts {
             const lastParam = lastOrUndefined(declaration.parameters);
             const lastParamTags = lastParam ? getJSDocParameterTags(lastParam) : getJSDocTags(declaration).filter(isJSDocParameterTag);
             const lastParamVariadicType = firstDefined(lastParamTags, p =>
-                p.type && isJSDocVariadicType(p.type.type) ? p.type.type : undefined);
+                p.typeExpression && isJSDocVariadicType(p.typeExpression.type) ? p.typeExpression.type : undefined);
 
             const syntheticArgsSymbol = createSymbol(SymbolFlags.Variable, "args" as __String);
             syntheticArgsSymbol.type = lastParamVariadicType ? createArrayType(getTypeFromTypeNode(lastParamVariadicType.type)) : anyArrayType;
@@ -15166,7 +15166,7 @@ namespace ts {
                 case SyntaxKind.ParenthesizedExpression: {
                     // Like in `checkParenthesizedExpression`, an `/** @type {xyz} */` comment before a parenthesized expression acts as a type cast.
                     const tag = isInJavaScriptFile(parent) ? getJSDocTypeTag(parent) : undefined;
-                    return tag ? getTypeFromTypeNode(tag.type.type) : getContextualType(<ParenthesizedExpression>parent);
+                    return tag ? getTypeFromTypeNode(tag.typeExpression.type) : getContextualType(<ParenthesizedExpression>parent);
                 }
                 case SyntaxKind.JsxExpression:
                     return getContextualTypeForJsxExpression(<JsxExpression>parent);
@@ -20465,7 +20465,7 @@ namespace ts {
         function checkParenthesizedExpression(node: ParenthesizedExpression, checkMode?: CheckMode): Type {
             const tag = isInJavaScriptFile(node) ? getJSDocTypeTag(node) : undefined;
             if (tag) {
-                return checkAssertionWorker(tag, tag.type.type, node.expression, checkMode);
+                return checkAssertionWorker(tag, tag.typeExpression.type, node.expression, checkMode);
             }
             return checkExpression(node.expression, checkMode);
         }
@@ -22148,7 +22148,7 @@ namespace ts {
 
         function checkJSDocTypeAliasTag(node: JSDocTypedefTag | JSDocCallbackTag) {
             if (!node.type) {
-                // If the node had `@property` tags, `type` would have been set to the first property tag.
+                // If the node had `@property` tags, `typeExpression` would have been set to the first property tag.
                 error(node.name, Diagnostics.JSDoc_typedef_tag_should_either_have_a_type_annotation_or_be_followed_by_property_or_member_tags);
             }
 
@@ -22159,7 +22159,7 @@ namespace ts {
         }
 
         function checkJSDocParameterTag(node: JSDocParameterTag) {
-            checkSourceElement(node.type);
+            checkSourceElement(node.typeExpression);
             if (!getParameterSymbolFromJSDoc(node)) {
                 const decl = getHostSignatureFromJSDoc(node);
                 // don't issue an error for invalid hosts -- just functions --
@@ -22176,8 +22176,8 @@ namespace ts {
                             idText(node.name.kind === SyntaxKind.QualifiedName ? node.name.right : node.name));
                     }
                     else if (findLast(getJSDocTags(decl), isJSDocParameterTag) === node &&
-                        node.type && node.type.type &&
-                        !isArrayType(getTypeFromTypeNode(node.type.type))) {
+                        node.typeExpression && node.typeExpression.type &&
+                        !isArrayType(getTypeFromTypeNode(node.typeExpression.type))) {
                         error(node.name,
                               Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name_It_would_match_arguments_if_it_had_an_array_type,
                               idText(node.name.kind === SyntaxKind.QualifiedName ? node.name.right : node.name));
