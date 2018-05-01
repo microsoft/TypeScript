@@ -1772,6 +1772,10 @@ namespace ts {
             ((node as JSDocFunctionType).parameters[0].name as Identifier).escapedText === "new";
     }
 
+    export function isJSDocTypeAlias(node: Node): node is JSDocTypedefTag | JSDocCallbackTag {
+        return node.kind === SyntaxKind.JSDocTypedefTag || node.kind === SyntaxKind.JSDocCallbackTag;
+    }
+
     function getSourceOfAssignment(node: Node): Node {
         return isExpressionStatement(node) &&
             node.expression && isBinaryExpression(node.expression) &&
@@ -5434,6 +5438,14 @@ namespace ts {
 
     export function isJSDocTypeLiteral(node: Node): node is JSDocTypeLiteral {
         return node.kind === SyntaxKind.JSDocTypeLiteral;
+    }
+
+    export function isJSDocCallbackTag(node: Node): node is JSDocCallbackTag {
+        return node.kind === SyntaxKind.JSDocCallbackTag;
+    }
+
+    export function isJSDocSignature(node: Node): node is JSDocSignature {
+        return node.kind === SyntaxKind.JSDocSignature;
     }
 }
 

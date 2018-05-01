@@ -5355,9 +5355,9 @@ namespace ts {
                     return unknownType;
                 }
 
-                const declaration = <JSDocTypedefTag | TypeAliasDeclaration>find(symbol.declarations, d =>
-                    d.kind === SyntaxKind.JSDocTypedefTag || d.kind === SyntaxKind.TypeAliasDeclaration);
-                const typeNode = declaration.kind === SyntaxKind.JSDocTypedefTag ? declaration.typeExpression : declaration.type;
+                const declaration = <JSDocTypedefTag | JSDocCallbackTag | TypeAliasDeclaration>find(symbol.declarations, d =>
+                    isJSDocTypeAlias(d) || d.kind === SyntaxKind.TypeAliasDeclaration);
+                const typeNode = isJSDocTypedefTag(declaration) ? declaration.typeExpression : isJSDocCallbackTag(declaration) ? declaration.signature : declaration.type;
                 // If typeNode is missing, we will error in checkJSDocTypedefTag.
                 let type = typeNode ? getTypeFromTypeNode(typeNode) : unknownType;
 
@@ -7575,24 +7575,25 @@ namespace ts {
          */
         function getTypeFromTypeAliasReference(node: NodeWithTypeArguments, symbol: Symbol, typeArguments: Type[]): Type {
             const type = getDeclaredTypeOfSymbol(symbol);
+            // TODO: call getEffectiveTypeParameterDeclarations here and upgrade it to understand in-comment template tags as type parameters
             const typeParameters = getSymbolLinks(symbol).typeParameters;
             if (typeParameters) {
                 const numTypeArguments = length(node.typeArguments);
                 const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
                 if (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length) {
                     error(node,
-                        minTypeArgumentCount === typeParameters.length
-                            ? Diagnostics.Generic_type_0_requires_1_type_argument_s
-                            : Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments,
-                        symbolToString(symbol),
-                        minTypeArgumentCount,
-                        typeParameters.length);
+                          minTypeArgumentCount === typeParameters.length
+                          ? Diagnostics.Generic_type_0_requires_1_type_argument_s
+                          : Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments,
+                          symbolToString(symbol),
+                          minTypeArgumentCount,
+                          typeParameters.length);
                     return unknownType;
                 }
                 return getTypeAliasInstantiation(symbol, typeArguments);
             }
             return checkNoTypeArguments(node, symbol) ? type : unknownType;
-            }
+        }
 
         function getTypeReferenceName(node: TypeReferenceType): EntityNameOrEntityNameExpression | undefined {
             switch (node.kind) {
