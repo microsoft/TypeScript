@@ -656,17 +656,6 @@ namespace ts {
 
         Debug.assert(!!missingFilePaths);
 
-        // List of collected files is complete; validate exhautiveness if this is a project with a file list
-        if (options.composite && rootNames.length < files.length) {
-            const normalizedRootNames = rootNames.map(r => normalizePathAndRoot(r).toLowerCase());
-            const sourceFiles = files.filter(f => !f.isDeclarationFile).map(f => normalizePathAndRoot(f.path).toLowerCase());
-            for (const file of sourceFiles) {
-                if (normalizedRootNames.every(r => r !== file)) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern, file));
-                }
-            }
-        }
-
         // Release any files we have acquired in the old program but are
         // not part of the new program.
         if (oldProgram && host.onReleaseOldSourceFile) {
@@ -2289,6 +2278,17 @@ namespace ts {
                         else {
                             createDiagnosticForReference(i, Diagnostics.Cannot_prepend_project_0_because_it_does_not_have_outFile_set, ref.path);
                         }
+                    }
+                }
+            }
+
+            // List of collected files is complete; validate exhautiveness if this is a project with a file list
+            if (options.composite && rootNames.length < files.length) {
+                const normalizedRootNames = rootNames.map(r => normalizePathAndRoot(r).toLowerCase());
+                const sourceFiles = files.filter(f => !f.isDeclarationFile).map(f => normalizePathAndRoot(f.path).toLowerCase());
+                for (const file of sourceFiles) {
+                    if (normalizedRootNames.every(r => r !== file)) {
+                        programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern, file));
                     }
                 }
             }
