@@ -21611,7 +21611,8 @@ namespace ts {
                 ExportType = 1 << 1,
                 ExportNamespace = 1 << 2,
             }
-            function getDeclarationSpaces(d: Declaration): DeclarationSpaces {
+            function getDeclarationSpaces(decl: Declaration): DeclarationSpaces {
+                let d = decl as Node;
                 switch (d.kind) {
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.TypeAliasDeclaration:
@@ -21627,6 +21628,13 @@ namespace ts {
                         return DeclarationSpaces.ExportType | DeclarationSpaces.ExportValue;
                     case SyntaxKind.SourceFile:
                         return DeclarationSpaces.ExportType | DeclarationSpaces.ExportValue | DeclarationSpaces.ExportNamespace;
+                    case SyntaxKind.ExportAssignment:
+                        // Export assigned entity name expressions act as aliases and should fall through, otherwise they export values
+                        if (!isEntityNameExpression((d as ExportAssignment).expression)) {
+                            return DeclarationSpaces.ExportValue;
+                        }
+                        d = (d as ExportAssignment).expression;
+                        /* falls through */
                     // The below options all declare an Alias, which is allowed to merge with other values within the importing module
                     case SyntaxKind.ImportEqualsDeclaration:
                     case SyntaxKind.NamespaceImport:
