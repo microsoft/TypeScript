@@ -509,6 +509,7 @@ namespace ts {
     export function isDeclarationWithTypeParameters(node: DeclarationWithTypeParameters): node is DeclarationWithTypeParameters {
         switch (node.kind) {
             case SyntaxKind.CallSignature:
+            case SyntaxKind.JSDocSignature:
             case SyntaxKind.ConstructSignature:
             case SyntaxKind.MethodSignature:
             case SyntaxKind.IndexSignature:
