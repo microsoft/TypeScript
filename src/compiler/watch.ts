@@ -533,14 +533,14 @@ namespace ts {
         const trace = host.trace && ((s: string) => { host.trace!(s + newLine); });
         const watchLogLevel = trace ? compilerOptions.extendedDiagnostics ? WatchLogLevel.Verbose :
             compilerOptions.diagnostis ? WatchLogLevel.TriggerOnly : WatchLogLevel.None : WatchLogLevel.None;
-        const writeLog: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? trace! : noop;
-        const { watchFile, watchFilePath, watchDirectory: watchDirectoryWorker } = getWatchFactory(watchLogLevel, writeLog);
+        const writeLog: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? trace! : noop; // TODO: GH#18217
+        const { watchFile, watchFilePath, watchDirectory } = getWatchFactory<string>(watchLogLevel, writeLog);
 
         const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
 
         writeLog(`Current directory: ${currentDirectory} CaseSensitiveFileNames: ${useCaseSensitiveFileNames}`);
         if (configFileName) {
-            watchFile(host, configFileName, scheduleProgramReload, PollingInterval.High);
+            watchFile(host, configFileName, scheduleProgramReload, PollingInterval.High, "Config file");
         }
 
         const compilerHost: CompilerHost & ResolutionCacheHost = {
@@ -566,8 +566,8 @@ namespace ts {
             // Members for ResolutionCacheHost
             toPath,
             getCompilationSettings: () => compilerOptions,
-            watchDirectoryOfFailedLookupLocation: watchDirectory,
-            watchTypeRootsDirectory: watchDirectory,
+            watchDirectoryOfFailedLookupLocation: (dir, cb, flags) => watchDirectory(host, dir, cb, flags, "Failed Lookup Locations"),
+            watchTypeRootsDirectory: (dir, cb, flags) => watchDirectory(host, dir, cb, flags, "Type roots"),
             getCachedDirectoryStructureHost: () => cachedDirectoryStructureHost,
             onInvalidatedResolution: scheduleProgramUpdate,
             onChangedAutomaticTypeDirectiveNames: () => {
@@ -628,9 +628,19 @@ namespace ts {
                     builderProgram = createProgram(/*rootNames*/ undefined, /*options*/ undefined, compilerHost, builderProgram, configFileParsingDiagnostics);
                     hasChangedConfigFileParsingErrors = false;
                 }
-                return builderProgram;
+            }
+            else {
+                createNewProgram(program, hasInvalidatedResolution);
             }
 
+            if (host.afterProgramCreate) {
+                host.afterProgramCreate(builderProgram);
+            }
+
+            return builderProgram;
+        }
+
+        function createNewProgram(program: Program, hasInvalidatedResolution: HasInvalidatedResolution) {
             // Compile the program
             if (watchLogLevel !== WatchLogLevel.None) {
                 writeLog("CreatingProgramWith::");
@@ -666,12 +676,6 @@ namespace ts {
                 }
                 missingFilePathsRequestedForRelease = undefined;
             }
-
-            if (host.afterProgramCreate) {
-                host.afterProgramCreate(builderProgram);
-            }
-
-            return builderProgram;
         }
 
         function updateRootFileNames(files: string[]) {
@@ -727,7 +731,7 @@ namespace ts {
                         (hostSourceFile as FilePresentOnHost).sourceFile = sourceFile;
                         sourceFile.version = hostSourceFile.version.toString();
                         if (!(hostSourceFile as FilePresentOnHost).fileWatcher) {
-                            (hostSourceFile as FilePresentOnHost).fileWatcher = watchFilePath(host, fileName, onSourceFileChange, PollingInterval.Low, path);
+                            (hostSourceFile as FilePresentOnHost).fileWatcher = watchFilePath(host, fileName, onSourceFileChange, PollingInterval.Low, path, "Source file");
                         }
                     }
                     else {
@@ -741,7 +745,7 @@ namespace ts {
                 else {
                     if (sourceFile) {
                         sourceFile.version = initialVersion.toString();
-                        const fileWatcher = watchFilePath(host, fileName, onSourceFileChange, PollingInterval.Low, path);
+                        const fileWatcher = watchFilePath(host, fileName, onSourceFileChange, PollingInterval.Low, path, "Source file");
                         sourceFilesCache.set(path, { sourceFile, version: initialVersion, fileWatcher });
                     }
                     else {
@@ -826,6 +830,7 @@ namespace ts {
             if (timerToUpdateProgram) {
                 host.clearTimeout(timerToUpdateProgram);
             }
+            writeLog("Scheduling update");
             timerToUpdateProgram = host.setTimeout(updateProgram, 250);
         }
 
@@ -851,6 +856,7 @@ namespace ts {
         }
 
         function reloadFileNamesFromConfigFile() {
+            writeLog("Reloading new file names and options");
             const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), compilerOptions, parseConfigFileHost);
             if (result.fileNames.length) {
                 configFileParsingDiagnostics = filter(configFileParsingDiagnostics, error => !isErrorNoInputFiles(error));
@@ -912,12 +918,8 @@ namespace ts {
             }
         }
 
-        function watchDirectory(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags) {
-            return watchDirectoryWorker(host, directory, cb, flags);
-        }
-
         function watchMissingFilePath(missingFilePath: Path) {
-            return watchFilePath(host, missingFilePath, onMissingFileChange, PollingInterval.Medium, missingFilePath);
+            return watchFilePath(host, missingFilePath, onMissingFileChange, PollingInterval.Medium, missingFilePath, "Missing file");
         }
 
         function onMissingFileChange(fileName: string, eventKind: FileWatcherEventKind, missingFilePath: Path) {
@@ -950,6 +952,7 @@ namespace ts {
 
         function watchWildcardDirectory(directory: string, flags: WatchDirectoryFlags) {
             return watchDirectory(
+                host,
                 directory,
                 fileOrDirectory => {
                     Debug.assert(!!configFileName);
@@ -977,7 +980,8 @@ namespace ts {
                         scheduleProgramUpdate();
                     }
                 },
-                flags
+                flags,
+                "Wild card directories"
             );
         }
 

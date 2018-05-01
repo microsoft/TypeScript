@@ -1,0 +1,15 @@
+=== tests/cases/conformance/jsdoc/mod3.js ===
+/** @typedef {number} Foo */
+class Bar { }
+>Bar : Bar
+
+module.exports = { Foo: Bar };
+>module.exports = { Foo: Bar } : { [x: string]: any; Foo: typeof Bar; }
+>module.exports : any
+>module : any
+>exports : any
+>{ Foo: Bar } : { [x: string]: any; Foo: typeof Bar; }
+>Foo : typeof Bar
+>Bar : typeof Bar
+
+

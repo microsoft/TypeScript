@@ -154,9 +154,12 @@ namespace ts {
 
     function updateWatchCompilationHost(watchCompilerHost: WatchCompilerHost<EmitAndSemanticDiagnosticsBuilderProgram>) {
         const compileUsingBuilder = watchCompilerHost.createProgram;
-        watchCompilerHost.createProgram = (rootNames, options, host, oldProgram) => {
-            enableStatistics(options!); // TODO: GH#18217
-            return compileUsingBuilder(rootNames, options, host, oldProgram);
+        watchCompilerHost.createProgram = (rootNames, options, host, oldProgram, configFileParsingDiagnostics) => {
+            Debug.assert(rootNames !== undefined || (options === undefined && !!oldProgram));
+            if (options !== undefined) {
+                enableStatistics(options);
+            }
+            return compileUsingBuilder(rootNames, options, host, oldProgram, configFileParsingDiagnostics);
         };
         const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate!; // TODO: GH#18217
         watchCompilerHost.afterProgramCreate = builderProgram => {

@@ -250,7 +250,7 @@ namespace ts {
     export function createBuilderProgram(kind: BuilderProgramKind, { newProgram, host, oldProgram, configFileParsingDiagnostics }: BuilderCreationParameters) {
         // Return same program if underlying program doesnt change
         let oldState = oldProgram && oldProgram.getState();
-        if (oldState && newProgram === oldState.program && configFileParsingDiagnostics !== newProgram.getConfigFileParsingDiagnostics()) {
+        if (oldState && newProgram === oldState.program && configFileParsingDiagnostics === newProgram.getConfigFileParsingDiagnostics()) {
             newProgram = undefined!; // TODO: GH#18217
             oldState = undefined;
             return oldProgram;
