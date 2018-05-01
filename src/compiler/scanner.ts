@@ -1144,7 +1144,8 @@ namespace ts {
             pos++;
             switch (ch) {
                 case CharacterCodes._0:
-                    if (isTaggedTemplate && isDigit(text.charCodeAt(pos))) {
+                    // '\01'
+                    if (isTaggedTemplate && pos < end && isDigit(text.charCodeAt(pos))) {
                         pos++;
                         tokenFlags |= TokenFlags.NotEscape;
                         return text.substring(start, pos);
@@ -1168,11 +1169,13 @@ namespace ts {
                     return "\"";
                 case CharacterCodes.u:
                     if (isTaggedTemplate) {
+                        // '\u'
                         if (pos < end && !isHexDigit(text.charCodeAt(pos)) && text.charCodeAt(pos) !== CharacterCodes.openBrace) {
                             tokenFlags |= TokenFlags.NotEscape;
-                            return "u";
+                            return text.substring(start, pos);
                         }
 
+                        // '\u0' or '\u00' or '\u000'
                         for (let i = 0; i < 3; i++) {
                             if (pos + i + 1 < end && isHexDigit(text.charCodeAt(pos + i)) &&  !isHexDigit(text.charCodeAt(pos + i + 1)) && text.charCodeAt(pos + i + 1) !== CharacterCodes.openBrace) {
                                 pos += i;
@@ -1185,13 +1188,15 @@ namespace ts {
                     if (pos < end && text.charCodeAt(pos) === CharacterCodes.openBrace) {
                         pos++;
 
+                        // '\u{'
                         if (isTaggedTemplate && !isHexDigit(text.charCodeAt(pos))) {
                             tokenFlags |= TokenFlags.NotEscape;
-                            return "u{";
+                            return text.substring(start, pos);
                         }
 
                         const escapedValue = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);
                         if (isTaggedTemplate) {
+                            // '\u{Not Code Point' or '\u{CodePoint'
                             if (!isCodePoint(escapedValue) || text.charCodeAt(pos) !== CharacterCodes.closeBrace) {
                                 tokenFlags |= TokenFlags.NotEscape;
                                 return text.substring(start, pos);
@@ -1208,12 +1213,12 @@ namespace ts {
                     if (isTaggedTemplate) {
                         if (!isHexDigit(text.charCodeAt(pos))) {
                             tokenFlags |= TokenFlags.NotEscape;
-                            return "x";
+                            return text.substring(start, pos);
                         }
                         else if (!isHexDigit(text.charCodeAt(pos + 1))) {
                             pos++;
                             tokenFlags |= TokenFlags.NotEscape;
-                            return "x" + String.fromCharCode(text.charCodeAt(pos));
+                            return text.substring(start, pos);
                         }
                     }
                     // '\xDD'
