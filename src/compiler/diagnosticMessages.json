@@ -3543,6 +3543,11 @@
         "code": 6196,
         "reportsUnnecessary": true
     },
+    "All destructured elements are unused.": {
+        "category": "Error",
+        "code": 6197,
+        "reportsUnnecessary": true
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -3934,6 +3939,10 @@
     "Add '{0}.' to unresolved variable": {
         "category": "Message",
         "code": 90008
+    },
+    "Remove destructuring": {
+        "category": "Message",
+        "code": 90009
     },
     "Import '{0}' from module \"{1}\"": {
         "category": "Message",
