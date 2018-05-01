@@ -2392,7 +2392,7 @@ namespace ts {
         kind: SyntaxKind.JSDocCallbackTag;
         fullName?: JSDocNamespaceDeclaration | Identifier;
         name?: Identifier; // TODO: Not sure whether this rigamarole is needed for callback...but probably!
-        signature: JSDocSignature;
+        typeExpression: JSDocSignature;
     }
 
     // TODO: Could just try to reuse JSDocTypeLiteral

@@ -491,7 +491,7 @@ namespace ts {
                 }
             case SyntaxKind.JSDocCallbackTag:
                 return visitNode(cbNode, (node as JSDocCallbackTag).fullName) ||
-                    visitNode(cbNode, (node as JSDocCallbackTag).signature);
+                    visitNode(cbNode, (node as JSDocCallbackTag).typeExpression);
             case SyntaxKind.JSDocSignature:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
@@ -6737,7 +6737,7 @@ namespace ts {
                         // Debug.assert(child.kind !== SyntaxKind.JSDocTypeTag);
                         jsdocSignature.parameters = append(jsdocSignature.parameters as MutableNodeArray<JSDocParameterTag>, child);
                     }
-                    callbackTag.signature = finishNode(jsdocSignature);
+                    callbackTag.typeExpression = finishNode(jsdocSignature);
                     return finishNode(callbackTag);
                 }
 

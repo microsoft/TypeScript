@@ -5357,7 +5357,7 @@ namespace ts {
 
                 const declaration = <JSDocTypedefTag | JSDocCallbackTag | TypeAliasDeclaration>find(symbol.declarations, d =>
                     isJSDocTypeAlias(d) || d.kind === SyntaxKind.TypeAliasDeclaration);
-                const typeNode = isJSDocTypedefTag(declaration) ? declaration.typeExpression : isJSDocCallbackTag(declaration) ? declaration.signature : declaration.type;
+                const typeNode = isJSDocTypedefTag(declaration) ? declaration.typeExpression : isJSDocCallbackTag(declaration) ? declaration.typeExpression : declaration.type;
                 // If typeNode is missing, we will error in checkJSDocTypedefTag.
                 let type = typeNode ? getTypeFromTypeNode(typeNode) : unknownType;
 
