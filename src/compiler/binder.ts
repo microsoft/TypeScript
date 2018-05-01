@@ -2103,7 +2103,6 @@ namespace ts {
                 case SyntaxKind.TypeParameter:
                     return bindTypeParameter(node as TypeParameterDeclaration);
                 case SyntaxKind.Parameter:
-                case SyntaxKind.JSDocParameterTag:
                     return bindParameter(<ParameterDeclaration>node);
                 case SyntaxKind.VariableDeclaration:
                     return bindVariableDeclarationOrBindingElement(<VariableDeclaration>node);
@@ -2206,6 +2205,9 @@ namespace ts {
                     return updateStrictModeStatementList((<Block | ModuleBlock>node).statements);
 
                 case SyntaxKind.JSDocParameterTag:
+                    if (node.parent.kind === SyntaxKind.JSDocCallbackTag) {
+                        return bindParameter(node as JSDocParameterTag);
+                    }
                     if (node.parent.kind !== SyntaxKind.JSDocTypeLiteral) {
                         break;
                     }
