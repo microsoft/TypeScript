@@ -1693,9 +1693,9 @@ namespace ts {
         function checkResolvedBlockScopedVariable(result: Symbol, errorLocation: Node): void {
             Debug.assert(!!(result.flags & SymbolFlags.BlockScopedVariable || result.flags & SymbolFlags.Class || result.flags & SymbolFlags.Enum));
             // Block-scoped variables cannot be used before their definition
-            const declaration = forEach(result.declarations, d => isBlockOrCatchScoped(d) || isClassLike(d) || (d.kind === SyntaxKind.EnumDeclaration) ? d : undefined)!;
+            const declaration = forEach(result.declarations, d => isBlockOrCatchScoped(d) || isClassLike(d) || (d.kind === SyntaxKind.EnumDeclaration) ? d : undefined);
 
-            Debug.assert(declaration !== undefined, "Declaration to checkResolvedBlockScopedVariable is undefined");
+            if(declaration === undefined) return Debug.fail("Declaration to checkResolvedBlockScopedVariable is undefined");
 
             if (!(declaration.flags & NodeFlags.Ambient) && !isBlockScopedNameDeclaredBeforeUse(declaration, errorLocation)) {
                 if (result.flags & SymbolFlags.BlockScopedVariable) {
@@ -1962,16 +1962,15 @@ namespace ts {
          * Indicates that a symbol is an alias that does not merge with a local declaration.
          * OR Is a JSContainer which may merge an alias with a local declaration
          */
-        function isNonLocalAlias(symbol: Symbol | undefined, excludes = SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace) {
+        function isNonLocalAlias(symbol: Symbol | undefined, excludes = SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace): symbol is Symbol {
             if (!symbol) return false;
-            return (symbol.flags & (SymbolFlags.Alias | excludes)) === SymbolFlags.Alias || (symbol.flags & SymbolFlags.Alias && symbol.flags & SymbolFlags.JSContainer);
+            return (symbol.flags & (SymbolFlags.Alias | excludes)) === SymbolFlags.Alias || !!(symbol.flags & SymbolFlags.Alias && symbol.flags & SymbolFlags.JSContainer);
         }
 
         function resolveSymbol(symbol: Symbol, dontResolveAlias?: boolean): Symbol;
         function resolveSymbol(symbol: Symbol | undefined, dontResolveAlias?: boolean): Symbol | undefined;
         function resolveSymbol(symbol: Symbol | undefined, dontResolveAlias?: boolean): Symbol | undefined {
-            const shouldResolve = !dontResolveAlias && isNonLocalAlias(symbol);
-            return shouldResolve ? resolveAlias(symbol!) : symbol;
+            return !dontResolveAlias && isNonLocalAlias(symbol) ? resolveAlias(symbol) : symbol;
         }
 
         function resolveAlias(symbol: Symbol): Symbol {
@@ -26100,7 +26099,7 @@ namespace ts {
                 // We should only get the declaration of an alias if there isn't a local value
                 // declaration for the symbol
                 if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value)) {
-                    return getDeclarationOfAliasSymbol(symbol!);
+                    return getDeclarationOfAliasSymbol(symbol);
                 }
             }
 
