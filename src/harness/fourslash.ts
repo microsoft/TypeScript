@@ -324,8 +324,10 @@ namespace FourSlash {
                         this.languageServiceAdapterHost.addScript(fileName, file, /*isRootFile*/ true);
                     }
                 });
-                this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
-                    Harness.Compiler.getDefaultLibrarySourceFile().text, /*isRootFile*/ false);
+                if (!compilationOptions.noLib) {
+                    this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
+                        Harness.Compiler.getDefaultLibrarySourceFile().text, /*isRootFile*/ false);
+                }
             }
 
             for (const file of testData.files) {

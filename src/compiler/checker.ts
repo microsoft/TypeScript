@@ -60,7 +60,7 @@ namespace ts {
 
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
-        const modulekind = getEmitModuleKind(compilerOptions);
+        const moduleKind = getEmitModuleKind(compilerOptions);
         const allowSyntheticDefaultImports = getAllowSyntheticDefaultImports(compilerOptions);
         const strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
         const strictFunctionTypes = getStrictOptionValue(compilerOptions, "strictFunctionTypes");
@@ -75,6 +75,8 @@ namespace ts {
         const undefinedSymbol = createSymbol(SymbolFlags.Property, "undefined" as __String);
         undefinedSymbol.declarations = [];
         const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as __String);
+        const requireSymbol = createSymbol(SymbolFlags.Property, "require" as __String);
+        const moduleSymbol = createSymbol(SymbolFlags.Property, "module" as __String);
 
         /** This will be set during calls to `getResolvedSignature` where services determines an apparent number of arguments greater than what is actually provided. */
         let apparentArgumentCount: number | undefined;
@@ -443,6 +445,7 @@ namespace ts {
         let deferredGlobalAsyncIteratorType: GenericType;
         let deferredGlobalAsyncIterableIteratorType: GenericType;
         let deferredGlobalTemplateStringsArrayType: ObjectType;
+        let deferredGlobalImportMetaType: ObjectType;
         let deferredGlobalExtractSymbol: Symbol;
 
         let deferredNodes: Node[];
@@ -615,22 +618,6 @@ namespace ts {
             Source = 1,
             Target = 1 << 1,
             Both = Source | Target,
-        }
-
-        const enum TypeIncludes {
-            Any = 1 << 0,
-            Undefined = 1 << 1,
-            Null = 1 << 2,
-            Never = 1 << 3,
-            NonWideningType = 1 << 4,
-            String = 1 << 5,
-            Number = 1 << 6,
-            ESSymbol = 1 << 7,
-            LiteralOrUniqueESSymbol = 1 << 8,
-            ObjectType = 1 << 9,
-            EmptyObject = 1 << 10,
-            Union = 1 << 11,
-            Wildcard = 1 << 12,
         }
 
         const enum MembersOrExportsResolutionKind {
@@ -1094,7 +1081,7 @@ namespace ts {
             const declarationFile = getSourceFileOfNode(declaration);
             const useFile = getSourceFileOfNode(usage);
             if (declarationFile !== useFile) {
-                if ((modulekind && (declarationFile.externalModuleIndicator || useFile.externalModuleIndicator)) ||
+                if ((moduleKind && (declarationFile.externalModuleIndicator || useFile.externalModuleIndicator)) ||
                     (!compilerOptions.outFile && !compilerOptions.out) ||
                     isInTypeQuery(usage) ||
                     declaration.flags & NodeFlags.Ambient) {
@@ -1125,6 +1112,10 @@ namespace ts {
                 else if (declaration.kind === SyntaxKind.VariableDeclaration) {
                     // still might be illegal if usage is in the initializer of the variable declaration (eg var a = a)
                     return !isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration as VariableDeclaration, usage);
+                }
+                else if (isClassDeclaration(declaration)) {
+                    // still might be illegal if the usage is within a computed property name in the class (eg class A { static p = "a"; [A.p]() {} })
+                    return !findAncestor(usage, n => isComputedPropertyName(n) && n.parent.parent === declaration);
                 }
                 return true;
             }
@@ -1481,7 +1472,17 @@ namespace ts {
                     result = lookup(globals, name, meaning);
                 }
             }
-
+            if (!result) {
+                if (originalLocation && isInJavaScriptFile(originalLocation) && originalLocation.parent) {
+                    if (isRequireCall(originalLocation.parent, /*checkArgumentIsStringLiteralLike*/ false)) {
+                        return requireSymbol;
+                    }
+                    if (isIdentifier(originalLocation) && isPropertyAccessExpression(originalLocation.parent) &&
+                        originalLocation.escapedText === "module" && originalLocation.parent.name.escapedText === "exports") {
+                        return moduleSymbol;
+                    }
+                }
+            }
             if (!result) {
                 if (nameNotFoundMessage) {
                     if (!errorLocation ||
@@ -4180,7 +4181,7 @@ namespace ts {
                 const isPrivate = getDeclarationModifierFlagsFromSymbol(prop) & (ModifierFlags.Private | ModifierFlags.Protected);
                 const isSetOnlyAccessor = prop.flags & SymbolFlags.SetAccessor && !(prop.flags & SymbolFlags.GetAccessor);
                 if (!inNamesToRemove && !isPrivate && !isClassMethod(prop) && !isSetOnlyAccessor) {
-                    members.set(prop.escapedName, prop);
+                    members.set(prop.escapedName, getNonReadonlySymbol(prop));
                 }
             }
             const stringIndexInfo = getIndexInfoOfType(source, IndexKind.String);
@@ -4227,18 +4228,41 @@ namespace ts {
                     const isLate = isLateBindableName(name);
                     const isWellKnown = isComputedPropertyName(name) && isWellKnownSymbolSyntactically(name.expression);
                     if (!isLate && !isWellKnown && isComputedNonLiteralName(name)) {
-                        return anyType;
+                        const exprType = checkExpression((name as ComputedPropertyName).expression);
+                        if (isTypeAssignableToKind(exprType, TypeFlags.ESSymbolLike)) {
+                            if (noImplicitAny) {
+                                error(declaration, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(exprType), typeToString(parentType));
+                            }
+                            return anyType;
+                        }
+                        const indexerType = isTypeAssignableToKind(exprType, TypeFlags.NumberLike) && getIndexTypeOfType(parentType, IndexKind.Number) || getIndexTypeOfType(parentType, IndexKind.String);
+                        if (!indexerType && noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors) {
+                            if (getIndexTypeOfType(parentType, IndexKind.Number)) {
+                                error(declaration, Diagnostics.Element_implicitly_has_an_any_type_because_index_expression_is_not_of_type_number);
+                            }
+                            else {
+                                error(declaration, Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature, typeToString(parentType));
+                            }
+                        }
+                        return indexerType || anyType;
                     }
 
                     // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
                     // or otherwise the type of the string index signature.
-                    const text = isLate ? getLateBoundNameFromType(checkComputedPropertyName(name as ComputedPropertyName) as LiteralType | UniqueESSymbolType) :
+                    const nameType = isLate && checkComputedPropertyName(name as ComputedPropertyName) as LiteralType | UniqueESSymbolType;
+                    const text = isLate ? getLateBoundNameFromType(nameType) :
                         isWellKnown ? getPropertyNameForKnownSymbolName(idText(((name as ComputedPropertyName).expression as PropertyAccessExpression).name)) :
                         getTextOfPropertyName(name);
 
                     // Relax null check on ambient destructuring parameters, since the parameters have no implementation and are just documentation
                     if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
                         parentType = getNonNullableType(parentType);
+                    }
+                    if (isLate && nameType && !getPropertyOfType(parentType, text) && isTypeAssignableToKind(nameType, TypeFlags.ESSymbolLike)) {
+                        if (noImplicitAny) {
+                            error(declaration, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(nameType), typeToString(parentType));
+                        }
+                        return anyType;
                     }
                     const declaredType = getConstraintForLocation(getTypeOfPropertyOfType(parentType, text), declaration.name);
                     type = declaredType && getFlowTypeOfReference(declaration, declaredType) ||
@@ -4670,6 +4694,10 @@ namespace ts {
                 // Handle prototype property
                 if (symbol.flags & SymbolFlags.Prototype) {
                     return links.type = getTypeOfPrototypeProperty(symbol);
+                }
+                // CommonsJS require/module/exports all have type any.
+                if (symbol === requireSymbol || symbol === moduleSymbol) {
+                    return links.type = anyType;
                 }
                 // Handle catch clause variables
                 const declaration = symbol.valueDeclaration;
@@ -6470,6 +6498,47 @@ namespace ts {
             return getConstraintOfDistributiveConditionalType(type) || getDefaultConstraintOfConditionalType(type);
         }
 
+        function getUnionConstraintOfIntersection(type: IntersectionType, targetIsUnion: boolean) {
+            let constraints: Type[];
+            let hasDisjointDomainType = false;
+            for (const t of type.types) {
+                if (t.flags & TypeFlags.Instantiable) {
+                    // We keep following constraints as long as we have an instantiable type that is known
+                    // not to be circular or infinite (hence we stop on index access types).
+                    let constraint = getConstraintOfType(t);
+                    while (constraint && constraint.flags & (TypeFlags.TypeParameter | TypeFlags.Index | TypeFlags.Conditional)) {
+                        constraint = getConstraintOfType(constraint);
+                    }
+                    if (constraint) {
+                        // A constraint that isn't a union type implies that the final type would be a non-union
+                        // type as well. Since non-union constraints are of no interest, we can exit here.
+                        if (!(constraint.flags & TypeFlags.Union)) {
+                            return undefined;
+                        }
+                        constraints = append(constraints, constraint);
+                    }
+                }
+                else if (t.flags & TypeFlags.DisjointDomains) {
+                    hasDisjointDomainType = true;
+                }
+            }
+            // If the target is a union type or if we are intersecting with types belonging to one of the
+            // disjoint domans, we may end up producing a constraint that hasn't been examined before.
+            if (constraints && (targetIsUnion || hasDisjointDomainType)) {
+                if (hasDisjointDomainType) {
+                    // We add any types belong to one of the disjoint domans because they might cause the final
+                    // intersection operation to reduce the union constraints.
+                    for (const t of type.types) {
+                        if (t.flags & TypeFlags.DisjointDomains) {
+                            constraints = append(constraints, t);
+                        }
+                    }
+                }
+                return getIntersectionType(constraints);
+            }
+            return undefined;
+        }
+
         function getBaseConstraintOfInstantiableNonPrimitiveUnionOrIntersection(type: Type) {
             if (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.UnionOrIntersection)) {
                 const constraint = getResolvedBaseConstraint(<InstantiableType | UnionOrIntersectionType>type);
@@ -6677,7 +6746,15 @@ namespace ts {
             let nameType: Type;
             const propTypes: Type[] = [];
             let first = true;
+            let commonValueDeclaration: Declaration;
+            let hasNonUniformValueDeclaration = false;
             for (const prop of props) {
+                if (!commonValueDeclaration) {
+                    commonValueDeclaration = prop.valueDeclaration;
+                }
+                else if (prop.valueDeclaration !== commonValueDeclaration) {
+                    hasNonUniformValueDeclaration = true;
+                }
                 declarations = addRange(declarations, prop.declarations);
                 const type = getTypeOfSymbol(prop);
                 if (first) {
@@ -6694,6 +6771,9 @@ namespace ts {
             }
             const result = createSymbol(SymbolFlags.Property | commonFlags, name, syntheticFlag | checkFlags);
             result.containingType = containingType;
+            if (!hasNonUniformValueDeclaration && commonValueDeclaration) {
+                result.valueDeclaration = commonValueDeclaration;
+            }
             result.declarations = declarations;
             result.nameType = nameType;
             result.type = isUnion ? getUnionType(propTypes) : getIntersectionType(propTypes);
@@ -7562,23 +7642,38 @@ namespace ts {
                 return unknownType;
             }
 
-            // A jsdoc TypeReference may have resolved to a value (as opposed to a type). If
-            // the symbol is a constructor function, return the inferred class type; otherwise,
-            // the type of this reference is just the type of the value we resolved to.
-            const assignedType = getAssignedClassType(symbol);
-            const valueType = getTypeOfSymbol(symbol);
-            const referenceType = valueType.symbol && !isInferredClassType(valueType) && getTypeReferenceTypeWorker(node, valueType.symbol, typeArguments);
-            if (referenceType || assignedType) {
-                return referenceType && assignedType ? getIntersectionType([assignedType, referenceType]) : referenceType || assignedType;
+            const jsdocType = getJSDocTypeReference(node, symbol, typeArguments);
+            if (jsdocType) {
+                return jsdocType;
             }
 
             // Resolve the type reference as a Type for the purpose of reporting errors.
             resolveTypeReferenceName(getTypeReferenceName(node), SymbolFlags.Type);
-            return valueType;
+            return getTypeOfSymbol(symbol);
+        }
+
+        /**
+         * A jsdoc TypeReference may have resolved to a value (as opposed to a type). If
+         * the symbol is a constructor function, return the inferred class type; otherwise,
+         * the type of this reference is just the type of the value we resolved to.
+         */
+        function getJSDocTypeReference(node: NodeWithTypeArguments, symbol: Symbol, typeArguments: Type[]): Type | undefined {
+            const assignedType = getAssignedClassType(symbol);
+            const valueType = getTypeOfSymbol(symbol);
+            const referenceType = valueType.symbol && valueType.symbol !== symbol && !isInferredClassType(valueType) && getTypeReferenceTypeWorker(node, valueType.symbol, typeArguments);
+            if (referenceType || assignedType) {
+                return referenceType && assignedType ? getIntersectionType([assignedType, referenceType]) : referenceType || assignedType;
+            }
         }
 
         function getTypeReferenceTypeWorker(node: NodeWithTypeArguments, symbol: Symbol, typeArguments: Type[]): Type | undefined {
             if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                if (symbol.valueDeclaration && isBinaryExpression(symbol.valueDeclaration.parent)) {
+                    const jsdocType = getJSDocTypeReference(node, symbol, typeArguments);
+                    if (jsdocType) {
+                        return jsdocType;
+                    }
+                }
                 return getTypeFromClassOrInterfaceReference(node, symbol, typeArguments);
             }
 
@@ -7785,6 +7880,10 @@ namespace ts {
             return deferredGlobalTemplateStringsArrayType || (deferredGlobalTemplateStringsArrayType = getGlobalType("TemplateStringsArray" as __String, /*arity*/ 0, /*reportErrors*/ true)) || emptyObjectType;
         }
 
+        function getGlobalImportMetaType() {
+            return deferredGlobalImportMetaType || (deferredGlobalImportMetaType = getGlobalType("ImportMeta" as __String, /*arity*/ 0, /*reportErrors*/ true)) || emptyObjectType;
+        }
+
         function getGlobalESSymbolConstructorSymbol(reportErrors: boolean) {
             return deferredGlobalESSymbolConstructorSymbol || (deferredGlobalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol" as __String, reportErrors));
         }
@@ -7940,8 +8039,14 @@ namespace ts {
             return binarySearch(types, type, getTypeId, compareValues) >= 0;
         }
 
-        // Return true if the given intersection type contains (a) more than one unit type or (b) an object
-        // type and a nullable type (null or undefined).
+        // Return true if the given intersection type contains
+        // more than one unit type or,
+        // an object type and a nullable type (null or undefined), or
+        // a string-like type and a type known to be non-string-like, or
+        // a number-like type and a type known to be non-number-like, or
+        // a symbol-like type and a type known to be non-symbol-like, or
+        // a void-like type and a type known to be non-void-like, or
+        // a non-primitive type and a type known to be primitive.
         function isEmptyIntersectionType(type: IntersectionType) {
             let combined: TypeFlags = 0;
             for (const t of type.types) {
@@ -7949,42 +8054,43 @@ namespace ts {
                     return true;
                 }
                 combined |= t.flags;
-                if (combined & TypeFlags.Nullable && combined & (TypeFlags.Object | TypeFlags.NonPrimitive)) {
+                if (combined & TypeFlags.Nullable && combined & (TypeFlags.Object | TypeFlags.NonPrimitive) ||
+                    combined & TypeFlags.NonPrimitive && combined & (TypeFlags.DisjointDomains & ~TypeFlags.NonPrimitive) ||
+                    combined & TypeFlags.StringLike && combined & (TypeFlags.DisjointDomains & ~TypeFlags.StringLike) ||
+                    combined & TypeFlags.NumberLike && combined & (TypeFlags.DisjointDomains & ~TypeFlags.NumberLike) ||
+                    combined & TypeFlags.ESSymbolLike && combined & (TypeFlags.DisjointDomains & ~TypeFlags.ESSymbolLike) ||
+                    combined & TypeFlags.VoidLike && combined & (TypeFlags.DisjointDomains & ~TypeFlags.VoidLike)) {
                     return true;
                 }
             }
             return false;
         }
 
-        function addTypeToUnion(typeSet: Type[], includes: TypeIncludes, type: Type) {
+        function addTypeToUnion(typeSet: Type[], includes: TypeFlags, type: Type) {
             const flags = type.flags;
             if (flags & TypeFlags.Union) {
-                includes = addTypesToUnion(typeSet, includes, (<UnionType>type).types);
+                return addTypesToUnion(typeSet, includes, (<UnionType>type).types);
             }
-            else if (flags & TypeFlags.Any) {
-                includes |= TypeIncludes.Any;
-                if (type === wildcardType) includes |= TypeIncludes.Wildcard;
-            }
-            else if (!strictNullChecks && flags & TypeFlags.Nullable) {
-                if (flags & TypeFlags.Undefined) includes |= TypeIncludes.Undefined;
-                if (flags & TypeFlags.Null) includes |= TypeIncludes.Null;
-                if (!(flags & TypeFlags.ContainsWideningType)) includes |= TypeIncludes.NonWideningType;
-            }
-            else if (!(flags & TypeFlags.Never || flags & TypeFlags.Intersection && isEmptyIntersectionType(<IntersectionType>type))) {
-                // We ignore 'never' types in unions. Likewise, we ignore intersections of unit types as they are
-                // another form of 'never' (in that they have an empty value domain). We could in theory turn
-                // intersections of unit types into 'never' upon construction, but deferring the reduction makes it
-                // easier to reason about their origin.
-                if (flags & TypeFlags.String) includes |= TypeIncludes.String;
-                if (flags & TypeFlags.Number) includes |= TypeIncludes.Number;
-                if (flags & TypeFlags.ESSymbol) includes |= TypeIncludes.ESSymbol;
-                if (flags & TypeFlags.StringOrNumberLiteralOrUnique) includes |= TypeIncludes.LiteralOrUniqueESSymbol;
-                const len = typeSet.length;
-                const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues);
-                if (index < 0) {
-                    if (!(flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.Anonymous &&
-                        type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && containsIdenticalType(typeSet, type))) {
-                        typeSet.splice(~index, 0, type);
+            // We ignore 'never' types in unions. Likewise, we ignore intersections of unit types as they are
+            // another form of 'never' (in that they have an empty value domain). We could in theory turn
+            // intersections of unit types into 'never' upon construction, but deferring the reduction makes it
+            // easier to reason about their origin.
+            if (!(flags & TypeFlags.Never || flags & TypeFlags.Intersection && isEmptyIntersectionType(<IntersectionType>type))) {
+                includes |= flags & ~TypeFlags.ConstructionFlags;
+                if (flags & TypeFlags.Any) {
+                    if (type === wildcardType) includes |= TypeFlags.Wildcard;
+                }
+                else if (!strictNullChecks && flags & TypeFlags.Nullable) {
+                    if (!(flags & TypeFlags.ContainsWideningType)) includes |= TypeFlags.NonWideningType;
+                }
+                else {
+                    const len = typeSet.length;
+                    const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues);
+                    if (index < 0) {
+                        if (!(flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.Anonymous &&
+                            type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && containsIdenticalType(typeSet, type))) {
+                            typeSet.splice(~index, 0, type);
+                        }
                     }
                 }
             }
@@ -7993,7 +8099,7 @@ namespace ts {
 
         // Add the given types to the given type set. Order is preserved, duplicates are removed,
         // and nested types of the given kind are flattened into the set.
-        function addTypesToUnion(typeSet: Type[], includes: TypeIncludes, types: Type[]): TypeIncludes {
+        function addTypesToUnion(typeSet: Type[], includes: TypeFlags, types: Type[]): TypeFlags {
             for (const type of types) {
                 includes = addTypeToUnion(typeSet, includes, type);
             }
@@ -8050,15 +8156,15 @@ namespace ts {
             }
         }
 
-        function removeRedundantLiteralTypes(types: Type[], includes: TypeIncludes) {
+        function removeRedundantLiteralTypes(types: Type[], includes: TypeFlags) {
             let i = types.length;
             while (i > 0) {
                 i--;
                 const t = types[i];
                 const remove =
-                    t.flags & TypeFlags.StringLiteral && includes & TypeIncludes.String ||
-                    t.flags & TypeFlags.NumberLiteral && includes & TypeIncludes.Number ||
-                    t.flags & TypeFlags.UniqueESSymbol && includes & TypeIncludes.ESSymbol ||
+                    t.flags & TypeFlags.StringLiteral && includes & TypeFlags.String ||
+                    t.flags & TypeFlags.NumberLiteral && includes & TypeFlags.Number ||
+                    t.flags & TypeFlags.UniqueESSymbol && includes & TypeFlags.ESSymbol ||
                     t.flags & TypeFlags.StringOrNumberLiteral && t.flags & TypeFlags.FreshLiteral && containsType(types, (<LiteralType>t).regularType);
                 if (remove) {
                     orderedRemoveItemAt(types, i);
@@ -8082,12 +8188,12 @@ namespace ts {
             }
             const typeSet: Type[] = [];
             const includes = addTypesToUnion(typeSet, 0, types);
-            if (includes & TypeIncludes.Any) {
-                return includes & TypeIncludes.Wildcard ? wildcardType : anyType;
+            if (includes & TypeFlags.Any) {
+                return includes & TypeFlags.Wildcard ? wildcardType : anyType;
             }
             switch (unionReduction) {
                 case UnionReduction.Literal:
-                    if (includes & TypeIncludes.LiteralOrUniqueESSymbol) {
+                    if (includes & TypeFlags.StringOrNumberLiteralOrUnique) {
                         removeRedundantLiteralTypes(typeSet, includes);
                     }
                     break;
@@ -8096,8 +8202,8 @@ namespace ts {
                     break;
             }
             if (typeSet.length === 0) {
-                return includes & TypeIncludes.Null ? includes & TypeIncludes.NonWideningType ? nullType : nullWideningType :
-                    includes & TypeIncludes.Undefined ? includes & TypeIncludes.NonWideningType ? undefinedType : undefinedWideningType :
+                return includes & TypeFlags.Null ? includes & TypeFlags.NonWideningType ? nullType : nullWideningType :
+                    includes & TypeFlags.Undefined ? includes & TypeFlags.NonWideningType ? undefinedType : undefinedWideningType :
                         neverType;
             }
             return getUnionTypeFromSortedList(typeSet, aliasSymbol, aliasTypeArguments);
@@ -8175,30 +8281,23 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function addTypeToIntersection(typeSet: Type[], includes: TypeIncludes, type: Type) {
+        function addTypeToIntersection(typeSet: Type[], includes: TypeFlags, type: Type) {
             const flags = type.flags;
             if (flags & TypeFlags.Intersection) {
-                includes = addTypesToIntersection(typeSet, includes, (<IntersectionType>type).types);
+                return addTypesToIntersection(typeSet, includes, (<IntersectionType>type).types);
             }
-            else if (flags & TypeFlags.Any) {
-                includes |= TypeIncludes.Any;
-                if (type === wildcardType) includes |= TypeIncludes.Wildcard;
+            if (getObjectFlags(type) & ObjectFlags.Anonymous && isEmptyObjectType(type)) {
+                includes |= TypeFlags.EmptyObject;
             }
-            else if (flags & TypeFlags.Never) {
-                includes |= TypeIncludes.Never;
-            }
-            else if (getObjectFlags(type) & ObjectFlags.Anonymous && isEmptyObjectType(type)) {
-                includes |= TypeIncludes.EmptyObject;
-            }
-            else if ((strictNullChecks || !(flags & TypeFlags.Nullable)) && !contains(typeSet, type)) {
-                if (flags & TypeFlags.Object) {
-                    includes |= TypeIncludes.ObjectType;
+            else {
+                includes |= flags & ~TypeFlags.ConstructionFlags;
+                if (flags & TypeFlags.Any) {
+                    if (type === wildcardType) includes |= TypeFlags.Wildcard;
                 }
-                if (flags & TypeFlags.Union) {
-                    includes |= TypeIncludes.Union;
-                }
-                if (!(flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.Anonymous &&
-                    type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && containsIdenticalType(typeSet, type))) {
+                else if ((strictNullChecks || !(flags & TypeFlags.Nullable)) && !contains(typeSet, type) &&
+                    !(flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.Anonymous &&
+                    type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) &&
+                    containsIdenticalType(typeSet, type))) {
                     typeSet.push(type);
                 }
             }
@@ -8207,11 +8306,26 @@ namespace ts {
 
         // Add the given types to the given type set. Order is preserved, freshness is removed from literal
         // types, duplicates are removed, and nested types of the given kind are flattened into the set.
-        function addTypesToIntersection(typeSet: Type[], includes: TypeIncludes, types: Type[]) {
+        function addTypesToIntersection(typeSet: Type[], includes: TypeFlags, types: Type[]) {
             for (const type of types) {
                 includes = addTypeToIntersection(typeSet, includes, getRegularTypeOfLiteralType(type));
             }
             return includes;
+        }
+
+        function removeRedundantPrimitiveTypes(types: Type[], includes: TypeFlags) {
+            let i = types.length;
+            while (i > 0) {
+                i--;
+                const t = types[i];
+                const remove =
+                    t.flags & TypeFlags.String && includes & TypeFlags.StringLiteral ||
+                    t.flags & TypeFlags.Number && includes & TypeFlags.NumberLiteral ||
+                    t.flags & TypeFlags.ESSymbol && includes & TypeFlags.UniqueESSymbol;
+                if (remove) {
+                    orderedRemoveItemAt(types, i);
+                }
+            }
         }
 
         // We normalize combinations of intersection and union types based on the distributive property of the '&'
@@ -8230,19 +8344,24 @@ namespace ts {
             }
             const typeSet: Type[] = [];
             const includes = addTypesToIntersection(typeSet, 0, types);
-            if (includes & TypeIncludes.Never) {
+            if (includes & TypeFlags.Never) {
                 return neverType;
             }
-            if (includes & TypeIncludes.Any) {
-                return includes & TypeIncludes.Wildcard ? wildcardType : anyType;
+            if (includes & TypeFlags.Any) {
+                return includes & TypeFlags.Wildcard ? wildcardType : anyType;
             }
-            if (includes & TypeIncludes.EmptyObject && !(includes & TypeIncludes.ObjectType)) {
+            if (includes & TypeFlags.String && includes & TypeFlags.StringLiteral ||
+                includes & TypeFlags.Number && includes & TypeFlags.NumberLiteral ||
+                includes & TypeFlags.ESSymbol && includes & TypeFlags.UniqueESSymbol) {
+                removeRedundantPrimitiveTypes(typeSet, includes);
+            }
+            if (includes & TypeFlags.EmptyObject && !(includes & TypeFlags.Object)) {
                 typeSet.push(emptyObjectType);
             }
             if (typeSet.length === 1) {
                 return typeSet[0];
             }
-            if (includes & TypeIncludes.Union) {
+            if (includes & TypeFlags.Union) {
                 // We are attempting to construct a type of the form X & (A | B) & Y. Transform this into a type of
                 // the form X & A & Y | X & B & Y and recursively reduce until no union type constituents remain.
                 const unionIndex = findIndex(typeSet, t => (t.flags & TypeFlags.Union) !== 0);
@@ -10169,6 +10288,23 @@ namespace ts {
                         }
                     }
                 }
+                if (!result && source.flags & TypeFlags.Intersection) {
+                    // The combined constraint of an intersection type is the intersection of the constraints of
+                    // the constituents. When an intersection type contains instantiable types with union type
+                    // constraints, there are situations where we need to examine the combined constraint. One is
+                    // when the target is a union type. Another is when the intersection contains types belonging
+                    // to one of the disjoint domains. For example, given type variables T and U, each with the
+                    // constraint 'string | number', the combined constraint of 'T & U' is 'string | number' and
+                    // we need to check this constraint against a union on the target side. Also, given a type
+                    // variable V constrained to 'string | number', 'V & number' has a combined constraint of
+                    // 'string & number | number & number' which reduces to just 'number'.
+                    const constraint = getUnionConstraintOfIntersection(<IntersectionType>source, !!(target.flags & TypeFlags.Union));
+                    if (constraint) {
+                        if (result = isRelatedTo(constraint, target, reportErrors)) {
+                            errorInfo = saveErrorInfo;
+                        }
+                    }
+                }
 
                 isIntersectionConstituent = saveIsIntersectionConstituent;
 
@@ -10526,11 +10662,14 @@ namespace ts {
                         }
                     }
                     // A type S is assignable to keyof T if S is assignable to keyof C, where C is the
-                    // constraint of T.
-                    const constraint = getConstraintForRelation((<IndexType>target).type);
-                    if (constraint) {
-                        if (result = isRelatedTo(source, getIndexType(constraint, (target as IndexType).stringsOnly), reportErrors)) {
-                            return result;
+                    // simplified form of T or, if T doesn't simplify, the constraint of T.
+                    if (relation !== definitelyAssignableRelation) {
+                        const simplified = getSimplifiedType((<IndexType>target).type);
+                        const constraint = simplified !== (<IndexType>target).type ? simplified : getConstraintOfType((<IndexType>target).type);
+                        if (constraint) {
+                            if (result = isRelatedTo(source, getIndexType(constraint, (target as IndexType).stringsOnly), reportErrors)) {
+                                return result;
+                            }
                         }
                     }
                 }
@@ -10566,23 +10705,8 @@ namespace ts {
                     }
                 }
 
-                if (source.flags & TypeFlags.TypeParameter) {
-                    let constraint = getConstraintForRelation(<TypeParameter>source);
-                    // A type parameter with no constraint is not related to the non-primitive object type.
-                    if (constraint || !(target.flags & TypeFlags.NonPrimitive)) {
-                        if (!constraint || constraint.flags & TypeFlags.Any) {
-                            constraint = emptyObjectType;
-                        }
-                        // Report constraint errors only if the constraint is not the empty object type
-                        const reportConstraintErrors = reportErrors && constraint !== emptyObjectType;
-                        if (result = isRelatedTo(constraint, target, reportConstraintErrors)) {
-                            errorInfo = saveErrorInfo;
-                            return result;
-                        }
-                    }
-                }
-                else if (source.flags & TypeFlags.IndexedAccess) {
-                    if (target.flags & TypeFlags.IndexedAccess) {
+                if (source.flags & TypeFlags.TypeVariable) {
+                    if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {
                         // A type S[K] is related to a type T[J] if S is related to T and K is related to J.
                         if (result = isRelatedTo((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType, reportErrors)) {
                             result &= isRelatedTo((<IndexedAccessType>source).indexType, (<IndexedAccessType>target).indexType, reportErrors);
@@ -10592,11 +10716,15 @@ namespace ts {
                             return result;
                         }
                     }
-                    // A type S[K] is related to a type T if C is related to T, where C is the
-                    // constraint of S[K].
-                    const constraint = getConstraintForRelation(<IndexedAccessType>source);
-                    if (constraint) {
-                        if (result = isRelatedTo(constraint, target, reportErrors)) {
+                    let constraint = getConstraintForRelation(<TypeParameter>source);
+                    // A type variable with no constraint is not related to the non-primitive object type.
+                    if (constraint || !(target.flags & TypeFlags.NonPrimitive)) {
+                        if (!constraint || constraint.flags & TypeFlags.Any) {
+                            constraint = emptyObjectType;
+                        }
+                        // Report constraint errors only if the constraint is not the empty object type
+                        const reportConstraintErrors = reportErrors && constraint !== emptyObjectType;
+                        if (result = isRelatedTo(constraint, target, reportConstraintErrors)) {
                             errorInfo = saveErrorInfo;
                             return result;
                         }
@@ -10774,13 +10902,14 @@ namespace ts {
                             const sourcePropFlags = getDeclarationModifierFlagsFromSymbol(sourceProp);
                             const targetPropFlags = getDeclarationModifierFlagsFromSymbol(targetProp);
                             if (sourcePropFlags & ModifierFlags.Private || targetPropFlags & ModifierFlags.Private) {
-                                if (getCheckFlags(sourceProp) & CheckFlags.ContainsPrivate) {
+                                const hasDifferingDeclarations = sourceProp.valueDeclaration !== targetProp.valueDeclaration;
+                                if (getCheckFlags(sourceProp) & CheckFlags.ContainsPrivate && hasDifferingDeclarations) {
                                     if (reportErrors) {
                                         reportError(Diagnostics.Property_0_has_conflicting_declarations_and_is_inaccessible_in_type_1, symbolToString(sourceProp), typeToString(source));
                                     }
                                     return Ternary.False;
                                 }
-                                if (sourceProp.valueDeclaration !== targetProp.valueDeclaration) {
+                                if (hasDifferingDeclarations) {
                                     if (reportErrors) {
                                         if (sourcePropFlags & ModifierFlags.Private && targetPropFlags & ModifierFlags.Private) {
                                             reportError(Diagnostics.Types_have_separate_declarations_of_a_private_property_0, symbolToString(targetProp));
@@ -11461,6 +11590,10 @@ namespace ts {
 
         function isTupleLikeType(type: Type): boolean {
             return !!getPropertyOfType(type, "0" as __String);
+        }
+
+        function isNeitherUnitTypeNorNever(type: Type): boolean {
+            return !(type.flags & (TypeFlags.Unit | TypeFlags.Never));
         }
 
         function isUnitType(type: Type): boolean {
@@ -12942,8 +13075,7 @@ namespace ts {
 
         function getTypeOfSwitchClause(clause: CaseClause | DefaultClause) {
             if (clause.kind === SyntaxKind.CaseClause) {
-                const caseType = getRegularTypeOfLiteralType(getTypeOfExpression(clause.expression));
-                return isUnitType(caseType) ? caseType : undefined;
+                return getRegularTypeOfLiteralType(getTypeOfExpression(clause.expression));
             }
             return neverType;
         }
@@ -12951,15 +13083,9 @@ namespace ts {
         function getSwitchClauseTypes(switchStatement: SwitchStatement): Type[] {
             const links = getNodeLinks(switchStatement);
             if (!links.switchTypes) {
-                // If all case clauses specify expressions that have unit types, we return an array
-                // of those unit types. Otherwise we return an empty array.
                 links.switchTypes = [];
                 for (const clause of switchStatement.caseBlock.clauses) {
-                    const type = getTypeOfSwitchClause(clause);
-                    if (type === undefined) {
-                        return links.switchTypes = emptyArray;
-                    }
-                    links.switchTypes.push(type);
+                    links.switchTypes.push(getTypeOfSwitchClause(clause));
                 }
             }
             return links.switchTypes;
@@ -13599,7 +13725,7 @@ namespace ts {
                     const doubleEquals = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken;
                     const facts = doubleEquals ?
                         assumeTrue ? TypeFacts.EQUndefinedOrNull : TypeFacts.NEUndefinedOrNull :
-                        value.kind === SyntaxKind.NullKeyword ?
+                        valueType.flags & TypeFlags.Null ?
                             assumeTrue ? TypeFacts.EQNull : TypeFacts.NENull :
                             assumeTrue ? TypeFacts.EQUndefined : TypeFacts.NEUndefined;
                     return getTypeWithFacts(type, facts);
@@ -18746,11 +18872,10 @@ namespace ts {
             // Make sure require is not a local function
             if (!isIdentifier(node.expression)) return Debug.fail();
             const resolvedRequire = resolveName(node.expression, node.expression.escapedText, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
-            if (!resolvedRequire) {
-                // project does not contain symbol named 'require' - assume commonjs require
+            if (resolvedRequire === requireSymbol) {
                 return true;
             }
-            // project includes symbol named 'require' - make sure that it it ambient and local non-alias
+            // project includes symbol named 'require' - make sure that it is ambient and local non-alias
             if (resolvedRequire.flags & SymbolFlags.Alias) {
                 return false;
             }
@@ -18801,6 +18926,17 @@ namespace ts {
 
         function checkMetaProperty(node: MetaProperty) {
             checkGrammarMetaProperty(node);
+
+            if (node.keywordToken === SyntaxKind.NewKeyword) {
+                return checkNewTargetMetaProperty(node);
+            }
+
+            if (node.keywordToken === SyntaxKind.ImportKeyword) {
+                return checkImportMetaProperty(node);
+            }
+        }
+
+        function checkNewTargetMetaProperty(node: MetaProperty) {
             const container = getNewTargetContainer(node);
             if (!container) {
                 error(node, Diagnostics.Meta_property_0_is_only_allowed_in_the_body_of_a_function_declaration_function_expression_or_constructor, "new.target");
@@ -18814,6 +18950,16 @@ namespace ts {
                 const symbol = getSymbolOfNode(container);
                 return getTypeOfSymbol(symbol);
             }
+        }
+
+        function checkImportMetaProperty(node: MetaProperty) {
+            if (languageVersion < ScriptTarget.ESNext || moduleKind < ModuleKind.ESNext) {
+                error(node, Diagnostics.The_import_meta_meta_property_is_only_allowed_using_ESNext_for_the_target_and_module_compiler_options);
+            }
+            const file = getSourceFileOfNode(node);
+            Debug.assert(!!(file.flags & NodeFlags.PossiblyContainsImportMeta), "Containing file is missing import meta node flag.");
+            Debug.assert(!!file.externalModuleIndicator, "Containing file should be a module.");
+            return node.name.escapedText === "meta" ? getGlobalImportMetaType() : unknownType;
         }
 
         function getTypeOfParameter(symbol: Symbol) {
@@ -19063,7 +19209,7 @@ namespace ts {
                 return false;
             }
             const switchTypes = getSwitchClauseTypes(node);
-            if (!switchTypes.length) {
+            if (!switchTypes.length || some(switchTypes, isNeitherUnitTypeNorNever)) {
                 return false;
             }
             return eachTypeContainedIn(mapType(type, getRegularTypeOfLiteralType), switchTypes);
@@ -19915,6 +20061,7 @@ namespace ts {
                         getUnionType([removeDefinitelyFalsyTypes(leftType), rightType], UnionReduction.Subtype) :
                         leftType;
                 case SyntaxKind.EqualsToken:
+                    checkSpecialAssignment(left, right);
                     checkAssignmentOperator(rightType);
                     return getRegularTypeOfObjectLiteral(rightType);
                 case SyntaxKind.CommaToken:
@@ -19922,6 +20069,24 @@ namespace ts {
                         error(left, Diagnostics.Left_side_of_comma_operator_is_unused_and_has_no_side_effects);
                     }
                     return rightType;
+            }
+
+            function checkSpecialAssignment(left: Node, right: Expression) {
+                const special = getSpecialPropertyAssignmentKind(left.parent as BinaryExpression);
+                if (special === SpecialPropertyAssignmentKind.ModuleExports) {
+                    const rightType = checkExpression(right, checkMode);
+                    for (const prop of getPropertiesOfObjectType(rightType)) {
+                        const propType = getTypeOfSymbol(prop);
+                        if (propType.symbol && propType.symbol.flags & SymbolFlags.Class) {
+                            const name = prop.escapedName;
+                            const symbol = resolveName(prop.valueDeclaration, name, SymbolFlags.Type, undefined, name, /*isUse*/ false);
+                            if (symbol) {
+                                grammarErrorOnNode(symbol.declarations[0], Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(name));
+                                return grammarErrorOnNode(prop.valueDeclaration, Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(name));
+                            }
+                        }
+                    }
+                }
             }
 
             function isEvalNode(node: Expression) {
@@ -22438,7 +22603,7 @@ namespace ts {
 
         function checkCollisionWithRequireExportsInGeneratedCode(node: Node, name: Identifier) {
             // No need to check for require or exports for ES6 modules and later
-            if (modulekind >= ModuleKind.ES2015 || compilerOptions.noEmit) {
+            if (moduleKind >= ModuleKind.ES2015 || compilerOptions.noEmit) {
                 return;
             }
 
@@ -24634,7 +24799,7 @@ namespace ts {
                     }
                 }
                 else {
-                    if (modulekind >= ModuleKind.ES2015 && !(node.flags & NodeFlags.Ambient)) {
+                    if (moduleKind >= ModuleKind.ES2015 && !(node.flags & NodeFlags.Ambient)) {
                         // Import equals declaration is deprecated in es6 or above
                         grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_import_d_from_mod_or_another_module_format_instead);
                     }
@@ -24672,7 +24837,7 @@ namespace ts {
                         error(node.moduleSpecifier, Diagnostics.Module_0_uses_export_and_cannot_be_used_with_export_Asterisk, symbolToString(moduleSymbol));
                     }
 
-                    if (modulekind !== ModuleKind.System && modulekind !== ModuleKind.ES2015 && modulekind !== ModuleKind.ESNext) {
+                    if (moduleKind !== ModuleKind.System && moduleKind !== ModuleKind.ES2015 && moduleKind !== ModuleKind.ESNext) {
                         checkExternalEmitHelpers(node, ExternalEmitHelpers.ExportStar);
                     }
                 }
@@ -24745,11 +24910,11 @@ namespace ts {
             }
 
             if (node.isExportEquals && !(node.flags & NodeFlags.Ambient)) {
-                if (modulekind >= ModuleKind.ES2015) {
+                if (moduleKind >= ModuleKind.ES2015) {
                     // export assignment is not supported in es6 modules
                     grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_export_default_or_another_module_format_instead);
                 }
-                else if (modulekind === ModuleKind.System) {
+                else if (moduleKind === ModuleKind.System) {
                     // system modules does not support export assignment
                     grammarErrorOnNode(node, Diagnostics.Export_assignment_is_not_supported_when_module_flag_is_system);
                 }
@@ -27697,10 +27862,18 @@ namespace ts {
         }
 
         function checkGrammarMetaProperty(node: MetaProperty) {
-            if (node.keywordToken === SyntaxKind.NewKeyword) {
-                if (node.name.escapedText !== "target") {
-                    return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2, node.name.escapedText, tokenToString(node.keywordToken), "target");
-                }
+            const escapedText = node.name.escapedText;
+            switch (node.keywordToken) {
+                case SyntaxKind.NewKeyword:
+                    if (escapedText !== "target") {
+                        return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2, node.name.escapedText, tokenToString(node.keywordToken), "target");
+                    }
+                    break;
+                case SyntaxKind.ImportKeyword:
+                    if (escapedText !== "meta") {
+                        return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2, node.name.escapedText, tokenToString(node.keywordToken), "meta");
+                    }
+                    break;
             }
         }
 
@@ -27899,7 +28072,7 @@ namespace ts {
         }
 
         function checkGrammarImportCallExpression(node: ImportCall): boolean {
-            if (modulekind === ModuleKind.ES2015) {
+            if (moduleKind === ModuleKind.ES2015) {
                 return grammarErrorOnNode(node, Diagnostics.Dynamic_import_cannot_be_used_when_targeting_ECMAScript_2015_modules);
             }
 

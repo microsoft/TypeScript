@@ -105,6 +105,7 @@
         "codefixes/inferFromUsage.ts",
         "codefixes/fixInvalidImportSyntax.ts",
         "codefixes/fixStrictClassInitialization.ts",
+        "codefixes/requireInTs.ts",
         "codefixes/useDefaultImport.ts",
         "refactors/extractSymbol.ts",
         "refactors/generateGetAccessorAndSetAccessor.ts",
