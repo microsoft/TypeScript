@@ -398,6 +398,7 @@ namespace ts {
         SourceFile,
         Bundle,
         UnparsedSource,
+        InputFiles,
 
         // JSDoc nodes
         JSDocTypeExpression,
@@ -2621,17 +2622,22 @@ namespace ts {
 
     export interface Bundle extends Node {
         kind: SyntaxKind.Bundle;
-        prepends: ReadonlyArray<UnparsedSource>;
+        prepends: ReadonlyArray<InputFiles | UnparsedSource>;
         sourceFiles: ReadonlyArray<SourceFile>;
         /* @internal */ syntheticFileReferences?: ReadonlyArray<FileReference>;
         /* @internal */ syntheticTypeReferences?: ReadonlyArray<FileReference>;
         /* @internal */ hasNoDefaultLib?: boolean;
     }
 
-    export interface UnparsedSource extends Node {
-        kind: SyntaxKind.UnparsedSource;
+    export interface InputFiles extends Node {
+        kind: SyntaxKind.InputFiles;
         javascriptText: string;
         declarationText: string;
+    }
+
+    export interface UnparsedSource extends Node {
+        kind: SyntaxKind.UnparsedSource;
+        text: string;
     }
 
     export interface JsonSourceFile extends SourceFile {
@@ -4928,7 +4934,7 @@ namespace ts {
 
         isEmitBlocked(emitFileName: string): boolean;
 
-        getPrependNodes(): ReadonlyArray<UnparsedSource>;
+        getPrependNodes(): ReadonlyArray<InputFiles>;
 
         writeFile: WriteFileCallback;
     }

@@ -163,7 +163,11 @@ namespace ts {
                         const updated = visitNodes(sourceFile.statements, visitDeclarationStatements);
                         return updateSourceFileNode(sourceFile, filterCandidateImports(updated), /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false);
                     }
-                ));
+                ), ts.mapDefined(node.prepends, prepend => {
+                    if (prepend.kind === SyntaxKind.InputFiles) {
+                        return createUnparsedSourceFile(prepend.declarationText);
+                    }
+                }));
                 bundle.syntheticFileReferences = [];
                 bundle.syntheticTypeReferences = getFileReferencesForUsedTypeReferences();
                 bundle.hasNoDefaultLib = hasNoDefaultLib;

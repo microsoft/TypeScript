@@ -2569,15 +2569,21 @@ namespace ts {
             : node;
     }
 
-    export function createBundle(sourceFiles: ReadonlyArray<SourceFile>, prepends: ReadonlyArray<UnparsedSource> = emptyArray) {
+    export function createBundle(sourceFiles: ReadonlyArray<SourceFile>, prepends: ReadonlyArray<UnparsedSource | InputFiles> = emptyArray) {
         const node = <Bundle>createNode(SyntaxKind.Bundle);
         node.prepends = prepends;
         node.sourceFiles = sourceFiles;
         return node;
     }
 
-    export function createPrepend(javascript: string, declaration: string): UnparsedSource {
+    export function createUnparsedSourceFile(text: string): UnparsedSource {
         const node = <UnparsedSource>createNode(SyntaxKind.UnparsedSource);
+        node.text = text;
+        return node;
+    }
+
+    export function createInputFiles(javascript: string, declaration: string): InputFiles {
+        const node = <InputFiles>createNode(SyntaxKind.InputFiles);
         node.javascriptText = javascript;
         node.declarationText = declaration;
         return node;

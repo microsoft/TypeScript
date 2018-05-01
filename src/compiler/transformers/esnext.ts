@@ -26,7 +26,7 @@ namespace ts {
         let enclosingFunctionFlags: FunctionFlags;
         let enclosingSuperContainerFlags: NodeCheckFlags = 0;
 
-        return transformSourceFile;
+        return chainBundle(transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {

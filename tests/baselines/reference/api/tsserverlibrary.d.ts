@@ -338,32 +338,33 @@ declare namespace ts {
         SourceFile = 273,
         Bundle = 274,
         UnparsedSource = 275,
-        JSDocTypeExpression = 276,
-        JSDocAllType = 277,
-        JSDocUnknownType = 278,
-        JSDocNullableType = 279,
-        JSDocNonNullableType = 280,
-        JSDocOptionalType = 281,
-        JSDocFunctionType = 282,
-        JSDocVariadicType = 283,
-        JSDocComment = 284,
-        JSDocTypeLiteral = 285,
-        JSDocTag = 286,
-        JSDocAugmentsTag = 287,
-        JSDocClassTag = 288,
-        JSDocParameterTag = 289,
-        JSDocReturnTag = 290,
-        JSDocTypeTag = 291,
-        JSDocTemplateTag = 292,
-        JSDocTypedefTag = 293,
-        JSDocPropertyTag = 294,
-        SyntaxList = 295,
-        NotEmittedStatement = 296,
-        PartiallyEmittedExpression = 297,
-        CommaListExpression = 298,
-        MergeDeclarationMarker = 299,
-        EndOfDeclarationMarker = 300,
-        Count = 301,
+        InputFiles = 276,
+        JSDocTypeExpression = 277,
+        JSDocAllType = 278,
+        JSDocUnknownType = 279,
+        JSDocNullableType = 280,
+        JSDocNonNullableType = 281,
+        JSDocOptionalType = 282,
+        JSDocFunctionType = 283,
+        JSDocVariadicType = 284,
+        JSDocComment = 285,
+        JSDocTypeLiteral = 286,
+        JSDocTag = 287,
+        JSDocAugmentsTag = 288,
+        JSDocClassTag = 289,
+        JSDocParameterTag = 290,
+        JSDocReturnTag = 291,
+        JSDocTypeTag = 292,
+        JSDocTemplateTag = 293,
+        JSDocTypedefTag = 294,
+        JSDocPropertyTag = 295,
+        SyntaxList = 296,
+        NotEmittedStatement = 297,
+        PartiallyEmittedExpression = 298,
+        CommaListExpression = 299,
+        MergeDeclarationMarker = 300,
+        EndOfDeclarationMarker = 301,
+        Count = 302,
         FirstAssignment = 58,
         LastAssignment = 70,
         FirstCompoundAssignment = 59,
@@ -389,10 +390,10 @@ declare namespace ts {
         FirstBinaryOperator = 27,
         LastBinaryOperator = 70,
         FirstNode = 145,
-        FirstJSDocNode = 276,
-        LastJSDocNode = 294,
-        FirstJSDocTagNode = 286,
-        LastJSDocTagNode = 294
+        FirstJSDocNode = 277,
+        LastJSDocNode = 295,
+        FirstJSDocTagNode = 287,
+        LastJSDocTagNode = 295
     }
     enum NodeFlags {
         None = 0,
@@ -1645,13 +1646,17 @@ declare namespace ts {
     }
     interface Bundle extends Node {
         kind: SyntaxKind.Bundle;
-        prepends: ReadonlyArray<UnparsedSource>;
+        prepends: ReadonlyArray<InputFiles | UnparsedSource>;
         sourceFiles: ReadonlyArray<SourceFile>;
+    }
+    interface InputFiles extends Node {
+        kind: SyntaxKind.InputFiles;
+        javascriptText: string;
+        declarationText: string;
     }
     interface UnparsedSource extends Node {
         kind: SyntaxKind.UnparsedSource;
-        javascriptText: string;
-        declarationText: string;
+        text: string;
     }
     interface JsonSourceFile extends SourceFile {
         jsonObject?: ObjectLiteralExpression;
@@ -3756,8 +3761,9 @@ declare namespace ts {
     function updatePartiallyEmittedExpression(node: PartiallyEmittedExpression, expression: Expression): PartiallyEmittedExpression;
     function createCommaList(elements: ReadonlyArray<Expression>): CommaListExpression;
     function updateCommaList(node: CommaListExpression, elements: ReadonlyArray<Expression>): CommaListExpression;
-    function createBundle(sourceFiles: ReadonlyArray<SourceFile>, prepends?: ReadonlyArray<UnparsedSource>): Bundle;
-    function createPrepend(javascript: string, declaration: string): UnparsedSource;
+    function createBundle(sourceFiles: ReadonlyArray<SourceFile>, prepends?: ReadonlyArray<UnparsedSource | InputFiles>): Bundle;
+    function createUnparsedSourceFile(text: string): UnparsedSource;
+    function createInputFiles(javascript: string, declaration: string): InputFiles;
     function updateBundle(node: Bundle, sourceFiles: ReadonlyArray<SourceFile>, prepends?: ReadonlyArray<UnparsedSource>): Bundle;
     function createImmediatelyInvokedFunctionExpression(statements: ReadonlyArray<Statement>): CallExpression;
     function createImmediatelyInvokedFunctionExpression(statements: ReadonlyArray<Statement>, param: ParameterDeclaration, paramValue: Expression): CallExpression;
@@ -4483,6 +4489,7 @@ declare namespace ts {
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion;
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan;
+        toLineColumnOffset?(fileName: string, position: number): LineAndCharacter;
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings, preferences: UserPreferences): ReadonlyArray<CodeFixAction>;
         getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, preferences: UserPreferences): CombinedCodeActions;
         applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;

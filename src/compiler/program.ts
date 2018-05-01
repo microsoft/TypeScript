@@ -1170,12 +1170,12 @@ namespace ts {
             };
         }
 
-        function getPrependNodes(): UnparsedSource[] {
+        function getPrependNodes(): InputFiles[] {
             if (!projectReferences) {
                 return emptyArray;
             }
 
-            const nodes: UnparsedSource[] = [];
+            const nodes: InputFiles[] = [];
             for (let i = 0; i < projectReferences.length; i++) {
                 const ref = projectReferences[i];
                 const resolvedRefOpts = resolvedProjectReferences[i].commandLine;
@@ -1186,7 +1186,7 @@ namespace ts {
                     const dtsFilename = changeExtension(resolvedRefOpts.options.outFile, ".d.ts");
                     const js = host.readFile(resolvedRefOpts.options.outFile) || `/* Input file ${resolvedRefOpts.options.outFile} was missing */\r\n`;
                     const dts = host.readFile(dtsFilename) || `/* Input file ${dtsFilename} was missing */\r\n`;
-                    const node = createPrepend(js, dts);
+                    const node = createInputFiles(js, dts);
                     nodes.push(node);
                 }
             }

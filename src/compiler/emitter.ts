@@ -90,7 +90,7 @@ namespace ts {
 
     /*@internal*/
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
-    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean, transformers?: TransformerFactory<SourceFile>[]): EmitResult {
+    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean, transformers?: TransformerFactory<SourceFile | Bundle>[]): EmitResult {
         const compilerOptions = host.getCompilerOptions();
         const sourceMapDataList: SourceMapData[] = (compilerOptions.sourceMap || compilerOptions.inlineSourceMap || getAreDeclarationMapsEnabled(compilerOptions)) ? [] : undefined;
         const emittedFilesList: string[] = compilerOptions.listEmittedFiles ? [] : undefined;
@@ -143,7 +143,6 @@ namespace ts {
         }
 
         function emitJsFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, jsFilePath: string, sourceMapFilePath: string, bundleInfoPath: string | undefined) {
-            const sourceFiles = isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : sourceFileOrBundle.sourceFiles;
             // Make sure not to write js file and source map file if any of them cannot be written
             if (host.isEmitBlocked(jsFilePath) || compilerOptions.noEmit || compilerOptions.emitDeclarationOnly) {
                 emitSkipped = true;
@@ -153,7 +152,7 @@ namespace ts {
                 return;
             }
             // Transform the source files
-            const transform = transformNodes(resolver, host, compilerOptions, sourceFiles, transformers, /*allowDtsFiles*/ false);
+            const transform = transformNodes(resolver, host, compilerOptions, [sourceFileOrBundle], transformers, /*allowDtsFiles*/ false);
 
             // Create a printer to print the nodes
             const printer = createPrinter({ ...compilerOptions, noEmitHelpers: compilerOptions.noEmitHelpers } as PrinterOptions, {
@@ -173,7 +172,8 @@ namespace ts {
                 onSetSourceFile: setSourceFile,
             });
 
-            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, isSourceFile(sourceFileOrBundle) ? transform.transformed[0] : createBundle(transform.transformed), bundleInfoPath, printer, sourceMap);
+            Debug.assert(transform.transformed.length === 1, "Should only see one output from the transform");
+            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, transform.transformed[0], bundleInfoPath, printer, sourceMap);
 
             // Clean up emit nodes on parse tree
             transform.dispose();
@@ -186,7 +186,7 @@ namespace ts {
             const sourceFiles = isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : sourceFileOrBundle.sourceFiles;
             // Setup and perform the transformation to retrieve declarations from the input files
             const nonJsFiles = filter(sourceFiles, isSourceFileNotJavaScript);
-            const inputListOrBundle = (compilerOptions.outFile || compilerOptions.out) ? [createBundle(nonJsFiles)] : nonJsFiles;
+            const inputListOrBundle = (compilerOptions.outFile || compilerOptions.out) ? [createBundle(nonJsFiles, !isSourceFile(sourceFileOrBundle) ? sourceFileOrBundle.prepends : undefined)] : nonJsFiles;
             const declarationTransform = transformNodes(resolver, host, compilerOptions, inputListOrBundle, [transformDeclarations], /*allowDtsFiles*/ false);
             if (length(declarationTransform.diagnostics)) {
                 for (const diagnostic of declarationTransform.diagnostics) {
@@ -210,6 +210,7 @@ namespace ts {
             const declBlocked = (!!declarationTransform.diagnostics && !!declarationTransform.diagnostics.length) || !!host.isEmitBlocked(declarationFilePath) || !!compilerOptions.noEmit;
             emitSkipped = emitSkipped || declBlocked;
             if (!declBlocked || emitOnlyDtsFiles) {
+                Debug.assert(declarationTransform.transformed.length === 1, "Should only see one output from the decl transform");
                 printSourceFileOrBundle(declarationFilePath, declarationMapPath, declarationTransform.transformed[0], /* bundleInfopath*/ undefined, declarationPrinter, declarationSourceMap);
             }
             declarationTransform.dispose();
@@ -403,6 +404,7 @@ namespace ts {
             emitSyntheticTripleSlashReferencesIfNeeded(bundle);
 
             for (const prepend of bundle.prepends) {
+                write("\n");
                 print(EmitHint.Unspecified, prepend, /*sourceFile*/ undefined);
             }
 
@@ -411,7 +413,6 @@ namespace ts {
             }
 
             for (const sourceFile of bundle.sourceFiles) {
-                write("\n");
                 print(EmitHint.SourceFile, sourceFile, sourceFile);
             }
             reset();
@@ -1018,7 +1019,7 @@ namespace ts {
 
         // SyntaxKind.UnparsedSource
         function emitUnparsedSource(unparsed: UnparsedSource) {
-            write(unparsed.javascriptText);
+            write(unparsed.text);
         }
 
         //
