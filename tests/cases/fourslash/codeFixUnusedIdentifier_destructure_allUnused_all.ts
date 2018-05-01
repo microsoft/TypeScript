@@ -3,16 +3,20 @@
 // @noUnusedLocals: true
 // @noUnusedParameters: true
 
-////export {};
 ////const { x, y } = o;
 ////const { a, b } = o;
 ////a;
+////export function f({ x, y }, { a, b }) {
+////    a;
+////}
 
 verify.codeFixAll({
     fixId: "unusedIdentifier_delete",
     fixAllDescription: "Delete all unused declarations",
     newFileContent:
-`export {};
-const { a, } = o;
-a;`,
+`const { a, } = o;
+a;
+export function f({ a, }) {
+    a;
+}`,
 });
