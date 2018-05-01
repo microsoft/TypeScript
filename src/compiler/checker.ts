@@ -5357,8 +5357,9 @@ namespace ts {
 
                 const declaration = <JSDocTypedefTag | JSDocCallbackTag | TypeAliasDeclaration>find(symbol.declarations, d =>
                     isJSDocTypeAlias(d) || d.kind === SyntaxKind.TypeAliasDeclaration);
+                const typeNode = isJSDocTypedefTag(declaration) ? declaration.typeExpression : isJSDocCallbackTag(declaration) ? declaration.signature : declaration.type;
                 // If typeNode is missing, we will error in checkJSDocTypedefTag.
-                let type = declaration.type ? getTypeFromTypeNode(declaration.type) : unknownType;
+                let type = typeNode ? getTypeFromTypeNode(typeNode) : unknownType;
 
                 if (popTypeResolution()) {
                     const typeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
@@ -22147,7 +22148,7 @@ namespace ts {
         }
 
         function checkJSDocTypeAliasTag(node: JSDocTypedefTag | JSDocCallbackTag) {
-            if (!node.type) {
+            if (!node.typeExpression) {
                 // If the node had `@property` tags, `typeExpression` would have been set to the first property tag.
                 error(node.name, Diagnostics.JSDoc_typedef_tag_should_either_have_a_type_annotation_or_be_followed_by_property_or_member_tags);
             }
@@ -22155,7 +22156,7 @@ namespace ts {
             if (node.name) {
                 checkTypeNameIsReserved(node.name, Diagnostics.Type_alias_name_cannot_be_0);
             }
-            checkSourceElement(node.type);
+            checkSourceElement(node.typeExpression);
         }
 
         function checkJSDocParameterTag(node: JSDocParameterTag) {
