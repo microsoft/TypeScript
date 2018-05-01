@@ -27,7 +27,8 @@ namespace ts {
         getTokenFlags(): TokenFlags;
         reScanGreaterToken(): SyntaxKind;
         reScanSlashToken(): SyntaxKind;
-        reScanTemplateToken(): SyntaxKind;
+        reScanTemplateToken(isTaggedTemplate?: boolean): SyntaxKind;
+        reScanTemplateHead(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
         reScanJsxToken(): JsxTokenSyntaxKind;
@@ -426,6 +427,16 @@ namespace ts {
       /* @internal */
       export function isOctalDigit(ch: number): boolean {
           return ch >= CharacterCodes._0 && ch <= CharacterCodes._7;
+      }
+
+      /* @internal */
+      export function isHexDigit(ch: number): boolean {
+          return isDigit(ch) || ch >= CharacterCodes.A && ch <= CharacterCodes.F || ch >= CharacterCodes.a && ch <= CharacterCodes.f;
+      }
+
+      /* @internal */
+      export function isCodePoint(code: number): boolean {
+          return code <= 0x10FFFF;
       }
 
       export function couldStartTrivia(text: string, pos: number): boolean {
@@ -838,6 +849,7 @@ namespace ts {
             reScanGreaterToken,
             reScanSlashToken,
             reScanTemplateToken,
+            reScanTemplateHead,
             scanJsxIdentifier,
             scanJsxAttributeValue,
             reScanJsxToken,
@@ -1054,7 +1066,7 @@ namespace ts {
          * Sets the current 'tokenValue' and returns a NoSubstitutionTemplateLiteral or
          * a literal component of a TemplateExpression.
          */
-        function scanTemplateAndSetTokenValue(): SyntaxKind {
+        function scanTemplateAndSetTokenValue(isTaggedTemplate?: boolean): SyntaxKind {
             const startedWithBacktick = text.charCodeAt(pos) === CharacterCodes.backtick;
 
             pos++;
@@ -1092,7 +1104,7 @@ namespace ts {
                 // Escape character
                 if (currChar === CharacterCodes.backslash) {
                     contents += text.substring(start, pos);
-                    contents += scanEscapeSequence();
+                    contents += scanEscapeSequence(isTaggedTemplate);
                     start = pos;
                     continue;
                 }
@@ -1121,7 +1133,8 @@ namespace ts {
             return resultingToken;
         }
 
-        function scanEscapeSequence(): string {
+        function scanEscapeSequence(isTaggedTemplate?: boolean): string {
+            const start = pos;
             pos++;
             if (pos >= end) {
                 error(Diagnostics.Unexpected_end_of_text);
@@ -1131,6 +1144,11 @@ namespace ts {
             pos++;
             switch (ch) {
                 case CharacterCodes._0:
+                    if (isTaggedTemplate && isDigit(text.charCodeAt(pos))) {
+                        pos++;
+                        tokenFlags |= TokenFlags.NotEscape;
+                        return text.substring(start, pos);
+                    }
                     return "\0";
                 case CharacterCodes.b:
                     return "\b";
@@ -1149,17 +1167,55 @@ namespace ts {
                 case CharacterCodes.doubleQuote:
                     return "\"";
                 case CharacterCodes.u:
+                    if (isTaggedTemplate) {
+                        if (pos < end && !isHexDigit(text.charCodeAt(pos)) && text.charCodeAt(pos) !== CharacterCodes.openBrace) {
+                            tokenFlags |= TokenFlags.NotEscape;
+                            return "u";
+                        }
+
+                        for (let i = 0; i < 3; i++) {
+                            if (pos + i + 1 < end && isHexDigit(text.charCodeAt(pos + i)) &&  !isHexDigit(text.charCodeAt(pos + i + 1)) && text.charCodeAt(pos + i + 1) !== CharacterCodes.openBrace) {
+                                pos += i;
+                                tokenFlags |= TokenFlags.NotEscape;
+                                return text.substring(start, pos);
+                            }
+                        }
+                    }
                     // '\u{DDDDDDDD}'
                     if (pos < end && text.charCodeAt(pos) === CharacterCodes.openBrace) {
-                        tokenFlags |= TokenFlags.ExtendedUnicodeEscape;
                         pos++;
-                        return scanExtendedUnicodeEscape();
+
+                        if (isTaggedTemplate && !isHexDigit(text.charCodeAt(pos))) {
+                            tokenFlags |= TokenFlags.NotEscape;
+                            return "u{";
+                        }
+
+                        const escapedValue = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);
+                        if (isTaggedTemplate) {
+                            if (!isCodePoint(escapedValue) || text.charCodeAt(pos) !== CharacterCodes.closeBrace) {
+                                tokenFlags |= TokenFlags.NotEscape;
+                                return text.substring(start, pos);
+                            }
+                        }
+                        tokenFlags |= TokenFlags.ExtendedUnicodeEscape;
+                        return scanExtendedUnicodeEscape(escapedValue);
                     }
 
                     // '\uDDDD'
                     return scanHexadecimalEscape(/*numDigits*/ 4);
 
                 case CharacterCodes.x:
+                    if (isTaggedTemplate) {
+                        if (!isHexDigit(text.charCodeAt(pos))) {
+                            tokenFlags |= TokenFlags.NotEscape;
+                            return "x";
+                        }
+                        else if (!isHexDigit(text.charCodeAt(pos + 1))) {
+                            pos++;
+                            tokenFlags |= TokenFlags.NotEscape;
+                            return "x" + String.fromCharCode(text.charCodeAt(pos));
+                        }
+                    }
                     // '\xDD'
                     return scanHexadecimalEscape(/*numDigits*/ 2);
 
@@ -1191,8 +1247,7 @@ namespace ts {
             }
         }
 
-        function scanExtendedUnicodeEscape(): string {
-            const escapedValue = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);
+        function scanExtendedUnicodeEscape(escapedValue: number): string {
             let isInvalidExtendedEscape = false;
 
             // Validate the value of the digit
@@ -1825,10 +1880,15 @@ namespace ts {
         /**
          * Unconditionally back up and scan a template expression portion.
          */
-        function reScanTemplateToken(): SyntaxKind {
+        function reScanTemplateToken(isTaggedTemplate?: boolean): SyntaxKind {
             Debug.assert(token === SyntaxKind.CloseBraceToken, "'reScanTemplateToken' should only be called on a '}'");
             pos = tokenPos;
-            return token = scanTemplateAndSetTokenValue();
+            return token = scanTemplateAndSetTokenValue(isTaggedTemplate);
+        }
+
+        function reScanTemplateHead(): SyntaxKind {
+            pos = tokenPos;
+            return token = scanTemplateAndSetTokenValue(/* isTaggedTemplate */ true);
         }
 
         function reScanJsxToken(): JsxTokenSyntaxKind {

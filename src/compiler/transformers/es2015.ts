@@ -3656,10 +3656,10 @@ namespace ts {
                 rawStrings.push(getRawLiteral(template));
             }
             else {
-                cookedStrings.push(createLiteral(template.head.text));
+                cookedStrings.push(template.head.notEscapeFlags ? createIdentifier("undefined") : createLiteral(template.head.text));
                 rawStrings.push(getRawLiteral(template.head));
                 for (const templateSpan of template.templateSpans) {
-                    cookedStrings.push(createLiteral(templateSpan.literal.text));
+                    cookedStrings.push(templateSpan.literal.notEscapeFlags ? createIdentifier("undefined") : createLiteral(templateSpan.literal.text));
                     rawStrings.push(getRawLiteral(templateSpan.literal));
                     templateArguments.push(visitNode(templateSpan.expression, visitor, isExpression));
                 }

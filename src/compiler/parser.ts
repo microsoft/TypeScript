@@ -1034,8 +1034,12 @@ namespace ts {
             return currentToken = scanner.reScanSlashToken();
         }
 
-        function reScanTemplateToken(): SyntaxKind {
-            return currentToken = scanner.reScanTemplateToken();
+        function reScanTemplateToken(isTaggedTemplate?: boolean): SyntaxKind {
+            return currentToken = scanner.reScanTemplateToken(isTaggedTemplate);
+        }
+
+        function reScanTemplateHead(): SyntaxKind {
+            return currentToken = scanner.reScanTemplateHead();
         }
 
         function scanJsxIdentifier(): SyntaxKind {
@@ -2104,17 +2108,17 @@ namespace ts {
             return allowIdentifierNames ? parseIdentifierName() : parseIdentifier();
         }
 
-        function parseTemplateExpression(): TemplateExpression {
+        function parseTemplateExpression(isTaggedTemplate?: boolean): TemplateExpression {
             const template = <TemplateExpression>createNode(SyntaxKind.TemplateExpression);
 
-            template.head = parseTemplateHead();
+            template.head = parseTemplateHead(isTaggedTemplate);
             Debug.assert(template.head.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
 
             const list = [];
             const listPos = getNodePos();
 
             do {
-                list.push(parseTemplateSpan());
+                list.push(parseTemplateSpan(isTaggedTemplate));
             }
             while (lastOrUndefined(list).literal.kind === SyntaxKind.TemplateMiddle);
 
@@ -2123,13 +2127,13 @@ namespace ts {
             return finishNode(template);
         }
 
-        function parseTemplateSpan(): TemplateSpan {
+        function parseTemplateSpan(isTaggedTemplate?: boolean): TemplateSpan {
             const span = <TemplateSpan>createNode(SyntaxKind.TemplateSpan);
             span.expression = allowInAnd(parseExpression);
 
             let literal: TemplateMiddle | TemplateTail;
             if (token() === SyntaxKind.CloseBraceToken) {
-                reScanTemplateToken();
+                reScanTemplateToken(isTaggedTemplate);
                 literal = parseTemplateMiddleOrTemplateTail();
             }
             else {
@@ -2144,7 +2148,10 @@ namespace ts {
             return <LiteralExpression>parseLiteralLikeNode(token());
         }
 
-        function parseTemplateHead(): TemplateHead {
+        function parseTemplateHead(isTaggedTemplate?: boolean): TemplateHead {
+            if (isTaggedTemplate) {
+                reScanTemplateHead();
+            }
             const fragment = parseLiteralLikeNode(token());
             Debug.assert(fragment.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
             return <TemplateHead>fragment;
@@ -2157,7 +2164,7 @@ namespace ts {
         }
 
         function parseLiteralLikeNode(kind: SyntaxKind): LiteralExpression | LiteralLikeNode {
-            const node = <LiteralExpression>createNode(kind);
+            const node = <LiteralExpression | LiteralLikeNode>createNode(kind);
             const text = scanner.getTokenValue();
             node.text = text;
 
@@ -2177,6 +2184,10 @@ namespace ts {
             // parent unary expression.
             if (node.kind === SyntaxKind.NumericLiteral) {
                 (<NumericLiteral>node).numericLiteralFlags = scanner.getTokenFlags() & TokenFlags.NumericLiteralFlags;
+            }
+
+            if (node.kind === SyntaxKind.TemplateHead || node.kind === SyntaxKind.TemplateMiddle || node.kind === SyntaxKind.TemplateTail) {
+                (<TemplateHead | TemplateMiddle | TemplateTail>node).notEscapeFlags = scanner.getTokenFlags() & TokenFlags.NotEscape;
             }
 
             nextToken();
@@ -4414,7 +4425,7 @@ namespace ts {
             tagExpression.typeArguments = typeArguments;
             tagExpression.template = token() === SyntaxKind.NoSubstitutionTemplateLiteral
                 ? <NoSubstitutionTemplateLiteral>parseLiteralNode()
-                : parseTemplateExpression();
+                : parseTemplateExpression(/*isTaggedTemplate*/ true);
             return finishNode(tagExpression);
         }
 
