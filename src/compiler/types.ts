@@ -411,9 +411,11 @@ namespace ts {
         JSDocVariadicType,
         JSDocComment,
         JSDocTypeLiteral,
+        JSDocSignature,
         JSDocTag,
         JSDocAugmentsTag,
         JSDocClassTag,
+        JSDocCallbackTag,
         JSDocParameterTag,
         JSDocReturnTag,
         JSDocTypeTag,
@@ -822,6 +824,7 @@ namespace ts {
         | FunctionTypeNode
         | ConstructorTypeNode
         | JSDocFunctionType
+        | JSDocSignature // TODO: Different from JSDocFunctionType??????
         | FunctionDeclaration
         | MethodDeclaration
         | ConstructorDeclaration
@@ -2383,6 +2386,19 @@ namespace ts {
         fullName?: JSDocNamespaceDeclaration | Identifier;
         name?: Identifier;
         typeExpression?: JSDocTypeExpression | JSDocTypeLiteral;
+    }
+
+    export interface JSDocCallbackTag extends JSDocTag, NamedDeclaration {
+        parent: JSDoc;
+        kind: SyntaxKind.JSDocCallbackTag;
+        fullName?: JSDocNamespaceDeclaration | Identifier;
+        name?: Identifier; // TODO: Not sure whether this rigamarole is needed for callback...but probably!
+        signature: JSDocSignature;
+    }
+
+    // TODO: name it JSDocSignatureDeclaration? Could just try to reuse JSDocTypeLiteral
+    export interface JSDocSignature extends JSDocType, SignatureDeclarationBase {
+        kind: SyntaxKind.JSDocSignature;
     }
 
     export interface JSDocPropertyLikeTag extends JSDocTag, Declaration {
