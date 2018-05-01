@@ -2618,6 +2618,9 @@ namespace ts {
         }
 
         function bindParameter(node: ParameterDeclaration | JSDocParameterTag) {
+            if (node.kind === SyntaxKind.JSDocParameterTag && container.kind !== SyntaxKind.JSDocSignature) {
+                return;
+            }
             if (inStrictMode && !(node.flags & NodeFlags.Ambient)) {
                 // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a
                 // strict mode FunctionLikeDeclaration or FunctionExpression(13.1)
