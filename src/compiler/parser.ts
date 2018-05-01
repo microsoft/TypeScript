@@ -480,18 +480,18 @@ namespace ts {
             case SyntaxKind.JSDocTemplateTag:
                 return visitNodes(cbNode, cbNodes, (<JSDocTemplateTag>node).typeParameters);
             case SyntaxKind.JSDocTypedefTag:
-                if ((node as JSDocTypedefTag).typeExpression &&
-                    (node as JSDocTypedefTag).typeExpression.kind === SyntaxKind.JSDocTypeExpression) {
-                    return visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression) ||
+                if ((node as JSDocTypedefTag).type &&
+                    (node as JSDocTypedefTag).type.kind === SyntaxKind.JSDocTypeExpression) {
+                    return visitNode(cbNode, (<JSDocTypedefTag>node).type) ||
                         visitNode(cbNode, (<JSDocTypedefTag>node).fullName);
                 }
                 else {
                     return visitNode(cbNode, (<JSDocTypedefTag>node).fullName) ||
-                        visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression);
+                        visitNode(cbNode, (<JSDocTypedefTag>node).type);
                 }
             case SyntaxKind.JSDocCallbackTag:
                 return visitNode(cbNode, (node as JSDocCallbackTag).fullName) ||
-                    visitNode(cbNode, (node as JSDocCallbackTag).signature);
+                    visitNode(cbNode, (node as JSDocCallbackTag).type);
             case SyntaxKind.JSDocSignature:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
@@ -6737,7 +6737,7 @@ namespace ts {
                         // Debug.assert(child.kind !== SyntaxKind.JSDocTypeTag);
                         jsdocSignature.parameters = append(jsdocSignature.parameters as MutableNodeArray<JSDocParameterTag>, child);
                     }
-                    callbackTag.signature = finishNode(jsdocSignature);
+                    callbackTag.type = finishNode(jsdocSignature);
                     return finishNode(callbackTag);
                 }
 
@@ -6764,7 +6764,7 @@ namespace ts {
                     typedefTag.name = getJSDocTypeAliasName(typedefTag.fullName);
                     skipWhitespace();
 
-                    typedefTag.typeExpression = typeExpression;
+                    typedefTag.type = typeExpression;
                     if (!typeExpression || isObjectOrObjectArrayTypeReference(typeExpression.type)) {
                         let child: JSDocTypeTag | JSDocPropertyTag | false;
                         let jsdocTypeLiteral: JSDocTypeLiteral;
@@ -6790,7 +6790,7 @@ namespace ts {
                             if (typeExpression && typeExpression.type.kind === SyntaxKind.ArrayType) {
                                 jsdocTypeLiteral.isArrayType = true;
                             }
-                            typedefTag.typeExpression = childTypeTag && childTypeTag.typeExpression && !isObjectOrObjectArrayTypeReference(childTypeTag.typeExpression.type) ?
+                            typedefTag.type = childTypeTag && childTypeTag.typeExpression && !isObjectOrObjectArrayTypeReference(childTypeTag.typeExpression.type) ?
                                 childTypeTag.typeExpression :
                                 finishNode(jsdocTypeLiteral);
                         }
