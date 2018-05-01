@@ -404,8 +404,8 @@ namespace ts {
             emitSyntheticTripleSlashReferencesIfNeeded(bundle);
 
             for (const prepend of bundle.prepends) {
-                write("\n");
                 print(EmitHint.Unspecified, prepend, /*sourceFile*/ undefined);
+                write("\n");
             }
 
             if (bundleInfo) {
