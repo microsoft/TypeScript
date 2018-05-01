@@ -325,7 +325,8 @@ namespace ts.refactor {
             forEachTopLevelDeclaration(statement, decl => {
                 movedSymbols.add(Debug.assertDefined(isExpressionStatement(decl) ? checker.getSymbolAtLocation(decl.expression.left) : decl.symbol));
             });
-
+        }
+        for (const statement of toMove) {
             forEachReference(statement, checker, symbol => {
                 if (!symbol.declarations) return;
                 for (const decl of symbol.declarations) {
@@ -460,7 +461,15 @@ namespace ts.refactor {
     }
 
     type TopLevelExpressionStatement = ExpressionStatement & { expression: BinaryExpression & { left: PropertyAccessExpression } }; // 'exports.x = ...'
-    type NonVariableTopLevelDeclaration = FunctionDeclaration | ClassDeclaration | EnumDeclaration | TypeAliasDeclaration | InterfaceDeclaration | ModuleDeclaration | TopLevelExpressionStatement;
+    type NonVariableTopLevelDeclaration =
+        | FunctionDeclaration
+        | ClassDeclaration
+        | EnumDeclaration
+        | TypeAliasDeclaration
+        | InterfaceDeclaration
+        | ModuleDeclaration
+        | TopLevelExpressionStatement
+        | ImportEqualsDeclaration;
     type TopLevelDeclarationStatement = NonVariableTopLevelDeclaration | VariableStatement;
     interface TopLevelVariableDeclaration extends VariableDeclaration { parent: VariableDeclarationList & { parent: VariableStatement; }; }
     type TopLevelDeclaration = NonVariableTopLevelDeclaration | TopLevelVariableDeclaration;
@@ -481,6 +490,7 @@ namespace ts.refactor {
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.ImportEqualsDeclaration:
                 return true;
             default:
                 return false;
@@ -495,7 +505,8 @@ namespace ts.refactor {
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.InterfaceDeclaration:
-                return cb(statement as FunctionDeclaration | ClassDeclaration | EnumDeclaration | ModuleDeclaration | TypeAliasDeclaration | InterfaceDeclaration);
+            case SyntaxKind.ImportEqualsDeclaration:
+                return cb(statement as FunctionDeclaration | ClassDeclaration | EnumDeclaration | ModuleDeclaration | TypeAliasDeclaration | InterfaceDeclaration | ImportEqualsDeclaration);
 
             case SyntaxKind.VariableStatement:
                 return forEach((statement as VariableStatement).declarationList.declarations as ReadonlyArray<TopLevelVariableDeclaration>, cb);
@@ -557,6 +568,8 @@ namespace ts.refactor {
                 return updateTypeAliasDeclaration(d, d.decorators, modifiers, d.name, d.typeParameters, d.type);
             case SyntaxKind.InterfaceDeclaration:
                 return updateInterfaceDeclaration(d, d.decorators, modifiers, d.name, d.typeParameters, d.heritageClauses, d.members);
+            case SyntaxKind.ImportEqualsDeclaration:
+                return updateImportEqualsDeclaration(d, d.decorators, modifiers, d.name, d.moduleReference);
             case SyntaxKind.ExpressionStatement:
                 return Debug.fail(); // Shouldn't try to add 'export' keyword to `exports.x = ...`
             default:
@@ -577,6 +590,7 @@ namespace ts.refactor {
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.ImportEqualsDeclaration:
                 return undefined;
             case SyntaxKind.ExpressionStatement:
                 return Debug.fail(); // Shouldn't try to add 'export' keyword to `exports.x = ...`
