@@ -7,12 +7,8 @@
 ////
 ////declare function foo<TString, TNumber>(obj: I<TString, TNumber>): { str: TStr/*1*/
 
-goTo.marker("1");
-
-verify.completionListContains("I");
-verify.completionListContains("TString");
-verify.completionListContains("TNumber"); // REVIEW: Is this intended behavior?
-
-// Ideally the following shouldn't show up since they're not types.
-verify.not.completionListContains("foo");
-verify.not.completionListContains("obj");
+verify.completions({
+    at: "1",
+    includes: ["I", "TString", "TNumber"], // REVIEW: Is TNumber intended behavior?
+    excludes: ["foo", "obj"], // These shouldn't show up since they're not types.
+})

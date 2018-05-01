@@ -22,6 +22,8 @@
 namespace FourSlash {
     ts.disableIncrementalParsing = false;
 
+    import Many = FourSlashInterface.Many;
+
     // Represents a parsed source file with metadata
     interface FourSlashFile {
         // The contents of the file (with markers, etc stripped out)
@@ -615,11 +617,11 @@ namespace FourSlash {
             }
         }
 
-        public verifyGoToDefinitionIs(endMarker: string | string[]) {
+        public verifyGoToDefinitionIs(endMarker: Many<string>) {
             this.verifyGoToXWorker(toArray(endMarker), () => this.getGoToDefinition());
         }
 
-        public verifyGoToDefinition(arg0: any, endMarkerNames?: string | string[]) {
+        public verifyGoToDefinition(arg0: any, endMarkerNames?: Many<string>) {
             this.verifyGoToX(arg0, endMarkerNames, () => this.getGoToDefinitionAndBoundSpan());
         }
 
@@ -631,23 +633,23 @@ namespace FourSlash {
             return this.languageService.getDefinitionAndBoundSpan(this.activeFile.fileName, this.currentCaretPosition);
         }
 
-        public verifyGoToType(arg0: any, endMarkerNames?: string | string[]) {
+        public verifyGoToType(arg0: any, endMarkerNames?: Many<string>) {
             this.verifyGoToX(arg0, endMarkerNames, () =>
                 this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition));
         }
 
-        private verifyGoToX(arg0: any, endMarkerNames: string | string[] | undefined, getDefs: () => ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
+        private verifyGoToX(arg0: any, endMarkerNames: Many<string> | undefined, getDefs: () => ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
             if (endMarkerNames) {
                 this.verifyGoToXPlain(arg0, endMarkerNames, getDefs);
             }
             else if (ts.isArray(arg0)) {
-                const pairs = arg0 as ReadonlyArray<[string | string[], string | string[]]>;
+                const pairs = arg0 as ReadonlyArray<[Many<string>, Many<string>]>;
                 for (const [start, end] of pairs) {
                     this.verifyGoToXPlain(start, end, getDefs);
                 }
             }
             else {
-                const obj: { [startMarkerName: string]: string | string[] } = arg0;
+                const obj: { [startMarkerName: string]: Many<string> } = arg0;
                 for (const startMarkerName in obj) {
                     if (ts.hasProperty(obj, startMarkerName)) {
                         this.verifyGoToXPlain(startMarkerName, obj[startMarkerName], getDefs);
@@ -656,7 +658,7 @@ namespace FourSlash {
             }
         }
 
-        private verifyGoToXPlain(startMarkerNames: string | string[], endMarkerNames: string | string[], getDefs: () => ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
+        private verifyGoToXPlain(startMarkerNames: Many<string>, endMarkerNames: Many<string>, getDefs: () => ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
             for (const start of toArray(startMarkerNames)) {
                 this.verifyGoToXSingle(start, endMarkerNames, getDefs);
             }
@@ -668,17 +670,17 @@ namespace FourSlash {
             }
         }
 
-        private verifyGoToXSingle(startMarkerName: string, endMarkerNames: string | string[], getDefs: () => ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
+        private verifyGoToXSingle(startMarkerName: string, endMarkerNames: Many<string>, getDefs: () => ReadonlyArray<ts.DefinitionInfo> | ts.DefinitionInfoAndBoundSpan | undefined) {
             this.goToMarker(startMarkerName);
             this.verifyGoToXWorker(toArray(endMarkerNames), getDefs, startMarkerName);
         }
 
-        private verifyGoToXWorker(endMarkers: string[], getDefs: () => ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined, startMarkerName?: string) {
+        private verifyGoToXWorker(endMarkers: ReadonlyArray<string>, getDefs: () => ReadonlyArray<ts.DefinitionInfo> | ts.DefinitionInfoAndBoundSpan | undefined, startMarkerName?: string) {
             const defs = getDefs();
-            let definitions: ts.DefinitionInfo[] | ReadonlyArray<ts.DefinitionInfo>;
+            let definitions: ReadonlyArray<ts.DefinitionInfo>;
             let testName: string;
 
-            if (!defs || Array.isArray(defs)) {
+            if (!defs || ts.isArray(defs)) {
                 definitions = defs as ts.DefinitionInfo[] || [];
                 testName = "goToDefinitions";
             }
@@ -830,46 +832,119 @@ namespace FourSlash {
             }
         }
 
-        public verifyCompletionsAt(markerName: string | ReadonlyArray<string>, expected: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, options?: FourSlashInterface.CompletionsAtOptions) {
-            if (typeof markerName !== "string") {
-                for (const m of markerName) this.verifyCompletionsAt(m, expected, options);
-                return;
+        public verifyCompletions(options: FourSlashInterface.VerifyCompletionsOptions) {
+            if (options.at !== undefined) {
+                if (typeof options.at === "string") {
+                    this.goToMarker(options.at);
+                }
+                else {
+                    for (const a of options.at) this.verifyCompletions({ ...options, at: a });
+                    return;
+                }
             }
 
-            this.goToMarker(markerName);
-
-            const actualCompletions = this.getCompletionListAtCaret(options);
+            const actualCompletions = this.getCompletionListAtCaret({ ...options.preferences, triggerCharacter: options.triggerCharacter });
             if (!actualCompletions) {
-                if (expected === undefined) return;
+                if (options.are === undefined) return;
                 this.raiseError(`No completions at position '${this.currentCaretPosition}'.`);
             }
 
-            if (actualCompletions.isNewIdentifierLocation !== (options && options.isNewIdentifierLocation || false)) {
-                this.raiseError(`Expected 'isNewIdentifierLocation' to be ${options && options.isNewIdentifierLocation}, got ${actualCompletions.isNewIdentifierLocation}`);
+            if (actualCompletions.isNewIdentifierLocation !== (options.isNewIdentifierLocation || false)) {
+                this.raiseError(`Expected 'isNewIdentifierLocation' to be ${options.isNewIdentifierLocation || false}, got ${actualCompletions.isNewIdentifierLocation}`);
             }
 
-            const actual = actualCompletions.entries;
+            const actualByName = ts.createMap<ts.CompletionEntry>();
+            for (const entry of actualCompletions.entries) {
+                if (actualByName.has(entry.name)) {
+                    // TODO: GH#23587
+                    if (entry.name !== "undefined" && entry.name !== "require") this.raiseError(`Duplicate completions for ${entry.name}`);
+                }
+                else {
+                    actualByName.set(entry.name, entry);
+                }
+            }
 
+            if ("are" in options) {
+                if (options.are === undefined) this.raiseError("Expected no completions");
+                this.verifyCompletionsAreExactly(actualCompletions.entries, toArray(options.are));
+            }
+            else {
+                if (options.includes) {
+                    for (const include of toArray(options.includes)) {
+                        const name = typeof include === "string" ? include : include.name;
+                        const found = actualByName.get(name);
+                        if (!found) this.raiseError(`No completion ${name} found`);
+                        this.verifyCompletionEntry(found, include);
+                    }
+                }
+                else {
+                    for (const exclude of toArray(options.excludes)) {
+                        if (typeof exclude === "string") {
+                            if (actualByName.has(exclude)) {
+                                this.raiseError(`Did not expect to get a completion named ${exclude}`);
+                            }
+                        }
+                        else {
+                            const found = actualByName.get(exclude.name);
+                            if (found.source === exclude.source) {
+                                this.raiseError(`Did not expect to get a completion named ${exclude.name} with source ${exclude.source}`);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private verifyCompletionEntry(actual: ts.CompletionEntry, expected: FourSlashInterface.ExpectedCompletionEntry) {
+            const { insertText, replacementSpan, hasAction, kind, text, documentation, sourceDisplay } = typeof expected === "string"
+                ? { insertText: undefined, replacementSpan: undefined, hasAction: undefined, kind: undefined, text: undefined, documentation: undefined, sourceDisplay: undefined }
+                : expected;
+
+            if (actual.insertText !== insertText) {
+                this.raiseError(`Expected completion insert text to be ${insertText}, got ${actual.insertText}`);
+            }
+            const convertedReplacementSpan = replacementSpan && ts.createTextSpanFromRange(replacementSpan);
+            try {
+                assert.deepEqual(actual.replacementSpan, convertedReplacementSpan);
+            }
+            catch {
+                this.raiseError(`Expected completion replacementSpan to be ${stringify(convertedReplacementSpan)}, got ${stringify(actual.replacementSpan)}`);
+            }
+
+            if (kind !== undefined) assert.equal(actual.kind, kind);
+
+            assert.equal(actual.hasAction, hasAction);
+
+            if (text) {
+                const actualDetails = this.getCompletionEntryDetails(actual.name, actual.source);
+                assert.equal(ts.displayPartsToString(actualDetails.displayParts), text);
+                assert.equal(ts.displayPartsToString(actualDetails.documentation), documentation || "");
+                // TODO: GH#23587
+                // assert.equal(actualDetails.kind, actual.kind);
+                assert.equal(actualDetails.kindModifiers, actual.kindModifiers);
+                assert.equal(actualDetails.source && ts.displayPartsToString(actualDetails.source), sourceDisplay);
+            }
+            else {
+                assert(documentation === undefined && sourceDisplay === undefined, "If specifying completion details, should specify 'text'");
+            }
+        }
+
+        private verifyCompletionsAreExactly(actual: ReadonlyArray<ts.CompletionEntry>, expected: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>) {
             if (actual.length !== expected.length) {
                 this.raiseError(`Expected ${expected.length} completions, got ${actual.length} (${actual.map(a => a.name)}).`);
             }
 
             ts.zipWith(actual, expected, (completion, expectedCompletion, index) => {
-                const { name, insertText, replacementSpan } = typeof expectedCompletion === "string" ? { name: expectedCompletion, insertText: undefined, replacementSpan: undefined } : expectedCompletion;
+                const name = typeof expectedCompletion === "string" ? expectedCompletion : expectedCompletion.name;
                 if (completion.name !== name) {
                     this.raiseError(`Expected completion at index ${index} to be ${name}, got ${completion.name}`);
                 }
-                if (completion.insertText !== insertText) {
-                    this.raiseError(`Expected completion insert text at index ${index} to be ${insertText}, got ${completion.insertText}`);
-                }
-                const convertedReplacementSpan = replacementSpan && ts.createTextSpanFromRange(replacementSpan);
-                try {
-                    assert.deepEqual(completion.replacementSpan, convertedReplacementSpan);
-                }
-                catch {
-                    this.raiseError(`Expected completion replacementSpan at index ${index} to be ${stringify(convertedReplacementSpan)}, got ${stringify(completion.replacementSpan)}`);
-                }
+                this.verifyCompletionEntry(completion, expectedCompletion);
             });
+        }
+
+        public verifyCompletionsAt(markerName: string | ReadonlyArray<string>, expected: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, options?: FourSlashInterface.CompletionsAtOptions) {
+            this.verifyCompletions({ at: markerName, are: expected, isNewIdentifierLocation: options && options.isNewIdentifierLocation, preferences: options, triggerCharacter: options && options.triggerCharacter });
         }
 
         public verifyCompletionListContains(entryId: ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string | { kind?: string, kindModifiers?: string }, spanIndex?: number, hasAction?: boolean, options?: FourSlashInterface.VerifyCompletionListContainsOptions) {
@@ -1105,7 +1180,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyReferenceGroups(starts: string | string[] | Range | Range[], parts: FourSlashInterface.ReferenceGroup[] | undefined): void {
+        public verifyReferenceGroups(starts: Many<string> | Many<Range>, parts: ReadonlyArray<FourSlashInterface.ReferenceGroup> | undefined): void {
             interface ReferenceGroupJson {
                 definition: string | { text: string, range: ts.TextSpan };
                 references: ts.ReferenceEntry[];
@@ -1243,7 +1318,7 @@ Actual: ${stringify(fullActual)}`);
             this.raiseError(`verifyReferencesAtPositionListContains failed - could not find the item: ${stringify(missingItem)} in the returned list: (${stringify(references)})`);
         }
 
-        private getCompletionListAtCaret(options?: FourSlashInterface.CompletionsAtOptions): ts.CompletionInfo {
+        private getCompletionListAtCaret(options?: ts.GetCompletionsAtPositionOptions): ts.CompletionInfo {
             return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition, options);
         }
 
@@ -1340,7 +1415,7 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        public verifyRenameLocations(startRanges: Range | Range[], options: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges: Range[] }) {
+        public verifyRenameLocations(startRanges: Many<Range>, options: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges: Range[] }) {
             let findInStrings: boolean, findInComments: boolean, ranges: Range[];
             if (ts.isArray(options)) {
                 findInStrings = findInComments = false;
@@ -3730,7 +3805,7 @@ ${code}
         return ts.arrayFrom(set.keys());
     }
 
-    function toArray<T>(x: T | T[]): T[] {
+    function toArray<T>(x: Many<T>): ReadonlyArray<T> {
         return ts.isArray(x) ? x : [x];
     }
 
@@ -4018,8 +4093,14 @@ namespace FourSlashInterface {
             super(state);
         }
 
-        public completionsAt(markerName: string | ReadonlyArray<string>, completions: ReadonlyArray<ExpectedCompletionEntry>, options?: CompletionsAtOptions) {
+        public completionsAt(markerName: Many<string>, completions: ReadonlyArray<ExpectedCompletionEntry>, options?: CompletionsAtOptions) {
             this.state.verifyCompletionsAt(markerName, completions, options);
+        }
+
+        public completions(...optionsArray: VerifyCompletionsOptions[]) {
+            for (const options of optionsArray) {
+                this.state.verifyCompletions(options);
+            }
         }
 
         public quickInfoIs(expectedText: string, expectedDocumentation?: string) {
@@ -4067,19 +4148,19 @@ namespace FourSlashInterface {
             this.state.verifyCurrentFileContent(text);
         }
 
-        public goToDefinitionIs(endMarkers: string | string[]) {
+        public goToDefinitionIs(endMarkers: Many<string>) {
             this.state.verifyGoToDefinitionIs(endMarkers);
         }
 
-        public goToDefinition(startMarkerName: string | string[], endMarkerName: string | string[], range?: FourSlash.Range): void;
-        public goToDefinition(startsAndEnds: [string | string[], string | string[]][] | { [startMarkerName: string]: string | string[] }): void;
-        public goToDefinition(arg0: any, endMarkerName?: string | string[]) {
+        public goToDefinition(startMarkerName: Many<string>, endMarkerName: Many<string>, range?: FourSlash.Range): void;
+        public goToDefinition(startsAndEnds: [Many<string>, Many<string>][] | { [startMarkerName: string]: Many<string> }): void;
+        public goToDefinition(arg0: any, endMarkerName?: Many<string>) {
             this.state.verifyGoToDefinition(arg0, endMarkerName);
         }
 
-        public goToType(startMarkerName: string | string[], endMarkerName: string | string[]): void;
-        public goToType(startsAndEnds: [string | string[], string | string[]][] | { [startMarkerName: string]: string | string[] }): void;
-        public goToType(arg0: any, endMarkerName?: string | string[]) {
+        public goToType(startMarkerName: Many<string>, endMarkerName: Many<string>): void;
+        public goToType(startsAndEnds: [Many<string>, Many<string>][] | { [startMarkerName: string]: Many<string> }): void;
+        public goToType(arg0: any, endMarkerName?: Many<string>) {
             this.state.verifyGoToType(arg0, endMarkerName);
         }
 
@@ -4111,7 +4192,7 @@ namespace FourSlashInterface {
             this.state.verifyReferencesOf(start, references);
         }
 
-        public referenceGroups(starts: string | string[] | FourSlash.Range | FourSlash.Range[], parts: ReferenceGroup[]) {
+        public referenceGroups(starts: Many<string> | Many<FourSlash.Range>, parts: ReferenceGroup[]) {
             this.state.verifyReferenceGroups(starts, parts);
         }
 
@@ -4343,7 +4424,7 @@ namespace FourSlashInterface {
             this.state.verifyRenameInfoFailed(message);
         }
 
-        public renameLocations(startRanges: FourSlash.Range | FourSlash.Range[], options: FourSlash.Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges: FourSlash.Range[] }) {
+        public renameLocations(startRanges: Many<FourSlash.Range>, options: FourSlash.Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges: FourSlash.Range[] }) {
             this.state.verifyRenameLocations(startRanges, options);
         }
 
@@ -4656,11 +4737,32 @@ namespace FourSlashInterface {
         newContent: string;
     }
 
-    export type ExpectedCompletionEntry = string | { name: string, insertText?: string, replacementSpan?: FourSlash.Range };
+    export type ExpectedCompletionEntry = string | {
+        readonly name: string,
+        readonly insertText?: string,
+        readonly replacementSpan?: FourSlash.Range,
+        readonly hasAction?: boolean, // If not specified, will assert that this is false.
+        readonly kind?: string, // If not specified, won't assert about this
+        readonly text: string;
+        readonly documentation: string;
+        readonly sourceDisplay?: string;
+    };
     export interface CompletionsAtOptions extends Partial<ts.UserPreferences> {
         triggerCharacter?: string;
         isNewIdentifierLocation?: boolean;
     }
+
+    export interface VerifyCompletionsOptions {
+        readonly at?: Many<string>;
+        readonly isNewIdentifierLocation?: boolean;
+        readonly are?: Many<ExpectedCompletionEntry>;
+        readonly includes?: Many<ExpectedCompletionEntry>;
+        readonly excludes?: Many<string | { readonly name: string, readonly source: string }>;
+        readonly preferences: ts.UserPreferences;
+        readonly triggerCharacter?: string;
+    }
+
+    export type Many<T> = T | ReadonlyArray<T>;
 
     export interface VerifyCompletionListContainsOptions extends ts.UserPreferences {
         triggerCharacter?: string;

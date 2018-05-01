@@ -25,12 +25,4 @@
 // @Filename: some/other/path.ts
 //// export var y = 10;
 
-
-const kinds = ["import_as", "import_equals", "require"];
-
-for (const kind of kinds) {
-    goTo.marker(kind + "0");
-    verify.completionListContains("module1");
-    verify.completionListContains("module2");
-    verify.not.completionListItemsCountIsGreaterThan(2);
-}
+verify.completions({ at: test.markerNames(), are: ["module1", "module2"], isNewIdentifierLocation: true });

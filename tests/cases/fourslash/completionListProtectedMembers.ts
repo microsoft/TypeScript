@@ -18,27 +18,10 @@
 ////var b: Base;
 ////f./*5*/
 
-goTo.marker("1");
-verify.completionListContains("y");
-verify.completionListContains("x");
-verify.not.completionListContains("z");
-
-goTo.marker("2");
-verify.completionListContains("y");
-verify.completionListContains("x");
-verify.completionListContains("z");
-
-goTo.marker("3");
-verify.completionListContains("y");
-verify.completionListContains("x");
-verify.not.completionListContains("z");
-
-goTo.marker("4");
-verify.completionListContains("y");
-verify.completionListContains("x");
-verify.completionListContains("z");
-
-goTo.marker("5");
-verify.not.completionListContains("x");
-verify.not.completionListContains("y");
-verify.not.completionListContains("z");
+verify.completions(
+    { at: "1", are: ["y", "x", "method"] },
+    { at: "2", are: ["z", "method1", "y", "x", "method"] },
+    { at: "3", are: ["method2", "y", "x", "method"] },
+    { at: "4", are: ["method2", "z", "method1", "y", "x", "method"] },
+    { at: "5", are: undefined },
+);

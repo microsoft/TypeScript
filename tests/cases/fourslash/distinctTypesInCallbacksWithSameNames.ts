@@ -13,27 +13,23 @@
 ////var c3: Collection<Collection<number>>;
 ////var _: Combinators;
 ////var r = _.forEach(c2, (x) => { return x./*1*/toFixed() });
-////var r2 = _.forEach(c3, (x) => { return x./*2*/toFixed() }); 
+////var r2 = _.forEach(c3, (x) => { return x./*2*/toFixed() });
 /////*3*/
 
-goTo.marker('1');
-verify.completionListContains('toFixed');
-goTo.marker('2');
-verify.completionListContains('add');
-verify.completionListContains('length');
-verify.completionListContains('remove');
+const verifyCompletions = () =>
+    verify.completions(
+        { at: "1", includes: "toFixed" },
+        { at: "2", are: ["length", "add", "remove"] },
+    );
+
+verifyCompletions();
 
 goTo.marker('3');
-edit.insert("class A {\
-    foo() { }\
-}\
-var c4: Collection<A>;\
-var r3 = _.forEach(c4, (x) => { return x.foo() });\
-");
+edit.insert(`class A {
+    foo() { }
+}
+var c4: Collection<A>;
+var r3 = _.forEach(c4, (x) => { return x.foo() });
+`);
 
-goTo.marker('1');
-verify.completionListContains('toFixed');
-goTo.marker('2');
-verify.completionListContains('add');
-verify.completionListContains('length');
-verify.completionListContains('remove');
+verifyCompletions();

@@ -4,9 +4,4 @@
 ////    /*1*/
 ////
 
-goTo.marker("1");
-
-verify.completionListContains("foo");
-verify.completionListContains("x");
-verify.completionListContains("y");
-verify.completionListContains("z");
+verify.completions({ at: "1", includes: ["foo", "x", "y", "z"] });

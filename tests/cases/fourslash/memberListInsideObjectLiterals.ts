@@ -24,18 +24,9 @@
 ////    };
 ////}
 
-// Literal member completion inside empty literal.
-goTo.marker("1");
-verify.completionListContains("x1", "(property) MyPoint.x1: number");
-verify.completionListContains("y1", "(property) MyPoint.y1: number");
-
-// Literal member completion for 2nd member name.
-goTo.marker("2");
-verify.completionListContains("y1", "(property) MyPoint.y1: number");
-
-// Literal member completion at existing member name location.
-goTo.marker("3");
-verify.completionListContains("y1", "(property) MyPoint.y1: number");
-
-goTo.marker("4");
-verify.completionListContains("x1", "(property) MyPoint.x1: number");
+const x1 = { name: "x1", text: "(property) MyPoint.x1: number" };
+const y1 = { name: "y1", text: "(property) MyPoint.y1: number" };
+verify.completions(
+    { at: ["1", "3", "4"], are: [x1, y1] }, // Literal member completion inside empty literal or at existing member name location
+    { at: ["2"], are: y1 }, // Literal member completion for 2nd member name
+);
