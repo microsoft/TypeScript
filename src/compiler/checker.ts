@@ -4685,8 +4685,8 @@ namespace ts {
                     return links.type = anyType;
                 }
                 // Handle export default expressions
-                if (declaration.kind === SyntaxKind.SourceFile) {
-                    Debug.assert(isJsonSourceFile(declaration as SourceFile));
+                if (isSourceFile(declaration)) {
+                    Debug.assert(isJsonSourceFile(declaration));
                     const jsonSourceFile = <JsonSourceFile>declaration;
                     return links.type = jsonSourceFile.statements.length ? checkExpression(jsonSourceFile.statements[0].expression) : emptyObjectType;
                 }
