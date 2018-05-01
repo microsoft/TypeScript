@@ -10716,18 +10716,17 @@ namespace ts {
                             return result;
                         }
                     }
-                    let constraint = getConstraintForRelation(<TypeParameter>source);
-                    // A type variable with no constraint is not related to the non-primitive object type.
-                    if (constraint || !(target.flags & TypeFlags.NonPrimitive)) {
-                        if (!constraint || constraint.flags & TypeFlags.Any) {
-                            constraint = emptyObjectType;
-                        }
-                        // Report constraint errors only if the constraint is not the empty object type
-                        const reportConstraintErrors = reportErrors && constraint !== emptyObjectType;
-                        if (result = isRelatedTo(constraint, target, reportConstraintErrors)) {
+                    const constraint = getConstraintForRelation(<TypeParameter>source);
+                    if (!constraint || constraint.flags & TypeFlags.Any) {
+                        // A type variable with no constraint is not related to the non-primitive object type.
+                        if (result = isRelatedTo(emptyObjectType, extractTypesOfKind(target, ~TypeFlags.NonPrimitive))) {
                             errorInfo = saveErrorInfo;
                             return result;
                         }
+                    }
+                    else if (result = isRelatedTo(constraint, target, reportErrors)) {
+                        errorInfo = saveErrorInfo;
+                        return result;
                     }
                 }
                 else if (source.flags & TypeFlags.Index) {
