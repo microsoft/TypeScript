@@ -21616,8 +21616,9 @@ namespace ts {
                 switch (d.kind) {
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.TypeAliasDeclaration:
-                    // A jsdoc typedef is, by definition, a type alias
+                    // A jsdoc typedef and callback are, by definition, type aliases
                     case SyntaxKind.JSDocTypedefTag:
+                    case SyntaxKind.JSDocCallbackTag:
                         return DeclarationSpaces.ExportType;
                     case SyntaxKind.ModuleDeclaration:
                         return isAmbientModule(d as ModuleDeclaration) || getModuleInstanceState(d as ModuleDeclaration) !== ModuleInstanceState.NonInstantiated
@@ -22145,7 +22146,7 @@ namespace ts {
             }
         }
 
-        function checkJSDocTypedefTag(node: JSDocTypedefTag) {
+        function checkJSDocTypeAliasTag(node: JSDocTypedefTag | JSDocCallbackTag) {
             if (!node.type) {
                 // If the node had `@property` tags, `type` would have been set to the first property tag.
                 error(node.name, Diagnostics.JSDoc_typedef_tag_should_either_have_a_type_annotation_or_be_followed_by_property_or_member_tags);
@@ -25051,7 +25052,8 @@ namespace ts {
                 case SyntaxKind.JSDocAugmentsTag:
                     return checkJSDocAugmentsTag(node as JSDocAugmentsTag);
                 case SyntaxKind.JSDocTypedefTag:
-                    return checkJSDocTypedefTag(node as JSDocTypedefTag);
+                case SyntaxKind.JSDocCallbackTag:
+                    return checkJSDocTypeAliasTag(node as JSDocTypedefTag);
                 case SyntaxKind.JSDocParameterTag:
                     return checkJSDocParameterTag(node as JSDocParameterTag);
                 case SyntaxKind.JSDocFunctionType:
