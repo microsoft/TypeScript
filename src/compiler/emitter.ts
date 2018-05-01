@@ -399,6 +399,9 @@ namespace ts {
             setWriter(output);
             emitShebangIfNeeded(bundle);
             emitPrologueDirectivesIfNeeded(bundle);
+            emitHelpers(bundle);
+            emitSyntheticTripleSlashReferencesIfNeeded(bundle);
+
             for (const prepend of bundle.prepends) {
                 print(EmitHint.Unspecified, prepend, /*sourceFile*/ undefined);
             }
@@ -406,10 +409,9 @@ namespace ts {
             if (bundleInfo) {
                 bundleInfo.originalOffset = writer.getTextPos();
             }
-            emitHelpers(bundle);
-            emitSyntheticTripleSlashReferencesIfNeeded(bundle);
 
             for (const sourceFile of bundle.sourceFiles) {
+                write("\n");
                 print(EmitHint.SourceFile, sourceFile, sourceFile);
             }
             reset();
