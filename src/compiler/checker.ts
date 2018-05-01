@@ -1278,7 +1278,7 @@ namespace ts {
                         isInExternalModule = true;
                         // falls through
                     case SyntaxKind.ModuleDeclaration:
-                        const moduleExports = getSymbolOfNode(location)!.exports!;
+                        const moduleExports = getSymbolOfNode(location as ModuleDeclaration).exports!;
                         if (location.kind === SyntaxKind.SourceFile || isAmbientModule(location)) {
 
                             // It's an external module. First see if the module has an export default and if the local
@@ -1340,7 +1340,7 @@ namespace ts {
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.ClassExpression:
                     case SyntaxKind.InterfaceDeclaration:
-                        if (result = lookup(getMembersOfSymbol(getSymbolOfNode(location)!), name, meaning & SymbolFlags.Type)) {
+                        if (result = lookup(getMembersOfSymbol(getSymbolOfNode(location as ClassLikeDeclaration | InterfaceDeclaration)), name, meaning & SymbolFlags.Type)) {
                             if (!isTypeParameterSymbolDeclaredInContainer(result, location)) {
                                 // ignore type parameters not declared in this container
                                 result = undefined;
@@ -1387,7 +1387,7 @@ namespace ts {
                         grandparent = location.parent.parent;
                         if (isClassLike(grandparent) || grandparent.kind === SyntaxKind.InterfaceDeclaration) {
                             // A reference to this grandparent's type parameters would be an error
-                            if (result = lookup(getSymbolOfNode(grandparent)!.members!, name, meaning & SymbolFlags.Type)) {
+                            if (result = lookup(getSymbolOfNode(grandparent as ClassLikeDeclaration | InterfaceDeclaration).members!, name, meaning & SymbolFlags.Type)) {
                                 error(errorLocation, Diagnostics.A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type);
                                 return undefined;
                             }
@@ -2574,7 +2574,7 @@ namespace ts {
                         }
                         // falls through
                     case SyntaxKind.ModuleDeclaration:
-                        if (result = callback(getSymbolOfNode(location)!.exports!)) {
+                        if (result = callback(getSymbolOfNode(location as ModuleDeclaration).exports!)) {
                             return result;
                         }
                         break;
@@ -5036,7 +5036,7 @@ namespace ts {
                         const outerAndOwnTypeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(<DeclarationWithTypeParameters>node) || emptyArray);
                         const thisType = includeThisTypes &&
                             (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression || node.kind === SyntaxKind.InterfaceDeclaration) &&
-                            getDeclaredTypeOfClassOrInterface(getSymbolOfNode(node)!).thisType;
+                            getDeclaredTypeOfClassOrInterface(getSymbolOfNode(node as ClassLikeDeclaration | InterfaceDeclaration)).thisType;
                         return thisType ? append(outerAndOwnTypeParameters, thisType) : outerAndOwnTypeParameters;
                 }
             }
@@ -9088,7 +9088,7 @@ namespace ts {
 
         function getESSymbolLikeTypeForNode(node: Node) {
             if (isValidESSymbolDeclaration(node)) {
-                const symbol = getSymbolOfNode(node)!;
+                const symbol = getSymbolOfNode(node);
                 const links = getSymbolLinks(symbol);
                 return links.uniqueESSymbolType || (links.uniqueESSymbolType = createUniqueESSymbolType(symbol));
             }
@@ -9101,7 +9101,7 @@ namespace ts {
             if (parent && (isClassLike(parent) || parent.kind === SyntaxKind.InterfaceDeclaration)) {
                 if (!hasModifier(container, ModifierFlags.Static) &&
                     (container.kind !== SyntaxKind.Constructor || isNodeDescendantOf(node, (<ConstructorDeclaration>container).body!))) {
-                    return getDeclaredTypeOfClassOrInterface(getSymbolOfNode(parent)!).thisType!;
+                    return getDeclaredTypeOfClassOrInterface(getSymbolOfNode(parent as ClassLikeDeclaration | InterfaceDeclaration)).thisType!;
                 }
             }
             error(node, Diagnostics.A_this_type_is_available_only_in_a_non_static_member_of_a_class_or_interface);
@@ -17773,7 +17773,7 @@ namespace ts {
             if (node.kind === SyntaxKind.ClassDeclaration) {
                 // For a class decorator, the `target` is the type of the class (e.g. the
                 // "static" or "constructor" side of the class)
-                const classSymbol = getSymbolOfNode(node)!;
+                const classSymbol = getSymbolOfNode(node as ClassDeclaration);
                 return getTypeOfSymbol(classSymbol);
             }
 
@@ -17782,7 +17782,7 @@ namespace ts {
                 // parameter's containing method.
                 node = node.parent;
                 if (node.kind === SyntaxKind.Constructor) {
-                    const classSymbol = getSymbolOfNode(node)!;
+                    const classSymbol = getSymbolOfNode(node as ConstructorDeclaration);
                     return getTypeOfSymbol(classSymbol);
                 }
             }
@@ -18958,7 +18958,7 @@ namespace ts {
                 return unknownType;
             }
             else if (container.kind === SyntaxKind.Constructor) {
-                const symbol = getSymbolOfNode(container.parent)!;
+                const symbol = getSymbolOfNode(container.parent as ClassLikeDeclaration);
                 return getTypeOfSymbol(symbol);
             }
             else {
@@ -20944,7 +20944,7 @@ namespace ts {
 
         function checkTypeForDuplicateIndexSignatures(node: Node) {
             if (node.kind === SyntaxKind.InterfaceDeclaration) {
-                const nodeSymbol = getSymbolOfNode(node)!;
+                const nodeSymbol = getSymbolOfNode(node as InterfaceDeclaration);
                 // in case of merging interface declaration it is possible that we'll enter this check procedure several times for every declaration
                 // to prevent this run check only for the first declaration of a given kind
                 if (nodeSymbol.declarations.length > 0 && nodeSymbol.declarations[0] !== node) {
@@ -24187,7 +24187,7 @@ namespace ts {
                 if (isInstancePropertyWithoutInitializer(member)) {
                     const propName = (<PropertyDeclaration>member).name;
                     if (isIdentifier(propName)) {
-                        const type = getTypeOfSymbol(getSymbolOfNode(member)); // TODO: GH#18217
+                        const type = getTypeOfSymbol(getSymbolOfNode(member));
                         if (!(type.flags & TypeFlags.Any || getFalsyFlags(type) & TypeFlags.Undefined)) {
                             if (!constructor || !isPropertyInitializedInConstructor(propName, type, constructor)) {
                                 error(member.name, Diagnostics.Property_0_has_no_initializer_and_is_not_definitely_assigned_in_the_constructor, declarationNameToString(propName));
@@ -25412,13 +25412,13 @@ namespace ts {
 
                     switch (location.kind) {
                         case SyntaxKind.ModuleDeclaration:
-                            copySymbols(getSymbolOfNode(location)!.exports!, meaning & SymbolFlags.ModuleMember);
+                            copySymbols(getSymbolOfNode(location as ModuleDeclaration).exports!, meaning & SymbolFlags.ModuleMember);
                             break;
                         case SyntaxKind.EnumDeclaration:
-                            copySymbols(getSymbolOfNode(location)!.exports!, meaning & SymbolFlags.EnumMember);
+                            copySymbols(getSymbolOfNode(location as EnumDeclaration).exports!, meaning & SymbolFlags.EnumMember);
                             break;
                         case SyntaxKind.ClassExpression:
-                            const className = (<ClassExpression>location).name;
+                            const className = (location as ClassExpression).name;
                             if (className) {
                                 copySymbol(location.symbol, meaning);
                             }
@@ -25432,11 +25432,11 @@ namespace ts {
                             // (type parameters of classDeclaration/classExpression and interface are in member property of the symbol.
                             // Note: that the memberFlags come from previous iteration.
                             if (!isStatic) {
-                                copySymbols(getMembersOfSymbol(getSymbolOfNode(location)!), meaning & SymbolFlags.Type);
+                                copySymbols(getMembersOfSymbol(getSymbolOfNode(location as ClassDeclaration | InterfaceDeclaration)), meaning & SymbolFlags.Type);
                             }
                             break;
                         case SyntaxKind.FunctionExpression:
-                            const funcName = (<FunctionExpression>location).name;
+                            const funcName = (location as FunctionExpression).name;
                             if (funcName) {
                                 copySymbol(location.symbol, meaning);
                             }
@@ -25488,7 +25488,7 @@ namespace ts {
                 (<NamedDeclaration>name.parent).name === name;
         }
 
-        function isTypeDeclaration(node: Node): boolean {
+        function isTypeDeclaration(node: Node): node is TypeParameterDeclaration | ClassDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumDeclaration {
             switch (node.kind) {
                 case SyntaxKind.TypeParameter:
                 case SyntaxKind.ClassDeclaration:
@@ -25864,7 +25864,7 @@ namespace ts {
 
             if (isTypeDeclaration(node)) {
                 // In this case, we call getSymbolOfNode instead of getSymbolAtLocation because it is a declaration
-                const symbol = getSymbolOfNode(node)!;
+                const symbol = getSymbolOfNode(node);
                 return getDeclaredTypeOfSymbol(symbol);
             }
 
