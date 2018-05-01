@@ -21,18 +21,20 @@ type B<T, V> = { [P in keyof T]: T[P] extends V | object ? 1 : 0; };
 >P : Symbol(P, Decl(nonPrimitiveAndTypeVariables.ts, 3, 18))
 >V : Symbol(V, Decl(nonPrimitiveAndTypeVariables.ts, 3, 9))
 
-type a = A<{ a: 0 | 1 }, 0>; // { a: 0; }
->a : Symbol(a, Decl(nonPrimitiveAndTypeVariables.ts, 3, 68))
+let a: A<{ a: 0 | 1 }, 0> = { a: 0 };
+>a : Symbol(a, Decl(nonPrimitiveAndTypeVariables.ts, 5, 3))
 >A : Symbol(A, Decl(nonPrimitiveAndTypeVariables.ts, 0, 0))
->a : Symbol(a, Decl(nonPrimitiveAndTypeVariables.ts, 5, 12))
+>a : Symbol(a, Decl(nonPrimitiveAndTypeVariables.ts, 5, 10))
+>a : Symbol(a, Decl(nonPrimitiveAndTypeVariables.ts, 5, 29))
 
-type b = B<{ a: 0 | 1 }, 0>; // { a: 0; }
->b : Symbol(b, Decl(nonPrimitiveAndTypeVariables.ts, 5, 28))
+let b: B<{ a: 0 | 1 }, 0> = { a: 0 };
+>b : Symbol(b, Decl(nonPrimitiveAndTypeVariables.ts, 6, 3))
 >B : Symbol(B, Decl(nonPrimitiveAndTypeVariables.ts, 2, 59))
->a : Symbol(a, Decl(nonPrimitiveAndTypeVariables.ts, 6, 12))
+>a : Symbol(a, Decl(nonPrimitiveAndTypeVariables.ts, 6, 10))
+>a : Symbol(a, Decl(nonPrimitiveAndTypeVariables.ts, 6, 29))
 
 function foo<T, U>(x: T) {
->foo : Symbol(foo, Decl(nonPrimitiveAndTypeVariables.ts, 6, 28))
+>foo : Symbol(foo, Decl(nonPrimitiveAndTypeVariables.ts, 6, 37))
 >T : Symbol(T, Decl(nonPrimitiveAndTypeVariables.ts, 8, 13))
 >U : Symbol(U, Decl(nonPrimitiveAndTypeVariables.ts, 8, 15))
 >x : Symbol(x, Decl(nonPrimitiveAndTypeVariables.ts, 8, 19))

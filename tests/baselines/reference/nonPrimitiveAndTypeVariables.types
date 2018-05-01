@@ -21,15 +21,21 @@ type B<T, V> = { [P in keyof T]: T[P] extends V | object ? 1 : 0; };
 >P : P
 >V : V
 
-type a = A<{ a: 0 | 1 }, 0>; // { a: 0; }
+let a: A<{ a: 0 | 1 }, 0> = { a: 0 };
 >a : A<{ a: 0 | 1; }, 0>
 >A : A<T, V>
 >a : 0 | 1
+>{ a: 0 } : { a: 0; }
+>a : 0
+>0 : 0
 
-type b = B<{ a: 0 | 1 }, 0>; // { a: 0; }
+let b: B<{ a: 0 | 1 }, 0> = { a: 0 };
 >b : B<{ a: 0 | 1; }, 0>
 >B : B<T, V>
 >a : 0 | 1
+>{ a: 0 } : { a: 0; }
+>a : 0
+>0 : 0
 
 function foo<T, U>(x: T) {
 >foo : <T, U>(x: T) => void
