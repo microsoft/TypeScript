@@ -30,9 +30,8 @@ namespace ts.codefix {
     function getTypesPackageNameToInstall(host: LanguageServiceHost, sourceFile: SourceFile, pos: number, diagCode: number): string | undefined {
         const moduleName = cast(getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false), isStringLiteral).text;
         const { packageName } = getPackageName(moduleName);
-        const name = diagCode === errorCodeCannotFindModule
-            ? (JsTyping.nodeCoreModules.has(packageName) ? "node" : undefined)
-            : (host.isKnownTypesPackageName(packageName) ? packageName : undefined);
-        return name === undefined ? undefined : getTypesPackageName(name);
+        return diagCode === errorCodeCannotFindModule
+            ? (JsTyping.nodeCoreModules.has(packageName) ? "@types/node" : undefined)
+            : (host.isKnownTypesPackageName(packageName) ? getTypesPackageName(packageName) : undefined);
     }
 }
