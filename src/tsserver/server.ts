@@ -915,7 +915,23 @@ namespace ts.server {
     let cancellationToken: ServerCancellationToken;
     try {
         const factory = require("./cancellationToken");
-        cancellationToken = factory(sys.args);
+        const original: ServerCancellationToken = factory(sys.args);
+        let request: number | undefined;
+        cancellationToken = logger.hasLevel(LogLevel.verbose) ? {
+            isCancellationRequested: () => {
+                const result = original.isCancellationRequested();
+                logger.info(`isCancellationRequested: ${request}: ${result}`);
+                return result;
+            },
+            setRequest: requestId => {
+                request = requestId;
+                original.setRequest(requestId);
+            },
+            resetRequest: requestId => {
+                request = undefined;
+                original.resetRequest(requestId);
+            }
+        } : original;
     }
     catch (e) {
         cancellationToken = nullCancellationToken;
