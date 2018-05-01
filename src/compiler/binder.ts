@@ -118,7 +118,7 @@ namespace ts {
         let thisParentContainer: Node; // Container one level up
         let blockScopeContainer: Node;
         let lastContainer: Node;
-        let delayedTypedefs: { typedef: JSDocTypedefTag, container: Node, lastContainer: Node, blockScopeContainer: Node, parent: Node }[];
+        let delayedTypedefs: { typeAlias: JSDocTypedefTag | JSDocCallbackTag, container: Node, lastContainer: Node, blockScopeContainer: Node, parent: Node }[];
         let seenThisKeyword: boolean;
 
         // state used by control flow analysis
@@ -273,6 +273,7 @@ namespace ts {
                     return InternalSymbolName.Constructor;
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.CallSignature:
+                case SyntaxKind.JSDocSignature:
                     return InternalSymbolName.Call;
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.ConstructSignature:
@@ -1452,6 +1453,7 @@ namespace ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.CallSignature:
+                case SyntaxKind.JSDocSignature:
                 case SyntaxKind.JSDocFunctionType:
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructSignature:
@@ -1541,6 +1543,7 @@ namespace ts {
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
+                case SyntaxKind.JSDocSignature:
                 case SyntaxKind.IndexSignature:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
@@ -1646,7 +1649,7 @@ namespace ts {
             return state;
         }
 
-        function bindFunctionOrConstructorType(node: SignatureDeclaration): void {
+        function bindFunctionOrConstructorType(node: SignatureDeclaration | JSDocSignature): void {
             // For a given function symbol "<...>(...) => T" we want to generate a symbol identical
             // to the one we would get for: { <...>(...): T }
             //
@@ -1757,7 +1760,7 @@ namespace ts {
             const saveParent = parent;
             for (const delay of delayedTypedefs) {
                 ({ container, lastContainer, blockScopeContainer, parent } = delay);
-                bindBlockScopedDeclaration(delay.typedef, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                bindBlockScopedDeclaration(delay.typeAlias, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
             }
             container = saveContainer;
             lastContainer = saveLastContainer;
@@ -2100,6 +2103,7 @@ namespace ts {
                 case SyntaxKind.TypeParameter:
                     return bindTypeParameter(node as TypeParameterDeclaration);
                 case SyntaxKind.Parameter:
+                case SyntaxKind.JSDocParameterTag:
                     return bindParameter(<ParameterDeclaration>node);
                 case SyntaxKind.VariableDeclaration:
                     return bindVariableDeclarationOrBindingElement(<VariableDeclaration>node);
@@ -2137,8 +2141,9 @@ namespace ts {
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.SetAccessor, SymbolFlags.SetAccessorExcludes);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.JSDocFunctionType:
+                case SyntaxKind.JSDocSignature:
                 case SyntaxKind.ConstructorType:
-                    return bindFunctionOrConstructorType(<SignatureDeclaration>node);
+                    return bindFunctionOrConstructorType(<SignatureDeclaration | JSDocSignature>node);
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.MappedType:
@@ -2211,10 +2216,11 @@ namespace ts {
                         SymbolFlags.Property | SymbolFlags.Optional :
                         SymbolFlags.Property;
                     return declareSymbolAndAddToSymbolTable(propTag, flags, SymbolFlags.PropertyExcludes);
-                case SyntaxKind.JSDocTypedefTag: {
+                case SyntaxKind.JSDocTypedefTag:
+                case SyntaxKind.JSDocCallbackTag: {
                     const { fullName } = node as JSDocTypedefTag;
                     if (!fullName || fullName.kind === SyntaxKind.Identifier) {
-                        (delayedTypedefs || (delayedTypedefs = [])).push({ typedef: node as JSDocTypedefTag, container, lastContainer, blockScopeContainer, parent });
+                        (delayedTypedefs || (delayedTypedefs = [])).push({ typeAlias: node as JSDocTypedefTag | JSDocCallbackTag, container, lastContainer, blockScopeContainer, parent });
                     }
                     break;
                 }
@@ -2611,7 +2617,7 @@ namespace ts {
             }
         }
 
-        function bindParameter(node: ParameterDeclaration) {
+        function bindParameter(node: ParameterDeclaration | JSDocParameterTag) {
             if (inStrictMode && !(node.flags & NodeFlags.Ambient)) {
                 // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a
                 // strict mode FunctionLikeDeclaration or FunctionExpression(13.1)
@@ -2619,7 +2625,7 @@ namespace ts {
             }
 
             if (isBindingPattern(node.name)) {
-                bindAnonymousDeclaration(node, SymbolFlags.FunctionScopedVariable, "__" + node.parent.parameters.indexOf(node) as __String);
+                bindAnonymousDeclaration(node, SymbolFlags.FunctionScopedVariable, "__" + (node as ParameterDeclaration).parent.parameters.indexOf(node as ParameterDeclaration) as __String);
             }
             else {
                 declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes);
