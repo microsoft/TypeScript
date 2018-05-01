@@ -1,8 +1,7 @@
 /// <reference path='fourslash.ts' />
 
-////export {};
+// @Filename: /a.ts
 ////const a = [|require("a")|];
-////a;
 
 verify.getSuggestionDiagnostics([{
     message: "'require' call may be converted to an import.",
@@ -12,8 +11,5 @@ verify.getSuggestionDiagnostics([{
 verify.codeFix({
     description: "Convert 'require' to 'import'",
     newFileContent:
-// TODO: GH#23781
-`export {};
-    import a = require("a");
-a;`,
+`import a = require("a");`,
 });

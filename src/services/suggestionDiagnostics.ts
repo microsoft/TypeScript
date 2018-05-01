@@ -32,7 +32,7 @@ namespace ts {
         }
         check(sourceFile);
 
-        if (!isJsFile && sourceFile.externalModuleIndicator) {
+        if (!isJsFile) {
             for (const statement of sourceFile.statements) {
                 if (isVariableStatement(statement) &&
                     statement.declarationList.flags & NodeFlags.Const &&
