@@ -824,7 +824,6 @@ namespace ts {
         | FunctionTypeNode
         | ConstructorTypeNode
         | JSDocFunctionType
-        | JSDocSignature // TODO: Different from JSDocFunctionType??????
         | FunctionDeclaration
         | MethodDeclaration
         | ConstructorDeclaration
@@ -2396,9 +2395,12 @@ namespace ts {
         signature: JSDocSignature;
     }
 
-    // TODO: name it JSDocSignatureDeclaration? Could just try to reuse JSDocTypeLiteral
-    export interface JSDocSignature extends JSDocType, SignatureDeclarationBase {
+    // TODO: Could just try to reuse JSDocTypeLiteral
+    export interface JSDocSignature extends JSDocType, Declaration {
         kind: SyntaxKind.JSDocSignature;
+        typeParameters?: ReadonlyArray<JSDocTemplateTag>;
+        parameters: ReadonlyArray<JSDocParameterTag>;
+        type: JSDocReturnTag | undefined;
     }
 
     export interface JSDocPropertyLikeTag extends JSDocTag, Declaration {

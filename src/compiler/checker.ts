@@ -22340,7 +22340,6 @@ namespace ts {
                         break;
                     case SyntaxKind.MethodSignature:
                     case SyntaxKind.CallSignature:
-                    case SyntaxKind.JSDocSignature:
                     case SyntaxKind.ConstructSignature:
                     case SyntaxKind.FunctionType:
                     case SyntaxKind.ConstructorType:
