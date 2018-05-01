@@ -4702,7 +4702,7 @@ namespace ts {
     export function getJSDocTypeTag(node: Node): JSDocTypeTag | undefined {
         // We should have already issued an error if there were multiple type jsdocs, so just use the first one.
         const tag = getFirstJSDocTag(node, isJSDocTypeTag);
-        if (tag && tag.typeExpression && tag.typeExpression.type) {
+        if (tag && tag.type && tag.type.type) {
             return tag;
         }
         return undefined;
@@ -4722,10 +4722,10 @@ namespace ts {
     export function getJSDocType(node: Node): TypeNode | undefined {
         let tag: JSDocTypeTag | JSDocParameterTag | undefined = getFirstJSDocTag(node, isJSDocTypeTag);
         if (!tag && isParameter(node)) {
-            tag = find(getJSDocParameterTags(node), tag => !!tag.typeExpression);
+            tag = find(getJSDocParameterTags(node), tag => !!tag.type);
         }
 
-        return tag && tag.typeExpression && tag.typeExpression.type;
+        return tag && tag.type && tag.type.type;
     }
 
     /**
@@ -4736,7 +4736,7 @@ namespace ts {
      */
     export function getJSDocReturnType(node: Node): TypeNode | undefined {
         const returnTag = getJSDocReturnTag(node);
-        return returnTag && returnTag.typeExpression && returnTag.typeExpression.type;
+        return returnTag && returnTag.type && returnTag.type.type;
     }
 
     /** Get all JSDoc tags related to a node, including those on parent nodes. */

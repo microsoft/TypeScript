@@ -817,14 +817,14 @@ namespace ts.Completions {
                 if (tag.tagName.pos <= position && position <= tag.tagName.end) {
                     return { kind: CompletionDataKind.JsDocTagName };
                 }
-                if (isTagWithTypeExpression(tag) && tag.typeExpression && tag.typeExpression.kind === SyntaxKind.JSDocTypeExpression) {
+                if (isTagWithType(tag) && tag.type && tag.type.kind === SyntaxKind.JSDocTypeExpression) {
                     currentToken = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ true);
                     if (!currentToken ||
                         (!isDeclarationName(currentToken) &&
                             (currentToken.parent.kind !== SyntaxKind.JSDocPropertyTag ||
                                 (<JSDocPropertyTag>currentToken.parent).name !== currentToken))) {
                         // Use as type location if inside tag's type expression
-                        insideJsDocTagTypeExpression = isCurrentlyEditingNode(tag.typeExpression);
+                        insideJsDocTagTypeExpression = isCurrentlyEditingNode(tag.type);
                     }
                 }
                 if (isJSDocParameterTag(tag) && (nodeIsMissing(tag.name) || tag.name.pos <= position && position <= tag.name.end)) {
@@ -1002,9 +1002,9 @@ namespace ts.Completions {
         const recommendedCompletion = previousToken && getRecommendedCompletion(previousToken, position, sourceFile, typeChecker);
         return { kind: CompletionDataKind.Data, symbols, completionKind, isInSnippetScope, propertyAccessToConvert, isNewIdentifierLocation, location, keywordFilters, symbolToOriginInfoMap, recommendedCompletion, previousToken, isJsxInitializer };
 
-        type JSDocTagWithTypeExpression = JSDocParameterTag | JSDocPropertyTag | JSDocReturnTag | JSDocTypeTag | JSDocTypedefTag;
+        type JSDocTagWithType = JSDocParameterTag | JSDocPropertyTag | JSDocReturnTag | JSDocTypeTag | JSDocTypedefTag;
 
-        function isTagWithTypeExpression(tag: JSDocTag): tag is JSDocTagWithTypeExpression {
+        function isTagWithType(tag: JSDocTag): tag is JSDocTagWithType {
             switch (tag.kind) {
                 case SyntaxKind.JSDocParameterTag:
                 case SyntaxKind.JSDocPropertyTag:

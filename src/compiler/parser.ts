@@ -465,16 +465,16 @@ namespace ts {
             case SyntaxKind.JSDocPropertyTag:
                 if ((node as JSDocPropertyLikeTag).isNameFirst) {
                     return visitNode(cbNode, (<JSDocPropertyLikeTag>node).name) ||
-                        visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression);
+                        visitNode(cbNode, (<JSDocPropertyLikeTag>node).type);
                 }
                 else {
-                    return visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression) ||
+                    return visitNode(cbNode, (<JSDocPropertyLikeTag>node).type) ||
                         visitNode(cbNode, (<JSDocPropertyLikeTag>node).name);
                 }
             case SyntaxKind.JSDocReturnTag:
-                return visitNode(cbNode, (<JSDocReturnTag>node).typeExpression);
+                return visitNode(cbNode, (<JSDocReturnTag>node).type);
             case SyntaxKind.JSDocTypeTag:
-                return visitNode(cbNode, (<JSDocTypeTag>node).typeExpression);
+                return visitNode(cbNode, (<JSDocTypeTag>node).type);
             case SyntaxKind.JSDocAugmentsTag:
                 return visitNode(cbNode, (<JSDocAugmentsTag>node).class);
             case SyntaxKind.JSDocTemplateTag:
@@ -6628,7 +6628,7 @@ namespace ts {
                     }
                     result.atToken = atToken;
                     result.tagName = tagName;
-                    result.typeExpression = typeExpression;
+                    result.type = typeExpression;
                     result.name = name;
                     result.isNameFirst = isNameFirst;
                     result.isBracketed = isBracketed;
@@ -6668,7 +6668,7 @@ namespace ts {
                     const result = <JSDocReturnTag>createNode(SyntaxKind.JSDocReturnTag, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
-                    result.typeExpression = tryParseTypeExpression();
+                    result.type = tryParseTypeExpression();
                     return finishNode(result);
                 }
 
@@ -6680,7 +6680,7 @@ namespace ts {
                     const result = <JSDocTypeTag>createNode(SyntaxKind.JSDocTypeTag, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
-                    result.typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ true);
+                    result.type = parseJSDocTypeExpression(/*mayOmitBraces*/ true);
                     return finishNode(result);
                 }
 
@@ -6790,8 +6790,8 @@ namespace ts {
                             if (typeExpression && typeExpression.type.kind === SyntaxKind.ArrayType) {
                                 jsdocTypeLiteral.isArrayType = true;
                             }
-                            typedefTag.type = childTypeTag && childTypeTag.typeExpression && !isObjectOrObjectArrayTypeReference(childTypeTag.typeExpression.type) ?
-                                childTypeTag.typeExpression :
+                            typedefTag.type = childTypeTag && childTypeTag.type && !isObjectOrObjectArrayTypeReference(childTypeTag.type.type) ?
+                                childTypeTag.type :
                                 finishNode(jsdocTypeLiteral);
                         }
                     }
