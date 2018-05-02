@@ -4,6 +4,7 @@ function tag (str: any, ...args: any[]): string {
 
 const x = tag`\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld`;
 const y = `\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld`;
+const z = tag`\u{hello} \xtraordinary wonderful \uworld` // should work with Tagged NoSubstitutionTemplate
 
 const a1 = tag`${ 100 }\0` // \0
 const a2 = tag`${ 100 }\00` // \\00

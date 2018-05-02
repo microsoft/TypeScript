@@ -2,9 +2,12 @@ tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences.ts(5,18): er
 tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences.ts(6,15): error TS1125: Hexadecimal digit expected.
 tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences.ts(6,33): error TS1125: Hexadecimal digit expected.
 tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences.ts(6,75): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences.ts(7,18): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences.ts(7,27): error TS1125: Hexadecimal digit expected.
+tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences.ts(7,51): error TS1125: Hexadecimal digit expected.
 
 
-==== tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences.ts (4 errors) ====
+==== tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences.ts (7 errors) ====
     function tag (str: any, ...args: any[]): string {
       return str
     }
@@ -18,6 +21,13 @@ tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences.ts(6,75): er
                                     
 !!! error TS1125: Hexadecimal digit expected.
                                                                               
+!!! error TS1125: Hexadecimal digit expected.
+    const z = tag`\u{hello} \xtraordinary wonderful \uworld` // should work with Tagged NoSubstitutionTemplate
+                     
+!!! error TS1125: Hexadecimal digit expected.
+                              
+!!! error TS1125: Hexadecimal digit expected.
+                                                      
 !!! error TS1125: Hexadecimal digit expected.
     
     const a1 = tag`${ 100 }\0` // \0
