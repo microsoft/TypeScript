@@ -1634,7 +1634,9 @@ namespace ts {
                 textSpan: {
                     start: newLoc.position,
                     length: info.textSpan.length
-                }
+                },
+                originalFileName: info.fileName,
+                originalTextSpan: info.textSpan
             })
         );
 
@@ -1678,7 +1680,9 @@ namespace ts {
                 textSpan: {
                     start: newLoc.position,
                     length: info.textSpan.length
-                }
+                },
+                originalFileName: info.fileName,
+                originalTextSpan: info.textSpan
             })
         );
 
