@@ -3067,8 +3067,8 @@ namespace ts {
                         if (isValueSymbolAccessible(type.symbol, context.enclosingDeclaration!)) {
                             return symbolToTypeNode(type.symbol, context, SymbolFlags.Value);
                         }
-                        if (context.tracker!.reportInaccessibleUniqueSymbolError) {
-                            context.tracker!.reportInaccessibleUniqueSymbolError!();
+                        if (context.tracker.reportInaccessibleUniqueSymbolError) {
+                            context.tracker.reportInaccessibleUniqueSymbolError();
                         }
                     }
                     return createTypeOperatorNode(SyntaxKind.UniqueKeyword, createKeywordTypeNode(SyntaxKind.SymbolKeyword));
@@ -3096,8 +3096,8 @@ namespace ts {
                         if (!context.encounteredError && !(context.flags & NodeBuilderFlags.AllowThisInObjectLiteral)) {
                             context.encounteredError = true;
                         }
-                        if (context.tracker!.reportInaccessibleThisError) {
-                            context.tracker!.reportInaccessibleThisError!();
+                        if (context.tracker.reportInaccessibleThisError) {
+                            context.tracker.reportInaccessibleThisError();
                         }
                     }
                     return createThis();
@@ -3417,8 +3417,8 @@ namespace ts {
                             if (propertySymbol.flags & SymbolFlags.Prototype) {
                                 continue;
                             }
-                            if (getDeclarationModifierFlagsFromSymbol(propertySymbol) & (ModifierFlags.Private | ModifierFlags.Protected) && context.tracker!.reportPrivateInBaseOfClassExpression) {
-                                context.tracker!.reportPrivateInBaseOfClassExpression!(unescapeLeadingUnderscores(propertySymbol.escapedName));
+                            if (getDeclarationModifierFlagsFromSymbol(propertySymbol) & (ModifierFlags.Private | ModifierFlags.Protected) && context.tracker.reportPrivateInBaseOfClassExpression) {
+                                context.tracker.reportPrivateInBaseOfClassExpression(unescapeLeadingUnderscores(propertySymbol.escapedName));
                             }
                         }
                         const propertyType = getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped && context.flags & NodeBuilderFlags.InReverseMappedType ?
@@ -3428,8 +3428,8 @@ namespace ts {
                         if (getCheckFlags(propertySymbol) & CheckFlags.Late) {
                             const decl = first(propertySymbol.declarations);
                             const name = hasLateBindableName(decl) && resolveEntityName(decl.name.expression, SymbolFlags.Value);
-                            if (name && context.tracker!.trackSymbol) {
-                                context.tracker!.trackSymbol!(name, saveEnclosingDeclaration, SymbolFlags.Value);
+                            if (name && context.tracker.trackSymbol) {
+                                context.tracker.trackSymbol(name, saveEnclosingDeclaration, SymbolFlags.Value);
                             }
                         }
                         const propertyName = symbolToName(propertySymbol, context, SymbolFlags.Value, /*expectsIdentifier*/ true);
@@ -3604,7 +3604,7 @@ namespace ts {
             }
 
             function lookupSymbolChain(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags) {
-                context.tracker!.trackSymbol!(symbol, context.enclosingDeclaration, meaning);
+                context.tracker.trackSymbol!(symbol, context.enclosingDeclaration, meaning);
                 // Try to get qualified name if the symbol is not a type parameter and there is an enclosing declaration.
                 let chain: Symbol[];
                 const isTypeParameter = symbol.flags & SymbolFlags.TypeParameter;
@@ -3864,7 +3864,7 @@ namespace ts {
         interface NodeBuilderContext {
             enclosingDeclaration: Node | undefined;
             flags: NodeBuilderFlags;
-            tracker: SymbolTracker | undefined;
+            tracker: SymbolTracker;
 
             // State
             encounteredError: boolean;
