@@ -8612,7 +8612,7 @@ namespace ts {
                     const stringIndexTypes: Type[] = [];
                     for (const t of (<IntersectionType>objectType).types) {
                         if (isStringIndexOnlyType(t)) {
-                            stringIndexTypes.push(getIndexTypeOfType(t, IndexKind.String)!); // TODO: GH#18217
+                            stringIndexTypes.push(getIndexTypeOfType(t, IndexKind.String)!);
                         }
                         else {
                             regularTypes.push(t);
