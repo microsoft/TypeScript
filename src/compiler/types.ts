@@ -3689,8 +3689,8 @@ namespace ts {
     // Numeric literal types (TypeFlags.NumberLiteral)
     export interface LiteralType extends Type {
         value: string | number;     // Value of literal
-        freshType?: LiteralType;    // Fresh version of type
-        regularType?: LiteralType;  // Regular version of type
+        freshType: LiteralType;     // Fresh version of type
+        regularType: LiteralType;   // Regular version of type
     }
 
     // Unique symbol types (TypeFlags.UniqueESSymbol)
