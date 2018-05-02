@@ -3019,7 +3019,7 @@ namespace ts {
                 };
             }
 
-            function typeToTypeNodeHelper(type: Type, context: NodeBuilderContext): TypeNode | undefined {
+            function typeToTypeNodeHelper(type: Type, context: NodeBuilderContext): TypeNode {
                 if (cancellationToken && cancellationToken.throwIfCancellationRequested) {
                     cancellationToken.throwIfCancellationRequested();
                 }
@@ -3028,7 +3028,7 @@ namespace ts {
 
                 if (!type) {
                     context.encounteredError = true;
-                    return undefined;
+                    return undefined!; // TODO: GH#18217
                 }
 
                 if (type.flags & TypeFlags.Any) {
@@ -3133,7 +3133,7 @@ namespace ts {
                         if (!context.encounteredError && !(context.flags & NodeBuilderFlags.AllowEmptyUnionOrIntersection)) {
                             context.encounteredError = true;
                         }
-                        return undefined;
+                        return undefined!; // TODO: GH#18217
                     }
                 }
                 if (objectFlags & (ObjectFlags.Anonymous | ObjectFlags.Mapped)) {
@@ -3143,29 +3143,29 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.Index) {
                     const indexedType = (<IndexType>type).type;
-                    const indexTypeNode = typeToTypeNodeHelper(indexedType, context)!; // TODO: GH#18217
+                    const indexTypeNode = typeToTypeNodeHelper(indexedType, context);
                     return createTypeOperatorNode(indexTypeNode);
                 }
                 if (type.flags & TypeFlags.IndexedAccess) {
-                    const objectTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).objectType, context)!; // TODO: GH#18217
-                    const indexTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).indexType, context)!;
+                    const objectTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).objectType, context);
+                    const indexTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).indexType, context);
                     return createIndexedAccessTypeNode(objectTypeNode, indexTypeNode);
                 }
                 if (type.flags & TypeFlags.Conditional) {
-                    const checkTypeNode = typeToTypeNodeHelper((<ConditionalType>type).checkType, context)!; // TODO: GH#18217
+                    const checkTypeNode = typeToTypeNodeHelper((<ConditionalType>type).checkType, context);
                     const saveInferTypeParameters = context.inferTypeParameters;
                     context.inferTypeParameters = (<ConditionalType>type).root.inferTypeParameters;
-                    const extendsTypeNode = typeToTypeNodeHelper((<ConditionalType>type).extendsType, context)!;
+                    const extendsTypeNode = typeToTypeNodeHelper((<ConditionalType>type).extendsType, context);
                     context.inferTypeParameters = saveInferTypeParameters;
-                    const trueTypeNode = typeToTypeNodeHelper(getTrueTypeFromConditionalType(<ConditionalType>type), context)!;
-                    const falseTypeNode = typeToTypeNodeHelper(getFalseTypeFromConditionalType(<ConditionalType>type), context)!;
+                    const trueTypeNode = typeToTypeNodeHelper(getTrueTypeFromConditionalType(<ConditionalType>type), context);
+                    const falseTypeNode = typeToTypeNodeHelper(getFalseTypeFromConditionalType(<ConditionalType>type), context);
                     return createConditionalTypeNode(checkTypeNode, extendsTypeNode, trueTypeNode, falseTypeNode);
                 }
                 if (type.flags & TypeFlags.Substitution) {
                     return typeToTypeNodeHelper((<SubstitutionType>type).typeVariable, context);
                 }
 
-                Debug.fail("Should be unreachable.");
+                return Debug.fail("Should be unreachable.");
 
                 function createMappedTypeNodeFromType(type: MappedType) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
@@ -3281,15 +3281,15 @@ namespace ts {
                     return entityName;
                 }
 
-                function typeReferenceToTypeNode(type: TypeReference) {
+                function typeReferenceToTypeNode(type: TypeReference): TypeNode {
                     const typeArguments: Type[] = type.typeArguments || emptyArray;
                     if (type.target === globalArrayType) {
                         if (context.flags & NodeBuilderFlags.WriteArrayAsGenericType) {
-                            const typeArgumentNode = typeToTypeNodeHelper(typeArguments[0], context)!;
+                            const typeArgumentNode = typeToTypeNodeHelper(typeArguments[0], context);
                             return createTypeReferenceNode("Array", [typeArgumentNode]);
                         }
 
-                        const elementType = typeToTypeNodeHelper(typeArguments[0], context)!;
+                        const elementType = typeToTypeNodeHelper(typeArguments[0], context);
                         return createArrayTypeNode(elementType);
                     }
                     else if (type.target.objectFlags & ObjectFlags.Tuple) {
@@ -3303,7 +3303,7 @@ namespace ts {
                             return createTupleTypeNode([]);
                         }
                         context.encounteredError = true;
-                        return undefined;
+                        return undefined!; // TODO: GH#18217
                     }
                     else if (context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral &&
                         type.symbol.valueDeclaration &&
@@ -3498,7 +3498,7 @@ namespace ts {
                     /*questionToken*/ undefined,
                     indexerTypeNode,
                     /*initializer*/ undefined);
-                const typeNode = typeToTypeNodeHelper(indexInfo.type || anyType, context)!; // TODO: GH#18217
+                const typeNode = typeToTypeNodeHelper(indexInfo.type || anyType, context);
                 if (!indexInfo.type && !(context.flags & NodeBuilderFlags.AllowEmptyIndexInfoType)) {
                     context.encounteredError = true;
                 }
@@ -3513,7 +3513,7 @@ namespace ts {
                 let typeParameters: TypeParameterDeclaration[] | undefined;
                 let typeArguments: TypeNode[] | undefined;
                 if (context.flags & NodeBuilderFlags.WriteTypeArgumentsOfSignature && signature.target && signature.mapper && signature.target.typeParameters) {
-                    typeArguments = signature.target.typeParameters.map(parameter => typeToTypeNodeHelper(instantiateType(parameter, signature.mapper!), context)!); // TODO: GH#18217
+                    typeArguments = signature.target.typeParameters.map(parameter => typeToTypeNodeHelper(instantiateType(parameter, signature.mapper!), context));
                 }
                 else {
                     typeParameters = signature.typeParameters && signature.typeParameters.map(parameter => typeParameterToDeclaration(parameter, context));
@@ -3531,7 +3531,7 @@ namespace ts {
                     const parameterName = typePredicate.kind === TypePredicateKind.Identifier ?
                         setEmitFlags(createIdentifier(typePredicate.parameterName), EmitFlags.NoAsciiEscaping) :
                         createThisTypeNode();
-                    const typeNode = typeToTypeNodeHelper(typePredicate.type, context)!;
+                    const typeNode = typeToTypeNodeHelper(typePredicate.type, context);
                     returnTypeNode = createTypePredicateNode(parameterName, typeNode);
                 }
                 else {
