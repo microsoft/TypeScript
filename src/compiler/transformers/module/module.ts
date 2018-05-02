@@ -1680,18 +1680,18 @@ namespace ts {
                 && !isGeneratedIdentifier(node.left)
                 && !isLocalName(node.left)
                 && !isDeclarationNameOfEnumOrNamespace(node.left)) {
-                    const exportedNames = getExports(node.left);
-                    if (exportedNames) {
-                        // For each additional export of the declaration, apply an export assignment.
-                        let expression: Expression = node;
-                        for (const exportName of exportedNames) {
-                            // Mark the node to prevent triggering this rule again.
-                            noSubstitution[getNodeId(expression)] = true;
-                            expression = createExportExpression(exportName, expression, /*location*/ node);
-                        }
-
-                        return expression;
+                const exportedNames = getExports(node.left);
+                if (exportedNames) {
+                    // For each additional export of the declaration, apply an export assignment.
+                    let expression: Expression = node;
+                    for (const exportName of exportedNames) {
+                        // Mark the node to prevent triggering this rule again.
+                        noSubstitution[getNodeId(expression)] = true;
+                        expression = createExportExpression(exportName, expression, /*location*/ node);
                     }
+
+                    return expression;
+                }
             }
 
             return node;
