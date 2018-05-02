@@ -1,0 +1,19 @@
+=== tests/cases/conformance/jsdoc/cb.js ===
+// TODO: Test nested param types using the nested Object style
+/** @callback Sid
+ * @param {string} s
+ * @returns {string} What were you expecting
+ */
+var x = 1
+>x : number
+>1 : 1
+
+/** @type {Sid} smallId */
+var sid = s => s + "!";
+>sid : (s: string) => string
+>s => s + "!" : (s: string) => string
+>s : string
+>s + "!" : string
+>s : string
+>"!" : "!"
+

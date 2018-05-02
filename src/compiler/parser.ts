@@ -6739,10 +6739,20 @@ namespace ts {
                         // Debug.assert(child.kind !== SyntaxKind.JSDocTypeTag);
                         jsdocSignature.parameters = append(jsdocSignature.parameters as MutableNodeArray<JSDocParameterTag>, child);
                     }
-                    // const shouldParseReturnTag = true;
-                    // if (shouldParseReturnTag) {
-                    //     jsdocSignature.type = parseReturnTag(x, y);
-                    // }
+                    const returnTag = tryParse(() => {
+                        if (parseExpectedToken(SyntaxKind.AtToken)) {
+                            const atToken = <AtToken>createNode(SyntaxKind.AtToken, scanner.getTokenPos());
+                            atToken.end = scanner.getTextPos();
+                            nextToken(); // why is this needed? Doesn't parseExpectedToken advance the token enough?
+                            const name = parseJSDocIdentifierName();
+                            if (name && (name.escapedText === "return" || name.escapedText === "returns")) {
+                                return parseReturnTag(atToken, name);
+                            }
+                        }
+                    });
+                    if (returnTag) {
+                        jsdocSignature.type = returnTag;
+                    }
                     callbackTag.typeExpression = finishNode(jsdocSignature);
                     return finishNode(callbackTag);
                 }
