@@ -6724,51 +6724,6 @@ namespace ts {
                     return finishNode(tag);
                 }
 
-                function parseCallbackTag(atToken: AtToken, tagName: Identifier): JSDocCallbackTag {
-                    const callbackTag = createNode(SyntaxKind.JSDocCallbackTag, atToken.pos) as JSDocCallbackTag;
-                    callbackTag.atToken = atToken;
-                    callbackTag.tagName = tagName;
-                    callbackTag.fullName = parseJSDocTypeNameWithNamespace();
-                    callbackTag.name = getJSDocTypeAliasName(callbackTag.fullName);
-                    skipWhitespace();
-
-                    let child: JSDocParameterTag | false;
-                    const start = scanner.getStartPos();
-                    const jsdocSignature = createNode(SyntaxKind.JSDocSignature, start) as JSDocSignature;
-                    while (child = tryParse(() => parseChildParameterOrPropertyTag(PropertyLikeParse.CallbackParameter) as JSDocParameterTag)) {
-                        // Debug.assert(child.kind !== SyntaxKind.JSDocTypeTag);
-                        jsdocSignature.parameters = append(jsdocSignature.parameters as MutableNodeArray<JSDocParameterTag>, child);
-                    }
-                    const returnTag = tryParse(() => {
-                        if (parseExpectedToken(SyntaxKind.AtToken)) {
-                            const atToken = <AtToken>createNode(SyntaxKind.AtToken, scanner.getTokenPos());
-                            atToken.end = scanner.getTextPos();
-                            nextToken(); // why is this needed? Doesn't parseExpectedToken advance the token enough?
-                            const name = parseJSDocIdentifierName();
-                            if (name && (name.escapedText === "return" || name.escapedText === "returns")) {
-                                return parseReturnTag(atToken, name);
-                            }
-                        }
-                    });
-                    if (returnTag) {
-                        jsdocSignature.type = returnTag;
-                    }
-                    callbackTag.typeExpression = finishNode(jsdocSignature);
-                    return finishNode(callbackTag);
-                }
-
-                function getJSDocTypeAliasName(fullName: JSDocNamespaceBody | undefined) {
-                    if (fullName) {
-                        let rightNode = fullName;
-                        while (true) {
-                            if (ts.isIdentifier(rightNode) || !rightNode.body) {
-                                return ts.isIdentifier(rightNode) ? rightNode : rightNode.name;
-                            }
-                            rightNode = rightNode.body;
-                        }
-                    }
-                }
-
                 function parseTypedefTag(atToken: AtToken, tagName: Identifier): JSDocTypedefTag {
                     const typeExpression = tryParseTypeExpression();
                     skipWhitespace();
@@ -6815,7 +6770,52 @@ namespace ts {
                     return finishNode(typedefTag);
                 }
 
-                function parseJSDocTypeNameWithNamespace(nested?: boolean) {
+                function parseCallbackTag(atToken: AtToken, tagName: Identifier): JSDocCallbackTag {
+                    const callbackTag = createNode(SyntaxKind.JSDocCallbackTag, atToken.pos) as JSDocCallbackTag;
+                    callbackTag.atToken = atToken;
+                    callbackTag.tagName = tagName;
+                    callbackTag.fullName = parseJSDocTypeNameWithNamespace();
+                    callbackTag.name = getJSDocTypeAliasName(callbackTag.fullName);
+                    skipWhitespace();
+
+                    let child: JSDocParameterTag | false;
+                    const start = scanner.getStartPos();
+                    const jsdocSignature = createNode(SyntaxKind.JSDocSignature, start) as JSDocSignature;
+                    while (child = tryParse(() => parseChildParameterOrPropertyTag(PropertyLikeParse.CallbackParameter) as JSDocParameterTag)) {
+                        // Debug.assert(child.kind !== SyntaxKind.JSDocTypeTag);
+                        jsdocSignature.parameters = append(jsdocSignature.parameters as MutableNodeArray<JSDocParameterTag>, child);
+                    }
+                    const returnTag = tryParse(() => {
+                        if (parseExpectedToken(SyntaxKind.AtToken)) {
+                            const atToken = <AtToken>createNode(SyntaxKind.AtToken, scanner.getTokenPos());
+                            atToken.end = scanner.getTextPos();
+                            nextToken(); // why is this needed? Doesn't parseExpectedToken advance the token enough?
+                            const name = parseJSDocIdentifierName();
+                            if (name && (name.escapedText === "return" || name.escapedText === "returns")) {
+                                return parseReturnTag(atToken, name);
+                            }
+                        }
+                    });
+                    if (returnTag) {
+                        jsdocSignature.type = returnTag;
+                    }
+                    callbackTag.typeExpression = finishNode(jsdocSignature);
+                    return finishNode(callbackTag);
+                }
+
+                function getJSDocTypeAliasName(fullName: JSDocNamespaceBody | undefined) {
+                    if (fullName) {
+                        let rightNode = fullName;
+                        while (true) {
+                            if (ts.isIdentifier(rightNode) || !rightNode.body) {
+                                return ts.isIdentifier(rightNode) ? rightNode : rightNode.name;
+                            }
+                            rightNode = rightNode.body;
+                        }
+                    }
+                }
+
+               function parseJSDocTypeNameWithNamespace(nested?: boolean) {
                     const pos = scanner.getTokenPos();
                     const typeNameOrNamespaceName = parseJSDocIdentifierName();
 
