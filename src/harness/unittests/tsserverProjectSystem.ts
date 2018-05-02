@@ -3181,7 +3181,7 @@ namespace ts.projectSystem {
             const projectLocation = "/user/username/projects/project";
             const file1: FileOrFolder = {
                 path: `${projectLocation}/src/file1.ts`,
-                content: `import { y } from "./file1"; let x = 10;`
+                content: `import { y } from "./file2"; let x = 10;`
             };
             const file2: FileOrFolder = {
                 path: `${projectLocation}/src/file2.ts`,
@@ -3216,6 +3216,53 @@ namespace ts.projectSystem {
                 arguments: { file: file2.path, startLine: 1, startOffset, endLine: 1, endOffset: startOffset + 1 }
             });
 
+        });
+
+        it("Orphan source files are handled correctly on watch trigger", () => {
+            const projectLocation = "/user/username/projects/project";
+            const file1: FileOrFolder = {
+                path: `${projectLocation}/src/file1.ts`,
+                content: `export let x = 10;`
+            };
+            const file2: FileOrFolder = {
+                path: `${projectLocation}/src/file2.ts`,
+                content: "export let y = 10;"
+            };
+            const configContent1 = JSON.stringify({
+                files: ["src/file1.ts", "src/file2.ts"]
+            });
+            const config: FileOrFolder = {
+                path: `${projectLocation}/tsconfig.json`,
+                content: configContent1
+            };
+            const files = [file1, file2, libFile, config];
+            const host = createServerHost(files);
+            const service = createProjectService(host);
+            service.openClientFile(file1.path);
+            checkProjectActualFiles(service.configuredProjects.get(config.path), [file1.path, file2.path, libFile.path, config.path]);
+
+            const configContent2 = JSON.stringify({
+                files: ["src/file1.ts"]
+            });
+            config.content = configContent2;
+            host.reloadFS(files);
+            host.runQueuedTimeoutCallbacks();
+
+            checkProjectActualFiles(service.configuredProjects.get(config.path), [file1.path, libFile.path, config.path]);
+            verifyFile2InfoIsOrphan();
+
+            file2.content += "export let z = 10;";
+            host.reloadFS(files);
+            host.runQueuedTimeoutCallbacks();
+
+            checkProjectActualFiles(service.configuredProjects.get(config.path), [file1.path, libFile.path, config.path]);
+            verifyFile2InfoIsOrphan();
+
+            function verifyFile2InfoIsOrphan() {
+                const info = service.getScriptInfoForPath(file2.path as Path);
+                assert.isDefined(info);
+                assert.equal(info.containingProjects.length, 0);
+            }
         });
     });
 

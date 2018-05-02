@@ -594,10 +594,12 @@ namespace ts.server {
         }
 
         private delayUpdateProjectGraphs(projects: ReadonlyArray<Project>) {
-            for (const project of projects) {
-                this.delayUpdateProjectGraph(project);
+            if (projects.length) {
+                for (const project of projects) {
+                    this.delayUpdateProjectGraph(project);
+                }
+                this.delayEnsureProjectForOpenFiles();
             }
-            this.delayEnsureProjectForOpenFiles();
         }
 
         setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions, projectRootPath?: string): void {
@@ -708,7 +710,6 @@ namespace ts.server {
                 this.handleDeletedFile(info);
             }
             else if (!info.isScriptOpen()) {
-                Debug.assert(info.containingProjects.length !== 0);
                 // file has been changed which might affect the set of referenced files in projects that include
                 // this file and set of inferred projects
                 info.delayReloadNonMixedContentFile();
