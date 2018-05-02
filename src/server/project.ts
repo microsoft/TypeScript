@@ -57,6 +57,7 @@ namespace ts.server {
 
     export interface PluginCreateInfo {
         project: Project;
+        projectService: ProjectService;
         languageService: LanguageService;
         languageServiceHost: LanguageServiceHost;
         serverHost: ServerHost;
@@ -164,7 +165,7 @@ namespace ts.server {
             return hasOneOrMoreJsAndNoTsFiles(this);
         }
 
-        public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} {
+        public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} | undefined {
             const resolvedPath = normalizeSlashes(host.resolvePath(combinePaths(initialDir, "node_modules")));
             log(`Loading ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
             const result = host.require(resolvedPath, moduleName);
@@ -1112,6 +1113,7 @@ namespace ts.server {
                 const info: PluginCreateInfo = {
                     config: configEntry,
                     project: this,
+                    projectService: this.projectService,
                     languageService: this.languageService,
                     languageServiceHost: this,
                     serverHost: this.projectService.host

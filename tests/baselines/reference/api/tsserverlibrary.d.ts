@@ -7647,6 +7647,7 @@ declare namespace ts.server {
     function allFilesAreJsOrDts(project: Project): boolean;
     interface PluginCreateInfo {
         project: Project;
+        projectService: ProjectService;
         languageService: LanguageService;
         languageServiceHost: LanguageServiceHost;
         serverHost: ServerHost;
@@ -7710,7 +7711,7 @@ declare namespace ts.server {
         private readonly cancellationToken;
         isNonTsProject(): boolean;
         isJsOnlyProject(): boolean;
-        static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {};
+        static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} | undefined;
         isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
         private readonly typingsCache;
@@ -8043,7 +8044,8 @@ declare namespace ts.server {
         updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse): void;
         private delayEnsureProjectForOpenFiles;
         private delayUpdateProjectGraph;
-        private sendProjectsUpdatedInBackgroundEvent;
+        /** Call this function when an event has happened that should cause projects to update. */
+        sendProjectsUpdatedInBackgroundEvent(): void;
         private delayUpdateProjectGraphs;
         setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions, projectRootPath?: string): void;
         findProject(projectName: string): Project | undefined;
