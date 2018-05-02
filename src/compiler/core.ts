@@ -2986,7 +2986,7 @@ namespace ts {
     export function changeAnyExtension(path: string, ext: string, extensions: string | ReadonlyArray<string>, ignoreCase: boolean): string;
     export function changeAnyExtension(path: string, ext: string, extensions?: string | ReadonlyArray<string>, ignoreCase?: boolean) {
         const pathext = extensions !== undefined && ignoreCase !== undefined ? getAnyExtensionFromPath(path, extensions, ignoreCase) : getAnyExtensionFromPath(path);
-        return pathext ? path.slice(0, path.length - pathext.length) + (ts.startsWith(ext, ".") ? ext : "." + ext) : path;
+        return pathext ? path.slice(0, path.length - pathext.length) + (startsWith(ext, ".") ? ext : "." + ext) : path;
     }
 
     /**

@@ -39,6 +39,6 @@ verify.completions(
     },
     {
         at: kinds.map(k => `${k}2`),
-        are: ["e1", "f1", "f2", "tests", "folder"],
+        are: ["e1", "f1", "f2", "folder", "tests"],
         isNewIdentifierLocation: true,
     });
