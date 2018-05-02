@@ -976,6 +976,9 @@ namespace ts {
          * <JsxTagName attribute1 attribute2={0} />
          */
         jsxAttribute = "JSX attribute",
+
+        /** String literal */
+        string = "string",
     }
 
     export const enum ScriptElementKindModifier {
