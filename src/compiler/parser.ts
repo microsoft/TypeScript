@@ -6770,6 +6770,26 @@ namespace ts {
                     return finishNode(typedefTag);
                 }
 
+                function parseJSDocTypeNameWithNamespace(nested?: boolean) {
+                    const pos = scanner.getTokenPos();
+                    const typeNameOrNamespaceName = parseJSDocIdentifierName();
+
+                    if (typeNameOrNamespaceName && parseOptional(SyntaxKind.DotToken)) {
+                        const jsDocNamespaceNode = <JSDocNamespaceDeclaration>createNode(SyntaxKind.ModuleDeclaration, pos);
+                        if (nested) {
+                            jsDocNamespaceNode.flags |= NodeFlags.NestedNamespace;
+                        }
+                        jsDocNamespaceNode.name = typeNameOrNamespaceName;
+                        jsDocNamespaceNode.body = parseJSDocTypeNameWithNamespace(/*nested*/ true);
+                        return finishNode(jsDocNamespaceNode);
+                    }
+
+                    if (typeNameOrNamespaceName && nested) {
+                        typeNameOrNamespaceName.isInJSDocNamespace = true;
+                    }
+                    return typeNameOrNamespaceName;
+                }
+
                 function parseCallbackTag(atToken: AtToken, tagName: Identifier): JSDocCallbackTag {
                     const callbackTag = createNode(SyntaxKind.JSDocCallbackTag, atToken.pos) as JSDocCallbackTag;
                     callbackTag.atToken = atToken;
@@ -6813,26 +6833,6 @@ namespace ts {
                             rightNode = rightNode.body;
                         }
                     }
-                }
-
-               function parseJSDocTypeNameWithNamespace(nested?: boolean) {
-                    const pos = scanner.getTokenPos();
-                    const typeNameOrNamespaceName = parseJSDocIdentifierName();
-
-                    if (typeNameOrNamespaceName && parseOptional(SyntaxKind.DotToken)) {
-                        const jsDocNamespaceNode = <JSDocNamespaceDeclaration>createNode(SyntaxKind.ModuleDeclaration, pos);
-                        if (nested) {
-                            jsDocNamespaceNode.flags |= NodeFlags.NestedNamespace;
-                        }
-                        jsDocNamespaceNode.name = typeNameOrNamespaceName;
-                        jsDocNamespaceNode.body = parseJSDocTypeNameWithNamespace(/*nested*/ true);
-                        return finishNode(jsDocNamespaceNode);
-                    }
-
-                    if (typeNameOrNamespaceName && nested) {
-                        typeNameOrNamespaceName.isInJSDocNamespace = true;
-                    }
-                    return typeNameOrNamespaceName;
                 }
 
                 function escapedTextsEqual(a: EntityName, b: EntityName): boolean {
