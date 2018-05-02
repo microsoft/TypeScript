@@ -1538,7 +1538,6 @@ namespace ts {
 
     export function createStatement(expression: Expression) {
         return createExpressionStatement(parenthesizeExpressionForExpressionStatement(expression));
-
     }
 
     export function updateStatement(node: ExpressionStatement, expression: Expression) {
