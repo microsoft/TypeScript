@@ -71,6 +71,6 @@ namespace ts {
     }
 
     function createStringRange(node: StringLiteralLike, sourceFile: SourceFileLike): TextRange {
-        return createTextRange(node.getStart(sourceFile) + 1, node.end - 1);
+        return createRange(node.getStart(sourceFile) + 1, node.end - 1);
     }
 }

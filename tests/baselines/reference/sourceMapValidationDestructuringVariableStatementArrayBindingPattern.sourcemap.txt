@@ -188,8 +188,8 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern.
 6 >                                                         , 
 7 >                                                           nameC
 8 >                                                                        , 
-9 >                                                                          skillC
-10>                                                                                        ] = [3, "edging", "Trimming edges"];
+9 >                                                                          skillC] = [3, "edging", "Trimming edges"]
+10>                                                                                        ;
 1->Emitted(7, 1) Source(14, 5) + SourceIndex(0)
 2 >Emitted(7, 5) Source(14, 5) + SourceIndex(0)
 3 >Emitted(7, 41) Source(14, 63) + SourceIndex(0)
@@ -198,7 +198,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern.
 6 >Emitted(7, 60) Source(14, 15) + SourceIndex(0)
 7 >Emitted(7, 73) Source(14, 20) + SourceIndex(0)
 8 >Emitted(7, 75) Source(14, 22) + SourceIndex(0)
-9 >Emitted(7, 89) Source(14, 28) + SourceIndex(0)
+9 >Emitted(7, 89) Source(14, 63) + SourceIndex(0)
 10>Emitted(7, 90) Source(14, 64) + SourceIndex(0)
 ---
 >>>var numberA3 = robotA[0], robotAInfo = robotA.slice(1);

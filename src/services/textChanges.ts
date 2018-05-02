@@ -368,7 +368,7 @@ namespace ts.textChanges {
         }
 
         private insertText(sourceFile: SourceFile, pos: number, text: string): void {
-            this.replaceRangeWithText(sourceFile, createTextRange(pos), text);
+            this.replaceRangeWithText(sourceFile, createRange(pos), text);
         }
 
         /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
@@ -641,7 +641,7 @@ namespace ts.textChanges {
                 const [openBraceEnd, closeBraceEnd] = getClassBraceEnds(cls, sourceFile);
                 // For `class C { }` remove the whitespace inside the braces.
                 if (positionsAreOnSameLine(openBraceEnd, closeBraceEnd, sourceFile) && openBraceEnd !== closeBraceEnd - 1) {
-                    this.deleteRange(sourceFile, createTextRange(openBraceEnd, closeBraceEnd - 1));
+                    this.deleteRange(sourceFile, createRange(openBraceEnd, closeBraceEnd - 1));
                 }
             });
         }

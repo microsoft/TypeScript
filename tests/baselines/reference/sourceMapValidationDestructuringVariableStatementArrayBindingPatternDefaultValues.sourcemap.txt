@@ -235,8 +235,8 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternD
 12>                                                                                                                                          , 
 13>                                                                                                                                            skillC = "noSkill"
 14>                                                                                                                                                      
-15>                                                                                                                                                        skillC = "noSkill"
-16>                                                                                                                                                                                               ] = [3, "edging", "Trimming edges"];
+15>                                                                                                                                                        skillC = "noSkill"] = [3, "edging", "Trimming edges"]
+16>                                                                                                                                                                                               ;
 1->Emitted(7, 1) Source(13, 5) + SourceIndex(0)
 2 >Emitted(7, 5) Source(13, 5) + SourceIndex(0)
 3 >Emitted(7, 41) Source(13, 91) + SourceIndex(0)
@@ -251,7 +251,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternD
 12>Emitted(7, 141) Source(13, 38) + SourceIndex(0)
 13>Emitted(7, 151) Source(13, 56) + SourceIndex(0)
 14>Emitted(7, 153) Source(13, 38) + SourceIndex(0)
-15>Emitted(7, 192) Source(13, 56) + SourceIndex(0)
+15>Emitted(7, 192) Source(13, 91) + SourceIndex(0)
 16>Emitted(7, 193) Source(13, 92) + SourceIndex(0)
 ---
 >>>var _l = robotA[0], numberA3 = _l === void 0 ? -1 : _l, robotAInfo = robotA.slice(1);

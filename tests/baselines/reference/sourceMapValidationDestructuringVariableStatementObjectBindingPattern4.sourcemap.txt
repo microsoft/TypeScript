@@ -30,8 +30,8 @@ sourceFile:sourceMapValidationDestructuringVariableStatementObjectBindingPattern
 7 >                                        x = 500
 8 >                                                                    ,
   >                                                                         
-9 >                                                                      y
-10>                                                                              } = { x: 20, y: "hi" };
+9 >                                                                      y} = { x: 20, y: "hi" }
+10>                                                                              ;
 1 >Emitted(1, 1) Source(1, 5) + SourceIndex(0)
 2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
 3 >Emitted(1, 28) Source(2, 29) + SourceIndex(0)
@@ -40,7 +40,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementObjectBindingPattern
 6 >Emitted(1, 41) Source(1, 6) + SourceIndex(0)
 7 >Emitted(1, 69) Source(1, 13) + SourceIndex(0)
 8 >Emitted(1, 71) Source(2, 6) + SourceIndex(0)
-9 >Emitted(1, 79) Source(2, 7) + SourceIndex(0)
+9 >Emitted(1, 79) Source(2, 29) + SourceIndex(0)
 10>Emitted(1, 80) Source(2, 30) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementObjectBindingPattern4.js.map

@@ -3697,8 +3697,8 @@ namespace ts {
      * @param pos The start position.
      * @param end The end position.
      */
-    export function createRange(pos: number, end: number = pos, noAssert?: boolean): TextRange {
-        Debug.assert(end >= pos || end === -1 || noAssert); // TODO: GH#23370
+    export function createRange(pos: number, end: number = pos): TextRange {
+        Debug.assert(end >= pos || end === -1);
         return { pos, end };
     }
 
