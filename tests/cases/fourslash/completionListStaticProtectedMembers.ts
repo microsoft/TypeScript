@@ -27,12 +27,12 @@
 
 verify.completions(
     {
-        at: ["1", "2"],
+        marker: ["1", "2"],
         // Same class, everything is visible
         includes: ["privateMethod", "privateProperty", "protectedMethod", "protectedProperty", "publicMethod", "publicProperty", "protectedOverriddenMethod", "protectedOverriddenProperty"],
     },
     {
-        at: "3",
+        marker: "3",
         includes: ["privateMethod", "privateProperty", "protectedMethod", "protectedProperty", "publicMethod", "publicProperty"],
         // Can not access protected properties overridden in subclass
         excludes: ["protectedOverriddenMethod", "protectedOverriddenProperty"],

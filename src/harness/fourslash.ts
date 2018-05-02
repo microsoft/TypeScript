@@ -22,7 +22,7 @@
 namespace FourSlash {
     ts.disableIncrementalParsing = false;
 
-    import Many = FourSlashInterface.Many;
+    import ArrayOrSingle = FourSlashInterface.Many;
 
     // Represents a parsed source file with metadata
     interface FourSlashFile {
@@ -617,11 +617,11 @@ namespace FourSlash {
             }
         }
 
-        public verifyGoToDefinitionIs(endMarker: Many<string>) {
+        public verifyGoToDefinitionIs(endMarker: ArrayOrSingle<string>) {
             this.verifyGoToXWorker(toArray(endMarker), () => this.getGoToDefinition());
         }
 
-        public verifyGoToDefinition(arg0: any, endMarkerNames?: Many<string>) {
+        public verifyGoToDefinition(arg0: any, endMarkerNames?: ArrayOrSingle<string>) {
             this.verifyGoToX(arg0, endMarkerNames, () => this.getGoToDefinitionAndBoundSpan());
         }
 
@@ -633,23 +633,23 @@ namespace FourSlash {
             return this.languageService.getDefinitionAndBoundSpan(this.activeFile.fileName, this.currentCaretPosition);
         }
 
-        public verifyGoToType(arg0: any, endMarkerNames?: Many<string>) {
+        public verifyGoToType(arg0: any, endMarkerNames?: ArrayOrSingle<string>) {
             this.verifyGoToX(arg0, endMarkerNames, () =>
                 this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition));
         }
 
-        private verifyGoToX(arg0: any, endMarkerNames: Many<string> | undefined, getDefs: () => ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
+        private verifyGoToX(arg0: any, endMarkerNames: ArrayOrSingle<string> | undefined, getDefs: () => ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
             if (endMarkerNames) {
                 this.verifyGoToXPlain(arg0, endMarkerNames, getDefs);
             }
             else if (ts.isArray(arg0)) {
-                const pairs = arg0 as ReadonlyArray<[Many<string>, Many<string>]>;
+                const pairs = arg0 as ReadonlyArray<[ArrayOrSingle<string>, ArrayOrSingle<string>]>;
                 for (const [start, end] of pairs) {
                     this.verifyGoToXPlain(start, end, getDefs);
                 }
             }
             else {
-                const obj: { [startMarkerName: string]: Many<string> } = arg0;
+                const obj: { [startMarkerName: string]: ArrayOrSingle<string> } = arg0;
                 for (const startMarkerName in obj) {
                     if (ts.hasProperty(obj, startMarkerName)) {
                         this.verifyGoToXPlain(startMarkerName, obj[startMarkerName], getDefs);
@@ -658,7 +658,7 @@ namespace FourSlash {
             }
         }
 
-        private verifyGoToXPlain(startMarkerNames: Many<string>, endMarkerNames: Many<string>, getDefs: () => ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
+        private verifyGoToXPlain(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string>, getDefs: () => ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
             for (const start of toArray(startMarkerNames)) {
                 this.verifyGoToXSingle(start, endMarkerNames, getDefs);
             }
@@ -670,7 +670,7 @@ namespace FourSlash {
             }
         }
 
-        private verifyGoToXSingle(startMarkerName: string, endMarkerNames: Many<string>, getDefs: () => ReadonlyArray<ts.DefinitionInfo> | ts.DefinitionInfoAndBoundSpan | undefined) {
+        private verifyGoToXSingle(startMarkerName: string, endMarkerNames: ArrayOrSingle<string>, getDefs: () => ReadonlyArray<ts.DefinitionInfo> | ts.DefinitionInfoAndBoundSpan | undefined) {
             this.goToMarker(startMarkerName);
             this.verifyGoToXWorker(toArray(endMarkerNames), getDefs, startMarkerName);
         }
@@ -833,19 +833,21 @@ namespace FourSlash {
         }
 
         public verifyCompletions(options: FourSlashInterface.VerifyCompletionsOptions) {
-            if (options.at !== undefined) {
-                if (typeof options.at === "string") {
-                    this.goToMarker(options.at);
-                }
-                else {
-                    for (const a of options.at) this.verifyCompletions({ ...options, at: a });
-                    return;
+            if (options.marker === undefined) {
+                this.verifyCompletionsWorker(options);
+            }
+            else {
+                for (const marker of toArray(options.marker)) {
+                    this.goToMarker(marker);
+                    this.verifyCompletionsWorker(options);
                 }
             }
+        }
 
+        private verifyCompletionsWorker(options: FourSlashInterface.VerifyCompletionsOptions): void {
             const actualCompletions = this.getCompletionListAtCaret({ ...options.preferences, triggerCharacter: options.triggerCharacter });
             if (!actualCompletions) {
-                if (options.are === undefined) return;
+                if (options.exact === undefined) return;
                 this.raiseError(`No completions at position '${this.currentCaretPosition}'.`);
             }
 
@@ -864,9 +866,10 @@ namespace FourSlash {
                 }
             }
 
-            if ("are" in options) {
-                if (options.are === undefined) this.raiseError("Expected no completions");
-                this.verifyCompletionsAreExactly(actualCompletions.entries, toArray(options.are));
+            if ("exact" in options) {
+                ts.Debug.assert(!("includes" in options) && !("excludes" in options));
+                if (options.exact === undefined) this.raiseError("Expected no completions");
+                this.verifyCompletionsAreExactly(actualCompletions.entries, toArray(options.exact));
             }
             else {
                 if (options.includes) {
@@ -877,7 +880,7 @@ namespace FourSlash {
                         this.verifyCompletionEntry(found, include);
                     }
                 }
-                else {
+                if (options.excludes) {
                     for (const exclude of toArray(options.excludes)) {
                         if (typeof exclude === "string") {
                             if (actualByName.has(exclude)) {
@@ -944,7 +947,7 @@ namespace FourSlash {
         }
 
         public verifyCompletionsAt(markerName: string | ReadonlyArray<string>, expected: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, options?: FourSlashInterface.CompletionsAtOptions) {
-            this.verifyCompletions({ at: markerName, are: expected, isNewIdentifierLocation: options && options.isNewIdentifierLocation, preferences: options, triggerCharacter: options && options.triggerCharacter });
+            this.verifyCompletions({ marker: markerName, exact: expected, isNewIdentifierLocation: options && options.isNewIdentifierLocation, preferences: options, triggerCharacter: options && options.triggerCharacter });
         }
 
         public verifyCompletionListContains(entryId: ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string | { kind?: string, kindModifiers?: string }, spanIndex?: number, hasAction?: boolean, options?: FourSlashInterface.VerifyCompletionListContainsOptions) {
@@ -1180,7 +1183,7 @@ namespace FourSlash {
             }
         }
 
-        public verifyReferenceGroups(starts: Many<string> | Many<Range>, parts: ReadonlyArray<FourSlashInterface.ReferenceGroup> | undefined): void {
+        public verifyReferenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<Range>, parts: ReadonlyArray<FourSlashInterface.ReferenceGroup> | undefined): void {
             interface ReferenceGroupJson {
                 definition: string | { text: string, range: ts.TextSpan };
                 references: ts.ReferenceEntry[];
@@ -1415,7 +1418,7 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        public verifyRenameLocations(startRanges: Many<Range>, options: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges: Range[] }) {
+        public verifyRenameLocations(startRanges: ArrayOrSingle<Range>, options: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges: Range[] }) {
             let findInStrings: boolean, findInComments: boolean, ranges: Range[];
             if (ts.isArray(options)) {
                 findInStrings = findInComments = false;
@@ -3805,7 +3808,7 @@ ${code}
         return ts.arrayFrom(set.keys());
     }
 
-    function toArray<T>(x: Many<T>): ReadonlyArray<T> {
+    function toArray<T>(x: ArrayOrSingle<T>): ReadonlyArray<T> {
         return ts.isArray(x) ? x : [x];
     }
 
@@ -4753,9 +4756,9 @@ namespace FourSlashInterface {
     }
 
     export interface VerifyCompletionsOptions {
-        readonly at?: Many<string>;
+        readonly marker?: Many<string>;
         readonly isNewIdentifierLocation?: boolean;
-        readonly are?: Many<ExpectedCompletionEntry>;
+        readonly exact?: Many<ExpectedCompletionEntry>;
         readonly includes?: Many<ExpectedCompletionEntry>;
         readonly excludes?: Many<string | { readonly name: string, readonly source: string }>;
         readonly preferences: ts.UserPreferences;

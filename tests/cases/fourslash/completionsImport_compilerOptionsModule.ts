@@ -24,9 +24,9 @@
 ////const a = import("./a"); // Does not make this an external module
 ////fo/*d2*/
 
-verify.completions({ at: ["b", "c", "d"], excludes: "foo", preferences: { includeCompletionsForModuleExports: true } });
+verify.completions({ marker: ["b", "c", "d"], excludes: "foo", preferences: { includeCompletionsForModuleExports: true } });
 verify.completions({
-    at: ["c2", "d2"],
+    marker: ["c2", "d2"],
     includes: [{ name: "foo", source: "/node_modules/a/index", text: "const foo: 0", kind: "const", hasAction: true, sourceDisplay: "a" }],
     preferences: { includeCompletionsForModuleExports: true },
 });

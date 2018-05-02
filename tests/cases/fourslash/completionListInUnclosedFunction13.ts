@@ -9,4 +9,4 @@
 ////    }
 ////}
 
-verify.completions({ at: "1", includes: "MyType" });
+verify.completions({ marker: "1", includes: "MyType" });

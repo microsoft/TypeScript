@@ -19,7 +19,7 @@
 
 goTo.marker();
 edit.insert('.');
-verify.completions({ are: ["bar", "thing", "union", "Foo", "x"] });
+verify.completions({ exact: ["bar", "thing", "union", "Foo", "x"] });
 
 edit.insert('bar.');
 verify.completions({ includes: ["substr"], isNewIdentifierLocation: true });

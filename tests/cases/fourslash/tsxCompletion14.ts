@@ -23,6 +23,6 @@
 //// var x4 = <Exp.M.SFCComp /*4*/ ></Exp.M.SFCComp>;
 
 verify.completions(
-    { at: ["1", "3"], are: ["ONE", "TWO"] },
-    { at: ["2", "4"], are: ["Three", "Four"] },
+    { marker: ["1", "3"], exact: ["ONE", "TWO"] },
+    { marker: ["2", "4"], exact: ["Three", "Four"] },
 );
