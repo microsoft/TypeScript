@@ -6279,8 +6279,9 @@ namespace ts {
             }
 
             const enum PropertyLikeParse {
-                Property,
-                Parameter,
+                Property = 1 << 0,
+                Parameter = 1 << 1,
+                CallbackParameter = 1 << 2,
             }
 
             export function parseJSDocCommentWorker(start: number, length: number): JSDoc {
@@ -6616,11 +6617,12 @@ namespace ts {
                         typeExpression = tryParseTypeExpression();
                     }
 
-                    const result = target === PropertyLikeParse.Parameter ?
-                        <JSDocParameterTag>createNode(SyntaxKind.JSDocParameterTag, atToken.pos) :
-                        <JSDocPropertyTag>createNode(SyntaxKind.JSDocPropertyTag, atToken.pos);
+                    const result = target === PropertyLikeParse.Property ?
+                        <JSDocPropertyTag>createNode(SyntaxKind.JSDocPropertyTag, atToken.pos) :
+                        <JSDocParameterTag>createNode(SyntaxKind.JSDocParameterTag, atToken.pos);
                     let comment: string | undefined;
                     if (indent !== undefined) comment = parseTagComments(indent + scanner.getStartPos() - atToken.pos);
+                    // TODO: For nested parsing, CallbackParameter should change to Parameter
                     const nestedTypeLiteral = parseNestedTypeLiteral(typeExpression, name, target);
                     if (nestedTypeLiteral) {
                         typeExpression = nestedTypeLiteral;
@@ -6733,10 +6735,14 @@ namespace ts {
                     let child: JSDocParameterTag | false;
                     const start = scanner.getStartPos();
                     const jsdocSignature = createNode(SyntaxKind.JSDocSignature, start) as JSDocSignature;
-                    while (child = tryParse(() => parseChildParameterOrPropertyTag(PropertyLikeParse.Parameter) as JSDocParameterTag)) {
+                    while (child = tryParse(() => parseChildParameterOrPropertyTag(PropertyLikeParse.CallbackParameter) as JSDocParameterTag)) {
                         // Debug.assert(child.kind !== SyntaxKind.JSDocTypeTag);
                         jsdocSignature.parameters = append(jsdocSignature.parameters as MutableNodeArray<JSDocParameterTag>, child);
                     }
+                    // const shouldParseReturnTag = true;
+                    // if (shouldParseReturnTag) {
+                    //     jsdocSignature.type = parseReturnTag(x, y);
+                    // }
                     callbackTag.typeExpression = finishNode(jsdocSignature);
                     return finishNode(callbackTag);
                 }
@@ -6845,6 +6851,7 @@ namespace ts {
                                 if (canParseTag) {
                                     const child = tryParseChildTag(target);
                                     if (child && child.kind === SyntaxKind.JSDocParameterTag &&
+                                        target !== PropertyLikeParse.CallbackParameter &&
                                         (ts.isIdentifier(child.name) || !escapedTextsEqual(name, child.name.left))) {
                                         return false;
                                     }
@@ -6893,12 +6900,12 @@ namespace ts {
                         case "arg":
                         case "argument":
                         case "param":
-                            t = PropertyLikeParse.Parameter;
+                            t = PropertyLikeParse.Parameter | PropertyLikeParse.CallbackParameter;
                             break;
                         default:
                             return false;
                     }
-                    if (target !== t) {
+                    if (!(target & t)) {
                         return false;
                     }
                     const tag = parseParameterOrPropertyTag(atToken, tagName, target, /*indent*/ undefined);

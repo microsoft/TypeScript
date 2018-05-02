@@ -347,22 +347,24 @@ declare namespace ts {
         JSDocVariadicType = 282,
         JSDocComment = 283,
         JSDocTypeLiteral = 284,
-        JSDocTag = 285,
-        JSDocAugmentsTag = 286,
-        JSDocClassTag = 287,
-        JSDocParameterTag = 288,
-        JSDocReturnTag = 289,
-        JSDocTypeTag = 290,
-        JSDocTemplateTag = 291,
-        JSDocTypedefTag = 292,
-        JSDocPropertyTag = 293,
-        SyntaxList = 294,
-        NotEmittedStatement = 295,
-        PartiallyEmittedExpression = 296,
-        CommaListExpression = 297,
-        MergeDeclarationMarker = 298,
-        EndOfDeclarationMarker = 299,
-        Count = 300,
+        JSDocSignature = 285,
+        JSDocTag = 286,
+        JSDocAugmentsTag = 287,
+        JSDocClassTag = 288,
+        JSDocCallbackTag = 289,
+        JSDocParameterTag = 290,
+        JSDocReturnTag = 291,
+        JSDocTypeTag = 292,
+        JSDocTemplateTag = 293,
+        JSDocTypedefTag = 294,
+        JSDocPropertyTag = 295,
+        SyntaxList = 296,
+        NotEmittedStatement = 297,
+        PartiallyEmittedExpression = 298,
+        CommaListExpression = 299,
+        MergeDeclarationMarker = 300,
+        EndOfDeclarationMarker = 301,
+        Count = 302,
         FirstAssignment = 58,
         LastAssignment = 70,
         FirstCompoundAssignment = 59,
@@ -389,9 +391,9 @@ declare namespace ts {
         LastBinaryOperator = 70,
         FirstNode = 145,
         FirstJSDocNode = 275,
-        LastJSDocNode = 293,
-        FirstJSDocTagNode = 285,
-        LastJSDocTagNode = 293
+        LastJSDocNode = 295,
+        FirstJSDocTagNode = 286,
+        LastJSDocTagNode = 295
     }
     enum NodeFlags {
         None = 0,
@@ -1277,7 +1279,7 @@ declare namespace ts {
         block: Block;
     }
     type ObjectTypeDeclaration = ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
-    type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag;
+    type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag | JSDocTypeLiteral | JSDocSignature;
     interface ClassLikeDeclarationBase extends NamedDeclaration, JSDocContainer {
         kind: SyntaxKind.ClassDeclaration | SyntaxKind.ClassExpression;
         name?: Identifier;
@@ -1533,6 +1535,19 @@ declare namespace ts {
         fullName?: JSDocNamespaceDeclaration | Identifier;
         name?: Identifier;
         typeExpression?: JSDocTypeExpression | JSDocTypeLiteral;
+    }
+    interface JSDocCallbackTag extends JSDocTag, NamedDeclaration {
+        parent: JSDoc;
+        kind: SyntaxKind.JSDocCallbackTag;
+        fullName?: JSDocNamespaceDeclaration | Identifier;
+        name?: Identifier;
+        typeExpression: JSDocSignature;
+    }
+    interface JSDocSignature extends JSDocType, Declaration {
+        kind: SyntaxKind.JSDocSignature;
+        typeParameters?: ReadonlyArray<JSDocTemplateTag>;
+        parameters: ReadonlyArray<JSDocParameterTag>;
+        type: JSDocReturnTag | undefined;
     }
     interface JSDocPropertyLikeTag extends JSDocTag, Declaration {
         parent: JSDoc;
@@ -2251,7 +2266,7 @@ declare namespace ts {
         Construct = 1
     }
     interface Signature {
-        declaration?: SignatureDeclaration;
+        declaration?: SignatureDeclaration | JSDocSignature;
         typeParameters?: TypeParameter[];
         parameters: Symbol[];
     }
@@ -3298,6 +3313,8 @@ declare namespace ts {
     function isJSDocPropertyTag(node: Node): node is JSDocPropertyTag;
     function isJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag;
     function isJSDocTypeLiteral(node: Node): node is JSDocTypeLiteral;
+    function isJSDocCallbackTag(node: Node): node is JSDocCallbackTag;
+    function isJSDocSignature(node: Node): node is JSDocSignature;
 }
 declare namespace ts {
     /**

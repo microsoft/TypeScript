@@ -3547,6 +3547,31 @@ namespace ts {
 
             function symbolToParameterDeclaration(parameterSymbol: Symbol, context: NodeBuilderContext, preserveModifierFlags?: boolean): ParameterDeclaration {
                 const parameterDeclaration = getDeclarationOfKind<ParameterDeclaration>(parameterSymbol, SyntaxKind.Parameter);
+                if (!parameterDeclaration && !(isTransientSymbol(parameterSymbol) && !!parameterSymbol.isRestParameter)) {
+                    const paramTagDeclaration = getDeclarationOfKind<JSDocParameterTag>(parameterSymbol, SyntaxKind.JSDocParameterTag);
+                    // now do a whole bunch of stuff with the parameter tag instead
+                    // TODO: Dedupe this!
+                    Debug.assert(!!paramTagDeclaration);
+                    // TODO: Might need to convert jsdoc type literal to a binding name?
+                    Debug.assert(isIdentifier(paramTagDeclaration.name));
+                    const dotDotDotToken = isRestParameter(paramTagDeclaration) ? createToken(SyntaxKind.DotDotDotToken) : undefined;
+                    const name = paramTagDeclaration.name && isIdentifier(paramTagDeclaration.name) ?
+                        // isIdentifier(paramTagDeclaration.name) ?
+                            setEmitFlags(getSynthesizedClone(paramTagDeclaration.name), EmitFlags.NoAsciiEscaping) :
+                            // cloneQualifiedName(paramTagDeclaration.name) :
+                        symbolName(parameterSymbol);
+                    const questionToken = isOptionalParameter2(paramTagDeclaration) ? createToken(SyntaxKind.QuestionToken) : undefined;
+                    const parameterTypeNode = typeToTypeNodeHelper(getTypeOfSymbol(parameterSymbol), context);
+                    const parameterNode = createParameter(
+                        /*decorators*/ undefined,
+                        /*modifiers*/ undefined,
+                        dotDotDotToken,
+                        name,
+                        questionToken,
+                        parameterTypeNode,
+                        /*initializer*/ undefined);
+                    return parameterNode;
+                }
                 Debug.assert(!!parameterDeclaration || isTransientSymbol(parameterSymbol) && !!parameterSymbol.isRestParameter);
 
                 let parameterType = getTypeOfSymbol(parameterSymbol);
@@ -3586,6 +3611,15 @@ namespace ts {
                         return setEmitFlags(clone, EmitFlags.SingleLine | EmitFlags.NoAsciiEscaping);
                     }
                 }
+
+                // function cloneQualifiedName(node: QualifiedName): EntityName {
+                //     if (isIdentifier(node.left)) {
+                //         return setEmitFlags(getSynthesizedClone(node.left), EmitFlags.NoAsciiEscaping);
+                //     }
+                //     else {
+                //         return setEmitFlags(createQualifiedName(cloneQualifiedName(node.left), getSynthesizedClone(node.right)), EmitFlags.NoAsciiEscaping);
+                //     }
+                // }
             }
 
             function lookupSymbolChain(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags) {
@@ -4710,6 +4744,9 @@ namespace ts {
                 }
                 if (isInJavaScriptFile(declaration) && isJSDocPropertyLikeTag(declaration) && declaration.typeExpression) {
                     return links.type = getTypeFromTypeNode(declaration.typeExpression.type);
+                }
+                if (isInJavaScriptFile(declaration) && isJSDocPropertyLikeTag(declaration) && isJSDocSignature(declaration.parent) && !declaration.typeExpression) {
+                    return links.type = unknownType;
                 }
                 // Handle variable, parameter or property
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
@@ -5922,7 +5959,7 @@ namespace ts {
         }
 
         function createSignature(
-            declaration: SignatureDeclaration,
+            declaration: SignatureDeclaration | JSDocSignature,
             typeParameters: TypeParameter[],
             thisParameter: Symbol | undefined,
             parameters: Symbol[],
@@ -7022,7 +7059,7 @@ namespace ts {
             return typeArguments;
         }
 
-        function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
+        function getSignatureFromDeclaration(declaration: SignatureDeclaration | JSDocSignature): Signature {
             const links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
                 const parameters: Symbol[] = [];
@@ -7045,6 +7082,7 @@ namespace ts {
                     const param = declaration.parameters[i];
 
                     let paramSymbol = param.symbol;
+                    const type = isJSDocParameterTag(param) ? (param.typeExpression && param.typeExpression.type) : param.type;
                     // Include parameter symbol instead of property symbol in the signature
                     if (paramSymbol && !!(paramSymbol.flags & SymbolFlags.Property) && !isBindingPattern(param.name)) {
                         const resolvedSymbol = resolveName(param, paramSymbol.escapedName, SymbolFlags.Value, undefined, undefined, /*isUse*/ false);
@@ -7058,16 +7096,14 @@ namespace ts {
                         parameters.push(paramSymbol);
                     }
 
-                    if (param.type && param.type.kind === SyntaxKind.LiteralType) {
+                    if (type && type.kind === SyntaxKind.LiteralType) {
                         hasLiteralTypes = true;
                     }
 
                     // Record a new minimum argument count if this is not an optional parameter
-                    const isOptionalParameter = param.initializer || param.questionToken || param.dotDotDotToken ||
-                        iife && parameters.length > iife.arguments.length && !param.type ||
-                        isUntypedSignatureInJSFile ||
-                        isJSDocOptionalParameter(param);
-                    if (!isOptionalParameter) {
+                    if (!(isOptionalParameter2(param) ||
+                          iife && parameters.length > iife.arguments.length && !type ||
+                          isUntypedSignatureInJSFile)) {
                         minArgumentCount = parameters.length;
                     }
                 }
@@ -7094,14 +7130,26 @@ namespace ts {
             return links.resolvedSignature;
         }
 
+        // TODO: Decide between this and the Original and B-b-b-b-best?
+        function isOptionalParameter2(param: ParameterDeclaration | JSDocParameterTag) {
+            if (isParameter(param)) {
+                return param.initializer || param.questionToken || param.dotDotDotToken ||
+                    isJSDocOptionalParameter(param);
+            }
+            else {
+                const { isBracketed, typeExpression } = param;
+                return isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
+            }
+        }
+
         /**
          * A JS function gets a synthetic rest parameter if it references `arguments` AND:
          * 1. It has no parameters but at least one `@param` with a type that starts with `...`
          * OR
          * 2. It has at least one parameter, and the last parameter has a matching `@param` with a type that starts with `...`
          */
-        function maybeAddJsSyntheticRestParameter(declaration: SignatureDeclaration, parameters: Symbol[]): boolean {
-            if (!containsArgumentsReference(declaration)) {
+        function maybeAddJsSyntheticRestParameter(declaration: SignatureDeclaration | JSDocSignature, parameters: Symbol[]): boolean {
+            if (isJSDocSignature(declaration) || !containsArgumentsReference(declaration)) {
                 return false;
             }
             const lastParam = lastOrUndefined(declaration.parameters);
@@ -7120,9 +7168,9 @@ namespace ts {
             return true;
         }
 
-        function getSignatureReturnTypeFromDeclaration(declaration: SignatureDeclaration, isJSConstructSignature: boolean, classType: Type) {
+        function getSignatureReturnTypeFromDeclaration(declaration: SignatureDeclaration | JSDocSignature, isJSConstructSignature: boolean, classType: Type) {
             if (isJSConstructSignature) {
-                return getTypeFromTypeNode(declaration.parameters[0].type);
+                return getTypeFromTypeNode((declaration.parameters[0] as ParameterDeclaration).type);
             }
             else if (classType) {
                 return classType;
@@ -7182,7 +7230,7 @@ namespace ts {
             for (let i = 0; i < symbol.declarations.length; i++) {
                 const decl = symbol.declarations[i];
                 const node = isPropertyAccessExpression(decl) ? getAssignedJavascriptInitializer(decl) : decl;
-                if (!isFunctionLike(node)) continue;
+                if (!isFunctionLike(node) && !(node && isJSDocSignature(node))) continue;
                 // Don't include signature if node is the implementation of an overloaded function. A node is considered
                 // an implementation node if it has a body and the previous node is of the same kind and immediately
                 // precedes the implementation node (i.e. has the same parent and ends where the implementation starts).
@@ -9871,8 +9919,8 @@ namespace ts {
         function compareTypePredicateRelatedTo(
             source: TypePredicate,
             target: TypePredicate,
-            sourceDeclaration: SignatureDeclaration,
-            targetDeclaration: SignatureDeclaration,
+            sourceDeclaration: SignatureDeclaration | JSDocSignature,
+            targetDeclaration: SignatureDeclaration | JSDocSignature,
             reportErrors: boolean,
             errorReporter: ErrorReporter,
             compareTypes: (s: Type, t: Type, reportErrors?: boolean) => Ternary): Ternary {

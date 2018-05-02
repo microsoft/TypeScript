@@ -2205,7 +2205,7 @@ namespace ts {
                     return updateStrictModeStatementList((<Block | ModuleBlock>node).statements);
 
                 case SyntaxKind.JSDocParameterTag:
-                    if (node.parent.kind === SyntaxKind.JSDocCallbackTag) {
+                    if (node.parent.kind === SyntaxKind.JSDocSignature) {
                         return bindParameter(node as JSDocParameterTag);
                     }
                     if (node.parent.kind !== SyntaxKind.JSDocTypeLiteral) {

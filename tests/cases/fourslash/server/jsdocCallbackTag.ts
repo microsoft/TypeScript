@@ -26,6 +26,6 @@
 
 
 goTo.marker("1");
-verify.quickInfoIs("var t: (eventName: string, eventName2: number | string, eventName3: any) => void");
+verify.quickInfoIs("var t: (eventName: string, eventName2: string | number, eventName3: any) => void");
 goTo.marker("2");
 verify.quickInfoIs("var t2: (eventName?: string, eventName2?: string) => void"); 

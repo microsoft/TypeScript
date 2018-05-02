@@ -3,6 +3,7 @@
 // @checkJs: true
 // @Filename: cb.js
 
+// TODO: Test nested param types using the nested Object style
 /** @callback Sid
  * @param {string} s
  * @returns {string} What were you expecting

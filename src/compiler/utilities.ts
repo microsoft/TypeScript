@@ -505,6 +505,38 @@ namespace ts {
         return false;
     }
 
+    export function getTypeParametersOfDeclaration(node: DeclarationWithTypeParameters): NodeArray<TypeParameterDeclaration> | undefined {
+        switch (node.kind) {
+            case SyntaxKind.CallSignature:
+            case SyntaxKind.ConstructSignature:
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.IndexSignature:
+            case SyntaxKind.FunctionType:
+            case SyntaxKind.ConstructorType:
+            case SyntaxKind.JSDocFunctionType:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.JSDocTemplateTag:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.Constructor:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
+                return node.typeParameters;
+            case SyntaxKind.JSDocSignature:
+            case SyntaxKind.JSDocTypeLiteral:
+                // TODO: Actually go find them!
+                return undefined;
+            default:
+                assertTypeIsNever(node);
+                return undefined;
+        }
+    }
+
     export function isDeclarationWithTypeParameters(node: Node): node is DeclarationWithTypeParameters;
     export function isDeclarationWithTypeParameters(node: DeclarationWithTypeParameters): node is DeclarationWithTypeParameters {
         switch (node.kind) {
@@ -527,6 +559,8 @@ namespace ts {
             case SyntaxKind.SetAccessor:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
+            case SyntaxKind.JSDocSignature:
+            case SyntaxKind.JSDocTypeLiteral:
                 return true;
             default:
                 assertTypeIsNever(node);
@@ -1776,7 +1810,7 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocTypedefTag || node.kind === SyntaxKind.JSDocCallbackTag;
     }
 
-    export function isTypeAlias(node: Node): node is JSDocTypedefTag | JSDocCallbackTag | TypeAliasDeclaration  {
+    export function isTypeAlias(node: Node): node is JSDocTypedefTag | JSDocCallbackTag | TypeAliasDeclaration {
         return isJSDocTypeAlias(node) || isTypeAliasDeclaration(node);
     }
 
@@ -1915,13 +1949,15 @@ namespace ts {
         return find(typeParameters, p => p.name.escapedText === name);
     }
 
-    export function hasRestParameter(s: SignatureDeclaration): boolean {
-        const last = lastOrUndefined(s.parameters);
+    export function hasRestParameter(s: SignatureDeclaration | JSDocSignature): boolean {
+        // TODO: This type argument wouldn't be needed if I used NodeArray for jsdoc signatures
+        const last = lastOrUndefined<ParameterDeclaration | JSDocParameterTag>(s.parameters);
         return last && isRestParameter(last);
     }
 
-    export function isRestParameter(node: ParameterDeclaration): boolean {
-        return node.dotDotDotToken !== undefined || node.type && node.type.kind === SyntaxKind.JSDocVariadicType;
+    export function isRestParameter(node: ParameterDeclaration | JSDocParameterTag): boolean {
+        const type = isJSDocParameterTag(node) ? (node.typeExpression && node.typeExpression.type) : node.type;
+        return (node as ParameterDeclaration).dotDotDotToken !== undefined || type && type.kind === SyntaxKind.JSDocVariadicType;
     }
 
     export const enum AssignmentKind {
@@ -2968,8 +3004,9 @@ namespace ts {
         return parameter && parameter.type;
     }
 
-    export function getThisParameter(signature: SignatureDeclaration): ParameterDeclaration | undefined {
-        if (signature.parameters.length) {
+    export function getThisParameter(signature: SignatureDeclaration | JSDocSignature): ParameterDeclaration | undefined {
+        // TODO: Maybe jsdoc signatures should support this parameters? (parameterIsThisKeyword is not going to work there, I think, since jsdoc doesn't have keywords)
+        if (signature.parameters.length && !isJSDocSignature(signature)) {
             const thisParameter = signature.parameters[0];
             if (parameterIsThisKeyword(thisParameter)) {
                 return thisParameter;
@@ -3062,8 +3099,8 @@ namespace ts {
      * Gets the effective return type annotation of a signature. If the node was parsed in a
      * JavaScript file, gets the return type annotation from JSDoc.
      */
-    export function getEffectiveReturnTypeNode(node: SignatureDeclaration): TypeNode | undefined {
-        return node.type || (isInJavaScriptFile(node) ? getJSDocReturnType(node) : undefined);
+    export function getEffectiveReturnTypeNode(node: SignatureDeclaration | JSDocSignature): TypeNode | undefined {
+        return !isJSDocSignature(node) && node.type || (isInJavaScriptFile(node) ? getJSDocReturnType(node) : undefined);
     }
 
     /**
@@ -3071,6 +3108,8 @@ namespace ts {
      * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
      */
     export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters) {
+        // TODO: Make getJSDocTypeParameterDeclarations do the right thing
+        if (isJSDocTypeLiteral(node) || isJSDocSignature(node)) return undefined;
         return node.typeParameters || (isInJavaScriptFile(node) ? getJSDocTypeParameterDeclarations(node) : undefined);
     }
 
@@ -4694,6 +4733,9 @@ namespace ts {
 
     /** Gets the JSDoc return tag for the node if present */
     export function getJSDocReturnTag(node: Node): JSDocReturnTag | undefined {
+        if (isJSDocSignature(node)) {
+            return node.type;
+        }
         return getFirstJSDocTag(node, isJSDocReturnTag);
     }
 
@@ -5612,6 +5654,7 @@ namespace ts {
         switch (kind) {
             case SyntaxKind.MethodSignature:
             case SyntaxKind.CallSignature:
+            case SyntaxKind.JSDocSignature:
             case SyntaxKind.ConstructSignature:
             case SyntaxKind.IndexSignature:
             case SyntaxKind.FunctionType:
