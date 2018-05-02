@@ -328,14 +328,14 @@ namespace ts {
 
                 output += formatColorAndReset(relativeFileName, ForegroundColorEscapeSequences.Cyan);
                 output += ":";
-                output += formatColorAndReset(`${ firstLine + 1 }`, ForegroundColorEscapeSequences.Yellow);
+                output += formatColorAndReset(`${firstLine + 1}`, ForegroundColorEscapeSequences.Yellow);
                 output += ":";
-                output += formatColorAndReset(`${ firstLineChar + 1 }`, ForegroundColorEscapeSequences.Yellow);
+                output += formatColorAndReset(`${firstLineChar + 1}`, ForegroundColorEscapeSequences.Yellow);
                 output += " - ";
             }
 
             output += formatColorAndReset(diagnosticCategoryName(diagnostic), getCategoryFormat(diagnostic.category));
-            output += formatColorAndReset(` TS${ diagnostic.code }: `, ForegroundColorEscapeSequences.Grey);
+            output += formatColorAndReset(` TS${diagnostic.code}: `, ForegroundColorEscapeSequences.Grey);
             output += flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine());
 
             if (diagnostic.file) {
@@ -2432,6 +2432,7 @@ namespace ts {
                 return needJsx();
             case Extension.Jsx:
                 return needJsx() || needAllowJs();
+            case Extension.Mjs:
             case Extension.Js:
                 return needAllowJs();
         }

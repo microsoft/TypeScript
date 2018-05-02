@@ -159,7 +159,7 @@ namespace Utils {
     export function memoize<T extends ts.AnyFunction>(f: T, memoKey: (...anything: any[]) => string): T {
         const cache = ts.createMap<any>();
 
-        return <any>(function(this: any, ...args: any[]) {
+        return <any>(function (this: any, ...args: any[]) {
             const key = memoKey(...args);
             if (cache.has(key)) {
                 return cache.get(key);
@@ -1339,7 +1339,7 @@ namespace Harness {
         export function getErrorBaseline(inputFiles: ReadonlyArray<TestFile>, diagnostics: ReadonlyArray<ts.Diagnostic>, pretty?: boolean) {
             let outputLines = "";
             const gen = iterateErrorBaseline(inputFiles, diagnostics, pretty);
-            for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
+            for (let { done, value } = gen.next(); !done; { done, value } = gen.next()) {
                 const [, content] = value;
                 outputLines += content;
             }
@@ -1348,7 +1348,7 @@ namespace Harness {
 
         export const diagnosticSummaryMarker = "__diagnosticSummary";
         export const globalErrorsMarker = "__globalErrors";
-        export function *iterateErrorBaseline(inputFiles: ReadonlyArray<TestFile>, diagnostics: ReadonlyArray<ts.Diagnostic>, pretty?: boolean): IterableIterator<[string, string, number]> {
+        export function* iterateErrorBaseline(inputFiles: ReadonlyArray<TestFile>, diagnostics: ReadonlyArray<ts.Diagnostic>, pretty?: boolean): IterableIterator<[string, string, number]> {
             diagnostics = ts.sort(diagnostics, ts.compareDiagnostics);
             let outputLines = "";
             // Count up all errors that were found in files other than lib.d.ts so we don't miss any
@@ -1492,7 +1492,7 @@ namespace Harness {
             });
         }
 
-        export function doTypeAndSymbolBaseline(baselinePath: string, program: ts.Program, allFiles: {unitName: string, content: string}[], opts?: Baseline.BaselineOptions, multifile?: boolean, skipTypeBaselines?: boolean, skipSymbolBaselines?: boolean) {
+        export function doTypeAndSymbolBaseline(baselinePath: string, program: ts.Program, allFiles: { unitName: string, content: string }[], opts?: Baseline.BaselineOptions, multifile?: boolean, skipTypeBaselines?: boolean, skipSymbolBaselines?: boolean) {
             // The full walker simulates the types that you would get from doing a full
             // compile.  The pull walker simulates the types you get when you just do
             // a type query for a random node (like how the LS would do it).  Most of the
@@ -1563,7 +1563,7 @@ namespace Harness {
             function generateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): string {
                 let result = "";
                 const gen = iterateBaseLine(isSymbolBaseline, skipBaseline);
-                for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
+                for (let { done, value } = gen.next(); !done; { done, value } = gen.next()) {
                     const [, content] = value;
                     result += content;
                 }
@@ -1572,7 +1572,7 @@ namespace Harness {
                 /* tslint:enable:no-null-keyword */
             }
 
-            function *iterateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): IterableIterator<[string, string]> {
+            function* iterateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): IterableIterator<[string, string]> {
                 if (skipBaseline) {
                     return;
                 }
@@ -1584,7 +1584,7 @@ namespace Harness {
                     const codeLines = ts.flatMap(file.content.split(/\r?\n/g), e => e.split(/[\r\u2028\u2029]/g));
                     const gen: IterableIterator<TypeWriterResult> = isSymbolBaseline ? fullWalker.getSymbols(unitName) : fullWalker.getTypes(unitName);
                     let lastIndexWritten: number | undefined;
-                    for (let {done, value: result} = gen.next(); !done; { done, value: result } = gen.next()) {
+                    for (let { done, value: result } = gen.next(); !done; { done, value: result } = gen.next()) {
                         if (isSymbolBaseline && !result.symbol) {
                             return;
                         }
@@ -1640,7 +1640,14 @@ namespace Harness {
                     throw new Error("Number of sourcemap files should be same as js files.");
                 }
 
-                Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ".js.map"), () => {
+                const outExt = options.target === ts.ScriptTarget.ESNext
+                    && options.module === ts.ModuleKind.ESNext
+                    && options.esModuleInterop
+                    && options.allowSyntheticDefaultImports
+                    ? ts.Extension.Mjs : ts.Extension.Js;
+                const mapExt = `${outExt}.map`;
+
+                Baseline.runBaseline(baselinePath.replace(/\.tsx?/, mapExt), () => {
                     if ((options.noEmitOnError && result.errors.length !== 0) || result.sourceMaps.length === 0) {
                         // We need to return null here or the runBaseLine will actually create a empty file.
                         // Baselining isn't required here because there is no output.
@@ -1664,8 +1671,11 @@ namespace Harness {
                 throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
             }
 
+            const outExt = options.target === ts.ScriptTarget.ESNext
+                ? ts.Extension.Mjs : ts.Extension.Js;
+
             // check js output
-            Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ts.Extension.Js), () => {
+            Baseline.runBaseline(baselinePath.replace(/\.tsx?/, outExt), () => {
                 let tsCode = "";
                 const tsSources = otherFiles.concat(toBeCompiled);
                 if (tsSources.length > 1) {
@@ -1719,7 +1729,7 @@ namespace Harness {
             const gen = iterateOutputs(outputFiles);
             // Emit them
             let result = "";
-            for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
+            for (let { done, value } = gen.next(); !done; { done, value } = gen.next()) {
                 // Some extra spacing if this isn't the first file
                 if (result.length) {
                     result += "\r\n\r\n";
@@ -1731,7 +1741,7 @@ namespace Harness {
             return result;
         }
 
-        export function *iterateOutputs(outputFiles: GeneratedFile[]): IterableIterator<[string, string]> {
+        export function* iterateOutputs(outputFiles: GeneratedFile[]): IterableIterator<[string, string]> {
             // Collect, test, and sort the fileNames
             outputFiles.sort((a, b) => ts.compareStringsCaseSensitive(cleanName(a.fileName), cleanName(b.fileName)));
             const dupeCase = ts.createMap<number>();
@@ -1793,14 +1803,17 @@ namespace Harness {
         }
 
         export function isJS(fileName: string) {
-            return ts.endsWith(fileName, ts.Extension.Js);
+            return ts.endsWith(fileName, ts.Extension.Mjs)
+                || ts.endsWith(fileName, ts.Extension.Js);
         }
         export function isJSX(fileName: string) {
             return ts.endsWith(fileName, ts.Extension.Jsx);
         }
 
         export function isJSMap(fileName: string) {
-            return ts.endsWith(fileName, ".js.map") || ts.endsWith(fileName, ".jsx.map");
+            return ts.endsWith(fileName, ".mjs.map")
+                || ts.endsWith(fileName, ".js.map")
+                || ts.endsWith(fileName, ".jsx.map");
         }
 
         export function isDTSMap(fileName: string) {
@@ -1870,7 +1883,7 @@ namespace Harness {
             let match: RegExpExecArray;
             /* tslint:disable:no-null-keyword */
             while ((match = optionRegex.exec(content)) !== null) {
-            /* tslint:enable:no-null-keyword */
+                /* tslint:enable:no-null-keyword */
                 opts[match[1]] = match[2].trim();
             }
 
@@ -2052,7 +2065,7 @@ namespace Harness {
 
             /* tslint:disable:no-null-keyword */
             if (actual === null) {
-            /* tslint:enable:no-null-keyword */
+                /* tslint:enable:no-null-keyword */
                 actual = noContent;
             }
 
@@ -2115,7 +2128,7 @@ namespace Harness {
             const errors: Error[] = [];
             // tslint:disable-next-line:no-null-keyword
             if (gen !== null) {
-                for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
+                for (let { done, value } = gen.next(); !done; { done, value } = gen.next()) {
                     const [name, content, count] = value as [string, string, number | undefined];
                     if (count === 0) continue; // Allow error reporter to skip writing files without errors
                     const relativeFileName = relativeFileBase + "/" + name + extension;

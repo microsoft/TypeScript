@@ -13,6 +13,7 @@
     "File '/jsx.d.ts' does not exist.",
     "Directory '/jsx' does not exist, skipping all lookups in it.",
     "Loading module as file / folder, candidate module location '/jsx', target file type 'JavaScript'.",
+    "File '/jsx.mjs' does not exist.",
     "File '/jsx.js' does not exist.",
     "File '/jsx.jsx' exist - use it as a name resolution result.",
     "======== Module name './jsx' was successfully resolved to '/jsx.jsx'. ========",
@@ -24,6 +25,7 @@
     "File '/js.d.ts' does not exist.",
     "Directory '/js' does not exist, skipping all lookups in it.",
     "Loading module as file / folder, candidate module location '/js', target file type 'JavaScript'.",
+    "File '/js.mjs' does not exist.",
     "File '/js.js' exist - use it as a name resolution result.",
     "======== Module name './js' was successfully resolved to '/js.js'. ========"
 ]
