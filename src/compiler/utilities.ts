@@ -1776,6 +1776,10 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocTypedefTag || node.kind === SyntaxKind.JSDocCallbackTag;
     }
 
+    export function isTypeAlias(node: Node): node is JSDocTypedefTag | JSDocCallbackTag | TypeAliasDeclaration  {
+        return isJSDocTypeAlias(node) || isTypeAliasDeclaration(node);
+    }
+
     function getSourceOfAssignment(node: Node): Node {
         return isExpressionStatement(node) &&
             node.expression && isBinaryExpression(node.expression) &&

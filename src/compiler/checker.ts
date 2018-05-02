@@ -4695,7 +4695,7 @@ namespace ts {
                 if (symbol.flags & SymbolFlags.Prototype) {
                     return links.type = getTypeOfPrototypeProperty(symbol);
                 }
-                // CommonsJS require/module/exports all have type any.
+                // CommonsJS require and module both have type any.
                 if (symbol === requireSymbol || symbol === moduleSymbol) {
                     return links.type = anyType;
                 }
@@ -5057,6 +5057,7 @@ namespace ts {
         function getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): TypeParameter[] {
             let result: TypeParameter[];
             for (const node of symbol.declarations) {
+                // TODO: needs to understand jsdoc typedefs and callbacks
                 if (node.kind === SyntaxKind.InterfaceDeclaration || node.kind === SyntaxKind.ClassDeclaration ||
                     node.kind === SyntaxKind.ClassExpression || node.kind === SyntaxKind.TypeAliasDeclaration) {
                     const declaration = <InterfaceDeclaration | TypeAliasDeclaration>node;
@@ -5357,7 +5358,7 @@ namespace ts {
 
                 const declaration = <JSDocTypedefTag | JSDocCallbackTag | TypeAliasDeclaration>find(symbol.declarations, d =>
                     isJSDocTypeAlias(d) || d.kind === SyntaxKind.TypeAliasDeclaration);
-                const typeNode = isJSDocTypedefTag(declaration) ? declaration.typeExpression : isJSDocCallbackTag(declaration) ? declaration.typeExpression : declaration.type;
+                const typeNode = isJSDocTypeAlias(declaration) ? declaration.typeExpression : declaration.type;
                 // If typeNode is missing, we will error in checkJSDocTypedefTag.
                 let type = typeNode ? getTypeFromTypeNode(typeNode) : unknownType;
 
@@ -8276,8 +8277,9 @@ namespace ts {
         function getTypeFromUnionTypeNode(node: UnionTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
+                const aliasSymbol = getAliasSymbolForTypeNode(node);
                 links.resolvedType = getUnionType(map(node.types, getTypeFromTypeNode), UnionReduction.Literal,
-                    getAliasSymbolForTypeNode(node), getAliasTypeArgumentsForTypeNode(node));
+                    aliasSymbol, getTypeParametersForAliasSymbol(aliasSymbol));
             }
             return links.resolvedType;
         }
@@ -8386,8 +8388,9 @@ namespace ts {
         function getTypeFromIntersectionTypeNode(node: IntersectionTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
+                const aliasSymbol = getAliasSymbolForTypeNode(node);
                 links.resolvedType = getIntersectionType(map(node.types, getTypeFromTypeNode),
-                    getAliasSymbolForTypeNode(node), getAliasTypeArgumentsForTypeNode(node));
+                    aliasSymbol, getTypeParametersForAliasSymbol(aliasSymbol));
             }
             return links.resolvedType;
         }
@@ -8692,7 +8695,7 @@ namespace ts {
                 const type = <MappedType>createObjectType(ObjectFlags.Mapped, node.symbol);
                 type.declaration = node;
                 type.aliasSymbol = getAliasSymbolForTypeNode(node);
-                type.aliasTypeArguments = getAliasTypeArgumentsForTypeNode(node);
+                type.aliasTypeArguments = getTypeParametersForAliasSymbol(type.aliasSymbol);
                 links.resolvedType = type;
                 // Eagerly resolve the constraint type which forces an error if the constraint type circularly
                 // references itself through one or more type aliases.
@@ -8800,7 +8803,8 @@ namespace ts {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 const checkType = getTypeFromTypeNode(node.checkType);
-                const aliasTypeArguments = getAliasTypeArgumentsForTypeNode(node);
+                const aliasSymbol = getAliasSymbolForTypeNode(node);
+                const aliasTypeArguments = getTypeParametersForAliasSymbol(aliasSymbol);
                 const allOuterTypeParameters = getOuterTypeParameters(node, /*includeThisTypes*/ true);
                 const outerTypeParameters = aliasTypeArguments ? allOuterTypeParameters : filter(allOuterTypeParameters, tp => isPossiblyReferencedInConditionalType(tp, node));
                 const root: ConditionalRoot = {
@@ -8813,7 +8817,7 @@ namespace ts {
                     inferTypeParameters: getInferTypeParameters(node),
                     outerTypeParameters,
                     instantiations: undefined,
-                    aliasSymbol: getAliasSymbolForTypeNode(node),
+                    aliasSymbol,
                     aliasTypeArguments
                 };
                 links.resolvedType = getConditionalType(root, /*mapper*/ undefined);
@@ -8917,7 +8921,7 @@ namespace ts {
                 else {
                     let type = createObjectType(ObjectFlags.Anonymous, node.symbol);
                     type.aliasSymbol = aliasSymbol;
-                    type.aliasTypeArguments = getAliasTypeArgumentsForTypeNode(node);
+                    type.aliasTypeArguments = getTypeParametersForAliasSymbol(aliasSymbol);
                     if (isJSDocTypeLiteral(node) && node.isArrayType) {
                         type = createArrayType(type);
                     }
@@ -8928,11 +8932,10 @@ namespace ts {
         }
 
         function getAliasSymbolForTypeNode(node: TypeNode) {
-            return node.parent.kind === SyntaxKind.TypeAliasDeclaration ? getSymbolOfNode(node.parent) : undefined;
+            return isTypeAlias(node.parent) ? getSymbolOfNode(node.parent) : undefined;
         }
 
-        function getAliasTypeArgumentsForTypeNode(node: TypeNode) {
-            const symbol = getAliasSymbolForTypeNode(node);
+        function getTypeParametersForAliasSymbol(symbol: Symbol) {
             return symbol ? getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol) : undefined;
         }
 
@@ -9190,6 +9193,7 @@ namespace ts {
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.JSDocFunctionType:
+                case SyntaxKind.JSDocSignature:
                     return getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);
                 case SyntaxKind.TypeOperator:
                     return getTypeFromTypeOperatorNode(<TypeOperatorNode>node);

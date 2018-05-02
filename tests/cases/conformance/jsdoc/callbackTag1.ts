@@ -7,6 +7,7 @@
  * @param {string} s
  * @returns {string} What were you expecting
  */
+var x = 1
 
 /** @type {Sid} smallId */
 var sid = s => s + "!";
