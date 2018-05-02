@@ -171,6 +171,10 @@ namespace ts.codefix {
                 }
                 break;
 
+            case SyntaxKind.BindingElement:
+                changes.deleteNodeInList(sourceFile, parent);
+                break;
+
             // handle case where 'import a = A;'
             case SyntaxKind.ImportEqualsDeclaration:
                 const importEquals = getAncestor(identifier, SyntaxKind.ImportEqualsDeclaration);
