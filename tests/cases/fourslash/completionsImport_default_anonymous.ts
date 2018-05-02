@@ -11,14 +11,11 @@
 ////fooB/*1*/
 
 goTo.marker("0");
-const options = {
-    includeExternalModuleExports: true,
-    sourceDisplay: "./foo-bar",
-};
-verify.not.completionListContains({ name: "default", source: "/src/foo-bar" }, undefined, undefined, undefined, undefined, undefined, options);
-
-goTo.marker("1");
-verify.completionListContains({ name: "fooBar", source: "/src/foo-bar" }, "(property) default: 0", "", "property", /*spanIndex*/ undefined, /*hasAction*/ true, options);
+const preferences = { includeCompletionsForModuleExports: true };
+verify.completions(
+    { at: "0", excludes: { name: "default", source: "/src/foo-bar" }, preferences },
+    { at: "1", includes: { name: "fooBar", source: "/src/foo-bar", sourceDisplay: "./foo-bar", text: "(property) default: 0", kind: "property", hasAction: true }, preferences }
+);
 verify.applyCodeActionFromCompletion("1", {
     name: "fooBar",
     source: "/src/foo-bar",

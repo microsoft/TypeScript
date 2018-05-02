@@ -17,19 +17,11 @@
 // @Filename: package.json
 //// { "dependencies": { "fake-module": "latest" } }
 // @Filename: node_modules/fake-module/ts.ts
-//// /*module1*/
+////
 
 // @Filename: dir1/dir2/dir3/package.json
 //// { "dependencies": { "fake-module3": "latest" } }
 // @Filename: dir1/dir2/dir3/node_modules/fake-module3/ts.ts
-//// /*module3*/
+////
 
-const kinds = ["import_as", "import_equals", "require"];
-
-for (const kind of kinds) {
-    goTo.marker(kind + "0");
-    verify.completionListIsEmpty();
-
-    goTo.marker(kind + "1");
-    verify.completionListIsEmpty();
-}
+verify.completions({ at: test.markerNames(), are: [], isNewIdentifierLocation: true });

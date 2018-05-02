@@ -418,6 +418,28 @@ namespace ts.tscWatch {
             checkProgramRootFiles(watch(), [commonFile1.path]);
         });
 
+        it("works correctly when config file is changed but its content havent", () => {
+            const configFile: FileOrFolder = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {},
+                    "files": ["${commonFile1.path}", "${commonFile2.path}"]
+                }`
+            };
+            const files = [libFile, commonFile1, commonFile2, configFile];
+            const host = createWatchedSystem(files);
+            const watch = createWatchOfConfigFile(configFile.path, host);
+
+            checkProgramActualFiles(watch(), [libFile.path, commonFile1.path, commonFile2.path]);
+            checkOutputErrorsInitial(host, emptyArray);
+
+            host.modifyFile(configFile.path, configFile.content);
+            host.checkTimeoutQueueLengthAndRun(1); // reload the configured project
+
+            checkProgramActualFiles(watch(), [libFile.path, commonFile1.path, commonFile2.path]);
+            checkOutputErrorsIncremental(host, emptyArray);
+        });
+
         it("files explicitly excluded in config file", () => {
             const configFile: FileOrFolder = {
                 path: "/a/b/tsconfig.json",
@@ -2235,16 +2257,17 @@ declare module "fs" {
                 "CreatingProgramWith::\n",
                 "  roots: [\"f.ts\"]\n",
                 "  options: {\"extendedDiagnostics\":true}\n",
-                "FileWatcher:: Added:: WatchInfo: f.ts 250 \n",
-                "FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 \n"
+                "FileWatcher:: Added:: WatchInfo: f.ts 250 Source file\n",
+                "FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 Source file\n"
             ]);
 
             file.content = "//";
             host.reloadFS(files);
             host.runQueuedTimeoutCallbacks();
             checkOutputErrorsIncremental(host, emptyArray, disableConsoleClear, options.extendedDiagnostics && [
-                "FileWatcher:: Triggered with /f.ts1:: WatchInfo: f.ts 250 \n",
-                "Elapsed:: 0ms FileWatcher:: Triggered with /f.ts1:: WatchInfo: f.ts 250 \n"
+                "FileWatcher:: Triggered with /f.ts1:: WatchInfo: f.ts 250 Source file\n",
+                "Scheduling update\n",
+                "Elapsed:: 0ms FileWatcher:: Triggered with /f.ts1:: WatchInfo: f.ts 250 Source file\n"
             ], options.extendedDiagnostics && [
                 "Synchronizing program\n",
                 "CreatingProgramWith::\n",

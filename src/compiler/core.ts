@@ -1762,6 +1762,10 @@ namespace ts {
         return compareComparableValues(a, b);
     }
 
+    export function getStringComparer(ignoreCase?: boolean) {
+        return ignoreCase ? compareStringsCaseInsensitive : compareStringsCaseSensitive;
+    }
+
     /**
      * Creates a string comparer for use with string collation in the UI.
      */
@@ -2459,7 +2463,7 @@ namespace ts {
         else if (typeof currentDirectory === "boolean") {
             ignoreCase = currentDirectory;
         }
-        return comparePathsWorker(a, b, ignoreCase ? compareStringsCaseInsensitive : compareStringsCaseSensitive);
+        return comparePathsWorker(a, b, getStringComparer(ignoreCase));
     }
 
     export function containsPath(parent: string, child: string, ignoreCase?: boolean): boolean;
@@ -2799,7 +2803,7 @@ namespace ts {
             }
 
             // Sort the offsets array using either the literal or canonical path representations.
-            includeBasePaths.sort(useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive);
+            includeBasePaths.sort(getStringComparer(!useCaseSensitiveFileNames));
 
             // Iterate over each include base path and include unique base paths that are not a
             // subpath of an existing base path

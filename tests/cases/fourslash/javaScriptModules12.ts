@@ -12,7 +12,7 @@
 //// var y;
 //// if(true) {
 ////     y = require('fs');
-//// } 
+//// }
 //// /*2*/
 
 // @Filename: glob1.js
@@ -26,32 +26,8 @@
 // @Filename: consumer.js
 //// /*5*/
 
-goTo.marker('1');
-verify.completionListContains('x');
-verify.not.completionListContains('y');
-verify.completionListContains('a');
-verify.completionListContains('b');
-
-goTo.marker('2');
-verify.not.completionListContains('x');
-verify.completionListContains('y');
-verify.completionListContains('a');
-verify.completionListContains('b');
-
-goTo.marker('3');
-verify.not.completionListContains('x');
-verify.not.completionListContains('y');
-verify.completionListContains('a');
-verify.completionListContains('b');
-
-goTo.marker('4');
-verify.not.completionListContains('x');
-verify.not.completionListContains('y');
-verify.completionListContains('a');
-verify.completionListContains('b');
-
-goTo.marker('5');
-verify.not.completionListContains('x');
-verify.not.completionListContains('y');
-verify.completionListContains('a');
-verify.completionListContains('b');
+verify.completions(
+    { at: "1", includes: ["x", "a", "b"], excludes: "y" },
+    { at: "2", includes: ["y", "a", "b"], excludes: "x" },
+    { at: ["3", "4", "5"], includes: ["a", "b"], excludes: ["x", "y"] },
+);

@@ -21,15 +21,4 @@
 ////l./*7*/prototype = Object.prototype;
 
 verify.noErrors();
-for (var i = 1; i <= 7; i++) {
-    goTo.marker('' + i);
-    verify.completionListCount(8);
-    verify.completionListContains('apply');
-    verify.completionListContains('arguments');
-    verify.completionListContains('bind');
-    verify.completionListContains('call');
-    verify.completionListContains('length');
-    verify.completionListContains('caller');
-    verify.completionListContains('prototype');
-    verify.completionListContains('toString');
-}
+verify.completionsAt(test.markerNames(), ["apply", "call", "bind", "toString", "prototype", "length", "arguments", "caller" ]);

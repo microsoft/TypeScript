@@ -986,7 +986,7 @@ namespace ts {
                         // moduleAugmentations has changed
                         oldProgram.structureIsReused = StructureIsReused.SafeModules;
                     }
-                    if ((oldSourceFile.flags & NodeFlags.PossiblyContainsDynamicImport) !== (newSourceFile.flags & NodeFlags.PossiblyContainsDynamicImport)) {
+                    if ((oldSourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags) !== (newSourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags)) {
                         // dynamicImport has changed
                         oldProgram.structureIsReused = StructureIsReused.SafeModules;
                     }
@@ -2062,6 +2062,10 @@ namespace ts {
         }
 
         function verifyCompilerOptions() {
+            if (options.strictPropertyInitialization && !options.strictNullChecks) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictPropertyInitialization", "strictNullChecks");
+            }
+
             if (options.isolatedModules) {
                 if (options.declaration) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "declaration", "isolatedModules");

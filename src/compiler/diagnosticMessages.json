@@ -971,6 +971,10 @@
         "category": "Error",
         "code": 1342
     },
+    "The 'import.meta' meta-property is only allowed using 'ESNext' for the 'target' and 'module' compiler options.": {
+        "category": "Error",
+        "code": 1343
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -3898,6 +3902,10 @@
         "category": "Suggestion",
         "code": 80004
     },
+    "'require' call may be converted to an import.": {
+        "category": "Suggestion",
+        "code": 80005
+    },
 
     "Add missing 'super()' call": {
         "category": "Message",
@@ -4174,5 +4182,13 @@
     "Generate 'get' and 'set' accessors": {
         "category": "Message",
         "code": 95046
+    },
+    "Convert 'require' to 'import'": {
+        "category": "Message",
+        "code": 95047
+    },
+    "Convert all 'require' to 'import'": {
+        "category": "Message",
+        "code": 95048
     }
 }

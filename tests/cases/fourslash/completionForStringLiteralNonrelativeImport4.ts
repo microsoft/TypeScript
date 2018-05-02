@@ -10,25 +10,20 @@
 // @Filename: package.json
 //// { "dependencies": { "fake-module": "latest" } }
 // @Filename: node_modules/fake-module/ts.ts
-//// /*module1*/
+////
 
 // @Filename: dir1/package.json
 //// { "dependencies": { "fake-module2": "latest" } }
 // @Filename: dir1/node_modules/fake-module2/index.ts
-//// /*module2*/
+////
 
 // @Filename: dir1/dir2/dir3/package.json
 //// { "dependencies": { "fake-module3": "latest" } }
 // @Filename: dir1/dir2/dir3/node_modules/fake-module3/ts.ts
-//// /*module3*/
+////
 
-const kinds = ["import_as", "import_equals", "require"];
-
-for (const kind of kinds) {
-    goTo.marker(kind + "0");
-
-    verify.completionListContains("fake-module");
-    verify.completionListContains("fake-module2");
-    verify.completionListContains("fake-module3");
-    verify.not.completionListItemsCountIsGreaterThan(3);
-}
+verify.completions({
+    at: test.markerNames(),
+    are: ["fake-module3", "fake-module2", "fake-module"],
+    isNewIdentifierLocation: true,
+});

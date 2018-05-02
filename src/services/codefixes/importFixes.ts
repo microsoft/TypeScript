@@ -114,7 +114,7 @@ namespace ts.codefix {
             }
 
             for (const exported of checker.getExportsOfModule(moduleSymbol)) {
-                if (exported.escapedName === InternalSymbolName.Default || exported.name === symbolName && skipAlias(exported, checker) === exportedSymbol) {
+                if ((exported.escapedName === InternalSymbolName.Default || exported.name === symbolName) && skipAlias(exported, checker) === exportedSymbol) {
                     const isDefaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol) === exported;
                     result.push({ moduleSymbol, importKind: isDefaultExport ? ImportKind.Default : ImportKind.Named });
                 }
