@@ -3609,7 +3609,7 @@ namespace ts {
                 let chain: Symbol[];
                 const isTypeParameter = symbol.flags & SymbolFlags.TypeParameter;
                 if (!isTypeParameter && (context.enclosingDeclaration || context.flags & NodeBuilderFlags.UseFullyQualifiedType)) {
-                    chain = getSymbolChain(symbol, meaning, /*endOfChain*/ true)!;
+                    chain = Debug.assertDefined(getSymbolChain(symbol, meaning, /*endOfChain*/ true));
                     Debug.assert(chain && chain.length > 0);
                 }
                 else {
