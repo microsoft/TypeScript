@@ -11,6 +11,7 @@
         "dom.generated",
         "dom.iterable",
         "webworker.generated",
+        "webworker.importscripts",
         "scripthost",
         // By-feature options
         "es2015.core",
