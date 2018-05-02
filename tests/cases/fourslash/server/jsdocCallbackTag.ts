@@ -8,6 +8,7 @@
 ////  * @param {string} eventName - So many words
 ////  * @param eventName2 {number | string} - Silence is golden
 ////  * @param eventName3 - Osterreich mos def
+////  * @return {number} - DIVEKICK
 ////  */
 //// /**
 ////  * @type {FooHandler} callback
@@ -20,12 +21,14 @@
 ////  * @param {string} [eventName2] - i WARNED you dog
 ////  */
 //// /**
-////  * @type {FooHandler2} callback
+////  * @type {FooH/*3*/andler2} callback
 ////  */
 //// var t2/*2*/;
 
 
 goTo.marker("1");
-verify.quickInfoIs("var t: (eventName: string, eventName2: string | number, eventName3: any) => void");
+verify.quickInfoIs("var t: (eventName: string, eventName2: string | number, eventName3: any) => number");
 goTo.marker("2");
-verify.quickInfoIs("var t2: (eventName?: string, eventName2?: string) => void"); 
+verify.quickInfoIs("var t2: (eventName?: string, eventName2?: string) => any");
+goTo.marker("3");
+verify.quickInfoIs("type FooHandler2 = (eventName?: string, eventName2?: string) => any");
