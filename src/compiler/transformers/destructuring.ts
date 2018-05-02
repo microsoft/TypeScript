@@ -1,6 +1,3 @@
-/// <reference path="../factory.ts" />
-/// <reference path="../visitor.ts" />
-
 /*@internal*/
 namespace ts {
     interface FlattenContext {
@@ -49,7 +46,7 @@ namespace ts {
                     value = node.right;
                 }
                 else {
-                    return value;
+                    return visitNode(value, visitor, isExpression);
                 }
             }
         }

@@ -18,3 +18,23 @@
 	path = tests/cases/user/TypeScript-WeChat-Starter/TypeScript-WeChat-Starter
 	url = https://github.com/Microsoft/TypeScript-WeChat-Starter.git
 	ignore = all
+[submodule "tests/cases/user/create-react-app/create-react-app"]
+	path = tests/cases/user/create-react-app/create-react-app
+	url = https://github.com/facebook/create-react-app.git
+	ignore = all
+[submodule "tests/cases/user/webpack/webpack"]
+	path = tests/cases/user/webpack/webpack 
+        url = https://github.com/webpack/webpack.git
+	ignore = all
+[submodule "tests/cases/user/puppeteer/puppeteer"]
+	path = tests/cases/user/puppeteer/puppeteer
+	url = https://github.com/GoogleChrome/puppeteer.git
+	ignore = all
+[submodule "tests/cases/user/axios-src/axios-src"]
+	path = tests/cases/user/axios-src/axios-src
+	url = https://github.com/axios/axios.git
+        ignore = all
+[submodule "tests/cases/user/prettier/prettier"]
+	path = tests/cases/user/prettier/prettier
+	url = https://github.com/prettier/prettier.git
+        ignore = all

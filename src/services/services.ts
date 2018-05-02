@@ -1,37 +1,3 @@
-/// <reference path="..\compiler\program.ts"/>
-/// <reference path="..\compiler\commandLineParser.ts"/>
-
-/// <reference path='types.ts' />
-/// <reference path='utilities.ts' />
-/// <reference path='breakpoints.ts' />
-/// <reference path='classifier.ts' />
-/// <reference path='completions.ts' />
-/// <reference path='documentHighlights.ts' />
-/// <reference path='documentRegistry.ts' />
-/// <reference path='findAllReferences.ts' />
-/// <reference path='goToDefinition.ts' />
-/// <reference path='jsDoc.ts' />
-/// <reference path='jsTyping.ts' />
-/// <reference path='navigateTo.ts' />
-/// <reference path='navigationBar.ts' />
-/// <reference path='organizeImports.ts' />
-/// <reference path='outliningElementsCollector.ts' />
-/// <reference path='patternMatcher.ts' />
-/// <reference path='preProcess.ts' />
-/// <reference path='rename.ts' />
-/// <reference path='signatureHelp.ts' />
-/// <reference path='suggestionDiagnostics.ts' />
-/// <reference path='symbolDisplay.ts' />
-/// <reference path='transpile.ts' />
-/// <reference path='formatting\formatting.ts' />
-/// <reference path='formatting\smartIndenter.ts' />
-/// <reference path='textChanges.ts' />
-/// <reference path='codeFixProvider.ts' />
-/// <reference path='refactorProvider.ts' />
-/// <reference path='codefixes\fixes.ts' />
-/// <reference path='refactors\refactors.ts' />
-/// <reference path="sourcemaps.ts" />
-
 namespace ts {
     /** The version of the language service API */
     export const servicesVersion = "0.8";
@@ -580,7 +546,6 @@ namespace ts {
         public typeReferenceDirectives: FileReference[];
 
         public syntacticDiagnostics: Diagnostic[];
-        public referenceDiagnostics: Diagnostic[];
         public parseDiagnostics: Diagnostic[];
         public bindDiagnostics: Diagnostic[];
 
@@ -1162,7 +1127,6 @@ namespace ts {
         let lastProjectVersion: string;
         let lastTypesRootVersion = 0;
 
-        const useCaseSensitivefileNames = host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames();
         const cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
 
         const currentDirectory = host.getCurrentDirectory();
@@ -1179,7 +1143,8 @@ namespace ts {
             }
         }
 
-        const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitivefileNames);
+        const useCaseSensitiveFileNames = hostUsesCaseSensitiveFileNames(host);
+        const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
 
         function getValidSourceFile(fileName: string): SourceFile {
             const sourceFile = program.getSourceFile(fileName);
@@ -1236,7 +1201,7 @@ namespace ts {
                 getSourceFileByPath: getOrCreateSourceFileByPath,
                 getCancellationToken: () => cancellationToken,
                 getCanonicalFileName,
-                useCaseSensitiveFileNames: () => useCaseSensitivefileNames,
+                useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 getNewLine: () => getNewLineCharacter(newSettings, () => getNewLineOrDefaultFromHost(host)),
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: noop,
@@ -1443,7 +1408,8 @@ namespace ts {
                 log,
                 getValidSourceFile(fileName),
                 position,
-                fullPreferences);
+                fullPreferences,
+                options.triggerCharacter);
         }
 
         function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = defaultPreferences): CompletionEntryDetails {
@@ -1457,7 +1423,9 @@ namespace ts {
                 host,
                 formattingOptions && formatting.getFormatContext(formattingOptions),
                 getCanonicalFileName,
-                preferences);
+                preferences,
+                cancellationToken,
+            );
         }
 
         function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string): Symbol {
@@ -1498,7 +1466,7 @@ namespace ts {
                             kind: ScriptElementKind.unknown,
                             kindModifiers: ScriptElementKindModifier.none,
                             textSpan: createTextSpanFromNode(node, sourceFile),
-                            displayParts: typeToDisplayParts(typeChecker, type, getContainerNode(node)),
+                            displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(node))),
                             documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
                             tags: type.symbol ? type.symbol.getJsDocTags() : undefined
                         };
@@ -1507,7 +1475,9 @@ namespace ts {
                 return undefined;
             }
 
-            const { symbolKind, displayParts, documentation, tags } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(node), node);
+            const { symbolKind, displayParts, documentation, tags } = typeChecker.runWithCancellationToken(cancellationToken, typeChecker =>
+                SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(node), node)
+            );
             return {
                 kind: symbolKind,
                 kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
@@ -1707,7 +1677,7 @@ namespace ts {
         }
 
         function getDocumentHighlights(fileName: string, position: number, filesToSearch: ReadonlyArray<string>): DocumentHighlights[] {
-            Debug.assert(contains(filesToSearch, fileName));
+            Debug.assert(filesToSearch.some(f => normalizePath(f) === fileName));
             synchronizeHostData();
             const sourceFilesToSearch = map(filesToSearch, f => Debug.assertDefined(program.getSourceFile(f)));
             const sourceFile = getValidSourceFile(fileName);
@@ -1982,6 +1952,10 @@ namespace ts {
             const formatContext = formatting.getFormatContext(formatOptions);
 
             return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences);
+        }
+
+        function getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges> {
+            return ts.getEditsForFileRename(getProgram(), oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions));
         }
 
         function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
@@ -2284,6 +2258,7 @@ namespace ts {
             getCombinedCodeFix,
             applyCodeActionCommand,
             organizeImports,
+            getEditsForFileRename,
             getEmitOutput,
             getNonBoundSourceFile,
             getSourceFile,

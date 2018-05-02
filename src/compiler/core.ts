@@ -1,6 +1,3 @@
-/// <reference path="types.ts"/>
-/// <reference path="performance.ts" />
-
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
@@ -1314,12 +1311,13 @@ namespace ts {
      * the same key with the given 'makeKey' function, then the element with the higher
      * index in the array will be the one associated with the produced key.
      */
-    export function arrayToMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => string): Map<T>;
-    export function arrayToMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => string, makeValue: (value: T) => U): Map<U>;
-    export function arrayToMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => string, makeValue: (value: T) => T | U = identity): Map<T | U> {
+    export function arrayToMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => string | undefined): Map<T>;
+    export function arrayToMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => string | undefined, makeValue: (value: T) => U): Map<U>;
+    export function arrayToMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => string | undefined, makeValue: (value: T) => T | U = identity): Map<T | U> {
         const result = createMap<T | U>();
         for (const value of array) {
-            result.set(makeKey(value), makeValue(value));
+            const key = makeKey(value);
+            if (key !== undefined) result.set(key, makeValue(value));
         }
         return result;
     }
@@ -1340,8 +1338,9 @@ namespace ts {
      * @param array the array of input elements.
      */
     export function arrayToSet(array: ReadonlyArray<string>): Map<true>;
-    export function arrayToSet<T>(array: ReadonlyArray<T>, makeKey: (value: T) => string): Map<true>;
-    export function arrayToSet(array: ReadonlyArray<any>, makeKey?: (value: any) => string): Map<true> {
+    export function arrayToSet<T>(array: ReadonlyArray<T>, makeKey: (value: T) => string | undefined): Map<true>;
+    export function arrayToSet<T>(array: ReadonlyArray<T>, makeKey: (value: T) => __String | undefined): UnderscoreEscapedMap<true>;
+    export function arrayToSet(array: ReadonlyArray<any>, makeKey?: (value: any) => string | __String | undefined): Map<true> | UnderscoreEscapedMap<true> {
         return arrayToMap<any, true>(array, makeKey || (s => s), () => true);
     }
 
@@ -1724,6 +1723,10 @@ namespace ts {
         return compareComparableValues(a, b);
     }
 
+    export function min<T>(a: T, b: T, compare: Comparer<T>): T {
+        return compare(a, b) === Comparison.LessThan ? a : b;
+    }
+
     /**
      * Compare two strings using a case-insensitive ordinal comparison.
      *
@@ -1757,6 +1760,10 @@ namespace ts {
      */
     export function compareStringsCaseSensitive(a: string, b: string) {
         return compareComparableValues(a, b);
+    }
+
+    export function getStringComparer(ignoreCase?: boolean) {
+        return ignoreCase ? compareStringsCaseInsensitive : compareStringsCaseSensitive;
     }
 
     /**
@@ -2209,6 +2216,15 @@ namespace ts {
         return absolutePath;
     }
 
+    export function getRelativePath(path: string, directoryPath: string, getCanonicalFileName: GetCanonicalFileName) {
+        const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
+        return ensurePathIsRelative(relativePath);
+    }
+
+    export function ensurePathIsRelative(path: string): string {
+        return !pathIsRelative(path) ? "./" + path : path;
+    }
+
     export function getBaseFileName(path: string) {
         if (path === undefined) {
             return undefined;
@@ -2262,7 +2278,7 @@ namespace ts {
         const aComponents = getNormalizedPathComponents(a, currentDirectory);
         const bComponents = getNormalizedPathComponents(b, currentDirectory);
         const sharedLength = Math.min(aComponents.length, bComponents.length);
-        const comparer = ignoreCase ? compareStringsCaseInsensitive : compareStringsCaseSensitive;
+        const comparer = getStringComparer(ignoreCase);
         for (let i = 0; i < sharedLength; i++) {
             const result = comparer(aComponents[i], bComponents[i]);
             if (result !== Comparison.EqualTo) {
@@ -2603,7 +2619,7 @@ namespace ts {
             }
 
             // Sort the offsets array using either the literal or canonical path representations.
-            includeBasePaths.sort(useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive);
+            includeBasePaths.sort(getStringComparer(!useCaseSensitiveFileNames));
 
             // Iterate over each include base path and include unique base paths that are not a
             // subpath of an existing base path
@@ -2984,18 +3000,19 @@ namespace ts {
     }
 
     /** Remove the *first* occurrence of `item` from the array. */
-    export function unorderedRemoveItem<T>(array: T[], item: T): void {
-        unorderedRemoveFirstItemWhere(array, element => element === item);
+    export function unorderedRemoveItem<T>(array: T[], item: T) {
+        return unorderedRemoveFirstItemWhere(array, element => element === item);
     }
 
     /** Remove the *first* element satisfying `predicate`. */
-    function unorderedRemoveFirstItemWhere<T>(array: T[], predicate: (element: T) => boolean): void {
+    function unorderedRemoveFirstItemWhere<T>(array: T[], predicate: (element: T) => boolean) {
         for (let i = 0; i < array.length; i++) {
             if (predicate(array[i])) {
                 unorderedRemoveItemAt(array, i);
-                break;
+                return true;
             }
         }
+        return false;
     }
 
     export type GetCanonicalFileName = (fileName: string) => string;

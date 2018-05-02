@@ -24,7 +24,7 @@ const cFromAGroup = { definition: "(alias) const x: 0\nimport x", ranges: cFromA
 verify.referenceGroups(a, [aGroup, cFromAGroup]);
 
 const bGroup = { definition: "const x: 0", ranges: [b] };
-const cFromBGroup = { definition: "(alias) const x: 0\nimport x", ranges: [cFromB] };
+const cFromBGroup = { definition: "(alias) const x: 0\nexport x", ranges: [cFromB] };
 const dGroup = { definition: "(alias) const x: 0\nimport x", ranges: [d] };
 verify.referenceGroups(b, [bGroup, cFromBGroup, dGroup]);
 

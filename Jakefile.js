@@ -87,92 +87,9 @@ var typingsInstallerSources = filesFromConfig(path.join(serverDirectory, "typing
 var watchGuardSources = filesFromConfig(path.join(serverDirectory, "watchGuard/tsconfig.json"));
 var serverSources = filesFromConfig(path.join(serverDirectory, "tsconfig.json"));
 var languageServiceLibrarySources = filesFromConfig(path.join(serverDirectory, "tsconfig.library.json"));
+var harnessSources = filesFromConfig("./src/harness/tsconfig.json");
 
 var typesMapOutputPath = path.join(builtLocalDirectory, 'typesMap.json');
-
-var harnessCoreSources = [
-    "harness.ts",
-    "virtualFileSystem.ts",
-    "virtualFileSystemWithWatch.ts",
-    "sourceMapRecorder.ts",
-    "harnessLanguageService.ts",
-    "fourslash.ts",
-    "runnerbase.ts",
-    "compilerRunner.ts",
-    "typeWriter.ts",
-    "fourslashRunner.ts",
-    "projectsRunner.ts",
-    "loggedIO.ts",
-    "rwcRunner.ts",
-    "externalCompileRunner.ts",
-    "test262Runner.ts",
-    "./parallel/shared.ts",
-    "./parallel/host.ts",
-    "./parallel/worker.ts",
-    "runner.ts"
-].map(function (f) {
-    return path.join(harnessDirectory, f);
-});
-
-var harnessSources = harnessCoreSources.concat([
-    "base64.ts",
-    "incrementalParser.ts",
-    "jsDocParsing.ts",
-    "services/colorization.ts",
-    "services/documentRegistry.ts",
-    "services/preProcessFile.ts",
-    "services/patternMatcher.ts",
-    "session.ts",
-    "versionCache.ts",
-    "convertToBase64.ts",
-    "transpile.ts",
-    "reuseProgramStructure.ts",
-    "textStorage.ts",
-    "moduleResolution.ts",
-    "tsconfigParsing.ts",
-    "asserts.ts",
-    "builder.ts",
-    "commandLineParsing.ts",
-    "configurationExtension.ts",
-    "convertCompilerOptionsFromJson.ts",
-    "convertTypeAcquisitionFromJson.ts",
-    "tsserverProjectSystem.ts",
-    "tscWatchMode.ts",
-    "compileOnSave.ts",
-    "typingsInstaller.ts",
-    "projectErrors.ts",
-    "matchFiles.ts",
-    "organizeImports.ts",
-    "initializeTSConfig.ts",
-    "extractConstants.ts",
-    "extractFunctions.ts",
-    "extractRanges.ts",
-    "extractTestHelpers.ts",
-    "printer.ts",
-    "textChanges.ts",
-    "telemetry.ts",
-    "transform.ts",
-    "customTransforms.ts",
-    "programMissingFiles.ts",
-    "programNoParseFalsyFileNames.ts",
-    "symbolWalker.ts",
-    "languageService.ts",
-    "publicApi.ts",
-    "hostNewLineSupport.ts",
-].map(function (f) {
-    return path.join(unittestsDirectory, f);
-})).concat([
-    "protocol.ts",
-    "utilities.ts",
-    "scriptVersionCache.ts",
-    "scriptInfo.ts",
-    "project.ts",
-    "typingsCache.ts",
-    "editorServices.ts",
-    "session.ts",
-].map(function (f) {
-    return path.join(serverDirectory, f);
-}));
 
 var es2015LibrarySources = [
     "es2015.core.d.ts",
@@ -210,7 +127,8 @@ var es2017LibrarySourceMap = es2017LibrarySource.map(function (source) {
 
 var es2018LibrarySource = [
     "es2018.regexp.d.ts",
-    "es2018.promise.d.ts"
+    "es2018.promise.d.ts",
+    "es2018.intl.d.ts"
 ];
 
 var es2018LibrarySourceMap = es2018LibrarySource.map(function (source) {
@@ -451,6 +369,8 @@ task("lib", libraryTargets);
 // Generate diagnostics
 var processDiagnosticMessagesJs = path.join(scriptsDirectory, "processDiagnosticMessages.js");
 var processDiagnosticMessagesTs = path.join(scriptsDirectory, "processDiagnosticMessages.ts");
+var processDiagnosticMessagesSources = filesFromConfig("./scripts/processDiagnosticMessages.tsconfig.json");
+
 var diagnosticMessagesJson = path.join(compilerDirectory, "diagnosticMessages.json");
 var diagnosticInfoMapTs = path.join(compilerDirectory, "diagnosticInformationMap.generated.ts");
 var generatedDiagnosticMessagesJSON = path.join(compilerDirectory, "diagnosticMessages.generated.json");
@@ -460,8 +380,8 @@ file(processDiagnosticMessagesTs);
 
 // processDiagnosticMessages script
 compileFile(processDiagnosticMessagesJs,
-    [processDiagnosticMessagesTs],
-    [processDiagnosticMessagesTs],
+    processDiagnosticMessagesSources,
+    processDiagnosticMessagesSources,
     [],
     /*useBuiltCompiler*/ false);
 
@@ -572,7 +492,7 @@ compileFile(/*outfile*/configurePrereleaseJs,
             /*prereqs*/[configurePrereleaseTs],
             /*prefixes*/[],
             /*useBuiltCompiler*/ false,
-    { noOutFile: false, generateDeclarations: false, keepComments: false, noResolve: false, stripInternal: false });
+    { noOutFile: true, generateDeclarations: false, keepComments: false, noResolve: false, stripInternal: false });
 
 task("setDebugMode", function () {
     useDebugMode = true;

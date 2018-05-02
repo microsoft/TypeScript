@@ -179,8 +179,16 @@ interface Array<T> {}`
         checkMapKeys("watchedFiles", host.watchedFiles, expectedFiles);
     }
 
-    export function checkWatchedDirectories(host: TestServerHost, expectedDirectories: string[], recursive = false) {
+    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: Map<number>) {
+        checkMultiMapKeyCount("watchedFiles", host.watchedFiles, expectedFiles);
+    }
+
+    export function checkWatchedDirectories(host: TestServerHost, expectedDirectories: string[], recursive: boolean) {
         checkMapKeys(`watchedDirectories${recursive ? " recursive" : ""}`, recursive ? host.watchedDirectoriesRecursive : host.watchedDirectories, expectedDirectories);
+    }
+
+    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: Map<number>, recursive: boolean) {
+        checkMultiMapKeyCount(`watchedDirectories${recursive ? " recursive" : ""}`, recursive ? host.watchedDirectoriesRecursive : host.watchedDirectories, expectedDirectories);
     }
 
     export function checkOutputContains(host: TestServerHost, expected: ReadonlyArray<string>) {
@@ -385,21 +393,7 @@ interface Array<T> {}`
                         if (isString(fileOrDirectory.content)) {
                             // Update file
                             if (currentEntry.content !== fileOrDirectory.content) {
-                                if (options && options.invokeFileDeleteCreateAsPartInsteadOfChange) {
-                                    this.removeFileOrFolder(currentEntry, returnFalse);
-                                    this.ensureFileOrFolder(fileOrDirectory);
-                                }
-                                else {
-                                    currentEntry.content = fileOrDirectory.content;
-                                    currentEntry.modifiedTime = this.now();
-                                    this.fs.get(getDirectoryPath(currentEntry.path)).modifiedTime = this.now();
-                                    if (options && options.invokeDirectoryWatcherInsteadOfFileChanged) {
-                                        this.invokeDirectoryWatcher(getDirectoryPath(currentEntry.fullPath), currentEntry.fullPath);
-                                    }
-                                    else {
-                                        this.invokeFileWatcher(currentEntry.fullPath, FileWatcherEventKind.Changed);
-                                    }
-                                }
+                                this.modifyFile(fileOrDirectory.path, fileOrDirectory.content, options);
                             }
                         }
                         else {
@@ -435,6 +429,30 @@ interface Array<T> {}`
                         }
                     }
                 });
+            }
+        }
+
+        modifyFile(filePath: string, content: string, options?: Partial<ReloadWatchInvokeOptions>) {
+            const path = this.toFullPath(filePath);
+            const currentEntry = this.fs.get(path);
+            if (!currentEntry || !isFile(currentEntry)) {
+                throw new Error(`file not present: ${filePath}`);
+            }
+
+            if (options && options.invokeFileDeleteCreateAsPartInsteadOfChange) {
+                this.removeFileOrFolder(currentEntry, returnFalse);
+                this.ensureFileOrFolder({ path: filePath, content });
+            }
+            else {
+                currentEntry.content = content;
+                currentEntry.modifiedTime = this.now();
+                this.fs.get(getDirectoryPath(currentEntry.path)).modifiedTime = this.now();
+                if (options && options.invokeDirectoryWatcherInsteadOfFileChanged) {
+                    this.invokeDirectoryWatcher(getDirectoryPath(currentEntry.fullPath), currentEntry.fullPath);
+                }
+                else {
+                    this.invokeFileWatcher(currentEntry.fullPath, FileWatcherEventKind.Changed);
+                }
             }
         }
 

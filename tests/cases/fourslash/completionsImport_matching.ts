@@ -14,12 +14,10 @@
 // @Filename: /b.ts
 ////bdf/**/
 
-goTo.marker("");
-
-const options = { includeExternalModuleExports: true, sourceDisplay: "./a" };
-verify.not.completionListContains({ name: "abcde", source: "/a" }, undefined, undefined, undefined, undefined, undefined, options);
-verify.not.completionListContains({ name: "dbf", source: "/a" }, undefined, undefined, undefined, undefined, undefined, options);
-
-verify.completionListContains({ name: "bdf", source: "/a" }, "function bdf(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true, options);
-verify.completionListContains({ name: "abcdef", source: "/a" }, "function abcdef(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true, options);
-verify.completionListContains({ name: "BDF", source: "/a" }, "function BDF(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true, options);
+verify.completions({
+    at: "",
+    includes: ["bdf", "abcdef", "BDF"].map(name =>
+        ({ name, source: "/a", text: `function ${name}(): void`, hasAction: true, kind: "function", sourceDisplay: "./a" })),
+    excludes: ["abcde", "dbf"],
+    preferences: { includeCompletionsForModuleExports: true },
+})

@@ -15,16 +15,10 @@
 // @Filename: package.json
 //// { "dependencies": { "module-from-node": "latest" } }
 // @Filename: node_modules/module-from-node/index.ts
-//// /*module1*/
+////
 
-
-
-const kinds = ["import_as", "import_equals", "require"];
-
-for (const kind of kinds) {
-    goTo.marker(kind + "0");
-
-    verify.completionListContains("module");
-    verify.completionListContains("module-from-node");
-    verify.not.completionListItemsCountIsGreaterThan(2);
-}
+verify.completions({
+    at: test.markerNames(),
+    are: ["module", "module-from-node"],
+    isNewIdentifierLocation: true,
+});

@@ -124,14 +124,17 @@ namespace ts.tscWatch {
         }
 
         function getWatchDiagnosticWithoutDate(diagnostic: Diagnostic) {
-            return ` - ${flattenDiagnosticMessageText(diagnostic.messageText, host.newLine)}${host.newLine + host.newLine + host.newLine}`;
+            const newLines = contains(screenStartingMessageCodes, diagnostic.code)
+                ? `${host.newLine}${host.newLine}`
+                : host.newLine;
+            return ` - ${flattenDiagnosticMessageText(diagnostic.messageText, host.newLine)}${newLines}`;
         }
     }
 
     function createErrorsFoundCompilerDiagnostic(errors: ReadonlyArray<Diagnostic>) {
         return errors.length === 1
-            ? createCompilerDiagnostic(Diagnostics.Found_1_error)
-            : createCompilerDiagnostic(Diagnostics.Found_0_errors, errors.length);
+            ? createCompilerDiagnostic(Diagnostics.Found_1_error_Watching_for_file_changes)
+            : createCompilerDiagnostic(Diagnostics.Found_0_errors_Watching_for_file_changes, errors.length);
     }
 
     function checkOutputErrorsInitial(host: WatchedSystem, errors: ReadonlyArray<Diagnostic>, disableConsoleClears?: boolean, logsBeforeErrors?: string[]) {
@@ -142,8 +145,7 @@ namespace ts.tscWatch {
             logsBeforeErrors,
             errors,
             disableConsoleClears,
-            createErrorsFoundCompilerDiagnostic(errors),
-            createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
+            createErrorsFoundCompilerDiagnostic(errors));
     }
 
     function checkOutputErrorsIncremental(host: WatchedSystem, errors: ReadonlyArray<Diagnostic>, disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
@@ -154,8 +156,7 @@ namespace ts.tscWatch {
             logsBeforeErrors,
             errors,
             disableConsoleClears,
-            createErrorsFoundCompilerDiagnostic(errors),
-            createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
+            createErrorsFoundCompilerDiagnostic(errors));
     }
 
     function checkOutputErrorsIncrementalWithExit(host: WatchedSystem, errors: ReadonlyArray<Diagnostic>, expectedExitCode: ExitStatus, disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
@@ -415,6 +416,28 @@ namespace ts.tscWatch {
             host.reloadFS(files);
             host.checkTimeoutQueueLengthAndRun(1); // reload the configured project
             checkProgramRootFiles(watch(), [commonFile1.path]);
+        });
+
+        it("works correctly when config file is changed but its content havent", () => {
+            const configFile: FileOrFolder = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {},
+                    "files": ["${commonFile1.path}", "${commonFile2.path}"]
+                }`
+            };
+            const files = [libFile, commonFile1, commonFile2, configFile];
+            const host = createWatchedSystem(files);
+            const watch = createWatchOfConfigFile(configFile.path, host);
+
+            checkProgramActualFiles(watch(), [libFile.path, commonFile1.path, commonFile2.path]);
+            checkOutputErrorsInitial(host, emptyArray);
+
+            host.modifyFile(configFile.path, configFile.content);
+            host.checkTimeoutQueueLengthAndRun(1); // reload the configured project
+
+            checkProgramActualFiles(watch(), [libFile.path, commonFile1.path, commonFile2.path]);
+            checkOutputErrorsIncremental(host, emptyArray);
         });
 
         it("files explicitly excluded in config file", () => {
@@ -2234,16 +2257,17 @@ declare module "fs" {
                 "CreatingProgramWith::\n",
                 "  roots: [\"f.ts\"]\n",
                 "  options: {\"extendedDiagnostics\":true}\n",
-                "FileWatcher:: Added:: WatchInfo: f.ts 250 \n",
-                "FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 \n"
+                "FileWatcher:: Added:: WatchInfo: f.ts 250 Source file\n",
+                "FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 Source file\n"
             ]);
 
             file.content = "//";
             host.reloadFS(files);
             host.runQueuedTimeoutCallbacks();
             checkOutputErrorsIncremental(host, emptyArray, disableConsoleClear, options.extendedDiagnostics && [
-                "FileWatcher:: Triggered with /f.ts1:: WatchInfo: f.ts 250 \n",
-                "Elapsed:: 0ms FileWatcher:: Triggered with /f.ts1:: WatchInfo: f.ts 250 \n"
+                "FileWatcher:: Triggered with /f.ts1:: WatchInfo: f.ts 250 Source file\n",
+                "Scheduling update\n",
+                "Elapsed:: 0ms FileWatcher:: Triggered with /f.ts1:: WatchInfo: f.ts 250 Source file\n"
             ], options.extendedDiagnostics && [
                 "Synchronizing program\n",
                 "CreatingProgramWith::\n",

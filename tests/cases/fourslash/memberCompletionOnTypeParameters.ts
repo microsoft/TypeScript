@@ -13,22 +13,8 @@
 ////    v./*V*/;    // IFoo
 ////}
 
-goTo.marker("S");
-verify.completionListIsEmpty();
-
-goTo.marker("T");
-verify.completionListContains("x", "(property) IFoo.x: number");
-verify.completionListContains("y", "(property) IFoo.y: string");
-verify.completionListCount(2);
-
-goTo.marker("U");
-verify.completionListContains("toString", "(method) Object.toString(): string");
-verify.completionListCount(7); // constructor, toString, toLocaleString, valueOf, hasOwnProperty, isPrototypeOf, propertyIsEnumerable
-
-goTo.marker("V");
-verify.completionListContains("x", "(property) IFoo.x: number");
-verify.completionListContains("y", "(property) IFoo.y: string");
-verify.completionListCount(2);
-
-
-
+verify.completions(
+    { at: "S", are: undefined },
+    { at: ["T", "V"], are: [{ name: "x", text: "(property) IFoo.x: number" }, { name: "y", text: "(property) IFoo.y: string" }]},
+    { at: "U", are: ["constructor", "toString", "toLocaleString", "valueOf", "hasOwnProperty", "isPrototypeOf", "propertyIsEnumerable"] },
+);

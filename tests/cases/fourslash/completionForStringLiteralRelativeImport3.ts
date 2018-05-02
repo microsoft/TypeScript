@@ -31,21 +31,14 @@
 //// /*e2*/
 
 const kinds = ["import_as", "import_equals", "require"];
-
-for (const kind of kinds) {
-    goTo.marker(kind + "0");
-    verify.completionListContains("fourslash");
-    verify.not.completionListItemsCountIsGreaterThan(1);
-
-    goTo.marker(kind + "1");
-    verify.completionListContains("fourslash");
-    verify.not.completionListItemsCountIsGreaterThan(1);
-
-    goTo.marker(kind + "2");
-    verify.completionListContains("f1");
-    verify.completionListContains("f2");
-    verify.completionListContains("e1");
-    verify.completionListContains("folder");
-    verify.completionListContains("tests");
-    verify.not.completionListItemsCountIsGreaterThan(5);
-}
+verify.completions(
+    {
+        at: [...kinds.map(k => `${k}0`), ...kinds.map(k => `${k}1`)],
+        are: "fourslash",
+        isNewIdentifierLocation: true,
+    },
+    {
+        at: kinds.map(k => `${k}2`),
+        are: ["e1", "f1", "f2", "tests", "folder"],
+        isNewIdentifierLocation: true,
+    });

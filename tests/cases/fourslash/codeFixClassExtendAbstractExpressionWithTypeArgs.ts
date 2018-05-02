@@ -12,7 +12,6 @@
 
 verify.codeFix({
     description: "Implement inherited abstract class",
-    // TODO: GH#18795
     newFileContent:
 `function foo<T>(a: T) {
     a;

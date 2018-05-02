@@ -9,6 +9,4 @@
 ////    }
 ////}
 
-goTo.marker("1");
-
-verify.completionListContains("MyType");
+verify.completions({ at: "1", includes: "MyType" });
