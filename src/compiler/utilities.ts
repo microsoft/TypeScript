@@ -6122,7 +6122,8 @@ namespace ts {
             || kind === SyntaxKind.TypeAliasDeclaration
             || kind === SyntaxKind.TypeParameter
             || kind === SyntaxKind.VariableDeclaration
-            || kind === SyntaxKind.JSDocTypedefTag;
+            || kind === SyntaxKind.JSDocTypedefTag
+            || kind === SyntaxKind.JSDocCallbackTag;
     }
 
     function isDeclarationStatementKind(kind: SyntaxKind) {
