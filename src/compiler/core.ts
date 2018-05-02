@@ -2134,7 +2134,7 @@ namespace ts {
      * Returns the path except for its basename. Semantics align with NodeJS's `path.dirname`
      * except that we support URL's as well.
      *
-     * ```js
+     * ```ts
      * getDirectoryPath("/path/to/file.ext") === "/path/to"
      * getDirectoryPath("/path/to/") === "/path"
      * getDirectoryPath("/") === "/"
@@ -2145,7 +2145,7 @@ namespace ts {
      * Returns the path except for its basename. Semantics align with NodeJS's `path.dirname`
      * except that we support URL's as well.
      *
-     * ```js
+     * ```ts
      * getDirectoryPath("/path/to/file.ext") === "/path/to"
      * getDirectoryPath("/path/to/") === "/path"
      * getDirectoryPath("/") === "/"
@@ -2332,14 +2332,25 @@ namespace ts {
     }
 
     /**
-     * Gets the portion of a path following the last separator (`/`).
+     * Returns the path except for its containing directory name.
      * Semantics align with NodeJS's `path.basename` except that we support URL's as well.
+     *
+     * ```ts
+     * getBaseFileName("/path/to/file.ext") === "file.ext"
+     * getBaseFileName("/path/to/") === "to"
+     * getBaseFileName("/") === ""
+     * ```
      */
     export function getBaseFileName(path: string): string;
     /**
-     * Gets the portion of a path following the last separator (`/`).
+     * Gets the portion of a path following the last (non-terminal) separator (`/`).
      * Semantics align with NodeJS's `path.basename` except that we support URL's as well.
      * If the base name has any one of the provided extensions, it is removed.
+     *
+     * ```ts
+     * getBaseFileName("/path/to/file.ext", ".ext", true) === "file"
+     * getBaseFileName("/path/to/file.js", ".ext", true) === "file.js"
+     * ```
      */
     export function getBaseFileName(path: string, extensions: string | ReadonlyArray<string>, ignoreCase: boolean): string;
     export function getBaseFileName(path: string, extensions?: string | ReadonlyArray<string>, ignoreCase?: boolean) {
