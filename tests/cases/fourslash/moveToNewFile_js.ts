@@ -5,7 +5,6 @@
 // @Filename: /a.js
 ////const { a, b } = require("./other");
 ////const p = 0;
-////
 ////[|const y = p + b;
 ////const z = 0;
 ////exports.z = 0;|]
@@ -13,8 +12,6 @@
 
 // @Filename: /user.ts
 ////const { x, y } = require("./a");
-
-// TODO: GH#23793 This will crash if the blank line between `const p` and `const y` is removed
 
 verify.moveToNewFile({
     newFileContents: {
@@ -25,7 +22,6 @@ verify.moveToNewFile({
 const { a, } = require("./other");
 const p = 0;
 exports.p = p;
-
 a; y; z;`,
 
         "/y.js":
