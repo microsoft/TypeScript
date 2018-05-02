@@ -38,14 +38,15 @@ namespace ts {
         }
 
         function shouldIdentifierInline(node: Identifier): boolean {
-            if (!node || !node.parent) return false
-            switch (node.parent.kind) {
-                case SyntaxKind.BinaryExpression:
-                case SyntaxKind.IfStatement:
-                    return true
-                default:
-                    return false
-            }
+            if (!node || !node.parent) return false;
+
+            const parent = node.parent
+
+            if (isPropertyAccessExpression(parent) && parent.name === node) return false;
+            if (isVariableDeclaration(parent) && parent.name === node) return false;
+            if (isClassElement(parent) && parent.name === node) return false;
+            if (isObjectLiteralElementLike(parent) && parent.name === node) return false;
+            return true
         }
 
         function resolveValue (identifier: Identifier) : Identifier | Expression {
