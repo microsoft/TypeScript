@@ -1932,6 +1932,207 @@ namespace ts {
         return text1 ? Comparison.GreaterThan : Comparison.LessThan;
     }
 
+    /**
+     * Given a name and a list of names that are *not* equal to the name, return a spelling suggestion if there is one that is close enough.
+     * Names less than length 3 only check for case-insensitive equality, not Levenshtein distance.
+     *
+     * If there is a candidate that's the same except for case, return that.
+     * If there is a candidate that's within one edit of the name, return that.
+     * Otherwise, return the candidate with the smallest Levenshtein distance,
+     *    except for candidates:
+     *      * With no name
+     *      * Whose length differs from the target name by more than 0.34 of the length of the name.
+     *      * Whose levenshtein distance is more than 0.4 of the length of the name
+     *        (0.4 allows 1 substitution/transposition for every 5 characters,
+     *         and 1 insertion/deletion at 3 characters)
+     */
+    export function getSpellingSuggestion<T>(name: string, candidates: T[], getName: (candidate: T) => string | undefined): T | undefined {
+        const maximumLengthDifference = Math.min(2, Math.floor(name.length * 0.34));
+        let bestDistance = Math.floor(name.length * 0.4) + 1; // If the best result isn't better than this, don't bother.
+        let bestCandidate: T | undefined;
+        let justCheckExactMatches = false;
+        const nameLowerCase = name.toLowerCase();
+        for (const candidate of candidates) {
+            const candidateName = getName(candidate);
+            if (candidateName !== undefined && Math.abs(candidateName.length - nameLowerCase.length) <= maximumLengthDifference) {
+                const candidateNameLowerCase = candidateName.toLowerCase();
+                if (candidateNameLowerCase === nameLowerCase) {
+                    return candidate;
+                }
+                if (justCheckExactMatches) {
+                    continue;
+                }
+                if (candidateName.length < 3) {
+                    // Don't bother, user would have noticed a 2-character name having an extra character
+                    continue;
+                }
+                // Only care about a result better than the best so far.
+                const distance = levenshteinWithMax(nameLowerCase, candidateNameLowerCase, bestDistance - 1);
+                if (distance === undefined) {
+                    continue;
+                }
+                if (distance < 3) {
+                    justCheckExactMatches = true;
+                    bestCandidate = candidate;
+                }
+                else {
+                    Debug.assert(distance < bestDistance); // Else `levenshteinWithMax` should return undefined
+                    bestDistance = distance;
+                    bestCandidate = candidate;
+                }
+            }
+        }
+        return bestCandidate;
+    }
+
+    function levenshteinWithMax(s1: string, s2: string, max: number): number | undefined {
+        let previous = new Array(s2.length + 1);
+        let current = new Array(s2.length + 1);
+        /** Represents any value > max. We don't care about the particular value. */
+        const big = max + 1;
+
+        for (let i = 0; i <= s2.length; i++) {
+            previous[i] = i;
+        }
+
+        for (let i = 1; i <= s1.length; i++) {
+            const c1 = s1.charCodeAt(i - 1);
+            const minJ = i > max ? i - max : 1;
+            const maxJ = s2.length > max + i ? max + i : s2.length;
+            current[0] = i;
+            /** Smallest value of the matrix in the ith column. */
+            let colMin = i;
+            for (let j = 1; j < minJ; j++) {
+                current[j] = big;
+            }
+            for (let j = minJ; j <= maxJ; j++) {
+                const dist = c1 === s2.charCodeAt(j - 1)
+                    ? previous[j - 1]
+                    : Math.min(/*delete*/ previous[j] + 1, /*insert*/ current[j - 1] + 1, /*substitute*/ previous[j - 1] + 2);
+                current[j] = dist;
+                colMin = Math.min(colMin, dist);
+            }
+            for (let j = maxJ + 1; j <= s2.length; j++) {
+                current[j] = big;
+            }
+            if (colMin > max) {
+                // Give up -- everything in this column is > max and it can't get better in future columns.
+                return undefined;
+            }
+
+            const temp = previous;
+            previous = current;
+            current = temp;
+        }
+
+        const res = previous[s2.length];
+        return res > max ? undefined : res;
+    }
+
+    export function normalizeSlashes(path: string): string {
+        return path.replace(/\\/g, "/");
+    }
+
+    /**
+     * Returns length of path root (i.e. length of "/", "x:/", "//server/share/, file:///user/files")
+     */
+    export function getRootLength(path: string): number {
+        if (path.charCodeAt(0) === CharacterCodes.slash) {
+            if (path.charCodeAt(1) !== CharacterCodes.slash) return 1;
+            const p1 = path.indexOf("/", 2);
+            if (p1 < 0) return 2;
+            const p2 = path.indexOf("/", p1 + 1);
+            if (p2 < 0) return p1 + 1;
+            return p2 + 1;
+        }
+        if (path.charCodeAt(1) === CharacterCodes.colon) {
+            if (path.charCodeAt(2) === CharacterCodes.slash || path.charCodeAt(2) === CharacterCodes.backslash) return 3;
+        }
+        // Per RFC 1738 'file' URI schema has the shape file://<host>/<path>
+        // if <host> is omitted then it is assumed that host value is 'localhost',
+        // however slash after the omitted <host> is not removed.
+        // file:///folder1/file1 - this is a correct URI
+        // file://folder2/file2 - this is an incorrect URI
+        if (path.lastIndexOf("file:///", 0) === 0) {
+            return "file:///".length;
+        }
+        const idx = path.indexOf("://");
+        if (idx !== -1) {
+            return idx + "://".length;
+        }
+        return 0;
+    }
+
+    /**
+     * Internally, we represent paths as strings with '/' as the directory separator.
+     * When we make system calls (eg: LanguageServiceHost.getDirectory()),
+     * we expect the host to correctly handle paths in our specified format.
+     */
+    export const directorySeparator = "/";
+    const directorySeparatorCharCode = CharacterCodes.slash;
+    function getNormalizedParts(normalizedSlashedPath: string, rootLength: number): string[] {
+        const parts = normalizedSlashedPath.substr(rootLength).split(directorySeparator);
+        const normalized: string[] = [];
+        for (const part of parts) {
+            if (part !== ".") {
+                if (part === ".." && normalized.length > 0 && lastOrUndefined(normalized) !== "..") {
+                    normalized.pop();
+                }
+                else {
+                    // A part may be an empty string (which is 'falsy') if the path had consecutive slashes,
+                    // e.g. "path//file.ts".  Drop these before re-joining the parts.
+                    if (part) {
+                        normalized.push(part);
+                    }
+                }
+            }
+        }
+
+        return normalized;
+    }
+
+    export function normalizePath(path: string): string {
+        return normalizePathAndParts(path).path;
+    }
+
+    export function normalizePathAndParts(path: string): { path: string, parts: string[] } {
+        path = normalizeSlashes(path);
+        const rootLength = getRootLength(path);
+        const root = path.substr(0, rootLength);
+        const parts = getNormalizedParts(path, rootLength);
+        if (parts.length) {
+            const joinedParts = root + parts.join(directorySeparator);
+            return { path: pathEndsWithDirectorySeparator(path) ? joinedParts + directorySeparator : joinedParts, parts };
+        }
+        else {
+            return { path: root, parts };
+        }
+    }
+
+    /** A path ending with '/' refers to a directory only, never a file. */
+    export function pathEndsWithDirectorySeparator(path: string): boolean {
+        return path.charCodeAt(path.length - 1) === directorySeparatorCharCode;
+    }
+
+    /**
+     * Returns the path except for its basename. Eg:
+     *
+     * /path/to/file.ext -> /path/to
+     */
+    export function getDirectoryPath(path: Path): Path;
+    export function getDirectoryPath(path: string): string;
+    export function getDirectoryPath(path: string): string {
+        return path.substr(0, Math.max(getRootLength(path), path.lastIndexOf(directorySeparator)));
+    }
+
+    export function isUrl(path: string) {
+        return path && !isRootedDiskPath(path) && stringContains(path, "://");
+    }
+
+    export function pathIsRelative(path: string): boolean {
+        return /^\.\.?($|[\\/])/.test(path);
+    }
+
     export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
         return compilerOptions.target || ScriptTarget.ES3;
     }
