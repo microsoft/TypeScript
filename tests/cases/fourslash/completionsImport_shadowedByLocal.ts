@@ -8,7 +8,7 @@
 ////fo/**/
 
 verify.completions({
-    at: "",
+    marker: "",
     includes: "foo",
     excludes: { name: "foo", source: "/a" },
     preferences: { includeCompletionsForModuleExports: true },

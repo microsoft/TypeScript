@@ -20,18 +20,18 @@
 ////const less = 1 </*lessThan*/
 
 verify.completions(
-    { at: "openQuote", are: ["a", "b"], triggerCharacter: '"' },
-    { at: "closeQuote", are: undefined, triggerCharacter: '"' },
+    { marker: "openQuote", exact: ["a", "b"], triggerCharacter: '"' },
+    { marker: "closeQuote", exact: undefined, triggerCharacter: '"' },
 
-    { at: "openSingleQuote", are: ["a", "b"], triggerCharacter: "'" },
-    { at: "closeSingleQuote", are: undefined, triggerCharacter: "'" },
+    { marker: "openSingleQuote", exact: ["a", "b"], triggerCharacter: "'" },
+    { marker: "closeSingleQuote", exact: undefined, triggerCharacter: "'" },
 
-    { at: "openTemplate", are: ["a", "b"], triggerCharacter: "`" },
-    { at: "closeTemplate", are: undefined, triggerCharacter: "`" },
+    { marker: "openTemplate", exact: ["a", "b"], triggerCharacter: "`" },
+    { marker: "closeTemplate", exact: undefined, triggerCharacter: "`" },
 
-    { at: "quoteInComment", are: undefined, triggerCharacter: '"' },
-    { at: "lessInComment", are: undefined, triggerCharacter: "<" },
+    { marker: "quoteInComment", exact: undefined, triggerCharacter: '"' },
+    { marker: "lessInComment", exact: undefined, triggerCharacter: "<" },
 
-    { at: "openTag", includes: "div", triggerCharacter: "<" },
-    { at: "lessThan", are: undefined, triggerCharacter: "<" },
+    { marker: "openTag", includes: "div", triggerCharacter: "<" },
+    { marker: "lessThan", exact: undefined, triggerCharacter: "<" },
 );

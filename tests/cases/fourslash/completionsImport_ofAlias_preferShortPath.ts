@@ -16,7 +16,7 @@
 ////fo/**/
 
 verify.completions({
-    at: "",
+    marker: "",
     includes: { name: "foo", source: "/foo/lib/foo", sourceDisplay: "./foo", text: "const foo: 0", kind: "const", hasAction: true },
     excludes: { name: "foo", source: "/foo/index" },
     preferences: { includeCompletionsForModuleExports: true },

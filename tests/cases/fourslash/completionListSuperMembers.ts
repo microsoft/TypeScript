@@ -24,7 +24,7 @@
 ////}
 
 verify.completions({
-    at: "",
+    marker: "",
     includes: "publicInstanceMethod",
     excludes: [
         "publicProperty",
