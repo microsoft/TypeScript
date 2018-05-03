@@ -10,7 +10,7 @@ declare function bazz()
 declare function bazzz()
 >bazzz : () => any
 
-const a: number = 1 + 2;
+const a = 1 + 2;
 >a : number
 >1 + 2 : number
 >1 : 1
@@ -262,4 +262,18 @@ const configPath = args.forEach(arg => arg.lastIndexOf(i, 0) === 0 && arg.substr
 >i.length : number
 >i : "test"
 >length : number
+
+const j = "123" + "456"
+>j : string
+>"123" + "456" : string
+>"123" : "123"
+>"456" : "456"
+
+if (j === "123456") { }
+>j === "123456" : boolean
+>j : string
+>"123456" : "123456"
+
+if (j) { }
+>j : string
 

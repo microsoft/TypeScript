@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es6
 // @inlineConst: true
 // @declaration: true
 
@@ -6,7 +6,7 @@ declare function output(x: any, y?: any)
 declare function bazz()
 declare function bazzz()
 
-const a: number = 1 + 2;
+const a = 1 + 2;
 const foo = {
     a: 123
 }
@@ -60,3 +60,6 @@ const i = "test"
 output(i, i.length)
 const args: string[] = []
 const configPath = args.forEach(arg => arg.lastIndexOf(i, 0) === 0 && arg.substr(i.length))
+const j = "123" + "456"
+if (j === "123456") { }
+if (j) { }

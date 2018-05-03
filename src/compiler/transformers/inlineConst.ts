@@ -33,18 +33,18 @@ namespace ts {
 
         function visitVariableStatement(statement: VariableStatement) {
             const visited = visitEachChild(statement, visitor, context);
-            return every(visited.declarationList.declarations, declaration => declaration && !!declaration.resolvedValue) ? undefined : visited;
+            return visited && every(visited.declarationList.declarations, declaration => declaration && !!declaration.resolvedValue) ? undefined : visited;
         }
 
         function visitVariableDeclaration(declaration: VariableDeclaration) {
-            const visited = visitEachChild(declaration, visitor, context);
-            resolveValueDeclaration(visited);
-            return visited.resolvedValue ? undefined : visited;
+            const visited = visitEachChild(declaration, visitor, context)
+            const node = resolveValueDeclaration(<VariableDeclaration>visited.original || visited);
+            return node && node.resolvedValue ? undefined : node;
         }
 
         function visitIdentifier(identifier: Identifier): VisitResult<Node> {
             const visited = visitEachChild(identifier, visitor, context);
-            return shouldIdentifierInline(visited) ? evaluateIdentifier(visited) : visited;
+            return visited && shouldIdentifierInline(visited) ? evaluateIdentifier(visited) : visited;
         }
 
         function visitExpression(expression: Expression) {
@@ -67,7 +67,7 @@ namespace ts {
             return true;
         }
 
-        function resolveValueDeclaration(declaration: VariableDeclaration): Expression | undefined {
+        function resolveValueDeclaration(declaration: VariableDeclaration): VariableDeclaration | undefined {
             if (!shouldDeclarationInline(declaration)) return undefined;
 
             if (!declaration.resolvedValue) {
@@ -81,14 +81,15 @@ namespace ts {
                     declaration.resolvedValue = undefined;
                 }
             }
-            return declaration.resolvedValue;
+            return declaration;
         }
 
         function evaluateIdentifier(identifier: Identifier): Expression {
             const declaration = resolver.getReferencedValueDeclaration(identifier);
             if (declaration) {
                 if (isVariableDeclaration(declaration)) {
-                    return resolveValueDeclaration(declaration) || identifier;
+                    const result = resolveValueDeclaration(declaration)
+                    return result && result.resolvedValue || identifier;
                 }
             }
             return identifier;

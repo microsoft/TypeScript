@@ -3,7 +3,7 @@ declare function output(x: any, y?: any)
 declare function bazz()
 declare function bazzz()
 
-const a: number = 1 + 2;
+const a = 1 + 2;
 const foo = {
     a: 123
 }
@@ -57,50 +57,37 @@ const i = "test"
 output(i, i.length)
 const args: string[] = []
 const configPath = args.forEach(arg => arg.lastIndexOf(i, 0) === 0 && arg.substr(i.length))
+const j = "123" + "456"
+if (j === "123456") { }
+if (j) { }
 
 
 //// [inlineConst.js]
-var a = 3;
-var foo = {
+const foo = {
     a: 123
 };
-var bar = {
-    a: a
+const bar = {
+    a
 };
-var Foo = /** @class */ (function () {
-    function Foo() {
+class Foo {
+    constructor() {
         this.a = 456;
     }
-    return Foo;
-}());
-var Bar = /** @class */ (function () {
-    function Bar() {
-    }
-    Object.defineProperty(Bar.prototype, "a", {
-        get: function () { return 1; },
-        set: function (v) { },
-        enumerable: true,
-        configurable: true
-    });
-    return Bar;
-}());
-var Baz = /** @class */ (function () {
-    function Baz() {
+}
+class Bar {
+    get a() { return 1; }
+    set a(v) { }
+}
+class Baz {
+    constructor() {
         this._a = 1;
     }
-    Object.defineProperty(Baz.prototype, 3, {
-        get: function () { return 3; },
-        set: function (a) { this._a = a; },
-        enumerable: true,
-        configurable: true
-    });
-    return Baz;
-}());
+    get [3]() { return 3; }
+    set [3](a) { this._a = a; }
+}
 if (3) { }
 if (false) { }
-var b = 4;
 if (4) { }
-var c = 7;
 if (7) { }
 if (foo.a) {
     3..toString();
@@ -108,8 +95,8 @@ if (foo.a) {
 if (foo[3]) {
     3['toString']();
 }
-for (var i_1 = 0; i_1 < 10; ++i_1) {
-    output(i_1);
+for (let ; i < 10; ++i) {
+    output(i);
 }
 output(3);
 output(-3);
@@ -121,13 +108,15 @@ output(false);
 output(false);
 output(true);
 output(false);
-var f = 3, g = bazz;
+const g = bazz;
 if (3) { }
 if (g) { }
-var h = (bazz() || bazzz());
+const h = (bazz() || bazzz());
 output("test", "test".length);
-var args = [];
-var configPath = args.forEach(function (arg) { return arg.lastIndexOf("test", 0) === 0 && arg.substr("test".length); });
+const args = [];
+const configPath = args.forEach(arg => arg.lastIndexOf(i, 0) === 0 && arg.substr(i.length));
+if (true) { }
+if ("123456") { }
 
 
 //// [inlineConst.d.ts]
@@ -157,3 +146,4 @@ declare const h: any;
 declare const i = "test";
 declare const args: string[];
 declare const configPath: void;
+declare const j: string;
