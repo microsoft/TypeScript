@@ -19,13 +19,11 @@
 
 goTo.marker();
 edit.insert('.');
-verify.completionListContains("bar", /*displayText*/ undefined, /*documentation*/ undefined, "property");
-verify.completionListContains("thing", /*displayText*/ undefined, /*documentation*/ undefined, "property");
-verify.completionListContains("union", /*displayText*/ undefined, /*documentation*/ undefined, "property");
+verify.completions({ exact: ["bar", "thing", "union", "Foo", "x"] });
 
 edit.insert('bar.');
-verify.completionListContains("substr", /*displayText*/ undefined, /*documentation*/ undefined, "method");
+verify.completions({ includes: ["substr"], isNewIdentifierLocation: true });
 edit.backspace('bar.'.length);
 
 edit.insert('union.');
-verify.completionListContains("toString", /*displayText*/ undefined, /*documentation*/ undefined, "method", undefined, undefined, { allowDuplicate: true });
+verify.completions({ includes: "toString" });

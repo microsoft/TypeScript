@@ -74,6 +74,14 @@ declare function escape(string: string): string;
   */
 declare function unescape(string: string): string;
 
+interface Symbol {
+  /** Returns a string representation of an object. */
+  toString(): string;
+
+  /** Returns the primitive value of the specified object. */
+  valueOf(): symbol;
+}
+
 declare type PropertyKey = string | number | symbol;
 
 interface PropertyDescriptor {
@@ -505,6 +513,15 @@ declare const Number: NumberConstructor;
 
 interface TemplateStringsArray extends ReadonlyArray<string> {
     readonly raw: ReadonlyArray<string>;
+}
+
+/**
+ * The type of `import.meta`.
+ * 
+ * If you need to declare that a given property exists on `import.meta`,
+ * this type may be augmented via interface merging.
+ */
+interface ImportMeta {
 }
 
 interface Math {

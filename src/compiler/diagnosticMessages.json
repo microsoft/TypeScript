@@ -971,37 +971,41 @@
         "category": "Error",
         "code": 1342
     },
-    "Positional type arguments cannot follow named type arguments.": {
+    "The 'import.meta' meta-property is only allowed using 'ESNext' for the 'target' and 'module' compiler options.": {
         "category": "Error",
         "code": 1343
     },
-    "Named type argument conflicts with positional type argument at index '{0}'.": {
+    "Positional type arguments cannot follow named type arguments.": {
         "category": "Error",
         "code": 1344
     },
-    "Positional type argument conflicts with named type argument '{0}'.": {
+    "Named type argument conflicts with positional type argument at index '{0}'.": {
         "category": "Error",
         "code": 1345
     },
-    "Signature has no type argument named '{0}'.": {
+    "Positional type argument conflicts with named type argument '{0}'.": {
         "category": "Error",
         "code": 1346
     },
-    "No signature has all named type arguments.": {
+    "Signature has no type argument named '{0}'.": {
         "category": "Error",
         "code": 1347
     },
-    "No signature matches all named and positional type arguments.": {
+    "No signature has all named type arguments.": {
         "category": "Error",
         "code": 1348
     },
-    "No signature has a type argument named '{0}'.": {
+    "No signature matches all named and positional type arguments.": {
         "category": "Error",
         "code": 1349
     },
-    "No value provided for required type argument '{0}'.": {
+    "No signature has a type argument named '{0}'.": {
         "category": "Error",
         "code": 1350
+    },
+    "No value provided for required type argument '{0}'.": {
+        "category": "Error",
+        "code": 1351
     },
 
     "Duplicate identifier '{0}'.": {
@@ -3930,6 +3934,10 @@
         "category": "Suggestion",
         "code": 80004
     },
+    "'require' call may be converted to an import.": {
+        "category": "Suggestion",
+        "code": 80005
+    },
 
     "Add missing 'super()' call": {
         "category": "Message",
@@ -4206,5 +4214,13 @@
     "Generate 'get' and 'set' accessors": {
         "category": "Message",
         "code": 95046
+    },
+    "Convert 'require' to 'import'": {
+        "category": "Message",
+        "code": 95047
+    },
+    "Convert all 'require' to 'import'": {
+        "category": "Message",
+        "code": 95048
     }
 }

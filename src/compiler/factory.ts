@@ -192,16 +192,11 @@ namespace ts {
     }
 
     /** Create a unique name generated for a node. */
-    export function getGeneratedNameForNode(node: Node): Identifier;
-    /* @internal */ export function getGeneratedNameForNode(node: Node, shouldSkipNameGenerationScope?: boolean): Identifier; // tslint:disable-line unified-signatures
-    export function getGeneratedNameForNode(node: Node, shouldSkipNameGenerationScope?: boolean): Identifier {
+    export function getGeneratedNameForNode(node: Node): Identifier {
         const name = createIdentifier("");
         name.autoGenerateFlags = GeneratedIdentifierFlags.Node;
         name.autoGenerateId = nextAutoGenerateId;
         name.original = node;
-        if (shouldSkipNameGenerationScope) {
-            name.autoGenerateFlags |= GeneratedIdentifierFlags.SkipNameGenerationScope;
-        }
         nextAutoGenerateId++;
         return name;
     }

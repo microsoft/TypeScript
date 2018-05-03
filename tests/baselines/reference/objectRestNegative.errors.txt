@@ -29,7 +29,7 @@ tests/cases/conformance/types/rest/objectRestNegative.ts(17,9): error TS2701: Th
 !!! error TS2462: A rest element must be last in a destructuring pattern.
     }
     function generic<T extends { x, y }>(t: T) {
-                                 ~~
+                                 ~
 !!! error TS7008: Member 'x' implicitly has an 'any' type.
                                     ~
 !!! error TS7008: Member 'y' implicitly has an 'any' type.

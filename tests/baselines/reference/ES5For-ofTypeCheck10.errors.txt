@@ -1,4 +1,4 @@
-tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck10.ts(9,6): error TS2304: Cannot find name 'Symbol'.
+tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck10.ts(9,6): error TS2693: 'Symbol' only refers to a type, but is being used as a value here.
 tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck10.ts(14,15): error TS2569: Type 'StringIterator' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators.
 
 
@@ -13,7 +13,7 @@ tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck10.ts(14,1
         }
         [Symbol.iterator]() {
          ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
+!!! error TS2693: 'Symbol' only refers to a type, but is being used as a value here.
             return this;
         }
     }

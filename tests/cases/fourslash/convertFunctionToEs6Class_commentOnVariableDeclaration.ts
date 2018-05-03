@@ -8,7 +8,8 @@
 verify.codeFix({
     description: "Convert function to an ES2015 class",
     newFileContent:
-`/** Doc */
+`
+/** Doc */
 class C {
     constructor() { this.x = 0; }
 }

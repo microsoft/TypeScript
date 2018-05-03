@@ -46,97 +46,97 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
         foo2: string; // ok
         foo3: number; // ok
         foo4: boolean; // error 
-        ~~~~~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'foo4' of type 'boolean' is not assignable to string index type 'string | number'.
         foo5: E; // ok - subtype of number 
         foo6: Date; // error
-        ~~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'foo6' of type 'Date' is not assignable to string index type 'string | number'.
         foo7: RegExp; // error
-        ~~~~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'foo7' of type 'RegExp' is not assignable to string index type 'string | number'.
         foo8: { bar: number }; // error
-        ~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'foo8' of type '{ bar: number; }' is not assignable to string index type 'string | number'.
         foo9: I8; // error
-        ~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'foo9' of type 'I8' is not assignable to string index type 'string | number'.
         foo10: A; // error
-        ~~~~~~~~~
+        ~~~~~
 !!! error TS2411: Property 'foo10' of type 'A' is not assignable to string index type 'string | number'.
         foo11: A2<number>; // error
-        ~~~~~~~~~~~~~~~~~~
+        ~~~~~
 !!! error TS2411: Property 'foo11' of type 'A2<number>' is not assignable to string index type 'string | number'.
         foo12: (x) => number; //error
-        ~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~
 !!! error TS2411: Property 'foo12' of type '(x: any) => number' is not assignable to string index type 'string | number'.
         foo13: <T>(x: T) => T; // error
-        ~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~
 !!! error TS2411: Property 'foo13' of type '<T>(x: T) => T' is not assignable to string index type 'string | number'.
         foo14: typeof f; // error
-        ~~~~~~~~~~~~~~~~
+        ~~~~~
 !!! error TS2411: Property 'foo14' of type 'typeof f' is not assignable to string index type 'string | number'.
         foo15: typeof c; // error
-        ~~~~~~~~~~~~~~~~
+        ~~~~~
 !!! error TS2411: Property 'foo15' of type 'typeof c' is not assignable to string index type 'string | number'.
         foo16: T; // error
-        ~~~~~~~~~
+        ~~~~~
 !!! error TS2411: Property 'foo16' of type 'T' is not assignable to string index type 'string | number'.
         foo17: Object; // error
-        ~~~~~~~~~~~~~~
+        ~~~~~
 !!! error TS2411: Property 'foo17' of type 'Object' is not assignable to string index type 'string | number'.
         foo18: {}; // error
-        ~~~~~~~~~~
+        ~~~~~
 !!! error TS2411: Property 'foo18' of type '{}' is not assignable to string index type 'string | number'.
     }
     interface I2<T> {
         [x: string]: E | number;
         foo: any; // ok
         foo2: string; // error
-        ~~~~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'foo2' of type 'string' is not assignable to string index type 'number'.
         foo3: number; // ok
         foo4: boolean; // error 
-        ~~~~~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'foo4' of type 'boolean' is not assignable to string index type 'number'.
         foo5: E; // ok
         foo6: Date; // error
-        ~~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'foo6' of type 'Date' is not assignable to string index type 'number'.
         foo7: RegExp; // error
-        ~~~~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'foo7' of type 'RegExp' is not assignable to string index type 'number'.
         foo8: { bar: number }; // error
-        ~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'foo8' of type '{ bar: number; }' is not assignable to string index type 'number'.
         foo9: I8; // error
-        ~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'foo9' of type 'I8' is not assignable to string index type 'number'.
         foo10: A; // error
-        ~~~~~~~~~
+        ~~~~~
 !!! error TS2411: Property 'foo10' of type 'A' is not assignable to string index type 'number'.
         foo11: A2<number>; // error
-        ~~~~~~~~~~~~~~~~~~
+        ~~~~~
 !!! error TS2411: Property 'foo11' of type 'A2<number>' is not assignable to string index type 'number'.
         foo12: (x) => number; //error
-        ~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~
 !!! error TS2411: Property 'foo12' of type '(x: any) => number' is not assignable to string index type 'number'.
         foo13: <T>(x: T) => T; // error
-        ~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~
 !!! error TS2411: Property 'foo13' of type '<T>(x: T) => T' is not assignable to string index type 'number'.
         foo14: typeof f; // error
-        ~~~~~~~~~~~~~~~~
+        ~~~~~
 !!! error TS2411: Property 'foo14' of type 'typeof f' is not assignable to string index type 'number'.
         foo15: typeof c; // error
-        ~~~~~~~~~~~~~~~~
+        ~~~~~
 !!! error TS2411: Property 'foo15' of type 'typeof c' is not assignable to string index type 'number'.
         foo16: T; // error
-        ~~~~~~~~~
+        ~~~~~
 !!! error TS2411: Property 'foo16' of type 'T' is not assignable to string index type 'number'.
         foo17: Object; // error
-        ~~~~~~~~~~~~~~
+        ~~~~~
 !!! error TS2411: Property 'foo17' of type 'Object' is not assignable to string index type 'number'.
         foo18: {}; // error
-        ~~~~~~~~~~
+        ~~~~~
 !!! error TS2411: Property 'foo18' of type '{}' is not assignable to string index type 'number'.
     }
