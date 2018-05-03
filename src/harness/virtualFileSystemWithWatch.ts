@@ -93,24 +93,26 @@ interface Array<T> {}`
         return isString((<SymLink>fileOrFolderOrSymLink).symLink);
     }
 
-    interface FSEntry {
+    interface FSEntryBase {
         path: Path;
         fullPath: string;
         modifiedTime: Date;
     }
 
-    interface FsFile extends FSEntry {
+    interface FsFile extends FSEntryBase {
         content: string;
         fileSize?: number;
     }
 
-    interface FsFolder extends FSEntry {
+    interface FsFolder extends FSEntryBase {
         entries: SortedArray<FSEntry>;
     }
 
-    interface FsSymLink extends FSEntry {
+    interface FsSymLink extends FSEntryBase {
         symLink: string;
     }
+
+    type FSEntry = FsFile | FsFolder | FsSymLink;
 
     function isFsFolder(s: FSEntry): s is FsFolder {
         return s && isArray((<FsFolder>s).entries);
@@ -599,6 +601,24 @@ interface Array<T> {}`
             }
         }
 
+        removeFolder(folderPath: string, recursive?: boolean) {
+            const path = this.toFullPath(folderPath);
+            const currentEntry = this.fs.get(path) as FsFolder;
+            Debug.assert(isFsFolder(currentEntry));
+            if (recursive && currentEntry.entries.length) {
+                const subEntries = currentEntry.entries.slice();
+                subEntries.forEach(fsEntry => {
+                    if (isFsFolder(fsEntry)) {
+                        this.removeFolder(fsEntry.fullPath, recursive);
+                    }
+                    else {
+                        this.removeFileOrFolder(fsEntry, returnFalse);
+                    }
+                });
+            }
+            this.removeFileOrFolder(currentEntry, returnFalse);
+        }
+
         // For overriding the methods
         invokeWatchedDirectoriesCallback(folderFullPath: string, relativePath: string) {
             invokeWatcherCallbacks(this.watchedDirectories.get(this.toPath(folderFullPath)), cb => this.directoryCallback(cb, relativePath));
@@ -643,7 +663,7 @@ interface Array<T> {}`
             }
         }
 
-        private toFsEntry(path: string): FSEntry {
+        private toFsEntry(path: string): FSEntryBase {
             const fullPath = getNormalizedAbsolutePath(path, this.currentDirectory);
             return {
                 path: this.toPath(fullPath),

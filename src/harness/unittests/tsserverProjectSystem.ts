@@ -7706,6 +7706,186 @@ namespace ts.projectSystem {
                 }
             }
         });
+
+        describe("module resolution when symlinked folder contents change and resolve modules", () => {
+            const projectRootPath = "/users/username/projects/myproject";
+            const packages = `${projectRootPath}/javascript/packages`;
+            const recognizersDateTime = `${packages}/recognizers-date-time`;
+            const recognizersText = `${packages}/recognizers-text`;
+            const recognizersTextDist = `${recognizersText}/dist`;
+            const moduleName = "@microsoft/recognizers-text";
+            const moduleNameInFile = `"${moduleName}"`;
+            const recognizersDateTimeSrcFile: File = {
+                path: `${recognizersDateTime}/src/datetime/baseDate.ts`,
+                content: `import {C} from ${moduleNameInFile};
+new C();`
+            };
+            const recognizerDateTimeTsconfigPath = `${recognizersDateTime}/tsconfig.json`;
+            const recognizerDateTimeTsconfigWithoutPathMapping: File = {
+                path: recognizerDateTimeTsconfigPath,
+                content: JSON.stringify({
+                    include: ["src"]
+                })
+            };
+            const recognizerDateTimeTsconfigWithPathMapping: File = {
+                path: recognizerDateTimeTsconfigPath,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        rootDir: "src",
+                        baseUrl: "./",
+                        paths: {
+                            "@microsoft/*": ["../*"]
+                        }
+                    },
+                    include: ["src"]
+                })
+            };
+            const nodeModulesRecorgnizersText: SymLink = {
+                path: `${recognizersDateTime}/node_modules/@microsoft/recognizers-text`,
+                symLink: recognizersText
+            };
+            const recognizerTextSrcFile: File = {
+                path: `${recognizersText}/src/recognizers-text.ts`,
+                content: `export class C { method () { return 10; } }`
+            };
+            const recongnizerTextDistTypingFile: File = {
+                path: `${recognizersTextDist}/types/recognizers-text.d.ts`,
+                content: `export class C { method(): number; }`
+            };
+            const recongnizerTextPackageJson: File = {
+                path: `${recognizersText}/package.json`,
+                content: JSON.stringify({
+                    typings: "dist/types/recognizers-text.d.ts"
+                })
+            };
+            const filesInProjectWithUnresolvedModule = [recognizerDateTimeTsconfigPath, libFile.path, recognizersDateTimeSrcFile.path];
+            const filesInProjectWithResolvedModule = [...filesInProjectWithUnresolvedModule, recongnizerTextDistTypingFile.path];
+
+            function verifyErrors(session: TestSession, semanticErrors: protocol.Diagnostic[]) {
+                session.clearMessages();
+                const expectedSequenceId = session.getNextSeq();
+                session.executeCommandSeq<protocol.GeterrRequest>({
+                    command: server.CommandNames.Geterr,
+                    arguments: {
+                        delay: 0,
+                        files: [recognizersDateTimeSrcFile.path],
+                    }
+                });
+
+                const host = session.host;
+                host.checkTimeoutQueueLengthAndRun(1);
+
+                checkErrorMessage(session, "syntaxDiag", { file: recognizersDateTimeSrcFile.path, diagnostics: [] });
+                session.clearMessages();
+
+                host.runQueuedImmediateCallbacks(1);
+
+                checkErrorMessage(session, "semanticDiag", { file: recognizersDateTimeSrcFile.path, diagnostics: semanticErrors });
+                session.clearMessages();
+
+                host.runQueuedImmediateCallbacks(1);
+
+                checkErrorMessage(session, "suggestionDiag", {
+                    file: recognizersDateTimeSrcFile.path,
+                    diagnostics: [],
+                });
+                checkCompleteEvent(session, 2, expectedSequenceId);
+            }
+
+            function createSingleWatchMap(paths: string[]) {
+                return arrayToMap(paths, p => p, () => 1);
+            }
+
+            function verifyWatchedFilesAndDirectories(host: TestServerHost, files: string[], directories: string[]) {
+                checkWatchedFilesDetailed(host, createSingleWatchMap(files.filter(f => f !== recognizersDateTimeSrcFile.path)));
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedDirectoriesDetailed(host, createSingleWatchMap(directories), /*recursive*/ true);
+            }
+
+            function createSessionAndOpenFile(host: TestServerHost) {
+                const session = createSession(host, { canUseEvents: true });
+                session.executeCommandSeq<protocol.OpenRequest>({
+                    command: protocol.CommandTypes.Open,
+                    arguments: {
+                        file: recognizersDateTimeSrcFile.path,
+                        projectRootPath
+                    }
+                });
+                return session;
+            }
+
+            function verifyModuleResolution(withPathMapping: boolean) {
+                describe(withPathMapping ? "when tsconfig file contains path mapping" : "when tsconfig does not contain path mapping", () => {
+                    const filesWithSources = [libFile, recognizersDateTimeSrcFile, withPathMapping ? recognizerDateTimeTsconfigWithPathMapping : recognizerDateTimeTsconfigWithoutPathMapping, recognizerTextSrcFile, recongnizerTextPackageJson];
+                    const filesWithNodeModulesSetup = [...filesWithSources, nodeModulesRecorgnizersText];
+                    const filesAfterCompilation = [...filesWithNodeModulesSetup, recongnizerTextDistTypingFile];
+
+                    const watchedDirectoriesWithResolvedModule = [`${recognizersDateTime}/src`, withPathMapping ? packages : recognizersDateTime, ...getTypeRootsFromLocation(recognizersDateTime)];
+                    const watchedDirectoriesWithUnresolvedModule = [recognizersDateTime, ...watchedDirectoriesWithResolvedModule, ...getNodeModuleDirectories(packages)];
+
+                    function verifyProjectWithResolvedModule(session: TestSession) {
+                        const projectService = session.getProjectService();
+                        const project = projectService.configuredProjects.get(recognizerDateTimeTsconfigPath);
+                        checkProjectActualFiles(project, filesInProjectWithResolvedModule);
+                        verifyWatchedFilesAndDirectories(session.host, filesInProjectWithResolvedModule, watchedDirectoriesWithResolvedModule);
+                        verifyErrors(session, []);
+                    }
+
+                    function verifyProjectWithUnresolvedModule(session: TestSession) {
+                        const projectService = session.getProjectService();
+                        const project = projectService.configuredProjects.get(recognizerDateTimeTsconfigPath);
+                        checkProjectActualFiles(project, filesInProjectWithUnresolvedModule);
+                        verifyWatchedFilesAndDirectories(session.host, filesInProjectWithUnresolvedModule, watchedDirectoriesWithUnresolvedModule);
+                        const startOffset = recognizersDateTimeSrcFile.content.indexOf('"') + 1;
+                        verifyErrors(session, [
+                            createDiagnostic({ line: 1, offset: startOffset }, { line: 1, offset: startOffset + moduleNameInFile.length }, Diagnostics.Cannot_find_module_0, [moduleName])
+                        ]);
+                    }
+
+                    it("when project compiles from sources", () => {
+                        const host = createServerHost(filesWithSources);
+                        const session = createSessionAndOpenFile(host);
+                        verifyProjectWithUnresolvedModule(session);
+
+                        host.reloadFS(filesAfterCompilation);
+                        host.runQueuedTimeoutCallbacks();
+
+                        verifyProjectWithResolvedModule(session);
+                    });
+
+                    it("when project has node_modules setup but doesnt have modules in typings folder and then recompiles", () => {
+                        const host = createServerHost(filesWithNodeModulesSetup);
+                        const session = createSessionAndOpenFile(host);
+                        verifyProjectWithUnresolvedModule(session);
+
+                        host.reloadFS(filesAfterCompilation);
+                        host.runQueuedTimeoutCallbacks();
+
+                        verifyProjectWithResolvedModule(session);
+                    });
+
+                    it("when project recompiles after deleting generated folders", () => {
+                        const host = createServerHost(filesAfterCompilation);
+                        const session = createSessionAndOpenFile(host);
+
+                        verifyProjectWithResolvedModule(session);
+
+                        host.removeFolder(recognizersTextDist, /*recursive*/ true);
+                        host.runQueuedTimeoutCallbacks();
+
+                        verifyProjectWithUnresolvedModule(session);
+
+                        host.ensureFileOrFolder(recongnizerTextDistTypingFile);
+                        host.runQueuedTimeoutCallbacks();
+
+                        verifyProjectWithResolvedModule(session);
+                    });
+                });
+            }
+
+            verifyModuleResolution(/*withPathMapping*/ false);
+            verifyModuleResolution(/*withPathMapping*/ true);
+        });
     });
 
     describe("tsserverProjectSystem forceConsistentCasingInFileNames", () => {
