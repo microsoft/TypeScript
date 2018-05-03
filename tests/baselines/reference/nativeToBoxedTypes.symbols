@@ -37,6 +37,7 @@ var sym: symbol;
 
 var Sym: Symbol;
 >Sym : Symbol(Sym, Decl(nativeToBoxedTypes.ts, 13, 3))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --))
 
 sym = Sym;
 >sym : Symbol(sym, Decl(nativeToBoxedTypes.ts, 12, 3))
