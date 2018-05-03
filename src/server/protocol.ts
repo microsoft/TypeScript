@@ -1293,7 +1293,7 @@ namespace ts.server.protocol {
         /**
          * The host's additional supported .js file extensions
          */
-        extraFileExtensions?: JsFileExtensionInfo[];
+        extraFileExtensions?: FileExtensionInfo[];
     }
 
     /**

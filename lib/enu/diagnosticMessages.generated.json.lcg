@@ -585,6 +585,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Add_0_to_unresolved_variable_90008" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Add '{0}.' to unresolved variable]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Add_all_missing_async_modifiers_95041" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Add all missing 'async' modifiers]]></Val>
@@ -645,15 +651,9 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
-            <Item ItemId=";Add_this_to_all_unresolved_variables_matching_a_member_name_95037" ItemType="0" PsrId="306" Leaf="true">
+            <Item ItemId=";Add_qualifier_to_all_unresolved_variables_matching_a_member_name_95037" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
-                <Val><![CDATA[Add 'this.' to all unresolved variables matching a member name]]></Val>
-              </Str>
-              <Disp Icon="Str" />
-            </Item>
-            <Item ItemId=";Add_this_to_unresolved_variable_90008" ItemType="0" PsrId="306" Leaf="true">
-              <Str Cat="Text">
-                <Val><![CDATA[Add 'this.' to unresolved variable]]></Val>
+                <Val><![CDATA[Add qualifier to all unresolved variables matching a member name]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -810,6 +810,12 @@
             <Item ItemId=";An_async_iterator_must_have_a_next_method_2519" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[An async iterator must have a 'next()' method.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";An_element_access_expression_should_take_an_argument_1011" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[An element access expression should take an argument.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -1551,12 +1557,6 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
-            <Item ItemId=";Compilation_complete_Watching_for_file_changes_6042" ItemType="0" PsrId="306" Leaf="true">
-              <Str Cat="Text">
-                <Val><![CDATA[Compilation complete. Watching for file changes.]]></Val>
-              </Str>
-              <Disp Icon="Str" />
-            </Item>
             <Item ItemId=";Compile_the_project_given_the_path_to_its_configuration_file_or_to_a_folder_with_a_tsconfig_json_6020" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Compile the project given the path to its configuration file, or to a folder with a 'tsconfig.json'.]]></Val>
@@ -1641,6 +1641,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Convert_all_require_to_import_95048" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Convert all 'require' to 'import']]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Convert_all_to_default_imports_95035" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Convert all to default imports]]></Val>
@@ -1656,6 +1662,12 @@
             <Item ItemId=";Convert_function_to_an_ES2015_class_95001" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Convert function to an ES2015 class]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Convert_require_to_import_95047" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Convert 'require' to 'import']]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -2451,6 +2463,18 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Found_0_errors_Watching_for_file_changes_6194" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Found {0} errors. Watching for file changes.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Found_1_error_Watching_for_file_changes_6193" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Found 1 error. Watching for file changes.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Found_package_json_at_0_6099" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Found 'package.json' at '{0}'.]]></Val>
@@ -2520,6 +2544,12 @@
             <Item ItemId=";Function_overload_must_not_be_static_2388" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Function overload must not be static.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Generate_get_and_set_accessors_95046" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Generate 'get' and 'set' accessors]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -3879,6 +3909,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Property_0_does_not_exist_on_type_1_Did_you_forget_to_use_await_2570" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Property '{0}' does not exist on type '{1}'. Did you forget to use 'await'?]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Property_0_does_not_exist_on_type_1_Did_you_mean_2_2551" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Property '{0}' does not exist on type '{1}'. Did you mean '{2}'?]]></Val>
@@ -4200,6 +4236,12 @@
             <Item ItemId=";Resolution_for_module_0_was_found_in_cache_from_location_1_6147" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Resolution for module '{0}' was found in cache from location '{1}'.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Resolve_keyof_to_string_valued_property_names_only_no_numbers_or_symbols_6195" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Resolve 'keyof' to string valued property names only (no numbers or symbols).]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -4788,6 +4830,12 @@
             <Item ItemId=";The_global_type_JSX_0_may_not_have_more_than_one_property_2608" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[The global type 'JSX.{0}' may not have more than one property.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";The_import_meta_meta_property_is_only_allowed_using_ESNext_for_the_target_and_module_compiler_option_1343" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[The 'import.meta' meta-property is only allowed using 'ESNext' for the 'target' and 'module' compiler options.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -5673,6 +5721,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";_0_is_declared_but_never_used_6196" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA['{0}' is declared but never used.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";_0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2_17012" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA['{0}' is not a valid meta-property for keyword '{1}'. Did you mean '{2}'?]]></Val>
@@ -6054,6 +6108,12 @@
             <Item ItemId=";readonly_modifier_can_only_appear_on_a_property_declaration_or_index_signature_1024" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA['readonly' modifier can only appear on a property declaration or index signature.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";require_call_may_be_converted_to_an_import_80005" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA['require' call may be converted to an import.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
