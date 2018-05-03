@@ -486,7 +486,7 @@ namespace ts {
                     return pipelineEmitWithHint;
 
                 default:
-                    return Debug.assertNever(phase);
+                    return Debug.assertNever(phase, `Unexpected value for PipelinePhase: ${phase}`);
             }
         }
 
