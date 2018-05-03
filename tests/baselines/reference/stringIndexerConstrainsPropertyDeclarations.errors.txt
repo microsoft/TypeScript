@@ -43,25 +43,25 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerCon
     
         a: string; // ok
         b: number; // error
-        ~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'b' of type 'number' is not assignable to string index type 'string'.
         c: () => {} // error
-        ~~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'c' of type '() => {}' is not assignable to string index type 'string'.
         "d": string; // ok
         "e": number; // error
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property '"e"' of type 'number' is not assignable to string index type 'string'.
         1.0: string; // ok
         2.0: number; // error
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property '2.0' of type 'number' is not assignable to string index type 'string'.
         "3.0": string; // ok
         "4.0": number; // error
-        ~~~~~~~~~~~~~~
+        ~~~~~
 !!! error TS2411: Property '"4.0"' of type 'number' is not assignable to string index type 'string'.
         f: MyString; // error
-        ~~~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'f' of type 'MyString' is not assignable to string index type 'string'.
     
         get X() { // ok
@@ -95,18 +95,18 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerCon
     
         a: string; // ok
         b: number; // error
-        ~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'b' of type 'number' is not assignable to string index type 'string'.
         c: () => {} // error
-        ~~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'c' of type '() => {}' is not assignable to string index type 'string'.
         "d": string; // ok
         "e": number; // error
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property '"e"' of type 'number' is not assignable to string index type 'string'.
         1.0: string; // ok
         2.0: number; // error
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property '2.0' of type 'number' is not assignable to string index type 'string'.
         (): string; // ok
         (x): number // ok
@@ -115,10 +115,10 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerCon
 !!! error TS2411: Property 'foo' of type '() => string' is not assignable to string index type 'string'.
         "3.0": string; // ok
         "4.0": number; // error
-        ~~~~~~~~~~~~~~
+        ~~~~~
 !!! error TS2411: Property '"4.0"' of type 'number' is not assignable to string index type 'string'.
         f: MyString; // error
-        ~~~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'f' of type 'MyString' is not assignable to string index type 'string'.
     }
     
@@ -127,18 +127,18 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerCon
     
         a: string; // ok
         b: number; // error
-        ~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'b' of type 'number' is not assignable to string index type 'string'.
         c: () => {} // error
-        ~~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'c' of type '() => {}' is not assignable to string index type 'string'.
         "d": string; // ok
         "e": number; // error
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property '"e"' of type 'number' is not assignable to string index type 'string'.
         1.0: string; // ok
         2.0: number; // error
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property '2.0' of type 'number' is not assignable to string index type 'string'.
         (): string; // ok
         (x): number // ok
@@ -147,10 +147,10 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerCon
 !!! error TS2411: Property 'foo' of type '() => string' is not assignable to string index type 'string'.
         "3.0": string; // ok
         "4.0": number; // error
-        ~~~~~~~~~~~~~~
+        ~~~~~
 !!! error TS2411: Property '"4.0"' of type 'number' is not assignable to string index type 'string'.
         f: MyString; // error
-        ~~~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'f' of type 'MyString' is not assignable to string index type 'string'.
     }
     
