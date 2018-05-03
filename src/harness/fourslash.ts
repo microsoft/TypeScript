@@ -2662,10 +2662,10 @@ Actual: ${stringify(fullActual)}`);
         public verifyImportFixAtPosition(expectedTextArray: string[], errorCode: number | undefined, preferences: ts.UserPreferences | undefined) {
             const { fileName } = this.activeFile;
             const ranges = this.getRanges().filter(r => r.fileName === fileName);
-            if (ranges.length !== 1) {
+            if (ranges.length > 1) {
                 this.raiseError("Exactly one range should be specified in the testfile.");
             }
-            const range = ts.first(ranges);
+            const range = ts.firstOrUndefined(ranges);
 
             const codeFixes = this.getCodeFixes(fileName, errorCode, preferences).filter(f => f.fixId === undefined); // TODO: GH#20315 filter out those that use the import fix ID;
 
@@ -2684,7 +2684,7 @@ Actual: ${stringify(fullActual)}`);
                 const change = ts.first(codeFix.changes);
                 ts.Debug.assert(change.fileName === fileName);
                 this.applyEdits(change.fileName, change.textChanges, /*isFormattingEdit*/ false);
-                const text = this.rangeText(range);
+                const text = range ? this.rangeText(range) : this.getFileContent(this.activeFile.fileName);
                 actualTextArray.push(text);
                 scriptInfo.updateContent(originalContent);
             }
