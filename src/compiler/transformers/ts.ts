@@ -533,7 +533,6 @@ namespace ts {
             }
         }
 
-
         function visitSourceFile(node: SourceFile) {
             const alwaysStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") &&
                 !(isExternalModule(node) && moduleKind >= ModuleKind.ES2015);
