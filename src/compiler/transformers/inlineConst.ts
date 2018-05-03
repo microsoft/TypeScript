@@ -37,7 +37,7 @@ namespace ts {
         }
 
         function visitVariableDeclaration(declaration: VariableDeclaration) {
-            const visited = visitEachChild(declaration, visitor, context)
+            const visited = visitEachChild(declaration, visitor, context);
             const node = resolveValueDeclaration(<VariableDeclaration>visited.original || visited);
             return node && node.resolvedValue ? undefined : node;
         }
@@ -88,7 +88,7 @@ namespace ts {
             const declaration = resolver.getReferencedValueDeclaration(identifier);
             if (declaration) {
                 if (isVariableDeclaration(declaration)) {
-                    const result = resolveValueDeclaration(declaration)
+                    const result = resolveValueDeclaration(declaration);
                     return result && result.resolvedValue || identifier;
                 }
             }
