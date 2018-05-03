@@ -36,22 +36,45 @@ else if (process.env.PATH !== undefined) {
     process.env.PATH = nodeModulesPathPrefix + process.env.PATH;
 }
 
+/**
+ * @param diagnostics {ts.Diagnostic[]}
+ * @param [pretty] {boolean}
+ */
+function diagnosticsToString(diagnostics, pretty) {
+    const host = {
+        getCurrentDirectory() { return process.cwd(); },
+        getCanonicalFileName(fileName) { return fileName; },
+        getNewLine() { return os.EOL; }
+    };
+    return pretty ? ts.formatDiagnosticsWithColorAndContext(diagnostics, host) :
+        ts.formatDiagnostics(diagnostics, host);
+}
+
+/** @param diagnostics {ts.Diagnostic[]} */
+function reportDiagnostics(diagnostics) {
+    console.log(diagnosticsToString(diagnostics, process.stdout.isTTY));
+}
+
+/** @param jsonPath {string} */
+function readJson(jsonPath) {
+    const jsonText = fs.readFileSync(jsonPath, "utf8");
+    const result = ts.parseConfigFileTextToJson(jsonPath, jsonText);
+    if (result.error) {
+        reportDiagnostics([result.error]);
+        throw new Error("An error occurred during parse.");
+    }
+    return result.config;
+}
+
+/** @param configPath {string} */
 function filesFromConfig(configPath) {
-    var configText = fs.readFileSync(configPath).toString();
-    var config = ts.parseConfigFileTextToJson(configPath, configText);
-    if (config.error) {
-        throw new Error(diagnosticsToString([config.error]));
-    }
-    const configFileContent = ts.parseJsonConfigFileContent(config.config, ts.sys, path.dirname(configPath));
+    const config = readJson(configPath);
+    const configFileContent = ts.parseJsonConfigFileContent(config, ts.sys, path.dirname(configPath));
     if (configFileContent.errors && configFileContent.errors.length) {
-        throw new Error(diagnosticsToString(configFileContent.errors));
+        reportDiagnostics(configFileContent.errors);
+        throw new Error("An error occurred during parse.");
     }
-
     return configFileContent.fileNames;
-
-    function diagnosticsToString(s) {
-        return s.map(function(e) { return ts.flattenDiagnosticMessageText(e.messageText, ts.sys.newLine); }).join(ts.sys.newLine);
-    }
 }
 
 function toNs(diff) {
@@ -91,88 +114,8 @@ var harnessSources = filesFromConfig("./src/harness/tsconfig.json");
 
 var typesMapOutputPath = path.join(builtLocalDirectory, 'typesMap.json');
 
-var es2015LibrarySources = [
-    "es2015.core.d.ts",
-    "es2015.collection.d.ts",
-    "es2015.generator.d.ts",
-    "es2015.iterable.d.ts",
-    "es2015.promise.d.ts",
-    "es2015.proxy.d.ts",
-    "es2015.reflect.d.ts",
-    "es2015.symbol.d.ts",
-    "es2015.symbol.wellknown.d.ts"
-];
-
-var es2015LibrarySourceMap = es2015LibrarySources.map(function (source) {
-    return { target: "lib." + source, sources: ["header.d.ts", source] };
-});
-
-var es2016LibrarySource = ["es2016.array.include.d.ts"];
-
-var es2016LibrarySourceMap = es2016LibrarySource.map(function (source) {
-    return { target: "lib." + source, sources: ["header.d.ts", source] };
-});
-
-var es2017LibrarySource = [
-    "es2017.object.d.ts",
-    "es2017.sharedmemory.d.ts",
-    "es2017.string.d.ts",
-    "es2017.intl.d.ts",
-    "es2017.typedarrays.d.ts",
-];
-
-var es2017LibrarySourceMap = es2017LibrarySource.map(function (source) {
-    return { target: "lib." + source, sources: ["header.d.ts", source] };
-});
-
-var es2018LibrarySource = [
-    "es2018.regexp.d.ts",
-    "es2018.promise.d.ts",
-    "es2018.intl.d.ts"
-];
-
-var es2018LibrarySourceMap = es2018LibrarySource.map(function (source) {
-    return { target: "lib." + source, sources: ["header.d.ts", source] };
-});
-
-var esnextLibrarySource = [
-    "esnext.asynciterable.d.ts",
-    "esnext.array.d.ts"
-];
-
-var esnextLibrarySourceMap = esnextLibrarySource.map(function (source) {
-    return { target: "lib." + source, sources: ["header.d.ts", source] };
-});
-
-var hostsLibrarySources = ["dom.generated.d.ts", "webworker.importscripts.d.ts", "scripthost.d.ts"];
-
-var librarySourceMap = [
-    // Host library
-    { target: "lib.dom.d.ts", sources: ["header.d.ts", "dom.generated.d.ts"] },
-    { target: "lib.dom.iterable.d.ts", sources: ["header.d.ts", "dom.iterable.d.ts"] },
-    { target: "lib.webworker.d.ts", sources: ["header.d.ts", "webworker.generated.d.ts"] },
-    { target: "lib.scripthost.d.ts", sources: ["header.d.ts", "scripthost.d.ts"] },
-
-    // JavaScript library
-    { target: "lib.es5.d.ts", sources: ["header.d.ts", "es5.d.ts"] },
-    { target: "lib.es2015.d.ts", sources: ["header.d.ts", "es2015.d.ts"] },
-    { target: "lib.es2016.d.ts", sources: ["header.d.ts", "es2016.d.ts"] },
-    { target: "lib.es2017.d.ts", sources: ["header.d.ts", "es2017.d.ts"] },
-    { target: "lib.es2018.d.ts", sources: ["header.d.ts", "es2018.d.ts"] },
-    { target: "lib.esnext.d.ts", sources: ["header.d.ts", "esnext.d.ts"] },
-
-    // JavaScript + all host library
-    { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources) },
-    { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") },
-    { target: "lib.es2016.full.d.ts", sources: ["header.d.ts", "es2016.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
-    { target: "lib.es2017.full.d.ts", sources: ["header.d.ts", "es2017.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
-    { target: "lib.es2018.full.d.ts", sources: ["header.d.ts", "es2018.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
-    { target: "lib.esnext.full.d.ts", sources: ["header.d.ts", "esnext.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
-].concat(es2015LibrarySourceMap, es2016LibrarySourceMap, es2017LibrarySourceMap, es2018LibrarySourceMap, esnextLibrarySourceMap);
-
-var libraryTargets = librarySourceMap.map(function (f) {
-    return path.join(builtLocalDirectory, f.target);
-});
+/** @type {{ libs: string[], paths?: Record<string, string>, sources?: Record<string, string[]> }} */
+var libraries = readJson("./src/lib/libs.json");
 
 /**
  * .lcg file is what localization team uses to know what messages to localize.
@@ -348,18 +291,16 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
 // Prerequisite task for built directory and library typings
 directory(builtLocalDirectory);
 
-for (var i in libraryTargets) {
-    (function (i) {
-        var entry = librarySourceMap[i];
-        var target = libraryTargets[i];
-        var sources = [copyright].concat(entry.sources.map(function (s) {
-            return path.join(libraryDirectory, s);
-        }));
-        file(target, [builtLocalDirectory].concat(sources), function () {
-            concatenateFiles(target, sources);
-        });
-    })(i);
-}
+var libraryTargets = libraries.libs.map(function (lib) {
+    var relativeSources = ["header.d.ts"].concat(libraries.sources && libraries.sources[lib] || [lib + ".d.ts"]);
+    var relativeTarget = libraries.paths && libraries.paths[lib] || ("lib." + lib + ".d.ts");
+    var sources = [copyright].concat(relativeSources.map(s => path.join(libraryDirectory, s)));
+    var target = path.join(builtLocalDirectory, relativeTarget);
+    file(target, [builtLocalDirectory].concat(sources), function () {
+        concatenateFiles(target, sources);
+    });
+    return target;
+});
 
 // Lib target to build the library files
 desc("Builds the library targets");
