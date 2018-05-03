@@ -13,7 +13,7 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentLists
   Types of property 'c' are incompatible.
     Type '"y"[]' is not assignable to type '"x"[]'.
       Type '"y"' is not assignable to type '"x"'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts(32,41): error TS1350: No value provided for required type argument 'R'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts(32,41): error TS1351: No value provided for required type argument 'R'.
 
 
 ==== tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentListsWithNamedTypeArguments/typeArgumentListsWithNamedTypeArgumentsComplexExamples.ts (5 errors) ====
@@ -69,5 +69,5 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/typeArgumentLists
     type InferredReturnType2<R, F extends (...args: any[]) => R = any> = R;
     const expectError4: InferredReturnType2<F = () => string> = "test"; // Didn't fulfill R, issues error
                                             ~~~~~~~~~~~~~~~~
-!!! error TS1350: No value provided for required type argument 'R'.
+!!! error TS1351: No value provided for required type argument 'R'.
     
