@@ -5,8 +5,8 @@ namespace ts {
         const checker = program.getDiagnosticsProducingTypeChecker();
         const diags: Diagnostic[] = [];
 
-        if (sourceFile.commonJsModuleIndicator) {
-            diags.push(createDiagnosticForNode(sourceFile.commonJsModuleIndicator, Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES6_module));
+        if (sourceFile.commonJsModuleIndicator && (programContainsEs6Modules(program) || compilerOptionsIndicateEs6Modules(program.getCompilerOptions()))) {
+            diags.push(createDiagnosticForNode(getErrorNodeFromCommonJsIndicator(sourceFile.commonJsModuleIndicator), Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES6_module));
         }
 
         const isJsFile = isSourceFileJavaScript(sourceFile);
@@ -31,6 +31,19 @@ namespace ts {
             node.forEachChild(check);
         }
         check(sourceFile);
+
+        if (!isJsFile) {
+            for (const statement of sourceFile.statements) {
+                if (isVariableStatement(statement) &&
+                    statement.declarationList.flags & NodeFlags.Const &&
+                    statement.declarationList.declarations.length === 1) {
+                    const init = statement.declarationList.declarations[0].initializer;
+                    if (init && isRequireCall(init, /*checkArgumentIsStringLiteralLike*/ true)) {
+                        diags.push(createDiagnosticForNode(init, Diagnostics.require_call_may_be_converted_to_an_import));
+                    }
+                }
+            }
+        }
 
         if (getAllowSyntheticDefaultImports(program.getCompilerOptions())) {
             for (const moduleSpecifier of sourceFile.imports) {
@@ -60,5 +73,9 @@ namespace ts {
             default:
                 return undefined;
         }
+    }
+
+    function getErrorNodeFromCommonJsIndicator(commonJsModuleIndicator: Node): Node {
+        return isBinaryExpression(commonJsModuleIndicator) ? commonJsModuleIndicator.left : commonJsModuleIndicator;
     }
 }

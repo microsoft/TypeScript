@@ -1,7 +1,3 @@
-/// <reference path="checker.ts" />
-/// <reference path="factory.ts" />
-/// <reference path="utilities.ts" />
-
 namespace ts {
     const isTypeNodeOrTypeParameterDeclaration = or(isTypeNode, isTypeParameterDeclaration);
 
@@ -482,6 +478,7 @@ namespace ts {
             case SyntaxKind.TaggedTemplateExpression:
                 return updateTaggedTemplate(<TaggedTemplateExpression>node,
                     visitNode((<TaggedTemplateExpression>node).tag, visitor, isExpression),
+                    visitNodes((<TaggedTemplateExpression>node).typeArguments, visitor, isExpression),
                     visitNode((<TaggedTemplateExpression>node).template, visitor, isTemplateLiteral));
 
             case SyntaxKind.TypeAssertionExpression:

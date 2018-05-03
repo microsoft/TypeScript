@@ -1,11 +1,11 @@
-tests/cases/compiler/argumentsObjectIterator02_ES5.ts(2,26): error TS2304: Cannot find name 'Symbol'.
+tests/cases/compiler/argumentsObjectIterator02_ES5.ts(2,26): error TS2693: 'Symbol' only refers to a type, but is being used as a value here.
 
 
 ==== tests/cases/compiler/argumentsObjectIterator02_ES5.ts (1 errors) ====
     function doubleAndReturnAsArray(x: number, y: number, z: number): [number, number, number] {
         let blah = arguments[Symbol.iterator];
                              ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
+!!! error TS2693: 'Symbol' only refers to a type, but is being used as a value here.
     
         let result = [];
         for (let arg of blah()) {

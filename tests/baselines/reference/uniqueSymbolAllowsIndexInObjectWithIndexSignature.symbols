@@ -2,7 +2,7 @@
 // https://github.com/Microsoft/TypeScript/issues/21962
 export const SYM = Symbol('a unique symbol');
 >SYM : Symbol(SYM, Decl(uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts, 1, 12))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 
 export interface I {
 >I : Symbol(I, Decl(uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts, 1, 45))

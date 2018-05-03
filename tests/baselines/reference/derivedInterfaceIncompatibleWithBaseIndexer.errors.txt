@@ -15,23 +15,23 @@ tests/cases/conformance/interfaces/interfaceDeclarations/derivedInterfaceIncompa
     
     interface Derived extends Base {
         1: { y: number } // error
-        ~~~~~~~~~~~~~~~~
+        ~
 !!! error TS2411: Property '1' of type '{ y: number; }' is not assignable to string index type '{ x: number; }'.
-        ~~~~~~~~~~~~~~~~
+        ~
 !!! error TS2412: Property '1' of type '{ y: number; }' is not assignable to numeric index type '{ x: number; y: number; }'.
     }
     
     interface Derived2 extends Base {
         '1': { y: number } // error
-        ~~~~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property ''1'' of type '{ y: number; }' is not assignable to string index type '{ x: number; }'.
-        ~~~~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2412: Property ''1'' of type '{ y: number; }' is not assignable to numeric index type '{ x: number; y: number; }'.
     }
     
     interface Derived3 extends Base {
         foo: { y: number } // error
-        ~~~~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type '{ y: number; }' is not assignable to string index type '{ x: number; }'.
     }
     
@@ -44,7 +44,7 @@ tests/cases/conformance/interfaces/interfaceDeclarations/derivedInterfaceIncompa
     // satisifies string indexer but not numeric indexer
     interface Derived5 extends Base {
         1: { x: number } // error
-        ~~~~~~~~~~~~~~~~
+        ~
 !!! error TS2412: Property '1' of type '{ x: number; }' is not assignable to numeric index type '{ x: number; y: number; }'.
     }
     

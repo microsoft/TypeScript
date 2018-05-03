@@ -10,5 +10,5 @@
         "types": ["node"],
         "lib": ["esnext", "dom"],
     },
-    "include": ["node_modules/url-search-params"]
+    "include": ["node_modules/url-search-params/build/url-search-params.node.js"]
 }

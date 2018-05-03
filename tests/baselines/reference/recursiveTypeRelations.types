@@ -1,7 +1,7 @@
 === tests/cases/compiler/recursiveTypeRelations.ts ===
 // Repro from #14896
 
-type Attributes<Keys extends string> = {
+type Attributes<Keys extends keyof any> = {
 >Attributes : Attributes<Keys>
 >Keys : Keys
 
@@ -97,7 +97,7 @@ export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNam
     if (typeof arg == "object") {
 >typeof arg == "object" : boolean
 >typeof arg : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->arg : ClassNameObjectMap<S>
+>arg : ClassNameArg<S>
 >"object" : "object"
 
       return Object.keys(arg).reduce<ClassNameObject>((obj: ClassNameObject, key: keyof S) => {

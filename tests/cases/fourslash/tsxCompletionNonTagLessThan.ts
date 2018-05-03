@@ -5,6 +5,7 @@
 ////[].map<numb/*b*/;
 ////1 < Infini/*c*/;
 
+verify.completions({ marker: "a", includes: "number", excludes: "SVGNumber" })
 for (const marker of ["a", "b"]) {
     goTo.marker(marker);
     verify.completionListContains("number");

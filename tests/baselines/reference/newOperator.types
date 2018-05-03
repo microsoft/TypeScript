@@ -49,6 +49,7 @@ var t3 = new string[]( );
 >new string[]( ) : any
 >string[] : any
 >string : any
+> : any
 
 var t4 =
 >t4 : any
@@ -62,6 +63,8 @@ string
 
 [
     ]
+> : any
+
     (
         );
 
@@ -109,6 +112,7 @@ class S {
 >M.T : typeof M.T
 >M : typeof M
 >T : typeof M.T
+> : any
     }
 }
 

@@ -365,24 +365,28 @@ module TypeScript {
 >new TokenInfo[] : any
 >TokenInfo[] : any
 >TokenInfo : typeof TokenInfo
+> : any
 
     export var nodeTypeTable = new string[];
 >nodeTypeTable : any
 >new string[] : any
 >string[] : any
 >string : any
+> : any
 
     export var nodeTypeToTokTable = new number[];
 >nodeTypeToTokTable : any
 >new number[] : any
 >number[] : any
 >number : any
+> : any
 
     export var noRegexTable = new boolean[];
 >noRegexTable : any
 >new boolean[] : any
 >boolean[] : any
 >boolean : any
+> : any
 
     noRegexTable[TokenID.Identifier] = true;
 >noRegexTable[TokenID.Identifier] = true : true
@@ -3949,6 +3953,7 @@ module TypeScript {
 >new Token[] : any
 >Token[] : any
 >Token : typeof Token
+> : any
 
     export function initializeStaticTokens() {
 >initializeStaticTokens : () => void

@@ -1,7 +1,3 @@
-/// <reference path="program.ts"/>
-/// <reference path="watch.ts"/>
-/// <reference path="commandLineParser.ts"/>
-
 namespace ts {
     interface Statistic {
         name: string;
@@ -23,9 +19,16 @@ namespace ts {
 
     let reportDiagnostic = createDiagnosticReporter(sys);
     function updateReportDiagnostic(options: CompilerOptions) {
-        if (options.pretty) {
+        if (shouldBePretty(options)) {
             reportDiagnostic = createDiagnosticReporter(sys, /*pretty*/ true);
         }
+    }
+
+    function shouldBePretty(options: CompilerOptions) {
+        if (typeof options.pretty === "undefined") {
+            return !!sys.writeOutputIsTTY && sys.writeOutputIsTTY();
+        }
+        return options.pretty;
     }
 
     function padLeft(s: string, length: number) {
@@ -151,9 +154,12 @@ namespace ts {
 
     function updateWatchCompilationHost(watchCompilerHost: WatchCompilerHost<EmitAndSemanticDiagnosticsBuilderProgram>) {
         const compileUsingBuilder = watchCompilerHost.createProgram;
-        watchCompilerHost.createProgram = (rootNames, options, host, oldProgram) => {
-            enableStatistics(options);
-            return compileUsingBuilder(rootNames, options, host, oldProgram);
+        watchCompilerHost.createProgram = (rootNames, options, host, oldProgram, configFileParsingDiagnostics) => {
+            Debug.assert(rootNames !== undefined || (options === undefined && !!oldProgram));
+            if (options !== undefined) {
+                enableStatistics(options);
+            }
+            return compileUsingBuilder(rootNames, options, host, oldProgram, configFileParsingDiagnostics);
         };
         const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate;
         watchCompilerHost.afterProgramCreate = builderProgram => {
@@ -163,7 +169,7 @@ namespace ts {
     }
 
     function createWatchStatusReporter(options: CompilerOptions) {
-        return ts.createWatchStatusReporter(sys, !!options.pretty);
+        return ts.createWatchStatusReporter(sys, shouldBePretty(options));
     }
 
     function createWatchOfConfigFile(configParseResult: ParsedCommandLine, optionsToExtend: CompilerOptions) {

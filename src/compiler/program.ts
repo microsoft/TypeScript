@@ -1,7 +1,3 @@
-/// <reference path="sys.ts" />
-/// <reference path="emitter.ts" />
-/// <reference path="core.ts" />
-
 namespace ts {
     const ignoreDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-ignore)?)/;
 
@@ -61,7 +57,7 @@ namespace ts {
             return currentDirectory;
         }
 
-        return getNormalizedPathFromPathComponents(commonPathComponents);
+        return getPathFromPathComponents(commonPathComponents);
     }
 
     interface OutputFingerprint {
@@ -626,9 +622,6 @@ namespace ts {
 
         Debug.assert(!!missingFilePaths);
 
-        // unconditionally set moduleResolutionCache to undefined to avoid unnecessary leaks
-        moduleResolutionCache = undefined;
-
         // Release any files we have acquired in the old program but are
         // not part of the new program.
         if (oldProgram && host.onReleaseOldSourceFile) {
@@ -674,7 +667,8 @@ namespace ts {
             sourceFileToPackageName,
             redirectTargetsSet,
             isEmittedFile,
-            getConfigFileParsingDiagnostics
+            getConfigFileParsingDiagnostics,
+            getResolvedModuleWithFailedLookupLocationsFromCache,
         };
 
         verifyCompilerOptions();
@@ -682,6 +676,10 @@ namespace ts {
         performance.measure("Program", "beforeProgram", "afterProgram");
 
         return program;
+
+        function getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations {
+            return moduleResolutionCache && resolveModuleNameFromCache(moduleName, containingFile, moduleResolutionCache);
+        }
 
         function toPath(fileName: string): Path {
             return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
@@ -988,7 +986,7 @@ namespace ts {
                         // moduleAugmentations has changed
                         oldProgram.structureIsReused = StructureIsReused.SafeModules;
                     }
-                    if ((oldSourceFile.flags & NodeFlags.PossiblyContainsDynamicImport) !== (newSourceFile.flags & NodeFlags.PossiblyContainsDynamicImport)) {
+                    if ((oldSourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags) !== (newSourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags)) {
                         // dynamicImport has changed
                         oldProgram.structureIsReused = StructureIsReused.SafeModules;
                     }
@@ -1298,9 +1296,9 @@ namespace ts {
                 Debug.assert(!!sourceFile.bindDiagnostics);
 
                 const isCheckJs = isCheckJsEnabledForFile(sourceFile, options);
-                // By default, only type-check .ts, .tsx, and 'External' files (external files are added by plugins)
+                // By default, only type-check .ts, .tsx, 'Deferred' and 'External' files (external files are added by plugins)
                 const includeBindAndCheckDiagnostics = sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX ||
-                    sourceFile.scriptKind === ScriptKind.External || isCheckJs;
+                    sourceFile.scriptKind === ScriptKind.External || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred;
                 const bindDiagnostics = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
                 const checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
@@ -1627,6 +1625,9 @@ namespace ts {
                 if ((file.flags & NodeFlags.PossiblyContainsDynamicImport) || isJavaScriptFile) {
                     collectDynamicImportOrRequireCalls(node);
                 }
+            }
+            if ((file.flags & NodeFlags.PossiblyContainsDynamicImport) || isJavaScriptFile) {
+                collectDynamicImportOrRequireCalls(file.endOfFileToken);
             }
 
             file.imports = imports || emptyArray;
@@ -2008,7 +2009,8 @@ namespace ts {
                         && !options.noResolve
                         && i < file.imports.length
                         && !elideImport
-                        && !(isJsFile && !options.allowJs);
+                        && !(isJsFile && !options.allowJs)
+                        && (isInJavaScriptFile(file.imports[i]) || !(file.imports[i].flags & NodeFlags.JSDoc));
 
                     if (elideImport) {
                         modulesWithElidedImports.set(file.path, true);
@@ -2060,6 +2062,10 @@ namespace ts {
         }
 
         function verifyCompilerOptions() {
+            if (options.strictPropertyInitialization && !options.strictNullChecks) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictPropertyInitialization", "strictNullChecks");
+            }
+
             if (options.isolatedModules) {
                 if (options.declaration) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "declaration", "isolatedModules");

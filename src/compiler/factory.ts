@@ -1,6 +1,3 @@
-/// <reference path="core.ts"/>
-/// <reference path="utilities.ts"/>
-
 namespace ts {
     function createSynthesizedNode(kind: SyntaxKind): Node {
         const node = createNode(kind, -1, -1);
@@ -191,16 +188,11 @@ namespace ts {
     }
 
     /** Create a unique name generated for a node. */
-    export function getGeneratedNameForNode(node: Node): Identifier;
-    /* @internal */ export function getGeneratedNameForNode(node: Node, shouldSkipNameGenerationScope?: boolean): Identifier; // tslint:disable-line unified-signatures
-    export function getGeneratedNameForNode(node: Node, shouldSkipNameGenerationScope?: boolean): Identifier {
+    export function getGeneratedNameForNode(node: Node): Identifier {
         const name = createIdentifier("");
         name.autoGenerateFlags = GeneratedIdentifierFlags.Node;
         name.autoGenerateId = nextAutoGenerateId;
         name.original = node;
-        if (shouldSkipNameGenerationScope) {
-            name.autoGenerateFlags |= GeneratedIdentifierFlags.SkipNameGenerationScope;
-        }
         nextAutoGenerateId++;
         return name;
     }
@@ -1035,17 +1027,32 @@ namespace ts {
             : node;
     }
 
-    export function createTaggedTemplate(tag: Expression, template: TemplateLiteral) {
+    export function createTaggedTemplate(tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
+    export function createTaggedTemplate(tag: Expression, typeArguments: ReadonlyArray<TypeNode>, template: TemplateLiteral): TaggedTemplateExpression;
+    /** @internal */
+    export function createTaggedTemplate(tag: Expression, typeArgumentsOrTemplate: ReadonlyArray<TypeNode> | TemplateLiteral, template?: TemplateLiteral): TaggedTemplateExpression;
+    export function createTaggedTemplate(tag: Expression, typeArgumentsOrTemplate: ReadonlyArray<TypeNode> | TemplateLiteral, template?: TemplateLiteral) {
         const node = <TaggedTemplateExpression>createSynthesizedNode(SyntaxKind.TaggedTemplateExpression);
         node.tag = parenthesizeForAccess(tag);
-        node.template = template;
+        if (template) {
+            node.typeArguments = asNodeArray(typeArgumentsOrTemplate as ReadonlyArray<TypeNode>);
+            node.template = template!;
+        }
+        else {
+            node.typeArguments = undefined;
+            node.template = typeArgumentsOrTemplate as TemplateLiteral;
+        }
         return node;
     }
 
-    export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, template: TemplateLiteral) {
+    export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
+    export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, typeArguments: ReadonlyArray<TypeNode>, template: TemplateLiteral): TaggedTemplateExpression;
+    export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, typeArgumentsOrTemplate: ReadonlyArray<TypeNode> | TemplateLiteral, template?: TemplateLiteral) {
         return node.tag !== tag
-            || node.template !== template
-            ? updateNode(createTaggedTemplate(tag, template), node)
+            || (template
+                ? node.typeArguments !== typeArgumentsOrTemplate || node.template !== template
+                : node.typeArguments !== undefined || node.template !== typeArgumentsOrTemplate)
+            ? updateNode(createTaggedTemplate(tag, typeArgumentsOrTemplate, template), node)
             : node;
     }
 

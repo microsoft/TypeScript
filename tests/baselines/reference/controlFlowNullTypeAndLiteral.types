@@ -1,0 +1,99 @@
+=== tests/cases/compiler/controlFlowNullTypeAndLiteral.ts ===
+// Repros from #23771
+
+const myNull: null = null;
+>myNull : null
+>null : null
+>null : null
+
+const objWithValMaybeNull: { val: number | null } = { val: 1 };
+>objWithValMaybeNull : { val: number | null; }
+>val : number | null
+>null : null
+>{ val: 1 } : { val: number; }
+>val : number
+>1 : 1
+
+const addOne = function (num: number) {
+>addOne : (num: number) => number
+>function (num: number) {    return num + 1;} : (num: number) => number
+>num : number
+
+    return num + 1;
+>num + 1 : number
+>num : number
+>1 : 1
+}
+
+if (objWithValMaybeNull.val !== null)
+>objWithValMaybeNull.val !== null : boolean
+>objWithValMaybeNull.val : number | null
+>objWithValMaybeNull : { val: number | null; }
+>val : number | null
+>null : null
+
+    addOne(objWithValMaybeNull.val);
+>addOne(objWithValMaybeNull.val) : number
+>addOne : (num: number) => number
+>objWithValMaybeNull.val : number
+>objWithValMaybeNull : { val: number | null; }
+>val : number
+
+if (objWithValMaybeNull.val !== myNull)
+>objWithValMaybeNull.val !== myNull : boolean
+>objWithValMaybeNull.val : number | null
+>objWithValMaybeNull : { val: number | null; }
+>val : number | null
+>myNull : null
+
+    addOne(objWithValMaybeNull.val);
+>addOne(objWithValMaybeNull.val) : number
+>addOne : (num: number) => number
+>objWithValMaybeNull.val : number
+>objWithValMaybeNull : { val: number | null; }
+>val : number
+
+if (objWithValMaybeNull.val === null)
+>objWithValMaybeNull.val === null : boolean
+>objWithValMaybeNull.val : number | null
+>objWithValMaybeNull : { val: number | null; }
+>val : number | null
+>null : null
+
+    addOne(objWithValMaybeNull.val);    // Error
+>addOne(objWithValMaybeNull.val) : number
+>addOne : (num: number) => number
+>objWithValMaybeNull.val : null
+>objWithValMaybeNull : { val: number | null; }
+>val : null
+
+if (objWithValMaybeNull.val === myNull)
+>objWithValMaybeNull.val === myNull : boolean
+>objWithValMaybeNull.val : number | null
+>objWithValMaybeNull : { val: number | null; }
+>val : number | null
+>myNull : null
+
+    addOne(objWithValMaybeNull.val);    // Error
+>addOne(objWithValMaybeNull.val) : number
+>addOne : (num: number) => number
+>objWithValMaybeNull.val : null
+>objWithValMaybeNull : { val: number | null; }
+>val : null
+
+function f(x: number | null) {
+>f : (x: number | null) => void
+>x : number | null
+>null : null
+
+    if(x === myNull) {
+>x === myNull : boolean
+>x : number | null
+>myNull : null
+
+        const s: string = x;  // Error
+>s : string
+>x : null
+    }
+}
+

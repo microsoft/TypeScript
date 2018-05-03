@@ -1,8 +1,3 @@
-/// <reference path="formattingContext.ts" />
-/// <reference path="formattingScanner.ts" />
-/// <reference path="rule.ts" />
-/// <reference path="rulesMap.ts" />
-
 /* @internal */
 namespace ts.formatting {
     export interface FormatContext {
