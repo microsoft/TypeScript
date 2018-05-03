@@ -52,6 +52,7 @@ module Test {
 >tokens : any
 >Gar[] : any
 >Gar : typeof Gar
+> : any
 
        endState: state
 >endState : IState

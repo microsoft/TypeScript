@@ -12,10 +12,10 @@ namespace ts.FindAllReferences {
     export type ImportTracker = (exportSymbol: Symbol, exportInfo: ExportInfo, isForRename: boolean) => ImportsResult;
 
     /** Creates the imports map and returns an ImportTracker that uses it. Call this lazily to avoid calling `getDirectImportsMap` unnecessarily.  */
-    export function createImportTracker(sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cancellationToken: CancellationToken): ImportTracker {
+    export function createImportTracker(sourceFiles: ReadonlyArray<SourceFile>, sourceFilesSet: ReadonlyMap<true>, checker: TypeChecker, cancellationToken: CancellationToken): ImportTracker {
         const allDirectImports = getDirectImportsMap(sourceFiles, checker, cancellationToken);
         return (exportSymbol, exportInfo, isForRename) => {
-            const { directImports, indirectUsers } = getImportersForExport(sourceFiles, allDirectImports, exportInfo, checker, cancellationToken);
+            const { directImports, indirectUsers } = getImportersForExport(sourceFiles, sourceFilesSet, allDirectImports, exportInfo, checker, cancellationToken);
             return { indirectUsers, ...getSearchesFromDirectImports(directImports, exportSymbol, exportInfo.exportKind, checker, isForRename) };
         };
     }
@@ -33,17 +33,18 @@ namespace ts.FindAllReferences {
     interface AmbientModuleDeclaration extends ModuleDeclaration { body?: ModuleBlock; }
     type SourceFileLike = SourceFile | AmbientModuleDeclaration;
     // Identifier for the case of `const x = require("y")`.
-    type Importer = AnyImportSyntax | Identifier | ExportDeclaration;
+    type Importer = AnyImportOrReExport | ImportTypeNode | Identifier;
     type ImporterOrCallExpression = Importer | CallExpression;
 
     /** Returns import statements that directly reference the exporting module, and a list of files that may access the module through a namespace. */
     function getImportersForExport(
-            sourceFiles: ReadonlyArray<SourceFile>,
-            allDirectImports: Map<ImporterOrCallExpression[]>,
-            { exportingModuleSymbol, exportKind }: ExportInfo,
-            checker: TypeChecker,
-            cancellationToken: CancellationToken
-            ): { directImports: Importer[], indirectUsers: ReadonlyArray<SourceFile> } {
+        sourceFiles: ReadonlyArray<SourceFile>,
+        sourceFilesSet: ReadonlyMap<true>,
+        allDirectImports: Map<ImporterOrCallExpression[]>,
+        { exportingModuleSymbol, exportKind }: ExportInfo,
+        checker: TypeChecker,
+        cancellationToken: CancellationToken
+    ): { directImports: Importer[], indirectUsers: ReadonlyArray<SourceFile> } {
         const markSeenDirectImport = nodeSeenTracker<ImporterOrCallExpression>();
         const markSeenIndirectUser = nodeSeenTracker<SourceFileLike>();
         const directImports: Importer[] = [];
@@ -62,8 +63,8 @@ namespace ts.FindAllReferences {
 
             // Module augmentations may use this module's exports without importing it.
             for (const decl of exportingModuleSymbol.declarations) {
-                if (isExternalModuleAugmentation(decl)) {
-                    addIndirectUser(decl as SourceFileLike);
+                if (isExternalModuleAugmentation(decl) && sourceFilesSet.has(decl.getSourceFile().fileName)) {
+                    addIndirectUser(decl);
                 }
             }
 
@@ -86,7 +87,7 @@ namespace ts.FindAllReferences {
                             if (!isAvailableThroughGlobal) {
                                 const parent = direct.parent!;
                                 if (exportKind === ExportKind.ExportEquals && parent.kind === SyntaxKind.VariableDeclaration) {
-                                    const { name } = parent as ts.VariableDeclaration;
+                                    const { name } = parent as VariableDeclaration;
                                     if (name.kind === SyntaxKind.Identifier) {
                                         directImports.push(name);
                                         break;
@@ -109,7 +110,9 @@ namespace ts.FindAllReferences {
                             }
                             else if (isDefaultImport(direct)) {
                                 const sourceFileLike = getSourceFileLikeForImportDeclaration(direct);
-                                addIndirectUser(sourceFileLike); // Add a check for indirect uses to handle synthetic default imports
+                                if (!isAvailableThroughGlobal) {
+                                    addIndirectUser(sourceFileLike); // Add a check for indirect uses to handle synthetic default imports
+                                }
                                 directImports.push(direct);
                             }
                             else {
@@ -207,8 +210,12 @@ namespace ts.FindAllReferences {
                 return;
             }
 
-            if (decl.kind === ts.SyntaxKind.Identifier) {
+            if (decl.kind === SyntaxKind.Identifier) {
                 handleNamespaceImportLike(decl);
+                return;
+            }
+
+            if (decl.kind === SyntaxKind.ImportType) {
                 return;
             }
 
@@ -247,7 +254,7 @@ namespace ts.FindAllReferences {
                 }
 
                 // 'default' might be accessed as a named import `{ default as foo }`.
-                if (!isForRename && exportKind === ExportKind.Default) {
+                if (exportKind === ExportKind.Default) {
                     searchForNamedImport(namedBindings as NamedImports | undefined);
                 }
             }
@@ -279,7 +286,9 @@ namespace ts.FindAllReferences {
                 if (propertyName) {
                     // This is `import { foo as bar } from "./a"` or `export { foo as bar } from "./a"`. `foo` isn't a local in the file, so just add it as a single reference.
                     singleReferences.push(propertyName);
-                    if (!isForRename) { // If renaming `foo`, don't touch `bar`, just `foo`.
+                    // If renaming `{ foo as bar }`, don't touch `bar`, just `foo`.
+                    // But do rename `foo` in ` { default as foo }` if that's the original export name.
+                    if (!isForRename || name.escapedText === exportSymbol.escapedName) {
                         // Search locally for `bar`.
                         addSearch(name, checker.getSymbolAtLocation(name));
                     }
@@ -319,7 +328,7 @@ namespace ts.FindAllReferences {
 
     export type ModuleReference =
         /** "import" also includes require() calls. */
-        | { kind: "import", literal: StringLiteral }
+        | { kind: "import", literal: StringLiteralLike }
         /** <reference path> or <reference types> */
         | { kind: "reference", referencingFile: SourceFile, ref: FileReference };
     export function findModuleReferences(program: Program, sourceFiles: ReadonlyArray<SourceFile>, searchModuleSymbol: Symbol): ModuleReference[] {
@@ -327,7 +336,7 @@ namespace ts.FindAllReferences {
         const checker = program.getTypeChecker();
         for (const referencingFile of sourceFiles) {
             const searchSourceFile = searchModuleSymbol.valueDeclaration;
-            if (searchSourceFile.kind === ts.SyntaxKind.SourceFile) {
+            if (searchSourceFile.kind === SyntaxKind.SourceFile) {
                 for (const ref of referencingFile.referencedFiles) {
                     if (program.getSourceFileFromReference(referencingFile, ref) === searchSourceFile) {
                         refs.push({ kind: "reference", referencingFile, ref });
@@ -335,7 +344,7 @@ namespace ts.FindAllReferences {
                 }
                 for (const ref of referencingFile.typeReferenceDirectives) {
                     const referenced = program.getResolvedTypeReferenceDirectives().get(ref.fileName);
-                    if (referenced !== undefined && referenced.resolvedFileName === (searchSourceFile as ts.SourceFile).fileName) {
+                    if (referenced !== undefined && referenced.resolvedFileName === (searchSourceFile as SourceFile).fileName) {
                         refs.push({ kind: "reference", referencingFile, ref });
                     }
                 }
@@ -380,10 +389,10 @@ namespace ts.FindAllReferences {
     }
 
     /** Calls `action` for each import, re-export, or require() in a file. */
-    function forEachImport(sourceFile: SourceFile, action: (importStatement: ImporterOrCallExpression, imported: StringLiteral) => void): void {
+    function forEachImport(sourceFile: SourceFile, action: (importStatement: ImporterOrCallExpression, imported: StringLiteralLike) => void): void {
         if (sourceFile.externalModuleIndicator || sourceFile.imports !== undefined) {
-            for (const moduleSpecifier of sourceFile.imports) {
-                action(importerFromModuleSpecifier(moduleSpecifier), moduleSpecifier);
+            for (const i of sourceFile.imports) {
+                action(importFromModuleSpecifier(i), i);
             }
         }
         else {
@@ -392,37 +401,21 @@ namespace ts.FindAllReferences {
                     case SyntaxKind.ExportDeclaration:
                     case SyntaxKind.ImportDeclaration: {
                         const decl = statement as ImportDeclaration | ExportDeclaration;
-                        if (decl.moduleSpecifier && decl.moduleSpecifier.kind === SyntaxKind.StringLiteral) {
-                            action(decl, decl.moduleSpecifier as StringLiteral);
+                        if (decl.moduleSpecifier && isStringLiteral(decl.moduleSpecifier)) {
+                            action(decl, decl.moduleSpecifier);
                         }
                         break;
                     }
 
                     case SyntaxKind.ImportEqualsDeclaration: {
                         const decl = statement as ImportEqualsDeclaration;
-                        const { moduleReference } = decl;
-                        if (moduleReference.kind === SyntaxKind.ExternalModuleReference &&
-                            moduleReference.expression.kind === SyntaxKind.StringLiteral) {
-                            action(decl, moduleReference.expression as StringLiteral);
+                        if (isExternalModuleImportEquals(decl)) {
+                            action(decl, decl.moduleReference.expression);
                         }
                         break;
                     }
                 }
             });
-        }
-    }
-
-    function importerFromModuleSpecifier(moduleSpecifier: StringLiteral): ImporterOrCallExpression {
-        const decl = moduleSpecifier.parent;
-        switch (decl.kind) {
-            case SyntaxKind.CallExpression:
-            case SyntaxKind.ImportDeclaration:
-            case SyntaxKind.ExportDeclaration:
-                return decl as ImportDeclaration | ExportDeclaration | CallExpression;
-            case SyntaxKind.ExternalModuleReference:
-                return (decl as ExternalModuleReference).parent;
-            default:
-                Debug.fail("Unexpected module specifier parent: " + decl.kind);
         }
     }
 
@@ -501,7 +494,7 @@ namespace ts.FindAllReferences {
                 return { kind: ImportExport.Export, symbol, exportInfo: { exportingModuleSymbol, exportKind } };
             }
 
-            function getSpecialPropertyExport(node: ts.BinaryExpression, useLhsSymbol: boolean): ExportedSymbol | undefined {
+            function getSpecialPropertyExport(node: BinaryExpression, useLhsSymbol: boolean): ExportedSymbol | undefined {
                 let kind: ExportKind;
                 switch (getSpecialPropertyAssignmentKind(node)) {
                     case SpecialPropertyAssignmentKind.ExportsProperty:
@@ -577,9 +570,9 @@ namespace ts.FindAllReferences {
     // If a reference is a variable declaration, the exported node would be the variable statement.
     function getExportNode(parent: Node, node: Node): Node | undefined {
         if (parent.kind === SyntaxKind.VariableDeclaration) {
-            const p = parent as ts.VariableDeclaration;
+            const p = parent as VariableDeclaration;
             return p.name !== node ? undefined :
-                p.parent.kind === ts.SyntaxKind.CatchClause ? undefined : p.parent.parent.kind === SyntaxKind.VariableStatement ? p.parent.parent : undefined;
+                p.parent.kind === SyntaxKind.CatchClause ? undefined : p.parent.parent.kind === SyntaxKind.VariableStatement ? p.parent.parent : undefined;
         }
         else {
             return parent;
@@ -651,15 +644,15 @@ namespace ts.FindAllReferences {
         if (parent.kind === SyntaxKind.SourceFile) {
             return parent as SourceFile;
         }
-        Debug.assert(parent.kind === SyntaxKind.ModuleBlock && isAmbientModuleDeclaration(parent.parent));
-        return parent.parent as AmbientModuleDeclaration;
+        Debug.assert(parent.kind === SyntaxKind.ModuleBlock);
+        return cast(parent.parent, isAmbientModuleDeclaration);
     }
 
     function isAmbientModuleDeclaration(node: Node): node is AmbientModuleDeclaration {
         return node.kind === SyntaxKind.ModuleDeclaration && (node as ModuleDeclaration).name.kind === SyntaxKind.StringLiteral;
     }
 
-    function isExternalModuleImportEquals({ moduleReference }: ImportEqualsDeclaration): boolean {
-        return moduleReference.kind === SyntaxKind.ExternalModuleReference && moduleReference.expression.kind === SyntaxKind.StringLiteral;
+    function isExternalModuleImportEquals(eq: ImportEqualsDeclaration): eq is ImportEqualsDeclaration & { moduleReference: { expression: StringLiteral } } {
+        return eq.moduleReference.kind === SyntaxKind.ExternalModuleReference && eq.moduleReference.expression.kind === SyntaxKind.StringLiteral;
     }
 }

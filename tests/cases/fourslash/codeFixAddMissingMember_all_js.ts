@@ -15,11 +15,13 @@
 
 verify.codeFixAll({
     fixId: "addMissingMember",
+    fixAllDescription: "Add all missing members",
     newFileContent:
 `class C {
     y() {
         throw new Error("Method not implemented.");
     }
+
     constructor() {
         this.x = undefined;
     }

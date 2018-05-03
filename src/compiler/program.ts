@@ -1,7 +1,3 @@
-/// <reference path="sys.ts" />
-/// <reference path="emitter.ts" />
-/// <reference path="core.ts" />
-
 namespace ts {
     const ignoreDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-ignore)?)/;
 
@@ -61,7 +57,7 @@ namespace ts {
             return currentDirectory;
         }
 
-        return getNormalizedPathFromPathComponents(commonPathComponents);
+        return getPathFromPathComponents(commonPathComponents);
     }
 
     interface OutputFingerprint {
@@ -198,6 +194,7 @@ namespace ts {
 
     export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[] {
         const diagnostics = [
+            ...program.getConfigFileParsingDiagnostics(),
             ...program.getOptionsDiagnostics(cancellationToken),
             ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
             ...program.getGlobalDiagnostics(cancellationToken),
@@ -227,8 +224,7 @@ namespace ts {
     }
 
     export function formatDiagnostic(diagnostic: Diagnostic, host: FormatDiagnosticsHost): string {
-        const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-        const errorMessage = `${category} TS${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine())}${host.getNewLine()}`;
+        const errorMessage = `${diagnosticCategoryName(diagnostic)} TS${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine())}${host.getNewLine()}`;
 
         if (diagnostic.file) {
             const { line, character } = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
@@ -254,8 +250,9 @@ namespace ts {
     const ellipsis = "...";
     function getCategoryFormat(category: DiagnosticCategory): string {
         switch (category) {
-            case DiagnosticCategory.Warning: return ForegroundColorEscapeSequences.Yellow;
             case DiagnosticCategory.Error: return ForegroundColorEscapeSequences.Red;
+            case DiagnosticCategory.Warning: return ForegroundColorEscapeSequences.Yellow;
+            case DiagnosticCategory.Suggestion: return Debug.fail("Should never get an Info diagnostic on the command line.");
             case DiagnosticCategory.Message: return ForegroundColorEscapeSequences.Blue;
         }
     }
@@ -289,8 +286,8 @@ namespace ts {
                     gutterWidth = Math.max(ellipsis.length, gutterWidth);
                 }
 
-                context += host.getNewLine();
                 for (let i = firstLine; i <= lastLine; i++) {
+                    context += host.getNewLine();
                     // If the error spans over 5 lines, we'll only show the first 2 and last 2 lines,
                     // so we'll skip ahead to the second-to-last line.
                     if (hasMoreThanFiveLines && firstLine + 1 < i && i < lastLine - 1) {
@@ -337,9 +334,7 @@ namespace ts {
                 output += " - ";
             }
 
-            const categoryColor = getCategoryFormat(diagnostic.category);
-            const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-            output += formatColorAndReset(category, categoryColor);
+            output += formatColorAndReset(diagnosticCategoryName(diagnostic), getCategoryFormat(diagnostic.category));
             output += formatColorAndReset(` TS${ diagnostic.code }: `, ForegroundColorEscapeSequences.Grey);
             output += flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine());
 
@@ -456,6 +451,12 @@ namespace ts {
         }
     }
 
+    export function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): ReadonlyArray<Diagnostic> {
+        return configFileParseResult.options.configFile ?
+            configFileParseResult.options.configFile.parseDiagnostics.concat(configFileParseResult.errors) :
+            configFileParseResult.errors;
+    }
+
     /**
      * Determined if source file needs to be re-created even if its text hasn't changed
      */
@@ -487,9 +488,10 @@ namespace ts {
      * @param options - The compiler options which should be used.
      * @param host - The host interacts with the underlying file system.
      * @param oldProgram - Reuses an old program structure.
+     * @param configFileParsingDiagnostics - error during config file parsing
      * @returns A 'Program' object.
      */
-    export function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program {
+    export function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program {
         let program: Program;
         let files: SourceFile[] = [];
         let commonSourceDirectory: string;
@@ -540,7 +542,7 @@ namespace ts {
         let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string, reusedNames?: string[]) => ResolvedModuleFull[];
         const hasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
         if (host.resolveModuleNames) {
-            resolveModuleNamesWorker = (moduleNames, containingFile, reusedNames) => host.resolveModuleNames(checkAllDefined(moduleNames), containingFile, reusedNames).map(resolved => {
+            resolveModuleNamesWorker = (moduleNames, containingFile, reusedNames) => host.resolveModuleNames(Debug.assertEachDefined(moduleNames), containingFile, reusedNames).map(resolved => {
                 // An older host may have omitted extension, in which case we should infer it from the file extension of resolvedFileName.
                 if (!resolved || (resolved as ResolvedModuleFull).extension !== undefined) {
                     return resolved as ResolvedModuleFull;
@@ -553,16 +555,16 @@ namespace ts {
         else {
             moduleResolutionCache = createModuleResolutionCache(currentDirectory, x => host.getCanonicalFileName(x));
             const loader = (moduleName: string, containingFile: string) => resolveModuleName(moduleName, containingFile, options, host, moduleResolutionCache).resolvedModule;
-            resolveModuleNamesWorker = (moduleNames, containingFile) => loadWithLocalCache(checkAllDefined(moduleNames), containingFile, loader);
+            resolveModuleNamesWorker = (moduleNames, containingFile) => loadWithLocalCache(Debug.assertEachDefined(moduleNames), containingFile, loader);
         }
 
         let resolveTypeReferenceDirectiveNamesWorker: (typeDirectiveNames: string[], containingFile: string) => ResolvedTypeReferenceDirective[];
         if (host.resolveTypeReferenceDirectives) {
-            resolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile) => host.resolveTypeReferenceDirectives(checkAllDefined(typeDirectiveNames), containingFile);
+            resolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile) => host.resolveTypeReferenceDirectives(Debug.assertEachDefined(typeDirectiveNames), containingFile);
         }
         else {
             const loader = (typesRef: string, containingFile: string) => resolveTypeReferenceDirective(typesRef, containingFile, options, host).resolvedTypeReferenceDirective;
-            resolveTypeReferenceDirectiveNamesWorker = (typeReferenceDirectiveNames, containingFile) => loadWithLocalCache(checkAllDefined(typeReferenceDirectiveNames), containingFile, loader);
+            resolveTypeReferenceDirectiveNamesWorker = (typeReferenceDirectiveNames, containingFile) => loadWithLocalCache(Debug.assertEachDefined(typeReferenceDirectiveNames), containingFile, loader);
         }
 
         // Map from a stringified PackageId to the source file with that id.
@@ -571,7 +573,6 @@ namespace ts {
         const packageIdToSourceFile = createMap<SourceFile>();
         // Maps from a SourceFile's `.path` to the name of the package it was imported with.
         let sourceFileToPackageName = createMap<string>();
-        // See `sourceFileIsRedirectedTo`.
         let redirectTargetsSet = createMap<true>();
 
         const filesByName = createMap<SourceFile | undefined>();
@@ -605,8 +606,9 @@ namespace ts {
             if (!skipDefaultLib) {
                 // If '--lib' is not specified, include default library file according to '--target'
                 // otherwise, using options specified in '--lib' instead of '--target' default library file
-                if (!options.lib) {
-                    processRootFile(getDefaultLibraryFileName(), /*isDefaultLib*/ true);
+                const defaultLibraryFileName = getDefaultLibraryFileName();
+                if (!options.lib && defaultLibraryFileName) {
+                    processRootFile(defaultLibraryFileName, /*isDefaultLib*/ true);
                 }
                 else {
                     forEach(options.lib, libFileName => {
@@ -619,9 +621,6 @@ namespace ts {
         }
 
         Debug.assert(!!missingFilePaths);
-
-        // unconditionally set moduleResolutionCache to undefined to avoid unnecessary leaks
-        moduleResolutionCache = undefined;
 
         // Release any files we have acquired in the old program but are
         // not part of the new program.
@@ -667,7 +666,9 @@ namespace ts {
             getSourceFileFromReference,
             sourceFileToPackageName,
             redirectTargetsSet,
-            isEmittedFile
+            isEmittedFile,
+            getConfigFileParsingDiagnostics,
+            getResolvedModuleWithFailedLookupLocationsFromCache,
         };
 
         verifyCompilerOptions();
@@ -675,6 +676,10 @@ namespace ts {
         performance.measure("Program", "beforeProgram", "afterProgram");
 
         return program;
+
+        function getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations {
+            return moduleResolutionCache && resolveModuleNameFromCache(moduleName, containingFile, moduleResolutionCache);
+        }
 
         function toPath(fileName: string): Path {
             return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
@@ -981,7 +986,7 @@ namespace ts {
                         // moduleAugmentations has changed
                         oldProgram.structureIsReused = StructureIsReused.SafeModules;
                     }
-                    if ((oldSourceFile.flags & NodeFlags.PossiblyContainsDynamicImport) !== (newSourceFile.flags & NodeFlags.PossiblyContainsDynamicImport)) {
+                    if ((oldSourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags) !== (newSourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags)) {
                         // dynamicImport has changed
                         oldProgram.structureIsReused = StructureIsReused.SafeModules;
                     }
@@ -1110,7 +1115,7 @@ namespace ts {
             // otherwise, using options specified in '--lib' instead of '--target' default library file
             const equalityComparer = host.useCaseSensitiveFileNames() ? equateStringsCaseSensitive : equateStringsCaseInsensitive;
             if (!options.lib) {
-               return equalityComparer(file.fileName, getDefaultLibraryFileName());
+                return equalityComparer(file.fileName, getDefaultLibraryFileName());
             }
             else {
                 return forEach(options.lib, libFileName => equalityComparer(file.fileName, combinePaths(defaultLibraryPath, libFileName)));
@@ -1291,9 +1296,9 @@ namespace ts {
                 Debug.assert(!!sourceFile.bindDiagnostics);
 
                 const isCheckJs = isCheckJsEnabledForFile(sourceFile, options);
-                // By default, only type-check .ts, .tsx, and 'External' files (external files are added by plugins)
+                // By default, only type-check .ts, .tsx, 'Deferred' and 'External' files (external files are added by plugins)
                 const includeBindAndCheckDiagnostics = sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX ||
-                    sourceFile.scriptKind === ScriptKind.External || isCheckJs;
+                    sourceFile.scriptKind === ScriptKind.External || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred;
                 const bindDiagnostics = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
                 const checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
@@ -1460,8 +1465,10 @@ namespace ts {
                         case SyntaxKind.CallExpression:
                         case SyntaxKind.NewExpression:
                         case SyntaxKind.ExpressionWithTypeArguments:
+                        case SyntaxKind.JsxSelfClosingElement:
+                        case SyntaxKind.JsxOpeningElement:
                             // Check type arguments
-                            if (nodes === (<CallExpression | NewExpression | ExpressionWithTypeArguments>parent).typeArguments) {
+                            if (nodes === (<CallExpression | NewExpression | ExpressionWithTypeArguments | JsxOpeningLikeElement>parent).typeArguments) {
                                 diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.type_arguments_can_only_be_used_in_a_ts_file));
                                 return;
                             }
@@ -1568,6 +1575,10 @@ namespace ts {
             return sortAndDeduplicateDiagnostics(getDiagnosticsProducingTypeChecker().getGlobalDiagnostics().slice());
         }
 
+        function getConfigFileParsingDiagnostics(): ReadonlyArray<Diagnostic> {
+            return configFileParsingDiagnostics || emptyArray;
+        }
+
         function processRootFile(fileName: string, isDefaultLib: boolean) {
             processSourceFile(normalizePath(fileName), isDefaultLib, /*packageId*/ undefined);
         }
@@ -1576,10 +1587,10 @@ namespace ts {
             return a.fileName === b.fileName;
         }
 
-        function moduleNameIsEqualTo(a: StringLiteral | Identifier, b: StringLiteral | Identifier): boolean {
-            return a.kind === SyntaxKind.StringLiteral
-                ? b.kind === SyntaxKind.StringLiteral && a.text === b.text
-                : b.kind === SyntaxKind.Identifier && a.escapedText === b.escapedText;
+        function moduleNameIsEqualTo(a: StringLiteralLike | Identifier, b: StringLiteralLike | Identifier): boolean {
+            return a.kind === SyntaxKind.Identifier
+                ? b.kind === SyntaxKind.Identifier && a.escapedText === b.escapedText
+                : b.kind === SyntaxKind.StringLiteral && a.text === b.text;
         }
 
         function collectExternalModuleReferences(file: SourceFile): void {
@@ -1591,7 +1602,7 @@ namespace ts {
             const isExternalModuleFile = isExternalModule(file);
 
             // file.imports may not be undefined if there exists dynamic import
-            let imports: StringLiteral[];
+            let imports: StringLiteralLike[] | undefined;
             let moduleAugmentations: (StringLiteral | Identifier)[];
             let ambientModules: string[];
 
@@ -1602,7 +1613,7 @@ namespace ts {
                 && !file.isDeclarationFile) {
                 // synthesize 'import "tslib"' declaration
                 const externalHelpersModuleReference = createLiteral(externalHelpersModuleNameText);
-                const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined);
+                const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference);
                 addEmitFlags(importDecl, EmitFlags.NeverApplyImportHelper);
                 externalHelpersModuleReference.parent = importDecl;
                 importDecl.parent = file;
@@ -1615,6 +1626,9 @@ namespace ts {
                     collectDynamicImportOrRequireCalls(node);
                 }
             }
+            if ((file.flags & NodeFlags.PossiblyContainsDynamicImport) || isJavaScriptFile) {
+                collectDynamicImportOrRequireCalls(file.endOfFileToken);
+            }
 
             file.imports = imports || emptyArray;
             file.moduleAugmentations = moduleAugmentations || emptyArray;
@@ -1623,70 +1637,69 @@ namespace ts {
             return;
 
             function collectModuleReferences(node: Statement, inAmbientModule: boolean): void {
-                switch (node.kind) {
-                    case SyntaxKind.ImportDeclaration:
-                    case SyntaxKind.ImportEqualsDeclaration:
-                    case SyntaxKind.ExportDeclaration:
-                        const moduleNameExpr = getExternalModuleName(node);
-                        if (!moduleNameExpr || !isStringLiteral(moduleNameExpr)) {
-                            break;
+                if (isAnyImportOrReExport(node)) {
+                    const moduleNameExpr = getExternalModuleName(node);
+                    // TypeScript 1.0 spec (April 2014): 12.1.6
+                    // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference other external modules
+                    // only through top - level external module names. Relative external module names are not permitted.
+                    if (moduleNameExpr && isStringLiteral(moduleNameExpr) && moduleNameExpr.text && (!inAmbientModule || !isExternalModuleNameRelative(moduleNameExpr.text))) {
+                        imports = append(imports, moduleNameExpr);
+                    }
+                }
+                else if (isModuleDeclaration(node)) {
+                    if (isAmbientModule(node) && (inAmbientModule || hasModifier(node, ModifierFlags.Ambient) || file.isDeclarationFile)) {
+                        const nameText = getTextOfIdentifierOrLiteral(node.name);
+                        // Ambient module declarations can be interpreted as augmentations for some existing external modules.
+                        // This will happen in two cases:
+                        // - if current file is external module then module augmentation is a ambient module declaration defined in the top level scope
+                        // - if current file is not external module then module augmentation is an ambient module declaration with non-relative module name
+                        //   immediately nested in top level ambient module declaration .
+                        if (isExternalModuleFile || (inAmbientModule && !isExternalModuleNameRelative(nameText))) {
+                            (moduleAugmentations || (moduleAugmentations = [])).push(node.name);
                         }
-                        if (!moduleNameExpr.text) {
-                            break;
-                        }
-
-                        // TypeScript 1.0 spec (April 2014): 12.1.6
-                        // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference other external modules
-                        // only through top - level external module names. Relative external module names are not permitted.
-                        if (!inAmbientModule || !isExternalModuleNameRelative(moduleNameExpr.text)) {
-                            (imports || (imports = [])).push(moduleNameExpr);
-                        }
-                        break;
-                    case SyntaxKind.ModuleDeclaration:
-                        if (isAmbientModule(<ModuleDeclaration>node) && (inAmbientModule || hasModifier(node, ModifierFlags.Ambient) || file.isDeclarationFile)) {
-                            const moduleName = (<ModuleDeclaration>node).name;
-                            const nameText = getTextOfIdentifierOrLiteral(moduleName);
-                            // Ambient module declarations can be interpreted as augmentations for some existing external modules.
-                            // This will happen in two cases:
-                            // - if current file is external module then module augmentation is a ambient module declaration defined in the top level scope
-                            // - if current file is not external module then module augmentation is an ambient module declaration with non-relative module name
-                            //   immediately nested in top level ambient module declaration .
-                            if (isExternalModuleFile || (inAmbientModule && !isExternalModuleNameRelative(nameText))) {
-                                (moduleAugmentations || (moduleAugmentations = [])).push(moduleName);
+                        else if (!inAmbientModule) {
+                            if (file.isDeclarationFile) {
+                                // for global .d.ts files record name of ambient module
+                                (ambientModules || (ambientModules = [])).push(nameText);
                             }
-                            else if (!inAmbientModule) {
-                                if (file.isDeclarationFile) {
-                                    // for global .d.ts files record name of ambient module
-                                    (ambientModules || (ambientModules = [])).push(nameText);
-                                }
-                                // An AmbientExternalModuleDeclaration declares an external module.
-                                // This type of declaration is permitted only in the global module.
-                                // The StringLiteral must specify a top - level external module name.
-                                // Relative external module names are not permitted
+                            // An AmbientExternalModuleDeclaration declares an external module.
+                            // This type of declaration is permitted only in the global module.
+                            // The StringLiteral must specify a top - level external module name.
+                            // Relative external module names are not permitted
 
-                                // NOTE: body of ambient module is always a module block, if it exists
-                                const body = <ModuleBlock>(<ModuleDeclaration>node).body;
-                                if (body) {
-                                    for (const statement of body.statements) {
-                                        collectModuleReferences(statement, /*inAmbientModule*/ true);
-                                    }
+                            // NOTE: body of ambient module is always a module block, if it exists
+                            const body = <ModuleBlock>(<ModuleDeclaration>node).body;
+                            if (body) {
+                                for (const statement of body.statements) {
+                                    collectModuleReferences(statement, /*inAmbientModule*/ true);
                                 }
                             }
                         }
+                    }
                 }
             }
 
             function collectDynamicImportOrRequireCalls(node: Node): void {
-                if (isRequireCall(node, /*checkArgumentIsStringLiteral*/ true)) {
-                    (imports || (imports = [])).push(<StringLiteral>(<CallExpression>node).arguments[0]);
+                if (isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ true)) {
+                    imports = append(imports, node.arguments[0]);
                 }
                 // we have to check the argument list has length of 1. We will still have to process these even though we have parsing error.
-                else if (isImportCall(node) && node.arguments.length === 1 && node.arguments[0].kind === SyntaxKind.StringLiteral) {
-                    (imports || (imports = [])).push(<StringLiteral>(<CallExpression>node).arguments[0]);
+                else if (isImportCall(node) && node.arguments.length === 1 && isStringLiteralLike(node.arguments[0])) {
+                    imports = append(imports, node.arguments[0] as StringLiteralLike);
+                }
+                else if (isLiteralImportTypeNode(node)) {
+                    imports = append(imports, node.argument.literal);
                 }
                 else {
-                    forEachChild(node, collectDynamicImportOrRequireCalls);
+                    collectDynamicImportOrRequireCallsForEachChild(node);
+                    if (hasJSDocNodes(node)) {
+                        forEach(node.jsDoc, collectDynamicImportOrRequireCallsForEachChild);
+                    }
                 }
+            }
+
+            function collectDynamicImportOrRequireCallsForEachChild(node: Node) {
+                forEachChild(node, collectDynamicImportOrRequireCalls);
             }
         }
 
@@ -1996,7 +2009,8 @@ namespace ts {
                         && !options.noResolve
                         && i < file.imports.length
                         && !elideImport
-                        && !(isJsFile && !options.allowJs);
+                        && !(isJsFile && !options.allowJs)
+                        && (isInJavaScriptFile(file.imports[i]) || !(file.imports[i].flags & NodeFlags.JSDoc));
 
                     if (elideImport) {
                         modulesWithElidedImports.set(file.path, true);
@@ -2048,6 +2062,10 @@ namespace ts {
         }
 
         function verifyCompilerOptions() {
+            if (options.strictPropertyInitialization && !options.strictNullChecks) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictPropertyInitialization", "strictNullChecks");
+            }
+
             if (options.isolatedModules) {
                 if (options.declaration) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "declaration", "isolatedModules");
@@ -2124,9 +2142,9 @@ namespace ts {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", "outFile");
             }
 
-            if (options.mapRoot && !options.sourceMap) {
+            if (options.mapRoot && !(options.sourceMap || options.declarationMap)) {
                 // Error to specify --mapRoot without --sourcemap
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "mapRoot", "sourceMap");
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "mapRoot", "sourceMap", "declarationMap");
             }
 
             if (options.declarationDir) {
@@ -2136,6 +2154,10 @@ namespace ts {
                 if (options.out || options.outFile) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "declarationDir", options.out ? "out" : "outFile");
                 }
+            }
+
+            if (options.declarationMap && !options.declaration) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "declarationMap", "declaration");
             }
 
             if (options.lib && options.noLib) {
@@ -2203,7 +2225,7 @@ namespace ts {
 
             if (options.emitDeclarationOnly) {
                 if (!options.declaration) {
-                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDeclarationOnly", "declarations");
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDeclarationOnly", "declaration");
                 }
 
                 if (options.noEmit) {
@@ -2312,21 +2334,21 @@ namespace ts {
             return emptyArray;
         }
 
-        function createDiagnosticForOptionName(message: DiagnosticMessage, option1: string, option2?: string) {
-            createDiagnosticForOption(/*onKey*/ true, option1, option2, message, option1, option2);
+        function createDiagnosticForOptionName(message: DiagnosticMessage, option1: string, option2?: string, option3?: string) {
+            createDiagnosticForOption(/*onKey*/ true, option1, option2, message, option1, option2, option3);
         }
 
         function createOptionValueDiagnostic(option1: string, message: DiagnosticMessage, arg0: string) {
             createDiagnosticForOption(/*onKey*/ false, option1, /*option2*/ undefined, message, arg0);
         }
 
-        function createDiagnosticForOption(onKey: boolean, option1: string, option2: string, message: DiagnosticMessage, arg0: string | number, arg1?: string | number) {
+        function createDiagnosticForOption(onKey: boolean, option1: string, option2: string, message: DiagnosticMessage, arg0: string | number, arg1?: string | number, arg2?: string | number) {
             const compilerOptionsObjectLiteralSyntax = getCompilerOptionsObjectLiteralSyntax();
             const needCompilerDiagnostic = !compilerOptionsObjectLiteralSyntax ||
-                !createOptionDiagnosticInObjectLiteralSyntax(compilerOptionsObjectLiteralSyntax, onKey, option1, option2, message, arg0, arg1);
+                !createOptionDiagnosticInObjectLiteralSyntax(compilerOptionsObjectLiteralSyntax, onKey, option1, option2, message, arg0, arg1, arg2);
 
             if (needCompilerDiagnostic) {
-                programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1));
+                programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1, arg2));
             }
         }
 
@@ -2345,10 +2367,10 @@ namespace ts {
             return _compilerOptionsObjectLiteralSyntax;
         }
 
-        function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string, message: DiagnosticMessage, arg0: string | number, arg1?: string | number): boolean {
+        function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string, message: DiagnosticMessage, arg0: string | number, arg1?: string | number, arg2?: string | number): boolean {
             const props = getPropertyAssignment(objectLiteral, key1, key2);
             for (const prop of props) {
-                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile, onKey ? prop.name : prop.initializer, message, arg0, arg1));
+                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile, onKey ? prop.name : prop.initializer, message, arg0, arg1, arg2));
             }
             return !!props.length;
         }
@@ -2420,11 +2442,6 @@ namespace ts {
         function needAllowJs() {
             return options.allowJs || !getStrictOptionValue(options, "noImplicitAny") ? undefined : Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type;
         }
-    }
-
-    function checkAllDefined(names: string[]): string[] {
-        Debug.assert(names.every(name => name !== undefined), "A name is undefined.", () => JSON.stringify(names));
-        return names;
     }
 
     function getModuleNames({ imports, moduleAugmentations }: SourceFile): string[] {

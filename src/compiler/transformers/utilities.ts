@@ -15,14 +15,6 @@ namespace ts {
         hasExportStarsToExportValues: boolean; // whether this module contains export*
     }
 
-    function getNamedImportCount(node: ImportDeclaration) {
-        if (!(node.importClause && node.importClause.namedBindings)) return 0;
-        const names = node.importClause.namedBindings;
-        if (!names) return 0;
-        if (!isNamedImports(names)) return 0;
-        return names.elements.length;
-    }
-
     function containsDefaultReference(node: NamedImportBindings) {
         if (!node) return false;
         if (!isNamedImports(node)) return false;
@@ -34,11 +26,27 @@ namespace ts {
     }
 
     export function getImportNeedsImportStarHelper(node: ImportDeclaration) {
-        return !!getNamespaceDeclarationNode(node) || (getNamedImportCount(node) > 1 && containsDefaultReference(node.importClause.namedBindings));
+        if (!!getNamespaceDeclarationNode(node)) {
+            return true;
+        }
+        const bindings = node.importClause && node.importClause.namedBindings;
+        if (!bindings) {
+            return false;
+        }
+        if (!isNamedImports(bindings)) return false;
+        let defaultRefCount = 0;
+        for (const binding of bindings.elements) {
+            if (isNamedDefaultReference(binding)) {
+                defaultRefCount++;
+            }
+        }
+        // Import star is required if there's default named refs mixed with non-default refs, or if theres non-default refs and it has a default import
+        return (defaultRefCount > 0 && defaultRefCount !== bindings.elements.length) || (!!(bindings.elements.length - defaultRefCount) && isDefaultImport(node));
     }
 
     export function getImportNeedsImportDefaultHelper(node: ImportDeclaration) {
-        return isDefaultImport(node) || (getNamedImportCount(node) === 1 && containsDefaultReference(node.importClause.namedBindings));
+        // Import default is needed if there's a default import or a default ref and no other refs (meaning an import star helper wasn't requested)
+        return !getImportNeedsImportStarHelper(node) && (isDefaultImport(node) || (node.importClause && isNamedImports(node.importClause.namedBindings) && containsDefaultReference(node.importClause.namedBindings)));
     }
 
     export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver, compilerOptions: CompilerOptions): ExternalModuleInfo {
@@ -48,7 +56,7 @@ namespace ts {
         const uniqueExports = createMap<boolean>();
         let exportedNames: Identifier[];
         let hasExportDefault = false;
-        let exportEquals: ExportAssignment = undefined;
+        let exportEquals: ExportAssignment;
         let hasExportStarsToExportValues = false;
         let hasImportStarOrImportDefault = false;
 
@@ -60,7 +68,7 @@ namespace ts {
                     // import * as x from "mod"
                     // import { x, y } from "mod"
                     externalImports.push(<ImportDeclaration>node);
-                    hasImportStarOrImportDefault = getImportNeedsImportStarHelper(<ImportDeclaration>node) || getImportNeedsImportDefaultHelper(<ImportDeclaration>node);
+                    hasImportStarOrImportDefault = hasImportStarOrImportDefault || getImportNeedsImportStarHelper(<ImportDeclaration>node) || getImportNeedsImportDefaultHelper(<ImportDeclaration>node);
                     break;
 
                 case SyntaxKind.ImportEqualsDeclaration:
@@ -218,5 +226,21 @@ namespace ts {
             expression.kind === SyntaxKind.NumericLiteral ||
             isKeyword(expression.kind) ||
             isIdentifier(expression);
+    }
+
+    /**
+     * @param input Template string input strings
+     * @param args Names which need to be made file-level unique
+     */
+    export function helperString(input: TemplateStringsArray, ...args: string[]) {
+        return (uniqueName: EmitHelperUniqueNameCallback) => {
+            let result = "";
+            for (let i = 0; i < args.length; i++) {
+                result += input[i];
+                result += uniqueName(args[i]);
+            }
+            result += input[input.length - 1];
+            return result;
+        };
     }
 }

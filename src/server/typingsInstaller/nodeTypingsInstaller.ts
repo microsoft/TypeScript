@@ -21,7 +21,7 @@ namespace ts.server.typingsInstaller {
         }
         writeLine = (text: string) => {
             try {
-                fs.appendFileSync(this.logFile, text + sys.newLine);
+                fs.appendFileSync(this.logFile, `[${nowString()}] ${text}${sys.newLine}`);
             }
             catch (e) {
                 this.logEnabled = false;
@@ -184,9 +184,8 @@ namespace ts.server.typingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`#${requestId} with arguments'${JSON.stringify(packageNames)}'.`);
             }
-            const command = `${this.npmPath} install --ignore-scripts ${packageNames.join(" ")} --save-dev --user-agent="typesInstaller/${version}"`;
             const start = Date.now();
-            const hasError = this.execSyncAndLog(command, { cwd });
+            const hasError = installNpmPackages(this.npmPath, version, packageNames, command => this.execSyncAndLog(command, { cwd }));
             if (this.log.isEnabled()) {
                 this.log.writeLine(`npm install #${requestId} took: ${Date.now() - start} ms`);
             }
@@ -221,11 +220,11 @@ namespace ts.server.typingsInstaller {
         });
     }
 
-    const logFilePath = findArgument(server.Arguments.LogFile);
-    const globalTypingsCacheLocation = findArgument(server.Arguments.GlobalCacheLocation);
-    const typingSafeListLocation = findArgument(server.Arguments.TypingSafeListLocation);
-    const typesMapLocation = findArgument(server.Arguments.TypesMapLocation);
-    const npmLocation = findArgument(server.Arguments.NpmLocation);
+    const logFilePath = findArgument(Arguments.LogFile);
+    const globalTypingsCacheLocation = findArgument(Arguments.GlobalCacheLocation);
+    const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation);
+    const typesMapLocation = findArgument(Arguments.TypesMapLocation);
+    const npmLocation = findArgument(Arguments.NpmLocation);
 
     const log = new FileLog(logFilePath);
     if (log.isEnabled()) {

@@ -1,6 +1,3 @@
-/// <reference path="../refactorProvider.ts" />
-/// <reference path="../../compiler/checker.ts" />
-
 /* @internal */
 namespace ts.refactor.extractSymbol {
     const refactorName = "Extract Symbol";
@@ -274,7 +271,7 @@ namespace ts.refactor.extractSymbol {
             }
             else if (isVariableStatement(node)) {
                 let numInitializers = 0;
-                let lastInitializer: Expression | undefined = undefined;
+                let lastInitializer: Expression | undefined;
                 for (const declaration of node.declarationList.declarations) {
                     if (declaration.initializer) {
                         numInitializers++;
@@ -405,7 +402,7 @@ namespace ts.refactor.extractSymbol {
                     switch (node.kind) {
                         case SyntaxKind.FunctionDeclaration:
                         case SyntaxKind.ClassDeclaration:
-                            if (node.parent.kind === SyntaxKind.SourceFile && (node.parent as ts.SourceFile).externalModuleIndicator === undefined) {
+                            if (isSourceFile(node.parent) && node.parent.externalModuleIndicator === undefined) {
                                 // You cannot extract global declarations
                                 (errors || (errors = [])).push(createDiagnosticForNode(node, Messages.functionWillNotBeVisibleInTheNewScope));
                             }
@@ -701,14 +698,6 @@ namespace ts.refactor.extractSymbol {
         Global,
     }
 
-    function getUniqueName(baseName: string, fileText: string): string {
-        let nameText = baseName;
-        for (let i = 1; stringContains(fileText, nameText); i++) {
-            nameText = `${baseName}_${i}`;
-        }
-        return nameText;
-    }
-
     /**
      * Result of 'extractRange' operation for a specific scope.
      * Stores either a list of changes that should be applied to extract a range or a list of errors
@@ -730,12 +719,12 @@ namespace ts.refactor.extractSymbol {
 
         const functionName = createIdentifier(functionNameText);
 
-        let returnType: TypeNode = undefined;
+        let returnType: TypeNode;
         const parameters: ParameterDeclaration[] = [];
         const callArguments: Identifier[] = [];
         let writes: UsageEntry[];
         usagesInScope.forEach((usage, name) => {
-            let typeNode: TypeNode = undefined;
+            let typeNode: TypeNode;
             if (!isJS) {
                 let type = checker.getTypeOfSymbolAtLocation(usage.symbol, usage.node);
                 // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
@@ -1053,7 +1042,7 @@ namespace ts.refactor.extractSymbol {
             changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariable, /*blankLineBetween*/ true);
 
             // Consume
-            changeTracker.replaceNode(context.file, node, localReference, textChanges.useNonAdjustedPositions);
+            changeTracker.replaceNode(context.file, node, localReference);
         }
         else {
             const newVariableDeclaration = createVariableDeclaration(localNameText, variableType, initializer);
@@ -1070,7 +1059,7 @@ namespace ts.refactor.extractSymbol {
 
                 // Consume
                 const localReference = createIdentifier(localNameText);
-                changeTracker.replaceNode(context.file, node, localReference, textChanges.useNonAdjustedPositions);
+                changeTracker.replaceNode(context.file, node, localReference);
             }
             else if (node.parent.kind === SyntaxKind.ExpressionStatement && scope === findAncestor(node, isScope)) {
                 // If the parent is an expression statement and the target scope is the immediately enclosing one,
@@ -1078,7 +1067,7 @@ namespace ts.refactor.extractSymbol {
                 const newVariableStatement = createVariableStatement(
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([newVariableDeclaration], NodeFlags.Const));
-                changeTracker.replaceNode(context.file, node.parent, newVariableStatement, textChanges.useNonAdjustedPositions);
+                changeTracker.replaceNode(context.file, node.parent, newVariableStatement);
             }
             else {
                 const newVariableStatement = createVariableStatement(
@@ -1101,7 +1090,7 @@ namespace ts.refactor.extractSymbol {
                 }
                 else {
                     const localReference = createIdentifier(localNameText);
-                    changeTracker.replaceNode(context.file, node, localReference, textChanges.useNonAdjustedPositions);
+                    changeTracker.replaceNode(context.file, node, localReference);
                 }
             }
         }
@@ -1114,7 +1103,7 @@ namespace ts.refactor.extractSymbol {
     }
 
     function getContainingVariableDeclarationIfInList(node: Node, scope: Scope) {
-        let prevNode = undefined;
+        let prevNode;
         while (node !== undefined && node !== scope) {
             if (isVariableDeclaration(node) &&
                 node.initializer === prevNode &&
@@ -1129,39 +1118,8 @@ namespace ts.refactor.extractSymbol {
         }
     }
 
-    /**
-     * @return The index of the (only) reference to the extracted symbol.  We want the cursor
-     * to be on the reference, rather than the declaration, because it's closer to where the
-     * user was before extracting it.
-     */
-    function getRenameLocation(edits: ReadonlyArray<FileTextChanges>, renameFilename: string, functionNameText: string, isDeclaredBeforeUse: boolean): number {
-        let delta = 0;
-        let lastPos = -1;
-        for (const { fileName, textChanges } of edits) {
-            Debug.assert(fileName === renameFilename);
-            for (const change of textChanges) {
-                const { span, newText } = change;
-                const index = newText.indexOf(functionNameText);
-                if (index !== -1) {
-                    lastPos = span.start + delta + index;
-
-                    // If the reference comes first, return immediately.
-                    if (!isDeclaredBeforeUse) {
-                        return lastPos;
-                    }
-                }
-                delta += newText.length - span.length;
-            }
-        }
-
-        // If the declaration comes first, return the position of the last occurrence.
-        Debug.assert(isDeclaredBeforeUse);
-        Debug.assert(lastPos >= 0);
-        return lastPos;
-    }
-
     function getFirstDeclaration(type: Type): Declaration | undefined {
-        let firstDeclaration = undefined;
+        let firstDeclaration;
 
         const symbol = type.symbol;
         if (symbol && symbol.declarations) {
@@ -1297,7 +1255,7 @@ namespace ts.refactor.extractSymbol {
         const members = scope.members;
         Debug.assert(members.length > 0); // There must be at least one child, since we extracted from one.
 
-        let prevMember: ClassElement | undefined = undefined;
+        let prevMember: ClassElement | undefined;
         let allProperties = true;
         for (const member of members) {
             if (member.pos > maxPos) {
@@ -1322,7 +1280,7 @@ namespace ts.refactor.extractSymbol {
     function getNodeToInsertConstantBefore(node: Node, scope: Scope): Statement {
         Debug.assert(!isClassLike(scope));
 
-        let prevScope: Scope | undefined = undefined;
+        let prevScope: Scope | undefined;
         for (let curr = node; curr !== scope; curr = curr.parent) {
             if (isScope(curr)) {
                 prevScope = curr;
@@ -1331,7 +1289,7 @@ namespace ts.refactor.extractSymbol {
 
         for (let curr = (prevScope || node).parent; ; curr = curr.parent) {
             if (isBlockLike(curr)) {
-                let prevStatement = undefined;
+                let prevStatement;
                 for (const statement of curr.statements) {
                     if (statement.pos > node.pos) {
                         break;
@@ -1358,7 +1316,7 @@ namespace ts.refactor.extractSymbol {
     }
 
     function getPropertyAssignmentsForWritesAndVariableDeclarations(
-        exposedVariableDeclarations: ReadonlyArray<ts.VariableDeclaration>,
+        exposedVariableDeclarations: ReadonlyArray<VariableDeclaration>,
         writes: ReadonlyArray<UsageEntry>) {
 
         const variableAssignments = map(exposedVariableDeclarations, v => createShorthandPropertyAssignment(v.symbol.name));
@@ -1432,7 +1390,7 @@ namespace ts.refactor.extractSymbol {
         const visibleDeclarationsInExtractedRange: NamedDeclaration[] = [];
         const exposedVariableSymbolSet = createMap<true>(); // Key is symbol ID
         const exposedVariableDeclarations: VariableDeclaration[] = [];
-        let firstExposedNonVariableDeclaration: NamedDeclaration | undefined = undefined;
+        let firstExposedNonVariableDeclaration: NamedDeclaration | undefined;
 
         const expression = !isReadonlyArray(targetRange.range)
             ? targetRange.range
@@ -1440,7 +1398,7 @@ namespace ts.refactor.extractSymbol {
                 ? (targetRange.range[0] as ExpressionStatement).expression
                 : undefined;
 
-        let expressionDiagnostic: Diagnostic | undefined = undefined;
+        let expressionDiagnostic: Diagnostic | undefined;
         if (expression === undefined) {
             const statements = targetRange.range as ReadonlyArray<Statement>;
             const start = first(statements).getStart();
@@ -1542,7 +1500,7 @@ namespace ts.refactor.extractSymbol {
             }
 
             let hasWrite = false;
-            let readonlyClassPropertyWrite: Declaration | undefined = undefined;
+            let readonlyClassPropertyWrite: Declaration | undefined;
             usagesPerScope[i].usages.forEach(value => {
                 if (value.usage === Usage.Write) {
                     hasWrite = true;
@@ -1600,8 +1558,8 @@ namespace ts.refactor.extractSymbol {
             const {visitedTypes} = symbolWalker.walkType(type);
 
             for (const visitedType of visitedTypes) {
-                if (visitedType.flags & TypeFlags.TypeParameter) {
-                    allTypeParameterUsages.set(visitedType.id.toString(), visitedType as TypeParameter);
+                if (visitedType.isTypeParameter()) {
+                    allTypeParameterUsages.set(visitedType.id.toString(), visitedType);
                 }
             }
         }

@@ -8,5 +8,4 @@ var v;
 
 
 //// [computedPropertyNamesDeclarationEmit4_ES5.d.ts]
-declare var v: {
-};
+declare var v: {};

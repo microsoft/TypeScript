@@ -1,0 +1,36 @@
+=== tests/cases/compiler/a.js ===
+const other = require('./other');
+>other : Symbol(other, Decl(a.js, 0, 5))
+>require : Symbol(require)
+>'./other' : Symbol("tests/cases/compiler/other", Decl(other.d.ts, 0, 0))
+
+/** @type {Puppeteer.Keyboard} */
+var ppk;
+>ppk : Symbol(ppk, Decl(a.js, 2, 3))
+
+Puppeteer.connect;
+>Puppeteer.connect : Symbol(Puppeteer.connect, Decl(puppet.d.ts, 3, 1))
+>Puppeteer : Symbol(Puppeteer, Decl(puppet.d.ts, 0, 0))
+>connect : Symbol(Puppeteer.connect, Decl(puppet.d.ts, 3, 1))
+
+=== tests/cases/compiler/puppet.d.ts ===
+export as namespace Puppeteer;
+>Puppeteer : Symbol(Puppeteer, Decl(puppet.d.ts, 0, 0))
+
+export interface Keyboard {
+>Keyboard : Symbol(Keyboard, Decl(puppet.d.ts, 0, 30))
+
+    key: string
+>key : Symbol(Keyboard.key, Decl(puppet.d.ts, 1, 27))
+}
+export function connect(name: string): void;
+>connect : Symbol(connect, Decl(puppet.d.ts, 3, 1))
+>name : Symbol(name, Decl(puppet.d.ts, 4, 24))
+
+=== tests/cases/compiler/other.d.ts ===
+declare function f(): string;
+>f : Symbol(f, Decl(other.d.ts, 0, 0))
+
+export = f;
+>f : Symbol(f, Decl(other.d.ts, 0, 0))
+

@@ -1,5 +1,3 @@
-/// <reference path='services.ts' />
-
 /* @internal */
 namespace ts.NavigationBar {
     /**
@@ -275,6 +273,7 @@ namespace ts.NavigationBar {
                     case SpecialPropertyAssignmentKind.ExportsProperty:
                     case SpecialPropertyAssignmentKind.ModuleExports:
                     case SpecialPropertyAssignmentKind.PrototypeProperty:
+                    case SpecialPropertyAssignmentKind.Prototype:
                         addNodeWithRecursiveChild(node, (node as BinaryExpression).right);
                         break;
                     case SpecialPropertyAssignmentKind.ThisProperty:
@@ -635,7 +634,7 @@ namespace ts.NavigationBar {
         return node.kind === SyntaxKind.SourceFile ? createTextSpanFromRange(node) : createTextSpanFromNode(node, curSourceFile);
     }
 
-    function getModifiers(node: ts.Node): string {
+    function getModifiers(node: Node): string {
         if (node.parent && node.parent.kind === SyntaxKind.VariableDeclaration) {
             node = node.parent;
         }

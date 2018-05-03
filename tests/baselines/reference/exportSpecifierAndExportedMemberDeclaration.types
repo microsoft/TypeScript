@@ -1,6 +1,6 @@
 === tests/cases/compiler/exportSpecifierAndExportedMemberDeclaration.ts ===
 declare module "m2" {
->"m2" : typeof "m2"
+>"m2" : typeof import("m2")
 
     export module X {
 >X : () => any
@@ -22,7 +22,7 @@ declare module "m2" {
 }
 
 declare module "m2" {
->"m2" : typeof "m2"
+>"m2" : typeof import("m2")
 
     function Z2(): X.I;
 >Z2 : () => X.I

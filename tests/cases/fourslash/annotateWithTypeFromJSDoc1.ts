@@ -2,9 +2,16 @@
 
 // @Filename: test123.ts
 /////** @type {number} */
-////var /*1*/x;
+////var [|x|];
 
-verify.applicableRefactorAvailableAtMarker('1');
-verify.fileAfterApplyingRefactorAtMarker('1',
+verify.getSuggestionDiagnostics([{
+    message: "JSDoc types may be moved to TypeScript types.",
+    code: 80004,
+}]);
+
+verify.codeFix({
+    description: "Annotate with type from JSDoc",
+    newFileContent:
 `/** @type {number} */
-var x: number;`, 'Annotate with type from JSDoc', 'annotate');
+var x: number;`,
+});

@@ -3,6 +3,7 @@ class C {
 >C : C
 
     get [Symbol.hasInstance]() {
+>[Symbol.hasInstance] : number
 >Symbol.hasInstance : symbol
 >Symbol : SymbolConstructor
 >hasInstance : symbol
@@ -12,6 +13,7 @@ class C {
     }
     // Should take a string
     set [Symbol.hasInstance](x: number) {
+>[Symbol.hasInstance] : number
 >Symbol.hasInstance : symbol
 >Symbol : SymbolConstructor
 >hasInstance : symbol

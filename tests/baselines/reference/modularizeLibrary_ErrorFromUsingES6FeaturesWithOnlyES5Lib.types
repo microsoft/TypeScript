@@ -68,6 +68,7 @@ var o = {
 >2 : 2
 
     [Symbol.hasInstance](value: any) {
+>[Symbol.hasInstance] : (value: any) => boolean
 >Symbol.hasInstance : any
 >Symbol : any
 >hasInstance : any
@@ -79,9 +80,9 @@ var o = {
 };
 o.hasOwnProperty(Symbol.hasInstance);
 >o.hasOwnProperty(Symbol.hasInstance) : boolean
->o.hasOwnProperty : (v: string) => boolean
+>o.hasOwnProperty : (v: string | number | symbol) => boolean
 >o : { a: number; [Symbol.hasInstance](value: any): boolean; }
->hasOwnProperty : (v: string) => boolean
+>hasOwnProperty : (v: string | number | symbol) => boolean
 >Symbol.hasInstance : any
 >Symbol : any
 >hasInstance : any
@@ -143,6 +144,7 @@ const o1 = {
 >{    [Symbol.hasInstance](value: any) {        return false;    }} : { [Symbol.hasInstance](value: any): boolean; }
 
     [Symbol.hasInstance](value: any) {
+>[Symbol.hasInstance] : (value: any) => boolean
 >Symbol.hasInstance : any
 >Symbol : any
 >hasInstance : any

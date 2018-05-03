@@ -59,6 +59,8 @@ namespace ts.formatting {
             rule("NoSpaceBeforeDot", anyToken, SyntaxKind.DotToken, [isNonJsxSameLineTokenContext], RuleAction.Delete),
             rule("NoSpaceAfterDot", SyntaxKind.DotToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.Delete),
 
+            rule("NoSpaceBetweenImportParenInImportType", SyntaxKind.ImportKeyword, SyntaxKind.OpenParenToken, [isNonJsxSameLineTokenContext, isImportTypeContext], RuleAction.Delete),
+
             // Special handling of unary operators.
             // Prefix operators generally shouldn't have a space between
             // them and their target unary expression.
@@ -126,8 +128,8 @@ namespace ts.formatting {
             rule("SpaceBetweenAsyncAndOpenParen", SyntaxKind.AsyncKeyword, SyntaxKind.OpenParenToken, [isArrowFunctionContext, isNonJsxSameLineTokenContext], RuleAction.Space),
             rule("SpaceBetweenAsyncAndFunctionKeyword", SyntaxKind.AsyncKeyword, SyntaxKind.FunctionKeyword, [isNonJsxSameLineTokenContext], RuleAction.Space),
 
-            // template string
-            rule("NoSpaceBetweenTagAndTemplateString", SyntaxKind.Identifier, [SyntaxKind.NoSubstitutionTemplateLiteral, SyntaxKind.TemplateHead], [isNonJsxSameLineTokenContext], RuleAction.Delete),
+            // Template string
+            rule("NoSpaceBetweenTagAndTemplateString", [SyntaxKind.Identifier, SyntaxKind.CloseParenToken], [SyntaxKind.NoSubstitutionTemplateLiteral, SyntaxKind.TemplateHead], [isNonJsxSameLineTokenContext], RuleAction.Delete),
 
             // JSX opening elements
             rule("SpaceBeforeJsxAttribute", anyToken, SyntaxKind.Identifier, [isNextTokenParentJsxAttribute, isNonJsxSameLineTokenContext], RuleAction.Space),
@@ -198,7 +200,7 @@ namespace ts.formatting {
             rule("NoSpaceAfterCloseAngularBracket",
                 SyntaxKind.GreaterThanToken,
                 [SyntaxKind.OpenParenToken, SyntaxKind.OpenBracketToken, SyntaxKind.GreaterThanToken, SyntaxKind.CommaToken],
-                [isNonJsxSameLineTokenContext, isTypeArgumentOrParameterOrAssertionContext],
+                [isNonJsxSameLineTokenContext, isTypeArgumentOrParameterOrAssertionContext, isNotFunctionDeclContext /*To prevent an interference with the SpaceBeforeOpenParenInFuncDecl rule*/],
                 RuleAction.Delete),
 
             // decorators
@@ -542,6 +544,10 @@ namespace ts.formatting {
         return false;
     }
 
+    function isNotFunctionDeclContext(context: FormattingContext): boolean {
+        return !isFunctionDeclContext(context);
+    }
+
     function isFunctionDeclarationOrFunctionExpressionContext(context: FormattingContext): boolean {
         return context.contextNode.kind === SyntaxKind.FunctionDeclaration || context.contextNode.kind === SyntaxKind.FunctionExpression;
     }
@@ -635,6 +641,10 @@ namespace ts.formatting {
 
     function isArrowFunctionContext(context: FormattingContext): boolean {
         return context.contextNode.kind === SyntaxKind.ArrowFunction;
+    }
+
+    function isImportTypeContext(context: FormattingContext): boolean {
+        return context.contextNode.kind === SyntaxKind.ImportType;
     }
 
     function isNonJsxSameLineTokenContext(context: FormattingContext): boolean {

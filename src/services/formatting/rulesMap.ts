@@ -1,8 +1,6 @@
-/// <reference path="rules.ts" />
-
 /* @internal */
 namespace ts.formatting {
-    export function getFormatContext(options: FormatCodeSettings): formatting.FormatContext {
+    export function getFormatContext(options: FormatCodeSettings): FormatContext {
         return { options, getRule: getRulesMap() };
     }
 

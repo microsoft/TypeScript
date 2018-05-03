@@ -15,14 +15,8 @@
 ////     "peerDependencies": { "peer-module": "latest" }
 //// }
 
-const kinds = ["import_as", "import_equals", "require"];
-
-for (const kind of kinds) {
-    goTo.marker(kind + "0");
-
-    verify.completionListContains("module");
-    verify.completionListContains("dev-module");
-    verify.completionListContains("optional-module");
-    verify.completionListContains("peer-module");
-    verify.not.completionListItemsCountIsGreaterThan(4);
-}
+verify.completions({
+    marker: test.markerNames(),
+    exact: ["module", "dev-module", "peer-module", "optional-module"],
+    isNewIdentifierLocation: true,
+});

@@ -15,13 +15,14 @@ class C extends Base {
 >() => {            var obj = {                // Ideally, we would capture this. But the reference is                // illegal, and not capturing this is consistent with                //treatment of other similar violations.                [(super(), "prop")]() { }            };        } : () => void
 
             var obj = {
->obj : { [x: string]: () => void; }
->{                // Ideally, we would capture this. But the reference is                // illegal, and not capturing this is consistent with                //treatment of other similar violations.                [(super(), "prop")]() { }            } : { [x: string]: () => void; }
+>obj : { [(super(), "prop")](): void; }
+>{                // Ideally, we would capture this. But the reference is                // illegal, and not capturing this is consistent with                //treatment of other similar violations.                [(super(), "prop")]() { }            } : { [(super(), "prop")](): void; }
 
                 // Ideally, we would capture this. But the reference is
                 // illegal, and not capturing this is consistent with
                 //treatment of other similar violations.
                 [(super(), "prop")]() { }
+>[(super(), "prop")] : () => void
 >(super(), "prop") : "prop"
 >super(), "prop" : "prop"
 >super() : void

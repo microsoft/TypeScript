@@ -7,25 +7,9 @@ tests/cases/compiler/dynamicNamesErrors.ts(24,1): error TS2322: Type 'T2' is not
 tests/cases/compiler/dynamicNamesErrors.ts(25,1): error TS2322: Type 'T1' is not assignable to type 'T2'.
   Types of property '[c0]' are incompatible.
     Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/dynamicNamesErrors.ts(33,6): error TS4033: Property '[x]' of exported interface has or is using private name 'x'.
-tests/cases/compiler/dynamicNamesErrors.ts(34,6): error TS4102: Method '[y]' of exported interface has or is using private name 'y'.
-tests/cases/compiler/dynamicNamesErrors.ts(38,13): error TS4028: Public static property '[x]' of exported class has or is using private name 'x'.
-tests/cases/compiler/dynamicNamesErrors.ts(39,13): error TS4097: Public static method '[y]' of exported class has or is using private name 'y'.
-tests/cases/compiler/dynamicNamesErrors.ts(40,17): error TS4028: Public static property '[z]' of exported class has or is using private name 'z'.
-tests/cases/compiler/dynamicNamesErrors.ts(41,17): error TS4028: Public static property '[w]' of exported class has or is using private name 'w'.
-tests/cases/compiler/dynamicNamesErrors.ts(43,6): error TS4031: Public property '[x]' of exported class has or is using private name 'x'.
-tests/cases/compiler/dynamicNamesErrors.ts(44,6): error TS4100: Public method '[y]' of exported class has or is using private name 'y'.
-tests/cases/compiler/dynamicNamesErrors.ts(45,10): error TS4031: Public property '[z]' of exported class has or is using private name 'z'.
-tests/cases/compiler/dynamicNamesErrors.ts(46,10): error TS4031: Public property '[w]' of exported class has or is using private name 'w'.
-tests/cases/compiler/dynamicNamesErrors.ts(50,6): error TS4033: Property '[x]' of exported interface has or is using private name 'x'.
-tests/cases/compiler/dynamicNamesErrors.ts(51,6): error TS4102: Method '[y]' of exported interface has or is using private name 'y'.
-tests/cases/compiler/dynamicNamesErrors.ts(54,14): error TS4025: Exported variable 'ObjectLiteralVisibility' has or is using private name 'w'.
-tests/cases/compiler/dynamicNamesErrors.ts(54,14): error TS4025: Exported variable 'ObjectLiteralVisibility' has or is using private name 'x'.
-tests/cases/compiler/dynamicNamesErrors.ts(54,14): error TS4025: Exported variable 'ObjectLiteralVisibility' has or is using private name 'y'.
-tests/cases/compiler/dynamicNamesErrors.ts(54,14): error TS4025: Exported variable 'ObjectLiteralVisibility' has or is using private name 'z'.
 
 
-==== tests/cases/compiler/dynamicNamesErrors.ts (21 errors) ====
+==== tests/cases/compiler/dynamicNamesErrors.ts (5 errors) ====
     const c0 = "1";
     const c1 = 1;
     
@@ -73,59 +57,27 @@ tests/cases/compiler/dynamicNamesErrors.ts(54,14): error TS4025: Exported variab
     
     export interface InterfaceMemberVisibility {
         [x]: number;
-         ~
-!!! error TS4033: Property '[x]' of exported interface has or is using private name 'x'.
         [y](): number;
-         ~
-!!! error TS4102: Method '[y]' of exported interface has or is using private name 'y'.
     }
     
     export class ClassMemberVisibility {
         static [x]: number;
-                ~
-!!! error TS4028: Public static property '[x]' of exported class has or is using private name 'x'.
         static [y](): number { return 0; }
-                ~
-!!! error TS4097: Public static method '[y]' of exported class has or is using private name 'y'.
         static get [z](): number { return 0; }
-                    ~
-!!! error TS4028: Public static property '[z]' of exported class has or is using private name 'z'.
         static set [w](value: number) { }
-                    ~
-!!! error TS4028: Public static property '[w]' of exported class has or is using private name 'w'.
     
         [x]: number;
-         ~
-!!! error TS4031: Public property '[x]' of exported class has or is using private name 'x'.
         [y](): number { return 0; }
-         ~
-!!! error TS4100: Public method '[y]' of exported class has or is using private name 'y'.
         get [z](): number { return 0; }
-             ~
-!!! error TS4031: Public property '[z]' of exported class has or is using private name 'z'.
         set [w](value: number) { }
-             ~
-!!! error TS4031: Public property '[w]' of exported class has or is using private name 'w'.
     }
     
     export type ObjectTypeVisibility = {
         [x]: number;
-         ~
-!!! error TS4033: Property '[x]' of exported interface has or is using private name 'x'.
         [y](): number;
-         ~
-!!! error TS4102: Method '[y]' of exported interface has or is using private name 'y'.
     };
     
     export const ObjectLiteralVisibility = {
-                 ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4025: Exported variable 'ObjectLiteralVisibility' has or is using private name 'w'.
-                 ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4025: Exported variable 'ObjectLiteralVisibility' has or is using private name 'x'.
-                 ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4025: Exported variable 'ObjectLiteralVisibility' has or is using private name 'y'.
-                 ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4025: Exported variable 'ObjectLiteralVisibility' has or is using private name 'z'.
         [x]: 0,
         [y](): number { return 0; },
         get [z](): number { return 0; },

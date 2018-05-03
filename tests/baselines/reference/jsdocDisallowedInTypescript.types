@@ -64,13 +64,6 @@ var g: function(number, number): number = (n,m) => n + m;
 >n : number
 >m : number
 
-var variadic: ...boolean = [true, false, true];
->variadic : boolean | undefined
->[true, false, true] : boolean[]
->true : true
->false : false
->true : true
-
 var most: !string = 'definite';
 >most : string
 >'definite' : "definite"
@@ -93,10 +86,6 @@ var dns: Array<!number>;
 
 var anys: Array<*>;
 >anys : any[]
->Array : T[]
-
-var vars: Array<...number>;
->vars : (number | undefined)[]
 >Array : T[]
 
 
