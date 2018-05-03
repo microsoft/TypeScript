@@ -35,7 +35,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotA
     interface I3 {
         [x: string]: string;
         foo: E;
-        ~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'string'.
     }
     
@@ -43,7 +43,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotA
     interface I4 {
         [x: string]: boolean;
         foo: E;
-        ~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'boolean'.
     }
     
@@ -51,7 +51,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotA
     interface I5 {
         [x: string]: Date;
         foo: E;
-        ~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'Date'.
     }
     
@@ -59,7 +59,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotA
     interface I6 {
         [x: string]: RegExp;
         foo: E;
-        ~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'RegExp'.
     }
     
@@ -67,7 +67,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotA
     interface I7 {
         [x: string]: { bar: number };
         foo: E;
-        ~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type '{ bar: number; }'.
     }
     
@@ -75,7 +75,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotA
     interface I8 {
         [x: string]: number[];
         foo: E;
-        ~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'number[]'.
     }
     
@@ -83,7 +83,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotA
     interface I9 {
         [x: string]: I8;
         foo: E;
-        ~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'I8'.
     }
     
@@ -91,7 +91,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotA
     interface I10 {
         [x: string]: A;
         foo: E;
-        ~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'A'.
     }
     
@@ -99,7 +99,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotA
     interface I11 {
         [x: string]: A2<number>;
         foo: E;
-        ~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'A2<number>'.
     }
     
@@ -107,7 +107,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotA
     interface I12 {
         [x: string]: (x) => number;
         foo: E;
-        ~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type '(x: any) => number'.
     }
     
@@ -115,7 +115,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotA
     interface I13 {
         [x: string]: <T>(x: T) => T;
         foo: E;
-        ~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type '<T>(x: T) => T'.
     }
     
@@ -124,7 +124,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotA
     interface I14 {
         [x: string]: E2;
         foo: E;
-        ~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'E2'.
     }
     
@@ -136,7 +136,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotA
     interface I15 {
         [x: string]: typeof f;
         foo: E;
-        ~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'typeof f'.
     }
     
@@ -148,7 +148,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotA
     interface I16 {
         [x: string]: typeof c;
         foo: E;
-        ~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'typeof c'.
     }
     
@@ -156,7 +156,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotA
     interface I17<T> {
         [x: string]: T;
         foo: E;
-        ~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'T'.
     }
     
@@ -164,7 +164,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotA
     interface I18<T, U extends T> {
         [x: string]: U;
         foo: E;
-        ~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'U'.
     }
     
