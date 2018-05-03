@@ -13,3 +13,17 @@ var sid = s => s + "!";
 >s : Symbol(s, Decl(cb.js, 8, 9))
 >s : Symbol(s, Decl(cb.js, 8, 9))
 
+
+/** @type {NoReturn} */
+var noreturn = obj => void obj.title
+>noreturn : Symbol(noreturn, Decl(cb.js, 12, 3))
+>obj : Symbol(obj, Decl(cb.js, 12, 14))
+>obj.title : Symbol(title, Decl(cb.js, 16, 34))
+>obj : Symbol(obj, Decl(cb.js, 12, 14))
+>title : Symbol(title, Decl(cb.js, 16, 34))
+
+/**
+ * @callback NoReturn
+ * @param {{ e: number, m: number, title: string }} s - Knee deep, shores, etc
+ */
+

@@ -17,3 +17,19 @@ var sid = s => s + "!";
 >s : string
 >"!" : "!"
 
+
+/** @type {NoReturn} */
+var noreturn = obj => void obj.title
+>noreturn : (s: { e: number; m: number; title: string; }) => any
+>obj => void obj.title : (obj: { e: number; m: number; title: string; }) => any
+>obj : { e: number; m: number; title: string; }
+>void obj.title : undefined
+>obj.title : string
+>obj : { e: number; m: number; title: string; }
+>title : string
+
+/**
+ * @callback NoReturn
+ * @param {{ e: number, m: number, title: string }} s - Knee deep, shores, etc
+ */
+
