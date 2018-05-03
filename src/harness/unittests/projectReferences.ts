@@ -130,7 +130,7 @@ namespace ts {
 
             testProjectReferences(spec, "/primary/tsconfig.json", program => {
                 const errs = program.getOptionsDiagnostics();
-                assertHasError("Reports an error about the wrong decl setting", errs, Diagnostics.Projects_may_not_disable_declaration_emit);
+                assertHasError("Reports an error about the wrong decl setting", errs, Diagnostics.Composite_projects_may_not_disable_declaration_emit);
             });
         });
 
