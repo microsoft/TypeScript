@@ -1,15 +1,8 @@
 === tests/cases/compiler/mod.d.ts ===
 declare function expect(spy: Function): void;
->expect : { (spy: Function): void; <T>(actual: ArrayLike<T>): void; (spy: Function): void; (element: string): void; }
+>expect : { (spy: Function): void; (element: string): void; }
 >spy : Function
 >Function : Function
-
-declare function expect<T>(actual: ArrayLike<T>): void;
->expect : { (spy: Function): void; <T>(actual: ArrayLike<T>): void; (spy: Function): void; (element: string): void; }
->T : T
->actual : ArrayLike<T>
->ArrayLike : ArrayLike<T>
->T : T
 
 declare module "mod" {
 >"mod" : typeof import("mod")
@@ -27,12 +20,6 @@ declare global {
 >global : typeof global
 
     function expect(element: string): void;
->expect : { (spy: Function): void; <T>(actual: ArrayLike<T>): void; (spy: Function): void; (element: string): void; }
+>expect : { (spy: Function): void; (element: string): void; }
 >element : string
 }
-=== tests/cases/compiler/index.d.ts ===
-declare function expect(spy: Function): void;
->expect : { (spy: Function): void; <T>(actual: ArrayLike<T>): void; (spy: Function): void; (element: string): void; }
->spy : Function
->Function : Function
-
