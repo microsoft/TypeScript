@@ -138,13 +138,13 @@ function f2<T, U>(x: T, y: U) {
 
     var r4 = true ? new Date() : x;
 >r4 : Symbol(r4, Decl(subtypesOfTypeParameter.ts, 46, 7), Decl(subtypesOfTypeParameter.ts, 47, 7))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
 
     var r4 = true ? x : new Date();
 >r4 : Symbol(r4, Decl(subtypesOfTypeParameter.ts, 46, 7), Decl(subtypesOfTypeParameter.ts, 47, 7))
 >x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     var r5 = true ? /1/ : x;
 >r5 : Symbol(r5, Decl(subtypesOfTypeParameter.ts, 49, 7), Decl(subtypesOfTypeParameter.ts, 50, 7))

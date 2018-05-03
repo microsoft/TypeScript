@@ -81,7 +81,7 @@ var r5a = _.map<number, string, Date>(c2, (x, y) => { return x.toFixed() });
 >_.map : Symbol(Combinators.map, Decl(genericCombinators2.ts, 6, 23), Decl(genericCombinators2.ts, 7, 81))
 >_ : Symbol(_, Decl(genericCombinators2.ts, 11, 3))
 >map : Symbol(Combinators.map, Decl(genericCombinators2.ts, 6, 23), Decl(genericCombinators2.ts, 7, 81))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >c2 : Symbol(c2, Decl(genericCombinators2.ts, 12, 3))
 >x : Symbol(x, Decl(genericCombinators2.ts, 14, 43))
 >y : Symbol(y, Decl(genericCombinators2.ts, 14, 45))
@@ -94,7 +94,7 @@ var r5b = _.map<number, string, Date>(c2, rf1);
 >_.map : Symbol(Combinators.map, Decl(genericCombinators2.ts, 6, 23), Decl(genericCombinators2.ts, 7, 81))
 >_ : Symbol(_, Decl(genericCombinators2.ts, 11, 3))
 >map : Symbol(Combinators.map, Decl(genericCombinators2.ts, 6, 23), Decl(genericCombinators2.ts, 7, 81))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >c2 : Symbol(c2, Decl(genericCombinators2.ts, 12, 3))
 >rf1 : Symbol(rf1, Decl(genericCombinators2.ts, 13, 3))
 

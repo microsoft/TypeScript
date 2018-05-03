@@ -1253,25 +1253,6 @@ namespace vfs {
         node: Inode | undefined;
     }
 
-    // TODO(rbuckton): This patches the baseline to replace lib.d.ts with lib.es5.d.ts.
-    // This is only to make the PR for this change easier to read. A follow-up PR will
-    // revert this change and accept the new baselines.
-    // See https://github.com/Microsoft/TypeScript/pull/20763#issuecomment-352553264
-    function patchResolver(host: FileSystemResolverHost, resolver: FileSystemResolver): FileSystemResolver {
-        const libFile = vpath.combine(host.getWorkspaceRoot(), "built/local/lib.d.ts");
-        const es5File = vpath.combine(host.getWorkspaceRoot(), "built/local/lib.es5.d.ts");
-        const stringComparer = host.useCaseSensitiveFileNames() ? vpath.compareCaseSensitive : vpath.compareCaseInsensitive;
-        return {
-            readdirSync: path => resolver.readdirSync(path),
-            statSync: path => resolver.statSync(fixPath(path)),
-            readFileSync: (path) => resolver.readFileSync(fixPath(path))
-        };
-
-        function fixPath(path: string) {
-            return stringComparer(path, libFile) === 0 ? es5File : path;
-        }
-    }
-
     let builtLocalHost: FileSystemResolverHost | undefined;
     let builtLocalCI: FileSystem | undefined;
     let builtLocalCS: FileSystem | undefined;
@@ -1286,7 +1267,7 @@ namespace vfs {
             const resolver = createResolver(host);
             builtLocalCI = new FileSystem(/*ignoreCase*/ true, {
                 files: {
-                    [builtFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "built/local"), patchResolver(host, resolver)),
+                    [builtFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "built/local"), resolver),
                     [testLibFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "tests/lib"), resolver),
                     [srcFolder]: {}
                 },

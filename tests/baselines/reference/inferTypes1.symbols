@@ -502,7 +502,7 @@ type Example = {
 
     date: Date,
 >date : Symbol(date, Decl(inferTypes1.ts, 112, 19))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     customClass: MyClass,
 >customClass : Symbol(customClass, Decl(inferTypes1.ts, 113, 15))
@@ -521,7 +521,7 @@ type Example = {
         nested: { attr: Date }
 >nested : Symbol(nested, Decl(inferTypes1.ts, 117, 21))
 >attr : Symbol(attr, Decl(inferTypes1.ts, 118, 17))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     },
 }

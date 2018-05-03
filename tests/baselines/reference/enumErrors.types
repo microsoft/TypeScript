@@ -67,7 +67,7 @@ enum E11 {
 
     C = window,
 >C : E11
->window : any
+>window : Window
 
     D = {}
 >D : E11
@@ -89,7 +89,7 @@ enum E12 {
 
     C = window,
 >C : E12.B
->window : any
+>window : Window
 
     D = {},
 >D : E12.B

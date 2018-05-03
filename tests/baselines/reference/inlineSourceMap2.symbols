@@ -5,5 +5,8 @@ var x = 0;
 >x : Symbol(x, Decl(inlineSourceMap2.ts, 2, 3))
 
 console.log(x);
+>console.log : Symbol(Console.log, Decl(lib.d.ts, --, --))
+>console : Symbol(console, Decl(lib.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(inlineSourceMap2.ts, 2, 3))
 

@@ -4,39 +4,39 @@ function CheckAssignability() {
 
     let arr_Int8Array           = new Int8Array(1);
 >arr_Int8Array : Symbol(arr_Int8Array, Decl(typedArraysCrossAssignability01.ts, 1, 7))
->Int8Array : Symbol(Int8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Int8Array : Symbol(Int8Array, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 
     let arr_Uint8Array          = new Uint8Array(1);
 >arr_Uint8Array : Symbol(arr_Uint8Array, Decl(typedArraysCrossAssignability01.ts, 2, 7))
->Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 
     let arr_Int16Array          = new Int16Array(1);
 >arr_Int16Array : Symbol(arr_Int16Array, Decl(typedArraysCrossAssignability01.ts, 3, 7))
->Int16Array : Symbol(Int16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Int16Array : Symbol(Int16Array, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 
     let arr_Uint16Array         = new Uint16Array(1);
 >arr_Uint16Array : Symbol(arr_Uint16Array, Decl(typedArraysCrossAssignability01.ts, 4, 7))
->Uint16Array : Symbol(Uint16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Uint16Array : Symbol(Uint16Array, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 
     let arr_Int32Array          = new Int32Array(1);
 >arr_Int32Array : Symbol(arr_Int32Array, Decl(typedArraysCrossAssignability01.ts, 5, 7))
->Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Int32Array : Symbol(Int32Array, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 
     let arr_Uint32Array         = new Uint32Array(1);
 >arr_Uint32Array : Symbol(arr_Uint32Array, Decl(typedArraysCrossAssignability01.ts, 6, 7))
->Uint32Array : Symbol(Uint32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Uint32Array : Symbol(Uint32Array, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 
     let arr_Float32Array        = new Float32Array(1);
 >arr_Float32Array : Symbol(arr_Float32Array, Decl(typedArraysCrossAssignability01.ts, 7, 7))
->Float32Array : Symbol(Float32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Float32Array : Symbol(Float32Array, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 
     let arr_Float64Array        = new Float64Array(1);
 >arr_Float64Array : Symbol(arr_Float64Array, Decl(typedArraysCrossAssignability01.ts, 8, 7))
->Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Float64Array : Symbol(Float64Array, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 
     let arr_Uint8ClampedArray   = new Uint8ClampedArray(1);
 >arr_Uint8ClampedArray : Symbol(arr_Uint8ClampedArray, Decl(typedArraysCrossAssignability01.ts, 9, 7))
->Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 
     arr_Int8Array = arr_Int8Array;
 >arr_Int8Array : Symbol(arr_Int8Array, Decl(typedArraysCrossAssignability01.ts, 1, 7))
