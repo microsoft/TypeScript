@@ -1,6 +1,8 @@
 // @target: es5
 // @lib: es6
 // @strict: true
+
+// repro for: https://github.com/Microsoft/TypeScript/issues/23661
 export interface IValidationError {
     message: string;
 }
