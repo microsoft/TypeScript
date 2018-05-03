@@ -2681,16 +2681,23 @@ namespace ts {
     export const supportedJavascriptExtensions: ReadonlyArray<Extension> = [Extension.Js, Extension.Jsx];
     const allSupportedExtensions: ReadonlyArray<Extension> = [...supportedTypeScriptExtensions, ...supportedJavascriptExtensions];
 
-    export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: ReadonlyArray<JsFileExtensionInfo>): ReadonlyArray<string> {
-        const needAllExtensions = options && options.allowJs;
-        if (!extraFileExtensions || extraFileExtensions.length === 0 || !needAllExtensions) {
-            return needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions;
+    export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ReadonlyArray<string> {
+        const needJsExtensions = options && options.allowJs;
+
+        if (!extraFileExtensions || extraFileExtensions.length === 0) {
+            return needJsExtensions ? allSupportedExtensions : supportedTypeScriptExtensions;
         }
-        return deduplicate(
-            [...allSupportedExtensions, ...extraFileExtensions.map(e => e.extension)],
-            equateStringsCaseSensitive,
-            compareStringsCaseSensitive
-        );
+
+        const extensions = [
+            ...needJsExtensions ? allSupportedExtensions : supportedTypeScriptExtensions,
+            ...mapDefined(extraFileExtensions, x => x.scriptKind === ScriptKind.Deferred || needJsExtensions && isJavaScriptLike(x.scriptKind) ? x.extension : undefined)
+        ];
+
+        return deduplicate(extensions, equateStringsCaseSensitive, compareStringsCaseSensitive);
+    }
+
+    function isJavaScriptLike(scriptKind: ScriptKind): boolean {
+        return scriptKind === ScriptKind.JS || scriptKind === ScriptKind.JSX;
     }
 
     export function hasJavaScriptFileExtension(fileName: string) {
@@ -2701,7 +2708,7 @@ namespace ts {
         return forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
-    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: ReadonlyArray<JsFileExtensionInfo>) {
+    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: ReadonlyArray<FileExtensionInfo>) {
         if (!fileName) { return false; }
 
         for (const extension of getSupportedExtensions(compilerOptions, extraFileExtensions)) {

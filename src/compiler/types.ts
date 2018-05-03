@@ -4098,7 +4098,10 @@ namespace ts {
         Prototype,
     }
 
-    export interface JsFileExtensionInfo {
+    /** @deprecated Use FileExtensionInfo instead. */
+    export type JsFileExtensionInfo = FileExtensionInfo;
+
+    export interface FileExtensionInfo {
         extension: string;
         isMixedContent: boolean;
         scriptKind?: ScriptKind;
@@ -4306,7 +4309,12 @@ namespace ts {
         TS = 3,
         TSX = 4,
         External = 5,
-        JSON = 6
+        JSON = 6,
+        /**
+         * Used on extensions that doesn't define the ScriptKind but the content defines it.
+         * Deferred extensions are going to be included in all project contexts.
+         */
+        Deferred = 7
     }
 
     export const enum ScriptTarget {
