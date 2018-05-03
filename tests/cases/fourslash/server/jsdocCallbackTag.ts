@@ -2,16 +2,15 @@
 
 // @allowNonTsExtensions: true
 // @Filename: jsdocCallbackTag.js
-
 //// /**
-////  * @callback FooHandler
+////  * @callback FooHandler - A kind of magic
 ////  * @param {string} eventName - So many words
 ////  * @param eventName2 {number | string} - Silence is golden
 ////  * @param eventName3 - Osterreich mos def
 ////  * @return {number} - DIVEKICK
 ////  */
 //// /**
-////  * @type {FooHandler} callback
+////  * @type {FooHa/*8*/ndler} callback
 ////  */
 //// var t/*1*/;
 ////
@@ -24,11 +23,20 @@
 ////  * @type {FooH/*3*/andler2} callback
 ////  */
 //// var t2/*2*/;
-
+//// t(/*4*/"!", /*5*/12, /*6*/false);
 
 goTo.marker("1");
 verify.quickInfoIs("var t: (eventName: string, eventName2: string | number, eventName3: any) => number");
 goTo.marker("2");
 verify.quickInfoIs("var t2: (eventName?: string, eventName2?: string) => any");
 goTo.marker("3");
-verify.quickInfoIs("type FooHandler2 = (eventName?: string, eventName2?: string) => any");
+verify.quickInfoIs("type FooHandler2 = (eventName?: string, eventName2?: string) => any", "- What, another one?");
+goTo.marker("8");
+verify.quickInfoIs("type FooHandler = (eventName: string, eventName2: string | number, eventName3: any) => number", "- A kind of magic");
+goTo.marker('4');
+verify.currentSignatureHelpIs("t(eventName: string, eventName2: string | number, eventName3: any): number");
+verify.currentParameterHelpArgumentDocCommentIs("- So many words");
+goTo.marker('5');
+verify.currentParameterHelpArgumentDocCommentIs("- Silence is golden");
+goTo.marker('6');
+verify.currentParameterHelpArgumentDocCommentIs("- Osterreich mos def");

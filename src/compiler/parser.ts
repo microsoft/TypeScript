@@ -6465,10 +6465,10 @@ namespace ts {
                                 tag = parseTypeTag(atToken, tagName);
                                 break;
                             case "typedef":
-                                tag = parseTypedefTag(atToken, tagName);
+                                tag = parseTypedefTag(atToken, tagName, indent);
                                 break;
                             case "callback":
-                                tag = parseCallbackTag(atToken, tagName);
+                                tag = parseCallbackTag(atToken, tagName, indent);
                                 break;
                             default:
                                 tag = parseUnknownTag(atToken, tagName);
@@ -6483,7 +6483,10 @@ namespace ts {
                         // a badly malformed tag should not be added to the list of tags
                         return;
                     }
-                    tag.comment = parseTagComments(indent + tag.end - tag.pos);
+                    if (!tag.comment) {
+                        // some tags, like typedef and callback, have already parsed their comments earlier
+                        tag.comment = parseTagComments(indent + tag.end - tag.pos);
+                    }
                     addTag(tag);
                 }
 
@@ -6724,7 +6727,7 @@ namespace ts {
                     return finishNode(tag);
                 }
 
-                function parseTypedefTag(atToken: AtToken, tagName: Identifier): JSDocTypedefTag {
+                function parseTypedefTag(atToken: AtToken, tagName: Identifier, indent: number): JSDocTypedefTag {
                     const typeExpression = tryParseTypeExpression();
                     skipWhitespace();
 
@@ -6735,6 +6738,7 @@ namespace ts {
                     typedefTag.name = getJSDocTypeAliasName(typedefTag.fullName);
                     skipWhitespace();
 
+                    typedefTag.comment = parseTagComments(indent);
                     typedefTag.typeExpression = typeExpression;
                     if (!typeExpression || isObjectOrObjectArrayTypeReference(typeExpression.type)) {
                         let child: JSDocTypeTag | JSDocPropertyTag | false;
@@ -6790,13 +6794,14 @@ namespace ts {
                     return typeNameOrNamespaceName;
                 }
 
-                function parseCallbackTag(atToken: AtToken, tagName: Identifier): JSDocCallbackTag {
+                function parseCallbackTag(atToken: AtToken, tagName: Identifier, indent: number): JSDocCallbackTag {
                     const callbackTag = createNode(SyntaxKind.JSDocCallbackTag, atToken.pos) as JSDocCallbackTag;
                     callbackTag.atToken = atToken;
                     callbackTag.tagName = tagName;
                     callbackTag.fullName = parseJSDocTypeNameWithNamespace();
                     callbackTag.name = getJSDocTypeAliasName(callbackTag.fullName);
                     skipWhitespace();
+                    callbackTag.comment = parseTagComments(indent);
 
                     let child: JSDocParameterTag | false;
                     const start = scanner.getStartPos();
@@ -6812,7 +6817,9 @@ namespace ts {
                             nextToken(); // why is this needed? Doesn't parseExpectedToken advance the token enough?
                             const name = parseJSDocIdentifierName();
                             if (name && (name.escapedText === "return" || name.escapedText === "returns")) {
-                                return parseReturnTag(atToken, name);
+                                const returnTag = parseReturnTag(atToken, name);
+                                returnTag.comment = parseTagComments(indent);
+                                return returnTag;
                             }
                         }
                     });
