@@ -94,6 +94,8 @@ declare function escape(string: string): string;
   */
 declare function unescape(string: string): string;
 
+declare type PropertyKey = string | number | symbol;
+
 interface PropertyDescriptor {
     configurable?: boolean;
     enumerable?: boolean;
@@ -124,7 +126,7 @@ interface Object {
       * Determines whether an object has a property with the specified name.
       * @param v A property name.
       */
-    hasOwnProperty(v: string): boolean;
+    hasOwnProperty(v: PropertyKey): boolean;
 
     /**
       * Determines whether an object exists in another object's prototype chain.
@@ -136,7 +138,7 @@ interface Object {
       * Determines whether a specified property is enumerable.
       * @param v A property name.
       */
-    propertyIsEnumerable(v: string): boolean;
+    propertyIsEnumerable(v: PropertyKey): boolean;
 }
 
 interface ObjectConstructor {
@@ -159,7 +161,7 @@ interface ObjectConstructor {
       * @param o Object that contains the property.
       * @param p Name of the property.
     */
-    getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor | undefined;
+    getOwnPropertyDescriptor(o: any, p: PropertyKey): PropertyDescriptor | undefined;
 
     /**
       * Returns the names of the own properties of an object. The own properties of an object are those that are defined directly
@@ -187,7 +189,7 @@ interface ObjectConstructor {
       * @param p The property name.
       * @param attributes Descriptor for the property. It can be for a data property or an accessor property.
       */
-    defineProperty(o: any, p: string, attributes: PropertyDescriptor & ThisType<any>): any;
+    defineProperty(o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>): any;
 
     /**
       * Adds one or more properties to an object, and/or modifies attributes of existing properties.
@@ -525,6 +527,15 @@ interface TemplateStringsArray extends ReadonlyArray<string> {
     readonly raw: ReadonlyArray<string>;
 }
 
+/**
+ * The type of `import.meta`.
+ * 
+ * If you need to declare that a given property exists on `import.meta`,
+ * this type may be augmented via interface merging.
+ */
+interface ImportMeta {
+}
+
 interface Math {
     /** The mathematical constant e. This is Euler's number, the base of natural logarithms. */
     readonly E: number;
@@ -792,8 +803,7 @@ interface Date {
 
 interface DateConstructor {
     new(): Date;
-    new(value: number): Date;
-    new(value: string): Date;
+    new(value: number | string): Date;
     new(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date;
     (): string;
     readonly prototype: Date;
@@ -1361,7 +1371,7 @@ type Pick<T, K extends keyof T> = {
 /**
  * Construct a type with a set of properties K of type T
  */
-type Record<K extends string, T> = {
+type Record<K extends keyof any, T> = {
     [P in K]: T;
 };
 
@@ -8129,7 +8139,7 @@ interface Document extends Node, GlobalEventHandlers, ParentNode, DocumentEvent 
     /**
      * Retrieves a value that indicates the current state of the object.
      */
-    readonly readyState: string;
+    readonly readyState: DocumentReadyState;
     /**
      * Gets the URL of the location that referred the user to the current page.
      */
@@ -8388,6 +8398,7 @@ interface Document extends Node, GlobalEventHandlers, ParentNode, DocumentEvent 
      */
     queryCommandValue(commandId: string): string;
     releaseEvents(): void;
+    updateSettings(): void;
     webkitCancelFullScreen(): void;
     webkitExitFullscreen(): void;
     /**
@@ -10412,7 +10423,7 @@ interface HTMLInputElement extends HTMLElement {
     /**
      * Returns a FileList object on a file type input object.
      */
-    readonly files: FileList | null;
+    files: FileList | null;
     /**
      * Retrieves a reference to the form that the object is embedded in.
      */
@@ -17014,6 +17025,7 @@ interface SourceBuffer extends EventTarget {
     readonly audioTracks: AudioTrackList;
     readonly buffered: TimeRanges;
     mode: AppendMode;
+    readonly textTracks: TextTrackList;
     timestampOffset: number;
     readonly updating: boolean;
     readonly videoTracks: VideoTrackList;
@@ -18954,6 +18966,8 @@ declare var WheelEvent: {
 
 interface WindowEventMap extends GlobalEventHandlersEventMap {
     "abort": UIEvent;
+    "afterprint": Event;
+    "beforeprint": Event;
     "beforeunload": BeforeUnloadEvent;
     "blur": FocusEvent;
     "canplay": Event;
@@ -19085,6 +19099,8 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     readonly navigator: Navigator;
     offscreenBuffering: string | boolean;
     onabort: ((this: Window, ev: UIEvent) => any) | null;
+    onafterprint: ((this: Window, ev: Event) => any) | null;
+    onbeforeprint: ((this: Window, ev: Event) => any) | null;
     onbeforeunload: ((this: Window, ev: BeforeUnloadEvent) => any) | null;
     onblur: ((this: Window, ev: FocusEvent) => any) | null;
     oncanplay: ((this: Window, ev: Event) => any) | null;
@@ -19895,6 +19911,8 @@ declare const name: never;
 declare var navigator: Navigator;
 declare var offscreenBuffering: string | boolean;
 declare var onabort: ((this: Window, ev: UIEvent) => any) | null;
+declare var onafterprint: ((this: Window, ev: Event) => any) | null;
+declare var onbeforeprint: ((this: Window, ev: Event) => any) | null;
 declare var onbeforeunload: ((this: Window, ev: BeforeUnloadEvent) => any) | null;
 declare var onblur: ((this: Window, ev: FocusEvent) => any) | null;
 declare var oncanplay: ((this: Window, ev: Event) => any) | null;
@@ -20139,6 +20157,7 @@ type ChannelCountMode = "max" | "clamped-max" | "explicit";
 type ChannelInterpretation = "speakers" | "discrete";
 type DisplayCaptureSurfaceType = "monitor" | "window" | "application" | "browser";
 type DistanceModelType = "linear" | "inverse" | "exponential";
+type DocumentReadyState = "loading" | "interactive" | "complete";
 type EndOfStreamError = "network" | "decode";
 type ExpandGranularity = "character" | "word" | "sentence" | "textedit";
 type GamepadHand = "" | "left" | "right";
