@@ -710,10 +710,9 @@ namespace ts {
         KindMask = 7,                       // Mask to extract the kind of identifier from its flags.
 
         // Flags
-        SkipNameGenerationScope = 1 << 3,   // Should skip a name generation scope when generating the name for this identifier
-        ReservedInNestedScopes = 1 << 4,    // Reserve the generated name in nested scopes
-        Optimistic = 1 << 5,                // First instance won't use '_#' if there's no conflict
-        FileLevel = 1 << 6,                 // Use only the file identifiers list and not generated names to search for conflicts
+        ReservedInNestedScopes = 1 << 3,    // Reserve the generated name in nested scopes
+        Optimistic = 1 << 4,                // First instance won't use '_#' if there's no conflict
+        FileLevel = 1 << 5,                 // Use only the file identifiers list and not generated names to search for conflicts
     }
 
     export interface Identifier extends PrimaryExpression, Declaration {
