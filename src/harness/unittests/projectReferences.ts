@@ -77,18 +77,18 @@ namespace ts {
             }
         }
 
-        const vfsys = new vfs.FileSystem(false, { files: { '/lib.d.ts': TestFSWithWatch.libFile.content! }});
+        const vfsys = new vfs.FileSystem(false, { files: { "/lib.d.ts": TestFSWithWatch.libFile.content! } });
         files.forEach((v, k) => {
             vfsys.mkdirpSync(getDirectoryPath(k));
             vfsys.writeFileSync(k, v);
         });
-        const host = new fakes.CompilerHost(new fakes.System(vfsys)); 
+        const host = new fakes.CompilerHost(new fakes.System(vfsys));
 
         const { config, error } = readConfigFile(entryPointConfigFileName, name => host.readFile(name));
 
         // We shouldn't have any errors about invalid tsconfig files in these tests
         assert(config && !error, flattenDiagnosticMessageText(error && error.messageText, "\n"));
-        const file = parseJsonConfigFileContent(config, ts.parseConfigHostFromCompilerHost(host), getDirectoryPath(entryPointConfigFileName), {}, entryPointConfigFileName);
+        const file = parseJsonConfigFileContent(config, parseConfigHostFromCompilerHost(host), getDirectoryPath(entryPointConfigFileName), {}, entryPointConfigFileName);
         file.options.configFilePath = entryPointConfigFileName;
         const prog = createProgram({
             rootNames: file.fileNames,
