@@ -1,5 +1,6 @@
 // This file contains the build logic for the public repo
 // @ts-check
+/// <reference types="jake" />
 
 var fs = require("fs");
 var os = require("os");
@@ -171,35 +172,34 @@ var compilerFilename = "tsc.js";
 var LKGCompiler = path.join(LKGDirectory, compilerFilename);
 var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
 
-/* Compiles a file from a list of sources
-    * @param outFile: the target file name
-    * @param sources: an array of the names of the source files
-    * @param prereqs: prerequisite tasks to compiling the file
-    * @param prefixes: a list of files to prepend to the target file
-    * @param useBuiltCompiler: true to use the built compiler, false to use the LKG
-    * @parap {Object}  opts - property bag containing auxiliary options
-    * @param {boolean} opts.noOutFile: true to compile without using --out
-    * @param {boolean} opts.generateDeclarations: true to compile using --declaration
-    * @param {string}  opts.outDir: value for '--outDir' command line option
-    * @param {boolean} opts.keepComments: false to compile using --removeComments
-    * @param {boolean} opts.preserveConstEnums: true if compiler should keep const enums in code
-    * @param {boolean} opts.noResolve: true if compiler should not include non-rooted files in compilation
-    * @param {boolean} opts.stripInternal: true if compiler should remove declarations marked as @internal
-    * @param {boolean} opts.inlineSourceMap: true if compiler should inline sourceMap
-    * @param {Array} opts.types: array of types to include in compilation
-    * @param callback: a function to execute after the compilation process ends
-    */
+/**
+ * Compiles a file from a list of sources
+ * @param {string} outFile the target file name
+ * @param {string[]} sources an array of the names of the source files
+ * @param {string[]} prereqs prerequisite tasks to compiling the file
+ * @param {string[]} prefixes a list of files to prepend to the target file
+ * @param {boolean} useBuiltCompiler true to use the built compiler, false to use the LKG
+ * @param {object} [opts] property bag containing auxiliary options
+ * @param {boolean} [opts.noOutFile] true to compile without using --out
+ * @param {boolean} [opts.generateDeclarations] true to compile using --declaration
+ * @param {string} [opts.outDir] value for '--outDir' command line option
+ * @param {boolean} [opts.keepComments] false to compile using --removeComments
+ * @param {boolean} [opts.preserveConstEnums] true if compiler should keep const enums in code
+ * @param {boolean} [opts.noResolve] true if compiler should not include non-rooted files in compilation
+ * @param {boolean} [opts.stripInternal] true if compiler should remove declarations marked as internal
+ * @param {boolean} [opts.inlineSourceMap] true if compiler should inline sourceMap
+ * @param {string[]} [opts.types] array of types to include in compilation
+ * @param {string} [opts.lib] explicit libs to include.
+ * @param {function(): void} [callback] a function to execute after the compilation process ends
+ */
 function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts, callback) {
     file(outFile, prereqs, function() {
-        if (process.env.USE_TRANSFORMS === "false") {
-            useBuiltCompiler = false;
-        }
         var startCompileTime = mark();
         opts = opts || {};
         var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
-        var options = "--noImplicitAny --noImplicitThis --alwaysStrict --noEmitOnError --types ";
+        var options = "--noImplicitAny --noImplicitThis --alwaysStrict --noEmitOnError";
         if (opts.types) {
-            options += opts.types.join(",");
+            options += " --types " + opts.types.join(",");
         }
         options += " --pretty";
         // Keep comments when specifically requested
@@ -236,7 +236,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
                 options += " --inlineSourceMap --inlineSources";
             }
             else {
-                options += " -sourcemap";
+                options += " --sourcemap";
             }
         }
         options += " --newLine LF";
@@ -244,7 +244,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         if (opts.stripInternal) {
             options += " --stripInternal";
         }
-        options += " --target es5";
+        options +=  " --target es5";
         if (opts.lib) {
             options += " --lib " + opts.lib;
         }
@@ -362,7 +362,6 @@ var buildProtocolTs = path.join(scriptsDirectory, "buildProtocol.ts");
 var buildProtocolJs = path.join(scriptsDirectory, "buildProtocol.js");
 var buildProtocolDts = path.join(builtLocalDirectory, "protocol.d.ts");
 var typescriptServicesDts = path.join(builtLocalDirectory, "typescriptServices.d.ts");
-var typesMapJson = path.join(builtLocalDirectory, "typesMap.json");
 
 file(buildProtocolTs);
 
@@ -540,7 +539,7 @@ var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources, [builtLocalDirectory, copyright, cancellationTokenFile, typingsInstallerFile, watchGuardFile].concat(serverSources).concat(servicesSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { types: ["node"], preserveConstEnums: true, lib: "es6" });
 var tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js");
 var tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");
-file(typesMapOutputPath, function() {
+file(typesMapOutputPath, /** @type {*} */(function() {
     var content = fs.readFileSync(path.join(serverDirectory, 'typesMap.json'));
     // Validate that it's valid JSON
     try {
@@ -549,7 +548,7 @@ file(typesMapOutputPath, function() {
         console.log("Parse error in typesMap.json: " + e);
     }
     fs.writeFileSync(typesMapOutputPath, content);
-});
+}));
 compileFile(
     tsserverLibraryFile,
     languageServiceLibrarySources,
@@ -693,7 +692,7 @@ desc("Builds the test infrastructure using the built compiler");
 task("tests", ["local", run].concat(libraryTargets));
 
 function exec(cmd, completeHandler, errorHandler) {
-    var ex = jake.createExec([cmd], { windowsVerbatimArguments: true, interactive: true });
+    var ex = jake.createExec([cmd], /** @type {jake.ExecOptions} */({ windowsVerbatimArguments: true, interactive: true }));
     // Add listeners for output and error
     ex.addListener("stdout", function (output) {
         process.stdout.write(output);
@@ -1170,7 +1169,7 @@ task("lint", ["build-rules"], () => {
    function lint(project, cb) {
         const cmd = `node node_modules/tslint/bin/tslint --project ${project} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
         console.log("Linting: " + cmd);
-        jake.exec([cmd], { interactive: true, windowsVerbatimArguments: true }, cb);
+        jake.exec([cmd], cb, /** @type {jake.ExecOptions} */({ interactive: true, windowsVerbatimArguments: true }));
    }
    lint("scripts/tslint/tsconfig.json", () => lint("src/tsconfig-base.json", () => {
         if (fold.isTravis()) console.log(fold.end("lint"));

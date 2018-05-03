@@ -1820,7 +1820,7 @@ namespace ts {
     }
 
     function getDefaultCompilerOptions(configFileName?: string) {
-        const options: CompilerOptions = getBaseFileName(configFileName) === "jsconfig.json"
+        const options: CompilerOptions = configFileName && getBaseFileName(configFileName) === "jsconfig.json"
             ? { allowJs: true, maxNodeModuleJsDepth: 2, allowSyntheticDefaultImports: true, skipLibCheck: true, noEmit: true }
             : {};
         return options;
@@ -1835,7 +1835,7 @@ namespace ts {
     }
 
     function getDefaultTypeAcquisition(configFileName?: string): TypeAcquisition {
-        return { enable: getBaseFileName(configFileName) === "jsconfig.json", include: [], exclude: [] };
+        return { enable: configFileName && getBaseFileName(configFileName) === "jsconfig.json", include: [], exclude: [] };
     }
 
     function convertTypeAcquisitionFromJsonWorker(jsonOptions: any,

@@ -761,7 +761,7 @@ const nodeServerOutFile = "tests/webTestServer.js";
 const nodeServerInFile = "tests/webTestServer.ts";
 gulp.task(nodeServerOutFile, /*help*/ false, [servicesFile], () => {
     /** @type {tsc.Settings} */
-    const settings = getCompilerSettings({ module: "commonjs" }, /*useBuiltCompiler*/ true);
+    const settings = getCompilerSettings({ module: "commonjs", target: "es2015" }, /*useBuiltCompiler*/ true);
     return gulp.src(nodeServerInFile)
         .pipe(newer(nodeServerOutFile))
         .pipe(sourcemaps.init())

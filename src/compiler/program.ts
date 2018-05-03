@@ -57,7 +57,7 @@ namespace ts {
             return currentDirectory;
         }
 
-        return getNormalizedPathFromPathComponents(commonPathComponents);
+        return getPathFromPathComponents(commonPathComponents);
     }
 
     interface OutputFingerprint {

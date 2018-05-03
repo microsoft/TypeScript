@@ -42,6 +42,6 @@
 
 verify.completions({
     at: test.markerNames(),
-    are: ["prefix", "prefix-only", "2test", "0test", "1test"],
+    are: ["2test", "prefix", "prefix-only", "0test", "1test"],
     isNewIdentifierLocation: true,
 });
