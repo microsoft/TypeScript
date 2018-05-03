@@ -2324,7 +2324,7 @@ namespace ts {
     }
 
     export function fileExtensionIs(path: string, extension: string): boolean {
-        return path.length >= extension.length && endsWith(path, extension);
+        return path.length > extension.length && endsWith(path, extension);
     }
 
     export function fileExtensionIsOneOf(path: string, extensions: ReadonlyArray<string>): boolean {
