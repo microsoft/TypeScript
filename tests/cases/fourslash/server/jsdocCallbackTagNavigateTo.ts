@@ -4,7 +4,7 @@
 // @Filename: jsDocCallback.js
 
 //// /**
-////  * @callback FooCallback
+////  * @callback  FooCallback
 ////  * @param {string} eventName - What even is the navigation bar?
 ////  */
 //// /** @type {FooCallback} */
@@ -13,7 +13,7 @@
 verify.navigationBar([
     {
         "text": "<global>",
-        "kind": "module",
+        "kind": "script",
         "childItems": [
             {
                 "text": "FooCallback",

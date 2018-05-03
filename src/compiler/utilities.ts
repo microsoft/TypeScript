@@ -4652,6 +4652,8 @@ namespace ts {
                         return undefined;
                 }
             }
+            case SyntaxKind.JSDocCallbackTag:
+                return (declaration as JSDocCallbackTag).name;
             case SyntaxKind.JSDocTypedefTag:
                 return getNameOfJSDocTypedef(declaration as JSDocTypedefTag);
             case SyntaxKind.ExportAssignment: {
