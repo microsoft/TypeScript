@@ -3557,7 +3557,7 @@
         "category": "Error",
         "code": 6202
     },
-    "Projects may not disable declaration emit.": {
+    "Composite projects may not disable declaration emit.": {
         "category": "Error",
         "code": 6304
     },

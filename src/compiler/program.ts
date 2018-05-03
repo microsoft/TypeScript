@@ -542,6 +542,7 @@ namespace ts {
         performance.mark("beforeProgram");
 
         host = host || createCompilerHost(options);
+        const configParsingHost = parseConfigHostFromCompilerHost(host);
 
         let skipDefaultLib = options.noLib;
         const getDefaultLibraryFileName = memoize(() => host.getDefaultLibFileName(options));
@@ -2201,7 +2202,7 @@ namespace ts {
                 return undefined;
             }
 
-            const commandLine = parseJsonSourceFileConfigFileContent(sourceFile, parseConfigHostFromCompilerHost(host), basePath, /*existingOptions*/ undefined, refPath);
+            const commandLine = parseJsonSourceFileConfigFileContent(sourceFile, configParsingHost, basePath, /*existingOptions*/ undefined, refPath);
             return { commandLine, sourceFile };
         }
 
@@ -2254,7 +2255,7 @@ namespace ts {
 
             if (options.composite) {
                 if (options.declaration === false) {
-                    createDiagnosticForOptionName(Diagnostics.Projects_may_not_disable_declaration_emit, "declaration");
+                    createDiagnosticForOptionName(Diagnostics.Composite_projects_may_not_disable_declaration_emit, "declaration");
                 }
             }
 
@@ -2651,11 +2652,11 @@ namespace ts {
 
     function parseConfigHostFromCompilerHost(host: CompilerHost): ParseConfigFileHost {
         return {
-            fileExists: host.fileExists,
+            fileExists: f => host.fileExists(f),
             readDirectory: () => [],
-            readFile: host.readFile,
+            readFile: f => host.readFile(f),
             useCaseSensitiveFileNames: host.useCaseSensitiveFileNames(),
-            getCurrentDirectory: host.getCurrentDirectory,
+            getCurrentDirectory: () => host.getCurrentDirectory(),
             onUnRecoverableConfigFileDiagnostic: () => undefined
         };
     }

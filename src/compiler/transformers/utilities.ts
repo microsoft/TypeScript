@@ -41,7 +41,7 @@ namespace ts {
         }
 
         function transformBundle(node: Bundle) {
-            return createBundle(node.sourceFiles.map(transformSourceFile), node.prepends);
+            return createBundle(map(node.sourceFiles, transformSourceFile), node.prepends);
         }
     }
 
