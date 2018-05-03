@@ -1,6 +1,6 @@
 === tests/cases/conformance/Symbols/ES5SymbolProperty5.ts ===
 var Symbol: { iterator: symbol };
->Symbol : Symbol(Symbol, Decl(ES5SymbolProperty5.ts, 0, 3))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(ES5SymbolProperty5.ts, 0, 3))
 >iterator : Symbol(iterator, Decl(ES5SymbolProperty5.ts, 0, 13))
 
 class C {
@@ -9,13 +9,13 @@ class C {
     [Symbol.iterator]() { }
 >[Symbol.iterator] : Symbol(C[Symbol.iterator], Decl(ES5SymbolProperty5.ts, 2, 9))
 >Symbol.iterator : Symbol(iterator, Decl(ES5SymbolProperty5.ts, 0, 13))
->Symbol : Symbol(Symbol, Decl(ES5SymbolProperty5.ts, 0, 3))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(ES5SymbolProperty5.ts, 0, 3))
 >iterator : Symbol(iterator, Decl(ES5SymbolProperty5.ts, 0, 13))
 }
 
 (new C)[Symbol.iterator](0) // Should error
 >C : Symbol(C, Decl(ES5SymbolProperty5.ts, 0, 33))
 >Symbol.iterator : Symbol(iterator, Decl(ES5SymbolProperty5.ts, 0, 13))
->Symbol : Symbol(Symbol, Decl(ES5SymbolProperty5.ts, 0, 3))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(ES5SymbolProperty5.ts, 0, 3))
 >iterator : Symbol(iterator, Decl(ES5SymbolProperty5.ts, 0, 13))
 

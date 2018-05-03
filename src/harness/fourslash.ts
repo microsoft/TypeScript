@@ -18,6 +18,7 @@
 /// <reference path="harnessLanguageService.ts" />
 /// <reference path="harness.ts" />
 /// <reference path="fourslashRunner.ts" />
+/// <reference path="./compiler.ts" />
 
 namespace FourSlash {
     ts.disableIncrementalParsing = false;
@@ -277,7 +278,13 @@ namespace FourSlash {
 
             if (configFileName) {
                 const baseDir = ts.normalizePath(ts.getDirectoryPath(configFileName));
-                const host = new Utils.MockParseConfigHost(baseDir, /*ignoreCase*/ false, this.inputFiles);
+                const files: vfs.FileSet = { [baseDir]: {} };
+                this.inputFiles.forEach((data, path) => {
+                    const scriptInfo = new Harness.LanguageService.ScriptInfo(path, undefined, /*isRootFile*/ false);
+                    files[path] = new vfs.File(data, { meta: { scriptInfo } });
+                });
+                const fs = new vfs.FileSystem(/*ignoreCase*/ true, { cwd: baseDir, files });
+                const host = new fakes.ParseConfigHost(fs);
                 const jsonSourceFile = ts.parseJsonText(configFileName, this.inputFiles.get(configFileName));
                 compilationOptions = ts.parseJsonSourceFileConfigFileContent(jsonSourceFile, host, baseDir, compilationOptions, configFileName).options;
             }
@@ -333,7 +340,10 @@ namespace FourSlash {
             }
 
             for (const file of testData.files) {
-                ts.forEach(file.symlinks, link => this.languageServiceAdapterHost.addSymlink(link, file.fileName));
+                ts.forEach(file.symlinks, link => {
+                    this.languageServiceAdapterHost.vfs.mkdirpSync(vpath.dirname(link));
+                    this.languageServiceAdapterHost.vfs.symlinkSync(file.fileName, link);
+                });
             }
 
             this.formatCodeSettings = {

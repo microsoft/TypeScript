@@ -42,6 +42,6 @@
 
 verify.completions({
     marker: test.markerNames(),
-    exact: ["prefix", "prefix-only", "2test", "0test", "1test"],
+    exact: ["2test", "prefix", "prefix-only", "0test", "1test"],
     isNewIdentifierLocation: true,
 });

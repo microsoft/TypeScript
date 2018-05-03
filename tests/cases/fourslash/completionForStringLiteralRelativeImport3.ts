@@ -39,6 +39,6 @@ verify.completions(
     },
     {
         marker: kinds.map(k => `${k}2`),
-        exact: ["e1", "f1", "f2", "tests", "folder"],
+        exact: ["e1", "f1", "f2", "folder", "tests"],
         isNewIdentifierLocation: true,
     });
