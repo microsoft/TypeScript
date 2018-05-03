@@ -298,9 +298,6 @@ namespace ts {
                     const functionType = <JSDocFunctionType>node.parent;
                     const index = functionType.parameters.indexOf(node as ParameterDeclaration);
                     return "arg" + index as __String;
-                case SyntaxKind.JSDocTypedefTag:
-                    const name = getNameOfJSDocTypedef(node as JSDocTypedefTag);
-                    return typeof name !== "undefined" ? name.escapedText : undefined;
             }
         }
 
@@ -453,6 +450,7 @@ namespace ts {
                 //       during global merging in the checker. Why? The only case when ambient module is permitted inside another module is module augmentation
                 //       and this case is specially handled. Module augmentations should only be merged with original module definition
                 //       and should never be merged directly with other augmentation, and the latter case would be possible if automatic merge is allowed.
+                // TODO: Handle callbacks here too
                 if (node.kind === SyntaxKind.JSDocTypedefTag) Debug.assert(isInJavaScriptFile(node)); // We shouldn't add symbols for JSDoc nodes if not in a JS file.
                 if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) || isJSDocTypedefTag(node)) {
                     if (hasModifier(node, ModifierFlags.Default) && !getDeclarationName(node)) {
@@ -710,7 +708,8 @@ namespace ts {
                     bindJSDocComment(<JSDoc>node);
                     break;
                 case SyntaxKind.JSDocTypedefTag:
-                    bindJSDocTypedefTag(<JSDocTypedefTag>node);
+                case SyntaxKind.JSDocCallbackTag:
+                    bindJSDocTypeAlias(node as JSDocTypedefTag | JSDocCallbackTag);
                     break;
                 // In source files and blocks, bind functions first to match hoisting that occurs at runtime
                 case SyntaxKind.SourceFile:
@@ -1378,13 +1377,13 @@ namespace ts {
 
         function bindJSDocComment(node: JSDoc) {
             forEachChild(node, n => {
-                if (n.kind !== SyntaxKind.JSDocTypedefTag) {
+                if (!isJSDocTypeAlias(n)) {
                     bind(n);
                 }
             });
         }
 
-        function bindJSDocTypedefTag(node: JSDocTypedefTag) {
+        function bindJSDocTypeAlias(node: JSDocTypedefTag | JSDocCallbackTag) {
             forEachChild(node, n => {
                 // if the node has a fullName "A.B.C", that means symbol "C" was already bound
                 // when we visit "fullName"; so when we visit the name "C" as the next child of
@@ -1992,7 +1991,7 @@ namespace ts {
                 }
 
                 for (const tag of jsDoc.tags) {
-                    if (tag.kind === SyntaxKind.JSDocTypedefTag) {
+                    if (isJSDocTypeAlias(tag)) {
                         const savedParent = parent;
                         parent = jsDoc;
                         bind(tag);
