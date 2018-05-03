@@ -14940,7 +14940,7 @@ namespace ts {
                     // except for the special case of Javascript declarations of the form `namespace.prop = namespace.prop || {}`
                     const type = getContextualType(binaryExpression);
                     return !type && node === right && !getDeclaredJavascriptInitializer(binaryExpression.parent) && !getAssignedJavascriptInitializer(binaryExpression) ?
-                        getTypeOfExpression(left, /*cache*/ true) : type;
+                        getTypeOfExpression(left) : type;
                 case SyntaxKind.AmpersandAmpersandToken:
                 case SyntaxKind.CommaToken:
                     return node === right ? getContextualType(binaryExpression) : undefined;
