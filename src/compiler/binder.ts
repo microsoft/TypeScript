@@ -2033,10 +2033,10 @@ namespace ts {
                     // current "blockScopeContainer" needs to be set to its immediate namespace parent.
                     if ((<Identifier>node).isInJSDocNamespace) {
                         let parentNode = node.parent;
-                        while (parentNode && parentNode.kind !== SyntaxKind.JSDocTypedefTag) {
+                        while (parentNode && !isJSDocTypeAlias(parentNode)) {
                             parentNode = parentNode.parent;
                         }
-                        bindBlockScopedDeclaration(<Declaration>parentNode, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                        bindBlockScopedDeclaration(parentNode as Declaration, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
                         break;
                     }
                 // falls through
