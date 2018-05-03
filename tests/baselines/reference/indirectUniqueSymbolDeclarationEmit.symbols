@@ -1,11 +1,11 @@
 === tests/cases/compiler/indirectUniqueSymbolDeclarationEmit.ts ===
 export const x = Symbol();
 >x : Symbol(x, Decl(indirectUniqueSymbolDeclarationEmit.ts, 0, 12))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 
 export const y = Symbol();
 >y : Symbol(y, Decl(indirectUniqueSymbolDeclarationEmit.ts, 1, 12))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 
 declare function rand(): boolean;
 >rand : Symbol(rand, Decl(indirectUniqueSymbolDeclarationEmit.ts, 1, 26))
