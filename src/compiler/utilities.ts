@@ -6345,4 +6345,37 @@ namespace ts {
     export function isNamedImportsOrExports(node: Node): node is NamedImportsOrExports {
         return node.kind === SyntaxKind.NamedImports || node.kind === SyntaxKind.NamedExports;
     }
+
+    /** @internal */
+    export function isEqualityOperatorKind(kind: SyntaxKind): kind is EqualityOperator {
+        switch (kind) {
+            case SyntaxKind.EqualsEqualsEqualsToken:
+            case SyntaxKind.EqualsEqualsToken:
+            case SyntaxKind.ExclamationEqualsEqualsToken:
+            case SyntaxKind.ExclamationEqualsToken:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /** @internal */
+    export function isRelationalOperator(kind: SyntaxKind): kind is RelationalOperator {
+        switch (kind) {
+            case SyntaxKind.GreaterThanToken:
+            case SyntaxKind.GreaterThanEqualsToken:
+            case SyntaxKind.LessThanToken:
+            case SyntaxKind.LessThanEqualsToken:
+            case SyntaxKind.InstanceOfKeyword:
+            case SyntaxKind.InKeyword:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /** @internal */
+    export function isBooleanLiteral(node: Node): node is BooleanLiteral {
+        return node.kind === SyntaxKind.TrueKeyword || node.kind === SyntaxKind.FalseKeyword;
+    }
 }

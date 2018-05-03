@@ -515,15 +515,9 @@ namespace ts {
 
                 case SyntaxKind.VariableStatement:
                     // TypeScript namespace exports for variable statements must be transformed.
-                    if ((<VariableStatement>node).declarationList.declarations.every(declaration => !!declaration.resolvedValue)) {
-                        return undefined
-                    }
                     return visitVariableStatement(<VariableStatement>node);
 
                 case SyntaxKind.VariableDeclaration:
-                    if ((<VariableDeclaration>node).resolvedValue) {
-                        return undefined
-                    }
                     return visitVariableDeclaration(<VariableDeclaration>node);
 
                 case SyntaxKind.ModuleDeclaration:

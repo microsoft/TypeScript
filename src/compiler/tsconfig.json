@@ -31,7 +31,7 @@
         "transformers/es5.ts",
         "transformers/generators.ts",
         "transformers/destructuring.ts",
-        "transformers/inlines.ts",
+        "transformers/inlineConst.ts",
         "transformers/module/module.ts",
         "transformers/module/system.ts",
         "transformers/module/es2015.ts",

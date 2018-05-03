@@ -689,6 +689,12 @@ namespace ts {
                 type: "object"
             },
             description: Diagnostics.List_of_language_service_plugins
+        },
+        {
+            name: "inlineConst",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Resolve_keyof_to_string_valued_property_names_only_no_numbers_or_symbols,
         }
     ];
 

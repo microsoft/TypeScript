@@ -2107,18 +2107,6 @@ namespace ts.Completions {
         return isIdentifier(node) ? node.originalKeywordKind || SyntaxKind.Unknown : node.kind;
     }
 
-    function isEqualityOperatorKind(kind: SyntaxKind): kind is EqualityOperator {
-        switch (kind) {
-            case SyntaxKind.EqualsEqualsEqualsToken:
-            case SyntaxKind.EqualsEqualsToken:
-            case SyntaxKind.ExclamationEqualsEqualsToken:
-            case SyntaxKind.ExclamationEqualsToken:
-                return true;
-            default:
-                return false;
-        }
-    }
-
     /** Get the corresponding JSDocTag node if the position is in a jsDoc comment */
     function getJsDocTagAtPosition(node: Node, position: number): JSDocTag | undefined {
         const { jsDoc } = getJsDocHavingNode(node) as JSDocContainer;
