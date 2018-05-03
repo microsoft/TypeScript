@@ -1,6 +1,6 @@
 ---
 name: Question
-about: The issue tracker is not for questions. please use <a href="https://stackoverflow.com/questions/tagged/typescript">Stack Overflow</a> or other resources for help writing TypeScript code.
+about: The issue tracker is not for questions. please use Stack Overflow or other resources for help writing TypeScript code.
 
 ---
 
