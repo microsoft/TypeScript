@@ -1630,6 +1630,7 @@ declare namespace ts {
         moduleName: string;
         referencedFiles: ReadonlyArray<FileReference>;
         typeReferenceDirectives: ReadonlyArray<FileReference>;
+        libReferenceDirectives: ReadonlyArray<FileReference>;
         languageVariant: LanguageVariant;
         isDeclarationFile: boolean;
         /**
@@ -3722,7 +3723,7 @@ declare namespace ts {
     function updateSpreadAssignment(node: SpreadAssignment, expression: Expression): SpreadAssignment;
     function createEnumMember(name: string | PropertyName, initializer?: Expression): EnumMember;
     function updateEnumMember(node: EnumMember, name: PropertyName, initializer: Expression | undefined): EnumMember;
-    function updateSourceFileNode(node: SourceFile, statements: ReadonlyArray<Statement>, isDeclarationFile?: boolean, referencedFiles?: SourceFile["referencedFiles"], typeReferences?: SourceFile["typeReferenceDirectives"], hasNoDefaultLib?: boolean): SourceFile;
+    function updateSourceFileNode(node: SourceFile, statements: ReadonlyArray<Statement>, isDeclarationFile?: boolean, referencedFiles?: SourceFile["referencedFiles"], typeReferences?: SourceFile["typeReferenceDirectives"], hasNoDefaultLib?: boolean, libReferences?: SourceFile["libReferenceDirectives"]): SourceFile;
     /**
      * Creates a shallow, memberwise clone of a node for mutation.
      */
@@ -4364,6 +4365,7 @@ declare namespace ts {
     interface PreProcessedFileInfo {
         referencedFiles: FileReference[];
         typeReferenceDirectives: FileReference[];
+        libReferenceDirectives: FileReference[];
         importedFiles: FileReference[];
         ambientExternalModules: string[];
         isLibFile: boolean;

@@ -1103,7 +1103,8 @@ namespace ts {
                         importedFiles: this.convertFileReferences(result.importedFiles),
                         ambientExternalModules: result.ambientExternalModules,
                         isLibFile: result.isLibFile,
-                        typeReferenceDirectives: this.convertFileReferences(result.typeReferenceDirectives)
+                        typeReferenceDirectives: this.convertFileReferences(result.typeReferenceDirectives),
+                        libReferenceDirectives: this.convertFileReferences(result.libReferenceDirectives)
                     };
                 });
         }
