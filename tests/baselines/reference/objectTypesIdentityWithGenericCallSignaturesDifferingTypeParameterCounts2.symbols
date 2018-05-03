@@ -85,7 +85,7 @@ function foo13(x: I<boolean, string, number, Date>);
 >foo13 : Symbol(foo13, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts, 23, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts, 25, 52), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts, 26, 28))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts, 25, 15))
 >I : Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts, 0, 0))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo13(x: typeof a); // ok
 >foo13 : Symbol(foo13, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts, 23, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts, 25, 52), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts, 26, 28))
@@ -100,7 +100,7 @@ function foo14(x: I<boolean, string, number, Date>);
 >foo14 : Symbol(foo14, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts, 27, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts, 29, 52), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts, 30, 22))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts, 29, 15))
 >I : Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts, 0, 0))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo14(x: I2); // error
 >foo14 : Symbol(foo14, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts, 27, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts, 29, 52), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts, 30, 22))
@@ -129,7 +129,7 @@ function foo15(x: I<boolean, string, number, Date>);
 >foo15 : Symbol(foo15, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts, 35, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts, 37, 52), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts, 38, 22))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts, 37, 15))
 >I : Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts, 0, 0))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo15(x: I2); // ok
 >foo15 : Symbol(foo15, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts, 35, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts, 37, 52), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.ts, 38, 22))

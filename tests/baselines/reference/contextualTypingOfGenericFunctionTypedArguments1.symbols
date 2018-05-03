@@ -29,7 +29,7 @@ interface Combinators {
 >f : Symbol(f, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 7, 32))
 >x : Symbol(x, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 7, 37))
 >T : Symbol(T, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 7, 12))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 var c2: Collection<number>;

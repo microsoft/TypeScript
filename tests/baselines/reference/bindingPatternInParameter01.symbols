@@ -10,6 +10,9 @@ nestedArray.forEach(([[a, b]]) => {
 >b : Symbol(b, Decl(bindingPatternInParameter01.ts, 2, 25))
 
   console.log(a, b);
+>console.log : Symbol(Console.log, Decl(lib.d.ts, --, --))
+>console : Symbol(console, Decl(lib.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.d.ts, --, --))
 >a : Symbol(a, Decl(bindingPatternInParameter01.ts, 2, 23))
 >b : Symbol(b, Decl(bindingPatternInParameter01.ts, 2, 25))
 

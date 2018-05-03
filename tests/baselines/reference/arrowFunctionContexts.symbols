@@ -1,6 +1,8 @@
 === tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts ===
 // Arrow function used in with statement
 with (window) {
+>window : Symbol(window, Decl(lib.d.ts, --, --))
+
     var p = () => this;
 }
 
@@ -25,6 +27,9 @@ class Derived extends Base {
 
 // Arrow function as function argument
 window.setTimeout(() => null, 100);
+>window.setTimeout : Symbol(WindowTimers.setTimeout, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>window : Symbol(window, Decl(lib.d.ts, --, --))
+>setTimeout : Symbol(WindowTimers.setTimeout, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 // Arrow function as value in array literal
 
@@ -77,6 +82,8 @@ module M2 {
 
     // Arrow function used in with statement
     with (window) {
+>window : Symbol(window, Decl(lib.d.ts, --, --))
+
         var p = () => this;
     }
 
@@ -101,6 +108,9 @@ module M2 {
 
     // Arrow function as function argument
     window.setTimeout(() => null, 100);
+>window.setTimeout : Symbol(WindowTimers.setTimeout, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>window : Symbol(window, Decl(lib.d.ts, --, --))
+>setTimeout : Symbol(WindowTimers.setTimeout, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     // Arrow function as value in array literal
 

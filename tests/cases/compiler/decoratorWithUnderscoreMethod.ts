@@ -1,3 +1,4 @@
+// @lib: es5
 // @noemithelpers: true
 // @experimentaldecorators: true
 

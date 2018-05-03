@@ -4,5 +4,5 @@ const [[k1, v1], [k2, v2]] = new Map([["", true], ["hello", true]])
 >v1 : Symbol(v1, Decl(iterableArrayPattern30.ts, 0, 11))
 >k2 : Symbol(k2, Decl(iterableArrayPattern30.ts, 0, 18))
 >v2 : Symbol(v2, Decl(iterableArrayPattern30.ts, 0, 21))
->Map : Symbol(Map, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --))
+>Map : Symbol(Map, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 

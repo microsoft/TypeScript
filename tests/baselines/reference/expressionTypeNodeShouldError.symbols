@@ -31,10 +31,15 @@ class C {
 
 const nodes = document.getElementsByTagName("li");
 >nodes : Symbol(nodes, Decl(string.ts, 10, 5))
+>document.getElementsByTagName : Symbol(Document.getElementsByTagName, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>document : Symbol(document, Decl(lib.d.ts, --, --))
+>getElementsByTagName : Symbol(Document.getElementsByTagName, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 type ItemType = "".typeof(nodes.item(0));
 >ItemType : Symbol(ItemType, Decl(string.ts, 10, 50))
+>nodes.item : Symbol(NodeListOf.item, Decl(lib.d.ts, --, --))
 >nodes : Symbol(nodes, Decl(string.ts, 10, 5))
+>item : Symbol(NodeListOf.item, Decl(lib.d.ts, --, --))
 
 === tests/cases/compiler/number.ts ===
 interface Number {
@@ -64,10 +69,15 @@ class C2 {
 
 const nodes2 = document.getElementsByTagName("li");
 >nodes2 : Symbol(nodes2, Decl(number.ts, 10, 5))
+>document.getElementsByTagName : Symbol(Document.getElementsByTagName, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>document : Symbol(document, Decl(lib.d.ts, --, --))
+>getElementsByTagName : Symbol(Document.getElementsByTagName, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 type ItemType2 = 4..typeof(nodes.item(0));
 >ItemType2 : Symbol(ItemType2, Decl(number.ts, 10, 51))
+>nodes.item : Symbol(NodeListOf.item, Decl(lib.d.ts, --, --))
 >nodes : Symbol(nodes, Decl(string.ts, 10, 5))
+>item : Symbol(NodeListOf.item, Decl(lib.d.ts, --, --))
 
 === tests/cases/compiler/boolean.ts ===
 interface Boolean {
@@ -97,9 +107,14 @@ class C3 {
 
 const nodes3 = document.getElementsByTagName("li");
 >nodes3 : Symbol(nodes3, Decl(boolean.ts, 10, 5))
+>document.getElementsByTagName : Symbol(Document.getElementsByTagName, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>document : Symbol(document, Decl(lib.d.ts, --, --))
+>getElementsByTagName : Symbol(Document.getElementsByTagName, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 type ItemType3 = true.typeof(nodes.item(0));
 >ItemType3 : Symbol(ItemType3, Decl(boolean.ts, 10, 51))
+>nodes.item : Symbol(NodeListOf.item, Decl(lib.d.ts, --, --))
 >nodes : Symbol(nodes, Decl(string.ts, 10, 5))
+>item : Symbol(NodeListOf.item, Decl(lib.d.ts, --, --))
 
 

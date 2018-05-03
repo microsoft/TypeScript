@@ -3,7 +3,7 @@ async () => {
 >async () => {    if (window)        return;} : () => Promise<void>
 
     if (window)
->window : any
+>window : Window
 
         return;
 }

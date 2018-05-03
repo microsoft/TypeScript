@@ -13,7 +13,7 @@ var f = function foo(...x: number) { }
 var f2 = (...x: Date, ...y: boolean) => { }
 >f2 : Symbol(f2, Decl(restParametersOfNonArrayTypes.ts, 4, 3))
 >x : Symbol(x, Decl(restParametersOfNonArrayTypes.ts, 4, 10))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >y : Symbol(y, Decl(restParametersOfNonArrayTypes.ts, 4, 21))
 
 class C {
@@ -60,7 +60,7 @@ var b = {
 >foo : Symbol(foo, Decl(restParametersOfNonArrayTypes.ts, 22, 6))
 >x : Symbol(x, Decl(restParametersOfNonArrayTypes.ts, 22, 20))
 >y : Symbol(y, Decl(restParametersOfNonArrayTypes.ts, 22, 33))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     b: (...x: string) => { }
 >b : Symbol(b, Decl(restParametersOfNonArrayTypes.ts, 22, 50))
