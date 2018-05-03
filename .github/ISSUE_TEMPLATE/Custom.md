@@ -1,6 +1,6 @@
 ---
 name: Question
-about: Ask a question
+about: The issue tracker is not for questions; please use [Stack Overflow](https://stackoverflow.com/questions/tagged/typescript) or other resources for help writing TypeScript code.
 
 ---
 
