@@ -207,7 +207,7 @@ namespace ts.server {
                 this.compilerOptions.allowNonTsExtensions = true;
                 this.compilerOptions.allowJs = true;
             }
-            else if (hasExplicitListOfFiles || this.compilerOptions.allowJs) {
+            else if (hasExplicitListOfFiles || this.compilerOptions.allowJs || this.projectService.hasDeferredExtension()) {
                 // If files are listed explicitly or allowJs is specified, allow all extensions
                 this.compilerOptions.allowNonTsExtensions = true;
             }
@@ -1096,14 +1096,14 @@ namespace ts.server {
                 this.projectService.logger.info(message);
             };
 
-            for (const searchPath of searchPaths) {
-                const resolvedModule = <PluginModuleFactory>Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log);
-                if (resolvedModule) {
-                    this.enableProxy(resolvedModule, pluginConfigEntry);
-                    return;
-                }
+            const resolvedModule = firstDefined(searchPaths, searchPath =>
+                <PluginModuleFactory | undefined>Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log));
+            if (resolvedModule) {
+                this.enableProxy(resolvedModule, pluginConfigEntry);
             }
-            this.projectService.logger.info(`Couldn't find ${pluginConfigEntry.name}`);
+            else {
+                this.projectService.logger.info(`Couldn't find ${pluginConfigEntry.name}`);
+            }
         }
 
         private enableProxy(pluginModuleFactory: PluginModuleFactory, configEntry: PluginImport) {

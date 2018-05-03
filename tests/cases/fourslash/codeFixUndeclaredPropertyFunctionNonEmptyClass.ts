@@ -11,8 +11,8 @@
 
 verify.rangeAfterCodeFix(`
 class A {
-    x: (x: number, y?: A) => number | A;
     y: number;
+    x: (x: number, y?: A) => number | A;
     constructor(public a: number) {
         this.x = function(x: number, y?: A){
             return x > 0 ? x : y;

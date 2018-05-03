@@ -24,17 +24,9 @@
 ////const a = import("./a"); // Does not make this an external module
 ////fo/*d2*/
 
-for (const marker of ["b", "c", "d"]) {
-    goTo.marker(marker);
-    verify.not.completionListContains({ name: "foo", source: "/node_modules/a/index" }, undefined, undefined, undefined, undefined, undefined, {
-        includeCompletionsForModuleExports: true
-    });
-}
-
-for (const marker of ["c2", "d2"]) {
-    goTo.marker(marker);
-    verify.completionListContains({ name: "foo", source: "/node_modules/a/index" }, "const foo: 0", "", "const", /*spanIndex*/ undefined, /*hasAction*/ true, {
-        includeCompletionsForModuleExports: true,
-        sourceDisplay: "a",
-    });
-}
+verify.completions({ marker: ["b", "c", "d"], excludes: "foo", preferences: { includeCompletionsForModuleExports: true } });
+verify.completions({
+    marker: ["c2", "d2"],
+    includes: [{ name: "foo", source: "/node_modules/a/index", text: "const foo: 0", kind: "const", hasAction: true, sourceDisplay: "a" }],
+    preferences: { includeCompletionsForModuleExports: true },
+});

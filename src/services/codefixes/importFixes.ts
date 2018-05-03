@@ -114,7 +114,7 @@ namespace ts.codefix {
             }
 
             for (const exported of checker.getExportsOfModule(moduleSymbol)) {
-                if (exported.escapedName === InternalSymbolName.Default || exported.name === symbolName && skipAlias(exported, checker) === exportedSymbol) {
+                if ((exported.escapedName === InternalSymbolName.Default || exported.name === symbolName) && skipAlias(exported, checker) === exportedSymbol) {
                     const isDefaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol) === exported;
                     result.push({ moduleSymbol, importKind: isDefaultExport ? ImportKind.Default : ImportKind.Named });
                 }
@@ -266,7 +266,7 @@ namespace ts.codefix {
                     return [global];
                 }
 
-                const relativePath = removeExtensionAndIndexPostFix(getRelativePath(moduleFileName, sourceDirectory, getCanonicalFileName), moduleResolutionKind, addJsExtension);
+                const relativePath = removeExtensionAndIndexPostFix(ensurePathIsNonModuleName(getRelativePath(sourceDirectory, moduleFileName, getCanonicalFileName)), moduleResolutionKind, addJsExtension);
                 if (!baseUrl || preferences.importModuleSpecifierPreference === "relative") {
                     return [relativePath];
                 }
@@ -321,7 +321,7 @@ namespace ts.codefix {
                     1 < 2 = true
                 In this case we should prefer using the relative path "../a" instead of the baseUrl path "foo/a".
                 */
-                const pathFromSourceToBaseUrl = getRelativePath(baseUrl, sourceDirectory, getCanonicalFileName);
+                const pathFromSourceToBaseUrl = ensurePathIsNonModuleName(getRelativePath(sourceDirectory, baseUrl, getCanonicalFileName));
                 const relativeFirst = getRelativePathNParents(relativePath) < getRelativePathNParents(pathFromSourceToBaseUrl);
                 return relativeFirst ? [relativePath, importRelativeToBaseUrl] : [importRelativeToBaseUrl, relativePath];
             });
@@ -343,11 +343,12 @@ namespace ts.codefix {
     }
 
     function getRelativePathNParents(relativePath: string): number {
-        let count = 0;
-        for (let i = 0; i + 3 <= relativePath.length && relativePath.slice(i, i + 3) === "../"; i += 3) {
-            count++;
+        const components = getPathComponents(relativePath);
+        if (components[0] || components.length === 1) return 0;
+        for (let i = 1; i < components.length; i++) {
+            if (components[i] !== "..") return i - 1;
         }
-        return count;
+        return components.length - 1;
     }
 
     function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol): string | undefined {
@@ -389,7 +390,7 @@ namespace ts.codefix {
         }
 
         const normalizedSourcePath = getPathRelativeToRootDirs(sourceDirectory, rootDirs, getCanonicalFileName);
-        const relativePath = normalizedSourcePath !== undefined ? getRelativePath(normalizedTargetPath, normalizedSourcePath, getCanonicalFileName) : normalizedTargetPath;
+        const relativePath = normalizedSourcePath !== undefined ? ensurePathIsNonModuleName(getRelativePath(normalizedSourcePath, normalizedTargetPath, getCanonicalFileName)) : normalizedTargetPath;
         return removeFileExtension(relativePath);
     }
 
@@ -472,7 +473,7 @@ namespace ts.codefix {
                 return path.substring(parts.topLevelPackageNameIndex + 1);
             }
             else {
-                return getRelativePath(path, sourceDirectory, getCanonicalFileName);
+                return ensurePathIsNonModuleName(getRelativePath(sourceDirectory, path, getCanonicalFileName));
             }
         }
     }

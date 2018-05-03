@@ -32,6 +32,19 @@ namespace ts {
         }
         check(sourceFile);
 
+        if (!isJsFile) {
+            for (const statement of sourceFile.statements) {
+                if (isVariableStatement(statement) &&
+                    statement.declarationList.flags & NodeFlags.Const &&
+                    statement.declarationList.declarations.length === 1) {
+                    const init = statement.declarationList.declarations[0].initializer;
+                    if (init && isRequireCall(init, /*checkArgumentIsStringLiteralLike*/ true)) {
+                        diags.push(createDiagnosticForNode(init, Diagnostics.require_call_may_be_converted_to_an_import));
+                    }
+                }
+            }
+        }
+
         if (getAllowSyntheticDefaultImports(program.getCompilerOptions())) {
             for (const moduleSpecifier of sourceFile.imports) {
                 const importNode = importFromModuleSpecifier(moduleSpecifier);

@@ -7,7 +7,7 @@ export const c1 = 1;
 
 export const s0 = Symbol();
 >s0 : Symbol(s0, Decl(module.ts, 2, 12))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 
 export interface T0 {
 >T0 : Symbol(T0, Decl(module.ts, 2, 27))

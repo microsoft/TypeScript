@@ -1,11 +1,10 @@
-tests/cases/conformance/jsdoc/use.js(3,7): error TS2345: Argument of type '"no"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/jsdoc/use.js(4,7): error TS2345: Argument of type '"also no"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/jsdoc/use.js(5,7): error TS2345: Argument of type '0' is not assignable to parameter of type 'string'.
-tests/cases/conformance/jsdoc/use.js(6,7): error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
+tests/cases/conformance/jsdoc/use.js(2,7): error TS2345: Argument of type '"no"' is not assignable to parameter of type 'number'.
+tests/cases/conformance/jsdoc/use.js(3,7): error TS2345: Argument of type '"also no"' is not assignable to parameter of type 'number'.
+tests/cases/conformance/jsdoc/use.js(4,7): error TS2345: Argument of type '0' is not assignable to parameter of type 'string'.
+tests/cases/conformance/jsdoc/use.js(5,7): error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
 
 
 ==== tests/cases/conformance/jsdoc/use.js (4 errors) ====
-    /// <reference path='./types.d.ts'/>
     var mod = require('./mod');
     mod.f('no')
           ~~~~
@@ -20,13 +19,7 @@ tests/cases/conformance/jsdoc/use.js(6,7): error TS2345: Argument of type '1' is
           ~
 !!! error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
     
-==== tests/cases/conformance/jsdoc/types.d.ts (0 errors) ====
-    declare function require(name: string): any;
-    declare var exports: any;
-    declare var module: { exports: any };
 ==== tests/cases/conformance/jsdoc/mod.js (0 errors) ====
-    /// <reference path='./types.d.ts'/>
-    
     /** @param {number} n */
     exports.f = exports.g = function fg(n) {
         return n + 1

@@ -386,6 +386,7 @@ Math.random() * 2 ? N["s"] : "a";
 });
 class C1 {
 }
+N.s, N.s;
 const o4 = {
     method1() {
         return s; // return type should not widen due to contextual type

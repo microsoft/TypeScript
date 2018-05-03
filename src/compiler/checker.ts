@@ -75,6 +75,8 @@ namespace ts {
         const undefinedSymbol = createSymbol(SymbolFlags.Property, "undefined" as __String);
         undefinedSymbol.declarations = [];
         const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as __String);
+        const requireSymbol = createSymbol(SymbolFlags.Property, "require" as __String);
+        const moduleSymbol = createSymbol(SymbolFlags.Property, "module" as __String);
 
         /** This will be set during calls to `getResolvedSignature` where services determines an apparent number of arguments greater than what is actually provided. */
         let apparentArgumentCount: number | undefined;
@@ -1470,7 +1472,17 @@ namespace ts {
                     result = lookup(globals, name, meaning);
                 }
             }
-
+            if (!result) {
+                if (originalLocation && isInJavaScriptFile(originalLocation) && originalLocation.parent) {
+                    if (isRequireCall(originalLocation.parent, /*checkArgumentIsStringLiteralLike*/ false)) {
+                        return requireSymbol;
+                    }
+                    if (isIdentifier(originalLocation) && isPropertyAccessExpression(originalLocation.parent) &&
+                        originalLocation.escapedText === "module" && originalLocation.parent.name.escapedText === "exports") {
+                        return moduleSymbol;
+                    }
+                }
+            }
             if (!result) {
                 if (nameNotFoundMessage) {
                     if (!errorLocation ||
@@ -3161,7 +3173,16 @@ namespace ts {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
                     const readonlyToken = type.declaration.readonlyToken ? <ReadonlyToken | PlusToken | MinusToken>createToken(type.declaration.readonlyToken.kind) : undefined;
                     const questionToken = type.declaration.questionToken ? <QuestionToken | PlusToken | MinusToken>createToken(type.declaration.questionToken.kind) : undefined;
-                    const typeParameterNode = typeParameterToDeclaration(getTypeParameterFromMappedType(type), context, getConstraintTypeFromMappedType(type));
+                    let appropriateConstraintTypeNode: TypeNode;
+                    if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
+                        // We have a { [P in keyof T]: X }
+                        // We do this to ensure we retain the toplevel keyof-ness of the type which may be lost due to keyof distribution during `getConstraintTypeFromMappedType`
+                        appropriateConstraintTypeNode = createTypeOperatorNode(typeToTypeNodeHelper(getModifiersTypeFromMappedType(type), context));
+                    }
+                    else {
+                        appropriateConstraintTypeNode = typeToTypeNodeHelper(getConstraintTypeFromMappedType(type), context);
+                    }
+                    const typeParameterNode = typeParameterToDeclarationWithConstraint(getTypeParameterFromMappedType(type), context, appropriateConstraintTypeNode);
                     const templateTypeNode = typeToTypeNodeHelper(getTemplateTypeFromMappedType(type), context);
                     const mappedTypeNode = createMappedTypeNode(readonlyToken, typeParameterNode, questionToken, templateTypeNode);
                     return setEmitFlags(mappedTypeNode, EmitFlags.SingleLine);
@@ -3537,15 +3558,19 @@ namespace ts {
                 return createSignatureDeclaration(kind, typeParameters, parameters, returnTypeNode, typeArguments);
             }
 
-            function typeParameterToDeclaration(type: TypeParameter, context: NodeBuilderContext, constraint = getConstraintFromTypeParameter(type)): TypeParameterDeclaration {
+            function typeParameterToDeclarationWithConstraint(type: TypeParameter, context: NodeBuilderContext, constraintNode: TypeNode): TypeParameterDeclaration {
                 const savedContextFlags = context.flags;
                 context.flags &= ~NodeBuilderFlags.WriteTypeParametersInQualifiedName; // Avoids potential infinite loop when building for a claimspace with a generic
                 const name = symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ true);
-                const constraintNode = constraint && typeToTypeNodeHelper(constraint, context);
                 const defaultParameter = getDefaultFromTypeParameter(type);
                 const defaultParameterNode = defaultParameter && typeToTypeNodeHelper(defaultParameter, context);
                 context.flags = savedContextFlags;
                 return createTypeParameterDeclaration(name, constraintNode, defaultParameterNode);
+            }
+
+            function typeParameterToDeclaration(type: TypeParameter, context: NodeBuilderContext, constraint = getConstraintFromTypeParameter(type)): TypeParameterDeclaration {
+                const constraintNode = constraint && typeToTypeNodeHelper(constraint, context);
+                return typeParameterToDeclarationWithConstraint(type, context, constraintNode);
             }
 
             function symbolToParameterDeclaration(parameterSymbol: Symbol, context: NodeBuilderContext, preserveModifierFlags?: boolean): ParameterDeclaration {
@@ -4697,6 +4722,10 @@ namespace ts {
                 // Handle prototype property
                 if (symbol.flags & SymbolFlags.Prototype) {
                     return links.type = getTypeOfPrototypeProperty(symbol);
+                }
+                // CommonsJS require/module/exports all have type any.
+                if (symbol === requireSymbol || symbol === moduleSymbol) {
+                    return links.type = anyType;
                 }
                 // Handle catch clause variables
                 const declaration = symbol.valueDeclaration;
@@ -6220,10 +6249,8 @@ namespace ts {
             const templateType = getTemplateTypeFromMappedType(<MappedType>type.target || type);
             const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
             const templateModifiers = getMappedTypeModifiers(type);
-            const constraintDeclaration = type.declaration.typeParameter.constraint;
             const include = keyofStringsOnly ? TypeFlags.StringLiteral : TypeFlags.StringOrNumberLiteralOrUnique;
-            if (constraintDeclaration.kind === SyntaxKind.TypeOperator &&
-                (<TypeOperatorNode>constraintDeclaration).operator === SyntaxKind.KeyOfKeyword) {
+            if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
                 // We have a { [P in keyof T]: X }
                 for (const prop of getPropertiesOfType(modifiersType)) {
                     addMemberForKeyType(getLiteralTypeFromPropertyName(prop, include), /*_index*/ undefined, prop);
@@ -6300,15 +6327,23 @@ namespace ts {
                     unknownType);
         }
 
+        function getConstraintDeclarationForMappedType(type: MappedType) {
+            return type.declaration.typeParameter.constraint;
+        }
+
+        function isMappedTypeWithKeyofConstraintDeclaration(type: MappedType) {
+            const constraintDeclaration = getConstraintDeclarationForMappedType(type);
+            return constraintDeclaration.kind === SyntaxKind.TypeOperator &&
+                (<TypeOperatorNode>constraintDeclaration).operator === SyntaxKind.KeyOfKeyword;
+        }
+
         function getModifiersTypeFromMappedType(type: MappedType) {
             if (!type.modifiersType) {
-                const constraintDeclaration = type.declaration.typeParameter.constraint;
-                if (constraintDeclaration.kind === SyntaxKind.TypeOperator &&
-                    (<TypeOperatorNode>constraintDeclaration).operator === SyntaxKind.KeyOfKeyword) {
+                if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
                     // If the constraint declaration is a 'keyof T' node, the modifiers type is T. We check
                     // AST nodes here because, when T is a non-generic type, the logic below eagerly resolves
                     // 'keyof T' to a literal union type and we can't recover T from that type.
-                    type.modifiersType = instantiateType(getTypeFromTypeNode((<TypeOperatorNode>constraintDeclaration).type), type.mapper || identityMapper);
+                    type.modifiersType = instantiateType(getTypeFromTypeNode((<TypeOperatorNode>getConstraintDeclarationForMappedType(type)).type), type.mapper || identityMapper);
                 }
                 else {
                     // Otherwise, get the declared constraint type, and if the constraint type is a type parameter,
@@ -7641,23 +7676,38 @@ namespace ts {
                 return unknownType;
             }
 
-            // A jsdoc TypeReference may have resolved to a value (as opposed to a type). If
-            // the symbol is a constructor function, return the inferred class type; otherwise,
-            // the type of this reference is just the type of the value we resolved to.
-            const assignedType = getAssignedClassType(symbol);
-            const valueType = getTypeOfSymbol(symbol);
-            const referenceType = valueType.symbol && !isInferredClassType(valueType) && getTypeReferenceTypeWorker(node, valueType.symbol, typeArguments);
-            if (referenceType || assignedType) {
-                return referenceType && assignedType ? getIntersectionType([assignedType, referenceType]) : referenceType || assignedType;
+            const jsdocType = getJSDocTypeReference(node, symbol, typeArguments);
+            if (jsdocType) {
+                return jsdocType;
             }
 
             // Resolve the type reference as a Type for the purpose of reporting errors.
             resolveTypeReferenceName(getTypeReferenceName(node), SymbolFlags.Type);
-            return valueType;
+            return getTypeOfSymbol(symbol);
+        }
+
+        /**
+         * A jsdoc TypeReference may have resolved to a value (as opposed to a type). If
+         * the symbol is a constructor function, return the inferred class type; otherwise,
+         * the type of this reference is just the type of the value we resolved to.
+         */
+        function getJSDocTypeReference(node: NodeWithTypeArguments, symbol: Symbol, typeArguments: Type[]): Type | undefined {
+            const assignedType = getAssignedClassType(symbol);
+            const valueType = getTypeOfSymbol(symbol);
+            const referenceType = valueType.symbol && valueType.symbol !== symbol && !isInferredClassType(valueType) && getTypeReferenceTypeWorker(node, valueType.symbol, typeArguments);
+            if (referenceType || assignedType) {
+                return referenceType && assignedType ? getIntersectionType([assignedType, referenceType]) : referenceType || assignedType;
+            }
         }
 
         function getTypeReferenceTypeWorker(node: NodeWithTypeArguments, symbol: Symbol, typeArguments: Type[]): Type | undefined {
             if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                if (symbol.valueDeclaration && isBinaryExpression(symbol.valueDeclaration.parent)) {
+                    const jsdocType = getJSDocTypeReference(node, symbol, typeArguments);
+                    if (jsdocType) {
+                        return jsdocType;
+                    }
+                }
                 return getTypeFromClassOrInterfaceReference(node, symbol, typeArguments);
             }
 
@@ -10700,18 +10750,17 @@ namespace ts {
                             return result;
                         }
                     }
-                    let constraint = getConstraintForRelation(<TypeParameter>source);
-                    // A type variable with no constraint is not related to the non-primitive object type.
-                    if (constraint || !(target.flags & TypeFlags.NonPrimitive)) {
-                        if (!constraint || constraint.flags & TypeFlags.Any) {
-                            constraint = emptyObjectType;
-                        }
-                        // Report constraint errors only if the constraint is not the empty object type
-                        const reportConstraintErrors = reportErrors && constraint !== emptyObjectType;
-                        if (result = isRelatedTo(constraint, target, reportConstraintErrors)) {
+                    const constraint = getConstraintForRelation(<TypeParameter>source);
+                    if (!constraint || constraint.flags & TypeFlags.Any) {
+                        // A type variable with no constraint is not related to the non-primitive object type.
+                        if (result = isRelatedTo(emptyObjectType, extractTypesOfKind(target, ~TypeFlags.NonPrimitive))) {
                             errorInfo = saveErrorInfo;
                             return result;
                         }
+                    }
+                    else if (result = isRelatedTo(constraint, target, reportErrors)) {
+                        errorInfo = saveErrorInfo;
+                        return result;
                     }
                 }
                 else if (source.flags & TypeFlags.Index) {
@@ -14925,7 +14974,7 @@ namespace ts {
                     // except for the special case of Javascript declarations of the form `namespace.prop = namespace.prop || {}`
                     const type = getContextualType(binaryExpression);
                     return !type && node === right && !getDeclaredJavascriptInitializer(binaryExpression.parent) && !getAssignedJavascriptInitializer(binaryExpression) ?
-                        getTypeOfExpression(left, /*cache*/ true) : type;
+                        getTypeOfExpression(left) : type;
                 case SyntaxKind.AmpersandAmpersandToken:
                 case SyntaxKind.CommaToken:
                     return node === right ? getContextualType(binaryExpression) : undefined;
@@ -18856,11 +18905,10 @@ namespace ts {
             // Make sure require is not a local function
             if (!isIdentifier(node.expression)) return Debug.fail();
             const resolvedRequire = resolveName(node.expression, node.expression.escapedText, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
-            if (!resolvedRequire) {
-                // project does not contain symbol named 'require' - assume commonjs require
+            if (resolvedRequire === requireSymbol) {
                 return true;
             }
-            // project includes symbol named 'require' - make sure that it it ambient and local non-alias
+            // project includes symbol named 'require' - make sure that it is ambient and local non-alias
             if (resolvedRequire.flags & SymbolFlags.Alias) {
                 return false;
             }
@@ -20046,6 +20094,7 @@ namespace ts {
                         getUnionType([removeDefinitelyFalsyTypes(leftType), rightType], UnionReduction.Subtype) :
                         leftType;
                 case SyntaxKind.EqualsToken:
+                    checkSpecialAssignment(left, right);
                     checkAssignmentOperator(rightType);
                     return getRegularTypeOfObjectLiteral(rightType);
                 case SyntaxKind.CommaToken:
@@ -20053,6 +20102,24 @@ namespace ts {
                         error(left, Diagnostics.Left_side_of_comma_operator_is_unused_and_has_no_side_effects);
                     }
                     return rightType;
+            }
+
+            function checkSpecialAssignment(left: Node, right: Expression) {
+                const special = getSpecialPropertyAssignmentKind(left.parent as BinaryExpression);
+                if (special === SpecialPropertyAssignmentKind.ModuleExports) {
+                    const rightType = checkExpression(right, checkMode);
+                    for (const prop of getPropertiesOfObjectType(rightType)) {
+                        const propType = getTypeOfSymbol(prop);
+                        if (propType.symbol && propType.symbol.flags & SymbolFlags.Class) {
+                            const name = prop.escapedName;
+                            const symbol = resolveName(prop.valueDeclaration, name, SymbolFlags.Type, undefined, name, /*isUse*/ false);
+                            if (symbol) {
+                                grammarErrorOnNode(symbol.declarations[0], Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(name));
+                                return grammarErrorOnNode(prop.valueDeclaration, Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(name));
+                            }
+                        }
+                    }
+                }
             }
 
             function isEvalNode(node: Expression) {
@@ -21286,7 +21353,7 @@ namespace ts {
                 n.parent.kind !== SyntaxKind.ClassDeclaration &&
                 n.parent.kind !== SyntaxKind.ClassExpression &&
                 n.flags & NodeFlags.Ambient) {
-                if (!(flags & ModifierFlags.Ambient)) {
+                if (!(flags & ModifierFlags.Ambient) && !(isModuleBlock(n.parent) && isModuleDeclaration(n.parent.parent) && isGlobalScopeAugmentation(n.parent.parent))) {
                     // It is nested in an ambient context, which means it is automatically exported
                     flags |= ModifierFlags.Export;
                 }
@@ -21578,7 +21645,8 @@ namespace ts {
                 ExportType = 1 << 1,
                 ExportNamespace = 1 << 2,
             }
-            function getDeclarationSpaces(d: Declaration): DeclarationSpaces {
+            function getDeclarationSpaces(decl: Declaration): DeclarationSpaces {
+                let d = decl as Node;
                 switch (d.kind) {
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.TypeAliasDeclaration:
@@ -21594,6 +21662,13 @@ namespace ts {
                         return DeclarationSpaces.ExportType | DeclarationSpaces.ExportValue;
                     case SyntaxKind.SourceFile:
                         return DeclarationSpaces.ExportType | DeclarationSpaces.ExportValue | DeclarationSpaces.ExportNamespace;
+                    case SyntaxKind.ExportAssignment:
+                        // Export assigned entity name expressions act as aliases and should fall through, otherwise they export values
+                        if (!isEntityNameExpression((d as ExportAssignment).expression)) {
+                            return DeclarationSpaces.ExportValue;
+                        }
+                        d = (d as ExportAssignment).expression;
+                        /* falls through */
                     // The below options all declare an Alias, which is allowed to merge with other values within the importing module
                     case SyntaxKind.ImportEqualsDeclaration:
                     case SyntaxKind.NamespaceImport:

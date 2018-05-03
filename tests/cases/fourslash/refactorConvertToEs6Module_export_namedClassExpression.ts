@@ -10,6 +10,12 @@
 verify.codeFix({
     description: "Convert to ES6 module",
     newFileContent:
-`export const C = class E { static instance = new E(); }
-export class D { static instance = new D(); }`,
+`const _C = class E {
+    static instance = new E();
+};
+export { _C as C };
+const _D = class D {
+    static instance = new D();
+};
+export { _D as D };`,
 });

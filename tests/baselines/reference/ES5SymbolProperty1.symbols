@@ -6,7 +6,7 @@ interface SymbolConstructor {
 >foo : Symbol(SymbolConstructor.foo, Decl(ES5SymbolProperty1.ts, 0, 29))
 }
 var Symbol: SymbolConstructor;
->Symbol : Symbol(Symbol, Decl(ES5SymbolProperty1.ts, 3, 3))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(ES5SymbolProperty1.ts, 3, 3))
 >SymbolConstructor : Symbol(SymbolConstructor, Decl(ES5SymbolProperty1.ts, 0, 0))
 
 var obj = {
@@ -15,13 +15,13 @@ var obj = {
     [Symbol.foo]: 0
 >[Symbol.foo] : Symbol([Symbol.foo], Decl(ES5SymbolProperty1.ts, 5, 11))
 >Symbol.foo : Symbol(SymbolConstructor.foo, Decl(ES5SymbolProperty1.ts, 0, 29))
->Symbol : Symbol(Symbol, Decl(ES5SymbolProperty1.ts, 3, 3))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(ES5SymbolProperty1.ts, 3, 3))
 >foo : Symbol(SymbolConstructor.foo, Decl(ES5SymbolProperty1.ts, 0, 29))
 }
 
 obj[Symbol.foo];
 >obj : Symbol(obj, Decl(ES5SymbolProperty1.ts, 5, 3))
 >Symbol.foo : Symbol(SymbolConstructor.foo, Decl(ES5SymbolProperty1.ts, 0, 29))
->Symbol : Symbol(Symbol, Decl(ES5SymbolProperty1.ts, 3, 3))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(ES5SymbolProperty1.ts, 3, 3))
 >foo : Symbol(SymbolConstructor.foo, Decl(ES5SymbolProperty1.ts, 0, 29))
 
