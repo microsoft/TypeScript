@@ -816,6 +816,17 @@ namespace ts {
          * the 'Collapse to Definitions' command is invoked.
          */
         autoCollapse: boolean;
+
+        /**
+         * Classification of the contents of the span
+         */
+        kind: OutliningSpanKind;
+    }
+
+    export const enum OutliningSpanKind {
+        Comment = "comment",
+        Region = "region",
+        Code = "code"
     }
 
     export const enum OutputFileType {

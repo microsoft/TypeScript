@@ -2461,7 +2461,13 @@ Actual: ${stringify(fullActual)}`);
             this.verifyClassifications(expected, actual, this.activeFile.content);
         }
 
-        public verifyOutliningSpans(spans: Range[]) {
+        public printOutliningSpans() {
+            const spans = this.languageService.getOutliningSpans(this.activeFile.fileName);
+            Harness.IO.log(`Outlining spans (${spans.length} items)`);
+            Harness.IO.log(stringify(spans));
+        }
+
+        public verifyOutliningSpans(spans: Range[], kind?: "comment" | "region" | "code") {
             const actual = this.languageService.getOutliningSpans(this.activeFile.fileName);
 
             if (actual.length !== spans.length) {
@@ -2470,7 +2476,10 @@ Actual: ${stringify(fullActual)}`);
 
             ts.zipWith(spans, actual, (expectedSpan, actualSpan, i) => {
                 if (expectedSpan.pos !== actualSpan.textSpan.start || expectedSpan.end !== ts.textSpanEnd(actualSpan.textSpan)) {
-                    this.raiseError(`verifyOutliningSpans failed - span ${(i + 1)} expected: (${expectedSpan.pos},${expectedSpan.end}),  actual: (${actualSpan.textSpan.start},${ts.textSpanEnd(actualSpan.textSpan)})`);
+                    return this.raiseError(`verifyOutliningSpans failed - span ${(i + 1)} expected: (${expectedSpan.pos},${expectedSpan.end}),  actual: (${actualSpan.textSpan.start},${ts.textSpanEnd(actualSpan.textSpan)})`);
+                }
+                if (kind !== undefined && actualSpan.kind !== kind) {
+                    return this.raiseError(`verifyOutliningSpans failed - span ${(i + 1)} expected kind: ('${kind}'),  actual: ('${actualSpan.kind}')`);
                 }
             });
         }
@@ -4290,8 +4299,8 @@ namespace FourSlashInterface {
             this.state.verifyCurrentNameOrDottedNameSpanText(text);
         }
 
-        public outliningSpansInCurrentFile(spans: FourSlash.Range[]) {
-            this.state.verifyOutliningSpans(spans);
+        public outliningSpansInCurrentFile(spans: FourSlash.Range[], kind?: "comment" | "region" | "code") {
+            this.state.verifyOutliningSpans(spans, kind);
         }
 
         public todoCommentsInCurrentFile(descriptors: string[]) {
@@ -4584,6 +4593,10 @@ namespace FourSlashInterface {
 
         public printContext() {
             this.state.printContext();
+        }
+
+        public printOutliningSpans() {
+            this.state.printOutliningSpans();
         }
     }
 
