@@ -188,7 +188,8 @@ namespace ts {
             directoryExists: directoryName => sys.directoryExists(directoryName),
             getEnvironmentVariable: name => sys.getEnvironmentVariable ? sys.getEnvironmentVariable(name) : "",
             getDirectories: (path: string) => sys.getDirectories(path),
-            realpath
+            realpath,
+            readDirectory: (path, extensions, include, exclude, depth) => sys.readDirectory(path, extensions, include, exclude, depth)
         };
     }
 
@@ -2650,10 +2651,11 @@ namespace ts {
         }
     }
 
-    function parseConfigHostFromCompilerHost(host: CompilerHost): ParseConfigFileHost {
+    /* @internal */
+    export function parseConfigHostFromCompilerHost(host: CompilerHost): ParseConfigFileHost {
         return {
             fileExists: f => host.fileExists(f),
-            readDirectory: () => [],
+            readDirectory: (root, extensions, includes, depth?) => host.readDirectory ? host.readDirectory(root, extensions, includes, depth) : [],
             readFile: f => host.readFile(f),
             useCaseSensitiveFileNames: host.useCaseSensitiveFileNames(),
             getCurrentDirectory: () => host.getCurrentDirectory(),

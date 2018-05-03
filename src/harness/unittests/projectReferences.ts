@@ -45,7 +45,7 @@ namespace ts {
         return names.map((n, i) => `import * as mod_${i} from ${n}`).join("\r\n");
     }
 
-    function testProjectReferences(spec: TestSpecification, entryPointConfigFileName: string, checkResult: (prog: Program, host: Utils.MockProjectReferenceCompilerHost) => void) {
+    function testProjectReferences(spec: TestSpecification, entryPointConfigFileName: string, checkResult: (prog: Program, host: fakes.CompilerHost) => void) {
         const files = createMap<string>();
         for (const key in spec) {
             const sp = spec[key];
@@ -77,13 +77,18 @@ namespace ts {
             }
         }
 
-        const host = new Utils.MockProjectReferenceCompilerHost("/", /*useCaseSensitiveFileNames*/ true, files);
+        const vfsys = new vfs.FileSystem(false, { files: { '/lib.d.ts': TestFSWithWatch.libFile.content! }});
+        files.forEach((v, k) => {
+            vfsys.mkdirpSync(getDirectoryPath(k));
+            vfsys.writeFileSync(k, v);
+        });
+        const host = new fakes.CompilerHost(new fakes.System(vfsys)); 
 
         const { config, error } = readConfigFile(entryPointConfigFileName, name => host.readFile(name));
 
         // We shouldn't have any errors about invalid tsconfig files in these tests
         assert(config && !error, flattenDiagnosticMessageText(error && error.messageText, "\n"));
-        const file = parseJsonConfigFileContent(config, host.configHost, getDirectoryPath(entryPointConfigFileName), {}, entryPointConfigFileName);
+        const file = parseJsonConfigFileContent(config, ts.parseConfigHostFromCompilerHost(host), getDirectoryPath(entryPointConfigFileName), {}, entryPointConfigFileName);
         file.options.configFilePath = entryPointConfigFileName;
         const prog = createProgram({
             rootNames: file.fileNames,
@@ -278,7 +283,7 @@ namespace ts {
             };
             testProjectReferences(spec, "/alpha/tsconfig.json", (program, host) => {
                 program.emit();
-                assert.deepEqual(host.emittedFiles.map(e => e.fileName).sort(), ["/alpha/bin/src/a.d.ts", "/alpha/bin/src/a.js"]);
+                assert.deepEqual(host.outputs.map(e => e.file).sort(), ["/alpha/bin/src/a.d.ts", "/alpha/bin/src/a.js"]);
             });
         });
     });

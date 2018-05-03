@@ -256,6 +256,10 @@ namespace fakes {
             return this.sys.getDirectories(path);
         }
 
+        public readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
+            return this.sys.readDirectory(path, extensions, exclude, include, depth);
+        }
+
         public readFile(path: string): string | undefined {
             return this.sys.readFile(path);
         }
