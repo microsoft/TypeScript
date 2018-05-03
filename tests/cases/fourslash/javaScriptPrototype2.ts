@@ -10,7 +10,7 @@
 //// }
 //// myCtor.prototype.foo = function() { return 32 };
 //// myCtor.prototype.bar = function() { return '' };
-//// 
+////
 //// var m = new myCtor(10);
 //// m/*1*/
 //// var x = m.qua;
@@ -20,17 +20,15 @@
 // Verify the instance property exists
 goTo.marker('1');
 edit.insert('.');
-verify.completionListContains('qua', undefined, undefined, 'property');
+verify.completions({ includes: { name: "qua", kind: "property" } });
 edit.backspace();
 
 // Verify the type of the instance property
 goTo.marker('2');
 edit.insert('.');
-verify.completionListContains('toFixed', undefined, undefined, 'method');
+verify.completions({ includes: { name: "toFixed", kind: "method" } });
 
 goTo.marker('3');
 edit.insert('.');
 // Make sure symbols don't leak out into the constructor
-verify.completionListContains('qua', undefined, undefined, 'warning');
-verify.completionListContains('foo', undefined, undefined, 'warning');
-verify.completionListContains('bar', undefined, undefined, 'warning');
+verify.completions({ includes: ["qua", "foo", "bar"].map(name => ({ name, kind: "warning" })) });

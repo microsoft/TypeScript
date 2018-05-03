@@ -811,7 +811,7 @@ namespace ts {
         if (state.traceEnabled) {
             trace(state.host, Diagnostics.Loading_module_as_file_Slash_folder_candidate_module_location_0_target_file_type_1, candidate, Extensions[extensions]);
         }
-        if (!pathEndsWithDirectorySeparator(candidate)) {
+        if (!hasTrailingDirectorySeparator(candidate)) {
             if (!onlyRecordFailures) {
                 const parentOfCandidate = getDirectoryPath(candidate);
                 if (!directoryProbablyExists(parentOfCandidate, state.host)) {

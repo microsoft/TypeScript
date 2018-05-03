@@ -207,7 +207,7 @@ namespace ts.server {
                 this.compilerOptions.allowNonTsExtensions = true;
                 this.compilerOptions.allowJs = true;
             }
-            else if (hasExplicitListOfFiles || this.compilerOptions.allowJs) {
+            else if (hasExplicitListOfFiles || this.compilerOptions.allowJs || this.projectService.hasDeferredExtension()) {
                 // If files are listed explicitly or allowJs is specified, allow all extensions
                 this.compilerOptions.allowNonTsExtensions = true;
             }
@@ -591,6 +591,11 @@ namespace ts.server {
             return this.rootFiles && this.rootFiles.length > 0;
         }
 
+        /*@internal*/
+        isOrphan() {
+            return false;
+        }
+
         getRootFiles() {
             return this.rootFiles && this.rootFiles.map(info => info.fileName);
         }
@@ -834,6 +839,10 @@ namespace ts.server {
 
         /*@internal*/
         updateTypingFiles(typingFiles: SortedReadonlyArray<string>) {
+            enumerateInsertsAndDeletes(typingFiles, this.typingFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
+                /*inserted*/ noop,
+                removed => this.detachScriptInfoFromProject(removed)
+            );
             this.typingFiles = typingFiles;
             // Invalidate files with unresolved imports
             this.resolutionCache.setFilesWithInvalidatedNonRelativeUnresolvedImports(this.cachedUnresolvedImportsPerFile);
@@ -894,7 +903,7 @@ namespace ts.server {
 
             const oldExternalFiles = this.externalFiles || emptyArray as SortedReadonlyArray<string>;
             this.externalFiles = this.getExternalFiles();
-            enumerateInsertsAndDeletes(this.externalFiles, oldExternalFiles, compareStringsCaseSensitive,
+            enumerateInsertsAndDeletes(this.externalFiles, oldExternalFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
                 // Ensure a ScriptInfo is created for new external files. This is performed indirectly
                 // by the LSHost for files in the program when the program is retrieved above but
                 // the program doesn't contain external files so this must be done explicitly.
@@ -1083,14 +1092,14 @@ namespace ts.server {
                 this.projectService.logger.info(message);
             };
 
-            for (const searchPath of searchPaths) {
-                const resolvedModule = <PluginModuleFactory>Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log);
-                if (resolvedModule) {
-                    this.enableProxy(resolvedModule, pluginConfigEntry);
-                    return;
-                }
+            const resolvedModule = firstDefined(searchPaths, searchPath =>
+                <PluginModuleFactory | undefined>Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log));
+            if (resolvedModule) {
+                this.enableProxy(resolvedModule, pluginConfigEntry);
             }
-            this.projectService.logger.info(`Couldn't find ${pluginConfigEntry.name}`);
+            else {
+                this.projectService.logger.info(`Couldn't find ${pluginConfigEntry.name}`);
+            }
         }
 
         private enableProxy(pluginModuleFactory: PluginModuleFactory, configEntry: PluginImport) {
@@ -1170,6 +1179,10 @@ namespace ts.server {
         readonly projectRootPath: string | undefined;
 
         /*@internal*/
+        /** stored only if their is no projectRootPath and this isnt single inferred project */
+        readonly canonicalCurrentDirectory: string | undefined;
+
+        /*@internal*/
         constructor(
             projectService: ProjectService,
             documentRegistry: DocumentRegistry,
@@ -1187,12 +1200,15 @@ namespace ts.server {
                 projectService.host,
                 currentDirectory);
             this.projectRootPath = projectRootPath && projectService.toCanonicalFileName(projectRootPath);
+            if (!projectRootPath && !projectService.useSingleInferredProject) {
+                this.canonicalCurrentDirectory = projectService.toCanonicalFileName(this.currentDirectory);
+            }
             this.enableGlobalPlugins();
         }
 
         addRoot(info: ScriptInfo) {
             Debug.assert(info.isScriptOpen());
-            this.projectService.startWatchingConfigFilesForInferredProjectRoot(info, this.projectService.openFiles.get(info.path));
+            this.projectService.startWatchingConfigFilesForInferredProjectRoot(info);
             if (!this._isJsInferredProject && info.isJavaScript()) {
                 this.toggleJsInferredProject(/*isJsInferredProject*/ true);
             }
@@ -1207,6 +1223,11 @@ namespace ts.server {
                     this.toggleJsInferredProject(/*isJsInferredProject*/ false);
                 }
             }
+        }
+
+        /*@internal*/
+        isOrphan() {
+            return !this.hasRoots();
         }
 
         isProjectWithSingleRoot() {

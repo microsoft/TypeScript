@@ -57,7 +57,7 @@ namespace ts {
             return currentDirectory;
         }
 
-        return getNormalizedPathFromPathComponents(commonPathComponents);
+        return getPathFromPathComponents(commonPathComponents);
     }
 
     interface OutputFingerprint {
@@ -1296,9 +1296,9 @@ namespace ts {
                 Debug.assert(!!sourceFile.bindDiagnostics);
 
                 const isCheckJs = isCheckJsEnabledForFile(sourceFile, options);
-                // By default, only type-check .ts, .tsx, and 'External' files (external files are added by plugins)
+                // By default, only type-check .ts, .tsx, 'Deferred' and 'External' files (external files are added by plugins)
                 const includeBindAndCheckDiagnostics = sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX ||
-                    sourceFile.scriptKind === ScriptKind.External || isCheckJs;
+                    sourceFile.scriptKind === ScriptKind.External || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred;
                 const bindDiagnostics = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
                 const checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
@@ -2062,6 +2062,10 @@ namespace ts {
         }
 
         function verifyCompilerOptions() {
+            if (options.strictPropertyInitialization && !options.strictNullChecks) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictPropertyInitialization", "strictNullChecks");
+            }
+
             if (options.isolatedModules) {
                 if (options.declaration) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "declaration", "isolatedModules");

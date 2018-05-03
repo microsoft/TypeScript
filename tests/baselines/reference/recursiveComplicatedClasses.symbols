@@ -10,13 +10,13 @@ class Signature {
 function aEnclosesB(a: Symbol) {
 >aEnclosesB : Symbol(aEnclosesB, Decl(recursiveComplicatedClasses.ts, 2, 1))
 >a : Symbol(a, Decl(recursiveComplicatedClasses.ts, 4, 20))
->Symbol : Symbol(Symbol, Decl(recursiveComplicatedClasses.ts, 6, 1))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(recursiveComplicatedClasses.ts, 6, 1))
 
     return true;
 }
 
 class Symbol {
->Symbol : Symbol(Symbol, Decl(recursiveComplicatedClasses.ts, 6, 1))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(recursiveComplicatedClasses.ts, 6, 1))
 
     public bound: boolean;
 >bound : Symbol(Symbol.bound, Decl(recursiveComplicatedClasses.ts, 8, 14))
@@ -36,7 +36,7 @@ class Symbol {
 }
 class InferenceSymbol extends Symbol {
 >InferenceSymbol : Symbol(InferenceSymbol, Decl(recursiveComplicatedClasses.ts, 15, 1))
->Symbol : Symbol(Symbol, Decl(recursiveComplicatedClasses.ts, 6, 1))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(recursiveComplicatedClasses.ts, 6, 1))
 }
 
 class ParameterSymbol extends InferenceSymbol {

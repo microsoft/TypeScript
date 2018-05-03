@@ -1122,11 +1122,6 @@ namespace ts {
         return false;
     }
 
-    export function hasTrailingDirectorySeparator(path: string) {
-        const lastCharacter = path.charAt(path.length - 1);
-        return lastCharacter === "/" || lastCharacter === "\\";
-    }
-
     export function isInReferenceComment(sourceFile: SourceFile, position: number): boolean {
         return isInComment(sourceFile, position, /*tokenAtPosition*/ undefined, c => {
             const commentText = sourceFile.text.substring(c.pos, c.end);

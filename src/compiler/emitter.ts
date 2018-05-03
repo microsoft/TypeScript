@@ -65,7 +65,8 @@ namespace ts {
     // JavaScript files are always LanguageVariant.JSX, as JSX syntax is allowed in .js files also.
     // So for JavaScript files, '.jsx' is only emitted if the input was '.jsx', and JsxEmit.Preserve.
     // For TypeScript, the only time to emit with a '.jsx' extension, is on JSX input, and JsxEmit.Preserve
-    function getOutputExtension(sourceFile: SourceFile, options: CompilerOptions): Extension {
+    /* @internal */
+    export function getOutputExtension(sourceFile: SourceFile, options: CompilerOptions): Extension {
         if (isJsonSourceFile(sourceFile)) {
             return Extension.Json;
         }
@@ -1382,6 +1383,8 @@ namespace ts {
         }
 
         function emitObjectLiteralExpression(node: ObjectLiteralExpression) {
+            forEach(node.properties, generateMemberNames);
+
             const indentedFlag = getEmitFlags(node) & EmitFlags.Indented;
             if (indentedFlag) {
                 increaseIndent();
@@ -1485,6 +1488,7 @@ namespace ts {
         }
 
         function emitFunctionExpression(node: FunctionExpression) {
+            generateNameIfNeeded(node.name);
             emitFunctionDeclarationOrExpression(node);
         }
 
@@ -1610,6 +1614,7 @@ namespace ts {
         }
 
         function emitClassExpression(node: ClassExpression) {
+            generateNameIfNeeded(node.name);
             emitClassDeclarationOrExpression(node);
         }
 
@@ -1917,6 +1922,9 @@ namespace ts {
                     }
 
                     pushNameGenerationScope(node);
+                    forEach(node.parameters, generateNames);
+                    generateNames(node.body);
+
                     emitSignatureHead(node);
                     if (onEmitNode) {
                         onEmitNode(EmitHint.Unspecified, body, emitBlockCallback);
@@ -2031,6 +2039,8 @@ namespace ts {
         }
 
         function emitClassDeclarationOrExpression(node: ClassDeclaration | ClassExpression) {
+            forEach(node.members, generateMemberNames);
+
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             writeKeyword("class");
@@ -2119,6 +2129,7 @@ namespace ts {
 
         function emitModuleBlock(node: ModuleBlock) {
             pushNameGenerationScope(node);
+            forEach(node.statements, generateNames);
             emitBlockStatements(node, /*forceSingleLine*/ isEmptyBlock(node));
             popNameGenerationScope(node);
         }
@@ -2522,6 +2533,7 @@ namespace ts {
         function emitSourceFileWorker(node: SourceFile) {
             const statements = node.statements;
             pushNameGenerationScope(node);
+            forEach(node.statements, generateNames);
             emitHelpers(node);
             const index = findIndex(statements, statement => !isPrologueDirective(statement));
             emitTripleSlashDirectivesIfNeeded(node);
@@ -3228,6 +3240,114 @@ namespace ts {
             reservedNames.set(name, true);
         }
 
+        function generateNames(node: Node | undefined) {
+            if (!node) return;
+            switch (node.kind) {
+                case SyntaxKind.Block:
+                    forEach((<Block>node).statements, generateNames);
+                    break;
+                case SyntaxKind.LabeledStatement:
+                case SyntaxKind.WithStatement:
+                case SyntaxKind.DoStatement:
+                case SyntaxKind.WhileStatement:
+                    generateNames((<LabeledStatement | WithStatement | DoStatement | WhileStatement>node).statement);
+                    break;
+                case SyntaxKind.IfStatement:
+                    generateNames((<IfStatement>node).thenStatement);
+                    generateNames((<IfStatement>node).elseStatement);
+                    break;
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ForOfStatement:
+                case SyntaxKind.ForInStatement:
+                    generateNames((<ForStatement | ForInOrOfStatement>node).initializer);
+                    generateNames((<ForStatement | ForInOrOfStatement>node).statement);
+                    break;
+                case SyntaxKind.SwitchStatement:
+                    generateNames((<SwitchStatement>node).caseBlock);
+                    break;
+                case SyntaxKind.CaseBlock:
+                    forEach((<CaseBlock>node).clauses, generateNames);
+                    break;
+                case SyntaxKind.CaseClause:
+                case SyntaxKind.DefaultClause:
+                    forEach((<CaseOrDefaultClause>node).statements, generateNames);
+                    break;
+                case SyntaxKind.TryStatement:
+                    generateNames((<TryStatement>node).tryBlock);
+                    generateNames((<TryStatement>node).catchClause);
+                    generateNames((<TryStatement>node).finallyBlock);
+                    break;
+                case SyntaxKind.CatchClause:
+                    generateNames((<CatchClause>node).variableDeclaration);
+                    generateNames((<CatchClause>node).block);
+                    break;
+                case SyntaxKind.VariableStatement:
+                    generateNames((<VariableStatement>node).declarationList);
+                    break;
+                case SyntaxKind.VariableDeclarationList:
+                    forEach((<VariableDeclarationList>node).declarations, generateNames);
+                    break;
+                case SyntaxKind.VariableDeclaration:
+                case SyntaxKind.Parameter:
+                case SyntaxKind.BindingElement:
+                case SyntaxKind.ClassDeclaration:
+                    generateNameIfNeeded((<NamedDeclaration>node).name);
+                    break;
+                case SyntaxKind.FunctionDeclaration:
+                    generateNameIfNeeded((<FunctionDeclaration>node).name);
+                    if (getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
+                        forEach((<FunctionDeclaration>node).parameters, generateNames);
+                        generateNames((<FunctionDeclaration>node).body);
+                    }
+                    break;
+                case SyntaxKind.ObjectBindingPattern:
+                case SyntaxKind.ArrayBindingPattern:
+                    forEach((<BindingPattern>node).elements, generateNames);
+                    break;
+                case SyntaxKind.ImportDeclaration:
+                    generateNames((<ImportDeclaration>node).importClause);
+                    break;
+                case SyntaxKind.ImportClause:
+                    generateNameIfNeeded((<ImportClause>node).name);
+                    generateNames((<ImportClause>node).namedBindings);
+                    break;
+                case SyntaxKind.NamespaceImport:
+                    generateNameIfNeeded((<NamespaceImport>node).name);
+                    break;
+                case SyntaxKind.NamedImports:
+                    forEach((<NamedImports>node).elements, generateNames);
+                    break;
+                case SyntaxKind.ImportSpecifier:
+                    generateNameIfNeeded((<ImportSpecifier>node).propertyName || (<ImportSpecifier>node).name);
+                    break;
+            }
+        }
+
+        function generateMemberNames(node: Node | undefined) {
+            if (!node) return;
+            switch (node.kind) {
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.ShorthandPropertyAssignment:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    generateNameIfNeeded((<NamedDeclaration>node).name);
+                    break;
+            }
+        }
+
+        function generateNameIfNeeded(name: DeclarationName | undefined) {
+            if (name) {
+                if (isGeneratedIdentifier(name)) {
+                    generateName(name);
+                }
+                else if (isBindingPattern(name)) {
+                    generateNames(name);
+                }
+            }
+        }
+
         /**
          * Generate the text for a generated identifier.
          */
@@ -3235,17 +3355,7 @@ namespace ts {
             if ((name.autoGenerateFlags & GeneratedIdentifierFlags.KindMask) === GeneratedIdentifierFlags.Node) {
                 // Node names generate unique names based on their original node
                 // and are cached based on that node's id.
-                if (name.autoGenerateFlags & GeneratedIdentifierFlags.SkipNameGenerationScope) {
-                    const savedTempFlags = tempFlags;
-                    popNameGenerationScope(/*node*/ undefined);
-                    const result = generateNameCached(getNodeForGeneratedName(name));
-                    pushNameGenerationScope(/*node*/ undefined);
-                    tempFlags = savedTempFlags;
-                    return result;
-                  }
-                  else {
-                    return generateNameCached(getNodeForGeneratedName(name));
-                  }
+                return generateNameCached(getNodeForGeneratedName(name));
             }
             else {
                 // Auto, Loop, and Unique names are cached based on their unique

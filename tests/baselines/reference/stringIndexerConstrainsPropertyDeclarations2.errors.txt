@@ -26,10 +26,10 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerCon
         a: A; // ok
         b: B; // ok
         c: number; // error
-        ~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'c' of type 'number' is not assignable to string index type 'A'.
         d: string; // error
-        ~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'd' of type 'string' is not assignable to string index type 'A'.
     }
     
@@ -38,10 +38,10 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerCon
         a: A; // ok
         b: B; // ok
         c: number; // error
-        ~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'c' of type 'number' is not assignable to string index type 'A'.
         d: string; // error
-        ~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'd' of type 'string' is not assignable to string index type 'A'.
     }
     
@@ -50,10 +50,10 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerCon
         a: A; // ok
         b: B; // ok
         c: number; // error
-        ~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'c' of type 'number' is not assignable to string index type 'A'.
         d: string; // error
-        ~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'd' of type 'string' is not assignable to string index type 'A'.
     };
     

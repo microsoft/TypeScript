@@ -55,10 +55,10 @@ namespace ts {
 
     function getPathUpdater(oldFilePath: string, newFilePath: string, host: LanguageServiceHost): (oldPath: string) => string | undefined {
         // Get the relative path from old to new location, and append it on to the end of imports and normalize.
-        const rel = getRelativePath(newFilePath, getDirectoryPath(oldFilePath), createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host)));
+        const rel = ensurePathIsNonModuleName(getRelativePath(getDirectoryPath(oldFilePath), newFilePath, createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host))));
         return oldPath => {
             if (!pathIsRelative(oldPath)) return;
-            return ensurePathIsRelative(normalizePath(combinePaths(getDirectoryPath(oldPath), rel)));
+            return ensurePathIsNonModuleName(normalizePath(combinePaths(getDirectoryPath(oldPath), rel)));
         };
     }
 

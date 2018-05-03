@@ -1,5 +1,7 @@
 /// <reference path="..\harness.ts" />
 /// <reference path="..\..\compiler\commandLineParser.ts" />
+/// <reference path="../compiler.ts" />
+/// <reference path="../vfs.ts" />
 
 namespace ts {
     interface ExpectedResult { typeAcquisition: TypeAcquisition; errors: Diagnostic[]; }
@@ -43,7 +45,7 @@ namespace ts {
             const result = parseJsonText(configFileName, fileText);
             assert(!result.parseDiagnostics.length);
             assert(!!result.endOfFileToken);
-            const host: ParseConfigHost = new Utils.MockParseConfigHost("/apath/", true, []);
+            const host: ParseConfigHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: "/apath/" }));
             const { typeAcquisition: actualTypeAcquisition, errors: actualParseErrors } = parseJsonSourceFileConfigFileContent(result, host, "/apath/", /*existingOptions*/ undefined, configFileName);
             verifyAcquisition(actualTypeAcquisition, expectedResult);
 

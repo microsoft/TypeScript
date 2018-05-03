@@ -7,15 +7,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(17,15): error TS
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(18,20): error TS2304: Cannot find name 'Type'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(19,14): error TS2304: Cannot find name 'FuncDecl'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(21,25): error TS2304: Cannot find name 'ScopeChain'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(32,40): error TS2304: Cannot find name 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(32,51): error TS2304: Cannot find name 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(41,43): error TS2304: Cannot find name 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(47,41): error TS2304: Cannot find name 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(47,52): error TS2304: Cannot find name 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(47,62): error TS2304: Cannot find name 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(48,46): error TS2304: Cannot find name 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(50,24): error TS2304: Cannot find name 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(56,26): error TS2304: Cannot find name 'Symbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(33,33): error TS2339: Property 'isInstanceProperty' does not exist on type 'Symbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(42,18): error TS2339: Property 'isInstanceProperty' does not exist on type 'Symbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(69,48): error TS2304: Cannot find name 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(70,27): error TS2304: Cannot find name 'ModuleDeclaration'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(71,26): error TS2304: Cannot find name 'SymbolTableScope'.
@@ -51,8 +44,6 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(163,30): error T
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(170,40): error TS2339: Property 'SymbolScopeBuilder' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(176,50): error TS2304: Cannot find name 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(177,25): error TS2304: Cannot find name 'FuncDecl'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(179,24): error TS2304: Cannot find name 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(180,29): error TS2304: Cannot find name 'Symbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(185,24): error TS2304: Cannot find name 'hasFlag'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(185,51): error TS2304: Cannot find name 'FncFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(195,41): error TS2304: Cannot find name 'hasFlag'.
@@ -66,12 +57,17 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(231,38): error T
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(231,74): error TS2304: Cannot find name 'SymbolFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(237,27): error TS2304: Cannot find name 'FuncDecl'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(239,24): error TS2304: Cannot find name 'TypeSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(245,64): error TS2339: Property 'getType' does not exist on type 'Symbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(246,47): error TS2304: Cannot find name 'SymbolScopeBuilder'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(246,68): error TS2304: Cannot find name 'TypeSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(255,31): error TS2339: Property 'declAST' does not exist on type 'Symbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(256,31): error TS2339: Property 'declAST' does not exist on type 'Symbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(256,51): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(257,23): error TS2304: Cannot find name 'FuncDecl'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(257,42): error TS2339: Property 'declAST' does not exist on type 'Symbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(284,38): error TS2304: Cannot find name 'FncFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(286,55): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(289,116): error TS2339: Property 'getType' does not exist on type 'Symbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(292,43): error TS2304: Cannot find name 'SymbolFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(309,29): error TS2304: Cannot find name 'StringHashTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(310,31): error TS2304: Cannot find name 'ScopedMembers'.
@@ -134,7 +130,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(453,38): error T
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(454,35): error TS2304: Cannot find name 'Catch'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts (134 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts (130 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
@@ -185,11 +181,9 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(454,35): error T
         }
     
         export function instanceCompare(a: Symbol, b: Symbol) {
-                                           ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
-                                                      ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
             if (((a == null) || (!a.isInstanceProperty()))) {
+                                    ~~~~~~~~~~~~~~~~~~
+!!! error TS2339: Property 'isInstanceProperty' does not exist on type 'Symbol'.
                 return b;
             }
             else {
@@ -198,35 +192,23 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(454,35): error T
         }
     
         export function instanceFilterStop(s: Symbol) {
-                                              ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
             return s.isInstanceProperty();
+                     ~~~~~~~~~~~~~~~~~~
+!!! error TS2339: Property 'isInstanceProperty' does not exist on type 'Symbol'.
         }
     
         export class ScopeSearchFilter {
     
             constructor (public select: (a: Symbol, b: Symbol) =>Symbol,
-                                            ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
-                                                       ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
-                                                                 ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
                                 public stop: (s: Symbol) =>boolean) { }
-                                                 ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
     
             public result: Symbol = null;
-                           ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
     
             public reset() {
                 this.result = null;
             }
     
             public update(b: Symbol): boolean {
-                             ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
                 this.result = this.select(this.result, b);
                 if (this.result) {
                     return this.stop(this.result);
@@ -420,11 +402,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(454,35): error T
 !!! error TS2304: Cannot find name 'FuncDecl'.
     
             var container: Symbol = null;
-                           ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
             var localContainer: Symbol = null;
-                                ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
             if (funcDecl.type) {
                 localContainer = ast.type.symbol;
             }
@@ -516,6 +494,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(454,35): error T
                     // to copy it over.  We don't set this by default because having a non-null member list will throw off assignment
                     // compatibility tests
                     if (outerFnc.type.members == null && container.getType().memberScope) {
+                                                                   ~~~~~~~
+!!! error TS2339: Property 'getType' does not exist on type 'Symbol'.
                         outerFnc.type.members = (<SymbolScopeBuilder>(<TypeSymbol>container).type.memberScope).valueMembers;
                                                   ~~~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'SymbolScopeBuilder'.
@@ -530,12 +510,18 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(454,35): error T
                     if (!funcDecl.isConstructor &&
                         container &&
                         container.declAST &&
+                                  ~~~~~~~
+!!! error TS2339: Property 'declAST' does not exist on type 'Symbol'.
                         container.declAST.nodeType == NodeType.FuncDecl &&
+                                  ~~~~~~~
+!!! error TS2339: Property 'declAST' does not exist on type 'Symbol'.
                                                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
                         (<FuncDecl>container.declAST).isConstructor &&
                           ~~~~~~~~
 !!! error TS2304: Cannot find name 'FuncDecl'.
+                                             ~~~~~~~
+!!! error TS2339: Property 'declAST' does not exist on type 'Symbol'.
                         !funcDecl.isMethod()) {
                         funcScope = context.scopeChain.thisType.constructorScope;//locals;
                     }
@@ -572,6 +558,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(454,35): error T
                         (fgSym && fgSym.isAccessor())) 
                 {
                     funcDecl.accessorSymbol = context.typeFlow.checker.createAccessorSymbol(funcDecl, fgSym, container.getType(), (funcDecl.isMethod() && isStatic), true, funcScope, container);
+                                                                                                                       ~~~~~~~
+!!! error TS2339: Property 'getType' does not exist on type 'Symbol'.
                 }
     
                 funcDecl.type.symbol.flags |= SymbolFlags.TypeSetDuringScopeAssignment;

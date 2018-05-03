@@ -688,6 +688,8 @@ namespace ts {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.PropertySignature:
                 errorNode = (<NamedDeclaration>node).name;
                 break;
             case SyntaxKind.ArrowFunction:
@@ -6094,7 +6096,8 @@ namespace ts {
             || kind === SyntaxKind.TypeAliasDeclaration
             || kind === SyntaxKind.TypeParameter
             || kind === SyntaxKind.VariableDeclaration
-            || kind === SyntaxKind.JSDocTypedefTag;
+            || kind === SyntaxKind.JSDocTypedefTag
+            || kind === SyntaxKind.JSDocPropertyTag;
     }
 
     function isDeclarationStatementKind(kind: SyntaxKind) {

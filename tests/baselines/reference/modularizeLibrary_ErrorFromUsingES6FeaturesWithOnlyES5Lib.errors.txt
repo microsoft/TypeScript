@@ -2,14 +2,14 @@ tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.t
 tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(10,13): error TS2304: Cannot find name 'Map'.
 tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(17,5): error TS2339: Property 'name' does not exist on type '() => void'.
 tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(20,6): error TS2551: Property 'sign' does not exist on type 'Math'. Did you mean 'sin'?
-tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(25,6): error TS2304: Cannot find name 'Symbol'.
-tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(29,18): error TS2304: Cannot find name 'Symbol'.
+tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(25,6): error TS2693: 'Symbol' only refers to a type, but is being used as a value here.
+tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(29,18): error TS2693: 'Symbol' only refers to a type, but is being used as a value here.
 tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(33,13): error TS2304: Cannot find name 'Proxy'.
 tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(36,1): error TS2304: Cannot find name 'Reflect'.
 tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(40,5): error TS2339: Property 'flags' does not exist on type 'RegExp'.
 tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(44,5): error TS2339: Property 'includes' does not exist on type 'string'.
-tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(47,9): error TS2304: Cannot find name 'Symbol'.
-tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(51,6): error TS2304: Cannot find name 'Symbol'.
+tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(47,9): error TS2693: 'Symbol' only refers to a type, but is being used as a value here.
+tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(51,6): error TS2693: 'Symbol' only refers to a type, but is being used as a value here.
 
 
 ==== tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts (12 errors) ====
@@ -47,13 +47,13 @@ tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.t
         a: 2,
         [Symbol.hasInstance](value: any) {
          ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
+!!! error TS2693: 'Symbol' only refers to a type, but is being used as a value here.
             return false;
         }
     };
     o.hasOwnProperty(Symbol.hasInstance);
                      ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
+!!! error TS2693: 'Symbol' only refers to a type, but is being used as a value here.
     
     // Using Es6 proxy
     var t = {}
@@ -81,13 +81,13 @@ tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.t
     // Using ES6 symbol
     var s = Symbol();
             ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
+!!! error TS2693: 'Symbol' only refers to a type, but is being used as a value here.
     
     // Using ES6 wellknown-symbol
     const o1 = {
         [Symbol.hasInstance](value: any) {
          ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
+!!! error TS2693: 'Symbol' only refers to a type, but is being used as a value here.
             return false;
         }
     }
