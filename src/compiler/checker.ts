@@ -3552,13 +3552,13 @@ namespace ts {
             }
 
             function typeParameterShadowsNameInScope(type: TypeParameter, context: NodeBuilderContext) {
-                return !!resolveName(context.enclosingDeclaration, type.symbol.escapedName, SymbolFlags.Type, /*nameNotFoundArg*/ undefined, type.symbol.escapedName, /*isUse*/ false)
+                return !!resolveName(context.enclosingDeclaration, type.symbol.escapedName, SymbolFlags.Type, /*nameNotFoundArg*/ undefined, type.symbol.escapedName, /*isUse*/ false);
             }
 
             function typeParameterToDeclarationWithConstraint(type: TypeParameter, context: NodeBuilderContext, constraintNode: TypeNode | undefined): TypeParameterDeclaration {
                 const savedContextFlags = context.flags;
                 context.flags &= ~NodeBuilderFlags.WriteTypeParametersInQualifiedName; // Avoids potential infinite loop when building for a claimspace with a generic
-                const shouldUseGeneratedName = 
+                const shouldUseGeneratedName =
                     context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams &&
                     type.symbol.declarations[0] &&
                     isTypeParameterDeclaration(type.symbol.declarations[0]) &&
