@@ -2210,6 +2210,8 @@ namespace ts.Completions {
 
     function isValidTrigger(sourceFile: SourceFile, triggerCharacter: string, contextToken: Node, position: number): boolean {
         switch (triggerCharacter) {
+            case ".":
+                return true;
             case '"':
             case "'":
             case "`":
