@@ -650,8 +650,8 @@ task("LKG", ["clean", "release", "local"].concat(libraryTargets), function () {
         return !fs.existsSync(f);
     });
     if (missingFiles.length > 0) {
-        fail("Cannot replace the LKG unless all built targets are present in directory " + builtLocalDirectory +
-            ". The following files are missing:\n" + missingFiles.join("\n"));
+        fail(new Error("Cannot replace the LKG unless all built targets are present in directory " + builtLocalDirectory +
+            ". The following files are missing:\n" + missingFiles.join("\n")));
     }
     // Copy all the targets into the LKG directory
     jake.mkdirP(LKGDirectory);
