@@ -3061,7 +3061,7 @@ Actual: ${stringify(fullActual)}`);
         public moveToNewFile(options: FourSlashInterface.MoveToNewFileOptions): void {
             assert(this.getRanges().length === 1);
             const range = this.getRanges()[0];
-            const refactor = ts.find(this.getApplicableRefactors(range), r => r.name === "Move to a new file");
+            const refactor = ts.find(this.getApplicableRefactors(range, { allowTextChangesInNewFiles: true }), r => r.name === "Move to a new file");
             assert(refactor.actions.length === 1);
             const action = ts.first(refactor.actions);
             assert(action.name === "Move to a new file" && action.description === "Move to a new file");
@@ -3304,8 +3304,8 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        private getApplicableRefactors(positionOrRange: number | ts.TextRange): ReadonlyArray<ts.ApplicableRefactorInfo> {
-            return this.languageService.getApplicableRefactors(this.activeFile.fileName, positionOrRange, ts.defaultPreferences) || ts.emptyArray;
+        private getApplicableRefactors(positionOrRange: number | ts.TextRange, preferences = ts.defaultPreferences): ReadonlyArray<ts.ApplicableRefactorInfo> {
+            return this.languageService.getApplicableRefactors(this.activeFile.fileName, positionOrRange, preferences) || ts.emptyArray;
         }
     }
 

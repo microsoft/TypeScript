@@ -233,6 +233,7 @@ namespace ts {
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly allowTextChangesInNewFiles?: boolean;
     }
     /* @internal */
     export const defaultPreferences: UserPreferences = {};

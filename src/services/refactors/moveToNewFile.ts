@@ -3,7 +3,7 @@ namespace ts.refactor {
     const refactorName = "Move to a new file";
     registerRefactor(refactorName, {
         getAvailableActions(context): ApplicableRefactorInfo[] {
-            if (getStatementsToMove(context) === undefined) return undefined;
+            if (getStatementsToMove(context) === undefined || !context.preferences.allowTextChangesInNewFiles) return undefined;
             const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);
             return [{ name: refactorName, description, actions: [{ name: refactorName, description }] }];
         },
