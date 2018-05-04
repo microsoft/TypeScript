@@ -67,18 +67,7 @@ namespace ts {
     // For TypeScript, the only time to emit with a '.jsx' extension, is on JSX input, and JsxEmit.Preserve
     /* @internal */
     export function getOutputExtension(sourceFile: SourceFile, options: CompilerOptions): Extension {
-        if (options.jsx === JsxEmit.Preserve) {
-            if (isSourceFileJavaScript(sourceFile)) {
-                if (fileExtensionIs(sourceFile.fileName, Extension.Jsx)) {
-                    return Extension.Jsx;
-                }
-            }
-            else if (sourceFile.languageVariant === LanguageVariant.JSX) {
-                // TypeScript source file preserving JSX syntax
-                return Extension.Jsx;
-            }
-        }
-        return Extension.Js;
+        return options.jsx === JsxEmit.Preserve && sourceFile.languageVariant === LanguageVariant.JSX && !fileExtensionIs(sourceFile.fileName, Extension.Js) ? Extension.Jsx : Extension.Js;
     }
 
     /*@internal*/
