@@ -1,10 +1,3 @@
-tests/cases/conformance/enums/enumConstantMembers.ts(22,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
-tests/cases/conformance/enums/enumConstantMembers.ts(23,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
-tests/cases/conformance/enums/enumConstantMembers.ts(24,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
-tests/cases/conformance/enums/enumConstantMembers.ts(25,9): error TS2478: 'const' enum member initializer was evaluated to disallowed value 'NaN'.
-tests/cases/conformance/enums/enumConstantMembers.ts(26,9): error TS2478: 'const' enum member initializer was evaluated to disallowed value 'NaN'.
-tests/cases/conformance/enums/enumConstantMembers.ts(27,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
-tests/cases/conformance/enums/enumConstantMembers.ts(28,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
 tests/cases/conformance/enums/enumConstantMembers.ts(32,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
 tests/cases/conformance/enums/enumConstantMembers.ts(33,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
 tests/cases/conformance/enums/enumConstantMembers.ts(34,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
@@ -14,7 +7,7 @@ tests/cases/conformance/enums/enumConstantMembers.ts(37,9): error TS2477: 'const
 tests/cases/conformance/enums/enumConstantMembers.ts(38,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
 
 
-==== tests/cases/conformance/enums/enumConstantMembers.ts (14 errors) ====
+==== tests/cases/conformance/enums/enumConstantMembers.ts (7 errors) ====
     // Constant members allow negatives, but not decimals. Also hex literals are allowed
     enum E1 {
         a = 1,
@@ -37,26 +30,12 @@ tests/cases/conformance/enums/enumConstantMembers.ts(38,9): error TS2477: 'const
     
     enum E5 {
         a = 1 / 0,
-            ~~~~~
-!!! error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
         b = 2 / 0.0,
-            ~~~~~~~
-!!! error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
         c = 1.0 / 0.0,
-            ~~~~~~~~~
-!!! error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
         d = 0.0 / 0.0,
-            ~~~~~~~~~
-!!! error TS2478: 'const' enum member initializer was evaluated to disallowed value 'NaN'.
         e = NaN,
-            ~~~
-!!! error TS2478: 'const' enum member initializer was evaluated to disallowed value 'NaN'.
         f = Infinity,
-            ~~~~~~~~
-!!! error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
         g = -Infinity
-            ~~~~~~~~~
-!!! error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
     }
     
     const enum E6 {

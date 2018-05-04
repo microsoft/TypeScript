@@ -24311,7 +24311,7 @@ namespace ts {
             const initializer = member.initializer;
             const value = enumKind === EnumKind.Literal && !isLiteralEnumMember(member) ? undefined : evaluate(initializer);
             if (value !== undefined) {
-                if (typeof value === "number" && !isFinite(value)) {
+                if (isConstEnum && typeof value === "number" && !isFinite(value)) {
                     error(initializer, isNaN(value) ?
                         Diagnostics.const_enum_member_initializer_was_evaluated_to_disallowed_value_NaN :
                         Diagnostics.const_enum_member_initializer_was_evaluated_to_a_non_finite_value);
