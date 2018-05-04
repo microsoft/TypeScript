@@ -527,10 +527,9 @@ namespace ts {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
                 return node.typeParameters;
-            case SyntaxKind.JSDocSignature:
-            case SyntaxKind.JSDocTypeLiteral:
-                // TODO: Actually go find them!
-                return undefined;
+            case SyntaxKind.JSDocCallbackTag:
+            case SyntaxKind.JSDocTypedefTag:
+                return getEffectiveTypeParameterDeclarations(node);
             default:
                 assertTypeIsNever(node);
                 return undefined;
@@ -559,8 +558,8 @@ namespace ts {
             case SyntaxKind.SetAccessor:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
-            case SyntaxKind.JSDocSignature:
-            case SyntaxKind.JSDocTypeLiteral:
+            case SyntaxKind.JSDocCallbackTag:
+            case SyntaxKind.JSDocTypedefTag:
                 return true;
             default:
                 assertTypeIsNever(node);
@@ -1930,8 +1929,8 @@ namespace ts {
     }
 
     export function getJSDocHost(node: JSDocTag): HasJSDoc {
-        while (node.parent.kind === SyntaxKind.JSDocTypeLiteral) {
-            if (node.parent.parent.kind === SyntaxKind.JSDocTypedefTag) {
+        while (isJSDocTypeLiteral(node.parent) || isJSDocSignature(node.parent)) {
+            if (isJSDocTypeAlias(node.parent.parent)) {
                 node = node.parent.parent as JSDocTypedefTag;
             }
             else {
@@ -3107,9 +3106,16 @@ namespace ts {
      * Gets the effective type parameters. If the node was parsed in a
      * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
      */
-    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters) {
-        // TODO: Make getJSDocTypeParameterDeclarations do the right thing
-        if (isJSDocTypeLiteral(node) || isJSDocSignature(node)) return undefined;
+    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): NodeArray<TypeParameterDeclaration> {
+        if (isJSDocTypeAlias(node)) {
+            Debug.assert(node.parent.kind === SyntaxKind.JSDocComment);
+            const templateTags = flatMap(filter(node.parent.tags, isJSDocTemplateTag), tag => tag.typeParameters) as ReadonlyArray<TypeParameterDeclaration>;
+            const templateTagNodes = templateTags as NodeArray<TypeParameterDeclaration>;
+            templateTagNodes.pos = templateTagNodes.length > 0 ? first(templateTagNodes).pos : node.pos;
+            templateTagNodes.end = templateTagNodes.length > 0 ? last(templateTagNodes).end : node.end;
+            templateTagNodes.hasTrailingComma = false;
+            return templateTagNodes;
+        }
         return node.typeParameters || (isInJavaScriptFile(node) ? getJSDocTypeParameterDeclarations(node) : undefined);
     }
 

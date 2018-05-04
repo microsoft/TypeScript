@@ -1990,7 +1990,7 @@ namespace ts {
                 }
 
                 for (const tag of jsDoc.tags) {
-                    if (isJSDocTypeAlias(tag)) {
+                    if (isJSDocTypeAlias(tag) || isJSDocTemplateTag(tag)) {
                         const savedParent = parent;
                         parent = jsDoc;
                         bind(tag);
@@ -2202,6 +2202,8 @@ namespace ts {
                 case SyntaxKind.ModuleBlock:
                     return updateStrictModeStatementList((<Block | ModuleBlock>node).statements);
 
+                case SyntaxKind.JSDocTemplateTag:
+                    return forEach((node as JSDocTemplateTag).typeParameters, bindTypeParameter);
                 case SyntaxKind.JSDocParameterTag:
                     if (node.parent.kind === SyntaxKind.JSDocSignature) {
                         return bindParameter(node as JSDocParameterTag);
@@ -2699,7 +2701,7 @@ namespace ts {
         }
 
         function bindTypeParameter(node: TypeParameterDeclaration) {
-            if (node.parent.kind === SyntaxKind.InferType) {
+            if (node.parent && node.parent.kind === SyntaxKind.InferType) {
                 const container = getInferTypeContainer(node.parent);
                 if (container) {
                     if (!container.locals) {

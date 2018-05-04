@@ -1367,6 +1367,16 @@ namespace ts {
                             }
                         }
                         break;
+                    case SyntaxKind.JSDocTypedefTag:
+                    case SyntaxKind.JSDocCallbackTag:
+                        // TODO: These might be stored elsewhere already if we can get the symbol
+                        if (meaning & SymbolFlags.Type) {
+                            const param = find(getEffectiveTypeParameterDeclarations(location as JSDocTypedefTag), param => param.name.escapedText === name);
+                            if (result = getSymbolOfNode(param)) {
+                                break loop;
+                            }
+                        }
+                        break;
                     case SyntaxKind.ExpressionWithTypeArguments:
                         // The type parameters of a class are not in scope in the base class expression.
                         if (lastLocation === (<ExpressionWithTypeArguments>location).expression && (<HeritageClause>location.parent).token === SyntaxKind.ExtendsKeyword) {
@@ -5065,6 +5075,8 @@ namespace ts {
                     case SyntaxKind.ArrowFunction:
                     case SyntaxKind.TypeAliasDeclaration:
                     case SyntaxKind.JSDocTemplateTag:
+                    case SyntaxKind.JSDocTypedefTag:
+                    case SyntaxKind.JSDocCallbackTag:
                     case SyntaxKind.MappedType:
                     case SyntaxKind.ConditionalType:
                         const outerTypeParameters = getOuterTypeParameters(node, includeThisTypes);
@@ -5094,10 +5106,10 @@ namespace ts {
         function getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): TypeParameter[] {
             let result: TypeParameter[];
             for (const node of symbol.declarations) {
-                // TODO: needs to understand jsdoc typedefs and callbacks
                 if (node.kind === SyntaxKind.InterfaceDeclaration || node.kind === SyntaxKind.ClassDeclaration ||
-                    node.kind === SyntaxKind.ClassExpression || node.kind === SyntaxKind.TypeAliasDeclaration) {
-                    const declaration = <InterfaceDeclaration | TypeAliasDeclaration>node;
+                    node.kind === SyntaxKind.ClassExpression || node.kind === SyntaxKind.TypeAliasDeclaration ||
+                    isJSDocTypeAlias(node)) {
+                    const declaration = <InterfaceDeclaration | TypeAliasDeclaration | JSDocTypedefTag | JSDocCallbackTag>node;
                     const typeParameters = getEffectiveTypeParameterDeclarations(declaration);
                     if (typeParameters) {
                         result = appendTypeParameters(result, typeParameters);
@@ -7122,7 +7134,7 @@ namespace ts {
                 const classType = declaration.kind === SyntaxKind.Constructor ?
                     getDeclaredTypeOfClassOrInterface(getMergedSymbol((<ClassDeclaration>declaration.parent).symbol))
                     : undefined;
-                const typeParameters = classType ? classType.localTypeParameters : getTypeParametersFromDeclaration(declaration);
+                const typeParameters = classType ? classType.localTypeParameters : isJSDocSignature(declaration) ? undefined : getTypeParametersFromDeclaration(declaration);
                 const returnType = getSignatureReturnTypeFromDeclaration(declaration, isJSConstructSignature, classType);
                 const hasRestLikeParameter = hasRestParameter(declaration) || isInJavaScriptFile(declaration) && maybeAddJsSyntheticRestParameter(declaration, parameters);
                 links.resolvedSignature = createSignature(declaration, typeParameters, thisParameter, parameters, returnType, /*resolvedTypePredicate*/ undefined, minArgumentCount, hasRestLikeParameter, hasLiteralTypes);
@@ -7584,11 +7596,11 @@ namespace ts {
                     const missingAugmentsTag = isJs && node.parent.kind !== SyntaxKind.JSDocAugmentsTag;
                     const diag = minTypeArgumentCount === typeParameters.length
                         ? missingAugmentsTag
-                            ? Diagnostics.Expected_0_type_arguments_provide_these_with_an_extends_tag
-                            : Diagnostics.Generic_type_0_requires_1_type_argument_s
-                        : missingAugmentsTag
-                            ? Diagnostics.Expected_0_1_type_arguments_provide_these_with_an_extends_tag
-                            : Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments;
+                        ? Diagnostics.Expected_0_type_arguments_provide_these_with_an_extends_tag
+                        : Diagnostics.Generic_type_0_requires_1_type_argument_s
+                    : missingAugmentsTag
+                        ? Diagnostics.Expected_0_1_type_arguments_provide_these_with_an_extends_tag
+                        : Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments;
                     const typeStr = typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType);
                     error(node, diag, typeStr, minTypeArgumentCount, typeParameters.length);
                     if (!isJs) {
@@ -7603,7 +7615,7 @@ namespace ts {
                 return createTypeReference(<GenericType>type, typeArguments);
             }
             return checkNoTypeArguments(node, symbol) ? type : unknownType;
-            }
+        }
 
         function getTypeAliasInstantiation(symbol: Symbol, typeArguments: Type[]): Type {
             const type = getDeclaredTypeOfSymbol(symbol);
@@ -7757,7 +7769,7 @@ namespace ts {
 
         function getConstrainedTypeVariable(typeVariable: TypeVariable, node: Node) {
             let constraints: Type[];
-            while (node && !isStatement(node)) {
+            while (node && !isStatement(node) && node.kind !== SyntaxKind.JSDocComment) {
                 const parent = node.parent;
                 if (parent.kind === SyntaxKind.ConditionalType && node === (<ConditionalTypeNode>parent).trueType) {
                     const constraint = getImpliedConstraint(typeVariable, (<ConditionalTypeNode>parent).checkType, (<ConditionalTypeNode>parent).extendsType);
