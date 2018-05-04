@@ -9,7 +9,35 @@ namespace ts.OutliningElementsCollector {
 
     function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
         let depthRemaining = 40;
-        sourceFile.forEachChild(function walk(n) {
+        let current = 0;
+        const statements = sourceFile.statements;
+        const n = statements.length;
+        while (current < n) {
+            while (current < n && !isAnyImportSyntax(statements[current])) {
+                visitNonImportNode(statements[current]);
+                current++;
+            }
+            if (current === n) break;
+            const firstImport = statements[current];
+            while (current < n && isAnyImportSyntax(statements[current])) {
+                visitImportNode(statements[current] as AnyImportSyntax, sourceFile, cancellationToken, out);
+                current++;
+            }
+            const lastImport = current < n ? statements[current - 1] : statements[n - 1];
+            if (lastImport !== firstImport) {
+                out.push(createOutliningSpanFromBounds(findChildOfKind(firstImport, SyntaxKind.ImportKeyword, sourceFile)!.getStart(sourceFile), lastImport.getEnd(), OutliningSpanKind.Import));
+            }
+        }
+
+        function visitImportNode(node: AnyImportSyntax, sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>) {
+            // Add outlining spans for comments if they exist
+            addOutliningForLeadingCommentsForNode(node, sourceFile, cancellationToken, out);
+            // Add outlining spans for the import statement itself if applicable
+            const span = getOutliningSpanForNode(node, sourceFile);
+            if (span) out.push(span);
+        }
+
+        function visitNonImportNode(n: Node) {
             if (depthRemaining === 0) return;
             cancellationToken.throwIfCancellationRequested();
 
@@ -23,17 +51,17 @@ namespace ts.OutliningElementsCollector {
             depthRemaining--;
             if (isIfStatement(n) && n.elseStatement && isIfStatement(n.elseStatement)) {
                 // Consider an 'else if' to be on the same depth as the 'if'.
-                walk(n.expression);
-                walk(n.thenStatement);
+                visitNonImportNode(n.expression);
+                visitNonImportNode(n.thenStatement);
                 depthRemaining++;
-                walk(n.elseStatement);
+                visitNonImportNode(n.elseStatement);
                 depthRemaining--;
             }
             else {
-                n.forEachChild(walk);
+                n.forEachChild(visitNonImportNode);
             }
             depthRemaining++;
-        });
+        }
     }
 
     function addRegionOutliningSpans(sourceFile: SourceFile, out: Push<OutliningSpan>): void {
@@ -149,6 +177,9 @@ namespace ts.OutliningElementsCollector {
                 return spanForObjectOrArrayLiteral(n);
             case SyntaxKind.ArrayLiteralExpression:
                 return spanForObjectOrArrayLiteral(n, SyntaxKind.OpenBracketToken);
+            case SyntaxKind.ImportDeclaration:
+                const importClause = (n as ImportDeclaration).importClause;
+                return importClause && importClause.namedBindings && importClause.namedBindings.kind !== SyntaxKind.NamespaceImport ? spanForNode(importClause.namedBindings) : undefined;
         }
 
         function spanForObjectOrArrayLiteral(node: Node, open: SyntaxKind.OpenBraceToken | SyntaxKind.OpenBracketToken = SyntaxKind.OpenBraceToken): OutliningSpan | undefined {

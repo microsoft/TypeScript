@@ -2467,7 +2467,7 @@ Actual: ${stringify(fullActual)}`);
             Harness.IO.log(stringify(spans));
         }
 
-        public verifyOutliningSpans(spans: Range[], kind?: "comment" | "region" | "code") {
+        public verifyOutliningSpans(spans: Range[], kind?: "comment" | "region" | "code" | "import") {
             const actual = this.languageService.getOutliningSpans(this.activeFile.fileName);
 
             if (actual.length !== spans.length) {
@@ -4299,7 +4299,7 @@ namespace FourSlashInterface {
             this.state.verifyCurrentNameOrDottedNameSpanText(text);
         }
 
-        public outliningSpansInCurrentFile(spans: FourSlash.Range[], kind?: "comment" | "region" | "code") {
+        public outliningSpansInCurrentFile(spans: FourSlash.Range[], kind?: "comment" | "region" | "code" | "import") {
             this.state.verifyOutliningSpans(spans, kind);
         }
 

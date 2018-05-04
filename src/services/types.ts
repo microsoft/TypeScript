@@ -826,7 +826,8 @@ namespace ts {
     export const enum OutliningSpanKind {
         Comment = "comment",
         Region = "region",
-        Code = "code"
+        Code = "code",
+        Import = "import"
     }
 
     export const enum OutputFileType {
