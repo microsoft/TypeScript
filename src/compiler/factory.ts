@@ -197,6 +197,15 @@ namespace ts {
         return name;
     }
 
+    export function getOptimisticScopedGeneratedNameForName(node: Identifier): Identifier {
+        const name = createIdentifier(idText(node));
+        name.autoGenerateFlags = GeneratedIdentifierFlags.Node | GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes;
+        name.autoGenerateId = nextAutoGenerateId;
+        name.original = node;
+        nextAutoGenerateId++;
+        return name;
+    }
+
     // Punctuation
 
     export function createToken<TKind extends SyntaxKind>(token: TKind) {
@@ -4228,6 +4237,7 @@ namespace ts {
         switch (member.kind) {
             case SyntaxKind.TypeQuery:
             case SyntaxKind.TypeOperator:
+            case SyntaxKind.InferType:
                 return createParenthesizedType(member);
         }
         return parenthesizeElementTypeMember(member);

@@ -1075,6 +1075,7 @@ namespace ts {
         }
 
         function emitMethodSignature(node: MethodSignature) {
+            pushNameGenerationScope(node);
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             emit(node.name);
@@ -1083,6 +1084,7 @@ namespace ts {
             emitParameters(node, node.parameters);
             emitTypeAnnotation(node.type);
             writeSemicolon();
+            popNameGenerationScope(node);
         }
 
         function emitMethodDeclaration(node: MethodDeclaration) {
@@ -1110,15 +1112,18 @@ namespace ts {
         }
 
         function emitCallSignature(node: CallSignatureDeclaration) {
+            pushNameGenerationScope(node);
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             emitTypeParameters(node, node.typeParameters);
             emitParameters(node, node.parameters);
             emitTypeAnnotation(node.type);
             writeSemicolon();
+            popNameGenerationScope(node);
         }
 
         function emitConstructSignature(node: ConstructSignatureDeclaration) {
+            pushNameGenerationScope(node);
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             writeKeyword("new");
@@ -1127,6 +1132,7 @@ namespace ts {
             emitParameters(node, node.parameters);
             emitTypeAnnotation(node.type);
             writeSemicolon();
+            popNameGenerationScope(node);
         }
 
         function emitIndexSignature(node: IndexSignatureDeclaration) {
@@ -1159,12 +1165,14 @@ namespace ts {
         }
 
         function emitFunctionType(node: FunctionTypeNode) {
+            pushNameGenerationScope(node);
             emitTypeParameters(node, node.typeParameters);
             emitParametersForArrow(node, node.parameters);
             writeSpace();
             writePunctuation("=>");
             writeSpace();
             emit(node.type);
+            popNameGenerationScope(node);
         }
 
         function emitJSDocFunctionType(node: JSDocFunctionType) {
@@ -1191,6 +1199,7 @@ namespace ts {
         }
 
         function emitConstructorType(node: ConstructorTypeNode) {
+            pushNameGenerationScope(node);
             writeKeyword("new");
             writeSpace();
             emitTypeParameters(node, node.typeParameters);
@@ -1199,6 +1208,7 @@ namespace ts {
             writePunctuation("=>");
             writeSpace();
             emit(node.type);
+            popNameGenerationScope(node);
         }
 
         function emitTypeQuery(node: TypeQueryNode) {
@@ -3182,7 +3192,7 @@ namespace ts {
             if (isGeneratedIdentifier(node)) {
                 return generateName(node);
             }
-            else if (isIdentifier(node) && (nodeIsSynthesized(node) || !node.parent)) {
+            else if (isIdentifier(node) && (nodeIsSynthesized(node) || !node.parent || !currentSourceFile)) {
                 return idText(node);
             }
             else if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
@@ -3356,7 +3366,7 @@ namespace ts {
             if ((name.autoGenerateFlags & GeneratedIdentifierFlags.KindMask) === GeneratedIdentifierFlags.Node) {
                 // Node names generate unique names based on their original node
                 // and are cached based on that node's id.
-                return generateNameCached(getNodeForGeneratedName(name));
+                return generateNameCached(getNodeForGeneratedName(name), name.autoGenerateFlags);
             }
             else {
                 // Auto, Loop, and Unique names are cached based on their unique
@@ -3366,9 +3376,9 @@ namespace ts {
             }
         }
 
-        function generateNameCached(node: Node) {
+        function generateNameCached(node: Node, flags?: GeneratedIdentifierFlags) {
             const nodeId = getNodeId(node);
-            return nodeIdToGeneratedName[nodeId] || (nodeIdToGeneratedName[nodeId] = generateNameForNode(node));
+            return nodeIdToGeneratedName[nodeId] || (nodeIdToGeneratedName[nodeId] = generateNameForNode(node, flags));
         }
 
         /**
@@ -3385,7 +3395,7 @@ namespace ts {
          * Returns a value indicating whether a name is unique globally or within the current file.
          */
         function isFileLevelUniqueName(name: string) {
-            return ts.isFileLevelUniqueName(currentSourceFile, name, hasGlobalName);
+            return currentSourceFile ? ts.isFileLevelUniqueName(currentSourceFile, name, hasGlobalName) : true;
         }
 
         /**
@@ -3445,10 +3455,15 @@ namespace ts {
          * makeUniqueName are guaranteed to never conflict.
          * If `optimistic` is set, the first instance will use 'baseName' verbatim instead of 'baseName_1'
          */
-        function makeUniqueName(baseName: string, checkFn: (name: string) => boolean = isUniqueName, optimistic?: boolean): string {
+        function makeUniqueName(baseName: string, checkFn: (name: string) => boolean = isUniqueName, optimistic?: boolean, scoped?: boolean): string {
             if (optimistic) {
                 if (checkFn(baseName)) {
-                    generatedNames.set(baseName, true);
+                    if (scoped) {
+                        reserveNameInNestedScopes(baseName);
+                    }
+                    else {
+                        generatedNames.set(baseName, true);
+                    }
                     return baseName;
                 }
             }
@@ -3460,7 +3475,12 @@ namespace ts {
             while (true) {
                 const generatedName = baseName + i;
                 if (checkFn(generatedName)) {
-                    generatedNames.set(generatedName, true);
+                    if (scoped) {
+                        reserveNameInNestedScopes(generatedName);
+                    }
+                    else {
+                        generatedNames.set(generatedName, true);
+                    }
                     return generatedName;
                 }
                 i++;
@@ -3514,10 +3534,15 @@ namespace ts {
         /**
          * Generates a unique name from a node.
          */
-        function generateNameForNode(node: Node): string {
+        function generateNameForNode(node: Node, flags?: GeneratedIdentifierFlags): string {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    return makeUniqueName(getTextOfNode(node));
+                    return makeUniqueName(
+                        getTextOfNode(node),
+                        isUniqueName,
+                        !!(flags & GeneratedIdentifierFlags.Optimistic),
+                        !!(flags & GeneratedIdentifierFlags.ReservedInNestedScopes)
+                    );
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.EnumDeclaration:
                     return generateNameForModuleOrEnum(<ModuleDeclaration | EnumDeclaration>node);
@@ -3552,7 +3577,8 @@ namespace ts {
                     return makeUniqueName(
                         idText(name),
                         (name.autoGenerateFlags & GeneratedIdentifierFlags.FileLevel) ? isFileLevelUniqueName : isUniqueName,
-                        !!(name.autoGenerateFlags & GeneratedIdentifierFlags.Optimistic)
+                        !!(name.autoGenerateFlags & GeneratedIdentifierFlags.Optimistic),
+                        !!(name.autoGenerateFlags & GeneratedIdentifierFlags.ReservedInNestedScopes)
                     );
             }
 
