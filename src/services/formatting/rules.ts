@@ -59,6 +59,8 @@ namespace ts.formatting {
             rule("NoSpaceBeforeDot", anyToken, SyntaxKind.DotToken, [isNonJsxSameLineTokenContext], RuleAction.Delete),
             rule("NoSpaceAfterDot", SyntaxKind.DotToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.Delete),
 
+            rule("NoSpaceBetweenImportParenInImportType", SyntaxKind.ImportKeyword, SyntaxKind.OpenParenToken, [isNonJsxSameLineTokenContext, isImportTypeContext], RuleAction.Delete),
+
             // Special handling of unary operators.
             // Prefix operators generally shouldn't have a space between
             // them and their target unary expression.
@@ -639,6 +641,10 @@ namespace ts.formatting {
 
     function isArrowFunctionContext(context: FormattingContext): boolean {
         return context.contextNode.kind === SyntaxKind.ArrowFunction;
+    }
+
+    function isImportTypeContext(context: FormattingContext): boolean {
+        return context.contextNode.kind === SyntaxKind.ImportType;
     }
 
     function isNonJsxSameLineTokenContext(context: FormattingContext): boolean {

@@ -154,11 +154,11 @@ var sameType3 = { get x(): any { return undefined; }, set x(n: typeof anyVar) { 
 var sameType4 = { get x(): Date { return undefined; }, set x(n: Date) { } };
 >sameType4 : Symbol(sameType4, Decl(objectLiteralGettersAndSetters.ts, 37, 3))
 >x : Symbol(x, Decl(objectLiteralGettersAndSetters.ts, 37, 17), Decl(objectLiteralGettersAndSetters.ts, 37, 54))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >undefined : Symbol(undefined)
 >x : Symbol(x, Decl(objectLiteralGettersAndSetters.ts, 37, 17), Decl(objectLiteralGettersAndSetters.ts, 37, 54))
 >n : Symbol(n, Decl(objectLiteralGettersAndSetters.ts, 37, 61))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 // Type of unannotated get accessor return type is the type annotation of the set accessor param
 var setParamType1 = {

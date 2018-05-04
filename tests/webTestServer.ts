@@ -780,7 +780,6 @@ function startClient(server: http.Server) {
     const child = child_process.spawn(browserPath, [`http://localhost:${port}/tests/webTestResults.html${queryString}`], {
         stdio: "inherit"
     });
-    child.on("exit", () => server.close());
 }
 
 function printHelp() {

@@ -10,7 +10,7 @@
     "mapRoot": "http://www.typescriptlang.org/",
     "sourceRoot": "http://typescript.codeplex.com/",
     "resolvedInputFiles": [
-        "lib.d.ts",
+        "lib.es5.d.ts",
         "test.ts"
     ],
     "emittedFiles": [

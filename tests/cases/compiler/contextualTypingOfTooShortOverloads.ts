@@ -1,3 +1,4 @@
+// @lib: es5
 // small repro from #11875
 var use: Overload;
 use((req, res) => {});

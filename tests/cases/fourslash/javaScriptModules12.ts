@@ -27,7 +27,7 @@
 //// /*5*/
 
 verify.completions(
-    { at: "1", includes: ["x", "a", "b"], excludes: "y" },
-    { at: "2", includes: ["y", "a", "b"], excludes: "x" },
-    { at: ["3", "4", "5"], includes: ["a", "b"], excludes: ["x", "y"] },
+    { marker: "1", includes: ["x", "a", "b"], excludes: "y" },
+    { marker: "2", includes: ["y", "a", "b"], excludes: "x" },
+    { marker: ["3", "4", "5"], includes: ["a", "b"], excludes: ["x", "y"] },
 );

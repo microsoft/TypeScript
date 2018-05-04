@@ -9,7 +9,7 @@ declare module "foo" {
     interface y { a: Date }
 >y : Symbol(y, Decl(incompatibleExports1.ts, 1, 36))
 >a : Symbol(y.a, Decl(incompatibleExports1.ts, 2, 17))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     export = y;
 >y : Symbol(y, Decl(incompatibleExports1.ts, 1, 36))

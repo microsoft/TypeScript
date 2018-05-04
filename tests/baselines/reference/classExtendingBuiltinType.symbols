@@ -21,7 +21,7 @@ class C5 extends Number { }
 
 class C6 extends Date { }
 >C6 : Symbol(C6, Decl(classExtendingBuiltinType.ts, 4, 27))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 class C7 extends RegExp { }
 >C7 : Symbol(C7, Decl(classExtendingBuiltinType.ts, 5, 25))

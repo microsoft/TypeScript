@@ -4,7 +4,7 @@ declare var a: boolean;
 
 declare var p: Promise<boolean>;
 >p : Symbol(p, Decl(awaitBinaryExpression2_es6.ts, 1, 11))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 
 declare function before(): void;
 >before : Symbol(before, Decl(awaitBinaryExpression2_es6.ts, 1, 32))
@@ -14,7 +14,7 @@ declare function after(): void;
 
 async function func(): Promise<void> {
 >func : Symbol(func, Decl(awaitBinaryExpression2_es6.ts, 3, 31))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 
     before();
 >before : Symbol(before, Decl(awaitBinaryExpression2_es6.ts, 1, 32))

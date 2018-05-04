@@ -6,7 +6,7 @@
 
 verify.errorExistsBetweenMarkers("1", "2");
 verify.numberOfErrorsInCurrentFile(1);
-// Expected errors are:
+// Expected errors exact:
 // - Supplied parameters do not match any signature of call target.
 // - Could not select overload for 'call' expression.
 

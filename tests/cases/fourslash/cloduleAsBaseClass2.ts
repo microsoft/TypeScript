@@ -28,10 +28,10 @@
 ////d./*1*/
 ////D./*2*/
 
-verify.completions({ at: "1", are: ["foo2", "foo"] });
+verify.completions({ marker: "1", exact: ["foo2", "foo"] });
 edit.insert('foo()');
 
-verify.completions({ at: "2", includes: ["bar", "bar2", "baz", "x"], excludes: ["foo", "foo2"] });
+verify.completions({ marker: "2", includes: ["bar", "bar2", "baz", "x"], excludes: ["foo", "foo2"] });
 edit.insert('bar()');
 
 verify.noErrors();

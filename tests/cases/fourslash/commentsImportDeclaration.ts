@@ -29,11 +29,11 @@ verify.quickInfos({
     3: ['import extMod = require("./commentsImportDeclaration_file0")', "Import declaration"]
 });
 
-verify.completions({ at: "6", are: [{ name: "m1", text: "namespace extMod.m1", documentation: "NamespaceComment" }] });
+verify.completions({ marker: "6", exact: [{ name: "m1", text: "namespace extMod.m1", documentation: "NamespaceComment" }] });
 
 verify.completions({
-    at: "7",
-    are: [
+    marker: "7",
+    exact: [
         { name: "fooExport", text: "function extMod.m1.fooExport(): number", documentation: "exported function" },
         { name: "b", text: "var extMod.m1.b: number", documentation: "b's comment" },
         { name: "m2", text: "namespace extMod.m1.m2", documentation: "m2 comments" },
@@ -48,8 +48,8 @@ verify.quickInfos({
 });
 
 verify.completions({
-    at: "10",
-    are:  [
+    marker: "10",
+    exact:  [
         { name: "c", text: "constructor extMod.m1.m2.c(): extMod.m1.m2.c" },
         { name: "i", text: "var extMod.m1.m2.i: extMod.m1.m2.c", documentation: "i" },
     ],

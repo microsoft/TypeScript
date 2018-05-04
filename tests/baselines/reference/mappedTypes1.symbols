@@ -24,7 +24,7 @@ type T03 = { [P in keyof Item]: Date };
 >T03 : Symbol(T03, Decl(mappedTypes1.ts, 4, 41))
 >P : Symbol(P, Decl(mappedTypes1.ts, 5, 14))
 >Item : Symbol(Item, Decl(mappedTypes1.ts, 0, 0))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 type T10 = { [P in keyof Item]: Item[P] };
 >T10 : Symbol(T10, Decl(mappedTypes1.ts, 5, 39))
