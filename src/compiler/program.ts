@@ -965,7 +965,7 @@ namespace ts {
                     // The `newSourceFile` object was created for the new program.
 
                     if (!arrayIsEqualTo(oldSourceFile.libReferenceDirectives, newSourceFile.libReferenceDirectives, fileReferenceIsEqualTo)) {
-                        // 'lib' references has changed. Matches behavior in chagnesAffectModuleResolution
+                        // 'lib' references has changed. Matches behavior in changesAffectModuleResolution
                         return oldProgram.structureIsReused = StructureIsReused.Not;
                     }
 
