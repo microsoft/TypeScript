@@ -1,5 +1,5 @@
 /// <reference path="..\..\..\src\harness\harness.ts" />
-/// <reference path="..\..\..\src\harness\virtualFileSystem.ts" />
+/// <reference path="..\..\..\src\harness\vfs.ts" />
 
 
 namespace ts {

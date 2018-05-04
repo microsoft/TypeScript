@@ -146,7 +146,7 @@ namespace ts.refactor {
     }
 
     function makeImportOrRequire(defaultImport: Identifier | undefined, imports: ReadonlyArray<string>, path: string, useEs6Imports: boolean): Statement | undefined {
-        path = ensurePathIsRelative(path);
+        path = ensurePathIsNonModuleName(path);
         if (useEs6Imports) {
             const specifiers = imports.map(i => createImportSpecifier(/*propertyName*/ undefined, createIdentifier(i)));
             return makeImportIfNecessary(defaultImport, specifiers, path);

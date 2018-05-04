@@ -10,7 +10,7 @@ async function test(isError: boolean = false) {
     }
     let x = await Promise.resolve("The test is passed without an error.");
 >x : Symbol(x, Decl(noImplicitReturnsInAsync1.ts, 4, 7))
->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 }

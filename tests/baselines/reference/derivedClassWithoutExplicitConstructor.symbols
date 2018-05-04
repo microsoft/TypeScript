@@ -52,7 +52,7 @@ class Base2<T> {
 class D<T extends Date> extends Base2<T> {
 >D : Symbol(D, Decl(derivedClassWithoutExplicitConstructor.ts, 16, 1))
 >T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor.ts, 18, 8))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Base2 : Symbol(Base2, Decl(derivedClassWithoutExplicitConstructor.ts, 11, 24))
 >T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor.ts, 18, 8))
 
@@ -71,5 +71,5 @@ var d = new D(); // error
 var d2 = new D(new Date()); // ok
 >d2 : Symbol(d2, Decl(derivedClassWithoutExplicitConstructor.ts, 24, 3))
 >D : Symbol(D, Decl(derivedClassWithoutExplicitConstructor.ts, 16, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 

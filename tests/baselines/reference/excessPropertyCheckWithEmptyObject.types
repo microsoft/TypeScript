@@ -7,7 +7,7 @@ Object.defineProperty(window, "prop", { value: "v1.0.0", readonly: false });
 >Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
 >defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
->window : any
+>window : Window
 >"prop" : "prop"
 >{ value: "v1.0.0", readonly: false } : { value: string; readonly: boolean; }
 >value : string

@@ -4,7 +4,7 @@ declare var a: boolean;
 
 declare var p: Promise<boolean>;
 >p : Symbol(p, Decl(awaitCallExpression2_es6.ts, 1, 11))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 
 declare function fn(arg0: boolean, arg1: boolean, arg2: boolean): void;
 >fn : Symbol(fn, Decl(awaitCallExpression2_es6.ts, 1, 32))
@@ -21,14 +21,14 @@ declare var o: { fn(arg0: boolean, arg1: boolean, arg2: boolean): void; };
 
 declare var pfn: Promise<{ (arg0: boolean, arg1: boolean, arg2: boolean): void; }>;
 >pfn : Symbol(pfn, Decl(awaitCallExpression2_es6.ts, 4, 11))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >arg0 : Symbol(arg0, Decl(awaitCallExpression2_es6.ts, 4, 28))
 >arg1 : Symbol(arg1, Decl(awaitCallExpression2_es6.ts, 4, 42))
 >arg2 : Symbol(arg2, Decl(awaitCallExpression2_es6.ts, 4, 57))
 
 declare var po: Promise<{ fn(arg0: boolean, arg1: boolean, arg2: boolean): void; }>;
 >po : Symbol(po, Decl(awaitCallExpression2_es6.ts, 5, 11))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >fn : Symbol(fn, Decl(awaitCallExpression2_es6.ts, 5, 25))
 >arg0 : Symbol(arg0, Decl(awaitCallExpression2_es6.ts, 5, 29))
 >arg1 : Symbol(arg1, Decl(awaitCallExpression2_es6.ts, 5, 43))
@@ -42,7 +42,7 @@ declare function after(): void;
 
 async function func(): Promise<void> {
 >func : Symbol(func, Decl(awaitCallExpression2_es6.ts, 7, 31))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 
     before();
 >before : Symbol(before, Decl(awaitCallExpression2_es6.ts, 5, 84))

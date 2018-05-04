@@ -1,14 +1,14 @@
-tests/cases/conformance/Symbols/ES5SymbolProperty6.ts(2,6): error TS2304: Cannot find name 'Symbol'.
-tests/cases/conformance/Symbols/ES5SymbolProperty6.ts(5,9): error TS2304: Cannot find name 'Symbol'.
+tests/cases/conformance/Symbols/ES5SymbolProperty6.ts(2,6): error TS2693: 'Symbol' only refers to a type, but is being used as a value here.
+tests/cases/conformance/Symbols/ES5SymbolProperty6.ts(5,9): error TS2693: 'Symbol' only refers to a type, but is being used as a value here.
 
 
 ==== tests/cases/conformance/Symbols/ES5SymbolProperty6.ts (2 errors) ====
     class C {
         [Symbol.iterator]() { }
          ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
+!!! error TS2693: 'Symbol' only refers to a type, but is being used as a value here.
     }
     
     (new C)[Symbol.iterator]
             ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
+!!! error TS2693: 'Symbol' only refers to a type, but is being used as a value here.

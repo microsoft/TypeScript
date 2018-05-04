@@ -2,8 +2,14 @@
 function foo(a = console.log) { }
 >foo : Symbol(foo, Decl(functionWithDefaultParameterWithNoStatements9.ts, 0, 0))
 >a : Symbol(a, Decl(functionWithDefaultParameterWithNoStatements9.ts, 0, 13))
+>console.log : Symbol(Console.log, Decl(lib.d.ts, --, --))
+>console : Symbol(console, Decl(lib.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.d.ts, --, --))
 
 function bar(a = console.log) {
 >bar : Symbol(bar, Decl(functionWithDefaultParameterWithNoStatements9.ts, 0, 33))
 >a : Symbol(a, Decl(functionWithDefaultParameterWithNoStatements9.ts, 2, 13))
+>console.log : Symbol(Console.log, Decl(lib.d.ts, --, --))
+>console : Symbol(console, Decl(lib.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.d.ts, --, --))
 }

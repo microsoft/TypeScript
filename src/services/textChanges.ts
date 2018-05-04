@@ -177,10 +177,10 @@ namespace ts.textChanges {
     }
 
     function getAdjustedEndPosition(sourceFile: SourceFile, node: Node, options: ConfigurableEnd) {
+        const { end } = node;
         if (options.useNonAdjustedEndPosition || isExpression(node)) {
-            return node.getEnd();
+            return end;
         }
-        const end = node.getEnd();
         const newEnd = skipTrivia(sourceFile.text, end, /*stopAfterLineBreak*/ true);
         return newEnd !== end && isLineBreak(sourceFile.text.charCodeAt(newEnd - 1))
             ? newEnd
@@ -460,12 +460,12 @@ namespace ts.textChanges {
 
         public insertNodeAfter(sourceFile: SourceFile, after: Node, newNode: Node): void {
             const endPosition = this.insertNodeAfterWorker(sourceFile, after, newNode);
-            this.insertNodeAt(sourceFile, endPosition, newNode, this.getInsertNodeAfterOptions(after));
+            this.insertNodeAt(sourceFile, endPosition, newNode, this.getInsertNodeAfterOptions(sourceFile, after));
         }
 
         public insertNodesAfter(sourceFile: SourceFile, after: Node, newNodes: ReadonlyArray<Node>): void {
             const endPosition = this.insertNodeAfterWorker(sourceFile, after, first(newNodes));
-            this.insertNodesAt(sourceFile, endPosition, newNodes, this.getInsertNodeAfterOptions(after));
+            this.insertNodesAt(sourceFile, endPosition, newNodes, this.getInsertNodeAfterOptions(sourceFile, after));
         }
 
         private insertNodeAfterWorker(sourceFile: SourceFile, after: Node, newNode: Node): number {
@@ -476,10 +476,18 @@ namespace ts.textChanges {
                     this.replaceRange(sourceFile, createTextRange(after.end), createToken(SyntaxKind.SemicolonToken));
                 }
             }
-            return getAdjustedEndPosition(sourceFile, after, {});
+            const endPosition = getAdjustedEndPosition(sourceFile, after, {});
+            return endPosition;
         }
 
-        private getInsertNodeAfterOptions(node: Node): InsertNodeOptions {
+        private getInsertNodeAfterOptions(sourceFile: SourceFile, after: Node) {
+            const options = this.getInsertNodeAfterOptionsWorker(after);
+            return {
+                ...options,
+                prefix: after.end === sourceFile.end && isStatement(after) ? (options.prefix ? `\n${options.prefix}` : "\n") : options.prefix,
+            };
+        }
+        private getInsertNodeAfterOptionsWorker(node: Node): InsertNodeOptions {
             if (isClassDeclaration(node) || isModuleDeclaration(node)) {
                 return { prefix: this.newLineCharacter, suffix: this.newLineCharacter };
             }

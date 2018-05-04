@@ -47,7 +47,7 @@ class D<T> {
 class E<T extends Date> {
 >E : Symbol(E, Decl(typeOfThisInMemberFunctions.ts, 19, 1))
 >T : Symbol(T, Decl(typeOfThisInMemberFunctions.ts, 21, 8))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     x: T;
 >x : Symbol(E.x, Decl(typeOfThisInMemberFunctions.ts, 21, 25))

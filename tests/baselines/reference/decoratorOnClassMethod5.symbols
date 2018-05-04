@@ -5,9 +5,9 @@ declare function dec(): <T>(target: any, propertyKey: string, descriptor: TypedP
 >target : Symbol(target, Decl(decoratorOnClassMethod5.ts, 0, 28))
 >propertyKey : Symbol(propertyKey, Decl(decoratorOnClassMethod5.ts, 0, 40))
 >descriptor : Symbol(descriptor, Decl(decoratorOnClassMethod5.ts, 0, 61))
->TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
+>TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.es6.d.ts, --, --))
 >T : Symbol(T, Decl(decoratorOnClassMethod5.ts, 0, 25))
->TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
+>TypedPropertyDescriptor : Symbol(TypedPropertyDescriptor, Decl(lib.es6.d.ts, --, --))
 >T : Symbol(T, Decl(decoratorOnClassMethod5.ts, 0, 25))
 
 class C {

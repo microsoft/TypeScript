@@ -78,9 +78,8 @@ verify.codeFix({
     index: 1, // fix at index 0 is to change the spelling to 'prop1'
     newFileContent:
 `class A {
-    static prop2: string;
-
     static prop1: number;
+    static prop2: string;
 
     static m2(arg0: any, arg1: any): any {
         throw new Error("Method not implemented.");

@@ -146,7 +146,7 @@ function ternaryTest(isWhile:boolean) {
 }
 
 declare function setTimeout(expression: any, msec?: number, language?: any): number;
->setTimeout : Symbol(setTimeout, Decl(fatarrowfunctions.ts, 33, 1))
+>setTimeout : Symbol(setTimeout, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(fatarrowfunctions.ts, 33, 1))
 >expression : Symbol(expression, Decl(fatarrowfunctions.ts, 35, 28))
 >msec : Symbol(msec, Decl(fatarrowfunctions.ts, 35, 44))
 >language : Symbol(language, Decl(fatarrowfunctions.ts, 35, 59))
@@ -161,7 +161,7 @@ var messenger = {
 >start : Symbol(start, Decl(fatarrowfunctions.ts, 38, 27))
 
         setTimeout(() => { this.message.toString(); }, 3000);
->setTimeout : Symbol(setTimeout, Decl(fatarrowfunctions.ts, 33, 1))
+>setTimeout : Symbol(setTimeout, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(fatarrowfunctions.ts, 33, 1))
     }
 };
 

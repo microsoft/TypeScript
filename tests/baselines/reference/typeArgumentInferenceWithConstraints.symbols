@@ -111,6 +111,7 @@ someGenerics2b<string, number>((n, t) => n.substr(t * t));
 function someGenerics3<T extends Window>(producer: () => T) { }
 >someGenerics3 : Symbol(someGenerics3, Decl(typeArgumentInferenceWithConstraints.ts, 28, 58))
 >T : Symbol(T, Decl(typeArgumentInferenceWithConstraints.ts, 31, 23))
+>Window : Symbol(Window, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >producer : Symbol(producer, Decl(typeArgumentInferenceWithConstraints.ts, 31, 41))
 >T : Symbol(T, Decl(typeArgumentInferenceWithConstraints.ts, 31, 23))
 
@@ -119,6 +120,7 @@ someGenerics3(() => ''); // Error
 
 someGenerics3<Window>(() => undefined);
 >someGenerics3 : Symbol(someGenerics3, Decl(typeArgumentInferenceWithConstraints.ts, 28, 58))
+>Window : Symbol(Window, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >undefined : Symbol(undefined)
 
 someGenerics3<number>(() => 3); // Error
@@ -340,6 +342,7 @@ interface A92 {
 
     z?: Window;
 >z : Symbol(A92.z, Decl(typeArgumentInferenceWithConstraints.ts, 83, 14))
+>Window : Symbol(Window, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 var a9e = someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >a9e : Symbol(a9e, Decl(typeArgumentInferenceWithConstraints.ts, 86, 3), Decl(typeArgumentInferenceWithConstraints.ts, 87, 3))
@@ -347,6 +350,7 @@ var a9e = someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >undefined : Symbol(undefined)
 >x : Symbol(x, Decl(typeArgumentInferenceWithConstraints.ts, 86, 36))
 >z : Symbol(z, Decl(typeArgumentInferenceWithConstraints.ts, 86, 42))
+>window : Symbol(window, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeArgumentInferenceWithConstraints.ts, 86, 57))
 >y : Symbol(y, Decl(typeArgumentInferenceWithConstraints.ts, 86, 63))
 
@@ -360,6 +364,7 @@ var a9f = someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >undefined : Symbol(undefined)
 >x : Symbol(x, Decl(typeArgumentInferenceWithConstraints.ts, 88, 41))
 >z : Symbol(z, Decl(typeArgumentInferenceWithConstraints.ts, 88, 47))
+>window : Symbol(window, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeArgumentInferenceWithConstraints.ts, 88, 62))
 >y : Symbol(y, Decl(typeArgumentInferenceWithConstraints.ts, 88, 68))
 
