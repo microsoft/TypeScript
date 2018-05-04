@@ -1,0 +1,103 @@
+=== tests/cases/compiler/file1.ts ===
+import b = require('./b.json');
+>b : Symbol(b, Decl(file1.ts, 0, 0))
+
+import c = require('./c.json');
+>c : Symbol(c, Decl(file1.ts, 0, 31))
+
+import d = require('./d.json');
+>d : Symbol(d, Decl(file1.ts, 1, 31))
+
+import e = require('./e.json');
+>e : Symbol(e, Decl(file1.ts, 2, 31))
+
+import f = require('./f.json');
+>f : Symbol(f, Decl(file1.ts, 3, 31))
+
+import g = require('./g.json');
+>g : Symbol(g, Decl(file1.ts, 4, 31))
+
+let booleanLiteral: boolean, nullLiteral: null;
+>booleanLiteral : Symbol(booleanLiteral, Decl(file1.ts, 7, 3))
+>nullLiteral : Symbol(nullLiteral, Decl(file1.ts, 7, 28))
+
+let stringLiteral: string;
+>stringLiteral : Symbol(stringLiteral, Decl(file1.ts, 8, 3))
+
+let numberLiteral: number;
+>numberLiteral : Symbol(numberLiteral, Decl(file1.ts, 9, 3))
+
+booleanLiteral = b.a;
+>booleanLiteral : Symbol(booleanLiteral, Decl(file1.ts, 7, 3))
+>b.a : Symbol("a", Decl(b.json, 0, 1))
+>b : Symbol(b, Decl(file1.ts, 0, 0))
+>a : Symbol("a", Decl(b.json, 0, 1))
+
+stringLiteral = b.b;
+>stringLiteral : Symbol(stringLiteral, Decl(file1.ts, 8, 3))
+>b.b : Symbol("b", Decl(b.json, 1, 14))
+>b : Symbol(b, Decl(file1.ts, 0, 0))
+>b : Symbol("b", Decl(b.json, 1, 14))
+
+nullLiteral = b.c;
+>nullLiteral : Symbol(nullLiteral, Decl(file1.ts, 7, 28))
+>b.c : Symbol("c", Decl(b.json, 2, 17))
+>b : Symbol(b, Decl(file1.ts, 0, 0))
+>c : Symbol("c", Decl(b.json, 2, 17))
+
+booleanLiteral = b.d;
+>booleanLiteral : Symbol(booleanLiteral, Decl(file1.ts, 7, 3))
+>b.d : Symbol("d", Decl(b.json, 3, 14))
+>b : Symbol(b, Decl(file1.ts, 0, 0))
+>d : Symbol("d", Decl(b.json, 3, 14))
+
+const stringOrNumberOrNull: string | number | null = c[0];
+>stringOrNumberOrNull : Symbol(stringOrNumberOrNull, Decl(file1.ts, 15, 5))
+>c : Symbol(c, Decl(file1.ts, 0, 31))
+
+stringLiteral = d;
+>stringLiteral : Symbol(stringLiteral, Decl(file1.ts, 8, 3))
+>d : Symbol(d, Decl(file1.ts, 1, 31))
+
+numberLiteral = e;
+>numberLiteral : Symbol(numberLiteral, Decl(file1.ts, 9, 3))
+>e : Symbol(e, Decl(file1.ts, 2, 31))
+
+numberLiteral = f[0];
+>numberLiteral : Symbol(numberLiteral, Decl(file1.ts, 9, 3))
+>f : Symbol(f, Decl(file1.ts, 3, 31))
+
+booleanLiteral = g[0];
+>booleanLiteral : Symbol(booleanLiteral, Decl(file1.ts, 7, 3))
+>g : Symbol(g, Decl(file1.ts, 4, 31))
+
+=== tests/cases/compiler/b.json ===
+{
+    "a": true,
+>"a" : Symbol("a", Decl(b.json, 0, 1))
+
+    "b": "hello",
+>"b" : Symbol("b", Decl(b.json, 1, 14))
+
+    "c": null,
+>"c" : Symbol("c", Decl(b.json, 2, 17))
+
+    "d": false
+>"d" : Symbol("d", Decl(b.json, 3, 14))
+}
+
+=== tests/cases/compiler/c.json ===
+["a", null, "string"]
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/d.json ===
+"dConfig"
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/e.json ===
+-10
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/f.json ===
+[-10, 30]
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/g.json ===
+[true, false]
+No type information for this code.
