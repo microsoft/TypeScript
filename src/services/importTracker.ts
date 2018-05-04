@@ -145,7 +145,7 @@ namespace ts.FindAllReferences {
                             break;
 
                         default:
-                            Debug.assertNever(direct);
+                            Debug.assertNever(direct, `Unexpected import kind: ${Debug.showSyntaxKind(direct)}`);
                     }
                 }
             }
