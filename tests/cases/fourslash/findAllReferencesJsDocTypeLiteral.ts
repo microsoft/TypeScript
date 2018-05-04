@@ -13,4 +13,4 @@
 //// */
 //// function f(o) { return o.nested.[|great|]; }
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("(property) great: boolean");

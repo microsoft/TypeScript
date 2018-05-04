@@ -7,13 +7,13 @@
 ////     }
 ////     interface ElementAttributesProperty { props }
 //// }
-//// class [|MyClass|] {
+//// class [|{| "isWriteAccess": true, "isDefinition": true |}MyClass|] {
 ////   props: {
 ////     name?: string;
 ////     size?: number;
 //// }
-//// 
-//// 
+////
+////
 //// var x = <[|MyClass|] name='hello'></[|MyClass|]>;
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("class MyClass");

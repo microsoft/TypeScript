@@ -17,7 +17,6 @@
 ////     optional?: boolean
 //// }
 //// declare function Opt(attributes: OptionPropBag): JSX.Element;
-//// let opt = <Opt [|wrong|] />;  //r1
+//// let opt = <Opt [|{| "isWriteAccess": true, "isDefinition": true |}wrong|] />;
 
-const [r1] = test.ranges();
-verify.referencesOf(r1, [r1]);
+verify.singleReferenceGroup("(property) wrong: true");

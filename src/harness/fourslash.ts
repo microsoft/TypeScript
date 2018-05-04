@@ -1142,32 +1142,6 @@ namespace FourSlash {
             }
         }
 
-        private verifyReferencesAre(expectedReferences: Range[]) {
-            const actualReferences = this.getReferencesAtCaret() || [];
-
-            if (actualReferences.length > expectedReferences.length) {
-                // Find the unaccounted-for reference.
-                for (const actual of actualReferences) {
-                    if (!ts.forEach(expectedReferences, r => r.pos === actual.textSpan.start)) {
-                        this.raiseError(`A reference ${stringify(actual)} is unaccounted for.`);
-                    }
-                }
-                // Probably will never reach here.
-                this.raiseError(`There are ${actualReferences.length} references but only ${expectedReferences.length} were expected.`);
-            }
-
-            for (const reference of expectedReferences) {
-                const { fileName, pos, end } = reference;
-                if (reference.marker && reference.marker.data) {
-                    const { isWriteAccess, isDefinition } = reference.marker.data as { isWriteAccess?: boolean, isDefinition?: boolean };
-                    this.verifyReferencesWorker(actualReferences, fileName, pos, end, isWriteAccess, isDefinition);
-                }
-                else {
-                    this.verifyReferencesWorker(actualReferences, fileName, pos, end);
-                }
-            }
-        }
-
         private verifyDocumentHighlightsRespectFilesList(files: ReadonlyArray<string>): void {
             const startFile = this.activeFile.fileName;
             for (const fileName of files) {
@@ -1176,20 +1150,6 @@ namespace FourSlash {
                 if (!highlights.every(dh => ts.contains(searchFileNames, dh.fileName))) {
                     this.raiseError(`When asking for document highlights only in files ${searchFileNames}, got document highlights in ${unique(highlights, dh => dh.fileName)}`);
                 }
-            }
-        }
-
-        public verifyReferencesOf(range: Range, references: Range[]) {
-            this.goToRangeStart(range);
-            this.verifyDocumentHighlightsRespectFilesList(unique(references, e => e.fileName));
-            this.verifyReferencesAre(references);
-        }
-
-        public verifyRangesReferenceEachOther(ranges?: Range[]) {
-            ranges = ranges || this.getRanges();
-            assert(ranges.length);
-            for (const range of ranges) {
-                this.verifyReferencesOf(range, ranges);
             }
         }
 
@@ -1248,6 +1208,12 @@ namespace FourSlash {
             if (refs && refs.length) {
                 this.raiseError(`Expected getReferences to fail, but saw references: ${stringify(refs)}`);
             }
+        }
+
+        // Necessary to have this function since `findReferences` isn't implemented in `client.ts`
+        public verifyGetReferencesForServerTest(expected: ReadonlyArray<ts.ReferenceEntry>): void {
+            const refs = this.getReferencesAtCaret();
+            assert.deepEqual(refs, expected);
         }
 
         public verifySingleReferenceGroup(definition: FourSlashInterface.ReferenceGroupDefinition, ranges?: Range[]) {
@@ -1312,23 +1278,6 @@ Actual: ${stringify(fullActual)}`);
 
             assert.equal(TestState.getDisplayPartsJson(referencedSymbols[0].definition.displayParts),
                 TestState.getDisplayPartsJson(expected), this.messageAtLastKnownMarker("referenced symbol definition display parts"));
-        }
-
-        private verifyReferencesWorker(references: ts.ReferenceEntry[], fileName: string, start: number, end: number, isWriteAccess?: boolean, isDefinition?: boolean) {
-            for (const reference of references) {
-                if (reference && reference.fileName === fileName && reference.textSpan.start === start && ts.textSpanEnd(reference.textSpan) === end) {
-                    if (typeof isWriteAccess !== "undefined" && reference.isWriteAccess !== isWriteAccess) {
-                        this.raiseError(`verifyReferencesAtPositionListContains failed - item isWriteAccess value does not match, actual: ${reference.isWriteAccess}, expected: ${isWriteAccess}.`);
-                    }
-                    if (typeof isDefinition !== "undefined" && reference.isDefinition !== isDefinition) {
-                        this.raiseError(`verifyReferencesAtPositionListContains failed - item isDefinition value does not match, actual: ${reference.isDefinition}, expected: ${isDefinition}.`);
-                    }
-                    return;
-                }
-            }
-
-            const missingItem = { fileName, start, end, isWriteAccess, isDefinition };
-            this.raiseError(`verifyReferencesAtPositionListContains failed - could not find the item: ${stringify(missingItem)} in the returned list: (${stringify(references)})`);
         }
 
         private getCompletionListAtCaret(options?: ts.GetCompletionsAtPositionOptions): ts.CompletionInfo {
@@ -4210,10 +4159,6 @@ namespace FourSlashInterface {
             this.state.verifyTypeOfSymbolAtLocation(range, symbol, expected);
         }
 
-        public referencesOf(start: FourSlash.Range, references: FourSlash.Range[]) {
-            this.state.verifyReferencesOf(start, references);
-        }
-
         public referenceGroups(starts: Many<string> | Many<FourSlash.Range>, parts: ReferenceGroup[]) {
             this.state.verifyReferenceGroups(starts, parts);
         }
@@ -4222,12 +4167,12 @@ namespace FourSlashInterface {
             this.state.verifyNoReferences(markerNameOrRange);
         }
 
-        public singleReferenceGroup(definition: ReferenceGroupDefinition, ranges?: FourSlash.Range[]) {
-            this.state.verifySingleReferenceGroup(definition, ranges);
+        public getReferencesForServerTest(expected: ReadonlyArray<ts.ReferenceEntry>) {
+            this.state.verifyGetReferencesForServerTest(expected);
         }
 
-        public rangesReferenceEachOther(ranges?: FourSlash.Range[]) {
-            this.state.verifyRangesReferenceEachOther(ranges);
+        public singleReferenceGroup(definition: ReferenceGroupDefinition, ranges?: FourSlash.Range[]) {
+            this.state.verifySingleReferenceGroup(definition, ranges);
         }
 
         public findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]) {

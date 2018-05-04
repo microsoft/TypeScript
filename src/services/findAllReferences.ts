@@ -119,7 +119,7 @@ namespace ts.FindAllReferences {
                     const { node } = def;
                     const symbol = checker.getSymbolAtLocation(node);
                     const displayParts = symbol && SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(
-                        checker, symbol, node.getSourceFile(), getContainerNode(node), node).displayParts;
+                        checker, symbol, node.getSourceFile(), getContainerNode(node), node).displayParts || [textPart("this")];
                     return { node, name: "this", kind: ScriptElementKind.variableElement, displayParts };
                 }
                 case "string": {
