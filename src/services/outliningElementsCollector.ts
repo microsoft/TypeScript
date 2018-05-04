@@ -185,7 +185,7 @@ namespace ts.OutliningElementsCollector {
                 return spanForObjectOrArrayLiteral(n);
             case SyntaxKind.ArrayLiteralExpression:
                 return spanForObjectOrArrayLiteral(n, SyntaxKind.OpenBracketToken);
-            }
+        }
 
         function spanForObjectOrArrayLiteral(node: Node, open: SyntaxKind.OpenBraceToken | SyntaxKind.OpenBracketToken = SyntaxKind.OpenBraceToken): OutliningSpan | undefined {
             // If the block has no leading keywords and is inside an array literal,
