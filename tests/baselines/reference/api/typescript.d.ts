@@ -4880,7 +4880,8 @@ declare namespace ts {
     enum OutliningSpanKind {
         Comment = "comment",
         Region = "region",
-        Code = "code"
+        Code = "code",
+        Import = "import"
     }
     enum OutputFileType {
         JavaScript = 0,
