@@ -41,6 +41,17 @@ namespace ts.refactor {
 
         // If previous file was global, this is easy.
         changes.createNewFile(oldFile, combinePaths(currentDirectory, newFileNameWithExtension), getNewStatements(oldFile, usage, changes, toMove, program, newModuleName));
+
+        addNewFileToTsconfig(program, changes, normalizePath(combinePaths(oldFile.fileName, "..", newFileNameWithExtension)));
+    }
+
+    function addNewFileToTsconfig(program: Program, changes: textChanges.ChangeTracker, newFilePath: string): void {
+        const cfg = program.getCompilerOptions().configFile;
+        const filesProp = cfg && cfg.jsonObject && find(cfg.jsonObject.properties, (prop): prop is PropertyAssignment =>
+            isPropertyAssignment(prop) && isStringLiteral(prop.name) && prop.name.text === "files");
+        if (filesProp && isArrayLiteralExpression(filesProp.initializer)) {
+            changes.insertNodeInListAfter(cfg, last(filesProp.initializer.elements), createLiteral(newFilePath), filesProp.initializer.elements);
+        }
     }
 
     function getNewStatements(

@@ -544,8 +544,7 @@ namespace ts.textChanges {
          * i.e. arguments in arguments lists, parameters in parameter lists etc.
          * Note that separators are part of the node in statements and class elements.
          */
-        public insertNodeInListAfter(sourceFile: SourceFile, after: Node, newNode: Node) {
-            const containingList = formatting.SmartIndenter.getContainingList(after, sourceFile);
+        public insertNodeInListAfter(sourceFile: SourceFile, after: Node, newNode: Node, containingList = formatting.SmartIndenter.getContainingList(after, sourceFile)) {
             if (!containingList) {
                 Debug.fail("node is not a list element");
                 return this;
