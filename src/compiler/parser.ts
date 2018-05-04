@@ -7657,12 +7657,11 @@ namespace ts {
                     forEach(toArray(entryOrList), (arg: PragmaPsuedoMap["reference"]) => {
                         if (arg.arguments["no-default-lib"]) {
                             context.hasNoDefaultLib = true;
+                            return;
                         }
-                        else if (arg.arguments.types) {
-                            typeReferenceDirectives.push({ pos: arg.arguments.types.pos, end: arg.arguments.types.end, fileName: arg.arguments.types.value });
-                        }
-                        else if (arg.arguments.path) {
-                            referencedFiles.push({ pos: arg.arguments.path.pos, end: arg.arguments.path.end, fileName: arg.arguments.path.value });
+                        const ref = arg.arguments.types || arg.arguments.path;
+                        if (ref) {
+                            (ref === arg.arguments.types ? typeReferenceDirectives : referencedFiles).push({ pos: ref.pos, end: ref.end, fileName: ref.value });
                         }
                         else {
                             reportDiagnostic(arg.range.pos, arg.range.end - arg.range.pos, Diagnostics.Invalid_reference_directive_syntax);
