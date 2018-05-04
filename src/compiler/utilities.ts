@@ -724,6 +724,11 @@ namespace ts {
         return (file.externalModuleIndicator || file.commonJsModuleIndicator) !== undefined;
     }
 
+
+    export function isJsonSourceFile(file: SourceFile): file is JsonSourceFile {
+        return file.scriptKind === ScriptKind.JSON;
+    }
+
     export function isConstEnumDeclaration(node: Node): boolean {
         return node.kind === SyntaxKind.EnumDeclaration && isConst(node);
     }
@@ -1069,6 +1074,22 @@ namespace ts {
                 return key === propName || (key2 && key2 === propName);
             }
         });
+    }
+
+    export function getTsConfigObjectLiteralExpression(tsConfigSourceFile: TsConfigSourceFile | undefined) {
+        if (tsConfigSourceFile && tsConfigSourceFile.statements.length) {
+            const expression = tsConfigSourceFile.statements[0].expression;
+            return isObjectLiteralExpression(expression) && expression;
+        }
+    }
+
+    export function getTsConfigPropArrayElementValue(tsConfigSourceFile: TsConfigSourceFile | undefined, propKey: string, elementValue: string): StringLiteral | undefined {
+        const jsonObjectLiteral = getTsConfigObjectLiteralExpression(tsConfigSourceFile);
+        return jsonObjectLiteral &&
+            firstDefined(getPropertyAssignment(jsonObjectLiteral, propKey), property =>
+                isArrayLiteralExpression(property.initializer) ?
+                    find(property.initializer.elements, (element): element is StringLiteral => isStringLiteral(element) && element.text === elementValue) :
+                    undefined);
     }
 
     export function getContainingFunction(node: Node): SignatureDeclaration {
@@ -1465,6 +1486,10 @@ namespace ts {
 
     export function isInJavaScriptFile(node: Node | undefined): boolean {
         return node && !!(node.flags & NodeFlags.JavaScriptFile);
+    }
+
+    export function isInJsonFile(node: Node | undefined): boolean {
+        return node && !!(node.flags & NodeFlags.JsonFile);
     }
 
     export function isInJSDoc(node: Node | undefined): boolean {

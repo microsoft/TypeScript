@@ -505,6 +505,7 @@ namespace ts {
         JSDoc                                         = 1 << 21, // If node was parsed inside jsdoc
         /* @internal */ Ambient                       = 1 << 22, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
         /* @internal */ InWithStatement               = 1 << 23, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
+        JsonFile                                      = 1 << 24, // If node was parsed in a Json
 
         BlockScoped = Let | Const,
 
@@ -2620,8 +2621,21 @@ namespace ts {
     }
 
     export interface JsonSourceFile extends SourceFile {
-        jsonObject?: ObjectLiteralExpression;
+        statements: NodeArray<JsonObjectExpressionStatement>;
+    }
+
+    export interface TsConfigSourceFile extends JsonSourceFile {
         extendedSourceFiles?: string[];
+    }
+
+    export interface JsonMinusNumericLiteral extends PrefixUnaryExpression {
+        kind: SyntaxKind.PrefixUnaryExpression;
+        operator: SyntaxKind.MinusToken;
+        operand: NumericLiteral;
+    }
+
+    export interface JsonObjectExpressionStatement extends ExpressionStatement {
+        expression: ObjectLiteralExpression | ArrayLiteralExpression | JsonMinusNumericLiteral | NumericLiteral | StringLiteral | BooleanLiteral | NullLiteral;
     }
 
     export interface ScriptReferenceHost {
@@ -4176,7 +4190,7 @@ namespace ts {
         checkJs?: boolean;
         /* @internal */ configFilePath?: string;
         /** configFile is set as non enumerable property so as to avoid checking of json source files */
-        /* @internal */ readonly configFile?: JsonSourceFile;
+        /* @internal */ readonly configFile?: TsConfigSourceFile;
         declaration?: boolean;
         declarationMap?: boolean;
         emitDeclarationOnly?: boolean;
@@ -4250,6 +4264,7 @@ namespace ts {
         /* @internal */ suppressOutputPathCheck?: boolean;
         target?: ScriptTarget;
         traceResolution?: boolean;
+        resolveJsonModule?: boolean;
         types?: string[];
         /** Paths used to compute primary types search locations */
         typeRoots?: string[];
@@ -4257,7 +4272,7 @@ namespace ts {
         /*@internal*/ watch?: boolean;
         esModuleInterop?: boolean;
 
-        [option: string]: CompilerOptionsValue | JsonSourceFile | undefined;
+        [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
 
     export interface TypeAcquisition {
