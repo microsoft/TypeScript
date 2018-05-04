@@ -293,27 +293,7 @@ namespace fakes {
         }
 
         public getDefaultLibFileName(options: ts.CompilerOptions): string {
-            // return vpath.resolve(this.getDefaultLibLocation(), ts.getDefaultLibFileName(options));
-
-            // TODO(rbuckton): This patches the baseline to replace lib.es5.d.ts with lib.d.ts.
-            // This is only to make the PR for this change easier to read. A follow-up PR will
-            // revert this change and accept the new baselines.
-            // See https://github.com/Microsoft/TypeScript/pull/20763#issuecomment-352553264
-            return vpath.resolve(this.getDefaultLibLocation(), getDefaultLibFileName(options));
-            function getDefaultLibFileName(options: ts.CompilerOptions) {
-                switch (options.target) {
-                    case ts.ScriptTarget.ESNext:
-                    case ts.ScriptTarget.ES2017:
-                        return "lib.es2017.d.ts";
-                    case ts.ScriptTarget.ES2016:
-                        return "lib.es2016.d.ts";
-                    case ts.ScriptTarget.ES2015:
-                        return "lib.es2015.d.ts";
-
-                    default:
-                        return "lib.d.ts";
-                }
-            }
+            return vpath.resolve(this.getDefaultLibLocation(), ts.getDefaultLibFileName(options));
         }
 
         public getSourceFile(fileName: string, languageVersion: number): ts.SourceFile | undefined {

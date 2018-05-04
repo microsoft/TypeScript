@@ -326,6 +326,11 @@ namespace ts.server.protocol {
          * the 'Collapse to Definitions' command is invoked.
          */
         autoCollapse: boolean;
+
+        /**
+         * Classification of the contents of the span
+         */
+        kind: OutliningSpanKind;
     }
 
     /**

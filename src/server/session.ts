@@ -1114,7 +1114,8 @@ namespace ts.server {
                     textSpan: this.toLocationTextSpan(s.textSpan, scriptInfo),
                     hintSpan: this.toLocationTextSpan(s.hintSpan, scriptInfo),
                     bannerText: s.bannerText,
-                    autoCollapse: s.autoCollapse
+                    autoCollapse: s.autoCollapse,
+                    kind: s.kind
                 }));
             }
             else {

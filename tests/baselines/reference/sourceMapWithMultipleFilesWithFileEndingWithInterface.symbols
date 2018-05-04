@@ -6,10 +6,10 @@ module M {
 >X : Symbol(X, Decl(a.ts, 1, 14))
 }
 interface Navigator {
->Navigator : Symbol(Navigator, Decl(a.ts, 2, 1))
+>Navigator : Symbol(Navigator, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(a.ts, 2, 1))
 
     getGamepads(func?: any): any;
->getGamepads : Symbol(Navigator.getGamepads, Decl(a.ts, 3, 21))
+>getGamepads : Symbol(Navigator.getGamepads, Decl(lib.d.ts, --, --), Decl(a.ts, 3, 21))
 >func : Symbol(func, Decl(a.ts, 4, 16))
 
     webkitGetGamepads(func?: any): any

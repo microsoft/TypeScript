@@ -11,7 +11,7 @@ class A {
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 5, 8))
 >U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 5, 20))
 >U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 5, 20))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 5, 37))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 5, 8))
 >y : Symbol(y, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByConstraints2.ts, 5, 42))

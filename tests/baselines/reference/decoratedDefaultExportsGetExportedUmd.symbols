@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/moduleExportsUmd/a.ts ===
 var decorator: ClassDecorator;
 >decorator : Symbol(decorator, Decl(a.ts, 0, 3))
->ClassDecorator : Symbol(ClassDecorator, Decl(lib.es5.d.ts, --, --))
+>ClassDecorator : Symbol(ClassDecorator, Decl(lib.es6.d.ts, --, --))
 
 @decorator
 >decorator : Symbol(decorator, Decl(a.ts, 0, 3))
@@ -12,7 +12,7 @@ export default class Foo {}
 === tests/cases/conformance/es6/moduleExportsUmd/b.ts ===
 var decorator: ClassDecorator;
 >decorator : Symbol(decorator, Decl(b.ts, 0, 3))
->ClassDecorator : Symbol(ClassDecorator, Decl(lib.es5.d.ts, --, --))
+>ClassDecorator : Symbol(ClassDecorator, Decl(lib.es6.d.ts, --, --))
 
 @decorator
 >decorator : Symbol(decorator, Decl(b.ts, 0, 3))

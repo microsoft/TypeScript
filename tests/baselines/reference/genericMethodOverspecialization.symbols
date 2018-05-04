@@ -3,7 +3,7 @@ var names = ["list", "table1", "table2", "table3", "summary"];
 >names : Symbol(names, Decl(genericMethodOverspecialization.ts, 0, 3))
 
 interface HTMLElement {
->HTMLElement : Symbol(HTMLElement, Decl(genericMethodOverspecialization.ts, 0, 62))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(genericMethodOverspecialization.ts, 0, 62))
 
     clientWidth: number;
 >clientWidth : Symbol(HTMLElement.clientWidth, Decl(genericMethodOverspecialization.ts, 2, 23))
@@ -13,16 +13,16 @@ interface HTMLElement {
 }
 
 declare var document: Document;
->document : Symbol(document, Decl(genericMethodOverspecialization.ts, 7, 11))
->Document : Symbol(Document, Decl(genericMethodOverspecialization.ts, 7, 31))
+>document : Symbol(document, Decl(lib.d.ts, --, --), Decl(genericMethodOverspecialization.ts, 7, 11))
+>Document : Symbol(Document, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(genericMethodOverspecialization.ts, 7, 31))
 
 interface Document {
->Document : Symbol(Document, Decl(genericMethodOverspecialization.ts, 7, 31))
+>Document : Symbol(Document, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(genericMethodOverspecialization.ts, 7, 31))
 
     getElementById(elementId: string): HTMLElement;
->getElementById : Symbol(Document.getElementById, Decl(genericMethodOverspecialization.ts, 8, 20))
+>getElementById : Symbol(Document.getElementById, Decl(lib.d.ts, --, --), Decl(genericMethodOverspecialization.ts, 8, 20))
 >elementId : Symbol(elementId, Decl(genericMethodOverspecialization.ts, 9, 19))
->HTMLElement : Symbol(HTMLElement, Decl(genericMethodOverspecialization.ts, 0, 62))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(genericMethodOverspecialization.ts, 0, 62))
 }
 
 var elements = names.map(function (name) {
@@ -33,9 +33,9 @@ var elements = names.map(function (name) {
 >name : Symbol(name, Decl(genericMethodOverspecialization.ts, 12, 35))
 
     return document.getElementById(name);
->document.getElementById : Symbol(Document.getElementById, Decl(genericMethodOverspecialization.ts, 8, 20))
->document : Symbol(document, Decl(genericMethodOverspecialization.ts, 7, 11))
->getElementById : Symbol(Document.getElementById, Decl(genericMethodOverspecialization.ts, 8, 20))
+>document.getElementById : Symbol(Document.getElementById, Decl(lib.d.ts, --, --), Decl(genericMethodOverspecialization.ts, 8, 20))
+>document : Symbol(document, Decl(lib.d.ts, --, --), Decl(genericMethodOverspecialization.ts, 7, 11))
+>getElementById : Symbol(Document.getElementById, Decl(lib.d.ts, --, --), Decl(genericMethodOverspecialization.ts, 8, 20))
 >name : Symbol(name, Decl(genericMethodOverspecialization.ts, 12, 35))
 
 });

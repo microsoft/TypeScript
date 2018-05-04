@@ -181,7 +181,7 @@ const Timestamped = <CT extends Constructor<object>>(Base: CT) => {
 
         timestamp = new Date();
 >timestamp : Symbol((Anonymous class).timestamp, Decl(mixinClassesAnonymous.ts, 60, 31))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     };
 }
