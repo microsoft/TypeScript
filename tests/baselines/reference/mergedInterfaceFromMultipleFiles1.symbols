@@ -11,7 +11,7 @@ interface C extends D {
 
 	b(): Date;
 >b : Symbol(C.b, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 4, 23))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 var c:C;
@@ -38,7 +38,7 @@ var d: number = c.a();
 
 var e: Date = c.b();
 >e : Symbol(e, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 12, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >c.b : Symbol(C.b, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 4, 23))
 >c : Symbol(c, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 8, 3))
 >b : Symbol(C.b, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 4, 23))

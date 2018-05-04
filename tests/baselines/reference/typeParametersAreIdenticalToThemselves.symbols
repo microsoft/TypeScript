@@ -144,21 +144,21 @@ class C<T> {
     foo4<T extends Date>(x: T);
 >foo4 : Symbol(C.foo4, Decl(typeParametersAreIdenticalToThemselves.ts, 31, 21), Decl(typeParametersAreIdenticalToThemselves.ts, 33, 31), Decl(typeParametersAreIdenticalToThemselves.ts, 34, 31))
 >T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 33, 9))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 33, 25))
 >T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 33, 9))
 
     foo4<T extends Date>(x: T); // no error, different declaration for each T
 >foo4 : Symbol(C.foo4, Decl(typeParametersAreIdenticalToThemselves.ts, 31, 21), Decl(typeParametersAreIdenticalToThemselves.ts, 33, 31), Decl(typeParametersAreIdenticalToThemselves.ts, 34, 31))
 >T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 34, 9))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 34, 25))
 >T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 34, 9))
 
     foo4<T extends Date>(x: T) { }
 >foo4 : Symbol(C.foo4, Decl(typeParametersAreIdenticalToThemselves.ts, 31, 21), Decl(typeParametersAreIdenticalToThemselves.ts, 33, 31), Decl(typeParametersAreIdenticalToThemselves.ts, 34, 31))
 >T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 35, 9))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 35, 25))
 >T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 35, 9))
 }
@@ -166,7 +166,7 @@ class C<T> {
 class C2<T extends Date> {
 >C2 : Symbol(C2, Decl(typeParametersAreIdenticalToThemselves.ts, 36, 1))
 >T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 38, 9))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     foo1(x: T);
 >foo1 : Symbol(C2.foo1, Decl(typeParametersAreIdenticalToThemselves.ts, 38, 26), Decl(typeParametersAreIdenticalToThemselves.ts, 39, 15), Decl(typeParametersAreIdenticalToThemselves.ts, 40, 15))
@@ -271,14 +271,14 @@ interface I<T> {
     foo4<T extends Date>(x: T);
 >foo4 : Symbol(I.foo4, Decl(typeParametersAreIdenticalToThemselves.ts, 60, 18), Decl(typeParametersAreIdenticalToThemselves.ts, 62, 31))
 >T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 62, 9))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 62, 25))
 >T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 62, 9))
 
     foo4<T extends Date>(x: T); // no error, different declaration for each T
 >foo4 : Symbol(I.foo4, Decl(typeParametersAreIdenticalToThemselves.ts, 60, 18), Decl(typeParametersAreIdenticalToThemselves.ts, 62, 31))
 >T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 63, 9))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeParametersAreIdenticalToThemselves.ts, 63, 25))
 >T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 63, 9))
 }
@@ -286,7 +286,7 @@ interface I<T> {
 interface I2<T extends Date> {
 >I2 : Symbol(I2, Decl(typeParametersAreIdenticalToThemselves.ts, 64, 1))
 >T : Symbol(T, Decl(typeParametersAreIdenticalToThemselves.ts, 66, 13))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     foo1(x: T);
 >foo1 : Symbol(I2.foo1, Decl(typeParametersAreIdenticalToThemselves.ts, 66, 30), Decl(typeParametersAreIdenticalToThemselves.ts, 67, 15))

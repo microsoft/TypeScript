@@ -414,11 +414,11 @@ declare namespace ts {
         JavaScriptFile = 65536,
         ThisNodeOrAnySubNodesHasError = 131072,
         HasAggregatedChildData = 262144,
-        JSDoc = 1048576,
+        JSDoc = 2097152,
         BlockScoped = 3,
         ReachabilityCheckFlags = 384,
         ReachabilityAndEmitFlags = 1408,
-        ContextFlags = 6387712,
+        ContextFlags = 12679168,
         TypeExcludesFlags = 20480
     }
     enum ModifierFlags {
@@ -1019,7 +1019,7 @@ declare namespace ts {
     interface ElementAccessExpression extends MemberExpression {
         kind: SyntaxKind.ElementAccessExpression;
         expression: LeftHandSideExpression;
-        argumentExpression?: Expression;
+        argumentExpression: Expression;
     }
     interface SuperElementAccessExpression extends ElementAccessExpression {
         expression: SuperExpression;
@@ -1051,6 +1051,7 @@ declare namespace ts {
     interface TaggedTemplateExpression extends MemberExpression {
         kind: SyntaxKind.TaggedTemplateExpression;
         tag: LeftHandSideExpression;
+        typeArguments?: NodeArray<TypeNode>;
         template: TemplateLiteral;
     }
     type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement;
@@ -1071,7 +1072,7 @@ declare namespace ts {
     }
     interface MetaProperty extends PrimaryExpression {
         kind: SyntaxKind.MetaProperty;
-        keywordToken: SyntaxKind.NewKeyword;
+        keywordToken: SyntaxKind.NewKeyword | SyntaxKind.ImportKeyword;
         name: Identifier;
     }
     interface JsxElement extends PrimaryExpression {
@@ -1160,7 +1161,7 @@ declare namespace ts {
     interface DebuggerStatement extends Statement {
         kind: SyntaxKind.DebuggerStatement;
     }
-    interface MissingDeclaration extends DeclarationStatement, ClassElement, ObjectLiteralElement, TypeElement {
+    interface MissingDeclaration extends DeclarationStatement {
         kind: SyntaxKind.MissingDeclaration;
         name?: Identifier;
     }
@@ -1493,7 +1494,7 @@ declare namespace ts {
         comment: string | undefined;
     }
     interface JSDocTag extends Node {
-        parent: JSDoc;
+        parent: JSDoc | JSDocTypeLiteral;
         atToken: AtToken;
         tagName: Identifier;
         comment: string | undefined;
@@ -1841,6 +1842,12 @@ declare namespace ts {
         getSuggestionForNonexistentModule(node: Identifier, target: Symbol): string | undefined;
         getBaseConstraintOfType(type: Type): Type | undefined;
         getDefaultFromTypeParameter(type: Type): Type | undefined;
+        /**
+         * Depending on the operation performed, it may be appropriate to throw away the checker
+         * if the cancellation token is triggered. Typically, if it is used for error checking
+         * and the operation is cancelled, then it should be discarded, otherwise it is safe to keep.
+         */
+        runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
     }
     enum NodeBuilderFlags {
         None = 0,
@@ -2099,11 +2106,12 @@ declare namespace ts {
         Unit = 13536,
         StringOrNumberLiteral = 96,
         PossiblyFalsy = 14574,
-        StringLike = 524322,
+        StringLike = 34,
         NumberLike = 84,
         BooleanLike = 136,
         EnumLike = 272,
         ESSymbolLike = 1536,
+        VoidLike = 6144,
         UnionOrIntersection = 393216,
         StructuredType = 458752,
         TypeVariable = 1081344,
@@ -2266,7 +2274,9 @@ declare namespace ts {
         AlwaysStrict = 64,
         PriorityImpliesCombination = 28
     }
-    interface JsFileExtensionInfo {
+    /** @deprecated Use FileExtensionInfo instead. */
+    type JsFileExtensionInfo = FileExtensionInfo;
+    interface FileExtensionInfo {
         extension: string;
         isMixedContent: boolean;
         scriptKind?: ScriptKind;
@@ -2339,6 +2349,7 @@ declare namespace ts {
         inlineSources?: boolean;
         isolatedModules?: boolean;
         jsx?: JsxEmit;
+        keyofStringsOnly?: boolean;
         lib?: string[];
         locale?: string;
         mapRoot?: string;
@@ -2428,7 +2439,12 @@ declare namespace ts {
         TS = 3,
         TSX = 4,
         External = 5,
-        JSON = 6
+        JSON = 6,
+        /**
+         * Used on extensions that doesn't define the ScriptKind but the content defines it.
+         * Deferred extensions are going to be included in all project contexts.
+         */
+        Deferred = 7
     }
     enum ScriptTarget {
         ES3 = 0,
@@ -2889,6 +2905,7 @@ declare namespace ts {
         newLine: string;
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
+        writeOutputIsTTY?(): boolean;
         readFile(path: string, encoding?: string): string | undefined;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
@@ -3169,6 +3186,7 @@ declare namespace ts {
     function isIndexedAccessTypeNode(node: Node): node is IndexedAccessTypeNode;
     function isMappedTypeNode(node: Node): node is MappedTypeNode;
     function isLiteralTypeNode(node: Node): node is LiteralTypeNode;
+    function isImportTypeNode(node: Node): node is ImportTypeNode;
     function isObjectBindingPattern(node: Node): node is ObjectBindingPattern;
     function isArrayBindingPattern(node: Node): node is ArrayBindingPattern;
     function isBindingElement(node: Node): node is BindingElement;
@@ -3399,6 +3417,7 @@ declare namespace ts {
         set(directory: string, result: ResolvedModuleWithFailedLookupLocations): void;
     }
     function createModuleResolutionCache(currentDirectory: string, getCanonicalFileName: (s: string) => string): ModuleResolutionCache;
+    function resolveModuleNameFromCache(moduleName: string, containingFile: string, cache: ModuleResolutionCache): ResolvedModuleWithFailedLookupLocations | undefined;
     function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache): ResolvedModuleWithFailedLookupLocations;
     function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache): ResolvedModuleWithFailedLookupLocations;
     function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: NonRelativeModuleNameResolutionCache): ResolvedModuleWithFailedLookupLocations;
@@ -3522,7 +3541,9 @@ declare namespace ts {
     function createNew(expression: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<Expression> | undefined): NewExpression;
     function updateNew(node: NewExpression, expression: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, argumentsArray: ReadonlyArray<Expression> | undefined): NewExpression;
     function createTaggedTemplate(tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
+    function createTaggedTemplate(tag: Expression, typeArguments: ReadonlyArray<TypeNode>, template: TemplateLiteral): TaggedTemplateExpression;
     function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
+    function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, typeArguments: ReadonlyArray<TypeNode>, template: TemplateLiteral): TaggedTemplateExpression;
     function createTypeAssertion(type: TypeNode, expression: Expression): TypeAssertion;
     function updateTypeAssertion(node: TypeAssertion, type: TypeNode, expression: Expression): TypeAssertion;
     function createParen(expression: Expression): ParenthesizedExpression;
@@ -4211,7 +4232,7 @@ declare namespace ts {
      * @param basePath A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
-    function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<JsFileExtensionInfo>): ParsedCommandLine;
+    function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ParsedCommandLine;
     /**
      * Parse the contents of a config file (tsconfig.json).
      * @param jsonNode The contents of the config file to parse
@@ -4219,7 +4240,7 @@ declare namespace ts {
      * @param basePath A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
-    function parseJsonSourceFileConfigFileContent(sourceFile: JsonSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<JsFileExtensionInfo>): ParsedCommandLine;
+    function parseJsonSourceFileConfigFileContent(sourceFile: JsonSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ParsedCommandLine;
     function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): {
         options: CompilerOptions;
         errors: Diagnostic[];
@@ -4438,9 +4459,10 @@ declare namespace ts {
         applyCodeActionCommand(fileName: string, action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
         /** @deprecated `fileName` will be ignored */
         applyCodeActionCommand(fileName: string, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
-        getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange, preferences: UserPreferences | undefined): ApplicableRefactorInfo[];
+        getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined): RefactorEditInfo | undefined;
         organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): ReadonlyArray<FileTextChanges>;
+        getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges>;
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
         getProgram(): Program;
         dispose(): void;
@@ -4450,8 +4472,9 @@ declare namespace ts {
         fileName: string;
     }
     type OrganizeImportsScope = CombinedCodeFixScope;
-    /** @deprecated Use UserPreferences */
     interface GetCompletionsAtPositionOptions extends UserPreferences {
+        /** If the editor is asking for completions because a certain character was typed, and not because the user explicitly requested them, this should be set. */
+        triggerCharacter?: string;
         /** @deprecated Use includeCompletionsForModuleExports */
         includeExternalModuleExports?: boolean;
         /** @deprecated Use includeCompletionsWithInsertText */
@@ -5404,7 +5427,8 @@ declare namespace ts.server.protocol {
         GetSupportedCodeFixes = "getSupportedCodeFixes",
         GetApplicableRefactors = "getApplicableRefactors",
         GetEditsForRefactor = "getEditsForRefactor",
-        OrganizeImports = "organizeImports"
+        OrganizeImports = "organizeImports",
+        GetEditsForFileRename = "getEditsForFileRename"
     }
     /**
      * A TypeScript Server message
@@ -5798,6 +5822,17 @@ declare namespace ts.server.protocol {
         scope: OrganizeImportsScope;
     }
     interface OrganizeImportsResponse extends Response {
+        edits: ReadonlyArray<FileCodeEdits>;
+    }
+    interface GetEditsForFileRenameRequest extends Request {
+        command: CommandTypes.GetEditsForFileRename;
+        arguments: GetEditsForFileRenameRequestArgs;
+    }
+    interface GetEditsForFileRenameRequestArgs extends FileRequestArgs {
+        readonly oldFilePath: string;
+        readonly newFilePath: string;
+    }
+    interface GetEditsForFileRenameResponse extends Response {
         edits: ReadonlyArray<FileCodeEdits>;
     }
     /**
@@ -6290,7 +6325,7 @@ declare namespace ts.server.protocol {
         /**
          * The host's additional supported .js file extensions
          */
-        extraFileExtensions?: JsFileExtensionInfo[];
+        extraFileExtensions?: FileExtensionInfo[];
     }
     /**
      *  Configure request; value of command field is "configure".  Specifies
@@ -6662,6 +6697,7 @@ declare namespace ts.server.protocol {
          * Optional prefix to apply to possible completions.
          */
         prefix?: string;
+        triggerCharacter?: string;
         /**
          * @deprecated Use UserPreferences.includeCompletionsForModuleExports
          */
@@ -7607,17 +7643,6 @@ declare namespace ts.server {
         readonly globalTypingsCacheLocation: string;
     }
     const nullTypingsInstaller: ITypingsInstaller;
-    class TypingsCache {
-        private readonly installer;
-        private readonly perProjectCache;
-        constructor(installer: ITypingsInstaller);
-        isKnownTypesPackageName(name: string): boolean;
-        installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult>;
-        getTypingsForProject(project: Project, unresolvedImports: SortedReadonlyArray<string>, forceRefresh: boolean): SortedReadonlyArray<string>;
-        updateTypingsForProject(projectName: string, compilerOptions: CompilerOptions, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, newTypings: string[]): void;
-        deleteTypingsForProject(projectName: string): void;
-        onProjectClosed(project: Project): void;
-    }
 }
 declare namespace ts.server {
     enum ProjectKind {
@@ -7627,15 +7652,6 @@ declare namespace ts.server {
     }
     function allRootFilesAreJsOrDts(project: Project): boolean;
     function allFilesAreJsOrDts(project: Project): boolean;
-    class UnresolvedImportsMap {
-        readonly perFileMap: Map<ReadonlyArray<string>>;
-        private version;
-        clear(): void;
-        getVersion(): number;
-        remove(path: Path): void;
-        get(path: Path): ReadonlyArray<string>;
-        set(path: Path, value: ReadonlyArray<string>): void;
-    }
     interface PluginCreateInfo {
         project: Project;
         languageService: LanguageService;
@@ -7668,8 +7684,6 @@ declare namespace ts.server {
         private externalFiles;
         private missingFilesMap;
         private plugins;
-        private cachedUnresolvedImportsPerFile;
-        private lastCachedUnresolvedImportsList;
         private lastFileExceededProgramSize;
         protected languageService: LanguageService;
         languageServiceEnabled: boolean;
@@ -7689,10 +7703,10 @@ declare namespace ts.server {
          */
         private lastReportedVersion;
         /**
-         * Current project structure version.
+         * Current project's program version. (incremented everytime new program is created that is not complete reuse from the old one)
          * This property is changed in 'updateGraph' based on the set of files in program
          */
-        private projectStructureVersion;
+        private projectProgramVersion;
         /**
          * Current version of the project state. It is changed when:
          * - new root file was added/removed
@@ -7700,11 +7714,9 @@ declare namespace ts.server {
          * This property is different from projectStructureVersion since in most cases edits don't affect set of files in the project
          */
         private projectStateVersion;
-        private typingFiles;
         private readonly cancellationToken;
         isNonTsProject(): boolean;
         isJsOnlyProject(): boolean;
-        getCachedUnresolvedImportsPerFile_TestOnly(): UnresolvedImportsMap;
         static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {};
         isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
@@ -7942,7 +7954,7 @@ declare namespace ts.server {
         formatCodeOptions: FormatCodeSettings;
         preferences: UserPreferences;
         hostInfo: string;
-        extraFileExtensions?: JsFileExtensionInfo[];
+        extraFileExtensions?: FileExtensionInfo[];
     }
     interface OpenConfiguredProjectResult {
         configFileName?: NormalizedPath;
@@ -7965,7 +7977,6 @@ declare namespace ts.server {
         syntaxOnly?: boolean;
     }
     class ProjectService {
-        readonly typingsCache: TypingsCache;
         private readonly documentRegistry;
         /**
          * Container of all known scripts
@@ -8053,7 +8064,6 @@ declare namespace ts.server {
          *   ensure that each open script info has project
          */
         private ensureProjectStructuresUptoDate;
-        private updateProjectIfDirty;
         getFormatCodeOptions(file: NormalizedPath): FormatCodeSettings;
         getPreferences(file: NormalizedPath): UserPreferences;
         private onSourceFileChanged;
@@ -8071,7 +8081,6 @@ declare namespace ts.server {
          * @param info The file that has been closed or newly configured
          */
         private closeOpenFile;
-        private deleteOrphanScriptInfoNotInAnyProject;
         private deleteScriptInfo;
         private configFileExists;
         private setConfigFileExistenceByNewConfiguredProject;
@@ -8128,6 +8137,7 @@ declare namespace ts.server {
         private sendConfigFileDiagEvent;
         private getOrCreateInferredProjectForProjectRootPathIfEnabled;
         private getOrCreateSingleInferredProjectIfEnabled;
+        private getOrCreateSingleInferredWithoutProjectRoot;
         private createInferredProject;
         getScriptInfo(uncheckedFileName: string): ScriptInfo;
         private watchClosedScriptInfo;
@@ -8192,6 +8202,7 @@ declare namespace ts.server {
         resetSafeList(): void;
         applySafeList(proj: protocol.ExternalProject): NormalizedPath[];
         openExternalProject(proj: protocol.ExternalProject): void;
+        hasDeferredExtension(): boolean;
     }
 }
 declare namespace ts.server {
@@ -8340,6 +8351,7 @@ declare namespace ts.server {
         private getApplicableRefactors;
         private getEditsForRefactor;
         private organizeImports;
+        private getEditsForFileRename;
         private getCodeFixes;
         private getCombinedCodeFix;
         private applyCodeActionCommand;

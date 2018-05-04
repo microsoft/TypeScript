@@ -2,15 +2,15 @@
 // declarations with call initializer
 const constCall = Symbol();
 >constCall : Symbol(constCall, Decl(uniqueSymbolsDeclarations.ts, 1, 5))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 
 let letCall = Symbol();
 >letCall : Symbol(letCall, Decl(uniqueSymbolsDeclarations.ts, 2, 3))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 
 var varCall = Symbol();
 >varCall : Symbol(varCall, Decl(uniqueSymbolsDeclarations.ts, 3, 3))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 
 // ambient declaration with type
 declare const constType: unique symbol;
@@ -19,7 +19,7 @@ declare const constType: unique symbol;
 // declaration with type and call initializer
 const constTypeAndCall: unique symbol = Symbol();
 >constTypeAndCall : Symbol(constTypeAndCall, Decl(uniqueSymbolsDeclarations.ts, 9, 5))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 
 // declaration from initializer
 const constInitToConstCall = constCall;
@@ -152,26 +152,26 @@ class C {
 
     static readonly readonlyStaticCall = Symbol();
 >readonlyStaticCall : Symbol(C.readonlyStaticCall, Decl(uniqueSymbolsDeclarations.ts, 56, 9))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 
     static readonly readonlyStaticType: unique symbol;
 >readonlyStaticType : Symbol(C.readonlyStaticType, Decl(uniqueSymbolsDeclarations.ts, 57, 50))
 
     static readonly readonlyStaticTypeAndCall: unique symbol = Symbol();
 >readonlyStaticTypeAndCall : Symbol(C.readonlyStaticTypeAndCall, Decl(uniqueSymbolsDeclarations.ts, 58, 54))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 
     static readwriteStaticCall = Symbol();
 >readwriteStaticCall : Symbol(C.readwriteStaticCall, Decl(uniqueSymbolsDeclarations.ts, 59, 72))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 
     readonly readonlyCall = Symbol();
 >readonlyCall : Symbol(C.readonlyCall, Decl(uniqueSymbolsDeclarations.ts, 60, 42))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 
     readwriteCall = Symbol();
 >readwriteCall : Symbol(C.readwriteCall, Decl(uniqueSymbolsDeclarations.ts, 62, 37))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 }
 declare const c: C;
 >c : Symbol(c, Decl(uniqueSymbolsDeclarations.ts, 65, 13))

@@ -33,7 +33,7 @@ namespace ts.FindAllReferences {
     interface AmbientModuleDeclaration extends ModuleDeclaration { body?: ModuleBlock; }
     type SourceFileLike = SourceFile | AmbientModuleDeclaration;
     // Identifier for the case of `const x = require("y")`.
-    type Importer = AnyImportOrReExport | Identifier;
+    type Importer = AnyImportOrReExport | ImportTypeNode | Identifier;
     type ImporterOrCallExpression = Importer | CallExpression;
 
     /** Returns import statements that directly reference the exporting module, and a list of files that may access the module through a namespace. */
@@ -215,6 +215,10 @@ namespace ts.FindAllReferences {
                 return;
             }
 
+            if (decl.kind === SyntaxKind.ImportType) {
+                return;
+            }
+
             // Ignore if there's a grammar error
             if (decl.moduleSpecifier.kind !== SyntaxKind.StringLiteral) {
                 return;
@@ -250,7 +254,7 @@ namespace ts.FindAllReferences {
                 }
 
                 // 'default' might be accessed as a named import `{ default as foo }`.
-                if (!isForRename && exportKind === ExportKind.Default) {
+                if (exportKind === ExportKind.Default) {
                     searchForNamedImport(namedBindings as NamedImports | undefined);
                 }
             }
@@ -282,7 +286,9 @@ namespace ts.FindAllReferences {
                 if (propertyName) {
                     // This is `import { foo as bar } from "./a"` or `export { foo as bar } from "./a"`. `foo` isn't a local in the file, so just add it as a single reference.
                     singleReferences.push(propertyName);
-                    if (!isForRename) { // If renaming `foo`, don't touch `bar`, just `foo`.
+                    // If renaming `{ foo as bar }`, don't touch `bar`, just `foo`.
+                    // But do rename `foo` in ` { default as foo }` if that's the original export name.
+                    if (!isForRename || name.escapedText === exportSymbol.escapedName) {
                         // Search locally for `bar`.
                         addSearch(name, checker.getSymbolAtLocation(name));
                     }

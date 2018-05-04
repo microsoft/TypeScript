@@ -17,9 +17,9 @@ class StringIterator {
     
     [Symbol.iterator]() {
 >[Symbol.iterator] : Symbol(StringIterator[Symbol.iterator], Decl(for-of35.ts, 6, 5))
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es6.d.ts, --, --))
 
         return this;
 >this : Symbol(StringIterator, Decl(for-of35.ts, 0, 0))

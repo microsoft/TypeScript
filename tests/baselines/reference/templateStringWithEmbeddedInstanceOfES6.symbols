@@ -1,5 +1,5 @@
 === tests/cases/conformance/es6/templates/templateStringWithEmbeddedInstanceOfES6.ts ===
 var x = `abc${ "hello" instanceof String }def`;
 >x : Symbol(x, Decl(templateStringWithEmbeddedInstanceOfES6.ts, 0, 3))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
+>String : Symbol(String, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --) ... and 1 more)
 

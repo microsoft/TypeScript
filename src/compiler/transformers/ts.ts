@@ -502,6 +502,9 @@ namespace ts {
                 case SyntaxKind.NewExpression:
                     return visitNewExpression(<NewExpression>node);
 
+                case SyntaxKind.TaggedTemplateExpression:
+                    return visitTaggedTemplateExpression(<TaggedTemplateExpression>node);
+
                 case SyntaxKind.NonNullExpression:
                     // TypeScript non-null expressions are removed, but their subtrees are preserved.
                     return visitNonNullExpression(<NonNullExpression>node);
@@ -1245,7 +1248,7 @@ namespace ts {
         function transformInitializedProperty(property: PropertyDeclaration, receiver: LeftHandSideExpression) {
             // We generate a name here in order to reuse the value cached by the relocated computed name expression (which uses the same generated name)
             const propertyName = isComputedPropertyName(property.name) && !isSimpleInlineableExpression(property.name.expression)
-                ? updateComputedPropertyName(property.name, getGeneratedNameForNode(property.name, !hasModifier(property, ModifierFlags.Static)))
+                ? updateComputedPropertyName(property.name, getGeneratedNameForNode(property.name))
                 : property.name;
             const initializer = visitNode(property.initializer, visitor, isExpression);
             const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName);
@@ -2545,6 +2548,14 @@ namespace ts {
                 visitNode(node.expression, visitor, isExpression),
                 /*typeArguments*/ undefined,
                 visitNodes(node.arguments, visitor, isExpression));
+        }
+
+        function visitTaggedTemplateExpression(node: TaggedTemplateExpression) {
+            return updateTaggedTemplate(
+                node,
+                visitNode(node.tag, visitor, isExpression),
+                /*typeArguments*/ undefined,
+                visitNode(node.template, visitor, isExpression));
         }
 
         /**

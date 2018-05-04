@@ -428,6 +428,7 @@ namespace ts {
         newLine: string;
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
+        writeOutputIsTTY?(): boolean;
         readFile(path: string, encoding?: string): string | undefined;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
@@ -560,6 +561,9 @@ namespace ts {
                 useCaseSensitiveFileNames,
                 write(s: string): void {
                     process.stdout.write(s);
+                },
+                writeOutputIsTTY() {
+                    return process.stdout.isTTY;
                 },
                 readFile,
                 writeFile,
@@ -694,7 +698,7 @@ namespace ts {
                         createWatchDirectoryUsing(dynamicPollingWatchFile || createDynamicPriorityPollingWatchFile({ getModifiedTime, setTimeout })) :
                         watchDirectoryUsingFsWatch;
                 const watchDirectoryRecursively = createRecursiveDirectoryWatcher({
-                    filePathComparer: useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
+                    filePathComparer: getStringComparer(!useCaseSensitiveFileNames),
                     directoryExists,
                     getAccessibleSortedChildDirectories: path => getAccessibleFileSystemEntries(path).directories,
                     watchDirectory,

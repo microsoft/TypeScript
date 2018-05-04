@@ -18,13 +18,7 @@ namespace ts.GoToDefinition {
         }
 
         const typeChecker = program.getTypeChecker();
-
-        const calledDeclaration = tryGetSignatureDeclaration(typeChecker, node);
-        if (calledDeclaration) {
-            return [createDefinitionFromSignatureDeclaration(typeChecker, calledDeclaration)];
-        }
-
-        let symbol = typeChecker.getSymbolAtLocation(node);
+        const symbol = getSymbol(node, typeChecker);
 
         // Could not find a symbol e.g. node is string or number keyword,
         // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
@@ -32,15 +26,16 @@ namespace ts.GoToDefinition {
             return getDefinitionInfoForIndexSignatures(node, typeChecker);
         }
 
-        // If this is an alias, and the request came at the declaration location
-        // get the aliased symbol instead. This allows for goto def on an import e.g.
-        //   import {A, B} from "mod";
-        // to jump to the implementation directly.
-        if (symbol.flags & SymbolFlags.Alias && shouldSkipAlias(node, symbol.declarations[0])) {
-            const aliased = typeChecker.getAliasedSymbol(symbol);
-            if (aliased.declarations) {
-                symbol = aliased;
-            }
+        const calledDeclaration = tryGetSignatureDeclaration(typeChecker, node);
+        if (calledDeclaration) {
+            const sigInfo = createDefinitionFromSignatureDeclaration(typeChecker, calledDeclaration);
+            // For a function, if this is the original function definition, return just sigInfo.
+            // If this is the original constructor definition, parent is the class.
+            return typeChecker.getRootSymbols(symbol).some(s => calledDeclaration.symbol === s || calledDeclaration.symbol.parent === s) ||
+                // TODO: GH#23742 Following check shouldn't be necessary if 'require' is an alias
+                symbol.declarations.some(d => isVariableDeclaration(d) && d.initializer && isRequireCall(d.initializer, /*checkArgumentIsStringLiteralLike*/ false))
+                ? [sigInfo]
+                : [sigInfo, ...getDefinitionFromSymbol(typeChecker, symbol, node)];
         }
 
         // Because name in short-hand property assignment has two different meanings: property name and property value,
@@ -156,6 +151,21 @@ namespace ts.GoToDefinition {
             const info = checker.getIndexInfoOfType(nonUnionType, IndexKind.String);
             return info && info.declaration && createDefinitionFromSignatureDeclaration(checker, info.declaration);
         });
+    }
+
+    function getSymbol(node: Node, checker: TypeChecker): Symbol | undefined {
+        const symbol = checker.getSymbolAtLocation(node);
+        // If this is an alias, and the request came at the declaration location
+        // get the aliased symbol instead. This allows for goto def on an import e.g.
+        //   import {A, B} from "mod";
+        // to jump to the implementation directly.
+        if (symbol && symbol.flags & SymbolFlags.Alias && shouldSkipAlias(node, symbol.declarations[0])) {
+            const aliased = checker.getAliasedSymbol(symbol);
+            if (aliased.declarations) {
+                return aliased;
+            }
+        }
+        return symbol;
     }
 
     // Go to the original declaration for cases:

@@ -634,7 +634,8 @@ namespace ts.server {
                 code: d.code,
                 source: d.source,
                 startLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start),
-                endLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start + d.length)
+                endLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start + d.length),
+                reportsUnnecessary: d.reportsUnnecessary
             });
         }
 
@@ -864,7 +865,7 @@ namespace ts.server {
                 symLinkedProjects = this.projectService.getSymlinkedProjects(scriptInfo);
             }
             // filter handles case when 'projects' is undefined
-            projects = filter(projects, p => p.languageServiceEnabled);
+            projects = filter(projects, p => p.languageServiceEnabled && !p.isOrphan());
             if ((!projects || !projects.length) && !symLinkedProjects) {
                 return Errors.ThrowNoProject();
             }
@@ -1286,6 +1287,7 @@ namespace ts.server {
 
             const completions = project.getLanguageService().getCompletionsAtPosition(file, position, {
                 ...this.getPreferences(file),
+                triggerCharacter: args.triggerCharacter,
                 includeExternalModuleExports: args.includeExternalModuleExports,
                 includeInsertTextCompletions: args.includeInsertTextCompletions
             });
@@ -1334,7 +1336,7 @@ namespace ts.server {
                 symLinkedProjects ? { projects, symLinkedProjects } : projects,
                 (project, info) => {
                     let result: protocol.CompileOnSaveAffectedFileListSingleProject;
-                    if (project.compileOnSaveEnabled && project.languageServiceEnabled && !project.getCompilationSettings().noEmit) {
+                    if (project.compileOnSaveEnabled && project.languageServiceEnabled && !project.isOrphan() && !project.getCompilationSettings().noEmit) {
                         result = {
                             projectFileName: project.getProjectName(),
                             fileNames: project.getCompileOnSaveAffectedFileList(info),
@@ -1661,6 +1663,12 @@ namespace ts.server {
             else {
                 return changes;
             }
+        }
+
+        private getEditsForFileRename(args: protocol.GetEditsForFileRenameRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.FileCodeEdits> | ReadonlyArray<FileTextChanges> {
+            const { file, project } = this.getFileAndProject(args);
+            const changes = project.getLanguageService().getEditsForFileRename(args.oldFilePath, args.newFilePath, this.getFormatOptions(file));
+            return simplifiedResult ? this.mapTextChangesToCodeEdits(project, changes) : changes;
         }
 
         private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): ReadonlyArray<protocol.CodeFixAction> | ReadonlyArray<CodeFixAction> {
@@ -2116,7 +2124,13 @@ namespace ts.server {
             },
             [CommandNames.OrganizeImportsFull]: (request: protocol.OrganizeImportsRequest) => {
                 return this.requiredResponse(this.organizeImports(request.arguments, /*simplifiedResult*/ false));
-            }
+            },
+            [CommandNames.GetEditsForFileRename]: (request: protocol.GetEditsForFileRenameRequest) => {
+                return this.requiredResponse(this.getEditsForFileRename(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.GetEditsForFileRenameFull]: (request: protocol.GetEditsForFileRenameRequest) => {
+                return this.requiredResponse(this.getEditsForFileRename(request.arguments, /*simplifiedResult*/ false));
+            },
         });
 
         public addProtocolHandler(command: string, handler: (request: protocol.Request) => HandlerResponse) {

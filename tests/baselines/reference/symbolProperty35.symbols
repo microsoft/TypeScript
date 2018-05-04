@@ -4,9 +4,9 @@ interface I1 {
 
     [Symbol.toStringTag](): { x: string }
 >[Symbol.toStringTag] : Symbol(I1[Symbol.toStringTag], Decl(symbolProperty35.ts, 0, 14))
->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es6.d.ts, --, --))
 >x : Symbol(x, Decl(symbolProperty35.ts, 1, 29))
 }
 interface I2 {
@@ -14,9 +14,9 @@ interface I2 {
 
     [Symbol.toStringTag](): { x: number }
 >[Symbol.toStringTag] : Symbol(I2[Symbol.toStringTag], Decl(symbolProperty35.ts, 3, 14))
->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es6.d.ts, --, --))
 >x : Symbol(x, Decl(symbolProperty35.ts, 4, 29))
 }
 

@@ -1,5 +1,5 @@
-tests/cases/compiler/deferredLookupTypeResolution2.ts(14,13): error TS2536: Type '({ [K in keyof T]: "true"; } & { [key: string]: "false"; })["1"]' cannot be used to index type '{ true: "true"; }'.
-tests/cases/compiler/deferredLookupTypeResolution2.ts(19,21): error TS2536: Type '({ true: "otherwise"; } & { [k: string]: "true"; })[({ [K in keyof T]: "true"; } & { [key: string]: "false"; })["1"]]' cannot be used to index type '{ true: "true"; }'.
+tests/cases/compiler/deferredLookupTypeResolution2.ts(14,13): error TS2536: Type '({ [K in Extract<keyof T, string>]: "true"; } & { [key: string]: "false"; })["1"]' cannot be used to index type '{ true: "true"; }'.
+tests/cases/compiler/deferredLookupTypeResolution2.ts(19,21): error TS2536: Type '({ true: "otherwise"; } & { [k: string]: "true"; })[({ [K in Extract<keyof T, string>]: "true"; } & { [key: string]: "false"; })["1"]]' cannot be used to index type '{ true: "true"; }'.
 
 
 ==== tests/cases/compiler/deferredLookupTypeResolution2.ts (2 errors) ====
@@ -7,7 +7,7 @@ tests/cases/compiler/deferredLookupTypeResolution2.ts(19,21): error TS2536: Type
     
     type StringContains<S extends string, L extends string> = ({ [K in S]: 'true' } & { [key: string]: 'false'})[L];
     
-    type ObjectHasKey<O, L extends string> = StringContains<keyof O, L>;
+    type ObjectHasKey<O, L extends string> = StringContains<Extract<keyof O, string>, L>;
     
     type A<T> = ObjectHasKey<T, '0'>;
     
@@ -18,14 +18,14 @@ tests/cases/compiler/deferredLookupTypeResolution2.ts(19,21): error TS2536: Type
     // Error, "false" not handled
     type E<T> = { true: 'true' }[ObjectHasKey<T, '1'>];
                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2536: Type '({ [K in keyof T]: "true"; } & { [key: string]: "false"; })["1"]' cannot be used to index type '{ true: "true"; }'.
+!!! error TS2536: Type '({ [K in Extract<keyof T, string>]: "true"; } & { [key: string]: "false"; })["1"]' cannot be used to index type '{ true: "true"; }'.
     
     type Juxtapose<T> = ({ true: 'otherwise' } & { [k: string]: 'true' })[ObjectHasKey<T, '1'>];
     
     // Error, "otherwise" is missing
     type DeepError<T> = { true: 'true' }[Juxtapose<T>];
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2536: Type '({ true: "otherwise"; } & { [k: string]: "true"; })[({ [K in keyof T]: "true"; } & { [key: string]: "false"; })["1"]]' cannot be used to index type '{ true: "true"; }'.
+!!! error TS2536: Type '({ true: "otherwise"; } & { [k: string]: "true"; })[({ [K in Extract<keyof T, string>]: "true"; } & { [key: string]: "false"; })["1"]]' cannot be used to index type '{ true: "true"; }'.
     
     type DeepOK<T> = { true: 'true', otherwise: 'false' }[Juxtapose<T>];
     

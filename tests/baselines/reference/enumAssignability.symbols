@@ -84,7 +84,7 @@ module Others {
 
     var ee: Date = e;
 >ee : Symbol(ee, Decl(enumAssignability.ts, 30, 7))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
 
     var f: any = e; // ok
@@ -159,7 +159,7 @@ module Others {
 >U : Symbol(U, Decl(enumAssignability.ts, 46, 19))
 >T : Symbol(T, Decl(enumAssignability.ts, 46, 17))
 >V : Symbol(V, Decl(enumAssignability.ts, 46, 32))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >A : Symbol(A, Decl(enumAssignability.ts, 46, 48))
 >Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >B : Symbol(B, Decl(enumAssignability.ts, 46, 66))

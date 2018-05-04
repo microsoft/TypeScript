@@ -903,6 +903,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_0_to_unresolved_variable_90008" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add '{0}.' to unresolved variable]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[對未解析的變數新增 '{0}.']]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Add_all_missing_async_modifiers_95041" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add all missing 'async' modifiers]]></Val>
@@ -999,24 +1008,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Add_this_to_all_unresolved_variables_matching_a_member_name_95037" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Add_qualifier_to_all_unresolved_variables_matching_a_member_name_95037" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Add 'this.' to all unresolved variables matching a member name]]></Val>
+          <Val><![CDATA[Add qualifier to all unresolved variables matching a member name]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[為所有用以比對成員名稱未解析的變數新增 'this.']]></Val>
+            <Val><![CDATA[對所有比對成員名稱的未解析變數新增限定詞]]></Val>
           </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Add_this_to_unresolved_variable_90008" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Add 'this.' to unresolved variable]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[將 'this' 新增至未解析的變數]]></Val>
-          </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Add 'this.' to unresolved variable.]]></Val>
-          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1250,6 +1247,15 @@
           <Val><![CDATA[An async iterator must have a 'next()' method.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[非同步迭代器必須有 'next()' 方法。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";An_element_access_expression_should_take_an_argument_1011" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An element access expression should take an argument.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[項目存取運算式應接受一個引數。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2388,15 +2394,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Compilation_complete_Watching_for_file_changes_6042" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Compilation complete. Watching for file changes.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[編譯完成。正在等候檔案變更。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Compile_the_project_given_the_path_to_its_configuration_file_or_to_a_folder_with_a_tsconfig_json_6020" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Compile the project given the path to its configuration file, or to a folder with a 'tsconfig.json'.]]></Val>
@@ -2523,6 +2520,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Convert_all_require_to_import_95048" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert all 'require' to 'import']]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Convert_all_to_default_imports_95035" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert all to default imports]]></Val>
@@ -2547,6 +2550,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[將函式轉換為 ES2015 類別]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_require_to_import_95047" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert 'require' to 'import']]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3771,20 +3780,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Found_0_errors_6194" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Found_0_errors_Watching_for_file_changes_6194" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Found {0} errors.]]></Val>
+          <Val><![CDATA[Found {0} errors. Watching for file changes.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[找到 {0} 個錯誤。]]></Val>
+            <Val><![CDATA[找到 {0} 個錯誤。正在監看檔案變更。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Found_1_error_6193" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Found_1_error_Watching_for_file_changes_6193" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Found 1 error.]]></Val>
+          <Val><![CDATA[Found 1 error. Watching for file changes.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[找到 1 個錯誤。]]></Val>
+            <Val><![CDATA[找到 1 個錯誤。正在監看檔案變更。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6516,6 +6525,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Resolve_keyof_to_string_valued_property_names_only_no_numbers_or_symbols_6195" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Resolve 'keyof' to string valued property names only (no numbers or symbols).]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[只將 'keyof' 解析為字串值的屬性名稱 (無任何數字或符號)。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Resolving_from_node_modules_folder_6118" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Resolving from node_modules folder...]]></Val>
@@ -7419,6 +7437,12 @@
           <Prev Cat="Text">
             <Val><![CDATA[The global type 'JSX.{0}' may not have more than one property]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_import_meta_meta_property_is_only_allowed_using_ESNext_for_the_target_and_module_compiler_option_1343" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The 'import.meta' meta-property is only allowed using 'ESNext' for the 'target' and 'module' compiler options.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8766,6 +8790,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_is_declared_but_never_used_6196" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is declared but never used.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[宣告了 '{0}'，但從未使用過。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2_17012" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' is not a valid meta-property for keyword '{1}'. Did you mean '{2}'?]]></Val>
@@ -9348,6 +9381,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['readonly' 修飾詞只能出現在屬性宣告或索引簽章。]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";require_call_may_be_converted_to_an_import_80005" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['require' call may be converted to an import.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>

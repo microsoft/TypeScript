@@ -6,7 +6,7 @@
     ],
     "baselineCheck": true,
     "resolvedInputFiles": [
-        "lib.d.ts",
+        "lib.es5.d.ts",
         "decl.ts",
         "lib/foo/b.ts",
         "lib/foo/a.ts",

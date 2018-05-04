@@ -80,19 +80,19 @@ function fun<T>(item: { [P in keyof T]: T[P] }) {
 >[] : never[]
 
     for (const key in item) {
->key : keyof T
+>key : Extract<keyof T, string>
 >item : { [P in keyof T]: T[P]; }
 
         const value = item[key];
->value : { [P in keyof T]: T[P]; }[keyof T]
->item[key] : { [P in keyof T]: T[P]; }[keyof T]
+>value : { [P in keyof T]: T[P]; }[Extract<keyof T, string>]
+>item[key] : { [P in keyof T]: T[P]; }[Extract<keyof T, string>]
 >item : { [P in keyof T]: T[P]; }
->key : keyof T
+>key : Extract<keyof T, string>
 
         if (typeof value === "string") {
 >typeof value === "string" : boolean
 >typeof value : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->value : { [P in keyof T]: T[P]; }[keyof T]
+>value : { [P in keyof T]: T[P]; }[Extract<keyof T, string>]
 >"string" : "string"
 
             strings.push(value);
@@ -100,7 +100,7 @@ function fun<T>(item: { [P in keyof T]: T[P] }) {
 >strings.push : (...items: string[]) => number
 >strings : string[]
 >push : (...items: string[]) => number
->value : { [P in keyof T]: T[P]; }[keyof T] & string
+>value : { [P in keyof T]: T[P]; }[Extract<keyof T, string>] & string
         }
     }
 }

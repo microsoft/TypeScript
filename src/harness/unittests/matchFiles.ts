@@ -1,107 +1,108 @@
-/// <reference path="..\harness.ts" />
-/// <reference path="..\virtualFileSystem.ts" />
+/// <reference path="../harness.ts" />
+/// <reference path="../compiler.ts" />
+/// <reference path="../vfs.ts" />
 
 namespace ts {
     const caseInsensitiveBasePath = "c:/dev/";
     const caseInsensitiveTsconfigPath = "c:/dev/tsconfig.json";
-    const caseInsensitiveHost = new Utils.MockParseConfigHost(caseInsensitiveBasePath, /*useCaseSensitiveFileNames*/ false, [
-        "c:/dev/a.ts",
-        "c:/dev/a.d.ts",
-        "c:/dev/a.js",
-        "c:/dev/b.ts",
-        "c:/dev/b.js",
-        "c:/dev/c.d.ts",
-        "c:/dev/z/a.ts",
-        "c:/dev/z/abz.ts",
-        "c:/dev/z/aba.ts",
-        "c:/dev/z/b.ts",
-        "c:/dev/z/bbz.ts",
-        "c:/dev/z/bba.ts",
-        "c:/dev/x/a.ts",
-        "c:/dev/x/aa.ts",
-        "c:/dev/x/b.ts",
-        "c:/dev/x/y/a.ts",
-        "c:/dev/x/y/b.ts",
-        "c:/dev/js/a.js",
-        "c:/dev/js/b.js",
-        "c:/dev/js/d.min.js",
-        "c:/dev/js/ab.min.js",
-        "c:/ext/ext.ts",
-        "c:/ext/b/a..b.ts"
-    ]);
+    const caseInsensitiveHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
+        "c:/dev/a.ts": "",
+        "c:/dev/a.d.ts": "",
+        "c:/dev/a.js": "",
+        "c:/dev/b.ts": "",
+        "c:/dev/b.js": "",
+        "c:/dev/c.d.ts": "",
+        "c:/dev/z/a.ts": "",
+        "c:/dev/z/abz.ts": "",
+        "c:/dev/z/aba.ts": "",
+        "c:/dev/z/b.ts": "",
+        "c:/dev/z/bbz.ts": "",
+        "c:/dev/z/bba.ts": "",
+        "c:/dev/x/a.ts": "",
+        "c:/dev/x/aa.ts": "",
+        "c:/dev/x/b.ts": "",
+        "c:/dev/x/y/a.ts": "",
+        "c:/dev/x/y/b.ts": "",
+        "c:/dev/js/a.js": "",
+        "c:/dev/js/b.js": "",
+        "c:/dev/js/d.min.js": "",
+        "c:/dev/js/ab.min.js": "",
+        "c:/ext/ext.ts": "",
+        "c:/ext/b/a..b.ts": "",
+    }}));
 
     const caseSensitiveBasePath = "/dev/";
-    const caseSensitiveHost = new Utils.MockParseConfigHost(caseSensitiveBasePath, /*useCaseSensitiveFileNames*/ true, [
-        "/dev/a.ts",
-        "/dev/a.d.ts",
-        "/dev/a.js",
-        "/dev/b.ts",
-        "/dev/b.js",
-        "/dev/A.ts",
-        "/dev/B.ts",
-        "/dev/c.d.ts",
-        "/dev/z/a.ts",
-        "/dev/z/abz.ts",
-        "/dev/z/aba.ts",
-        "/dev/z/b.ts",
-        "/dev/z/bbz.ts",
-        "/dev/z/bba.ts",
-        "/dev/x/a.ts",
-        "/dev/x/b.ts",
-        "/dev/x/y/a.ts",
-        "/dev/x/y/b.ts",
-        "/dev/q/a/c/b/d.ts",
-        "/dev/js/a.js",
-        "/dev/js/b.js",
-    ]);
+    const caseSensitiveHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: caseSensitiveBasePath, files: {
+        "/dev/a.ts": "",
+        "/dev/a.d.ts": "",
+        "/dev/a.js": "",
+        "/dev/b.ts": "",
+        "/dev/b.js": "",
+        "/dev/A.ts": "",
+        "/dev/B.ts": "",
+        "/dev/c.d.ts": "",
+        "/dev/z/a.ts": "",
+        "/dev/z/abz.ts": "",
+        "/dev/z/aba.ts": "",
+        "/dev/z/b.ts": "",
+        "/dev/z/bbz.ts": "",
+        "/dev/z/bba.ts": "",
+        "/dev/x/a.ts": "",
+        "/dev/x/b.ts": "",
+        "/dev/x/y/a.ts": "",
+        "/dev/x/y/b.ts": "",
+        "/dev/q/a/c/b/d.ts": "",
+        "/dev/js/a.js": "",
+        "/dev/js/b.js": "",
+    }}));
 
-    const caseInsensitiveMixedExtensionHost = new Utils.MockParseConfigHost(caseInsensitiveBasePath, /*useCaseSensitiveFileNames*/ false, [
-        "c:/dev/a.ts",
-        "c:/dev/a.d.ts",
-        "c:/dev/a.js",
-        "c:/dev/b.tsx",
-        "c:/dev/b.d.ts",
-        "c:/dev/b.jsx",
-        "c:/dev/c.tsx",
-        "c:/dev/c.js",
-        "c:/dev/d.js",
-        "c:/dev/e.jsx",
-        "c:/dev/f.other"
-    ]);
+    const caseInsensitiveMixedExtensionHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
+        "c:/dev/a.ts": "",
+        "c:/dev/a.d.ts": "",
+        "c:/dev/a.js": "",
+        "c:/dev/b.tsx": "",
+        "c:/dev/b.d.ts": "",
+        "c:/dev/b.jsx": "",
+        "c:/dev/c.tsx": "",
+        "c:/dev/c.js": "",
+        "c:/dev/d.js": "",
+        "c:/dev/e.jsx": "",
+        "c:/dev/f.other": "",
+    }}));
 
-    const caseInsensitiveCommonFoldersHost = new Utils.MockParseConfigHost(caseInsensitiveBasePath, /*useCaseSensitiveFileNames*/ false, [
-        "c:/dev/a.ts",
-        "c:/dev/a.d.ts",
-        "c:/dev/a.js",
-        "c:/dev/b.ts",
-        "c:/dev/x/a.ts",
-        "c:/dev/node_modules/a.ts",
-        "c:/dev/bower_components/a.ts",
-        "c:/dev/jspm_packages/a.ts"
-    ]);
+    const caseInsensitiveCommonFoldersHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
+        "c:/dev/a.ts": "",
+        "c:/dev/a.d.ts": "",
+        "c:/dev/a.js": "",
+        "c:/dev/b.ts": "",
+        "c:/dev/x/a.ts": "",
+        "c:/dev/node_modules/a.ts": "",
+        "c:/dev/bower_components/a.ts": "",
+        "c:/dev/jspm_packages/a.ts": "",
+    }}));
 
-    const caseInsensitiveDottedFoldersHost = new Utils.MockParseConfigHost(caseInsensitiveBasePath, /*useCaseSensitiveFileNames*/ false, [
-        "c:/dev/x/d.ts",
-        "c:/dev/x/y/d.ts",
-        "c:/dev/x/y/.e.ts",
-        "c:/dev/x/.y/a.ts",
-        "c:/dev/.z/.b.ts",
-        "c:/dev/.z/c.ts",
-        "c:/dev/w/.u/e.ts",
-        "c:/dev/g.min.js/.g/g.ts"
-    ]);
+    const caseInsensitiveDottedFoldersHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
+        "c:/dev/x/d.ts": "",
+        "c:/dev/x/y/d.ts": "",
+        "c:/dev/x/y/.e.ts": "",
+        "c:/dev/x/.y/a.ts": "",
+        "c:/dev/.z/.b.ts": "",
+        "c:/dev/.z/c.ts": "",
+        "c:/dev/w/.u/e.ts": "",
+        "c:/dev/g.min.js/.g/g.ts": "",
+    }}));
 
-    const caseInsensitiveOrderingDiffersWithCaseHost = new Utils.MockParseConfigHost(caseInsensitiveBasePath, /*useCaseSensitiveFileNames*/ false, [
-        "c:/dev/xylophone.ts",
-        "c:/dev/Yosemite.ts",
-        "c:/dev/zebra.ts",
-    ]);
+    const caseInsensitiveOrderingDiffersWithCaseHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
+        "c:/dev/xylophone.ts": "",
+        "c:/dev/Yosemite.ts": "",
+        "c:/dev/zebra.ts": "",
+    }}));
 
-    const caseSensitiveOrderingDiffersWithCaseHost = new Utils.MockParseConfigHost(caseSensitiveBasePath, /*useCaseSensitiveFileNames*/ true, [
-        "/dev/xylophone.ts",
-        "/dev/Yosemite.ts",
-        "/dev/zebra.ts",
-    ]);
+    const caseSensitiveOrderingDiffersWithCaseHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: caseSensitiveBasePath, files: {
+        "/dev/xylophone.ts": "",
+        "/dev/Yosemite.ts": "",
+        "/dev/zebra.ts": "",
+    }}));
 
     function assertParsed(actual: ParsedCommandLine, expected: ParsedCommandLine): void {
         assert.deepEqual(actual.fileNames, expected.fileNames);

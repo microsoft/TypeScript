@@ -11,6 +11,6 @@ tests/cases/compiler/functionAndInterfaceWithSeparateErrors.ts(6,5): error TS241
     interface Foo {
         [s: string]: string;
         prop: number;
-        ~~~~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'prop' of type 'number' is not assignable to string index type 'string'.
     }

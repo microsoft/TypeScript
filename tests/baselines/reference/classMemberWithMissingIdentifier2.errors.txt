@@ -1,6 +1,5 @@
 tests/cases/compiler/classMemberWithMissingIdentifier2.ts(2,11): error TS1146: Declaration expected.
 tests/cases/compiler/classMemberWithMissingIdentifier2.ts(2,12): error TS1005: ';' expected.
-tests/cases/compiler/classMemberWithMissingIdentifier2.ts(2,14): error TS2304: Cannot find name 'name'.
 tests/cases/compiler/classMemberWithMissingIdentifier2.ts(2,18): error TS1005: ',' expected.
 tests/cases/compiler/classMemberWithMissingIdentifier2.ts(2,19): error TS2693: 'string' only refers to a type, but is being used as a value here.
 tests/cases/compiler/classMemberWithMissingIdentifier2.ts(2,26): error TS1005: ';' expected.
@@ -8,15 +7,13 @@ tests/cases/compiler/classMemberWithMissingIdentifier2.ts(2,27): error TS2304: C
 tests/cases/compiler/classMemberWithMissingIdentifier2.ts(3,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/compiler/classMemberWithMissingIdentifier2.ts (8 errors) ====
+==== tests/cases/compiler/classMemberWithMissingIdentifier2.ts (7 errors) ====
     class C { 
         public {[name:string]:VariableDeclaration};
               
 !!! error TS1146: Declaration expected.
                ~
 !!! error TS1005: ';' expected.
-                 ~~~~
-!!! error TS2304: Cannot find name 'name'.
                      ~
 !!! error TS1005: ',' expected.
                       ~~~~~~

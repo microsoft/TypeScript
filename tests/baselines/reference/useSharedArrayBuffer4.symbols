@@ -13,14 +13,14 @@ var species = foge[Symbol.species];
 >species : Symbol(species, Decl(useSharedArrayBuffer4.ts, 2, 3))
 >foge : Symbol(foge, Decl(useSharedArrayBuffer4.ts, 0, 3))
 >Symbol.species : Symbol(SymbolConstructor.species, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 >species : Symbol(SymbolConstructor.species, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 var stringTag = foge[Symbol.toStringTag];
 >stringTag : Symbol(stringTag, Decl(useSharedArrayBuffer4.ts, 3, 3))
 >foge : Symbol(foge, Decl(useSharedArrayBuffer4.ts, 0, 3))
 >Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 >toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 var len = foge.byteLength;

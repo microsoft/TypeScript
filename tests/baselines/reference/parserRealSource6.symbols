@@ -259,6 +259,7 @@ module TypeScript {
     export function pushTypeCollectionScope(container: Symbol,
 >pushTypeCollectionScope : Symbol(pushTypeCollectionScope, Decl(parserRealSource6.ts, 89, 5))
 >container : Symbol(container, Decl(parserRealSource6.ts, 91, 44))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --))
 
         valueMembers: ScopedMembers,
 >valueMembers : Symbol(valueMembers, Decl(parserRealSource6.ts, 91, 62))

@@ -4,9 +4,9 @@ interface I {
 
     [Symbol.iterator]: number;
 >[Symbol.iterator] : Symbol(I[Symbol.iterator], Decl(symbolProperty17.ts, 0, 13))
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es6.d.ts, --, --))
 
     [s: symbol]: string;
 >s : Symbol(s, Decl(symbolProperty17.ts, 2, 5))
@@ -22,7 +22,7 @@ var i: I;
 var it = i[Symbol.iterator];
 >it : Symbol(it, Decl(symbolProperty17.ts, 7, 3))
 >i : Symbol(i, Decl(symbolProperty17.ts, 6, 3))
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es6.d.ts, --, --))
 

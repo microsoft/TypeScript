@@ -304,6 +304,7 @@ namespace ts.server {
             const isNew = !this.isAttached(project);
             if (isNew) {
                 this.containingProjects.push(project);
+                project.onFileAddedOrRemoved();
                 if (!project.getCompilerOptions().preserveSymlinks) {
                     this.ensureRealPath();
                 }
@@ -328,19 +329,24 @@ namespace ts.server {
                     return;
                 case 1:
                     if (this.containingProjects[0] === project) {
+                        project.onFileAddedOrRemoved();
                         this.containingProjects.pop();
                     }
                     break;
                 case 2:
                     if (this.containingProjects[0] === project) {
+                        project.onFileAddedOrRemoved();
                         this.containingProjects[0] = this.containingProjects.pop();
                     }
                     else if (this.containingProjects[1] === project) {
+                        project.onFileAddedOrRemoved();
                         this.containingProjects.pop();
                     }
                     break;
                 default:
-                    unorderedRemoveItem(this.containingProjects, project);
+                    if (unorderedRemoveItem(this.containingProjects, project)) {
+                        project.onFileAddedOrRemoved();
+                    }
                     break;
             }
         }
@@ -454,7 +460,7 @@ namespace ts.server {
         }
 
         isOrphan() {
-            return this.containingProjects.length === 0;
+            return !forEach(this.containingProjects, p => !p.isOrphan());
         }
 
         /**

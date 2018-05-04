@@ -223,6 +223,7 @@ namespace ts {
                     visitNodes(cbNode, cbNodes, (<CallExpression>node).arguments);
             case SyntaxKind.TaggedTemplateExpression:
                 return visitNode(cbNode, (<TaggedTemplateExpression>node).tag) ||
+                    visitNodes(cbNode, cbNodes, (<TaggedTemplateExpression>node).typeArguments) ||
                     visitNode(cbNode, (<TaggedTemplateExpression>node).template);
             case SyntaxKind.TypeAssertionExpression:
                 return visitNode(cbNode, (<TypeAssertion>node).type) ||
@@ -539,7 +540,7 @@ namespace ts {
         const newSourceFile = IncrementalParser.updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks);
         // Because new source file node is created, it may not have the flag PossiblyContainDynamicImport. This is the case if there is no new edit to add dynamic import.
         // We will manually port the flag to the new source file.
-        newSourceFile.flags |= (sourceFile.flags & NodeFlags.PossiblyContainsDynamicImport);
+        newSourceFile.flags |= (sourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags);
         return newSourceFile;
     }
 
@@ -1239,7 +1240,7 @@ namespace ts {
             if (reportAtCurrentPosition) {
                 parseErrorAtPosition(scanner.getStartPos(), 0, diagnosticMessage, arg0);
             }
-            else {
+            else if (diagnosticMessage) {
                 parseErrorAtCurrentToken(diagnosticMessage, arg0);
             }
 
@@ -2624,6 +2625,20 @@ namespace ts {
             return token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken;
         }
 
+        function nextTokenIsDot() {
+            return nextToken() === SyntaxKind.DotToken;
+        }
+
+        function nextTokenIsOpenParenOrLessThanOrDot() {
+            switch (nextToken()) {
+                case SyntaxKind.OpenParenToken:
+                case SyntaxKind.LessThanToken:
+                case SyntaxKind.DotToken:
+                    return true;
+            }
+            return false;
+        }
+
         function parseTypeLiteral(): TypeLiteralNode {
             const node = <TypeLiteralNode>createNode(SyntaxKind.TypeLiteral);
             node.members = parseObjectTypeMembers();
@@ -3092,7 +3107,7 @@ namespace ts {
                 case SyntaxKind.Identifier:
                     return true;
                 case SyntaxKind.ImportKeyword:
-                    return lookAhead(nextTokenIsOpenParenOrLessThan);
+                    return lookAhead(nextTokenIsOpenParenOrLessThanOrDot);
                 default:
                     return isIdentifier();
             }
@@ -3954,14 +3969,31 @@ namespace ts {
             // 3)we have a MemberExpression which either completes the LeftHandSideExpression,
             // or starts the beginning of the first four CallExpression productions.
             let expression: MemberExpression;
-            if (token() === SyntaxKind.ImportKeyword && lookAhead(nextTokenIsOpenParenOrLessThan)) {
-                // We don't want to eagerly consume all import keyword as import call expression so we look a head to find "("
-                // For example:
-                //      var foo3 = require("subfolder
-                //      import * as foo1 from "module-from-node
-                // We want this import to be a statement rather than import call expression
-                sourceFile.flags |= NodeFlags.PossiblyContainsDynamicImport;
-                expression = parseTokenNode<PrimaryExpression>();
+            if (token() === SyntaxKind.ImportKeyword) {
+                if (lookAhead(nextTokenIsOpenParenOrLessThan)) {
+                    // We don't want to eagerly consume all import keyword as import call expression so we look ahead to find "("
+                    // For example:
+                    //      var foo3 = require("subfolder
+                    //      import * as foo1 from "module-from-node
+                    // We want this import to be a statement rather than import call expression
+                    sourceFile.flags |= NodeFlags.PossiblyContainsDynamicImport;
+                    expression = parseTokenNode<PrimaryExpression>();
+                }
+                else if (lookAhead(nextTokenIsDot)) {
+                    // This is an 'import.*' metaproperty (i.e. 'import.meta')
+                    const fullStart = scanner.getStartPos();
+                    nextToken(); // advance past the 'import'
+                    nextToken(); // advance past the dot
+                    const node = createNode(SyntaxKind.MetaProperty, fullStart) as MetaProperty;
+                    node.keywordToken = SyntaxKind.ImportKeyword;
+                    node.name = parseIdentifierName();
+                    expression = finishNode(node);
+
+                    sourceFile.flags |= NodeFlags.PossiblyContainsImportMeta;
+                }
+                else {
+                    expression = parseMemberExpressionOrHigher();
+                }
             }
             else {
                 expression = token() === SyntaxKind.SuperKeyword ? parseSuperExpression() : parseMemberExpressionOrHigher();
@@ -4347,14 +4379,15 @@ namespace ts {
                     const indexedAccess = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression, expression.pos);
                     indexedAccess.expression = expression;
 
-                    // It's not uncommon for a user to write: "new Type[]".
-                    // Check for that common pattern and report a better error message.
-                    if (token() !== SyntaxKind.CloseBracketToken) {
-                        indexedAccess.argumentExpression = allowInAnd(parseExpression);
-                        if (indexedAccess.argumentExpression.kind === SyntaxKind.StringLiteral || indexedAccess.argumentExpression.kind === SyntaxKind.NumericLiteral) {
-                            const literal = <LiteralExpression>indexedAccess.argumentExpression;
-                            literal.text = internIdentifier(literal.text);
+                    if (token() === SyntaxKind.CloseBracketToken) {
+                        indexedAccess.argumentExpression = createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.An_element_access_expression_should_take_an_argument);
+                    }
+                    else {
+                        const argument = allowInAnd(parseExpression);
+                        if (isStringOrNumericLiteral(argument)) {
+                            argument.text = internIdentifier(argument.text);
                         }
+                        indexedAccess.argumentExpression = argument;
                     }
 
                     parseExpected(SyntaxKind.CloseBracketToken);
@@ -4362,18 +4395,27 @@ namespace ts {
                     continue;
                 }
 
-                if (token() === SyntaxKind.NoSubstitutionTemplateLiteral || token() === SyntaxKind.TemplateHead) {
-                    const tagExpression = <TaggedTemplateExpression>createNode(SyntaxKind.TaggedTemplateExpression, expression.pos);
-                    tagExpression.tag = expression;
-                    tagExpression.template = token() === SyntaxKind.NoSubstitutionTemplateLiteral
-                        ? <NoSubstitutionTemplateLiteral>parseLiteralNode()
-                        : parseTemplateExpression();
-                    expression = finishNode(tagExpression);
+                if (isTemplateStartOfTaggedTemplate()) {
+                    expression = parseTaggedTemplateRest(expression, /*typeArguments*/ undefined);
                     continue;
                 }
 
                 return <MemberExpression>expression;
             }
+        }
+
+        function isTemplateStartOfTaggedTemplate() {
+            return token() === SyntaxKind.NoSubstitutionTemplateLiteral || token() === SyntaxKind.TemplateHead;
+        }
+
+        function parseTaggedTemplateRest(tag: LeftHandSideExpression, typeArguments: NodeArray<TypeNode> | undefined) {
+            const tagExpression = <TaggedTemplateExpression>createNode(SyntaxKind.TaggedTemplateExpression, tag.pos);
+            tagExpression.tag = tag;
+            tagExpression.typeArguments = typeArguments;
+            tagExpression.template = token() === SyntaxKind.NoSubstitutionTemplateLiteral
+                ? <NoSubstitutionTemplateLiteral>parseLiteralNode()
+                : parseTemplateExpression();
+            return finishNode(tagExpression);
         }
 
         function parseCallExpressionRest(expression: LeftHandSideExpression): LeftHandSideExpression {
@@ -4387,6 +4429,11 @@ namespace ts {
                     const typeArguments = tryParse(parseTypeArgumentsInExpression);
                     if (!typeArguments) {
                         return expression;
+                    }
+
+                    if (isTemplateStartOfTaggedTemplate()) {
+                        expression = parseTaggedTemplateRest(expression, typeArguments);
+                        continue;
                     }
 
                     const callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
@@ -4436,8 +4483,10 @@ namespace ts {
         function canFollowTypeArgumentsInExpression(): boolean {
             switch (token()) {
                 case SyntaxKind.OpenParenToken:                 // foo<x>(
-                // this case are the only case where this token can legally follow a type argument
-                // list.  So we definitely want to treat this as a type arg list.
+                case SyntaxKind.NoSubstitutionTemplateLiteral:  // foo<T> `...`
+                case SyntaxKind.TemplateHead:                   // foo<T> `...${100}...`
+                // these are the only tokens can legally follow a type argument
+                // list. So we definitely want to treat them as type arg lists.
 
                 case SyntaxKind.DotToken:                       // foo<x>.
                 case SyntaxKind.CloseParenToken:                // foo<x>)
@@ -4505,7 +4554,7 @@ namespace ts {
                 case SyntaxKind.FunctionKeyword:
                     return parseFunctionExpression();
                 case SyntaxKind.NewKeyword:
-                    return parseNewExpression();
+                    return parseNewExpressionOrNewDotTarget();
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.SlashEqualsToken:
                     if (reScanSlashToken() === SyntaxKind.RegularExpressionLiteral) {
@@ -4656,7 +4705,7 @@ namespace ts {
             return isIdentifier() ? parseIdentifier() : undefined;
         }
 
-        function parseNewExpression(): NewExpression | MetaProperty {
+        function parseNewExpressionOrNewDotTarget(): NewExpression | MetaProperty {
             const fullStart = scanner.getStartPos();
             parseExpected(SyntaxKind.NewKeyword);
             if (parseOptional(SyntaxKind.DotToken)) {
@@ -4666,9 +4715,23 @@ namespace ts {
                 return finishNode(node);
             }
 
+            let expression: MemberExpression = parsePrimaryExpression();
+            let typeArguments;
+            while (true) {
+                expression = parseMemberExpressionRest(expression);
+                typeArguments = tryParse(parseTypeArgumentsInExpression);
+                if (isTemplateStartOfTaggedTemplate()) {
+                    Debug.assert(!!typeArguments,
+                        "Expected a type argument list; all plain tagged template starts should be consumed in 'parseMemberExpressionRest'");
+                    expression = parseTaggedTemplateRest(expression, typeArguments);
+                    typeArguments = undefined;
+                }
+                break;
+            }
+
             const node = <NewExpression>createNode(SyntaxKind.NewExpression, fullStart);
-            node.expression = parseMemberExpressionOrHigher();
-            node.typeArguments = tryParse(parseTypeArgumentsInExpression);
+            node.expression = expression;
+            node.typeArguments = typeArguments;
             if (node.typeArguments || token() === SyntaxKind.OpenParenToken) {
                 node.arguments = parseArgumentList();
             }
@@ -5090,7 +5153,7 @@ namespace ts {
                     return true;
 
                 case SyntaxKind.ImportKeyword:
-                    return isStartOfDeclaration() || lookAhead(nextTokenIsOpenParenOrLessThan);
+                    return isStartOfDeclaration() || lookAhead(nextTokenIsOpenParenOrLessThanOrDot);
 
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.ExportKeyword:
@@ -6076,14 +6139,35 @@ namespace ts {
         }
 
         function setExternalModuleIndicator(sourceFile: SourceFile) {
-            sourceFile.externalModuleIndicator = forEach(sourceFile.statements, node =>
-                hasModifier(node, ModifierFlags.Export)
-                    || node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
-                    || node.kind === SyntaxKind.ImportDeclaration
-                    || node.kind === SyntaxKind.ExportAssignment
-                    || node.kind === SyntaxKind.ExportDeclaration
+            // Try to use the first top-level import/export when available, then
+            // fall back to looking for an 'import.meta' somewhere in the tree if necessary.
+            sourceFile.externalModuleIndicator =
+                    forEach(sourceFile.statements, isAnExternalModuleIndicatorNode) ||
+                    getImportMetaIfNecessary(sourceFile);
+        }
+
+        function isAnExternalModuleIndicatorNode(node: Node) {
+            return hasModifier(node, ModifierFlags.Export)
+                || node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
+                || node.kind === SyntaxKind.ImportDeclaration
+                || node.kind === SyntaxKind.ExportAssignment
+                || node.kind === SyntaxKind.ExportDeclaration
                     ? node
-                    : undefined);
+                    : undefined;
+        }
+
+        function getImportMetaIfNecessary(sourceFile: SourceFile) {
+            return sourceFile.flags & NodeFlags.PossiblyContainsImportMeta ?
+                walkTreeForExternalModuleIndicators(sourceFile) :
+                undefined;
+        }
+
+        function walkTreeForExternalModuleIndicators(node: Node): Node {
+            return isImportMeta(node) ? node : forEachChild(node, walkTreeForExternalModuleIndicators);
+        }
+
+        function isImportMeta(node: Node): boolean {
+            return isMetaProperty(node) && node.keywordToken === SyntaxKind.ImportKeyword && node.name.escapedText === "meta";
         }
 
         const enum ParsingContext {

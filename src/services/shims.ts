@@ -912,7 +912,7 @@ namespace ts {
          * to provide at the given source position and providing a member completion
          * list if requested.
          */
-        public getCompletionsAtPosition(fileName: string, position: number, preferences: UserPreferences | undefined) {
+        public getCompletionsAtPosition(fileName: string, position: number, preferences: GetCompletionsAtPositionOptions | undefined) {
             return this.forwardJSONCall(
                 `getCompletionsAtPosition('${fileName}', ${position}, ${preferences})`,
                 () => this.languageService.getCompletionsAtPosition(fileName, position, preferences)

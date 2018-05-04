@@ -23,6 +23,10 @@
         "category": "Error",
         "code": 1010
     },
+    "An element access expression should take an argument.": {
+        "category": "Error",
+        "code": 1011
+    },
     "Unexpected token.": {
         "category": "Error",
         "code": 1012
@@ -966,6 +970,10 @@
     "Type arguments cannot be used here.": {
         "category": "Error",
         "code": 1342
+    },
+    "The 'import.meta' meta-property is only allowed using 'ESNext' for the 'target' and 'module' compiler options.": {
+        "category": "Error",
+        "code": 1343
     },
 
     "Duplicate identifier '{0}'.": {
@@ -3526,6 +3534,15 @@
         "category": "Message",
         "code": 6194
     },
+    "Resolve 'keyof' to string valued property names only (no numbers or symbols).": {
+        "category": "Message",
+        "code": 6195
+    },
+    "'{0}' is declared but never used.": {
+        "category": "Error",
+        "code": 6196,
+        "reportsUnnecessary": true
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -3885,6 +3902,10 @@
         "category": "Suggestion",
         "code": 80004
     },
+    "'require' call may be converted to an import.": {
+        "category": "Suggestion",
+        "code": 80005
+    },
 
     "Add missing 'super()' call": {
         "category": "Message",
@@ -3914,7 +3935,7 @@
         "category": "Message",
         "code": 90007
     },
-    "Add 'this.' to unresolved variable": {
+    "Add '{0}.' to unresolved variable": {
         "category": "Message",
         "code": 90008
     },
@@ -4122,7 +4143,7 @@
         "category": "Message",
         "code": 95036
     },
-    "Add 'this.' to all unresolved variables matching a member name": {
+    "Add qualifier to all unresolved variables matching a member name": {
         "category": "Message",
         "code": 95037
     },
@@ -4161,5 +4182,13 @@
     "Generate 'get' and 'set' accessors": {
         "category": "Message",
         "code": 95046
+    },
+    "Convert 'require' to 'import'": {
+        "category": "Message",
+        "code": 95047
+    },
+    "Convert all 'require' to 'import'": {
+        "category": "Message",
+        "code": 95048
     }
 }

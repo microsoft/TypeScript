@@ -118,6 +118,7 @@ namespace ts {
         let thisParentContainer: Node; // Container one level up
         let blockScopeContainer: Node;
         let lastContainer: Node;
+        let delayedTypedefs: { typedef: JSDocTypedefTag, container: Node, lastContainer: Node, blockScopeContainer: Node, parent: Node }[];
         let seenThisKeyword: boolean;
 
         // state used by control flow analysis
@@ -176,6 +177,7 @@ namespace ts {
                 bind(file);
                 file.symbolCount = symbolCount;
                 file.classifiableNames = classifiableNames;
+                delayedBindJSDocTypedefTag();
             }
 
             file = undefined;
@@ -186,6 +188,7 @@ namespace ts {
             thisParentContainer = undefined;
             blockScopeContainer = undefined;
             lastContainer = undefined;
+            delayedTypedefs = undefined;
             seenThisKeyword = false;
             currentFlow = undefined;
             currentBreakTarget = undefined;
@@ -450,8 +453,7 @@ namespace ts {
                 //       and this case is specially handled. Module augmentations should only be merged with original module definition
                 //       and should never be merged directly with other augmentation, and the latter case would be possible if automatic merge is allowed.
                 if (node.kind === SyntaxKind.JSDocTypedefTag) Debug.assert(isInJavaScriptFile(node)); // We shouldn't add symbols for JSDoc nodes if not in a JS file.
-                const isJSDocTypedefInJSDocNamespace = isJSDocTypedefTag(node) && node.name && node.name.kind === SyntaxKind.Identifier && node.name.isInJSDocNamespace;
-                if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) || isJSDocTypedefInJSDocNamespace) {
+                if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) || isJSDocTypedefTag(node)) {
                     if (hasModifier(node, ModifierFlags.Default) && !getDeclarationName(node)) {
                         return declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes); // No local symbol for an unnamed default!
                     }
@@ -516,8 +518,9 @@ namespace ts {
                 const saveReturnTarget = currentReturnTarget;
                 const saveActiveLabels = activeLabels;
                 const saveHasExplicitReturn = hasExplicitReturn;
-                const isIIFE = containerFlags & ContainerFlags.IsFunctionExpression && !hasModifier(node, ModifierFlags.Async) && !!getImmediatelyInvokedFunctionExpression(node);
-                // A non-async IIFE is considered part of the containing control flow. Return statements behave
+                const isIIFE = containerFlags & ContainerFlags.IsFunctionExpression && !hasModifier(node, ModifierFlags.Async) &&
+                    !(<FunctionLikeDeclaration>node).asteriskToken && !!getImmediatelyInvokedFunctionExpression(node);
+                // A non-async, non-generator IIFE is considered part of the containing control flow. Return statements behave
                 // similarly to break statements that exit to a label just past the statement body.
                 if (!isIIFE) {
                     currentFlow = { flags: FlowFlags.Start };
@@ -1726,7 +1729,7 @@ namespace ts {
                     declareModuleMember(node, symbolFlags, symbolExcludes);
                     break;
                 case SyntaxKind.SourceFile:
-                    if (isExternalModule(<SourceFile>container)) {
+                    if (isExternalOrCommonJsModule(<SourceFile>container)) {
                         declareModuleMember(node, symbolFlags, symbolExcludes);
                         break;
                     }
@@ -1742,6 +1745,24 @@ namespace ts {
 
         function bindBlockScopedVariableDeclaration(node: Declaration) {
             bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
+        }
+
+        function delayedBindJSDocTypedefTag() {
+            if (!delayedTypedefs) {
+                return;
+            }
+            const saveContainer = container;
+            const saveLastContainer = lastContainer;
+            const saveBlockScopeContainer = blockScopeContainer;
+            const saveParent = parent;
+            for (const delay of delayedTypedefs) {
+                ({ container, lastContainer, blockScopeContainer, parent } = delay);
+                bindBlockScopedDeclaration(delay.typedef, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+            }
+            container = saveContainer;
+            lastContainer = saveLastContainer;
+            blockScopeContainer = saveBlockScopeContainer;
+            parent = saveParent;
         }
 
         // The binder visits every node in the syntax tree so it is a convenient place to perform a single localized
@@ -2193,7 +2214,7 @@ namespace ts {
                 case SyntaxKind.JSDocTypedefTag: {
                     const { fullName } = node as JSDocTypedefTag;
                     if (!fullName || fullName.kind === SyntaxKind.Identifier) {
-                        return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                        (delayedTypedefs || (delayedTypedefs = [])).push({ typedef: node as JSDocTypedefTag, container, lastContainer, blockScopeContainer, parent });
                     }
                     break;
                 }
@@ -2219,14 +2240,14 @@ namespace ts {
             bindAnonymousDeclaration(file, SymbolFlags.ValueModule, `"${removeFileExtension(file.fileName)}"` as __String);
         }
 
-        function bindExportAssignment(node: ExportAssignment | BinaryExpression) {
+        function bindExportAssignment(node: ExportAssignment) {
             if (!container.symbol || !container.symbol.exports) {
                 // Export assignment in some sort of block construct
                 bindAnonymousDeclaration(node, SymbolFlags.Alias, getDeclarationName(node));
             }
             else {
                 const flags = node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(node)
-                    // An export default clause with an EntityNameExpression exports all meanings of that identifier
+                    // An export default clause with an EntityNameExpression or a class expression exports all meanings of that identifier or expression;
                     ? SymbolFlags.Alias
                     // An export default clause with any other expression exports a value
                     : SymbolFlags.Property;
@@ -2303,7 +2324,10 @@ namespace ts {
                 return s;
             });
             if (symbol) {
-                declareSymbol(symbol.exports, symbol, lhs, SymbolFlags.Property | SymbolFlags.ExportValue, SymbolFlags.None);
+                const flags = isClassExpression(node.right) ?
+                    SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.Class :
+                    SymbolFlags.Property | SymbolFlags.ExportValue;
+                declareSymbol(symbol.exports, symbol, lhs, flags, SymbolFlags.None);
             }
         }
 
@@ -2321,7 +2345,10 @@ namespace ts {
 
             // 'module.exports = expr' assignment
             setCommonJsModuleIndicator(node);
-            declareSymbol(file.symbol.exports, file.symbol, node, SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.ValueModule, SymbolFlags.None);
+            const flags = exportAssignmentIsAlias(node)
+                ? SymbolFlags.Alias // An export= with an EntityNameExpression or a ClassExpression exports all meanings of that identifier or class
+                : SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.ValueModule;
+            declareSymbol(file.symbol.exports, file.symbol, node, flags, SymbolFlags.None);
         }
 
         function bindThisPropertyAssignment(node: BinaryExpression | PropertyAccessExpression) {
@@ -2994,7 +3021,7 @@ namespace ts {
             // A ClassDeclaration is ES6 syntax.
             transformFlags = subtreeFlags | TransformFlags.AssertES2015;
 
-            // A class with a parameter property assignment, property initializer, or decorator is
+            // A class with a parameter property assignment, property initializer, computed property name, or decorator is
             // TypeScript syntax.
             // An exported declaration may be TypeScript syntax, but is handled by the visitor
             // for a namespace declaration.
@@ -3164,9 +3191,9 @@ namespace ts {
         // A PropertyDeclaration is TypeScript syntax.
         let transformFlags = subtreeFlags | TransformFlags.AssertTypeScript;
 
-        // If the PropertyDeclaration has an initializer, we need to inform its ancestor
+        // If the PropertyDeclaration has an initializer or a computed name, we need to inform its ancestor
         // so that it handle the transformation.
-        if (node.initializer) {
+        if (node.initializer || isComputedPropertyName(node.name)) {
             transformFlags |= TransformFlags.ContainsPropertyInitializer;
         }
 

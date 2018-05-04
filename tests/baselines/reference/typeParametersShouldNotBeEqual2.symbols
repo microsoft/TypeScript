@@ -2,9 +2,9 @@
 function ff<T extends Date, U extends Date, V>(x: T, y: U, z: V) {
 >ff : Symbol(ff, Decl(typeParametersShouldNotBeEqual2.ts, 0, 0))
 >T : Symbol(T, Decl(typeParametersShouldNotBeEqual2.ts, 0, 12))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >U : Symbol(U, Decl(typeParametersShouldNotBeEqual2.ts, 0, 27))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >V : Symbol(V, Decl(typeParametersShouldNotBeEqual2.ts, 0, 43))
 >x : Symbol(x, Decl(typeParametersShouldNotBeEqual2.ts, 0, 47))
 >T : Symbol(T, Decl(typeParametersShouldNotBeEqual2.ts, 0, 12))
