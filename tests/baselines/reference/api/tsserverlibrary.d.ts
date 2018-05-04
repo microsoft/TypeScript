@@ -4400,6 +4400,7 @@ declare namespace ts {
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly allowTextChangesInNewFiles?: boolean;
     }
     interface LanguageService {
         cleanupSemanticCache(): void;
