@@ -7861,7 +7861,13 @@ new C();`
                         host.reloadFS(filesAfterCompilation);
                         host.runQueuedTimeoutCallbacks();
 
-                        verifyProjectWithResolvedModule(session);
+                        if (withPathMapping) {
+                            verifyProjectWithResolvedModule(session);
+                        }
+                        else {
+                            // Cannot handle the resolution update
+                            verifyProjectWithUnresolvedModule(session);
+                        }
                     });
 
                     it("when project recompiles after deleting generated folders", () => {
@@ -7878,7 +7884,13 @@ new C();`
                         host.ensureFileOrFolder(recongnizerTextDistTypingFile);
                         host.runQueuedTimeoutCallbacks();
 
-                        verifyProjectWithResolvedModule(session);
+                        if (withPathMapping) {
+                            verifyProjectWithResolvedModule(session);
+                        }
+                        else {
+                            // Cannot handle the resolution update
+                            verifyProjectWithUnresolvedModule(session);
+                        }
                     });
                 });
             }
