@@ -2433,7 +2433,7 @@ namespace ts {
         switch (extension) {
             case Extension.Ts:
             case Extension.Dts:
-            case Extension.Json:
+            case Extension.Json: // Since module is resolved to json file only when --resolveJsonModule, we dont need further check
                 // These are always allowed.
                 return undefined;
             case Extension.Tsx:

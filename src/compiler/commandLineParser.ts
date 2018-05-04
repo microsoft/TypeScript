@@ -1076,6 +1076,8 @@ namespace ts {
 
     /**
      * Convert the json syntax tree into the json value and report errors
+     * This returns the json value (apart from checking errors) only if returnValue provided is true.
+     * Otherwise it just checks the errors and returns undefined
      */
     /*@internal*/
     export function convertToObjectWorker(

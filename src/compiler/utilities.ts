@@ -1076,26 +1076,20 @@ namespace ts {
         });
     }
 
-    export function getTsConfigObjectLiteralExpression(tsConfigSourceFile: TsConfigSourceFile) {
+    export function getTsConfigObjectLiteralExpression(tsConfigSourceFile: TsConfigSourceFile | undefined) {
         if (tsConfigSourceFile && tsConfigSourceFile.statements.length) {
             const expression = tsConfigSourceFile.statements[0].expression;
             return isObjectLiteralExpression(expression) && expression;
         }
     }
 
-    export function getTsConfigPropArrayElementValue(tsConfigSourceFile: TsConfigSourceFile, propKey: string, elementValue: string): StringLiteral {
+    export function getTsConfigPropArrayElementValue(tsConfigSourceFile: TsConfigSourceFile | undefined, propKey: string, elementValue: string): StringLiteral | undefined {
         const jsonObjectLiteral = getTsConfigObjectLiteralExpression(tsConfigSourceFile);
-        if (jsonObjectLiteral) {
-            for (const property of getPropertyAssignment(jsonObjectLiteral, propKey)) {
-                if (isArrayLiteralExpression(property.initializer)) {
-                    for (const element of property.initializer.elements) {
-                        if (isStringLiteral(element) && element.text === elementValue) {
-                            return element;
-                        }
-                    }
-                }
-            }
-        }
+        return jsonObjectLiteral &&
+            firstDefined(getPropertyAssignment(jsonObjectLiteral, propKey), property =>
+                isArrayLiteralExpression(property.initializer) ?
+                    find(property.initializer.elements, (element): element is StringLiteral => isStringLiteral(element) && element.text === elementValue) :
+                    undefined);
     }
 
     export function getContainingFunction(node: Node): SignatureDeclaration {
