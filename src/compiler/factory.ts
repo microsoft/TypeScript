@@ -28,6 +28,8 @@ namespace ts {
             if (isNodeArray(elements)) {
                 return elements;
             }
+            // elements is a ReadonlyArray, so create a fresh array before adding properties.
+            elements = elements.slice();
         }
 
         const array = <NodeArray<T>>elements;
