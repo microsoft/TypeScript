@@ -4472,7 +4472,7 @@ declare namespace ts {
         fileName: string;
     }
     type OrganizeImportsScope = CombinedCodeFixScope;
-    type CompletionsTriggerCharacter = "." | "'" | '"' | "`" | "<";
+    type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<";
     interface GetCompletionsAtPositionOptions extends UserPreferences {
         /** If the editor is asking for completions because a certain character was typed, and not because the user explicitly requested them, this should be set. */
         triggerCharacter?: CompletionsTriggerCharacter;
@@ -6703,6 +6703,7 @@ declare namespace ts.server.protocol {
         command: CommandTypes.Formatonkey;
         arguments: FormatOnKeyRequestArgs;
     }
+    type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<";
     /**
      * Arguments for completions messages.
      */
@@ -6711,7 +6712,7 @@ declare namespace ts.server.protocol {
          * Optional prefix to apply to possible completions.
          */
         prefix?: string;
-        triggerCharacter?: "." | "'" | '"' | "`" | "<";
+        triggerCharacter?: CompletionsTriggerCharacter;
         /**
          * @deprecated Use UserPreferences.includeCompletionsForModuleExports
          */
