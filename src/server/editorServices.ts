@@ -1197,8 +1197,11 @@ namespace ts.server {
             const projectRootPath = this.openFiles.get(info.path);
 
             let searchPath = asNormalizedPath(getDirectoryPath(info.fileName));
+            const isSearchPathInProjectRoot = () => containsPath(projectRootPath, searchPath, this.currentDirectory, !this.host.useCaseSensitiveFileNames);
 
-            while (!projectRootPath || containsPath(projectRootPath, searchPath, this.currentDirectory, !this.host.useCaseSensitiveFileNames)) {
+            // If projectRootPath doesnt contain info.path, then do normal search for config file
+            const anySearchPathOk = !projectRootPath || !isSearchPathInProjectRoot();
+            do {
                 const canonicalSearchPath = normalizedPathToPath(searchPath, this.currentDirectory, this.toCanonicalFileName);
                 const tsconfigFileName = asNormalizedPath(combinePaths(searchPath, "tsconfig.json"));
                 let result = action(tsconfigFileName, combinePaths(canonicalSearchPath, "tsconfig.json"));
@@ -1217,7 +1220,7 @@ namespace ts.server {
                     break;
                 }
                 searchPath = parentPath;
-            }
+            } while (anySearchPathOk || isSearchPathInProjectRoot());
 
             return undefined;
         }
@@ -1235,7 +1238,7 @@ namespace ts.server {
             this.logger.info(`Search path: ${getDirectoryPath(info.fileName)}`);
             const configFileName = this.forEachConfigFileLocation(info,
                 (configFileName, canonicalConfigFilePath) =>
-                    this.configFileExists(configFileName, canonicalConfigFilePath, info),
+                    this.configFileExists(configFileName, canonicalConfigFilePath, info)
             );
             if (configFileName) {
                 this.logger.info(`For info: ${info.fileName} :: Config file name: ${configFileName}`);
