@@ -1773,7 +1773,7 @@ namespace ts.server.protocol {
          * Optional prefix to apply to possible completions.
          */
         prefix?: string;
-        triggerCharacter?: "." | "'" | '"' | "`" | "<";
+        triggerCharacter?: "." | '"' | "'" | "`" | "/" | "@" | "<";
         /**
          * @deprecated Use UserPreferences.includeCompletionsForModuleExports
          */
