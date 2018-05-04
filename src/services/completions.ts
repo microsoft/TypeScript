@@ -25,7 +25,7 @@ namespace ts.Completions {
 
     const enum GlobalsSearch { Continue, Success, Fail }
 
-    export function getCompletionsAtPosition(host: LanguageServiceHost, program: Program, log: Log, sourceFile: SourceFile, position: number, preferences: UserPreferences, triggerCharacter: string | undefined): CompletionInfo | undefined {
+    export function getCompletionsAtPosition(host: LanguageServiceHost, program: Program, log: Log, sourceFile: SourceFile, position: number, preferences: UserPreferences, triggerCharacter: CompletionsTriggerCharacter | undefined): CompletionInfo | undefined {
         const typeChecker = program.getTypeChecker();
         const compilerOptions = program.getCompilerOptions();
         if (isInReferenceComment(sourceFile, position)) {
@@ -2208,7 +2208,7 @@ namespace ts.Completions {
         return !!type.getStringIndexType() || !!type.getNumberIndexType();
     }
 
-    function isValidTrigger(sourceFile: SourceFile, triggerCharacter: string, contextToken: Node, position: number): boolean {
+    function isValidTrigger(sourceFile: SourceFile, triggerCharacter: CompletionsTriggerCharacter, contextToken: Node, position: number): boolean {
         switch (triggerCharacter) {
             case ".":
                 return true;
@@ -2221,7 +2221,7 @@ namespace ts.Completions {
                 // Opening JSX tag
                 return contextToken.kind === SyntaxKind.LessThanToken && contextToken.parent.kind !== SyntaxKind.BinaryExpression;
             default:
-                return Debug.fail(triggerCharacter);
+                return Debug.assertNever(triggerCharacter);
         }
     }
 
