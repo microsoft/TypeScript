@@ -845,6 +845,10 @@ namespace ts {
         exclamationToken?: ExclamationToken;  // Optional definite assignment assertion
         type?: TypeNode;                      // Optional type annotation
         initializer?: Expression;             // Optional initializer
+        /** @internal */
+        resolvedValue?: Expression;
+        /** @internal */
+        couldResolved?: boolean;
     }
 
     export interface VariableDeclarationList extends Node {
@@ -4256,6 +4260,7 @@ namespace ts {
         /*@internal*/ version?: boolean;
         /*@internal*/ watch?: boolean;
         esModuleInterop?: boolean;
+        inlineConst?: boolean;
 
         [option: string]: CompilerOptionsValue | JsonSourceFile | undefined;
     }

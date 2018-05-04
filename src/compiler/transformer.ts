@@ -26,11 +26,16 @@ namespace ts {
 
     export function getTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers) {
         const jsx = compilerOptions.jsx;
+        const inlineConst = compilerOptions.inlineConst;
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
         const transformers: TransformerFactory<SourceFile>[] = [];
 
         addRange(transformers, customTransformers && customTransformers.before);
+
+        if (inlineConst) {
+            transformers.push(transformInlineConst);
+        }
 
         transformers.push(transformTypeScript);
 

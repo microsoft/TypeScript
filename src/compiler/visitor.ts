@@ -936,6 +936,7 @@ namespace ts {
     }
 }
 
+
 /* @internal */
 namespace ts {
     function reduceNode<T>(node: Node, f: (memo: T, node: Node) => T, initial: T) {

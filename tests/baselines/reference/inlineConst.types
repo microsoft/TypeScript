@@ -1,0 +1,279 @@
+=== tests/cases/conformance/inlineConst/inlineConst.ts ===
+declare function output(x: any, y?: any)
+>output : (x: any, y?: any) => any
+>x : any
+>y : any
+
+declare function bazz()
+>bazz : () => any
+
+declare function bazzz()
+>bazzz : () => any
+
+const a = 1 + 2;
+>a : number
+>1 + 2 : number
+>1 : 1
+>2 : 2
+
+const foo = {
+>foo : { a: number; }
+>{    a: 123} : { a: number; }
+
+    a: 123
+>a : number
+>123 : 123
+}
+const bar = {
+>bar : { a: number; }
+>{    a} : { a: number; }
+
+    a
+>a : number
+}
+class Foo {
+>Foo : Foo
+
+    a = 456
+>a : number
+>456 : 456
+}
+class Bar {
+>Bar : Bar
+
+    get a() { return 1 }
+>a : number
+>1 : 1
+
+    set a(v) { }
+>a : number
+>v : number
+}
+class Baz {
+>Baz : Baz
+
+    _a: number = 1
+>_a : number
+>1 : 1
+
+    get [a]() { return a }
+>[a] : number
+>a : number
+>a : number
+
+    set [a](a) { this._a = a }
+>[a] : any
+>a : number
+>a : any
+>this._a = a : any
+>this._a : number
+>this : this
+>_a : number
+>a : any
+}
+
+if (a) { }
+>a : number
+
+if (a === 2) { }
+>a === 2 : boolean
+>a : number
+>2 : 2
+
+const b = a + 1
+>b : number
+>a + 1 : number
+>a : number
+>1 : 1
+
+if (b) { }
+>b : number
+
+const c = a + b
+>c : number
+>a + b : number
+>a : number
+>b : number
+
+if (c) { }
+>c : number
+
+if (foo.a) {
+>foo.a : number
+>foo : { a: number; }
+>a : number
+
+    a.toString()
+>a.toString() : string
+>a.toString : (radix?: number) => string
+>a : number
+>toString : (radix?: number) => string
+}
+if (foo[a]) {
+>foo[a] : any
+>foo : { a: number; }
+>a : number
+
+    a['toString']()
+>a['toString']() : string
+>a['toString'] : (radix?: number) => string
+>a : number
+>'toString' : "toString"
+}
+for (let i = 0; i < 10; ++i) {
+>i : number
+>0 : 0
+>i < 10 : boolean
+>i : number
+>10 : 10
+>++i : number
+>i : number
+
+    output(i)
+>output(i) : any
+>output : (x: any, y?: any) => any
+>i : number
+}
+output(+a)
+>output(+a) : any
+>output : (x: any, y?: any) => any
+>+a : number
+>a : number
+
+output(-a)
+>output(-a) : any
+>output : (x: any, y?: any) => any
+>-a : number
+>a : number
+
+output(~a)
+>output(~a) : any
+>output : (x: any, y?: any) => any
+>~a : number
+>a : number
+
+output(a < b)
+>output(a < b) : any
+>output : (x: any, y?: any) => any
+>a < b : boolean
+>a : number
+>b : number
+
+output(a > b)
+>output(a > b) : any
+>output : (x: any, y?: any) => any
+>a > b : boolean
+>a : number
+>b : number
+
+output(a <= b)
+>output(a <= b) : any
+>output : (x: any, y?: any) => any
+>a <= b : boolean
+>a : number
+>b : number
+
+output(a >= b)
+>output(a >= b) : any
+>output : (x: any, y?: any) => any
+>a >= b : boolean
+>a : number
+>b : number
+
+output(a == b)
+>output(a == b) : any
+>output : (x: any, y?: any) => any
+>a == b : boolean
+>a : number
+>b : number
+
+output(a != b)
+>output(a != b) : any
+>output : (x: any, y?: any) => any
+>a != b : boolean
+>a : number
+>b : number
+
+output(a === b)
+>output(a === b) : any
+>output : (x: any, y?: any) => any
+>a === b : boolean
+>a : number
+>b : number
+
+const f = a, g = bazz
+>f : number
+>a : number
+>g : () => any
+>bazz : () => any
+
+if (f) { }
+>f : number
+
+if (g) { }
+>g : () => any
+
+const h = (bazz() || bazzz())
+>h : any
+>(bazz() || bazzz()) : any
+>bazz() || bazzz() : any
+>bazz() : any
+>bazz : () => any
+>bazzz() : any
+>bazzz : () => any
+
+const i = "test"
+>i : "test"
+>"test" : "test"
+
+output(i, i.length)
+>output(i, i.length) : any
+>output : (x: any, y?: any) => any
+>i : "test"
+>i.length : number
+>i : "test"
+>length : number
+
+const args: string[] = []
+>args : string[]
+>[] : undefined[]
+
+const configPath = args.forEach(arg => arg.lastIndexOf(i, 0) === 0 && arg.substr(i.length))
+>configPath : void
+>args.forEach(arg => arg.lastIndexOf(i, 0) === 0 && arg.substr(i.length)) : void
+>args.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>args : string[]
+>forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>arg => arg.lastIndexOf(i, 0) === 0 && arg.substr(i.length) : (arg: string) => string
+>arg : string
+>arg.lastIndexOf(i, 0) === 0 && arg.substr(i.length) : string
+>arg.lastIndexOf(i, 0) === 0 : boolean
+>arg.lastIndexOf(i, 0) : number
+>arg.lastIndexOf : (searchString: string, position?: number) => number
+>arg : string
+>lastIndexOf : (searchString: string, position?: number) => number
+>i : "test"
+>0 : 0
+>0 : 0
+>arg.substr(i.length) : string
+>arg.substr : (from: number, length?: number) => string
+>arg : string
+>substr : (from: number, length?: number) => string
+>i.length : number
+>i : "test"
+>length : number
+
+const j = "123" + "456"
+>j : string
+>"123" + "456" : string
+>"123" : "123"
+>"456" : "456"
+
+if (j === "123456") { }
+>j === "123456" : boolean
+>j : string
+>"123456" : "123456"
+
+if (j) { }
+>j : string
+
