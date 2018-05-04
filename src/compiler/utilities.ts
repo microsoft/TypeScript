@@ -6,13 +6,6 @@ namespace ts {
 
     export const externalHelpersModuleNameText = "tslib";
 
-    export interface ReferencePathMatchResult {
-        fileReference?: FileReference;
-        diagnosticMessage?: DiagnosticMessage;
-        isNoDefaultLib?: boolean;
-        isTypeReferenceDirective?: boolean;
-    }
-
     export function getDeclarationOfKind<T extends Declaration>(symbol: Symbol, kind: T["kind"]): T {
         const declarations = symbol.declarations;
         if (declarations) {
