@@ -3547,7 +3547,7 @@
         "code": 6196,
         "reportsUnnecessary": true
     },
-    "Resolve module name imported with '.json' extension to the json source file.": {
+    "Include modules imported with '.json' extension": {
         "category": "Message",
         "code": 6197
     },

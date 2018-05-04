@@ -505,7 +505,7 @@ namespace ts {
             name: "resolveJsonModule",
             type: "boolean",
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Resolve_module_name_imported_with_json_extension_to_the_json_source_file
+            description: Diagnostics.Include_modules_imported_with_json_extension
         },
         {
             name: "listFiles",
