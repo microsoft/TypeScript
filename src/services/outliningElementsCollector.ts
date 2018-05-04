@@ -33,8 +33,16 @@ namespace ts.OutliningElementsCollector {
             // Add outlining spans for comments if they exist
             addOutliningForLeadingCommentsForNode(node, sourceFile, cancellationToken, out);
             // Add outlining spans for the import statement itself if applicable
-            const span = getOutliningSpanForNode(node, sourceFile);
-            if (span) out.push(span);
+            if (isImportDeclaration(node) && node.importClause && node.importClause.namedBindings &&
+                node.importClause.namedBindings.kind !== SyntaxKind.NamespaceImport && node.importClause.namedBindings.elements.length) {
+                const openToken = findChildOfKind(node.importClause.namedBindings, SyntaxKind.OpenBraceToken, sourceFile);
+                const closeToken = findChildOfKind(node.importClause.namedBindings, SyntaxKind.CloseBraceToken, sourceFile);
+                if (openToken && closeToken) {
+                    out.push(createOutliningSpan(
+                        createTextSpanFromBounds(openToken.getStart(sourceFile), closeToken.getEnd()),
+                        OutliningSpanKind.Import, createTextSpanFromNode(node, sourceFile)));
+                }
+            }
         }
 
         function visitNonImportNode(n: Node) {
@@ -177,10 +185,7 @@ namespace ts.OutliningElementsCollector {
                 return spanForObjectOrArrayLiteral(n);
             case SyntaxKind.ArrayLiteralExpression:
                 return spanForObjectOrArrayLiteral(n, SyntaxKind.OpenBracketToken);
-            case SyntaxKind.ImportDeclaration:
-                const importClause = (n as ImportDeclaration).importClause;
-                return importClause && importClause.namedBindings && importClause.namedBindings.kind !== SyntaxKind.NamespaceImport ? spanForNode(importClause.namedBindings) : undefined;
-        }
+            }
 
         function spanForObjectOrArrayLiteral(node: Node, open: SyntaxKind.OpenBraceToken | SyntaxKind.OpenBracketToken = SyntaxKind.OpenBraceToken): OutliningSpan | undefined {
             // If the block has no leading keywords and is inside an array literal,
