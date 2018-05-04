@@ -3,6 +3,7 @@
     "rulesDirectory": "built/local/tslint/rules",
     "rules": {
         "no-unnecessary-type-assertion-2": true,
+        "empty-array": true,
 
         "array-type": [true, "array"],
         "ban-types": {

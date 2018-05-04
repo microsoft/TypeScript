@@ -1031,7 +1031,7 @@ namespace ts.projectSystem {
         });
 
         it("cached unresolved typings are not recomputed if program structure did not change", () => {
-            const host = createServerHost([]);
+            const host = createServerHost(emptyArray);
             const session = createSession(host);
             const f = {
                 path: "/a/app.js",
@@ -1356,7 +1356,7 @@ namespace ts.projectSystem {
             const host = createServerHost([app, a, b]);
             const cache = createMap<JsTyping.CachedTyping>();
             const logger = trackingLogger();
-            const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(<Path>app.path), emptySafeList, cache, { enable: true }, /*unresolvedImports*/ [], emptyMap);
+            const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(<Path>app.path), emptySafeList, cache, { enable: true }, /*unresolvedImports*/ emptyArray, emptyMap);
             assert.deepEqual(logger.finish(), [
                 'Searching for typing names in /node_modules; all files: ["/node_modules/a/package.json"]',
                 '    Found package names: ["a"]',

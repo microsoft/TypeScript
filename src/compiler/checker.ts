@@ -680,7 +680,7 @@ namespace ts {
                 buildDisplayForParametersAndDelimiters(thisParameter, parameters, writer, enclosing?, originalFlags?) {
                     const printer = createPrinter({ removeComments: true });
                     const flags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | toNodeBuilderFlags(originalFlags);
-                    const thisParameterArray = thisParameter ? [nodeBuilder.symbolToParameterDeclaration(thisParameter, enclosing, flags)] : [];
+                    const thisParameterArray = thisParameter ? [nodeBuilder.symbolToParameterDeclaration(thisParameter, enclosing, flags)] : emptyArray;
                     const params = createNodeArray([...thisParameterArray, ...map(parameters, param => nodeBuilder.symbolToParameterDeclaration(param, enclosing, flags))]);
                     printer.writeList(ListFormat.CallExpressionArguments, params, getSourceFileOfNode(getParseTreeNode(enclosing)), emitTextWriterWrapper(writer));
                 },
@@ -3310,7 +3310,7 @@ namespace ts {
                             }
                         }
                         if (context.encounteredError || (context.flags & NodeBuilderFlags.AllowEmptyTuple)) {
-                            return createTupleTypeNode([]);
+                            return createTupleTypeNode(emptyArray);
                         }
                         context.encounteredError = true;
                         return undefined;
@@ -9257,7 +9257,7 @@ namespace ts {
                     const item = items[i];
                     const mapped = instantiator(item, mapper);
                     if (item !== mapped) {
-                        const result = i === 0 ? [] : items.slice(0, i);
+                        const result: T[] = i === 0 ? [] : items.slice(0, i);
                         result.push(mapped);
                         for (i++; i < items.length; i++) {
                             result.push(instantiator(items[i], mapper));

@@ -1160,7 +1160,7 @@ namespace ts {
                                 )
                             ),
                             /*typeArguments*/ undefined,
-                            []
+                            emptyArray
                         ),
                         node
                     ),
@@ -2146,7 +2146,7 @@ namespace ts {
             exception.catchVariable = name;
             exception.catchLabel = catchLabel;
 
-            emitAssignment(name, createCall(createPropertyAccess(state, "sent"), /*typeArguments*/ undefined, []));
+            emitAssignment(name, createCall(createPropertyAccess(state, "sent"), /*typeArguments*/ undefined, emptyArray));
             emitNop();
         }
 
@@ -2481,7 +2481,7 @@ namespace ts {
                 createCall(
                     createPropertyAccess(state, "sent"),
                     /*typeArguments*/ undefined,
-                    []
+                    emptyArray
                 ),
                 location
             );
@@ -2812,7 +2812,7 @@ namespace ts {
             clauses.push(
                 createCaseClause(
                     createLiteral(labelNumber),
-                    statements || []
+                    statements || emptyArray
                 )
             );
 

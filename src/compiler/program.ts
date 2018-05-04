@@ -1245,7 +1245,7 @@ namespace ts {
         }
 
         function emitWorker(program: Program, sourceFile: SourceFile, writeFileCallback: WriteFileCallback, cancellationToken: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
-            let declarationDiagnostics: ReadonlyArray<Diagnostic> = [];
+            let declarationDiagnostics: ReadonlyArray<Diagnostic> = emptyArray;
 
             if (!emitOnlyDtsFiles) {
                 if (options.noEmit) {
@@ -1290,7 +1290,7 @@ namespace ts {
 
             performance.mark("beforeEmit");
 
-            const transformers = emitOnlyDtsFiles ? [] : getTransformers(options, customTransformers);
+            const transformers = emitOnlyDtsFiles ? emptyArray : getTransformers(options, customTransformers);
             const emitResult = emitFiles(
                 emitResolver,
                 getEmitHost(writeFileCallback),
@@ -1931,7 +1931,7 @@ namespace ts {
             if (refFile) {
                 const redirect = getProjectReferenceRedirect(fileName);
                 if (redirect) {
-                    ((refFile.redirectedReferences || (refFile.redirectedReferences = [])) as string[]).push(fileName);
+                    ((refFile.redirectedReferences || (refFile.redirectedReferences = [] as string[])) as string[]).push(fileName);
                     fileName = redirect;
                     // Once we start redirecting to a file, we can potentially come back to it
                     // via a back-reference from another file in the .d.ts folder. If that happens we'll

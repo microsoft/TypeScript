@@ -691,7 +691,7 @@ namespace FourSlash {
             let testName: string;
 
             if (!defs || ts.isArray(defs)) {
-                definitions = defs as ts.DefinitionInfo[] || [];
+                definitions = defs as ts.DefinitionInfo[] || ts.emptyArray;
                 testName = "goToDefinitions";
             }
             else {
@@ -2957,7 +2957,7 @@ Actual: ${stringify(fullActual)}`);
             for (const fileName of fileNames) {
                 const expectedRangesInFile = expectedRanges.filter(r => ts.normalizePath(r.fileName) === fileName);
                 const highlights = ts.find(documentHighlights, dh => dh.fileName === fileName);
-                const spansInFile = highlights ? highlights.highlightSpans.sort((s1, s2) => s1.textSpan.start - s2.textSpan.start) : [];
+                const spansInFile = highlights ? highlights.highlightSpans.sort((s1, s2) => s1.textSpan.start - s2.textSpan.start) : ts.emptyArray;
 
                 if (expectedRangesInFile.length !== spansInFile.length) {
                     this.raiseError(`verifyDocumentHighlights failed - In ${fileName}, expected ${expectedRangesInFile.length} highlights, got ${spansInFile.length}`);

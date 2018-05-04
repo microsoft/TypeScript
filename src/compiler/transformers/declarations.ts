@@ -152,27 +152,28 @@ namespace ts {
                             needsDeclare = false;
                             const statements = visitNodes(sourceFile.statements, visitDeclarationStatements);
                             const newFile = updateSourceFileNode(sourceFile, [createModuleDeclaration(
-                                [],
+                                emptyArray,
                                 [createModifier(SyntaxKind.DeclareKeyword)],
                                 createLiteral(getResolvedExternalModuleName(context.getEmitHost(), sourceFile)),
                                 createModuleBlock(setTextRange(createNodeArray(filterCandidateImports(statements)), sourceFile.statements))
-                            )], /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false);
+                            )], /*isDeclarationFile*/ true, /*referencedFiles*/ emptyArray, /*typeReferences*/ emptyArray, /*hasNoDefaultLib*/ false);
                             return newFile;
                         }
                         needsDeclare = true;
                         const updated = visitNodes(sourceFile.statements, visitDeclarationStatements);
-                        return updateSourceFileNode(sourceFile, filterCandidateImports(updated), /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false);
+                        return updateSourceFileNode(sourceFile, filterCandidateImports(updated), /*isDeclarationFile*/ true, /*referencedFiles*/ emptyArray, /*typeReferences*/ emptyArray, /*hasNoDefaultLib*/ false);
                     }
                 ), mapDefined(node.prepends, prepend => {
                     if (prepend.kind === SyntaxKind.InputFiles) {
                         return createUnparsedSourceFile(prepend.declarationText);
                     }
                 }));
-                bundle.syntheticFileReferences = [];
+                const syntheticFileReferences: FileReference[] = [];
+                bundle.syntheticFileReferences = syntheticFileReferences;
                 bundle.syntheticTypeReferences = getFileReferencesForUsedTypeReferences();
                 bundle.hasNoDefaultLib = hasNoDefaultLib;
                 const outputFilePath = getDirectoryPath(normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath));
-                const referenceVisitor = mapReferencesIntoArray(bundle.syntheticFileReferences as FileReference[], outputFilePath);
+                const referenceVisitor = mapReferencesIntoArray(syntheticFileReferences, outputFilePath);
                 refs.forEach(referenceVisitor);
                 return bundle;
             }
@@ -199,13 +200,13 @@ namespace ts {
             let combinedStatements = setTextRange(createNodeArray(filterCandidateImports(statements)), node.statements);
             const emittedImports = filter(combinedStatements, isAnyImportSyntax);
             if (isExternalModule(node) && (!resultHasExternalModuleIndicator || (needsScopeFixMarker && !resultHasScopeMarker))) {
-                combinedStatements = setTextRange(createNodeArray([...combinedStatements, createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports([]), /*moduleSpecifier*/ undefined)]), combinedStatements);
+                combinedStatements = setTextRange(createNodeArray([...combinedStatements, createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports(emptyArray), /*moduleSpecifier*/ undefined)]), combinedStatements);
             }
             const updated = updateSourceFileNode(node, combinedStatements, /*isDeclarationFile*/ true, references, getFileReferencesForUsedTypeReferences(), node.hasNoDefaultLib);
             return updated;
 
-            function getFileReferencesForUsedTypeReferences() {
-                return necessaryTypeRefernces ? mapDefined(arrayFrom(necessaryTypeRefernces.keys()), getFileReferenceForTypeName) : [];
+            function getFileReferencesForUsedTypeReferences(): ReadonlyArray<FileReference> {
+                return necessaryTypeRefernces ? mapDefined(arrayFrom(necessaryTypeRefernces.keys()), getFileReferenceForTypeName) : emptyArray;
             }
 
             function getFileReferenceForTypeName(typeName: string): FileReference | undefined {
@@ -862,7 +863,7 @@ namespace ts {
                             errorNode: input
                         });
                         const varDecl = createVariableDeclaration(newId, resolver.createTypeOfExpression(input.expression, input, declarationEmitNodeBuilderFlags, symbolTracker), /*initializer*/ undefined);
-                        const statement = createVariableStatement(needsDeclare ? [createModifier(SyntaxKind.DeclareKeyword)] : [], createVariableDeclarationList([varDecl], NodeFlags.Const));
+                        const statement = createVariableStatement(needsDeclare ? [createModifier(SyntaxKind.DeclareKeyword)] : emptyArray, createVariableDeclarationList([varDecl], NodeFlags.Const));
                         return [statement, updateExportAssignment(input, input.decorators, input.modifiers, newId)];
                     }
                 }
@@ -1020,7 +1021,7 @@ namespace ts {
                             typeName: input.name
                         });
                         const varDecl = createVariableDeclaration(newId, resolver.createTypeOfExpression(extendsClause.expression, input, declarationEmitNodeBuilderFlags, symbolTracker), /*initializer*/ undefined);
-                        const statement = createVariableStatement(needsDeclare ? [createModifier(SyntaxKind.DeclareKeyword)] : [], createVariableDeclarationList([varDecl], NodeFlags.Const));
+                        const statement = createVariableStatement(needsDeclare ? [createModifier(SyntaxKind.DeclareKeyword)] : emptyArray, createVariableDeclarationList([varDecl], NodeFlags.Const));
                         const heritageClauses = createNodeArray(map(input.heritageClauses, clause => {
                             if (clause.token === SyntaxKind.ExtendsKeyword) {
                                 const oldDiag = getSymbolAccessibilityDiagnostic;

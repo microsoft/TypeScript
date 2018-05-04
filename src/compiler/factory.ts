@@ -21,14 +21,11 @@ namespace ts {
      * Make `elements` into a `NodeArray<T>`. If `elements` is `undefined`, returns an empty `NodeArray<T>`.
      */
     export function createNodeArray<T extends Node>(elements?: ReadonlyArray<T>, hasTrailingComma?: boolean): NodeArray<T> {
-        if (!elements || elements === emptyArray) {
-            elements = [];
-        }
-        else if (isNodeArray(elements)) {
+        if (elements && isNodeArray(elements)) {
             return elements;
         }
 
-        const array = <NodeArray<T>>elements;
+        const array = !elements || elements === emptyArray ? <NodeArray<T>><any>[] : <NodeArray<T>>elements;
         array.pos = -1;
         array.end = -1;
         array.hasTrailingComma = hasTrailingComma;
@@ -2600,12 +2597,12 @@ namespace ts {
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
-                /*parameters*/ param ? [param] : [],
+                /*parameters*/ param ? [param] : emptyArray,
                 /*type*/ undefined,
                 createBlock(statements, /*multiLine*/ true)
             ),
             /*typeArguments*/ undefined,
-            /*argumentsArray*/ paramValue ? [paramValue] : []
+            /*argumentsArray*/ paramValue ? [paramValue] : emptyArray
         );
     }
 
@@ -2616,13 +2613,13 @@ namespace ts {
             createArrowFunction(
                 /*modifiers*/ undefined,
                 /*typeParameters*/ undefined,
-                /*parameters*/ param ? [param] : [],
+                /*parameters*/ param ? [param] : emptyArray,
                 /*type*/ undefined,
                 /*equalsGreaterThanToken*/ undefined,
                 createBlock(statements, /*multiLine*/ true)
             ),
             /*typeArguments*/ undefined,
-            /*argumentsArray*/ paramValue ? [paramValue] : []
+            /*argumentsArray*/ paramValue ? [paramValue] : emptyArray
         );
     }
 

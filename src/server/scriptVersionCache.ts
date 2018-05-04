@@ -733,7 +733,7 @@ namespace ts.server {
             return childIndex;
         }
 
-        insertAt(child: LineCollection, nodes: LineCollection[]) {
+        insertAt(child: LineCollection, nodes: LineCollection[]): LineNode[] {
             let childIndex = this.findChildIndex(child);
             const clen = this.children.length;
             const nodeCount = nodes.length;

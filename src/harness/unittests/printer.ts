@@ -188,7 +188,7 @@ namespace ts {
                             /*name*/ createIdentifier("method"),
                             /*questionToken*/ createToken(SyntaxKind.QuestionToken),
                             /*typeParameters*/ undefined,
-                            [],
+                            emptyArray,
                             /*type*/ createKeywordTypeNode(SyntaxKind.VoidKeyword),
                             /*body*/ undefined
                         ),
@@ -268,7 +268,7 @@ namespace ts {
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
                             /*dotDotDotToken*/ undefined,
-                            createObjectBindingPattern([])
+                            createObjectBindingPattern(emptyArray)
                         )],
                         createKeywordTypeNode(SyntaxKind.AnyKeyword)
                     ),

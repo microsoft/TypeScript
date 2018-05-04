@@ -57,13 +57,13 @@ namespace ts {
                     "dev/missing.json": JSON.stringify({
                         extends: "./missing2",
                         compilerOptions: {
-                            types: []
+                            types: emptyArray,
                         }
                     }),
                     "dev/failure.json": JSON.stringify({
                         extends: "./failure2.json",
                         compilerOptions: {
-                            typeRoots: []
+                            typeRoots: emptyArray,
                         }
                     }),
                     "dev/failure2.json": JSON.stringify({

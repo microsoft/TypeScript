@@ -214,7 +214,7 @@ describe("core paths", () => {
         assert.deepEqual(ts.getPathComponents("http://server/path"), ["http://server/", "path"]);
     });
     it("reducePathComponents", () => {
-        assert.deepEqual(ts.reducePathComponents([]), []);
+        assert.deepEqual(ts.reducePathComponents(ts.emptyArray), ts.emptyArray);
         assert.deepEqual(ts.reducePathComponents([""]), [""]);
         assert.deepEqual(ts.reducePathComponents(["", "."]), [""]);
         assert.deepEqual(ts.reducePathComponents(["", ".", "a"]), ["", "a"]);

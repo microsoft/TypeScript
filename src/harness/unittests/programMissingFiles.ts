@@ -46,7 +46,7 @@ namespace ts {
         it("handles no missing root files", () => {
             const program = createProgram([emptyFileRelativePath], options, testCompilerHost);
             const missing = program.getMissingFilePaths();
-            verifyMissingFilePaths(missing, []);
+            verifyMissingFilePaths(missing, emptyArray);
         });
 
         it("handles missing root file", () => {

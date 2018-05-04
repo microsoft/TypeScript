@@ -377,7 +377,7 @@ namespace ts {
                         target: "es5",
                         noImplicitAny: false,
                         sourceMap: false,
-                        lib: []
+                        lib: emptyArray,
                     }
                 }, "tsconfig.json",
                 {
@@ -386,9 +386,9 @@ namespace ts {
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
                         sourceMap: false,
-                        lib: []
+                        lib: emptyArray,
                     },
-                    errors: []
+                    errors: emptyArray,
                 }
             );
         });

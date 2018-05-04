@@ -196,7 +196,7 @@ namespace ts.projectSystem {
                     enable: true,
                     enableAutoDiscovery: false,
                     include: ["hunter2", "hunter3"],
-                    exclude: [],
+                    exclude: emptyArray,
                 },
             });
             const et = new TestServerEventManager([jsconfig, file]);

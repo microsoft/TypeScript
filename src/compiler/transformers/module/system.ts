@@ -270,7 +270,7 @@ namespace ts {
                         /*asteriskToken*/ undefined,
                         /*name*/ undefined,
                         /*typeParameters*/ undefined,
-                        /*parameters*/ [],
+                        /*parameters*/ emptyArray,
                         /*type*/ undefined,
                         createBlock(executeStatements, /*multiLine*/ true)
                     )
@@ -415,7 +415,7 @@ namespace ts {
                             createVariableDeclaration(
                                 exports,
                                 /*type*/ undefined,
-                                createObjectLiteral([])
+                                createObjectLiteral(emptyArray)
                             )
                         ])
                     ),
@@ -1499,7 +1499,7 @@ namespace ts {
                     createIdentifier("import")
                 ),
                 /*typeArguments*/ undefined,
-                some(node.arguments) ? [visitNode(node.arguments[0], destructuringAndImportCallVisitor)] : []
+                some(node.arguments) ? [visitNode(node.arguments[0], destructuringAndImportCallVisitor)] : emptyArray
             );
         }
 

@@ -372,10 +372,10 @@ namespace ts {
             const catchVariable = getGeneratedNameForNode(errorRecord);
             const returnMethod = createTempVariable(/*recordTempVariable*/ undefined);
             const callValues = createAsyncValuesHelper(context, expression, /*location*/ node.expression);
-            const callNext = createCall(createPropertyAccess(iterator, "next"), /*typeArguments*/ undefined, []);
+            const callNext = createCall(createPropertyAccess(iterator, "next"), /*typeArguments*/ undefined, emptyArray);
             const getDone = createPropertyAccess(result, "done");
             const getValue = createPropertyAccess(result, "value");
-            const callReturn = createFunctionCall(returnMethod, iterator, []);
+            const callReturn = createFunctionCall(returnMethod, iterator, emptyArray);
 
             hoistVariableDeclaration(errorRecord);
             hoistVariableDeclaration(returnMethod);
@@ -634,7 +634,7 @@ namespace ts {
                             createToken(SyntaxKind.AsteriskToken),
                             node.name && getGeneratedNameForNode(node.name),
                             /*typeParameters*/ undefined,
-                            /*parameters*/ [],
+                            /*parameters*/ emptyArray,
                             /*type*/ undefined,
                             updateBlock(
                                 node.body,

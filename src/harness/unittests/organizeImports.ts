@@ -32,7 +32,7 @@ namespace ts {
 
         describe("Coalesce imports", () => {
             it("No imports", () => {
-                assert.isEmpty(OrganizeImports.coalesceImports([]));
+                assert.isEmpty(OrganizeImports.coalesceImports(emptyArray));
             });
 
             it("Sort specifiers", () => {
