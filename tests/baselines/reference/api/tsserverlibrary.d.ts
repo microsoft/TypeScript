@@ -4872,6 +4872,15 @@ declare namespace ts {
          * the 'Collapse to Definitions' command is invoked.
          */
         autoCollapse: boolean;
+        /**
+         * Classification of the contents of the span
+         */
+        kind: OutliningSpanKind;
+    }
+    enum OutliningSpanKind {
+        Comment = "comment",
+        Region = "region",
+        Code = "code"
     }
     enum OutputFileType {
         JavaScript = 0,
@@ -5594,6 +5603,10 @@ declare namespace ts.server.protocol {
          * the 'Collapse to Definitions' command is invoked.
          */
         autoCollapse: boolean;
+        /**
+         * Classification of the contents of the span
+         */
+        kind: OutliningSpanKind;
     }
     /**
      * Response to OutliningSpansRequest request.
