@@ -19,9 +19,9 @@ var enumValue = MyEnumType.foo;
 
 var x = _arr.map(o => MyEnumType[o.key] === enumValue); // these are not same type
 >x : Symbol(x, Decl(enumIndexer.ts, 5, 3))
->_arr.map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>_arr.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >_arr : Symbol(_arr, Decl(enumIndexer.ts, 3, 3))
->map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >o : Symbol(o, Decl(enumIndexer.ts, 5, 17))
 >MyEnumType : Symbol(MyEnumType, Decl(enumIndexer.ts, 0, 0))
 >o.key : Symbol(key, Decl(enumIndexer.ts, 3, 13))

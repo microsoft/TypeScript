@@ -6,7 +6,7 @@ class CDoc {
         function doSomething(a: Function) {
 >doSomething : Symbol(doSomething, Decl(functionExpressionAndLambdaMatchesFunction.ts, 1, 23))
 >a : Symbol(a, Decl(functionExpressionAndLambdaMatchesFunction.ts, 2, 29))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
         }
         doSomething(() => undefined);
 >doSomething : Symbol(doSomething, Decl(functionExpressionAndLambdaMatchesFunction.ts, 1, 23))

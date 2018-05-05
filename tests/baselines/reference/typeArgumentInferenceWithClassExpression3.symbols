@@ -12,8 +12,8 @@ function foo<T>(x = class { prop: T }): T {
 }
 
 foo(class { prop = "hello" }).length;
->foo(class { prop = "hello" }).length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>foo(class { prop = "hello" }).length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >foo : Symbol(foo, Decl(typeArgumentInferenceWithClassExpression3.ts, 0, 0))
 >prop : Symbol((Anonymous class).prop, Decl(typeArgumentInferenceWithClassExpression3.ts, 4, 11))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 

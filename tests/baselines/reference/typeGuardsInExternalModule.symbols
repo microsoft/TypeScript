@@ -14,9 +14,9 @@ if (typeof var1 === "string") {
 
     num = var1.length; // string
 >num : Symbol(num, Decl(typeGuardsInExternalModule.ts, 4, 3))
->var1.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>var1.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >var1 : Symbol(var1, Decl(typeGuardsInExternalModule.ts, 5, 3))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 }
 else {
     num = var1; // number

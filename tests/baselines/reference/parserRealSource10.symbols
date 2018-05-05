@@ -2418,16 +2418,16 @@ module TypeScript {
 >this.hasEmptyFraction : Symbol(NumberLiteralToken.hasEmptyFraction, Decl(parserRealSource10.ts, 366, 42))
 >this : Symbol(NumberLiteralToken, Decl(parserRealSource10.ts, 363, 5))
 >hasEmptyFraction : Symbol(NumberLiteralToken.hasEmptyFraction, Decl(parserRealSource10.ts, 366, 42))
->this.value.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>this.value.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >this.value : Symbol(NumberLiteralToken.value, Decl(parserRealSource10.ts, 366, 21))
 >this : Symbol(NumberLiteralToken, Decl(parserRealSource10.ts, 363, 5))
 >value : Symbol(NumberLiteralToken.value, Decl(parserRealSource10.ts, 366, 21))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
->this.value.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>this.value.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >this.value : Symbol(NumberLiteralToken.value, Decl(parserRealSource10.ts, 366, 21))
 >this : Symbol(NumberLiteralToken, Decl(parserRealSource10.ts, 363, 5))
 >value : Symbol(NumberLiteralToken.value, Decl(parserRealSource10.ts, 366, 21))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
         }
 
         public classification(): TokenClass {

@@ -36,9 +36,9 @@ if (typeof b === 'object') {
 >b : Symbol(b, Decl(nonPrimitiveNarrow.ts, 15, 3))
 
    b.toString(); // ok, object | null
->b.toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>b.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 >b : Symbol(b, Decl(nonPrimitiveNarrow.ts, 15, 3))
->toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 
 } else {
    b.toString(); // error, never

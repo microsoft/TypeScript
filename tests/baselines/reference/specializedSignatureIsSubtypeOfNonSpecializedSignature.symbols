@@ -55,7 +55,7 @@ class C2<T> {
 class C3<T extends String> {
 >C3 : Symbol(C3, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 18, 1))
 >T : Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 20, 9))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     foo(x: 'a');
 >foo : Symbol(C3.foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 20, 28), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 21, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 22, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 23, 14))
@@ -131,7 +131,7 @@ interface I2<T> {
 interface I3<T extends String> {
 >I3 : Symbol(I3, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 43, 1))
 >T : Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 45, 13))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     (x: 'a');
 >x : Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 46, 5))
@@ -236,7 +236,7 @@ var a3: {
     foo<T extends String>(x: T);
 >foo : Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 75, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 76, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 77, 16))
 >T : Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 78, 8))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 78, 26))
 >T : Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 78, 8))
 }

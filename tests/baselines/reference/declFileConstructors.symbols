@@ -32,9 +32,9 @@ export class ConstructorWithRestParamters {
 
         return a + rests.join("");
 >a : Symbol(a, Decl(declFileConstructors_0.ts, 15, 16))
->rests.join : Symbol(Array.join, Decl(lib.d.ts, --, --))
+>rests.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
 >rests : Symbol(rests, Decl(declFileConstructors_0.ts, 15, 26))
->join : Symbol(Array.join, Decl(lib.d.ts, --, --))
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
     }
 }
 
@@ -118,9 +118,9 @@ class GlobalConstructorWithRestParamters {
 
         return a + rests.join("");
 >a : Symbol(a, Decl(declFileConstructors_1.ts, 15, 16))
->rests.join : Symbol(Array.join, Decl(lib.d.ts, --, --))
+>rests.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
 >rests : Symbol(rests, Decl(declFileConstructors_1.ts, 15, 26))
->join : Symbol(Array.join, Decl(lib.d.ts, --, --))
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
     }
 }
 

@@ -25,7 +25,7 @@ var e: { a: number };
 
 var f: Number;
 >f : Symbol(f, Decl(arithmeticOperatorWithInvalidOperands.ts, 9, 3))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 // All of the below should be an error unless otherwise noted
 // operator *

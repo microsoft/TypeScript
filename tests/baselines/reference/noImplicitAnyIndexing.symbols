@@ -81,7 +81,7 @@ var m: MyMap<number> = {
 
     "Okay that's enough for today.": NaN
 >"Okay that's enough for today." : Symbol("Okay that's enough for today.", Decl(noImplicitAnyIndexing.ts, 39, 11))
->NaN : Symbol(NaN, Decl(lib.d.ts, --, --))
+>NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
 
 };
 

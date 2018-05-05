@@ -27,9 +27,9 @@ class B {
 >path : Symbol(path, Decl(autolift3.ts, 13, 39))
 
                         return fso.toString();
->fso.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>fso.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >fso : Symbol(fso, Decl(autolift3.ts, 10, 19))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
                     }
                 }
             })();

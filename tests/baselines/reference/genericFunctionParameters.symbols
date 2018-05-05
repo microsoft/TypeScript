@@ -24,7 +24,7 @@ declare function f3<T>(cb: <S extends Array<S>>(x: S) => T): T;
 >T : Symbol(T, Decl(genericFunctionParameters.ts, 2, 20))
 >cb : Symbol(cb, Decl(genericFunctionParameters.ts, 2, 23))
 >S : Symbol(S, Decl(genericFunctionParameters.ts, 2, 28))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >S : Symbol(S, Decl(genericFunctionParameters.ts, 2, 28))
 >x : Symbol(x, Decl(genericFunctionParameters.ts, 2, 48))
 >S : Symbol(S, Decl(genericFunctionParameters.ts, 2, 28))

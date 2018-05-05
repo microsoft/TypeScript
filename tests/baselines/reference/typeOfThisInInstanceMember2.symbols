@@ -101,9 +101,9 @@ var rs = [r, r2, r3];
 >r3 : Symbol(r3, Decl(typeOfThisInInstanceMember2.ts, 25, 3))
 
 rs.forEach(x => {
->rs.forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
+>rs.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >rs : Symbol(rs, Decl(typeOfThisInInstanceMember2.ts, 27, 3))
->forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(typeOfThisInInstanceMember2.ts, 29, 11))
 
     x.foo;

@@ -7,19 +7,19 @@
 
 type arrayString = Array<String>
 >arrayString : Symbol(arrayString, Decl(destructuringParameterDeclaration4.ts, 0, 0))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 type someArray = Array<String> | number[];
 >someArray : Symbol(someArray, Decl(destructuringParameterDeclaration4.ts, 6, 32))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 type stringOrNumArray = Array<String|Number>;
 >stringOrNumArray : Symbol(stringOrNumArray, Decl(destructuringParameterDeclaration4.ts, 7, 42))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 function a0(...x: [number, number, string]) { }  // Error, rest parameter must be array type
 >a0 : Symbol(a0, Decl(destructuringParameterDeclaration4.ts, 8, 45))
@@ -86,7 +86,7 @@ class C {
 function foo1<T extends Number>(...a: T[]) { }
 >foo1 : Symbol(foo1, Decl(destructuringParameterDeclaration4.ts, 29, 1))
 >T : Symbol(T, Decl(destructuringParameterDeclaration4.ts, 32, 14))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(destructuringParameterDeclaration4.ts, 32, 32))
 >T : Symbol(T, Decl(destructuringParameterDeclaration4.ts, 32, 14))
 

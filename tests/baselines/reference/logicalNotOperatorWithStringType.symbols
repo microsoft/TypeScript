@@ -88,9 +88,9 @@ var ResultIsBoolean11 = !(STRING + STRING);
 
 var ResultIsBoolean12 = !STRING.charAt(0);
 >ResultIsBoolean12 : Symbol(ResultIsBoolean12, Decl(logicalNotOperatorWithStringType.ts, 32, 3))
->STRING.charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>STRING.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >STRING : Symbol(STRING, Decl(logicalNotOperatorWithStringType.ts, 1, 3))
->charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 
 // multiple ! operator
 var ResultIsBoolean13 = !!STRING;

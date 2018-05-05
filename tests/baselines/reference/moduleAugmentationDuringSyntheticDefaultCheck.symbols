@@ -15,7 +15,7 @@ declare namespace moment {
 
   interface Moment extends Object {
 >Moment : Symbol(Moment, Decl(index.d.ts, 1, 26), Decl(idx.ts, 1, 25), Decl(idx.ts, 6, 34), Decl(index.d.ts, 2, 25))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     valueOf(): number;
 >valueOf : Symbol(Moment.valueOf, Decl(index.d.ts, 2, 35))

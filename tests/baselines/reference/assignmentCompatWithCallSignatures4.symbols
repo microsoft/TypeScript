@@ -73,12 +73,12 @@ module Errors {
         var a12: (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
 >a12 : Symbol(a12, Decl(assignmentCompatWithCallSignatures4.ts, 15, 11))
 >x : Symbol(x, Decl(assignmentCompatWithCallSignatures4.ts, 15, 18))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 15))
 >y : Symbol(y, Decl(assignmentCompatWithCallSignatures4.ts, 15, 33))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Derived2 : Symbol(Derived2, Decl(assignmentCompatWithCallSignatures4.ts, 4, 47))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures4.ts, 3, 31))
 
         var a14: {
@@ -266,13 +266,13 @@ module Errors {
         var b12: <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T; 
 >b12 : Symbol(b12, Decl(assignmentCompatWithCallSignatures4.ts, 63, 11))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures4.ts, 63, 18))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Derived2 : Symbol(Derived2, Decl(assignmentCompatWithCallSignatures4.ts, 4, 47))
 >x : Symbol(x, Decl(assignmentCompatWithCallSignatures4.ts, 63, 45))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 15))
 >y : Symbol(y, Decl(assignmentCompatWithCallSignatures4.ts, 63, 60))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures4.ts, 2, 15))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures4.ts, 63, 18))
 

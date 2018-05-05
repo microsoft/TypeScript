@@ -38,7 +38,7 @@ var v4 = {a: true, b: NaN};  // Should shadow global v2 in this module
 >v4 : Symbol(v4, Decl(file4.ts, 4, 3))
 >a : Symbol(a, Decl(file4.ts, 4, 10))
 >b : Symbol(b, Decl(file4.ts, 4, 18))
->NaN : Symbol(NaN, Decl(lib.d.ts, --, --))
+>NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
 
 === tests/cases/conformance/externalModules/file5.ts ===
 var x = v2; // Should be global v2 of type number again

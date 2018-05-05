@@ -3,9 +3,9 @@ var a = [1,2];
 >a : Symbol(a, Decl(extendArray.ts, 0, 3))
 
 a.forEach(function (v,i,a) {});
->a.forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
+>a.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(extendArray.ts, 0, 3))
->forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >v : Symbol(v, Decl(extendArray.ts, 1, 20))
 >i : Symbol(i, Decl(extendArray.ts, 1, 22))
 >a : Symbol(a, Decl(extendArray.ts, 1, 24))
@@ -27,7 +27,7 @@ declare module _Core {
 
 var arr = (<any>Array).prototype;
 >arr : Symbol(arr, Decl(extendArray.ts, 11, 3))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 arr.collect = function (fn) {
 >arr : Symbol(arr, Decl(extendArray.ts, 11, 3))
@@ -53,9 +53,9 @@ arr.collect = function (fn) {
 >j : Symbol(j, Decl(extendArray.ts, 16, 16))
 
             res.push(tmp[j]);
->res.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>res.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >res : Symbol(res, Decl(extendArray.ts, 13, 7))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >tmp : Symbol(tmp, Decl(extendArray.ts, 15, 11))
 >j : Symbol(j, Decl(extendArray.ts, 16, 16))
         }

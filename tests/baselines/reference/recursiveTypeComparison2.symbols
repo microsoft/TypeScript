@@ -82,7 +82,7 @@ declare module Bacon {
         decode(mapping: Object): Property<any>;
 >decode : Symbol(Observable.decode, Decl(recursiveTypeComparison2.ts, 12, 113))
 >mapping : Symbol(mapping, Decl(recursiveTypeComparison2.ts, 13, 15))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Property : Symbol(Property, Decl(recursiveTypeComparison2.ts, 19, 5))
 
         awaiting<U>(other: Observable<U>): Property<boolean>;

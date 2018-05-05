@@ -3,9 +3,9 @@ var a: object;
 >a : Symbol(a, Decl(nonPrimitiveAccessProperty.ts, 0, 3))
 
 a.toString();
->a.toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>a.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(nonPrimitiveAccessProperty.ts, 0, 3))
->toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 
 a.nonExist(); // error
 >a : Symbol(a, Decl(nonPrimitiveAccessProperty.ts, 0, 3))

@@ -163,9 +163,9 @@ var i11Ori21: I11 | I21 = { // Like i1
 
         var z = a.charAt(b);
 >z : Symbol(z, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 45, 11))
->a.charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>a.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 44, 38))
->charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >b : Symbol(b, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 44, 40))
 
         return z;
@@ -185,9 +185,9 @@ var i11Ori21: I11 | I21 = { // Like i2
 
         var z = a.charCodeAt(b);
 >z : Symbol(z, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 51, 11))
->a.charCodeAt : Symbol(String.charCodeAt, Decl(lib.d.ts, --, --))
+>a.charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 50, 38))
->charCodeAt : Symbol(String.charCodeAt, Decl(lib.d.ts, --, --))
+>charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
 >b : Symbol(b, Decl(contextualTypeWithUnionTypeObjectLiteral.ts, 50, 40))
 
         return z;

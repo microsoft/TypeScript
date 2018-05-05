@@ -40,11 +40,11 @@ thing.doSomething((x, y) => x.name.charAt(0));      // x.name should be string, 
 >doSomething : Symbol(MyArrayWrapper.doSomething, Decl(lambdaParamTypes.ts, 1, 36))
 >x : Symbol(x, Decl(lambdaParamTypes.ts, 10, 19))
 >y : Symbol(y, Decl(lambdaParamTypes.ts, 10, 21))
->x.name.charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>x.name.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >x.name : Symbol(name, Decl(lambdaParamTypes.ts, 7, 21))
 >x : Symbol(x, Decl(lambdaParamTypes.ts, 10, 19))
 >name : Symbol(name, Decl(lambdaParamTypes.ts, 7, 21))
->charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 
 thing.doSomething((x, y) => x.id.toExponential(0)); // x.id should be string, so should be OK
 >thing.doSomething : Symbol(MyArrayWrapper.doSomething, Decl(lambdaParamTypes.ts, 1, 36))
@@ -52,11 +52,11 @@ thing.doSomething((x, y) => x.id.toExponential(0)); // x.id should be string, so
 >doSomething : Symbol(MyArrayWrapper.doSomething, Decl(lambdaParamTypes.ts, 1, 36))
 >x : Symbol(x, Decl(lambdaParamTypes.ts, 11, 19))
 >y : Symbol(y, Decl(lambdaParamTypes.ts, 11, 21))
->x.id.toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>x.id.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >x.id : Symbol(id, Decl(lambdaParamTypes.ts, 7, 34))
 >x : Symbol(x, Decl(lambdaParamTypes.ts, 11, 19))
 >id : Symbol(id, Decl(lambdaParamTypes.ts, 7, 34))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
 thing.doSomething((x, y) => y.name.charAt(0));      // x.name should be string, so should be OK
 >thing.doSomething : Symbol(MyArrayWrapper.doSomething, Decl(lambdaParamTypes.ts, 1, 36))
@@ -64,11 +64,11 @@ thing.doSomething((x, y) => y.name.charAt(0));      // x.name should be string, 
 >doSomething : Symbol(MyArrayWrapper.doSomething, Decl(lambdaParamTypes.ts, 1, 36))
 >x : Symbol(x, Decl(lambdaParamTypes.ts, 12, 19))
 >y : Symbol(y, Decl(lambdaParamTypes.ts, 12, 21))
->y.name.charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>y.name.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >y.name : Symbol(name, Decl(lambdaParamTypes.ts, 7, 21))
 >y : Symbol(y, Decl(lambdaParamTypes.ts, 12, 21))
 >name : Symbol(name, Decl(lambdaParamTypes.ts, 7, 21))
->charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 
 thing.doSomething((x, y) => y.id.toExponential(0)); // x.id should be string, so should be OK
 >thing.doSomething : Symbol(MyArrayWrapper.doSomething, Decl(lambdaParamTypes.ts, 1, 36))
@@ -76,11 +76,11 @@ thing.doSomething((x, y) => y.id.toExponential(0)); // x.id should be string, so
 >doSomething : Symbol(MyArrayWrapper.doSomething, Decl(lambdaParamTypes.ts, 1, 36))
 >x : Symbol(x, Decl(lambdaParamTypes.ts, 13, 19))
 >y : Symbol(y, Decl(lambdaParamTypes.ts, 13, 21))
->y.id.toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>y.id.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >y.id : Symbol(id, Decl(lambdaParamTypes.ts, 7, 34))
 >y : Symbol(y, Decl(lambdaParamTypes.ts, 13, 21))
 >id : Symbol(id, Decl(lambdaParamTypes.ts, 7, 34))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
 // Below should all be in error
 thing.doSomething((x, y) => x.foo); // no such property on x

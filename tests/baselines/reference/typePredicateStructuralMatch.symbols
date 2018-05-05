@@ -35,9 +35,9 @@ function isResponseInData<T>(value: T | { data: T}): value is { data: T } {
 >T : Symbol(T, Decl(typePredicateStructuralMatch.ts, 11, 26))
 
     return value.hasOwnProperty('data');
->value.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.d.ts, --, --))
+>value.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(typePredicateStructuralMatch.ts, 11, 29))
->hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.d.ts, --, --))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
 }
 
 function getResults1(value: Results | { data: Results }): Results {
@@ -68,9 +68,9 @@ function isPlainResponse<T>(value: T | { data: T}): value is T {
 >T : Symbol(T, Decl(typePredicateStructuralMatch.ts, 19, 25))
 
     return !value.hasOwnProperty('data');
->value.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.d.ts, --, --))
+>value.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(typePredicateStructuralMatch.ts, 19, 28))
->hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.d.ts, --, --))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
 }
 
 function getResults2(value: Results | { data: Results }): Results {

@@ -25,7 +25,7 @@ function f2(x): number {
 >x : Symbol(x, Decl(reachabilityChecks5.ts, 10, 12))
 
         throw new Error();
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
     }
     return 1;
 }
@@ -38,7 +38,7 @@ function f3(x): number {
 >x : Symbol(x, Decl(reachabilityChecks5.ts, 17, 12))
 
         throw new Error();
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
     }
 }
 
@@ -50,7 +50,7 @@ function f3_1 (x): number {
 >x : Symbol(x, Decl(reachabilityChecks5.ts, 23, 15))
     }
     throw new Error();
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 function f4(x): number {
@@ -100,7 +100,7 @@ function f6(x): number {
         else 
         {
             throw new Error();
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
         }
     }
     catch (e) {
@@ -120,7 +120,7 @@ function f7(x): number {
         }
         else {
             throw new Error();
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
         }
     }
     catch (e) {

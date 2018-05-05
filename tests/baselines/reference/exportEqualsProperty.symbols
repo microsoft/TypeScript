@@ -86,6 +86,6 @@ export = A.B;
 
 === tests/cases/compiler/b.ts ===
 export = "foo".length;
->"foo".length : Symbol(String.length, Decl(lib.d.ts, --, --))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>"foo".length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 

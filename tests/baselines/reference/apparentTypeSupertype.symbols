@@ -13,7 +13,7 @@ class Base {
 class Derived<U extends String> extends Base { // error
 >Derived : Symbol(Derived, Decl(apparentTypeSupertype.ts, 5, 1))
 >U : Symbol(U, Decl(apparentTypeSupertype.ts, 8, 14))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Base : Symbol(Base, Decl(apparentTypeSupertype.ts, 0, 0))
 
     x: U;

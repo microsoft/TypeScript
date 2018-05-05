@@ -16,9 +16,9 @@ function concat(/* first, second, ... */) {
   for (var i = 0, l = arguments.length; i < l; i++) {
 >i : Symbol(i, Decl(a.js, 5, 10))
 >l : Symbol(l, Decl(a.js, 5, 17))
->arguments.length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 >arguments : Symbol(arguments)
->length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(a.js, 5, 10))
 >l : Symbol(l, Decl(a.js, 5, 17))
 >i : Symbol(i, Decl(a.js, 5, 10))

@@ -200,12 +200,12 @@ declare function f15(a: Meters): string;
 >Meters : Symbol(Meters, Decl(typeAliases.ts, 63, 39))
 
 f15(E.x).toLowerCase();
->f15(E.x).toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+>f15(E.x).toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 >f15 : Symbol(f15, Decl(typeAliases.ts, 67, 17), Decl(typeAliases.ts, 69, 41))
 >E.x : Symbol(E.x, Decl(typeAliases.ts, 67, 8))
 >E : Symbol(E, Decl(typeAliases.ts, 65, 20))
 >x : Symbol(E.x, Decl(typeAliases.ts, 67, 8))
->toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 
 type StringAndBoolean = [string, boolean]
 >StringAndBoolean : Symbol(StringAndBoolean, Decl(typeAliases.ts, 71, 23))
@@ -227,8 +227,8 @@ var y: StringAndBoolean = ["1", false];
 >StringAndBoolean : Symbol(StringAndBoolean, Decl(typeAliases.ts, 71, 23))
 
 y[0].toLowerCase();
->y[0].toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+>y[0].toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 >y : Symbol(y, Decl(typeAliases.ts, 78, 3))
 >0 : Symbol(0)
->toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 

@@ -48,12 +48,12 @@ class Giraffe extends Mammal { neck; }
 function fn1(x: Array<number>|Array<string>|boolean) {
 >fn1 : Symbol(fn1, Decl(instanceOfAssignability.ts, 19, 38))
 >x : Symbol(x, Decl(instanceOfAssignability.ts, 21, 13))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 	if(x instanceof Array) {
 >x : Symbol(x, Decl(instanceOfAssignability.ts, 21, 13))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 		// 1.5: y: Array<number>|Array<string>
 		// Want: y: Array<number>|Array<string>
@@ -154,12 +154,12 @@ function fn6(x: Animal|Mammal) {
 function fn7(x: Array<number>|Array<string>) {
 >fn7 : Symbol(fn7, Decl(instanceOfAssignability.ts, 67, 1))
 >x : Symbol(x, Decl(instanceOfAssignability.ts, 69, 13))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 	if(x instanceof Array) {
 >x : Symbol(x, Decl(instanceOfAssignability.ts, 69, 13))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 		// 1.5: y: Array<number>|Array<string>
 		// Want: y: Array<number>|Array<string>

@@ -11,25 +11,25 @@ interface IAsyncEnumerator<T> {
 
     next1(): Promise<T | AsyncEnumeratorDone>;
 >next1 : Symbol(IAsyncEnumerator.next1, Decl(awaitUnionPromise.ts, 5, 31))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(awaitUnionPromise.ts, 5, 27))
 >AsyncEnumeratorDone : Symbol(AsyncEnumeratorDone, Decl(awaitUnionPromise.ts, 0, 0))
 
     next2(): Promise<T> | Promise<AsyncEnumeratorDone>;
 >next2 : Symbol(IAsyncEnumerator.next2, Decl(awaitUnionPromise.ts, 6, 46))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(awaitUnionPromise.ts, 5, 27))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
 >AsyncEnumeratorDone : Symbol(AsyncEnumeratorDone, Decl(awaitUnionPromise.ts, 0, 0))
 
     next3(): Promise<T | {}>;
 >next3 : Symbol(IAsyncEnumerator.next3, Decl(awaitUnionPromise.ts, 7, 55))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(awaitUnionPromise.ts, 5, 27))
 
     next4(): Promise<T | { x: string }>;
 >next4 : Symbol(IAsyncEnumerator.next4, Decl(awaitUnionPromise.ts, 8, 29))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(awaitUnionPromise.ts, 5, 27))
 >x : Symbol(x, Decl(awaitUnionPromise.ts, 9, 26))
 }

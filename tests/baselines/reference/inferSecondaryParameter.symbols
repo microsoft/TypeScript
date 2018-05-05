@@ -6,7 +6,7 @@ interface Ib { m(test: string, fn: Function); }
 >m : Symbol(Ib.m, Decl(inferSecondaryParameter.ts, 2, 14))
 >test : Symbol(test, Decl(inferSecondaryParameter.ts, 2, 17))
 >fn : Symbol(fn, Decl(inferSecondaryParameter.ts, 2, 30))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var b: Ib = { m: function (test: string, fn: Function) { } };
 >b : Symbol(b, Decl(inferSecondaryParameter.ts, 4, 3))
@@ -14,7 +14,7 @@ var b: Ib = { m: function (test: string, fn: Function) { } };
 >m : Symbol(m, Decl(inferSecondaryParameter.ts, 4, 13))
 >test : Symbol(test, Decl(inferSecondaryParameter.ts, 4, 27))
 >fn : Symbol(fn, Decl(inferSecondaryParameter.ts, 4, 40))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 b.m("test", function (bug) {
 >b.m : Symbol(Ib.m, Decl(inferSecondaryParameter.ts, 2, 14))

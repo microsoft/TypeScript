@@ -30,12 +30,12 @@ function tryCatch() {
 
         else if (err instanceof Error) {
 >err : Symbol(err, Decl(narrowExceptionVariableInCatchClause.ts, 6, 11))
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
             err.message;
->err.message : Symbol(Error.message, Decl(lib.d.ts, --, --))
+>err.message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
 >err : Symbol(err, Decl(narrowExceptionVariableInCatchClause.ts, 6, 11))
->message : Symbol(Error.message, Decl(lib.d.ts, --, --))
+>message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
 
             err.massage; // ERROR: Property 'massage' does not exist on type 'Error'
 >err : Symbol(err, Decl(narrowExceptionVariableInCatchClause.ts, 6, 11))

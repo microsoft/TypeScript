@@ -40,19 +40,19 @@ var d: ({ (x: string): string } | { (x: number): number })[];
 
 var d: Array<((x: string) => string) | ((x: number) => number)>;
 >d : Symbol(d, Decl(parenthesizedTypes.ts, 12, 3), Decl(parenthesizedTypes.ts, 13, 3), Decl(parenthesizedTypes.ts, 14, 3), Decl(parenthesizedTypes.ts, 15, 3), Decl(parenthesizedTypes.ts, 16, 3))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(parenthesizedTypes.ts, 14, 15))
 >x : Symbol(x, Decl(parenthesizedTypes.ts, 14, 41))
 
 var d: Array<{ (x: string): string } | { (x: number): number }>;
 >d : Symbol(d, Decl(parenthesizedTypes.ts, 12, 3), Decl(parenthesizedTypes.ts, 13, 3), Decl(parenthesizedTypes.ts, 14, 3), Decl(parenthesizedTypes.ts, 15, 3), Decl(parenthesizedTypes.ts, 16, 3))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(parenthesizedTypes.ts, 15, 16))
 >x : Symbol(x, Decl(parenthesizedTypes.ts, 15, 42))
 
 var d: (Array<{ (x: string): string } | { (x: number): number }>);
 >d : Symbol(d, Decl(parenthesizedTypes.ts, 12, 3), Decl(parenthesizedTypes.ts, 13, 3), Decl(parenthesizedTypes.ts, 14, 3), Decl(parenthesizedTypes.ts, 15, 3), Decl(parenthesizedTypes.ts, 16, 3))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(parenthesizedTypes.ts, 16, 17))
 >x : Symbol(x, Decl(parenthesizedTypes.ts, 16, 43))
 

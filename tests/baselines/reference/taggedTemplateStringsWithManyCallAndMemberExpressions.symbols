@@ -4,7 +4,7 @@ interface I {
 
     (strs: TemplateStringsArray, ...subs: number[]): I;
 >strs : Symbol(strs, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 1, 5))
->TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.d.ts, --, --))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
 >subs : Symbol(subs, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 1, 32))
 >I : Symbol(I, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 0, 0))
 

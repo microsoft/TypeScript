@@ -14,9 +14,9 @@ let f = (n: number) => string => n.toString();
 >f : Symbol(f, Decl(parseErrorIncorrectReturnToken.ts, 6, 3))
 >n : Symbol(n, Decl(parseErrorIncorrectReturnToken.ts, 6, 9))
 >string : Symbol(string, Decl(parseErrorIncorrectReturnToken.ts, 6, 22))
->n.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>n.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >n : Symbol(n, Decl(parseErrorIncorrectReturnToken.ts, 6, 9))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
 let o = {
 >o : Symbol(o, Decl(parseErrorIncorrectReturnToken.ts, 7, 3))

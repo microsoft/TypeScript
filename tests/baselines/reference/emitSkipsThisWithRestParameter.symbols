@@ -11,13 +11,13 @@ function rebase(fn: (base: any, ...args: any[]) => any): (...args: any[]) => any
 >args : Symbol(args, Decl(emitSkipsThisWithRestParameter.ts, 1, 30))
 
         return fn.apply(this, [ this ].concat(args));
->fn.apply : Symbol(Function.apply, Decl(lib.d.ts, --, --))
+>fn.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
 >fn : Symbol(fn, Decl(emitSkipsThisWithRestParameter.ts, 0, 16))
->apply : Symbol(Function.apply, Decl(lib.d.ts, --, --))
+>apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
 >this : Symbol(this, Decl(emitSkipsThisWithRestParameter.ts, 1, 20))
->[ this ].concat : Symbol(Array.concat, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>[ this ].concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >this : Symbol(this, Decl(emitSkipsThisWithRestParameter.ts, 1, 20))
->concat : Symbol(Array.concat, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >args : Symbol(args, Decl(emitSkipsThisWithRestParameter.ts, 1, 30))
 
     };

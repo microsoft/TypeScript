@@ -25,7 +25,7 @@ import iArray = require('./expArray');
 
 var v4: Array<number> = iArray;
 >v4 : Symbol(v4, Decl(consumer.ts, 10, 3))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >iArray : Symbol(iArray, Decl(consumer.ts, 7, 27))
 
 import iObject = require('./expObject');
@@ -33,7 +33,7 @@ import iObject = require('./expObject');
 
 var v5: Object = iObject;
 >v5 : Symbol(v5, Decl(consumer.ts, 13, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >iObject : Symbol(iObject, Decl(consumer.ts, 10, 31))
 
 import iAny = require('./expAny');

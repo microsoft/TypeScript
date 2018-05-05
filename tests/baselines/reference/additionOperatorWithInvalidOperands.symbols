@@ -29,11 +29,11 @@ var b: number;
 
 var c: Object;
 >c : Symbol(c, Decl(additionOperatorWithInvalidOperands.ts, 10, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var d: Number;
 >d : Symbol(d, Decl(additionOperatorWithInvalidOperands.ts, 11, 3))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 // boolean + every type except any and string
 var r1 = a + a;

@@ -8,8 +8,8 @@ function log(n:number) { return n;}
 >n : Symbol(n, Decl(topLevelExports.ts, 2, 13))
 
 void log(foo).toString();
->log(foo).toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>log(foo).toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >log : Symbol(log, Decl(topLevelExports.ts, 0, 19))
 >foo : Symbol(foo, Decl(topLevelExports.ts, 0, 10))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 

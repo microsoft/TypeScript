@@ -59,6 +59,14 @@ namespace ts {
         return result;
     }
 
+    export function createMapFromEntries<T>(entries: [string, T][]): Map<T> {
+        const map = createMap<T>();
+        for (const [key, value] of entries) {
+            map.set(key, value);
+        }
+        return map;
+    }
+
     export function createMapFromTemplate<T>(template?: MapLike<T>): Map<T> {
         const map: Map<T> = new MapCtr<T>();
 

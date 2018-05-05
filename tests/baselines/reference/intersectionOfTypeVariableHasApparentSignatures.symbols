@@ -5,9 +5,9 @@ interface Component<P> {
 
     props: Readonly<P> & Readonly<{ children?: {} }>;
 >props : Symbol(Component.props, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 0, 24))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >P : Symbol(P, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 0, 20))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >children : Symbol(children, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 1, 35))
 }
 

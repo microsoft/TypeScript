@@ -1,6 +1,6 @@
 === tests/cases/conformance/types/primitives/string/assignFromStringInterface2.ts ===
 interface String {
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(assignFromStringInterface2.ts, 0, 0))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(assignFromStringInterface2.ts, 0, 0))
 
     doStuff(): string;
 >doStuff : Symbol(String.doStuff, Decl(assignFromStringInterface2.ts, 0, 18))
@@ -48,7 +48,7 @@ interface NotString {
     match(regexp: RegExp): string[];
 >match : Symbol(NotString.match, Decl(assignFromStringInterface2.ts, 12, 40), Decl(assignFromStringInterface2.ts, 13, 36))
 >regexp : Symbol(regexp, Decl(assignFromStringInterface2.ts, 14, 10))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     replace(searchValue: string, replaceValue: string): string;
 >replace : Symbol(NotString.replace, Decl(assignFromStringInterface2.ts, 14, 36), Decl(assignFromStringInterface2.ts, 15, 63), Decl(assignFromStringInterface2.ts, 16, 102), Decl(assignFromStringInterface2.ts, 17, 63))
@@ -65,13 +65,13 @@ interface NotString {
     replace(searchValue: RegExp, replaceValue: string): string;
 >replace : Symbol(NotString.replace, Decl(assignFromStringInterface2.ts, 14, 36), Decl(assignFromStringInterface2.ts, 15, 63), Decl(assignFromStringInterface2.ts, 16, 102), Decl(assignFromStringInterface2.ts, 17, 63))
 >searchValue : Symbol(searchValue, Decl(assignFromStringInterface2.ts, 17, 12))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >replaceValue : Symbol(replaceValue, Decl(assignFromStringInterface2.ts, 17, 32))
 
     replace(searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string;
 >replace : Symbol(NotString.replace, Decl(assignFromStringInterface2.ts, 14, 36), Decl(assignFromStringInterface2.ts, 15, 63), Decl(assignFromStringInterface2.ts, 16, 102), Decl(assignFromStringInterface2.ts, 17, 63))
 >searchValue : Symbol(searchValue, Decl(assignFromStringInterface2.ts, 18, 12))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >replaceValue : Symbol(replaceValue, Decl(assignFromStringInterface2.ts, 18, 32))
 >substring : Symbol(substring, Decl(assignFromStringInterface2.ts, 18, 48))
 >args : Symbol(args, Decl(assignFromStringInterface2.ts, 18, 66))
@@ -83,7 +83,7 @@ interface NotString {
     search(regexp: RegExp): number;
 >search : Symbol(NotString.search, Decl(assignFromStringInterface2.ts, 18, 102), Decl(assignFromStringInterface2.ts, 19, 35))
 >regexp : Symbol(regexp, Decl(assignFromStringInterface2.ts, 20, 11))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     slice(start?: number, end?: number): string;
 >slice : Symbol(NotString.slice, Decl(assignFromStringInterface2.ts, 20, 35))
@@ -98,7 +98,7 @@ interface NotString {
     split(separator: RegExp, limit?: number): string[];
 >split : Symbol(NotString.split, Decl(assignFromStringInterface2.ts, 21, 48), Decl(assignFromStringInterface2.ts, 22, 55))
 >separator : Symbol(separator, Decl(assignFromStringInterface2.ts, 23, 10))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >limit : Symbol(limit, Decl(assignFromStringInterface2.ts, 23, 28))
 
     substring(start: number, end?: number): string;
@@ -141,7 +141,7 @@ var x = '';
 
 var a: String;
 >a : Symbol(a, Decl(assignFromStringInterface2.ts, 37, 3))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(assignFromStringInterface2.ts, 0, 0))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(assignFromStringInterface2.ts, 0, 0))
 
 var b: NotString;
 >b : Symbol(b, Decl(assignFromStringInterface2.ts, 38, 3))

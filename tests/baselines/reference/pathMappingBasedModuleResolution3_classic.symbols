@@ -10,9 +10,9 @@ declare function use(a: any): void;
 
 use(x.toExponential());
 >use : Symbol(use, Decl(file1.ts, 2, 31))
->x.toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>x.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(file1.ts, 2, 8))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
 === c:/root/folder2/file2.ts ===
 import {x as a} from "./file3"  // found with baseurl

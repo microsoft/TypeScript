@@ -22,9 +22,9 @@ class D {
         return typeof data === "string" ? data : data.join(" ");
 >data : Symbol(data, Decl(typeGuardsOnClassProperty.ts, 8, 11))
 >data : Symbol(data, Decl(typeGuardsOnClassProperty.ts, 8, 11))
->data.join : Symbol(Array.join, Decl(lib.d.ts, --, --))
+>data.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
 >data : Symbol(data, Decl(typeGuardsOnClassProperty.ts, 8, 11))
->join : Symbol(Array.join, Decl(lib.d.ts, --, --))
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
     }
 
     getData1() {
@@ -37,11 +37,11 @@ class D {
 >this.data : Symbol(D.data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
 >this : Symbol(D, Decl(typeGuardsOnClassProperty.ts, 0, 0))
 >data : Symbol(D.data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
->this.data.join : Symbol(Array.join, Decl(lib.d.ts, --, --))
+>this.data.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
 >this.data : Symbol(D.data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
 >this : Symbol(D, Decl(typeGuardsOnClassProperty.ts, 0, 0))
 >data : Symbol(D.data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
->join : Symbol(Array.join, Decl(lib.d.ts, --, --))
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
     }
 }
 
@@ -66,11 +66,11 @@ if (typeof o.prop1 === "string" && o.prop1.toLowerCase()) {}
 >o.prop1 : Symbol(prop1, Decl(typeGuardsOnClassProperty.ts, 17, 8))
 >o : Symbol(o, Decl(typeGuardsOnClassProperty.ts, 17, 3))
 >prop1 : Symbol(prop1, Decl(typeGuardsOnClassProperty.ts, 17, 8))
->o.prop1.toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+>o.prop1.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 >o.prop1 : Symbol(prop1, Decl(typeGuardsOnClassProperty.ts, 17, 8))
 >o : Symbol(o, Decl(typeGuardsOnClassProperty.ts, 17, 3))
 >prop1 : Symbol(prop1, Decl(typeGuardsOnClassProperty.ts, 17, 8))
->toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 
 var prop1 = o.prop1;
 >prop1 : Symbol(prop1, Decl(typeGuardsOnClassProperty.ts, 26, 3))
@@ -80,7 +80,7 @@ var prop1 = o.prop1;
 
 if (typeof prop1 === "string" && prop1.toLocaleLowerCase()) { }
 >prop1 : Symbol(prop1, Decl(typeGuardsOnClassProperty.ts, 26, 3))
->prop1.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.d.ts, --, --))
+>prop1.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
 >prop1 : Symbol(prop1, Decl(typeGuardsOnClassProperty.ts, 26, 3))
->toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.d.ts, --, --))
+>toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
 

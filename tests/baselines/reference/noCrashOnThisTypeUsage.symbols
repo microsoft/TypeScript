@@ -4,7 +4,7 @@ interface IListenable {
 
     changeListeners: Function[] | null
 >changeListeners : Symbol(IListenable.changeListeners, Decl(noCrashOnThisTypeUsage.ts, 0, 23))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     observe(handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean): void
 >observe : Symbol(IListenable.observe, Decl(noCrashOnThisTypeUsage.ts, 1, 38))
@@ -62,7 +62,7 @@ export class ObservableValue<T> {
     }
     changeListeners: Function[] | null = [];
 >changeListeners : Symbol(ObservableValue.changeListeners, Decl(noCrashOnThisTypeUsage.ts, 20, 5))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     observe(handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean) {}
 >observe : Symbol(ObservableValue.observe, Decl(noCrashOnThisTypeUsage.ts, 21, 44))

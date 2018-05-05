@@ -5,9 +5,9 @@ class C extends null {
     constructor() {
         super();
         return Object.create(null);
->Object.create : Symbol(ObjectConstructor.create, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->create : Symbol(ObjectConstructor.create, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
     }
 }
 
@@ -16,8 +16,8 @@ class D extends null {
 
     constructor() {
         return Object.create(null);
->Object.create : Symbol(ObjectConstructor.create, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->create : Symbol(ObjectConstructor.create, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
     }
 }

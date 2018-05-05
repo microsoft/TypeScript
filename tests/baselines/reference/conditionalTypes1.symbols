@@ -1,29 +1,29 @@
 === tests/cases/conformance/types/conditional/conditionalTypes1.ts ===
 type T00 = Exclude<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "b" | "d"
 >T00 : Symbol(T00, Decl(conditionalTypes1.ts, 0, 0))
->Exclude : Symbol(Exclude, Decl(lib.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
 
 type T01 = Extract<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "a" | "c"
 >T01 : Symbol(T01, Decl(conditionalTypes1.ts, 0, 59))
->Extract : Symbol(Extract, Decl(lib.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
 
 type T02 = Exclude<string | number | (() => void), Function>;  // string | number
 >T02 : Symbol(T02, Decl(conditionalTypes1.ts, 1, 59))
->Exclude : Symbol(Exclude, Decl(lib.d.ts, --, --))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 type T03 = Extract<string | number | (() => void), Function>;  // () => void
 >T03 : Symbol(T03, Decl(conditionalTypes1.ts, 3, 61))
->Extract : Symbol(Extract, Decl(lib.d.ts, --, --))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 type T04 = NonNullable<string | number | undefined>;  // string | number
 >T04 : Symbol(T04, Decl(conditionalTypes1.ts, 4, 61))
->NonNullable : Symbol(NonNullable, Decl(lib.d.ts, --, --))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
 
 type T05 = NonNullable<(() => string) | string[] | null | undefined>;  // (() => string) | string[]
 >T05 : Symbol(T05, Decl(conditionalTypes1.ts, 6, 52))
->NonNullable : Symbol(NonNullable, Decl(lib.d.ts, --, --))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
 
 function f1<T>(x: T, y: NonNullable<T>) {
 >f1 : Symbol(f1, Decl(conditionalTypes1.ts, 7, 69))
@@ -31,7 +31,7 @@ function f1<T>(x: T, y: NonNullable<T>) {
 >x : Symbol(x, Decl(conditionalTypes1.ts, 9, 15))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 9, 12))
 >y : Symbol(y, Decl(conditionalTypes1.ts, 9, 20))
->NonNullable : Symbol(NonNullable, Decl(lib.d.ts, --, --))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 9, 12))
 
     x = y;
@@ -49,7 +49,7 @@ function f2<T extends string | undefined>(x: T, y: NonNullable<T>) {
 >x : Symbol(x, Decl(conditionalTypes1.ts, 14, 42))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 14, 12))
 >y : Symbol(y, Decl(conditionalTypes1.ts, 14, 47))
->NonNullable : Symbol(NonNullable, Decl(lib.d.ts, --, --))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 14, 12))
 
     x = y;
@@ -73,12 +73,12 @@ function f3<T>(x: Partial<T>[keyof T], y: NonNullable<Partial<T>[keyof T]>) {
 >f3 : Symbol(f3, Decl(conditionalTypes1.ts, 19, 1))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 21, 12))
 >x : Symbol(x, Decl(conditionalTypes1.ts, 21, 15))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 21, 12))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 21, 12))
 >y : Symbol(y, Decl(conditionalTypes1.ts, 21, 38))
->NonNullable : Symbol(NonNullable, Decl(lib.d.ts, --, --))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 21, 12))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 21, 12))
 
@@ -98,7 +98,7 @@ function f4<T extends { x: string | undefined }>(x: T["x"], y: NonNullable<T["x"
 >x : Symbol(x, Decl(conditionalTypes1.ts, 26, 49))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 26, 12))
 >y : Symbol(y, Decl(conditionalTypes1.ts, 26, 59))
->NonNullable : Symbol(NonNullable, Decl(lib.d.ts, --, --))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 26, 12))
 
     x = y;
@@ -129,39 +129,39 @@ type Options = { k: "a", a: number } | { k: "b", b: string } | { k: "c", c: bool
 
 type T10 = Exclude<Options, { k: "a" | "b" }>;  // { k: "c", c: boolean }
 >T10 : Symbol(T10, Decl(conditionalTypes1.ts, 33, 86))
->Exclude : Symbol(Exclude, Decl(lib.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
 >Options : Symbol(Options, Decl(conditionalTypes1.ts, 31, 1))
 >k : Symbol(k, Decl(conditionalTypes1.ts, 35, 29))
 
 type T11 = Extract<Options, { k: "a" | "b" }>;  // { k: "a", a: number } | { k: "b", b: string }
 >T11 : Symbol(T11, Decl(conditionalTypes1.ts, 35, 46))
->Extract : Symbol(Extract, Decl(lib.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
 >Options : Symbol(Options, Decl(conditionalTypes1.ts, 31, 1))
 >k : Symbol(k, Decl(conditionalTypes1.ts, 36, 29))
 
 type T12 = Exclude<Options, { k: "a" } | { k: "b" }>;  // { k: "c", c: boolean }
 >T12 : Symbol(T12, Decl(conditionalTypes1.ts, 36, 46))
->Exclude : Symbol(Exclude, Decl(lib.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
 >Options : Symbol(Options, Decl(conditionalTypes1.ts, 31, 1))
 >k : Symbol(k, Decl(conditionalTypes1.ts, 38, 29))
 >k : Symbol(k, Decl(conditionalTypes1.ts, 38, 42))
 
 type T13 = Extract<Options, { k: "a" } | { k: "b" }>;  // { k: "a", a: number } | { k: "b", b: string }
 >T13 : Symbol(T13, Decl(conditionalTypes1.ts, 38, 53))
->Extract : Symbol(Extract, Decl(lib.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
 >Options : Symbol(Options, Decl(conditionalTypes1.ts, 31, 1))
 >k : Symbol(k, Decl(conditionalTypes1.ts, 39, 29))
 >k : Symbol(k, Decl(conditionalTypes1.ts, 39, 42))
 
 type T14 = Exclude<Options, { q: "a" }>;  // Options
 >T14 : Symbol(T14, Decl(conditionalTypes1.ts, 39, 53))
->Exclude : Symbol(Exclude, Decl(lib.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
 >Options : Symbol(Options, Decl(conditionalTypes1.ts, 31, 1))
 >q : Symbol(q, Decl(conditionalTypes1.ts, 41, 29))
 
 type T15 = Extract<Options, { q: "a" }>;  // never
 >T15 : Symbol(T15, Decl(conditionalTypes1.ts, 41, 40))
->Extract : Symbol(Extract, Decl(lib.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
 >Options : Symbol(Options, Decl(conditionalTypes1.ts, 31, 1))
 >q : Symbol(q, Decl(conditionalTypes1.ts, 42, 29))
 
@@ -172,7 +172,7 @@ declare function f5<T extends Options, K extends string>(p: K): Extract<T, { k: 
 >K : Symbol(K, Decl(conditionalTypes1.ts, 44, 38))
 >p : Symbol(p, Decl(conditionalTypes1.ts, 44, 57))
 >K : Symbol(K, Decl(conditionalTypes1.ts, 44, 38))
->Extract : Symbol(Extract, Decl(lib.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 44, 20))
 >k : Symbol(k, Decl(conditionalTypes1.ts, 44, 76))
 >K : Symbol(K, Decl(conditionalTypes1.ts, 44, 38))
@@ -185,7 +185,7 @@ type OptionsOfKind<K extends Options["k"]> = Extract<Options, { k: K }>;
 >OptionsOfKind : Symbol(OptionsOfKind, Decl(conditionalTypes1.ts, 45, 17))
 >K : Symbol(K, Decl(conditionalTypes1.ts, 47, 19))
 >Options : Symbol(Options, Decl(conditionalTypes1.ts, 31, 1))
->Extract : Symbol(Extract, Decl(lib.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
 >Options : Symbol(Options, Decl(conditionalTypes1.ts, 31, 1))
 >k : Symbol(k, Decl(conditionalTypes1.ts, 47, 63))
 >K : Symbol(K, Decl(conditionalTypes1.ts, 47, 19))
@@ -202,7 +202,7 @@ type Select<T, K extends keyof T, V extends T[K]> = Extract<T, { [P in K]: V }>;
 >V : Symbol(V, Decl(conditionalTypes1.ts, 51, 33))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 51, 12))
 >K : Symbol(K, Decl(conditionalTypes1.ts, 51, 14))
->Extract : Symbol(Extract, Decl(lib.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 51, 12))
 >P : Symbol(P, Decl(conditionalTypes1.ts, 51, 66))
 >K : Symbol(K, Decl(conditionalTypes1.ts, 51, 14))
@@ -231,7 +231,7 @@ type TypeName<T> =
 
     T extends Function ? "function" :
 >T : Symbol(T, Decl(conditionalTypes1.ts, 55, 14))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     "object";
 
@@ -327,14 +327,14 @@ type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : ne
 >T : Symbol(T, Decl(conditionalTypes1.ts, 92, 27))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 92, 27))
 >K : Symbol(K, Decl(conditionalTypes1.ts, 92, 35))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >K : Symbol(K, Decl(conditionalTypes1.ts, 92, 35))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 92, 27))
 
 type FunctionProperties<T> = Pick<T, FunctionPropertyNames<T>>;
 >FunctionProperties : Symbol(FunctionProperties, Decl(conditionalTypes1.ts, 92, 95))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 93, 24))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 93, 24))
 >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(conditionalTypes1.ts, 90, 1))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 93, 24))
@@ -346,14 +346,14 @@ type NonFunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? nev
 >T : Symbol(T, Decl(conditionalTypes1.ts, 95, 30))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 95, 30))
 >K : Symbol(K, Decl(conditionalTypes1.ts, 95, 38))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >K : Symbol(K, Decl(conditionalTypes1.ts, 95, 38))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 95, 30))
 
 type NonFunctionProperties<T> = Pick<T, NonFunctionPropertyNames<T>>;
 >NonFunctionProperties : Symbol(NonFunctionProperties, Decl(conditionalTypes1.ts, 95, 98))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 96, 27))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 96, 27))
 >NonFunctionPropertyNames : Symbol(NonFunctionPropertyNames, Decl(conditionalTypes1.ts, 93, 63))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 96, 27))
@@ -462,7 +462,7 @@ type DeepReadonly<T> =
 interface DeepReadonlyArray<T> extends ReadonlyArray<DeepReadonly<T>> {}
 >DeepReadonlyArray : Symbol(DeepReadonlyArray, Decl(conditionalTypes1.ts, 122, 6))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 124, 28))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
 >DeepReadonly : Symbol(DeepReadonly, Decl(conditionalTypes1.ts, 117, 1))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 124, 28))
 
@@ -1263,7 +1263,7 @@ type NonFooKeys1<T extends object> = OldDiff<keyof T, 'foo'>;
 type NonFooKeys2<T extends object> = Exclude<keyof T, 'foo'>;
 >NonFooKeys2 : Symbol(NonFooKeys2, Decl(conditionalTypes1.ts, 324, 61))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 325, 17))
->Exclude : Symbol(Exclude, Decl(lib.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 325, 17))
 
 type Test1 = NonFooKeys1<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
@@ -1328,7 +1328,7 @@ type RecursivePartial<T> = {
 >T : Symbol(T, Decl(conditionalTypes1.ts, 343, 22))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 343, 22))
 >P : Symbol(P, Decl(conditionalTypes1.ts, 344, 3))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >index : Symbol(index, Decl(conditionalTypes1.ts, 344, 47))
 >RecursivePartial : Symbol(RecursivePartial, Decl(conditionalTypes1.ts, 339, 1))
 >T : Symbol(T, Decl(conditionalTypes1.ts, 343, 22))

@@ -38,7 +38,7 @@ var classTypeArray = [C, C, C];
 
 var classTypeArray: Array<typeof C>; // Should OK, not be a parse error
 >classTypeArray : Symbol(classTypeArray, Decl(arrayLiterals.ts, 19, 3), Decl(arrayLiterals.ts, 20, 3))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >C : Symbol(C, Decl(arrayLiterals.ts, 14, 41))
 
 // Contextual type C with numeric index signature makes array literal of EveryType E of type BCT(E,C)[]

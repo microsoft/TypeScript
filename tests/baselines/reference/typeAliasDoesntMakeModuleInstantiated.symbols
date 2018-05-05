@@ -5,7 +5,7 @@ declare module m {
     // type alias declaration here shouldnt make the module declaration instantiated
     type Selector = string| string[] |Function;
 >Selector : Symbol(Selector, Decl(typeAliasDoesntMakeModuleInstantiated.ts, 0, 18))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     export interface IStatic {
 >IStatic : Symbol(IStatic, Decl(typeAliasDoesntMakeModuleInstantiated.ts, 2, 47))

@@ -13,23 +13,23 @@ let a: A;
 
 let b = a.getB().x.toFixed();
 >b : Symbol(b, Decl(main.ts, 7, 3))
->a.getB().x.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>a.getB().x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >a.getB().x : Symbol(B.x, Decl(b.ts, 0, 16))
 >a.getB : Symbol(A.getB, Decl(d.d.ts, 4, 21))
 >a : Symbol(a, Decl(main.ts, 6, 3))
 >getB : Symbol(A.getB, Decl(d.d.ts, 4, 21))
 >x : Symbol(B.x, Decl(b.ts, 0, 16))
->toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 let c = a.getCls().y.toLowerCase();
 >c : Symbol(c, Decl(main.ts, 8, 3))
->a.getCls().y.toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+>a.getCls().y.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 >a.getCls().y : Symbol(Cls.y, Decl(c.d.ts, 1, 15))
 >a.getCls : Symbol(A.getCls, Decl(e.d.ts, 6, 21))
 >a : Symbol(a, Decl(main.ts, 6, 3))
 >getCls : Symbol(A.getCls, Decl(e.d.ts, 6, 21))
 >y : Symbol(Cls.y, Decl(c.d.ts, 1, 15))
->toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 
 === tests/cases/compiler/a.ts ===
 export class A {}

@@ -126,7 +126,7 @@ function assertNever(x: never): never {
 >x : Symbol(x, Decl(booleanLiteralTypes1.ts, 40, 21))
 
     throw new Error("Unexpected value");
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 function f10(x: true | false) {

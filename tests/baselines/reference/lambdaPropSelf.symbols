@@ -22,11 +22,11 @@ class Person {
 
     addChild = () => this.children.push("New child");
 >addChild : Symbol(Person.addChild, Decl(lambdaPropSelf.ts, 7, 5))
->this.children.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>this.children.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >this.children : Symbol(Person.children, Decl(lambdaPropSelf.ts, 2, 14))
 >this : Symbol(Person, Decl(lambdaPropSelf.ts, 0, 20))
 >children : Symbol(Person.children, Decl(lambdaPropSelf.ts, 2, 14))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 }
 
 

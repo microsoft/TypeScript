@@ -6,11 +6,11 @@ export class Test  {
 
         let outerArray: Array<number> = [1, 2, 3];
 >outerArray : Symbol(outerArray, Decl(nestedLoops.ts, 3, 11))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
         let innerArray: Array<number> = [1, 2, 3];
 >innerArray : Symbol(innerArray, Decl(nestedLoops.ts, 4, 11))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
         for (let outer of outerArray)
 >outer : Symbol(outer, Decl(nestedLoops.ts, 6, 16))

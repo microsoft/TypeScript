@@ -5,8 +5,8 @@ class Rule {
 
     public regex: RegExp = new RegExp('');
 >regex : Symbol(Rule.regex, Decl(constDeclarationShadowedByVarDeclaration3.ts, 1, 12))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     public name: string = '';
 >name : Symbol(Rule.name, Decl(constDeclarationShadowedByVarDeclaration3.ts, 2, 42))

@@ -9,10 +9,10 @@ interface IFoo<T> {
 }
 
 interface Array<T> extends IFoo<T> { }
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(extendGenericArray2.ts, 2, 1))
->T : Symbol(T, Decl(lib.d.ts, --, --), Decl(extendGenericArray2.ts, 4, 16))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(extendGenericArray2.ts, 2, 1))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(extendGenericArray2.ts, 4, 16))
 >IFoo : Symbol(IFoo, Decl(extendGenericArray2.ts, 0, 0))
->T : Symbol(T, Decl(lib.d.ts, --, --), Decl(extendGenericArray2.ts, 4, 16))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(extendGenericArray2.ts, 4, 16))
 
 var arr: string[] = [];
 >arr : Symbol(arr, Decl(extendGenericArray2.ts, 6, 3))

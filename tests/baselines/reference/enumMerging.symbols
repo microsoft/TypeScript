@@ -71,14 +71,14 @@ module M2 {
 
         A = 'foo'.length, B = 'foo'.length, C = 'foo'.length
 >A : Symbol(EComp2.A, Decl(enumMerging.ts, 24, 24))
->'foo'.length : Symbol(String.length, Decl(lib.d.ts, --, --))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>'foo'.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >B : Symbol(EComp2.B, Decl(enumMerging.ts, 25, 25))
->'foo'.length : Symbol(String.length, Decl(lib.d.ts, --, --))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>'foo'.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >C : Symbol(EComp2.C, Decl(enumMerging.ts, 25, 43))
->'foo'.length : Symbol(String.length, Decl(lib.d.ts, --, --))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>'foo'.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
     }
 
     export enum EComp2 {
@@ -86,14 +86,14 @@ module M2 {
 
         D = 'foo'.length, E = 'foo'.length, F = 'foo'.length
 >D : Symbol(EComp2.D, Decl(enumMerging.ts, 28, 24))
->'foo'.length : Symbol(String.length, Decl(lib.d.ts, --, --))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>'foo'.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >E : Symbol(EComp2.E, Decl(enumMerging.ts, 29, 25))
->'foo'.length : Symbol(String.length, Decl(lib.d.ts, --, --))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>'foo'.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >F : Symbol(EComp2.F, Decl(enumMerging.ts, 29, 43))
->'foo'.length : Symbol(String.length, Decl(lib.d.ts, --, --))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>'foo'.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
     }
 
     var x = [EComp2.A, EComp2.B, EComp2.C, EComp2.D, EComp2.E, EComp2.F];

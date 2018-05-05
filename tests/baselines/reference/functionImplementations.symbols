@@ -279,9 +279,9 @@ var f7: (x: number) => string | number = x => { // should be (x: number) => numb
 >x : Symbol(x, Decl(functionImplementations.ts, 130, 40))
 
     return x.toString();
->x.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(functionImplementations.ts, 130, 40))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 }
 var f8: (x: number) => any = x => { // should be (x: number) => Base
 >f8 : Symbol(f8, Decl(functionImplementations.ts, 134, 3))

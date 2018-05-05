@@ -5,7 +5,7 @@ var x: any = { p: 0 };
 
 if (x instanceof Object) {
 >x : Symbol(x, Decl(typeGuardsWithAny.ts, 0, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     x.p; // No error, type any unaffected by instanceof type guard
 >x : Symbol(x, Decl(typeGuardsWithAny.ts, 0, 3))

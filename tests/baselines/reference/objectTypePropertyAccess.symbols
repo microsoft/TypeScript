@@ -13,14 +13,14 @@ var c: C;
 
 var r1 = c.toString();
 >r1 : Symbol(r1, Decl(objectTypePropertyAccess.ts, 6, 3))
->c.toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>c.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 >c : Symbol(c, Decl(objectTypePropertyAccess.ts, 5, 3))
->toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 
 var r2 = c['toString']();
 >r2 : Symbol(r2, Decl(objectTypePropertyAccess.ts, 7, 3))
 >c : Symbol(c, Decl(objectTypePropertyAccess.ts, 5, 3))
->'toString' : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>'toString' : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 
 var r3 = c.foo;
 >r3 : Symbol(r3, Decl(objectTypePropertyAccess.ts, 8, 3))
@@ -45,14 +45,14 @@ var i: I;
 
 var r4 = i.toString();
 >r4 : Symbol(r4, Decl(objectTypePropertyAccess.ts, 9, 3), Decl(objectTypePropertyAccess.ts, 15, 3))
->i.toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>i.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(objectTypePropertyAccess.ts, 14, 3))
->toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 
 var r5 = i['toString']();
 >r5 : Symbol(r5, Decl(objectTypePropertyAccess.ts, 16, 3))
 >i : Symbol(i, Decl(objectTypePropertyAccess.ts, 14, 3))
->'toString' : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>'toString' : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 
 var r6 = i.bar;
 >r6 : Symbol(r6, Decl(objectTypePropertyAccess.ts, 17, 3))
@@ -74,14 +74,14 @@ var a = {
 
 var r8 = a.toString();
 >r8 : Symbol(r8, Decl(objectTypePropertyAccess.ts, 24, 3))
->a.toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>a.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(objectTypePropertyAccess.ts, 20, 3))
->toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 
 var r9 = a['toString']();
 >r9 : Symbol(r9, Decl(objectTypePropertyAccess.ts, 25, 3))
 >a : Symbol(a, Decl(objectTypePropertyAccess.ts, 20, 3))
->'toString' : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>'toString' : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 
 var r10 = a.foo;
 >r10 : Symbol(r10, Decl(objectTypePropertyAccess.ts, 26, 3))

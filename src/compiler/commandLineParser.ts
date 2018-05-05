@@ -2,43 +2,44 @@ namespace ts {
     /* @internal */
     export const compileOnSaveCommandLineOption: CommandLineOption = { name: "compileOnSave", type: "boolean" };
 
-    const commandLineLibMap = createMapFromTemplate({
+    // NOTE: The order here is important to default lib ordering
+    const commandLineLibMap = createMapFromEntries([
         // JavaScript only
-        "es5": "lib.es5.d.ts",
-        "es6": "lib.es2015.d.ts",
-        "es2015": "lib.es2015.d.ts",
-        "es7": "lib.es2016.d.ts",
-        "es2016": "lib.es2016.d.ts",
-        "es2017": "lib.es2017.d.ts",
-        "es2018": "lib.es2018.d.ts",
-        "esnext": "lib.esnext.d.ts",
+        ["es5", "lib.es5.d.ts"],
+        ["es6", "lib.es2015.d.ts"],
+        ["es2015", "lib.es2015.d.ts"],
+        ["es7", "lib.es2016.d.ts"],
+        ["es2016", "lib.es2016.d.ts"],
+        ["es2017", "lib.es2017.d.ts"],
+        ["es2018", "lib.es2018.d.ts"],
+        ["esnext", "lib.esnext.d.ts"],
         // Host only
-        "dom": "lib.dom.d.ts",
-        "dom.iterable": "lib.dom.iterable.d.ts",
-        "webworker": "lib.webworker.d.ts",
-        "scripthost": "lib.scripthost.d.ts",
+        ["dom", "lib.dom.d.ts"],
+        ["dom.iterable", "lib.dom.iterable.d.ts"],
+        ["webworker", "lib.webworker.d.ts"],
+        ["scripthost", "lib.scripthost.d.ts"],
         // ES2015 Or ESNext By-feature options
-        "es2015.core": "lib.es2015.core.d.ts",
-        "es2015.collection": "lib.es2015.collection.d.ts",
-        "es2015.generator": "lib.es2015.generator.d.ts",
-        "es2015.iterable": "lib.es2015.iterable.d.ts",
-        "es2015.promise": "lib.es2015.promise.d.ts",
-        "es2015.proxy": "lib.es2015.proxy.d.ts",
-        "es2015.reflect": "lib.es2015.reflect.d.ts",
-        "es2015.symbol": "lib.es2015.symbol.d.ts",
-        "es2015.symbol.wellknown": "lib.es2015.symbol.wellknown.d.ts",
-        "es2016.array.include": "lib.es2016.array.include.d.ts",
-        "es2017.object": "lib.es2017.object.d.ts",
-        "es2017.sharedmemory": "lib.es2017.sharedmemory.d.ts",
-        "es2017.string": "lib.es2017.string.d.ts",
-        "es2017.intl": "lib.es2017.intl.d.ts",
-        "es2017.typedarrays": "lib.es2017.typedarrays.d.ts",
-        "es2018.intl": "lib.es2018.intl.d.ts",
-        "es2018.promise": "lib.es2018.promise.d.ts",
-        "es2018.regexp": "lib.es2018.regexp.d.ts",
-        "esnext.array": "lib.esnext.array.d.ts",
-        "esnext.asynciterable": "lib.esnext.asynciterable.d.ts",
-    });
+        ["es2015.core", "lib.es2015.core.d.ts"],
+        ["es2015.collection", "lib.es2015.collection.d.ts"],
+        ["es2015.generator", "lib.es2015.generator.d.ts"],
+        ["es2015.iterable", "lib.es2015.iterable.d.ts"],
+        ["es2015.promise", "lib.es2015.promise.d.ts"],
+        ["es2015.proxy", "lib.es2015.proxy.d.ts"],
+        ["es2015.reflect", "lib.es2015.reflect.d.ts"],
+        ["es2015.symbol", "lib.es2015.symbol.d.ts"],
+        ["es2015.symbol.wellknown", "lib.es2015.symbol.wellknown.d.ts"],
+        ["es2016.array.include", "lib.es2016.array.include.d.ts"],
+        ["es2017.object", "lib.es2017.object.d.ts"],
+        ["es2017.sharedmemory", "lib.es2017.sharedmemory.d.ts"],
+        ["es2017.string", "lib.es2017.string.d.ts"],
+        ["es2017.intl", "lib.es2017.intl.d.ts"],
+        ["es2017.typedarrays", "lib.es2017.typedarrays.d.ts"],
+        ["es2018.intl", "lib.es2018.intl.d.ts"],
+        ["es2018.promise", "lib.es2018.promise.d.ts"],
+        ["es2018.regexp", "lib.es2018.regexp.d.ts"],
+        ["esnext.array", "lib.esnext.array.d.ts"],
+        ["esnext.asynciterable", "lib.esnext.asynciterable.d.ts"],
+    ]);
 
     // Internally we add some additional lib references that we only support when used as part of a
     // "lib" reference directive. They are not available on the command line or in tsconfig.json.

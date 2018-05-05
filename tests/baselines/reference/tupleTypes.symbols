@@ -56,9 +56,9 @@ var tf: [string, (x: string) => number] = ["hello", x => x.length];
 >tf : Symbol(tf, Decl(tupleTypes.ts, 19, 3))
 >x : Symbol(x, Decl(tupleTypes.ts, 19, 18))
 >x : Symbol(x, Decl(tupleTypes.ts, 19, 51))
->x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(tupleTypes.ts, 19, 51))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
 declare function ff<T, U>(a: T, b: [T, (x: T) => U]): U;
 >ff : Symbol(ff, Decl(tupleTypes.ts, 19, 67))
@@ -77,9 +77,9 @@ var ff1 = ff("hello", ["foo", x => x.length]);
 >ff1 : Symbol(ff1, Decl(tupleTypes.ts, 22, 3), Decl(tupleTypes.ts, 23, 3))
 >ff : Symbol(ff, Decl(tupleTypes.ts, 19, 67))
 >x : Symbol(x, Decl(tupleTypes.ts, 22, 29))
->x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(tupleTypes.ts, 22, 29))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
 var ff1: number;
 >ff1 : Symbol(ff1, Decl(tupleTypes.ts, 22, 3), Decl(tupleTypes.ts, 23, 3))

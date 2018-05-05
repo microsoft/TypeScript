@@ -4,6 +4,6 @@ function foo() {
 
     super(value => String(value));
 >value : Symbol(value, Decl(superCallFromFunction1.ts, 1, 10))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(superCallFromFunction1.ts, 1, 10))
 }

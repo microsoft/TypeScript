@@ -41,12 +41,12 @@ function zip<T, U>(array1: T[], array2: U[]): [[T, U]] {
 >U : Symbol(U, Decl(typeInferenceWithTupleType.ts, 8, 15))
 
     if (array1.length != array2.length) {
->array1.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>array1.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >array1 : Symbol(array1, Decl(typeInferenceWithTupleType.ts, 8, 19))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
->array2.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>array2.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >array2 : Symbol(array2, Decl(typeInferenceWithTupleType.ts, 8, 31))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
         return [[undefined, undefined]];
 >undefined : Symbol(undefined)
@@ -54,9 +54,9 @@ function zip<T, U>(array1: T[], array2: U[]): [[T, U]] {
     }
     var length = array1.length;
 >length : Symbol(length, Decl(typeInferenceWithTupleType.ts, 12, 7))
->array1.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>array1.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >array1 : Symbol(array1, Decl(typeInferenceWithTupleType.ts, 8, 19))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
     var zipResult: [[T, U]];
 >zipResult : Symbol(zipResult, Decl(typeInferenceWithTupleType.ts, 13, 7))
@@ -70,9 +70,9 @@ function zip<T, U>(array1: T[], array2: U[]): [[T, U]] {
 >i : Symbol(i, Decl(typeInferenceWithTupleType.ts, 14, 12))
 
         zipResult.push([array1[i], array2[i]]);
->zipResult.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>zipResult.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >zipResult : Symbol(zipResult, Decl(typeInferenceWithTupleType.ts, 13, 7))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >array1 : Symbol(array1, Decl(typeInferenceWithTupleType.ts, 8, 19))
 >i : Symbol(i, Decl(typeInferenceWithTupleType.ts, 14, 12))
 >array2 : Symbol(array2, Decl(typeInferenceWithTupleType.ts, 8, 31))

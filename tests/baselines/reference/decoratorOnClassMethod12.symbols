@@ -8,7 +8,7 @@ module M {
         decorator(target: Object, key: string): void { }
 >decorator : Symbol(S.decorator, Decl(decoratorOnClassMethod12.ts, 1, 13))
 >target : Symbol(target, Decl(decoratorOnClassMethod12.ts, 2, 18))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >key : Symbol(key, Decl(decoratorOnClassMethod12.ts, 2, 33))
     }
     class C extends S {

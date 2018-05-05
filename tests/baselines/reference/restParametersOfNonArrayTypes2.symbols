@@ -4,12 +4,12 @@
 
 interface MyThing extends Array<any> { }
 >MyThing : Symbol(MyThing, Decl(restParametersOfNonArrayTypes2.ts, 0, 0))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 interface MyThing2<T> extends Array<T> { }
 >MyThing2 : Symbol(MyThing2, Decl(restParametersOfNonArrayTypes2.ts, 3, 40))
 >T : Symbol(T, Decl(restParametersOfNonArrayTypes2.ts, 4, 19))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(restParametersOfNonArrayTypes2.ts, 4, 19))
 
 function foo(...x: MyThing) { }

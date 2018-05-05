@@ -36,9 +36,9 @@ class ListWrapper2 {
 >array : Symbol(array, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 12, 43))
 >T : Symbol(T, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 12, 15))
 >T : Symbol(T, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 12, 15))
->array.slice : Symbol(Array.slice, Decl(lib.d.ts, --, --))
+>array.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
 >array : Symbol(array, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 12, 43))
->slice : Symbol(Array.slice, Decl(lib.d.ts, --, --))
+>slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
 
   static reversed<T>(dit: typeof ListWrapper2, array: T[]): T[] {
 >reversed : Symbol(ListWrapper2.reversed, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 12, 87))
@@ -88,9 +88,9 @@ namespace tessst {
             for (let i = 0, len = array.length; i < len; i++) {
 >i : Symbol(i, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 26, 20))
 >len : Symbol(len, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 26, 27))
->array.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>array.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >array : Symbol(array, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 24, 35))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 26, 20))
 >len : Symbol(len, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 26, 27))
 >i : Symbol(i, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 26, 20))
@@ -136,7 +136,7 @@ class ListWrapper {
 >dit : Symbol(dit, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 42, 25))
 >ListWrapper : Symbol(ListWrapper, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 38, 1))
 >size : Symbol(size, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 42, 49))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 137, 75))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 137, 75))
 >size : Symbol(size, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 42, 49))
 
   static createGrowableSize(dit: typeof ListWrapper, size: number): any[] { return new Array(size); }
@@ -144,7 +144,7 @@ class ListWrapper {
 >dit : Symbol(dit, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 43, 28))
 >ListWrapper : Symbol(ListWrapper, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 38, 1))
 >size : Symbol(size, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 43, 52))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 137, 75))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 137, 75))
 >size : Symbol(size, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 43, 52))
 
   static clone<T>(dit: typeof ListWrapper, array: T[]): T[] { return array.slice(0); }
@@ -155,9 +155,9 @@ class ListWrapper {
 >array : Symbol(array, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 44, 42))
 >T : Symbol(T, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 44, 15))
 >T : Symbol(T, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 44, 15))
->array.slice : Symbol(Array.slice, Decl(lib.d.ts, --, --))
+>array.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
 >array : Symbol(array, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 44, 42))
->slice : Symbol(Array.slice, Decl(lib.d.ts, --, --))
+>slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
 
   static forEachWithIndex<T>(dit: typeof ListWrapper, array: T[], fn: (t: T, n: number) => void) {
 >forEachWithIndex : Symbol(ListWrapper.forEachWithIndex, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 44, 86))
@@ -174,9 +174,9 @@ class ListWrapper {
     for (var i = 0; i < array.length; i++) {
 >i : Symbol(i, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 46, 12))
 >i : Symbol(i, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 46, 12))
->array.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>array.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >array : Symbol(array, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 45, 53))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 46, 12))
 
       fn(array[i], i);
@@ -212,15 +212,15 @@ class ListWrapper {
 
     if (!array || array.length == 0) return null;
 >array : Symbol(array, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 54, 41))
->array.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>array.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >array : Symbol(array, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 54, 41))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
     return array[array.length - 1];
 >array : Symbol(array, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 54, 41))
->array.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>array.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >array : Symbol(array, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 54, 41))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
   }
   static indexOf<T>(dit: typeof ListWrapper, array: T[], value: T, startIndex: number = 0): number {
 >indexOf : Symbol(ListWrapper.indexOf, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 57, 3))
@@ -234,9 +234,9 @@ class ListWrapper {
 >startIndex : Symbol(startIndex, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 58, 66))
 
     return array.indexOf(value, startIndex);
->array.indexOf : Symbol(Array.indexOf, Decl(lib.d.ts, --, --))
+>array.indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
 >array : Symbol(array, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 58, 44))
->indexOf : Symbol(Array.indexOf, Decl(lib.d.ts, --, --))
+>indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 58, 56))
 >startIndex : Symbol(startIndex, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 58, 66))
   }
@@ -249,9 +249,9 @@ class ListWrapper {
 >T : Symbol(T, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 61, 18))
 >el : Symbol(el, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 61, 56))
 >T : Symbol(T, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 61, 18))
->list.indexOf : Symbol(Array.indexOf, Decl(lib.d.ts, --, --))
+>list.indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
 >list : Symbol(list, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 61, 45))
->indexOf : Symbol(Array.indexOf, Decl(lib.d.ts, --, --))
+>indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
 >el : Symbol(el, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 61, 56))
 
   static reversed<T>(dit: typeof ListWrapper, array: T[]): T[] {
@@ -286,12 +286,12 @@ class ListWrapper {
 >funkyFor : Symbol(tessst.funkyFor, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 18, 18))
 >array : Symbol(array, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 62, 45))
 >t : Symbol(t, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 66, 33))
->t.toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>t.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 >t : Symbol(t, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 66, 33))
->toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
->a.reverse : Symbol(Array.reverse, Decl(lib.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>a.reverse : Symbol(Array.reverse, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 63, 7))
->reverse : Symbol(Array.reverse, Decl(lib.d.ts, --, --))
+>reverse : Symbol(Array.reverse, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 63, 7))
   }
   static concat(dit: typeof ListWrapper, a: any[], b: any[]): any[] { return a.concat(b); }
@@ -300,9 +300,9 @@ class ListWrapper {
 >ListWrapper : Symbol(ListWrapper, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 38, 1))
 >a : Symbol(a, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 68, 40))
 >b : Symbol(b, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 68, 50))
->a.concat : Symbol(Array.concat, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>a.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 68, 40))
->concat : Symbol(Array.concat, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >b : Symbol(b, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 68, 50))
 
   static insert<T>(dit: typeof ListWrapper, list: T[], index: number, value: T) { list.splice(index, 0, value); }
@@ -315,9 +315,9 @@ class ListWrapper {
 >index : Symbol(index, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 69, 54))
 >value : Symbol(value, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 69, 69))
 >T : Symbol(T, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 69, 16))
->list.splice : Symbol(Array.splice, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>list.splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >list : Symbol(list, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 69, 43))
->splice : Symbol(Array.splice, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >index : Symbol(index, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 69, 54))
 >value : Symbol(value, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 69, 69))
 
@@ -337,9 +337,9 @@ class ListWrapper {
 >index : Symbol(index, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 70, 56))
 
     list.splice(index, 1);
->list.splice : Symbol(Array.splice, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>list.splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >list : Symbol(list, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 70, 45))
->splice : Symbol(Array.splice, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >index : Symbol(index, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 70, 56))
 
     return res;
@@ -358,23 +358,23 @@ class ListWrapper {
     for (var i = 0; i < items.length; ++i) {
 >i : Symbol(i, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 76, 12))
 >i : Symbol(i, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 76, 12))
->items.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>items.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >items : Symbol(items, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 75, 57))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 76, 12))
 
       var index = list.indexOf(items[i]);
 >index : Symbol(index, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 77, 9))
->list.indexOf : Symbol(Array.indexOf, Decl(lib.d.ts, --, --))
+>list.indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
 >list : Symbol(list, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 75, 46))
->indexOf : Symbol(Array.indexOf, Decl(lib.d.ts, --, --))
+>indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
 >items : Symbol(items, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 75, 57))
 >i : Symbol(i, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 76, 12))
 
       list.splice(index, 1);
->list.splice : Symbol(Array.splice, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>list.splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >list : Symbol(list, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 75, 46))
->splice : Symbol(Array.splice, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >index : Symbol(index, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 77, 9))
     }
   }
@@ -390,18 +390,18 @@ class ListWrapper {
 
     var index = list.indexOf(el);
 >index : Symbol(index, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 82, 7))
->list.indexOf : Symbol(Array.indexOf, Decl(lib.d.ts, --, --))
+>list.indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
 >list : Symbol(list, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 81, 43))
->indexOf : Symbol(Array.indexOf, Decl(lib.d.ts, --, --))
+>indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
 >el : Symbol(el, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 81, 54))
 
     if (index > -1) {
 >index : Symbol(index, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 82, 7))
 
       list.splice(index, 1);
->list.splice : Symbol(Array.splice, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>list.splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >list : Symbol(list, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 81, 43))
->splice : Symbol(Array.splice, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >index : Symbol(index, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 82, 7))
 
       return true;
@@ -413,18 +413,18 @@ class ListWrapper {
 >dit : Symbol(dit, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 89, 15))
 >ListWrapper : Symbol(ListWrapper, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 38, 1))
 >list : Symbol(list, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 89, 39))
->list.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>list.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >list : Symbol(list, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 89, 39))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
   static isEmpty(dit: typeof ListWrapper, list: any[]): boolean { return list.length == 0; }
 >isEmpty : Symbol(ListWrapper.isEmpty, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 89, 73))
 >dit : Symbol(dit, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 90, 17))
 >ListWrapper : Symbol(ListWrapper, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 38, 1))
 >list : Symbol(list, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 90, 41))
->list.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>list.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >list : Symbol(list, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 90, 41))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
   static fill(dit: typeof ListWrapper, list: any[], value: any, start: number = 0, end: number = null) {
 >fill : Symbol(ListWrapper.fill, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 90, 92))
@@ -442,9 +442,9 @@ class ListWrapper {
 >value : Symbol(value, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 91, 51))
 >start : Symbol(start, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 91, 63))
 >end : Symbol(end, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 91, 82))
->list.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>list.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >list : Symbol(list, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 91, 38))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >end : Symbol(end, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 91, 82))
   }
   static equals(dit: typeof ListWrapper, a: any[], b: any[]): boolean {
@@ -455,19 +455,19 @@ class ListWrapper {
 >b : Symbol(b, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 94, 50))
 
     if (a.length != b.length) return false;
->a.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>a.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 94, 40))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
->b.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>b.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >b : Symbol(b, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 94, 50))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
     for (var i = 0; i < a.length; ++i) {
 >i : Symbol(i, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 96, 12))
 >i : Symbol(i, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 96, 12))
->a.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>a.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 94, 40))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 96, 12))
 
       if (a[i] !== b[i]) return false;
@@ -490,9 +490,9 @@ class ListWrapper {
 >T : Symbol(T, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 101, 15))
 
     return l.slice(from, to === null ? undefined : to);
->l.slice : Symbol(Array.slice, Decl(lib.d.ts, --, --))
+>l.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
 >l : Symbol(l, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 101, 42))
->slice : Symbol(Array.slice, Decl(lib.d.ts, --, --))
+>slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
 >from : Symbol(from, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 101, 50))
 >to : Symbol(to, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 101, 68))
 >undefined : Symbol(undefined)
@@ -508,9 +508,9 @@ class ListWrapper {
 >from : Symbol(from, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 104, 51))
 >length : Symbol(length, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 104, 65))
 >T : Symbol(T, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 104, 16))
->l.splice : Symbol(Array.splice, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>l.splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >l : Symbol(l, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 104, 43))
->splice : Symbol(Array.splice, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >from : Symbol(from, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 104, 51))
 >length : Symbol(length, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 104, 65))
 
@@ -532,16 +532,16 @@ class ListWrapper {
 >compareFn : Symbol(compareFn, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 105, 49))
 
       l.sort(compareFn);
->l.sort : Symbol(Array.sort, Decl(lib.d.ts, --, --))
+>l.sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
 >l : Symbol(l, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 105, 41))
->sort : Symbol(Array.sort, Decl(lib.d.ts, --, --))
+>sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
 >compareFn : Symbol(compareFn, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 105, 49))
 
     } else {
       l.sort();
->l.sort : Symbol(Array.sort, Decl(lib.d.ts, --, --))
+>l.sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
 >l : Symbol(l, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 105, 41))
->sort : Symbol(Array.sort, Decl(lib.d.ts, --, --))
+>sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
     }
   }
   static toString<T>(dit: typeof ListWrapper, l: T[]): string { return l.toString(); }
@@ -551,9 +551,9 @@ class ListWrapper {
 >ListWrapper : Symbol(ListWrapper, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 38, 1))
 >l : Symbol(l, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 112, 45))
 >T : Symbol(T, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 112, 18))
->l.toString : Symbol(Array.toString, Decl(lib.d.ts, --, --))
+>l.toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
 >l : Symbol(l, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 112, 45))
->toString : Symbol(Array.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
 
   static toJSON<T>(dit: typeof ListWrapper, l: T[]): string { return JSON.stringify(l); }
 >toJSON : Symbol(ListWrapper.toJSON, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 112, 86))
@@ -562,9 +562,9 @@ class ListWrapper {
 >ListWrapper : Symbol(ListWrapper, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 38, 1))
 >l : Symbol(l, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 113, 43))
 >T : Symbol(T, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 113, 16))
->JSON.stringify : Symbol(JSON.stringify, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->JSON : Symbol(JSON, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->stringify : Symbol(JSON.stringify, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >l : Symbol(l, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 113, 43))
 
   static maximum<T>(dit: typeof ListWrapper, list: T[], predicate: (t: T) => number): T {
@@ -580,9 +580,9 @@ class ListWrapper {
 >T : Symbol(T, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 115, 17))
 
     if (list.length == 0) {
->list.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>list.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >list : Symbol(list, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 115, 44))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
       return null;
     }
@@ -592,14 +592,14 @@ class ListWrapper {
 
     var maxValue = -Infinity;
 >maxValue : Symbol(maxValue, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 120, 7))
->Infinity : Symbol(Infinity, Decl(lib.d.ts, --, --))
+>Infinity : Symbol(Infinity, Decl(lib.es5.d.ts, --, --))
 
     for (var index = 0; index < list.length; index++) {
 >index : Symbol(index, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 121, 12))
 >index : Symbol(index, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 121, 12))
->list.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>list.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >list : Symbol(list, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 115, 44))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >index : Symbol(index, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 121, 12))
 
       var candidate = list[index];
@@ -656,8 +656,8 @@ declare function isPresent<T>(compareFn?: (a: T, b: T) => number): boolean;
 >T : Symbol(T, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 137, 27))
 
 interface Array<T> {
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 137, 75))
->T : Symbol(T, Decl(lib.d.ts, --, --), Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 138, 16))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 137, 75))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 138, 16))
 
 	fill(value: any, start: number, end: number): void;
 >fill : Symbol(Array.fill, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 138, 20))

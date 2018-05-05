@@ -41,7 +41,7 @@ declare function isZ(obj: any): obj is Z;
 function f1(obj: Object) {
 >f1 : Symbol(f1, Decl(typeGuardIntersectionTypes.ts, 14, 41))
 >obj : Symbol(obj, Decl(typeGuardIntersectionTypes.ts, 16, 12))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     if (isX(obj) || isY(obj) || isZ(obj)) {
 >isX : Symbol(isX, Decl(typeGuardIntersectionTypes.ts, 10, 1))
@@ -229,7 +229,7 @@ function identifyBeast(beast: Beast) {
 function beastFoo(beast: Object) {
 >beastFoo : Symbol(beastFoo, Decl(typeGuardIntersectionTypes.ts, 97, 1))
 >beast : Symbol(beast, Decl(typeGuardIntersectionTypes.ts, 99, 18))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     if (hasWings(beast) && hasLegs(beast)) {
 >hasWings : Symbol(hasWings, Decl(typeGuardIntersectionTypes.ts, 60, 83))

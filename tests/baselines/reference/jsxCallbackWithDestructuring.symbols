@@ -20,9 +20,9 @@ declare class Component<P, S> {
 
     props: Readonly<{ children?: {} }> & Readonly<P>;
 >props : Symbol(Component.props, Decl(jsxCallbackWithDestructuring.tsx, 4, 17))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >children : Symbol(children, Decl(jsxCallbackWithDestructuring.tsx, 5, 21))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >P : Symbol(P, Decl(jsxCallbackWithDestructuring.tsx, 1, 20), Decl(jsxCallbackWithDestructuring.tsx, 2, 24))
 }
 

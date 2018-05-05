@@ -493,7 +493,9 @@ namespace ts {
      */
     export function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program {
         let program: Program;
-        let files: SourceFile[] = [];
+        let processingDefaultLibFiles: SourceFile[] | undefined;
+        let processingOtherFiles: SourceFile[] | undefined;
+        let files: SourceFile[] | undefined;
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
@@ -584,6 +586,8 @@ namespace ts {
         const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
         const structuralIsReused = tryReuseStructureFromOldProgram();
         if (structuralIsReused !== StructureIsReused.Completely) {
+            processingDefaultLibFiles = [];
+            processingOtherFiles = [];
             forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false));
 
             // load type declarations specified via 'types' argument or implicitly from types/ and node_modules/@types folders
@@ -618,6 +622,9 @@ namespace ts {
             }
 
             missingFilePaths = arrayFrom(filesByName.keys(), p => <Path>p).filter(p => !filesByName.get(p));
+            files = stableSort(processingDefaultLibFiles, compareDefaultLibFiles).concat(processingOtherFiles);
+            processingDefaultLibFiles = undefined;
+            processingOtherFiles = undefined;
         }
 
         Debug.assert(!!missingFilePaths);
@@ -676,6 +683,21 @@ namespace ts {
         performance.measure("Program", "beforeProgram", "afterProgram");
 
         return program;
+
+        function compareDefaultLibFiles(a: SourceFile, b: SourceFile) {
+            return compareValues(getDefaultLibFilePriority(a), getDefaultLibFilePriority(b));
+        }
+
+        function getDefaultLibFilePriority(a: SourceFile) {
+            if (containsPath(defaultLibraryPath, a.fileName, /*ignoreCase*/ false)) {
+                const basename = getBaseFileName(a.fileName);
+                if (basename === "lib.d.ts" || basename === "lib.es6.d.ts") return 0;
+                const name = removeSuffix(removePrefix(basename, "lib."), ".d.ts");
+                const index = libs.indexOf(name);
+                if (index !== -1) return index + 1;
+            }
+            return libs.length + 2;
+        }
 
         function getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations {
             return moduleResolutionCache && resolveModuleNameFromCache(moduleName, containingFile, moduleResolutionCache);
@@ -1807,9 +1829,10 @@ namespace ts {
                     sourceFilesFoundSearchingNodeModules.set(file.path, false);
                     if (!options.noResolve) {
                         processReferencedFiles(file, isDefaultLib);
-                        processLibReferenceDirectives(file);
                         processTypeReferenceDirectives(file);
                     }
+
+                    processLibReferenceDirectives(file);
 
                     modulesWithElidedImports.set(file.path, false);
                     processImportedModules(file);
@@ -1846,7 +1869,7 @@ namespace ts {
                     redirectTargetsSet.set(fileFromPackageId.path, true);
                     filesByName.set(path, dupFile);
                     sourceFileToPackageName.set(path, packageId.name);
-                    files.push(dupFile);
+                    processingOtherFiles.push(dupFile);
                     return dupFile;
                 }
                 else if (file) {
@@ -1877,18 +1900,19 @@ namespace ts {
 
                 if (!options.noResolve) {
                     processReferencedFiles(file, isDefaultLib);
-                    processLibReferenceDirectives(file);
                     processTypeReferenceDirectives(file);
                 }
+
+                processLibReferenceDirectives(file);
 
                 // always process imported modules to record module name resolutions
                 processImportedModules(file);
 
                 if (isDefaultLib) {
-                    files.unshift(file);
+                    processingDefaultLibFiles.push(file);
                 }
                 else {
-                    files.push(file);
+                    processingOtherFiles.push(file);
                 }
             }
 

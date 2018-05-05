@@ -14,17 +14,17 @@ class Linq {
 
         var result = new Array(values.length);
 >result : Symbol(result, Decl(unknownSymbolInGenericReturnType.ts, 2, 11))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->values.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>values.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >values : Symbol(values, Decl(unknownSymbolInGenericReturnType.ts, 1, 31))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
  
         for (var i = 0; i < values.length; i++) {
 >i : Symbol(i, Decl(unknownSymbolInGenericReturnType.ts, 4, 16))
 >i : Symbol(i, Decl(unknownSymbolInGenericReturnType.ts, 4, 16))
->values.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>values.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >values : Symbol(values, Decl(unknownSymbolInGenericReturnType.ts, 1, 31))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(unknownSymbolInGenericReturnType.ts, 4, 16))
 
             result[i] = func(values[i]);

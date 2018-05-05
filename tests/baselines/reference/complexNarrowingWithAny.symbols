@@ -134,7 +134,7 @@ namespace import49 {
 	//export var NG_VALUE_ACCESSOR = new OpaqueToken('ngValueAccessor')
 	export var NG_VALUE_ACCESSOR = new String('foo')
 >NG_VALUE_ACCESSOR : Symbol(NG_VALUE_ACCESSOR, Decl(complexNarrowingWithAny.ts, 103, 11))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 //using a class - < 1 sec typecheck

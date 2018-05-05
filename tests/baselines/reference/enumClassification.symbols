@@ -148,8 +148,8 @@ enum E20 {
 
     A = "foo".length,
 >A : Symbol(E20.A, Decl(enumClassification.ts, 72, 10))
->"foo".length : Symbol(String.length, Decl(lib.d.ts, --, --))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>"foo".length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
     B = A + 1,
 >B : Symbol(E20.B, Decl(enumClassification.ts, 73, 21))
@@ -160,8 +160,8 @@ enum E20 {
 
     D = Math.sin(1)
 >D : Symbol(E20.D, Decl(enumClassification.ts, 75, 15))
->Math.sin : Symbol(Math.sin, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->sin : Symbol(Math.sin, Decl(lib.d.ts, --, --))
+>Math.sin : Symbol(Math.sin, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>sin : Symbol(Math.sin, Decl(lib.es5.d.ts, --, --))
 }
 

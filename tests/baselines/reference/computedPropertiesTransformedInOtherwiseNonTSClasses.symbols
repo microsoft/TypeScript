@@ -4,7 +4,7 @@ namespace NS {
 
     export const x = Symbol();
 >x : Symbol(x, Decl(computedPropertiesTransformedInOtherwiseNonTSClasses.ts, 1, 16))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     class NotTransformed { 
 >NotTransformed : Symbol(NotTransformed, Decl(computedPropertiesTransformedInOtherwiseNonTSClasses.ts, 1, 30))

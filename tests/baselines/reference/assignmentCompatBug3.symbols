@@ -19,9 +19,9 @@ function makePoint(x: number, y: number) {
 >dist : Symbol(dist, Decl(assignmentCompatBug3.ts, 3, 29))
 
 			return Math.sqrt(x*x+y*y); // shouldn't be picking up "x" and "y" from the object lit
->Math.sqrt : Symbol(Math.sqrt, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->sqrt : Symbol(Math.sqrt, Decl(lib.d.ts, --, --))
+>Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(assignmentCompatBug3.ts, 0, 19))
 >x : Symbol(x, Decl(assignmentCompatBug3.ts, 0, 19))
 >y : Symbol(y, Decl(assignmentCompatBug3.ts, 0, 29))

@@ -51,7 +51,7 @@ function A () {
 A.prototype.z = function f(n) {
 >A.prototype : Symbol(A.z, Decl(a.js, 20, 1))
 >A : Symbol(A, Decl(a.js, 13, 10), Decl(a.js, 24, 1))
->prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >z : Symbol(A.z, Decl(a.js, 20, 1))
 >f : Symbol(f, Decl(a.js, 22, 15))
 >n : Symbol(n, Decl(a.js, 22, 27))

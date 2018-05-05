@@ -28,7 +28,7 @@ interface Take<T> {
 foo(n => n.length, () => 'hi');
 >foo : Symbol(foo, Decl(inferenceFromParameterlessLambda.ts, 0, 0))
 >n : Symbol(n, Decl(inferenceFromParameterlessLambda.ts, 8, 4))
->n.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>n.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >n : Symbol(n, Decl(inferenceFromParameterlessLambda.ts, 8, 4))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 

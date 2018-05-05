@@ -7,7 +7,7 @@ class Bug {
 
     private static func: Function[] = [
 >func : Symbol(Bug.func, Decl(thisInPropertyBoundDeclarations.ts, 1, 25))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
      (that: Bug, name: string) => {
 >that : Symbol(that, Decl(thisInPropertyBoundDeclarations.ts, 4, 6))

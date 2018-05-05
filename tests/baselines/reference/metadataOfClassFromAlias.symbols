@@ -12,7 +12,7 @@ import { SomeClass } from './auxiliry';
 
 function annotation(): PropertyDecorator {
 >annotation : Symbol(annotation, Decl(test.ts, 0, 39))
->PropertyDecorator : Symbol(PropertyDecorator, Decl(lib.d.ts, --, --))
+>PropertyDecorator : Symbol(PropertyDecorator, Decl(lib.es5.d.ts, --, --))
 
     return (target: any): void => { };
 >target : Symbol(target, Decl(test.ts, 2, 12))

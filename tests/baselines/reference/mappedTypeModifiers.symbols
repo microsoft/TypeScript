@@ -51,14 +51,14 @@ var v01: { [P in keyof T]: T[P] };
 
 var v01: Pick<T, keyof T>;
 >v01 : Symbol(v01, Decl(mappedTypeModifiers.ts, 11, 3), Decl(mappedTypeModifiers.ts, 12, 3), Decl(mappedTypeModifiers.ts, 13, 3), Decl(mappedTypeModifiers.ts, 14, 3))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
 >T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
 
 var v01: Pick<Pick<T, keyof T>, keyof T>;
 >v01 : Symbol(v01, Decl(mappedTypeModifiers.ts, 11, 3), Decl(mappedTypeModifiers.ts, 12, 3), Decl(mappedTypeModifiers.ts, 13, 3), Decl(mappedTypeModifiers.ts, 14, 3))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
 >T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
 >T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
@@ -76,7 +76,7 @@ var v02: { [P in keyof T]?: T[P] };
 
 var v02: Partial<T>;
 >v02 : Symbol(v02, Decl(mappedTypeModifiers.ts, 16, 3), Decl(mappedTypeModifiers.ts, 17, 3), Decl(mappedTypeModifiers.ts, 18, 3), Decl(mappedTypeModifiers.ts, 19, 3), Decl(mappedTypeModifiers.ts, 20, 3))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
 
 var v02: { [P in keyof TP]: TP[P] }
@@ -88,7 +88,7 @@ var v02: { [P in keyof TP]: TP[P] }
 
 var v02: Pick<TP, keyof TP>;
 >v02 : Symbol(v02, Decl(mappedTypeModifiers.ts, 16, 3), Decl(mappedTypeModifiers.ts, 17, 3), Decl(mappedTypeModifiers.ts, 18, 3), Decl(mappedTypeModifiers.ts, 19, 3), Decl(mappedTypeModifiers.ts, 20, 3))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >TP : Symbol(TP, Decl(mappedTypeModifiers.ts, 0, 34))
 >TP : Symbol(TP, Decl(mappedTypeModifiers.ts, 0, 34))
 
@@ -105,7 +105,7 @@ var v03: { readonly [P in keyof T]: T[P] };
 
 var v03: Readonly<T>;
 >v03 : Symbol(v03, Decl(mappedTypeModifiers.ts, 22, 3), Decl(mappedTypeModifiers.ts, 23, 3), Decl(mappedTypeModifiers.ts, 24, 3), Decl(mappedTypeModifiers.ts, 25, 3), Decl(mappedTypeModifiers.ts, 26, 3))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
 
 var v03: { [P in keyof TR]: TR[P] }
@@ -117,7 +117,7 @@ var v03: { [P in keyof TR]: TR[P] }
 
 var v03: Pick<TR, keyof TR>;
 >v03 : Symbol(v03, Decl(mappedTypeModifiers.ts, 22, 3), Decl(mappedTypeModifiers.ts, 23, 3), Decl(mappedTypeModifiers.ts, 24, 3), Decl(mappedTypeModifiers.ts, 25, 3), Decl(mappedTypeModifiers.ts, 26, 3))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >TR : Symbol(TR, Decl(mappedTypeModifiers.ts, 1, 37))
 >TR : Symbol(TR, Decl(mappedTypeModifiers.ts, 1, 37))
 
@@ -134,24 +134,24 @@ var v04: { readonly [P in keyof T]?: T[P] };
 
 var v04: Partial<TR>;
 >v04 : Symbol(v04, Decl(mappedTypeModifiers.ts, 28, 3), Decl(mappedTypeModifiers.ts, 29, 3), Decl(mappedTypeModifiers.ts, 30, 3), Decl(mappedTypeModifiers.ts, 31, 3), Decl(mappedTypeModifiers.ts, 32, 3) ... and 3 more)
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >TR : Symbol(TR, Decl(mappedTypeModifiers.ts, 1, 37))
 
 var v04: Readonly<TP>;
 >v04 : Symbol(v04, Decl(mappedTypeModifiers.ts, 28, 3), Decl(mappedTypeModifiers.ts, 29, 3), Decl(mappedTypeModifiers.ts, 30, 3), Decl(mappedTypeModifiers.ts, 31, 3), Decl(mappedTypeModifiers.ts, 32, 3) ... and 3 more)
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >TP : Symbol(TP, Decl(mappedTypeModifiers.ts, 0, 34))
 
 var v04: Partial<Readonly<T>>;
 >v04 : Symbol(v04, Decl(mappedTypeModifiers.ts, 28, 3), Decl(mappedTypeModifiers.ts, 29, 3), Decl(mappedTypeModifiers.ts, 30, 3), Decl(mappedTypeModifiers.ts, 31, 3), Decl(mappedTypeModifiers.ts, 32, 3) ... and 3 more)
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
 
 var v04: Readonly<Partial<T>>;
 >v04 : Symbol(v04, Decl(mappedTypeModifiers.ts, 28, 3), Decl(mappedTypeModifiers.ts, 29, 3), Decl(mappedTypeModifiers.ts, 30, 3), Decl(mappedTypeModifiers.ts, 31, 3), Decl(mappedTypeModifiers.ts, 32, 3) ... and 3 more)
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
 
 var v04: { [P in keyof TPR]: TPR[P] }
@@ -163,7 +163,7 @@ var v04: { [P in keyof TPR]: TPR[P] }
 
 var v04: Pick<TPR, keyof T>;
 >v04 : Symbol(v04, Decl(mappedTypeModifiers.ts, 28, 3), Decl(mappedTypeModifiers.ts, 29, 3), Decl(mappedTypeModifiers.ts, 30, 3), Decl(mappedTypeModifiers.ts, 31, 3), Decl(mappedTypeModifiers.ts, 32, 3) ... and 3 more)
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >TPR : Symbol(TPR, Decl(mappedTypeModifiers.ts, 2, 53))
 >T : Symbol(T, Decl(mappedTypeModifiers.ts, 0, 0))
 
@@ -236,14 +236,14 @@ var b01: { [P in keyof B]: B[P] };
 
 var b01: Pick<B, keyof B>;
 >b01 : Symbol(b01, Decl(mappedTypeModifiers.ts, 50, 3), Decl(mappedTypeModifiers.ts, 51, 3), Decl(mappedTypeModifiers.ts, 52, 3), Decl(mappedTypeModifiers.ts, 53, 3))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >B : Symbol(B, Decl(mappedTypeModifiers.ts, 37, 51))
 >B : Symbol(B, Decl(mappedTypeModifiers.ts, 37, 51))
 
 var b01: Pick<Pick<B, keyof B>, keyof B>;
 >b01 : Symbol(b01, Decl(mappedTypeModifiers.ts, 50, 3), Decl(mappedTypeModifiers.ts, 51, 3), Decl(mappedTypeModifiers.ts, 52, 3), Decl(mappedTypeModifiers.ts, 53, 3))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >B : Symbol(B, Decl(mappedTypeModifiers.ts, 37, 51))
 >B : Symbol(B, Decl(mappedTypeModifiers.ts, 37, 51))
 >B : Symbol(B, Decl(mappedTypeModifiers.ts, 37, 51))
@@ -261,7 +261,7 @@ var b02: { [P in keyof B]?: B[P] };
 
 var b02: Partial<B>;
 >b02 : Symbol(b02, Decl(mappedTypeModifiers.ts, 55, 3), Decl(mappedTypeModifiers.ts, 56, 3), Decl(mappedTypeModifiers.ts, 57, 3), Decl(mappedTypeModifiers.ts, 58, 3), Decl(mappedTypeModifiers.ts, 59, 3))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >B : Symbol(B, Decl(mappedTypeModifiers.ts, 37, 51))
 
 var b02: { [P in keyof BP]: BP[P] }
@@ -273,7 +273,7 @@ var b02: { [P in keyof BP]: BP[P] }
 
 var b02: Pick<BP, keyof BP>;
 >b02 : Symbol(b02, Decl(mappedTypeModifiers.ts, 55, 3), Decl(mappedTypeModifiers.ts, 56, 3), Decl(mappedTypeModifiers.ts, 57, 3), Decl(mappedTypeModifiers.ts, 58, 3), Decl(mappedTypeModifiers.ts, 59, 3))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >BP : Symbol(BP, Decl(mappedTypeModifiers.ts, 39, 48))
 >BP : Symbol(BP, Decl(mappedTypeModifiers.ts, 39, 48))
 
@@ -290,7 +290,7 @@ var b03: { readonly [P in keyof B]: B[P] };
 
 var b03: Readonly<B>;
 >b03 : Symbol(b03, Decl(mappedTypeModifiers.ts, 61, 3), Decl(mappedTypeModifiers.ts, 62, 3), Decl(mappedTypeModifiers.ts, 63, 3), Decl(mappedTypeModifiers.ts, 64, 3), Decl(mappedTypeModifiers.ts, 65, 3))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >B : Symbol(B, Decl(mappedTypeModifiers.ts, 37, 51))
 
 var b03: { [P in keyof BR]: BR[P] }
@@ -302,7 +302,7 @@ var b03: { [P in keyof BR]: BR[P] }
 
 var b03: Pick<BR, keyof BR>;
 >b03 : Symbol(b03, Decl(mappedTypeModifiers.ts, 61, 3), Decl(mappedTypeModifiers.ts, 62, 3), Decl(mappedTypeModifiers.ts, 63, 3), Decl(mappedTypeModifiers.ts, 64, 3), Decl(mappedTypeModifiers.ts, 65, 3))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >BR : Symbol(BR, Decl(mappedTypeModifiers.ts, 40, 51))
 >BR : Symbol(BR, Decl(mappedTypeModifiers.ts, 40, 51))
 
@@ -319,24 +319,24 @@ var b04: { readonly [P in keyof B]?: B[P] };
 
 var b04: Partial<BR>;
 >b04 : Symbol(b04, Decl(mappedTypeModifiers.ts, 67, 3), Decl(mappedTypeModifiers.ts, 68, 3), Decl(mappedTypeModifiers.ts, 69, 3), Decl(mappedTypeModifiers.ts, 70, 3), Decl(mappedTypeModifiers.ts, 71, 3) ... and 3 more)
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >BR : Symbol(BR, Decl(mappedTypeModifiers.ts, 40, 51))
 
 var b04: Readonly<BP>;
 >b04 : Symbol(b04, Decl(mappedTypeModifiers.ts, 67, 3), Decl(mappedTypeModifiers.ts, 68, 3), Decl(mappedTypeModifiers.ts, 69, 3), Decl(mappedTypeModifiers.ts, 70, 3), Decl(mappedTypeModifiers.ts, 71, 3) ... and 3 more)
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >BP : Symbol(BP, Decl(mappedTypeModifiers.ts, 39, 48))
 
 var b04: Partial<Readonly<B>>;
 >b04 : Symbol(b04, Decl(mappedTypeModifiers.ts, 67, 3), Decl(mappedTypeModifiers.ts, 68, 3), Decl(mappedTypeModifiers.ts, 69, 3), Decl(mappedTypeModifiers.ts, 70, 3), Decl(mappedTypeModifiers.ts, 71, 3) ... and 3 more)
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >B : Symbol(B, Decl(mappedTypeModifiers.ts, 37, 51))
 
 var b04: Readonly<Partial<B>>;
 >b04 : Symbol(b04, Decl(mappedTypeModifiers.ts, 67, 3), Decl(mappedTypeModifiers.ts, 68, 3), Decl(mappedTypeModifiers.ts, 69, 3), Decl(mappedTypeModifiers.ts, 70, 3), Decl(mappedTypeModifiers.ts, 71, 3) ... and 3 more)
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >B : Symbol(B, Decl(mappedTypeModifiers.ts, 37, 51))
 
 var b04: { [P in keyof BPR]: BPR[P] }
@@ -348,7 +348,7 @@ var b04: { [P in keyof BPR]: BPR[P] }
 
 var b04: Pick<BPR, keyof BPR>;
 >b04 : Symbol(b04, Decl(mappedTypeModifiers.ts, 67, 3), Decl(mappedTypeModifiers.ts, 68, 3), Decl(mappedTypeModifiers.ts, 69, 3), Decl(mappedTypeModifiers.ts, 70, 3), Decl(mappedTypeModifiers.ts, 71, 3) ... and 3 more)
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >BPR : Symbol(BPR, Decl(mappedTypeModifiers.ts, 41, 67))
 >BPR : Symbol(BPR, Decl(mappedTypeModifiers.ts, 41, 67))
 
@@ -360,7 +360,7 @@ type Foo = { prop: number, [x: string]: number };
 function f1(x: Partial<Foo>) {
 >f1 : Symbol(f1, Decl(mappedTypeModifiers.ts, 76, 49))
 >x : Symbol(x, Decl(mappedTypeModifiers.ts, 78, 12))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >Foo : Symbol(Foo, Decl(mappedTypeModifiers.ts, 74, 30))
 
     x.prop; // ok
@@ -369,15 +369,15 @@ function f1(x: Partial<Foo>) {
 >prop : Symbol(prop, Decl(mappedTypeModifiers.ts, 76, 12))
 
     (x["other"] || 0).toFixed();
->(x["other"] || 0).toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>(x["other"] || 0).toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(mappedTypeModifiers.ts, 78, 12))
->toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 }
 
 function f2(x: Readonly<Foo>) {
 >f2 : Symbol(f2, Decl(mappedTypeModifiers.ts, 81, 1))
 >x : Symbol(x, Decl(mappedTypeModifiers.ts, 83, 12))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >Foo : Symbol(Foo, Decl(mappedTypeModifiers.ts, 74, 30))
 
     x.prop; // ok
@@ -386,9 +386,9 @@ function f2(x: Readonly<Foo>) {
 >prop : Symbol(prop, Decl(mappedTypeModifiers.ts, 76, 12))
 
     x["other"].toFixed();
->x["other"].toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>x["other"].toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(mappedTypeModifiers.ts, 83, 12))
->toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 }
 
 function f3(x: Boxified<Foo>) {
@@ -403,11 +403,11 @@ function f3(x: Boxified<Foo>) {
 >prop : Symbol(prop, Decl(mappedTypeModifiers.ts, 76, 12))
 
     x["other"].x.toFixed();
->x["other"].x.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>x["other"].x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >x["other"].x : Symbol(x, Decl(mappedTypeModifiers.ts, 37, 38))
 >x : Symbol(x, Decl(mappedTypeModifiers.ts, 88, 12))
 >x : Symbol(x, Decl(mappedTypeModifiers.ts, 37, 38))
->toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 }
 
 function f4(x: { [P in keyof Foo]: Foo[P] }) {
@@ -424,8 +424,8 @@ function f4(x: { [P in keyof Foo]: Foo[P] }) {
 >prop : Symbol(prop, Decl(mappedTypeModifiers.ts, 76, 12))
 
     x["other"].toFixed();
->x["other"].toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>x["other"].toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(mappedTypeModifiers.ts, 93, 12))
->toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 }
 

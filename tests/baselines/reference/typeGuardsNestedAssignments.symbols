@@ -59,7 +59,7 @@ function f3() {
 
     let obj: Object | null;
 >obj : Symbol(obj, Decl(typeGuardsNestedAssignments.ts, 24, 7))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     if ((obj = getFooOrNull()) instanceof Foo) {
 >obj : Symbol(obj, Decl(typeGuardsNestedAssignments.ts, 24, 7))
@@ -93,20 +93,20 @@ const re = /./g
 
 let match: RegExpExecArray | null
 >match : Symbol(match, Decl(typeGuardsNestedAssignments.ts, 40, 3))
->RegExpExecArray : Symbol(RegExpExecArray, Decl(lib.d.ts, --, --))
+>RegExpExecArray : Symbol(RegExpExecArray, Decl(lib.es5.d.ts, --, --))
 
 while ((match = re.exec("xxx")) != null) {
 >match : Symbol(match, Decl(typeGuardsNestedAssignments.ts, 40, 3))
->re.exec : Symbol(RegExp.exec, Decl(lib.d.ts, --, --))
+>re.exec : Symbol(RegExp.exec, Decl(lib.es5.d.ts, --, --))
 >re : Symbol(re, Decl(typeGuardsNestedAssignments.ts, 39, 5))
->exec : Symbol(RegExp.exec, Decl(lib.d.ts, --, --))
+>exec : Symbol(RegExp.exec, Decl(lib.es5.d.ts, --, --))
 
     const length = match[1].length + match[2].length
 >length : Symbol(length, Decl(typeGuardsNestedAssignments.ts, 43, 9))
->match[1].length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>match[1].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >match : Symbol(match, Decl(typeGuardsNestedAssignments.ts, 40, 3))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
->match[2].length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>match[2].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >match : Symbol(match, Decl(typeGuardsNestedAssignments.ts, 40, 3))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 }

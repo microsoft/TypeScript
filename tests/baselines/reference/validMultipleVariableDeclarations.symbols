@@ -110,7 +110,7 @@ var a: string[] = [];
 
 var a = new Array<string>();
 >a : Symbol(a, Decl(validMultipleVariableDeclarations.ts, 32, 3), Decl(validMultipleVariableDeclarations.ts, 33, 3), Decl(validMultipleVariableDeclarations.ts, 34, 3), Decl(validMultipleVariableDeclarations.ts, 35, 3), Decl(validMultipleVariableDeclarations.ts, 36, 3) ... and 1 more)
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var a: typeof a;
 >a : Symbol(a, Decl(validMultipleVariableDeclarations.ts, 32, 3), Decl(validMultipleVariableDeclarations.ts, 33, 3), Decl(validMultipleVariableDeclarations.ts, 34, 3), Decl(validMultipleVariableDeclarations.ts, 35, 3), Decl(validMultipleVariableDeclarations.ts, 36, 3) ... and 1 more)

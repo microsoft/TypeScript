@@ -11,11 +11,11 @@ module A {
 
     export var beez: Array<B>;
 >beez : Symbol(beez, Decl(ExportVariableOfGenericTypeWithInaccessibleTypeAsTypeArgument.ts, 5, 14))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >B : Symbol(B, Decl(ExportVariableOfGenericTypeWithInaccessibleTypeAsTypeArgument.ts, 0, 10))
 
     export var beez2 = new Array<B>();
 >beez2 : Symbol(beez2, Decl(ExportVariableOfGenericTypeWithInaccessibleTypeAsTypeArgument.ts, 6, 14))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >B : Symbol(B, Decl(ExportVariableOfGenericTypeWithInaccessibleTypeAsTypeArgument.ts, 0, 10))
 }

@@ -12,9 +12,9 @@ function f() {
         return {
             bar() { return x.length; }  // ok
 >bar : Symbol(bar, Decl(narrowedConstInMethod.ts, 4, 16))
->x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(narrowedConstInMethod.ts, 2, 9))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
         };
     }
@@ -32,9 +32,9 @@ function f2() {
         return class {
             bar() { return x.length; }  // ok
 >bar : Symbol((Anonymous class).bar, Decl(narrowedConstInMethod.ts, 13, 22))
->x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(narrowedConstInMethod.ts, 11, 9))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
         };
     }

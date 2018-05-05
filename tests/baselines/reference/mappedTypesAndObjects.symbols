@@ -3,10 +3,10 @@ function f1<T>(x: Partial<T>, y: Readonly<T>) {
 >f1 : Symbol(f1, Decl(mappedTypesAndObjects.ts, 0, 0))
 >T : Symbol(T, Decl(mappedTypesAndObjects.ts, 0, 12))
 >x : Symbol(x, Decl(mappedTypesAndObjects.ts, 0, 15))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypesAndObjects.ts, 0, 12))
 >y : Symbol(y, Decl(mappedTypesAndObjects.ts, 0, 29))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypesAndObjects.ts, 0, 12))
 
     let obj: {};
@@ -25,10 +25,10 @@ function f2<T>(x: Partial<T>, y: Readonly<T>) {
 >f2 : Symbol(f2, Decl(mappedTypesAndObjects.ts, 4, 1))
 >T : Symbol(T, Decl(mappedTypesAndObjects.ts, 6, 12))
 >x : Symbol(x, Decl(mappedTypesAndObjects.ts, 6, 15))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypesAndObjects.ts, 6, 12))
 >y : Symbol(y, Decl(mappedTypesAndObjects.ts, 6, 29))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypesAndObjects.ts, 6, 12))
 
     let obj: { [x: string]: any };
@@ -48,7 +48,7 @@ function f3<T>(x: Partial<T>) {
 >f3 : Symbol(f3, Decl(mappedTypesAndObjects.ts, 10, 1))
 >T : Symbol(T, Decl(mappedTypesAndObjects.ts, 12, 12))
 >x : Symbol(x, Decl(mappedTypesAndObjects.ts, 12, 15))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypesAndObjects.ts, 12, 12))
 
     x = {};
@@ -92,7 +92,7 @@ interface E2 extends Base {
 
     foo: Partial<Something>;  // or other mapped type
 >foo : Symbol(E2.foo, Decl(mappedTypesAndObjects.ts, 29, 27))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >Something : Symbol(Something, Decl(mappedTypesAndObjects.ts, 26, 1))
 }
 
@@ -103,7 +103,7 @@ interface E3<T> extends Base {
 
     foo: Partial<T>; // or other mapped type
 >foo : Symbol(E3.foo, Decl(mappedTypesAndObjects.ts, 33, 30))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypesAndObjects.ts, 33, 13))
 }
 

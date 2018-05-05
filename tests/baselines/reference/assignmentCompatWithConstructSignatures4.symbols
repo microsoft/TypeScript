@@ -73,12 +73,12 @@ module Errors {
         var a12: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
 >a12 : Symbol(a12, Decl(assignmentCompatWithConstructSignatures4.ts, 15, 11))
 >x : Symbol(x, Decl(assignmentCompatWithConstructSignatures4.ts, 15, 22))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Base : Symbol(Base, Decl(assignmentCompatWithConstructSignatures4.ts, 2, 15))
 >y : Symbol(y, Decl(assignmentCompatWithConstructSignatures4.ts, 15, 37))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Derived2 : Symbol(Derived2, Decl(assignmentCompatWithConstructSignatures4.ts, 4, 47))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(assignmentCompatWithConstructSignatures4.ts, 3, 31))
 
         var a14: {
@@ -266,13 +266,13 @@ module Errors {
         var b12: new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T; 
 >b12 : Symbol(b12, Decl(assignmentCompatWithConstructSignatures4.ts, 63, 11))
 >T : Symbol(T, Decl(assignmentCompatWithConstructSignatures4.ts, 63, 22))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Derived2 : Symbol(Derived2, Decl(assignmentCompatWithConstructSignatures4.ts, 4, 47))
 >x : Symbol(x, Decl(assignmentCompatWithConstructSignatures4.ts, 63, 49))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Base : Symbol(Base, Decl(assignmentCompatWithConstructSignatures4.ts, 2, 15))
 >y : Symbol(y, Decl(assignmentCompatWithConstructSignatures4.ts, 63, 64))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Base : Symbol(Base, Decl(assignmentCompatWithConstructSignatures4.ts, 2, 15))
 >T : Symbol(T, Decl(assignmentCompatWithConstructSignatures4.ts, 63, 22))
 

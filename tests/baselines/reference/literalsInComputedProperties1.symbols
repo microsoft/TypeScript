@@ -17,28 +17,28 @@ let x = {
 >"4" : Symbol(["4"], Decl(literalsInComputedProperties1.ts, 3, 10))
 }
 x[1].toExponential();
->x[1].toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>x[1].toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(literalsInComputedProperties1.ts, 0, 3))
 >1 : Symbol(1, Decl(literalsInComputedProperties1.ts, 0, 9))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
 x[2].toExponential();
->x[2].toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>x[2].toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(literalsInComputedProperties1.ts, 0, 3))
 >2 : Symbol([2], Decl(literalsInComputedProperties1.ts, 1, 8))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
 x[3].toExponential();
->x[3].toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>x[3].toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(literalsInComputedProperties1.ts, 0, 3))
 >3 : Symbol("3", Decl(literalsInComputedProperties1.ts, 2, 10))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
 x[4].toExponential();
->x[4].toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>x[4].toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(literalsInComputedProperties1.ts, 0, 3))
 >4 : Symbol(["4"], Decl(literalsInComputedProperties1.ts, 3, 10))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
 interface A {
 >A : Symbol(A, Decl(literalsInComputedProperties1.ts, 9, 21))
@@ -63,28 +63,28 @@ let y:A;
 >A : Symbol(A, Decl(literalsInComputedProperties1.ts, 9, 21))
 
 y[1].toExponential();
->y[1].toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>y[1].toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >y : Symbol(y, Decl(literalsInComputedProperties1.ts, 18, 3))
 >1 : Symbol(A[1], Decl(literalsInComputedProperties1.ts, 11, 13))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
 y[2].toExponential();
->y[2].toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>y[2].toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >y : Symbol(y, Decl(literalsInComputedProperties1.ts, 18, 3))
 >2 : Symbol(A[2], Decl(literalsInComputedProperties1.ts, 12, 13))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
 y[3].toExponential();
->y[3].toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>y[3].toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >y : Symbol(y, Decl(literalsInComputedProperties1.ts, 18, 3))
 >3 : Symbol(A["3"], Decl(literalsInComputedProperties1.ts, 13, 15))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
 y[4].toExponential();
->y[4].toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>y[4].toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >y : Symbol(y, Decl(literalsInComputedProperties1.ts, 18, 3))
 >4 : Symbol(A["4"], Decl(literalsInComputedProperties1.ts, 14, 15))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
 class C {
 >C : Symbol(C, Decl(literalsInComputedProperties1.ts, 22, 21))
@@ -109,28 +109,28 @@ let z:C;
 >C : Symbol(C, Decl(literalsInComputedProperties1.ts, 22, 21))
 
 z[1].toExponential();
->z[1].toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>z[1].toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >z : Symbol(z, Decl(literalsInComputedProperties1.ts, 31, 3))
 >1 : Symbol(C[1], Decl(literalsInComputedProperties1.ts, 24, 9))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
 z[2].toExponential();
->z[2].toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>z[2].toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >z : Symbol(z, Decl(literalsInComputedProperties1.ts, 31, 3))
 >2 : Symbol(C[2], Decl(literalsInComputedProperties1.ts, 25, 13))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
 z[3].toExponential();
->z[3].toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>z[3].toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >z : Symbol(z, Decl(literalsInComputedProperties1.ts, 31, 3))
 >3 : Symbol(C["3"], Decl(literalsInComputedProperties1.ts, 26, 15))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
 z[4].toExponential();
->z[4].toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>z[4].toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >z : Symbol(z, Decl(literalsInComputedProperties1.ts, 31, 3))
 >4 : Symbol(C["4"], Decl(literalsInComputedProperties1.ts, 27, 15))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
 enum X {
 >X : Symbol(X, Decl(literalsInComputedProperties1.ts, 35, 21))

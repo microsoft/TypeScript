@@ -11,7 +11,7 @@ var i: I;
 
 var f: Object;
 >f : Symbol(f, Decl(objectTypeWithConstructSignatureHidingMembersOfFunctionAssignmentCompat.ts, 5, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 f = i;
 >f : Symbol(f, Decl(objectTypeWithConstructSignatureHidingMembersOfFunctionAssignmentCompat.ts, 5, 3))

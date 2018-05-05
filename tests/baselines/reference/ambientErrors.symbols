@@ -53,8 +53,8 @@ declare enum E2 {
 
     x = 'foo'.length
 >x : Symbol(E2.x, Decl(ambientErrors.ts, 27, 17))
->'foo'.length : Symbol(String.length, Decl(lib.d.ts, --, --))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>'foo'.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 }
 
 // Ambient module with initializers for values, bodies for functions / classes

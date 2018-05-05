@@ -9,22 +9,22 @@ let o = {
 >m : Symbol(m, Decl(thisTypeInObjectLiterals.ts, 1, 13))
 
         return this.d.length;
->this.d.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>this.d.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >this.d : Symbol(d, Decl(thisTypeInObjectLiterals.ts, 0, 9))
 >this : Symbol(o, Decl(thisTypeInObjectLiterals.ts, 0, 7))
 >d : Symbol(d, Decl(thisTypeInObjectLiterals.ts, 0, 9))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
     },
     f: function() {
 >f : Symbol(f, Decl(thisTypeInObjectLiterals.ts, 4, 6))
 
         return this.d.length;
->this.d.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>this.d.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >this.d : Symbol(d, Decl(thisTypeInObjectLiterals.ts, 0, 9))
 >this : Symbol(o, Decl(thisTypeInObjectLiterals.ts, 0, 7))
 >d : Symbol(d, Decl(thisTypeInObjectLiterals.ts, 0, 9))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
     }
 }
 

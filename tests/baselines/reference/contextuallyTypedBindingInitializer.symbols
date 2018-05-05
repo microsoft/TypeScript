@@ -10,18 +10,18 @@ function f({ show = v => v.toString() }: Show) {}
 >f : Symbol(f, Decl(contextuallyTypedBindingInitializer.ts, 2, 1))
 >show : Symbol(show, Decl(contextuallyTypedBindingInitializer.ts, 3, 12))
 >v : Symbol(v, Decl(contextuallyTypedBindingInitializer.ts, 3, 19))
->v.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>v.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >v : Symbol(v, Decl(contextuallyTypedBindingInitializer.ts, 3, 19))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >Show : Symbol(Show, Decl(contextuallyTypedBindingInitializer.ts, 0, 0))
 
 function f2({ "show": showRename = v => v.toString() }: Show) {}
 >f2 : Symbol(f2, Decl(contextuallyTypedBindingInitializer.ts, 3, 49))
 >showRename : Symbol(showRename, Decl(contextuallyTypedBindingInitializer.ts, 4, 13))
 >v : Symbol(v, Decl(contextuallyTypedBindingInitializer.ts, 4, 34))
->v.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>v.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >v : Symbol(v, Decl(contextuallyTypedBindingInitializer.ts, 4, 34))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >Show : Symbol(Show, Decl(contextuallyTypedBindingInitializer.ts, 0, 0))
 
 function f3({ ["show"]: showRename = v => v.toString() }: Show) {}
@@ -29,9 +29,9 @@ function f3({ ["show"]: showRename = v => v.toString() }: Show) {}
 >"show" : Symbol(showRename, Decl(contextuallyTypedBindingInitializer.ts, 5, 13))
 >showRename : Symbol(showRename, Decl(contextuallyTypedBindingInitializer.ts, 5, 13))
 >v : Symbol(v, Decl(contextuallyTypedBindingInitializer.ts, 5, 36))
->v.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>v.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >v : Symbol(v, Decl(contextuallyTypedBindingInitializer.ts, 5, 36))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >Show : Symbol(Show, Decl(contextuallyTypedBindingInitializer.ts, 0, 0))
 
 interface Nested {
@@ -46,9 +46,9 @@ function ff({ nested = { show: v => v.toString() } }: Nested) {}
 >nested : Symbol(nested, Decl(contextuallyTypedBindingInitializer.ts, 10, 13))
 >show : Symbol(show, Decl(contextuallyTypedBindingInitializer.ts, 10, 24))
 >v : Symbol(v, Decl(contextuallyTypedBindingInitializer.ts, 10, 30))
->v.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>v.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >v : Symbol(v, Decl(contextuallyTypedBindingInitializer.ts, 10, 30))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >Nested : Symbol(Nested, Decl(contextuallyTypedBindingInitializer.ts, 5, 66))
 
 interface Tuples {

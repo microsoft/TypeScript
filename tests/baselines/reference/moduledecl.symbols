@@ -80,7 +80,7 @@ module m0 {
 >i1 : Symbol(i1, Decl(moduledecl.ts, 31, 5))
 
         () : Object;
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
         [n: number]: c1;
 >n : Symbol(n, Decl(moduledecl.ts, 35, 9))
@@ -174,7 +174,7 @@ module m1 {
 >i1 : Symbol(i1, Decl(moduledecl.ts, 68, 5))
 
         () : Object;
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
         [n: number]: c1;
 >n : Symbol(n, Decl(moduledecl.ts, 72, 9))

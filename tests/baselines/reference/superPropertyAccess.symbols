@@ -42,11 +42,11 @@ class MyDerived extends MyBase {
 
         var l2 = super.m1.bind(this);                       // Should be allowed, can access properties as well as invoke
 >l2 : Symbol(l2, Decl(superPropertyAccess.ts, 16, 11))
->super.m1.bind : Symbol(Function.bind, Decl(lib.d.ts, --, --))
+>super.m1.bind : Symbol(Function.bind, Decl(lib.es5.d.ts, --, --))
 >super.m1 : Symbol(MyBase.m1, Decl(superPropertyAccess.ts, 0, 14))
 >super : Symbol(MyBase, Decl(superPropertyAccess.ts, 0, 0))
 >m1 : Symbol(MyBase.m1, Decl(superPropertyAccess.ts, 0, 14))
->bind : Symbol(Function.bind, Decl(lib.d.ts, --, --))
+>bind : Symbol(Function.bind, Decl(lib.es5.d.ts, --, --))
 >this : Symbol(MyDerived, Decl(superPropertyAccess.ts, 8, 1))
 
         var x: (a: string) => string = super.m1;            // Should be allowed, can assign to var with compatible signature
@@ -57,11 +57,11 @@ class MyDerived extends MyBase {
 >m1 : Symbol(MyBase.m1, Decl(superPropertyAccess.ts, 0, 14))
 
         super.m2.bind(this);                                // Should error, instance property, not a public instance member function
->super.m2.bind : Symbol(Function.bind, Decl(lib.d.ts, --, --))
+>super.m2.bind : Symbol(Function.bind, Decl(lib.es5.d.ts, --, --))
 >super.m2 : Symbol(MyBase.m2, Decl(superPropertyAccess.ts, 2, 20))
 >super : Symbol(MyBase, Decl(superPropertyAccess.ts, 0, 0))
 >m2 : Symbol(MyBase.m2, Decl(superPropertyAccess.ts, 2, 20))
->bind : Symbol(Function.bind, Decl(lib.d.ts, --, --))
+>bind : Symbol(Function.bind, Decl(lib.es5.d.ts, --, --))
 >this : Symbol(MyDerived, Decl(superPropertyAccess.ts, 8, 1))
 
         super.p1();                                         // Should error, private not public instance member function

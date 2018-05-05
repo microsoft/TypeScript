@@ -12,8 +12,8 @@ declare global {
 >global : Symbol(global, Decl(f2.ts, 0, 23))
 
     interface Array<T> {
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(f2.ts, 3, 16))
->T : Symbol(T, Decl(lib.d.ts, --, --), Decl(f2.ts, 4, 20))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(f2.ts, 3, 16))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(f2.ts, 4, 20))
 
         getA(): A;
 >getA : Symbol(Array.getA, Decl(f2.ts, 4, 24))

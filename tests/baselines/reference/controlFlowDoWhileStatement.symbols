@@ -80,9 +80,9 @@ function d() {
 
     } while (x = x.length)
 >x : Symbol(x, Decl(controlFlowDoWhileStatement.ts, 28, 7))
->x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowDoWhileStatement.ts, 28, 7))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
     x; // number
 >x : Symbol(x, Decl(controlFlowDoWhileStatement.ts, 28, 7))
@@ -111,8 +111,8 @@ function f() {
 
     let x: string | number | boolean | RegExp | Function;
 >x : Symbol(x, Decl(controlFlowDoWhileStatement.ts, 45, 7))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     x = "";
 >x : Symbol(x, Decl(controlFlowDoWhileStatement.ts, 45, 7))
@@ -148,8 +148,8 @@ function g() {
 
     let x: string | number | boolean | RegExp | Function;
 >x : Symbol(x, Decl(controlFlowDoWhileStatement.ts, 61, 7))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     x = "";
 >x : Symbol(x, Decl(controlFlowDoWhileStatement.ts, 61, 7))

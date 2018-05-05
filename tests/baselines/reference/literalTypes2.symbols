@@ -573,14 +573,14 @@ function append<T>(a: T[], x: T): T[] {
 
     let result = a.slice();
 >result : Symbol(result, Decl(literalTypes2.ts, 169, 7))
->a.slice : Symbol(Array.slice, Decl(lib.d.ts, --, --))
+>a.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(literalTypes2.ts, 168, 19))
->slice : Symbol(Array.slice, Decl(lib.d.ts, --, --))
+>slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
 
     result.push(x);
->result.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>result.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >result : Symbol(result, Decl(literalTypes2.ts, 169, 7))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(literalTypes2.ts, 168, 26))
 
     return result;

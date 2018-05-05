@@ -175,13 +175,13 @@ type Identifiable<T> = { _id: string } & T;
 
 interface I20 extends Partial<T1> { x: string }
 >I20 : Symbol(I20, Decl(interfaceExtendsObjectIntersection.ts, 42, 43))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T1 : Symbol(T1, Decl(interfaceExtendsObjectIntersection.ts, 0, 0))
 >x : Symbol(I20.x, Decl(interfaceExtendsObjectIntersection.ts, 44, 35))
 
 interface I21 extends Readonly<T1> { x: string }
 >I21 : Symbol(I21, Decl(interfaceExtendsObjectIntersection.ts, 44, 47))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >T1 : Symbol(T1, Decl(interfaceExtendsObjectIntersection.ts, 0, 0))
 >x : Symbol(I21.x, Decl(interfaceExtendsObjectIntersection.ts, 45, 36))
 
@@ -201,14 +201,14 @@ interface I23 extends Identifiable<T1 & { b: number}> { x: string }
 class C20 extends Constructor<Partial<T1>>() { x: string }
 >C20 : Symbol(C20, Decl(interfaceExtendsObjectIntersection.ts, 47, 67))
 >Constructor : Symbol(Constructor, Decl(interfaceExtendsObjectIntersection.ts, 16, 34), Decl(interfaceExtendsObjectIntersection.ts, 14, 37))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T1 : Symbol(T1, Decl(interfaceExtendsObjectIntersection.ts, 0, 0))
 >x : Symbol(C20.x, Decl(interfaceExtendsObjectIntersection.ts, 49, 46))
 
 class C21 extends Constructor<Readonly<T1>>() { x: string }
 >C21 : Symbol(C21, Decl(interfaceExtendsObjectIntersection.ts, 49, 58))
 >Constructor : Symbol(Constructor, Decl(interfaceExtendsObjectIntersection.ts, 16, 34), Decl(interfaceExtendsObjectIntersection.ts, 14, 37))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >T1 : Symbol(T1, Decl(interfaceExtendsObjectIntersection.ts, 0, 0))
 >x : Symbol(C21.x, Decl(interfaceExtendsObjectIntersection.ts, 50, 47))
 

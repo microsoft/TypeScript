@@ -40,5 +40,5 @@ var r5 = foo<any[]>([1, '']); // any[]
 var r6 = foo<Object[]>([1, '']); // Object[]
 >r6 : Symbol(r6, Decl(genericCallWithArrayLiteralArgs.ts, 11, 3))
 >foo : Symbol(foo, Decl(genericCallWithArrayLiteralArgs.ts, 0, 0))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 

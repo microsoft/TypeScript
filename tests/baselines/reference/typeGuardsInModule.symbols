@@ -20,9 +20,9 @@ module m1 {
     num = typeof var1 === "string" && var1.length; // string
 >num : Symbol(num, Decl(typeGuardsInModule.ts, 4, 3))
 >var1 : Symbol(var1, Decl(typeGuardsInModule.ts, 6, 3))
->var1.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>var1.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >var1 : Symbol(var1, Decl(typeGuardsInModule.ts, 6, 3))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
     // variables in module declaration
     var var2: string | number;
@@ -33,9 +33,9 @@ module m1 {
 
         num = var2.length; // string
 >num : Symbol(num, Decl(typeGuardsInModule.ts, 4, 3))
->var2.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>var2.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >var2 : Symbol(var2, Decl(typeGuardsInModule.ts, 13, 7))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
     }
     else {
         num = var2; // number
@@ -77,17 +77,17 @@ module m2 {
         num = typeof var1 === "string" && var1.length; // string
 >num : Symbol(num, Decl(typeGuardsInModule.ts, 4, 3))
 >var1 : Symbol(var1, Decl(typeGuardsInModule.ts, 6, 3))
->var1.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>var1.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >var1 : Symbol(var1, Decl(typeGuardsInModule.ts, 6, 3))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
         // local variables from outer module declaration
         num = typeof var2 === "string" && var2.length; // string
 >num : Symbol(num, Decl(typeGuardsInModule.ts, 4, 3))
 >var2 : Symbol(var2, Decl(typeGuardsInModule.ts, 32, 7))
->var2.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>var2.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >var2 : Symbol(var2, Decl(typeGuardsInModule.ts, 32, 7))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
         // exported variable from outer the module
         strOrNum = typeof var3 === "string" && var3; // string | number
@@ -104,9 +104,9 @@ module m2 {
 
             num = var4.length; // string
 >num : Symbol(num, Decl(typeGuardsInModule.ts, 4, 3))
->var4.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>var4.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >var4 : Symbol(var4, Decl(typeGuardsInModule.ts, 45, 11))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
         }
         else {
             num = var4; // number
@@ -141,9 +141,9 @@ module m3.m4 {
     num = typeof var1 === "string" && var1.length; // string
 >num : Symbol(num, Decl(typeGuardsInModule.ts, 4, 3))
 >var1 : Symbol(var1, Decl(typeGuardsInModule.ts, 6, 3))
->var1.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>var1.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >var1 : Symbol(var1, Decl(typeGuardsInModule.ts, 6, 3))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
     // variables in module declaration
     var var2: string | number;
@@ -154,9 +154,9 @@ module m3.m4 {
 
         num = var2.length; // string
 >num : Symbol(num, Decl(typeGuardsInModule.ts, 4, 3))
->var2.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>var2.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >var2 : Symbol(var2, Decl(typeGuardsInModule.ts, 69, 7))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
     }
     else {
         num = var2; // number

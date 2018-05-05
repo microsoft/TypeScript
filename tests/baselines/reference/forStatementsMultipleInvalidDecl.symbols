@@ -62,9 +62,9 @@ module M {
     export function F2(x: number): string { return x.toString(); }
 >F2 : Symbol(F2, Decl(forStatementsMultipleInvalidDecl.ts, 24, 5))
 >x : Symbol(x, Decl(forStatementsMultipleInvalidDecl.ts, 26, 23))
->x.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(forStatementsMultipleInvalidDecl.ts, 26, 23))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 }
 
 // all of these are errors
@@ -127,7 +127,7 @@ for(var arr2 = [new D<string>()];;){}
 
 for( var arr2 = new Array<D<number>>();;){}
 >arr2 : Symbol(arr2, Decl(forStatementsMultipleInvalidDecl.ts, 48, 7), Decl(forStatementsMultipleInvalidDecl.ts, 49, 8))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >D : Symbol(D, Decl(forStatementsMultipleInvalidDecl.ts, 11, 1))
 
 for(var m: typeof M;;){}

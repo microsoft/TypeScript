@@ -466,7 +466,7 @@ const foo = <T>(object: T, partial: Partial<T>) => object;
 >object : Symbol(object, Decl(isomorphicMappedTypeInference.ts, 147, 16))
 >T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 147, 13))
 >partial : Symbol(partial, Decl(isomorphicMappedTypeInference.ts, 147, 26))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 147, 13))
 >object : Symbol(object, Decl(isomorphicMappedTypeInference.ts, 147, 16))
 

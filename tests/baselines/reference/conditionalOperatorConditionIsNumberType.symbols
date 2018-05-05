@@ -17,7 +17,7 @@ var exprString1: string;
 
 var exprIsObject1: Object;
 >exprIsObject1 : Symbol(exprIsObject1, Decl(conditionalOperatorConditionIsNumberType.ts, 7, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var exprAny2: any;
 >exprAny2 : Symbol(exprAny2, Decl(conditionalOperatorConditionIsNumberType.ts, 9, 3))
@@ -33,7 +33,7 @@ var exprString2: string;
 
 var exprIsObject2: Object;
 >exprIsObject2 : Symbol(exprIsObject2, Decl(conditionalOperatorConditionIsNumberType.ts, 13, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 //Cond is a number type variable
 condNumber ? exprAny1 : exprAny2;
@@ -107,8 +107,8 @@ var array = [1, 2, 3];
 >exprBoolean2 : Symbol(exprBoolean2, Decl(conditionalOperatorConditionIsNumberType.ts, 10, 3))
 
 "string".length ? exprNumber1 : exprNumber2;
->"string".length : Symbol(String.length, Decl(lib.d.ts, --, --))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>"string".length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >exprNumber1 : Symbol(exprNumber1, Decl(conditionalOperatorConditionIsNumberType.ts, 5, 3))
 >exprNumber2 : Symbol(exprNumber2, Decl(conditionalOperatorConditionIsNumberType.ts, 11, 3))
 
@@ -207,8 +207,8 @@ var resultIsBoolean3 = 1 + 1 ? exprBoolean1 : exprBoolean2;
 
 var resultIsNumber3 = "string".length ? exprNumber1 : exprNumber2;
 >resultIsNumber3 : Symbol(resultIsNumber3, Decl(conditionalOperatorConditionIsNumberType.ts, 59, 3))
->"string".length : Symbol(String.length, Decl(lib.d.ts, --, --))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>"string".length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >exprNumber1 : Symbol(exprNumber1, Decl(conditionalOperatorConditionIsNumberType.ts, 5, 3))
 >exprNumber2 : Symbol(exprNumber2, Decl(conditionalOperatorConditionIsNumberType.ts, 11, 3))
 

@@ -19,7 +19,7 @@ function never(_: never): never {
 >_ : Symbol(_, Decl(discriminantsAndNullOrUndefined.ts, 7, 15))
 
     throw new Error();
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 function useA(_: A): void { }

@@ -7,7 +7,7 @@ interface Utils {
 >T : Symbol(T, Decl(genericFunctionsWithOptionalParameters1.ts, 1, 8))
 >S : Symbol(S, Decl(genericFunctionsWithOptionalParameters1.ts, 1, 10))
 >c : Symbol(c, Decl(genericFunctionsWithOptionalParameters1.ts, 1, 14))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(genericFunctionsWithOptionalParameters1.ts, 1, 8))
 >folder : Symbol(folder, Decl(genericFunctionsWithOptionalParameters1.ts, 1, 27))
 >s : Symbol(s, Decl(genericFunctionsWithOptionalParameters1.ts, 1, 38))

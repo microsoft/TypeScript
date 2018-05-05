@@ -81,9 +81,9 @@ module Test {
 >tokens : Symbol(ILineTokens.tokens, Decl(arrayAssignmentTest5.ts, 9, 27))
 
             if (tokens.length === 0) {
->tokens.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>tokens.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >tokens : Symbol(tokens, Decl(arrayAssignmentTest5.ts, 22, 15))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
                 return this.onEnter(line, tokens, offset);        // <== this should produce an error since onEnter can not be called with (string, IStateToken[], offset)
 >this.onEnter : Symbol(Bug.onEnter, Decl(arrayAssignmentTest5.ts, 19, 39))

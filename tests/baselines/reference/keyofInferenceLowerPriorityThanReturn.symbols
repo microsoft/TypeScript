@@ -122,7 +122,7 @@ function insertOnConflictDoNothing<Req extends object, Def extends object>(_tabl
 >Def : Symbol(Def, Decl(keyofInferenceLowerPriorityThanReturn.ts, 39, 54))
 
     throw new Error();
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 function f() {

@@ -2,35 +2,35 @@
 declare function ClassDecorator1(target: Function): void;
 >ClassDecorator1 : Symbol(ClassDecorator1, Decl(sourceMapValidationDecorators.ts, 0, 0))
 >target : Symbol(target, Decl(sourceMapValidationDecorators.ts, 0, 33))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 declare function ClassDecorator2(x: number): (target: Function) => void;
 >ClassDecorator2 : Symbol(ClassDecorator2, Decl(sourceMapValidationDecorators.ts, 0, 57))
 >x : Symbol(x, Decl(sourceMapValidationDecorators.ts, 1, 33))
 >target : Symbol(target, Decl(sourceMapValidationDecorators.ts, 1, 46))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 declare function PropertyDecorator1(target: Object, key: string | symbol, descriptor?: PropertyDescriptor): void;
 >PropertyDecorator1 : Symbol(PropertyDecorator1, Decl(sourceMapValidationDecorators.ts, 1, 72))
 >target : Symbol(target, Decl(sourceMapValidationDecorators.ts, 2, 36))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >key : Symbol(key, Decl(sourceMapValidationDecorators.ts, 2, 51))
 >descriptor : Symbol(descriptor, Decl(sourceMapValidationDecorators.ts, 2, 73))
->PropertyDescriptor : Symbol(PropertyDescriptor, Decl(lib.d.ts, --, --))
+>PropertyDescriptor : Symbol(PropertyDescriptor, Decl(lib.es5.d.ts, --, --))
 
 declare function PropertyDecorator2(x: number): (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void;
 >PropertyDecorator2 : Symbol(PropertyDecorator2, Decl(sourceMapValidationDecorators.ts, 2, 113))
 >x : Symbol(x, Decl(sourceMapValidationDecorators.ts, 3, 36))
 >target : Symbol(target, Decl(sourceMapValidationDecorators.ts, 3, 49))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >key : Symbol(key, Decl(sourceMapValidationDecorators.ts, 3, 64))
 >descriptor : Symbol(descriptor, Decl(sourceMapValidationDecorators.ts, 3, 86))
->PropertyDescriptor : Symbol(PropertyDescriptor, Decl(lib.d.ts, --, --))
+>PropertyDescriptor : Symbol(PropertyDescriptor, Decl(lib.es5.d.ts, --, --))
 
 declare function ParameterDecorator1(target: Object, key: string | symbol, paramIndex: number): void;
 >ParameterDecorator1 : Symbol(ParameterDecorator1, Decl(sourceMapValidationDecorators.ts, 3, 128))
 >target : Symbol(target, Decl(sourceMapValidationDecorators.ts, 4, 37))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >key : Symbol(key, Decl(sourceMapValidationDecorators.ts, 4, 52))
 >paramIndex : Symbol(paramIndex, Decl(sourceMapValidationDecorators.ts, 4, 74))
 
@@ -38,7 +38,7 @@ declare function ParameterDecorator2(x: number): (target: Object, key: string | 
 >ParameterDecorator2 : Symbol(ParameterDecorator2, Decl(sourceMapValidationDecorators.ts, 4, 101))
 >x : Symbol(x, Decl(sourceMapValidationDecorators.ts, 5, 37))
 >target : Symbol(target, Decl(sourceMapValidationDecorators.ts, 5, 50))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >key : Symbol(key, Decl(sourceMapValidationDecorators.ts, 5, 65))
 >paramIndex : Symbol(paramIndex, Decl(sourceMapValidationDecorators.ts, 5, 87))
 

@@ -29,12 +29,12 @@ class Bar extends Foo.Object { // should work
 
 class Baz extends Object {
 >Baz : Symbol(Baz, Decl(checkForObjectTooStrict.ts, 18, 1))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     constructor () { // ERROR, as expected
 
         super();
->super : Symbol(ObjectConstructor, Decl(lib.d.ts, --, --))
+>super : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
 
     }
 

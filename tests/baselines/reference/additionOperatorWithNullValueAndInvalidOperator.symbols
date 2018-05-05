@@ -10,14 +10,14 @@ var a: boolean;
 
 var b: Object;
 >b : Symbol(b, Decl(additionOperatorWithNullValueAndInvalidOperator.ts, 5, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var c: void;
 >c : Symbol(c, Decl(additionOperatorWithNullValueAndInvalidOperator.ts, 6, 3))
 
 var d: Number;
 >d : Symbol(d, Decl(additionOperatorWithNullValueAndInvalidOperator.ts, 7, 3))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 // null + boolean/Object
 var r1 = null + a;

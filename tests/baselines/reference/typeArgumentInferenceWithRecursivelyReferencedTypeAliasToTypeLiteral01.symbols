@@ -15,9 +15,9 @@ var nodes: TreeNode[];
 >TreeNode : Symbol(TreeNode, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral01.ts, 0, 0))
 
 nodes.map(n => n.name);
->nodes.map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>nodes.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >nodes : Symbol(nodes, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral01.ts, 5, 3))
->map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >n : Symbol(n, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral01.ts, 6, 10))
 >n.name : Symbol(name, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral01.ts, 0, 17))
 >n : Symbol(n, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral01.ts, 6, 10))

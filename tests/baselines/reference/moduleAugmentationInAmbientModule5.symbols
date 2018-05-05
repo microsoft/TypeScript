@@ -32,8 +32,8 @@ declare module "array" {
 >global : Symbol(global, Decl(array.d.ts, 5, 24))
 
         interface Array<T> {
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(array.d.ts, 6, 12))
->T : Symbol(T, Decl(lib.d.ts, --, --), Decl(array.d.ts, 7, 24))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(array.d.ts, 6, 12))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(array.d.ts, 7, 24))
 
             getA(): A;
 >getA : Symbol(Array.getA, Decl(array.d.ts, 7, 28))

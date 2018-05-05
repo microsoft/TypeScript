@@ -12,9 +12,9 @@ function fn() {
 >arr : Symbol(arr, Decl(commaOperatorLeftSideUnused.ts, 4, 5))
 
   switch(arr.length) {
->arr.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >arr : Symbol(arr, Decl(commaOperatorLeftSideUnused.ts, 4, 5))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
     // Should error
     case 0, 1:
@@ -27,9 +27,9 @@ function fn() {
 // Should error
 let x = Math.pow((3, 5), 2);
 >x : Symbol(x, Decl(commaOperatorLeftSideUnused.ts, 15, 3))
->Math.pow : Symbol(Math.pow, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->pow : Symbol(Math.pow, Decl(lib.d.ts, --, --))
+>Math.pow : Symbol(Math.pow, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>pow : Symbol(Math.pow, Decl(lib.es5.d.ts, --, --))
 
 // Should error
 let a = [(3 + 4), ((1 + 1, 8) * 4)];
@@ -139,9 +139,9 @@ xx = ((xx+= 4), xx);
 
 xx = (Math.pow(3, 2), 4);
 >xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
->Math.pow : Symbol(Math.pow, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->pow : Symbol(Math.pow, Decl(lib.d.ts, --, --))
+>Math.pow : Symbol(Math.pow, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>pow : Symbol(Math.pow, Decl(lib.es5.d.ts, --, --))
 
 xx = (void xx, 10);
 >xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))

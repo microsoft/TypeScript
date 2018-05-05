@@ -54,9 +54,9 @@ function f2<T>(x: T) {
 >x : Symbol(x, Decl(typeGuardsTypeParameters.ts, 14, 15))
 
         x.length;
->x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsTypeParameters.ts, 14, 15))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
     }
 }
 
@@ -87,9 +87,9 @@ function fun<T>(item: { [P in keyof T]: T[P] }) {
 >value : Symbol(value, Decl(typeGuardsTypeParameters.ts, 27, 13))
 
             strings.push(value);
->strings.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>strings.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >strings : Symbol(strings, Decl(typeGuardsTypeParameters.ts, 25, 9))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(typeGuardsTypeParameters.ts, 27, 13))
         }
     }

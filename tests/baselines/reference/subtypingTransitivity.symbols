@@ -4,7 +4,7 @@ class B {
 
     x: Object;
 >x : Symbol(B.x, Decl(subtypingTransitivity.ts, 0, 9))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 class D extends B {

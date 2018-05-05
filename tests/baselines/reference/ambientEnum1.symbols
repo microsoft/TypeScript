@@ -12,6 +12,6 @@
 
         x = 'foo'.length
 >x : Symbol(E2.x, Decl(ambientEnum1.ts, 5, 21))
->'foo'.length : Symbol(String.length, Decl(lib.d.ts, --, --))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>'foo'.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
     }

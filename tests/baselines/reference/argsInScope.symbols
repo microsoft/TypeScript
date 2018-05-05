@@ -11,9 +11,9 @@ class C {
        for (var i = 0; i < arguments.length; i++) {
 >i : Symbol(i, Decl(argsInScope.ts, 2, 15))
 >i : Symbol(i, Decl(argsInScope.ts, 2, 15))
->arguments.length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 >arguments : Symbol(arguments)
->length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(argsInScope.ts, 2, 15))
 
            // WScript.Echo("param: " + arguments[i]);

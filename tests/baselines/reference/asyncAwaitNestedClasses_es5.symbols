@@ -9,10 +9,10 @@ class A {
 
         static func2(): Promise<void> {
 >func2 : Symbol(B.func2, Decl(asyncAwaitNestedClasses_es5.ts, 2, 24))
->Promise : Symbol(Promise, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
             return new Promise((resolve) => { resolve(null); });
->Promise : Symbol(Promise, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >resolve : Symbol(resolve, Decl(asyncAwaitNestedClasses_es5.ts, 4, 32))
 >resolve : Symbol(resolve, Decl(asyncAwaitNestedClasses_es5.ts, 4, 32))
         }

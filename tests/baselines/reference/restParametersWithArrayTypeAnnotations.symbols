@@ -70,20 +70,20 @@ var b = {
 function foo2(...x: Array<string>) { }
 >foo2 : Symbol(foo2, Decl(restParametersWithArrayTypeAnnotations.ts, 24, 1))
 >x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 29, 14))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var f3 = function foo(...x: Array<string>) { }
 >f3 : Symbol(f3, Decl(restParametersWithArrayTypeAnnotations.ts, 30, 3))
 >foo : Symbol(foo, Decl(restParametersWithArrayTypeAnnotations.ts, 30, 8))
 >x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 30, 22))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var f4 = (...x: Array<string>, ...y: Array<string>) => { }
 >f4 : Symbol(f4, Decl(restParametersWithArrayTypeAnnotations.ts, 31, 3))
 >x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 31, 10))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >y : Symbol(y, Decl(restParametersWithArrayTypeAnnotations.ts, 31, 30))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 class C2 {
 >C2 : Symbol(C2, Decl(restParametersWithArrayTypeAnnotations.ts, 31, 58))
@@ -91,7 +91,7 @@ class C2 {
     foo(...x: Array<string>) { }
 >foo : Symbol(C2.foo, Decl(restParametersWithArrayTypeAnnotations.ts, 33, 10))
 >x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 34, 8))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 interface I2 {
@@ -99,14 +99,14 @@ interface I2 {
 
     (...x: Array<string>);
 >x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 38, 5))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     foo(...x: Array<string>, ...y: Array<string>);
 >foo : Symbol(I2.foo, Decl(restParametersWithArrayTypeAnnotations.ts, 38, 26))
 >x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 39, 8))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >y : Symbol(y, Decl(restParametersWithArrayTypeAnnotations.ts, 39, 28))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 var a2: {
@@ -114,12 +114,12 @@ var a2: {
 
     (...x: Array<string>);
 >x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 43, 5))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     foo(...x: Array<string>);
 >foo : Symbol(foo, Decl(restParametersWithArrayTypeAnnotations.ts, 43, 26))
 >x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 44, 8))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 var b2 = {
@@ -128,18 +128,18 @@ var b2 = {
     foo(...x: Array<string>) { },
 >foo : Symbol(foo, Decl(restParametersWithArrayTypeAnnotations.ts, 47, 10))
 >x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 48, 8))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     a: function foo(...x: Array<string>, ...y: Array<string>) { },
 >a : Symbol(a, Decl(restParametersWithArrayTypeAnnotations.ts, 48, 33))
 >foo : Symbol(foo, Decl(restParametersWithArrayTypeAnnotations.ts, 49, 6))
 >x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 49, 20))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >y : Symbol(y, Decl(restParametersWithArrayTypeAnnotations.ts, 49, 40))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     b: (...x: Array<string>) => { }
 >b : Symbol(b, Decl(restParametersWithArrayTypeAnnotations.ts, 49, 66))
 >x : Symbol(x, Decl(restParametersWithArrayTypeAnnotations.ts, 50, 8))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }

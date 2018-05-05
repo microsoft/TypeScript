@@ -11,7 +11,7 @@ function C(x) {
 C.prototype.m = function() {
 >C.prototype : Symbol(C.m, Decl(a.js, 3, 1))
 >C : Symbol(C, Decl(a.js, 0, 0))
->prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >m : Symbol(C.m, Decl(a.js, 3, 1))
 
     this.y = 12
