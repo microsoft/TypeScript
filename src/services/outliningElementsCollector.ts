@@ -20,28 +20,12 @@ namespace ts.OutliningElementsCollector {
             if (current === n) break;
             const firstImport = statements[current];
             while (current < n && isAnyImportSyntax(statements[current])) {
-                visitImportNode(statements[current] as AnyImportSyntax, sourceFile, cancellationToken, out);
+                addOutliningForLeadingCommentsForNode(statements[current], sourceFile, cancellationToken, out);
                 current++;
             }
             const lastImport = current < n ? statements[current - 1] : statements[n - 1];
             if (lastImport !== firstImport) {
-                out.push(createOutliningSpanFromBounds(findChildOfKind(firstImport, SyntaxKind.ImportKeyword, sourceFile)!.getStart(sourceFile), lastImport.getEnd(), OutliningSpanKind.Import));
-            }
-        }
-
-        function visitImportNode(node: AnyImportSyntax, sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>) {
-            // Add outlining spans for comments if they exist
-            addOutliningForLeadingCommentsForNode(node, sourceFile, cancellationToken, out);
-            // Add outlining spans for the import statement itself if applicable
-            if (isImportDeclaration(node) && node.importClause && node.importClause.namedBindings &&
-                node.importClause.namedBindings.kind !== SyntaxKind.NamespaceImport && node.importClause.namedBindings.elements.length) {
-                const openToken = findChildOfKind(node.importClause.namedBindings, SyntaxKind.OpenBraceToken, sourceFile);
-                const closeToken = findChildOfKind(node.importClause.namedBindings, SyntaxKind.CloseBraceToken, sourceFile);
-                if (openToken && closeToken) {
-                    out.push(createOutliningSpan(
-                        createTextSpanFromBounds(openToken.getStart(sourceFile), closeToken.getEnd()),
-                        OutliningSpanKind.Import, createTextSpanFromNode(node, sourceFile)));
-                }
+                out.push(createOutliningSpanFromBounds(findChildOfKind(firstImport, SyntaxKind.ImportKeyword, sourceFile)!.getStart(sourceFile), lastImport.getEnd(), OutliningSpanKind.Imports));
             }
         }
 
