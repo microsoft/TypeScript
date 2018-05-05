@@ -824,9 +824,16 @@ namespace ts {
     }
 
     export const enum OutliningSpanKind {
+        /** Single or multi-line comments */
         Comment = "comment",
+
+        /** Sections marked by '// #region' and '// #endregion' comments */
         Region = "region",
+
+        /** Declarations and expressions */
         Code = "code",
+
+        /** Contiguous blocks of import declarations */
         Imports = "imports"
     }
 
