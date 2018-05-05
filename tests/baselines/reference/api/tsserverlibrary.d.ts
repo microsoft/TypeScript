@@ -4893,7 +4893,7 @@ declare namespace ts {
         Comment = "comment",
         Region = "region",
         Code = "code",
-        Import = "import"
+        Imports = "imports"
     }
     enum OutputFileType {
         JavaScript = 0,

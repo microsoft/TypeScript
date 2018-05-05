@@ -827,7 +827,7 @@ namespace ts {
         Comment = "comment",
         Region = "region",
         Code = "code",
-        Import = "import"
+        Imports = "imports"
     }
 
     export const enum OutputFileType {
