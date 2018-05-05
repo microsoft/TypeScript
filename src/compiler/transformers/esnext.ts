@@ -118,28 +118,44 @@ namespace ts {
         }
 
         function visitYieldExpression(node: YieldExpression) {
-            if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator && node.asteriskToken) {
-                const expression = visitNode(node.expression, visitor, isExpression);
-                return setOriginalNode(
-                    setTextRange(
-                        createYield(
-                            createAwaitHelper(context,
-                                updateYield(
-                                    node,
-                                    node.asteriskToken,
-                                    createAsyncDelegatorHelper(
-                                        context,
-                                        createAsyncValuesHelper(context, expression, expression),
-                                        expression
+            if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
+                if (node.asteriskToken) {
+                    const expression = visitNode(node.expression, visitor, isExpression);
+
+                    return setOriginalNode(
+                        setTextRange(
+                            createYield(
+                                createAwaitHelper(context,
+                                    updateYield(
+                                        node,
+                                        node.asteriskToken,
+                                        createAsyncDelegatorHelper(
+                                            context,
+                                            createAsyncValuesHelper(context, expression, expression),
+                                            expression
+                                        )
                                     )
                                 )
-                            )
+                            ),
+                            node
                         ),
                         node
-                    ),
-                    node
-                );
+                    );
+                }
+
+                if (node.expression && node.expression.kind !== SyntaxKind.AwaitExpression) {
+                    return setOriginalNode(
+                        setTextRange(
+                            createYield(
+                                createDownlevelAwait(node.expression)
+                            ),
+                            node
+                        ),
+                        node
+                    );
+                }
             }
+
             return visitEachChild(node, visitor, context);
         }
 

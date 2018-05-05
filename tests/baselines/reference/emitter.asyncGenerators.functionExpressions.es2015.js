@@ -100,7 +100,7 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 };
 const f3 = function () {
     return __asyncGenerator(this, arguments, function* () {
-        const x = yield 1;
+        const x = yield yield __await(1);
     });
 };
 //// [F4.js]
@@ -170,7 +170,7 @@ var __asyncDelegator = (this && this.__asyncDelegator) || function (o) {
 };
 const f5 = function () {
     return __asyncGenerator(this, arguments, function* () {
-        const x = yield __await(yield* __asyncDelegator(__asyncValues((function () { return __asyncGenerator(this, arguments, function* () { yield 1; }); })())));
+        const x = yield __await(yield* __asyncDelegator(__asyncValues((function () { return __asyncGenerator(this, arguments, function* () { yield yield __await(1); }); })())));
     });
 };
 //// [F6.js]

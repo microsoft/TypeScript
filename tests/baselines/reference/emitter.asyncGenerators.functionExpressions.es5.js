@@ -195,8 +195,9 @@ var f3 = function () {
         var x;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, 1];
-                case 1:
+                case 0: return [4 /*yield*/, __await(1)];
+                case 1: return [4 /*yield*/, _a.sent()];
+                case 2:
                     x = _a.sent();
                     return [2 /*return*/];
             }
@@ -358,8 +359,9 @@ var f5 = function () {
             switch (_a.label) {
                 case 0: return [5 /*yield**/, __values(__asyncDelegator(__asyncValues((function () { return __asyncGenerator(this, arguments, function () { return __generator(this, function (_a) {
                         switch (_a.label) {
-                            case 0: return [4 /*yield*/, 1];
-                            case 1:
+                            case 0: return [4 /*yield*/, __await(1)];
+                            case 1: return [4 /*yield*/, _a.sent()];
+                            case 2:
                                 _a.sent();
                                 return [2 /*return*/];
                         }
