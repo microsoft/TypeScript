@@ -18,14 +18,14 @@ namespace ts.OutliningElementsCollector {
                 current++;
             }
             if (current === n) break;
-            const firstImport = statements[current];
+            const firstImport = current;
             while (current < n && isAnyImportSyntax(statements[current])) {
                 addOutliningForLeadingCommentsForNode(statements[current], sourceFile, cancellationToken, out);
                 current++;
             }
-            const lastImport = current < n ? statements[current - 1] : statements[n - 1];
+            const lastImport = current - 1;
             if (lastImport !== firstImport) {
-                out.push(createOutliningSpanFromBounds(findChildOfKind(firstImport, SyntaxKind.ImportKeyword, sourceFile)!.getStart(sourceFile), lastImport.getEnd(), OutliningSpanKind.Imports));
+                out.push(createOutliningSpanFromBounds(findChildOfKind(statements[firstImport], SyntaxKind.ImportKeyword, sourceFile)!.getStart(sourceFile), statements[lastImport].getEnd(), OutliningSpanKind.Imports));
             }
         }
 

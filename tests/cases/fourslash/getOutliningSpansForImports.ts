@@ -17,4 +17,4 @@
 ////import { a, b, c } from "mod";
 ////import r = require("mod");|]
 
-verify.outliningSpansInCurrentFile(test.ranges(), "import");
+verify.outliningSpansInCurrentFile(test.ranges(), "imports");
