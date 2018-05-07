@@ -9,5 +9,5 @@
 ////const x: typeof import("./a").[|T|] = 0;
 
 const [r0, r1, r2, r3] = test.ranges();
-verify.rangesReferenceEachOther([r0, r2]);
-verify.rangesReferenceEachOther([r1, r3]);
+verify.singleReferenceGroup("type T = 0\nconst T: 0", [r0, r2]);
+verify.singleReferenceGroup("type T = 0\nconst T: 0", [r1, r3]);
