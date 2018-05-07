@@ -1569,13 +1569,10 @@ namespace ts {
 
         function isTypeParameterSymbolDeclaredInContainer(symbol: Symbol, container: Node) {
             for (const decl of symbol.declarations) {
-                const parent = isJSDocTemplateTag(decl.parent) ? getJSDocHost(decl.parent) : decl.parent;
-                if (decl.kind === SyntaxKind.TypeParameter && parent === container) {
-                    if (isJSDocTemplateTag(decl.parent)) {
-                        return !find((decl.parent.parent as JSDoc).tags, isJSDocTypeAlias);
-                    }
-                    else {
-                        return true;
+                if (decl.kind === SyntaxKind.TypeParameter) {
+                    const parent = isJSDocTemplateTag(decl.parent) ? getJSDocHost(decl.parent) : decl.parent;
+                    if (parent === container) {
+                        return !(isJSDocTemplateTag(decl.parent) && find((decl.parent.parent as JSDoc).tags, isJSDocTypeAlias));
                     }
                 }
             }
@@ -3565,34 +3562,10 @@ namespace ts {
             }
 
             function symbolToParameterDeclaration(parameterSymbol: Symbol, context: NodeBuilderContext, preserveModifierFlags?: boolean): ParameterDeclaration {
-                const parameterDeclaration = getDeclarationOfKind<ParameterDeclaration>(parameterSymbol, SyntaxKind.Parameter);
+                let parameterDeclaration: ParameterDeclaration | JSDocParameterTag = getDeclarationOfKind<ParameterDeclaration>(parameterSymbol, SyntaxKind.Parameter);
                 if (!parameterDeclaration && !(isTransientSymbol(parameterSymbol) && !!parameterSymbol.isRestParameter)) {
-                    const paramTagDeclaration = getDeclarationOfKind<JSDocParameterTag>(parameterSymbol, SyntaxKind.JSDocParameterTag);
-                    // now do a whole bunch of stuff with the parameter tag instead
-                    // TODO: Dedupe this!
-                    Debug.assert(!!paramTagDeclaration);
-                    // TODO: Might need to convert jsdoc type literal to a binding name?
-                    Debug.assert(isIdentifier(paramTagDeclaration.name));
-                    const dotDotDotToken = isRestParameter(paramTagDeclaration) ? createToken(SyntaxKind.DotDotDotToken) : undefined;
-                    const name = paramTagDeclaration.name && isIdentifier(paramTagDeclaration.name) ?
-                        // isIdentifier(paramTagDeclaration.name) ?
-                            setEmitFlags(getSynthesizedClone(paramTagDeclaration.name), EmitFlags.NoAsciiEscaping) :
-                            // cloneQualifiedName(paramTagDeclaration.name) :
-                        symbolName(parameterSymbol);
-                    const questionToken = isOptionalParameter2(paramTagDeclaration) ? createToken(SyntaxKind.QuestionToken) : undefined;
-                    const parameterTypeNode = typeToTypeNodeHelper(getTypeOfSymbol(parameterSymbol), context);
-                    const parameterNode = createParameter(
-                        /*decorators*/ undefined,
-                        /*modifiers*/ undefined,
-                        dotDotDotToken,
-                        name,
-                        questionToken,
-                        parameterTypeNode,
-                        /*initializer*/ undefined);
-                    return parameterNode;
+                    parameterDeclaration = getDeclarationOfKind<JSDocParameterTag>(parameterSymbol, SyntaxKind.JSDocParameterTag);
                 }
-                Debug.assert(!!parameterDeclaration || isTransientSymbol(parameterSymbol) && !!parameterSymbol.isRestParameter);
-
                 let parameterType = getTypeOfSymbol(parameterSymbol);
                 if (parameterDeclaration && isRequiredInitializedParameter(parameterDeclaration)) {
                     parameterType = getOptionalType(parameterType);
@@ -3603,8 +3576,8 @@ namespace ts {
                 const dotDotDotToken = !parameterDeclaration || isRestParameter(parameterDeclaration) ? createToken(SyntaxKind.DotDotDotToken) : undefined;
                 const name = parameterDeclaration
                     ? parameterDeclaration.name ?
-                        parameterDeclaration.name.kind === SyntaxKind.Identifier ?
-                            setEmitFlags(getSynthesizedClone(parameterDeclaration.name), EmitFlags.NoAsciiEscaping) :
+                            parameterDeclaration.name.kind === SyntaxKind.Identifier ? setEmitFlags(getSynthesizedClone(parameterDeclaration.name), EmitFlags.NoAsciiEscaping) :
+                            parameterDeclaration.name.kind === SyntaxKind.QualifiedName ? setEmitFlags(getSynthesizedClone(parameterDeclaration.name.right), EmitFlags.NoAsciiEscaping) :
                             cloneBindingName(parameterDeclaration.name) :
                         symbolName(parameterSymbol)
                     : symbolName(parameterSymbol);
@@ -3630,15 +3603,6 @@ namespace ts {
                         return setEmitFlags(clone, EmitFlags.SingleLine | EmitFlags.NoAsciiEscaping);
                     }
                 }
-
-                // function cloneQualifiedName(node: QualifiedName): EntityName {
-                //     if (isIdentifier(node.left)) {
-                //         return setEmitFlags(getSynthesizedClone(node.left), EmitFlags.NoAsciiEscaping);
-                //     }
-                //     else {
-                //         return setEmitFlags(createQualifiedName(cloneQualifiedName(node.left), getSynthesizedClone(node.right)), EmitFlags.NoAsciiEscaping);
-                //     }
-                // }
             }
 
             function lookupSymbolChain(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags) {
@@ -6994,8 +6958,8 @@ namespace ts {
             return symbol && withAugmentations ? getMergedSymbol(symbol) : symbol;
         }
 
-        function isOptionalParameter(node: ParameterDeclaration) {
-            if (hasQuestionToken(node) || isJSDocOptionalParameter(node)) {
+        function isOptionalParameter(node: ParameterDeclaration | JSDocParameterTag) {
+            if (hasQuestionToken(node) || isOptionalJSDocParameterTag(node) || isJSDocOptionalParameter(node)) {
                 return true;
             }
 
@@ -7013,6 +6977,14 @@ namespace ts {
             }
 
             return false;
+        }
+
+        function isOptionalJSDocParameterTag(node: Node): node is JSDocParameterTag {
+            if (!isJSDocParameterTag(node)) {
+                return false;
+            }
+            const { isBracketed, typeExpression } = node;
+            return isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
         }
 
         function createTypePredicateFromTypePredicateNode(node: TypePredicateNode): IdentifierTypePredicate | ThisTypePredicate {
@@ -7132,9 +7104,14 @@ namespace ts {
                     }
 
                     // Record a new minimum argument count if this is not an optional parameter
-                    if (!(isOptionalParameter2(param) ||
-                          iife && parameters.length > iife.arguments.length && !type ||
-                          isUntypedSignatureInJSFile)) {
+                    const isOptionalParameter = isOptionalJSDocParameterTag(param) ||
+                        param.initializer || param.questionToken || param.dotDotDotToken ||
+                        iife && parameters.length > iife.arguments.length && !type ||
+                        isUntypedSignatureInJSFile ||
+                        isJSDocOptionalParameter(param);
+
+
+                    if (!isOptionalParameter) {
                         minArgumentCount = parameters.length;
                     }
                 }
@@ -7159,18 +7136,6 @@ namespace ts {
                 links.resolvedSignature = createSignature(declaration, typeParameters, thisParameter, parameters, returnType, /*resolvedTypePredicate*/ undefined, minArgumentCount, hasRestLikeParameter, hasLiteralTypes);
             }
             return links.resolvedSignature;
-        }
-
-        // TODO: Decide between this and the Original and B-b-b-b-best?
-        function isOptionalParameter2(param: ParameterDeclaration | JSDocParameterTag) {
-            if (isParameter(param)) {
-                return param.initializer || param.questionToken || param.dotDotDotToken ||
-                    isJSDocOptionalParameter(param);
-            }
-            else {
-                const { isBracketed, typeExpression } = param;
-                return isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
-            }
         }
 
         /**
@@ -26355,9 +26320,10 @@ namespace ts {
             return false;
         }
 
-        function isRequiredInitializedParameter(parameter: ParameterDeclaration) {
+        function isRequiredInitializedParameter(parameter: ParameterDeclaration | JSDocParameterTag) {
             return strictNullChecks &&
                 !isOptionalParameter(parameter) &&
+                !isJSDocParameterTag(parameter) &&
                 parameter.initializer &&
                 !hasModifier(parameter, ModifierFlags.ParameterPropertyModifier);
         }

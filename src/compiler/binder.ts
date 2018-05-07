@@ -1380,6 +1380,7 @@ namespace ts {
 
         function bindJSDocComment(node: JSDoc) {
             forEachChild(node, n => {
+                // Skip type-alias-related tags, which are bound early.
                 if (!isJSDocTypeAlias(n) && !getTypeAliasForJSDocTemplateTag(n, node.tags)) {
                     bind(n);
                 }
@@ -1949,7 +1950,7 @@ namespace ts {
             // Here the current node is "foo", which is a container, but the scope of "MyType" should
             // not be inside "foo". Therefore we always bind @typedef before bind the parent node,
             // and skip binding this tag later when binding all the other jsdoc tags.
-            if (isInJavaScriptFile(node)) bindJSDocTypedefTagIfAny(node);
+            if (isInJavaScriptFile(node)) bindJSDocTypeAliasTagsIfAny(node);
 
             // First we bind declaration nodes to a symbol if possible. We'll both create a symbol
             // and then potentially add the symbol to an appropriate symbol table. Possible
@@ -1985,7 +1986,7 @@ namespace ts {
             inStrictMode = saveInStrictMode;
         }
 
-        function bindJSDocTypedefTagIfAny(node: Node) {
+        function bindJSDocTypeAliasTagsIfAny(node: Node) {
             if (!hasJSDocNodes(node)) {
                 return;
             }
@@ -2002,9 +2003,10 @@ namespace ts {
                         bind(tag);
                         parent = savedParent;
                     }
+                    // Bind template tags that have a typedef or callback tag in the same comment.
+                    // The typedef/callback tag is the container of the template.
                     const alias = getTypeAliasForJSDocTemplateTag(tag, jsDoc.tags);
                     if (alias) {
-                        // find typedef or callback and set that to the container (TODO:manually, which is kind of a bad idea)
                         const savedContainer = container;
                         const savedParent = parent;
                         container = alias;
