@@ -21,7 +21,17 @@ namespace ts.OutliningElementsCollector {
             if (span) out.push(span);
 
             depthRemaining--;
-            n.forEachChild(walk);
+            if (isIfStatement(n) && n.elseStatement && isIfStatement(n.elseStatement)) {
+                // Consider an 'else if' to be on the same depth as the 'if'.
+                walk(n.expression);
+                walk(n.thenStatement);
+                depthRemaining++;
+                walk(n.elseStatement);
+                depthRemaining--;
+            }
+            else {
+                n.forEachChild(walk);
+            }
             depthRemaining++;
         });
     }
@@ -40,7 +50,7 @@ namespace ts.OutliningElementsCollector {
 
             if (!result[1]) {
                 const span = createTextSpanFromBounds(sourceFile.text.indexOf("//", currentLineStart), lineEnd);
-                regions.push(createOutliningSpan(span, span, /*autoCollapse*/ false, result[2] || "#region"));
+                regions.push(createOutliningSpan(span, OutliningSpanKind.Region, span, /*autoCollapse*/ false, result[2] || "#region"));
             }
             else {
                 const region = regions.pop();
@@ -73,7 +83,7 @@ namespace ts.OutliningElementsCollector {
                     break;
                 case SyntaxKind.MultiLineCommentTrivia:
                     combineAndAddMultipleSingleLineComments();
-                    out.push(createOutliningSpanFromBounds(pos, end));
+                    out.push(createOutliningSpanFromBounds(pos, end, OutliningSpanKind.Comment));
                     singleLineCommentCount = 0;
                     break;
                 default:
@@ -85,13 +95,13 @@ namespace ts.OutliningElementsCollector {
         function combineAndAddMultipleSingleLineComments(): void {
             // Only outline spans of two or more consecutive single line comments
             if (singleLineCommentCount > 1) {
-                out.push(createOutliningSpanFromBounds(firstSingleLineCommentStart, lastSingleLineCommentEnd));
+                out.push(createOutliningSpanFromBounds(firstSingleLineCommentStart, lastSingleLineCommentEnd, OutliningSpanKind.Comment));
             }
         }
     }
 
-    function createOutliningSpanFromBounds(pos: number, end: number): OutliningSpan {
-        return createOutliningSpan(createTextSpanFromBounds(pos, end));
+    function createOutliningSpanFromBounds(pos: number, end: number, kind: OutliningSpanKind): OutliningSpan {
+        return createOutliningSpan(createTextSpanFromBounds(pos, end), kind);
     }
 
     function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan | undefined {
@@ -126,7 +136,7 @@ namespace ts.OutliningElementsCollector {
                     default:
                         // Block was a standalone block.  In this case we want to only collapse
                         // the span of the block, independent of any parent span.
-                        return createOutliningSpan(createTextSpanFromNode(n, sourceFile));
+                        return createOutliningSpan(createTextSpanFromNode(n, sourceFile), OutliningSpanKind.Code);
                 }
             case SyntaxKind.ModuleBlock:
                 return spanForNode(n.parent);
@@ -156,11 +166,11 @@ namespace ts.OutliningElementsCollector {
                 return undefined;
             }
             const textSpan = createTextSpanFromBounds(useFullStart ? openToken.getFullStart() : openToken.getStart(sourceFile), closeToken.getEnd());
-            return createOutliningSpan(textSpan, createTextSpanFromNode(hintSpanNode, sourceFile), autoCollapse);
+            return createOutliningSpan(textSpan, OutliningSpanKind.Code, createTextSpanFromNode(hintSpanNode, sourceFile), autoCollapse);
         }
     }
 
-    function createOutliningSpan(textSpan: TextSpan, hintSpan: TextSpan = textSpan, autoCollapse = false, bannerText = "..."): OutliningSpan {
-        return { textSpan, hintSpan, bannerText, autoCollapse };
+    function createOutliningSpan(textSpan: TextSpan, kind: OutliningSpanKind, hintSpan: TextSpan = textSpan, autoCollapse = false, bannerText = "..."): OutliningSpan {
+        return { textSpan, kind, hintSpan, bannerText, autoCollapse };
     }
 }

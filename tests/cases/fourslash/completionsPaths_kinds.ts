@@ -20,11 +20,8 @@
 ////    }
 ////}
 
-goTo.marker("0");
-verify.completionListContains("dir", undefined, undefined, "directory");
-verify.completionListContains("b", undefined, undefined, "script");
-
-goTo.marker("1");
-verify.completionListContains("dir", undefined, undefined, "directory");
-verify.completionListContains("b", undefined, undefined, "script");
-
+verify.completions({
+    marker: ["0", "1"],
+    exact: [{ name: "b", kind: "script" }, { name: "dir", kind: "directory" }],
+    isNewIdentifierLocation: true
+});

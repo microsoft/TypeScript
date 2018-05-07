@@ -41,7 +41,7 @@ var d: boolean;
 
 var e: Date;
 >e : Symbol(e, Decl(everyTypeAssignableToAny.ts, 17, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var f: any;
 >f : Symbol(f, Decl(everyTypeAssignableToAny.ts, 18, 3))
@@ -166,7 +166,7 @@ function foo<T, U /*extends T*/, V extends Date>(x: T, y: U, z: V) {
 >T : Symbol(T, Decl(everyTypeAssignableToAny.ts, 50, 13))
 >U : Symbol(U, Decl(everyTypeAssignableToAny.ts, 50, 15))
 >V : Symbol(V, Decl(everyTypeAssignableToAny.ts, 50, 32))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(everyTypeAssignableToAny.ts, 50, 49))
 >T : Symbol(T, Decl(everyTypeAssignableToAny.ts, 50, 13))
 >y : Symbol(y, Decl(everyTypeAssignableToAny.ts, 50, 54))

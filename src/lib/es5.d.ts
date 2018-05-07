@@ -74,6 +74,16 @@ declare function escape(string: string): string;
   */
 declare function unescape(string: string): string;
 
+interface Symbol {
+  /** Returns a string representation of an object. */
+  toString(): string;
+
+  /** Returns the primitive value of the specified object. */
+  valueOf(): symbol;
+}
+
+declare type PropertyKey = string | number | symbol;
+
 interface PropertyDescriptor {
     configurable?: boolean;
     enumerable?: boolean;
@@ -104,7 +114,7 @@ interface Object {
       * Determines whether an object has a property with the specified name.
       * @param v A property name.
       */
-    hasOwnProperty(v: string): boolean;
+    hasOwnProperty(v: PropertyKey): boolean;
 
     /**
       * Determines whether an object exists in another object's prototype chain.
@@ -116,7 +126,7 @@ interface Object {
       * Determines whether a specified property is enumerable.
       * @param v A property name.
       */
-    propertyIsEnumerable(v: string): boolean;
+    propertyIsEnumerable(v: PropertyKey): boolean;
 }
 
 interface ObjectConstructor {
@@ -139,7 +149,7 @@ interface ObjectConstructor {
       * @param o Object that contains the property.
       * @param p Name of the property.
     */
-    getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor | undefined;
+    getOwnPropertyDescriptor(o: any, p: PropertyKey): PropertyDescriptor | undefined;
 
     /**
       * Returns the names of the own properties of an object. The own properties of an object are those that are defined directly
@@ -167,7 +177,7 @@ interface ObjectConstructor {
       * @param p The property name.
       * @param attributes Descriptor for the property. It can be for a data property or an accessor property.
       */
-    defineProperty(o: any, p: string, attributes: PropertyDescriptor & ThisType<any>): any;
+    defineProperty(o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>): any;
 
     /**
       * Adds one or more properties to an object, and/or modifies attributes of existing properties.
@@ -503,6 +513,15 @@ declare const Number: NumberConstructor;
 
 interface TemplateStringsArray extends ReadonlyArray<string> {
     readonly raw: ReadonlyArray<string>;
+}
+
+/**
+ * The type of `import.meta`.
+ * 
+ * If you need to declare that a given property exists on `import.meta`,
+ * this type may be augmented via interface merging.
+ */
+interface ImportMeta {
 }
 
 interface Math {
@@ -1340,7 +1359,7 @@ type Pick<T, K extends keyof T> = {
 /**
  * Construct a type with a set of properties K of type T
  */
-type Record<K extends string, T> = {
+type Record<K extends keyof any, T> = {
     [P in K]: T;
 };
 

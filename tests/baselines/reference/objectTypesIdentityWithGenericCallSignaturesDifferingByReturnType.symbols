@@ -41,7 +41,7 @@ interface I<T> {
 >foo : Symbol(I.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType.ts, 16, 16))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType.ts, 17, 8))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType.ts, 16, 12))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 interface I2 {

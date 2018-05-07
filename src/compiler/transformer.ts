@@ -1,18 +1,3 @@
-/// <reference path="visitor.ts" />
-/// <reference path="transformers/utilities.ts" />
-/// <reference path="transformers/ts.ts" />
-/// <reference path="transformers/jsx.ts" />
-/// <reference path="transformers/esnext.ts" />
-/// <reference path="transformers/es2017.ts" />
-/// <reference path="transformers/es2016.ts" />
-/// <reference path="transformers/es2015.ts" />
-/// <reference path="transformers/generators.ts" />
-/// <reference path="transformers/es5.ts" />
-/// <reference path="transformers/module/module.ts" />
-/// <reference path="transformers/module/system.ts" />
-/// <reference path="transformers/module/es2015.ts" />
-/// <reference path="transformers/declarations.ts" />
-
 /* @internal */
 namespace ts {
     function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile> {

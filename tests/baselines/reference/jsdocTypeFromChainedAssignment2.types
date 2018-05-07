@@ -1,9 +1,8 @@
 === tests/cases/conformance/jsdoc/use.js ===
-/// <reference path='./types.d.ts'/>
 var mod = require('./mod');
 >mod : typeof import("tests/cases/conformance/jsdoc/mod")
 >require('./mod') : typeof import("tests/cases/conformance/jsdoc/mod")
->require : (name: string) => any
+>require : any
 >'./mod' : "./mod"
 
 mod.f('no')
@@ -34,21 +33,7 @@ mod.i(1)
 >i : (mom: string) => string
 >1 : 1
 
-=== tests/cases/conformance/jsdoc/types.d.ts ===
-declare function require(name: string): any;
->require : (name: string) => any
->name : string
-
-declare var exports: any;
->exports : any
-
-declare var module: { exports: any };
->module : { exports: any; }
->exports : any
-
 === tests/cases/conformance/jsdoc/mod.js ===
-/// <reference path='./types.d.ts'/>
-
 /** @param {number} n */
 exports.f = exports.g = function fg(n) {
 >exports.f = exports.g = function fg(n) {    return n + 1} : (n: number) => number
@@ -73,13 +58,13 @@ module.exports.h = module.exports.i = function hi(mom) {
 >module.exports.h = module.exports.i = function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string
 >module.exports.h : any
 >module.exports : any
->module : { exports: any; }
+>module : any
 >exports : any
 >h : any
 >module.exports.i = function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string
 >module.exports.i : any
 >module.exports : any
->module : { exports: any; }
+>module : any
 >exports : any
 >i : any
 >function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string

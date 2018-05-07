@@ -45,11 +45,11 @@ var sym: symbol;
 >sym : symbol
 
 var Sym: Symbol;
->Sym : any
->Symbol : No type information available!
+>Sym : Symbol
+>Symbol : Symbol
 
 sym = Sym;
->sym = Sym : any
+>sym = Sym : Symbol
 >sym : symbol
->Sym : any
+>Sym : Symbol
 

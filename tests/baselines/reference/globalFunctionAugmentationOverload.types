@@ -1,0 +1,25 @@
+=== tests/cases/compiler/mod.d.ts ===
+declare function expect(spy: Function): void;
+>expect : { (spy: Function): void; (element: string): void; }
+>spy : Function
+>Function : Function
+
+declare module "mod" {
+>"mod" : typeof import("mod")
+
+    class mod {}
+>mod : mod
+
+    export = mod;
+>mod : mod
+}
+=== tests/cases/compiler/mine.ts ===
+import "mod";
+
+declare global {
+>global : typeof global
+
+    function expect(element: string): void;
+>expect : { (spy: Function): void; (element: string): void; }
+>element : string
+}

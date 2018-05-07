@@ -1689,7 +1689,7 @@ declare module Immutable {
     export interface Class<T extends Object> {
 >Class : Symbol(Class, Decl(immutable.ts, 214, 70))
 >T : Symbol(T, Decl(immutable.ts, 215, 27))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
       (values?: Partial<T> | Iterable<[string, any]>): Instance<T> & Readonly<T>;
 >values : Symbol(values, Decl(immutable.ts, 216, 7))
@@ -1714,7 +1714,7 @@ declare module Immutable {
     export interface Instance<T extends Object> {
 >Instance : Symbol(Instance, Decl(immutable.ts, 218, 5))
 >T : Symbol(T, Decl(immutable.ts, 219, 30))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
       readonly size: number;
 >size : Symbol(Instance.size, Decl(immutable.ts, 219, 49))
@@ -1910,7 +1910,7 @@ declare module Immutable {
       [Symbol.iterator](): IterableIterator<[keyof T, T[keyof T]]>;
 >[Symbol.iterator] : Symbol(Instance[Symbol.iterator], Decl(immutable.ts, 256, 46))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 219, 30))
@@ -2005,7 +2005,7 @@ declare module Immutable {
 
       toJS(): Object;
 >toJS : Symbol(Keyed.toJS, Decl(immutable.ts, 269, 76))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
       toJSON(): { [key: string]: V };
 >toJSON : Symbol(Keyed.toJSON, Decl(immutable.ts, 270, 21))
@@ -2594,7 +2594,7 @@ declare module Immutable {
 
       toJS(): Object;
 >toJS : Symbol(Keyed.toJS, Decl(immutable.ts, 340, 59))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
       toJSON(): { [key: string]: V };
 >toJSON : Symbol(Keyed.toJSON, Decl(immutable.ts, 341, 21))
@@ -2737,7 +2737,7 @@ declare module Immutable {
       [Symbol.iterator](): IterableIterator<[K, V]>;
 >[Symbol.iterator] : Symbol(Keyed[Symbol.iterator], Decl(immutable.ts, 353, 84))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >K : Symbol(K, Decl(immutable.ts, 340, 27))
@@ -2981,7 +2981,7 @@ declare module Immutable {
       [Symbol.iterator](): IterableIterator<T>;
 >[Symbol.iterator] : Symbol(Indexed[Symbol.iterator], Decl(immutable.ts, 385, 91))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 358, 29))
@@ -3091,7 +3091,7 @@ declare module Immutable {
       [Symbol.iterator](): IterableIterator<T>;
 >[Symbol.iterator] : Symbol(Set[Symbol.iterator], Decl(immutable.ts, 399, 88))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 390, 25))

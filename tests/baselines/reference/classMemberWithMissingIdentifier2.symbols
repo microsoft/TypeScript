@@ -4,4 +4,5 @@ class C {
 
     public {[name:string]:VariableDeclaration};
 > : Symbol(C[(Missing)], Decl(classMemberWithMissingIdentifier2.ts, 0, 9))
+>name : Symbol(name, Decl(lib.d.ts, --, --))
 }

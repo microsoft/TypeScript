@@ -17,9 +17,9 @@ var r = c.toString();
 var r2 = c.hasOwnProperty('');
 >r2 : boolean
 >c.hasOwnProperty('') : boolean
->c.hasOwnProperty : (v: string) => boolean
+>c.hasOwnProperty : (v: string | number | symbol) => boolean
 >c : C
->hasOwnProperty : (v: string) => boolean
+>hasOwnProperty : (v: string | number | symbol) => boolean
 >'' : ""
 
 var o: Object = c;

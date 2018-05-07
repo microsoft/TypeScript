@@ -1,6 +1,3 @@
-/// <reference path="types.ts" />
-/// <reference path="shared.ts" />
-
 namespace ts.server {
     export enum LogLevel {
         terse,

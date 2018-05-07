@@ -1,5 +1,3 @@
-/// <reference path="session.ts" />
-
 namespace ts.server {
     export interface SessionClientHost extends LanguageServiceHost {
         writeMessage(message: string): void;
@@ -532,7 +530,8 @@ namespace ts.server {
                 textSpan: this.decodeSpan(item.textSpan, file),
                 hintSpan: this.decodeSpan(item.hintSpan, file),
                 bannerText: item.bannerText,
-                autoCollapse: item.autoCollapse
+                autoCollapse: item.autoCollapse,
+                kind: item.kind
             }));
         }
 
@@ -558,7 +557,8 @@ namespace ts.server {
             const request = this.processRequest<protocol.CodeFixRequest>(CommandNames.GetCodeFixes, args);
             const response = this.processResponse<protocol.CodeFixResponse>(request);
 
-            return response.body.map(({ description, changes, fixId, fixAllDescription }) => ({ description, changes: this.convertChanges(changes, file), fixId, fixAllDescription }));
+            return response.body.map<CodeFixAction>(({ fixName, description, changes, commands, fixId, fixAllDescription }) =>
+                ({ fixName, description, changes: this.convertChanges(changes, file), commands: commands as CodeActionCommand[], fixId, fixAllDescription }));
         }
 
         getCombinedCodeFix = notImplemented;
@@ -630,6 +630,10 @@ namespace ts.server {
         }
 
         organizeImports(_scope: OrganizeImportsScope, _formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges> {
+            return notImplemented();
+        }
+
+        getEditsForFileRename() {
             return notImplemented();
         }
 

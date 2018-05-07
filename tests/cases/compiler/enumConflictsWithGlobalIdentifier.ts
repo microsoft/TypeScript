@@ -1,3 +1,4 @@
+// @lib: es5
 enum Position { 
     IgnoreRulesSpecific = 0,
 }

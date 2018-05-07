@@ -4,13 +4,13 @@ interface I {
 
    [x: number]: Date;
 >x : Symbol(x, Decl(contextualTypingOfArrayLiterals1.ts, 1, 4))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 var x3: I = [new Date(), 1]; 
 >x3 : Symbol(x3, Decl(contextualTypingOfArrayLiterals1.ts, 4, 3))
 >I : Symbol(I, Decl(contextualTypingOfArrayLiterals1.ts, 0, 0))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var r2 = x3[1]; 
 >r2 : Symbol(r2, Decl(contextualTypingOfArrayLiterals1.ts, 5, 3))

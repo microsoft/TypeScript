@@ -1,6 +1,3 @@
-/// <reference path="../factory.ts" />
-/// <reference path="../visitor.ts" />
-
 // Transforms generator functions into a compatible ES5 representation with similar runtime
 // semantics. This is accomplished by first transforming the body of each generator
 // function into an intermediate representation that is the compiled into a JavaScript

@@ -189,7 +189,7 @@ new someGenerics3(() => '');
 new someGenerics3<Window>(() => undefined);
 >new someGenerics3<Window>(() => undefined) : any
 >someGenerics3 : someGenerics3
->Window : No type information available!
+>Window : Window
 >() => undefined : () => any
 >undefined : undefined
 
@@ -520,19 +520,19 @@ interface A92 {
 >x : number
 
     z?: Window;
->z : any
->Window : No type information available!
+>z : Window
+>Window : Window
 }
 var a9e = new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
->a9e : { x: number; z: any; y?: undefined; } | { x: number; y: string; z?: undefined; }
->new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' }) : { x: number; z: any; y?: undefined; } | { x: number; y: string; z?: undefined; }
+>a9e : { x: number; z: Window; y?: undefined; } | { x: number; y: string; z?: undefined; }
+>new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' }) : { x: number; z: Window; y?: undefined; } | { x: number; y: string; z?: undefined; }
 >someGenerics9 : someGenerics9
 >undefined : undefined
->{ x: 6, z: window } : { x: number; z: any; }
+>{ x: 6, z: window } : { x: number; z: Window; }
 >x : number
 >6 : 6
->z : any
->window : any
+>z : Window
+>window : Window
 >{ x: 6, y: '' } : { x: number; y: string; }
 >x : number
 >6 : 6
@@ -540,7 +540,7 @@ var a9e = new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >'' : ""
 
 var a9e: {};
->a9e : { x: number; z: any; y?: undefined; } | { x: number; y: string; z?: undefined; }
+>a9e : { x: number; z: Window; y?: undefined; } | { x: number; y: string; z?: undefined; }
 
 var a9f = new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >a9f : any
@@ -548,11 +548,11 @@ var a9f = new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' }
 >someGenerics9 : someGenerics9
 >A92 : A92
 >undefined : undefined
->{ x: 6, z: window } : { x: number; z: any; }
+>{ x: 6, z: window } : { x: number; z: Window; }
 >x : number
 >6 : 6
->z : any
->window : any
+>z : Window
+>window : Window
 >{ x: 6, y: '' } : { x: number; y: string; }
 >x : number
 >6 : 6
