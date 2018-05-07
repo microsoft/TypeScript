@@ -2102,12 +2102,11 @@ namespace ts.server {
 
             this.printProjects();
 
-            this.telemetryOnOpenFile(fileName, info);
+            this.telemetryOnOpenFile(info);
             return { configFileName, configFileErrors };
         }
 
-        private telemetryOnOpenFile(fileName: NormalizedPath, info: ScriptInfo): void {
-            Debug.assert(info.containingProjects.length !== 0);
+        private telemetryOnOpenFile(info: ScriptInfo): void {
             if (
                 !this.eventHandler ||
                 // Don't send for a project with 'checkJs' enabled globally.
@@ -2115,11 +2114,11 @@ namespace ts.server {
                 // We are only sending stats for JS files
                 !info.isJavaScript() ||
                 // If we've already seen the file, no need to send a new event.
-                this.allJsFilesForOpenFilesTelemetry.has(fileName)) {
+                this.allJsFilesForOpenFilesTelemetry.has(info.path)) {
                 return;
             }
 
-            this.allJsFilesForOpenFilesTelemetry.set(fileName, !!info.getDefaultProject().getSourceFile(info.path).checkJsDirective);
+            this.allJsFilesForOpenFilesTelemetry.set(info.path, !!info.getDefaultProject().getSourceFile(info.path).checkJsDirective);
 
             let checkJs = 0;
             this.allJsFilesForOpenFilesTelemetry.forEach(isCheckJs => {
