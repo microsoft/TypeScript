@@ -6848,6 +6848,7 @@ namespace ts {
                     let child: JSDocParameterTag | false;
                     const start = scanner.getStartPos();
                     const jsdocSignature = createNode(SyntaxKind.JSDocSignature, start) as JSDocSignature;
+                    jsdocSignature.parameters = [];
                     while (child = tryParse(() => parseChildParameterOrPropertyTag(PropertyLikeParse.CallbackParameter) as JSDocParameterTag)) {
                         jsdocSignature.parameters = append(jsdocSignature.parameters as MutableNodeArray<JSDocParameterTag>, child);
                     }
