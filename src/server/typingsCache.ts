@@ -87,10 +87,6 @@ namespace ts.server {
         constructor(private readonly installer: ITypingsInstaller) {
         }
 
-        get globalTypingsCacheLocation(): string | undefined {
-            return this.installer.globalTypingsCacheLocation;
-        }
-
         isKnownTypesPackageName(name: string): boolean {
             return this.installer.isKnownTypesPackageName(name);
         }

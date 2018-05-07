@@ -235,21 +235,35 @@ namespace ts.projectSystem {
             });
         });
 
-        it("open files telemetry", () => {
-            const ajs = makeFile("/a.js", "// @ts-check\nconst x = 0;");
-            const bjs = makeFile("/b.js");
-            const et = new TestServerEventManager([ajs, bjs]);
-            const globalTypingsCache = et.service.typingsCache.globalTypingsCacheLocation;
-            et.host.createDirectoryRecursively(globalTypingsCache);
-            et.host.writeFile(server.openFileStatsFileName(globalTypingsCache), JSON.stringify({ js: 13, checkJs: 10 }));
+        describe("open files telemetry", () => {
+            it("sends event for inferred project", () => {
+                const ajs = makeFile("/a.js", "// @ts-check\nconst x = 0;");
+                const bjs = makeFile("/b.js");
+                const et = new TestServerEventManager([ajs, bjs]);
 
-            // Must open a file for the event to be sent.
-            et.service.openClientFile(ajs.path);
-            et.assertOpenFilesTelemetryEvent({ js: 13, checkJs: 10 });
+                et.service.openClientFile(ajs.path);
+                et.assertOpenFilesTelemetryEvent({ js: 1, checkJs: 1 });
 
-            et.service.openClientFile(bjs.path);
-            et.assertNoOpenFilesTelemetryEvent();
-            assert.deepEqual(JSON.parse(et.host.readFile(server.openFileStatsFileName(globalTypingsCache))), { js: 2, checkJs: 1 });
+                et.service.openClientFile(bjs.path);
+                et.assertOpenFilesTelemetryEvent({ js: 2, checkJs: 1 });
+            });
+
+            it("not for project without '.js' files", () => {
+                const ats = makeFile("/a.ts", "");
+                const et = new TestServerEventManager([ats]);
+
+                et.service.openClientFile(ats.path);
+                et.assertNoOpenFilesTelemetryEvent();
+            });
+
+            it("not for project with 'ts-check' in config", () => {
+                const file = makeFile("/a.js");
+                const compilerOptions: CompilerOptions = { checkJs: true };
+                const jsconfig = makeFile("/jsconfig.json", { compilerOptions });
+                const et = new TestServerEventManager([jsconfig, file]);
+                et.service.openClientFile(file.path);
+                et.assertNoOpenFilesTelemetryEvent();
+            });
         });
     });
 

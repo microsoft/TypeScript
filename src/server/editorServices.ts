@@ -84,7 +84,6 @@ namespace ts.server {
         readonly js: number; // # '.js' files that were opened in the previous session
         readonly checkJs: number; // # of those with `// @ts-check`
     }
-    const openFileStatsKeys: ReadonlyArray<keyof OpenFileStats> = ["js", "checkJs"];
 
     export type ProjectServiceEvent = ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFilesInfoTelemetryEvent;
 
@@ -330,30 +329,6 @@ namespace ts.server {
         return project.dirty && project.updateGraph();
     }
 
-    /* @internal */
-    export function openFileStatsFileName(globalTypingsCacheLocation: string): string {
-        return combinePaths(globalTypingsCacheLocation, "openFileStats.json");
-    }
-
-    function tryReadOpenFileStats(globalTypingsCacheLocation: string, host: ServerHost): OpenFileStats {
-        const res = readJson(openFileStatsFileName(globalTypingsCacheLocation), host) as OpenFileStats;
-        if (!arrayIsEqualTo(Object.keys(res), openFileStatsKeys)) {
-            return undefined;
-        }
-        for (const key in res) {
-            if (typeof (res as any)[key] !== "number") {
-                return undefined;
-            }
-        }
-        return res;
-    }
-
-    function writeOpenFileStats(globalTypingsCacheLocation: string, host: ServerHost, stats: OpenFileStats): void {
-        if (host.directoryExists(globalTypingsCacheLocation)) {
-            host.writeFile(openFileStatsFileName(globalTypingsCacheLocation), JSON.stringify(stats));
-        }
-    }
-
     export class ProjectService {
 
         /*@internal*/
@@ -446,8 +421,6 @@ namespace ts.server {
 
         /*@internal*/
         readonly watchFactory: WatchFactory<WatchType, Project>;
-
-        private hasSentOpenFileTelemetry: boolean;
 
         constructor(opts: ProjectServiceOptions) {
             this.host = opts.host;
@@ -2125,27 +2098,24 @@ namespace ts.server {
 
             this.printProjects();
 
-            this.telemetryOnOpenFile();
+            this.telemetryOnOpenFile(project);
             return { configFileName, configFileErrors };
         }
 
-        private telemetryOnOpenFile(): void {
-            if (this.hasSentOpenFileTelemetry) {
-                const stats: Mutable<OpenFileStats> = { js: 0, checkJs: 0 };
-                this.filenameToScriptInfo.forEach(scriptInfo => {
-                    if (!scriptInfo.isJavaScript || scriptInfo.containingProjects.length === 0) return;
-                    stats.js++;
-                    const file = scriptInfo.getDefaultProject().getSourceFile(scriptInfo.path);
-                    if (file.checkJsDirective) stats.checkJs++;
-                });
-                if (this.typingsCache.globalTypingsCacheLocation) writeOpenFileStats(this.typingsCache.globalTypingsCacheLocation, this.host, stats);
-            }
-            else {
-                this.hasSentOpenFileTelemetry = true;
-                const stats = tryReadOpenFileStats(this.typingsCache.globalTypingsCacheLocation, this.host);
-                if (stats) {
-                    this.eventHandler({ eventName: OpenFilesInfoTelemetryEvent, data: { stats } });
-                }
+        private telemetryOnOpenFile(project: ConfiguredProject | ExternalProject | undefined): void {
+            if (!this.eventHandler) return;
+            // Don't send for a project with 'checkJs' enabled globally.
+            if (project && project.getCompilationSettings().checkJs) return;
+
+            const stats: Mutable<OpenFileStats> = { js: 0, checkJs: 0 };
+            this.filenameToScriptInfo.forEach(scriptInfo => {
+                if (!scriptInfo.isJavaScript() || scriptInfo.containingProjects.length === 0) return;
+                stats.js++;
+                const file = scriptInfo.getDefaultProject().getSourceFile(scriptInfo.path);
+                if (file.checkJsDirective) stats.checkJs++;
+            });
+            if (stats.js !== 0) {
+                this.eventHandler({ eventName: OpenFilesInfoTelemetryEvent, data: { stats } });
             }
         }
 

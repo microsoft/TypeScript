@@ -6090,9 +6090,9 @@ namespace ts.projectSystem {
                 iterateOnCalledMaps(key => verifyNoCall(key));
             }
 
-            function verifyNoHostCallsExceptFileExistsOnce(expectedKeys: ReadonlyArray<string>, directoryExists: ReadonlyArray<string>) {
+            function verifyNoHostCallsExceptFileExistsOnce(expectedKeys: ReadonlyArray<string>) {
                 verifyCalledOnEachEntryNTimes(CalledMapsWithSingleArg.fileExists, expectedKeys, 1);
-                verifyCalledOnEachEntryNTimes(CalledMapsWithSingleArg.directoryExists, directoryExists, 1);
+                verifyNoCall(CalledMapsWithSingleArg.directoryExists);
                 verifyNoCall(CalledMapsWithSingleArg.getDirectories);
                 verifyNoCall(CalledMapsWithSingleArg.readFile);
                 verifyNoCall(CalledMapsWithFiveArgs.readDirectory);
@@ -6335,10 +6335,7 @@ namespace ts.projectSystem {
             // Open the file should call only file exists on module directory and use cached value for parental directory
             const { configFileName: config2 } = projectService.openClientFile(moduleFile.path);
             assert.equal(config2, configFileName);
-            callsTrackingHost.verifyNoHostCallsExceptFileExistsOnce(
-                ["/a/b/models/tsconfig.json", "/a/b/models/jsconfig.json"],
-                // This directory is checked for existence due to open-files telemetry.
-                ["/a/data/"]);
+            callsTrackingHost.verifyNoHostCallsExceptFileExistsOnce(["/a/b/models/tsconfig.json", "/a/b/models/jsconfig.json"]);
 
             checkNumberOfConfiguredProjects(projectService, 1);
             assert.strictEqual(projectService.configuredProjects.get(tsconfigFile.path), project);
