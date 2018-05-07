@@ -522,6 +522,7 @@ namespace ts {
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.JSDocCallbackTag:
             case SyntaxKind.JSDocTypedefTag:
+            case SyntaxKind.JSDocSignature:
                 return true;
             default:
                 assertTypeIsNever(node);
@@ -3099,6 +3100,9 @@ namespace ts {
      * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
      */
     export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters) {
+        if (isJSDocSignature(node)) {
+            return undefined;
+        }
         if (isJSDocTypeAlias(node)) {
             Debug.assert(node.parent.kind === SyntaxKind.JSDocComment);
             const templateTags = flatMap(filter(node.parent.tags, isJSDocTemplateTag), tag => tag.typeParameters) as ReadonlyArray<TypeParameterDeclaration>;

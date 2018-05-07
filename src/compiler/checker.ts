@@ -4732,9 +4732,6 @@ namespace ts {
                 if (isInJavaScriptFile(declaration) && isJSDocPropertyLikeTag(declaration) && declaration.typeExpression) {
                     return links.type = getTypeFromTypeNode(declaration.typeExpression.type);
                 }
-                if (isInJavaScriptFile(declaration) && isJSDocPropertyLikeTag(declaration) && isJSDocSignature(declaration.parent) && !declaration.typeExpression) {
-                    return links.type = unknownType;
-                }
                 // Handle variable, parameter or property
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
                     return unknownType;
@@ -4750,7 +4747,7 @@ namespace ts {
                     declaration.kind === SyntaxKind.PropertyAccessExpression && declaration.parent.kind === SyntaxKind.BinaryExpression) {
                     type = getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
                 }
-                else if (isJSDocPropertyTag(declaration)
+                else if (isJSDocPropertyLikeTag(declaration)
                     || isPropertyAccessExpression(declaration)
                     || isIdentifier(declaration)
                     || (isMethodDeclaration(declaration) && !isObjectLiteralMethod(declaration))
@@ -7109,8 +7106,6 @@ namespace ts {
                         iife && parameters.length > iife.arguments.length && !type ||
                         isUntypedSignatureInJSFile ||
                         isJSDocOptionalParameter(param);
-
-
                     if (!isOptionalParameter) {
                         minArgumentCount = parameters.length;
                     }
@@ -7130,7 +7125,7 @@ namespace ts {
                 const classType = declaration.kind === SyntaxKind.Constructor ?
                     getDeclaredTypeOfClassOrInterface(getMergedSymbol((<ClassDeclaration>declaration.parent).symbol))
                     : undefined;
-                const typeParameters = classType ? classType.localTypeParameters : isJSDocSignature(declaration) ? undefined : getTypeParametersFromDeclaration(declaration);
+                const typeParameters = classType ? classType.localTypeParameters : getTypeParametersFromDeclaration(declaration);
                 const returnType = getSignatureReturnTypeFromDeclaration(declaration, isJSConstructSignature, classType);
                 const hasRestLikeParameter = hasRestParameter(declaration) || isInJavaScriptFile(declaration) && maybeAddJsSyntheticRestParameter(declaration, parameters);
                 links.resolvedSignature = createSignature(declaration, typeParameters, thisParameter, parameters, returnType, /*resolvedTypePredicate*/ undefined, minArgumentCount, hasRestLikeParameter, hasLiteralTypes);
