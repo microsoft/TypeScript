@@ -24,10 +24,8 @@ namespace ts {
         if (!elements || elements === emptyArray) {
             elements = [];
         }
-        else {
-            if (isNodeArray(elements)) {
-                return elements;
-            }
+        else if (isNodeArray(elements)) {
+            return elements;
         }
 
         const array = <NodeArray<T>>elements;

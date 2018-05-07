@@ -2136,7 +2136,7 @@ namespace ts {
                     }
 
                     const isFromNodeModulesSearch = resolution.isExternalLibraryImport;
-                    const isJsFile = !extensionIsTypeScript(resolution.extension);
+                    const isJsFile = !resolutionExtensionIsTypeScriptOrJson(resolution.extension);
                     const isJsFileFromNodeModules = isFromNodeModulesSearch && isJsFile;
                     const resolvedFileName = resolution.resolvedFileName;
 
@@ -2414,6 +2414,12 @@ namespace ts {
                 }
             }
 
+            if (options.resolveJsonModule) {
+                if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs) {
+                    createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_cannot_be_specified_without_node_module_resolution_strategy, "resolveJsonModule");
+                }
+            }
+
             // there has to be common source directory if user specified --outdir || --sourceRoot
             // if user specified --mapRoot, there needs to be common source directory if there would be multiple files being emitted
             if (options.outDir || // there is --outDir specified
@@ -2583,8 +2589,9 @@ namespace ts {
         function getProjectReferencesSyntax(): ArrayLiteralExpression | null {
             if (_referencesArrayLiteralSyntax === undefined) {
                 _referencesArrayLiteralSyntax = null; // tslint:disable-line:no-null-keyword
-                if (options.configFile && options.configFile.jsonObject) {
-                    for (const prop of getPropertyAssignment(options.configFile.jsonObject, "references")) {
+                if (options.configFile) {
+                    const jsonObjectLiteral = getTsConfigObjectLiteralExpression(options.configFile);
+                    for (const prop of getPropertyAssignment(jsonObjectLiteral, "references")) {
                         if (isArrayLiteralExpression(prop.initializer)) {
                             _referencesArrayLiteralSyntax = prop.initializer;
                             break;
@@ -2598,8 +2605,9 @@ namespace ts {
         function getCompilerOptionsObjectLiteralSyntax() {
             if (_compilerOptionsObjectLiteralSyntax === undefined) {
                 _compilerOptionsObjectLiteralSyntax = null; // tslint:disable-line:no-null-keyword
-                if (options.configFile && options.configFile.jsonObject) {
-                    for (const prop of getPropertyAssignment(options.configFile.jsonObject, "compilerOptions")) {
+                const jsonObjectLiteral = getTsConfigObjectLiteralExpression(options.configFile);
+                if (jsonObjectLiteral) {
+                    for (const prop of getPropertyAssignment(jsonObjectLiteral, "compilerOptions")) {
                         if (isObjectLiteralExpression(prop.initializer)) {
                             _compilerOptionsObjectLiteralSyntax = prop.initializer;
                             break;
@@ -2699,6 +2707,7 @@ namespace ts {
         switch (extension) {
             case Extension.Ts:
             case Extension.Dts:
+            case Extension.Json: // Since module is resolved to json file only when --resolveJsonModule, we dont need further check
                 // These are always allowed.
                 return undefined;
             case Extension.Tsx:
