@@ -289,7 +289,7 @@ namespace ts {
         let currentExceptionBlock: ExceptionBlock; // The current exception block.
         let withBlockStack: WithBlock[]; // A stack containing `with` blocks.
 
-        return transformSourceFile;
+        return chainBundle(transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile || (node.transformFlags & TransformFlags.ContainsGenerator) === 0) {

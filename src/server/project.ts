@@ -265,6 +265,10 @@ namespace ts.server {
             return this.projectStateVersion.toString();
         }
 
+        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined {
+            return undefined;
+        }
+
         getScriptFileNames() {
             if (!this.rootFiles) {
                 return ts.emptyArray;
@@ -1288,7 +1292,8 @@ namespace ts.server {
             compilerOptions: CompilerOptions,
             lastFileExceededProgramSize: string | undefined,
             public compileOnSaveEnabled: boolean,
-            cachedDirectoryStructureHost: CachedDirectoryStructureHost) {
+            cachedDirectoryStructureHost: CachedDirectoryStructureHost,
+            private projectReferences: ReadonlyArray<ProjectReference> | undefined) {
             super(configFileName,
                 ProjectKind.Configured,
                 projectService,
@@ -1328,6 +1333,14 @@ namespace ts.server {
 
         getConfigFilePath() {
             return asNormalizedPath(this.getProjectName());
+        }
+
+        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined {
+            return this.projectReferences;
+        }
+
+        updateReferences(refs: ReadonlyArray<ProjectReference> | undefined) {
+            this.projectReferences = refs;
         }
 
         enablePlugins() {
