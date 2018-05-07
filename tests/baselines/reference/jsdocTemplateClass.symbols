@@ -3,52 +3,53 @@
  * @template {T}
  * @typedef {(t: T) => T} Id
  */
+/** @template T */
 class Foo {
 >Foo : Symbol(Foo, Decl(templateTagOnClasses.js, 0, 0))
 
     /** @typedef {(t: T) => T} Id2 */
     /** @param {T} x */
     constructor (x) {
->x : Symbol(x, Decl(templateTagOnClasses.js, 7, 17))
+>x : Symbol(x, Decl(templateTagOnClasses.js, 8, 17))
 
         this.a = x
->this.a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 7, 21))
+>this.a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 8, 21))
 >this : Symbol(Foo, Decl(templateTagOnClasses.js, 0, 0))
->a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 7, 21))
->x : Symbol(x, Decl(templateTagOnClasses.js, 7, 17))
+>a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 8, 21))
+>x : Symbol(x, Decl(templateTagOnClasses.js, 8, 17))
     }
     /**
      * 
      * @param {T} x 
-     * @param {Id} y
+     * @param {Id<T>} y
      * @param {Id2} alpha
      * @return {T}
      */
     foo(x, y, alpha) {
->foo : Symbol(Foo.foo, Decl(templateTagOnClasses.js, 9, 5))
->x : Symbol(x, Decl(templateTagOnClasses.js, 17, 8))
->y : Symbol(y, Decl(templateTagOnClasses.js, 17, 10))
->alpha : Symbol(alpha, Decl(templateTagOnClasses.js, 17, 13))
+>foo : Symbol(Foo.foo, Decl(templateTagOnClasses.js, 10, 5))
+>x : Symbol(x, Decl(templateTagOnClasses.js, 18, 8))
+>y : Symbol(y, Decl(templateTagOnClasses.js, 18, 10))
+>alpha : Symbol(alpha, Decl(templateTagOnClasses.js, 18, 13))
 
         return alpha(y(x))
->alpha : Symbol(alpha, Decl(templateTagOnClasses.js, 17, 13))
->y : Symbol(y, Decl(templateTagOnClasses.js, 17, 10))
->x : Symbol(x, Decl(templateTagOnClasses.js, 17, 8))
+>alpha : Symbol(alpha, Decl(templateTagOnClasses.js, 18, 13))
+>y : Symbol(y, Decl(templateTagOnClasses.js, 18, 10))
+>x : Symbol(x, Decl(templateTagOnClasses.js, 18, 8))
     }
 }
 var f = new Foo(1)
->f : Symbol(f, Decl(templateTagOnClasses.js, 21, 3))
+>f : Symbol(f, Decl(templateTagOnClasses.js, 22, 3))
 >Foo : Symbol(Foo, Decl(templateTagOnClasses.js, 0, 0))
 
 var g = new Foo(false)
->g : Symbol(g, Decl(templateTagOnClasses.js, 22, 3))
+>g : Symbol(g, Decl(templateTagOnClasses.js, 23, 3))
 >Foo : Symbol(Foo, Decl(templateTagOnClasses.js, 0, 0))
 
 f.a = g.a
->f.a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 7, 21))
->f : Symbol(f, Decl(templateTagOnClasses.js, 21, 3))
->a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 7, 21))
->g.a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 7, 21))
->g : Symbol(g, Decl(templateTagOnClasses.js, 22, 3))
->a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 7, 21))
+>f.a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 8, 21))
+>f : Symbol(f, Decl(templateTagOnClasses.js, 22, 3))
+>a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 8, 21))
+>g.a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 8, 21))
+>g : Symbol(g, Decl(templateTagOnClasses.js, 23, 3))
+>a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 8, 21))
 

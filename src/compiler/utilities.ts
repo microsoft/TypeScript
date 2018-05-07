@@ -1928,18 +1928,12 @@ namespace ts {
         return decl && isFunctionLike(decl) ? decl : undefined;
     }
 
-    export function getJSDocHost(node: JSDocTag): HasJSDoc {
-        while (isJSDocTypeLiteral(node.parent) || isJSDocSignature(node.parent)) {
-            if (isJSDocTypeAlias(node.parent.parent)) {
-                node = node.parent.parent as JSDocTypedefTag;
-            }
-            else {
-                // node.parent.parent is a type expression, child of a parameter type
-                node = node.parent.parent.parent as JSDocParameterTag;
-            }
+    export function getJSDocHost(node: Node): HasJSDoc {
+        const comment = findAncestor(node.parent,
+            node => !(isJSDocNode(node) || node.flags & NodeFlags.JSDoc) ? "quit" : node.kind === SyntaxKind.JSDocComment);
+        if (comment) {
+            return (comment as JSDoc).parent;
         }
-        Debug.assert(node.parent!.kind === SyntaxKind.JSDocComment);
-        return node.parent!.parent!;
     }
 
     export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { parent: JSDocTemplateTag }): TypeParameterDeclaration | undefined {
@@ -3120,8 +3114,12 @@ namespace ts {
     }
 
     export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters) {
-        const templateTag = getJSDocTemplateTag(node);
-        return templateTag && templateTag.typeParameters;
+        const tags = filter(getJSDocTags(node), isJSDocTemplateTag);
+        for (const tag of tags) {
+            if (!(tag.parent.kind === SyntaxKind.JSDocComment && find(tag.parent.tags, isJSDocTypeAlias))) {
+                return tag.typeParameters;
+            }
+        }
     }
 
     /**
@@ -4804,7 +4802,8 @@ namespace ts {
     }
 
     /** Get the first JSDoc tag of a specified kind, or undefined if not present. */
-    function getFirstJSDocTag<T extends JSDocTag>(node: Node, predicate: (tag: JSDocTag) => tag is T): T | undefined {
+    export function getFirstJSDocTag<T extends JSDocTag>(node: Node, predicate: (tag: JSDocTag) => tag is T): T | undefined {
+        // TODO: This shouldn't need to be exported, I think
         return find(getJSDocTags(node), predicate);
     }
 

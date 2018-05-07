@@ -1367,16 +1367,6 @@ namespace ts {
                             }
                         }
                         break;
-                    case SyntaxKind.JSDocTypedefTag:
-                    case SyntaxKind.JSDocCallbackTag:
-                        // TODO: These might be stored elsewhere already if we can get the symbol
-                        if (meaning & SymbolFlags.Type) {
-                            const param = find(getEffectiveTypeParameterDeclarations(location as JSDocTypedefTag), param => param.name.escapedText === name);
-                            if (result = getSymbolOfNode(param)) {
-                                break loop;
-                            }
-                        }
-                        break;
                     case SyntaxKind.ExpressionWithTypeArguments:
                         // The type parameters of a class are not in scope in the base class expression.
                         if (lastLocation === (<ExpressionWithTypeArguments>location).expression && (<HeritageClause>location.parent).token === SyntaxKind.ExtendsKeyword) {
@@ -1581,7 +1571,12 @@ namespace ts {
             for (const decl of symbol.declarations) {
                 const parent = isJSDocTemplateTag(decl.parent) ? getJSDocHost(decl.parent) : decl.parent;
                 if (decl.kind === SyntaxKind.TypeParameter && parent === container) {
-                    return true;
+                    if (isJSDocTemplateTag(decl.parent)) {
+                        return !find((decl.parent.parent as JSDoc).tags, isJSDocTypeAlias);
+                    }
+                    else {
+                        return true;
+                    }
                 }
             }
 
@@ -2151,9 +2146,10 @@ namespace ts {
          * name resolution won't work either.
          */
         function resolveEntityNameFromJSPrototype(name: Identifier, meaning: SymbolFlags) {
-            if (isJSDocTypeReference(name.parent) && isJSDocTag(name.parent.parent.parent)) {
-                const host = getJSDocHost(name.parent.parent.parent as JSDocTag);
-                if (isExpressionStatement(host) &&
+            if (isJSDocTypeReference(name.parent)) {
+                const host = getJSDocHost(name.parent);
+                if (host &&
+                    isExpressionStatement(host) &&
                     isBinaryExpression(host.expression) &&
                     getSpecialPropertyAssignmentKind(host.expression) === SpecialPropertyAssignmentKind.PrototypeProperty) {
                     const symbol = getSymbolOfNode(host.expression.left);

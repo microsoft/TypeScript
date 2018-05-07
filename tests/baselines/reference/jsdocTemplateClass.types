@@ -3,6 +3,7 @@
  * @template {T}
  * @typedef {(t: T) => T} Id
  */
+/** @template T */
 class Foo {
 >Foo : Foo<T>
 
@@ -21,7 +22,7 @@ class Foo {
     /**
      * 
      * @param {T} x 
-     * @param {Id} y
+     * @param {Id<T>} y
      * @param {Id2} alpha
      * @return {T}
      */

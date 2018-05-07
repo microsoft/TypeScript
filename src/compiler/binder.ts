@@ -1376,7 +1376,7 @@ namespace ts {
 
         function bindJSDocComment(node: JSDoc) {
             forEachChild(node, n => {
-                if (!isJSDocTypeAlias(n)) {
+                if (!isJSDocTypeAlias(n) && !getTypeAliasForJSDocTemplateTag(n, node.tags)) {
                     bind(n);
                 }
             });
@@ -1552,6 +1552,8 @@ namespace ts {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.JSDocFunctionType:
+                case SyntaxKind.JSDocTypedefTag:
+                case SyntaxKind.JSDocCallbackTag:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.MappedType:
                     // All the children of these container types are never visible through another
@@ -1990,14 +1992,30 @@ namespace ts {
                 }
 
                 for (const tag of jsDoc.tags) {
-                    if (isJSDocTypeAlias(tag) || isJSDocTemplateTag(tag)) {
+                    if (isJSDocTypeAlias(tag)) {
                         const savedParent = parent;
                         parent = jsDoc;
                         bind(tag);
                         parent = savedParent;
                     }
+                    const alias = getTypeAliasForJSDocTemplateTag(tag, jsDoc.tags);
+                    if (alias) {
+                        // find typedef or callback and set that to the container (TODO:manually, which is kind of a bad idea)
+                        const savedContainer = container;
+                        const savedParent = parent;
+                        container = alias;
+                        parent = jsDoc;
+                        alias.locals = alias.locals || createSymbolTable();
+                        bind(tag);
+                        container = savedContainer;
+                        parent = savedParent;
+                    }
                 }
             }
+        }
+
+        function getTypeAliasForJSDocTemplateTag(tag: Node, siblings: NodeArray<JSDocTag>) {
+            return isJSDocTemplateTag(tag) && find(siblings, isJSDocTypeAlias);
         }
 
         function updateStrictModeStatementList(statements: NodeArray<Statement>) {

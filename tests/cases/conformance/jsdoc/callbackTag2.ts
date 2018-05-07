@@ -35,6 +35,6 @@ var noreturn = (barts, tidus, noctis) => "cecil"
  * @callback Final
  * @param {V} barts - "Barts"
  * @param {X} tidus - Titus
- * @param {X & V} noctis - "... Whatever"
+ * @param {X & V} noctis - "Prince Noctis Lucius Caelum"
  * @return {"cecil" | "zidane"}
  */
