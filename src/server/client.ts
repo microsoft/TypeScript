@@ -139,6 +139,11 @@ namespace ts.server {
             this.processRequest(CommandNames.Change, args);
         }
 
+        toLineColumnOffset(fileName: string, position: number) {
+            const { line, offset } = this.positionToOneBasedLineOffset(fileName, position);
+            return { line, character: offset };
+        }
+
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
             const args = this.createFileLocationRequestArgs(fileName, position);
 
