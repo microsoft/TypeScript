@@ -27,7 +27,7 @@ namespace ts.Completions.PathCompletions {
         const scriptDirectory = getDirectoryPath(scriptPath);
 
         if (isPathRelativeToScript(literalValue) || isRootedDiskPath(literalValue)) {
-            const extensions = getSupportExtensionsForModuleResolution(compilerOptions);
+            const extensions = getSupportedExtensionsForModuleResolution(compilerOptions);
             if (compilerOptions.rootDirs) {
                 return getCompletionEntriesForDirectoryFragmentWithRootDirs(
                     compilerOptions.rootDirs, literalValue, scriptDirectory, extensions, /*includeExtensions*/ false, compilerOptions, host, scriptPath);
@@ -42,7 +42,7 @@ namespace ts.Completions.PathCompletions {
         }
     }
 
-    function getSupportExtensionsForModuleResolution(compilerOptions: CompilerOptions) {
+    function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions) {
         const extensions = getSupportedExtensions(compilerOptions);
         return compilerOptions.resolveJsonModule && getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs ?
             extensions.concat(Extension.Json) :
@@ -169,7 +169,7 @@ namespace ts.Completions.PathCompletions {
 
         const result: NameAndKind[] = [];
 
-        const fileExtensions = getSupportExtensionsForModuleResolution(compilerOptions);
+        const fileExtensions = getSupportedExtensionsForModuleResolution(compilerOptions);
         if (baseUrl) {
             const projectDir = compilerOptions.project || host.getCurrentDirectory();
             const absolute = isRootedDiskPath(baseUrl) ? baseUrl : combinePaths(projectDir, baseUrl);
