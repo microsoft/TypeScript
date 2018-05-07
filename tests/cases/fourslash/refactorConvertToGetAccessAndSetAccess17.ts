@@ -10,7 +10,6 @@ edit.applyRefactor({
     actionName: "Generate 'get' and 'set' accessors",
     actionDescription: "Generate 'get' and 'set' accessors",
     newContent: `class A {
-    private /*RENAME*/_a: string;
     protected get a(): string {
         return this._a;
     }
@@ -18,6 +17,6 @@ edit.applyRefactor({
         this._a = value;
     }
 
-    constructor() { }
+    constructor(private /*RENAME*/_a: string) { }
 }`,
 });
