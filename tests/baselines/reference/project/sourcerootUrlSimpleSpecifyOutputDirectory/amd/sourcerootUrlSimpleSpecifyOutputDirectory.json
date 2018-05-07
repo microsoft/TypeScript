@@ -10,7 +10,7 @@
     "baselineCheck": true,
     "sourceRoot": "http://typescript.codeplex.com/",
     "resolvedInputFiles": [
-        "lib.d.ts",
+        "lib.es5.d.ts",
         "m1.ts",
         "test.ts"
     ],

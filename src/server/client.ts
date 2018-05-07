@@ -530,7 +530,8 @@ namespace ts.server {
                 textSpan: this.decodeSpan(item.textSpan, file),
                 hintSpan: this.decodeSpan(item.hintSpan, file),
                 bannerText: item.bannerText,
-                autoCollapse: item.autoCollapse
+                autoCollapse: item.autoCollapse,
+                kind: item.kind
             }));
         }
 

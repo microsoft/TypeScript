@@ -1,3 +1,4 @@
+// @lib: es5
 class Comment {
 
     public getDocCommentText()

@@ -28,7 +28,7 @@ async function test4(isError: boolean = true) {
 async function test5(isError: boolean = true): Promise<any> { //should not be error
 >test5 : Symbol(test5, Decl(noImplicitReturnsInAsync2.ts, 12, 1))
 >isError : Symbol(isError, Decl(noImplicitReturnsInAsync2.ts, 15, 21))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 
     if (isError === true) {
 >isError : Symbol(isError, Decl(noImplicitReturnsInAsync2.ts, 15, 21))
@@ -43,7 +43,7 @@ async function test5(isError: boolean = true): Promise<any> { //should not be er
 async function test6(isError: boolean = true): Promise<number> { 
 >test6 : Symbol(test6, Decl(noImplicitReturnsInAsync2.ts, 19, 1))
 >isError : Symbol(isError, Decl(noImplicitReturnsInAsync2.ts, 23, 21))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 
     if (isError === true) {
 >isError : Symbol(isError, Decl(noImplicitReturnsInAsync2.ts, 23, 21))

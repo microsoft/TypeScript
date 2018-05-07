@@ -10,7 +10,7 @@ var c: boolean;
 
 var d: Date;
 >d : Symbol(d, Decl(chainedAssignment2.ts, 3, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var e: RegExp;
 >e : Symbol(e, Decl(chainedAssignment2.ts, 4, 3))

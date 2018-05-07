@@ -119,7 +119,7 @@ namespace ts.FindAllReferences {
                     const { node } = def;
                     const symbol = checker.getSymbolAtLocation(node);
                     const displayParts = symbol && SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(
-                        checker, symbol, node.getSourceFile(), getContainerNode(node), node).displayParts;
+                        checker, symbol, node.getSourceFile(), getContainerNode(node), node).displayParts || [textPart("this")];
                     return { node, name: "this", kind: ScriptElementKind.variableElement, displayParts };
                 }
                 case "string": {
@@ -559,7 +559,8 @@ namespace ts.FindAllReferences.Core {
             const addRef = state.referenceAdder(exportSymbol);
             for (const singleRef of singleReferences) {
                 // At `default` in `import { default as x }` or `export { default as x }`, do add a reference, but do not rename.
-                if (!(state.options.isForRename && (isExportSpecifier(singleRef.parent) || isImportSpecifier(singleRef.parent)) && singleRef.escapedText === InternalSymbolName.Default)) {
+                if (hasMatchingMeaning(singleRef, state) &&
+                    !(state.options.isForRename && (isExportSpecifier(singleRef.parent) || isImportSpecifier(singleRef.parent)) && singleRef.escapedText === InternalSymbolName.Default)) {
                     addRef(singleRef);
                 }
             }
@@ -822,6 +823,10 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
+    function hasMatchingMeaning(referenceLocation: Node, state: State): boolean {
+        return !!(getMeaningFromLocation(referenceLocation) & state.searchMeaning);
+    }
+
     function getReferencesAtLocation(sourceFile: SourceFile, position: number, search: Search, state: State, addReferencesHere: boolean): void {
         const referenceLocation = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
 
@@ -840,9 +845,7 @@ namespace ts.FindAllReferences.Core {
             return;
         }
 
-        if (!(getMeaningFromLocation(referenceLocation) & state.searchMeaning)) {
-            return;
-        }
+        if (!hasMatchingMeaning(referenceLocation, state)) return;
 
         const referenceSymbol = state.checker.getSymbolAtLocation(referenceLocation);
         if (!referenceSymbol) {

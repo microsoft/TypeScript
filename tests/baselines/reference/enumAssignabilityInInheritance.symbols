@@ -85,8 +85,8 @@ var r4 = foo3(E.A);
 declare function foo4(x: Date): Date;
 >foo4 : Symbol(foo4, Decl(enumAssignabilityInInheritance.ts, 26, 19), Decl(enumAssignabilityInInheritance.ts, 28, 37))
 >x : Symbol(x, Decl(enumAssignabilityInInheritance.ts, 28, 22))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 declare function foo4(x: E): E;
 >foo4 : Symbol(foo4, Decl(enumAssignabilityInInheritance.ts, 26, 19), Decl(enumAssignabilityInInheritance.ts, 28, 37))

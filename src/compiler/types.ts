@@ -507,6 +507,7 @@ namespace ts {
         JSDoc                                         = 1 << 21, // If node was parsed inside jsdoc
         /* @internal */ Ambient                       = 1 << 22, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
         /* @internal */ InWithStatement               = 1 << 23, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
+        JsonFile                                      = 1 << 24, // If node was parsed in a Json
 
         BlockScoped = Let | Const,
 
@@ -712,10 +713,9 @@ namespace ts {
         KindMask = 7,                       // Mask to extract the kind of identifier from its flags.
 
         // Flags
-        SkipNameGenerationScope = 1 << 3,   // Should skip a name generation scope when generating the name for this identifier
-        ReservedInNestedScopes = 1 << 4,    // Reserve the generated name in nested scopes
-        Optimistic = 1 << 5,                // First instance won't use '_#' if there's no conflict
-        FileLevel = 1 << 6,                 // Use only the file identifiers list and not generated names to search for conflicts
+        ReservedInNestedScopes = 1 << 3,    // Reserve the generated name in nested scopes
+        Optimistic = 1 << 4,                // First instance won't use '_#' if there's no conflict
+        FileLevel = 1 << 5,                 // Use only the file identifiers list and not generated names to search for conflicts
     }
 
     export interface Identifier extends PrimaryExpression, Declaration {
@@ -2639,8 +2639,21 @@ namespace ts {
     }
 
     export interface JsonSourceFile extends SourceFile {
-        jsonObject?: ObjectLiteralExpression;
+        statements: NodeArray<JsonObjectExpressionStatement>;
+    }
+
+    export interface TsConfigSourceFile extends JsonSourceFile {
         extendedSourceFiles?: string[];
+    }
+
+    export interface JsonMinusNumericLiteral extends PrefixUnaryExpression {
+        kind: SyntaxKind.PrefixUnaryExpression;
+        operator: SyntaxKind.MinusToken;
+        operand: NumericLiteral;
+    }
+
+    export interface JsonObjectExpressionStatement extends ExpressionStatement {
+        expression: ObjectLiteralExpression | ArrayLiteralExpression | JsonMinusNumericLiteral | NumericLiteral | StringLiteral | BooleanLiteral | NullLiteral;
     }
 
     export interface ScriptReferenceHost {
@@ -4117,7 +4130,10 @@ namespace ts {
         Prototype,
     }
 
-    export interface JsFileExtensionInfo {
+    /** @deprecated Use FileExtensionInfo instead. */
+    export type JsFileExtensionInfo = FileExtensionInfo;
+
+    export interface FileExtensionInfo {
         extension: string;
         isMixedContent: boolean;
         scriptKind?: ScriptKind;
@@ -4192,7 +4208,7 @@ namespace ts {
         checkJs?: boolean;
         /* @internal */ configFilePath?: string;
         /** configFile is set as non enumerable property so as to avoid checking of json source files */
-        /* @internal */ readonly configFile?: JsonSourceFile;
+        /* @internal */ readonly configFile?: TsConfigSourceFile;
         declaration?: boolean;
         declarationMap?: boolean;
         emitDeclarationOnly?: boolean;
@@ -4266,6 +4282,7 @@ namespace ts {
         /* @internal */ suppressOutputPathCheck?: boolean;
         target?: ScriptTarget;
         traceResolution?: boolean;
+        resolveJsonModule?: boolean;
         types?: string[];
         /** Paths used to compute primary types search locations */
         typeRoots?: string[];
@@ -4273,7 +4290,7 @@ namespace ts {
         /*@internal*/ watch?: boolean;
         esModuleInterop?: boolean;
 
-        [option: string]: CompilerOptionsValue | JsonSourceFile | undefined;
+        [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
 
     export interface TypeAcquisition {
@@ -4325,7 +4342,12 @@ namespace ts {
         TS = 3,
         TSX = 4,
         External = 5,
-        JSON = 6
+        JSON = 6,
+        /**
+         * Used on extensions that doesn't define the ScriptKind but the content defines it.
+         * Deferred extensions are going to be included in all project contexts.
+         */
+        Deferred = 7
     }
 
     export const enum ScriptTarget {

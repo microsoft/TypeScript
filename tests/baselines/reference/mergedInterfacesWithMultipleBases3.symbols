@@ -69,7 +69,7 @@ class D implements A<boolean> {
 
     b: Date;
 >b : Symbol(D.b, Decl(mergedInterfacesWithMultipleBases3.ts, 28, 14))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     c: string;
 >c : Symbol(D.c, Decl(mergedInterfacesWithMultipleBases3.ts, 29, 12))

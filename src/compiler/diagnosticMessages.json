@@ -2806,6 +2806,10 @@
         "category": "Error",
         "code": 5069
     },
+    "Option '--resolveJsonModule' cannot be specified without 'node' module resolution strategy.": {
+        "category": "Error",
+        "code": 5070
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -3543,6 +3547,11 @@
         "code": 6196,
         "reportsUnnecessary": true
     },
+    "Include modules imported with '.json' extension": {
+        "category": "Message",
+        "code": 6197
+    },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -3902,6 +3911,10 @@
         "category": "Suggestion",
         "code": 80004
     },
+    "'require' call may be converted to an import.": {
+        "category": "Suggestion",
+        "code": 80005
+    },
 
     "Add missing 'super()' call": {
         "category": "Message",
@@ -4178,5 +4191,13 @@
     "Generate 'get' and 'set' accessors": {
         "category": "Message",
         "code": 95046
+    },
+    "Convert 'require' to 'import'": {
+        "category": "Message",
+        "code": 95047
+    },
+    "Convert all 'require' to 'import'": {
+        "category": "Message",
+        "code": 95048
     }
 }

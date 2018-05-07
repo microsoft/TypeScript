@@ -194,7 +194,7 @@ namespace ts.server {
         formatCodeOptions: FormatCodeSettings;
         preferences: UserPreferences;
         hostInfo: string;
-        extraFileExtensions?: JsFileExtensionInfo[];
+        extraFileExtensions?: FileExtensionInfo[];
     }
 
     export interface OpenConfiguredProjectResult {
@@ -204,8 +204,8 @@ namespace ts.server {
 
     interface FilePropertyReader<T> {
         getFileName(f: T): string;
-        getScriptKind(f: T, extraFileExtensions?: JsFileExtensionInfo[]): ScriptKind;
-        hasMixedContent(f: T, extraFileExtensions: JsFileExtensionInfo[]): boolean;
+        getScriptKind(f: T, extraFileExtensions?: FileExtensionInfo[]): ScriptKind;
+        hasMixedContent(f: T, extraFileExtensions: FileExtensionInfo[]): boolean;
     }
 
     const fileNamePropertyReader: FilePropertyReader<string> = {
@@ -521,7 +521,11 @@ namespace ts.server {
             }
         }
 
-        updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse): void {
+        updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse): void;
+        /** @internal */
+        // tslint:disable-next-line:unified-signatures
+        updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse | BeginInstallTypes | EndInstallTypes): void;
+        updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse | BeginInstallTypes | EndInstallTypes): void {
             const project = this.findProject(response.projectName);
             if (!project) {
                 return;
@@ -594,10 +598,12 @@ namespace ts.server {
         }
 
         private delayUpdateProjectGraphs(projects: ReadonlyArray<Project>) {
-            for (const project of projects) {
-                this.delayUpdateProjectGraph(project);
+            if (projects.length) {
+                for (const project of projects) {
+                    this.delayUpdateProjectGraph(project);
+                }
+                this.delayEnsureProjectForOpenFiles();
             }
-            this.delayEnsureProjectForOpenFiles();
         }
 
         setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions, projectRootPath?: string): void {
@@ -708,7 +714,6 @@ namespace ts.server {
                 this.handleDeletedFile(info);
             }
             else if (!info.isScriptOpen()) {
-                Debug.assert(info.containingProjects.length !== 0);
                 // file has been changed which might affect the set of referenced files in projects that include
                 // this file and set of inferred projects
                 info.delayReloadNonMixedContentFile();
@@ -1192,8 +1197,11 @@ namespace ts.server {
             const projectRootPath = this.openFiles.get(info.path);
 
             let searchPath = asNormalizedPath(getDirectoryPath(info.fileName));
+            const isSearchPathInProjectRoot = () => containsPath(projectRootPath, searchPath, this.currentDirectory, !this.host.useCaseSensitiveFileNames);
 
-            while (!projectRootPath || containsPath(projectRootPath, searchPath, this.currentDirectory, !this.host.useCaseSensitiveFileNames)) {
+            // If projectRootPath doesnt contain info.path, then do normal search for config file
+            const anySearchPathOk = !projectRootPath || !isSearchPathInProjectRoot();
+            do {
                 const canonicalSearchPath = normalizedPathToPath(searchPath, this.currentDirectory, this.toCanonicalFileName);
                 const tsconfigFileName = asNormalizedPath(combinePaths(searchPath, "tsconfig.json"));
                 let result = action(tsconfigFileName, combinePaths(canonicalSearchPath, "tsconfig.json"));
@@ -1212,7 +1220,7 @@ namespace ts.server {
                     break;
                 }
                 searchPath = parentPath;
-            }
+            } while (anySearchPathOk || isSearchPathInProjectRoot());
 
             return undefined;
         }
@@ -1230,7 +1238,7 @@ namespace ts.server {
             this.logger.info(`Search path: ${getDirectoryPath(info.fileName)}`);
             const configFileName = this.forEachConfigFileLocation(info,
                 (configFileName, canonicalConfigFilePath) =>
-                    this.configFileExists(configFileName, canonicalConfigFilePath, info),
+                    this.configFileExists(configFileName, canonicalConfigFilePath, info)
             );
             if (configFileName) {
                 this.logger.info(`For info: ${info.fileName} :: Config file name: ${configFileName}`);
@@ -2425,6 +2433,16 @@ namespace ts.server {
                 this.externalProjectToConfiguredProjectMap.delete(proj.projectFileName);
                 this.createExternalProject(proj.projectFileName, rootFiles, proj.options, proj.typeAcquisition, excludedFiles);
             }
+        }
+
+        hasDeferredExtension() {
+            for (const extension of this.hostConfiguration.extraFileExtensions) {
+                if (extension.scriptKind === ScriptKind.Deferred) {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

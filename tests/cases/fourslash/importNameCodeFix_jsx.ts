@@ -13,11 +13,11 @@
 
 // @Filename: /c.tsx
 ////import { React } from "react";
-////[|<Foo />;|]
+////<Foo />;
 
 // @Filename: /d.tsx
-////[|import { Foo } from "./Foo";
-////<Foo />;|]
+////import { Foo } from "./Foo";
+////<Foo />;
 
 // Tests that we don't crash at non-identifier location.
 goTo.file("/a.tsx");
@@ -26,7 +26,8 @@ verify.importFixAtPosition([]);
 // When constructor is missing, provide fix for that
 goTo.file("/c.tsx");
 verify.importFixAtPosition([
-`import { Foo } from "./Foo";
+`import { React } from "react";
+import { Foo } from "./Foo";
 <Foo />;`]);
 
 // When JSX namespace is missing, provide fix for that

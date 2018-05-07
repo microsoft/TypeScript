@@ -3181,7 +3181,7 @@ namespace ts.projectSystem {
             const projectLocation = "/user/username/projects/project";
             const file1: FileOrFolder = {
                 path: `${projectLocation}/src/file1.ts`,
-                content: `import { y } from "./file1"; let x = 10;`
+                content: `import { y } from "./file2"; let x = 10;`
             };
             const file2: FileOrFolder = {
                 path: `${projectLocation}/src/file2.ts`,
@@ -3216,6 +3216,95 @@ namespace ts.projectSystem {
                 arguments: { file: file2.path, startLine: 1, startOffset, endLine: 1, endOffset: startOffset + 1 }
             });
 
+        });
+
+        it("includes deferred files in the project context", () => {
+            const file1 = {
+                path: "/a.deferred",
+                content: "const a = 1;"
+            };
+            // Deferred extensions should not affect JS files.
+            const file2 = {
+                path: "/b.js",
+                content: "const b = 1;"
+            };
+            const tsconfig = {
+                path: "/tsconfig.json",
+                content: ""
+            };
+
+            const host = createServerHost([file1, file2, tsconfig]);
+            const session = createSession(host);
+            const projectService = session.getProjectService();
+
+            // Configure the deferred extension.
+            const extraFileExtensions = [{ extension: ".deferred", scriptKind: ScriptKind.Deferred, isMixedContent: true }];
+            const configureHostRequest = makeSessionRequest<protocol.ConfigureRequestArguments>(CommandNames.Configure, { extraFileExtensions });
+            session.executeCommand(configureHostRequest);
+
+            // Open external project
+            const projectName = "/proj1";
+            projectService.openExternalProject({
+                projectFileName: projectName,
+                rootFiles: toExternalFiles([file1.path, file2.path, tsconfig.path]),
+                options: {}
+            });
+
+            // Assert
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+
+            const configuredProject = configuredProjectAt(projectService, 0);
+            checkProjectActualFiles(configuredProject, [file1.path, tsconfig.path]);
+
+            // Allow allowNonTsExtensions will be set to true for deferred extensions.
+            assert.isTrue(configuredProject.getCompilerOptions().allowNonTsExtensions);
+        });
+
+        it("Orphan source files are handled correctly on watch trigger", () => {
+            const projectLocation = "/user/username/projects/project";
+            const file1: FileOrFolder = {
+                path: `${projectLocation}/src/file1.ts`,
+                content: `export let x = 10;`
+            };
+            const file2: FileOrFolder = {
+                path: `${projectLocation}/src/file2.ts`,
+                content: "export let y = 10;"
+            };
+            const configContent1 = JSON.stringify({
+                files: ["src/file1.ts", "src/file2.ts"]
+            });
+            const config: FileOrFolder = {
+                path: `${projectLocation}/tsconfig.json`,
+                content: configContent1
+            };
+            const files = [file1, file2, libFile, config];
+            const host = createServerHost(files);
+            const service = createProjectService(host);
+            service.openClientFile(file1.path);
+            checkProjectActualFiles(service.configuredProjects.get(config.path), [file1.path, file2.path, libFile.path, config.path]);
+
+            const configContent2 = JSON.stringify({
+                files: ["src/file1.ts"]
+            });
+            config.content = configContent2;
+            host.reloadFS(files);
+            host.runQueuedTimeoutCallbacks();
+
+            checkProjectActualFiles(service.configuredProjects.get(config.path), [file1.path, libFile.path, config.path]);
+            verifyFile2InfoIsOrphan();
+
+            file2.content += "export let z = 10;";
+            host.reloadFS(files);
+            host.runQueuedTimeoutCallbacks();
+
+            checkProjectActualFiles(service.configuredProjects.get(config.path), [file1.path, libFile.path, config.path]);
+            verifyFile2InfoIsOrphan();
+
+            function verifyFile2InfoIsOrphan() {
+                const info = service.getScriptInfoForPath(file2.path as Path);
+                assert.isDefined(info);
+                assert.equal(info.containingProjects.length, 0);
+            }
         });
     });
 
@@ -3985,11 +4074,11 @@ namespace ts.projectSystem {
             // Open file1 -> configFile
             verifyConfigFileName(file1, "/a", configFile);
             verifyConfigFileName(file1, "/a/b", configFile);
-            verifyConfigFileName(file1, "/a/B", useCaseSensitiveFileNames ? undefined : configFile);
+            verifyConfigFileName(file1, "/a/B", configFile);
 
             // Open file2 use root "/a/b"
             verifyConfigFileName(file2, "/a", useCaseSensitiveFileNames ? configFile2 : configFile);
-            verifyConfigFileName(file2, "/a/b", useCaseSensitiveFileNames ? undefined : configFile);
+            verifyConfigFileName(file2, "/a/b", useCaseSensitiveFileNames ? configFile2 : configFile);
             verifyConfigFileName(file2, "/a/B", useCaseSensitiveFileNames ? undefined : configFile);
 
             function verifyConfigFileName(file: FileOrFolder, projectRoot: string, expectedConfigFile: FileOrFolder | undefined) {
@@ -5517,6 +5606,88 @@ namespace ts.projectSystem {
             checkWatchedFiles(host, [libFile.path, configFile.path, `${configFileLocation}/jsconfig.json`, `${projectDir}/tsconfig.json`, `${projectDir}/jsconfig.json`]);
             checkWatchedDirectories(host, [], /*recursive*/ false);
             checkWatchedDirectories(host, getTypeRootsFromLocation(projectDir), /*recursive*/ true);
+        });
+
+        describe("when the opened file is not from project root", () => {
+            const projectRoot = "/a/b/projects/project";
+            const file: FileOrFolder = {
+                path: `${projectRoot}/src/index.ts`,
+                content: "let y = 10"
+            };
+            const tsconfig: FileOrFolder = {
+                path: `${projectRoot}/tsconfig.json`,
+                content: "{}"
+            };
+            const files = [file, libFile];
+            const filesWithConfig = files.concat(tsconfig);
+            const dirOfFile = getDirectoryPath(file.path);
+
+            function openClientFile(files: FileOrFolder[]) {
+                const host = createServerHost(files);
+                const projectService = createProjectService(host);
+
+                projectService.openClientFile(file.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, "/a/b/projects/proj");
+                return { host, projectService };
+            }
+
+            function verifyConfiguredProject(host: TestServerHost, projectService: TestProjectService, orphanInferredProject?: boolean) {
+                projectService.checkNumberOfProjects({ configuredProjects: 1, inferredProjects: orphanInferredProject ? 1 : 0 });
+                const project = projectService.configuredProjects.get(tsconfig.path);
+                assert.isDefined(project);
+
+                if (orphanInferredProject) {
+                    const inferredProject = projectService.inferredProjects[0];
+                    assert.isTrue(inferredProject.isOrphan());
+                }
+
+                checkProjectActualFiles(project, [file.path, libFile.path, tsconfig.path]);
+                checkWatchedFiles(host, [libFile.path, tsconfig.path]);
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedDirectories(host, (orphanInferredProject ? [projectRoot, `${dirOfFile}/node_modules/@types`] : [projectRoot]).concat(getTypeRootsFromLocation(projectRoot)), /*recursive*/ true);
+            }
+
+            function verifyInferredProject(host: TestServerHost, projectService: TestProjectService) {
+                projectService.checkNumberOfProjects({ inferredProjects: 1 });
+                const project = projectService.inferredProjects[0];
+                assert.isDefined(project);
+
+                const filesToWatch = [libFile.path];
+                forEachAncestorDirectory(dirOfFile, ancestor => {
+                    filesToWatch.push(combinePaths(ancestor, "tsconfig.json"));
+                    filesToWatch.push(combinePaths(ancestor, "jsconfig.json"));
+                });
+
+                checkProjectActualFiles(project, [file.path, libFile.path]);
+                checkWatchedFiles(host, filesToWatch);
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedDirectories(host, getTypeRootsFromLocation(dirOfFile), /*recursive*/ true);
+            }
+
+            it("tsconfig for the file exists", () => {
+                const { host, projectService } = openClientFile(filesWithConfig);
+                verifyConfiguredProject(host, projectService);
+
+                host.reloadFS(files);
+                host.runQueuedTimeoutCallbacks();
+                verifyInferredProject(host, projectService);
+
+                host.reloadFS(filesWithConfig);
+                host.runQueuedTimeoutCallbacks();
+                verifyConfiguredProject(host, projectService, /*orphanInferredProject*/ true);
+            });
+
+            it("tsconfig for the file does not exist", () => {
+                const { host, projectService } = openClientFile(files);
+                verifyInferredProject(host, projectService);
+
+                host.reloadFS(filesWithConfig);
+                host.runQueuedTimeoutCallbacks();
+                verifyConfiguredProject(host, projectService, /*orphanInferredProject*/ true);
+
+                host.reloadFS(files);
+                host.runQueuedTimeoutCallbacks();
+                verifyInferredProject(host, projectService);
+            });
         });
     });
 

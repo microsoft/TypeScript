@@ -25,6 +25,7 @@ module TypeScript {
 
         constructor (public outfile: ITextWriter, public parser: Parser) {
 >outfile : Symbol(PrintContext.outfile, Decl(parserRealSource5.ts, 13, 21))
+>ITextWriter : Symbol(ITextWriter, Decl(lib.d.ts, --, --))
 >parser : Symbol(PrintContext.parser, Decl(parserRealSource5.ts, 13, 49))
         }
 
@@ -129,9 +130,11 @@ module TypeScript {
 >s : Symbol(s, Decl(parserRealSource5.ts, 43, 25))
 
             this.outfile.WriteLine(this.builder);
+>this.outfile.WriteLine : Symbol(ITextWriter.WriteLine, Decl(lib.d.ts, --, --))
 >this.outfile : Symbol(PrintContext.outfile, Decl(parserRealSource5.ts, 13, 21))
 >this : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
 >outfile : Symbol(PrintContext.outfile, Decl(parserRealSource5.ts, 13, 21))
+>WriteLine : Symbol(ITextWriter.WriteLine, Decl(lib.d.ts, --, --))
 >this.builder : Symbol(PrintContext.builder, Decl(parserRealSource5.ts, 7, 31))
 >this : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
 >builder : Symbol(PrintContext.builder, Decl(parserRealSource5.ts, 7, 31))

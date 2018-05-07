@@ -177,10 +177,10 @@ namespace ts.textChanges {
     }
 
     function getAdjustedEndPosition(sourceFile: SourceFile, node: Node, options: ConfigurableEnd) {
+        const { end } = node;
         if (options.useNonAdjustedEndPosition || isExpression(node)) {
-            return node.getEnd();
+            return end;
         }
-        const end = node.getEnd();
         const newEnd = skipTrivia(sourceFile.text, end, /*stopAfterLineBreak*/ true);
         return newEnd !== end && isLineBreak(sourceFile.text.charCodeAt(newEnd - 1))
             ? newEnd
@@ -466,7 +466,11 @@ namespace ts.textChanges {
                 }
             }
             const endPosition = getAdjustedEndPosition(sourceFile, after, {});
-            return this.replaceRange(sourceFile, createTextRange(endPosition), newNode, this.getInsertNodeAfterOptions(after));
+            const options = this.getInsertNodeAfterOptions(after);
+            return this.replaceRange(sourceFile, createTextRange(endPosition), newNode, {
+                ...options,
+                prefix: after.end === sourceFile.end && isStatement(after) ? (options.prefix ? `\n${options.prefix}` : "\n") : options.prefix,
+            });
         }
 
         private getInsertNodeAfterOptions(node: Node): InsertNodeOptions {
