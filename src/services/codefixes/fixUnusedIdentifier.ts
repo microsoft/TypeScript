@@ -125,7 +125,7 @@ namespace ts.codefix {
                 break;
 
             case SyntaxKind.TypeParameter:
-                const typeParameters = getTypeParametersOfDeclaration(<DeclarationWithTypeParameters>parent.parent);
+                const typeParameters = getEffectiveTypeParameterDeclarations(<DeclarationWithTypeParameters>parent.parent);
                 if (typeParameters.length === 1) {
                     const previousToken = getTokenAtPosition(sourceFile, typeParameters.pos - 1, /*includeJsDocComment*/ false);
                     const nextToken = getTokenAtPosition(sourceFile, typeParameters.end, /*includeJsDocComment*/ false);

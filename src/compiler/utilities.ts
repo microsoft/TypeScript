@@ -498,37 +498,6 @@ namespace ts {
         return false;
     }
 
-    export function getTypeParametersOfDeclaration(node: DeclarationWithTypeParameters): NodeArray<TypeParameterDeclaration> | undefined {
-        switch (node.kind) {
-            case SyntaxKind.CallSignature:
-            case SyntaxKind.ConstructSignature:
-            case SyntaxKind.MethodSignature:
-            case SyntaxKind.IndexSignature:
-            case SyntaxKind.FunctionType:
-            case SyntaxKind.ConstructorType:
-            case SyntaxKind.JSDocFunctionType:
-            case SyntaxKind.ClassDeclaration:
-            case SyntaxKind.ClassExpression:
-            case SyntaxKind.InterfaceDeclaration:
-            case SyntaxKind.TypeAliasDeclaration:
-            case SyntaxKind.JSDocTemplateTag:
-            case SyntaxKind.FunctionDeclaration:
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.Constructor:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-            case SyntaxKind.FunctionExpression:
-            case SyntaxKind.ArrowFunction:
-                return node.typeParameters;
-            case SyntaxKind.JSDocCallbackTag:
-            case SyntaxKind.JSDocTypedefTag:
-                return getEffectiveTypeParameterDeclarations(node);
-            default:
-                assertTypeIsNever(node);
-                return undefined;
-        }
-    }
-
     export function isDeclarationWithTypeParameters(node: Node): node is DeclarationWithTypeParameters;
     export function isDeclarationWithTypeParameters(node: DeclarationWithTypeParameters): node is DeclarationWithTypeParameters {
         switch (node.kind) {
@@ -3024,7 +2993,7 @@ namespace ts {
     }
 
     export function getThisParameter(signature: SignatureDeclaration | JSDocSignature): ParameterDeclaration | undefined {
-        // TODO: Maybe jsdoc signatures should support this parameters? (parameterIsThisKeyword is not going to work there, I think, since jsdoc doesn't have keywords)
+        // callback tags do not currently support this parameters
         if (signature.parameters.length && !isJSDocSignature(signature)) {
             const thisParameter = signature.parameters[0];
             if (parameterIsThisKeyword(thisParameter)) {
@@ -3119,14 +3088,17 @@ namespace ts {
      * JavaScript file, gets the return type annotation from JSDoc.
      */
     export function getEffectiveReturnTypeNode(node: SignatureDeclaration | JSDocSignature): TypeNode | undefined {
-        return !isJSDocSignature(node) && node.type || (isInJavaScriptFile(node) ? getJSDocReturnType(node) : undefined);
+        if (isJSDocSignature(node)) {
+            return node.type && node.type.typeExpression && node.type.typeExpression.type;
+        }
+        return node.type || (isInJavaScriptFile(node) ? getJSDocReturnType(node) : undefined);
     }
 
     /**
      * Gets the effective type parameters. If the node was parsed in a
      * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
      */
-    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): NodeArray<TypeParameterDeclaration> {
+    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters) {
         if (isJSDocTypeAlias(node)) {
             Debug.assert(node.parent.kind === SyntaxKind.JSDocComment);
             const templateTags = flatMap(filter(node.parent.tags, isJSDocTemplateTag), tag => tag.typeParameters) as ReadonlyArray<TypeParameterDeclaration>;
@@ -3143,6 +3115,7 @@ namespace ts {
         const tags = filter(getJSDocTags(node), isJSDocTemplateTag);
         for (const tag of tags) {
             if (!(tag.parent.kind === SyntaxKind.JSDocComment && find(tag.parent.tags, isJSDocTypeAlias))) {
+                // template tags are only available when a typedef isn't already using them
                 return tag.typeParameters;
             }
         }
@@ -4765,9 +4738,6 @@ namespace ts {
 
     /** Gets the JSDoc return tag for the node if present */
     export function getJSDocReturnTag(node: Node): JSDocReturnTag | undefined {
-        if (isJSDocSignature(node)) {
-            return node.type;
-        }
         return getFirstJSDocTag(node, isJSDocReturnTag);
     }
 
@@ -4828,7 +4798,7 @@ namespace ts {
     }
 
     /** Get the first JSDoc tag of a specified kind, or undefined if not present. */
-    export function getFirstJSDocTag<T extends JSDocTag>(node: Node, predicate: (tag: JSDocTag) => tag is T): T | undefined {
+    function getFirstJSDocTag<T extends JSDocTag>(node: Node, predicate: (tag: JSDocTag) => tag is T): T | undefined {
         // TODO: This shouldn't need to be exported, I think
         return find(getJSDocTags(node), predicate);
     }

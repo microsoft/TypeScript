@@ -2391,11 +2391,10 @@ namespace ts {
         parent: JSDoc;
         kind: SyntaxKind.JSDocCallbackTag;
         fullName?: JSDocNamespaceDeclaration | Identifier;
-        name?: Identifier; // TODO: Not sure whether this rigamarole is needed for callback...but probably!
+        name?: Identifier;
         typeExpression: JSDocSignature;
     }
 
-    // TODO: Could just try to reuse JSDocTypeLiteral
     export interface JSDocSignature extends JSDocType, Declaration {
         kind: SyntaxKind.JSDocSignature;
         typeParameters?: ReadonlyArray<JSDocTemplateTag>;
