@@ -57,7 +57,6 @@ namespace ts.server {
 
     export interface PluginCreateInfo {
         project: Project;
-        projectService: ProjectService;
         languageService: LanguageService;
         languageServiceHost: LanguageServiceHost;
         serverHost: ServerHost;
@@ -1103,6 +1102,11 @@ namespace ts.server {
             this.projectService.logger.info(`Couldn't find ${pluginConfigEntry.name}`);
         }
 
+        /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
+        refreshDiagnostics() {
+            this.projectService.sendProjectsUpdatedInBackgroundEvent();
+        }
+
         private enableProxy(pluginModuleFactory: PluginModuleFactory, configEntry: PluginImport) {
             try {
                 if (typeof pluginModuleFactory !== "function") {
@@ -1113,7 +1117,6 @@ namespace ts.server {
                 const info: PluginCreateInfo = {
                     config: configEntry,
                     project: this,
-                    projectService: this.projectService,
                     languageService: this.languageService,
                     languageServiceHost: this,
                     serverHost: this.projectService.host

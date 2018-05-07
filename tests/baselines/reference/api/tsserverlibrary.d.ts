@@ -7647,7 +7647,6 @@ declare namespace ts.server {
     function allFilesAreJsOrDts(project: Project): boolean;
     interface PluginCreateInfo {
         project: Project;
-        projectService: ProjectService;
         languageService: LanguageService;
         languageServiceHost: LanguageServiceHost;
         serverHost: ServerHost;
@@ -7792,6 +7791,8 @@ declare namespace ts.server {
         protected removeRoot(info: ScriptInfo): void;
         protected enableGlobalPlugins(): void;
         protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[]): void;
+        /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
+        refreshDiagnostics(): void;
         private enableProxy;
     }
     /**
@@ -8044,8 +8045,6 @@ declare namespace ts.server {
         updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse): void;
         private delayEnsureProjectForOpenFiles;
         private delayUpdateProjectGraph;
-        /** Call this function when an event has happened that should cause projects to update. */
-        sendProjectsUpdatedInBackgroundEvent(): void;
         private delayUpdateProjectGraphs;
         setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions, projectRootPath?: string): void;
         findProject(projectName: string): Project | undefined;

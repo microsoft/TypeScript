@@ -573,7 +573,7 @@ namespace ts.server {
             return this.pendingProjectUpdates.has(project.getProjectName());
         }
 
-        /** Call this function when an event has happened that should cause projects to update. */
+        /* @internal */
         sendProjectsUpdatedInBackgroundEvent() {
             if (!this.eventHandler) {
                 return;
