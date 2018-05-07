@@ -100,8 +100,8 @@ namespace ts.JsDoc {
                 return withList((tag as JSDocTemplateTag).typeParameters);
             case SyntaxKind.JSDocTypeTag:
                 return withNode((tag as JSDocTypeTag).typeExpression);
-            // TODO: Handle callback here
             case SyntaxKind.JSDocTypedefTag:
+            case SyntaxKind.JSDocCallbackTag:
             case SyntaxKind.JSDocPropertyTag:
             case SyntaxKind.JSDocParameterTag:
                 const { name } = tag as JSDocTypedefTag | JSDocPropertyTag | JSDocParameterTag;
