@@ -264,9 +264,9 @@ namespace ts {
         });
 
         function baselineDeclarationTransform(text: string, opts: TranspileOptions) {
-            const fs = vfs.createFromFileSystem(Harness.IO, true, { documents: [new documents.TextDocument("/.src/index.ts", text)] });
+            const fs = vfs.createFromFileSystem(Harness.IO, /*caseSensitive*/ true, { documents: [new documents.TextDocument("/.src/index.ts", text)] });
             const host = new fakes.CompilerHost(fs, opts.compilerOptions);
-            const program = ts.createProgram(["/.src/index.ts"], opts.compilerOptions, host);
+            const program = createProgram(["/.src/index.ts"], opts.compilerOptions, host);
             program.emit(program.getSourceFiles()[1], (p, s, bom) => host.writeFile(p, s, bom), /*cancellationToken*/ undefined, /*onlyDts*/ true, opts.transformers);
             return fs.readFileSync("/.src/index.d.ts").toString();
         }
