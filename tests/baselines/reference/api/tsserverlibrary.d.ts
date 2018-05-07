@@ -7987,6 +7987,7 @@ declare namespace ts.server {
          * Container of all known scripts
          */
         private readonly filenameToScriptInfo;
+        private readonly allJsFilesForOpenFilesTelemetry;
         /**
          * maps external project file name to list of config files that were the part of this project
          */
@@ -8049,7 +8050,6 @@ declare namespace ts.server {
         readonly syntaxOnly?: boolean;
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects;
-        private hasSentOpenFileTelemetry;
         constructor(opts: ProjectServiceOptions);
         toPath(fileName: string): Path;
         private loadTypesMap;
