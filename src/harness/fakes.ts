@@ -39,9 +39,7 @@ namespace fakes {
         public readFile(path: string) {
             try {
                 const content = this.vfs.readFileSync(path, "utf8");
-                return content === undefined ? undefined :
-                    vpath.extname(path) === ".json" ? utils.removeComments(utils.removeByteOrderMark(content), utils.CommentRemoval.leadingAndTrailing) :
-                        utils.removeByteOrderMark(content);
+                return content === undefined ? undefined : utils.removeByteOrderMark(content);
             }
             catch {
                 return undefined;
@@ -202,7 +200,8 @@ namespace fakes {
     export class CompilerHost implements ts.CompilerHost {
         public readonly sys: System;
         public readonly defaultLibLocation: string;
-        public readonly outputs: documents.TextDocument[] = [];
+        private readonly outputNames: string[] = [];
+        private readonly outputsMap: ts.Map<documents.TextDocument> = ts.createMap();
         public readonly traces: string[] = [];
         public readonly shouldAssertInvariants = !Harness.lightMode;
 
@@ -218,6 +217,10 @@ namespace fakes {
             this._newLine = ts.getNewLineCharacter(options, () => this.sys.newLine);
             this._sourceFiles = new collections.SortedMap<string, ts.SourceFile>({ comparer: sys.vfs.stringComparer, sort: "insertion" });
             this._setParentNodes = setParentNodes;
+        }
+
+        public get outputs() {
+            return ts.map(this.outputNames, e => this.outputsMap.get(e));
         }
 
         public get vfs() {
@@ -267,13 +270,11 @@ namespace fakes {
             const document = new documents.TextDocument(fileName, content);
             document.meta.set("fileName", fileName);
             this.vfs.filemeta(fileName).set("document", document);
-            const index = this.outputs.findIndex(output => this.vfs.stringComparer(document.file, output.file) === 0);
-            if (index < 0) {
-                this.outputs.push(document);
+            const canonical = ts.toPath(fileName, this.sys.getCurrentDirectory(), ts.createGetCanonicalFileName(this.sys.useCaseSensitiveFileNames));
+            if (!this.outputsMap.has(canonical)) {
+                this.outputNames.push(canonical);
             }
-            else {
-                this.outputs[index] = document;
-            }
+            this.outputsMap.set(canonical, document);
         }
 
         public trace(s: string): void {
