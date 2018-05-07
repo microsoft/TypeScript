@@ -6668,7 +6668,6 @@ namespace ts {
                         <JSDocParameterTag>createNode(SyntaxKind.JSDocParameterTag, atToken.pos);
                     let comment: string | undefined;
                     if (indent !== undefined) comment = parseTagComments(indent + scanner.getStartPos() - atToken.pos);
-                    // TODO: For nested parsing, CallbackParameter should change to Parameter
                     const nestedTypeLiteral = parseNestedTypeLiteral(typeExpression, name, target);
                     if (nestedTypeLiteral) {
                         typeExpression = nestedTypeLiteral;

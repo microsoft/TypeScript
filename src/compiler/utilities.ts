@@ -1933,7 +1933,6 @@ namespace ts {
     }
 
     export function hasRestParameter(s: SignatureDeclaration | JSDocSignature): boolean {
-        // TODO: This type argument wouldn't be needed if I used NodeArray for jsdoc signatures
         const last = lastOrUndefined<ParameterDeclaration | JSDocParameterTag>(s.parameters);
         return last && isRestParameter(last);
     }
@@ -4803,7 +4802,6 @@ namespace ts {
 
     /** Get the first JSDoc tag of a specified kind, or undefined if not present. */
     function getFirstJSDocTag<T extends JSDocTag>(node: Node, predicate: (tag: JSDocTag) => tag is T): T | undefined {
-        // TODO: This shouldn't need to be exported, I think
         return find(getJSDocTags(node), predicate);
     }
 

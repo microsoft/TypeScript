@@ -7221,7 +7221,7 @@ namespace ts {
             for (let i = 0; i < symbol.declarations.length; i++) {
                 const decl = symbol.declarations[i];
                 const node = isPropertyAccessExpression(decl) ? getAssignedJavascriptInitializer(decl) : decl;
-                if (!isFunctionLike(node) && !(node && isJSDocSignature(node))) continue;
+                if (!isFunctionLike(node)) continue;
                 // Don't include signature if node is the implementation of an overloaded function. A node is considered
                 // an implementation node if it has a body and the previous node is of the same kind and immediately
                 // precedes the implementation node (i.e. has the same parent and ends where the implementation starts).
@@ -7615,7 +7615,6 @@ namespace ts {
          */
         function getTypeFromTypeAliasReference(node: NodeWithTypeArguments, symbol: Symbol, typeArguments: Type[]): Type {
             const type = getDeclaredTypeOfSymbol(symbol);
-            // TODO: call getEffectiveTypeParameterDeclarations here and upgrade it to understand in-comment template tags as type parameters
             const typeParameters = getSymbolLinks(symbol).typeParameters;
             if (typeParameters) {
                 const numTypeArguments = length(node.typeArguments);
