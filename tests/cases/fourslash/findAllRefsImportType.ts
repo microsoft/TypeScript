@@ -9,4 +9,4 @@
 // @Filename: /b.js
 ////type T = import("./a").[|N|];
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("type N = number");
