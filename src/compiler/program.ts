@@ -1194,7 +1194,9 @@ namespace ts {
                 getEmitHost(writeFileCallback),
                 sourceFile,
                 emitOnlyDtsFiles,
-                transformers);
+                transformers,
+                customTransformers && customTransformers.afterDeclarations
+            );
 
             performance.mark("afterEmit");
             performance.measure("Emit", "beforeEmit", "afterEmit");
