@@ -340,6 +340,11 @@ namespace ts.server {
          * Container of all known scripts
          */
         private readonly filenameToScriptInfo = createMap<ScriptInfo>();
+        // Set of all '.js' files ever opened.
+        private readonly allJsFilesForOpenFilesTelemetry = createMap<true>();
+        // Number of files in allJsFilesForOpenFilesTelemetry that have `// @ts-check`
+        private tsCheckCountForOpenFilesTelemetry = 0;
+
         /**
          * Map to the real path of the infos
          */
@@ -2098,25 +2103,30 @@ namespace ts.server {
 
             this.printProjects();
 
-            this.telemetryOnOpenFile(project);
+            this.telemetryOnOpenFile(project, fileName, info);
             return { configFileName, configFileErrors };
         }
 
-        private telemetryOnOpenFile(project: ConfiguredProject | ExternalProject | undefined): void {
-            if (!this.eventHandler) return;
-            // Don't send for a project with 'checkJs' enabled globally.
-            if (project && project.getCompilationSettings().checkJs) return;
-
-            const stats: Mutable<OpenFileStats> = { js: 0, checkJs: 0 };
-            this.filenameToScriptInfo.forEach(scriptInfo => {
-                if (!scriptInfo.isJavaScript() || scriptInfo.containingProjects.length === 0) return;
-                stats.js++;
-                const file = scriptInfo.getDefaultProject().getSourceFile(scriptInfo.path);
-                if (file.checkJsDirective) stats.checkJs++;
-            });
-            if (stats.js !== 0) {
-                this.eventHandler({ eventName: OpenFilesInfoTelemetryEvent, data: { stats } });
+        private telemetryOnOpenFile(project: ConfiguredProject | ExternalProject | undefined, fileName: NormalizedPath, info: ScriptInfo): void {
+            if (
+                !this.eventHandler ||
+                // Don't send for a project with 'checkJs' enabled globally.
+                project && project.getCompilationSettings().checkJs ||
+                // We are only sending stats for JS files
+                !info.isJavaScript() ||
+                // Won't be able to get sourceFile without containingProjects
+                info.containingProjects.length === 0 ||
+                // If we've already seen the file, no need to send a new evnt.
+                !addToSeen(this.allJsFilesForOpenFilesTelemetry, fileName)) {
+                return;
             }
+
+            if (info.getDefaultProject().getSourceFile(info.path).checkJsDirective) {
+                this.tsCheckCountForOpenFilesTelemetry++;
+            }
+
+            const stats: OpenFileStats = { js: this.allJsFilesForOpenFilesTelemetry.size, checkJs: this.tsCheckCountForOpenFilesTelemetry };
+            this.eventHandler({ eventName: OpenFilesInfoTelemetryEvent, data: { stats } });
         }
 
         /**

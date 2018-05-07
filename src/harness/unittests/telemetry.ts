@@ -239,6 +239,7 @@ namespace ts.projectSystem {
             it("sends event for inferred project", () => {
                 const ajs = makeFile("/a.js", "// @ts-check\nconst x = 0;");
                 const bjs = makeFile("/b.js");
+                const cjs = makeFile("/c.js");
                 const et = new TestServerEventManager([ajs, bjs]);
 
                 et.service.openClientFile(ajs.path);
@@ -246,6 +247,15 @@ namespace ts.projectSystem {
 
                 et.service.openClientFile(bjs.path);
                 et.assertOpenFilesTelemetryEvent({ js: 2, checkJs: 1 });
+
+                // Closing a file doesn't remove it from the map
+                et.service.closeClientFile(bjs.path);
+                et.service.openClientFile(cjs.path);
+                et.assertOpenFilesTelemetryEvent({ js: 3, checkJs: 1 });
+
+                // No repeated send for opening a file seen before.
+                et.service.openClientFile(bjs.path);
+                et.assertNoOpenFilesTelemetryEvent();
             });
 
             it("not for project without '.js' files", () => {
