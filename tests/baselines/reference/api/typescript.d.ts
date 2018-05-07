@@ -1717,6 +1717,11 @@ declare namespace ts {
          */
         getTypeChecker(): TypeChecker;
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
+        getProjectReferences(): (ResolvedProjectReference | undefined)[] | undefined;
+    }
+    interface ResolvedProjectReference {
+        commandLine: ParsedCommandLine;
+        sourceFile: SourceFile;
     }
     interface CustomTransformers {
         /** Custom transformers to evaluate before built-in transformations. */

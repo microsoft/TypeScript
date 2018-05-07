@@ -2117,18 +2117,6 @@ namespace ts {
         return rootLength < 0 ? ~rootLength : rootLength;
     }
 
-    /**
-     * Normalizes a path including its leading drive letter (if any)
-     */
-    export function normalizePathAndRoot(path: string): string {
-        const normalized = normalizePathAndParts(path).path;
-        const rootLength = getRootLength(normalized);
-        if (rootLength === 0) {
-            return normalized;
-        }
-        return path.substr(0, rootLength).toLowerCase() + path.substr(rootLength);
-    }
-
     // TODO(rbuckton): replace references with `resolvePath`
     export function normalizePath(path: string): string {
         return resolvePath(path);

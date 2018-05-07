@@ -601,7 +601,7 @@ namespace ts {
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createMap<SourceFile>() : undefined;
 
         // A parallel array to projectReferences storing the results of reading in the referenced tsconfig files
-        const resolvedProjectReferences: { commandLine: ParsedCommandLine; sourceFile: SourceFile }[] = [];
+        const resolvedProjectReferences: (ResolvedProjectReference | undefined)[] | undefined = projectReferences ? [] : undefined;
         const projectReferenceRedirects: Map<string> = createMap();
         if (projectReferences) {
             for (const ref of projectReferences) {
@@ -705,6 +705,7 @@ namespace ts {
             isEmittedFile,
             getConfigFileParsingDiagnostics,
             getResolvedModuleWithFailedLookupLocationsFromCache,
+            getProjectReferences
         };
 
         verifyCompilerOptions();
@@ -939,11 +940,15 @@ namespace ts {
             }
 
             // Check if any referenced project tsconfig files are different
-            if (createProgramOptions.projectReferences) {
-                for (let i = 0; i < createProgramOptions.projectReferences.length; i++) {
-                    const oldRef = resolvedProjectReferences[i];
+            const oldRefs = oldProgram.getProjectReferences();
+            if (projectReferences) {
+                if (!oldRefs) {
+                    return oldProgram.structureIsReused = StructureIsReused.Not;
+                }
+                for (let i = 0; i < projectReferences.length; i++) {
+                    const oldRef = oldRefs[i];
                     if (oldRef) {
-                        const newRef = parseProjectReferenceConfigFile(createProgramOptions.projectReferences[i]);
+                        const newRef = parseProjectReferenceConfigFile(projectReferences[i]);
                         if (!newRef || newRef.sourceFile !== oldRef.sourceFile) {
                             // Resolved project reference has gone missing or changed
                             return oldProgram.structureIsReused = StructureIsReused.Not;
@@ -951,10 +956,15 @@ namespace ts {
                     }
                     else {
                         // A previously-unresolved reference may be resolved now
-                        if (parseProjectReferenceConfigFile(createProgramOptions.projectReferences[i]) !== undefined) {
+                        if (parseProjectReferenceConfigFile(projectReferences[i]) !== undefined) {
                             return oldProgram.structureIsReused = StructureIsReused.Not;
                         }
                     }
+                }
+            }
+            else {
+                if (oldRefs) {
+                    return oldProgram.structureIsReused = StructureIsReused.Not;
                 }
             }
 
@@ -1159,6 +1169,12 @@ namespace ts {
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
                 isEmitBlocked,
             };
+        }
+
+        function getProjectReferences() {
+            if (!resolvedProjectReferences) return;
+
+            return resolvedProjectReferences;
         }
 
         function getPrependNodes(): InputFiles[] {
@@ -2286,8 +2302,8 @@ namespace ts {
 
             // List of collected files is complete; validate exhautiveness if this is a project with a file list
             if (options.composite && rootNames.length < files.length) {
-                const normalizedRootNames = rootNames.map(r => normalizePathAndRoot(r).toLowerCase());
-                const sourceFiles = files.filter(f => !f.isDeclarationFile).map(f => normalizePathAndRoot(f.path).toLowerCase());
+                const normalizedRootNames = rootNames.map(r => normalizePath(r).toLowerCase());
+                const sourceFiles = files.filter(f => !f.isDeclarationFile).map(f => normalizePath(f.path).toLowerCase());
                 for (const file of sourceFiles) {
                     if (normalizedRootNames.every(r => r !== file)) {
                         programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern, file));

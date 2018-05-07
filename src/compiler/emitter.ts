@@ -413,7 +413,7 @@ namespace ts {
 
             for (const prepend of bundle.prepends) {
                 print(EmitHint.Unspecified, prepend, /*sourceFile*/ undefined);
-                write("\n");
+                writeLine();
             }
 
             if (bundleInfo) {

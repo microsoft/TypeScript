@@ -2757,6 +2757,13 @@ namespace ts {
         /* @internal */ isEmittedFile(file: string): boolean;
 
         /* @internal */ getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
+
+        getProjectReferences(): (ResolvedProjectReference | undefined)[] | undefined;
+    }
+
+    export interface ResolvedProjectReference {
+        commandLine: ParsedCommandLine;
+        sourceFile: SourceFile;
     }
 
     /* @internal */
