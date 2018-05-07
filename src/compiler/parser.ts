@@ -6376,7 +6376,7 @@ namespace ts {
                             case SyntaxKind.AtToken:
                                 if (state === JSDocState.BeginningOfLine || state === JSDocState.SawAsterisk) {
                                     removeTrailingNewlines(comments);
-                                    parseTag(indent);
+                                    addTag(parseTag(indent));
                                     // NOTE: According to usejsdoc.org, a tag goes to end of line, except the last tag.
                                     // Real-world comments may break this rule, so "BeginningOfLine" will not be a real line beginning
                                     // for malformed examples like `/** @param {string} x @returns {number} the length */`
@@ -6493,8 +6493,7 @@ namespace ts {
                             case "arg":
                             case "argument":
                             case "param":
-                                addTag(parseParameterOrPropertyTag(atToken, tagName, PropertyLikeParse.Parameter, indent));
-                                return;
+                                return parseParameterOrPropertyTag(atToken, tagName, PropertyLikeParse.Parameter, indent);
                             case "return":
                             case "returns":
                                 tag = parseReturnTag(atToken, tagName);
@@ -6528,7 +6527,7 @@ namespace ts {
                         // some tags, like typedef and callback, have already parsed their comments earlier
                         tag.comment = parseTagComments(indent + tag.end - tag.pos);
                     }
-                    addTag(tag);
+                    return tag;
                 }
 
                 function parseTagComments(indent: number): string | undefined {
@@ -6601,6 +6600,9 @@ namespace ts {
                 }
 
                 function addTag(tag: JSDocTag): void {
+                    if (!tag) {
+                        return;
+                    }
                     if (!tags) {
                         tags = [tag];
                         tagsPos = tag.pos;
@@ -6778,8 +6780,8 @@ namespace ts {
                     typedefTag.fullName = parseJSDocTypeNameWithNamespace();
                     typedefTag.name = getJSDocTypeAliasName(typedefTag.fullName);
                     skipWhitespace();
-
                     typedefTag.comment = parseTagComments(indent);
+
                     typedefTag.typeExpression = typeExpression;
                     if (!typeExpression || isObjectOrObjectArrayTypeReference(typeExpression.type)) {
                         let child: JSDocTypeTag | JSDocPropertyTag | false;
@@ -6848,19 +6850,14 @@ namespace ts {
                     const start = scanner.getStartPos();
                     const jsdocSignature = createNode(SyntaxKind.JSDocSignature, start) as JSDocSignature;
                     while (child = tryParse(() => parseChildParameterOrPropertyTag(PropertyLikeParse.CallbackParameter) as JSDocParameterTag)) {
-                        // Debug.assert(child.kind !== SyntaxKind.JSDocTypeTag);
                         jsdocSignature.parameters = append(jsdocSignature.parameters as MutableNodeArray<JSDocParameterTag>, child);
                     }
                     const returnTag = tryParse(() => {
-                        if (parseExpectedToken(SyntaxKind.AtToken)) {
-                            const atToken = <AtToken>createNode(SyntaxKind.AtToken, scanner.getTokenPos());
-                            atToken.end = scanner.getTextPos();
-                            nextToken(); // why is this needed? Doesn't parseExpectedToken advance the token enough?
-                            const name = parseJSDocIdentifierName();
-                            if (name && (name.escapedText === "return" || name.escapedText === "returns")) {
-                                const returnTag = parseReturnTag(atToken, name);
-                                returnTag.comment = parseTagComments(indent);
-                                return returnTag;
+                        if (token() === SyntaxKind.AtToken) {
+                            nextJSDocToken();
+                            const tag = parseTag(indent);
+                            if (tag && tag.kind === SyntaxKind.JSDocReturnTag) {
+                                return tag as JSDocReturnTag;
                             }
                         }
                     });
