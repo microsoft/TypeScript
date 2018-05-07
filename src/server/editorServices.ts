@@ -577,7 +577,8 @@ namespace ts.server {
             return this.pendingProjectUpdates.has(project.getProjectName());
         }
 
-        private sendProjectsUpdatedInBackgroundEvent() {
+        /* @internal */
+        sendProjectsUpdatedInBackgroundEvent() {
             if (!this.eventHandler) {
                 return;
             }

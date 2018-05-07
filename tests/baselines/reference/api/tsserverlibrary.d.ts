@@ -7748,7 +7748,7 @@ declare namespace ts.server {
         private readonly cancellationToken;
         isNonTsProject(): boolean;
         isJsOnlyProject(): boolean;
-        static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {};
+        static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} | undefined;
         isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
         private readonly typingsCache;
@@ -7829,6 +7829,8 @@ declare namespace ts.server {
         protected removeRoot(info: ScriptInfo): void;
         protected enableGlobalPlugins(): void;
         protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[]): void;
+        /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
+        refreshDiagnostics(): void;
         private enableProxy;
     }
     /**
@@ -8081,7 +8083,6 @@ declare namespace ts.server {
         updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse): void;
         private delayEnsureProjectForOpenFiles;
         private delayUpdateProjectGraph;
-        private sendProjectsUpdatedInBackgroundEvent;
         private delayUpdateProjectGraphs;
         setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions, projectRootPath?: string): void;
         findProject(projectName: string): Project | undefined;
