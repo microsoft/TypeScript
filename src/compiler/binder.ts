@@ -2226,8 +2226,6 @@ namespace ts {
                 case SyntaxKind.ModuleBlock:
                     return updateStrictModeStatementList((<Block | ModuleBlock>node).statements);
 
-                case SyntaxKind.JSDocTemplateTag:
-                    return forEach((node as JSDocTemplateTag).typeParameters, bindTypeParameter);
                 case SyntaxKind.JSDocParameterTag:
                     if (node.parent.kind === SyntaxKind.JSDocSignature) {
                         return bindParameter(node as JSDocParameterTag);
