@@ -707,7 +707,7 @@ namespace ts {
         return findPrecedingToken(position, file);
     }
 
-    export function findNextToken(previousToken: Node, parent: Node): Node {
+    export function findNextToken(previousToken: Node, parent: Node, sourceFile: SourceFile): Node {
         return find(parent);
 
         function find(n: Node): Node {
@@ -724,7 +724,7 @@ namespace ts {
                     // previous token ends exactly at the beginning of child
                     (child.pos === previousToken.end);
 
-                if (shouldDiveInChildNode && nodeHasTokens(child)) {
+                if (shouldDiveInChildNode && nodeHasTokens(child, sourceFile)) {
                     return find(child);
                 }
             }
@@ -759,12 +759,12 @@ namespace ts {
                     const start = child.getStart(sourceFile, includeJsDoc);
                     const lookInPreviousChild =
                         (start >= position) || // cursor in the leading trivia
-                        !nodeHasTokens(child) ||
+                        !nodeHasTokens(child, sourceFile) ||
                         isWhiteSpaceOnlyJsxText(child);
 
                     if (lookInPreviousChild) {
                         // actual start of the node is past the position - previous token should be at the end of previous child
-                        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
+                        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i, sourceFile);
                         return candidate && findRightmostToken(candidate, sourceFile);
                     }
                     else {
@@ -781,7 +781,7 @@ namespace ts {
             // Try to find the rightmost token in the file without filtering.
             // Namely we are skipping the check: 'position < node.end'
             if (children.length) {
-                const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
+                const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile);
                 return candidate && findRightmostToken(candidate, sourceFile);
             }
         }
@@ -797,21 +797,21 @@ namespace ts {
         }
 
         const children = n.getChildren(sourceFile);
-        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
+        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile);
         return candidate && findRightmostToken(candidate, sourceFile);
     }
 
     /**
      * Finds the rightmost child to the left of `children[exclusiveStartPosition]` which is a non-all-whitespace token or has constituent tokens.
      */
-    function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number): Node | undefined {
+    function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number, sourceFile: SourceFile): Node | undefined {
         for (let i = exclusiveStartPosition - 1; i >= 0; i--) {
             const child = children[i];
 
             if (isWhiteSpaceOnlyJsxText(child)) {
                 Debug.assert(i > 0, "`JsxText` tokens should not be the first child of `JsxElement | JsxSelfClosingElement`");
             }
-            else if (nodeHasTokens(children[i])) {
+            else if (nodeHasTokens(children[i], sourceFile)) {
                 return children[i];
             }
         }
@@ -1022,10 +1022,10 @@ namespace ts {
         }
     }
 
-    function nodeHasTokens(n: Node): boolean {
+    function nodeHasTokens(n: Node, sourceFile: SourceFileLike): boolean {
         // If we have a token or node that has a non-zero width, it must have tokens.
         // Note: getWidth() does not take trivia into account.
-        return n.getWidth() !== 0;
+        return n.getWidth(sourceFile) !== 0;
     }
 
     export function getNodeModifiers(node: Node): string {

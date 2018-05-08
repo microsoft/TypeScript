@@ -53,7 +53,8 @@ namespace ts.refactor {
         const newFileAbsolutePath = normalizePath(combinePaths(oldFileName, "..", newFileNameWithExtension));
         const newFilePath = getRelativePathFromFile(cfg.fileName, newFileAbsolutePath, getCanonicalFileName);
 
-        const filesProp = cfg.jsonObject && find(cfg.jsonObject.properties, (prop): prop is PropertyAssignment =>
+        const cfgObject = cfg.statements[0] && tryCast(cfg.statements[0].expression, isObjectLiteralExpression);
+        const filesProp = cfgObject && find(cfgObject.properties, (prop): prop is PropertyAssignment =>
             isPropertyAssignment(prop) && isStringLiteral(prop.name) && prop.name.text === "files");
         if (filesProp && isArrayLiteralExpression(filesProp.initializer)) {
             changes.insertNodeInListAfter(cfg, last(filesProp.initializer.elements), createLiteral(newFilePath), filesProp.initializer.elements);
