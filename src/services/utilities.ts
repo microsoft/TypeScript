@@ -940,22 +940,22 @@ namespace ts {
                     break;
 
                 case SyntaxKind.CloseBraceToken:
-                    // This can be object type, skip untill we find the matching open brace token
-                    // Skip untill the matching open brace token
+                    // This can be object type, skip until we find the matching open brace token
+                    // Skip until the matching open brace token
                     token = findPrecedingMatchingToken(token, SyntaxKind.OpenBraceToken, sourceFile);
                     if (!token) return false;
                     break;
 
                 case SyntaxKind.CloseParenToken:
-                    // This can be object type, skip untill we find the matching open brace token
-                    // Skip untill the matching open brace token
+                    // This can be object type, skip until we find the matching open brace token
+                    // Skip until the matching open brace token
                     token = findPrecedingMatchingToken(token, SyntaxKind.OpenParenToken, sourceFile);
                     if (!token) return false;
                     break;
 
                 case SyntaxKind.CloseBracketToken:
-                    // This can be object type, skip untill we find the matching open brace token
-                    // Skip untill the matching open brace token
+                    // This can be object type, skip until we find the matching open brace token
+                    // Skip until the matching open brace token
                     token = findPrecedingMatchingToken(token, SyntaxKind.OpenBracketToken, sourceFile);
                     if (!token) return false;
                     break;
