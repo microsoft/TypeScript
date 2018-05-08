@@ -110,7 +110,7 @@ namespace RWC {
                             // Majority of RWC code will be using built/local/lib.d.ts instead of
                             // lib.d.ts inside json file. However, some RWC cases will still use
                             // their own version of lib.d.ts because they have customized lib.d.ts
-                            uniqueNames.set(normalized, true)
+                            uniqueNames.set(normalized, true);
                             inputFiles.push(getHarnessCompilerInputUnit(fileRead.path));
                         }
                     }
