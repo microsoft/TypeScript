@@ -236,7 +236,7 @@ namespace ts.projectSystem {
         });
     });
 
-    function makeFile(path: string, content: {} = ""): FileOrFolder {
+    function makeFile(path: string, content: {} = ""): File {
         return { path, content: isString(content) ? "" : JSON.stringify(content) };
     }
 }
