@@ -6,7 +6,7 @@ namespace ts.server {
     export const ConfigFileDiagEvent = "configFileDiag";
     export const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
     export const ProjectInfoTelemetryEvent = "projectInfo";
-    export const OpenFilesInfoTelemetryEvent = "openFilesInfo";
+    export const OpenFileInfoTelemetryEvent = "openFilesInfo";
     // tslint:enable variable-name
 
     export interface ProjectsUpdatedInBackgroundEvent {
@@ -56,13 +56,18 @@ namespace ts.server {
         readonly version: string;
     }
 
-    export interface OpenFilesInfoTelemetryEvent {
-        readonly eventName: typeof OpenFilesInfoTelemetryEvent;
-        readonly data: OpenFilesInfoTelemetryEventData;
+    /**
+     * Info that we may send about a file that was just opened.
+     * Info about a file will only be sent once per session, even if the file changes in ways that might affect the info.
+     * Currently this is only sent for '.js' files.
+     */
+    export interface OpenFileInfoTelemetryEvent {
+        readonly eventName: typeof OpenFileInfoTelemetryEvent;
+        readonly data: OpenFileInfoTelemetryEventData;
     }
 
-    export interface OpenFilesInfoTelemetryEventData {
-        readonly stats: OpenFileStats;
+    export interface OpenFileInfoTelemetryEventData {
+        readonly info: OpenFileInfo;
     }
 
     export interface ProjectInfoTypeAcquisitionData {
@@ -80,12 +85,11 @@ namespace ts.server {
         readonly dts: number;
     }
 
-    export interface OpenFileStats {
-        readonly js: number; // # '.js' files that were opened in the previous session
-        readonly checkJs: number; // # of those with `// @ts-check`
+    export interface OpenFileInfo {
+        readonly checkJs: boolean;
     }
 
-    export type ProjectServiceEvent = ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFilesInfoTelemetryEvent;
+    export type ProjectServiceEvent = ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
 
     export type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
 
@@ -209,7 +213,7 @@ namespace ts.server {
         formatCodeOptions: FormatCodeSettings;
         preferences: UserPreferences;
         hostInfo: string;
-        extraFileExtensions?: JsFileExtensionInfo[];
+        extraFileExtensions?: FileExtensionInfo[];
     }
 
     export interface OpenConfiguredProjectResult {
@@ -219,8 +223,8 @@ namespace ts.server {
 
     interface FilePropertyReader<T> {
         getFileName(f: T): string;
-        getScriptKind(f: T, extraFileExtensions?: JsFileExtensionInfo[]): ScriptKind;
-        hasMixedContent(f: T, extraFileExtensions: JsFileExtensionInfo[]): boolean;
+        getScriptKind(f: T, extraFileExtensions?: FileExtensionInfo[]): ScriptKind;
+        hasMixedContent(f: T, extraFileExtensions: FileExtensionInfo[]): boolean;
     }
 
     const fileNamePropertyReader: FilePropertyReader<string> = {
@@ -341,8 +345,7 @@ namespace ts.server {
          */
         private readonly filenameToScriptInfo = createMap<ScriptInfo>();
         // Set of all '.js' files ever opened.
-        // Value is 'true' if the file has '// @ts-check', else 'false' if the file exists but does not have '// @ts-check'.
-        private readonly allJsFilesForOpenFilesTelemetry = createMap<boolean>();
+        private readonly allJsFilesForOpenFileTelemetry = createMap<true>();
 
         /**
          * Map to the real path of the infos
@@ -540,7 +543,11 @@ namespace ts.server {
             }
         }
 
-        updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse): void {
+        updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse): void;
+        /** @internal */
+        // tslint:disable-next-line:unified-signatures
+        updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse | BeginInstallTypes | EndInstallTypes): void;
+        updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse | BeginInstallTypes | EndInstallTypes): void {
             const project = this.findProject(response.projectName);
             if (!project) {
                 return;
@@ -592,7 +599,8 @@ namespace ts.server {
             return this.pendingProjectUpdates.has(project.getProjectName());
         }
 
-        private sendProjectsUpdatedInBackgroundEvent() {
+        /* @internal */
+        sendProjectsUpdatedInBackgroundEvent() {
             if (!this.eventHandler) {
                 return;
             }
@@ -613,10 +621,12 @@ namespace ts.server {
         }
 
         private delayUpdateProjectGraphs(projects: ReadonlyArray<Project>) {
-            for (const project of projects) {
-                this.delayUpdateProjectGraph(project);
+            if (projects.length) {
+                for (const project of projects) {
+                    this.delayUpdateProjectGraph(project);
+                }
+                this.delayEnsureProjectForOpenFiles();
             }
-            this.delayEnsureProjectForOpenFiles();
         }
 
         setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions, projectRootPath?: string): void {
@@ -727,7 +737,6 @@ namespace ts.server {
                 this.handleDeletedFile(info);
             }
             else if (!info.isScriptOpen()) {
-                Debug.assert(info.containingProjects.length !== 0);
                 // file has been changed which might affect the set of referenced files in projects that include
                 // this file and set of inferred projects
                 info.delayReloadNonMixedContentFile();
@@ -1211,8 +1220,11 @@ namespace ts.server {
             const projectRootPath = this.openFiles.get(info.path);
 
             let searchPath = asNormalizedPath(getDirectoryPath(info.fileName));
+            const isSearchPathInProjectRoot = () => containsPath(projectRootPath, searchPath, this.currentDirectory, !this.host.useCaseSensitiveFileNames);
 
-            while (!projectRootPath || containsPath(projectRootPath, searchPath, this.currentDirectory, !this.host.useCaseSensitiveFileNames)) {
+            // If projectRootPath doesnt contain info.path, then do normal search for config file
+            const anySearchPathOk = !projectRootPath || !isSearchPathInProjectRoot();
+            do {
                 const canonicalSearchPath = normalizedPathToPath(searchPath, this.currentDirectory, this.toCanonicalFileName);
                 const tsconfigFileName = asNormalizedPath(combinePaths(searchPath, "tsconfig.json"));
                 let result = action(tsconfigFileName, combinePaths(canonicalSearchPath, "tsconfig.json"));
@@ -1231,7 +1243,7 @@ namespace ts.server {
                     break;
                 }
                 searchPath = parentPath;
-            }
+            } while (anySearchPathOk || isSearchPathInProjectRoot());
 
             return undefined;
         }
@@ -1249,7 +1261,7 @@ namespace ts.server {
             this.logger.info(`Search path: ${getDirectoryPath(info.fileName)}`);
             const configFileName = this.forEachConfigFileLocation(info,
                 (configFileName, canonicalConfigFilePath) =>
-                    this.configFileExists(configFileName, canonicalConfigFilePath, info),
+                    this.configFileExists(configFileName, canonicalConfigFilePath, info)
             );
             if (configFileName) {
                 this.logger.info(`For info: ${info.fileName} :: Config file name: ${configFileName}`);
@@ -1341,7 +1353,8 @@ namespace ts.server {
                 configHasExcludeProperty: parsedCommandLine.raw.exclude !== undefined,
                 wildcardDirectories: createMapFromTemplate(parsedCommandLine.wildcardDirectories),
                 typeAcquisition: parsedCommandLine.typeAcquisition,
-                compileOnSave: parsedCommandLine.compileOnSave
+                compileOnSave: parsedCommandLine.compileOnSave,
+                projectReferences: parsedCommandLine.projectReferences
             };
 
             return { projectOptions, configFileErrors: errors, configFileSpecs: parsedCommandLine.configFileSpecs };
@@ -1474,7 +1487,8 @@ namespace ts.server {
                 projectOptions.compilerOptions,
                 lastFileExceededProgramSize,
                 projectOptions.compileOnSave === undefined ? false : projectOptions.compileOnSave,
-                cachedDirectoryStructureHost);
+                cachedDirectoryStructureHost,
+                projectOptions.projectReferences);
 
             project.configFileSpecs = configFileSpecs;
             // TODO: We probably should also watch the configFiles that are extended
@@ -1599,6 +1613,7 @@ namespace ts.server {
             // Update the project
             project.configFileSpecs = configFileSpecs;
             project.setProjectErrors(configFileErrors);
+            project.updateReferences(projectOptions.projectReferences);
             const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(project.canonicalConfigFilePath, projectOptions.compilerOptions, projectOptions.files, fileNamePropertyReader);
             if (lastFileExceededProgramSize) {
                 project.disableLanguageService(lastFileExceededProgramSize);
@@ -2106,27 +2121,13 @@ namespace ts.server {
             return { configFileName, configFileErrors };
         }
 
-        private telemetryOnOpenFile(info: ScriptInfo): void {
-            if (
-                !this.eventHandler ||
-                // Don't send for a project with 'checkJs' enabled globally.
-                info.getDefaultProject().getCompilationSettings().checkJs ||
-                // We are only sending stats for JS files
-                !info.isJavaScript() ||
-                // If we've already seen the file, no need to send a new event.
-                this.allJsFilesForOpenFilesTelemetry.has(info.path)) {
+        private telemetryOnOpenFile(scriptInfo: ScriptInfo): void {
+            if (!this.eventHandler || !scriptInfo.isJavaScript() || !addToSeen(this.allJsFilesForOpenFileTelemetry, scriptInfo.path)) {
                 return;
             }
 
-            this.allJsFilesForOpenFilesTelemetry.set(info.path, !!info.getDefaultProject().getSourceFile(info.path).checkJsDirective);
-
-            let checkJs = 0;
-            this.allJsFilesForOpenFilesTelemetry.forEach(isCheckJs => {
-                if (isCheckJs) checkJs++;
-            });
-
-            const stats: OpenFileStats = { js: this.allJsFilesForOpenFilesTelemetry.size, checkJs };
-            this.eventHandler({ eventName: OpenFilesInfoTelemetryEvent, data: { stats } });
+            const info: OpenFileInfo = { checkJs: !!scriptInfo.getDefaultProject().getSourceFile(scriptInfo.path).checkJsDirective };
+            this.eventHandler({ eventName: OpenFileInfoTelemetryEvent, data: { info } });
         }
 
         /**
@@ -2468,6 +2469,16 @@ namespace ts.server {
                 this.externalProjectToConfiguredProjectMap.delete(proj.projectFileName);
                 this.createExternalProject(proj.projectFileName, rootFiles, proj.options, proj.typeAcquisition, excludedFiles);
             }
+        }
+
+        hasDeferredExtension() {
+            for (const extension of this.hostConfiguration.extraFileExtensions) {
+                if (extension.scriptKind === ScriptKind.Deferred) {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

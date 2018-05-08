@@ -14,3 +14,4 @@ var C = /** @class */ (function () {
     }
     return C;
 }());
+x = 0;

@@ -1,8 +1,9 @@
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(11,17): error TS2344: Type '{}' does not satisfy the constraint 'number'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(16,23): error TS2344: Type 'number' does not satisfy the constraint 'string'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(17,23): error TS2344: Type '{}' does not satisfy the constraint 'number'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(32,34): error TS2304: Cannot find name 'Window'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(34,15): error TS2304: Cannot find name 'Window'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(33,15): error TS2345: Argument of type '() => string' is not assignable to parameter of type '() => Window'.
+  Type 'string' is not assignable to type 'Window'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(35,15): error TS2344: Type 'number' does not satisfy the constraint 'Window'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(41,35): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'number' is not assignable to type 'string'.
@@ -15,15 +16,12 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConst
     Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(66,31): error TS2345: Argument of type '<A, B extends string, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void' is not assignable to parameter of type 'string'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(73,29): error TS2345: Argument of type '0' is not assignable to parameter of type '""'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(85,9): error TS2304: Cannot find name 'Window'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(87,47): error TS2304: Cannot find name 'window'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(88,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: any; y?: undefined; } | { x: number; y: string; z?: undefined; }', but here has type '{}'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(89,52): error TS2304: Cannot find name 'window'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(88,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Window; y?: undefined; } | { x: number; y: string; z?: undefined; }', but here has type '{}'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(89,70): error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type 'A92'.
   Object literal may only specify known properties, and 'y' does not exist in type 'A92'.
 
 
-==== tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts (16 errors) ====
+==== tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts (13 errors) ====
     // Generic call with no parameters
     function noParams<T extends {}>() { }
     noParams();
@@ -62,13 +60,14 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConst
     
     // Generic call with argument of function type whose parameter is not of type parameter type but body/return type uses type parameter
     function someGenerics3<T extends Window>(producer: () => T) { }
-                                     ~~~~~~
-!!! error TS2304: Cannot find name 'Window'.
     someGenerics3(() => ''); // Error
+                  ~~~~~~~~
+!!! error TS2345: Argument of type '() => string' is not assignable to parameter of type '() => Window'.
+!!! error TS2345:   Type 'string' is not assignable to type 'Window'.
     someGenerics3<Window>(() => undefined);
-                  ~~~~~~
-!!! error TS2304: Cannot find name 'Window'.
     someGenerics3<number>(() => 3); // Error
+                  ~~~~~~
+!!! error TS2344: Type 'number' does not satisfy the constraint 'Window'.
     
     // 2 parameter generic call with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
     function someGenerics4<T, U extends number>(n: T, f: (x: U) => void) { }
@@ -137,18 +136,12 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConst
     interface A92 {
         x: number;
         z?: Window;
-            ~~~~~~
-!!! error TS2304: Cannot find name 'Window'.
     }
     var a9e = someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
-                                                  ~~~~~~
-!!! error TS2304: Cannot find name 'window'.
     var a9e: {};
         ~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: any; y?: undefined; } | { x: number; y: string; z?: undefined; }', but here has type '{}'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Window; y?: undefined; } | { x: number; y: string; z?: undefined; }', but here has type '{}'.
     var a9f = someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });
-                                                       ~~~~~~
-!!! error TS2304: Cannot find name 'window'.
                                                                          ~~~~~
 !!! error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type 'A92'.
 !!! error TS2345:   Object literal may only specify known properties, and 'y' does not exist in type 'A92'.

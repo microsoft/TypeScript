@@ -18,8 +18,8 @@ function fn5(): boolean { return true; }
 
 function fn6(): Date { return new Date(12); }
 >fn6 : Symbol(fn6, Decl(returnStatements.ts, 5, 40))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function fn7(): any { return null; }
 >fn7 : Symbol(fn7, Decl(returnStatements.ts, 6, 45))

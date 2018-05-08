@@ -16,7 +16,7 @@ interface server {
 
     startTime: Date;
 >startTime : Symbol(server.startTime, Decl(exportEqualNamespaces.ts, 5, 22))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
  
 var x = 5;
@@ -24,7 +24,7 @@ var x = 5;
 
 var server = new Date();
 >server : Symbol(server, Decl(exportEqualNamespaces.ts, 0, 0), Decl(exportEqualNamespaces.ts, 2, 1), Decl(exportEqualNamespaces.ts, 10, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 export = server;
 >server : Symbol(server, Decl(exportEqualNamespaces.ts, 0, 0), Decl(exportEqualNamespaces.ts, 2, 1), Decl(exportEqualNamespaces.ts, 10, 3))

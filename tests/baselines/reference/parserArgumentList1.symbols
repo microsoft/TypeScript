@@ -2,11 +2,18 @@
 export function removeClass (node:HTMLElement, className:string) {
 >removeClass : Symbol(removeClass, Decl(parserArgumentList1.ts, 0, 0))
 >node : Symbol(node, Decl(parserArgumentList1.ts, 0, 29))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >className : Symbol(className, Decl(parserArgumentList1.ts, 0, 46))
 
 	node.className = node.className.replace(_classNameRegexp(className), function (everything, leftDelimiter, name, rightDelimiter) {
+>node.className : Symbol(Element.className, Decl(lib.d.ts, --, --))
 >node : Symbol(node, Decl(parserArgumentList1.ts, 0, 29))
+>className : Symbol(Element.className, Decl(lib.d.ts, --, --))
+>node.className.replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>node.className : Symbol(Element.className, Decl(lib.d.ts, --, --))
 >node : Symbol(node, Decl(parserArgumentList1.ts, 0, 29))
+>className : Symbol(Element.className, Decl(lib.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >className : Symbol(className, Decl(parserArgumentList1.ts, 0, 46))
 >everything : Symbol(everything, Decl(parserArgumentList1.ts, 1, 80))
 >leftDelimiter : Symbol(leftDelimiter, Decl(parserArgumentList1.ts, 1, 91))

@@ -154,7 +154,7 @@ var r11 = foo(<U extends Date>(x: U) => x);
 >r11 : Symbol(r11, Decl(functionConstraintSatisfaction.ts, 42, 3))
 >foo : Symbol(foo, Decl(functionConstraintSatisfaction.ts, 0, 0))
 >U : Symbol(U, Decl(functionConstraintSatisfaction.ts, 42, 15))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(functionConstraintSatisfaction.ts, 42, 31))
 >U : Symbol(U, Decl(functionConstraintSatisfaction.ts, 42, 15))
 >x : Symbol(x, Decl(functionConstraintSatisfaction.ts, 42, 31))

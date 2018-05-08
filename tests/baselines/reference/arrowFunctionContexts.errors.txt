@@ -1,22 +1,16 @@
 tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(2,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
-tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(2,7): error TS2304: Cannot find name 'window'.
-tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(18,1): error TS2304: Cannot find name 'window'.
 tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(30,9): error TS2322: Type '() => number' is not assignable to type 'E'.
 tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(31,16): error TS2332: 'this' cannot be referenced in current location.
 tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(43,5): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
-tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(43,11): error TS2304: Cannot find name 'window'.
-tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(59,5): error TS2304: Cannot find name 'window'.
 tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(71,13): error TS2322: Type '() => number' is not assignable to type 'E'.
 tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(72,20): error TS2332: 'this' cannot be referenced in current location.
 
 
-==== tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts (10 errors) ====
+==== tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts (6 errors) ====
     // Arrow function used in with statement
     with (window) {
     ~~~~~~~~~~~~~
 !!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
-          ~~~~~~
-!!! error TS2304: Cannot find name 'window'.
         var p = () => this;
     }
     
@@ -33,8 +27,6 @@ tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(72,20): e
     
     // Arrow function as function argument
     window.setTimeout(() => null, 100);
-    ~~~~~~
-!!! error TS2304: Cannot find name 'window'.
     
     // Arrow function as value in array literal
     
@@ -66,8 +58,6 @@ tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(72,20): e
         with (window) {
         ~~~~~~~~~~~~~
 !!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
-              ~~~~~~
-!!! error TS2304: Cannot find name 'window'.
             var p = () => this;
         }
     
@@ -84,8 +74,6 @@ tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(72,20): e
     
         // Arrow function as function argument
         window.setTimeout(() => null, 100);
-        ~~~~~~
-!!! error TS2304: Cannot find name 'window'.
     
         // Arrow function as value in array literal
     

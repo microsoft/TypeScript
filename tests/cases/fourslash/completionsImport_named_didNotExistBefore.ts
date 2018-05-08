@@ -9,11 +9,15 @@
 ////import { Test2 } from "./a";
 ////t/**/
 
-goTo.marker("");
-const options = { includeExternalModuleExports: true, sourceDisplay: undefined };
-verify.completionListContains({ name: "Test1", source: "/a" }, "function Test1(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true, { ...options, sourceDisplay: "./a" });
-verify.completionListContains("Test2", "(alias) function Test2(): void\nimport Test2", "", "alias", /*spanIndex*/ undefined, /*hasAction*/ undefined, options);
-verify.not.completionListContains({ name: "Test2", source: "/a" }, undefined, undefined, undefined, undefined, undefined, options);
+verify.completions({
+    marker: "",
+    includes: [
+        { name: "Test1", source: "/a", sourceDisplay: "./a", text: "function Test1(): void", kind: "function", hasAction: true },
+        { name: "Test2", text: "(alias) function Test2(): void\nimport Test2", kind: "alias" },
+    ],
+    excludes: [{ name: "Test2", source: "/a" }],
+    preferences: { includeCompletionsForModuleExports: true },
+});
 
 verify.applyCodeActionFromCompletion("", {
     name: "Test1",

@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/Symbols/symbolProperty2.ts ===
 var s = Symbol();
 >s : Symbol(s, Decl(symbolProperty2.ts, 0, 3))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 
 var x = {
 >x : Symbol(x, Decl(symbolProperty2.ts, 1, 3))

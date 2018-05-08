@@ -4,17 +4,13 @@ namespace ts {
     describe("Symbol Walker", () => {
         function test(description: string, source: string, verifier: (file: SourceFile, checker: TypeChecker) => void) {
             it(description, () => {
-                let {result} = Harness.Compiler.compileFiles([{
+                const result = Harness.Compiler.compileFiles([{
                     unitName: "main.ts",
                     content: source
                 }], [], {}, {}, "/");
-                let file = result.program.getSourceFile("main.ts");
-                let checker = result.program.getTypeChecker();
+                const file = result.program.getSourceFile("main.ts");
+                const checker = result.program.getTypeChecker();
                 verifier(file, checker);
-
-                result = undefined;
-                file = undefined;
-                checker = undefined;
             });
         }
 

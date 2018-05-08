@@ -1,3 +1,4 @@
+// @lib: es5
 // @noImplicitAny: true
 // @noImplicitThis: true
 

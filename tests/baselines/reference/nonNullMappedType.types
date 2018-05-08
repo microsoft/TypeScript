@@ -1,0 +1,17 @@
+=== tests/cases/compiler/nonNullMappedType.ts ===
+function f<A extends string>(p0: { [key in A]: {} | undefined }, p1: A) {
+>f : <A extends string>(p0: { [key in A]: {} | undefined; }, p1: A) => void
+>A : A
+>p0 : { [key in A]: {} | undefined; }
+>key : key
+>A : A
+>p1 : A
+>A : A
+
+    const v: {} = p0[p1]!;
+>v : {}
+>p0[p1]! : NonNullable<{ [key in A]: {} | undefined; }[A]>
+>p0[p1] : { [key in A]: {} | undefined; }[A]
+>p0 : { [key in A]: {} | undefined; }
+>p1 : A
+}

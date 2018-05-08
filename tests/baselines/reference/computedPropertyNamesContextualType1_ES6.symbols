@@ -18,14 +18,14 @@ var o: I = {
     ["" + 0](y) { return y.length; },
 >["" + 0] : Symbol(["" + 0], Decl(computedPropertyNamesContextualType1_ES6.ts, 5, 12))
 >y : Symbol(y, Decl(computedPropertyNamesContextualType1_ES6.ts, 6, 13))
->y.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>y.length : Symbol(String.length, Decl(lib.es6.d.ts, --, --))
 >y : Symbol(y, Decl(computedPropertyNamesContextualType1_ES6.ts, 6, 13))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es6.d.ts, --, --))
 
     ["" + 1]: y => y.length
 >["" + 1] : Symbol(["" + 1], Decl(computedPropertyNamesContextualType1_ES6.ts, 6, 37))
 >y : Symbol(y, Decl(computedPropertyNamesContextualType1_ES6.ts, 7, 13))
->y.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>y.length : Symbol(String.length, Decl(lib.es6.d.ts, --, --))
 >y : Symbol(y, Decl(computedPropertyNamesContextualType1_ES6.ts, 7, 13))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es6.d.ts, --, --))
 }

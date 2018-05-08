@@ -29,5 +29,8 @@ var s = f("str").toUpperCase();
 >toUpperCase : Symbol(String.toUpperCase, Decl(lib.d.ts, --, --))
 
 console.log(s);
+>console.log : Symbol(Console.log, Decl(lib.d.ts, --, --))
+>console : Symbol(console, Decl(lib.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.d.ts, --, --))
 >s : Symbol(s, Decl(functionTypeArgumentAssignmentCompat.ts, 9, 3))
 

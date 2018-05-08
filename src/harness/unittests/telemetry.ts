@@ -239,26 +239,20 @@ namespace ts.projectSystem {
             it("sends event for inferred project", () => {
                 const ajs = makeFile("/a.js", "// @ts-check\nconst x = 0;");
                 const bjs = makeFile("/b.js");
-                const cjs = makeFile("/c.js");
                 const et = new TestServerEventManager([ajs, bjs]);
 
                 et.service.openClientFile(ajs.path);
-                et.assertOpenFilesTelemetryEvent({ js: 1, checkJs: 1 });
+                et.assertOpenFileTelemetryEvent({ checkJs: true });
 
                 et.service.openClientFile(bjs.path);
-                et.assertOpenFilesTelemetryEvent({ js: 2, checkJs: 1 });
-
-                // Closing a file doesn't remove it from the map
-                et.service.closeClientFile(bjs.path);
-                et.service.openClientFile(cjs.path);
-                et.assertOpenFilesTelemetryEvent({ js: 3, checkJs: 1 });
+                et.assertOpenFileTelemetryEvent({ checkJs: false });
 
                 // No repeated send for opening a file seen before.
                 et.service.openClientFile(bjs.path);
                 et.assertNoOpenFilesTelemetryEvent();
             });
 
-            it("not for project without '.js' files", () => {
+            it("not for '.ts' file", () => {
                 const ats = makeFile("/a.ts", "");
                 const et = new TestServerEventManager([ats]);
 
@@ -266,18 +260,18 @@ namespace ts.projectSystem {
                 et.assertNoOpenFilesTelemetryEvent();
             });
 
-            it("not for project with 'ts-check' in config", () => {
+            it("even for project with 'ts-check' in config", () => {
                 const file = makeFile("/a.js");
                 const compilerOptions: CompilerOptions = { checkJs: true };
                 const jsconfig = makeFile("/jsconfig.json", { compilerOptions });
                 const et = new TestServerEventManager([jsconfig, file]);
                 et.service.openClientFile(file.path);
-                et.assertNoOpenFilesTelemetryEvent();
+                et.assertOpenFileTelemetryEvent({ checkJs: false });
             });
         });
     });
 
-    function makeFile(path: string, content: {} = ""): FileOrFolder {
+    function makeFile(path: string, content: {} = ""): File {
         return { path, content: isString(content) ? content : JSON.stringify(content) };
     }
 }

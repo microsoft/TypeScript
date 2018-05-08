@@ -9,11 +9,4 @@
 //// }
 //// var x = <div /*1*/ autoComplete /*2*/ />;
 
-
-goTo.marker('1');
-verify.completionListContains("ONE");
-verify.not.completionListAllowsNewIdentifier();
-
-goTo.marker('2');
-verify.completionListContains("ONE");
-verify.not.completionListAllowsNewIdentifier();
+verify.completions({ marker: ["1", "2"], exact: ["ONE", "TWO"] });

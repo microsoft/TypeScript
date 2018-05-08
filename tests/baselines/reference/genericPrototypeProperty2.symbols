@@ -1,6 +1,6 @@
 === tests/cases/compiler/genericPrototypeProperty2.ts ===
 interface EventTarget { x } 
->EventTarget : Symbol(EventTarget, Decl(genericPrototypeProperty2.ts, 0, 0))
+>EventTarget : Symbol(EventTarget, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(genericPrototypeProperty2.ts, 0, 0))
 >x : Symbol(EventTarget.x, Decl(genericPrototypeProperty2.ts, 0, 23))
 
 class BaseEvent {
@@ -8,13 +8,13 @@ class BaseEvent {
 
     target: EventTarget;
 >target : Symbol(BaseEvent.target, Decl(genericPrototypeProperty2.ts, 1, 17))
->EventTarget : Symbol(EventTarget, Decl(genericPrototypeProperty2.ts, 0, 0))
+>EventTarget : Symbol(EventTarget, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(genericPrototypeProperty2.ts, 0, 0))
 }
 
 class MyEvent<T extends EventTarget> extends BaseEvent {
 >MyEvent : Symbol(MyEvent, Decl(genericPrototypeProperty2.ts, 3, 1))
 >T : Symbol(T, Decl(genericPrototypeProperty2.ts, 5, 14))
->EventTarget : Symbol(EventTarget, Decl(genericPrototypeProperty2.ts, 0, 0))
+>EventTarget : Symbol(EventTarget, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(genericPrototypeProperty2.ts, 0, 0))
 >BaseEvent : Symbol(BaseEvent, Decl(genericPrototypeProperty2.ts, 0, 27))
 
     target: T;

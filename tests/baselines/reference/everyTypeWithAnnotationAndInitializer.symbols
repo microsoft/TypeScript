@@ -64,8 +64,8 @@ var aString: string = 'this is a string';
 
 var aDate: Date = new Date(12);
 >aDate : Symbol(aDate, Decl(everyTypeWithAnnotationAndInitializer.ts, 26, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var anObject: Object = new Object();
 >anObject : Symbol(anObject, Decl(everyTypeWithAnnotationAndInitializer.ts, 27, 3))
