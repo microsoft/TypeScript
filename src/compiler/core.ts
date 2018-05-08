@@ -751,7 +751,7 @@ namespace ts {
     /**
      * Deduplicates an array that has already been sorted.
      */
-    function deduplicateSorted<T>(array: ReadonlyArray<T>, comparer: EqualityComparer<T> | Comparer<T>) {
+    function deduplicateSorted<T>(array: ReadonlyArray<T>, comparer: EqualityComparer<T> | Comparer<T>): T[] {
         if (!array) return undefined;
         if (array.length === 0) return [];
 
@@ -790,7 +790,7 @@ namespace ts {
         }
     }
 
-    export function sortAndDeduplicate<T>(array: ReadonlyArray<T>, comparer: Comparer<T>, equalityComparer?: EqualityComparer<T>) {
+    export function sortAndDeduplicate<T>(array: ReadonlyArray<T>, comparer: Comparer<T>, equalityComparer?: EqualityComparer<T>): T[] {
         return deduplicateSorted(sort(array, comparer), equalityComparer || comparer);
     }
 
@@ -2222,7 +2222,7 @@ namespace ts {
      * Reduce an array of path components to a more simplified path by navigating any
      * `"."` or `".."` entries in the path.
      */
-    export function reducePathComponents(components: ReadonlyArray<string>) {
+    export function reducePathComponents(components: ReadonlyArray<string>): string[] {
         if (!some(components)) return [];
         const reduced = [components[0]];
         for (let i = 1; i < components.length; i++) {

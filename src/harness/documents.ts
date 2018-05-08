@@ -64,9 +64,9 @@ namespace documents {
         public readonly version: number;
         public readonly file: string;
         public readonly sourceRoot: string | undefined;
-        public readonly sources: ReadonlyArray<string> = [];
+        public readonly sources: ReadonlyArray<string> = ts.emptyArray;
         public readonly sourcesContent: ReadonlyArray<string> | undefined;
-        public readonly mappings: ReadonlyArray<Mapping> = [];
+        public readonly mappings: ReadonlyArray<Mapping> = ts.emptyArray;
         public readonly names: ReadonlyArray<string> | undefined;
 
         private static readonly _mappingRegExp = /([A-Za-z0-9+/]+),?|(;)|./g;

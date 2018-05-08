@@ -775,7 +775,7 @@ namespace ts {
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
-                extendsClauseElement ? [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, createFileLevelUniqueName("_super"))] : [],
+                extendsClauseElement ? [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, createFileLevelUniqueName("_super"))] : emptyArray,
                 /*type*/ undefined,
                 transformClassBody(node, extendsClauseElement)
             );
@@ -801,7 +801,7 @@ namespace ts {
                     /*typeArguments*/ undefined,
                     extendsClauseElement
                         ? [visitNode(extendsClauseElement.expression, visitor, isExpression)]
-                        : []
+                        : emptyArray
                 )
             );
             addSyntheticLeadingComment(result, SyntaxKind.MultiLineCommentTrivia, "* @class ");
@@ -1377,7 +1377,7 @@ namespace ts {
                                 createVariableDeclaration(
                                     declarationName,
                                     /*type*/ undefined,
-                                    createArrayLiteral([])
+                                    createArrayLiteral(emptyArray)
                                 )
                             ])
                         ),
@@ -2446,7 +2446,7 @@ namespace ts {
             const catchVariable = getGeneratedNameForNode(errorRecord);
             const returnMethod = createTempVariable(/*recordTempVariable*/ undefined);
             const values = createValuesHelper(context, expression, node.expression);
-            const next = createCall(createPropertyAccess(iterator, "next"), /*typeArguments*/ undefined, []);
+            const next = createCall(createPropertyAccess(iterator, "next"), /*typeArguments*/ undefined, emptyArray);
 
             hoistVariableDeclaration(errorRecord);
             hoistVariableDeclaration(returnMethod);
@@ -2518,7 +2518,7 @@ namespace ts {
                                         )
                                     ),
                                     createStatement(
-                                        createFunctionCall(returnMethod, iterator, [])
+                                        createFunctionCall(returnMethod, iterator, emptyArray)
                                     )
                                 ),
                                 EmitFlags.SingleLine
@@ -3517,7 +3517,7 @@ namespace ts {
                         transformAndSpreadElements(createNodeArray([createVoidZero(), ...node.arguments]), /*needsUniqueCopy*/ false, /*multiLine*/ false, /*hasTrailingComma*/ false)
                     ),
                     /*typeArguments*/ undefined,
-                    []
+                    emptyArray
                 );
             }
             return visitEachChild(node, visitor, context);

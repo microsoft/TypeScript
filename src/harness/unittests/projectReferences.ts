@@ -56,7 +56,7 @@ namespace ts {
                     outDir: "bin",
                     ...sp.options
                 },
-                references: (sp.references || []).map(r => {
+                references: (sp.references || emptyArray).map(r => {
                     if (typeof r === "string") {
                         return { path: r };
                     }
@@ -104,7 +104,7 @@ namespace ts {
             const spec: TestSpecification = {
                 "/primary": {
                     files: { "/primary/a.ts": emptyModule },
-                    references: []
+                    references: emptyArray
                 },
                 "/reference": {
                     files: { "/secondary/b.ts": moduleImporting("../primary/a") },
@@ -126,7 +126,7 @@ namespace ts {
             const spec: TestSpecification = {
                 "/primary": {
                     files: { "/primary/a.ts": emptyModule },
-                    references: [],
+                    references: emptyArray,
                     options: {
                         declaration: false
                     }
@@ -143,7 +143,7 @@ namespace ts {
             const spec: TestSpecification = {
                 "/primary": {
                     files: { "/primary/a.ts": emptyModule },
-                    references: [],
+                    references: emptyArray,
                     options: {
                         composite: false
                     }
@@ -233,7 +233,7 @@ namespace ts {
             const spec: TestSpecification = {
                 "/alpha": {
                     files: { "/alpha/a.ts": "export const m: number = 3;" },
-                    references: [],
+                    references: emptyArray,
                     outputFiles: { "a.d.ts": emptyModule }
                 },
                 "/beta": {
@@ -253,7 +253,7 @@ namespace ts {
             const spec: TestSpecification = {
                 "/alpha": {
                     files: { "/alpha/a.ts": "export const m: number = 3;" },
-                    references: []
+                    references: emptyArray,
                 },
                 "/beta": {
                     files: { "/beta/b.ts": "import { m } from '../alpha/a'" },
@@ -278,7 +278,7 @@ namespace ts {
                         declaration: true,
                         outDir: "bin"
                     },
-                    references: []
+                    references: emptyArray,
                 }
             };
             testProjectReferences(spec, "/alpha/tsconfig.json", (program, host) => {

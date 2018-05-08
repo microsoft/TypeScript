@@ -212,7 +212,7 @@ namespace ts.DocumentHighlights {
             case SyntaxKind.Constructor:
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.FunctionDeclaration: {
-                return [...container.parameters, ...(isClassLike(container.parent) ? container.parent.members : [])];
+                return [...container.parameters, ...(isClassLike(container.parent) ? container.parent.members : emptyArray)];
             }
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:

@@ -605,7 +605,7 @@ namespace Harness {
                 return { files, directories };
             }
             catch (e) {
-                return { files: [], directories: [] };
+                return { files: ts.emptyArray, directories: ts.emptyArray };
             }
         }
 
@@ -935,7 +935,7 @@ namespace Harness {
 
         function getAccessibleFileSystemEntries(dirname: string): ts.FileSystemEntries {
             const response = send(HttpRequestMessage.post(new URL("/api/getAccessibleFileSystemEntries", serverRoot), HttpContent.text(dirname)));
-            return hasJsonContent(response) ? JSON.parse(response.content.content) : { files: [], directories: [] };
+            return hasJsonContent(response) ? JSON.parse(response.content.content) : { files: ts.emptyArray, directories: ts.emptyArray };
         }
 
         function hasJsonContent(response: HttpResponseMessage): response is HttpResponseMessage & { content: HttpContent } {

@@ -124,7 +124,7 @@ namespace ts {
             return undefined;
         }
 
-        candidateContainers = candidateContainers || [];
+        candidateContainers = candidateContainers || emptyArray;
 
         // -1 because the last part was checked against the name, and only the rest
         // of the parts are checked against the container.

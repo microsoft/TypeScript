@@ -908,7 +908,7 @@ namespace ts.tscWatch {
             };
             const config = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ compilerOptions: { types: ["node"], typeRoots: [] } })
+                content: JSON.stringify({ compilerOptions: { types: ["node"], typeRoots: emptyArray } })
             };
             const node = {
                 path: "/a/b/node_modules/@types/node/index.d.ts",
@@ -1047,7 +1047,7 @@ namespace ts.tscWatch {
                 path: "/a/tsconfig.json",
                 content: JSON.stringify({
                     compiler: {},
-                    files: []
+                    files: emptyArray
                 })
             };
             const t1 = {
@@ -1163,13 +1163,13 @@ namespace ts.tscWatch {
                 noUnusedLocals: true
             });
             checkProgramActualFiles(watch(), files.map(file => file.path));
-            checkOutputErrorsInitial(host, []);
+            checkOutputErrorsInitial(host, emptyArray);
 
             file.content = getFileContent(/*asModule*/ true);
             host.reloadFS(files);
             host.runQueuedTimeoutCallbacks();
             checkProgramActualFiles(watch(), files.map(file => file.path));
-            checkOutputErrorsIncremental(host, []);
+            checkOutputErrorsIncremental(host, emptyArray);
         });
 
         it("watched files when file is deleted and new file is added as part of change", () => {
@@ -1203,7 +1203,7 @@ namespace ts.tscWatch {
 
     describe("tsc-watch emit with outFile or out setting", () => {
         function createWatchForOut(out?: string, outFile?: string) {
-            const host = createWatchedSystem([]);
+            const host = createWatchedSystem(emptyArray);
             const config: FileOrFolderEmit = {
                 path: "/a/tsconfig.json",
                 content: JSON.stringify({
@@ -1341,7 +1341,7 @@ namespace ts.tscWatch {
             firstReloadFileList?: string[];
         }
         function getInitialState({ configObj = {}, firstCompilationEmitFiles, getEmitLine, getAdditionalFileOrFolder, firstReloadFileList }: InitialStateParams = {}) {
-            const host = createWatchedSystem([]);
+            const host = createWatchedSystem(emptyArray);
             const getOutputName = getEmitLine ? (file: FileOrFolder) => getEmitLine(file, host) :
                 (file: FileOrFolder) => getEmittedLineForMultiFileOutput(file, host);
 
@@ -1372,7 +1372,7 @@ namespace ts.tscWatch {
 
             const additionalFiles = getAdditionalFileOrFolder ?
                 map(getAdditionalFileOrFolder(), file => getFileOrFolderEmit(file, getOutputName)) :
-                [];
+                emptyArray;
 
             (configObj.compilerOptions || (configObj.compilerOptions = {})).listEmittedFiles = true;
             const configFile = getFileOrFolderEmit({
@@ -1686,7 +1686,7 @@ namespace ts.tscWatch {
 
         function verifyEmittedFileContents(newLine: string, inputFiles: FileOrFolder[], initialEmittedFileContents: string[],
             modifyFiles: (files: FileOrFolderEmit[], emitedFiles: EmittedFile[]) => FileOrFolderEmit[], configFile?: FileOrFolder) {
-            const host = createWatchedSystem([], { newLine });
+            const host = createWatchedSystem(emptyArray, { newLine });
             const files = concatenate(
                 map(inputFiles, file => getFileOrFolderEmit(file, fileToConvert => getEmittedLineForMultiFileOutput(fileToConvert, host))),
                 configFile ? [libFile, configFile] : [libFile]

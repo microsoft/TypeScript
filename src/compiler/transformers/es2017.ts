@@ -642,7 +642,7 @@ namespace ts {
             createToken(SyntaxKind.AsteriskToken),
             /*name*/ undefined,
             /*typeParameters*/ undefined,
-            /*parameters*/ [],
+            /*parameters*/ emptyArray,
             /*type*/ undefined,
             body
         );

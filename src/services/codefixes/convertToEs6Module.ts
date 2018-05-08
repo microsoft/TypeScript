@@ -134,7 +134,7 @@ namespace ts.codefix {
                 if (isExportsOrModuleExportsOrAlias(sourceFile, initializer)) {
                     // `const alias = module.exports;` can be removed.
                     foundImport = true;
-                    return [];
+                    return emptyArray;
                 }
                 else if (isRequireCall(initializer, /*checkArgumentIsStringLiteralLike*/ true)) {
                     foundImport = true;

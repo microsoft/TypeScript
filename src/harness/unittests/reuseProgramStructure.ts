@@ -873,14 +873,14 @@ namespace ts {
                     updateProgramText(files, bxPackage, JSON.stringify({ name: "x", version: "1.2.3" }));
                 });
                 assert.equal(program1.structureIsReused, StructureIsReused.Not);
-                assert.deepEqual(program2.getSemanticDiagnostics(), []);
+                assert.deepEqual(program2.getSemanticDiagnostics(), emptyArray);
             });
         });
     });
 
     describe("host is optional", () => {
         it("should work if host is not provided", () => {
-            createProgram([], {});
+            createProgram(emptyArray, {});
         });
     });
 

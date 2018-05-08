@@ -153,7 +153,7 @@ namespace ts {
                                 /*typeArguments*/ undefined,
                                 [
                                     // Add the module name (if provided).
-                                    ...(moduleName ? [moduleName] : []),
+                                    ...(moduleName ? [moduleName] : emptyArray),
 
                                     // Add the dependency array argument:
                                     //
@@ -262,7 +262,7 @@ namespace ts {
                                                 /*typeArguments*/ undefined,
                                                 [
                                                     // Add the module name (if provided).
-                                                    ...(moduleName ? [moduleName] : []),
+                                                    ...(moduleName ? [moduleName] : emptyArray),
                                                     createArrayLiteral([
                                                         createLiteral("require"),
                                                         createLiteral("exports"),
@@ -703,8 +703,8 @@ namespace ts {
             // Promise.resolve().then(function () { return require(x); }) /*CommonJs Require*/
             // We have to wrap require in then callback so that require is done in asynchronously
             // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
-            const promiseResolveCall = createCall(createPropertyAccess(createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/ []);
-            let requireCall = createCall(createIdentifier("require"), /*typeArguments*/ undefined, arg ? [arg] : []);
+            const promiseResolveCall = createCall(createPropertyAccess(createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/ emptyArray);
+            let requireCall = createCall(createIdentifier("require"), /*typeArguments*/ undefined, arg ? [arg] : emptyArray);
             if (compilerOptions.esModuleInterop) {
                 context.requestEmitHelper(importStarHelper);
                 requireCall = createCall(getHelperName("__importStar"), /*typeArguments*/ undefined, [requireCall]);
@@ -715,7 +715,7 @@ namespace ts {
                 func = createArrowFunction(
                     /*modifiers*/ undefined,
                     /*typeParameters*/ undefined,
-                    /*parameters*/ [],
+                    /*parameters*/ emptyArray,
                     /*type*/ undefined,
                     /*equalsGreaterThanToken*/ undefined,
                     requireCall);
@@ -726,7 +726,7 @@ namespace ts {
                     /*asteriskToken*/ undefined,
                     /*name*/ undefined,
                     /*typeParameters*/ undefined,
-                    /*parameters*/ [],
+                    /*parameters*/ emptyArray,
                     /*type*/ undefined,
                     createBlock([createReturn(requireCall)]));
 

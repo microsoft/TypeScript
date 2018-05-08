@@ -368,7 +368,7 @@ namespace ts.formatting {
         return typeof arg === "number" ? tokenRangeFrom([arg]) : isArray(arg) ? tokenRangeFrom(arg) : arg;
     }
 
-    function tokenRangeFromRange(from: SyntaxKind, to: SyntaxKind, except: ReadonlyArray<SyntaxKind> = []): TokenRange {
+    function tokenRangeFromRange(from: SyntaxKind, to: SyntaxKind, except: ReadonlyArray<SyntaxKind> = emptyArray): TokenRange {
         const tokens: SyntaxKind[] = [];
         for (let token = from; token <= to; token++) {
             if (!contains(except, token)) {

@@ -240,7 +240,7 @@ namespace compiler {
         if (compilerOptions.skipDefaultLibCheck === undefined) compilerOptions.skipDefaultLibCheck = true;
         if (compilerOptions.noErrorTruncation === undefined) compilerOptions.noErrorTruncation = true;
 
-        const program = ts.createProgram(rootFiles || [], compilerOptions, host);
+        const program = ts.createProgram(rootFiles || ts.emptyArray, compilerOptions, host);
         const emitResult = program.emit();
         const errors = ts.getPreEmitDiagnostics(program);
         return new CompilationResult(host, compilerOptions, program, emitResult, errors);

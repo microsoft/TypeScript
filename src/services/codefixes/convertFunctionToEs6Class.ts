@@ -118,7 +118,7 @@ namespace ts.codefix {
                 deleteNode(nodeToDelete);
 
                 if (!assignmentBinaryExpression.right) {
-                    return createProperty([], modifiers, symbol.name, /*questionToken*/ undefined,
+                    return createProperty(emptyArray, modifiers, symbol.name, /*questionToken*/ undefined,
                         /*type*/ undefined, /*initializer*/ undefined);
                 }
 

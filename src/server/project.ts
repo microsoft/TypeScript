@@ -631,7 +631,7 @@ namespace ts.server {
             return emptyArray;
         }
 
-        getFileNames(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean) {
+        getFileNames(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean): NormalizedPath[] {
             if (!this.program) {
                 return [];
             }
@@ -1487,7 +1487,7 @@ namespace ts.server {
      * These are created only if a host explicitly calls `openExternalProject`.
      */
     export class ExternalProject extends Project {
-        excludedFiles: ReadonlyArray<NormalizedPath> = [];
+        excludedFiles: ReadonlyArray<NormalizedPath> = emptyArray;
         private typeAcquisition: TypeAcquisition;
         /*@internal*/
         constructor(public externalProjectName: string,

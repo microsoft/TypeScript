@@ -480,7 +480,7 @@ namespace ts.projectSystem {
         checkNthEvent(session, server.toEvent(eventName, diagnostics), 0, isMostRecent);
     }
 
-    function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: ReadonlyArray<string> = [], category = diagnosticCategoryName(message), reportsUnnecessary?: {}): protocol.Diagnostic {
+    function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: ReadonlyArray<string> = emptyArray, category = diagnosticCategoryName(message), reportsUnnecessary?: {}): protocol.Diagnostic {
         return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category, reportsUnnecessary, source: undefined };
     }
 
@@ -560,7 +560,7 @@ namespace ts.projectSystem {
             const config = {
                 path: "/a/b/tsconfig.json",
                 content: JSON.stringify({
-                    include: []
+                    include: emptyArray,
                 })
             };
 
@@ -1255,7 +1255,7 @@ namespace ts.projectSystem {
         it("external project for dynamic file", () => {
             const externalProjectName = "^ScriptDocument1 file1.ts";
             const externalFiles = toExternalFiles(["^ScriptDocument1 file1.ts"]);
-            const host = createServerHost([]);
+            const host = createServerHost(emptyArray);
             const projectService = createProjectService(host);
             projectService.openExternalProject({
                 rootFiles: externalFiles,
@@ -2029,7 +2029,7 @@ namespace ts.projectSystem {
                 scriptKind: "JS" as "JS"
             };
 
-            const host = createServerHost([]);
+            const host = createServerHost(emptyArray);
             const projectService = createProjectService(host);
             projectService.applyChangesInOpenFiles([tsFile], [], []);
             const projs = projectService.synchronizeProjectList([]);
@@ -4264,7 +4264,7 @@ namespace ts.projectSystem {
             };
             const config = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ compilerOptions: { types: ["node"], typeRoots: [] } })
+                content: JSON.stringify({ compilerOptions: { types: ["node"], typeRoots: emptyArray } })
             };
             const node = {
                 path: "/a/b/node_modules/@types/node/index.d.ts",
@@ -4945,7 +4945,7 @@ namespace ts.projectSystem {
                 path: "/a/tsconfig.json",
                 content: JSON.stringify({
                     compiler: {},
-                    files: []
+                    files: emptyArray,
                 })
             };
             const t1 = {
@@ -7050,7 +7050,7 @@ namespace ts.projectSystem {
                         content: `interface GlobalFoo { age: number }`
                     };
 
-                    const additionalFiles = getAdditionalFileOrFolder ? getAdditionalFileOrFolder() : [];
+                    const additionalFiles = getAdditionalFileOrFolder ? getAdditionalFileOrFolder() : emptyArray;
                     const configFile = {
                         path: configFilePath,
                         content: JSON.stringify(configObj || { compilerOptions: {} })
@@ -7315,7 +7315,7 @@ namespace ts.projectSystem {
                     };
                     const configFile: FileOrFolder = {
                         path: rootFolder + "a/b/project/tsconfig.json",
-                        content: JSON.stringify({ compilerOptions: { typeRoots: [] } })
+                        content: JSON.stringify({ compilerOptions: { typeRoots: emptyArray } })
                     };
 
                     const projectFiles = [file1, file3, libFile, configFile];

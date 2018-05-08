@@ -243,8 +243,8 @@ namespace ts {
                 };
                 function visitNode(sf: SourceFile) {
                     // produce `class Foo { @Bar baz() {} }`;
-                    const classDecl = createClassDeclaration([], [], "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
-                        createMethod([createDecorator(createIdentifier("Bar"))], [], /**/ undefined, "baz", /**/ undefined, /**/ undefined, [], /**/ undefined, createBlock([]))
+                    const classDecl = createClassDeclaration(emptyArray, emptyArray, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
+                        createMethod([createDecorator(createIdentifier("Bar"))], emptyArray, /**/ undefined, "baz", /**/ undefined, /**/ undefined, emptyArray, /**/ undefined, createBlock(emptyArray))
                     ]);
                     return updateSourceFileNode(sf, [classDecl]);
                 }
