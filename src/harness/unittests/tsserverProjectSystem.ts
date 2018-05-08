@@ -3028,7 +3028,7 @@ namespace ts.projectSystem {
             const project = projectService.configuredProjects.get(configFile.path);
             assert.isDefined(project);
             checkProjectActualFiles(project, [file1.path, libFile.path, module1.path, module2.path, configFile.path]);
-            checkWatchedFiles(host, [libFile.path, module1.path, module2.path, configFile.path]);
+            checkWatchedFiles(host, [libFile.path, configFile.path]);
             checkWatchedDirectories(host, [], /*recursive*/ false);
             const watchedRecursiveDirectories = getTypeRootsFromLocation(root + "/a/b/src");
             watchedRecursiveDirectories.push(`${root}/a/b/src`, `${root}/a/b/node_modules`);
@@ -6803,6 +6803,7 @@ namespace ts.projectSystem {
                 projectFiles.push(find(filesAndFoldersToAdd, f => f.path === lodashIndexPath));
                 // we would now not have failed lookup in the parent of appFolder since lodash is available
                 recursiveWatchedDirectories.length = 1;
+                recursiveWatchedDirectories.push(`${root}/a/b/node_modules`);
                 // npm installation complete, timeout after reload fs
                 timeoutAfterReloadFs = true;
                 verifyAfterPartialOrCompleteNpmInstall(2);
@@ -6825,7 +6826,7 @@ namespace ts.projectSystem {
                     const projectFilePaths = map(projectFiles, f => f.path);
                     checkProjectActualFiles(project, projectFilePaths);
 
-                    const filesWatched = filter(projectFilePaths, p => p !== app.path);
+                    const filesWatched = filter(projectFilePaths, p => p !== app.path && p.indexOf("/a/b/node_modules") === -1);
                     checkWatchedFiles(host, filesWatched);
                     checkWatchedDirectories(host, typeRootDirectories.concat(recursiveWatchedDirectories), /*recursive*/ true);
                     checkWatchedDirectories(host, [], /*recursive*/ false);
@@ -7860,10 +7861,23 @@ namespace ts.projectSystem {
         }
 
         function verifyWatchesWithConfigFile(host: TestServerHost, files: FileOrFolder[], openFile: FileOrFolder) {
-            checkWatchedFiles(host, mapDefined(files, f => f === openFile ? undefined : f.path));
+            const nodeModulesDirs = createMap<true>();
+            checkWatchedFiles(host, mapDefined(files, f => {
+                if (f === openFile) {
+                    return undefined;
+                }
+
+                const indexOfNodeModules = f.path.indexOf("/node_modules/");
+                if (indexOfNodeModules === -1) {
+                    return f.path;
+                }
+
+                nodeModulesDirs.set(f.path.substr(0, indexOfNodeModules + "/node_modules".length), true);
+                return undefined;
+            }));
             checkWatchedDirectories(host, [], /*recursive*/ false);
             const configDirectory = getDirectoryPath(configFile.path);
-            checkWatchedDirectories(host, [configDirectory, `${configDirectory}/${nodeModulesAtTypes}`], /*recursive*/ true);
+            checkWatchedDirectories(host, [configDirectory, `${configDirectory}/${nodeModulesAtTypes}`].concat(arrayFrom(nodeModulesDirs.keys())), /*recursive*/ true);
         }
 
         describe("from files in same folder", () => {
@@ -8063,7 +8077,7 @@ namespace ts.projectSystem {
                 verifyTrace(resolutionTrace, expectedTrace);
 
                 const currentDirectory = getDirectoryPath(file1.path);
-                const watchedFiles = mapDefined(files, f => f === file1 ? undefined : f.path);
+                const watchedFiles = mapDefined(files, f => f === file1 || f.path.indexOf("/node_modules/") !== -1 ? undefined : f.path);
                 forEachAncestorDirectory(currentDirectory, d => {
                     watchedFiles.push(combinePaths(d, "tsconfig.json"), combinePaths(d, "jsconfig.json"));
                 });
