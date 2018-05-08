@@ -6,7 +6,7 @@ namespace ts.server {
     export const ConfigFileDiagEvent = "configFileDiag";
     export const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
     export const ProjectInfoTelemetryEvent = "projectInfo";
-    export const OpenFileInfoTelemetryEvent = "openFilesInfo";
+    export const OpenFileInfoTelemetryEvent = "openFileInfo";
     // tslint:enable variable-name
 
     export interface ProjectsUpdatedInBackgroundEvent {

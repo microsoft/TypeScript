@@ -7971,7 +7971,7 @@ declare namespace ts.server {
     const ConfigFileDiagEvent = "configFileDiag";
     const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
     const ProjectInfoTelemetryEvent = "projectInfo";
-    const OpenFilesInfoTelemetryEvent = "openFilesInfo";
+    const OpenFileInfoTelemetryEvent = "openFileInfo";
     interface ProjectsUpdatedInBackgroundEvent {
         eventName: typeof ProjectsUpdatedInBackgroundEvent;
         data: {
@@ -8020,12 +8020,17 @@ declare namespace ts.server {
         /** TypeScript version used by the server. */
         readonly version: string;
     }
-    interface OpenFilesInfoTelemetryEvent {
-        readonly eventName: typeof OpenFilesInfoTelemetryEvent;
-        readonly data: OpenFilesInfoTelemetryEventData;
+    /**
+     * Info that we may send about a file that was just opened.
+     * Info about a file will only be sent once per session, even if the file changes in ways that might affect the info.
+     * Currently this is only sent for '.js' files.
+     */
+    interface OpenFileInfoTelemetryEvent {
+        readonly eventName: typeof OpenFileInfoTelemetryEvent;
+        readonly data: OpenFileInfoTelemetryEventData;
     }
-    interface OpenFilesInfoTelemetryEventData {
-        readonly stats: OpenFileStats;
+    interface OpenFileInfoTelemetryEventData {
+        readonly info: OpenFileInfo;
     }
     interface ProjectInfoTypeAcquisitionData {
         readonly enable: boolean;
@@ -8039,11 +8044,10 @@ declare namespace ts.server {
         readonly tsx: number;
         readonly dts: number;
     }
-    interface OpenFileStats {
-        readonly js: number;
-        readonly checkJs: number;
+    interface OpenFileInfo {
+        readonly checkJs: boolean;
     }
-    type ProjectServiceEvent = ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFilesInfoTelemetryEvent;
+    type ProjectServiceEvent = ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
     type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
     interface SafeList {
         [name: string]: {
@@ -8094,7 +8098,7 @@ declare namespace ts.server {
          * Container of all known scripts
          */
         private readonly filenameToScriptInfo;
-        private readonly allJsFilesForOpenFilesTelemetry;
+        private readonly allJsFilesForOpenFileTelemetry;
         /**
          * maps external project file name to list of config files that were the part of this project
          */
