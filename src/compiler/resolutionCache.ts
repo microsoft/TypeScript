@@ -539,7 +539,7 @@ namespace ts {
             return resolutionHost.watchDirectoryOfFailedLookupLocation(directory, fileOrDirectory => {
                 const fileOrDirectoryPath = resolutionHost.toPath(fileOrDirectory);
                 if (cachedDirectoryStructureHost) {
-                    // Since the file existance changed, update the sourceFiles cache
+                    // Since the file existence changed, update the sourceFiles cache
                     cachedDirectoryStructureHost.addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
                 }
 
@@ -690,7 +690,7 @@ namespace ts {
             return resolutionHost.watchTypeRootsDirectory(typeRoot, fileOrDirectory => {
                 const fileOrDirectoryPath = resolutionHost.toPath(fileOrDirectory);
                 if (cachedDirectoryStructureHost) {
-                    // Since the file existance changed, update the sourceFiles cache
+                    // Since the file existence changed, update the sourceFiles cache
                     cachedDirectoryStructureHost.addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
                 }
 
