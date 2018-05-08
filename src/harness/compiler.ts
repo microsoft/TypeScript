@@ -10,8 +10,7 @@ namespace compiler {
 
     export function readProject(host: fakes.ParseConfigHost, project: string | undefined, existingOptions?: ts.CompilerOptions): Project | undefined {
         if (project) {
-            project = host.vfs.stringComparer(vpath.basename(project), "tsconfig.json") === 0 ? project :
-                vpath.combine(project, "tsconfig.json");
+            project = utils.isTsConfigFile({path: project}) ? project : vpath.combine(project, "tsconfig.json");
         }
         else {
             [project] = host.vfs.scanSync(".", "ancestors-or-self", {
