@@ -35,7 +35,6 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(137,17): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(138,24): error TS2304: Cannot find name 'nodeTypeTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(141,30): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(145,42): error TS2304: Cannot find name 'ControlFlowContext'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(151,39): error TS2304: Cannot find name 'Symbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(151,57): error TS2304: Cannot find name 'StringHashTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(155,26): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(184,19): error TS2304: Cannot find name 'NodeType'.
@@ -48,7 +47,6 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(231,30): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(231,48): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(233,52): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(237,36): error TS2304: Cannot find name 'TypeFlow'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(251,21): error TS2304: Cannot find name 'Symbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(268,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(298,36): error TS2304: Cannot find name 'TypeFlow'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(302,30): error TS2304: Cannot find name 'Emitter'.
@@ -218,7 +216,6 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(863,36): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(868,38): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(877,40): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(891,27): error TS2304: Cannot find name 'VarFlags'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(892,21): error TS2304: Cannot find name 'Symbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(894,55): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(900,37): error TS2304: Cannot find name 'hasFlag'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(900,60): error TS2304: Cannot find name 'VarFlags'.
@@ -243,17 +240,15 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(946,48): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(959,27): error TS2304: Cannot find name 'FncFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(961,25): error TS2304: Cannot find name 'IHashTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(963,27): error TS2304: Cannot find name 'Signature'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(969,31): error TS2304: Cannot find name 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(977,32): error TS2304: Cannot find name 'Symbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(981,27): error TS2304: Cannot find name 'Type'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(985,29): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1004,44): error TS2304: Cannot find name 'hasFlag'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1004,67): error TS2304: Cannot find name 'FncFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1005,57): error TS2304: Cannot find name 'FncFlags'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1007,47): error TS2304: Cannot find name 'Symbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1009,46): error TS1011: An element access expression should take an argument.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1022,32): error TS2304: Cannot find name 'Symbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1014,65): error TS2339: Property 'container' does not exist on type 'Symbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1024,48): error TS1011: An element access expression should take an argument.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1026,41): error TS2339: Property 'name' does not exist on type 'Symbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1032,36): error TS2304: Cannot find name 'ControlFlowContext'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1033,29): error TS2304: Cannot find name 'BasicBlock'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1034,28): error TS2304: Cannot find name 'BasicBlock'.
@@ -516,7 +511,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,30): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts (516 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts (511 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
@@ -742,8 +737,6 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
             }
     
             public netFreeUses(container: Symbol, freeUses: StringHashTable) {
-                                          ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
                                                             ~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'StringHashTable'.
             }
@@ -868,8 +861,6 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
     
         export class Identifier extends AST {
             public sym: Symbol = null;
-                        ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
             public cloId = -1;
             public text: string;
     
@@ -1849,8 +1840,6 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                               ~~~~~~~~
 !!! error TS2304: Cannot find name 'VarFlags'.
             public sym: Symbol = null;
-                        ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
     
             constructor (public id: Identifier, nodeType: NodeType, public nestingLevel: number) {
                                                           ~~~~~~~~
@@ -1976,8 +1965,6 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
             public tmp1Declared = false;
             public enclosingFnc: FuncDecl = null;
             public freeVariables: Symbol[] = [];
-                                  ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
             public unitIndex = -1;
             public classDecl: NamedDeclaration = null;
             public boundToProperty: VarDecl = null;
@@ -1986,8 +1973,6 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
             public isTargetTypedAsMethod = false;
             public isInlineCallLiteral = false;
             public accessorSymbol: Symbol = null;
-                                   ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
             public leftCurlyCount = 0;
             public rightCurlyCount = 0;
             public returnStatementsWithExpressions: ReturnStatement[] = [];
@@ -2028,8 +2013,6 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
 !!! error TS2304: Cannot find name 'FncFlags'.
     
             public addCloRef(id: Identifier, sym: Symbol): number {
-                                                  ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
                 if (this.envids == null) {
                     this.envids = new Identifier[];
                                                  
@@ -2039,6 +2022,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                 var outerFnc = this.enclosingFnc;
                 if (sym) {
                     while (outerFnc && (outerFnc.type.symbol != sym.container)) {
+                                                                    ~~~~~~~~~
+!!! error TS2339: Property 'container' does not exist on type 'Symbol'.
                         outerFnc.addJumpRef(sym);
                         outerFnc = outerFnc.enclosingFnc;
                     }
@@ -2047,14 +2032,14 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
             }
     
             public addJumpRef(sym: Symbol): void {
-                                   ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
                 if (this.jumpRefs == null) {
                     this.jumpRefs = new Identifier[];
                                                    
 !!! error TS1011: An element access expression should take an argument.
                 }
                 var id = new Identifier(sym.name);
+                                            ~~~~
+!!! error TS2339: Property 'name' does not exist on type 'Symbol'.
                 this.jumpRefs[this.jumpRefs.length] = id;
                 id.sym = sym;
                 id.cloId = this.addCloRef(id, null);

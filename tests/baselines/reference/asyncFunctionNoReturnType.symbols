@@ -1,7 +1,8 @@
 === tests/cases/compiler/asyncFunctionNoReturnType.ts ===
 async () => {
-No type information for this code.    if (window)
-No type information for this code.        return;
-No type information for this code.}
-No type information for this code.
-No type information for this code.
+    if (window)
+>window : Symbol(window, Decl(lib.d.ts, --, --))
+
+        return;
+}
+

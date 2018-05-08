@@ -180,6 +180,8 @@ namespace ts {
         switch (node.parent.kind) {
             case SyntaxKind.TypeReference:
                 return true;
+            case SyntaxKind.ImportType:
+                return !(node.parent as ImportTypeNode).isTypeOf;
             case SyntaxKind.ExpressionWithTypeArguments:
                 return !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent);
         }
@@ -1122,11 +1124,6 @@ namespace ts {
         return false;
     }
 
-    export function hasTrailingDirectorySeparator(path: string) {
-        const lastCharacter = path.charAt(path.length - 1);
-        return lastCharacter === "/" || lastCharacter === "\\";
-    }
-
     export function isInReferenceComment(sourceFile: SourceFile, position: number): boolean {
         return isInComment(sourceFile, position, /*tokenAtPosition*/ undefined, c => {
             const commentText = sourceFile.text.substring(c.pos, c.end);
@@ -1541,7 +1538,7 @@ namespace ts {
      * user was before extracting it.
      */
     /* @internal */
-    export function getRenameLocation(edits: ReadonlyArray<FileTextChanges>, renameFilename: string, name: string, isDeclaredBeforeUse: boolean): number {
+    export function getRenameLocation(edits: ReadonlyArray<FileTextChanges>, renameFilename: string, name: string, preferLastLocation: boolean): number {
         let delta = 0;
         let lastPos = -1;
         for (const { fileName, textChanges } of edits) {
@@ -1553,7 +1550,7 @@ namespace ts {
                     lastPos = span.start + delta + index;
 
                     // If the reference comes first, return immediately.
-                    if (!isDeclaredBeforeUse) {
+                    if (!preferLastLocation) {
                         return lastPos;
                     }
                 }
@@ -1562,7 +1559,7 @@ namespace ts {
         }
 
         // If the declaration comes first, return the position of the last occurrence.
-        Debug.assert(isDeclaredBeforeUse);
+        Debug.assert(preferLastLocation);
         Debug.assert(lastPos >= 0);
         return lastPos;
     }

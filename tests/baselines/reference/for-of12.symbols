@@ -4,6 +4,6 @@ var v: string;
 
 for (v of [0, ""].values()) { }
 >v : Symbol(v, Decl(for-of12.ts, 0, 3))
->[0, ""].values : Symbol(Array.values, Decl(lib.es2015.iterable.d.ts, --, --))
->values : Symbol(Array.values, Decl(lib.es2015.iterable.d.ts, --, --))
+>[0, ""].values : Symbol(Array.values, Decl(lib.es6.d.ts, --, --))
+>values : Symbol(Array.values, Decl(lib.es6.d.ts, --, --))
 

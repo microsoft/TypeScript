@@ -23,14 +23,8 @@
 //// */
 ////var test1 = function(x) { return x./*4*/ }, test2 = function(a) { return a./*5*/ };
 
-
-goTo.marker("1");
-verify.completionListContains("charCodeAt", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
-goTo.marker("2");
-verify.completionListContains("toExponential", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
-goTo.marker("3");
-verify.completionListContains("toExponential", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
-goTo.marker("4");
-verify.completionListContains("toExponential", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
-goTo.marker("5");
-verify.completionListContains("test1", /*displayText:*/ undefined, /*documentation*/ undefined, "warning");
+verify.completions(
+    { marker: "1", includes: { name: "charCodeAt", kind: "method" }, isNewIdentifierLocation: true },
+    { marker: ["2", "3", "4"], includes: { name: "toExponential", kind: "method" } },
+    { marker: "5", includes: { name: "test1", kind: "warning" } },
+);

@@ -1,20 +1,20 @@
 === tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck26.ts ===
 function* g(): IterableIterator<(x: string) => number> {
 >g : Symbol(g, Decl(generatorTypeCheck26.ts, 0, 0))
->IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es6.d.ts, --, --))
 >x : Symbol(x, Decl(generatorTypeCheck26.ts, 0, 33))
 
     yield x => x.length;
 >x : Symbol(x, Decl(generatorTypeCheck26.ts, 1, 9))
->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es6.d.ts, --, --))
 >x : Symbol(x, Decl(generatorTypeCheck26.ts, 1, 9))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es6.d.ts, --, --))
 
     yield *[x => x.length];
 >x : Symbol(x, Decl(generatorTypeCheck26.ts, 2, 12))
->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es6.d.ts, --, --))
 >x : Symbol(x, Decl(generatorTypeCheck26.ts, 2, 12))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es6.d.ts, --, --))
 
     return x => x.length;
 >x : Symbol(x, Decl(generatorTypeCheck26.ts, 3, 10))

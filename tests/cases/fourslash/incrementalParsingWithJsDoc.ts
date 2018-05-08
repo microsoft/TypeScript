@@ -1,8 +1,8 @@
 /// <reference path="fourslash.ts"/>
 
-////import a from 'a/aaaaaaa/aaaaaaa/aaaaaa/aaaaaaa';
+////[|import a from 'a/aaaaaaa/aaaaaaa/aaaaaa/aaaaaaa';
 /////**/import b from 'b';
-////import c from 'c';
+////import c from 'c';|]
 ////
 ////[|/** @internal */|]
 ////export class LanguageIdentifier[| { }|]

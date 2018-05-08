@@ -10,7 +10,7 @@ class Bar extends Foo { y: string }
 
 function* g(): IterableIterator<Foo> {
 >g : Symbol(g, Decl(generatorTypeCheck19.ts, 1, 35))
->IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es6.d.ts, --, --))
 >Foo : Symbol(Foo, Decl(generatorTypeCheck19.ts, 0, 0))
 
     yield;

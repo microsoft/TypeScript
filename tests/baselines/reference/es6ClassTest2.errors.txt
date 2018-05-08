@@ -1,9 +1,8 @@
-tests/cases/compiler/es6ClassTest2.ts(17,1): error TS2304: Cannot find name 'console'.
 tests/cases/compiler/es6ClassTest2.ts(30,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/es6ClassTest2.ts(35,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 
 
-==== tests/cases/compiler/es6ClassTest2.ts (3 errors) ====
+==== tests/cases/compiler/es6ClassTest2.ts (2 errors) ====
     class BasicMonster {
         constructor(public name: string, public health: number) {
     
@@ -21,8 +20,6 @@ tests/cases/compiler/es6ClassTest2.ts(35,9): error TS1056: Accessors are only av
     m1.attack(m2);
     m1.health = 0;
     console.log((<any>m5.isAlive).toString());
-    ~~~~~~~
-!!! error TS2304: Cannot find name 'console'.
     
     class GetSetMonster {
         constructor(public name: string, private _health: number) {

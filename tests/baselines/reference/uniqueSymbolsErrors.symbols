@@ -214,7 +214,7 @@ type InvalidAliasTypeParameterDefault<T extends unique symbol> = never;
 // type references
 declare const invalidTypeArgument: Promise<unique symbol>;
 >invalidTypeArgument : Symbol(invalidTypeArgument, Decl(uniqueSymbolsErrors.ts, 73, 13))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2018.promise.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 declare const invalidArrayType: (unique symbol)[];
 >invalidArrayType : Symbol(invalidArrayType, Decl(uniqueSymbolsErrors.ts, 74, 13))
@@ -238,5 +238,5 @@ declare const invalidIntersection: unique symbol | unique symbol;
 // https://github.com/Microsoft/TypeScript/issues/21584
 const shouldNotBeAssignable: string = Symbol();
 >shouldNotBeAssignable : Symbol(shouldNotBeAssignable, Decl(uniqueSymbolsErrors.ts, 86, 5))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 

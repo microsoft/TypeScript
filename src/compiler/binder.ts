@@ -281,6 +281,10 @@ namespace ts {
                     return InternalSymbolName.Index;
                 case SyntaxKind.ExportDeclaration:
                     return InternalSymbolName.ExportStar;
+                case SyntaxKind.SourceFile:
+                    // json file should behave as
+                    // module.exports = ...
+                    return InternalSymbolName.ExportEquals;
                 case SyntaxKind.BinaryExpression:
                     if (getSpecialPropertyAssignmentKind(node as BinaryExpression) === SpecialPropertyAssignmentKind.ModuleExports) {
                         // module.exports = ...
@@ -2234,6 +2238,13 @@ namespace ts {
             if (isExternalModule(file)) {
                 bindSourceFileAsExternalModule();
             }
+            else if (isJsonSourceFile(file)) {
+                bindSourceFileAsExternalModule();
+                // Create symbol equivalent for the module.exports = {}
+                const originalSymbol = file.symbol;
+                declareSymbol(file.symbol.exports, file.symbol, file, SymbolFlags.Property, SymbolFlags.All);
+                file.symbol = originalSymbol;
+            }
         }
 
         function bindSourceFileAsExternalModule() {
@@ -3021,7 +3032,7 @@ namespace ts {
             // A ClassDeclaration is ES6 syntax.
             transformFlags = subtreeFlags | TransformFlags.AssertES2015;
 
-            // A class with a parameter property assignment, property initializer, or decorator is
+            // A class with a parameter property assignment, property initializer, computed property name, or decorator is
             // TypeScript syntax.
             // An exported declaration may be TypeScript syntax, but is handled by the visitor
             // for a namespace declaration.
@@ -3191,9 +3202,9 @@ namespace ts {
         // A PropertyDeclaration is TypeScript syntax.
         let transformFlags = subtreeFlags | TransformFlags.AssertTypeScript;
 
-        // If the PropertyDeclaration has an initializer, we need to inform its ancestor
+        // If the PropertyDeclaration has an initializer or a computed name, we need to inform its ancestor
         // so that it handle the transformation.
-        if (node.initializer) {
+        if (node.initializer || isComputedPropertyName(node.name)) {
             transformFlags |= TransformFlags.ContainsPropertyInitializer;
         }
 

@@ -51,7 +51,7 @@ class C {
 
     s: Date;
 >s : Symbol(C.s, Decl(scopeResolutionIdentifiers.ts, 21, 9))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     n = this.s;
 >n : Symbol(C.n, Decl(scopeResolutionIdentifiers.ts, 22, 12))
@@ -70,7 +70,7 @@ class C {
 
         var p: Date;
 >p : Symbol(p, Decl(scopeResolutionIdentifiers.ts, 25, 11), Decl(scopeResolutionIdentifiers.ts, 26, 11))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
     }
 }
 

@@ -7,7 +7,7 @@ interface Document {
 >Document : Document
 
     getElementById(elementId: string): HTMLElement;
->getElementById : (elementId: string) => HTMLElement
+>getElementById : { (elementId: string): HTMLElement; (elementId: string): HTMLElement; }
 >elementId : string
 >HTMLElement : HTMLElement
 }
@@ -32,9 +32,9 @@ function getMaxWidth(elementNames: string[]) {
 
         return document.getElementById(name);
 >document.getElementById(name) : HTMLElement
->document.getElementById : (elementId: string) => HTMLElement
+>document.getElementById : { (elementId: string): HTMLElement; (elementId: string): HTMLElement; }
 >document : Document
->getElementById : (elementId: string) => HTMLElement
+>getElementById : { (elementId: string): HTMLElement; (elementId: string): HTMLElement; }
 >name : string
 
     });

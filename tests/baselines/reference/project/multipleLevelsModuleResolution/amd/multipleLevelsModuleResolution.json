@@ -5,7 +5,7 @@
         "root.ts"
     ],
     "resolvedInputFiles": [
-        "lib.d.ts",
+        "lib.es5.d.ts",
         "A/A.ts",
         "A/AA/AA.ts",
         "B/B.ts",

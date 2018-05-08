@@ -1,6 +1,6 @@
 === tests/cases/compiler/libdtsFix.ts ===
 interface HTMLElement {
->HTMLElement : Symbol(HTMLElement, Decl(libdtsFix.ts, 0, 0))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(libdtsFix.ts, 0, 0))
 
     type: string;
 >type : Symbol(HTMLElement.type, Decl(libdtsFix.ts, 0, 23))

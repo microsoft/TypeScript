@@ -295,7 +295,7 @@ namespace ts {
          */
         let enabledSubstitutions: ES2015SubstitutionFlags;
 
-        return transformSourceFile;
+        return chainBundle(transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {

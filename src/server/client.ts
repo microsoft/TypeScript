@@ -139,6 +139,11 @@ namespace ts.server {
             this.processRequest(CommandNames.Change, args);
         }
 
+        toLineColumnOffset(fileName: string, position: number) {
+            const { line, offset } = this.positionToOneBasedLineOffset(fileName, position);
+            return { line, character: offset };
+        }
+
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
             const args = this.createFileLocationRequestArgs(fileName, position);
 
@@ -530,7 +535,8 @@ namespace ts.server {
                 textSpan: this.decodeSpan(item.textSpan, file),
                 hintSpan: this.decodeSpan(item.hintSpan, file),
                 bannerText: item.bannerText,
-                autoCollapse: item.autoCollapse
+                autoCollapse: item.autoCollapse,
+                kind: item.kind
             }));
         }
 

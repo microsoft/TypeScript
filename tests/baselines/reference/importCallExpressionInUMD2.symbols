@@ -11,7 +11,7 @@ export class B {
 function foo(x: Promise<any>) {
 >foo : Symbol(foo, Decl(2.ts, 0, 0))
 >x : Symbol(x, Decl(2.ts, 1, 13))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2018.promise.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
     x.then(value => {
 >x.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))

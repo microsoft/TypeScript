@@ -699,12 +699,14 @@ namespace ts.server {
         }
 
         private toFileSpan(fileName: string, textSpan: TextSpan, project: Project): protocol.FileSpan {
-            const scriptInfo = project.getScriptInfo(fileName);
+            const ls = project.getLanguageService();
+            const start = ls.toLineColumnOffset(fileName, textSpan.start);
+            const end = ls.toLineColumnOffset(fileName, textSpanEnd(textSpan));
 
             return {
                 file: fileName,
-                start: scriptInfo.positionToLineOffset(textSpan.start),
-                end: scriptInfo.positionToLineOffset(textSpanEnd(textSpan))
+                start: { line: start.line + 1, offset: start.character + 1 },
+                end: { line: end.line + 1, offset: end.character + 1 }
             };
         }
 
@@ -1112,7 +1114,8 @@ namespace ts.server {
                     textSpan: this.toLocationTextSpan(s.textSpan, scriptInfo),
                     hintSpan: this.toLocationTextSpan(s.hintSpan, scriptInfo),
                     bannerText: s.bannerText,
-                    autoCollapse: s.autoCollapse
+                    autoCollapse: s.autoCollapse,
+                    kind: s.kind
                 }));
             }
             else {

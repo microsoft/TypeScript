@@ -1,3 +1,4 @@
+// @lib: es5
 // @target: es5
 let parent = true;
 const parent2 = true;
