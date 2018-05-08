@@ -783,7 +783,7 @@ namespace ts {
                 // We only set `file.resolvedModules` via work from the current function,
                 // so it is defined iff we already called the current function on `file`.
                 // That call happened no later than the creation of the `file` object,
-                // which per above occured during the current program creation.
+                // which per above occurred during the current program creation.
                 // Since we assume the filesystem does not change during program creation,
                 // it is safe to reuse resolutions from the earlier call.
                 const result: ResolvedModuleFull[] = [];
