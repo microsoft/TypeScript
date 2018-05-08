@@ -358,9 +358,11 @@ namespace ts {
 
     export type OrganizeImportsScope = CombinedCodeFixScope;
 
+    export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<";
+
     export interface GetCompletionsAtPositionOptions extends UserPreferences {
         /** If the editor is asking for completions because a certain character was typed, and not because the user explicitly requested them, this should be set. */
-        triggerCharacter?: string;
+        triggerCharacter?: CompletionsTriggerCharacter;
         /** @deprecated Use includeCompletionsForModuleExports */
         includeExternalModuleExports?: boolean;
         /** @deprecated Use includeCompletionsWithInsertText */
