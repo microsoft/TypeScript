@@ -14,9 +14,9 @@ verify.codeFixAll({
     fixId: "unusedIdentifier_delete",
     fixAllDescription: "Delete all unused declarations",
     newFileContent:
-`const { a, } = o;
+`const { a } = o;
 a;
-export function f({ a, }) {
+export function f({ a }) {
     a;
 }`,
 });
