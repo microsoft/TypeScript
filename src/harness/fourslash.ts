@@ -3155,6 +3155,16 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
+        public noMoveToNewFile() {
+            for (const range of this.getRanges()) {
+                for (const refactor of this.getApplicableRefactors(range, { allowTextChangesInNewFiles: true })) {
+                    if (refactor.name === "Move to a new file") {
+                        ts.Debug.fail("Did not expect to get 'move to a new file' refactor");
+                    }
+                }
+            }
+        }
+
         public moveToNewFile(options: FourSlashInterface.MoveToNewFileOptions): void {
             assert(this.getRanges().length === 1);
             const range = this.getRanges()[0];
@@ -4508,6 +4518,9 @@ namespace FourSlashInterface {
 
         public moveToNewFile(options: MoveToNewFileOptions): void {
             this.state.moveToNewFile(options);
+        }
+        public noMoveToNewFile(): void {
+            this.state.noMoveToNewFile();
         }
     }
 

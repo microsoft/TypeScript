@@ -3,7 +3,7 @@ namespace ts.refactor {
     const refactorName = "Move to a new file";
     registerRefactor(refactorName, {
         getAvailableActions(context): ApplicableRefactorInfo[] {
-            if (getStatementsToMove(context) === undefined || !context.preferences.allowTextChangesInNewFiles) return undefined;
+            if (!context.preferences.allowTextChangesInNewFiles || getStatementsToMove(context) === undefined) return undefined;
             const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);
             return [{ name: refactorName, description, actions: [{ name: refactorName, description }] }];
         },
@@ -23,11 +23,12 @@ namespace ts.refactor {
         const startNodeIndex = findIndex(statements, s => s.end > range.pos);
         if (startNodeIndex === -1) return undefined;
         // Can't only partially include the start node or be partially into the next node
-        const okStart = range.pos <= statements[startNodeIndex].getStart(file);
+        if (range.pos > statements[startNodeIndex].getStart(file)) return undefined;
         const afterEndNodeIndex = findIndex(statements, s => s.end > range.end, startNodeIndex);
         // Can't be partially into the next node
-        const okEnd = afterEndNodeIndex === -1 || afterEndNodeIndex !== 0 && statements[afterEndNodeIndex].getStart(file) >= range.end;
-        return okStart && okEnd ? statements.slice(startNodeIndex, afterEndNodeIndex === -1 ? statements.length : afterEndNodeIndex) : undefined;
+        if (afterEndNodeIndex !== -1 && (afterEndNodeIndex === 0 || statements[afterEndNodeIndex].getStart(file) < range.end)) return undefined;
+
+        return statements.slice(startNodeIndex, afterEndNodeIndex === -1 ? statements.length : afterEndNodeIndex);
     }
 
     function doChange(oldFile: SourceFile, program: Program, toMove: ReadonlyArray<Statement>, changes: textChanges.ChangeTracker, host: LanguageServiceHost): void {

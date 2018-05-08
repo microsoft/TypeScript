@@ -2290,7 +2290,7 @@ namespace ts {
     }
 
     export function getRelativePathFromFile(from: string, to: string, getCanonicalFileName: GetCanonicalFileName) {
-        return ensurePathIsNonModuleName(getRelativePathFromDirectory(ts.getDirectoryPath(from), to, getCanonicalFileName));
+        return ensurePathIsNonModuleName(getRelativePathFromDirectory(getDirectoryPath(from), to, getCanonicalFileName));
     }
 
     /**

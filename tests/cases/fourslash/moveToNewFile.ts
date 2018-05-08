@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: /a.ts
-////import { a, b } from "./other";
+////import { a, b, alreadyUnused } from "./other";
 ////const p = 0;
 ////[|const y = p + b;|]
 ////a; y;
@@ -11,7 +11,7 @@ verify.moveToNewFile({
         "/a.ts":
 `import { y } from "./y";
 
-import { a } from "./other";
+import { a, alreadyUnused } from "./other";
 export const p = 0;
 a; y;`,
 

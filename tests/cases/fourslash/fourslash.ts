@@ -362,6 +362,7 @@ declare namespace FourSlashInterface {
         moveToNewFile(options: {
             readonly newFileContents: { readonly [fileName: string]: string };
         }): void;
+        noMoveToNewFile(): void;
     }
     class edit {
         backspace(count?: number): void;
