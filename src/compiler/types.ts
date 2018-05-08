@@ -1879,7 +1879,7 @@ namespace ts {
     }
 
     /**
-     * A list of comma-seperated expressions. This node is only created by transformations.
+     * A list of comma-separated expressions. This node is only created by transformations.
      */
     export interface CommaListExpression extends Expression {
         kind: SyntaxKind.CommaListExpression;
