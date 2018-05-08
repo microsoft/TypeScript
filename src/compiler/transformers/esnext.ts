@@ -147,7 +147,9 @@ namespace ts {
                     return setOriginalNode(
                         setTextRange(
                             createYield(
-                                createDownlevelAwait(node.expression)
+                                createDownlevelAwait(
+                                    visitNode(node.expression, visitor, isExpression)
+                                )
                             ),
                             node
                         ),
