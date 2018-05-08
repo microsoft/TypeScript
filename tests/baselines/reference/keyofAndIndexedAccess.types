@@ -2591,3 +2591,26 @@ class Unbounded<T> {
     }
 }
 
+// Repro from #23940
+
+interface I7 {
+>I7 : I7
+
+    x: any;
+>x : any
+}
+type Foo7<T extends number> = T;
+>Foo7 : T
+>T : T
+>T : T
+
+declare function f7<K extends keyof I7>(type: K): Foo7<I7[K]>;
+>f7 : <K extends "x">(type: K) => I7[K]
+>K : K
+>I7 : I7
+>type : K
+>K : K
+>Foo7 : T
+>I7 : I7
+>K : K
+
