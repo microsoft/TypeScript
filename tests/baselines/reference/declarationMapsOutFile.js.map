@@ -1,2 +1,2 @@
 //// [bundle.d.ts.map]
-{"version":3,"file":"bundle.d.ts","sourceRoot":"","sources":["tests/cases/compiler/a.ts","tests/cases/compiler/index.ts"],"names":[],"mappings":";IAAA,MAAM;QACF,OAAO,CAAC,CAAC,EAAE;YAAC,CAAC,EAAE,MAAM,CAAA;SAAC;;;QAGtB,MAAM,CAAC,IAAI;KAGd;;;ICPD,OAAO,EAAC,GAAG,EAAC,UAAY;IAExB,MAAM,CAAC,KAAY,CAAC;IAGpB,MAAM,CAAC,IAAI,CAAC;;KAAqB,CAAC;IAClC,OAAO,EAAE,CAAC,EAAE,GAAG,EAAE,CAAC"}
+{"version":3,"file":"bundle.d.ts","sourceRoot":"","sources":["tests/cases/compiler/a.ts","tests/cases/compiler/index.ts"],"names":[],"mappings":";IAAA,MAAM;QACF,OAAO,CAAC,GAAG;YAAC,CAAC,EAAE,MAAM,CAAA;SAAC;;;QAGtB,MAAM,CAAC,IAAI;KAGd;;;ICPD,OAAO,EAAC,GAAG,EAAC,UAAY;IAExB,MAAM,CAAC,KAAY,CAAC;IAGpB,MAAM,CAAC,IAAI,CAAC;;KAAqB,CAAC;IAClC,OAAO,EAAE,CAAC,EAAE,GAAG,EAAE,CAAC"}

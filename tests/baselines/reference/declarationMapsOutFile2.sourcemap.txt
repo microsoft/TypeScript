@@ -18,20 +18,17 @@ sourceFile:tests/cases/compiler/a.ts
 1->^^^^
 2 >    ^^^^^^^
 3 >           ^
-4 >            ^
-5 >             ^^
-6 >               ^^^^->
+4 >            ^^^
+5 >               ^^^^->
 1->class Foo {
   >    
 2 >    doThing
 3 >           (
-4 >            x
-5 >             : 
+4 >            x: 
 1->Emitted(2, 5) Source(2, 5) + SourceIndex(0)
 2 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
 3 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
-4 >Emitted(2, 14) Source(2, 14) + SourceIndex(0)
-5 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
+4 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
 ---
 >>>        a: number;
 1->^^^^^^^^
