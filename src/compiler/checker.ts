@@ -1175,6 +1175,10 @@ namespace ts {
                         return true;
                     }
 
+                    if (isComputedPropertyName(current) && isPropertySignature(current.parent) && current.parent.name === current) {
+                        return true;
+                    }
+
                     const initializerOfProperty = current.parent &&
                         current.parent.kind === SyntaxKind.PropertyDeclaration &&
                         (<PropertyDeclaration>current.parent).initializer === current;

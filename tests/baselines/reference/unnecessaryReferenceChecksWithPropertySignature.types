@@ -1,0 +1,30 @@
+=== tests/cases/compiler/unnecessaryReferenceChecksWithPropertySignature.ts ===
+interface C {
+>C : C
+
+  [C.a](): void;
+>[C.a] : () => void
+>C.a : unique symbol
+>C : typeof C
+>a : unique symbol
+
+  [C.b]: void;
+>[C.b] : void
+>C.b : unique symbol
+>C : typeof C
+>b : unique symbol
+}
+class C {
+>C : C
+
+  static readonly a = Symbol();
+>a : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+  static readonly b = Symbol();
+>b : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+}
+
