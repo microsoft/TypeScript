@@ -68,7 +68,7 @@ namespace RWC {
                 let fileNames = opts.fileNames;
 
                 runWithIOLog(ioLog, () => {
-                    const tsconfigFile = ts.forEach(ioLog.filesRead, f => utils.isTsConfigFile(f) ? f : undefined);
+                    const tsconfigFile = ts.forEach(ioLog.filesRead, f => vpath.isTsConfigFile(f.path) ? f : undefined);
                     if (tsconfigFile) {
                         const tsconfigFileContents = getHarnessCompilerInputUnit(tsconfigFile.path);
                         tsconfigFiles.push({ unitName: tsconfigFile.path, content: tsconfigFileContents.content });

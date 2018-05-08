@@ -86,8 +86,4 @@ namespace utils {
     export function addUTF8ByteOrderMark(text: string) {
         return getByteOrderMarkLength(text) === 0 ? "\u00EF\u00BB\u00BF" + text : text;
     }
-
-    export function isTsConfigFile(file: { path: string }): boolean {
-        return file.path.indexOf("tsconfig") !== -1 && file.path.indexOf("json") !== -1;
-    }
 }
