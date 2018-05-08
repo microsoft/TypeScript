@@ -28,7 +28,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
 
         describe(`${this.kind()} code samples`, () => {
             for (const test of testList) {
-                this.runTest(test);
+                this.runTest(typeof test === "string" ? test : test.file);
             }
         });
     }

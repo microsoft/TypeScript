@@ -24,6 +24,16 @@ let browser = "IE";
 let grep: string | undefined;
 let verbose = false;
 
+interface FileTest {
+    file: string;
+    configurations?: FileTestConfiguration[];
+}
+
+interface FileTestConfiguration {
+    name: string;
+    settings: Record<string, string>;
+}
+
 function isFileSystemCaseSensitive(): boolean {
     // win32\win64 are case insensitive platforms
     const platform = os.platform();
@@ -82,6 +92,20 @@ function toClientPath(pathname: string) {
     clientPath = ensureLeadingSeparator(clientPath);
     clientPath = normalizeSlashes(clientPath);
     return clientPath;
+}
+
+function flatMap<T, U>(array: T[], selector: (value: T) => U | U[]) {
+    let result: U[] = [];
+    for (const item of array) {
+        const mapped = selector(item);
+        if (Array.isArray(mapped)) {
+            result = result.concat(mapped);
+        }
+        else {
+            result.push(mapped);
+        }
+    }
+    return result;
 }
 
 declare module "http" {
@@ -640,29 +664,129 @@ function handleApiResolve(req: http.ServerRequest, res: http.ServerResponse) {
     });
 }
 
+function handleApiEnumerateTestFiles(req: http.ServerRequest, res: http.ServerResponse) {
+    readContent(req, (err, content) => {
+        try {
+            if (err) return sendInternalServerError(res, err);
+            if (!content) return sendBadRequest(res);
+            const tests: (string | FileTest)[] = enumerateTestFiles(content);
+            return sendJson(res, /*statusCode*/ 200, tests);
+        }
+        catch (e) {
+            return sendInternalServerError(res, e);
+        }
+    });
+}
+
+function enumerateTestFiles(runner: string) {
+    switch (runner) {
+        case "conformance":
+        case "compiler":
+            return listFiles(`tests/cases/${runner}`, /*serverDirname*/ undefined, /\.tsx?$/, { recursive: true }).map(parseCompilerTestConfigurations);
+        case "fourslash":
+            return listFiles(`tests/cases/fourslash`, /*serverDirname*/ undefined, /\.ts/i, { recursive: false });
+        case "fourslash-shims":
+            return listFiles(`tests/cases/fourslash/shims`, /*serverDirname*/ undefined, /\.ts/i, { recursive: false });
+        case "fourslash-shims-pp":
+            return listFiles(`tests/cases/fourslash/shims-pp`, /*serverDirname*/ undefined, /\.ts/i, { recursive: false });
+        case "fourslash-server":
+            return listFiles(`tests/cases/fourslash/server`, /*serverDirname*/ undefined, /\.ts/i, { recursive: false });
+        default:
+            throw new Error(`Runner '${runner}' not supported in browser tests.`);
+    }
+}
+
+// Regex for parsing options in the format "@Alpha: Value of any sort"
+const optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*([^\r\n]*)/gm;  // multiple matches on multiple lines
+
+function extractCompilerSettings(content: string): Record<string, any> {
+    const opts: Record<string, any> = {};
+
+    let match: RegExpExecArray;
+    /* tslint:disable:no-null-keyword */
+    while ((match = optionRegex.exec(content)) !== null) {
+    /* tslint:enable:no-null-keyword */
+        opts[match[1]] = match[2].trim();
+    }
+
+    return opts;
+}
+
+function split(text: string) {
+    const entries = text && text.split(",").map(s => s.toLowerCase().trim()).filter(s => s.length > 0);
+    return entries && entries.length > 0 ? entries : [""];
+}
+
+function parseCompilerTestConfigurations(file: string): FileTest {
+    const content = fs.readFileSync(path.join(rootDir, file), "utf8");
+    const settings = extractCompilerSettings(content);
+    const scriptTargets = split(settings.target);
+    const moduleKinds = split(settings.module);
+    if (scriptTargets.length <= 1 && moduleKinds.length <= 1) {
+        return { file };
+    }
+
+    const configurations: FileTestConfiguration[] = [];
+    for (const scriptTarget of scriptTargets) {
+        for (const moduleKind of moduleKinds) {
+            const settings: Record<string, any> = {};
+            let name = "";
+            if (moduleKinds.length > 1) {
+                settings.module = moduleKind;
+                name += `@module: ${moduleKind || "none"}`;
+            }
+            if (scriptTargets.length > 1) {
+                settings.target = scriptTarget;
+                if (name) name += ", ";
+                name += `@target: ${scriptTarget || "none"}`;
+            }
+            configurations.push({ name, settings });
+        }
+    }
+
+    return { file, configurations };
+}
+
+function parseProjectTestConfigurations(file: string): FileTest {
+    return { file, configurations: [
+        { name: `@module: commonjs`, settings: { module: "commonjs" } },
+        { name: `@module: amd`, settings: { module: "amd" } },
+    ] };
+}
+
 function handleApiListFiles(req: http.ServerRequest, res: http.ServerResponse) {
     readContent(req, (err, content) => {
         try {
             if (err) return sendInternalServerError(res, err);
             if (!content) return sendBadRequest(res);
             const serverPath = toServerPath(content);
-            const files: string[] = [];
-            visit(serverPath, content, files);
+            const files = listFiles(content, serverPath, /*spec*/ undefined, { recursive: true });
             return sendJson(res, /*statusCode*/ 200, files);
-            function visit(dirname: string, relative: string, results: string[]) {
-                const { files, directories } = getAccessibleFileSystemEntries(dirname);
-                for (const file of files) {
-                    results.push(path.join(relative, file));
-                }
-                for (const directory of directories) {
-                    visit(path.join(dirname, directory), path.join(relative, directory), results);
-                }
-            }
         }
         catch (e) {
             return sendInternalServerError(res, e);
         }
     });
+}
+
+function listFiles(clientDirname: string, serverDirname: string = path.resolve(rootDir, clientDirname), spec?: RegExp, options: { recursive?: boolean } = {}): string[] {
+    const files: string[] = [];
+    visit(serverDirname, clientDirname, files);
+    return files;
+
+    function visit(dirname: string, relative: string, results: string[]) {
+        const { files, directories } = getAccessibleFileSystemEntries(dirname);
+        for (const file of files) {
+            if (!spec || file.match(spec)) {
+                results.push(path.join(relative, file));
+            }
+        }
+        for (const directory of directories) {
+            if (options.recursive) {
+                visit(path.join(dirname, directory), path.join(relative, directory), results);
+            }
+        }
+    }
 }
 
 function handleApiDirectoryExists(req: http.ServerRequest, res: http.ServerResponse) {
@@ -707,6 +831,7 @@ function handlePostRequest(req: http.ServerRequest, res: http.ServerResponse) {
     switch (new URL(req.url, baseUrl).pathname) {
         case "/api/resolve": return handleApiResolve(req, res);
         case "/api/listFiles": return handleApiListFiles(req, res);
+        case "/api/enumerateTestFiles": return handleApiEnumerateTestFiles(req, res);
         case "/api/directoryExists": return handleApiDirectoryExists(req, res);
         case "/api/getAccessibleFileSystemEntries": return handleApiGetAccessibleFileSystemEntries(req, res);
         default: return sendMethodNotAllowed(res, ["HEAD", "GET", "PUT", "DELETE", "OPTIONS"]);

@@ -499,6 +499,16 @@ namespace Utils {
 }
 
 namespace Harness {
+    export interface FileBasedTest {
+        file: string;
+        configurations?: FileBasedTestConfiguration[];
+    }
+
+    export interface FileBasedTestConfiguration {
+        name: string;
+        settings?: Record<string, string>;
+    }
+
     // tslint:disable-next-line:interface-name
     export interface IO {
         newLine(): string;
@@ -514,6 +524,7 @@ namespace Harness {
         fileExists(fileName: string): boolean;
         directoryExists(path: string): boolean;
         deleteFile(fileName: string): void;
+        enumerateTestFiles(runner: RunnerBase): (string | FileBasedTest)[];
         listFiles(path: string, filter?: RegExp, options?: { recursive?: boolean }): string[];
         log(text: string): void;
         args(): string[];
@@ -557,6 +568,10 @@ namespace Harness {
             const dirPath = pathModule.dirname(path);
             // Node will just continue to repeat the root path, rather than return null
             return dirPath === path ? undefined : dirPath;
+        }
+
+        function enumerateTestFiles(runner: RunnerBase) {
+            return runner.enumerateTestFiles();
         }
 
         function listFiles(path: string, spec: RegExp, options?: { recursive?: boolean }) {
@@ -639,6 +654,7 @@ namespace Harness {
             directoryExists: path => ts.sys.directoryExists(path),
             deleteFile,
             listFiles,
+            enumerateTestFiles,
             log: s => console.log(s),
             args: () => ts.sys.args,
             getExecutingFilePath: () => ts.sys.getExecutingFilePath(),
@@ -913,6 +929,11 @@ namespace Harness {
             return ts.getDirectoryPath(ts.normalizeSlashes(url.pathname || "/"));
         }
 
+        function enumerateTestFiles(runner: RunnerBase): (string | FileBasedTest)[] {
+            const response = send(HttpRequestMessage.post(new URL("/api/enumerateTestFiles", serverRoot), HttpContent.text(runner.kind())));
+            return hasJsonContent(response) ? JSON.parse(response.content.content) : [];
+        }
+
         function listFiles(dirname: string, spec?: RegExp, options?: { recursive?: boolean }): string[] {
             if (spec || (options && !options.recursive)) {
                 let results = IO.listFiles(dirname);
@@ -959,6 +980,7 @@ namespace Harness {
             directoryExists,
             deleteFile,
             listFiles: Utils.memoize(listFiles, (path, spec, options) => `${path}|${spec}|${options ? options.recursive === true : true}`),
+            enumerateTestFiles: Utils.memoize(enumerateTestFiles, runner => runner.kind()),
             log: s => console.log(s),
             args: () => [],
             getExecutingFilePath: () => "",
@@ -1779,7 +1801,7 @@ namespace Harness {
         // Regex for parsing options in the format "@Alpha: Value of any sort"
         const optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*([^\r\n]*)/gm;  // multiple matches on multiple lines
 
-        function extractCompilerSettings(content: string): CompilerSettings {
+        export function extractCompilerSettings(content: string): CompilerSettings {
             const opts: CompilerSettings = {};
 
             let match: RegExpExecArray;
@@ -1800,9 +1822,7 @@ namespace Harness {
         }
 
         /** Given a test file containing // @FileName directives, return an array of named units of code to be added to an existing compiler instance */
-        export function makeUnitsFromTest(code: string, fileName: string, rootDir?: string): TestCaseContent {
-            const settings = extractCompilerSettings(code);
-
+        export function makeUnitsFromTest(code: string, fileName: string, rootDir?: string, settings = extractCompilerSettings(code)): TestCaseContent {
             // List of all the subfiles we've parsed out
             const testUnitData: TestUnitData[] = [];
 
