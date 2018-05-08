@@ -42,12 +42,17 @@ namespace ts.refactor {
         // If previous file was global, this is easy.
         changes.createNewFile(oldFile, combinePaths(currentDirectory, newFileNameWithExtension), getNewStatements(oldFile, usage, changes, toMove, program, newModuleName));
 
-        addNewFileToTsconfig(program, changes, normalizePath(combinePaths(oldFile.fileName, "..", newFileNameWithExtension)));
+        addNewFileToTsconfig(program, changes, oldFile.fileName, newFileNameWithExtension, hostGetCanonicalFileName(host));
     }
 
-    function addNewFileToTsconfig(program: Program, changes: textChanges.ChangeTracker, newFilePath: string): void {
+    function addNewFileToTsconfig(program: Program, changes: textChanges.ChangeTracker, oldFileName: string, newFileNameWithExtension: string, getCanonicalFileName: GetCanonicalFileName): void {
         const cfg = program.getCompilerOptions().configFile;
-        const filesProp = cfg && cfg.jsonObject && find(cfg.jsonObject.properties, (prop): prop is PropertyAssignment =>
+        if (!cfg) return;
+
+        const newFileAbsolutePath = normalizePath(combinePaths(oldFileName, "..", newFileNameWithExtension));
+        const newFilePath = getRelativePathFromFile(cfg.fileName, newFileAbsolutePath, getCanonicalFileName);
+
+        const filesProp = cfg.jsonObject && find(cfg.jsonObject.properties, (prop): prop is PropertyAssignment =>
             isPropertyAssignment(prop) && isStringLiteral(prop.name) && prop.name.text === "files");
         if (filesProp && isArrayLiteralExpression(filesProp.initializer)) {
             changes.insertNodeInListAfter(cfg, last(filesProp.initializer.elements), createLiteral(newFilePath), filesProp.initializer.elements);

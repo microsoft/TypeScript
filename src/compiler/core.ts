@@ -2289,20 +2289,24 @@ namespace ts {
         return ["", ...relative, ...components];
     }
 
+    export function getRelativePathFromFile(from: string, to: string, getCanonicalFileName: GetCanonicalFileName) {
+        return ensurePathIsNonModuleName(getRelativePathFromDirectory(ts.getDirectoryPath(from), to, getCanonicalFileName));
+    }
+
     /**
      * Gets a relative path that can be used to traverse between `from` and `to`.
      */
-    export function getRelativePath(from: string, to: string, ignoreCase: boolean): string;
+    export function getRelativePathFromDirectory(from: string, to: string, ignoreCase: boolean): string;
     /**
      * Gets a relative path that can be used to traverse between `from` and `to`.
      */
     // tslint:disable-next-line:unified-signatures
-    export function getRelativePath(from: string, to: string, getCanonicalFileName: GetCanonicalFileName): string;
-    export function getRelativePath(from: string, to: string, getCanonicalFileNameOrIgnoreCase: GetCanonicalFileName | boolean) {
-        Debug.assert((getRootLength(from) > 0) === (getRootLength(to) > 0), "Paths must either both be absolute or both be relative");
+    export function getRelativePathFromDirectory(fromDirectory: string, to: string, getCanonicalFileName: GetCanonicalFileName): string;
+    export function getRelativePathFromDirectory(fromDirectory: string, to: string, getCanonicalFileNameOrIgnoreCase: GetCanonicalFileName | boolean) {
+        Debug.assert((getRootLength(fromDirectory) > 0) === (getRootLength(to) > 0), "Paths must either both be absolute or both be relative");
         const getCanonicalFileName = typeof getCanonicalFileNameOrIgnoreCase === "function" ? getCanonicalFileNameOrIgnoreCase : identity;
         const ignoreCase = typeof getCanonicalFileNameOrIgnoreCase === "boolean" ? getCanonicalFileNameOrIgnoreCase : false;
-        const pathComponents = getPathComponentsRelativeTo(from, to, ignoreCase ? equateStringsCaseInsensitive : equateStringsCaseSensitive, getCanonicalFileName);
+        const pathComponents = getPathComponentsRelativeTo(fromDirectory, to, ignoreCase ? equateStringsCaseInsensitive : equateStringsCaseSensitive, getCanonicalFileName);
         return getPathFromPathComponents(pathComponents);
     }
 

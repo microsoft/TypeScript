@@ -1,26 +1,28 @@
 /// <reference path='fourslash.ts' />
 
-// @Filename: /a.ts
+// @Filename: /src/a.ts
 ////0;
 ////[|1;|]
 
-// @Filename: /tsconfig.json
+// @Filename: /src/tsconfig.json
 ////{
-////    "files": ["/a.ts"]
+////    "files": ["./a.ts"]
 ////}
+
+verify.noErrors();
 
 verify.moveToNewFile({
     newFileContents: {
-        "/a.ts":
+        "/src/a.ts":
 `0;
 `,
 
-        "/newFile.ts":
+        "/src/newFile.ts":
 `1;`,
 
-        "/tsconfig.json":
+        "/src/tsconfig.json":
 `{
-    "files": ["/a.ts", "/newFile.ts"]
+    "files": ["./a.ts", "./newFile.ts"]
 }`,
     },
 });
