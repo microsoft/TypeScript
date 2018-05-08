@@ -200,8 +200,8 @@ namespace fakes {
     export class CompilerHost implements ts.CompilerHost {
         public readonly sys: System;
         public readonly defaultLibLocation: string;
-        private readonly outputNames: string[] = [];
-        private readonly outputsMap: ts.Map<documents.TextDocument> = ts.createMap();
+        public readonly outputs: documents.TextDocument[] = [];
+        private readonly _outputsMap: collections.SortedMap<string, number>;
         public readonly traces: string[] = [];
         public readonly shouldAssertInvariants = !Harness.lightMode;
 
@@ -217,10 +217,7 @@ namespace fakes {
             this._newLine = ts.getNewLineCharacter(options, () => this.sys.newLine);
             this._sourceFiles = new collections.SortedMap<string, ts.SourceFile>({ comparer: sys.vfs.stringComparer, sort: "insertion" });
             this._setParentNodes = setParentNodes;
-        }
-
-        public get outputs() {
-            return ts.map(this.outputNames, e => this.outputsMap.get(e));
+            this._outputsMap = new collections.SortedMap(this.vfs.stringComparer);
         }
 
         public get vfs() {
@@ -270,11 +267,11 @@ namespace fakes {
             const document = new documents.TextDocument(fileName, content);
             document.meta.set("fileName", fileName);
             this.vfs.filemeta(fileName).set("document", document);
-            const canonical = ts.toPath(fileName, this.sys.getCurrentDirectory(), ts.createGetCanonicalFileName(this.sys.useCaseSensitiveFileNames));
-            if (!this.outputsMap.has(canonical)) {
-                this.outputNames.push(canonical);
+            if (!this._outputsMap.has(document.file)) {
+                this._outputsMap.set(document.file, this.outputs.length);
+                this.outputs.push(document);
             }
-            this.outputsMap.set(canonical, document);
+            this.outputs[this._outputsMap.get(document.file)] = document;
         }
 
         public trace(s: string): void {
