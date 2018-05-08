@@ -11,6 +11,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     interface Info {
         container: ContainerDeclaration;
         isStatic: boolean;
+        isReadonly: boolean;
         type: TypeNode | undefined;
         declaration: AcceptedDeclaration;
         fieldName: AcceptedNameType;
@@ -41,21 +42,40 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
 
         const isJS = isSourceFileJavaScript(file);
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
-        const { isStatic, fieldName, accessorName, type, container, declaration } = fieldInfo;
+        const { isStatic, isReadonly, fieldName, accessorName, type, container, declaration } = fieldInfo;
+
+        suppressLeadingAndTrailingTrivia(fieldName);
+        suppressLeadingAndTrailingTrivia(declaration);
+        suppressLeadingAndTrailingTrivia(container);
 
         const isInClassLike = isClassLike(container);
+        // avoid Readonly modifier because it will convert to get accessor
+        const modifierFlags = getModifierFlags(declaration) & ~ModifierFlags.Readonly;
         const accessorModifiers = isInClassLike
-            ? !declaration.modifiers || getModifierFlags(declaration) & ModifierFlags.Private ? getModifiers(isJS, isStatic, SyntaxKind.PublicKeyword) : declaration.modifiers
+            ? !modifierFlags || modifierFlags & ModifierFlags.Private
+                ? getModifiers(isJS, isStatic, SyntaxKind.PublicKeyword)
+                : createNodeArray(createModifiersFromModifierFlags(modifierFlags))
             : undefined;
         const fieldModifiers = isInClassLike ? getModifiers(isJS, isStatic, SyntaxKind.PrivateKeyword) : undefined;
 
         updateFieldDeclaration(changeTracker, file, declaration, fieldName, fieldModifiers);
 
         const getAccessor = generateGetAccessor(fieldName, accessorName, type, accessorModifiers, isStatic, container);
-        const setAccessor = generateSetAccessor(fieldName, accessorName, type, accessorModifiers, isStatic, container);
-
+        suppressLeadingAndTrailingTrivia(getAccessor);
         insertAccessor(changeTracker, file, getAccessor, declaration, container);
-        insertAccessor(changeTracker, file, setAccessor, declaration, container);
+
+        if (isReadonly) {
+            // readonly modifier only existed in classLikeDeclaration
+            const constructor = getFirstConstructorWithBody(<ClassLikeDeclaration>container);
+            if (constructor) {
+                updateReadonlyPropertyInitializerStatementConstructor(changeTracker, file, constructor, accessorName, fieldName);
+            }
+        }
+        else {
+            const setAccessor = generateSetAccessor(fieldName, accessorName, type, accessorModifiers, isStatic, container);
+            suppressLeadingAndTrailingTrivia(setAccessor);
+            insertAccessor(changeTracker, file, setAccessor, declaration, container);
+        }
 
         const edits = changeTracker.getChanges();
         const renameFilename = file.fileName;
@@ -92,16 +112,15 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     function getConvertibleFieldAtPosition(file: SourceFile, startPosition: number): Info | undefined {
         const node = getTokenAtPosition(file, startPosition, /*includeJsDocComment*/ false);
         const declaration = findAncestor(node.parent, isAcceptedDeclaration);
-        // make sure propertyDeclaration have AccessibilityModifier or Static Modifier
-        const meaning = ModifierFlags.AccessibilityModifier | ModifierFlags.Static;
+        // make sure declaration have AccessibilityModifier or Static Modifier or Readonly Modifier
+        const meaning = ModifierFlags.AccessibilityModifier | ModifierFlags.Static | ModifierFlags.Readonly;
         if (!declaration || !isConvertableName(declaration.name) || (getModifierFlags(declaration) | meaning) !== meaning) return undefined;
 
         const fieldName = createPropertyName(getUniqueName(`_${declaration.name.text}`, file.text), declaration.name);
         const accessorName = createPropertyName(declaration.name.text, declaration.name);
-        suppressLeadingAndTrailingTrivia(fieldName);
-        suppressLeadingAndTrailingTrivia(declaration);
         return {
             isStatic: hasStaticModifier(declaration),
+            isReadonly: hasReadonlyModifier(declaration),
             type: getTypeAnnotationNode(declaration),
             container: declaration.kind === SyntaxKind.Parameter ? declaration.parent.parent : declaration.parent,
             declaration,
@@ -159,7 +178,6 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
             declaration.type,
             declaration.initializer
         );
-
         changeTracker.replaceNode(file, declaration, property);
     }
 
@@ -185,5 +203,39 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         isParameterPropertyDeclaration(declaration)
             ? changeTracker.insertNodeAtClassStart(file, <ClassLikeDeclaration>container, accessor)
             : changeTracker.insertNodeAfter(file, declaration, accessor);
+    }
+
+    function updateReadonlyPropertyInitializerStatementConstructor(changeTracker: textChanges.ChangeTracker, file: SourceFile, constructor: ConstructorDeclaration, accessorName: AcceptedNameType, fieldName: AcceptedNameType) {
+        if (constructor.body) {
+            const initializerStatement = find(constructor.body.statements, (stmt =>
+                isExpressionStatement(stmt) &&
+                isAssignmentExpression(stmt.expression) &&
+                stmt.expression.operatorToken.kind === SyntaxKind.EqualsToken &&
+                (isPropertyAccessExpression(stmt.expression.left) || isElementAccessExpression(stmt.expression.left)) &&
+                isThis(stmt.expression.left.expression) &&
+                (isPropertyAccessExpression(stmt.expression.left)
+                    ? (getNameFromPropertyName(stmt.expression.left.name) === accessorName.text)
+                    : (isPropertyName(stmt.expression.left.argumentExpression) && isConvertableName(stmt.expression.left.argumentExpression) && getNameFromPropertyName(stmt.expression.left.argumentExpression) === accessorName.text
+                ))
+            ));
+            if (initializerStatement) {
+                const initializerLeftHead = (<PropertyAccessExpression | ElementAccessExpression>(<AssignmentExpression<Token<SyntaxKind.EqualsToken>>>(<ExpressionStatement>initializerStatement).expression).left);
+
+                if (isPropertyAccessExpression(initializerLeftHead)) {
+                    changeTracker.replaceNode(file, initializerLeftHead, updatePropertyAccess(
+                        initializerLeftHead,
+                        initializerLeftHead.expression,
+                        createIdentifier(fieldName.text)
+                    ));
+                }
+                else {
+                    changeTracker.replaceNode(file, initializerLeftHead, updateElementAccess(
+                        initializerLeftHead,
+                        initializerLeftHead.expression,
+                        createPropertyName(fieldName.text, <AcceptedNameType>initializerLeftHead.argumentExpression)
+                    ));
+                }
+            }
+        }
     }
 }
