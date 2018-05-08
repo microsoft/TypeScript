@@ -2083,7 +2083,7 @@ namespace ts {
             let symbol: Symbol;
             if (name.kind === SyntaxKind.Identifier) {
                 const message = meaning === namespaceMeaning ? Diagnostics.Cannot_find_namespace_0 : Diagnostics.Cannot_find_name_0;
-                const symbolFromJSPrototype = isInJavaScriptFile(name) ? resolveEntityNameFromJSPrototype(name, meaning) : undefined;
+                const symbolFromJSPrototype = isInJavaScriptFile(name) ? resolveEntityNameFromJSSpecialAssignment(name, meaning) : undefined;
                 symbol = resolveName(location || name, name.escapedText, meaning, ignoreErrors || symbolFromJSPrototype ? undefined : message, name, /*isUse*/ true);
                 if (!symbol) {
                     return symbolFromJSPrototype;
@@ -2138,23 +2138,31 @@ namespace ts {
         }
 
         /**
-         * For prototype-property methods like `A.prototype.m = function () ...`, try to resolve names in the scope of `A` too.
+         * 1. For prototype-property methods like `A.prototype.m = function () ...`, try to resolve names in the scope of `A` too.
          * Note that prototype-property assignment to locations outside the current file (eg globals) doesn't work, so
          * name resolution won't work either.
+         * 2. For property assignments like `{ x: function f () { } }`, try to resolve names in the scope of `f` too.
          */
-        function resolveEntityNameFromJSPrototype(name: Identifier, meaning: SymbolFlags) {
+        function resolveEntityNameFromJSSpecialAssignment(name: Identifier, meaning: SymbolFlags) {
             if (isJSDocTypeReference(name.parent)) {
                 const host = getJSDocHost(name.parent);
-                if (host &&
-                    isExpressionStatement(host) &&
-                    isBinaryExpression(host.expression) &&
-                    getSpecialPropertyAssignmentKind(host.expression) === SpecialPropertyAssignmentKind.PrototypeProperty) {
-                    const symbol = getSymbolOfNode(host.expression.left);
-                    if (symbol) {
-                        const secondaryLocation = symbol.parent.valueDeclaration;
-                        return resolveName(secondaryLocation, name.escapedText, meaning, /*nameNotFoundMessage*/ undefined, name, /*isUse*/ true);
-                    }
+                if (host) {
+                    const secondaryLocation = getJSSpecialAssignmentSymbol(getJSDocHost(name.parent.parent.parent as JSDocTag));
+                    return secondaryLocation && resolveName(secondaryLocation, name.escapedText, meaning, /*nameNotFoundMessage*/ undefined, name, /*isUse*/ true);
                 }
+            }
+        }
+
+        function getJSSpecialAssignmentSymbol(host: HasJSDoc): Declaration | undefined {
+            if (isPropertyAssignment(host) && isFunctionLike(host.initializer)) {
+                const symbol = getSymbolOfNode(host.initializer);
+                return symbol && symbol.valueDeclaration;
+            }
+            else if (isExpressionStatement(host) &&
+                     isBinaryExpression(host.expression) &&
+                     getSpecialPropertyAssignmentKind(host.expression) === SpecialPropertyAssignmentKind.PrototypeProperty) {
+                const symbol = getSymbolOfNode(host.expression.left);
+                return symbol && symbol.parent.valueDeclaration;
             }
         }
 

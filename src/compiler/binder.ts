@@ -626,22 +626,6 @@ namespace ts {
         }
 
         function bindChildrenWorker(node: Node): void {
-            // Binding of JsDocComment should be done before the current block scope container changes.
-            // because the scope of JsDocComment should not be affected by whether the current node is a
-            // container or not.
-            if (hasJSDocNodes(node)) {
-                if (isInJavaScriptFile(node)) {
-                    for (const j of node.jsDoc) {
-                        bind(j);
-                    }
-                }
-                else {
-                    for (const j of node.jsDoc) {
-                        setParentPointers(node, j);
-                    }
-                }
-            }
-
             if (checkUnreachable(node)) {
                 bindEachChild(node);
                 return;
@@ -727,6 +711,23 @@ namespace ts {
                     bindEachChild(node);
                     break;
             }
+            // Binding of JsDocComment should be done before the current block scope container changes.
+            // because the scope of JsDocComment should not be affected by whether the current node is a
+            // container or not.
+            if (hasJSDocNodes(node)) {
+                if (isInJavaScriptFile(node)) {
+                    for (const j of node.jsDoc) {
+                        bind(j);
+                    }
+                }
+                else {
+                    for (const j of node.jsDoc) {
+                        setParentPointers(node, j);
+                    }
+                }
+            }
+
+
         }
 
         function isNarrowingExpression(expr: Expression): boolean {
@@ -2719,19 +2720,15 @@ namespace ts {
         }
 
         function getInferTypeContainer(node: Node): ConditionalTypeNode {
-            while (node) {
-                const parent = node.parent;
-                if (parent && parent.kind === SyntaxKind.ConditionalType && (<ConditionalTypeNode>parent).extendsType === node) {
-                    return <ConditionalTypeNode>parent;
-                }
-                node = parent;
-            }
-            return undefined;
+            const extendsType = findAncestor(node, n => n.parent && isConditionalTypeNode(n.parent) && n.parent.extendsType === n);
+            return extendsType && extendsType.parent as ConditionalTypeNode;
         }
 
         function bindTypeParameter(node: TypeParameterDeclaration) {
-            if (node.parent && node.parent.kind === SyntaxKind.InferType) {
-                const container = getInferTypeContainer(node.parent);
+            // TODO: node.parent check *might* not be necessary, although that would mean combining isJSDocTemplateTag with getTypeAliasForJSDocTemplateTag
+            // and then calling that instead
+            if (node.parent && (node.parent.kind === SyntaxKind.InferType || isJSDocTemplateTag(node.parent))) {
+                const container = node.parent.kind === SyntaxKind.InferType ? getInferTypeContainer(node.parent) : getHostSignatureFromJSDoc(node.parent);
                 if (container) {
                     if (!container.locals) {
                         container.locals = createSymbolTable();

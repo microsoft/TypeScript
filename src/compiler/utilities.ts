@@ -1826,6 +1826,8 @@ namespace ts {
                 return v && v.initializer;
             case SyntaxKind.PropertyDeclaration:
                 return (node as PropertyDeclaration).initializer;
+            case SyntaxKind.PropertyAssignment:
+                return (node as PropertyAssignment).initializer;
         }
     }
 
@@ -1907,7 +1909,7 @@ namespace ts {
         return parameter && parameter.symbol;
     }
 
-    export function getHostSignatureFromJSDoc(node: JSDocParameterTag): SignatureDeclaration | undefined {
+    export function getHostSignatureFromJSDoc(node: JSDocTag): SignatureDeclaration | undefined {
         const host = getJSDocHost(node);
         const decl = getSourceOfDefaultedAssignment(host) ||
             getSourceOfAssignment(host) ||
