@@ -3551,6 +3551,11 @@
         "category": "Message",
         "code": 6197
     },
+    "All destructured elements are unused.": {
+        "category": "Error",
+        "code": 6198,
+        "reportsUnnecessary": true
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -3984,6 +3989,10 @@
     "Add '{0}.' to unresolved variable": {
         "category": "Message",
         "code": 90008
+    },
+    "Remove destructuring": {
+        "category": "Message",
+        "code": 90009
     },
     "Import '{0}' from module \"{1}\"": {
         "category": "Message",

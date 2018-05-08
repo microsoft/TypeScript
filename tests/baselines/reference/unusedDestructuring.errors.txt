@@ -1,0 +1,35 @@
+tests/cases/compiler/unusedDestructuring.ts(3,7): error TS6198: All destructured elements are unused.
+tests/cases/compiler/unusedDestructuring.ts(4,9): error TS6133: 'c' is declared but its value is never read.
+tests/cases/compiler/unusedDestructuring.ts(6,7): error TS6133: 'e' is declared but its value is never read.
+tests/cases/compiler/unusedDestructuring.ts(8,1): error TS6133: 'f' is declared but its value is never read.
+tests/cases/compiler/unusedDestructuring.ts(8,12): error TS6198: All destructured elements are unused.
+tests/cases/compiler/unusedDestructuring.ts(8,24): error TS6133: 'c' is declared but its value is never read.
+tests/cases/compiler/unusedDestructuring.ts(8,32): error TS6133: 'e' is declared but its value is never read.
+
+
+==== tests/cases/compiler/unusedDestructuring.ts (7 errors) ====
+    export {};
+    declare const o: any;
+    const { a, b } = o;
+          ~~~~~~~~
+!!! error TS6198: All destructured elements are unused.
+    const { c, d }  = o;
+            ~
+!!! error TS6133: 'c' is declared but its value is never read.
+    d;
+    const { e } = o;
+          ~~~~~
+!!! error TS6133: 'e' is declared but its value is never read.
+    
+    function f({ a, b }, { c, d }, { e }) {
+    ~~~~~~~~~~
+!!! error TS6133: 'f' is declared but its value is never read.
+               ~~~~~~~~
+!!! error TS6198: All destructured elements are unused.
+                           ~
+!!! error TS6133: 'c' is declared but its value is never read.
+                                   ~~~~~
+!!! error TS6133: 'e' is declared but its value is never read.
+        d;
+    }
+    
