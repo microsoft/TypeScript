@@ -443,19 +443,25 @@ namespace ts.textChanges {
 
         public insertNodeAtClassStart(sourceFile: SourceFile, cls: ClassLikeDeclaration, newElement: ClassElement): void {
             const clsStart = cls.getStart(sourceFile);
-            let prefix = "";
-            let suffix = this.newLineCharacter;
-            if (addToSeen(this.classesWithNodesInsertedAtStart, getNodeId(cls), cls)) {
-                prefix = this.newLineCharacter;
-                // For `class C {\n}`, don't add the trailing "\n"
-                if (cls.members.length === 0 && !(positionsAreOnSameLine as any)(...getClassBraceEnds(cls, sourceFile), sourceFile)) { // TODO: GH#4130 remove 'as any'
-                    suffix = "";
-                }
-            }
-
             const indentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(getLineStartPositionForPosition(clsStart, sourceFile), clsStart, sourceFile, this.formatContext.options)
                 + this.formatContext.options.indentSize;
-            this.insertNodeAt(sourceFile, cls.members.pos, newElement, { indentation, prefix, suffix });
+            this.insertNodeAt(sourceFile, cls.members.pos, newElement, { indentation, ...this.getInsertNodeAtClassStartPrefixSuffix(sourceFile, cls) });
+        }
+
+        private getInsertNodeAtClassStartPrefixSuffix(sourceFile: SourceFile, cls: ClassLikeDeclaration): { prefix: string, suffix: string } {
+            if (cls.members.length === 0) {
+                if (addToSeen(this.classesWithNodesInsertedAtStart, getNodeId(cls), cls)) {
+                    // For `class C {\n}`, don't add the trailing "\n"
+                    const shouldSuffix = (positionsAreOnSameLine as any)(...getClassBraceEnds(cls, sourceFile), sourceFile); // TODO: GH#4130 remove 'as any'
+                    return { prefix: this.newLineCharacter, suffix: shouldSuffix ? this.newLineCharacter : "" };
+                }
+                else {
+                    return { prefix: "", suffix: this.newLineCharacter };
+                }
+            }
+            else {
+                return { prefix: this.newLineCharacter, suffix: "" };
+            }
         }
 
         public insertNodeAfter(sourceFile: SourceFile, after: Node, newNode: Node): void {

@@ -179,6 +179,7 @@ namespace ts {
         getScriptKind?(fileName: string): ScriptKind;
         getScriptVersion(fileName: string): string;
         getScriptSnapshot(fileName: string): IScriptSnapshot | undefined;
+        getProjectReferences?(): ReadonlyArray<ProjectReference> | undefined;
         getLocalizedDiagnosticMessages?(): any;
         getCancellationToken?(): HostCancellationToken;
         getCurrentDirectory(): string;
@@ -321,6 +322,8 @@ namespace ts {
 
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan;
 
+        toLineColumnOffset?(fileName: string, position: number): LineAndCharacter;
+
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings, preferences: UserPreferences): ReadonlyArray<CodeFixAction>;
         getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, preferences: UserPreferences): CombinedCodeActions;
         applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
@@ -356,9 +359,11 @@ namespace ts {
 
     export type OrganizeImportsScope = CombinedCodeFixScope;
 
+    export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<";
+
     export interface GetCompletionsAtPositionOptions extends UserPreferences {
         /** If the editor is asking for completions because a certain character was typed, and not because the user explicitly requested them, this should be set. */
-        triggerCharacter?: string;
+        triggerCharacter?: CompletionsTriggerCharacter;
         /** @deprecated Use includeCompletionsForModuleExports */
         includeExternalModuleExports?: boolean;
         /** @deprecated Use includeCompletionsWithInsertText */
@@ -825,9 +830,17 @@ namespace ts {
     }
 
     export const enum OutliningSpanKind {
+        /** Single or multi-line comments */
         Comment = "comment",
+
+        /** Sections marked by '// #region' and '// #endregion' comments */
         Region = "region",
-        Code = "code"
+
+        /** Declarations and expressions */
+        Code = "code",
+
+        /** Contiguous blocks of import declarations */
+        Imports = "imports"
     }
 
     export const enum OutputFileType {
@@ -988,6 +1001,9 @@ namespace ts {
          * <JsxTagName attribute1 attribute2={0} />
          */
         jsxAttribute = "JSX attribute",
+
+        /** String literal */
+        string = "string",
     }
 
     export const enum ScriptElementKindModifier {

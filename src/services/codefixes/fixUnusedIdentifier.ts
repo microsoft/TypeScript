@@ -171,6 +171,21 @@ namespace ts.codefix {
                 }
                 break;
 
+            case SyntaxKind.BindingElement: {
+                const pattern = (parent as BindingElement).parent;
+                switch (pattern.kind) {
+                    case SyntaxKind.ArrayBindingPattern:
+                        changes.deleteNode(sourceFile, parent); // Don't delete ','
+                        break;
+                    case SyntaxKind.ObjectBindingPattern:
+                        changes.deleteNodeInList(sourceFile, parent);
+                        break;
+                    default:
+                        return Debug.assertNever(pattern);
+                }
+                break;
+            }
+
             // handle case where 'import a = A;'
             case SyntaxKind.ImportEqualsDeclaration:
                 const importEquals = getAncestor(identifier, SyntaxKind.ImportEqualsDeclaration);
