@@ -957,7 +957,14 @@ namespace FourSlash {
         }
 
         public verifyCompletionsAt(markerName: string | ReadonlyArray<string>, expected: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, options?: FourSlashInterface.CompletionsAtOptions) {
-            this.verifyCompletions({ marker: markerName, exact: expected, isNewIdentifierLocation: options && options.isNewIdentifierLocation, preferences: options, triggerCharacter: options && options.triggerCharacter });
+            this.verifyCompletions({
+                marker: markerName,
+                exact: expected,
+                isNewIdentifierLocation: options && options.isNewIdentifierLocation,
+                preferences: options,
+                // TODO: GH#20090
+                triggerCharacter: (options && options.triggerCharacter) as ts.CompletionsTriggerCharacter | undefined,
+            });
         }
 
         public verifyCompletionListContains(entryId: ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string | { kind?: string, kindModifiers?: string }, spanIndex?: number, hasAction?: boolean, options?: FourSlashInterface.VerifyCompletionListContainsOptions) {
@@ -2419,7 +2426,7 @@ Actual: ${stringify(fullActual)}`);
             Harness.IO.log(stringify(spans));
         }
 
-        public verifyOutliningSpans(spans: Range[], kind?: "comment" | "region" | "code") {
+        public verifyOutliningSpans(spans: Range[], kind?: "comment" | "region" | "code" | "imports") {
             const actual = this.languageService.getOutliningSpans(this.activeFile.fileName);
 
             if (actual.length !== spans.length) {
@@ -4247,7 +4254,7 @@ namespace FourSlashInterface {
             this.state.verifyCurrentNameOrDottedNameSpanText(text);
         }
 
-        public outliningSpansInCurrentFile(spans: FourSlash.Range[], kind?: "comment" | "region" | "code") {
+        public outliningSpansInCurrentFile(spans: FourSlash.Range[], kind?: "comment" | "region" | "code" | "imports") {
             this.state.verifyOutliningSpans(spans, kind);
         }
 
@@ -4719,7 +4726,7 @@ namespace FourSlashInterface {
         readonly sourceDisplay?: string;
     };
     export interface CompletionsAtOptions extends Partial<ts.UserPreferences> {
-        triggerCharacter?: string;
+        triggerCharacter?: ts.CompletionsTriggerCharacter;
         isNewIdentifierLocation?: boolean;
     }
 
@@ -4730,13 +4737,13 @@ namespace FourSlashInterface {
         readonly includes?: Many<ExpectedCompletionEntry>;
         readonly excludes?: Many<string | { readonly name: string, readonly source: string }>;
         readonly preferences: ts.UserPreferences;
-        readonly triggerCharacter?: string;
+        readonly triggerCharacter?: ts.CompletionsTriggerCharacter;
     }
 
     export type Many<T> = T | ReadonlyArray<T>;
 
     export interface VerifyCompletionListContainsOptions extends ts.UserPreferences {
-        triggerCharacter?: string;
+        triggerCharacter?: ts.CompletionsTriggerCharacter;
         sourceDisplay: string;
         isRecommended?: true;
         insertText?: string;

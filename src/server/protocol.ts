@@ -1765,6 +1765,8 @@ namespace ts.server.protocol {
         arguments: FormatOnKeyRequestArgs;
     }
 
+    export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<";
+
     /**
      * Arguments for completions messages.
      */
@@ -1773,7 +1775,7 @@ namespace ts.server.protocol {
          * Optional prefix to apply to possible completions.
          */
         prefix?: string;
-        triggerCharacter?: string;
+        triggerCharacter?: CompletionsTriggerCharacter;
         /**
          * @deprecated Use UserPreferences.includeCompletionsForModuleExports
          */
@@ -2734,6 +2736,7 @@ namespace ts.server.protocol {
         project?: string;
         reactNamespace?: string;
         removeComments?: boolean;
+        references?: ProjectReference[];
         rootDir?: string;
         rootDirs?: string[];
         skipLibCheck?: boolean;

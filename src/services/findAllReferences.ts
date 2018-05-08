@@ -272,6 +272,8 @@ namespace ts.FindAllReferences.Core {
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ExportDeclaration:
                 return true;
+            case SyntaxKind.LiteralType:
+                return isImportTypeNode(node.parent.parent);
             case SyntaxKind.CallExpression:
                 return isRequireCall(node.parent as CallExpression, /*checkArgumentIsStringLiteralLike*/ false) || isImportCall(node.parent as CallExpression);
             default:
@@ -407,7 +409,6 @@ namespace ts.FindAllReferences.Core {
         return firstDefined(symbol.declarations, decl => {
             if (!decl.parent) {
                 // Assertions for GH#21814. We should be handling SourceFile symbols in `getReferencedSymbolsForModule` instead of getting here.
-                Debug.assert(decl.kind === SyntaxKind.SourceFile);
                 Debug.fail(`Unexpected symbol at ${Debug.showSyntaxKind(node)}: ${Debug.showSymbol(symbol)}`);
             }
             return isTypeLiteralNode(decl.parent) && isUnionTypeNode(decl.parent.parent)
