@@ -1152,7 +1152,7 @@ declare namespace ts {
         kind: SyntaxKind.NotEmittedStatement;
     }
     /**
-     * A list of comma-seperated expressions. This node is only created by transformations.
+     * A list of comma-separated expressions. This node is only created by transformations.
      */
     interface CommaListExpression extends Expression {
         kind: SyntaxKind.CommaListExpression;
