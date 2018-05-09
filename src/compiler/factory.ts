@@ -191,7 +191,7 @@ namespace ts {
     export function getGeneratedNameForNode(node: Node): Identifier;
     /* @internal */ export function getGeneratedNameForNode(node: Node, flags: GeneratedIdentifierFlags): Identifier; // tslint:disable-line unified-signatures
     export function getGeneratedNameForNode(node: Node, flags?: GeneratedIdentifierFlags): Identifier {
-        const name = createIdentifier("");
+        const name = createIdentifier(isIdentifier(node) ? idText(node) : "");
         name.autoGenerateFlags = GeneratedIdentifierFlags.Node | flags;
         name.autoGenerateId = nextAutoGenerateId;
         name.original = node;
