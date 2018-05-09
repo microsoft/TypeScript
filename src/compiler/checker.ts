@@ -895,7 +895,7 @@ namespace ts {
                 if ((source.flags | target.flags) & SymbolFlags.JSContainer) {
                     const sourceInitializer = getJSInitializerSymbol(source);
                     const targetInitializer = getJSInitializerSymbol(target);
-                    if (sourceInitializer !== source || targetInitializer !== target) {
+                    if (sourceInitializer !== targetInitializer && (sourceInitializer !== source || targetInitializer !== target)) {
                         mergeSymbol(targetInitializer, sourceInitializer);
                     }
                 }
