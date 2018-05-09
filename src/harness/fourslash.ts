@@ -899,7 +899,7 @@ namespace FourSlash {
                         }
                         else {
                             const found = actualByName.get(exclude.name);
-                            if (found.source === exclude.source) {
+                            if (found && found.source === exclude.source) {
                                 this.raiseError(`Did not expect to get a completion named ${exclude.name} with source ${exclude.source}`);
                             }
                         }
