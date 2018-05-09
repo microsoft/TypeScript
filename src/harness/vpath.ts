@@ -124,4 +124,8 @@ namespace vpath {
         return isDeclaration(path)
             && basename(path).startsWith("lib.");
     }
+
+    export function isTsConfigFile(path: string): boolean {
+        return path.indexOf("tsconfig") !== -1 && path.indexOf("json") !== -1;
+    }
 }

@@ -18,7 +18,6 @@ verify.codeFix({
     foo1(arg0: any, arg1: any, arg2: any): any {
         throw new Error("Method not implemented.");
     }
-
     constructor() {
         this.foo1(1,2,3);
         // 7 type args
@@ -37,11 +36,9 @@ verify.codeFix({
     foo2<T, U, V, W, X, Y, Z>(): any {
         throw new Error("Method not implemented.");
     }
-
     foo1(arg0: any, arg1: any, arg2: any): any {
         throw new Error("Method not implemented.");
     }
-
     constructor() {
         this.foo1(1,2,3);
         // 7 type args
@@ -60,15 +57,12 @@ verify.codeFix({
     foo3<T0, T1, T2, T3, T4, T5, T6, T7>(): any {
         throw new Error("Method not implemented.");
     }
-
     foo2<T, U, V, W, X, Y, Z>(): any {
         throw new Error("Method not implemented.");
     }
-
     foo1(arg0: any, arg1: any, arg2: any): any {
         throw new Error("Method not implemented.");
     }
-
     constructor() {
         this.foo1(1,2,3);
         // 7 type args

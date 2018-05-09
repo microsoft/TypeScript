@@ -2220,7 +2220,22 @@ namespace ts {
             }
 
             if (moduleNotFoundError) {
-                // report errors only if it was requested
+                // For relative paths, see if this was possibly a projectReference redirect
+                if (pathIsRelative(moduleReference)) {
+                    const sourceFile = getSourceFileOfNode(location);
+                    const redirects = sourceFile.redirectedReferences;
+                    if (redirects) {
+                        const normalizedTargetPath = getNormalizedAbsolutePath(moduleReference, getDirectoryPath(sourceFile.fileName));
+                        for (const ext of [Extension.Ts, Extension.Tsx]) {
+                            const probePath = normalizedTargetPath + ext;
+                            if (redirects.indexOf(probePath) >= 0) {
+                                error(errorNode, Diagnostics.Output_file_0_has_not_been_built_from_source_file_1, moduleReference, probePath);
+                                return undefined;
+                            }
+                        }
+                    }
+                }
+
                 if (resolutionDiagnostic) {
                     error(errorNode, resolutionDiagnostic, moduleReference, resolvedModule.resolvedFileName);
                 }
@@ -5641,6 +5656,10 @@ namespace ts {
                 const symbol = type.symbol;
                 const members = getMembersOfSymbol(symbol);
                 (<InterfaceTypeWithDeclaredMembers>type).declaredProperties = getNamedMembers(members);
+                // Start with signatures at empty array in case of recursive types
+                (<InterfaceTypeWithDeclaredMembers>type).declaredCallSignatures = emptyArray;
+                (<InterfaceTypeWithDeclaredMembers>type).declaredConstructSignatures = emptyArray;
+
                 (<InterfaceTypeWithDeclaredMembers>type).declaredCallSignatures = getSignaturesOfSymbol(members.get(InternalSymbolName.Call));
                 (<InterfaceTypeWithDeclaredMembers>type).declaredConstructSignatures = getSignaturesOfSymbol(members.get(InternalSymbolName.New));
                 (<InterfaceTypeWithDeclaredMembers>type).declaredStringIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.String);
@@ -7033,7 +7052,7 @@ namespace ts {
                     for (let i = numTypeArguments; i < numTypeParameters; i++) {
                         const mapper = createTypeMapper(typeParameters, typeArguments);
                         let defaultType = getDefaultFromTypeParameter(typeParameters[i]);
-                        if (defaultType && isTypeIdenticalTo(defaultType, emptyObjectType) && isJavaScriptImplicitAny) {
+                        if (isJavaScriptImplicitAny && defaultType && isTypeIdenticalTo(defaultType, emptyObjectType)) {
                             defaultType = anyType;
                         }
                         typeArguments[i] = defaultType ? instantiateType(defaultType, mapper) : getDefaultTypeArgumentType(isJavaScriptImplicitAny);
@@ -10740,7 +10759,7 @@ namespace ts {
                         }
                     }
                     const constraint = getConstraintForRelation(<TypeParameter>source);
-                    if (!constraint || constraint.flags & TypeFlags.Any) {
+                    if (!constraint || (source.flags & TypeFlags.TypeParameter && constraint.flags & TypeFlags.Any)) {
                         // A type variable with no constraint is not related to the non-primitive object type.
                         if (result = isRelatedTo(emptyObjectType, extractTypesOfKind(target, ~TypeFlags.NonPrimitive))) {
                             errorInfo = saveErrorInfo;
@@ -22260,10 +22279,6 @@ namespace ts {
         function checkUnusedIdentifiers(potentiallyUnusedIdentifiers: ReadonlyArray<PotentiallyUnusedIdentifier>, addDiagnostic: AddUnusedDiagnostic) {
             for (const node of potentiallyUnusedIdentifiers) {
                 switch (node.kind) {
-                    case SyntaxKind.SourceFile:
-                    case SyntaxKind.ModuleDeclaration:
-                        checkUnusedModuleMembers(node, addDiagnostic);
-                        break;
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.ClassExpression:
                         checkUnusedClassMembers(node, addDiagnostic);
@@ -22272,6 +22287,8 @@ namespace ts {
                     case SyntaxKind.InterfaceDeclaration:
                         checkUnusedTypeParameters(node, addDiagnostic);
                         break;
+                    case SyntaxKind.SourceFile:
+                    case SyntaxKind.ModuleDeclaration:
                     case SyntaxKind.Block:
                     case SyntaxKind.CaseBlock:
                     case SyntaxKind.ForStatement:
@@ -22305,35 +22322,6 @@ namespace ts {
             }
         }
 
-        function checkUnusedLocalsAndParameters(node: Node, addDiagnostic: AddUnusedDiagnostic): void {
-            if (!(node.flags & NodeFlags.Ambient)) {
-                node.locals.forEach(local => {
-                    // If it's purely a type parameter, ignore, will be checked in `checkUnusedTypeParameters`.
-                    // If it's a type parameter merged with a parameter, check if the parameter-side is used.
-                    if (local.flags & SymbolFlags.TypeParameter ? (local.flags & SymbolFlags.Variable && !(local.isReferenced & SymbolFlags.Variable)) : !local.isReferenced) {
-                        if (local.valueDeclaration && getRootDeclaration(local.valueDeclaration).kind === SyntaxKind.Parameter) {
-                            const parameter = <ParameterDeclaration>getRootDeclaration(local.valueDeclaration);
-                            const name = getNameOfDeclaration(local.valueDeclaration);
-                            if (!isParameterPropertyDeclaration(parameter) && !parameterIsThisKeyword(parameter) && !parameterNameStartsWithUnderscore(name)) {
-                                addDiagnostic(UnusedKind.Parameter, createDiagnosticForNode(name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(local)));
-                            }
-                        }
-                        else {
-                            forEach(local.declarations, d => errorUnusedLocal(d, symbolName(local), addDiagnostic));
-                        }
-                    }
-                });
-            }
-        }
-
-        function isRemovedPropertyFromObjectSpread(node: Node) {
-            if (isBindingElement(node) && isObjectBindingPattern(node.parent)) {
-                const lastElement = lastOrUndefined(node.parent.elements);
-                return lastElement !== node && !!lastElement.dotDotDotToken;
-            }
-            return false;
-        }
-
         function errorUnusedLocal(declaration: Declaration, name: string, addDiagnostic: AddUnusedDiagnostic) {
             const node = getNameOfDeclaration(declaration) || declaration;
             if (isIdentifierThatStartsWithUnderScore(node)) {
@@ -22344,10 +22332,8 @@ namespace ts {
                 }
             }
 
-            if (!isRemovedPropertyFromObjectSpread(node.kind === SyntaxKind.Identifier ? node.parent : node)) {
-                const message = isTypeDeclaration(declaration) ? Diagnostics._0_is_declared_but_never_used : Diagnostics._0_is_declared_but_its_value_is_never_read;
-                addDiagnostic(UnusedKind.Local, createDiagnosticForNodeSpan(getSourceFileOfNode(declaration), declaration, node, message, name));
-            }
+            const message = isTypeDeclaration(declaration) ? Diagnostics._0_is_declared_but_never_used : Diagnostics._0_is_declared_but_its_value_is_never_read;
+            addDiagnostic(UnusedKind.Local, createDiagnosticForNodeSpan(getSourceFileOfNode(declaration), declaration, node, message, name));
         }
 
         function parameterNameStartsWithUnderscore(parameterName: DeclarationName) {
@@ -22409,44 +22395,86 @@ namespace ts {
             }
         }
 
-        function checkUnusedModuleMembers(node: ModuleDeclaration | SourceFile, addDiagnostic: AddUnusedDiagnostic): void {
-            if (!(node.flags & NodeFlags.Ambient)) {
-                // Ideally we could use the ImportClause directly as a key, but must wait until we have full ES6 maps. So must store key along with value.
-                const unusedImports = createMap<[ImportClause, ImportedDeclaration[]]>();
-                node.locals.forEach(local => {
-                    if (local.isReferenced || local.exportSymbol) return;
-                    for (const declaration of local.declarations) {
-                        if (isAmbientModule(declaration)) continue;
-                        if (isImportedDeclaration(declaration)) {
-                            const importClause = importClauseFromImported(declaration);
-                            const key = String(getNodeId(importClause));
-                            const group = unusedImports.get(key);
-                            if (group) {
-                                group[1].push(declaration);
-                            }
-                            else {
-                                unusedImports.set(key, [importClause, [declaration]]);
+        function addToGroup<K, V>(map: Map<[K, V[]]>, key: K, value: V, getKey: (key: K) => number | string): void {
+            const keyString = String(getKey(key));
+            const group = map.get(keyString);
+            if (group) {
+                group[1].push(value);
+            }
+            else {
+                map.set(keyString, [key, [value]]);
+            }
+        }
+
+        function tryGetRootParameterDeclaration(node: Node): ParameterDeclaration | undefined {
+            return tryCast(getRootDeclaration(node), isParameter);
+        }
+
+        function checkUnusedLocalsAndParameters(nodeWithLocals: Node, addDiagnostic: AddUnusedDiagnostic): void {
+            if (nodeWithLocals.flags & NodeFlags.Ambient) return;
+
+            // Ideally we could use the ImportClause directly as a key, but must wait until we have full ES6 maps. So must store key along with value.
+            const unusedImports = createMap<[ImportClause, ImportedDeclaration[]]>();
+            const unusedDestructures = createMap<[ObjectBindingPattern, BindingElement[]]>();
+            nodeWithLocals.locals.forEach(local => {
+                // If it's purely a type parameter, ignore, will be checked in `checkUnusedTypeParameters`.
+                // If it's a type parameter merged with a parameter, check if the parameter-side is used.
+                if (local.flags & SymbolFlags.TypeParameter ? !(local.flags & SymbolFlags.Variable && !(local.isReferenced & SymbolFlags.Variable)) : local.isReferenced || local.exportSymbol) {
+                    return;
+                }
+
+                for (const declaration of local.declarations) {
+                    if (isAmbientModule(declaration)) continue;
+                    if (isImportedDeclaration(declaration)) {
+                        addToGroup(unusedImports, importClauseFromImported(declaration), declaration, getNodeId);
+                    }
+                    else if (isBindingElement(declaration) && isObjectBindingPattern(declaration.parent)) {
+                        // In `{ a, ...b }, `a` is considered used since it removes a property from `b`. `b` may still be unused though.
+                        const lastElement = last(declaration.parent.elements);
+                        if (declaration === lastElement || !last(declaration.parent.elements).dotDotDotToken) {
+                            addToGroup(unusedDestructures, declaration.parent, declaration, getNodeId);
+                        }
+                    }
+                    else {
+                        const parameter = local.valueDeclaration && tryGetRootParameterDeclaration(local.valueDeclaration);
+                        if (parameter) {
+                            const name = getNameOfDeclaration(local.valueDeclaration);
+                            if (!isParameterPropertyDeclaration(parameter) && !parameterIsThisKeyword(parameter) && !parameterNameStartsWithUnderscore(name)) {
+                                addDiagnostic(UnusedKind.Parameter, createDiagnosticForNode(name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(local)));
                             }
                         }
                         else {
                             errorUnusedLocal(declaration, symbolName(local), addDiagnostic);
                         }
                     }
-                });
-
-                unusedImports.forEach(([importClause, unuseds]) => {
-                    const importDecl = importClause.parent;
-                    if (forEachImportedDeclaration(importClause, d => !contains(unuseds, d))) {
-                        for (const unused of unuseds) errorUnusedLocal(unused, idText(unused.name), addDiagnostic);
+                }
+            });
+            unusedImports.forEach(([importClause, unuseds]) => {
+                const importDecl = importClause.parent;
+                if (forEachImportedDeclaration(importClause, d => !contains(unuseds, d))) {
+                    for (const unused of unuseds) errorUnusedLocal(unused, idText(unused.name), addDiagnostic);
+                }
+                else if (unuseds.length === 1) {
+                    addDiagnostic(UnusedKind.Local, createDiagnosticForNode(importDecl, Diagnostics._0_is_declared_but_its_value_is_never_read, idText(first(unuseds).name)));
+                }
+                else {
+                    addDiagnostic(UnusedKind.Local, createDiagnosticForNode(importDecl, Diagnostics.All_imports_in_import_declaration_are_unused));
+                }
+            });
+            unusedDestructures.forEach(([bindingPattern, bindingElements]) => {
+                const kind = tryGetRootParameterDeclaration(bindingPattern.parent) ? UnusedKind.Parameter : UnusedKind.Local;
+                if (!bindingPattern.elements.every(e => contains(bindingElements, e))) {
+                    for (const e of bindingElements) {
+                        addDiagnostic(kind, createDiagnosticForNode(e, Diagnostics._0_is_declared_but_its_value_is_never_read, getBindingElementNameText(e)));
                     }
-                    else if (unuseds.length === 1) {
-                        addDiagnostic(UnusedKind.Local, createDiagnosticForNode(importDecl, Diagnostics._0_is_declared_but_its_value_is_never_read, idText(first(unuseds).name)));
-                    }
-                    else {
-                        addDiagnostic(UnusedKind.Local, createDiagnosticForNode(importDecl, Diagnostics.All_imports_in_import_declaration_are_unused, showModuleSpecifier(importDecl)));
-                    }
-                });
-            }
+                }
+                else if (bindingElements.length === 1) {
+                    addDiagnostic(kind, createDiagnosticForNode(bindingPattern, Diagnostics._0_is_declared_but_its_value_is_never_read, getBindingElementNameText(first(bindingElements))));
+                }
+                else {
+                    addDiagnostic(kind, createDiagnosticForNode(bindingPattern, Diagnostics.All_destructured_elements_are_unused));
+                }
+            });
         }
 
         type ImportedDeclaration = ImportClause | ImportSpecifier | NamespaceImport;
@@ -28026,7 +28054,7 @@ namespace ts {
 
         function checkGrammarImportCallExpression(node: ImportCall): boolean {
             if (moduleKind === ModuleKind.ES2015) {
-                return grammarErrorOnNode(node, Diagnostics.Dynamic_import_cannot_be_used_when_targeting_ECMAScript_2015_modules);
+                return grammarErrorOnNode(node, Diagnostics.Dynamic_import_is_only_supported_when_module_flag_is_commonjs_or_esNext);
             }
 
             if (node.typeArguments) {

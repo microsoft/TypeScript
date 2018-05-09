@@ -11,7 +11,7 @@ namespace ts.server {
         enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void;
         attach(projectService: ProjectService): void;
         onProjectClosed(p: Project): void;
-        readonly globalTypingsCacheLocation: string;
+        readonly globalTypingsCacheLocation: string | undefined;
     }
 
     export const nullTypingsInstaller: ITypingsInstaller = {

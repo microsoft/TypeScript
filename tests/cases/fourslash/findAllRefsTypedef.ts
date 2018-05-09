@@ -5,11 +5,11 @@
 // @Filename: /a.js
 /////**
 //// * @typedef I {Object}
-//// * @prop [|p|] {number}
+//// * @prop [|{| "isWriteAccess": true, "isDefinition": true |}p|] {number}
 //// */
 ////
 /////** @type {I} */
 ////let x;
 ////x.[|p|];
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("(property) p: number");

@@ -9,7 +9,27 @@ namespace ts.OutliningElementsCollector {
 
     function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
         let depthRemaining = 40;
-        sourceFile.forEachChild(function walk(n) {
+        let current = 0;
+        const statements = sourceFile.statements;
+        const n = statements.length;
+        while (current < n) {
+            while (current < n && !isAnyImportSyntax(statements[current])) {
+                visitNonImportNode(statements[current]);
+                current++;
+            }
+            if (current === n) break;
+            const firstImport = current;
+            while (current < n && isAnyImportSyntax(statements[current])) {
+                addOutliningForLeadingCommentsForNode(statements[current], sourceFile, cancellationToken, out);
+                current++;
+            }
+            const lastImport = current - 1;
+            if (lastImport !== firstImport) {
+                out.push(createOutliningSpanFromBounds(findChildOfKind(statements[firstImport], SyntaxKind.ImportKeyword, sourceFile)!.getStart(sourceFile), statements[lastImport].getEnd(), OutliningSpanKind.Imports));
+            }
+        }
+
+        function visitNonImportNode(n: Node) {
             if (depthRemaining === 0) return;
             cancellationToken.throwIfCancellationRequested();
 
@@ -23,17 +43,17 @@ namespace ts.OutliningElementsCollector {
             depthRemaining--;
             if (isIfStatement(n) && n.elseStatement && isIfStatement(n.elseStatement)) {
                 // Consider an 'else if' to be on the same depth as the 'if'.
-                walk(n.expression);
-                walk(n.thenStatement);
+                visitNonImportNode(n.expression);
+                visitNonImportNode(n.thenStatement);
                 depthRemaining++;
-                walk(n.elseStatement);
+                visitNonImportNode(n.elseStatement);
                 depthRemaining--;
             }
             else {
-                n.forEachChild(walk);
+                n.forEachChild(visitNonImportNode);
             }
             depthRemaining++;
-        });
+        }
     }
 
     function addRegionOutliningSpans(sourceFile: SourceFile, out: Push<OutliningSpan>): void {

@@ -254,12 +254,6 @@ declare namespace FourSlashInterface {
         symbolAtLocation(startRange: Range, ...declarationRanges: Range[]): void;
         typeOfSymbolAtLocation(range: Range, symbol: any, expected: string): void;
         /**
-         * @deprecated, prefer 'referenceGroups'
-         * Like `referencesAre`, but goes to `start` first.
-         * `start` should be included in `references`.
-         */
-        referencesOf(start: Range, references: Range[]): void;
-        /**
          * For each of starts, asserts the ranges that are referenced from there.
          * This uses the 'findReferences' command instead of 'getReferencesAtPosition', so references are grouped by their definition.
          */
@@ -268,11 +262,6 @@ declare namespace FourSlashInterface {
         rangesAreOccurrences(isWriteAccess?: boolean): void;
         rangesWithSameTextAreRenameLocations(): void;
         rangesAreRenameLocations(options?: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: Range[] });
-        /**
-         * Performs `referencesOf` for every range on the whole set.
-         * If `ranges` is omitted, this is `test.ranges()`.
-         */
-        rangesReferenceEachOther(ranges?: Range[]): void;
         findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]): void;
         currentParameterHelpArgumentNameIs(name: string): void;
         currentParameterSpanIs(parameter: string): void;

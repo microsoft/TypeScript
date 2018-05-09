@@ -27,7 +27,7 @@ namespace ts.Completions.PathCompletions {
         const scriptDirectory = getDirectoryPath(scriptPath);
 
         if (isPathRelativeToScript(literalValue) || isRootedDiskPath(literalValue)) {
-            const extensions = getSupportedExtensions(compilerOptions);
+            const extensions = getSupportedExtensionsForModuleResolution(compilerOptions);
             if (compilerOptions.rootDirs) {
                 return getCompletionEntriesForDirectoryFragmentWithRootDirs(
                     compilerOptions.rootDirs, literalValue, scriptDirectory, extensions, /*includeExtensions*/ false, compilerOptions, host, scriptPath);
@@ -40,6 +40,13 @@ namespace ts.Completions.PathCompletions {
             // Check for node modules
             return getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory, compilerOptions, host, typeChecker);
         }
+    }
+
+    function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions) {
+        const extensions = getSupportedExtensions(compilerOptions);
+        return compilerOptions.resolveJsonModule && getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs ?
+            extensions.concat(Extension.Json) :
+            extensions;
     }
 
     /**
@@ -122,7 +129,7 @@ namespace ts.Completions.PathCompletions {
                         continue;
                     }
 
-                    const foundFileName = includeExtensions ? getBaseFileName(filePath) : removeFileExtension(getBaseFileName(filePath));
+                    const foundFileName = includeExtensions || fileExtensionIs(filePath, Extension.Json) ? getBaseFileName(filePath) : removeFileExtension(getBaseFileName(filePath));
 
                     if (!foundFiles.has(foundFileName)) {
                         foundFiles.set(foundFileName, true);
@@ -162,7 +169,7 @@ namespace ts.Completions.PathCompletions {
 
         const result: NameAndKind[] = [];
 
-        const fileExtensions = getSupportedExtensions(compilerOptions);
+        const fileExtensions = getSupportedExtensionsForModuleResolution(compilerOptions);
         if (baseUrl) {
             const projectDir = compilerOptions.project || host.getCurrentDirectory();
             const absolute = isRootedDiskPath(baseUrl) ? baseUrl : combinePaths(projectDir, baseUrl);

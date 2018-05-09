@@ -6,13 +6,6 @@ namespace ts {
 
     export const externalHelpersModuleNameText = "tslib";
 
-    export interface ReferencePathMatchResult {
-        fileReference?: FileReference;
-        diagnosticMessage?: DiagnosticMessage;
-        isNoDefaultLib?: boolean;
-        isTypeReferenceDirective?: boolean;
-    }
-
     export function getDeclarationOfKind<T extends Declaration>(symbol: Symbol, kind: T["kind"]): T {
         const declarations = symbol.declarations;
         if (declarations) {
@@ -2109,8 +2102,14 @@ namespace ts {
                 if (isDeclaration(name.parent)) {
                     return name.parent.name === name;
                 }
-                const binExp = name.parent.parent;
-                return isBinaryExpression(binExp) && getSpecialPropertyAssignmentKind(binExp) !== SpecialPropertyAssignmentKind.None && getNameOfDeclaration(binExp) === name;
+                else if (isQualifiedName(name.parent)) {
+                    const tag = name.parent.parent;
+                    return isJSDocParameterTag(tag) && tag.name === name.parent;
+                }
+                else {
+                    const binExp = name.parent.parent;
+                    return isBinaryExpression(binExp) && getSpecialPropertyAssignmentKind(binExp) !== SpecialPropertyAssignmentKind.None && getNameOfDeclaration(binExp) === name;
+                }
             default:
                 return false;
         }
@@ -2916,6 +2915,7 @@ namespace ts {
         sourceMapFilePath: string | undefined;
         declarationFilePath: string | undefined;
         declarationMapPath: string | undefined;
+        bundleInfoPath: string | undefined;
     }
 
     /**

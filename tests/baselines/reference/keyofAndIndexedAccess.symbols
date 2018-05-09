@@ -2235,3 +2235,26 @@ class Unbounded<T> {
     }
 }
 
+// Repro from #23940
+
+interface I7 {
+>I7 : Symbol(I7, Decl(keyofAndIndexedAccess.ts, 627, 1))
+
+    x: any;
+>x : Symbol(I7.x, Decl(keyofAndIndexedAccess.ts, 631, 14))
+}
+type Foo7<T extends number> = T;
+>Foo7 : Symbol(Foo7, Decl(keyofAndIndexedAccess.ts, 633, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 634, 10))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 634, 10))
+
+declare function f7<K extends keyof I7>(type: K): Foo7<I7[K]>;
+>f7 : Symbol(f7, Decl(keyofAndIndexedAccess.ts, 634, 32))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 635, 20))
+>I7 : Symbol(I7, Decl(keyofAndIndexedAccess.ts, 627, 1))
+>type : Symbol(type, Decl(keyofAndIndexedAccess.ts, 635, 40))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 635, 20))
+>Foo7 : Symbol(Foo7, Decl(keyofAndIndexedAccess.ts, 633, 1))
+>I7 : Symbol(I7, Decl(keyofAndIndexedAccess.ts, 627, 1))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 635, 20))
+

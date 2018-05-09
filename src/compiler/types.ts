@@ -397,6 +397,8 @@ namespace ts {
         // Top-level nodes
         SourceFile,
         Bundle,
+        UnparsedSource,
+        InputFiles,
 
         // JSDoc nodes
         JSDocTypeExpression,
@@ -1877,7 +1879,7 @@ namespace ts {
     }
 
     /**
-     * A list of comma-seperated expressions. This node is only created by transformations.
+     * A list of comma-separated expressions. This node is only created by transformations.
      */
     export interface CommaListExpression extends Expression {
         kind: SyntaxKind.CommaListExpression;
@@ -2602,6 +2604,12 @@ namespace ts {
         /* @internal */ resolvedModules: Map<ResolvedModuleFull | undefined>;
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         /* @internal */ imports: ReadonlyArray<StringLiteralLike>;
+        /**
+         * When a file's references are redirected due to project reference directives,
+         * the original names of the references are stored in this array
+         */
+        /* @internal*/
+        redirectedReferences?: ReadonlyArray<string>;
         // Identifier only if `declare global`
         /* @internal */ moduleAugmentations: ReadonlyArray<StringLiteral | Identifier>;
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
@@ -2615,10 +2623,22 @@ namespace ts {
 
     export interface Bundle extends Node {
         kind: SyntaxKind.Bundle;
+        prepends: ReadonlyArray<InputFiles | UnparsedSource>;
         sourceFiles: ReadonlyArray<SourceFile>;
         /* @internal */ syntheticFileReferences?: ReadonlyArray<FileReference>;
         /* @internal */ syntheticTypeReferences?: ReadonlyArray<FileReference>;
         /* @internal */ hasNoDefaultLib?: boolean;
+    }
+
+    export interface InputFiles extends Node {
+        kind: SyntaxKind.InputFiles;
+        javascriptText: string;
+        declarationText: string;
+    }
+
+    export interface UnparsedSource extends Node {
+        kind: SyntaxKind.UnparsedSource;
+        text: string;
     }
 
     export interface JsonSourceFile extends SourceFile {
@@ -2752,6 +2772,13 @@ namespace ts {
         /* @internal */ isEmittedFile(file: string): boolean;
 
         /* @internal */ getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
+
+        getProjectReferences(): (ResolvedProjectReference | undefined)[] | undefined;
+    }
+
+    export interface ResolvedProjectReference {
+        commandLine: ParsedCommandLine;
+        sourceFile: SourceFile;
     }
 
     /* @internal */
@@ -2762,10 +2789,12 @@ namespace ts {
     }
 
     export interface CustomTransformers {
-        /** Custom transformers to evaluate before built-in transformations. */
+        /** Custom transformers to evaluate before built-in .js transformations. */
         before?: TransformerFactory<SourceFile>[];
-        /** Custom transformers to evaluate after built-in transformations. */
+        /** Custom transformers to evaluate after built-in .js transformations. */
         after?: TransformerFactory<SourceFile>[];
+        /** Custom transformers to evaluate after built-in .d.ts transformations. */
+        afterDeclarations?: TransformerFactory<Bundle | SourceFile>[];
     }
 
     export interface SourceMapSpan {
@@ -4176,7 +4205,18 @@ namespace ts {
         name: string;
     }
 
-    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | null | undefined;
+    export interface ProjectReference {
+        /** A normalized path on disk */
+        path: string;
+        /** The path as the user originally wrote it */
+        originalPath?: string;
+        /** True if the output of this reference should be prepended to the output of this project. Only valid for --outFile compilations */
+        prepend?: boolean;
+        /** True if it is intended that this reference form a circularity */
+        circular?: boolean;
+    }
+
+    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
 
     export interface CompilerOptions {
         /*@internal*/ all?: boolean;
@@ -4248,6 +4288,7 @@ namespace ts {
         /* @internal */ pretty?: boolean;
         reactNamespace?: string;
         jsxFactory?: string;
+        composite?: boolean;
         removeComments?: boolean;
         rootDir?: string;
         rootDirs?: string[];
@@ -4341,12 +4382,13 @@ namespace ts {
         ES2017 = 4,
         ES2018 = 5,
         ESNext = 6,
+        JSON = 100,
         Latest = ESNext,
     }
 
     export const enum LanguageVariant {
         Standard,
-        JSX,
+        JSX
     }
 
     /** Either a parsed command line or a parsed tsconfig.json */
@@ -4354,6 +4396,7 @@ namespace ts {
         options: CompilerOptions;
         typeAcquisition?: TypeAcquisition;
         fileNames: string[];
+        projectReferences?: ReadonlyArray<ProjectReference>;
         raw?: any;
         errors: Diagnostic[];
         wildcardDirectories?: MapLike<WatchDirectoryFlags>;
@@ -4369,6 +4412,7 @@ namespace ts {
     /* @internal */
     export interface ConfigFileSpecs {
         filesSpecs: ReadonlyArray<string>;
+        referencesSpecs: ReadonlyArray<ProjectReference> | undefined;
         /**
          * Present to report errors (user specified specs), validatedIncludeSpecs are used for file name matching
          */
@@ -4384,8 +4428,18 @@ namespace ts {
 
     export interface ExpandResult {
         fileNames: string[];
+        projectReferences: ReadonlyArray<ProjectReference> | undefined;
         wildcardDirectories: MapLike<WatchDirectoryFlags>;
         /* @internal */ spec: ConfigFileSpecs;
+    }
+
+    export interface CreateProgramOptions {
+        rootNames: ReadonlyArray<string>;
+        options: CompilerOptions;
+        projectReferences?: ReadonlyArray<ProjectReference>;
+        host?: CompilerHost;
+        oldProgram?: Program;
+        configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>;
     }
 
     /* @internal */
@@ -4674,6 +4728,7 @@ namespace ts {
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
+        readDirectory?(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string>, depth?: number): string[];
 
         /*
          * CompilerHost must either implement resolveModuleNames (in case if it wants to be completely in charge of
@@ -4912,6 +4967,8 @@ namespace ts {
 
         isEmitBlocked(emitFileName: string): boolean;
 
+        getPrependNodes(): ReadonlyArray<InputFiles>;
+
         writeFile: WriteFileCallback;
     }
 
@@ -5063,7 +5120,23 @@ namespace ts {
         /*@internal*/ writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile | undefined, writer: EmitTextWriter): void;
         /*@internal*/ writeList<T extends Node>(format: ListFormat, list: NodeArray<T>, sourceFile: SourceFile | undefined, writer: EmitTextWriter): void;
         /*@internal*/ writeFile(sourceFile: SourceFile, writer: EmitTextWriter): void;
-        /*@internal*/ writeBundle(bundle: Bundle, writer: EmitTextWriter): void;
+        /*@internal*/ writeBundle(bundle: Bundle, writer: EmitTextWriter, info?: BundleInfo): void;
+    }
+
+    /**
+     * When a bundle contains prepended content, we store a file on disk indicating where the non-prepended
+     * content of that file starts. On a subsequent build where there are no upstream .d.ts changes, we
+     * read the bundle info file and the original .js file to quickly re-use portion of the file
+     * that didn't originate in prepended content.
+     */
+    /* @internal */
+    export interface BundleInfo {
+        // The offset (in characters, i.e. suitable for .substr) at which the
+        // non-prepended portion of the emitted file starts.
+        originalOffset: number;
+        // The total length of this bundle. Used to ensure we're pulling from
+        // the same source as we originally wrote.
+        totalLength: number;
     }
 
     export interface PrintHandlers {

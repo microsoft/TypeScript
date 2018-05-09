@@ -2068,6 +2068,10 @@ namespace ts {
                 : moduleKind === ModuleKind.System;
     }
 
+    export function getEmitDeclarations(compilerOptions: CompilerOptions): boolean {
+        return !!(compilerOptions.declaration || compilerOptions.composite);
+    }
+
     export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "strictPropertyInitialization" | "alwaysStrict";
 
     export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
@@ -2328,6 +2332,7 @@ namespace ts {
         const reduced = [components[0]];
         for (let i = 1; i < components.length; i++) {
             const component = components[i];
+            if (!component) continue;
             if (component === ".") continue;
             if (component === "..") {
                 if (reduced.length > 1) {

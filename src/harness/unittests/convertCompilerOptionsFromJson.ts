@@ -14,7 +14,7 @@ namespace ts {
             const { options: actualCompilerOptions, errors: actualErrors} = convertCompilerOptionsFromJson(json.compilerOptions, "/apath/", configFileName);
 
             const parsedCompilerOptions = JSON.stringify(actualCompilerOptions);
-            const expectedCompilerOptions = JSON.stringify(expectedResult.compilerOptions);
+            const expectedCompilerOptions = JSON.stringify({ ...expectedResult.compilerOptions, configFilePath: configFileName });
             assert.equal(parsedCompilerOptions, expectedCompilerOptions);
 
             const expectedErrors = expectedResult.errors;
