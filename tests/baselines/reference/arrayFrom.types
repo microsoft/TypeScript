@@ -41,6 +41,12 @@ const inputARand = getEither(inputA, inputALike);
 >inputA : A[]
 >inputALike : ArrayLike<A>
 
+const inputASet = new Set<A>();
+>inputASet : Set<A>
+>new Set<A>() : Set<A>
+>Set : SetConstructor
+>A : A
+
 const result1: A[] = Array.from(inputA);
 >result1 : A[]
 >A : A
@@ -141,6 +147,33 @@ const result9: B[] = Array.from(inputARand, ({ a }): B => ({ b: a }));
 >Array : ArrayConstructor
 >from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 >inputARand : ArrayLike<A> | Iterable<A>
+>({ a }): B => ({ b: a }) : ({ a }: A) => B
+>a : string
+>B : B
+>({ b: a }) : { b: string; }
+>{ b: a } : { b: string; }
+>b : string
+>a : string
+
+const result10: A[] = Array.from(new Set<A>());
+>result10 : A[]
+>A : A
+>Array.from(new Set<A>()) : A[]
+>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>Array : ArrayConstructor
+>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>new Set<A>() : Set<A>
+>Set : SetConstructor
+>A : A
+
+const result11: B[] = Array.from(inputASet, ({ a }): B => ({ b: a }));
+>result11 : B[]
+>B : B
+>Array.from(inputASet, ({ a }): B => ({ b: a })) : B[]
+>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>Array : ArrayConstructor
+>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>inputASet : Set<A>
 >({ a }): B => ({ b: a }) : ({ a }: A) => B
 >a : string
 >B : B
