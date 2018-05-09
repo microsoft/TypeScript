@@ -913,6 +913,8 @@ namespace ts {
      * @param value The value to append to the array. If `value` is `undefined`, nothing is
      * appended.
      */
+    export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined;
+    export function append<T>(to: Push<T>, value: T | undefined): void;
     export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined {
         if (value === undefined) return to;
         if (to === undefined) return [value];
