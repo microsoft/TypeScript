@@ -1,9 +1,9 @@
-tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty7.ts(2,6): error TS2304: Cannot find name 'Symbol'.
+tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty7.ts(2,6): error TS2693: 'Symbol' only refers to a type, but is being used as a value here.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty7.ts (1 errors) ====
     class C {
         [Symbol.toStringTag](): void { }
          ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
+!!! error TS2693: 'Symbol' only refers to a type, but is being used as a value here.
     }

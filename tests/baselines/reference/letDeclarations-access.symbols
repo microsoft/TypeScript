@@ -80,7 +80,7 @@ x;
 >x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
 
 x.toString();
->x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>x.toString : Symbol(Number.toString, Decl(lib.es6.d.ts, --, --))
 >x : Symbol(x, Decl(letDeclarations-access.ts, 0, 3))
->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es6.d.ts, --, --))
 

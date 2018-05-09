@@ -3,6 +3,6 @@
 var p2 = window. 
 >p2 : any
 >window. : any
->window : any
+>window : Window
 > : any
 

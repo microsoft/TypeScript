@@ -1,28 +1,40 @@
 /* @internal */
 namespace ts.codefix {
+    const fixName = "unusedIdentifier";
     const fixIdPrefix = "unusedIdentifier_prefix";
     const fixIdDelete = "unusedIdentifier_delete";
     const errorCodes = [
         Diagnostics._0_is_declared_but_its_value_is_never_read.code,
+        Diagnostics._0_is_declared_but_never_used.code,
         Diagnostics.Property_0_is_declared_but_its_value_is_never_read.code,
+        Diagnostics.All_imports_in_import_declaration_are_unused.code,
+        Diagnostics.All_destructured_elements_are_unused.code,
     ];
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
-            const { sourceFile } = context;
-            const token = getToken(sourceFile, context.span.start);
+            const { errorCode, sourceFile } = context;
+            const importDecl = tryGetFullImport(sourceFile, context.span.start);
+            if (importDecl) {
+                const changes = textChanges.ChangeTracker.with(context, t => t.deleteNode(sourceFile, importDecl));
+                return [createCodeFixAction(fixName, changes, [Diagnostics.Remove_import_from_0, showModuleSpecifier(importDecl)], fixIdDelete, Diagnostics.Delete_all_unused_declarations)];
+            }
+            const delDestructure = textChanges.ChangeTracker.with(context, t => tryDeleteFullDestructure(t, sourceFile, context.span.start));
+            if (delDestructure.length) {
+                return [createCodeFixAction(fixName, delDestructure, Diagnostics.Remove_destructuring, fixIdDelete, Diagnostics.Delete_all_unused_declarations)];
+            }
+
+            const token = getToken(sourceFile, textSpanEnd(context.span));
             const result: CodeFixAction[] = [];
 
             const deletion = textChanges.ChangeTracker.with(context, t => tryDeleteDeclaration(t, sourceFile, token));
             if (deletion.length) {
-                const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Remove_declaration_for_Colon_0), [token.getText()]);
-                result.push({ description, changes: deletion, fixId: fixIdDelete });
+                result.push(createCodeFixAction(fixName, deletion, [Diagnostics.Remove_declaration_for_Colon_0, token.getText(sourceFile)], fixIdDelete, Diagnostics.Delete_all_unused_declarations));
             }
 
-            const prefix = textChanges.ChangeTracker.with(context, t => tryPrefixDeclaration(t, context.errorCode, sourceFile, token));
+            const prefix = textChanges.ChangeTracker.with(context, t => tryPrefixDeclaration(t, errorCode, sourceFile, token));
             if (prefix.length) {
-                const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Prefix_0_with_an_underscore), [token.getText()]);
-                result.push({ description, changes: prefix, fixId: fixIdPrefix });
+                result.push(createCodeFixAction(fixName, prefix, [Diagnostics.Prefix_0_with_an_underscore, token.getText(sourceFile)], fixIdPrefix, Diagnostics.Prefix_all_unused_declarations_with_where_possible));
             }
 
             return result;
@@ -30,7 +42,7 @@ namespace ts.codefix {
         fixIds: [fixIdPrefix, fixIdDelete],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
             const { sourceFile } = context;
-            const token = getToken(diag.file!, diag.start!);
+            const token = findPrecedingToken(textSpanEnd(diag), diag.file!);
             switch (context.fixId) {
                 case fixIdPrefix:
                     if (isIdentifier(token) && canPrefix(token)) {
@@ -38,7 +50,15 @@ namespace ts.codefix {
                     }
                     break;
                 case fixIdDelete:
-                    tryDeleteDeclaration(changes, sourceFile, token);
+                    const importDecl = tryGetFullImport(diag.file!, diag.start!);
+                    if (importDecl) {
+                        changes.deleteNode(sourceFile, importDecl);
+                    }
+                    else {
+                        if (!tryDeleteFullDestructure(changes, sourceFile, diag.start!)) {
+                            tryDeleteDeclaration(changes, sourceFile, token);
+                        }
+                    }
                     break;
                 default:
                     Debug.fail(JSON.stringify(context.fixId));
@@ -46,10 +66,36 @@ namespace ts.codefix {
         }),
     });
 
+    // Sometimes the diagnostic span is an entire ImportDeclaration, so we should remove the whole thing.
+    function tryGetFullImport(sourceFile: SourceFile, pos: number): ImportDeclaration | undefined {
+        const startToken = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+        return startToken.kind === SyntaxKind.ImportKeyword ? tryCast(startToken.parent, isImportDeclaration) : undefined;
+    }
+
+    function tryDeleteFullDestructure(changes: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number): boolean {
+        const startToken = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+        if (startToken.kind !== SyntaxKind.OpenBraceToken || !isObjectBindingPattern(startToken.parent)) return false;
+        const decl = startToken.parent.parent;
+        switch (decl.kind) {
+            case SyntaxKind.VariableDeclaration:
+                tryDeleteVariableDeclaration(changes, sourceFile, decl);
+                break;
+            case SyntaxKind.Parameter:
+                changes.deleteNodeInList(sourceFile, decl);
+                break;
+            case SyntaxKind.BindingElement:
+                changes.deleteNode(sourceFile, decl);
+                break;
+            default:
+                return Debug.assertNever(decl);
+        }
+        return true;
+    }
+
     function getToken(sourceFile: SourceFile, pos: number): Node {
-        const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+        const token = findPrecedingToken(pos, sourceFile);
         // this handles var ["computed"] = 12;
-        return token.kind === SyntaxKind.OpenBracketToken ? getTokenAtPosition(sourceFile, pos + 1, /*includeJsDocComment*/ false) : token;
+        return token.kind === SyntaxKind.CloseBracketToken ? findPrecedingToken(pos - 1, sourceFile) : token;
     }
 
     function tryPrefixDeclaration(changes: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, token: Node): void {
@@ -122,6 +168,11 @@ namespace ts.codefix {
 
             case SyntaxKind.Parameter:
                 const oldFunction = parent.parent;
+                if (isSetAccessor(oldFunction)) {
+                    // Setter must have a parameter
+                    break;
+                }
+
                 if (isArrowFunction(oldFunction) && oldFunction.parameters.length === 1) {
                     // Lambdas with exactly one parameter are special because, after removal, there
                     // must be an empty parameter list (i.e. `()`) and this won't necessarily be the
@@ -140,12 +191,27 @@ namespace ts.codefix {
                     // and trailing trivia will remain.
                     suppressLeadingAndTrailingTrivia(newFunction);
 
-                    changes.replaceNode(sourceFile, oldFunction, newFunction, textChanges.useNonAdjustedPositions);
+                    changes.replaceNode(sourceFile, oldFunction, newFunction);
                 }
                 else {
                     changes.deleteNodeInList(sourceFile, parent);
                 }
                 break;
+
+            case SyntaxKind.BindingElement: {
+                const pattern = (parent as BindingElement).parent;
+                switch (pattern.kind) {
+                    case SyntaxKind.ArrayBindingPattern:
+                        changes.deleteNode(sourceFile, parent); // Don't delete ','
+                        break;
+                    case SyntaxKind.ObjectBindingPattern:
+                        changes.deleteNodeInList(sourceFile, parent);
+                        break;
+                    default:
+                        return Debug.assertNever(pattern);
+                }
+                break;
+            }
 
             // handle case where 'import a = A;'
             case SyntaxKind.ImportEqualsDeclaration:

@@ -27,5 +27,5 @@ declare const enum D {
     d = 10,
     e,
     f,
-    g,
+    g
 }

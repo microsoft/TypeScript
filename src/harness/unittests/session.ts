@@ -145,7 +145,7 @@ namespace ts.server {
 
                 session.onMessage(JSON.stringify(configureRequest));
 
-                assert.equal(session.getProjectService().getFormatCodeOptions().indentStyle, IndentStyle.Block);
+                assert.equal(session.getProjectService().getFormatCodeOptions("" as NormalizedPath).indentStyle, IndentStyle.Block);
 
                 const setOptionsRequest: protocol.SetCompilerOptionsForInferredProjectsRequest = {
                     command: CommandNames.CompilerOptionsForInferredProjects,
@@ -263,6 +263,8 @@ namespace ts.server {
                 CommandNames.GetEditsForRefactorFull,
                 CommandNames.OrganizeImports,
                 CommandNames.OrganizeImportsFull,
+                CommandNames.GetEditsForFileRename,
+                CommandNames.GetEditsForFileRenameFull,
             ];
 
             it("should not throw when commands are executed with invalid arguments", () => {
@@ -421,13 +423,17 @@ namespace ts.server {
 
         // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
         let oldPrepare: AnyFunction;
+        let oldStackTraceLimit: number;
         before(() => {
+            oldStackTraceLimit = (Error as any).stackTraceLimit;
             oldPrepare = (Error as any).prepareStackTrace;
             delete (Error as any).prepareStackTrace;
+            (Error as any).stackTraceLimit = 10;
         });
 
         after(() => {
             (Error as any).prepareStackTrace = oldPrepare;
+            (Error as any).stackTraceLimit = oldStackTraceLimit;
         });
 
         const command = "testhandler";

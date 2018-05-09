@@ -1,11 +1,11 @@
-tests/cases/compiler/contextualTyping11.ts(1,13): error TS2322: Type 'foo[]' is not assignable to type '{ id: number; }[]'.
+tests/cases/compiler/contextualTyping11.ts(1,20): error TS2322: Type 'foo[]' is not assignable to type '{ id: number; }[]'.
   Type 'foo' is not assignable to type '{ id: number; }'.
     Property 'id' is missing in type 'foo'.
 
 
 ==== tests/cases/compiler/contextualTyping11.ts (1 errors) ====
     class foo { public bar:{id:number;}[] = [<foo>({})]; }
-                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       ~~~
 !!! error TS2322: Type 'foo[]' is not assignable to type '{ id: number; }[]'.
 !!! error TS2322:   Type 'foo' is not assignable to type '{ id: number; }'.
 !!! error TS2322:     Property 'id' is missing in type 'foo'.

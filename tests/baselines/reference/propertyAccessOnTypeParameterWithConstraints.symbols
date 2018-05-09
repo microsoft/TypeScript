@@ -5,7 +5,7 @@
 class C<T extends Date> {
 >C : Symbol(C, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 0, 0))
 >T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 3, 8))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     f() {
 >f : Symbol(C.f, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 3, 25))
@@ -31,13 +31,13 @@ var r = (new C<Date>()).f();
 >r : Symbol(r, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 11, 3))
 >(new C<Date>()).f : Symbol(C.f, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 3, 25))
 >C : Symbol(C, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 0, 0))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >f : Symbol(C.f, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 3, 25))
 
 interface I<T extends Date> {
 >I : Symbol(I, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 11, 28))
 >T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 13, 12))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     foo: T;
 >foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 13, 29))
@@ -46,7 +46,7 @@ interface I<T extends Date> {
 var i: I<Date>;
 >i : Symbol(i, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 16, 3))
 >I : Symbol(I, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 11, 28))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var r2 = i.foo.getDate();
 >r2 : Symbol(r2, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 17, 3))
@@ -68,14 +68,14 @@ var a: {
 
     <T extends Date>(): T;
 >T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 21, 5))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 21, 5))
 }
 var r3 = a<Date>().getDate();
 >r3 : Symbol(r3, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 23, 3))
 >a<Date>().getDate : Symbol(Date.getDate, Decl(lib.d.ts, --, --))
 >a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 20, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >getDate : Symbol(Date.getDate, Decl(lib.d.ts, --, --))
 
 var r3b = a()['getDate']();
@@ -89,7 +89,7 @@ var b = {
     foo: <T extends Date>(x: T) => {
 >foo : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 26, 9))
 >T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 27, 10))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 27, 26))
 >T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 27, 10))
 
@@ -111,5 +111,5 @@ var r4 = b.foo(new Date());
 >b.foo : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 26, 9))
 >b : Symbol(b, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 26, 3))
 >foo : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 26, 9))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 

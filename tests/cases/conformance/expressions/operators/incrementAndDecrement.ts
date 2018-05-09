@@ -1,3 +1,4 @@
+// @lib: es5
 enum E { A, B, C };
 var x = 4;
 var e = E.B;

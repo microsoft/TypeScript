@@ -31,12 +31,12 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerCo
         "e": number; // ok
         1.0: string; // ok
         2.0: number; // error
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2412: Property '2.0' of type 'number' is not assignable to numeric index type 'string'.
         "3.0": string; // ok
         "4.0": number; // error
         3.0: MyNumber // error
-        ~~~~~~~~~~~~~
+        ~~~
 !!! error TS2412: Property '3.0' of type 'MyNumber' is not assignable to numeric index type 'string'.
     
         get X() { // ok
@@ -73,7 +73,7 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerCo
         "e": number; // ok
         1.0: string; // ok
         2.0: number; // error
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2412: Property '2.0' of type 'number' is not assignable to numeric index type 'string'.
         (): string; // ok
         (x): number // ok
@@ -93,7 +93,7 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerCo
         "e": number; // ok
         1.0: string; // ok
         2.0: number; // error
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2412: Property '2.0' of type 'number' is not assignable to numeric index type 'string'.
         (): string; // ok
         (x): number // ok

@@ -11,7 +11,7 @@
     "sourceRoot": "tests/cases/projects/outputdir_singleFile/src",
     "resolveSourceRoot": true,
     "resolvedInputFiles": [
-        "lib.d.ts",
+        "lib.es5.d.ts",
         "test.ts"
     ],
     "emittedFiles": [

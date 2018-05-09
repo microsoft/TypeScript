@@ -111,8 +111,6 @@ namespace ts {
             }
 
             describe("parsesIncorrectly", () => {
-                parsesIncorrectly("emptyComment", "/***/");
-                parsesIncorrectly("threeAsterisks", "/*** */");
                 parsesIncorrectly("multipleTypes",
                         `/**
   * @type {number}
@@ -152,6 +150,8 @@ namespace ts {
             });
 
             describe("parsesCorrectly", () => {
+                parsesCorrectly("threeAsterisks", "/*** */");
+                parsesCorrectly("emptyComment", "/***/");
                 parsesCorrectly("noLeadingAsterisk",
 `/**
     @type {number}
@@ -305,6 +305,12 @@ namespace ts {
  * @param x hi
 < > still part of the previous comment
  */`);
+
+                parsesCorrectly("Nested @param tags",
+`/**
+* @param {object} o Doc doc
+* @param {string} o.f Doc for f
+*/`);
             });
         });
         describe("getFirstToken", () => {

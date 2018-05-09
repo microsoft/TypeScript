@@ -1,116 +1,123 @@
-/// <reference path="..\harness.ts" />
-/// <reference path="..\virtualFileSystem.ts" />
+/// <reference path="../harness.ts" />
+/// <reference path="../vfs.ts" />
+/// <reference path="../compiler.ts" />
 
 namespace ts {
-    const testContentsJson = createMapFromTemplate({
-        "/dev/tsconfig.json": {
-            extends: "./configs/base",
-            files: [
-                "main.ts",
-                "supplemental.ts"
-            ]
-        },
-        "/dev/tsconfig.nostrictnull.json": {
-            extends: "./tsconfig",
-            compilerOptions: {
-                strictNullChecks: false
+    function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
+        return new vfs.FileSystem(ignoreCase, {
+            cwd,
+            files: {
+                [root]: {
+                    "dev/tsconfig.json": JSON.stringify({
+                        extends: "./configs/base",
+                        files: [
+                            "main.ts",
+                            "supplemental.ts"
+                        ]
+                    }),
+                    "dev/tsconfig.nostrictnull.json": JSON.stringify({
+                        extends: "./tsconfig",
+                        compilerOptions: {
+                            strictNullChecks: false
+                        }
+                    }),
+                    "dev/configs/base.json": JSON.stringify({
+                        compilerOptions: {
+                            allowJs: true,
+                            noImplicitAny: true,
+                            strictNullChecks: true
+                        }
+                    }),
+                    "dev/configs/tests.json": JSON.stringify({
+                        compilerOptions: {
+                            preserveConstEnums: true,
+                            removeComments: false,
+                            sourceMap: true
+                        },
+                        exclude: [
+                            "../tests/baselines",
+                            "../tests/scenarios"
+                        ],
+                        include: [
+                            "../tests/**/*.ts"
+                        ]
+                    }),
+                    "dev/circular.json": JSON.stringify({
+                        extends: "./circular2",
+                        compilerOptions: {
+                            module: "amd"
+                        }
+                    }),
+                    "dev/circular2.json": JSON.stringify({
+                        extends: "./circular",
+                        compilerOptions: {
+                            module: "commonjs"
+                        }
+                    }),
+                    "dev/missing.json": JSON.stringify({
+                        extends: "./missing2",
+                        compilerOptions: {
+                            types: []
+                        }
+                    }),
+                    "dev/failure.json": JSON.stringify({
+                        extends: "./failure2.json",
+                        compilerOptions: {
+                            typeRoots: []
+                        }
+                    }),
+                    "dev/failure2.json": JSON.stringify({
+                        excludes: ["*.js"]
+                    }),
+                    "dev/configs/first.json": JSON.stringify({
+                        extends: "./base",
+                        compilerOptions: {
+                            module: "commonjs"
+                        },
+                        files: ["../main.ts"]
+                    }),
+                    "dev/configs/second.json": JSON.stringify({
+                        extends: "./base",
+                        compilerOptions: {
+                            module: "amd"
+                        },
+                        include: ["../supplemental.*"]
+                    }),
+                    "dev/configs/third.json": JSON.stringify({
+                        extends: "./second",
+                        compilerOptions: {
+                            // tslint:disable-next-line:no-null-keyword
+                            module: null
+                        },
+                        include: ["../supplemental.*"]
+                    }),
+                    "dev/configs/fourth.json": JSON.stringify({
+                        extends: "./third",
+                        compilerOptions: {
+                            module: "system"
+                        },
+                        // tslint:disable-next-line:no-null-keyword
+                        include: null,
+                        files: ["../main.ts"]
+                    }),
+                    "dev/extends.json": JSON.stringify({ extends: 42 }),
+                    "dev/extends2.json": JSON.stringify({ extends: "configs/base" }),
+                    "dev/main.ts": "",
+                    "dev/supplemental.ts": "",
+                    "dev/tests/unit/spec.ts": "",
+                    "dev/tests/utils.ts": "",
+                    "dev/tests/scenarios/first.json": "",
+                    "dev/tests/baselines/first/output.ts": ""
+                }
             }
-        },
-        "/dev/configs/base.json": {
-            compilerOptions: {
-                allowJs: true,
-                noImplicitAny: true,
-                strictNullChecks: true
-            }
-        },
-        "/dev/configs/tests.json": {
-            compilerOptions: {
-                preserveConstEnums: true,
-                removeComments: false,
-                sourceMap: true
-            },
-            exclude: [
-                "../tests/baselines",
-                "../tests/scenarios"
-            ],
-            include: [
-                "../tests/**/*.ts"
-            ]
-        },
-        "/dev/circular.json": {
-            extends: "./circular2",
-            compilerOptions: {
-                module: "amd"
-            }
-        },
-        "/dev/circular2.json": {
-            extends: "./circular",
-            compilerOptions: {
-                module: "commonjs"
-            }
-        },
-        "/dev/missing.json": {
-            extends: "./missing2",
-            compilerOptions: {
-                types: []
-            }
-        },
-        "/dev/failure.json": {
-            extends: "./failure2.json",
-            compilerOptions: {
-                typeRoots: []
-            }
-        },
-        "/dev/failure2.json": {
-            excludes: ["*.js"]
-        },
-        "/dev/configs/first.json": {
-            extends: "./base",
-            compilerOptions: {
-                module: "commonjs"
-            },
-            files: ["../main.ts"]
-        },
-        "/dev/configs/second.json": {
-            extends: "./base",
-            compilerOptions: {
-                module: "amd"
-            },
-            include: ["../supplemental.*"]
-        },
-        "/dev/configs/third.json": {
-            extends: "./second",
-            compilerOptions: {
-                // tslint:disable-next-line:no-null-keyword
-                module: null
-            },
-            include: ["../supplemental.*"]
-        },
-        "/dev/configs/fourth.json": {
-            extends: "./third",
-            compilerOptions: {
-                module: "system"
-            },
-            // tslint:disable-next-line:no-null-keyword
-            include: null,
-            files: ["../main.ts"]
-        },
-        "/dev/extends.json": { extends: 42 },
-        "/dev/extends2.json": { extends: "configs/base" },
-        "/dev/main.ts": "",
-        "/dev/supplemental.ts": "",
-        "/dev/tests/unit/spec.ts": "",
-        "/dev/tests/utils.ts": "",
-        "/dev/tests/scenarios/first.json": "",
-        "/dev/tests/baselines/first/output.ts": ""
-    });
-    const testContents = mapEntries(testContentsJson, (k, v) => [k, isString(v) ? v : JSON.stringify(v)]);
+        });
+    }
 
     const caseInsensitiveBasePath = "c:/dev/";
-    const caseInsensitiveHost = new Utils.MockParseConfigHost(caseInsensitiveBasePath, /*useCaseSensitiveFileNames*/ false, mapEntries(testContents, (key, content) => [`c:${key}`, content]));
+    const caseInsensitiveHost = new fakes.ParseConfigHost(createFileSystem(/*ignoreCase*/ true, caseInsensitiveBasePath, "c:/"));
 
     const caseSensitiveBasePath = "/dev/";
-    const caseSensitiveHost = new Utils.MockParseConfigHost(caseSensitiveBasePath, /*useCaseSensitiveFileNames*/ true, testContents);
+    const caseSensitiveHost = new fakes.ParseConfigHost(createFileSystem(/*ignoreCase*/ false, caseSensitiveBasePath, "/"));
 
     function verifyDiagnostics(actual: Diagnostic[], expected: {code: number, category: DiagnosticCategory, messageText: string}[]) {
         assert.isTrue(expected.length === actual.length, `Expected error: ${JSON.stringify(expected)}. Actual error: ${JSON.stringify(actual)}.`);
@@ -124,7 +131,7 @@ namespace ts {
     }
 
     describe("configurationExtension", () => {
-        forEach<[string, string, Utils.MockParseConfigHost], void>([
+        forEach<[string, string, fakes.ParseConfigHost], void>([
             ["under a case insensitive host", caseInsensitiveBasePath, caseInsensitiveHost],
             ["under a case sensitive host", caseSensitiveBasePath, caseSensitiveHost]
         ], ([testName, basePath, host]) => {

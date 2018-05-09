@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "strict": true,
-        "lib": ["es2015", "dom"],
+        "lib": ["esnext", "dom"],
         "types": []
     }
 }

@@ -1,5 +1,3 @@
-/// <reference path='services.ts' />
-
 /* @internal */
 namespace ts.NavigationBar {
     /**
@@ -275,6 +273,7 @@ namespace ts.NavigationBar {
                     case SpecialPropertyAssignmentKind.ExportsProperty:
                     case SpecialPropertyAssignmentKind.ModuleExports:
                     case SpecialPropertyAssignmentKind.PrototypeProperty:
+                    case SpecialPropertyAssignmentKind.Prototype:
                         addNodeWithRecursiveChild(node, (node as BinaryExpression).right);
                         break;
                     case SpecialPropertyAssignmentKind.ThisProperty:

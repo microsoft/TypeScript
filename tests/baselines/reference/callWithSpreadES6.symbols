@@ -93,7 +93,7 @@ xa[1].foo(1, 2, ...a, "abc");
 >a : Symbol(a, Decl(callWithSpreadES6.ts, 7, 3))
 
 (<Function>xa[1].foo)(...[1, 2, "abc"]);
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >xa[1].foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))
 >xa : Symbol(xa, Decl(callWithSpreadES6.ts, 10, 3))
 >foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 0, 13))

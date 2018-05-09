@@ -29,7 +29,7 @@ declare function isDate(x): x is Date;
 >isDate : Symbol(isDate, Decl(narrowFromAnyWithTypePredicate.ts, 4, 40))
 >x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 5, 24))
 >x : Symbol(x, Decl(narrowFromAnyWithTypePredicate.ts, 5, 24))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 
 if (isFunction(x)) { // 'any' is not narrowed when target type is 'Function'

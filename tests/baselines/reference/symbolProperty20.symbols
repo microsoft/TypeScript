@@ -4,16 +4,16 @@ interface I {
 
     [Symbol.iterator]: (s: string) => string;
 >[Symbol.iterator] : Symbol(I[Symbol.iterator], Decl(symbolProperty20.ts, 0, 13))
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es6.d.ts, --, --))
 >s : Symbol(s, Decl(symbolProperty20.ts, 1, 24))
 
     [Symbol.toStringTag](s: number): number;
 >[Symbol.toStringTag] : Symbol(I[Symbol.toStringTag], Decl(symbolProperty20.ts, 1, 45))
->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es6.d.ts, --, --))
 >s : Symbol(s, Decl(symbolProperty20.ts, 2, 25))
 }
 
@@ -23,17 +23,17 @@ var i: I = {
 
     [Symbol.iterator]: s => s,
 >[Symbol.iterator] : Symbol([Symbol.iterator], Decl(symbolProperty20.ts, 5, 12))
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es6.d.ts, --, --))
 >s : Symbol(s, Decl(symbolProperty20.ts, 6, 22))
 >s : Symbol(s, Decl(symbolProperty20.ts, 6, 22))
 
     [Symbol.toStringTag](n) { return n; }
 >[Symbol.toStringTag] : Symbol([Symbol.toStringTag], Decl(symbolProperty20.ts, 6, 30))
->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es6.d.ts, --, --))
 >n : Symbol(n, Decl(symbolProperty20.ts, 7, 25))
 >n : Symbol(n, Decl(symbolProperty20.ts, 7, 25))
 }

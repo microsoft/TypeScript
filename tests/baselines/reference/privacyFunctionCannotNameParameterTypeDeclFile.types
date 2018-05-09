@@ -434,7 +434,7 @@ function privateFunctionWithPrivateModuleParameterTypes1(param= exporter.createE
 }
 === tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts ===
 declare module "GlobalWidgets" {
->"GlobalWidgets" : typeof "GlobalWidgets"
+>"GlobalWidgets" : typeof import("GlobalWidgets")
 
     export class Widget3 {
 >Widget3 : Widget3

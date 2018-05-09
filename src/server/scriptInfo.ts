@@ -1,5 +1,3 @@
-/// <reference path="scriptVersionCache.ts"/>
-
 namespace ts.server {
 
     /* @internal */
@@ -209,7 +207,8 @@ namespace ts.server {
          * All projects that include this file
          */
         readonly containingProjects: Project[] = [];
-        private formatCodeSettings: FormatCodeSettings;
+        private formatSettings: FormatCodeSettings | undefined;
+        private preferences: UserPreferences | undefined;
 
         /* @internal */
         fileWatcher: FileWatcher;
@@ -298,14 +297,14 @@ namespace ts.server {
             return this.realpath && this.realpath !== this.path ? this.realpath : undefined;
         }
 
-        getFormatCodeSettings() {
-            return this.formatCodeSettings;
-        }
+        getFormatCodeSettings(): FormatCodeSettings { return this.formatSettings; }
+        getPreferences(): UserPreferences { return this.preferences; }
 
         attachToProject(project: Project): boolean {
             const isNew = !this.isAttached(project);
             if (isNew) {
                 this.containingProjects.push(project);
+                project.onFileAddedOrRemoved();
                 if (!project.getCompilerOptions().preserveSymlinks) {
                     this.ensureRealPath();
                 }
@@ -330,19 +329,24 @@ namespace ts.server {
                     return;
                 case 1:
                     if (this.containingProjects[0] === project) {
+                        project.onFileAddedOrRemoved();
                         this.containingProjects.pop();
                     }
                     break;
                 case 2:
                     if (this.containingProjects[0] === project) {
+                        project.onFileAddedOrRemoved();
                         this.containingProjects[0] = this.containingProjects.pop();
                     }
                     else if (this.containingProjects[1] === project) {
+                        project.onFileAddedOrRemoved();
                         this.containingProjects.pop();
                     }
                     break;
                 default:
-                    unorderedRemoveItem(this.containingProjects, project);
+                    if (unorderedRemoveItem(this.containingProjects, project)) {
+                        project.onFileAddedOrRemoved();
+                    }
                     break;
             }
         }
@@ -393,12 +397,22 @@ namespace ts.server {
             }
         }
 
-        setFormatOptions(formatSettings: FormatCodeSettings): void {
+        setOptions(formatSettings: FormatCodeSettings, preferences: UserPreferences): void {
             if (formatSettings) {
-                if (!this.formatCodeSettings) {
-                    this.formatCodeSettings = getDefaultFormatCodeSettings(this.host);
+                if (!this.formatSettings) {
+                    this.formatSettings = getDefaultFormatCodeSettings(this.host);
+                    assign(this.formatSettings, formatSettings);
                 }
-                mergeMapLikes(this.formatCodeSettings, formatSettings);
+                else {
+                    this.formatSettings = { ...this.formatSettings, ...formatSettings };
+                }
+            }
+
+            if (preferences) {
+                if (!this.preferences) {
+                    this.preferences = defaultPreferences;
+                }
+                this.preferences = { ...this.preferences, ...preferences };
             }
         }
 
@@ -446,7 +460,7 @@ namespace ts.server {
         }
 
         isOrphan() {
-            return this.containingProjects.length === 0;
+            return !forEach(this.containingProjects, p => !p.isOrphan());
         }
 
         /**

@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(11,22): error TS2559: Type '{ bar: string; }' has no properties in common with type 'IntrinsicAttributes & { ref?: string; }'.
+tests/cases/conformance/jsx/file.tsx(11,10): error TS2559: Type '{ bar: string; }' has no properties in common with type 'IntrinsicAttributes & { ref?: string; }'.
 
 
 ==== tests/cases/conformance/jsx/react.d.ts (0 errors) ====
@@ -26,7 +26,7 @@ tests/cases/conformance/jsx/file.tsx(11,22): error TS2559: Type '{ bar: string; 
     
     // Should be an OK
     var x = <MyComponent bar='world' />;
-                         ~~~~~~~~~~~
+             ~~~~~~~~~~~
 !!! error TS2559: Type '{ bar: string; }' has no properties in common with type 'IntrinsicAttributes & { ref?: string; }'.
     
     

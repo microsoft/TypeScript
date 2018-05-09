@@ -106,33 +106,33 @@ function fn9() { }
 
 //Function overloads that differ only by type parameter constraints
 function fn10<T extends Window>();
->fn10 : { <T extends any>(): any; <S extends Date>(): any; }
+>fn10 : { <T extends Window>(): any; <S extends Date>(): any; }
 >T : T
->Window : No type information available!
+>Window : Window
 
 function fn10<S extends Date>();
->fn10 : { <T extends any>(): any; <S extends Date>(): any; }
+>fn10 : { <T extends Window>(): any; <S extends Date>(): any; }
 >S : S
 >Date : Date
 
 function fn10() { }
->fn10 : { <T extends any>(): any; <S extends Date>(): any; }
+>fn10 : { <T extends Window>(): any; <S extends Date>(): any; }
 
 // (actually OK)
 
 //Function overloads that differ only by type parameter constraints where constraints are structually identical
 function fn11<T extends Window>();
->fn11 : { <T extends any>(): any; <S extends any>(): any; }
+>fn11 : { <T extends Window>(): any; <S extends Window>(): any; }
 >T : T
->Window : No type information available!
+>Window : Window
 
 function fn11<S extends typeof window>();
->fn11 : { <T extends any>(): any; <S extends any>(): any; }
+>fn11 : { <T extends Window>(): any; <S extends Window>(): any; }
 >S : S
->window : any
+>window : Window
 
 function fn11() { }
->fn11 : { <T extends any>(): any; <S extends any>(): any; }
+>fn11 : { <T extends Window>(): any; <S extends Window>(): any; }
 
 //Function overloads that differ only by type parameter constraints where constraints include infinitely recursive type reference
 interface List<T> {

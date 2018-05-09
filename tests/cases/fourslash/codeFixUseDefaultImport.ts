@@ -7,16 +7,19 @@
 ////export = x;
 
 // @Filename: /b.ts
-////import * as [|a|] from "./a";
+/////*com ment*/import * as [|a|] from "./a";/*tnem moc*/
+////a;
 
 // @Filename: /c.ts
-////import [|a|] = require("./a");
+/////*com ment*/import [|a|] = require("./a");/*tnem moc*/
+////a;
 
 // @Filename: /d.ts
 ////import "./a";
 
 // @Filename: /e.ts
 ////import * as n from "./non-existant";
+////n;
 
 for (const file of ["/b.ts", "/c.ts"]) {
     goTo.file(file);
@@ -29,7 +32,9 @@ for (const file of ["/b.ts", "/c.ts"]) {
 
     verify.codeFix({
         description: "Convert to default import",
-        newFileContent: `import a from "./a";`,
+        newFileContent:
+`/*com ment*/import a from "./a";/*tnem moc*/
+a;`,
     });
 }
 

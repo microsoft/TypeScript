@@ -20,12 +20,12 @@ const obj = {
 
   /** @type {function(number): number} */
   method1(n1) {
->method1 : (n1: any) => any
->n1 : any
+>method1 : (n1: number) => number
+>n1 : number
 
       return n1 + 42;
->n1 + 42 : any
->n1 : any
+>n1 + 42 : number
+>n1 : number
 >42 : 42
 
   },
@@ -44,10 +44,10 @@ const obj = {
   /** @type {function(number): number} */
   arrowFunc: (num) => num + 42
 >arrowFunc : (arg0: number) => number
->(num) => num + 42 : (num: any) => any
->num : any
->num + 42 : any
->num : any
+>(num) => num + 42 : (num: number) => number
+>num : number
+>num + 42 : number
+>num : number
 >42 : 42
 }
 obj.foo = 'string'

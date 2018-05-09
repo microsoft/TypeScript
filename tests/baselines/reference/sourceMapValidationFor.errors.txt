@@ -1,20 +1,14 @@
-tests/cases/compiler/sourceMapValidationFor.ts(2,5): error TS2304: Cannot find name 'WScript'.
-tests/cases/compiler/sourceMapValidationFor.ts(6,5): error TS2304: Cannot find name 'WScript'.
 tests/cases/compiler/sourceMapValidationFor.ts(20,1): error TS7027: Unreachable code detected.
 tests/cases/compiler/sourceMapValidationFor.ts(32,21): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== tests/cases/compiler/sourceMapValidationFor.ts (4 errors) ====
+==== tests/cases/compiler/sourceMapValidationFor.ts (2 errors) ====
     for (var i = 0; i < 10; i++) {
         WScript.Echo("i: " + i);
-        ~~~~~~~
-!!! error TS2304: Cannot find name 'WScript'.
     }
     for (i = 0; i < 10; i++)
     {
         WScript.Echo("i: " + i);
-        ~~~~~~~
-!!! error TS2304: Cannot find name 'WScript'.
     }
     for (var j = 0; j < 10; ) {
         j++;

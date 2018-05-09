@@ -9,7 +9,7 @@ class A {
     foo<T extends Date>(x: T): string { return null; }
 >foo : Symbol(A.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 4, 9))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 5, 8))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 5, 24))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 5, 8))
 }
@@ -17,7 +17,7 @@ class A {
 class B<T extends Date> {
 >B : Symbol(B, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 6, 1))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 8, 8))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     foo(x: T): number { return null; }
 >foo : Symbol(B.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 8, 25))
@@ -28,7 +28,7 @@ class B<T extends Date> {
 class C<T extends Date> {
 >C : Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 10, 1))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 12, 8))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     foo(x: T): boolean { return null; }
 >foo : Symbol(C.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 12, 25))
@@ -39,13 +39,13 @@ class C<T extends Date> {
 interface I<T extends Date> {
 >I : Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 14, 1))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 16, 12))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     foo(x: T): Date;
 >foo : Symbol(I.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 16, 29))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 17, 8))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 16, 12))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 interface I2 {
@@ -54,7 +54,7 @@ interface I2 {
     foo<T extends Date>(x: T): RegExp;
 >foo : Symbol(I2.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 20, 14))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 21, 8))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 21, 24))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 21, 8))
 >RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
@@ -64,7 +64,7 @@ var a: { foo<T extends Date>(x: T): T }
 >a : Symbol(a, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 24, 3))
 >foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 24, 8))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 24, 13))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 24, 29))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 24, 13))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 24, 13))
@@ -73,7 +73,7 @@ var b = { foo<T extends Date>(x: T) { return null; } };
 >b : Symbol(b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 25, 3))
 >foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 25, 9))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 25, 14))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 25, 30))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 25, 14))
 
@@ -95,13 +95,13 @@ function foo1b(x: B<Date>);
 >foo1b : Symbol(foo1b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 29, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 31, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 32, 27))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 31, 15))
 >B : Symbol(B, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 6, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo1b(x: B<Date>); // error
 >foo1b : Symbol(foo1b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 29, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 31, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 32, 27))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 32, 15))
 >B : Symbol(B, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 6, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo1b(x: any) { }
 >foo1b : Symbol(foo1b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 29, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 31, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 32, 27))
@@ -111,13 +111,13 @@ function foo1c(x: C<Date>);
 >foo1c : Symbol(foo1c, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 33, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 35, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 36, 27))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 35, 15))
 >C : Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 10, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo1c(x: C<Date>); // error
 >foo1c : Symbol(foo1c, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 33, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 35, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 36, 27))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 36, 15))
 >C : Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 10, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo1c(x: any) { }
 >foo1c : Symbol(foo1c, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 33, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 35, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 36, 27))
@@ -127,13 +127,13 @@ function foo2(x: I<Date>);
 >foo2 : Symbol(foo2, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 37, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 39, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 40, 26))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 39, 14))
 >I : Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 14, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo2(x: I<Date>); // error
 >foo2 : Symbol(foo2, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 37, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 39, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 40, 26))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 40, 14))
 >I : Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 14, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo2(x: any) { }
 >foo2 : Symbol(foo2, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 37, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 39, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 40, 26))
@@ -176,7 +176,7 @@ function foo5(x: B<Date>); // ok
 >foo5 : Symbol(foo5, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 49, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 51, 20), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 52, 26))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 52, 14))
 >B : Symbol(B, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 6, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo5(x: any) { }
 >foo5 : Symbol(foo5, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 49, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 51, 20), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 52, 26))
@@ -191,7 +191,7 @@ function foo5b(x: C<Date>); // ok
 >foo5b : Symbol(foo5b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 53, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 55, 21), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 56, 27))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 56, 15))
 >C : Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 10, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo5b(x: any) { }
 >foo5b : Symbol(foo5b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 53, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 55, 21), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 56, 27))
@@ -206,7 +206,7 @@ function foo6(x: I<Date>); // ok
 >foo6 : Symbol(foo6, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 57, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 59, 20), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 60, 26))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 60, 14))
 >I : Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 14, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo6(x: any) { }
 >foo6 : Symbol(foo6, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 57, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 59, 20), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 60, 26))
@@ -230,13 +230,13 @@ function foo8(x: B<Date>);
 >foo8 : Symbol(foo8, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 65, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 67, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 68, 26))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 67, 14))
 >B : Symbol(B, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 6, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo8(x: I<Date>); // ok
 >foo8 : Symbol(foo8, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 65, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 67, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 68, 26))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 68, 14))
 >I : Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 14, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo8(x: any) { }
 >foo8 : Symbol(foo8, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 65, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 67, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 68, 26))
@@ -246,13 +246,13 @@ function foo9(x: B<Date>);
 >foo9 : Symbol(foo9, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 69, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 71, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 72, 26))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 71, 14))
 >B : Symbol(B, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 6, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo9(x: C<Date>); // ok
 >foo9 : Symbol(foo9, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 69, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 71, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 72, 26))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 72, 14))
 >C : Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 10, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo9(x: any) { }
 >foo9 : Symbol(foo9, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 69, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 71, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 72, 26))
@@ -262,7 +262,7 @@ function foo10(x: B<Date>);
 >foo10 : Symbol(foo10, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 73, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 75, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 76, 28))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 75, 15))
 >B : Symbol(B, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 6, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo10(x: typeof a); // ok
 >foo10 : Symbol(foo10, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 73, 25), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 75, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 76, 28))
@@ -277,7 +277,7 @@ function foo11(x: B<Date>);
 >foo11 : Symbol(foo11, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 77, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 79, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 80, 28))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 79, 15))
 >B : Symbol(B, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 6, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo11(x: typeof b); // ok
 >foo11 : Symbol(foo11, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 77, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 79, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 80, 28))
@@ -292,13 +292,13 @@ function foo12(x: I<Date>);
 >foo12 : Symbol(foo12, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 81, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 83, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 84, 27))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 83, 15))
 >I : Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 14, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo12(x: C<Date>); // ok
 >foo12 : Symbol(foo12, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 81, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 83, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 84, 27))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 84, 15))
 >C : Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 10, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo12(x: any) { }
 >foo12 : Symbol(foo12, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 81, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 83, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 84, 27))
@@ -313,7 +313,7 @@ function foo12b(x: C<Date>); // ok
 >foo12b : Symbol(foo12b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 85, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 87, 23), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 88, 28))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 88, 16))
 >C : Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 10, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo12b(x: any) { }
 >foo12b : Symbol(foo12b, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 85, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 87, 23), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 88, 28))
@@ -323,7 +323,7 @@ function foo13(x: I<Date>);
 >foo13 : Symbol(foo13, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 89, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 91, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 92, 28))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 91, 15))
 >I : Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 14, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo13(x: typeof a); // ok
 >foo13 : Symbol(foo13, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 89, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 91, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 92, 28))
@@ -338,7 +338,7 @@ function foo14(x: I<Date>);
 >foo14 : Symbol(foo14, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 93, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 95, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 96, 28))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 95, 15))
 >I : Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 14, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo14(x: typeof b); // ok
 >foo14 : Symbol(foo14, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 93, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 95, 27), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 96, 28))
@@ -358,7 +358,7 @@ function foo15(x: C<Date>); // ok
 >foo15 : Symbol(foo15, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 97, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 99, 22), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 100, 27))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 100, 15))
 >C : Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 10, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function foo15(x: any) { }
 >foo15 : Symbol(foo15, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 97, 26), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 99, 22), Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 100, 27))

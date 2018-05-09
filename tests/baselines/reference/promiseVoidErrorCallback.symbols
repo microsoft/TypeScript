@@ -22,13 +22,13 @@ interface T3 {
 
 function f1(): Promise<T1> {
 >f1 : Symbol(f1, Decl(promiseVoidErrorCallback.ts, 10, 1))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >T1 : Symbol(T1, Decl(promiseVoidErrorCallback.ts, 0, 0))
 
     return Promise.resolve({ __t1: "foo_t1" });
->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >__t1 : Symbol(__t1, Decl(promiseVoidErrorCallback.ts, 13, 28))
 }
 
@@ -47,22 +47,22 @@ function f2(x: T1): T2 {
 
 var x3 = f1()
 >x3 : Symbol(x3, Decl(promiseVoidErrorCallback.ts, 20, 3))
->f1()    .then(f2, (e: Error) => {    throw e;})    .then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
->f1()    .then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>f1()    .then(f2, (e: Error) => {    throw e;})    .then : Symbol(Promise.then, Decl(lib.es6.d.ts, --, --))
+>f1()    .then : Symbol(Promise.then, Decl(lib.es6.d.ts, --, --))
 >f1 : Symbol(f1, Decl(promiseVoidErrorCallback.ts, 10, 1))
 
     .then(f2, (e: Error) => {
->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es6.d.ts, --, --))
 >f2 : Symbol(f2, Decl(promiseVoidErrorCallback.ts, 14, 1))
 >e : Symbol(e, Decl(promiseVoidErrorCallback.ts, 21, 15))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 
     throw e;
 >e : Symbol(e, Decl(promiseVoidErrorCallback.ts, 21, 15))
 
 })
     .then((x: T2) => {
->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es6.d.ts, --, --))
 >x : Symbol(x, Decl(promiseVoidErrorCallback.ts, 24, 11))
 >T2 : Symbol(T2, Decl(promiseVoidErrorCallback.ts, 2, 1))
 

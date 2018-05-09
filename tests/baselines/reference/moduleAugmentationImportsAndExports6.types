@@ -49,7 +49,7 @@ import C = N.Cls;
 >Cls : C
 
 declare module "./f1" {
->"./f1" : typeof "tests/cases/compiler/f1"
+>"./f1" : typeof import("tests/cases/compiler/f1")
 
     interface A {
 >A : A

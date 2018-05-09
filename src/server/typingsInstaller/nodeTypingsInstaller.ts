@@ -2,7 +2,8 @@
 
 namespace ts.server.typingsInstaller {
     const fs: {
-        appendFileSync(file: string, content: string): void
+        appendFileSync(file: string, content: string): void;
+        existsSync(path: string): boolean;
     } = require("fs");
 
     const path: {
@@ -21,7 +22,7 @@ namespace ts.server.typingsInstaller {
         }
         writeLine = (text: string) => {
             try {
-                fs.appendFileSync(this.logFile, text + sys.newLine);
+                fs.appendFileSync(this.logFile, `[${nowString()}] ${text}${sys.newLine}`);
             }
             catch (e) {
                 this.logEnabled = false;
@@ -32,11 +33,12 @@ namespace ts.server.typingsInstaller {
     /** Used if `--npmLocation` is not passed. */
     function getDefaultNPMLocation(processName: string) {
         if (path.basename(processName).indexOf("node") === 0) {
-            return `"${path.join(path.dirname(process.argv[0]), "npm")}"`;
+            const npmPath = `"${path.join(path.dirname(process.argv[0]), "npm")}"`;
+            if (fs.existsSync(npmPath)) {
+                return npmPath;
+            }
         }
-        else {
-            return "npm";
-        }
+        return "npm";
     }
 
     interface TypesRegistryFile {
@@ -184,9 +186,8 @@ namespace ts.server.typingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`#${requestId} with arguments'${JSON.stringify(packageNames)}'.`);
             }
-            const command = `${this.npmPath} install --ignore-scripts ${packageNames.join(" ")} --save-dev --user-agent="typesInstaller/${version}"`;
             const start = Date.now();
-            const hasError = this.execSyncAndLog(command, { cwd });
+            const hasError = installNpmPackages(this.npmPath, version, packageNames, command => this.execSyncAndLog(command, { cwd }));
             if (this.log.isEnabled()) {
                 this.log.writeLine(`npm install #${requestId} took: ${Date.now() - start} ms`);
             }

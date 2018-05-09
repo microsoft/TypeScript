@@ -190,13 +190,13 @@ function f51<T, K extends keyof T>(k: K, s: string) {
     const x2 = k as string;
 }
 
-function f52<T>(obj: { [x: string]: boolean }, k: keyof T, s: string, n: number) {
+function f52<T>(obj: { [x: string]: boolean }, k: Exclude<keyof T, symbol>, s: string, n: number) {
     const x1 = obj[s];
     const x2 = obj[n];
     const x3 = obj[k];
 }
 
-function f53<T, K extends keyof T>(obj: { [x: string]: boolean }, k: K, s: string, n: number) {
+function f53<T, K extends Exclude<keyof T, symbol>>(obj: { [x: string]: boolean }, k: K, s: string, n: number) {
     const x1 = obj[s];
     const x2 = obj[n];
     const x3 = obj[k];
@@ -319,6 +319,20 @@ function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2]
     x2.length;
     x3.length;
     x4.length;
+}
+
+function f91<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {
+    let a: {};
+    a = x;
+    a = y;
+    a = z;
+}
+
+function f92<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {
+    let a: {} | null | undefined;
+    a = x;
+    a = y;
+    a = z;
 }
 
 // Repros from #12011
@@ -556,7 +570,7 @@ class AnotherSampleClass<T> extends SampleClass<T & Foo> {
 new AnotherSampleClass({});
 
 // Positive repro from #17166
-function f3<T, K extends keyof T>(t: T, k: K, tk: T[K]): void {
+function f3<T, K extends Extract<keyof T, string>>(t: T, k: K, tk: T[K]): void {
     for (let key in t) {
         key = k // ok, K ==> keyof T
         t[key] = tk; // ok, T[K] ==> T[keyof T]
@@ -567,3 +581,59 @@ function f3<T, K extends keyof T>(t: T, k: K, tk: T[K]): void {
 type Predicates<TaggedRecord> = {
   [T in keyof TaggedRecord]: (variant: TaggedRecord[keyof TaggedRecord]) => variant is TaggedRecord[T]
 }
+
+// Repros from #23592
+
+type Example<T extends { [K in keyof T]: { prop: any } }> = { [K in keyof T]: T[K]["prop"] };
+type Result = Example<{ a: { prop: string }; b: { prop: number } }>;
+
+type Helper2<T> = { [K in keyof T]: Extract<T[K], { prop: any }> };
+type Example2<T> = { [K in keyof Helper2<T>]: Helper2<T>[K]["prop"] };
+type Result2 = Example2<{ 1: { prop: string }; 2: { prop: number } }>;
+
+// Repro from #23618
+
+type DBBoolTable<K extends string> = { [k in K]: 0 | 1 } 
+enum Flag {
+    FLAG_1 = "flag_1",
+    FLAG_2 = "flag_2"
+}
+
+type SimpleDBRecord<Flag extends string> = { staticField: number } & DBBoolTable<Flag>
+function getFlagsFromSimpleRecord<Flag extends string>(record: SimpleDBRecord<Flag>, flags: Flag[]) {
+    return record[flags[0]];
+}
+
+type DynamicDBRecord<Flag extends string> = ({ dynamicField: number } | { dynamicField: string }) & DBBoolTable<Flag>
+function getFlagsFromDynamicRecord<Flag extends string>(record: DynamicDBRecord<Flag>, flags: Flag[]) {
+    return record[flags[0]];
+}
+
+// Repro from #21368
+
+interface I {
+    foo: string;
+}
+
+declare function take<T>(p: T): void;
+
+function fn<T extends I, K extends keyof T>(o: T, k: K) {
+    take<{} | null | undefined>(o[k]);
+    take<any>(o[k]);
+}
+
+// Repro from #23133
+
+class Unbounded<T> {
+    foo(x: T[keyof T]) {
+        let y: {} | undefined | null = x;
+    }
+}
+
+// Repro from #23940
+
+interface I7 {
+    x: any;
+}
+type Foo7<T extends number> = T;
+declare function f7<K extends keyof I7>(type: K): Foo7<I7[K]>;

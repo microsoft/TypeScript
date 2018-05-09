@@ -1,11 +1,3 @@
-// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0.
-// See LICENSE.txt in the project root for complete license information.
-
-/// <reference path='../compiler/types.ts' />
-/// <reference path='../compiler/core.ts' />
-/// <reference path='../compiler/commandLineParser.ts' />
-/// <reference path='../services/semver.ts' />
-
 /* @internal */
 namespace ts.JsTyping {
 
@@ -47,7 +39,8 @@ namespace ts.JsTyping {
         "crypto", "stream", "util", "assert", "tty", "domain",
         "constants", "process", "v8", "timers", "console"];
 
-    const nodeCoreModules = arrayToSet(nodeCoreModuleList);
+    /* @internal */
+    export const nodeCoreModules = arrayToSet(nodeCoreModuleList);
 
     /**
      * A map of loose file names to library names that we are confident require typings

@@ -32,7 +32,7 @@ exports.bar = bar;
 
 
 //// [0.d.ts]
-export {  };
+export {};
 //// [1.d.ts]
 declare let v: string | boolean;
 declare function bar(): string | boolean;

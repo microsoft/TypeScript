@@ -4,7 +4,7 @@ class X {
 >X : X
 
 	method(readonly x: number) {}
->method : (readonly x: number) => void
+>method : (x: number) => void
 >x : number
 
 	set x(readonly value: number) {}
@@ -12,7 +12,7 @@ class X {
 >value : number
 }
 (readonly x) => 0;
->(readonly x) => 0 : (readonly x: any) => number
+>(readonly x) => 0 : (x: any) => number
 >x : any
 >0 : 0
 

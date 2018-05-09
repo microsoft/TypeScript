@@ -1,7 +1,3 @@
-/// <reference path="program.ts" />
-/// <reference path="builder.ts" />
-/// <reference path="resolutionCache.ts"/>
-
 /*@internal*/
 namespace ts {
     const sysFormatDiagnosticsHost: FormatDiagnosticsHost = sys ? {
@@ -31,14 +27,38 @@ namespace ts {
         };
     }
 
-    function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic, options: CompilerOptions) {
+    /** @internal */
+    export const nonClearingMessageCodes: number[] = [
+        Diagnostics.Found_1_error_Watching_for_file_changes.code,
+        Diagnostics.Found_0_errors_Watching_for_file_changes.code
+    ];
+
+    /**
+     * @returns Whether the screen was cleared.
+     */
+    function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic, options: CompilerOptions): boolean {
         if (system.clearScreen &&
             !options.preserveWatchOutput &&
-            diagnostic.code !== Diagnostics.Compilation_complete_Watching_for_file_changes.code &&
             !options.extendedDiagnostics &&
-            !options.diagnostics) {
+            !options.diagnostics &&
+            !contains(nonClearingMessageCodes, diagnostic.code)) {
             system.clearScreen();
+            return true;
         }
+
+        return false;
+    }
+
+    /** @internal */
+    export const screenStartingMessageCodes: number[] = [
+        Diagnostics.Starting_compilation_in_watch_mode.code,
+        Diagnostics.File_change_detected_Starting_incremental_compilation.code,
+    ];
+
+    function getPlainDiagnosticFollowingNewLines(diagnostic: Diagnostic, newLine: string): string {
+        return contains(screenStartingMessageCodes, diagnostic.code)
+            ? newLine + newLine
+            : newLine;
     }
 
     /**
@@ -49,62 +69,30 @@ namespace ts {
             (diagnostic, newLine, options) => {
                 clearScreenIfNotWatchingForFileChanges(system, diagnostic, options);
                 let output = `[${formatColorAndReset(new Date().toLocaleTimeString(), ForegroundColorEscapeSequences.Grey)}] `;
-                output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine + newLine}`;
+                output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine}`;
                 system.write(output);
             } :
             (diagnostic, newLine, options) => {
-                clearScreenIfNotWatchingForFileChanges(system, diagnostic, options);
-                let output = new Date().toLocaleTimeString() + " - ";
-                output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine + newLine}`;
+                let output = "";
+
+                if (!clearScreenIfNotWatchingForFileChanges(system, diagnostic, options)) {
+                    output += newLine;
+                }
+
+                output += `${new Date().toLocaleTimeString()} - `;
+                output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${getPlainDiagnosticFollowingNewLines(diagnostic, newLine)}`;
+
                 system.write(output);
             };
-    }
-
-    /**
-     * Interface extending ParseConfigHost to support ParseConfigFile that reads config file and reports errors
-     */
-    export interface ParseConfigFileHost extends ParseConfigHost, ConfigFileDiagnosticsReporter {
-        getCurrentDirectory(): string;
     }
 
     /** Parses config file using System interface */
     export function parseConfigFileWithSystem(configFileName: string, optionsToExtend: CompilerOptions, system: System, reportDiagnostic: DiagnosticReporter) {
         const host: ParseConfigFileHost = <any>system;
-        host.onConfigFileDiagnostic = reportDiagnostic;
         host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(sys, reportDiagnostic, diagnostic);
         const result = getParsedCommandLineOfConfigFile(configFileName, optionsToExtend, host);
-        host.onConfigFileDiagnostic = undefined;
         host.onUnRecoverableConfigFileDiagnostic = undefined;
         return result;
-    }
-
-    /**
-     * Reads the config file, reports errors if any and exits if the config file cannot be found
-     */
-    export function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions, host: ParseConfigFileHost): ParsedCommandLine | undefined {
-        let configFileText: string;
-        try {
-            configFileText = host.readFile(configFileName);
-        }
-        catch (e) {
-            const error = createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, configFileName, e.message);
-            host.onUnRecoverableConfigFileDiagnostic(error);
-            return undefined;
-        }
-        if (!configFileText) {
-            const error = createCompilerDiagnostic(Diagnostics.File_0_not_found, configFileName);
-            host.onUnRecoverableConfigFileDiagnostic(error);
-            return undefined;
-        }
-
-        const result = parseJsonText(configFileName, configFileText);
-        result.parseDiagnostics.forEach(diagnostic => host.onConfigFileDiagnostic(diagnostic));
-
-        const cwd = host.getCurrentDirectory();
-        const configParseResult = parseJsonSourceFileConfigFileContent(result, host, getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd), optionsToExtend, getNormalizedAbsolutePath(configFileName, cwd));
-        configParseResult.errors.forEach(diagnostic => host.onConfigFileDiagnostic(diagnostic));
-
-        return configParseResult;
     }
 
     /**
@@ -118,24 +106,29 @@ namespace ts {
         getOptionsDiagnostics(): ReadonlyArray<Diagnostic>;
         getGlobalDiagnostics(): ReadonlyArray<Diagnostic>;
         getSemanticDiagnostics(): ReadonlyArray<Diagnostic>;
+        getConfigFileParsingDiagnostics(): ReadonlyArray<Diagnostic>;
         emit(): EmitResult;
     }
+
+    export type ReportEmitErrorSummary = (errorCount: number) => void;
 
     /**
      * Helper that emit files, report diagnostics and lists emitted and/or source files depending on compiler options
      */
-    export function emitFilesAndReportErrors(program: ProgramToEmitFilesAndReportErrors, reportDiagnostic: DiagnosticReporter, writeFileName?: (s: string) => void) {
+    export function emitFilesAndReportErrors(program: ProgramToEmitFilesAndReportErrors, reportDiagnostic: DiagnosticReporter, writeFileName?: (s: string) => void, reportSummary?: ReportEmitErrorSummary) {
         // First get and report any syntactic errors.
-        const diagnostics = program.getSyntacticDiagnostics().slice();
+        const diagnostics = program.getConfigFileParsingDiagnostics().slice();
+        const configFileParsingDiagnosticsLength = diagnostics.length;
+        addRange(diagnostics, program.getSyntacticDiagnostics());
         let reportSemanticDiagnostics = false;
 
         // If we didn't have any syntactic errors, then also try getting the global and
         // semantic errors.
-        if (diagnostics.length === 0) {
+        if (diagnostics.length === configFileParsingDiagnosticsLength) {
             addRange(diagnostics, program.getOptionsDiagnostics());
             addRange(diagnostics, program.getGlobalDiagnostics());
 
-            if (diagnostics.length === 0) {
+            if (diagnostics.length === configFileParsingDiagnosticsLength) {
                 reportSemanticDiagnostics = true;
             }
         }
@@ -163,6 +156,10 @@ namespace ts {
             }
         }
 
+        if (reportSummary) {
+            reportSummary(diagnostics.filter(diagnostic => diagnostic.category === DiagnosticCategory.Error).length);
+        }
+
         if (emitSkipped && diagnostics.length > 0) {
             // If the emitter didn't emit anything, then pass that value along.
             return ExitStatus.DiagnosticsPresent_OutputsSkipped;
@@ -188,6 +185,7 @@ namespace ts {
         let host: DirectoryStructureHost = system;
         const useCaseSensitiveFileNames = () => system.useCaseSensitiveFileNames;
         const writeFileName = (s: string) => system.write(s + system.newLine);
+        const onWatchStatusChange = reportWatchStatus || createWatchStatusReporter(system);
         return {
             useCaseSensitiveFileNames,
             getNewLine: () => system.newLine,
@@ -206,7 +204,7 @@ namespace ts {
             setTimeout: system.setTimeout ? ((callback, ms, ...args: any[]) => system.setTimeout.call(system, callback, ms, ...args)) : noop,
             clearTimeout: system.clearTimeout ? (timeoutId => system.clearTimeout(timeoutId)) : noop,
             trace: s => system.write(s),
-            onWatchStatusChange: reportWatchStatus || createWatchStatusReporter(system),
+            onWatchStatusChange,
             createDirectory: path => system.createDirectory(path),
             writeFile: (path, data, writeByteOrderMark) => system.writeFile(path, data, writeByteOrderMark),
             onCachedDirectoryStructureHostCreate: cacheHost => host = cacheHost || system,
@@ -220,7 +218,19 @@ namespace ts {
         }
 
         function emitFilesAndReportErrorUsingBuilder(builderProgram: BuilderProgram) {
-            emitFilesAndReportErrors(builderProgram, reportDiagnostic, writeFileName);
+            const compilerOptions = builderProgram.getCompilerOptions();
+            const newLine = getNewLineCharacter(compilerOptions, () => system.newLine);
+
+            const reportSummary = (errorCount: number) => {
+                if (errorCount === 1) {
+                    onWatchStatusChange(createCompilerDiagnostic(Diagnostics.Found_1_error_Watching_for_file_changes, errorCount), newLine, compilerOptions);
+                }
+                else {
+                    onWatchStatusChange(createCompilerDiagnostic(Diagnostics.Found_0_errors_Watching_for_file_changes, errorCount, errorCount), newLine, compilerOptions);
+                }
+            };
+
+            emitFilesAndReportErrors(builderProgram, reportDiagnostic, writeFileName, reportSummary);
         }
     }
 
@@ -238,7 +248,6 @@ namespace ts {
     export function createWatchCompilerHostOfConfigFile<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(configFileName: string, optionsToExtend: CompilerOptions | undefined, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHostOfConfigFile<T> {
         reportDiagnostic = reportDiagnostic || createDiagnosticReporter(system);
         const host = createWatchCompilerHost(system, createProgram, reportDiagnostic, reportWatchStatus) as WatchCompilerHostOfConfigFile<T>;
-        host.onConfigFileDiagnostic = reportDiagnostic;
         host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, reportDiagnostic, diagnostic);
         host.configFileName = configFileName;
         host.optionsToExtend = optionsToExtend;
@@ -257,9 +266,9 @@ namespace ts {
 }
 
 namespace ts {
-    export type DiagnosticReporter = (diagnostic: Diagnostic) => void;
     export type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string, options: CompilerOptions) => void;
-    export type CreateProgram<T extends BuilderProgram> = (rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: T) => T;
+    /** Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program */
+    export type CreateProgram<T extends BuilderProgram> = (rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: T, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) => T;
     export interface WatchCompilerHost<T extends BuilderProgram> {
         /**
          * Used to create the program when need for program creation or recreation detected
@@ -342,21 +351,6 @@ namespace ts {
     }
 
     /**
-     * Reports config file diagnostics
-     */
-    export interface ConfigFileDiagnosticsReporter {
-        /**
-         * Reports the diagnostics in reading/writing or parsing of the config file
-         */
-        onConfigFileDiagnostic: DiagnosticReporter;
-
-        /**
-         * Reports unrecoverable error when parsing config file
-         */
-        onUnRecoverableConfigFileDiagnostic: DiagnosticReporter;
-    }
-
-    /**
      * Host to create watch with config file
      */
     export interface WatchCompilerHostOfConfigFile<T extends BuilderProgram> extends WatchCompilerHost<T>, ConfigFileDiagnosticsReporter {
@@ -378,11 +372,8 @@ namespace ts {
      */
     /*@internal*/
     export interface WatchCompilerHostOfConfigFile<T extends BuilderProgram> extends WatchCompilerHost<T> {
-        rootFiles?: string[];
-        options?: CompilerOptions;
         optionsToExtend?: CompilerOptions;
-        configFileSpecs?: ConfigFileSpecs;
-        configFileWildCardDirectories?: MapLike<WatchDirectoryFlags>;
+        configFileParsingResult?: ParsedCommandLine;
     }
 
     export interface Watch<T> {
@@ -460,7 +451,10 @@ namespace ts {
         const getCurrentDirectory = () => currentDirectory;
         const readFile: (path: string, encoding?: string) => string | undefined = (path, encoding) => host.readFile(path, encoding);
         const { configFileName, optionsToExtend: optionsToExtendForConfigFile = {}, createProgram } = host;
-        let { rootFiles: rootFileNames, options: compilerOptions, configFileSpecs, configFileWildCardDirectories } = host;
+        let { rootFiles: rootFileNames, options: compilerOptions } = host;
+        let configFileSpecs: ConfigFileSpecs;
+        let configFileParsingDiagnostics: ReadonlyArray<Diagnostic> | undefined;
+        let hasChangedConfigFileParsingErrors = false;
 
         const cachedDirectoryStructureHost = configFileName && createCachedDirectoryStructureHost(host, currentDirectory, useCaseSensitiveFileNames);
         if (cachedDirectoryStructureHost && host.onCachedDirectoryStructureHostCreate) {
@@ -473,28 +467,35 @@ namespace ts {
             fileExists: path => host.fileExists(path),
             readFile,
             getCurrentDirectory,
-            onConfigFileDiagnostic: host.onConfigFileDiagnostic,
             onUnRecoverableConfigFileDiagnostic: host.onUnRecoverableConfigFileDiagnostic
         };
 
         // From tsc we want to get already parsed result and hence check for rootFileNames
-        if (configFileName && !rootFileNames) {
-            parseConfigFile();
+        let newLine = updateNewLine();
+        reportWatchDiagnostic(Diagnostics.Starting_compilation_in_watch_mode);
+        if (configFileName) {
+            newLine = getNewLineCharacter(optionsToExtendForConfigFile, () => host.getNewLine());
+            if (host.configFileParsingResult) {
+                setConfigFileParsingResult(host.configFileParsingResult);
+            }
+            else {
+                Debug.assert(!rootFileNames);
+                parseConfigFile();
+            }
+            newLine = updateNewLine();
         }
 
         const trace = host.trace && ((s: string) => { host.trace(s + newLine); });
-        const loggingEnabled = trace && (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics);
-        const writeLog = loggingEnabled ? trace : noop;
-        const watchFile = compilerOptions.extendedDiagnostics ? addFileWatcherWithLogging : loggingEnabled ? addFileWatcherWithOnlyTriggerLogging : addFileWatcher;
-        const watchFilePath = compilerOptions.extendedDiagnostics ? addFilePathWatcherWithLogging : addFilePathWatcher;
-        const watchDirectoryWorker = compilerOptions.extendedDiagnostics ? addDirectoryWatcherWithLogging : addDirectoryWatcher;
+        const watchLogLevel = trace ? compilerOptions.extendedDiagnostics ? WatchLogLevel.Verbose :
+            compilerOptions.diagnostis ? WatchLogLevel.TriggerOnly : WatchLogLevel.None : WatchLogLevel.None;
+        const writeLog: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? trace : noop;
+        const { watchFile, watchFilePath, watchDirectory } = getWatchFactory<string>(watchLogLevel, writeLog);
 
         const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
-        let newLine = updateNewLine();
 
         writeLog(`Current directory: ${currentDirectory} CaseSensitiveFileNames: ${useCaseSensitiveFileNames}`);
         if (configFileName) {
-            watchFile(host, configFileName, scheduleProgramReload, writeLog);
+            watchFile(host, configFileName, scheduleProgramReload, PollingInterval.High, "Config file");
         }
 
         const compilerHost: CompilerHost & ResolutionCacheHost = {
@@ -520,8 +521,8 @@ namespace ts {
             // Members for ResolutionCacheHost
             toPath,
             getCompilationSettings: () => compilerOptions,
-            watchDirectoryOfFailedLookupLocation: watchDirectory,
-            watchTypeRootsDirectory: watchDirectory,
+            watchDirectoryOfFailedLookupLocation: (dir, cb, flags) => watchDirectory(host, dir, cb, flags, "Failed Lookup Locations"),
+            watchTypeRootsDirectory: (dir, cb, flags) => watchDirectory(host, dir, cb, flags, "Type roots"),
             getCachedDirectoryStructureHost: () => cachedDirectoryStructureHost,
             onInvalidatedResolution: scheduleProgramUpdate,
             onChangedAutomaticTypeDirectiveNames: () => {
@@ -547,7 +548,6 @@ namespace ts {
             ((typeDirectiveNames, containingFile) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile));
         const userProvidedResolution = !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
 
-        reportWatchDiagnostic(Diagnostics.Starting_compilation_in_watch_mode);
         synchronizeProgram();
 
         // Update the wild card directory watch
@@ -579,22 +579,37 @@ namespace ts {
             // All resolutions are invalid if user provided resolutions
             const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution(userProvidedResolution);
             if (isProgramUptoDate(getCurrentProgram(), rootFileNames, compilerOptions, getSourceVersion, fileExists, hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames)) {
-                return builderProgram;
+                if (hasChangedConfigFileParsingErrors) {
+                    builderProgram = createProgram(/*rootNames*/ undefined, /*options*/ undefined, compilerHost, builderProgram, configFileParsingDiagnostics);
+                    hasChangedConfigFileParsingErrors = false;
+                }
+            }
+            else {
+                createNewProgram(program, hasInvalidatedResolution);
             }
 
+            if (host.afterProgramCreate) {
+                host.afterProgramCreate(builderProgram);
+            }
+
+            return builderProgram;
+        }
+
+        function createNewProgram(program: Program, hasInvalidatedResolution: HasInvalidatedResolution) {
             // Compile the program
-            if (loggingEnabled) {
-                writeLog(`CreatingProgramWith::`);
+            if (watchLogLevel !== WatchLogLevel.None) {
+                writeLog("CreatingProgramWith::");
                 writeLog(`  roots: ${JSON.stringify(rootFileNames)}`);
                 writeLog(`  options: ${JSON.stringify(compilerOptions)}`);
             }
 
             const needsUpdateInTypeRootWatch = hasChangedCompilerOptions || !program;
             hasChangedCompilerOptions = false;
+            hasChangedConfigFileParsingErrors = false;
             resolutionCache.startCachingPerDirectoryResolution();
             compilerHost.hasInvalidatedResolution = hasInvalidatedResolution;
             compilerHost.hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames;
-            builderProgram = createProgram(rootFileNames, compilerOptions, compilerHost, builderProgram);
+            builderProgram = createProgram(rootFileNames, compilerOptions, compilerHost, builderProgram, configFileParsingDiagnostics);
             resolutionCache.finishCachingPerDirectoryResolution();
 
             // Update watches
@@ -616,12 +631,6 @@ namespace ts {
                 }
                 missingFilePathsRequestedForRelease = undefined;
             }
-
-            if (host.afterProgramCreate) {
-                host.afterProgramCreate(builderProgram);
-            }
-            reportWatchDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes);
-            return builderProgram;
         }
 
         function updateRootFileNames(files: string[]) {
@@ -631,7 +640,7 @@ namespace ts {
         }
 
         function updateNewLine() {
-            return getNewLineCharacter(compilerOptions, () => host.getNewLine());
+            return getNewLineCharacter(compilerOptions || optionsToExtendForConfigFile, () => host.getNewLine());
         }
 
         function toPath(fileName: string) {
@@ -677,7 +686,7 @@ namespace ts {
                         (hostSourceFile as FilePresentOnHost).sourceFile = sourceFile;
                         sourceFile.version = hostSourceFile.version.toString();
                         if (!(hostSourceFile as FilePresentOnHost).fileWatcher) {
-                            (hostSourceFile as FilePresentOnHost).fileWatcher = watchFilePath(host, fileName, onSourceFileChange, path, writeLog);
+                            (hostSourceFile as FilePresentOnHost).fileWatcher = watchFilePath(host, fileName, onSourceFileChange, PollingInterval.Low, path, "Source file");
                         }
                     }
                     else {
@@ -691,7 +700,7 @@ namespace ts {
                 else {
                     if (sourceFile) {
                         sourceFile.version = initialVersion.toString();
-                        const fileWatcher = watchFilePath(host, fileName, onSourceFileChange, path, writeLog);
+                        const fileWatcher = watchFilePath(host, fileName, onSourceFileChange, PollingInterval.Low, path, "Source file");
                         sourceFilesCache.set(path, { sourceFile, version: initialVersion, fileWatcher });
                     }
                     else {
@@ -761,7 +770,7 @@ namespace ts {
 
         function reportWatchDiagnostic(message: DiagnosticMessage) {
             if (host.onWatchStatusChange) {
-                host.onWatchStatusChange(createCompilerDiagnostic(message), newLine, compilerOptions);
+                host.onWatchStatusChange(createCompilerDiagnostic(message), newLine, compilerOptions || optionsToExtendForConfigFile);
             }
         }
 
@@ -776,6 +785,7 @@ namespace ts {
             if (timerToUpdateProgram) {
                 host.clearTimeout(timerToUpdateProgram);
             }
+            writeLog("Scheduling update");
             timerToUpdateProgram = host.setTimeout(updateProgram, 250);
         }
 
@@ -801,9 +811,15 @@ namespace ts {
         }
 
         function reloadFileNamesFromConfigFile() {
+            writeLog("Reloading new file names and options");
             const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), compilerOptions, parseConfigFileHost);
-            if (!configFileSpecs.filesSpecs && result.fileNames.length === 0) {
-                host.onConfigFileDiagnostic(getErrorForNoInputFiles(configFileSpecs, configFileName));
+            if (result.fileNames.length) {
+                configFileParsingDiagnostics = filter(configFileParsingDiagnostics, error => !isErrorNoInputFiles(error));
+                hasChangedConfigFileParsingErrors = true;
+            }
+            else if (!configFileSpecs.filesSpecs && !some(configFileParsingDiagnostics, isErrorNoInputFiles)) {
+                configFileParsingDiagnostics = configFileParsingDiagnostics!.concat(getErrorForNoInputFiles(configFileSpecs, configFileName));
+                hasChangedConfigFileParsingErrors = true;
             }
             rootFileNames = result.fileNames;
 
@@ -827,11 +843,15 @@ namespace ts {
         }
 
         function parseConfigFile() {
-            const configParseResult = getParsedCommandLineOfConfigFile(configFileName, optionsToExtendForConfigFile, parseConfigFileHost);
-            rootFileNames = configParseResult.fileNames;
-            compilerOptions = configParseResult.options;
-            configFileSpecs = configParseResult.configFileSpecs;
-            configFileWildCardDirectories = configParseResult.wildcardDirectories;
+            setConfigFileParsingResult(getParsedCommandLineOfConfigFile(configFileName, optionsToExtendForConfigFile, parseConfigFileHost));
+        }
+
+        function setConfigFileParsingResult(configFileParseResult: ParsedCommandLine) {
+            rootFileNames = configFileParseResult.fileNames;
+            compilerOptions = configFileParseResult.options;
+            configFileSpecs = configFileParseResult.configFileSpecs;
+            configFileParsingDiagnostics = getConfigFileParsingDiagnostics(configFileParseResult);
+            hasChangedConfigFileParsingErrors = true;
         }
 
         function onSourceFileChange(fileName: string, eventKind: FileWatcherEventKind, path: Path) {
@@ -853,12 +873,8 @@ namespace ts {
             }
         }
 
-        function watchDirectory(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags) {
-            return watchDirectoryWorker(host, directory, cb, flags, writeLog);
-        }
-
         function watchMissingFilePath(missingFilePath: Path) {
-            return watchFilePath(host, missingFilePath, onMissingFileChange, missingFilePath, writeLog);
+            return watchFilePath(host, missingFilePath, onMissingFileChange, PollingInterval.Medium, missingFilePath, "Missing file");
         }
 
         function onMissingFileChange(fileName: string, eventKind: FileWatcherEventKind, missingFilePath: Path) {
@@ -877,10 +893,10 @@ namespace ts {
         }
 
         function watchConfigFileWildCardDirectories() {
-            if (configFileWildCardDirectories) {
+            if (configFileSpecs) {
                 updateWatchingWildcardDirectories(
                     watchedWildcardDirectories || (watchedWildcardDirectories = createMap()),
-                    createMapFromTemplate(configFileWildCardDirectories),
+                    createMapFromTemplate(configFileSpecs.wildcardDirectories),
                     watchWildcardDirectory
                 );
             }
@@ -891,6 +907,7 @@ namespace ts {
 
         function watchWildcardDirectory(directory: string, flags: WatchDirectoryFlags) {
             return watchDirectory(
+                host,
                 directory,
                 fileOrDirectory => {
                     Debug.assert(!!configFileName);
@@ -918,7 +935,8 @@ namespace ts {
                         scheduleProgramUpdate();
                     }
                 },
-                flags
+                flags,
+                "Wild card directories"
             );
         }
 

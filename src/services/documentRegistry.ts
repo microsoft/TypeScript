@@ -172,9 +172,10 @@ namespace ts {
 
             const bucket = getBucketForCompilationSettings(key, /*createIfMissing*/ true);
             let entry = bucket.get(path);
+            const scriptTarget = scriptKind === ScriptKind.JSON ? ScriptTarget.JSON : compilationSettings.target;
             if (!entry) {
                 // Have never seen this file with these settings.  Create a new source file for it.
-                const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, compilationSettings.target, version, /*setNodeParents*/ false, scriptKind);
+                const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, scriptTarget, version, /*setNodeParents*/ false, scriptKind);
 
                 entry = {
                     sourceFile,

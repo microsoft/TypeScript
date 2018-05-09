@@ -9,9 +9,9 @@ async function foo() {
 >await import((await import("./foo")).default) : any
 >import((await import("./foo")).default) : Promise<any>
 >(await import("./foo")).default : "./foo"
->(await import("./foo")) : typeof "tests/cases/conformance/dynamicImport/foo"
->await import("./foo") : typeof "tests/cases/conformance/dynamicImport/foo"
->import("./foo") : Promise<typeof "tests/cases/conformance/dynamicImport/foo">
+>(await import("./foo")) : typeof import("tests/cases/conformance/dynamicImport/foo")
+>await import("./foo") : typeof import("tests/cases/conformance/dynamicImport/foo")
+>import("./foo") : Promise<typeof import("tests/cases/conformance/dynamicImport/foo")>
 >"./foo" : "./foo"
 >default : "./foo"
 }

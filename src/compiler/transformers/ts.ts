@@ -1,7 +1,3 @@
-/// <reference path="../factory.ts" />
-/// <reference path="../visitor.ts" />
-/// <reference path="./destructuring.ts" />
-
 /*@internal*/
 namespace ts {
     /**
@@ -92,7 +88,23 @@ namespace ts {
          */
         let pendingExpressions: Expression[] | undefined;
 
-        return transformSourceFile;
+        return transformSourceFileOrBundle;
+
+        function transformSourceFileOrBundle(node: SourceFile | Bundle) {
+            if (node.kind === SyntaxKind.Bundle) {
+                return transformBundle(node);
+            }
+            return transformSourceFile(node);
+        }
+
+        function transformBundle(node: Bundle) {
+            return createBundle(node.sourceFiles.map(transformSourceFile), mapDefined(node.prepends, prepend => {
+                if (prepend.kind === SyntaxKind.InputFiles) {
+                    return createUnparsedSourceFile(prepend.javascriptText);
+                }
+                return prepend;
+            }));
+        }
 
         /**
          * Transform TypeScript-specific syntax in a SourceFile.
@@ -324,8 +336,7 @@ namespace ts {
                     return node;
 
                 default:
-                    Debug.failBadSyntaxKind(node);
-                    return undefined;
+                    return Debug.failBadSyntaxKind(node);
             }
         }
 
@@ -507,6 +518,9 @@ namespace ts {
                 case SyntaxKind.NewExpression:
                     return visitNewExpression(<NewExpression>node);
 
+                case SyntaxKind.TaggedTemplateExpression:
+                    return visitTaggedTemplateExpression(<TaggedTemplateExpression>node);
+
                 case SyntaxKind.NonNullExpression:
                     // TypeScript non-null expressions are removed, but their subtrees are preserved.
                     return visitNonNullExpression(<NonNullExpression>node);
@@ -531,8 +545,7 @@ namespace ts {
                     return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
 
                 default:
-                    Debug.failBadSyntaxKind(node);
-                    return visitEachChild(node, visitor, context);
+                    return Debug.failBadSyntaxKind(node);
             }
         }
 
@@ -1251,7 +1264,7 @@ namespace ts {
         function transformInitializedProperty(property: PropertyDeclaration, receiver: LeftHandSideExpression) {
             // We generate a name here in order to reuse the value cached by the relocated computed name expression (which uses the same generated name)
             const propertyName = isComputedPropertyName(property.name) && !isSimpleInlineableExpression(property.name.expression)
-                ? updateComputedPropertyName(property.name, getGeneratedNameForNode(property.name, !hasModifier(property, ModifierFlags.Static)))
+                ? updateComputedPropertyName(property.name, getGeneratedNameForNode(property.name))
                 : property.name;
             const initializer = visitNode(property.initializer, visitor, isExpression);
             const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName);
@@ -1780,7 +1793,7 @@ namespace ts {
             return createArrayLiteral(expressions);
         }
 
-        function getParametersOfDecoratedDeclaration(node: FunctionLike, container: ClassLikeDeclaration) {
+        function getParametersOfDecoratedDeclaration(node: SignatureDeclaration, container: ClassLikeDeclaration) {
             if (container && node.kind === SyntaxKind.GetAccessor) {
                 const { setAccessor } = getAllAccessorDeclarations(container.members, <AccessorDeclaration>node);
                 if (setAccessor) {
@@ -1870,10 +1883,8 @@ namespace ts {
                             return createIdentifier("Boolean");
 
                         default:
-                            Debug.failBadSyntaxKind((<LiteralTypeNode>node).literal);
-                            break;
+                            return Debug.failBadSyntaxKind((<LiteralTypeNode>node).literal);
                     }
-                    break;
 
                 case SyntaxKind.NumberKeyword:
                     return createIdentifier("Number");
@@ -1900,8 +1911,7 @@ namespace ts {
                     break;
 
                 default:
-                    Debug.failBadSyntaxKind(node);
-                    break;
+                    return Debug.failBadSyntaxKind(node);
             }
 
             return createIdentifier("Object");
@@ -2554,6 +2564,14 @@ namespace ts {
                 visitNode(node.expression, visitor, isExpression),
                 /*typeArguments*/ undefined,
                 visitNodes(node.arguments, visitor, isExpression));
+        }
+
+        function visitTaggedTemplateExpression(node: TaggedTemplateExpression) {
+            return updateTaggedTemplate(
+                node,
+                visitNode(node.tag, visitor, isExpression),
+                /*typeArguments*/ undefined,
+                visitNode(node.template, visitor, isExpression));
         }
 
         /**

@@ -1,13 +1,10 @@
 tests/cases/conformance/parser/ecmascript5/parserNoASIOnCallAfterFunctionExpression1.ts(1,9): error TS2554: Expected 0 arguments, but got 1.
-tests/cases/conformance/parser/ecmascript5/parserNoASIOnCallAfterFunctionExpression1.ts(2,7): error TS2304: Cannot find name 'window'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/parserNoASIOnCallAfterFunctionExpression1.ts (2 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/parserNoASIOnCallAfterFunctionExpression1.ts (1 errors) ====
     var x = function () { }
             ~~~~~~~~~~~~~~~
     (<any>window).foo;
     ~~~~~~~~~~~~~
 !!! error TS2554: Expected 0 arguments, but got 1.
-          ~~~~~~
-!!! error TS2304: Cannot find name 'window'.
     

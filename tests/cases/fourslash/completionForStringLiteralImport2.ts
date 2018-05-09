@@ -20,14 +20,7 @@
 // @Filename: my_typings/some-module/index.d.ts
 //// export var x = 9;
 
-goTo.marker("0");
-verify.completionListContains("someFile.ts", undefined, undefined, undefined, 0);
-
-goTo.marker("1");
-verify.completionListContains("some-module", undefined, undefined, undefined, 1);
-
-goTo.marker("2");
-verify.completionListContains("someOtherFile.ts", undefined, undefined, undefined, 2);
-
-goTo.marker("3");
-verify.completionListContains("some-module", undefined, undefined, undefined, 3);
+verify.completionsAt("0", ["someFile.ts", "my_typings", "sub"], { isNewIdentifierLocation: true });
+verify.completionsAt("1", ["some-module"], { isNewIdentifierLocation: true });
+verify.completionsAt("2", ["someOtherFile.ts"], { isNewIdentifierLocation: true });
+verify.completionsAt("3", ["some-module"], { isNewIdentifierLocation: true });

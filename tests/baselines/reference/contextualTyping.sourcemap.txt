@@ -3077,7 +3077,7 @@ sourceFile:contextualTyping.ts
 9 >                 ^
 10>                  ^
 11>                   ^
-12>                    ^^^->
+12>                    ^^^^^^^^^^^^->
 1 >
   >
   >
@@ -3103,113 +3103,6 @@ sourceFile:contextualTyping.ts
 10>Emitted(125, 20) Source(193, 19) + SourceIndex(0)
 11>Emitted(125, 21) Source(193, 20) + SourceIndex(0)
 ---
->>>function Point(x, y) {
-1->
-2 >^^^^^^^^^^^^^^^
-3 >               ^
-4 >                ^^
-5 >                  ^
-1->
-  >
-  >
-  >// contextually typing from ambient class declarations
-  >declare class Point
-  >{
-  >      constructor(x: number, y: number);
-  >      x: number;
-  >      y: number;
-  >      add(dx: number, dy: number): Point;
-  >      static origin: Point;
-  >
-  >}
-  >
-  >
-2 >function Point(
-3 >               x
-4 >                , 
-5 >                  y
-1->Emitted(126, 1) Source(207, 1) + SourceIndex(0)
-2 >Emitted(126, 16) Source(207, 16) + SourceIndex(0)
-3 >Emitted(126, 17) Source(207, 17) + SourceIndex(0)
-4 >Emitted(126, 19) Source(207, 19) + SourceIndex(0)
-5 >Emitted(126, 20) Source(207, 20) + SourceIndex(0)
----
->>>    this.x = x;
-1 >^^^^
-2 >    ^^^^
-3 >        ^
-4 >         ^
-5 >          ^^^
-6 >             ^
-7 >              ^
-8 >               ^->
-1 >) {
-  >    
-2 >    this
-3 >        .
-4 >         x
-5 >           = 
-6 >             x
-7 >              ;
-1 >Emitted(127, 5) Source(208, 5) + SourceIndex(0)
-2 >Emitted(127, 9) Source(208, 9) + SourceIndex(0)
-3 >Emitted(127, 10) Source(208, 10) + SourceIndex(0)
-4 >Emitted(127, 11) Source(208, 11) + SourceIndex(0)
-5 >Emitted(127, 14) Source(208, 14) + SourceIndex(0)
-6 >Emitted(127, 15) Source(208, 15) + SourceIndex(0)
-7 >Emitted(127, 16) Source(208, 16) + SourceIndex(0)
----
->>>    this.y = y;
-1->^^^^
-2 >    ^^^^
-3 >        ^
-4 >         ^
-5 >          ^^^
-6 >             ^
-7 >              ^
-8 >               ^^->
-1->
-  >    
-2 >    this
-3 >        .
-4 >         y
-5 >           = 
-6 >             y
-7 >              ;
-1->Emitted(128, 5) Source(209, 5) + SourceIndex(0)
-2 >Emitted(128, 9) Source(209, 9) + SourceIndex(0)
-3 >Emitted(128, 10) Source(209, 10) + SourceIndex(0)
-4 >Emitted(128, 11) Source(209, 11) + SourceIndex(0)
-5 >Emitted(128, 14) Source(209, 14) + SourceIndex(0)
-6 >Emitted(128, 15) Source(209, 15) + SourceIndex(0)
-7 >Emitted(128, 16) Source(209, 16) + SourceIndex(0)
----
->>>    return this;
-1->^^^^
-2 >    ^^^^^^^
-3 >           ^^^^
-4 >               ^
-1->
-  >
-  >    
-2 >    return 
-3 >           this
-4 >               ;
-1->Emitted(129, 5) Source(211, 5) + SourceIndex(0)
-2 >Emitted(129, 12) Source(211, 12) + SourceIndex(0)
-3 >Emitted(129, 16) Source(211, 16) + SourceIndex(0)
-4 >Emitted(129, 17) Source(211, 17) + SourceIndex(0)
----
->>>}
-1 >
-2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-  >
-2 >}
-1 >Emitted(130, 1) Source(212, 1) + SourceIndex(0)
-2 >Emitted(130, 2) Source(212, 2) + SourceIndex(0)
----
 >>>Point.origin = new Point(0, 0);
 1->
 2 >^^^^^
@@ -3228,6 +3121,18 @@ sourceFile:contextualTyping.ts
 1->
   >
   >
+  >// contextually typing from ambient class declarations
+  >declare class Point
+  >{
+  >      constructor(x: number, y: number);
+  >      x: number;
+  >      y: number;
+  >      add(dx: number, dy: number): Point;
+  >      static origin: Point;
+  >
+  >}
+  >
+  >
 2 >Point
 3 >     .
 4 >      origin
@@ -3240,19 +3145,19 @@ sourceFile:contextualTyping.ts
 11>                            0
 12>                             )
 13>                              ;
-1->Emitted(131, 1) Source(214, 1) + SourceIndex(0)
-2 >Emitted(131, 6) Source(214, 6) + SourceIndex(0)
-3 >Emitted(131, 7) Source(214, 7) + SourceIndex(0)
-4 >Emitted(131, 13) Source(214, 13) + SourceIndex(0)
-5 >Emitted(131, 16) Source(214, 16) + SourceIndex(0)
-6 >Emitted(131, 20) Source(214, 20) + SourceIndex(0)
-7 >Emitted(131, 25) Source(214, 25) + SourceIndex(0)
-8 >Emitted(131, 26) Source(214, 26) + SourceIndex(0)
-9 >Emitted(131, 27) Source(214, 27) + SourceIndex(0)
-10>Emitted(131, 29) Source(214, 29) + SourceIndex(0)
-11>Emitted(131, 30) Source(214, 30) + SourceIndex(0)
-12>Emitted(131, 31) Source(214, 31) + SourceIndex(0)
-13>Emitted(131, 32) Source(214, 32) + SourceIndex(0)
+1->Emitted(126, 1) Source(207, 1) + SourceIndex(0)
+2 >Emitted(126, 6) Source(207, 6) + SourceIndex(0)
+3 >Emitted(126, 7) Source(207, 7) + SourceIndex(0)
+4 >Emitted(126, 13) Source(207, 13) + SourceIndex(0)
+5 >Emitted(126, 16) Source(207, 16) + SourceIndex(0)
+6 >Emitted(126, 20) Source(207, 20) + SourceIndex(0)
+7 >Emitted(126, 25) Source(207, 25) + SourceIndex(0)
+8 >Emitted(126, 26) Source(207, 26) + SourceIndex(0)
+9 >Emitted(126, 27) Source(207, 27) + SourceIndex(0)
+10>Emitted(126, 29) Source(207, 29) + SourceIndex(0)
+11>Emitted(126, 30) Source(207, 30) + SourceIndex(0)
+12>Emitted(126, 31) Source(207, 31) + SourceIndex(0)
+13>Emitted(126, 32) Source(207, 32) + SourceIndex(0)
 ---
 >>>Point.prototype.add = function (dx, dy) {
 1->
@@ -3280,17 +3185,17 @@ sourceFile:contextualTyping.ts
 9 >                                dx
 10>                                  , 
 11>                                    dy
-1->Emitted(132, 1) Source(216, 1) + SourceIndex(0)
-2 >Emitted(132, 6) Source(216, 6) + SourceIndex(0)
-3 >Emitted(132, 7) Source(216, 7) + SourceIndex(0)
-4 >Emitted(132, 16) Source(216, 16) + SourceIndex(0)
-5 >Emitted(132, 17) Source(216, 17) + SourceIndex(0)
-6 >Emitted(132, 20) Source(216, 20) + SourceIndex(0)
-7 >Emitted(132, 23) Source(216, 23) + SourceIndex(0)
-8 >Emitted(132, 33) Source(216, 32) + SourceIndex(0)
-9 >Emitted(132, 35) Source(216, 34) + SourceIndex(0)
-10>Emitted(132, 37) Source(216, 36) + SourceIndex(0)
-11>Emitted(132, 39) Source(216, 38) + SourceIndex(0)
+1->Emitted(127, 1) Source(209, 1) + SourceIndex(0)
+2 >Emitted(127, 6) Source(209, 6) + SourceIndex(0)
+3 >Emitted(127, 7) Source(209, 7) + SourceIndex(0)
+4 >Emitted(127, 16) Source(209, 16) + SourceIndex(0)
+5 >Emitted(127, 17) Source(209, 17) + SourceIndex(0)
+6 >Emitted(127, 20) Source(209, 20) + SourceIndex(0)
+7 >Emitted(127, 23) Source(209, 23) + SourceIndex(0)
+8 >Emitted(127, 33) Source(209, 32) + SourceIndex(0)
+9 >Emitted(127, 35) Source(209, 34) + SourceIndex(0)
+10>Emitted(127, 37) Source(209, 36) + SourceIndex(0)
+11>Emitted(127, 39) Source(209, 38) + SourceIndex(0)
 ---
 >>>    return new Point(this.x + dx, this.y + dy);
 1->^^^^
@@ -3330,24 +3235,24 @@ sourceFile:contextualTyping.ts
 16>                                           dy
 17>                                             )
 18>                                              ;
-1->Emitted(133, 5) Source(217, 5) + SourceIndex(0)
-2 >Emitted(133, 12) Source(217, 12) + SourceIndex(0)
-3 >Emitted(133, 16) Source(217, 16) + SourceIndex(0)
-4 >Emitted(133, 21) Source(217, 21) + SourceIndex(0)
-5 >Emitted(133, 22) Source(217, 22) + SourceIndex(0)
-6 >Emitted(133, 26) Source(217, 26) + SourceIndex(0)
-7 >Emitted(133, 27) Source(217, 27) + SourceIndex(0)
-8 >Emitted(133, 28) Source(217, 28) + SourceIndex(0)
-9 >Emitted(133, 31) Source(217, 31) + SourceIndex(0)
-10>Emitted(133, 33) Source(217, 33) + SourceIndex(0)
-11>Emitted(133, 35) Source(217, 35) + SourceIndex(0)
-12>Emitted(133, 39) Source(217, 39) + SourceIndex(0)
-13>Emitted(133, 40) Source(217, 40) + SourceIndex(0)
-14>Emitted(133, 41) Source(217, 41) + SourceIndex(0)
-15>Emitted(133, 44) Source(217, 44) + SourceIndex(0)
-16>Emitted(133, 46) Source(217, 46) + SourceIndex(0)
-17>Emitted(133, 47) Source(217, 47) + SourceIndex(0)
-18>Emitted(133, 48) Source(217, 48) + SourceIndex(0)
+1->Emitted(128, 5) Source(210, 5) + SourceIndex(0)
+2 >Emitted(128, 12) Source(210, 12) + SourceIndex(0)
+3 >Emitted(128, 16) Source(210, 16) + SourceIndex(0)
+4 >Emitted(128, 21) Source(210, 21) + SourceIndex(0)
+5 >Emitted(128, 22) Source(210, 22) + SourceIndex(0)
+6 >Emitted(128, 26) Source(210, 26) + SourceIndex(0)
+7 >Emitted(128, 27) Source(210, 27) + SourceIndex(0)
+8 >Emitted(128, 28) Source(210, 28) + SourceIndex(0)
+9 >Emitted(128, 31) Source(210, 31) + SourceIndex(0)
+10>Emitted(128, 33) Source(210, 33) + SourceIndex(0)
+11>Emitted(128, 35) Source(210, 35) + SourceIndex(0)
+12>Emitted(128, 39) Source(210, 39) + SourceIndex(0)
+13>Emitted(128, 40) Source(210, 40) + SourceIndex(0)
+14>Emitted(128, 41) Source(210, 41) + SourceIndex(0)
+15>Emitted(128, 44) Source(210, 44) + SourceIndex(0)
+16>Emitted(128, 46) Source(210, 46) + SourceIndex(0)
+17>Emitted(128, 47) Source(210, 47) + SourceIndex(0)
+18>Emitted(128, 48) Source(210, 48) + SourceIndex(0)
 ---
 >>>};
 1 >
@@ -3358,9 +3263,9 @@ sourceFile:contextualTyping.ts
   >
 2 >}
 3 > ;
-1 >Emitted(134, 1) Source(218, 1) + SourceIndex(0)
-2 >Emitted(134, 2) Source(218, 2) + SourceIndex(0)
-3 >Emitted(134, 3) Source(218, 3) + SourceIndex(0)
+1 >Emitted(129, 1) Source(211, 1) + SourceIndex(0)
+2 >Emitted(129, 2) Source(211, 2) + SourceIndex(0)
+3 >Emitted(129, 3) Source(211, 3) + SourceIndex(0)
 ---
 >>>Point.prototype = {
 1->
@@ -3375,11 +3280,11 @@ sourceFile:contextualTyping.ts
 3 >     .
 4 >      prototype
 5 >                = 
-1->Emitted(135, 1) Source(220, 1) + SourceIndex(0)
-2 >Emitted(135, 6) Source(220, 6) + SourceIndex(0)
-3 >Emitted(135, 7) Source(220, 7) + SourceIndex(0)
-4 >Emitted(135, 16) Source(220, 16) + SourceIndex(0)
-5 >Emitted(135, 19) Source(220, 19) + SourceIndex(0)
+1->Emitted(130, 1) Source(213, 1) + SourceIndex(0)
+2 >Emitted(130, 6) Source(213, 6) + SourceIndex(0)
+3 >Emitted(130, 7) Source(213, 7) + SourceIndex(0)
+4 >Emitted(130, 16) Source(213, 16) + SourceIndex(0)
+5 >Emitted(130, 19) Source(213, 19) + SourceIndex(0)
 ---
 >>>    x: 0,
 1 >^^^^
@@ -3392,10 +3297,10 @@ sourceFile:contextualTyping.ts
 2 >    x
 3 >     : 
 4 >       0
-1 >Emitted(136, 5) Source(221, 5) + SourceIndex(0)
-2 >Emitted(136, 6) Source(221, 6) + SourceIndex(0)
-3 >Emitted(136, 8) Source(221, 8) + SourceIndex(0)
-4 >Emitted(136, 9) Source(221, 9) + SourceIndex(0)
+1 >Emitted(131, 5) Source(214, 5) + SourceIndex(0)
+2 >Emitted(131, 6) Source(214, 6) + SourceIndex(0)
+3 >Emitted(131, 8) Source(214, 8) + SourceIndex(0)
+4 >Emitted(131, 9) Source(214, 9) + SourceIndex(0)
 ---
 >>>    y: 0,
 1->^^^^
@@ -3408,10 +3313,10 @@ sourceFile:contextualTyping.ts
 2 >    y
 3 >     : 
 4 >       0
-1->Emitted(137, 5) Source(222, 5) + SourceIndex(0)
-2 >Emitted(137, 6) Source(222, 6) + SourceIndex(0)
-3 >Emitted(137, 8) Source(222, 8) + SourceIndex(0)
-4 >Emitted(137, 9) Source(222, 9) + SourceIndex(0)
+1->Emitted(132, 5) Source(215, 5) + SourceIndex(0)
+2 >Emitted(132, 6) Source(215, 6) + SourceIndex(0)
+3 >Emitted(132, 8) Source(215, 8) + SourceIndex(0)
+4 >Emitted(132, 9) Source(215, 9) + SourceIndex(0)
 ---
 >>>    add: function (dx, dy) {
 1->^^^^
@@ -3430,13 +3335,13 @@ sourceFile:contextualTyping.ts
 5 >                   dx
 6 >                     , 
 7 >                       dy
-1->Emitted(138, 5) Source(223, 5) + SourceIndex(0)
-2 >Emitted(138, 8) Source(223, 8) + SourceIndex(0)
-3 >Emitted(138, 10) Source(223, 10) + SourceIndex(0)
-4 >Emitted(138, 20) Source(223, 19) + SourceIndex(0)
-5 >Emitted(138, 22) Source(223, 21) + SourceIndex(0)
-6 >Emitted(138, 24) Source(223, 23) + SourceIndex(0)
-7 >Emitted(138, 26) Source(223, 25) + SourceIndex(0)
+1->Emitted(133, 5) Source(216, 5) + SourceIndex(0)
+2 >Emitted(133, 8) Source(216, 8) + SourceIndex(0)
+3 >Emitted(133, 10) Source(216, 10) + SourceIndex(0)
+4 >Emitted(133, 20) Source(216, 19) + SourceIndex(0)
+5 >Emitted(133, 22) Source(216, 21) + SourceIndex(0)
+6 >Emitted(133, 24) Source(216, 23) + SourceIndex(0)
+7 >Emitted(133, 26) Source(216, 25) + SourceIndex(0)
 ---
 >>>        return new Point(this.x + dx, this.y + dy);
 1->^^^^^^^^
@@ -3476,24 +3381,24 @@ sourceFile:contextualTyping.ts
 16>                                               dy
 17>                                                 )
 18>                                                  ;
-1->Emitted(139, 9) Source(224, 9) + SourceIndex(0)
-2 >Emitted(139, 16) Source(224, 16) + SourceIndex(0)
-3 >Emitted(139, 20) Source(224, 20) + SourceIndex(0)
-4 >Emitted(139, 25) Source(224, 25) + SourceIndex(0)
-5 >Emitted(139, 26) Source(224, 26) + SourceIndex(0)
-6 >Emitted(139, 30) Source(224, 30) + SourceIndex(0)
-7 >Emitted(139, 31) Source(224, 31) + SourceIndex(0)
-8 >Emitted(139, 32) Source(224, 32) + SourceIndex(0)
-9 >Emitted(139, 35) Source(224, 35) + SourceIndex(0)
-10>Emitted(139, 37) Source(224, 37) + SourceIndex(0)
-11>Emitted(139, 39) Source(224, 39) + SourceIndex(0)
-12>Emitted(139, 43) Source(224, 43) + SourceIndex(0)
-13>Emitted(139, 44) Source(224, 44) + SourceIndex(0)
-14>Emitted(139, 45) Source(224, 45) + SourceIndex(0)
-15>Emitted(139, 48) Source(224, 48) + SourceIndex(0)
-16>Emitted(139, 50) Source(224, 50) + SourceIndex(0)
-17>Emitted(139, 51) Source(224, 51) + SourceIndex(0)
-18>Emitted(139, 52) Source(224, 52) + SourceIndex(0)
+1->Emitted(134, 9) Source(217, 9) + SourceIndex(0)
+2 >Emitted(134, 16) Source(217, 16) + SourceIndex(0)
+3 >Emitted(134, 20) Source(217, 20) + SourceIndex(0)
+4 >Emitted(134, 25) Source(217, 25) + SourceIndex(0)
+5 >Emitted(134, 26) Source(217, 26) + SourceIndex(0)
+6 >Emitted(134, 30) Source(217, 30) + SourceIndex(0)
+7 >Emitted(134, 31) Source(217, 31) + SourceIndex(0)
+8 >Emitted(134, 32) Source(217, 32) + SourceIndex(0)
+9 >Emitted(134, 35) Source(217, 35) + SourceIndex(0)
+10>Emitted(134, 37) Source(217, 37) + SourceIndex(0)
+11>Emitted(134, 39) Source(217, 39) + SourceIndex(0)
+12>Emitted(134, 43) Source(217, 43) + SourceIndex(0)
+13>Emitted(134, 44) Source(217, 44) + SourceIndex(0)
+14>Emitted(134, 45) Source(217, 45) + SourceIndex(0)
+15>Emitted(134, 48) Source(217, 48) + SourceIndex(0)
+16>Emitted(134, 50) Source(217, 50) + SourceIndex(0)
+17>Emitted(134, 51) Source(217, 51) + SourceIndex(0)
+18>Emitted(134, 52) Source(217, 52) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -3501,8 +3406,8 @@ sourceFile:contextualTyping.ts
 1 >
   >    
 2 >    }
-1 >Emitted(140, 5) Source(225, 5) + SourceIndex(0)
-2 >Emitted(140, 6) Source(225, 6) + SourceIndex(0)
+1 >Emitted(135, 5) Source(218, 5) + SourceIndex(0)
+2 >Emitted(135, 6) Source(218, 6) + SourceIndex(0)
 ---
 >>>};
 1 >^
@@ -3511,8 +3416,8 @@ sourceFile:contextualTyping.ts
 1 >
   >}
 2 > ;
-1 >Emitted(141, 2) Source(226, 2) + SourceIndex(0)
-2 >Emitted(141, 3) Source(226, 3) + SourceIndex(0)
+1 >Emitted(136, 2) Source(219, 2) + SourceIndex(0)
+2 >Emitted(136, 3) Source(219, 3) + SourceIndex(0)
 ---
 >>>var x = {};
 1->
@@ -3532,11 +3437,11 @@ sourceFile:contextualTyping.ts
 4 >     : B = 
 5 >        { }
 6 >          ;
-1->Emitted(142, 1) Source(230, 1) + SourceIndex(0)
-2 >Emitted(142, 5) Source(230, 5) + SourceIndex(0)
-3 >Emitted(142, 6) Source(230, 6) + SourceIndex(0)
-4 >Emitted(142, 9) Source(230, 12) + SourceIndex(0)
-5 >Emitted(142, 11) Source(230, 15) + SourceIndex(0)
-6 >Emitted(142, 12) Source(230, 16) + SourceIndex(0)
+1->Emitted(137, 1) Source(223, 1) + SourceIndex(0)
+2 >Emitted(137, 5) Source(223, 5) + SourceIndex(0)
+3 >Emitted(137, 6) Source(223, 6) + SourceIndex(0)
+4 >Emitted(137, 9) Source(223, 12) + SourceIndex(0)
+5 >Emitted(137, 11) Source(223, 15) + SourceIndex(0)
+6 >Emitted(137, 12) Source(223, 16) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=contextualTyping.js.map
