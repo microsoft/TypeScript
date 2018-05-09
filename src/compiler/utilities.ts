@@ -558,14 +558,7 @@ namespace ts {
     // Gets the nearest enclosing block scope container that has the provided node
     // as a descendant, that is not the provided node.
     export function getEnclosingBlockScopeContainer(node: Node): Node {
-        let current = node.parent;
-        while (current) {
-            if (isBlockScope(current, current.parent)) {
-                return current;
-            }
-
-            current = current.parent;
-        }
+        return findAncestor(node.parent, current => isBlockScope(current, current.parent));
     }
 
     // Return display name of an identifier

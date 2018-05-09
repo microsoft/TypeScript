@@ -118,7 +118,7 @@ namespace ts {
         let thisParentContainer: Node; // Container one level up
         let blockScopeContainer: Node;
         let lastContainer: Node;
-        let delayedTypedefs: { typeAlias: JSDocTypedefTag | JSDocCallbackTag, container: Node, lastContainer: Node, blockScopeContainer: Node, parent: Node }[];
+        let delayedTypeAliases: (JSDocTypedefTag | JSDocCallbackTag)[];
         let seenThisKeyword: boolean;
 
         // state used by control flow analysis
@@ -188,7 +188,7 @@ namespace ts {
             thisParentContainer = undefined;
             blockScopeContainer = undefined;
             lastContainer = undefined;
-            delayedTypedefs = undefined;
+            delayedTypeAliases = undefined;
             seenThisKeyword = false;
             currentFlow = undefined;
             currentBreakTarget = undefined;
@@ -627,6 +627,7 @@ namespace ts {
 
         function bindChildrenWorker(node: Node): void {
             if (isJSDoc(node)) {
+                // TODO: This won't be needed after getting rid of early-jsdoc-if-any binding, because we won't be skipping anything
                 return bindJSDocComment(node);
             }
             if (checkUnreachable(node)) {
@@ -694,9 +695,6 @@ namespace ts {
                 case SyntaxKind.CallExpression:
                     bindCallExpressionFlow(<CallExpression>node);
                     break;
-                case SyntaxKind.JSDocComment:
-                    bindJSDocComment(<JSDoc>node);
-                    break;
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
                     bindJSDocTypeAlias(node as JSDocTypedefTag | JSDocCallbackTag);
@@ -714,18 +712,7 @@ namespace ts {
                     bindEachChild(node);
                     break;
             }
-            if (hasJSDocNodes(node)) {
-                if (isInJavaScriptFile(node)) {
-                    for (const j of node.jsDoc) {
-                        bind(j);
-                    }
-                }
-                else {
-                    for (const j of node.jsDoc) {
-                        setParentPointers(node, j);
-                    }
-                }
-            }
+            bindJSDoc(node);
         }
 
         function isNarrowingExpression(expr: Expression): boolean {
@@ -1380,22 +1367,17 @@ namespace ts {
         function bindJSDocComment(node: JSDoc) {
             forEachChild(node, n => {
                 // Skip type-alias-related tags, which are bound early.
-                if (!isJSDocTypeAlias(n) && !getTypeAliasForJSDocTemplateTag(n, node.tags)) {
+                if (!getTypeAliasForJSDocTemplateTag(n, node.tags)) {
                     bind(n);
                 }
             });
         }
 
         function bindJSDocTypeAlias(node: JSDocTypedefTag | JSDocCallbackTag) {
-            forEachChild(node, n => {
-                // if the node has a fullName "A.B.C", that means symbol "C" was already bound
-                // when we visit "fullName"; so when we visit the name "C" as the next child of
-                // the jsDocTypedefTag, we should skip binding it.
-                if (node.fullName && n === node.name && node.fullName.kind !== SyntaxKind.Identifier) {
-                    return;
-                }
-                bind(n);
-            });
+            if (node.fullName) {
+                // TODO: Could be not needed?
+                setParentPointers(node, node.fullName);
+            }
         }
 
         function bindCallExpressionFlow(node: CallExpression) {
@@ -1755,21 +1737,44 @@ namespace ts {
         }
 
         function delayedBindJSDocTypedefTag() {
-            if (!delayedTypedefs) {
+            if (!delayedTypeAliases) {
                 return;
             }
             const saveContainer = container;
             const saveLastContainer = lastContainer;
             const saveBlockScopeContainer = blockScopeContainer;
             const saveParent = parent;
-            for (const delay of delayedTypedefs) {
-                ({ container, lastContainer, blockScopeContainer, parent } = delay);
-                bindBlockScopedDeclaration(delay.typeAlias, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+            const saveCurrentFlow = currentFlow;
+            for (const typeAlias of delayedTypeAliases) {
+                const host = getJSDocHost(typeAlias);
+                container = findAncestor(host.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer)) || file;
+                blockScopeContainer = getEnclosingBlockScopeContainer(host) || file;
+                currentFlow = { flags: FlowFlags.Start }
+                if (!typeAlias.fullName || typeAlias.fullName.kind === SyntaxKind.Identifier) {
+                    parent = typeAlias.parent;
+                    bindBlockScopedDeclaration(typeAlias, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                    parent = typeAlias;
+                    bind(typeAlias.typeExpression);
+                }
+                else {
+                    parent = typeAlias;
+                    forEachChild(typeAlias, n => {
+                        // if the node has a fullName "A.B.C", that means symbol "C" was already bound
+                        // when we visit "fullName"; so when we visit the name "C" as the next child of
+                        // the jsDocTypedefTag, we should skip binding it.
+                        if (n === typeAlias.name) {
+                            // TODO: I don't think this can ever happen
+                            return;
+                        }
+                        bind(n);
+                    });
+                }
             }
             container = saveContainer;
             lastContainer = saveLastContainer;
             blockScopeContainer = saveBlockScopeContainer;
             parent = saveParent;
+            currentFlow = saveCurrentFlow;
         }
 
         // The binder visits every node in the syntax tree so it is a convenient place to perform a single localized
@@ -1981,8 +1986,24 @@ namespace ts {
             }
             else if (!skipTransformFlagAggregation && (node.transformFlags & TransformFlags.HasComputedFlags) === 0) {
                 subtreeTransformFlags |= computeTransformFlagsForNode(node, 0);
+                bindJSDoc(node);
             }
             inStrictMode = saveInStrictMode;
+        }
+
+        function bindJSDoc(node: Node) {
+            if (hasJSDocNodes(node)) {
+                if (isInJavaScriptFile(node)) {
+                    for (const j of node.jsDoc) {
+                        bind(j);
+                    }
+                }
+                else {
+                    for (const j of node.jsDoc) {
+                        setParentPointers(node, j);
+                    }
+                }
+            }
         }
 
         function bindJSDocTypeAliasTagsIfAny(node: Node) {
@@ -1996,12 +2017,6 @@ namespace ts {
                 }
 
                 for (const tag of jsDoc.tags) {
-                    if (isJSDocTypeAlias(tag)) {
-                        const savedParent = parent;
-                        parent = jsDoc;
-                        bind(tag);
-                        parent = savedParent;
-                    }
                     // Bind template tags that have a typedef or callback tag in the same comment.
                     // The typedef/callback tag is the container of the template.
                     const alias = getTypeAliasForJSDocTemplateTag(tag, jsDoc.tags);
@@ -2240,13 +2255,8 @@ namespace ts {
                         SymbolFlags.Property;
                     return declareSymbolAndAddToSymbolTable(propTag, flags, SymbolFlags.PropertyExcludes);
                 case SyntaxKind.JSDocTypedefTag:
-                case SyntaxKind.JSDocCallbackTag: {
-                    const { fullName } = node as JSDocTypedefTag;
-                    if (!fullName || fullName.kind === SyntaxKind.Identifier) {
-                        (delayedTypedefs || (delayedTypedefs = [])).push({ typeAlias: node as JSDocTypedefTag | JSDocCallbackTag, container, lastContainer, blockScopeContainer, parent });
-                    }
-                    break;
-                }
+                case SyntaxKind.JSDocCallbackTag:
+                    return (delayedTypeAliases || (delayedTypeAliases = [])).push(node as JSDocTypedefTag | JSDocCallbackTag);
             }
         }
 
@@ -3836,6 +3846,6 @@ namespace ts {
      */
     function setParentPointers(parent: Node, child: Node): void {
         child.parent = parent;
-        forEachChild(child, (childsChild) => setParentPointers(child, childsChild));
+        forEachChild(child, grandchild => setParentPointers(child, grandchild));
     }
 }
