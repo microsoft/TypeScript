@@ -6,5 +6,4 @@
 ////    }
 ////}
 
-goTo.marker("");
-verify.completionListContains("target");
+verify.completions({ marker: "", exact: "target" });

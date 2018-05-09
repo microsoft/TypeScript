@@ -5,6 +5,4 @@
 ////}
 ////class Bar extends mod./**/
 
-goTo.marker();
-verify.completionListContains("Foo");
-verify.completionListCount(1);
+verify.completions({ marker: "", includes: "Foo" });

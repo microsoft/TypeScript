@@ -8,5 +8,4 @@
 //// var a = require(`./a`);
 //// a./**/;
 
-goTo.marker();
-verify.completionListContains("x");
+verify.completions({ marker: "", includes: "x" });

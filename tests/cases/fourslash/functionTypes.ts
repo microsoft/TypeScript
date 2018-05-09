@@ -21,10 +21,7 @@
 ////l./*7*/prototype = Object.prototype;
 
 verify.noErrors();
-verify.completionsAt('1', ["apply", "call", "bind", "toString", "prototype", "length", "arguments", "caller" ]);
-verify.completionsAt('2', ["apply", "call", "bind", "toString", "prototype", "length", "arguments", "caller" ]);
-verify.completionsAt('3', ["apply", "call", "bind", "toString", "prototype", "length", "arguments", "caller" ]);
-verify.completionsAt('4', ["apply", "call", "bind", "toString", "prototype", "length", "arguments", "caller" ]);
-verify.completionsAt('5', ["apply", "call", "bind", "toString", "prototype", "length", "arguments", "caller" ]);
-verify.completionsAt('6', ["apply", "call", "bind", "toString", "prototype", "length", "arguments", "caller" ]);
-verify.completionsAt('7', ["prototype", "apply", "call", "bind", "toString", "length", "arguments", "caller" ]);
+verify.completions(
+    { marker: ["1", "2", "3", "4", "5", "6"], exact: completion.functionMembersWithPrototype },
+    { marker: "7", exact: ["prototype", ...completion.functionMembers] },
+);

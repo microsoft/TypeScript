@@ -7,5 +7,4 @@
 ////import * as a from "./a";
 ////a./**/;
 
-goTo.marker();
-verify.completionListContains("default", "function f(): void");
+verify.completions({ marker: "", exact: { name: "default", text: "function f(): void" } });

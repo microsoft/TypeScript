@@ -21,5 +21,7 @@
 ////}
 
 const [r0, r1] = test.ranges();
-verify.completionsAt("0", ["a", "b", "dir"], { isNewIdentifierLocation: true });
-verify.completionsAt("1", ["x"], { isNewIdentifierLocation: true });
+verify.completions(
+    { marker: "0", exact: ["a", "b", "dir"], isNewIdentifierLocation: true },
+    { marker: "1", exact: "x", isNewIdentifierLocation: true },
+);

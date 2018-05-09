@@ -29,35 +29,14 @@
 ////    protected  protectedOverriddenProperty;
 ////}
 
-
-// Same class, everything is visible
-goTo.marker("1");
-verify.completionListContains('privateMethod');
-verify.completionListContains('privateProperty');
-verify.completionListContains('protectedMethod');
-verify.completionListContains('protectedProperty');
-verify.completionListContains('publicMethod');
-verify.completionListContains('publicProperty');
-verify.completionListContains('protectedOverriddenMethod');
-verify.completionListContains('protectedOverriddenProperty');
-
-goTo.marker("2");
-verify.completionListContains('privateMethod');
-verify.completionListContains('privateProperty');
-verify.completionListContains('protectedMethod');
-verify.completionListContains('protectedProperty');
-verify.completionListContains('publicMethod');
-verify.completionListContains('publicProperty');
-verify.completionListContains('protectedOverriddenMethod');
-verify.completionListContains('protectedOverriddenProperty');
-
-// Can not access protected properties overridden in subclass
-goTo.marker("3");
-verify.completionListContains('privateMethod');
-verify.completionListContains('privateProperty');
-verify.completionListContains('protectedMethod');
-verify.completionListContains('protectedProperty');
-verify.completionListContains('publicMethod');
-verify.completionListContains('publicProperty');
-verify.not.completionListContains('protectedOverriddenMethod');
-verify.not.completionListContains('protectedOverriddenProperty');
+verify.completions(
+    {
+        marker: ["1", "2"],
+        exact: ["privateMethod", "privateProperty", "protectedMethod", "protectedProperty", "publicMethod", "publicProperty", "protectedOverriddenMethod", "protectedOverriddenProperty", "test"],
+    },
+    {
+        marker: "3",
+        // Can not access protected properties overridden in subclass
+        exact: ["privateMethod", "privateProperty", "protectedMethod", "protectedProperty", "publicMethod", "publicProperty", "test"],
+    },
+);

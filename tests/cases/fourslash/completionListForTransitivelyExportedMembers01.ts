@@ -31,9 +31,4 @@
 ////import * as c from "./C";
 ////var x = c./**/
 
-goTo.marker();
-verify.completionListContains("C1");
-verify.completionListContains("Inner");
-verify.completionListContains("bVar");
-verify.completionListContains("cVar");
-verify.not.completionListContains("__export");
+verify.completions({ marker: "", exact: ["cVar", "C1", "Inner", "bVar"] });

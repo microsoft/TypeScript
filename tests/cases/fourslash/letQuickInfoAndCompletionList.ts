@@ -7,20 +7,21 @@
 ////    /*4*/b = /*5*/a;
 ////}
 
-verify.quickInfoAt("1", "let a: number");
+const a = "let a: number";
+const b = "let b: number";
+const completionA: FourSlashInterface.ExpectedCompletionEntry = { name: "a", text: a };
+const completionB: FourSlashInterface.ExpectedCompletionEntry = { name: "b", text: b };
 
-goTo.marker('2');
-verify.completionListContains("a", "let a: number");
-verify.quickInfoIs("let a: number");
+verify.completions(
+    { marker: "2", includes: completionA },
+    { marker: "4", includes: [completionA, completionB] },
+    { marker: "5", includes: [completionA, completionB], isNewIdentifierLocation: true },
+);
 
-verify.quickInfoAt("3", "let b: number");
-
-goTo.marker('4');
-verify.completionListContains("a", "let a: number");
-verify.completionListContains("b", "let b: number");
-verify.quickInfoIs("let b: number");
-
-goTo.marker('5');
-verify.completionListContains("a", "let a: number");
-verify.completionListContains("b", "let b: number");
-verify.quickInfoIs("let a: number");
+verify.quickInfos({
+    1: a,
+    2: a,
+    3: b,
+    4: b,
+    5: a,
+});

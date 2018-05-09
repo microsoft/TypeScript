@@ -20,18 +20,14 @@
 ////    iMod1./*3*/iMex = 1;
 ////}
 
-goTo.marker('1');
-verify.completionListContains('meX', 'var mod1.meX: number');
-verify.completionListContains('meFunc', 'function mod1.meFunc(): void');
-verify.completionListContains('meClass', 'class mod1.meClass');
-verify.completionListContains('meMod', 'namespace mod1.meMod');
-verify.completionListContains('meInt', 'interface mod1.meInt');
-
-goTo.marker('2');
-verify.completionListContains('meX', 'var mod1.meX: number');
-verify.completionListContains('meFunc', 'function mod1.meFunc(): void');
-verify.completionListContains('meClass', 'class mod1.meClass');
-verify.completionListContains('meMod', 'namespace mod1.meMod');
-
-goTo.marker('3');
-verify.completionListContains('iMex', 'var mod1.meMod.iMex: number');
+const values: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = [
+    { name: "meFunc", text: "function mod1.meFunc(): void" },
+    { name: "meX", text: "var mod1.meX: number" },
+    { name: "meClass", text: "class mod1.meClass" },
+    { name: "meMod", text: "namespace mod1.meMod" },
+];
+verify.completions(
+    { marker: "1", exact: [...values, { name: "meInt", text: "interface mod1.meInt" }] },
+    { marker: "2", exact: values },
+    { marker: "3", exact: { name: "iMex", text: "var mod1.meMod.iMex: number" } },
+);

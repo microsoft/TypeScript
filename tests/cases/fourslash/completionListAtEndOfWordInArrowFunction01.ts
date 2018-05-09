@@ -2,5 +2,4 @@
 
 ////xyz => x/*1*/
 
-goTo.marker("1");
-verify.completionListContains("xyz");
+verify.completions({ marker: "1", includes: "xyz" });

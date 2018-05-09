@@ -40,12 +40,14 @@
 // @Filename: /usage9.ts
 ////type H = typeof import("./equals")./*9*/
 
-verify.completionsAt("1", ["Foo"]);
-verify.completionsAt("2", ["Bar"]);
-verify.completionsAt("3", ["Baz", "a"]);
-verify.completionsAt("4", ["Foo"]);
-verify.completionsAt("5", ["Bar"]);
-verify.completionsAt("6", ["Baz", "Bat"]);
-verify.completionsAt("7", ["a"]);
-verify.completionsAt("8", ["Bat"]);
-verify.completionsAt("9", ["prototype", "bar"]);
+verify.completions(
+    { marker: "1", exact: "Foo" },
+    { marker: "2", exact: "Bar" },
+    { marker: "3", exact: ["Baz", "a"] },
+    { marker: "4", exact: "Foo" },
+    { marker: "5", exact: "Bar" },
+    { marker: "6", exact: ["Baz", "Bat"] },
+    { marker: "7", exact: "a" },
+    { marker: "8", exact: "Bat" },
+    { marker: "9", exact: ["prototype", "bar"] },
+);

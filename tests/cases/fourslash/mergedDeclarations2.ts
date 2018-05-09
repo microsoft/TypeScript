@@ -13,8 +13,7 @@
 ////var p2 = point./*1*/origin;
 ////var b = point./*2*/equals(p1, p2);
 
-goTo.marker('1');
-verify.completionListContains('origin');
-
-goTo.marker('2');
-verify.completionListContains('equals');
+verify.completions(
+    { marker: "1", includes: "origin" },
+    { marker: "2", includes: "equals" },
+);

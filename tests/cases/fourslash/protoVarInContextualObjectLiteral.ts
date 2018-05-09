@@ -39,56 +39,35 @@
 ////        /*6*/
 ////    };
 
-goTo.marker('1');
-verify.completionListContains("__proto__", '(property) __proto__: number');
-verify.completionListContains("p", '(property) p: number');
-edit.insert('__proto__: 10,');
-verify.not.completionListContains("__proto__", '(property) __proto__: number');
-verify.completionListContains("p", '(property) p: number');
+const tripleProto: FourSlashInterface.ExpectedCompletionEntry = { name: "___proto__", text: "(property) ___proto__: string" };
+const proto: FourSlashInterface.ExpectedCompletionEntry = { name: "__proto__", text: "(property) __proto__: number" };
+const protoQuoted: FourSlashInterface.ExpectedCompletionEntry = { name: "__proto__", text: '(property) "__proto__": number' };
+const p: FourSlashInterface.ExpectedCompletionEntry = { name: "p", text: "(property) p: number" };
 
-goTo.marker('2');
-verify.completionListContains("__proto__", '(property) __proto__: number');
-verify.completionListContains("p", '(property) p: number');
+verify.completions({ marker: "1", exact: [proto, p] });
+edit.insert('__proto__: 10,');
+verify.completions({ exact: p });
+
+verify.completions({ marker: "2", exact: [proto, p] });
 edit.insert('"__proto__": 10,');
-verify.not.completionListContains("__proto__", '(property) __proto__: number');
-verify.completionListContains("p", '(property) p: number');
+verify.completions({ exact: p });
 
-goTo.marker('3');
-verify.completionListContains("__proto__", '(property) "__proto__": number');
-verify.completionListContains("p", '(property) p: number');
+verify.completions({ marker: "3", exact: [protoQuoted, p] })
 edit.insert('__proto__: 10,');
-verify.not.completionListContains("__proto__", '(property) "__proto__": number');
-verify.completionListContains("p", '(property) p: number');
+verify.completions({ exact: p });
 
-goTo.marker('4');
-verify.completionListContains("__proto__", '(property) "__proto__": number');
-verify.completionListContains("p", '(property) p: number');
+verify.completions({ marker: "4", exact: [protoQuoted, p] });
 edit.insert('"__proto__": 10,');
-verify.not.completionListContains("__proto__", '(property) "__proto__": number');
-verify.completionListContains("p", '(property) p: number');
+verify.completions({ exact: p });
 
-goTo.marker('5');
-verify.completionListContains("___proto__", '(property) ___proto__: string');
-verify.completionListContains("__proto__", '(property) __proto__: number');
-verify.completionListContains("p", '(property) p: number');
+verify.completions({ marker: "5", exact: [proto, tripleProto, p] });
 edit.insert('__proto__: 10,');
-verify.not.completionListContains("__proto__", '(property) __proto__: number');
-verify.completionListContains("___proto__", '(property) ___proto__: string');
-verify.completionListContains("p", '(property) p: number');
+verify.completions({ exact: [tripleProto, p] });
 edit.insert('"___proto__": "10",');
-verify.not.completionListContains("__proto__", '(property) __proto__: number');
-verify.not.completionListContains("___proto__", '(property) ___proto__: string');
-verify.completionListContains("p", '(property) p: number');
+verify.completions({ exact: p });
 
-goTo.marker('6');
-verify.completionListContains("___proto__", '(property) ___proto__: string');
-verify.completionListContains("__proto__", '(property) __proto__: number');
-verify.completionListContains("p", '(property) p: number');
+verify.completions({ marker: "6", exact: [proto, tripleProto, p] });
 edit.insert('___proto__: "10",');
-verify.completionListContains("__proto__", '(property) __proto__: number');
-verify.not.completionListContains("___proto__", '(property) ___proto__: string');
-verify.completionListContains("p", '(property) p: number');
+verify.completions({ exact: [proto, p] });
 edit.insert('"__proto__": 10,');
-verify.not.completionListContains("__proto__", '(property) __proto__: number');
-verify.not.completionListContains("___proto__", '(property) ___proto__: string');
-verify.completionListContains("p", '(property) p: number');
+verify.completions({ exact: p });

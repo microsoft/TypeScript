@@ -19,4 +19,4 @@
 ////    }
 ////}
 
-verify.completionsAt("", ["a", "b"], { isNewIdentifierLocation: true });
+verify.completions({ marker: "", exact: ["a", "b"], isNewIdentifierLocation: true });

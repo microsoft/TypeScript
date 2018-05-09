@@ -19,5 +19,4 @@
 //// var SFCComp = SFC1 || SFC2;
 //// <SFCComp /**/ />
 
-goTo.marker();
-verify.completionListIsEmpty();
+verify.completions({ marker: "", exact: undefined });
