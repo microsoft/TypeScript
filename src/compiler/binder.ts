@@ -1750,24 +1750,14 @@ namespace ts {
                 container = findAncestor(host.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer)) || file;
                 blockScopeContainer = getEnclosingBlockScopeContainer(host) || file;
                 currentFlow = { flags: FlowFlags.Start }
+                parent = typeAlias;
+                bind(typeAlias.typeExpression);
                 if (!typeAlias.fullName || typeAlias.fullName.kind === SyntaxKind.Identifier) {
                     parent = typeAlias.parent;
                     bindBlockScopedDeclaration(typeAlias, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
-                    parent = typeAlias;
-                    bind(typeAlias.typeExpression);
                 }
                 else {
-                    parent = typeAlias;
-                    forEachChild(typeAlias, n => {
-                        // if the node has a fullName "A.B.C", that means symbol "C" was already bound
-                        // when we visit "fullName"; so when we visit the name "C" as the next child of
-                        // the jsDocTypedefTag, we should skip binding it.
-                        if (n === typeAlias.name) {
-                            // TODO: I don't think this can ever happen
-                            return;
-                        }
-                        bind(n);
-                    });
+                    bind(typeAlias.fullName);
                 }
             }
             container = saveContainer;
