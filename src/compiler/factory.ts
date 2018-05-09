@@ -2705,7 +2705,7 @@ namespace ts {
     }
 
     function asToken<TKind extends SyntaxKind>(value: TKind | Token<TKind>): Token<TKind> {
-        return typeof value === "number" ? createToken(value) : value;
+        return typeof value === "number" ? createToken(value) : value as any; // TODO: FIXME
     }
 
     /**

@@ -13,8 +13,8 @@ namespace collections {
         private _copyOnWrite = false;
 
         constructor(comparer: ((a: K, b: K) => number) | SortOptions<K>, iterable?: Iterable<[K, V]>) {
-            this._comparer = typeof comparer === "object" ? comparer.comparer : comparer;
-            this._order = typeof comparer === "object" && comparer.sort === "insertion" ? [] : undefined;
+            this._comparer = typeof comparer === "function" ? comparer : comparer.comparer;
+            this._order = typeof comparer !== "function" && comparer.sort === "insertion" ? [] : undefined;
             if (iterable) {
                 const iterator = getIterator(iterable);
                 try {
