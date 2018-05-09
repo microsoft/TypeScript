@@ -3106,7 +3106,7 @@ namespace ts {
                         isTypeParameterDeclaration(type.symbol.declarations[0]) &&
                         typeParameterShadowsNameInScope(type, context) &&
                         !isTypeSymbolAccessible(type.symbol, context.enclosingDeclaration)) {
-                        return createTypeReferenceNode(getOptimisticScopedGeneratedNameForName((type.symbol.declarations[0] as TypeParameterDeclaration).name), /*typeArguments*/ undefined);
+                        return createTypeReferenceNode(getGeneratedNameForNode((type.symbol.declarations[0] as TypeParameterDeclaration).name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes), /*typeArguments*/ undefined);
                     }
                     const name = type.symbol ? symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ false) : createIdentifier("?");
                     // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
@@ -3564,7 +3564,7 @@ namespace ts {
                     isTypeParameterDeclaration(type.symbol.declarations[0]) &&
                     typeParameterShadowsNameInScope(type, context);
                 const name = shouldUseGeneratedName
-                    ? getOptimisticScopedGeneratedNameForName((type.symbol.declarations[0] as TypeParameterDeclaration).name)
+                    ? getGeneratedNameForNode((type.symbol.declarations[0] as TypeParameterDeclaration).name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes)
                     : symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ true);
                 const defaultParameter = getDefaultFromTypeParameter(type);
                 const defaultParameterNode = defaultParameter && typeToTypeNodeHelper(defaultParameter, context);
