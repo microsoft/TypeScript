@@ -8382,6 +8382,10 @@ namespace ts {
             }
             const typeSet: Type[] = [];
             const includes = addTypesToIntersection(typeSet, 0, types);
+            return getIntersectionFromTypeSet(typeSet, includes, aliasSymbol, aliasTypeArguments);
+        }
+
+        function getIntersectionFromTypeSet(typeSet: Type[], includes: TypeFlags, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]) {
             if (includes & TypeFlags.Never) {
                 return neverType;
             }
@@ -8418,6 +8422,61 @@ namespace ts {
                 type.aliasTypeArguments = aliasTypeArguments;
             }
             return type;
+        }
+
+        /**
+         * This is a fast path replacement for `getIntersectionType` (though it should be interchangable) utilizing common properties of
+         * `keyof (A | B | C)` types to avoid deeply nesting type creation for all members of the inner union in the common
+         * case where the inner union members are mostly normal object types. In other scenarios, this is a bit more bookkeeping
+         * than is usually required.
+         */
+        function getDistributedKeyofIntersectionType(types: Type[]) {
+            if (types.length === 0) {
+                return emptyObjectType;
+            }
+            if (types.length === 1) {
+                return types[0];
+            }
+            let masked: Type[];
+            const result: Type[] = [];
+            let includes: TypeFlags = 0;
+            outerLoop: for (const keySet of types) {
+                if (keySet.flags & TypeFlags.Union) {
+                    if (!masked) {
+                        masked = (keySet as UnionType).types.slice();
+                    }
+                    else {
+                        const unfound = [];
+                        for (let i = 0; i < masked.length; i++) {
+                            const key = masked[i];
+                            if (key.flags & TypeFlags.Literal) {
+                                if (!some((keySet as UnionType).types, t => isTypeIdenticalTo(t, key))) {
+                                    unfound.push(i);
+                                }
+                            }
+                            else {
+                                // If a key type in the mask isn't a literal type (so is, eg, `number` or `symbol`)
+                                // We can't easily remove things by checking identity, so we fall back to just adding the
+                                // union normally
+                                includes = addTypeToIntersection(result, includes, keySet);
+                                continue outerLoop;
+                            }
+                        }
+                        let priors = 0;
+                        for (const index of unfound) {
+                            orderedRemoveItemAt(masked, index - priors);
+                            priors++;
+                        }
+                    }
+                }
+                else {
+                    includes = addTypeToIntersection(result, includes, keySet);
+                }
+            }
+            if (length(masked)) {
+                includes = addTypeToIntersection(result, includes, getUnionType(masked));
+            }
+            return getIntersectionFromTypeSet(result, includes);
         }
 
         function getTypeFromIntersectionTypeNode(node: IntersectionTypeNode): Type {
@@ -8468,7 +8527,7 @@ namespace ts {
         }
 
         function getIndexType(type: Type, stringsOnly = keyofStringsOnly): Type {
-            return type.flags & TypeFlags.Union ? getIntersectionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly))) :
+            return type.flags & TypeFlags.Union ? getDistributedKeyofIntersectionType(map((type as UnionType).types, t => getIndexType(t, stringsOnly))) :
                 type.flags & TypeFlags.Intersection ? getUnionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly))) :
                 maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type, stringsOnly) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
