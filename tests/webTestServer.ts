@@ -24,14 +24,13 @@ let browser = "IE";
 let grep: string | undefined;
 let verbose = false;
 
-interface FileTest {
+interface FileBasedTest {
     file: string;
-    configurations?: FileTestConfiguration[];
+    configurations?: FileBasedTestConfiguration[];
 }
 
-interface FileTestConfiguration {
-    name: string;
-    settings: Record<string, string>;
+interface FileBasedTestConfiguration {
+    [setting: string]: string;
 }
 
 function isFileSystemCaseSensitive(): boolean {
@@ -669,7 +668,7 @@ function handleApiEnumerateTestFiles(req: http.ServerRequest, res: http.ServerRe
         try {
             if (err) return sendInternalServerError(res, err);
             if (!content) return sendBadRequest(res);
-            const tests: (string | FileTest)[] = enumerateTestFiles(content);
+            const tests: (string | FileBasedTest)[] = enumerateTestFiles(content);
             return sendJson(res, /*statusCode*/ 200, tests);
         }
         catch (e) {
@@ -699,59 +698,62 @@ function enumerateTestFiles(runner: string) {
 // Regex for parsing options in the format "@Alpha: Value of any sort"
 const optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*([^\r\n]*)/gm;  // multiple matches on multiple lines
 
-function extractCompilerSettings(content: string): Record<string, any> {
-    const opts: Record<string, any> = {};
+function extractCompilerSettings(content: string): Record<string, string> {
+    const opts: Record<string, string> = {};
 
     let match: RegExpExecArray;
-    /* tslint:disable:no-null-keyword */
     while ((match = optionRegex.exec(content)) !== null) {
-    /* tslint:enable:no-null-keyword */
         opts[match[1]] = match[2].trim();
     }
 
     return opts;
 }
 
-function split(text: string) {
-    const entries = text && text.split(",").map(s => s.toLowerCase().trim()).filter(s => s.length > 0);
-    return entries && entries.length > 0 ? entries : [""];
+function splitVaryBySettingValue(text: string): string[] | undefined {
+    if (!text) return undefined;
+    const entries = text.split(/,/).map(s => s.trim().toLowerCase()).filter(s => s.length > 0);
+    return entries && entries.length > 1 ? entries : undefined;
 }
 
-function parseCompilerTestConfigurations(file: string): FileTest {
-    const content = fs.readFileSync(path.join(rootDir, file), "utf8");
-    const settings = extractCompilerSettings(content);
-    const scriptTargets = split(settings.target);
-    const moduleKinds = split(settings.module);
-    if (scriptTargets.length <= 1 && moduleKinds.length <= 1) {
-        return { file };
+function computeFileBasedTestConfigurationVariations(configurations: FileBasedTestConfiguration[], variationState: FileBasedTestConfiguration, varyByEntries: [string, string[]][], offset: number) {
+    if (offset >= varyByEntries.length) {
+        // make a copy of the current variation state
+        configurations.push({ ...variationState });
+        return;
     }
 
-    const configurations: FileTestConfiguration[] = [];
-    for (const scriptTarget of scriptTargets) {
-        for (const moduleKind of moduleKinds) {
-            const settings: Record<string, any> = {};
-            let name = "";
-            if (moduleKinds.length > 1) {
-                settings.module = moduleKind;
-                name += `@module: ${moduleKind || "none"}`;
+    const [varyBy, entries] = varyByEntries[offset];
+    for (const entry of entries) {
+        // set or overwrite the variation
+        variationState[varyBy] = entry;
+        computeFileBasedTestConfigurationVariations(configurations, variationState, varyByEntries, offset + 1);
+    }
+}
+
+function getFileBasedTestConfigurations(settings: Record<string, string>, varyBy: string[]): FileBasedTestConfiguration[] | undefined {
+    let varyByEntries: [string, string[]][] | undefined;
+    for (const varyByKey of varyBy) {
+        if (Object.prototype.hasOwnProperty.call(settings, varyByKey)) {
+            const entries = splitVaryBySettingValue(settings[varyByKey]);
+            if (entries) {
+                if (!varyByEntries) varyByEntries = [];
+                varyByEntries.push([varyByKey, entries]);
             }
-            if (scriptTargets.length > 1) {
-                settings.target = scriptTarget;
-                if (name) name += ", ";
-                name += `@target: ${scriptTarget || "none"}`;
-            }
-            configurations.push({ name, settings });
         }
     }
 
-    return { file, configurations };
+    if (!varyByEntries) return undefined;
+
+    const configurations: FileBasedTestConfiguration[] = [];
+    computeFileBasedTestConfigurationVariations(configurations, {}, varyByEntries, 0);
+    return configurations;
 }
 
-function parseProjectTestConfigurations(file: string): FileTest {
-    return { file, configurations: [
-        { name: `@module: commonjs`, settings: { module: "commonjs" } },
-        { name: `@module: amd`, settings: { module: "amd" } },
-    ] };
+function parseCompilerTestConfigurations(file: string): FileBasedTest {
+    const content = fs.readFileSync(path.join(rootDir, file), "utf8");
+    const settings = extractCompilerSettings(content);
+    const configurations = getFileBasedTestConfigurations(settings, ["module", "target"]);
+    return { file, configurations };
 }
 
 function handleApiListFiles(req: http.ServerRequest, res: http.ServerResponse) {

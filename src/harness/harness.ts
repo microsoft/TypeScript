@@ -499,16 +499,6 @@ namespace Utils {
 }
 
 namespace Harness {
-    export interface FileBasedTest {
-        file: string;
-        configurations?: FileBasedTestConfiguration[];
-    }
-
-    export interface FileBasedTestConfiguration {
-        name: string;
-        settings?: Record<string, string>;
-    }
-
     // tslint:disable-next-line:interface-name
     export interface IO {
         newLine(): string;
@@ -1781,6 +1771,74 @@ namespace Harness {
             }
             return path;
         }
+    }
+
+    export interface FileBasedTest {
+        file: string;
+        configurations?: FileBasedTestConfiguration[];
+    }
+
+    export interface FileBasedTestConfiguration {
+        [key: string]: string;
+    }
+
+    function splitVaryBySettingValue(text: string): string[] | undefined {
+        if (!text) return undefined;
+        const entries = text.split(/,/).map(s => s.trim().toLowerCase()).filter(s => s.length > 0);
+        return entries && entries.length > 1 ? entries : undefined;
+    }
+
+    function computeFileBasedTestConfigurationVariations(configurations: FileBasedTestConfiguration[], variationState: FileBasedTestConfiguration, varyByEntries: [string, string[]][], offset: number) {
+        if (offset >= varyByEntries.length) {
+            // make a copy of the current variation state
+            configurations.push({ ...variationState });
+            return;
+        }
+
+        const [varyBy, entries] = varyByEntries[offset];
+        for (const entry of entries) {
+            // set or overwrite the variation, then compute the next variation
+            variationState[varyBy] = entry;
+            computeFileBasedTestConfigurationVariations(configurations, variationState, varyByEntries, offset + 1);
+        }
+    }
+
+    /**
+     * Compute FileBasedTestConfiguration variations based on a supplied list of variable settings.
+     */
+    export function getFileBasedTestConfigurations(settings: TestCaseParser.CompilerSettings, varyBy: string[]): FileBasedTestConfiguration[] | undefined {
+        let varyByEntries: [string, string[]][] | undefined;
+        for (const varyByKey of varyBy) {
+            if (ts.hasProperty(settings, varyByKey)) {
+                // we only consider variations when there are 2 or more variable entries.
+                const entries = splitVaryBySettingValue(settings[varyByKey]);
+                if (entries) {
+                    if (!varyByEntries) varyByEntries = [];
+                    varyByEntries.push([varyByKey, entries]);
+                }
+            }
+        }
+
+        if (!varyByEntries) return undefined;
+
+        const configurations: FileBasedTestConfiguration[] = [];
+        computeFileBasedTestConfigurationVariations(configurations, /*variationState*/ {}, varyByEntries, /*offset*/ 0);
+        return configurations;
+    }
+
+    /**
+     * Compute a description for this configuration based on its entries
+     */
+    export function getFileBasedTestConfigurationDescription(configuration: FileBasedTestConfiguration) {
+        let name = "";
+        if (configuration) {
+            const keys = Object.keys(configuration).sort();
+            for (const key of keys) {
+                if (name) name += ", ";
+                name += `@${key}: ${configuration[key]}`;
+            }
+        }
+        return name;
     }
 
     export namespace TestCaseParser {

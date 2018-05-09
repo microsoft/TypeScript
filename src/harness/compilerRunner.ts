@@ -68,7 +68,7 @@ class CompilerBaselineRunner extends RunnerBase {
     public checkTestCodeOutput(fileName: string, test?: CompilerFileBasedTest) {
         if (test && test.configurations) {
             test.configurations.forEach(configuration => {
-                describe(`${this.testSuiteName} tests for ${fileName}${configuration && configuration.name ? ` (${configuration.name})` : ``}`, () => {
+                describe(`${this.testSuiteName} tests for ${fileName}${configuration ? ` (${Harness.getFileBasedTestConfigurationDescription(configuration)})` : ``}`, () => {
                     this.runSuite(fileName, test, configuration);
                 });
             });
@@ -82,7 +82,7 @@ class CompilerBaselineRunner extends RunnerBase {
         // Mocha holds onto the closure environment of the describe callback even after the test is done.
         // Everything declared here should be cleared out in the "after" callback.
         let compilerTest: CompilerTest | undefined;
-        before(() => { compilerTest = new CompilerTest(fileName, test && test.payload, configuration && configuration.settings); });
+        before(() => { compilerTest = new CompilerTest(fileName, test && test.payload, configuration); });
         it(`Correct errors for ${fileName}`, () => { compilerTest.verifyDiagnostics(); });
         it(`Correct module resolution tracing for ${fileName}`, () => { compilerTest.verifyModuleResolution(); });
         it(`Correct sourcemap content for ${fileName}`, () => { compilerTest.verifySourceMapRecord(); });
@@ -198,31 +198,7 @@ class CompilerTest {
         const rootDir = file.indexOf("conformance") === -1 ? "tests/cases/compiler/" : ts.getDirectoryPath(file) + "/";
         const payload = Harness.TestCaseParser.makeUnitsFromTest(content, file, rootDir);
         const settings = Harness.TestCaseParser.extractCompilerSettings(content);
-        const scriptTargets = CompilerTest._split(settings.target);
-        const moduleKinds = CompilerTest._split(settings.module);
-        if (scriptTargets.length <= 1 && moduleKinds.length <= 1) {
-            return { file, payload };
-        }
-
-        const configurations: Harness.FileBasedTestConfiguration[] = [];
-        for (const scriptTarget of scriptTargets) {
-            for (const moduleKind of moduleKinds) {
-                const settings: Record<string, any> = {};
-                let name = "";
-                if (moduleKinds.length > 1) {
-                    settings.module = moduleKind;
-                    name += `@module: ${moduleKind || "none"}`;
-                }
-                if (scriptTargets.length > 1) {
-                    settings.target = scriptTarget;
-                    if (name) name += ", ";
-                    name += `@target: ${scriptTarget || "none"}`;
-                }
-
-                configurations.push({ name, settings });
-            }
-        }
-
+        const configurations = Harness.getFileBasedTestConfigurations(settings, /*varyBy*/ ["module", "target"]);
         return { file, payload, configurations };
     }
 
@@ -289,11 +265,6 @@ class CompilerTest {
             this.justName,
             this.result.program,
             this.toBeCompiled.concat(this.otherFiles).filter(file => !!this.result.program.getSourceFile(file.unitName)));
-    }
-
-    private static _split(text: string) {
-        const entries = text && text.split(",").map(s => s.toLowerCase().trim()).filter(s => s.length > 0);
-        return entries && entries.length > 0 ? entries : [""];
     }
 
     private makeUnitName(name: string, root: string) {
