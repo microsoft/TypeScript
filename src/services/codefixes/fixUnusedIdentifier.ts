@@ -66,7 +66,7 @@ namespace ts.codefix {
     }
 
     function getToken(sourceFile: SourceFile, pos: number): Node {
-        const token = findPrecedingToken(pos, sourceFile);
+        const token = findPrecedingToken(pos, sourceFile, /*startNode*/ undefined, /*includeJsDoc*/ true);
         // this handles var ["computed"] = 12;
         return token.kind === SyntaxKind.CloseBracketToken ? findPrecedingToken(pos - 1, sourceFile) : token;
     }

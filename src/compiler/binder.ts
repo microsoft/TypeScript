@@ -626,6 +626,9 @@ namespace ts {
         }
 
         function bindChildrenWorker(node: Node): void {
+            if (isJSDoc(node)) {
+                return bindJSDocComment(node);
+            }
             if (checkUnreachable(node)) {
                 bindEachChild(node);
                 return;
@@ -711,9 +714,6 @@ namespace ts {
                     bindEachChild(node);
                     break;
             }
-            // Binding of JsDocComment should be done before the current block scope container changes.
-            // because the scope of JsDocComment should not be affected by whether the current node is a
-            // container or not.
             if (hasJSDocNodes(node)) {
                 if (isInJavaScriptFile(node)) {
                     for (const j of node.jsDoc) {
@@ -726,8 +726,6 @@ namespace ts {
                     }
                 }
             }
-
-
         }
 
         function isNarrowingExpression(expr: Expression): boolean {
@@ -2725,10 +2723,18 @@ namespace ts {
         }
 
         function bindTypeParameter(node: TypeParameterDeclaration) {
-            // TODO: node.parent check *might* not be necessary, although that would mean combining isJSDocTemplateTag with getTypeAliasForJSDocTemplateTag
-            // and then calling that instead
-            if (node.parent && (node.parent.kind === SyntaxKind.InferType || isJSDocTemplateTag(node.parent))) {
-                const container = node.parent.kind === SyntaxKind.InferType ? getInferTypeContainer(node.parent) : getHostSignatureFromJSDoc(node.parent);
+            if (isJSDocTemplateTag(node.parent)) {
+                const container = getTypeAliasForJSDocTemplateTag(node.parent, (node.parent.parent as JSDoc).tags) || getHostSignatureFromJSDoc(node.parent);
+                if (container) {
+                    Debug.assert(!!container.locals);
+                    declareSymbol(container.locals, /*parent*/ undefined, node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
+                }
+                else {
+                    declareSymbolAndAddToSymbolTable(node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
+                }
+            }
+            else if (node.parent.kind === SyntaxKind.InferType) {
+                const container = getInferTypeContainer(node.parent);
                 if (container) {
                     if (!container.locals) {
                         container.locals = createSymbolTable();
