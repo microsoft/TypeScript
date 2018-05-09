@@ -1722,6 +1722,10 @@ namespace ts {
     }
 
     export function importFromModuleSpecifier(node: StringLiteralLike): AnyValidImportOrReExport {
+        return tryGetImportFromModuleSpecifier(node) || Debug.fail(Debug.showSyntaxKind(node.parent));
+    }
+
+    export function tryGetImportFromModuleSpecifier(node: StringLiteralLike): AnyValidImportOrReExport | undefined {
         switch (node.parent.kind) {
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ExportDeclaration:
@@ -1731,9 +1735,10 @@ namespace ts {
             case SyntaxKind.CallExpression:
                 return node.parent as AnyValidImportOrReExport;
             case SyntaxKind.LiteralType:
-                return cast(node.parent.parent, isImportTypeNode) as ImportTypeNode & { argument: LiteralType };
+                Debug.assert(isStringLiteral(node));
+                return tryCast(node.parent.parent, isImportTypeNode) as ValidImportTypeNode | undefined;
             default:
-                return Debug.fail(Debug.showSyntaxKind(node.parent));
+                return undefined;
         }
     }
 

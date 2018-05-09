@@ -3253,11 +3253,16 @@ namespace ts {
     export type AnyImportOrReExport = AnyImportSyntax | ExportDeclaration;
 
     /* @internal */
+    export interface ValidImportTypeNode extends ImportTypeNode {
+        argument: LiteralTypeNode & { literal: StringLiteral };
+    }
+
+    /* @internal */
     export type AnyValidImportOrReExport =
         | (ImportDeclaration | ExportDeclaration) & { moduleSpecifier: StringLiteral }
         | ImportEqualsDeclaration & { moduleReference: ExternalModuleReference & { expression: StringLiteral } }
         | RequireOrImportCall
-        | ImportTypeNode & { argument: LiteralType };
+        | ValidImportTypeNode;
 
     /* @internal */
     export type RequireOrImportCall = CallExpression & { arguments: [StringLiteralLike] };

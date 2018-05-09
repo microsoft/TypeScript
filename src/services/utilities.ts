@@ -107,6 +107,10 @@ namespace ts {
             Debug.assert(isJSDocTemplateTag(node.parent.parent)); // Else would be handled by isDeclarationName
             return SemanticMeaning.Type;
         }
+        else if (isLiteralTypeNode(node.parent)) {
+            // This might be T["name"], which is actually referencing a property and not a type. So allow both meanings.
+            return SemanticMeaning.Type | SemanticMeaning.Value;
+        }
         else {
             return SemanticMeaning.Value;
         }

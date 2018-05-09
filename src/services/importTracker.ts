@@ -3,9 +3,9 @@
 namespace ts.FindAllReferences {
     export interface ImportsResult {
         /** For every import of the symbol, the location and local symbol for the import. */
-        importSearches: [Identifier, Symbol][];
+        importSearches: ReadonlyArray<[Identifier, Symbol]>;
         /** For rename imports/exports `{ foo as bar }`, `foo` is not a local, so it may be added as a reference immediately without further searching. */
-        singleReferences: Identifier[];
+        singleReferences: ReadonlyArray<Identifier | StringLiteral>;
         /** List of source files that may (or may not) use the symbol via a namespace. (For UMD modules this is every file.) */
         indirectUsers: ReadonlyArray<SourceFile>;
     }
@@ -33,7 +33,7 @@ namespace ts.FindAllReferences {
     interface AmbientModuleDeclaration extends ModuleDeclaration { body?: ModuleBlock; }
     type SourceFileLike = SourceFile | AmbientModuleDeclaration;
     // Identifier for the case of `const x = require("y")`.
-    type Importer = AnyImportOrReExport | ImportTypeNode | Identifier;
+    type Importer = AnyImportOrReExport | ValidImportTypeNode | Identifier;
     type ImporterOrCallExpression = Importer | CallExpression;
 
     /** Returns import statements that directly reference the exporting module, and a list of files that may access the module through a namespace. */
@@ -135,13 +135,7 @@ namespace ts.FindAllReferences {
                             break;
 
                         case SyntaxKind.ImportType:
-                            if (direct.qualifier) {
-                                // `import("foo").x` named import
-                                directImports.push(direct);
-                            }
-                            else {
-                                // TODO: GH#23879
-                            }
+                            directImports.push(direct);
                             break;
 
                         default:
@@ -205,7 +199,7 @@ namespace ts.FindAllReferences {
      */
     function getSearchesFromDirectImports(directImports: Importer[], exportSymbol: Symbol, exportKind: ExportKind, checker: TypeChecker, isForRename: boolean): Pick<ImportsResult, "importSearches" | "singleReferences"> {
         const importSearches: [Identifier, Symbol][] = [];
-        const singleReferences: Identifier[] = [];
+        const singleReferences: (Identifier | StringLiteral)[] = [];
         function addSearch(location: Identifier, symbol: Symbol): void {
             importSearches.push([location, symbol]);
         }
@@ -232,8 +226,13 @@ namespace ts.FindAllReferences {
             }
 
             if (decl.kind === SyntaxKind.ImportType) {
-                if (decl.qualifier) { // TODO: GH#23879
-                    singleReferences.push(decl.qualifier.kind === SyntaxKind.Identifier ? decl.qualifier : decl.qualifier.right);
+                if (decl.qualifier) {
+                    if (isIdentifier(decl.qualifier) && decl.qualifier.escapedText === symbolName(exportSymbol)) {
+                        singleReferences.push(decl.qualifier);
+                    }
+                }
+                else if (exportKind === ExportKind.ExportEquals) {
+                    singleReferences.push(decl.argument.literal);
                 }
                 return;
             }
