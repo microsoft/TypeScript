@@ -626,10 +626,6 @@ namespace ts {
         }
 
         function bindChildrenWorker(node: Node): void {
-            if (isJSDoc(node)) {
-                // TODO: This won't be needed after getting rid of early-jsdoc-if-any binding, because we won't be skipping anything
-                return bindJSDocComment(node);
-            }
             if (checkUnreachable(node)) {
                 bindEachChild(node);
                 return;
@@ -1364,15 +1360,6 @@ namespace ts {
             }
         }
 
-        function bindJSDocComment(node: JSDoc) {
-            forEachChild(node, n => {
-                // Skip type-alias-related tags, which are bound early.
-                if (!getTypeAliasForJSDocTemplateTag(n, node.tags)) {
-                    bind(n);
-                }
-            });
-        }
-
         function bindJSDocTypeAlias(node: JSDocTypedefTag | JSDocCallbackTag) {
             if (node.fullName) {
                 // TODO: Could be not needed?
@@ -1944,7 +1931,6 @@ namespace ts {
             // Here the current node is "foo", which is a container, but the scope of "MyType" should
             // not be inside "foo". Therefore we always bind @typedef before bind the parent node,
             // and skip binding this tag later when binding all the other jsdoc tags.
-            if (isInJavaScriptFile(node)) bindJSDocTypeAliasTagsIfAny(node);
 
             // First we bind declaration nodes to a symbol if possible. We'll both create a symbol
             // and then potentially add the symbol to an appropriate symbol table. Possible
@@ -1994,38 +1980,6 @@ namespace ts {
                     }
                 }
             }
-        }
-
-        function bindJSDocTypeAliasTagsIfAny(node: Node) {
-            if (!hasJSDocNodes(node)) {
-                return;
-            }
-
-            for (const jsDoc of node.jsDoc) {
-                if (!jsDoc.tags) {
-                    continue;
-                }
-
-                for (const tag of jsDoc.tags) {
-                    // Bind template tags that have a typedef or callback tag in the same comment.
-                    // The typedef/callback tag is the container of the template.
-                    const alias = getTypeAliasForJSDocTemplateTag(tag, jsDoc.tags);
-                    if (alias) {
-                        const savedContainer = container;
-                        const savedParent = parent;
-                        container = alias;
-                        parent = jsDoc;
-                        alias.locals = alias.locals || createSymbolTable();
-                        bind(tag);
-                        container = savedContainer;
-                        parent = savedParent;
-                    }
-                }
-            }
-        }
-
-        function getTypeAliasForJSDocTemplateTag(tag: Node, siblings: NodeArray<JSDocTag>) {
-            return isJSDocTemplateTag(tag) && find(siblings, isJSDocTypeAlias);
         }
 
         function updateStrictModeStatementList(statements: NodeArray<Statement>) {
@@ -2724,9 +2678,11 @@ namespace ts {
 
         function bindTypeParameter(node: TypeParameterDeclaration) {
             if (isJSDocTemplateTag(node.parent)) {
-                const container = getTypeAliasForJSDocTemplateTag(node.parent, (node.parent.parent as JSDoc).tags) || getHostSignatureFromJSDoc(node.parent);
+                const container = find((node.parent.parent as JSDoc).tags, isJSDocTypeAlias) || getHostSignatureFromJSDoc(node.parent);
                 if (container) {
-                    Debug.assert(!!container.locals);
+                    if (!container.locals) {
+                        container.locals = createSymbolTable();
+                    }
                     declareSymbol(container.locals, /*parent*/ undefined, node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
                 }
                 else {
