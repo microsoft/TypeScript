@@ -28103,7 +28103,7 @@ namespace ts {
 
         function checkGrammarImportCallExpression(node: ImportCall): boolean {
             if (moduleKind === ModuleKind.ES2015) {
-                return grammarErrorOnNode(node, Diagnostics.Dynamic_import_cannot_be_used_when_targeting_ECMAScript_2015_modules_Please_use_esnext_or_commonjs_as_module_compiler_option);
+                return grammarErrorOnNode(node, Diagnostics.Dynamic_import_is_only_supported_when_module_flag_is_commonjs_or_esNext);
             }
 
             if (node.typeArguments) {
