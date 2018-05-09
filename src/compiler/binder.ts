@@ -1362,7 +1362,6 @@ namespace ts {
 
         function bindJSDocTypeAlias(node: JSDocTypedefTag | JSDocCallbackTag) {
             if (node.fullName) {
-                // TODO: Could be not needed?
                 setParentPointers(node, node.fullName);
             }
         }
