@@ -61,7 +61,7 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 };
 const f2 = function () {
     return __asyncGenerator(this, arguments, function* () {
-        const x = yield;
+        const x = yield yield __await(void 0);
     });
 };
 //// [F3.js]

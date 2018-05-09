@@ -160,8 +160,9 @@ var C2 = /** @class */ (function () {
             var x;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/];
-                    case 1:
+                    case 0: return [4 /*yield*/, __await(void 0)];
+                    case 1: return [4 /*yield*/, _a.sent()];
+                    case 2:
                         x = _a.sent();
                         return [2 /*return*/];
                 }

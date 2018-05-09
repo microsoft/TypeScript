@@ -143,19 +143,19 @@ namespace ts {
                     );
                 }
 
-                if (node.expression && node.expression.kind !== SyntaxKind.AwaitExpression) {
-                    return setOriginalNode(
-                        setTextRange(
-                            createYield(
-                                createDownlevelAwait(
-                                    visitNode(node.expression, visitor, isExpression)
-                                )
-                            ),
-                            node
+                return setOriginalNode(
+                    setTextRange(
+                        createYield(
+                            createDownlevelAwait(
+                                node.expression
+                                    ? visitNode(node.expression, visitor, isExpression)
+                                    : createVoidZero()
+                            )
                         ),
                         node
-                    );
-                }
+                    ),
+                    node
+                );
             }
 
             return visitEachChild(node, visitor, context);
