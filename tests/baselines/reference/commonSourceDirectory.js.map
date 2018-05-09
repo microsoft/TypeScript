@@ -1,2 +1,2 @@
 //// [/app/bin/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"/app/mySourceRoot/","sources":["index.ts"],"names":[],"mappings":";;AAAA,yCAAyC;AACzC,2BAAwB;AACxB,2BAAwB;AACxB,OAAC,GAAG,OAAC,CAAC"}
+{"version":3,"file":"index.js","sourceRoot":"mySourceRoot/","sources":["index.ts"],"names":[],"mappings":";;AAAA,yCAAyC;AACzC,2BAAwB;AACxB,2BAAwB;AACxB,OAAC,GAAG,OAAC,CAAC"}
