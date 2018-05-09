@@ -7,7 +7,5 @@
 ////    await 300;
 ////}
 
-verify.rangesAreOccurrences(false);
-
 goTo.marker();
 verify.occurrencesAtPositionCount(0);

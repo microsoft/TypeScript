@@ -395,7 +395,7 @@ namespace ts.DocumentHighlights {
                 pushKeywordIf(keywords, node.getFirstToken(), SyntaxKind.AwaitKeyword);
             }
             // Do not cross function boundaries.
-            if (!isFunctionLike(node)) {
+            if (!isFunctionLike(node) && !isClassLike(node) && !isInterfaceDeclaration(node) && !isModuleDeclaration(node) && !isTypeAliasDeclaration(node) && !isTypeNode(node)) {
                 forEachChild(node, aggregate);
             }
         }
