@@ -16,6 +16,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         declaration: AcceptedDeclaration;
         fieldName: AcceptedNameType;
         accessorName: AcceptedNameType;
+        originalName: AcceptedNameType;
     }
 
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
@@ -42,7 +43,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
 
         const isJS = isSourceFileJavaScript(file);
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
-        const { isStatic, isReadonly, fieldName, accessorName, type, container, declaration } = fieldInfo;
+        const { isStatic, isReadonly, fieldName, accessorName, originalName, type, container, declaration } = fieldInfo;
 
         suppressLeadingAndTrailingTrivia(fieldName);
         suppressLeadingAndTrailingTrivia(declaration);
@@ -68,7 +69,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
             // readonly modifier only existed in classLikeDeclaration
             const constructor = getFirstConstructorWithBody(<ClassLikeDeclaration>container);
             if (constructor) {
-                updateReadonlyPropertyInitializerStatementConstructor(changeTracker, file, constructor, accessorName, fieldName);
+                updateReadonlyPropertyInitializerStatementConstructor(changeTracker, context, constructor, fieldName, originalName);
             }
         }
         else {
@@ -123,6 +124,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
             isReadonly: hasReadonlyModifier(declaration),
             type: getTypeAnnotationNode(declaration),
             container: declaration.kind === SyntaxKind.Parameter ? declaration.parent.parent : declaration.parent,
+            originalName: <AcceptedNameType>declaration.name,
             declaration,
             fieldName,
             accessorName,
@@ -205,37 +207,23 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
             : changeTracker.insertNodeAfter(file, declaration, accessor);
     }
 
-    function updateReadonlyPropertyInitializerStatementConstructor(changeTracker: textChanges.ChangeTracker, file: SourceFile, constructor: ConstructorDeclaration, accessorName: AcceptedNameType, fieldName: AcceptedNameType) {
-        if (constructor.body) {
-            const initializerStatement = find(constructor.body.statements, (stmt =>
-                isExpressionStatement(stmt) &&
-                isAssignmentExpression(stmt.expression) &&
-                stmt.expression.operatorToken.kind === SyntaxKind.EqualsToken &&
-                (isPropertyAccessExpression(stmt.expression.left) || isElementAccessExpression(stmt.expression.left)) &&
-                isThis(stmt.expression.left.expression) &&
-                (isPropertyAccessExpression(stmt.expression.left)
-                    ? (getNameFromPropertyName(stmt.expression.left.name) === accessorName.text)
-                    : (isPropertyName(stmt.expression.left.argumentExpression) && isConvertableName(stmt.expression.left.argumentExpression) && getNameFromPropertyName(stmt.expression.left.argumentExpression) === accessorName.text
-                ))
-            ));
-            if (initializerStatement) {
-                const initializerLeftHead = (<PropertyAccessExpression | ElementAccessExpression>(<AssignmentExpression<Token<SyntaxKind.EqualsToken>>>(<ExpressionStatement>initializerStatement).expression).left);
+    function updateReadonlyPropertyInitializerStatementConstructor(changeTracker: textChanges.ChangeTracker, context: RefactorContext, constructor: ConstructorDeclaration, fieldName: AcceptedNameType, originalName: AcceptedNameType) {
+        if (!constructor.body) return;
+        const { file, program, cancellationToken } = context;
 
-                if (isPropertyAccessExpression(initializerLeftHead)) {
-                    changeTracker.replaceNode(file, initializerLeftHead, updatePropertyAccess(
-                        initializerLeftHead,
-                        initializerLeftHead.expression,
-                        createIdentifier(fieldName.text)
-                    ));
-                }
-                else {
-                    changeTracker.replaceNode(file, initializerLeftHead, updateElementAccess(
-                        initializerLeftHead,
-                        initializerLeftHead.expression,
-                        createPropertyName(fieldName.text, <AcceptedNameType>initializerLeftHead.argumentExpression)
-                    ));
-                }
-            }
-        }
+        const referenceEntries = mapDefined(FindAllReferences.getReferenceEntriesForNode(-1, originalName, program, [file], cancellationToken), entry => (
+            (entry.type === "node" && rangeContainsRange(constructor, entry.node) && isIdentifier(entry.node) && isWriteAccess(entry.node)) ? entry.node : undefined
+        ));
+
+        forEach(referenceEntries, entry => {
+            const parent = entry.parent;
+            const accessorName = createIdentifier(fieldName.text);
+            const node = isBinaryExpression(parent)
+                ? updateBinary(parent, accessorName, parent.right, parent.operatorToken)
+                : isPropertyAccessExpression(parent)
+                    ? updatePropertyAccess(parent, parent.expression, accessorName)
+                    : Debug.fail("Unexpected write access token");
+            changeTracker.replaceNode(file, parent, node);
+        });
     }
 }
