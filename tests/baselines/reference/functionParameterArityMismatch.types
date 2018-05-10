@@ -36,62 +36,91 @@ f(1, 2, 3, 4, 5);
 >4 : 4
 >5 : 5
 
-declare function g();
->g : { (): any; (a: number, b: number, c: number): any; }
-
-declare function g(a: number, b: number, c: number);
->g : { (): any; (a: number, b: number, c: number): any; }
+declare function g(a?: number);
+>g : { (a?: number): any; (a: number, b: number, c: number, d: number, e?: number): any; }
 >a : number
->b : number
->c : number
 
-g(1);
->g(1) : any
->g : { (): any; (a: number, b: number, c: number): any; }
->1 : 1
-
-g(1, 2);
->g(1, 2) : any
->g : { (): any; (a: number, b: number, c: number): any; }
->1 : 1
->2 : 2
-
-g(1, 2, 3, 4);
->g(1, 2, 3, 4) : any
->g : { (): any; (a: number, b: number, c: number): any; }
->1 : 1
->2 : 2
->3 : 3
->4 : 4
-
-declare function h(a: number, b: number, c: number, d?: number);
->h : (a: number, b: number, c: number, d?: number) => any
+declare function g(a: number, b: number, c: number, d: number, e?: number);
+>g : { (a?: number): any; (a: number, b: number, c: number, d: number, e?: number): any; }
 >a : number
 >b : number
 >c : number
 >d : number
+>e : number
 
-h();
->h() : any
->h : (a: number, b: number, c: number, d?: number) => any
-
-h(1);
->h(1) : any
->h : (a: number, b: number, c: number, d?: number) => any
->1 : 1
-
-h(1, 2);
->h(1, 2) : any
->h : (a: number, b: number, c: number, d?: number) => any
+g(1, 2);
+>g(1, 2) : any
+>g : { (a?: number): any; (a: number, b: number, c: number, d: number, e?: number): any; }
 >1 : 1
 >2 : 2
 
-h(1, 2, 3, 4, 5);
->h(1, 2, 3, 4, 5) : any
->h : (a: number, b: number, c: number, d?: number) => any
+g(1, 2, 3);
+>g(1, 2, 3) : any
+>g : { (a?: number): any; (a: number, b: number, c: number, d: number, e?: number): any; }
+>1 : 1
+>2 : 2
+>3 : 3
+
+g(1, 2, 3, 4, 5, 6, 7);
+>g(1, 2, 3, 4, 5, 6, 7) : any
+>g : { (a?: number): any; (a: number, b: number, c: number, d: number, e?: number): any; }
 >1 : 1
 >2 : 2
 >3 : 3
 >4 : 4
 >5 : 5
+>6 : 6
+>7 : 7
+
+declare function h(a: number, b: number, c?: number);
+>h : (a: number, b: number, c?: number) => any
+>a : number
+>b : number
+>c : number
+
+h();
+>h() : any
+>h : (a: number, b: number, c?: number) => any
+
+h(1);
+>h(1) : any
+>h : (a: number, b: number, c?: number) => any
+>1 : 1
+
+h(1, 2, 3, 4);
+>h(1, 2, 3, 4) : any
+>h : (a: number, b: number, c?: number) => any
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+
+h(1, 2, 3, 4, 5);
+>h(1, 2, 3, 4, 5) : any
+>h : (a: number, b: number, c?: number) => any
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+>5 : 5
+
+declare function i(a?: number, b?: number);
+>i : (a?: number, b?: number) => any
+>a : number
+>b : number
+
+i(1, 2, 3);
+>i(1, 2, 3) : any
+>i : (a?: number, b?: number) => any
+>1 : 1
+>2 : 2
+>3 : 3
+
+i(1, 2, 3, 4);
+>i(1, 2, 3, 4) : any
+>i : (a?: number, b?: number) => any
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
 

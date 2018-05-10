@@ -19046,22 +19046,21 @@ namespace ts {
                 diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments));
             }
             else if (args) {
+                const numericalComparison = (a: number, b: number) => a < b ? 0 : 1;
+                const minArgsSorted = map(signatures, s => s.minArgumentCount).sort(numericalComparison);
+                const maxArgsSorted = map(signatures, s => s.parameters.length).sort(numericalComparison);
+                const min = minArgsSorted[0];
+                const max = maxArgsSorted[maxArgsSorted.length - 1];
+
                 let argCount = args.length;
-                let min = Number.POSITIVE_INFINITY;
-                let max = Number.NEGATIVE_INFINITY;
-                let minAboveArgCount = Number.POSITIVE_INFINITY;
-                let maxBelowArgCount = Number.NEGATIVE_INFINITY;
-                for (const sig of signatures) {
-                    const minArgs = sig.minArgumentCount;
-                    const maxArgs = sig.parameters.length;
-                    min = Math.min(min, minArgs);
-                    max = Math.max(max, maxArgs);
-                    minAboveArgCount = minArgs > argCount ? Math.min(minAboveArgCount, minArgs) : minAboveArgCount;
-                    maxBelowArgCount = maxArgs < argCount ? Math.max(maxBelowArgCount, maxArgs) : maxBelowArgCount;
-                }
-                const hasRestParameter = some(signatures, hasEffectiveRestParameter);
+                const minArgsAboveCurrentSorted = filter(minArgsSorted, c => c > argCount);
+                const maxArgsBelowCurrentSorted = filter(maxArgsSorted, c => c < argCount);
+                const minAboveArgCount = minArgsAboveCurrentSorted[0];
+                const maxBelowArgCount = maxArgsBelowCurrentSorted[maxArgsBelowCurrentSorted.length - 1];
+
+                const hasRestParameter = some(signatures, sig => sig.hasRestParameter);
                 const hasSpreadArgument = getSpreadArgumentIndex(args) > -1;
-                const paramCount = hasRestParameter ? min :
+                const paramRange = hasRestParameter ? min :
                     min < max ? min + "-" + max :
                     min;
 
@@ -19074,20 +19073,48 @@ namespace ts {
                         hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
                             hasSpreadArgument ? Diagnostics.Expected_0_arguments_but_got_1_or_more :
                                 undefined;
-                    diagnostics.add(createDiagnosticForNode(node, error, paramCount, argCount));
+                    diagnostics.add(createDiagnosticForNode(node, error, paramRange, argCount));
                 }
                 else {
-                    if (max - min <= 1) {
-                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, paramCount, argCount));
+                    const availableSignatures: {[key: number]: boolean} = {};
+                    let idx = min;
+                    while (idx <= max) {
+                        availableSignatures[idx] = some(minArgsSorted, c => c === idx) || some(maxArgsSorted, c => c === idx);
+                        idx++;
                     }
-                    else if (maxBelowArgCount === Number.NEGATIVE_INFINITY) {
-                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_at_least_0_arguments_but_got_1, minAboveArgCount, argCount));
+
+                    const overloadsAreContiguousInRange = (start: number, stop: number) => {
+                        let idx = start;
+                        while (idx <= stop) {
+                            if (!availableSignatures[idx]) {
+                                return false;
+                            }
+                            idx++;
+                        }
+                        return true;
+                    };
+
+                    if (max === min || overloadsAreContiguousInRange(min, max)) {
+                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, paramRange, argCount));
                     }
-                    else if (minAboveArgCount === Number.POSITIVE_INFINITY) {
-                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_or_more_arguments_The_most_likely_overload_that_matches_expects_1_arguments, argCount, maxBelowArgCount));
+                    else if (argCount > max) { // too many args and options are not contiguous
+                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_no_more_than_0_arguments_but_got_1, max, argCount));
                     }
-                    else { // introducing another diagnostic which omits 'at least' would be possible
-                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_The_most_likely_overloads_that_match_expect_either_1_arguments_or_at_least_2_arguments, argCount, maxBelowArgCount, minAboveArgCount));
+                    else if (argCount < min) { // too few args and options are not contiguous
+                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_at_least_0_arguments_but_got_1, min, argCount));
+                    }
+                    else { // between valid overload(s)
+                        // identify blocks before/after X
+                        const contiguousBefore = overloadsAreContiguousInRange(min, maxBelowArgCount);
+                        const contiguousAfter = overloadsAreContiguousInRange(minAboveArgCount, max);
+
+                        const applicableWithFewerArgs = min !== maxBelowArgCount && contiguousBefore ?
+                            min + "-" + maxBelowArgCount : min;
+
+                        const applicableWithMoreArgs = max !== minAboveArgCount && contiguousAfter ?
+                            minAboveArgCount + "-" + max : max;
+
+                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_The_most_likely_overloads_that_match_expect_either_1_arguments_or_2_arguments, argCount, applicableWithFewerArgs, applicableWithMoreArgs));
                     }
                 }
             }

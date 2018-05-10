@@ -12,10 +12,10 @@ tests/cases/compiler/optionalParamArgsTest.ts(106,1): error TS2554: Expected 1 a
 tests/cases/compiler/optionalParamArgsTest.ts(107,1): error TS2554: Expected 1 arguments, but got 2.
 tests/cases/compiler/optionalParamArgsTest.ts(108,1): error TS2554: Expected 1 arguments, but got 2.
 tests/cases/compiler/optionalParamArgsTest.ts(109,1): error TS2554: Expected 1 arguments, but got 2.
-tests/cases/compiler/optionalParamArgsTest.ts(110,1): error TS2572: No overload expects 3 or more arguments. The most likely overload that matches expects 2 arguments.
-tests/cases/compiler/optionalParamArgsTest.ts(111,1): error TS2572: No overload expects 3 or more arguments. The most likely overload that matches expects 2 arguments.
-tests/cases/compiler/optionalParamArgsTest.ts(112,1): error TS2572: No overload expects 3 or more arguments. The most likely overload that matches expects 2 arguments.
-tests/cases/compiler/optionalParamArgsTest.ts(113,1): error TS2572: No overload expects 3 or more arguments. The most likely overload that matches expects 2 arguments.
+tests/cases/compiler/optionalParamArgsTest.ts(110,1): error TS2572: Expected no more than 2 arguments but got 3.
+tests/cases/compiler/optionalParamArgsTest.ts(111,1): error TS2572: Expected no more than 2 arguments but got 3.
+tests/cases/compiler/optionalParamArgsTest.ts(112,1): error TS2572: Expected no more than 2 arguments but got 3.
+tests/cases/compiler/optionalParamArgsTest.ts(113,1): error TS2572: Expected no more than 2 arguments but got 3.
 tests/cases/compiler/optionalParamArgsTest.ts(114,1): error TS2554: Expected 1-2 arguments, but got 0.
 tests/cases/compiler/optionalParamArgsTest.ts(115,1): error TS2554: Expected 1-2 arguments, but got 0.
 tests/cases/compiler/optionalParamArgsTest.ts(116,1): error TS2554: Expected 1-2 arguments, but got 0.
@@ -162,16 +162,16 @@ tests/cases/compiler/optionalParamArgsTest.ts(117,1): error TS2554: Expected 1-2
 !!! error TS2554: Expected 1 arguments, but got 2.
     c1o1.C1M3(1,2,3);
     ~~~~~~~~~~~~~~~~
-!!! error TS2572: No overload expects 3 or more arguments. The most likely overload that matches expects 2 arguments.
+!!! error TS2572: Expected no more than 2 arguments but got 3.
     i1o1.C1M3(1,2,3);
     ~~~~~~~~~~~~~~~~
-!!! error TS2572: No overload expects 3 or more arguments. The most likely overload that matches expects 2 arguments.
+!!! error TS2572: Expected no more than 2 arguments but got 3.
     F3(1,2,3);
     ~~~~~~~~~
-!!! error TS2572: No overload expects 3 or more arguments. The most likely overload that matches expects 2 arguments.
+!!! error TS2572: Expected no more than 2 arguments but got 3.
     L3(1,2,3);
     ~~~~~~~~~
-!!! error TS2572: No overload expects 3 or more arguments. The most likely overload that matches expects 2 arguments.
+!!! error TS2572: Expected no more than 2 arguments but got 3.
     c1o1.C1M4();
     ~~~~~~~~~~~
 !!! error TS2554: Expected 1-2 arguments, but got 0.

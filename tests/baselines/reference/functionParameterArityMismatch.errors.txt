@@ -1,17 +1,19 @@
 tests/cases/compiler/functionParameterArityMismatch.ts(3,1): error TS2555: Expected at least 1 arguments, but got 0.
-tests/cases/compiler/functionParameterArityMismatch.ts(4,1): error TS2571: No overload expects 2 arguments. The most likely overloads that match expect either 1 arguments or at least 3 arguments.
-tests/cases/compiler/functionParameterArityMismatch.ts(5,1): error TS2572: No overload expects 4 or more arguments. The most likely overload that matches expects 3 arguments.
-tests/cases/compiler/functionParameterArityMismatch.ts(6,1): error TS2572: No overload expects 5 or more arguments. The most likely overload that matches expects 3 arguments.
-tests/cases/compiler/functionParameterArityMismatch.ts(10,1): error TS2571: No overload expects 1 arguments. The most likely overloads that match expect either 0 arguments or at least 3 arguments.
-tests/cases/compiler/functionParameterArityMismatch.ts(11,1): error TS2571: No overload expects 2 arguments. The most likely overloads that match expect either 0 arguments or at least 3 arguments.
-tests/cases/compiler/functionParameterArityMismatch.ts(12,1): error TS2572: No overload expects 4 or more arguments. The most likely overload that matches expects 3 arguments.
-tests/cases/compiler/functionParameterArityMismatch.ts(15,1): error TS2554: Expected 3-4 arguments, but got 0.
-tests/cases/compiler/functionParameterArityMismatch.ts(16,1): error TS2554: Expected 3-4 arguments, but got 1.
-tests/cases/compiler/functionParameterArityMismatch.ts(17,1): error TS2554: Expected 3-4 arguments, but got 2.
-tests/cases/compiler/functionParameterArityMismatch.ts(18,1): error TS2554: Expected 3-4 arguments, but got 5.
+tests/cases/compiler/functionParameterArityMismatch.ts(4,1): error TS2571: No overload expects 2 arguments. The most likely overloads that match expect either 1 arguments or 3 arguments.
+tests/cases/compiler/functionParameterArityMismatch.ts(5,1): error TS2572: Expected no more than 3 arguments but got 4.
+tests/cases/compiler/functionParameterArityMismatch.ts(6,1): error TS2572: Expected no more than 3 arguments but got 5.
+tests/cases/compiler/functionParameterArityMismatch.ts(10,1): error TS2571: No overload expects 2 arguments. The most likely overloads that match expect either 0-1 arguments or 4-5 arguments.
+tests/cases/compiler/functionParameterArityMismatch.ts(11,1): error TS2571: No overload expects 3 arguments. The most likely overloads that match expect either 0-1 arguments or 4-5 arguments.
+tests/cases/compiler/functionParameterArityMismatch.ts(12,1): error TS2572: Expected no more than 5 arguments but got 7.
+tests/cases/compiler/functionParameterArityMismatch.ts(15,1): error TS2554: Expected 2-3 arguments, but got 0.
+tests/cases/compiler/functionParameterArityMismatch.ts(16,1): error TS2554: Expected 2-3 arguments, but got 1.
+tests/cases/compiler/functionParameterArityMismatch.ts(17,1): error TS2554: Expected 2-3 arguments, but got 4.
+tests/cases/compiler/functionParameterArityMismatch.ts(18,1): error TS2554: Expected 2-3 arguments, but got 5.
+tests/cases/compiler/functionParameterArityMismatch.ts(21,1): error TS2572: Expected no more than 2 arguments but got 3.
+tests/cases/compiler/functionParameterArityMismatch.ts(22,1): error TS2572: Expected no more than 2 arguments but got 4.
 
 
-==== tests/cases/compiler/functionParameterArityMismatch.ts (11 errors) ====
+==== tests/cases/compiler/functionParameterArityMismatch.ts (13 errors) ====
     declare function f(a: number);
     declare function f(a: number, b: number, c: number);
     f();
@@ -19,37 +21,45 @@ tests/cases/compiler/functionParameterArityMismatch.ts(18,1): error TS2554: Expe
 !!! error TS2555: Expected at least 1 arguments, but got 0.
     f(1, 2);
     ~~~~~~~
-!!! error TS2571: No overload expects 2 arguments. The most likely overloads that match expect either 1 arguments or at least 3 arguments.
+!!! error TS2571: No overload expects 2 arguments. The most likely overloads that match expect either 1 arguments or 3 arguments.
     f(1, 2, 3, 4);
     ~~~~~~~~~~~~~
-!!! error TS2572: No overload expects 4 or more arguments. The most likely overload that matches expects 3 arguments.
+!!! error TS2572: Expected no more than 3 arguments but got 4.
     f(1, 2, 3, 4, 5);
     ~~~~~~~~~~~~~~~~
-!!! error TS2572: No overload expects 5 or more arguments. The most likely overload that matches expects 3 arguments.
+!!! error TS2572: Expected no more than 3 arguments but got 5.
     
-    declare function g();
-    declare function g(a: number, b: number, c: number);
-    g(1);
-    ~~~~
-!!! error TS2571: No overload expects 1 arguments. The most likely overloads that match expect either 0 arguments or at least 3 arguments.
+    declare function g(a?: number);
+    declare function g(a: number, b: number, c: number, d: number, e?: number);
     g(1, 2);
     ~~~~~~~
-!!! error TS2571: No overload expects 2 arguments. The most likely overloads that match expect either 0 arguments or at least 3 arguments.
-    g(1, 2, 3, 4);
-    ~~~~~~~~~~~~~
-!!! error TS2572: No overload expects 4 or more arguments. The most likely overload that matches expects 3 arguments.
+!!! error TS2571: No overload expects 2 arguments. The most likely overloads that match expect either 0-1 arguments or 4-5 arguments.
+    g(1, 2, 3);
+    ~~~~~~~~~~
+!!! error TS2571: No overload expects 3 arguments. The most likely overloads that match expect either 0-1 arguments or 4-5 arguments.
+    g(1, 2, 3, 4, 5, 6, 7);
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2572: Expected no more than 5 arguments but got 7.
     
-    declare function h(a: number, b: number, c: number, d?: number);
+    declare function h(a: number, b: number, c?: number);
     h();
     ~~~
-!!! error TS2554: Expected 3-4 arguments, but got 0.
+!!! error TS2554: Expected 2-3 arguments, but got 0.
     h(1);
     ~~~~
-!!! error TS2554: Expected 3-4 arguments, but got 1.
-    h(1, 2);
-    ~~~~~~~
-!!! error TS2554: Expected 3-4 arguments, but got 2.
+!!! error TS2554: Expected 2-3 arguments, but got 1.
+    h(1, 2, 3, 4);
+    ~~~~~~~~~~~~~
+!!! error TS2554: Expected 2-3 arguments, but got 4.
     h(1, 2, 3, 4, 5);
     ~~~~~~~~~~~~~~~~
-!!! error TS2554: Expected 3-4 arguments, but got 5.
+!!! error TS2554: Expected 2-3 arguments, but got 5.
+    
+    declare function i(a?: number, b?: number);
+    i(1, 2, 3);
+    ~~~~~~~~~~
+!!! error TS2572: Expected no more than 2 arguments but got 3.
+    i(1, 2, 3, 4);
+    ~~~~~~~~~~~~~
+!!! error TS2572: Expected no more than 2 arguments but got 4.
     

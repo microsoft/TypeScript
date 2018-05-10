@@ -2060,7 +2060,7 @@
         "category": "Error",
         "code": 2575
     },
-    "No overload expects {0} or more arguments. The most likely overload that matches expects {1} arguments.": {
+    "Expected no more than {0} arguments but got {1}.": {
         "category": "Error",
         "code": 2576
     },

@@ -5,14 +5,18 @@ f(1, 2);
 f(1, 2, 3, 4);
 f(1, 2, 3, 4, 5);
 
-declare function g();
-declare function g(a: number, b: number, c: number);
-g(1);
+declare function g(a?: number);
+declare function g(a: number, b: number, c: number, d: number, e?: number);
 g(1, 2);
-g(1, 2, 3, 4);
+g(1, 2, 3);
+g(1, 2, 3, 4, 5, 6, 7);
 
-declare function h(a: number, b: number, c: number, d?: number);
+declare function h(a: number, b: number, c?: number);
 h();
 h(1);
-h(1, 2);
+h(1, 2, 3, 4);
 h(1, 2, 3, 4, 5);
+
+declare function i(a?: number, b?: number);
+i(1, 2, 3);
+i(1, 2, 3, 4);
