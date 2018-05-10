@@ -1883,6 +1883,7 @@ declare namespace ts {
         None = 0,
         NoTruncation = 1,
         WriteArrayAsGenericType = 2,
+        GenerateNamesForShadowedTypeParams = 4,
         UseStructuralFallback = 8,
         WriteTypeArgumentsOfSignature = 32,
         UseFullyQualifiedType = 64,

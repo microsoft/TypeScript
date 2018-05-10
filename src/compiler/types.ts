@@ -3074,7 +3074,7 @@ namespace ts {
         // Options
         NoTruncation                            = 1 << 0,   // Don't truncate result
         WriteArrayAsGenericType                 = 1 << 1,   // Write Array<T> instead T[]
-        // empty space
+        GenerateNamesForShadowedTypeParams      = 1 << 2,   // When a type parameter T is shadowing another T, generate a name for it so it can still be referenced
         UseStructuralFallback                   = 1 << 3,   // When an alias cannot be named by its symbol, rather than report an error, fallback to a structural printout if possible
         // empty space
         WriteTypeArgumentsOfSignature           = 1 << 5,   // Write the type arguments instead of type parameters of the signature
