@@ -126,7 +126,7 @@ namespace RWC {
                 compilerResult = Harness.Compiler.compileFiles(
                     inputFiles,
                     otherFiles,
-                    /* harnessOptions */ undefined,
+                    { useCaseSensitiveFileNames: "" + (ioLog.useCaseSensitiveFileNames || false) },
                     opts.options,
                     // Since each RWC json file specifies its current directory in its json file, we need
                     // to pass this information in explicitly instead of acquiring it from the process.
