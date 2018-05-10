@@ -99,6 +99,7 @@ for ([...multiRobotAInfo] = <MultiSkilledRobot>["trimmer", ["trimming", "edging"
 }
 
 //// [sourceMapValidationDestructuringForArrayBindingPattern2.js]
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x;
 var robotA = [1, "mower", "mowing"];
 function getRobot() {
     return robotA;
@@ -185,5 +186,4 @@ for (_w = getMultiRobot(), multiRobotAInfo = _w.slice(0), _w, i = 0; i < 1; i++)
 for (_x = ["trimmer", ["trimming", "edging"]], multiRobotAInfo = _x.slice(0), _x, i = 0; i < 1; i++) {
     console.log(multiRobotAInfo);
 }
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x;
 //# sourceMappingURL=sourceMapValidationDestructuringForArrayBindingPattern2.js.map
