@@ -36,11 +36,30 @@ namespace ts.codefix {
                 break;
             default:
                 if (isBlock(statement.parent)) {
-                    split(sliceAfter(statement.parent.statements, statement), s => !isFunctionDeclaration(s), (start, end) => changes.deleteNodeRange(sourceFile, start, end));
+                    split(sliceAfter(statement.parent.statements, statement), shouldRemove, (start, end) => changes.deleteNodeRange(sourceFile, start, end));
                 }
                 else {
                     changes.deleteNode(sourceFile, statement);
                 }
+        }
+    }
+
+    function shouldRemove(s: Statement): boolean {
+        // Don't remove statements that can validly be used before they appear.
+        return !isFunctionDeclaration(s) && !isPurelyTypeDeclaration(s) &&
+            // `var x;` may declare a variable used above
+            !(isVariableStatement(s) && !(getCombinedNodeFlags(s) & (NodeFlags.Let | NodeFlags.Const)) && s.declarationList.declarations.some(d => !d.initializer));
+    }
+
+    function isPurelyTypeDeclaration(s: Statement): boolean {
+        switch (s.kind) {
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+                return true;
+            case SyntaxKind.ModuleDeclaration:
+                return getModuleInstanceState(s as ModuleDeclaration) !== ModuleInstanceState.Instantiated;
+            case SyntaxKind.EnumDeclaration:
+                return hasModifier(s, ModifierFlags.Const);
         }
     }
 
