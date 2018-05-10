@@ -211,7 +211,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         if (!constructor.body) return;
         const { file, program, cancellationToken } = context;
 
-        const referenceEntries = mapDefined(FindAllReferences.getReferenceEntriesForNode(-1, originalName, program, [file], cancellationToken), entry => (
+        const referenceEntries = mapDefined(FindAllReferences.getReferenceEntriesForNode(constructor.pos, originalName, program, [file], cancellationToken), entry => (
             (entry.type === "node" && rangeContainsRange(constructor, entry.node) && isIdentifier(entry.node) && isWriteAccess(entry.node)) ? entry.node : undefined
         ));
 
