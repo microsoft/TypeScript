@@ -18906,33 +18906,14 @@ namespace ts {
         }
 
         function getTypeArgumentArityError(node: Node, signatures: Signature[], typeArguments: NodeArray<TypeNode>) {
-            const callArgs = typeArguments.length;
-            let lowerBound = Infinity;
-            let upperBound = -Infinity;
+            let min = Infinity;
+            let max = -Infinity;
             for (const sig of signatures) {
-                const minArgs = getMinTypeArgumentCount(sig.typeParameters);
-                if (minArgs < callArgs) {
-                    lowerBound = Math.max(lowerBound, minArgs);
-                }
-                const maxArgs = length(sig.typeParameters);
-                if (maxArgs > callArgs) {
-                    upperBound = Math.min(upperBound, maxArgs);
-                }
+                min = Math.min(min, getMinTypeArgumentCount(sig.typeParameters));
+                max = Math.max(max, length(sig.typeParameters));
             }
-            // for b inbetween a's
-            // 0,1,3 got 2 -> 2,1,3
-            // 0,1,4 got 2 -> 2,1,4
-            // 0,4 got 2 -> 2,0,4
-            // a1,a2,a3 got b -> b,max(a)<b,min(a)>b
-
-            // for b < all a's --> probably handled somewhere else (as should be b > all a's)
-
-            // Diagnostics.No_overload_expects_0_arguments_The_most_likely_overloads_that_match_expect_either_1_arguments_or_at_least_2_arguments
-
-            // const paramCount = min === max ? min : min + "-" + max;
-            // return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, paramCount, typeArguments.length);
-
-            return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.No_overload_expects_0_arguments_The_most_likely_overloads_that_match_expect_either_1_arguments_or_at_least_2_arguments, callArgs, lowerBound, upperBound);
+            const paramCount = min === max ? min : min + "-" + max;
+            return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, paramCount, typeArguments.length);
         }
 
         function resolveCall(node: CallLikeExpression, signatures: ReadonlyArray<Signature>, candidatesOutArray: Signature[] | undefined, fallbackError?: DiagnosticMessage): Signature {
@@ -19088,14 +19069,18 @@ namespace ts {
                     argCount--;
                 }
 
-                const error = hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_got_1_or_more :
-                    hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
-                    hasSpreadArgument ? Diagnostics.Expected_0_arguments_but_got_1_or_more :
-                    null;
-                if (error) {
+                if (hasRestParameter || hasSpreadArgument) {
+                    const error = hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_got_1_or_more :
+                        hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
+                            hasSpreadArgument ? Diagnostics.Expected_0_arguments_but_got_1_or_more :
+                                null;
                     diagnostics.add(createDiagnosticForNode(node, error, paramCount, argCount));
-                } else {
-                    if (maxBelowArgCount === Number.NEGATIVE_INFINITY) {
+                }
+                else {
+                    if (min === max) {
+                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, min, argCount));
+                    }
+                    else if (maxBelowArgCount === Number.NEGATIVE_INFINITY) {
                         diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_at_least_0_arguments_but_got_1, minAboveArgCount, argCount));
                     }
                     else if (minAboveArgCount === Number.POSITIVE_INFINITY) {
