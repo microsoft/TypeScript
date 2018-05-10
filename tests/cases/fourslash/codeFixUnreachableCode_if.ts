@@ -6,6 +6,7 @@
 ////}
 ////
 ////// No good way to delete just the 'if' part
+////if (false) a; else b;
 ////if (false) {
 ////    a;
 ////} else {
@@ -28,7 +29,9 @@ verify.codeFixAll({
     newFileContent:
 `
 // No good way to delete just the 'if' part
-if (false) else {
+if (false) { } else b;
+if (false) {
+} else {
     b;
 }
 

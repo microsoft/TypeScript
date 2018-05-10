@@ -1,14 +1,17 @@
 /// <reference path='fourslash.ts' />
 
 ////function f() {
-////    return 0;
+////    return f();
 ////    return 1;
+////    function f() {}
+////    return 2;
 ////}
 
 verify.codeFix({
     description: "Remove unreachable code",
     newFileContent:
 `function f() {
-    return 0;
+    return f();
+    function f() {}
 }`,
 });
