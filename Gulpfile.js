@@ -54,7 +54,7 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         debug: process.env.debug || process.env["debug-brk"] || process.env.d,
         inspect: process.env.inspect || process.env["inspect-brk"] || process.env.i,
         host: process.env.TYPESCRIPT_HOST || process.env.host || "node",
-        browser: process.env.browser || process.env.b || "IE",
+        browser: process.env.browser || process.env.b || (os.platform() === "win32" ? "edge" : "chrome"),
         timeout: process.env.timeout || 40000,
         tests: process.env.test || process.env.tests || process.env.t,
         runners: process.env.runners || process.env.runner || process.env.ru,

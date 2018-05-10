@@ -1,6 +1,7 @@
 /// <reference types="node" />
 // tslint:disable:no-null-keyword
 
+import minimist = require("minimist");
 import http = require("http");
 import fs = require("fs");
 import path = require("path");
@@ -20,7 +21,8 @@ const baseUrl = new URL(`http://localhost:${port}/`);
 const rootDir = path.dirname(__dirname);
 const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
 
-let browser = "IE";
+const defaultBrowser = os.platform() === "win32" ? "edge" : "chrome";
+let browser: "edge" | "chrome" | "none" = defaultBrowser;
 let grep: string | undefined;
 let verbose = false;
 
@@ -862,50 +864,101 @@ function startServer() {
     return http.createServer(handleRequest).listen(port);
 }
 
+const REG_COLUMN_PADDING = 4;
+
+function queryRegistryValue(keyPath: string, callback: (error: Error | null, value: string) => void) {
+    const args = ["query", keyPath];
+    child_process.execFile("reg", ["query", keyPath, "/ve"], { encoding: "utf8" }, (error, stdout) => {
+        if (error) return callback(error, null);
+
+        const valueLine = stdout.replace(/^\r\n.+?\r\n|\r\n\r\n$/g, "");
+        if (!valueLine) {
+            return callback(new Error("Unable to retrieve value."), null);
+        }
+
+        const valueNameColumnOffset = REG_COLUMN_PADDING;
+        if (valueLine.lastIndexOf("(Default)", valueNameColumnOffset) !== valueNameColumnOffset) {
+            return callback(new Error("Unable to retrieve value."), null);
+        }
+
+        const dataTypeColumnOffset = valueNameColumnOffset + "(Default)".length + REG_COLUMN_PADDING;
+        if (valueLine.lastIndexOf("REG_SZ", dataTypeColumnOffset) !== dataTypeColumnOffset) {
+            return callback(new Error("Unable to retrieve value."), null);
+        }
+
+        const valueColumnOffset = dataTypeColumnOffset + "REG_SZ".length + REG_COLUMN_PADDING;
+        const value = valueLine.slice(valueColumnOffset);
+        return callback(null, value);
+    });
+}
+
+interface Browser {
+    description: string;
+    command: string;
+}
+
+function createBrowserFromPath(path: string): Browser {
+    return { description: path, command: path };
+}
+
+function getChromePath(callback: (error: Error | null, browser: Browser | string | null) => void) {
+    switch (os.platform()) {
+        case "win32":
+            return queryRegistryValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\chrome.exe", (error, value) => {
+                if (error) return callback(null, "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe");
+                return callback(null, createBrowserFromPath(value));
+            });
+        case "darwin": return callback(null, "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome");
+        case "linux": return callback(null, "/opt/google/chrome/chrome");
+        default: return callback(new Error(`Chrome location is unknown for platform '${os.platform()}'`), null);
+    }
+}
+
+function getEdgePath(callback: (error: Error | null, browser: Browser | null) => void) {
+    switch (os.platform()) {
+        case "win32": return callback(null, { description: "Microsoft Edge", command: "cmd /c start microsoft-edge:%1" });
+        default: return callback(new Error(`Edge location is unknown for platform '${os.platform()}'`), null);
+    }
+}
+
+function getBrowserPath(callback: (error: Error | null, browser: Browser | null) => void) {
+    switch (browser) {
+        case "chrome": return getChromePath(afterGetBrowserPath);
+        case "edge": return getEdgePath(afterGetBrowserPath);
+        default: return callback(new Error(`Browser location is unknown for '${browser}'`), null);
+    }
+
+    function afterGetBrowserPath(error: Error | null, browser: Browser | string | null) {
+        if (error) return callback(error, null);
+        if (typeof browser === "object") return callback(null, browser);
+        return fs.stat(browser, (error, stats) => {
+            if (!error && stats.isFile()) {
+                return callback(null, createBrowserFromPath(browser));
+            }
+            if (browser === "chrome") return callback(null, createBrowserFromPath("chrome"));
+            return callback(new Error(`Browser location is unknown for '${browser}'`), null);
+        });
+    }
+}
+
 function startClient(server: http.Server) {
     let browserPath: string;
     if (browser === "none") {
         return;
     }
 
-    if (browser === "chrome") {
-        let defaultChromePath = "";
-        switch (os.platform()) {
-            case "win32":
-                defaultChromePath = "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe";
-                break;
-            case "darwin":
-                defaultChromePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-                break;
-            case "linux":
-                defaultChromePath = "/opt/google/chrome/chrome";
-                break;
-            default:
-                console.log(`default Chrome location is unknown for platform '${os.platform()}'`);
-                break;
-        }
-        if (fs.existsSync(defaultChromePath)) {
-            browserPath = defaultChromePath;
+    getBrowserPath((error, browser) => {
+        if (error) return console.error(error);
+        console.log(`Using browser: ${browser.description}`);
+        const queryString = grep ? `?grep=${grep}` : "";
+        const args = [`http://localhost:${port}/tests/webTestResults.html${queryString}`];
+        if (browser.command.indexOf("%") === -1) {
+            child_process.spawn(browser.command, args);
         }
         else {
-            browserPath = browser;
+            const command = browser.command.replace(/%(\d+)/g, (_, offset) => args[+offset - 1]);
+            child_process.exec(command);
         }
-    }
-    else {
-        const defaultIEPath = "C:/Program Files/Internet Explorer/iexplore.exe";
-        if (fs.existsSync(defaultIEPath)) {
-            browserPath = defaultIEPath;
-        }
-        else {
-            browserPath = browser;
-        }
-    }
-
-    console.log(`Using browser: ${browserPath}`);
-
-    const queryString = grep ? `?grep=${grep}` : "";
-    const child = child_process.spawn(browserPath, [`http://localhost:${port}/tests/webTestResults.html${queryString}`], {
-        stdio: "inherit"
     });
 }
 
@@ -913,42 +966,35 @@ function printHelp() {
     console.log("Runs an http server on port 8888, looking for tests folder in the current directory\n");
     console.log("Syntax: node webTestServer.js [browser] [tests] [--verbose]\n");
     console.log("Options:");
-    console.log(" <browser>     The browser to launch. One of 'IE', 'chrome', or 'none' (default 'IE').");
+    console.log(" <browser>     The browser to launch. One of 'edge', 'chrome', or 'none' (default 'edge' on Windows, otherwise `chrome`).");
     console.log(" <tests>       A regular expression to pass to Mocha.");
     console.log(" --verbose     Enables verbose logging.");
 }
 
 function parseCommandLine(args: string[]) {
-    let offset = 0;
-    for (const arg of args) {
-        const argLower = arg.toLowerCase();
-        if (argLower === "--help") {
-            printHelp();
-            return false;
-        }
-        else if (argLower === "--verbose") {
-            verbose = true;
-        }
-        else {
-            if (offset === 0) {
-                browser = arg;
-            }
-            else if (offset === 1) {
-                grep = arg;
-            }
-            else {
-                console.log(`Unrecognized argument: ${arg}\n`);
-                return false;
-            }
-            offset++;
-        }
-    }
-
-    if (browser !== "IE" && browser !== "chrome" && browser !== "none") {
-        console.log(`Unrecognized browser '${browser}', expected 'IE' or 'chrome'.`);
+    const parsed = minimist(args, { boolean: ["help", "verbose"] });
+    if (parsed.help) {
+        printHelp();
         return false;
     }
 
+    if (parsed.verbose) {
+        verbose = true;
+    }
+
+    const [parsedBrowser = defaultBrowser, parsedGrep, ...unrecognized] = parsed._;
+    if (parsedBrowser !== "edge" && parsedBrowser !== "chrome" && parsedBrowser !== "none") {
+        console.log(`Unrecognized browser '${parsedBrowser}', expected 'edge', 'chrome', or 'none'.`);
+        return false;
+    }
+
+    if (unrecognized.length > 0) {
+        console.log(`Unrecognized argument: ${unrecognized[0]}`);
+        return false;
+    }
+
+    browser = parsedBrowser;
+    grep = parsedGrep;
     return true;
 }
 
