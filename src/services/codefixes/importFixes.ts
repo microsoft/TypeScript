@@ -266,7 +266,7 @@ namespace ts.codefix {
                     return [global];
                 }
 
-                const relativePath = removeExtensionAndIndexPostFix(ensurePathIsNonModuleName(getRelativePath(sourceDirectory, moduleFileName, getCanonicalFileName)), moduleResolutionKind, addJsExtension);
+                const relativePath = removeExtensionAndIndexPostFix(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), moduleResolutionKind, addJsExtension);
                 if (!baseUrl || preferences.importModuleSpecifierPreference === "relative") {
                     return [relativePath];
                 }
@@ -321,7 +321,7 @@ namespace ts.codefix {
                     1 < 2 = true
                 In this case we should prefer using the relative path "../a" instead of the baseUrl path "foo/a".
                 */
-                const pathFromSourceToBaseUrl = ensurePathIsNonModuleName(getRelativePath(sourceDirectory, baseUrl, getCanonicalFileName));
+                const pathFromSourceToBaseUrl = ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, baseUrl, getCanonicalFileName));
                 const relativeFirst = getRelativePathNParents(relativePath) < getRelativePathNParents(pathFromSourceToBaseUrl);
                 return relativeFirst ? [relativePath, importRelativeToBaseUrl] : [importRelativeToBaseUrl, relativePath];
             });
@@ -390,7 +390,7 @@ namespace ts.codefix {
         }
 
         const normalizedSourcePath = getPathRelativeToRootDirs(sourceDirectory, rootDirs, getCanonicalFileName);
-        const relativePath = normalizedSourcePath !== undefined ? ensurePathIsNonModuleName(getRelativePath(normalizedSourcePath, normalizedTargetPath, getCanonicalFileName)) : normalizedTargetPath;
+        const relativePath = normalizedSourcePath !== undefined ? ensurePathIsNonModuleName(getRelativePathFromDirectory(normalizedSourcePath, normalizedTargetPath, getCanonicalFileName)) : normalizedTargetPath;
         return removeFileExtension(relativePath);
     }
 
@@ -473,7 +473,7 @@ namespace ts.codefix {
                 return path.substring(parts.topLevelPackageNameIndex + 1);
             }
             else {
-                return ensurePathIsNonModuleName(getRelativePath(sourceDirectory, path, getCanonicalFileName));
+                return ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, path, getCanonicalFileName));
             }
         }
     }

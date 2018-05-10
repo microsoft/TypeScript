@@ -4245,5 +4245,9 @@
     "Convert all 'require' to 'import'": {
         "category": "Message",
         "code": 95048
+    },
+    "Move to a new file": {
+        "category": "Message",
+        "code": 95049
     }
 }

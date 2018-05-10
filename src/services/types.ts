@@ -13,7 +13,7 @@ namespace ts {
         getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number;
         getFullStart(): number;
         getEnd(): number;
-        getWidth(sourceFile?: SourceFile): number;
+        getWidth(sourceFile?: SourceFileLike): number;
         getFullWidth(): number;
         getLeadingTriviaWidth(sourceFile?: SourceFile): number;
         getFullText(sourceFile?: SourceFile): string;
@@ -234,6 +234,7 @@ namespace ts {
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly allowTextChangesInNewFiles?: boolean;
     }
     /* @internal */
     export const defaultPreferences: UserPreferences = {};

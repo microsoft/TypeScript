@@ -1505,6 +1505,13 @@ namespace ts {
         return block;
     }
 
+    /* @internal */
+    export function createExpressionStatement(expression: Expression): ExpressionStatement {
+        const node = <ExpressionStatement>createSynthesizedNode(SyntaxKind.ExpressionStatement);
+        node.expression = expression;
+        return node;
+    }
+
     export function updateBlock(node: Block, statements: ReadonlyArray<Statement>) {
         return node.statements !== statements
             ? updateNode(createBlock(statements, node.multiLine), node)
@@ -1531,9 +1538,7 @@ namespace ts {
     }
 
     export function createStatement(expression: Expression) {
-        const node = <ExpressionStatement>createSynthesizedNode(SyntaxKind.ExpressionStatement);
-        node.expression = parenthesizeExpressionForExpressionStatement(expression);
-        return node;
+        return createExpressionStatement(parenthesizeExpressionForExpressionStatement(expression));
     }
 
     export function updateStatement(node: ExpressionStatement, expression: Expression) {
