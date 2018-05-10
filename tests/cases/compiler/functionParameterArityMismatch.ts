@@ -11,8 +11,8 @@ g(1);
 g(1, 2);
 g(1, 2, 3, 4);
 
-declare function h(a: number, b: number, c: number);
+declare function h(a: number, b: number, c: number, d?: number);
 h();
 h(1);
 h(1, 2);
-h(1, 2, 3, 4);
+h(1, 2, 3, 4, 5);

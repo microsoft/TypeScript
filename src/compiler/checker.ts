@@ -19077,8 +19077,8 @@ namespace ts {
                     diagnostics.add(createDiagnosticForNode(node, error, paramCount, argCount));
                 }
                 else {
-                    if (min === max) {
-                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, min, argCount));
+                    if (max - min <= 1) {
+                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, paramCount, argCount));
                     }
                     else if (maxBelowArgCount === Number.NEGATIVE_INFINITY) {
                         diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_at_least_0_arguments_but_got_1, minAboveArgCount, argCount));
