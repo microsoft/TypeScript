@@ -2218,7 +2218,9 @@ namespace ts.Completions {
                 // Opening JSX tag
                 return contextToken.kind === SyntaxKind.LessThanToken && contextToken.parent.kind !== SyntaxKind.BinaryExpression;
             case "/":
-                return isJsxClosingElement(contextToken.parent);
+                return isStringLiteralLike(contextToken)
+                    ? !!tryGetImportFromModuleSpecifier(contextToken)
+                    : contextToken.kind === SyntaxKind.SlashToken && isJsxClosingElement(contextToken.parent);
             default:
                 return Debug.assertNever(triggerCharacter);
         }
