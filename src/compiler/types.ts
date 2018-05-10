@@ -3268,7 +3268,15 @@ namespace ts {
     export type RequireOrImportCall = CallExpression & { arguments: [StringLiteralLike] };
 
     /* @internal */
-    export type LateVisibilityPaintedStatement = AnyImportSyntax | VariableStatement;
+    export type LateVisibilityPaintedStatement =
+        | AnyImportSyntax
+        | VariableStatement
+        | ClassDeclaration
+        | FunctionDeclaration
+        | ModuleDeclaration
+        | TypeAliasDeclaration
+        | InterfaceDeclaration
+        | EnumDeclaration;
 
     /* @internal */
     export interface SymbolVisibilityResult {
@@ -3281,6 +3289,14 @@ namespace ts {
     /* @internal */
     export interface SymbolAccessibilityResult extends SymbolVisibilityResult {
         errorModuleName?: string; // If the symbol is not visible from module, module's name
+    }
+
+    /* @internal */
+    export interface AllAccessorDeclarations {
+        firstAccessor: AccessorDeclaration;
+        secondAccessor: AccessorDeclaration;
+        getAccessor: AccessorDeclaration;
+        setAccessor: AccessorDeclaration;
     }
 
     /** Indicates how to serialize the name for a TypeReferenceNode when emitting decorator metadata */
@@ -3339,6 +3355,7 @@ namespace ts {
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[];
         isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
         getJsxFactoryEntity(location?: Node): EntityName;
+        getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
     }
 
     export const enum SymbolFlags {

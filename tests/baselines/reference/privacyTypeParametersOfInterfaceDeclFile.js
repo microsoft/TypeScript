@@ -265,3 +265,204 @@ var privateModule;
     }());
     privateModule.publicClassInPrivateModuleT = publicClassInPrivateModuleT;
 })(privateModule || (privateModule = {}));
+
+
+//// [privacyTypeParametersOfInterfaceDeclFile.d.ts]
+class privateClass {
+}
+export declare class publicClass {
+}
+class privateClassT<T> {
+}
+export declare class publicClassT<T> {
+}
+export interface publicInterfaceWithPrivateTypeParameters<T extends privateClass> {
+    myMethod(val: T): T;
+    myMethod0(): publicClassT<T>;
+    myMethod1(): privateClassT<privateClass>;
+    myMethod2(): privateClassT<publicClass>;
+    myMethod3(): publicClassT<privateClass>;
+    myMethod4(): publicClassT<publicClass>;
+}
+export interface publicInterfaceWithPublicTypeParameters<T extends publicClass> {
+    myMethod(val: T): T;
+    myMethod0(): publicClassT<T>;
+    myMethod1(): privateClassT<privateClass>;
+    myMethod2(): privateClassT<publicClass>;
+    myMethod3(): publicClassT<privateClass>;
+    myMethod4(): publicClassT<publicClass>;
+}
+export interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
+    myMethod(val: T): T;
+    myMethod0(): publicClassT<T>;
+}
+export interface publicInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> {
+}
+export declare module publicModule {
+    class privateClassInPublicModule {
+    }
+    class publicClassInPublicModule {
+    }
+    class privateClassInPublicModuleT<T> {
+    }
+    class publicClassInPublicModuleT<T> {
+    }
+    interface publicInterfaceWithPrivateTypeParameters<T extends privateClassInPublicModule> {
+        myMethod(val: T): T;
+        myMethod0(): publicClassInPublicModuleT<T>;
+        myMethod1(): privateClassInPublicModuleT<privateClassInPublicModule>;
+        myMethod2(): privateClassInPublicModuleT<publicClassInPublicModule>;
+        myMethod3(): publicClassInPublicModuleT<privateClassInPublicModule>;
+        myMethod4(): publicClassInPublicModuleT<publicClassInPublicModule>;
+    }
+    interface publicInterfaceWithPublicTypeParameters<T extends publicClassInPublicModule> {
+        myMethod(val: T): T;
+        myMethod0(): publicClassInPublicModuleT<T>;
+        myMethod1(): privateClassInPublicModuleT<privateClassInPublicModule>;
+        myMethod2(): privateClassInPublicModuleT<publicClassInPublicModule>;
+        myMethod3(): publicClassInPublicModuleT<privateClassInPublicModule>;
+        myMethod4(): publicClassInPublicModuleT<publicClassInPublicModule>;
+    }
+    interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
+        myMethod(val: T): T;
+        myMethod0(): publicClassInPublicModuleT<T>;
+    }
+    interface publicInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> {
+    }
+}
+declare module privateModule {
+    class privateClassInPrivateModule {
+    }
+    class publicClassInPrivateModule {
+    }
+    class privateClassInPrivateModuleT<T> {
+    }
+    class publicClassInPrivateModuleT<T> {
+    }
+    interface publicInterfaceWithPrivateTypeParameters<T extends privateClassInPrivateModule> {
+        myMethod(val: T): T;
+        myMethod0(): publicClassInPrivateModuleT<T>;
+        myMethod1(): privateClassInPrivateModuleT<privateClassInPrivateModule>;
+        myMethod2(): privateClassInPrivateModuleT<publicClassInPrivateModule>;
+        myMethod3(): publicClassInPrivateModuleT<privateClassInPrivateModule>;
+        myMethod4(): publicClassInPrivateModuleT<publicClassInPrivateModule>;
+    }
+    interface publicInterfaceWithPublicTypeParameters<T extends publicClassInPrivateModule> {
+        myMethod(val: T): T;
+        myMethod0(): publicClassInPrivateModuleT<T>;
+        myMethod1(): privateClassInPrivateModuleT<privateClassInPrivateModule>;
+        myMethod2(): privateClassInPrivateModuleT<publicClassInPrivateModule>;
+        myMethod3(): publicClassInPrivateModuleT<privateClassInPrivateModule>;
+        myMethod4(): publicClassInPrivateModuleT<publicClassInPrivateModule>;
+    }
+    interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
+        myMethod(val: T): T;
+        myMethod0(): publicClassInPrivateModuleT<T>;
+    }
+}
+export {};
+
+
+//// [DtsFileErrors]
+
+
+tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.d.ts(1,1): error TS1046: A 'declare' modifier is required for a top level declaration in a .d.ts file.
+
+
+==== tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.d.ts (1 errors) ====
+    class privateClass {
+    ~~~~~
+!!! error TS1046: A 'declare' modifier is required for a top level declaration in a .d.ts file.
+    }
+    export declare class publicClass {
+    }
+    class privateClassT<T> {
+    }
+    export declare class publicClassT<T> {
+    }
+    export interface publicInterfaceWithPrivateTypeParameters<T extends privateClass> {
+        myMethod(val: T): T;
+        myMethod0(): publicClassT<T>;
+        myMethod1(): privateClassT<privateClass>;
+        myMethod2(): privateClassT<publicClass>;
+        myMethod3(): publicClassT<privateClass>;
+        myMethod4(): publicClassT<publicClass>;
+    }
+    export interface publicInterfaceWithPublicTypeParameters<T extends publicClass> {
+        myMethod(val: T): T;
+        myMethod0(): publicClassT<T>;
+        myMethod1(): privateClassT<privateClass>;
+        myMethod2(): privateClassT<publicClass>;
+        myMethod3(): publicClassT<privateClass>;
+        myMethod4(): publicClassT<publicClass>;
+    }
+    export interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
+        myMethod(val: T): T;
+        myMethod0(): publicClassT<T>;
+    }
+    export interface publicInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> {
+    }
+    export declare module publicModule {
+        class privateClassInPublicModule {
+        }
+        class publicClassInPublicModule {
+        }
+        class privateClassInPublicModuleT<T> {
+        }
+        class publicClassInPublicModuleT<T> {
+        }
+        interface publicInterfaceWithPrivateTypeParameters<T extends privateClassInPublicModule> {
+            myMethod(val: T): T;
+            myMethod0(): publicClassInPublicModuleT<T>;
+            myMethod1(): privateClassInPublicModuleT<privateClassInPublicModule>;
+            myMethod2(): privateClassInPublicModuleT<publicClassInPublicModule>;
+            myMethod3(): publicClassInPublicModuleT<privateClassInPublicModule>;
+            myMethod4(): publicClassInPublicModuleT<publicClassInPublicModule>;
+        }
+        interface publicInterfaceWithPublicTypeParameters<T extends publicClassInPublicModule> {
+            myMethod(val: T): T;
+            myMethod0(): publicClassInPublicModuleT<T>;
+            myMethod1(): privateClassInPublicModuleT<privateClassInPublicModule>;
+            myMethod2(): privateClassInPublicModuleT<publicClassInPublicModule>;
+            myMethod3(): publicClassInPublicModuleT<privateClassInPublicModule>;
+            myMethod4(): publicClassInPublicModuleT<publicClassInPublicModule>;
+        }
+        interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
+            myMethod(val: T): T;
+            myMethod0(): publicClassInPublicModuleT<T>;
+        }
+        interface publicInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> {
+        }
+    }
+    declare module privateModule {
+        class privateClassInPrivateModule {
+        }
+        class publicClassInPrivateModule {
+        }
+        class privateClassInPrivateModuleT<T> {
+        }
+        class publicClassInPrivateModuleT<T> {
+        }
+        interface publicInterfaceWithPrivateTypeParameters<T extends privateClassInPrivateModule> {
+            myMethod(val: T): T;
+            myMethod0(): publicClassInPrivateModuleT<T>;
+            myMethod1(): privateClassInPrivateModuleT<privateClassInPrivateModule>;
+            myMethod2(): privateClassInPrivateModuleT<publicClassInPrivateModule>;
+            myMethod3(): publicClassInPrivateModuleT<privateClassInPrivateModule>;
+            myMethod4(): publicClassInPrivateModuleT<publicClassInPrivateModule>;
+        }
+        interface publicInterfaceWithPublicTypeParameters<T extends publicClassInPrivateModule> {
+            myMethod(val: T): T;
+            myMethod0(): publicClassInPrivateModuleT<T>;
+            myMethod1(): privateClassInPrivateModuleT<privateClassInPrivateModule>;
+            myMethod2(): privateClassInPrivateModuleT<publicClassInPrivateModule>;
+            myMethod3(): publicClassInPrivateModuleT<privateClassInPrivateModule>;
+            myMethod4(): publicClassInPrivateModuleT<publicClassInPrivateModule>;
+        }
+        interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
+            myMethod(val: T): T;
+            myMethod0(): publicClassInPrivateModuleT<T>;
+        }
+    }
+    export {};
+    

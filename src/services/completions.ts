@@ -972,12 +972,8 @@ namespace ts.Completions {
         }
         else if (isRightOfOpenTag) {
             const tagSymbols = Debug.assertEachDefined(typeChecker.getJsxIntrinsicTagNamesAt(location), "getJsxIntrinsicTagNames() should all be defined");
-            if (tryGetGlobalSymbols()) {
-                symbols = tagSymbols.concat(symbols.filter(s => !!(s.flags & (SymbolFlags.Value | SymbolFlags.Alias))));
-            }
-            else {
-                symbols = tagSymbols;
-            }
+            tryGetGlobalSymbols();
+            symbols = tagSymbols.concat(symbols);
             completionKind = CompletionKind.MemberLike;
         }
         else if (isStartingCloseTag) {
@@ -1298,7 +1294,7 @@ namespace ts.Completions {
                 const exportedSymbols = typeChecker.getExportsOfModule(symbol);
                 // If the exported symbols contains type,
                 // symbol can be referenced at locations where type is allowed
-                return forEach(exportedSymbols, symbolCanBeReferencedAtTypeLocation);
+                return exportedSymbols.some(symbolCanBeReferencedAtTypeLocation);
             }
         }
 

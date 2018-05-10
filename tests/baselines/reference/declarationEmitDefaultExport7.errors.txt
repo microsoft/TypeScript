@@ -1,9 +1,0 @@
-tests/cases/compiler/declarationEmitDefaultExport7.ts(2,1): error TS4082: Default export of the module has or is using private name 'A'.
-
-
-==== tests/cases/compiler/declarationEmitDefaultExport7.ts (1 errors) ====
-    class A {}
-    export default new A();
-    ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4082: Default export of the module has or is using private name 'A'.
-    
