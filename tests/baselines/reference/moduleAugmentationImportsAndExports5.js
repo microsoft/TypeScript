@@ -78,5 +78,68 @@ export declare class A {
 export declare class B {
     n: number;
 }
+//// [f3.d.ts]
+import { B } from "./f2";
+namespace N {
+    interface Ifc {
+        a: number;
+    }
+    interface Cls {
+        b: number;
+    }
+}
+import I = N.Ifc;
+import C = N.Cls;
+declare module "./f1" {
+    interface A {
+        foo(): B;
+        bar(): I;
+        baz(): C;
+    }
+}
+export {};
 //// [f4.d.ts]
 import "./f3";
+
+
+//// [DtsFileErrors]
+
+
+tests/cases/compiler/f3.d.ts(2,1): error TS1046: A 'declare' modifier is required for a top level declaration in a .d.ts file.
+
+
+==== tests/cases/compiler/f1.d.ts (0 errors) ====
+    export declare class A {
+    }
+    
+==== tests/cases/compiler/f2.d.ts (0 errors) ====
+    export declare class B {
+        n: number;
+    }
+    
+==== tests/cases/compiler/f3.d.ts (1 errors) ====
+    import { B } from "./f2";
+    namespace N {
+    ~~~~~~~~~
+!!! error TS1046: A 'declare' modifier is required for a top level declaration in a .d.ts file.
+        interface Ifc {
+            a: number;
+        }
+        interface Cls {
+            b: number;
+        }
+    }
+    import I = N.Ifc;
+    import C = N.Cls;
+    declare module "./f1" {
+        interface A {
+            foo(): B;
+            bar(): I;
+            baz(): C;
+        }
+    }
+    export {};
+    
+==== tests/cases/compiler/f4.d.ts (0 errors) ====
+    import "./f3";
+    

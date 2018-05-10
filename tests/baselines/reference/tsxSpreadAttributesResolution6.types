@@ -3,7 +3,7 @@ import React = require('react');
 >React : typeof React
 
 type TextProps = { editable: false }
->TextProps : { editable: false; } | { editable: true; onEdit: (newText: string) => void; }
+>TextProps : TextProps
 >editable : false
 >false : false
 
@@ -15,10 +15,10 @@ type TextProps = { editable: false }
 
 class TextComponent extends React.Component<TextProps, {}> {
 >TextComponent : TextComponent
->React.Component : React.Component<{ editable: false; } | { editable: true; onEdit: (newText: string) => void; }, {}>
+>React.Component : React.Component<TextProps, {}>
 >React : typeof React
 >Component : typeof React.Component
->TextProps : { editable: false; } | { editable: true; onEdit: (newText: string) => void; }
+>TextProps : TextProps
 
     render() {
 >render : () => JSX.Element
@@ -39,8 +39,8 @@ let x = <TextComponent editable={true} />
 >true : true
 
 const textProps: TextProps = {
->textProps : { editable: false; } | { editable: true; onEdit: (newText: string) => void; }
->TextProps : { editable: false; } | { editable: true; onEdit: (newText: string) => void; }
+>textProps : TextProps
+>TextProps : TextProps
 >{    editable: false} : { editable: false; }
 
     editable: false

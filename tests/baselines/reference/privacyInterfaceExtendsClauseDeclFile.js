@@ -97,3 +97,58 @@ interface publicInterfaceImplementingPublicInterfaceInGlobal extends publicInter
 "use strict";
 exports.__esModule = true;
 //// [privacyInterfaceExtendsClauseDeclFile_GlobalFile.js]
+
+
+//// [privacyInterfaceExtendsClauseDeclFile_externalModule.d.ts]
+export declare module publicModule {
+    interface publicInterfaceInPublicModule {
+    }
+    interface privateInterfaceInPublicModule {
+    }
+    interface publicInterfaceImplementingPublicInterfaceInModule extends publicInterfaceInPublicModule {
+    }
+    interface publicInterfaceImplementingPrivateInterfaceInModule extends privateInterfaceInPublicModule {
+    }
+    interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
+    }
+    interface publicInterfaceImplementingPrivateAndPublicInterface extends privateInterfaceInPublicModule, publicInterfaceInPublicModule {
+    }
+}
+declare module privateModule {
+    interface publicInterfaceInPrivateModule {
+    }
+    interface privateInterfaceInPrivateModule {
+    }
+    interface publicInterfaceImplementingPublicInterfaceInModule extends publicInterfaceInPrivateModule {
+    }
+    interface publicInterfaceImplementingPrivateInterfaceInModule extends privateInterfaceInPrivateModule {
+    }
+    interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
+    }
+}
+export interface publicInterface {
+}
+interface privateInterface {
+}
+export interface publicInterfaceImplementingPublicInterface extends publicInterface {
+}
+export interface publicInterfaceImplementingPrivateInterface extends privateInterface {
+}
+export interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
+}
+export {};
+//// [privacyInterfaceExtendsClauseDeclFile_GlobalFile.d.ts]
+declare module publicModuleInGlobal {
+    interface publicInterfaceInPublicModule {
+    }
+    interface privateInterfaceInPublicModule {
+    }
+    interface publicInterfaceImplementingPublicInterfaceInModule extends publicInterfaceInPublicModule {
+    }
+    interface publicInterfaceImplementingPrivateInterfaceInModule extends privateInterfaceInPublicModule {
+    }
+}
+interface publicInterfaceInGlobal {
+}
+interface publicInterfaceImplementingPublicInterfaceInGlobal extends publicInterfaceInGlobal {
+}

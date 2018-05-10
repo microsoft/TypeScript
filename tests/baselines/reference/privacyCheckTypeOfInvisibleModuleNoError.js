@@ -15,3 +15,12 @@ var Outer;
     (function (Inner) {
     })(Inner || (Inner = {}));
 })(Outer || (Outer = {}));
+
+
+//// [privacyCheckTypeOfInvisibleModuleNoError.d.ts]
+declare module Outer {
+    module Inner {
+        var m: number;
+    }
+    var f: typeof Inner;
+}

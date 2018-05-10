@@ -383,3 +383,118 @@ var privateModule;
         return privateClassWithPublicTypeParametersWithoutExtends;
     }());
 })(privateModule || (privateModule = {}));
+
+
+//// [privacyTypeParametersOfClassDeclFile.d.ts]
+class privateClass {
+}
+export declare class publicClass {
+}
+export declare class publicClassWithPrivateTypeParameters<T extends privateClass> {
+    myMethod(val: T): T;
+}
+export declare class publicClassWithPublicTypeParameters<T extends publicClass> {
+    myMethod(val: T): T;
+}
+export declare class publicClassWithPublicTypeParametersWithoutExtends<T> {
+    myMethod(val: T): T;
+}
+export declare class publicClassWithTypeParametersFromPrivateModule<T extends privateModule.publicClassInPrivateModule> {
+    myMethod(val: T): T;
+}
+export declare module publicModule {
+    class privateClassInPublicModule {
+    }
+    class publicClassInPublicModule {
+    }
+    class publicClassWithPrivateTypeParameters<T extends privateClassInPublicModule> {
+        myMethod(val: T): T;
+    }
+    class publicClassWithPublicTypeParameters<T extends publicClassInPublicModule> {
+        myMethod(val: T): T;
+    }
+    class publicClassWithPublicTypeParametersWithoutExtends<T> {
+        myMethod(val: T): T;
+    }
+    class publicClassWithTypeParametersFromPrivateModule<T extends privateModule.publicClassInPrivateModule> {
+        myMethod(val: T): T;
+    }
+}
+declare module privateModule {
+    class privateClassInPrivateModule {
+    }
+    class publicClassInPrivateModule {
+    }
+    class publicClassWithPrivateTypeParameters<T extends privateClassInPrivateModule> {
+        myMethod(val: T): T;
+    }
+    class publicClassWithPublicTypeParameters<T extends publicClassInPrivateModule> {
+        myMethod(val: T): T;
+    }
+    class publicClassWithPublicTypeParametersWithoutExtends<T> {
+        myMethod(val: T): T;
+    }
+}
+export {};
+
+
+//// [DtsFileErrors]
+
+
+tests/cases/compiler/privacyTypeParametersOfClassDeclFile.d.ts(1,1): error TS1046: A 'declare' modifier is required for a top level declaration in a .d.ts file.
+
+
+==== tests/cases/compiler/privacyTypeParametersOfClassDeclFile.d.ts (1 errors) ====
+    class privateClass {
+    ~~~~~
+!!! error TS1046: A 'declare' modifier is required for a top level declaration in a .d.ts file.
+    }
+    export declare class publicClass {
+    }
+    export declare class publicClassWithPrivateTypeParameters<T extends privateClass> {
+        myMethod(val: T): T;
+    }
+    export declare class publicClassWithPublicTypeParameters<T extends publicClass> {
+        myMethod(val: T): T;
+    }
+    export declare class publicClassWithPublicTypeParametersWithoutExtends<T> {
+        myMethod(val: T): T;
+    }
+    export declare class publicClassWithTypeParametersFromPrivateModule<T extends privateModule.publicClassInPrivateModule> {
+        myMethod(val: T): T;
+    }
+    export declare module publicModule {
+        class privateClassInPublicModule {
+        }
+        class publicClassInPublicModule {
+        }
+        class publicClassWithPrivateTypeParameters<T extends privateClassInPublicModule> {
+            myMethod(val: T): T;
+        }
+        class publicClassWithPublicTypeParameters<T extends publicClassInPublicModule> {
+            myMethod(val: T): T;
+        }
+        class publicClassWithPublicTypeParametersWithoutExtends<T> {
+            myMethod(val: T): T;
+        }
+        class publicClassWithTypeParametersFromPrivateModule<T extends privateModule.publicClassInPrivateModule> {
+            myMethod(val: T): T;
+        }
+    }
+    declare module privateModule {
+        class privateClassInPrivateModule {
+        }
+        class publicClassInPrivateModule {
+        }
+        class publicClassWithPrivateTypeParameters<T extends privateClassInPrivateModule> {
+            myMethod(val: T): T;
+        }
+        class publicClassWithPublicTypeParameters<T extends publicClassInPrivateModule> {
+            myMethod(val: T): T;
+        }
+        class publicClassWithPublicTypeParametersWithoutExtends<T> {
+            myMethod(val: T): T;
+        }
+    }
+    export {};
+    

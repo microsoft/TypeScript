@@ -4,12 +4,12 @@ interface ComponentOptions<V> {
 >V : V
 
     watch: Record<string, WatchHandler<any>>;
->watch : Record<string, (val: any) => void>
+>watch : Record<string, WatchHandler<any>>
 >Record : Record<K, T>
->WatchHandler : (val: T) => void
+>WatchHandler : WatchHandler<T>
 }
 type WatchHandler<T> = (val: T) => void;
->WatchHandler : (val: T) => void
+>WatchHandler : WatchHandler<T>
 >T : T
 >val : T
 >T : T

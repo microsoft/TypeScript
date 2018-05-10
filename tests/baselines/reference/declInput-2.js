@@ -48,3 +48,31 @@ var M;
     }());
     M.D = D;
 })(M || (M = {}));
+
+
+//// [declInput-2.d.ts]
+declare module M {
+    class C {
+    }
+    class E {
+    }
+    interface I1 {
+    }
+    interface I2 {
+    }
+    class D {
+        private c;
+        m1: number;
+        m2: string;
+        m22: C;
+        m23: E;
+        m24: I1;
+        m25: I2;
+        m232(): E;
+        m242(): I1;
+        m252(): I2;
+        m26(i: I1): void;
+        m262(i: I2): void;
+        m3(): C;
+    }
+}
