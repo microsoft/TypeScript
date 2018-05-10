@@ -9,12 +9,12 @@ var MyClass = /** @class */ (function () {
         this.db = db;
         this.db.doSomething();
     }
+    var _a;
     MyClass = __decorate([
         someDecorator,
         __metadata("design:paramtypes", [typeof (_a = typeof db_1.db !== "undefined" && db_1.db) === "function" && _a || Object])
     ], MyClass);
     return MyClass;
-    var _a;
 }());
 exports.MyClass = MyClass;
 //# sourceMappingURL=file.js.map

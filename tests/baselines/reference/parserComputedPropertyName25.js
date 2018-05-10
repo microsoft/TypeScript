@@ -6,6 +6,7 @@ class C {
 }
 
 //// [parserComputedPropertyName25.js]
+var _a;
 class C {
     constructor() {
         // No ASI
@@ -13,4 +14,3 @@ class C {
     }
 }
 _a = e;
-var _a;

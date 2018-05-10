@@ -24,15 +24,15 @@ var __rest = (this && this.__rest) || function (s, e) {
             t[p[i]] = s[p[i]];
     return t;
 };
+var _a, _b, _c;
 let ka;
 let nested;
 let other;
 let rest;
 let complex;
-(_c = complex.x, { ka } = _c, nested = __rest(_c, ["ka"]), { y: other } = complex, rest = __rest(complex, ["x", "y"]));
+(_a = complex.x, { ka } = _a, nested = __rest(_a, ["ka"]), { y: other } = complex, rest = __rest(complex, ["x", "y"]));
 // should be:
 let overEmit;
 // var _g = overEmit.a, [_h, ...y] = _g, nested2 = __rest(_h, []), _j = overEmit.b, { z } = _j, c = __rest(_j, ["z"]), rest2 = __rest(overEmit, ["a", "b"]);
-var [_a, ...y] = overEmit.a, nested2 = __rest(_a, []), _b = overEmit.b, { z } = _b, c = __rest(_b, ["z"]), rest2 = __rest(overEmit, ["a", "b"]);
-([_d, ...y] = overEmit.a, nested2 = __rest(_d, []), _e = overEmit.b, { z } = _e, c = __rest(_e, ["z"]), rest2 = __rest(overEmit, ["a", "b"]));
-var _c, _d, _e;
+var [_d, ...y] = overEmit.a, nested2 = __rest(_d, []), _e = overEmit.b, { z } = _e, c = __rest(_e, ["z"]), rest2 = __rest(overEmit, ["a", "b"]);
+([_b, ...y] = overEmit.a, nested2 = __rest(_b, []), _c = overEmit.b, { z } = _c, c = __rest(_c, ["z"]), rest2 = __rest(overEmit, ["a", "b"]));

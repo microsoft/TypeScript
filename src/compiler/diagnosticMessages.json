@@ -4246,12 +4246,16 @@
         "category": "Message",
         "code": 95048
     },
-    "Remove unreachable code": {
+    "Move to a new file": {
         "category": "Message",
         "code": 95049
     },
-    "Remove all unreachable code": {
+    "Remove unreachable code": {
         "category": "Message",
         "code": 95050
+    },
+    "Remove all unreachable code": {
+        "category": "Message",
+        "code": 95051
     }
 }

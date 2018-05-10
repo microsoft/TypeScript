@@ -614,27 +614,19 @@ namespace ts.FindAllReferences.Core {
             checker.getPropertySymbolOfDestructuringAssignment(<Identifier>location);
     }
 
-    function getObjectBindingElementWithoutPropertyName(symbol: Symbol): BindingElement | undefined {
+    function getObjectBindingElementWithoutPropertyName(symbol: Symbol): BindingElement & { name: Identifier } | undefined {
         const bindingElement = getDeclarationOfKind<BindingElement>(symbol, SyntaxKind.BindingElement);
         if (bindingElement &&
             bindingElement.parent.kind === SyntaxKind.ObjectBindingPattern &&
+            isIdentifier(bindingElement.name) &&
             !bindingElement.propertyName) {
-            return bindingElement;
+            return bindingElement as BindingElement & { name: Identifier };
         }
     }
 
     function getPropertySymbolOfObjectBindingPatternWithoutPropertyName(symbol: Symbol, checker: TypeChecker): Symbol | undefined {
         const bindingElement = getObjectBindingElementWithoutPropertyName(symbol);
-        if (!bindingElement) return undefined;
-
-        const typeOfPattern = checker.getTypeAtLocation(bindingElement.parent);
-        const propSymbol = typeOfPattern && checker.getPropertyOfType(typeOfPattern, (<Identifier>bindingElement.name).text);
-        if (propSymbol && propSymbol.flags & SymbolFlags.Accessor) {
-            // See GH#16922
-            Debug.assert(!!(propSymbol.flags & SymbolFlags.Transient));
-            return (propSymbol as TransientSymbol).target;
-        }
-        return propSymbol;
+        return bindingElement && getPropertySymbolFromBindingElement(checker, bindingElement);
     }
 
     /**

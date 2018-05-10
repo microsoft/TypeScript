@@ -18,7 +18,7 @@ namespace vpath {
     export import dirname = ts.getDirectoryPath;
     export import basename = ts.getBaseFileName;
     export import extname = ts.getAnyExtensionFromPath;
-    export import relative = ts.getRelativePath;
+    export import relative = ts.getRelativePathFromDirectory;
     export import beneath = ts.containsPath;
     export import changeExtension = ts.changeAnyExtension;
     export import isTypeScript = ts.hasTypeScriptFileExtension;

@@ -13,11 +13,11 @@ var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.bar = function () {
+        var _a;
         var obj = (_a = {},
             _a[this.bar()] = function () { },
             _a);
         return 0;
-        var _a;
     };
     return C;
 }());
