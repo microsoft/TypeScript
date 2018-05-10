@@ -627,7 +627,7 @@ namespace ts {
                 }
 
                 for (const variable of node.declarationList.declarations) {
-                    hoistVariableDeclaration(<Identifier>variable.name);
+                    hoistVariableDeclaration(<Identifier>variable.name, node);
                 }
 
                 const variables = getInitializedVariables(node.declarationList);

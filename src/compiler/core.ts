@@ -680,6 +680,34 @@ namespace ts {
         return result;
     }
 
+    export function groupBy<T>(array: ReadonlyArray<T> | undefined, getGroupId: (elem: T, index: number) => number): T[][] | undefined {
+        if (!array) {
+            return undefined;
+        }
+
+        const groupIdToGroup: T[][] = []; // Sparse array for combining entries with the same id
+        let result: T[][]; // Compacted array for return value
+        for (let index = 0; index < array.length; index++) {
+            const value = array[index];
+            const key = getGroupId(value, index);
+            if (groupIdToGroup[key]) {
+                groupIdToGroup[key].push(value);
+            }
+            else {
+                const newGroup = [value];
+                groupIdToGroup[key] = newGroup;
+                if (!result) {
+                    result = [newGroup];
+                }
+                else {
+                    result.push(newGroup);
+                }
+            }
+        }
+
+        return result;
+    }
+
     export function some<T>(array: ReadonlyArray<T>, predicate?: (value: T) => boolean): boolean {
         if (array) {
             if (predicate) {
