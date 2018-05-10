@@ -3076,7 +3076,7 @@ namespace ts {
         WriteArrayAsGenericType                 = 1 << 1,   // Write Array<T> instead T[]
         // empty space
         UseStructuralFallback                   = 1 << 3,   // When an alias cannot be named by its symbol, rather than report an error, fallback to a structural printout if possible
-        // empty space
+        UseLocalAliases                         = 1 << 4,   // Write aliases that are in scope locally even if they are not exported.
         WriteTypeArgumentsOfSignature           = 1 << 5,   // Write the type arguments instead of type parameters of the signature
         UseFullyQualifiedType                   = 1 << 6,   // Write out the fully qualified type name (eg. Module.Type, instead of Type)
         UseOnlyExternalAliasing                 = 1 << 7,   // Only use external aliases for a symbol
@@ -3113,7 +3113,7 @@ namespace ts {
         WriteArrayAsGenericType                 = 1 << 1,  // Write Array<T> instead T[]
         // hole because there's a hole in node builder flags
         UseStructuralFallback                   = 1 << 3,   // When an alias cannot be named by its symbol, rather than report an error, fallback to a structural printout if possible
-        // hole because there's a hole in node builder flags
+        UseLocalAliases                         = 1 << 4,   // Write aliases that are in scope locally even if they are not exported.
         WriteTypeArgumentsOfSignature           = 1 << 5,  // Write the type arguments instead of type parameters of the signature
         UseFullyQualifiedType                   = 1 << 6,  // Write out the fully qualified type name (eg. Module.Type, instead of Type)
         // hole because `UseOnlyExternalAliasing` is here in node builder flags, but functions which take old flags use `SymbolFormatFlags` instead
@@ -3144,7 +3144,7 @@ namespace ts {
         NodeBuilderFlagsMask =
             NoTruncation | WriteArrayAsGenericType | UseStructuralFallback | WriteTypeArgumentsOfSignature |
             UseFullyQualifiedType | SuppressAnyReturnType | MultilineObjectLiterals | WriteClassExpressionAsTypeLiteral |
-            UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias,
+            UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias | UseLocalAliases,
     }
 
     export const enum SymbolFormatFlags {
