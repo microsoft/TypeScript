@@ -18,6 +18,8 @@
 ////}
 ////const ctr = </*openTag*/
 ////const less = 1 </*lessThan*/
+////const closeTag = <div> foo <//*closeTag*/
+////const divide = 1 //*divide*/
 
 verify.completions(
     { marker: "openQuote", exact: ["a", "b"], triggerCharacter: '"' },
@@ -34,4 +36,6 @@ verify.completions(
 
     { marker: "openTag", includes: "div", triggerCharacter: "<" },
     { marker: "lessThan", exact: undefined, triggerCharacter: "<" },
+    { marker: "closeTag", exact: "div", triggerCharacter: "/" },
+    { marker: "divide", exact: undefined, triggerCharacter: "/" },
 );
