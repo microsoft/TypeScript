@@ -4249,5 +4249,13 @@
     "Move to a new file": {
         "category": "Message",
         "code": 95049
+    },
+    "Remove unused label": {
+        "category": "Message",
+        "code": 95050
+    },
+    "Remove all unused labels": {
+        "category": "Message",
+        "code": 95051
     }
 }
