@@ -91,12 +91,22 @@ class UserCodeRunner extends ExternalCompileRunnerBase {
         // tslint:disable-next-line:no-null-keyword
         return result.status === 0 && !result.stdout.length && !result.stderr.length ? null : `Exit Code: ${result.status}
 Standard output:
-${result.stdout.toString().replace(/\r\n/g, "\n")}
+${stripAbsoluteImportPaths(result.stdout.toString().replace(/\r\n/g, "\n"))}
 
 
 Standard error:
-${result.stderr.toString().replace(/\r\n/g, "\n")}`;
+${stripAbsoluteImportPaths(result.stderr.toString().replace(/\r\n/g, "\n"))}`;
     }
+}
+
+/**
+ * Import types and some other error messages use absolute paths in errors as they have no context to be written relative to;
+ * This is problematic for error baselines, so we grep for them and strip them out.
+ */
+function stripAbsoluteImportPaths(result: string) {
+    return result
+        .replace(/import\(".*?\/tests\/cases\/user\//g, `import("/`)
+        .replace(/Module '".*?\/tests\/cases\/user\//g, `Module '"/`);
 }
 
 class DefinitelyTypedRunner extends ExternalCompileRunnerBase {
