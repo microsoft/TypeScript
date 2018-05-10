@@ -12,9 +12,9 @@ export {ns, AnEnum, ns as FooBar, AnEnum as BarEnum};
 
 //// [systemNamespaceAliasEmit.js]
 System.register([], function (exports_1, context_1) {
+    var ns, AnEnum;
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var ns, AnEnum;
     return {
         setters: [],
         execute: function () {

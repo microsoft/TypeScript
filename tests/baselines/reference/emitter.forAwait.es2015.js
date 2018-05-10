@@ -57,6 +57,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
 };
 function f1() {
     return __awaiter(this, void 0, void 0, function* () {
+        var e_1, _a;
         let y;
         try {
             for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = yield y_1.next(), !y_1_1.done;) {
@@ -70,7 +71,6 @@ function f1() {
             }
             finally { if (e_1) throw e_1.error; }
         }
-        var e_1, _a;
     });
 }
 //// [file2.js]
@@ -89,6 +89,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
 };
 function f2() {
     return __awaiter(this, void 0, void 0, function* () {
+        var e_1, _a;
         let x, y;
         try {
             for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = yield y_1.next(), !y_1_1.done;) {
@@ -102,7 +103,6 @@ function f2() {
             }
             finally { if (e_1) throw e_1.error; }
         }
-        var e_1, _a;
     });
 }
 //// [file3.js]
@@ -125,6 +125,7 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 };
 function f3() {
     return __asyncGenerator(this, arguments, function* f3_1() {
+        var e_1, _a;
         let y;
         try {
             for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), !y_1_1.done;) {
@@ -138,7 +139,6 @@ function f3() {
             }
             finally { if (e_1) throw e_1.error; }
         }
-        var e_1, _a;
     });
 }
 //// [file4.js]
@@ -161,6 +161,7 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 };
 function f4() {
     return __asyncGenerator(this, arguments, function* f4_1() {
+        var e_1, _a;
         let x, y;
         try {
             for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), !y_1_1.done;) {
@@ -174,7 +175,6 @@ function f4() {
             }
             finally { if (e_1) throw e_1.error; }
         }
-        var e_1, _a;
     });
 }
 //// [file5.js]
@@ -194,6 +194,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
 // https://github.com/Microsoft/TypeScript/issues/21363
 function f5() {
     return __awaiter(this, void 0, void 0, function* () {
+        var e_1, _a;
         let y;
         try {
             outer: for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = yield y_1.next(), !y_1_1.done;) {
@@ -208,7 +209,6 @@ function f5() {
             }
             finally { if (e_1) throw e_1.error; }
         }
-        var e_1, _a;
     });
 }
 //// [file6.js]
@@ -232,6 +232,7 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 // https://github.com/Microsoft/TypeScript/issues/21363
 function f6() {
     return __asyncGenerator(this, arguments, function* f6_1() {
+        var e_1, _a;
         let y;
         try {
             outer: for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), !y_1_1.done;) {
@@ -246,6 +247,5 @@ function f6() {
             }
             finally { if (e_1) throw e_1.error; }
         }
-        var e_1, _a;
     });
 }

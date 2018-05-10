@@ -29,12 +29,12 @@ var Base = /** @class */ (function () {
 var C = /** @class */ (function (_super) {
     __extends(C, _super);
     function C() {
+        var _a;
         var _this = _super.call(this) || this;
         var obj = (_a = {},
             _a[(_this = _super.call(this) || this, "prop")] = function () { },
             _a);
         return _this;
-        var _a;
     }
     return C;
 }(Base));

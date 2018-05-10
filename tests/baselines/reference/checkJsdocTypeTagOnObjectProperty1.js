@@ -25,6 +25,7 @@ obj.bar1 = "42";
 obj.arrowFunc(0);
 
 //// [0.js]
+var _a;
 // @ts-check
 var lol = "hello Lol";
 var obj = (_a = {
@@ -50,4 +51,3 @@ obj.bar = undefined;
 var k = obj.method1(0);
 obj.bar1 = "42";
 obj.arrowFunc(0);
-var _a;

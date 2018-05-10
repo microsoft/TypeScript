@@ -15,8 +15,8 @@ function foo(y, x) {
         _a.c = x,
         _a); }
     if (x === void 0) { x = 1; }
-    y.c;
     var _a;
+    y.c;
 }
 function foo2(y, x) {
     if (y === void 0) { y = (_b = /** @class */ (function () {

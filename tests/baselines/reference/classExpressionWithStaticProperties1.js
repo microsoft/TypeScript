@@ -6,6 +6,7 @@ var v = class C {
 };
 
 //// [classExpressionWithStaticProperties1.js]
+var _a;
 var v = (_a = /** @class */ (function () {
         function C() {
         }
@@ -15,4 +16,3 @@ var v = (_a = /** @class */ (function () {
     _a.b = 2,
     _a.c = _a.a + _a.b,
     _a);
-var _a;

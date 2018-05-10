@@ -15,9 +15,10 @@ var __values = (this && this.__values) || function (o) {
         }
     };
 };
+var e_1, _a;
 try {
-    for (var _a = __values([2, 3]), _b = _a.next(); !_b.done; _b = _a.next()) {
-        var _c = _b.value, _d = _c.x, a = _d === void 0 ? 0 : _d, _e = _c.y, b = _e === void 0 ? 1 : _e;
+    for (var _b = __values([2, 3]), _c = _b.next(); !_c.done; _c = _b.next()) {
+        var _d = _c.value, _e = _d.x, a = _e === void 0 ? 0 : _e, _f = _d.y, b = _f === void 0 ? 1 : _f;
         a;
         b;
     }
@@ -25,9 +26,8 @@ try {
 catch (e_1_1) { e_1 = { error: e_1_1 }; }
 finally {
     try {
-        if (_b && !_b.done && (_f = _a["return"])) _f.call(_a);
+        if (_c && !_c.done && (_a = _b["return"])) _a.call(_b);
     }
     finally { if (e_1) throw e_1.error; }
 }
-var e_1, _f;
 //# sourceMappingURL=ES5For-of35.js.map

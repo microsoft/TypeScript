@@ -10,9 +10,9 @@ export {n2 as n3}
 
 //// [systemModule10.js]
 System.register(["file1", "file2"], function (exports_1, context_1) {
+    var file1_1, n2;
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var file1_1, n2;
     return {
         setters: [
             function (file1_1_1) {

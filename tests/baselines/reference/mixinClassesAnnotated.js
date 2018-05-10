@@ -93,7 +93,7 @@ var Derived = /** @class */ (function (_super) {
     }
     return Derived;
 }(Base));
-var Printable = function (superClass) { return _a = /** @class */ (function (_super) {
+var Printable = function (superClass) { var _a; return _a = /** @class */ (function (_super) {
         __extends(class_1, _super);
         function class_1() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -104,7 +104,7 @@ var Printable = function (superClass) { return _a = /** @class */ (function (_su
         return class_1;
     }(superClass)),
     _a.message = "hello",
-    _a; var _a; };
+    _a; };
 function Tagged(superClass) {
     var C = /** @class */ (function (_super) {
         __extends(C, _super);
