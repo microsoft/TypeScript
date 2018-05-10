@@ -256,11 +256,12 @@ namespace ts.FindAllReferences.Core {
         }
 
         let moduleReferences: SymbolAndEntries[] = emptyArray;
-        if (isModuleSymbol(symbol)) {
+        const moduleSourceFile = isModuleSymbol(symbol);
+        if (moduleSourceFile) {
             const exportEquals = symbol.exports.get(InternalSymbolName.ExportEquals);
             // If !!exportEquals, we're about to add references to `import("mod")` anyway, so don't double-count them.
             moduleReferences = getReferencedSymbolsForModule(program, symbol, !!exportEquals, sourceFiles, sourceFilesSet);
-            if (!exportEquals) return moduleReferences;
+            if (!exportEquals || !sourceFilesSet.has(moduleSourceFile.fileName)) return moduleReferences;
             // Continue to get references to 'export ='.
             symbol = skipAlias(exportEquals, checker);
             node = undefined;
@@ -268,8 +269,8 @@ namespace ts.FindAllReferences.Core {
         return concatenate(moduleReferences, getReferencedSymbolsForSymbol(symbol, node, sourceFiles, sourceFilesSet, checker, cancellationToken, options));
     }
 
-    function isModuleSymbol(symbol: Symbol): boolean {
-        return symbol.flags & SymbolFlags.Module && symbol.declarations.some(isSourceFile);
+    function isModuleSymbol(symbol: Symbol): SourceFile | undefined {
+        return symbol.flags & SymbolFlags.Module && find(symbol.declarations, isSourceFile);
     }
 
     function getReferencedSymbolsForModule(program: Program, symbol: Symbol, excludeImportTypeOfExportEquals: boolean, sourceFiles: ReadonlyArray<SourceFile>, sourceFilesSet: ReadonlyMap<true>): SymbolAndEntries[] {

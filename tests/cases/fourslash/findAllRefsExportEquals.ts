@@ -7,7 +7,6 @@
 // @Filename: /b.ts
 ////import [|{| "isWriteAccess": true, "isDefinition": true |}T|] = require("[|./a|]");
 
-// TODO: GH#23879 Should be `verify.singleReferenceGroup("type T = number")
 const [r0, r1, r2, r3] = test.ranges();
 const mod = { definition: 'module "/a"', ranges: [r3] };
 const a = { definition: "type T = number", ranges: [r0, r1] };
