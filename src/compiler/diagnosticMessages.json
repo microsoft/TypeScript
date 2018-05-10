@@ -2060,6 +2060,10 @@
         "category": "Error",
         "code": 2575
     },
+    "No overload expects {0} or more arguments. The most likely overload that matches expects {1} arguments.": {
+        "category": "Error",
+        "code": 2576
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600

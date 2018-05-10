@@ -18905,15 +18905,34 @@ namespace ts {
             }
         }
 
-        function getTypeArgumentArityError(node: Node, signatures: ReadonlyArray<Signature>, typeArguments: NodeArray<TypeNode>) {
-            let min = Infinity;
-            let max = -Infinity;
+        function getTypeArgumentArityError(node: Node, signatures: Signature[], typeArguments: NodeArray<TypeNode>) {
+            const callArgs = typeArguments.length;
+            let lowerBound = Infinity;
+            let upperBound = -Infinity;
             for (const sig of signatures) {
-                min = Math.min(min, getMinTypeArgumentCount(sig.typeParameters));
-                max = Math.max(max, length(sig.typeParameters));
+                const minArgs = getMinTypeArgumentCount(sig.typeParameters);
+                if (minArgs < callArgs) {
+                    lowerBound = Math.max(lowerBound, minArgs);
+                }
+                const maxArgs = length(sig.typeParameters);
+                if (maxArgs > callArgs) {
+                    upperBound = Math.min(upperBound, maxArgs);
+                }
             }
-            const paramCount = min === max ? min : min + "-" + max;
-            return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, paramCount, typeArguments.length);
+            // for b inbetween a's
+            // 0,1,3 got 2 -> 2,1,3
+            // 0,1,4 got 2 -> 2,1,4
+            // 0,4 got 2 -> 2,0,4
+            // a1,a2,a3 got b -> b,max(a)<b,min(a)>b
+
+            // for b < all a's --> probably handled somewhere else (as should be b > all a's)
+
+            // Diagnostics.No_overload_expects_0_arguments_The_most_likely_overloads_that_match_expect_either_1_arguments_or_at_least_2_arguments
+
+            // const paramCount = min === max ? min : min + "-" + max;
+            // return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, paramCount, typeArguments.length);
+
+            return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.No_overload_expects_0_arguments_The_most_likely_overloads_that_match_expect_either_1_arguments_or_at_least_2_arguments, callArgs, lowerBound, upperBound);
         }
 
         function resolveCall(node: CallLikeExpression, signatures: ReadonlyArray<Signature>, candidatesOutArray: Signature[] | undefined, fallbackError?: DiagnosticMessage): Signature {
@@ -19046,26 +19065,46 @@ namespace ts {
                 diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments));
             }
             else if (args) {
+                let argCount = args.length;
                 let min = Number.POSITIVE_INFINITY;
                 let max = Number.NEGATIVE_INFINITY;
+                let minAboveArgCount = Number.POSITIVE_INFINITY;
+                let maxBelowArgCount = Number.NEGATIVE_INFINITY;
                 for (const sig of signatures) {
-                    min = Math.min(min, getMinArgumentCount(sig));
-                    max = Math.max(max, getParameterCount(sig));
+                    const minArgs = sig.minArgumentCount;
+                    const maxArgs = sig.parameters.length;
+                    min = Math.min(min, minArgs);
+                    max = Math.max(max, maxArgs);
+                    minAboveArgCount = minArgs > argCount ? Math.min(minAboveArgCount, minArgs) : minAboveArgCount;
+                    maxBelowArgCount = maxArgs < argCount ? Math.max(maxBelowArgCount, maxArgs) : maxBelowArgCount;
                 }
                 const hasRestParameter = some(signatures, hasEffectiveRestParameter);
                 const hasSpreadArgument = getSpreadArgumentIndex(args) > -1;
                 const paramCount = hasRestParameter ? min :
                     min < max ? min + "-" + max :
                     min;
-                let argCount = args.length;
+
                 if (argCount <= max && hasSpreadArgument) {
                     argCount--;
                 }
+
                 const error = hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_got_1_or_more :
                     hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
                     hasSpreadArgument ? Diagnostics.Expected_0_arguments_but_got_1_or_more :
-                    Diagnostics.Expected_0_arguments_but_got_1;
-                diagnostics.add(createDiagnosticForNode(node, error, paramCount, argCount));
+                    null;
+                if (error) {
+                    diagnostics.add(createDiagnosticForNode(node, error, paramCount, argCount));
+                } else {
+                    if (maxBelowArgCount === Number.NEGATIVE_INFINITY) {
+                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_at_least_0_arguments_but_got_1, minAboveArgCount, argCount));
+                    }
+                    else if (minAboveArgCount === Number.POSITIVE_INFINITY) {
+                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_or_more_arguments_The_most_likely_overload_that_matches_expects_1_arguments, argCount, maxBelowArgCount));
+                    }
+                    else {
+                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_The_most_likely_overloads_that_match_expect_either_1_arguments_or_at_least_2_arguments, argCount, maxBelowArgCount, minAboveArgCount));
+                    }
+                }
             }
             else if (fallbackError) {
                 diagnostics.add(createDiagnosticForNode(node, fallbackError));
