@@ -1,4 +1,5 @@
-tests/cases/compiler/higherKindedTypesLift3.ts(24,7): error TS2322: Type 'LC' is not assignable to type 'number[]'.
+tests/cases/compiler/higherKindedTypesLift3.ts(26,40): error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'string[]'.
+  Type 'number' is not assignable to type 'string'.
 
 
 ==== tests/cases/compiler/higherKindedTypesLift3.ts (1 errors) ====
@@ -26,9 +27,10 @@ tests/cases/compiler/higherKindedTypesLift3.ts(24,7): error TS2322: Type 'LC' is
     
     const result = liftedStringLength(arrayOfStrings);
     const expectedType: Array<number> = result;
-          ~~~~~~~~~~~~
-!!! error TS2322: Type 'LC' is not assignable to type 'number[]'.
     
     const expectError = liftedStringLength(result)
+                                           ~~~~~~
+!!! error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'string[]'.
+!!! error TS2345:   Type 'number' is not assignable to type 'string'.
     
     

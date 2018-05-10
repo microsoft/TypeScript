@@ -65,8 +65,8 @@ declare function stringLength(strarg: string): number
 >strarg : string
 
 const liftedStringLength = liftedArray(stringLength);
->liftedStringLength : (a: LC) => LC
->liftedArray(stringLength) : (a: LC) => LC
+>liftedStringLength : (a: string[]) => number[]
+>liftedArray(stringLength) : (a: string[]) => number[]
 >liftedArray : LiftedResult<T[]>
 >stringLength : (strarg: string) => number
 
@@ -75,20 +75,20 @@ declare const arrayOfStrings: Array<string>;
 >Array : T[]
 
 const result = liftedStringLength(arrayOfStrings);
->result : LC
->liftedStringLength(arrayOfStrings) : LC
->liftedStringLength : (a: LC) => LC
+>result : number[]
+>liftedStringLength(arrayOfStrings) : number[]
+>liftedStringLength : (a: string[]) => number[]
 >arrayOfStrings : string[]
 
 const expectedType: Array<number> = result;
 >expectedType : number[]
 >Array : T[]
->result : LC
+>result : number[]
 
 const expectError = liftedStringLength(result)
->expectError : LC
->liftedStringLength(result) : LC
->liftedStringLength : (a: LC) => LC
->result : LC
+>expectError : number[]
+>liftedStringLength(result) : number[]
+>liftedStringLength : (a: string[]) => number[]
+>result : number[]
 
 
