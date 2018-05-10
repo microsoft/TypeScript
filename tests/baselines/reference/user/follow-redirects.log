@@ -2,7 +2,6 @@ Exit Code: 1
 Standard output:
 node_modules/follow-redirects/index.js(66,10): error TS2339: Property 'emit' does not exist on type 'RedirectableRequest'.
 node_modules/follow-redirects/index.js(67,10): error TS2339: Property 'abort' does not exist on type 'RedirectableRequest'.
-node_modules/follow-redirects/index.js(109,36): error TS2339: Property '_currentRequest' does not exist on type 'PropertyDescriptor'.
 node_modules/follow-redirects/index.js(171,12): error TS2339: Property 'emit' does not exist on type 'RedirectableRequest'.
 node_modules/follow-redirects/index.js(205,35): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
