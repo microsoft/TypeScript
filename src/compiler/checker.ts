@@ -3684,9 +3684,12 @@ namespace ts {
                 return typeParameterNodes;
             }
 
-            function getAccessTypeSplitNode(top: IndexedAccessTypeNode): IndexedAccessTypeNode {
+            /**
+             * Given A[B][C][D], finds A[B]
+             */
+            function getTopmostIndexedAccessType(top: IndexedAccessTypeNode): IndexedAccessTypeNode {
                 if (isIndexedAccessTypeNode(top.objectType)) {
-                    return getAccessTypeSplitNode(top.objectType);
+                    return getTopmostIndexedAccessType(top.objectType);
                 }
                 return top;
             }
@@ -3708,7 +3711,7 @@ namespace ts {
                         return createImportTypeNode(lit, nonRootParts as EntityName, typeParameterNodes as ReadonlyArray<TypeNode>, isTypeOf);
                     }
                     else {
-                        const splitNode = getAccessTypeSplitNode(nonRootParts);
+                        const splitNode = getTopmostIndexedAccessType(nonRootParts);
                         const qualifier = (splitNode.objectType as TypeReferenceNode).typeName;
                         return createIndexedAccessTypeNode(createImportTypeNode(lit, qualifier, typeParameterNodes as ReadonlyArray<TypeNode>, isTypeOf), splitNode.indexType);
                     }
