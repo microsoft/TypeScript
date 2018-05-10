@@ -5,7 +5,7 @@
 
 // @Filename: b.ts
 ////import [|{| "isWriteAccess": true, "isDefinition": true |}g|] from "./a";
-////[|/*ref*/g|]();
+////[|/**/g|]();
 
 // @Filename: c.ts
 ////import { f } from "./a";
@@ -18,4 +18,4 @@ verify.referenceGroups(r0, [
 ]);
 verify.singleReferenceGroup("(alias) function g(): void\nimport g", [r1, r2]);
 
-verify.goToDefinition("ref", "def");
+verify.goToDefinition("", "def");
