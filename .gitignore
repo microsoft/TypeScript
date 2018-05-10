@@ -40,6 +40,7 @@ scripts/buildProtocol.js
 scripts/ior.js
 scripts/authors.js
 scripts/configurePrerelease.js
+scripts/open-user-pr.js
 scripts/processDiagnosticMessages.d.ts
 scripts/processDiagnosticMessages.js
 scripts/importDefinitelyTypedTests/importDefinitelyTypedTests.js

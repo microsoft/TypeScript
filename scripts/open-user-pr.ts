@@ -33,7 +33,7 @@ runSequence([
 const gh = new Octokit();
 gh.authenticate({
     type: "token",
-    token: process.env.GH_TOKEN
+    token: process.argv[2]
 });
 gh.pullRequests.create({
     owner: process.env.TARGET_FORK,
