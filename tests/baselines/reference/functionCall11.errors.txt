@@ -1,6 +1,6 @@
-tests/cases/compiler/functionCall11.ts(4,1): error TS2555: Expected at least 1 arguments, but got 0.
+tests/cases/compiler/functionCall11.ts(4,1): error TS2554: Expected 1-2 arguments, but got 0.
 tests/cases/compiler/functionCall11.ts(5,5): error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
-tests/cases/compiler/functionCall11.ts(6,1): error TS2572: No overload expects 3 or more arguments. The most likely overload that matches expects 2 arguments.
+tests/cases/compiler/functionCall11.ts(6,1): error TS2554: Expected 1-2 arguments, but got 3.
 
 
 ==== tests/cases/compiler/functionCall11.ts (3 errors) ====
@@ -9,11 +9,11 @@ tests/cases/compiler/functionCall11.ts(6,1): error TS2572: No overload expects 3
     foo('foo'); 
     foo();
     ~~~~~
-!!! error TS2555: Expected at least 1 arguments, but got 0.
+!!! error TS2554: Expected 1-2 arguments, but got 0.
     foo(1, 'bar');
         ~
 !!! error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
     foo('foo', 1, 'bar');
     ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2572: No overload expects 3 or more arguments. The most likely overload that matches expects 2 arguments.
+!!! error TS2554: Expected 1-2 arguments, but got 3.
     

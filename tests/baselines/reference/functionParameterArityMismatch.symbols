@@ -39,11 +39,12 @@ g(1, 2);
 g(1, 2, 3, 4);
 >g : Symbol(g, Decl(functionParameterArityMismatch.ts, 5, 17), Decl(functionParameterArityMismatch.ts, 7, 21))
 
-declare function h(a: number, b: number, c: number);
+declare function h(a: number, b: number, c: number, d?: number);
 >h : Symbol(h, Decl(functionParameterArityMismatch.ts, 11, 14))
 >a : Symbol(a, Decl(functionParameterArityMismatch.ts, 13, 19))
 >b : Symbol(b, Decl(functionParameterArityMismatch.ts, 13, 29))
 >c : Symbol(c, Decl(functionParameterArityMismatch.ts, 13, 40))
+>d : Symbol(d, Decl(functionParameterArityMismatch.ts, 13, 51))
 
 h();
 >h : Symbol(h, Decl(functionParameterArityMismatch.ts, 11, 14))
@@ -54,6 +55,6 @@ h(1);
 h(1, 2);
 >h : Symbol(h, Decl(functionParameterArityMismatch.ts, 11, 14))
 
-h(1, 2, 3, 4);
+h(1, 2, 3, 4, 5);
 >h : Symbol(h, Decl(functionParameterArityMismatch.ts, 11, 14))
 

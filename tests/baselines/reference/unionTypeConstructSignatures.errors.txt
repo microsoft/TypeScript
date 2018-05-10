@@ -11,7 +11,7 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(29,1): error
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(30,1): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(31,1): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(36,53): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(37,12): error TS2555: Expected at least 1 arguments, but got 0.
+tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(37,12): error TS2554: Expected 1-2 arguments, but got 0.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(40,12): error TS2554: Expected 2 arguments, but got 1.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(42,53): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(43,12): error TS2554: Expected 2 arguments, but got 0.
@@ -95,7 +95,7 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(70,12): erro
 !!! error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
     strOrNum = new unionWithOptionalParameter1(); // error
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2555: Expected at least 1 arguments, but got 0.
+!!! error TS2554: Expected 1-2 arguments, but got 0.
     
     var unionWithOptionalParameter2: { new (a: string, b?: number): string; } | { new (a: string, b: number): number };
     strOrNum = new unionWithOptionalParameter2('hello'); // error no call signature

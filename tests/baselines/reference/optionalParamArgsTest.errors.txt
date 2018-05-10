@@ -16,10 +16,10 @@ tests/cases/compiler/optionalParamArgsTest.ts(110,1): error TS2572: No overload 
 tests/cases/compiler/optionalParamArgsTest.ts(111,1): error TS2572: No overload expects 3 or more arguments. The most likely overload that matches expects 2 arguments.
 tests/cases/compiler/optionalParamArgsTest.ts(112,1): error TS2572: No overload expects 3 or more arguments. The most likely overload that matches expects 2 arguments.
 tests/cases/compiler/optionalParamArgsTest.ts(113,1): error TS2572: No overload expects 3 or more arguments. The most likely overload that matches expects 2 arguments.
-tests/cases/compiler/optionalParamArgsTest.ts(114,1): error TS2555: Expected at least 1 arguments, but got 0.
-tests/cases/compiler/optionalParamArgsTest.ts(115,1): error TS2555: Expected at least 1 arguments, but got 0.
-tests/cases/compiler/optionalParamArgsTest.ts(116,1): error TS2555: Expected at least 1 arguments, but got 0.
-tests/cases/compiler/optionalParamArgsTest.ts(117,1): error TS2555: Expected at least 1 arguments, but got 0.
+tests/cases/compiler/optionalParamArgsTest.ts(114,1): error TS2554: Expected 1-2 arguments, but got 0.
+tests/cases/compiler/optionalParamArgsTest.ts(115,1): error TS2554: Expected 1-2 arguments, but got 0.
+tests/cases/compiler/optionalParamArgsTest.ts(116,1): error TS2554: Expected 1-2 arguments, but got 0.
+tests/cases/compiler/optionalParamArgsTest.ts(117,1): error TS2554: Expected 1-2 arguments, but got 0.
 
 
 ==== tests/cases/compiler/optionalParamArgsTest.ts (22 errors) ====
@@ -174,16 +174,16 @@ tests/cases/compiler/optionalParamArgsTest.ts(117,1): error TS2555: Expected at 
 !!! error TS2572: No overload expects 3 or more arguments. The most likely overload that matches expects 2 arguments.
     c1o1.C1M4();
     ~~~~~~~~~~~
-!!! error TS2555: Expected at least 1 arguments, but got 0.
+!!! error TS2554: Expected 1-2 arguments, but got 0.
     i1o1.C1M4();
     ~~~~~~~~~~~
-!!! error TS2555: Expected at least 1 arguments, but got 0.
+!!! error TS2554: Expected 1-2 arguments, but got 0.
     F4();
     ~~~~
-!!! error TS2555: Expected at least 1 arguments, but got 0.
+!!! error TS2554: Expected 1-2 arguments, but got 0.
     L4();
     ~~~~
-!!! error TS2555: Expected at least 1 arguments, but got 0.
+!!! error TS2554: Expected 1-2 arguments, but got 0.
     
     function fnOpt1(id: number, children: number[] = [], expectedPath: number[] = [], isRoot?: boolean): void {}
     function fnOpt2(id: number, children?: number[], expectedPath?: number[], isRoot?: boolean): void {}

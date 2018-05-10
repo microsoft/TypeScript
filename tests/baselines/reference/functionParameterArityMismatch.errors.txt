@@ -5,10 +5,10 @@ tests/cases/compiler/functionParameterArityMismatch.ts(6,1): error TS2572: No ov
 tests/cases/compiler/functionParameterArityMismatch.ts(10,1): error TS2571: No overload expects 1 arguments. The most likely overloads that match expect either 0 arguments or at least 3 arguments.
 tests/cases/compiler/functionParameterArityMismatch.ts(11,1): error TS2571: No overload expects 2 arguments. The most likely overloads that match expect either 0 arguments or at least 3 arguments.
 tests/cases/compiler/functionParameterArityMismatch.ts(12,1): error TS2572: No overload expects 4 or more arguments. The most likely overload that matches expects 3 arguments.
-tests/cases/compiler/functionParameterArityMismatch.ts(15,1): error TS2554: Expected 3 arguments, but got 0.
-tests/cases/compiler/functionParameterArityMismatch.ts(16,1): error TS2554: Expected 3 arguments, but got 1.
-tests/cases/compiler/functionParameterArityMismatch.ts(17,1): error TS2554: Expected 3 arguments, but got 2.
-tests/cases/compiler/functionParameterArityMismatch.ts(18,1): error TS2554: Expected 3 arguments, but got 4.
+tests/cases/compiler/functionParameterArityMismatch.ts(15,1): error TS2554: Expected 3-4 arguments, but got 0.
+tests/cases/compiler/functionParameterArityMismatch.ts(16,1): error TS2554: Expected 3-4 arguments, but got 1.
+tests/cases/compiler/functionParameterArityMismatch.ts(17,1): error TS2554: Expected 3-4 arguments, but got 2.
+tests/cases/compiler/functionParameterArityMismatch.ts(18,1): error TS2554: Expected 3-4 arguments, but got 5.
 
 
 ==== tests/cases/compiler/functionParameterArityMismatch.ts (11 errors) ====
@@ -39,17 +39,17 @@ tests/cases/compiler/functionParameterArityMismatch.ts(18,1): error TS2554: Expe
     ~~~~~~~~~~~~~
 !!! error TS2572: No overload expects 4 or more arguments. The most likely overload that matches expects 3 arguments.
     
-    declare function h(a: number, b: number, c: number);
+    declare function h(a: number, b: number, c: number, d?: number);
     h();
     ~~~
-!!! error TS2554: Expected 3 arguments, but got 0.
+!!! error TS2554: Expected 3-4 arguments, but got 0.
     h(1);
     ~~~~
-!!! error TS2554: Expected 3 arguments, but got 1.
+!!! error TS2554: Expected 3-4 arguments, but got 1.
     h(1, 2);
     ~~~~~~~
-!!! error TS2554: Expected 3 arguments, but got 2.
-    h(1, 2, 3, 4);
-    ~~~~~~~~~~~~~
-!!! error TS2554: Expected 3 arguments, but got 4.
+!!! error TS2554: Expected 3-4 arguments, but got 2.
+    h(1, 2, 3, 4, 5);
+    ~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 3-4 arguments, but got 5.
     

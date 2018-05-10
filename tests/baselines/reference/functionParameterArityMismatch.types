@@ -64,32 +64,34 @@ g(1, 2, 3, 4);
 >3 : 3
 >4 : 4
 
-declare function h(a: number, b: number, c: number);
->h : (a: number, b: number, c: number) => any
+declare function h(a: number, b: number, c: number, d?: number);
+>h : (a: number, b: number, c: number, d?: number) => any
 >a : number
 >b : number
 >c : number
+>d : number
 
 h();
 >h() : any
->h : (a: number, b: number, c: number) => any
+>h : (a: number, b: number, c: number, d?: number) => any
 
 h(1);
 >h(1) : any
->h : (a: number, b: number, c: number) => any
+>h : (a: number, b: number, c: number, d?: number) => any
 >1 : 1
 
 h(1, 2);
 >h(1, 2) : any
->h : (a: number, b: number, c: number) => any
+>h : (a: number, b: number, c: number, d?: number) => any
 >1 : 1
 >2 : 2
 
-h(1, 2, 3, 4);
->h(1, 2, 3, 4) : any
->h : (a: number, b: number, c: number) => any
+h(1, 2, 3, 4, 5);
+>h(1, 2, 3, 4, 5) : any
+>h : (a: number, b: number, c: number, d?: number) => any
 >1 : 1
 >2 : 2
 >3 : 3
 >4 : 4
+>5 : 5
 
