@@ -915,8 +915,11 @@ namespace ts {
                 }
                 if ((source.flags | target.flags) & SymbolFlags.JSContainer) {
                     const sourceInitializer = getJSInitializerSymbol(source);
-                    const targetInitializer = getJSInitializerSymbol(target);
+                    let targetInitializer = getJSInitializerSymbol(target);
                     if (sourceInitializer !== source || targetInitializer !== target) {
+                        if (!(targetInitializer.flags & SymbolFlags.Transient)) {
+                            targetInitializer = cloneSymbol(targetInitializer);
+                        }
                         mergeSymbol(targetInitializer, sourceInitializer);
                     }
                 }
@@ -19452,7 +19455,7 @@ namespace ts {
             }
 
             const links = getNodeLinks(node);
-            const type = getTypeOfSymbol(node.symbol);
+            const type = getTypeOfSymbol(getMergedSymbol(node.symbol));
             if (isTypeAny(type)) {
                 return type;
             }
