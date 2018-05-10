@@ -16303,6 +16303,11 @@ declare var WScript: {
 };
 
 /**
+ * WSH is an alias for WScript under Windows Script Host
+ */
+declare var WSH: typeof WScript;
+
+/**
  * Represents an Automation SAFEARRAY
  */
 declare class SafeArray<T = any> {
