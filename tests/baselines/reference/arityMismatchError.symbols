@@ -1,14 +1,14 @@
-=== tests/cases/compiler/arityMismatchError.ts ===
+=== tests/cases/compiler/functionParameterArityMismatch.ts ===
 declare function f(x: number): number;
->f : Symbol(f, Decl(arityMismatchError.ts, 0, 0), Decl(arityMismatchError.ts, 0, 38))
->x : Symbol(x, Decl(arityMismatchError.ts, 0, 19))
+>f : Symbol(f, Decl(functionParameterArityMismatch.ts, 0, 0), Decl(functionParameterArityMismatch.ts, 0, 38))
+>x : Symbol(x, Decl(functionParameterArityMismatch.ts, 0, 19))
 
 declare function f(x: number, y: number, z: number): number;
->f : Symbol(f, Decl(arityMismatchError.ts, 0, 0), Decl(arityMismatchError.ts, 0, 38))
->x : Symbol(x, Decl(arityMismatchError.ts, 1, 19))
->y : Symbol(y, Decl(arityMismatchError.ts, 1, 29))
->z : Symbol(z, Decl(arityMismatchError.ts, 1, 40))
+>f : Symbol(f, Decl(functionParameterArityMismatch.ts, 0, 0), Decl(functionParameterArityMismatch.ts, 0, 38))
+>x : Symbol(x, Decl(functionParameterArityMismatch.ts, 1, 19))
+>y : Symbol(y, Decl(functionParameterArityMismatch.ts, 1, 29))
+>z : Symbol(z, Decl(functionParameterArityMismatch.ts, 1, 40))
 
 f(1, 2);
->f : Symbol(f, Decl(arityMismatchError.ts, 0, 0), Decl(arityMismatchError.ts, 0, 38))
+>f : Symbol(f, Decl(functionParameterArityMismatch.ts, 0, 0), Decl(functionParameterArityMismatch.ts, 0, 38))
 

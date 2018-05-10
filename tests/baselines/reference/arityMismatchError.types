@@ -1,4 +1,4 @@
-=== tests/cases/compiler/arityMismatchError.ts ===
+=== tests/cases/compiler/functionParameterArityMismatch.ts ===
 declare function f(x: number): number;
 >f : { (x: number): number; (x: number, y: number, z: number): number; }
 >x : number

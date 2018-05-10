@@ -19073,7 +19073,7 @@ namespace ts {
                     const error = hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_got_1_or_more :
                         hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
                             hasSpreadArgument ? Diagnostics.Expected_0_arguments_but_got_1_or_more :
-                                null;
+                                undefined;
                     diagnostics.add(createDiagnosticForNode(node, error, paramCount, argCount));
                 }
                 else {
@@ -19086,7 +19086,7 @@ namespace ts {
                     else if (minAboveArgCount === Number.POSITIVE_INFINITY) {
                         diagnostics.add(createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_or_more_arguments_The_most_likely_overload_that_matches_expects_1_arguments, argCount, maxBelowArgCount));
                     }
-                    else {
+                    else { // introducing another diagnostic which omits 'at least' would be possible
                         diagnostics.add(createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_The_most_likely_overloads_that_match_expect_either_1_arguments_or_at_least_2_arguments, argCount, maxBelowArgCount, minAboveArgCount));
                     }
                 }
