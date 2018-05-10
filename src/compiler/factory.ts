@@ -93,8 +93,14 @@ namespace ts {
         return node;
     }
 
-    function createStringLiteral(text: string): StringLiteral {
+    export function createStringLiteral(text: string): StringLiteral {
         const node = <StringLiteral>createSynthesizedNode(SyntaxKind.StringLiteral);
+        node.text = text;
+        return node;
+    }
+
+    export function createRegularExpressionLiteral(text: string): RegularExpressionLiteral {
+        const node = <RegularExpressionLiteral>createSynthesizedNode(SyntaxKind.RegularExpressionLiteral);
         node.text = text;
         return node;
     }
