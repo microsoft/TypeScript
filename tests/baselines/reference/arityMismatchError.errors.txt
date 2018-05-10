@@ -1,0 +1,10 @@
+tests/cases/compiler/arityMismatchError.ts(3,1): error TS2554: Expected 1-3 arguments, but got 2.
+
+
+==== tests/cases/compiler/arityMismatchError.ts (1 errors) ====
+    declare function f(x: number): number;
+    declare function f(x: number, y: number, z: number): number;
+    f(1, 2);
+    ~~~~~~~
+!!! error TS2554: Expected 1-3 arguments, but got 2.
+    

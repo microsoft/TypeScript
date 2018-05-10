@@ -1,0 +1,17 @@
+=== tests/cases/compiler/arityMismatchError.ts ===
+declare function f(x: number): number;
+>f : { (x: number): number; (x: number, y: number, z: number): number; }
+>x : number
+
+declare function f(x: number, y: number, z: number): number;
+>f : { (x: number): number; (x: number, y: number, z: number): number; }
+>x : number
+>y : number
+>z : number
+
+f(1, 2);
+>f(1, 2) : any
+>f : { (x: number): number; (x: number, y: number, z: number): number; }
+>1 : 1
+>2 : 2
+
