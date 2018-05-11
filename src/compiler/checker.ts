@@ -918,7 +918,8 @@ namespace ts {
                     let targetInitializer = getJSInitializerSymbol(target);
                     if (sourceInitializer !== source || targetInitializer !== target) {
                         if (!(targetInitializer.flags & SymbolFlags.Transient)) {
-                            targetInitializer = cloneSymbol(targetInitializer);
+                            const mergedInitializer = getMergedSymbol(targetInitializer);
+                            targetInitializer = mergedInitializer === targetInitializer ? cloneSymbol(targetInitializer) : mergedInitializer;
                         }
                         mergeSymbol(targetInitializer, sourceInitializer);
                     }
