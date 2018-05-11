@@ -53,6 +53,7 @@ function register(kind) {
     kindCache[kind] = true;
 }
 function ClassFactory(kind) {
+    var _a;
     register(kind);
     return _a = /** @class */ (function () {
             function class_1() {
@@ -62,7 +63,6 @@ function ClassFactory(kind) {
         }()),
         _a.THE_KIND = kind,
         _a;
-    var _a;
 }
 var Kinds = /** @class */ (function () {
     function Kinds() {
@@ -123,3 +123,4 @@ declare const CKind_base: {
 };
 export declare class CKind extends CKind_base {
 }
+export {};

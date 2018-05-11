@@ -26,7 +26,7 @@ namespace ts {
         let enclosingFunctionFlags: FunctionFlags;
         let enclosingSuperContainerFlags: NodeCheckFlags = 0;
 
-        return transformSourceFile;
+        return chainBundle(transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {
@@ -118,21 +118,38 @@ namespace ts {
         }
 
         function visitYieldExpression(node: YieldExpression) {
-            if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator && node.asteriskToken) {
-                const expression = visitNode(node.expression, visitor, isExpression);
+            if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
+                if (node.asteriskToken) {
+                    const expression = visitNode(node.expression, visitor, isExpression);
+
+                    return setOriginalNode(
+                        setTextRange(
+                            createYield(
+                                createAwaitHelper(context,
+                                    updateYield(
+                                        node,
+                                        node.asteriskToken,
+                                        createAsyncDelegatorHelper(
+                                            context,
+                                            createAsyncValuesHelper(context, expression, expression),
+                                            expression
+                                        )
+                                    )
+                                )
+                            ),
+                            node
+                        ),
+                        node
+                    );
+                }
+
                 return setOriginalNode(
                     setTextRange(
                         createYield(
-                            createAwaitHelper(context,
-                                updateYield(
-                                    node,
-                                    node.asteriskToken,
-                                    createAsyncDelegatorHelper(
-                                        context,
-                                        createAsyncValuesHelper(context, expression, expression),
-                                        expression
-                                    )
-                                )
+                            createDownlevelAwait(
+                                node.expression
+                                    ? visitNode(node.expression, visitor, isExpression)
+                                    : createVoidZero()
                             )
                         ),
                         node
@@ -140,6 +157,7 @@ namespace ts {
                     node
                 );
             }
+
             return visitEachChild(node, visitor, context);
         }
 
@@ -645,7 +663,7 @@ namespace ts {
                 )
             );
 
-            addRange(statements, endLexicalEnvironment());
+            prependRange(statements, endLexicalEnvironment());
             const block = updateBlock(node.body, statements);
 
             // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
@@ -674,11 +692,11 @@ namespace ts {
                 statementOffset = addPrologue(statements, body.statements, /*ensureUseStrict*/ false, visitor);
             }
             addRange(statements, appendObjectRestAssignmentsIfNeeded(/*statements*/ undefined, node));
-            const trailingStatements = endLexicalEnvironment();
-            if (statementOffset > 0 || some(statements) || some(trailingStatements)) {
+            const leadingStatements = endLexicalEnvironment();
+            if (statementOffset > 0 || some(statements) || some(leadingStatements)) {
                 const block = convertToFunctionBody(body, /*multiLine*/ true);
+                prependRange(statements, leadingStatements);
                 addRange(statements, block.statements.slice(statementOffset));
-                addRange(statements, trailingStatements);
                 return updateBlock(block, setTextRange(createNodeArray(statements), block.statements));
             }
             return body;

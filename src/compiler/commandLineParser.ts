@@ -236,6 +236,13 @@ namespace ts {
             description: Diagnostics.Specify_the_root_directory_of_input_files_Use_to_control_the_output_directory_structure_with_outDir,
         },
         {
+            name: "composite",
+            type: "boolean",
+            isTSConfigOnly: true,
+            category: Diagnostics.Basic_Options,
+            description: Diagnostics.Enable_project_compilation,
+        },
+        {
             name: "removeComments",
             type: "boolean",
             showInSimplifiedHelpView: true,
@@ -814,12 +821,14 @@ namespace ts {
     export function parseCommandLine(commandLine: ReadonlyArray<string>, readFile?: (path: string) => string | undefined): ParsedCommandLine {
         const options: CompilerOptions = {};
         const fileNames: string[] = [];
+        const projectReferences: ProjectReference[] | undefined = undefined;
         const errors: Diagnostic[] = [];
 
         parseStrings(commandLine);
         return {
             options,
             fileNames,
+            projectReferences,
             errors
         };
 
@@ -933,6 +942,49 @@ namespace ts {
         return optionNameMap.get(optionName);
     }
 
+
+    export type DiagnosticReporter = (diagnostic: Diagnostic) => void;
+    /**
+     * Reports config file diagnostics
+     */
+    export interface ConfigFileDiagnosticsReporter {
+        /**
+         * Reports unrecoverable error when parsing config file
+         */
+        onUnRecoverableConfigFileDiagnostic: DiagnosticReporter;
+    }
+
+    /**
+     * Interface extending ParseConfigHost to support ParseConfigFile that reads config file and reports errors
+     */
+    export interface ParseConfigFileHost extends ParseConfigHost, ConfigFileDiagnosticsReporter {
+        getCurrentDirectory(): string;
+    }
+
+    /**
+     * Reads the config file, reports errors if any and exits if the config file cannot be found
+     */
+    export function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions, host: ParseConfigFileHost): ParsedCommandLine | undefined {
+        let configFileText: string;
+        try {
+            configFileText = host.readFile(configFileName);
+        }
+        catch (e) {
+            const error = createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, configFileName, e.message);
+            host.onUnRecoverableConfigFileDiagnostic(error);
+            return undefined;
+        }
+        if (!configFileText) {
+            const error = createCompilerDiagnostic(Diagnostics.File_0_not_found, configFileName);
+            host.onUnRecoverableConfigFileDiagnostic(error);
+            return undefined;
+        }
+
+        const result = parseJsonText(configFileName, configFileText);
+        const cwd = host.getCurrentDirectory();
+        return parseJsonSourceFileConfigFileContent(result, host, getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd), optionsToExtend, getNormalizedAbsolutePath(configFileName, cwd));
+    }
+
     /**
      * Read tsconfig.json file
      * @param fileName The path to the config file
@@ -1007,6 +1059,14 @@ namespace ts {
                     {
                         name: "extends",
                         type: "string"
+                    },
+                    {
+                        name: "references",
+                        type: "list",
+                        element: {
+                            name: "references",
+                            type: "object"
+                        }
                     },
                     {
                         name: "files",
@@ -1415,7 +1475,7 @@ namespace ts {
             for (let i = 0; i < nameColumn.length; i++) {
                 const optionName = nameColumn[i];
                 const description = descriptionColumn[i];
-                result.push(optionName && `${tab}${tab}${optionName}${ description && (makePadding(marginLength - optionName.length + 2) + description)}`);
+                result.push(optionName && `${tab}${tab}${optionName}${description && (makePadding(marginLength - optionName.length + 2) + description)}`);
             }
             if (fileNames.length) {
                 result.push(`${tab}},`);
@@ -1499,12 +1559,13 @@ namespace ts {
         const parsedConfig = parseConfig(json, sourceFile, host, basePath, configFileName, resolutionStack, errors);
         const { raw } = parsedConfig;
         const options = extend(existingOptions, parsedConfig.options || {});
-        options.configFilePath = configFileName;
+        options.configFilePath = configFileName && normalizeSlashes(configFileName);
         setConfigFileInOptions(options, sourceFile);
-        const { fileNames, wildcardDirectories, spec } = getFileNames();
+        const { fileNames, wildcardDirectories, spec, projectReferences } = getFileNames();
         return {
             options,
             fileNames,
+            projectReferences,
             typeAcquisition: parsedConfig.typeAcquisition || getDefaultTypeAcquisition(),
             raw,
             errors,
@@ -1558,8 +1619,31 @@ namespace ts {
             }
 
             const result = matchFileNames(filesSpecs, includeSpecs, excludeSpecs, configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath, options, host, errors, extraFileExtensions, sourceFile);
-            if (result.fileNames.length === 0 && !hasProperty(raw, "files") && resolutionStack.length === 0) {
+            if (result.fileNames.length === 0 && !hasProperty(raw, "files") && resolutionStack.length === 0 && !hasProperty(raw, "references")) {
                 errors.push(getErrorForNoInputFiles(result.spec, configFileName));
+            }
+
+            if (hasProperty(raw, "references") && !isNullOrUndefined(raw.references)) {
+                if (isArray(raw.references)) {
+                    const references: ProjectReference[] = [];
+                    for (const ref of raw.references) {
+                        if (typeof ref.path !== "string") {
+                            createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "reference.path", "string");
+                        }
+                        else {
+                            references.push({
+                                path: getNormalizedAbsolutePath(ref.path, basePath),
+                                originalPath: ref.path,
+                                prepend: ref.prepend,
+                                circular: ref.circular
+                            });
+                        }
+                    }
+                    result.projectReferences = references;
+                }
+                else {
+                    createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "references", "Array");
+                }
             }
 
             return result;
@@ -1850,6 +1934,9 @@ namespace ts {
 
         const options = getDefaultCompilerOptions(configFileName);
         convertOptionsFromJson(optionDeclarations, jsonOptions, basePath, options, Diagnostics.Unknown_compiler_option_0, errors);
+        if (configFileName) {
+            options.configFilePath = normalizeSlashes(configFileName);
+        }
         return options;
     }
 
@@ -2048,7 +2135,7 @@ namespace ts {
         // new entries in these paths.
         const wildcardDirectories = getWildcardDirectories(validatedIncludeSpecs, validatedExcludeSpecs, basePath, host.useCaseSensitiveFileNames);
 
-        const spec: ConfigFileSpecs = { filesSpecs, includeSpecs, excludeSpecs, validatedIncludeSpecs, validatedExcludeSpecs, wildcardDirectories };
+        const spec: ConfigFileSpecs = { filesSpecs, referencesSpecs: undefined, includeSpecs, excludeSpecs, validatedIncludeSpecs, validatedExcludeSpecs, wildcardDirectories };
         return getFileNamesFromConfigSpecs(spec, basePath, options, host, extraFileExtensions);
     }
 
@@ -2119,8 +2206,16 @@ namespace ts {
 
         const literalFiles = arrayFrom(literalFileMap.values());
         const wildcardFiles = arrayFrom(wildcardFileMap.values());
+        const projectReferences = spec.referencesSpecs && spec.referencesSpecs.map((r): ProjectReference => {
+            return {
+                ...r,
+                path: getNormalizedAbsolutePath(r.path, basePath)
+            };
+        });
+
         return {
             fileNames: literalFiles.concat(wildcardFiles),
+            projectReferences,
             wildcardDirectories,
             spec
         };

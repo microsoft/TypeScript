@@ -45,7 +45,7 @@ namespace ts {
                 if (checker.getSymbolAtLocation(importStringLiteral)) continue;
 
                 const resolved = program.getResolvedModuleWithFailedLookupLocationsFromCache(importStringLiteral.text, sourceFile.fileName);
-                if (contains(resolved.failedLookupLocations, oldFilePath)) {
+                if (resolved && contains(resolved.failedLookupLocations, oldFilePath)) {
                     result.push({ sourceFile, toUpdate: importStringLiteral });
                 }
             }
@@ -55,7 +55,7 @@ namespace ts {
 
     function getPathUpdater(oldFilePath: string, newFilePath: string, host: LanguageServiceHost): (oldPath: string) => string | undefined {
         // Get the relative path from old to new location, and append it on to the end of imports and normalize.
-        const rel = ensurePathIsNonModuleName(getRelativePath(getDirectoryPath(oldFilePath), newFilePath, createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host))));
+        const rel = getRelativePathFromFile(oldFilePath, newFilePath, createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host)));
         return oldPath => {
             if (!pathIsRelative(oldPath)) return;
             return ensurePathIsNonModuleName(normalizePath(combinePaths(getDirectoryPath(oldPath), rel)));

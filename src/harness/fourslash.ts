@@ -899,7 +899,7 @@ namespace FourSlash {
                         }
                         else {
                             const found = actualByName.get(exclude.name);
-                            if (found.source === exclude.source) {
+                            if (found && found.source === exclude.source) {
                                 this.raiseError(`Did not expect to get a completion named ${exclude.name} with source ${exclude.source}`);
                             }
                         }
@@ -957,7 +957,14 @@ namespace FourSlash {
         }
 
         public verifyCompletionsAt(markerName: string | ReadonlyArray<string>, expected: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, options?: FourSlashInterface.CompletionsAtOptions) {
-            this.verifyCompletions({ marker: markerName, exact: expected, isNewIdentifierLocation: options && options.isNewIdentifierLocation, preferences: options, triggerCharacter: options && options.triggerCharacter });
+            this.verifyCompletions({
+                marker: markerName,
+                exact: expected,
+                isNewIdentifierLocation: options && options.isNewIdentifierLocation,
+                preferences: options,
+                // TODO: GH#20090
+                triggerCharacter: (options && options.triggerCharacter) as ts.CompletionsTriggerCharacter | undefined,
+            });
         }
 
         public verifyCompletionListContains(entryId: ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string | { kind?: string, kindModifiers?: string }, spanIndex?: number, hasAction?: boolean, options?: FourSlashInterface.VerifyCompletionListContainsOptions) {
@@ -2419,7 +2426,7 @@ Actual: ${stringify(fullActual)}`);
             Harness.IO.log(stringify(spans));
         }
 
-        public verifyOutliningSpans(spans: Range[], kind?: "comment" | "region" | "code") {
+        public verifyOutliningSpans(spans: Range[], kind?: "comment" | "region" | "code" | "imports") {
             const actual = this.languageService.getOutliningSpans(this.activeFile.fileName);
 
             if (actual.length !== spans.length) {
@@ -2998,9 +3005,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public verifyApplicableRefactorAvailableAtMarker(negative: boolean, markerName: string) {
-            const marker = this.getMarkerByName(markerName);
-            const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, marker.position, ts.defaultPreferences);
-            const isAvailable = applicableRefactors && applicableRefactors.length > 0;
+            const isAvailable = this.getApplicableRefactors(this.getMarkerByName(markerName).position).length > 0;
             if (negative && isAvailable) {
                 this.raiseError(`verifyApplicableRefactorAvailableAtMarker failed - expected no refactor at marker ${markerName} but found some.`);
             }
@@ -3017,9 +3022,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public verifyRefactorAvailable(negative: boolean, name: string, actionName?: string) {
-            const selection = this.getSelection();
-
-            let refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, selection, ts.defaultPreferences) || [];
+            let refactors = this.getApplicableRefactors(this.getSelection());
             refactors = refactors.filter(r => r.name === name && (actionName === undefined || r.actions.some(a => a.name === actionName)));
             const isAvailable = refactors.length > 0;
 
@@ -3039,10 +3042,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public verifyRefactor({ name, actionName, refactors }: FourSlashInterface.VerifyRefactorOptions) {
-            const selection = this.getSelection();
-
-            const actualRefactors = (this.languageService.getApplicableRefactors(this.activeFile.fileName, selection, ts.defaultPreferences) || ts.emptyArray)
-                .filter(r => r.name === name && r.actions.some(a => a.name === actionName));
+            const actualRefactors = this.getApplicableRefactors(this.getSelection()).filter(r => r.name === name && r.actions.some(a => a.name === actionName));
             this.assertObjectsEqual(actualRefactors, refactors);
         }
 
@@ -3052,8 +3052,7 @@ Actual: ${stringify(fullActual)}`);
                 throw new Error("Exactly one refactor range is allowed per test.");
             }
 
-            const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, ts.first(ranges), ts.defaultPreferences);
-            const isAvailable = applicableRefactors && applicableRefactors.length > 0;
+            const isAvailable = this.getApplicableRefactors(ts.first(ranges)).length > 0;
             if (negative && isAvailable) {
                 this.raiseError(`verifyApplicableRefactorAvailableForRange failed - expected no refactor but found some.`);
             }
@@ -3064,7 +3063,7 @@ Actual: ${stringify(fullActual)}`);
 
         public applyRefactor({ refactorName, actionName, actionDescription, newContent: newContentWithRenameMarker }: FourSlashInterface.ApplyRefactorOptions) {
             const range = this.getSelection();
-            const refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, range, ts.defaultPreferences);
+            const refactors = this.getApplicableRefactors(range);
             const refactorsWithName = refactors.filter(r => r.name === refactorName);
             if (refactorsWithName.length === 0) {
                 this.raiseError(`The expected refactor: ${refactorName} is not available at the marker location.\nAvailable refactors: ${refactors.map(r => r.name)}`);
@@ -3110,7 +3109,48 @@ Actual: ${stringify(fullActual)}`);
                     return { renamePosition, newContent };
                 }
             }
+        }
 
+        public noMoveToNewFile() {
+            for (const range of this.getRanges()) {
+                for (const refactor of this.getApplicableRefactors(range, { allowTextChangesInNewFiles: true })) {
+                    if (refactor.name === "Move to a new file") {
+                        ts.Debug.fail("Did not expect to get 'move to a new file' refactor");
+                    }
+                }
+            }
+        }
+
+        public moveToNewFile(options: FourSlashInterface.MoveToNewFileOptions): void {
+            assert(this.getRanges().length === 1);
+            const range = this.getRanges()[0];
+            const refactor = ts.find(this.getApplicableRefactors(range, { allowTextChangesInNewFiles: true }), r => r.name === "Move to a new file");
+            assert(refactor.actions.length === 1);
+            const action = ts.first(refactor.actions);
+            assert(action.name === "Move to a new file" && action.description === "Move to a new file");
+
+            const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, this.formatCodeSettings, range, refactor.name, action.name, ts.defaultPreferences);
+            for (const edit of editInfo.edits) {
+                const newContent = options.newFileContents[edit.fileName];
+                if (newContent === undefined) {
+                    this.raiseError(`There was an edit in ${edit.fileName} but new content was not specified.`);
+                }
+                if (this.testData.files.some(f => f.fileName === edit.fileName)) {
+                    this.applyEdits(edit.fileName, edit.textChanges, /*isFormattingEdit*/ false);
+                    this.openFile(edit.fileName);
+                    this.verifyCurrentFileContent(newContent);
+                }
+                else {
+                    assert(edit.textChanges.length === 1);
+                    const change = ts.first(edit.textChanges);
+                    assert.deepEqual(change.span, ts.createTextSpan(0, 0));
+                    assert.equal(change.newText, newContent, `Content for ${edit.fileName}`);
+                }
+            }
+
+            for (const fileName in options.newFileContents) {
+                assert(editInfo.edits.some(e => e.fileName === fileName));
+            }
         }
 
         public verifyFileAfterApplyingRefactorAtMarker(
@@ -3325,6 +3365,10 @@ Actual: ${stringify(fullActual)}`);
                 this.openFile(fileName);
                 this.verifyCurrentFileContent(options.newFileContents[fileName]);
             }
+        }
+
+        private getApplicableRefactors(positionOrRange: number | ts.TextRange, preferences = ts.defaultPreferences): ReadonlyArray<ts.ApplicableRefactorInfo> {
+            return this.languageService.getApplicableRefactors(this.activeFile.fileName, positionOrRange, preferences) || ts.emptyArray;
         }
     }
 
@@ -4247,7 +4291,7 @@ namespace FourSlashInterface {
             this.state.verifyCurrentNameOrDottedNameSpanText(text);
         }
 
-        public outliningSpansInCurrentFile(spans: FourSlash.Range[], kind?: "comment" | "region" | "code") {
+        public outliningSpansInCurrentFile(spans: FourSlash.Range[], kind?: "comment" | "region" | "code" | "imports") {
             this.state.verifyOutliningSpans(spans, kind);
         }
 
@@ -4422,6 +4466,13 @@ namespace FourSlashInterface {
 
         public getEditsForFileRename(options: GetEditsForFileRenameOptions) {
             this.state.getEditsForFileRename(options);
+        }
+
+        public moveToNewFile(options: MoveToNewFileOptions): void {
+            this.state.moveToNewFile(options);
+        }
+        public noMoveToNewFile(): void {
+            this.state.noMoveToNewFile();
         }
     }
 
@@ -4719,7 +4770,7 @@ namespace FourSlashInterface {
         readonly sourceDisplay?: string;
     };
     export interface CompletionsAtOptions extends Partial<ts.UserPreferences> {
-        triggerCharacter?: string;
+        triggerCharacter?: ts.CompletionsTriggerCharacter;
         isNewIdentifierLocation?: boolean;
     }
 
@@ -4730,13 +4781,13 @@ namespace FourSlashInterface {
         readonly includes?: Many<ExpectedCompletionEntry>;
         readonly excludes?: Many<string | { readonly name: string, readonly source: string }>;
         readonly preferences: ts.UserPreferences;
-        readonly triggerCharacter?: string;
+        readonly triggerCharacter?: ts.CompletionsTriggerCharacter;
     }
 
     export type Many<T> = T | ReadonlyArray<T>;
 
     export interface VerifyCompletionListContainsOptions extends ts.UserPreferences {
-        triggerCharacter?: string;
+        triggerCharacter?: ts.CompletionsTriggerCharacter;
         sourceDisplay: string;
         isRecommended?: true;
         insertText?: string;
@@ -4794,6 +4845,10 @@ namespace FourSlashInterface {
     export interface GetEditsForFileRenameOptions {
         readonly oldPath: string;
         readonly newPath: string;
+        readonly newFileContents: { readonly [fileName: string]: string };
+    }
+
+    export interface MoveToNewFileOptions {
         readonly newFileContents: { readonly [fileName: string]: string };
     }
 }

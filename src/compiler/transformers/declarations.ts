@@ -9,7 +9,13 @@ namespace ts {
         return result.diagnostics;
     }
 
-    const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals | TypeFormatFlags.WriteClassExpressionAsTypeLiteral | NodeBuilderFlags.UseTypeOfFunction | NodeBuilderFlags.UseStructuralFallback | NodeBuilderFlags.AllowEmptyTuple;
+    const declarationEmitNodeBuilderFlags =
+        NodeBuilderFlags.MultilineObjectLiterals |
+        TypeFormatFlags.WriteClassExpressionAsTypeLiteral |
+        NodeBuilderFlags.UseTypeOfFunction |
+        NodeBuilderFlags.UseStructuralFallback |
+        NodeBuilderFlags.AllowEmptyTuple |
+        NodeBuilderFlags.GenerateNamesForShadowedTypeParams;
 
     /**
      * Transforms a ts file into a .d.ts file
@@ -28,7 +34,7 @@ namespace ts {
         let enclosingDeclaration: Node;
         let necessaryTypeRefernces: Map<true>;
         let lateMarkedStatements: LateVisibilityPaintedStatement[];
-        let lateStatementReplacementMap: Map<LateVisibilityPaintedStatement | undefined>;
+        let lateStatementReplacementMap: Map<VisitResult<LateVisibilityPaintedStatement>>;
         let suppressNewDiagnosticContexts: boolean;
 
         const symbolTracker: SymbolTracker = {
@@ -95,6 +101,7 @@ namespace ts {
         }
 
         function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
+            if (symbol.flags & SymbolFlags.TypeParameter) return;
             handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ true));
             recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForSymbol(symbol, meaning));
         }
@@ -155,15 +162,19 @@ namespace ts {
                                 [],
                                 [createModifier(SyntaxKind.DeclareKeyword)],
                                 createLiteral(getResolvedExternalModuleName(context.getEmitHost(), sourceFile)),
-                                createModuleBlock(setTextRange(createNodeArray(filterCandidateImports(statements)), sourceFile.statements))
+                                createModuleBlock(setTextRange(createNodeArray(transformAndReplaceLatePaintedStatements(statements)), sourceFile.statements))
                             )], /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false);
                             return newFile;
                         }
                         needsDeclare = true;
                         const updated = visitNodes(sourceFile.statements, visitDeclarationStatements);
-                        return updateSourceFileNode(sourceFile, filterCandidateImports(updated), /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false);
+                        return updateSourceFileNode(sourceFile, transformAndReplaceLatePaintedStatements(updated), /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false);
                     }
-                ));
+                ), mapDefined(node.prepends, prepend => {
+                    if (prepend.kind === SyntaxKind.InputFiles) {
+                        return createUnparsedSourceFile(prepend.declarationText);
+                    }
+                }));
                 bundle.syntheticFileReferences = [];
                 bundle.syntheticTypeReferences = getFileReferencesForUsedTypeReferences();
                 bundle.hasNoDefaultLib = hasNoDefaultLib;
@@ -192,7 +203,7 @@ namespace ts {
             const referenceVisitor = mapReferencesIntoArray(references, outputFilePath);
             refs.forEach(referenceVisitor);
             const statements = visitNodes(node.statements, visitDeclarationStatements);
-            let combinedStatements = setTextRange(createNodeArray(filterCandidateImports(statements)), node.statements);
+            let combinedStatements = setTextRange(createNodeArray(transformAndReplaceLatePaintedStatements(statements)), node.statements);
             const emittedImports = filter(combinedStatements, isAnyImportSyntax);
             if (isExternalModule(node) && (!resultHasExternalModuleIndicator || (needsScopeFixMarker && !resultHasScopeMarker))) {
                 combinedStatements = setTextRange(createNodeArray([...combinedStatements, createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports([]), /*moduleSpecifier*/ undefined)]), combinedStatements);
@@ -254,7 +265,7 @@ namespace ts {
             forEach(sourceFile.referencedFiles, f => {
                 const elem = tryResolveScriptReference(host, sourceFile, f);
                 if (elem) {
-                    ret.set("" + getNodeId(elem), elem);
+                    ret.set("" + getOriginalNodeId(elem), elem);
                 }
             });
             return ret;
@@ -534,7 +545,7 @@ namespace ts {
             // Nothing visible
         }
 
-        function filterCandidateImports(statements: NodeArray<Statement>): NodeArray<Statement> {
+        function transformAndReplaceLatePaintedStatements(statements: NodeArray<Statement>): NodeArray<Statement> {
             // This is a `while` loop because `handleSymbolAccessibilityError` can see additional import aliases marked as visible during
             // error handling which must now be included in the output and themselves checked for errors.
             // For example:
@@ -549,63 +560,48 @@ namespace ts {
             // In such a scenario, only Q and D are initially visible, but we don't consider imports as private names - instead we say they if they are referenced they must
             // be recorded. So while checking D's visibility we mark C as visible, then we must check C which in turn marks B, completing the chain of
             // dependent imports and allowing a valid declaration file output. Today, this dependent alias marking only happens for internal import aliases.
-            const unconsideredStatements: LateVisibilityPaintedStatement[] = [];
             while (length(lateMarkedStatements)) {
                 const i = lateMarkedStatements.shift();
-                if ((isSourceFile(i.parent) ? i.parent : i.parent.parent) !== enclosingDeclaration) { // Filter to only declarations in the current scope
-                    unconsideredStatements.push(i);
-                    continue;
-                }
                 if (!isLateVisibilityPaintedStatement(i)) {
-                    return Debug.fail(`Late replaced statement was foudn which is not handled by the declaration transformer!: ${(ts as any).SyntaxKind ? (ts as any).SyntaxKind[(i as any).kind] : (i as any).kind}`);
+                    return Debug.fail(`Late replaced statement was found which is not handled by the declaration transformer!: ${(ts as any).SyntaxKind ? (ts as any).SyntaxKind[(i as any).kind] : (i as any).kind}`);
                 }
-                switch (i.kind) {
-                    case SyntaxKind.ImportEqualsDeclaration: {
-                        const result = transformImportEqualsDeclaration(i);
-                        lateStatementReplacementMap.set("" + getNodeId(i), result);
-                        break;
-                    }
-                    case SyntaxKind.ImportDeclaration: {
-                        const result = transformImportDeclaration(i);
-                        lateStatementReplacementMap.set("" + getNodeId(i), result);
-                        break;
-                    }
-                    case SyntaxKind.VariableStatement: {
-                        const result = transformVariableStatement(i, /*privateDeclaration*/ true); // Transform the statement (potentially again, possibly revealing more sub-nodes)
-                        lateStatementReplacementMap.set("" + getNodeId(i), result);
-                        break;
-                    }
-                    default: Debug.assertNever(i, "Unhandled late painted statement!");
-                }
+                const result = transformTopLevelDeclaration(i, /*privateDeclaration*/ true);
+                lateStatementReplacementMap.set("" + getOriginalNodeId(i), result);
             }
-            // Filtering available imports is the last thing done within a scope, so the possible set becomes those which could not
-            // be considered in the child scope
-            lateMarkedStatements = unconsideredStatements;
 
             // And lastly, we need to get the final form of all those indetermine import declarations from before and add them to the output list
             // (and remove them from the set to examine for outter declarations)
             return visitNodes(statements, visitLateVisibilityMarkedStatements);
-        }
 
-        function visitLateVisibilityMarkedStatements(statement: Statement) {
-            if (isLateVisibilityPaintedStatement(statement)) {
-                const key = "" + getNodeId(statement);
-                if (lateStatementReplacementMap.has(key)) {
-                    const result = lateStatementReplacementMap.get(key);
-                    lateStatementReplacementMap.delete(key);
-                    if (result && isSourceFile(statement.parent) && !isAnyImportOrReExport(result) && !isExportAssignment(result) && !hasModifier(result, ModifierFlags.Export)) {
-                        // Top-level declarations in .d.ts files are always considered exported even without a modifier unless there's an export assignment or specifier
-                        needsScopeFixMarker = true;
+            function visitLateVisibilityMarkedStatements(statement: Statement) {
+                if (isLateVisibilityPaintedStatement(statement)) {
+                    const key = "" + getOriginalNodeId(statement);
+                    if (lateStatementReplacementMap.has(key)) {
+                        const result = lateStatementReplacementMap.get(key);
+                        lateStatementReplacementMap.delete(key);
+                        if (result && isSourceFile(statement.parent)) {
+                            if (isArray(result) ? some(result, needsScopeMarker) : needsScopeMarker(result)) {
+                                // Top-level declarations in .d.ts files are always considered exported even without a modifier unless there's an export assignment or specifier
+                                needsScopeFixMarker = true;
+                            }
+                            if (isArray(result) ? some(result, isExternalModuleIndicator) : isExternalModuleIndicator(result)) {
+                                resultHasExternalModuleIndicator = true;
+                            }
+                        }
+                        return result;
                     }
-                    return result;
                 }
-                else {
-                    return getParseTreeNode(statement) ? undefined : statement;
-                }
-            }
-            else {
                 return statement;
             }
+        }
+
+        function isExternalModuleIndicator(result: LateVisibilityPaintedStatement) {
+            // Exported top-level member indicates moduleness
+            return isAnyImportOrReExport(result) || isExportAssignment(result) || hasModifier(result, ModifierFlags.Export);
+        }
+
+        function needsScopeMarker(result: LateVisibilityPaintedStatement) {
+            return !isAnyImportOrReExport(result) && !isExportAssignment(result) && !hasModifier(result, ModifierFlags.Export) && !isAmbientModule(result);
         }
 
         function visitDeclarationSubtree(input: Node): VisitResult<Node> {
@@ -862,13 +858,22 @@ namespace ts {
                         return [statement, updateExportAssignment(input, input.decorators, input.modifiers, newId)];
                     }
                 }
-                case SyntaxKind.ImportEqualsDeclaration:
+            }
+
+            const result = transformTopLevelDeclaration(input);
+            // Don't actually transform yet; just leave as original node - will be elided/swapped by late pass
+            lateStatementReplacementMap.set("" + getOriginalNodeId(input), result);
+            return input;
+        }
+
+        function transformTopLevelDeclaration(input: LateVisibilityPaintedStatement, isPrivate?: boolean) {
+            if (shouldStripInternal(input)) return;
+            switch (input.kind) {
+                case SyntaxKind.ImportEqualsDeclaration: {
+                    return transformImportEqualsDeclaration(input);
+                }
                 case SyntaxKind.ImportDeclaration: {
-                    // Different parts of the import may be marked visible at different times (via visibility checking), so we defer our first look until later
-                    // to reduce the likelihood we need to rewrite it
-                    lateMarkedStatements = lateMarkedStatements || [];
-                    pushIfUnique(lateMarkedStatements, input);
-                    return input;
+                    return transformImportDeclaration(input);
                 }
             }
             if (isDeclaration(input) && isDeclarationAndNotVisible(input)) return;
@@ -881,21 +886,20 @@ namespace ts {
                 previousEnclosingDeclaration = enclosingDeclaration;
                 enclosingDeclaration = input as Declaration;
             }
-            let previousNeedsDeclare: typeof needsDeclare;
 
             const canProdiceDiagnostic = canProduceDiagnostics(input);
             const oldDiag = getSymbolAccessibilityDiagnostic;
             if (canProdiceDiagnostic) {
                 getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(input as DeclarationDiagnosticProducing);
             }
-            let oldPossibleImports: typeof lateMarkedStatements;
 
+            const previousNeedsDeclare = needsDeclare;
             switch (input.kind) {
                 case SyntaxKind.TypeAliasDeclaration: // Type aliases get `declare`d if need be (for legacy support), but that's all
                     return cleanup(updateTypeAliasDeclaration(
                         input,
                         /*decorators*/ undefined,
-                        ensureModifiers(input),
+                        ensureModifiers(input, isPrivate),
                         input.name,
                         visitNodes(input.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration),
                         visitNode(input.type, visitDeclarationSubtree, isTypeNode)
@@ -904,7 +908,7 @@ namespace ts {
                     return cleanup(updateInterfaceDeclaration(
                         input,
                         /*decorators*/ undefined,
-                        ensureModifiers(input),
+                        ensureModifiers(input, isPrivate),
                         input.name,
                         ensureTypeParams(input, input.typeParameters),
                         transformHeritageClauses(input.heritageClauses),
@@ -916,7 +920,7 @@ namespace ts {
                     return cleanup(updateFunctionDeclaration(
                         input,
                         /*decorators*/ undefined,
-                        ensureModifiers(input),
+                        ensureModifiers(input, isPrivate),
                         /*asteriskToken*/ undefined,
                         input.name,
                         ensureTypeParams(input, input.typeParameters),
@@ -926,16 +930,13 @@ namespace ts {
                     ));
                 }
                 case SyntaxKind.ModuleDeclaration: {
-                    previousNeedsDeclare = needsDeclare;
                     needsDeclare = false;
-                    oldPossibleImports = lateMarkedStatements;
-                    lateMarkedStatements = undefined;
                     const inner = input.body;
                     if (inner && inner.kind === SyntaxKind.ModuleBlock) {
                         const statements = visitNodes(inner.statements, visitDeclarationStatements);
-                        const body = updateModuleBlock(inner, filterCandidateImports(statements));
+                        const body = updateModuleBlock(inner, transformAndReplaceLatePaintedStatements(statements));
                         needsDeclare = previousNeedsDeclare;
-                        const mods = ensureModifiers(input);
+                        const mods = ensureModifiers(input, isPrivate);
                         return cleanup(updateModuleDeclaration(
                             input,
                             /*decorators*/ undefined,
@@ -946,19 +947,24 @@ namespace ts {
                     }
                     else {
                         needsDeclare = previousNeedsDeclare;
-                        const mods = ensureModifiers(input);
+                        const mods = ensureModifiers(input, isPrivate);
                         needsDeclare = false;
+                        visitNode(inner, visitDeclarationStatements);
+                        // eagerly transform nested namespaces (the nesting doesn't need any elision or painting done)
+                        const id = "" + getOriginalNodeId(inner);
+                        const body = lateStatementReplacementMap.get(id);
+                        lateStatementReplacementMap.delete(id);
                         return cleanup(updateModuleDeclaration(
                             input,
                             /*decorators*/ undefined,
                             mods,
                             input.name,
-                            visitNode(inner, visitDeclarationStatements)
+                            body as ModuleBody
                         ));
                     }
                 }
                 case SyntaxKind.ClassDeclaration: {
-                    const modifiers = createNodeArray(ensureModifiers(input));
+                    const modifiers = createNodeArray(ensureModifiers(input, isPrivate));
                     const typeParameters = ensureTypeParams(input, input.typeParameters);
                     const ctor = getFirstConstructorWithBody(input);
                     let parameterProperties: PropertyDeclaration[];
@@ -1051,12 +1057,10 @@ namespace ts {
                     }
                 }
                 case SyntaxKind.VariableStatement: {
-                    const result = transformVariableStatement(input);
-                    lateStatementReplacementMap.set("" + getNodeId(input), result); // Don't actually elide yet; just leave as original node - will be elided/swapped by late pass
-                    return cleanup(input);
+                    return cleanup(transformVariableStatement(input, isPrivate));
                 }
                 case SyntaxKind.EnumDeclaration: {
-                    return cleanup(updateEnumDeclaration(input, /*decorators*/ undefined, createNodeArray(ensureModifiers(input)), input.name, createNodeArray(mapDefined(input.members, m => {
+                    return cleanup(updateEnumDeclaration(input, /*decorators*/ undefined, createNodeArray(ensureModifiers(input, isPrivate)), input.name, createNodeArray(mapDefined(input.members, m => {
                         if (shouldStripInternal(m)) return;
                         // Rewrite enum values to their constants, if available
                         const constValue = resolver.getConstantValue(m);
@@ -1064,31 +1068,23 @@ namespace ts {
                     }))));
                 }
             }
-
             // Anything left unhandled is an error, so this should be unreachable
             return Debug.assertNever(input, `Unhandled top-level node in declaration emit: ${(ts as any).SyntaxKind[(input as any).kind]}`);
 
-            function cleanup<T extends Node>(returnValue: T | undefined): T {
+            function cleanup<T extends Node>(node: T | undefined): T {
                 if (isEnclosingDeclaration(input)) {
                     enclosingDeclaration = previousEnclosingDeclaration;
-                }
-                if (input.kind === SyntaxKind.ModuleDeclaration) {
-                    needsDeclare = previousNeedsDeclare;
-                    lateMarkedStatements = concatenate(oldPossibleImports, lateMarkedStatements);
                 }
                 if (canProdiceDiagnostic) {
                     getSymbolAccessibilityDiagnostic = oldDiag;
                 }
-                if (returnValue && (!isLateVisibilityPaintedStatement(input) || lateStatementReplacementMap.get("" + getNodeId(input)))) {
-                    if (!resultHasExternalModuleIndicator && hasModifier(input, ModifierFlags.Export) && isSourceFile(input.parent)) {
-                        // Exported top-level member indicates moduleness
-                        resultHasExternalModuleIndicator = true;
-                    }
+                if (input.kind === SyntaxKind.ModuleDeclaration) {
+                    needsDeclare = previousNeedsDeclare;
                 }
-                if (returnValue === input) {
-                    return returnValue;
+                if (node as Node === input) {
+                    return node;
                 }
-                return returnValue && setOriginalNode(preserveJsDoc(returnValue, input), input);
+                return node && setOriginalNode(preserveJsDoc(node, input), input);
             }
         }
 
@@ -1171,7 +1167,7 @@ namespace ts {
         }
 
         function ensureAccessor(node: AccessorDeclaration): PropertyDeclaration | undefined {
-            const accessors = getAllAccessorDeclarations((node.parent as ClassDeclaration).members, node);
+            const accessors = resolver.getAllAccessorDeclarations(node);
             if (node.kind !== accessors.firstAccessor.kind) {
                 return;
             }

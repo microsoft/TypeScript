@@ -8,6 +8,7 @@ export class Foo {
 //// [variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.js]
 "use strict";
 exports.__esModule = true;
+var _a;
 var key = Symbol(), value = 12;
 var Foo = /** @class */ (function () {
     function Foo() {
@@ -17,7 +18,6 @@ var Foo = /** @class */ (function () {
 }());
 _a = key;
 exports.Foo = Foo;
-var _a;
 
 
 //// [variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.d.ts]

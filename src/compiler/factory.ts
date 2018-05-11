@@ -93,8 +93,14 @@ namespace ts {
         return node;
     }
 
-    function createStringLiteral(text: string): StringLiteral {
+    export function createStringLiteral(text: string): StringLiteral {
         const node = <StringLiteral>createSynthesizedNode(SyntaxKind.StringLiteral);
+        node.text = text;
+        return node;
+    }
+
+    export function createRegularExpressionLiteral(text: string): RegularExpressionLiteral {
+        const node = <RegularExpressionLiteral>createSynthesizedNode(SyntaxKind.RegularExpressionLiteral);
         node.text = text;
         return node;
     }
@@ -186,9 +192,11 @@ namespace ts {
     }
 
     /** Create a unique name generated for a node. */
-    export function getGeneratedNameForNode(node: Node): Identifier {
-        const name = createIdentifier("");
-        name.autoGenerateFlags = GeneratedIdentifierFlags.Node;
+    export function getGeneratedNameForNode(node: Node): Identifier;
+    /* @internal */ export function getGeneratedNameForNode(node: Node, flags: GeneratedIdentifierFlags): Identifier; // tslint:disable-line unified-signatures
+    export function getGeneratedNameForNode(node: Node, flags?: GeneratedIdentifierFlags): Identifier {
+        const name = createIdentifier(isIdentifier(node) ? idText(node) : "");
+        name.autoGenerateFlags = GeneratedIdentifierFlags.Node | flags;
         name.autoGenerateId = nextAutoGenerateId;
         name.original = node;
         nextAutoGenerateId++;
@@ -1497,6 +1505,13 @@ namespace ts {
         return block;
     }
 
+    /* @internal */
+    export function createExpressionStatement(expression: Expression): ExpressionStatement {
+        const node = <ExpressionStatement>createSynthesizedNode(SyntaxKind.ExpressionStatement);
+        node.expression = expression;
+        return node;
+    }
+
     export function updateBlock(node: Block, statements: ReadonlyArray<Statement>) {
         return node.statements !== statements
             ? updateNode(createBlock(statements, node.multiLine), node)
@@ -1523,9 +1538,7 @@ namespace ts {
     }
 
     export function createStatement(expression: Expression) {
-        const node = <ExpressionStatement>createSynthesizedNode(SyntaxKind.ExpressionStatement);
-        node.expression = parenthesizeExpressionForExpressionStatement(expression);
-        return node;
+        return createExpressionStatement(parenthesizeExpressionForExpressionStatement(expression));
     }
 
     export function updateStatement(node: ExpressionStatement, expression: Expression) {
@@ -2562,15 +2575,29 @@ namespace ts {
             : node;
     }
 
-    export function createBundle(sourceFiles: ReadonlyArray<SourceFile>) {
+    export function createBundle(sourceFiles: ReadonlyArray<SourceFile>, prepends: ReadonlyArray<UnparsedSource | InputFiles> = emptyArray) {
         const node = <Bundle>createNode(SyntaxKind.Bundle);
+        node.prepends = prepends;
         node.sourceFiles = sourceFiles;
         return node;
     }
 
-    export function updateBundle(node: Bundle, sourceFiles: ReadonlyArray<SourceFile>) {
-        if (node.sourceFiles !== sourceFiles) {
-            return createBundle(sourceFiles);
+    export function createUnparsedSourceFile(text: string): UnparsedSource {
+        const node = <UnparsedSource>createNode(SyntaxKind.UnparsedSource);
+        node.text = text;
+        return node;
+    }
+
+    export function createInputFiles(javascript: string, declaration: string): InputFiles {
+        const node = <InputFiles>createNode(SyntaxKind.InputFiles);
+        node.javascriptText = javascript;
+        node.declarationText = declaration;
+        return node;
+    }
+
+    export function updateBundle(node: Bundle, sourceFiles: ReadonlyArray<SourceFile>, prepends: ReadonlyArray<UnparsedSource> = emptyArray) {
+        if (node.sourceFiles !== sourceFiles || node.prepends !== prepends) {
+            return createBundle(sourceFiles, prepends);
         }
         return node;
     }
@@ -4226,6 +4253,7 @@ namespace ts {
         switch (member.kind) {
             case SyntaxKind.TypeQuery:
             case SyntaxKind.TypeOperator:
+            case SyntaxKind.InferType:
                 return createParenthesizedType(member);
         }
         return parenthesizeElementTypeMember(member);

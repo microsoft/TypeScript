@@ -4,10 +4,10 @@ class C {
 }
 
 //// [parserComputedPropertyName10.js]
+var _a;
 class C {
     constructor() {
         this[_a] = 1;
     }
 }
 _a = e;
-var _a;

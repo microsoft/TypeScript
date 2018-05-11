@@ -48,6 +48,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
 };
 async function f1() {
+    var e_1, _a;
     let y;
     try {
         for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = await y_1.next(), !y_1_1.done;) {
@@ -61,7 +62,6 @@ async function f1() {
         }
         finally { if (e_1) throw e_1.error; }
     }
-    var e_1, _a;
 }
 //// [file2.js]
 var __asyncValues = (this && this.__asyncValues) || function (o) {
@@ -70,6 +70,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
 };
 async function f2() {
+    var e_1, _a;
     let x, y;
     try {
         for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = await y_1.next(), !y_1_1.done;) {
@@ -83,7 +84,6 @@ async function f2() {
         }
         finally { if (e_1) throw e_1.error; }
     }
-    var e_1, _a;
 }
 //// [file3.js]
 var __asyncValues = (this && this.__asyncValues) || function (o) {
@@ -105,10 +105,11 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 };
 function f3() {
     return __asyncGenerator(this, arguments, function* f3_1() {
+        var e_1, _a;
         let y;
         try {
             for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), !y_1_1.done;) {
-                const x = yield __await(y_1_1.value);
+                const x = yield yield __await(__await(y_1_1.value));
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -118,7 +119,6 @@ function f3() {
             }
             finally { if (e_1) throw e_1.error; }
         }
-        var e_1, _a;
     });
 }
 //// [file4.js]
@@ -141,10 +141,11 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 };
 function f4() {
     return __asyncGenerator(this, arguments, function* f4_1() {
+        var e_1, _a;
         let x, y;
         try {
             for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), !y_1_1.done;) {
-                x = yield __await(y_1_1.value);
+                x = yield yield __await(__await(y_1_1.value));
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -154,7 +155,6 @@ function f4() {
             }
             finally { if (e_1) throw e_1.error; }
         }
-        var e_1, _a;
     });
 }
 //// [file5.js]
@@ -165,6 +165,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
 };
 // https://github.com/Microsoft/TypeScript/issues/21363
 async function f5() {
+    var e_1, _a;
     let y;
     try {
         outer: for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = await y_1.next(), !y_1_1.done;) {
@@ -179,7 +180,6 @@ async function f5() {
         }
         finally { if (e_1) throw e_1.error; }
     }
-    var e_1, _a;
 }
 //// [file6.js]
 var __asyncValues = (this && this.__asyncValues) || function (o) {
@@ -202,10 +202,11 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 // https://github.com/Microsoft/TypeScript/issues/21363
 function f6() {
     return __asyncGenerator(this, arguments, function* f6_1() {
+        var e_1, _a;
         let y;
         try {
             outer: for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), !y_1_1.done;) {
-                const x = yield __await(y_1_1.value);
+                const x = yield yield __await(__await(y_1_1.value));
                 continue outer;
             }
         }
@@ -216,6 +217,5 @@ function f6() {
             }
             finally { if (e_1) throw e_1.error; }
         }
-        var e_1, _a;
     });
 }

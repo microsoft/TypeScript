@@ -6,6 +6,7 @@ namespace ts.server {
     export const ConfigFileDiagEvent = "configFileDiag";
     export const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
     export const ProjectInfoTelemetryEvent = "projectInfo";
+    export const OpenFileInfoTelemetryEvent = "openFileInfo";
     // tslint:enable variable-name
 
     export interface ProjectsUpdatedInBackgroundEvent {
@@ -55,6 +56,20 @@ namespace ts.server {
         readonly version: string;
     }
 
+    /**
+     * Info that we may send about a file that was just opened.
+     * Info about a file will only be sent once per session, even if the file changes in ways that might affect the info.
+     * Currently this is only sent for '.js' files.
+     */
+    export interface OpenFileInfoTelemetryEvent {
+        readonly eventName: typeof OpenFileInfoTelemetryEvent;
+        readonly data: OpenFileInfoTelemetryEventData;
+    }
+
+    export interface OpenFileInfoTelemetryEventData {
+        readonly info: OpenFileInfo;
+    }
+
     export interface ProjectInfoTypeAcquisitionData {
         readonly enable: boolean;
         // Actual values of include/exclude entries are scrubbed.
@@ -70,7 +85,11 @@ namespace ts.server {
         readonly dts: number;
     }
 
-    export type ProjectServiceEvent = ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent;
+    export interface OpenFileInfo {
+        readonly checkJs: boolean;
+    }
+
+    export type ProjectServiceEvent = ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
 
     export type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
 
@@ -325,6 +344,9 @@ namespace ts.server {
          * Container of all known scripts
          */
         private readonly filenameToScriptInfo = createMap<ScriptInfo>();
+        // Set of all '.js' files ever opened.
+        private readonly allJsFilesForOpenFileTelemetry = createMap<true>();
+
         /**
          * Map to the real path of the infos
          */
@@ -577,7 +599,8 @@ namespace ts.server {
             return this.pendingProjectUpdates.has(project.getProjectName());
         }
 
-        private sendProjectsUpdatedInBackgroundEvent() {
+        /* @internal */
+        sendProjectsUpdatedInBackgroundEvent() {
             if (!this.eventHandler) {
                 return;
             }
@@ -1330,7 +1353,8 @@ namespace ts.server {
                 configHasExcludeProperty: parsedCommandLine.raw.exclude !== undefined,
                 wildcardDirectories: createMapFromTemplate(parsedCommandLine.wildcardDirectories),
                 typeAcquisition: parsedCommandLine.typeAcquisition,
-                compileOnSave: parsedCommandLine.compileOnSave
+                compileOnSave: parsedCommandLine.compileOnSave,
+                projectReferences: parsedCommandLine.projectReferences
             };
 
             return { projectOptions, configFileErrors: errors, configFileSpecs: parsedCommandLine.configFileSpecs };
@@ -1463,7 +1487,8 @@ namespace ts.server {
                 projectOptions.compilerOptions,
                 lastFileExceededProgramSize,
                 projectOptions.compileOnSave === undefined ? false : projectOptions.compileOnSave,
-                cachedDirectoryStructureHost);
+                cachedDirectoryStructureHost,
+                projectOptions.projectReferences);
 
             project.configFileSpecs = configFileSpecs;
             // TODO: We probably should also watch the configFiles that are extended
@@ -1588,6 +1613,7 @@ namespace ts.server {
             // Update the project
             project.configFileSpecs = configFileSpecs;
             project.setProjectErrors(configFileErrors);
+            project.updateReferences(projectOptions.projectReferences);
             const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(project.canonicalConfigFilePath, projectOptions.compilerOptions, projectOptions.files, fileNamePropertyReader);
             if (lastFileExceededProgramSize) {
                 project.disableLanguageService(lastFileExceededProgramSize);
@@ -2091,7 +2117,17 @@ namespace ts.server {
 
             this.printProjects();
 
+            this.telemetryOnOpenFile(info);
             return { configFileName, configFileErrors };
+        }
+
+        private telemetryOnOpenFile(scriptInfo: ScriptInfo): void {
+            if (!this.eventHandler || !scriptInfo.isJavaScript() || !addToSeen(this.allJsFilesForOpenFileTelemetry, scriptInfo.path)) {
+                return;
+            }
+
+            const info: OpenFileInfo = { checkJs: !!scriptInfo.getDefaultProject().getSourceFile(scriptInfo.path).checkJsDirective };
+            this.eventHandler({ eventName: OpenFileInfoTelemetryEvent, data: { info } });
         }
 
         /**

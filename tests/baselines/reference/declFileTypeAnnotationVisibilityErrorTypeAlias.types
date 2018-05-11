@@ -10,7 +10,7 @@ module M {
 >M : typeof M
 
     type W = Window | string;
->W : string | Window
+>W : W
 >Window : Window
 
     export module N {
@@ -20,8 +20,8 @@ module M {
 >Window : Window
 
         export var p: W; // Should report error that W is private
->p : string | Window
->W : string | Window
+>p : W
+>W : W
     }
 }
 

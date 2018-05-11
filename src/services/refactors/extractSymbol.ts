@@ -8,7 +8,7 @@ namespace ts.refactor.extractSymbol {
      * Exported for tests.
      */
     export function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
-        const rangeToExtract = getRangeToExtract(context.file, { start: context.startPosition, length: getRefactorContextLength(context) });
+        const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context));
 
         const targetRange: TargetRange = rangeToExtract.targetRange;
         if (targetRange === undefined) {
@@ -87,7 +87,7 @@ namespace ts.refactor.extractSymbol {
 
     /* Exported for tests */
     export function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
-        const rangeToExtract = getRangeToExtract(context.file, { start: context.startPosition, length: getRefactorContextLength(context) });
+        const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context));
         const targetRange: TargetRange = rangeToExtract.targetRange;
 
         const parsedFunctionIndexMatch = /^function_scope_(\d+)$/.exec(actionName);

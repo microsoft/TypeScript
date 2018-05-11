@@ -24,6 +24,7 @@ exports.__esModule = true;
 var IGNORE_EXTRA_VARIABLES = Symbol(); //Notice how this is unexported
 //This is exported
 function ignoreExtraVariables(ctor) {
+    var _a, _b;
     return _b = /** @class */ (function (_super) {
             __extends(class_1, _super);
             function class_1() {
@@ -35,7 +36,6 @@ function ignoreExtraVariables(ctor) {
         }(ctor)),
         _a = IGNORE_EXTRA_VARIABLES,
         _b;
-    var _a, _b;
 }
 exports.ignoreExtraVariables = ignoreExtraVariables;
 

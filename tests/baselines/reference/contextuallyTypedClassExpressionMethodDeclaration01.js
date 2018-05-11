@@ -60,6 +60,7 @@ function getFoo1() {
     }());
 }
 function getFoo2() {
+    var _a;
     return _a = /** @class */ (function () {
             function class_2() {
             }
@@ -72,9 +73,9 @@ function getFoo2() {
             arg.strProp = "hello";
         },
         _a;
-    var _a;
 }
 function getFoo3() {
+    var _a;
     return _a = /** @class */ (function () {
             function class_3() {
             }
@@ -87,5 +88,4 @@ function getFoo3() {
             arg.strProp = "hello";
         },
         _a;
-    var _a;
 }

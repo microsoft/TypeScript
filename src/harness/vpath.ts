@@ -18,7 +18,7 @@ namespace vpath {
     export import dirname = ts.getDirectoryPath;
     export import basename = ts.getBaseFileName;
     export import extname = ts.getAnyExtensionFromPath;
-    export import relative = ts.getRelativePath;
+    export import relative = ts.getRelativePathFromDirectory;
     export import beneath = ts.containsPath;
     export import changeExtension = ts.changeAnyExtension;
     export import isTypeScript = ts.hasTypeScriptFileExtension;
@@ -123,5 +123,9 @@ namespace vpath {
     export function isDefaultLibrary(path: string) {
         return isDeclaration(path)
             && basename(path).startsWith("lib.");
+    }
+
+    export function isTsConfigFile(path: string): boolean {
+        return path.indexOf("tsconfig") !== -1 && path.indexOf("json") !== -1;
     }
 }

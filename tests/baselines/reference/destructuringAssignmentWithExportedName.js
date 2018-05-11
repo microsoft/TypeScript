@@ -26,6 +26,7 @@ export { nonexportedFoo };
 export { exportedFoo as foo, nonexportedFoo as nfoo };
 
 //// [destructuringAssignmentWithExportedName.js]
+var _a, _b, _c, _d, _e;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = exports.exportedFoo;
@@ -50,4 +51,3 @@ else if (null) {
 else {
     (_e = null[0], exports.foo = exports.exportedFoo = _e[0], exports.nfoo = exports.nonexportedFoo = nonexportedFoo = _e[1]);
 }
-var _a, _b, _c, _d, _e;

@@ -7,8 +7,11 @@ namespace ts.server {
     }
 
     /* @internal */
+    export type Mutable<T> = { -readonly [K in keyof T]: T[K]; };
+
+    /* @internal */
     export function countEachFileTypes(infos: ScriptInfo[]): FileStats {
-        const result = { js: 0, jsx: 0, ts: 0, tsx: 0, dts: 0 };
+        const result: Mutable<FileStats> = { js: 0, jsx: 0, ts: 0, tsx: 0, dts: 0 };
         for (const info of infos) {
             switch (info.scriptKind) {
                 case ScriptKind.JS:
@@ -164,7 +167,7 @@ namespace ts.server {
             return hasOneOrMoreJsAndNoTsFiles(this);
         }
 
-        public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} {
+        public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} | undefined {
             const resolvedPath = normalizeSlashes(host.resolvePath(combinePaths(initialDir, "node_modules")));
             log(`Loading ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
             const result = host.require(resolvedPath, moduleName);
@@ -263,6 +266,10 @@ namespace ts.server {
 
         getProjectVersion() {
             return this.projectStateVersion.toString();
+        }
+
+        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined {
+            return undefined;
         }
 
         getScriptFileNames() {
@@ -1102,6 +1109,11 @@ namespace ts.server {
             }
         }
 
+        /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
+        refreshDiagnostics() {
+            this.projectService.sendProjectsUpdatedInBackgroundEvent();
+        }
+
         private enableProxy(pluginModuleFactory: PluginModuleFactory, configEntry: PluginImport) {
             try {
                 if (typeof pluginModuleFactory !== "function") {
@@ -1283,7 +1295,8 @@ namespace ts.server {
             compilerOptions: CompilerOptions,
             lastFileExceededProgramSize: string | undefined,
             public compileOnSaveEnabled: boolean,
-            cachedDirectoryStructureHost: CachedDirectoryStructureHost) {
+            cachedDirectoryStructureHost: CachedDirectoryStructureHost,
+            private projectReferences: ReadonlyArray<ProjectReference> | undefined) {
             super(configFileName,
                 ProjectKind.Configured,
                 projectService,
@@ -1323,6 +1336,14 @@ namespace ts.server {
 
         getConfigFilePath() {
             return asNormalizedPath(this.getProjectName());
+        }
+
+        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined {
+            return this.projectReferences;
+        }
+
+        updateReferences(refs: ReadonlyArray<ProjectReference> | undefined) {
+            this.projectReferences = refs;
         }
 
         enablePlugins() {
