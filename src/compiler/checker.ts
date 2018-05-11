@@ -892,6 +892,7 @@ namespace ts {
         function mergeSymbol(target: Symbol, source: Symbol) {
             if (!(target.flags & getExcludedSymbolFlags(source.flags)) ||
                 (source.flags | target.flags) & SymbolFlags.JSContainer) {
+                Debug.assert(!!(target.flags & SymbolFlags.Transient));
                 // Javascript static-property-assignment declarations always merge, even though they are also values
                 if (source.flags & SymbolFlags.ValueModule && target.flags & SymbolFlags.ValueModule && target.constEnumOnlyModule && !source.constEnumOnlyModule) {
                     // reset flag when merging instantiated module into value module that has only const enums
@@ -915,8 +916,12 @@ namespace ts {
                 }
                 if ((source.flags | target.flags) & SymbolFlags.JSContainer) {
                     const sourceInitializer = getJSInitializerSymbol(source);
-                    const targetInitializer = getJSInitializerSymbol(target);
+                    let targetInitializer = getJSInitializerSymbol(target);
                     if (sourceInitializer !== source || targetInitializer !== target) {
+                        if (!(targetInitializer.flags & SymbolFlags.Transient)) {
+                            const mergedInitializer = getMergedSymbol(targetInitializer);
+                            targetInitializer = mergedInitializer === targetInitializer ? cloneSymbol(targetInitializer) : mergedInitializer;
+                        }
                         mergeSymbol(targetInitializer, sourceInitializer);
                     }
                 }
@@ -19452,7 +19457,7 @@ namespace ts {
             }
 
             const links = getNodeLinks(node);
-            const type = getTypeOfSymbol(node.symbol);
+            const type = getTypeOfSymbol(getMergedSymbol(node.symbol));
             if (isTypeAny(type)) {
                 return type;
             }
