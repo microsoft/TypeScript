@@ -252,9 +252,9 @@ function foo11(x: number | string | boolean) {
             y = x && x.toString() // number | boolean | string
 >y : Symbol(y, Decl(typeGuardsInIfStatement.ts, 114, 11))
 >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 107, 15))
->x.toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>x.toString : Symbol(Boolean.toString, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 107, 15))
->toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Boolean.toString, Decl(lib.d.ts, --, --))
 
             );
     }

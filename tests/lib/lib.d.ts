@@ -456,6 +456,9 @@ interface StringConstructor {
 declare var String: StringConstructor;
 
 interface Boolean {
+    /** Returns a string representation of a boolean. */
+    toString(): string;
+
     /** Returns the primitive value of the specified object. */
     valueOf(): boolean;
 }
@@ -470,7 +473,7 @@ declare var Boolean: BooleanConstructor;
 
 interface Number {
     /**
-      * Returns a string representation of an object.
+      * Returns a string representation of a number.
       * @param radix Specifies a radix for converting numeric values to strings. This value is only used for numbers.
       */
     toString(radix?: number): string;
