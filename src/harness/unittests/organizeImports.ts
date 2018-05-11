@@ -23,6 +23,15 @@ namespace ts {
                     `import x from "./lib";`);
             });
 
+            it("Sort - case-insensitive", () => {
+                assertSortsBefore(
+                    `import y from "a";`,
+                    `import x from "Z";`);
+                assertSortsBefore(
+                    `import y from "A";`,
+                    `import x from "z";`);
+            });
+
             function assertSortsBefore(importString1: string, importString2: string) {
                 const [{moduleSpecifier: moduleSpecifier1}, {moduleSpecifier: moduleSpecifier2}] = parseImports(importString1, importString2);
                 assert.equal(OrganizeImports.compareModuleSpecifiers(moduleSpecifier1, moduleSpecifier2), Comparison.LessThan);
@@ -39,6 +48,13 @@ namespace ts {
                 const sortedImports = parseImports(`import { default as m, a as n, b, y, z as o } from "lib";`);
                 const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = parseImports(`import { a as n, b, default as m, y, z as o } from "lib";`);
+                assertListEqual(actualCoalescedImports, expectedCoalescedImports);
+            });
+
+            it("Sort specifiers - case-insensitive", () => {
+                const sortedImports = parseImports(`import { default as M, a as n, B, y, Z as O } from "lib";`);
+                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+                const expectedCoalescedImports = parseImports(`import { a as n, B, default as M, y, Z as O } from "lib";`);
                 assertListEqual(actualCoalescedImports, expectedCoalescedImports);
             });
 
