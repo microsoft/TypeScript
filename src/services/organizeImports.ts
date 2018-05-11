@@ -198,7 +198,9 @@ namespace ts.OrganizeImports {
             : namedImports[0];
 
         const newNamedImports = sortedImportSpecifiers.length === 0
-            ? undefined
+            ? newDefaultImport
+                ? undefined
+                : createNamedImports(emptyArray)
             : namedImports.length === 0
                 ? createNamedImports(sortedImportSpecifiers)
                 : updateNamedImports(namedImports[0].importClause.namedBindings as NamedImports, sortedImportSpecifiers);

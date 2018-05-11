@@ -247,6 +247,15 @@ import D from "lib";
                 },
                 libFile);
 
+            testOrganizeImports("Unused_Empty",
+                {
+                    path: "/test.ts",
+                    content: `
+import { } from "lib";
+`,
+                },
+                libFile);
+
             testOrganizeImports("Unused_false_positive_shorthand_assignment",
             {
                     path: "/test.ts",
