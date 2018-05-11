@@ -1735,7 +1735,7 @@ namespace ts {
                 const host = getJSDocHost(typeAlias);
                 container = findAncestor(host.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer)) || file;
                 blockScopeContainer = getEnclosingBlockScopeContainer(host) || file;
-                currentFlow = { flags: FlowFlags.Start }
+                currentFlow = { flags: FlowFlags.Start };
                 parent = typeAlias;
                 bind(typeAlias.typeExpression);
                 if (!typeAlias.fullName || typeAlias.fullName.kind === SyntaxKind.Identifier) {
