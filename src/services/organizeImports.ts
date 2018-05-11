@@ -256,7 +256,7 @@ namespace ts.OrganizeImports {
         }
 
         function compareIdentifiers(s1: Identifier, s2: Identifier) {
-            return compareStringsCaseSensitive(s1.text, s2.text);
+            return compareStringsCaseInsensitive(s1.text, s2.text);
         }
     }
 
@@ -279,6 +279,6 @@ namespace ts.OrganizeImports {
         const name2 = getExternalModuleName(m2);
         return compareBooleans(name1 === undefined, name2 === undefined) ||
             compareBooleans(isExternalModuleNameRelative(name1), isExternalModuleNameRelative(name2)) ||
-            compareStringsCaseSensitive(name1, name2);
+            compareStringsCaseInsensitive(name1, name2);
     }
 }
