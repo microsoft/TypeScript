@@ -17501,8 +17501,20 @@ namespace ts {
                 return false;
             }
 
+            let optionParametersCount = 0;
+            if (!signature.hasRestParameter) {
+                const len = signature.parameters.length;
+                for (let i = len - 1; i >= 0; i--) {
+                    const type = getTypeAtPosition(signature, i);
+                    if (type.flags !== TypeFlags.Void) {
+                        break;
+                    }
+                    optionParametersCount++;
+                }
+            }
+
             // If the call is incomplete, we should skip the lower bound check.
-            const hasEnoughArguments = argCount >= signature.minArgumentCount;
+            const hasEnoughArguments = argCount >= (signature.minArgumentCount - optionParametersCount);
             return callIsIncomplete || hasEnoughArguments;
         }
 
