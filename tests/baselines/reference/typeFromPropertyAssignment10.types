@@ -1,28 +1,28 @@
 === tests/cases/conformance/salsa/module.js ===
 var Outer = Outer || {};
->Outer : typeof __object
->Outer || {} : typeof __object
->Outer : typeof __object
->{} : typeof __object
+>Outer : { [x: string]: any; app: { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }; }
+>Outer || {} : { [x: string]: any; app: { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }; }
+>Outer : { [x: string]: any; app: { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }; }
+>{} : { [x: string]: any; app: { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }; }
 
 Outer.app = Outer.app || {};
->Outer.app = Outer.app || {} : typeof __object
->Outer.app : typeof __object
->Outer : typeof __object
->app : typeof __object
->Outer.app || {} : typeof __object
->Outer.app : typeof __object
->Outer : typeof __object
->app : typeof __object
->{} : typeof __object
+>Outer.app = Outer.app || {} : { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }
+>Outer.app : { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }
+>Outer : { [x: string]: any; app: { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }; }
+>app : { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }
+>Outer.app || {} : { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }
+>Outer.app : { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }
+>Outer : { [x: string]: any; app: { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }; }
+>app : { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }
+>{} : { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }
 
 === tests/cases/conformance/salsa/someview.js ===
 Outer.app.SomeView = (function () {
 >Outer.app.SomeView = (function () {    var SomeView = function() {        var me = this;    }    return SomeView;})() : () => void
 >Outer.app.SomeView : () => void
->Outer.app : typeof __object
->Outer : typeof __object
->app : typeof __object
+>Outer.app : { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }
+>Outer : { [x: string]: any; app: { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }; }
+>app : { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }
 >SomeView : () => void
 >(function () {    var SomeView = function() {        var me = this;    }    return SomeView;})() : () => void
 >(function () {    var SomeView = function() {        var me = this;    }    return SomeView;}) : () => () => void
@@ -43,9 +43,9 @@ Outer.app.SomeView = (function () {
 Outer.app.Inner = class {
 >Outer.app.Inner = class {    constructor() {        /** @type {number} */        this.y = 12;    }} : typeof Inner
 >Outer.app.Inner : typeof Inner
->Outer.app : typeof __object
->Outer : typeof __object
->app : typeof __object
+>Outer.app : { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }
+>Outer : { [x: string]: any; app: { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }; }
+>app : { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }
 >Inner : typeof Inner
 >class {    constructor() {        /** @type {number} */        this.y = 12;    }} : typeof Inner
 
@@ -63,9 +63,9 @@ var example = new Outer.app.Inner();
 >example : Inner
 >new Outer.app.Inner() : Inner
 >Outer.app.Inner : typeof Inner
->Outer.app : typeof __object
->Outer : typeof __object
->app : typeof __object
+>Outer.app : { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }
+>Outer : { [x: string]: any; app: { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }; }
+>app : { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }
 >Inner : typeof Inner
 
 example.y;
@@ -77,9 +77,9 @@ example.y;
 Outer.app.statische = function (k) {
 >Outer.app.statische = function (k) {    return k ** k;} : (k: number) => number
 >Outer.app.statische : (k: number) => number
->Outer.app : typeof __object
->Outer : typeof __object
->app : typeof __object
+>Outer.app : { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }
+>Outer : { [x: string]: any; app: { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }; }
+>app : { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }
 >statische : (k: number) => number
 >function (k) {    return k ** k;} : (k: number) => number
 >k : number
@@ -93,9 +93,9 @@ Outer.app.statische = function (k) {
 Outer.app.Application = (function () {
 >Outer.app.Application = (function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;})() : () => void
 >Outer.app.Application : () => void
->Outer.app : typeof __object
->Outer : typeof __object
->app : typeof __object
+>Outer.app : { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }
+>Outer : { [x: string]: any; app: { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }; }
+>app : { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }
 >Application : () => void
 >(function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;})() : () => void
 >(function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;}) : () => () => void
@@ -120,9 +120,9 @@ Outer.app.Application = (function () {
 >view : any
 >new Outer.app.SomeView() : any
 >Outer.app.SomeView : () => void
->Outer.app : typeof __object
->Outer : typeof __object
->app : typeof __object
+>Outer.app : { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }
+>Outer : { [x: string]: any; app: { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }; }
+>app : { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }
 >SomeView : () => void
 
     };
@@ -135,18 +135,18 @@ var app = new Outer.app.Application();
 >app : any
 >new Outer.app.Application() : any
 >Outer.app.Application : () => void
->Outer.app : typeof __object
->Outer : typeof __object
->app : typeof __object
+>Outer.app : { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }
+>Outer : { [x: string]: any; app: { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }; }
+>app : { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }
 >Application : () => void
 
 var inner = new Outer.app.Inner();
 >inner : Inner
 >new Outer.app.Inner() : Inner
 >Outer.app.Inner : typeof Inner
->Outer.app : typeof __object
->Outer : typeof __object
->app : typeof __object
+>Outer.app : { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }
+>Outer : { [x: string]: any; app: { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }; }
+>app : { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }
 >Inner : typeof Inner
 
 inner.y;
@@ -166,9 +166,9 @@ x.y;
 Outer.app.statische(101); // Infinity, duh
 >Outer.app.statische(101) : number
 >Outer.app.statische : (k: number) => number
->Outer.app : typeof __object
->Outer : typeof __object
->app : typeof __object
+>Outer.app : { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }
+>Outer : { [x: string]: any; app: { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }; }
+>app : { [x: string]: any; SomeView: () => void; Inner: typeof Inner; statische(k: number): number; Application: () => void; }
 >statische : (k: number) => number
 >101 : 101
 

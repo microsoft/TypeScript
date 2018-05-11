@@ -1,13 +1,13 @@
 === tests/cases/conformance/salsa/def.js ===
 var Outer = {};
->Outer : typeof Outer
->{} : typeof Outer
+>Outer : { [x: string]: any; Inner: typeof Inner; }
+>{} : { [x: string]: any; Inner: typeof Inner; }
 
 === tests/cases/conformance/salsa/a.js ===
 Outer.Inner = class {
 >Outer.Inner = class {    constructor() {        /** @type {number} */        this.y = 12    }} : typeof Inner
 >Outer.Inner : typeof Inner
->Outer : typeof Outer
+>Outer : { [x: string]: any; Inner: typeof Inner; }
 >Inner : typeof Inner
 >class {    constructor() {        /** @type {number} */        this.y = 12    }} : typeof Inner
 
@@ -35,7 +35,7 @@ var inner = new Outer.Inner()
 >inner : Inner
 >new Outer.Inner() : Inner
 >Outer.Inner : typeof Inner
->Outer : typeof Outer
+>Outer : { [x: string]: any; Inner: typeof Inner; }
 >Inner : typeof Inner
 
 inner.y
@@ -57,7 +57,7 @@ var z = new Outer.Inner()
 >z : Inner
 >new Outer.Inner() : Inner
 >Outer.Inner : typeof Inner
->Outer : typeof Outer
+>Outer : { [x: string]: any; Inner: typeof Inner; }
 >Inner : typeof Inner
 
 z.y

@@ -5,7 +5,9 @@ index.js(138,21): error TS2532: Object is possibly 'undefined'.
 src/cli/util.js(262,64): error TS2339: Property 'length' does not exist on type 'Ignore'.
 src/cli/util.js(335,52): error TS2339: Property 'length' does not exist on type 'Ignore'.
 src/cli/util.js(396,46): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number | undefined'.
-src/cli/util.js(403,39): error TS2339: Property 'grey' does not exist on type 'typeof import("/home/nathansa/ts/node_modules/chalk/types/index")'.
+src/cli/util.js(403,39): error TS2339: Property 'grey' does not exist on type 'typeof import("E:/Github/TypeScript/node_modules/chalk/types/index")'.
+src/common/errors.js(3,7): error TS2300: Duplicate identifier 'ConfigError'.
+src/common/errors.js(7,3): error TS2300: Duplicate identifier 'ConfigError'.
 src/common/parser-create-error.js(8,9): error TS2339: Property 'loc' does not exist on type 'SyntaxError'.
 src/config/resolve-config.js(75,32): error TS2345: Argument of type '{ sync: false; }' is not assignable to parameter of type '{ cache: boolean; sync: boolean; }'.
   Property 'cache' is missing in type '{ sync: false; }'.

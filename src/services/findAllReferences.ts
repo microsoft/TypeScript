@@ -236,7 +236,7 @@ namespace ts.FindAllReferences.Core {
     export function getReferencedSymbolsForNode(position: number, node: Node, program: Program, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken, options: Options = {}, sourceFilesSet: ReadonlyMap<true> = arrayToSet(sourceFiles, f => f.fileName)): SymbolAndEntries[] | undefined {
         if (isSourceFile(node)) {
             const reference = GoToDefinition.getReferenceAtPosition(node, position, program);
-            return reference && getReferencedSymbolsForModule(program, program.getTypeChecker().getMergedSymbol(reference.file.symbol), sourceFiles, sourceFilesSet);
+            return reference && getReferencedSymbolsForModule(program, program.getTypeChecker().getMergedSymbol(reference.file.symbol), /*excludeImportTypeOfExportEquals*/ false, sourceFiles, sourceFilesSet);
         }
 
         if (!options.implementations) {
@@ -247,7 +247,7 @@ namespace ts.FindAllReferences.Core {
         }
 
         const checker = program.getTypeChecker();
-        const symbol = checker.getSymbolAtLocation(node);
+        let symbol = checker.getSymbolAtLocation(node);
 
         // Could not find a symbol e.g. unknown identifier
         if (!symbol) {
@@ -255,37 +255,37 @@ namespace ts.FindAllReferences.Core {
             return !options.implementations && isStringLiteral(node) ? getReferencesForStringLiteral(node, sourceFiles, cancellationToken) : undefined;
         }
 
-        if (symbol.flags & SymbolFlags.Module && isModuleReferenceLocation(node)) {
-            return getReferencedSymbolsForModule(program, symbol, sourceFiles, sourceFilesSet);
+        let moduleReferences: SymbolAndEntries[] = emptyArray;
+        const moduleSourceFile = isModuleSymbol(symbol);
+        if (moduleSourceFile) {
+            const exportEquals = symbol.exports.get(InternalSymbolName.ExportEquals);
+            // If !!exportEquals, we're about to add references to `import("mod")` anyway, so don't double-count them.
+            moduleReferences = getReferencedSymbolsForModule(program, symbol, !!exportEquals, sourceFiles, sourceFilesSet);
+            if (!exportEquals || !sourceFilesSet.has(moduleSourceFile.fileName)) return moduleReferences;
+            // Continue to get references to 'export ='.
+            symbol = skipAlias(exportEquals, checker);
+            node = undefined;
         }
-
-        return getReferencedSymbolsForSymbol(symbol, node, sourceFiles, sourceFilesSet, checker, cancellationToken, options);
+        return concatenate(moduleReferences, getReferencedSymbolsForSymbol(symbol, node, sourceFiles, sourceFilesSet, checker, cancellationToken, options));
     }
 
-    function isModuleReferenceLocation(node: Node): boolean {
-        if (!isStringLiteralLike(node)) {
-            return false;
-        }
-        switch (node.parent.kind) {
-            case SyntaxKind.ModuleDeclaration:
-            case SyntaxKind.ExternalModuleReference:
-            case SyntaxKind.ImportDeclaration:
-            case SyntaxKind.ExportDeclaration:
-                return true;
-            case SyntaxKind.LiteralType:
-                return isImportTypeNode(node.parent.parent);
-            case SyntaxKind.CallExpression:
-                return isRequireCall(node.parent as CallExpression, /*checkArgumentIsStringLiteralLike*/ false) || isImportCall(node.parent as CallExpression);
-            default:
-                return false;
-        }
+    function isModuleSymbol(symbol: Symbol): SourceFile | undefined {
+        return symbol.flags & SymbolFlags.Module && find(symbol.declarations, isSourceFile);
     }
 
-    function getReferencedSymbolsForModule(program: Program, symbol: Symbol, sourceFiles: ReadonlyArray<SourceFile>, sourceFilesSet: ReadonlyMap<true>): SymbolAndEntries[] {
+    function getReferencedSymbolsForModule(program: Program, symbol: Symbol, excludeImportTypeOfExportEquals: boolean, sourceFiles: ReadonlyArray<SourceFile>, sourceFilesSet: ReadonlyMap<true>): SymbolAndEntries[] {
         Debug.assert(!!symbol.valueDeclaration);
 
-        const references = findModuleReferences(program, sourceFiles, symbol).map<Entry>(reference => {
+        const references = mapDefined<ModuleReference, Entry>(findModuleReferences(program, sourceFiles, symbol), reference => {
             if (reference.kind === "import") {
+                const parent = reference.literal.parent;
+                if (isLiteralTypeNode(parent)) {
+                    const importType = cast(parent.parent, isImportTypeNode);
+                    if (excludeImportTypeOfExportEquals && !importType.qualifier) {
+                        return undefined;
+                    }
+                }
+                // import("foo") with no qualifier will reference the `export =` of the module, which may be referenced anyway.
                 return { type: "node", node: reference.literal };
             }
             else {
@@ -308,11 +308,12 @@ namespace ts.FindAllReferences.Core {
                     }
                     break;
                 default:
+                    // This may be merged with something.
                     Debug.fail("Expected a module symbol to be declared by a SourceFile or ModuleDeclaration.");
             }
         }
 
-        return [{ definition: { type: "symbol", symbol }, references }];
+        return references.length ? [{ definition: { type: "symbol", symbol }, references }] : emptyArray;
     }
 
     /** getReferencedSymbols for special node kinds. */
@@ -345,21 +346,21 @@ namespace ts.FindAllReferences.Core {
     }
 
     /** Core find-all-references algorithm for a normal symbol. */
-    function getReferencedSymbolsForSymbol(symbol: Symbol, node: Node, sourceFiles: ReadonlyArray<SourceFile>, sourceFilesSet: ReadonlyMap<true>, checker: TypeChecker, cancellationToken: CancellationToken, options: Options): SymbolAndEntries[] {
-        symbol = skipPastExportOrImportSpecifierOrUnion(symbol, node, checker) || symbol;
+    function getReferencedSymbolsForSymbol(symbol: Symbol, node: Node | undefined, sourceFiles: ReadonlyArray<SourceFile>, sourceFilesSet: ReadonlyMap<true>, checker: TypeChecker, cancellationToken: CancellationToken, options: Options): SymbolAndEntries[] {
+        symbol = node && skipPastExportOrImportSpecifierOrUnion(symbol, node, checker) || symbol;
 
         // Compute the meaning from the location and the symbol it references
-        const searchMeaning = getIntersectingMeaningFromDeclarations(node, symbol);
+        const searchMeaning = node ? getIntersectingMeaningFromDeclarations(node, symbol) : SemanticMeaning.All;
 
         const result: SymbolAndEntries[] = [];
-        const state = new State(sourceFiles, sourceFilesSet, getSpecialSearchKind(node), checker, cancellationToken, searchMeaning, options, result);
+        const state = new State(sourceFiles, sourceFilesSet, node ? getSpecialSearchKind(node) : SpecialSearchKind.None, checker, cancellationToken, searchMeaning, options, result);
 
-        if (node.kind === SyntaxKind.DefaultKeyword) {
+        if (node && node.kind === SyntaxKind.DefaultKeyword) {
             addReference(node, symbol, state);
             searchForImportsOfExport(node, symbol, { exportingModuleSymbol: Debug.assertDefined(symbol.parent, "Expected export symbol to have a parent"), exportKind: ExportKind.Default }, state);
         }
         else {
-            const search = state.createSearch(node, symbol, /*comingFrom*/ undefined, { allSearchSymbols: populateSearchSymbolSet(symbol, node, checker, options.implementations) });
+            const search = state.createSearch(node, symbol, /*comingFrom*/ undefined, { allSearchSymbols: node ? populateSearchSymbolSet(symbol, node, checker, options.implementations) : [symbol] });
 
             // Try to get the smallest valid scope that we can limit our search to;
             // otherwise we'll need to search globally (i.e. include each file).
@@ -499,7 +500,7 @@ namespace ts.FindAllReferences.Core {
         }
 
         /** @param allSearchSymbols set of additinal symbols for use by `includes`. */
-        createSearch(location: Node, symbol: Symbol, comingFrom: ImportExport | undefined, searchOptions: { text?: string, allSearchSymbols?: Symbol[] } = {}): Search {
+        createSearch(location: Node | undefined, symbol: Symbol, comingFrom: ImportExport | undefined, searchOptions: { text?: string, allSearchSymbols?: Symbol[] } = {}): Search {
             // Note: if this is an external module symbol, the name doesn't include quotes.
             // Note: getLocalSymbolForExportDefault handles `export default class C {}`, but not `export default C` or `export { C as default }`.
             // The other two forms seem to be handled downstream (e.g. in `skipPastExportOrImportSpecifier`), so special-casing the first form
@@ -509,7 +510,7 @@ namespace ts.FindAllReferences.Core {
                 allSearchSymbols = [symbol],
             } = searchOptions;
             const escapedText = escapeLeadingUnderscores(text);
-            const parents = this.options.implementations && getParentSymbolsOfPropertyAccess(location, symbol, this.checker);
+            const parents = this.options.implementations && location && getParentSymbolsOfPropertyAccess(location, symbol, this.checker);
             return { symbol, comingFrom, text, escapedText, parents, allSearchSymbols, includes: sym => contains(allSearchSymbols, sym) };
         }
 
@@ -559,11 +560,7 @@ namespace ts.FindAllReferences.Core {
         if (singleReferences.length) {
             const addRef = state.referenceAdder(exportSymbol);
             for (const singleRef of singleReferences) {
-                // At `default` in `import { default as x }` or `export { default as x }`, do add a reference, but do not rename.
-                if (hasMatchingMeaning(singleRef, state) &&
-                    !(state.options.isForRename && (isExportSpecifier(singleRef.parent) || isImportSpecifier(singleRef.parent)) && singleRef.escapedText === InternalSymbolName.Default)) {
-                    addRef(singleRef);
-                }
+                if (shouldAddSingleReference(singleRef, state)) addRef(singleRef);
             }
         }
 
@@ -591,6 +588,15 @@ namespace ts.FindAllReferences.Core {
                 }
             }
         }
+    }
+
+    function shouldAddSingleReference(singleRef: Identifier | StringLiteral, state: State): boolean {
+        if (!hasMatchingMeaning(singleRef, state)) return false;
+        if (!state.options.isForRename) return true;
+        // Don't rename an import type `import("./module-name")` when renaming `name` in `export = name;`
+        if (!isIdentifier(singleRef)) return false;
+        // At `default` in `import { default as x }` or `export { default as x }`, do add a reference, but do not rename.
+        return !((isExportSpecifier(singleRef.parent) || isImportSpecifier(singleRef.parent)) && singleRef.escapedText === InternalSymbolName.Default);
     }
 
     // Go to the symbol we imported from and find references for it.

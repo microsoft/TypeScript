@@ -538,7 +538,7 @@ namespace ts {
         Abstract =           1 << 7,  // Class/Method/ConstructSignature
         Async =              1 << 8,  // Property/Method/Function
         Default =            1 << 9,  // Function/Class (export default declaration)
-        Const =              1 << 11, // Variable declaration
+        Const =              1 << 11, // Const enum
         HasComputedFlags =   1 << 29, // Modifier flags have been computed
 
         AccessibilityModifier = Public | Private | Protected,
@@ -3253,11 +3253,16 @@ namespace ts {
     export type AnyImportOrReExport = AnyImportSyntax | ExportDeclaration;
 
     /* @internal */
+    export interface ValidImportTypeNode extends ImportTypeNode {
+        argument: LiteralTypeNode & { literal: StringLiteral };
+    }
+
+    /* @internal */
     export type AnyValidImportOrReExport =
         | (ImportDeclaration | ExportDeclaration) & { moduleSpecifier: StringLiteral }
         | ImportEqualsDeclaration & { moduleReference: ExternalModuleReference & { expression: StringLiteral } }
         | RequireOrImportCall
-        | ImportTypeNode & { argument: LiteralType };
+        | ValidImportTypeNode;
 
     /* @internal */
     export type RequireOrImportCall = CallExpression & { arguments: [StringLiteralLike] };
