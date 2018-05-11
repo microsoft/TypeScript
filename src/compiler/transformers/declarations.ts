@@ -147,7 +147,7 @@ namespace ts {
 
             if (node.kind === SyntaxKind.Bundle) {
                 isBundledEmit = true;
-                let refs = createMap<SourceFile>();
+                const refs = createMap<SourceFile>();
                 let hasNoDefaultLib = false;
                 const bundle = createBundle(map(node.sourceFiles,
                     sourceFile => {

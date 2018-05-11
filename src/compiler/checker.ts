@@ -3407,7 +3407,7 @@ namespace ts {
 
                 function getAccessStack(ref: TypeReferenceNode): Identifier[] {
                     let state = ref.typeName;
-                    let ids = [];
+                    const ids = [];
                     while (!isIdentifier(state)) {
                         ids.unshift(state.right);
                         state = state.left;
@@ -3731,7 +3731,7 @@ namespace ts {
                 }
                 return top;
             }
-            
+
             function symbolToTypeNode(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, overrideTypeArguments?: ReadonlyArray<TypeNode>): TypeNode {
                 const chain = lookupSymbolChain(symbol, context, meaning, !(context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope)); // If we're using aliases outside the current scope, dont bother with the module
 
