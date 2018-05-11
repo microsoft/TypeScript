@@ -1607,10 +1607,13 @@ namespace ts {
                     createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "exclude", "Array");
                 }
             }
-            else {
-                const outDir = raw.compilerOptions && raw.compilerOptions.outDir;
-                if (outDir) {
-                    excludeSpecs = [outDir];
+            else if (raw.compilerOptions) {
+                const outDir = raw.compilerOptions.outDir;
+                const declarationDir = raw.compilerOptions.declarationDir;
+                const excludeDirs = [outDir, declarationDir].filter(dir => dir);
+
+                if (excludeDirs.length) {
+                    excludeSpecs = excludeDirs;
                 }
             }
 
