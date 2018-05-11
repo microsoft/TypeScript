@@ -44,10 +44,12 @@ namespace ts {
             reportInaccessibleUniqueSymbolError,
             reportPrivateInBaseOfClassExpression,
             moduleResolverHost: host,
+            trackReferencedAmbientModule,
         };
         let errorNameNode: DeclarationName | undefined;
 
         let currentSourceFile: SourceFile;
+        let refs: Map<SourceFile>;
         const resolver = context.getEmitResolver();
         const options = context.getCompilerOptions();
         const newLine = getNewLineCharacter(options);
@@ -62,6 +64,11 @@ namespace ts {
             for (const ref of typeReferenceDirectives) {
                 necessaryTypeRefernces.set(ref, true);
             }
+        }
+
+        function trackReferencedAmbientModule(node: ModuleDeclaration) {
+            const container = getSourceFileOfNode(node);
+            refs.set("" + getOriginalNodeId(container), container);
         }
 
         function handleSymbolAccessibilityError(symbolAccessibilityResult: SymbolAccessibilityResult) {
@@ -140,7 +147,7 @@ namespace ts {
 
             if (node.kind === SyntaxKind.Bundle) {
                 isBundledEmit = true;
-                const refs = createMap<SourceFile>();
+                let refs = createMap<SourceFile>();
                 let hasNoDefaultLib = false;
                 const bundle = createBundle(map(node.sourceFiles,
                     sourceFile => {
@@ -198,13 +205,13 @@ namespace ts {
             lateMarkedStatements = undefined;
             lateStatementReplacementMap = createMap();
             necessaryTypeRefernces = undefined;
-            const refs = collectReferences(currentSourceFile, createMap());
+            refs = collectReferences(currentSourceFile, createMap());
             const references: FileReference[] = [];
             const outputFilePath = getDirectoryPath(normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath));
             const referenceVisitor = mapReferencesIntoArray(references, outputFilePath);
-            refs.forEach(referenceVisitor);
             const statements = visitNodes(node.statements, visitDeclarationStatements);
             let combinedStatements = setTextRange(createNodeArray(transformAndReplaceLatePaintedStatements(statements)), node.statements);
+            refs.forEach(referenceVisitor);
             const emittedImports = filter(combinedStatements, isAnyImportSyntax);
             if (isExternalModule(node) && (!resultHasExternalModuleIndicator || (needsScopeFixMarker && !resultHasScopeMarker))) {
                 combinedStatements = setTextRange(createNodeArray([...combinedStatements, createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports([]), /*moduleSpecifier*/ undefined)]), combinedStatements);

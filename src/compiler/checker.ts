@@ -3340,20 +3340,73 @@ namespace ts {
                     else {
                         const outerTypeParameters = type.target.outerTypeParameters;
                         let i = 0;
+                        let resultType: TypeReferenceNode | ImportTypeNode;
                         if (outerTypeParameters) {
                             const length = outerTypeParameters.length;
-                            // Find group of type arguments for type parameters with the same declaring container.
-                            const parent = getParentSymbolOfTypeParameter(outerTypeParameters[i]);
-                            do {
-                                i++;
-                            } while (i < length && getParentSymbolOfTypeParameter(outerTypeParameters[i]) === parent);
+                            while (i < length) {
+                                // Find group of type arguments for type parameters with the same declaring container.
+                                const start = i;
+                                const parent = getParentSymbolOfTypeParameter(outerTypeParameters[i]);
+                                do {
+                                    i++;
+                                } while (i < length && getParentSymbolOfTypeParameter(outerTypeParameters[i]) === parent);
+                                // When type parameters are their own type arguments for the whole group (i.e. we have
+                                // the default outer type arguments), we don't show the group.
+                                if (!rangeEquals(outerTypeParameters, typeArguments, start, i)) {
+                                    const typeArgumentSlice = mapToTypeNodes(typeArguments.slice(start, i), context);
+                                    const ref = symbolToTypeNode(parent, context, SymbolFlags.Type, typeArgumentSlice) as TypeReferenceNode | ImportTypeNode;
+                                    resultType = !resultType ? ref : appendReferenceToType(resultType, ref as TypeReferenceNode);
+                                }
+                            }
                         }
                         let typeArgumentNodes: ReadonlyArray<TypeNode> | undefined;
                         if (typeArguments.length > 0) {
                             const typeParameterCount = (type.target.typeParameters || emptyArray).length;
                             typeArgumentNodes = mapToTypeNodes(typeArguments.slice(i, typeParameterCount), context);
                         }
-                        return symbolToTypeNode(type.symbol, context, SymbolFlags.Type, typeArgumentNodes);
+                        const finalRef = symbolToTypeNode(type.symbol, context, SymbolFlags.Type, typeArgumentNodes);
+                        return !resultType ? finalRef : appendReferenceToType(resultType, finalRef as TypeReferenceNode);
+                    }
+                }
+
+                function appendReferenceToType(root: TypeReferenceNode | ImportTypeNode, ref: TypeReferenceNode): TypeReferenceNode | ImportTypeNode {
+                    if (isImportTypeNode(root)) {
+                        // first shift type arguments
+                        const innerParams = root.typeArguments;
+                        if (root.qualifier) {
+                            (isIdentifier(root.qualifier) ? root.qualifier : root.qualifier.right).typeArguments = innerParams;
+                        }
+                        root.typeArguments = ref.typeArguments;
+                        // then move qualifiers
+                        let state = ref.typeName;
+                        let ids = [];
+                        while (!isIdentifier(state)) {
+                            ids.unshift(state.right);
+                            state = state.left;
+                        }
+                        ids.unshift(state);
+                        for (const id of ids) {
+                            root.qualifier = root.qualifier ? createQualifiedName(root.qualifier, id) : id;
+                        }
+                        return root;
+                    }
+                    else {
+                        // first shift type arguments
+                        const innerParams = root.typeArguments;
+                        (isIdentifier(root.typeName) ? root.typeName : root.typeName.right).typeArguments = innerParams;
+                        root.typeArguments = ref.typeArguments;
+                        // then move qualifiers
+                        let state = ref.typeName;
+                        let ids = [];
+                        while (!isIdentifier(state)) {
+                            ids.unshift(state.right);
+                            state = state.left;
+                        }
+                        ids.unshift(state);
+                        for (const id of ids) {
+                            root.typeName = root.typeName ? createQualifiedName(root.typeName, id) : id;
+                        }
+                        return root;
                     }
                 }
 
@@ -3672,7 +3725,7 @@ namespace ts {
                 }
                 return top;
             }
-
+            
             function symbolToTypeNode(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, overrideTypeArguments?: ReadonlyArray<TypeNode>): TypeNode {
                 const chain = lookupSymbolChain(symbol, context, meaning, !(context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope)); // If we're using aliases outside the current scope, dont bother with the module
 
@@ -3930,6 +3983,23 @@ namespace ts {
                 return "default";
             }
             if (symbol.declarations && symbol.declarations.length) {
+                if (some(symbol.declarations, hasExternalModuleSymbol) && context.enclosingDeclaration) {
+                    const file = getDeclarationOfKind<SourceFile>(symbol, SyntaxKind.SourceFile);
+                    if (!file || !context.tracker.moduleResolverHost) {
+                        if (context.tracker.trackReferencedAmbientModule) {
+                            const ambientDecls = filter(symbol.declarations, isAmbientModule);
+                            if (length(ambientDecls)) {
+                                for (const decl of ambientDecls) {
+                                    context.tracker.trackReferencedAmbientModule(decl);
+                                }
+                            }
+                        }
+                        // ambient module, just use declaration/symbol name (fallthrough)
+                    }
+                    else {
+                        return `"${getResolvedExternalModuleName(context.tracker.moduleResolverHost, file, getSourceFileOfNode(getOriginalNode(context.enclosingDeclaration)))}"`;
+                    }
+                }
                 const declaration = symbol.declarations[0];
                 const name = getNameOfDeclaration(declaration);
                 if (name) {
@@ -3937,14 +4007,6 @@ namespace ts {
                 }
                 if (declaration.parent && declaration.parent.kind === SyntaxKind.VariableDeclaration) {
                     return declarationNameToString((<VariableDeclaration>declaration.parent).name);
-                }
-                if (some(symbol.declarations, hasExternalModuleSymbol) && context.enclosingDeclaration) {
-                    const file = getDeclarationOfKind<SourceFile>(symbol, SyntaxKind.SourceFile);
-                    if (!file || !context.tracker.moduleResolverHost) {
-                        // ambient module, just use symbol name
-                        return symbolName(symbol);
-                    }
-                    return `"${getResolvedExternalModuleName(context.tracker.moduleResolverHost, file, getSourceFileOfNode(getOriginalNode(context.enclosingDeclaration)))}"`;
                 }
                 if (context && !context.encounteredError && !(context.flags & NodeBuilderFlags.AllowAnonymousIdentifier)) {
                     context.encounteredError = true;

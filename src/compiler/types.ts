@@ -5258,6 +5258,8 @@ namespace ts {
         reportInaccessibleUniqueSymbolError?(): void;
         /* @internal */
         moduleResolverHost?: ModuleNameResolverHost;
+        /* @internal */
+        trackReferencedAmbientModule?(decl: ModuleDeclaration): void;
     }
 
     export interface TextSpan {
