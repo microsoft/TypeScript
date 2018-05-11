@@ -1,6 +1,6 @@
 === tests/cases/compiler/Class.ts ===
 import { Configurable } from "./Configurable"
->Configurable : <T extends new (...args: any[]) => {}>(base: T) => T
+>Configurable : <T extends import("tests/cases/compiler/Configurable").Constructor<{}>>(base: T) => T
 
 export class HiddenClass {}
 >HiddenClass : HiddenClass
@@ -8,7 +8,7 @@ export class HiddenClass {}
 export class ActualClass extends Configurable(HiddenClass) {}
 >ActualClass : ActualClass
 >Configurable(HiddenClass) : HiddenClass
->Configurable : <T extends new (...args: any[]) => {}>(base: T) => T
+>Configurable : <T extends import("tests/cases/compiler/Configurable").Constructor<{}>>(base: T) => T
 >HiddenClass : typeof HiddenClass
 
 === tests/cases/compiler/Configurable.ts ===

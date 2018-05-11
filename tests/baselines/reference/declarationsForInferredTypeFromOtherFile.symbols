@@ -5,7 +5,7 @@ export class Foo {}
 === tests/cases/compiler/file2.ts ===
 export function foo(): import("./file1").Foo {
 >foo : Symbol(foo, Decl(file2.ts, 0, 0))
->Foo : Symbol("tests/cases/compiler/file1".Foo, Decl(file1.ts, 0, 0))
+>Foo : Symbol(Foo, Decl(file1.ts, 0, 0))
 
     return null as any;
 }

@@ -3354,7 +3354,10 @@ namespace ts {
                                 // the default outer type arguments), we don't show the group.
                                 if (!rangeEquals(outerTypeParameters, typeArguments, start, i)) {
                                     const typeArgumentSlice = mapToTypeNodes(typeArguments.slice(start, i), context);
+                                    const flags = context.flags;
+                                    context.flags |= NodeBuilderFlags.ForbidIndexedAccessSymbolReferences;
                                     const ref = symbolToTypeNode(parent, context, SymbolFlags.Type, typeArgumentSlice) as TypeReferenceNode | ImportTypeNode;
+                                    context.flags = flags;
                                     resultType = !resultType ? ref : appendReferenceToType(resultType, ref as TypeReferenceNode);
                                 }
                             }
@@ -3364,10 +3367,14 @@ namespace ts {
                             const typeParameterCount = (type.target.typeParameters || emptyArray).length;
                             typeArgumentNodes = mapToTypeNodes(typeArguments.slice(i, typeParameterCount), context);
                         }
+                        const flags = context.flags;
+                        context.flags |= NodeBuilderFlags.ForbidIndexedAccessSymbolReferences;
                         const finalRef = symbolToTypeNode(type.symbol, context, SymbolFlags.Type, typeArgumentNodes);
+                        context.flags = flags;
                         return !resultType ? finalRef : appendReferenceToType(resultType, finalRef as TypeReferenceNode);
                     }
                 }
+
 
                 function appendReferenceToType(root: TypeReferenceNode | ImportTypeNode, ref: TypeReferenceNode): TypeReferenceNode | ImportTypeNode {
                     if (isImportTypeNode(root)) {
@@ -3378,13 +3385,7 @@ namespace ts {
                         }
                         root.typeArguments = ref.typeArguments;
                         // then move qualifiers
-                        let state = ref.typeName;
-                        let ids = [];
-                        while (!isIdentifier(state)) {
-                            ids.unshift(state.right);
-                            state = state.left;
-                        }
-                        ids.unshift(state);
+                        const ids = getAccessStack(ref);
                         for (const id of ids) {
                             root.qualifier = root.qualifier ? createQualifiedName(root.qualifier, id) : id;
                         }
@@ -3396,18 +3397,23 @@ namespace ts {
                         (isIdentifier(root.typeName) ? root.typeName : root.typeName.right).typeArguments = innerParams;
                         root.typeArguments = ref.typeArguments;
                         // then move qualifiers
-                        let state = ref.typeName;
-                        let ids = [];
-                        while (!isIdentifier(state)) {
-                            ids.unshift(state.right);
-                            state = state.left;
-                        }
-                        ids.unshift(state);
+                        const ids = getAccessStack(ref);
                         for (const id of ids) {
-                            root.typeName = root.typeName ? createQualifiedName(root.typeName, id) : id;
+                            root.typeName = createQualifiedName(root.typeName, id);
                         }
                         return root;
                     }
+                }
+
+                function getAccessStack(ref: TypeReferenceNode): Identifier[] {
+                    let state = ref.typeName;
+                    let ids = [];
+                    while (!isIdentifier(state)) {
+                        ids.unshift(state.right);
+                        state = state.left;
+                    }
+                    ids.unshift(state);
+                    return ids;
                 }
 
                 function createTypeNodesFromResolvedType(resolvedType: ResolvedType): TypeElement[] {
@@ -3780,7 +3786,7 @@ namespace ts {
                     }
 
                     const parent = chain[index - 1];
-                    if (parent && getMembersOfSymbol(parent) && getMembersOfSymbol(parent).get(symbol.escapedName) === symbol) {
+                    if (!(context.flags & NodeBuilderFlags.ForbidIndexedAccessSymbolReferences) && parent && getMembersOfSymbol(parent) && getMembersOfSymbol(parent).get(symbol.escapedName) === symbol) {
                         // Should use an indexed access
                         const LHS = createAccessFromSymbolChain(chain, index - 1, stopper);
                         if (isIndexedAccessTypeNode(LHS)) {
