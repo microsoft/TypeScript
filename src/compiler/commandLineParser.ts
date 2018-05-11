@@ -1610,10 +1610,9 @@ namespace ts {
             else if (raw.compilerOptions) {
                 const outDir = raw.compilerOptions.outDir;
                 const declarationDir = raw.compilerOptions.declarationDir;
-                const excludeDirs = [outDir, declarationDir].filter(dir => dir);
 
-                if (excludeDirs.length) {
-                    excludeSpecs = excludeDirs;
+                if (outDir || declarationDir) {
+                    excludeSpecs = [outDir, declarationDir].filter(d => !!d);
                 }
             }
 
