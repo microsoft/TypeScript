@@ -37,11 +37,13 @@ namespace ts {
         let lateStatementReplacementMap: Map<VisitResult<LateVisibilityPaintedStatement>>;
         let suppressNewDiagnosticContexts: boolean;
 
+        const host = context.getEmitHost();
         const symbolTracker: SymbolTracker = {
             trackSymbol,
             reportInaccessibleThisError,
             reportInaccessibleUniqueSymbolError,
-            reportPrivateInBaseOfClassExpression
+            reportPrivateInBaseOfClassExpression,
+            moduleResolverHost: host,
         };
         let errorNameNode: DeclarationName | undefined;
 
@@ -50,7 +52,6 @@ namespace ts {
         const options = context.getCompilerOptions();
         const newLine = getNewLineCharacter(options);
         const { noResolve, stripInternal } = options;
-        const host = context.getEmitHost();
         return transformRoot;
 
         function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: string[]): void {

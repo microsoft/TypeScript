@@ -2763,6 +2763,14 @@ namespace ts {
                         }
                         return hasAccessibleDeclarations;
                     }
+                    else {
+                        if (some(symbol.declarations, hasExternalModuleSymbol)) {
+                            // Any meaning of a module symbol is always accessible via an `import` type
+                            return {
+                                accessibility: SymbolAccessibility.Accessible
+                            };
+                        }
+                    }
 
                     // If we haven't got the accessible symbol, it doesn't mean the symbol is actually inaccessible.
                     // It could be a qualified symbol and hence verify the path
@@ -3133,9 +3141,9 @@ namespace ts {
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
                 if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
-                    const name = symbolToTypeReferenceName(type.aliasSymbol);
                     const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
-                    return createTypeReferenceNode(name, typeArgumentNodes);
+                    if (isReservedMemberName(type.aliasSymbol.escapedName) && !(type.aliasSymbol.flags & SymbolFlags.Class)) return createTypeReferenceNode(createIdentifier(""), typeArgumentNodes);
+                    return symbolToTypeNode(type.aliasSymbol, context, SymbolFlags.Type, typeArgumentNodes);
                 }
                 if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
                     const types = type.flags & TypeFlags.Union ? formatUnionTypes((<UnionType>type).types) : (<IntersectionType>type).types;
@@ -3298,12 +3306,6 @@ namespace ts {
                     return setEmitFlags(typeLiteralNode, (context.flags & NodeBuilderFlags.MultilineObjectLiterals) ? 0 : EmitFlags.SingleLine);
                 }
 
-                function symbolToTypeReferenceName(symbol: Symbol) {
-                    // Unnamed function expressions and arrow functions have reserved names that we don't want to display
-                    const entityName = symbol.flags & SymbolFlags.Class || !isReservedMemberName(symbol.escapedName) ? symbolToName(symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ false) : createIdentifier("");
-                    return entityName;
-                }
-
                 function typeReferenceToTypeNode(type: TypeReference) {
                     const typeArguments: Type[] = type.typeArguments || emptyArray;
                     if (type.target === globalArrayType) {
@@ -3338,78 +3340,21 @@ namespace ts {
                     else {
                         const outerTypeParameters = type.target.outerTypeParameters;
                         let i = 0;
-                        let qualifiedName: QualifiedName | undefined;
                         if (outerTypeParameters) {
                             const length = outerTypeParameters.length;
-                            while (i < length) {
-                                // Find group of type arguments for type parameters with the same declaring container.
-                                const start = i;
-                                const parent = getParentSymbolOfTypeParameter(outerTypeParameters[i]);
-                                do {
-                                    i++;
-                                } while (i < length && getParentSymbolOfTypeParameter(outerTypeParameters[i]) === parent);
-                                // When type parameters are their own type arguments for the whole group (i.e. we have
-                                // the default outer type arguments), we don't show the group.
-                                if (!rangeEquals(outerTypeParameters, typeArguments, start, i)) {
-                                    const typeArgumentSlice = mapToTypeNodes(typeArguments.slice(start, i), context);
-                                    const typeArgumentNodes = typeArgumentSlice && createNodeArray(typeArgumentSlice);
-                                    const namePart = symbolToTypeReferenceName(parent);
-                                    (namePart.kind === SyntaxKind.Identifier ? namePart : namePart.right).typeArguments = typeArgumentNodes;
-
-                                    if (qualifiedName) {
-                                        Debug.assert(!qualifiedName.right);
-                                        qualifiedName = addToQualifiedNameMissingRightIdentifier(qualifiedName, namePart);
-                                        qualifiedName = createQualifiedName(qualifiedName, /*right*/ undefined);
-                                    }
-                                    else {
-                                        qualifiedName = createQualifiedName(namePart, /*right*/ undefined);
-                                    }
-                                }
-                            }
+                            // Find group of type arguments for type parameters with the same declaring container.
+                            const parent = getParentSymbolOfTypeParameter(outerTypeParameters[i]);
+                            do {
+                                i++;
+                            } while (i < length && getParentSymbolOfTypeParameter(outerTypeParameters[i]) === parent);
                         }
-
-                        let entityName: EntityName;
-                        const nameIdentifier = symbolToTypeReferenceName(type.symbol);
-                        if (qualifiedName) {
-                            Debug.assert(!qualifiedName.right);
-                            qualifiedName = addToQualifiedNameMissingRightIdentifier(qualifiedName, nameIdentifier);
-                            entityName = qualifiedName;
-                        }
-                        else {
-                            entityName = nameIdentifier;
-                        }
-
                         let typeArgumentNodes: ReadonlyArray<TypeNode> | undefined;
                         if (typeArguments.length > 0) {
                             const typeParameterCount = (type.target.typeParameters || emptyArray).length;
                             typeArgumentNodes = mapToTypeNodes(typeArguments.slice(i, typeParameterCount), context);
                         }
-
-                        if (typeArgumentNodes) {
-                            const lastIdentifier = entityName.kind === SyntaxKind.Identifier ? entityName : entityName.right;
-                            lastIdentifier.typeArguments = undefined;
-                        }
-
-                        return createTypeReferenceNode(entityName, typeArgumentNodes);
+                        return symbolToTypeNode(type.symbol, context, SymbolFlags.Type, typeArgumentNodes);
                     }
-                }
-
-                function addToQualifiedNameMissingRightIdentifier(left: QualifiedName, right: Identifier | QualifiedName) {
-                    Debug.assert(left.right === undefined);
-
-                    if (right.kind === SyntaxKind.Identifier) {
-                        left.right = right;
-                        return left;
-                    }
-
-                    let rightPart = right;
-                    while (rightPart.left.kind !== SyntaxKind.Identifier) {
-                        rightPart = rightPart.left;
-                    }
-
-                    left.right = rightPart.left;
-                    rightPart.left = left;
-                    return right;
                 }
 
                 function createTypeNodesFromResolvedType(resolvedType: ResolvedType): TypeElement[] {
@@ -3640,7 +3585,7 @@ namespace ts {
                 }
             }
 
-            function lookupSymbolChain(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags) {
+            function lookupSymbolChain(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, yieldModuleSymbol?: boolean) {
                 context.tracker.trackSymbol(symbol, context.enclosingDeclaration, meaning);
                 // Try to get qualified name if the symbol is not a type parameter and there is an enclosing declaration.
                 let chain: Symbol[];
@@ -3680,7 +3625,7 @@ namespace ts {
                         // If this is the last part of outputting the symbol, always output. The cases apply only to parent symbols.
                         endOfChain ||
                         // If a parent symbol is an external module, don't write it. (We prefer just `x` vs `"foo/bar".x`.)
-                        !(!parentSymbol && forEach(symbol.declarations, hasExternalModuleSymbol)) &&
+                        (yieldModuleSymbol || !(!parentSymbol && forEach(symbol.declarations, hasExternalModuleSymbol))) &&
                         // If a parent symbol is an anonymous type, don't write it.
                         !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral))) {
 
@@ -3728,8 +3673,8 @@ namespace ts {
                 return top;
             }
 
-            function symbolToTypeNode(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags): TypeNode {
-                const chain = lookupSymbolChain(symbol, context, meaning);
+            function symbolToTypeNode(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, overrideTypeArguments?: ReadonlyArray<TypeNode>): TypeNode {
+                const chain = lookupSymbolChain(symbol, context, meaning, !(context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope)); // If we're using aliases outside the current scope, dont bother with the module
 
                 context.flags |= NodeBuilderFlags.InInitialEntityName;
                 const rootName = getNameOfSymbolAsWritten(chain[0], context);
@@ -3739,9 +3684,13 @@ namespace ts {
                 if (ambientModuleSymbolRegex.test(rootName)) {
                     // module is root, must use `ImportTypeNode`
                     const nonRootParts = chain.length > 1 ? createAccessFromSymbolChain(chain, chain.length - 1, 1) : undefined;
-                    const typeParameterNodes = lookupTypeParameterNodes(chain, 0, context);
+                    const typeParameterNodes = overrideTypeArguments || lookupTypeParameterNodes(chain, 0, context);
                     const lit = createLiteralTypeNode(createLiteral(rootName.substring(1, rootName.length - 1)));
                     if (!nonRootParts || isEntityName(nonRootParts)) {
+                        if (nonRootParts) {
+                            const lastId = isIdentifier(nonRootParts) ? nonRootParts : (nonRootParts as QualifiedName).right;
+                            lastId.typeArguments = undefined;
+                        }
                         return createImportTypeNode(lit, nonRootParts as EntityName, typeParameterNodes as ReadonlyArray<TypeNode>, isTypeOf);
                     }
                     else {
@@ -3755,10 +3704,18 @@ namespace ts {
                 if (isIndexedAccessTypeNode(entityName)) {
                     return entityName; // Indexed accesses can never be `typeof`
                 }
-                return isTypeOf ? createTypeQueryNode(entityName) : createTypeReferenceNode(entityName, /*typeArguments*/ undefined);
+                if (isTypeOf) {
+                    return createTypeQueryNode(entityName);
+                }
+                else {
+                    const lastId = isIdentifier(entityName) ? entityName : entityName.right;
+                    const lastTypeArgs = lastId.typeArguments;
+                    lastId.typeArguments = undefined;
+                    return createTypeReferenceNode(entityName, lastTypeArgs as NodeArray<TypeNode>);
+                }
 
                 function createAccessFromSymbolChain(chain: Symbol[], index: number, stopper: number): EntityName | IndexedAccessTypeNode {
-                    const typeParameterNodes = lookupTypeParameterNodes(chain, index, context);
+                    const typeParameterNodes = index === (chain.length - 1) ? overrideTypeArguments : lookupTypeParameterNodes(chain, index, context);
                     const symbol = chain[index];
 
                     if (index === 0) {
@@ -3980,6 +3937,14 @@ namespace ts {
                 }
                 if (declaration.parent && declaration.parent.kind === SyntaxKind.VariableDeclaration) {
                     return declarationNameToString((<VariableDeclaration>declaration.parent).name);
+                }
+                if (some(symbol.declarations, hasExternalModuleSymbol) && context.enclosingDeclaration) {
+                    const file = getDeclarationOfKind<SourceFile>(symbol, SyntaxKind.SourceFile);
+                    if (!file || !context.tracker.moduleResolverHost) {
+                        // ambient module, just use symbol name
+                        return symbolName(symbol);
+                    }
+                    return `"${getResolvedExternalModuleName(context.tracker.moduleResolverHost, file, getSourceFileOfNode(getOriginalNode(context.enclosingDeclaration)))}"`;
                 }
                 if (context && !context.encounteredError && !(context.flags & NodeBuilderFlags.AllowAnonymousIdentifier)) {
                     context.encounteredError = true;

@@ -5239,6 +5239,13 @@ namespace ts {
         isAtStartOfLine(): boolean;
     }
 
+    /* @internal */
+    export interface ModuleNameResolverHost {
+        getCanonicalFileName(f: string): string;
+        getCommonSourceDirectory(): string;
+        getCurrentDirectory(): string;
+    }
+
     /** @deprecated See comment on SymbolWriter */
     // Note: this has non-deprecated internal uses.
     export interface SymbolTracker {
@@ -5249,6 +5256,8 @@ namespace ts {
         reportInaccessibleThisError?(): void;
         reportPrivateInBaseOfClassExpression?(propertyName: string): void;
         reportInaccessibleUniqueSymbolError?(): void;
+        /* @internal */
+        moduleResolverHost?: ModuleNameResolverHost;
     }
 
     export interface TextSpan {
