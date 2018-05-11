@@ -894,8 +894,12 @@ namespace ts {
                 }
                 if ((source.flags | target.flags) & SymbolFlags.JSContainer) {
                     const sourceInitializer = getJSInitializerSymbol(source);
-                    const targetInitializer = getJSInitializerSymbol(target);
+                    let targetInitializer = getJSInitializerSymbol(target);
                     if (sourceInitializer !== source || targetInitializer !== target) {
+                        if (!(targetInitializer.flags & SymbolFlags.Transient)) {
+                            const mergedInitializer = getMergedSymbol(targetInitializer);
+                            targetInitializer = mergedInitializer === targetInitializer ? cloneSymbol(targetInitializer) : mergedInitializer;
+                        }
                         mergeSymbol(targetInitializer, sourceInitializer);
                     }
                 }
@@ -18779,7 +18783,7 @@ namespace ts {
             }
 
             const links = getNodeLinks(node);
-            const type = getTypeOfSymbol(node.symbol);
+            const type = getTypeOfSymbol(getMergedSymbol(node.symbol));
 
             // Check if function expression is contextually typed and assign parameter types if so.
             if (!(links.flags & NodeCheckFlags.ContextChecked)) {
