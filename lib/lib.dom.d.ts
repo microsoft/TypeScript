@@ -9162,10 +9162,12 @@ declare var MessageEvent: {
 
 interface MessagePortEventMap {
     "message": MessageEvent;
+    "messageerror": MessageEvent;
 }
 
 interface MessagePort extends EventTarget {
     onmessage: ((this: MessagePort, ev: MessageEvent) => any) | null;
+    onmessageerror: ((this: MessagePort, ev: MessageEvent) => any) | null;
     close(): void;
     postMessage(message?: any, transfer?: any[]): void;
     start(): void;
