@@ -2441,6 +2441,8 @@ declare namespace ts {
         types?: string[];
         /** Paths used to compute primary types search locations */
         typeRoots?: string[];
+        /** Scopes used to search for type-only packages */
+        searchScopes?: string[];
         esModuleInterop?: boolean;
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
