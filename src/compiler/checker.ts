@@ -892,6 +892,7 @@ namespace ts {
         function mergeSymbol(target: Symbol, source: Symbol) {
             if (!(target.flags & getExcludedSymbolFlags(source.flags)) ||
                 (source.flags | target.flags) & SymbolFlags.JSContainer) {
+                Debug.assert(!!(target.flags & SymbolFlags.Transient));
                 // Javascript static-property-assignment declarations always merge, even though they are also values
                 if (source.flags & SymbolFlags.ValueModule && target.flags & SymbolFlags.ValueModule && target.constEnumOnlyModule && !source.constEnumOnlyModule) {
                     // reset flag when merging instantiated module into value module that has only const enums
@@ -915,8 +916,12 @@ namespace ts {
                 }
                 if ((source.flags | target.flags) & SymbolFlags.JSContainer) {
                     const sourceInitializer = getJSInitializerSymbol(source);
-                    const targetInitializer = getJSInitializerSymbol(target);
+                    let targetInitializer = getJSInitializerSymbol(target);
                     if (sourceInitializer !== source || targetInitializer !== target) {
+                        if (!(targetInitializer.flags & SymbolFlags.Transient)) {
+                            const mergedInitializer = getMergedSymbol(targetInitializer);
+                            targetInitializer = mergedInitializer === targetInitializer ? cloneSymbol(targetInitializer) : mergedInitializer;
+                        }
                         mergeSymbol(targetInitializer, sourceInitializer);
                     }
                 }
@@ -2746,7 +2751,7 @@ namespace ts {
          * @param shouldComputeAliasToMakeVisible a boolean value to indicate whether to return aliases to be mark visible in case the symbol is accessible
          */
         function isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, shouldComputeAliasesToMakeVisible: boolean): SymbolAccessibilityResult {
-            if (symbol && enclosingDeclaration && !(symbol.flags & SymbolFlags.TypeParameter)) {
+            if (symbol && enclosingDeclaration) {
                 const initialSymbol = symbol;
                 let meaningToLook = meaning;
                 while (symbol) {
@@ -2836,6 +2841,11 @@ namespace ts {
                         !hasModifier(declaration.parent.parent, ModifierFlags.Export) && // unexported variable statement
                         isDeclarationVisible(declaration.parent.parent.parent)) {
                         return addVisibleAlias(declaration, declaration.parent.parent);
+                    }
+                    else if (isLateVisibilityPaintedStatement(declaration) // unexported top-level statement
+                        && !hasModifier(declaration, ModifierFlags.Export)
+                        && isDeclarationVisible(declaration.parent)) {
+                        return addVisibleAlias(declaration, declaration);
                     }
 
                     // Declaration is not visible
@@ -3113,7 +3123,15 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.TypeParameter || objectFlags & ObjectFlags.ClassOrInterface) {
                     if (type.flags & TypeFlags.TypeParameter && contains(context.inferTypeParameters, type)) {
-                        return createInferTypeNode(createTypeParameterDeclaration(getNameOfSymbolAsWritten(type.symbol)));
+                        return createInferTypeNode(typeParameterToDeclarationWithConstraint(type as TypeParameter, context, /*constraintNode*/ undefined));
+                    }
+                    if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams &&
+                        type.flags & TypeFlags.TypeParameter &&
+                        length(type.symbol.declarations) &&
+                        isTypeParameterDeclaration(type.symbol.declarations[0]) &&
+                        typeParameterShadowsNameInScope(type, context) &&
+                        !isTypeSymbolAccessible(type.symbol, context.enclosingDeclaration)) {
+                        return createTypeReferenceNode(getGeneratedNameForNode((type.symbol.declarations[0] as TypeParameterDeclaration).name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes), /*typeArguments*/ undefined);
                     }
                     const name = type.symbol ? symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ false) : createIdentifier("?");
                     // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
@@ -3558,10 +3576,21 @@ namespace ts {
                 return createSignatureDeclaration(kind, typeParameters, parameters, returnTypeNode, typeArguments);
             }
 
-            function typeParameterToDeclarationWithConstraint(type: TypeParameter, context: NodeBuilderContext, constraintNode: TypeNode): TypeParameterDeclaration {
+            function typeParameterShadowsNameInScope(type: TypeParameter, context: NodeBuilderContext) {
+                return !!resolveName(context.enclosingDeclaration, type.symbol.escapedName, SymbolFlags.Type, /*nameNotFoundArg*/ undefined, type.symbol.escapedName, /*isUse*/ false);
+            }
+
+            function typeParameterToDeclarationWithConstraint(type: TypeParameter, context: NodeBuilderContext, constraintNode: TypeNode | undefined): TypeParameterDeclaration {
                 const savedContextFlags = context.flags;
                 context.flags &= ~NodeBuilderFlags.WriteTypeParametersInQualifiedName; // Avoids potential infinite loop when building for a claimspace with a generic
-                const name = symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ true);
+                const shouldUseGeneratedName =
+                    context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams &&
+                    type.symbol.declarations[0] &&
+                    isTypeParameterDeclaration(type.symbol.declarations[0]) &&
+                    typeParameterShadowsNameInScope(type, context);
+                const name = shouldUseGeneratedName
+                    ? getGeneratedNameForNode((type.symbol.declarations[0] as TypeParameterDeclaration).name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes)
+                    : symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ true);
                 const defaultParameter = getDefaultFromTypeParameter(type);
                 const defaultParameterNode = defaultParameter && typeToTypeNodeHelper(defaultParameter, context);
                 context.flags = savedContextFlags;
@@ -3694,7 +3723,17 @@ namespace ts {
                 return typeParameterNodes;
             }
 
-            function symbolToTypeNode(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags): TypeQueryNode | TypeReferenceNode | ImportTypeNode {
+            /**
+             * Given A[B][C][D], finds A[B]
+             */
+            function getTopmostIndexedAccessType(top: IndexedAccessTypeNode): IndexedAccessTypeNode {
+                if (isIndexedAccessTypeNode(top.objectType)) {
+                    return getTopmostIndexedAccessType(top.objectType);
+                }
+                return top;
+            }
+
+            function symbolToTypeNode(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags): TypeNode {
                 const chain = lookupSymbolChain(symbol, context, meaning);
 
                 context.flags |= NodeBuilderFlags.InInitialEntityName;
@@ -3704,15 +3743,26 @@ namespace ts {
                 const isTypeOf = meaning === SymbolFlags.Value;
                 if (ambientModuleSymbolRegex.test(rootName)) {
                     // module is root, must use `ImportTypeNode`
-                    const nonRootParts = chain.length > 1 ? createEntityNameFromSymbolChain(chain, chain.length - 1, 1) : undefined;
+                    const nonRootParts = chain.length > 1 ? createAccessFromSymbolChain(chain, chain.length - 1, 1) : undefined;
                     const typeParameterNodes = lookupTypeParameterNodes(chain, 0, context);
-                    return createImportTypeNode(createLiteralTypeNode(createLiteral(rootName.substring(1, rootName.length - 1))), nonRootParts, typeParameterNodes as ReadonlyArray<TypeNode>, isTypeOf);
+                    const lit = createLiteralTypeNode(createLiteral(rootName.substring(1, rootName.length - 1)));
+                    if (!nonRootParts || isEntityName(nonRootParts)) {
+                        return createImportTypeNode(lit, nonRootParts as EntityName, typeParameterNodes as ReadonlyArray<TypeNode>, isTypeOf);
+                    }
+                    else {
+                        const splitNode = getTopmostIndexedAccessType(nonRootParts);
+                        const qualifier = (splitNode.objectType as TypeReferenceNode).typeName;
+                        return createIndexedAccessTypeNode(createImportTypeNode(lit, qualifier, typeParameterNodes as ReadonlyArray<TypeNode>, isTypeOf), splitNode.indexType);
+                    }
                 }
 
-                const entityName = createEntityNameFromSymbolChain(chain, chain.length - 1, 0);
+                const entityName = createAccessFromSymbolChain(chain, chain.length - 1, 0);
+                if (isIndexedAccessTypeNode(entityName)) {
+                    return entityName; // Indexed accesses can never be `typeof`
+                }
                 return isTypeOf ? createTypeQueryNode(entityName) : createTypeReferenceNode(entityName, /*typeArguments*/ undefined);
 
-                function createEntityNameFromSymbolChain(chain: Symbol[], index: number, stopper: number): EntityName {
+                function createAccessFromSymbolChain(chain: Symbol[], index: number, stopper: number): EntityName | IndexedAccessTypeNode {
                     const typeParameterNodes = lookupTypeParameterNodes(chain, index, context);
                     const symbol = chain[index];
 
@@ -3723,10 +3773,30 @@ namespace ts {
                     if (index === 0) {
                         context.flags ^= NodeBuilderFlags.InInitialEntityName;
                     }
+
+                    const parent = chain[index - 1];
+                    if (parent && getMembersOfSymbol(parent) && getMembersOfSymbol(parent).get(symbol.escapedName) === symbol) {
+                        // Should use an indexed access
+                        const LHS = createAccessFromSymbolChain(chain, index - 1, stopper);
+                        if (isIndexedAccessTypeNode(LHS)) {
+                            return createIndexedAccessTypeNode(LHS, createLiteralTypeNode(createLiteral(symbolName)));
+                        }
+                        else {
+                            return createIndexedAccessTypeNode(createTypeReferenceNode(LHS, typeParameterNodes as ReadonlyArray<TypeNode>), createLiteralTypeNode(createLiteral(symbolName)));
+                        }
+                    }
+
                     const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
                     identifier.symbol = symbol;
 
-                    return index > stopper ? createQualifiedName(createEntityNameFromSymbolChain(chain, index - 1, stopper), identifier) : identifier;
+                    if (index > stopper) {
+                        const LHS = createAccessFromSymbolChain(chain, index - 1, stopper);
+                        if (!isEntityName(LHS)) {
+                            return Debug.fail("Impossible construct - an export of an indexed access cannot be reachable");
+                        }
+                        return createQualifiedName(LHS, identifier);
+                    }
+                    return identifier;
                 }
             }
 
@@ -3753,6 +3823,7 @@ namespace ts {
                     if (index === 0) {
                         context.flags ^= NodeBuilderFlags.InInitialEntityName;
                     }
+
                     const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
                     identifier.symbol = symbol;
 
@@ -19309,7 +19380,7 @@ namespace ts {
             }
 
             const links = getNodeLinks(node);
-            const type = getTypeOfSymbol(node.symbol);
+            const type = getTypeOfSymbol(getMergedSymbol(node.symbol));
             if (isTypeAny(type)) {
                 return type;
             }
@@ -26521,7 +26592,22 @@ namespace ts {
                     const symbol = node && getSymbolOfNode(node);
                     return !!(symbol && getCheckFlags(symbol) & CheckFlags.Late);
                 },
-                getJsxFactoryEntity: location => location ? (getJsxNamespace(location), (getSourceFileOfNode(location).localJsxFactory || _jsxFactoryEntity)) : _jsxFactoryEntity
+                getJsxFactoryEntity: location => location ? (getJsxNamespace(location), (getSourceFileOfNode(location).localJsxFactory || _jsxFactoryEntity)) : _jsxFactoryEntity,
+                getAllAccessorDeclarations(accessor: AccessorDeclaration): AllAccessorDeclarations {
+                    accessor = getParseTreeNode(accessor, isGetOrSetAccessorDeclaration);
+                    const otherKind = accessor.kind === SyntaxKind.SetAccessor ? SyntaxKind.GetAccessor : SyntaxKind.SetAccessor;
+                    const otherAccessor = getDeclarationOfKind<AccessorDeclaration>(getSymbolOfNode(accessor), otherKind);
+                    const firstAccessor = otherAccessor && (otherAccessor.pos < accessor.pos) ? otherAccessor : accessor;
+                    const secondAccessor = otherAccessor && (otherAccessor.pos < accessor.pos) ? accessor : otherAccessor;
+                    const setAccessor = accessor.kind === SyntaxKind.SetAccessor ? accessor : otherAccessor;
+                    const getAccessor = accessor.kind === SyntaxKind.GetAccessor ? accessor : otherAccessor;
+                    return {
+                        firstAccessor,
+                        secondAccessor,
+                        setAccessor,
+                        getAccessor
+                    };
+                }
             };
 
             function isInHeritageClause(node: PropertyAccessEntityNameExpression) {

@@ -98,3 +98,50 @@ class ClassWithPrivateNamedAccessors {
     static set [s](v) { }
 }
 exports.ClassWithPrivateNamedAccessors = ClassWithPrivateNamedAccessors;
+
+
+//// [uniqueSymbolsDeclarationsErrors.d.ts]
+declare const s: unique symbol;
+interface I {
+    readonly readonlyType: unique symbol;
+}
+export declare const obj: {
+    method1(p: typeof s): typeof s;
+    method2(p: I["readonlyType"]): I["readonlyType"];
+};
+export declare const classExpression: {
+    new (): {
+        method1(p: typeof s): typeof s;
+        method2(p: I["readonlyType"]): I["readonlyType"];
+    };
+};
+export declare function funcInferredReturnType(obj: {
+    method(p: typeof s): void;
+}): {
+    method(p: typeof s): void;
+};
+export interface InterfaceWithPrivateNamedProperties {
+    [s]: any;
+}
+export interface InterfaceWithPrivateNamedMethods {
+    [s](): any;
+}
+export declare type TypeLiteralWithPrivateNamedProperties = {
+    [s]: any;
+};
+export declare type TypeLiteralWithPrivateNamedMethods = {
+    [s](): any;
+};
+export declare class ClassWithPrivateNamedProperties {
+    [s]: any;
+    static [s]: any;
+}
+export declare class ClassWithPrivateNamedMethods {
+    [s](): void;
+    static [s](): void;
+}
+export declare class ClassWithPrivateNamedAccessors {
+    [s]: any;
+    static [s]: any;
+}
+export {};

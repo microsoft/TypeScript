@@ -81,7 +81,8 @@ namespace Harness.Parallel.Host {
         const { statSync }: { statSync(path: string): { size: number }; } = require("fs");
         const path: { join: (...args: string[]) => string } = require("path");
         for (const runner of runners) {
-            for (const file of runner.enumerateTestFiles()) {
+            for (const test of runner.enumerateTestFiles()) {
+                const file = typeof test === "string" ? test : test.file;
                 let size: number;
                 if (!perfData) {
                     try {
@@ -126,6 +127,7 @@ namespace Harness.Parallel.Host {
         let passingFiles = 0;
         let failingFiles = 0;
         let errorResults: ErrorInfo[] = [];
+        let passingResults: { name: string[] }[] = [];
         let totalPassing = 0;
         const startTime = Date.now();
 
@@ -197,9 +199,11 @@ namespace Harness.Parallel.Host {
                         totalPassing += data.payload.passing;
                         if (data.payload.errors.length) {
                             errorResults = errorResults.concat(data.payload.errors);
+                            passingResults = passingResults.concat(data.payload.passes);
                             failingFiles++;
                         }
                         else {
+                            passingResults = passingResults.concat(data.payload.passes);
                             passingFiles++;
                         }
                         newPerfData[hashName(data.payload.runner, data.payload.file)] = data.payload.duration;
@@ -366,21 +370,55 @@ namespace Harness.Parallel.Host {
 
             IO.writeFile(perfdataFileName(configOption), JSON.stringify(newPerfData, null, 4)); // tslint:disable-line:no-null-keyword
 
-            process.exit(errorResults.length);
+            if (Utils.getExecutionEnvironment() !== Utils.ExecutionEnvironment.Browser && process.env.CI === "true") {
+                const xunitReport = new xunit({ on: ts.noop, once: ts.noop }, { reporterOptions: { output: "./TEST-results.xml" } });
+                xunitReport.stats = reporter.stats;
+                xunitReport.failures = reporter.failures;
+                const rootAttrs: {[index: string]: any} = {
+                    name: "Tests",
+                    tests: stats.tests,
+                    failures: stats.failures,
+                    errors: stats.failures,
+                    skipped: stats.tests - stats.failures - stats.passes,
+                    timestamp: (new Date()).toUTCString(),
+                    time: (stats.duration / 1000) || 0
+                };
+                xunitReport.write(`<?xml version="1.0" encoding="UTF-8"?>` + "\n");
+                xunitReport.write(`<testsuite ${Object.keys(rootAttrs).map(k => `${k}="${escape("" + rootAttrs[k])}"`).join(" ")}>`);
+                [...failures, ...ts.map(passingResults, makeMochaTest)].forEach(t => {
+                    xunitReport.test(t);
+                });
+                xunitReport.write("</testsuite>");
+                xunitReport.done(failures, (f: any[]) => {
+                    process.exit(f.length);
+                });
+            }
+            else {
+                process.exit(failures.length);
+            }
+
         }
 
-        function makeMochaTest(test: ErrorInfo) {
+        function makeMochaTest(test: ErrorInfo | TestInfo) {
             return {
+                state: (test as ErrorInfo).error ? "failed" : "passed",
+                parent: {
+                    fullTitle: () => {
+                        return test.name.slice(0, test.name.length - 1).join(" ");
+                    }
+                },
+                title: test.name[test.name.length - 1],
                 fullTitle: () => {
                     return test.name.join(" ");
                 },
                 titlePath: () => {
                     return test.name;
                 },
-                err: {
-                    message: test.error,
-                    stack: test.stack
-                }
+                isPending: () => false,
+                err: (test as ErrorInfo).error ? {
+                    message: (test as ErrorInfo).error,
+                    stack: (test as ErrorInfo).stack
+                } : undefined
             };
         }
 
@@ -391,6 +429,7 @@ namespace Harness.Parallel.Host {
 
     let mocha: any;
     let base: any;
+    let xunit: any;
     let color: any;
     let cursor: any;
     let readline: any;
@@ -433,6 +472,7 @@ namespace Harness.Parallel.Host {
     function initializeProgressBarsDependencies() {
         mocha = require("mocha");
         base = mocha.reporters.Base;
+        xunit = mocha.reporters.xunit;
         color = base.color;
         cursor = base.cursor;
         readline = require("readline");

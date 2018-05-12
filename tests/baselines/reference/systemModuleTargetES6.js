@@ -15,6 +15,7 @@ export function myFunction2() {
 
 //// [systemModuleTargetES6.js]
 System.register([], function (exports_1, context_1) {
+    var MyClass, MyClass2;
     "use strict";
     var __moduleName = context_1 && context_1.id;
     function myFunction() {
@@ -25,7 +26,6 @@ System.register([], function (exports_1, context_1) {
         return new MyClass2();
     }
     exports_1("myFunction2", myFunction2);
-    var MyClass, MyClass2;
     return {
         setters: [],
         execute: function () {

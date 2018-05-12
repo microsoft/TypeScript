@@ -347,7 +347,11 @@ declare namespace FourSlashInterface {
             oldPath: string;
             newPath: string;
             newFileContents: { [fileName: string]: string };
-        });
+        }): void;
+        moveToNewFile(options: {
+            readonly newFileContents: { readonly [fileName: string]: string };
+        }): void;
+        noMoveToNewFile(): void;
     }
     class edit {
         backspace(count?: number): void;

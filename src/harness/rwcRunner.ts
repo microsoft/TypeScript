@@ -126,7 +126,7 @@ namespace RWC {
                 compilerResult = Harness.Compiler.compileFiles(
                     inputFiles,
                     otherFiles,
-                    /* harnessOptions */ undefined,
+                    { useCaseSensitiveFileNames: "" + (ioLog.useCaseSensitiveFileNames || false) },
                     opts.options,
                     // Since each RWC json file specifies its current directory in its json file, we need
                     // to pass this information in explicitly instead of acquiring it from the process.
@@ -212,6 +212,7 @@ namespace RWC {
 
 class RWCRunner extends RunnerBase {
     public enumerateTestFiles() {
+        // see also: `enumerateTestFiles` in tests/webTestServer.ts
         return Harness.IO.getDirectories("internal/cases/rwc/");
     }
 
@@ -225,7 +226,7 @@ class RWCRunner extends RunnerBase {
     public initializeTests(): void {
         // Read in and evaluate the test list
         for (const test of this.tests && this.tests.length ? this.tests : this.enumerateTestFiles()) {
-            this.runTest(test);
+            this.runTest(typeof test === "string" ? test : test.file);
         }
     }
 

@@ -542,6 +542,12 @@ namespace ts {
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.VariableStatement:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.ModuleDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.EnumDeclaration:
                 return true;
             default:
                 return false;
@@ -1722,6 +1728,10 @@ namespace ts {
     }
 
     export function importFromModuleSpecifier(node: StringLiteralLike): AnyValidImportOrReExport {
+        return tryGetImportFromModuleSpecifier(node) || Debug.fail(Debug.showSyntaxKind(node.parent));
+    }
+
+    export function tryGetImportFromModuleSpecifier(node: StringLiteralLike): AnyValidImportOrReExport | undefined {
         switch (node.parent.kind) {
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ExportDeclaration:
@@ -1731,9 +1741,10 @@ namespace ts {
             case SyntaxKind.CallExpression:
                 return node.parent as AnyValidImportOrReExport;
             case SyntaxKind.LiteralType:
-                return cast(node.parent.parent, isImportTypeNode) as ImportTypeNode & { argument: LiteralType };
+                Debug.assert(isStringLiteral(node));
+                return tryCast(node.parent.parent, isImportTypeNode) as ValidImportTypeNode | undefined;
             default:
-                return Debug.fail(Debug.showSyntaxKind(node.parent));
+                return undefined;
         }
     }
 
@@ -3006,13 +3017,6 @@ namespace ts {
 
     export function identifierIsThisKeyword(id: Identifier): boolean {
         return id.originalKeywordKind === SyntaxKind.ThisKeyword;
-    }
-
-    export interface AllAccessorDeclarations {
-        firstAccessor: AccessorDeclaration;
-        secondAccessor: AccessorDeclaration;
-        getAccessor: AccessorDeclaration;
-        setAccessor: AccessorDeclaration;
     }
 
     export function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration): AllAccessorDeclarations {
@@ -4888,6 +4892,11 @@ namespace ts {
 
     export function isIndexSignatureDeclaration(node: Node): node is IndexSignatureDeclaration {
         return node.kind === SyntaxKind.IndexSignature;
+    }
+
+    /* @internal */
+    export function isGetOrSetAccessorDeclaration(node: Node): node is AccessorDeclaration {
+        return node.kind === SyntaxKind.SetAccessor || node.kind === SyntaxKind.GetAccessor;
     }
 
     // Type

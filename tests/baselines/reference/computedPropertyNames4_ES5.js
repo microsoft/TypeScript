@@ -17,6 +17,7 @@ var v = {
 }
 
 //// [computedPropertyNames4_ES5.js]
+var _a;
 var s;
 var n;
 var a;
@@ -33,4 +34,3 @@ var v = (_a = {},
     _a["hello bye"] = 0,
     _a["hello " + a + " bye"] = 0,
     _a);
-var _a;

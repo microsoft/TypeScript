@@ -1,6 +1,6 @@
 === tests/cases/compiler/noImplicitAnyDestructuringInPrivateMethod.ts ===
 type Arg = {
->Arg : { a: number; }
+>Arg : Arg
 
     a: number;
 >a : number
@@ -10,9 +10,9 @@ export class Bar {
 >Bar : Bar
 
     private bar({ a, }: Arg): number {
->bar : ({ a, }: { a: number; }) => number
+>bar : ({ a, }: Arg) => number
 >a : number
->Arg : { a: number; }
+>Arg : Arg
 
         return a;
 >a : number

@@ -83,6 +83,7 @@ namespace ts.server {
         readonly ts: number;
         readonly tsx: number;
         readonly dts: number;
+        readonly deferred: number;
     }
 
     export interface OpenFileInfo {

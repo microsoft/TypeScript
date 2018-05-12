@@ -258,3 +258,33 @@ var m;
     }());
     m.c = c;
 })(m || (m = {}));
+
+
+//// [declFileTypeAnnotationVisibilityErrorAccessors.d.ts]
+declare module m {
+    class private1 {
+    }
+    class public1 {
+    }
+    module m2 {
+        class public2 {
+        }
+    }
+    class c {
+        readonly foo1: private1;
+        readonly foo2: private1;
+        foo3: private1;
+        foo4: private1;
+        foo5: private1;
+        readonly foo11: public1;
+        readonly foo12: public1;
+        foo13: public1;
+        foo14: public1;
+        foo15: public1;
+        readonly foo111: m2.public2;
+        readonly foo112: m2.public2;
+        foo113: m2.public2;
+        foo114: m2.public2;
+        foo115: m2.public2;
+    }
+}

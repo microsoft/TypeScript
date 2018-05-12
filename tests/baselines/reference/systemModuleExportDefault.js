@@ -40,9 +40,9 @@ System.register([], function (exports_1, context_1) {
 });
 //// [file3.js]
 System.register([], function (exports_1, context_1) {
+    var default_1;
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var default_1;
     return {
         setters: [],
         execute: function () {
@@ -57,9 +57,9 @@ System.register([], function (exports_1, context_1) {
 });
 //// [file4.js]
 System.register([], function (exports_1, context_1) {
+    var C;
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var C;
     return {
         setters: [],
         execute: function () {

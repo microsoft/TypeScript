@@ -111,6 +111,7 @@ for ({ name, skills: { primary, secondary } } =
 }
 
 //// [sourceMapValidationDestructuringForObjectBindingPattern2.js]
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3;
 var robot = { name: "mower", skill: "mowing" };
 var multiRobot = { name: "mower", skills: { primary: "mowing", secondary: "none" } };
 function getRobot() {
@@ -197,5 +198,4 @@ for (_2 = { name: "trimmer", skills: { primary: "trimming", secondary: "edging" 
     i = 0; i < 1; i++) {
     console.log(primaryA);
 }
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3;
 //# sourceMappingURL=sourceMapValidationDestructuringForObjectBindingPattern2.js.map

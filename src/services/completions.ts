@@ -972,12 +972,8 @@ namespace ts.Completions {
         }
         else if (isRightOfOpenTag) {
             const tagSymbols = Debug.assertEachDefined(typeChecker.getJsxIntrinsicTagNamesAt(location), "getJsxIntrinsicTagNames() should all be defined");
-            if (tryGetGlobalSymbols()) {
-                symbols = tagSymbols.concat(symbols.filter(s => !!(s.flags & (SymbolFlags.Value | SymbolFlags.Alias))));
-            }
-            else {
-                symbols = tagSymbols;
-            }
+            tryGetGlobalSymbols();
+            symbols = tagSymbols.concat(symbols);
             completionKind = CompletionKind.MemberLike;
         }
         else if (isStartingCloseTag) {
@@ -1298,7 +1294,7 @@ namespace ts.Completions {
                 const exportedSymbols = typeChecker.getExportsOfModule(symbol);
                 // If the exported symbols contains type,
                 // symbol can be referenced at locations where type is allowed
-                return forEach(exportedSymbols, symbolCanBeReferencedAtTypeLocation);
+                return exportedSymbols.some(symbolCanBeReferencedAtTypeLocation);
             }
         }
 
@@ -2211,7 +2207,6 @@ namespace ts.Completions {
     function isValidTrigger(sourceFile: SourceFile, triggerCharacter: CompletionsTriggerCharacter, contextToken: Node, position: number): boolean {
         switch (triggerCharacter) {
             case ".":
-            case "/":
             case "@":
                 return true;
             case '"':
@@ -2222,6 +2217,10 @@ namespace ts.Completions {
             case "<":
                 // Opening JSX tag
                 return contextToken.kind === SyntaxKind.LessThanToken && contextToken.parent.kind !== SyntaxKind.BinaryExpression;
+            case "/":
+                return isStringLiteralLike(contextToken)
+                    ? !!tryGetImportFromModuleSpecifier(contextToken)
+                    : contextToken.kind === SyntaxKind.SlashToken && isJsxClosingElement(contextToken.parent);
             default:
                 return Debug.assertNever(triggerCharacter);
         }

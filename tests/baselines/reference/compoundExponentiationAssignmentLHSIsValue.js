@@ -96,6 +96,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var _a;
 // expected error for all the LHS of compound assignments (arithmetic and addition)
 var value;
 // this
@@ -144,18 +145,19 @@ _a = Math.pow(['', ''], value), '' = _a[0], '' = _a[1];
 var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        var _this = _super.call(this) || this;
-        (_a = _super.prototype). = Math.pow(_a., value);
+        var _this = this;
         var _a;
+        _this = _super.call(this) || this;
+        (_a = _super.prototype). = Math.pow(_a., value);
         return _this;
     }
     Derived.prototype.foo = function () {
-        (_a = _super.prototype). = Math.pow(_a., value);
         var _a;
+        (_a = _super.prototype). = Math.pow(_a., value);
     };
     Derived.sfoo = function () {
-        (_a = _super). = Math.pow(_a., value);
         var _a;
+        (_a = _super). = Math.pow(_a., value);
     };
     return Derived;
 }(C));
@@ -181,4 +183,3 @@ foo() = Math.pow(foo(), value);
 ([]) = Math.pow(([]), value);
 (function baz1() { }) = Math.pow((function baz1() { }), value);
 (foo()) = Math.pow((foo()), value);
-var _a;

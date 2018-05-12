@@ -9,6 +9,9 @@
 
 ////// "/*quoteInComment*/ </*lessInComment*/
 
+// @Filename: /foo/importMe.ts
+////whatever
+
 // @Filename: /a.tsx
 ////declare namespace JSX {
 ////    interface Element {}
@@ -16,8 +19,11 @@
 ////        div: {};
 ////    }
 ////}
-////const ctr = </*openTag*/
-////const less = 1 </*lessThan*/
+////const ctr = </*openTag*/;
+////const less = 1 </*lessThan*/;
+////const closeTag = <div> foo <//*closeTag*/;
+////import something from "./foo//*path*/";
+////const divide = 1 //*divide*/
 
 verify.completions(
     { marker: "openQuote", exact: ["a", "b"], triggerCharacter: '"' },
@@ -34,4 +40,7 @@ verify.completions(
 
     { marker: "openTag", includes: "div", triggerCharacter: "<" },
     { marker: "lessThan", exact: undefined, triggerCharacter: "<" },
+    { marker: "closeTag", exact: "div", triggerCharacter: "/" },
+    { marker: "path", exact: "importMe", triggerCharacter: "/", isNewIdentifierLocation: true },
+    { marker: "divide", exact: undefined, triggerCharacter: "/" },
 );
