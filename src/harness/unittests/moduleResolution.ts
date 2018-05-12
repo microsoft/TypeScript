@@ -1270,7 +1270,7 @@ import b = require("./moduleB");
         });
     });
 
-    describe("Type reference directive resolution: ", () => {
+    describe("Type search scope resolution: ", () => {
         function test(searchScope: string, typeDirective: string, primary: boolean, initialFile: File, targetFile: File, ...otherFiles: File[]) {
             const host = createModuleResolutionHost(/*hasDirectoryExists*/ false, ...[initialFile, targetFile].concat(...otherFiles));
             const result = resolveTypeReferenceDirective(typeDirective, initialFile.name, { searchScopes: [searchScope] }, host);
