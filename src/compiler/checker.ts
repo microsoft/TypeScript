@@ -19049,20 +19049,24 @@ namespace ts {
                 const availableArgumentCounts: number[] = [];
                 for (const sig of signatures) {
                     let argc = sig.minArgumentCount;
+                    let maxArgs = sig.parameters.length;
                     do {
                         if (availableArgumentCounts.indexOf(argc) < 0) {
                             availableArgumentCounts.push(argc);
                         }
                         argc++;
-                    } while (argc <= sig.parameters.length);
+                    } while (argc <= maxArgs);
+                }
+                if (availableArgumentCounts.length === 0) {
+                    availableArgumentCounts.push(0);
                 }
 
                 const availableArgumentCountsSorted = availableArgumentCounts.sort((a, b) => a < b ? 0 : 1);
 
-                const min = availableArgumentCountsSorted[0];
+                const min = availableArgumentCountsSorted[0] || 0;
                 const max = availableArgumentCountsSorted[availableArgumentCountsSorted.length - 1];
 
-                const argCount = args.length;
+                let argCount = args.length;
                 const availableBelowCurrentArgCount = filter(availableArgumentCountsSorted, c => c < argCount);
                 const availableAboveCurrentArgCount = filter(availableArgumentCountsSorted, c => c > argCount);
 
@@ -19081,18 +19085,28 @@ namespace ts {
                     max;
 
                 const hasRestParameter = some(signatures, sig => sig.hasRestParameter);
+                const hasSpreadArgument = getSpreadArgumentIndex(args) > -1;
+                if (argCount <= max && hasSpreadArgument) {
+                    argCount--;
+                }
 
-                if (argCount > max) {
-                    if (hasRestParameter) {
-                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_at_least_0_arguments_but_got_1, min, argCount));
+                if (hasSpreadArgument) {
+                    if (contiguousAbove && argCount < min) {
+                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1_or_more, rangeErrorAbove, argCount));
+                    }
+                    else if (contiguousBelow && argCount > max) {
+                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1_or_more, rangeErrorBelow, argCount));
                     }
                     else {
-                        if (contiguousBelow) {
-                            diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, rangeErrorBelow, argCount));
-                        }
-                        else {
-                            diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_no_more_than_0_arguments_but_got_1, max, argCount));
-                        }
+                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_at_least_0_arguments_but_got_1_or_more, min, argCount));
+                    }
+                }
+                else if (argCount > max) {
+                    if (contiguousBelow && !hasRestParameter) {
+                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, rangeErrorBelow, argCount));
+                    }
+                    else {
+                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_no_more_than_0_arguments_but_got_1, max, argCount));
                     }
                 }
                 else if (argCount < min) {
@@ -19100,7 +19114,7 @@ namespace ts {
                         diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, rangeErrorAbove, argCount));
                     }
                     else {
-                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_at_least_0_arguments_but_got_1, minAboveArgCount, argCount));
+                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_at_least_0_arguments_but_got_1, min, argCount));
                     }
                 }
                 else { // there are both signatures taking less and more arguments
