@@ -2060,9 +2060,13 @@
         "category": "Error",
         "code": 2575
     },
-    "Expected no more than {0} arguments but got {1}.": {
+    "No overload expects {0} arguments. The most likely overloads that match expect either up to {1} arguments or {2} arguments.": {
         "category": "Error",
         "code": 2576
+    },
+    "No overload expects {0} arguments. The most likely overloads that match expect either up to {1} arguments or at least {2} arguments.": {
+        "category": "Error",
+        "code": 2577
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",

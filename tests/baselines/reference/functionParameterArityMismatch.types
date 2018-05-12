@@ -1,126 +1,132 @@
 === tests/cases/compiler/functionParameterArityMismatch.ts ===
-declare function f(a: number);
->f : { (a: number): any; (a: number, b: number, c: number): any; }
+declare function f1(a: number);
+>f1 : { (a: number): any; (a: number, b: number, c: number): any; }
 >a : number
 
-declare function f(a: number, b: number, c: number);
->f : { (a: number): any; (a: number, b: number, c: number): any; }
+declare function f1(a: number, b: number, c: number);
+>f1 : { (a: number): any; (a: number, b: number, c: number): any; }
 >a : number
 >b : number
 >c : number
 
-f();
->f() : any
->f : { (a: number): any; (a: number, b: number, c: number): any; }
+f1();
+>f1() : any
+>f1 : { (a: number): any; (a: number, b: number, c: number): any; }
 
-f(1, 2);
->f(1, 2) : any
->f : { (a: number): any; (a: number, b: number, c: number): any; }
+f1(1, 2);
+>f1(1, 2) : any
+>f1 : { (a: number): any; (a: number, b: number, c: number): any; }
 >1 : 1
 >2 : 2
 
-f(1, 2, 3, 4);
->f(1, 2, 3, 4) : any
->f : { (a: number): any; (a: number, b: number, c: number): any; }
->1 : 1
->2 : 2
->3 : 3
->4 : 4
-
-f(1, 2, 3, 4, 5);
->f(1, 2, 3, 4, 5) : any
->f : { (a: number): any; (a: number, b: number, c: number): any; }
+f1(1, 2, 3, 4);
+>f1(1, 2, 3, 4) : any
+>f1 : { (a: number): any; (a: number, b: number, c: number): any; }
 >1 : 1
 >2 : 2
 >3 : 3
 >4 : 4
->5 : 5
 
-declare function g(a?: number);
->g : { (a?: number): any; (a: number, b: number, c: number, d: number, e?: number): any; }
+declare function f2(a?: number);
+>f2 : { (a?: number): any; (a: number, b: number, c: number, ...d: number[]): any; }
 >a : number
 
-declare function g(a: number, b: number, c: number, d: number, e?: number);
->g : { (a?: number): any; (a: number, b: number, c: number, d: number, e?: number): any; }
+declare function f2(a: number, b: number, c: number, ...d: number[]);
+>f2 : { (a?: number): any; (a: number, b: number, c: number, ...d: number[]): any; }
+>a : number
+>b : number
+>c : number
+>d : number[]
+
+f2(1, 2);
+>f2(1, 2) : any
+>f2 : { (a?: number): any; (a: number, b: number, c: number, ...d: number[]): any; }
+>1 : 1
+>2 : 2
+
+declare function f3();
+>f3 : { (): any; (a: number, b: number): any; (a: number, b: number, c: number, d: number, e?: number): any; }
+
+declare function f3(a: number, b: number);
+>f3 : { (): any; (a: number, b: number): any; (a: number, b: number, c: number, d: number, e?: number): any; }
+>a : number
+>b : number
+
+declare function f3(a: number, b: number, c: number, d: number, e?: number);
+>f3 : { (): any; (a: number, b: number): any; (a: number, b: number, c: number, d: number, e?: number): any; }
 >a : number
 >b : number
 >c : number
 >d : number
 >e : number
 
-g(1, 2);
->g(1, 2) : any
->g : { (a?: number): any; (a: number, b: number, c: number, d: number, e?: number): any; }
+f3(1);
+>f3(1) : any
+>f3 : { (): any; (a: number, b: number): any; (a: number, b: number, c: number, d: number, e?: number): any; }
 >1 : 1
->2 : 2
 
-g(1, 2, 3);
->g(1, 2, 3) : any
->g : { (a?: number): any; (a: number, b: number, c: number, d: number, e?: number): any; }
+f3(1, 2, 3);
+>f3(1, 2, 3) : any
+>f3 : { (): any; (a: number, b: number): any; (a: number, b: number, c: number, d: number, e?: number): any; }
 >1 : 1
 >2 : 2
 >3 : 3
 
-g(1, 2, 3, 4, 5, 6, 7);
->g(1, 2, 3, 4, 5, 6, 7) : any
->g : { (a?: number): any; (a: number, b: number, c: number, d: number, e?: number): any; }
+declare function f4();
+>f4 : { (): any; (a: number, b: number): any; (a: number, b: number, c: number, d: number, ...e: number[]): any; }
+
+declare function f4(a: number, b: number);
+>f4 : { (): any; (a: number, b: number): any; (a: number, b: number, c: number, d: number, ...e: number[]): any; }
+>a : number
+>b : number
+
+declare function f4(a: number, b: number, c: number, d: number, ...e: number[]);
+>f4 : { (): any; (a: number, b: number): any; (a: number, b: number, c: number, d: number, ...e: number[]): any; }
+>a : number
+>b : number
+>c : number
+>d : number
+>e : number[]
+
+f4(1);
+>f4(1) : any
+>f4 : { (): any; (a: number, b: number): any; (a: number, b: number, c: number, d: number, ...e: number[]): any; }
+>1 : 1
+
+f4(1, 2, 3);
+>f4(1, 2, 3) : any
+>f4 : { (): any; (a: number, b: number): any; (a: number, b: number, c: number, d: number, ...e: number[]): any; }
+>1 : 1
+>2 : 2
+>3 : 3
+
+declare function f5(a?: number, b?: number);
+>f5 : { (a?: number, b?: number): any; (a: number, b: number, c: number, d: number, e?: number): any; }
+>a : number
+>b : number
+
+declare function f5(a: number, b: number, c: number, d: number, e?: number);
+>f5 : { (a?: number, b?: number): any; (a: number, b: number, c: number, d: number, e?: number): any; }
+>a : number
+>b : number
+>c : number
+>d : number
+>e : number
+
+f5(1, 2, 3);
+>f5(1, 2, 3) : any
+>f5 : { (a?: number, b?: number): any; (a: number, b: number, c: number, d: number, e?: number): any; }
+>1 : 1
+>2 : 2
+>3 : 3
+
+f5(1, 2, 3, 4, 5, 6);
+>f5(1, 2, 3, 4, 5, 6) : any
+>f5 : { (a?: number, b?: number): any; (a: number, b: number, c: number, d: number, e?: number): any; }
 >1 : 1
 >2 : 2
 >3 : 3
 >4 : 4
 >5 : 5
 >6 : 6
->7 : 7
-
-declare function h(a: number, b: number, c?: number);
->h : (a: number, b: number, c?: number) => any
->a : number
->b : number
->c : number
-
-h();
->h() : any
->h : (a: number, b: number, c?: number) => any
-
-h(1);
->h(1) : any
->h : (a: number, b: number, c?: number) => any
->1 : 1
-
-h(1, 2, 3, 4);
->h(1, 2, 3, 4) : any
->h : (a: number, b: number, c?: number) => any
->1 : 1
->2 : 2
->3 : 3
->4 : 4
-
-h(1, 2, 3, 4, 5);
->h(1, 2, 3, 4, 5) : any
->h : (a: number, b: number, c?: number) => any
->1 : 1
->2 : 2
->3 : 3
->4 : 4
->5 : 5
-
-declare function i(a?: number, b?: number);
->i : (a?: number, b?: number) => any
->a : number
->b : number
-
-i(1, 2, 3);
->i(1, 2, 3) : any
->i : (a?: number, b?: number) => any
->1 : 1
->2 : 2
->3 : 3
-
-i(1, 2, 3, 4);
->i(1, 2, 3, 4) : any
->i : (a?: number, b?: number) => any
->1 : 1
->2 : 2
->3 : 3
->4 : 4
 

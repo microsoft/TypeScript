@@ -1,22 +1,26 @@
-declare function f(a: number);
-declare function f(a: number, b: number, c: number);
-f();
-f(1, 2);
-f(1, 2, 3, 4);
-f(1, 2, 3, 4, 5);
+declare function f1(a: number);
+declare function f1(a: number, b: number, c: number);
+f1();
+f1(1, 2);
+f1(1, 2, 3, 4);
 
-declare function g(a?: number);
-declare function g(a: number, b: number, c: number, d: number, e?: number);
-g(1, 2);
-g(1, 2, 3);
-g(1, 2, 3, 4, 5, 6, 7);
+declare function f2(a?: number);
+declare function f2(a: number, b: number, c: number, ...d: number[]);
+f2(1, 2);
 
-declare function h(a: number, b: number, c?: number);
-h();
-h(1);
-h(1, 2, 3, 4);
-h(1, 2, 3, 4, 5);
+declare function f3();
+declare function f3(a: number, b: number);
+declare function f3(a: number, b: number, c: number, d: number, e?: number);
+f3(1);
+f3(1, 2, 3);
 
-declare function i(a?: number, b?: number);
-i(1, 2, 3);
-i(1, 2, 3, 4);
+declare function f4();
+declare function f4(a: number, b: number);
+declare function f4(a: number, b: number, c: number, d: number, ...e: number[]);
+f4(1);
+f4(1, 2, 3);
+
+declare function f5(a?: number, b?: number);
+declare function f5(a: number, b: number, c: number, d: number, e?: number);
+f5(1, 2, 3);
+f5(1, 2, 3, 4, 5, 6);
