@@ -19047,40 +19047,35 @@ namespace ts {
             }
             else if (args) {
                 const availableArgumentCounts: number[] = [];
-                for (const sig of signatures) {
+                forEach(signatures, sig => {
                     const maxArgs = sig.parameters.length;
                     let argc = sig.minArgumentCount;
                     do {
-                        if (availableArgumentCounts.indexOf(argc) < 0) {
-                            availableArgumentCounts.push(argc);
-                        }
+                        pushIfUnique(availableArgumentCounts, argc);
                         argc++;
                     } while (argc <= maxArgs);
-                }
-                if (availableArgumentCounts.length === 0) {
-                    availableArgumentCounts.push(0);
-                }
+                });
+                if (availableArgumentCounts.length === 0) availableArgumentCounts.push(0);
 
-                const availableArgumentCountsSorted = availableArgumentCounts.sort((a, b) => a < b ? 0 : 1);
+                const orderNumerically = (a: number, b: number) => a < b ? 0 : 1;
+                const availableArgumentCountsSorted = sort(availableArgumentCounts, orderNumerically);
 
-                const min = availableArgumentCountsSorted[0] || 0;
-                const max = availableArgumentCountsSorted[availableArgumentCountsSorted.length - 1];
+                const min = first(availableArgumentCountsSorted);
+                const max = last(availableArgumentCountsSorted);
 
                 const hasRestParameter = some(signatures, sig => sig.hasRestParameter);
                 const hasSpreadArgument = getSpreadArgumentIndex(args) > -1;
 
                 let argCount = args.length;
-                if (argCount <= max && hasSpreadArgument) {
-                    argCount--;
-                }
+                if (argCount <= max && hasSpreadArgument) argCount--;
 
                 const availableBelowCurrentArgCount = filter(availableArgumentCountsSorted, c => c < argCount);
                 const availableAboveCurrentArgCount = filter(availableArgumentCountsSorted, c => c > argCount);
 
-                const minAboveArgCount = availableAboveCurrentArgCount[0];
-                const maxBelowArgCount = availableBelowCurrentArgCount[availableBelowCurrentArgCount.length - 1];
+                const minAboveArgCount = firstOrUndefined(availableAboveCurrentArgCount);
+                const maxBelowArgCount = lastOrUndefined(availableBelowCurrentArgCount);
 
-                const sortedArrayIsContiguous = (arr: number[]) => arr === [] ? true : arr[arr.length - 1] - arr[0] === arr.length - 1;
+                const sortedArrayIsContiguous = (arr: number[]) => arr.length === 0 ? true : last(arr) - first(arr) === arr.length - 1;
                 const contiguousBelow = sortedArrayIsContiguous(availableBelowCurrentArgCount);
                 const contiguousAbove = sortedArrayIsContiguous(availableAboveCurrentArgCount);
 
@@ -19098,42 +19093,32 @@ namespace ts {
                     else if (contiguousBelow && argCount > max) {
                         diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1_or_more, rangeErrorBelow, argCount));
                     }
-                    else {
-                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_at_least_0_arguments_but_got_1_or_more, min, argCount));
-                    }
+                    else diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_at_least_0_arguments_but_got_1_or_more, min, argCount));
                 }
                 else if (argCount > max) {
                     if (contiguousBelow && !hasRestParameter) {
                         diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, rangeErrorBelow, argCount));
                     }
-                    else {
-                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_no_more_than_0_arguments_but_got_1, max, argCount));
-                    }
+                    else diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_no_more_than_0_arguments_but_got_1, max, argCount));
                 }
                 else if (argCount < min) {
                     if (contiguousAbove && !hasRestParameter) {
                         diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, rangeErrorAbove, argCount));
                     }
-                    else {
-                        diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_at_least_0_arguments_but_got_1, min, argCount));
-                    }
+                    else diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_at_least_0_arguments_but_got_1, min, argCount));
                 }
                 else { // there are both signatures taking less and more arguments
                     if (contiguousBelow) {
                         if (contiguousAbove && !hasRestParameter) {
                             diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_0_or_1_arguments_but_got_2, rangeErrorBelow, rangeErrorAbove, argCount));
                         }
-                        else {
-                            diagnostics.add(createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_The_most_likely_overloads_that_match_expect_either_1_arguments_or_at_least_2_arguments, argCount, rangeErrorBelow, minAboveArgCount));
-                        }
+                        else diagnostics.add(createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_The_most_likely_overloads_that_match_expect_either_1_arguments_or_at_least_2_arguments, argCount, rangeErrorBelow, minAboveArgCount));
                     }
                     else {
                         if (contiguousAbove && !hasRestParameter) {
                             diagnostics.add(createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_The_most_likely_overloads_that_match_expect_either_up_to_1_arguments_or_2_arguments, argCount, maxBelowArgCount, rangeErrorAbove));
                         }
-                        else {
-                            diagnostics.add(createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_The_most_likely_overloads_that_match_expect_either_up_to_1_arguments_or_at_least_2_arguments, argCount, maxBelowArgCount, minAboveArgCount));
-                        }
+                        else diagnostics.add(createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_The_most_likely_overloads_that_match_expect_either_up_to_1_arguments_or_at_least_2_arguments, argCount, maxBelowArgCount, minAboveArgCount));
                     }
                 }
             }
