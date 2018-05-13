@@ -437,6 +437,9 @@ interface StringConstructor {
 declare const String: StringConstructor;
 
 interface Boolean {
+    /** Returns a string representation of a boolean. */
+    toString(): string;
+
     /** Returns the primitive value of the specified object. */
     valueOf(): boolean;
 }
@@ -517,7 +520,7 @@ interface TemplateStringsArray extends ReadonlyArray<string> {
 
 /**
  * The type of `import.meta`.
- * 
+ *
  * If you need to declare that a given property exists on `import.meta`,
  * this type may be augmented via interface merging.
  */
