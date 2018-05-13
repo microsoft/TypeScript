@@ -19048,8 +19048,8 @@ namespace ts {
             else if (args) {
                 const availableArgumentCounts: number[] = [];
                 for (const sig of signatures) {
+                    const maxArgs = sig.parameters.length;
                     let argc = sig.minArgumentCount;
-                    let maxArgs = sig.parameters.length;
                     do {
                         if (availableArgumentCounts.indexOf(argc) < 0) {
                             availableArgumentCounts.push(argc);
@@ -19066,7 +19066,14 @@ namespace ts {
                 const min = availableArgumentCountsSorted[0] || 0;
                 const max = availableArgumentCountsSorted[availableArgumentCountsSorted.length - 1];
 
+                const hasRestParameter = some(signatures, sig => sig.hasRestParameter);
+                const hasSpreadArgument = getSpreadArgumentIndex(args) > -1;
+
                 let argCount = args.length;
+                if (argCount <= max && hasSpreadArgument) {
+                    argCount--;
+                }
+
                 const availableBelowCurrentArgCount = filter(availableArgumentCountsSorted, c => c < argCount);
                 const availableAboveCurrentArgCount = filter(availableArgumentCountsSorted, c => c > argCount);
 
@@ -19084,14 +19091,8 @@ namespace ts {
                     minAboveArgCount + "-" + max :
                     max;
 
-                const hasRestParameter = some(signatures, sig => sig.hasRestParameter);
-                const hasSpreadArgument = getSpreadArgumentIndex(args) > -1;
-                if (argCount <= max && hasSpreadArgument) {
-                    argCount--;
-                }
-
                 if (hasSpreadArgument) {
-                    if (contiguousAbove && argCount < min) {
+                    if (!hasRestParameter && contiguousAbove && argCount < min) {
                         diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1_or_more, rangeErrorAbove, argCount));
                     }
                     else if (contiguousBelow && argCount > max) {
