@@ -23615,14 +23615,15 @@ namespace ts {
             const returnType = getReturnTypeOfSignature(signature);
             const functionFlags = getFunctionFlags(func);
             const isGenerator = functionFlags & FunctionFlags.Generator;
+            const isAsync = (functionFlags & FunctionFlags.Async) !== 0;
             if (strictNullChecks || node.expression || returnType.flags & TypeFlags.Never) {
                 const exprType = node.expression ? checkExpressionCached(node.expression) : undefinedType;
-                if (isGenerator) { // AsyncGenerator function or Generator function
-                    // A generator does not need its return expressions checked against its return type.
-                    // Instead, the yield expressions are checked against the element type.
-                    // TODO: Check return types of generators when return type tracking is added
-                    // for generators.
-                    return;
+                if (isGenerator) {
+                    const returnType = getEffectiveReturnTypeNode(func);
+                    if (returnType) {
+                        const signatureElementType = getIteratedTypeOfGenerator(getTypeFromTypeNode(returnType), isAsync) || anyType;
+                        checkTypeAssignableTo(exprType, signatureElementType, node);
+                    }
                 }
                 else if (func.kind === SyntaxKind.SetAccessor) {
                     if (node.expression) {
