@@ -4346,6 +4346,9 @@
       <Item ItemId=";Include_modules_imported_with_json_extension_6197" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Include modules imported with '.json' extension]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Включать модули, импортированные с расширением .json]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6539,6 +6542,9 @@
       <Item ItemId=";Referenced_project_0_must_have_setting_composite_Colon_true_6306" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Referenced project '{0}' must have setting "composite": true.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Указанный в ссылке проект "{0}" должен иметь следующее значение параметра composite: true.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>

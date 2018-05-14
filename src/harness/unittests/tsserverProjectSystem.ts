@@ -164,7 +164,7 @@ namespace ts.projectSystem {
     }
 
     export function fileStats(nonZeroStats: Partial<server.FileStats>): server.FileStats {
-        return { ts: 0, tsx: 0, dts: 0, js: 0, jsx: 0, ...nonZeroStats };
+        return { ts: 0, tsx: 0, dts: 0, js: 0, jsx: 0, deferred: 0, ...nonZeroStats };
     }
 
     export class TestServerEventManager {
