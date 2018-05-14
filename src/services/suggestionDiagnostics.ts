@@ -5,7 +5,9 @@ namespace ts {
         const checker = program.getDiagnosticsProducingTypeChecker();
         const diags: Diagnostic[] = [];
 
-        if (sourceFile.commonJsModuleIndicator && (programContainsEs6Modules(program) || compilerOptionsIndicateEs6Modules(program.getCompilerOptions()))) {
+        if (sourceFile.commonJsModuleIndicator &&
+            (programContainsEs6Modules(program) || compilerOptionsIndicateEs6Modules(program.getCompilerOptions())) &&
+            containsTopLevelCommonjs(sourceFile)) {
             diags.push(createDiagnosticForNode(getErrorNodeFromCommonJsIndicator(sourceFile.commonJsModuleIndicator), Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES6_module));
         }
 
@@ -59,6 +61,29 @@ namespace ts {
         }
 
         return diags.concat(checker.getSuggestionDiagnostics(sourceFile));
+    }
+
+    // convertToEs6Module only works on top-level, so don't trigger it if commonjs code only appears in nested scopes.
+    function containsTopLevelCommonjs(sourceFile: SourceFile): boolean {
+        return sourceFile.statements.some(statement => {
+            switch (statement.kind) {
+                case SyntaxKind.VariableStatement:
+                    return (statement as VariableStatement).declarationList.declarations.some(decl =>
+                        isRequireCall(propertyAccessLeftHandSide(decl.initializer), /*checkArgumentIsStringLiteralLike*/ true));
+                case SyntaxKind.ExpressionStatement: {
+                    const { expression } = statement as ExpressionStatement;
+                    if (!isBinaryExpression(expression)) return isRequireCall(expression, /*checkArgumentIsStringLiteralLike*/ true);
+                    const kind = getSpecialPropertyAssignmentKind(expression);
+                    return kind === SpecialPropertyAssignmentKind.ExportsProperty || kind === SpecialPropertyAssignmentKind.ModuleExports;
+                }
+                default:
+                    return false;
+            }
+        });
+    }
+
+    function propertyAccessLeftHandSide(node: Expression): Expression {
+        return isPropertyAccessExpression(node) ? propertyAccessLeftHandSide(node.expression) : node;
     }
 
     function importNameForConvertToDefaultImport(node: AnyValidImportOrReExport): Identifier | undefined {
