@@ -1012,8 +1012,10 @@ namespace ts {
                 }
                 else {
                     const jsPath = tryReadPackageJsonFields(/*readTypes*/ false, packageJsonContent, nodeModuleDirectory, state);
-                    if (typeof jsPath === "string") {
-                        subModuleName = removeExtension(removeExtension(jsPath.substring(nodeModuleDirectory.length + 1), Extension.Js), Extension.Jsx) + Extension.Dts;
+                    if (typeof jsPath === "string" && jsPath.length > nodeModuleDirectory.length) {
+                        const potentialSubModule = jsPath.substring(nodeModuleDirectory.length + 1);
+                        subModuleName = (forEach(supportedJavascriptExtensions, extension =>
+                            tryRemoveExtension(potentialSubModule, extension)) || potentialSubModule) + Extension.Dts;
                     }
                     else {
                         subModuleName = "index.d.ts";
