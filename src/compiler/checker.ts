@@ -892,6 +892,7 @@ namespace ts {
         function mergeSymbol(target: Symbol, source: Symbol) {
             if (!(target.flags & getExcludedSymbolFlags(source.flags)) ||
                 (source.flags | target.flags) & SymbolFlags.JSContainer) {
+                const targetValueDeclaration = target.valueDeclaration;
                 Debug.assert(!!(target.flags & SymbolFlags.Transient));
                 // Javascript static-property-assignment declarations always merge, even though they are also values
                 if (source.flags & SymbolFlags.ValueModule && target.flags & SymbolFlags.ValueModule && target.constEnumOnlyModule && !source.constEnumOnlyModule) {
@@ -916,7 +917,8 @@ namespace ts {
                 }
                 if ((source.flags | target.flags) & SymbolFlags.JSContainer) {
                     const sourceInitializer = getJSInitializerSymbol(source);
-                    let targetInitializer = getJSInitializerSymbol(target);
+                    const init = getDeclaredJavascriptInitializer(targetValueDeclaration) || getAssignedJavascriptInitializer(targetValueDeclaration);
+                    let targetInitializer = init && init.symbol ? init.symbol : target;
                     if (sourceInitializer !== source || targetInitializer !== target) {
                         if (!(targetInitializer.flags & SymbolFlags.Transient)) {
                             const mergedInitializer = getMergedSymbol(targetInitializer);
