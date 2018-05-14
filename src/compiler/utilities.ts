@@ -1866,7 +1866,7 @@ namespace ts {
             //   */
             // var x = function(name) { return name.length; }
             if (parent.parent &&
-                (getSingleVariableOfVariableStatement(parent.parent) === node || getSourceOfAssignment(parent.parent))) {
+                (getSingleVariableOfVariableStatement(parent.parent) === node)) {
                 getJSDocCommentsAndTagsWorker(parent.parent);
             }
             if (parent.parent && parent.parent.parent &&
@@ -1875,8 +1875,8 @@ namespace ts {
                     getSourceOfDefaultedAssignment(parent.parent.parent))) {
                 getJSDocCommentsAndTagsWorker(parent.parent.parent);
             }
-            if (isBinaryExpression(node) && getSpecialPropertyAssignmentKind(node) !== SpecialPropertyAssignmentKind.None ||
-                isBinaryExpression(parent) && getSpecialPropertyAssignmentKind(parent) !== SpecialPropertyAssignmentKind.None ||
+            if (isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.EqualsToken ||
+                isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken ||
                 node.kind === SyntaxKind.PropertyAccessExpression && node.parent && node.parent.kind === SyntaxKind.ExpressionStatement) {
                 getJSDocCommentsAndTagsWorker(parent);
             }
@@ -1913,7 +1913,7 @@ namespace ts {
         return parameter && parameter.symbol;
     }
 
-    export function getHostSignatureFromJSDoc(node: JSDocTag): SignatureDeclaration | undefined {
+    export function getHostSignatureFromJSDoc(node: Node): SignatureDeclaration | undefined {
         const host = getJSDocHost(node);
         const decl = getSourceOfDefaultedAssignment(host) ||
             getSourceOfAssignment(host) ||
