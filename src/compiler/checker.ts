@@ -2153,22 +2153,24 @@ namespace ts {
          */
         function resolveEntityNameFromJSSpecialAssignment(name: Identifier, meaning: SymbolFlags) {
             if (isJSDocTypeReference(name.parent)) {
-                const host = getJSDocHost(name.parent);
-                if (host) {
-                    const secondaryLocation = getJSSpecialAssignmentSymbol(getJSDocHost(name.parent.parent.parent as JSDocTag));
-                    return secondaryLocation && resolveName(secondaryLocation, name.escapedText, meaning, /*nameNotFoundMessage*/ undefined, name, /*isUse*/ true);
+                const secondaryLocation = getJSSpecialAssignmentSymbol(name.parent);
+                if (secondaryLocation) {
+                    return resolveName(secondaryLocation, name.escapedText, meaning, /*nameNotFoundMessage*/ undefined, name, /*isUse*/ true);
                 }
             }
         }
 
-        function getJSSpecialAssignmentSymbol(host: HasJSDoc): Declaration | undefined {
-            if (isPropertyAssignment(host) && isFunctionLike(host.initializer)) {
-                const symbol = getSymbolOfNode(host.initializer);
+        function getJSSpecialAssignmentSymbol(node: TypeReferenceNode): Declaration | undefined {
+            const sig = getHostSignatureFromJSDoc(node);
+            if (sig) {
+                const symbol = getSymbolOfNode(sig);
                 return symbol && symbol.valueDeclaration;
             }
-            else if (isExpressionStatement(host) &&
-                     isBinaryExpression(host.expression) &&
-                     getSpecialPropertyAssignmentKind(host.expression) === SpecialPropertyAssignmentKind.PrototypeProperty) {
+            const host = getJSDocHost(node);
+            if (host &&
+                isExpressionStatement(host) &&
+                isBinaryExpression(host.expression) &&
+                getSpecialPropertyAssignmentKind(host.expression) === SpecialPropertyAssignmentKind.PrototypeProperty) {
                 const symbol = getSymbolOfNode(host.expression.left);
                 return symbol && symbol.parent.valueDeclaration;
             }
@@ -9554,7 +9556,16 @@ namespace ts {
                 // parameters that are in scope (and therefore potentially referenced). For type literals that
                 // aren't the right hand side of a generic type alias declaration we optimize by reducing the
                 // set of type parameters to those that are possibly referenced in the literal.
-                const declaration = symbol.declarations[0];
+                let declaration = symbol.declarations[0];
+                if (isInJavaScriptFile(declaration)) {
+                    const paramTag = findAncestor(declaration, isJSDocParameterTag);
+                    if (paramTag) {
+                        const paramSymbol = getParameterSymbolFromJSDoc(paramTag);
+                        if (paramSymbol) {
+                            declaration = paramSymbol.valueDeclaration;
+                        }
+                    }
+                }
                 let outerTypeParameters = getOuterTypeParameters(declaration, /*includeThisTypes*/ true);
                 if (isJavaScriptConstructor(declaration)) {
                     const templateTagParameters = getTypeParametersFromDeclaration(declaration as DeclarationWithTypeParameters);

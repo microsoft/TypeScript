@@ -1913,7 +1913,7 @@ namespace ts {
         return parameter && parameter.symbol;
     }
 
-    export function getHostSignatureFromJSDoc(node: JSDocTag): SignatureDeclaration | undefined {
+    export function getHostSignatureFromJSDoc(node: Node): SignatureDeclaration | undefined {
         const host = getJSDocHost(node);
         const decl = getSourceOfDefaultedAssignment(host) ||
             getSourceOfAssignment(host) ||
