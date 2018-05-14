@@ -1842,16 +1842,16 @@ namespace ts {
             (node as ModuleDeclaration).body;
     }
 
-    export function getJSDocCommentsAndTags(node: Node): ReadonlyArray<JSDoc | JSDocTag> {
+    export function getJSDocCommentsAndTags(hostNode: Node): ReadonlyArray<JSDoc | JSDocTag> {
         let result: (JSDoc | JSDocTag)[] | undefined;
-        getJSDocCommentsAndTagsWorker(node, undefined);
+        getJSDocCommentsAndTagsWorker(hostNode);
         return result || emptyArray;
 
-        function getJSDocCommentsAndTagsWorker(node: Node, previous: Node | undefined): void {
+        function getJSDocCommentsAndTagsWorker(node: Node): void {
             const parent = node.parent;
             if (!parent) return;
             if (parent.kind === SyntaxKind.PropertyAssignment || parent.kind === SyntaxKind.PropertyDeclaration || getNestedModuleDeclaration(parent)) {
-                getJSDocCommentsAndTagsWorker(parent, node);
+                getJSDocCommentsAndTagsWorker(parent);
             }
             // Try to recognize this pattern when node is initializer of variable declaration and JSDoc comments are on containing variable statement.
             // /**
@@ -1861,18 +1861,18 @@ namespace ts {
             // var x = function(name) { return name.length; }
             if (parent.parent &&
                 (getSingleVariableOfVariableStatement(parent.parent) === node)) {
-                getJSDocCommentsAndTagsWorker(parent.parent, node);
+                getJSDocCommentsAndTagsWorker(parent.parent);
             }
             if (parent.parent && parent.parent.parent &&
                 (getSingleVariableOfVariableStatement(parent.parent.parent) ||
                     getSingleInitializerOfVariableStatementOrPropertyDeclaration(parent.parent.parent) === node ||
                     getSourceOfDefaultedAssignment(parent.parent.parent))) {
-                getJSDocCommentsAndTagsWorker(parent.parent.parent, node);
+                getJSDocCommentsAndTagsWorker(parent.parent.parent);
             }
             if (isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.EqualsToken ||
                 isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken ||
                 node.kind === SyntaxKind.PropertyAccessExpression && node.parent && node.parent.kind === SyntaxKind.ExpressionStatement) {
-                getJSDocCommentsAndTagsWorker(parent, node);
+                getJSDocCommentsAndTagsWorker(parent);
             }
 
             // Pull parameter comments from declaring function as well
@@ -1880,7 +1880,7 @@ namespace ts {
                 result = addRange(result, getJSDocParameterTags(node as ParameterDeclaration));
             }
 
-            if (isVariableLike(node) && hasInitializer(node) && node.initializer !== previous && hasJSDocNodes(node.initializer)) {
+            if (isVariableLike(node) && hasInitializer(node) && node.initializer !== hostNode && hasJSDocNodes(node.initializer)) {
                 result = addRange(result, node.initializer.jsDoc);
             }
 
