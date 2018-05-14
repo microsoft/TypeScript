@@ -1,0 +1,373 @@
+=== tests/cases/compiler/complextypeExampleNoOOM.ts ===
+class HList {
+>HList : HList
+
+    static hnil(): HNil {
+>hnil : () => HNil
+>HNil : HNil
+
+      return HNil.instance;
+>HNil.instance : HNil
+>HNil : typeof HNil
+>instance : HNil
+    }
+    static hcons<V, Next extends HList>(value: V, next: Next) {
+>hcons : <V, Next extends HList>(value: V, next: Next) => HCons<V, Next>
+>V : V
+>Next : Next
+>HList : HList
+>value : V
+>V : V
+>next : Next
+>Next : Next
+
+      return new HCons<V, Next>(value, next);
+>new HCons<V, Next>(value, next) : HCons<V, Next>
+>HCons : typeof HCons
+>V : V
+>Next : Next
+>value : V
+>next : Next
+    }
+  }
+  class HNil extends HList {
+>HNil : HNil
+>HList : HList
+
+    static readonly instance = new HNil();
+>instance : HNil
+>new HNil() : HNil
+>HNil : typeof HNil
+
+    private readonly __hnil = 0;
+>__hnil : 0
+>0 : 0
+  }
+  class HCons<Value, Next extends HList> extends HList {
+>HCons : HCons<Value, Next>
+>Value : Value
+>Next : Next
+>HList : HList
+>HList : HList
+
+    constructor(readonly value: Value, readonly next: Next) {
+>value : Value
+>Value : Value
+>next : Next
+>Next : Next
+
+      super();
+>super() : void
+>super : typeof HList
+    }
+  }
+  
+  type IsHNil<H extends HList> = H extends HNil ? '1' : '0';
+>IsHNil : IsHNil<H>
+>H : H
+>HList : HList
+>H : H
+>HNil : HNil
+
+  type IsHCons<H extends HList> = H extends HCons<any, any> ? '1' : '0';
+>IsHCons : IsHCons<H>
+>H : H
+>HList : HList
+>H : H
+>HCons : HCons<Value, Next>
+
+  type GetValue<H extends HList> = H extends HCons<infer V, any> ? V : never;
+>GetValue : GetValue<H>
+>H : H
+>HList : HList
+>H : H
+>HCons : HCons<Value, Next>
+>V : V
+>V : V
+
+  type GetNext<H extends HList> = H extends HCons<any, infer N> ? N : never;
+>GetNext : GetNext<H>
+>H : H
+>HList : HList
+>H : H
+>HCons : HCons<Value, Next>
+>N : N
+>N : N
+  
+  // Keys
+  type JsObject = { [key: string]: any };
+>JsObject : JsObject
+>key : string
+
+  type Unionize<T> = keyof T extends infer K
+>Unionize : keyof T extends string & keyof T ? Record<keyof T, T[keyof T]> : never
+>T : T
+>T : T
+>K : K
+
+    ? K extends string & keyof T ? Record<K, T[K]> : never
+>K : K
+>T : T
+>Record : Record<K, T>
+>K : K
+>T : T
+>K : K
+
+    : never;
+  type KeysRec<T> = T extends Record<infer K, infer V>
+>KeysRec : any
+>T : T
+>T : T
+>Record : Record<K, T>
+>K : K
+>V : V
+
+    ? {
+        "1": V extends JsObject ? HCons<K, HKeys<V>> : HCons<K, HNil>;
+>"1" : any
+>V : V
+>JsObject : JsObject
+>HCons : HCons<Value, Next>
+>K : K
+>HKeys : any
+>V : V
+>HCons : HCons<Value, Next>
+>K : K
+>HNil : HNil
+
+        "0": HCons<K, HNil>;
+>"0" : HCons<K, HNil>
+>HCons : HCons<Value, Next>
+>K : K
+>HNil : HNil
+
+      }[V extends JsObject ? '1' : '0']
+>V : V
+>JsObject : JsObject
+
+    : HNil;
+>HNil : HNil
+
+  type HKeys<T> = KeysRec<Unionize<T>>;
+>HKeys : any
+>T : T
+>KeysRec : any
+>Unionize : keyof T extends string & keyof T ? Record<keyof T, T[keyof T]> : never
+>T : T
+  
+  type DistriHelper<T, V> = T extends infer U ? HCons<V, U> : never;
+>DistriHelper : DistriHelper<T, V>
+>T : T
+>V : V
+>T : T
+>U : U
+>HCons : HCons<Value, Next>
+>V : V
+>U : U
+  
+  type Normalize<T extends HList> = T extends HCons<infer V, infer N>
+>Normalize : Normalize<T>
+>T : T
+>HList : HList
+>T : T
+>HCons : HCons<Value, Next>
+>V : V
+>N : N
+
+    ? {
+        "1": DistriHelper<Normalize<N>, V>;
+>"1" : DistriHelper<Normalize<N>, V>
+>DistriHelper : DistriHelper<T, V>
+>Normalize : Normalize<T>
+>N : N
+>V : V
+
+        "0": HCons<V, HNil>;
+>"0" : HCons<V, HNil>
+>HCons : HCons<Value, Next>
+>V : V
+>HNil : HNil
+
+      }[IsHCons<N>]
+>IsHCons : IsHCons<H>
+>N : N
+
+    : HNil;
+>HNil : HNil
+  
+  type HListToArray<H extends HCons<any, any>> = H extends HCons<infer V1, HNil>
+>HListToArray : HListToArray<H>
+>H : H
+>HCons : HCons<Value, Next>
+>H : H
+>HCons : HCons<Value, Next>
+>V1 : V1
+>HNil : HNil
+
+    ? [V1]
+>V1 : V1
+
+    : (H extends HCons<infer V1, HCons<infer V2, HNil>>
+>H : H
+>HCons : HCons<Value, Next>
+>V1 : V1
+>HCons : HCons<Value, Next>
+>V2 : V2
+>HNil : HNil
+
+        ? [V1, V2]
+>V1 : V1
+>V2 : V2
+
+        : (H extends HCons<infer V1, HCons<infer V2, HCons<infer V3, HNil>>>
+>H : H
+>HCons : HCons<Value, Next>
+>V1 : V1
+>HCons : HCons<Value, Next>
+>V2 : V2
+>HCons : HCons<Value, Next>
+>V3 : V3
+>HNil : HNil
+
+            ? [V1, V2, V3]
+>V1 : V1
+>V2 : V2
+>V3 : V3
+
+            : (H extends HCons<
+>H : H
+>HCons : HCons<Value, Next>
+
+                infer V1,
+>V1 : V1
+
+                HCons<infer V2, HCons<infer V3, HCons<infer V4, HNil>>>
+>HCons : HCons<Value, Next>
+>V2 : V2
+>HCons : HCons<Value, Next>
+>V3 : V3
+>HCons : HCons<Value, Next>
+>V4 : V4
+>HNil : HNil
+
+              >
+                ? [V1, V2, V3, V4]
+>V1 : V1
+>V2 : V2
+>V3 : V3
+>V4 : V4
+
+                : (H extends HCons<
+>H : H
+>HCons : HCons<Value, Next>
+
+                    infer V1,
+>V1 : V1
+
+                    HCons<
+>HCons : HCons<Value, Next>
+
+                      infer V2,
+>V2 : V2
+
+                      HCons<infer V3, HCons<infer V4, HCons<infer V5, HNil>>>
+>HCons : HCons<Value, Next>
+>V3 : V3
+>HCons : HCons<Value, Next>
+>V4 : V4
+>HCons : HCons<Value, Next>
+>V5 : V5
+>HNil : HNil
+
+                    >
+                  >
+                    ? [V1, V2, V3, V4, V5]
+>V1 : V1
+>V2 : V2
+>V3 : V3
+>V4 : V4
+>V5 : V5
+
+                    : never))));
+  
+  type HListToArray2<H extends HCons<any, any>> = H extends HCons<
+>HListToArray2 : HListToArray2<H>
+>H : H
+>HCons : HCons<Value, Next>
+>H : H
+>HCons : HCons<Value, Next>
+
+    infer V1,
+>V1 : V1
+
+    infer N
+>N : N
+
+  >
+    ? (N extends HCons<infer V2, infer N>
+>N : N
+>HCons : HCons<Value, Next>
+>V2 : V2
+>N : N
+
+        ? (N extends HCons<infer V3, infer N>
+>N : N
+>HCons : HCons<Value, Next>
+>V3 : V3
+>N : N
+
+            ? (N extends HCons<infer V4, infer N>
+>N : N
+>HCons : HCons<Value, Next>
+>V4 : V4
+>N : N
+
+                ? (N extends HCons<infer V5, infer N>
+>N : N
+>HCons : HCons<Value, Next>
+>V5 : V5
+>N : N
+
+                    ? [V1, V2, V3, V4, V5]
+>V1 : V1
+>V2 : V2
+>V3 : V3
+>V4 : V4
+>V5 : V5
+
+                    : [V1, V2, V3, V4])
+>V1 : V1
+>V2 : V2
+>V3 : V3
+>V4 : V4
+
+                : [V1, V2, V3])
+>V1 : V1
+>V2 : V2
+>V3 : V3
+
+            : [V1, V2])
+>V1 : V1
+>V2 : V2
+
+        : [V1])
+>V1 : V1
+
+    : HNil;
+>HNil : HNil
+  
+  type NHKeys<T> = Normalize<HKeys<T>>;
+>NHKeys : HNil | HCons<{}, HNil>
+>T : T
+>Normalize : Normalize<T>
+>HKeys : any
+>T : T
+  
+  // ADDING THIS LINE WOULD HANG THE COMPILER
+  type Keys<T> = HListToArray2<NHKeys<T>>;
+>Keys : HNil | [{}]
+>T : T
+>HListToArray2 : HListToArray2<H>
+>NHKeys : HNil | HCons<{}, HNil>
+>T : T
+

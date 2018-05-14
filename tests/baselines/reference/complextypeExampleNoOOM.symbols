@@ -1,0 +1,369 @@
+=== tests/cases/compiler/complextypeExampleNoOOM.ts ===
+class HList {
+>HList : Symbol(HList, Decl(complextypeExampleNoOOM.ts, 0, 0))
+
+    static hnil(): HNil {
+>hnil : Symbol(HList.hnil, Decl(complextypeExampleNoOOM.ts, 0, 13))
+>HNil : Symbol(HNil, Decl(complextypeExampleNoOOM.ts, 7, 3))
+
+      return HNil.instance;
+>HNil.instance : Symbol(HNil.instance, Decl(complextypeExampleNoOOM.ts, 8, 28))
+>HNil : Symbol(HNil, Decl(complextypeExampleNoOOM.ts, 7, 3))
+>instance : Symbol(HNil.instance, Decl(complextypeExampleNoOOM.ts, 8, 28))
+    }
+    static hcons<V, Next extends HList>(value: V, next: Next) {
+>hcons : Symbol(HList.hcons, Decl(complextypeExampleNoOOM.ts, 3, 5))
+>V : Symbol(V, Decl(complextypeExampleNoOOM.ts, 4, 17))
+>Next : Symbol(Next, Decl(complextypeExampleNoOOM.ts, 4, 19))
+>HList : Symbol(HList, Decl(complextypeExampleNoOOM.ts, 0, 0))
+>value : Symbol(value, Decl(complextypeExampleNoOOM.ts, 4, 40))
+>V : Symbol(V, Decl(complextypeExampleNoOOM.ts, 4, 17))
+>next : Symbol(next, Decl(complextypeExampleNoOOM.ts, 4, 49))
+>Next : Symbol(Next, Decl(complextypeExampleNoOOM.ts, 4, 19))
+
+      return new HCons<V, Next>(value, next);
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>V : Symbol(V, Decl(complextypeExampleNoOOM.ts, 4, 17))
+>Next : Symbol(Next, Decl(complextypeExampleNoOOM.ts, 4, 19))
+>value : Symbol(value, Decl(complextypeExampleNoOOM.ts, 4, 40))
+>next : Symbol(next, Decl(complextypeExampleNoOOM.ts, 4, 49))
+    }
+  }
+  class HNil extends HList {
+>HNil : Symbol(HNil, Decl(complextypeExampleNoOOM.ts, 7, 3))
+>HList : Symbol(HList, Decl(complextypeExampleNoOOM.ts, 0, 0))
+
+    static readonly instance = new HNil();
+>instance : Symbol(HNil.instance, Decl(complextypeExampleNoOOM.ts, 8, 28))
+>HNil : Symbol(HNil, Decl(complextypeExampleNoOOM.ts, 7, 3))
+
+    private readonly __hnil = 0;
+>__hnil : Symbol(HNil.__hnil, Decl(complextypeExampleNoOOM.ts, 9, 42))
+  }
+  class HCons<Value, Next extends HList> extends HList {
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>Value : Symbol(Value, Decl(complextypeExampleNoOOM.ts, 12, 14))
+>Next : Symbol(Next, Decl(complextypeExampleNoOOM.ts, 12, 20))
+>HList : Symbol(HList, Decl(complextypeExampleNoOOM.ts, 0, 0))
+>HList : Symbol(HList, Decl(complextypeExampleNoOOM.ts, 0, 0))
+
+    constructor(readonly value: Value, readonly next: Next) {
+>value : Symbol(HCons.value, Decl(complextypeExampleNoOOM.ts, 13, 16))
+>Value : Symbol(Value, Decl(complextypeExampleNoOOM.ts, 12, 14))
+>next : Symbol(HCons.next, Decl(complextypeExampleNoOOM.ts, 13, 38))
+>Next : Symbol(Next, Decl(complextypeExampleNoOOM.ts, 12, 20))
+
+      super();
+>super : Symbol(HList, Decl(complextypeExampleNoOOM.ts, 0, 0))
+    }
+  }
+  
+  type IsHNil<H extends HList> = H extends HNil ? '1' : '0';
+>IsHNil : Symbol(IsHNil, Decl(complextypeExampleNoOOM.ts, 16, 3))
+>H : Symbol(H, Decl(complextypeExampleNoOOM.ts, 18, 14))
+>HList : Symbol(HList, Decl(complextypeExampleNoOOM.ts, 0, 0))
+>H : Symbol(H, Decl(complextypeExampleNoOOM.ts, 18, 14))
+>HNil : Symbol(HNil, Decl(complextypeExampleNoOOM.ts, 7, 3))
+
+  type IsHCons<H extends HList> = H extends HCons<any, any> ? '1' : '0';
+>IsHCons : Symbol(IsHCons, Decl(complextypeExampleNoOOM.ts, 18, 60))
+>H : Symbol(H, Decl(complextypeExampleNoOOM.ts, 19, 15))
+>HList : Symbol(HList, Decl(complextypeExampleNoOOM.ts, 0, 0))
+>H : Symbol(H, Decl(complextypeExampleNoOOM.ts, 19, 15))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+
+  type GetValue<H extends HList> = H extends HCons<infer V, any> ? V : never;
+>GetValue : Symbol(GetValue, Decl(complextypeExampleNoOOM.ts, 19, 72))
+>H : Symbol(H, Decl(complextypeExampleNoOOM.ts, 20, 16))
+>HList : Symbol(HList, Decl(complextypeExampleNoOOM.ts, 0, 0))
+>H : Symbol(H, Decl(complextypeExampleNoOOM.ts, 20, 16))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>V : Symbol(V, Decl(complextypeExampleNoOOM.ts, 20, 56))
+>V : Symbol(V, Decl(complextypeExampleNoOOM.ts, 20, 56))
+
+  type GetNext<H extends HList> = H extends HCons<any, infer N> ? N : never;
+>GetNext : Symbol(GetNext, Decl(complextypeExampleNoOOM.ts, 20, 77))
+>H : Symbol(H, Decl(complextypeExampleNoOOM.ts, 21, 15))
+>HList : Symbol(HList, Decl(complextypeExampleNoOOM.ts, 0, 0))
+>H : Symbol(H, Decl(complextypeExampleNoOOM.ts, 21, 15))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>N : Symbol(N, Decl(complextypeExampleNoOOM.ts, 21, 60))
+>N : Symbol(N, Decl(complextypeExampleNoOOM.ts, 21, 60))
+  
+  // Keys
+  type JsObject = { [key: string]: any };
+>JsObject : Symbol(JsObject, Decl(complextypeExampleNoOOM.ts, 21, 76))
+>key : Symbol(key, Decl(complextypeExampleNoOOM.ts, 24, 21))
+
+  type Unionize<T> = keyof T extends infer K
+>Unionize : Symbol(Unionize, Decl(complextypeExampleNoOOM.ts, 24, 41))
+>T : Symbol(T, Decl(complextypeExampleNoOOM.ts, 25, 16))
+>T : Symbol(T, Decl(complextypeExampleNoOOM.ts, 25, 16))
+>K : Symbol(K, Decl(complextypeExampleNoOOM.ts, 25, 42))
+
+    ? K extends string & keyof T ? Record<K, T[K]> : never
+>K : Symbol(K, Decl(complextypeExampleNoOOM.ts, 25, 42))
+>T : Symbol(T, Decl(complextypeExampleNoOOM.ts, 25, 16))
+>Record : Symbol(Record, Decl(lib.d.ts, --, --))
+>K : Symbol(K, Decl(complextypeExampleNoOOM.ts, 25, 42))
+>T : Symbol(T, Decl(complextypeExampleNoOOM.ts, 25, 16))
+>K : Symbol(K, Decl(complextypeExampleNoOOM.ts, 25, 42))
+
+    : never;
+  type KeysRec<T> = T extends Record<infer K, infer V>
+>KeysRec : Symbol(KeysRec, Decl(complextypeExampleNoOOM.ts, 27, 12))
+>T : Symbol(T, Decl(complextypeExampleNoOOM.ts, 28, 15))
+>T : Symbol(T, Decl(complextypeExampleNoOOM.ts, 28, 15))
+>Record : Symbol(Record, Decl(lib.d.ts, --, --))
+>K : Symbol(K, Decl(complextypeExampleNoOOM.ts, 28, 42))
+>V : Symbol(V, Decl(complextypeExampleNoOOM.ts, 28, 51))
+
+    ? {
+        "1": V extends JsObject ? HCons<K, HKeys<V>> : HCons<K, HNil>;
+>"1" : Symbol("1", Decl(complextypeExampleNoOOM.ts, 29, 7))
+>V : Symbol(V, Decl(complextypeExampleNoOOM.ts, 28, 51))
+>JsObject : Symbol(JsObject, Decl(complextypeExampleNoOOM.ts, 21, 76))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>K : Symbol(K, Decl(complextypeExampleNoOOM.ts, 28, 42))
+>HKeys : Symbol(HKeys, Decl(complextypeExampleNoOOM.ts, 33, 11))
+>V : Symbol(V, Decl(complextypeExampleNoOOM.ts, 28, 51))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>K : Symbol(K, Decl(complextypeExampleNoOOM.ts, 28, 42))
+>HNil : Symbol(HNil, Decl(complextypeExampleNoOOM.ts, 7, 3))
+
+        "0": HCons<K, HNil>;
+>"0" : Symbol("0", Decl(complextypeExampleNoOOM.ts, 30, 70))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>K : Symbol(K, Decl(complextypeExampleNoOOM.ts, 28, 42))
+>HNil : Symbol(HNil, Decl(complextypeExampleNoOOM.ts, 7, 3))
+
+      }[V extends JsObject ? '1' : '0']
+>V : Symbol(V, Decl(complextypeExampleNoOOM.ts, 28, 51))
+>JsObject : Symbol(JsObject, Decl(complextypeExampleNoOOM.ts, 21, 76))
+
+    : HNil;
+>HNil : Symbol(HNil, Decl(complextypeExampleNoOOM.ts, 7, 3))
+
+  type HKeys<T> = KeysRec<Unionize<T>>;
+>HKeys : Symbol(HKeys, Decl(complextypeExampleNoOOM.ts, 33, 11))
+>T : Symbol(T, Decl(complextypeExampleNoOOM.ts, 34, 13))
+>KeysRec : Symbol(KeysRec, Decl(complextypeExampleNoOOM.ts, 27, 12))
+>Unionize : Symbol(Unionize, Decl(complextypeExampleNoOOM.ts, 24, 41))
+>T : Symbol(T, Decl(complextypeExampleNoOOM.ts, 34, 13))
+  
+  type DistriHelper<T, V> = T extends infer U ? HCons<V, U> : never;
+>DistriHelper : Symbol(DistriHelper, Decl(complextypeExampleNoOOM.ts, 34, 39))
+>T : Symbol(T, Decl(complextypeExampleNoOOM.ts, 36, 20))
+>V : Symbol(V, Decl(complextypeExampleNoOOM.ts, 36, 22))
+>T : Symbol(T, Decl(complextypeExampleNoOOM.ts, 36, 20))
+>U : Symbol(U, Decl(complextypeExampleNoOOM.ts, 36, 43))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>V : Symbol(V, Decl(complextypeExampleNoOOM.ts, 36, 22))
+>U : Symbol(U, Decl(complextypeExampleNoOOM.ts, 36, 43))
+  
+  type Normalize<T extends HList> = T extends HCons<infer V, infer N>
+>Normalize : Symbol(Normalize, Decl(complextypeExampleNoOOM.ts, 36, 68))
+>T : Symbol(T, Decl(complextypeExampleNoOOM.ts, 38, 17))
+>HList : Symbol(HList, Decl(complextypeExampleNoOOM.ts, 0, 0))
+>T : Symbol(T, Decl(complextypeExampleNoOOM.ts, 38, 17))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>V : Symbol(V, Decl(complextypeExampleNoOOM.ts, 38, 57))
+>N : Symbol(N, Decl(complextypeExampleNoOOM.ts, 38, 66))
+
+    ? {
+        "1": DistriHelper<Normalize<N>, V>;
+>"1" : Symbol("1", Decl(complextypeExampleNoOOM.ts, 39, 7))
+>DistriHelper : Symbol(DistriHelper, Decl(complextypeExampleNoOOM.ts, 34, 39))
+>Normalize : Symbol(Normalize, Decl(complextypeExampleNoOOM.ts, 36, 68))
+>N : Symbol(N, Decl(complextypeExampleNoOOM.ts, 38, 66))
+>V : Symbol(V, Decl(complextypeExampleNoOOM.ts, 38, 57))
+
+        "0": HCons<V, HNil>;
+>"0" : Symbol("0", Decl(complextypeExampleNoOOM.ts, 40, 43))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>V : Symbol(V, Decl(complextypeExampleNoOOM.ts, 38, 57))
+>HNil : Symbol(HNil, Decl(complextypeExampleNoOOM.ts, 7, 3))
+
+      }[IsHCons<N>]
+>IsHCons : Symbol(IsHCons, Decl(complextypeExampleNoOOM.ts, 18, 60))
+>N : Symbol(N, Decl(complextypeExampleNoOOM.ts, 38, 66))
+
+    : HNil;
+>HNil : Symbol(HNil, Decl(complextypeExampleNoOOM.ts, 7, 3))
+  
+  type HListToArray<H extends HCons<any, any>> = H extends HCons<infer V1, HNil>
+>HListToArray : Symbol(HListToArray, Decl(complextypeExampleNoOOM.ts, 43, 11))
+>H : Symbol(H, Decl(complextypeExampleNoOOM.ts, 45, 20))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>H : Symbol(H, Decl(complextypeExampleNoOOM.ts, 45, 20))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>V1 : Symbol(V1, Decl(complextypeExampleNoOOM.ts, 45, 70))
+>HNil : Symbol(HNil, Decl(complextypeExampleNoOOM.ts, 7, 3))
+
+    ? [V1]
+>V1 : Symbol(V1, Decl(complextypeExampleNoOOM.ts, 45, 70))
+
+    : (H extends HCons<infer V1, HCons<infer V2, HNil>>
+>H : Symbol(H, Decl(complextypeExampleNoOOM.ts, 45, 20))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>V1 : Symbol(V1, Decl(complextypeExampleNoOOM.ts, 47, 28))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>V2 : Symbol(V2, Decl(complextypeExampleNoOOM.ts, 47, 44))
+>HNil : Symbol(HNil, Decl(complextypeExampleNoOOM.ts, 7, 3))
+
+        ? [V1, V2]
+>V1 : Symbol(V1, Decl(complextypeExampleNoOOM.ts, 47, 28))
+>V2 : Symbol(V2, Decl(complextypeExampleNoOOM.ts, 47, 44))
+
+        : (H extends HCons<infer V1, HCons<infer V2, HCons<infer V3, HNil>>>
+>H : Symbol(H, Decl(complextypeExampleNoOOM.ts, 45, 20))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>V1 : Symbol(V1, Decl(complextypeExampleNoOOM.ts, 49, 32))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>V2 : Symbol(V2, Decl(complextypeExampleNoOOM.ts, 49, 48))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>V3 : Symbol(V3, Decl(complextypeExampleNoOOM.ts, 49, 64))
+>HNil : Symbol(HNil, Decl(complextypeExampleNoOOM.ts, 7, 3))
+
+            ? [V1, V2, V3]
+>V1 : Symbol(V1, Decl(complextypeExampleNoOOM.ts, 49, 32))
+>V2 : Symbol(V2, Decl(complextypeExampleNoOOM.ts, 49, 48))
+>V3 : Symbol(V3, Decl(complextypeExampleNoOOM.ts, 49, 64))
+
+            : (H extends HCons<
+>H : Symbol(H, Decl(complextypeExampleNoOOM.ts, 45, 20))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+
+                infer V1,
+>V1 : Symbol(V1, Decl(complextypeExampleNoOOM.ts, 52, 21))
+
+                HCons<infer V2, HCons<infer V3, HCons<infer V4, HNil>>>
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>V2 : Symbol(V2, Decl(complextypeExampleNoOOM.ts, 53, 27))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>V3 : Symbol(V3, Decl(complextypeExampleNoOOM.ts, 53, 43))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>V4 : Symbol(V4, Decl(complextypeExampleNoOOM.ts, 53, 59))
+>HNil : Symbol(HNil, Decl(complextypeExampleNoOOM.ts, 7, 3))
+
+              >
+                ? [V1, V2, V3, V4]
+>V1 : Symbol(V1, Decl(complextypeExampleNoOOM.ts, 52, 21))
+>V2 : Symbol(V2, Decl(complextypeExampleNoOOM.ts, 53, 27))
+>V3 : Symbol(V3, Decl(complextypeExampleNoOOM.ts, 53, 43))
+>V4 : Symbol(V4, Decl(complextypeExampleNoOOM.ts, 53, 59))
+
+                : (H extends HCons<
+>H : Symbol(H, Decl(complextypeExampleNoOOM.ts, 45, 20))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+
+                    infer V1,
+>V1 : Symbol(V1, Decl(complextypeExampleNoOOM.ts, 57, 25))
+
+                    HCons<
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+
+                      infer V2,
+>V2 : Symbol(V2, Decl(complextypeExampleNoOOM.ts, 59, 27))
+
+                      HCons<infer V3, HCons<infer V4, HCons<infer V5, HNil>>>
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>V3 : Symbol(V3, Decl(complextypeExampleNoOOM.ts, 60, 33))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>V4 : Symbol(V4, Decl(complextypeExampleNoOOM.ts, 60, 49))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>V5 : Symbol(V5, Decl(complextypeExampleNoOOM.ts, 60, 65))
+>HNil : Symbol(HNil, Decl(complextypeExampleNoOOM.ts, 7, 3))
+
+                    >
+                  >
+                    ? [V1, V2, V3, V4, V5]
+>V1 : Symbol(V1, Decl(complextypeExampleNoOOM.ts, 57, 25))
+>V2 : Symbol(V2, Decl(complextypeExampleNoOOM.ts, 59, 27))
+>V3 : Symbol(V3, Decl(complextypeExampleNoOOM.ts, 60, 33))
+>V4 : Symbol(V4, Decl(complextypeExampleNoOOM.ts, 60, 49))
+>V5 : Symbol(V5, Decl(complextypeExampleNoOOM.ts, 60, 65))
+
+                    : never))));
+  
+  type HListToArray2<H extends HCons<any, any>> = H extends HCons<
+>HListToArray2 : Symbol(HListToArray2, Decl(complextypeExampleNoOOM.ts, 64, 32))
+>H : Symbol(H, Decl(complextypeExampleNoOOM.ts, 66, 21))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>H : Symbol(H, Decl(complextypeExampleNoOOM.ts, 66, 21))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+
+    infer V1,
+>V1 : Symbol(V1, Decl(complextypeExampleNoOOM.ts, 67, 9))
+
+    infer N
+>N : Symbol(N, Decl(complextypeExampleNoOOM.ts, 68, 9))
+
+  >
+    ? (N extends HCons<infer V2, infer N>
+>N : Symbol(N, Decl(complextypeExampleNoOOM.ts, 68, 9))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>V2 : Symbol(V2, Decl(complextypeExampleNoOOM.ts, 70, 28))
+>N : Symbol(N, Decl(complextypeExampleNoOOM.ts, 70, 38))
+
+        ? (N extends HCons<infer V3, infer N>
+>N : Symbol(N, Decl(complextypeExampleNoOOM.ts, 70, 38))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>V3 : Symbol(V3, Decl(complextypeExampleNoOOM.ts, 71, 32))
+>N : Symbol(N, Decl(complextypeExampleNoOOM.ts, 71, 42))
+
+            ? (N extends HCons<infer V4, infer N>
+>N : Symbol(N, Decl(complextypeExampleNoOOM.ts, 71, 42))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>V4 : Symbol(V4, Decl(complextypeExampleNoOOM.ts, 72, 36))
+>N : Symbol(N, Decl(complextypeExampleNoOOM.ts, 72, 46))
+
+                ? (N extends HCons<infer V5, infer N>
+>N : Symbol(N, Decl(complextypeExampleNoOOM.ts, 72, 46))
+>HCons : Symbol(HCons, Decl(complextypeExampleNoOOM.ts, 11, 3))
+>V5 : Symbol(V5, Decl(complextypeExampleNoOOM.ts, 73, 40))
+>N : Symbol(N, Decl(complextypeExampleNoOOM.ts, 73, 50))
+
+                    ? [V1, V2, V3, V4, V5]
+>V1 : Symbol(V1, Decl(complextypeExampleNoOOM.ts, 67, 9))
+>V2 : Symbol(V2, Decl(complextypeExampleNoOOM.ts, 70, 28))
+>V3 : Symbol(V3, Decl(complextypeExampleNoOOM.ts, 71, 32))
+>V4 : Symbol(V4, Decl(complextypeExampleNoOOM.ts, 72, 36))
+>V5 : Symbol(V5, Decl(complextypeExampleNoOOM.ts, 73, 40))
+
+                    : [V1, V2, V3, V4])
+>V1 : Symbol(V1, Decl(complextypeExampleNoOOM.ts, 67, 9))
+>V2 : Symbol(V2, Decl(complextypeExampleNoOOM.ts, 70, 28))
+>V3 : Symbol(V3, Decl(complextypeExampleNoOOM.ts, 71, 32))
+>V4 : Symbol(V4, Decl(complextypeExampleNoOOM.ts, 72, 36))
+
+                : [V1, V2, V3])
+>V1 : Symbol(V1, Decl(complextypeExampleNoOOM.ts, 67, 9))
+>V2 : Symbol(V2, Decl(complextypeExampleNoOOM.ts, 70, 28))
+>V3 : Symbol(V3, Decl(complextypeExampleNoOOM.ts, 71, 32))
+
+            : [V1, V2])
+>V1 : Symbol(V1, Decl(complextypeExampleNoOOM.ts, 67, 9))
+>V2 : Symbol(V2, Decl(complextypeExampleNoOOM.ts, 70, 28))
+
+        : [V1])
+>V1 : Symbol(V1, Decl(complextypeExampleNoOOM.ts, 67, 9))
+
+    : HNil;
+>HNil : Symbol(HNil, Decl(complextypeExampleNoOOM.ts, 7, 3))
+  
+  type NHKeys<T> = Normalize<HKeys<T>>;
+>NHKeys : Symbol(NHKeys, Decl(complextypeExampleNoOOM.ts, 79, 11))
+>T : Symbol(T, Decl(complextypeExampleNoOOM.ts, 81, 14))
+>Normalize : Symbol(Normalize, Decl(complextypeExampleNoOOM.ts, 36, 68))
+>HKeys : Symbol(HKeys, Decl(complextypeExampleNoOOM.ts, 33, 11))
+>T : Symbol(T, Decl(complextypeExampleNoOOM.ts, 81, 14))
+  
+  // ADDING THIS LINE WOULD HANG THE COMPILER
+  type Keys<T> = HListToArray2<NHKeys<T>>;
+>Keys : Symbol(Keys, Decl(complextypeExampleNoOOM.ts, 81, 39))
+>T : Symbol(T, Decl(complextypeExampleNoOOM.ts, 84, 12))
+>HListToArray2 : Symbol(HListToArray2, Decl(complextypeExampleNoOOM.ts, 64, 32))
+>NHKeys : Symbol(NHKeys, Decl(complextypeExampleNoOOM.ts, 79, 11))
+>T : Symbol(T, Decl(complextypeExampleNoOOM.ts, 84, 12))
+
