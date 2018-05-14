@@ -3973,6 +3973,7 @@ namespace ts {
         objectType: Type;
         indexType: Type;
         constraint?: Type;
+        simplified?: Type;
     }
 
     export type TypeVariable = TypeParameter | IndexedAccessType;
