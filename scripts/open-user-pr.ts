@@ -27,7 +27,7 @@ runSequence([
     ["git", ["add", "."]], // Add all changes
     ["git", ["commit", "-m", `"Update user baselines"`]], // Commit all changes
     ["git", ["remote", "add", "fork", remoteUrl]], // Add the remote fork
-    ["git", ["push", "--set-upstream", "fork", branchName]] // push the branch
+    ["git", ["-c", `http.extraheader="AUTHORIZATION: basic ${process.argv[2]}"`, "push", "--set-upstream", "fork", branchName]] // push the branch
 ]);
 
 const gh = new Octokit();
