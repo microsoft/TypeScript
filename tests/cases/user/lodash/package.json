@@ -7,5 +7,8 @@
   "license": "Apache-2.0",
   "dependencies": {
     "lodash": "^4.17.5"
+  },
+  "devDependencies": {
+    "@types/node": "latest"
   }
 }
