@@ -4,5 +4,5 @@ export const x: number;
 
 === /index.ts ===
 import { x } from "foo";
->x : any
+>x : number
 

@@ -1049,9 +1049,18 @@ namespace ts {
     }
 
     function loadModuleFromPackageJson(jsonContent: PackageJsonPathFields, extensions: Extensions, candidate: string, failedLookupLocations: Push<string>, state: ModuleResolutionState): PathAndExtension | undefined {
-        const file = tryReadPackageJsonFields(extensions !== Extensions.JavaScript && extensions !== Extensions.Json, jsonContent, candidate, state);
+        let file = tryReadPackageJsonFields(extensions !== Extensions.JavaScript && extensions !== Extensions.Json, jsonContent, candidate, state);
         if (!file) {
-            return undefined;
+            if (extensions === Extensions.TypeScript) {
+                // When resolving typescript modules, try resolving using main field as well
+                file = tryReadPackageJsonFields(/*readTypes*/ false, jsonContent, candidate, state);
+                if (!file) {
+                    return undefined;
+                }
+            }
+            else {
+                return undefined;
+            }
         }
 
         const onlyRecordFailures = !directoryProbablyExists(getDirectoryPath(file), state.host);
