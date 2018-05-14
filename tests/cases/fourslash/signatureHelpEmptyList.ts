@@ -7,14 +7,13 @@
 ////function Bar<T>(arg1: string, arg2: string) { }
 ////Bar</*2*/>();
 
-goTo.marker('1');
-verify.signatureHelpPresent();
-verify.signatureHelpCountIs(1);
-
-verify.currentSignatureHelpIs("Foo(arg1: string, arg2: string): void");
-verify.currentSignatureParameterCountIs(2);
-verify.currentParameterHelpArgumentNameIs("arg1");
-verify.currentParameterSpanIs("arg1: string");
-
-goTo.marker('2');
-verify.signatureHelpPresent();
+verify.signatureHelp(
+    {
+        marker: "1",
+        text: "Foo(arg1: string, arg2: string): void",
+        parameterCount: 2,
+        parameterName: "arg1",
+        parameterSpan: "arg1: string",
+    },
+    { marker: "2", text: "Bar<T>(arg1: string, arg2: string): void" },
+);

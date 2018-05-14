@@ -4,13 +4,19 @@
 ////var x = new clsOverload(/*1*/);
 ////var y = new clsOverload(/*2*/'');
 
-goTo.marker('1');
-verify.signatureHelpCountIs(2);
-verify.currentSignatureParameterCountIs(0);
-verify.currentSignatureHelpIs('clsOverload(): clsOverload');
-
-goTo.marker('2');
-verify.currentSignatureParameterCountIs(1);
-verify.currentSignatureHelpIs('clsOverload(test: string): clsOverload');
-verify.currentParameterHelpArgumentNameIs('test');
-verify.currentParameterSpanIs("test: string");
+verify.signatureHelp(
+    {
+        marker: "1",
+        overloadsCount: 2,
+        text: "clsOverload(): clsOverload",
+        parameterCount: 0,
+    },
+    {
+        marker: "2",
+        overloadsCount: 2,
+        text: "clsOverload(test: string): clsOverload",
+        parameterCount: 1,
+        parameterName: "test",
+        parameterSpan: "test: string",
+    },
+);

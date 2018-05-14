@@ -12,4 +12,4 @@
 
 goTo.marker();
 edit.insert('(');
-verify.currentSignatureHelpIs('abs(str: string): string');
+verify.signatureHelp({ text: "abs(str: string): string" });

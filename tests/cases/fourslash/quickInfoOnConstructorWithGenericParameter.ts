@@ -16,10 +16,9 @@
 ////}
 ////var x = new /*2*/B(/*1*/
 
-goTo.marker("1");
-verify.currentSignatureHelpIs("B(a: Foo<I>, b: number): B");
+verify.signatureHelp({ marker: "1", text: "B(a: Foo<I>, b: number): B" });
 edit.insert("null,");
-verify.currentSignatureHelpIs("B(a: Foo<I>, b: number): B");
+verify.signatureHelp({ text: "B(a: Foo<I>, b: number): B" });
 edit.insert("10);");
 
 verify.quickInfoAt("2", "constructor B(a: Foo<I>, b: number): B");

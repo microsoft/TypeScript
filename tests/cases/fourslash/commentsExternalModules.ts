@@ -38,8 +38,7 @@ goTo.marker('2');
 verify.completionListContains("b", "var b: number", "b's comment");
 verify.completionListContains("foo", "function foo(): number", "foo's comment");
 
-goTo.marker('3');
-verify.currentSignatureHelpDocCommentIs("foo's comment");
+verify.signatureHelp({ marker: "3", docComment: "foo's comment" });
 verify.quickInfoAt("3q", "function foo(): number", "foo's comment");
 
 goTo.marker('4');
@@ -50,8 +49,7 @@ verify.completionListContains("b", "var m1.b: number", "b's comment");
 verify.completionListContains("fooExport", "function m1.fooExport(): number", "exported function");
 verify.completionListContains("m2", "namespace m1.m2");
 
-goTo.marker('6');
-verify.currentSignatureHelpDocCommentIs("exported function");
+verify.signatureHelp({ marker: "6", docComment: "exported function" });
 verify.quickInfoAt("6q", "function m1.fooExport(): number", "exported function");
 
 verify.quickInfoAt("7", "var myvar: m1.m2.c");
@@ -74,8 +72,7 @@ verify.completionListContains("b", "var extMod.m1.b: number", "b's comment");
 verify.completionListContains("fooExport", "function extMod.m1.fooExport(): number", "exported function");
 verify.completionListContains("m2", "namespace extMod.m1.m2");
 
-goTo.marker('13');
-verify.currentSignatureHelpDocCommentIs("exported function");
+verify.signatureHelp({ marker: "13", docComment: "exported function" });
 verify.quickInfoAt("13q", "function extMod.m1.fooExport(): number", "exported function");
 
 verify.quickInfoAt("14", "var newVar: extMod.m1.m2.c");

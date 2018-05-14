@@ -12,23 +12,20 @@
 ////class Bar<T> extends testClass</*type3*/
 ////var x : testClass<,, /*type4*/any>;
 
- // goTo.marker("type1");
- // verify.signatureHelpCountIs(1);
- // verify.currentSignatureHelpIs("testClass<T extends IFoo, U, M extends IFoo>");
- // verify.currentParameterHelpArgumentNameIs("T");
- // verify.currentParameterSpanIs("T extends IFoo");
+// TODO: GH#23631
 
- // goTo.marker("type2");
- // verify.signatureHelpCountIs(1);
- // verify.currentParameterHelpArgumentNameIs("T");
- // verify.currentParameterSpanIs("T extends IFoo");
-
- // goTo.marker("type3");
- // verify.signatureHelpCountIs(1);
- // verify.currentParameterHelpArgumentNameIs("T");
- // verify.currentParameterSpanIs("T extends IFoo");
-
- // goTo.marker("type4");
- // verify.signatureHelpCountIs(1);
- // verify.currentParameterHelpArgumentNameIs("M");
- // verify.currentParameterSpanIs("M extends IFoo");
+if (false) {
+    verify.signatureHelp(
+        {
+            marker: ["type1", "type2", "type3"],
+            text: "testClass<T extends IFoo, U, M extends IFoo>",
+            parameterName: "T",
+            parameterSpan: "T extends IFoo",
+        },
+        {
+            marker: "type4",
+            parameterName: "M",
+            parameterSpan: "M extends IFoo",
+        }
+    );
+}

@@ -4,5 +4,4 @@
 ////}
 ////foo(/*1*/
 
-goTo.marker('1');
-verify.currentSignatureHelpIs("foo(x: number, callback: (x: {}) => number): void");
+verify.signatureHelp({ marker: "1", text: "foo(x: number, callback: (x: {}) => number): void" });
