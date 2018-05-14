@@ -8047,6 +8047,7 @@ declare namespace ts.server {
         readonly ts: number;
         readonly tsx: number;
         readonly dts: number;
+        readonly deferred: number;
     }
     interface OpenFileInfo {
         readonly checkJs: boolean;
