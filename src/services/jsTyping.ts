@@ -37,7 +37,7 @@ namespace ts.JsTyping {
         "vm", "child_process", "url", "dns", "net",
         "dgram", "fs", "path", "string_decoder", "tls",
         "crypto", "stream", "util", "assert", "tty", "domain",
-        "constants", "process", "v8", "timers", "console"];
+        "constants", "process", "v8", "timers", "console", "inspector"];
 
     /* @internal */
     export const nodeCoreModules = arrayToSet(nodeCoreModuleList);
