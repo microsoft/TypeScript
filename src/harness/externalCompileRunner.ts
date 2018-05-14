@@ -36,7 +36,9 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                     try {
                         fs.renameSync(path.join(dir, moduleDirName), path.join(dir, placeholderName));
                     }
-                    catch {}
+                    catch {
+                        // empty
+                    }
                 });
             });
             for (const test of testList) {
@@ -47,7 +49,9 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                     try {
                         fs.renameSync(path.join(dir, placeholderName), path.join(dir, moduleDirName));
                     }
-                    catch {}
+                    catch {
+                        // empty
+                    }
                 });
             });
         });
