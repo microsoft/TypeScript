@@ -811,6 +811,10 @@ interface Array<T> {}`
             return Harness.mockHash(s);
         }
 
+        createSHA256Hash(s: string): string {
+            return sys.createSHA256Hash(s);
+        }
+
         watchFile(fileName: string, cb: FileWatcherCallback, pollingInterval: number) {
             if (this.dynamicPriorityWatchFile) {
                 return this.dynamicPriorityWatchFile(fileName, cb, pollingInterval);
