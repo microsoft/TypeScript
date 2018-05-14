@@ -2153,19 +2153,14 @@ namespace ts {
          */
         function resolveEntityNameFromJSSpecialAssignment(name: Identifier, meaning: SymbolFlags) {
             if (isJSDocTypeReference(name.parent)) {
-                const secondaryLocation = getJSSpecialAssignmentSymbol(name.parent);
+                const secondaryLocation = getJSSpecialAssignmentLocation(name.parent);
                 if (secondaryLocation) {
                     return resolveName(secondaryLocation, name.escapedText, meaning, /*nameNotFoundMessage*/ undefined, name, /*isUse*/ true);
                 }
             }
         }
 
-        function getJSSpecialAssignmentSymbol(node: TypeReferenceNode): Declaration | undefined {
-            const sig = getHostSignatureFromJSDoc(node);
-            if (sig) {
-                const symbol = getSymbolOfNode(sig);
-                return symbol && symbol.valueDeclaration;
-            }
+        function getJSSpecialAssignmentLocation(node: TypeReferenceNode): Declaration | undefined {
             const host = getJSDocHost(node);
             if (host &&
                 isExpressionStatement(host) &&
@@ -2173,6 +2168,11 @@ namespace ts {
                 getSpecialPropertyAssignmentKind(host.expression) === SpecialPropertyAssignmentKind.PrototypeProperty) {
                 const symbol = getSymbolOfNode(host.expression.left);
                 return symbol && symbol.parent.valueDeclaration;
+            }
+            const sig = getHostSignatureFromJSDoc(node);
+            if (sig) {
+                const symbol = getSymbolOfNode(sig);
+                return symbol && symbol.valueDeclaration;
             }
         }
 
