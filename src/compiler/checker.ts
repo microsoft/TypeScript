@@ -20557,15 +20557,6 @@ namespace ts {
             return widened;
         }
 
-        function isTypeParameterWithKeyofConstraint(type: Type) {
-            if (type.flags & TypeFlags.TypeParameter) {
-                const constraintDeclaration = getConstraintDeclaration(<TypeParameter>type);
-                return constraintDeclaration && constraintDeclaration.kind === SyntaxKind.TypeOperator &&
-                    (<TypeOperatorNode>constraintDeclaration).operator === SyntaxKind.KeyOfKeyword;
-            }
-            return false;
-        }
-
         function isLiteralOfContextualType(candidateType: Type, contextualType: Type): boolean {
             if (contextualType) {
                 if (contextualType.flags & TypeFlags.UnionOrIntersection) {
@@ -20577,7 +20568,7 @@ namespace ts {
                     // this a literal context for literals of that primitive type. For example, given a
                     // type parameter 'T extends string', infer string literal types for T.
                     const constraint = getBaseConstraintOfType(contextualType) || emptyObjectType;
-                    return isTypeParameterWithKeyofConstraint(contextualType) && maybeTypeOfKind(candidateType, TypeFlags.StringLiteral | TypeFlags.NumberLiteral | TypeFlags.UniqueESSymbol) ||
+                    return constraint === keyofConstraintType ||
                         constraint.flags & TypeFlags.String && maybeTypeOfKind(candidateType, TypeFlags.StringLiteral) ||
                         constraint.flags & TypeFlags.Number && maybeTypeOfKind(candidateType, TypeFlags.NumberLiteral) ||
                         constraint.flags & TypeFlags.Boolean && maybeTypeOfKind(candidateType, TypeFlags.BooleanLiteral) ||
