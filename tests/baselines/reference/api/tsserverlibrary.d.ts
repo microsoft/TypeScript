@@ -4617,6 +4617,7 @@ declare namespace ts {
     interface FileTextChanges {
         fileName: string;
         textChanges: TextChange[];
+        isNewFile?: boolean;
     }
     interface CodeAction {
         /** Description of the code action to display in the UI of the editor */
@@ -7892,7 +7893,7 @@ declare namespace ts.server {
         private detachScriptInfoFromProject;
         private addMissingFileWatcher;
         private isWatchedMissingFile;
-        getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo;
+        getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo | undefined;
         getScriptInfo(uncheckedFileName: string): ScriptInfo;
         filesToString(writeProjectFileNames: boolean): string;
         setCompilerOptions(compilerOptions: CompilerOptions): void;
@@ -8485,6 +8486,7 @@ declare namespace ts.server {
         private mapTextChangesToCodeEdits;
         private mapTextChangesToCodeEditsUsingScriptinfo;
         private convertTextChangeToCodeEdit;
+        private convertNewFileTextChangeToCodeEdit;
         private getBraceMatching;
         private getDiagnosticsForProject;
         getCanonicalFileName(fileName: string): string;

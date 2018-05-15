@@ -439,6 +439,7 @@ namespace ts {
     export interface FileTextChanges {
         fileName: string;
         textChanges: TextChange[];
+        isNewFile?: boolean;
     }
 
     export interface CodeAction {
