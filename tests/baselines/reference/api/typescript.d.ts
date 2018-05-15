@@ -4703,6 +4703,12 @@ declare namespace ts {
     interface DocumentSpan {
         textSpan: TextSpan;
         fileName: string;
+        /**
+         * If the span represents a location that was remapped (e.g. via a .d.ts.map file),
+         * then the original filename and span will be specified here
+         */
+        originalTextSpan?: TextSpan;
+        originalFileName?: string;
     }
     interface RenameLocation extends DocumentSpan {
     }
@@ -4800,9 +4806,7 @@ declare namespace ts {
         insertSpaceBeforeTypeAnnotation?: boolean;
         indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
     }
-    interface DefinitionInfo {
-        fileName: string;
-        textSpan: TextSpan;
+    interface DefinitionInfo extends DocumentSpan {
         kind: ScriptElementKind;
         name: string;
         containerKind: ScriptElementKind;

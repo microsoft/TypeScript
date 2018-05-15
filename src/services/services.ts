@@ -1600,10 +1600,10 @@ namespace ts {
 
         function makeGetTargetOfMappedPosition<TIn>(
             extract: (original: TIn) => sourcemaps.SourceMappableLocation,
-            create: (result: sourcemaps.SourceMappableLocation, original: TIn) => TIn
+            create: (result: sourcemaps.SourceMappableLocation, unmapped: TIn, original: TIn) => TIn
         ) {
             return getTargetOfMappedPosition;
-            function getTargetOfMappedPosition(input: TIn): TIn {
+            function getTargetOfMappedPosition(input: TIn, original = input): TIn {
                 const info = extract(input);
                 if (endsWith(info.fileName, Extension.Dts)) {
                     let file: SourceFileLike = program.getSourceFile(info.fileName);
@@ -1617,7 +1617,7 @@ namespace ts {
                     const mapper = getSourceMapper(info.fileName, file);
                     const newLoc = mapper.getOriginalPosition(info);
                     if (newLoc === info) return input;
-                    return getTargetOfMappedPosition(create(newLoc, input));
+                    return getTargetOfMappedPosition(create(newLoc, input, original), original);
                 }
                 return input;
             }
@@ -1625,7 +1625,7 @@ namespace ts {
 
         const getTargetOfMappedDeclarationInfo = makeGetTargetOfMappedPosition(
             (info: DefinitionInfo) => ({ fileName: info.fileName, position: info.textSpan.start }),
-            (newLoc, info) => ({
+            (newLoc, info, original) => ({
                 containerKind: info.containerKind,
                 containerName: info.containerName,
                 fileName: newLoc.fileName,
@@ -1634,12 +1634,14 @@ namespace ts {
                 textSpan: {
                     start: newLoc.position,
                     length: info.textSpan.length
-                }
+                },
+                originalFileName: original.fileName,
+                originalTextSpan: original.textSpan
             })
         );
 
         function getTargetOfMappedDeclarationFiles(infos: ReadonlyArray<DefinitionInfo>): DefinitionInfo[] {
-            return map(infos, getTargetOfMappedDeclarationInfo);
+            return map(infos, d => getTargetOfMappedDeclarationInfo(d));
         }
 
         /// Goto definition
@@ -1678,12 +1680,14 @@ namespace ts {
                 textSpan: {
                     start: newLoc.position,
                     length: info.textSpan.length
-                }
+                },
+                originalFileName: info.fileName,
+                originalTextSpan: info.textSpan
             })
         );
 
         function getTargetOfMappedImplementationLocations(infos: ReadonlyArray<ImplementationLocation>): ImplementationLocation[] {
-            return map(infos, getTargetOfMappedImplementationLocation);
+            return map(infos, d => getTargetOfMappedImplementationLocation(d));
         }
 
         function getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] {

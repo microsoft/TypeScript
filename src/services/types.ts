@@ -542,6 +542,13 @@ namespace ts {
     export interface DocumentSpan {
         textSpan: TextSpan;
         fileName: string;
+
+        /**
+         * If the span represents a location that was remapped (e.g. via a .d.ts.map file),
+         * then the original filename and span will be specified here
+         */
+        originalTextSpan?: TextSpan;
+        originalFileName?: string;
     }
 
     export interface RenameLocation extends DocumentSpan {
@@ -654,9 +661,7 @@ namespace ts {
         indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
     }
 
-    export interface DefinitionInfo {
-        fileName: string;
-        textSpan: TextSpan;
+    export interface DefinitionInfo extends DocumentSpan {
         kind: ScriptElementKind;
         name: string;
         containerKind: ScriptElementKind;
