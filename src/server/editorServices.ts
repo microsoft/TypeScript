@@ -403,7 +403,7 @@ namespace ts.server {
         /* @internal */
         pendingEnsureProjectForOpenFiles: boolean;
 
-        readonly currentDirectory: string;
+        readonly currentDirectory: NormalizedPath;
         readonly toCanonicalFileName: (f: string) => string;
 
         public readonly host: ServerHost;
@@ -450,7 +450,7 @@ namespace ts.server {
             if (this.host.realpath) {
                 this.realpathToScriptInfos = createMultiMap();
             }
-            this.currentDirectory = this.host.getCurrentDirectory();
+            this.currentDirectory = toNormalizedPath(this.host.getCurrentDirectory());
             this.toCanonicalFileName = createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
             this.globalCacheLocationDirectoryPath = this.typingsInstaller.globalTypingsCacheLocation &&
                 ensureTrailingDirectorySeparator(this.toPath(this.typingsInstaller.globalTypingsCacheLocation));
