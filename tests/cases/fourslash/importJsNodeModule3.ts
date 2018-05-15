@@ -37,11 +37,8 @@ edit.backspace(2);
 edit.insert('z(');
 verify.signatureHelp({
     text: "z(a: number | boolean, b: string[]): string",
-    // TODO: GH#24129
-    parameterDocComment: "The first param\nThe first param",
+    parameterDocComment: "The first param",
     tags: [
-        { name: "param", text: "a The first param" },
-        { name: "param", text: "b The second param" },
         { name: "param", text: "a The first param" },
         { name: "param", text: "b The second param" },
     ],
