@@ -892,6 +892,7 @@ namespace ts {
         function mergeSymbol(target: Symbol, source: Symbol) {
             if (!(target.flags & getExcludedSymbolFlags(source.flags)) ||
                 (source.flags | target.flags) & SymbolFlags.JSContainer) {
+                const targetValueDeclaration = target.valueDeclaration;
                 Debug.assert(!!(target.flags & SymbolFlags.Transient));
                 // Javascript static-property-assignment declarations always merge, even though they are also values
                 if (source.flags & SymbolFlags.ValueModule && target.flags & SymbolFlags.ValueModule && target.constEnumOnlyModule && !source.constEnumOnlyModule) {
@@ -916,12 +917,13 @@ namespace ts {
                 }
                 if ((source.flags | target.flags) & SymbolFlags.JSContainer) {
                     const sourceInitializer = getJSInitializerSymbol(source);
-                    let targetInitializer = getJSInitializerSymbol(target);
+                    const init = getDeclaredJavascriptInitializer(targetValueDeclaration) || getAssignedJavascriptInitializer(targetValueDeclaration);
+                    let targetInitializer = init && init.symbol ? init.symbol : target;
+                    if (!(targetInitializer.flags & SymbolFlags.Transient)) {
+                        const mergedInitializer = getMergedSymbol(targetInitializer);
+                        targetInitializer = mergedInitializer === targetInitializer ? cloneSymbol(targetInitializer) : mergedInitializer;
+                    }
                     if (sourceInitializer !== source || targetInitializer !== target) {
-                        if (!(targetInitializer.flags & SymbolFlags.Transient)) {
-                            const mergedInitializer = getMergedSymbol(targetInitializer);
-                            targetInitializer = mergedInitializer === targetInitializer ? cloneSymbol(targetInitializer) : mergedInitializer;
-                        }
                         mergeSymbol(targetInitializer, sourceInitializer);
                     }
                 }
@@ -8692,6 +8694,10 @@ namespace ts {
         // Transform an indexed access to a simpler form, if possible. Return the simpler form, or return
         // the type itself if no transformation is possible.
         function getSimplifiedIndexedAccessType(type: IndexedAccessType): Type {
+            if (type.simplified) {
+                return type.simplified === circularConstraintType ? type : type.simplified;
+            }
+            type.simplified = circularConstraintType;
             const objectType = type.objectType;
             if (objectType.flags & TypeFlags.Intersection && isGenericObjectType(objectType)) {
                 // Given an indexed access type T[K], if T is an intersection containing one or more generic types and one or
@@ -8709,7 +8715,7 @@ namespace ts {
                             regularTypes.push(t);
                         }
                     }
-                    return getUnionType([
+                    return type.simplified = getUnionType([
                         getSimplifiedType(getIndexedAccessType(getIntersectionType(regularTypes), type.indexType)),
                         getIntersectionType(stringIndexTypes)
                     ]);
@@ -8720,7 +8726,7 @@ namespace ts {
                 // eventually anyway, but it easier to reason about.
                 if (some((<IntersectionType>objectType).types, isMappedTypeToNever)) {
                     const nonNeverTypes = filter((<IntersectionType>objectType).types, t => !isMappedTypeToNever(t));
-                    return getSimplifiedType(getIndexedAccessType(getIntersectionType(nonNeverTypes), type.indexType));
+                    return type.simplified = getSimplifiedType(getIndexedAccessType(getIntersectionType(nonNeverTypes), type.indexType));
                 }
             }
             // If the object type is a mapped type { [P in K]: E }, where K is generic, instantiate E using a mapper
@@ -8728,15 +8734,15 @@ namespace ts {
             // construct the type Box<T[X]>. We do not further simplify the result because mapped types can be recursive
             // and we might never terminate.
             if (isGenericMappedType(objectType)) {
-                return substituteIndexedMappedType(objectType, type);
+                return type.simplified = substituteIndexedMappedType(objectType, type);
             }
             if (objectType.flags & TypeFlags.TypeParameter) {
                 const constraint = getConstraintFromTypeParameter(objectType as TypeParameter);
                 if (constraint && isGenericMappedType(constraint)) {
-                    return substituteIndexedMappedType(constraint, type);
+                    return type.simplified = substituteIndexedMappedType(constraint, type);
                 }
             }
-            return type;
+            return type.simplified = type;
         }
 
         function substituteIndexedMappedType(objectType: MappedType, type: IndexedAccessType) {

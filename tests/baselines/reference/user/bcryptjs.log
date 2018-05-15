@@ -3,13 +3,6 @@ Standard output:
 node_modules/bcryptjs/scripts/build.js(1,26): error TS2307: Cannot find module 'metascript'.
 node_modules/bcryptjs/scripts/build.js(32,1): error TS2322: Type '{ VERSION: any; }' is not assignable to type '{ [x: string]: any; VERSION: any; ISAAC: boolean; }'.
   Property 'ISAAC' is missing in type '{ VERSION: any; }'.
-node_modules/bcryptjs/src/bcrypt.js(25,13): error TS2322: Type 'Buffer' is not assignable to type 'number[]'.
-  Property 'flatMap' is missing in type 'Buffer'.
-node_modules/bcryptjs/src/bcrypt.js(94,14): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
-node_modules/bcryptjs/src/bcrypt.js(150,5): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
-  Type 'undefined' is not assignable to type 'string'.
-node_modules/bcryptjs/src/bcrypt.js(160,14): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
-node_modules/bcryptjs/src/bcrypt.js(238,14): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
 node_modules/bcryptjs/src/bcrypt/impl.js(516,22): error TS2345: Argument of type 'Int32Array | number[]' is not assignable to parameter of type 'number[]'.
   Type 'Int32Array' is not assignable to type 'number[]'.
     Property 'flatMap' is missing in type 'Int32Array'.
@@ -27,6 +20,13 @@ node_modules/bcryptjs/src/bcrypt/prng/accum.js(65,74): error TS2339: Property 'd
 node_modules/bcryptjs/src/bcrypt/prng/accum.js(66,22): error TS2339: Property 'detachEvent' does not exist on type 'Document'.
 node_modules/bcryptjs/src/bcrypt/prng/accum.js(67,22): error TS2339: Property 'detachEvent' does not exist on type 'Document'.
 node_modules/bcryptjs/src/bcrypt/util.js(20,5): error TS2304: Cannot find name 'utfx'.
+node_modules/bcryptjs/src/bcrypt.js(25,13): error TS2322: Type 'Buffer' is not assignable to type 'number[]'.
+  Property 'flatMap' is missing in type 'Buffer'.
+node_modules/bcryptjs/src/bcrypt.js(94,14): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+node_modules/bcryptjs/src/bcrypt.js(150,5): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+node_modules/bcryptjs/src/bcrypt.js(160,14): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+node_modules/bcryptjs/src/bcrypt.js(238,14): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
 node_modules/bcryptjs/src/wrap.js(37,26): error TS2304: Cannot find name 'define'.
 node_modules/bcryptjs/src/wrap.js(37,51): error TS2304: Cannot find name 'define'.
 node_modules/bcryptjs/src/wrap.js(38,9): error TS2304: Cannot find name 'define'.

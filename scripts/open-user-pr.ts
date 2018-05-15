@@ -19,7 +19,7 @@ const userName = process.env.GH_USERNAME;
 const reviewers = ["weswigham", "sandersn", "mhegazy"]
 const now = new Date();
 const branchName = `user-update-${now.getFullYear()}${padNum(now.getMonth())}${padNum(now.getDay())}`;
-const remoteUrl = `https://github.com/${userName}/TypeScript.git`;
+const remoteUrl = `https://${process.argv[2]}@github.com/${userName}/TypeScript.git`;
 runSequence([
     ["git", ["checkout", "."]], // reset any changes
     ["node", ["./node_modules/jake/bin/cli.js", "baseline-accept"]], // accept baselines

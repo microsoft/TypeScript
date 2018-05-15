@@ -7,29 +7,28 @@
 ////}
 ////
 ////// Constructor calls
-////new testClass</*construcor1*/
-////new testClass<IFoo, /*construcor2*/
-////new testClass</*construcor3*/>(null, null, null)
-////new testClass<,,/*construcor4*/>(null, null, null)
-////new testClass<IFoo,/*construcor5*/IFoo,IFoo>(null, null, null)
+////new testClass</*constructor1*/
+////new testClass<IFoo, /*constructor2*/
+////new testClass</*constructor3*/>(null, null, null)
+////new testClass<,,/*constructor4*/>(null, null, null)
+////new testClass<IFoo,/*constructor5*/IFoo,IFoo>(null, null, null)
 
- // goTo.marker("construcor1");
- // verify.currentSignatureHelpIs("testClass<T extends IFoo, U, M extends IFoo>(a: T, b: U, c: M): testClass<T, U, M>");
- // verify.currentParameterHelpArgumentNameIs("T");
- // verify.currentParameterSpanIs("T extends IFoo");
-
- // goTo.marker("construcor2");
- // verify.currentParameterHelpArgumentNameIs("U");
- // verify.currentParameterSpanIs("U");
-
-goTo.marker("construcor3");
-verify.currentParameterHelpArgumentNameIs("T");
-verify.currentParameterSpanIs("T extends IFoo");
-
-goTo.marker("construcor4");
-verify.currentParameterHelpArgumentNameIs("M");
-verify.currentParameterSpanIs("M extends IFoo");
-
-goTo.marker("construcor5");
-verify.currentParameterHelpArgumentNameIs("U");
-verify.currentParameterSpanIs("U");
+verify.signatureHelp(
+    // TODO: GH#23631
+    /*
+    {
+        marker: "constructor1",
+        text: "testClass<T extends IFoo, U, M extends IFoo>(a: T, b: U, c: M): testClass<T, U, M>",
+        parameterName: "T",
+        parameterSpan: "T extends IFoo",
+    },
+    {
+        marker: "constructor2",
+        parameterName: "U",
+        parameterSpan: "U",
+    },
+    */
+   { marker: "constructor3", parameterName: "T", parameterSpan: "T extends IFoo" },
+   { marker: "constructor4", parameterName: "M", parameterSpan: "M extends IFoo" },
+   { marker: "constructor5", parameterName: "U", parameterSpan: "U" },
+);

@@ -102,8 +102,7 @@ goTo.marker('2');
 verify.completionListContains("b", "var b: number", "b's comment");
 verify.completionListContains("foo", "function foo(): number", "foo's comment");
 
-goTo.marker('3');
-verify.currentSignatureHelpDocCommentIs("foo's comment");
+verify.signatureHelp({ marker: "3", docComment: "foo's comment" });
 verify.quickInfoAt("3q", "function foo(): number", "foo's comment");
 
 goTo.marker('4');
@@ -115,8 +114,7 @@ verify.completionListContains("fooExport", "function m1.fooExport(): number", "e
 verify.completionListContains("m2", "namespace m1.m2");
 verify.quickInfoIs("function m1.fooExport(): number", "exported function");
 
-goTo.marker('6');
-verify.currentSignatureHelpDocCommentIs("exported function");
+verify.signatureHelp({ marker: "6", docComment: "exported function" });
 
 verify.quickInfoAt("7", "var myvar: m1.m2.c");
 

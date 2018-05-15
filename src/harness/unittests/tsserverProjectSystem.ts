@@ -214,9 +214,9 @@ namespace ts.projectSystem {
             assert.equal(eventData.triggerFile, triggerFile);
         }
 
-        assertProjectInfoTelemetryEvent(partial: Partial<server.ProjectInfoTelemetryEventData>, configFile?: string): void {
+        assertProjectInfoTelemetryEvent(partial: Partial<server.ProjectInfoTelemetryEventData>, configFile = "/tsconfig.json"): void {
             assert.deepEqual<server.ProjectInfoTelemetryEventData>(this.getEvent<server.ProjectInfoTelemetryEvent>(server.ProjectInfoTelemetryEvent), {
-                projectId: Harness.mockHash(configFile || "/tsconfig.json"),
+                projectId: sys.createSHA256Hash(configFile),
                 fileStats: fileStats({ ts: 1 }),
                 compilerOptions: {},
                 extends: false,
