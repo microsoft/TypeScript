@@ -1600,10 +1600,10 @@ namespace ts {
 
         function makeGetTargetOfMappedPosition<TIn>(
             extract: (original: TIn) => sourcemaps.SourceMappableLocation,
-            create: (result: sourcemaps.SourceMappableLocation, original: TIn, firstOriginal: TIn) => TIn
+            create: (result: sourcemaps.SourceMappableLocation, unmapped: TIn, original: TIn) => TIn
         ) {
             return getTargetOfMappedPosition;
-            function getTargetOfMappedPosition(input: TIn, firstOriginal = input): TIn {
+            function getTargetOfMappedPosition(input: TIn, original = input): TIn {
                 const info = extract(input);
                 if (endsWith(info.fileName, Extension.Dts)) {
                     let file: SourceFileLike = program.getSourceFile(info.fileName);
@@ -1617,7 +1617,7 @@ namespace ts {
                     const mapper = getSourceMapper(info.fileName, file);
                     const newLoc = mapper.getOriginalPosition(info);
                     if (newLoc === info) return input;
-                    return getTargetOfMappedPosition(create(newLoc, input, firstOriginal), firstOriginal);
+                    return getTargetOfMappedPosition(create(newLoc, input, original), original);
                 }
                 return input;
             }
@@ -1625,7 +1625,7 @@ namespace ts {
 
         const getTargetOfMappedDeclarationInfo = makeGetTargetOfMappedPosition(
             (info: DefinitionInfo) => ({ fileName: info.fileName, position: info.textSpan.start }),
-            (newLoc, info, firstOriginal) => ({
+            (newLoc, info, original) => ({
                 containerKind: info.containerKind,
                 containerName: info.containerName,
                 fileName: newLoc.fileName,
@@ -1635,8 +1635,8 @@ namespace ts {
                     start: newLoc.position,
                     length: info.textSpan.length
                 },
-                originalFileName: firstOriginal.fileName,
-                originalTextSpan: firstOriginal.textSpan
+                originalFileName: original.fileName,
+                originalTextSpan: original.textSpan
             })
         );
 
