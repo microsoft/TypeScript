@@ -8319,7 +8319,7 @@ namespace ts {
                     includes & TypeFlags.Undefined ? includes & TypeFlags.NonWideningType ? undefinedType : undefinedWideningType :
                         neverType;
             }
-            return getUnionTypeFromSortedList(typeSet, aliasSymbol, aliasTypeArguments);
+            return getUnionTypeFromSortedList(typeSet, includes & TypeFlags.NotUnit ? 0 : TypeFlags.UnionOfUnitTypes, aliasSymbol, aliasTypeArguments);
         }
 
         function getUnionTypePredicate(signatures: ReadonlyArray<Signature>): TypePredicate {
@@ -8359,7 +8359,7 @@ namespace ts {
         }
 
         // This function assumes the constituent type list is sorted and deduplicated.
-        function getUnionTypeFromSortedList(types: Type[], aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
+        function getUnionTypeFromSortedList(types: Type[], unionOfUnitTypes: TypeFlags, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
             if (types.length === 0) {
                 return neverType;
             }
@@ -8370,7 +8370,7 @@ namespace ts {
             let type = unionTypes.get(id);
             if (!type) {
                 const propagatedFlags = getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
-                type = <UnionType>createType(TypeFlags.Union | propagatedFlags);
+                type = <UnionType>createType(TypeFlags.Union | propagatedFlags | unionOfUnitTypes);
                 unionTypes.set(id, type);
                 type.types = types;
                 /*
@@ -8441,6 +8441,27 @@ namespace ts {
             }
         }
 
+        // When intersecting unions of unit types we can simply intersect based on type identity.
+        // Here we remove all unions of unit types from the given list and replace them with a
+        // a single union containing an intersection of the unit types.
+        function intersectUnionsOfUnitTypes(types: Type[]) {
+            const unionIndex = findIndex(types, t => (t.flags & TypeFlags.UnionOfUnitTypes) !== 0);
+            const unionType = <UnionType>types[unionIndex];
+            let intersection = unionType.types;
+            let i = types.length - 1;
+            while (i > unionIndex) {
+                const t = types[i];
+                if (t.flags & TypeFlags.UnionOfUnitTypes) {
+                    intersection = filter(intersection, u => containsType((<UnionType>t).types, u));
+                    orderedRemoveItemAt(types, i);
+                }
+                i--;
+            }
+            if (intersection !== unionType.types) {
+                types[unionIndex] = getUnionTypeFromSortedList(intersection, unionType.flags & TypeFlags.UnionOfUnitTypes);
+            }
+        }
+
         // We normalize combinations of intersection and union types based on the distributive property of the '&'
         // operator. Specifically, because X & (A | B) is equivalent to X & A | X & B, we can transform intersection
         // types with union type constituents into equivalent union types with intersection type constituents and
@@ -8467,6 +8488,9 @@ namespace ts {
                 includes & TypeFlags.Number && includes & TypeFlags.NumberLiteral ||
                 includes & TypeFlags.ESSymbol && includes & TypeFlags.UniqueESSymbol) {
                 removeRedundantPrimitiveTypes(typeSet, includes);
+            }
+            if (includes & TypeFlags.UnionOfUnitTypes) {
+                intersectUnionsOfUnitTypes(typeSet);
             }
             if (includes & TypeFlags.EmptyObject && !(includes & TypeFlags.Object)) {
                 typeSet.push(emptyObjectType);
@@ -13234,7 +13258,7 @@ namespace ts {
             if (type.flags & TypeFlags.Union) {
                 const types = (<UnionType>type).types;
                 const filtered = filter(types, f);
-                return filtered === types ? type : getUnionTypeFromSortedList(filtered);
+                return filtered === types ? type : getUnionTypeFromSortedList(filtered, type.flags & TypeFlags.UnionOfUnitTypes);
             }
             return f(type) ? type : neverType;
         }
