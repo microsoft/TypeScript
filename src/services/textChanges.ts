@@ -360,7 +360,8 @@ namespace ts.textChanges {
             // Otherwise, add an extra new line immediately before the error span.
             const insertAtLineStart = isValidLocationToAddComment(sourceFile, startPosition);
             const token = getTouchingToken(sourceFile, insertAtLineStart ? startPosition : position, /*includeJsDocComment*/ false);
-            const text = `${insertAtLineStart ? "" : this.newLineCharacter}${sourceFile.text.slice(lineStartPosition, startPosition)}//${commentText}${this.newLineCharacter}`;
+            const indent = sourceFile.text.slice(lineStartPosition, startPosition);
+            const text = `${insertAtLineStart ? "" : this.newLineCharacter}//${commentText}${this.newLineCharacter}${indent}`;
             this.insertText(sourceFile, token.getStart(sourceFile), text);
         }
 
