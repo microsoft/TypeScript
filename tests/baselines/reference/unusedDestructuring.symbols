@@ -20,15 +20,19 @@ const { e } = o;
 >e : Symbol(e, Decl(unusedDestructuring.ts, 5, 7))
 >o : Symbol(o, Decl(unusedDestructuring.ts, 1, 13))
 
+const { f: g } = o;
+>g : Symbol(g, Decl(unusedDestructuring.ts, 6, 7))
+>o : Symbol(o, Decl(unusedDestructuring.ts, 1, 13))
+
 function f({ a, b }, { c, d }, { e }) {
->f : Symbol(f, Decl(unusedDestructuring.ts, 5, 16))
->a : Symbol(a, Decl(unusedDestructuring.ts, 7, 12))
->b : Symbol(b, Decl(unusedDestructuring.ts, 7, 15))
->c : Symbol(c, Decl(unusedDestructuring.ts, 7, 22))
->d : Symbol(d, Decl(unusedDestructuring.ts, 7, 25))
->e : Symbol(e, Decl(unusedDestructuring.ts, 7, 32))
+>f : Symbol(f, Decl(unusedDestructuring.ts, 6, 19))
+>a : Symbol(a, Decl(unusedDestructuring.ts, 8, 12))
+>b : Symbol(b, Decl(unusedDestructuring.ts, 8, 15))
+>c : Symbol(c, Decl(unusedDestructuring.ts, 8, 22))
+>d : Symbol(d, Decl(unusedDestructuring.ts, 8, 25))
+>e : Symbol(e, Decl(unusedDestructuring.ts, 8, 32))
 
     d;
->d : Symbol(d, Decl(unusedDestructuring.ts, 7, 25))
+>d : Symbol(d, Decl(unusedDestructuring.ts, 8, 25))
 }
 
