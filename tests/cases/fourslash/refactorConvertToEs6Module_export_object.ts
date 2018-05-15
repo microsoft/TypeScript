@@ -12,6 +12,9 @@
 ////    C: class {},
 ////};
 
+// @Filename: /b.js
+////const a = require("./a.js");
+
 verify.codeFix({
     description: "Convert to ES6 module",
     newFileContent:

@@ -179,7 +179,7 @@ declare namespace FourSlashInterface {
         isInCommentAtPosition(onlyMultiLineDiverges?: boolean): void;
         codeFix(options: {
             description: string,
-            newFileContent?: string,
+            newFileContent?: string | { readonly [fileName: string]: string },
             newRangeContent?: string,
             errorCode?: number,
             index?: number,

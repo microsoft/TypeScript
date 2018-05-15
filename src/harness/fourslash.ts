@@ -2293,9 +2293,13 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public verifyCurrentFileContent(text: string) {
-            const actual = this.getFileContent(this.activeFile.fileName);
+            this.verifyFileContent(this.activeFile.fileName, text);
+        }
+
+        private verifyFileContent(fileName: string, text: string) {
+            const actual = this.getFileContent(fileName);
             if (actual !== text) {
-                throw new Error(`verifyCurrentFileContent failed:\n${showTextDiff(text, actual)}`);
+                throw new Error(`verifyFileContent failed:\n${showTextDiff(text, actual)}`);
             }
         }
 
@@ -2483,7 +2487,7 @@ Actual: ${stringify(fullActual)}`);
 
             this.applyCodeActions(details.codeActions);
 
-            this.verifyNewContent(options);
+            this.verifyNewContent(options, ts.flatMap(details.codeActions, a => a.changes.map(c => c.fileName)));
         }
 
         public verifyRangeIs(expectedText: string, includeWhiteSpace?: boolean) {
@@ -2570,13 +2574,25 @@ Actual: ${stringify(fullActual)}`);
                 this.applyEdits(change.fileName, change.textChanges, /*isFormattingEdit*/ false);
             }
 
-            this.verifyNewContent(options);
+            this.verifyNewContent(options, action.changes.map(c => c.fileName));
         }
 
-        private verifyNewContent(options: FourSlashInterface.NewContentOptions) {
+        private verifyNewContent(options: FourSlashInterface.NewContentOptions, changedFiles: ReadonlyArray<string>) {
+            const assertedChangedFiles = !options.newFileContent || typeof options.newFileContent === "string"
+                ? [this.activeFile.fileName]
+                : ts.getOwnKeys(options.newFileContent);
+            assert.deepEqual(assertedChangedFiles, changedFiles);
+
             if (options.newFileContent !== undefined) {
                 assert(!options.newRangeContent);
-                this.verifyCurrentFileContent(options.newFileContent);
+                if (typeof options.newFileContent === "string") {
+                    this.verifyCurrentFileContent(options.newFileContent);
+                }
+                else {
+                    for (const fileName in options.newFileContent) {
+                        this.verifyFileContent(fileName, options.newFileContent[fileName]);
+                    }
+                }
             }
             else {
                 this.verifyRangeIs(options.newRangeContent, /*includeWhitespace*/ true);
@@ -4781,7 +4797,7 @@ namespace FourSlashInterface {
 
     export interface NewContentOptions {
         // Exactly one of these should be defined.
-        newFileContent?: string;
+        newFileContent?: string | { readonly [filename: string]: string };
         newRangeContent?: string;
     }
 
