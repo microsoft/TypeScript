@@ -1,5 +1,10 @@
 Exit Code: 1
 Standard output:
+node_modules/lodash/_Hash.js(20,17): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_ListCache.js(20,17): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_MapCache.js(20,17): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_SetCache.js(19,14): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_Stack.js(17,20): error TS2339: Property 'size' does not exist on type 'ListCache'.
 node_modules/lodash/_arrayAggregator.js(16,17): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_arrayEach.js(15,18): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_arrayEach.js(19,3): error TS2322: Type 'any[] | undefined' is not assignable to type 'any[]'.
@@ -130,9 +135,8 @@ node_modules/lodash/_equalObjects.js(70,18): error TS2322: Type 'boolean' is not
 node_modules/lodash/_getHolder.js(10,17): error TS2339: Property 'placeholder' does not exist on type 'Function'.
 node_modules/lodash/_getRawTag.js(36,7): error TS2454: Variable 'unmasked' is used before being assigned.
 node_modules/lodash/_getSymbolsIn.js(19,23): error TS2554: Expected 0 arguments, but got 1.
-node_modules/lodash/_Hash.js(20,17): error TS2532: Object is possibly 'undefined'.
-node_modules/lodash/_hashDelete.js(7,20): error TS8024: JSDoc '@param' tag has name 'hash', but there is no parameter with that name.
 node_modules/lodash/_hasPath.js(35,50): error TS2454: Variable 'key' is used before being assigned.
+node_modules/lodash/_hashDelete.js(7,20): error TS8024: JSDoc '@param' tag has name 'hash', but there is no parameter with that name.
 node_modules/lodash/_initCloneArray.js(16,16): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 node_modules/lodash/_initCloneArray.js(20,26): error TS2339: Property 'index' does not exist on type 'any[]'.
 node_modules/lodash/_initCloneArray.js(21,26): error TS2339: Property 'input' does not exist on type 'any[]'.
@@ -140,8 +144,6 @@ node_modules/lodash/_insertWrapDetails.js(10,5): error TS1223: 'returns' tag alr
 node_modules/lodash/_insertWrapDetails.js(15,5): error TS2322: Type 'string' is not assignable to type 'any[]'.
 node_modules/lodash/_insertWrapDetails.js(20,3): error TS2322: Type 'string' is not assignable to type 'any[]'.
 node_modules/lodash/_isLaziable.js(24,14): error TS2554: Expected 0 arguments, but got 1.
-node_modules/lodash/_ListCache.js(20,17): error TS2532: Object is possibly 'undefined'.
-node_modules/lodash/_MapCache.js(20,17): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_memoizeCapped.js(22,22): error TS2339: Property 'cache' does not exist on type 'Function'.
 node_modules/lodash/_mergeData.js(60,26): error TS2554: Expected 4 arguments, but got 3.
 node_modules/lodash/_mergeData.js(67,26): error TS2554: Expected 4 arguments, but got 3.
@@ -155,8 +157,6 @@ node_modules/lodash/_overRest.js(27,27): error TS2532: Object is possibly 'undef
 node_modules/lodash/_overRest.js(28,22): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_overRest.js(31,15): error TS2538: Type 'undefined' cannot be used as an index type.
 node_modules/lodash/_root.js(4,56): error TS2339: Property 'Object' does not exist on type 'Window'.
-node_modules/lodash/_SetCache.js(19,14): error TS2532: Object is possibly 'undefined'.
-node_modules/lodash/_Stack.js(17,20): error TS2339: Property 'size' does not exist on type 'ListCache'.
 node_modules/lodash/_unicodeWords.js(62,20): error TS8024: JSDoc '@param' tag has name 'The', but there is no parameter with that name.
 node_modules/lodash/_updateWrapDetails.js(34,5): error TS1223: 'returns' tag already specified.
 node_modules/lodash/ary.js(16,10): error TS1003: Identifier expected.
