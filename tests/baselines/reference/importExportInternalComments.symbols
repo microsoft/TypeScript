@@ -4,7 +4,7 @@ declare module "foo";
 
 === tests/cases/compiler/default.ts ===
 /*1*/ export /*2*/ default /*3*/ Array /*4*/;
->Array : Symbol(Array, Decl(lib.es2016.array.include.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
+>Array : Symbol(Array, Decl(lib.esnext.array.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 
 === tests/cases/compiler/index.ts ===
 /*1*/ import /*2*/ D /*3*/, /*4*/ { /*5*/ A /*6*/, /*7*/ B /*8*/ as /*9*/ C /*10*/ } /*11*/ from /*12*/ "foo";

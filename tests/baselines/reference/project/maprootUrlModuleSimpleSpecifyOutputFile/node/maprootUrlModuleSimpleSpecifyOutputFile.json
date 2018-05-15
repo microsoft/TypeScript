@@ -10,7 +10,7 @@
     "baselineCheck": true,
     "mapRoot": "http://www.typescriptlang.org/",
     "resolvedInputFiles": [
-        "lib.d.ts",
+        "lib.es5.d.ts",
         "m1.ts",
         "test.ts"
     ],

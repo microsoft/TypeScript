@@ -252,35 +252,36 @@ function f3() {
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    _b.trys.push([0, 6, 7, 12]);
+                    _b.trys.push([0, 7, 8, 13]);
                     y_1 = __asyncValues(y);
                     _b.label = 1;
                 case 1: return [4 /*yield*/, __await(y_1.next())];
                 case 2:
-                    if (!(y_1_1 = _b.sent(), !y_1_1.done)) return [3 /*break*/, 5];
-                    return [4 /*yield*/, __await(y_1_1.value)];
-                case 3:
+                    if (!(y_1_1 = _b.sent(), !y_1_1.done)) return [3 /*break*/, 6];
+                    return [4 /*yield*/, __await(__await(y_1_1.value))];
+                case 3: return [4 /*yield*/, _b.sent()];
+                case 4:
                     x = _b.sent();
-                    _b.label = 4;
-                case 4: return [3 /*break*/, 1];
-                case 5: return [3 /*break*/, 12];
-                case 6:
+                    _b.label = 5;
+                case 5: return [3 /*break*/, 1];
+                case 6: return [3 /*break*/, 13];
+                case 7:
                     e_1_1 = _b.sent();
                     e_1 = { error: e_1_1 };
-                    return [3 /*break*/, 12];
-                case 7:
-                    _b.trys.push([7, , 10, 11]);
-                    if (!(y_1_1 && !y_1_1.done && (_a = y_1.return))) return [3 /*break*/, 9];
-                    return [4 /*yield*/, __await(_a.call(y_1))];
+                    return [3 /*break*/, 13];
                 case 8:
+                    _b.trys.push([8, , 11, 12]);
+                    if (!(y_1_1 && !y_1_1.done && (_a = y_1.return))) return [3 /*break*/, 10];
+                    return [4 /*yield*/, __await(_a.call(y_1))];
+                case 9:
                     _b.sent();
-                    _b.label = 9;
-                case 9: return [3 /*break*/, 11];
-                case 10:
+                    _b.label = 10;
+                case 10: return [3 /*break*/, 12];
+                case 11:
                     if (e_1) throw e_1.error;
                     return [7 /*endfinally*/];
-                case 11: return [7 /*endfinally*/];
-                case 12: return [2 /*return*/];
+                case 12: return [7 /*endfinally*/];
+                case 13: return [2 /*return*/];
             }
         });
     });
@@ -336,35 +337,36 @@ function f4() {
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    _b.trys.push([0, 6, 7, 12]);
+                    _b.trys.push([0, 7, 8, 13]);
                     y_1 = __asyncValues(y);
                     _b.label = 1;
                 case 1: return [4 /*yield*/, __await(y_1.next())];
                 case 2:
-                    if (!(y_1_1 = _b.sent(), !y_1_1.done)) return [3 /*break*/, 5];
-                    return [4 /*yield*/, __await(y_1_1.value)];
-                case 3:
+                    if (!(y_1_1 = _b.sent(), !y_1_1.done)) return [3 /*break*/, 6];
+                    return [4 /*yield*/, __await(__await(y_1_1.value))];
+                case 3: return [4 /*yield*/, _b.sent()];
+                case 4:
                     x = _b.sent();
-                    _b.label = 4;
-                case 4: return [3 /*break*/, 1];
-                case 5: return [3 /*break*/, 12];
-                case 6:
+                    _b.label = 5;
+                case 5: return [3 /*break*/, 1];
+                case 6: return [3 /*break*/, 13];
+                case 7:
                     e_1_1 = _b.sent();
                     e_1 = { error: e_1_1 };
-                    return [3 /*break*/, 12];
-                case 7:
-                    _b.trys.push([7, , 10, 11]);
-                    if (!(y_1_1 && !y_1_1.done && (_a = y_1.return))) return [3 /*break*/, 9];
-                    return [4 /*yield*/, __await(_a.call(y_1))];
+                    return [3 /*break*/, 13];
                 case 8:
+                    _b.trys.push([8, , 11, 12]);
+                    if (!(y_1_1 && !y_1_1.done && (_a = y_1.return))) return [3 /*break*/, 10];
+                    return [4 /*yield*/, __await(_a.call(y_1))];
+                case 9:
                     _b.sent();
-                    _b.label = 9;
-                case 9: return [3 /*break*/, 11];
-                case 10:
+                    _b.label = 10;
+                case 10: return [3 /*break*/, 12];
+                case 11:
                     if (e_1) throw e_1.error;
                     return [7 /*endfinally*/];
-                case 11: return [7 /*endfinally*/];
-                case 12: return [2 /*return*/];
+                case 12: return [7 /*endfinally*/];
+                case 13: return [2 /*return*/];
             }
         });
     });
@@ -502,35 +504,36 @@ function f6() {
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    _b.trys.push([0, 6, 7, 12]);
+                    _b.trys.push([0, 7, 8, 13]);
                     y_1 = __asyncValues(y);
                     _b.label = 1;
                 case 1: return [4 /*yield*/, __await(y_1.next())];
                 case 2:
-                    if (!(y_1_1 = _b.sent(), !y_1_1.done)) return [3 /*break*/, 5];
-                    return [4 /*yield*/, __await(y_1_1.value)];
-                case 3:
+                    if (!(y_1_1 = _b.sent(), !y_1_1.done)) return [3 /*break*/, 6];
+                    return [4 /*yield*/, __await(__await(y_1_1.value))];
+                case 3: return [4 /*yield*/, _b.sent()];
+                case 4:
                     x = _b.sent();
-                    return [3 /*break*/, 4];
-                case 4: return [3 /*break*/, 1];
-                case 5: return [3 /*break*/, 12];
-                case 6:
+                    return [3 /*break*/, 5];
+                case 5: return [3 /*break*/, 1];
+                case 6: return [3 /*break*/, 13];
+                case 7:
                     e_1_1 = _b.sent();
                     e_1 = { error: e_1_1 };
-                    return [3 /*break*/, 12];
-                case 7:
-                    _b.trys.push([7, , 10, 11]);
-                    if (!(y_1_1 && !y_1_1.done && (_a = y_1.return))) return [3 /*break*/, 9];
-                    return [4 /*yield*/, __await(_a.call(y_1))];
+                    return [3 /*break*/, 13];
                 case 8:
+                    _b.trys.push([8, , 11, 12]);
+                    if (!(y_1_1 && !y_1_1.done && (_a = y_1.return))) return [3 /*break*/, 10];
+                    return [4 /*yield*/, __await(_a.call(y_1))];
+                case 9:
                     _b.sent();
-                    _b.label = 9;
-                case 9: return [3 /*break*/, 11];
-                case 10:
+                    _b.label = 10;
+                case 10: return [3 /*break*/, 12];
+                case 11:
                     if (e_1) throw e_1.error;
                     return [7 /*endfinally*/];
-                case 11: return [7 /*endfinally*/];
-                case 12: return [2 /*return*/];
+                case 12: return [7 /*endfinally*/];
+                case 13: return [2 /*return*/];
             }
         });
     });

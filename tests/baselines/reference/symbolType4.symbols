@@ -1,9 +1,9 @@
 === tests/cases/conformance/es6/Symbols/symbolType4.ts ===
 var s = Symbol.for("postfix");
 >s : Symbol(s, Decl(symbolType4.ts, 0, 3))
->Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.es6.d.ts, --, --))
 
 s++;
 >s : Symbol(s, Decl(symbolType4.ts, 0, 3))

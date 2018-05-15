@@ -323,15 +323,16 @@ namespace ts.formatting {
             return false;
         }
 
-        function getListIfStartEndIsInListRange(list: NodeArray<Node>, start: number, end: number) {
+        function getListIfStartEndIsInListRange(list: NodeArray<Node> | undefined, start: number, end: number) {
             return list && rangeContainsStartEnd(list, start, end) ? list : undefined;
         }
 
         export function getContainingList(node: Node, sourceFile: SourceFile): NodeArray<Node> | undefined {
             if (node.parent) {
+                const { end } = node;
                 switch (node.parent.kind) {
                     case SyntaxKind.TypeReference:
-                        return getListIfStartEndIsInListRange((<TypeReferenceNode>node.parent).typeArguments!, node.getStart(sourceFile), node.getEnd());
+                        return getListIfStartEndIsInListRange((<TypeReferenceNode>node.parent).typeArguments, node.getStart(sourceFile), end);
                     case SyntaxKind.ObjectLiteralExpression:
                         return (<ObjectLiteralExpression>node.parent).properties;
                     case SyntaxKind.ArrayLiteralExpression:
@@ -346,22 +347,25 @@ namespace ts.formatting {
                     case SyntaxKind.ConstructorType:
                     case SyntaxKind.ConstructSignature: {
                         const start = node.getStart(sourceFile);
-                        return getListIfStartEndIsInListRange((<SignatureDeclaration>node.parent).typeParameters!, start, node.getEnd()) ||
-                            getListIfStartEndIsInListRange((<SignatureDeclaration>node.parent).parameters, start, node.getEnd());
+                        return getListIfStartEndIsInListRange((<SignatureDeclaration>node.parent).typeParameters, start, end) ||
+                            getListIfStartEndIsInListRange((<SignatureDeclaration>node.parent).parameters, start, end);
                     }
                     case SyntaxKind.ClassDeclaration:
-                        return getListIfStartEndIsInListRange((<ClassDeclaration>node.parent).typeParameters!, node.getStart(sourceFile), node.getEnd());
+                        return getListIfStartEndIsInListRange((<ClassDeclaration>node.parent).typeParameters, node.getStart(sourceFile), end);
                     case SyntaxKind.NewExpression:
                     case SyntaxKind.CallExpression: {
                         const start = node.getStart(sourceFile);
-                        return getListIfStartEndIsInListRange((<CallExpression>node.parent).typeArguments!, start, node.getEnd()) ||
-                            getListIfStartEndIsInListRange((<CallExpression>node.parent).arguments, start, node.getEnd());
+                        return getListIfStartEndIsInListRange((<CallExpression>node.parent).typeArguments, start, end) ||
+                            getListIfStartEndIsInListRange((<CallExpression>node.parent).arguments, start, end);
                     }
                     case SyntaxKind.VariableDeclarationList:
-                        return getListIfStartEndIsInListRange((<VariableDeclarationList>node.parent).declarations, node.getStart(sourceFile), node.getEnd());
+                        return getListIfStartEndIsInListRange((<VariableDeclarationList>node.parent).declarations, node.getStart(sourceFile), end);
                     case SyntaxKind.NamedImports:
                     case SyntaxKind.NamedExports:
-                        return getListIfStartEndIsInListRange((<NamedImportsOrExports>node.parent).elements, node.getStart(sourceFile), node.getEnd());
+                        return getListIfStartEndIsInListRange((<NamedImportsOrExports>node.parent).elements, node.getStart(sourceFile), end);
+                    case SyntaxKind.ObjectBindingPattern:
+                    case SyntaxKind.ArrayBindingPattern:
+                        return getListIfStartEndIsInListRange((<ObjectBindingPattern | ArrayBindingPattern>node.parent).elements, node.getStart(sourceFile), end);
                 }
             }
             return undefined;

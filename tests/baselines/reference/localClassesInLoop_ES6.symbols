@@ -16,9 +16,9 @@ for (let x = 0; x < 2; ++x) {
 >C : Symbol(C, Decl(localClassesInLoop_ES6.ts, 4, 29))
 
     data.push(() => C);
->data.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>data.push : Symbol(Array.push, Decl(lib.es6.d.ts, --, --))
 >data : Symbol(data, Decl(localClassesInLoop_ES6.ts, 3, 3))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es6.d.ts, --, --))
 >C : Symbol(C, Decl(localClassesInLoop_ES6.ts, 4, 29))
 }
 

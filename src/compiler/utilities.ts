@@ -6,13 +6,6 @@ namespace ts {
 
     export const externalHelpersModuleNameText = "tslib";
 
-    export interface ReferencePathMatchResult {
-        fileReference?: FileReference;
-        diagnosticMessage?: DiagnosticMessage;
-        isNoDefaultLib?: boolean;
-        isTypeReferenceDirective?: boolean;
-    }
-
     export function getDeclarationOfKind<T extends Declaration>(symbol: Symbol, kind: T["kind"]): T | undefined {
         const declarations = symbol.declarations;
         if (declarations) {
@@ -551,6 +544,12 @@ namespace ts {
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.VariableStatement:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.ModuleDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.EnumDeclaration:
                 return true;
             default:
                 return false;
@@ -665,7 +664,7 @@ namespace ts {
     }
 
     export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan {
-        let errorNode = node;
+        let errorNode: Node | undefined = node;
         switch (node.kind) {
             case SyntaxKind.SourceFile:
                 const pos = skipTrivia(sourceFile.text, 0, /*stopAfterLineBreak*/ false);
@@ -690,7 +689,9 @@ namespace ts {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.TypeAliasDeclaration:
-                errorNode = (<NamedDeclaration>node).name!;
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.PropertySignature:
+                errorNode = (<NamedDeclaration>node).name;
                 break;
             case SyntaxKind.ArrowFunction:
                 return getErrorSpanForArrowFunction(sourceFile, <ArrowFunction>node);
@@ -722,6 +723,11 @@ namespace ts {
 
     export function isExternalOrCommonJsModule(file: SourceFile): boolean {
         return (file.externalModuleIndicator || file.commonJsModuleIndicator) !== undefined;
+    }
+
+
+    export function isJsonSourceFile(file: SourceFile): file is JsonSourceFile {
+        return file.scriptKind === ScriptKind.JSON;
     }
 
     export function isConstEnumDeclaration(node: Node): boolean {
@@ -1071,6 +1077,22 @@ namespace ts {
             }
             return false;
         });
+    }
+
+    export function getTsConfigObjectLiteralExpression(tsConfigSourceFile: TsConfigSourceFile | undefined): ObjectLiteralExpression | undefined {
+        if (tsConfigSourceFile && tsConfigSourceFile.statements.length) {
+            const expression = tsConfigSourceFile.statements[0].expression;
+            return tryCast(expression, isObjectLiteralExpression);
+        }
+    }
+
+    export function getTsConfigPropArrayElementValue(tsConfigSourceFile: TsConfigSourceFile | undefined, propKey: string, elementValue: string): StringLiteral | undefined {
+        const jsonObjectLiteral = getTsConfigObjectLiteralExpression(tsConfigSourceFile);
+        return jsonObjectLiteral &&
+            firstDefined(getPropertyAssignment(jsonObjectLiteral, propKey), property =>
+                isArrayLiteralExpression(property.initializer) ?
+                    find(property.initializer.elements, (element): element is StringLiteral => isStringLiteral(element) && element.text === elementValue) :
+                    undefined);
     }
 
     export function getContainingFunction(node: Node): SignatureDeclaration | undefined {
@@ -1472,6 +1494,10 @@ namespace ts {
         return !!node && !!(node.flags & NodeFlags.JavaScriptFile);
     }
 
+    export function isInJsonFile(node: Node | undefined): boolean {
+        return !!node && !!(node.flags & NodeFlags.JsonFile);
+    }
+
     export function isInJSDoc(node: Node | undefined): boolean {
         return !!node && !!(node.flags & NodeFlags.JSDoc);
     }
@@ -1751,8 +1777,8 @@ namespace ts {
         }
     }
 
-    export function isDefaultImport(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
-        return node.kind === SyntaxKind.ImportDeclaration && node.importClause && !!node.importClause.name;
+    export function isDefaultImport(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration): boolean {
+        return node.kind === SyntaxKind.ImportDeclaration && !!node.importClause && !!node.importClause.name;
     }
 
     export function hasQuestionToken(node: Node) {
@@ -2094,8 +2120,14 @@ namespace ts {
                 if (isDeclaration(parent)) {
                     return parent.name === name;
                 }
-                const binExp = parent.parent;
-                return isBinaryExpression(binExp) && getSpecialPropertyAssignmentKind(binExp) !== SpecialPropertyAssignmentKind.None && getNameOfDeclaration(binExp) === name;
+                else if (isQualifiedName(name.parent)) {
+                    const tag = name.parent.parent;
+                    return isJSDocParameterTag(tag) && tag.name === name.parent;
+                }
+                else {
+                    const binExp = name.parent.parent;
+                    return isBinaryExpression(binExp) && getSpecialPropertyAssignmentKind(binExp) !== SpecialPropertyAssignmentKind.None && getNameOfDeclaration(binExp) === name;
+                }
             }
             default:
                 return false;
@@ -2902,6 +2934,7 @@ namespace ts {
         sourceMapFilePath: string | undefined;
         declarationFilePath: string | undefined;
         declarationMapPath: string | undefined;
+        bundleInfoPath: string | undefined;
     }
 
     /**
@@ -2942,7 +2975,7 @@ namespace ts {
         return combinePaths(newDirPath, sourceFilePath);
     }
 
-    export function writeFile(host: EmitHost, diagnostics: DiagnosticCollection, fileName: string, data: string, writeByteOrderMark: boolean, sourceFiles: ReadonlyArray<SourceFile>) {
+    export function writeFile(host: EmitHost, diagnostics: DiagnosticCollection, fileName: string, data: string, writeByteOrderMark: boolean, sourceFiles?: ReadonlyArray<SourceFile>) {
         host.writeFile(fileName, data, writeByteOrderMark, hostErrorMessage => {
             diagnostics.add(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, fileName, hostErrorMessage));
         }, sourceFiles);
@@ -2994,18 +3027,12 @@ namespace ts {
         return id.originalKeywordKind === SyntaxKind.ThisKeyword;
     }
 
-    export interface AllAccessorDeclarations {
-        firstAccessor: AccessorDeclaration;
-        secondAccessor: AccessorDeclaration | undefined;
-        getAccessor: AccessorDeclaration | undefined;
-        setAccessor: AccessorDeclaration | undefined;
-    }
-
     export function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration): AllAccessorDeclarations {
+        // TODO: GH#18217
         let firstAccessor!: AccessorDeclaration;
-        let secondAccessor: AccessorDeclaration | undefined;
-        let getAccessor: AccessorDeclaration | undefined;
-        let setAccessor: AccessorDeclaration | undefined;
+        let secondAccessor!: AccessorDeclaration;
+        let getAccessor!: AccessorDeclaration;
+        let setAccessor!: AccessorDeclaration;
         if (hasDynamicName(accessor)) {
             firstAccessor = accessor;
             if (accessor.kind === SyntaxKind.GetAccessor) {
@@ -4879,6 +4906,11 @@ namespace ts {
         return node.kind === SyntaxKind.IndexSignature;
     }
 
+    /* @internal */
+    export function isGetOrSetAccessorDeclaration(node: Node): node is AccessorDeclaration {
+        return node.kind === SyntaxKind.SetAccessor || node.kind === SyntaxKind.GetAccessor;
+    }
+
     // Type
 
     export function isTypePredicateNode(node: Node): node is TypePredicateNode {
@@ -6078,7 +6110,8 @@ namespace ts {
             || kind === SyntaxKind.TypeAliasDeclaration
             || kind === SyntaxKind.TypeParameter
             || kind === SyntaxKind.VariableDeclaration
-            || kind === SyntaxKind.JSDocTypedefTag;
+            || kind === SyntaxKind.JSDocTypedefTag
+            || kind === SyntaxKind.JSDocPropertyTag;
     }
 
     function isDeclarationStatementKind(kind: SyntaxKind) {

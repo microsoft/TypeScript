@@ -83,7 +83,7 @@ class Base2<T> {
 class D<T extends Date> extends Base2<T> {
 >D : Symbol(D, Decl(derivedClassWithoutExplicitConstructor2.ts, 22, 1))
 >T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor2.ts, 24, 8))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Base2 : Symbol(Base2, Decl(derivedClassWithoutExplicitConstructor2.ts, 15, 30))
 >T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor2.ts, 24, 8))
 
@@ -102,18 +102,18 @@ var d = new D(); // error
 var d2 = new D(new Date()); // ok
 >d2 : Symbol(d2, Decl(derivedClassWithoutExplicitConstructor2.ts, 30, 3))
 >D : Symbol(D, Decl(derivedClassWithoutExplicitConstructor2.ts, 22, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var d3 = new D(new Date(), new Date());
 >d3 : Symbol(d3, Decl(derivedClassWithoutExplicitConstructor2.ts, 31, 3))
 >D : Symbol(D, Decl(derivedClassWithoutExplicitConstructor2.ts, 22, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var d4 = new D(new Date(), new Date(), new Date());
 >d4 : Symbol(d4, Decl(derivedClassWithoutExplicitConstructor2.ts, 32, 3))
 >D : Symbol(D, Decl(derivedClassWithoutExplicitConstructor2.ts, 22, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 

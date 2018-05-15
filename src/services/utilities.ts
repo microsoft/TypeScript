@@ -180,6 +180,8 @@ namespace ts {
         switch (node.parent.kind) {
             case SyntaxKind.TypeReference:
                 return true;
+            case SyntaxKind.ImportType:
+                return !(node.parent as ImportTypeNode).isTypeOf;
             case SyntaxKind.ExpressionWithTypeArguments:
                 return !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent);
         }
@@ -943,22 +945,22 @@ namespace ts {
                     break;
 
                 case SyntaxKind.CloseBraceToken:
-                    // This can be object type, skip untill we find the matching open brace token
-                    // Skip untill the matching open brace token
+                    // This can be object type, skip until we find the matching open brace token
+                    // Skip until the matching open brace token
                     token = findPrecedingMatchingToken(token, SyntaxKind.OpenBraceToken, sourceFile);
                     if (!token) return false;
                     break;
 
                 case SyntaxKind.CloseParenToken:
-                    // This can be object type, skip untill we find the matching open brace token
-                    // Skip untill the matching open brace token
+                    // This can be object type, skip until we find the matching open brace token
+                    // Skip until the matching open brace token
                     token = findPrecedingMatchingToken(token, SyntaxKind.OpenParenToken, sourceFile);
                     if (!token) return false;
                     break;
 
                 case SyntaxKind.CloseBracketToken:
-                    // This can be object type, skip untill we find the matching open brace token
-                    // Skip untill the matching open brace token
+                    // This can be object type, skip until we find the matching open brace token
+                    // Skip until the matching open brace token
                     token = findPrecedingMatchingToken(token, SyntaxKind.OpenBracketToken, sourceFile);
                     if (!token) return false;
                     break;
@@ -1125,11 +1127,6 @@ namespace ts {
         }
 
         return false;
-    }
-
-    export function hasTrailingDirectorySeparator(path: string) {
-        const lastCharacter = path.charAt(path.length - 1);
-        return lastCharacter === "/" || lastCharacter === "\\";
     }
 
     export function isInReferenceComment(sourceFile: SourceFile, position: number): boolean {
@@ -1548,7 +1545,7 @@ namespace ts {
      * user was before extracting it.
      */
     /* @internal */
-    export function getRenameLocation(edits: ReadonlyArray<FileTextChanges>, renameFilename: string, name: string, isDeclaredBeforeUse: boolean): number {
+    export function getRenameLocation(edits: ReadonlyArray<FileTextChanges>, renameFilename: string, name: string, preferLastLocation: boolean): number {
         let delta = 0;
         let lastPos = -1;
         for (const { fileName, textChanges } of edits) {
@@ -1560,7 +1557,7 @@ namespace ts {
                     lastPos = span.start + delta + index;
 
                     // If the reference comes first, return immediately.
-                    if (!isDeclaredBeforeUse) {
+                    if (!preferLastLocation) {
                         return lastPos;
                     }
                 }
@@ -1569,7 +1566,7 @@ namespace ts {
         }
 
         // If the declaration comes first, return the position of the last occurrence.
-        Debug.assert(isDeclaredBeforeUse);
+        Debug.assert(preferLastLocation);
         Debug.assert(lastPos >= 0);
         return lastPos;
     }

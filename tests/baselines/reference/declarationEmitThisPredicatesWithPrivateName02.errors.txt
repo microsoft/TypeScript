@@ -1,8 +1,7 @@
-tests/cases/conformance/declarationEmit/typePredicates/declarationEmitThisPredicatesWithPrivateName02.ts(7,14): error TS4025: Exported variable 'obj' has or is using private name 'Foo'.
 tests/cases/conformance/declarationEmit/typePredicates/declarationEmitThisPredicatesWithPrivateName02.ts(8,10): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 
 
-==== tests/cases/conformance/declarationEmit/typePredicates/declarationEmitThisPredicatesWithPrivateName02.ts (2 errors) ====
+==== tests/cases/conformance/declarationEmit/typePredicates/declarationEmitThisPredicatesWithPrivateName02.ts (1 errors) ====
     interface Foo {
         a: string;
         b: number;
@@ -10,8 +9,6 @@ tests/cases/conformance/declarationEmit/typePredicates/declarationEmitThisPredic
     }
     
     export const obj = {
-                 ~~~
-!!! error TS4025: Exported variable 'obj' has or is using private name 'Foo'.
         m(): this is Foo {
              ~~~~
 !!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.

@@ -53,7 +53,7 @@ interface I5 {
 
     foo: Date;
 >foo : Symbol(I5.foo, Decl(subtypesOfAny.ts, 27, 21))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 

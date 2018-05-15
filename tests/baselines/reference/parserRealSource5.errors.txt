@@ -1,5 +1,4 @@
 tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(4,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
-tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(14,38): error TS2304: Cannot find name 'ITextWriter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(14,66): error TS2304: Cannot find name 'Parser'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(27,17): error TS2304: Cannot find name 'CompilerDiagnostics'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(52,38): error TS2304: Cannot find name 'AST'.
@@ -10,7 +9,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(61,52): error TS
 tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(61,65): error TS2304: Cannot find name 'IAstWalker'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts (10 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts (9 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
@@ -27,8 +26,6 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(61,65): error TS
             public indentAmt = 0;
     
             constructor (public outfile: ITextWriter, public parser: Parser) {
-                                         ~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'ITextWriter'.
                                                                      ~~~~~~
 !!! error TS2304: Cannot find name 'Parser'.
             }

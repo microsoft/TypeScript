@@ -1,27 +1,17 @@
-tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts(4,28): error TS4031: Public property '[Symbol.iterator]' of exported class has or is using private name 'I'.
 tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts(5,9): error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
-tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts(5,33): error TS4073: Parameter 'x' of public method from exported class has or is using private name 'I'.
-tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts(6,40): error TS4055: Return type of public method from exported class has or is using private name 'I'.
 tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts(9,13): error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
 tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts(10,13): error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
-tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts(10,37): error TS4037: Parameter type of public setter '[Symbol.toPrimitive]' from exported class has or is using private name 'I'.
 
 
-==== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts (7 errors) ====
+==== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts (3 errors) ====
     module M {
         interface I { }
         export class C {
             [Symbol.iterator]: I;
-                               ~
-!!! error TS4031: Public property '[Symbol.iterator]' of exported class has or is using private name 'I'.
             [Symbol.toPrimitive](x: I) { }
             ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
-                                    ~
-!!! error TS4073: Parameter 'x' of public method from exported class has or is using private name 'I'.
             [Symbol.isConcatSpreadable](): I {
-                                           ~
-!!! error TS4055: Return type of public method from exported class has or is using private name 'I'.
                 return undefined
             }
             get [Symbol.toPrimitive]() { return undefined; }
@@ -30,7 +20,5 @@ tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts(10,37): error TS4
             set [Symbol.toPrimitive](x: I) { }
                 ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
-                                        ~
-!!! error TS4037: Parameter type of public setter '[Symbol.toPrimitive]' from exported class has or is using private name 'I'.
         }
     }

@@ -128,6 +128,8 @@ namespace ts.server {
         configHasFilesProperty: boolean;
         configHasIncludeProperty: boolean;
         configHasExcludeProperty: boolean;
+
+        projectReferences: ReadonlyArray<ProjectReference> | undefined;
         /**
          * these fields can be present in the project file
          */
@@ -216,7 +218,7 @@ namespace ts.server {
         }
     }
 
-    export function getBaseConfigFileName(configFilePath: NormalizedPath | undefined): "tsconfig.json" | "jsconfig.json" | undefined {
+    export function getBaseConfigFileName(configFilePath: NormalizedPath): "tsconfig.json" | "jsconfig.json" | undefined {
         const base = getBaseFileName(configFilePath);
         return base === "tsconfig.json" || base === "jsconfig.json" ? base : undefined;
     }

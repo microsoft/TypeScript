@@ -4,7 +4,7 @@ namespace ts {
         const compilerOptions = context.getCompilerOptions();
         let currentSourceFile: SourceFile;
 
-        return transformSourceFile;
+        return chainBundle(transformSourceFile);
 
         /**
          * Transform JSX-specific syntax in a SourceFile.

@@ -33,7 +33,7 @@ interface I2<T> extends I1<T[]> {
 var x: I2<Date>;
 >x : Symbol(x, Decl(inheritedGenericCallSignature.ts, 19, 3))
 >I2 : Symbol(I2, Decl(inheritedGenericCallSignature.ts, 7, 19))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
  
 

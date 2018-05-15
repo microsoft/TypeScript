@@ -11,7 +11,7 @@ namespace ts.projectSystem {
     }
 
     describe("CompileOnSave affected list", () => {
-        function sendAffectedFileRequestAndCheckResult(session: server.Session, request: server.protocol.Request, expectedFileList: { projectFileName: string, files: FileOrFolder[] }[]) {
+        function sendAffectedFileRequestAndCheckResult(session: server.Session, request: server.protocol.Request, expectedFileList: { projectFileName: string, files: File[] }[]) {
             const response = session.executeCommand(request).response as server.protocol.CompileOnSaveAffectedFileListSingleProject[];
             const actualResult = response.sort((list1, list2) => compareStringsCaseSensitive(list1.projectFileName, list2.projectFileName));
             expectedFileList = expectedFileList.sort((list1, list2) => compareStringsCaseSensitive(list1.projectFileName, list2.projectFileName));
@@ -47,12 +47,12 @@ namespace ts.projectSystem {
         }
 
         describe("for configured projects", () => {
-            let moduleFile1: FileOrFolder;
-            let file1Consumer1: FileOrFolder;
-            let file1Consumer2: FileOrFolder;
-            let moduleFile2: FileOrFolder;
-            let globalFile3: FileOrFolder;
-            let configFile: FileOrFolder;
+            let moduleFile1: File;
+            let file1Consumer1: File;
+            let file1Consumer2: File;
+            let moduleFile2: File;
+            let globalFile3: File;
+            let configFile: File;
             let changeModuleFile1ShapeRequest1: server.protocol.Request;
             let changeModuleFile1InternalRequest1: server.protocol.Request;
             // A compile on save affected file request using file1
@@ -225,7 +225,7 @@ namespace ts.projectSystem {
                 openFilesForSession([moduleFile1], session);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
 
-                const file1Consumer3: FileOrFolder = {
+                const file1Consumer3: File = {
                     path: "/a/b/file1Consumer3.ts",
                     content: `import {Foo} from "./moduleFile1"; let y = Foo();`
                 };
@@ -330,7 +330,7 @@ namespace ts.projectSystem {
                     }`
                 };
 
-                const configFile2: FileOrFolder = {
+                const configFile2: File = {
                     path: "/a/tsconfig.json",
                     content: `{
                         "compileOnSave": true
@@ -403,7 +403,7 @@ namespace ts.projectSystem {
             });
 
             it("should return cascaded affected file list", () => {
-                const file1Consumer1Consumer1: FileOrFolder = {
+                const file1Consumer1Consumer1: File = {
                     path: "/a/b/file1Consumer1Consumer1.ts",
                     content: `import {y} from "./file1Consumer1";`
                 };
@@ -428,13 +428,13 @@ namespace ts.projectSystem {
             });
 
             it("should work fine for files with circular references", () => {
-                const file1: FileOrFolder = {
+                const file1: File = {
                     path: "/a/b/file1.ts",
                     content: `
                     /// <reference path="./file2.ts" />
                     export var t1 = 10;`
                 };
-                const file2: FileOrFolder = {
+                const file2: File = {
                     path: "/a/b/file2.ts",
                     content: `
                     /// <reference path="./file1.ts" />
@@ -450,11 +450,11 @@ namespace ts.projectSystem {
             });
 
             it("should return results for all projects if not specifying projectFileName", () => {
-                const file1: FileOrFolder = { path: "/a/b/file1.ts", content: "export var t = 10;" };
-                const file2: FileOrFolder = { path: "/a/b/file2.ts", content: `import {t} from "./file1"; var t2 = 11;` };
-                const file3: FileOrFolder = { path: "/a/c/file2.ts", content: `import {t} from "../b/file1"; var t3 = 11;` };
-                const configFile1: FileOrFolder = { path: "/a/b/tsconfig.json", content: `{ "compileOnSave": true }` };
-                const configFile2: FileOrFolder = { path: "/a/c/tsconfig.json", content: `{ "compileOnSave": true }` };
+                const file1: File = { path: "/a/b/file1.ts", content: "export var t = 10;" };
+                const file2: File = { path: "/a/b/file2.ts", content: `import {t} from "./file1"; var t2 = 11;` };
+                const file3: File = { path: "/a/c/file2.ts", content: `import {t} from "../b/file1"; var t3 = 11;` };
+                const configFile1: File = { path: "/a/b/tsconfig.json", content: `{ "compileOnSave": true }` };
+                const configFile2: File = { path: "/a/c/tsconfig.json", content: `{ "compileOnSave": true }` };
 
                 const host = createServerHost([file1, file2, file3, configFile1, configFile2]);
                 const session = createSession(host);
@@ -469,7 +469,7 @@ namespace ts.projectSystem {
             });
 
             it("should detect removed code file", () => {
-                const referenceFile1: FileOrFolder = {
+                const referenceFile1: File = {
                     path: "/a/b/referenceFile1.ts",
                     content: `
                     /// <reference path="./moduleFile1.ts" />
@@ -490,7 +490,7 @@ namespace ts.projectSystem {
             });
 
             it("should detect non-existing code file", () => {
-                const referenceFile1: FileOrFolder = {
+                const referenceFile1: File = {
                     path: "/a/b/referenceFile1.ts",
                     content: `
                     /// <reference path="./moduleFile2.ts" />

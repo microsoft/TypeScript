@@ -1,5 +1,5 @@
 /// <reference path="..\..\..\src\harness\harness.ts" />
-/// <reference path="..\..\..\src\harness\virtualFileSystem.ts" />
+/// <reference path="..\..\..\src\harness\vfs.ts" />
 
 
 namespace ts {
@@ -446,11 +446,11 @@ import { React, Other } from "react";
                 },
                 reactLibFile);
 
-            function testOrganizeImports(testName: string, testFile: TestFSWithWatch.FileOrFolder, ...otherFiles: TestFSWithWatch.FileOrFolder[]) {
+            function testOrganizeImports(testName: string, testFile: TestFSWithWatch.File, ...otherFiles: TestFSWithWatch.File[]) {
                 it(testName, () => runBaseline(`organizeImports/${testName}.ts`, testFile, ...otherFiles));
             }
 
-            function runBaseline(baselinePath: string, testFile: TestFSWithWatch.FileOrFolder, ...otherFiles: TestFSWithWatch.FileOrFolder[]) {
+            function runBaseline(baselinePath: string, testFile: TestFSWithWatch.File, ...otherFiles: TestFSWithWatch.File[]) {
                 const { path: testPath, content: testContent } = testFile;
                 const languageService = makeLanguageService(testFile, ...otherFiles);
                 const changes = languageService.organizeImports({ type: "file", fileName: testPath }, testFormatOptions, defaultPreferences);
@@ -458,7 +458,7 @@ import { React, Other } from "react";
                 assert.equal(changes[0].fileName, testPath);
 
                 Harness.Baseline.runBaseline(baselinePath, () => {
-                    const newText = textChanges.applyChanges(testContent!, changes[0].textChanges); // TODO: GH#18217
+                    const newText = textChanges.applyChanges(testContent, changes[0].textChanges);
                     return [
                         "// ==ORIGINAL==",
                         testContent,
@@ -468,7 +468,7 @@ import { React, Other } from "react";
                 });
             }
 
-            function makeLanguageService(...files: TestFSWithWatch.FileOrFolder[]) {
+            function makeLanguageService(...files: TestFSWithWatch.File[]) {
                 const host = projectSystem.createServerHost(files);
                 const projectService = projectSystem.createProjectService(host, { useSingleInferredProject: true });
                 projectService.setCompilerOptionsForInferredProjects({ jsx: files.some(f => f.path.endsWith("x")) ? JsxEmit.React : JsxEmit.None });

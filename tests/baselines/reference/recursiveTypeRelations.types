@@ -2,7 +2,7 @@
 // Repro from #14896
 
 type Attributes<Keys extends keyof any> = {
->Attributes : { [Key in Keys]: string; }
+>Attributes : Attributes<Keys>
 >Keys : Keys
 
     [Key in Keys]: string;
@@ -13,13 +13,13 @@ type Attributes<Keys extends keyof any> = {
 class Query<A extends Attributes<keyof A>> {
 >Query : Query<A>
 >A : A
->Attributes : { [Key in Keys]: string; }
+>Attributes : Attributes<Keys>
 >A : A
 
     multiply<B extends Attributes<keyof B>>(x: B): Query<A & B>;
->multiply : <B extends { [Key in keyof B]: string; }>(x: B) => Query<A & B>
+>multiply : <B extends Attributes<keyof B>>(x: B) => Query<A & B>
 >B : B
->Attributes : { [Key in Keys]: string; }
+>Attributes : Attributes<Keys>
 >B : B
 >x : B
 >B : B
@@ -36,48 +36,48 @@ type ClassName<S> = keyof S;
 >S : S
 
 type ClassNameMap<S> = { [K in keyof S]?: boolean }
->ClassNameMap : { [K in keyof S]?: boolean; }
+>ClassNameMap : ClassNameMap<S>
 >S : S
 >K : K
 >S : S
 
 type ClassNameObjectMap<S> = object & ClassNameMap<S>;
->ClassNameObjectMap : object & { [K in keyof S]?: boolean; }
+>ClassNameObjectMap : ClassNameObjectMap<S>
 >S : S
->ClassNameMap : { [K in keyof S]?: boolean; }
+>ClassNameMap : ClassNameMap<S>
 >S : S
 
 type ClassNameArg<S> = ClassName<S> | ClassNameObjectMap<S>;
->ClassNameArg : keyof S | (object & { [K in keyof S]?: boolean; })
+>ClassNameArg : ClassNameArg<S>
 >S : S
 >ClassName : keyof S
 >S : S
->ClassNameObjectMap : object & { [K in keyof S]?: boolean; }
+>ClassNameObjectMap : ClassNameObjectMap<S>
 >S : S
 
 export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNames: ClassNameArg<S>[]): string {
->css : <S extends { [K in keyof S]: string; }>(styles: S, ...classNames: (keyof S | (object & { [K in keyof S]?: boolean; }))[]) => string
+>css : <S extends { [K in keyof S]: string; }>(styles: S, ...classNames: ClassNameArg<S>[]) => string
 >S : S
 >K : K
 >S : S
 >styles : S
 >S : S
->classNames : (keyof S | (object & { [K in keyof S]?: boolean; }))[]
->ClassNameArg : keyof S | (object & { [K in keyof S]?: boolean; })
+>classNames : ClassNameArg<S>[]
+>ClassNameArg : ClassNameArg<S>
 >S : S
 
   const args = classNames.map(arg => {
 >args : any[]
 >classNames.map(arg => {    if (arg == null) {      return null;    }    if (typeof arg == "string") {      return styles[arg];    }    if (typeof arg == "object") {      return Object.keys(arg).reduce<ClassNameObject>((obj: ClassNameObject, key: keyof S) => {        const exportedClassName = styles[key];        obj[exportedClassName] = (arg as ClassNameMap<S>)[key];         return obj;      }, {});    }  }) : any[]
->classNames.map : <U>(callbackfn: (value: keyof S | (object & { [K in keyof S]?: boolean; }), index: number, array: (keyof S | (object & { [K in keyof S]?: boolean; }))[]) => U, thisArg?: any) => U[]
->classNames : (keyof S | (object & { [K in keyof S]?: boolean; }))[]
->map : <U>(callbackfn: (value: keyof S | (object & { [K in keyof S]?: boolean; }), index: number, array: (keyof S | (object & { [K in keyof S]?: boolean; }))[]) => U, thisArg?: any) => U[]
->arg => {    if (arg == null) {      return null;    }    if (typeof arg == "string") {      return styles[arg];    }    if (typeof arg == "object") {      return Object.keys(arg).reduce<ClassNameObject>((obj: ClassNameObject, key: keyof S) => {        const exportedClassName = styles[key];        obj[exportedClassName] = (arg as ClassNameMap<S>)[key];         return obj;      }, {});    }  } : (arg: keyof S | (object & { [K in keyof S]?: boolean; })) => any
->arg : keyof S | (object & { [K in keyof S]?: boolean; })
+>classNames.map : <U>(callbackfn: (value: ClassNameArg<S>, index: number, array: ClassNameArg<S>[]) => U, thisArg?: any) => U[]
+>classNames : ClassNameArg<S>[]
+>map : <U>(callbackfn: (value: ClassNameArg<S>, index: number, array: ClassNameArg<S>[]) => U, thisArg?: any) => U[]
+>arg => {    if (arg == null) {      return null;    }    if (typeof arg == "string") {      return styles[arg];    }    if (typeof arg == "object") {      return Object.keys(arg).reduce<ClassNameObject>((obj: ClassNameObject, key: keyof S) => {        const exportedClassName = styles[key];        obj[exportedClassName] = (arg as ClassNameMap<S>)[key];         return obj;      }, {});    }  } : (arg: ClassNameArg<S>) => any
+>arg : ClassNameArg<S>
 
     if (arg == null) {
 >arg == null : boolean
->arg : keyof S | (object & { [K in keyof S]?: boolean; })
+>arg : ClassNameArg<S>
 >null : null
 
       return null;
@@ -86,7 +86,7 @@ export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNam
     if (typeof arg == "string") {
 >typeof arg == "string" : boolean
 >typeof arg : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->arg : keyof S | (object & { [K in keyof S]?: boolean; })
+>arg : ClassNameArg<S>
 >"string" : "string"
 
       return styles[arg];
@@ -97,7 +97,7 @@ export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNam
     if (typeof arg == "object") {
 >typeof arg == "object" : boolean
 >typeof arg : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->arg : keyof S | (object & { [K in keyof S]?: boolean; })
+>arg : ClassNameArg<S>
 >"object" : "object"
 
       return Object.keys(arg).reduce<ClassNameObject>((obj: ClassNameObject, key: keyof S) => {
@@ -107,7 +107,7 @@ export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNam
 >Object.keys : (o: {}) => string[]
 >Object : ObjectConstructor
 >keys : (o: {}) => string[]
->arg : object & { [K in keyof S]?: boolean; }
+>arg : ClassNameObjectMap<S>
 >reduce : { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }
 >ClassNameObject : No type information available!
 >(obj: ClassNameObject, key: keyof S) => {        const exportedClassName = styles[key];        obj[exportedClassName] = (arg as ClassNameMap<S>)[key];         return obj;      } : (obj: any, key: keyof S) => any
@@ -123,15 +123,15 @@ export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNam
 >key : keyof S
 
         obj[exportedClassName] = (arg as ClassNameMap<S>)[key]; 
->obj[exportedClassName] = (arg as ClassNameMap<S>)[key] : { [K in keyof S]?: boolean; }[keyof S]
+>obj[exportedClassName] = (arg as ClassNameMap<S>)[key] : ClassNameMap<S>[keyof S]
 >obj[exportedClassName] : any
 >obj : any
 >exportedClassName : S[keyof S]
->(arg as ClassNameMap<S>)[key] : { [K in keyof S]?: boolean; }[keyof S]
->(arg as ClassNameMap<S>) : { [K in keyof S]?: boolean; }
->arg as ClassNameMap<S> : { [K in keyof S]?: boolean; }
->arg : object & { [K in keyof S]?: boolean; }
->ClassNameMap : { [K in keyof S]?: boolean; }
+>(arg as ClassNameMap<S>)[key] : ClassNameMap<S>[keyof S]
+>(arg as ClassNameMap<S>) : ClassNameMap<S>
+>arg as ClassNameMap<S> : ClassNameMap<S>
+>arg : ClassNameObjectMap<S>
+>ClassNameMap : ClassNameMap<S>
 >S : S
 >key : keyof S
 

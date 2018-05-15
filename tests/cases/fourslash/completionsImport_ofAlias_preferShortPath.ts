@@ -15,11 +15,12 @@
 // @Filename: /user.ts
 ////fo/**/
 
-goTo.marker("");
-const options = { includeExternalModuleExports: true, sourceDisplay: "./foo" };
-verify.completionListContains({ name: "foo", source: "/foo/lib/foo" }, "const foo: 0", "", "const", /*spanIndex*/ undefined, /*hasAction*/ true, options);
-verify.not.completionListContains({ name: "foo", source: "/foo/index" }, undefined, undefined, undefined, undefined, undefined, options);
-
+verify.completions({
+    marker: "",
+    includes: { name: "foo", source: "/foo/lib/foo", sourceDisplay: "./foo", text: "const foo: 0", kind: "const", hasAction: true },
+    excludes: { name: "foo", source: "/foo/index" },
+    preferences: { includeCompletionsForModuleExports: true },
+});
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
     source: "/foo/lib/foo",

@@ -4,7 +4,7 @@
 //// declare module JSX {
 ////     interface Element { }
 ////     interface IntrinsicElements {
-////         [|div|]: {
+////         [|{| "isWriteAccess": true, "isDefinition": true |}div|]: {
 ////             name?: string;
 ////             isOpen?: boolean;
 ////         };
@@ -13,4 +13,7 @@
 //// }
 //// var x = <[|div|] />;
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup(`(property) JSX.IntrinsicElements.div: {
+    name?: string;
+    isOpen?: boolean;
+}`);

@@ -83,7 +83,7 @@ f4 = f3;  // Error
 >f3 : (x: string) => Object
 
 type Func<T, U> = (x: T) => U;
->Func : (x: T) => U
+>Func : Func<T, U>
 >T : T
 >U : U
 >x : T
@@ -91,252 +91,252 @@ type Func<T, U> = (x: T) => U;
 >U : U
 
 declare let g1: Func<Object, Object>;
->g1 : (x: Object) => Object
->Func : (x: T) => U
+>g1 : Func<Object, Object>
+>Func : Func<T, U>
 >Object : Object
 >Object : Object
 
 declare let g2: Func<Object, string>;
->g2 : (x: Object) => string
->Func : (x: T) => U
+>g2 : Func<Object, string>
+>Func : Func<T, U>
 >Object : Object
 
 declare let g3: Func<string, Object>;
->g3 : (x: string) => Object
->Func : (x: T) => U
+>g3 : Func<string, Object>
+>Func : Func<T, U>
 >Object : Object
 
 declare let g4: Func<string, string>;
->g4 : (x: string) => string
->Func : (x: T) => U
+>g4 : Func<string, string>
+>Func : Func<T, U>
 
 g1 = g2;  // Ok
->g1 = g2 : (x: Object) => string
->g1 : (x: Object) => Object
->g2 : (x: Object) => string
+>g1 = g2 : Func<Object, string>
+>g1 : Func<Object, Object>
+>g2 : Func<Object, string>
 
 g1 = g3;  // Error
->g1 = g3 : (x: string) => Object
->g1 : (x: Object) => Object
->g3 : (x: string) => Object
+>g1 = g3 : Func<string, Object>
+>g1 : Func<Object, Object>
+>g3 : Func<string, Object>
 
 g1 = g4;  // Error
->g1 = g4 : (x: string) => string
->g1 : (x: Object) => Object
->g4 : (x: string) => string
+>g1 = g4 : Func<string, string>
+>g1 : Func<Object, Object>
+>g4 : Func<string, string>
 
 g2 = g1;  // Error
->g2 = g1 : (x: Object) => Object
->g2 : (x: Object) => string
->g1 : (x: Object) => Object
+>g2 = g1 : Func<Object, Object>
+>g2 : Func<Object, string>
+>g1 : Func<Object, Object>
 
 g2 = g3;  // Error
->g2 = g3 : (x: string) => Object
->g2 : (x: Object) => string
->g3 : (x: string) => Object
+>g2 = g3 : Func<string, Object>
+>g2 : Func<Object, string>
+>g3 : Func<string, Object>
 
 g2 = g4;  // Error
->g2 = g4 : (x: string) => string
->g2 : (x: Object) => string
->g4 : (x: string) => string
+>g2 = g4 : Func<string, string>
+>g2 : Func<Object, string>
+>g4 : Func<string, string>
 
 g3 = g1;  // Ok
->g3 = g1 : (x: Object) => Object
->g3 : (x: string) => Object
->g1 : (x: Object) => Object
+>g3 = g1 : Func<Object, Object>
+>g3 : Func<string, Object>
+>g1 : Func<Object, Object>
 
 g3 = g2;  // Ok
->g3 = g2 : (x: Object) => string
->g3 : (x: string) => Object
->g2 : (x: Object) => string
+>g3 = g2 : Func<Object, string>
+>g3 : Func<string, Object>
+>g2 : Func<Object, string>
 
 g3 = g4;  // Ok
->g3 = g4 : (x: string) => string
->g3 : (x: string) => Object
->g4 : (x: string) => string
+>g3 = g4 : Func<string, string>
+>g3 : Func<string, Object>
+>g4 : Func<string, string>
 
 g4 = g1;  // Error
->g4 = g1 : (x: Object) => Object
->g4 : (x: string) => string
->g1 : (x: Object) => Object
+>g4 = g1 : Func<Object, Object>
+>g4 : Func<string, string>
+>g1 : Func<Object, Object>
 
 g4 = g2;  // Ok
->g4 = g2 : (x: Object) => string
->g4 : (x: string) => string
->g2 : (x: Object) => string
+>g4 = g2 : Func<Object, string>
+>g4 : Func<string, string>
+>g2 : Func<Object, string>
 
 g4 = g3;  // Error
->g4 = g3 : (x: string) => Object
->g4 : (x: string) => string
->g3 : (x: string) => Object
+>g4 = g3 : Func<string, Object>
+>g4 : Func<string, string>
+>g3 : Func<string, Object>
 
 declare let h1: Func<Func<Object, void>, Object>;
->h1 : (x: Func) => Object
->Func : (x: T) => U
->Func : (x: T) => U
+>h1 : Func<Func<Object, void>, Object>
+>Func : Func<T, U>
+>Func : Func<T, U>
 >Object : Object
 >Object : Object
 
 declare let h2: Func<Func<Object, void>, string>;
->h2 : (x: Func) => string
->Func : (x: T) => U
->Func : (x: T) => U
+>h2 : Func<Func<Object, void>, string>
+>Func : Func<T, U>
+>Func : Func<T, U>
 >Object : Object
 
 declare let h3: Func<Func<string, void>, Object>;
->h3 : (x: Func) => Object
->Func : (x: T) => U
->Func : (x: T) => U
+>h3 : Func<Func<string, void>, Object>
+>Func : Func<T, U>
+>Func : Func<T, U>
 >Object : Object
 
 declare let h4: Func<Func<string, void>, string>;
->h4 : (x: Func) => string
->Func : (x: T) => U
->Func : (x: T) => U
+>h4 : Func<Func<string, void>, string>
+>Func : Func<T, U>
+>Func : Func<T, U>
 
 h1 = h2;  // Ok
->h1 = h2 : (x: Func) => string
->h1 : (x: Func) => Object
->h2 : (x: Func) => string
+>h1 = h2 : Func<Func<Object, void>, string>
+>h1 : Func<Func<Object, void>, Object>
+>h2 : Func<Func<Object, void>, string>
 
 h1 = h3;  // Ok
->h1 = h3 : (x: Func) => Object
->h1 : (x: Func) => Object
->h3 : (x: Func) => Object
+>h1 = h3 : Func<Func<string, void>, Object>
+>h1 : Func<Func<Object, void>, Object>
+>h3 : Func<Func<string, void>, Object>
 
 h1 = h4;  // Ok
->h1 = h4 : (x: Func) => string
->h1 : (x: Func) => Object
->h4 : (x: Func) => string
+>h1 = h4 : Func<Func<string, void>, string>
+>h1 : Func<Func<Object, void>, Object>
+>h4 : Func<Func<string, void>, string>
 
 h2 = h1;  // Error
->h2 = h1 : (x: Func) => Object
->h2 : (x: Func) => string
->h1 : (x: Func) => Object
+>h2 = h1 : Func<Func<Object, void>, Object>
+>h2 : Func<Func<Object, void>, string>
+>h1 : Func<Func<Object, void>, Object>
 
 h2 = h3;  // Error
->h2 = h3 : (x: Func) => Object
->h2 : (x: Func) => string
->h3 : (x: Func) => Object
+>h2 = h3 : Func<Func<string, void>, Object>
+>h2 : Func<Func<Object, void>, string>
+>h3 : Func<Func<string, void>, Object>
 
 h2 = h4;  // Ok
->h2 = h4 : (x: Func) => string
->h2 : (x: Func) => string
->h4 : (x: Func) => string
+>h2 = h4 : Func<Func<string, void>, string>
+>h2 : Func<Func<Object, void>, string>
+>h4 : Func<Func<string, void>, string>
 
 h3 = h1;  // Error
->h3 = h1 : (x: Func) => Object
->h3 : (x: Func) => Object
->h1 : (x: Func) => Object
+>h3 = h1 : Func<Func<Object, void>, Object>
+>h3 : Func<Func<string, void>, Object>
+>h1 : Func<Func<Object, void>, Object>
 
 h3 = h2;  // Error
->h3 = h2 : (x: Func) => string
->h3 : (x: Func) => Object
->h2 : (x: Func) => string
+>h3 = h2 : Func<Func<Object, void>, string>
+>h3 : Func<Func<string, void>, Object>
+>h2 : Func<Func<Object, void>, string>
 
 h3 = h4;  // Ok
->h3 = h4 : (x: Func) => string
->h3 : (x: Func) => Object
->h4 : (x: Func) => string
+>h3 = h4 : Func<Func<string, void>, string>
+>h3 : Func<Func<string, void>, Object>
+>h4 : Func<Func<string, void>, string>
 
 h4 = h1;  // Error
->h4 = h1 : (x: Func) => Object
->h4 : (x: Func) => string
->h1 : (x: Func) => Object
+>h4 = h1 : Func<Func<Object, void>, Object>
+>h4 : Func<Func<string, void>, string>
+>h1 : Func<Func<Object, void>, Object>
 
 h4 = h2;  // Error
->h4 = h2 : (x: Func) => string
->h4 : (x: Func) => string
->h2 : (x: Func) => string
+>h4 = h2 : Func<Func<Object, void>, string>
+>h4 : Func<Func<string, void>, string>
+>h2 : Func<Func<Object, void>, string>
 
 h4 = h3;  // Error
->h4 = h3 : (x: Func) => Object
->h4 : (x: Func) => string
->h3 : (x: Func) => Object
+>h4 = h3 : Func<Func<string, void>, Object>
+>h4 : Func<Func<string, void>, string>
+>h3 : Func<Func<string, void>, Object>
 
 declare let i1: Func<Object, Func<Object, void>>;
->i1 : (x: Object) => Func
->Func : (x: T) => U
+>i1 : Func<Object, Func<Object, void>>
+>Func : Func<T, U>
 >Object : Object
->Func : (x: T) => U
+>Func : Func<T, U>
 >Object : Object
 
 declare let i2: Func<Object, Func<string, void>>;
->i2 : (x: Object) => Func
->Func : (x: T) => U
+>i2 : Func<Object, Func<string, void>>
+>Func : Func<T, U>
 >Object : Object
->Func : (x: T) => U
+>Func : Func<T, U>
 
 declare let i3: Func<string, Func<Object, void>>;
->i3 : (x: string) => Func
->Func : (x: T) => U
->Func : (x: T) => U
+>i3 : Func<string, Func<Object, void>>
+>Func : Func<T, U>
+>Func : Func<T, U>
 >Object : Object
 
 declare let i4: Func<string, Func<string, void>>;
->i4 : (x: string) => Func
->Func : (x: T) => U
->Func : (x: T) => U
+>i4 : Func<string, Func<string, void>>
+>Func : Func<T, U>
+>Func : Func<T, U>
 
 i1 = i2;  // Error
->i1 = i2 : (x: Object) => Func
->i1 : (x: Object) => Func
->i2 : (x: Object) => Func
+>i1 = i2 : Func<Object, Func<string, void>>
+>i1 : Func<Object, Func<Object, void>>
+>i2 : Func<Object, Func<string, void>>
 
 i1 = i3;  // Error
->i1 = i3 : (x: string) => Func
->i1 : (x: Object) => Func
->i3 : (x: string) => Func
+>i1 = i3 : Func<string, Func<Object, void>>
+>i1 : Func<Object, Func<Object, void>>
+>i3 : Func<string, Func<Object, void>>
 
 i1 = i4;  // Error
->i1 = i4 : (x: string) => Func
->i1 : (x: Object) => Func
->i4 : (x: string) => Func
+>i1 = i4 : Func<string, Func<string, void>>
+>i1 : Func<Object, Func<Object, void>>
+>i4 : Func<string, Func<string, void>>
 
 i2 = i1;  // Ok
->i2 = i1 : (x: Object) => Func
->i2 : (x: Object) => Func
->i1 : (x: Object) => Func
+>i2 = i1 : Func<Object, Func<Object, void>>
+>i2 : Func<Object, Func<string, void>>
+>i1 : Func<Object, Func<Object, void>>
 
 i2 = i3;  // Error
->i2 = i3 : (x: string) => Func
->i2 : (x: Object) => Func
->i3 : (x: string) => Func
+>i2 = i3 : Func<string, Func<Object, void>>
+>i2 : Func<Object, Func<string, void>>
+>i3 : Func<string, Func<Object, void>>
 
 i2 = i4;  // Error
->i2 = i4 : (x: string) => Func
->i2 : (x: Object) => Func
->i4 : (x: string) => Func
+>i2 = i4 : Func<string, Func<string, void>>
+>i2 : Func<Object, Func<string, void>>
+>i4 : Func<string, Func<string, void>>
 
 i3 = i1;  // Ok
->i3 = i1 : (x: Object) => Func
->i3 : (x: string) => Func
->i1 : (x: Object) => Func
+>i3 = i1 : Func<Object, Func<Object, void>>
+>i3 : Func<string, Func<Object, void>>
+>i1 : Func<Object, Func<Object, void>>
 
 i3 = i2;  // Error
->i3 = i2 : (x: Object) => Func
->i3 : (x: string) => Func
->i2 : (x: Object) => Func
+>i3 = i2 : Func<Object, Func<string, void>>
+>i3 : Func<string, Func<Object, void>>
+>i2 : Func<Object, Func<string, void>>
 
 i3 = i4;  // Error
->i3 = i4 : (x: string) => Func
->i3 : (x: string) => Func
->i4 : (x: string) => Func
+>i3 = i4 : Func<string, Func<string, void>>
+>i3 : Func<string, Func<Object, void>>
+>i4 : Func<string, Func<string, void>>
 
 i4 = i1;  // Ok
->i4 = i1 : (x: Object) => Func
->i4 : (x: string) => Func
->i1 : (x: Object) => Func
+>i4 = i1 : Func<Object, Func<Object, void>>
+>i4 : Func<string, Func<string, void>>
+>i1 : Func<Object, Func<Object, void>>
 
 i4 = i2;  // Ok
->i4 = i2 : (x: Object) => Func
->i4 : (x: string) => Func
->i2 : (x: Object) => Func
+>i4 = i2 : Func<Object, Func<string, void>>
+>i4 : Func<string, Func<string, void>>
+>i2 : Func<Object, Func<string, void>>
 
 i4 = i3;  // Ok
->i4 = i3 : (x: string) => Func
->i4 : (x: string) => Func
->i3 : (x: string) => Func
+>i4 = i3 : Func<string, Func<Object, void>>
+>i4 : Func<string, Func<string, void>>
+>i3 : Func<string, Func<Object, void>>
 
 interface Animal { animal: void }
 >Animal : Animal

@@ -9,9 +9,9 @@ type Nominal<Kind extends string, Type> = Type & {
 
     [Symbol.species]: Kind;
 >[Symbol.species] : Symbol([Symbol.species], Decl(intersectionTypeInference3.ts, 2, 50))
->Symbol.species : Symbol(SymbolConstructor.species, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->species : Symbol(SymbolConstructor.species, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol.species : Symbol(SymbolConstructor.species, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>species : Symbol(SymbolConstructor.species, Decl(lib.es6.d.ts, --, --))
 >Kind : Symbol(Kind, Decl(intersectionTypeInference3.ts, 2, 13))
 
 };
@@ -22,25 +22,25 @@ type A = Nominal<'A', string>;
 
 declare const a: Set<A>;
 >a : Symbol(a, Decl(intersectionTypeInference3.ts, 8, 13))
->Set : Symbol(Set, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --))
+>Set : Symbol(Set, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >A : Symbol(A, Decl(intersectionTypeInference3.ts, 4, 2))
 
 declare const b: Set<A>;
 >b : Symbol(b, Decl(intersectionTypeInference3.ts, 9, 13))
->Set : Symbol(Set, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --))
+>Set : Symbol(Set, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >A : Symbol(A, Decl(intersectionTypeInference3.ts, 4, 2))
 
 const c1 = Array.from(a).concat(Array.from(b));
 >c1 : Symbol(c1, Decl(intersectionTypeInference3.ts, 11, 5))
->Array.from(a).concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->Array.from : Symbol(ArrayConstructor.from, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
->from : Symbol(ArrayConstructor.from, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array.from(a).concat : Symbol(Array.concat, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>Array.from : Symbol(ArrayConstructor.from, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>from : Symbol(ArrayConstructor.from, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >a : Symbol(a, Decl(intersectionTypeInference3.ts, 8, 13))
->concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->Array.from : Symbol(ArrayConstructor.from, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
->from : Symbol(ArrayConstructor.from, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>concat : Symbol(Array.concat, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>Array.from : Symbol(ArrayConstructor.from, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>from : Symbol(ArrayConstructor.from, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >b : Symbol(b, Decl(intersectionTypeInference3.ts, 9, 13))
 
 // Simpler repro
@@ -52,7 +52,7 @@ declare function from<T>(): T[];
 
 const c2: ReadonlyArray<A> = from();
 >c2 : Symbol(c2, Decl(intersectionTypeInference3.ts, 16, 5))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >A : Symbol(A, Decl(intersectionTypeInference3.ts, 4, 2))
 >from : Symbol(from, Decl(intersectionTypeInference3.ts, 11, 47))
 
