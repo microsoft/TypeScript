@@ -233,7 +233,7 @@ namespace ts.codefix {
                     Debug.assertNever(prop);
             }
         });
-        return statements && [statements, true];
+        return statements && [statements, false];
     }
 
     function convertNamedExport(
