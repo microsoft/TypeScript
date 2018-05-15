@@ -339,7 +339,8 @@ namespace ts.server {
         /*@internal*/
         readonly typingsCache: TypingsCache;
 
-        private readonly documentRegistry: DocumentRegistry;
+        /*@internal*/
+        readonly documentRegistry: DocumentRegistry;
 
         /**
          * Container of all known scripts

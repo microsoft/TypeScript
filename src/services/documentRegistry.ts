@@ -87,6 +87,9 @@ namespace ts {
 
         releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey): void;
 
+        /*@internal*/
+        hasDocument(path: Path): boolean;
+
         reportStats(): string;
     }
 
@@ -225,6 +228,10 @@ namespace ts {
             }
         }
 
+        function hasDocument(path: Path) {
+            return !!forEachEntry(buckets, bucket => bucket.has(path));
+        }
+
         return {
             acquireDocument,
             acquireDocumentWithKey,
@@ -232,6 +239,7 @@ namespace ts {
             updateDocumentWithKey,
             releaseDocument,
             releaseDocumentWithKey,
+            hasDocument,
             reportStats,
             getKeyForCompilationSettings
         };

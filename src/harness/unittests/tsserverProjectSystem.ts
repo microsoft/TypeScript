@@ -8383,4 +8383,47 @@ new C();`
             verifyCompletionListWithNewFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.DynamicPolling);
         });
     });
+
+    describe("document registry in project service", () => {
+        it("Caches the source file if script info is orphan", () => {
+            const projectRootPath = "/user/username/projects/project";
+            const importModuleContent = `import {a} from "./module1"`;
+            const file: File = {
+                path: `${projectRootPath}/index.ts`,
+                content: importModuleContent
+            };
+            const moduleFile: File = {
+                path: `${projectRootPath}/module1.d.ts`,
+                content: "export const a: number;"
+            };
+            const configFile: File = {
+                path: `${projectRootPath}/tsconfig.json`,
+                content: JSON.stringify({ files: ["index.ts"] })
+            };
+            const host = createServerHost([file, moduleFile, libFile, configFile]);
+            const service = createProjectService(host);
+            service.openClientFile(file.path);
+            const project = service.configuredProjects.get(configFile.path);
+            checkProject(/*moduleIsOrphan*/ false);
+
+            // edit file
+            const info = service.getScriptInfo(file.path);
+            service.applyChangesToFile(info, [{ span: { start: 0, length: importModuleContent.length }, newText: "" }]);
+            checkProject(/*moduleIsOrphan*/ true);
+
+            // write content back
+            service.applyChangesToFile(info, [{ span: { start: 0, length: 0 }, newText: importModuleContent }]);
+            checkProject(/*moduleIsOrphan*/ false);
+
+            function checkProject(moduleIsOrphan: boolean) {
+                // Update the project
+                project.getLanguageService();
+                checkProjectActualFiles(project, [file.path, libFile.path, configFile.path, ...(moduleIsOrphan ? [] : [moduleFile.path])]);
+                const moduleInfo = service.getScriptInfo(moduleFile.path);
+                assert.isDefined(moduleInfo);
+                assert.equal(moduleInfo.isOrphan(), moduleIsOrphan);
+                assert.equal(service.documentRegistry.hasDocument(moduleInfo.path), !moduleIsOrphan);
+            }
+        });
+    });
 }
