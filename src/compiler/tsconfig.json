@@ -46,6 +46,7 @@
         "resolutionCache.ts",
         "watch.ts",
         "commandLineParser.ts",
-        "tsc.ts"
+        "tsc.ts",
+        "tsbuild.ts"
     ]
 }
