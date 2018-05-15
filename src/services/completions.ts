@@ -418,7 +418,7 @@ namespace ts.Completions {
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
                 if (!isRequireCall(node.parent, /*checkArgumentIsStringLiteralLike*/ false) && !isImportCall(node.parent)) {
-                    const argumentInfo = SignatureHelp.getImmediatelyContainingArgumentInfo(node, position, sourceFile);
+                    const argumentInfo = SignatureHelp.getArgumentInfoForCompletions(node, position, sourceFile);
                     // Get string literal completions from specialized signatures of the target
                     // i.e. declare function f(a: 'A');
                     // f("/*completion position*/")
@@ -448,7 +448,7 @@ namespace ts.Completions {
         }
     }
 
-    function getStringLiteralCompletionsFromSignature(argumentInfo: SignatureHelp.ArgumentListInfo, checker: TypeChecker): StringLiteralCompletionsFromTypes {
+    function getStringLiteralCompletionsFromSignature(argumentInfo: SignatureHelp.ArgumentInfoForCompletions, checker: TypeChecker): StringLiteralCompletionsFromTypes {
         let isNewIdentifier = false;
 
         const uniques = createMap<true>();
@@ -712,7 +712,7 @@ namespace ts.Completions {
             case SyntaxKind.OpenBraceToken:
                 return isJsxExpression(parent) && parent.parent.kind !== SyntaxKind.JsxElement ? checker.getContextualTypeForJsxAttribute(parent.parent) : undefined;
             default:
-                const argInfo = SignatureHelp.getImmediatelyContainingArgumentInfo(currentToken, position, sourceFile);
+                const argInfo = SignatureHelp.getArgumentInfoForCompletions(currentToken, position, sourceFile);
                 return argInfo
                     // At `,`, treat this as the next argument after the comma.
                     ? checker.getContextualTypeForArgumentAtIndex(argInfo.invocation, argInfo.argumentIndex + (currentToken.kind === SyntaxKind.CommaToken ? 1 : 0))
