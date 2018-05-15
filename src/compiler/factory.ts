@@ -2900,6 +2900,15 @@ namespace ts {
         return setSyntheticTrailingComments(node, append<SynthesizedComment>(getSyntheticTrailingComments(node), { kind, pos: -1, end: -1, hasTrailingNewLine, text }));
     }
 
+    export function moveSyntheticComments<T extends Node>(node: T, original: Node): T {
+        setSyntheticLeadingComments(node, getSyntheticLeadingComments(original));
+        setSyntheticTrailingComments(node, getSyntheticTrailingComments(original));
+        const emit = getOrCreateEmitNode(original);
+        emit.leadingComments = undefined;
+        emit.trailingComments = undefined;
+        return node;
+    }
+
     /**
      * Gets the constant value to emit for an expression.
      */
