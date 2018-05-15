@@ -1453,6 +1453,12 @@ namespace ts {
                             location = location.parent;
                         }
                         break;
+                    case SyntaxKind.JSDocTypedefTag:
+                    case SyntaxKind.JSDocCallbackTag:
+                        // js type aliases do not resolve names from their host, so skip past it
+                        lastLocation = location;
+                        location = getJSDocHost(location).parent;
+                        continue;
                 }
                 if (isSelfReferenceLocation(location)) {
                     lastSelfReferenceLocation = location;
@@ -2161,6 +2167,10 @@ namespace ts {
         }
 
         function getJSSpecialAssignmentLocation(node: TypeReferenceNode): Declaration | undefined {
+            const typeAlias = findAncestor(node, node => !(isJSDocNode(node) || node.flags & NodeFlags.JSDoc) ? "quit" : isJSDocTypeAlias(node));
+            if (typeAlias) {
+                return;
+            }
             const host = getJSDocHost(node);
             if (host &&
                 isExpressionStatement(host) &&
@@ -2169,7 +2179,7 @@ namespace ts {
                 const symbol = getSymbolOfNode(host.expression.left);
                 return symbol && symbol.parent.valueDeclaration;
             }
-            const sig = getHostSignatureFromJSDoc(node);
+            const sig = getHostSignatureFromJSDocHost(host);
             if (sig) {
                 const symbol = getSymbolOfNode(sig);
                 return symbol && symbol.valueDeclaration;

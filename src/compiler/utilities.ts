@@ -1914,7 +1914,10 @@ namespace ts {
     }
 
     export function getHostSignatureFromJSDoc(node: Node): SignatureDeclaration | undefined {
-        const host = getJSDocHost(node);
+        return getHostSignatureFromJSDocHost(getJSDocHost(node));
+    }
+
+    export function getHostSignatureFromJSDocHost(host: HasJSDoc): SignatureDeclaration | undefined {
         const decl = getSourceOfDefaultedAssignment(host) ||
             getSourceOfAssignment(host) ||
             getSingleInitializerOfVariableStatementOrPropertyDeclaration(host) ||
