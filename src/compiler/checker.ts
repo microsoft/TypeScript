@@ -919,11 +919,11 @@ namespace ts {
                     const sourceInitializer = getJSInitializerSymbol(source);
                     const init = getDeclaredJavascriptInitializer(targetValueDeclaration) || getAssignedJavascriptInitializer(targetValueDeclaration);
                     let targetInitializer = init && init.symbol ? init.symbol : target;
+                    if (!(targetInitializer.flags & SymbolFlags.Transient)) {
+                        const mergedInitializer = getMergedSymbol(targetInitializer);
+                        targetInitializer = mergedInitializer === targetInitializer ? cloneSymbol(targetInitializer) : mergedInitializer;
+                    }
                     if (sourceInitializer !== source || targetInitializer !== target) {
-                        if (!(targetInitializer.flags & SymbolFlags.Transient)) {
-                            const mergedInitializer = getMergedSymbol(targetInitializer);
-                            targetInitializer = mergedInitializer === targetInitializer ? cloneSymbol(targetInitializer) : mergedInitializer;
-                        }
                         mergeSymbol(targetInitializer, sourceInitializer);
                     }
                 }
