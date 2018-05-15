@@ -12,6 +12,15 @@
 ////}
 ////find(''/**/);
 
-goTo.marker();
-verify.currentSignatureHelpIs("find<T>(l: T[], x: T): T")
-// There currently isn't a way to display the return tag comment
+verify.signatureHelp({
+    marker: "",
+    text: "find<T>(l: T[], x: T): T",
+    docComment: "Find an item",
+    tags: [
+        // TODO: GH#24130
+        { name: "template", text: "T\n " },
+        { name: "param", text: "l" },
+        { name: "param", text: "x" },
+        { name: "returns", text: "The names of the found item(s)." },
+    ],
+});

@@ -6,14 +6,17 @@
 ////functionCall(/*functionCall1*/);
 ////functionCall("", /*functionCall2*/1);
 
-
-goTo.marker('functionCall1');
-verify.signatureHelpCountIs(1);
-verify.currentSignatureHelpIs("functionCall(str: string, num: number): void");
-verify.currentParameterHelpArgumentNameIs("str");
-verify.currentParameterSpanIs("str: string");
-goTo.marker('functionCall2');
-verify.currentSignatureHelpIs("functionCall(str: string, num: number): void");
-verify.currentParameterHelpArgumentNameIs("num");
-verify.currentParameterSpanIs("num: number");
-
+verify.signatureHelp(
+    {
+        marker: "functionCall1",
+        text: "functionCall(str: string, num: number): void",
+        parameterName: "str",
+        parameterSpan: "str: string",
+    },
+    {
+        marker: "functionCall2",
+        text: "functionCall(str: string, num: number): void",
+        parameterName: "num",
+        parameterSpan: "num: number",
+    },
+);

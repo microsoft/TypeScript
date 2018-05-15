@@ -3,15 +3,18 @@
 ////var objectLiteral = { n: 5, s: "", f: (a: number, b: string) => "" };
 ////objectLiteral.f(/*objectLiteral1*/4, /*objectLiteral2*/"");
 
-goTo.marker('objectLiteral1');
-verify.signatureHelpCountIs(1);
-verify.currentSignatureParameterCountIs(2);
-verify.currentSignatureHelpIs('f(a: number, b: string): string');
-
-verify.currentParameterHelpArgumentNameIs("a");
-verify.currentParameterSpanIs("a: number");
-
-goTo.marker('objectLiteral2');
-verify.currentSignatureHelpIs('f(a: number, b: string): string');
-verify.currentParameterHelpArgumentNameIs("b");
-verify.currentParameterSpanIs("b: string");
+verify.signatureHelp(
+    {
+        marker: "objectLiteral1",
+        text: "f(a: number, b: string): string",
+        parameterCount: 2,
+        parameterName: "a",
+        parameterSpan: "a: number",
+    },
+    {
+        marker: "objectLiteral2",
+        text: "f(a: number, b: string): string",
+        parameterName: "b",
+        parameterSpan: "b: string",
+    },
+);
