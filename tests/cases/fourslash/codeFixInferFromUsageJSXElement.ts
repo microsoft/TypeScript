@@ -37,4 +37,4 @@
 //// }
 
 
-verify.rangeAfterCodeFix("props: { isLoading: any; update: (...arg0: any) => void; }",/*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, 0);
+verify.rangeAfterCodeFix("props: { isLoading: any; update: (arg0: any) => void; }",/*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, 0);
