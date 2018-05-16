@@ -271,7 +271,7 @@ namespace ts.formatting {
         }
 
         function nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken: Node, current: Node, lineAtPosition: number, sourceFile: SourceFile): NextTokenKind {
-            const nextToken = findNextToken(precedingToken, current);
+            const nextToken = findNextToken(precedingToken, current, sourceFile);
             if (!nextToken) {
                 return NextTokenKind.Unknown;
             }

@@ -892,6 +892,8 @@ namespace ts {
         function mergeSymbol(target: Symbol, source: Symbol) {
             if (!(target.flags & getExcludedSymbolFlags(source.flags)) ||
                 (source.flags | target.flags) & SymbolFlags.JSContainer) {
+                const targetValueDeclaration = target.valueDeclaration;
+                Debug.assert(!!(target.flags & SymbolFlags.Transient));
                 // Javascript static-property-assignment declarations always merge, even though they are also values
                 if (source.flags & SymbolFlags.ValueModule && target.flags & SymbolFlags.ValueModule && target.constEnumOnlyModule && !source.constEnumOnlyModule) {
                     // reset flag when merging instantiated module into value module that has only const enums
@@ -915,7 +917,12 @@ namespace ts {
                 }
                 if ((source.flags | target.flags) & SymbolFlags.JSContainer) {
                     const sourceInitializer = getJSInitializerSymbol(source)!;
-                    const targetInitializer = getJSInitializerSymbol(target)!;
+                    const init = getDeclaredJavascriptInitializer(targetValueDeclaration) || getAssignedJavascriptInitializer(targetValueDeclaration);
+                    let targetInitializer = init && init.symbol ? init.symbol : target;
+                    if (!(targetInitializer.flags & SymbolFlags.Transient)) {
+                        const mergedInitializer = getMergedSymbol(targetInitializer);
+                        targetInitializer = mergedInitializer === targetInitializer ? cloneSymbol(targetInitializer) : mergedInitializer;
+                    }
                     if (sourceInitializer !== source || targetInitializer !== target) {
                         mergeSymbol(targetInitializer, sourceInitializer);
                     }
@@ -2759,7 +2766,7 @@ namespace ts {
          * @param shouldComputeAliasToMakeVisible a boolean value to indicate whether to return aliases to be mark visible in case the symbol is accessible
          */
         function isSymbolAccessible(symbol: Symbol | undefined, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, shouldComputeAliasesToMakeVisible: boolean): SymbolAccessibilityResult {
-            if (symbol && enclosingDeclaration && !(symbol.flags & SymbolFlags.TypeParameter)) {
+            if (symbol && enclosingDeclaration) {
                 const initialSymbol = symbol;
                 let meaningToLook = meaning;
                 while (symbol) {
@@ -3131,7 +3138,15 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.TypeParameter || objectFlags & ObjectFlags.ClassOrInterface) {
                     if (type.flags & TypeFlags.TypeParameter && contains(context.inferTypeParameters, type)) {
-                        return createInferTypeNode(createTypeParameterDeclaration(getNameOfSymbolAsWritten(type.symbol)));
+                        return createInferTypeNode(typeParameterToDeclarationWithConstraint(type as TypeParameter, context, /*constraintNode*/ undefined));
+                    }
+                    if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams &&
+                        type.flags & TypeFlags.TypeParameter &&
+                        length(type.symbol.declarations) &&
+                        isTypeParameterDeclaration(type.symbol.declarations[0]) &&
+                        typeParameterShadowsNameInScope(type, context) &&
+                        !isTypeSymbolAccessible(type.symbol, context.enclosingDeclaration)) {
+                        return createTypeReferenceNode(getGeneratedNameForNode((type.symbol.declarations[0] as TypeParameterDeclaration).name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes), /*typeArguments*/ undefined);
                     }
                     const name = type.symbol ? symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ false) : createIdentifier("?");
                     // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
@@ -3578,10 +3593,21 @@ namespace ts {
                 return createSignatureDeclaration(kind, typeParameters, parameters, returnTypeNode, typeArguments);
             }
 
+            function typeParameterShadowsNameInScope(type: TypeParameter, context: NodeBuilderContext) {
+                return !!resolveName(context.enclosingDeclaration, type.symbol.escapedName, SymbolFlags.Type, /*nameNotFoundArg*/ undefined, type.symbol.escapedName, /*isUse*/ false);
+            }
+
             function typeParameterToDeclarationWithConstraint(type: TypeParameter, context: NodeBuilderContext, constraintNode: TypeNode | undefined): TypeParameterDeclaration {
                 const savedContextFlags = context.flags;
                 context.flags &= ~NodeBuilderFlags.WriteTypeParametersInQualifiedName; // Avoids potential infinite loop when building for a claimspace with a generic
-                const name = symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ true);
+                const shouldUseGeneratedName =
+                    context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams &&
+                    type.symbol.declarations[0] &&
+                    isTypeParameterDeclaration(type.symbol.declarations[0]) &&
+                    typeParameterShadowsNameInScope(type, context);
+                const name = shouldUseGeneratedName
+                    ? getGeneratedNameForNode((type.symbol.declarations[0] as TypeParameterDeclaration).name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes)
+                    : symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ true);
                 const defaultParameter = getDefaultFromTypeParameter(type);
                 const defaultParameterNode = defaultParameter && typeToTypeNodeHelper(defaultParameter, context);
                 context.flags = savedContextFlags;
@@ -3814,6 +3840,7 @@ namespace ts {
                     if (index === 0) {
                         context.flags ^= NodeBuilderFlags.InInitialEntityName;
                     }
+
                     const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
                     identifier.symbol = symbol;
 
@@ -8689,6 +8716,10 @@ namespace ts {
         // Transform an indexed access to a simpler form, if possible. Return the simpler form, or return
         // the type itself if no transformation is possible.
         function getSimplifiedIndexedAccessType(type: IndexedAccessType): Type {
+            if (type.simplified) {
+                return type.simplified === circularConstraintType ? type : type.simplified;
+            }
+            type.simplified = circularConstraintType;
             const objectType = type.objectType;
             if (objectType.flags & TypeFlags.Intersection && isGenericObjectType(objectType)) {
                 // Given an indexed access type T[K], if T is an intersection containing one or more generic types and one or
@@ -8706,7 +8737,7 @@ namespace ts {
                             regularTypes.push(t);
                         }
                     }
-                    return getUnionType([
+                    return type.simplified = getUnionType([
                         getSimplifiedType(getIndexedAccessType(getIntersectionType(regularTypes), type.indexType)),
                         getIntersectionType(stringIndexTypes)
                     ]);
@@ -8717,7 +8748,7 @@ namespace ts {
                 // eventually anyway, but it easier to reason about.
                 if (some((<IntersectionType>objectType).types, isMappedTypeToNever)) {
                     const nonNeverTypes = filter((<IntersectionType>objectType).types, t => !isMappedTypeToNever(t));
-                    return getSimplifiedType(getIndexedAccessType(getIntersectionType(nonNeverTypes), type.indexType));
+                    return type.simplified = getSimplifiedType(getIndexedAccessType(getIntersectionType(nonNeverTypes), type.indexType));
                 }
             }
             // If the object type is a mapped type { [P in K]: E }, where K is generic, instantiate E using a mapper
@@ -8725,15 +8756,15 @@ namespace ts {
             // construct the type Box<T[X]>. We do not further simplify the result because mapped types can be recursive
             // and we might never terminate.
             if (isGenericMappedType(objectType)) {
-                return substituteIndexedMappedType(objectType, type);
+                return type.simplified = substituteIndexedMappedType(objectType, type);
             }
             if (objectType.flags & TypeFlags.TypeParameter) {
                 const constraint = getConstraintFromTypeParameter(objectType as TypeParameter);
                 if (constraint && isGenericMappedType(constraint)) {
-                    return substituteIndexedMappedType(constraint, type);
+                    return type.simplified = substituteIndexedMappedType(constraint, type);
                 }
             }
-            return type;
+            return type.simplified = type;
         }
 
         function substituteIndexedMappedType(objectType: MappedType, type: IndexedAccessType) {
@@ -19481,7 +19512,7 @@ namespace ts {
             }
 
             const links = getNodeLinks(node);
-            const type = getTypeOfSymbol(node.symbol);
+            const type = getTypeOfSymbol(getMergedSymbol(node.symbol));
             if (isTypeAny(type)) {
                 return type;
             }
@@ -22646,11 +22677,11 @@ namespace ts {
                 const kind = tryGetRootParameterDeclaration(bindingPattern.parent) ? UnusedKind.Parameter : UnusedKind.Local;
                 if (!bindingPattern.elements.every(e => contains(bindingElements, e))) {
                     for (const e of bindingElements) {
-                        addDiagnostic(kind, createDiagnosticForNode(e, Diagnostics._0_is_declared_but_its_value_is_never_read, getBindingElementNameText(e)));
+                        addDiagnostic(kind, createDiagnosticForNode(e, Diagnostics._0_is_declared_but_its_value_is_never_read, idText(cast(e.name, isIdentifier))));
                     }
                 }
                 else if (bindingElements.length === 1) {
-                    addDiagnostic(kind, createDiagnosticForNode(bindingPattern, Diagnostics._0_is_declared_but_its_value_is_never_read, getBindingElementNameText(first(bindingElements))));
+                    addDiagnostic(kind, createDiagnosticForNode(bindingPattern, Diagnostics._0_is_declared_but_its_value_is_never_read, idText(cast(first(bindingElements).name, isIdentifier))));
                 }
                 else {
                     addDiagnostic(kind, createDiagnosticForNode(bindingPattern, Diagnostics.All_destructured_elements_are_unused));

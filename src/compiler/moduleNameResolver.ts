@@ -1011,8 +1011,10 @@ namespace ts {
                 }
                 else {
                     const jsPath = tryReadPackageJsonFields(/*readTypes*/ false, packageJsonContent, nodeModuleDirectory, state);
-                    if (typeof jsPath === "string") {
-                        subModuleName = removeExtension(removeExtension(jsPath.substring(nodeModuleDirectory.length + 1), Extension.Js), Extension.Jsx) + Extension.Dts;
+                    if (typeof jsPath === "string" && jsPath.length > nodeModuleDirectory.length) {
+                        const potentialSubModule = jsPath.substring(nodeModuleDirectory.length + 1);
+                        subModuleName = (forEach(supportedJavascriptExtensions, extension =>
+                            tryRemoveExtension(potentialSubModule, extension)) || potentialSubModule) + Extension.Dts;
                     }
                     else {
                         subModuleName = "index.d.ts";
@@ -1046,9 +1048,18 @@ namespace ts {
     }
 
     function loadModuleFromPackageJson(jsonContent: PackageJsonPathFields, extensions: Extensions, candidate: string, failedLookupLocations: Push<string>, state: ModuleResolutionState): PathAndExtension | undefined {
-        const file = tryReadPackageJsonFields(extensions !== Extensions.JavaScript && extensions !== Extensions.Json, jsonContent, candidate, state);
+        let file = tryReadPackageJsonFields(extensions !== Extensions.JavaScript && extensions !== Extensions.Json, jsonContent, candidate, state);
         if (!file) {
-            return undefined;
+            if (extensions === Extensions.TypeScript) {
+                // When resolving typescript modules, try resolving using main field as well
+                file = tryReadPackageJsonFields(/*readTypes*/ false, jsonContent, candidate, state);
+                if (!file) {
+                    return undefined;
+                }
+            }
+            else {
+                return undefined;
+            }
         }
 
         const onlyRecordFailures = !directoryProbablyExists(getDirectoryPath(file), state.host);

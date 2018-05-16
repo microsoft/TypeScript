@@ -75,7 +75,7 @@ node_modules/lodash/_baseUniq.js(33,33): error TS2554: Expected 0 arguments, but
 node_modules/lodash/_baseUniq.js(39,5): error TS2322: Type 'SetCache' is not assignable to type 'any[]'.
 node_modules/lodash/_baseUniq.js(62,15): error TS2554: Expected 2 arguments, but got 3.
 node_modules/lodash/_cloneArrayBuffer.js(11,16): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-node_modules/lodash/_cloneBuffer.js(4,69): error TS2339: Property 'nodeType' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/lodash/node_modules/lodash/_cloneBuffer")'.
+node_modules/lodash/_cloneBuffer.js(4,69): error TS2339: Property 'nodeType' does not exist on type 'typeof import("/lodash/node_modules/lodash/_cloneBuffer")'.
 node_modules/lodash/_cloneBuffer.js(7,80): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
 node_modules/lodash/_copySymbols.js(13,29): error TS2554: Expected 0 arguments, but got 1.
 node_modules/lodash/_copySymbolsIn.js(13,29): error TS2554: Expected 0 arguments, but got 1.
@@ -147,7 +147,7 @@ node_modules/lodash/_isLaziable.js(24,14): error TS2554: Expected 0 arguments, b
 node_modules/lodash/_memoizeCapped.js(22,22): error TS2339: Property 'cache' does not exist on type 'Function'.
 node_modules/lodash/_mergeData.js(60,26): error TS2554: Expected 4 arguments, but got 3.
 node_modules/lodash/_mergeData.js(67,26): error TS2554: Expected 4 arguments, but got 3.
-node_modules/lodash/_nodeUtil.js(4,69): error TS2339: Property 'nodeType' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/lodash/node_modules/lodash/_nodeUtil")'.
+node_modules/lodash/_nodeUtil.js(4,69): error TS2339: Property 'nodeType' does not exist on type 'typeof import("/lodash/node_modules/lodash/_nodeUtil")'.
 node_modules/lodash/_nodeUtil.js(7,80): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
 node_modules/lodash/_nodeUtil.js(13,47): error TS2339: Property 'process' does not exist on type 'boolean | Global'.
   Property 'process' does not exist on type 'true'.
@@ -181,8 +181,8 @@ node_modules/lodash/core.js(77,82): error TS2339: Property 'nodeType' does not e
 node_modules/lodash/core.js(540,19): error TS2322: Type '(value: any) => boolean' is not assignable to type 'boolean | undefined'.
   Type '(value: any) => boolean' is not assignable to type 'false'.
 node_modules/lodash/core.js(545,24): error TS2532: Object is possibly 'undefined'.
-node_modules/lodash/core.js(545,24): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/lodash/core.js(545,24): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'Boolean' has no compatible call signatures.
+node_modules/lodash/core.js(545,24): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/lodash/core.js(664,42): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
 node_modules/lodash/core.js(721,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'result' must be of type 'boolean', but here has type 'any'.
 node_modules/lodash/core.js(749,18): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
@@ -218,8 +218,8 @@ node_modules/lodash/core.js(1566,33): error TS2554: Expected 1 arguments, but go
 node_modules/lodash/core.js(1709,41): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/core.js(1872,12): error TS1003: Identifier expected.
 node_modules/lodash/core.js(1872,12): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
-node_modules/lodash/core.js(2142,12): error TS1003: Identifier expected.
 node_modules/lodash/core.js(2142,12): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/core.js(2142,12): error TS1003: Identifier expected.
 node_modules/lodash/core.js(2183,41): error TS8024: JSDoc '@param' tag has name 'iteratees', but there is no parameter with that name.
 node_modules/lodash/core.js(2473,21): error TS2554: Expected 0 arguments, but got 1.
 node_modules/lodash/core.js(2609,39): error TS2554: Expected 0 arguments, but got 1.
@@ -235,11 +235,11 @@ node_modules/lodash/core.js(3830,45): error TS2304: Cannot find name 'define'.
 node_modules/lodash/core.js(3830,71): error TS2304: Cannot find name 'define'.
 node_modules/lodash/core.js(3839,5): error TS2304: Cannot find name 'define'.
 node_modules/lodash/core.js(3846,35): error TS2339: Property '_' does not exist on type 'typeof lodash'.
-node_modules/lodash/curry.js(24,10): error TS1003: Identifier expected.
 node_modules/lodash/curry.js(24,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/curry.js(24,10): error TS1003: Identifier expected.
 node_modules/lodash/curry.js(50,10): error TS2339: Property 'placeholder' does not exist on type 'Function'.
-node_modules/lodash/curryRight.js(21,10): error TS1003: Identifier expected.
 node_modules/lodash/curryRight.js(21,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/curryRight.js(21,10): error TS1003: Identifier expected.
 node_modules/lodash/curryRight.js(47,10): error TS2339: Property 'placeholder' does not exist on type 'Function'.
 node_modules/lodash/debounce.js(83,17): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/debounce.js(84,27): error TS2532: Object is possibly 'undefined'.
@@ -255,22 +255,21 @@ node_modules/lodash/differenceBy.js(40,52): error TS2345: Argument of type '(val
 node_modules/lodash/differenceBy.js(40,78): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/differenceWith.js(36,52): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean | undefined'.
   Type '(value: any) => boolean' is not assignable to type 'false'.
-node_modules/lodash/drop.js(13,10): error TS1003: Identifier expected.
 node_modules/lodash/drop.js(13,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/drop.js(13,10): error TS1003: Identifier expected.
 node_modules/lodash/dropRight.js(13,10): error TS1003: Identifier expected.
 node_modules/lodash/dropRight.js(13,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
 node_modules/lodash/dropRightWhile.js(41,24): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/dropWhile.js(41,24): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/escape.js(39,39): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
-node_modules/lodash/every.js(23,10): error TS1003: Identifier expected.
 node_modules/lodash/every.js(23,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/every.js(23,10): error TS1003: Identifier expected.
 node_modules/lodash/every.js(53,27): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/filter.js(45,27): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/findIndex.js(52,31): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/findKey.js(41,30): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/findLastIndex.js(56,31): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/findLastKey.js(41,30): error TS2554: Expected 0-1 arguments, but got 2.
-node_modules/lodash/fp.js(2,18): error TS2554: Expected 3-4 arguments, but got 2.
 node_modules/lodash/fp/_baseConvert.js(144,5): error TS2322: Type 'Function' is not assignable to type '{ cap?: boolean; curry?: boolean; fixed?: boolean; immutable?: boolean; rearg?: boolean; } | unde...'.
   Type 'Function' has no properties in common with type '{ cap?: boolean; curry?: boolean; fixed?: boolean; immutable?: boolean; rearg?: boolean; }'.
 node_modules/lodash/fp/_baseConvert.js(145,5): error TS2322: Type 'string' is not assignable to type 'Function'.
@@ -326,10 +325,11 @@ node_modules/lodash/fp/object.js(2,26): error TS2345: Argument of type '{ [x: st
 node_modules/lodash/fp/seq.js(2,26): error TS2345: Argument of type '{ [x: string]: any; 'at': Function; 'chain': (value: any) => any; 'commit': () => any; 'lodash': ...' is not assignable to parameter of type 'string'.
 node_modules/lodash/fp/string.js(2,26): error TS2345: Argument of type '{ [x: string]: any; 'camelCase': Function; 'capitalize': (string?: string | undefined) => string;...' is not assignable to parameter of type 'string'.
 node_modules/lodash/fp/util.js(2,26): error TS2345: Argument of type '{ [x: string]: any; 'attempt': Function; 'bindAll': Function; 'cond': (pairs: any[]) => Function;...' is not assignable to parameter of type 'string'.
+node_modules/lodash/fp.js(2,18): error TS2554: Expected 3-4 arguments, but got 2.
 node_modules/lodash/includes.js(24,10): error TS1003: Identifier expected.
 node_modules/lodash/includes.js(24,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
 node_modules/lodash/intersectionBy.js(41,32): error TS2554: Expected 0-1 arguments, but got 2.
-node_modules/lodash/isBuffer.js(5,69): error TS2339: Property 'nodeType' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/lodash/node_modules/lodash/isBuffer")'.
+node_modules/lodash/isBuffer.js(5,69): error TS2339: Property 'nodeType' does not exist on type 'typeof import("/lodash/node_modules/lodash/isBuffer")'.
 node_modules/lodash/isBuffer.js(8,80): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
 node_modules/lodash/isEqual.js(32,10): error TS2554: Expected 3-5 arguments, but got 2.
 node_modules/lodash/isEqualWith.js(38,59): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'boolean'.
@@ -364,17 +364,17 @@ node_modules/lodash/property.js(29,37): error TS2345: Argument of type 'string |
 node_modules/lodash/pullAllBy.js(29,34): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/reduce.js(48,10): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((array?: any[] | undefined, iteratee: Function, accumulator?: any, initAccum?: boolean | undefin...' has no compatible call signatures.
 node_modules/lodash/reduce.js(48,27): error TS2554: Expected 0-1 arguments, but got 2.
-node_modules/lodash/reduceRight.js(33,10): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((collection: any, iteratee: Function, accumulator: any, initAccum: boolean, eachFunc: Function) ...' has no compatible call signatures.
+node_modules/lodash/reduceRight.js(33,10): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((array?: any[] | undefined, iteratee: Function, accumulator?: any, initAccum?: boolean | undefin...' has no compatible call signatures.
 node_modules/lodash/reduceRight.js(33,27): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/reject.js(43,34): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/remove.js(41,15): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/repeat.js(15,10): error TS1003: Identifier expected.
 node_modules/lodash/repeat.js(15,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
 node_modules/lodash/replace.js(15,29): error TS8029: JSDoc '@param' tag has name 'replacement', but there is no parameter with that name. It would match 'arguments' if it had an array type.
-node_modules/lodash/sampleSize.js(17,10): error TS1003: Identifier expected.
 node_modules/lodash/sampleSize.js(17,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
-node_modules/lodash/some.js(18,10): error TS1003: Identifier expected.
+node_modules/lodash/sampleSize.js(17,10): error TS1003: Identifier expected.
 node_modules/lodash/some.js(18,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/some.js(18,10): error TS1003: Identifier expected.
 node_modules/lodash/some.js(48,27): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/sortedIndexBy.js(30,42): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/sortedLastIndexBy.js(30,42): error TS2554: Expected 0-1 arguments, but got 2.
@@ -388,8 +388,8 @@ node_modules/lodash/takeRight.js(13,10): error TS1003: Identifier expected.
 node_modules/lodash/takeRight.js(13,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
 node_modules/lodash/takeRightWhile.js(41,24): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/takeWhile.js(41,24): error TS2554: Expected 0-1 arguments, but got 2.
-node_modules/lodash/template.js(65,10): error TS1003: Identifier expected.
 node_modules/lodash/template.js(65,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/template.js(65,10): error TS1003: Identifier expected.
 node_modules/lodash/template.js(146,34): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/template.js(153,21): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/template.js(158,6): error TS2532: Object is possibly 'undefined'.
@@ -414,8 +414,8 @@ node_modules/lodash/transform.js(59,3): error TS2349: Cannot invoke an expressio
 node_modules/lodash/transform.js(60,12): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/lodash/trim.js(20,10): error TS1003: Identifier expected.
 node_modules/lodash/trim.js(20,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
-node_modules/lodash/trimEnd.js(19,10): error TS1003: Identifier expected.
 node_modules/lodash/trimEnd.js(19,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/trimEnd.js(19,10): error TS1003: Identifier expected.
 node_modules/lodash/trimStart.js(19,10): error TS1003: Identifier expected.
 node_modules/lodash/trimStart.js(19,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
 node_modules/lodash/truncate.js(60,36): error TS2532: Object is possibly 'undefined'.

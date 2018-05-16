@@ -30,11 +30,11 @@ var Base = /** @class */ (function () {
     return Base;
 }());
 var C = /** @class */ (function (_super) {
+    var _a;
     __extends(C, _super);
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     C.prototype[(_a = {}, _a[_super.bar.call(this)] = 1, _a)[0]] = function () { };
     return C;
-    var _a;
 }(Base));

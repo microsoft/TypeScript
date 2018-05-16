@@ -44,6 +44,7 @@ node_modules/adonis-framework/src/Event/index.js(256,52): error TS2345: Argument
   Type 'Function' provides no match for the signature '(...values: any[]): void'.
 node_modules/adonis-framework/src/Event/index.js(264,28): error TS2345: Argument of type 'Function' is not assignable to parameter of type 'Listener'.
 node_modules/adonis-framework/src/Event/index.js(294,30): error TS2345: Argument of type 'Function' is not assignable to parameter of type 'Listener'.
+node_modules/adonis-framework/src/Exceptions/index.js(5,7): error TS2300: Duplicate identifier 'RuntimeException'.
 node_modules/adonis-framework/src/Exceptions/index.js(13,14): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 node_modules/adonis-framework/src/Exceptions/index.js(27,12): error TS2554: Expected 0 arguments, but got 3.
 node_modules/adonis-framework/src/Exceptions/index.js(40,12): error TS2554: Expected 0 arguments, but got 3.
@@ -60,6 +61,7 @@ node_modules/adonis-framework/src/Exceptions/index.js(164,14): error TS1056: Acc
 node_modules/adonis-framework/src/Exceptions/index.js(178,12): error TS2554: Expected 0 arguments, but got 3.
 node_modules/adonis-framework/src/Exceptions/index.js(191,12): error TS2554: Expected 0 arguments, but got 3.
 node_modules/adonis-framework/src/Exceptions/index.js(205,12): error TS2554: Expected 0 arguments, but got 3.
+node_modules/adonis-framework/src/Exceptions/index.js(210,19): error TS2300: Duplicate identifier 'RuntimeException'.
 node_modules/adonis-framework/src/File/index.js(175,5): error TS2322: Type 'Promise<any>' is not assignable to type 'boolean'.
 node_modules/adonis-framework/src/File/index.js(273,5): error TS2322: Type 'boolean | ""' is not assignable to type 'boolean'.
   Type '""' is not assignable to type 'boolean'.
@@ -150,6 +152,7 @@ node_modules/adonis-framework/src/Session/SessionManager.js(69,49): error TS2339
 node_modules/adonis-framework/src/Session/SessionManager.js(71,76): error TS2339: Property 'drivers' does not exist on type 'Function'.
 node_modules/adonis-framework/src/Session/Store.js(28,13): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Session/Store.js(80,13): error TS2304: Cannot find name 'Mixed'.
+node_modules/adonis-framework/src/Session/index.js(10,14): error TS2304: Cannot find name 'SessionDriver'.
 node_modules/adonis-framework/src/Session/index.js(11,2): error TS1003: Identifier expected.
 node_modules/adonis-framework/src/Session/index.js(11,11): error TS2304: Cannot find name 'Class'.
 node_modules/adonis-framework/src/Session/index.js(46,15): error TS2304: Cannot find name 'SessionDriver'.

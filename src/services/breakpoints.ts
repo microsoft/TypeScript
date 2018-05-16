@@ -42,7 +42,7 @@ namespace ts.BreakpointResolver {
         }
 
         function textSpanEndingAtNextToken(startNode: Node, previousTokenToFindNextEndToken: Node): TextSpan {
-            return textSpan(startNode, findNextToken(previousTokenToFindNextEndToken, previousTokenToFindNextEndToken.parent));
+            return textSpan(startNode, findNextToken(previousTokenToFindNextEndToken, previousTokenToFindNextEndToken.parent, sourceFile));
         }
 
         function spanInNodeIfStartsOnSameLine(node: Node | undefined, otherwiseOnNode?: Node): TextSpan | undefined {
@@ -61,7 +61,7 @@ namespace ts.BreakpointResolver {
         }
 
         function spanInNextNode(node: Node): TextSpan | undefined {
-            return spanInNode(findNextToken(node, node.parent));
+            return spanInNode(findNextToken(node, node.parent, sourceFile));
         }
 
         function spanInNode(node: Node | undefined): TextSpan | undefined {

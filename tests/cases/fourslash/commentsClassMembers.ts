@@ -171,9 +171,7 @@ verify.completionListContains("nc_pp1", "(property) c1.nc_pp1: number", "");
 verify.completionListContains("nc_pp2", "(method) c1.nc_pp2(b: number): number", "");
 verify.completionListContains("nc_pp3", "(property) c1.nc_pp3: number", "");
 
-goTo.marker('8');
-verify.currentSignatureHelpDocCommentIs("sum with property");
-verify.currentParameterHelpArgumentDocCommentIs("number to add");
+verify.signatureHelp({ marker: "8", docComment: "sum with property", parameterDocComment: "number to add" });
 verify.quickInfoAt("8q", "(method) c1.p2(b: number): number", "sum with property");
 
 goTo.marker('9');
@@ -220,9 +218,7 @@ verify.completionListContains("nc_pp1", "(property) c1.nc_pp1: number", "");
 verify.completionListContains("nc_pp2", "(method) c1.nc_pp2(b: number): number", "");
 verify.completionListContains("nc_pp3", "(property) c1.nc_pp3: number", "");
 
-goTo.marker('13');
-verify.currentSignatureHelpDocCommentIs("sum with property");
-verify.currentParameterHelpArgumentDocCommentIs("number to add");
+verify.signatureHelp({ marker: "13", docComment: "sum with property", parameterDocComment: "number to add" });
 verify.completionListContains("value", "(parameter) value: number", "this is value");
 
 verify.quickInfos({
@@ -264,9 +260,7 @@ verify.completionListContains("nc_pp1", "(property) c1.nc_pp1: number", "");
 verify.completionListContains("nc_pp2", "(method) c1.nc_pp2(b: number): number", "");
 verify.completionListContains("nc_pp3", "(property) c1.nc_pp3: number", "");
 
-goTo.marker('20');
-verify.currentSignatureHelpDocCommentIs("sum with property");
-verify.currentParameterHelpArgumentDocCommentIs("number to add");
+verify.signatureHelp({ marker: "20", docComment: "sum with property", parameterDocComment: "number to add" });
 verify.quickInfoAt("20q", "(method) c1.pp2(b: number): number", "sum with property");
 
 goTo.marker('21');
@@ -313,9 +307,7 @@ verify.completionListContains("nc_pp1", "(property) c1.nc_pp1: number", "");
 verify.completionListContains("nc_pp2", "(method) c1.nc_pp2(b: number): number", "");
 verify.completionListContains("nc_pp3", "(property) c1.nc_pp3: number", "");
 
-goTo.marker('25');
-verify.currentSignatureHelpDocCommentIs("sum with property");
-verify.currentParameterHelpArgumentDocCommentIs("number to add");
+verify.signatureHelp({ marker: "25", docComment: "sum with property", parameterDocComment: "number to add" });
 verify.completionListContains("value", "(parameter) value: number", "this is value");
 
 verify.quickInfos({
@@ -352,9 +344,7 @@ verify.completionListContains("nc_s1", "(property) c1.nc_s1: number", "");
 verify.completionListContains("nc_s2", "(method) c1.nc_s2(b: number): number", "");
 verify.completionListContains("nc_s3", "(property) c1.nc_s3: number", "");
 
-goTo.marker('35');
-verify.currentSignatureHelpDocCommentIs("static sum with property");
-verify.currentParameterHelpArgumentDocCommentIs("number to add");
+verify.signatureHelp({ marker: "35", docComment: "static sum with property", parameterDocComment: "number to add" });
 verify.completionListContains("c1", "class c1", "This is comment for c1");
 verify.quickInfoAt("35q", "(method) c1.s2(b: number): number", "static sum with property");
 
@@ -390,9 +380,7 @@ verify.completionListContains("nc_s1", "(property) c1.nc_s1: number", "");
 verify.completionListContains("nc_s2", "(method) c1.nc_s2(b: number): number", "");
 verify.completionListContains("nc_s3", "(property) c1.nc_s3: number", "");
 
-goTo.marker('42');
-verify.currentSignatureHelpDocCommentIs("static sum with property");
-verify.currentParameterHelpArgumentDocCommentIs("number to add");
+verify.signatureHelp({ marker: "42", docComment: "static sum with property", parameterDocComment: "number to add" });
 verify.completionListContains("value", "(parameter) value: number", "this is value");
 verify.quickInfos({
     "42q": ["(method) c1.s2(b: number): number", "static sum with property"],
@@ -405,17 +393,13 @@ verify.completionListContains("b", "(parameter) b: number", "");
 
 verify.quickInfoAt("46", "(property) c1.nc_p3: number");
 
-goTo.marker('47');
-verify.currentSignatureHelpDocCommentIs("");
-verify.currentParameterHelpArgumentDocCommentIs("");
+verify.signatureHelp({ marker: "47", docComment: "" });
 verify.quickInfos({
     "47q": "(method) c1.nc_p2(b: number): number",
     48: "(property) c1.nc_p3: number"
 });
 
-goTo.marker('49');
-verify.currentSignatureHelpDocCommentIs("");
-verify.currentParameterHelpArgumentDocCommentIs("");
+verify.signatureHelp({ marker: "49", docComment: "" });
 verify.completionListContains("value", "(parameter) value: number", "");
 verify.quickInfos({
     "49q": "(method) c1.nc_p2(b: number): number",
@@ -428,17 +412,13 @@ verify.completionListContains("b", "(parameter) b: number", "");
 
 verify.quickInfoAt("53", "(property) c1.nc_pp3: number");
 
-goTo.marker('54');
-verify.currentSignatureHelpDocCommentIs("");
-verify.currentParameterHelpArgumentDocCommentIs("");
+verify.signatureHelp({ marker: "54", docComment: "" });
 verify.quickInfos({
     "54q": "(method) c1.nc_pp2(b: number): number",
     55: "(property) c1.nc_pp3: number"
 });
 
-goTo.marker('56');
-verify.currentSignatureHelpDocCommentIs("");
-verify.currentParameterHelpArgumentDocCommentIs("");
+verify.signatureHelp({ marker: "56", docComment: "" });
 verify.completionListContains("value", "(parameter) value: number", "");
 verify.quickInfos({
     "56q": "(method) c1.nc_pp2(b: number): number",
@@ -451,25 +431,20 @@ verify.completionListContains("b", "(parameter) b: number", "");
 
 verify.quickInfoAt("60", "(property) c1.nc_s3: number");
 
-goTo.marker('61');
-verify.currentSignatureHelpDocCommentIs("");
-verify.currentParameterHelpArgumentDocCommentIs("");
+verify.signatureHelp({ marker: "61", docComment: "" });
 verify.quickInfos({
     "61q": "(method) c1.nc_s2(b: number): number",
     62: "(property) c1.nc_s3: number"
 });
 
-goTo.marker('63');
-verify.currentSignatureHelpDocCommentIs("");
-verify.currentParameterHelpArgumentDocCommentIs("");
+verify.signatureHelp({ marker: "63", docComment: "" });
 verify.completionListContains("value", "(parameter) value: number", "");
 verify.quickInfos({
     "63q": "(method) c1.nc_s2(b: number): number",
     64: "var i1: c1"
 });
 
-goTo.marker('65');
-verify.currentSignatureHelpDocCommentIs("Constructor method");
+verify.signatureHelp({ marker: "65", docComment: "Constructor method" });
 verify.quickInfos({
     "65q": ["constructor c1(): c1", "Constructor method"],
     66: "var i1_p: number"
@@ -490,9 +465,7 @@ verify.quickInfos({
     70: "var i1_r: number"
 });
 
-goTo.marker('71');
-verify.currentSignatureHelpDocCommentIs("sum with property");
-verify.currentParameterHelpArgumentDocCommentIs("number to add");
+verify.signatureHelp({ marker: "71", docComment: "sum with property", parameterDocComment: "number to add" });
 
 verify.quickInfos({
     "71q": ["(method) c1.p2(b: number): number", "sum with property"],
@@ -507,9 +480,7 @@ verify.quickInfos({
     80: "var i1_ncr: number"
 });
 
-goTo.marker('81');
-verify.currentSignatureHelpDocCommentIs("");
-verify.currentParameterHelpArgumentDocCommentIs("");
+verify.signatureHelp({ marker: "81", docComment: "" });
 
 verify.quickInfos({
     "81q": "(method) c1.nc_p2(b: number): number",
@@ -539,9 +510,7 @@ verify.quickInfos({
     91: "var i1_s_r: number"
 });
 
-goTo.marker('92');
-verify.currentSignatureHelpDocCommentIs("static sum with property");
-verify.currentParameterHelpArgumentDocCommentIs("number to add");
+verify.signatureHelp({ marker: "92", docComment: "static sum with property", parameterDocComment: "number to add" });
 
 verify.quickInfos({
     "92q": ["(method) c1.s2(b: number): number", "static sum with property"],
@@ -556,9 +525,7 @@ verify.quickInfos({
     101: "var i1_s_ncr: number"
 });
 
-goTo.marker('102');
-verify.currentSignatureHelpDocCommentIs("");
-verify.currentParameterHelpArgumentDocCommentIs("");
+verify.signatureHelp({ marker: "102", docComment: "" });
 verify.quickInfos({
     "102q": "(method) c1.nc_s2(b: number): number",
     103: "var i1_s_ncprop: number",

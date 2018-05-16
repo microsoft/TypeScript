@@ -1,0 +1,12 @@
+Exit Code: 1
+Standard output:
+node_modules/log4js/types/log4js.d.ts(4,2): error TS7008: Member 'getLogger' implicitly has an 'any' type.
+node_modules/log4js/types/log4js.d.ts(5,2): error TS7008: Member 'configure' implicitly has an 'any' type.
+node_modules/log4js/types/log4js.d.ts(6,2): error TS7008: Member 'addLayout' implicitly has an 'any' type.
+node_modules/log4js/types/log4js.d.ts(7,2): error TS7008: Member 'connectLogger' implicitly has an 'any' type.
+node_modules/log4js/types/log4js.d.ts(8,2): error TS7008: Member 'levels' implicitly has an 'any' type.
+node_modules/log4js/types/log4js.d.ts(9,2): error TS7008: Member 'shutdown' implicitly has an 'any' type.
+
+
+
+Standard error:

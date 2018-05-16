@@ -8,9 +8,9 @@ import * from Zero from "./0"
 
 //// [0.js]
 System.register([], function (exports_1, context_1) {
+    var C;
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var C;
     return {
         setters: [],
         execute: function () {
@@ -25,9 +25,9 @@ System.register([], function (exports_1, context_1) {
 });
 //// [1.js]
 System.register([], function (exports_1, context_1) {
+    var from;
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var from;
     return {
         setters: [],
         execute: function () {

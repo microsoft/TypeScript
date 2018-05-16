@@ -13,8 +13,7 @@ edit.insert('I;');
 
 verify.completions({ marker: "2", includes: "m3f" });
 
-goTo.marker('3');
-verify.currentSignatureHelpIs('m3f(): m3f');
+verify.signatureHelp({ marker: "3", text: "m3f(): m3f" });
 
 verify.quickInfoAt("4", "var r: m3f");
 
@@ -23,4 +22,4 @@ edit.insert('foo(1)');
 
 verify.completions({ marker: "6", includes: "foo" });
 edit.insert('foo(');
-verify.currentSignatureHelpIs('foo(): void');
+verify.signatureHelp({ text: "foo(): void" });

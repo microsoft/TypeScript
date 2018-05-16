@@ -2212,7 +2212,6 @@ namespace ts.Completions {
     function isValidTrigger(sourceFile: SourceFile, triggerCharacter: CompletionsTriggerCharacter, contextToken: Node, position: number): boolean {
         switch (triggerCharacter) {
             case ".":
-            case "/":
             case "@":
                 return true;
             case '"':
@@ -2223,6 +2222,10 @@ namespace ts.Completions {
             case "<":
                 // Opening JSX tag
                 return contextToken.kind === SyntaxKind.LessThanToken && contextToken.parent.kind !== SyntaxKind.BinaryExpression;
+            case "/":
+                return isStringLiteralLike(contextToken)
+                    ? !!tryGetImportFromModuleSpecifier(contextToken)
+                    : contextToken.kind === SyntaxKind.SlashToken && isJsxClosingElement(contextToken.parent);
             default:
                 return Debug.assertNever(triggerCharacter);
         }

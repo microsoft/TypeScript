@@ -385,6 +385,14 @@ namespace vfs {
         // POSIX API (aligns with NodeJS "fs" module API)
 
         /**
+         * Determines whether a path exists.
+         */
+        public existsSync(path: string) {
+            const result = this._walk(this._resolve(path), /*noFollow*/ true, () => "stop");
+            return result !== undefined && result.node !== undefined;
+        }
+
+        /**
          * Get file status. If `path` is a symbolic link, it is dereferenced.
          *
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/stat.html
@@ -861,8 +869,8 @@ namespace vfs {
          */
         private _resolve(path: string) {
             return this._cwd
-                ? vpath.resolve(this._cwd, vpath.validate(path, vpath.ValidationFlags.RelativeOrAbsolute))
-                : vpath.validate(path, vpath.ValidationFlags.Absolute);
+                ? vpath.resolve(this._cwd, vpath.validate(path, vpath.ValidationFlags.RelativeOrAbsolute | vpath.ValidationFlags.AllowWildcard))
+                : vpath.validate(path, vpath.ValidationFlags.Absolute | vpath.ValidationFlags.AllowWildcard);
         }
 
         private _applyFiles(files: FileSet, dirname: string) {

@@ -1735,6 +1735,10 @@ namespace ts {
     }
 
     export function importFromModuleSpecifier(node: StringLiteralLike): AnyValidImportOrReExport {
+        return tryGetImportFromModuleSpecifier(node) || Debug.fail(Debug.showSyntaxKind(node.parent));
+    }
+
+    export function tryGetImportFromModuleSpecifier(node: StringLiteralLike): AnyValidImportOrReExport | undefined {
         switch (node.parent.kind) {
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ExportDeclaration:
@@ -1744,9 +1748,10 @@ namespace ts {
             case SyntaxKind.CallExpression:
                 return node.parent as AnyValidImportOrReExport;
             case SyntaxKind.LiteralType:
-                return cast(node.parent.parent, isImportTypeNode) as ImportTypeNode & { argument: LiteralType };
+                Debug.assert(isStringLiteral(node));
+                return tryCast(node.parent.parent, isImportTypeNode) as ValidImportTypeNode | undefined;
             default:
-                return Debug.fail(Debug.showSyntaxKind(node.parent));
+                return undefined;
         }
     }
 
@@ -1845,9 +1850,9 @@ namespace ts {
             : undefined;
     }
 
-    export function getJSDocCommentsAndTags(node: Node): ReadonlyArray<JSDoc | JSDocTag> {
+    export function getJSDocCommentsAndTags(hostNode: Node): ReadonlyArray<JSDoc | JSDocTag> {
         let result: (JSDoc | JSDocTag)[] | undefined;
-        getJSDocCommentsAndTagsWorker(node);
+        getJSDocCommentsAndTagsWorker(hostNode);
         return result || emptyArray;
 
         function getJSDocCommentsAndTagsWorker(node: Node): void {
@@ -1863,7 +1868,7 @@ namespace ts {
             //   */
             // var x = function(name) { return name.length; }
             if (parent.parent &&
-                (getSingleVariableOfVariableStatement(parent.parent) === node || getSourceOfAssignment(parent.parent))) {
+                (getSingleVariableOfVariableStatement(parent.parent) === node)) {
                 getJSDocCommentsAndTagsWorker(parent.parent);
             }
             if (parent.parent && parent.parent.parent &&
@@ -1872,8 +1877,8 @@ namespace ts {
                     getSourceOfDefaultedAssignment(parent.parent.parent))) {
                 getJSDocCommentsAndTagsWorker(parent.parent.parent);
             }
-            if (isBinaryExpression(node) && getSpecialPropertyAssignmentKind(node) !== SpecialPropertyAssignmentKind.None ||
-                isBinaryExpression(parent) && getSpecialPropertyAssignmentKind(parent) !== SpecialPropertyAssignmentKind.None ||
+            if (isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.EqualsToken ||
+                isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken ||
                 node.kind === SyntaxKind.PropertyAccessExpression && node.parent && node.parent.kind === SyntaxKind.ExpressionStatement) {
                 getJSDocCommentsAndTagsWorker(parent);
             }
@@ -1883,11 +1888,8 @@ namespace ts {
                 result = addRange(result, getJSDocParameterTags(node as ParameterDeclaration));
             }
 
-            if (isVariableLike(node) && hasInitializer(node)) {
-                const initializer = node.initializer!;
-                if (hasJSDocNodes(initializer)) {
-                    result = addRange(result, initializer.jsDoc);
-                }
+            if (isVariableLike(node) && hasInitializer(node) && node.initializer !== hostNode && hasJSDocNodes(node.initializer!)) {
+                result = addRange(result, (node.initializer as HasJSDoc).jsDoc);
             }
 
             if (hasJSDocNodes(node)) {
@@ -4783,7 +4785,9 @@ namespace ts {
         let tags = (node as JSDocContainer).jsDocCache;
         // If cache is 'null', that means we did the work of searching for JSDoc tags and came up with nothing.
         if (tags === undefined) {
-            (node as JSDocContainer).jsDocCache = tags = flatMap(getJSDocCommentsAndTags(node), j => isJSDoc(j) ? j.tags : j);
+            const comments = getJSDocCommentsAndTags(node);
+            Debug.assert(comments.length < 2 || comments[0] !== comments[1]);
+            (node as JSDocContainer).jsDocCache = tags = flatMap(comments, j => isJSDoc(j) ? j.tags : j);
         }
         return tags;
     }

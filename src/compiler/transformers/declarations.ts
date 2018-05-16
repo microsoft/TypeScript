@@ -9,7 +9,13 @@ namespace ts {
         return result.diagnostics;
     }
 
-    const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals | TypeFormatFlags.WriteClassExpressionAsTypeLiteral | NodeBuilderFlags.UseTypeOfFunction | NodeBuilderFlags.UseStructuralFallback | NodeBuilderFlags.AllowEmptyTuple;
+    const declarationEmitNodeBuilderFlags =
+        NodeBuilderFlags.MultilineObjectLiterals |
+        TypeFormatFlags.WriteClassExpressionAsTypeLiteral |
+        NodeBuilderFlags.UseTypeOfFunction |
+        NodeBuilderFlags.UseStructuralFallback |
+        NodeBuilderFlags.AllowEmptyTuple |
+        NodeBuilderFlags.GenerateNamesForShadowedTypeParams;
 
     /**
      * Transforms a ts file into a .d.ts file
@@ -95,6 +101,7 @@ namespace ts {
         }
 
         function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
+            if (symbol.flags & SymbolFlags.TypeParameter) return;
             handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ true));
             recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForSymbol(symbol, meaning));
         }

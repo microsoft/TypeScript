@@ -21,11 +21,11 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
 };
 // fixes #12200
 function f() {
+    var _a, _b, _c, _d, _e;
     var n = 12;
     var m = 13;
     var a = null;
     var o1 = __assign({}, (_a = {}, _a[n] = n, _a));
     var o2 = __assign({}, (_b = {}, _b[a] = n, _b));
     var o3 = __assign((_c = {}, _c[a] = n, _c), {}, (_d = {}, _d[n] = n, _d), {}, (_e = {}, _e[m] = m, _e));
-    var _a, _b, _c, _d, _e;
 }

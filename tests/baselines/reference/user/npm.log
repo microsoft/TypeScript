@@ -2,28 +2,33 @@ Exit Code: 1
 Standard output:
 node_modules/npm/bin/npm-cli.js(6,13): error TS2551: Property 'echo' does not exist on type '{ Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: nu...'. Did you mean 'Echo'?
 node_modules/npm/bin/npm-cli.js(13,13): error TS2551: Property 'quit' does not exist on type '{ Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: nu...'. Did you mean 'Quit'?
-node_modules/npm/bin/npm-cli.js(30,23): error TS2307: Cannot find module '../package.json'.
-node_modules/npm/bin/npm-cli.js(54,7): error TS2339: Property 'argv' does not exist on type 'EventEmitter'.
-node_modules/npm/bin/npm-cli.js(55,11): error TS2339: Property 'deref' does not exist on type 'EventEmitter'.
-node_modules/npm/bin/npm-cli.js(55,21): error TS2339: Property 'argv' does not exist on type 'EventEmitter'.
-node_modules/npm/bin/npm-cli.js(55,35): error TS2339: Property 'command' does not exist on type 'EventEmitter'.
-node_modules/npm/bin/npm-cli.js(55,49): error TS2339: Property 'argv' does not exist on type 'EventEmitter'.
-node_modules/npm/bin/npm-cli.js(59,21): error TS2339: Property 'version' does not exist on type 'EventEmitter'.
-node_modules/npm/bin/npm-cli.js(64,9): error TS2339: Property 'command' does not exist on type 'EventEmitter'.
-node_modules/npm/bin/npm-cli.js(66,9): error TS2339: Property 'argv' does not exist on type 'EventEmitter'.
-node_modules/npm/bin/npm-cli.js(69,35): error TS2339: Property 'version' does not exist on type 'EventEmitter'.
-node_modules/npm/bin/npm-cli.js(74,25): error TS2339: Property 'command' does not exist on type 'EventEmitter'.
-node_modules/npm/bin/npm-cli.js(75,9): error TS2339: Property 'argv' does not exist on type 'EventEmitter'.
-node_modules/npm/bin/npm-cli.js(75,26): error TS2339: Property 'command' does not exist on type 'EventEmitter'.
-node_modules/npm/bin/npm-cli.js(76,9): error TS2339: Property 'command' does not exist on type 'EventEmitter'.
-node_modules/npm/bin/npm-cli.js(82,7): error TS2339: Property 'load' does not exist on type 'EventEmitter'.
-node_modules/npm/bin/npm-cli.js(84,9): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
-node_modules/npm/bin/npm-cli.js(84,22): error TS2339: Property 'command' does not exist on type 'EventEmitter'.
-node_modules/npm/bin/npm-cli.js(84,35): error TS2339: Property 'argv' does not exist on type 'EventEmitter'.
-node_modules/npm/bin/npm-cli.js(86,23): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/bin/npm-cli.js(86,55): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/bin/npm-cli.js(86,82): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/bin/npm-cli.js(86,113): error TS2339: Property 'command' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(47,7): error TS2339: Property 'argv' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(48,11): error TS2339: Property 'deref' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(48,21): error TS2339: Property 'argv' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(48,35): error TS2339: Property 'command' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(48,49): error TS2339: Property 'argv' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(52,21): error TS2339: Property 'version' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(57,9): error TS2339: Property 'command' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(59,9): error TS2339: Property 'argv' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(62,35): error TS2339: Property 'version' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(67,25): error TS2339: Property 'command' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(68,9): error TS2339: Property 'argv' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(68,26): error TS2339: Property 'command' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(69,9): error TS2339: Property 'command' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(75,7): error TS2339: Property 'load' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(78,27): error TS2307: Cannot find module '../package.json'.
+node_modules/npm/bin/npm-cli.js(85,30): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(86,32): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(121,9): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(121,22): error TS2339: Property 'command' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(121,35): error TS2339: Property 'argv' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(125,13): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(126,14): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(127,14): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(128,13): error TS2339: Property 'command' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(132,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(134,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/bin/npm-cli.js(136,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/html/static/toc.js(3,40): error TS2531: Object is possibly 'null'.
 node_modules/npm/lib/access.js(58,46): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/access.js(65,18): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
@@ -39,6 +44,16 @@ node_modules/npm/lib/adduser.js(44,9): error TS2339: Property 'config' does not 
 node_modules/npm/lib/adduser.js(45,20): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/adduser.js(46,9): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/adduser.js(47,9): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/audit.js(29,23): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/audit.js(47,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/audit.js(49,9): error TS2339: Property 'code' does not exist on type 'Error'.
+node_modules/npm/lib/audit.js(60,11): error TS2339: Property 'code' does not exist on type 'Error'.
+node_modules/npm/lib/audit.js(65,11): error TS2339: Property 'code' does not exist on type 'Error'.
+node_modules/npm/lib/audit.js(75,27): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/audit.js(81,11): error TS2339: Property 'code' does not exist on type 'Error'.
+node_modules/npm/lib/audit.js(88,61): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/audit.js(89,10): error TS2339: Property 'code' does not exist on type 'Error'.
+node_modules/npm/lib/audit.js(90,10): error TS2339: Property 'wrapped' does not exist on type 'Error'.
 node_modules/npm/lib/auth/legacy.js(12,30): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/auth/legacy.js(35,16): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/auth/legacy.js(69,33): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
@@ -73,40 +88,15 @@ node_modules/npm/lib/ci.js(13,31): error TS2339: Property 'config' does not exis
 node_modules/npm/lib/ci.js(14,12): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/ci.js(15,12): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/ci.js(27,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/completion.js(26,24): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+node_modules/npm/lib/completion.js(30,24): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
 node_modules/npm/lib/completion.js(51,7): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/npm/lib/completion.js(52,7): error TS2339: Property 'errno' does not exist on type 'Error'.
 node_modules/npm/lib/completion.js(129,9): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/completion.js(135,13): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/completion.js(247,23): error TS2339: Property 'fullList' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(72,18): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(81,15): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(82,19): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(83,15): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(85,7): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(91,25): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(103,37): error TS2339: Property 'defaults' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/config/core")'.
-node_modules/npm/lib/config.js(105,28): error TS2339: Property 'defaults' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/config/core")'.
-node_modules/npm/lib/config.js(130,19): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(131,7): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(132,7): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(151,19): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(153,7): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(154,7): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(162,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(181,26): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(182,21): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(205,27): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(218,18): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(220,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(233,52): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(236,21): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(240,45): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(240,75): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(243,47): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(243,79): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(246,21): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/config.js(262,26): error TS2339: Property 'defaults' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/config/core")'.
-node_modules/npm/lib/config.js(268,29): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config/bin-links.js(11,24): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config/bin-links.js(12,16): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config/bin-links.js(13,20): error TS2339: Property 'globalBin' does not exist on type 'EventEmitter'.
@@ -125,13 +115,13 @@ node_modules/npm/lib/config/bin-links.js(30,16): error TS2339: Property 'config'
 node_modules/npm/lib/config/core.js(17,1): error TS2323: Cannot redeclare exported variable 'loaded'.
 node_modules/npm/lib/config/core.js(18,1): error TS2323: Cannot redeclare exported variable 'rootConf'.
 node_modules/npm/lib/config/core.js(19,1): error TS2323: Cannot redeclare exported variable 'usingBuiltin'.
-node_modules/npm/lib/config/core.js(23,21): error TS2339: Property 'defaults' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/config/defaults")'.
+node_modules/npm/lib/config/core.js(23,21): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/defaults")'.
 node_modules/npm/lib/config/core.js(77,7): error TS2323: Cannot redeclare exported variable 'loaded'.
 node_modules/npm/lib/config/core.js(87,3): error TS2323: Cannot redeclare exported variable 'usingBuiltin'.
 node_modules/npm/lib/config/core.js(88,12): error TS2323: Cannot redeclare exported variable 'rootConf'.
 node_modules/npm/lib/config/core.js(95,6): error TS2339: Property 'on' does not exist on type 'Conf'.
 node_modules/npm/lib/config/core.js(98,6): error TS2339: Property 'on' does not exist on type 'Conf'.
-node_modules/npm/lib/config/core.js(102,29): error TS2339: Property 'defaults' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/config/defaults")'.
+node_modules/npm/lib/config/core.js(102,29): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/defaults")'.
 node_modules/npm/lib/config/core.js(105,8): error TS2339: Property 'usingBuiltin' does not exist on type 'Conf'.
 node_modules/npm/lib/config/core.js(128,41): error TS2551: Property 'localPrefix' does not exist on type 'Conf'. Did you mean 'loadPrefix'?
 node_modules/npm/lib/config/core.js(130,35): error TS2339: Property 'get' does not exist on type 'Conf'.
@@ -142,19 +132,19 @@ node_modules/npm/lib/config/core.js(144,10): error TS2339: Property 'once' does 
 node_modules/npm/lib/config/core.js(145,10): error TS2339: Property 'once' does not exist on type 'Conf'.
 node_modules/npm/lib/config/core.js(154,14): error TS2339: Property 'get' does not exist on type 'Conf'.
 node_modules/npm/lib/config/core.js(155,35): error TS2339: Property 'get' does not exist on type 'Conf'.
-node_modules/npm/lib/config/core.js(167,23): error TS2339: Property 'get' does not exist on type 'Conf'.
-node_modules/npm/lib/config/core.js(172,10): error TS2339: Property 'once' does not exist on type 'Conf'.
-node_modules/npm/lib/config/core.js(183,23): error TS2339: Property 'get' does not exist on type 'Conf'.
-node_modules/npm/lib/config/core.js(197,5): error TS2323: Cannot redeclare exported variable 'loaded'.
-node_modules/npm/lib/config/core.js(220,28): error TS2339: Property 'defaults' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/config/defaults")'.
-node_modules/npm/lib/config/core.js(244,21): error TS2339: Property 'sources' does not exist on type 'Conf'.
-node_modules/npm/lib/config/core.js(252,17): error TS2339: Property 'emit' does not exist on type 'Conf'.
-node_modules/npm/lib/config/core.js(286,8): error TS2339: Property '_saving' does not exist on type 'Conf'.
-node_modules/npm/lib/config/core.js(314,8): error TS2339: Property 'sources' does not exist on type 'Conf'.
-node_modules/npm/lib/config/core.js(315,8): error TS2339: Property 'push' does not exist on type 'Conf'.
-node_modules/npm/lib/config/core.js(316,8): error TS2339: Property '_await' does not exist on type 'Conf'.
-node_modules/npm/lib/config/core.js(340,10): error TS2339: Property 'emit' does not exist on type 'Conf'.
-node_modules/npm/lib/config/core.js(416,29): error TS2345: Argument of type '(orig: string, esc: any, name: any) => string | undefined' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
+node_modules/npm/lib/config/core.js(160,23): error TS2339: Property 'get' does not exist on type 'Conf'.
+node_modules/npm/lib/config/core.js(165,10): error TS2339: Property 'once' does not exist on type 'Conf'.
+node_modules/npm/lib/config/core.js(176,23): error TS2339: Property 'get' does not exist on type 'Conf'.
+node_modules/npm/lib/config/core.js(190,5): error TS2323: Cannot redeclare exported variable 'loaded'.
+node_modules/npm/lib/config/core.js(213,28): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/defaults")'.
+node_modules/npm/lib/config/core.js(237,21): error TS2339: Property 'sources' does not exist on type 'Conf'.
+node_modules/npm/lib/config/core.js(245,17): error TS2339: Property 'emit' does not exist on type 'Conf'.
+node_modules/npm/lib/config/core.js(279,8): error TS2339: Property '_saving' does not exist on type 'Conf'.
+node_modules/npm/lib/config/core.js(307,8): error TS2339: Property 'sources' does not exist on type 'Conf'.
+node_modules/npm/lib/config/core.js(308,8): error TS2339: Property 'push' does not exist on type 'Conf'.
+node_modules/npm/lib/config/core.js(309,8): error TS2339: Property '_await' does not exist on type 'Conf'.
+node_modules/npm/lib/config/core.js(333,10): error TS2339: Property 'emit' does not exist on type 'Conf'.
+node_modules/npm/lib/config/core.js(409,29): error TS2345: Argument of type '(orig: string, esc: any, name: any) => string | undefined' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
   Type 'string | undefined' is not assignable to type 'string'.
     Type 'undefined' is not assignable to type 'string'.
 node_modules/npm/lib/config/gentle-fs.js(16,11): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
@@ -216,6 +206,35 @@ node_modules/npm/lib/config/pacote.js(84,31): error TS2339: Property 'config' do
 node_modules/npm/lib/config/pacote.js(89,19): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config/pacote.js(90,38): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config/pacote.js(110,60): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(74,18): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(83,15): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(84,19): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(85,15): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(87,7): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(93,25): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(105,37): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/core")'.
+node_modules/npm/lib/config.js(107,28): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/core")'.
+node_modules/npm/lib/config.js(135,19): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(136,7): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(137,7): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(156,19): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(158,7): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(159,7): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(167,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(186,26): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(187,21): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(210,27): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(223,18): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(225,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(238,52): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(241,21): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(245,45): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(245,75): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(248,47): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(248,79): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(251,21): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(267,26): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/core")'.
+node_modules/npm/lib/config.js(273,29): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/dedupe.js(35,32): error TS2339: Property 'dir' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/dedupe.js(37,11): error TS2339: Property 'command' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/dedupe.js(38,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
@@ -253,7 +272,10 @@ node_modules/npm/lib/dist-tag.js(109,11): error TS2339: Property 'registry' does
 node_modules/npm/lib/dist-tag.js(142,26): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/dist-tag.js(149,9): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/docs.js(40,38): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/doctor.js(6,54): error TS2339: Property 'defaults' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/config/defaults")'.
+node_modules/npm/lib/doctor/check-files-permission.js(11,14): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/doctor/check-files-permission.js(11,38): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/doctor/verify-cached-files.js(10,90): error TS2345: Argument of type '2' is not assignable to parameter of type '(string | number)[] | null | undefined'.
+node_modules/npm/lib/doctor.js(6,54): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/defaults")'.
 node_modules/npm/lib/doctor.js(23,41): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/doctor.js(24,40): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/doctor.js(42,32): error TS2339: Property 'cache' does not exist on type 'EventEmitter'.
@@ -262,9 +284,6 @@ node_modules/npm/lib/doctor.js(55,13): error TS2339: Property 'color' does not e
 node_modules/npm/lib/doctor.js(88,20): error TS2339: Property 'version' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/doctor.js(90,24): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/doctor.js(108,92): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/doctor/check-files-permission.js(11,14): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/doctor/check-files-permission.js(11,38): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/doctor/verify-cached-files.js(10,90): error TS2345: Argument of type '2' is not assignable to parameter of type '(string | number)[] | null | undefined'.
 node_modules/npm/lib/edit.js(18,15): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/edit.js(27,28): error TS2339: Property 'dir' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/edit.js(32,11): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
@@ -296,6 +315,7 @@ node_modules/npm/lib/help.js(146,7): error TS2322: Type '"cli"' is not assignabl
 node_modules/npm/lib/help.js(149,7): error TS2322: Type '"api"' is not assignable to type 'number'.
 node_modules/npm/lib/help.js(152,7): error TS2322: Type '"files"' is not assignable to type 'number'.
 node_modules/npm/lib/help.js(155,7): error TS2322: Type '"misc"' is not assignable to type 'number'.
+node_modules/npm/lib/help.js(160,55): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 node_modules/npm/lib/help.js(164,7): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/help.js(170,9): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/help.js(179,18): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
@@ -306,51 +326,9 @@ node_modules/npm/lib/help.js(196,26): error TS2339: Property 'commands' does not
 node_modules/npm/lib/help.js(197,22): error TS2339: Property 'deref' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/help.js(199,14): error TS2345: Argument of type 'any[]' is not assignable to parameter of type 'never'.
 node_modules/npm/lib/help.js(199,22): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/init.js(16,22): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/init.js(17,25): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/init.js(31,31): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(181,36): error TS2339: Property 'globalDir' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(183,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(185,17): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(189,22): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(191,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(199,36): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(223,24): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(225,19): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(226,20): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(229,20): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(234,34): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(235,63): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(236,51): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(238,85): error TS2339: Property 'globalDir' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(266,26): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(267,9): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(270,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(271,7): error TS2532: Object is possibly 'undefined'.
-node_modules/npm/lib/install.js(271,7): error TS2684: The 'this' context of type '((err: any, ...args: any[]) => any) | undefined' is not assignable to method's 'this' of type 'Function'.
-  Type 'undefined' is not assignable to type 'Function'.
-node_modules/npm/lib/install.js(336,25): error TS2339: Property 'failing' does not exist on type 'Installer'.
-node_modules/npm/lib/install.js(365,18): error TS2345: Argument of type '"time"' is not assignable to parameter of type '"warning"'.
-node_modules/npm/lib/install.js(372,16): error TS2345: Argument of type '"timeEnd"' is not assignable to parameter of type '"warning"'.
-node_modules/npm/lib/install.js(523,40): error TS2339: Property 'globalPrefix' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(601,12): error TS2339: Property 'failing' does not exist on type 'Installer'.
-node_modules/npm/lib/install.js(618,12): error TS2339: Property 'failing' does not exist on type 'Installer'.
-node_modules/npm/lib/install.js(637,12): error TS2339: Property 'failing' does not exist on type 'Installer'.
-node_modules/npm/lib/install.js(678,12): error TS2339: Property 'code' does not exist on type 'Error'.
-node_modules/npm/lib/install.js(679,12): error TS2339: Property 'errno' does not exist on type 'Error'.
-node_modules/npm/lib/install.js(739,32): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(745,12): error TS2339: Property 'failing' does not exist on type 'Installer'.
-node_modules/npm/lib/install.js(757,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(759,18): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(877,26): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
-node_modules/npm/lib/install.js(884,26): error TS2345: Argument of type '{ [x: string]: any; action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
-node_modules/npm/lib/install.js(886,25): error TS2345: Argument of type '{ [x: string]: any; action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
-node_modules/npm/lib/install.js(888,27): error TS2345: Argument of type '{ [x: string]: any; action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
-node_modules/npm/lib/install.js(890,25): error TS2345: Argument of type '{ [x: string]: any; action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
-node_modules/npm/lib/install.js(892,27): error TS2345: Argument of type '{ [x: string]: any; action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
-node_modules/npm/lib/install.js(936,8): error TS2454: Variable 'previousPath' is used before being assigned.
-node_modules/npm/lib/install.js(974,53): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install.js(996,53): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/init.js(38,22): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/init.js(39,25): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/init.js(53,31): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/access-error.js(4,18): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/npm/lib/install/action/build.js(10,50): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/action/extract.js(39,40): error TS2339: Property 'limit' does not exist on type 'EventEmitter'.
@@ -366,27 +344,43 @@ node_modules/npm/lib/install/actions.js(126,24): error TS2339: Property 'limit' 
 node_modules/npm/lib/install/actions.js(168,16): error TS2345: Argument of type '"time"' is not assignable to parameter of type '"warning"'.
 node_modules/npm/lib/install/actions.js(171,16): error TS2345: Argument of type '"timeEnd"' is not assignable to parameter of type '"warning"'.
 node_modules/npm/lib/install/and-add-parent-to-errors.js(9,10): error TS2339: Property 'parent' does not exist on type 'Error'.
+node_modules/npm/lib/install/audit.js(32,19): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/audit.js(89,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/audit.js(91,23): error TS2339: Property 'projectScope' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/audit.js(100,20): error TS2339: Property 'color' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/audit.js(101,22): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/audit.js(109,20): error TS2339: Property 'color' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/audit.js(110,22): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/audit.js(172,19): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/audit.js(216,26): error TS2339: Property 'version' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/check-permissions.js(36,9): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/decompose-actions.js(35,30): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/deps.js(243,15): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/deps.js(298,14): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/deps.js(299,29): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/deps.js(434,27): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/deps.js(479,14): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/deps.js(580,9): error TS2339: Property 'code' does not exist on type 'Error'.
-node_modules/npm/lib/install/deps.js(795,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/deps.js(796,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/diff-trees.js(233,26): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/diff-trees.js(234,34): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/diff-trees.js(234,62): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/diff-trees.js(235,33): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/diff-trees.js(236,33): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/diff-trees.js(237,52): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/decompose-actions.js(47,30): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/deps.js(253,15): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/deps.js(309,14): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/deps.js(310,29): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/deps.js(401,28): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/deps.js(402,36): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/deps.js(402,64): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/deps.js(403,35): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/deps.js(404,35): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/deps.js(409,54): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/deps.js(459,27): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/deps.js(599,9): error TS2339: Property 'code' does not exist on type 'Error'.
+node_modules/npm/lib/install/deps.js(814,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/deps.js(815,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/diff-trees.js(242,26): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/diff-trees.js(243,26): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/diff-trees.js(244,34): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/diff-trees.js(244,62): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/diff-trees.js(245,33): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/diff-trees.js(246,33): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/diff-trees.js(247,52): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/exists.js(20,21): error TS2339: Property 'F_OK' does not exist on type 'typeof import("fs")'.
 node_modules/npm/lib/install/flatten-tree.js(16,15): error TS2532: Object is possibly 'undefined'.
 node_modules/npm/lib/install/flatten-tree.js(18,16): error TS2532: Object is possibly 'undefined'.
-node_modules/npm/lib/install/inflate-shrinkwrap.js(29,12): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/install/inflate-shrinkwrap.js(29,45): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/inflate-shrinkwrap.js(30,12): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/inflate-shrinkwrap.js(30,45): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/inflate-shrinkwrap.js(77,34): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/mutate-into-logical-tree.js(137,86): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/read-shrinkwrap.js(11,46): error TS2339: Property 'lockfileVersion' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/save.js(48,12): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
@@ -414,6 +408,51 @@ node_modules/npm/lib/install/validate-tree.js(70,25): error TS2339: Property 'co
 node_modules/npm/lib/install/validate-tree.js(74,13): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/npm/lib/install/validate-tree.js(89,15): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/npm/lib/install/writable.js(22,21): error TS2339: Property 'W_OK' does not exist on type 'typeof import("fs")'.
+node_modules/npm/lib/install.js(182,36): error TS2339: Property 'globalDir' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install.js(184,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install.js(186,17): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install.js(190,22): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install.js(192,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install.js(200,36): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install.js(224,24): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install.js(226,19): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install.js(227,20): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install.js(230,20): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install.js(235,34): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install.js(236,63): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install.js(237,51): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install.js(239,85): error TS2339: Property 'globalDir' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install.js(240,20): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install.js(268,26): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install.js(269,9): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install.js(272,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install.js(273,7): error TS2532: Object is possibly 'undefined'.
+node_modules/npm/lib/install.js(273,7): error TS2684: The 'this' context of type '((err: any, ...args: any[]) => any) | undefined' is not assignable to method's 'this' of type 'Function'.
+  Type 'undefined' is not assignable to type 'Function'.
+node_modules/npm/lib/install.js(340,25): error TS2339: Property 'failing' does not exist on type 'Installer'.
+node_modules/npm/lib/install.js(369,18): error TS2345: Argument of type '"time"' is not assignable to parameter of type '"warning"'.
+node_modules/npm/lib/install.js(376,16): error TS2345: Argument of type '"timeEnd"' is not assignable to parameter of type '"warning"'.
+node_modules/npm/lib/install.js(519,40): error TS2339: Property 'globalPrefix' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install.js(597,12): error TS2339: Property 'failing' does not exist on type 'Installer'.
+node_modules/npm/lib/install.js(614,12): error TS2339: Property 'failing' does not exist on type 'Installer'.
+node_modules/npm/lib/install.js(634,88): error TS2339: Property 'remove' does not exist on type 'Installer'.
+node_modules/npm/lib/install.js(643,12): error TS2339: Property 'failing' does not exist on type 'Installer'.
+node_modules/npm/lib/install.js(684,12): error TS2339: Property 'code' does not exist on type 'Error'.
+node_modules/npm/lib/install.js(685,12): error TS2339: Property 'errno' does not exist on type 'Error'.
+node_modules/npm/lib/install.js(745,32): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install.js(751,12): error TS2339: Property 'failing' does not exist on type 'Installer'.
+node_modules/npm/lib/install.js(768,13): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install.js(770,20): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install.js(771,14): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/npm/lib/install.js(890,26): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/npm/lib/install.js(897,26): error TS2345: Argument of type '{ [x: string]: any; action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
+node_modules/npm/lib/install.js(899,25): error TS2345: Argument of type '{ [x: string]: any; action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
+node_modules/npm/lib/install.js(901,27): error TS2345: Argument of type '{ [x: string]: any; action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
+node_modules/npm/lib/install.js(903,25): error TS2345: Argument of type '{ [x: string]: any; action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
+node_modules/npm/lib/install.js(905,27): error TS2345: Argument of type '{ [x: string]: any; action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
+node_modules/npm/lib/install.js(948,8): error TS2454: Variable 'previousPath' is used before being assigned.
+node_modules/npm/lib/install.js(985,53): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install.js(1007,53): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/link.js(25,17): error TS2339: Property 'globalDir' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/link.js(39,9): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/npm/lib/link.js(40,9): error TS2339: Property 'errno' does not exist on type 'Error'.
@@ -495,31 +534,31 @@ node_modules/npm/lib/npm.js(228,11): error TS2339: Property 'config' does not ex
 node_modules/npm/lib/npm.js(231,30): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/npm.js(234,19): error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
 node_modules/npm/lib/npm.js(253,17): error TS2339: Property 'installPrefix' does not exist on type 'Process'.
-node_modules/npm/lib/npm.js(343,52): error TS2345: Argument of type 'PropertyDescriptor | undefined' is not assignable to parameter of type 'PropertyDescriptor & ThisType<any>'.
+node_modules/npm/lib/npm.js(347,52): error TS2345: Argument of type 'PropertyDescriptor | undefined' is not assignable to parameter of type 'PropertyDescriptor & ThisType<any>'.
   Type 'undefined' is not assignable to type 'PropertyDescriptor & ThisType<any>'.
     Type 'undefined' is not assignable to type 'PropertyDescriptor'.
-node_modules/npm/lib/npm.js(346,51): error TS2345: Argument of type 'PropertyDescriptor | undefined' is not assignable to parameter of type 'PropertyDescriptor & ThisType<any>'.
+node_modules/npm/lib/npm.js(350,51): error TS2345: Argument of type 'PropertyDescriptor | undefined' is not assignable to parameter of type 'PropertyDescriptor & ThisType<any>'.
   Type 'undefined' is not assignable to type 'PropertyDescriptor & ThisType<any>'.
     Type 'undefined' is not assignable to type 'PropertyDescriptor'.
-node_modules/npm/lib/npm.js(373,20): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/npm.js(373,47): error TS2339: Property 'globalPrefix' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/npm.js(373,66): error TS2339: Property 'localPrefix' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/npm.js(376,21): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/npm.js(386,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/npm.js(386,50): error TS2339: Property 'globalBin' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/npm.js(387,33): error TS2339: Property 'root' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/npm.js(395,21): error TS2339: Property 'globalPrefix' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/npm.js(404,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/npm.js(404,50): error TS2339: Property 'globalDir' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/npm.js(405,33): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/npm.js(414,33): error TS2339: Property 'globalPrefix' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/npm.js(415,33): error TS2339: Property 'globalPrefix' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/npm.js(421,37): error TS2339: Property 'dir' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/npm.js(424,37): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/npm.js(425,38): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/npm.js(435,33): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/npm.js(441,34): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/npm.js(456,13): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/npm.js(377,20): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/npm.js(377,47): error TS2339: Property 'globalPrefix' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/npm.js(377,66): error TS2339: Property 'localPrefix' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/npm.js(380,21): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/npm.js(390,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/npm.js(390,50): error TS2339: Property 'globalBin' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/npm.js(391,33): error TS2339: Property 'root' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/npm.js(399,21): error TS2339: Property 'globalPrefix' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/npm.js(408,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/npm.js(408,50): error TS2339: Property 'globalDir' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/npm.js(409,33): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/npm.js(418,33): error TS2339: Property 'globalPrefix' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/npm.js(419,33): error TS2339: Property 'globalPrefix' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/npm.js(425,37): error TS2339: Property 'dir' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/npm.js(428,37): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/npm.js(429,38): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/npm.js(439,33): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/npm.js(445,34): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/npm.js(460,13): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/outdated.js(36,16): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/outdated.js(71,30): error TS2339: Property 'dir' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/outdated.js(74,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
@@ -559,15 +598,22 @@ node_modules/npm/lib/owner.js(223,28): error TS2339: Property 'config' does not 
 node_modules/npm/lib/owner.js(226,11): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/owner.js(246,37): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/owner.js(254,15): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/pack.js(87,32): error TS2339: Property 'tmp' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/pack.js(95,15): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/pack.js(115,36): error TS2339: Property 'tmp' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/pack.js(169,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/pack.js(170,20): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
-node_modules/npm/lib/pack.js(170,36): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/pack.js(205,17): error TS2339: Property 'code' does not exist on type 'Error'.
-node_modules/npm/lib/pack.js(206,17): error TS2339: Property 'signal' does not exist on type 'Error'.
-node_modules/npm/lib/pack.js(224,36): error TS2339: Property 'tmp' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/pack.js(53,24): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/pack.js(72,40): error TS2339: Property 'tmp' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/pack.js(79,21): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/pack.js(86,22): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/pack.js(88,40): error TS2339: Property 'tmp' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/pack.js(102,39): error TS2339: Property 'tmp' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/pack.js(119,32): error TS2339: Property 'tmp' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/pack.js(127,15): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/pack.js(147,36): error TS2339: Property 'tmp' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/pack.js(177,25): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/pack.js(299,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/pack.js(300,20): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+node_modules/npm/lib/pack.js(300,36): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/pack.js(335,17): error TS2339: Property 'code' does not exist on type 'Error'.
+node_modules/npm/lib/pack.js(336,17): error TS2339: Property 'signal' does not exist on type 'Error'.
+node_modules/npm/lib/pack.js(354,36): error TS2339: Property 'tmp' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/ping.js(13,22): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/ping.js(15,18): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/ping.js(17,7): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
@@ -592,15 +638,20 @@ node_modules/npm/lib/prune.js(58,22): error TS2339: Property 'idealTree' does no
 node_modules/npm/lib/prune.js(61,32): error TS2339: Property 'idealTree' does not exist on type 'Pruner'.
 node_modules/npm/lib/prune.js(62,27): error TS2339: Property 'idealTree' does not exist on type 'Pruner'.
 node_modules/npm/lib/publish.js(45,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/publish.js(62,11): error TS2339: Property 'code' does not exist on type 'Error'.
-node_modules/npm/lib/publish.js(86,36): error TS2339: Property 'tmp' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/publish.js(102,34): error TS2339: Property 'tmp' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/publish.js(126,9): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/publish.js(127,9): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/publish.js(132,25): error TS2339: Property 'version' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/publish.js(174,13): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/publish.js(179,15): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/publish.js(196,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/publish.js(53,24): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/publish.js(68,11): error TS2339: Property 'code' does not exist on type 'Error'.
+node_modules/npm/lib/publish.js(93,36): error TS2339: Property 'tmp' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/publish.js(97,25): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/publish.js(111,34): error TS2339: Property 'tmp' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/publish.js(120,24): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/publish.js(138,9): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/publish.js(139,9): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/publish.js(144,25): error TS2339: Property 'version' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/publish.js(166,18): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/publish.js(180,13): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/publish.js(191,13): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/publish.js(196,15): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/publish.js(213,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/rebuild.js(20,26): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/rebuild.js(21,21): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/rebuild.js(26,24): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
@@ -623,6 +674,14 @@ node_modules/npm/lib/run-script.js(77,21): error TS2345: Argument of type 'strin
 node_modules/npm/lib/run-script.js(94,13): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/run-script.js(99,13): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/run-script.js(148,22): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/search/all-package-metadata.js(33,30): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/search/all-package-metadata.js(36,35): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/search/all-package-metadata.js(146,7): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/search/all-package-metadata.js(239,20): error TS2339: Property 'cache' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/search/esearch.js(15,36): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/search/esearch.js(35,7): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/search/format-package-stream.js(130,31): error TS2339: Property 'fd' does not exist on type 'WriteStream'.
+node_modules/npm/lib/search/format-package-stream.js(130,63): error TS2339: Property 'getWindowSize' does not exist on type 'WriteStream'.
 node_modules/npm/lib/search.js(25,22): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/search.js(26,34): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/search.js(27,40): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
@@ -636,33 +695,26 @@ node_modules/npm/lib/search.js(71,20): error TS2339: Property 'config' does not 
 node_modules/npm/lib/search.js(72,16): error TS2339: Property 'color' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/search.js(82,28): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/search.js(82,55): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/search/all-package-metadata.js(33,30): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/search/all-package-metadata.js(36,35): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/search/all-package-metadata.js(146,7): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/search/all-package-metadata.js(239,20): error TS2339: Property 'cache' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/search/esearch.js(15,36): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/search/esearch.js(35,7): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/search/format-package-stream.js(130,31): error TS2339: Property 'fd' does not exist on type 'WriteStream'.
-node_modules/npm/lib/search/format-package-stream.js(130,63): error TS2339: Property 'getWindowSize' does not exist on type 'WriteStream'.
 node_modules/npm/lib/set.js(8,22): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/set.js(12,7): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/shrinkwrap.js(30,29): error TS2339: Property 'lockfileVersion' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/shrinkwrap.js(48,22): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/shrinkwrap.js(49,22): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/shrinkwrap.js(53,38): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/shrinkwrap.js(60,34): error TS2339: Property 'localPrefix' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/shrinkwrap.js(115,13): error TS2339: Property 'version' does not exist on type '{}'.
-node_modules/npm/lib/shrinkwrap.js(117,15): error TS2339: Property 'bundled' does not exist on type '{}'.
-node_modules/npm/lib/shrinkwrap.js(120,17): error TS2339: Property 'resolved' does not exist on type '{}'.
-node_modules/npm/lib/shrinkwrap.js(126,17): error TS2339: Property 'integrity' does not exist on type '{}'.
-node_modules/npm/lib/shrinkwrap.js(127,22): error TS2339: Property 'integrity' does not exist on type '{}'.
-node_modules/npm/lib/shrinkwrap.js(128,19): error TS2339: Property 'integrity' does not exist on type '{}'.
-node_modules/npm/lib/shrinkwrap.js(132,33): error TS2339: Property 'dev' does not exist on type '{}'.
-node_modules/npm/lib/shrinkwrap.js(133,40): error TS2339: Property 'optional' does not exist on type '{}'.
-node_modules/npm/lib/shrinkwrap.js(135,15): error TS2339: Property 'requires' does not exist on type '{}'.
-node_modules/npm/lib/shrinkwrap.js(138,17): error TS2339: Property 'requires' does not exist on type '{}'.
-node_modules/npm/lib/shrinkwrap.js(142,15): error TS2339: Property 'dependencies' does not exist on type '{}'.
-node_modules/npm/lib/shrinkwrap.js(143,30): error TS2339: Property 'dependencies' does not exist on type '{}'.
+node_modules/npm/lib/shrinkwrap.js(50,22): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/shrinkwrap.js(51,22): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/shrinkwrap.js(55,38): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/shrinkwrap.js(62,34): error TS2339: Property 'localPrefix' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/shrinkwrap.js(117,13): error TS2339: Property 'version' does not exist on type '{}'.
+node_modules/npm/lib/shrinkwrap.js(119,15): error TS2339: Property 'from' does not exist on type '{}'.
+node_modules/npm/lib/shrinkwrap.js(122,15): error TS2339: Property 'bundled' does not exist on type '{}'.
+node_modules/npm/lib/shrinkwrap.js(125,17): error TS2339: Property 'resolved' does not exist on type '{}'.
+node_modules/npm/lib/shrinkwrap.js(131,17): error TS2339: Property 'integrity' does not exist on type '{}'.
+node_modules/npm/lib/shrinkwrap.js(132,22): error TS2339: Property 'integrity' does not exist on type '{}'.
+node_modules/npm/lib/shrinkwrap.js(133,19): error TS2339: Property 'integrity' does not exist on type '{}'.
+node_modules/npm/lib/shrinkwrap.js(137,33): error TS2339: Property 'dev' does not exist on type '{}'.
+node_modules/npm/lib/shrinkwrap.js(138,40): error TS2339: Property 'optional' does not exist on type '{}'.
+node_modules/npm/lib/shrinkwrap.js(140,15): error TS2339: Property 'requires' does not exist on type '{}'.
+node_modules/npm/lib/shrinkwrap.js(143,17): error TS2339: Property 'requires' does not exist on type '{}'.
+node_modules/npm/lib/shrinkwrap.js(147,15): error TS2339: Property 'dependencies' does not exist on type '{}'.
+node_modules/npm/lib/shrinkwrap.js(148,30): error TS2339: Property 'dependencies' does not exist on type '{}'.
 node_modules/npm/lib/star.js(24,15): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/star.js(25,15): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/star.js(26,21): error TS2339: Property 'command' does not exist on type 'EventEmitter'.
@@ -753,9 +805,9 @@ node_modules/npm/lib/utils/error-handler.js(216,18): error TS2339: Property 'err
 node_modules/npm/lib/utils/error-handler.js(216,42): error TS2339: Property 'errno' does not exist on type 'Error'.
 node_modules/npm/lib/utils/error-handler.js(231,34): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/error-handler.js(236,7): error TS2322: Type 'string' is not assignable to type 'any[]'.
-node_modules/npm/lib/utils/error-message.js(66,37): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/utils/error-message.js(295,24): error TS2339: Property 'version' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/utils/error-message.js(296,25): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/utils/error-message.js(77,37): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/utils/error-message.js(300,24): error TS2339: Property 'version' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/utils/error-message.js(301,25): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/git.js(9,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/is-windows-bash.js(3,53): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
@@ -782,7 +834,6 @@ node_modules/npm/lib/utils/metrics.js(65,9): error TS2339: Property 'registry' d
 node_modules/npm/lib/utils/parse-json.js(7,11): error TS2339: Property 'noExceptions' does not exist on type '(content: any) => any'.
 node_modules/npm/lib/utils/perf.js(9,12): error TS2345: Argument of type '"time"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/lib/utils/perf.js(10,12): error TS2345: Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
-node_modules/npm/lib/utils/perf.js(21,18): error TS2345: Argument of type '"timing"' is not assignable to parameter of type '"removeListener"'.
 node_modules/npm/lib/utils/read-local-package.js(7,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/read-local-package.js(9,29): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/spawn.js(26,8): error TS2339: Property 'file' does not exist on type 'Error'.
@@ -814,21 +865,23 @@ node_modules/npm/lib/version.js(297,20): error TS2339: Property 'config' does no
 node_modules/npm/lib/version.js(306,20): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/version.js(324,44): error TS2339: Property 'localPrefix' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/version.js(336,19): error TS2339: Property 'localPrefix' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/view.js(26,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/view.js(27,47): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/view.js(30,9): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/view.js(80,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/view.js(85,19): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/view.js(107,35): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/view.js(109,27): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/view.js(112,9): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/view.js(257,13): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/view.js(260,38): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/view.js(264,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/view.js(267,74): error TS2339: Property 'color' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/view.js(269,47): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/view.js(272,16): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/view.js(281,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/view.js(35,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/view.js(36,47): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/view.js(39,9): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/view.js(89,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/view.js(94,19): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/view.js(116,35): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/view.js(118,27): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/view.js(121,9): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/view.js(168,14): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/view.js(185,23): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/view.js(405,13): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/view.js(408,38): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/view.js(412,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/view.js(415,74): error TS2339: Property 'color' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/view.js(417,47): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/view.js(420,16): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/view.js(429,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/visnup.js(41,14): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/whoami.js(15,22): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/whoami.js(18,18): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
@@ -851,9 +904,9 @@ node_modules/npm/test/broken-under-nyc-and-travis/whoami.js(7,20): error TS2307:
 node_modules/npm/test/common-tap.js(5,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/common-tap.js(10,3): error TS2322: Type '(...args: any[]) => void' is not assignable to type 'typeof setImmediate'.
   Property '__promisify__' is missing in type '(...args: any[]) => void'.
-node_modules/npm/test/common-tap.js(170,17): error TS2339: Property '_storage' does not exist on type 'Environment'.
-node_modules/npm/test/common-tap.js(176,31): error TS2339: Property '_storage' does not exist on type 'Environment'.
-node_modules/npm/test/common-tap.js(187,12): error TS2339: Property '_storage' does not exist on type 'Environment'.
+node_modules/npm/test/common-tap.js(175,17): error TS2339: Property '_storage' does not exist on type 'Environment'.
+node_modules/npm/test/common-tap.js(181,31): error TS2339: Property '_storage' does not exist on type 'Environment'.
+node_modules/npm/test/common-tap.js(192,12): error TS2339: Property '_storage' does not exist on type 'Environment'.
 node_modules/npm/test/need-npm5-update/belongs-in-pacote/add-remote-git-get-resolved.js(2,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/need-npm5-update/belongs-in-pacote/add-remote-git-get-resolved.js(4,19): error TS2307: Cannot find module '../../lib/npm.js'.
 node_modules/npm/test/need-npm5-update/belongs-in-pacote/add-remote-git-get-resolved.js(5,22): error TS2307: Cannot find module '../common-tap.js'.
@@ -1071,14 +1124,14 @@ node_modules/npm/test/tap/config-basic.js(1,20): error TS2307: Cannot find modul
 node_modules/npm/test/tap/config-basic.js(81,12): error TS2531: Object is possibly 'null'.
 node_modules/npm/test/tap/config-basic.js(81,29): error TS2339: Property 'list' does not exist on type 'Conf'.
 node_modules/npm/test/tap/config-basic.js(82,24): error TS2531: Object is possibly 'null'.
-node_modules/npm/test/tap/config-basic.js(82,60): error TS2339: Property 'defaults' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/config/defaults")'.
-node_modules/npm/test/tap/config-basic.js(83,48): error TS2339: Property 'defaults' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/config/defaults")'.
+node_modules/npm/test/tap/config-basic.js(82,60): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/defaults")'.
+node_modules/npm/test/tap/config-basic.js(83,48): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/defaults")'.
 node_modules/npm/test/tap/config-builtin.js(1,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/config-builtin.js(60,12): error TS2531: Object is possibly 'null'.
 node_modules/npm/test/tap/config-builtin.js(60,29): error TS2339: Property 'list' does not exist on type 'Conf'.
 node_modules/npm/test/tap/config-builtin.js(61,13): error TS2531: Object is possibly 'null'.
-node_modules/npm/test/tap/config-builtin.js(61,49): error TS2339: Property 'defaults' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/config/defaults")'.
-node_modules/npm/test/tap/config-builtin.js(62,37): error TS2339: Property 'defaults' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/config/defaults")'.
+node_modules/npm/test/tap/config-builtin.js(61,49): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/defaults")'.
+node_modules/npm/test/tap/config-builtin.js(62,37): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/defaults")'.
 node_modules/npm/test/tap/config-certfile.js(5,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/config-credentials.js(1,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/config-edit.js(6,20): error TS2307: Cannot find module 'tap'.
@@ -1088,15 +1141,15 @@ node_modules/npm/test/tap/config-malformed.js(1,20): error TS2307: Cannot find m
 node_modules/npm/test/tap/config-meta.js(7,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/config-meta.js(63,9): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
   Type 'undefined' is not assignable to type 'string'.
-node_modules/npm/test/tap/config-meta.js(101,35): error TS2339: Property 'defaults' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/config/defaults")'.
+node_modules/npm/test/tap/config-meta.js(101,35): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/defaults")'.
 node_modules/npm/test/tap/config-new-cafile.js(5,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/config-private.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/config-project.js(1,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/config-project.js(59,12): error TS2531: Object is possibly 'null'.
 node_modules/npm/test/tap/config-project.js(59,29): error TS2339: Property 'list' does not exist on type 'Conf'.
 node_modules/npm/test/tap/config-project.js(60,13): error TS2531: Object is possibly 'null'.
-node_modules/npm/test/tap/config-project.js(60,49): error TS2339: Property 'defaults' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/config/defaults")'.
-node_modules/npm/test/tap/config-project.js(61,37): error TS2339: Property 'defaults' does not exist on type 'typeof import("/home/nathansa/ts/tests/cases/user/npm/node_modules/npm/lib/config/defaults")'.
+node_modules/npm/test/tap/config-project.js(60,49): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/defaults")'.
+node_modules/npm/test/tap/config-project.js(61,37): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/defaults")'.
 node_modules/npm/test/tap/config-save.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/correct-mkdir.js(1,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/correct-mkdir.js(4,29): error TS2307: Cannot find module 'require-inject'.
@@ -1133,8 +1186,6 @@ node_modules/npm/test/tap/false-name.js(17,20): error TS2307: Cannot find module
 node_modules/npm/test/tap/fetch-package-metadata.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/fetch-package-metadata.js(9,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/fetch-package-metadata.js(36,7): error TS2339: Property 'load' does not exist on type 'EventEmitter'.
-node_modules/npm/test/tap/files-and-ignores.js(2,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/files-and-ignores.js(12,21): error TS2307: Cannot find module 'tacks'.
 node_modules/npm/test/tap/full-warning-messages.js(2,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/gently-rm-cmdshims.js(4,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/gently-rm-cmdshims.js(107,7): error TS2339: Property 'load' does not exist on type 'EventEmitter'.
@@ -1185,6 +1236,14 @@ node_modules/npm/test/tap/graceful-restart.js(7,20): error TS2307: Cannot find m
 node_modules/npm/test/tap/help.js(1,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/ignore-install-link.js(6,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/ignore-scripts.js(6,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/init-create.js(2,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/init-create.js(3,29): error TS2307: Cannot find module 'require-inject'.
+node_modules/npm/test/tap/init-create.js(25,7): error TS2339: Property 'load' does not exist on type 'EventEmitter'.
+node_modules/npm/test/tap/init-create.js(42,7): error TS2339: Property 'load' does not exist on type 'EventEmitter'.
+node_modules/npm/test/tap/init-create.js(47,16): error TS2339: Property 'parseArgs' does not exist on type '() => Promise<void>'.
+node_modules/npm/test/tap/init-create.js(53,16): error TS2339: Property 'parseArgs' does not exist on type '() => Promise<void>'.
+node_modules/npm/test/tap/init-create.js(68,7): error TS2339: Property 'load' does not exist on type 'EventEmitter'.
+node_modules/npm/test/tap/init-create.js(74,16): error TS2339: Property 'parseArgs' does not exist on type '() => Promise<void>'.
 node_modules/npm/test/tap/init-interrupt.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/init-interrupt.js(8,29): error TS2307: Cannot find module 'require-inject'.
 node_modules/npm/test/tap/init-interrupt.js(28,7): error TS2339: Property 'load' does not exist on type 'EventEmitter'.
@@ -1251,11 +1310,12 @@ node_modules/npm/test/tap/install-scoped-with-bundled-dependency.js(3,20): error
 node_modules/npm/test/tap/install-scoped-with-bundled-dependency.js(4,21): error TS2307: Cannot find module 'tacks'.
 node_modules/npm/test/tap/install-scoped-with-bundled-dependency.js(7,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/tap/install-scoped-with-peer-dependency.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-shrinkwrapped-git.js(7,20): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/install-shrinkwrapped-git.js(53,12): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
-node_modules/npm/test/tap/install-shrinkwrapped-git.js(57,12): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
-node_modules/npm/test/tap/install-shrinkwrapped-git.js(62,12): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
-node_modules/npm/test/tap/install-shrinkwrapped-git.js(94,7): error TS2339: Property 'load' does not exist on type 'EventEmitter'.
+node_modules/npm/test/tap/install-shrinkwrapped-git.js(9,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/install-shrinkwrapped-git.js(56,12): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
+node_modules/npm/test/tap/install-shrinkwrapped-git.js(60,12): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
+node_modules/npm/test/tap/install-shrinkwrapped-git.js(65,12): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
+node_modules/npm/test/tap/install-shrinkwrapped-git.js(106,7): error TS2339: Property 'load' does not exist on type 'EventEmitter'.
+node_modules/npm/test/tap/install-test-cli-without-package-lock.js(7,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/install-windows-newlines.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'typeof import("path")'.
 node_modules/npm/test/tap/install-windows-newlines.js(7,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/install-with-dev-dep-duplicate.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
@@ -1389,7 +1449,10 @@ node_modules/npm/test/tap/outdated.js(105,15): error TS2339: Property 'outdated'
 node_modules/npm/test/tap/override-bundled.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/owner.js(1,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/owner.js(2,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/pack-files-and-ignores.js(2,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/pack-files-and-ignores.js(12,21): error TS2307: Cannot find module 'tacks'.
 node_modules/npm/test/tap/pack-scoped.js(2,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/pack.js(5,22): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/peer-deps.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/peer-deps.js(8,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/pick-manifest-from-registry-metadata.js(2,20): error TS2307: Cannot find module 'tap'.
@@ -1449,6 +1512,10 @@ node_modules/npm/test/tap/publish-invalid-semver-tag.js(64,7): error TS2339: Pro
 node_modules/npm/test/tap/publish-invalid-semver-tag.js(65,7): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
 node_modules/npm/test/tap/publish-scoped.js(4,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/publish-scoped.js(8,18): error TS2307: Cannot find module 'npm-registry-mock'.
+node_modules/npm/test/tap/publish.js(8,33): error TS2307: Cannot find module 'npm-registry-mock'.
+node_modules/npm/test/tap/publish.js(11,22): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/publish.js(56,47): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string | RegExp'.
+node_modules/npm/test/tap/publish.js(117,45): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string | RegExp'.
 node_modules/npm/test/tap/pwd-prefix.js(5,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/referer.js(2,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/repo.js(2,18): error TS2307: Cannot find module 'npm-registry-mock'.
@@ -1463,6 +1530,10 @@ node_modules/npm/test/tap/run-script.js(213,18): error TS2345: Argument of type 
   Type 'undefined' is not assignable to type 'string'.
 node_modules/npm/test/tap/run-script.js(256,18): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
+node_modules/npm/test/tap/save-optional.js(3,22): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/save-optional.js(4,20): error TS2307: Cannot find module 'npm-registry-mock'.
+node_modules/npm/test/tap/save-optional.js(5,23): error TS2307: Cannot find module 'tacks'.
+node_modules/npm/test/tap/save-optional.js(70,30): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 node_modules/npm/test/tap/scope-header.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/scope-header.js(4,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/scope-header.js(5,21): error TS2307: Cannot find module 'tacks'.

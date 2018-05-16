@@ -158,7 +158,7 @@ namespace ts {
         };
     }
 
-    export function toPath(fileName: string, basePath: string, getCanonicalFileName: (path: string) => string): Path {
+    export function toPath(fileName: string, basePath: string | undefined, getCanonicalFileName: (path: string) => string): Path {
         const nonCanonicalizedPath = isRootedDiskPath(fileName)
             ? normalizePath(fileName)
             : getNormalizedAbsolutePath(fileName, basePath);
@@ -311,8 +311,8 @@ namespace ts {
     }
 
     /** Works like Array.prototype.findIndex, returning `-1` if no element satisfying the predicate is found. */
-    export function findIndex<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): number {
-        for (let i = 0; i < array.length; i++) {
+    export function findIndex<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean, startIndex?: number): number {
+        for (let i = startIndex || 0; i < array.length; i++) {
             if (predicate(array[i], i)) {
                 return i;
             }
@@ -978,6 +978,21 @@ namespace ts {
                 to.push(from[i]);
             }
         }
+        return to;
+    }
+
+    /**
+     * Appends a range of value to begin of an array, returning the array.
+     *
+     * @param to The array to which `value` is to be appended. If `to` is `undefined`, a new array
+     * is created if `value` was appended.
+     * @param from The values to append to the array. If `from` is `undefined`, nothing is
+     * appended. If an element of `from` is `undefined`, that element is not appended.
+     */
+    export function prependRange<T>(to: T[], from: ReadonlyArray<T> | undefined): T[] | undefined {
+        if (from === undefined || from.length === 0) return to;
+        if (to === undefined) return from.slice();
+        to.unshift(...from);
         return to;
     }
 
@@ -2281,11 +2296,11 @@ namespace ts {
      * If the path is relative, the root component is `""`.
      * If the path is absolute, the root component includes the first path separator (`/`).
      */
-    export function getNormalizedPathComponents(path: string, currentDirectory: string) {
+    export function getNormalizedPathComponents(path: string, currentDirectory: string | undefined) {
         return reducePathComponents(getPathComponents(path, currentDirectory));
     }
 
-    export function getNormalizedAbsolutePath(fileName: string, currentDirectory: string) {
+    export function getNormalizedAbsolutePath(fileName: string, currentDirectory: string | undefined) {
         return getPathFromPathComponents(getNormalizedPathComponents(fileName, currentDirectory));
     }
 
@@ -2326,20 +2341,24 @@ namespace ts {
         return ["", ...relative, ...components];
     }
 
+    export function getRelativePathFromFile(from: string, to: string, getCanonicalFileName: GetCanonicalFileName) {
+        return ensurePathIsNonModuleName(getRelativePathFromDirectory(getDirectoryPath(from), to, getCanonicalFileName));
+    }
+
     /**
      * Gets a relative path that can be used to traverse between `from` and `to`.
      */
-    export function getRelativePath(from: string, to: string, ignoreCase: boolean): string;
+    export function getRelativePathFromDirectory(from: string, to: string, ignoreCase: boolean): string;
     /**
      * Gets a relative path that can be used to traverse between `from` and `to`.
      */
     // tslint:disable-next-line:unified-signatures
-    export function getRelativePath(from: string, to: string, getCanonicalFileName: GetCanonicalFileName): string;
-    export function getRelativePath(from: string, to: string, getCanonicalFileNameOrIgnoreCase: GetCanonicalFileName | boolean) {
-        Debug.assert((getRootLength(from) > 0) === (getRootLength(to) > 0), "Paths must either both be absolute or both be relative");
+    export function getRelativePathFromDirectory(fromDirectory: string, to: string, getCanonicalFileName: GetCanonicalFileName): string;
+    export function getRelativePathFromDirectory(fromDirectory: string, to: string, getCanonicalFileNameOrIgnoreCase: GetCanonicalFileName | boolean) {
+        Debug.assert((getRootLength(fromDirectory) > 0) === (getRootLength(to) > 0), "Paths must either both be absolute or both be relative");
         const getCanonicalFileName = typeof getCanonicalFileNameOrIgnoreCase === "function" ? getCanonicalFileNameOrIgnoreCase : identity;
         const ignoreCase = typeof getCanonicalFileNameOrIgnoreCase === "boolean" ? getCanonicalFileNameOrIgnoreCase : false;
-        const pathComponents = getPathComponentsRelativeTo(from, to, ignoreCase ? equateStringsCaseInsensitive : equateStringsCaseSensitive, getCanonicalFileName);
+        const pathComponents = getPathComponentsRelativeTo(fromDirectory, to, ignoreCase ? equateStringsCaseInsensitive : equateStringsCaseSensitive, getCanonicalFileName);
         return getPathFromPathComponents(pathComponents);
     }
 
