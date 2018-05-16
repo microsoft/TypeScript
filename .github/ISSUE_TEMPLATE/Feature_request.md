@@ -32,8 +32,8 @@ What shortcomings exist with current approaches?
 ## Checklist
 
 My suggestion meets these guidelines:
- [ ] This wouldn't be a breaking change in existing TypeScript / JavaScript code
- [ ] This wouldn't change the runtime behavior of existing JavaScript code
- [ ] This could be implemented without emitting different JS based on the types of the expressions
- [ ] This isn't a runtime feature (e.g. new expression-level syntax)
+* [ ] This wouldn't be a breaking change in existing TypeScript / JavaScript code
+* [ ] This wouldn't change the runtime behavior of existing JavaScript code
+* [ ] This could be implemented without emitting different JS based on the types of the expressions
+* [ ] This isn't a runtime feature (e.g. new expression-level syntax)
 
