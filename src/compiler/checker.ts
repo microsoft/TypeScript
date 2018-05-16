@@ -3618,9 +3618,10 @@ namespace ts {
 
             function symbolToParameterDeclaration(parameterSymbol: Symbol, context: NodeBuilderContext, preserveModifierFlags?: boolean): ParameterDeclaration {
                 let parameterDeclaration: ParameterDeclaration | JSDocParameterTag = getDeclarationOfKind<ParameterDeclaration>(parameterSymbol, SyntaxKind.Parameter);
-                if (!parameterDeclaration && !(isTransientSymbol(parameterSymbol) && !!parameterSymbol.isRestParameter)) {
+                if (!parameterDeclaration && !isTransientSymbol(parameterSymbol)) {
                     parameterDeclaration = getDeclarationOfKind<JSDocParameterTag>(parameterSymbol, SyntaxKind.JSDocParameterTag);
                 }
+
                 let parameterType = getTypeOfSymbol(parameterSymbol);
                 if (parameterDeclaration && isRequiredInitializedParameter(parameterDeclaration)) {
                     parameterType = getOptionalType(parameterType);
@@ -3628,7 +3629,8 @@ namespace ts {
                 const parameterTypeNode = typeToTypeNodeHelper(parameterType, context);
 
                 const modifiers = !(context.flags & NodeBuilderFlags.OmitParameterModifiers) && preserveModifierFlags && parameterDeclaration && parameterDeclaration.modifiers && parameterDeclaration.modifiers.map(getSynthesizedClone);
-                const dotDotDotToken = !parameterDeclaration || isRestParameter(parameterDeclaration) ? createToken(SyntaxKind.DotDotDotToken) : undefined;
+                const isRest = parameterDeclaration ? isRestParameter(parameterDeclaration) : (parameterSymbol as TransientSymbol).isRestParameter;
+                const dotDotDotToken = isRest ? createToken(SyntaxKind.DotDotDotToken) : undefined;
                 const name = parameterDeclaration
                     ? parameterDeclaration.name ?
                             parameterDeclaration.name.kind === SyntaxKind.Identifier ? setEmitFlags(getSynthesizedClone(parameterDeclaration.name), EmitFlags.NoAsciiEscaping) :
