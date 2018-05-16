@@ -204,7 +204,9 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     function insertAccessor(changeTracker: textChanges.ChangeTracker, file: SourceFile, accessor: AccessorDeclaration, declaration: AcceptedDeclaration, container: ContainerDeclaration) {
         isParameterPropertyDeclaration(declaration)
             ? changeTracker.insertNodeAtClassStart(file, <ClassLikeDeclaration>container, accessor)
-            : changeTracker.insertNodeAfter(file, declaration, accessor);
+            : isPropertyAssignment(declaration)
+                ? changeTracker.insertNodeAfterComma(file, declaration, accessor)
+                : changeTracker.insertNodeAfter(file, declaration, accessor);
     }
 
     function updateReadonlyPropertyInitializerStatementConstructor(changeTracker: textChanges.ChangeTracker, context: RefactorContext, constructor: ConstructorDeclaration, fieldName: AcceptedNameType, originalName: AcceptedNameType) {
