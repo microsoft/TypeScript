@@ -320,10 +320,14 @@ namespace ts.textChanges {
             return this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, startNode, endNode, options), newNodes, options);
         }
 
+        private nextCommaToken (sourceFile: SourceFile, node: Node): Node | undefined {
+            const next = findNextToken(node, node.parent, sourceFile);
+            return next && next.kind === SyntaxKind.CommaToken ? next : undefined;
+        }
+
         public replacePropertyAssignment(sourceFile: SourceFile, oldNode: PropertyAssignment, newNode: PropertyAssignment) {
-            return this.replaceNode(sourceFile, oldNode, newNode, {
-                suffix: "," + this.newLineCharacter
-            });
+            const suffix = this.nextCommaToken(sourceFile, oldNode) ? "" : ("," + this.newLineCharacter);
+            return this.replaceNode(sourceFile, oldNode, newNode, { suffix });
         }
 
         private insertNodeAt(sourceFile: SourceFile, pos: number, newNode: Node, options: InsertNodeOptions = {}) {
@@ -463,6 +467,11 @@ namespace ts.textChanges {
             else {
                 return { prefix: this.newLineCharacter, suffix: "" };
             }
+        }
+
+        public insertNodeAfterComma(sourceFile: SourceFile, after: Node, newNode: Node): void {
+            const endPosition = this.insertNodeAfterWorker(sourceFile, this.nextCommaToken(sourceFile, after) || after, newNode);
+            this.insertNodeAt(sourceFile, endPosition, newNode, this.getInsertNodeAfterOptions(sourceFile, after));
         }
 
         public insertNodeAfter(sourceFile: SourceFile, after: Node, newNode: Node): void {
