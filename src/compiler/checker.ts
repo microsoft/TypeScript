@@ -8852,7 +8852,7 @@ namespace ts {
             // over union types.
             // If the true and false branches of the conditional aren't affected by any infer param or check type instantiation, then we can and should try to simplify the type
             const conditionalMapper = createConditionalWildcardMapper(root);
-            const independent = conditionalMapper !== identityMapper && instantiateType(root.trueType, conditionalMapper) === root.trueType && instantiateType(root.falseType, conditionalMapper) === root.falseType;
+            const independent = conditionalMapper === identityMapper || (instantiateType(root.trueType, conditionalMapper) === root.trueType && instantiateType(root.falseType, conditionalMapper) === root.falseType);
             const isDeferred = !independent && root.isDistributive && maybeTypeOfKind(checkType, TypeFlags.Instantiable);
             let combinedMapper: TypeMapper;
             if (root.inferTypeParameters) {
