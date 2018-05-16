@@ -4024,6 +4024,10 @@ namespace ts {
 
             function determineIfDeclarationIsVisible() {
                 switch (node.kind) {
+                    case SyntaxKind.JSDocTypedefTag:
+                        // Top-level jsdoc typedefs are considered exported
+                        // First parent is comment node, second is hosting declaration or token; we only care about those tokens or declarations whose parent is a source file
+                        return !!(node.parent && node.parent.parent && node.parent.parent.parent && isSourceFile(node.parent.parent.parent));
                     case SyntaxKind.BindingElement:
                         return isDeclarationVisible(node.parent.parent);
                     case SyntaxKind.VariableDeclaration:
@@ -5163,8 +5167,8 @@ namespace ts {
             let result: TypeParameter[];
             for (const node of symbol.declarations) {
                 if (node.kind === SyntaxKind.InterfaceDeclaration || node.kind === SyntaxKind.ClassDeclaration ||
-                    node.kind === SyntaxKind.ClassExpression || node.kind === SyntaxKind.TypeAliasDeclaration) {
-                    const declaration = <InterfaceDeclaration | TypeAliasDeclaration>node;
+                    node.kind === SyntaxKind.ClassExpression || node.kind === SyntaxKind.TypeAliasDeclaration || node.kind === SyntaxKind.JSDocTypedefTag) {
+                    const declaration = <InterfaceDeclaration | TypeAliasDeclaration | JSDocTypedefTag>node;
                     const typeParameters = getEffectiveTypeParameterDeclarations(declaration);
                     if (typeParameters) {
                         result = appendTypeParameters(result, typeParameters);
@@ -9046,7 +9050,7 @@ namespace ts {
         }
 
         function getAliasSymbolForTypeNode(node: TypeNode) {
-            return node.parent.kind === SyntaxKind.TypeAliasDeclaration ? getSymbolOfNode(node.parent) : undefined;
+            return (node.parent.kind === SyntaxKind.TypeAliasDeclaration || node.parent.kind === SyntaxKind.JSDocTypedefTag) ? getSymbolOfNode(node.parent) : undefined;
         }
 
         function getAliasTypeArgumentsForTypeNode(node: TypeNode) {
