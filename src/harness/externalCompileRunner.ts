@@ -27,8 +27,10 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
         // Read in and evaluate the test list
         const testList = this.tests && this.tests.length ? this.tests : this.enumerateTestFiles();
 
-        describe(`${this.kind()} code samples`, () => {
-            const cwd = path.join(Harness.IO.getWorkspaceRoot(), this.testDir);
+        const cls = this;
+        describe(`${this.kind()} code samples`, function(this: Mocha.ISuiteCallbackContext) {
+            this.timeout(600_000); // 10 minutes
+            const cwd = path.join(Harness.IO.getWorkspaceRoot(), cls.testDir);
             const placeholderName = ".node_modules";
             const moduleDirName = "node_modules";
             before(() => {
@@ -42,7 +44,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                 });
             });
             for (const test of testList) {
-                this.runTest(typeof test === "string" ? test : test.file);
+                cls.runTest(typeof test === "string" ? test : test.file);
             }
             after(() => {
                 ts.forEachAncestorDirectory(cwd, dir => {
