@@ -8405,15 +8405,21 @@ new C();`
             service.openClientFile(file.path);
             const project = service.configuredProjects.get(configFile.path);
             checkProject(/*moduleIsOrphan*/ false);
+            const moduleInfo = service.getScriptInfo(moduleFile.path);
+            const sourceFile = moduleInfo.cacheSourceFile.sourceFile;
+            assert.equal(project.getSourceFile(moduleInfo.path), sourceFile);
 
             // edit file
             const info = service.getScriptInfo(file.path);
             service.applyChangesToFile(info, [{ span: { start: 0, length: importModuleContent.length }, newText: "" }]);
             checkProject(/*moduleIsOrphan*/ true);
+            assert.equal(moduleInfo.cacheSourceFile.sourceFile, sourceFile);
 
             // write content back
             service.applyChangesToFile(info, [{ span: { start: 0, length: 0 }, newText: importModuleContent }]);
             checkProject(/*moduleIsOrphan*/ false);
+            assert.equal(moduleInfo.cacheSourceFile.sourceFile, sourceFile);
+            assert.equal(project.getSourceFile(moduleInfo.path), sourceFile);
 
             function checkProject(moduleIsOrphan: boolean) {
                 // Update the project
