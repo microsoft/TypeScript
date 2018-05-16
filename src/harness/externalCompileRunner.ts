@@ -144,7 +144,7 @@ function sortErrors(result: string) {
     return ts.flatten(splitBy(result.split("\n"), s => /^\S+/.test(s)).sort(compareErrorStrings)).join("\n");
 }
 
-const errorRegexp = /^(.+\.[tj]sx?)\((\d+),(\d+)\): error TS/;
+const errorRegexp = /^(.+\.[tj]sx?)\((\d+),(\d+)\)(: error TS.*)/;
 function compareErrorStrings(a: string[], b: string[]) {
     ts.Debug.assertGreaterThanOrEqual(a.length, 1);
     ts.Debug.assertGreaterThanOrEqual(b.length, 1);
@@ -156,11 +156,12 @@ function compareErrorStrings(a: string[], b: string[]) {
     if (!matchB) {
         return 1;
     }
-    const [, errorFileA, lineNumberStringA, columnNumberStringA] = matchA;
-    const [, errorFileB, lineNumberStringB, columnNumberStringB] = matchB;
+    const [, errorFileA, lineNumberStringA, columnNumberStringA, remainderA] = matchA;
+    const [, errorFileB, lineNumberStringB, columnNumberStringB, remainderB] = matchB;
     return ts.comparePathsCaseSensitive(errorFileA, errorFileB) ||
         ts.compareValues(parseInt(lineNumberStringA), parseInt(lineNumberStringB)) ||
-        ts.compareValues(parseInt(columnNumberStringA), parseInt(columnNumberStringB));
+        ts.compareValues(parseInt(columnNumberStringA), parseInt(columnNumberStringB)) ||
+        ts.compareStringsCaseSensitive(remainderA, remainderB);
 }
 
 class DefinitelyTypedRunner extends ExternalCompileRunnerBase {
