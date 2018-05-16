@@ -83,6 +83,7 @@ namespace ts.server {
         readonly ts: number;
         readonly tsx: number;
         readonly dts: number;
+        readonly deferred: number;
     }
 
     export interface OpenFileInfo {
@@ -1428,12 +1429,12 @@ namespace ts.server {
             }
             this.seenProjects.set(projectKey, true);
 
-            if (!this.eventHandler) {
+            if (!this.eventHandler || !this.host.createSHA256Hash) {
                 return;
             }
 
             const data: ProjectInfoTelemetryEventData = {
-                projectId: this.host.createHash(projectKey),
+                projectId: this.host.createSHA256Hash(projectKey),
                 fileStats: countEachFileTypes(project.getScriptInfos()),
                 compilerOptions: convertCompilerOptionsForTelemetry(project.getCompilationSettings()),
                 typeAcquisition: convertTypeAcquisition(project.getTypeAcquisition()),

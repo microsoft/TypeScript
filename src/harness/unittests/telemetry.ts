@@ -59,7 +59,6 @@ namespace ts.projectSystem {
 
             // TODO: Apparently compilerOptions is mutated, so have to repeat it here!
             et.assertProjectInfoTelemetryEvent({
-                projectId: Harness.mockHash("/hunter2/foo.csproj"),
                 compilerOptions: { strict: true },
                 compileOnSave: true,
                 // These properties can't be present for an external project, so they are undefined instead of false.
@@ -69,7 +68,7 @@ namespace ts.projectSystem {
                 exclude: undefined,
                 configFileName: "other",
                 projectType: "external",
-            });
+            }, "/hunter2/foo.csproj");
 
             // Also test that opening an external project only sends an event once.
 
@@ -202,7 +201,6 @@ namespace ts.projectSystem {
             const et = new TestServerEventManager([jsconfig, file]);
             et.service.openClientFile(file.path);
             et.assertProjectInfoTelemetryEvent({
-                projectId: Harness.mockHash("/jsconfig.json"),
                 fileStats: fileStats({ js: 1 }),
                 compilerOptions: autoJsCompilerOptions,
                 typeAcquisition: {
@@ -211,7 +209,7 @@ namespace ts.projectSystem {
                     exclude: false,
                 },
                 configFileName: "jsconfig.json",
-            });
+            }, "/jsconfig.json");
         });
 
         it("detects whether language service was disabled", () => {
@@ -222,7 +220,6 @@ namespace ts.projectSystem {
             et.service.openClientFile(file.path);
             et.getEvent<server.ProjectLanguageServiceStateEvent>(server.ProjectLanguageServiceStateEvent);
             et.assertProjectInfoTelemetryEvent({
-                projectId: Harness.mockHash("/jsconfig.json"),
                 fileStats: fileStats({ js: 1 }),
                 compilerOptions: autoJsCompilerOptions,
                 configFileName: "jsconfig.json",
@@ -232,7 +229,7 @@ namespace ts.projectSystem {
                     exclude: false,
                 },
                 languageServiceEnabled: false,
-            });
+            }, "/jsconfig.json");
         });
 
         describe("open files telemetry", () => {

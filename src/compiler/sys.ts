@@ -448,10 +448,11 @@ namespace ts {
         readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
         getModifiedTime?(path: string): Date;
         /**
-         * This should be cryptographically secure.
          * A good implementation is node.js' `crypto.createHash`. (https://nodejs.org/api/crypto.html#crypto_crypto_createhash_algorithm)
          */
         createHash?(data: string): string;
+        /** This must be cryptographically secure. Only implement this method using `crypto.createHash("sha256")`. */
+        createSHA256Hash?(data: string): string;
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
         realpath?(path: string): string;
@@ -527,7 +528,7 @@ namespace ts {
             const _path = require("path");
             const _os = require("os");
             // crypto can be absent on reduced node installations
-            let _crypto: any;
+            let _crypto: typeof import("crypto");
             try {
               _crypto = require("crypto");
             }
@@ -590,6 +591,7 @@ namespace ts {
                 readDirectory,
                 getModifiedTime,
                 createHash: _crypto ? createMD5HashUsingNativeCrypto : generateDjb2Hash,
+                createSHA256Hash: _crypto ? createSHA256Hash : undefined,
                 getMemoryUsage() {
                     if (global.gc) {
                         global.gc();
@@ -1072,8 +1074,14 @@ namespace ts {
                 return `${chars.reduce((prev, curr) => ((prev << 5) + prev) + curr, 5381)}`;
             }
 
-            function createMD5HashUsingNativeCrypto(data: string) {
+            function createMD5HashUsingNativeCrypto(data: string): string {
                 const hash = _crypto.createHash("md5");
+                hash.update(data);
+                return hash.digest("hex");
+            }
+
+            function createSHA256Hash(data: string): string {
+                const hash = _crypto.createHash("sha256");
                 hash.update(data);
                 return hash.digest("hex");
             }

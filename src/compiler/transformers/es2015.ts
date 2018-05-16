@@ -1885,6 +1885,7 @@ namespace ts {
                 const expression = visitNode(body, visitor, isExpression);
                 const returnStatement = createReturn(expression);
                 setTextRange(returnStatement, body);
+                moveSyntheticComments(returnStatement, body);
                 setEmitFlags(returnStatement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTrailingComments);
                 statements.push(returnStatement);
 

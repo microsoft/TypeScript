@@ -401,6 +401,7 @@ namespace ts {
         const unknownSignature = createSignature(undefined, undefined, undefined, emptyArray, unknownType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         const resolvingSignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         const silentNeverSignature = createSignature(undefined, undefined, undefined, emptyArray, silentNeverType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
+        const resolvingSignaturesArray = [resolvingSignature];
 
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
         const jsObjectLiteralIndexInfo = createIndexInfo(anyType, /*isReadonly*/ false);
@@ -892,6 +893,8 @@ namespace ts {
         function mergeSymbol(target: Symbol, source: Symbol) {
             if (!(target.flags & getExcludedSymbolFlags(source.flags)) ||
                 (source.flags | target.flags) & SymbolFlags.JSContainer) {
+                const targetValueDeclaration = target.valueDeclaration;
+                Debug.assert(!!(target.flags & SymbolFlags.Transient));
                 // Javascript static-property-assignment declarations always merge, even though they are also values
                 if (source.flags & SymbolFlags.ValueModule && target.flags & SymbolFlags.ValueModule && target.constEnumOnlyModule && !source.constEnumOnlyModule) {
                     // reset flag when merging instantiated module into value module that has only const enums
@@ -915,7 +918,12 @@ namespace ts {
                 }
                 if ((source.flags | target.flags) & SymbolFlags.JSContainer) {
                     const sourceInitializer = getJSInitializerSymbol(source);
-                    const targetInitializer = getJSInitializerSymbol(target);
+                    const init = getDeclaredJavascriptInitializer(targetValueDeclaration) || getAssignedJavascriptInitializer(targetValueDeclaration);
+                    let targetInitializer = init && init.symbol ? init.symbol : target;
+                    if (!(targetInitializer.flags & SymbolFlags.Transient)) {
+                        const mergedInitializer = getMergedSymbol(targetInitializer);
+                        targetInitializer = mergedInitializer === targetInitializer ? cloneSymbol(targetInitializer) : mergedInitializer;
+                    }
                     if (sourceInitializer !== source || targetInitializer !== target) {
                         mergeSymbol(targetInitializer, sourceInitializer);
                     }
@@ -4029,6 +4037,10 @@ namespace ts {
 
             function determineIfDeclarationIsVisible() {
                 switch (node.kind) {
+                    case SyntaxKind.JSDocTypedefTag:
+                        // Top-level jsdoc typedefs are considered exported
+                        // First parent is comment node, second is hosting declaration or token; we only care about those tokens or declarations whose parent is a source file
+                        return !!(node.parent && node.parent.parent && node.parent.parent.parent && isSourceFile(node.parent.parent.parent));
                     case SyntaxKind.BindingElement:
                         return isDeclarationVisible(node.parent.parent);
                     case SyntaxKind.VariableDeclaration:
@@ -8714,6 +8726,10 @@ namespace ts {
         // Transform an indexed access to a simpler form, if possible. Return the simpler form, or return
         // the type itself if no transformation is possible.
         function getSimplifiedIndexedAccessType(type: IndexedAccessType): Type {
+            if (type.simplified) {
+                return type.simplified === circularConstraintType ? type : type.simplified;
+            }
+            type.simplified = circularConstraintType;
             const objectType = type.objectType;
             if (objectType.flags & TypeFlags.Intersection && isGenericObjectType(objectType)) {
                 // Given an indexed access type T[K], if T is an intersection containing one or more generic types and one or
@@ -8731,7 +8747,7 @@ namespace ts {
                             regularTypes.push(t);
                         }
                     }
-                    return getUnionType([
+                    return type.simplified = getUnionType([
                         getSimplifiedType(getIndexedAccessType(getIntersectionType(regularTypes), type.indexType)),
                         getIntersectionType(stringIndexTypes)
                     ]);
@@ -8742,7 +8758,7 @@ namespace ts {
                 // eventually anyway, but it easier to reason about.
                 if (some((<IntersectionType>objectType).types, isMappedTypeToNever)) {
                     const nonNeverTypes = filter((<IntersectionType>objectType).types, t => !isMappedTypeToNever(t));
-                    return getSimplifiedType(getIndexedAccessType(getIntersectionType(nonNeverTypes), type.indexType));
+                    return type.simplified = getSimplifiedType(getIndexedAccessType(getIntersectionType(nonNeverTypes), type.indexType));
                 }
             }
             // If the object type is a mapped type { [P in K]: E }, where K is generic, instantiate E using a mapper
@@ -8750,15 +8766,15 @@ namespace ts {
             // construct the type Box<T[X]>. We do not further simplify the result because mapped types can be recursive
             // and we might never terminate.
             if (isGenericMappedType(objectType)) {
-                return substituteIndexedMappedType(objectType, type);
+                return type.simplified = substituteIndexedMappedType(objectType, type);
             }
             if (objectType.flags & TypeFlags.TypeParameter) {
                 const constraint = getConstraintFromTypeParameter(objectType as TypeParameter);
                 if (constraint && isGenericMappedType(constraint)) {
-                    return substituteIndexedMappedType(constraint, type);
+                    return type.simplified = substituteIndexedMappedType(constraint, type);
                 }
             }
-            return type;
+            return type.simplified = type;
         }
 
         function substituteIndexedMappedType(objectType: MappedType, type: IndexedAccessType) {
@@ -15372,8 +15388,17 @@ namespace ts {
                 }
             }
 
-            if (context.typeArguments) {
-                signatures = mapDefined(signatures, s => getJsxSignatureTypeArgumentInstantiation(s, context, isJs));
+            const links = getNodeLinks(context);
+            if (!links.resolvedSignatures) {
+                links.resolvedSignatures = createMap();
+            }
+            const cacheKey = "" + getTypeId(valueType);
+            if (links.resolvedSignatures.get(cacheKey) && links.resolvedSignatures.get(cacheKey) !== resolvingSignaturesArray) {
+                signatures = links.resolvedSignatures.get(cacheKey);
+            }
+            else if (!links.resolvedSignatures.get(cacheKey)) {
+                links.resolvedSignatures.set(cacheKey, resolvingSignaturesArray);
+                links.resolvedSignatures.set(cacheKey, signatures = instantiateJsxSignatures(context, signatures));
             }
 
             return getUnionType(map(signatures, ctor ? t => getJsxPropsTypeFromClassType(t, isJs, context, /*reportErrors*/ false) : t => getJsxPropsTypeFromCallSignature(t, context)), UnionReduction.None);
@@ -16354,6 +16379,40 @@ namespace ts {
             return undefined;
         }
 
+        function getInstantiatedJsxSignatures(openingLikeElement: JsxOpeningLikeElement, elementType: Type, reportErrors?: boolean) {
+            const links = getNodeLinks(openingLikeElement);
+            if (!links.resolvedSignatures) {
+                links.resolvedSignatures = createMap();
+            }
+            const cacheKey = "" + getTypeId(elementType);
+            if (links.resolvedSignatures.get(cacheKey) && links.resolvedSignatures.get(cacheKey) === resolvingSignaturesArray) {
+                return;
+            }
+            else if (links.resolvedSignatures.get(cacheKey)) {
+                return links.resolvedSignatures.get(cacheKey);
+            }
+
+            links.resolvedSignatures.set(cacheKey, resolvingSignaturesArray);
+            // Resolve the signatures, preferring constructor
+            let signatures = getSignaturesOfType(elementType, SignatureKind.Construct);
+            if (signatures.length === 0) {
+                // No construct signatures, try call signatures
+                signatures = getSignaturesOfType(elementType, SignatureKind.Call);
+                if (signatures.length === 0) {
+                    // We found no signatures at all, which is an error
+                    if (reportErrors) {
+                        error(openingLikeElement.tagName, Diagnostics.JSX_element_type_0_does_not_have_any_construct_or_call_signatures, getTextOfNode(openingLikeElement.tagName));
+                    }
+                    return;
+                }
+            }
+
+            // Instantiate in context of source type
+            const results = instantiateJsxSignatures(openingLikeElement, signatures);
+            links.resolvedSignatures.set(cacheKey, results);
+            return results;
+        }
+
         /**
          * Resolve attributes type of the given opening-like element. The attributes type is a type of attributes associated with the given elementType.
          * For instance:
@@ -16416,20 +16475,10 @@ namespace ts {
 
             // Get the element instance type (the result of newing or invoking this tag)
 
-            // Resolve the signatures, preferring constructor
-            let signatures = getSignaturesOfType(elementType, SignatureKind.Construct);
-            if (signatures.length === 0) {
-                // No construct signatures, try call signatures
-                signatures = getSignaturesOfType(elementType, SignatureKind.Call);
-                if (signatures.length === 0) {
-                    // We found no signatures at all, which is an error
-                    error(openingLikeElement.tagName, Diagnostics.JSX_element_type_0_does_not_have_any_construct_or_call_signatures, getTextOfNode(openingLikeElement.tagName));
-                    return unknownType;
-                }
+            const instantiatedSignatures = getInstantiatedJsxSignatures(openingLikeElement, elementType, /*reportErrors*/ true);
+            if (!length(instantiatedSignatures)) {
+                return unknownType;
             }
-
-            // Instantiate in context of source type
-            const instantiatedSignatures = instantiateJsxSignatures(openingLikeElement, signatures);
             const elemInstanceType = getUnionType(map(instantiatedSignatures, getReturnTypeOfSignature), UnionReduction.Subtype);
 
             // If we should include all stateless attributes type, then get all attributes type from all stateless function signature.
@@ -18119,11 +18168,11 @@ namespace ts {
 
             let typeArguments: NodeArray<TypeNode>;
 
-            if (!isDecorator && !isJsxOpeningOrSelfClosingElement) {
+            if (!isDecorator) {
                 typeArguments = (<CallExpression>node).typeArguments;
 
                 // We already perform checking on the type arguments on the class declaration itself.
-                if (isTaggedTemplate || (<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword) {
+                if (isTaggedTemplate || isJsxOpeningOrSelfClosingElement || (<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword) {
                     forEach(typeArguments, checkSourceElement);
                 }
             }
@@ -18712,30 +18761,6 @@ namespace ts {
          */
         function getResolvedJsxStatelessFunctionSignature(openingLikeElement: JsxOpeningLikeElement, elementType: Type, candidatesOutArray: Signature[]): Signature | undefined {
             Debug.assert(!(elementType.flags & TypeFlags.Union));
-            return resolveStatelessJsxOpeningLikeElement(openingLikeElement, elementType, candidatesOutArray);
-        }
-
-        /**
-         * Try treating a given opening-like element as stateless function component and resolve a tagName to a function signature.
-         * @param openingLikeElement an JSX opening-like element we want to try resolve its stateless function if possible
-         * @param elementType a type of the opening-like JSX element, a result of resolving tagName in opening-like element.
-         * @param candidatesOutArray an array of signature to be filled in by the function. It is passed by signature help in the language service;
-         *                           the function will fill it up with appropriate candidate signatures
-         * @return a resolved signature if we can find function matching function signature through resolve call or a first signature in the list of functions.
-         *         otherwise return undefined if tag-name of the opening-like element doesn't have call signatures
-         */
-        function resolveStatelessJsxOpeningLikeElement(openingLikeElement: JsxOpeningLikeElement, elementType: Type, candidatesOutArray: Signature[]): Signature | undefined {
-            // If this function is called from language service, elementType can be a union type. This is not possible if the function is called from compiler (see: resolveCustomJsxElementAttributesType)
-            if (elementType.flags & TypeFlags.Union) {
-                const types = (elementType as UnionType).types;
-                let result: Signature;
-                for (const type of types) {
-                    result = result || resolveStatelessJsxOpeningLikeElement(openingLikeElement, type, candidatesOutArray);
-                }
-
-                return result;
-            }
-
             const callSignatures = elementType && getSignaturesOfType(elementType, SignatureKind.Call);
             if (callSignatures && callSignatures.length > 0) {
                 return resolveCall(openingLikeElement, callSignatures, candidatesOutArray);
@@ -18757,7 +18782,18 @@ namespace ts {
                 case SyntaxKind.JsxOpeningElement:
                 case SyntaxKind.JsxSelfClosingElement:
                     // This code-path is called by language service
-                    return resolveStatelessJsxOpeningLikeElement(node, checkExpression(node.tagName), candidatesOutArray) || unknownSignature;
+                    const exprTypes = checkExpression(node.tagName);
+                    return forEachType(exprTypes, exprType => {
+                        const sfcResult = getResolvedJsxStatelessFunctionSignature(node, exprType, candidatesOutArray);
+                        if (sfcResult && sfcResult !== unknownSignature) {
+                            return sfcResult;
+                        }
+                        const sigs = getInstantiatedJsxSignatures(node, exprType);
+                        if (candidatesOutArray && length(sigs)) {
+                            candidatesOutArray.push(...sigs);
+                        }
+                        return length(sigs) ? sigs[0] : unknownSignature;
+                    }) || unknownSignature;
             }
             Debug.assertNever(node, "Branch in 'resolveSignature' should be unreachable.");
         }
@@ -19480,7 +19516,7 @@ namespace ts {
             }
 
             const links = getNodeLinks(node);
-            const type = getTypeOfSymbol(node.symbol);
+            const type = getTypeOfSymbol(getMergedSymbol(node.symbol));
             if (isTypeAny(type)) {
                 return type;
             }
@@ -22637,11 +22673,11 @@ namespace ts {
                 const kind = tryGetRootParameterDeclaration(bindingPattern.parent) ? UnusedKind.Parameter : UnusedKind.Local;
                 if (!bindingPattern.elements.every(e => contains(bindingElements, e))) {
                     for (const e of bindingElements) {
-                        addDiagnostic(kind, createDiagnosticForNode(e, Diagnostics._0_is_declared_but_its_value_is_never_read, getBindingElementNameText(e)));
+                        addDiagnostic(kind, createDiagnosticForNode(e, Diagnostics._0_is_declared_but_its_value_is_never_read, idText(cast(e.name, isIdentifier))));
                     }
                 }
                 else if (bindingElements.length === 1) {
-                    addDiagnostic(kind, createDiagnosticForNode(bindingPattern, Diagnostics._0_is_declared_but_its_value_is_never_read, getBindingElementNameText(first(bindingElements))));
+                    addDiagnostic(kind, createDiagnosticForNode(bindingPattern, Diagnostics._0_is_declared_but_its_value_is_never_read, idText(cast(first(bindingElements).name, isIdentifier))));
                 }
                 else {
                     addDiagnostic(kind, createDiagnosticForNode(bindingPattern, Diagnostics.All_destructured_elements_are_unused));

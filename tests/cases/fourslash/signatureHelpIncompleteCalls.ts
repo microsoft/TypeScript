@@ -15,17 +15,8 @@
 ////    x.f3(5,/*incompleteCalls3*/
 ////}
 
-goTo.marker('incompleteCalls1');
-verify.currentSignatureHelpIs("f1(): void");
-verify.currentSignatureParameterCountIs(0);
-
-goTo.marker('incompleteCalls2');
-verify.currentSignatureParameterCountIs(1);
-verify.currentSignatureHelpIs("f2(n: number): number");
-goTo.marker('incompleteCalls3');
-verify.currentSignatureParameterCountIs(2);
-verify.currentSignatureHelpIs("f3(n: number, s: string): string");
-
-verify.currentParameterHelpArgumentNameIs("s");
-verify.currentParameterSpanIs("s: string");
-
+verify.signatureHelp(
+    { marker: "incompleteCalls1", text: "f1(): void", parameterCount: 0 },
+    { marker: "incompleteCalls2", text: "f2(n: number): number", parameterCount: 1 },
+    { marker: "incompleteCalls3", text: "f3(n: number, s: string): string", parameterCount: 2, parameterName: "s", parameterSpan: "s: string" },
+);
