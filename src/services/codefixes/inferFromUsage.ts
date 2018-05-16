@@ -32,16 +32,16 @@ namespace ts.codefix {
 
             const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
             let declaration!: Declaration;
-            const changes = textChanges.ChangeTracker.with(context, changes => { declaration = doChange(changes, sourceFile, token, errorCode, program, cancellationToken); });
+            const changes = textChanges.ChangeTracker.with(context, changes => { declaration = doChange(changes, sourceFile, token, errorCode, program, cancellationToken, /*markSeenseen*/ returnTrue); });
             return changes.length === 0 ? undefined
                 : [createCodeFixAction(fixId, changes, [getDiagnostic(errorCode, token), getNameOfDeclaration(declaration).getText(sourceFile)], fixId, Diagnostics.Infer_all_types_from_usage)];
         },
         fixIds: [fixId],
         getAllCodeActions(context) {
             const { sourceFile, program, cancellationToken } = context;
-            const seenFunctions = createMap<true>();
+            const markSeen = nodeSeenTracker();
             return codeFixAll(context, errorCodes, (changes, err) => {
-                doChange(changes, sourceFile, getTokenAtPosition(err.file!, err.start!, /*includeJsDocComment*/ false), err.code, program, cancellationToken, seenFunctions);
+                doChange(changes, sourceFile, getTokenAtPosition(err.file!, err.start!, /*includeJsDocComment*/ false), err.code, program, cancellationToken, markSeen);
             });
         },
     });
@@ -57,7 +57,7 @@ namespace ts.codefix {
         }
     }
 
-    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, errorCode: number, program: Program, cancellationToken: CancellationToken, seenFunctions?: Map<true>): Declaration | undefined {
+    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, errorCode: number, program: Program, cancellationToken: CancellationToken, markSeen: NodeSeenTracker): Declaration | undefined {
         if (!isParameterPropertyModifier(token.kind) && token.kind !== SyntaxKind.Identifier && token.kind !== SyntaxKind.DotDotDotToken) {
             return undefined;
         }
@@ -67,7 +67,7 @@ namespace ts.codefix {
             // Variable and Property declarations
             case Diagnostics.Member_0_implicitly_has_an_1_type.code:
             case Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined.code:
-                if (isVariableDeclaration(parent) || isPropertyDeclaration(parent) || isPropertySignature(parent)) { // handle bad location
+                if ((isVariableDeclaration(parent) && markSeen(parent)) || isPropertyDeclaration(parent) || isPropertySignature(parent)) { // handle bad location
                     annotateVariableDeclaration(changes, sourceFile, parent, program, cancellationToken);
                     return parent;
                 }
@@ -75,10 +75,11 @@ namespace ts.codefix {
 
             case Diagnostics.Variable_0_implicitly_has_an_1_type.code: {
                 const symbol = program.getTypeChecker().getSymbolAtLocation(token);
-                if (symbol && symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration)) {
+                if (symbol && symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) && markSeen(symbol.valueDeclaration)) {
                     annotateVariableDeclaration(changes, sourceFile, symbol.valueDeclaration, program, cancellationToken);
                     return symbol.valueDeclaration;
                 }
+                return undefined;
             }
         }
 
@@ -96,7 +97,7 @@ namespace ts.codefix {
                 }
                 // falls through
             case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
-                if (!seenFunctions || addToSeen(seenFunctions, getNodeId(containingFunction))) {
+                if (markSeen(containingFunction)) {
                     const param = cast(parent, isParameter);
                     annotateParameters(changes, param, containingFunction, sourceFile, program, cancellationToken);
                     return param;
@@ -318,6 +319,16 @@ namespace ts.codefix {
                 case SyntaxKind.ElementAccessExpression:
                     inferTypeFromPropertyElementExpressionContext(<ElementAccessExpression>node.parent, node, checker, usageContext);
                     break;
+                case SyntaxKind.VariableDeclaration: {
+                    const { name, initializer } = node.parent as VariableDeclaration;
+                    if (node === name) {
+                        if (initializer) { // This can happen for `let x = null;` which still has an implicit-any error.
+                            addCandidateType(usageContext, checker.getTypeAtLocation(initializer));
+                        }
+                        break;
+                    }
+                }
+                    // falls through
                 default:
                     return inferTypeFromContextualType(node, checker, usageContext);
             }
@@ -511,7 +522,7 @@ namespace ts.codefix {
                 return checker.getStringType();
             }
             else if (usageContext.candidateTypes) {
-                return checker.getWidenedType(checker.getUnionType(map(usageContext.candidateTypes, t => checker.getBaseTypeOfLiteralType(t)), UnionReduction.Subtype));
+                return checker.getWidenedType(checker.getUnionType(usageContext.candidateTypes.map(t => checker.getBaseTypeOfLiteralType(t)), UnionReduction.Subtype));
             }
             else if (usageContext.properties && hasCallContext(usageContext.properties.get("then" as __String))) {
                 const paramType = getParameterTypeFromCallContexts(0, usageContext.properties.get("then" as __String).callContexts, /*isRestParameter*/ false, checker);
