@@ -1,0 +1,14 @@
+.git*
+docs/
+test/
+support/
+component.json
+components/
+build/
+lib-cov/
+coverage/
+.travis.yml
+.mailmap
+Makefile
+*.swp
+.DS_Store

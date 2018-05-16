@@ -1,0 +1,21 @@
+language: node_js
+dist: trusty
+os:
+  - linux
+  - osx
+node_js:
+- '4'
+- '5'
+- '6'
+- '7'
+- 'node'
+before_install:
+  - npm i -g npm@latest
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y libnotify-bin; fi
+jobs:
+  include:
+    - stage: lint
+      script: npm run lint
+    - stage: test
+      script: npm test

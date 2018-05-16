@@ -1,0 +1,18 @@
+$ git log|head -n1
+commit 8b66aec6f43c5099c72ab365a93da2a9e406824e
+
+with lexical-scope@0.0.4:
+
+$ time module-deps bench/jquery.js | bin/cmd.js >/dev/null
+
+real    0m7.380s
+user    0m7.504s
+sys     0m0.320s
+
+with lexical-scope@0.0.5:
+
+$ time module-deps bench/jquery.js | bin/cmd.js >/dev/null
+
+real    0m2.441s
+user    0m2.584s
+sys     0m0.176s

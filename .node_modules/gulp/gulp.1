@@ -1,0 +1,40 @@
+.TH "GULP" "" "February 2016" "" ""
+.SH "NAME"
+\fBgulp\fR
+.SH gulp CLI docs
+.SS Flags
+.P
+gulp has very few flags to know about\. All other flags are for tasks to use if needed\.
+.RS 0
+.IP \(bu 2
+\fB\-v\fP or \fB\-\-version\fP will display the global and local gulp versions
+.IP \(bu 2
+\fB\-\-require <module path>\fP will require a module before running the gulpfile\. This is useful for transpilers but also has other applications\. You can use multiple \fB\-\-require\fP flags
+.IP \(bu 2
+\fB\-\-gulpfile <gulpfile path>\fP will manually set path of gulpfile\. Useful if you have multiple gulpfiles\. This will set the CWD to the gulpfile directory as well
+.IP \(bu 2
+\fB\-\-cwd <dir path>\fP will manually set the CWD\. The search for the gulpfile, as well as the relativity of all requires will be from here
+.IP \(bu 2
+\fB\-T\fP or \fB\-\-tasks\fP will display the task dependency tree for the loaded gulpfile
+.IP \(bu 2
+\fB\-\-tasks\-simple\fP will display a plaintext list of tasks for the loaded gulpfile
+.IP \(bu 2
+\fB\-\-color\fP will force gulp and gulp plugins to display colors even when no color support is detected
+.IP \(bu 2
+\fB\-\-no\-color\fP will force gulp and gulp plugins to not display colors even when color support is detected
+.IP \(bu 2
+\fB\-\-silent\fP will disable all gulp logging
+
+.RE
+.P
+The CLI adds process\.env\.INIT_CWD which is the original cwd it was launched from\.
+.SS Task specific flags
+.P
+Refer to this StackOverflow \fIhttp://stackoverflow\.com/questions/23023650/is\-it\-possible\-to\-pass\-a\-flag\-to\-gulp\-to\-have\-it\-run\-tasks\-in\-different\-ways\fR link for how to add task specific flags
+.SS Tasks
+.P
+Tasks can be executed by running \fBgulp <task> <othertask>\fP\|\. Just running \fBgulp\fP will execute the task you registered called \fBdefault\fP\|\. If there is no \fBdefault\fP task gulp will error\.
+.SS Compilers
+.P
+You can find a list of supported languages at interpret \fIhttps://github\.com/tkellen/node\-interpret#jsvariants\fR\|\. If you would like to add support for a new language send pull request/open issues there\.
+

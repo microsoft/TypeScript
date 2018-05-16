@@ -1,0 +1,18 @@
+esprima:
+
+  $ for i in {1..5}; do node detect.js; done
+  704
+  702
+  704
+  704
+  697
+
+acorn:
+
+  $ for i in {1..5}; do node detect.js; done
+  555
+  552
+  585
+  549
+  583
+

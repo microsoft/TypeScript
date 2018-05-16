@@ -1,0 +1,13 @@
+[
+  {
+    "id": "a1b5af78",
+    "source": "console.log(require('./foo')(5))",
+    "deps": { "./foo": "b8f69fa5" },
+    "entry": true
+  },
+  {
+    "id": "b8f69fa5",
+    "source": "module.exports = function (n) { return n * 111 }",
+    "deps": {}
+  }
+]

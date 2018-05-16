@@ -1,0 +1,8 @@
+sudo: false
+language: node_js
+node_js:
+  - "0.10"
+  - "0.12"
+  - "iojs-v2.4"
+before_install:
+  - npm install --global npm

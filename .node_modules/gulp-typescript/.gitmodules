@@ -1,0 +1,7 @@
+[submodule "typescript/dev"]
+	path = typescript/dev
+	url = https://github.com/Microsoft/TypeScript.git
+
+[submodule "typescript/2.3"]
+	path = typescript/2.3
+	url = https://github.com/Microsoft/TypeScript.git

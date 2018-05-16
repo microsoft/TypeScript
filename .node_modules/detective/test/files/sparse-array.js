@@ -1,0 +1,3 @@
+var o = [,,,,]
+
+require('./foo')

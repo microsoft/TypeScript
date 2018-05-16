@@ -1,0 +1,5 @@
+{
+  "browser": {
+    "./xyz": "wow.js"
+  }
+}

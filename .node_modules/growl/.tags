@@ -1,0 +1,195 @@
+name	/Users/timosand/Dropbox/Documents/Projects/node-growl/package.json	/^  "name": "growl",$/;"	function	line:2
+version	/Users/timosand/Dropbox/Documents/Projects/node-growl/package.json	/^  "version": "1.10.1",$/;"	function	line:3
+description	/Users/timosand/Dropbox/Documents/Projects/node-growl/package.json	/^  "description": "Growl unobtrusive notifications",$/;"	function	line:4
+author	/Users/timosand/Dropbox/Documents/Projects/node-growl/package.json	/^  "author": "TJ Holowaychuk <tj@vision-media.ca>",$/;"	function	line:5
+maintainers	/Users/timosand/Dropbox/Documents/Projects/node-growl/package.json	/^  "maintainers": [$/;"	function	line:6
+repository	/Users/timosand/Dropbox/Documents/Projects/node-growl/package.json	/^  "repository": {$/;"	function	line:10
+type	/Users/timosand/Dropbox/Documents/Projects/node-growl/package.json	/^    "type": "git",$/;"	function	line:11
+url	/Users/timosand/Dropbox/Documents/Projects/node-growl/package.json	/^    "url": "git:\/\/github.com\/tj\/node-growl.git"$/;"	function	line:12
+main	/Users/timosand/Dropbox/Documents/Projects/node-growl/package.json	/^  "main": ".\/lib\/growl.js",$/;"	function	line:14
+license	/Users/timosand/Dropbox/Documents/Projects/node-growl/package.json	/^  "license": "MIT",$/;"	function	line:15
+devDependencies	/Users/timosand/Dropbox/Documents/Projects/node-growl/package.json	/^  "devDependencies": {$/;"	function	line:16
+eslint	/Users/timosand/Dropbox/Documents/Projects/node-growl/package.json	/^    "eslint": "^4.2.0",$/;"	function	line:17
+eslint-config-airbnb-base	/Users/timosand/Dropbox/Documents/Projects/node-growl/package.json	/^    "eslint-config-airbnb-base": "^11.2.0",$/;"	function	line:18
+eslint-plugin-import	/Users/timosand/Dropbox/Documents/Projects/node-growl/package.json	/^    "eslint-plugin-import": "^2.7.0"$/;"	function	line:19
+scripts	/Users/timosand/Dropbox/Documents/Projects/node-growl/package.json	/^  "scripts": {$/;"	function	line:21
+test	/Users/timosand/Dropbox/Documents/Projects/node-growl/package.json	/^    "test": "node test.js",$/;"	function	line:22
+lint	/Users/timosand/Dropbox/Documents/Projects/node-growl/package.json	/^    "lint": "eslint --ext js lib "$/;"	function	line:23
+engines	/Users/timosand/Dropbox/Documents/Projects/node-growl/package.json	/^  "engines": {$/;"	function	line:25
+node	/Users/timosand/Dropbox/Documents/Projects/node-growl/package.json	/^    "node": ">=4.x"$/;"	function	line:26
+extends	/Users/timosand/Dropbox/Documents/Projects/node-growl/.eslintrc.json	/^    "extends": ["airbnb-base", "eslint:recommended", "plugin:node\/recommended"],$/;"	function	line:2
+plugins	/Users/timosand/Dropbox/Documents/Projects/node-growl/.eslintrc.json	/^    "plugins": [$/;"	function	line:3
+rules	/Users/timosand/Dropbox/Documents/Projects/node-growl/.eslintrc.json	/^    "rules": {$/;"	function	line:7
+no-console	/Users/timosand/Dropbox/Documents/Projects/node-growl/.eslintrc.json	/^      "no-console": ["error", { "allow": ["warn", "error"] }]$/;"	function	line:8
+env	/Users/timosand/Dropbox/Documents/Projects/node-growl/.eslintrc.json	/^    "env": {$/;"	function	line:10
+node	/Users/timosand/Dropbox/Documents/Projects/node-growl/.eslintrc.json	/^        "node": true,$/;"	function	line:11
+es6	/Users/timosand/Dropbox/Documents/Projects/node-growl/.eslintrc.json	/^        "es6": true$/;"	function	line:12
+language	/Users/timosand/Dropbox/Documents/Projects/node-growl/.travis.yml	/^language: node_js$/;"	function	line:1
+dist	/Users/timosand/Dropbox/Documents/Projects/node-growl/.travis.yml	/^dist: trusty$/;"	function	line:2
+os	/Users/timosand/Dropbox/Documents/Projects/node-growl/.travis.yml	/^os:$/;"	function	line:3
+node_js	/Users/timosand/Dropbox/Documents/Projects/node-growl/.travis.yml	/^node_js:$/;"	function	line:6
+before_install	/Users/timosand/Dropbox/Documents/Projects/node-growl/.travis.yml	/^before_install:$/;"	function	line:12
+jobs	/Users/timosand/Dropbox/Documents/Projects/node-growl/.travis.yml	/^jobs:$/;"	function	line:14
+include	/Users/timosand/Dropbox/Documents/Projects/node-growl/.travis.yml	/^  include:$/;"	function	line:15
+script	/Users/timosand/Dropbox/Documents/Projects/node-growl/.travis.yml	/^      script: npm run lint$/;"	function	line:17
+script	/Users/timosand/Dropbox/Documents/Projects/node-growl/.travis.yml	/^      script: npm test$/;"	function	line:19
+cmd	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^let cmd;$/;"	variable	line:15
+which	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^function which(name) {$/;"	function	line:17
+loc	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^  let loc;$/;"	variable	line:19
+len	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^  for (let i = 0, len = paths.length; i < len; i += 1) {$/;"	variable	line:21
+loc	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^    loc = path.join(paths[i], name);$/;"	variable	line:22
+setupCmd	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^function setupCmd() {$/;"	function	line:28
+cmd	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        cmd = {$/;"	object	line:32
+cmd	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        cmd = {$/;"	variable	line:32
+type	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          type: 'Darwin-NotificationCenter',$/;"	string	line:33
+type	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          type: 'Darwin-NotificationCenter',$/;"	variable	line:33
+pkg	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          pkg: 'terminal-notifier',$/;"	string	line:34
+pkg	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          pkg: 'terminal-notifier',$/;"	variable	line:34
+msg	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          msg: '-message',$/;"	string	line:35
+msg	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          msg: '-message',$/;"	variable	line:35
+title	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          title: '-title',$/;"	string	line:36
+title	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          title: '-title',$/;"	variable	line:36
+subtitle	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          subtitle: '-subtitle',$/;"	string	line:37
+subtitle	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          subtitle: '-subtitle',$/;"	variable	line:37
+icon	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          icon: '-appIcon',$/;"	string	line:38
+icon	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          icon: '-appIcon',$/;"	variable	line:38
+sound	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          sound: '-sound',$/;"	string	line:39
+sound	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          sound: '-sound',$/;"	variable	line:39
+url	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          url: '-open',$/;"	string	line:40
+url	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          url: '-open',$/;"	variable	line:40
+priority	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          priority: {$/;"	object	line:41
+priority	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          priority: {$/;"	variable	line:41
+cmd	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^            cmd: '-execute',$/;"	string	line:42
+cmd	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^            cmd: '-execute',$/;"	variable	line:42
+range	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^            range: [],$/;"	array	line:43
+range	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^            range: [],$/;"	variable	line:43
+cmd	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        cmd = {$/;"	object	line:47
+cmd	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        cmd = {$/;"	variable	line:47
+type	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          type: 'Darwin-Growl',$/;"	string	line:48
+type	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          type: 'Darwin-Growl',$/;"	variable	line:48
+pkg	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          pkg: 'growlnotify',$/;"	string	line:49
+pkg	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          pkg: 'growlnotify',$/;"	variable	line:49
+msg	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          msg: '-m',$/;"	string	line:50
+msg	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          msg: '-m',$/;"	variable	line:50
+sticky	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          sticky: '--sticky',$/;"	string	line:51
+sticky	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          sticky: '--sticky',$/;"	variable	line:51
+url	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          url: '--url',$/;"	string	line:52
+url	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          url: '--url',$/;"	variable	line:52
+priority	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          priority: {$/;"	object	line:53
+priority	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          priority: {$/;"	variable	line:53
+cmd	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^            cmd: '--priority',$/;"	string	line:54
+cmd	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^            cmd: '--priority',$/;"	variable	line:54
+range	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^            range: [$/;"	array	line:55
+range	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^            range: [$/;"	variable	line:55
+0	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^              0,$/;"	variable	line:58
+1	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^              1,$/;"	variable	line:59
+2	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^              2,$/;"	variable	line:60
+break	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^      break;$/;"	variable	line:70
+cmd	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        cmd = {$/;"	object	line:73
+cmd	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        cmd = {$/;"	variable	line:73
+type	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          type: 'Linux-Growl',$/;"	string	line:74
+type	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          type: 'Linux-Growl',$/;"	variable	line:74
+pkg	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          pkg: 'growl',$/;"	string	line:75
+pkg	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          pkg: 'growl',$/;"	variable	line:75
+msg	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          msg: '-m',$/;"	string	line:76
+msg	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          msg: '-m',$/;"	variable	line:76
+title	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          title: '-title',$/;"	string	line:77
+title	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          title: '-title',$/;"	variable	line:77
+subtitle	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          subtitle: '-subtitle',$/;"	string	line:78
+subtitle	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          subtitle: '-subtitle',$/;"	variable	line:78
+host	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          host: {$/;"	object	line:79
+host	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          host: {$/;"	variable	line:79
+cmd	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^            cmd: '-H',$/;"	string	line:80
+cmd	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^            cmd: '-H',$/;"	variable	line:80
+hostname	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^            hostname: '192.168.33.1',$/;"	string	line:81
+hostname	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^            hostname: '192.168.33.1',$/;"	variable	line:81
+cmd	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        cmd = {$/;"	object	line:85
+cmd	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        cmd = {$/;"	variable	line:85
+type	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          type: 'Linux',$/;"	string	line:86
+type	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          type: 'Linux',$/;"	variable	line:86
+pkg	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          pkg: 'notify-send',$/;"	string	line:87
+pkg	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          pkg: 'notify-send',$/;"	variable	line:87
+msg	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          msg: '',$/;"	string	line:88
+msg	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          msg: '',$/;"	variable	line:88
+sticky	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          sticky: '-t 0',$/;"	string	line:89
+sticky	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          sticky: '-t 0',$/;"	variable	line:89
+icon	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          icon: '-i',$/;"	string	line:90
+icon	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          icon: '-i',$/;"	variable	line:90
+priority	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          priority: {$/;"	object	line:91
+priority	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          priority: {$/;"	variable	line:91
+cmd	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^            cmd: '-u',$/;"	string	line:92
+cmd	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^            cmd: '-u',$/;"	variable	line:92
+range	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^            range: [$/;"	array	line:93
+range	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^            range: [$/;"	variable	line:93
+break	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^      break;$/;"	variable	line:101
+cmd	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^      cmd = {$/;"	object	line:103
+cmd	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^      cmd = {$/;"	variable	line:103
+type	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        type: 'Windows',$/;"	string	line:104
+type	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        type: 'Windows',$/;"	variable	line:104
+pkg	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        pkg: 'growlnotify',$/;"	string	line:105
+pkg	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        pkg: 'growlnotify',$/;"	variable	line:105
+msg	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        msg: '',$/;"	string	line:106
+msg	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        msg: '',$/;"	variable	line:106
+sticky	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        sticky: '\/s:true',$/;"	string	line:107
+sticky	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        sticky: '\/s:true',$/;"	variable	line:107
+title	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        title: '\/t:',$/;"	string	line:108
+title	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        title: '\/t:',$/;"	variable	line:108
+icon	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        icon: '\/i:',$/;"	string	line:109
+icon	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        icon: '\/i:',$/;"	variable	line:109
+url	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        url: '\/cu:',$/;"	string	line:110
+url	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        url: '\/cu:',$/;"	variable	line:110
+priority	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        priority: {$/;"	object	line:111
+priority	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        priority: {$/;"	variable	line:111
+cmd	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          cmd: '\/p:',$/;"	string	line:112
+cmd	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          cmd: '\/p:',$/;"	variable	line:112
+range	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          range: [$/;"	array	line:113
+range	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^          range: [$/;"	variable	line:113
+0	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^            0,$/;"	variable	line:116
+1	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^            1,$/;"	variable	line:117
+2	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^            2,$/;"	variable	line:118
+break	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^      break;$/;"	variable	line:122
+break	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^      break;$/;"	variable	line:124
+sound	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^ *   growl('5 new emails', { title: 'Thunderbird', sound: 'Purr' })$/;"	string	line:151
+sound	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^ *   growl('5 new emails', { title: 'Thunderbird', sound: 'Purr' })$/;"	variable	line:151
+opts	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^function growl(msg, opts, callback) {$/;"	variable	line:162
+growl	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^function growl(msg, opts, callback) {$/;"	function	line:162
+image	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^  let image;$/;"	variable	line:163
+noop	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^  const fn = callback || function noop() {};$/;"	function	line:165
+cmd	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^    cmd = {$/;"	object	line:170
+cmd	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^    cmd = {$/;"	variable	line:170
+type	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^      type: 'Custom',$/;"	string	line:171
+type	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^      type: 'Custom',$/;"	variable	line:171
+pkg	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^      pkg: options.exec,$/;"	variable	line:172
+range	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^      range: [],$/;"	array	line:173
+range	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^      range: [],$/;"	variable	line:173
+return	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^    return;$/;"	variable	line:180
+image	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^    image = options.image;$/;"	variable	line:186
+flag	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        let flag;$/;"	variable	line:189
+flag	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        flag = ext === 'icns' && 'iconpath';$/;"	variable	line:191
+flag	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        flag = flag || (\/^[A-Z]\/.test(image) && 'appIcon');$/;"	variable	line:192
+flag	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        flag = flag || (\/^png|gif|jpe?g$\/.test(ext) && 'image');$/;"	variable	line:193
+flag	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        flag = flag || (ext && (image = ext) && 'icon');$/;"	variable	line:194
+flag	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        flag = flag || 'icon';$/;"	variable	line:195
+break	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        break;$/;"	variable	line:197
+break	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        break;$/;"	variable	line:201
+break	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        break;$/;"	variable	line:206
+break	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        break;$/;"	variable	line:209
+break	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        break;$/;"	variable	line:211
+break	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^      break;$/;"	variable	line:246
+break	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^      break;$/;"	variable	line:264
+break	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^      break;$/;"	variable	line:273
+break	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^      break;$/;"	variable	line:282
+break	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^      break;$/;"	variable	line:287
+command	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^      let command = customCmd.replace(\/(^|[^%])%s\/g, `$1${message}`);$/;"	variable	line:293
+command	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^        command = splitCmd.shift();$/;"	variable	line:296
+break	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^      break;$/;"	variable	line:303
+break	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^      break;$/;"	variable	line:306
+stdout	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^  let stdout = '';$/;"	string	line:311
+stdout	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^  let stdout = '';$/;"	variable	line:311
+stderr	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^  let stderr = '';$/;"	string	line:312
+stderr	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^  let stderr = '';$/;"	variable	line:312
+error	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^  let error;$/;"	variable	line:313
+error	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^    error = err;$/;"	variable	line:317
+error	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^    error = error || code === 0 ? null : code;$/;"	variable	line:329
+stdout	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^      fn(error, stdout, stderr);$/;"	variable	line:331
+exports	/Users/timosand/Dropbox/Documents/Projects/node-growl/lib/growl.js	/^module.exports = growl;$/;"	variable	line:341
