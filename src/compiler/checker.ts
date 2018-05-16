@@ -4037,8 +4037,9 @@ namespace ts {
 
             function determineIfDeclarationIsVisible() {
                 switch (node.kind) {
+                    case SyntaxKind.JSDocCallbackTag:
                     case SyntaxKind.JSDocTypedefTag:
-                        // Top-level jsdoc typedefs are considered exported
+                        // Top-level jsdoc type aliases are considered exported
                         // First parent is comment node, second is hosting declaration or token; we only care about those tokens or declarations whose parent is a source file
                         return !!(node.parent && node.parent.parent && node.parent.parent.parent && isSourceFile(node.parent.parent.parent));
                     case SyntaxKind.BindingElement:
@@ -5181,9 +5182,10 @@ namespace ts {
         function getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): TypeParameter[] {
             let result: TypeParameter[];
             for (const node of symbol.declarations) {
-                if (node.kind === SyntaxKind.InterfaceDeclaration || node.kind === SyntaxKind.ClassDeclaration ||
-                    node.kind === SyntaxKind.ClassExpression || node.kind === SyntaxKind.TypeAliasDeclaration ||
-                    isJSDocTypeAlias(node)) {
+                if (node.kind === SyntaxKind.InterfaceDeclaration ||
+                    node.kind === SyntaxKind.ClassDeclaration ||
+                    node.kind === SyntaxKind.ClassExpression ||
+                    isTypeAlias(node)) {
                     const declaration = <InterfaceDeclaration | TypeAliasDeclaration | JSDocTypedefTag | JSDocCallbackTag>node;
                     const typeParameters = getEffectiveTypeParameterDeclarations(declaration);
                     if (typeParameters) {
