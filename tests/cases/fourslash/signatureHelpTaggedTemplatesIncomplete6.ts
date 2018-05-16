@@ -5,12 +5,11 @@
 ////
 //// f `   ${  123 } ${/*1*/  }   `
 
-goTo.eachMarker(() => {
-    verify.signatureHelpCountIs(1);
-    verify.signatureHelpArgumentCountIs(3);
-
-    verify.currentSignatureParameterCountIs(4);
-    verify.currentSignatureHelpIs('f(templateStrings: any, x: any, y: any, z: any): number');
-    verify.currentParameterHelpArgumentNameIs("y");
-    verify.currentParameterSpanIs("y: any");
+verify.signatureHelp({
+    marker: test.markerNames(),
+    text: "f(templateStrings: any, x: any, y: any, z: any): number",
+    argumentCount: 3,
+    parameterCount: 4,
+    parameterName: "y",
+    parameterSpan: "y: any",
 });

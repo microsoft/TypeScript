@@ -1842,9 +1842,9 @@ namespace ts {
             (node as ModuleDeclaration).body;
     }
 
-    export function getJSDocCommentsAndTags(node: Node): ReadonlyArray<JSDoc | JSDocTag> {
+    export function getJSDocCommentsAndTags(hostNode: Node): ReadonlyArray<JSDoc | JSDocTag> {
         let result: (JSDoc | JSDocTag)[] | undefined;
-        getJSDocCommentsAndTagsWorker(node);
+        getJSDocCommentsAndTagsWorker(hostNode);
         return result || emptyArray;
 
         function getJSDocCommentsAndTagsWorker(node: Node): void {
@@ -1860,7 +1860,7 @@ namespace ts {
             //   */
             // var x = function(name) { return name.length; }
             if (parent.parent &&
-                (getSingleVariableOfVariableStatement(parent.parent) === node || getSourceOfAssignment(parent.parent))) {
+                (getSingleVariableOfVariableStatement(parent.parent) === node)) {
                 getJSDocCommentsAndTagsWorker(parent.parent);
             }
             if (parent.parent && parent.parent.parent &&
@@ -1869,8 +1869,8 @@ namespace ts {
                     getSourceOfDefaultedAssignment(parent.parent.parent))) {
                 getJSDocCommentsAndTagsWorker(parent.parent.parent);
             }
-            if (isBinaryExpression(node) && getSpecialPropertyAssignmentKind(node) !== SpecialPropertyAssignmentKind.None ||
-                isBinaryExpression(parent) && getSpecialPropertyAssignmentKind(parent) !== SpecialPropertyAssignmentKind.None ||
+            if (isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.EqualsToken ||
+                isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken ||
                 node.kind === SyntaxKind.PropertyAccessExpression && node.parent && node.parent.kind === SyntaxKind.ExpressionStatement) {
                 getJSDocCommentsAndTagsWorker(parent);
             }
@@ -1880,7 +1880,7 @@ namespace ts {
                 result = addRange(result, getJSDocParameterTags(node as ParameterDeclaration));
             }
 
-            if (isVariableLike(node) && hasInitializer(node) && hasJSDocNodes(node.initializer)) {
+            if (isVariableLike(node) && hasInitializer(node) && node.initializer !== hostNode && hasJSDocNodes(node.initializer)) {
                 result = addRange(result, node.initializer.jsDoc);
             }
 
@@ -3093,11 +3093,13 @@ namespace ts {
      * Gets the effective type parameters. If the node was parsed in a
      * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
      */
-    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters) {
-        return node.typeParameters || (isInJavaScriptFile(node) ? getJSDocTypeParameterDeclarations(node) : undefined);
+    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters | JSDocTypedefTag) {
+        return isJSDocTypedefTag(node)
+            ? getJSDocTypeParameterDeclarations(node)
+            : node.typeParameters || (isInJavaScriptFile(node) ? getJSDocTypeParameterDeclarations(node) : undefined);
     }
 
-    export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters) {
+    export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters | JSDocTypedefTag) {
         const templateTag = getJSDocTemplateTag(node);
         return templateTag && templateTag.typeParameters;
     }
@@ -4771,7 +4773,9 @@ namespace ts {
         let tags = (node as JSDocContainer).jsDocCache;
         // If cache is 'null', that means we did the work of searching for JSDoc tags and came up with nothing.
         if (tags === undefined) {
-            (node as JSDocContainer).jsDocCache = tags = flatMap(getJSDocCommentsAndTags(node), j => isJSDoc(j) ? j.tags : j);
+            const comments = getJSDocCommentsAndTags(node);
+            Debug.assert(comments.length < 2 || comments[0] !== comments[1]);
+            (node as JSDocContainer).jsDocCache = tags = flatMap(comments, j => isJSDoc(j) ? j.tags : j);
         }
         return tags;
     }

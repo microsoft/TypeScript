@@ -202,76 +202,72 @@
 ////class NoQuic/*50*/kInfoClass {
 ////}
 
-goTo.marker('1');
-verify.currentSignatureHelpDocCommentIs("");
+verify.signatureHelp({ marker: "1", docComment: "" });
 verify.quickInfoAt("1q", "function simple(): void");
 
-goTo.marker('2');
-verify.currentSignatureHelpDocCommentIs("");
+verify.signatureHelp({ marker: "2", docComment: "" });
 verify.quickInfoAt("2q", "function multiLine(): void");
 
-goTo.marker('3');
-verify.currentSignatureHelpDocCommentIs("this is eg of single line jsdoc style comment ");
+verify.signatureHelp({ marker: "3", docComment: "this is eg of single line jsdoc style comment " });
 verify.quickInfoAt("3q", "function jsDocSingleLine(): void", "this is eg of single line jsdoc style comment ");
 
-goTo.marker('4');
-verify.currentSignatureHelpDocCommentIs("this is multiple line jsdoc stule comment\nNew line1\nNew Line2");
+verify.signatureHelp({ marker: "4", docComment: "this is multiple line jsdoc stule comment\nNew line1\nNew Line2" });
 verify.quickInfoAt("4q", "function jsDocMultiLine(): void", "this is multiple line jsdoc stule comment\nNew line1\nNew Line2");
 
-goTo.marker('5');
-verify.currentSignatureHelpDocCommentIs("this is multiple line jsdoc stule comment\nNew line1\nNew Line2\nShoul mege this line as well\nand this too\nAnother this one too");
+verify.signatureHelp({ marker: "5", docComment: "this is multiple line jsdoc stule comment\nNew line1\nNew Line2\nShoul mege this line as well\nand this too\nAnother this one too" });
 verify.quickInfoAt("5q", "function jsDocMultiLineMerge(): void", "this is multiple line jsdoc stule comment\nNew line1\nNew Line2\nShoul mege this line as well\nand this too\nAnother this one too");
 
-goTo.marker('6');
-verify.currentSignatureHelpDocCommentIs("jsdoc comment ");
+verify.signatureHelp({ marker: "6", docComment: "jsdoc comment " });
 verify.quickInfoAt("6q", "function jsDocMixedComments1(): void", "jsdoc comment ");
 
-goTo.marker('7');
-verify.currentSignatureHelpDocCommentIs("jsdoc comment \nanother jsDocComment");
+verify.signatureHelp({ marker: "7", docComment: "jsdoc comment \nanother jsDocComment" });
 verify.quickInfoAt("7q", "function jsDocMixedComments2(): void", "jsdoc comment \nanother jsDocComment");
 
-goTo.marker('8');
-verify.currentSignatureHelpDocCommentIs("jsdoc comment \n* triplestar jsDocComment");
+verify.signatureHelp({ marker: "8", docComment: "jsdoc comment \n* triplestar jsDocComment" });
 verify.quickInfoAt("8q", "function jsDocMixedComments3(): void", "jsdoc comment \n* triplestar jsDocComment");
 
-goTo.marker('9');
-verify.currentSignatureHelpDocCommentIs("jsdoc comment \nanother jsDocComment");
+verify.signatureHelp({ marker: "9", docComment: "jsdoc comment \nanother jsDocComment" });
 verify.quickInfoAt("9q", "function jsDocMixedComments4(): void", "jsdoc comment \nanother jsDocComment");
 
-goTo.marker('10');
-verify.currentSignatureHelpDocCommentIs("jsdoc comment \nanother jsDocComment");
+verify.signatureHelp({ marker: "10", docComment: "jsdoc comment \nanother jsDocComment" });
 verify.quickInfoAt("10q", "function jsDocMixedComments5(): void", "jsdoc comment \nanother jsDocComment");
 
-goTo.marker('11');
-verify.currentSignatureHelpDocCommentIs("another jsDocComment\njsdoc comment ");
+verify.signatureHelp({ marker: "11", docComment: "another jsDocComment\njsdoc comment " });
 verify.quickInfoAt("11q", "function jsDocMixedComments6(): void", "another jsDocComment\njsdoc comment ");
 
-goTo.marker('12');
-verify.currentSignatureHelpDocCommentIs("");
+verify.signatureHelp({ marker: "12", docComment: "" });
 verify.quickInfoAt("12q", "function noHelpComment1(): void");
 
-goTo.marker('13');
-verify.currentSignatureHelpDocCommentIs("");
+verify.signatureHelp({ marker: "13", docComment: "" });
 verify.quickInfoAt("13q", "function noHelpComment2(): void");
 
-goTo.marker('14');
-verify.currentSignatureHelpDocCommentIs("");
+verify.signatureHelp({ marker: "14", docComment: "" });
 verify.quickInfoAt("14q", "function noHelpComment3(): void");
 
 goTo.marker('15');
 verify.completionListContains("sum", "function sum(a: number, b: number): number", "Adds two integers and returns the result");
 
-goTo.marker('16');
-verify.currentSignatureHelpDocCommentIs("Adds two integers and returns the result");
-verify.currentParameterHelpArgumentDocCommentIs("first number");
+const addTags: ReadonlyArray<FourSlashInterface.JSDocTagInfo> = [
+    { name: "param", text: "a first number" },
+    { name: "param", text: "b second number" },
+];
+verify.signatureHelp({
+    marker: "16",
+    docComment: "Adds two integers and returns the result",
+    parameterDocComment: "first number",
+    tags: addTags,
+});
 verify.quickInfos({
     "16q": ["function sum(a: number, b: number): number", "Adds two integers and returns the result"],
     "16aq": ["(parameter) a: number", "first number"]
 });
 
-goTo.marker('17');
-verify.currentSignatureHelpDocCommentIs("Adds two integers and returns the result");
-verify.currentParameterHelpArgumentDocCommentIs("second number");
+verify.signatureHelp({
+    marker: "17",
+    docComment: "Adds two integers and returns the result",
+    parameterDocComment: "second number",
+    tags: addTags,
+});
 verify.quickInfoAt("17aq", "(parameter) b: number", "second number");
 
 goTo.marker('18');
@@ -279,9 +275,17 @@ verify.quickInfoIs("(parameter) a: number", "first number");
 verify.completionListContains("a", "(parameter) a: number", "first number");
 verify.completionListContains("b", "(parameter) b: number", "second number");
 
-goTo.marker('19');
-verify.currentSignatureHelpDocCommentIs("This is multiplication function");
-verify.currentParameterHelpArgumentDocCommentIs("first number");
+const multiplyTags: ReadonlyArray<FourSlashInterface.JSDocTagInfo> = [
+    { name: "param", text: "" },
+    { name: "param", text: "a first number" },
+    { name: "param", text: "b" },
+    { name: "param", text: "c" },
+    { name: "param", text: "d" },
+    { name: "anotherTag", text: undefined },
+    { name: "param", text: "e LastParam " },
+    { name: "anotherTag", text: undefined },
+];
+verify.signatureHelp({ marker: "19", docComment: "This is multiplication function", parameterDocComment: "first number", tags: multiplyTags });
 verify.quickInfos({
     "19q": [
         "function multiply(a: number, b: number, c?: number, d?: any, e?: any): void",
@@ -290,41 +294,34 @@ verify.quickInfos({
     "19aq": ["(parameter) a: number", "first number"]
 });
 
-goTo.marker('20');
-verify.currentSignatureHelpDocCommentIs("This is multiplication function");
-verify.currentParameterHelpArgumentDocCommentIs("");
+verify.signatureHelp({ marker: "20", docComment: "This is multiplication function", tags: multiplyTags });
 verify.quickInfoAt("20aq", "(parameter) b: number");
 
-goTo.marker('21');
-verify.currentSignatureHelpDocCommentIs("This is multiplication function");
-verify.currentParameterHelpArgumentDocCommentIs("");
+verify.signatureHelp({ marker: "21", docComment: "This is multiplication function", tags: multiplyTags });
 verify.quickInfoAt("21aq", "(parameter) c: number");
 
-goTo.marker('22');
-verify.currentSignatureHelpDocCommentIs("This is multiplication function");
-verify.currentParameterHelpArgumentDocCommentIs("");
+verify.signatureHelp({ marker: "22", docComment: "This is multiplication function", tags: multiplyTags });
 verify.quickInfoAt("22aq", "(parameter) d: any");
 
-goTo.marker('23');
-verify.currentSignatureHelpDocCommentIs("This is multiplication function");
-verify.currentParameterHelpArgumentDocCommentIs("LastParam ");
+verify.signatureHelp({ marker: "23", docComment: "This is multiplication function", parameterDocComment: "LastParam ", tags: multiplyTags });
 verify.quickInfoAt("23aq", "(parameter) e: any", "LastParam ");
 
 goTo.marker('24');
 verify.completionListContains("aOrb", "(parameter) aOrb: any", "");
 verify.completionListContains("opt", "(parameter) opt: any", "optional parameter");
 
-goTo.marker('25');
-verify.currentSignatureHelpDocCommentIs("fn f1 with number");
-verify.currentParameterHelpArgumentDocCommentIs("");
+verify.signatureHelp({
+    marker: "25",
+    overloadsCount: 2,
+    docComment: "fn f1 with number",
+    tags: [{ name: "param", text: "b about b" }],
+});
 verify.quickInfos({
     "25q": ["function f1(a: number): any (+1 overload)", "fn f1 with number"],
     "25aq": "(parameter) a: number"
 });
 
-goTo.marker('26');
-verify.currentSignatureHelpDocCommentIs("");
-verify.currentParameterHelpArgumentDocCommentIs("");
+verify.signatureHelp({ marker: "26", overloadsCount: 2, docComment: "" });
 verify.quickInfos({
     "26q": "function f1(b: string): any (+1 overload)",
     "26aq": "(parameter) b: string"
@@ -335,9 +332,15 @@ verify.completionListContains("multiply", "function multiply(a: number, b: numbe
 verify.completionListContains("f1", "function f1(a: number): any (+1 overload)", "fn f1 with number");
 
 const subtractDoc = "This is subtract function";
-goTo.marker('28');
-verify.currentSignatureHelpDocCommentIs(subtractDoc);
-verify.currentParameterHelpArgumentDocCommentIs("");
+const subtractTags: ReadonlyArray<FourSlashInterface.JSDocTagInfo> = [
+    { name: "param", text: "" },
+    { name: "param", text: "b this is about b" },
+    { name: "param", text: "c this is optional param c" },
+    { name: "param", text: "d this is optional param d" },
+    { name: "param", text: "e this is optional param e" },
+    { name: "param", text: " { () => string; } } f this is optional param f" },
+];
+verify.signatureHelp({ marker: "28", docComment: subtractDoc, tags: subtractTags });
 verify.quickInfos({
     "28q": [
         "function subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void",
@@ -346,34 +349,31 @@ verify.quickInfos({
     "28aq": "(parameter) a: number"
 });
 
-goTo.marker('29');
-verify.currentSignatureHelpDocCommentIs(subtractDoc);
-verify.currentParameterHelpArgumentDocCommentIs("this is about b");
+verify.signatureHelp({ marker: "29", docComment: subtractDoc, tags: subtractTags, parameterDocComment: "this is about b" });
 verify.quickInfoAt("29aq", "(parameter) b: number", "this is about b");
 
-goTo.marker('30');
-verify.currentSignatureHelpDocCommentIs(subtractDoc);
-verify.currentParameterHelpArgumentDocCommentIs("this is optional param c");
+verify.signatureHelp({ marker: "30", docComment: subtractDoc, tags: subtractTags, parameterDocComment: "this is optional param c" });
 verify.quickInfoAt("30aq", "(parameter) c: () => string", "this is optional param c");
 
-goTo.marker('31');
-verify.currentSignatureHelpDocCommentIs(subtractDoc);
-verify.currentParameterHelpArgumentDocCommentIs("this is optional param d");
+verify.signatureHelp({ marker: "31", docComment: subtractDoc, tags: subtractTags, parameterDocComment: "this is optional param d" });
 verify.quickInfoAt("31aq", "(parameter) d: () => string", "this is optional param d");
 
-goTo.marker('32');
-verify.currentSignatureHelpDocCommentIs(subtractDoc);
-verify.currentParameterHelpArgumentDocCommentIs("this is optional param e");
+verify.signatureHelp({ marker: "32", docComment: subtractDoc, tags: subtractTags, parameterDocComment: "this is optional param e" });
 verify.quickInfoAt("32aq", "(parameter) e: () => string", "this is optional param e");
 
-goTo.marker('33');
-verify.currentSignatureHelpDocCommentIs(subtractDoc);
-verify.currentParameterHelpArgumentDocCommentIs("");
+verify.signatureHelp({ marker: "33", docComment: subtractDoc, tags: subtractTags });
 verify.quickInfoAt("33aq", "(parameter) f: () => string");
 
-goTo.marker('34');
-verify.currentSignatureHelpDocCommentIs("this is square function");
-verify.currentParameterHelpArgumentDocCommentIs("this is input number");
+verify.signatureHelp({
+    marker: "34",
+    docComment: "this is square function",
+    parameterDocComment: "this is input number",
+    tags: [
+        { name: "paramTag", text: "{ number } a this is input number of paramTag" },
+        { name: "param", text: "a this is input number" },
+        { name: "returnType", text: "{ number } it is return type" },
+    ],
+});
 verify.quickInfos({
     "34q": [
         "function square(a: number): number",
@@ -385,9 +385,12 @@ verify.quickInfos({
     ]
 });
 
-goTo.marker('35');
-verify.currentSignatureHelpDocCommentIs("this is divide function");
-verify.currentParameterHelpArgumentDocCommentIs("this is a");
+const divideTags: ReadonlyArray<FourSlashInterface.JSDocTagInfo> = [
+    { name: "param", text: "a this is a" },
+    { name: "paramTag", text: "{ number } g this is optional param g" },
+    { name: "param", text: "b this is b" },
+];
+verify.signatureHelp({ marker: "35", docComment: "this is divide function", parameterDocComment: "this is a", tags: divideTags });
 verify.quickInfos({
     "35q": [
         "function divide(a: number, b: number): void",
@@ -399,22 +402,21 @@ verify.quickInfos({
     ]
 });
 
-goTo.marker('36');
-verify.currentSignatureHelpDocCommentIs("this is divide function");
-verify.currentParameterHelpArgumentDocCommentIs("this is b");
+verify.signatureHelp({ marker: "36", docComment: "this is divide function", parameterDocComment: "this is b", tags: divideTags });
 verify.quickInfoAt("36aq", "(parameter) b: number", "this is b");
 
-goTo.marker('37');
-verify.currentSignatureHelpDocCommentIs("Function returns string concat of foo and bar");
-verify.currentParameterHelpArgumentDocCommentIs("is string");
+const concatDoc = "Function returns string concat of foo and bar";
+const concatTags: ReadonlyArray<FourSlashInterface.JSDocTagInfo> = [
+    { name: "param", text: "foo is string" },
+    { name: "param", text: "bar is second string" },
+];
+verify.signatureHelp({ marker: "37", docComment: concatDoc, parameterDocComment: "is string", tags: concatTags });
 verify.quickInfos({
-    "37q": ["function fooBar(foo: string, bar: string): string", "Function returns string concat of foo and bar"],
+    "37q": ["function fooBar(foo: string, bar: string): string", concatDoc],
     "37aq": ["(parameter) foo: string", "is string"]
 });
 
-goTo.marker('38');
-verify.currentSignatureHelpDocCommentIs("Function returns string concat of foo and bar");
-verify.currentParameterHelpArgumentDocCommentIs("is second string");
+verify.signatureHelp({ marker: "38", docComment: concatDoc, parameterDocComment: "is second string", tags: concatTags });
 verify.quickInfoAt("38aq", "(parameter) bar: string", "is second string");
 
 goTo.marker('39');
@@ -423,13 +425,16 @@ verify.completionListContains("b", "(parameter) b: number", "this is inline comm
 verify.completionListContains("c", "(parameter) c: number", "it is third parameter");
 verify.completionListContains("d", "(parameter) d: number", "");
 
-goTo.marker('40');
-verify.currentSignatureHelpDocCommentIs("this is jsdoc style function with param tag as well as inline parameter help");
-verify.currentParameterHelpArgumentDocCommentIs("it is first parameter\nthis is inline comment for a ");
+const jsdocTestDocComment = "this is jsdoc style function with param tag as well as inline parameter help";
+const jsdocTestTags: ReadonlyArray<FourSlashInterface.JSDocTagInfo> = [
+    { name: "param", text: "a it is first parameter" },
+    { name: "param", text: "c it is third parameter" },
+];
+verify.signatureHelp({ marker: "40", docComment: jsdocTestDocComment, parameterDocComment: "it is first parameter\nthis is inline comment for a ", tags: jsdocTestTags });
 verify.quickInfos({
     "40q": [
         "function jsDocParamTest(a: number, b: number, c: number, d: number): number",
-        "this is jsdoc style function with param tag as well as inline parameter help"
+        jsdocTestDocComment
     ],
     "40aq": [
         "(parameter) a: number",
@@ -437,41 +442,42 @@ verify.quickInfos({
     ]
 });
 
-goTo.marker('41');
-verify.currentSignatureHelpDocCommentIs("this is jsdoc style function with param tag as well as inline parameter help");
-verify.currentParameterHelpArgumentDocCommentIs("this is inline comment for b");
+verify.signatureHelp({ marker: "41", docComment: jsdocTestDocComment, parameterDocComment: "this is inline comment for b", tags: jsdocTestTags });
 verify.quickInfoAt("41aq", "(parameter) b: number", "this is inline comment for b");
 
-goTo.marker('42');
-verify.currentSignatureHelpDocCommentIs("this is jsdoc style function with param tag as well as inline parameter help");
-verify.currentParameterHelpArgumentDocCommentIs("it is third parameter");
+verify.signatureHelp({ marker: "42", docComment: jsdocTestDocComment, parameterDocComment: "it is third parameter", tags: jsdocTestTags });
 verify.quickInfoAt("42aq", "(parameter) c: number", "it is third parameter");
 
-goTo.marker('43');
-verify.currentSignatureHelpDocCommentIs("this is jsdoc style function with param tag as well as inline parameter help");
-verify.currentParameterHelpArgumentDocCommentIs("");
+verify.signatureHelp({ marker: "43", docComment: jsdocTestDocComment, tags: jsdocTestTags });
 verify.quickInfoAt("43aq", "(parameter) d: number");
 
 goTo.marker('44');
-verify.completionListContains("jsDocParamTest", "function jsDocParamTest(a: number, b: number, c: number, d: number): number", "this is jsdoc style function with param tag as well as inline parameter help");
+verify.completionListContains("jsDocParamTest", "function jsDocParamTest(a: number, b: number, c: number, d: number): number", jsdocTestDocComment);
 verify.completionListContains("x", "var x: any", "This is a comment ");
 verify.completionListContains("y", "var y: any", "This is a comment");
 
-goTo.marker('45');
-verify.currentSignatureHelpDocCommentIs("This is function comment\nAnd properly aligned comment");
+verify.signatureHelp({ marker: "45", docComment: "This is function comment\nAnd properly aligned comment" });
 verify.quickInfoAt("45q", "function jsDocCommentAlignmentTest1(): void", "This is function comment\nAnd properly aligned comment");
 
-goTo.marker('46');
-verify.currentSignatureHelpDocCommentIs("This is function comment\n    And aligned with 4 space char margin");
-verify.quickInfoAt("46q", "function jsDocCommentAlignmentTest2(): void", "This is function comment\n    And aligned with 4 space char margin");
+const alignmentDocComment = "This is function comment\n    And aligned with 4 space char margin";
+verify.signatureHelp({ marker: "46", docComment: alignmentDocComment });
+verify.quickInfoAt("46q", "function jsDocCommentAlignmentTest2(): void", alignmentDocComment);
 
-goTo.marker('47');
-verify.currentSignatureHelpDocCommentIs("This is function comment\n    And aligned with 4 space char margin");
-verify.currentParameterHelpArgumentDocCommentIs("this is info about a\nspanning on two lines and aligned perfectly");
+const alignmentTags: ReadonlyArray<FourSlashInterface.JSDocTagInfo> = [
+    { name: "param", text: "a this is info about a\nspanning on two lines and aligned perfectly" },
+    { name: "param", text: "b this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin" },
+    { name: "param", text: "c this is info about b\nnot aligned text about parameter will eat only one space" },
+];
+verify.signatureHelp({
+    marker: "47",
+    docComment: alignmentDocComment,
+    parameterDocComment: "this is info about a\nspanning on two lines and aligned perfectly",
+    tags: alignmentTags,
+});
 verify.quickInfos({
     "47q": [
         "function jsDocCommentAlignmentTest3(a: string, b: any, c: any): void",
-        "This is function comment\n    And aligned with 4 space char margin"
+        alignmentDocComment
     ],
     "47aq": [
         "(parameter) a: string",
@@ -479,14 +485,20 @@ verify.quickInfos({
     ]
 });
 
-goTo.marker('48');
-verify.currentSignatureHelpDocCommentIs("This is function comment\n    And aligned with 4 space char margin");
-verify.currentParameterHelpArgumentDocCommentIs("this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin");
+verify.signatureHelp({
+    marker: "48",
+    docComment: alignmentDocComment,
+    parameterDocComment: "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin",
+    tags: alignmentTags,
+});
 verify.quickInfoAt("48aq", "(parameter) b: any", "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin");
 
-goTo.marker('49');
-verify.currentSignatureHelpDocCommentIs("This is function comment\n    And aligned with 4 space char margin");
-verify.currentParameterHelpArgumentDocCommentIs("this is info about b\nnot aligned text about parameter will eat only one space");
+verify.signatureHelp({
+    marker: "49",
+    docComment: alignmentDocComment,
+    parameterDocComment: "this is info about b\nnot aligned text about parameter will eat only one space",
+    tags: alignmentTags,
+});
 verify.quickInfos({
     "49aq": [
         "(parameter) c: any",

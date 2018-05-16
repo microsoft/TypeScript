@@ -20,7 +20,7 @@
 //// }
 
 //// function _buildMainButton({ onClick, children, className }: ButtonProps): JSX.Element {
-////     return(<button className={className} onClick={onClick}>{ children || 'MAIN BUTTON'}</button>);  
+////     return(<button className={className} onClick={onClick}>{ children || 'MAIN BUTTON'}</button>);
 //// }
 
 //// export function MainButton(buttonProps: ButtonProps): JSX.Element;
@@ -30,12 +30,9 @@
 //// }
 //// let e1 = <MainButton/*1*/ /*2*/
 
-goTo.marker("1");
-verify.signatureHelpCountIs(2);
-verify.currentSignatureHelpIs("MainButton(buttonProps: ButtonProps): any");
-verify.currentParameterSpanIs("buttonProps: ButtonProps");
-
-goTo.marker("2");
-verify.signatureHelpCountIs(2);
-verify.currentSignatureHelpIs("MainButton(buttonProps: ButtonProps): any");
-verify.currentParameterSpanIs("buttonProps: ButtonProps");
+verify.signatureHelp({
+    marker: ["1", "2"],
+    overloadsCount: 2,
+    text: "MainButton(buttonProps: ButtonProps): any",
+    parameterSpan: "buttonProps: ButtonProps",
+});

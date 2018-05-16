@@ -3,7 +3,4 @@
 ////function foo(a) { }
 ////foo(hello my name /**/is
 
-goTo.marker();
-verify.signatureHelpPresent();
-verify.signatureHelpCountIs(1);
-
+verify.signatureHelp({ marker: "", text: "foo(a: any): void" });

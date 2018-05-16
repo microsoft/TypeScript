@@ -964,7 +964,7 @@ namespace ts.server {
             return this.missingFilesMap && this.missingFilesMap.has(path);
         }
 
-        getScriptInfoForNormalizedPath(fileName: NormalizedPath) {
+        getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo | undefined {
             const scriptInfo = this.projectService.getScriptInfoForPath(this.toPath(fileName));
             if (scriptInfo && !scriptInfo.isAttached(this)) {
                 return Errors.ThrowProjectDoesNotContainDocument(fileName, this);

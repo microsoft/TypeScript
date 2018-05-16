@@ -28,16 +28,7 @@
 ////let o = { n: 14, m: explicitLiteral };
 ////o.m(/*6*/);
 
-
-goTo.marker('1');
-verify.currentParameterHelpArgumentNameIs("n");
-goTo.marker('2');
-verify.currentParameterHelpArgumentNameIs("n");
-goTo.marker('3');
-verify.currentParameterHelpArgumentNameIs("n");
-goTo.marker('4');
-verify.currentParameterHelpArgumentNameIs("x");
-goTo.marker('5');
-verify.currentParameterHelpArgumentNameIs("x");
-goTo.marker('6');
-verify.currentParameterHelpArgumentNameIs("x");
+verify.signatureHelp(
+    { marker: ["1", "2", "3"], parameterName: "n" },
+    { marker: ["4", "5", "6"], parameterName: "x" },
+);
