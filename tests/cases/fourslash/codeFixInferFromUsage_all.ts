@@ -1,6 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @noImplicitAny: true
+// @strictNullChecks: true
 
 ////function f(x, y) {
 ////    x += 0;
@@ -10,6 +11,13 @@
 ////function g(z) {
 ////    return z * 2;
 ////}
+////
+////let x = null;
+////function h() {
+////    if (!x) x = 2;
+////}
+
+// TODO: GH#24168
 
 verify.codeFixAll({
     fixId: "inferFromUsage",
@@ -22,5 +30,10 @@ verify.codeFixAll({
 
 function g(z: number) {
     return z * 2;
+}
+
+let x: number = null;
+function h() {
+    if (!x) x = 2;
 }`,
 });
