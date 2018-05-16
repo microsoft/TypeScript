@@ -44,6 +44,7 @@ gh.pullRequests.create({
     base: "master",
     body:
 `Please review the diff and merge if no changes are unexpected.
+You can view the build log [here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${process.env.BUILD_BUILDID}&_a=summary).
 
 cc ${reviewers.map(r => "@" + r).join(" ")}`,
 }).then(r => {
