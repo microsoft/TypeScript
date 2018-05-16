@@ -3100,7 +3100,7 @@ namespace ts {
     }
 
     export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters | JSDocTypedefTag) {
-        const templateTag = getJSDocTemplateTag(node);
+        const templateTag = node.parent.kind === SyntaxKind.JSDocComment ? firstDefined((node.parent as JSDoc).tags, e => isJSDocTemplateTag(e) ? e : undefined)  : getJSDocTemplateTag(node);
         return templateTag && templateTag.typeParameters;
     }
 

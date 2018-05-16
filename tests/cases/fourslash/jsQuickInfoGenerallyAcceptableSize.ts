@@ -195,5 +195,18 @@
 //// */
 ////var doSome/*1*/thing = function (dataTable) {
 ////};
+////
+/////**
+//// * @callback SomeCallback
+//// * @param {number} foo
+//// * @param {string} bar
+//// */
+////
+//// /**
+////  * Another thing
+////  * @type {SomeCallback}
+////  */
+////var another/*2*/Thing = function(a, b) {}
 
 verify.quickInfoAt("1", "var doSomething: (dataTable: DataTableThing) => void", "Do something");
+verify.quickInfoAt("2", "var anotherThing: any", "Another thing"); // TODO: #23947
