@@ -8457,9 +8457,11 @@ namespace ts {
                 }
                 i--;
             }
-            if (intersection !== unionType.types) {
-                types[unionIndex] = getUnionTypeFromSortedList(intersection, unionType.flags & TypeFlags.UnionOfUnitTypes);
+            if (intersection === unionType.types) {
+                return false;
             }
+            types[unionIndex] = getUnionTypeFromSortedList(intersection, unionType.flags & TypeFlags.UnionOfUnitTypes);
+            return true;
         }
 
         // We normalize combinations of intersection and union types based on the distributive property of the '&'
@@ -8489,9 +8491,6 @@ namespace ts {
                 includes & TypeFlags.ESSymbol && includes & TypeFlags.UniqueESSymbol) {
                 removeRedundantPrimitiveTypes(typeSet, includes);
             }
-            if (includes & TypeFlags.UnionOfUnitTypes) {
-                intersectUnionsOfUnitTypes(typeSet);
-            }
             if (includes & TypeFlags.EmptyObject && !(includes & TypeFlags.Object)) {
                 typeSet.push(emptyObjectType);
             }
@@ -8499,6 +8498,12 @@ namespace ts {
                 return typeSet[0];
             }
             if (includes & TypeFlags.Union) {
+                if (includes & TypeFlags.UnionOfUnitTypes && intersectUnionsOfUnitTypes(typeSet)) {
+                    // When the intersection creates a reduced set (which might mean that *all* union types have
+                    // disappeared), we restart the operation to get a new set of combined flags. Once we have
+                    // reduced we'll never reduce again, so this occurs at most once.
+                    return getIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
+                }
                 // We are attempting to construct a type of the form X & (A | B) & Y. Transform this into a type of
                 // the form X & A & Y | X & B & Y and recursively reduce until no union type constituents remain.
                 const unionIndex = findIndex(typeSet, t => (t.flags & TypeFlags.Union) !== 0);
