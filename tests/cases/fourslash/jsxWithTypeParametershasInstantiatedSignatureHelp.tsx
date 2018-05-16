@@ -14,6 +14,6 @@
 //// (</*2*/SFC<string>/>);
 
 goTo.marker("1");
-verify.currentSignatureHelpIs("SFC(_props: Record<string, {}>): string");
+verify.signatureHelp({ text: "SFC(_props: Record<string, {}>): string" });
 goTo.marker("2");
-verify.currentSignatureHelpIs("SFC(_props: Record<string, string>): string");
+verify.signatureHelp({ text: "SFC(_props: Record<string, string>): string" });
