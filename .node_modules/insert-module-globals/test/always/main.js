@@ -1,0 +1,10 @@
+t.equal(eval('typeof process'), 'object');
+t.equal(eval('typeof process.nextTick'), 'function');
+t.equal(eval('typeof global'), 'object');
+t.equal(eval('global.xyz'), 555);
+t.equal(eval('typeof Buffer'), 'function');
+t.equal(eval('typeof __filename'), 'string');
+t.notEqual(eval('__filename'), 'sandbox __filename');
+t.equal(eval('typeof __dirname'), 'string');
+t.notEqual(eval('__dirname'), 'sandbox __dirname');
+t.equal(eval('custom'), 'sandbox custom');

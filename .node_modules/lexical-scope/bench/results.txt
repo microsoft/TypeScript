@@ -1,0 +1,15 @@
+$ git log|head -n1
+commit ae85dfd4cc0284679ce21bb662427340fa966666
+$ time node run.js >/dev/null
+
+real    0m6.551s
+user    0m6.336s
+sys     0m0.288s
+
+$ git log|head -n1
+commit 9125bf1ec0cf78c77a852e0547a4cc69db7797bf
+$ time node run.js>/dev/null
+
+real    0m1.702s
+user    0m1.644s
+sys     0m0.084s

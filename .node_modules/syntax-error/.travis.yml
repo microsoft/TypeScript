@@ -1,0 +1,12 @@
+language: node_js
+node_js:
+  - stable
+  - 8
+  - 6
+  - 4
+  - "iojs"
+  - "0.12"
+  - "0.10"
+  - "0.8"
+before_install:
+  - nvm install-latest-npm

@@ -1,0 +1,2 @@
+var foo;
+foo = bar;

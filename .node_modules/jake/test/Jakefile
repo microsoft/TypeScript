@@ -1,0 +1,359 @@
+var exec = require('child_process').exec
+  , fs = require('fs')
+  , Q = require('q');
+
+desc('The default task.');
+task('default', function () {
+  console.log('default task');
+});
+
+desc('No action.');
+task({'noAction': ['default']});
+
+desc('No action, no prereqs.');
+task('noActionNoPrereqs');
+
+desc('Task that throws');
+task('throwy', function () {
+  var errorListener = function (err) {
+    process.stderr.write('Emitted: ');
+    process.stderr.write(err.toString());
+
+    jake.removeListener('error', errorListener);
+  };
+
+  jake.on('error', errorListener);
+
+  throw new Error('I am bad');
+});
+
+desc('Accepts args and env vars.');
+task('argsEnvVars', function () {
+  var res = {
+    args: arguments
+  , env: {
+      foo: process.env.foo
+    , baz: process.env.baz
+    }
+  };
+  console.log(JSON.stringify(res));
+});
+
+namespace('foo', function () {
+  desc('The foo:bar task.');
+  task('bar', function () {
+    if (arguments.length) {
+      console.log('foo:bar[' +
+          Array.prototype.join.call(arguments, ',') +
+          '] task');
+    }
+    else {
+      console.log('foo:bar task');
+    }
+  });
+
+  desc('The foo:baz task, calls foo:bar as a prerequisite.');
+  task('baz', ['foo:bar'], function () {
+    console.log('foo:baz task');
+  });
+
+  desc('The foo:qux task, calls foo:bar with cmdline args as a prerequisite.');
+  task('qux', ['foo:bar[asdf,qwer]'], function () {
+    console.log('foo:qux task');
+  });
+
+  desc('The foo:frang task,`invokes` foo:bar with passed args as a prerequisite.');
+  task('frang', function () {
+    var task = jake.Task['foo:bar'];
+    // Do args pass-through
+    task.invoke.apply(task, arguments);
+    console.log('foo:frang task');
+  });
+
+  desc('The foo:frang task, `executes` foo:bar with passed args as a prerequisite.');
+  task('zerb', function () {
+    var task = jake.Task['foo:bar'];
+    // Do args pass-through
+    task.execute.apply(task, arguments);
+    console.log('foo:zerb task');
+  });
+
+  desc('The foo:zoobie task, has no prerequisites.');
+  task('zoobie', function () {
+    console.log('foo:zoobie task');
+  });
+
+  desc('The foo:voom task, has no prerequisites.');
+  task('voom', function () {
+    console.log('foo:voom task');
+  });
+
+  desc('The foo:asdf task, has the same prereq twice.');
+  task('asdf', ['foo:bar', 'foo:baz'], function () {
+    console.log('foo:asdf task');
+  });
+
+});
+
+namespace('bar', function () {
+  desc('The bar:foo task, has no prerequisites, is async.');
+  task('foo', function () {
+    console.log('bar:foo task');
+    complete();
+  }, {async: true});
+
+  desc('The bar:promise task is a promised based async task.');
+  task('promise', function() {
+    return Q()
+    .then(function() {
+      console.log('bar:promise task');
+      return 123654;
+    });
+  });
+
+  desc('The bar:dependOnpromise task waits for a promise based async test');
+  task('dependOnpromise', ['promise'], function() {
+      console.log('bar:dependOnpromise task saw value', jake.Task["bar:promise"].value);
+  });
+
+  desc('The bar:brokenPromise task is a failing promised based async task.');
+  task('brokenPromise', function() {
+    return Q()
+    .then(function() {
+      throw new Error("nom nom nom");
+    });
+  });
+
+  desc('The bar:bar task, has the async bar:foo task as a prerequisite.');
+  task('bar', ['bar:foo'], function () {
+    console.log('bar:bar task');
+  });
+
+});
+
+namespace('hoge', function () {
+  desc('The hoge:hoge task, has no prerequisites.');
+  task('hoge', function () {
+    console.log('hoge:hoge task');
+  });
+
+  desc('The hoge:piyo task, has no prerequisites.');
+  task('piyo', function () {
+    console.log('hoge:piyo task');
+  });
+
+  desc('The hoge:fuga task, has hoge:hoge and hoge:piyo as prerequisites.');
+  task('fuga', ['hoge:hoge', 'hoge:piyo'], function () {
+    console.log('hoge:fuga task');
+  });
+
+  desc('The hoge:charan task, has hoge:fuga as a prerequisite.');
+  task('charan', ['hoge:fuga'], function () {
+    console.log('hoge:charan task');
+  });
+
+  desc('The hoge:gero task, has hoge:fuga as a prerequisite.');
+  task('gero', ['hoge:fuga'], function () {
+    console.log('hoge:gero task');
+  });
+
+  desc('The hoge:kira task, has hoge:charan and hoge:gero as prerequisites.');
+  task('kira', ['hoge:charan', 'hoge:gero'], function () {
+    console.log('hoge:kira task');
+  });
+
+});
+
+namespace('fileTest', function () {
+  directory('foo');
+
+  desc('File task, concatenating two files together');
+  file({'foo/concat.txt': ['fileTest:foo', 'fileTest:foo/src1.txt', 'fileTest:foo/src2.txt']}, function () {
+    console.log('fileTest:foo/concat.txt task');
+    var data1 = fs.readFileSync('foo/src1.txt');
+    var data2 = fs.readFileSync('foo/src2.txt');
+    fs.writeFileSync('foo/concat.txt', data1 + data2);
+  });
+
+  desc('File task, async creation with child_process.exec');
+  file('foo/src1.txt', function () {
+    fs.writeFile('foo/src1.txt', 'src1', function (err) {
+      if (err) {
+        throw err;
+      }
+      console.log('fileTest:foo/src1.txt task');
+      complete();
+    });
+  }, {async: true});
+
+  desc('File task, sync creation with writeFileSync');
+  file('foo/src2.txt', ['default'], function () {
+    fs.writeFileSync('foo/src2.txt', 'src2');
+    console.log('fileTest:foo/src2.txt task');
+  });
+
+  desc('File task, do not run unless the prereq file changes');
+  file('foo/from-src1.txt', ['fileTest:foo', 'fileTest:foo/src1.txt'], function () {
+    var data = fs.readFileSync('foo/src1.txt');
+    fs.writeFileSync('foo/from-src1.txt', data);
+    console.log('fileTest:foo/from-src1.txt task');
+  }, {async: true});
+
+  desc('File task, run if the prereq file changes');
+  task('touch-prereq', function() {
+    fs.writeFileSync('foo/prereq.txt', 'UPDATED');
+  })
+
+  desc('File task, has a preexisting file (with no associated task) as a prereq');
+  file('foo/from-prereq.txt', ['fileTest:foo', 'foo/prereq.txt'], function () {
+    var data = fs.readFileSync('foo/prereq.txt');
+    fs.writeFileSync('foo/from-prereq.txt', data);
+    console.log('fileTest:foo/from-prereq.txt task');
+  });
+
+  directory('foo/bar/baz');
+
+  desc('Write a file in a nested subdirectory');
+  file('foo/bar/baz/bamf.txt', ['foo/bar/baz'], function () {
+    fs.writeFileSync('foo/bar/baz/bamf.txt', 'w00t');
+  });
+
+});
+
+task('blammo');
+// Define task
+task('voom', ['blammo'], function () {
+  console.log(this.prereqs.length);
+});
+
+// Modify, add a prereq
+task('voom', ['noActionNoPrereqs']);
+
+namespace('vronk', function () {
+  task('groo', function () {
+    var t = jake.Task['vronk:zong'];
+    t.addListener('error', function (e) {
+      console.log(e.message);
+    });
+    t.invoke();
+  });
+  task('zong', function () {
+    throw new Error('OMFGZONG');
+  });
+});
+
+// define namespace
+namespace('one', function() {
+  task('one', function() {
+    console.log('one:one');
+  });
+});
+
+// modify namespace (add task)
+namespace('one', function() {
+  task('two', ['one:one'], function() {
+    console.log('one:two');
+  });
+});
+
+
+namespace('parallel', function() {
+  task("A", {async: true}, function() {
+    console.log("Started A");
+    var task = this;
+    setTimeout(function() {
+      console.log("Finished A");
+      task.complete();
+    }, 200);
+  });
+  task("B", {async: true}, function() {
+    console.log("Started B");
+    var task = this;
+    setTimeout(function() {
+      console.log("Finished B");
+      task.complete();
+    },50);
+  });
+  task("C", {async: true}, function() {
+    console.log("Started C");
+    var task = this;
+    setTimeout(function() {
+      console.log("Finished C");
+      task.complete();
+    }, 100);
+  });
+  task("D", {async: true}, function() {
+    console.log("Started D");
+    var task = this;
+    setTimeout(function() {
+      console.log("Finished D");
+      task.complete();
+    },300);
+  });
+  task("Ba", ["A"], {async: true}, function() {
+    console.log("Started Ba");
+    var task = this;
+    setTimeout(function() {
+      console.log("Finished Ba");
+      task.complete();
+    },50);
+  });
+  task("Afail", {async: true}, function() {
+    console.log("Started failing task");
+    var task = this;
+    setTimeout(function() {
+      console.log("Failing B with error");
+      throw new Error("I failed");
+    },50);
+  });
+  task("simple1", ["A","B"], {async: true, parallelLimit: 2}, function() {
+    var task = this;
+    setTimeout(function() {
+      task.complete();
+    },50);
+  });
+  task("simple2", ["C","D"], {async: true, parallelLimit: 2}, function() {
+    var task = this;
+    setTimeout(function() {
+      task.complete();
+    },50);
+  });
+  task("seqparallel", ["simple1","simple2"], {async: true}, function() {
+    var task = this;
+    setTimeout(function() {
+      task.complete();
+    },50);
+  });
+  task("parallelparallel", ["simple1","simple2"], {async: true, parallelLimit: 2}, function() {
+    var task = this;
+    setTimeout(function() {
+      task.complete();
+    },50);
+  });
+  task("subdep", ["A","Ba"], {async: true, parallelLimit: 2}, function() {
+    var task = this;
+    setTimeout(function() {
+      task.complete();
+    },50);
+  });
+  task("fail", ["A", "B", "Afail"], {async: true, parallelLimit: 3}, function() {
+    var task = this;
+    setTimeout(function() {
+      task.complete();
+    },50);
+  });
+
+});
+
+task('selfdepconst', [], function() {
+  task('selfdep', ['selfdep'], function() {
+    console.log("I made a task that depends on itself");
+  });
+});
+task('selfdepdyn', function() {
+  task('selfdeppar', [], {parallelLimit: 2}, function() {
+    console.log("I will depend on myself and will fail at runtime");
+  });
+  task('selfdeppar', ['selfdeppar']);
+  jake.Task['selfdeppar'].invoke();
+});

@@ -1,0 +1,31 @@
+{
+	"env": {
+		"node": true
+	},
+	"plugins": [],
+	"extends": ["eslint:recommended"],
+	"rules": {
+		"camelcase": 2,
+		"comma-dangle": 0,
+		"comma-spacing": 0,
+		"curly": 0,
+		"eqeqeq": 2,
+		"key-spacing": 0,
+		"new-cap": [ 2, { "capIsNew": false } ],
+		"no-empty": ["error", { "allowEmptyCatch": true }],
+		"no-extra-semi": 0,
+		"no-extra-strict": 0,
+		"no-irregular-whitespace": 2,
+		"no-new": 2,
+		"no-shadow": 0,
+		"no-undef": 2,
+		"no-underscore-dangle": 0,
+		"no-use-before-define": [ 2, "nofunc" ],
+		"quotes": 0,
+		"semi": 0,
+		"strict": 0,
+		"wrap-iife": [ 2, "inside" ],
+		"yoda": 0
+	},
+	"globals": {}
+}

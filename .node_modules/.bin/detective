@@ -1,0 +1,1 @@
+../detective/bin/detective.js

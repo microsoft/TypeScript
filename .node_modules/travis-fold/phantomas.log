@@ -1,0 +1,236 @@
+travis_fold:start:https-github-com-macbre-phantomas
+phantomas v0.10.1 metrics for <https://github.com/macbre/phantomas>:
+
+travis_fold:start:metrics
+* requests: 17
+* gzipRequests: 9
+* postRequests: 1
+* httpsRequests: 17
+* redirects: 1
+* notFound: 0
+* timeToFirstByte: 705
+* timeToLastByte: 713
+* bodySize: 415055
+* contentLength: 433162
+* ajaxRequests: 1
+* htmlCount: 2
+* htmlSize: 80202
+* cssCount: 2
+* cssSize: 137604
+* jsCount: 4
+* jsSize: 139271
+* jsonCount: 0
+* jsonSize: 0
+* imageCount: 8
+* imageSize: 27370
+* webfontCount: 1
+* webfontSize: 30608
+* base64Count: 0
+* base64Size: 0
+* otherCount: 0
+* otherSize: 0
+* cacheHits: 10
+* cacheMisses: 0
+* cachingNotSpecified: 5
+* cachingTooShort: 3
+* cachingDisabled: 0
+* domains: 10
+* maxRequestsPerDomain: 6
+* medianRequestsPerDomain: 1
+* DOMqueries: 138
+* DOMqueriesById: 18
+* DOMqueriesByClassName: 59
+* DOMqueriesByTagName: 24
+* DOMqueriesByQuerySelectorAll: 37
+* DOMinserts: 11
+* DOMqueriesDuplicated: 11
+* eventsBound: 130
+* headersCount: 319
+* headersSentCount: 55
+* headersRecvCount: 264
+* headersSize: 11354
+* headersSentSize: 2387
+* headersRecvSize: 8967
+* documentWriteCalls: 0
+* evalCalls: 0
+* jQueryVersion: 2.0.3
+* jQueryOnDOMReadyFunctions: 35
+* jQuerySizzleCalls: 90
+* jsErrors: 0
+* assetsNotGzipped: 2
+* assetsWithQueryString: 4
+* smallImages: 5
+* multipleRequests: 0
+* timeToFirstCss: 1014
+* timeToFirstJs: 1112
+* timeToFirstImage: 1572
+* onDOMReadyTime: 633
+* onDOMReadyTimeEnd: 812
+* windowOnLoadTime: 1732
+* windowOnLoadTimeEnd: 1735
+* httpTrafficCompleted: 2708
+* windowAlerts: 0
+* windowConfirms: 0
+* windowPrompts: 0
+* consoleMessages: 0
+* cookiesSent: 0
+* cookiesRecv: 1035
+* domainsWithCookies: 2
+* documentCookiesLength: 181
+* documentCookiesCount: 5
+* bodyHTMLSize: 74148
+* iframesCount: 0
+* imagesWithoutDimensions: 3
+* commentsSize: 245
+* hiddenContentSize: 13897
+* whiteSpacesSize: 3645
+* DOMelementsCount: 881
+* DOMelementMaxDepth: 12
+* nodesWithInlineCSS: 6
+* globalVariables: 27
+* localStorageEntries: 0
+* smallestResponse: 1
+* biggestResponse: 80201
+* fastestResponse: 44
+* slowestResponse: 713
+* smallestLatency: 44
+* biggestLatency: 705
+* medianResponse: 259.5
+* medianLatency: 248
+travis_fold:end:metrics
+
+travis_fold:start:offenders
+[92mOffenders for httpsRequests (17):[39m
+travis_fold:start:offenders-httpsRequests
+ * https://github.com/macbre/phantomas
+ * https://github.global.ssl.fastly.net/assets/github-d1cff5b8c7ef78cf661f85dbf94ce8bbb19958b0.css
+ * https://github.global.ssl.fastly.net/assets/github2-739ae94074bd58ea5f487331d9a79836678e5db7.css
+ * https://github.global.ssl.fastly.net/assets/github-44188494b76ae62bb834f936309193eec69b2810.js
+ * https://github.global.ssl.fastly.net/assets/frameworks-5970f5a0a3dcc441d5f7ff74326ffd59bbe9388e.js
+ * https://github.global.ssl.fastly.net/assets/octicons-bccfe7abf7461ed10568dd044425080f7de09889.woff
+ * https://ssl.google-analytics.com/ga.js
+ * https://1.gravatar.com/avatar/57548e3255bfa0e74afff98289dae839?d=https%3A%2F%2Fidenticons.github.com%2Fd00d857df31276a1273537d5c4dad9cd.png&r=x&s=140
+ * https://github-camo.global.ssl.fastly.net/96074490e39183d2e206261281012c7a9b992ee9/687474703a2f2f75706c6f61642e77696b696d656469612e6f72672f77696b6970656469612f656e2f612f61352f46616e746f6d61732e6a7067
+ * https://github.global.ssl.fastly.net/images/spinners/octocat-spinner-32.gif
+ * https://collector-cdn.github.com/assets/api.js
+ * https://ssl.google-analytics.com/__utm.gif?utmwv=5.4.6&utms=1&utmn=2097392645&utmhn=github.com&utme=8(Session%20Type)9(Logged%20Out)11(2)&utmcs=UTF-8&utmsr=1024x768&utmvp=1280x1024&utmsc=32-bit&utmul=pl-pl&utmje=0&utmfl=-&utmdt=macbre%2Fphantomas%20%C2%B7%20GitHub&utmhid=226519811&utmr=-&utmp=%2Fmacbre%2Fphantomas&utmht=1387013999475&utmac=UA-3769691-2&utmcc=__utma%3D1.1006596141.1387013999.1387013999.1387013999.1%3B%2B__utmz%3D1.1387013999.1.1.utmcsr%3D(direct)%7Cutmccn%3D(direct)%7Cutmcmd%3D(none)%3B&utmu=qR~
+ * https://api.travis-ci.org/macbre/phantomas.png
+ * https://collector.githubapp.com/github/page_view?dimensions%5Bpage%5D=https%3A%2F%2Fgithub.com%2Fmacbre%2Fphantomas&dimensions%5Btitle%5D=macbre%2Fphantomas%20%C2%B7%20GitHub&dimensions%5Breferrer%5D=&dimensions%5Buser_agent%5D=phantomas%2F0.10.1%20(PhantomJS%2F1.9.2%3B%20linux%2064bit)&dimensions%5Bscreen_resolution%5D=1024x768&dimensions%5Bpixel_ratio%5D=1&dimensions%5Bbrowser_resolution%5D=1280x1024&dimensions%5Btz_seconds%5D=3600&dimensions%5Btimestamp%5D=1387013999518&dimensions%5Brequest_id%5D=4D414626%3A043C%3A2EE62B0%3A52AC276E&dimensions%5Buser_id%5D=1929317&dimensions%5Buser_login%5D=macbre&dimensions%5Brepository_id%5D=4939243&dimensions%5Brepository_nwo%5D=macbre%2Fphantomas&dimensions%5Brepository_public%5D=true&dimensions%5Brepository_is_fork%5D=false&dimensions%5Brepository_network_root_id%5D=4939243&dimensions%5Brepository_network_root_nwo%5D=macbre%2Fphantomas&&&
+ * https://badge.fury.io/js/phantomas.png
+ * https://d25lcipzij17d.cloudfront.net/badge.png?id=js&type=3d&v=0.10.1
+ * https://github.com/_stats
+travis_fold:end:offenders-httpsRequests
+
+[92mOffenders for htmlCount (2):[39m
+travis_fold:start:offenders-htmlCount
+ * https://github.com/macbre/phantomas (78.32 kB)
+ * https://github.com/_stats (0.00 kB)
+travis_fold:end:offenders-htmlCount
+
+[92mOffenders for cssCount (2):[39m
+travis_fold:start:offenders-cssCount
+ * https://github.global.ssl.fastly.net/assets/github-d1cff5b8c7ef78cf661f85dbf94ce8bbb19958b0.css (65.64 kB)
+ * https://github.global.ssl.fastly.net/assets/github2-739ae94074bd58ea5f487331d9a79836678e5db7.css (68.74 kB)
+travis_fold:end:offenders-cssCount
+
+[92mOffenders for timeToFirstCss (1014):[39m
+travis_fold:start:offenders-timeToFirstCss
+ * https://github.global.ssl.fastly.net/assets/github-d1cff5b8c7ef78cf661f85dbf94ce8bbb19958b0.css received in 1014 ms
+travis_fold:end:offenders-timeToFirstCss
+
+[92mOffenders for jsCount (4):[39m
+travis_fold:start:offenders-jsCount
+ * https://github.global.ssl.fastly.net/assets/github-44188494b76ae62bb834f936309193eec69b2810.js (51.11 kB)
+ * https://github.global.ssl.fastly.net/assets/frameworks-5970f5a0a3dcc441d5f7ff74326ffd59bbe9388e.js (39.40 kB)
+ * https://ssl.google-analytics.com/ga.js (39.05 kB)
+ * https://collector-cdn.github.com/assets/api.js (6.44 kB)
+travis_fold:end:offenders-jsCount
+
+[92mOffenders for timeToFirstJs (1112):[39m
+travis_fold:start:offenders-timeToFirstJs
+ * https://github.global.ssl.fastly.net/assets/github-44188494b76ae62bb834f936309193eec69b2810.js received in 1112 ms
+travis_fold:end:offenders-timeToFirstJs
+
+[92mOffenders for webfontCount (1):[39m
+travis_fold:start:offenders-webfontCount
+ * https://github.global.ssl.fastly.net/assets/octicons-bccfe7abf7461ed10568dd044425080f7de09889.woff (29.89 kB)
+travis_fold:end:offenders-webfontCount
+
+[92mOffenders for imageCount (8):[39m
+travis_fold:start:offenders-imageCount
+ * https://1.gravatar.com/avatar/57548e3255bfa0e74afff98289dae839?d=https%3A%2F%2Fidenticons.github.com%2Fd00d857df31276a1273537d5c4dad9cd.png&r=x&s=140 (2.41 kB)
+ * https://github-camo.global.ssl.fastly.net/96074490e39183d2e206261281012c7a9b992ee9/687474703a2f2f75706c6f61642e77696b696d656469612e6f72672f77696b6970656469612f656e2f612f61352f46616e746f6d61732e6a7067 (18.46 kB)
+ * https://github.global.ssl.fastly.net/images/spinners/octocat-spinner-32.gif (2.26 kB)
+ * https://ssl.google-analytics.com/__utm.gif?utmwv=5.4.6&utms=1&utmn=2097392645&utmhn=github.com&utme=8(Session%20Type)9(Logged%20Out)11(2)&utmcs=UTF-8&utmsr=1024x768&utmvp=1280x1024&utmsc=32-bit&utmul=pl-pl&utmje=0&utmfl=-&utmdt=macbre%2Fphantomas%20%C2%B7%20GitHub&utmhid=226519811&utmr=-&utmp=%2Fmacbre%2Fphantomas&utmht=1387013999475&utmac=UA-3769691-2&utmcc=__utma%3D1.1006596141.1387013999.1387013999.1387013999.1%3B%2B__utmz%3D1.1387013999.1.1.utmcsr%3D(direct)%7Cutmccn%3D(direct)%7Cutmcmd%3D(none)%3B&utmu=qR~ (0.03 kB)
+ * https://api.travis-ci.org/macbre/phantomas.png (1.43 kB)
+ * https://collector.githubapp.com/github/page_view?dimensions%5Bpage%5D=https%3A%2F%2Fgithub.com%2Fmacbre%2Fphantomas&dimensions%5Btitle%5D=macbre%2Fphantomas%20%C2%B7%20GitHub&dimensions%5Breferrer%5D=&dimensions%5Buser_agent%5D=phantomas%2F0.10.1%20(PhantomJS%2F1.9.2%3B%20linux%2064bit)&dimensions%5Bscreen_resolution%5D=1024x768&dimensions%5Bpixel_ratio%5D=1&dimensions%5Bbrowser_resolution%5D=1280x1024&dimensions%5Btz_seconds%5D=3600&dimensions%5Btimestamp%5D=1387013999518&dimensions%5Brequest_id%5D=4D414626%3A043C%3A2EE62B0%3A52AC276E&dimensions%5Buser_id%5D=1929317&dimensions%5Buser_login%5D=macbre&dimensions%5Brepository_id%5D=4939243&dimensions%5Brepository_nwo%5D=macbre%2Fphantomas&dimensions%5Brepository_public%5D=true&dimensions%5Brepository_is_fork%5D=false&dimensions%5Brepository_network_root_id%5D=4939243&dimensions%5Brepository_network_root_nwo%5D=macbre%2Fphantomas&&& (0.03 kB)
+ * https://badge.fury.io/js/phantomas.png (0.14 kB)
+ * https://d25lcipzij17d.cloudfront.net/badge.png?id=js&type=3d&v=0.10.1 (1.97 kB)
+travis_fold:end:offenders-imageCount
+
+[92mOffenders for timeToFirstImage (1572):[39m
+travis_fold:start:offenders-timeToFirstImage
+ * https://1.gravatar.com/avatar/57548e3255bfa0e74afff98289dae839?d=https%3A%2F%2Fidenticons.github.com%2Fd00d857df31276a1273537d5c4dad9cd.png&r=x&s=140 received in 1572 ms
+travis_fold:end:offenders-timeToFirstImage
+
+[92mOffenders for redirects (1):[39m
+travis_fold:start:offenders-redirects
+ * https://badge.fury.io/js/phantomas.png is a redirect (HTTP 302 Moved Temporarily) to https://d25lcipzij17d.cloudfront.net/badge.png?id=js&type=3d&v=0.10.1
+travis_fold:end:offenders-redirects
+
+[92mOffenders for postRequests (1):[39m
+travis_fold:start:offenders-postRequests
+ * https://github.com/_stats
+travis_fold:end:offenders-postRequests
+
+[92mOffenders for domains (10):[39m
+travis_fold:start:offenders-domains
+ * github.global.ssl.fastly.net: 6 request(s)
+ * github.com: 2 request(s)
+ * ssl.google-analytics.com: 2 request(s)
+ * 1.gravatar.com: 1 request(s)
+ * github-camo.global.ssl.fastly.net: 1 request(s)
+ * collector-cdn.github.com: 1 request(s)
+ * api.travis-ci.org: 1 request(s)
+ * collector.githubapp.com: 1 request(s)
+ * badge.fury.io: 1 request(s)
+ * d25lcipzij17d.cloudfront.net: 1 request(s)
+travis_fold:end:offenders-domains
+
+[92mOffenders for hiddenContentSize (13897):[39m
+travis_fold:start:offenders-hiddenContentSize
+ * body > div.wrapper > div.site > div.container > div.repository-with-sidebar.repo-container.with-full-navigation > div#js-repo-pjax-container > div.file-navigation.in-mid-page > div.select-menu.js-menu-container.js-select-menu > div.select-menu-modal-holder.js-menu-content.js-navigation-container (11164 bytes)
+travis_fold:end:offenders-hiddenContentSize
+
+[92mOffenders for DOMqueries (138):[39m
+travis_fold:start:offenders-DOMqueries
+ * selector ".js-deferred-content, [data-hotkey], .js-navigation-container, .js-relative-date, textarea.js-size-to-fit, textarea.js-size-to-fit:not(.is-user-resized), .js-obfuscate-email, .sticky, .js-card-select-number-field, .js-card-expiration, .js-card-cvv, .js-card-select-number-field, .js-zeroclipboard, .js-draft-field, a[rel*=facebox], [data-gotokey], .js-plaxify, .js-poll, .js-socket-channel[data-channel], .tooltipped, .js-uploadable-container, .js-conduit-openfile-check, .js-conduit-rewrite-url, .js-graph, #js-features-branch-diagram.preload, .js-issue-search-filter:checked, .js-dark-ship-traffic-graphs, .js-plan-choice:checked, .js-plan-row.selected, .js-plan-row.free-plan.selected, .js-setup-organization:checked": 7 queries
+ * tag name "*": 7 queries
+ * tag name "input": 7 queries
+ * class ".js-comment-field": 5 queries
+ * tag name "meta": 4 queries
+ * class ".selected": 3 queries
+ * id "#issues_list": 3 queries
+ * class ".js-breadcrumb-nav": 2 queries
+ * class ".js-filterable-field": 2 queries
+ * tag name "head": 2 queries
+ * tag name "link": 2 queries
+travis_fold:end:offenders-DOMqueries
+
+[92mOffenders for globalVariables (27):[39m
+travis_fold:start:offenders-globalVariables
+ * $, Billing, Braintree, CommandBar, DateInput, FastClick, GitHub, JsMutationObserver, MutationObserver, Network, SelectorSet, WeakMap, ZeroClipboard, _gaq, _gat, _octo, clearImmediate, d3, debug, defineNetwork, gaGlobal, jQuery, jQuery203022528866236098110.04891290608793497, jstz, moment, setImmediate, staff
+travis_fold:end:offenders-globalVariables
+
+travis_fold:end:offenders
+[92mThe smallest response (0.00 kB):[39m [94m<https://github.com/_stats>[39m
+[92mThe biggest response (78.32 kB):[39m [94m<https://github.com/macbre/phantomas>[39m
+
+[92mThe fastest response (44 ms):[39m [94m<https://ssl.google-analytics.com/__utm.gif?utmwv=5.4.6&utms=1&utmn=2097392645&utmhn=github.com&utme=8(Session%20Type)9(Logged%20Out)11(2)&utmcs=UTF-8&utmsr=1024x768&utmvp=1280x1024&utmsc=32-bit&utmul=pl-pl&utmje=0&utmfl=-&utmdt=macbre%2Fphantomas%20%C2%B7%20GitHub&utmhid=226519811&utmr=-&utmp=%2Fmacbre%2Fphantomas&utmht=1387013999475&utmac=UA-3769691-2&utmcc=__utma%3D1.1006596141.1387013999.1387013999.1387013999.1%3B%2B__utmz%3D1.1387013999.1.1.utmcsr%3D(direct)%7Cutmccn%3D(direct)%7Cutmcmd%3D(none)%3B&utmu=qR~>[39m
+[92mThe slowest response (713 ms):[39m [94m<https://github.com/macbre/phantomas>[39m
+
+[92mThe smallest latency (44 ms):[39m [94m<https://ssl.google-analytics.com/__utm.gif?utmwv=5.4.6&utms=1&utmn=2097392645&utmhn=github.com&utme=8(Session%20Type)9(Logged%20Out)11(2)&utmcs=UTF-8&utmsr=1024x768&utmvp=1280x1024&utmsc=32-bit&utmul=pl-pl&utmje=0&utmfl=-&utmdt=macbre%2Fphantomas%20%C2%B7%20GitHub&utmhid=226519811&utmr=-&utmp=%2Fmacbre%2Fphantomas&utmht=1387013999475&utmac=UA-3769691-2&utmcc=__utma%3D1.1006596141.1387013999.1387013999.1387013999.1%3B%2B__utmz%3D1.1387013999.1.1.utmcsr%3D(direct)%7Cutmccn%3D(direct)%7Cutmcmd%3D(none)%3B&utmu=qR~>[39m
+[92mThe biggest latency (705 ms):[39m [94m<https://github.com/macbre/phantomas>[39m
+
+[92mTime spent on backend / frontend:[39m 29% / 71%
+travis_fold:end:https-github-com-macbre-phantomas

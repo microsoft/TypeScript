@@ -1,0 +1,22 @@
+{
+    "authors": "Bart van der Schoor <https://github.com/Bartvds>, Necroskillz <https://github.com/Necroskillz>, kamranayub <https://github.com/kamranayub>",
+    "libraryDependencies": [],
+    "moduleDependencies": [],
+    "libraryMajorVersion": 1,
+    "libraryMinorVersion": 2,
+    "typeScriptVersion": "2.0",
+    "libraryName": "minimist",
+    "typingsPackageName": "minimist",
+    "projectName": "https://github.com/substack/minimist",
+    "sourceRepoURL": "https://www.github.com/DefinitelyTyped/DefinitelyTyped",
+    "sourceBranch": "master",
+    "globals": [],
+    "declaredModules": [
+        "minimist"
+    ],
+    "files": [
+        "index.d.ts"
+    ],
+    "hasPackageJson": false,
+    "contentHash": "46fbb5db5555175c72b64f17adce05fa9f0b38683361f762134fc47aea2ac195"
+}

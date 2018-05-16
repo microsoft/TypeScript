@@ -1,0 +1,3 @@
+console.log("" + __dirname, "" + __filename);
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInRlc3Qvc291cmNlbWFwL21haW5fZXM2LmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sQ0FBQyxHQUFHLE1BQUksU0FBUyxPQUFPLFVBQVUsQ0FBRyxDQUFDIiwiZmlsZSI6InVuZGVmaW5lZCIsInNvdXJjZXNDb250ZW50IjpbImNvbnNvbGUubG9nKGAke19fZGlybmFtZX1gLCBgJHtfX2ZpbGVuYW1lfWApO1xuIl19

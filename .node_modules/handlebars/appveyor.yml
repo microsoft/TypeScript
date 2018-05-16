@@ -1,0 +1,38 @@
+# Test against these versions of Node.js
+environment:
+  matrix:
+    - nodejs_version: "4"
+    - nodejs_version: "5"
+
+platform:
+  - x64
+
+# Install scripts (runs after repo cloning)
+install:
+  # Get the latest stable version of Node.js
+  - ps: Install-Product node $env:nodejs_version $env:platform
+  # Clone submodules (mustache spec)
+  - cmd: git submodule update --init --recursive
+  # Install modules
+  - cmd: npm install
+  - cmd: npm install -g grunt-cli
+
+
+# Post-install test scripts
+test_script:
+  # Output useful info for debugging
+  - cmd: node --version
+  - cmd: npm --version
+  # Run tests
+  - cmd: grunt --stack travis
+
+# Don't actually build
+build: off
+
+on_failure:
+  - cmd: 7z a coverage.zip coverage
+  - cmd: appveyor PushArtifact coverage.zip
+
+
+# Set build version format here instead of in the admin panel
+version: "{build}"
