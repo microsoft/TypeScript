@@ -17,8 +17,6 @@
 ////    if (!x) x = 2;
 ////}
 
-// TODO: GH#24168
-
 verify.codeFixAll({
     fixId: "inferFromUsage",
     fixAllDescription: "Infer all types from usage",
@@ -32,7 +30,7 @@ function g(z: number) {
     return z * 2;
 }
 
-let x: number = null;
+let x: number | null = null;
 function h() {
     if (!x) x = 2;
 }`,

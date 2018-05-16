@@ -319,6 +319,16 @@ namespace ts.codefix {
                 case SyntaxKind.ElementAccessExpression:
                     inferTypeFromPropertyElementExpressionContext(<ElementAccessExpression>node.parent, node, checker, usageContext);
                     break;
+                case SyntaxKind.VariableDeclaration: {
+                    const { name, initializer } = node.parent as VariableDeclaration;
+                    if (node === name) {
+                        if (initializer) { // This can happen for `let x = null;` which still has an implicit-any error.
+                            addCandidateType(usageContext, checker.getTypeAtLocation(initializer));
+                        }
+                        break;
+                    }
+                }
+                    // falls through
                 default:
                     return inferTypeFromContextualType(node, checker, usageContext);
             }
@@ -512,7 +522,7 @@ namespace ts.codefix {
                 return checker.getStringType();
             }
             else if (usageContext.candidateTypes) {
-                return checker.getWidenedType(checker.getUnionType(map(usageContext.candidateTypes, t => checker.getBaseTypeOfLiteralType(t)), UnionReduction.Subtype));
+                return checker.getWidenedType(checker.getUnionType(usageContext.candidateTypes.map(t => checker.getBaseTypeOfLiteralType(t)), UnionReduction.Subtype));
             }
             else if (usageContext.properties && hasCallContext(usageContext.properties.get("then" as __String))) {
                 const paramType = getParameterTypeFromCallContexts(0, usageContext.properties.get("then" as __String).callContexts, /*isRestParameter*/ false, checker);
