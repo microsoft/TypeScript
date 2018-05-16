@@ -31,32 +31,9 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
         const cls = this;
         describe(`${this.kind()} code samples`, function(this: Mocha.ISuiteCallbackContext) {
             this.timeout(600_000); // 10 minutes
-            const cwd = path.join(Harness.IO.getWorkspaceRoot(), cls.testDir);
-            const placeholderName = ".node_modules";
-            const moduleDirName = "node_modules";
-            before(() => {
-                ts.forEachAncestorDirectory(cwd, dir => {
-                    try {
-                        fs.renameSync(path.join(dir, moduleDirName), path.join(dir, placeholderName));
-                    }
-                    catch {
-                        // empty
-                    }
-                });
-            });
             for (const test of testList) {
                 cls.runTest(typeof test === "string" ? test : test.file);
             }
-            after(() => {
-                ts.forEachAncestorDirectory(cwd, dir => {
-                    try {
-                        fs.renameSync(path.join(dir, placeholderName), path.join(dir, moduleDirName));
-                    }
-                    catch {
-                        // empty
-                    }
-                });
-            });
         });
     }
     private runTest(directoryName: string) {
@@ -137,7 +114,9 @@ ${stripAbsoluteImportPaths(result.stderr.toString().replace(/\r\n/g, "\n"))}`;
 function stripAbsoluteImportPaths(result: string) {
     return result
         .replace(/import\(".*?\/tests\/cases\/user\//g, `import("/`)
-        .replace(/Module '".*?\/tests\/cases\/user\//g, `Module '"/`);
+        .replace(/Module '".*?\/tests\/cases\/user\//g, `Module '"/`)
+        .replace(/import\(".*?\/TypeScript\/node_modules\//g, `import("../../../node_modules`)
+        .replace(/Module '".*?\/TypeScript\/node_modules\//g, `Module '"../../../node_modules`);
 }
 
 function sortErrors(result: string) {
