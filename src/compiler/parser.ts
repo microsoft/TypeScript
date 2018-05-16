@@ -6471,8 +6471,16 @@ namespace ts {
                     return finishNode(result, end);
                 }
 
+                function isNextNonwhitespaceTokenEndOfFile() {
+                    nextJSDocToken();
+                    return token() === SyntaxKind.EndOfFileToken || ((token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) && nextJSDocToken() === SyntaxKind.EndOfFileToken);
+                }
+
                 function skipWhitespace(): void {
                     while (token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
+                        if (lookAhead(isNextNonwhitespaceTokenEndOfFile)) {
+                            return; // Don't skip whitespace prior to EoF (or end of comment)
+                        }
                         nextJSDocToken();
                     }
                 }
@@ -7020,7 +7028,7 @@ namespace ts {
                     const pos = scanner.getTokenPos();
                     const end = scanner.getTextPos();
                     const result = <Identifier>createNode(SyntaxKind.Identifier, pos);
-                    result.escapedText = escapeLeadingUnderscores(content.substring(pos, end));
+                    result.escapedText = escapeLeadingUnderscores(scanner.getTokenText());
                     finishNode(result, end);
 
                     nextJSDocToken();

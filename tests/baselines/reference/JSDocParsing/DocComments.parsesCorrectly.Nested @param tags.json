@@ -6,7 +6,7 @@
         "0": {
             "kind": "JSDocParameterTag",
             "pos": 6,
-            "end": 63,
+            "end": 64,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 6,
@@ -21,11 +21,11 @@
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 34,
-                "end": 63,
+                "end": 64,
                 "type": {
                     "kind": "JSDocTypeLiteral",
                     "pos": 34,
-                    "end": 63,
+                    "end": 64,
                     "jsDocPropertyTags": [
                         {
                             "kind": "JSDocParameterTag",
@@ -88,6 +88,6 @@
         },
         "length": 1,
         "pos": 6,
-        "end": 63
+        "end": 64
     }
 }
