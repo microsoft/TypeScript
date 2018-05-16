@@ -9,7 +9,7 @@ var x = 1
 
 /** @type {Sid} smallId */
 var sid = s => s + "!";
->sid : (s: string) => string
+>sid : Sid
 >s => s + "!" : (s: string) => string
 >s : string
 >s + "!" : string
