@@ -32,7 +32,7 @@
             },
             "typeExpression": {
                 "kind": "JSDocTypeLiteral",
-                "pos": 26,
+                "pos": 28,
                 "end": 100,
                 "jsDocPropertyTags": [
                     {

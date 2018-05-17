@@ -93,7 +93,7 @@ namespace ts.codefix {
     }
 
     function getToken(sourceFile: SourceFile, pos: number): Node {
-        const token = findPrecedingToken(pos, sourceFile);
+        const token = findPrecedingToken(pos, sourceFile, /*startNode*/ undefined, /*includeJsDoc*/ true);
         // this handles var ["computed"] = 12;
         return token.kind === SyntaxKind.CloseBracketToken ? findPrecedingToken(pos - 1, sourceFile) : token;
     }
@@ -152,7 +152,7 @@ namespace ts.codefix {
                 break;
 
             case SyntaxKind.TypeParameter:
-                const typeParameters = (<DeclarationWithTypeParameters>parent.parent).typeParameters;
+                const typeParameters = getEffectiveTypeParameterDeclarations(<DeclarationWithTypeParameters>parent.parent);
                 if (typeParameters.length === 1) {
                     const previousToken = getTokenAtPosition(sourceFile, typeParameters.pos - 1, /*includeJsDocComment*/ false);
                     const nextToken = getTokenAtPosition(sourceFile, typeParameters.end, /*includeJsDocComment*/ false);
