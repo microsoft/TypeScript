@@ -13,6 +13,8 @@
 ////var i: I;
 ////i.foo(/**/
 
-goTo.marker();
-verify.signatureHelpCountIs(2);
-verify.currentParameterSpanIs('x: string');
+verify.signatureHelp({
+    marker: "",
+    overloadsCount: 2,
+    parameterSpan: "x: string",
+});

@@ -1189,7 +1189,8 @@ namespace ts {
     }
 
     /** Returns `true` the first time it encounters a node and `false` afterwards. */
-    export function nodeSeenTracker<T extends Node>(): (node: T) => boolean {
+    export type NodeSeenTracker<T = Node> = (node: T) => boolean;
+    export function nodeSeenTracker<T extends Node>(): NodeSeenTracker<T> {
         const seen: true[] = [];
         return node => {
             const id = getNodeId(node);

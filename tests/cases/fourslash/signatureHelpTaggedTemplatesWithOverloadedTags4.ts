@@ -7,12 +7,11 @@
 ////
 //// f `${/*1*/ 123.456/*2*/ /*3*/ }   ${
 
-goTo.eachMarker(() => {
-    verify.signatureHelpCountIs(3);
-    verify.signatureHelpArgumentCountIs(3);
-
-    verify.currentSignatureParameterCountIs(4);
-    verify.currentSignatureHelpIs('f(templateStrings: string[], p1_o2: number, p2_o2: number, p3_o2: number): string');
-    verify.currentParameterHelpArgumentNameIs("p1_o2");
-    verify.currentParameterSpanIs("p1_o2: number");
+verify.signatureHelp({
+    marker: test.markerNames(),
+    overloadsCount: 3,
+    text: "f(templateStrings: string[], p1_o2: number, p2_o2: number, p3_o2: number): string",
+    parameterCount: 4,
+    parameterName: "p1_o2",
+    parameterSpan: "p1_o2: number",
 });

@@ -23,7 +23,7 @@
 namespace FourSlash {
     ts.disableIncrementalParsing = false;
 
-    import ArrayOrSingle = FourSlashInterface.Many;
+    import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
 
     // Represents a parsed source file with metadata
     interface FourSlashFile {
@@ -378,7 +378,6 @@ namespace FourSlash {
                     "getCompletionEntryDetails",
                     "getCompletionEntrySymbol",
                     "getQuickInfoAtPosition",
-                    "getSignatureHelpItems",
                     "getReferencesAtPosition",
                     "getDocumentHighlights",
                 ];
@@ -1062,8 +1061,8 @@ namespace FourSlash {
             if (tags !== undefined) {
                 assert.equal(details.tags.length, tags.length, this.messageAtLastKnownMarker("QuickInfo tags"));
                 ts.zipWith(tags, details.tags, (expectedTag, actualTag) => {
-                    assert.equal(expectedTag.name, actualTag.name);
-                    assert.equal(expectedTag.text, actualTag.text, this.messageAtLastKnownMarker("QuickInfo tag " + actualTag.name));
+                    assert.equal(actualTag.name, expectedTag.name);
+                    assert.equal(actualTag.text, expectedTag.text, this.messageAtLastKnownMarker("QuickInfo tag " + actualTag.name));
                 });
             }
         }
@@ -1446,83 +1445,91 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        public verifyCurrentSignatureHelpIs(expected: string) {
-            const help = this.getActiveSignatureHelpItem();
-            assert.equal(
-                ts.displayPartsToString(help.prefixDisplayParts) +
-                help.parameters.map(p => ts.displayPartsToString(p.displayParts)).join(ts.displayPartsToString(help.separatorDisplayParts)) +
-                ts.displayPartsToString(help.suffixDisplayParts), expected);
+        public verifyNoSignatureHelp(markers: ReadonlyArray<string>) {
+            if (markers.length) {
+                for (const marker of markers) {
+                    this.goToMarker(marker);
+                    this.verifyNoSignatureHelp(ts.emptyArray);
+                }
+                return;
+            }
+
+            const actual = this.getSignatureHelp();
+            if (actual) {
+                this.raiseError(`Expected no signature help, but got "${stringify(actual)}"`);
+            }
         }
 
-        public verifyCurrentParameterIsVariable(isVariable: boolean) {
-            const signature = this.getActiveSignatureHelpItem();
-            assert.isOk(signature);
-            assert.equal(isVariable, signature.isVariadic);
+        public verifySignatureHelp(optionses: ReadonlyArray<FourSlashInterface.VerifySignatureHelpOptions>) {
+            for (const options of optionses) {
+                if (options.marker === undefined) {
+                    this.verifySignatureHelpWorker(options);
+                }
+                else {
+                    for (const marker of toArray(options.marker)) {
+                        this.goToMarker(marker);
+                        this.verifySignatureHelpWorker(options);
+                    }
+                }
+            }
         }
 
-        public verifyCurrentParameterHelpName(name: string) {
-            const activeParameter = this.getActiveParameter();
-            const activeParameterName = activeParameter.name;
-            assert.equal(activeParameterName, name);
-        }
+        private verifySignatureHelpWorker(options: FourSlashInterface.VerifySignatureHelpOptions) {
+            const help = this.getSignatureHelp();
+            const selectedItem = help.items[help.selectedItemIndex];
+            // Argument index may exceed number of parameters
+            const currentParameter: ts.SignatureHelpParameter | undefined = selectedItem.parameters[help.argumentIndex];
 
-        public verifyCurrentParameterSpanIs(parameter: string) {
-            const activeParameter = this.getActiveParameter();
-            assert.equal(ts.displayPartsToString(activeParameter.displayParts), parameter);
-        }
+            assert.equal(help.items.length, options.overloadsCount || 1, this.assertionMessageAtLastKnownMarker("signature help overloads count"));
 
-        public verifyCurrentParameterHelpDocComment(docComment: string) {
-            const activeParameter = this.getActiveParameter();
-            const activeParameterDocComment = activeParameter.documentation;
-            assert.equal(ts.displayPartsToString(activeParameterDocComment), docComment, this.assertionMessageAtLastKnownMarker("current parameter Help DocComment"));
-        }
+            assert.equal(ts.displayPartsToString(selectedItem.documentation), options.docComment || "", this.assertionMessageAtLastKnownMarker("current signature help doc comment"));
 
-        public verifyCurrentSignatureHelpParameterCount(expectedCount: number) {
-            assert.equal(this.getActiveSignatureHelpItem().parameters.length, expectedCount);
-        }
+            if (options.text !== undefined) {
+                assert.equal(
+                    ts.displayPartsToString(selectedItem.prefixDisplayParts) +
+                    selectedItem.parameters.map(p => ts.displayPartsToString(p.displayParts)).join(ts.displayPartsToString(selectedItem.separatorDisplayParts)) +
+                    ts.displayPartsToString(selectedItem.suffixDisplayParts), options.text);
+            }
+            if (options.parameterName !== undefined) {
+                assert.equal(currentParameter!.name, options.parameterName);
+            }
+            if (options.parameterSpan !== undefined) {
+                assert.equal(ts.displayPartsToString(currentParameter!.displayParts), options.parameterSpan);
+            }
+            if (currentParameter) {
+                assert.equal(ts.displayPartsToString(currentParameter.documentation), options.parameterDocComment || "", this.assertionMessageAtLastKnownMarker("current parameter Help DocComment"));
+            }
+            if (options.parameterCount !== undefined) {
+                assert.equal(selectedItem.parameters.length, options.parameterCount);
+            }
+            if (options.argumentCount !== undefined) {
+                assert.equal(help.argumentCount, options.argumentCount);
+            }
 
-        public verifyCurrentSignatureHelpIsVariadic(expected: boolean) {
-            assert.equal(this.getActiveSignatureHelpItem().isVariadic, expected);
-        }
+            assert.equal(selectedItem.isVariadic, !!options.isVariadic);
 
-        public verifyCurrentSignatureHelpDocComment(docComment: string) {
-            const actualDocComment = this.getActiveSignatureHelpItem().documentation;
-            assert.equal(ts.displayPartsToString(actualDocComment), docComment, this.assertionMessageAtLastKnownMarker("current signature help doc comment"));
-        }
-
-        public verifyCurrentSignatureHelpTags(tags: ts.JSDocTagInfo[]) {
-            const actualTags = this.getActiveSignatureHelpItem().tags;
-
-            assert.equal(actualTags.length, tags.length, this.assertionMessageAtLastKnownMarker("signature help tags"));
-            ts.zipWith(tags, actualTags, (expectedTag, actualTag) => {
+            const actualTags = selectedItem.tags;
+            assert.equal(actualTags.length, (options.tags || ts.emptyArray).length, this.assertionMessageAtLastKnownMarker("signature help tags"));
+            ts.zipWith((options.tags || ts.emptyArray), actualTags, (expectedTag, actualTag) => {
                 assert.equal(expectedTag.name, actualTag.name);
                 assert.equal(expectedTag.text, actualTag.text, this.assertionMessageAtLastKnownMarker("signature help tag " + actualTag.name));
             });
-        }
 
-        public verifySignatureHelpCount(expected: number) {
-            const help = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
-            const actual = help && help.items ? help.items.length : 0;
-            assert.equal(actual, expected);
-        }
-
-        public verifySignatureHelpArgumentCount(expected: number) {
-            const signatureHelpItems = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
-            const actual = signatureHelpItems.argumentCount;
-            assert.equal(actual, expected);
-        }
-
-        public verifySignatureHelpPresent(shouldBePresent = true) {
-            const actual = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
-            if (shouldBePresent) {
-                if (!actual) {
-                    this.raiseError("Expected signature help to be present, but it wasn't");
-                }
-            }
-            else {
-                if (actual) {
-                    this.raiseError(`Expected no signature help, but got "${stringify(actual)}"`);
-                }
+            const allKeys: ReadonlyArray<keyof FourSlashInterface.VerifySignatureHelpOptions> = [
+                "marker",
+                "overloadsCount",
+                "docComment",
+                "text",
+                "parameterName",
+                "parameterSpan",
+                "parameterDocComment",
+                "parameterCount",
+                "isVariadic",
+                "tags",
+                "argumentCount",
+            ];
+            for (const key in options) {
+                ts.Debug.assert(ts.contains(allKeys, key));
             }
         }
 
@@ -1562,19 +1569,6 @@ Actual: ${stringify(fullActual)}`);
             }
 
             this.validate("error", message, renameInfo.localizedErrorMessage);
-        }
-
-        private getActiveSignatureHelpItem() {
-            const help = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
-            const index = help.selectedItemIndex;
-            return help.items[index];
-        }
-
-        private getActiveParameter(): ts.SignatureHelpParameter {
-            const help = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
-            const item = help.items[help.selectedItemIndex];
-            const currentParam = help.argumentIndex;
-            return item.parameters[currentParam];
         }
 
         private alignmentForExtraInfo = 50;
@@ -1790,8 +1784,12 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public printCurrentSignatureHelp() {
-            const sigHelp = this.getActiveSignatureHelpItem();
-            Harness.IO.log(stringify(sigHelp));
+            const help = this.getSignatureHelp();
+            Harness.IO.log(stringify(help.items[help.selectedItemIndex]));
+        }
+
+        private getSignatureHelp(): ts.SignatureHelpItems | undefined {
+            return this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
         }
 
         public printCompletionListMembers(preferences: ts.UserPreferences | undefined) {
@@ -2295,9 +2293,13 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public verifyCurrentFileContent(text: string) {
-            const actual = this.getFileContent(this.activeFile.fileName);
+            this.verifyFileContent(this.activeFile.fileName, text);
+        }
+
+        private verifyFileContent(fileName: string, text: string) {
+            const actual = this.getFileContent(fileName);
             if (actual !== text) {
-                throw new Error(`verifyCurrentFileContent failed:\n${showTextDiff(text, actual)}`);
+                throw new Error(`verifyFileContent failed:\n${showTextDiff(text, actual)}`);
             }
         }
 
@@ -2485,7 +2487,7 @@ Actual: ${stringify(fullActual)}`);
 
             this.applyCodeActions(details.codeActions);
 
-            this.verifyNewContent(options);
+            this.verifyNewContent(options, ts.flatMap(details.codeActions, a => a.changes.map(c => c.fileName)));
         }
 
         public verifyRangeIs(expectedText: string, includeWhiteSpace?: boolean) {
@@ -2572,13 +2574,25 @@ Actual: ${stringify(fullActual)}`);
                 this.applyEdits(change.fileName, change.textChanges, /*isFormattingEdit*/ false);
             }
 
-            this.verifyNewContent(options);
+            this.verifyNewContent(options, action.changes.map(c => c.fileName));
         }
 
-        private verifyNewContent(options: FourSlashInterface.NewContentOptions) {
+        private verifyNewContent(options: FourSlashInterface.NewContentOptions, changedFiles: ReadonlyArray<string>) {
+            const assertedChangedFiles = !options.newFileContent || typeof options.newFileContent === "string"
+                ? [this.activeFile.fileName]
+                : ts.getOwnKeys(options.newFileContent);
+            assert.deepEqual(assertedChangedFiles, changedFiles);
+
             if (options.newFileContent !== undefined) {
                 assert(!options.newRangeContent);
-                this.verifyCurrentFileContent(options.newFileContent);
+                if (typeof options.newFileContent === "string") {
+                    this.verifyCurrentFileContent(options.newFileContent);
+                }
+                else {
+                    for (const fileName in options.newFileContent) {
+                        this.verifyFileContent(fileName, options.newFileContent[fileName]);
+                    }
+                }
             }
             else {
                 this.verifyRangeIs(options.newRangeContent, /*includeWhitespace*/ true);
@@ -4042,8 +4056,12 @@ namespace FourSlashInterface {
             this.state.verifyCompletionListAllowsNewIdentifier(this.negative);
         }
 
-        public signatureHelpPresent() {
-            this.state.verifySignatureHelpPresent(!this.negative);
+        public noSignatureHelp(...markers: string[]): void {
+            this.state.verifyNoSignatureHelp(markers);
+        }
+
+        public signatureHelp(...options: VerifySignatureHelpOptions[]): void {
+            this.state.verifySignatureHelp(options);
         }
 
         public errorExistsBetweenMarkers(startMarker: string, endMarker: string) {
@@ -4108,7 +4126,7 @@ namespace FourSlashInterface {
             super(state);
         }
 
-        public completionsAt(markerName: Many<string>, completions: ReadonlyArray<ExpectedCompletionEntry>, options?: CompletionsAtOptions) {
+        public completionsAt(markerName: ArrayOrSingle<string>, completions: ReadonlyArray<ExpectedCompletionEntry>, options?: CompletionsAtOptions) {
             this.state.verifyCompletionsAt(markerName, completions, options);
         }
 
@@ -4163,19 +4181,19 @@ namespace FourSlashInterface {
             this.state.verifyCurrentFileContent(text);
         }
 
-        public goToDefinitionIs(endMarkers: Many<string>) {
+        public goToDefinitionIs(endMarkers: ArrayOrSingle<string>) {
             this.state.verifyGoToDefinitionIs(endMarkers);
         }
 
-        public goToDefinition(startMarkerName: Many<string>, endMarkerName: Many<string>, range?: FourSlash.Range): void;
-        public goToDefinition(startsAndEnds: [Many<string>, Many<string>][] | { [startMarkerName: string]: Many<string> }): void;
-        public goToDefinition(arg0: any, endMarkerName?: Many<string>) {
+        public goToDefinition(startMarkerName: ArrayOrSingle<string>, endMarkerName: ArrayOrSingle<string>, range?: FourSlash.Range): void;
+        public goToDefinition(startsAndEnds: [ArrayOrSingle<string>, ArrayOrSingle<string>][] | { [startMarkerName: string]: ArrayOrSingle<string> }): void;
+        public goToDefinition(arg0: any, endMarkerName?: ArrayOrSingle<string>) {
             this.state.verifyGoToDefinition(arg0, endMarkerName);
         }
 
-        public goToType(startMarkerName: Many<string>, endMarkerName: Many<string>): void;
-        public goToType(startsAndEnds: [Many<string>, Many<string>][] | { [startMarkerName: string]: Many<string> }): void;
-        public goToType(arg0: any, endMarkerName?: Many<string>) {
+        public goToType(startMarkerName: ArrayOrSingle<string>, endMarkerName: ArrayOrSingle<string>): void;
+        public goToType(startsAndEnds: [ArrayOrSingle<string>, ArrayOrSingle<string>][] | { [startMarkerName: string]: ArrayOrSingle<string> }): void;
+        public goToType(arg0: any, endMarkerName?: ArrayOrSingle<string>) {
             this.state.verifyGoToType(arg0, endMarkerName);
         }
 
@@ -4203,7 +4221,7 @@ namespace FourSlashInterface {
             this.state.verifyTypeOfSymbolAtLocation(range, symbol, expected);
         }
 
-        public referenceGroups(starts: Many<string> | Many<FourSlash.Range>, parts: ReferenceGroup[]) {
+        public referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<FourSlash.Range>, parts: ReferenceGroup[]) {
             this.state.verifyReferenceGroups(starts, parts);
         }
 
@@ -4221,46 +4239,6 @@ namespace FourSlashInterface {
 
         public findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]) {
             this.state.verifyDisplayPartsOfReferencedSymbol(expected);
-        }
-
-        public currentParameterHelpArgumentNameIs(name: string) {
-            this.state.verifyCurrentParameterHelpName(name);
-        }
-
-        public currentParameterSpanIs(parameter: string) {
-            this.state.verifyCurrentParameterSpanIs(parameter);
-        }
-
-        public currentParameterHelpArgumentDocCommentIs(docComment: string) {
-            this.state.verifyCurrentParameterHelpDocComment(docComment);
-        }
-
-        public currentSignatureHelpDocCommentIs(docComment: string) {
-            this.state.verifyCurrentSignatureHelpDocComment(docComment);
-        }
-
-        public currentSignatureHelpTagsAre(tags: ts.JSDocTagInfo[]) {
-            this.state.verifyCurrentSignatureHelpTags(tags);
-        }
-
-        public signatureHelpCountIs(expected: number) {
-            this.state.verifySignatureHelpCount(expected);
-        }
-
-        public signatureHelpCurrentArgumentListIsVariadic(expected: boolean) {
-            this.state.verifyCurrentSignatureHelpIsVariadic(expected);
-        }
-
-        public signatureHelpArgumentCountIs(expected: number) {
-            this.state.verifySignatureHelpArgumentCount(expected);
-        }
-
-        public currentSignatureParameterCountIs(expected: number) {
-            this.state.verifyCurrentSignatureHelpParameterCount(expected);
-        }
-
-        public currentSignatureHelpIs(expected: string) {
-            this.state.verifyCurrentSignatureHelpIs(expected);
         }
 
         public noErrors() {
@@ -4435,7 +4413,7 @@ namespace FourSlashInterface {
             this.state.verifyRenameInfoFailed(message);
         }
 
-        public renameLocations(startRanges: Many<FourSlash.Range>, options: FourSlash.Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges: FourSlash.Range[] }) {
+        public renameLocations(startRanges: ArrayOrSingle<FourSlash.Range>, options: FourSlash.Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges: FourSlash.Range[] }) {
             this.state.verifyRenameLocations(startRanges, options);
         }
 
@@ -4775,16 +4753,35 @@ namespace FourSlashInterface {
     }
 
     export interface VerifyCompletionsOptions {
-        readonly marker?: Many<string>;
+        readonly marker?: ArrayOrSingle<string>;
         readonly isNewIdentifierLocation?: boolean;
-        readonly exact?: Many<ExpectedCompletionEntry>;
-        readonly includes?: Many<ExpectedCompletionEntry>;
-        readonly excludes?: Many<string | { readonly name: string, readonly source: string }>;
+        readonly exact?: ArrayOrSingle<ExpectedCompletionEntry>;
+        readonly includes?: ArrayOrSingle<ExpectedCompletionEntry>;
+        readonly excludes?: ArrayOrSingle<string | { readonly name: string, readonly source: string }>;
         readonly preferences: ts.UserPreferences;
         readonly triggerCharacter?: ts.CompletionsTriggerCharacter;
     }
 
-    export type Many<T> = T | ReadonlyArray<T>;
+    export interface VerifySignatureHelpOptions {
+        readonly marker?: ArrayOrSingle<string>;
+        /** @default 1 */
+        readonly overloadsCount?: number;
+        /** @default undefined */
+        readonly docComment?: string;
+        readonly text?: string;
+        readonly parameterName?: string;
+        readonly parameterSpan?: string;
+        /** @default undefined */
+        readonly parameterDocComment?: string;
+        readonly parameterCount?: number;
+        readonly argumentCount?: number;
+        /** @default false */
+        readonly isVariadic?: boolean;
+        /** @default ts.emptyArray */
+        readonly tags?: ReadonlyArray<ts.JSDocTagInfo>;
+    }
+
+    export type ArrayOrSingle<T> = T | ReadonlyArray<T>;
 
     export interface VerifyCompletionListContainsOptions extends ts.UserPreferences {
         triggerCharacter?: ts.CompletionsTriggerCharacter;
@@ -4800,7 +4797,7 @@ namespace FourSlashInterface {
 
     export interface NewContentOptions {
         // Exactly one of these should be defined.
-        newFileContent?: string;
+        newFileContent?: string | { readonly [filename: string]: string };
         newRangeContent?: string;
     }
 

@@ -164,7 +164,7 @@ namespace ts.projectSystem {
     }
 
     export function fileStats(nonZeroStats: Partial<server.FileStats>): server.FileStats {
-        return { ts: 0, tsx: 0, dts: 0, js: 0, jsx: 0, ...nonZeroStats };
+        return { ts: 0, tsx: 0, dts: 0, js: 0, jsx: 0, deferred: 0, ...nonZeroStats };
     }
 
     export class TestServerEventManager {
@@ -214,9 +214,9 @@ namespace ts.projectSystem {
             assert.equal(eventData.triggerFile, triggerFile);
         }
 
-        assertProjectInfoTelemetryEvent(partial: Partial<server.ProjectInfoTelemetryEventData>, configFile?: string): void {
+        assertProjectInfoTelemetryEvent(partial: Partial<server.ProjectInfoTelemetryEventData>, configFile = "/tsconfig.json"): void {
             assert.deepEqual<server.ProjectInfoTelemetryEventData>(this.getEvent<server.ProjectInfoTelemetryEvent>(server.ProjectInfoTelemetryEvent), {
-                projectId: Harness.mockHash(configFile || "/tsconfig.json"),
+                projectId: sys.createSHA256Hash(configFile),
                 fileStats: fileStats({ ts: 1 }),
                 compilerOptions: {},
                 extends: false,

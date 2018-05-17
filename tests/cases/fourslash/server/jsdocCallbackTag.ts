@@ -26,17 +26,29 @@
 //// t(/*4*/"!", /*5*/12, /*6*/false);
 
 goTo.marker("1");
-verify.quickInfoIs("var t: (eventName: string, eventName2: string | number, eventName3: any) => number");
+verify.quickInfoIs("var t: FooHandler");
 goTo.marker("2");
-verify.quickInfoIs("var t2: (eventName?: string, eventName2?: string) => any");
+verify.quickInfoIs("var t2: FooHandler2");
 goTo.marker("3");
 verify.quickInfoIs("type FooHandler2 = (eventName?: string, eventName2?: string) => any", "- What, another one?");
 goTo.marker("8");
 verify.quickInfoIs("type FooHandler = (eventName: string, eventName2: string | number, eventName3: any) => number", "- A kind of magic");
-goTo.marker('4');
-verify.currentSignatureHelpIs("t(eventName: string, eventName2: string | number, eventName3: any): number");
-verify.currentParameterHelpArgumentDocCommentIs("- So many words");
-goTo.marker('5');
-verify.currentParameterHelpArgumentDocCommentIs("- Silence is golden");
-goTo.marker('6');
-verify.currentParameterHelpArgumentDocCommentIs("- Osterreich mos def");
+verify.signatureHelp({
+    marker: '4',
+    text: "t(eventName: string, eventName2: string | number, eventName3: any): number",
+    parameterDocComment: "- So many words",
+    tags: [{ name: "callback", text: "FooHandler - A kind of magic" },
+           { name: "type", text: "{FooHandler} callback" }]
+});
+verify.signatureHelp({
+    marker: '5',
+    parameterDocComment: "- Silence is golden",
+    tags: [{ name: "callback", text: "FooHandler - A kind of magic" },
+           { name: "type", text: "{FooHandler} callback" }]
+});
+verify.signatureHelp({
+    marker: '6',
+    parameterDocComment: "- Osterreich mos def",
+    tags: [{ name: "callback", text: "FooHandler - A kind of magic" },
+           { name: "type", text: "{FooHandler} callback" }]
+});
