@@ -319,7 +319,7 @@ namespace ts {
                     checkSourceFile(file);
                     const diagnostics: Diagnostic[] = [];
                     Debug.assert(!!(getNodeLinks(file).flags & NodeCheckFlags.TypeChecked));
-                    checkUnusedIdentifiers(allPotentiallyUnusedIdentifiers.get(file.fileName)!, (kind, diag) => {
+                    checkUnusedIdentifiers(getPotentiallyUnusedIdentifiers(file), (kind, diag) => {
                         if (!unusedIsError(kind)) {
                             diagnostics.push({ ...diag, category: DiagnosticCategory.Suggestion });
                         }
@@ -450,9 +450,7 @@ namespace ts {
         let deferredGlobalExtractSymbol: Symbol;
 
         let deferredNodes: Node[];
-        const allPotentiallyUnusedIdentifiers = createMap<ReadonlyArray<PotentiallyUnusedIdentifier>>(); // key is file name
-        let potentiallyUnusedIdentifiers: PotentiallyUnusedIdentifier[]; // Potentially unused identifiers in the source file currently being checked.
-        const seenPotentiallyUnusedIdentifiers = createMap<true>(); // For assertion that we don't defer the same identifier twice
+        const allPotentiallyUnusedIdentifiers = createMap<PotentiallyUnusedIdentifier[]>(); // key is file name
 
         let flowLoopStart = 0;
         let flowLoopCount = 0;
@@ -22557,7 +22555,13 @@ namespace ts {
 
         function registerForUnusedIdentifiersCheck(node: PotentiallyUnusedIdentifier): void {
             // May be in a call such as getTypeOfNode that happened to call this. But potentiallyUnusedIdentifiers is only defined in the scope of `checkSourceFile`.
-            if (potentiallyUnusedIdentifiers) {
+            if (produceDiagnostics) {
+                const sourceFile = getSourceFileOfNode(node);
+                let potentiallyUnusedIdentifiers = allPotentiallyUnusedIdentifiers.get(sourceFile.path);
+                if (!potentiallyUnusedIdentifiers) {
+                    potentiallyUnusedIdentifiers = [];
+                    allPotentiallyUnusedIdentifiers.set(sourceFile.path, potentiallyUnusedIdentifiers);
+                }
                 // TODO: GH#22580
                 // Debug.assert(addToSeen(seenPotentiallyUnusedIdentifiers, getNodeId(node)), "Adding potentially-unused identifier twice");
                 potentiallyUnusedIdentifiers.push(node);
@@ -25539,6 +25543,10 @@ namespace ts {
             }
         }
 
+        function getPotentiallyUnusedIdentifiers(sourceFile: SourceFile): ReadonlyArray<PotentiallyUnusedIdentifier> {
+            return allPotentiallyUnusedIdentifiers.get(sourceFile.path) || emptyArray;
+        }
+
         // Fully type check a source file and collect the relevant diagnostics.
         function checkSourceFileWorker(node: SourceFile) {
             const links = getNodeLinks(node);
@@ -25557,11 +25565,6 @@ namespace ts {
                 clear(potentialNewTargetCollisions);
 
                 deferredNodes = [];
-                if (produceDiagnostics) {
-                    Debug.assert(!allPotentiallyUnusedIdentifiers.has(node.fileName));
-                    allPotentiallyUnusedIdentifiers.set(node.fileName, potentiallyUnusedIdentifiers = []);
-                }
-
                 forEach(node.statements, checkSourceElement);
 
                 checkDeferredNodes();
@@ -25571,7 +25574,7 @@ namespace ts {
                 }
 
                 if (!node.isDeclarationFile && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters)) {
-                    checkUnusedIdentifiers(potentiallyUnusedIdentifiers, (kind, diag) => {
+                    checkUnusedIdentifiers(getPotentiallyUnusedIdentifiers(node), (kind, diag) => {
                         if (unusedIsError(kind)) {
                             diagnostics.add(diag);
                         }
@@ -25579,8 +25582,6 @@ namespace ts {
                 }
 
                 deferredNodes = undefined;
-                seenPotentiallyUnusedIdentifiers.clear();
-                potentiallyUnusedIdentifiers = undefined;
 
                 if (isExternalOrCommonJsModule(node)) {
                     checkExternalModuleExports(node);
