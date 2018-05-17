@@ -8426,7 +8426,7 @@ namespace ts {
             if (!links.resolvedType) {
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
                 links.resolvedType = getUnionType(map(node.types, getTypeFromTypeNode), UnionReduction.Literal,
-                    aliasSymbol, getTypeParametersForAliasSymbol(aliasSymbol));
+                    aliasSymbol, getTypeArgumentsForAliasSymbol(aliasSymbol));
             }
             return links.resolvedType;
         }
@@ -8537,7 +8537,7 @@ namespace ts {
             if (!links.resolvedType) {
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
                 links.resolvedType = getIntersectionType(map(node.types, getTypeFromTypeNode),
-                    aliasSymbol, getTypeParametersForAliasSymbol(aliasSymbol));
+                    aliasSymbol, getTypeArgumentsForAliasSymbol(aliasSymbol));
             }
             return links.resolvedType;
         }
@@ -8846,7 +8846,7 @@ namespace ts {
                 const type = <MappedType>createObjectType(ObjectFlags.Mapped, node.symbol);
                 type.declaration = node;
                 type.aliasSymbol = getAliasSymbolForTypeNode(node);
-                type.aliasTypeArguments = getTypeParametersForAliasSymbol(type.aliasSymbol);
+                type.aliasTypeArguments = getTypeArgumentsForAliasSymbol(type.aliasSymbol);
                 links.resolvedType = type;
                 // Eagerly resolve the constraint type which forces an error if the constraint type circularly
                 // references itself through one or more type aliases.
@@ -8955,7 +8955,7 @@ namespace ts {
             if (!links.resolvedType) {
                 const checkType = getTypeFromTypeNode(node.checkType);
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
-                const aliasTypeArguments = getTypeParametersForAliasSymbol(aliasSymbol);
+                const aliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
                 const allOuterTypeParameters = getOuterTypeParameters(node, /*includeThisTypes*/ true);
                 const outerTypeParameters = aliasTypeArguments ? allOuterTypeParameters : filter(allOuterTypeParameters, tp => isPossiblyReferencedInConditionalType(tp, node));
                 const root: ConditionalRoot = {
@@ -9072,7 +9072,7 @@ namespace ts {
                 else {
                     let type = createObjectType(ObjectFlags.Anonymous, node.symbol);
                     type.aliasSymbol = aliasSymbol;
-                    type.aliasTypeArguments = getTypeParametersForAliasSymbol(aliasSymbol);
+                    type.aliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
                     if (isJSDocTypeLiteral(node) && node.isArrayType) {
                         type = createArrayType(type);
                     }
@@ -9086,7 +9086,7 @@ namespace ts {
             return isTypeAlias(node.parent) ? getSymbolOfNode(node.parent) : undefined;
         }
 
-        function getTypeParametersForAliasSymbol(symbol: Symbol) {
+        function getTypeArgumentsForAliasSymbol(symbol: Symbol) {
             return symbol ? getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol) : undefined;
         }
 
