@@ -2658,7 +2658,12 @@ namespace ts {
             }
             checkStrictModeFunctionName(node);
             const bindingName = node.name ? node.name.escapedText : InternalSymbolName.Function;
-            return bindAnonymousDeclaration(node, SymbolFlags.Function, bindingName);
+            const symbol = bindAnonymousDeclaration(node, SymbolFlags.Function, bindingName);
+            if (isInJavaScriptFile(node) && (getAssignedJavascriptInitializer(node) || node.parent && getDeclaredJavascriptInitializer(node.parent))) {
+                // Will be looked up later (probably) (who knows)
+                symbol.flags |= SymbolFlags.JSAlias;
+            }
+            return symbol;
         }
 
         function bindPropertyOrMethodOrAccessor(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {

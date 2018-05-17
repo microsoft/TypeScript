@@ -81,11 +81,11 @@ var n = a.C1.staticProp;
 
 var n = a.C2.staticProp;
 >n : Symbol(n, Decl(b.ts, 1, 3), Decl(b.ts, 3, 3), Decl(b.ts, 4, 3), Decl(b.ts, 5, 3), Decl(b.ts, 6, 3) ... and 4 more)
->a.C2.staticProp : Symbol(C2.staticProp, Decl(a.js, 6, 26))
+>a.C2.staticProp : Symbol(a.C2.staticProp, Decl(a.js, 6, 26))
 >a.C2 : Symbol(a.C2, Decl(a.js, 6, 10))
 >a : Symbol(a, Decl(b.ts, 0, 6))
 >C2 : Symbol(a.C2, Decl(a.js, 6, 10))
->staticProp : Symbol(C2.staticProp, Decl(a.js, 6, 26))
+>staticProp : Symbol(a.C2.staticProp, Decl(a.js, 6, 26))
 
 var n = a.F1.staticProp;
 >n : Symbol(n, Decl(b.ts, 1, 3), Decl(b.ts, 3, 3), Decl(b.ts, 4, 3), Decl(b.ts, 5, 3), Decl(b.ts, 6, 3) ... and 4 more)
@@ -97,11 +97,11 @@ var n = a.F1.staticProp;
 
 var n = a.F2.staticProp;
 >n : Symbol(n, Decl(b.ts, 1, 3), Decl(b.ts, 3, 3), Decl(b.ts, 4, 3), Decl(b.ts, 5, 3), Decl(b.ts, 6, 3) ... and 4 more)
->a.F2.staticProp : Symbol(F2.staticProp, Decl(a.js, 9, 32))
+>a.F2.staticProp : Symbol(a.F2.staticProp, Decl(a.js, 9, 32))
 >a.F2 : Symbol(a.F2, Decl(a.js, 9, 10))
 >a : Symbol(a, Decl(b.ts, 0, 6))
 >F2 : Symbol(a.F2, Decl(a.js, 9, 10))
->staticProp : Symbol(F2.staticProp, Decl(a.js, 9, 32))
+>staticProp : Symbol(a.F2.staticProp, Decl(a.js, 9, 32))
 
 
 var n = C3.staticProp;

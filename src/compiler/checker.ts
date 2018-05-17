@@ -4857,7 +4857,7 @@ namespace ts {
                     type = getWidenedTypeForVariableLikeDeclaration(declaration, /*reportErrors*/ true);
                 }
                 else {
-                    Debug.fail("Unhandled declaration kind! " + Debug.showSyntaxKind(declaration));
+                    Debug.fail("Unhandled declaration kind! " + Debug.showSyntaxKind(declaration) + " for " + Debug.showSymbol(symbol));
                 }
 
                 if (!popTypeResolution()) {
@@ -4959,19 +4959,20 @@ namespace ts {
         }
 
         function getTypeOfFuncClassEnumModule(symbol: Symbol): Type {
-            const links = getSymbolLinks(symbol);
+            let links = getSymbolLinks(symbol);
             if (!links.type) {
                 if (symbol.flags & SymbolFlags.JSAlias) {
                     // TODO: eventually just call resolveAlias
                     const aliasDeclaration = symbol.valueDeclaration; // TODO: For testing purposes only, should be getDeclarationOfAliasSymbol
                     // Debug.assert(isBinaryExpression(aliasDeclaration.parent) && isExpressionStatement(aliasDeclaration.parent.parent),  Debug.showSyntaxKind(aliasDeclaration) + Debug.showSyntaxKind(aliasDeclaration.parent) + Debug.showSyntaxKind(aliasDeclaration.parent.parent));
                     const aliasSymbol = aliasDeclaration.parent.symbol;
-                    symbol = cloneSymbol(symbol);
                     // TODO: Jamming things in manually *might* be the right thing (possibly even with mergeSymbolTable)
                     // but it needs to be a lot more complete
                     // (probably I need a "cloneSymbolTable" or "cloneToSymbol")
-                    symbol.exports = symbol.exports || createSymbolTable();
                     if (aliasSymbol && aliasSymbol.exports && aliasSymbol.exports.size) {
+                        symbol = cloneSymbol(symbol);
+                        links = symbol as TransientSymbol; // need to overwrite links because we overwrote symbol as well -- and for transient symbol, there are their own symbolLinks
+                        symbol.exports = symbol.exports || createSymbolTable();
                         mergeSymbolTable(symbol.exports, aliasSymbol.exports);
                     }
                 }
