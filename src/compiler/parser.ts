@@ -6481,7 +6481,25 @@ namespace ts {
                     return finishNode(result, end);
                 }
 
+                function isNextNonwhitespaceTokenEndOfFile(): boolean {
+                    // We must use infinite lookahead, as there could be any number of newlines :(
+                    while (true) {
+                        nextJSDocToken();
+                        if (token() === SyntaxKind.EndOfFileToken) {
+                            return true;
+                        }
+                        if (!(token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia)) {
+                            return false;
+                        }
+                    }
+                }
+
                 function skipWhitespace(): void {
+                    if (token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
+                        if (lookAhead(isNextNonwhitespaceTokenEndOfFile)) {
+                            return; // Don't skip whitespace prior to EoF (or end of comment) - that shouldn't be included in any node's range
+                        }
+                    }
                     while (token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
                         nextJSDocToken();
                     }
@@ -6802,6 +6820,7 @@ namespace ts {
                     typedefTag.comment = parseTagComments(indent);
 
                     typedefTag.typeExpression = typeExpression;
+                    let end: number;
                     if (!typeExpression || isObjectOrObjectArrayTypeReference(typeExpression.type)) {
                         let child: JSDocTypeTag | JSDocPropertyTag | false;
                         let jsdocTypeLiteral: JSDocTypeLiteral;
@@ -6830,10 +6849,12 @@ namespace ts {
                             typedefTag.typeExpression = childTypeTag && childTypeTag.typeExpression && !isObjectOrObjectArrayTypeReference(childTypeTag.typeExpression.type) ?
                                 childTypeTag.typeExpression :
                                 finishNode(jsdocTypeLiteral);
+                            end = typedefTag.typeExpression.end;
                         }
                     }
 
-                    return finishNode(typedefTag);
+                    // Only include the characters between the name end and the next token if a comment was actually parsed out - otherwise it's just whitespace
+                    return finishNode(typedefTag, end || typedefTag.comment !== undefined ? scanner.getStartPos() : (typedefTag.fullName || typedefTag.typeExpression || typedefTag.tagName).end);
                 }
 
                 function parseJSDocTypeNameWithNamespace(nested?: boolean) {
@@ -7075,7 +7096,7 @@ namespace ts {
                     const pos = scanner.getTokenPos();
                     const end = scanner.getTextPos();
                     const result = <Identifier>createNode(SyntaxKind.Identifier, pos);
-                    result.escapedText = escapeLeadingUnderscores(content.substring(pos, end));
+                    result.escapedText = escapeLeadingUnderscores(scanner.getTokenText());
                     finishNode(result, end);
 
                     nextJSDocToken();
