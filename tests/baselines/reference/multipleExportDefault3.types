@@ -9,6 +9,6 @@ export default {
 };
 
 export default class C { }
->C : C
+>C : import("tests/cases/conformance/externalModules/multipleExportDefault3").default
 
 

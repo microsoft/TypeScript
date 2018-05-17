@@ -60,7 +60,7 @@ namespace ts {
             }
         }
 
-        return diags.concat(checker.getSuggestionDiagnostics(sourceFile));
+        return diags.concat(checker.getSuggestionDiagnostics(sourceFile)).sort((d1, d2) => d1.start - d2.start);
     }
 
     // convertToEs6Module only works on top-level, so don't trigger it if commonjs code only appears in nested scopes.

@@ -433,7 +433,7 @@ namespace ts.refactor {
     }
     function isVariableDeclarationInImport(decl: VariableDeclaration) {
         return isSourceFile(decl.parent.parent.parent) &&
-            isRequireCall(decl.initializer, /*checkArgumentIsStringLiteralLike*/ true);
+            decl.initializer && isRequireCall(decl.initializer, /*checkArgumentIsStringLiteralLike*/ true);
     }
 
     function filterImport(i: SupportedImport, moduleSpecifier: StringLiteralLike, keep: (name: Identifier) => boolean): SupportedImportStatement | undefined {
