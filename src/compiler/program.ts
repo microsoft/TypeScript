@@ -658,6 +658,9 @@ namespace ts {
 
         Debug.assert(!!missingFilePaths);
 
+        // unconditionally set moduleResolutionCache to undefined to avoid unnecessary leaks
+        moduleResolutionCache = undefined;
+
         // Release any files we have acquired in the old program but are
         // not part of the new program.
         if (oldProgram && host.onReleaseOldSourceFile) {
@@ -704,7 +707,6 @@ namespace ts {
             redirectTargetsSet,
             isEmittedFile,
             getConfigFileParsingDiagnostics,
-            getResolvedModuleWithFailedLookupLocationsFromCache,
             getProjectReferences
         };
 
@@ -713,10 +715,6 @@ namespace ts {
         performance.measure("Program", "beforeProgram", "afterProgram");
 
         return program;
-
-        function getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations {
-            return moduleResolutionCache && resolveModuleNameFromCache(moduleName, containingFile, moduleResolutionCache);
-        }
 
         function toPath(fileName: string): Path {
             return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
