@@ -414,3 +414,21 @@ export declare function createExportedWidget1(): Widgets.Widget1;
 export declare function createExportedWidget2(): Widgets.SpecializedWidget.Widget2;
 export declare function createExportedWidget3(): Widgets1.Widget3;
 export declare function createExportedWidget4(): Widgets1.SpecializedGlobalWidget.Widget4;
+//// [privacyCannotNameAccessorDeclFile_consumer.d.ts]
+/// <reference path="privacyCannotNameAccessorDeclFile_GlobalWidgets.d.ts" />
+export declare class publicClassWithWithPrivateGetAccessorTypes {
+    static readonly myPublicStaticMethod: import("./privacyCannotNameAccessorDeclFile_Widgets").Widget1;
+    private static readonly myPrivateStaticMethod;
+    readonly myPublicMethod: import("./privacyCannotNameAccessorDeclFile_Widgets").Widget1;
+    private readonly myPrivateMethod;
+    static readonly myPublicStaticMethod1: import("GlobalWidgets").Widget3;
+    private static readonly myPrivateStaticMethod1;
+    readonly myPublicMethod1: import("GlobalWidgets").Widget3;
+    private readonly myPrivateMethod1;
+}
+export declare class publicClassWithPrivateModuleGetAccessorTypes {
+    static readonly myPublicStaticMethod: import("./privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2;
+    readonly myPublicMethod: import("./privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2;
+    static readonly myPublicStaticMethod1: import("GlobalWidgets").SpecializedGlobalWidget.Widget4;
+    readonly myPublicMethod1: import("GlobalWidgets").SpecializedGlobalWidget.Widget4;
+}

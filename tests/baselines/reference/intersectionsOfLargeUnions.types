@@ -1,0 +1,110 @@
+=== tests/cases/compiler/intersectionsOfLargeUnions.ts ===
+// Repro from #23977
+
+export function assertIsElement(node: Node | null): node is Element {
+>assertIsElement : (node: Node | null) => node is Element
+>node : Node | null
+>Node : Node
+>null : null
+>node : any
+>Element : Element
+
+    let nodeType = node === null ? null : node.nodeType;
+>nodeType : number | null
+>node === null ? null : node.nodeType : number | null
+>node === null : boolean
+>node : Node | null
+>null : null
+>null : null
+>node.nodeType : number
+>node : Node
+>nodeType : number
+
+    return nodeType === 1;
+>nodeType === 1 : boolean
+>nodeType : number | null
+>1 : 1
+}
+  
+export function assertNodeTagName<
+>assertNodeTagName : <T extends "symbol" | "object" | "a" | "abbr" | "acronym" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdo" | "big" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "center" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "dfn" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "isindex" | "kbd" | "keygen" | "label" | "legend" | "li" | "link" | "listing" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "nextid" | "nobr" | "noframes" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "plaintext" | "pre" | "progress" | "q" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strike" | "strong" | "style" | "sub" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "tt" | "u" | "ul" | "var" | "video" | "wbr" | "xmp" | "circle" | "clippath" | "defs" | "desc" | "ellipse" | "feblend" | "fecolormatrix" | "fecomponenttransfer" | "fecomposite" | "feconvolvematrix" | "fediffuselighting" | "fedisplacementmap" | "fedistantlight" | "feflood" | "fefunca" | "fefuncb" | "fefuncg" | "fefuncr" | "fegaussianblur" | "feimage" | "femerge" | "femergenode" | "femorphology" | "feoffset" | "fepointlight" | "fespecularlighting" | "fespotlight" | "fetile" | "feturbulence" | "filter" | "foreignobject" | "g" | "image" | "line" | "lineargradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialgradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textpath" | "tspan" | "use" | "view", U extends ElementTagNameMap[T]>(node: Node | null, tagName: T) => node is U
+
+    T extends keyof ElementTagNameMap,
+>T : T
+>ElementTagNameMap : ElementTagNameMap
+
+    U extends ElementTagNameMap[T]>(node: Node | null, tagName: T): node is U {
+>U : U
+>ElementTagNameMap : ElementTagNameMap
+>T : T
+>node : Node | null
+>Node : Node
+>null : null
+>tagName : T
+>T : T
+>node : any
+>U : U
+
+    if (assertIsElement(node)) {
+>assertIsElement(node) : boolean
+>assertIsElement : (node: Node | null) => node is Element
+>node : Node | null
+
+        const nodeTagName = node.tagName.toLowerCase();
+>nodeTagName : string
+>node.tagName.toLowerCase() : string
+>node.tagName.toLowerCase : () => string
+>node.tagName : string
+>node : Element
+>tagName : string
+>toLowerCase : () => string
+
+         return nodeTagName === tagName;
+>nodeTagName === tagName : boolean
+>nodeTagName : string
+>tagName : T
+    }
+    return false;
+>false : false
+}
+  
+export function assertNodeProperty<
+>assertNodeProperty : <T extends "symbol" | "object" | "a" | "abbr" | "acronym" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdo" | "big" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "center" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "dfn" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "isindex" | "kbd" | "keygen" | "label" | "legend" | "li" | "link" | "listing" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "nextid" | "nobr" | "noframes" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "plaintext" | "pre" | "progress" | "q" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strike" | "strong" | "style" | "sub" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "tt" | "u" | "ul" | "var" | "video" | "wbr" | "xmp" | "circle" | "clippath" | "defs" | "desc" | "ellipse" | "feblend" | "fecolormatrix" | "fecomponenttransfer" | "fecomposite" | "feconvolvematrix" | "fediffuselighting" | "fedisplacementmap" | "fedistantlight" | "feflood" | "fefunca" | "fefuncb" | "fefuncg" | "fefuncr" | "fegaussianblur" | "feimage" | "femerge" | "femergenode" | "femorphology" | "feoffset" | "fepointlight" | "fespecularlighting" | "fespotlight" | "fetile" | "feturbulence" | "filter" | "foreignobject" | "g" | "image" | "line" | "lineargradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialgradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textpath" | "tspan" | "use" | "view", P extends keyof ElementTagNameMap[T], V extends HTMLElementTagNameMap[T][P]>(node: Node | null, tagName: T, prop: P, value: V) => void
+
+    T extends keyof ElementTagNameMap,
+>T : T
+>ElementTagNameMap : ElementTagNameMap
+
+    P extends keyof ElementTagNameMap[T],
+>P : P
+>ElementTagNameMap : ElementTagNameMap
+>T : T
+
+    V extends HTMLElementTagNameMap[T][P]>(node: Node | null, tagName: T, prop: P, value: V) {
+>V : V
+>HTMLElementTagNameMap : HTMLElementTagNameMap
+>T : T
+>P : P
+>node : Node | null
+>Node : Node
+>null : null
+>tagName : T
+>T : T
+>prop : P
+>P : P
+>value : V
+>V : V
+
+    if (assertNodeTagName(node, tagName)) {
+>assertNodeTagName(node, tagName) : boolean
+>assertNodeTagName : <T extends "symbol" | "object" | "a" | "abbr" | "acronym" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdo" | "big" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "center" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "dfn" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "isindex" | "kbd" | "keygen" | "label" | "legend" | "li" | "link" | "listing" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "nextid" | "nobr" | "noframes" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "plaintext" | "pre" | "progress" | "q" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strike" | "strong" | "style" | "sub" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "tt" | "u" | "ul" | "var" | "video" | "wbr" | "xmp" | "circle" | "clippath" | "defs" | "desc" | "ellipse" | "feblend" | "fecolormatrix" | "fecomponenttransfer" | "fecomposite" | "feconvolvematrix" | "fediffuselighting" | "fedisplacementmap" | "fedistantlight" | "feflood" | "fefunca" | "fefuncb" | "fefuncg" | "fefuncr" | "fegaussianblur" | "feimage" | "femerge" | "femergenode" | "femorphology" | "feoffset" | "fepointlight" | "fespecularlighting" | "fespotlight" | "fetile" | "feturbulence" | "filter" | "foreignobject" | "g" | "image" | "line" | "lineargradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialgradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textpath" | "tspan" | "use" | "view", U extends ElementTagNameMap[T]>(node: Node | null, tagName: T) => node is U
+>node : Node | null
+>tagName : T
+
+        node[prop];
+>node[prop] : ElementTagNameMap[T][P]
+>node : ElementTagNameMap[T]
+>prop : P
+    }
+}
+

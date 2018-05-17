@@ -1,6 +1,6 @@
 === tests/cases/compiler/es6ExportEquals.ts ===
 export function f() { }
->f : typeof f
+>f : typeof import("tests/cases/compiler/es6ExportEquals").f
 
 export = f;
 >f : () => void

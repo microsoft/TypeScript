@@ -46,7 +46,7 @@ export class Kettle {
 }
 
 export class Kettle { // Should error
->Kettle : Kettle
+>Kettle : import("tests/cases/compiler/moduleDuplicateIdentifiers").Kettle
 
 	member2 = 42;
 >member2 : number
