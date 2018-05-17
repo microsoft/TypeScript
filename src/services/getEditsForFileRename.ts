@@ -45,10 +45,10 @@ namespace ts {
                 if (checker.getSymbolAtLocation(importStringLiteral)) continue;
 
                 if (!host.resolveModuleNameWithFailedLookupLocations && !host.fileExists) continue;
-                const resolved = host.resolveModuleNameWithFailedLookupLocations
-                    ? host.resolveModuleNameWithFailedLookupLocations(importStringLiteral.text, sourceFile.fileName)
-                    : resolveModuleName(importStringLiteral.text, sourceFile.fileName, program.getCompilerOptions(), host as ModuleResolutionHost);
-                if (contains(resolved.failedLookupLocations, oldFilePath)) {
+                const resolved = host.resolveModuleNames
+                    ? host.resolveModuleNameWithFailedLookupLocations && host.resolveModuleNameWithFailedLookupLocations(importStringLiteral.text, sourceFile.fileName)
+                    : program.getResolvedModuleWithFailedLookupLocationsFromCache(importStringLiteral.text, sourceFile.fileName);
+                if (resolved && contains(resolved.failedLookupLocations, oldFilePath)) {
                     result.push({ sourceFile, toUpdate: importStringLiteral });
                 }
             }

@@ -207,6 +207,8 @@ namespace ts {
          * LS host can optionally implement this method if it wants to be completely in charge of module name resolution.
          * if implementation is omitted then language service will use built-in module resolution logic and get answers to
          * host specific questions using 'getScriptSnapshot'.
+         *
+         * If this is implemented, `resolveModuleNameWithFailedLookupLocations` should be too.
          */
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
         resolveModuleNameWithFailedLookupLocations?(modulename: string, containingFile: string): ResolvedModuleWithFailedLookupLocations;
