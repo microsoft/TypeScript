@@ -489,6 +489,15 @@ namespace ts {
                     return visitNode(cbNode, (<JSDocTypedefTag>node).fullName) ||
                         visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression);
                 }
+            case SyntaxKind.JSDocCallbackTag:
+                return visitNode(cbNode, (node as JSDocCallbackTag).fullName) ||
+                    visitNode(cbNode, (node as JSDocCallbackTag).typeExpression);
+            case SyntaxKind.JSDocSignature:
+                return visitNodes(cbNode, cbNodes, node.decorators) ||
+                    visitNodes(cbNode, cbNodes, node.modifiers) ||
+                    visitNodes(cbNode, cbNodes, (<SignatureDeclaration>node).typeParameters) ||
+                    visitNodes(cbNode, cbNodes, (<SignatureDeclaration>node).parameters) ||
+                    visitNode(cbNode, (<SignatureDeclaration>node).type);
             case SyntaxKind.JSDocTypeLiteral:
                 if ((node as JSDocTypeLiteral).jsDocPropertyTags) {
                     for (const tag of (node as JSDocTypeLiteral).jsDocPropertyTags) {
@@ -6331,8 +6340,9 @@ namespace ts {
             }
 
             const enum PropertyLikeParse {
-                Property,
-                Parameter,
+                Property = 1 << 0,
+                Parameter = 1 << 1,
+                CallbackParameter = 1 << 2,
             }
 
             export function parseJSDocCommentWorker(start: number, length: number): JSDoc {
@@ -6386,7 +6396,7 @@ namespace ts {
                             case SyntaxKind.AtToken:
                                 if (state === JSDocState.BeginningOfLine || state === JSDocState.SawAsterisk) {
                                     removeTrailingNewlines(comments);
-                                    parseTag(indent);
+                                    addTag(parseTag(indent));
                                     // NOTE: According to usejsdoc.org, a tag goes to end of line, except the last tag.
                                     // Real-world comments may break this rule, so "BeginningOfLine" will not be a real line beginning
                                     // for malformed examples like `/** @param {string} x @returns {number} the length */`
@@ -6471,7 +6481,25 @@ namespace ts {
                     return finishNode(result, end);
                 }
 
+                function isNextNonwhitespaceTokenEndOfFile(): boolean {
+                    // We must use infinite lookahead, as there could be any number of newlines :(
+                    while (true) {
+                        nextJSDocToken();
+                        if (token() === SyntaxKind.EndOfFileToken) {
+                            return true;
+                        }
+                        if (!(token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia)) {
+                            return false;
+                        }
+                    }
+                }
+
                 function skipWhitespace(): void {
+                    if (token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
+                        if (lookAhead(isNextNonwhitespaceTokenEndOfFile)) {
+                            return; // Don't skip whitespace prior to EoF (or end of comment) - that shouldn't be included in any node's range
+                        }
+                    }
                     while (token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
                         nextJSDocToken();
                     }
@@ -6503,8 +6531,7 @@ namespace ts {
                             case "arg":
                             case "argument":
                             case "param":
-                                addTag(parseParameterOrPropertyTag(atToken, tagName, PropertyLikeParse.Parameter, indent));
-                                return;
+                                return parseParameterOrPropertyTag(atToken, tagName, PropertyLikeParse.Parameter, indent);
                             case "return":
                             case "returns":
                                 tag = parseReturnTag(atToken, tagName);
@@ -6516,7 +6543,10 @@ namespace ts {
                                 tag = parseTypeTag(atToken, tagName);
                                 break;
                             case "typedef":
-                                tag = parseTypedefTag(atToken, tagName);
+                                tag = parseTypedefTag(atToken, tagName, indent);
+                                break;
+                            case "callback":
+                                tag = parseCallbackTag(atToken, tagName, indent);
                                 break;
                             default:
                                 tag = parseUnknownTag(atToken, tagName);
@@ -6531,8 +6561,11 @@ namespace ts {
                         // a badly malformed tag should not be added to the list of tags
                         return;
                     }
-                    tag.comment = parseTagComments(indent + tag.end - tag.pos);
-                    addTag(tag);
+                    if (!tag.comment) {
+                        // some tags, like typedef and callback, have already parsed their comments earlier
+                        tag.comment = parseTagComments(indent + tag.end - tag.pos);
+                    }
+                    return tag;
                 }
 
                 function parseTagComments(indent: number): string | undefined {
@@ -6605,6 +6638,9 @@ namespace ts {
                 }
 
                 function addTag(tag: JSDocTag): void {
+                    if (!tag) {
+                        return;
+                    }
                     if (!tags) {
                         tags = [tag];
                         tagsPos = tag.pos;
@@ -6665,9 +6701,9 @@ namespace ts {
                         typeExpression = tryParseTypeExpression();
                     }
 
-                    const result = target === PropertyLikeParse.Parameter ?
-                        <JSDocParameterTag>createNode(SyntaxKind.JSDocParameterTag, atToken.pos) :
-                        <JSDocPropertyTag>createNode(SyntaxKind.JSDocPropertyTag, atToken.pos);
+                    const result = target === PropertyLikeParse.Property ?
+                        <JSDocPropertyTag>createNode(SyntaxKind.JSDocPropertyTag, atToken.pos) :
+                        <JSDocParameterTag>createNode(SyntaxKind.JSDocParameterTag, atToken.pos);
                     let comment: string | undefined;
                     if (indent !== undefined) comment = parseTagComments(indent + scanner.getStartPos() - atToken.pos);
                     const nestedTypeLiteral = parseNestedTypeLiteral(typeExpression, name, target);
@@ -6771,29 +6807,20 @@ namespace ts {
                     return finishNode(tag);
                 }
 
-                function parseTypedefTag(atToken: AtToken, tagName: Identifier): JSDocTypedefTag {
+                function parseTypedefTag(atToken: AtToken, tagName: Identifier, indent: number): JSDocTypedefTag {
                     const typeExpression = tryParseTypeExpression();
                     skipWhitespace();
 
                     const typedefTag = <JSDocTypedefTag>createNode(SyntaxKind.JSDocTypedefTag, atToken.pos);
                     typedefTag.atToken = atToken;
                     typedefTag.tagName = tagName;
-                    typedefTag.fullName = parseJSDocTypeNameWithNamespace(/*flags*/ 0);
-                    if (typedefTag.fullName) {
-                        let rightNode = typedefTag.fullName;
-                        while (true) {
-                            if (rightNode.kind === SyntaxKind.Identifier || !rightNode.body) {
-                                // if node is identifier - use it as name
-                                // otherwise use name of the rightmost part that we were able to parse
-                                typedefTag.name = rightNode.kind === SyntaxKind.Identifier ? rightNode : rightNode.name;
-                                break;
-                            }
-                            rightNode = rightNode.body;
-                        }
-                    }
+                    typedefTag.fullName = parseJSDocTypeNameWithNamespace();
+                    typedefTag.name = getJSDocTypeAliasName(typedefTag.fullName);
                     skipWhitespace();
+                    typedefTag.comment = parseTagComments(indent);
 
                     typedefTag.typeExpression = typeExpression;
+                    let end: number;
                     if (!typeExpression || isObjectOrObjectArrayTypeReference(typeExpression.type)) {
                         let child: JSDocTypeTag | JSDocPropertyTag | false;
                         let jsdocTypeLiteral: JSDocTypeLiteral;
@@ -6822,27 +6849,75 @@ namespace ts {
                             typedefTag.typeExpression = childTypeTag && childTypeTag.typeExpression && !isObjectOrObjectArrayTypeReference(childTypeTag.typeExpression.type) ?
                                 childTypeTag.typeExpression :
                                 finishNode(jsdocTypeLiteral);
+                            end = typedefTag.typeExpression.end;
                         }
                     }
 
-                    return finishNode(typedefTag);
+                    // Only include the characters between the name end and the next token if a comment was actually parsed out - otherwise it's just whitespace
+                    return finishNode(typedefTag, end || typedefTag.comment !== undefined ? scanner.getStartPos() : (typedefTag.fullName || typedefTag.typeExpression || typedefTag.tagName).end);
+                }
 
-                    function parseJSDocTypeNameWithNamespace(flags: NodeFlags) {
-                        const pos = scanner.getTokenPos();
-                        const typeNameOrNamespaceName = parseJSDocIdentifierName();
+                function parseJSDocTypeNameWithNamespace(nested?: boolean) {
+                    const pos = scanner.getTokenPos();
+                    const typeNameOrNamespaceName = parseJSDocIdentifierName();
 
-                        if (typeNameOrNamespaceName && parseOptional(SyntaxKind.DotToken)) {
-                            const jsDocNamespaceNode = <JSDocNamespaceDeclaration>createNode(SyntaxKind.ModuleDeclaration, pos);
-                            jsDocNamespaceNode.flags |= flags;
-                            jsDocNamespaceNode.name = typeNameOrNamespaceName;
-                            jsDocNamespaceNode.body = parseJSDocTypeNameWithNamespace(NodeFlags.NestedNamespace);
-                            return finishNode(jsDocNamespaceNode);
+                    if (typeNameOrNamespaceName && parseOptional(SyntaxKind.DotToken)) {
+                        const jsDocNamespaceNode = <JSDocNamespaceDeclaration>createNode(SyntaxKind.ModuleDeclaration, pos);
+                        if (nested) {
+                            jsDocNamespaceNode.flags |= NodeFlags.NestedNamespace;
                         }
+                        jsDocNamespaceNode.name = typeNameOrNamespaceName;
+                        jsDocNamespaceNode.body = parseJSDocTypeNameWithNamespace(/*nested*/ true);
+                        return finishNode(jsDocNamespaceNode);
+                    }
 
-                        if (typeNameOrNamespaceName && flags & NodeFlags.NestedNamespace) {
-                            typeNameOrNamespaceName.isInJSDocNamespace = true;
+                    if (typeNameOrNamespaceName && nested) {
+                        typeNameOrNamespaceName.isInJSDocNamespace = true;
+                    }
+                    return typeNameOrNamespaceName;
+                }
+
+                function parseCallbackTag(atToken: AtToken, tagName: Identifier, indent: number): JSDocCallbackTag {
+                    const callbackTag = createNode(SyntaxKind.JSDocCallbackTag, atToken.pos) as JSDocCallbackTag;
+                    callbackTag.atToken = atToken;
+                    callbackTag.tagName = tagName;
+                    callbackTag.fullName = parseJSDocTypeNameWithNamespace();
+                    callbackTag.name = getJSDocTypeAliasName(callbackTag.fullName);
+                    skipWhitespace();
+                    callbackTag.comment = parseTagComments(indent);
+
+                    let child: JSDocParameterTag | false;
+                    const start = scanner.getStartPos();
+                    const jsdocSignature = createNode(SyntaxKind.JSDocSignature, start) as JSDocSignature;
+                    jsdocSignature.parameters = [];
+                    while (child = tryParse(() => parseChildParameterOrPropertyTag(PropertyLikeParse.CallbackParameter) as JSDocParameterTag)) {
+                        jsdocSignature.parameters = append(jsdocSignature.parameters as MutableNodeArray<JSDocParameterTag>, child);
+                    }
+                    const returnTag = tryParse(() => {
+                        if (token() === SyntaxKind.AtToken) {
+                            nextJSDocToken();
+                            const tag = parseTag(indent);
+                            if (tag && tag.kind === SyntaxKind.JSDocReturnTag) {
+                                return tag as JSDocReturnTag;
+                            }
                         }
-                        return typeNameOrNamespaceName;
+                    });
+                    if (returnTag) {
+                        jsdocSignature.type = returnTag;
+                    }
+                    callbackTag.typeExpression = finishNode(jsdocSignature);
+                    return finishNode(callbackTag);
+                }
+
+                function getJSDocTypeAliasName(fullName: JSDocNamespaceBody | undefined) {
+                    if (fullName) {
+                        let rightNode = fullName;
+                        while (true) {
+                            if (ts.isIdentifier(rightNode) || !rightNode.body) {
+                                return ts.isIdentifier(rightNode) ? rightNode : rightNode.name;
+                            }
+                            rightNode = rightNode.body;
+                        }
                     }
                 }
 
@@ -6872,6 +6947,7 @@ namespace ts {
                                 if (canParseTag) {
                                     const child = tryParseChildTag(target);
                                     if (child && child.kind === SyntaxKind.JSDocParameterTag &&
+                                        target !== PropertyLikeParse.CallbackParameter &&
                                         (ts.isIdentifier(child.name) || !escapedTextsEqual(name, child.name.left))) {
                                         return false;
                                     }
@@ -6920,12 +6996,12 @@ namespace ts {
                         case "arg":
                         case "argument":
                         case "param":
-                            t = PropertyLikeParse.Parameter;
+                            t = PropertyLikeParse.Parameter | PropertyLikeParse.CallbackParameter;
                             break;
                         default:
                             return false;
                     }
-                    if (target !== t) {
+                    if (!(target & t)) {
                         return false;
                     }
                     const tag = parseParameterOrPropertyTag(atToken, tagName, target, /*indent*/ undefined);
@@ -7020,7 +7096,7 @@ namespace ts {
                     const pos = scanner.getTokenPos();
                     const end = scanner.getTextPos();
                     const result = <Identifier>createNode(SyntaxKind.Identifier, pos);
-                    result.escapedText = escapeLeadingUnderscores(content.substring(pos, end));
+                    result.escapedText = escapeLeadingUnderscores(scanner.getTokenText());
                     finishNode(result, end);
 
                     nextJSDocToken();

@@ -5,14 +5,13 @@
 ////a;|]
 ////b;
 
-//verify.noMoveToNewFile();
 verify.moveToNewFile({
     newFileContents: {
         "/a.ts":
-`b;`,
+`import { b } from "m";
+b;`,
         "/newFile.ts":
 `import { a } from "m";
-import { a, b } from "m";
 a;`,
     }
 });
