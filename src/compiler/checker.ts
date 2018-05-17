@@ -2089,14 +2089,6 @@ namespace ts {
                     return namespace;
                 }
                 if (isInJavaScriptFile(name)) {
-                    const initializer = getDeclaredJavascriptInitializer(namespace.valueDeclaration) || getAssignedJavascriptInitializer(namespace.valueDeclaration);
-                    if (initializer) {
-                        namespace = getSymbolOfNode(initializer);
-                    }
-                    // Currently, IIFEs may not have a symbol and we don't know about their contents. Give up in this case.
-                    if (!namespace) {
-                        return undefined;
-                    }
                     if (namespace.valueDeclaration &&
                         isVariableDeclaration(namespace.valueDeclaration) &&
                         namespace.valueDeclaration.initializer &&
@@ -4965,7 +4957,7 @@ namespace ts {
                     // TODO: eventually just call resolveAlias
                     const aliasDeclaration = symbol.valueDeclaration; // TODO: For testing purposes only, should be getDeclarationOfAliasSymbol
                     // Debug.assert(isBinaryExpression(aliasDeclaration.parent) && isExpressionStatement(aliasDeclaration.parent.parent),  Debug.showSyntaxKind(aliasDeclaration) + Debug.showSyntaxKind(aliasDeclaration.parent) + Debug.showSyntaxKind(aliasDeclaration.parent.parent));
-                    const aliasSymbol = aliasDeclaration.parent.symbol;
+                    const aliasSymbol = getMergedSymbol(aliasDeclaration.parent.symbol);
                     // TODO: Jamming things in manually *might* be the right thing (possibly even with mergeSymbolTable)
                     // but it needs to be a lot more complete
                     // (probably I need a "cloneSymbolTable" or "cloneToSymbol")
@@ -15739,15 +15731,16 @@ namespace ts {
             let hasComputedStringProperty = false;
             let hasComputedNumberProperty = false;
 
-            if (isInJSFile && node.properties.length === 0) {
-                // an empty JS object literal that nonetheless has members is a JS namespace
-                const symbol = getSymbolOfNode(node);
-                if (symbol.exports) {
-                    propertiesTable = symbol.exports;
-                    symbol.exports.forEach(symbol => propertiesArray.push(getMergedSymbol(symbol)));
-                    return createObjectLiteralType();
-                }
-            }
+            // TODO: All these checks know the possible kinds and could call the predicate directly instead of checking for function/class/{}
+            // if (isInJSFile && (getAssignedJavascriptInitializer(node) || node.parent && getDeclaredJavascriptInitializer(node.parent))) {
+            //     // an empty JS object literal whose 'alias symbol' has exports is a JS namespace
+            //     const aliasSymbol = getMergedSymbol(node.parent.symbol);
+            //     if (aliasSymbol && aliasSymbol.exports && aliasSymbol.exports.size) {
+            //         propertiesTable = aliasSymbol.exports;
+            //         aliasSymbol.exports.forEach(symbol => propertiesArray.push(getMergedSymbol(symbol)));
+            //         return createObjectLiteralType();
+            //     }
+            // }
             propertiesTable = createSymbolTable();
 
             let offset = 0;
