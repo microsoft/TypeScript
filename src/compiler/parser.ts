@@ -2439,20 +2439,24 @@ namespace ts {
             return finishNode(node);
         }
 
+        /**
+         * @returns If return type parsing succeeds
+         */
         function fillSignature(
             returnToken: SyntaxKind.ColonToken | SyntaxKind.EqualsGreaterThanToken,
             flags: SignatureFlags,
-            signature: SignatureDeclaration): void {
+            signature: SignatureDeclaration): boolean {
             if (!(flags & SignatureFlags.JSDoc)) {
                 signature.typeParameters = parseTypeParameters();
             }
             signature.parameters = parseParameterList(flags)!; // TODO: GH#18217
-            signature.type = parseReturnType(returnToken, !!(flags & SignatureFlags.Type));
+            if (shouldParseReturnType(returnToken, !!(flags & SignatureFlags.Type))) {
+                signature.type = parseTypeOrTypePredicate();
+                return signature.type !== undefined;
+            }
+            return true;
         }
 
-        function parseReturnType(returnToken: SyntaxKind.ColonToken | SyntaxKind.EqualsGreaterThanToken, isType: boolean): TypeNode | undefined {
-            return shouldParseReturnType(returnToken, isType) ? parseTypeOrTypePredicate() : undefined;
-        }
         function shouldParseReturnType(returnToken: SyntaxKind.ColonToken | SyntaxKind.EqualsGreaterThanToken, isType: boolean): boolean {
             if (returnToken === SyntaxKind.EqualsGreaterThanToken) {
                 parseExpected(returnToken);
@@ -2761,16 +2765,24 @@ namespace ts {
             const node = <ParenthesizedTypeNode>createNode(SyntaxKind.ParenthesizedType);
             parseExpected(SyntaxKind.OpenParenToken);
             node.type = parseType();
+            if (!node.type) {
+                return undefined!; // TODO: GH#18217
+            }
             parseExpected(SyntaxKind.CloseParenToken);
             return finishNode(node);
         }
 
-        function parseFunctionOrConstructorType(kind: SyntaxKind): FunctionOrConstructorTypeNode {
+        function parseFunctionOrConstructorType(kind: SyntaxKind): FunctionOrConstructorTypeNode | undefined {
             const node = <FunctionOrConstructorTypeNode>createNodeWithJSDoc(kind);
             if (kind === SyntaxKind.ConstructorType) {
                 parseExpected(SyntaxKind.NewKeyword);
             }
-            fillSignature(SyntaxKind.EqualsGreaterThanToken, SignatureFlags.Type, node);
+            if (!fillSignature(SyntaxKind.EqualsGreaterThanToken, SignatureFlags.Type | (sourceFile.languageVariant === LanguageVariant.JSX ? SignatureFlags.RequireCompleteParameterList : 0), node)) {
+                return undefined;
+            }
+            if (!node.parameters) {
+                return undefined;
+            }
             return finishNode(node);
         }
 
@@ -3110,10 +3122,10 @@ namespace ts {
 
         function parseTypeWorker(noConditionalTypes?: boolean): TypeNode {
             if (isStartOfFunctionType()) {
-                return parseFunctionOrConstructorType(SyntaxKind.FunctionType);
+                return parseFunctionOrConstructorType(SyntaxKind.FunctionType)!; // TODO: GH#18217
             }
             if (token() === SyntaxKind.NewKeyword) {
-                return parseFunctionOrConstructorType(SyntaxKind.ConstructorType);
+                return parseFunctionOrConstructorType(SyntaxKind.ConstructorType)!;
             }
             const type = parseUnionTypeOrHigher();
             if (!noConditionalTypes && !scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.ExtendsKeyword)) {
@@ -3601,7 +3613,9 @@ namespace ts {
             // a => (b => c)
             // And think that "(b =>" was actually a parenthesized arrow function with a missing
             // close paren.
-            fillSignature(SyntaxKind.ColonToken, isAsync | (allowAmbiguity ? SignatureFlags.None : SignatureFlags.RequireCompleteParameterList), node);
+            if (!fillSignature(SyntaxKind.ColonToken, isAsync | (allowAmbiguity ? SignatureFlags.None : SignatureFlags.RequireCompleteParameterList), node)) {
+                return undefined;
+            }
 
             // If we couldn't get parameters, we definitely could not parse out an arrow function.
             if (!node.parameters) {

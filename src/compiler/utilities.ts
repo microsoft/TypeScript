@@ -3104,11 +3104,13 @@ namespace ts {
      * Gets the effective type parameters. If the node was parsed in a
      * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
      */
-    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters) {
-        return node.typeParameters || (isInJavaScriptFile(node) ? getJSDocTypeParameterDeclarations(node) : undefined);
+    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters | JSDocTypedefTag) {
+        return isJSDocTypedefTag(node)
+            ? getJSDocTypeParameterDeclarations(node)
+            : node.typeParameters || (isInJavaScriptFile(node) ? getJSDocTypeParameterDeclarations(node) : undefined);
     }
 
-    export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters): NodeArray<TypeParameterDeclaration> | undefined {
+    export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters | JSDocTypedefTag): NodeArray<TypeParameterDeclaration> | undefined {
         const templateTag = getJSDocTemplateTag(node);
         return templateTag && templateTag.typeParameters;
     }

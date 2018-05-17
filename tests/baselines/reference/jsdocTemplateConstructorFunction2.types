@@ -79,7 +79,7 @@ z.u = false
  */
 /** @type {A} */
 const options = { value: null };
->options : { value: any; }
+>options : A
 >{ value: null } : { value: null; }
 >value : null
 >null : null

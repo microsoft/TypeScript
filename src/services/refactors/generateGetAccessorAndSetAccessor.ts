@@ -17,6 +17,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         fieldName: AcceptedNameType;
         accessorName: AcceptedNameType;
         originalName: AcceptedNameType;
+        renameAccessor: boolean;
     }
 
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
@@ -43,7 +44,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
 
         const isJS = isSourceFileJavaScript(file);
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
-        const { isStatic, isReadonly, fieldName, accessorName, originalName, type, container, declaration } = fieldInfo;
+        const { isStatic, isReadonly, fieldName, accessorName, originalName, type, container, declaration, renameAccessor } = fieldInfo;
 
         suppressLeadingAndTrailingTrivia(fieldName);
         suppressLeadingAndTrailingTrivia(declaration);
@@ -80,8 +81,10 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
 
         const edits = changeTracker.getChanges();
         const renameFilename = file.fileName;
-        const renameLocationOffset = isIdentifier(fieldName) ? 0 : -1;
-        const renameLocation = renameLocationOffset + getRenameLocation(edits, renameFilename, fieldName.text, /*preferLastLocation*/ isParameter(declaration));
+
+        const nameNeedRename = renameAccessor ? accessorName : fieldName;
+        const renameLocationOffset = isIdentifier(nameNeedRename) ? 0 : -1;
+        const renameLocation = renameLocationOffset + getRenameLocation(edits, renameFilename, nameNeedRename.text, /*preferLastLocation*/ isParameter(declaration));
         return { renameFilename, renameLocation, edits };
     }
 
@@ -110,6 +113,10 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         return modifiers && createNodeArray(modifiers);
     }
 
+    function startsWithUnderscore(name: string): boolean {
+        return name.charCodeAt(0) === CharacterCodes._;
+    }
+
     function getConvertibleFieldAtPosition(file: SourceFile, startPosition: number): Info | undefined {
         const node = getTokenAtPosition(file, startPosition, /*includeJsDocComment*/ false);
         const declaration = findAncestor(node.parent, isAcceptedDeclaration);
@@ -117,8 +124,10 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         const meaning = ModifierFlags.AccessibilityModifier | ModifierFlags.Static | ModifierFlags.Readonly;
         if (!declaration || !isConvertableName(declaration.name) || (getModifierFlags(declaration) | meaning) !== meaning) return undefined;
 
-        const fieldName = createPropertyName(getUniqueName(`_${declaration.name.text}`, file.text), declaration.name);
-        const accessorName = createPropertyName(declaration.name.text, declaration.name);
+        const name = declaration.name.text;
+        const startWithUnderscore = startsWithUnderscore(name);
+        const fieldName = createPropertyName(startWithUnderscore ? name : getUniqueName(`_${name}`, file.text), declaration.name);
+        const accessorName = createPropertyName(startWithUnderscore ? getUniqueName(name.substring(1), file.text) : name, declaration.name);
         return {
             isStatic: hasStaticModifier(declaration),
             isReadonly: hasReadonlyModifier(declaration),
@@ -128,6 +137,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
             declaration,
             fieldName,
             accessorName,
+            renameAccessor: startWithUnderscore
         };
     }
 
@@ -204,7 +214,9 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     function insertAccessor(changeTracker: textChanges.ChangeTracker, file: SourceFile, accessor: AccessorDeclaration, declaration: AcceptedDeclaration, container: ContainerDeclaration) {
         isParameterPropertyDeclaration(declaration)
             ? changeTracker.insertNodeAtClassStart(file, <ClassLikeDeclaration>container, accessor)
-            : changeTracker.insertNodeAfter(file, declaration, accessor);
+            : isPropertyAssignment(declaration)
+                ? changeTracker.insertNodeAfterComma(file, declaration, accessor)
+                : changeTracker.insertNodeAfter(file, declaration, accessor);
     }
 
     function updateReadonlyPropertyInitializerStatementConstructor(changeTracker: textChanges.ChangeTracker, context: RefactorContext, constructor: ConstructorDeclaration, fieldName: AcceptedNameType, originalName: AcceptedNameType) {

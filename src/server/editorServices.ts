@@ -2123,7 +2123,7 @@ namespace ts.server {
         }
 
         private telemetryOnOpenFile(scriptInfo: ScriptInfo): void {
-            if (!this.eventHandler || !scriptInfo.isJavaScript() || !addToSeen(this.allJsFilesForOpenFileTelemetry, scriptInfo.path)) {
+            if (this.syntaxOnly || !this.eventHandler || !scriptInfo.isJavaScript() || !addToSeen(this.allJsFilesForOpenFileTelemetry, scriptInfo.path)) {
                 return;
             }
 
