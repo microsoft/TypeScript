@@ -1,7 +1,6 @@
 /* @internal */
 namespace ts {
     export function getEditsForFileRename(program: Program, oldFilePath: string, newFilePath: string, host: LanguageServiceHost, formatContext: formatting.FormatContext): ReadonlyArray<FileTextChanges> {
-        if (!host.fileExists) return emptyArray; // Need to do module resolution to do this.
         const pathUpdater = getPathUpdater(oldFilePath, newFilePath, host);
         return textChanges.ChangeTracker.with({ host, formatContext }, changeTracker => {
             updateTsconfigFiles(program, changeTracker, oldFilePath, newFilePath);
@@ -45,7 +44,10 @@ namespace ts {
                 // If it resolved to something already, ignore.
                 if (checker.getSymbolAtLocation(importStringLiteral)) continue;
 
-                const resolved = resolveModuleName(importStringLiteral.text, sourceFile.fileName, program.getCompilerOptions(), host as ModuleResolutionHost);
+                if (!host.resolveModuleNameWithFailedLookupLocations && !host.fileExists) continue;
+                const resolved = host.resolveModuleNameWithFailedLookupLocations
+                    ? host.resolveModuleNameWithFailedLookupLocations(importStringLiteral.text, sourceFile.fileName)
+                    : resolveModuleName(importStringLiteral.text, sourceFile.fileName, program.getCompilerOptions(), host as ModuleResolutionHost);
                 if (contains(resolved.failedLookupLocations, oldFilePath)) {
                     result.push({ sourceFile, toUpdate: importStringLiteral });
                 }
