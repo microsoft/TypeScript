@@ -4257,5 +4257,9 @@
     "Remove all unreachable code": {
         "category": "Message",
         "code": 95051
+    },
+    "Add missing typeof": {
+        "category": "Message",
+        "code": 95052
     }
 }

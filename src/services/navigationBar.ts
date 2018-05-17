@@ -290,7 +290,7 @@ namespace ts.NavigationBar {
                 if (hasJSDocNodes(node)) {
                     forEach(node.jsDoc, jsDoc => {
                         forEach(jsDoc.tags, tag => {
-                            if (tag.kind === SyntaxKind.JSDocTypedefTag) {
+                            if (isJSDocTypeAlias(tag)) {
                                 addLeafNode(tag);
                             }
                         });
@@ -414,8 +414,6 @@ namespace ts.NavigationBar {
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.ClassExpression:
                 return getFunctionOrClassName(<FunctionExpression | ArrowFunction | ClassExpression>node);
-            case SyntaxKind.JSDocTypedefTag:
-                return getJSDocTypedefTagName(<JSDocTypedefTag>node);
             default:
                 return undefined;
         }
@@ -460,28 +458,8 @@ namespace ts.NavigationBar {
                 return "()";
             case SyntaxKind.IndexSignature:
                 return "[]";
-            case SyntaxKind.JSDocTypedefTag:
-                return getJSDocTypedefTagName(<JSDocTypedefTag>node);
             default:
                 return "<unknown>";
-        }
-    }
-
-    function getJSDocTypedefTagName(node: JSDocTypedefTag): string {
-        if (node.name) {
-            return node.name.text;
-        }
-        else {
-            const parentNode = node.parent && node.parent.parent;
-            if (parentNode && parentNode.kind === SyntaxKind.VariableStatement) {
-                if (parentNode.declarationList.declarations.length > 0) {
-                    const nameIdentifier = parentNode.declarationList.declarations[0].name;
-                    if (nameIdentifier.kind === SyntaxKind.Identifier) {
-                        return nameIdentifier.text;
-                    }
-                }
-            }
-            return "<typedef>";
         }
     }
 
@@ -511,6 +489,7 @@ namespace ts.NavigationBar {
                 case SyntaxKind.SourceFile:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.JSDocTypedefTag:
+                case SyntaxKind.JSDocCallbackTag:
                     return true;
 
                 case SyntaxKind.Constructor:

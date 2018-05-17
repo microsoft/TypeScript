@@ -1464,8 +1464,8 @@ namespace ts.refactor.extractSymbol {
                 }
 
                 // Note that we add the current node's type parameters *after* updating the corresponding scope.
-                if (isDeclarationWithTypeParameters(curr) && curr.typeParameters) {
-                    for (const typeParameterDecl of curr.typeParameters) {
+                if (isDeclarationWithTypeParameters(curr) && getEffectiveTypeParameterDeclarations(curr)) {
+                    for (const typeParameterDecl of getEffectiveTypeParameterDeclarations(curr)) {
                         const typeParameter = checker.getTypeAtLocation(typeParameterDecl) as TypeParameter;
                         if (allTypeParameterUsages.has(typeParameter.id.toString())) {
                             seenTypeParameterUsages.set(typeParameter.id.toString(), typeParameter);
@@ -1536,8 +1536,8 @@ namespace ts.refactor.extractSymbol {
 
         function hasTypeParameters(node: Node) {
             return isDeclarationWithTypeParameters(node) &&
-                node.typeParameters !== undefined &&
-                node.typeParameters.length > 0;
+                getEffectiveTypeParameterDeclarations(node) &&
+                getEffectiveTypeParameterDeclarations(node).length > 0;
         }
 
         function isInGenericContext(node: Node) {
