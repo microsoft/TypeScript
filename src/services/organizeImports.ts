@@ -21,15 +21,23 @@ namespace ts.OrganizeImports {
         const topLevelImportDecls = sourceFile.statements.filter(isImportDeclaration);
         organizeImportsWorker(topLevelImportDecls);
 
+        // All of the old ExportDeclarations in the file, in syntactic order.
+        const topLevelExportDecls = sourceFile.statements.filter(isExportDeclaration);
+        organizeImportsWorker(topLevelExportDecls);
+
         for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
             const ambientModuleBody = getModuleBlock(ambientModule as ModuleDeclaration);
+
             const ambientModuleImportDecls = ambientModuleBody.statements.filter(isImportDeclaration);
             organizeImportsWorker(ambientModuleImportDecls);
+
+            const ambientModuleExportDecls = ambientModuleBody.statements.filter(isExportDeclaration);
+            organizeImportsWorker(ambientModuleExportDecls);
         }
 
         return changeTracker.getChanges();
 
-        function organizeImportsWorker(oldImportDecls: ReadonlyArray<ImportDeclaration>) {
+        function organizeImportsWorker(oldImportDecls: ReadonlyArray<ImportDeclaration | ExportDeclaration>) {
             if (length(oldImportDecls) === 0) {
                 return;
             }
@@ -41,11 +49,15 @@ namespace ts.OrganizeImports {
             // but the consequences of being wrong are very minor.
             suppressLeadingTrivia(oldImportDecls[0]);
 
+            const areImports = isImportDeclaration(oldImportDecls[0]);
+
             const oldImportGroups = group(oldImportDecls, importDecl => getExternalModuleName(importDecl.moduleSpecifier));
             const sortedImportGroups = stableSort(oldImportGroups, (group1, group2) => compareModuleSpecifiers(group1[0].moduleSpecifier, group2[0].moduleSpecifier));
             const newImportDecls = flatMap(sortedImportGroups, importGroup =>
                 getExternalModuleName(importGroup[0].moduleSpecifier)
-                    ? coalesceImports(removeUnusedImports(importGroup, sourceFile, program))
+                    ? areImports
+                        ? coalesceImports(removeUnusedImports(importGroup as ReadonlyArray<ImportDeclaration>, sourceFile, program))
+                        : coalesceExports(importGroup as ReadonlyArray<ExportDeclaration>)
                     : importGroup);
 
             // Delete or replace the first import.
@@ -131,7 +143,9 @@ namespace ts.OrganizeImports {
     }
 
     function getExternalModuleName(specifier: Expression) {
-        return isStringLiteralLike(specifier) ? specifier.text : undefined;
+        return specifier !== undefined && isStringLiteralLike(specifier)
+            ? specifier.text
+            : undefined;
     }
 
     /* @internal */ // Internal for testing
@@ -254,9 +268,71 @@ namespace ts.OrganizeImports {
                 namedImports,
             };
         }
+    }
 
-        function compareIdentifiers(s1: Identifier, s2: Identifier) {
-            return compareStringsCaseInsensitive(s1.text, s2.text);
+    /* @internal */ // Internal for testing
+    /**
+     * @param exportGroup a list of ExportDeclarations, all with the same module name.
+     */
+    export function coalesceExports(exportGroup: ReadonlyArray<ExportDeclaration>) {
+        if (exportGroup.length === 0) {
+            return exportGroup;
+        }
+
+        const { exportWithoutClause, namedExports } = getCategorizedExports(exportGroup);
+
+        const coalescedExports: ExportDeclaration[] = [];
+
+        if (exportWithoutClause) {
+            coalescedExports.push(exportWithoutClause);
+        }
+
+        if (namedExports.length === 0) {
+            return coalescedExports;
+        }
+
+        const newExportSpecifiers: ExportSpecifier[] = [];
+        newExportSpecifiers.push(...flatMap(namedExports, i => (i.exportClause).elements));
+
+        const sortedExportSpecifiers = stableSort(newExportSpecifiers, (s1, s2) =>
+            compareIdentifiers(s1.propertyName || s1.name, s2.propertyName || s2.name) ||
+            compareIdentifiers(s1.name, s2.name));
+
+        const exportDecl = namedExports[0];
+        coalescedExports.push(
+            updateExportDeclaration(
+                exportDecl,
+                exportDecl.decorators,
+                exportDecl.modifiers,
+                updateNamedExports(exportDecl.exportClause, sortedExportSpecifiers),
+                exportDecl.moduleSpecifier));
+
+        return coalescedExports;
+
+        /*
+         * Returns entire export declarations because they may already have been rewritten and
+         * may lack parent pointers.  The desired parts can easily be recovered based on the
+         * categorization.
+         */
+        function getCategorizedExports(exportGroup: ReadonlyArray<ExportDeclaration>) {
+            let exportWithoutClause: ExportDeclaration | undefined;
+            const namedExports: ExportDeclaration[] = [];
+
+            for (const exportDeclaration of exportGroup) {
+                if (exportDeclaration.exportClause === undefined) {
+                    // Only the first such export is interesting - the others are redundant.
+                    // Note: Unfortunately, we will lose trivia that was on this node.
+                    exportWithoutClause = exportWithoutClause || exportDeclaration;
+                }
+                else {
+                    namedExports.push(exportDeclaration);
+                }
+            }
+
+            return {
+                exportWithoutClause,
+                namedExports,
+            };
         }
     }
 
@@ -280,5 +356,9 @@ namespace ts.OrganizeImports {
         return compareBooleans(name1 === undefined, name2 === undefined) ||
             compareBooleans(isExternalModuleNameRelative(name1), isExternalModuleNameRelative(name2)) ||
             compareStringsCaseInsensitive(name1, name2);
+    }
+
+    function compareIdentifiers(s1: Identifier, s2: Identifier) {
+        return compareStringsCaseInsensitive(s1.text, s2.text);
     }
 }
