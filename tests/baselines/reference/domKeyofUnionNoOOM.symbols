@@ -1,0 +1,92 @@
+=== tests/cases/compiler/domKeyofUnionNoOOM.ts ===
+export function assertIsElement(node: Node | null): node is Element {
+>assertIsElement : Symbol(assertIsElement, Decl(domKeyofUnionNoOOM.ts, 0, 0))
+>node : Symbol(node, Decl(domKeyofUnionNoOOM.ts, 0, 32))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>node : Symbol(node, Decl(domKeyofUnionNoOOM.ts, 0, 32))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+	let nodeType = node === null ? null : node.nodeType;
+>nodeType : Symbol(nodeType, Decl(domKeyofUnionNoOOM.ts, 1, 4))
+>node : Symbol(node, Decl(domKeyofUnionNoOOM.ts, 0, 32))
+>node.nodeType : Symbol(Node.nodeType, Decl(lib.dom.d.ts, --, --))
+>node : Symbol(node, Decl(domKeyofUnionNoOOM.ts, 0, 32))
+>nodeType : Symbol(Node.nodeType, Decl(lib.dom.d.ts, --, --))
+
+	return nodeType === 1;
+>nodeType : Symbol(nodeType, Decl(domKeyofUnionNoOOM.ts, 1, 4))
+}
+  
+export function assertNodeTagName<
+>assertNodeTagName : Symbol(assertNodeTagName, Decl(domKeyofUnionNoOOM.ts, 3, 1))
+
+T extends keyof ElementTagNameMap,
+>T : Symbol(T, Decl(domKeyofUnionNoOOM.ts, 5, 34))
+>ElementTagNameMap : Symbol(ElementTagNameMap, Decl(lib.dom.d.ts, --, --))
+
+U extends ElementTagNameMap[T]>(node: Node | null, tagName: T): node is U {
+>U : Symbol(U, Decl(domKeyofUnionNoOOM.ts, 6, 34))
+>ElementTagNameMap : Symbol(ElementTagNameMap, Decl(lib.dom.d.ts, --, --))
+>T : Symbol(T, Decl(domKeyofUnionNoOOM.ts, 5, 34))
+>node : Symbol(node, Decl(domKeyofUnionNoOOM.ts, 7, 32))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>tagName : Symbol(tagName, Decl(domKeyofUnionNoOOM.ts, 7, 50))
+>T : Symbol(T, Decl(domKeyofUnionNoOOM.ts, 5, 34))
+>node : Symbol(node, Decl(domKeyofUnionNoOOM.ts, 7, 32))
+>U : Symbol(U, Decl(domKeyofUnionNoOOM.ts, 6, 34))
+
+	if (assertIsElement(node)) {
+>assertIsElement : Symbol(assertIsElement, Decl(domKeyofUnionNoOOM.ts, 0, 0))
+>node : Symbol(node, Decl(domKeyofUnionNoOOM.ts, 7, 32))
+
+		const nodeTagName = node.tagName.toLowerCase();
+>nodeTagName : Symbol(nodeTagName, Decl(domKeyofUnionNoOOM.ts, 9, 7))
+>node.tagName.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>node.tagName : Symbol(Element.tagName, Decl(lib.dom.d.ts, --, --))
+>node : Symbol(node, Decl(domKeyofUnionNoOOM.ts, 7, 32))
+>tagName : Symbol(Element.tagName, Decl(lib.dom.d.ts, --, --))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+
+		return nodeTagName === tagName;
+>nodeTagName : Symbol(nodeTagName, Decl(domKeyofUnionNoOOM.ts, 9, 7))
+>tagName : Symbol(tagName, Decl(domKeyofUnionNoOOM.ts, 7, 50))
+	}
+	return false;
+}
+  
+export function assertNodeProperty<
+>assertNodeProperty : Symbol(assertNodeProperty, Decl(domKeyofUnionNoOOM.ts, 13, 1))
+
+	T extends keyof ElementTagNameMap,
+>T : Symbol(T, Decl(domKeyofUnionNoOOM.ts, 15, 35))
+>ElementTagNameMap : Symbol(ElementTagNameMap, Decl(lib.dom.d.ts, --, --))
+
+	P extends keyof ElementTagNameMap[T],
+>P : Symbol(P, Decl(domKeyofUnionNoOOM.ts, 16, 35))
+>ElementTagNameMap : Symbol(ElementTagNameMap, Decl(lib.dom.d.ts, --, --))
+>T : Symbol(T, Decl(domKeyofUnionNoOOM.ts, 15, 35))
+
+	V extends HTMLElementTagNameMap[T][P]>(node: Node | null, tagName: T, prop: P, value: V) {
+>V : Symbol(V, Decl(domKeyofUnionNoOOM.ts, 17, 38))
+>HTMLElementTagNameMap : Symbol(HTMLElementTagNameMap, Decl(lib.dom.d.ts, --, --))
+>T : Symbol(T, Decl(domKeyofUnionNoOOM.ts, 15, 35))
+>P : Symbol(P, Decl(domKeyofUnionNoOOM.ts, 16, 35))
+>node : Symbol(node, Decl(domKeyofUnionNoOOM.ts, 18, 40))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>tagName : Symbol(tagName, Decl(domKeyofUnionNoOOM.ts, 18, 58))
+>T : Symbol(T, Decl(domKeyofUnionNoOOM.ts, 15, 35))
+>prop : Symbol(prop, Decl(domKeyofUnionNoOOM.ts, 18, 70))
+>P : Symbol(P, Decl(domKeyofUnionNoOOM.ts, 16, 35))
+>value : Symbol(value, Decl(domKeyofUnionNoOOM.ts, 18, 79))
+>V : Symbol(V, Decl(domKeyofUnionNoOOM.ts, 17, 38))
+
+	if (assertNodeTagName(node, tagName)) {
+>assertNodeTagName : Symbol(assertNodeTagName, Decl(domKeyofUnionNoOOM.ts, 3, 1))
+>node : Symbol(node, Decl(domKeyofUnionNoOOM.ts, 18, 40))
+>tagName : Symbol(tagName, Decl(domKeyofUnionNoOOM.ts, 18, 58))
+
+		node[prop];
+>node : Symbol(node, Decl(domKeyofUnionNoOOM.ts, 18, 40))
+>prop : Symbol(prop, Decl(domKeyofUnionNoOOM.ts, 18, 70))
+	}
+}
