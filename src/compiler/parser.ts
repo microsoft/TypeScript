@@ -6849,7 +6849,7 @@ namespace ts {
                             typedefTag.typeExpression = childTypeTag && childTypeTag.typeExpression && !isObjectOrObjectArrayTypeReference(childTypeTag.typeExpression.type) ?
                                 childTypeTag.typeExpression :
                                 finishNode(jsdocTypeLiteral);
-                                end = jsdocTypeLiteral.end;
+                            end = typedefTag.typeExpression.end;
                         }
                     }
 
