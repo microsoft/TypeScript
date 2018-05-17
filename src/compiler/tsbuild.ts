@@ -260,6 +260,16 @@ namespace ts {
         const configFileCache = createConfigFileCache(host);
 
         function getUpToDateStatus(project: ParsedCommandLine, context: BuildContext): UpToDateStatus {
+            const prior = context.projectStatus.getValueOrUndefined(project.options.configFilePath);
+            if (prior !== undefined) {
+                return prior;
+            }
+            const actual = getUpToDateStatusWorker(project, context);
+            context.projectStatus.setValue(project.options.configFilePath, actual);
+            return actual;
+        }
+
+        function getUpToDateStatusWorker(project: ParsedCommandLine, context: BuildContext): UpToDateStatus {
             let newestInputFileName: string = '???';
             let newestInputFileTime = MinimumDate;
             // Get timestamps of input files
@@ -381,6 +391,6 @@ namespace ts {
 
         return {
             getUpToDateStatus
-        }
+        };
     }
 }
