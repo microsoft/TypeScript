@@ -52,9 +52,9 @@ let a: A;
 let b = a.foo().n;
 >b : number
 >a.foo().n : number
->a.foo() : B
->a.foo : () => B
+>a.foo() : import("tests/cases/compiler/f2").B
+>a.foo : () => import("tests/cases/compiler/f2").B
 >a : A
->foo : () => B
+>foo : () => import("tests/cases/compiler/f2").B
 >n : number
 

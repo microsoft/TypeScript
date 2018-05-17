@@ -320,6 +320,15 @@ namespace ts {
         return -1;
     }
 
+    export function findLastIndex<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean, startIndex?: number): number {
+        for (let i = startIndex === undefined ? array.length - 1 : startIndex; i >= 0; i--) {
+            if (predicate(array[i], i)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     /**
      * Returns the first truthy result of `callback`, or else fails.
      * This is like `forEach`, but never returns undefined.

@@ -417,6 +417,10 @@ namespace ts {
         return startEndContainsRange(r1.pos, r1.end, r2);
     }
 
+    export function rangeContainsPosition(r: TextRange, pos: number): boolean {
+        return r.pos <= pos && pos <= r.end;
+    }
+
     export function startEndContainsRange(start: number, end: number, range: TextRange): boolean {
         return start <= range.pos && end >= range.end;
     }
@@ -1275,6 +1279,23 @@ namespace ts {
             return (propSymbol as TransientSymbol).target;
         }
         return propSymbol;
+    }
+
+    export class NodeSet {
+        private map = createMap<Node>();
+
+        add(node: Node): void {
+            this.map.set(String(getNodeId(node)), node);
+        }
+        has(node: Node): boolean {
+            return this.map.has(String(getNodeId(node)));
+        }
+        forEach(cb: (node: Node) => void): void {
+            this.map.forEach(cb);
+        }
+        some(pred: (node: Node) => boolean): boolean {
+            return forEachEntry(this.map, pred) || false;
+        }
     }
 }
 

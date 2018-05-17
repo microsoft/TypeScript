@@ -1435,6 +1435,12 @@ namespace ts {
                             location = location.parent;
                         }
                         break;
+                    case SyntaxKind.JSDocTypedefTag:
+                    case SyntaxKind.JSDocCallbackTag:
+                        // js type aliases do not resolve names from their host, so skip past it
+                        lastLocation = location;
+                        location = getJSDocHost(location).parent;
+                        continue;
                 }
                 if (isSelfReferenceLocation(location)) {
                     lastSelfReferenceLocation = location;
@@ -2127,24 +2133,30 @@ namespace ts {
          */
         function resolveEntityNameFromJSSpecialAssignment(name: Identifier, meaning: SymbolFlags) {
             if (isJSDocTypeReference(name.parent)) {
-                const host = getJSDocHost(name.parent);
-                if (host) {
-                    const secondaryLocation = getJSSpecialAssignmentSymbol(getJSDocHost(name.parent.parent.parent as JSDocTag));
-                    return secondaryLocation && resolveName(secondaryLocation, name.escapedText, meaning, /*nameNotFoundMessage*/ undefined, name, /*isUse*/ true);
+                const secondaryLocation = getJSSpecialAssignmentLocation(name.parent);
+                if (secondaryLocation) {
+                    return resolveName(secondaryLocation, name.escapedText, meaning, /*nameNotFoundMessage*/ undefined, name, /*isUse*/ true);
                 }
             }
         }
 
-        function getJSSpecialAssignmentSymbol(host: HasJSDoc): Declaration | undefined {
-            if (isPropertyAssignment(host) && isFunctionLike(host.initializer)) {
-                const symbol = getSymbolOfNode(host.initializer);
-                return symbol && symbol.valueDeclaration;
+        function getJSSpecialAssignmentLocation(node: TypeReferenceNode): Declaration | undefined {
+            const typeAlias = findAncestor(node, node => !(isJSDocNode(node) || node.flags & NodeFlags.JSDoc) ? "quit" : isJSDocTypeAlias(node));
+            if (typeAlias) {
+                return;
             }
-            else if (isExpressionStatement(host) &&
-                     isBinaryExpression(host.expression) &&
-                     getSpecialPropertyAssignmentKind(host.expression) === SpecialPropertyAssignmentKind.PrototypeProperty) {
+            const host = getJSDocHost(node);
+            if (host &&
+                isExpressionStatement(host) &&
+                isBinaryExpression(host.expression) &&
+                getSpecialPropertyAssignmentKind(host.expression) === SpecialPropertyAssignmentKind.PrototypeProperty) {
                 const symbol = getSymbolOfNode(host.expression.left);
                 return symbol && symbol.parent.valueDeclaration;
+            }
+            const sig = getHostSignatureFromJSDocHost(host);
+            if (sig) {
+                const symbol = getSymbolOfNode(sig);
+                return symbol && symbol.valueDeclaration;
             }
         }
 
@@ -2749,6 +2761,14 @@ namespace ts {
                         }
                         return hasAccessibleDeclarations;
                     }
+                    else {
+                        if (some(symbol.declarations, hasExternalModuleSymbol)) {
+                            // Any meaning of a module symbol is always accessible via an `import` type
+                            return {
+                                accessibility: SymbolAccessibility.Accessible
+                            };
+                        }
+                    }
 
                     // If we haven't got the accessible symbol, it doesn't mean the symbol is actually inaccessible.
                     // It could be a qualified symbol and hence verify the path
@@ -3007,7 +3027,7 @@ namespace ts {
                     flags,
                     tracker: tracker && tracker.trackSymbol ? tracker : { trackSymbol: noop },
                     encounteredError: false,
-                    symbolStack: undefined,
+                    visitedSymbols: undefined,
                     inferTypeParameters: undefined
                 };
             }
@@ -3119,9 +3139,9 @@ namespace ts {
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
                 if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
-                    const name = symbolToTypeReferenceName(type.aliasSymbol);
                     const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
-                    return createTypeReferenceNode(name, typeArgumentNodes);
+                    if (isReservedMemberName(type.aliasSymbol.escapedName) && !(type.aliasSymbol.flags & SymbolFlags.Class)) return createTypeReferenceNode(createIdentifier(""), typeArgumentNodes);
+                    return symbolToTypeNode(type.aliasSymbol, context, SymbolFlags.Type, typeArgumentNodes);
                 }
                 if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
                     const types = type.flags & TypeFlags.Union ? formatUnionTypes((<UnionType>type).types) : (<IntersectionType>type).types;
@@ -3189,7 +3209,10 @@ namespace ts {
 
                 function createAnonymousTypeNode(type: ObjectType): TypeNode {
                     const symbol = type.symbol;
+                    let id: string;
                     if (symbol) {
+                        const isConstructorObject = getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & SymbolFlags.Class;
+                        id = (isConstructorObject ? "+" : "") + getSymbolId(symbol);
                         if (isJavaScriptConstructor(symbol.valueDeclaration)) {
                             // Instance and static types share the same symbol; only add 'typeof' for the static side.
                             const isInstanceType = type === getInferredClassType(symbol) ? SymbolFlags.Type : SymbolFlags.Value;
@@ -3201,7 +3224,7 @@ namespace ts {
                             shouldWriteTypeOfFunctionSymbol()) {
                             return symbolToTypeNode(symbol, context, SymbolFlags.Value);
                         }
-                        else if (contains(context.symbolStack, symbol)) {
+                        else if (context.visitedSymbols && context.visitedSymbols.has(id)) {
                             // If type is an anonymous type literal in a type alias declaration, use type alias name
                             const typeAlias = getTypeAliasForTypeLiteral(type);
                             if (typeAlias) {
@@ -3215,20 +3238,14 @@ namespace ts {
                         else {
                             // Since instantiations of the same anonymous type have the same symbol, tracking symbols instead
                             // of types allows us to catch circular references to instantiations of the same anonymous type
-                            if (!context.symbolStack) {
-                                context.symbolStack = [];
+                            if (!context.visitedSymbols) {
+                                context.visitedSymbols = createMap<true>();
                             }
 
-                            const isConstructorObject = getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & SymbolFlags.Class;
-                            if (isConstructorObject) {
-                                return createTypeNodeFromObjectType(type);
-                            }
-                            else {
-                                context.symbolStack.push(symbol);
-                                const result = createTypeNodeFromObjectType(type);
-                                context.symbolStack.pop();
-                                return result;
-                            }
+                            context.visitedSymbols.set(id, true);
+                            const result = createTypeNodeFromObjectType(type);
+                            context.visitedSymbols.delete(id);
+                            return result;
                         }
                     }
                     else {
@@ -3245,7 +3262,7 @@ namespace ts {
                                     declaration.parent.kind === SyntaxKind.SourceFile || declaration.parent.kind === SyntaxKind.ModuleBlock));
                         if (isStaticMethodSymbol || isNonLocalFunctionSymbol) {
                             // typeof is allowed only for static/non local functions
-                            return (!!(context.flags & NodeBuilderFlags.UseTypeOfFunction) || contains(context.symbolStack, symbol)) && // it is type of the symbol uses itself recursively
+                            return (!!(context.flags & NodeBuilderFlags.UseTypeOfFunction) || (context.visitedSymbols && context.visitedSymbols.has(id))) && // it is type of the symbol uses itself recursively
                                 (!(context.flags & NodeBuilderFlags.UseStructuralFallback) || isValueSymbolAccessible(symbol, context.enclosingDeclaration)); // And the build is going to succeed without visibility error or there is no structural fallback allowed
                         }
                     }
@@ -3284,12 +3301,6 @@ namespace ts {
                     return setEmitFlags(typeLiteralNode, (context.flags & NodeBuilderFlags.MultilineObjectLiterals) ? 0 : EmitFlags.SingleLine);
                 }
 
-                function symbolToTypeReferenceName(symbol: Symbol) {
-                    // Unnamed function expressions and arrow functions have reserved names that we don't want to display
-                    const entityName = symbol.flags & SymbolFlags.Class || !isReservedMemberName(symbol.escapedName) ? symbolToName(symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ false) : createIdentifier("");
-                    return entityName;
-                }
-
                 function typeReferenceToTypeNode(type: TypeReference) {
                     const typeArguments: Type[] = type.typeArguments || emptyArray;
                     if (type.target === globalArrayType) {
@@ -3324,7 +3335,7 @@ namespace ts {
                     else {
                         const outerTypeParameters = type.target.outerTypeParameters;
                         let i = 0;
-                        let qualifiedName: QualifiedName | undefined;
+                        let resultType: TypeReferenceNode | ImportTypeNode;
                         if (outerTypeParameters) {
                             const length = outerTypeParameters.length;
                             while (i < length) {
@@ -3338,64 +3349,66 @@ namespace ts {
                                 // the default outer type arguments), we don't show the group.
                                 if (!rangeEquals(outerTypeParameters, typeArguments, start, i)) {
                                     const typeArgumentSlice = mapToTypeNodes(typeArguments.slice(start, i), context);
-                                    const typeArgumentNodes = typeArgumentSlice && createNodeArray(typeArgumentSlice);
-                                    const namePart = symbolToTypeReferenceName(parent);
-                                    (namePart.kind === SyntaxKind.Identifier ? namePart : namePart.right).typeArguments = typeArgumentNodes;
-
-                                    if (qualifiedName) {
-                                        Debug.assert(!qualifiedName.right);
-                                        qualifiedName = addToQualifiedNameMissingRightIdentifier(qualifiedName, namePart);
-                                        qualifiedName = createQualifiedName(qualifiedName, /*right*/ undefined);
-                                    }
-                                    else {
-                                        qualifiedName = createQualifiedName(namePart, /*right*/ undefined);
-                                    }
+                                    const flags = context.flags;
+                                    context.flags |= NodeBuilderFlags.ForbidIndexedAccessSymbolReferences;
+                                    const ref = symbolToTypeNode(parent, context, SymbolFlags.Type, typeArgumentSlice) as TypeReferenceNode | ImportTypeNode;
+                                    context.flags = flags;
+                                    resultType = !resultType ? ref : appendReferenceToType(resultType, ref as TypeReferenceNode);
                                 }
                             }
                         }
-
-                        let entityName: EntityName;
-                        const nameIdentifier = symbolToTypeReferenceName(type.symbol);
-                        if (qualifiedName) {
-                            Debug.assert(!qualifiedName.right);
-                            qualifiedName = addToQualifiedNameMissingRightIdentifier(qualifiedName, nameIdentifier);
-                            entityName = qualifiedName;
-                        }
-                        else {
-                            entityName = nameIdentifier;
-                        }
-
                         let typeArgumentNodes: ReadonlyArray<TypeNode> | undefined;
                         if (typeArguments.length > 0) {
                             const typeParameterCount = (type.target.typeParameters || emptyArray).length;
                             typeArgumentNodes = mapToTypeNodes(typeArguments.slice(i, typeParameterCount), context);
                         }
-
-                        if (typeArgumentNodes) {
-                            const lastIdentifier = entityName.kind === SyntaxKind.Identifier ? entityName : entityName.right;
-                            lastIdentifier.typeArguments = undefined;
-                        }
-
-                        return createTypeReferenceNode(entityName, typeArgumentNodes);
+                        const flags = context.flags;
+                        context.flags |= NodeBuilderFlags.ForbidIndexedAccessSymbolReferences;
+                        const finalRef = symbolToTypeNode(type.symbol, context, SymbolFlags.Type, typeArgumentNodes);
+                        context.flags = flags;
+                        return !resultType ? finalRef : appendReferenceToType(resultType, finalRef as TypeReferenceNode);
                     }
                 }
 
-                function addToQualifiedNameMissingRightIdentifier(left: QualifiedName, right: Identifier | QualifiedName) {
-                    Debug.assert(left.right === undefined);
 
-                    if (right.kind === SyntaxKind.Identifier) {
-                        left.right = right;
-                        return left;
+                function appendReferenceToType(root: TypeReferenceNode | ImportTypeNode, ref: TypeReferenceNode): TypeReferenceNode | ImportTypeNode {
+                    if (isImportTypeNode(root)) {
+                        // first shift type arguments
+                        const innerParams = root.typeArguments;
+                        if (root.qualifier) {
+                            (isIdentifier(root.qualifier) ? root.qualifier : root.qualifier.right).typeArguments = innerParams;
+                        }
+                        root.typeArguments = ref.typeArguments;
+                        // then move qualifiers
+                        const ids = getAccessStack(ref);
+                        for (const id of ids) {
+                            root.qualifier = root.qualifier ? createQualifiedName(root.qualifier, id) : id;
+                        }
+                        return root;
                     }
-
-                    let rightPart = right;
-                    while (rightPart.left.kind !== SyntaxKind.Identifier) {
-                        rightPart = rightPart.left;
+                    else {
+                        // first shift type arguments
+                        const innerParams = root.typeArguments;
+                        (isIdentifier(root.typeName) ? root.typeName : root.typeName.right).typeArguments = innerParams;
+                        root.typeArguments = ref.typeArguments;
+                        // then move qualifiers
+                        const ids = getAccessStack(ref);
+                        for (const id of ids) {
+                            root.typeName = createQualifiedName(root.typeName, id);
+                        }
+                        return root;
                     }
+                }
 
-                    left.right = rightPart.left;
-                    rightPart.left = left;
-                    return right;
+                function getAccessStack(ref: TypeReferenceNode): Identifier[] {
+                    let state = ref.typeName;
+                    const ids = [];
+                    while (!isIdentifier(state)) {
+                        ids.unshift(state.right);
+                        state = state.left;
+                    }
+                    ids.unshift(state);
+                    return ids;
                 }
 
                 function createTypeNodesFromResolvedType(resolvedType: ResolvedType): TypeElement[] {
@@ -3629,7 +3642,7 @@ namespace ts {
                 }
             }
 
-            function lookupSymbolChain(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags) {
+            function lookupSymbolChain(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, yieldModuleSymbol?: boolean) {
                 context.tracker.trackSymbol(symbol, context.enclosingDeclaration, meaning);
                 // Try to get qualified name if the symbol is not a type parameter and there is an enclosing declaration.
                 let chain: Symbol[];
@@ -3669,7 +3682,7 @@ namespace ts {
                         // If this is the last part of outputting the symbol, always output. The cases apply only to parent symbols.
                         endOfChain ||
                         // If a parent symbol is an external module, don't write it. (We prefer just `x` vs `"foo/bar".x`.)
-                        !(!parentSymbol && forEach(symbol.declarations, hasExternalModuleSymbol)) &&
+                        (yieldModuleSymbol || !(!parentSymbol && forEach(symbol.declarations, hasExternalModuleSymbol))) &&
                         // If a parent symbol is an anonymous type, don't write it.
                         !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral))) {
 
@@ -3717,8 +3730,8 @@ namespace ts {
                 return top;
             }
 
-            function symbolToTypeNode(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags): TypeNode {
-                const chain = lookupSymbolChain(symbol, context, meaning);
+            function symbolToTypeNode(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, overrideTypeArguments?: ReadonlyArray<TypeNode>): TypeNode {
+                const chain = lookupSymbolChain(symbol, context, meaning, !(context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope)); // If we're using aliases outside the current scope, dont bother with the module
 
                 context.flags |= NodeBuilderFlags.InInitialEntityName;
                 const rootName = getNameOfSymbolAsWritten(chain[0], context);
@@ -3728,9 +3741,13 @@ namespace ts {
                 if (ambientModuleSymbolRegex.test(rootName)) {
                     // module is root, must use `ImportTypeNode`
                     const nonRootParts = chain.length > 1 ? createAccessFromSymbolChain(chain, chain.length - 1, 1) : undefined;
-                    const typeParameterNodes = lookupTypeParameterNodes(chain, 0, context);
+                    const typeParameterNodes = overrideTypeArguments || lookupTypeParameterNodes(chain, 0, context);
                     const lit = createLiteralTypeNode(createLiteral(rootName.substring(1, rootName.length - 1)));
                     if (!nonRootParts || isEntityName(nonRootParts)) {
+                        if (nonRootParts) {
+                            const lastId = isIdentifier(nonRootParts) ? nonRootParts : (nonRootParts as QualifiedName).right;
+                            lastId.typeArguments = undefined;
+                        }
                         return createImportTypeNode(lit, nonRootParts as EntityName, typeParameterNodes as ReadonlyArray<TypeNode>, isTypeOf);
                     }
                     else {
@@ -3744,10 +3761,18 @@ namespace ts {
                 if (isIndexedAccessTypeNode(entityName)) {
                     return entityName; // Indexed accesses can never be `typeof`
                 }
-                return isTypeOf ? createTypeQueryNode(entityName) : createTypeReferenceNode(entityName, /*typeArguments*/ undefined);
+                if (isTypeOf) {
+                    return createTypeQueryNode(entityName);
+                }
+                else {
+                    const lastId = isIdentifier(entityName) ? entityName : entityName.right;
+                    const lastTypeArgs = lastId.typeArguments;
+                    lastId.typeArguments = undefined;
+                    return createTypeReferenceNode(entityName, lastTypeArgs as NodeArray<TypeNode>);
+                }
 
                 function createAccessFromSymbolChain(chain: Symbol[], index: number, stopper: number): EntityName | IndexedAccessTypeNode {
-                    const typeParameterNodes = lookupTypeParameterNodes(chain, index, context);
+                    const typeParameterNodes = index === (chain.length - 1) ? overrideTypeArguments : lookupTypeParameterNodes(chain, index, context);
                     const symbol = chain[index];
 
                     if (index === 0) {
@@ -3759,7 +3784,7 @@ namespace ts {
                     }
 
                     const parent = chain[index - 1];
-                    if (parent && getMembersOfSymbol(parent) && getMembersOfSymbol(parent).get(symbol.escapedName) === symbol) {
+                    if (!(context.flags & NodeBuilderFlags.ForbidIndexedAccessSymbolReferences) && parent && getMembersOfSymbol(parent) && getMembersOfSymbol(parent).get(symbol.escapedName) === symbol) {
                         // Should use an indexed access
                         const LHS = createAccessFromSymbolChain(chain, index - 1, stopper);
                         if (isIndexedAccessTypeNode(LHS)) {
@@ -3936,7 +3961,7 @@ namespace ts {
 
             // State
             encounteredError: boolean;
-            symbolStack: Symbol[] | undefined;
+            visitedSymbols: Map<true> | undefined;
             inferTypeParameters: TypeParameter[] | undefined;
         }
 
@@ -3962,6 +3987,23 @@ namespace ts {
                 return "default";
             }
             if (symbol.declarations && symbol.declarations.length) {
+                if (some(symbol.declarations, hasExternalModuleSymbol) && context.enclosingDeclaration) {
+                    const file = getDeclarationOfKind<SourceFile>(symbol, SyntaxKind.SourceFile);
+                    if (!file || !context.tracker.moduleResolverHost) {
+                        if (context.tracker.trackReferencedAmbientModule) {
+                            const ambientDecls = filter(symbol.declarations, isAmbientModule);
+                            if (length(ambientDecls)) {
+                                for (const decl of ambientDecls) {
+                                    context.tracker.trackReferencedAmbientModule(decl);
+                                }
+                            }
+                        }
+                        // ambient module, just use declaration/symbol name (fallthrough)
+                    }
+                    else {
+                        return `"${getResolvedExternalModuleName(context.tracker.moduleResolverHost, file, getSourceFileOfNode(getOriginalNode(context.enclosingDeclaration)))}"`;
+                    }
+                }
                 const declaration = symbol.declarations[0];
                 const name = getNameOfDeclaration(declaration);
                 if (name) {
@@ -8337,7 +8379,7 @@ namespace ts {
                     includes & TypeFlags.Undefined ? includes & TypeFlags.NonWideningType ? undefinedType : undefinedWideningType :
                         neverType;
             }
-            return getUnionTypeFromSortedList(typeSet, aliasSymbol, aliasTypeArguments);
+            return getUnionTypeFromSortedList(typeSet, includes & TypeFlags.NotUnit ? 0 : TypeFlags.UnionOfUnitTypes, aliasSymbol, aliasTypeArguments);
         }
 
         function getUnionTypePredicate(signatures: ReadonlyArray<Signature>): TypePredicate {
@@ -8377,7 +8419,7 @@ namespace ts {
         }
 
         // This function assumes the constituent type list is sorted and deduplicated.
-        function getUnionTypeFromSortedList(types: Type[], aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
+        function getUnionTypeFromSortedList(types: Type[], unionOfUnitTypes: TypeFlags, aliasSymbol?: Symbol, aliasTypeArguments?: Type[]): Type {
             if (types.length === 0) {
                 return neverType;
             }
@@ -8388,7 +8430,7 @@ namespace ts {
             let type = unionTypes.get(id);
             if (!type) {
                 const propagatedFlags = getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
-                type = <UnionType>createType(TypeFlags.Union | propagatedFlags);
+                type = <UnionType>createType(TypeFlags.Union | propagatedFlags | unionOfUnitTypes);
                 unionTypes.set(id, type);
                 type.types = types;
                 /*
@@ -8460,6 +8502,29 @@ namespace ts {
             }
         }
 
+        // When intersecting unions of unit types we can simply intersect based on type identity.
+        // Here we remove all unions of unit types from the given list and replace them with a
+        // a single union containing an intersection of the unit types.
+        function intersectUnionsOfUnitTypes(types: Type[]) {
+            const unionIndex = findIndex(types, t => (t.flags & TypeFlags.UnionOfUnitTypes) !== 0);
+            const unionType = <UnionType>types[unionIndex];
+            let intersection = unionType.types;
+            let i = types.length - 1;
+            while (i > unionIndex) {
+                const t = types[i];
+                if (t.flags & TypeFlags.UnionOfUnitTypes) {
+                    intersection = filter(intersection, u => containsType((<UnionType>t).types, u));
+                    orderedRemoveItemAt(types, i);
+                }
+                i--;
+            }
+            if (intersection === unionType.types) {
+                return false;
+            }
+            types[unionIndex] = getUnionTypeFromSortedList(intersection, unionType.flags & TypeFlags.UnionOfUnitTypes);
+            return true;
+        }
+
         // We normalize combinations of intersection and union types based on the distributive property of the '&'
         // operator. Specifically, because X & (A | B) is equivalent to X & A | X & B, we can transform intersection
         // types with union type constituents into equivalent union types with intersection type constituents and
@@ -8494,6 +8559,12 @@ namespace ts {
                 return typeSet[0];
             }
             if (includes & TypeFlags.Union) {
+                if (includes & TypeFlags.UnionOfUnitTypes && intersectUnionsOfUnitTypes(typeSet)) {
+                    // When the intersection creates a reduced set (which might mean that *all* union types have
+                    // disappeared), we restart the operation to get a new set of combined flags. Once we have
+                    // reduced we'll never reduce again, so this occurs at most once.
+                    return getIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
+                }
                 // We are attempting to construct a type of the form X & (A | B) & Y. Transform this into a type of
                 // the form X & A & Y | X & B & Y and recursively reduce until no union type constituents remain.
                 const unionIndex = findIndex(typeSet, t => (t.flags & TypeFlags.Union) !== 0);
@@ -9536,7 +9607,16 @@ namespace ts {
                 // parameters that are in scope (and therefore potentially referenced). For type literals that
                 // aren't the right hand side of a generic type alias declaration we optimize by reducing the
                 // set of type parameters to those that are possibly referenced in the literal.
-                const declaration = symbol.declarations[0];
+                let declaration = symbol.declarations[0];
+                if (isInJavaScriptFile(declaration)) {
+                    const paramTag = findAncestor(declaration, isJSDocParameterTag);
+                    if (paramTag) {
+                        const paramSymbol = getParameterSymbolFromJSDoc(paramTag);
+                        if (paramSymbol) {
+                            declaration = paramSymbol.valueDeclaration;
+                        }
+                    }
+                }
                 let outerTypeParameters = getOuterTypeParameters(declaration, /*includeThisTypes*/ true);
                 if (isJavaScriptConstructor(declaration)) {
                     const templateTagParameters = getTypeParametersFromDeclaration(declaration as DeclarationWithTypeParameters);
@@ -13259,7 +13339,7 @@ namespace ts {
             if (type.flags & TypeFlags.Union) {
                 const types = (<UnionType>type).types;
                 const filtered = filter(types, f);
-                return filtered === types ? type : getUnionTypeFromSortedList(filtered);
+                return filtered === types ? type : getUnionTypeFromSortedList(filtered, type.flags & TypeFlags.UnionOfUnitTypes);
             }
             return f(type) ? type : neverType;
         }
@@ -15379,10 +15459,11 @@ namespace ts {
                 links.resolvedSignatures = createMap();
             }
             const cacheKey = "" + getTypeId(valueType);
-            if (links.resolvedSignatures.get(cacheKey) && links.resolvedSignatures.get(cacheKey) !== resolvingSignaturesArray) {
-                signatures = links.resolvedSignatures.get(cacheKey);
+            const cachedResolved = links.resolvedSignatures.get(cacheKey);
+            if (cachedResolved && cachedResolved !== resolvingSignaturesArray) {
+                signatures = cachedResolved;
             }
-            else if (!links.resolvedSignatures.get(cacheKey)) {
+            else if (!cachedResolved) {
                 links.resolvedSignatures.set(cacheKey, resolvingSignaturesArray);
                 links.resolvedSignatures.set(cacheKey, signatures = instantiateJsxSignatures(context, signatures));
             }

@@ -1900,6 +1900,7 @@ declare namespace ts {
         WriteArrayAsGenericType = 2,
         GenerateNamesForShadowedTypeParams = 4,
         UseStructuralFallback = 8,
+        ForbidIndexedAccessSymbolReferences = 16,
         WriteTypeArgumentsOfSignature = 32,
         UseFullyQualifiedType = 64,
         UseOnlyExternalAliasing = 128,
