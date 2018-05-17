@@ -1865,8 +1865,7 @@ namespace ts {
             //   * @returns {number}
             //   */
             // var x = function(name) { return name.length; }
-            if (parent.parent &&
-                (getSingleVariableOfVariableStatement(parent.parent) === node)) {
+            if (parent.parent && (getSingleVariableOfVariableStatement(parent.parent) === node)) {
                 getJSDocCommentsAndTagsWorker(parent.parent);
             }
             if (parent.parent && parent.parent.parent &&
@@ -1913,8 +1912,11 @@ namespace ts {
         return parameter && parameter.symbol;
     }
 
-    export function getHostSignatureFromJSDoc(node: JSDocTag): SignatureDeclaration | undefined {
-        const host = getJSDocHost(node);
+    export function getHostSignatureFromJSDoc(node: Node): SignatureDeclaration | undefined {
+        return getHostSignatureFromJSDocHost(getJSDocHost(node));
+    }
+
+    export function getHostSignatureFromJSDocHost(host: HasJSDoc): SignatureDeclaration | undefined {
         const decl = getSourceOfDefaultedAssignment(host) ||
             getSourceOfAssignment(host) ||
             getSingleInitializerOfVariableStatementOrPropertyDeclaration(host) ||
