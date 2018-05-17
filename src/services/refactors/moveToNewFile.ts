@@ -440,6 +440,7 @@ namespace ts.refactor {
         switch (i.kind) {
             case SyntaxKind.ImportDeclaration: {
                 const clause = i.importClause;
+                if (!clause) return undefined;
                 const defaultImport = clause.name && keep(clause.name) ? clause.name : undefined;
                 const namedBindings = clause.namedBindings && filterNamedBindings(clause.namedBindings, keep);
                 return defaultImport || namedBindings
