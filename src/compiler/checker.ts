@@ -3060,7 +3060,7 @@ namespace ts {
                     flags,
                     tracker: tracker && tracker.trackSymbol ? tracker : { trackSymbol: noop },
                     encounteredError: false,
-                    symbolStack: undefined,
+                    visitedSymbols: undefined,
                     inferTypeParameters: undefined
                 };
             }
@@ -3242,7 +3242,10 @@ namespace ts {
 
                 function createAnonymousTypeNode(type: ObjectType): TypeNode {
                     const symbol = type.symbol;
+                    let id: string;
                     if (symbol) {
+                        const isConstructorObject = getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & SymbolFlags.Class;
+                        id = (isConstructorObject ? "+" : "") + getSymbolId(symbol);
                         if (isJavaScriptConstructor(symbol.valueDeclaration)) {
                             // Instance and static types share the same symbol; only add 'typeof' for the static side.
                             const isInstanceType = type === getInferredClassType(symbol) ? SymbolFlags.Type : SymbolFlags.Value;
@@ -3254,7 +3257,7 @@ namespace ts {
                             shouldWriteTypeOfFunctionSymbol()) {
                             return symbolToTypeNode(symbol, context, SymbolFlags.Value);
                         }
-                        else if (contains(context.symbolStack, symbol)) {
+                        else if (context.visitedSymbols && context.visitedSymbols.has(id)) {
                             // If type is an anonymous type literal in a type alias declaration, use type alias name
                             const typeAlias = getTypeAliasForTypeLiteral(type);
                             if (typeAlias) {
@@ -3268,20 +3271,14 @@ namespace ts {
                         else {
                             // Since instantiations of the same anonymous type have the same symbol, tracking symbols instead
                             // of types allows us to catch circular references to instantiations of the same anonymous type
-                            if (!context.symbolStack) {
-                                context.symbolStack = [];
+                            if (!context.visitedSymbols) {
+                                context.visitedSymbols = createMap<true>();
                             }
 
-                            const isConstructorObject = getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & SymbolFlags.Class;
-                            if (isConstructorObject) {
-                                return createTypeNodeFromObjectType(type);
-                            }
-                            else {
-                                context.symbolStack.push(symbol);
-                                const result = createTypeNodeFromObjectType(type);
-                                context.symbolStack.pop();
-                                return result;
-                            }
+                            context.visitedSymbols.set(id, true);
+                            const result = createTypeNodeFromObjectType(type);
+                            context.visitedSymbols.delete(id);
+                            return result;
                         }
                     }
                     else {
@@ -3298,7 +3295,7 @@ namespace ts {
                                     declaration.parent.kind === SyntaxKind.SourceFile || declaration.parent.kind === SyntaxKind.ModuleBlock));
                         if (isStaticMethodSymbol || isNonLocalFunctionSymbol) {
                             // typeof is allowed only for static/non local functions
-                            return (!!(context.flags & NodeBuilderFlags.UseTypeOfFunction) || contains(context.symbolStack, symbol)) && // it is type of the symbol uses itself recursively
+                            return (!!(context.flags & NodeBuilderFlags.UseTypeOfFunction) || (context.visitedSymbols && context.visitedSymbols.has(id))) && // it is type of the symbol uses itself recursively
                                 (!(context.flags & NodeBuilderFlags.UseStructuralFallback) || isValueSymbolAccessible(symbol, context.enclosingDeclaration)); // And the build is going to succeed without visibility error or there is no structural fallback allowed
                         }
                     }
@@ -3997,7 +3994,7 @@ namespace ts {
 
             // State
             encounteredError: boolean;
-            symbolStack: Symbol[] | undefined;
+            visitedSymbols: Map<true> | undefined;
             inferTypeParameters: TypeParameter[] | undefined;
         }
 
