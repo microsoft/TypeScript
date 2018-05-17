@@ -112,11 +112,11 @@ ${stripAbsoluteImportPaths(result.stderr.toString().replace(/\r\n/g, "\n"))}`;
  * This is problematic for error baselines, so we grep for them and strip them out.
  */
 function stripAbsoluteImportPaths(result: string) {
+    const workspaceRegexp = new RegExp(Harness.IO.getWorkspaceRoot().replace(/\\/g, "\\\\"), "g");
     return result
         .replace(/import\(".*?\/tests\/cases\/user\//g, `import("/`)
         .replace(/Module '".*?\/tests\/cases\/user\//g, `Module '"/`)
-        .replace(/import\(".*?\/TypeScript\/node_modules\//g, `import("../../../node_modules`)
-        .replace(/Module '".*?\/TypeScript\/node_modules\//g, `Module '"../../../node_modules`);
+        .replace(workspaceRegexp, "../../..");
 }
 
 function sortErrors(result: string) {

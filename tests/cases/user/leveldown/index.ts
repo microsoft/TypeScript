@@ -1,1 +1,0 @@
-import leveldown = require("leveldown");
