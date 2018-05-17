@@ -33,7 +33,7 @@ interface d {}
 >d : d
 
 export class d {}
->d : d
+>d : import("tests/cases/compiler/mergedDeclarationExports").d
 
 // both namespaces
 namespace N { }

@@ -15,10 +15,10 @@ export declare function makeThing(): Thing;
 
 === tests/cases/compiler/index.ts ===
 import { makeThing } from "umd";
->makeThing : () => { a: number; }
+>makeThing : () => import("tests/cases/compiler/node_modules/umd").Thing
 
 export const thing = makeThing();
->thing : { a: number; }
->makeThing() : { a: number; }
->makeThing : () => { a: number; }
+>thing : import("tests/cases/compiler/node_modules/umd").Thing
+>makeThing() : import("tests/cases/compiler/node_modules/umd").Thing
+>makeThing : () => import("tests/cases/compiler/node_modules/umd").Thing
 
