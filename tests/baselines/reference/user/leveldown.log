@@ -1,0 +1,8 @@
+Exit Code: 1
+Standard output:
+index.ts(1,28): error TS7016: Could not find a declaration file for module 'leveldown'. '/opt/vsts/work/1/s/tests/cases/user/leveldown/node_modules/leveldown/leveldown.js' implicitly has an 'any' type.
+  Try `npm install @types/leveldown` if it exists or add a new declaration (.d.ts) file containing `declare module 'leveldown';`
+
+
+
+Standard error:
