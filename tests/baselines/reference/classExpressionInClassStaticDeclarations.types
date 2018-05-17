@@ -1,0 +1,9 @@
+=== tests/cases/compiler/classExpressionInClassStaticDeclarations.ts ===
+class C {
+>C : C
+
+    static D = class extends C {};
+>D : typeof (Anonymous class)
+>class extends C {} : typeof (Anonymous class)
+>C : C
+}
