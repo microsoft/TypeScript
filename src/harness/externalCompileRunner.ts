@@ -27,33 +27,13 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
         // Read in and evaluate the test list
         const testList = this.tests && this.tests.length ? this.tests : this.enumerateTestFiles();
 
-        describe(`${this.kind()} code samples`, () => {
-            const cwd = path.join(Harness.IO.getWorkspaceRoot(), this.testDir);
-            const placeholderName = ".node_modules";
-            const moduleDirName = "node_modules";
-            before(() => {
-                ts.forEachAncestorDirectory(cwd, dir => {
-                    try {
-                        fs.renameSync(path.join(dir, moduleDirName), path.join(dir, placeholderName));
-                    }
-                    catch {
-                        // empty
-                    }
-                });
-            });
+        // tslint:disable-next-line:no-this-assignment
+        const cls = this;
+        describe(`${this.kind()} code samples`, function(this: Mocha.ISuiteCallbackContext) {
+            this.timeout(600_000); // 10 minutes
             for (const test of testList) {
-                this.runTest(typeof test === "string" ? test : test.file);
+                cls.runTest(typeof test === "string" ? test : test.file);
             }
-            after(() => {
-                ts.forEachAncestorDirectory(cwd, dir => {
-                    try {
-                        fs.renameSync(path.join(dir, placeholderName), path.join(dir, moduleDirName));
-                    }
-                    catch {
-                        // empty
-                    }
-                });
-            });
         });
     }
     private runTest(directoryName: string) {
@@ -134,14 +114,16 @@ ${stripAbsoluteImportPaths(result.stderr.toString().replace(/\r\n/g, "\n"))}`;
 function stripAbsoluteImportPaths(result: string) {
     return result
         .replace(/import\(".*?\/tests\/cases\/user\//g, `import("/`)
-        .replace(/Module '".*?\/tests\/cases\/user\//g, `Module '"/`);
+        .replace(/Module '".*?\/tests\/cases\/user\//g, `Module '"/`)
+        .replace(/import\(".*?\/TypeScript\/node_modules\//g, `import("../../../node_modules`)
+        .replace(/Module '".*?\/TypeScript\/node_modules\//g, `Module '"../../../node_modules`);
 }
 
 function sortErrors(result: string) {
     return ts.flatten(splitBy(result.split("\n"), s => /^\S+/.test(s)).sort(compareErrorStrings)).join("\n");
 }
 
-const errorRegexp = /^(.+\.[tj]sx?)\((\d+),(\d+)\): error TS/;
+const errorRegexp = /^(.+\.[tj]sx?)\((\d+),(\d+)\)(: error TS.*)/;
 function compareErrorStrings(a: string[], b: string[]) {
     ts.Debug.assertGreaterThanOrEqual(a.length, 1);
     ts.Debug.assertGreaterThanOrEqual(b.length, 1);
@@ -153,11 +135,12 @@ function compareErrorStrings(a: string[], b: string[]) {
     if (!matchB) {
         return 1;
     }
-    const [, errorFileA, lineNumberStringA, columnNumberStringA] = matchA;
-    const [, errorFileB, lineNumberStringB, columnNumberStringB] = matchB;
+    const [, errorFileA, lineNumberStringA, columnNumberStringA, remainderA] = matchA;
+    const [, errorFileB, lineNumberStringB, columnNumberStringB, remainderB] = matchB;
     return ts.comparePathsCaseSensitive(errorFileA, errorFileB) ||
         ts.compareValues(parseInt(lineNumberStringA), parseInt(lineNumberStringB)) ||
-        ts.compareValues(parseInt(columnNumberStringA), parseInt(columnNumberStringB));
+        ts.compareValues(parseInt(columnNumberStringA), parseInt(columnNumberStringB)) ||
+        ts.compareStringsCaseSensitive(remainderA, remainderB);
 }
 
 class DefinitelyTypedRunner extends ExternalCompileRunnerBase {
