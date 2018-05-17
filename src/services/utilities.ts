@@ -1280,6 +1280,23 @@ namespace ts {
         }
         return propSymbol;
     }
+
+    export class NodeSet {
+        private map = createMap<Node>();
+
+        add(node: Node): void {
+            this.map.set(String(getNodeId(node)), node);
+        }
+        has(node: Node): boolean {
+            return this.map.has(String(getNodeId(node)));
+        }
+        forEach(cb: (node: Node) => void): void {
+            this.map.forEach(cb);
+        }
+        some(pred: (node: Node) => boolean): boolean {
+            return forEachEntry(this.map, pred) || false;
+        }
+    }
 }
 
 // Display-part writer helpers
