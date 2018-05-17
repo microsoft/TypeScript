@@ -890,10 +890,15 @@ namespace ts {
             return result;
         }
 
-        function mergeSymbol(target: Symbol, source: Symbol) {
-            if (!(target.flags & getExcludedSymbolFlags(source.flags)) ||
-                (source.flags | target.flags) & SymbolFlags.JSContainer) {
-                const targetValueDeclaration = target.valueDeclaration;
+        /**
+         * Note: if target is transient, then it is mutable, and mergeSymbol with both mutate and return it.
+         * If target is not transient, mergeSymbol will produce a transient clone, mutate that and return it.
+         */
+        function mergeSymbol(target: Symbol, source: Symbol): Symbol {
+            if (!(target.flags & SymbolFlags.Transient)) {
+                target = cloneSymbol(target);
+            }
+            if (!(target.flags & getExcludedSymbolFlags(source.flags))) {
                 Debug.assert(!!(target.flags & SymbolFlags.Transient));
                 // Javascript static-property-assignment declarations always merge, even though they are also values
                 if (source.flags & SymbolFlags.ValueModule && target.flags & SymbolFlags.ValueModule && target.constEnumOnlyModule && !source.constEnumOnlyModule) {
@@ -916,18 +921,6 @@ namespace ts {
                     if (!target.exports) target.exports = createSymbolTable();
                     mergeSymbolTable(target.exports, source.exports);
                 }
-                if ((source.flags | target.flags) & SymbolFlags.JSContainer) {
-                    const sourceInitializer = getJSInitializerSymbol(source);
-                    const init = getDeclaredJavascriptInitializer(targetValueDeclaration) || getAssignedJavascriptInitializer(targetValueDeclaration);
-                    let targetInitializer = init && init.symbol ? init.symbol : target;
-                    if (!(targetInitializer.flags & SymbolFlags.Transient)) {
-                        const mergedInitializer = getMergedSymbol(targetInitializer);
-                        targetInitializer = mergedInitializer === targetInitializer ? cloneSymbol(targetInitializer) : mergedInitializer;
-                    }
-                    if (sourceInitializer !== source || targetInitializer !== target) {
-                        mergeSymbol(targetInitializer, sourceInitializer);
-                    }
-                }
                 recordMergedSymbol(target, source);
             }
             else if (target.flags & SymbolFlags.NamespaceModule) {
@@ -948,6 +941,7 @@ namespace ts {
                     error(errorNode, message, symbolToString(source));
                 });
             }
+            return target;
         }
 
         function combineSymbolTables(first: SymbolTable | undefined, second: SymbolTable | undefined): SymbolTable | undefined {
@@ -961,17 +955,7 @@ namespace ts {
 
         function mergeSymbolTable(target: SymbolTable, source: SymbolTable) {
             source.forEach((sourceSymbol, id) => {
-                let targetSymbol = target.get(id);
-                if (!targetSymbol) {
-                    target.set(id, sourceSymbol);
-                }
-                else {
-                    if (!(targetSymbol.flags & SymbolFlags.Transient)) {
-                        targetSymbol = cloneSymbol(targetSymbol);
-                        target.set(id, targetSymbol);
-                    }
-                    mergeSymbol(targetSymbol, sourceSymbol);
-                }
+                target.set(id, target.has(id) ? mergeSymbol(target.get(id), sourceSymbol) : sourceSymbol);
             });
         }
 
@@ -1001,10 +985,7 @@ namespace ts {
                 // obtain item referenced by 'export='
                 mainModule = resolveExternalModuleSymbol(mainModule);
                 if (mainModule.flags & SymbolFlags.Namespace) {
-                    // if module symbol has already been merged - it is safe to use it.
-                    // otherwise clone it
-                    mainModule = mainModule.flags & SymbolFlags.Transient ? mainModule : cloneSymbol(mainModule);
-                    mergeSymbol(mainModule, moduleAugmentation.symbol);
+                    mainModule = mergeSymbol(mainModule, moduleAugmentation.symbol);
                 }
                 else {
                     // moduleName will be a StringLiteral since this is not `declare global`.
@@ -2301,14 +2282,7 @@ namespace ts {
             }
             moduleSymbol.exports.forEach((s, name) => {
                 if (name === InternalSymbolName.ExportEquals) return;
-                if (!merged.exports.has(name)) {
-                    merged.exports.set(name, s);
-                }
-                else {
-                    const ms = cloneSymbol(merged.exports.get(name));
-                    mergeSymbol(ms, s);
-                    merged.exports.set(name, ms);
-                }
+                merged.exports.set(name, merged.exports.has(name) ? mergeSymbol(merged.exports.get(name), s) : s);
             });
             return merged;
         }
@@ -4987,6 +4961,20 @@ namespace ts {
         function getTypeOfFuncClassEnumModule(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
+                if (symbol.flags & SymbolFlags.JSAlias) {
+                    // TODO: eventually just call resolveAlias
+                    const aliasDeclaration = symbol.valueDeclaration; // TODO: For testing purposes only, should be getDeclarationOfAliasSymbol
+                    // Debug.assert(isBinaryExpression(aliasDeclaration.parent) && isExpressionStatement(aliasDeclaration.parent.parent),  Debug.showSyntaxKind(aliasDeclaration) + Debug.showSyntaxKind(aliasDeclaration.parent) + Debug.showSyntaxKind(aliasDeclaration.parent.parent));
+                    const aliasSymbol = aliasDeclaration.parent.symbol;
+                    symbol = cloneSymbol(symbol);
+                    // TODO: Jamming things in manually *might* be the right thing (possibly even with mergeSymbolTable)
+                    // but it needs to be a lot more complete
+                    // (probably I need a "cloneSymbolTable" or "cloneToSymbol")
+                    symbol.exports = symbol.exports || createSymbolTable();
+                    if (aliasSymbol && aliasSymbol.exports && aliasSymbol.exports.size) {
+                        mergeSymbolTable(symbol.exports, aliasSymbol.exports);
+                    }
+                }
                 if (symbol.flags & SymbolFlags.Module && isShorthandAmbientModuleSymbol(symbol)) {
                     links.type = anyType;
                 }

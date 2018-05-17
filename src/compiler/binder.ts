@@ -1696,6 +1696,7 @@ namespace ts {
                 symbol.parent = container.symbol;
             }
             addDeclarationToSymbol(symbol, node, symbolFlags);
+            return symbol;
         }
 
         function bindBlockScopedDeclaration(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
@@ -2305,12 +2306,10 @@ namespace ts {
             setCommonJsModuleIndicator(node);
             const lhs = node.left as PropertyAccessEntityNameExpression;
             const symbol = forEachIdentifierInEntityName(lhs.expression, (id, original) => {
-                if (!original) {
-                    return undefined;
+                if (original) {
+                    addDeclarationToSymbol(original, id, SymbolFlags.Module | SymbolFlags.JSContainer);
                 }
-                const s = getJSInitializerSymbol(original);
-                addDeclarationToSymbol(s, id, SymbolFlags.Module | SymbolFlags.JSContainer);
-                return s;
+                return original;
             });
             if (symbol) {
                 const flags = isClassExpression(node.right) ?
@@ -2351,7 +2350,7 @@ namespace ts {
                     if (isBinaryExpression(thisContainer.parent) && thisContainer.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
                         const l = thisContainer.parent.left;
                         if (isPropertyAccessEntityNameExpression(l) && isPrototypeAccess(l.expression)) {
-                            constructorSymbol = getJSInitializerSymbolFromName(l.expression.expression, thisParentContainer);
+                            constructorSymbol = lookupSymbolForPropertyAccess(l.expression.expression, thisParentContainer);
                         }
                     }
 
@@ -2450,12 +2449,8 @@ namespace ts {
             bindPropertyAssignment(node.expression, node, /*isPrototypeProperty*/ false);
         }
 
-        function getJSInitializerSymbolFromName(name: EntityNameExpression, lookupContainer?: Node): Symbol {
-            return getJSInitializerSymbol(lookupSymbolForPropertyAccess(name, lookupContainer));
-        }
-
         function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, isPrototypeProperty: boolean) {
-            let symbol = getJSInitializerSymbolFromName(name);
+            let symbol = lookupSymbolForPropertyAccess(name);
             const isToplevelNamespaceableInitializer = isBinaryExpression(propertyAccess.parent)
                 ? getParentOfBinaryExpression(propertyAccess.parent).parent.kind === SyntaxKind.SourceFile &&
                     !!getJavascriptInitializer(getInitializerOfBinaryExpression(propertyAccess.parent), isPrototypeAccess(propertyAccess.parent.left))
@@ -2464,18 +2459,19 @@ namespace ts {
                 // make symbols or add declarations for intermediate containers
                 const flags = SymbolFlags.Module | SymbolFlags.JSContainer;
                 const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.JSContainer;
-                forEachIdentifierInEntityName(propertyAccess.expression, (id, original) => {
+                symbol = forEachIdentifierInEntityName(propertyAccess.expression, (id, original) => {
                     if (original) {
                         // Note: add declaration to original symbol, not the special-syntax's symbol, so that namespaces work for type lookup
                         addDeclarationToSymbol(original, id, flags);
                         return original;
                     }
                     else {
-                        return symbol = declareSymbol(symbol ? symbol.exports : container.locals, symbol, id, flags, excludeFlags);
+                        return declareSymbol(symbol ? symbol.exports : container.locals, symbol, id, flags, excludeFlags);
                     }
                 });
             }
-            if (!symbol || !(symbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.NamespaceModule | SymbolFlags.ObjectLiteral))) {
+            // TODO: This should probably be an assert
+            if (!symbol || !isJavascriptContainer(symbol.valueDeclaration)) {
                 return;
             }
 
@@ -2492,6 +2488,11 @@ namespace ts {
             declareSymbol(symbolTable, symbol, propertyAccess, symbolFlags, symbolExcludes);
         }
 
+        function isJavascriptContainer(node: Node) {
+            return isClassDeclaration(node) || isFunctionDeclaration(node) || !!getDeclaredJavascriptInitializer(node) || !!getAssignedJavascriptInitializer(node)
+        }
+
+
         function getParentOfBinaryExpression(expr: BinaryExpression) {
             while (isBinaryExpression(expr.parent)) {
                 expr = expr.parent;
@@ -2504,7 +2505,7 @@ namespace ts {
                 return lookupSymbolForNameWorker(lookupContainer, node.escapedText);
             }
             else {
-                const symbol = getJSInitializerSymbol(lookupSymbolForPropertyAccess(node.expression));
+                const symbol = lookupSymbolForPropertyAccess(node.expression);
                 return symbol && symbol.exports && symbol.exports.get(node.name.escapedText);
             }
         }
@@ -2517,7 +2518,7 @@ namespace ts {
                 return action(e, lookupSymbolForPropertyAccess(e));
             }
             else {
-                const s = getJSInitializerSymbol(forEachIdentifierInEntityName(e.expression, action));
+                const s = forEachIdentifierInEntityName(e.expression, action);
                 Debug.assert(!!s && !!s.exports);
                 return action(e.name, s.exports.get(e.name.escapedText));
             }
@@ -2537,7 +2538,11 @@ namespace ts {
             }
             else {
                 const bindingName = node.name ? node.name.escapedText : InternalSymbolName.Class;
-                bindAnonymousDeclaration(node, SymbolFlags.Class, bindingName);
+                const symbol = bindAnonymousDeclaration(node, SymbolFlags.Class, bindingName);
+                if (isInJavaScriptFile(node) && (getAssignedJavascriptInitializer(node) || node.parent && getDeclaredJavascriptInitializer(node.parent))) {
+                    // Will be looked up later (probably) (who knows)
+                    symbol.flags |= SymbolFlags.JSAlias;
+                }
                 // Add name of class expression into the map for semantic classifier
                 if (node.name) {
                     classifiableNames.set(node.name.escapedText, true);
@@ -2583,7 +2588,7 @@ namespace ts {
                     bindBlockScopedVariableDeclaration(node);
                 }
                 else if (isParameterDeclaration(node)) {
-                    // It is safe to walk up parent chain to find whether the node is a destructing parameter declaration
+                    // It is safe to walk up parent chain to find whether the node is a destructuring parameter declaration
                     // because its parent chain has already been set up, since parents are set before descending into children.
                     //
                     // If node is a binding element in parameter declaration, we need to use ParameterExcludes.

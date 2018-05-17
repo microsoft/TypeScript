@@ -1531,22 +1531,6 @@ namespace ts {
         return getSourceTextOfNodeFromSourceFile(sourceFile, str).charCodeAt(0) === CharacterCodes.doubleQuote;
     }
 
-    /**
-     * Given the symbol of a declaration, find the symbol of its Javascript container-like initializer,
-     * if it has one. Otherwise just return the original symbol.
-     *
-     * Container-like initializer behave like namespaces, so the binder needs to add contained symbols
-     * to their exports. An example is a function with assignments to `this` inside.
-     */
-    export function getJSInitializerSymbol(symbol: Symbol) {
-        if (!symbol || !symbol.valueDeclaration) {
-            return symbol;
-        }
-        const declaration = symbol.valueDeclaration;
-        const e = getDeclaredJavascriptInitializer(declaration) || getAssignedJavascriptInitializer(declaration);
-        return e && e.symbol ? e.symbol : symbol;
-    }
-
     /** Get the declaration initializer, when the initializer is container-like (See getJavascriptInitializer) */
     export function getDeclaredJavascriptInitializer(node: Node) {
         if (node && isVariableDeclaration(node) && node.initializer) {
