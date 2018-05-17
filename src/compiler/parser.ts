@@ -6471,16 +6471,24 @@ namespace ts {
                     return finishNode(result, end);
                 }
 
-                function isNextNonwhitespaceTokenEndOfFile() {
+                function isNextNonwhitespaceTokenEndOfFile(): boolean {
                     nextJSDocToken();
-                    return token() === SyntaxKind.EndOfFileToken || ((token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) && nextJSDocToken() === SyntaxKind.EndOfFileToken);
+                    if (token() === SyntaxKind.EndOfFileToken) {
+                        return true;
+                    }
+                    if (token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
+                        return lookAhead(isNextNonwhitespaceTokenEndOfFile); // We must use infinte lookahead, as there could be any number of newlines :(
+                    }
+                    return false;
                 }
 
                 function skipWhitespace(): void {
-                    while (token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
+                    if (token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
                         if (lookAhead(isNextNonwhitespaceTokenEndOfFile)) {
-                            return; // Don't skip whitespace prior to EoF (or end of comment)
+                            return; // Don't skip whitespace prior to EoF (or end of comment) - that shouldn't be included in any node's range
                         }
+                    }
+                    while (token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
                         nextJSDocToken();
                     }
                 }
