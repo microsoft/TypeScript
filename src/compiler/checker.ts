@@ -1577,9 +1577,11 @@ namespace ts {
 
         function isTypeParameterSymbolDeclaredInContainer(symbol: Symbol, container: Node) {
             for (const decl of symbol.declarations) {
-                const parent = isJSDocTemplateTag(decl.parent) ? getJSDocHost(decl.parent) : decl.parent;
-                if (decl.kind === SyntaxKind.TypeParameter && parent === container) {
-                    return true;
+                if (decl.kind === SyntaxKind.TypeParameter) {
+                    const parent = isJSDocTemplateTag(decl.parent) ? getJSDocHost(decl.parent) : decl.parent;
+                    if (parent === container) {
+                        return !(isJSDocTemplateTag(decl.parent) && find((decl.parent.parent as JSDoc).tags, isJSDocTypeAlias));
+                    }
                 }
             }
 
@@ -2089,7 +2091,7 @@ namespace ts {
             let symbol: Symbol;
             if (name.kind === SyntaxKind.Identifier) {
                 const message = meaning === namespaceMeaning ? Diagnostics.Cannot_find_namespace_0 : Diagnostics.Cannot_find_name_0;
-                const symbolFromJSPrototype = isInJavaScriptFile(name) ? resolveEntityNameFromJSPrototype(name, meaning) : undefined;
+                const symbolFromJSPrototype = isInJavaScriptFile(name) ? resolveEntityNameFromJSSpecialAssignment(name, meaning) : undefined;
                 symbol = resolveName(location || name, name.escapedText, meaning, ignoreErrors || symbolFromJSPrototype ? undefined : message, name, /*isUse*/ true);
                 if (!symbol) {
                     return symbolFromJSPrototype;
@@ -2144,22 +2146,31 @@ namespace ts {
         }
 
         /**
-         * For prototype-property methods like `A.prototype.m = function () ...`, try to resolve names in the scope of `A` too.
+         * 1. For prototype-property methods like `A.prototype.m = function () ...`, try to resolve names in the scope of `A` too.
          * Note that prototype-property assignment to locations outside the current file (eg globals) doesn't work, so
          * name resolution won't work either.
+         * 2. For property assignments like `{ x: function f () { } }`, try to resolve names in the scope of `f` too.
          */
-        function resolveEntityNameFromJSPrototype(name: Identifier, meaning: SymbolFlags) {
-            if (isJSDocTypeReference(name.parent) && isJSDocTag(name.parent.parent.parent)) {
-                const host = getJSDocHost(name.parent.parent.parent as JSDocTag);
-                if (isExpressionStatement(host) &&
-                    isBinaryExpression(host.expression) &&
-                    getSpecialPropertyAssignmentKind(host.expression) === SpecialPropertyAssignmentKind.PrototypeProperty) {
-                    const symbol = getSymbolOfNode(host.expression.left);
-                    if (symbol) {
-                        const secondaryLocation = symbol.parent.valueDeclaration;
-                        return resolveName(secondaryLocation, name.escapedText, meaning, /*nameNotFoundMessage*/ undefined, name, /*isUse*/ true);
-                    }
+        function resolveEntityNameFromJSSpecialAssignment(name: Identifier, meaning: SymbolFlags) {
+            if (isJSDocTypeReference(name.parent)) {
+                const host = getJSDocHost(name.parent);
+                if (host) {
+                    const secondaryLocation = getJSSpecialAssignmentSymbol(getJSDocHost(name.parent.parent.parent as JSDocTag));
+                    return secondaryLocation && resolveName(secondaryLocation, name.escapedText, meaning, /*nameNotFoundMessage*/ undefined, name, /*isUse*/ true);
                 }
+            }
+        }
+
+        function getJSSpecialAssignmentSymbol(host: HasJSDoc): Declaration | undefined {
+            if (isPropertyAssignment(host) && isFunctionLike(host.initializer)) {
+                const symbol = getSymbolOfNode(host.initializer);
+                return symbol && symbol.valueDeclaration;
+            }
+            else if (isExpressionStatement(host) &&
+                     isBinaryExpression(host.expression) &&
+                     getSpecialPropertyAssignmentKind(host.expression) === SpecialPropertyAssignmentKind.PrototypeProperty) {
+                const symbol = getSymbolOfNode(host.expression.left);
+                return symbol && symbol.parent.valueDeclaration;
             }
         }
 
@@ -3606,8 +3617,10 @@ namespace ts {
             }
 
             function symbolToParameterDeclaration(parameterSymbol: Symbol, context: NodeBuilderContext, preserveModifierFlags?: boolean): ParameterDeclaration {
-                const parameterDeclaration = getDeclarationOfKind<ParameterDeclaration>(parameterSymbol, SyntaxKind.Parameter);
-                Debug.assert(!!parameterDeclaration || isTransientSymbol(parameterSymbol));
+                let parameterDeclaration: ParameterDeclaration | JSDocParameterTag = getDeclarationOfKind<ParameterDeclaration>(parameterSymbol, SyntaxKind.Parameter);
+                if (!parameterDeclaration && !isTransientSymbol(parameterSymbol)) {
+                    parameterDeclaration = getDeclarationOfKind<JSDocParameterTag>(parameterSymbol, SyntaxKind.JSDocParameterTag);
+                }
 
                 let parameterType = getTypeOfSymbol(parameterSymbol);
                 if (parameterDeclaration && isRequiredInitializedParameter(parameterDeclaration)) {
@@ -3620,8 +3633,8 @@ namespace ts {
                 const dotDotDotToken = isRest ? createToken(SyntaxKind.DotDotDotToken) : undefined;
                 const name = parameterDeclaration
                     ? parameterDeclaration.name ?
-                        parameterDeclaration.name.kind === SyntaxKind.Identifier ?
-                            setEmitFlags(getSynthesizedClone(parameterDeclaration.name), EmitFlags.NoAsciiEscaping) :
+                            parameterDeclaration.name.kind === SyntaxKind.Identifier ? setEmitFlags(getSynthesizedClone(parameterDeclaration.name), EmitFlags.NoAsciiEscaping) :
+                            parameterDeclaration.name.kind === SyntaxKind.QualifiedName ? setEmitFlags(getSynthesizedClone(parameterDeclaration.name.right), EmitFlags.NoAsciiEscaping) :
                             cloneBindingName(parameterDeclaration.name) :
                         symbolName(parameterSymbol)
                     : symbolName(parameterSymbol);
@@ -4026,8 +4039,9 @@ namespace ts {
 
             function determineIfDeclarationIsVisible() {
                 switch (node.kind) {
+                    case SyntaxKind.JSDocCallbackTag:
                     case SyntaxKind.JSDocTypedefTag:
-                        // Top-level jsdoc typedefs are considered exported
+                        // Top-level jsdoc type aliases are considered exported
                         // First parent is comment node, second is hosting declaration or token; we only care about those tokens or declarations whose parent is a source file
                         return !!(node.parent && node.parent.parent && node.parent.parent.parent && isSourceFile(node.parent.parent.parent));
                     case SyntaxKind.BindingElement:
@@ -4802,7 +4816,7 @@ namespace ts {
                 if (symbol.flags & SymbolFlags.Prototype) {
                     return links.type = getTypeOfPrototypeProperty(symbol);
                 }
-                // CommonsJS require/module/exports all have type any.
+                // CommonsJS require and module both have type any.
                 if (symbol === requireSymbol || symbol === moduleSymbol) {
                     return links.type = anyType;
                 }
@@ -4837,7 +4851,7 @@ namespace ts {
                     declaration.kind === SyntaxKind.PropertyAccessExpression && declaration.parent.kind === SyntaxKind.BinaryExpression) {
                     type = getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
                 }
-                else if (isJSDocPropertyTag(declaration)
+                else if (isJSDocPropertyLikeTag(declaration)
                     || isPropertyAccessExpression(declaration)
                     || isIdentifier(declaration)
                     || (isMethodDeclaration(declaration) && !isObjectLiteralMethod(declaration))
@@ -5139,6 +5153,8 @@ namespace ts {
                     case SyntaxKind.ArrowFunction:
                     case SyntaxKind.TypeAliasDeclaration:
                     case SyntaxKind.JSDocTemplateTag:
+                    case SyntaxKind.JSDocTypedefTag:
+                    case SyntaxKind.JSDocCallbackTag:
                     case SyntaxKind.MappedType:
                     case SyntaxKind.ConditionalType:
                         const outerTypeParameters = getOuterTypeParameters(node, includeThisTypes);
@@ -5168,9 +5184,11 @@ namespace ts {
         function getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): TypeParameter[] {
             let result: TypeParameter[];
             for (const node of symbol.declarations) {
-                if (node.kind === SyntaxKind.InterfaceDeclaration || node.kind === SyntaxKind.ClassDeclaration ||
-                    node.kind === SyntaxKind.ClassExpression || node.kind === SyntaxKind.TypeAliasDeclaration || node.kind === SyntaxKind.JSDocTypedefTag) {
-                    const declaration = <InterfaceDeclaration | TypeAliasDeclaration | JSDocTypedefTag>node;
+                if (node.kind === SyntaxKind.InterfaceDeclaration ||
+                    node.kind === SyntaxKind.ClassDeclaration ||
+                    node.kind === SyntaxKind.ClassExpression ||
+                    isTypeAlias(node)) {
+                    const declaration = <InterfaceDeclaration | TypeAliasDeclaration | JSDocTypedefTag | JSDocCallbackTag>node;
                     const typeParameters = getEffectiveTypeParameterDeclarations(declaration);
                     if (typeParameters) {
                         result = appendTypeParameters(result, typeParameters);
@@ -5466,9 +5484,9 @@ namespace ts {
                     return unknownType;
                 }
 
-                const declaration = <JSDocTypedefTag | TypeAliasDeclaration>find(symbol.declarations, d =>
-                    d.kind === SyntaxKind.JSDocTypedefTag || d.kind === SyntaxKind.TypeAliasDeclaration);
-                const typeNode = declaration.kind === SyntaxKind.JSDocTypedefTag ? declaration.typeExpression : declaration.type;
+                const declaration = <JSDocTypedefTag | JSDocCallbackTag | TypeAliasDeclaration>find(symbol.declarations, d =>
+                    isJSDocTypeAlias(d) || d.kind === SyntaxKind.TypeAliasDeclaration);
+                const typeNode = isJSDocTypeAlias(declaration) ? declaration.typeExpression : declaration.type;
                 // If typeNode is missing, we will error in checkJSDocTypedefTag.
                 let type = typeNode ? getTypeFromTypeNode(typeNode) : unknownType;
 
@@ -6036,7 +6054,7 @@ namespace ts {
         }
 
         function createSignature(
-            declaration: SignatureDeclaration,
+            declaration: SignatureDeclaration | JSDocSignature,
             typeParameters: TypeParameter[],
             thisParameter: Symbol | undefined,
             parameters: Symbol[],
@@ -7046,8 +7064,8 @@ namespace ts {
             return symbol && withAugmentations ? getMergedSymbol(symbol) : symbol;
         }
 
-        function isOptionalParameter(node: ParameterDeclaration) {
-            if (hasQuestionToken(node) || isJSDocOptionalParameter(node)) {
+        function isOptionalParameter(node: ParameterDeclaration | JSDocParameterTag) {
+            if (hasQuestionToken(node) || isOptionalJSDocParameterTag(node) || isJSDocOptionalParameter(node)) {
                 return true;
             }
 
@@ -7065,6 +7083,14 @@ namespace ts {
             }
 
             return false;
+        }
+
+        function isOptionalJSDocParameterTag(node: Node): node is JSDocParameterTag {
+            if (!isJSDocParameterTag(node)) {
+                return false;
+            }
+            const { isBracketed, typeExpression } = node;
+            return isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
         }
 
         function createTypePredicateFromTypePredicateNode(node: TypePredicateNode): IdentifierTypePredicate | ThisTypePredicate {
@@ -7142,7 +7168,7 @@ namespace ts {
             return typeArguments;
         }
 
-        function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
+        function getSignatureFromDeclaration(declaration: SignatureDeclaration | JSDocSignature): Signature {
             const links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
                 const parameters: Symbol[] = [];
@@ -7165,6 +7191,7 @@ namespace ts {
                     const param = declaration.parameters[i];
 
                     let paramSymbol = param.symbol;
+                    const type = isJSDocParameterTag(param) ? (param.typeExpression && param.typeExpression.type) : param.type;
                     // Include parameter symbol instead of property symbol in the signature
                     if (paramSymbol && !!(paramSymbol.flags & SymbolFlags.Property) && !isBindingPattern(param.name)) {
                         const resolvedSymbol = resolveName(param, paramSymbol.escapedName, SymbolFlags.Value, undefined, undefined, /*isUse*/ false);
@@ -7178,13 +7205,14 @@ namespace ts {
                         parameters.push(paramSymbol);
                     }
 
-                    if (param.type && param.type.kind === SyntaxKind.LiteralType) {
+                    if (type && type.kind === SyntaxKind.LiteralType) {
                         hasLiteralTypes = true;
                     }
 
                     // Record a new minimum argument count if this is not an optional parameter
-                    const isOptionalParameter = param.initializer || param.questionToken || param.dotDotDotToken ||
-                        iife && parameters.length > iife.arguments.length && !param.type ||
+                    const isOptionalParameter = isOptionalJSDocParameterTag(param) ||
+                        param.initializer || param.questionToken || param.dotDotDotToken ||
+                        iife && parameters.length > iife.arguments.length && !type ||
                         isUntypedSignatureInJSFile ||
                         isJSDocOptionalParameter(param);
                     if (!isOptionalParameter) {
@@ -7220,8 +7248,8 @@ namespace ts {
          * OR
          * 2. It has at least one parameter, and the last parameter has a matching `@param` with a type that starts with `...`
          */
-        function maybeAddJsSyntheticRestParameter(declaration: SignatureDeclaration, parameters: Symbol[]): boolean {
-            if (!containsArgumentsReference(declaration)) {
+        function maybeAddJsSyntheticRestParameter(declaration: SignatureDeclaration | JSDocSignature, parameters: Symbol[]): boolean {
+            if (isJSDocSignature(declaration) || !containsArgumentsReference(declaration)) {
                 return false;
             }
             const lastParam = lastOrUndefined(declaration.parameters);
@@ -7240,9 +7268,9 @@ namespace ts {
             return true;
         }
 
-        function getSignatureReturnTypeFromDeclaration(declaration: SignatureDeclaration, isJSConstructSignature: boolean, classType: Type) {
+        function getSignatureReturnTypeFromDeclaration(declaration: SignatureDeclaration | JSDocSignature, isJSConstructSignature: boolean, classType: Type) {
             if (isJSConstructSignature) {
-                return getTypeFromTypeNode(declaration.parameters[0].type);
+                return getTypeFromTypeNode((declaration.parameters[0] as ParameterDeclaration).type);
             }
             else if (classType) {
                 return classType;
@@ -7656,11 +7684,11 @@ namespace ts {
                     const missingAugmentsTag = isJs && node.parent.kind !== SyntaxKind.JSDocAugmentsTag;
                     const diag = minTypeArgumentCount === typeParameters.length
                         ? missingAugmentsTag
-                            ? Diagnostics.Expected_0_type_arguments_provide_these_with_an_extends_tag
-                            : Diagnostics.Generic_type_0_requires_1_type_argument_s
-                        : missingAugmentsTag
-                            ? Diagnostics.Expected_0_1_type_arguments_provide_these_with_an_extends_tag
-                            : Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments;
+                        ? Diagnostics.Expected_0_type_arguments_provide_these_with_an_extends_tag
+                        : Diagnostics.Generic_type_0_requires_1_type_argument_s
+                    : missingAugmentsTag
+                        ? Diagnostics.Expected_0_1_type_arguments_provide_these_with_an_extends_tag
+                        : Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments;
                     const typeStr = typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType);
                     error(node, diag, typeStr, minTypeArgumentCount, typeParameters.length);
                     if (!isJs) {
@@ -7675,7 +7703,7 @@ namespace ts {
                 return createTypeReference(<GenericType>type, typeArguments);
             }
             return checkNoTypeArguments(node, symbol) ? type : unknownType;
-            }
+        }
 
         function getTypeAliasInstantiation(symbol: Symbol, typeArguments: Type[]): Type {
             const type = getDeclaredTypeOfSymbol(symbol);
@@ -7702,18 +7730,18 @@ namespace ts {
                 const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
                 if (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length) {
                     error(node,
-                        minTypeArgumentCount === typeParameters.length
-                            ? Diagnostics.Generic_type_0_requires_1_type_argument_s
-                            : Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments,
-                        symbolToString(symbol),
-                        minTypeArgumentCount,
-                        typeParameters.length);
+                          minTypeArgumentCount === typeParameters.length
+                          ? Diagnostics.Generic_type_0_requires_1_type_argument_s
+                          : Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments,
+                          symbolToString(symbol),
+                          minTypeArgumentCount,
+                          typeParameters.length);
                     return unknownType;
                 }
                 return getTypeAliasInstantiation(symbol, typeArguments);
             }
             return checkNoTypeArguments(node, symbol) ? type : unknownType;
-            }
+        }
 
         function getTypeReferenceName(node: TypeReferenceType): EntityNameOrEntityNameExpression | undefined {
             switch (node.kind) {
@@ -7828,7 +7856,7 @@ namespace ts {
 
         function getConstrainedTypeVariable(typeVariable: TypeVariable, node: Node) {
             let constraints: Type[];
-            while (node && !isStatement(node)) {
+            while (node && !isStatement(node) && node.kind !== SyntaxKind.JSDocComment) {
                 const parent = node.parent;
                 if (parent.kind === SyntaxKind.ConditionalType && node === (<ConditionalTypeNode>parent).trueType) {
                     const constraint = getImpliedConstraint(typeVariable, (<ConditionalTypeNode>parent).checkType, (<ConditionalTypeNode>parent).extendsType);
@@ -8396,8 +8424,9 @@ namespace ts {
         function getTypeFromUnionTypeNode(node: UnionTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
+                const aliasSymbol = getAliasSymbolForTypeNode(node);
                 links.resolvedType = getUnionType(map(node.types, getTypeFromTypeNode), UnionReduction.Literal,
-                    getAliasSymbolForTypeNode(node), getAliasTypeArgumentsForTypeNode(node));
+                    aliasSymbol, getTypeArgumentsForAliasSymbol(aliasSymbol));
             }
             return links.resolvedType;
         }
@@ -8506,8 +8535,9 @@ namespace ts {
         function getTypeFromIntersectionTypeNode(node: IntersectionTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
+                const aliasSymbol = getAliasSymbolForTypeNode(node);
                 links.resolvedType = getIntersectionType(map(node.types, getTypeFromTypeNode),
-                    getAliasSymbolForTypeNode(node), getAliasTypeArgumentsForTypeNode(node));
+                    aliasSymbol, getTypeArgumentsForAliasSymbol(aliasSymbol));
             }
             return links.resolvedType;
         }
@@ -8816,7 +8846,7 @@ namespace ts {
                 const type = <MappedType>createObjectType(ObjectFlags.Mapped, node.symbol);
                 type.declaration = node;
                 type.aliasSymbol = getAliasSymbolForTypeNode(node);
-                type.aliasTypeArguments = getAliasTypeArgumentsForTypeNode(node);
+                type.aliasTypeArguments = getTypeArgumentsForAliasSymbol(type.aliasSymbol);
                 links.resolvedType = type;
                 // Eagerly resolve the constraint type which forces an error if the constraint type circularly
                 // references itself through one or more type aliases.
@@ -8924,7 +8954,8 @@ namespace ts {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 const checkType = getTypeFromTypeNode(node.checkType);
-                const aliasTypeArguments = getAliasTypeArgumentsForTypeNode(node);
+                const aliasSymbol = getAliasSymbolForTypeNode(node);
+                const aliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
                 const allOuterTypeParameters = getOuterTypeParameters(node, /*includeThisTypes*/ true);
                 const outerTypeParameters = aliasTypeArguments ? allOuterTypeParameters : filter(allOuterTypeParameters, tp => isPossiblyReferencedInConditionalType(tp, node));
                 const root: ConditionalRoot = {
@@ -8937,7 +8968,7 @@ namespace ts {
                     inferTypeParameters: getInferTypeParameters(node),
                     outerTypeParameters,
                     instantiations: undefined,
-                    aliasSymbol: getAliasSymbolForTypeNode(node),
+                    aliasSymbol,
                     aliasTypeArguments
                 };
                 links.resolvedType = getConditionalType(root, /*mapper*/ undefined);
@@ -9041,7 +9072,7 @@ namespace ts {
                 else {
                     let type = createObjectType(ObjectFlags.Anonymous, node.symbol);
                     type.aliasSymbol = aliasSymbol;
-                    type.aliasTypeArguments = getAliasTypeArgumentsForTypeNode(node);
+                    type.aliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
                     if (isJSDocTypeLiteral(node) && node.isArrayType) {
                         type = createArrayType(type);
                     }
@@ -9052,11 +9083,10 @@ namespace ts {
         }
 
         function getAliasSymbolForTypeNode(node: TypeNode) {
-            return (node.parent.kind === SyntaxKind.TypeAliasDeclaration || node.parent.kind === SyntaxKind.JSDocTypedefTag) ? getSymbolOfNode(node.parent) : undefined;
+            return isTypeAlias(node.parent) ? getSymbolOfNode(node.parent) : undefined;
         }
 
-        function getAliasTypeArgumentsForTypeNode(node: TypeNode) {
-            const symbol = getAliasSymbolForTypeNode(node);
+        function getTypeArgumentsForAliasSymbol(symbol: Symbol) {
             return symbol ? getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol) : undefined;
         }
 
@@ -9314,6 +9344,7 @@ namespace ts {
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.JSDocFunctionType:
+                case SyntaxKind.JSDocSignature:
                     return getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);
                 case SyntaxKind.TypeOperator:
                     return getTypeFromTypeOperatorNode(<TypeOperatorNode>node);
@@ -9991,8 +10022,8 @@ namespace ts {
         function compareTypePredicateRelatedTo(
             source: TypePredicate,
             target: TypePredicate,
-            sourceDeclaration: SignatureDeclaration,
-            targetDeclaration: SignatureDeclaration,
+            sourceDeclaration: SignatureDeclaration | JSDocSignature,
+            targetDeclaration: SignatureDeclaration | JSDocSignature,
             reportErrors: boolean,
             errorReporter: ErrorReporter,
             compareTypes: (s: Type, t: Type, reportErrors?: boolean) => Ternary): Ternary {
@@ -21761,8 +21792,9 @@ namespace ts {
                 switch (d.kind) {
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.TypeAliasDeclaration:
-                    // A jsdoc typedef is, by definition, a type alias
+                    // A jsdoc typedef and callback are, by definition, type aliases
                     case SyntaxKind.JSDocTypedefTag:
+                    case SyntaxKind.JSDocCallbackTag:
                         return DeclarationSpaces.ExportType;
                     case SyntaxKind.ModuleDeclaration:
                         return isAmbientModule(d as ModuleDeclaration) || getModuleInstanceState(d as ModuleDeclaration) !== ModuleInstanceState.NonInstantiated
@@ -22297,7 +22329,7 @@ namespace ts {
             }
         }
 
-        function checkJSDocTypedefTag(node: JSDocTypedefTag) {
+        function checkJSDocTypeAliasTag(node: JSDocTypedefTag | JSDocCallbackTag) {
             if (!node.typeExpression) {
                 // If the node had `@property` tags, `typeExpression` would have been set to the first property tag.
                 error(node.name, Diagnostics.JSDoc_typedef_tag_should_either_have_a_type_annotation_or_be_followed_by_property_or_member_tags);
@@ -25212,7 +25244,8 @@ namespace ts {
                 case SyntaxKind.JSDocAugmentsTag:
                     return checkJSDocAugmentsTag(node as JSDocAugmentsTag);
                 case SyntaxKind.JSDocTypedefTag:
-                    return checkJSDocTypedefTag(node as JSDocTypedefTag);
+                case SyntaxKind.JSDocCallbackTag:
+                    return checkJSDocTypeAliasTag(node as JSDocTypedefTag);
                 case SyntaxKind.JSDocParameterTag:
                     return checkJSDocParameterTag(node as JSDocParameterTag);
                 case SyntaxKind.JSDocFunctionType:
@@ -26423,9 +26456,10 @@ namespace ts {
             return false;
         }
 
-        function isRequiredInitializedParameter(parameter: ParameterDeclaration) {
+        function isRequiredInitializedParameter(parameter: ParameterDeclaration | JSDocParameterTag) {
             return strictNullChecks &&
                 !isOptionalParameter(parameter) &&
+                !isJSDocParameterTag(parameter) &&
                 parameter.initializer &&
                 !hasModifier(parameter, ModifierFlags.ParameterPropertyModifier);
         }

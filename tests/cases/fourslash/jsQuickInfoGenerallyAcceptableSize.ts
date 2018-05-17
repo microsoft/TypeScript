@@ -6,7 +6,7 @@
 ////// Data table
 /////**
 ////    @typedef DataTableThing
-////    @type {Thing}
+////    @type {Object}
 ////    @property {function(TagCollection, Location, string, string, Infotable):void} AddDataTableEntries - (arg0: tags, arg1: location, arg2: source, arg3: sourceType, arg4: values) Add multiple data table entries.
 ////    @property {function(TagCollection, Location, string, string, Infotable):string} AddDataTableEntry - (arg0: tags, arg1: location, arg2: source, arg3: sourceType, arg4: values) Add a new data table entry.
 ////    @property {function(TagCollection, Location, string, string, Infotable):void} AddOrUpdateDataTableEntries - (arg0: tags, arg1: location, arg2: source, arg3: sourceType, arg4: values) Add or update multiple data table entries.
@@ -206,7 +206,7 @@
 ////  * Another thing
 ////  * @type {SomeCallback}
 ////  */
-////var another/*2*/Thing = function(a, b) {}
+////var anotherThing/*2*/ = function(a, b) {}
 
 verify.quickInfoAt("1", "var doSomething: (dataTable: DataTableThing) => void", "Do something");
-verify.quickInfoAt("2", "var anotherThing: any", "Another thing"); // TODO: #23947
+verify.quickInfoAt("2", "var anotherThing: SomeCallback", "Another thing");
