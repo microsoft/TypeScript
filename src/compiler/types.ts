@@ -3692,6 +3692,8 @@ namespace ts {
         ContainsAnyFunctionType = 1 << 26,  // Type is or contains the anyFunctionType
         NonPrimitive            = 1 << 27,  // intrinsic object type
         /* @internal */
+        UnionOfUnitTypes        = 1 << 28,  // Type is union of unit types
+        /* @internal */
         GenericMappedType       = 1 << 29,  // Flag used by maybeTypeOfKind
 
         /* @internal */
@@ -3728,6 +3730,8 @@ namespace ts {
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | StructuredOrInstantiable | StringLike | NumberLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
         NotUnionOrUnit = Any | ESSymbol | Object | NonPrimitive,
+        /* @internal */
+        NotUnit = Any | String | Number | Boolean | Enum | ESSymbol | Void | Never | StructuredOrInstantiable,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
         /* @internal */
