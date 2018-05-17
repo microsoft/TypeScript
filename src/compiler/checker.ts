@@ -850,6 +850,7 @@ namespace ts {
         }
 
         function getExcludedSymbolFlags(flags: SymbolFlags): SymbolFlags {
+            if (flags & SymbolFlags.JSContainer) return 0; // TODO: This is a big hammer, but equivalent to what we had before
             let result: SymbolFlags = 0;
             if (flags & SymbolFlags.BlockScopedVariable) result |= SymbolFlags.BlockScopedVariableExcludes;
             if (flags & SymbolFlags.FunctionScopedVariable) result |= SymbolFlags.FunctionScopedVariableExcludes;
@@ -15732,15 +15733,15 @@ namespace ts {
             let hasComputedNumberProperty = false;
 
             // TODO: All these checks know the possible kinds and could call the predicate directly instead of checking for function/class/{}
-            // if (isInJSFile && (getAssignedJavascriptInitializer(node) || node.parent && getDeclaredJavascriptInitializer(node.parent))) {
-            //     // an empty JS object literal whose 'alias symbol' has exports is a JS namespace
-            //     const aliasSymbol = getMergedSymbol(node.parent.symbol);
-            //     if (aliasSymbol && aliasSymbol.exports && aliasSymbol.exports.size) {
-            //         propertiesTable = aliasSymbol.exports;
-            //         aliasSymbol.exports.forEach(symbol => propertiesArray.push(getMergedSymbol(symbol)));
-            //         return createObjectLiteralType();
-            //     }
-            // }
+            if (isInJSFile && (getAssignedJavascriptInitializer(node) || node.parent && getDeclaredJavascriptInitializer(node.parent))) {
+                // an empty JS object literal whose 'alias symbol' has exports is a JS namespace
+                const aliasSymbol = getMergedSymbol(node.parent.symbol);
+                if (aliasSymbol && aliasSymbol.exports && aliasSymbol.exports.size) {
+                    propertiesTable = aliasSymbol.exports;
+                    aliasSymbol.exports.forEach(symbol => propertiesArray.push(getMergedSymbol(symbol)));
+                    return createObjectLiteralType();
+                }
+            }
             propertiesTable = createSymbolTable();
 
             let offset = 0;

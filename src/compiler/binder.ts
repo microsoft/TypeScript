@@ -2458,7 +2458,7 @@ namespace ts {
             if (!isPrototypeProperty && (!symbol || !(symbol.flags & SymbolFlags.Namespace)) && isToplevelNamespaceableInitializer) {
                 // make symbols or add declarations for intermediate containers
                 const flags = SymbolFlags.Module | SymbolFlags.JSContainer;
-                const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.JSContainer;
+                const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.JSContainer; // TODO: This may not make much difference since it's only for in-file merges
                 symbol = forEachIdentifierInEntityName(propertyAccess.expression, (id, original) => {
                     if (original) {
                         // Note: add declaration to original symbol, not the special-syntax's symbol, so that namespaces work for type lookup
@@ -2466,12 +2466,16 @@ namespace ts {
                         return original;
                     }
                     else {
+                        // TODO: I'm not updating symbol anymore, but I should just be able to pass it through as 'parent' now
                         return declareSymbol(symbol ? symbol.exports : container.locals, symbol, id, flags, excludeFlags);
                     }
                 });
             }
-            // TODO: This should probably be an assert
-            if (!symbol || !isJavascriptContainer(symbol.valueDeclaration)) {
+            // TODO: This should probably be an assert, and I don't *think* it makes sense to restrict the container kind, but I am not sure
+            // function isJavascriptContainer(node: Node) {
+                // return isClassDeclaration(node) || isFunctionDeclaration(node) || !!getDeclaredJavascriptInitializer(node) || !!getAssignedJavascriptInitializer(node)
+            // }
+            if (!symbol) { // || !isJavascriptContainer(symbol.valueDeclaration)) {
                 return;
             }
 
@@ -2487,11 +2491,6 @@ namespace ts {
             const symbolExcludes = (isMethod ? SymbolFlags.MethodExcludes : SymbolFlags.PropertyExcludes) & ~jsContainerFlag;
             declareSymbol(symbolTable, symbol, propertyAccess, symbolFlags, symbolExcludes);
         }
-
-        function isJavascriptContainer(node: Node) {
-            return isClassDeclaration(node) || isFunctionDeclaration(node) || !!getDeclaredJavascriptInitializer(node) || !!getAssignedJavascriptInitializer(node)
-        }
-
 
         function getParentOfBinaryExpression(expr: BinaryExpression) {
             while (isBinaryExpression(expr.parent)) {
