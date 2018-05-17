@@ -6472,17 +6472,16 @@ namespace ts {
                 }
 
                 function isNextNonwhitespaceTokenEndOfFile(): boolean {
-                    // We must use infinte lookahead, as there could be any number of newlines :(
+                    // We must use infinite lookahead, as there could be any number of newlines :(
                     while(true) {
                         nextJSDocToken();
                         if (token() === SyntaxKind.EndOfFileToken) {
                             return true;
                         }
                         if (!(token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia)) {
-                            break;
+                            return false;
                         }
                     }
-                    return false;
                 }
 
                 function skipWhitespace(): void {
