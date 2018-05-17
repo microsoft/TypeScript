@@ -15813,8 +15813,9 @@ namespace ts {
             let hasComputedStringProperty = false;
             let hasComputedNumberProperty = false;
 
-            // TODO: All these checks know the possible kinds and could call the predicate directly instead of checking for function/class/{}
-            if (isInJSFile && (getAssignedJavascriptInitializer(node) || node.parent && getDeclaredJavascriptInitializer(node.parent))) {
+            // TODO: All these checks know the possible kinds and could call the correct predicate directly instead of going through getHorrible...
+            // (also they should have a cheaper/better way to know whether they are a defaulted initializer)
+            if (isInJSFile && getHorribleJavascriptInitializer(node)) {
                 // an empty JS object literal whose 'alias symbol' has exports is a JS namespace
                 const aliasSymbol = getMergedSymbol(node.parent.symbol);
                 if (aliasSymbol && aliasSymbol.exports && aliasSymbol.exports.size) {

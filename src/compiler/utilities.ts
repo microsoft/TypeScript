@@ -1531,6 +1531,12 @@ namespace ts {
         return getSourceTextOfNodeFromSourceFile(sourceFile, str).charCodeAt(0) === CharacterCodes.doubleQuote;
     }
 
+    export function getHorribleJavascriptInitializer(node: Node) {
+        return getAssignedJavascriptInitializer(node) ||
+            node.parent && (getDeclaredJavascriptInitializer(node.parent) || getAssignedJavascriptInitializer(node.parent)) ||
+            node.parent.parent && getDeclaredJavascriptInitializer(node.parent.parent);
+    }
+
     /** Get the declaration initializer, when the initializer is container-like (See getJavascriptInitializer) */
     export function getDeclaredJavascriptInitializer(node: Node) {
         if (node && isVariableDeclaration(node) && node.initializer) {

@@ -2538,8 +2538,7 @@ namespace ts {
             else {
                 const bindingName = node.name ? node.name.escapedText : InternalSymbolName.Class;
                 const symbol = bindAnonymousDeclaration(node, SymbolFlags.Class, bindingName);
-                if (isInJavaScriptFile(node) && (getAssignedJavascriptInitializer(node) || node.parent && getDeclaredJavascriptInitializer(node.parent))) {
-                    // Will be looked up later (probably) (who knows)
+                if (isInJavaScriptFile(node) && getHorribleJavascriptInitializer(node)) {
                     symbol.flags |= SymbolFlags.JSAlias;
                 }
                 // Add name of class expression into the map for semantic classifier
@@ -2658,8 +2657,7 @@ namespace ts {
             checkStrictModeFunctionName(node);
             const bindingName = node.name ? node.name.escapedText : InternalSymbolName.Function;
             const symbol = bindAnonymousDeclaration(node, SymbolFlags.Function, bindingName);
-            if (isInJavaScriptFile(node) && (getAssignedJavascriptInitializer(node) || node.parent && getDeclaredJavascriptInitializer(node.parent))) {
-                // Will be looked up later (probably) (who knows)
+            if (isInJavaScriptFile(node) && getHorribleJavascriptInitializer(node)) {
                 symbol.flags |= SymbolFlags.JSAlias;
             }
             return symbol;
