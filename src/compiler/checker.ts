@@ -15366,10 +15366,11 @@ namespace ts {
                 links.resolvedSignatures = createMap();
             }
             const cacheKey = "" + getTypeId(valueType);
-            if (links.resolvedSignatures.get(cacheKey) && links.resolvedSignatures.get(cacheKey) !== resolvingSignaturesArray) {
-                signatures = links.resolvedSignatures.get(cacheKey);
+            const cachedResolved = links.resolvedSignatures.get(cacheKey);
+            if (cachedResolved && cachedResolved !== resolvingSignaturesArray) {
+                signatures = cachedResolved;
             }
-            else if (!links.resolvedSignatures.get(cacheKey)) {
+            else if (!cachedResolved) {
                 links.resolvedSignatures.set(cacheKey, resolvingSignaturesArray);
                 links.resolvedSignatures.set(cacheKey, signatures = instantiateJsxSignatures(context, signatures));
             }
