@@ -505,7 +505,6 @@ namespace ts.formatting {
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.VariableStatement:
-                case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.ExportAssignment:
                 case SyntaxKind.ReturnStatement:
                 case SyntaxKind.ConditionalExpression:
@@ -528,7 +527,6 @@ namespace ts.formatting {
                 case SyntaxKind.NamedImports:
                 case SyntaxKind.ExportSpecifier:
                 case SyntaxKind.ImportSpecifier:
-                case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.PropertyDeclaration:
                     return true;
             }
@@ -541,7 +539,6 @@ namespace ts.formatting {
             switch (parent.kind) {
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.PropertyAssignment:
-                case SyntaxKind.ObjectLiteralExpression:
                     if (!settings.indentMultiLineObjectLiteralBeginningOnBlankLine && sourceFile && childKind === SyntaxKind.ObjectLiteralExpression) {
                         return rangeIsOnOneLine(sourceFile, child);
                     }
