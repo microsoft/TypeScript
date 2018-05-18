@@ -1403,7 +1403,7 @@ namespace Harness {
             const dupeCase = ts.createMap<number>();
             for (const inputFile of inputFiles.filter(f => f.content !== undefined)) {
                 // Filter down to the errors in the file
-                const fileErrors = diagnostics.filter(e => {
+                const fileErrors = diagnostics.filter((e): e is ts.DiagnosticWithLocation => {
                     const errFn = e.file;
                     return errFn && errFn.fileName === inputFile.unitName;
                 });

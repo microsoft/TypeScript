@@ -89,7 +89,7 @@ namespace ts {
         function eachDiagnostic({ program, sourceFile }: CodeFixAllContext, errorCodes: number[], cb: (diag: DiagnosticWithLocation) => void): void {
             for (const diag of program.getSemanticDiagnostics(sourceFile).concat(computeSuggestionDiagnostics(sourceFile, program))) {
                 if (contains(errorCodes, diag.code)) {
-                    cb(diag as Diagnostic & { file: SourceFile });
+                    cb(diag as DiagnosticWithLocation);
                 }
             }
         }

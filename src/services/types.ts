@@ -245,7 +245,8 @@ namespace ts {
         cleanupSemanticCache(): void;
 
         getSyntacticDiagnostics(fileName: string): DiagnosticWithLocation[];
-        getSemanticDiagnostics(fileName: string): DiagnosticWithLocation[];
+        /** The first time this is called, it will return global diagnostics (no location). */
+        getSemanticDiagnostics(fileName: string): Diagnostic[];
         getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[];
 
         // TODO: Rename this to getProgramDiagnostics to better indicate that these are any

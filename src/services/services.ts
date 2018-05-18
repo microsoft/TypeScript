@@ -1367,7 +1367,7 @@ namespace ts {
          * getSemanticDiagnostics return array of Diagnostics. If '-d' is not enabled, only report semantic errors
          * If '-d' enabled, report both semantic and emitter errors
          */
-        function getSemanticDiagnostics(fileName: string): DiagnosticWithLocation[] {
+        function getSemanticDiagnostics(fileName: string): Diagnostic[] {
             synchronizeHostData();
 
             const targetSourceFile = getValidSourceFile(fileName);

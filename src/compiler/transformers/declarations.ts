@@ -6,7 +6,7 @@ namespace ts {
         }
         const compilerOptions = host.getCompilerOptions();
         const result = transformNodes(resolver, host, compilerOptions, file ? [file] : filter(host.getSourceFiles(), isSourceFileNotJavaScript), [transformDeclarations], /*allowDtsFiles*/ false);
-        return result.diagnostics as DiagnosticWithLocation[]; // TODO: GH#18217
+        return result.diagnostics;
     }
 
     const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals | TypeFormatFlags.WriteClassExpressionAsTypeLiteral | NodeBuilderFlags.UseTypeOfFunction | NodeBuilderFlags.UseStructuralFallback | NodeBuilderFlags.AllowEmptyTuple;
