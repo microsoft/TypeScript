@@ -44,13 +44,6 @@ namespace ts {
                 assert.isEmpty(OrganizeImports.coalesceImports([]));
             });
 
-            it("Sort specifiers", () => {
-                const sortedImports = parseImports(`import { default as m, a as n, b, y, z as o } from "lib";`);
-                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
-                const expectedCoalescedImports = parseImports(`import { a as n, b, default as m, y, z as o } from "lib";`);
-                assertListEqual(actualCoalescedImports, expectedCoalescedImports);
-            });
-
             it("Sort specifiers - case-insensitive", () => {
                 const sortedImports = parseImports(`import { default as M, a as n, B, y, Z as O } from "lib";`);
                 const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
@@ -184,13 +177,6 @@ namespace ts {
         describe("Coalesce exports", () => {
             it("No exports", () => {
                 assert.isEmpty(OrganizeImports.coalesceExports([]));
-            });
-
-            it("Sort specifiers", () => {
-                const sortedExports = parseExports(`export { default as m, a as n, b, y, z as o } from "lib";`);
-                const actualCoalescedExports = OrganizeImports.coalesceExports(sortedExports);
-                const expectedCoalescedExports = parseExports(`export { a as n, b, default as m, y, z as o } from "lib";`);
-                assertListEqual(actualCoalescedExports, expectedCoalescedExports);
             });
 
             it("Sort specifiers - case-insensitive", () => {
