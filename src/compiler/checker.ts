@@ -5005,11 +5005,18 @@ namespace ts {
                     // but it needs to be a lot more complete
                     // (probably I need a "cloneSymbolTable" or "cloneToSymbol")
                     // TODO: Why not intersections? Oh...it has the wrong semantics for merges/conflicts.
-                    if (aliasSymbol && aliasSymbol.exports && aliasSymbol.exports.size) {
+                    if (aliasSymbol && (aliasSymbol.exports && aliasSymbol.exports.size || aliasSymbol.members && aliasSymbol.members.size)) {
                         symbol = cloneSymbol(symbol);
                         links = symbol as TransientSymbol; // need to overwrite links because we overwrote symbol as well -- and for transient symbol, there are their own symbolLinks
-                        symbol.exports = symbol.exports || createSymbolTable();
-                        mergeSymbolTable(symbol.exports, aliasSymbol.exports);
+                        if (aliasSymbol.exports && aliasSymbol.exports.size) {
+                            symbol.exports = symbol.exports || createSymbolTable();
+                            mergeSymbolTable(symbol.exports, aliasSymbol.exports);
+                        }
+                        // TODO: Instead of this, I bet you could just treat prototype assignment as normal in the binder now
+                        if (aliasSymbol.members && aliasSymbol.members.size) {
+                            symbol.members = symbol.members || createSymbolTable();
+                            mergeSymbolTable(symbol.members, aliasSymbol.members);
+                        }
                     }
                 }
                 if (symbol.flags & SymbolFlags.Module && isShorthandAmbientModuleSymbol(symbol)) {

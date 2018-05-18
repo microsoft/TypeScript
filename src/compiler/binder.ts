@@ -2466,7 +2466,6 @@ namespace ts {
                         return original;
                     }
                     else {
-                        // TODO: I'm not updating symbol anymore, but I should just be able to pass it through as 'parent' now
                         return declareSymbol(parent ? parent.exports : container.locals, parent, id, flags, excludeFlags);
                     }
                 });
@@ -2480,6 +2479,7 @@ namespace ts {
             }
 
             // Set up the members collection if it doesn't exist already
+            // TODO: I can probably get rid of the special-case for prototype properties now and just set *exports* on prototype. Not sure about that though.
             const symbolTable = isPrototypeProperty ?
                 (symbol.members || (symbol.members = createSymbolTable())) :
                 (symbol.exports || (symbol.exports = createSymbolTable()));
