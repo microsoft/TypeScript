@@ -21,8 +21,8 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     }
 
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
-        const { file, startPosition } = context;
-        if (!getConvertibleFieldAtPosition(file, startPosition)) return undefined;
+        const { file } = context;
+        if (!getConvertibleFieldAtPosition(context, file)) return undefined;
 
         return [{
             name: actionName,
@@ -37,9 +37,9 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     }
 
     function getEditsForAction(context: RefactorContext, _actionName: string): RefactorEditInfo | undefined {
-        const { file, startPosition } = context;
+        const { file } = context;
 
-        const fieldInfo = getConvertibleFieldAtPosition(file, startPosition);
+        const fieldInfo = getConvertibleFieldAtPosition(context, file);
         if (!fieldInfo) return undefined;
 
         const isJS = isSourceFileJavaScript(file);
@@ -117,12 +117,15 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         return name.charCodeAt(0) === CharacterCodes._;
     }
 
-    function getConvertibleFieldAtPosition(file: SourceFile, startPosition: number): Info | undefined {
+    function getConvertibleFieldAtPosition(context: RefactorContext, file: SourceFile): Info | undefined {
+        const { startPosition, endPosition } = context;
+
         const node = getTokenAtPosition(file, startPosition, /*includeJsDocComment*/ false);
         const declaration = findAncestor(node.parent, isAcceptedDeclaration);
         // make sure declaration have AccessibilityModifier or Static Modifier or Readonly Modifier
         const meaning = ModifierFlags.AccessibilityModifier | ModifierFlags.Static | ModifierFlags.Readonly;
-        if (!declaration || !isConvertableName(declaration.name) || (getModifierFlags(declaration) | meaning) !== meaning) return undefined;
+        if (!declaration || !rangeOverlapsWithStartEnd(declaration.name, startPosition, endPosition)
+            || !isConvertableName(declaration.name) || (getModifierFlags(declaration) | meaning) !== meaning) return undefined;
 
         const name = declaration.name.text;
         const startWithUnderscore = startsWithUnderscore(name);
