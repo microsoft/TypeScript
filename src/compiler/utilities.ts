@@ -1544,7 +1544,7 @@ namespace ts {
         }
         if (isBinaryExpression(node.parent) &&
             node.parent.operatorToken.kind === SyntaxKind.BarBarToken &&
-            (isAssignment(node.parent) || isVariableDeclaration(node.parent)) &&
+            (isAssignment(node.parent.parent) || isVariableDeclaration(node.parent.parent)) &&
             isSameDefaultedName(node.parent.parent, node.parent.left)) {
             // TODO: I thought binary expressions were sometimes declarations, but it appears (for now) to be the property access on the lhs
             // TODO: That means this function is extremely tangled and duplicative

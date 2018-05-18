@@ -19036,9 +19036,6 @@ namespace ts {
             if(isInJavaScriptFile(node)) {
                 const decl = getDeclarationOfJavascriptInitializer(node);
                 if (decl) {
-                    // let propertiesTable: SymbolTable;
-                    // let propertiesArray: Symbol[] = [];
-                    // an empty JS object literal whose 'alias symbol' has exports is a JS namespace
                     const aliasSymbol = getMergedSymbol(decl.symbol);
                     if (aliasSymbol && aliasSymbol.exports && aliasSymbol.exports.size) {
                         jsAssignmentType = createAnonymousType(aliasSymbol, aliasSymbol.exports, emptyArray, emptyArray, jsObjectLiteralIndexInfo, undefined);

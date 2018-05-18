@@ -2305,7 +2305,7 @@ namespace ts {
             // expression is the declaration
             setCommonJsModuleIndicator(node);
             const lhs = node.left as PropertyAccessEntityNameExpression;
-            const symbol = forEachIdentifierInEntityName(lhs.expression, (id, original) => {
+            const symbol = forEachIdentifierInEntityName(lhs.expression, /*parent*/ undefined, (id, original) => {
                 if (original) {
                     addDeclarationToSymbol(original, id, SymbolFlags.Module | SymbolFlags.JSContainer);
                 }
@@ -2459,7 +2459,7 @@ namespace ts {
                 // make symbols or add declarations for intermediate containers
                 const flags = SymbolFlags.Module | SymbolFlags.JSContainer;
                 const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.JSContainer; // TODO: This may not make much difference since it's only for in-file merges
-                symbol = forEachIdentifierInEntityName(propertyAccess.expression, (id, original) => {
+                symbol = forEachIdentifierInEntityName(propertyAccess.expression, symbol, (id, original, parent) => {
                     if (original) {
                         // Note: add declaration to original symbol, not the special-syntax's symbol, so that namespaces work for type lookup
                         addDeclarationToSymbol(original, id, flags);
@@ -2467,7 +2467,7 @@ namespace ts {
                     }
                     else {
                         // TODO: I'm not updating symbol anymore, but I should just be able to pass it through as 'parent' now
-                        return declareSymbol(symbol ? symbol.exports : container.locals, symbol, id, flags, excludeFlags);
+                        return declareSymbol(parent ? parent.exports : container.locals, parent, id, flags, excludeFlags);
                     }
                 });
             }
@@ -2509,17 +2509,17 @@ namespace ts {
             }
         }
 
-        function forEachIdentifierInEntityName(e: EntityNameExpression, action: (e: Identifier, symbol: Symbol) => Symbol): Symbol {
+        function forEachIdentifierInEntityName(e: EntityNameExpression, parent: Symbol, action: (e: Identifier, symbol: Symbol, parent: Symbol) => Symbol): Symbol {
             if (isExportsOrModuleExportsOrAlias(file, e)) {
                 return file.symbol;
             }
             else if (isIdentifier(e)) {
-                return action(e, lookupSymbolForPropertyAccess(e));
+                return action(e, lookupSymbolForPropertyAccess(e), parent);
             }
             else {
-                const s = forEachIdentifierInEntityName(e.expression, action);
+                const s = forEachIdentifierInEntityName(e.expression, parent, action);
                 Debug.assert(!!s && !!s.exports);
-                return action(e.name, s.exports.get(e.name.escapedText));
+                return action(e.name, s.exports.get(e.name.escapedText), s);
             }
         }
 
