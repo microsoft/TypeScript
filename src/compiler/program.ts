@@ -1407,11 +1407,18 @@ namespace ts {
                 const checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
-                let diagnostics = bindDiagnostics.concat(checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile);
-                if (isCheckJs) {
-                    diagnostics = concatenate(diagnostics, sourceFile.jsDocDiagnostics);
+
+                let diagnostics: Diagnostic[] | undefined;
+                for (const diags of [bindDiagnostics, checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile, isCheckJs ? sourceFile.jsDocDiagnostics : undefined]) {
+                    if (diags) {
+                        for (const diag of diags) {
+                            if (shouldReportDiagnostic(diag)) {
+                                diagnostics = append(diagnostics, diag);
+                            }
+                        }
+                    }
                 }
-                return filter<Diagnostic>(diagnostics, shouldReportDiagnostic);
+                return diagnostics;
             });
         }
 
