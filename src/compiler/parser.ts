@@ -912,6 +912,7 @@ namespace ts {
 
             sourceFile.text = sourceText;
             sourceFile.bindDiagnostics = [];
+            sourceFile.bindSuggestionDiagnostics = undefined;
             sourceFile.languageVersion = languageVersion;
             sourceFile.fileName = normalizePath(fileName);
             sourceFile.languageVariant = getLanguageVariant(scriptKind);

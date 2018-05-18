@@ -2238,7 +2238,8 @@
     },
     "Left side of comma operator is unused and has no side effects.": {
         "category": "Error",
-        "code": 2695
+        "code": 2695,
+        "reportsUnnecessary": true
     },
     "The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?": {
         "category": "Error",
@@ -3668,7 +3669,8 @@
     },
     "Unreachable code detected.": {
         "category": "Error",
-        "code": 7027
+        "code": 7027,
+        "reportsUnnecessary": true
     },
     "Unused label.": {
         "category": "Error",

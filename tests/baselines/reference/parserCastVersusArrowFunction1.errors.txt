@@ -7,14 +7,13 @@ tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunctio
 tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(8,13): error TS2304: Cannot find name 'a'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(9,10): error TS2304: Cannot find name 'T'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(9,13): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(9,13): error TS2695: Left side of comma operator is unused and has no side effects.
 tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(9,16): error TS2304: Cannot find name 'b'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(10,10): error TS2304: Cannot find name 'T'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(10,13): error TS2304: Cannot find name 'a'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(10,20): error TS2304: Cannot find name 'b'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts (14 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts (13 errors) ====
     var v = <T>() => 1;
     var v = <T>a;
              ~
@@ -42,8 +41,6 @@ tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunctio
 !!! error TS2304: Cannot find name 'T'.
                 ~
 !!! error TS2304: Cannot find name 'a'.
-                ~
-!!! error TS2695: Left side of comma operator is unused and has no side effects.
                    ~
 !!! error TS2304: Cannot find name 'b'.
     var v = <T>(a = 1, b = 2);

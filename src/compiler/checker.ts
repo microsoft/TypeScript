@@ -20315,8 +20315,8 @@ namespace ts {
                     checkAssignmentOperator(rightType);
                     return getRegularTypeOfObjectLiteral(rightType);
                 case SyntaxKind.CommaToken:
-                    if (!compilerOptions.allowUnreachableCode && isSideEffectFree(left) && !isEvalNode(right)) {
-                        error(left, Diagnostics.Left_side_of_comma_operator_is_unused_and_has_no_side_effects);
+                    if (isSideEffectFree(left) && !isEvalNode(right) && !compilerOptions.allowUnreachableCode) {
+                        errorOrSuggestion(unreachableCodeIsError(compilerOptions), left, Diagnostics.Left_side_of_comma_operator_is_unused_and_has_no_side_effects);
                     }
                     return rightType;
             }

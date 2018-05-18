@@ -1991,6 +1991,14 @@ namespace ts {
         return moduleResolution;
     }
 
+    export function unreachableCodeIsError(options: CompilerOptions): boolean {
+        return options.allowUnreachableCode === false;
+    }
+
+    export function unusedLabelIsError(options: CompilerOptions): boolean {
+        return options.allowUnusedLabels === false;
+    }
+
     export function getAreDeclarationMapsEnabled(options: CompilerOptions) {
         return !!(options.declaration && options.declarationMap);
     }

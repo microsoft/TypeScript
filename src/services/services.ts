@@ -548,6 +548,7 @@ namespace ts {
         public syntacticDiagnostics: Diagnostic[];
         public parseDiagnostics: Diagnostic[];
         public bindDiagnostics: Diagnostic[];
+        public bindSuggestionDiagnostics?: Diagnostic[];
 
         public isDeclarationFile: boolean;
         public isDefaultLib: boolean;

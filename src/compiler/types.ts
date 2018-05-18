@@ -2603,6 +2603,7 @@ namespace ts {
 
         // File-level diagnostics reported by the binder.
         /* @internal */ bindDiagnostics: Diagnostic[];
+        /* @internal */ bindSuggestionDiagnostics?: Diagnostic[];
 
         // File-level JSDoc diagnostics reported by the JSDoc parser
         /* @internal */ jsDocDiagnostics?: Diagnostic[];
