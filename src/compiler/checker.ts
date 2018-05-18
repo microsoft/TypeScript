@@ -5165,7 +5165,7 @@ namespace ts {
         // Appends the type parameters given by a list of declarations to a set of type parameters and returns the resulting set.
         // The function allocates a new array if the input type parameter set is undefined, but otherwise it modifies the set
         // in-place and returns the same array.
-        function appendTypeParameters(typeParameters: TypeParameter[], declarations: ReadonlyArray<TypeParameterDeclaration>): TypeParameter[] {
+        function appendTypeParameters(typeParameters: TypeParameter[] | undefined, declarations: ReadonlyArray<TypeParameterDeclaration>): TypeParameter[] {
             for (const declaration of declarations) {
                 typeParameters = appendIfUnique(typeParameters, getDeclaredTypeOfTypeParameter(getSymbolOfNode(declaration)));
             }
@@ -5206,7 +5206,7 @@ namespace ts {
                         else if (node.kind === SyntaxKind.ConditionalType) {
                             return concatenate(outerTypeParameters, getInferTypeParameters(<ConditionalTypeNode>node));
                         }
-                        const outerAndOwnTypeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(<DeclarationWithTypeParameters>node) || emptyArray);
+                        const outerAndOwnTypeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(<DeclarationWithTypeParameters>node));
                         const thisType = includeThisTypes &&
                             (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression || node.kind === SyntaxKind.InterfaceDeclaration) &&
                             getDeclaredTypeOfClassOrInterface(getSymbolOfNode(node)).thisType;
@@ -5224,17 +5224,14 @@ namespace ts {
         // The local type parameters are the combined set of type parameters from all declarations of the class,
         // interface, or type alias.
         function getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): TypeParameter[] {
-            let result: TypeParameter[];
+            let result: TypeParameter[] | undefined;
             for (const node of symbol.declarations) {
                 if (node.kind === SyntaxKind.InterfaceDeclaration ||
                     node.kind === SyntaxKind.ClassDeclaration ||
                     node.kind === SyntaxKind.ClassExpression ||
                     isTypeAlias(node)) {
                     const declaration = <InterfaceDeclaration | TypeAliasDeclaration | JSDocTypedefTag | JSDocCallbackTag>node;
-                    const typeParameters = getEffectiveTypeParameterDeclarations(declaration);
-                    if (typeParameters) {
-                        result = appendTypeParameters(result, typeParameters);
-                    }
+                    result = appendTypeParameters(result, getEffectiveTypeParameterDeclarations(declaration));
                 }
             }
             return result;
@@ -5744,7 +5741,7 @@ namespace ts {
             const typeParameters = getEffectiveTypeParameterDeclarations(node);
             return (node.kind === SyntaxKind.Constructor || (returnType && isThislessType(returnType))) &&
                 node.parameters.every(isThislessVariableLikeDeclaration) &&
-                (!typeParameters || typeParameters.every(isThislessTypeParameter));
+                typeParameters.every(isThislessTypeParameter);
         }
 
         /**
@@ -7071,11 +7068,11 @@ namespace ts {
 
         // Return list of type parameters with duplicates removed (duplicate identifier errors are generated in the actual
         // type checking functions).
-        function getTypeParametersFromDeclaration(declaration: DeclarationWithTypeParameters): TypeParameter[] {
-            let result: TypeParameter[];
-            forEach(getEffectiveTypeParameterDeclarations(declaration), node => {
+        function getTypeParametersFromDeclaration(declaration: DeclarationWithTypeParameters): TypeParameter[] | undefined {
+            let result: TypeParameter[] | undefined;
+            for (const node of getEffectiveTypeParameterDeclarations(declaration)) {
                 result = appendIfUnique(result, getDeclaredTypeOfTypeParameter(node.symbol));
-            });
+            }
             return result;
         }
 
@@ -22679,7 +22676,7 @@ namespace ts {
             // Only report errors on the last declaration for the type parameter container;
             // this ensures that all uses have been accounted for.
             const typeParameters = getEffectiveTypeParameterDeclarations(node);
-            if (!(node.flags & NodeFlags.Ambient) && typeParameters && last(getSymbolOfNode(node)!.declarations) === node) {
+            if (!(node.flags & NodeFlags.Ambient) && last(getSymbolOfNode(node)!.declarations) === node) {
                 for (const typeParameter of typeParameters) {
                     if (!(getMergedSymbol(typeParameter.symbol).isReferenced & SymbolFlags.TypeParameter) && !isIdentifierThatStartsWithUnderScore(typeParameter.name)) {
                         addDiagnostic(UnusedKind.Parameter, createDiagnosticForNode(typeParameter.name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(typeParameter.symbol)));
@@ -24047,7 +24044,7 @@ namespace ts {
         /**
          * Check each type parameter and check that type parameters have no duplicate type parameter declarations
          */
-        function checkTypeParameters(typeParameterDeclarations: ReadonlyArray<TypeParameterDeclaration>) {
+        function checkTypeParameters(typeParameterDeclarations: ReadonlyArray<TypeParameterDeclaration> | undefined) {
             if (typeParameterDeclarations) {
                 let seenDefault = false;
                 for (let i = 0; i < typeParameterDeclarations.length; i++) {
@@ -24103,7 +24100,7 @@ namespace ts {
             for (const declaration of declarations) {
                 // If this declaration has too few or too many type parameters, we report an error
                 const sourceParameters = getEffectiveTypeParameterDeclarations(declaration);
-                const numTypeParameters = length(sourceParameters);
+                const numTypeParameters = sourceParameters.length;
                 if (numTypeParameters < minTypeArgumentCount || numTypeParameters > maxTypeArgumentCount) {
                     return false;
                 }
@@ -27371,7 +27368,7 @@ namespace ts {
             }
         }
 
-        function checkGrammarTypeParameterList(typeParameters: NodeArray<TypeParameterDeclaration>, file: SourceFile): boolean {
+        function checkGrammarTypeParameterList(typeParameters: NodeArray<TypeParameterDeclaration> | undefined, file: SourceFile): boolean {
             if (typeParameters && typeParameters.length === 0) {
                 const start = typeParameters.pos - "<".length;
                 const end = skipTrivia(file.text, typeParameters.end) + ">".length;
@@ -27427,7 +27424,7 @@ namespace ts {
 
         function checkGrammarClassLikeDeclaration(node: ClassLikeDeclaration): boolean {
             const file = getSourceFileOfNode(node);
-            return checkGrammarClassDeclarationHeritageClauses(node) || checkGrammarTypeParameterList(getEffectiveTypeParameterDeclarations(node), file);
+            return checkGrammarClassDeclarationHeritageClauses(node) || checkGrammarTypeParameterList(node.typeParameters, file);
         }
 
         function checkGrammarArrowFunction(node: Node, file: SourceFile): boolean {
@@ -28199,8 +28196,8 @@ namespace ts {
 
         function checkGrammarConstructorTypeParameters(node: ConstructorDeclaration) {
             const typeParameters = getEffectiveTypeParameterDeclarations(node);
-            if (typeParameters) {
-                const { pos, end } = isNodeArray(typeParameters) ? typeParameters : first(typeParameters);
+            if (isNodeArray(typeParameters)) {
+                const { pos, end } = typeParameters;
                 return grammarErrorAtPos(node, pos, end - pos, Diagnostics.Type_parameters_cannot_appear_on_a_constructor_declaration);
             }
         }
