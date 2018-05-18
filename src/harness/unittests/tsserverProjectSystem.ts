@@ -8385,7 +8385,7 @@ new C();`
     });
 
     describe("tsserverProjectSystem getEditsForFileRename", () => {
-        it("works for host implementing 'resolveModuleNames' and 'resolveModuleNameWithFailedLookupLocation'", () => {
+        it("works for host implementing 'resolveModuleNames' and 'getResolvedModuleWithFailedLookupLocationsFromCache'", () => {
             const userTs: File = {
                 path: "/user.ts",
                 content: 'import { x } from "./old";',
