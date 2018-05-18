@@ -2172,8 +2172,7 @@ namespace ts {
                 return;
             }
             const host = getJSDocHost(node);
-            if (host &&
-                isExpressionStatement(host) &&
+            if (isExpressionStatement(host) &&
                 isBinaryExpression(host.expression) &&
                 getSpecialPropertyAssignmentKind(host.expression) === SpecialPropertyAssignmentKind.PrototypeProperty) {
                 const symbol = getSymbolOfNode(host.expression.left);

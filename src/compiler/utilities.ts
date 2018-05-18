@@ -1927,11 +1927,7 @@ namespace ts {
     }
 
     export function getJSDocHost(node: Node): HasJSDoc {
-        const comment = findAncestor(node.parent,
-            node => !(isJSDocNode(node) || node.flags & NodeFlags.JSDoc) ? "quit" : node.kind === SyntaxKind.JSDocComment);
-        if (comment) {
-            return (comment as JSDoc).parent;
-        }
+        return Debug.assertDefined(findAncestor(node.parent, isJSDoc)).parent;
     }
 
     export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { parent: JSDocTemplateTag }): TypeParameterDeclaration | undefined {
