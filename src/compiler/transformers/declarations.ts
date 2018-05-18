@@ -11,11 +11,12 @@ namespace ts {
 
     const declarationEmitNodeBuilderFlags =
         NodeBuilderFlags.MultilineObjectLiterals |
-        TypeFormatFlags.WriteClassExpressionAsTypeLiteral |
+        NodeBuilderFlags.WriteClassExpressionAsTypeLiteral |
         NodeBuilderFlags.UseTypeOfFunction |
         NodeBuilderFlags.UseStructuralFallback |
         NodeBuilderFlags.AllowEmptyTuple |
-        NodeBuilderFlags.GenerateNamesForShadowedTypeParams;
+        NodeBuilderFlags.GenerateNamesForShadowedTypeParams |
+        NodeBuilderFlags.NoTruncation;
 
     /**
      * Transforms a ts file into a .d.ts file

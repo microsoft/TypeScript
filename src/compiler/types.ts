@@ -5283,6 +5283,8 @@ namespace ts {
         moduleResolverHost?: ModuleNameResolverHost;
         /* @internal */
         trackReferencedAmbientModule?(decl: ModuleDeclaration): void;
+        /* @internal */
+        maximumApproximateLength?: number;
     }
 
     export interface TextSpan {

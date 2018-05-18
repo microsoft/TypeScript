@@ -2975,7 +2975,11 @@ namespace ts {
         }
 
         function typeToString(type: Type, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.AllowUniqueESSymbolType, writer: EmitTextWriter = createTextWriter("")): string {
-            const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors, writer);
+            if (writer.maximumApproximateLength === undefined) {
+                writer.maximumApproximateLength = 100;
+            }
+            const noTruncation = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation;
+            const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | (noTruncation ? NodeBuilderFlags.NoTruncation : 0), writer);
             Debug.assert(typeNode !== undefined, "should always get typenode");
             const options = { removeComments: true };
             const printer = createPrinter(options);
@@ -2983,7 +2987,7 @@ namespace ts {
             printer.writeNode(EmitHint.Unspecified, typeNode, /*sourceFile*/ sourceFile, writer);
             const result = writer.getText();
 
-            const maxLength = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation ? undefined : 100;
+            const maxLength = noTruncation ? undefined : writer.maximumApproximateLength;
             if (maxLength && result && result.length >= maxLength) {
                 return result.substr(0, maxLength - "...".length) + "...";
             }
@@ -3061,7 +3065,8 @@ namespace ts {
                     tracker: tracker && tracker.trackSymbol ? tracker : { trackSymbol: noop },
                     encounteredError: false,
                     visitedSymbols: undefined,
-                    inferTypeParameters: undefined
+                    inferTypeParameters: undefined,
+                    approximateLength: 0
                 };
             }
 
@@ -3077,64 +3082,81 @@ namespace ts {
                     return undefined;
                 }
 
-                if (type.flags & TypeFlags.Any) {
+                if (type.flags & TypeFlags.Any || (!(context.flags & NodeBuilderFlags.NoTruncation) && context.approximateLength > (context.tracker.maximumApproximateLength || 2000))) {
+                    context.approximateLength += 3;
                     return createKeywordTypeNode(SyntaxKind.AnyKeyword);
                 }
                 if (type.flags & TypeFlags.String) {
+                    context.approximateLength += 6;
                     return createKeywordTypeNode(SyntaxKind.StringKeyword);
                 }
                 if (type.flags & TypeFlags.Number) {
+                    context.approximateLength += 6;
                     return createKeywordTypeNode(SyntaxKind.NumberKeyword);
                 }
                 if (type.flags & TypeFlags.Boolean) {
+                    context.approximateLength += 7;
                     return createKeywordTypeNode(SyntaxKind.BooleanKeyword);
                 }
                 if (type.flags & TypeFlags.EnumLiteral && !(type.flags & TypeFlags.Union)) {
                     const parentSymbol = getParentOfSymbol(type.symbol);
                     const parentName = symbolToName(parentSymbol, context, SymbolFlags.Type, /*expectsIdentifier*/ false);
                     const enumLiteralName = getDeclaredTypeOfSymbol(parentSymbol) === type ? parentName : createQualifiedName(parentName, symbolName(type.symbol));
+                    context.approximateLength += symbolName(type.symbol).length;
                     return createTypeReferenceNode(enumLiteralName, /*typeArguments*/ undefined);
                 }
                 if (type.flags & TypeFlags.EnumLike) {
                     const name = symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ false);
+                    context.approximateLength += symbolName(type.symbol).length;
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
-                if (type.flags & (TypeFlags.StringLiteral)) {
+                if (type.flags & TypeFlags.StringLiteral) {
+                    context.approximateLength += ((<StringLiteralType>type).value.length + 2);
                     return createLiteralTypeNode(setEmitFlags(createLiteral((<StringLiteralType>type).value), EmitFlags.NoAsciiEscaping));
                 }
-                if (type.flags & (TypeFlags.NumberLiteral)) {
+                if (type.flags & TypeFlags.NumberLiteral) {
+                    context.approximateLength += (("" + (<NumberLiteralType>type).value).length);
                     return createLiteralTypeNode((createLiteral((<NumberLiteralType>type).value)));
                 }
                 if (type.flags & TypeFlags.BooleanLiteral) {
+                    context.approximateLength += (<IntrinsicType>type).intrinsicName.length;
                     return (<IntrinsicType>type).intrinsicName === "true" ? createTrue() : createFalse();
                 }
                 if (type.flags & TypeFlags.UniqueESSymbol) {
                     if (!(context.flags & NodeBuilderFlags.AllowUniqueESSymbolType)) {
                         if (isValueSymbolAccessible(type.symbol, context.enclosingDeclaration)) {
+                            context.approximateLength += (symbolName(type.symbol).length + 6);
                             return symbolToTypeNode(type.symbol, context, SymbolFlags.Value);
                         }
                         if (context.tracker.reportInaccessibleUniqueSymbolError) {
                             context.tracker.reportInaccessibleUniqueSymbolError();
                         }
                     }
+                    context.approximateLength += 13;
                     return createTypeOperatorNode(SyntaxKind.UniqueKeyword, createKeywordTypeNode(SyntaxKind.SymbolKeyword));
                 }
                 if (type.flags & TypeFlags.Void) {
+                    context.approximateLength += 4;
                     return createKeywordTypeNode(SyntaxKind.VoidKeyword);
                 }
                 if (type.flags & TypeFlags.Undefined) {
+                    context.approximateLength += 9;
                     return createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
                 }
                 if (type.flags & TypeFlags.Null) {
+                    context.approximateLength += 4;
                     return createKeywordTypeNode(SyntaxKind.NullKeyword);
                 }
                 if (type.flags & TypeFlags.Never) {
+                    context.approximateLength += 5;
                     return createKeywordTypeNode(SyntaxKind.NeverKeyword);
                 }
                 if (type.flags & TypeFlags.ESSymbol) {
+                    context.approximateLength += 6;
                     return createKeywordTypeNode(SyntaxKind.SymbolKeyword);
                 }
                 if (type.flags & TypeFlags.NonPrimitive) {
+                    context.approximateLength += 6;
                     return createKeywordTypeNode(SyntaxKind.ObjectKeyword);
                 }
                 if (type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType) {
@@ -3146,6 +3168,7 @@ namespace ts {
                             context.tracker.reportInaccessibleThisError();
                         }
                     }
+                    context.approximateLength += 4;
                     return createThis();
                 }
 
@@ -3157,6 +3180,7 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.TypeParameter || objectFlags & ObjectFlags.ClassOrInterface) {
                     if (type.flags & TypeFlags.TypeParameter && contains(context.inferTypeParameters, type)) {
+                        context.approximateLength += (symbolName(type.symbol).length + 6);
                         return createInferTypeNode(typeParameterToDeclarationWithConstraint(type as TypeParameter, context, /*constraintNode*/ undefined));
                     }
                     if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams &&
@@ -3165,15 +3189,19 @@ namespace ts {
                         isTypeParameterDeclaration(type.symbol.declarations[0]) &&
                         typeParameterShadowsNameInScope(type, context) &&
                         !isTypeSymbolAccessible(type.symbol, context.enclosingDeclaration)) {
-                        return createTypeReferenceNode(getGeneratedNameForNode((type.symbol.declarations[0] as TypeParameterDeclaration).name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes), /*typeArguments*/ undefined);
+                        const name = (type.symbol.declarations[0] as TypeParameterDeclaration).name;
+                        context.approximateLength += idText(name).length;
+                        return createTypeReferenceNode(getGeneratedNameForNode(name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes), /*typeArguments*/ undefined);
                     }
                     const name = type.symbol ? symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ false) : createIdentifier("?");
                     // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
+                    context.approximateLength += idText(getFirstIdentifier(name)).length;
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
                 if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
                     const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
                     if (isReservedMemberName(type.aliasSymbol.escapedName) && !(type.aliasSymbol.flags & SymbolFlags.Class)) return createTypeReferenceNode(createIdentifier(""), typeArgumentNodes);
+                    context.approximateLength += symbolName(type.aliasSymbol).length;
                     return symbolToTypeNode(type.aliasSymbol, context, SymbolFlags.Type, typeArgumentNodes);
                 }
                 if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
@@ -3181,6 +3209,7 @@ namespace ts {
                     const typeNodes = mapToTypeNodes(types, context);
                     if (typeNodes && typeNodes.length > 0) {
                         const unionOrIntersectionTypeNode = createUnionOrIntersectionTypeNode(type.flags & TypeFlags.Union ? SyntaxKind.UnionType : SyntaxKind.IntersectionType, typeNodes);
+                        context.approximateLength += (3 * (types.length - 1));
                         return unionOrIntersectionTypeNode;
                     }
                     else {
@@ -3197,12 +3226,14 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.Index) {
                     const indexedType = (<IndexType>type).type;
+                    context.approximateLength += 6;
                     const indexTypeNode = typeToTypeNodeHelper(indexedType, context);
                     return createTypeOperatorNode(indexTypeNode);
                 }
                 if (type.flags & TypeFlags.IndexedAccess) {
                     const objectTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).objectType, context);
                     const indexTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).indexType, context);
+                    context.approximateLength += 2;
                     return createIndexedAccessTypeNode(objectTypeNode, indexTypeNode);
                 }
                 if (type.flags & TypeFlags.Conditional) {
@@ -3213,6 +3244,7 @@ namespace ts {
                     context.inferTypeParameters = saveInferTypeParameters;
                     const trueTypeNode = typeToTypeNodeHelper(getTrueTypeFromConditionalType(<ConditionalType>type), context);
                     const falseTypeNode = typeToTypeNodeHelper(getFalseTypeFromConditionalType(<ConditionalType>type), context);
+                    context.approximateLength += 15;
                     return createConditionalTypeNode(checkTypeNode, extendsTypeNode, trueTypeNode, falseTypeNode);
                 }
                 if (type.flags & TypeFlags.Substitution) {
@@ -3237,6 +3269,7 @@ namespace ts {
                     const typeParameterNode = typeParameterToDeclarationWithConstraint(getTypeParameterFromMappedType(type), context, appropriateConstraintTypeNode);
                     const templateTypeNode = typeToTypeNodeHelper(getTemplateTypeFromMappedType(type), context);
                     const mappedTypeNode = createMappedTypeNode(readonlyToken, typeParameterNode, questionToken, templateTypeNode);
+                    context.approximateLength += 10;
                     return setEmitFlags(mappedTypeNode, EmitFlags.SingleLine);
                 }
 
@@ -3249,12 +3282,14 @@ namespace ts {
                         if (isJavaScriptConstructor(symbol.valueDeclaration)) {
                             // Instance and static types share the same symbol; only add 'typeof' for the static side.
                             const isInstanceType = type === getInferredClassType(symbol) ? SymbolFlags.Type : SymbolFlags.Value;
+                            context.approximateLength += symbolName(symbol).length;
                             return symbolToTypeNode(symbol, context, isInstanceType);
                         }
                         // Always use 'typeof T' for type of class, enum, and module objects
                         else if (symbol.flags & SymbolFlags.Class && !getBaseTypeVariableOfClass(symbol) && !(symbol.valueDeclaration.kind === SyntaxKind.ClassExpression && context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral) ||
                             symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule) ||
                             shouldWriteTypeOfFunctionSymbol()) {
+                            context.approximateLength += (symbolName(symbol).length + 7);
                             return symbolToTypeNode(symbol, context, SymbolFlags.Value);
                         }
                         else if (context.visitedSymbols && context.visitedSymbols.has(id)) {
@@ -3262,9 +3297,11 @@ namespace ts {
                             const typeAlias = getTypeAliasForTypeLiteral(type);
                             if (typeAlias) {
                                 // The specified symbol flags need to be reinterpreted as type flags
+                                context.approximateLength += symbolName(typeAlias).length;
                                 return symbolToTypeNode(typeAlias, context, SymbolFlags.Type);
                             }
                             else {
+                                context.approximateLength += 3;
                                 return createKeywordTypeNode(SyntaxKind.AnyKeyword);
                             }
                         }
@@ -3309,6 +3346,7 @@ namespace ts {
                     const resolved = resolveStructuredTypeMembers(type);
                     if (!resolved.properties.length && !resolved.stringIndexInfo && !resolved.numberIndexInfo) {
                         if (!resolved.callSignatures.length && !resolved.constructSignatures.length) {
+                            context.approximateLength += 2;
                             return setEmitFlags(createTypeLiteralNode(/*members*/ undefined), EmitFlags.SingleLine);
                         }
 
@@ -3331,6 +3369,7 @@ namespace ts {
                     const members = createTypeNodesFromResolvedType(resolved);
                     context.flags = savedFlags;
                     const typeLiteralNode = createTypeLiteralNode(members);
+                    context.approximateLength += 2;
                     return setEmitFlags(typeLiteralNode, (context.flags & NodeBuilderFlags.MultilineObjectLiterals) ? 0 : EmitFlags.SingleLine);
                 }
 
@@ -3488,6 +3527,7 @@ namespace ts {
                             }
                         }
                         const propertyName = symbolToName(propertySymbol, context, SymbolFlags.Value, /*expectsIdentifier*/ true);
+                        context.approximateLength += (symbolName(propertySymbol).length + 1);
                         context.enclosingDeclaration = saveEnclosingDeclaration;
                         const optionalToken = propertySymbol.flags & SymbolFlags.Optional ? createToken(SyntaxKind.QuestionToken) : undefined;
                         if (propertySymbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(propertyType).length) {
@@ -3510,6 +3550,9 @@ namespace ts {
                             context.flags = savedFlags;
 
                             const modifiers = isReadonlySymbol(propertySymbol) ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined;
+                            if (modifiers) {
+                                context.approximateLength += 9;
+                            }
                             const propertySignature = createPropertySignature(
                                 modifiers,
                                 propertyName,
@@ -3557,6 +3600,7 @@ namespace ts {
                 if (!indexInfo.type && !(context.flags & NodeBuilderFlags.AllowEmptyIndexInfoType)) {
                     context.encounteredError = true;
                 }
+                context.approximateLength += (name.length + 4);
                 return createIndexSignature(
                     /*decorators*/ undefined,
                     indexInfo.isReadonly ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined,
@@ -3600,6 +3644,7 @@ namespace ts {
                 else if (!returnTypeNode) {
                     returnTypeNode = createKeywordTypeNode(SyntaxKind.AnyKeyword);
                 }
+                context.approximateLength += 3; // Usually a signature contributes a few more characters than this, but 3 is the minimum
                 return createSignatureDeclaration(kind, typeParameters, parameters, returnTypeNode, typeArguments);
             }
 
@@ -3660,6 +3705,7 @@ namespace ts {
                     questionToken,
                     parameterTypeNode,
                     /*initializer*/ undefined);
+                context.approximateLength += symbolName(parameterSymbol).length + 3;
                 return parameterNode;
 
                 function cloneBindingName(node: BindingName): BindingName {
@@ -3996,6 +4042,7 @@ namespace ts {
             encounteredError: boolean;
             visitedSymbols: Map<true> | undefined;
             inferTypeParameters: TypeParameter[] | undefined;
+            approximateLength: number;
         }
 
         function isDefaultBindingContext(location: Node) {
