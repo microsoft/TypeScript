@@ -164,10 +164,11 @@ namespace ts.codefix {
                 break;
 
             case SyntaxKind.TypeParameter:
-                const typeParameters = getEffectiveTypeParameterDeclarations(<DeclarationWithTypeParameters>parent.parent)!;
+                const typeParameters = getEffectiveTypeParameterDeclarations(<DeclarationWithTypeParameters>parent.parent);
                 if (typeParameters.length === 1) {
-                    const previousToken = getTokenAtPosition(sourceFile, typeParameters.pos - 1, /*includeJsDocComment*/ false);
-                    const nextToken = getTokenAtPosition(sourceFile, typeParameters.end, /*includeJsDocComment*/ false);
+                    const { pos, end } = cast(typeParameters, isNodeArray);
+                    const previousToken = getTokenAtPosition(sourceFile, pos - 1, /*includeJsDocComment*/ false);
+                    const nextToken = getTokenAtPosition(sourceFile, end, /*includeJsDocComment*/ false);
                     Debug.assert(previousToken.kind === SyntaxKind.LessThanToken);
                     Debug.assert(nextToken.kind === SyntaxKind.GreaterThanToken);
 

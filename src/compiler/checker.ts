@@ -3792,7 +3792,7 @@ namespace ts {
                     const lit = createLiteralTypeNode(createLiteral(rootName.substring(1, rootName.length - 1)));
                     if (!nonRootParts || isEntityName(nonRootParts)) {
                         if (nonRootParts) {
-                            const lastId = isIdentifier(nonRootParts) ? nonRootParts : (nonRootParts as QualifiedName).right;
+                            const lastId = isIdentifier(nonRootParts) ? nonRootParts : nonRootParts.right;
                             lastId.typeArguments = undefined;
                         }
                         return createImportTypeNode(lit, nonRootParts as EntityName, typeParameterNodes as ReadonlyArray<TypeNode>, isTypeOf);
@@ -5221,7 +5221,7 @@ namespace ts {
                         else if (node.kind === SyntaxKind.ConditionalType) {
                             return concatenate(outerTypeParameters, getInferTypeParameters(<ConditionalTypeNode>node));
                         }
-                        const outerAndOwnTypeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(<DeclarationWithTypeParameters>node) || emptyArray);
+                        const outerAndOwnTypeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(<DeclarationWithTypeParameters>node));
                         const thisType = includeThisTypes &&
                             (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression || node.kind === SyntaxKind.InterfaceDeclaration) &&
                             getDeclaredTypeOfClassOrInterface(getSymbolOfNode(node as ClassLikeDeclaration | InterfaceDeclaration)).thisType;
@@ -5246,10 +5246,7 @@ namespace ts {
                     node.kind === SyntaxKind.ClassExpression ||
                     isTypeAlias(node)) {
                     const declaration = <InterfaceDeclaration | TypeAliasDeclaration | JSDocTypedefTag | JSDocCallbackTag>node;
-                    const typeParameters = getEffectiveTypeParameterDeclarations(declaration);
-                    if (typeParameters) {
-                        result = appendTypeParameters(result, typeParameters);
-                    }
+                    result = appendTypeParameters(result, getEffectiveTypeParameterDeclarations(declaration));
                 }
             }
             return result;
@@ -5759,7 +5756,7 @@ namespace ts {
             const typeParameters = getEffectiveTypeParameterDeclarations(node);
             return (node.kind === SyntaxKind.Constructor || (!!returnType && isThislessType(returnType))) &&
                 node.parameters.every(isThislessVariableLikeDeclaration) &&
-                (!typeParameters || typeParameters.every(isThislessTypeParameter));
+                typeParameters.every(isThislessTypeParameter);
         }
 
         /**
@@ -7091,9 +7088,9 @@ namespace ts {
         // type checking functions).
         function getTypeParametersFromDeclaration(declaration: DeclarationWithTypeParameters): TypeParameter[] | undefined {
             let result: TypeParameter[] | undefined;
-            forEach(getEffectiveTypeParameterDeclarations(declaration), node => {
+            for (const node of getEffectiveTypeParameterDeclarations(declaration)) {
                 result = appendIfUnique(result, getDeclaredTypeOfTypeParameter(node.symbol));
-            });
+            }
             return result;
         }
 
@@ -22736,7 +22733,7 @@ namespace ts {
             // Only report errors on the last declaration for the type parameter container;
             // this ensures that all uses have been accounted for.
             const typeParameters = getEffectiveTypeParameterDeclarations(node);
-            if (!(node.flags & NodeFlags.Ambient) && typeParameters && last(getSymbolOfNode(node).declarations) === node) {
+            if (!(node.flags & NodeFlags.Ambient) && last(getSymbolOfNode(node).declarations) === node) {
                 for (const typeParameter of typeParameters) {
                     if (!(getMergedSymbol(typeParameter.symbol).isReferenced! & SymbolFlags.TypeParameter) && !isIdentifierThatStartsWithUnderScore(typeParameter.name)) {
                         addDiagnostic(UnusedKind.Parameter, createDiagnosticForNode(typeParameter.name, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolName(typeParameter.symbol)));
@@ -24163,13 +24160,13 @@ namespace ts {
             for (const declaration of declarations) {
                 // If this declaration has too few or too many type parameters, we report an error
                 const sourceParameters = getEffectiveTypeParameterDeclarations(declaration);
-                const numTypeParameters = length(sourceParameters);
+                const numTypeParameters = sourceParameters.length;
                 if (numTypeParameters < minTypeArgumentCount || numTypeParameters > maxTypeArgumentCount) {
                     return false;
                 }
 
                 for (let i = 0; i < numTypeParameters; i++) {
-                    const source = sourceParameters![i];
+                    const source = sourceParameters[i];
                     const target = targetParameters[i];
 
                     // If the type parameter node does not have the same as the resolved type
@@ -27489,7 +27486,7 @@ namespace ts {
 
         function checkGrammarClassLikeDeclaration(node: ClassLikeDeclaration): boolean {
             const file = getSourceFileOfNode(node);
-            return checkGrammarClassDeclarationHeritageClauses(node) || checkGrammarTypeParameterList(getEffectiveTypeParameterDeclarations(node), file);
+            return checkGrammarClassDeclarationHeritageClauses(node) || checkGrammarTypeParameterList(node.typeParameters, file);
         }
 
         function checkGrammarArrowFunction(node: Node, file: SourceFile): boolean {
@@ -28270,8 +28267,8 @@ namespace ts {
 
         function checkGrammarConstructorTypeParameters(node: ConstructorDeclaration) {
             const typeParameters = getEffectiveTypeParameterDeclarations(node);
-            if (typeParameters) {
-                const { pos, end } = isNodeArray(typeParameters) ? typeParameters : first(typeParameters);
+            if (isNodeArray(typeParameters)) {
+                const { pos, end } = typeParameters;
                 return grammarErrorAtPos(node, pos, end - pos, Diagnostics.Type_parameters_cannot_appear_on_a_constructor_declaration);
             }
         }

@@ -3114,9 +3114,9 @@ namespace ts {
      * Gets the effective type parameters. If the node was parsed in a
      * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
      */
-    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters) {
+    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration> {
         if (isJSDocSignature(node)) {
-            return undefined;
+            return emptyArray;
         }
         if (isJSDocTypeAlias(node)) {
             Debug.assert(node.parent.kind === SyntaxKind.JSDocComment);
@@ -3127,17 +3127,14 @@ namespace ts {
             templateTagNodes.hasTrailingComma = false;
             return templateTagNodes;
         }
-        return node.typeParameters || (isInJavaScriptFile(node) ? getJSDocTypeParameterDeclarations(node) : undefined);
+        return node.typeParameters || (isInJavaScriptFile(node) ? getJSDocTypeParameterDeclarations(node) : emptyArray);
     }
 
-    export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters): NodeArray<TypeParameterDeclaration> | undefined {
+    export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration> {
         const tags = filter(getJSDocTags(node), isJSDocTemplateTag);
-        for (const tag of tags) {
-            if (!(tag.parent.kind === SyntaxKind.JSDocComment && find(tag.parent.tags!, isJSDocTypeAlias))) { // TODO: GH#18217
-                // template tags are only available when a typedef isn't already using them
-                return tag.typeParameters;
-            }
-        }
+        // template tags are only available when a typedef isn't already using them
+        const tag = find(tags, tag => !(tag.parent.kind === SyntaxKind.JSDocComment && find(tag.parent.tags!, isJSDocTypeAlias))); // TODO: GH#18217
+        return (tag && tag.typeParameters) || emptyArray;
     }
 
     /**
