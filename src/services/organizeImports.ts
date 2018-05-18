@@ -17,27 +17,32 @@ namespace ts.OrganizeImports {
 
         const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext });
 
+        const coalesceAndOrganizeImports = (importGroup: ReadonlyArray<ImportDeclaration>) => coalesceImports(removeUnusedImports(importGroup, sourceFile, program));
+
         // All of the old ImportDeclarations in the file, in syntactic order.
         const topLevelImportDecls = sourceFile.statements.filter(isImportDeclaration);
-        organizeImportsWorker(topLevelImportDecls);
+        organizeImportsWorker(topLevelImportDecls, coalesceAndOrganizeImports);
 
         // All of the old ExportDeclarations in the file, in syntactic order.
         const topLevelExportDecls = sourceFile.statements.filter(isExportDeclaration);
-        organizeImportsWorker(topLevelExportDecls);
+        organizeImportsWorker(topLevelExportDecls, coalesceExports);
 
         for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
             const ambientModuleBody = getModuleBlock(ambientModule as ModuleDeclaration);
 
             const ambientModuleImportDecls = ambientModuleBody.statements.filter(isImportDeclaration);
-            organizeImportsWorker(ambientModuleImportDecls);
+            organizeImportsWorker(ambientModuleImportDecls, coalesceAndOrganizeImports);
 
             const ambientModuleExportDecls = ambientModuleBody.statements.filter(isExportDeclaration);
-            organizeImportsWorker(ambientModuleExportDecls);
+            organizeImportsWorker(ambientModuleExportDecls, coalesceExports);
         }
 
         return changeTracker.getChanges();
 
-        function organizeImportsWorker(oldImportDecls: ReadonlyArray<ImportDeclaration | ExportDeclaration>) {
+        function organizeImportsWorker<T extends ImportDeclaration | ExportDeclaration>(
+            oldImportDecls: ReadonlyArray<T>,
+            coalesce: (group: ReadonlyArray<T>) => ReadonlyArray<T>) {
+
             if (length(oldImportDecls) === 0) {
                 return;
             }
@@ -49,15 +54,11 @@ namespace ts.OrganizeImports {
             // but the consequences of being wrong are very minor.
             suppressLeadingTrivia(oldImportDecls[0]);
 
-            const areImports = isImportDeclaration(oldImportDecls[0]);
-
             const oldImportGroups = group(oldImportDecls, importDecl => getExternalModuleName(importDecl.moduleSpecifier));
             const sortedImportGroups = stableSort(oldImportGroups, (group1, group2) => compareModuleSpecifiers(group1[0].moduleSpecifier, group2[0].moduleSpecifier));
             const newImportDecls = flatMap(sortedImportGroups, importGroup =>
                 getExternalModuleName(importGroup[0].moduleSpecifier)
-                    ? areImports
-                        ? coalesceImports(removeUnusedImports(importGroup as ReadonlyArray<ImportDeclaration>, sourceFile, program))
-                        : coalesceExports(importGroup as ReadonlyArray<ExportDeclaration>)
+                    ? coalesce(importGroup)
                     : importGroup);
 
             // Delete or replace the first import.
