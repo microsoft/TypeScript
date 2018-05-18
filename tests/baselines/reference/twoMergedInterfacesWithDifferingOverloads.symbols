@@ -19,8 +19,8 @@ interface A {
     foo(x: Date): Date;
 >foo : Symbol(A.foo, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 2, 13), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 3, 27), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 7, 13))
 >x : Symbol(x, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 8, 8))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 interface B<T> {
@@ -45,12 +45,12 @@ interface B<T> {
 >foo : Symbol(B.foo, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 11, 16), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 12, 22), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 16, 16), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 17, 20))
 >x : Symbol(x, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 17, 8))
 >T : Symbol(T, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 11, 12), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 16, 12))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     foo(x: Date): string;
 >foo : Symbol(B.foo, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 11, 16), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 12, 22), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 16, 16), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 17, 20))
 >x : Symbol(x, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 18, 8))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 var b: B<boolean>;
@@ -100,7 +100,7 @@ interface C<T, U> {
 var c: C<boolean, Date>;
 >c : Symbol(c, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 34, 3))
 >C : Symbol(C, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 22, 20), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 28, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var r2 = c.foo(1, 2); // number
 >r2 : Symbol(r2, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 35, 3))
@@ -150,7 +150,7 @@ interface D<T, U> {
 var d: D<boolean, Date>;
 >d : Symbol(d, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 48, 3))
 >D : Symbol(D, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 35, 21), Decl(twoMergedInterfacesWithDifferingOverloads.ts, 42, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var r3 = d.foo(1, 1); // boolean, last definition wins
 >r3 : Symbol(r3, Decl(twoMergedInterfacesWithDifferingOverloads.ts, 49, 3))

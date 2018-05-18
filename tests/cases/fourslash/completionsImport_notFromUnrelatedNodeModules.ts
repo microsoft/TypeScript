@@ -8,4 +8,4 @@
 // @Filename: /src/b.ts
 ////fo/**/;
 
-verify.completions({ at: "", excludes: "foo", preferences: {  includeCompletionsForModuleExports: true } });
+verify.completions({ marker: "", excludes: "foo", preferences: {  includeCompletionsForModuleExports: true } });

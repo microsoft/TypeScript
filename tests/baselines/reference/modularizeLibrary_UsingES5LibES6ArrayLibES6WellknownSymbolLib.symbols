@@ -21,6 +21,6 @@ let a = ['c', 'd'];
 a[Symbol.isConcatSpreadable] = false;
 >a : Symbol(a, Decl(modularizeLibrary_UsingES5LibES6ArrayLibES6WellknownSymbolLib.ts, 5, 3))
 >Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 

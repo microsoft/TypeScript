@@ -8,7 +8,7 @@ namespace ts.refactor.extractSymbol {
      * Exported for tests.
      */
     export function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
-        const rangeToExtract = getRangeToExtract(context.file, { start: context.startPosition, length: getRefactorContextLength(context) });
+        const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context));
 
         const targetRange: TargetRange = rangeToExtract.targetRange;
         if (targetRange === undefined) {
@@ -87,7 +87,7 @@ namespace ts.refactor.extractSymbol {
 
     /* Exported for tests */
     export function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
-        const rangeToExtract = getRangeToExtract(context.file, { start: context.startPosition, length: getRefactorContextLength(context) });
+        const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context));
         const targetRange: TargetRange = rangeToExtract.targetRange;
 
         const parsedFunctionIndexMatch = /^function_scope_(\d+)$/.exec(actionName);
@@ -1464,8 +1464,8 @@ namespace ts.refactor.extractSymbol {
                 }
 
                 // Note that we add the current node's type parameters *after* updating the corresponding scope.
-                if (isDeclarationWithTypeParameters(curr) && curr.typeParameters) {
-                    for (const typeParameterDecl of curr.typeParameters) {
+                if (isDeclarationWithTypeParameters(curr)) {
+                    for (const typeParameterDecl of getEffectiveTypeParameterDeclarations(curr)) {
                         const typeParameter = checker.getTypeAtLocation(typeParameterDecl) as TypeParameter;
                         if (allTypeParameterUsages.has(typeParameter.id.toString())) {
                             seenTypeParameterUsages.set(typeParameter.id.toString(), typeParameter);
@@ -1534,20 +1534,8 @@ namespace ts.refactor.extractSymbol {
 
         return { target, usagesPerScope, functionErrorsPerScope, constantErrorsPerScope, exposedVariableDeclarations };
 
-        function hasTypeParameters(node: Node) {
-            return isDeclarationWithTypeParameters(node) &&
-                node.typeParameters !== undefined &&
-                node.typeParameters.length > 0;
-        }
-
         function isInGenericContext(node: Node) {
-            for (; node; node = node.parent) {
-                if (hasTypeParameters(node)) {
-                    return true;
-                }
-            }
-
-            return false;
+            return !!findAncestor(node, n => isDeclarationWithTypeParameters(n) && getEffectiveTypeParameterDeclarations(n).length !== 0);
         }
 
         function recordTypeParameterUsages(type: Type) {

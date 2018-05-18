@@ -33,12 +33,12 @@
 const kinds = ["import_as", "import_equals", "require"];
 verify.completions(
     {
-        at: [...kinds.map(k => `${k}0`), ...kinds.map(k => `${k}1`)],
-        are: "fourslash",
+        marker: [...kinds.map(k => `${k}0`), ...kinds.map(k => `${k}1`)],
+        exact: "fourslash",
         isNewIdentifierLocation: true,
     },
     {
-        at: kinds.map(k => `${k}2`),
-        are: ["e1", "f1", "f2", "tests", "folder"],
+        marker: kinds.map(k => `${k}2`),
+        exact: ["e1", "f1", "f2", "folder", "tests"],
         isNewIdentifierLocation: true,
     });

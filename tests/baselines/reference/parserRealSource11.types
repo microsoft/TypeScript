@@ -669,9 +669,9 @@ module TypeScript {
         }
 
         public netFreeUses(container: Symbol, freeUses: StringHashTable) {
->netFreeUses : (container: any, freeUses: any) => void
->container : any
->Symbol : No type information available!
+>netFreeUses : (container: Symbol, freeUses: any) => void
+>container : Symbol
+>Symbol : Symbol
 >freeUses : any
 >StringHashTable : No type information available!
         }
@@ -1123,8 +1123,8 @@ module TypeScript {
 >AST : AST
 
         public sym: Symbol = null;
->sym : any
->Symbol : No type information available!
+>sym : Symbol
+>Symbol : Symbol
 >null : null
 
         public cloId = -1;
@@ -3869,21 +3869,21 @@ module TypeScript {
 >isDynamicImport : boolean
 >(this.id.sym && !(<TypeSymbol>this.id.sym).onlyReferencedAsTypeRef) : boolean
 >this.id.sym && !(<TypeSymbol>this.id.sym).onlyReferencedAsTypeRef : boolean
->this.id.sym : any
+>this.id.sym : Symbol
 >this.id : Identifier
 >this : this
 >id : Identifier
->sym : any
+>sym : Symbol
 >!(<TypeSymbol>this.id.sym).onlyReferencedAsTypeRef : boolean
 >(<TypeSymbol>this.id.sym).onlyReferencedAsTypeRef : any
 >(<TypeSymbol>this.id.sym) : any
 ><TypeSymbol>this.id.sym : any
 >TypeSymbol : No type information available!
->this.id.sym : any
+>this.id.sym : Symbol
 >this.id : Identifier
 >this : this
 >id : Identifier
->sym : any
+>sym : Symbol
 >onlyReferencedAsTypeRef : any
 
                 var prevModAliasId = emitter.modAliasId;
@@ -4143,8 +4143,8 @@ module TypeScript {
 >None : any
 
         public sym: Symbol = null;
->sym : any
->Symbol : No type information available!
+>sym : Symbol
+>Symbol : Symbol
 >null : null
 
         constructor (public id: Identifier, nodeType: NodeType, public nestingLevel: number) {
@@ -4463,8 +4463,8 @@ module TypeScript {
 >null : null
 
         public freeVariables: Symbol[] = [];
->freeVariables : any[]
->Symbol : No type information available!
+>freeVariables : Symbol[]
+>Symbol : Symbol
 >[] : undefined[]
 
         public unitIndex = -1;
@@ -4500,8 +4500,8 @@ module TypeScript {
 >false : false
 
         public accessorSymbol: Symbol = null;
->accessorSymbol : any
->Symbol : No type information available!
+>accessorSymbol : Symbol
+>Symbol : Symbol
 >null : null
 
         public leftCurlyCount = 0;
@@ -4622,11 +4622,11 @@ module TypeScript {
 >HasSelfReference : any
 
         public addCloRef(id: Identifier, sym: Symbol): number {
->addCloRef : (id: Identifier, sym: any) => number
+>addCloRef : (id: Identifier, sym: Symbol) => number
 >id : Identifier
 >Identifier : Identifier
->sym : any
->Symbol : No type information available!
+>sym : Symbol
+>Symbol : Symbol
 
             if (this.envids == null) {
 >this.envids == null : boolean
@@ -4665,7 +4665,7 @@ module TypeScript {
 >enclosingFnc : FuncDecl
 
             if (sym) {
->sym : any
+>sym : Symbol
 
                 while (outerFnc && (outerFnc.type.symbol != sym.container)) {
 >outerFnc && (outerFnc.type.symbol != sym.container) : boolean
@@ -4678,15 +4678,15 @@ module TypeScript {
 >type : any
 >symbol : any
 >sym.container : any
->sym : any
+>sym : Symbol
 >container : any
 
                     outerFnc.addJumpRef(sym);
 >outerFnc.addJumpRef(sym) : void
->outerFnc.addJumpRef : (sym: any) => void
+>outerFnc.addJumpRef : (sym: Symbol) => void
 >outerFnc : FuncDecl
->addJumpRef : (sym: any) => void
->sym : any
+>addJumpRef : (sym: Symbol) => void
+>sym : Symbol
 
                     outerFnc = outerFnc.enclosingFnc;
 >outerFnc = outerFnc.enclosingFnc : FuncDecl
@@ -4707,9 +4707,9 @@ module TypeScript {
         }
 
         public addJumpRef(sym: Symbol): void {
->addJumpRef : (sym: any) => void
->sym : any
->Symbol : No type information available!
+>addJumpRef : (sym: Symbol) => void
+>sym : Symbol
+>Symbol : Symbol
 
             if (this.jumpRefs == null) {
 >this.jumpRefs == null : boolean
@@ -4733,7 +4733,7 @@ module TypeScript {
 >new Identifier(sym.name) : Identifier
 >Identifier : typeof Identifier
 >sym.name : any
->sym : any
+>sym : Symbol
 >name : any
 
             this.jumpRefs[this.jumpRefs.length] = id;
@@ -4750,11 +4750,11 @@ module TypeScript {
 >id : Identifier
 
             id.sym = sym;
->id.sym = sym : any
->id.sym : any
+>id.sym = sym : Symbol
+>id.sym : Symbol
 >id : Identifier
->sym : any
->sym : any
+>sym : Symbol
+>sym : Symbol
 
             id.cloId = this.addCloRef(id, null);
 >id.cloId = this.addCloRef(id, null) : number
@@ -4762,9 +4762,9 @@ module TypeScript {
 >id : Identifier
 >cloId : number
 >this.addCloRef(id, null) : number
->this.addCloRef : (id: Identifier, sym: any) => number
+>this.addCloRef : (id: Identifier, sym: Symbol) => number
 >this : this
->addCloRef : (id: Identifier, sym: any) => number
+>addCloRef : (id: Identifier, sym: Symbol) => number
 >id : Identifier
 >null : null
         }
@@ -11105,11 +11105,11 @@ module TypeScript {
             }
             this.param.sym = exceptVar.symbol;
 >this.param.sym = exceptVar.symbol : any
->this.param.sym : any
+>this.param.sym : Symbol
 >this.param : VarDecl
 >this : this
 >param : VarDecl
->sym : any
+>sym : Symbol
 >exceptVar.symbol : any
 >exceptVar : any
 >symbol : any

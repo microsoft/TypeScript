@@ -40,7 +40,7 @@ function other3<T extends U, U extends Date>(arg: T) {
 >T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndIndexersErrors.ts, 14, 16))
 >U : Symbol(U, Decl(genericCallWithObjectTypeArgsAndIndexersErrors.ts, 14, 28))
 >U : Symbol(U, Decl(genericCallWithObjectTypeArgsAndIndexersErrors.ts, 14, 28))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >arg : Symbol(arg, Decl(genericCallWithObjectTypeArgsAndIndexersErrors.ts, 14, 45))
 >T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndIndexersErrors.ts, 14, 16))
 

@@ -6,16 +6,16 @@ interface I<T, U> {
 
     [Symbol.unscopables]: T;
 >[Symbol.unscopables] : Symbol(I[Symbol.unscopables], Decl(symbolProperty21.ts, 0, 19))
->Symbol.unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol.unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es6.d.ts, --, --))
 >T : Symbol(T, Decl(symbolProperty21.ts, 0, 12))
 
     [Symbol.isConcatSpreadable]: U;
 >[Symbol.isConcatSpreadable] : Symbol(I[Symbol.isConcatSpreadable], Decl(symbolProperty21.ts, 1, 28))
->Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es6.d.ts, --, --))
 >U : Symbol(U, Decl(symbolProperty21.ts, 0, 14))
 }
 
@@ -37,20 +37,20 @@ foo({
 
     [Symbol.isConcatSpreadable]: "",
 >[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(symbolProperty21.ts, 7, 5))
->Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es6.d.ts, --, --))
 
     [Symbol.toPrimitive]: 0,
 >[Symbol.toPrimitive] : Symbol([Symbol.toPrimitive], Decl(symbolProperty21.ts, 8, 36))
->Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es6.d.ts, --, --))
 
     [Symbol.unscopables]: true
 >[Symbol.unscopables] : Symbol([Symbol.unscopables], Decl(symbolProperty21.ts, 9, 28))
->Symbol.unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
->unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol.unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es6.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
+>unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es6.d.ts, --, --))
 
 });

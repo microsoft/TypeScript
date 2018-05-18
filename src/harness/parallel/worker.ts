@@ -1,5 +1,6 @@
 namespace Harness.Parallel.Worker {
     let errors: ErrorInfo[] = [];
+    let passes: TestInfo[] = [];
     let passing = 0;
 
     type MochaCallback = (this: Mocha.ISuiteCallbackContext, done: MochaDone) => void;
@@ -9,12 +10,13 @@ namespace Harness.Parallel.Worker {
 
     function resetShimHarnessAndExecute(runner: RunnerBase) {
         errors = [];
+        passes = [];
         passing = 0;
         testList.length = 0;
         const start = +(new Date());
         runner.initializeTests();
         testList.forEach(({ name, callback, kind }) => executeCallback(name, callback, kind));
-        return { errors, passing, duration: +(new Date()) - start };
+        return { errors, passes, passing, duration: +(new Date()) - start };
     }
 
 
@@ -28,12 +30,14 @@ namespace Harness.Parallel.Worker {
         (global as any).describe = ((name, callback) => {
             testList.push({ name, callback, kind: "suite" });
         }) as Mocha.IContextDefinition;
+        (global as any).describe.skip = ts.noop;
         (global as any).it = ((name, callback) => {
             if (!testList) {
                 throw new Error("Tests must occur within a describe block");
             }
             testList.push({ name, callback, kind: "test" });
         }) as Mocha.ITestDefinition;
+        (global as any).it.skip = ts.noop;
     }
 
     function setTimeoutAndExecute(timeout: number | undefined, f: () => void) {
@@ -150,6 +154,7 @@ namespace Harness.Parallel.Worker {
             try {
                 // TODO: If we ever start using async test completions, polyfill promise return handling
                 callback.call(fakeContext);
+                passes.push({ name: [...namestack] });
             }
             catch (error) {
                 errors.push({ error: error.message, stack: error.stack, name: [...namestack] });
@@ -176,6 +181,7 @@ namespace Harness.Parallel.Worker {
                         errors.push({ error: err.toString(), stack: "", name: [...namestack] });
                     }
                     else {
+                        passes.push({ name: [...namestack] });
                         passing++;
                     }
                     completed = true;
@@ -292,11 +298,12 @@ namespace Harness.Parallel.Worker {
         }
         if (unitTests[name]) {
             errors = [];
+            passes = [];
             passing = 0;
             const start = +(new Date());
             executeSuiteCallback(name, unitTests[name]);
             delete unitTests[name];
-            return { file: name, runner: unittest, errors, passing, duration: +(new Date()) - start };
+            return { file: name, runner: unittest, errors, passes, passing, duration: +(new Date()) - start };
         }
         throw new Error(`Unit test with name "${name}" was asked to be run, but such a test does not exist!`);
     }

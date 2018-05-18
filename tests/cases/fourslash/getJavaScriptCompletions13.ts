@@ -14,6 +14,6 @@
 ////file2Identifier2./*2*/
 
 verify.completions(
-    { at: "1", includes: ["file2Identifier1", "file2Identifier2", "file1Identifier"], excludes: "FooProp" },
-    { at: "2", includes: ["file2Identifier1", "file2Identifier2"], excludes: ["file1Identifier", "FooProp"] },
+    { marker: "1", includes: ["file2Identifier1", "file2Identifier2", "file1Identifier"], excludes: "FooProp" },
+    { marker: "2", includes: ["file2Identifier1", "file2Identifier2"], excludes: ["file1Identifier", "FooProp"] },
 )

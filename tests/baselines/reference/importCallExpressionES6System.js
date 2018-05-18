@@ -42,12 +42,12 @@ System.register([], function (exports_1, context_1) {
 });
 //// [1.js]
 System.register([], function (exports_1, context_1) {
+    var p1, p2, C, D;
     "use strict";
     var __moduleName = context_1 && context_1.id;
     function foo() {
         const p2 = context_1.import("./0");
     }
-    var p1, p2, C, D;
     return {
         setters: [],
         execute: function () {

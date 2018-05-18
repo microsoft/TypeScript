@@ -14,14 +14,14 @@
 ////    }
 ////}
 
-verify.completions({ at: "1", includes: ["f", "foo"] });
+verify.completions({ marker: "1", includes: ["f", "foo"] });
 edit.insert('foo(1);');
 
-verify.completions({ at: "2", includes: "x" });
+verify.completions({ marker: "2", includes: "x" });
 
 verify.quickInfoAt("3", "(local var) r: C<number>");
 
-verify.completions({ at: "4", includes: "x" });
+verify.completions({ marker: "4", includes: "x" });
 edit.insert('x;');
 
 verify.quickInfoAt("5", "(local var) r2: number");

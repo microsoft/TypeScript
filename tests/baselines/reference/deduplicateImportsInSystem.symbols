@@ -18,6 +18,9 @@ import {F} from 'f1';
 >F : Symbol(F, Decl(deduplicateImportsInSystem.ts, 5, 8))
 
 console.log(A + B + C + D + E + F)
+>console.log : Symbol(Console.log, Decl(lib.d.ts, --, --))
+>console : Symbol(console, Decl(lib.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.d.ts, --, --))
 >A : Symbol(A, Decl(deduplicateImportsInSystem.ts, 0, 8))
 >B : Symbol(B, Decl(deduplicateImportsInSystem.ts, 1, 8))
 >C : Symbol(C, Decl(deduplicateImportsInSystem.ts, 2, 8))

@@ -23,11 +23,11 @@ let numed = 6;
 
 const symed = Symbol();
 >symed : Symbol(symed, Decl(lateBoundDestructuringImplicitAnyError.ts, 9, 5))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 
 let symed2 = Symbol();
 >symed2 : Symbol(symed2, Decl(lateBoundDestructuringImplicitAnyError.ts, 10, 3))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 
 let {[named]: prop2} = numIndexed;
 >named : Symbol(named, Decl(lateBoundDestructuringImplicitAnyError.ts, 0, 3))

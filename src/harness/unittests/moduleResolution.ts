@@ -181,6 +181,13 @@ namespace ts {
                     "/a/b/foo.ts",
                     "/a/b/foo.tsx",
                     "/a/b/foo.d.ts",
+                    "/c/d",
+                    "/c/d.ts",
+                    "/c/d.tsx",
+                    "/c/d.d.ts",
+                    "/c/d/index.ts",
+                    "/c/d/index.tsx",
+                    "/c/d/index.d.ts",
                     "/a/b/foo/index.ts",
                     "/a/b/foo/index.tsx",
                 ]);

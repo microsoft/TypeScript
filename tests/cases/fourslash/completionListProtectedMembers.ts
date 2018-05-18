@@ -19,9 +19,9 @@
 ////f./*5*/
 
 verify.completions(
-    { at: "1", are: ["y", "x", "method"] },
-    { at: "2", are: ["z", "method1", "y", "x", "method"] },
-    { at: "3", are: ["method2", "y", "x", "method"] },
-    { at: "4", are: ["method2", "z", "method1", "y", "x", "method"] },
-    { at: "5", are: undefined },
+    { marker: "1", exact: ["y", "x", "method"] },
+    { marker: "2", exact: ["z", "method1", "y", "x", "method"] },
+    { marker: "3", exact: ["method2", "y", "x", "method"] },
+    { marker: "4", exact: ["method2", "z", "method1", "y", "x", "method"] },
+    { marker: "5", exact: undefined },
 );

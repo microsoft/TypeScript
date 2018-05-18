@@ -2,7 +2,7 @@
 var a₁ = "hello"; alert(a₁)
 >a : any
 >"hello" : "hello"
->alert(a₁) : any
->alert : any
+>alert(a₁) : void
+>alert : (message?: any) => void
 >a : any
 

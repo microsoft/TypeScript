@@ -1,5 +1,5 @@
 /// <reference path="..\..\..\src\harness\harness.ts" />
-/// <reference path="..\..\..\src\harness\virtualFileSystem.ts" />
+/// <reference path="..\..\..\src\harness\vfs.ts" />
 
 
 namespace ts {
@@ -23,6 +23,15 @@ namespace ts {
                     `import x from "./lib";`);
             });
 
+            it("Sort - case-insensitive", () => {
+                assertSortsBefore(
+                    `import y from "a";`,
+                    `import x from "Z";`);
+                assertSortsBefore(
+                    `import y from "A";`,
+                    `import x from "z";`);
+            });
+
             function assertSortsBefore(importString1: string, importString2: string) {
                 const [{moduleSpecifier: moduleSpecifier1}, {moduleSpecifier: moduleSpecifier2}] = parseImports(importString1, importString2);
                 assert.equal(OrganizeImports.compareModuleSpecifiers(moduleSpecifier1, moduleSpecifier2), Comparison.LessThan);
@@ -39,6 +48,13 @@ namespace ts {
                 const sortedImports = parseImports(`import { default as m, a as n, b, y, z as o } from "lib";`);
                 const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
                 const expectedCoalescedImports = parseImports(`import { a as n, b, default as m, y, z as o } from "lib";`);
+                assertListEqual(actualCoalescedImports, expectedCoalescedImports);
+            });
+
+            it("Sort specifiers - case-insensitive", () => {
+                const sortedImports = parseImports(`import { default as M, a as n, B, y, Z as O } from "lib";`);
+                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+                const expectedCoalescedImports = parseImports(`import { a as n, B, default as M, y, Z as O } from "lib";`);
                 assertListEqual(actualCoalescedImports, expectedCoalescedImports);
             });
 
@@ -247,6 +263,15 @@ import D from "lib";
                 },
                 libFile);
 
+            testOrganizeImports("Unused_Empty",
+                {
+                    path: "/test.ts",
+                    content: `
+import { } from "lib";
+`,
+                },
+                libFile);
+
             testOrganizeImports("Unused_false_positive_shorthand_assignment",
             {
                     path: "/test.ts",
@@ -446,11 +471,11 @@ import { React, Other } from "react";
                 },
                 reactLibFile);
 
-            function testOrganizeImports(testName: string, testFile: TestFSWithWatch.FileOrFolder, ...otherFiles: TestFSWithWatch.FileOrFolder[]) {
+            function testOrganizeImports(testName: string, testFile: TestFSWithWatch.File, ...otherFiles: TestFSWithWatch.File[]) {
                 it(testName, () => runBaseline(`organizeImports/${testName}.ts`, testFile, ...otherFiles));
             }
 
-            function runBaseline(baselinePath: string, testFile: TestFSWithWatch.FileOrFolder, ...otherFiles: TestFSWithWatch.FileOrFolder[]) {
+            function runBaseline(baselinePath: string, testFile: TestFSWithWatch.File, ...otherFiles: TestFSWithWatch.File[]) {
                 const { path: testPath, content: testContent } = testFile;
                 const languageService = makeLanguageService(testFile, ...otherFiles);
                 const changes = languageService.organizeImports({ type: "file", fileName: testPath }, testFormatOptions, defaultPreferences);
@@ -468,7 +493,7 @@ import { React, Other } from "react";
                 });
             }
 
-            function makeLanguageService(...files: TestFSWithWatch.FileOrFolder[]) {
+            function makeLanguageService(...files: TestFSWithWatch.File[]) {
                 const host = projectSystem.createServerHost(files);
                 const projectService = projectSystem.createProjectService(host, { useSingleInferredProject: true });
                 projectService.setCompilerOptionsForInferredProjects({ jsx: files.some(f => f.path.endsWith("x")) ? JsxEmit.React : JsxEmit.None });

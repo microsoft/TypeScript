@@ -26,7 +26,7 @@ namespace ts {
         let enclosingFunctionFlags: FunctionFlags;
         let enclosingSuperContainerFlags: NodeCheckFlags = 0;
 
-        return transformSourceFile;
+        return chainBundle(transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {
@@ -118,21 +118,38 @@ namespace ts {
         }
 
         function visitYieldExpression(node: YieldExpression) {
-            if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator && node.asteriskToken) {
-                const expression = visitNode(node.expression, visitor, isExpression);
+            if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
+                if (node.asteriskToken) {
+                    const expression = visitNode(node.expression, visitor, isExpression);
+
+                    return setOriginalNode(
+                        setTextRange(
+                            createYield(
+                                createAwaitHelper(context,
+                                    updateYield(
+                                        node,
+                                        node.asteriskToken,
+                                        createAsyncDelegatorHelper(
+                                            context,
+                                            createAsyncValuesHelper(context, expression, expression),
+                                            expression
+                                        )
+                                    )
+                                )
+                            ),
+                            node
+                        ),
+                        node
+                    );
+                }
+
                 return setOriginalNode(
                     setTextRange(
                         createYield(
-                            createAwaitHelper(context,
-                                updateYield(
-                                    node,
-                                    node.asteriskToken,
-                                    createAsyncDelegatorHelper(
-                                        context,
-                                        createAsyncValuesHelper(context, expression, expression),
-                                        expression
-                                    )
-                                )
+                            createDownlevelAwait(
+                                node.expression
+                                    ? visitNode(node.expression, visitor, isExpression)
+                                    : createVoidZero()
                             )
                         ),
                         node
@@ -140,6 +157,7 @@ namespace ts {
                     node
                 );
             }
+
             return visitEachChild(node, visitor, context);
         }
 
@@ -645,7 +663,7 @@ namespace ts {
                 )
             );
 
-            addRange(statements, endLexicalEnvironment());
+            prependRange(statements, endLexicalEnvironment());
             const block = updateBlock(node.body, statements);
 
             // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
@@ -674,11 +692,11 @@ namespace ts {
                 statementOffset = addPrologue(statements, body.statements, /*ensureUseStrict*/ false, visitor);
             }
             addRange(statements, appendObjectRestAssignmentsIfNeeded(/*statements*/ undefined, node));
-            const trailingStatements = endLexicalEnvironment();
-            if (statementOffset > 0 || some(statements) || some(trailingStatements)) {
+            const leadingStatements = endLexicalEnvironment();
+            if (statementOffset > 0 || some(statements) || some(leadingStatements)) {
                 const block = convertToFunctionBody(body, /*multiLine*/ true);
+                prependRange(statements, leadingStatements);
                 addRange(statements, block.statements.slice(statementOffset));
-                addRange(statements, trailingStatements);
                 return updateBlock(block, setTextRange(createNodeArray(statements), block.statements));
             }
             return body;
@@ -906,7 +924,7 @@ namespace ts {
                 return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
                 function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
                 function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
-                function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r);  }
+                function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
                 function fulfill(value) { resume("next", value); }
                 function reject(value) { resume("throw", value); }
                 function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
@@ -938,7 +956,7 @@ namespace ts {
             var __asyncDelegator = (this && this.__asyncDelegator) || function (o) {
                 var i, p;
                 return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
-                function verb(n, f) { if (o[n]) i[n] = function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; }; }
+                function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
             };`
     };
 
@@ -961,8 +979,10 @@ namespace ts {
         text: `
             var __asyncValues = (this && this.__asyncValues) || function (o) {
                 if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-                var m = o[Symbol.asyncIterator];
-                return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
+                var m = o[Symbol.asyncIterator], i;
+                return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+                function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+                function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
             };`
     };
 

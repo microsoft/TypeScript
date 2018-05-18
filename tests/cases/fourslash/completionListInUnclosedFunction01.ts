@@ -4,4 +4,4 @@
 ////    /*1*/
 ////
 
-verify.completions({ at: "1", includes: ["foo", "x", "y", "z"] });
+verify.completions({ marker: "1", includes: ["foo", "x", "y", "z"] });

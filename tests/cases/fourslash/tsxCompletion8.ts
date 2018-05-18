@@ -9,4 +9,4 @@
 //// }
 //// var x = <div /*1*/ autoComplete /*2*/ />;
 
-verify.completions({ at: ["1", "2"], are: ["ONE", "TWO"] });
+verify.completions({ marker: ["1", "2"], exact: ["ONE", "TWO"] });

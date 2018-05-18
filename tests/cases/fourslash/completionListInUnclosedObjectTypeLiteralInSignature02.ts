@@ -8,7 +8,7 @@
 ////declare function foo<TString, TNumber>(obj: I<TString, TNumber>): { str: TStr/*1*/
 
 verify.completions({
-    at: "1",
+    marker: "1",
     includes: ["I", "TString", "TNumber"], // REVIEW: Is TNumber intended behavior?
     excludes: ["foo", "obj"], // These shouldn't show up since they're not types.
 })

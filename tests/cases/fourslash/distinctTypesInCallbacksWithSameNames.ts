@@ -18,8 +18,8 @@
 
 const verifyCompletions = () =>
     verify.completions(
-        { at: "1", includes: "toFixed" },
-        { at: "2", are: ["length", "add", "remove"] },
+        { marker: "1", includes: "toFixed" },
+        { marker: "2", exact: ["length", "add", "remove"] },
     );
 
 verifyCompletions();

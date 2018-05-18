@@ -11,5 +11,4 @@
 ////var i = new C1;
 ////i.attr(/*1*/
 
-goTo.marker('1');
-verify.signatureHelpCountIs(3);
+verify.signatureHelp({ marker: "1", overloadsCount: 3 });

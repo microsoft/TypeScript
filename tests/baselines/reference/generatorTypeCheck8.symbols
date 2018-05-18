@@ -1,8 +1,8 @@
 === tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck8.ts ===
 interface BadGenerator extends Iterator<number>, Iterable<string> { }
 >BadGenerator : Symbol(BadGenerator, Decl(generatorTypeCheck8.ts, 0, 0))
->Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es6.d.ts, --, --))
+>Iterable : Symbol(Iterable, Decl(lib.es6.d.ts, --, --))
 
 function* g3(): BadGenerator { }
 >g3 : Symbol(g3, Decl(generatorTypeCheck8.ts, 0, 69))

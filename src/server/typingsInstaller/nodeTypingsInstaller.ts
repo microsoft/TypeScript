@@ -2,7 +2,8 @@
 
 namespace ts.server.typingsInstaller {
     const fs: {
-        appendFileSync(file: string, content: string): void
+        appendFileSync(file: string, content: string): void;
+        existsSync(path: string): boolean;
     } = require("fs");
 
     const path: {
@@ -32,11 +33,12 @@ namespace ts.server.typingsInstaller {
     /** Used if `--npmLocation` is not passed. */
     function getDefaultNPMLocation(processName: string) {
         if (path.basename(processName).indexOf("node") === 0) {
-            return `"${path.join(path.dirname(process.argv[0]), "npm")}"`;
+            const npmPath = `"${path.join(path.dirname(process.argv[0]), "npm")}"`;
+            if (fs.existsSync(npmPath)) {
+                return npmPath;
+            }
         }
-        else {
-            return "npm";
-        }
+        return "npm";
     }
 
     interface TypesRegistryFile {

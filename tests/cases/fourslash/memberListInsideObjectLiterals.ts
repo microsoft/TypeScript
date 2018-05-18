@@ -27,6 +27,6 @@
 const x1 = { name: "x1", text: "(property) MyPoint.x1: number" };
 const y1 = { name: "y1", text: "(property) MyPoint.y1: number" };
 verify.completions(
-    { at: ["1", "3", "4"], are: [x1, y1] }, // Literal member completion inside empty literal or at existing member name location
-    { at: ["2"], are: y1 }, // Literal member completion for 2nd member name
+    { marker: ["1", "3", "4"], exact: [x1, y1] }, // Literal member completion inside empty literal or at existing member name location
+    { marker: ["2"], exact: y1 }, // Literal member completion for 2nd member name
 );

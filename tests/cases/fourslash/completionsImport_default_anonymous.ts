@@ -13,8 +13,8 @@
 goTo.marker("0");
 const preferences = { includeCompletionsForModuleExports: true };
 verify.completions(
-    { at: "0", excludes: { name: "default", source: "/src/foo-bar" }, preferences },
-    { at: "1", includes: { name: "fooBar", source: "/src/foo-bar", sourceDisplay: "./foo-bar", text: "(property) default: 0", kind: "property", hasAction: true }, preferences }
+    { marker: "0", excludes: { name: "default", source: "/src/foo-bar" }, preferences },
+    { marker: "1", includes: { name: "fooBar", source: "/src/foo-bar", sourceDisplay: "./foo-bar", text: "(property) default: 0", kind: "property", hasAction: true }, preferences }
 );
 verify.applyCodeActionFromCompletion("1", {
     name: "fooBar",

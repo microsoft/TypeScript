@@ -169,7 +169,6 @@ declare namespace FourSlashInterface {
         completionListContainsClassElementKeywords(): void;
         completionListContainsConstructorParameterKeywords(): void;
         completionListAllowsNewIdentifier(): void;
-        signatureHelpPresent(): void;
         errorExistsBetweenMarkers(startMarker: string, endMarker: string): void;
         errorExistsAfterMarker(markerName?: string): void;
         errorExistsBeforeMarker(markerName?: string): void;
@@ -180,7 +179,7 @@ declare namespace FourSlashInterface {
         isInCommentAtPosition(onlyMultiLineDiverges?: boolean): void;
         codeFix(options: {
             description: string,
-            newFileContent?: string,
+            newFileContent?: string | { readonly [fileName: string]: string },
             newRangeContent?: string,
             errorCode?: number,
             index?: number,
@@ -202,15 +201,15 @@ declare namespace FourSlashInterface {
         assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
         completions(...options: {
-            readonly at?: Many<string>,
+            readonly marker?: ArrayOrSingle<string>,
             readonly isNewIdentifierLocation?: boolean;
-            readonly are?: Many<ExpectedCompletionEntry>;
-            readonly includes?: Many<ExpectedCompletionEntry>;
-            readonly excludes?: Many<string | { name: string, source: string }>;
+            readonly exact?: ArrayOrSingle<ExpectedCompletionEntry>;
+            readonly includes?: ArrayOrSingle<ExpectedCompletionEntry>;
+            readonly excludes?: ArrayOrSingle<string | { name: string, source: string }>;
             readonly preferences?: UserPreferences;
             readonly triggerCharacter?: string;
         }[]): void;
-        completionsAt(markerName: Many<string>, completions: ReadonlyArray<ExpectedCompletionEntry>, options?: CompletionsAtOptions): void;
+        completionsAt(markerName: ArrayOrSingle<string>, completions: ReadonlyArray<ExpectedCompletionEntry>, options?: CompletionsAtOptions): void;
         applyCodeActionFromCompletion(markerName: string, options: {
             name: string,
             source?: string,
@@ -231,60 +230,40 @@ declare namespace FourSlashInterface {
         currentLineContentIs(text: string): void;
         currentFileContentIs(text: string): void;
         /** Verifies that goToDefinition at the current position would take you to `endMarker`. */
-        goToDefinitionIs(endMarkers: Many<string>): void;
+        goToDefinitionIs(endMarkers: ArrayOrSingle<string>): void;
         goToDefinitionName(name: string, containerName: string): void;
         /**
          * `verify.goToDefinition("a", "b");` verifies that go-to-definition at marker "a" takes you to marker "b".
          * `verify.goToDefinition(["a", "aa"], "b");` verifies that markers "a" and "aa" have the same definition "b".
          * `verify.goToDefinition("a", ["b", "bb"]);` verifies that "a" has multiple definitions available.
          */
-        goToDefinition(startMarkerNames: Many<string>, endMarkerNames: Many<string>): void;
-        goToDefinition(startMarkerNames: Many<string>, endMarkerNames: Many<string>, range: Range): void;
+        goToDefinition(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string>): void;
+        goToDefinition(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string>, range: Range): void;
         /** Performs `goToDefinition` for each pair. */
-        goToDefinition(startsAndEnds: [Many<string>, Many<string>][]): void;
+        goToDefinition(startsAndEnds: [ArrayOrSingle<string>, ArrayOrSingle<string>][]): void;
         /** Performs `goToDefinition` on each key and value. */
-        goToDefinition(startsAndEnds: { [startMarkerName: string]: Many<string> }): void;
+        goToDefinition(startsAndEnds: { [startMarkerName: string]: ArrayOrSingle<string> }): void;
         /** Verifies goToDefinition for each `${markerName}Reference` -> `${markerName}Definition` */
         goToDefinitionForMarkers(...markerNames: string[]): void;
-        goToType(startsAndEnds: { [startMarkerName: string]: Many<string> }): void;
-        goToType(startMarkerNames: Many<string>, endMarkerNames: Many<string>): void;
+        goToType(startsAndEnds: { [startMarkerName: string]: ArrayOrSingle<string> }): void;
+        goToType(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string>): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
         noReferences(markerNameOrRange?: string | Range): void;
         symbolAtLocation(startRange: Range, ...declarationRanges: Range[]): void;
         typeOfSymbolAtLocation(range: Range, symbol: any, expected: string): void;
         /**
-         * @deprecated, prefer 'referenceGroups'
-         * Like `referencesAre`, but goes to `start` first.
-         * `start` should be included in `references`.
-         */
-        referencesOf(start: Range, references: Range[]): void;
-        /**
          * For each of starts, asserts the ranges that are referenced from there.
          * This uses the 'findReferences' command instead of 'getReferencesAtPosition', so references are grouped by their definition.
          */
-        referenceGroups(starts: Many<string> | Many<Range>, parts: Array<{ definition: ReferencesDefinition, ranges: Range[] }>): void;
+        referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<Range>, parts: Array<{ definition: ReferencesDefinition, ranges: Range[] }>): void;
         singleReferenceGroup(definition: ReferencesDefinition, ranges?: Range[]): void;
         rangesAreOccurrences(isWriteAccess?: boolean): void;
         rangesWithSameTextAreRenameLocations(): void;
         rangesAreRenameLocations(options?: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: Range[] });
-        /**
-         * Performs `referencesOf` for every range on the whole set.
-         * If `ranges` is omitted, this is `test.ranges()`.
-         */
-        rangesReferenceEachOther(ranges?: Range[]): void;
         findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]): void;
-        currentParameterHelpArgumentNameIs(name: string): void;
-        currentParameterSpanIs(parameter: string): void;
-        currentParameterHelpArgumentDocCommentIs(docComment: string): void;
-        currentSignatureHelpDocCommentIs(docComment: string): void;
-        currentSignatureHelpTagsAre(tags: ts.JSDocTagInfo[]): void;
-        signatureHelpCountIs(expected: number): void;
-        signatureHelpArgumentCountIs(expected: number): void;
-        signatureHelpCurrentArgumentListIsVariadic(expected: boolean);
-        currentSignatureParameterCountIs(expected: number): void;
-        currentSignatureTypeParameterCountIs(expected: number): void;
-        currentSignatureHelpIs(expected: string): void;
+        noSignatureHelp(...markers: string[]): void;
+        signatureHelp(...options: VerifySignatureHelpOptions[]): void;
         // Checks that there are no compile errors.
         noErrors(): void;
         numberOfErrorsInCurrentFile(expected: number): void;
@@ -334,7 +313,7 @@ declare namespace FourSlashInterface {
         }[]): void;
         renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string): void;
         renameInfoFailed(message?: string): void;
-        renameLocations(startRanges: Many<Range>, options: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges: Range[] }): void;
+        renameLocations(startRanges: ArrayOrSingle<Range>, options: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges: Range[] }): void;
 
         /** Verify the quick info available at the current marker. */
         quickInfoIs(expectedText: string, expectedDocumentation?: string): void;
@@ -358,7 +337,11 @@ declare namespace FourSlashInterface {
             oldPath: string;
             newPath: string;
             newFileContents: { [fileName: string]: string };
-        });
+        }): void;
+        moveToNewFile(options: {
+            readonly newFileContents: { readonly [fileName: string]: string };
+        }): void;
+        noMoveToNewFile(): void;
     }
     class edit {
         backspace(count?: number): void;
@@ -562,7 +545,28 @@ declare namespace FourSlashInterface {
         readonly sourceDisplay?: string,
     };
 
-    type Many<T> = T | ReadonlyArray<T>;
+    interface VerifySignatureHelpOptions {
+        marker?: ArrayOrSingle<string>;
+        /** @default 1 */
+        overloadsCount?: number;
+        docComment?: string;
+        text?: string;
+        name?: string;
+        parameterName?: string;
+        parameterSpan?: string;
+        parameterDocComment?: string;
+        parameterCount?: number;
+        argumentCount?: number;
+        isVariadic?: boolean;
+        tags?: ReadonlyArray<JSDocTagInfo>;
+    }
+
+    interface JSDocTagInfo {
+        name: string;
+        text: string | undefined;
+    }
+
+    type ArrayOrSingle<T> = T | ReadonlyArray<T>;
 }
 declare function verifyOperationIsCancelled(f: any): void;
 declare var test: FourSlashInterface.test_;

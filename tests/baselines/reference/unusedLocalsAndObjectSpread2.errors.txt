@@ -1,6 +1,6 @@
-tests/cases/compiler/unusedLocalsAndObjectSpread2.ts(5,3): error TS6133: 'rest' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndObjectSpread2.ts(5,6): error TS6133: 'rest' is declared but its value is never read.
 tests/cases/compiler/unusedLocalsAndObjectSpread2.ts(8,1): error TS6133: 'foo' is declared but its value is never read.
-tests/cases/compiler/unusedLocalsAndObjectSpread2.ts(12,9): error TS6133: 'rest' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndObjectSpread2.ts(12,12): error TS6133: 'rest' is declared but its value is never read.
 
 
 ==== tests/cases/compiler/unusedLocalsAndObjectSpread2.ts (3 errors) ====
@@ -9,7 +9,7 @@ tests/cases/compiler/unusedLocalsAndObjectSpread2.ts(12,9): error TS6133: 'rest'
         children, // here!
         active: _a, // here!
       ...rest
-      ~~~~~~~
+         ~~~~
 !!! error TS6133: 'rest' is declared but its value is never read.
     } = props;
     
@@ -20,7 +20,7 @@ tests/cases/compiler/unusedLocalsAndObjectSpread2.ts(12,9): error TS6133: 'rest'
             children,
             active: _a,
             ...rest
-            ~~~~~~~
+               ~~~~
 !!! error TS6133: 'rest' is declared but its value is never read.
         } = props;
     }

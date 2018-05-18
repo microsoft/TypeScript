@@ -5,4 +5,4 @@
 ////
 //// /*1*/fo/*2*/o /*3*/``/*4*/  /*5*/
 
-goTo.eachMarker(() => verify.not.signatureHelpPresent());
+verify.noSignatureHelp(...test.markerNames());

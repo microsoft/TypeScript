@@ -1,0 +1,81 @@
+=== tests/cases/compiler/mappedTypeUnionConstraintInferences.ts ===
+export declare type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+>Omit : Symbol(Omit, Decl(mappedTypeUnionConstraintInferences.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeUnionConstraintInferences.ts, 0, 25))
+>K : Symbol(K, Decl(mappedTypeUnionConstraintInferences.ts, 0, 27))
+>T : Symbol(T, Decl(mappedTypeUnionConstraintInferences.ts, 0, 25))
+>Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeUnionConstraintInferences.ts, 0, 25))
+>Exclude : Symbol(Exclude, Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeUnionConstraintInferences.ts, 0, 25))
+>K : Symbol(K, Decl(mappedTypeUnionConstraintInferences.ts, 0, 27))
+
+export declare type PartialProperties<T, K extends keyof T> = Partial<Pick<T, K>> & Omit<T, K>;
+>PartialProperties : Symbol(PartialProperties, Decl(mappedTypeUnionConstraintInferences.ts, 0, 78))
+>T : Symbol(T, Decl(mappedTypeUnionConstraintInferences.ts, 1, 38))
+>K : Symbol(K, Decl(mappedTypeUnionConstraintInferences.ts, 1, 40))
+>T : Symbol(T, Decl(mappedTypeUnionConstraintInferences.ts, 1, 38))
+>Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeUnionConstraintInferences.ts, 1, 38))
+>K : Symbol(K, Decl(mappedTypeUnionConstraintInferences.ts, 1, 40))
+>Omit : Symbol(Omit, Decl(mappedTypeUnionConstraintInferences.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeUnionConstraintInferences.ts, 1, 38))
+>K : Symbol(K, Decl(mappedTypeUnionConstraintInferences.ts, 1, 40))
+
+export function doSomething_Actual<T extends {
+>doSomething_Actual : Symbol(doSomething_Actual, Decl(mappedTypeUnionConstraintInferences.ts, 1, 95))
+>T : Symbol(T, Decl(mappedTypeUnionConstraintInferences.ts, 2, 35))
+
+    prop: string;
+>prop : Symbol(prop, Decl(mappedTypeUnionConstraintInferences.ts, 2, 46))
+
+}>(a: T) {
+>a : Symbol(a, Decl(mappedTypeUnionConstraintInferences.ts, 4, 3))
+>T : Symbol(T, Decl(mappedTypeUnionConstraintInferences.ts, 2, 35))
+
+    const x: { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; } = null as any;
+>x : Symbol(x, Decl(mappedTypeUnionConstraintInferences.ts, 5, 9))
+>P : Symbol(P, Decl(mappedTypeUnionConstraintInferences.ts, 5, 16))
+>PartialProperties : Symbol(PartialProperties, Decl(mappedTypeUnionConstraintInferences.ts, 0, 78))
+>T : Symbol(T, Decl(mappedTypeUnionConstraintInferences.ts, 2, 35))
+>PartialProperties : Symbol(PartialProperties, Decl(mappedTypeUnionConstraintInferences.ts, 0, 78))
+>T : Symbol(T, Decl(mappedTypeUnionConstraintInferences.ts, 2, 35))
+>P : Symbol(P, Decl(mappedTypeUnionConstraintInferences.ts, 5, 16))
+
+    return x;
+>x : Symbol(x, Decl(mappedTypeUnionConstraintInferences.ts, 5, 9))
+}
+export declare function doSomething_Expected<T extends {
+>doSomething_Expected : Symbol(doSomething_Expected, Decl(mappedTypeUnionConstraintInferences.ts, 7, 1))
+>T : Symbol(T, Decl(mappedTypeUnionConstraintInferences.ts, 8, 45))
+
+    prop: string;
+>prop : Symbol(prop, Decl(mappedTypeUnionConstraintInferences.ts, 8, 56))
+
+}>(a: T): { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; };
+>a : Symbol(a, Decl(mappedTypeUnionConstraintInferences.ts, 10, 3))
+>T : Symbol(T, Decl(mappedTypeUnionConstraintInferences.ts, 8, 45))
+>P : Symbol(P, Decl(mappedTypeUnionConstraintInferences.ts, 10, 13))
+>PartialProperties : Symbol(PartialProperties, Decl(mappedTypeUnionConstraintInferences.ts, 0, 78))
+>T : Symbol(T, Decl(mappedTypeUnionConstraintInferences.ts, 8, 45))
+>PartialProperties : Symbol(PartialProperties, Decl(mappedTypeUnionConstraintInferences.ts, 0, 78))
+>T : Symbol(T, Decl(mappedTypeUnionConstraintInferences.ts, 8, 45))
+>P : Symbol(P, Decl(mappedTypeUnionConstraintInferences.ts, 10, 13))
+
+export let a = doSomething_Actual({ prop: "test" });
+>a : Symbol(a, Decl(mappedTypeUnionConstraintInferences.ts, 12, 10))
+>doSomething_Actual : Symbol(doSomething_Actual, Decl(mappedTypeUnionConstraintInferences.ts, 1, 95))
+>prop : Symbol(prop, Decl(mappedTypeUnionConstraintInferences.ts, 12, 35))
+
+a = {} // should be fine, equivalent to below
+>a : Symbol(a, Decl(mappedTypeUnionConstraintInferences.ts, 12, 10))
+
+export let b = doSomething_Expected({ prop: "test" });
+>b : Symbol(b, Decl(mappedTypeUnionConstraintInferences.ts, 15, 10))
+>doSomething_Expected : Symbol(doSomething_Expected, Decl(mappedTypeUnionConstraintInferences.ts, 7, 1))
+>prop : Symbol(prop, Decl(mappedTypeUnionConstraintInferences.ts, 15, 37))
+
+b = {} // fine
+>b : Symbol(b, Decl(mappedTypeUnionConstraintInferences.ts, 15, 10))
+

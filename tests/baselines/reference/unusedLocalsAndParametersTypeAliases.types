@@ -1,14 +1,14 @@
 === tests/cases/compiler/unusedLocalsAndParametersTypeAliases.ts ===
 // used in a declaration
 type handler1 = () => void;
->handler1 : () => void
+>handler1 : handler1
 
 export interface I1 {
 >I1 : I1
 
     getHandler: handler1;
->getHandler : () => void
->handler1 : () => void
+>getHandler : handler1
+>handler1 : handler1
 }
 
 // exported
@@ -17,12 +17,12 @@ export type handler2 = () => void;
 
 // used in extends clause
 type handler3 = () => void;
->handler3 : () => void
+>handler3 : handler3
 
 export interface I3<T extends handler3> {
 >I3 : I3<T>
 >T : T
->handler3 : () => void
+>handler3 : handler3
 
     getHandler: T;
 >getHandler : T
@@ -31,32 +31,32 @@ export interface I3<T extends handler3> {
 
 // used in another type alias declaration
 type handler4 = () => void;
->handler4 : () => void
+>handler4 : handler4
 
 type handler5 = handler4 | (()=>number);
->handler5 : (() => void) | (() => number)
->handler4 : () => void
+>handler5 : handler5
+>handler4 : handler4
 
 var x: handler5;
->x : (() => void) | (() => number)
->handler5 : (() => void) | (() => number)
+>x : handler5
+>handler5 : handler5
 
 x();
 >x() : number | void
->x : (() => void) | (() => number)
+>x : handler5
 
 // used as type argument
 type handler6 = () => void;
->handler6 : () => void
+>handler6 : handler6
 
 var y: Array<handler6>;
->y : (() => void)[]
+>y : handler6[]
 >Array : T[]
->handler6 : () => void
+>handler6 : handler6
 
 y[0]();
 >y[0]() : void
->y[0] : () => void
->y : (() => void)[]
+>y[0] : handler6
+>y : handler6[]
 >0 : 0
     

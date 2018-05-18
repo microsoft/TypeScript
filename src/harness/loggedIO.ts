@@ -110,7 +110,7 @@ namespace Playback {
         return run;
     }
 
-    export interface PlaybackIO extends Harness.Io, PlaybackControl { }
+    export interface PlaybackIO extends Harness.IO, PlaybackControl { }
 
     export interface PlaybackSystem extends ts.System, PlaybackControl { }
 
@@ -134,7 +134,7 @@ namespace Playback {
         };
     }
 
-    export function newStyleLogIntoOldStyleLog(log: IoLog, host: ts.System | Harness.Io, baseName: string) {
+    export function newStyleLogIntoOldStyleLog(log: IoLog, host: ts.System | Harness.IO, baseName: string) {
         for (const file of log.filesAppended) {
             if (file.contentsPath) {
                 file.contents = host.readFile(ts.combinePaths(baseName, file.contentsPath));
@@ -210,8 +210,8 @@ namespace Playback {
     }
 
     function initWrapper(wrapper: PlaybackSystem, underlying: ts.System): void;
-    function initWrapper(wrapper: PlaybackIO, underlying: Harness.Io): void;
-    function initWrapper(wrapper: PlaybackSystem | PlaybackIO, underlying: ts.System | Harness.Io): void {
+    function initWrapper(wrapper: PlaybackIO, underlying: Harness.IO): void;
+    function initWrapper(wrapper: PlaybackSystem | PlaybackIO, underlying: ts.System | Harness.IO): void {
         ts.forEach(Object.keys(underlying), prop => {
             (<any>wrapper)[prop] = (<any>underlying)[prop];
         });
@@ -427,7 +427,7 @@ namespace Playback {
         // console.log("Swallowed write operation during replay: " + name);
     }
 
-    export function wrapIO(underlying: Harness.Io): PlaybackIO {
+    export function wrapIO(underlying: Harness.IO): PlaybackIO {
         const wrapper: PlaybackIO = <any>{};
         initWrapper(wrapper, underlying);
 

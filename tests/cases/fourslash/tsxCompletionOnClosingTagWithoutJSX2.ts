@@ -5,4 +5,4 @@
 ////    <h1> Hello world </ /*2*/>
 ////    </ /*1*/>
 
-verify.completions({ at: "1", are: ["div"] }, { at: "2", are: ["h1"] });
+verify.completions({ marker: "1", exact: ["div"] }, { marker: "2", exact: ["h1"] });

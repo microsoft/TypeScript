@@ -13,25 +13,19 @@
 ////testFunction<any, any,/*4*/ any>(null, null, null);
 ////testFunction<, ,/*5*/>(null, null, null);
 
-// goTo.marker("1");
-//  verify.currentSignatureParameterCountIs(3);
-//  verify.currentSignatureHelpIs("testFunction<T extends IFoo, U, M extends IFoo>(a: T, b: U, c: M): M");
-
-//  verify.currentParameterHelpArgumentNameIs("T");
-//  verify.currentParameterSpanIs("T extends IFoo");
-
-//  goTo.marker("2");
-//  verify.currentParameterHelpArgumentNameIs("U");
-//  verify.currentParameterSpanIs("U");
-
-goTo.marker("3");
-verify.currentParameterHelpArgumentNameIs("a");
-verify.currentParameterSpanIs("a: any");
-
-goTo.marker("4");
-verify.currentParameterHelpArgumentNameIs("M");
-verify.currentParameterSpanIs("M extends IFoo");
-
-goTo.marker("5");
-verify.currentParameterHelpArgumentNameIs("M");
-verify.currentParameterSpanIs("M extends IFoo");
+verify.signatureHelp(
+    // TODO: GH#23631
+    /*
+    {
+        marker: "1",
+        text: "testFunction<T extends IFoo, U, M extends IFoo>(a: T, b: U, c: M): M",
+        parameterCount: 3,
+        parameterName: "T",
+        parameterSpan: "T extends IFoo",
+    },
+    { marker: "2", parameterName: "U", parameterSpan: "U" },
+    */
+    { marker: "3", parameterName: "a", parameterSpan: "a: any" },
+    { marker: "4", parameterName: "M", parameterSpan: "M extends IFoo" },
+    { marker: "5", parameterName: "M", parameterSpan: "M extends IFoo" },
+);

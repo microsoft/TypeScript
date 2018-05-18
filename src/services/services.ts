@@ -878,6 +878,10 @@ namespace ts {
             return this._compilationSettings;
         }
 
+        public getProjectReferences(): ReadonlyArray<ProjectReference> | undefined {
+            return this.host.getProjectReferences && this.host.getProjectReferences();
+        }
+
         private createEntry(fileName: string, path: Path) {
             let entry: CachedHostFileInformation;
             const scriptSnapshot = this.host.getScriptSnapshot(fileName);
@@ -912,9 +916,18 @@ namespace ts {
         }
 
         public getRootFileNames(): string[] {
-            return arrayFrom(this.fileNameToEntry.values(), entry => {
-                return isString(entry) ? entry : entry.hostFileName;
+            const names: string[] = [];
+            this.fileNameToEntry.forEach(entry => {
+                if (isString(entry)) {
+                    names.push(entry);
+                }
+                else {
+                    if (entry.scriptKind !== ScriptKind.JSON) {
+                        names.push(entry.hostFileName);
+                    }
+                }
             });
+            return names;
         }
 
         public getVersion(path: Path): string {
@@ -1241,7 +1254,14 @@ namespace ts {
             }
 
             const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
-            program = createProgram(rootFileNames, newSettings, compilerHost, program);
+            const options: CreateProgramOptions = {
+                rootNames: rootFileNames,
+                options: newSettings,
+                host: compilerHost,
+                oldProgram: program,
+                projectReferences: hostCache.getProjectReferences()
+            };
+            program = createProgram(options);
 
             // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
             // It needs to be cleared to allow all collected snapshots to be released
@@ -1501,6 +1521,12 @@ namespace ts {
             return checker.getSymbolAtLocation(node);
         }
 
+        function toLineColumnOffset(fileName: string, position: number) {
+            const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+            const file = program.getSourceFile(path) || sourcemappedFileCache.get(path);
+            return file.getLineAndCharacterOfPosition(position);
+        }
+
         // Sometimes tools can sometimes see the following line as a source mapping url comment, so we mangle it a bit (the [M])
         const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)$/gm;
         const base64UrlRegExp = /^data:(?:application\/json(?:;charset=[uU][tT][fF]-8);base64,([A-Za-z0-9+\/=]+)$)?/;
@@ -1574,10 +1600,10 @@ namespace ts {
 
         function makeGetTargetOfMappedPosition<TIn>(
             extract: (original: TIn) => sourcemaps.SourceMappableLocation,
-            create: (result: sourcemaps.SourceMappableLocation, original: TIn) => TIn
+            create: (result: sourcemaps.SourceMappableLocation, unmapped: TIn, original: TIn) => TIn
         ) {
             return getTargetOfMappedPosition;
-            function getTargetOfMappedPosition(input: TIn): TIn {
+            function getTargetOfMappedPosition(input: TIn, original = input): TIn {
                 const info = extract(input);
                 if (endsWith(info.fileName, Extension.Dts)) {
                     let file: SourceFileLike = program.getSourceFile(info.fileName);
@@ -1591,7 +1617,7 @@ namespace ts {
                     const mapper = getSourceMapper(info.fileName, file);
                     const newLoc = mapper.getOriginalPosition(info);
                     if (newLoc === info) return input;
-                    return getTargetOfMappedPosition(create(newLoc, input));
+                    return getTargetOfMappedPosition(create(newLoc, input, original), original);
                 }
                 return input;
             }
@@ -1599,7 +1625,7 @@ namespace ts {
 
         const getTargetOfMappedDeclarationInfo = makeGetTargetOfMappedPosition(
             (info: DefinitionInfo) => ({ fileName: info.fileName, position: info.textSpan.start }),
-            (newLoc, info) => ({
+            (newLoc, info, original) => ({
                 containerKind: info.containerKind,
                 containerName: info.containerName,
                 fileName: newLoc.fileName,
@@ -1608,12 +1634,14 @@ namespace ts {
                 textSpan: {
                     start: newLoc.position,
                     length: info.textSpan.length
-                }
+                },
+                originalFileName: original.fileName,
+                originalTextSpan: original.textSpan
             })
         );
 
         function getTargetOfMappedDeclarationFiles(infos: ReadonlyArray<DefinitionInfo>): DefinitionInfo[] {
-            return map(infos, getTargetOfMappedDeclarationInfo);
+            return map(infos, d => getTargetOfMappedDeclarationInfo(d));
         }
 
         /// Goto definition
@@ -1652,12 +1680,14 @@ namespace ts {
                 textSpan: {
                     start: newLoc.position,
                     length: info.textSpan.length
-                }
+                },
+                originalFileName: info.fileName,
+                originalTextSpan: info.textSpan
             })
         );
 
         function getTargetOfMappedImplementationLocations(infos: ReadonlyArray<ImplementationLocation>): ImplementationLocation[] {
-            return map(infos, getTargetOfMappedImplementationLocation);
+            return map(infos, d => getTargetOfMappedImplementationLocation(d));
         }
 
         function getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] {
@@ -2265,6 +2295,7 @@ namespace ts {
             getProgram,
             getApplicableRefactors,
             getEditsForRefactor,
+            toLineColumnOffset
         };
     }
 

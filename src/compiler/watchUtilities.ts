@@ -63,7 +63,7 @@ namespace ts {
         }
 
         function getCachedFileSystemEntries(rootDirPath: Path): MutableFileSystemEntries | undefined {
-            return cachedReadDirectoryResult.get(rootDirPath);
+            return cachedReadDirectoryResult.get(ensureTrailingDirectorySeparator(rootDirPath));
         }
 
         function getCachedFileSystemEntriesForBaseDir(path: Path): MutableFileSystemEntries | undefined {
@@ -80,7 +80,7 @@ namespace ts {
                 directories: host.getDirectories(rootDir) || []
             };
 
-            cachedReadDirectoryResult.set(rootDirPath, resultFromHost);
+            cachedReadDirectoryResult.set(ensureTrailingDirectorySeparator(rootDirPath), resultFromHost);
             return resultFromHost;
         }
 
@@ -90,6 +90,7 @@ namespace ts {
          * The host request is done under try catch block to avoid caching incorrect result
          */
         function tryReadDirectory(rootDir: string, rootDirPath: Path): MutableFileSystemEntries | undefined {
+            rootDirPath = ensureTrailingDirectorySeparator(rootDirPath);
             const cachedResult = getCachedFileSystemEntries(rootDirPath);
             if (cachedResult) {
                 return cachedResult;
@@ -100,7 +101,7 @@ namespace ts {
             }
             catch (_e) {
                 // If there is exception to read directories, dont cache the result and direct the calls to host
-                Debug.assert(!cachedReadDirectoryResult.has(rootDirPath));
+                Debug.assert(!cachedReadDirectoryResult.has(ensureTrailingDirectorySeparator(rootDirPath)));
                 return undefined;
             }
         }
@@ -142,7 +143,7 @@ namespace ts {
 
         function directoryExists(dirPath: string): boolean {
             const path = toPath(dirPath);
-            return cachedReadDirectoryResult.has(path) || host.directoryExists(dirPath);
+            return cachedReadDirectoryResult.has(ensureTrailingDirectorySeparator(path)) || host.directoryExists(dirPath);
         }
 
         function createDirectory(dirPath: string) {

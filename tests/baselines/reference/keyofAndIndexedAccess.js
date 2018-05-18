@@ -628,6 +628,14 @@ class Unbounded<T> {
     }
 }
 
+// Repro from #23940
+
+interface I7 {
+    x: any;
+}
+type Foo7<T extends number> = T;
+declare function f7<K extends keyof I7>(type: K): Foo7<I7[K]>;
+
 
 //// [keyofAndIndexedAccess.js]
 var __extends = (this && this.__extends) || (function () {
@@ -1368,3 +1376,8 @@ declare function fn<T extends I, K extends keyof T>(o: T, k: K): void;
 declare class Unbounded<T> {
     foo(x: T[keyof T]): void;
 }
+interface I7 {
+    x: any;
+}
+declare type Foo7<T extends number> = T;
+declare function f7<K extends keyof I7>(type: K): Foo7<I7[K]>;

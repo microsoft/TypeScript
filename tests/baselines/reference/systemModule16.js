@@ -13,9 +13,9 @@ x,y,a1,b1,d1;
 
 //// [systemModule16.js]
 System.register(["foo", "bar"], function (exports_1, context_1) {
+    var x, y, foo_1;
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var x, y, foo_1;
     var exportedNames_1 = {
         "x": true,
         "y": true,

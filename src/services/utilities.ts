@@ -107,6 +107,10 @@ namespace ts {
             Debug.assert(isJSDocTemplateTag(node.parent.parent)); // Else would be handled by isDeclarationName
             return SemanticMeaning.Type;
         }
+        else if (isLiteralTypeNode(node.parent)) {
+            // This might be T["name"], which is actually referencing a property and not a type. So allow both meanings.
+            return SemanticMeaning.Type | SemanticMeaning.Value;
+        }
         else {
             return SemanticMeaning.Value;
         }
@@ -180,6 +184,8 @@ namespace ts {
         switch (node.parent.kind) {
             case SyntaxKind.TypeReference:
                 return true;
+            case SyntaxKind.ImportType:
+                return !(node.parent as ImportTypeNode).isTypeOf;
             case SyntaxKind.ExpressionWithTypeArguments:
                 return !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent);
         }
@@ -270,7 +276,7 @@ namespace ts {
     }
 
     export function getContainerNode(node: Node): Declaration {
-        if (node.kind === SyntaxKind.JSDocTypedefTag) {
+        if (isJSDocTypeAlias(node)) {
             // This doesn't just apply to the node immediately under the comment, but to everything in its parent's scope.
             // node.parent = the JSDoc comment, node.parent.parent = the node having the comment.
             // Then we get parent again in the loop.
@@ -309,7 +315,10 @@ namespace ts {
             case SyntaxKind.ClassExpression:
                 return ScriptElementKind.classElement;
             case SyntaxKind.InterfaceDeclaration: return ScriptElementKind.interfaceElement;
-            case SyntaxKind.TypeAliasDeclaration: return ScriptElementKind.typeElement;
+            case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.JSDocCallbackTag:
+            case SyntaxKind.JSDocTypedefTag:
+                return ScriptElementKind.typeElement;
             case SyntaxKind.EnumDeclaration: return ScriptElementKind.enumElement;
             case SyntaxKind.VariableDeclaration:
                 return getKindOfVariableDeclaration(<VariableDeclaration>node);
@@ -340,8 +349,6 @@ namespace ts {
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.NamespaceImport:
                 return ScriptElementKind.alias;
-            case SyntaxKind.JSDocTypedefTag:
-                return ScriptElementKind.typeElement;
             case SyntaxKind.BinaryExpression:
                 const kind = getSpecialPropertyAssignmentKind(node as BinaryExpression);
                 const { right } = node as BinaryExpression;
@@ -408,6 +415,10 @@ namespace ts {
 
     export function rangeContainsRange(r1: TextRange, r2: TextRange): boolean {
         return startEndContainsRange(r1.pos, r1.end, r2);
+    }
+
+    export function rangeContainsPosition(r: TextRange, pos: number): boolean {
+        return r.pos <= pos && pos <= r.end;
     }
 
     export function startEndContainsRange(start: number, end: number, range: TextRange): boolean {
@@ -705,7 +716,7 @@ namespace ts {
         return findPrecedingToken(position, file);
     }
 
-    export function findNextToken(previousToken: Node, parent: Node): Node {
+    export function findNextToken(previousToken: Node, parent: Node, sourceFile: SourceFile): Node {
         return find(parent);
 
         function find(n: Node): Node {
@@ -722,7 +733,7 @@ namespace ts {
                     // previous token ends exactly at the beginning of child
                     (child.pos === previousToken.end);
 
-                if (shouldDiveInChildNode && nodeHasTokens(child)) {
+                if (shouldDiveInChildNode && nodeHasTokens(child, sourceFile)) {
                     return find(child);
                 }
             }
@@ -757,12 +768,12 @@ namespace ts {
                     const start = child.getStart(sourceFile, includeJsDoc);
                     const lookInPreviousChild =
                         (start >= position) || // cursor in the leading trivia
-                        !nodeHasTokens(child) ||
+                        !nodeHasTokens(child, sourceFile) ||
                         isWhiteSpaceOnlyJsxText(child);
 
                     if (lookInPreviousChild) {
                         // actual start of the node is past the position - previous token should be at the end of previous child
-                        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
+                        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i, sourceFile);
                         return candidate && findRightmostToken(candidate, sourceFile);
                     }
                     else {
@@ -779,7 +790,7 @@ namespace ts {
             // Try to find the rightmost token in the file without filtering.
             // Namely we are skipping the check: 'position < node.end'
             if (children.length) {
-                const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
+                const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile);
                 return candidate && findRightmostToken(candidate, sourceFile);
             }
         }
@@ -795,21 +806,21 @@ namespace ts {
         }
 
         const children = n.getChildren(sourceFile);
-        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
+        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile);
         return candidate && findRightmostToken(candidate, sourceFile);
     }
 
     /**
      * Finds the rightmost child to the left of `children[exclusiveStartPosition]` which is a non-all-whitespace token or has constituent tokens.
      */
-    function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number): Node | undefined {
+    function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number, sourceFile: SourceFile): Node | undefined {
         for (let i = exclusiveStartPosition - 1; i >= 0; i--) {
             const child = children[i];
 
             if (isWhiteSpaceOnlyJsxText(child)) {
                 Debug.assert(i > 0, "`JsxText` tokens should not be the first child of `JsxElement | JsxSelfClosingElement`");
             }
-            else if (nodeHasTokens(children[i])) {
+            else if (nodeHasTokens(children[i], sourceFile)) {
                 return children[i];
             }
         }
@@ -938,22 +949,22 @@ namespace ts {
                     break;
 
                 case SyntaxKind.CloseBraceToken:
-                    // This can be object type, skip untill we find the matching open brace token
-                    // Skip untill the matching open brace token
+                    // This can be object type, skip until we find the matching open brace token
+                    // Skip until the matching open brace token
                     token = findPrecedingMatchingToken(token, SyntaxKind.OpenBraceToken, sourceFile);
                     if (!token) return false;
                     break;
 
                 case SyntaxKind.CloseParenToken:
-                    // This can be object type, skip untill we find the matching open brace token
-                    // Skip untill the matching open brace token
+                    // This can be object type, skip until we find the matching open brace token
+                    // Skip until the matching open brace token
                     token = findPrecedingMatchingToken(token, SyntaxKind.OpenParenToken, sourceFile);
                     if (!token) return false;
                     break;
 
                 case SyntaxKind.CloseBracketToken:
-                    // This can be object type, skip untill we find the matching open brace token
-                    // Skip untill the matching open brace token
+                    // This can be object type, skip until we find the matching open brace token
+                    // Skip until the matching open brace token
                     token = findPrecedingMatchingToken(token, SyntaxKind.OpenBracketToken, sourceFile);
                     if (!token) return false;
                     break;
@@ -1020,10 +1031,10 @@ namespace ts {
         }
     }
 
-    function nodeHasTokens(n: Node): boolean {
+    function nodeHasTokens(n: Node, sourceFile: SourceFileLike): boolean {
         // If we have a token or node that has a non-zero width, it must have tokens.
         // Note: getWidth() does not take trivia into account.
-        return n.getWidth() !== 0;
+        return n.getWidth(sourceFile) !== 0;
     }
 
     export function getNodeModifiers(node: Node): string {
@@ -1122,11 +1133,6 @@ namespace ts {
         return false;
     }
 
-    export function hasTrailingDirectorySeparator(path: string) {
-        const lastCharacter = path.charAt(path.length - 1);
-        return lastCharacter === "/" || lastCharacter === "\\";
-    }
-
     export function isInReferenceComment(sourceFile: SourceFile, position: number): boolean {
         return isInComment(sourceFile, position, /*tokenAtPosition*/ undefined, c => {
             const commentText = sourceFile.text.substring(c.pos, c.end);
@@ -1147,6 +1153,10 @@ namespace ts {
 
     export function createTextSpanFromRange(range: TextRange): TextSpan {
         return createTextSpanFromBounds(range.pos, range.end);
+    }
+
+    export function createTextRangeFromSpan(span: TextSpan): TextRange {
+        return createRange(span.start, span.start + span.length);
     }
 
     export function createTextChangeFromStartLength(start: number, length: number, newText: string): TextChange {
@@ -1183,7 +1193,8 @@ namespace ts {
     }
 
     /** Returns `true` the first time it encounters a node and `false` afterwards. */
-    export function nodeSeenTracker<T extends Node>(): (node: T) => boolean {
+    export type NodeSeenTracker<T = Node> = (node: T) => boolean;
+    export function nodeSeenTracker<T extends Node>(): NodeSeenTracker<T> {
         const seen: true[] = [];
         return node => {
             const id = getNodeId(node);
@@ -1227,6 +1238,64 @@ namespace ts {
 
     export function hostGetCanonicalFileName(host: LanguageServiceHost): GetCanonicalFileName {
         return createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host));
+    }
+
+    export function makeImportIfNecessary(defaultImport: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: string): ImportDeclaration | undefined {
+        return defaultImport || namedImports && namedImports.length ? makeImport(defaultImport, namedImports, moduleSpecifier) : undefined;
+    }
+
+    export function makeImport(defaultImport: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: string | Expression): ImportDeclaration {
+        return createImportDeclaration(
+            /*decorators*/ undefined,
+            /*modifiers*/ undefined,
+            defaultImport || namedImports
+                ? createImportClause(defaultImport, namedImports && namedImports.length ? createNamedImports(namedImports) : undefined)
+                : undefined,
+            typeof moduleSpecifier === "string" ? createLiteral(moduleSpecifier) : moduleSpecifier);
+    }
+
+    export function symbolNameNoDefault(symbol: Symbol): string | undefined {
+        const escaped = symbolEscapedNameNoDefault(symbol);
+        return escaped === undefined ? undefined : unescapeLeadingUnderscores(escaped);
+    }
+
+    export function symbolEscapedNameNoDefault(symbol: Symbol): __String | undefined {
+        if (symbol.escapedName !== InternalSymbolName.Default) {
+            return symbol.escapedName;
+        }
+
+        return firstDefined(symbol.declarations, decl => {
+            const name = getNameOfDeclaration(decl);
+            return name && name.kind === SyntaxKind.Identifier ? name.escapedText : undefined;
+        });
+    }
+
+    export function getPropertySymbolFromBindingElement(checker: TypeChecker, bindingElement: BindingElement & { name: Identifier }) {
+        const typeOfPattern = checker.getTypeAtLocation(bindingElement.parent);
+        const propSymbol = typeOfPattern && checker.getPropertyOfType(typeOfPattern, bindingElement.name.text);
+        if (propSymbol && propSymbol.flags & SymbolFlags.Accessor) {
+            // See GH#16922
+            Debug.assert(!!(propSymbol.flags & SymbolFlags.Transient));
+            return (propSymbol as TransientSymbol).target;
+        }
+        return propSymbol;
+    }
+
+    export class NodeSet {
+        private map = createMap<Node>();
+
+        add(node: Node): void {
+            this.map.set(String(getNodeId(node)), node);
+        }
+        has(node: Node): boolean {
+            return this.map.has(String(getNodeId(node)));
+        }
+        forEach(cb: (node: Node) => void): void {
+            this.map.forEach(cb);
+        }
+        some(pred: (node: Node) => boolean): boolean {
+            return forEachEntry(this.map, pred) || false;
+        }
     }
 }
 
@@ -1541,7 +1610,7 @@ namespace ts {
      * user was before extracting it.
      */
     /* @internal */
-    export function getRenameLocation(edits: ReadonlyArray<FileTextChanges>, renameFilename: string, name: string, isDeclaredBeforeUse: boolean): number {
+    export function getRenameLocation(edits: ReadonlyArray<FileTextChanges>, renameFilename: string, name: string, preferLastLocation: boolean): number {
         let delta = 0;
         let lastPos = -1;
         for (const { fileName, textChanges } of edits) {
@@ -1553,7 +1622,7 @@ namespace ts {
                     lastPos = span.start + delta + index;
 
                     // If the reference comes first, return immediately.
-                    if (!isDeclaredBeforeUse) {
+                    if (!preferLastLocation) {
                         return lastPos;
                     }
                 }
@@ -1562,7 +1631,7 @@ namespace ts {
         }
 
         // If the declaration comes first, return the position of the last occurrence.
-        Debug.assert(isDeclaredBeforeUse);
+        Debug.assert(preferLastLocation);
         Debug.assert(lastPos >= 0);
         return lastPos;
     }

@@ -236,6 +236,13 @@ namespace ts {
             description: Diagnostics.Specify_the_root_directory_of_input_files_Use_to_control_the_output_directory_structure_with_outDir,
         },
         {
+            name: "composite",
+            type: "boolean",
+            isTSConfigOnly: true,
+            category: Diagnostics.Basic_Options,
+            description: Diagnostics.Enable_project_compilation,
+        },
+        {
             name: "removeComments",
             type: "boolean",
             showInSimplifiedHelpView: true,
@@ -500,6 +507,12 @@ namespace ts {
             type: "boolean",
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Enable_tracing_of_the_name_resolution_process
+        },
+        {
+            name: "resolveJsonModule",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Include_modules_imported_with_json_extension
         },
         {
             name: "listFiles",
@@ -808,12 +821,14 @@ namespace ts {
     export function parseCommandLine(commandLine: ReadonlyArray<string>, readFile?: (path: string) => string | undefined): ParsedCommandLine {
         const options: CompilerOptions = {};
         const fileNames: string[] = [];
+        const projectReferences: ProjectReference[] | undefined = undefined;
         const errors: Diagnostic[] = [];
 
         parseStrings(commandLine);
         return {
             options,
             fileNames,
+            projectReferences,
             errors
         };
 
@@ -927,6 +942,49 @@ namespace ts {
         return optionNameMap.get(optionName);
     }
 
+
+    export type DiagnosticReporter = (diagnostic: Diagnostic) => void;
+    /**
+     * Reports config file diagnostics
+     */
+    export interface ConfigFileDiagnosticsReporter {
+        /**
+         * Reports unrecoverable error when parsing config file
+         */
+        onUnRecoverableConfigFileDiagnostic: DiagnosticReporter;
+    }
+
+    /**
+     * Interface extending ParseConfigHost to support ParseConfigFile that reads config file and reports errors
+     */
+    export interface ParseConfigFileHost extends ParseConfigHost, ConfigFileDiagnosticsReporter {
+        getCurrentDirectory(): string;
+    }
+
+    /**
+     * Reads the config file, reports errors if any and exits if the config file cannot be found
+     */
+    export function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions, host: ParseConfigFileHost): ParsedCommandLine | undefined {
+        let configFileText: string;
+        try {
+            configFileText = host.readFile(configFileName);
+        }
+        catch (e) {
+            const error = createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, configFileName, e.message);
+            host.onUnRecoverableConfigFileDiagnostic(error);
+            return undefined;
+        }
+        if (!configFileText) {
+            const error = createCompilerDiagnostic(Diagnostics.File_0_not_found, configFileName);
+            host.onUnRecoverableConfigFileDiagnostic(error);
+            return undefined;
+        }
+
+        const result = parseJsonText(configFileName, configFileText);
+        const cwd = host.getCurrentDirectory();
+        return parseJsonSourceFileConfigFileContent(result, host, getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd), optionsToExtend, getNormalizedAbsolutePath(configFileName, cwd));
+    }
+
     /**
      * Read tsconfig.json file
      * @param fileName The path to the config file
@@ -953,9 +1011,9 @@ namespace ts {
      * Read tsconfig.json file
      * @param fileName The path to the config file
      */
-    export function readJsonConfigFile(fileName: string, readFile: (path: string) => string | undefined): JsonSourceFile {
+    export function readJsonConfigFile(fileName: string, readFile: (path: string) => string | undefined): TsConfigSourceFile {
         const textOrDiagnostic = tryReadFile(fileName, readFile);
-        return isString(textOrDiagnostic) ? parseJsonText(fileName, textOrDiagnostic) : <JsonSourceFile>{ parseDiagnostics: [textOrDiagnostic] };
+        return isString(textOrDiagnostic) ? parseJsonText(fileName, textOrDiagnostic) : <TsConfigSourceFile>{ parseDiagnostics: [textOrDiagnostic] };
     }
 
     function tryReadFile(fileName: string, readFile: (path: string) => string | undefined): string | Diagnostic {
@@ -973,58 +1031,70 @@ namespace ts {
         return arrayToMap(options, option => option.name);
     }
 
-    let _tsconfigRootOptions: Map<CommandLineOption>;
+    let _tsconfigRootOptions: TsConfigOnlyOption;
     function getTsconfigRootOptionsMap() {
         if (_tsconfigRootOptions === undefined) {
-            _tsconfigRootOptions = commandLineOptionsToMap([
-                {
-                    name: "compilerOptions",
-                    type: "object",
-                    elementOptions: commandLineOptionsToMap(optionDeclarations),
-                    extraKeyDiagnosticMessage: Diagnostics.Unknown_compiler_option_0
-                },
-                {
-                    name: "typingOptions",
-                    type: "object",
-                    elementOptions: commandLineOptionsToMap(typeAcquisitionDeclarations),
-                    extraKeyDiagnosticMessage: Diagnostics.Unknown_type_acquisition_option_0
-                },
-                {
-                    name: "typeAcquisition",
-                    type: "object",
-                    elementOptions: commandLineOptionsToMap(typeAcquisitionDeclarations),
-                    extraKeyDiagnosticMessage: Diagnostics.Unknown_type_acquisition_option_0
-                },
-                {
-                    name: "extends",
-                    type: "string"
-                },
-                {
-                    name: "files",
-                    type: "list",
-                    element: {
+            _tsconfigRootOptions = {
+                name: undefined, // should never be needed since this is root
+                type: "object",
+                elementOptions: commandLineOptionsToMap([
+                    {
+                        name: "compilerOptions",
+                        type: "object",
+                        elementOptions: commandLineOptionsToMap(optionDeclarations),
+                        extraKeyDiagnosticMessage: Diagnostics.Unknown_compiler_option_0
+                    },
+                    {
+                        name: "typingOptions",
+                        type: "object",
+                        elementOptions: commandLineOptionsToMap(typeAcquisitionDeclarations),
+                        extraKeyDiagnosticMessage: Diagnostics.Unknown_type_acquisition_option_0
+                    },
+                    {
+                        name: "typeAcquisition",
+                        type: "object",
+                        elementOptions: commandLineOptionsToMap(typeAcquisitionDeclarations),
+                        extraKeyDiagnosticMessage: Diagnostics.Unknown_type_acquisition_option_0
+                    },
+                    {
+                        name: "extends",
+                        type: "string"
+                    },
+                    {
+                        name: "references",
+                        type: "list",
+                        element: {
+                            name: "references",
+                            type: "object"
+                        }
+                    },
+                    {
                         name: "files",
-                        type: "string"
-                    }
-                },
-                {
-                    name: "include",
-                    type: "list",
-                    element: {
+                        type: "list",
+                        element: {
+                            name: "files",
+                            type: "string"
+                        }
+                    },
+                    {
                         name: "include",
-                        type: "string"
-                    }
-                },
-                {
-                    name: "exclude",
-                    type: "list",
-                    element: {
+                        type: "list",
+                        element: {
+                            name: "include",
+                            type: "string"
+                        }
+                    },
+                    {
                         name: "exclude",
-                        type: "string"
-                    }
-                },
-                compileOnSaveCommandLineOption
-            ]);
+                        type: "list",
+                        element: {
+                            name: "exclude",
+                            type: "string"
+                        }
+                    },
+                    compileOnSaveCommandLineOption
+                ])
+            };
         }
         return _tsconfigRootOptions;
     }
@@ -1061,23 +1131,30 @@ namespace ts {
      * Convert the json syntax tree into the json value
      */
     export function convertToObject(sourceFile: JsonSourceFile, errors: Push<Diagnostic>): any {
-        return convertToObjectWorker(sourceFile, errors, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
+        return convertToObjectWorker(sourceFile, errors, /*returnValue*/ true, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
     }
 
     /**
-     * Convert the json syntax tree into the json value
+     * Convert the json syntax tree into the json value and report errors
+     * This returns the json value (apart from checking errors) only if returnValue provided is true.
+     * Otherwise it just checks the errors and returns undefined
      */
-    function convertToObjectWorker(
+    /*@internal*/
+    export function convertToObjectWorker(
         sourceFile: JsonSourceFile,
         errors: Push<Diagnostic>,
-        knownRootOptions: Map<CommandLineOption> | undefined,
+        returnValue: boolean,
+        knownRootOptions: CommandLineOption | undefined,
         jsonConversionNotifier: JsonConversionNotifier | undefined): any {
-        if (!sourceFile.jsonObject) {
-            return {};
+        if (!sourceFile.statements.length) {
+            return returnValue ? {} : undefined;
         }
 
-        return convertObjectLiteralExpressionToJson(sourceFile.jsonObject, knownRootOptions,
-            /*extraKeyDiagnosticMessage*/ undefined, /*parentOption*/ undefined);
+        return convertPropertyValueToJson(sourceFile.statements[0].expression, knownRootOptions);
+
+        function isRootOptionMap(knownOptions: Map<CommandLineOption> | undefined) {
+            return knownRootOptions && (knownRootOptions as TsConfigOnlyOption).elementOptions === knownOptions;
+        }
 
         function convertObjectLiteralExpressionToJson(
             node: ObjectLiteralExpression,
@@ -1085,7 +1162,7 @@ namespace ts {
             extraKeyDiagnosticMessage: DiagnosticMessage | undefined,
             parentOption: string | undefined
         ): any {
-            const result: any = {};
+            const result: any = returnValue ? {} : undefined;
             for (const element of node.properties) {
                 if (element.kind !== SyntaxKind.PropertyAssignment) {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element, Diagnostics.Property_assignment_expected));
@@ -1106,11 +1183,13 @@ namespace ts {
                 }
                 const value = convertPropertyValueToJson(element.initializer, option);
                 if (typeof keyText !== "undefined") {
-                    result[keyText] = value;
+                    if (returnValue) {
+                        result[keyText] = value;
+                    }
                     // Notify key value set, if user asked for it
                     if (jsonConversionNotifier &&
                         // Current callbacks are only on known parent option or if we are setting values in the root
-                        (parentOption || knownOptions === knownRootOptions)) {
+                        (parentOption || isRootOptionMap(knownOptions))) {
                         const isValidOptionValue = isCompilerOptionsValue(option, value);
                         if (parentOption) {
                             if (isValidOptionValue) {
@@ -1118,7 +1197,7 @@ namespace ts {
                                 jsonConversionNotifier.onSetValidOptionKeyValueInParent(parentOption, option, value);
                             }
                         }
-                        else if (knownOptions === knownRootOptions) {
+                        else if (isRootOptionMap(knownOptions)) {
                             if (isValidOptionValue) {
                                 // Notify about the valid root key value being set
                                 jsonConversionNotifier.onSetValidOptionKeyValueInRoot(keyText, element.name, value, element.initializer);
@@ -1137,8 +1216,8 @@ namespace ts {
         function convertArrayLiteralExpressionToJson(
             elements: NodeArray<Expression>,
             elementOption: CommandLineOption | undefined
-        ): any[] {
-            return elements.map(element => convertPropertyValueToJson(element, elementOption));
+        ): any[] | void {
+            return (returnValue ? elements.map : elements.forEach).call(elements, (element: Expression) => convertPropertyValueToJson(element, elementOption));
         }
 
         function convertPropertyValueToJson(valueExpression: Expression, option: CommandLineOption): any {
@@ -1396,7 +1475,7 @@ namespace ts {
             for (let i = 0; i < nameColumn.length; i++) {
                 const optionName = nameColumn[i];
                 const description = descriptionColumn[i];
-                result.push(optionName && `${tab}${tab}${optionName}${ description && (makePadding(marginLength - optionName.length + 2) + description)}`);
+                result.push(optionName && `${tab}${tab}${optionName}${description && (makePadding(marginLength - optionName.length + 2) + description)}`);
             }
             if (fileNames.length) {
                 result.push(`${tab}},`);
@@ -1422,7 +1501,7 @@ namespace ts {
      * @param basePath A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
-    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<JsFileExtensionInfo>): ParsedCommandLine {
+    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ParsedCommandLine {
         return parseJsonConfigFileContentWorker(json, /*sourceFile*/ undefined, host, basePath, existingOptions, configFileName, resolutionStack, extraFileExtensions);
     }
 
@@ -1433,12 +1512,12 @@ namespace ts {
      * @param basePath A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
-    export function parseJsonSourceFileConfigFileContent(sourceFile: JsonSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<JsFileExtensionInfo>): ParsedCommandLine {
+    export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ParsedCommandLine {
         return parseJsonConfigFileContentWorker(/*json*/ undefined, sourceFile, host, basePath, existingOptions, configFileName, resolutionStack, extraFileExtensions);
     }
 
     /*@internal*/
-    export function setConfigFileInOptions(options: CompilerOptions, configFile: JsonSourceFile) {
+    export function setConfigFileInOptions(options: CompilerOptions, configFile: TsConfigSourceFile) {
         if (configFile) {
             Object.defineProperty(options, "configFile", { enumerable: false, writable: false, value: configFile });
         }
@@ -1466,13 +1545,13 @@ namespace ts {
      */
     function parseJsonConfigFileContentWorker(
         json: any,
-        sourceFile: JsonSourceFile,
+        sourceFile: TsConfigSourceFile,
         host: ParseConfigHost,
         basePath: string,
         existingOptions: CompilerOptions = {},
         configFileName?: string,
         resolutionStack: Path[] = [],
-        extraFileExtensions: ReadonlyArray<JsFileExtensionInfo> = [],
+        extraFileExtensions: ReadonlyArray<FileExtensionInfo> = [],
     ): ParsedCommandLine {
         Debug.assert((json === undefined && sourceFile !== undefined) || (json !== undefined && sourceFile === undefined));
         const errors: Diagnostic[] = [];
@@ -1480,12 +1559,13 @@ namespace ts {
         const parsedConfig = parseConfig(json, sourceFile, host, basePath, configFileName, resolutionStack, errors);
         const { raw } = parsedConfig;
         const options = extend(existingOptions, parsedConfig.options || {});
-        options.configFilePath = configFileName;
+        options.configFilePath = configFileName && normalizeSlashes(configFileName);
         setConfigFileInOptions(options, sourceFile);
-        const { fileNames, wildcardDirectories, spec } = getFileNames();
+        const { fileNames, wildcardDirectories, spec, projectReferences } = getFileNames();
         return {
             options,
             fileNames,
+            projectReferences,
             typeAcquisition: parsedConfig.typeAcquisition || getDefaultTypeAcquisition(),
             raw,
             errors,
@@ -1527,10 +1607,12 @@ namespace ts {
                     createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "exclude", "Array");
                 }
             }
-            else {
-                const outDir = raw.compilerOptions && raw.compilerOptions.outDir;
-                if (outDir) {
-                    excludeSpecs = [outDir];
+            else if (raw.compilerOptions) {
+                const outDir = raw.compilerOptions.outDir;
+                const declarationDir = raw.compilerOptions.declarationDir;
+
+                if (outDir || declarationDir) {
+                    excludeSpecs = [outDir, declarationDir].filter(d => !!d);
                 }
             }
 
@@ -1539,8 +1621,31 @@ namespace ts {
             }
 
             const result = matchFileNames(filesSpecs, includeSpecs, excludeSpecs, configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath, options, host, errors, extraFileExtensions, sourceFile);
-            if (result.fileNames.length === 0 && !hasProperty(raw, "files") && resolutionStack.length === 0) {
+            if (result.fileNames.length === 0 && !hasProperty(raw, "files") && resolutionStack.length === 0 && !hasProperty(raw, "references")) {
                 errors.push(getErrorForNoInputFiles(result.spec, configFileName));
+            }
+
+            if (hasProperty(raw, "references") && !isNullOrUndefined(raw.references)) {
+                if (isArray(raw.references)) {
+                    const references: ProjectReference[] = [];
+                    for (const ref of raw.references) {
+                        if (typeof ref.path !== "string") {
+                            createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "reference.path", "string");
+                        }
+                        else {
+                            references.push({
+                                path: getNormalizedAbsolutePath(ref.path, basePath),
+                                originalPath: ref.path,
+                                prepend: ref.prepend,
+                                circular: ref.circular
+                            });
+                        }
+                    }
+                    result.projectReferences = references;
+                }
+                else {
+                    createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "references", "Array");
+                }
             }
 
             return result;
@@ -1587,7 +1692,7 @@ namespace ts {
      */
     function parseConfig(
             json: any,
-            sourceFile: JsonSourceFile,
+            sourceFile: TsConfigSourceFile,
             host: ParseConfigHost,
             basePath: string,
             configFileName: string,
@@ -1664,7 +1769,7 @@ namespace ts {
     }
 
     function parseOwnConfigOfJsonSourceFile(
-        sourceFile: JsonSourceFile,
+        sourceFile: TsConfigSourceFile,
         host: ParseConfigHost,
         basePath: string,
         configFileName: string | undefined,
@@ -1711,7 +1816,7 @@ namespace ts {
                 }
             }
         };
-        const json = convertToObjectWorker(sourceFile, errors, getTsconfigRootOptionsMap(), optionsIterator);
+        const json = convertToObjectWorker(sourceFile, errors, /*returnValue*/ true, getTsconfigRootOptionsMap(), optionsIterator);
         if (!typeAcquisition) {
             if (typingOptionstypeAcquisition) {
                 typeAcquisition = (typingOptionstypeAcquisition.enableAutoDiscovery !== undefined) ?
@@ -1754,7 +1859,7 @@ namespace ts {
     }
 
     function getExtendedConfig(
-        sourceFile: JsonSourceFile,
+        sourceFile: TsConfigSourceFile,
         extendedConfigPath: string,
         host: ParseConfigHost,
         basePath: string,
@@ -1820,7 +1925,7 @@ namespace ts {
     }
 
     function getDefaultCompilerOptions(configFileName?: string) {
-        const options: CompilerOptions = getBaseFileName(configFileName) === "jsconfig.json"
+        const options: CompilerOptions = configFileName && getBaseFileName(configFileName) === "jsconfig.json"
             ? { allowJs: true, maxNodeModuleJsDepth: 2, allowSyntheticDefaultImports: true, skipLibCheck: true, noEmit: true }
             : {};
         return options;
@@ -1831,11 +1936,14 @@ namespace ts {
 
         const options = getDefaultCompilerOptions(configFileName);
         convertOptionsFromJson(optionDeclarations, jsonOptions, basePath, options, Diagnostics.Unknown_compiler_option_0, errors);
+        if (configFileName) {
+            options.configFilePath = normalizeSlashes(configFileName);
+        }
         return options;
     }
 
     function getDefaultTypeAcquisition(configFileName?: string): TypeAcquisition {
-        return { enable: getBaseFileName(configFileName) === "jsconfig.json", include: [], exclude: [] };
+        return { enable: configFileName && getBaseFileName(configFileName) === "jsconfig.json", include: [], exclude: [] };
     }
 
     function convertTypeAcquisitionFromJsonWorker(jsonOptions: any,
@@ -2005,8 +2113,8 @@ namespace ts {
         options: CompilerOptions,
         host: ParseConfigHost,
         errors: Push<Diagnostic>,
-        extraFileExtensions: ReadonlyArray<JsFileExtensionInfo>,
-        jsonSourceFile: JsonSourceFile
+        extraFileExtensions: ReadonlyArray<FileExtensionInfo>,
+        jsonSourceFile: TsConfigSourceFile
     ): ExpandResult {
         basePath = normalizePath(basePath);
         let validatedIncludeSpecs: ReadonlyArray<string>, validatedExcludeSpecs: ReadonlyArray<string>;
@@ -2029,7 +2137,7 @@ namespace ts {
         // new entries in these paths.
         const wildcardDirectories = getWildcardDirectories(validatedIncludeSpecs, validatedExcludeSpecs, basePath, host.useCaseSensitiveFileNames);
 
-        const spec: ConfigFileSpecs = { filesSpecs, includeSpecs, excludeSpecs, validatedIncludeSpecs, validatedExcludeSpecs, wildcardDirectories };
+        const spec: ConfigFileSpecs = { filesSpecs, referencesSpecs: undefined, includeSpecs, excludeSpecs, validatedIncludeSpecs, validatedExcludeSpecs, wildcardDirectories };
         return getFileNamesFromConfigSpecs(spec, basePath, options, host, extraFileExtensions);
     }
 
@@ -2043,7 +2151,7 @@ namespace ts {
      * @param extraFileExtensions optionaly file extra file extension information from host
      */
     /* @internal */
-    export function getFileNamesFromConfigSpecs(spec: ConfigFileSpecs, basePath: string, options: CompilerOptions, host: ParseConfigHost, extraFileExtensions: ReadonlyArray<JsFileExtensionInfo> = []): ExpandResult {
+    export function getFileNamesFromConfigSpecs(spec: ConfigFileSpecs, basePath: string, options: CompilerOptions, host: ParseConfigHost, extraFileExtensions: ReadonlyArray<FileExtensionInfo> = []): ExpandResult {
         basePath = normalizePath(basePath);
 
         const keyMapper = host.useCaseSensitiveFileNames ? identity : toLowerCase;
@@ -2100,14 +2208,22 @@ namespace ts {
 
         const literalFiles = arrayFrom(literalFileMap.values());
         const wildcardFiles = arrayFrom(wildcardFileMap.values());
+        const projectReferences = spec.referencesSpecs && spec.referencesSpecs.map((r): ProjectReference => {
+            return {
+                ...r,
+                path: getNormalizedAbsolutePath(r.path, basePath)
+            };
+        });
+
         return {
             fileNames: literalFiles.concat(wildcardFiles),
+            projectReferences,
             wildcardDirectories,
             spec
         };
     }
 
-    function validateSpecs(specs: ReadonlyArray<string>, errors: Push<Diagnostic>, allowTrailingRecursion: boolean, jsonSourceFile: JsonSourceFile, specKey: string): ReadonlyArray<string> {
+    function validateSpecs(specs: ReadonlyArray<string>, errors: Push<Diagnostic>, allowTrailingRecursion: boolean, jsonSourceFile: TsConfigSourceFile, specKey: string): ReadonlyArray<string> {
         return specs.filter(spec => {
             const diag = specToDiagnostic(spec, allowTrailingRecursion);
             if (diag !== undefined) {
@@ -2117,18 +2233,10 @@ namespace ts {
         });
 
         function createDiagnostic(message: DiagnosticMessage, spec: string): Diagnostic {
-            if (jsonSourceFile && jsonSourceFile.jsonObject) {
-                for (const property of getPropertyAssignment(jsonSourceFile.jsonObject, specKey)) {
-                    if (isArrayLiteralExpression(property.initializer)) {
-                        for (const element of property.initializer.elements) {
-                            if (isStringLiteral(element) && element.text === spec) {
-                                return createDiagnosticForNodeInSourceFile(jsonSourceFile, element, message, spec);
-                            }
-                        }
-                    }
-                }
-            }
-            return createCompilerDiagnostic(message, spec);
+            const element = getTsConfigPropArrayElementValue(jsonSourceFile, specKey, spec);
+            return element ?
+                createDiagnosticForNodeInSourceFile(jsonSourceFile, element, message, spec) :
+                createCompilerDiagnostic(message, spec);
         }
     }
 

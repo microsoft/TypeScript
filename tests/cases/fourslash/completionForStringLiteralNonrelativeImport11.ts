@@ -24,13 +24,13 @@
 const kinds = ["import_as", "import_equals", "require"];
 verify.completions(
     {
-        at: kinds.map(k => `${k}0`),
-        are: "module",
+        marker: kinds.map(k => `${k}0`),
+        exact: "module",
         isNewIdentifierLocation: true,
     },
     {
-        at: kinds.map(k => `${k}1`),
-        are: "index",
+        marker: kinds.map(k => `${k}1`),
+        exact: "index",
         isNewIdentifierLocation: true,
     },
 )

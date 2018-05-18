@@ -22,6 +22,7 @@ const through2 = require("through2");
 const merge2 = require("merge2");
 const os = require("os");
 const fold = require("travis-fold");
+const ts = require("./lib/typescript");
 const gulp = helpMaker(originalGulp);
 
 Error.stackTraceLimit = 1000;
@@ -53,7 +54,7 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         debug: process.env.debug || process.env["debug-brk"] || process.env.d,
         inspect: process.env.inspect || process.env["inspect-brk"] || process.env.i,
         host: process.env.TYPESCRIPT_HOST || process.env.host || "node",
-        browser: process.env.browser || process.env.b || "IE",
+        browser: process.env.browser || process.env.b || (os.platform() === "win32" ? "edge" : "chrome"),
         timeout: process.env.timeout || 40000,
         tests: process.env.test || process.env.tests || process.env.t,
         runners: process.env.runners || process.env.runner || process.env.ru,
@@ -66,10 +67,10 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
 
 const noop = () => {}; // tslint:disable-line no-empty
 /**
- * @param {string} cmd 
- * @param {string[]} args 
- * @param {() => void} complete 
- * @param {(e: *, status: number) => void} error 
+ * @param {string} cmd
+ * @param {string[]} args
+ * @param {() => void} complete
+ * @param {(e: *, status: number) => void} error
  */
 function exec(cmd, args, complete = noop, error = noop) {
     console.log(`${cmd} ${args.join(" ")}`);
@@ -82,10 +83,40 @@ function exec(cmd, args, complete = noop, error = noop) {
 }
 
 /**
- * @param {string} cmd 
+ * @param {string} cmd
  */
 function possiblyQuote(cmd) {
     return cmd.indexOf(" ") >= 0 ? `"${cmd}"` : cmd;
+}
+
+/**
+ * @param diagnostics {ts.Diagnostic[]}
+ * @param [pretty] {boolean}
+ */
+function diagnosticsToString(diagnostics, pretty) {
+    const host = {
+        getCurrentDirectory() { return process.cwd(); },
+        getCanonicalFileName(fileName) { return fileName; },
+        getNewLine() { return os.EOL; }
+    };
+    return pretty ? ts.formatDiagnosticsWithColorAndContext(diagnostics, host) :
+        ts.formatDiagnostics(diagnostics, host);
+}
+
+/** @param diagnostics {ts.Diagnostic[]} */
+function reportDiagnostics(diagnostics) {
+    console.log(diagnosticsToString(diagnostics, process.stdout.isTTY));
+}
+
+/** @param jsonPath {string} */
+function readJson(jsonPath) {
+    const jsonText = fs.readFileSync(jsonPath, "utf8");
+    const result = ts.parseConfigFileTextToJson(jsonPath, jsonText);
+    if (result.error) {
+        reportDiagnostics([result.error]);
+        throw new Error("An error occurred during parse.");
+    }
+    return result.config;
 }
 
 let useDebugMode = true;
@@ -113,81 +144,8 @@ const nodeModulesPathPrefix = path.resolve("./node_modules/.bin/");
 const isWin = /^win/.test(process.platform);
 const mocha = path.join(nodeModulesPathPrefix, "mocha") + (isWin ? ".cmd" : "");
 
-const es2015LibrarySources = [
-    "es2015.core.d.ts",
-    "es2015.collection.d.ts",
-    "es2015.generator.d.ts",
-    "es2015.iterable.d.ts",
-    "es2015.promise.d.ts",
-    "es2015.proxy.d.ts",
-    "es2015.reflect.d.ts",
-    "es2015.symbol.d.ts",
-    "es2015.symbol.wellknown.d.ts"
-];
-
-const es2015LibrarySourceMap = es2015LibrarySources.map(source =>
-    ({ target: "lib." + source, sources: ["header.d.ts", source] }));
-
-const es2016LibrarySource = ["es2016.array.include.d.ts"];
-
-const es2016LibrarySourceMap = es2016LibrarySource.map(source =>
-    ({ target: "lib." + source, sources: ["header.d.ts", source] }));
-
-const es2017LibrarySource = [
-    "es2017.object.d.ts",
-    "es2017.sharedmemory.d.ts",
-    "es2017.string.d.ts",
-    "es2017.intl.d.ts",
-    "es2017.typedarrays.d.ts",
-];
-
-const es2017LibrarySourceMap = es2017LibrarySource.map(source =>
-    ({ target: "lib." + source, sources: ["header.d.ts", source] }));
-
-const es2018LibrarySource = [
-    "es2018.regexp.d.ts",
-    "es2018.promise.d.ts",
-    "es2018.intl.d.ts"
-];
-const es2018LibrarySourceMap = es2018LibrarySource.map(source =>
-    ({ target: "lib." + source, sources: ["header.d.ts", source] }));
-
-const esnextLibrarySource = [
-    "esnext.asynciterable.d.ts",
-    "esnext.array.d.ts"
-];
-
-const esnextLibrarySourceMap = esnextLibrarySource.map(source =>
-    ({ target: "lib." + source, sources: ["header.d.ts", source] }));
-
-const hostsLibrarySources = ["dom.generated.d.ts", "webworker.importscripts.d.ts", "scripthost.d.ts"];
-
-const librarySourceMap = [
-    // Host library
-    { target: "lib.dom.d.ts", sources: ["header.d.ts", "dom.generated.d.ts"] },
-    { target: "lib.dom.iterable.d.ts", sources: ["header.d.ts", "dom.iterable.d.ts"] },
-    { target: "lib.webworker.d.ts", sources: ["header.d.ts", "webworker.generated.d.ts"] },
-    { target: "lib.scripthost.d.ts", sources: ["header.d.ts", "scripthost.d.ts"] },
-
-    // JavaScript library
-    { target: "lib.es5.d.ts", sources: ["header.d.ts", "es5.d.ts"] },
-    { target: "lib.es2015.d.ts", sources: ["header.d.ts", "es2015.d.ts"] },
-    { target: "lib.es2016.d.ts", sources: ["header.d.ts", "es2016.d.ts"] },
-    { target: "lib.es2017.d.ts", sources: ["header.d.ts", "es2017.d.ts"] },
-    { target: "lib.es2018.d.ts", sources: ["header.d.ts", "es2018.d.ts"] },
-    { target: "lib.esnext.d.ts", sources: ["header.d.ts", "esnext.d.ts"] },
-
-    // JavaScript + all host library
-    { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources) },
-    { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") },
-    { target: "lib.es2016.full.d.ts", sources: ["header.d.ts", "es2016.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
-    { target: "lib.es2017.full.d.ts", sources: ["header.d.ts", "es2017.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
-    { target: "lib.es2018.full.d.ts", sources: ["header.d.ts", "es2018.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
-    { target: "lib.esnext.full.d.ts", sources: ["header.d.ts", "esnext.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
-].concat(es2015LibrarySourceMap, es2016LibrarySourceMap, es2017LibrarySourceMap, es2018LibrarySourceMap, esnextLibrarySourceMap);
-
-const libraryTargets = librarySourceMap.map(f =>
-    path.join(builtLocalDirectory, f.target));
+/** @type {{ libs: string[], paths?: Record<string, string>, sources?: Record<string, string[]> }} */
+const libraries = readJson("./src/lib/libs.json");
 
 /**
  * .lcg file is what localization team uses to know what messages to localize.
@@ -202,20 +160,22 @@ const generatedLCGFile = path.join(builtLocalDirectory, "enu", "diagnosticMessag
  *    2. 'src\compiler\diagnosticMessages.generated.json' => 'built\local\ENU\diagnosticMessages.generated.json.lcg'
  *       generate the lcg file (source of messages to localize) from the diagnosticMessages.generated.json
  */
-const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"]
+const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"]
     .map(f => path.join(builtLocalDirectory, f, "diagnosticMessages.generated.json"))
     .concat(generatedLCGFile);
 
-for (const i in libraryTargets) {
-    const entry = librarySourceMap[i];
-    const target = libraryTargets[i];
-    const sources = [copyright].concat(entry.sources.map(s => path.join(libraryDirectory, s)));
+const libraryTargets = libraries.libs.map(lib => {
+    const relativeSources = ["header.d.ts"].concat(libraries.sources && libraries.sources[lib] || [lib + ".d.ts"]);
+    const relativeTarget = libraries.paths && libraries.paths[lib] || ("lib." + lib + ".d.ts");
+    const sources = [copyright].concat(relativeSources.map(s => path.join(libraryDirectory, s)));
+    const target = path.join(builtLocalDirectory, relativeTarget);
     gulp.task(target, /*help*/ false, [], () =>
         gulp.src(sources)
             .pipe(newer(target))
             .pipe(concat(target, { newLine: "\n\n" }))
             .pipe(gulp.dest(".")));
-}
+    return target;
+});
 
 const configurePreleleaseJs = path.join(scriptsDirectory, "configurePrerelease.js");
 const configurePreleleaseTs = path.join(scriptsDirectory, "configurePrerelease.ts");
@@ -223,8 +183,8 @@ const packageJson = "package.json";
 const versionFile = path.join(compilerDirectory, "core.ts");
 
 /**
- * @param {string | string[]} source 
- * @param {string | string[]} dest 
+ * @param {string | string[]} source
+ * @param {string | string[]} dest
  * @returns {boolean}
  */
 function needsUpdate(source, dest) {
@@ -291,7 +251,7 @@ function needsUpdate(source, dest) {
 }
 
 /**
- * @param {tsc.Settings} base 
+ * @param {tsc.Settings} base
  * @param {boolean=} useBuiltCompiler
  * @returns {tsc.Settings}
  */
@@ -443,7 +403,7 @@ const nodeStandaloneDefinitionsFile = path.join(builtLocalDirectory, "typescript
 /** @type {string} */
 let copyrightContent;
 /**
- * @param {boolean} outputCopyright 
+ * @param {boolean} outputCopyright
  */
 function prependCopyright(outputCopyright = !useDebugMode) {
     return insert.prepend(outputCopyright ? (copyrightContent || (copyrightContent = fs.readFileSync(copyright).toString())) : "");
@@ -667,9 +627,9 @@ function restoreSavedNodeEnv() {
 }
 
 /**
- * @param {string} defaultReporter 
- * @param {boolean} runInParallel 
- * @param {(e?: any) => void} done 
+ * @param {string} defaultReporter
+ * @param {boolean} runInParallel
+ * @param {(e?: any) => void} done
  */
 function runConsoleTests(defaultReporter, runInParallel, done) {
     const lintFlag = cmdLineOptions.lint;
@@ -747,8 +707,8 @@ function runConsoleTests(defaultReporter, runInParallel, done) {
     });
 
     /**
-     * @param {any=} err 
-     * @param {number=} status 
+     * @param {any=} err
+     * @param {number=} status
      */
     function failWithStatus(err, status) {
         if (err || status) {
@@ -767,8 +727,8 @@ function runConsoleTests(defaultReporter, runInParallel, done) {
     }
 
     /**
-     * @param {any=} error 
-     * @param {number=} errorStatus 
+     * @param {any=} error
+     * @param {number=} errorStatus
      */
     function finish(error, errorStatus) {
         restoreSavedNodeEnv();
@@ -801,7 +761,7 @@ const nodeServerOutFile = "tests/webTestServer.js";
 const nodeServerInFile = "tests/webTestServer.ts";
 gulp.task(nodeServerOutFile, /*help*/ false, [servicesFile], () => {
     /** @type {tsc.Settings} */
-    const settings = getCompilerSettings({ module: "commonjs" }, /*useBuiltCompiler*/ true);
+    const settings = getCompilerSettings({ module: "commonjs", target: "es2015" }, /*useBuiltCompiler*/ true);
     return gulp.src(nodeServerInFile)
         .pipe(newer(nodeServerOutFile))
         .pipe(sourcemaps.init())
@@ -886,7 +846,7 @@ gulp.task("browserify", "Runs browserify on run.js to produce a file suitable fo
 });
 
 /**
- * @param {(e?: any) => void} done 
+ * @param {(e?: any) => void} done
  */
 function cleanTestDirs(done) {
     // Clean the local baselines & Rwc baselines directories
@@ -906,13 +866,13 @@ function cleanTestDirs(done) {
 
 /**
  * used to pass data from jake command line directly to run.js
- * @param {string} tests 
- * @param {string} runners 
- * @param {boolean} light 
- * @param {string=} taskConfigsFolder 
- * @param {number=} workerCount 
- * @param {string=} stackTraceLimit 
- * @param {number=} timeout 
+ * @param {string} tests
+ * @param {string} runners
+ * @param {boolean} light
+ * @param {string=} taskConfigsFolder
+ * @param {number=} workerCount
+ * @param {string=} stackTraceLimit
+ * @param {number=} timeout
  */
 function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, timeout) {
     const testConfigContents = JSON.stringify({

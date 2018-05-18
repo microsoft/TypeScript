@@ -23,7 +23,7 @@ declare global {
 >global : Symbol(global, Decl(index.ts, 0, 0))
 
     interface Account {
->Account : Symbol(Account, Decl(index.ts, 0, 16))
+>Account : Symbol(Account, Decl(lib.d.ts, --, --), Decl(index.ts, 0, 16))
 
         someProp: number;
 >someProp : Symbol(Account.someProp, Decl(index.ts, 1, 23))

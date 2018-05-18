@@ -45,18 +45,18 @@ verify.quickInfoAt("1", "var myVariable: number", "This is my variable");
 
 verify.completions(
     {
-        at: "2",
+        marker: "2",
         includes: { name: "myVariable", text: "var myVariable: number", documentation: "This is my variable" },
     },
     {
-        at: "3",
+        marker: "3",
         includes: [
             { name: "myVariable", text: "var myVariable: number", documentation: "This is my variable" },
             { name: "d", text: "var d: number", documentation: "d variable" }
         ],
     },
     {
-        at: "4",
+        marker: "4",
         includes: [
             { name: "foo", text: "function foo(): void", documentation: "foos comment" },
             { name: "fooVar", text: "var fooVar: () => void", documentation:"fooVar comment" },
@@ -64,35 +64,31 @@ verify.completions(
     },
 )
 
-goTo.marker('5');
-verify.currentSignatureHelpDocCommentIs("foos comment");
+verify.signatureHelp({ marker: "5", docComment: "foos comment" });
 verify.quickInfoAt("5q", "function foo(): void", "foos comment");
 
-goTo.marker('6');
-verify.currentSignatureHelpDocCommentIs("fooVar comment");
+verify.signatureHelp({ marker: "6", docComment: "fooVar comment" });
 verify.quickInfoAt("6q", "var fooVar: () => void", "fooVar comment");
 
 verify.completions({
-    at: "7",
+    marker: "7",
     includes: [
         { name: "foo", text: "function foo(): void", documentation: "foos comment" },
         { name: "fooVar", text: "var fooVar: () => void", documentation:"fooVar comment" },
     ],
 });
 
-goTo.marker('8');
-verify.currentSignatureHelpDocCommentIs("foos comment");
+verify.signatureHelp({ marker: "8", docComment: "foos comment" });
 verify.quickInfoAt("8q", "function foo(): void", "foos comment");
 
-goTo.marker('9');
-verify.currentSignatureHelpDocCommentIs("fooVar comment");
+verify.signatureHelp({ marker: "9", docComment: "fooVar comment" });
 verify.quickInfos({
     "9q": ["var fooVar: () => void", "fooVar comment"],
     "9aq": ["var fooVar: () => void", "fooVar comment"]
 });
 
-verify.completions({ at: "10", includes: { name: "i", text: "var i: c", documentation: "instance comment" } });
-verify.completions({ at: "11", includes: { name: "i1_i", text: "var i1_i: i1", documentation: "interface instance comments" } });
+verify.completions({ marker: "10", includes: { name: "i", text: "var i: c", documentation: "instance comment" } });
+verify.completions({ marker: "11", includes: { name: "i1_i", text: "var i1_i: i1", documentation: "interface instance comments" } });
 
 verify.quickInfos({
     12: ["var fooVar: () => void", "fooVar comment"],

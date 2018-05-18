@@ -10,7 +10,7 @@
 ////t/**/
 
 verify.completions({
-    at: "",
+    marker: "",
     includes: [
         { name: "Test1", source: "/a", sourceDisplay: "./a", text: "function Test1(): void", kind: "function", hasAction: true },
         { name: "Test2", text: "(alias) function Test2(): void\nimport Test2", kind: "alias" },

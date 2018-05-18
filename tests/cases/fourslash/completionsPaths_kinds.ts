@@ -21,7 +21,7 @@
 ////}
 
 verify.completions({
-    at: ["0", "1"],
-    are: [{ name: "b", kind: "script" }, { name: "dir", kind: "directory" }],
+    marker: ["0", "1"],
+    exact: [{ name: "b", kind: "script" }, { name: "dir", kind: "directory" }],
     isNewIdentifierLocation: true
 });

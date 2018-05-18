@@ -15,7 +15,7 @@
 ////bdf/**/
 
 verify.completions({
-    at: "",
+    marker: "",
     includes: ["bdf", "abcdef", "BDF"].map(name =>
         ({ name, source: "/a", text: `function ${name}(): void`, hasAction: true, kind: "function", sourceDisplay: "./a" })),
     excludes: ["abcde", "dbf"],

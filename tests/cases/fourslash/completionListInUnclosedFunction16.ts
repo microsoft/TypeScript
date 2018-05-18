@@ -7,4 +7,4 @@
 ////    function bar(a: number, b: string = "hello", c: typeof x = "hello") {
 ////        var v = (p: MyType) => /*1*/
 
-verify.completions({ at: "1", includes: ["foo", "x", "y", "z", "bar", "a", "b", "c", "v", "p"] });
+verify.completions({ marker: "1", includes: ["foo", "x", "y", "z", "bar", "a", "b", "c", "v", "p"] });

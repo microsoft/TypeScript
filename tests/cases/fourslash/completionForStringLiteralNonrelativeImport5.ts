@@ -22,12 +22,12 @@
 //// declare module "otherOtherAmbientModule" {}
 
 verify.completions({
-    at: test.markerNames().filter(k => k.endsWith("0")),
-    are: ["ambientModule", "otherAmbientModule", "otherOtherAmbientModule"],
+    marker: test.markerNames().filter(k => k.endsWith("0")),
+    exact: ["ambientModule", "otherAmbientModule", "otherOtherAmbientModule"],
     isNewIdentifierLocation: true,
 });
 verify.completions({
-    at: test.markerNames().filter(k => !k.endsWith("0")),
-    are: "ambientModule",
+    marker: test.markerNames().filter(k => !k.endsWith("0")),
+    exact: "ambientModule",
     isNewIdentifierLocation: true,
 });

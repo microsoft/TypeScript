@@ -1,0 +1,93 @@
+=== tests/cases/compiler/mappedTypeUnionConstraintInferences.ts ===
+export declare type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+>Omit : Pick<T, Exclude<keyof T, K>>
+>T : T
+>K : K
+>T : T
+>Pick : Pick<T, K>
+>T : T
+>Exclude : Exclude<T, U>
+>T : T
+>K : K
+
+export declare type PartialProperties<T, K extends keyof T> = Partial<Pick<T, K>> & Omit<T, K>;
+>PartialProperties : PartialProperties<T, K>
+>T : T
+>K : K
+>T : T
+>Partial : Partial<T>
+>Pick : Pick<T, K>
+>T : T
+>K : K
+>Omit : Pick<T, Exclude<keyof T, K>>
+>T : T
+>K : K
+
+export function doSomething_Actual<T extends {
+>doSomething_Actual : <T extends { prop: string; }>(a: T) => { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
+>T : T
+
+    prop: string;
+>prop : string
+
+}>(a: T) {
+>a : T
+>T : T
+
+    const x: { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; } = null as any;
+>x : { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
+>P : P
+>PartialProperties : PartialProperties<T, K>
+>T : T
+>PartialProperties : PartialProperties<T, K>
+>T : T
+>P : P
+>null as any : any
+>null : null
+
+    return x;
+>x : { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
+}
+export declare function doSomething_Expected<T extends {
+>doSomething_Expected : <T extends { prop: string; }>(a: T) => { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
+>T : T
+
+    prop: string;
+>prop : string
+
+}>(a: T): { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; };
+>a : T
+>T : T
+>P : P
+>PartialProperties : PartialProperties<T, K>
+>T : T
+>PartialProperties : PartialProperties<T, K>
+>T : T
+>P : P
+
+export let a = doSomething_Actual({ prop: "test" });
+>a : { prop?: string; }
+>doSomething_Actual({ prop: "test" }) : { prop?: string; }
+>doSomething_Actual : <T extends { prop: string; }>(a: T) => { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
+>{ prop: "test" } : { prop: string; }
+>prop : string
+>"test" : "test"
+
+a = {} // should be fine, equivalent to below
+>a = {} : {}
+>a : { prop?: string; }
+>{} : {}
+
+export let b = doSomething_Expected({ prop: "test" });
+>b : { prop?: string; }
+>doSomething_Expected({ prop: "test" }) : { prop?: string; }
+>doSomething_Expected : <T extends { prop: string; }>(a: T) => { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
+>{ prop: "test" } : { prop: string; }
+>prop : string
+>"test" : "test"
+
+b = {} // fine
+>b = {} : {}
+>b : { prop?: string; }
+>{} : {}
+

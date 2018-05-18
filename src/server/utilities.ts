@@ -128,6 +128,8 @@ namespace ts.server {
         configHasFilesProperty: boolean;
         configHasIncludeProperty: boolean;
         configHasExcludeProperty: boolean;
+
+        projectReferences: ReadonlyArray<ProjectReference> | undefined;
         /**
          * these fields can be present in the project file
          */

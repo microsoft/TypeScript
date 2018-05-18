@@ -24,4 +24,4 @@
 // @Filename: dir1/dir2/dir3/node_modules/fake-module3/ts.ts
 ////
 
-verify.completions({ at: test.markerNames(), are: [], isNewIdentifierLocation: true });
+verify.completions({ marker: test.markerNames(), exact: [], isNewIdentifierLocation: true });

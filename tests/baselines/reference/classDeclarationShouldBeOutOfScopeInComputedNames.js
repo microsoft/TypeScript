@@ -13,16 +13,16 @@ class A {
 //// [classDeclarationShouldBeOutOfScopeInComputedNames.js]
 var A = /** @class */ (function () {
     function A() {
-        this[_a] = 0;
+        this[_b] = 0;
     }
-    A[(_b = A.p1, A.p2)] = function () { return 0; };
+    A[(_a = A.p1, A.p2)] = function () { return 0; };
     ;
     A.prototype[A.p1] = function () { };
-    _a = A.p2;
+    var _a, _b;
+    _b = A.p2;
     A.p1 = Symbol();
     A.p2 = Symbol();
     // All of the below should be out of scope or TDZ - `A` has not finished being constructed as they are executed
-    A[_b] = 0;
+    A[_a] = 0;
     return A;
-    var _b, _a;
 }());

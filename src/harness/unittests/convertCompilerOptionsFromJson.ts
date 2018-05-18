@@ -1,5 +1,7 @@
 /// <reference path="..\harness.ts" />
 /// <reference path="..\..\compiler\commandLineParser.ts" />
+/// <reference path="../compiler.ts" />
+/// <reference path="../vfs.ts" />
 
 namespace ts {
     describe("convertCompilerOptionsFromJson", () => {
@@ -12,7 +14,7 @@ namespace ts {
             const { options: actualCompilerOptions, errors: actualErrors} = convertCompilerOptionsFromJson(json.compilerOptions, "/apath/", configFileName);
 
             const parsedCompilerOptions = JSON.stringify(actualCompilerOptions);
-            const expectedCompilerOptions = JSON.stringify(expectedResult.compilerOptions);
+            const expectedCompilerOptions = JSON.stringify({ ...expectedResult.compilerOptions, configFilePath: configFileName });
             assert.equal(parsedCompilerOptions, expectedCompilerOptions);
 
             const expectedErrors = expectedResult.errors;
@@ -31,7 +33,7 @@ namespace ts {
             const result = parseJsonText(configFileName, fileText);
             assert(!result.parseDiagnostics.length);
             assert(!!result.endOfFileToken);
-            const host: ParseConfigHost = new Utils.MockParseConfigHost("/apath/", true, []);
+            const host: ParseConfigHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: "/apath/" }));
             const { options: actualCompilerOptions, errors: actualParseErrors } = parseJsonSourceFileConfigFileContent(result, host, "/apath/", /*existingOptions*/ undefined, configFileName);
             expectedResult.compilerOptions.configFilePath = configFileName;
 
