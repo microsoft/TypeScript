@@ -14,7 +14,12 @@ namespace ts.codefix {
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, start: number): void {
         const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
-        const statement = cast(token.parent, isLabeledStatement).statement;
-        changes.deleteRange(sourceFile, { pos: token.getStart(sourceFile), end: statement.getStart(sourceFile) });
+        const labeledStatement = cast(token.parent, isLabeledStatement);
+        const pos = token.getStart(sourceFile);
+        const statementPos = labeledStatement.statement.getStart(sourceFile);
+        // If label is on a separate line, just delete the rest of that line, but not the indentation of the labeled statement.
+        const end = positionsAreOnSameLine(pos, statementPos, sourceFile) ? statementPos
+            : skipTrivia(sourceFile.text, findChildOfKind(labeledStatement, SyntaxKind.ColonToken, sourceFile)!.end, /*stopAfterLineBreak*/ true);
+        changes.deleteRange(sourceFile, { pos, end });
     }
 }

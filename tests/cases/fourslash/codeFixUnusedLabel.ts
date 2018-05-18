@@ -2,10 +2,10 @@
 
 // @noUnusedLocals: true
 
-////label: while (1) {}
+/////* a */label/* b */:/* c */while (1) {}
 
 verify.codeFix({
     description: "Remove unused label",
     newFileContent:
-`while (1) {}`,
+`/* a */while (1) {}`,
 });
