@@ -45,7 +45,7 @@ namespace ts {
                 if (checker.getSymbolAtLocation(importStringLiteral)) continue;
 
                 const resolved = host.resolveModuleNames
-                    ? host.resolveModuleNameWithFailedLookupLocations && host.resolveModuleNameWithFailedLookupLocations(importStringLiteral.text, sourceFile.fileName)
+                    ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importStringLiteral.text, sourceFile.fileName)
                     : program.getResolvedModuleWithFailedLookupLocationsFromCache(importStringLiteral.text, sourceFile.fileName);
                 if (resolved && contains(resolved.failedLookupLocations, oldFilePath)) {
                     result.push({ sourceFile, toUpdate: importStringLiteral });

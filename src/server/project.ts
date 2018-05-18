@@ -358,8 +358,8 @@ namespace ts.server {
             return this.resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames);
         }
 
-        resolveModuleNameWithFailedLookupLocations(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations {
-            return this.resolutionCache.resolveModuleNameWithFailedLookupLocations(moduleName, containingFile);
+        getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations {
+            return this.resolutionCache.getResolvedModuleWithFailedLookupLocationsFromCache(moduleName, containingFile);
         }
 
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[] {

@@ -6,7 +6,7 @@ namespace ts {
         finishRecordingFilesWithChangedResolutions(): Path[];
 
         resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined): ResolvedModuleFull[];
-        resolveModuleNameWithFailedLookupLocations(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations;
+        getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations;
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
 
         invalidateResolutionOfFile(filePath: Path): void;
@@ -74,7 +74,7 @@ namespace ts {
     export const maxNumberOfFilesToIterateForInvalidation = 256;
 
     type GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocations = ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName = ResolutionWithResolvedFileName> =
-        (resolution: T) => R;
+        (resolution: T) => R | undefined;
 
     export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootDirForResolution: string, logChangesWhenResolvingModule: boolean): ResolutionCache {
         let filesWithChangedSetOfUnresolvedImports: Path[] | undefined;
@@ -125,7 +125,7 @@ namespace ts {
             startCachingPerDirectoryResolution: clearPerDirectoryResolutions,
             finishCachingPerDirectoryResolution,
             resolveModuleNames,
-            resolveModuleNameWithFailedLookupLocations,
+            getResolvedModuleWithFailedLookupLocationsFromCache,
             resolveTypeReferenceDirectives,
             removeResolutionsOfFile,
             invalidateResolutionOfFile,
@@ -339,8 +339,9 @@ namespace ts {
             );
         }
 
-        function resolveModuleNameWithFailedLookupLocations(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations {
-            return resolveModuleName(moduleName, containingFile, resolutionHost.getCompilationSettings(), resolutionHost);
+        function getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined {
+            const cache = resolvedModuleNames.get(resolutionHost.toPath(containingFile));
+            return cache && cache.get(moduleName);
         }
 
         function isNodeModulesDirectory(dirPath: Path) {

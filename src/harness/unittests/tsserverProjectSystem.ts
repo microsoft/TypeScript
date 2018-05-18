@@ -8386,16 +8386,12 @@ new C();`
 
     describe("tsserverProjectSystem getEditsForFileRename", () => {
         it("works for host implementing 'resolveModuleNames' and 'resolveModuleNameWithFailedLookupLocation'", () => {
-            const newTs: File = {
-                path: "/new.ts",
-                content: "export const x = 0",
-            };
             const userTs: File = {
                 path: "/user.ts",
                 content: 'import { x } from "./old";',
             };
 
-            const host = createServerHost([newTs, userTs]);
+            const host = createServerHost([userTs]);
             const projectService = createProjectService(host);
             projectService.openClientFile(userTs.path);
             const project = first(projectService.inferredProjects);

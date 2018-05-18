@@ -208,10 +208,10 @@ namespace ts {
          * if implementation is omitted then language service will use built-in module resolution logic and get answers to
          * host specific questions using 'getScriptSnapshot'.
          *
-         * If this is implemented, `resolveModuleNameWithFailedLookupLocations` should be too.
+         * If this is implemented, `getResolvedModuleWithFailedLookupLocationsFromCache` should be too.
          */
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
-        resolveModuleNameWithFailedLookupLocations?(modulename: string, containingFile: string): ResolvedModuleWithFailedLookupLocations;
+        getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string): ResolvedModuleWithFailedLookupLocations;
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
