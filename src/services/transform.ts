@@ -1,5 +1,3 @@
-/// <reference path="..\compiler\transformer.ts"/>
-/// <reference path="transpile.ts"/>
 namespace ts {
     /**
      * Transform one or more nodes using the supplied transformers.

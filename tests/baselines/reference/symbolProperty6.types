@@ -3,22 +3,26 @@ class C {
 >C : C
 
     [Symbol.iterator] = 0;
+>[Symbol.iterator] : number
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
 >0 : 0
 
     [Symbol.unscopables]: number;
+>[Symbol.unscopables] : number
 >Symbol.unscopables : symbol
 >Symbol : SymbolConstructor
 >unscopables : symbol
 
     [Symbol.toPrimitive]() { }
+>[Symbol.toPrimitive] : () => void
 >Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
 >toPrimitive : symbol
 
     get [Symbol.toStringTag]() {
+>[Symbol.toStringTag] : number
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol

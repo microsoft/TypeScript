@@ -13,7 +13,10 @@ interface indexAccess {
 >indexAccess : Symbol(indexAccess, Decl(constIndexedAccess.ts, 3, 1))
 
     0: string;
+>0 : Symbol(indexAccess[0], Decl(constIndexedAccess.ts, 5, 23))
+
     1: number;
+>1 : Symbol(indexAccess[1], Decl(constIndexedAccess.ts, 6, 14))
 }
 
 let test: indexAccess;

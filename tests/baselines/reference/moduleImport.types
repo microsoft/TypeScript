@@ -7,8 +7,8 @@ module A.B.C {
 	import XYZ = X.Y.Z;
 >XYZ : any
 >X : typeof X
->Y : No type information available!
->Z : No type information available!
+>Y : any
+>Z : any
 
 	export function ping(x: number) {
 >ping : (x: number) => void

@@ -75,5 +75,5 @@ var f2 = function _b() {
     var j = function () { return _newTarget; };
 };
 var O = {
-    k: function _c() { var _newTarget = this && this instanceof _c ? this.constructor : void 0; return _newTarget; }
+    k: function k() { var _newTarget = this && this instanceof k ? this.constructor : void 0; return _newTarget; }
 };

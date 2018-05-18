@@ -2,12 +2,10 @@ built
 doc
 Gulpfile.ts
 internal
-issue_template.md
 jenkins.sh
 lib/README.md
 lib/enu
 netci.groovy
-pull_request_template.md
 scripts
 src
 tests
@@ -15,8 +13,13 @@ tslint.json
 Jakefile.js
 .editorconfig
 .gitattributes
+.gitmodules
 .settings/
 .travis.yml
+.circleci
 .vscode/
+.parallelperf.json
 test.config
 package-lock.json
+yarn.lock
+.github/

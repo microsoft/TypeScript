@@ -54,7 +54,7 @@ declare const enum G {
     A = 1,
     B = 2,
     C = 3,
-    D = 2,
+    D = 2
 }
 declare var o: {
     [idx: number]: boolean;

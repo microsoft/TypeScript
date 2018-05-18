@@ -52,10 +52,10 @@ var C = /** @class */ (function () {
 var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D() {
-        var _this = this;
+        var _this_1 = this;
         var _this = "uh-oh?";
-        _this = _super.call(this) || this;
-        return _this;
+        _this_1 = _super.call(this) || this;
+        return _this_1;
     }
     return D;
 }(C));

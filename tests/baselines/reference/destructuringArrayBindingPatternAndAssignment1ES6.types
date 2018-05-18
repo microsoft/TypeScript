@@ -109,7 +109,7 @@ var [[[c3]], [[[[c4]]]]] = [[[]], [[[[]]]]]
 var [[c5], c6]: [[string|number], boolean] = [[1], true];
 >c5 : string | number
 >c6 : boolean
->[[1], true] : [[number], boolean]
+>[[1], true] : [[number], true]
 >[1] : [number]
 >1 : 1
 >true : true

@@ -8,4 +8,5 @@ class C {
         return 0;
     }
     [this.bar()]() { }
+>[this.bar()] : Symbol(C[this.bar()], Decl(computedPropertyNames21_ES5.ts, 3, 5))
 }

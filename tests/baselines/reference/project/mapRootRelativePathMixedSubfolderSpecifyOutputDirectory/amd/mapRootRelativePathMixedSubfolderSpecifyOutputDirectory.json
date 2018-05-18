@@ -10,7 +10,7 @@
     "baselineCheck": true,
     "mapRoot": "../mapFiles",
     "resolvedInputFiles": [
-        "lib.d.ts",
+        "lib.es5.d.ts",
         "ref/m1.ts",
         "ref/m2.ts",
         "test.ts"

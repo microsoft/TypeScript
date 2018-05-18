@@ -30,6 +30,7 @@ for (x of a) {
 
 
 //// [assignmentTypeNarrowing.js]
+var _a, _b, _c;
 var x;
 x = "";
 x; // string
@@ -50,4 +51,3 @@ for (var _i = 0, a_1 = a; _i < a_1.length; _i++) {
     x = a_1[_i];
     x; // string
 }
-var _a, _b, _c;

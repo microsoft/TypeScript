@@ -17,6 +17,7 @@ class C {
 
     // Computed properties
     [""]: Foo;
+>[""] : Symbol(C[""], Decl(computedPropertyNames42_ES6.ts, 4, 22))
 >"" : Symbol(C[""], Decl(computedPropertyNames42_ES6.ts, 4, 22))
 >Foo : Symbol(Foo, Decl(computedPropertyNames42_ES6.ts, 0, 0))
 }

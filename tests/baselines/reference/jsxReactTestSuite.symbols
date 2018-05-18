@@ -36,36 +36,21 @@ declare var hasOwnProperty:any;
 >hasOwnProperty : Symbol(hasOwnProperty, Decl(jsxReactTestSuite.tsx, 11, 11))
 
 <div>text</div>;
->div : Symbol(unknown)
->div : Symbol(unknown)
 
 <div>
->div : Symbol(unknown)
-
   {this.props.children}
 </div>;
->div : Symbol(unknown)
 
 <div>
->div : Symbol(unknown)
-
   <div><br /></div>
->div : Symbol(unknown)
->br : Symbol(unknown)
->div : Symbol(unknown)
-
   <Component>{foo}<br />{bar}</Component>
 >Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 1, 11))
 >foo : Symbol(foo, Decl(jsxReactTestSuite.tsx, 6, 11))
->br : Symbol(unknown)
 >bar : Symbol(bar, Decl(jsxReactTestSuite.tsx, 7, 11))
 >Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 1, 11))
 
   <br />
->br : Symbol(unknown)
-
 </div>;
->div : Symbol(unknown)
 
 
 <Composite>
@@ -88,8 +73,6 @@ var x =
 >x : Symbol(x, Decl(jsxReactTestSuite.tsx, 9, 11), Decl(jsxReactTestSuite.tsx, 34, 3))
 
   <div
->div : Symbol(unknown)
-
     attr1={
 >attr1 : Symbol(attr1, Decl(jsxReactTestSuite.tsx, 35, 6))
 
@@ -113,64 +96,41 @@ var x =
 >attr4 : Symbol(attr4, Decl(jsxReactTestSuite.tsx, 48, 5))
 
   </div>;
->div : Symbol(unknown)
 
 (
   <div>
->div : Symbol(unknown)
-
     {/* A comment at the beginning */}
     {/* A second comment at the beginning */}
     <span>
->span : Symbol(unknown)
-
       {/* A nested comment */}
     </span>
->span : Symbol(unknown)
-
     {/* A sandwiched comment */}
     <br />
->br : Symbol(unknown)
-
     {/* A comment at the end */}
     {/* A second comment at the end */}
   </div>
->div : Symbol(unknown)
-
 );
 
 (
   <div
->div : Symbol(unknown)
-
     /* a multi-line
        comment */
     attr1="foo">
 >attr1 : Symbol(attr1, Decl(jsxReactTestSuite.tsx, 67, 6))
 
     <span // a double-slash comment
->span : Symbol(unknown)
-
       attr2="bar"
 >attr2 : Symbol(attr2, Decl(jsxReactTestSuite.tsx, 71, 9))
 
     />
   </div>
->div : Symbol(unknown)
-
 );
 
 <div>&nbsp;</div>;
->div : Symbol(unknown)
->div : Symbol(unknown)
 
 <div>&nbsp; </div>;
->div : Symbol(unknown)
->div : Symbol(unknown)
 
 <hasOwnProperty>testing</hasOwnProperty>;
->hasOwnProperty : Symbol(unknown)
->hasOwnProperty : Symbol(unknown)
 
 <Component constructor="foo" />;
 >Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 1, 11))
@@ -197,7 +157,6 @@ var x =
 >sound : Symbol(sound, Decl(jsxReactTestSuite.tsx, 93, 19))
 
 <font-face />;
->font-face : Symbol(unknown)
 
 <Component x={y} />;
 >Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 1, 11))
@@ -205,7 +164,6 @@ var x =
 >y : Symbol(y, Decl(jsxReactTestSuite.tsx, 8, 11))
 
 <x-component />;
->x-component : Symbol(unknown)
 
 <Component {...x} />;
 >Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 1, 11))

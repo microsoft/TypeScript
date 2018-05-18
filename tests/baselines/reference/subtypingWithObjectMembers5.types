@@ -40,6 +40,7 @@ module NotOptional {
 >A2 : A2
 
         1: Base;
+>1 : Base
 >Base : Base
     }
 
@@ -48,6 +49,7 @@ module NotOptional {
 >A2 : A2
 
         2: Derived; // error
+>2 : Derived
 >Derived : Derived
     }
 
@@ -55,6 +57,7 @@ module NotOptional {
 >A3 : A3
 
         '1': Base;
+>'1' : Base
 >Base : Base
     }
 
@@ -63,6 +66,7 @@ module NotOptional {
 >A3 : A3
 
         '1.0': Derived; // error
+>'1.0' : Derived
 >Derived : Derived
     }
 }
@@ -92,6 +96,7 @@ module Optional {
 >A2 : A2
 
         1?: Base;
+>1 : Base
 >Base : Base
     }
 
@@ -100,6 +105,7 @@ module Optional {
 >A2 : A2
 
         2: Derived; // weak type error
+>2 : Derived
 >Derived : Derived
     }
 
@@ -107,6 +113,7 @@ module Optional {
 >A3 : A3
 
         '1'?: Base;
+>'1' : Base
 >Base : Base
     }
 
@@ -115,6 +122,7 @@ module Optional {
 >A3 : A3
 
         '1.0': Derived; // weak type error
+>'1.0' : Derived
 >Derived : Derived
     }
 }

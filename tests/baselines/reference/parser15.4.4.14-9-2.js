@@ -44,7 +44,8 @@ function testcase() {
     if (a.indexOf(-(4 / 3)) === 14 && // a[14]=_float===-(4/3)
         a.indexOf(0) === 7 && // a[7] = +0, 0===+0
         a.indexOf(-0) === 7 && // a[7] = +0, -0===+0
-        a.indexOf(1) === 10) {
+        a.indexOf(1) === 10) // a[10] =one=== 1
+     {
         return true;
     }
 }

@@ -1,5 +1,6 @@
 // This file contains the build logic for the public repo
 // @ts-check
+/// <reference types="jake" />
 
 var fs = require("fs");
 var os = require("os");
@@ -7,7 +8,6 @@ var path = require("path");
 var child_process = require("child_process");
 var fold = require("travis-fold");
 var ts = require("./lib/typescript");
-
 
 // Variables
 var compilerDirectory = "src/compiler/";
@@ -37,22 +37,45 @@ else if (process.env.PATH !== undefined) {
     process.env.PATH = nodeModulesPathPrefix + process.env.PATH;
 }
 
+/**
+ * @param diagnostics {ts.Diagnostic[]}
+ * @param [pretty] {boolean}
+ */
+function diagnosticsToString(diagnostics, pretty) {
+    const host = {
+        getCurrentDirectory() { return process.cwd(); },
+        getCanonicalFileName(fileName) { return fileName; },
+        getNewLine() { return os.EOL; }
+    };
+    return pretty ? ts.formatDiagnosticsWithColorAndContext(diagnostics, host) :
+        ts.formatDiagnostics(diagnostics, host);
+}
+
+/** @param diagnostics {ts.Diagnostic[]} */
+function reportDiagnostics(diagnostics) {
+    console.log(diagnosticsToString(diagnostics, process.stdout.isTTY));
+}
+
+/** @param jsonPath {string} */
+function readJson(jsonPath) {
+    const jsonText = fs.readFileSync(jsonPath, "utf8");
+    const result = ts.parseConfigFileTextToJson(jsonPath, jsonText);
+    if (result.error) {
+        reportDiagnostics([result.error]);
+        throw new Error("An error occurred during parse.");
+    }
+    return result.config;
+}
+
+/** @param configPath {string} */
 function filesFromConfig(configPath) {
-    var configText = fs.readFileSync(configPath).toString();
-    var config = ts.parseConfigFileTextToJson(configPath, configText);
-    if (config.error) {
-        throw new Error(diagnosticsToString([config.error]));
-    }
-    const configFileContent = ts.parseJsonConfigFileContent(config.config, ts.sys, path.dirname(configPath));
+    const config = readJson(configPath);
+    const configFileContent = ts.parseJsonConfigFileContent(config, ts.sys, path.dirname(configPath));
     if (configFileContent.errors && configFileContent.errors.length) {
-        throw new Error(diagnosticsToString(configFileContent.errors));
+        reportDiagnostics(configFileContent.errors);
+        throw new Error("An error occurred during parse.");
     }
-
     return configFileContent.fileNames;
-
-    function diagnosticsToString(s) {
-        return s.map(function(e) { return ts.flattenDiagnosticMessageText(e.messageText, ts.sys.newLine); }).join(ts.sys.newLine);
-    }
 }
 
 function toNs(diff) {
@@ -86,171 +109,14 @@ var servicesSources = filesFromConfig("./src/services/tsconfig.json");
 var cancellationTokenSources = filesFromConfig(path.join(serverDirectory, "cancellationToken/tsconfig.json"));
 var typingsInstallerSources = filesFromConfig(path.join(serverDirectory, "typingsInstaller/tsconfig.json"));
 var watchGuardSources = filesFromConfig(path.join(serverDirectory, "watchGuard/tsconfig.json"));
-var serverSources = filesFromConfig(path.join(serverDirectory, "tsconfig.json"))
+var serverSources = filesFromConfig(path.join(serverDirectory, "tsconfig.json"));
 var languageServiceLibrarySources = filesFromConfig(path.join(serverDirectory, "tsconfig.library.json"));
+var harnessSources = filesFromConfig("./src/harness/tsconfig.json");
 
 var typesMapOutputPath = path.join(builtLocalDirectory, 'typesMap.json');
 
-var harnessCoreSources = [
-    "harness.ts",
-    "virtualFileSystem.ts",
-    "virtualFileSystemWithWatch.ts",
-    "sourceMapRecorder.ts",
-    "harnessLanguageService.ts",
-    "fourslash.ts",
-    "runnerbase.ts",
-    "compilerRunner.ts",
-    "typeWriter.ts",
-    "fourslashRunner.ts",
-    "projectsRunner.ts",
-    "loggedIO.ts",
-    "rwcRunner.ts",
-    "externalCompileRunner.ts",
-    "test262Runner.ts",
-    "./parallel/shared.ts",
-    "./parallel/host.ts",
-    "./parallel/worker.ts",
-    "runner.ts"
-].map(function (f) {
-    return path.join(harnessDirectory, f);
-});
-
-var harnessSources = harnessCoreSources.concat([
-    "incrementalParser.ts",
-    "jsDocParsing.ts",
-    "services/colorization.ts",
-    "services/documentRegistry.ts",
-    "services/preProcessFile.ts",
-    "services/patternMatcher.ts",
-    "session.ts",
-    "versionCache.ts",
-    "convertToBase64.ts",
-    "transpile.ts",
-    "reuseProgramStructure.ts",
-    "textStorage.ts",
-    "moduleResolution.ts",
-    "tsconfigParsing.ts",
-    "asserts.ts",
-    "builder.ts",
-    "commandLineParsing.ts",
-    "configurationExtension.ts",
-    "convertCompilerOptionsFromJson.ts",
-    "convertTypeAcquisitionFromJson.ts",
-    "tsserverProjectSystem.ts",
-    "tscWatchMode.ts",
-    "compileOnSave.ts",
-    "typingsInstaller.ts",
-    "projectErrors.ts",
-    "matchFiles.ts",
-    "initializeTSConfig.ts",
-    "extractConstants.ts",
-    "extractFunctions.ts",
-    "extractRanges.ts",
-    "extractTestHelpers.ts",
-    "printer.ts",
-    "textChanges.ts",
-    "telemetry.ts",
-    "transform.ts",
-    "customTransforms.ts",
-    "programMissingFiles.ts",
-    "symbolWalker.ts",
-    "languageService.ts",
-    "publicApi.ts",
-    "hostNewLineSupport.ts",
-].map(function (f) {
-    return path.join(unittestsDirectory, f);
-})).concat([
-    "protocol.ts",
-    "utilities.ts",
-    "scriptVersionCache.ts",
-    "scriptInfo.ts",
-    "project.ts",
-    "typingsCache.ts",
-    "editorServices.ts",
-    "session.ts",
-].map(function (f) {
-    return path.join(serverDirectory, f);
-}));
-
-var es2015LibrarySources = [
-    "es2015.core.d.ts",
-    "es2015.collection.d.ts",
-    "es2015.generator.d.ts",
-    "es2015.iterable.d.ts",
-    "es2015.promise.d.ts",
-    "es2015.proxy.d.ts",
-    "es2015.reflect.d.ts",
-    "es2015.symbol.d.ts",
-    "es2015.symbol.wellknown.d.ts"
-];
-
-var es2015LibrarySourceMap = es2015LibrarySources.map(function (source) {
-    return { target: "lib." + source, sources: ["header.d.ts", source] };
-});
-
-var es2016LibrarySource = ["es2016.array.include.d.ts"];
-
-var es2016LibrarySourceMap = es2016LibrarySource.map(function (source) {
-    return { target: "lib." + source, sources: ["header.d.ts", source] };
-});
-
-var es2017LibrarySource = [
-    "es2017.object.d.ts",
-    "es2017.sharedmemory.d.ts",
-    "es2017.string.d.ts",
-    "es2017.intl.d.ts",
-    "es2017.typedarrays.d.ts",
-];
-
-var es2017LibrarySourceMap = es2017LibrarySource.map(function (source) {
-    return { target: "lib." + source, sources: ["header.d.ts", source] };
-});
-
-var es2018LibrarySource = [];
-
-var es2018LibrarySourceMap = es2018LibrarySource.map(function (source) {
-    return { target: "lib." + source, sources: ["header.d.ts", source] };
-});
-
-var esnextLibrarySource = [
-    "esnext.asynciterable.d.ts",
-    "esnext.array.d.ts",
-    "esnext.promise.d.ts"
-];
-
-var esnextLibrarySourceMap = esnextLibrarySource.map(function (source) {
-    return { target: "lib." + source, sources: ["header.d.ts", source] };
-});
-
-var hostsLibrarySources = ["dom.generated.d.ts", "webworker.importscripts.d.ts", "scripthost.d.ts"];
-
-var librarySourceMap = [
-    // Host library
-    { target: "lib.dom.d.ts", sources: ["header.d.ts", "dom.generated.d.ts"] },
-    { target: "lib.dom.iterable.d.ts", sources: ["header.d.ts", "dom.iterable.d.ts"] },
-    { target: "lib.webworker.d.ts", sources: ["header.d.ts", "webworker.generated.d.ts"] },
-    { target: "lib.scripthost.d.ts", sources: ["header.d.ts", "scripthost.d.ts"] },
-
-    // JavaScript library
-    { target: "lib.es5.d.ts", sources: ["header.d.ts", "es5.d.ts"] },
-    { target: "lib.es2015.d.ts", sources: ["header.d.ts", "es2015.d.ts"] },
-    { target: "lib.es2016.d.ts", sources: ["header.d.ts", "es2016.d.ts"] },
-    { target: "lib.es2017.d.ts", sources: ["header.d.ts", "es2017.d.ts"] },
-    { target: "lib.es2018.d.ts", sources: ["header.d.ts", "es2018.d.ts"] },
-    { target: "lib.esnext.d.ts", sources: ["header.d.ts", "esnext.d.ts"] },
-
-    // JavaScript + all host library
-    { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources) },
-    { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") },
-    { target: "lib.es2016.full.d.ts", sources: ["header.d.ts", "es2016.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
-    { target: "lib.es2017.full.d.ts", sources: ["header.d.ts", "es2017.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
-    { target: "lib.es2018.full.d.ts", sources: ["header.d.ts", "es2018.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
-    { target: "lib.esnext.full.d.ts", sources: ["header.d.ts", "esnext.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
-].concat(es2015LibrarySourceMap, es2016LibrarySourceMap, es2017LibrarySourceMap, es2018LibrarySourceMap, esnextLibrarySourceMap);
-
-var libraryTargets = librarySourceMap.map(function (f) {
-    return path.join(builtLocalDirectory, f.target);
-});
+/** @type {{ libs: string[], paths?: Record<string, string>, sources?: Record<string, string[]> }} */
+var libraries = readJson("./src/lib/libs.json");
 
 /**
  * .lcg file is what localization team uses to know what messages to localize.
@@ -265,7 +131,7 @@ var generatedLCGFile = path.join(builtLocalDirectory, "enu", "diagnosticMessages
  *    2. 'src\compiler\diagnosticMessages.generated.json' => 'built\local\ENU\diagnosticMessages.generated.json.lcg'
  *       generate the lcg file (source of messages to localize) from the diagnosticMessages.generated.json
  */
-var localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"].map(function (f) {
+var localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"].map(function (f) {
     return path.join(builtLocalDirectory, f);
 }).concat(path.dirname(generatedLCGFile));
 
@@ -306,35 +172,34 @@ var compilerFilename = "tsc.js";
 var LKGCompiler = path.join(LKGDirectory, compilerFilename);
 var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
 
-/* Compiles a file from a list of sources
-    * @param outFile: the target file name
-    * @param sources: an array of the names of the source files
-    * @param prereqs: prerequisite tasks to compiling the file
-    * @param prefixes: a list of files to prepend to the target file
-    * @param useBuiltCompiler: true to use the built compiler, false to use the LKG
-    * @parap {Object}  opts - property bag containing auxiliary options
-    * @param {boolean} opts.noOutFile: true to compile without using --out
-    * @param {boolean} opts.generateDeclarations: true to compile using --declaration
-    * @param {string}  opts.outDir: value for '--outDir' command line option
-    * @param {boolean} opts.keepComments: false to compile using --removeComments
-    * @param {boolean} opts.preserveConstEnums: true if compiler should keep const enums in code
-    * @param {boolean} opts.noResolve: true if compiler should not include non-rooted files in compilation
-    * @param {boolean} opts.stripInternal: true if compiler should remove declarations marked as @internal
-    * @param {boolean} opts.inlineSourceMap: true if compiler should inline sourceMap
-    * @param {Array} opts.types: array of types to include in compilation
-    * @param callback: a function to execute after the compilation process ends
-    */
+/**
+ * Compiles a file from a list of sources
+ * @param {string} outFile the target file name
+ * @param {string[]} sources an array of the names of the source files
+ * @param {string[]} prereqs prerequisite tasks to compiling the file
+ * @param {string[]} prefixes a list of files to prepend to the target file
+ * @param {boolean} useBuiltCompiler true to use the built compiler, false to use the LKG
+ * @param {object} [opts] property bag containing auxiliary options
+ * @param {boolean} [opts.noOutFile] true to compile without using --out
+ * @param {boolean} [opts.generateDeclarations] true to compile using --declaration
+ * @param {string} [opts.outDir] value for '--outDir' command line option
+ * @param {boolean} [opts.keepComments] false to compile using --removeComments
+ * @param {boolean} [opts.preserveConstEnums] true if compiler should keep const enums in code
+ * @param {boolean} [opts.noResolve] true if compiler should not include non-rooted files in compilation
+ * @param {boolean} [opts.stripInternal] true if compiler should remove declarations marked as internal
+ * @param {boolean} [opts.inlineSourceMap] true if compiler should inline sourceMap
+ * @param {string[]} [opts.types] array of types to include in compilation
+ * @param {string} [opts.lib] explicit libs to include.
+ * @param {function(): void} [callback] a function to execute after the compilation process ends
+ */
 function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts, callback) {
     file(outFile, prereqs, function() {
-        if (process.env.USE_TRANSFORMS === "false") {
-            useBuiltCompiler = false;
-        }
         var startCompileTime = mark();
         opts = opts || {};
         var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
-        var options = "--noImplicitAny --noImplicitThis --alwaysStrict --noEmitOnError --types "
+        var options = "--noImplicitAny --noImplicitThis --alwaysStrict --noEmitOnError";
         if (opts.types) {
-            options += opts.types.join(",");
+            options += " --types " + opts.types.join(",");
         }
         options += " --pretty";
         // Keep comments when specifically requested
@@ -371,7 +236,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
                 options += " --inlineSourceMap --inlineSources";
             }
             else {
-                options += " -sourcemap";
+                options += " --sourcemap";
             }
         }
         options += " --newLine LF";
@@ -379,12 +244,12 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         if (opts.stripInternal) {
             options += " --stripInternal";
         }
-        options += " --target es5";
+        options +=  " --target es5";
         if (opts.lib) {
-            options += " --lib " + opts.lib
+            options += " --lib " + opts.lib;
         }
         else {
-            options += " --lib es5"
+            options += " --lib es5";
         }
         options += " --noUnusedLocals --noUnusedParameters";
 
@@ -426,18 +291,16 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
 // Prerequisite task for built directory and library typings
 directory(builtLocalDirectory);
 
-for (var i in libraryTargets) {
-    (function (i) {
-        var entry = librarySourceMap[i];
-        var target = libraryTargets[i];
-        var sources = [copyright].concat(entry.sources.map(function (s) {
-            return path.join(libraryDirectory, s);
-        }));
-        file(target, [builtLocalDirectory].concat(sources), function () {
-            concatenateFiles(target, sources);
-        });
-    })(i);
-}
+var libraryTargets = libraries.libs.map(function (lib) {
+    var relativeSources = ["header.d.ts"].concat(libraries.sources && libraries.sources[lib] || [lib + ".d.ts"]);
+    var relativeTarget = libraries.paths && libraries.paths[lib] || ("lib." + lib + ".d.ts");
+    var sources = [copyright].concat(relativeSources.map(s => path.join(libraryDirectory, s)));
+    var target = path.join(builtLocalDirectory, relativeTarget);
+    file(target, [builtLocalDirectory].concat(sources), function () {
+        concatenateFiles(target, sources);
+    });
+    return target;
+});
 
 // Lib target to build the library files
 desc("Builds the library targets");
@@ -447,6 +310,8 @@ task("lib", libraryTargets);
 // Generate diagnostics
 var processDiagnosticMessagesJs = path.join(scriptsDirectory, "processDiagnosticMessages.js");
 var processDiagnosticMessagesTs = path.join(scriptsDirectory, "processDiagnosticMessages.ts");
+var processDiagnosticMessagesSources = filesFromConfig("./scripts/processDiagnosticMessages.tsconfig.json");
+
 var diagnosticMessagesJson = path.join(compilerDirectory, "diagnosticMessages.json");
 var diagnosticInfoMapTs = path.join(compilerDirectory, "diagnosticInformationMap.generated.ts");
 var generatedDiagnosticMessagesJSON = path.join(compilerDirectory, "diagnosticMessages.generated.json");
@@ -456,8 +321,8 @@ file(processDiagnosticMessagesTs);
 
 // processDiagnosticMessages script
 compileFile(processDiagnosticMessagesJs,
-    [processDiagnosticMessagesTs],
-    [processDiagnosticMessagesTs],
+    processDiagnosticMessagesSources,
+    processDiagnosticMessagesSources,
     [],
     /*useBuiltCompiler*/ false);
 
@@ -497,7 +362,6 @@ var buildProtocolTs = path.join(scriptsDirectory, "buildProtocol.ts");
 var buildProtocolJs = path.join(scriptsDirectory, "buildProtocol.js");
 var buildProtocolDts = path.join(builtLocalDirectory, "protocol.d.ts");
 var typescriptServicesDts = path.join(builtLocalDirectory, "typescriptServices.d.ts");
-var typesMapJson = path.join(builtLocalDirectory, "typesMap.json");
 
 file(buildProtocolTs);
 
@@ -526,7 +390,7 @@ file(buildProtocolDts, [buildProtocolTs, buildProtocolJs, typescriptServicesDts]
         complete();
     });
     ex.run();
-}, { async: true })
+}, { async: true });
 
 // The generated diagnostics map; built for the compiler and for the 'generate-diagnostics' task
 file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson], function () {
@@ -556,26 +420,26 @@ desc("Generates a diagnostic file in TypeScript based on an input JSON file");
 task("generate-diagnostics", [diagnosticInfoMapTs]);
 
 // Publish nightly
-var configureNightlyJs = path.join(scriptsDirectory, "configureNightly.js");
-var configureNightlyTs = path.join(scriptsDirectory, "configureNightly.ts");
+var configurePrereleaseJs = path.join(scriptsDirectory, "configurePrerelease.js");
+var configurePrereleaseTs = path.join(scriptsDirectory, "configurePrerelease.ts");
 var packageJson = "package.json";
 var versionFile = path.join(compilerDirectory, "core.ts");
 
-file(configureNightlyTs);
+file(configurePrereleaseTs);
 
-compileFile(/*outfile*/configureNightlyJs,
-            /*sources*/[configureNightlyTs],
-            /*prereqs*/[configureNightlyTs],
+compileFile(/*outfile*/configurePrereleaseJs,
+            /*sources*/[configurePrereleaseTs],
+            /*prereqs*/[configurePrereleaseTs],
             /*prefixes*/[],
             /*useBuiltCompiler*/ false,
-    { noOutFile: false, generateDeclarations: false, keepComments: false, noResolve: false, stripInternal: false });
+    { noOutFile: true, generateDeclarations: false, keepComments: false, noResolve: false, stripInternal: false });
 
 task("setDebugMode", function () {
     useDebugMode = true;
 });
 
-task("configure-nightly", [configureNightlyJs], function () {
-    var cmd = host + " " + configureNightlyJs + " " + packageJson + " " + versionFile;
+task("configure-nightly", [configurePrereleaseJs], function () {
+    var cmd = host + " " + configurePrereleaseJs + " dev " + packageJson + " " + versionFile;
     console.log(cmd);
     exec(cmd);
 }, { async: true });
@@ -583,6 +447,19 @@ task("configure-nightly", [configureNightlyJs], function () {
 desc("Configure, build, test, and publish the nightly release.");
 task("publish-nightly", ["configure-nightly", "LKG", "clean", "setDebugMode", "runtests-parallel"], function () {
     var cmd = "npm publish --tag next";
+    console.log(cmd);
+    exec(cmd);
+});
+
+task("configure-insiders", [configurePrereleaseJs], function () {
+    var cmd = host + " " + configurePrereleaseJs + " insiders " + packageJson + " " + versionFile;
+    console.log(cmd);
+    exec(cmd);
+}, { async: true });
+
+desc("Configure, build, test, and publish the insiders release.");
+task("publish-insiders", ["configure-insiders", "LKG", "clean", "setDebugMode", "runtests-parallel"], function () {
+    var cmd = "npm publish --tag insiders";
     console.log(cmd);
     exec(cmd);
 });
@@ -633,7 +510,7 @@ compileFile(servicesFile, servicesSources, [builtLocalDirectory, copyright].conc
         // Stanalone/web definition file using global 'ts' namespace
         jake.cpR(standaloneDefinitionsFile, nodeDefinitionsFile, { silent: true });
         var definitionFileContents = fs.readFileSync(nodeDefinitionsFile).toString();
-        definitionFileContents = removeConstModifierFromEnumDeclarations(definitionFileContents)
+        definitionFileContents = removeConstModifierFromEnumDeclarations(definitionFileContents);
         fs.writeFileSync(standaloneDefinitionsFile, definitionFileContents);
 
         // Official node package definition file, pointed to by 'typings' in package.json
@@ -662,7 +539,7 @@ var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources, [builtLocalDirectory, copyright, cancellationTokenFile, typingsInstallerFile, watchGuardFile].concat(serverSources).concat(servicesSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true, { types: ["node"], preserveConstEnums: true, lib: "es6" });
 var tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js");
 var tsserverLibraryDefinitionFile = path.join(builtLocalDirectory, "tsserverlibrary.d.ts");
-file(typesMapOutputPath, function() {
+file(typesMapOutputPath, /** @type {*} */(function() {
     var content = fs.readFileSync(path.join(serverDirectory, 'typesMap.json'));
     // Validate that it's valid JSON
     try {
@@ -671,7 +548,7 @@ file(typesMapOutputPath, function() {
         console.log("Parse error in typesMap.json: " + e);
     }
     fs.writeFileSync(typesMapOutputPath, content);
-});
+}));
 compileFile(
     tsserverLibraryFile,
     languageServiceLibrarySources,
@@ -773,8 +650,8 @@ task("LKG", ["clean", "release", "local"].concat(libraryTargets), function () {
         return !fs.existsSync(f);
     });
     if (missingFiles.length > 0) {
-        fail("Cannot replace the LKG unless all built targets are present in directory " + builtLocalDirectory +
-            ". The following files are missing:\n" + missingFiles.join("\n"));
+        fail(new Error("Cannot replace the LKG unless all built targets are present in directory " + builtLocalDirectory +
+            ". The following files are missing:\n" + missingFiles.join("\n")));
     }
     // Copy all the targets into the LKG directory
     jake.mkdirP(LKGDirectory);
@@ -815,7 +692,7 @@ desc("Builds the test infrastructure using the built compiler");
 task("tests", ["local", run].concat(libraryTargets));
 
 function exec(cmd, completeHandler, errorHandler) {
-    var ex = jake.createExec([cmd], { windowsVerbatimArguments: true, interactive: true });
+    var ex = jake.createExec([cmd], /** @type {jake.ExecOptions} */({ windowsVerbatimArguments: true, interactive: true }));
     // Add listeners for output and error
     ex.addListener("stdout", function (output) {
         process.stdout.write(output);
@@ -1045,7 +922,7 @@ desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is
 task("runtests-browser", ["browserify", nodeServerOutFile], function () {
     cleanTestDirs();
     host = "node";
-    var browser = process.env.browser || process.env.b ||  (os.platform() === "linux" ? "chrome" : "IE");
+    var browser = process.env.browser || process.env.b ||  (os.platform() === "win32" ? "edge" : "chrome");
     var runners = process.env.runners || process.env.runner || process.env.ru;
     var tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
@@ -1199,23 +1076,12 @@ task("update-sublime", ["local", serverFile], function () {
 });
 
 var tslintRuleDir = "scripts/tslint/rules";
-var tslintRules = [
-    "booleanTriviaRule",
-    "debugAssertRule",
-    "nextLineRule",
-    "noBomRule",
-    "noDoubleSpaceRule",
-    "noIncrementDecrementRule",
-    "noInOperatorRule",
-    "noTypeAssertionWhitespaceRule",
-    "objectLiteralSurroundingSpaceRule",
-    "typeOperatorSpacingRule",
-];
+var tslintRules = fs.readdirSync(tslintRuleDir);
 var tslintRulesFiles = tslintRules.map(function (p) {
-    return path.join(tslintRuleDir, p + ".ts");
+    return path.join(tslintRuleDir, p);
 });
 var tslintRulesOutFiles = tslintRules.map(function (p) {
-    return path.join(builtLocalDirectory, "tslint/rules", p + ".js");
+    return path.join(builtLocalDirectory, "tslint/rules", p.replace(".ts", ".js"));
 });
 var tslintFormattersDir = "scripts/tslint/formatters";
 var tslintFormatters = [
@@ -1251,7 +1117,7 @@ task("build-rules-end", [], function () {
 var lintTargets = compilerSources
     .concat(harnessSources)
     // Other harness sources
-    .concat(["instrumenter.ts"].map(function (f) { return path.join(harnessDirectory, f) }))
+    .concat(["instrumenter.ts"].map(function (f) { return path.join(harnessDirectory, f); }))
     .concat(serverSources)
     .concat(tslintRulesFiles)
     .concat(servicesSources)
@@ -1259,7 +1125,7 @@ var lintTargets = compilerSources
     .concat(cancellationTokenSources)
     .concat(["Gulpfile.ts"])
     .concat([nodeServerInFile, perftscPath, "tests/perfsys.ts", webhostPath])
-    .map(function (p) { return path.resolve(p) });
+    .map(function (p) { return path.resolve(p); });
 // keep only unique items
 lintTargets = Array.from(new Set(lintTargets));
 
@@ -1300,14 +1166,13 @@ function spawnLintWorker(files, callback) {
 desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");
 task("lint", ["build-rules"], () => {
     if (fold.isTravis()) console.log(fold.start("lint"));
-    const fileMatcher = process.env.f || process.env.file || process.env.files;
-    const files = fileMatcher
-        ? `src/**/${fileMatcher}`
-        : "Gulpfile.ts 'scripts/generateLocalizedDiagnosticMessages.ts' 'scripts/tslint/**/*.ts' 'src/**/*.ts' --exclude 'src/lib/*.d.ts'";
-    const cmd = `node node_modules/tslint/bin/tslint ${files} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
-    console.log("Linting: " + cmd);
-    jake.exec([cmd], { interactive: true }, () => {
+   function lint(project, cb) {
+        const cmd = `node node_modules/tslint/bin/tslint --project ${project} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
+        console.log("Linting: " + cmd);
+        jake.exec([cmd], cb, /** @type {jake.ExecOptions} */({ interactive: true, windowsVerbatimArguments: true }));
+   }
+   lint("scripts/tslint/tsconfig.json", () => lint("src/tsconfig-base.json", () => {
         if (fold.isTravis()) console.log(fold.end("lint"));
         complete();
-    });
+   }));
 });

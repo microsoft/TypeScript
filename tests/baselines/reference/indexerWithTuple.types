@@ -21,7 +21,7 @@ var unionTuple1: [number, string| number] = [10, "foo"];
 
 var unionTuple2: [boolean, string| number] = [true, "foo"]; 
 >unionTuple2 : [boolean, string | number]
->[true, "foo"] : [boolean, string]
+>[true, "foo"] : [true, string]
 >true : true
 >"foo" : "foo"
 

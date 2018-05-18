@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-// @noUnusedLocals: true
+// @noUnusedParameters: true
 //// class C1 {
 ////    [|f1<T extends number, U>(a: U)|] {a;}
 //// }

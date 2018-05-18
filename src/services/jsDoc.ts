@@ -5,6 +5,7 @@ namespace ts.JsDoc {
         "author",
         "argument",
         "borrows",
+        "callback",
         "class",
         "constant",
         "constructor",
@@ -37,6 +38,7 @@ namespace ts.JsDoc {
         "see",
         "since",
         "static",
+        "template",
         "throws",
         "type",
         "typedef",
@@ -45,7 +47,7 @@ namespace ts.JsDoc {
     let jsDocTagNameCompletionEntries: CompletionEntry[];
     let jsDocTagCompletionEntries: CompletionEntry[];
 
-    export function getJsDocCommentsFromDeclarations(declarations?: Declaration[]) {
+    export function getJsDocCommentsFromDeclarations(declarations: ReadonlyArray<Declaration>): SymbolDisplayPart[] {
         // Only collect doc comments from duplicate declarations once:
         // In case of a union property there might be same declaration multiple times
         // which only varies in type parameter
@@ -67,10 +69,12 @@ namespace ts.JsDoc {
 
     function getCommentHavingNodes(declaration: Declaration): ReadonlyArray<JSDoc | JSDocTag> {
         switch (declaration.kind) {
+            case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocPropertyTag:
                 return [declaration as JSDocPropertyTag];
+            case SyntaxKind.JSDocCallbackTag:
             case SyntaxKind.JSDocTypedefTag:
-                return [(declaration as JSDocTypedefTag).parent];
+                return [(declaration as JSDocTypedefTag), (declaration as JSDocTypedefTag).parent];
             default:
                 return getJSDocCommentsAndTags(declaration);
         }
@@ -97,6 +101,7 @@ namespace ts.JsDoc {
             case SyntaxKind.JSDocTypeTag:
                 return withNode((tag as JSDocTypeTag).typeExpression);
             case SyntaxKind.JSDocTypedefTag:
+            case SyntaxKind.JSDocCallbackTag:
             case SyntaxKind.JSDocPropertyTag:
             case SyntaxKind.JSDocParameterTag:
                 const { name } = tag as JSDocTypedefTag | JSDocPropertyTag | JSDocParameterTag;
@@ -123,7 +128,7 @@ namespace ts.JsDoc {
      * returns a truthy value, then returns that value.
      * If no such value is found, the callback is applied to each element of array and undefined is returned.
      */
-    function forEachUnique<T, U>(array: T[], callback: (element: T, index: number) => U): U {
+    function forEachUnique<T, U>(array: ReadonlyArray<T>, callback: (element: T, index: number) => U): U {
         if (array) {
             for (let i = 0; i < array.length; i++) {
                 if (array.indexOf(array[i]) === i) {
@@ -138,7 +143,7 @@ namespace ts.JsDoc {
     }
 
     export function getJSDocTagNameCompletions(): CompletionEntry[] {
-        return jsDocTagNameCompletionEntries || (jsDocTagNameCompletionEntries = ts.map(jsDocTagNames, tagName => {
+        return jsDocTagNameCompletionEntries || (jsDocTagNameCompletionEntries = map(jsDocTagNames, tagName => {
             return {
                 name: tagName,
                 kind: ScriptElementKind.keyword,
@@ -151,7 +156,7 @@ namespace ts.JsDoc {
     export const getJSDocTagNameCompletionDetails = getJSDocTagCompletionDetails;
 
     export function getJSDocTagCompletions(): CompletionEntry[] {
-        return jsDocTagCompletionEntries || (jsDocTagCompletionEntries = ts.map(jsDocTagNames, tagName => {
+        return jsDocTagCompletionEntries || (jsDocTagCompletionEntries = map(jsDocTagNames, tagName => {
             return {
                 name: `@${tagName}`,
                 kind: ScriptElementKind.keyword,
@@ -180,7 +185,7 @@ namespace ts.JsDoc {
         const nameThusFar = tag.name.text;
         const jsdoc = tag.parent;
         const fn = jsdoc.parent;
-        if (!ts.isFunctionLike(fn)) return [];
+        if (!isFunctionLike(fn)) return [];
 
         return mapDefined(fn.parameters, param => {
             if (!isIdentifier(param.name)) return undefined;
@@ -268,9 +273,7 @@ namespace ts.JsDoc {
         let docParams = "";
         for (let i = 0; i < parameters.length; i++) {
             const currentName = parameters[i].name;
-            const paramName = currentName.kind === SyntaxKind.Identifier ?
-                (<Identifier>currentName).escapedText :
-                "param" + i;
+            const paramName = currentName.kind === SyntaxKind.Identifier ? currentName.escapedText : "param" + i;
             if (isJavaScriptFile) {
                 docParams += `${indentationStr} * @param {any} ${paramName}${newLine}`;
             }
@@ -339,7 +342,7 @@ namespace ts.JsDoc {
 
                 case SyntaxKind.BinaryExpression: {
                     const be = commentOwner as BinaryExpression;
-                    if (getSpecialPropertyAssignmentKind(be) === ts.SpecialPropertyAssignmentKind.None) {
+                    if (getSpecialPropertyAssignmentKind(be) === SpecialPropertyAssignmentKind.None) {
                         return undefined;
                     }
                     const parameters = isFunctionLike(be.right) ? be.right.parameters : emptyArray;
@@ -366,13 +369,10 @@ namespace ts.JsDoc {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
                 return (<FunctionExpression>rightHandSide).parameters;
-            case SyntaxKind.ClassExpression:
-                for (const member of (<ClassExpression>rightHandSide).members) {
-                    if (member.kind === SyntaxKind.Constructor) {
-                        return (<ConstructorDeclaration>member).parameters;
-                    }
-                }
-                break;
+            case SyntaxKind.ClassExpression: {
+                const ctr = find((rightHandSide as ClassExpression).members, isConstructorDeclaration);
+                return ctr && ctr.parameters;
+            }
         }
 
         return emptyArray;

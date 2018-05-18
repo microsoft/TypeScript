@@ -82,7 +82,7 @@ var x = new C1(undefined, [0, true, ""]);
 >new C1(undefined, [0, true, ""]) : C1<number, boolean, string>
 >C1 : typeof C1
 >undefined : undefined
->[0, true, ""] : [number, boolean, string]
+>[0, true, ""] : [number, true, string]
 >0 : 0
 >true : true
 >"" : ""
@@ -110,7 +110,7 @@ var y = new C1(10, [0, true, true]);
 >new C1(10, [0, true, true]) : C1<number, boolean, boolean>
 >C1 : typeof C1
 >10 : 10
->[0, true, true] : [number, boolean, boolean]
+>[0, true, true] : [number, true, true]
 >0 : 0
 >true : true
 >true : true

@@ -1,4 +1,4 @@
 === tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration1.ts ===
 module "Foo" {
-No type information for this code.}
-No type information for this code.
+>"Foo" : Symbol("Foo", Decl(parserModuleDeclaration1.ts, 0, 0))
+}

@@ -2,6 +2,7 @@
 var v = { *[foo()]() { } }
 >v : { [x: number]: () => IterableIterator<any>; }
 >{ *[foo()]() { } } : { [x: number]: () => IterableIterator<any>; }
+>[foo()] : () => IterableIterator<any>
 >foo() : any
 >foo : any
 

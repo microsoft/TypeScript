@@ -1,4 +1,5 @@
 node_modules/
+.node_modules/
 built/*
 tests/cases/rwc/*
 tests/cases/test262/*
@@ -39,7 +40,8 @@ scripts/word2md.js
 scripts/buildProtocol.js
 scripts/ior.js
 scripts/authors.js
-scripts/configureNightly.js
+scripts/configurePrerelease.js
+scripts/open-user-pr.js
 scripts/processDiagnosticMessages.d.ts
 scripts/processDiagnosticMessages.js
 scripts/importDefinitelyTypedTests/importDefinitelyTypedTests.js

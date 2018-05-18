@@ -2,7 +2,7 @@
 function fn<A extends Date, B extends A, C extends B>(a: A, b: B, c: C) {
 >fn : Symbol(fn, Decl(typeArgumentInferenceTransitiveConstraints.ts, 0, 0))
 >A : Symbol(A, Decl(typeArgumentInferenceTransitiveConstraints.ts, 0, 12))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >B : Symbol(B, Decl(typeArgumentInferenceTransitiveConstraints.ts, 0, 27))
 >A : Symbol(A, Decl(typeArgumentInferenceTransitiveConstraints.ts, 0, 12))
 >C : Symbol(C, Decl(typeArgumentInferenceTransitiveConstraints.ts, 0, 40))
@@ -23,11 +23,11 @@ function fn<A extends Date, B extends A, C extends B>(a: A, b: B, c: C) {
 var d = fn(new Date(), new Date(), new Date());
 >d : Symbol(d, Decl(typeArgumentInferenceTransitiveConstraints.ts, 4, 3), Decl(typeArgumentInferenceTransitiveConstraints.ts, 5, 3))
 >fn : Symbol(fn, Decl(typeArgumentInferenceTransitiveConstraints.ts, 0, 0))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var d: Date[]; // Should be OK (d should be Date[])
 >d : Symbol(d, Decl(typeArgumentInferenceTransitiveConstraints.ts, 4, 3), Decl(typeArgumentInferenceTransitiveConstraints.ts, 5, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 

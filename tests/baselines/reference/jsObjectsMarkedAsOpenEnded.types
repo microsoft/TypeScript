@@ -1,13 +1,13 @@
 === tests/cases/conformance/salsa/a.js ===
 var variable = {};
->variable : { [x: string]: any; }
->{} : { [x: string]: any; }
+>variable : { [x: string]: any; a: number; }
+>{} : { [x: string]: any; a: number; }
 
 variable.a = 0;
 >variable.a = 0 : 0
->variable.a : any
->variable : { [x: string]: any; }
->a : any
+>variable.a : number
+>variable : { [x: string]: any; a: number; }
+>a : number
 >0 : 0
 
 class C {
@@ -71,9 +71,9 @@ function getObj() {
 === tests/cases/conformance/salsa/b.ts ===
 variable.a = 1;
 >variable.a = 1 : 1
->variable.a : any
->variable : { [x: string]: any; }
->a : any
+>variable.a : number
+>variable : { [x: string]: any; a: number; }
+>a : number
 >1 : 1
 
 (new C()).member.a = 1;

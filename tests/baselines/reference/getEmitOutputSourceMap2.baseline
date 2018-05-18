@@ -11,7 +11,7 @@ var M = /** @class */ (function () {
 //# sourceMappingURL=inputFile1.js.map
 EmitSkipped: false
 FileName : sample/outDir/inputFile2.js.map
-{"version":3,"file":"inputFile2.js","sourceRoot":"","sources":["../../tests/cases/fourslash/inputFile2.ts"],"names":[],"mappings":"AAAA,IAAI,KAAK,GAAG,aAAa,CAAC;AAC1B,EAAE,CAAC,CAAC,KAAK,KAAK,SAAS,CAAC,CAAC,CAAC;IACvB,IAAI,CAAC,GAAG,EAAE,CAAC;AACd,CAAC"}FileName : sample/outDir/inputFile2.js
+{"version":3,"file":"inputFile2.js","sourceRoot":"","sources":["../../tests/cases/fourslash/inputFile2.ts"],"names":[],"mappings":"AAAA,IAAI,KAAK,GAAG,aAAa,CAAC;AAC1B,IAAI,KAAK,KAAK,SAAS,EAAE;IACtB,IAAI,CAAC,GAAG,EAAE,CAAC;CACb"}FileName : sample/outDir/inputFile2.js
 var intro = "hello world";
 if (intro !== undefined) {
     var k = 10;

@@ -42,10 +42,10 @@ var Foo = /** @class */ (function () {
     }
     return Foo;
 }());
-var b = /** @class */ (function (_super) {
-    __extends(b, _super);
+var b = /** @class */ (function (_super_1) {
+    __extends(b, _super_1);
     function b() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super_1 !== null && _super_1.apply(this, arguments) || this;
         _this.prop2 = {
             doStuff: function () {
                 function _super() {

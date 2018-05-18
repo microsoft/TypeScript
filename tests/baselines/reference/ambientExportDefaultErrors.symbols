@@ -18,6 +18,8 @@ export as namespace Foo2;
 === tests/cases/compiler/indirection.d.ts ===
 /// <reference path="./foo.d.ts" />
 declare module "indirect" {
+>"indirect" : Symbol("indirect", Decl(indirection.d.ts, 0, 0))
+
     export default typeof Foo.default;
 >Foo.default : Symbol(Foo.default, Decl(foo.d.ts, 0, 0))
 >Foo : Symbol(Foo, Decl(foo.d.ts, 0, 21))
@@ -27,6 +29,8 @@ declare module "indirect" {
 === tests/cases/compiler/indirection2.d.ts ===
 /// <reference path="./foo2.d.ts" />
 declare module "indirect2" {
+>"indirect2" : Symbol("indirect2", Decl(indirection2.d.ts, 0, 0))
+
     export = typeof Foo2;
 >Foo2 : Symbol(Foo2, Decl(foo2.d.ts, 0, 15))
 }

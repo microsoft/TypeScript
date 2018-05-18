@@ -38,6 +38,7 @@ declare function OneThing(l1: {data: string, "data-prop": boolean}): JSX.Element
 >OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 2, 57), Decl(file.tsx, 3, 76), Decl(file.tsx, 4, 69), Decl(file.tsx, 5, 83))
 >l1 : Symbol(l1, Decl(file.tsx, 6, 26))
 >data : Symbol(data, Decl(file.tsx, 6, 31))
+>"data-prop" : Symbol("data-prop", Decl(file.tsx, 6, 44))
 >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 >Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 
@@ -82,6 +83,7 @@ declare function TestingOneThing({y1: string}): JSX.Element;
 declare function TestingOneThing(j: {"extra-data": string, yy?: string}): JSX.Element;
 >TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 13, 47), Decl(file.tsx, 16, 60), Decl(file.tsx, 17, 86), Decl(file.tsx, 18, 83))
 >j : Symbol(j, Decl(file.tsx, 17, 33))
+>"extra-data" : Symbol("extra-data", Decl(file.tsx, 17, 37))
 >yy : Symbol(yy, Decl(file.tsx, 17, 58))
 >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 >Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))

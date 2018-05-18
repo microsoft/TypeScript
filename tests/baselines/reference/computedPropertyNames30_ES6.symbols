@@ -18,6 +18,8 @@ class C extends Base {
                 // illegal, and not capturing this is consistent with
                 //treatment of other similar violations.
                 [(super(), "prop")]() { }
+>[(super(), "prop")] : Symbol([(super(), "prop")], Decl(computedPropertyNames30_ES6.ts, 6, 23))
+
             };
         }
     }

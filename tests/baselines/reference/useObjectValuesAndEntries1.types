@@ -58,8 +58,8 @@ var entries2 = Object.entries({ a: true, b: 2 });   // [string, number|boolean][
 >Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
 >Object : ObjectConstructor
 >entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
->{ a: true, b: 2 } : { a: boolean; b: number; }
->a : boolean
+>{ a: true, b: 2 } : { a: true; b: number; }
+>a : true
 >true : true
 >b : number
 >2 : 2
@@ -70,8 +70,8 @@ var values2 = Object.values({ a: true, b: 2 });     // (number|boolean)[]
 >Object.values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
 >Object : ObjectConstructor
 >values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
->{ a: true, b: 2 } : { a: boolean; b: number; }
->a : boolean
+>{ a: true, b: 2 } : { a: true; b: number; }
+>a : true
 >true : true
 >b : number
 >2 : 2

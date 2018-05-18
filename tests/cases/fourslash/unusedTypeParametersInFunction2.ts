@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-// @noUnusedLocals: true
+// @noUnusedParameters: true
 //// [|function f1<X, Y>(a: X) {a}|]
 
 verify.codeFix({

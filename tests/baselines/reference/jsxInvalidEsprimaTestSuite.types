@@ -25,14 +25,10 @@ declare var React: any;
 
 === tests/cases/conformance/jsx/4.tsx ===
 <a b=d />;
-><a b=d />; : any
+><a b=d /> : any
 >a : any
->b : boolean
->d /> : boolean
->d / : number
->d : any
-> : any
-> : any
+>b : true
+>d : true
 
 === tests/cases/conformance/jsx/5.tsx ===
 <a>;
@@ -251,17 +247,17 @@ var x = <div>one</div> /* intervening comment */ <div>two</div>;;
 <a b=}>;
 ><a b=}>; : any
 >a : any
->b : any
+>b : true
 
 > : any
 
 === tests/cases/conformance/jsx/29.tsx ===
 <a b=<}>;
 ><a b=<}>; : any
+><a b= : any
 >a : any
->b : boolean
->< : boolean
-> : any
+>b : true
+><}>; : any
 > : any
 
 > : any

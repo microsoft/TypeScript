@@ -59,6 +59,32 @@ describe("PreProcessFile:", () => {
                 });
         }),
 
+        it("Do not return reference path of non-imports", () => {
+            test("Quill.import('delta');",
+                /*readImportFile*/ true,
+                /*detectJavaScriptImports*/ false,
+                {
+                    referencedFiles: <ts.FileReference[]>[],
+                    importedFiles: <ts.FileReference[]>[],
+                    typeReferenceDirectives: [],
+                    ambientExternalModules: undefined,
+                    isLibFile: false
+                });
+        }),
+
+        it("Do not return reference path of nested non-imports", () => {
+            test("a.b.import('c');",
+                /*readImportFile*/ true,
+                /*detectJavaScriptImports*/ false,
+                {
+                    referencedFiles: <ts.FileReference[]>[],
+                    importedFiles: <ts.FileReference[]>[],
+                    typeReferenceDirectives: [],
+                    ambientExternalModules: undefined,
+                    isLibFile: false
+                });
+        }),
+
         it("Correctly return imported files", () => {
             test("import i1 = require(\"r1.ts\"); import i2 =require(\"r2.ts\"); import i3= require(\"r3.ts\"); import i4=require(\"r4.ts\"); import i5 = require  (\"r5.ts\");",
                 /*readImportFile*/ true,

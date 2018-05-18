@@ -178,7 +178,7 @@ function writeProtocolFile(outputFile: string, protocolTs: string, typeScriptSer
     ts.sys.writeFile(outputFile, protocolDts);
 
     if (diagnostics.length) {
-        const flattenedDiagnostics = diagnostics.map(d => `${ts.flattenDiagnosticMessageText(d.messageText, "\n")} at ${d.file.fileName} line ${d.start}`).join("\n");
+        const flattenedDiagnostics = diagnostics.map(d => `${ts.flattenDiagnosticMessageText(d.messageText, "\n")} at ${d.file ? d.file.fileName : "<unknown>"} line ${d.start}`).join("\n");
         throw new Error(`Unexpected errors during sanity check: ${flattenedDiagnostics}`);
     }
 }

@@ -1,7 +1,3 @@
-/// <reference path="../factory.ts" />
-/// <reference path="../visitor.ts" />
-/// <reference path="es2017.ts" />
-
 /*@internal*/
 namespace ts {
     const enum ESNextSubstitutionFlags {
@@ -30,7 +26,7 @@ namespace ts {
         let enclosingFunctionFlags: FunctionFlags;
         let enclosingSuperContainerFlags: NodeCheckFlags = 0;
 
-        return transformSourceFile;
+        return chainBundle(transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {
@@ -122,21 +118,38 @@ namespace ts {
         }
 
         function visitYieldExpression(node: YieldExpression) {
-            if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator && node.asteriskToken) {
-                const expression = visitNode(node.expression, visitor, isExpression);
+            if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
+                if (node.asteriskToken) {
+                    const expression = visitNode(node.expression, visitor, isExpression);
+
+                    return setOriginalNode(
+                        setTextRange(
+                            createYield(
+                                createAwaitHelper(context,
+                                    updateYield(
+                                        node,
+                                        node.asteriskToken,
+                                        createAsyncDelegatorHelper(
+                                            context,
+                                            createAsyncValuesHelper(context, expression, expression),
+                                            expression
+                                        )
+                                    )
+                                )
+                            ),
+                            node
+                        ),
+                        node
+                    );
+                }
+
                 return setOriginalNode(
                     setTextRange(
                         createYield(
-                            createAwaitHelper(context,
-                                updateYield(
-                                    node,
-                                    node.asteriskToken,
-                                    createAsyncDelegatorHelper(
-                                        context,
-                                        createAsyncValuesHelper(context, expression, expression),
-                                        expression
-                                    )
-                                )
+                            createDownlevelAwait(
+                                node.expression
+                                    ? visitNode(node.expression, visitor, isExpression)
+                                    : createVoidZero()
                             )
                         ),
                         node
@@ -144,22 +157,23 @@ namespace ts {
                     node
                 );
             }
+
             return visitEachChild(node, visitor, context);
         }
 
         function visitLabeledStatement(node: LabeledStatement) {
-            if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
+            if (enclosingFunctionFlags & FunctionFlags.Async) {
                 const statement = unwrapInnermostStatementOfLabel(node);
                 if (statement.kind === SyntaxKind.ForOfStatement && (<ForOfStatement>statement).awaitModifier) {
                     return visitForOfStatement(<ForOfStatement>statement, node);
                 }
-                return restoreEnclosingLabel(visitEachChild(node, visitor, context), node);
+                return restoreEnclosingLabel(visitEachChild(statement, visitor, context), node);
             }
             return visitEachChild(node, visitor, context);
         }
 
         function chunkObjectLiteralElements(elements: ReadonlyArray<ObjectLiteralElementLike>): Expression[] {
-            let chunkObject: ObjectLiteralElementLike[];
+            let chunkObject: ObjectLiteralElementLike[] | undefined;
             const objects: Expression[] = [];
             for (const e of elements) {
                 if (e.kind === SyntaxKind.SpreadAssignment) {
@@ -167,20 +181,13 @@ namespace ts {
                         objects.push(createObjectLiteral(chunkObject));
                         chunkObject = undefined;
                     }
-                    const target = (e as SpreadAssignment).expression;
+                    const target = e.expression;
                     objects.push(visitNode(target, visitor, isExpression));
                 }
                 else {
-                    if (!chunkObject) {
-                        chunkObject = [];
-                    }
-                    if (e.kind === SyntaxKind.PropertyAssignment) {
-                        const p = e as PropertyAssignment;
-                        chunkObject.push(createPropertyAssignment(p.name, visitNode(p.initializer, visitor, isExpression)));
-                    }
-                    else {
-                        chunkObject.push(visitNode(e, visitor, isObjectLiteralElementLike));
-                    }
+                    chunkObject = append(chunkObject, e.kind === SyntaxKind.PropertyAssignment
+                        ? createPropertyAssignment(e.name, visitNode(e.initializer, visitor, isExpression))
+                        : visitNode(e, visitor, isObjectLiteralElementLike));
                 }
             }
             if (chunkObject) {
@@ -310,6 +317,11 @@ namespace ts {
                     addRange(statements, node.statement.statements);
                     bodyLocation = node.statement;
                     statementsLocation = node.statement.statements;
+                }
+                else if (node.statement) {
+                    append(statements, node.statement);
+                    bodyLocation = node.statement;
+                    statementsLocation = node.statement;
                 }
                 return updateForOf(
                     node,
@@ -651,7 +663,7 @@ namespace ts {
                 )
             );
 
-            addRange(statements, endLexicalEnvironment());
+            prependRange(statements, endLexicalEnvironment());
             const block = updateBlock(node.body, statements);
 
             // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
@@ -680,11 +692,11 @@ namespace ts {
                 statementOffset = addPrologue(statements, body.statements, /*ensureUseStrict*/ false, visitor);
             }
             addRange(statements, appendObjectRestAssignmentsIfNeeded(/*statements*/ undefined, node));
-            const trailingStatements = endLexicalEnvironment();
-            if (statementOffset > 0 || some(statements) || some(trailingStatements)) {
+            const leadingStatements = endLexicalEnvironment();
+            if (statementOffset > 0 || some(statements) || some(leadingStatements)) {
                 const block = convertToFunctionBody(body, /*multiLine*/ true);
+                prependRange(statements, leadingStatements);
                 addRange(statements, block.statements.slice(statementOffset));
-                addRange(statements, trailingStatements);
                 return updateBlock(block, setTextRange(createNodeArray(statements), block.statements));
             }
             return body;
@@ -894,8 +906,7 @@ namespace ts {
         name: "typescript:await",
         scoped: false,
         text: `
-            var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
-        `
+            var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }`
     };
 
     function createAwaitHelper(context: TransformationContext, expression: Expression) {
@@ -913,12 +924,11 @@ namespace ts {
                 return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
                 function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
                 function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
-                function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r);  }
+                function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
                 function fulfill(value) { resume("next", value); }
                 function reject(value) { resume("throw", value); }
                 function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
-            };
-        `
+            };`
     };
 
     function createAsyncGeneratorHelper(context: TransformationContext, generatorFunc: FunctionExpression) {
@@ -946,9 +956,8 @@ namespace ts {
             var __asyncDelegator = (this && this.__asyncDelegator) || function (o) {
                 var i, p;
                 return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
-                function verb(n, f) { if (o[n]) i[n] = function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; }; }
-            };
-        `
+                function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
+            };`
     };
 
     function createAsyncDelegatorHelper(context: TransformationContext, expression: Expression, location?: TextRange) {
@@ -970,10 +979,11 @@ namespace ts {
         text: `
             var __asyncValues = (this && this.__asyncValues) || function (o) {
                 if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-                var m = o[Symbol.asyncIterator];
-                return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
-            };
-        `
+                var m = o[Symbol.asyncIterator], i;
+                return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+                function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+                function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+            };`
     };
 
     function createAsyncValuesHelper(context: TransformationContext, expression: Expression, location?: TextRange) {

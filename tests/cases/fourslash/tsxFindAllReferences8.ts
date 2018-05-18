@@ -20,9 +20,9 @@
 //// interface LinkProps extends ClickableProps {
 ////     goTo: string;
 //// }
-//// declare function [|MainButton|](buttonProps: ButtonProps): JSX.Element;
-//// declare function [|MainButton|](linkProps: LinkProps): JSX.Element;
-//// declare function [|MainButton|](props: ButtonProps | LinkProps): JSX.Element;
+//// declare function [|{| "isWriteAccess": true, "isDefinition": true |}MainButton|](buttonProps: ButtonProps): JSX.Element;
+//// declare function [|{| "isWriteAccess": true, "isDefinition": true |}MainButton|](linkProps: LinkProps): JSX.Element;
+//// declare function [|{| "isWriteAccess": true, "isDefinition": true |}MainButton|](props: ButtonProps | LinkProps): JSX.Element;
 //// let opt = <[|MainButton|] />;
 //// let opt = <[|MainButton|] children="chidlren" />;
 //// let opt = <[|MainButton|] onClick={()=>{}} />;
@@ -30,4 +30,4 @@
 //// let opt = <[|MainButton|] goTo="goTo" />;
 //// let opt = <[|MainButton|] wrong />;
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("function MainButton(buttonProps: ButtonProps): JSX.Element (+2 overloads)");

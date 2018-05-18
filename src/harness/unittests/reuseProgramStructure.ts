@@ -165,7 +165,7 @@ namespace ts {
 
     export function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: ReadonlyArray<string>, options: CompilerOptions, updater: (files: NamedSourceText[]) => void, newTexts?: NamedSourceText[]) {
         if (!newTexts) {
-            newTexts = (<ProgramWithSourceTexts>oldProgram).sourceTexts.slice(0);
+            newTexts = oldProgram.sourceTexts.slice(0);
         }
         updater(newTexts);
         const host = createTestCompilerHost(newTexts, options.target, oldProgram);
@@ -884,10 +884,9 @@ namespace ts {
         });
     });
 
-    import TestSystem = ts.TestFSWithWatch.TestServerHost;
-    type FileOrFolder = ts.TestFSWithWatch.FileOrFolder;
-    import createTestSystem = ts.TestFSWithWatch.createWatchedSystem;
-    import libFile = ts.TestFSWithWatch.libFile;
+    type File = TestFSWithWatch.File;
+    import createTestSystem = TestFSWithWatch.createWatchedSystem;
+    import libFile = TestFSWithWatch.libFile;
 
     describe("isProgramUptoDate should return true when there is no change in compiler options and", () => {
         function verifyProgramIsUptoDate(
@@ -910,42 +909,33 @@ namespace ts {
             return JSON.parse(JSON.stringify(filesOrOptions));
         }
 
-        function createWatchingSystemHost(host: TestSystem) {
-            return ts.createWatchingSystemHost(/*pretty*/ undefined, host);
-        }
-
-        function verifyProgramWithoutConfigFile(watchingSystemHost: WatchingSystemHost, rootFiles: string[], options: CompilerOptions) {
-            const program = createWatchModeWithoutConfigFile(rootFiles, options, watchingSystemHost)();
+        function verifyProgramWithoutConfigFile(system: System, rootFiles: string[], options: CompilerOptions) {
+            const program = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, system)).getCurrentProgram().getProgram();
             verifyProgramIsUptoDate(program, duplicate(rootFiles), duplicate(options));
         }
 
-        function getConfigParseResult(watchingSystemHost: WatchingSystemHost, configFileName: string) {
-            return parseConfigFile(configFileName, {}, watchingSystemHost.system, watchingSystemHost.reportDiagnostic, watchingSystemHost.reportWatchDiagnostic);
-        }
-
-        function verifyProgramWithConfigFile(watchingSystemHost: WatchingSystemHost, configFile: string) {
-            const result = getConfigParseResult(watchingSystemHost, configFile);
-            const program = createWatchModeWithConfigFile(result, {}, watchingSystemHost)();
-            const { fileNames, options } = getConfigParseResult(watchingSystemHost, configFile);
+        function verifyProgramWithConfigFile(system: System, configFileName: string) {
+            const program = createWatchProgram(createWatchCompilerHostOfConfigFile(configFileName, {}, system)).getCurrentProgram().getProgram();
+            const { fileNames, options } = parseConfigFileWithSystem(configFileName, {}, system, notImplemented);
             verifyProgramIsUptoDate(program, fileNames, options);
         }
 
-        function verifyProgram(files: FileOrFolder[], rootFiles: string[], options: CompilerOptions, configFile: string) {
-            const watchingSystemHost = createWatchingSystemHost(createTestSystem(files));
-            verifyProgramWithoutConfigFile(watchingSystemHost, rootFiles, options);
-            verifyProgramWithConfigFile(watchingSystemHost, configFile);
+        function verifyProgram(files: File[], rootFiles: string[], options: CompilerOptions, configFile: string) {
+            const system = createTestSystem(files);
+            verifyProgramWithoutConfigFile(system, rootFiles, options);
+            verifyProgramWithConfigFile(system, configFile);
         }
 
         it("has empty options", () => {
-            const file1: FileOrFolder = {
+            const file1: File = {
                 path: "/a/b/file1.ts",
                 content: "let x = 1"
             };
-            const file2: FileOrFolder = {
+            const file2: File = {
                 path: "/a/b/file2.ts",
                 content: "let y = 1"
             };
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: "{}"
             };
@@ -954,19 +944,19 @@ namespace ts {
 
         it("has lib specified in the options", () => {
             const compilerOptions: CompilerOptions = { lib: ["es5", "es2015.promise"] };
-            const app: FileOrFolder = {
+            const app: File = {
                 path: "/src/app.ts",
                 content: "var x: Promise<string>;"
             };
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: "/src/tsconfig.json",
                 content: JSON.stringify({ compilerOptions })
             };
-            const es5Lib: FileOrFolder = {
+            const es5Lib: File = {
                 path: "/compiler/lib.es5.d.ts",
                 content: "declare const eval: any"
             };
-            const es2015Promise: FileOrFolder = {
+            const es2015Promise: File = {
                 path: "/compiler/lib.es2015.promise.d.ts",
                 content: "declare class Promise<T> {}"
             };
@@ -985,26 +975,26 @@ namespace ts {
                     ]
                 }
             };
-            const app: FileOrFolder = {
+            const app: File = {
                 path: "/src/packages/framework/app.ts",
                 content: 'import classc from "module1/lib/file1";\
                           import classD from "module3/file3";\
                           let x = new classc();\
                           let y = new classD();'
             };
-            const module1: FileOrFolder = {
+            const module1: File = {
                 path: "/src/packages/mail/data/module1/lib/file1.ts",
                 content: 'import classc from "module2/file2";export default classc;',
             };
-            const module2: FileOrFolder = {
+            const module2: File = {
                 path: "/src/packages/mail/data/module1/lib/module2/file2.ts",
                 content: 'class classc { method2() { return "hello"; } }\nexport default classc',
             };
-            const module3: FileOrFolder = {
+            const module3: File = {
                 path: "/src/packages/styles/module3/file3.ts",
                 content: "class classD { method() { return 10; } }\nexport default classD;"
             };
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: "/src/tsconfig.json",
                 content: JSON.stringify({ compilerOptions })
             };
@@ -1023,32 +1013,30 @@ namespace ts {
                     ]
                 }
             };
-            const app: FileOrFolder = {
+            const app: File = {
                 path: "/src/packages/framework/app.ts",
                 content: 'import classc from "module1/lib/file1";\
                           import classD from "module3/file3";\
                           let x = new classc();\
                           let y = new classD();'
             };
-            const module1: FileOrFolder = {
+            const module1: File = {
                 path: "/src/packages/mail/data/module1/lib/file1.ts",
                 content: 'import classc from "module2/file2";export default classc;',
             };
-            const module2: FileOrFolder = {
+            const module2: File = {
                 path: "/src/packages/mail/data/module1/lib/module2/file2.ts",
                 content: 'class classc { method2() { return "hello"; } }\nexport default classc',
             };
-            const module3: FileOrFolder = {
+            const module3: File = {
                 path: "/src/packages/styles/module3/file3.ts",
                 content: "class classD { method() { return 10; } }\nexport default classD;"
             };
-            const configFile: FileOrFolder = {
+            const configFile: File = {
                 path: "/src/tsconfig.json",
-                content: JSON.stringify({ compilerOptions, include: ["packages/**/ *.ts"] })
+                content: JSON.stringify({ compilerOptions, include: ["packages/**/*.ts"] })
             };
-
-            const watchingSystemHost = createWatchingSystemHost(createTestSystem([app, module1, module2, module3, libFile, configFile]));
-            verifyProgramWithConfigFile(watchingSystemHost, configFile.path);
+            verifyProgramWithConfigFile(createTestSystem([app, module1, module2, module3, libFile, configFile]), configFile.path);
         });
     });
 }

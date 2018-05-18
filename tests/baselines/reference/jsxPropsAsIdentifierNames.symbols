@@ -18,6 +18,5 @@ declare namespace JSX {
     }
 }
 export default <div static={true} />;
->div : Symbol(unknown)
 >static : Symbol(static, Decl(index.tsx, 8, 19))
 

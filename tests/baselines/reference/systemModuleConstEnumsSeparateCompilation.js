@@ -13,6 +13,7 @@ module M {
 
 //// [systemModuleConstEnumsSeparateCompilation.js]
 System.register([], function (exports_1, context_1) {
+    var TopLevelConstEnum, M;
     "use strict";
     var __moduleName = context_1 && context_1.id;
     function foo() {
@@ -20,7 +21,6 @@ System.register([], function (exports_1, context_1) {
         use(M.NonTopLevelConstEnum.X);
     }
     exports_1("foo", foo);
-    var TopLevelConstEnum, M;
     return {
         setters: [],
         execute: function () {

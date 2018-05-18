@@ -1,5 +1,7 @@
 === tests/cases/conformance/jsx/react.d.ts ===
 declare module 'react' {
+>'react' : Symbol('react', Decl(react.d.ts, 0, 0))
+
 	class Component<T, U> { }
 >Component : Symbol(Component, Decl(react.d.ts, 0, 24))
 >T : Symbol(T, Decl(react.d.ts, 1, 17))

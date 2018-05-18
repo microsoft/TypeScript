@@ -14,5 +14,8 @@ var o: I = {
 >I : Symbol(I, Decl(computedPropertyNamesContextualType8_ES5.ts, 0, 0))
 
     [""+"foo"]: "",
+>[""+"foo"] : Symbol([""+"foo"], Decl(computedPropertyNamesContextualType8_ES5.ts, 5, 12))
+
     [""+"bar"]: 0
+>[""+"bar"] : Symbol([""+"bar"], Decl(computedPropertyNamesContextualType8_ES5.ts, 6, 19))
 }

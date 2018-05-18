@@ -3,7 +3,7 @@
 
 type StringContains<S extends string, L extends string> = ({ [K in S]: 'true' } & { [key: string]: 'false'})[L];
 
-type ObjectHasKey<O, L extends string> = StringContains<keyof O, L>;
+type ObjectHasKey<O, L extends string> = StringContains<Extract<keyof O, string>, L>;
 
 type A<T> = ObjectHasKey<T, '0'>;
 
@@ -33,7 +33,7 @@ declare type StringContains<S extends string, L extends string> = ({
 } & {
     [key: string]: 'false';
 })[L];
-declare type ObjectHasKey<O, L extends string> = StringContains<keyof O, L>;
+declare type ObjectHasKey<O, L extends string> = StringContains<Extract<keyof O, string>, L>;
 declare type A<T> = ObjectHasKey<T, '0'>;
 declare type B = ObjectHasKey<[string, number], '1'>;
 declare type C = ObjectHasKey<[string, number], '2'>;

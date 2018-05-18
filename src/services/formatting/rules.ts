@@ -59,6 +59,8 @@ namespace ts.formatting {
             rule("NoSpaceBeforeDot", anyToken, SyntaxKind.DotToken, [isNonJsxSameLineTokenContext], RuleAction.Delete),
             rule("NoSpaceAfterDot", SyntaxKind.DotToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.Delete),
 
+            rule("NoSpaceBetweenImportParenInImportType", SyntaxKind.ImportKeyword, SyntaxKind.OpenParenToken, [isNonJsxSameLineTokenContext, isImportTypeContext], RuleAction.Delete),
+
             // Special handling of unary operators.
             // Prefix operators generally shouldn't have a space between
             // them and their target unary expression.
@@ -92,6 +94,9 @@ namespace ts.formatting {
             rule("SpaceBetweenCloseBraceAndWhile", SyntaxKind.CloseBraceToken, SyntaxKind.WhileKeyword, [isNonJsxSameLineTokenContext], RuleAction.Space),
             rule("NoSpaceBetweenEmptyBraceBrackets", SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, [isNonJsxSameLineTokenContext, isObjectContext], RuleAction.Delete),
 
+            // Add a space after control dec context if the next character is an open bracket ex: 'if (false)[a, b] = [1, 2];' -> 'if (false) [a, b] = [1, 2];'
+            rule("SpaceAfterConditionalClosingParen", SyntaxKind.CloseParenToken, SyntaxKind.OpenBracketToken, [isControlDeclContext], RuleAction.Space),
+
             rule("NoSpaceBetweenFunctionKeywordAndStar", SyntaxKind.FunctionKeyword, SyntaxKind.AsteriskToken, [isFunctionDeclarationOrFunctionExpressionContext], RuleAction.Delete),
             rule("SpaceAfterStarInGeneratorDeclaration", SyntaxKind.AsteriskToken, [SyntaxKind.Identifier, SyntaxKind.OpenParenToken], [isFunctionDeclarationOrFunctionExpressionContext], RuleAction.Space),
 
@@ -123,8 +128,8 @@ namespace ts.formatting {
             rule("SpaceBetweenAsyncAndOpenParen", SyntaxKind.AsyncKeyword, SyntaxKind.OpenParenToken, [isArrowFunctionContext, isNonJsxSameLineTokenContext], RuleAction.Space),
             rule("SpaceBetweenAsyncAndFunctionKeyword", SyntaxKind.AsyncKeyword, SyntaxKind.FunctionKeyword, [isNonJsxSameLineTokenContext], RuleAction.Space),
 
-            // template string
-            rule("NoSpaceBetweenTagAndTemplateString", SyntaxKind.Identifier, [SyntaxKind.NoSubstitutionTemplateLiteral, SyntaxKind.TemplateHead], [isNonJsxSameLineTokenContext], RuleAction.Delete),
+            // Template string
+            rule("NoSpaceBetweenTagAndTemplateString", [SyntaxKind.Identifier, SyntaxKind.CloseParenToken], [SyntaxKind.NoSubstitutionTemplateLiteral, SyntaxKind.TemplateHead], [isNonJsxSameLineTokenContext], RuleAction.Delete),
 
             // JSX opening elements
             rule("SpaceBeforeJsxAttribute", anyToken, SyntaxKind.Identifier, [isNextTokenParentJsxAttribute, isNonJsxSameLineTokenContext], RuleAction.Space),
@@ -162,6 +167,7 @@ namespace ts.formatting {
                     SyntaxKind.TypeKeyword,
                     SyntaxKind.FromKeyword,
                     SyntaxKind.KeyOfKeyword,
+                    SyntaxKind.InferKeyword,
                 ],
                 anyToken,
                 [isNonJsxSameLineTokenContext],
@@ -194,7 +200,7 @@ namespace ts.formatting {
             rule("NoSpaceAfterCloseAngularBracket",
                 SyntaxKind.GreaterThanToken,
                 [SyntaxKind.OpenParenToken, SyntaxKind.OpenBracketToken, SyntaxKind.GreaterThanToken, SyntaxKind.CommaToken],
-                [isNonJsxSameLineTokenContext, isTypeArgumentOrParameterOrAssertionContext],
+                [isNonJsxSameLineTokenContext, isTypeArgumentOrParameterOrAssertionContext, isNotFunctionDeclContext /*To prevent an interference with the SpaceBeforeOpenParenInFuncDecl rule*/],
                 RuleAction.Delete),
 
             // decorators
@@ -321,6 +327,9 @@ namespace ts.formatting {
             rule("NoSpaceAfterCloseBracket", SyntaxKind.CloseBracketToken, anyToken, [isNonJsxSameLineTokenContext, isNotBeforeBlockInFunctionDeclarationContext], RuleAction.Delete),
             rule("SpaceAfterSemicolon", SyntaxKind.SemicolonToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.Space),
 
+            // Remove extra space between for and await
+            rule("SpaceBetweenForAndAwaitKeyword", SyntaxKind.ForKeyword, SyntaxKind.AwaitKeyword, [isNonJsxSameLineTokenContext], RuleAction.Space),
+
             // Add a space between statements. All keywords except (do,else,case) has open/close parens after them.
             // So, we have a rule to add a space for [),Any], [do,Any], [else,Any], and [case,Any]
             rule(
@@ -406,6 +415,7 @@ namespace ts.formatting {
         switch (context.contextNode.kind) {
             case SyntaxKind.BinaryExpression:
             case SyntaxKind.ConditionalExpression:
+            case SyntaxKind.ConditionalType:
             case SyntaxKind.AsExpression:
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.ImportSpecifier:
@@ -458,7 +468,8 @@ namespace ts.formatting {
     }
 
     function isConditionalOperatorContext(context: FormattingContext): boolean {
-        return context.contextNode.kind === SyntaxKind.ConditionalExpression;
+        return context.contextNode.kind === SyntaxKind.ConditionalExpression ||
+                context.contextNode.kind === SyntaxKind.ConditionalType;
     }
 
     function isSameLineTokenOrBeforeBlockContext(context: FormattingContext): boolean {
@@ -466,7 +477,9 @@ namespace ts.formatting {
     }
 
     function isBraceWrappedContext(context: FormattingContext): boolean {
-        return context.contextNode.kind === SyntaxKind.ObjectBindingPattern || isSingleLineBlockContext(context);
+        return context.contextNode.kind === SyntaxKind.ObjectBindingPattern ||
+            context.contextNode.kind === SyntaxKind.MappedType ||
+            isSingleLineBlockContext(context);
     }
 
     // This check is done before an open brace in a control construct, a function, or a typescript block declaration
@@ -529,6 +542,10 @@ namespace ts.formatting {
         }
 
         return false;
+    }
+
+    function isNotFunctionDeclContext(context: FormattingContext): boolean {
+        return !isFunctionDeclContext(context);
     }
 
     function isFunctionDeclarationOrFunctionExpressionContext(context: FormattingContext): boolean {
@@ -624,6 +641,10 @@ namespace ts.formatting {
 
     function isArrowFunctionContext(context: FormattingContext): boolean {
         return context.contextNode.kind === SyntaxKind.ArrowFunction;
+    }
+
+    function isImportTypeContext(context: FormattingContext): boolean {
+        return context.contextNode.kind === SyntaxKind.ImportType;
     }
 
     function isNonJsxSameLineTokenContext(context: FormattingContext): boolean {

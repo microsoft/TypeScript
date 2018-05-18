@@ -4,6 +4,6 @@
 
 // If there is an adjacent opening and closing brace,
 // then only the opening brace should get highlighted.
-test.ranges().forEach(range => {
-    verify.matchingBracePositionInCurrentFile(range.start, range.end - 1);
-});
+for (const range of test.ranges()) {
+    verify.matchingBracePositionInCurrentFile(range.pos, range.end - 1);
+}

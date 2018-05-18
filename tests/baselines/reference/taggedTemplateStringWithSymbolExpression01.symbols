@@ -1,0 +1,16 @@
+=== tests/cases/compiler/taggedTemplateStringWithSymbolExpression01.ts ===
+// taggedTemplateStringWithSymbolExpression01.ts
+
+declare function foo(template: any, val: symbol): number;
+>foo : Symbol(foo, Decl(taggedTemplateStringWithSymbolExpression01.ts, 0, 0))
+>template : Symbol(template, Decl(taggedTemplateStringWithSymbolExpression01.ts, 2, 21))
+>val : Symbol(val, Decl(taggedTemplateStringWithSymbolExpression01.ts, 2, 35))
+
+let x!: symbol;
+>x : Symbol(x, Decl(taggedTemplateStringWithSymbolExpression01.ts, 3, 3))
+
+let result: number = foo`${x}`;
+>result : Symbol(result, Decl(taggedTemplateStringWithSymbolExpression01.ts, 5, 3))
+>foo : Symbol(foo, Decl(taggedTemplateStringWithSymbolExpression01.ts, 0, 0))
+>x : Symbol(x, Decl(taggedTemplateStringWithSymbolExpression01.ts, 3, 3))
+

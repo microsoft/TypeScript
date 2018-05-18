@@ -16,7 +16,7 @@ var [a3, [[a4]], a5]: [number, [[string]], boolean] = [1, [[false]], true];  // 
 >a3 : number
 >a4 : string
 >a5 : boolean
->[1, [[false]], true] : [number, [[boolean]], boolean]
+>[1, [[false]], true] : [number, [[boolean]], true]
 >1 : 1
 >[[false]] : [[boolean]]
 >[false] : [boolean]
@@ -38,13 +38,13 @@ var [b0 = 3, b1 = true, b2 = temp] = [3, false, { t1: false, t2: 5}];  // Error
 >3 : 3
 >b1 : boolean
 >true : true
->b2 : { t1: boolean; t2: string; } | { t1: boolean; t2: number; }
+>b2 : { t1: boolean; t2: string; } | { t1: false; t2: number; }
 >temp : { t1: boolean; t2: string; }
->[3, false, { t1: false, t2: 5}] : [number, boolean, { t1: boolean; t2: number; }]
+>[3, false, { t1: false, t2: 5}] : [number, false, { t1: false; t2: number; }]
 >3 : 3
 >false : false
->{ t1: false, t2: 5} : { t1: boolean; t2: number; }
->t1 : boolean
+>{ t1: false, t2: 5} : { t1: false; t2: number; }
+>t1 : false
 >false : false
 >t2 : number
 >5 : 5

@@ -1,14 +1,19 @@
 === tests/cases/compiler/customEventDetail.ts ===
 var x: CustomEvent;
 >x : Symbol(x, Decl(customEventDetail.ts, 0, 3))
+>CustomEvent : Symbol(CustomEvent, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 // valid since detail is any
 x.initCustomEvent('hello', true, true, { id: 12, name: 'hello' });
+>x.initCustomEvent : Symbol(CustomEvent.initCustomEvent, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(customEventDetail.ts, 0, 3))
+>initCustomEvent : Symbol(CustomEvent.initCustomEvent, Decl(lib.d.ts, --, --))
 >id : Symbol(id, Decl(customEventDetail.ts, 3, 40))
 >name : Symbol(name, Decl(customEventDetail.ts, 3, 48))
 
 var y = x.detail.name;
 >y : Symbol(y, Decl(customEventDetail.ts, 4, 3))
+>x.detail : Symbol(CustomEvent.detail, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(customEventDetail.ts, 0, 3))
+>detail : Symbol(CustomEvent.detail, Decl(lib.d.ts, --, --))
 

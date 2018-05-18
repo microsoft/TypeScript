@@ -4,6 +4,8 @@ export var x: number
 
 === tests/cases/compiler/main.ts ===
 declare module "M" {
+>"M" : typeof import("M")
+
     import {x} from "external"
 >x : number
 }

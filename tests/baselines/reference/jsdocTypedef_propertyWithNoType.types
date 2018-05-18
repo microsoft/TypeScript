@@ -6,7 +6,7 @@
 
 /** @type {Foo} */
 const x = { foo: 0 };
->x : { foo: any; }
+>x : Foo
 >{ foo: 0 } : { foo: number; }
 >foo : number
 >0 : 0

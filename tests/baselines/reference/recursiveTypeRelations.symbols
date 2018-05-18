@@ -1,7 +1,7 @@
 === tests/cases/compiler/recursiveTypeRelations.ts ===
 // Repro from #14896
 
-type Attributes<Keys extends string> = {
+type Attributes<Keys extends keyof any> = {
 >Attributes : Symbol(Attributes, Decl(recursiveTypeRelations.ts, 0, 0))
 >Keys : Symbol(Keys, Decl(recursiveTypeRelations.ts, 2, 16))
 

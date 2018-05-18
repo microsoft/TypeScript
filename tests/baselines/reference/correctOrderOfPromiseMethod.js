@@ -63,8 +63,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 function countEverything() {
     return __awaiter(this, void 0, void 0, function () {
-        var _this = this;
         var providerA, providerB, _a, resultA, resultB, dataA, dataB;
+        var _this = this;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:

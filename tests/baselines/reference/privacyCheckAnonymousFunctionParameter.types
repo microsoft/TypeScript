@@ -31,7 +31,7 @@ module Query {
         return fromDoWhile(test => {
 >fromDoWhile(test => {            return true;        }) : Iterator<{}>
 >fromDoWhile : <T>(doWhile: (test: Iterator<T>) => boolean) => Iterator<T>
->test => {            return true;        } : (test: Iterator<{}>) => boolean
+>test => {            return true;        } : (test: Iterator<{}>) => true
 >test : Iterator<{}>
 
             return true;

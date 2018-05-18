@@ -55,3 +55,22 @@ declare let t0: { a: any, b: any } | { d: any, e: any }
 declare let t1: { a: any, b: any, c: any } | { c: any, d: any, e: any }
 let t2 = { ...t1 }
 t0 = t2
+
+// Nested excess property checks work with discriminated unions
+type AN = { a: string } | { c: string }
+type BN = { b: string }
+type AB = { kind: "A", n: AN } | { kind: "B", n: BN }
+const abab: AB = {
+    kind: "A",
+    n: {
+        a: "a",
+        b: "b", // excess -- kind: "A"
+    }
+}
+const abac: AB = {
+    kind: "A",
+    n: {
+        a: "a",
+        c: "c", // ok -- kind: "A", an: { a: string } | { c: string }
+    }
+}

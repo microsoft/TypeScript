@@ -2,14 +2,9 @@
 
 // @allowJs: true
 // @Filename: a.js
-//// Foo<number>();
+////Foo<[|number|]>();
 
-verify.getSyntacticDiagnostics(`[
-  {
-    "message": "'type arguments' can only be used in a .ts file.",
-    "start": 4,
-    "length": 6,
-    "category": "error",
-    "code": 8011
-  }
-]`);
+verify.getSyntacticDiagnostics([{
+    message: "'type arguments' can only be used in a .ts file.",
+    code: 8011
+}]);

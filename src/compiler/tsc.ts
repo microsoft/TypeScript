@@ -1,7 +1,3 @@
-/// <reference path="program.ts"/>
-/// <reference path="watch.ts"/>
-/// <reference path="commandLineParser.ts"/>
-
 namespace ts {
     interface Statistic {
         name: string;
@@ -21,11 +17,18 @@ namespace ts {
         return <string>diagnostic.messageText;
     }
 
-    let reportDiagnostic = createDiagnosticReporter(sys, reportDiagnosticSimply);
-    function udpateReportDiagnostic(options: CompilerOptions) {
-        if (options.pretty) {
-            reportDiagnostic = createDiagnosticReporter(sys, reportDiagnosticWithColorAndContext);
+    let reportDiagnostic = createDiagnosticReporter(sys);
+    function updateReportDiagnostic(options: CompilerOptions) {
+        if (shouldBePretty(options)) {
+            reportDiagnostic = createDiagnosticReporter(sys, /*pretty*/ true);
         }
+    }
+
+    function shouldBePretty(options: CompilerOptions) {
+        if (typeof options.pretty === "undefined") {
+            return !!sys.writeOutputIsTTY && sys.writeOutputIsTTY();
+        }
+        return options.pretty;
     }
 
     function padLeft(s: string, length: number) {
@@ -55,7 +58,7 @@ namespace ts {
         // If there are any errors due to command line parsing and/or
         // setting up localization, report them and quit.
         if (commandLine.errors.length > 0) {
-            reportDiagnostics(commandLine.errors, reportDiagnostic);
+            commandLine.errors.forEach(reportDiagnostic);
             return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
 
@@ -110,25 +113,24 @@ namespace ts {
 
         const commandLineOptions = commandLine.options;
         if (configFileName) {
-            const reportWatchDiagnostic = createWatchDiagnosticReporter();
-            const configParseResult = parseConfigFile(configFileName, commandLineOptions, sys, reportDiagnostic, reportWatchDiagnostic);
-            udpateReportDiagnostic(configParseResult.options);
+            const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, sys, reportDiagnostic);
+            updateReportDiagnostic(configParseResult.options);
             if (isWatchSet(configParseResult.options)) {
                 reportWatchModeWithoutSysSupport();
-                createWatchModeWithConfigFile(configParseResult, commandLineOptions, createWatchingSystemHost(reportWatchDiagnostic));
+                createWatchOfConfigFile(configParseResult, commandLineOptions);
             }
             else {
-                performCompilation(configParseResult.fileNames, configParseResult.options);
+                performCompilation(configParseResult.fileNames, configParseResult.projectReferences, configParseResult.options, getConfigFileParsingDiagnostics(configParseResult));
             }
         }
         else {
-            udpateReportDiagnostic(commandLineOptions);
+            updateReportDiagnostic(commandLineOptions);
             if (isWatchSet(commandLineOptions)) {
                 reportWatchModeWithoutSysSupport();
-                createWatchModeWithoutConfigFile(commandLine.fileNames, commandLineOptions, createWatchingSystemHost());
+                createWatchOfFilesAndCompilerOptions(commandLine.fileNames, commandLineOptions);
             }
             else {
-                performCompilation(commandLine.fileNames, commandLineOptions);
+                performCompilation(commandLine.fileNames, /*references*/ undefined, commandLineOptions);
             }
         }
     }
@@ -140,49 +142,54 @@ namespace ts {
         }
     }
 
-    function performCompilation(rootFileNames: string[], compilerOptions: CompilerOptions) {
-        const compilerHost = createCompilerHost(compilerOptions);
-        enableStatistics(compilerOptions);
+    function performCompilation(rootNames: string[], projectReferences: ReadonlyArray<ProjectReference> | undefined, options: CompilerOptions, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) {
+        const host = createCompilerHost(options);
+        enableStatistics(options);
 
-        const program = createProgram(rootFileNames, compilerOptions, compilerHost);
-        const exitStatus = compileProgram(program);
-
+        const programOptions: CreateProgramOptions = {
+            rootNames,
+            options,
+            projectReferences,
+            host,
+            configFileParsingDiagnostics
+        };
+        const program = createProgram(programOptions);
+        const exitStatus = emitFilesAndReportErrors(program, reportDiagnostic, s => sys.write(s + sys.newLine));
         reportStatistics(program);
         return sys.exit(exitStatus);
     }
 
-    function createWatchingSystemHost(reportWatchDiagnostic?: DiagnosticReporter) {
-        const watchingHost = ts.createWatchingSystemHost(/*pretty*/ undefined, sys, parseConfigFile, reportDiagnostic, reportWatchDiagnostic);
-        watchingHost.beforeCompile = enableStatistics;
-        const afterCompile = watchingHost.afterCompile;
-        watchingHost.afterCompile = (host, program, builder) => {
-            afterCompile(host, program, builder);
-            reportStatistics(program);
+    function updateWatchCompilationHost(watchCompilerHost: WatchCompilerHost<EmitAndSemanticDiagnosticsBuilderProgram>) {
+        const compileUsingBuilder = watchCompilerHost.createProgram;
+        watchCompilerHost.createProgram = (rootNames, options, host, oldProgram, configFileParsingDiagnostics) => {
+            Debug.assert(rootNames !== undefined || (options === undefined && !!oldProgram));
+            if (options !== undefined) {
+                enableStatistics(options);
+            }
+            return compileUsingBuilder(rootNames, options, host, oldProgram, configFileParsingDiagnostics);
         };
-        return watchingHost;
+        const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate;
+        watchCompilerHost.afterProgramCreate = builderProgram => {
+            emitFilesUsingBuilder(builderProgram);
+            reportStatistics(builderProgram.getProgram());
+        };
     }
 
-    function compileProgram(program: Program): ExitStatus {
-        let diagnostics: Diagnostic[];
+    function createWatchStatusReporter(options: CompilerOptions) {
+        return ts.createWatchStatusReporter(sys, shouldBePretty(options));
+    }
 
-        // First get and report any syntactic errors.
-        diagnostics = program.getSyntacticDiagnostics().slice();
+    function createWatchOfConfigFile(configParseResult: ParsedCommandLine, optionsToExtend: CompilerOptions) {
+        const watchCompilerHost = createWatchCompilerHostOfConfigFile(configParseResult.options.configFilePath, optionsToExtend, sys, /*createProgram*/ undefined, reportDiagnostic, createWatchStatusReporter(configParseResult.options));
+        updateWatchCompilationHost(watchCompilerHost);
+        watchCompilerHost.configFileParsingResult = configParseResult;
+        createWatchProgram(watchCompilerHost);
+    }
 
-        // If we didn't have any syntactic errors, then also try getting the global and
-        // semantic errors.
-        if (diagnostics.length === 0) {
-            diagnostics = program.getOptionsDiagnostics().concat(program.getGlobalDiagnostics());
-
-            if (diagnostics.length === 0) {
-                diagnostics = program.getSemanticDiagnostics().slice();
-            }
-        }
-
-        // Emit and report any errors we ran into.
-        const { emittedFiles, emitSkipped, diagnostics: emitDiagnostics } = program.emit();
-        addRange(diagnostics, emitDiagnostics);
-
-        return handleEmitOutputAndReportErrors(sys, program, emittedFiles, emitSkipped, diagnostics, reportDiagnostic);
+    function createWatchOfFilesAndCompilerOptions(rootFiles: string[], options: CompilerOptions) {
+        const watchCompilerHost = createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, sys, /*createProgram*/ undefined, reportDiagnostic, createWatchStatusReporter(options));
+        updateWatchCompilationHost(watchCompilerHost);
+        createWatchProgram(watchCompilerHost);
     }
 
     function enableStatistics(compilerOptions: CompilerOptions) {
@@ -265,7 +272,7 @@ namespace ts {
     }
 
     function printVersion() {
-        sys.write(getDiagnosticText(Diagnostics.Version_0, ts.version) + sys.newLine);
+        sys.write(getDiagnosticText(Diagnostics.Version_0, version) + sys.newLine);
     }
 
     function printHelp(showAllOptions: boolean) {
@@ -402,4 +409,9 @@ if (ts.Debug.isDebugging) {
 if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
     ts.sys.tryEnableSourceMapsForHost();
 }
+
+if (ts.sys.setBlocking) {
+    ts.sys.setBlocking();
+}
+
 ts.executeCommandLine(ts.sys.args);

@@ -4,6 +4,8 @@ declare module X { export interface bar { } }
 >bar : Symbol(bar, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 0, 18))
 
 declare module "m" {
+>"m" : Symbol("m", Decl(exportSpecifierReferencingOuterDeclaration3.ts, 0, 45))
+
     module X { export interface foo { } }
 >X : Symbol(X, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 1, 20))
 >foo : Symbol(foo, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 2, 14))

@@ -1,6 +1,3 @@
-/// <reference path="../factory.ts" />
-/// <reference path="../visitor.ts" />
-
 /*@internal*/
 namespace ts {
     type SuperContainer = ClassDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ConstructorDeclaration;
@@ -43,7 +40,7 @@ namespace ts {
         context.onEmitNode = onEmitNode;
         context.onSubstituteNode = onSubstituteNode;
 
-        return transformSourceFile;
+        return chainBundle(transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {
@@ -183,7 +180,7 @@ namespace ts {
                     : visitNode(node.initializer, visitor, isForInitializer),
                 visitNode(node.condition, visitor, isExpression),
                 visitNode(node.incrementor, visitor, isExpression),
-                visitNode((<ForStatement>node).statement, asyncBodyVisitor, isStatement, liftToBlock)
+                visitNode(node.statement, asyncBodyVisitor, isStatement, liftToBlock)
             );
         }
 
@@ -415,7 +412,7 @@ namespace ts {
                     )
                 );
 
-                addRange(statements, endLexicalEnvironment());
+                prependRange(statements, endLexicalEnvironment());
 
                 const block = createBlock(statements, /*multiLine*/ true);
                 setTextRange(block, node.body);
@@ -446,7 +443,7 @@ namespace ts {
                 const declarations = endLexicalEnvironment();
                 if (some(declarations)) {
                     const block = convertToFunctionBody(expression);
-                    result = updateBlock(block, setTextRange(createNodeArray(concatenate(block.statements, declarations)), block.statements));
+                    result = updateBlock(block, setTextRange(createNodeArray(concatenate(declarations, block.statements)), block.statements));
                 }
                 else {
                     result = expression;
@@ -600,7 +597,7 @@ namespace ts {
                 return setTextRange(
                     createPropertyAccess(
                         createCall(
-                            createIdentifier("_super"),
+                            createFileLevelUniqueName("_super"),
                             /*typeArguments*/ undefined,
                             [argumentExpression]
                         ),
@@ -612,7 +609,7 @@ namespace ts {
             else {
                 return setTextRange(
                     createCall(
-                        createIdentifier("_super"),
+                        createFileLevelUniqueName("_super"),
                         /*typeArguments*/ undefined,
                         [argumentExpression]
                     ),
@@ -668,19 +665,17 @@ namespace ts {
     export const asyncSuperHelper: EmitHelper = {
         name: "typescript:async-super",
         scoped: true,
-        text: `
-            const _super = name => super[name];
-        `
+        text: helperString`
+            const ${"_super"} = name => super[name];`
     };
 
     export const advancedAsyncSuperHelper: EmitHelper = {
         name: "typescript:advanced-async-super",
         scoped: true,
-        text: `
-            const _super = (function (geti, seti) {
+        text: helperString`
+            const ${"_super"} = (function (geti, seti) {
                 const cache = Object.create(null);
                 return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
-            })(name => super[name], (name, value) => super[name] = value);
-        `
+            })(name => super[name], (name, value) => super[name] = value);`
     };
 }

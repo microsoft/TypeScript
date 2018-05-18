@@ -178,15 +178,16 @@ for (var x = 0; x < 1; ++x) {
 }
 function foo() {
     var _loop_3 = function (a) {
+        var _a;
         if (a === 1) {
             return "break";
         }
         if (a === 2) {
             return "break-l0";
         }
-        for (var _i = 0, _a = []; _i < _a.length; _i++) {
-            var b = _a[_i];
-            _b = [{ x: 1, y: 2 }][0], x = _b.x, z = _b.y;
+        for (var _i = 0, _b = []; _i < _b.length; _i++) {
+            var b = _b[_i];
+            _a = [{ x: 1, y: 2 }][0], x = _a.x, z = _a.y;
             if (b === 1) {
                 break;
             }
@@ -199,6 +200,7 @@ function foo() {
             return { value: 50 };
         }
         var _loop_4 = function (b) {
+            var _a;
             _a = [{ x1: 1, y: arguments_1.length }][0], x1 = _a.x1, z1 = _a.y;
             if (b === 1) {
                 return "break";
@@ -208,31 +210,29 @@ function foo() {
             }
             (function () { return b; });
             return { value: 100 };
-            var _a;
         };
         for (var _c = 0, _d = []; _c < _d.length; _c++) {
             var b = _d[_c];
-            var state_1 = _loop_4(b);
-            if (typeof state_1 === "object")
-                return state_1;
-            if (state_1 === "break")
+            var state_2 = _loop_4(b);
+            if (typeof state_2 === "object")
+                return state_2;
+            if (state_2 === "break")
                 break;
-            switch (state_1) {
-                case "break-l0": return state_1;
+            switch (state_2) {
+                case "break-l0": return state_2;
             }
         }
         (function () { return a; });
-        var _b;
     };
     var arguments_1 = arguments, x, z, x1, z1;
     l0: for (var _i = 0, _a = []; _i < _a.length; _i++) {
         var a = _a[_i];
-        var state_2 = _loop_3(a);
-        if (typeof state_2 === "object")
-            return state_2.value;
-        if (state_2 === "break")
+        var state_1 = _loop_3(a);
+        if (typeof state_1 === "object")
+            return state_1.value;
+        if (state_1 === "break")
             break;
-        switch (state_2) {
+        switch (state_1) {
             case "break-l0": break l0;
         }
     }

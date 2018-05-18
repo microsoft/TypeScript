@@ -4,6 +4,7 @@ var x = { name: "x", 0: new Date() };
 >{ name: "x", 0: new Date() } : { name: string; 0: Date; }
 >name : string
 >"x" : "x"
+>0 : Date
 >new Date() : Date
 >Date : DateConstructor
 

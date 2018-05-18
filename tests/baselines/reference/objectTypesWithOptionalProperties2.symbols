@@ -49,4 +49,5 @@ var b = {
 
     x()?: 1 // error
 >x : Symbol(x, Decl(objectTypesWithOptionalProperties2.ts, 23, 9))
+>1 : Symbol(1, Decl(objectTypesWithOptionalProperties2.ts, 24, 9))
 }

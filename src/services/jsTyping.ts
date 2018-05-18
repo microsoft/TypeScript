@@ -1,10 +1,3 @@
-// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0.
-// See LICENSE.txt in the project root for complete license information.
-
-/// <reference path='../compiler/types.ts' />
-/// <reference path='../compiler/core.ts' />
-/// <reference path='../compiler/commandLineParser.ts' />
-
 /* @internal */
 namespace ts.JsTyping {
 
@@ -26,16 +19,59 @@ namespace ts.JsTyping {
         typings?: string;
     }
 
+    export interface CachedTyping {
+        typingLocation: string;
+        version: Semver;
+    }
+
+    /* @internal */
+    export function isTypingUpToDate(cachedTyping: CachedTyping, availableTypingVersions: MapLike<string>) {
+        const availableVersion = Semver.parse(getProperty(availableTypingVersions, `ts${versionMajorMinor}`) || getProperty(availableTypingVersions, "latest"));
+        return !availableVersion.greaterThan(cachedTyping.version);
+    }
+
     /* @internal */
     export const nodeCoreModuleList: ReadonlyArray<string> = [
-        "buffer", "querystring", "events", "http", "cluster",
-        "zlib", "os", "https", "punycode", "repl", "readline",
-        "vm", "child_process", "url", "dns", "net",
-        "dgram", "fs", "path", "string_decoder", "tls",
-        "crypto", "stream", "util", "assert", "tty", "domain",
-        "constants", "process", "v8", "timers", "console"];
+        "assert",
+        "async_hooks",
+        "buffer",
+        "child_process",
+        "cluster",
+        "console",
+        "constants",
+        "crypto",
+        "dgram",
+        "dns",
+        "domain",
+        "events",
+        "fs",
+        "http",
+        "https",
+        "http2",
+        "inspector",
+        "net",
+        "os",
+        "path",
+        "perf_hooks",
+        "process",
+        "punycode",
+        "querystring",
+        "readline",
+        "repl",
+        "stream",
+        "string_decoder",
+        "timers",
+        "tls",
+        "tty",
+        "url",
+        "util",
+        "v8",
+        "vm",
+        "zlib"
+    ];
 
-    const nodeCoreModules = arrayToSet(nodeCoreModuleList);
+    /* @internal */
+    export const nodeCoreModules = arrayToSet(nodeCoreModuleList);
 
     /**
      * A map of loose file names to library names that we are confident require typings
@@ -60,7 +96,7 @@ namespace ts.JsTyping {
      * @param fileNames are the file names that belong to the same project
      * @param projectRootPath is the path to the project root directory
      * @param safeListPath is the path used to retrieve the safe list
-     * @param packageNameToTypingLocation is the map of package names to their cached typing locations
+     * @param packageNameToTypingLocation is the map of package names to their cached typing locations and installed versions
      * @param typeAcquisition is used to customize the typing acquisition process
      * @param compilerOptions are used as a source for typing inference
      */
@@ -70,9 +106,10 @@ namespace ts.JsTyping {
         fileNames: string[],
         projectRootPath: Path,
         safeList: SafeList,
-        packageNameToTypingLocation: ReadonlyMap<string>,
+        packageNameToTypingLocation: ReadonlyMap<CachedTyping>,
         typeAcquisition: TypeAcquisition,
-        unresolvedImports: ReadonlyArray<string>):
+        unresolvedImports: ReadonlyArray<string>,
+        typesRegistry: ReadonlyMap<MapLike<string>>):
         { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
 
         if (!typeAcquisition || !typeAcquisition.enable) {
@@ -122,9 +159,9 @@ namespace ts.JsTyping {
             addInferredTypings(module, "Inferred typings from unresolved imports");
         }
         // Add the cached typing locations for inferred typings that are already installed
-        packageNameToTypingLocation.forEach((typingLocation, name) => {
-            if (inferredTypings.has(name) && inferredTypings.get(name) === undefined) {
-                inferredTypings.set(name, typingLocation);
+        packageNameToTypingLocation.forEach((typing, name) => {
+            if (inferredTypings.has(name) && inferredTypings.get(name) === undefined && isTypingUpToDate(typing, typesRegistry.get(name))) {
+                inferredTypings.set(name, typing.typingLocation);
             }
         });
 
@@ -305,7 +342,7 @@ namespace ts.JsTyping {
             case PackageNameValidationResult.NameContainsNonURISafeCharacters:
                 return `Package name '${typing}' contains non URI safe characters`;
             case PackageNameValidationResult.Ok:
-                throw Debug.fail(); // Shouldn't have called this.
+                return Debug.fail(); // Shouldn't have called this.
             default:
                 Debug.assertNever(result);
         }

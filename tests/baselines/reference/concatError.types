@@ -15,9 +15,9 @@ fa = fa.concat([0]);
 >fa = fa.concat([0]) : number[]
 >fa : number[]
 >fa.concat([0]) : number[]
->fa.concat : { (...items: (number[] | ReadonlyArray<number>)[]): number[]; (...items: (number | number[] | ReadonlyArray<number>)[]): number[]; }
+>fa.concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
 >fa : number[]
->concat : { (...items: (number[] | ReadonlyArray<number>)[]): number[]; (...items: (number | number[] | ReadonlyArray<number>)[]): number[]; }
+>concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
 >[0] : number[]
 >0 : 0
 
@@ -25,9 +25,9 @@ fa = fa.concat(0);
 >fa = fa.concat(0) : number[]
 >fa : number[]
 >fa.concat(0) : number[]
->fa.concat : { (...items: (number[] | ReadonlyArray<number>)[]): number[]; (...items: (number | number[] | ReadonlyArray<number>)[]): number[]; }
+>fa.concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
 >fa : number[]
->concat : { (...items: (number[] | ReadonlyArray<number>)[]): number[]; (...items: (number | number[] | ReadonlyArray<number>)[]): number[]; }
+>concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
 >0 : 0
 
 

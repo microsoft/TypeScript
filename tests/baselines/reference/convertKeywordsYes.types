@@ -578,6 +578,7 @@ class bigClass {
 >bigClass : bigClass
 
     public "constructor" = 0;
+>"constructor" : number
 >0 : 0
 
     public any = 0;

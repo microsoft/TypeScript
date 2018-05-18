@@ -39,6 +39,13 @@ module M {
 	export async function f1() { }
 }
 
+async function f14() {
+    block: {
+        await 1;
+        break block;
+    }
+}
+
 //// [asyncAwait_es5.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -188,3 +195,16 @@ var M;
     }
     M.f1 = f1;
 })(M || (M = {}));
+function f14() {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, 1];
+                case 1:
+                    _a.sent();
+                    return [3 /*break*/, 2];
+                case 2: return [2 /*return*/];
+            }
+        });
+    });
+}

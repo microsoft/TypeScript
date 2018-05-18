@@ -33,12 +33,12 @@ extend1({
 });
 extend2({
     init() {
-        this // this: containing object literal type
+        this // this: IndexedWithoutThis because of contextual typing
         this.mine
     },
     mine: 13,
     foo() {
-        this // this: containing object literal type
+        this // this: IndexedWithoutThis because of contextual typing
         this.mine
     }
 });
@@ -68,12 +68,12 @@ extend1({
 });
 extend2({
     init: function () {
-        this; // this: containing object literal type
+        this; // this: IndexedWithoutThis because of contextual typing
         this.mine;
     },
     mine: 13,
     foo: function () {
-        this; // this: containing object literal type
+        this; // this: IndexedWithoutThis because of contextual typing
         this.mine;
     }
 });

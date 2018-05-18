@@ -348,9 +348,9 @@ class ListWrapper {
 >a : any[]
 >b : any[]
 >a.concat(b) : any[]
->a.concat : { (...items: (any[] | ReadonlyArray<any>)[]): any[]; (...items: any[]): any[]; }
+>a.concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
 >a : any[]
->concat : { (...items: (any[] | ReadonlyArray<any>)[]): any[]; (...items: any[]): any[]; }
+>concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
 >b : any[]
 
   static insert<T>(dit: typeof ListWrapper, list: T[], index: number, value: T) { list.splice(index, 0, value); }

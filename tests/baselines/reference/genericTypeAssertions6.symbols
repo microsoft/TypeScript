@@ -40,9 +40,9 @@ class A<T,U> {
 class B<T extends Date, U extends Date> extends A<T, U> {
 >B : Symbol(B, Decl(genericTypeAssertions6.ts, 10, 1))
 >T : Symbol(T, Decl(genericTypeAssertions6.ts, 12, 8))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >U : Symbol(U, Decl(genericTypeAssertions6.ts, 12, 23))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >A : Symbol(A, Decl(genericTypeAssertions6.ts, 0, 0))
 >T : Symbol(T, Decl(genericTypeAssertions6.ts, 12, 8))
 >U : Symbol(U, Decl(genericTypeAssertions6.ts, 12, 23))
@@ -54,45 +54,45 @@ class B<T extends Date, U extends Date> extends A<T, U> {
 
         var a: Date = x;
 >a : Symbol(a, Decl(genericTypeAssertions6.ts, 14, 11))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(genericTypeAssertions6.ts, 13, 6))
 
         var b = <Date>x;
 >b : Symbol(b, Decl(genericTypeAssertions6.ts, 15, 11))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(genericTypeAssertions6.ts, 13, 6))
 
         var c = <T>new Date();
 >c : Symbol(c, Decl(genericTypeAssertions6.ts, 16, 11))
 >T : Symbol(T, Decl(genericTypeAssertions6.ts, 12, 8))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
         var d = <U>new Date();
 >d : Symbol(d, Decl(genericTypeAssertions6.ts, 17, 11))
 >U : Symbol(U, Decl(genericTypeAssertions6.ts, 12, 23))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
         var e = <T><U>new Date();
 >e : Symbol(e, Decl(genericTypeAssertions6.ts, 18, 11))
 >T : Symbol(T, Decl(genericTypeAssertions6.ts, 12, 8))
 >U : Symbol(U, Decl(genericTypeAssertions6.ts, 12, 23))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
     }
 }
 
 var b: B<Date, Date>;
 >b : Symbol(b, Decl(genericTypeAssertions6.ts, 22, 3))
 >B : Symbol(B, Decl(genericTypeAssertions6.ts, 10, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var c: A<Date, Date> = <A<Date, Date>>b;
 >c : Symbol(c, Decl(genericTypeAssertions6.ts, 23, 3))
 >A : Symbol(A, Decl(genericTypeAssertions6.ts, 0, 0))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >A : Symbol(A, Decl(genericTypeAssertions6.ts, 0, 0))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >b : Symbol(b, Decl(genericTypeAssertions6.ts, 22, 3))
 

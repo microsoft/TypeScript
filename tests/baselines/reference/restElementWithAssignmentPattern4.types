@@ -14,6 +14,7 @@ var tuple: [string, number] = ["", 1];
 >[...{ 0: a = "", b }] : undefined[]
 >...{ 0: a = "", b } : any
 >{ 0: a = "", b } : { 0?: string; b: number; }
+>0 : string
 >a = "" : ""
 >a : string
 >"" : ""

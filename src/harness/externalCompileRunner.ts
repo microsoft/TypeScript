@@ -2,6 +2,7 @@
 /// <reference path="runnerbase.ts" />
 const fs = require("fs");
 const path = require("path");
+const del = require("del");
 
 interface ExecResult {
     stdout: Buffer;
@@ -26,9 +27,12 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
         // Read in and evaluate the test list
         const testList = this.tests && this.tests.length ? this.tests : this.enumerateTestFiles();
 
-        describe(`${this.kind()} code samples`, () => {
+        // tslint:disable-next-line:no-this-assignment
+        const cls = this;
+        describe(`${this.kind()} code samples`, function(this: Mocha.ISuiteCallbackContext) {
+            this.timeout(600_000); // 10 minutes
             for (const test of testList) {
-                this.runTest(test);
+                cls.runTest(typeof test === "string" ? test : test.file);
             }
         });
     }
@@ -41,7 +45,8 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
             const cp = require("child_process");
 
             it("should build successfully", () => {
-                let cwd = path.join(__dirname, "../../", cls.testDir, directoryName);
+                let cwd = path.join(Harness.IO.getWorkspaceRoot(), cls.testDir, directoryName);
+                const originalCwd = cwd;
                 const stdio = isWorker ? "pipe" : "inherit";
                 let types: string[];
                 if (fs.existsSync(path.join(cwd, "test.json"))) {
@@ -64,14 +69,17 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                         fs.unlinkSync(path.join(cwd, "package-lock.json"));
                     }
                     if (fs.existsSync(path.join(cwd, "node_modules"))) {
-                        require("del").sync(path.join(cwd, "node_modules"), { force: true });
+                        del.sync(path.join(cwd, "node_modules"), { force: true });
                     }
-                    const install = cp.spawnSync(`npm`, ["i"], { cwd, timeout: timeout / 2, shell: true, stdio }); // NPM shouldn't take the entire timeout - if it takes a long time, it should be terminated and we should log the failure
+                    const install = cp.spawnSync(`npm`, ["i", "--ignore-scripts"], { cwd, timeout: timeout / 2, shell: true, stdio }); // NPM shouldn't take the entire timeout - if it takes a long time, it should be terminated and we should log the failure
                     if (install.status !== 0) throw new Error(`NPM Install for ${directoryName} failed: ${install.stderr.toString()}`);
                 }
-                const args = [path.join(__dirname, "tsc.js")];
+                const args = [path.join(Harness.IO.getWorkspaceRoot(), "built/local/tsc.js")];
                 if (types) {
                     args.push("--types", types.join(","));
+                    // Also actually install those types (for, eg, the js projects which need node)
+                    const install = cp.spawnSync(`npm`, ["i", ...types.map(t => `@types/${t}`), "--no-save", "--ignore-scripts"], { cwd: originalCwd, timeout: timeout / 2, shell: true, stdio }); // NPM shouldn't take the entire timeout - if it takes a long time, it should be terminated and we should log the failure
+                    if (install.status !== 0) throw new Error(`NPM Install types for ${directoryName} failed: ${install.stderr.toString()}`);
                 }
                 args.push("--noEmit");
                 Harness.Baseline.runBaseline(`${cls.kind()}/${directoryName}.log`, () => {
@@ -91,12 +99,48 @@ class UserCodeRunner extends ExternalCompileRunnerBase {
         // tslint:disable-next-line:no-null-keyword
         return result.status === 0 && !result.stdout.length && !result.stderr.length ? null : `Exit Code: ${result.status}
 Standard output:
-${result.stdout.toString().replace(/\r\n/g, "\n")}
+${sortErrors(stripAbsoluteImportPaths(result.stdout.toString().replace(/\r\n/g, "\n")))}
 
 
 Standard error:
-${result.stderr.toString().replace(/\r\n/g, "\n")}`;
+${stripAbsoluteImportPaths(result.stderr.toString().replace(/\r\n/g, "\n"))}`;
     }
+}
+
+/**
+ * Import types and some other error messages use absolute paths in errors as they have no context to be written relative to;
+ * This is problematic for error baselines, so we grep for them and strip them out.
+ */
+function stripAbsoluteImportPaths(result: string) {
+    const workspaceRegexp = new RegExp(Harness.IO.getWorkspaceRoot().replace(/\\/g, "\\\\"), "g");
+    return result
+        .replace(/import\(".*?\/tests\/cases\/user\//g, `import("/`)
+        .replace(/Module '".*?\/tests\/cases\/user\//g, `Module '"/`)
+        .replace(workspaceRegexp, "../../..");
+}
+
+function sortErrors(result: string) {
+    return ts.flatten(splitBy(result.split("\n"), s => /^\S+/.test(s)).sort(compareErrorStrings)).join("\n");
+}
+
+const errorRegexp = /^(.+\.[tj]sx?)\((\d+),(\d+)\)(: error TS.*)/;
+function compareErrorStrings(a: string[], b: string[]) {
+    ts.Debug.assertGreaterThanOrEqual(a.length, 1);
+    ts.Debug.assertGreaterThanOrEqual(b.length, 1);
+    const matchA = a[0].match(errorRegexp);
+    if (!matchA) {
+        return -1;
+    }
+    const matchB = b[0].match(errorRegexp);
+    if (!matchB) {
+        return 1;
+    }
+    const [, errorFileA, lineNumberStringA, columnNumberStringA, remainderA] = matchA;
+    const [, errorFileB, lineNumberStringB, columnNumberStringB, remainderB] = matchB;
+    return ts.comparePathsCaseSensitive(errorFileA, errorFileB) ||
+        ts.compareValues(parseInt(lineNumberStringA), parseInt(lineNumberStringB)) ||
+        ts.compareValues(parseInt(columnNumberStringA), parseInt(columnNumberStringB)) ||
+        ts.compareStringsCaseSensitive(remainderA, remainderB);
 }
 
 class DefinitelyTypedRunner extends ExternalCompileRunnerBase {
@@ -131,13 +175,13 @@ function removeExpectedErrors(errors: string, cwd: string): string {
 function isUnexpectedError(cwd: string) {
     return (error: string[]) => {
         ts.Debug.assertGreaterThanOrEqual(error.length, 1);
-        const match = error[0].match(/(.+\.ts)\((\d+),\d+\): error TS/);
+        const match = error[0].match(/(.+\.tsx?)\((\d+),\d+\): error TS/);
         if (!match) {
             return true;
         }
         const [, errorFile, lineNumberString] = match;
         const lines = fs.readFileSync(path.join(cwd, errorFile), { encoding: "utf8" }).split("\n");
-        const lineNumber = parseInt(lineNumberString);
+        const lineNumber = parseInt(lineNumberString) - 1;
         ts.Debug.assertGreaterThanOrEqual(lineNumber, 0);
         ts.Debug.assertLessThan(lineNumber, lines.length);
         const previousLine = lineNumber - 1 > 0 ? lines[lineNumber - 1] : "";

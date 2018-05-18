@@ -1,9 +1,9 @@
 === tests/cases/compiler/bar.ts ===
 export async function foo({ foo = await import("./bar") }) {
->foo : ({ foo }: { foo?: typeof "tests/cases/compiler/bar"; }) => Promise<void>
->foo : typeof "tests/cases/compiler/bar"
->await import("./bar") : typeof "tests/cases/compiler/bar"
->import("./bar") : Promise<typeof "tests/cases/compiler/bar">
+>foo : ({ foo }: { foo?: typeof import("tests/cases/compiler/bar"); }) => Promise<void>
+>foo : typeof import("tests/cases/compiler/bar")
+>await import("./bar") : typeof import("tests/cases/compiler/bar")
+>import("./bar") : Promise<typeof import("tests/cases/compiler/bar")>
 >"./bar" : "./bar"
 }
 

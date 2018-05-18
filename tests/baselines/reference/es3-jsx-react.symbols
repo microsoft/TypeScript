@@ -4,7 +4,5 @@ const React: any = null;
 
 const elem = <div></div>;
 >elem : Symbol(elem, Decl(es3-jsx-react.tsx, 2, 5))
->div : Symbol(unknown)
->div : Symbol(unknown)
 
 

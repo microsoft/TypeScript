@@ -3,16 +3,18 @@
 ////    /**
 ////     * @param {number} x - the first parameter
 ////     */
-////    constructor(/*1*/x) {
+////    constructor(readonly x) {
 ////    }
 ////}
-verify.applicableRefactorAvailableAtMarker('1');
-verify.fileAfterApplyingRefactorAtMarker('1',
+
+verify.codeFix({
+    description: "Annotate with type from JSDoc",
+    newFileContent:
 `class C {
     /**
      * @param {number} x - the first parameter
      */
-    constructor(x: number) {
+    constructor(readonly x: number) {
     }
-}`, 'Annotate with type from JSDoc', 'annotate');
-
+}`,
+});

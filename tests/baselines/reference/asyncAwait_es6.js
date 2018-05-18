@@ -14,7 +14,7 @@ let f6 = async function(): MyPromise<void> { }
 
 let f7 = async () => { };
 let f8 = async (): Promise<void> => { };
-let f9 = async (): MyPromise<void> => { }; 
+let f9 = async (): MyPromise<void> => { };
 let f10 = async () => p;
 let f11 = async () => mp;
 let f12 = async (): Promise<number> => mp;
@@ -37,6 +37,13 @@ class C {
 
 module M {
 	export async function f1() { }
+}
+
+async function f14() {
+    block: {
+        await 1;
+        break block;
+    }
 }
 
 //// [asyncAwait_es6.js]
@@ -111,3 +118,11 @@ var M;
     }
     M.f1 = f1;
 })(M || (M = {}));
+function f14() {
+    return __awaiter(this, void 0, void 0, function* () {
+        block: {
+            yield 1;
+            break block;
+        }
+    });
+}

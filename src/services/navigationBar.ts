@@ -1,5 +1,3 @@
-/// <reference path='services.ts' />
-
 /* @internal */
 namespace ts.NavigationBar {
     /**
@@ -197,10 +195,10 @@ namespace ts.NavigationBar {
                 const {namedBindings} = importClause;
                 if (namedBindings) {
                     if (namedBindings.kind === SyntaxKind.NamespaceImport) {
-                        addLeafNode(<NamespaceImport>namedBindings);
+                        addLeafNode(namedBindings);
                     }
                     else {
-                        for (const element of (<NamedImports>namedBindings).elements) {
+                        for (const element of namedBindings.elements) {
                             addLeafNode(element);
                         }
                     }
@@ -275,6 +273,7 @@ namespace ts.NavigationBar {
                     case SpecialPropertyAssignmentKind.ExportsProperty:
                     case SpecialPropertyAssignmentKind.ModuleExports:
                     case SpecialPropertyAssignmentKind.PrototypeProperty:
+                    case SpecialPropertyAssignmentKind.Prototype:
                         addNodeWithRecursiveChild(node, (node as BinaryExpression).right);
                         break;
                     case SpecialPropertyAssignmentKind.ThisProperty:
@@ -291,7 +290,7 @@ namespace ts.NavigationBar {
                 if (hasJSDocNodes(node)) {
                     forEach(node.jsDoc, jsDoc => {
                         forEach(jsDoc.tags, tag => {
-                            if (tag.kind === SyntaxKind.JSDocTypedefTag) {
+                            if (isJSDocTypeAlias(tag)) {
                                 addLeafNode(tag);
                             }
                         });
@@ -415,8 +414,6 @@ namespace ts.NavigationBar {
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.ClassExpression:
                 return getFunctionOrClassName(<FunctionExpression | ArrowFunction | ClassExpression>node);
-            case SyntaxKind.JSDocTypedefTag:
-                return getJSDocTypedefTagName(<JSDocTypedefTag>node);
             default:
                 return undefined;
         }
@@ -461,28 +458,8 @@ namespace ts.NavigationBar {
                 return "()";
             case SyntaxKind.IndexSignature:
                 return "[]";
-            case SyntaxKind.JSDocTypedefTag:
-                return getJSDocTypedefTagName(<JSDocTypedefTag>node);
             default:
                 return "<unknown>";
-        }
-    }
-
-    function getJSDocTypedefTagName(node: JSDocTypedefTag): string {
-        if (node.name) {
-            return node.name.text;
-        }
-        else {
-            const parentNode = node.parent && node.parent.parent;
-            if (parentNode && parentNode.kind === SyntaxKind.VariableStatement) {
-                if ((<VariableStatement>parentNode).declarationList.declarations.length > 0) {
-                    const nameIdentifier = (<VariableStatement>parentNode).declarationList.declarations[0].name;
-                    if (nameIdentifier.kind === SyntaxKind.Identifier) {
-                        return nameIdentifier.text;
-                    }
-                }
-            }
-            return "<typedef>";
         }
     }
 
@@ -512,6 +489,7 @@ namespace ts.NavigationBar {
                 case SyntaxKind.SourceFile:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.JSDocTypedefTag:
+                case SyntaxKind.JSDocCallbackTag:
                     return true;
 
                 case SyntaxKind.Constructor:
@@ -632,12 +610,10 @@ namespace ts.NavigationBar {
     }
 
     function getNodeSpan(node: Node): TextSpan {
-        return node.kind === SyntaxKind.SourceFile
-            ? createTextSpanFromBounds(node.getFullStart(), node.getEnd())
-            : createTextSpanFromNode(node, curSourceFile);
+        return node.kind === SyntaxKind.SourceFile ? createTextSpanFromRange(node) : createTextSpanFromNode(node, curSourceFile);
     }
 
-    function getModifiers(node: ts.Node): string {
+    function getModifiers(node: Node): string {
         if (node.parent && node.parent.kind === SyntaxKind.VariableDeclaration) {
             node = node.parent;
         }

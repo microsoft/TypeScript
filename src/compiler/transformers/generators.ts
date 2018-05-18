@@ -1,6 +1,3 @@
-/// <reference path="../factory.ts" />
-/// <reference path="../visitor.ts" />
-
 // Transforms generator functions into a compatible ES5 representation with similar runtime
 // semantics. This is accomplished by first transforming the body of each generator
 // function into an intermediate representation that is the compiled into a JavaScript
@@ -292,7 +289,7 @@ namespace ts {
         let currentExceptionBlock: ExceptionBlock; // The current exception block.
         let withBlockStack: WithBlock[]; // A stack containing `with` blocks.
 
-        return transformSourceFile;
+        return chainBundle(transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile || (node.transformFlags & TransformFlags.ContainsGenerator) === 0) {
@@ -430,8 +427,7 @@ namespace ts {
                     return visitFunctionExpression(<FunctionExpression>node);
 
                 default:
-                    Debug.failBadSyntaxKind(node);
-                    return visitEachChild(node, visitor, context);
+                    return Debug.failBadSyntaxKind(node);
             }
         }
 
@@ -590,7 +586,7 @@ namespace ts {
             transformAndEmitStatements(body.statements, statementOffset);
 
             const buildResult = build();
-            addRange(statements, endLexicalEnvironment());
+            prependRange(statements, endLexicalEnvironment());
             statements.push(createReturn(buildResult));
 
             // Restore previous generator state
@@ -1771,16 +1767,15 @@ namespace ts {
                     for (let i = clausesWritten; i < numClauses; i++) {
                         const clause = caseBlock.clauses[i];
                         if (clause.kind === SyntaxKind.CaseClause) {
-                            const caseClause = <CaseClause>clause;
-                            if (containsYield(caseClause.expression) && pendingClauses.length > 0) {
+                            if (containsYield(clause.expression) && pendingClauses.length > 0) {
                                 break;
                             }
 
                             pendingClauses.push(
                                 createCaseClause(
-                                    visitNode(caseClause.expression, visitor, isExpression),
+                                    visitNode(clause.expression, visitor, isExpression),
                                     [
-                                        createInlineBreak(clauseLabels[i], /*location*/ caseClause.expression)
+                                        createInlineBreak(clauseLabels[i], /*location*/ clause.expression)
                                     ]
                                 )
                             );

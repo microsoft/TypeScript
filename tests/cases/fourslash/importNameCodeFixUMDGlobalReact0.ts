@@ -22,10 +22,22 @@
 ////export class MyMap extends Component { }
 ////<MyMap/>;|]
 
+// @Filename: /b.tsx
+////[|import { Component } from "react";
+////<></>;|]
+
 goTo.file("/a.tsx");
+
+verify.importFixAtPosition([
+    `import { Component } from "react";
+import * as React from "react";
+export class MyMap extends Component { }
+<MyMap/>;`]);
+
+
+goTo.file("/b.tsx");
 
 verify.importFixAtPosition([
 `import { Component } from "react";
 import * as React from "react";
-export class MyMap extends Component { }
-<MyMap/>;`]);
+<></>;`]);

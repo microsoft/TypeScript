@@ -3,6 +3,8 @@ var [a, b] = { 0: "", 1: true };
 >a : string
 >b : boolean
 >{ 0: "", 1: true } : { 0: string; 1: boolean; }
+>0 : string
 >"" : ""
+>1 : boolean
 >true : true
 

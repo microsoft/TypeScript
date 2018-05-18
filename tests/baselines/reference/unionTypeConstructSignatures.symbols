@@ -1,7 +1,7 @@
 === tests/cases/conformance/types/union/unionTypeConstructSignatures.ts ===
 var numOrDate: number | Date;
 >numOrDate : Symbol(numOrDate, Decl(unionTypeConstructSignatures.ts, 0, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var strOrBoolean: string | boolean;
 >strOrBoolean : Symbol(strOrBoolean, Decl(unionTypeConstructSignatures.ts, 1, 3))
@@ -15,7 +15,7 @@ var unionOfDifferentReturnType: { new (a: number): number; } | { new (a: number)
 >unionOfDifferentReturnType : Symbol(unionOfDifferentReturnType, Decl(unionTypeConstructSignatures.ts, 6, 3))
 >a : Symbol(a, Decl(unionTypeConstructSignatures.ts, 6, 39))
 >a : Symbol(a, Decl(unionTypeConstructSignatures.ts, 6, 70))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 numOrDate = new unionOfDifferentReturnType(10);
 >numOrDate : Symbol(numOrDate, Decl(unionTypeConstructSignatures.ts, 0, 3))
@@ -33,7 +33,7 @@ var unionOfDifferentReturnType1: { new (a: number): number; new (a: string): str
 >a : Symbol(a, Decl(unionTypeConstructSignatures.ts, 11, 40))
 >a : Symbol(a, Decl(unionTypeConstructSignatures.ts, 11, 65))
 >a : Symbol(a, Decl(unionTypeConstructSignatures.ts, 11, 96))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >a : Symbol(a, Decl(unionTypeConstructSignatures.ts, 11, 119))
 
 numOrDate = new unionOfDifferentReturnType1(10);
@@ -54,7 +54,7 @@ var unionOfDifferentParameterTypes: { new (a: number): number; } | { new (a: str
 >unionOfDifferentParameterTypes : Symbol(unionOfDifferentParameterTypes, Decl(unionTypeConstructSignatures.ts, 17, 3))
 >a : Symbol(a, Decl(unionTypeConstructSignatures.ts, 17, 43))
 >a : Symbol(a, Decl(unionTypeConstructSignatures.ts, 17, 74))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 new unionOfDifferentParameterTypes(10);// error - no call signatures
 >unionOfDifferentParameterTypes : Symbol(unionOfDifferentParameterTypes, Decl(unionTypeConstructSignatures.ts, 17, 3))
@@ -69,7 +69,7 @@ var unionOfDifferentNumberOfSignatures: { new (a: number): number; } | { new (a:
 >unionOfDifferentNumberOfSignatures : Symbol(unionOfDifferentNumberOfSignatures, Decl(unionTypeConstructSignatures.ts, 22, 3))
 >a : Symbol(a, Decl(unionTypeConstructSignatures.ts, 22, 47))
 >a : Symbol(a, Decl(unionTypeConstructSignatures.ts, 22, 78))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >a : Symbol(a, Decl(unionTypeConstructSignatures.ts, 22, 101))
 
 new unionOfDifferentNumberOfSignatures(); // error - no call signatures

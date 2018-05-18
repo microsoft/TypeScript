@@ -1,0 +1,39 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/** @typedef {Object} App
+ * @property {string} name
+ * @property {Object} icons
+ * @property {string} icons.image32
+ * @property {string} icons.image64
+ */
+var ex;
+>ex : Symbol(ex, Decl(a.js, 6, 3))
+
+/** @type {App} */
+const app = {
+>app : Symbol(app, Decl(a.js, 9, 5))
+
+    name: 'name',
+>name : Symbol(name, Decl(a.js, 9, 13))
+
+    icons: {
+>icons : Symbol(icons, Decl(a.js, 10, 17))
+
+        image32: 'x.png',
+>image32 : Symbol(image32, Decl(a.js, 11, 12))
+
+        image64: 'y.png',
+>image64 : Symbol(image64, Decl(a.js, 12, 25))
+    }
+}
+
+/** @typedef {Object} Opp
+ * @property {string} name
+ * @property {Object} oops
+ * @property {string} horrible
+ * @type {string} idea
+ */
+
+/** @type {Opp} */
+var mistake;
+>mistake : Symbol(mistake, Decl(a.js, 25, 3))
+

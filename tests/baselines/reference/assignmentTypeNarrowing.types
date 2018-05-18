@@ -12,14 +12,14 @@ x; // string
 >x : string
 
 [x] = [true];
->[x] = [true] : [boolean]
+>[x] = [true] : [true]
 >[x] : [string | number | boolean | RegExp]
 >x : string | number | boolean | RegExp
->[true] : [boolean]
+>[true] : [true]
 >true : true
 
 x; // boolean
->x : boolean
+>x : true
 
 [x = ""] = [1];
 >[x = ""] = [1] : [number]
@@ -34,16 +34,16 @@ x; // string | number
 >x : string | number
 
 ({x} = {x: true});
->({x} = {x: true}) : { x: boolean; }
->{x} = {x: true} : { x: boolean; }
+>({x} = {x: true}) : { x: true; }
+>{x} = {x: true} : { x: true; }
 >{x} : { x: string | number | boolean | RegExp; }
 >x : string | number | boolean | RegExp
->{x: true} : { x: boolean; }
->x : boolean
+>{x: true} : { x: true; }
+>x : true
 >true : true
 
 x; // boolean
->x : boolean
+>x : true
 
 ({y: x} = {y: 1});
 >({y: x} = {y: 1}) : { y: number; }
@@ -59,16 +59,16 @@ x; // number
 >x : number
 
 ({x = ""} = {x: true});
->({x = ""} = {x: true}) : { x?: boolean; }
->{x = ""} = {x: true} : { x?: boolean; }
+>({x = ""} = {x: true}) : { x?: true; }
+>{x = ""} = {x: true} : { x?: true; }
 >{x = ""} : { x?: string | number | boolean | RegExp; }
 >x : string | number | boolean | RegExp
->{x: true} : { x?: boolean; }
->x : boolean
+>{x: true} : { x?: true; }
+>x : true
 >true : true
 
 x; // string | boolean
->x : string | boolean
+>x : string | true
 
 ({y: x = /a/} = {y: 1});
 >({y: x = /a/} = {y: 1}) : { y?: number; }

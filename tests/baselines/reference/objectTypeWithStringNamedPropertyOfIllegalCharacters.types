@@ -3,10 +3,19 @@ class C {
 >C : C
 
     "   ": number;
+>"   " : number
+
     "a   b": string;
+>"a   b" : string
+
     "~!@#$%^&*()_+{}|:'<>?\/.,`": number;
+>"~!@#$%^&*()_+{}|:'<>?\/.,`" : number
+
     "a\a": number;
+>"a\a" : number
+
     static "a ": number
+>"a " : number
 }
 
 var c: C;
@@ -42,8 +51,13 @@ interface I {
 >I : I
 
     "   ": number;
+>"   " : number
+
     "a   b": string;
+>"a   b" : string
+
     "~!@#$%^&*()_+{}|:'<>?\/.,`": number;
+>"~!@#$%^&*()_+{}|:'<>?\/.,`" : number
 }
 
 var i: I;
@@ -80,8 +94,13 @@ var a: {
 >a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
 
     "   ": number;
+>"   " : number
+
     "a   b": string;
+>"a   b" : string
+
     "~!@#$%^&*()_+{}|:'<>?\/.,`": number;
+>"~!@#$%^&*()_+{}|:'<>?\/.,`" : number
 }
 
 var r = a["   "];
@@ -114,12 +133,15 @@ var b = {
 >{    "   ": 1,    "a   b": "",    "~!@#$%^&*()_+{}|:'<>?\/.,`": 1,} : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
 
     "   ": 1,
+>"   " : number
 >1 : 1
 
     "a   b": "",
+>"a   b" : string
 >"" : ""
 
     "~!@#$%^&*()_+{}|:'<>?\/.,`": 1,
+>"~!@#$%^&*()_+{}|:'<>?\/.,`" : number
 >1 : 1
 }
 

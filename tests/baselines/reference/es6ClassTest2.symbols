@@ -39,6 +39,9 @@ m1.health = 0;
 >health : Symbol(BasicMonster.health, Decl(es6ClassTest2.ts, 1, 36))
 
 console.log((<any>m5.isAlive).toString());
+>console.log : Symbol(Console.log, Decl(lib.d.ts, --, --))
+>console : Symbol(console, Decl(lib.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.d.ts, --, --))
 >m5.isAlive : Symbol(OverloadedMonster.isAlive, Decl(es6ClassTest2.ts, 58, 5))
 >m5 : Symbol(m5, Decl(es6ClassTest2.ts, 63, 3))
 >isAlive : Symbol(OverloadedMonster.isAlive, Decl(es6ClassTest2.ts, 58, 5))

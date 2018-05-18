@@ -7,10 +7,9 @@
 ////    foo(/*1*/)
 ////}
 
-goTo.marker('1');
-verify.signatureHelpPresent();
-verify.signatureHelpCountIs(1);
-verify.signatureHelpArgumentCountIs(0);
-
-verify.currentSignatureParameterCountIs(1);
-verify.currentSignatureHelpDocCommentIs('');
+verify.signatureHelp({
+    marker: "1",
+    argumentCount: 0,
+    parameterCount: 1,
+    docComment: "",
+});

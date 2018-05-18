@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// @noLib: true
+// @module: esnext
 
 // @Filename: /a.ts
 ////export default function foo() {}

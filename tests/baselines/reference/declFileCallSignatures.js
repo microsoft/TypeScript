@@ -78,8 +78,8 @@ export interface ICallSignature {
 export interface ICallSignatureWithParameters {
     /** This is comment for function signature*/
     (/** this is comment about a*/ a: string, 
-        /** this is comment for b*/
-        b: number): void;
+    /** this is comment for b*/
+    b: number): void;
 }
 export interface ICallSignatureWithRestParameters {
     (a: string, ...rests: string[]): string;
@@ -103,8 +103,8 @@ interface IGlobalCallSignature {
 interface IGlobalCallSignatureWithParameters {
     /** This is comment for function signature*/
     (/** this is comment about a*/ a: string, 
-        /** this is comment for b*/
-        b: number): void;
+    /** this is comment for b*/
+    b: number): void;
 }
 interface IGlobalCallSignatureWithRestParameters {
     (a: string, ...rests: string[]): string;

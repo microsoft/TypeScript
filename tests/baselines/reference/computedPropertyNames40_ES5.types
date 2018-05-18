@@ -17,11 +17,13 @@ class C {
 
     // Computed properties
     [""]() { return new Foo }
+>[""] : () => Foo
 >"" : ""
 >new Foo : Foo
 >Foo : typeof Foo
 
     [""]() { return new Foo2 }
+>[""] : () => Foo
 >"" : ""
 >new Foo2 : Foo2
 >Foo2 : typeof Foo2

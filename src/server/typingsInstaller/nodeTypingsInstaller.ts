@@ -1,9 +1,9 @@
-/// <reference path="typingsInstaller.ts"/>
 /// <reference types="node" />
 
 namespace ts.server.typingsInstaller {
     const fs: {
-        appendFileSync(file: string, content: string): void
+        appendFileSync(file: string, content: string): void;
+        existsSync(path: string): boolean;
     } = require("fs");
 
     const path: {
@@ -22,7 +22,7 @@ namespace ts.server.typingsInstaller {
         }
         writeLine = (text: string) => {
             try {
-                fs.appendFileSync(this.logFile, text + sys.newLine);
+                fs.appendFileSync(this.logFile, `[${nowString()}] ${text}${sys.newLine}`);
             }
             catch (e) {
                 this.logEnabled = false;
@@ -33,23 +33,24 @@ namespace ts.server.typingsInstaller {
     /** Used if `--npmLocation` is not passed. */
     function getDefaultNPMLocation(processName: string) {
         if (path.basename(processName).indexOf("node") === 0) {
-            return `"${path.join(path.dirname(process.argv[0]), "npm")}"`;
+            const npmPath = `"${path.join(path.dirname(process.argv[0]), "npm")}"`;
+            if (fs.existsSync(npmPath)) {
+                return npmPath;
+            }
         }
-        else {
-            return "npm";
-        }
+        return "npm";
     }
 
     interface TypesRegistryFile {
-        entries: MapLike<void>;
+        entries: MapLike<MapLike<string>>;
     }
 
-    function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypingHost, log: Log): Map<void> {
+    function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypingHost, log: Log): Map<MapLike<string>> {
         if (!host.fileExists(typesRegistryFilePath)) {
             if (log.isEnabled()) {
                 log.writeLine(`Types registry file '${typesRegistryFilePath}' does not exist`);
             }
-            return createMap<void>();
+            return createMap<MapLike<string>>();
         }
         try {
             const content = <TypesRegistryFile>JSON.parse(host.readFile(typesRegistryFilePath));
@@ -59,7 +60,7 @@ namespace ts.server.typingsInstaller {
             if (log.isEnabled()) {
                 log.writeLine(`Error when loading types registry file '${typesRegistryFilePath}': ${(<Error>e).message}, ${(<Error>e).stack}`);
             }
-            return createMap<void>();
+            return createMap<MapLike<string>>();
         }
     }
 
@@ -77,7 +78,7 @@ namespace ts.server.typingsInstaller {
     export class NodeTypingsInstaller extends TypingsInstaller {
         private readonly nodeExecSync: ExecSync;
         private readonly npmPath: string;
-        readonly typesRegistry: Map<void>;
+        readonly typesRegistry: Map<MapLike<string>>;
 
         private delayedInitializationError: InitializationFailedResponse | undefined;
 
@@ -141,7 +142,7 @@ namespace ts.server.typingsInstaller {
                         this.closeProject(req);
                         break;
                     case "typesRegistry": {
-                        const typesRegistry: { [key: string]: void } = {};
+                        const typesRegistry: { [key: string]: MapLike<string> } = {};
                         this.typesRegistry.forEach((value, key) => {
                             typesRegistry[key] = value;
                         });
@@ -185,9 +186,8 @@ namespace ts.server.typingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`#${requestId} with arguments'${JSON.stringify(packageNames)}'.`);
             }
-            const command = `${this.npmPath} install --ignore-scripts ${packageNames.join(" ")} --save-dev --user-agent="typesInstaller/${version}"`;
             const start = Date.now();
-            const hasError = this.execSyncAndLog(command, { cwd });
+            const hasError = installNpmPackages(this.npmPath, version, packageNames, command => this.execSyncAndLog(command, { cwd }));
             if (this.log.isEnabled()) {
                 this.log.writeLine(`npm install #${requestId} took: ${Date.now() - start} ms`);
             }
@@ -222,11 +222,11 @@ namespace ts.server.typingsInstaller {
         });
     }
 
-    const logFilePath = findArgument(server.Arguments.LogFile);
-    const globalTypingsCacheLocation = findArgument(server.Arguments.GlobalCacheLocation);
-    const typingSafeListLocation = findArgument(server.Arguments.TypingSafeListLocation);
-    const typesMapLocation = findArgument(server.Arguments.TypesMapLocation);
-    const npmLocation = findArgument(server.Arguments.NpmLocation);
+    const logFilePath = findArgument(Arguments.LogFile);
+    const globalTypingsCacheLocation = findArgument(Arguments.GlobalCacheLocation);
+    const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation);
+    const typesMapLocation = findArgument(Arguments.TypesMapLocation);
+    const npmLocation = findArgument(Arguments.NpmLocation);
 
     const log = new FileLog(logFilePath);
     if (log.isEnabled()) {

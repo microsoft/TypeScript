@@ -17,6 +17,8 @@ use(x);
 
 === tests/cases/compiler/f.d.ts ===
 declare module "test" {
+>"test" : typeof import("test")
+
     let x: number;
 >x : number
 }

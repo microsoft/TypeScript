@@ -51,8 +51,8 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 var _this = this;
 (function (_a) { return __awaiter(_this, void 0, void 0, function () {
-    var foo = _a.foo, bar = _a.bar, rest = __rest(_a, ["foo", "bar"]);
     var _b;
+    var foo = _a.foo, bar = _a.bar, rest = __rest(_a, ["foo", "bar"]);
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:

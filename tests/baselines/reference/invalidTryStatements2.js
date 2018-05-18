@@ -27,7 +27,8 @@ function fn() {
     catch (x) { } // error missing try
     finally { } // potential error; can be absorbed by the 'catch'
     try { }
-    finally { }
+    finally { // error missing finally
+     } // error missing finally
     ; // error missing finally
 }
 function fn2() {

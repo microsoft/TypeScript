@@ -15,9 +15,11 @@ class C {
 
     @dec ["1"]() { }
 >dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>["1"] : () => void
 >"1" : "1"
 
     @dec ["b"]() { }
 >dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>["b"] : () => void
 >"b" : "b"
 }

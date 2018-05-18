@@ -45,7 +45,7 @@ if (x instanceof Error) { // 'any' is narrowed to types other than 'Function'/'O
 
 if (x instanceof Date) {
 >x : Symbol(x, Decl(narrowFromAnyWithInstanceof.ts, 0, 11))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     x.getDate();
 >x.getDate : Symbol(Date.getDate, Decl(lib.d.ts, --, --))

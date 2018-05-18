@@ -10,7 +10,7 @@ namespace ts.codefix {
             if (!nodes) return undefined;
             const { constructor, superCall } = nodes;
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, constructor, superCall));
-            return [{ description: getLocaleSpecificMessage(Diagnostics.Make_super_call_the_first_statement_in_the_constructor), changes, fixId }];
+            return [createCodeFixAction(fixId, changes, Diagnostics.Make_super_call_the_first_statement_in_the_constructor, fixId, Diagnostics.Make_all_super_calls_the_first_statement_in_their_constructor)];
         },
         fixIds: [fixId],
         getAllCodeActions(context) {
@@ -34,7 +34,7 @@ namespace ts.codefix {
 
     function getNodes(sourceFile: SourceFile, pos: number): { readonly constructor: ConstructorDeclaration, readonly superCall: ExpressionStatement } {
         const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
-        Debug.assert(token.kind === SyntaxKind.ThisKeyword);
+        if (token.kind !== SyntaxKind.ThisKeyword) return undefined;
         const constructor = getContainingFunction(token) as ConstructorDeclaration;
         const superCall = findSuperCall(constructor.body);
         // figure out if the `this` access is actually inside the supercall

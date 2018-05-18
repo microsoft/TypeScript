@@ -10,9 +10,9 @@ ijs = ijs.concat([[3, 4], [5, 6]]);
 >ijs = ijs.concat([[3, 4], [5, 6]]) : [number, number][]
 >ijs : [number, number][]
 >ijs.concat([[3, 4], [5, 6]]) : [number, number][]
->ijs.concat : { (...items: ([number, number][] | ReadonlyArray<[number, number]>)[]): [number, number][]; (...items: ([number, number] | [number, number][] | ReadonlyArray<[number, number]>)[]): [number, number][]; }
+>ijs.concat : { (...items: ConcatArray<[number, number]>[]): [number, number][]; (...items: ([number, number] | ConcatArray<[number, number]>)[]): [number, number][]; }
 >ijs : [number, number][]
->concat : { (...items: ([number, number][] | ReadonlyArray<[number, number]>)[]): [number, number][]; (...items: ([number, number] | [number, number][] | ReadonlyArray<[number, number]>)[]): [number, number][]; }
+>concat : { (...items: ConcatArray<[number, number]>[]): [number, number][]; (...items: ([number, number] | ConcatArray<[number, number]>)[]): [number, number][]; }
 >[[3, 4], [5, 6]] : [number, number][]
 >[3, 4] : [number, number]
 >3 : 3

@@ -1,7 +1,3 @@
-/// <reference path="../../factory.ts" />
-/// <reference path="../../visitor.ts" />
-/// <reference path="../destructuring.ts" />
-
 /*@internal*/
 namespace ts {
     export function transformSystemModule(context: TransformationContext) {
@@ -43,7 +39,7 @@ namespace ts {
         let enclosingBlockScopedContainer: Node;
         let noSubstitution: boolean[]; // Set of nodes for which substitution rules should be ignored.
 
-        return transformSourceFile;
+        return chainBundle(transformSourceFile);
 
         /**
          * Transforms the module aspects of a SourceFile.
@@ -261,7 +257,7 @@ namespace ts {
             // We emit hoisted variables early to align roughly with our previous emit output.
             // Two key differences in this approach are:
             // - Temporary variables will appear at the top rather than at the bottom of the file
-            addRange(statements, endLexicalEnvironment());
+            prependRange(statements, endLexicalEnvironment());
 
             const exportStarFunction = addExportStarIfNeeded(statements);
             const moduleObject = createObjectLiteral([
@@ -343,13 +339,12 @@ namespace ts {
                     continue;
                 }
 
-                const exportDecl = <ExportDeclaration>externalImport;
-                if (!exportDecl.exportClause) {
+                if (!externalImport.exportClause) {
                     // export * from ...
                     continue;
                 }
 
-                for (const element of exportDecl.exportClause.elements) {
+                for (const element of externalImport.exportClause.elements) {
                     // write name of indirectly exported entry, i.e. 'export {x} from ...'
                     exportedNames.push(
                         createPropertyAssignment(
@@ -472,7 +467,7 @@ namespace ts {
                     const importVariableName = getLocalNameForExternalImport(entry, currentSourceFile);
                     switch (entry.kind) {
                         case SyntaxKind.ImportDeclaration:
-                            if (!(<ImportDeclaration>entry).importClause) {
+                            if (!entry.importClause) {
                                 // 'import "..."' case
                                 // module is imported only for side-effects, no emit required
                                 break;
@@ -491,7 +486,7 @@ namespace ts {
 
                         case SyntaxKind.ExportDeclaration:
                             Debug.assert(importVariableName !== undefined);
-                            if ((<ExportDeclaration>entry).exportClause) {
+                            if (entry.exportClause) {
                                 //  export {a, b as c} from 'foo'
                                 //
                                 // emit as:
@@ -501,7 +496,7 @@ namespace ts {
                                 //     "c": _["b"]
                                 //  });
                                 const properties: PropertyAssignment[] = [];
-                                for (const e of (<ExportDeclaration>entry).exportClause.elements) {
+                                for (const e of entry.exportClause.elements) {
                                     properties.push(
                                         createPropertyAssignment(
                                             createLiteral(idText(e.name)),
@@ -913,6 +908,12 @@ namespace ts {
             if (statements) {
                 delete deferredExports[id];
                 return append(statements, node);
+            }
+            else {
+                const original = getOriginalNode(node);
+                if (isModuleOrEnumDeclaration(original)) {
+                    return append(appendExportsOfDeclaration(statements, original), node);
+                }
             }
 
             return node;

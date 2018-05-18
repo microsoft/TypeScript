@@ -1,7 +1,3 @@
-/// <reference path="checker.ts" />
-/// <reference path="factory.ts" />
-/// <reference path="utilities.ts" />
-
 namespace ts {
     const isTypeNodeOrTypeParameterDeclaration = or(isTypeNode, isTypeParameterDeclaration);
 
@@ -149,7 +145,7 @@ namespace ts {
             statements = setTextRange(createNodeArray([createStatement(createLiteral("use strict")), ...statements]), statements);
         }
         const declarations = context.endLexicalEnvironment();
-        return setTextRange(createNodeArray(concatenate(statements, declarations)), statements);
+        return setTextRange(createNodeArray(concatenate(declarations, statements)), statements);
     }
 
     /**
@@ -387,6 +383,25 @@ namespace ts {
                 return updateIntersectionTypeNode(<IntersectionTypeNode>node,
                     nodesVisitor((<IntersectionTypeNode>node).types, visitor, isTypeNode));
 
+            case SyntaxKind.ConditionalType:
+                return updateConditionalTypeNode(<ConditionalTypeNode>node,
+                    visitNode((<ConditionalTypeNode>node).checkType, visitor, isTypeNode),
+                    visitNode((<ConditionalTypeNode>node).extendsType, visitor, isTypeNode),
+                    visitNode((<ConditionalTypeNode>node).trueType, visitor, isTypeNode),
+                    visitNode((<ConditionalTypeNode>node).falseType, visitor, isTypeNode));
+
+            case SyntaxKind.InferType:
+                return updateInferTypeNode(<InferTypeNode>node,
+                    visitNode((<InferTypeNode>node).typeParameter, visitor, isTypeParameterDeclaration));
+
+            case SyntaxKind.ImportType:
+                return updateImportTypeNode(<ImportTypeNode>node,
+                    visitNode((<ImportTypeNode>node).argument, visitor, isTypeNode),
+                    visitNode((<ImportTypeNode>node).qualifier, visitor, isEntityName),
+                    visitNodes((<ImportTypeNode>node).typeArguments, visitor, isTypeNode),
+                    (<ImportTypeNode>node).isTypeOf
+                );
+
             case SyntaxKind.ParenthesizedType:
                 return updateParenthesizedType(<ParenthesizedTypeNode>node,
                     visitNode((<ParenthesizedTypeNode>node).type, visitor, isTypeNode));
@@ -463,6 +478,7 @@ namespace ts {
             case SyntaxKind.TaggedTemplateExpression:
                 return updateTaggedTemplate(<TaggedTemplateExpression>node,
                     visitNode((<TaggedTemplateExpression>node).tag, visitor, isExpression),
+                    visitNodes((<TaggedTemplateExpression>node).typeArguments, visitor, isExpression),
                     visitNode((<TaggedTemplateExpression>node).template, visitor, isTemplateLiteral));
 
             case SyntaxKind.TypeAssertionExpression:
@@ -810,11 +826,13 @@ namespace ts {
             case SyntaxKind.JsxSelfClosingElement:
                 return updateJsxSelfClosingElement(<JsxSelfClosingElement>node,
                     visitNode((<JsxSelfClosingElement>node).tagName, visitor, isJsxTagNameExpression),
+                    nodesVisitor((<JsxSelfClosingElement>node).typeArguments, visitor, isTypeNode),
                     visitNode((<JsxSelfClosingElement>node).attributes, visitor, isJsxAttributes));
 
             case SyntaxKind.JsxOpeningElement:
                 return updateJsxOpeningElement(<JsxOpeningElement>node,
                     visitNode((<JsxOpeningElement>node).tagName, visitor, isJsxTagNameExpression),
+                    nodesVisitor((<JsxSelfClosingElement>node).typeArguments, visitor, isTypeNode),
                     visitNode((<JsxOpeningElement>node).attributes, visitor, isJsxAttributes));
 
             case SyntaxKind.JsxClosingElement:
@@ -1450,8 +1468,8 @@ namespace ts {
         }
 
         return isNodeArray(statements)
-            ? setTextRange(createNodeArray(concatenate(statements, declarations)), statements)
-            : addRange(statements, declarations);
+            ? setTextRange(createNodeArray(concatenate(declarations, statements)), statements)
+            : prependRange(statements, declarations);
     }
 
     /**
@@ -1533,11 +1551,11 @@ namespace ts {
     export namespace Debug {
         let isDebugInfoEnabled = false;
 
-        export const failBadSyntaxKind = shouldAssert(AssertionLevel.Normal)
-            ? (node: Node, message?: string): void => fail(
+        export function failBadSyntaxKind(node: Node, message?: string): never {
+            return fail(
                 `${message || "Unexpected node."}\r\nNode ${formatSyntaxKind(node.kind)} was unexpected.`,
-                failBadSyntaxKind)
-            : noop;
+                failBadSyntaxKind);
+        }
 
         export const assertEachNode = shouldAssert(AssertionLevel.Normal)
             ? (nodes: Node[], test: (node: Node) => boolean, message?: string): void => assert(

@@ -672,8 +672,8 @@ p11.bar = p11.bar + 1;
 >1 : 1
 
 let p12 = defineProps(p1, {
->p12 : Point & { foo: any; bar: any; }
->defineProps(p1, {    foo: {        value: 42    },    bar: {        get(): number {            return this.x;        },        set(value: number) {            this.x = value;        }    }}) : Point & { foo: any; bar: any; }
+>p12 : Point & { foo: number; bar: number; }
+>defineProps(p1, {    foo: {        value: 42    },    bar: {        get(): number {            return this.x;        },        set(value: number) {            this.x = value;        }    }}) : Point & { foo: number; bar: number; }
 >defineProps : <T, U>(obj: T, descs: PropDescMap<U> & ThisType<T>) => T & U
 >p1 : Point
 >{    foo: {        value: 42    },    bar: {        get(): number {            return this.x;        },        set(value: number) {            this.x = value;        }    }} : { foo: { value: number; }; bar: { get(): number; set(value: number): void; }; }
@@ -716,22 +716,22 @@ let p12 = defineProps(p1, {
 p12.foo = p12.foo + 1;
 >p12.foo = p12.foo + 1 : number
 >p12.foo : number
->p12 : Point & { foo: any; bar: any; }
+>p12 : Point & { foo: number; bar: number; }
 >foo : number
 >p12.foo + 1 : number
 >p12.foo : number
->p12 : Point & { foo: any; bar: any; }
+>p12 : Point & { foo: number; bar: number; }
 >foo : number
 >1 : 1
 
 p12.bar = p12.bar + 1;
 >p12.bar = p12.bar + 1 : number
 >p12.bar : number
->p12 : Point & { foo: any; bar: any; }
+>p12 : Point & { foo: number; bar: number; }
 >bar : number
 >p12.bar + 1 : number
 >p12.bar : number
->p12 : Point & { foo: any; bar: any; }
+>p12 : Point & { foo: number; bar: number; }
 >bar : number
 >1 : 1
 
@@ -808,8 +808,8 @@ declare const Vue: new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P;
 >P : P
 
 let vue = new Vue({
->vue : { x: number; y: number; } & { f(x: string): number; } & { test: any; hello: any; }
->new Vue({    data: () => ({ x: 1, y: 2 }),    methods: {        f(x: string) {            return this.x;        }    },    computed: {        test(): number {            return this.x;        },        hello: {            get() {                return "hi";            },            set(value: string) {            }        }    }}) : { x: number; y: number; } & { f(x: string): number; } & { test: any; hello: any; }
+>vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
+>new Vue({    data: () => ({ x: 1, y: 2 }),    methods: {        f(x: string) {            return this.x;        }    },    computed: {        test(): number {            return this.x;        },        hello: {            get() {                return "hi";            },            set(value: string) {            }        }    }}) : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
 >Vue : new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P
 >{    data: () => ({ x: 1, y: 2 }),    methods: {        f(x: string) {            return this.x;        }    },    computed: {        test(): number {            return this.x;        },        hello: {            get() {                return "hi";            },            set(value: string) {            }        }    }} : { data: () => { x: number; y: number; }; methods: { f(x: string): number; }; computed: { test(): number; hello: { get(): string; set(value: string): void; }; }; }
 
@@ -833,7 +833,7 @@ let vue = new Vue({
 
             return this.x;
 >this.x : number
->this : { x: number; y: number; } & { f(x: string): number; } & { test: any; hello: any; }
+>this : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
 >x : number
         }
     },
@@ -846,7 +846,7 @@ let vue = new Vue({
 
             return this.x;
 >this.x : number
->this : { x: number; y: number; } & { f(x: string): number; } & { test: any; hello: any; }
+>this : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
 >x : number
 
         },
@@ -870,27 +870,27 @@ let vue = new Vue({
 });
 
 vue;
->vue : { x: number; y: number; } & { f(x: string): number; } & { test: any; hello: any; }
+>vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
 
 vue.x;
 >vue.x : number
->vue : { x: number; y: number; } & { f(x: string): number; } & { test: any; hello: any; }
+>vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
 >x : number
 
 vue.f("abc");
 >vue.f("abc") : number
 >vue.f : (x: string) => number
->vue : { x: number; y: number; } & { f(x: string): number; } & { test: any; hello: any; }
+>vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
 >f : (x: string) => number
 >"abc" : "abc"
 
 vue.test;
 >vue.test : number
->vue : { x: number; y: number; } & { f(x: string): number; } & { test: any; hello: any; }
+>vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
 >test : number
 
 vue.hello;
 >vue.hello : string
->vue : { x: number; y: number; } & { f(x: string): number; } & { test: any; hello: any; }
+>vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
 >hello : string
 

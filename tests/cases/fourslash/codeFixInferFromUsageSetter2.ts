@@ -3,6 +3,7 @@
 // @noImplicitAny: true
 ////class C {
 ////    set [|x(v)|] {
+////         v;
 ////    }
 ////}
 ////(new C).x = 1;

@@ -274,6 +274,13 @@ const myObj: { member(x: number, y: string): void } = {
     member: [#|(x, y) => x + y|],
 }
 `);
+
+        testExtractConstant("extractConstant_CaseClauseExpression", `
+switch (1) {
+    case [#|1|]:
+        break;
+}
+`);
     });
 
     function testExtractConstant(caption: string, text: string) {

@@ -21,6 +21,7 @@ class SymbolIterator {
     }
 
     [Symbol.iterator]() {
+>[Symbol.iterator] : () => this
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
@@ -35,9 +36,9 @@ var array: symbol[];
 
 array.concat([...new SymbolIterator]);
 >array.concat([...new SymbolIterator]) : symbol[]
->array.concat : { (...items: (symbol[] | ReadonlyArray<symbol>)[]): symbol[]; (...items: (symbol | symbol[] | ReadonlyArray<symbol>)[]): symbol[]; }
+>array.concat : { (...items: ConcatArray<symbol>[]): symbol[]; (...items: (symbol | ConcatArray<symbol>)[]): symbol[]; }
 >array : symbol[]
->concat : { (...items: (symbol[] | ReadonlyArray<symbol>)[]): symbol[]; (...items: (symbol | symbol[] | ReadonlyArray<symbol>)[]): symbol[]; }
+>concat : { (...items: ConcatArray<symbol>[]): symbol[]; (...items: (symbol | ConcatArray<symbol>)[]): symbol[]; }
 >[...new SymbolIterator] : symbol[]
 >...new SymbolIterator : symbol
 >new SymbolIterator : SymbolIterator

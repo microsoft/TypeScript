@@ -22,6 +22,7 @@ goTo.marker();
 
 verify.codeFixAll({
     fixId: "fixCannotFindModule",
+    fixAllDescription: "Install all missing types packages",
     commands: [
         { packageName: "@types/abs", file: "/a.ts", type: "install package" },
         { packageName: "@types/zap", file: "/a.ts", type: "install package" },

@@ -31,12 +31,12 @@ function foo(func: () => boolean) { }
 foo(() => true);
 >foo(() => true) : void
 >foo : (func: () => boolean) => void
->() => true : () => boolean
+>() => true : () => true
 >true : true
 
 foo(() => { return false; });
 >foo(() => { return false; }) : void
 >foo : (func: () => boolean) => void
->() => { return false; } : () => boolean
+>() => { return false; } : () => false
 >false : false
 

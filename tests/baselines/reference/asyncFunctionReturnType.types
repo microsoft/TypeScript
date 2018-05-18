@@ -15,7 +15,7 @@ async function fAsyncExplicit(): Promise<[number, boolean]> {
 
     // This is contextually typed as a tuple.
     return [1, true];
->[1, true] : [number, boolean]
+>[1, true] : [number, true]
 >1 : 1
 >true : true
 }

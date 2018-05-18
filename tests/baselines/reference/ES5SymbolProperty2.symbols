@@ -9,6 +9,7 @@ module M {
 >C : Symbol(C, Decl(ES5SymbolProperty2.ts, 1, 20))
 
         [Symbol.iterator]() { }
+>[Symbol.iterator] : Symbol(C[Symbol.iterator], Decl(ES5SymbolProperty2.ts, 3, 20))
 >Symbol : Symbol(Symbol, Decl(ES5SymbolProperty2.ts, 1, 7))
     }
     (new C)[Symbol.iterator];

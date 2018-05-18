@@ -44,7 +44,6 @@ function ShouldInferFromData<T>(props: Props<T>): JSX.Element {
 >Element : Symbol(JSX.Element, Decl(index.tsx, 0, 15))
 
     return <div />;
->div : Symbol(unknown)
 }
 
 // Sanity check: function call equivalent versions work fine

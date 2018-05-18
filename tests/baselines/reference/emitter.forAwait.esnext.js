@@ -24,6 +24,22 @@ async function* f4() {
     for await (x of y) {
     }
 }
+//// [file5.ts]
+// https://github.com/Microsoft/TypeScript/issues/21363
+async function f5() {
+    let y: any;
+    outer: for await (const x of y) {
+        continue outer;
+    }
+}
+//// [file6.ts]
+// https://github.com/Microsoft/TypeScript/issues/21363
+async function* f6() {
+    let y: any;
+    outer: for await (const x of y) {
+        continue outer;
+    }
+}
 
 //// [file1.js]
 async function f1() {
@@ -47,5 +63,21 @@ async function* f3() {
 async function* f4() {
     let x, y;
     for await (x of y) {
+    }
+}
+//// [file5.js]
+// https://github.com/Microsoft/TypeScript/issues/21363
+async function f5() {
+    let y;
+    outer: for await (const x of y) {
+        continue outer;
+    }
+}
+//// [file6.js]
+// https://github.com/Microsoft/TypeScript/issues/21363
+async function* f6() {
+    let y;
+    outer: for await (const x of y) {
+        continue outer;
     }
 }

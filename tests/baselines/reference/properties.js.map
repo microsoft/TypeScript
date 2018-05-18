@@ -1,2 +1,2 @@
 //// [properties.js.map]
-{"version":3,"file":"properties.js","sourceRoot":"","sources":["properties.ts"],"names":[],"mappings":"AAAA;IAAA;IAWA,CAAC;IATG,sBAAW,0BAAK;aAAhB;YAEI,MAAM,CAAC,EAAE,CAAC;QACd,CAAC;aAED,UAAiB,KAAa;YAE1B,EAAE;QACN,CAAC;;;OALA;IAML,cAAC;AAAD,CAAC,AAXD,IAWC"}
+{"version":3,"file":"properties.js","sourceRoot":"","sources":["properties.ts"],"names":[],"mappings":"AAAA;IAAA;IAWA,CAAC;IATG,sBAAW,0BAAK;aAAhB;YAEI,OAAO,EAAE,CAAC;QACd,CAAC;aAED,UAAiB,KAAa;YAE1B,EAAE;QACN,CAAC;;;OALA;IAML,cAAC;AAAD,CAAC,AAXD,IAWC"}

@@ -29,6 +29,7 @@ function Meet({name = 'world'}) {
 function MeetAndGreet(k: {"prop-name": string}) {
 >MeetAndGreet : Symbol(MeetAndGreet, Decl(file.tsx, 9, 1))
 >k : Symbol(k, Decl(file.tsx, 10, 22))
+>"prop-name" : Symbol("prop-name", Decl(file.tsx, 10, 26))
 
 	return <div>Hi Hi</div>;
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
@@ -144,5 +145,6 @@ let j3 = <EmptyPropSFC {...{}} />
 let j4 = <EmptyPropSFC {...{ "data-info": "hi"}} />
 >j4 : Symbol(j4, Decl(file.tsx, 52, 3))
 >EmptyPropSFC : Symbol(EmptyPropSFC, Decl(file.tsx, 0, 0))
+>"data-info" : Symbol("data-info", Decl(file.tsx, 52, 28))
 
 

@@ -5,17 +5,17 @@ var a: string[] = [];
 
 a.concat("hello", 'world');
 >a.concat("hello", 'world') : string[]
->a.concat : { (...items: (string[] | ReadonlyArray<string>)[]): string[]; (...items: (string | string[] | ReadonlyArray<string>)[]): string[]; }
+>a.concat : { (...items: ConcatArray<string>[]): string[]; (...items: (string | ConcatArray<string>)[]): string[]; }
 >a : string[]
->concat : { (...items: (string[] | ReadonlyArray<string>)[]): string[]; (...items: (string | string[] | ReadonlyArray<string>)[]): string[]; }
+>concat : { (...items: ConcatArray<string>[]): string[]; (...items: (string | ConcatArray<string>)[]): string[]; }
 >"hello" : "hello"
 >'world' : "world"
 
 a.concat('Hello');
 >a.concat('Hello') : string[]
->a.concat : { (...items: (string[] | ReadonlyArray<string>)[]): string[]; (...items: (string | string[] | ReadonlyArray<string>)[]): string[]; }
+>a.concat : { (...items: ConcatArray<string>[]): string[]; (...items: (string | ConcatArray<string>)[]): string[]; }
 >a : string[]
->concat : { (...items: (string[] | ReadonlyArray<string>)[]): string[]; (...items: (string | string[] | ReadonlyArray<string>)[]): string[]; }
+>concat : { (...items: ConcatArray<string>[]): string[]; (...items: (string | ConcatArray<string>)[]): string[]; }
 >'Hello' : "Hello"
 
 var b = new Array<string>();
@@ -25,8 +25,8 @@ var b = new Array<string>();
 
 b.concat('hello');
 >b.concat('hello') : string[]
->b.concat : { (...items: (string[] | ReadonlyArray<string>)[]): string[]; (...items: (string | string[] | ReadonlyArray<string>)[]): string[]; }
+>b.concat : { (...items: ConcatArray<string>[]): string[]; (...items: (string | ConcatArray<string>)[]): string[]; }
 >b : string[]
->concat : { (...items: (string[] | ReadonlyArray<string>)[]): string[]; (...items: (string | string[] | ReadonlyArray<string>)[]): string[]; }
+>concat : { (...items: ConcatArray<string>[]): string[]; (...items: (string | ConcatArray<string>)[]): string[]; }
 >'hello' : "hello"
 

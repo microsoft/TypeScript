@@ -33,7 +33,7 @@ namespace Harness.Parallel.Host {
         return `${perfdataFileNameFragment}${target ? `.${target}` : ""}.json`;
     }
     function readSavedPerfData(target?: string): {[testHash: string]: number} {
-        const perfDataContents = Harness.IO.readFile(perfdataFileName(target));
+        const perfDataContents = IO.readFile(perfdataFileName(target));
         if (perfDataContents) {
             return JSON.parse(perfDataContents);
         }
@@ -81,7 +81,8 @@ namespace Harness.Parallel.Host {
         const { statSync }: { statSync(path: string): { size: number }; } = require("fs");
         const path: { join: (...args: string[]) => string } = require("path");
         for (const runner of runners) {
-            for (const file of runner.enumerateTestFiles()) {
+            for (const test of runner.enumerateTestFiles()) {
+                const file = typeof test === "string" ? test : test.file;
                 let size: number;
                 if (!perfData) {
                     try {
@@ -90,7 +91,7 @@ namespace Harness.Parallel.Host {
                     catch {
                         // May be a directory
                         try {
-                            size = Harness.IO.listFiles(path.join(runner.workingDirectory, file), /.*/g, { recursive: true }).reduce((acc, elem) => acc + statSync(elem).size, 0);
+                            size = IO.listFiles(path.join(runner.workingDirectory, file), /.*/g, { recursive: true }).reduce((acc, elem) => acc + statSync(elem).size, 0);
                         }
                         catch {
                             // Unknown test kind, just return 0 and let the historical analysis take over after one run
@@ -126,6 +127,7 @@ namespace Harness.Parallel.Host {
         let passingFiles = 0;
         let failingFiles = 0;
         let errorResults: ErrorInfo[] = [];
+        let passingResults: { name: string[] }[] = [];
         let totalPassing = 0;
         const startTime = Date.now();
 
@@ -144,9 +146,9 @@ namespace Harness.Parallel.Host {
         let closedWorkers = 0;
         for (let i = 0; i < workerCount; i++) {
             // TODO: Just send the config over the IPC channel or in the command line arguments
-            const config: TestConfig = { light: Harness.lightMode, listenForWork: true, runUnitTests };
+            const config: TestConfig = { light: lightMode, listenForWork: true, runUnitTests, stackTraceLimit };
             const configPath = ts.combinePaths(taskConfigsFolder, `task-config${i}.json`);
-            Harness.IO.writeFile(configPath, JSON.stringify(config));
+            IO.writeFile(configPath, JSON.stringify(config));
             const child = fork(__filename, [`--config="${configPath}"`]);
             let currentTimeout = defaultTimeout;
             const killChild = () => {
@@ -197,9 +199,11 @@ namespace Harness.Parallel.Host {
                         totalPassing += data.payload.passing;
                         if (data.payload.errors.length) {
                             errorResults = errorResults.concat(data.payload.errors);
+                            passingResults = passingResults.concat(data.payload.passes);
                             failingFiles++;
                         }
                         else {
+                            passingResults = passingResults.concat(data.payload.passes);
                             passingFiles++;
                         }
                         newPerfData[hashName(data.payload.runner, data.payload.file)] = data.payload.duration;
@@ -364,33 +368,68 @@ namespace Harness.Parallel.Host {
                 reporter.epilogue();
             }
 
-            Harness.IO.writeFile(perfdataFileName(configOption), JSON.stringify(newPerfData, null, 4)); // tslint:disable-line:no-null-keyword
+            IO.writeFile(perfdataFileName(configOption), JSON.stringify(newPerfData, null, 4)); // tslint:disable-line:no-null-keyword
 
-            process.exit(errorResults.length);
+            if (Utils.getExecutionEnvironment() !== Utils.ExecutionEnvironment.Browser && process.env.CI === "true") {
+                const xunitReport = new xunit({ on: ts.noop, once: ts.noop }, { reporterOptions: { output: "./TEST-results.xml" } });
+                xunitReport.stats = reporter.stats;
+                xunitReport.failures = reporter.failures;
+                const rootAttrs: {[index: string]: any} = {
+                    name: "Tests",
+                    tests: stats.tests,
+                    failures: stats.failures,
+                    errors: stats.failures,
+                    skipped: stats.tests - stats.failures - stats.passes,
+                    timestamp: (new Date()).toUTCString(),
+                    time: (stats.duration / 1000) || 0
+                };
+                xunitReport.write(`<?xml version="1.0" encoding="UTF-8"?>` + "\n");
+                xunitReport.write(`<testsuite ${Object.keys(rootAttrs).map(k => `${k}="${escape("" + rootAttrs[k])}"`).join(" ")}>`);
+                [...failures, ...ts.map(passingResults, makeMochaTest)].forEach(t => {
+                    xunitReport.test(t);
+                });
+                xunitReport.write("</testsuite>");
+                xunitReport.done(failures, (f: any[]) => {
+                    process.exit(f.length);
+                });
+            }
+            else {
+                process.exit(failures.length);
+            }
+
         }
 
-        function makeMochaTest(test: ErrorInfo) {
+        function makeMochaTest(test: ErrorInfo | TestInfo) {
             return {
+                state: (test as ErrorInfo).error ? "failed" : "passed",
+                parent: {
+                    fullTitle: () => {
+                        return test.name.slice(0, test.name.length - 1).join(" ");
+                    }
+                },
+                title: test.name[test.name.length - 1],
                 fullTitle: () => {
                     return test.name.join(" ");
                 },
                 titlePath: () => {
                     return test.name;
                 },
-                err: {
-                    message: test.error,
-                    stack: test.stack
-                }
+                isPending: () => false,
+                err: (test as ErrorInfo).error ? {
+                    message: (test as ErrorInfo).error,
+                    stack: (test as ErrorInfo).stack
+                } : undefined
             };
         }
 
-        describe = ts.noop as any; // Disable unit tests
+        (global as any).describe = ts.noop as any; // Disable unit tests
 
         return;
     }
 
     let mocha: any;
     let base: any;
+    let xunit: any;
     let color: any;
     let cursor: any;
     let readline: any;
@@ -433,6 +472,7 @@ namespace Harness.Parallel.Host {
     function initializeProgressBarsDependencies() {
         mocha = require("mocha");
         base = mocha.reporters.Base;
+        xunit = mocha.reporters.xunit;
         color = base.color;
         cursor = base.cursor;
         readline = require("readline");

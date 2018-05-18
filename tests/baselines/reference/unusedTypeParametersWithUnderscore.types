@@ -14,8 +14,21 @@ interface I<_T, U> { };
 >_T : _T
 >U : U
 
-class C<_T, U> { };
+class C<_T, U> {
 >C : C<_T, U>
+>_T : _T
+>U : U
+
+    public m<_V, W>() { }
+>m : <_V, W>() => void
+>_V : _V
+>W : W
+
+};
+
+let l = <_T, U>() => { };
+>l : <_T, U>() => void
+><_T, U>() => { } : <_T, U>() => void
 >_T : _T
 >U : U
 

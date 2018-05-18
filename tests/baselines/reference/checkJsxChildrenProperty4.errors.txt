@@ -1,5 +1,5 @@
 tests/cases/conformance/jsx/file.tsx(24,28): error TS2551: Property 'NAme' does not exist on type 'IUser'. Did you mean 'Name'?
-tests/cases/conformance/jsx/file.tsx(32,9): error TS2322: Type '{ children: ((user: IUser) => Element)[]; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FetchUser> & IFetchUserProps & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(32,10): error TS2322: Type '{ children: ((user: IUser) => Element)[]; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FetchUser> & IFetchUserProps & { children?: ReactNode; }'.
   Type '{ children: ((user: IUser) => Element)[]; }' is not assignable to type 'IFetchUserProps'.
     Types of property 'children' are incompatible.
       Type '((user: IUser) => Element)[]' is not assignable to type '(user: IUser) => Element'.
@@ -41,7 +41,7 @@ tests/cases/conformance/jsx/file.tsx(32,9): error TS2322: Type '{ children: ((us
     function UserName1() {
         return (
             <FetchUser>
-            ~~~~~~~~~~~
+             ~~~~~~~~~
 !!! error TS2322: Type '{ children: ((user: IUser) => Element)[]; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FetchUser> & IFetchUserProps & { children?: ReactNode; }'.
 !!! error TS2322:   Type '{ children: ((user: IUser) => Element)[]; }' is not assignable to type 'IFetchUserProps'.
 !!! error TS2322:     Types of property 'children' are incompatible.

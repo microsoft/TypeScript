@@ -15,12 +15,16 @@ let y = x.getA().x;
 
 === tests/cases/compiler/array.d.ts ===
 declare module "A" {
+>"A" : Symbol("A", Decl(array.d.ts, 0, 0))
+
     class A { x: number; }
 >A : Symbol(A, Decl(array.d.ts, 0, 20))
 >x : Symbol(A.x, Decl(array.d.ts, 1, 13))
 }
 
 declare module "array" {
+>"array" : Symbol("array", Decl(array.d.ts, 2, 1))
+
     import {A} from "A";
 >A : Symbol(A, Decl(array.d.ts, 5, 12))
 

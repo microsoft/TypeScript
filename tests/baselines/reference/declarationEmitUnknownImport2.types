@@ -1,7 +1,7 @@
 === tests/cases/compiler/declarationEmitUnknownImport2.ts ===
 import Foo From './Foo'; // Syntax error
 >Foo : any
->From : No type information available!
+>From : any
 >'./Foo' : "./Foo"
 
 export default Foo

@@ -20,22 +20,22 @@ tests/cases/compiler/propertiesAndIndexers2.ts(14,5): error TS2412: Property '6'
     // All of these should fail.
     interface B extends A {
         c: string;
-        ~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'c' of type 'string' is not assignable to string index type 'number'.
         3: string;
-        ~~~~~~~~~~
+        ~
 !!! error TS2411: Property '3' of type 'string' is not assignable to string index type 'number'.
         Infinity: string;
-        ~~~~~~~~~~~~~~~~~
+        ~~~~~~~~
 !!! error TS2411: Property 'Infinity' of type 'string' is not assignable to string index type 'number'.
         "-Infinity": string;
-        ~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2411: Property '"-Infinity"' of type 'string' is not assignable to string index type 'number'.
         NaN: string;
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property 'NaN' of type 'string' is not assignable to string index type 'number'.
         "-NaN": string;
-        ~~~~~~~~~~~~~~~
+        ~~~~~~
 !!! error TS2411: Property '"-NaN"' of type 'string' is not assignable to string index type 'number'.
         6(): string;
         ~~~~~~~~~~~~

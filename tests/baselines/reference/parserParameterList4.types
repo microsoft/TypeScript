@@ -1,5 +1,5 @@
 === tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList4.ts ===
 function F(public A) {
->F : (public A: any) => void
+>F : (A: any) => void
 >A : any
 }

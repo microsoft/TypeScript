@@ -373,17 +373,17 @@ function setState<T, K extends keyof T>(obj: T, props: Pick<T, K>) {
 >K : K
 
     for (let k in props) {
->k : K
+>k : Extract<K, string>
 >props : Pick<T, K>
 
         obj[k] = props[k];
->obj[k] = props[k] : Pick<T, K>[K]
->obj[k] : T[K]
+>obj[k] = props[k] : Pick<T, K>[Extract<K, string>]
+>obj[k] : T[Extract<K, string>]
 >obj : T
->k : K
->props[k] : Pick<T, K>[K]
+>k : Extract<K, string>
+>props[k] : Pick<T, K>[Extract<K, string>]
 >props : Pick<T, K>
->k : K
+>k : Extract<K, string>
     }
 }
 
@@ -468,19 +468,19 @@ class C<T> {
 >K : K
 
         for (let k in props) {
->k : K
+>k : Extract<K, string>
 >props : Pick<T, K>
 
             this.state[k] = props[k];
->this.state[k] = props[k] : Pick<T, K>[K]
->this.state[k] : T[K]
+>this.state[k] = props[k] : Pick<T, K>[Extract<K, string>]
+>this.state[k] : T[Extract<K, string>]
 >this.state : T
 >this : this
 >state : T
->k : K
->props[k] : Pick<T, K>[K]
+>k : Extract<K, string>
+>props[k] : Pick<T, K>[Extract<K, string>]
 >props : Pick<T, K>
->k : K
+>k : Extract<K, string>
         }
     }
 }
@@ -613,10 +613,10 @@ type O = {x: number, y: boolean};
 let o: O = {x: 5, y: false};
 >o : O
 >O : O
->{x: 5, y: false} : { x: number; y: boolean; }
+>{x: 5, y: false} : { x: number; y: false; }
 >x : number
 >5 : 5
->y : boolean
+>y : false
 >false : false
 
 let f: Foo2<O, 'x'> = {

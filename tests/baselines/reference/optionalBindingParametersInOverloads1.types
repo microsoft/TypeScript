@@ -14,7 +14,7 @@ function foo(...rest: any[]) {
 foo(["", 0, false]);
 >foo(["", 0, false]) : any
 >foo : ([x, y, z]?: [string, number, boolean]) => any
->["", 0, false] : [string, number, boolean]
+>["", 0, false] : [string, number, false]
 >"" : ""
 >0 : 0
 >false : false

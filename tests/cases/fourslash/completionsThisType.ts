@@ -3,7 +3,7 @@
 ////class C {
 ////    "foo bar": number;
 ////    xyz() {
-////        /**/
+////        return (/**/)
 ////    }
 ////}
 ////
@@ -11,7 +11,7 @@
 
 goTo.marker("");
 
-verify.completionListContains("xyz", "(method) C.xyz(): void", "", "method", undefined, undefined, {
+verify.completionListContains("xyz", "(method) C.xyz(): any", "", "method", undefined, undefined, {
     includeInsertTextCompletions: true,
     insertText: "this.xyz",
 });

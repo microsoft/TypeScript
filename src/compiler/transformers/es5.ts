@@ -1,6 +1,3 @@
-/// <reference path="../factory.ts" />
-/// <reference path="../visitor.ts" />
-
 /*@internal*/
 namespace ts {
     /**
@@ -27,7 +24,7 @@ namespace ts {
         context.onSubstituteNode = onSubstituteNode;
         context.enableSubstitution(SyntaxKind.PropertyAccessExpression);
         context.enableSubstitution(SyntaxKind.PropertyAssignment);
-        return transformSourceFile;
+        return chainBundle(transformSourceFile);
 
         /**
          * Transforms an ES5 source file to ES3.

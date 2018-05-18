@@ -151,6 +151,7 @@ new someGenerics3(() => '');
 
 new someGenerics3<Window>(() => undefined);
 >someGenerics3 : Symbol(someGenerics3, Decl(typeArgumentInferenceConstructSignatures.ts, 42, 62), Decl(typeArgumentInferenceConstructSignatures.ts, 48, 3))
+>Window : Symbol(Window, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >undefined : Symbol(undefined)
 
 new someGenerics3<number>(() => 3);
@@ -405,6 +406,7 @@ interface A92 {
 
     z?: Window;
 >z : Symbol(A92.z, Decl(typeArgumentInferenceConstructSignatures.ts, 116, 14))
+>Window : Symbol(Window, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 var a9e = new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >a9e : Symbol(a9e, Decl(typeArgumentInferenceConstructSignatures.ts, 119, 3), Decl(typeArgumentInferenceConstructSignatures.ts, 120, 3))
@@ -412,6 +414,7 @@ var a9e = new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >undefined : Symbol(undefined)
 >x : Symbol(x, Decl(typeArgumentInferenceConstructSignatures.ts, 119, 40))
 >z : Symbol(z, Decl(typeArgumentInferenceConstructSignatures.ts, 119, 46))
+>window : Symbol(window, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeArgumentInferenceConstructSignatures.ts, 119, 61))
 >y : Symbol(y, Decl(typeArgumentInferenceConstructSignatures.ts, 119, 67))
 
@@ -425,6 +428,7 @@ var a9f = new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' }
 >undefined : Symbol(undefined)
 >x : Symbol(x, Decl(typeArgumentInferenceConstructSignatures.ts, 121, 45))
 >z : Symbol(z, Decl(typeArgumentInferenceConstructSignatures.ts, 121, 51))
+>window : Symbol(window, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeArgumentInferenceConstructSignatures.ts, 121, 66))
 >y : Symbol(y, Decl(typeArgumentInferenceConstructSignatures.ts, 121, 72))
 

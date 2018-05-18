@@ -20,7 +20,7 @@ tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithIndexe
     interface A2 {
         [x: number]: string;
         'a': number; //error
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property ''a'' of type 'number' is not assignable to string index type '{ length: number; }'.
     }
     
@@ -28,7 +28,7 @@ tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithIndexe
     interface A2 {
         [x: string]: { length: number };
         1: { length: number }; // error
-        ~~~~~~~~~~~~~~~~~~~~~~
+        ~
 !!! error TS2412: Property '1' of type '{ length: number; }' is not assignable to numeric index type 'string'.
     }
     

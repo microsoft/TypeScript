@@ -1,5 +1,3 @@
-/// <reference path="types.ts" />
-
 namespace ts.server {
     // tslint:disable variable-name
     export const ActionSet: ActionSet = "action::set";
@@ -32,5 +30,12 @@ namespace ts.server {
         return index >= 0 && index < sys.args.length - 1
             ? sys.args[index + 1]
             : undefined;
+    }
+
+    /*@internal*/
+    export function nowString() {
+        // E.g. "12:34:56.789"
+        const d = new Date();
+        return `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}.${d.getMilliseconds()}`;
     }
 }

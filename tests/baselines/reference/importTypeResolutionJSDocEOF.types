@@ -1,0 +1,14 @@
+=== tests/cases/compiler/interfaces.d.ts ===
+export interface Bar {
+>Bar : Bar
+
+    prop: string
+>prop : string
+}
+
+=== tests/cases/compiler/usage.js ===
+/** @type {Bar} */
+export let bar;
+>bar : Bar
+
+/** @typedef {import('./interfaces').Bar} Bar */

@@ -14,6 +14,7 @@ class C {
 >C : C
 
     [new.target]() { }
+>[new.target] : () => void
 >new.target : any
 >target : any
 
@@ -42,6 +43,7 @@ class C {
 >target : any
 
     static [new.target]() { }
+>[new.target] : () => void
 >new.target : any
 >target : any
 
@@ -75,6 +77,7 @@ const O = {
 >{    [new.target]: undefined,    k() { return new.target; },    get l() { return new.target; },    set m(_) { _ = new.target; },    n: new.target,} : { [x: number]: undefined; k(): any; readonly l: any; m: any; n: any; }
 
     [new.target]: undefined,
+>[new.target] : undefined
 >new.target : any
 >target : any
 >undefined : undefined

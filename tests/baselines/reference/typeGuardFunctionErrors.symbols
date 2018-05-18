@@ -312,6 +312,7 @@ function b5({a, b, p1}, p2, p3): p1 is A {
 >p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 127, 18))
 >p2 : Symbol(p2, Decl(typeGuardFunctionErrors.ts, 127, 23))
 >p3 : Symbol(p3, Decl(typeGuardFunctionErrors.ts, 127, 27))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 127, 18))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
 
     return true;
@@ -324,6 +325,7 @@ function b6([a, b, p1], p2, p3): p1 is A {
 >p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 131, 18))
 >p2 : Symbol(p2, Decl(typeGuardFunctionErrors.ts, 131, 23))
 >p3 : Symbol(p3, Decl(typeGuardFunctionErrors.ts, 131, 27))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 131, 18))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
 
     return true;
@@ -337,6 +339,7 @@ function b7({a, b, c: {p1}}, p2, p3): p1 is A {
 >p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 135, 23))
 >p2 : Symbol(p2, Decl(typeGuardFunctionErrors.ts, 135, 28))
 >p3 : Symbol(p3, Decl(typeGuardFunctionErrors.ts, 135, 32))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 135, 23))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
 
     return true;
@@ -382,9 +385,11 @@ declare function hasKey<T extends Keys>(x: KeySet<T>): x is KeySet<T|'d'>;
 
 type Foo = { 'a': string; }
 >Foo : Symbol(Foo, Decl(typeGuardFunctionErrors.ts, 151, 74))
+>'a' : Symbol('a', Decl(typeGuardFunctionErrors.ts, 153, 12))
 
 type Bar = { 'a': number; }
 >Bar : Symbol(Bar, Decl(typeGuardFunctionErrors.ts, 153, 27))
+>'a' : Symbol('a', Decl(typeGuardFunctionErrors.ts, 154, 12))
 
 interface NeedsFoo<T extends Foo> {
 >NeedsFoo : Symbol(NeedsFoo, Decl(typeGuardFunctionErrors.ts, 154, 27))

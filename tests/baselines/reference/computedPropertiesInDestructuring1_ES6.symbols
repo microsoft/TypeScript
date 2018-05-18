@@ -16,6 +16,7 @@ let {["bar"]: bar2} = {bar: "bar"};
 let {[11]: bar2_1} = {11: "bar"};
 >11 : Symbol(bar2_1, Decl(computedPropertiesInDestructuring1_ES6.ts, 5, 5))
 >bar2_1 : Symbol(bar2_1, Decl(computedPropertiesInDestructuring1_ES6.ts, 5, 5))
+>11 : Symbol(11, Decl(computedPropertiesInDestructuring1_ES6.ts, 5, 22))
 
 let foo2 = () => "bar";
 >foo2 : Symbol(foo2, Decl(computedPropertiesInDestructuring1_ES6.ts, 7, 3))
@@ -78,36 +79,43 @@ let [{[foo.toExponential()]: bar7}] = [{bar: "bar"}];
 
 // destructuring assignment
 ({[foo]: bar} = {bar: "bar"});
+>[foo] : Symbol([foo], Decl(computedPropertiesInDestructuring1_ES6.ts, 24, 2))
 >foo : Symbol(foo, Decl(computedPropertiesInDestructuring1_ES6.ts, 1, 3))
 >bar : Symbol(bar, Decl(computedPropertiesInDestructuring1_ES6.ts, 2, 5))
 >bar : Symbol(bar, Decl(computedPropertiesInDestructuring1_ES6.ts, 24, 17))
 
 ({["bar"]: bar2} = {bar: "bar"});
+>["bar"] : Symbol(["bar"], Decl(computedPropertiesInDestructuring1_ES6.ts, 26, 2))
 >"bar" : Symbol(["bar"], Decl(computedPropertiesInDestructuring1_ES6.ts, 26, 2))
 >bar2 : Symbol(bar2, Decl(computedPropertiesInDestructuring1_ES6.ts, 4, 5))
 >bar : Symbol(bar, Decl(computedPropertiesInDestructuring1_ES6.ts, 26, 20))
 
 ({[foo2()]: bar3} = {bar: "bar"});
+>[foo2()] : Symbol([foo2()], Decl(computedPropertiesInDestructuring1_ES6.ts, 28, 2))
 >foo2 : Symbol(foo2, Decl(computedPropertiesInDestructuring1_ES6.ts, 7, 3))
 >bar3 : Symbol(bar3, Decl(computedPropertiesInDestructuring1_ES6.ts, 8, 5))
 >bar : Symbol(bar, Decl(computedPropertiesInDestructuring1_ES6.ts, 28, 21))
 
 [{[foo]: bar4}] = [{bar: "bar"}];
+>[foo] : Symbol([foo], Decl(computedPropertiesInDestructuring1_ES6.ts, 30, 2))
 >foo : Symbol(foo, Decl(computedPropertiesInDestructuring1_ES6.ts, 1, 3))
 >bar4 : Symbol(bar4, Decl(computedPropertiesInDestructuring1_ES6.ts, 10, 6))
 >bar : Symbol(bar, Decl(computedPropertiesInDestructuring1_ES6.ts, 30, 20))
 
 [{[foo2()]: bar5}] = [{bar: "bar"}];
+>[foo2()] : Symbol([foo2()], Decl(computedPropertiesInDestructuring1_ES6.ts, 31, 2))
 >foo2 : Symbol(foo2, Decl(computedPropertiesInDestructuring1_ES6.ts, 7, 3))
 >bar5 : Symbol(bar5, Decl(computedPropertiesInDestructuring1_ES6.ts, 11, 6))
 >bar : Symbol(bar, Decl(computedPropertiesInDestructuring1_ES6.ts, 31, 23))
 
 [{[foo()]: bar4}] = [{bar: "bar"}];
+>[foo()] : Symbol([foo()], Decl(computedPropertiesInDestructuring1_ES6.ts, 33, 2))
 >foo : Symbol(foo, Decl(computedPropertiesInDestructuring1_ES6.ts, 1, 3))
 >bar4 : Symbol(bar4, Decl(computedPropertiesInDestructuring1_ES6.ts, 10, 6))
 >bar : Symbol(bar, Decl(computedPropertiesInDestructuring1_ES6.ts, 33, 22))
 
 [{[(1 + {})]: bar4}] = [{bar: "bar"}];
+>[(1 + {})] : Symbol([(1 + {})], Decl(computedPropertiesInDestructuring1_ES6.ts, 34, 2))
 >bar4 : Symbol(bar4, Decl(computedPropertiesInDestructuring1_ES6.ts, 10, 6))
 >bar : Symbol(bar, Decl(computedPropertiesInDestructuring1_ES6.ts, 34, 25))
 

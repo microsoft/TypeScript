@@ -367,6 +367,7 @@ module TypeScript {
         public netFreeUses(container: Symbol, freeUses: StringHashTable) {
 >netFreeUses : Symbol(AST.netFreeUses, Decl(parserRealSource11.ts, 148, 9))
 >container : Symbol(container, Decl(parserRealSource11.ts, 150, 27))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --))
 >freeUses : Symbol(freeUses, Decl(parserRealSource11.ts, 150, 45))
         }
 
@@ -694,6 +695,7 @@ module TypeScript {
 
         public sym: Symbol = null;
 >sym : Symbol(Identifier.sym, Decl(parserRealSource11.ts, 249, 41))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --))
 
         public cloId = -1;
 >cloId : Symbol(Identifier.cloId, Decl(parserRealSource11.ts, 250, 34))
@@ -2477,6 +2479,7 @@ module TypeScript {
 
         public sym: Symbol = null;
 >sym : Symbol(BoundDecl.sym, Decl(parserRealSource11.ts, 890, 40))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --))
 
         constructor (public id: Identifier, nodeType: NodeType, public nestingLevel: number) {
 >id : Symbol(BoundDecl.id, Decl(parserRealSource11.ts, 893, 21))
@@ -2703,6 +2706,7 @@ module TypeScript {
 
         public freeVariables: Symbol[] = [];
 >freeVariables : Symbol(FuncDecl.freeVariables, Decl(parserRealSource11.ts, 967, 45))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --))
 
         public unitIndex = -1;
 >unitIndex : Symbol(FuncDecl.unitIndex, Decl(parserRealSource11.ts, 968, 44))
@@ -2730,6 +2734,7 @@ module TypeScript {
 
         public accessorSymbol: Symbol = null;
 >accessorSymbol : Symbol(FuncDecl.accessorSymbol, Decl(parserRealSource11.ts, 975, 43))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --))
 
         public leftCurlyCount = 0;
 >leftCurlyCount : Symbol(FuncDecl.leftCurlyCount, Decl(parserRealSource11.ts, 976, 45))
@@ -2827,6 +2832,7 @@ module TypeScript {
 >id : Symbol(id, Decl(parserRealSource11.ts, 1006, 25))
 >Identifier : Symbol(Identifier, Decl(parserRealSource11.ts, 247, 5))
 >sym : Symbol(sym, Decl(parserRealSource11.ts, 1006, 40))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --))
 
             if (this.envids == null) {
 >this.envids : Symbol(FuncDecl.envids, Decl(parserRealSource11.ts, 962, 36))
@@ -2890,6 +2896,7 @@ module TypeScript {
         public addJumpRef(sym: Symbol): void {
 >addJumpRef : Symbol(FuncDecl.addJumpRef, Decl(parserRealSource11.ts, 1019, 9))
 >sym : Symbol(sym, Decl(parserRealSource11.ts, 1021, 26))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --))
 
             if (this.jumpRefs == null) {
 >this.jumpRefs : Symbol(FuncDecl.jumpRefs, Decl(parserRealSource11.ts, 963, 36))

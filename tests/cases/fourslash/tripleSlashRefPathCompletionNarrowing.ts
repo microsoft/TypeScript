@@ -17,18 +17,17 @@
 //// /// <reference path="./d/*2*/
 
 //// /// <reference path="f1/*3*/
-//// /// <reference path="f1./*4*/
-//// /// <reference path="f1.t/*5*/
-//// /// <reference path="f1.ts/*6*/
+//// /// <reference path="[|f1./*4*/|]
+//// /// <reference path="[|f1.t/*5*/|]
+//// /// <reference path="[|f1.ts/*6*/|]
 //// /// <reference path="./f1/*7*/
-//// /// <reference path="./f1./*8*/
-//// /// <reference path="./f1.t/*9*/
-//// /// <reference path="./f1.ts/*10*/
+//// /// <reference path="./[|f1./*8*/|]
+//// /// <reference path="./[|f1.t/*9*/|]
+//// /// <reference path="./[|f1.ts/*10*/|]
 
+const markersWithReplacementSpan = [4, 5, 6, 8, 9, 10];
 for (let m = 0; m < 11; ++m) {
-    goTo.marker("" + m);
-    verify.completionListContains("f1.ts");
-    verify.completionListContains("f2.ts");
-    verify.completionListContains("d");
-    verify.not.completionListItemsCountIsGreaterThan(3);
+    const idx = markersWithReplacementSpan.indexOf(m);
+    const names = ["f1.ts", "f2.ts", "d"];
+    verify.completionsAt(String(m), idx === -1 ? names : names.map(name => ({ name, replacementSpan: test.ranges()[idx] })), { isNewIdentifierLocation: true });
 }

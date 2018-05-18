@@ -6,11 +6,11 @@
 ////o.[|x|];
 
 const [r0, r1, r2, r3] = test.ranges();
-verify.referenceGroups(r0, [{ definition: "(property) I.x: {}", ranges: [r0, r3] }]);
-verify.referenceGroups(r1, [{ definition: "(property) J.x: {}", ranges: [r1, r3] }]);
-verify.referenceGroups(r2, [{ definition: "(property) x: string", ranges: [r2, r3] }]);
-verify.referenceGroups(r3, [
-	{ definition: "(property) I.x: {}", ranges: [r0, r3] },
-	{ definition: "(property) J.x: {}", ranges: [r1] },
-	{ definition: "(property) x: string", ranges: [r2] },
-]);
+const i = { definition: "(property) I.x: {}", ranges: [r0] };
+const j = { definition: "(property) J.x: {}", ranges: [r1] };
+const anon = { definition: "(property) x: string", ranges: [r2] };
+const intersect = { definition: "(property) x: string & {}", ranges: [r3] };
+verify.referenceGroups(r0, [i, intersect]);
+verify.referenceGroups(r1, [j, intersect]);
+verify.referenceGroups(r2, [anon, intersect]);
+verify.referenceGroups(r3, [i, j, anon, intersect]);

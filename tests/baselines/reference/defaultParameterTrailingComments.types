@@ -1,0 +1,14 @@
+=== tests/cases/compiler/defaultParameterTrailingComments.ts ===
+class C {
+>C : C
+
+    constructor(defaultParam: boolean = false /* Emit only once*/) {}
+>defaultParam : boolean
+>false : false
+}
+
+function foo(defaultParam = 10 /*emit only once*/) {}
+>foo : (defaultParam?: number) => void
+>defaultParam : number
+>10 : 10
+

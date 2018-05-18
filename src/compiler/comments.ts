@@ -1,5 +1,3 @@
-/// <reference path="sourcemap.ts" />
-
 /* @internal */
 namespace ts {
     export interface CommentWriter {
@@ -260,7 +258,15 @@ namespace ts {
             }
         }
 
+        function shouldWriteComment(text: string, pos: number) {
+            if (printerOptions.onlyPrintJsDocStyle) {
+                return (isJSDocLikeText(text, pos) || isPinnedComment(text, pos));
+            }
+            return true;
+        }
+
         function emitLeadingComment(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
+            if (!shouldWriteComment(currentText, commentPos)) return;
             if (!hasWrittenComment) {
                 emitNewLineBeforeLeadingCommentOfPosition(currentLineMap, writer, rangePos, commentPos);
                 hasWrittenComment = true;
@@ -292,6 +298,7 @@ namespace ts {
         }
 
         function emitTrailingComment(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean) {
+            if (!shouldWriteComment(currentText, commentPos)) return;
             // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment2*/
             if (!writer.isAtStartOfLine()) {
                 writer.write(" ");
@@ -404,6 +411,7 @@ namespace ts {
         }
 
         function writeComment(text: string, lineMap: number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) {
+            if (!shouldWriteComment(currentText, commentPos)) return;
             if (emitPos) emitPos(commentPos);
             writeCommentRange(text, lineMap, writer, commentPos, commentEnd, newLine);
             if (emitPos) emitPos(commentEnd);

@@ -3,6 +3,7 @@ tests/cases/compiler/reservedWords2.ts(1,14): error TS1005: '(' expected.
 tests/cases/compiler/reservedWords2.ts(1,16): error TS2304: Cannot find name 'require'.
 tests/cases/compiler/reservedWords2.ts(1,31): error TS1005: ')' expected.
 tests/cases/compiler/reservedWords2.ts(2,12): error TS2300: Duplicate identifier '(Missing)'.
+tests/cases/compiler/reservedWords2.ts(2,12): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 tests/cases/compiler/reservedWords2.ts(2,14): error TS1003: Identifier expected.
 tests/cases/compiler/reservedWords2.ts(2,20): error TS1005: '(' expected.
 tests/cases/compiler/reservedWords2.ts(2,20): error TS2304: Cannot find name 'from'.
@@ -10,6 +11,7 @@ tests/cases/compiler/reservedWords2.ts(2,25): error TS1005: ')' expected.
 tests/cases/compiler/reservedWords2.ts(4,5): error TS1134: Variable declaration expected.
 tests/cases/compiler/reservedWords2.ts(4,12): error TS1109: Expression expected.
 tests/cases/compiler/reservedWords2.ts(5,9): error TS2300: Duplicate identifier '(Missing)'.
+tests/cases/compiler/reservedWords2.ts(5,9): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 tests/cases/compiler/reservedWords2.ts(5,10): error TS1003: Identifier expected.
 tests/cases/compiler/reservedWords2.ts(5,18): error TS1005: '=>' expected.
 tests/cases/compiler/reservedWords2.ts(6,1): error TS2304: Cannot find name 'module'.
@@ -27,11 +29,11 @@ tests/cases/compiler/reservedWords2.ts(9,6): error TS1181: Array element destruc
 tests/cases/compiler/reservedWords2.ts(9,14): error TS1005: ';' expected.
 tests/cases/compiler/reservedWords2.ts(9,18): error TS1005: '(' expected.
 tests/cases/compiler/reservedWords2.ts(9,20): error TS1128: Declaration or statement expected.
-tests/cases/compiler/reservedWords2.ts(10,5): error TS2300: Duplicate identifier '(Missing)'.
+tests/cases/compiler/reservedWords2.ts(10,5): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 tests/cases/compiler/reservedWords2.ts(10,6): error TS1003: Identifier expected.
 
 
-==== tests/cases/compiler/reservedWords2.ts (31 errors) ====
+==== tests/cases/compiler/reservedWords2.ts (33 errors) ====
     import while = require("dfdf");
            ~~~~~
 !!! error TS1109: Expression expected.
@@ -44,6 +46,8 @@ tests/cases/compiler/reservedWords2.ts(10,6): error TS1003: Identifier expected.
     import * as  while from "foo"
                
 !!! error TS2300: Duplicate identifier '(Missing)'.
+               
+!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
                  ~~~~~
 !!! error TS1003: Identifier expected.
                        ~~~~
@@ -61,6 +65,8 @@ tests/cases/compiler/reservedWords2.ts(10,6): error TS1003: Identifier expected.
     function throw() {}
             
 !!! error TS2300: Duplicate identifier '(Missing)'.
+            
+!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
              ~~~~~
 !!! error TS1003: Identifier expected.
                      ~
@@ -101,7 +107,7 @@ tests/cases/compiler/reservedWords2.ts(10,6): error TS1003: Identifier expected.
 !!! error TS1128: Declaration or statement expected.
     enum void {}
         
-!!! error TS2300: Duplicate identifier '(Missing)'.
+!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
          ~~~~
 !!! error TS1003: Identifier expected.
     

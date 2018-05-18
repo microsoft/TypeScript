@@ -1,7 +1,7 @@
-tests/cases/conformance/types/mapped/mappedTypeInferenceErrors.ts(9,5): error TS2345: Argument of type '{ props: { x: number; y: number; }; computed: { bar(): number; baz: number; }; }' is not assignable to parameter of type '{ props: { x: number; y: number; }; computed: ComputedOf<{ bar: any; baz: any; }>; } & ThisType<{ x: number; y: number; } & { bar: any; baz: any; }>'.
-  Type '{ props: { x: number; y: number; }; computed: { bar(): number; baz: number; }; }' is not assignable to type '{ props: { x: number; y: number; }; computed: ComputedOf<{ bar: any; baz: any; }>; }'.
+tests/cases/conformance/types/mapped/mappedTypeInferenceErrors.ts(9,5): error TS2345: Argument of type '{ props: { x: number; y: number; }; computed: { bar(): number; baz: number; }; }' is not assignable to parameter of type '{ props: { x: number; y: number; }; computed: ComputedOf<{ bar: number; baz: {}; }>; } & ThisType<{ x: number; y: number; } & { bar: number; baz: {}; }>'.
+  Type '{ props: { x: number; y: number; }; computed: { bar(): number; baz: number; }; }' is not assignable to type '{ props: { x: number; y: number; }; computed: ComputedOf<{ bar: number; baz: {}; }>; }'.
     Types of property 'computed' are incompatible.
-      Type '{ bar(): number; baz: number; }' is not assignable to type 'ComputedOf<{ bar: any; baz: any; }>'.
+      Type '{ bar(): number; baz: number; }' is not assignable to type 'ComputedOf<{ bar: number; baz: {}; }>'.
         Types of property 'baz' are incompatible.
           Type 'number' is not assignable to type '() => {}'.
 
@@ -35,10 +35,10 @@ tests/cases/conformance/types/mapped/mappedTypeInferenceErrors.ts(9,5): error TS
     ~~~~~
     });
     ~
-!!! error TS2345: Argument of type '{ props: { x: number; y: number; }; computed: { bar(): number; baz: number; }; }' is not assignable to parameter of type '{ props: { x: number; y: number; }; computed: ComputedOf<{ bar: any; baz: any; }>; } & ThisType<{ x: number; y: number; } & { bar: any; baz: any; }>'.
-!!! error TS2345:   Type '{ props: { x: number; y: number; }; computed: { bar(): number; baz: number; }; }' is not assignable to type '{ props: { x: number; y: number; }; computed: ComputedOf<{ bar: any; baz: any; }>; }'.
+!!! error TS2345: Argument of type '{ props: { x: number; y: number; }; computed: { bar(): number; baz: number; }; }' is not assignable to parameter of type '{ props: { x: number; y: number; }; computed: ComputedOf<{ bar: number; baz: {}; }>; } & ThisType<{ x: number; y: number; } & { bar: number; baz: {}; }>'.
+!!! error TS2345:   Type '{ props: { x: number; y: number; }; computed: { bar(): number; baz: number; }; }' is not assignable to type '{ props: { x: number; y: number; }; computed: ComputedOf<{ bar: number; baz: {}; }>; }'.
 !!! error TS2345:     Types of property 'computed' are incompatible.
-!!! error TS2345:       Type '{ bar(): number; baz: number; }' is not assignable to type 'ComputedOf<{ bar: any; baz: any; }>'.
+!!! error TS2345:       Type '{ bar(): number; baz: number; }' is not assignable to type 'ComputedOf<{ bar: number; baz: {}; }>'.
 !!! error TS2345:         Types of property 'baz' are incompatible.
 !!! error TS2345:           Type 'number' is not assignable to type '() => {}'.
     

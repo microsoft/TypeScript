@@ -4,6 +4,7 @@ class C1 extends C2 {
 >C2 : C2
 
     [Symbol.toStringTag]() {
+>[Symbol.toStringTag] : () => { x: string; }
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol

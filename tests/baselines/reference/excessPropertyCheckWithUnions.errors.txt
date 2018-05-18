@@ -13,17 +13,22 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(39,1): error TS2322: Type 
   Type '{ tag: "A"; }' is not assignable to type '{ tag: "C"; }'.
     Types of property 'tag' are incompatible.
       Type '"A"' is not assignable to type '"C"'.
-tests/cases/compiler/excessPropertyCheckWithUnions.ts(40,1): error TS2322: Type '{ tag: "A"; z: boolean; }' is not assignable to type 'Ambiguous'.
-  Type '{ tag: "A"; z: boolean; }' is not assignable to type '{ tag: "C"; }'.
+tests/cases/compiler/excessPropertyCheckWithUnions.ts(40,1): error TS2322: Type '{ tag: "A"; z: true; }' is not assignable to type 'Ambiguous'.
+  Type '{ tag: "A"; z: true; }' is not assignable to type '{ tag: "C"; }'.
     Types of property 'tag' are incompatible.
       Type '"A"' is not assignable to type '"C"'.
 tests/cases/compiler/excessPropertyCheckWithUnions.ts(49,35): error TS2322: Type '{ a: 1; b: 1; first: string; second: string; }' is not assignable to type 'Overlapping'.
   Object literal may only specify known properties, and 'second' does not exist in type '{ a: 1; b: 1; first: string; }'.
 tests/cases/compiler/excessPropertyCheckWithUnions.ts(50,35): error TS2322: Type '{ a: 1; b: 1; first: string; third: string; }' is not assignable to type 'Overlapping'.
   Object literal may only specify known properties, and 'third' does not exist in type '{ a: 1; b: 1; first: string; }'.
+tests/cases/compiler/excessPropertyCheckWithUnions.ts(66,9): error TS2322: Type '{ kind: "A"; n: { a: string; b: string; }; }' is not assignable to type 'AB'.
+  Type '{ kind: "A"; n: { a: string; b: string; }; }' is not assignable to type '{ kind: "A"; n: AN; }'.
+    Types of property 'n' are incompatible.
+      Type '{ a: string; b: string; }' is not assignable to type 'AN'.
+        Object literal may only specify known properties, and 'b' does not exist in type 'AN'.
 
 
-==== tests/cases/compiler/excessPropertyCheckWithUnions.ts (9 errors) ====
+==== tests/cases/compiler/excessPropertyCheckWithUnions.ts (10 errors) ====
     type ADT = {
         tag: "A",
         a1: string
@@ -86,8 +91,8 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(50,35): error TS2322: Type
 !!! error TS2322:       Type '"A"' is not assignable to type '"C"'.
     amb = { tag: "A", z: true }
     ~~~
-!!! error TS2322: Type '{ tag: "A"; z: boolean; }' is not assignable to type 'Ambiguous'.
-!!! error TS2322:   Type '{ tag: "A"; z: boolean; }' is not assignable to type '{ tag: "C"; }'.
+!!! error TS2322: Type '{ tag: "A"; z: true; }' is not assignable to type 'Ambiguous'.
+!!! error TS2322:   Type '{ tag: "A"; z: true; }' is not assignable to type '{ tag: "C"; }'.
 !!! error TS2322:     Types of property 'tag' are incompatible.
 !!! error TS2322:       Type '"A"' is not assignable to type '"C"'.
     
@@ -112,4 +117,29 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(50,35): error TS2322: Type
     declare let t1: { a: any, b: any, c: any } | { c: any, d: any, e: any }
     let t2 = { ...t1 }
     t0 = t2
+    
+    // Nested excess property checks work with discriminated unions
+    type AN = { a: string } | { c: string }
+    type BN = { b: string }
+    type AB = { kind: "A", n: AN } | { kind: "B", n: BN }
+    const abab: AB = {
+        kind: "A",
+        n: {
+            a: "a",
+            b: "b", // excess -- kind: "A"
+            ~~~~~~
+!!! error TS2322: Type '{ kind: "A"; n: { a: string; b: string; }; }' is not assignable to type 'AB'.
+!!! error TS2322:   Type '{ kind: "A"; n: { a: string; b: string; }; }' is not assignable to type '{ kind: "A"; n: AN; }'.
+!!! error TS2322:     Types of property 'n' are incompatible.
+!!! error TS2322:       Type '{ a: string; b: string; }' is not assignable to type 'AN'.
+!!! error TS2322:         Object literal may only specify known properties, and 'b' does not exist in type 'AN'.
+        }
+    }
+    const abac: AB = {
+        kind: "A",
+        n: {
+            a: "a",
+            c: "c", // ok -- kind: "A", an: { a: string } | { c: string }
+        }
+    }
     
