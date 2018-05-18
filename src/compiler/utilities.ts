@@ -3114,9 +3114,9 @@ namespace ts {
     }
 
     export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration> {
-        const tags = filter(getJSDocTags(node), isJSDocTemplateTag);
         // template tags are only available when a typedef isn't already using them
-        const tag = find(tags, tag => !(tag.parent.kind === SyntaxKind.JSDocComment && find(tag.parent.tags, isJSDocTypeAlias)));
+        const tag = find(getJSDocTags(node), (tag): tag is JSDocTemplateTag =>
+            isJSDocTemplateTag(tag) && !(tag.parent.kind === SyntaxKind.JSDocComment && tag.parent.tags!.some(isJSDocTypeAlias)));
         return (tag && tag.typeParameters) || emptyArray;
     }
 
