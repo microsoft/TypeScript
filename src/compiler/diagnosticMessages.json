@@ -4261,5 +4261,13 @@
     "Add missing typeof": {
         "category": "Message",
         "code": 95052
+    },
+    "Remove unused label": {
+        "category": "Message",
+        "code": 95053
+    },
+    "Remove all unused labels": {
+        "category": "Message",
+        "code": 95054
     }
 }
