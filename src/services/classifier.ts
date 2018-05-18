@@ -709,16 +709,17 @@ namespace ts {
                             break;
                         case SyntaxKind.JSDocTemplateTag:
                             processJSDocTemplateTag(<JSDocTemplateTag>tag);
+                            pos = tag.end;
                             break;
                         case SyntaxKind.JSDocTypeTag:
-                            processElement((<JSDocTypeTag>tag).typeExpression!);
+                            processElement((<JSDocTypeTag>tag).typeExpression);
+                            pos = tag.end;
                             break;
                         case SyntaxKind.JSDocReturnTag:
-                            processElement((<JSDocReturnTag>tag).typeExpression!);
+                            processElement((<JSDocReturnTag>tag).typeExpression);
+                            pos = tag.end;
                             break;
                     }
-
-                    pos = tag.end;
                 }
             }
 
@@ -939,7 +940,7 @@ namespace ts {
             }
         }
 
-        function processElement(element: Node) {
+        function processElement(element: Node | undefined) {
             if (!element) {
                 return;
             }

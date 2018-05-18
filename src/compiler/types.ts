@@ -413,9 +413,11 @@ namespace ts {
         JSDocVariadicType,
         JSDocComment,
         JSDocTypeLiteral,
+        JSDocSignature,
         JSDocTag,
         JSDocAugmentsTag,
         JSDocClassTag,
+        JSDocCallbackTag,
         JSDocParameterTag,
         JSDocReturnTag,
         JSDocTypeTag,
@@ -2053,7 +2055,7 @@ namespace ts {
 
     export type ObjectTypeDeclaration = ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
 
-    export type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag;
+    export type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag | JSDocTypedefTag | JSDocCallbackTag | JSDocSignature;
 
     export interface ClassLikeDeclarationBase extends NamedDeclaration, JSDocContainer {
         kind: SyntaxKind.ClassDeclaration | SyntaxKind.ClassExpression;
@@ -2385,6 +2387,21 @@ namespace ts {
         fullName?: JSDocNamespaceDeclaration | Identifier;
         name?: Identifier;
         typeExpression?: JSDocTypeExpression | JSDocTypeLiteral;
+    }
+
+    export interface JSDocCallbackTag extends JSDocTag, NamedDeclaration {
+        parent: JSDoc;
+        kind: SyntaxKind.JSDocCallbackTag;
+        fullName?: JSDocNamespaceDeclaration | Identifier;
+        name?: Identifier;
+        typeExpression: JSDocSignature;
+    }
+
+    export interface JSDocSignature extends JSDocType, Declaration {
+        kind: SyntaxKind.JSDocSignature;
+        typeParameters?: ReadonlyArray<JSDocTemplateTag>;
+        parameters: ReadonlyArray<JSDocParameterTag>;
+        type: JSDocReturnTag | undefined;
     }
 
     export interface JSDocPropertyLikeTag extends JSDocTag, Declaration {
@@ -3079,7 +3096,7 @@ namespace ts {
         WriteArrayAsGenericType                 = 1 << 1,   // Write Array<T> instead T[]
         GenerateNamesForShadowedTypeParams      = 1 << 2,   // When a type parameter T is shadowing another T, generate a name for it so it can still be referenced
         UseStructuralFallback                   = 1 << 3,   // When an alias cannot be named by its symbol, rather than report an error, fallback to a structural printout if possible
-        // empty space
+        ForbidIndexedAccessSymbolReferences     = 1 << 4,   // Forbid references like `I["a"]["b"]` - print `typeof I.a<x>.b<y>` instead
         WriteTypeArgumentsOfSignature           = 1 << 5,   // Write the type arguments instead of type parameters of the signature
         UseFullyQualifiedType                   = 1 << 6,   // Write out the fully qualified type name (eg. Module.Type, instead of Type)
         UseOnlyExternalAliasing                 = 1 << 7,   // Only use external aliases for a symbol
@@ -3678,6 +3695,8 @@ namespace ts {
         ContainsAnyFunctionType = 1 << 26,  // Type is or contains the anyFunctionType
         NonPrimitive            = 1 << 27,  // intrinsic object type
         /* @internal */
+        UnionOfUnitTypes        = 1 << 28,  // Type is union of unit types
+        /* @internal */
         GenericMappedType       = 1 << 29,  // Flag used by maybeTypeOfKind
 
         /* @internal */
@@ -3714,6 +3733,8 @@ namespace ts {
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | StructuredOrInstantiable | StringLike | NumberLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
         NotUnionOrUnit = Any | ESSymbol | Object | NonPrimitive,
+        /* @internal */
+        NotUnit = Any | String | Number | Boolean | Enum | ESSymbol | Void | Never | StructuredOrInstantiable,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
         /* @internal */
@@ -4035,7 +4056,7 @@ namespace ts {
     }
 
     export interface Signature {
-        declaration?: SignatureDeclaration; // Originating declaration
+        declaration?: SignatureDeclaration | JSDocSignature; // Originating declaration
         typeParameters?: TypeParameter[];   // Type parameters (undefined if non-generic)
         parameters: Symbol[];               // Parameters
         /* @internal */
@@ -5247,6 +5268,13 @@ namespace ts {
         isAtStartOfLine(): boolean;
     }
 
+    /* @internal */
+    export interface ModuleNameResolverHost {
+        getCanonicalFileName(f: string): string;
+        getCommonSourceDirectory(): string;
+        getCurrentDirectory(): string;
+    }
+
     /** @deprecated See comment on SymbolWriter */
     // Note: this has non-deprecated internal uses.
     export interface SymbolTracker {
@@ -5257,6 +5285,10 @@ namespace ts {
         reportInaccessibleThisError?(): void;
         reportPrivateInBaseOfClassExpression?(propertyName: string): void;
         reportInaccessibleUniqueSymbolError?(): void;
+        /* @internal */
+        moduleResolverHost?: ModuleNameResolverHost;
+        /* @internal */
+        trackReferencedAmbientModule?(decl: ModuleDeclaration): void;
     }
 
     export interface TextSpan {

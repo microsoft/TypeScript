@@ -278,7 +278,7 @@ namespace ts {
     }
 
     export function getContainerNode(node: Node): Declaration | undefined {
-        if (node.kind === SyntaxKind.JSDocTypedefTag) {
+        if (isJSDocTypeAlias(node)) {
             // This doesn't just apply to the node immediately under the comment, but to everything in its parent's scope.
             // node.parent = the JSDoc comment, node.parent.parent = the node having the comment.
             // Then we get parent again in the loop.
@@ -317,7 +317,10 @@ namespace ts {
             case SyntaxKind.ClassExpression:
                 return ScriptElementKind.classElement;
             case SyntaxKind.InterfaceDeclaration: return ScriptElementKind.interfaceElement;
-            case SyntaxKind.TypeAliasDeclaration: return ScriptElementKind.typeElement;
+            case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.JSDocCallbackTag:
+            case SyntaxKind.JSDocTypedefTag:
+                return ScriptElementKind.typeElement;
             case SyntaxKind.EnumDeclaration: return ScriptElementKind.enumElement;
             case SyntaxKind.VariableDeclaration:
                 return getKindOfVariableDeclaration(<VariableDeclaration>node);
@@ -348,8 +351,6 @@ namespace ts {
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.NamespaceImport:
                 return ScriptElementKind.alias;
-            case SyntaxKind.JSDocTypedefTag:
-                return ScriptElementKind.typeElement;
             case SyntaxKind.BinaryExpression:
                 const kind = getSpecialPropertyAssignmentKind(node as BinaryExpression);
                 const { right } = node as BinaryExpression;
@@ -416,6 +417,10 @@ namespace ts {
 
     export function rangeContainsRange(r1: TextRange, r2: TextRange): boolean {
         return startEndContainsRange(r1.pos, r1.end, r2);
+    }
+
+    export function rangeContainsPosition(r: TextRange, pos: number): boolean {
+        return r.pos <= pos && pos <= r.end;
     }
 
     export function startEndContainsRange(start: number, end: number, range: TextRange): boolean {
@@ -1279,6 +1284,23 @@ namespace ts {
             return (propSymbol as TransientSymbol).target;
         }
         return propSymbol;
+    }
+
+    export class NodeSet {
+        private map = createMap<Node>();
+
+        add(node: Node): void {
+            this.map.set(String(getNodeId(node)), node);
+        }
+        has(node: Node): boolean {
+            return this.map.has(String(getNodeId(node)));
+        }
+        forEach(cb: (node: Node) => void): void {
+            this.map.forEach(cb);
+        }
+        some(pred: (node: Node) => boolean): boolean {
+            return forEachEntry(this.map, pred) || false;
+        }
     }
 }
 

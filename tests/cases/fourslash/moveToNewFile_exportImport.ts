@@ -9,14 +9,12 @@
 verify.moveToNewFile({
     newFileContents: {
         "/a.ts":
-`import { M } from "./M";
-
-export namespace N { export const x = 0; }
+`export namespace N { export const x = 0; }
+import M = N;
 M;`,
 
-        "/M.ts":
+        "/O.ts":
 `import { N } from "./a";
-export import M = N;
 export import O = N;`,
     },
 });

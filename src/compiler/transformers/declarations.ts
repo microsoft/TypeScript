@@ -37,20 +37,23 @@ namespace ts {
         let lateStatementReplacementMap: Map<VisitResult<LateVisibilityPaintedStatement>>;
         let suppressNewDiagnosticContexts: boolean;
 
+        const host = context.getEmitHost();
         const symbolTracker: SymbolTracker = {
             trackSymbol,
             reportInaccessibleThisError,
             reportInaccessibleUniqueSymbolError,
-            reportPrivateInBaseOfClassExpression
+            reportPrivateInBaseOfClassExpression,
+            moduleResolverHost: host,
+            trackReferencedAmbientModule,
         };
         let errorNameNode: DeclarationName | undefined;
 
         let currentSourceFile: SourceFile;
+        let refs: Map<SourceFile>;
         const resolver = context.getEmitResolver();
         const options = context.getCompilerOptions();
         const newLine = getNewLineCharacter(options);
         const { noResolve, stripInternal } = options;
-        const host = context.getEmitHost();
         return transformRoot;
 
         function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: string[] | undefined): void {
@@ -61,6 +64,11 @@ namespace ts {
             for (const ref of typeReferenceDirectives) {
                 necessaryTypeRefernces.set(ref, true);
             }
+        }
+
+        function trackReferencedAmbientModule(node: ModuleDeclaration) {
+            const container = getSourceFileOfNode(node);
+            refs.set("" + getOriginalNodeId(container), container);
         }
 
         function handleSymbolAccessibilityError(symbolAccessibilityResult: SymbolAccessibilityResult) {
@@ -197,13 +205,13 @@ namespace ts {
             lateMarkedStatements = undefined;
             lateStatementReplacementMap = createMap();
             necessaryTypeRefernces = undefined;
-            const refs = collectReferences(currentSourceFile, createMap());
+            refs = collectReferences(currentSourceFile, createMap());
             const references: FileReference[] = [];
             const outputFilePath = getDirectoryPath(normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath!));
             const referenceVisitor = mapReferencesIntoArray(references, outputFilePath);
-            refs.forEach(referenceVisitor);
             const statements = visitNodes(node.statements, visitDeclarationStatements);
             let combinedStatements = setTextRange(createNodeArray(transformAndReplaceLatePaintedStatements(statements)), node.statements);
+            refs.forEach(referenceVisitor);
             const emittedImports = filter(combinedStatements, isAnyImportSyntax);
             if (isExternalModule(node) && (!resultHasExternalModuleIndicator || (needsScopeFixMarker && !resultHasScopeMarker))) {
                 combinedStatements = setTextRange(createNodeArray([...combinedStatements, createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createNamedExports([]), /*moduleSpecifier*/ undefined)]), combinedStatements);
@@ -217,15 +225,17 @@ namespace ts {
 
             function getFileReferenceForTypeName(typeName: string): FileReference | undefined {
                 // Elide type references for which we have imports
-                for (const importStatement of emittedImports) {
-                    if (isImportEqualsDeclaration(importStatement) && isExternalModuleReference(importStatement.moduleReference)) {
-                        const expr = importStatement.moduleReference.expression;
-                        if (isStringLiteralLike(expr) && expr.text === typeName) {
+                if (emittedImports) {
+                    for (const importStatement of emittedImports) {
+                        if (isImportEqualsDeclaration(importStatement) && isExternalModuleReference(importStatement.moduleReference)) {
+                            const expr = importStatement.moduleReference.expression;
+                            if (isStringLiteralLike(expr) && expr.text === typeName) {
+                                return undefined;
+                            }
+                        }
+                        else if (isImportDeclaration(importStatement) && isStringLiteral(importStatement.moduleSpecifier) && importStatement.moduleSpecifier.text === typeName) {
                             return undefined;
                         }
-                    }
-                    else if (isImportDeclaration(importStatement) && isStringLiteral(importStatement.moduleSpecifier) && importStatement.moduleSpecifier.text === typeName) {
-                        return undefined;
                     }
                 }
                 return { fileName: typeName, pos: -1, end: -1 };

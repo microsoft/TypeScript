@@ -73,19 +73,6 @@ namespace ts.codefix {
 
     // Calls 'cb' with the start and end of each range where 'pred' is true.
     function split<T>(arr: ReadonlyArray<T>, pred: (t: T) => boolean, cb: (start: T, end: T) => void): void {
-        let start: T | undefined;
-        for (let i = 0; i < arr.length; i++) {
-            const value = arr[i];
-            if (pred(value)) {
-                start = start || value;
-            }
-            else {
-                if (start) {
-                    cb(start, arr[i - 1]);
-                    start = undefined;
-                }
-            }
-        }
-        if (start) cb(start, arr[arr.length - 1]);
+        getRangesWhere(arr, pred, (start, afterEnd) => cb(arr[start], arr[afterEnd - 1]));
     }
 }

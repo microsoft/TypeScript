@@ -1931,12 +1931,10 @@ namespace ts {
         }
 
         function scanJSDocToken(): JsDocSyntaxKind {
+            startPos = tokenPos = pos;
             if (pos >= end) {
                 return token = SyntaxKind.EndOfFileToken;
             }
-
-            startPos = pos;
-            tokenPos = pos;
 
             const ch = text.charCodeAt(pos);
             pos++;

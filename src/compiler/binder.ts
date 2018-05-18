@@ -118,7 +118,7 @@ namespace ts {
         let thisParentContainer: Node; // Container one level up
         let blockScopeContainer: Node;
         let lastContainer: Node;
-        let delayedTypedefs: { typedef: JSDocTypedefTag, container: Node, lastContainer: Node, blockScopeContainer: Node, parent: Node }[];
+        let delayedTypeAliases: (JSDocTypedefTag | JSDocCallbackTag)[];
         let seenThisKeyword: boolean;
 
         // state used by control flow analysis
@@ -188,7 +188,7 @@ namespace ts {
             thisParentContainer = undefined!;
             blockScopeContainer = undefined!;
             lastContainer = undefined!;
-            delayedTypedefs = undefined!;
+            delayedTypeAliases = undefined!;
             seenThisKeyword = false;
             currentFlow = undefined!;
             currentBreakTarget = undefined;
@@ -273,6 +273,7 @@ namespace ts {
                     return InternalSymbolName.Constructor;
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.CallSignature:
+                case SyntaxKind.JSDocSignature:
                     return InternalSymbolName.Call;
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.ConstructSignature:
@@ -301,9 +302,6 @@ namespace ts {
                     const functionType = <JSDocFunctionType>node.parent;
                     const index = functionType.parameters.indexOf(node as ParameterDeclaration);
                     return "arg" + index as __String;
-                case SyntaxKind.JSDocTypedefTag:
-                    const name = getNameOfJSDocTypedef(node as JSDocTypedefTag);
-                    return typeof name !== "undefined" ? name.escapedText : undefined;
             }
         }
 
@@ -456,8 +454,8 @@ namespace ts {
                 //       during global merging in the checker. Why? The only case when ambient module is permitted inside another module is module augmentation
                 //       and this case is specially handled. Module augmentations should only be merged with original module definition
                 //       and should never be merged directly with other augmentation, and the latter case would be possible if automatic merge is allowed.
-                if (node.kind === SyntaxKind.JSDocTypedefTag) Debug.assert(isInJavaScriptFile(node)); // We shouldn't add symbols for JSDoc nodes if not in a JS file.
-                if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) || isJSDocTypedefTag(node)) {
+                if (isJSDocTypeAlias(node)) Debug.assert(isInJavaScriptFile(node)); // We shouldn't add symbols for JSDoc nodes if not in a JS file.
+                if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) || isJSDocTypeAlias(node)) {
                     if (hasModifier(node, ModifierFlags.Default) && !getDeclarationName(node)) {
                         return declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes); // No local symbol for an unnamed default!
                     }
@@ -629,22 +627,6 @@ namespace ts {
         }
 
         function bindChildrenWorker(node: Node): void {
-            // Binding of JsDocComment should be done before the current block scope container changes.
-            // because the scope of JsDocComment should not be affected by whether the current node is a
-            // container or not.
-            if (hasJSDocNodes(node)) {
-                if (isInJavaScriptFile(node)) {
-                    for (const j of node.jsDoc!) {
-                        bind(j);
-                    }
-                }
-                else {
-                    for (const j of node.jsDoc!) {
-                        setParentPointers(node, j);
-                    }
-                }
-            }
-
             if (checkUnreachable(node)) {
                 bindEachChild(node);
                 return;
@@ -710,11 +692,9 @@ namespace ts {
                 case SyntaxKind.CallExpression:
                     bindCallExpressionFlow(<CallExpression>node);
                     break;
-                case SyntaxKind.JSDocComment:
-                    bindJSDocComment(<JSDoc>node);
-                    break;
                 case SyntaxKind.JSDocTypedefTag:
-                    bindJSDocTypedefTag(<JSDocTypedefTag>node);
+                case SyntaxKind.JSDocCallbackTag:
+                    bindJSDocTypeAlias(node as JSDocTypedefTag | JSDocCallbackTag);
                     break;
                 // In source files and blocks, bind functions first to match hoisting that occurs at runtime
                 case SyntaxKind.SourceFile:
@@ -729,6 +709,7 @@ namespace ts {
                     bindEachChild(node);
                     break;
             }
+            bindJSDoc(node);
         }
 
         function isNarrowingExpression(expr: Expression): boolean {
@@ -1381,24 +1362,10 @@ namespace ts {
             }
         }
 
-        function bindJSDocComment(node: JSDoc) {
-            forEachChild(node, n => {
-                if (n.kind !== SyntaxKind.JSDocTypedefTag) {
-                    bind(n);
-                }
-            });
-        }
-
-        function bindJSDocTypedefTag(node: JSDocTypedefTag) {
-            forEachChild(node, n => {
-                // if the node has a fullName "A.B.C", that means symbol "C" was already bound
-                // when we visit "fullName"; so when we visit the name "C" as the next child of
-                // the jsDocTypedefTag, we should skip binding it.
-                if (node.fullName && n === node.name && node.fullName.kind !== SyntaxKind.Identifier) {
-                    return;
-                }
-                bind(n);
-            });
+        function bindJSDocTypeAlias(node: JSDocTypedefTag | JSDocCallbackTag) {
+            if (node.fullName) {
+                setParentPointers(node, node.fullName);
+            }
         }
 
         function bindCallExpressionFlow(node: CallExpression) {
@@ -1458,6 +1425,7 @@ namespace ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.CallSignature:
+                case SyntaxKind.JSDocSignature:
                 case SyntaxKind.JSDocFunctionType:
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructSignature:
@@ -1547,6 +1515,7 @@ namespace ts {
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
+                case SyntaxKind.JSDocSignature:
                 case SyntaxKind.IndexSignature:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
@@ -1557,6 +1526,8 @@ namespace ts {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.JSDocFunctionType:
+                case SyntaxKind.JSDocTypedefTag:
+                case SyntaxKind.JSDocCallbackTag:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.MappedType:
                     // All the children of these container types are never visible through another
@@ -1652,7 +1623,7 @@ namespace ts {
             return state;
         }
 
-        function bindFunctionOrConstructorType(node: SignatureDeclaration): void {
+        function bindFunctionOrConstructorType(node: SignatureDeclaration | JSDocSignature): void {
             // For a given function symbol "<...>(...) => T" we want to generate a symbol identical
             // to the one we would get for: { <...>(...): T }
             //
@@ -1754,21 +1725,34 @@ namespace ts {
         }
 
         function delayedBindJSDocTypedefTag() {
-            if (!delayedTypedefs) {
+            if (!delayedTypeAliases) {
                 return;
             }
             const saveContainer = container;
             const saveLastContainer = lastContainer;
             const saveBlockScopeContainer = blockScopeContainer;
             const saveParent = parent;
-            for (const delay of delayedTypedefs) {
-                ({ container, lastContainer, blockScopeContainer, parent } = delay);
-                bindBlockScopedDeclaration(delay.typedef, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+            const saveCurrentFlow = currentFlow;
+            for (const typeAlias of delayedTypeAliases) {
+                const host = getJSDocHost(typeAlias)!; // TODO: GH#18217
+                container = findAncestor(host.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer)) || file;
+                blockScopeContainer = getEnclosingBlockScopeContainer(host) || file;
+                currentFlow = { flags: FlowFlags.Start };
+                parent = typeAlias;
+                bind(typeAlias.typeExpression);
+                if (!typeAlias.fullName || typeAlias.fullName.kind === SyntaxKind.Identifier) {
+                    parent = typeAlias.parent;
+                    bindBlockScopedDeclaration(typeAlias, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                }
+                else {
+                    bind(typeAlias.fullName);
+                }
             }
             container = saveContainer;
             lastContainer = saveLastContainer;
             blockScopeContainer = saveBlockScopeContainer;
             parent = saveParent;
+            currentFlow = saveCurrentFlow;
         }
 
         // The binder visits every node in the syntax tree so it is a convenient place to perform a single localized
@@ -1948,7 +1932,6 @@ namespace ts {
             // Here the current node is "foo", which is a container, but the scope of "MyType" should
             // not be inside "foo". Therefore we always bind @typedef before bind the parent node,
             // and skip binding this tag later when binding all the other jsdoc tags.
-            if (isInJavaScriptFile(node)) bindJSDocTypedefTagIfAny(node);
 
             // First we bind declaration nodes to a symbol if possible. We'll both create a symbol
             // and then potentially add the symbol to an appropriate symbol table. Possible
@@ -1980,26 +1963,21 @@ namespace ts {
             }
             else if (!skipTransformFlagAggregation && (node.transformFlags & TransformFlags.HasComputedFlags) === 0) {
                 subtreeTransformFlags |= computeTransformFlagsForNode(node, 0);
+                bindJSDoc(node);
             }
             inStrictMode = saveInStrictMode;
         }
 
-        function bindJSDocTypedefTagIfAny(node: Node) {
-            if (!hasJSDocNodes(node)) {
-                return;
-            }
-
-            for (const jsDoc of node.jsDoc!) {
-                if (!jsDoc.tags) {
-                    continue;
+        function bindJSDoc(node: Node) {
+            if (hasJSDocNodes(node)) {
+                if (isInJavaScriptFile(node)) {
+                    for (const j of node.jsDoc!) {
+                        bind(j);
+                    }
                 }
-
-                for (const tag of jsDoc.tags) {
-                    if (tag.kind === SyntaxKind.JSDocTypedefTag) {
-                        const savedParent = parent;
-                        parent = jsDoc;
-                        bind(tag);
-                        parent = savedParent;
+                else {
+                    for (const j of node.jsDoc!) {
+                        setParentPointers(node, j);
                     }
                 }
             }
@@ -2038,10 +2016,10 @@ namespace ts {
                     // current "blockScopeContainer" needs to be set to its immediate namespace parent.
                     if ((<Identifier>node).isInJSDocNamespace) {
                         let parentNode = node.parent;
-                        while (parentNode && parentNode.kind !== SyntaxKind.JSDocTypedefTag) {
+                        while (parentNode && !isJSDocTypeAlias(parentNode)) {
                             parentNode = parentNode.parent;
                         }
-                        bindBlockScopedDeclaration(<Declaration>parentNode, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                        bindBlockScopedDeclaration(parentNode as Declaration, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
                         break;
                     }
                 // falls through
@@ -2143,8 +2121,9 @@ namespace ts {
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.SetAccessor, SymbolFlags.SetAccessorExcludes);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.JSDocFunctionType:
+                case SyntaxKind.JSDocSignature:
                 case SyntaxKind.ConstructorType:
-                    return bindFunctionOrConstructorType(<SignatureDeclaration>node);
+                    return bindFunctionOrConstructorType(<SignatureDeclaration | JSDocSignature>node);
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.MappedType:
@@ -2207,6 +2186,9 @@ namespace ts {
                     return updateStrictModeStatementList((<Block | ModuleBlock>node).statements);
 
                 case SyntaxKind.JSDocParameterTag:
+                    if (node.parent.kind === SyntaxKind.JSDocSignature) {
+                        return bindParameter(node as JSDocParameterTag);
+                    }
                     if (node.parent.kind !== SyntaxKind.JSDocTypeLiteral) {
                         break;
                     }
@@ -2217,13 +2199,9 @@ namespace ts {
                         SymbolFlags.Property | SymbolFlags.Optional :
                         SymbolFlags.Property;
                     return declareSymbolAndAddToSymbolTable(propTag, flags, SymbolFlags.PropertyExcludes);
-                case SyntaxKind.JSDocTypedefTag: {
-                    const { fullName } = node as JSDocTypedefTag;
-                    if (!fullName || fullName.kind === SyntaxKind.Identifier) {
-                        (delayedTypedefs || (delayedTypedefs = [])).push({ typedef: node as JSDocTypedefTag, container, lastContainer, blockScopeContainer, parent });
-                    }
-                    break;
-                }
+                case SyntaxKind.JSDocTypedefTag:
+                case SyntaxKind.JSDocCallbackTag:
+                    return (delayedTypeAliases || (delayedTypeAliases = [])).push(node as JSDocTypedefTag | JSDocCallbackTag);
             }
         }
 
@@ -2624,7 +2602,10 @@ namespace ts {
             }
         }
 
-        function bindParameter(node: ParameterDeclaration) {
+        function bindParameter(node: ParameterDeclaration | JSDocParameterTag) {
+            if (node.kind === SyntaxKind.JSDocParameterTag && container.kind !== SyntaxKind.JSDocSignature) {
+                return;
+            }
             if (inStrictMode && !(node.flags & NodeFlags.Ambient)) {
                 // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a
                 // strict mode FunctionLikeDeclaration or FunctionExpression(13.1)
@@ -2632,7 +2613,7 @@ namespace ts {
             }
 
             if (isBindingPattern(node.name)) {
-                bindAnonymousDeclaration(node, SymbolFlags.FunctionScopedVariable, "__" + node.parent.parameters.indexOf(node) as __String);
+                bindAnonymousDeclaration(node, SymbolFlags.FunctionScopedVariable, "__" + (node as ParameterDeclaration).parent.parameters.indexOf(node as ParameterDeclaration) as __String);
             }
             else {
                 declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes);
@@ -2692,18 +2673,24 @@ namespace ts {
         }
 
         function getInferTypeContainer(node: Node): ConditionalTypeNode | undefined {
-            while (node) {
-                const parent = node.parent;
-                if (parent && parent.kind === SyntaxKind.ConditionalType && (<ConditionalTypeNode>parent).extendsType === node) {
-                    return <ConditionalTypeNode>parent;
-                }
-                node = parent;
-            }
-            return undefined;
+            const extendsType = findAncestor(node, n => n.parent && isConditionalTypeNode(n.parent) && n.parent.extendsType === n);
+            return extendsType && extendsType.parent as ConditionalTypeNode;
         }
 
         function bindTypeParameter(node: TypeParameterDeclaration) {
-            if (node.parent.kind === SyntaxKind.InferType) {
+            if (isJSDocTemplateTag(node.parent)) {
+                const container = find((node.parent.parent as JSDoc).tags!, isJSDocTypeAlias) || getHostSignatureFromJSDoc(node.parent); // TODO: GH#18217
+                if (container) {
+                    if (!container.locals) {
+                        container.locals = createSymbolTable();
+                    }
+                    declareSymbol(container.locals, /*parent*/ undefined, node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
+                }
+                else {
+                    declareSymbolAndAddToSymbolTable(node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
+                }
+            }
+            else if (node.parent.kind === SyntaxKind.InferType) {
                 const container = getInferTypeContainer(node.parent);
                 if (container) {
                     if (!container.locals) {
@@ -3806,6 +3793,6 @@ namespace ts {
      */
     function setParentPointers(parent: Node, child: Node): void {
         child.parent = parent;
-        forEachChild(child, (childsChild) => setParentPointers(child, childsChild));
+        forEachChild(child, grandchild => setParentPointers(child, grandchild));
     }
 }
