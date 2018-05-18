@@ -6,6 +6,7 @@ namespace ts {
         finishRecordingFilesWithChangedResolutions(): Path[];
 
         resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined): ResolvedModuleFull[];
+        getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations;
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
 
         invalidateResolutionOfFile(filePath: Path): void;
@@ -73,7 +74,7 @@ namespace ts {
     export const maxNumberOfFilesToIterateForInvalidation = 256;
 
     type GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocations = ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName = ResolutionWithResolvedFileName> =
-        (resolution: T) => R;
+        (resolution: T) => R | undefined;
 
     export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootDirForResolution: string, logChangesWhenResolvingModule: boolean): ResolutionCache {
         let filesWithChangedSetOfUnresolvedImports: Path[] | undefined;
@@ -124,6 +125,7 @@ namespace ts {
             startCachingPerDirectoryResolution: clearPerDirectoryResolutions,
             finishCachingPerDirectoryResolution,
             resolveModuleNames,
+            getResolvedModuleWithFailedLookupLocationsFromCache,
             resolveTypeReferenceDirectives,
             removeResolutionsOfFile,
             invalidateResolutionOfFile,
@@ -320,7 +322,7 @@ namespace ts {
         }
 
         function resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[] {
-            return resolveNamesWithLocalCache(
+            return resolveNamesWithLocalCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations, ResolvedTypeReferenceDirective>(
                 typeDirectiveNames, containingFile,
                 resolvedTypeReferenceDirectives, perDirectoryResolvedTypeReferenceDirectives,
                 resolveTypeReferenceDirective, getResolvedTypeReferenceDirective,
@@ -329,12 +331,17 @@ namespace ts {
         }
 
         function resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined): ResolvedModuleFull[] {
-            return resolveNamesWithLocalCache(
+            return resolveNamesWithLocalCache<ResolvedModuleWithFailedLookupLocations, ResolvedModuleFull>(
                 moduleNames, containingFile,
                 resolvedModuleNames, perDirectoryResolvedModuleNames,
                 resolveModuleName, getResolvedModule,
                 reusedNames, logChangesWhenResolvingModule
             );
+        }
+
+        function getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined {
+            const cache = resolvedModuleNames.get(resolutionHost.toPath(containingFile));
+            return cache && cache.get(moduleName);
         }
 
         function isNodeModulesDirectory(dirPath: Path) {
