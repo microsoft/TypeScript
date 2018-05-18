@@ -1531,12 +1531,40 @@ namespace ts {
         return getSourceTextOfNodeFromSourceFile(sourceFile, str).charCodeAt(0) === CharacterCodes.doubleQuote;
     }
 
-    export function getHorribleJavascriptInitializer(node: Node) {
-        return getAssignedJavascriptInitializer(node) ||
-            node.parent && (getDeclaredJavascriptInitializer(node.parent) || getAssignedJavascriptInitializer(node.parent)) ||
-            node.parent.parent && getDeclaredJavascriptInitializer(node.parent.parent);
+    export function getDeclarationOfJavascriptInitializer(node: Node): Node | undefined {
+        // TODO: Callers already know which category of initializer they fall into, and some are trivially valid, so this check is kind of pointless
+        const isPrototypeAssignment = isAssignment(node.parent) && isPrototypeAccess(node.parent.left) || isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.BarBarToken && isAssignment(node.parent.parent) && isPrototypeAccess(node.parent.parent.left);
+        if (!getJavascriptInitializer(node, isPrototypeAssignment)) {
+            return undefined;
+        }
+        if (isAssignment(node.parent) || isVariableDeclaration(node.parent)) {
+            // TODO: Maybe also verify that node is the rhs of node.parent?
+            return node.parent;
+        }
+        if (isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.BarBarToken && isSameDefaultedName(node.parent.parent, node.parent.left)) {
+                return node.parent.parent;
+        }
     }
 
+    function isAssignment(node: Node): node is BinaryExpression {
+        return isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.EqualsToken;
+    }
+
+    function isSameDefaultedName(declaration: Node, initializer: Expression) {
+        let name: EntityNameExpression;
+        if (isAssignment(declaration) && isIdentifier(declaration.left)) {
+            name = declaration.left;
+        }
+        else if (isVariableDeclaration(declaration) && isIdentifier(declaration.name)) {
+            name = declaration.name;
+        }
+        else {
+            return false;
+        }
+        return isEntityNameExpression(initializer) && isSameEntityName(name, initializer);
+    }
+
+    // TODO: Remaining calls to this are probably errors
     /** Get the declaration initializer, when the initializer is container-like (See getJavascriptInitializer) */
     export function getDeclaredJavascriptInitializer(node: Node) {
         if (node && isVariableDeclaration(node) && node.initializer) {
@@ -1545,6 +1573,7 @@ namespace ts {
         }
     }
 
+    // TODO: Remaining calls to this are probably errors
     /**
      * Get the assignment 'initializer' -- the righthand side-- when the initializer is container-like (See getJavascriptInitializer).
      * We treat the right hand side of assignments with container-like initalizers as declarations.
