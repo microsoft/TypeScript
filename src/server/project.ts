@@ -7,8 +7,11 @@ namespace ts.server {
     }
 
     /* @internal */
+    export type Mutable<T> = { -readonly [K in keyof T]: T[K]; };
+
+    /* @internal */
     export function countEachFileTypes(infos: ScriptInfo[]): FileStats {
-        const result = { js: 0, jsx: 0, ts: 0, tsx: 0, dts: 0 };
+        const result: Mutable<FileStats> = { js: 0, jsx: 0, ts: 0, tsx: 0, dts: 0, deferred: 0 };
         for (const info of infos) {
             switch (info.scriptKind) {
                 case ScriptKind.JS:
@@ -24,6 +27,9 @@ namespace ts.server {
                     break;
                 case ScriptKind.TSX:
                     result.tsx += 1;
+                    break;
+                case ScriptKind.Deferred:
+                    result.deferred += 1;
                     break;
             }
         }
@@ -164,7 +170,7 @@ namespace ts.server {
             return hasOneOrMoreJsAndNoTsFiles(this);
         }
 
-        public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} {
+        public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} | undefined {
             const resolvedPath = normalizeSlashes(host.resolvePath(combinePaths(initialDir, "node_modules")));
             log(`Loading ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
             const result = host.require(resolvedPath, moduleName);
@@ -207,7 +213,7 @@ namespace ts.server {
                 this.compilerOptions.allowNonTsExtensions = true;
                 this.compilerOptions.allowJs = true;
             }
-            else if (hasExplicitListOfFiles || this.compilerOptions.allowJs) {
+            else if (hasExplicitListOfFiles || this.compilerOptions.allowJs || this.projectService.hasDeferredExtension()) {
                 // If files are listed explicitly or allowJs is specified, allow all extensions
                 this.compilerOptions.allowNonTsExtensions = true;
             }
@@ -263,6 +269,10 @@ namespace ts.server {
 
         getProjectVersion() {
             return this.projectStateVersion.toString();
+        }
+
+        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined {
+            return undefined;
         }
 
         getScriptFileNames() {
@@ -591,6 +601,11 @@ namespace ts.server {
             return this.rootFiles && this.rootFiles.length > 0;
         }
 
+        /*@internal*/
+        isOrphan() {
+            return false;
+        }
+
         getRootFiles() {
             return this.rootFiles && this.rootFiles.map(info => info.fileName);
         }
@@ -834,6 +849,10 @@ namespace ts.server {
 
         /*@internal*/
         updateTypingFiles(typingFiles: SortedReadonlyArray<string>) {
+            enumerateInsertsAndDeletes(typingFiles, this.typingFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
+                /*inserted*/ noop,
+                removed => this.detachScriptInfoFromProject(removed)
+            );
             this.typingFiles = typingFiles;
             // Invalidate files with unresolved imports
             this.resolutionCache.setFilesWithInvalidatedNonRelativeUnresolvedImports(this.cachedUnresolvedImportsPerFile);
@@ -894,7 +913,7 @@ namespace ts.server {
 
             const oldExternalFiles = this.externalFiles || emptyArray as SortedReadonlyArray<string>;
             this.externalFiles = this.getExternalFiles();
-            enumerateInsertsAndDeletes(this.externalFiles, oldExternalFiles, compareStringsCaseSensitive,
+            enumerateInsertsAndDeletes(this.externalFiles, oldExternalFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
                 // Ensure a ScriptInfo is created for new external files. This is performed indirectly
                 // by the LSHost for files in the program when the program is retrieved above but
                 // the program doesn't contain external files so this must be done explicitly.
@@ -945,7 +964,7 @@ namespace ts.server {
             return this.missingFilesMap && this.missingFilesMap.has(path);
         }
 
-        getScriptInfoForNormalizedPath(fileName: NormalizedPath) {
+        getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo | undefined {
             const scriptInfo = this.projectService.getScriptInfoForPath(this.toPath(fileName));
             if (scriptInfo && !scriptInfo.isAttached(this)) {
                 return Errors.ThrowProjectDoesNotContainDocument(fileName, this);
@@ -1083,14 +1102,19 @@ namespace ts.server {
                 this.projectService.logger.info(message);
             };
 
-            for (const searchPath of searchPaths) {
-                const resolvedModule = <PluginModuleFactory>Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log);
-                if (resolvedModule) {
-                    this.enableProxy(resolvedModule, pluginConfigEntry);
-                    return;
-                }
+            const resolvedModule = firstDefined(searchPaths, searchPath =>
+                <PluginModuleFactory | undefined>Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log));
+            if (resolvedModule) {
+                this.enableProxy(resolvedModule, pluginConfigEntry);
             }
-            this.projectService.logger.info(`Couldn't find ${pluginConfigEntry.name}`);
+            else {
+                this.projectService.logger.info(`Couldn't find ${pluginConfigEntry.name}`);
+            }
+        }
+
+        /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
+        refreshDiagnostics() {
+            this.projectService.sendProjectsUpdatedInBackgroundEvent();
         }
 
         private enableProxy(pluginModuleFactory: PluginModuleFactory, configEntry: PluginImport) {
@@ -1170,6 +1194,10 @@ namespace ts.server {
         readonly projectRootPath: string | undefined;
 
         /*@internal*/
+        /** stored only if their is no projectRootPath and this isnt single inferred project */
+        readonly canonicalCurrentDirectory: string | undefined;
+
+        /*@internal*/
         constructor(
             projectService: ProjectService,
             documentRegistry: DocumentRegistry,
@@ -1187,12 +1215,15 @@ namespace ts.server {
                 projectService.host,
                 currentDirectory);
             this.projectRootPath = projectRootPath && projectService.toCanonicalFileName(projectRootPath);
+            if (!projectRootPath && !projectService.useSingleInferredProject) {
+                this.canonicalCurrentDirectory = projectService.toCanonicalFileName(this.currentDirectory);
+            }
             this.enableGlobalPlugins();
         }
 
         addRoot(info: ScriptInfo) {
             Debug.assert(info.isScriptOpen());
-            this.projectService.startWatchingConfigFilesForInferredProjectRoot(info, this.projectService.openFiles.get(info.path));
+            this.projectService.startWatchingConfigFilesForInferredProjectRoot(info);
             if (!this._isJsInferredProject && info.isJavaScript()) {
                 this.toggleJsInferredProject(/*isJsInferredProject*/ true);
             }
@@ -1207,6 +1238,11 @@ namespace ts.server {
                     this.toggleJsInferredProject(/*isJsInferredProject*/ false);
                 }
             }
+        }
+
+        /*@internal*/
+        isOrphan() {
+            return !this.hasRoots();
         }
 
         isProjectWithSingleRoot() {
@@ -1262,7 +1298,8 @@ namespace ts.server {
             compilerOptions: CompilerOptions,
             lastFileExceededProgramSize: string | undefined,
             public compileOnSaveEnabled: boolean,
-            cachedDirectoryStructureHost: CachedDirectoryStructureHost) {
+            cachedDirectoryStructureHost: CachedDirectoryStructureHost,
+            private projectReferences: ReadonlyArray<ProjectReference> | undefined) {
             super(configFileName,
                 ProjectKind.Configured,
                 projectService,
@@ -1302,6 +1339,14 @@ namespace ts.server {
 
         getConfigFilePath() {
             return asNormalizedPath(this.getProjectName());
+        }
+
+        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined {
+            return this.projectReferences;
+        }
+
+        updateReferences(refs: ReadonlyArray<ProjectReference> | undefined) {
+            this.projectReferences = refs;
         }
 
         enablePlugins() {

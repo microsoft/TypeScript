@@ -5,7 +5,7 @@ tests/cases/compiler/limitDeepInstantiations.ts(3,35): error TS2502: '"true"' is
     // Repro from #14837
     
     type Foo<T extends "true", B> = { "true": Foo<T, Foo<T, B>> }[T];
-                                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                      ~~~~~~
 !!! error TS2502: '"true"' is referenced directly or indirectly in its own type annotation.
     let f1: Foo<"true", {}>;
     let f2: Foo<"false", {}>;

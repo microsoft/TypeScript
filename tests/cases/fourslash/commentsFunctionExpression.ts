@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // test arrow doc comments
-/////** lamdaFoo var comment*/
+/////** lambdaFoo var comment*/
 ////var lamb/*1*/daFoo = /** this is lambda comment*/ (/**param a*/a: number, /**param b*/b: number) => /*2*/a + b;
 ////var lambddaN/*3*/oVarComment = /** this is lambda multiplication*/ (/**param a*/a: number, /**param b*/b: number) => a * b;
 /////*4*/lambdaFoo(/*5*/10, /*6*/20);
@@ -32,9 +32,7 @@
 ////}
 ////assig/*16*/ned/*17*/(/*18*/"hey");
 
-
-
-verify.quickInfoAt("1", "var lambdaFoo: (a: number, b: number) => number", "lamdaFoo var comment\nthis is lambda comment");
+verify.quickInfoAt("1", "var lambdaFoo: (a: number, b: number) => number", "lambdaFoo var comment\nthis is lambda comment");
 
 goTo.marker('2');
 verify.completionListContains('a', '(parameter) a: number', 'param a');
@@ -44,17 +42,21 @@ verify.completionListContains('b', '(parameter) b: number', 'param b');
 verify.quickInfoAt("3", "var lambddaNoVarComment: (a: number, b: number) => number", "this is lambda multiplication");
 
 goTo.marker('4');
-verify.completionListContains('lambdaFoo', 'var lambdaFoo: (a: number, b: number) => number', 'lamdaFoo var comment\nthis is lambda comment');
+verify.completionListContains('lambdaFoo', 'var lambdaFoo: (a: number, b: number) => number', 'lambdaFoo var comment\nthis is lambda comment');
 verify.completionListContains('lambddaNoVarComment', 'var lambddaNoVarComment: (a: number, b: number) => number', 'this is lambda multiplication');
 
-goTo.marker('5');
-verify.currentParameterHelpArgumentDocCommentIs("param a");
-
-goTo.marker('6');
-verify.currentParameterHelpArgumentDocCommentIs("param b");
-
-
-
+verify.signatureHelp(
+    {
+        marker: "5",
+        docComment: "lambdaFoo var comment\nthis is lambda comment",
+        parameterDocComment: "param a",
+    },
+    {
+        marker: "6",
+        docComment: "lambdaFoo var comment\nthis is lambda comment",
+        parameterDocComment: "param b",
+    },
+);
 
 // no documentation from nested lambda
 verify.quickInfos({
@@ -76,7 +78,14 @@ verify.completionListContains('s', '(parameter) s: string', "the first parameter
 verify.quickInfoAt("16", "var assigned: (s: string) => number", "On variable\nSummary on expression");
 goTo.marker('17');
 verify.completionListContains("assigned", "var assigned: (s: string) => number", "On variable\nSummary on expression");
-goTo.marker('18');
-verify.currentSignatureHelpDocCommentIs("On variable\nSummary on expression");
-verify.currentParameterHelpArgumentDocCommentIs("the first parameter!\nparam on expression\nOn parameter ");
-
+verify.signatureHelp({
+    marker: "18",
+    docComment: "On variable\nSummary on expression",
+    parameterDocComment: "the first parameter!\nparam on expression\nOn parameter ",
+    tags: [
+        { name: "param", text: "s the first parameter!" },
+        { name: "returns", text: "the parameter's length" },
+        { name: "param", text: "s param on expression" },
+        { name: "returns", text: "return on expression" },
+    ],
+});

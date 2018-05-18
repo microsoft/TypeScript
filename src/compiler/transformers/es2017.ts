@@ -40,7 +40,7 @@ namespace ts {
         context.onEmitNode = onEmitNode;
         context.onSubstituteNode = onSubstituteNode;
 
-        return transformSourceFile;
+        return chainBundle(transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {
@@ -412,7 +412,7 @@ namespace ts {
                     )
                 );
 
-                addRange(statements, endLexicalEnvironment());
+                prependRange(statements, endLexicalEnvironment());
 
                 const block = createBlock(statements, /*multiLine*/ true);
                 setTextRange(block, node.body);
@@ -443,7 +443,7 @@ namespace ts {
                 const declarations = endLexicalEnvironment();
                 if (some(declarations)) {
                     const block = convertToFunctionBody(expression);
-                    result = updateBlock(block, setTextRange(createNodeArray(concatenate(block.statements, declarations)), block.statements));
+                    result = updateBlock(block, setTextRange(createNodeArray(concatenate(declarations, block.statements)), block.statements));
                 }
                 else {
                     result = expression;

@@ -11,5 +11,8 @@ verify.codeFix({
     description: "Convert to ES6 module",
     newFileContent:
 `export async function* f(p) { p; }
-export class C extends D { m() {} }`,
+const _C = class C extends D {
+    m() { }
+};
+export { _C as C };`,
 });

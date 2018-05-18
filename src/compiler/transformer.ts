@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts {
-    function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile> {
+    function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile | Bundle> {
         switch (moduleKind) {
             case ModuleKind.ESNext:
             case ModuleKind.ES2015:
@@ -28,7 +28,7 @@ namespace ts {
         const jsx = compilerOptions.jsx;
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
-        const transformers: TransformerFactory<SourceFile>[] = [];
+        const transformers: TransformerFactory<SourceFile | Bundle>[] = [];
 
         addRange(transformers, customTransformers && customTransformers.before);
 

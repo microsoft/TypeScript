@@ -1,13 +1,8 @@
-tests/cases/compiler/privacyClassExtendsClauseDeclFile_GlobalFile.ts(16,67): error TS4020: 'extends' clause of exported class 'publicClassExtendingPrivateClassInModule' has or is using private name 'privateClassInPublicModule'.
-tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts(16,67): error TS4020: 'extends' clause of exported class 'publicClassExtendingPrivateClassInModule' has or is using private name 'privateClassInPublicModule'.
 tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts(19,77): error TS2449: Class 'publicClassInPrivateModule' used before its declaration.
-tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts(21,69): error TS4020: 'extends' clause of exported class 'publicClassExtendingFromPrivateModuleClass' has or is using private name 'privateModule'.
 tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts(21,83): error TS2449: Class 'publicClassInPrivateModule' used before its declaration.
-tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts(63,55): error TS4020: 'extends' clause of exported class 'publicClassExtendingPrivateClass' has or is using private name 'privateClass'.
-tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts(68,65): error TS4020: 'extends' clause of exported class 'publicClassExtendingFromPrivateModuleClass' has or is using private name 'privateModule'.
 
 
-==== tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts (6 errors) ====
+==== tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts (2 errors) ====
     export module publicModule {
         export class publicClassInPublicModule {
             private f1() {
@@ -24,8 +19,6 @@ tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts(68,65):
         export class publicClassExtendingPublicClassInModule extends publicClassInPublicModule {
         }
         export class publicClassExtendingPrivateClassInModule extends privateClassInPublicModule { // Should error
-                                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4020: 'extends' clause of exported class 'publicClassExtendingPrivateClassInModule' has or is using private name 'privateClassInPublicModule'.
         }
     
         class privateClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
@@ -33,8 +26,6 @@ tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts(68,65):
 !!! error TS2449: Class 'publicClassInPrivateModule' used before its declaration.
         }
         export class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule { // Should error
-                                                                        ~~~~~~~~~~~~~
-!!! error TS4020: 'extends' clause of exported class 'publicClassExtendingFromPrivateModuleClass' has or is using private name 'privateModule'.
                                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2449: Class 'publicClassInPrivateModule' used before its declaration.
         }
@@ -79,18 +70,14 @@ tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts(68,65):
     export class publicClassExtendingPublicClass extends publicClass {
     }
     export class publicClassExtendingPrivateClass extends privateClass { // Should error
-                                                          ~~~~~~~~~~~~
-!!! error TS4020: 'extends' clause of exported class 'publicClassExtendingPrivateClass' has or is using private name 'privateClass'.
     }
     
     class privateClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
     }
     export class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule { // Should error
-                                                                    ~~~~~~~~~~~~~
-!!! error TS4020: 'extends' clause of exported class 'publicClassExtendingFromPrivateModuleClass' has or is using private name 'privateModule'.
     }
     
-==== tests/cases/compiler/privacyClassExtendsClauseDeclFile_GlobalFile.ts (1 errors) ====
+==== tests/cases/compiler/privacyClassExtendsClauseDeclFile_GlobalFile.ts (0 errors) ====
     module publicModuleInGlobal {
         export class publicClassInPublicModule {
             private f1() {
@@ -107,8 +94,6 @@ tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts(68,65):
         export class publicClassExtendingPublicClassInModule extends publicClassInPublicModule {
         }
         export class publicClassExtendingPrivateClassInModule extends privateClassInPublicModule { // Should error
-                                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4020: 'extends' clause of exported class 'publicClassExtendingPrivateClassInModule' has or is using private name 'privateClassInPublicModule'.
         }
     }
     class publicClassInGlobal {

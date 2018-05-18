@@ -22,7 +22,7 @@ function foo<A>() {
 >Y : Symbol(Y, Decl(localTypes5.ts, 3, 36))
 
             })<Date>();
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
         }
     }
     var x = new X();

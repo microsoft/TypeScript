@@ -6,7 +6,7 @@ var o = { a: 1, b: 2 };
 
 for (var x of Object.values(o)) {
 >x : Symbol(x, Decl(useObjectValuesAndEntries3.ts, 2, 8))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >o : Symbol(o, Decl(useObjectValuesAndEntries3.ts, 0, 3))
 
     let y = x;
@@ -16,6 +16,6 @@ for (var x of Object.values(o)) {
 
 var entries = Object.entries(o);
 >entries : Symbol(entries, Decl(useObjectValuesAndEntries3.ts, 6, 3))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 >o : Symbol(o, Decl(useObjectValuesAndEntries3.ts, 0, 3))
 

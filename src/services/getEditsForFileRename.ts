@@ -15,19 +15,11 @@ namespace ts {
     }
 
     function updateTsconfigFiles(program: Program, changeTracker: textChanges.ChangeTracker, oldFilePath: string, newFilePath: string): void {
-        const cfg = program.getCompilerOptions().configFile;
-        if (!cfg) return;
-        const oldFile = cfg.jsonObject && getFilesEntry(cfg.jsonObject, oldFilePath);
+        const configFile = program.getCompilerOptions().configFile;
+        const oldFile = getTsConfigPropArrayElementValue(configFile, "files", oldFilePath);
         if (oldFile) {
-            changeTracker.replaceRangeWithText(cfg, createStringRange(oldFile, cfg), newFilePath);
+            changeTracker.replaceRangeWithText(configFile, createStringRange(oldFile, configFile), newFilePath);
         }
-    }
-
-    function getFilesEntry(cfg: ObjectLiteralExpression, fileName: string): StringLiteral | undefined {
-        const filesProp = find(cfg.properties, (prop): prop is PropertyAssignment =>
-            isPropertyAssignment(prop) && isStringLiteral(prop.name) && prop.name.text === "files");
-        const files = filesProp && filesProp.initializer;
-        return files && isArrayLiteralExpression(files) ? find(files.elements, (e): e is StringLiteral => isStringLiteral(e) && e.text === fileName) : undefined;
     }
 
     interface ToUpdate {
@@ -53,7 +45,7 @@ namespace ts {
                 if (checker.getSymbolAtLocation(importStringLiteral)) continue;
 
                 const resolved = program.getResolvedModuleWithFailedLookupLocationsFromCache(importStringLiteral.text, sourceFile.fileName);
-                if (contains(resolved.failedLookupLocations, oldFilePath)) {
+                if (resolved && contains(resolved.failedLookupLocations, oldFilePath)) {
                     result.push({ sourceFile, toUpdate: importStringLiteral });
                 }
             }
@@ -63,10 +55,10 @@ namespace ts {
 
     function getPathUpdater(oldFilePath: string, newFilePath: string, host: LanguageServiceHost): (oldPath: string) => string | undefined {
         // Get the relative path from old to new location, and append it on to the end of imports and normalize.
-        const rel = getRelativePath(newFilePath, getDirectoryPath(oldFilePath), createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host)));
+        const rel = getRelativePathFromFile(oldFilePath, newFilePath, createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host)));
         return oldPath => {
             if (!pathIsRelative(oldPath)) return;
-            return ensurePathIsRelative(normalizePath(combinePaths(getDirectoryPath(oldPath), rel)));
+            return ensurePathIsNonModuleName(normalizePath(combinePaths(getDirectoryPath(oldPath), rel)));
         };
     }
 

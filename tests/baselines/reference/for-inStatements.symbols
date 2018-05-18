@@ -32,7 +32,7 @@ for (var x in /[a-z]/) { }
 
 for (var x in new Date()) { }
 >x : Symbol(x, Decl(for-inStatements.ts, 6, 8), Decl(for-inStatements.ts, 7, 8), Decl(for-inStatements.ts, 8, 8), Decl(for-inStatements.ts, 11, 8), Decl(for-inStatements.ts, 13, 8) ... and 14 more)
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var c: any, d: any, e: any;
 >c : Symbol(c, Decl(for-inStatements.ts, 16, 3))

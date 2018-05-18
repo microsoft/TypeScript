@@ -3,5 +3,8 @@ for (var v of ['a', 'b', 'c']) {
 >v : Symbol(v, Decl(ES5For-of1.ts, 0, 8))
 
     console.log(v);
+>console.log : Symbol(Console.log, Decl(lib.d.ts, --, --))
+>console : Symbol(console, Decl(lib.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.d.ts, --, --))
 >v : Symbol(v, Decl(ES5For-of1.ts, 0, 8))
 }

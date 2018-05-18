@@ -37,6 +37,6 @@ namespace ts.codefix {
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, info: Info): void {
-        changes.replaceNode(sourceFile, info.importNode, makeImportDeclaration(info.name, /*namedImports*/ undefined, info.moduleSpecifier));
+        changes.replaceNode(sourceFile, info.importNode, makeImport(info.name, /*namedImports*/ undefined, info.moduleSpecifier));
     }
 }

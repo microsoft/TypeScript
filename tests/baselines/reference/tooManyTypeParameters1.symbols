@@ -20,8 +20,8 @@ class C<T> {}
 var c = new C<Date,Date>();
 >c : Symbol(c, Decl(tooManyTypeParameters1.ts, 7, 3))
 >C : Symbol(C, Decl(tooManyTypeParameters1.ts, 4, 19))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 interface I<T> {}
 >I : Symbol(I, Decl(tooManyTypeParameters1.ts, 7, 27))

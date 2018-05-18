@@ -24,7 +24,7 @@ class C {
 
     "1.0": Date;
 >"1.0" : Symbol(C["1.0"], Decl(objectTypeWithStringNamedNumericProperty.ts, 9, 19))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     "-1.0": RegExp;
 >"-1.0" : Symbol(C["-1.0"], Decl(objectTypeWithStringNamedNumericProperty.ts, 10, 16))
@@ -32,7 +32,7 @@ class C {
 
     "-1": Date;
 >"-1" : Symbol(C["-1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 11, 19))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 var c: C;
@@ -142,7 +142,7 @@ interface I {
 
     "1.0": Date;
 >"1.0" : Symbol(I["1.0"], Decl(objectTypeWithStringNamedNumericProperty.ts, 40, 19))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     "-1.0": RegExp;
 >"-1.0" : Symbol(I["-1.0"], Decl(objectTypeWithStringNamedNumericProperty.ts, 41, 16))
@@ -150,7 +150,7 @@ interface I {
 
     "-1": Date;
 >"-1" : Symbol(I["-1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 42, 19))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 var i: I;
@@ -260,7 +260,7 @@ var a: {
 
     "1.0": Date;
 >"1.0" : Symbol("1.0", Decl(objectTypeWithStringNamedNumericProperty.ts, 71, 19))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     "-1.0": RegExp;
 >"-1.0" : Symbol("-1.0", Decl(objectTypeWithStringNamedNumericProperty.ts, 72, 16))
@@ -268,7 +268,7 @@ var a: {
 
     "-1": Date;
 >"-1" : Symbol("-1", Decl(objectTypeWithStringNamedNumericProperty.ts, 73, 19))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 var r1 = a['0.1'];
@@ -374,14 +374,14 @@ var b = {
 
     "1.0": new Date(),
 >"1.0" : Symbol("1.0", Decl(objectTypeWithStringNamedNumericProperty.ts, 101, 16))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     "-1.0": /123/,
 >"-1.0" : Symbol("-1.0", Decl(objectTypeWithStringNamedNumericProperty.ts, 102, 22))
 
     "-1": Date
 >"-1" : Symbol("-1", Decl(objectTypeWithStringNamedNumericProperty.ts, 103, 18))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 };
 

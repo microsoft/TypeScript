@@ -10,7 +10,7 @@ namespace ts {
         context.enableSubstitution(SyntaxKind.Identifier);
 
         let currentSourceFile: SourceFile;
-        return transformSourceFile;
+        return chainBundle(transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {

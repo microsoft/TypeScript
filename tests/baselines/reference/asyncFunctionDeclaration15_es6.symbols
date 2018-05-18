@@ -28,7 +28,7 @@ async function fn4(): number { } // error
 
 async function fn5(): PromiseLike<void> { } // error
 >fn5 : Symbol(fn5, Decl(asyncFunctionDeclaration15_es6.ts, 7, 32))
->PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es6.d.ts, --, --))
 
 async function fn6(): Thenable { } // error
 >fn6 : Symbol(fn6, Decl(asyncFunctionDeclaration15_es6.ts, 8, 43))

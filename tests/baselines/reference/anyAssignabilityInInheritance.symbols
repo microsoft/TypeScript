@@ -56,8 +56,8 @@ var r3 = foo3(a); // any
 declare function foo5(x: Date): Date;
 >foo5 : Symbol(foo5, Decl(anyAssignabilityInInheritance.ts, 19, 17), Decl(anyAssignabilityInInheritance.ts, 21, 37))
 >x : Symbol(x, Decl(anyAssignabilityInInheritance.ts, 21, 22))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 declare function foo5(x: any): any;
 >foo5 : Symbol(foo5, Decl(anyAssignabilityInInheritance.ts, 19, 17), Decl(anyAssignabilityInInheritance.ts, 21, 37))

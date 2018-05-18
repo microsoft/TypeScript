@@ -5,7 +5,9 @@ namespace ts {
         const checker = program.getDiagnosticsProducingTypeChecker();
         const diags: DiagnosticWithLocation[] = [];
 
-        if (sourceFile.commonJsModuleIndicator && (programContainsEs6Modules(program) || compilerOptionsIndicateEs6Modules(program.getCompilerOptions()))) {
+        if (sourceFile.commonJsModuleIndicator &&
+            (programContainsEs6Modules(program) || compilerOptionsIndicateEs6Modules(program.getCompilerOptions())) &&
+            containsTopLevelCommonjs(sourceFile)) {
             diags.push(createDiagnosticForNode(getErrorNodeFromCommonJsIndicator(sourceFile.commonJsModuleIndicator), Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES6_module));
         }
 
@@ -32,6 +34,19 @@ namespace ts {
         }
         check(sourceFile);
 
+        if (!isJsFile) {
+            for (const statement of sourceFile.statements) {
+                if (isVariableStatement(statement) &&
+                    statement.declarationList.flags & NodeFlags.Const &&
+                    statement.declarationList.declarations.length === 1) {
+                    const init = statement.declarationList.declarations[0].initializer;
+                    if (init && isRequireCall(init, /*checkArgumentIsStringLiteralLike*/ true)) {
+                        diags.push(createDiagnosticForNode(init, Diagnostics.require_call_may_be_converted_to_an_import));
+                    }
+                }
+            }
+        }
+
         if (getAllowSyntheticDefaultImports(program.getCompilerOptions())) {
             for (const moduleSpecifier of sourceFile.imports) {
                 const importNode = importFromModuleSpecifier(moduleSpecifier);
@@ -45,7 +60,30 @@ namespace ts {
             }
         }
 
-        return diags.concat(checker.getSuggestionDiagnostics(sourceFile));
+        return diags.concat(checker.getSuggestionDiagnostics(sourceFile)).sort((d1, d2) => d1.start - d2.start);
+    }
+
+    // convertToEs6Module only works on top-level, so don't trigger it if commonjs code only appears in nested scopes.
+    function containsTopLevelCommonjs(sourceFile: SourceFile): boolean {
+        return sourceFile.statements.some(statement => {
+            switch (statement.kind) {
+                case SyntaxKind.VariableStatement:
+                    return (statement as VariableStatement).declarationList.declarations.some(decl =>
+                        isRequireCall(propertyAccessLeftHandSide(decl.initializer), /*checkArgumentIsStringLiteralLike*/ true));
+                case SyntaxKind.ExpressionStatement: {
+                    const { expression } = statement as ExpressionStatement;
+                    if (!isBinaryExpression(expression)) return isRequireCall(expression, /*checkArgumentIsStringLiteralLike*/ true);
+                    const kind = getSpecialPropertyAssignmentKind(expression);
+                    return kind === SpecialPropertyAssignmentKind.ExportsProperty || kind === SpecialPropertyAssignmentKind.ModuleExports;
+                }
+                default:
+                    return false;
+            }
+        });
+    }
+
+    function propertyAccessLeftHandSide(node: Expression): Expression {
+        return isPropertyAccessExpression(node) ? propertyAccessLeftHandSide(node.expression) : node;
     }
 
     function importNameForConvertToDefaultImport(node: AnyValidImportOrReExport): Identifier | undefined {

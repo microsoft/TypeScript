@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of57.ts ===
 var iter: Iterable<number>;
 >iter : Symbol(iter, Decl(for-of57.ts, 0, 3))
->Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>Iterable : Symbol(Iterable, Decl(lib.es6.d.ts, --, --))
 
 for (let num of iter) { }
 >num : Symbol(num, Decl(for-of57.ts, 1, 8))

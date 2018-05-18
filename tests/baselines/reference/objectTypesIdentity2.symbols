@@ -29,7 +29,7 @@ interface I {
 
     foo: Date;
 >foo : Symbol(I.foo, Decl(objectTypesIdentity2.ts, 14, 13))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 var a: { foo: RegExp; }

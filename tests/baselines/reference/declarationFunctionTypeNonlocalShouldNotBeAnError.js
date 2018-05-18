@@ -20,7 +20,8 @@ var foo;
 
 //// [declarationFunctionTypeNonlocalShouldNotBeAnError.d.ts]
 declare namespace foo {
+    function bar(): void;
     const obj: {
-        bar: () => void;
+        bar: typeof bar;
     };
 }

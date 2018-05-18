@@ -9,7 +9,7 @@
 // Do resolve without typeCheck
 goTo.marker('1');
 edit.insert("alert(");
-verify.currentSignatureHelpIs("alert(message?: any): void");
+verify.signatureHelp({ text: "alert(message?: any): void" });
 
 // TypeCheck
 verify.errorExistsAfterMarker('1');

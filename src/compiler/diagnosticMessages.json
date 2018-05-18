@@ -895,7 +895,7 @@
         "category": "Error",
         "code": 1322
     },
-    "Dynamic import cannot be used when targeting ECMAScript 2015 modules.": {
+    "Dynamic import is only supported when '--module' flag is 'commonjs' or 'esNext'.": {
         "category": "Error",
         "code": 1323
     },
@@ -970,6 +970,10 @@
     "Type arguments cannot be used here.": {
         "category": "Error",
         "code": 1342
+    },
+    "The 'import.meta' meta-property is only allowed using 'ESNext' for the 'target' and 'module' compiler options.": {
+        "category": "Error",
+        "code": 1343
     },
 
     "Duplicate identifier '{0}'.": {
@@ -2802,6 +2806,10 @@
         "category": "Error",
         "code": 5069
     },
+    "Option '--resolveJsonModule' cannot be specified without 'node' module resolution strategy.": {
+        "category": "Error",
+        "code": 5070
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -3539,6 +3547,53 @@
         "code": 6196,
         "reportsUnnecessary": true
     },
+    "Include modules imported with '.json' extension": {
+        "category": "Message",
+        "code": 6197
+    },
+    "All destructured elements are unused.": {
+        "category": "Error",
+        "code": 6198,
+        "reportsUnnecessary": true
+    },
+
+    "Projects to reference": {
+        "category": "Message",
+        "code": 6300
+    },
+    "Enable project compilation": {
+        "category": "Message",
+        "code": 6302
+    },
+    "Project references may not form a circular graph. Cycle detected: {0}": {
+        "category": "Error",
+        "code": 6202
+    },
+    "Composite projects may not disable declaration emit.": {
+        "category": "Error",
+        "code": 6304
+    },
+    "Output file '{0}' has not been built from source file '{1}'.": {
+        "category": "Error",
+        "code": 6305
+    },
+    "Referenced project '{0}' must have setting \"composite\": true.": {
+        "category": "Error",
+        "code": 6306
+    },
+    "File '{0}' is not in project file list. Projects must list all files or use an 'include' pattern.": {
+        "category": "Error",
+        "code": 6307
+    },
+    "Cannot prepend project '{0}' because it does not have 'outFile' set": {
+        "category": "Error",
+        "code": 6308
+    },
+    "Output file '{0}' from project '{1}' does not exist": {
+        "category": "Error",
+        "code": 6309
+    },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -3898,6 +3953,10 @@
         "category": "Suggestion",
         "code": 80004
     },
+    "'require' call may be converted to an import.": {
+        "category": "Suggestion",
+        "code": 80005
+    },
 
     "Add missing 'super()' call": {
         "category": "Message",
@@ -3930,6 +3989,10 @@
     "Add '{0}.' to unresolved variable": {
         "category": "Message",
         "code": 90008
+    },
+    "Remove destructuring": {
+        "category": "Message",
+        "code": 90009
     },
     "Import '{0}' from module \"{1}\"": {
         "category": "Message",
@@ -4174,5 +4237,29 @@
     "Generate 'get' and 'set' accessors": {
         "category": "Message",
         "code": 95046
+    },
+    "Convert 'require' to 'import'": {
+        "category": "Message",
+        "code": 95047
+    },
+    "Convert all 'require' to 'import'": {
+        "category": "Message",
+        "code": 95048
+    },
+    "Move to a new file": {
+        "category": "Message",
+        "code": 95049
+    },
+    "Remove unreachable code": {
+        "category": "Message",
+        "code": 95050
+    },
+    "Remove all unreachable code": {
+        "category": "Message",
+        "code": 95051
+    },
+    "Add missing typeof": {
+        "category": "Message",
+        "code": 95052
     }
 }

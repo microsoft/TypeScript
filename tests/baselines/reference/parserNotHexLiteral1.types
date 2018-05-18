@@ -8,10 +8,10 @@ var x = {e0: 'cat', x0: 'dog'};
 >'dog' : "dog"
 
 console.info (x.x0);
->console.info (x.x0) : any
->console.info : any
->console : any
->info : any
+>console.info (x.x0) : void
+>console.info : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>info : (message?: any, ...optionalParams: any[]) => void
 >x.x0 : string
 >x : { e0: string; x0: string; }
 >x0 : string
@@ -19,10 +19,10 @@ console.info (x.x0);
 // tsc dies on this next line with "bug.ts (5,16): Expected ')'"
 //   tsc seems to be parsing the e0 as a hex constant.
 console.info (x.e0);
->console.info (x.e0) : any
->console.info : any
->console : any
->info : any
+>console.info (x.e0) : void
+>console.info : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>info : (message?: any, ...optionalParams: any[]) => void
 >x.e0 : string
 >x : { e0: string; x0: string; }
 >e0 : string

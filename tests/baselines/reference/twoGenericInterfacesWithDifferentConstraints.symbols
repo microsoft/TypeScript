@@ -2,7 +2,7 @@
 interface A<T extends Date> {
 >A : Symbol(A, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 0, 0), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 2, 1))
 >T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 0, 12), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 4, 12))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     x: T;
 >x : Symbol(A.x, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 0, 29))
@@ -26,7 +26,7 @@ module M {
 >B : Symbol(B, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 8, 10), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 11, 5))
 >T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 9, 16), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 13, 16))
 >A : Symbol(A, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 0, 0), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 2, 1))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
         x: T;
 >x : Symbol(B.x, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 9, 36))
@@ -50,7 +50,7 @@ module M2 {
     interface A<T extends Date> {
 >A : Symbol(A, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 18, 11))
 >T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 19, 16))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
         x: T;
 >x : Symbol(A.x, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 19, 33))
@@ -78,7 +78,7 @@ module M3 {
     export interface A<T extends Date> {
 >A : Symbol(A, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 30, 11), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 36, 11))
 >T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 31, 23), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 37, 23))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
         x: T;
 >x : Symbol(A.x, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 31, 40))

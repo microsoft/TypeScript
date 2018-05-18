@@ -1,7 +1,7 @@
 === tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration13_es6.ts ===
 async function foo(): Promise<void> {
 >foo : Symbol(foo, Decl(asyncFunctionDeclaration13_es6.ts, 0, 0))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --), Decl(lib.es6.d.ts, --, --))
 
    // Legal to use 'await' in a type context.
    var v: await;

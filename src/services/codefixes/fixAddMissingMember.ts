@@ -132,7 +132,24 @@ namespace ts.codefix {
             /*questionToken*/ undefined,
             typeNode,
             /*initializer*/ undefined);
-        changeTracker.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, property);
+
+        const lastProp = getNodeToInsertPropertyAfter(classDeclaration);
+        if (lastProp) {
+            changeTracker.insertNodeAfter(classDeclarationSourceFile, lastProp, property);
+        }
+        else {
+            changeTracker.insertNodeAtClassStart(classDeclarationSourceFile, classDeclaration, property);
+        }
+    }
+
+    // Gets the last of the first run of PropertyDeclarations, or undefined if the class does not start with a PropertyDeclaration.
+    function getNodeToInsertPropertyAfter(cls: ClassLikeDeclaration): PropertyDeclaration | undefined {
+        let res: PropertyDeclaration | undefined;
+        for (const member of cls.members) {
+            if (!isPropertyDeclaration(member)) break;
+            res = member;
+        }
+        return res;
     }
 
     function createAddIndexSignatureAction(context: CodeFixContext, classDeclarationSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, tokenName: string, typeNode: TypeNode): CodeFixAction {

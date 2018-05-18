@@ -28,7 +28,7 @@ class C2<T, U> {
 class C3<T extends Date> {
 >C3 : Symbol(C3, Decl(staticMembersUsingClassTypeParameter.ts, 9, 1))
 >T : Symbol(T, Decl(staticMembersUsingClassTypeParameter.ts, 11, 9))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     static x: T;
 >x : Symbol(C3.x, Decl(staticMembersUsingClassTypeParameter.ts, 11, 26))

@@ -42,6 +42,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+var _a;
 exports.noPrivates = (_a = /** @class */ (function () {
         function class_1() {
             this.p = 12;
@@ -84,4 +85,3 @@ exports.Test = Test;
 var test = new Test();
 Test.getTags();
 test.tags();
-var _a;

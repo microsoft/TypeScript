@@ -114,9 +114,10 @@ export declare function MyMixin<T extends Constructor<MyBaseClass<any>>>(base: T
 //// [FinalClass.d.ts]
 import { MyBaseClass } from './BaseClass';
 import { MyMixin } from './MixinClass';
-declare const MyExtendedClass_base: typeof MyBaseClass & (new (...args: any[]) => MyMixin);
+declare const MyExtendedClass_base: typeof MyBaseClass & import("./BaseClass").Constructor<MyMixin>;
 export declare class MyExtendedClass extends MyExtendedClass_base<string> {
     extendedClassProperty: number;
 }
+export {};
 //// [Main.d.ts]
 export {};

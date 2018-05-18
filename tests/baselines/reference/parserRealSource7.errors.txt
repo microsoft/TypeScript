@@ -28,15 +28,14 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(83,24): error TS
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(84,18): error TS2304: Cannot find name 'IHashTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(85,20): error TS2304: Cannot find name 'TypeCollectionContext'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(88,67): error TS2304: Cannot find name 'ScopeChain'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(88,80): error TS2304: Cannot find name 'Symbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(98,41): error TS2304: Cannot find name 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(98,76): error TS2304: Cannot find name 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(99,21): error TS2304: Cannot find name 'Symbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(101,18): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(102,30): error TS2304: Cannot find name 'Identifier'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(103,33): error TS2304: Cannot find name 'isQuoted'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(123,18): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(124,35): error TS2304: Cannot find name 'BinaryExpression'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(127,38): error TS2339: Property 'getType' does not exist on type 'Symbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(138,34): error TS2339: Property 'getType' does not exist on type 'Symbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(150,48): error TS2304: Cannot find name 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(150,61): error TS2304: Cannot find name 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(150,75): error TS2304: Cannot find name 'TypeCollectionContext'.
@@ -45,6 +44,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(153,22): error T
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(154,27): error TS2304: Cannot find name 'ImportDeclaration'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(155,26): error TS2304: Cannot find name 'hasFlag'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(155,55): error TS2304: Cannot find name 'VarFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(162,51): error TS2339: Property 'getType' does not exist on type 'Symbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(165,28): error TS2304: Cannot find name 'ModuleType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(169,26): error TS2304: Cannot find name 'TypeSymbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(186,48): error TS2304: Cannot find name 'AST'.
@@ -452,8 +452,6 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(828,13): error T
         function findTypeSymbolInScopeChain(name: string, scopeChain: ScopeChain): Symbol {
                                                                       ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'ScopeChain'.
-                                                                                   ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
             var symbol = scopeChain.scope.find(name, false, true);
     
             if (symbol == null && scopeChain.previous) {
@@ -466,11 +464,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(828,13): error T
         function findSymbolFromAlias(alias: AST, context: IAliasScopeContext): Symbol {
                                             ~~~
 !!! error TS2304: Cannot find name 'AST'.
-                                                                               ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
             var symbol: Symbol = null;
-                        ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
             switch (alias.nodeType) {
                 case NodeType.Name:
                      ~~~~~~~~
@@ -509,6 +503,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(828,13): error T
                     var op1Sym = findSymbolFromAlias(dottedExpr.operand1, context);
     
                     if (op1Sym && op1Sym.getType()) {
+                                         ~~~~~~~
+!!! error TS2339: Property 'getType' does not exist on type 'Symbol'.
                         symbol = findSymbolFromAlias(dottedExpr.operand2, context);
                     }
     
@@ -520,6 +516,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(828,13): error T
     
             if (symbol) {
                 var symType = symbol.getType();
+                                     ~~~~~~~
+!!! error TS2339: Property 'getType' does not exist on type 'Symbol'.
                 if (symType) {
                     var members = symType.members;
                     if (members) {
@@ -560,6 +558,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(828,13): error T
     
             if (aliasedModSymbol) {
                 var aliasedModType = aliasedModSymbol.getType();
+                                                      ~~~~~~~
+!!! error TS2339: Property 'getType' does not exist on type 'Symbol'.
     
                 if (aliasedModType) {
                     modType = <ModuleType>aliasedModType;

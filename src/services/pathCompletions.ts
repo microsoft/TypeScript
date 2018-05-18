@@ -27,7 +27,7 @@ namespace ts.Completions.PathCompletions {
         const scriptDirectory = getDirectoryPath(scriptPath);
 
         if (isPathRelativeToScript(literalValue) || isRootedDiskPath(literalValue)) {
-            const extensions = getSupportedExtensions(compilerOptions);
+            const extensions = getSupportedExtensionsForModuleResolution(compilerOptions);
             if (compilerOptions.rootDirs) {
                 return getCompletionEntriesForDirectoryFragmentWithRootDirs(
                     compilerOptions.rootDirs, literalValue, scriptDirectory, extensions, /*includeExtensions*/ false, compilerOptions, host, scriptPath);
@@ -40,6 +40,13 @@ namespace ts.Completions.PathCompletions {
             // Check for node modules
             return getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory, compilerOptions, host, typeChecker);
         }
+    }
+
+    function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions) {
+        const extensions = getSupportedExtensions(compilerOptions);
+        return compilerOptions.resolveJsonModule && getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs ?
+            extensions.concat(Extension.Json) :
+            extensions;
     }
 
     /**
@@ -89,7 +96,9 @@ namespace ts.Completions.PathCompletions {
          * Remove the basename from the path. Note that we don't use the basename to filter completions;
          * the client is responsible for refining completions.
          */
-        fragment = getDirectoryPath(fragment);
+        if (!hasTrailingDirectorySeparator(fragment)) {
+            fragment = getDirectoryPath(fragment);
+        }
 
         if (fragment === "") {
             fragment = "." + directorySeparator;
@@ -97,8 +106,9 @@ namespace ts.Completions.PathCompletions {
 
         fragment = ensureTrailingDirectorySeparator(fragment);
 
-        const absolutePath = normalizeAndPreserveTrailingSlash(isRootedDiskPath(fragment) ? fragment : combinePaths(scriptPath, fragment));
-        const baseDirectory = getDirectoryPath(absolutePath);
+        // const absolutePath = normalizeAndPreserveTrailingSlash(isRootedDiskPath(fragment) ? fragment : combinePaths(scriptPath, fragment)); // TODO(rbuckton): should use resolvePaths
+        const absolutePath = resolvePath(scriptPath, fragment);
+        const baseDirectory = hasTrailingDirectorySeparator(absolutePath) ? absolutePath : getDirectoryPath(absolutePath);
         const ignoreCase = !(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames());
 
         if (tryDirectoryExists(host, baseDirectory)) {
@@ -119,7 +129,7 @@ namespace ts.Completions.PathCompletions {
                         continue;
                     }
 
-                    const foundFileName = includeExtensions ? getBaseFileName(filePath) : removeFileExtension(getBaseFileName(filePath));
+                    const foundFileName = includeExtensions || fileExtensionIs(filePath, Extension.Json) ? getBaseFileName(filePath) : removeFileExtension(getBaseFileName(filePath));
 
                     if (!foundFiles.has(foundFileName)) {
                         foundFiles.set(foundFileName, true);
@@ -159,7 +169,7 @@ namespace ts.Completions.PathCompletions {
 
         const result: NameAndKind[] = [];
 
-        const fileExtensions = getSupportedExtensions(compilerOptions);
+        const fileExtensions = getSupportedExtensionsForModuleResolution(compilerOptions);
         if (baseUrl) {
             const projectDir = compilerOptions.project || host.getCurrentDirectory();
             const absolute = isRootedDiskPath(baseUrl) ? baseUrl : combinePaths(projectDir, baseUrl);
@@ -178,7 +188,7 @@ namespace ts.Completions.PathCompletions {
             }
         }
 
-        const fragmentDirectory = containsSlash(fragment) ? getDirectoryPath(fragment) : undefined;
+        const fragmentDirectory = containsSlash(fragment) ? hasTrailingDirectorySeparator(fragment) ? fragment : getDirectoryPath(fragment) : undefined;
         for (const ambientName of getAmbientModuleCompletions(fragment, fragmentDirectory, typeChecker)) {
             result.push(nameAndKind(ambientName, ScriptElementKind.externalModuleName));
         }
@@ -239,14 +249,15 @@ namespace ts.Completions.PathCompletions {
 
         // The prefix has two effective parts: the directory path and the base component after the filepath that is not a
         // full directory component. For example: directory/path/of/prefix/base*
-        const normalizedPrefix = normalizeAndPreserveTrailingSlash(parsed.prefix);
-        const normalizedPrefixDirectory = getDirectoryPath(normalizedPrefix);
-        const normalizedPrefixBase = getBaseFileName(normalizedPrefix);
+        const normalizedPrefix = resolvePath(parsed.prefix);
+        const normalizedPrefixDirectory = hasTrailingDirectorySeparator(parsed.prefix) ? normalizedPrefix : getDirectoryPath(normalizedPrefix);
+        const normalizedPrefixBase = hasTrailingDirectorySeparator(parsed.prefix) ? "" : getBaseFileName(normalizedPrefix);
 
         const fragmentHasPath = containsSlash(fragment);
+        const fragmentDirectory = fragmentHasPath ? hasTrailingDirectorySeparator(fragment) ? fragment : getDirectoryPath(fragment) : undefined;
 
         // Try and expand the prefix to include any path from the fragment so that we can limit the readDirectory call
-        const expandedPrefixDirectory = fragmentHasPath ? combinePaths(normalizedPrefixDirectory, normalizedPrefixBase + getDirectoryPath(fragment)) : normalizedPrefixDirectory;
+        const expandedPrefixDirectory = fragmentHasPath ? combinePaths(normalizedPrefixDirectory, normalizedPrefixBase + fragmentDirectory) : normalizedPrefixDirectory;
 
         const normalizedSuffix = normalizePath(parsed.suffix);
         // Need to normalize after combining: If we combinePaths("a", "../b"), we want "b" and not "a/../b".
@@ -416,16 +427,6 @@ namespace ts.Completions.PathCompletions {
             return slashCharCode === CharacterCodes.slash || slashCharCode === CharacterCodes.backslash;
         }
         return false;
-    }
-
-    function normalizeAndPreserveTrailingSlash(path: string) {
-        if (normalizeSlashes(path) === "./") {
-            // normalizePath turns "./" into "". "" + "/" would then be a rooted path instead of a relative one, so avoid this particular case.
-            // There is no problem for adding "/" to a non-empty string -- it's only a problem at the beginning.
-            return "";
-        }
-        const norm = normalizePath(path);
-        return hasTrailingDirectorySeparator(path) ? ensureTrailingDirectorySeparator(norm) : norm;
     }
 
     /**

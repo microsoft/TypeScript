@@ -5,12 +5,11 @@
 ////
 //// f ` qwerty ${/*1*/ /*2*/123/*3*/ /*4*/} asdf ${   41234   }  zxcvb ${ g `    ` }    `
 
-goTo.eachMarker(() => {
-    verify.signatureHelpCountIs(1);
-    verify.signatureHelpArgumentCountIs(4);
-
-    verify.currentSignatureParameterCountIs(4);
-    verify.currentSignatureHelpIs('f(templateStrings: any, x: any, y: any, z: any): number');
-    verify.currentParameterHelpArgumentNameIs("x");
-    verify.currentParameterSpanIs("x: any");
+verify.signatureHelp({
+    marker: test.markerNames(),
+    text: "f(templateStrings: any, x: any, y: any, z: any): number",
+    argumentCount: 4,
+    parameterCount: 4,
+    parameterName: "x",
+    parameterSpan: "x: any",
 });

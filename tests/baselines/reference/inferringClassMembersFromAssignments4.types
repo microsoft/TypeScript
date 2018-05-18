@@ -1,0 +1,32 @@
+=== tests/cases/conformance/salsa/a.js ===
+class Base {
+>Base : Base
+
+    m() {
+>m : () => void
+
+        this.p = 1
+>this.p = 1 : 1
+>this.p : number | undefined
+>this : this
+>p : number | undefined
+>1 : 1
+    }
+}
+class Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    m() {
+>m : () => void
+
+        // should be OK, and p should have type number | undefined from its base
+        this.p = 1
+>this.p = 1 : 1
+>this.p : number | undefined
+>this : this
+>p : number | undefined
+>1 : 1
+    }
+}
+
