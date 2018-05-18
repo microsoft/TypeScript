@@ -4996,14 +4996,15 @@ namespace ts {
         function getTypeOfFuncClassEnumModule(symbol: Symbol): Type {
             let links = getSymbolLinks(symbol);
             if (!links.type) {
+                // TODO: Pretty sure I just look at valueDeclaration and figure this out syntactically. Not sure it's worth burning a symbol flag for.
                 if (symbol.flags & SymbolFlags.JSAlias) {
                     // TODO: eventually just call resolveAlias
-                    const aliasDeclaration = symbol.valueDeclaration; // TODO: For testing purposes only, should be getDeclarationOfAliasSymbol
-                    // Debug.assert(isBinaryExpression(aliasDeclaration.parent) && isExpressionStatement(aliasDeclaration.parent.parent),  Debug.showSyntaxKind(aliasDeclaration) + Debug.showSyntaxKind(aliasDeclaration.parent) + Debug.showSyntaxKind(aliasDeclaration.parent.parent));
-                    const aliasSymbol = getMergedSymbol(aliasDeclaration.parent.symbol);
+                    const aliasDeclaration = getDeclarationOfJavascriptInitializer(symbol.valueDeclaration);
+                    const aliasSymbol = getMergedSymbol(aliasDeclaration.symbol);
                     // TODO: Jamming things in manually *might* be the right thing (possibly even with mergeSymbolTable)
                     // but it needs to be a lot more complete
                     // (probably I need a "cloneSymbolTable" or "cloneToSymbol")
+                    // TODO: Why not intersections? Oh...it has the wrong semantics for merges/conflicts.
                     if (aliasSymbol && aliasSymbol.exports && aliasSymbol.exports.size) {
                         symbol = cloneSymbol(symbol);
                         links = symbol as TransientSymbol; // need to overwrite links because we overwrote symbol as well -- and for transient symbol, there are their own symbolLinks
@@ -15822,7 +15823,7 @@ namespace ts {
                     if (aliasSymbol && aliasSymbol.exports && aliasSymbol.exports.size) {
                         propertiesTable = aliasSymbol.exports;
                         aliasSymbol.exports.forEach(symbol => propertiesArray.push(getMergedSymbol(symbol)));
-                        return createObjectLiteralType();
+                        return createObjectLiteralType(); // This isn't cached, which seems bad. Don't know if the normal case is either though.
                     }
                 }
             }
@@ -19024,13 +19025,27 @@ namespace ts {
                 return resolveExternalModuleTypeByLiteral(node.arguments[0] as StringLiteral);
             }
 
+            // TODO: I might be able to push down the exports, etc, from aliasSymbol into getReturnTypeOfSignature and its children
             const returnType = getReturnTypeOfSignature(signature);
             // Treat any call to the global 'Symbol' function that is part of a const variable or readonly property
             // as a fresh unique symbol literal type.
             if (returnType.flags & TypeFlags.ESSymbolLike && isSymbolOrSymbolForCall(node)) {
                 return getESSymbolLikeTypeForNode(walkUpParenthesizedExpressions(node.parent));
             }
-            return returnType;
+            let jsAssignmentType: Type | undefined;
+            if(isInJavaScriptFile(node)) {
+                const decl = getDeclarationOfJavascriptInitializer(node);
+                if (decl) {
+                    // let propertiesTable: SymbolTable;
+                    // let propertiesArray: Symbol[] = [];
+                    // an empty JS object literal whose 'alias symbol' has exports is a JS namespace
+                    const aliasSymbol = getMergedSymbol(decl.symbol);
+                    if (aliasSymbol && aliasSymbol.exports && aliasSymbol.exports.size) {
+                        jsAssignmentType = createAnonymousType(aliasSymbol, aliasSymbol.exports, emptyArray, emptyArray, jsObjectLiteralIndexInfo, undefined);
+                    }
+                }
+            }
+            return jsAssignmentType ? getIntersectionType([returnType, jsAssignmentType]) : returnType;
         }
 
         function isSymbolOrSymbolForCall(node: Node) {

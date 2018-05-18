@@ -1531,6 +1531,7 @@ namespace ts {
         return getSourceTextOfNodeFromSourceFile(sourceFile, str).charCodeAt(0) === CharacterCodes.doubleQuote;
     }
 
+    // TODO: Maybe should be named getDeclarationOfJSAlias or JSAliasSymbol? (and should search ALL declarations of the symbol)
     export function getDeclarationOfJavascriptInitializer(node: Node): Node | undefined {
         // TODO: Callers already know which category of initializer they fall into, and some are trivially valid, so this check is kind of pointless
         const isPrototypeAssignment = isAssignment(node.parent) && isPrototypeAccess(node.parent.left) || isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.BarBarToken && isAssignment(node.parent.parent) && isPrototypeAccess(node.parent.parent.left);
@@ -1539,10 +1540,15 @@ namespace ts {
         }
         if (isAssignment(node.parent) || isVariableDeclaration(node.parent)) {
             // TODO: Maybe also verify that node is the rhs of node.parent?
-            return node.parent;
+            return isBinaryExpression(node.parent) ? node.parent.left : node.parent;
         }
-        if (isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.BarBarToken && isSameDefaultedName(node.parent.parent, node.parent.left)) {
-                return node.parent.parent;
+        if (isBinaryExpression(node.parent) &&
+            node.parent.operatorToken.kind === SyntaxKind.BarBarToken &&
+            (isAssignment(node.parent) || isVariableDeclaration(node.parent)) &&
+            isSameDefaultedName(node.parent.parent, node.parent.left)) {
+            // TODO: I thought binary expressions were sometimes declarations, but it appears (for now) to be the property access on the lhs
+            // TODO: That means this function is extremely tangled and duplicative
+            return isBinaryExpression(node.parent.parent) ? node.parent.parent.left : node.parent.parent;
         }
     }
 
@@ -1552,7 +1558,7 @@ namespace ts {
 
     function isSameDefaultedName(declaration: Node, initializer: Expression) {
         let name: EntityNameExpression;
-        if (isAssignment(declaration) && isIdentifier(declaration.left)) {
+        if (isAssignment(declaration) && isEntityNameExpression(declaration.left)) {
             name = declaration.left;
         }
         else if (isVariableDeclaration(declaration) && isIdentifier(declaration.name)) {
@@ -1561,7 +1567,7 @@ namespace ts {
         else {
             return false;
         }
-        return isEntityNameExpression(initializer) && isSameEntityName(name, initializer);
+        return isSameEntityName(name, initializer);
     }
 
     // TODO: Remaining calls to this are probably errors
@@ -1648,7 +1654,7 @@ namespace ts {
      * var min = window.min || {}
      * my.app = self.my.app || class { }
      */
-    function isSameEntityName(name: EntityNameExpression, initializer: EntityNameExpression): boolean {
+    function isSameEntityName(name: Expression, initializer: Expression): boolean {
         if (isIdentifier(name) && isIdentifier(initializer)) {
             return name.escapedText === initializer.escapedText;
         }
