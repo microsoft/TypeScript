@@ -25,15 +25,6 @@ lib/ExecutionContext.js(19,7): error TS2300: Duplicate identifier 'ExecutionCont
 lib/ExecutionContext.js(22,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/ExecutionContext.js(132,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/ExecutionContext.js(225,19): error TS2300: Duplicate identifier 'ExecutionContext'.
-lib/externs.d.ts(2,30): error TS2497: Module '"/puppeteer/puppeteer/lib/Browser"' resolves to a non-module entity and cannot be imported using this construct.
-lib/externs.d.ts(3,29): error TS2497: Module '"/puppeteer/puppeteer/lib/Target"' resolves to a non-module entity and cannot be imported using this construct.
-lib/externs.d.ts(5,32): error TS2497: Module '"/puppeteer/puppeteer/lib/TaskQueue"' resolves to a non-module entity and cannot be imported using this construct.
-lib/externs.d.ts(9,37): error TS2497: Module '"/puppeteer/puppeteer/lib/ElementHandle"' resolves to a non-module entity and cannot be imported using this construct.
-lib/externs.d.ts(16,26): error TS2503: Cannot find namespace 'Protocol'.
-lib/externs.d.ts(16,69): error TS2503: Cannot find namespace 'Protocol'.
-lib/externs.d.ts(17,28): error TS2503: Cannot find namespace 'Protocol'.
-lib/externs.d.ts(17,81): error TS2503: Cannot find namespace 'Protocol'.
-lib/externs.d.ts(17,121): error TS2503: Cannot find namespace 'Protocol'.
 lib/FrameManager.js(25,7): error TS2300: Duplicate identifier 'FrameManager'.
 lib/FrameManager.js(28,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/FrameManager.js(54,15): error TS2503: Cannot find namespace 'Protocol'.
@@ -41,9 +32,6 @@ lib/FrameManager.js(76,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/FrameManager.js(127,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/FrameManager.js(773,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/FrameManager.js(998,19): error TS2300: Duplicate identifier 'FrameManager'.
-lib/helper.js(59,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/helper.js(77,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/helper.js(101,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Input.js(29,7): error TS2300: Duplicate identifier 'Keyboard'.
 lib/Input.js(306,20): error TS2300: Duplicate identifier 'Keyboard'.
 lib/NetworkManager.js(129,15): error TS2503: Cannot find namespace 'Protocol'.
@@ -62,6 +50,18 @@ lib/Page.js(185,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(394,22): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(407,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(731,19): error TS2503: Cannot find namespace 'Protocol'.
+lib/externs.d.ts(2,30): error TS2497: Module '"/puppeteer/puppeteer/lib/Browser"' resolves to a non-module entity and cannot be imported using this construct.
+lib/externs.d.ts(3,29): error TS2497: Module '"/puppeteer/puppeteer/lib/Target"' resolves to a non-module entity and cannot be imported using this construct.
+lib/externs.d.ts(5,32): error TS2497: Module '"/puppeteer/puppeteer/lib/TaskQueue"' resolves to a non-module entity and cannot be imported using this construct.
+lib/externs.d.ts(9,37): error TS2497: Module '"/puppeteer/puppeteer/lib/ElementHandle"' resolves to a non-module entity and cannot be imported using this construct.
+lib/externs.d.ts(16,26): error TS2503: Cannot find namespace 'Protocol'.
+lib/externs.d.ts(16,69): error TS2503: Cannot find namespace 'Protocol'.
+lib/externs.d.ts(17,28): error TS2503: Cannot find namespace 'Protocol'.
+lib/externs.d.ts(17,81): error TS2503: Cannot find namespace 'Protocol'.
+lib/externs.d.ts(17,121): error TS2503: Cannot find namespace 'Protocol'.
+lib/helper.js(59,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/helper.js(77,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/helper.js(101,15): error TS2503: Cannot find namespace 'Protocol'.
 node_modules/@types/node/index.d.ts(911,22): error TS2300: Duplicate identifier 'EventEmitter'.
 
 

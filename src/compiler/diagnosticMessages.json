@@ -4250,12 +4250,24 @@
         "category": "Message",
         "code": 95049
     },
-    "Remove unused label": {
+    "Remove unreachable code": {
         "category": "Message",
         "code": 95050
     },
-    "Remove all unused labels": {
+    "Remove all unreachable code": {
         "category": "Message",
         "code": 95051
+    },
+    "Add missing typeof": {
+        "category": "Message",
+        "code": 95052
+    },
+    "Remove unused label": {
+        "category": "Message",
+        "code": 95053
+    },
+    "Remove all unused labels": {
+        "category": "Message",
+        "code": 95054
     }
 }

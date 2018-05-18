@@ -73,7 +73,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 });
             });
         }
-        describe(`${this.testSuiteName} tests for ${fileName}}`, () => {
+        describe(`${this.testSuiteName} tests for ${fileName}`, () => {
             this.runSuite(fileName, test);
         });
     }

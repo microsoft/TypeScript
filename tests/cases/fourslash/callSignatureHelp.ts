@@ -6,5 +6,4 @@
 ////var c: C;
 ////c(/**/
 
-goTo.marker();
-verify.currentSignatureHelpIs('c(): number');
+verify.signatureHelp({ marker: "", text: "c(): number" });

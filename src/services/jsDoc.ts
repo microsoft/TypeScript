@@ -5,6 +5,7 @@ namespace ts.JsDoc {
         "author",
         "argument",
         "borrows",
+        "callback",
         "class",
         "constant",
         "constructor",
@@ -68,10 +69,12 @@ namespace ts.JsDoc {
 
     function getCommentHavingNodes(declaration: Declaration): ReadonlyArray<JSDoc | JSDocTag> {
         switch (declaration.kind) {
+            case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocPropertyTag:
                 return [declaration as JSDocPropertyTag];
+            case SyntaxKind.JSDocCallbackTag:
             case SyntaxKind.JSDocTypedefTag:
-                return [(declaration as JSDocTypedefTag).parent];
+                return [(declaration as JSDocTypedefTag), (declaration as JSDocTypedefTag).parent];
             default:
                 return getJSDocCommentsAndTags(declaration);
         }
@@ -98,6 +101,7 @@ namespace ts.JsDoc {
             case SyntaxKind.JSDocTypeTag:
                 return withNode((tag as JSDocTypeTag).typeExpression);
             case SyntaxKind.JSDocTypedefTag:
+            case SyntaxKind.JSDocCallbackTag:
             case SyntaxKind.JSDocPropertyTag:
             case SyntaxKind.JSDocParameterTag:
                 const { name } = tag as JSDocTypedefTag | JSDocPropertyTag | JSDocParameterTag;

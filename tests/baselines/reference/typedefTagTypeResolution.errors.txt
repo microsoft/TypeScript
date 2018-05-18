@@ -1,0 +1,37 @@
+tests/cases/conformance/jsdoc/github20832.js(2,15): error TS2304: Cannot find name 'U'.
+tests/cases/conformance/jsdoc/github20832.js(17,12): error TS2304: Cannot find name 'V'.
+
+
+==== tests/cases/conformance/jsdoc/github20832.js (2 errors) ====
+    // #20832
+    /** @typedef {U} T - should be "error, can't find type named 'U' */
+                  ~
+!!! error TS2304: Cannot find name 'U'.
+    /**
+     * @template U
+     * @param {U} x
+     * @return {T}
+     */
+    function f(x) {
+        return x;
+    }
+    
+    /** @type T - should be fine, since T will be any */
+    const x = 3;
+    
+    /**
+     * @callback Cb
+     * @param {V} firstParam
+               ~
+!!! error TS2304: Cannot find name 'V'.
+     */
+    /**
+     * @template V
+     * @param {V} vvvvv
+     */
+    function g(vvvvv) {
+    }
+    
+    /** @type {Cb} */
+    const cb = x => {}
+    
