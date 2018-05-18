@@ -44,7 +44,6 @@ namespace ts {
                 // If it resolved to something already, ignore.
                 if (checker.getSymbolAtLocation(importStringLiteral)) continue;
 
-                if (!host.resolveModuleNameWithFailedLookupLocations && !host.fileExists) continue;
                 const resolved = host.resolveModuleNames
                     ? host.resolveModuleNameWithFailedLookupLocations && host.resolveModuleNameWithFailedLookupLocations(importStringLiteral.text, sourceFile.fileName)
                     : program.getResolvedModuleWithFailedLookupLocationsFromCache(importStringLiteral.text, sourceFile.fileName);
