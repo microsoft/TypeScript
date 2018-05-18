@@ -204,9 +204,7 @@ namespace ts.OrganizeImports {
 
         newImportSpecifiers.push(...flatMap(namedImports, i => (i.importClause.namedBindings as NamedImports).elements));
 
-        const sortedImportSpecifiers = stableSort(newImportSpecifiers, (s1, s2) =>
-            compareIdentifiers(s1.propertyName || s1.name, s2.propertyName || s2.name) ||
-            compareIdentifiers(s1.name, s2.name));
+        const sortedImportSpecifiers = sortSpecifiers(newImportSpecifiers);
 
         const importDecl = defaultImports.length > 0
             ? defaultImports[0]
@@ -295,9 +293,7 @@ namespace ts.OrganizeImports {
         const newExportSpecifiers: ExportSpecifier[] = [];
         newExportSpecifiers.push(...flatMap(namedExports, i => (i.exportClause).elements));
 
-        const sortedExportSpecifiers = stableSort(newExportSpecifiers, (s1, s2) =>
-            compareIdentifiers(s1.propertyName || s1.name, s2.propertyName || s2.name) ||
-            compareIdentifiers(s1.name, s2.name));
+        const sortedExportSpecifiers = sortSpecifiers(newExportSpecifiers);
 
         const exportDecl = namedExports[0];
         coalescedExports.push(
@@ -348,6 +344,12 @@ namespace ts.OrganizeImports {
             importDeclaration.modifiers,
             updateImportClause(importDeclaration.importClause, name, namedBindings),
             importDeclaration.moduleSpecifier);
+    }
+
+    function sortSpecifiers<T extends ImportOrExportSpecifier>(specifiers: ReadonlyArray<T>) {
+        return stableSort(specifiers, (s1, s2) =>
+            compareIdentifiers(s1.propertyName || s1.name, s2.propertyName || s2.name) ||
+            compareIdentifiers(s1.name, s2.name));
     }
 
     /* internal */ // Exported for testing
