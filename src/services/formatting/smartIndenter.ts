@@ -482,8 +482,10 @@ namespace ts.formatting {
             return findFirstNonWhitespaceCharacterAndColumn(startPos, endPos, sourceFile, options).column;
         }
 
-        function nodeContentIsAlwaysIndented(kind: SyntaxKind): boolean {
-            switch (kind) {
+        export function nodeWillIndentChild(settings: FormatCodeSettings | undefined, parent: TextRangeWithKind, child: TextRangeWithKind | undefined, sourceFile: SourceFileLike | undefined, indentByDefault: boolean): boolean {
+            const childKind = child ? child.kind : SyntaxKind.Unknown;
+
+            switch (parent.kind) {
                 case SyntaxKind.ExpressionStatement:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
@@ -529,20 +531,12 @@ namespace ts.formatting {
                 case SyntaxKind.ImportSpecifier:
                 case SyntaxKind.PropertyDeclaration:
                     return true;
-            }
-            return false;
-        }
-
-        export function nodeWillIndentChild(settings: FormatCodeSettings | undefined, parent: TextRangeWithKind, child: TextRangeWithKind | undefined, sourceFile: SourceFileLike | undefined, indentByDefault: boolean): boolean {
-            const childKind = child ? child.kind : SyntaxKind.Unknown;
-
-            switch (parent.kind) {
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.PropertyAssignment:
                     if (!settings.indentMultiLineObjectLiteralBeginningOnBlankLine && sourceFile && childKind === SyntaxKind.ObjectLiteralExpression) {
                         return rangeIsOnOneLine(sourceFile, child);
                     }
-                    break;
+                    return true;
                 case SyntaxKind.DoStatement:
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.ForInStatement:
@@ -595,7 +589,7 @@ namespace ts.formatting {
          * @param isNextChild If true, we are judging indent of a hypothetical child *after* this one, not the current child.
          */
         export function shouldIndentChildNode(settings: FormatCodeSettings | undefined, parent: TextRangeWithKind, child?: Node, sourceFile?: SourceFileLike, isNextChild = false): boolean {
-            return (nodeContentIsAlwaysIndented(parent.kind) || nodeWillIndentChild(settings, parent, child, sourceFile, /*indentByDefault*/ false))
+            return nodeWillIndentChild(settings, parent, child, sourceFile, /*indentByDefault*/ false)
                 && !(isNextChild && child && isControlFlowEndingStatement(child.kind, parent));
         }
 
