@@ -10954,9 +10954,12 @@ namespace ts {
                             return result;
                         }
                     }
-                    else if (result = isRelatedTo(constraint, target, reportErrors)) {
-                        errorInfo = saveErrorInfo;
-                        return result;
+                    else {
+                        const instantiated = getTypeWithThisArgument(constraint, source);
+                        if (result = isRelatedTo(instantiated, target, reportErrors)) {
+                            errorInfo = saveErrorInfo;
+                            return result;
+                        }
                     }
                 }
                 else if (source.flags & TypeFlags.Index) {
