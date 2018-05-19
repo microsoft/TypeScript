@@ -7,87 +7,87 @@ function Class()
 // error: 'Class' doesn't have property 'notPresent'
 Class.prototype.containsError = function () { return this.notPresent; };
 >Class.prototype.containsError = function () { return this.notPresent; } : () => any
->Class.prototype.containsError : any
->Class.prototype : any
+>Class.prototype.containsError : () => any
+>Class.prototype : typeof Class.prototype
 >Class : typeof Class
->prototype : any
->containsError : any
+>prototype : typeof Class.prototype
+>containsError : () => any
 >function () { return this.notPresent; } : () => any
 >this.notPresent : any
->this : Class
+>this : typeof Class.prototype
 >notPresent : any
 
 // lots of methods that return this, which caused out-of-memory in #9527
 Class.prototype.m1 = function (a, b, c, d, tx, ty) { return this; };
->Class.prototype.m1 = function (a, b, c, d, tx, ty) { return this; } : (a: any, b: any, c: any, d: any, tx: any, ty: any) => Class
->Class.prototype.m1 : any
->Class.prototype : any
+>Class.prototype.m1 = function (a, b, c, d, tx, ty) { return this; } : (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class.prototype
+>Class.prototype.m1 : (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class.prototype
+>Class.prototype : typeof Class.prototype
 >Class : typeof Class
->prototype : any
->m1 : any
->function (a, b, c, d, tx, ty) { return this; } : (a: any, b: any, c: any, d: any, tx: any, ty: any) => Class
+>prototype : typeof Class.prototype
+>m1 : (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class.prototype
+>function (a, b, c, d, tx, ty) { return this; } : (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class.prototype
 >a : any
 >b : any
 >c : any
 >d : any
 >tx : any
 >ty : any
->this : Class
+>this : typeof Class.prototype
 
 Class.prototype.m2 = function (x, y) { return this; };
->Class.prototype.m2 = function (x, y) { return this; } : (x: any, y: any) => Class
->Class.prototype.m2 : any
->Class.prototype : any
+>Class.prototype.m2 = function (x, y) { return this; } : (x: any, y: any) => typeof Class.prototype
+>Class.prototype.m2 : (x: any, y: any) => typeof Class.prototype
+>Class.prototype : typeof Class.prototype
 >Class : typeof Class
->prototype : any
->m2 : any
->function (x, y) { return this; } : (x: any, y: any) => Class
+>prototype : typeof Class.prototype
+>m2 : (x: any, y: any) => typeof Class.prototype
+>function (x, y) { return this; } : (x: any, y: any) => typeof Class.prototype
 >x : any
 >y : any
->this : Class
+>this : typeof Class.prototype
 
 Class.prototype.m3 = function (x, y) { return this; };
->Class.prototype.m3 = function (x, y) { return this; } : (x: any, y: any) => Class
->Class.prototype.m3 : any
->Class.prototype : any
+>Class.prototype.m3 = function (x, y) { return this; } : (x: any, y: any) => typeof Class.prototype
+>Class.prototype.m3 : (x: any, y: any) => typeof Class.prototype
+>Class.prototype : typeof Class.prototype
 >Class : typeof Class
->prototype : any
->m3 : any
->function (x, y) { return this; } : (x: any, y: any) => Class
+>prototype : typeof Class.prototype
+>m3 : (x: any, y: any) => typeof Class.prototype
+>function (x, y) { return this; } : (x: any, y: any) => typeof Class.prototype
 >x : any
 >y : any
->this : Class
+>this : typeof Class.prototype
 
 Class.prototype.m4 = function (angle) { return this; };
->Class.prototype.m4 = function (angle) { return this; } : (angle: any) => Class
->Class.prototype.m4 : any
->Class.prototype : any
+>Class.prototype.m4 = function (angle) { return this; } : (angle: any) => typeof Class.prototype
+>Class.prototype.m4 : (angle: any) => typeof Class.prototype
+>Class.prototype : typeof Class.prototype
 >Class : typeof Class
->prototype : any
->m4 : any
->function (angle) { return this; } : (angle: any) => Class
+>prototype : typeof Class.prototype
+>m4 : (angle: any) => typeof Class.prototype
+>function (angle) { return this; } : (angle: any) => typeof Class.prototype
 >angle : any
->this : Class
+>this : typeof Class.prototype
 
 Class.prototype.m5 = function (matrix) { return this; };
->Class.prototype.m5 = function (matrix) { return this; } : (matrix: any) => Class
->Class.prototype.m5 : any
->Class.prototype : any
+>Class.prototype.m5 = function (matrix) { return this; } : (matrix: any) => typeof Class.prototype
+>Class.prototype.m5 : (matrix: any) => typeof Class.prototype
+>Class.prototype : typeof Class.prototype
 >Class : typeof Class
->prototype : any
->m5 : any
->function (matrix) { return this; } : (matrix: any) => Class
+>prototype : typeof Class.prototype
+>m5 : (matrix: any) => typeof Class.prototype
+>function (matrix) { return this; } : (matrix: any) => typeof Class.prototype
 >matrix : any
->this : Class
+>this : typeof Class.prototype
 
 Class.prototype.m6 = function (x, y, pivotX, pivotY, scaleX, scaleY, rotation, skewX, skewY) { return this; };
->Class.prototype.m6 = function (x, y, pivotX, pivotY, scaleX, scaleY, rotation, skewX, skewY) { return this; } : (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => Class
->Class.prototype.m6 : any
->Class.prototype : any
+>Class.prototype.m6 = function (x, y, pivotX, pivotY, scaleX, scaleY, rotation, skewX, skewY) { return this; } : (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class.prototype
+>Class.prototype.m6 : (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class.prototype
+>Class.prototype : typeof Class.prototype
 >Class : typeof Class
->prototype : any
->m6 : any
->function (x, y, pivotX, pivotY, scaleX, scaleY, rotation, skewX, skewY) { return this; } : (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => Class
+>prototype : typeof Class.prototype
+>m6 : (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class.prototype
+>function (x, y, pivotX, pivotY, scaleX, scaleY, rotation, skewX, skewY) { return this; } : (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class.prototype
 >x : any
 >y : any
 >pivotX : any
@@ -97,37 +97,37 @@ Class.prototype.m6 = function (x, y, pivotX, pivotY, scaleX, scaleY, rotation, s
 >rotation : any
 >skewX : any
 >skewY : any
->this : Class
+>this : typeof Class.prototype
 
 Class.prototype.m7 = function(matrix) { return this; };
->Class.prototype.m7 = function(matrix) { return this; } : (matrix: any) => Class
->Class.prototype.m7 : any
->Class.prototype : any
+>Class.prototype.m7 = function(matrix) { return this; } : (matrix: any) => typeof Class.prototype
+>Class.prototype.m7 : (matrix: any) => typeof Class.prototype
+>Class.prototype : typeof Class.prototype
 >Class : typeof Class
->prototype : any
->m7 : any
->function(matrix) { return this; } : (matrix: any) => Class
+>prototype : typeof Class.prototype
+>m7 : (matrix: any) => typeof Class.prototype
+>function(matrix) { return this; } : (matrix: any) => typeof Class.prototype
 >matrix : any
->this : Class
+>this : typeof Class.prototype
 
 Class.prototype.m8 = function() { return this; };
->Class.prototype.m8 = function() { return this; } : () => Class
->Class.prototype.m8 : any
->Class.prototype : any
+>Class.prototype.m8 = function() { return this; } : () => typeof Class.prototype
+>Class.prototype.m8 : () => typeof Class.prototype
+>Class.prototype : typeof Class.prototype
 >Class : typeof Class
->prototype : any
->m8 : any
->function() { return this; } : () => Class
->this : Class
+>prototype : typeof Class.prototype
+>m8 : () => typeof Class.prototype
+>function() { return this; } : () => typeof Class.prototype
+>this : typeof Class.prototype
 
 Class.prototype.m9 = function () { return this; };
->Class.prototype.m9 = function () { return this; } : () => Class
->Class.prototype.m9 : any
->Class.prototype : any
+>Class.prototype.m9 = function () { return this; } : () => typeof Class.prototype
+>Class.prototype.m9 : () => typeof Class.prototype
+>Class.prototype : typeof Class.prototype
 >Class : typeof Class
->prototype : any
->m9 : any
->function () { return this; } : () => Class
->this : Class
+>prototype : typeof Class.prototype
+>m9 : () => typeof Class.prototype
+>function () { return this; } : () => typeof Class.prototype
+>this : typeof Class.prototype
 
 

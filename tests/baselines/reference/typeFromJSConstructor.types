@@ -50,11 +50,11 @@ function Installer () {
 }
 Installer.prototype.first = function () {
 >Installer.prototype.first = function () {    this.arg = 'hi' // error    this.unknown = 'hi' // ok    this.newProperty = 1 // ok: number | boolean    this.twice = undefined // ok    this.twice = 'hi' // ok} : () => void
->Installer.prototype.first : any
->Installer.prototype : any
+>Installer.prototype.first : () => void
+>Installer.prototype : typeof Installer.prototype
 >Installer : typeof Installer
->prototype : any
->first : any
+>prototype : typeof Installer.prototype
+>first : () => void
 >function () {    this.arg = 'hi' // error    this.unknown = 'hi' // ok    this.newProperty = 1 // ok: number | boolean    this.twice = undefined // ok    this.twice = 'hi' // ok} : () => void
 
     this.arg = 'hi' // error
@@ -94,11 +94,11 @@ Installer.prototype.first = function () {
 }
 Installer.prototype.second = function () {
 >Installer.prototype.second = function () {    this.arg = false // error    this.unknown = false // ok    this.newProperty = false // ok    this.twice = null // error    this.twice = false // error    this.twices.push(1) // error: Object is possibly null    if (this.twices != null) {        this.twices.push('hi')    }} : () => void
->Installer.prototype.second : any
->Installer.prototype : any
+>Installer.prototype.second : () => void
+>Installer.prototype : typeof Installer.prototype
 >Installer : typeof Installer
->prototype : any
->second : any
+>prototype : typeof Installer.prototype
+>second : () => void
 >function () {    this.arg = false // error    this.unknown = false // ok    this.newProperty = false // ok    this.twice = null // error    this.twice = false // error    this.twices.push(1) // error: Object is possibly null    if (this.twices != null) {        this.twices.push('hi')    }} : () => void
 
     this.arg = false // error

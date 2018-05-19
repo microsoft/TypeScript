@@ -20,21 +20,22 @@ const a = new A().id;
 >id : Symbol(A.id, Decl(other.js, 0, 14))
 
 const B = function() { this.id = 1; }
->B : Symbol(B, Decl(index.js, 3, 5))
+>B : Symbol(B, Decl(index.js, 3, 5), Decl(index.js, 3, 37))
 >id : Symbol(B.id, Decl(index.js, 3, 22))
 
 B.prototype.m = function() { this.x = 2; }
->B.prototype : Symbol(B.m, Decl(index.js, 3, 37))
->B : Symbol(B, Decl(index.js, 3, 5))
->prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
->m : Symbol(B.m, Decl(index.js, 3, 37))
+>B.prototype.m : Symbol(B.prototype.m, Decl(index.js, 3, 37))
+>B.prototype : Symbol(B.prototype.m, Decl(index.js, 3, 37))
+>B : Symbol(B, Decl(index.js, 3, 5), Decl(index.js, 3, 37))
+>prototype : Symbol(B.prototype, Decl(index.js, 4, 2))
+>m : Symbol(B.prototype.m, Decl(index.js, 3, 37))
 >this.x : Symbol(B.x, Decl(index.js, 4, 28))
 >this : Symbol(B, Decl(index.js, 3, 9))
 >x : Symbol(B.x, Decl(index.js, 4, 28))
 
 const b = new B();
 >b : Symbol(b, Decl(index.js, 5, 5))
->B : Symbol(B, Decl(index.js, 3, 5))
+>B : Symbol(B, Decl(index.js, 3, 5), Decl(index.js, 3, 37))
 
 b.id;
 >b.id : Symbol(B.id, Decl(index.js, 3, 22))

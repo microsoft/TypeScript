@@ -2413,14 +2413,12 @@ namespace ts {
             // Look up the function in the local scope, since prototype assignments should
             // follow the function declaration
             const classPrototype = lhs.expression as PropertyAccessEntityNameExpression;
-            const constructorFunction = classPrototype.expression;
 
             // Fix up parent pointers since we're going to use these nodes before we bind into them
             lhs.parent = parent;
-            constructorFunction.parent = classPrototype;
             classPrototype.parent = lhs;
 
-            bindPropertyAssignment(constructorFunction, lhs, /*isPrototypeProperty*/ true);
+            bindPropertyAssignment(classPrototype, lhs, /*isPrototypeProperty*/ false);
         }
 
 

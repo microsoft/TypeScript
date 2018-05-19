@@ -18924,10 +18924,10 @@ namespace ts {
         }
 
         function getJavaScriptClassType(symbol: Symbol): Type | undefined {
-            const initializer = getDeclaredJavascriptInitializer(symbol.valueDeclaration);
-            if (initializer) {
-                symbol = getSymbolOfNode(initializer);
-            }
+            // const initializer = getDeclaredJavascriptInitializer(symbol.valueDeclaration);
+            // if (initializer) {
+                // symbol = getSymbolOfNode(initializer);
+            // }
             let inferred: Type | undefined;
             if (isJavaScriptConstructor(symbol.valueDeclaration)) {
                 inferred = getInferredClassType(symbol);

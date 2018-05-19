@@ -11,11 +11,11 @@ function C() {
 }
 C.prototype.m = function() {
 >C.prototype.m = function() {    this.nothing();} : () => void
->C.prototype.m : any
->C.prototype : any
+>C.prototype.m : () => void
+>C.prototype : typeof C.prototype
 >C : typeof C
->prototype : any
->m : any
+>prototype : typeof C.prototype
+>m : () => void
 >function() {    this.nothing();} : () => void
 
     this.nothing();
