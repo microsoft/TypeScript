@@ -18,80 +18,39 @@ f1(1, 2);
 f1(1, 2, 3, 4);
 >f1 : Symbol(f1, Decl(functionParameterArityMismatch.ts, 0, 0), Decl(functionParameterArityMismatch.ts, 0, 31))
 
-declare function f2(a?: number);
->f2 : Symbol(f2, Decl(functionParameterArityMismatch.ts, 4, 15), Decl(functionParameterArityMismatch.ts, 6, 32))
->a : Symbol(a, Decl(functionParameterArityMismatch.ts, 6, 20))
+declare function f2();
+>f2 : Symbol(f2, Decl(functionParameterArityMismatch.ts, 4, 15), Decl(functionParameterArityMismatch.ts, 6, 22), Decl(functionParameterArityMismatch.ts, 7, 42), Decl(functionParameterArityMismatch.ts, 8, 64))
 
-declare function f2(a: number, b: number, c: number, ...d: number[]);
->f2 : Symbol(f2, Decl(functionParameterArityMismatch.ts, 4, 15), Decl(functionParameterArityMismatch.ts, 6, 32))
+declare function f2(a: number, b: number);
+>f2 : Symbol(f2, Decl(functionParameterArityMismatch.ts, 4, 15), Decl(functionParameterArityMismatch.ts, 6, 22), Decl(functionParameterArityMismatch.ts, 7, 42), Decl(functionParameterArityMismatch.ts, 8, 64))
 >a : Symbol(a, Decl(functionParameterArityMismatch.ts, 7, 20))
 >b : Symbol(b, Decl(functionParameterArityMismatch.ts, 7, 30))
->c : Symbol(c, Decl(functionParameterArityMismatch.ts, 7, 41))
->d : Symbol(d, Decl(functionParameterArityMismatch.ts, 7, 52))
 
-f2(1, 2);
->f2 : Symbol(f2, Decl(functionParameterArityMismatch.ts, 4, 15), Decl(functionParameterArityMismatch.ts, 6, 32))
+declare function f2(a: number, b: number, c: number, d: number);
+>f2 : Symbol(f2, Decl(functionParameterArityMismatch.ts, 4, 15), Decl(functionParameterArityMismatch.ts, 6, 22), Decl(functionParameterArityMismatch.ts, 7, 42), Decl(functionParameterArityMismatch.ts, 8, 64))
+>a : Symbol(a, Decl(functionParameterArityMismatch.ts, 8, 20))
+>b : Symbol(b, Decl(functionParameterArityMismatch.ts, 8, 30))
+>c : Symbol(c, Decl(functionParameterArityMismatch.ts, 8, 41))
+>d : Symbol(d, Decl(functionParameterArityMismatch.ts, 8, 52))
 
-declare function f3();
->f3 : Symbol(f3, Decl(functionParameterArityMismatch.ts, 8, 9), Decl(functionParameterArityMismatch.ts, 10, 22), Decl(functionParameterArityMismatch.ts, 11, 42))
+declare function f2(a: number, b: number, c: number, d: number, e: number, f: number);
+>f2 : Symbol(f2, Decl(functionParameterArityMismatch.ts, 4, 15), Decl(functionParameterArityMismatch.ts, 6, 22), Decl(functionParameterArityMismatch.ts, 7, 42), Decl(functionParameterArityMismatch.ts, 8, 64))
+>a : Symbol(a, Decl(functionParameterArityMismatch.ts, 9, 20))
+>b : Symbol(b, Decl(functionParameterArityMismatch.ts, 9, 30))
+>c : Symbol(c, Decl(functionParameterArityMismatch.ts, 9, 41))
+>d : Symbol(d, Decl(functionParameterArityMismatch.ts, 9, 52))
+>e : Symbol(e, Decl(functionParameterArityMismatch.ts, 9, 63))
+>f : Symbol(f, Decl(functionParameterArityMismatch.ts, 9, 74))
 
-declare function f3(a: number, b: number);
->f3 : Symbol(f3, Decl(functionParameterArityMismatch.ts, 8, 9), Decl(functionParameterArityMismatch.ts, 10, 22), Decl(functionParameterArityMismatch.ts, 11, 42))
->a : Symbol(a, Decl(functionParameterArityMismatch.ts, 11, 20))
->b : Symbol(b, Decl(functionParameterArityMismatch.ts, 11, 30))
+f2(1);
+>f2 : Symbol(f2, Decl(functionParameterArityMismatch.ts, 4, 15), Decl(functionParameterArityMismatch.ts, 6, 22), Decl(functionParameterArityMismatch.ts, 7, 42), Decl(functionParameterArityMismatch.ts, 8, 64))
 
-declare function f3(a: number, b: number, c: number, d: number, e?: number);
->f3 : Symbol(f3, Decl(functionParameterArityMismatch.ts, 8, 9), Decl(functionParameterArityMismatch.ts, 10, 22), Decl(functionParameterArityMismatch.ts, 11, 42))
->a : Symbol(a, Decl(functionParameterArityMismatch.ts, 12, 20))
->b : Symbol(b, Decl(functionParameterArityMismatch.ts, 12, 30))
->c : Symbol(c, Decl(functionParameterArityMismatch.ts, 12, 41))
->d : Symbol(d, Decl(functionParameterArityMismatch.ts, 12, 52))
->e : Symbol(e, Decl(functionParameterArityMismatch.ts, 12, 63))
+f2(1, 2, 3);
+>f2 : Symbol(f2, Decl(functionParameterArityMismatch.ts, 4, 15), Decl(functionParameterArityMismatch.ts, 6, 22), Decl(functionParameterArityMismatch.ts, 7, 42), Decl(functionParameterArityMismatch.ts, 8, 64))
 
-f3(1);
->f3 : Symbol(f3, Decl(functionParameterArityMismatch.ts, 8, 9), Decl(functionParameterArityMismatch.ts, 10, 22), Decl(functionParameterArityMismatch.ts, 11, 42))
+f2(1, 2, 3, 4, 5);
+>f2 : Symbol(f2, Decl(functionParameterArityMismatch.ts, 4, 15), Decl(functionParameterArityMismatch.ts, 6, 22), Decl(functionParameterArityMismatch.ts, 7, 42), Decl(functionParameterArityMismatch.ts, 8, 64))
 
-f3(1, 2, 3);
->f3 : Symbol(f3, Decl(functionParameterArityMismatch.ts, 8, 9), Decl(functionParameterArityMismatch.ts, 10, 22), Decl(functionParameterArityMismatch.ts, 11, 42))
-
-declare function f4();
->f4 : Symbol(f4, Decl(functionParameterArityMismatch.ts, 14, 12), Decl(functionParameterArityMismatch.ts, 16, 22), Decl(functionParameterArityMismatch.ts, 17, 42))
-
-declare function f4(a: number, b: number);
->f4 : Symbol(f4, Decl(functionParameterArityMismatch.ts, 14, 12), Decl(functionParameterArityMismatch.ts, 16, 22), Decl(functionParameterArityMismatch.ts, 17, 42))
->a : Symbol(a, Decl(functionParameterArityMismatch.ts, 17, 20))
->b : Symbol(b, Decl(functionParameterArityMismatch.ts, 17, 30))
-
-declare function f4(a: number, b: number, c: number, d: number, ...e: number[]);
->f4 : Symbol(f4, Decl(functionParameterArityMismatch.ts, 14, 12), Decl(functionParameterArityMismatch.ts, 16, 22), Decl(functionParameterArityMismatch.ts, 17, 42))
->a : Symbol(a, Decl(functionParameterArityMismatch.ts, 18, 20))
->b : Symbol(b, Decl(functionParameterArityMismatch.ts, 18, 30))
->c : Symbol(c, Decl(functionParameterArityMismatch.ts, 18, 41))
->d : Symbol(d, Decl(functionParameterArityMismatch.ts, 18, 52))
->e : Symbol(e, Decl(functionParameterArityMismatch.ts, 18, 63))
-
-f4(1);
->f4 : Symbol(f4, Decl(functionParameterArityMismatch.ts, 14, 12), Decl(functionParameterArityMismatch.ts, 16, 22), Decl(functionParameterArityMismatch.ts, 17, 42))
-
-f4(1, 2, 3);
->f4 : Symbol(f4, Decl(functionParameterArityMismatch.ts, 14, 12), Decl(functionParameterArityMismatch.ts, 16, 22), Decl(functionParameterArityMismatch.ts, 17, 42))
-
-declare function f5(a?: number, b?: number);
->f5 : Symbol(f5, Decl(functionParameterArityMismatch.ts, 20, 12), Decl(functionParameterArityMismatch.ts, 22, 44))
->a : Symbol(a, Decl(functionParameterArityMismatch.ts, 22, 20))
->b : Symbol(b, Decl(functionParameterArityMismatch.ts, 22, 31))
-
-declare function f5(a: number, b: number, c: number, d: number, e?: number);
->f5 : Symbol(f5, Decl(functionParameterArityMismatch.ts, 20, 12), Decl(functionParameterArityMismatch.ts, 22, 44))
->a : Symbol(a, Decl(functionParameterArityMismatch.ts, 23, 20))
->b : Symbol(b, Decl(functionParameterArityMismatch.ts, 23, 30))
->c : Symbol(c, Decl(functionParameterArityMismatch.ts, 23, 41))
->d : Symbol(d, Decl(functionParameterArityMismatch.ts, 23, 52))
->e : Symbol(e, Decl(functionParameterArityMismatch.ts, 23, 63))
-
-f5(1, 2, 3);
->f5 : Symbol(f5, Decl(functionParameterArityMismatch.ts, 20, 12), Decl(functionParameterArityMismatch.ts, 22, 44))
-
-f5(1, 2, 3, 4, 5, 6);
->f5 : Symbol(f5, Decl(functionParameterArityMismatch.ts, 20, 12), Decl(functionParameterArityMismatch.ts, 22, 44))
+f2(1, 2, 3, 4, 5, 6, 7);
+>f2 : Symbol(f2, Decl(functionParameterArityMismatch.ts, 4, 15), Decl(functionParameterArityMismatch.ts, 6, 22), Decl(functionParameterArityMismatch.ts, 7, 42), Decl(functionParameterArityMismatch.ts, 8, 64))
 
