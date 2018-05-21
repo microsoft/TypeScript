@@ -89,29 +89,29 @@ namespace RWC {
                     const uniqueNames = ts.createMap<true>();
                     for (const fileName of fileNames) {
                         // Must maintain order, build result list while checking map
-                        const normalized = ts.normalizeSlashes(fileName);
+                        const normalized = ts.normalizeSlashes(Harness.IO.resolvePath(fileName));
                         if (!uniqueNames.has(normalized)) {
                             uniqueNames.set(normalized, true);
                             // Load the file
-                            inputFiles.push(getHarnessCompilerInputUnit(fileName));
+                            inputFiles.push(getHarnessCompilerInputUnit(normalized));
                         }
                     }
 
                     // Add files to compilation
                     for (const fileRead of ioLog.filesRead) {
-                        const normalized = ts.normalizeSlashes(fileRead.path);
-                        if (!uniqueNames.has(normalized) && !Harness.isDefaultLibraryFile(fileRead.path)) {
-                            uniqueNames.set(normalized, true);
-                            otherFiles.push(getHarnessCompilerInputUnit(fileRead.path));
+                        const unitName = ts.normalizeSlashes(Harness.IO.resolvePath(fileRead.path));
+                        if (!uniqueNames.has(unitName) && !Harness.isDefaultLibraryFile(fileRead.path)) {
+                            uniqueNames.set(unitName, true);
+                            otherFiles.push(getHarnessCompilerInputUnit(unitName));
                         }
-                        else if (!opts.options.noLib && Harness.isDefaultLibraryFile(fileRead.path) && !uniqueNames.has(normalized) && useCustomLibraryFile) {
+                        else if (!opts.options.noLib && Harness.isDefaultLibraryFile(fileRead.path) && !uniqueNames.has(unitName) && useCustomLibraryFile) {
                             // If useCustomLibraryFile is true, we will use lib.d.ts from json object
                             // otherwise use the lib.d.ts from built/local
                             // Majority of RWC code will be using built/local/lib.d.ts instead of
                             // lib.d.ts inside json file. However, some RWC cases will still use
                             // their own version of lib.d.ts because they have customized lib.d.ts
-                            uniqueNames.set(normalized, true);
-                            inputFiles.push(getHarnessCompilerInputUnit(fileRead.path));
+                            uniqueNames.set(unitName, true);
+                            inputFiles.push(getHarnessCompilerInputUnit(unitName));
                         }
                     }
                 });
@@ -126,7 +126,7 @@ namespace RWC {
                 compilerResult = Harness.Compiler.compileFiles(
                     inputFiles,
                     otherFiles,
-                    /* harnessOptions */ undefined,
+                    { useCaseSensitiveFileNames: "" + (ioLog.useCaseSensitiveFileNames || false) },
                     opts.options,
                     // Since each RWC json file specifies its current directory in its json file, we need
                     // to pass this information in explicitly instead of acquiring it from the process.
@@ -212,6 +212,7 @@ namespace RWC {
 
 class RWCRunner extends RunnerBase {
     public enumerateTestFiles() {
+        // see also: `enumerateTestFiles` in tests/webTestServer.ts
         return Harness.IO.getDirectories("internal/cases/rwc/");
     }
 
@@ -225,7 +226,7 @@ class RWCRunner extends RunnerBase {
     public initializeTests(): void {
         // Read in and evaluate the test list
         for (const test of this.tests && this.tests.length ? this.tests : this.enumerateTestFiles()) {
-            this.runTest(test);
+            this.runTest(typeof test === "string" ? test : test.file);
         }
     }
 

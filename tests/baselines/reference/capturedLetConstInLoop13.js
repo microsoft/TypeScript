@@ -34,10 +34,10 @@ var Main = /** @class */ (function () {
             names[_i] = arguments[_i];
         }
         var _loop_1 = function (name_1) {
+            var _a;
             this_1.bar((_a = {},
                 _a[name_1 + ".a"] = function () { _this.foo(name_1); },
                 _a));
-            var _a;
         };
         var this_1 = this;
         for (var _a = 0, names_1 = names; _a < names_1.length; _a++) {

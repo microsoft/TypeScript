@@ -665,9 +665,8 @@ namespace ts.server {
             if (simplifiedResult) {
                 return this.mapDefinitionInfo(definitions, project);
             }
-            else {
-                return definitions;
-            }
+
+            return definitions.map(Session.mapToOriginalLocation);
         }
 
         private getDefinitionAndBoundSpan(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.DefinitionInfoAndBoundSpan | DefinitionInfoAndBoundSpan {
@@ -691,11 +690,35 @@ namespace ts.server {
                 };
             }
 
-            return definitionAndBoundSpan;
+            return {
+                ...definitionAndBoundSpan,
+                definitions: definitionAndBoundSpan.definitions.map(Session.mapToOriginalLocation)
+            };
         }
 
         private mapDefinitionInfo(definitions: ReadonlyArray<DefinitionInfo>, project: Project): ReadonlyArray<protocol.FileSpan> {
             return definitions.map(def => this.toFileSpan(def.fileName, def.textSpan, project));
+        }
+
+        /*
+         * When we map a .d.ts location to .ts, Visual Studio gets confused because there's no associated Roslyn Document in
+         * the same project which corresponds to the file. VS Code has no problem with this, and luckily we have two protocols.
+         * This retains the existing behavior for the "simplified" (VS Code) protocol but stores the .d.ts location in a
+         * set of additional fields, and does the reverse for VS (store the .d.ts location where
+         * it used to be and stores the .ts location in the additional fields).
+        */
+        private static mapToOriginalLocation<T extends DocumentSpan>(def: T): T {
+            if (def.originalFileName) {
+                Debug.assert(def.originalTextSpan !== undefined, "originalTextSpan should be present if originalFileName is");
+                return {
+                    ...<any>def,
+                    fileName: def.originalFileName,
+                    textSpan: def.originalTextSpan,
+                    targetFileName: def.fileName,
+                    targetTextSpan: def.textSpan
+                };
+            }
+            return def;
         }
 
         private toFileSpan(fileName: string, textSpan: TextSpan, project: Project): protocol.FileSpan {
@@ -732,9 +755,8 @@ namespace ts.server {
             if (simplifiedResult) {
                 return implementations.map(({ fileName, textSpan }) => this.toFileSpan(fileName, textSpan, project));
             }
-            else {
-                return implementations;
-            }
+
+            return implementations.map(Session.mapToOriginalLocation);
         }
 
         private getOccurrences(args: protocol.FileLocationRequestArgs): ReadonlyArray<protocol.OccurrencesResponseItem> {
@@ -1744,11 +1766,17 @@ namespace ts.server {
             return textChanges.map(change => this.mapTextChangesToCodeEditsUsingScriptinfo(change, project.getScriptInfoForNormalizedPath(toNormalizedPath(change.fileName))));
         }
 
-        private mapTextChangesToCodeEditsUsingScriptinfo(textChanges: FileTextChanges, scriptInfo: ScriptInfo): protocol.FileCodeEdits {
-            return {
-                fileName: textChanges.fileName,
-                textChanges: textChanges.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo))
-            };
+        private mapTextChangesToCodeEditsUsingScriptinfo(textChanges: FileTextChanges, scriptInfo: ScriptInfo | undefined): protocol.FileCodeEdits {
+            Debug.assert(!!textChanges.isNewFile === !scriptInfo);
+            if (scriptInfo) {
+                return {
+                    fileName: textChanges.fileName,
+                    textChanges: textChanges.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo))
+                };
+            }
+            else {
+                return this.convertNewFileTextChangeToCodeEdit(textChanges);
+            }
         }
 
         private convertTextChangeToCodeEdit(change: TextChange, scriptInfo: ScriptInfo): protocol.CodeEdit {
@@ -1757,6 +1785,13 @@ namespace ts.server {
                 end: scriptInfo.positionToLineOffset(change.span.start + change.span.length),
                 newText: change.newText ? change.newText : ""
             };
+        }
+
+        private convertNewFileTextChangeToCodeEdit(textChanges: FileTextChanges): protocol.FileCodeEdits {
+            Debug.assert(textChanges.textChanges.length === 1);
+            const change = first(textChanges.textChanges);
+            Debug.assert(change.span.start === 0 && change.span.length === 0);
+            return { fileName: textChanges.fileName, textChanges: [{ start: { line: 0, offset: 0 }, end: { line: 0, offset: 0 }, newText: change.newText }] };
         }
 
         private getBraceMatching(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.TextSpan[] | TextSpan[] {

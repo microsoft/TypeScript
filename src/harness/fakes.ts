@@ -150,7 +150,7 @@ namespace fakes {
 
         private _getStats(path: string) {
             try {
-                return this.vfs.statSync(path);
+                return this.vfs.existsSync(path) ? this.vfs.statSync(path) : undefined;
             }
             catch {
                 return undefined;
@@ -332,7 +332,7 @@ namespace fakes {
                 let fs = this.vfs;
                 while (fs.shadowRoot) {
                     try {
-                        const shadowRootStats = fs.shadowRoot.statSync(canonicalFileName);
+                        const shadowRootStats = fs.shadowRoot.existsSync(canonicalFileName) && fs.shadowRoot.statSync(canonicalFileName);
                         if (shadowRootStats.dev !== stats.dev ||
                             shadowRootStats.ino !== stats.ino ||
                             shadowRootStats.mtimeMs !== stats.mtimeMs) {

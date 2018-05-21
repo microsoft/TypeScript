@@ -1,7 +1,7 @@
 namespace ts {
     export function preProcessFile(sourceText: string, readImportFiles = true, detectJavaScriptImports = false): PreProcessedFileInfo {
         const pragmaContext: PragmaContext = {
-            languageVersion: ScriptTarget.ES5, // controls weather the token scanner considers unicode identifiers or not - shouldn't matter, since we're only using it for trivia
+            languageVersion: ScriptTarget.ES5, // controls whether the token scanner considers unicode identifiers or not - shouldn't matter, since we're only using it for trivia
             pragmas: undefined,
             checkJsDirective: undefined,
             referencedFiles: [],

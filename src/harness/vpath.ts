@@ -18,7 +18,7 @@ namespace vpath {
     export import dirname = ts.getDirectoryPath;
     export import basename = ts.getBaseFileName;
     export import extname = ts.getAnyExtensionFromPath;
-    export import relative = ts.getRelativePath;
+    export import relative = ts.getRelativePathFromDirectory;
     export import beneath = ts.containsPath;
     export import changeExtension = ts.changeAnyExtension;
     export import isTypeScript = ts.hasTypeScriptFileExtension;
@@ -26,7 +26,9 @@ namespace vpath {
 
     const invalidRootComponentRegExp = /^(?!(\/|\/\/\w+\/|[a-zA-Z]:\/?|)$)/;
     const invalidNavigableComponentRegExp = /[:*?"<>|]/;
+    const invalidNavigableComponentWithWildcardsRegExp = /[:"<>|]/;
     const invalidNonNavigableComponentRegExp = /^\.{1,2}$|[:*?"<>|]/;
+    const invalidNonNavigableComponentWithWildcardsRegExp = /^\.{1,2}$|[:"<>|]/;
     const extRegExp = /\.\w+$/;
 
     export const enum ValidationFlags {
@@ -44,6 +46,7 @@ namespace vpath {
         AllowExtname = 1 << 8,
         AllowTrailingSeparator = 1 << 9,
         AllowNavigation = 1 << 10,
+        AllowWildcard = 1 << 11,
 
         /** Path must be a valid directory root */
         Root = RequireRoot | AllowRoot | AllowTrailingSeparator,
@@ -63,7 +66,9 @@ namespace vpath {
         const hasDirname = components.length > 2;
         const hasBasename = components.length > 1;
         const hasExtname = hasBasename && extRegExp.test(components[components.length - 1]);
-        const invalidComponentRegExp = flags & ValidationFlags.AllowNavigation ? invalidNavigableComponentRegExp : invalidNonNavigableComponentRegExp;
+        const invalidComponentRegExp = flags & ValidationFlags.AllowNavigation
+            ? flags & ValidationFlags.AllowWildcard ? invalidNavigableComponentWithWildcardsRegExp : invalidNavigableComponentRegExp
+            : flags & ValidationFlags.AllowWildcard ? invalidNonNavigableComponentWithWildcardsRegExp : invalidNonNavigableComponentRegExp;
 
         // Validate required components
         if (flags & ValidationFlags.RequireRoot && !hasRoot) return false;

@@ -895,7 +895,7 @@
         "category": "Error",
         "code": 1322
     },
-    "Dynamic import cannot be used when targeting ECMAScript 2015 modules.": {
+    "Dynamic import is only supported when '--module' flag is 'commonjs' or 'esNext'.": {
         "category": "Error",
         "code": 1323
     },
@@ -4245,5 +4245,29 @@
     "Convert all 'require' to 'import'": {
         "category": "Message",
         "code": 95048
+    },
+    "Move to a new file": {
+        "category": "Message",
+        "code": 95049
+    },
+    "Remove unreachable code": {
+        "category": "Message",
+        "code": 95050
+    },
+    "Remove all unreachable code": {
+        "category": "Message",
+        "code": 95051
+    },
+    "Add missing 'typeof'": {
+        "category": "Message",
+        "code": 95052
+    },
+    "Remove unused label": {
+        "category": "Message",
+        "code": 95053
+    },
+    "Remove all unused labels": {
+        "category": "Message",
+        "code": 95054
     }
 }

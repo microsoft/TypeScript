@@ -6,9 +6,9 @@ export default Home
 
 //// [systemDefaultExportCommentValidity.js]
 System.register([], function (exports_1, context_1) {
+    var Home;
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var Home;
     return {
         setters: [],
         execute: function () {

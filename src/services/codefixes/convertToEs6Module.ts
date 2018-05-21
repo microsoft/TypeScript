@@ -233,7 +233,7 @@ namespace ts.codefix {
                     Debug.assertNever(prop);
             }
         });
-        return statements && [statements, true];
+        return statements && [statements, false];
     }
 
     function convertNamedExport(
@@ -485,15 +485,6 @@ namespace ts.codefix {
         return propertyName === "default"
             ? makeImport(createIdentifier(localName), /*namedImports*/ undefined, moduleSpecifier)
             : makeImport(/*name*/ undefined, [makeImportSpecifier(propertyName, localName)], moduleSpecifier);
-    }
-
-    function makeImport(name: Identifier | undefined, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: StringLiteralLike): ImportDeclaration {
-        return makeImportDeclaration(name, namedImports, moduleSpecifier);
-    }
-
-    export function makeImportDeclaration(name: Identifier, namedImports: ReadonlyArray<ImportSpecifier> | undefined, moduleSpecifier: Expression) {
-        const importClause = (name || namedImports) && createImportClause(name, namedImports && createNamedImports(namedImports));
-        return createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, importClause, moduleSpecifier);
     }
 
     function makeImportSpecifier(propertyName: string | undefined, name: string): ImportSpecifier {

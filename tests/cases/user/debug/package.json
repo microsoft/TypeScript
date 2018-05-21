@@ -7,5 +7,8 @@
   "license": "Apache-2.0",
   "dependencies": {
     "debug": "^3.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "latest"
   }
 }

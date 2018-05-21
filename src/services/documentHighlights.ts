@@ -74,6 +74,10 @@ namespace ts.DocumentHighlights {
             case SyntaxKind.GetKeyword:
             case SyntaxKind.SetKeyword:
                 return getFromAllDeclarations(isAccessor, [SyntaxKind.GetKeyword, SyntaxKind.SetKeyword]);
+            case SyntaxKind.AwaitKeyword:
+                return useParent(node.parent, isAwaitExpression, getAsyncAndAwaitOccurrences);
+            case SyntaxKind.AsyncKeyword:
+                return highlightSpans(getAsyncAndAwaitOccurrences(node));
             default:
                 return isModifierKind(node.kind) && (isDeclaration(node.parent) || isVariableStatement(node.parent))
                     ? highlightSpans(getModifierOccurrences(node.kind, node.parent))
@@ -366,6 +370,35 @@ namespace ts.DocumentHighlights {
         });
 
         return keywords;
+    }
+
+    function getAsyncAndAwaitOccurrences(node: Node): Node[] | undefined {
+        const func = <FunctionLikeDeclaration>getContainingFunction(node);
+        if (!func) {
+            return undefined;
+        }
+
+        const keywords: Node[] = [];
+
+        if (func.modifiers) {
+            func.modifiers.forEach(modifier => {
+                pushKeywordIf(keywords, modifier, SyntaxKind.AsyncKeyword);
+            });
+        }
+
+        forEachChild(func, aggregate);
+
+        return keywords;
+
+        function aggregate(node: Node): void {
+            if (isAwaitExpression(node)) {
+                pushKeywordIf(keywords, node.getFirstToken(), SyntaxKind.AwaitKeyword);
+            }
+            // Do not cross function boundaries.
+            if (!isFunctionLike(node) && !isClassLike(node) && !isInterfaceDeclaration(node) && !isModuleDeclaration(node) && !isTypeAliasDeclaration(node) && !isTypeNode(node)) {
+                forEachChild(node, aggregate);
+            }
+        }
     }
 
     function getIfElseOccurrences(ifStatement: IfStatement, sourceFile: SourceFile): HighlightSpan[] {

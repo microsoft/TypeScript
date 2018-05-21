@@ -51,7 +51,7 @@ namespace project {
             describe("projects tests", () => {
                 const tests = this.tests.length === 0 ? this.enumerateTestFiles() : this.tests;
                 for (const test of tests) {
-                    this.runProjectTestCase(test);
+                    this.runProjectTestCase(typeof test === "string" ? test : test.file);
                 }
             });
         }

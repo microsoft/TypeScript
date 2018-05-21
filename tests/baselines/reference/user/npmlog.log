@@ -1,7 +1,5 @@
 Exit Code: 1
 Standard output:
-node_modules/npmlog/log.js(16,14): error TS2339: Property 'gauge' does not exist on type 'PropertyDescriptor'.
-node_modules/npmlog/log.js(16,26): error TS2339: Property 'gauge' does not exist on type 'PropertyDescriptor'.
 node_modules/npmlog/log.js(25,5): error TS2339: Property 'useColor' does not exist on type 'EventEmitter'.
 node_modules/npmlog/log.js(29,5): error TS2339: Property 'enableColor' does not exist on type 'EventEmitter'.
 node_modules/npmlog/log.js(31,8): error TS2339: Property 'gauge' does not exist on type 'EventEmitter'.

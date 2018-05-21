@@ -217,6 +217,29 @@ namespace ts {
             assertParseFileList(tsconfigWithExclude, "tsconfig.json", rootDir, allFiles, allFiles);
         });
 
+        it("exclude declarationDir unless overridden", () => {
+            const tsconfigWithoutExclude =
+            `{
+                "compilerOptions": {
+                    "declarationDir": "declarations"
+                }
+            }`;
+            const tsconfigWithExclude =
+            `{
+                "compilerOptions": {
+                    "declarationDir": "declarations"
+                },
+                "exclude": [ "types" ]
+            }`;
+
+            const rootDir = "/";
+            const allFiles = ["/declarations/a.d.ts", "/a.ts"];
+            const expectedFiles = ["/a.ts"];
+
+            assertParseFileList(tsconfigWithoutExclude, "tsconfig.json", rootDir, allFiles, expectedFiles);
+            assertParseFileList(tsconfigWithExclude, "tsconfig.json", rootDir, allFiles, allFiles);
+        });
+
         it("implicitly exclude common package folders", () => {
             assertParseFileList(
                 `{}`,

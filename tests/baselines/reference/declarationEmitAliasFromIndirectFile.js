@@ -36,24 +36,9 @@ exports["default"] = fp.l10ns;
 
 //// [app.d.ts]
 declare const _default: {
-    ar?: {
-        weekdays: {
-            shorthand: [string, string, string, string, string, string, string];
-            longhand: [string, string, string, string, string, string, string];
-        };
-    };
-    bg?: {
-        weekdays: {
-            shorthand: [string, string, string, string, string, string, string];
-            longhand: [string, string, string, string, string, string, string];
-        };
-    };
+    ar?: import("./locale").CustomLocale;
+    bg?: import("./locale").CustomLocale;
 } & {
-    default: {
-        weekdays: {
-            shorthand: [string, string, string, string, string, string, string];
-            longhand: [string, string, string, string, string, string, string];
-        };
-    };
+    default: import("./locale").Locale;
 };
 export default _default;

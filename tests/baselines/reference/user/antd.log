@@ -1,0 +1,9 @@
+Exit Code: 1
+Standard output:
+node_modules/antd/lib/_util/type.d.ts(8,63): error TS2344: Type 'keyof T' does not satisfy the constraint 'string'.
+  Type 'string | number | symbol' is not assignable to type 'string'.
+    Type 'number' is not assignable to type 'string'.
+
+
+
+Standard error:
