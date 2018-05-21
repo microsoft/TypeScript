@@ -8,6 +8,6 @@
 
 goTo.file("b.ts")
 verify.codeFix({
-    description: "Add missing typeof",
+    description: "Add missing 'typeof'",
     newFileContent: `const a: typeof import("./a") = import("./a")`
 });

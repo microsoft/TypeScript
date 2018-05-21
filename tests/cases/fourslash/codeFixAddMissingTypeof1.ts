@@ -7,7 +7,7 @@
 //// const x: import("foo") = import("foo");
 
 verify.codeFix({
-    description: "Add missing typeof",
+    description: "Add missing 'typeof'",
     newFileContent: `declare module "foo" {
     const a = "foo"
     export = a

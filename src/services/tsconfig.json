@@ -99,6 +99,7 @@
         "codefixes/fixForgottenThisPropertyAccess.ts",
         "codefixes/fixUnusedIdentifier.ts",
         "codefixes/fixUnreachableCode.ts",
+        "codefixes/fixUnusedLabel.ts",
         "codefixes/fixJSDocTypes.ts",
         "codefixes/fixAwaitInSyncFunction.ts",
         "codefixes/disableJsDiagnostics.ts",

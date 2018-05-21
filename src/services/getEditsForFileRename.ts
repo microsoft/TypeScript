@@ -4,7 +4,7 @@ namespace ts {
         const pathUpdater = getPathUpdater(oldFilePath, newFilePath, host);
         return textChanges.ChangeTracker.with({ host, formatContext }, changeTracker => {
             updateTsconfigFiles(program, changeTracker, oldFilePath, newFilePath);
-            for (const { sourceFile, toUpdate } of getImportsToUpdate(program, oldFilePath)) {
+            for (const { sourceFile, toUpdate } of getImportsToUpdate(program, oldFilePath, host)) {
                 const newPath = pathUpdater(isRef(toUpdate) ? toUpdate.fileName : toUpdate.text);
                 if (newPath !== undefined) {
                     const range = isRef(toUpdate) ? toUpdate : createStringRange(toUpdate, sourceFile);
@@ -31,7 +31,7 @@ namespace ts {
         return "fileName" in toUpdate;
     }
 
-    function getImportsToUpdate(program: Program, oldFilePath: string): ReadonlyArray<ToUpdate> {
+    function getImportsToUpdate(program: Program, oldFilePath: string, host: LanguageServiceHost): ReadonlyArray<ToUpdate> {
         const checker = program.getTypeChecker();
         const result: ToUpdate[] = [];
         for (const sourceFile of program.getSourceFiles()) {
@@ -45,7 +45,9 @@ namespace ts {
                 // If it resolved to something already, ignore.
                 if (checker.getSymbolAtLocation(importStringLiteral)) continue;
 
-                const resolved = program.getResolvedModuleWithFailedLookupLocationsFromCache(importStringLiteral.text, sourceFile.fileName);
+                const resolved = host.resolveModuleNames
+                    ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importStringLiteral.text, sourceFile.fileName)
+                    : program.getResolvedModuleWithFailedLookupLocationsFromCache(importStringLiteral.text, sourceFile.fileName);
                 if (resolved && contains(resolved.failedLookupLocations, oldFilePath)) {
                     result.push({ sourceFile, toUpdate: importStringLiteral });
                 }

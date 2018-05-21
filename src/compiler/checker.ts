@@ -319,7 +319,7 @@ namespace ts {
                     checkSourceFile(file);
                     const diagnostics: Diagnostic[] = [];
                     Debug.assert(!!(getNodeLinks(file).flags & NodeCheckFlags.TypeChecked));
-                    checkUnusedIdentifiers(allPotentiallyUnusedIdentifiers.get(file.fileName)!, (kind, diag) => {
+                    checkUnusedIdentifiers(getPotentiallyUnusedIdentifiers(file), (kind, diag) => {
                         if (!unusedIsError(kind)) {
                             diagnostics.push({ ...diag, category: DiagnosticCategory.Suggestion });
                         }
@@ -450,9 +450,7 @@ namespace ts {
         let deferredGlobalExtractSymbol: Symbol;
 
         let deferredNodes: Node[] | undefined;
-        const allPotentiallyUnusedIdentifiers = createMap<ReadonlyArray<PotentiallyUnusedIdentifier>>(); // key is file name
-        let potentiallyUnusedIdentifiers: PotentiallyUnusedIdentifier[] | undefined; // Potentially unused identifiers in the source file currently being checked.
-        const seenPotentiallyUnusedIdentifiers = createMap<true>(); // For assertion that we don't defer the same identifier twice
+        const allPotentiallyUnusedIdentifiers = createMap<PotentiallyUnusedIdentifier[]>(); // key is file name
 
         let flowLoopStart = 0;
         let flowLoopCount = 0;
@@ -1459,7 +1457,7 @@ namespace ts {
                     case SyntaxKind.JSDocCallbackTag:
                         // js type aliases do not resolve names from their host, so skip past it
                         lastLocation = location;
-                        location = getJSDocHost(location)!.parent; // TODO: GH#18217
+                        location = getJSDocHost(location).parent;
                         continue;
                 }
                 if (isSelfReferenceLocation(location)) {
@@ -2177,14 +2175,13 @@ namespace ts {
                 return;
             }
             const host = getJSDocHost(node);
-            if (host &&
-                isExpressionStatement(host) &&
+            if (isExpressionStatement(host) &&
                 isBinaryExpression(host.expression) &&
                 getSpecialPropertyAssignmentKind(host.expression) === SpecialPropertyAssignmentKind.PrototypeProperty) {
                 const symbol = getSymbolOfNode(host.expression.left);
                 return symbol && symbol.parent!.valueDeclaration;
             }
-            const sig = getHostSignatureFromJSDocHost(host!); // TODO: GH#18217
+            const sig = getHostSignatureFromJSDocHost(host);
             if (sig) {
                 const symbol = getSymbolOfNode(sig);
                 return symbol && symbol.valueDeclaration;
@@ -10993,9 +10990,12 @@ namespace ts {
                             return result;
                         }
                     }
-                    else if (result = isRelatedTo(constraint, target, reportErrors)) {
-                        errorInfo = saveErrorInfo;
-                        return result;
+                    else {
+                        const instantiated = getTypeWithThisArgument(constraint, source);
+                        if (result = isRelatedTo(instantiated, target, reportErrors)) {
+                            errorInfo = saveErrorInfo;
+                            return result;
+                        }
                     }
                 }
                 else if (source.flags & TypeFlags.Index) {
@@ -22505,7 +22505,7 @@ namespace ts {
         }
 
         function checkJSDocAugmentsTag(node: JSDocAugmentsTag): void {
-            const classLike = getJSDocHost(node)!; // TODO: GH#18217
+            const classLike = getJSDocHost(node);
             if (!isClassDeclaration(classLike) && !isClassExpression(classLike)) {
                 error(classLike, Diagnostics.JSDoc_0_is_not_attached_to_a_class, idText(node.tagName));
                 return;
@@ -22611,7 +22611,13 @@ namespace ts {
 
         function registerForUnusedIdentifiersCheck(node: PotentiallyUnusedIdentifier): void {
             // May be in a call such as getTypeOfNode that happened to call this. But potentiallyUnusedIdentifiers is only defined in the scope of `checkSourceFile`.
-            if (potentiallyUnusedIdentifiers) {
+            if (produceDiagnostics) {
+                const sourceFile = getSourceFileOfNode(node);
+                let potentiallyUnusedIdentifiers = allPotentiallyUnusedIdentifiers.get(sourceFile.path);
+                if (!potentiallyUnusedIdentifiers) {
+                    potentiallyUnusedIdentifiers = [];
+                    allPotentiallyUnusedIdentifiers.set(sourceFile.path, potentiallyUnusedIdentifiers);
+                }
                 // TODO: GH#22580
                 // Debug.assert(addToSeen(seenPotentiallyUnusedIdentifiers, getNodeId(node)), "Adding potentially-unused identifier twice");
                 potentiallyUnusedIdentifiers.push(node);
@@ -25594,6 +25600,10 @@ namespace ts {
             }
         }
 
+        function getPotentiallyUnusedIdentifiers(sourceFile: SourceFile): ReadonlyArray<PotentiallyUnusedIdentifier> {
+            return allPotentiallyUnusedIdentifiers.get(sourceFile.path) || emptyArray;
+        }
+
         // Fully type check a source file and collect the relevant diagnostics.
         function checkSourceFileWorker(node: SourceFile) {
             const links = getNodeLinks(node);
@@ -25612,11 +25622,6 @@ namespace ts {
                 clear(potentialNewTargetCollisions);
 
                 deferredNodes = [];
-                if (produceDiagnostics) {
-                    Debug.assert(!allPotentiallyUnusedIdentifiers.has(node.fileName));
-                    allPotentiallyUnusedIdentifiers.set(node.fileName, potentiallyUnusedIdentifiers = []);
-                }
-
                 forEach(node.statements, checkSourceElement);
 
                 checkDeferredNodes();
@@ -25626,7 +25631,7 @@ namespace ts {
                 }
 
                 if (!node.isDeclarationFile && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters)) {
-                    checkUnusedIdentifiers(potentiallyUnusedIdentifiers!, (kind, diag) => {
+                    checkUnusedIdentifiers(getPotentiallyUnusedIdentifiers(node), (kind, diag) => {
                         if (unusedIsError(kind)) {
                             diagnostics.add(diag);
                         }
@@ -25634,8 +25639,6 @@ namespace ts {
                 }
 
                 deferredNodes = undefined;
-                seenPotentiallyUnusedIdentifiers.clear();
-                potentiallyUnusedIdentifiers = undefined;
 
                 if (isExternalOrCommonJsModule(node)) {
                     checkExternalModuleExports(node);

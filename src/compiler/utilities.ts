@@ -1923,7 +1923,7 @@ namespace ts {
     }
 
     export function getHostSignatureFromJSDoc(node: Node): SignatureDeclaration | undefined {
-        return getHostSignatureFromJSDocHost(getJSDocHost(node)!); // TODO: GH#18217
+        return getHostSignatureFromJSDocHost(getJSDocHost(node));
     }
 
     export function getHostSignatureFromJSDocHost(host: HasJSDoc): SignatureDeclaration | undefined {
@@ -1936,12 +1936,8 @@ namespace ts {
         return decl && isFunctionLike(decl) ? decl : undefined;
     }
 
-    export function getJSDocHost(node: Node): HasJSDoc | undefined {
-        const comment = findAncestor(node.parent,
-            node => !(isJSDocNode(node) || node.flags & NodeFlags.JSDoc) ? "quit" : node.kind === SyntaxKind.JSDocComment);
-        if (comment) {
-            return (comment as JSDoc).parent;
-        }
+    export function getJSDocHost(node: Node): HasJSDoc {
+        return Debug.assertDefined(findAncestor(node.parent, isJSDoc)).parent;
     }
 
     export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { parent: JSDocTemplateTag }): TypeParameterDeclaration | undefined {
@@ -3131,9 +3127,9 @@ namespace ts {
     }
 
     export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration> {
-        const tags = filter(getJSDocTags(node), isJSDocTemplateTag);
         // template tags are only available when a typedef isn't already using them
-        const tag = find(tags, tag => !(tag.parent.kind === SyntaxKind.JSDocComment && find(tag.parent.tags!, isJSDocTypeAlias))); // TODO: GH#18217
+        const tag = find(getJSDocTags(node), (tag): tag is JSDocTemplateTag =>
+            isJSDocTemplateTag(tag) && !(tag.parent.kind === SyntaxKind.JSDocComment && tag.parent.tags!.some(isJSDocTypeAlias)));
         return (tag && tag.typeParameters) || emptyArray;
     }
 
