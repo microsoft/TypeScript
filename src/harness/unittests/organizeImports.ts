@@ -517,6 +517,26 @@ import { React, Other } from "react";
                 },
                 reactLibFile);
 
+            testOrganizeImports("JsxFactoryUnusedJsx",
+                {
+                    path: "/test.jsx",
+                    content: `
+import { React, Other } from "react";
+`,
+                },
+                reactLibFile);
+
+            // Note: Since the file extension does not end with "x", the jsx compiler option
+            // will not be enabled.  The import should be retained regardless.
+            testOrganizeImports("JsxFactoryUnusedJs",
+                {
+                    path: "/test.js",
+                    content: `
+import { React, Other } from "react";
+`,
+                },
+                reactLibFile);
+
             // This is descriptive, rather than normative
             testOrganizeImports("JsxFactoryUnusedTsx",
                 {
