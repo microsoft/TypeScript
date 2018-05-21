@@ -653,7 +653,7 @@
             </Item>
             <Item ItemId=";Add_missing_typeof_95052" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
-                <Val><![CDATA[Add missing typeof]]></Val>
+                <Val><![CDATA[Add missing 'typeof']]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -4269,6 +4269,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Remove_all_unused_labels_95054" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Remove all unused labels]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Remove_declaration_for_Colon_0_90004" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Remove declaration for: '{0}']]></Val>
@@ -4290,6 +4296,12 @@
             <Item ItemId=";Remove_unreachable_code_95050" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Remove unreachable code]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Remove_unused_label_95053" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Remove unused label]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>

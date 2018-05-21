@@ -106,6 +106,7 @@
   "Add_initializer_to_property_0_95019": "Ajouter un initialiseur à la propriété '{0}'",
   "Add_initializers_to_all_uninitialized_properties_95027": "Ajouter des initialiseurs à toutes les propriétés non initialisées",
   "Add_missing_super_call_90001": "Ajouter l'appel manquant à 'super()'",
+  "Add_missing_typeof_95052": "Ajouter un typeof manquant",
   "Add_qualifier_to_all_unresolved_variables_matching_a_member_name_95037": "Ajouter un qualificateur à toutes les variables non résolues correspondant à un nom de membre",
   "Add_to_all_uncalled_decorators_95044": "Ajouter '()' à tous les décorateurs non appelés",
   "Add_ts_ignore_to_all_error_messages_95042": "Ajouter '@ts-ignore' à tous les messages d'erreur",

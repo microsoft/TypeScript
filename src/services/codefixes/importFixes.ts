@@ -498,7 +498,7 @@ namespace ts.codefix {
         }
         for (const sourceFile of allSourceFiles) {
             if (isExternalOrCommonJsModule(sourceFile)) {
-                cb(sourceFile.symbol, sourceFile);
+                cb(checker.getMergedSymbol(sourceFile.symbol), sourceFile);
             }
         }
     }

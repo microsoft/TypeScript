@@ -76,7 +76,7 @@ namespace ts.refactor {
             case SyntaxKind.ImportEqualsDeclaration:
                 return !hasModifier(node, ModifierFlags.Export);
             case SyntaxKind.VariableStatement:
-                return (node as VariableStatement).declarationList.declarations.every(d => isRequireCall(d.initializer, /*checkArgumentIsStringLiteralLike*/ true));
+                return (node as VariableStatement).declarationList.declarations.every(d => d.initializer && isRequireCall(d.initializer, /*checkArgumentIsStringLiteralLike*/ true));
             default:
                 return false;
         }
