@@ -2564,6 +2564,10 @@ namespace ts {
         return startsWith(str, prefix) ? str.substr(prefix.length) : str;
     }
 
+    export function tryRemovePrefix(str: string, prefix: string): string | undefined {
+        return startsWith(str, prefix) ? str.substring(prefix.length) : undefined;
+    }
+
     export function endsWith(str: string, suffix: string): boolean {
         const expectedPos = str.length - suffix.length;
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
@@ -2571,6 +2575,10 @@ namespace ts {
 
     export function removeSuffix(str: string, suffix: string): string {
         return endsWith(str, suffix) ? str.slice(0, str.length - suffix.length) : str;
+    }
+
+    export function tryRemoveSuffix(str: string, suffix: string): string | undefined {
+        return endsWith(str, suffix) ? str.slice(0, str.length - suffix.length) : undefined;
     }
 
     export function stringContains(str: string, substring: string): boolean {
