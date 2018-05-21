@@ -1,8 +1,9 @@
 tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithAnyOtherType.ts(34,24): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithAnyOtherType.ts(35,23): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithAnyOtherType.ts(51,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithAnyOtherType.ts (2 errors) ====
+==== tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithAnyOtherType.ts (3 errors) ====
     // - operator on any type
     
     var ANY: any;
@@ -58,5 +59,7 @@ tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperator
     -ANY1;
     -ANY2[0];
     -ANY, ANY1;
+    ~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     -objA.a;
     -M.n;

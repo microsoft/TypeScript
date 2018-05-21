@@ -1,5 +1,11 @@
 tests/cases/conformance/types/witness/witness.ts(4,21): error TS2372: Parameter 'pInit' cannot be referenced in its initializer.
+tests/cases/conformance/types/witness/witness.ts(28,12): error TS2695: Left side of comma operator is unused and has no side effects.
 tests/cases/conformance/types/witness/witness.ts(29,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'co1' must be of type 'any', but here has type 'number'.
+tests/cases/conformance/types/witness/witness.ts(30,12): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/types/witness/witness.ts(30,12): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/types/witness/witness.ts(32,12): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/types/witness/witness.ts(32,12): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/types/witness/witness.ts(32,12): error TS2695: Left side of comma operator is unused and has no side effects.
 tests/cases/conformance/types/witness/witness.ts(33,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'co3' must be of type 'any', but here has type 'number'.
 tests/cases/conformance/types/witness/witness.ts(37,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'as1' must be of type 'any', but here has type 'number'.
 tests/cases/conformance/types/witness/witness.ts(39,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'as2' must be of type 'any', but here has type 'number'.
@@ -8,7 +14,7 @@ tests/cases/conformance/types/witness/witness.ts(57,5): error TS2403: Subsequent
 tests/cases/conformance/types/witness/witness.ts(110,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'propAcc1' must be of type 'any', but here has type '{ m: any; }'.
 
 
-==== tests/cases/conformance/types/witness/witness.ts (8 errors) ====
+==== tests/cases/conformance/types/witness/witness.ts (14 errors) ====
     // Initializers
     var varInit = varInit; // any
     var pInit: any;
@@ -39,12 +45,24 @@ tests/cases/conformance/types/witness/witness.ts(110,5): error TS2403: Subsequen
     
     // Comma
     var co1 = (co1, 3);
+               ~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     var co1: number;
         ~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'co1' must be of type 'any', but here has type 'number'.
     var co2 = (3, 4, co2);
+               ~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+               ~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     var co2: any;
     var co3 = (co1, co2, co3, co1);
+               ~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+               ~~~~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+               ~~~~~~~~~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
     var co3: number;
         ~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'co3' must be of type 'any', but here has type 'number'.

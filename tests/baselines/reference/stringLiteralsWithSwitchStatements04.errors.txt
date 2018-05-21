@@ -1,7 +1,11 @@
+tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements04.ts(7,10): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements04.ts(9,10): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements04.ts(11,10): error TS2695: Left side of comma operator is unused and has no side effects.
 tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements04.ts(11,10): error TS2678: Type '"baz"' is not comparable to type '"foo" | "bar"'.
+tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements04.ts(13,10): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements04.ts (1 errors) ====
+==== tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements04.ts (5 errors) ====
     let x: "foo";
     let y: "foo" | "bar"; 
     
@@ -9,14 +13,22 @@ tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements04.ts(11
     
     switch (y) {
         case "foo", x:
+             ~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
             break;
         case x, "foo":
+             ~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
             break;
         case x, "baz":
+             ~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
              ~~~~~~~~
 !!! error TS2678: Type '"baz"' is not comparable to type '"foo" | "bar"'.
             break;
         case "baz", x:
+             ~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
             break;
         case "baz" && "bar":
             break;
