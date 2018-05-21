@@ -899,7 +899,7 @@ namespace ts {
             if (!(target.flags & SymbolFlags.Transient)) {
                 target = cloneSymbol(target);
             }
-            if (!(target.flags & getExcludedSymbolFlags(source.flags))) {
+            if (!(target.flags & getExcludedSymbolFlags(source.flags)) || target.flags & SymbolFlags.JSContainer) {
                 Debug.assert(!!(target.flags & SymbolFlags.Transient));
                 // Javascript static-property-assignment declarations always merge, even though they are also values
                 if (source.flags & SymbolFlags.ValueModule && target.flags & SymbolFlags.ValueModule && target.constEnumOnlyModule && !source.constEnumOnlyModule) {
@@ -18924,10 +18924,6 @@ namespace ts {
         }
 
         function getJavaScriptClassType(symbol: Symbol): Type | undefined {
-            // const initializer = getDeclaredJavascriptInitializer(symbol.valueDeclaration);
-            // if (initializer) {
-                // symbol = getSymbolOfNode(initializer);
-            // }
             let inferred: Type | undefined;
             if (isJavaScriptConstructor(symbol.valueDeclaration)) {
                 inferred = getInferredClassType(symbol);

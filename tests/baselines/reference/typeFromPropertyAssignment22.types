@@ -11,11 +11,11 @@ function Installer () {
 }
 Installer.prototype.loadArgMetadata = function (next) {
 >Installer.prototype.loadArgMetadata = function (next) {    // ArrowFunction isn't treated as a this-container    (args) => {        this.args = 'hi'        this.newProperty = 1    }} : (next: any) => void
->Installer.prototype.loadArgMetadata : (next: any) => void
->Installer.prototype : typeof Installer.prototype
+>Installer.prototype.loadArgMetadata : any
+>Installer.prototype : any
 >Installer : typeof Installer
->prototype : typeof Installer.prototype
->loadArgMetadata : (next: any) => void
+>prototype : any
+>loadArgMetadata : any
 >function (next) {    // ArrowFunction isn't treated as a this-container    (args) => {        this.args = 'hi'        this.newProperty = 1    }} : (next: any) => void
 >next : any
 

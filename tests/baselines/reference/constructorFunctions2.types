@@ -32,11 +32,11 @@ const B = function() { this.id = 1; }
 
 B.prototype.m = function() { this.x = 2; }
 >B.prototype.m = function() { this.x = 2; } : () => void
->B.prototype.m : () => void
->B.prototype : typeof B.prototype
+>B.prototype.m : any
+>B.prototype : any
 >B : typeof B
->prototype : typeof B.prototype
->m : () => void
+>prototype : any
+>m : any
 >function() { this.x = 2; } : () => void
 >this.x = 2 : 2
 >this.x : number

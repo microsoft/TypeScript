@@ -1,7 +1,7 @@
 === tests/cases/conformance/salsa/a.js ===
 /** @param {number} x */
 function C(x) {
->C : Symbol(C, Decl(a.js, 0, 0), Decl(a.js, 3, 1))
+>C : Symbol(C, Decl(a.js, 0, 0))
 >x : Symbol(x, Decl(a.js, 1, 11))
 
     this.x = x
@@ -9,20 +9,19 @@ function C(x) {
 >x : Symbol(x, Decl(a.js, 1, 11))
 }
 C.prototype.m = function() {
->C.prototype.m : Symbol(C.prototype.m, Decl(a.js, 3, 1))
->C.prototype : Symbol(C.prototype.m, Decl(a.js, 3, 1))
->C : Symbol(C, Decl(a.js, 0, 0), Decl(a.js, 3, 1))
->prototype : Symbol(C.prototype, Decl(a.js, 4, 2))
->m : Symbol(C.prototype.m, Decl(a.js, 3, 1))
+>C.prototype : Symbol(C.m, Decl(a.js, 3, 1))
+>C : Symbol(C, Decl(a.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
+>m : Symbol(C.m, Decl(a.js, 3, 1))
 
     this.y = 12
 >this.y : Symbol(C.y, Decl(a.js, 4, 28))
->this : Symbol(C, Decl(a.js, 0, 0), Decl(a.js, 3, 1))
+>this : Symbol(C, Decl(a.js, 0, 0))
 >y : Symbol(C.y, Decl(a.js, 4, 28))
 }
 var c = new C(1)
 >c : Symbol(c, Decl(a.js, 7, 3))
->C : Symbol(C, Decl(a.js, 0, 0), Decl(a.js, 3, 1))
+>C : Symbol(C, Decl(a.js, 0, 0))
 
 c.x = undefined // should error
 >c.x : Symbol(C.x, Decl(a.js, 1, 15))

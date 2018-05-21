@@ -1,19 +1,18 @@
 === tests/cases/conformance/salsa/input.js ===
 function C() {
->C : Symbol(C, Decl(input.js, 0, 0), Decl(input.js, 2, 1))
+>C : Symbol(C, Decl(input.js, 0, 0))
 
     this.m = null;
 >m : Symbol(C.m, Decl(input.js, 0, 14))
 }
 C.prototype.m = function() {
->C.prototype.m : Symbol(C.prototype.m, Decl(input.js, 2, 1))
->C.prototype : Symbol(C.prototype.m, Decl(input.js, 2, 1))
->C : Symbol(C, Decl(input.js, 0, 0), Decl(input.js, 2, 1))
->prototype : Symbol(C.prototype, Decl(input.js, 3, 2))
->m : Symbol(C.prototype.m, Decl(input.js, 2, 1))
+>C.prototype : Symbol(C.m, Decl(input.js, 2, 1))
+>C : Symbol(C, Decl(input.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
+>m : Symbol(C.m, Decl(input.js, 2, 1))
 
     this.nothing();
->this : Symbol(C, Decl(input.js, 0, 0), Decl(input.js, 2, 1))
+>this : Symbol(C, Decl(input.js, 0, 0))
 }
 class X {
 >X : Symbol(X, Decl(input.js, 5, 1))
@@ -31,7 +30,7 @@ class X {
 >this : Symbol(X, Decl(input.js, 5, 1))
 
         this.mistake = 'frankly, complete nonsense';
->this.mistake : Symbol(X.mistake, Decl(input.js, 12, 5))
+>this.mistake : Symbol(X.mistake, Decl(input.js, 12, 5), Decl(input.js, 16, 16))
 >this : Symbol(X, Decl(input.js, 5, 1))
 >mistake : Symbol(X.mistake, Decl(input.js, 8, 35))
     }
@@ -39,7 +38,7 @@ class X {
 >m : Symbol(X.m, Decl(input.js, 10, 5))
     }
     mistake() {
->mistake : Symbol(X.mistake, Decl(input.js, 12, 5))
+>mistake : Symbol(X.mistake, Decl(input.js, 12, 5), Decl(input.js, 16, 16))
     }
 }
 let x = new X();
@@ -47,11 +46,11 @@ let x = new X();
 >X : Symbol(X, Decl(input.js, 5, 1))
 
 X.prototype.mistake = false;
->X.prototype.mistake : Symbol(X.mistake, Decl(input.js, 12, 5))
->X.prototype : Symbol(X.prototype.mistake, Decl(input.js, 16, 16))
+>X.prototype.mistake : Symbol(X.mistake, Decl(input.js, 12, 5), Decl(input.js, 16, 16))
+>X.prototype : Symbol(X.mistake, Decl(input.js, 12, 5), Decl(input.js, 16, 16))
 >X : Symbol(X, Decl(input.js, 5, 1))
 >prototype : Symbol(X.prototype)
->mistake : Symbol(X.prototype.mistake, Decl(input.js, 16, 16))
+>mistake : Symbol(X.mistake, Decl(input.js, 12, 5), Decl(input.js, 16, 16))
 
 x.m();
 >x.m : Symbol(X.m, Decl(input.js, 10, 5))
@@ -59,15 +58,15 @@ x.m();
 >m : Symbol(X.m, Decl(input.js, 10, 5))
 
 x.mistake;
->x.mistake : Symbol(X.mistake, Decl(input.js, 12, 5))
+>x.mistake : Symbol(X.mistake, Decl(input.js, 12, 5), Decl(input.js, 16, 16))
 >x : Symbol(x, Decl(input.js, 16, 3))
->mistake : Symbol(X.mistake, Decl(input.js, 12, 5))
+>mistake : Symbol(X.mistake, Decl(input.js, 12, 5), Decl(input.js, 16, 16))
 
 class Y {
 >Y : Symbol(Y, Decl(input.js, 19, 10))
 
     mistake() {
->mistake : Symbol(Y.mistake, Decl(input.js, 20, 9))
+>mistake : Symbol(Y.mistake, Decl(input.js, 20, 9), Decl(input.js, 29, 1))
     }
     m() {
 >m : Symbol(Y.m, Decl(input.js, 22, 5))
@@ -85,17 +84,17 @@ class Y {
 >this : Symbol(Y, Decl(input.js, 19, 10))
 
         this.mistake = 'even more nonsense';
->this.mistake : Symbol(Y.mistake, Decl(input.js, 20, 9))
+>this.mistake : Symbol(Y.mistake, Decl(input.js, 20, 9), Decl(input.js, 29, 1))
 >this : Symbol(Y, Decl(input.js, 19, 10))
->mistake : Symbol(Y.mistake, Decl(input.js, 20, 9))
+>mistake : Symbol(Y.mistake, Decl(input.js, 20, 9), Decl(input.js, 29, 1))
     }
 }
 Y.prototype.mistake = true;
->Y.prototype.mistake : Symbol(Y.mistake, Decl(input.js, 20, 9))
->Y.prototype : Symbol(Y.prototype.mistake, Decl(input.js, 29, 1))
+>Y.prototype.mistake : Symbol(Y.mistake, Decl(input.js, 20, 9), Decl(input.js, 29, 1))
+>Y.prototype : Symbol(Y.mistake, Decl(input.js, 20, 9), Decl(input.js, 29, 1))
 >Y : Symbol(Y, Decl(input.js, 19, 10))
 >prototype : Symbol(Y.prototype)
->mistake : Symbol(Y.prototype.mistake, Decl(input.js, 29, 1))
+>mistake : Symbol(Y.mistake, Decl(input.js, 20, 9), Decl(input.js, 29, 1))
 
 let y = new Y();
 >y : Symbol(y, Decl(input.js, 31, 3))
@@ -107,7 +106,7 @@ y.m();
 >m : Symbol(Y.m, Decl(input.js, 22, 5))
 
 y.mistake();
->y.mistake : Symbol(Y.mistake, Decl(input.js, 20, 9))
+>y.mistake : Symbol(Y.mistake, Decl(input.js, 20, 9), Decl(input.js, 29, 1))
 >y : Symbol(y, Decl(input.js, 31, 3))
->mistake : Symbol(Y.mistake, Decl(input.js, 20, 9))
+>mistake : Symbol(Y.mistake, Decl(input.js, 20, 9), Decl(input.js, 29, 1))
 
