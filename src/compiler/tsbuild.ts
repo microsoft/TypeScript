@@ -19,6 +19,12 @@ namespace ts {
         projectStatus: FileMap<UpToDateStatus>;
     }
 
+    type Mapper = ReturnType<typeof createDependencyMapper>;
+    interface DependencyGraph {
+        buildQueue: string[][];
+        dependencyMap: Mapper;
+    }
+
     enum BuildResultFlags {
         None = 0,
 
@@ -189,6 +195,47 @@ namespace ts {
         }
     }
 
+    export function createDependencyMapper() {
+        const childToParents: { [key: string]: string[] } = {};
+        const parentToChildren: { [key: string]: string[] } = {};
+        const allKeys: string[] = [];
+
+        function addReference(childConfigFileName: string, parentConfigFileName: string): void {
+            addEntry(childToParents, childConfigFileName, parentConfigFileName);
+            addEntry(parentToChildren, parentConfigFileName, childConfigFileName);
+        }
+
+        function getReferencesTo(parentConfigFileName: string): string[] {
+            return parentToChildren[normalizePath(parentConfigFileName)] || [];
+        }
+
+        function getReferencesOf(childConfigFileName: string): string[] {
+            return childToParents[normalizePath(childConfigFileName)] || [];
+        }
+
+        function getKeys(): ReadonlyArray<string> {
+            return allKeys;
+        }
+
+        function addEntry(mapToAddTo: typeof childToParents | typeof parentToChildren, key: string, element: string) {
+            key = normalizePath(key);
+            element = normalizePath(element);
+            const arr = (mapToAddTo[key] = mapToAddTo[key] || []);
+            if (arr.indexOf(element) < 0) {
+                arr.push(element);
+            }
+            if (allKeys.indexOf(key) < 0) allKeys.push(key);
+            if (allKeys.indexOf(element) < 0) allKeys.push(element);
+        }
+
+        return {
+            addReference,
+            getReferencesTo,
+            getReferencesOf,
+            getKeys
+        };
+    }
+
     function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine) {
         const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile.options, configFile.options.configFilePath), inputFileName, /*ignoreCase*/ true);
         const outputPath = resolvePath(configFile.options.declarationDir || configFile.options.outDir || getDirectoryPath(configFile.options.configFilePath), relativePath);
@@ -232,7 +279,7 @@ namespace ts {
     }
 
     function rootDirOfOptions(opts: CompilerOptions, configFileName: string) {
-        return opts.rootDir || path.dirname(configFileName);
+        return opts.rootDir || getDirectoryPath(configFileName);
     }
 
     function createConfigFileCache(host: CompilerHost) {
@@ -261,7 +308,12 @@ namespace ts {
         return date2 < date1 ? date2 : date1;
     }
 
+    function isDeclarationFile(fileName: string) {
+        return fileExtensionIs(fileName, ".d.ts");
+    }
+
     function createSolutionBuilder(host: CompilerHost) {
+        const diagReporter = createDiagnosticReporter(sys, /*pretty*/true);
         const configFileCache = createConfigFileCache(host);
 
         function getUpToDateStatus(project: ParsedCommandLine, context: BuildContext): UpToDateStatus {
@@ -394,8 +446,163 @@ namespace ts {
             };
         }
 
+        function createDependencyGraph(roots: string[]): DependencyGraph {
+            // This is a list of list of projects that need to be built.
+            // The ordering here is "backwards", i.e. the first entry in the array is the last set of projects that need to be built;
+            //   and the last entry is the first set of projects to be built.
+            // Each subarray is effectively unordered.
+            // We traverse the reference graph from each root, then "clean" the list by removing
+            //   any entry that is duplicated to its right.
+            const buildQueue: string[][] = [];
+            const dependencyMap = createDependencyMapper();
+            let buildQueuePosition = 0;
+            for (const root of roots) {
+                const config = configFileCache.parseConfigFile(root);
+                if (config === undefined) {
+                    throw new Error(`Could not parse ${root}`);
+                }
+                enumerateReferences(normalizePath(root), config);
+            }
+            removeDuplicatesFromBuildQueue(buildQueue);
+
+            return {
+                buildQueue,
+                dependencyMap
+            };
+
+            function enumerateReferences(fileName: string, root: ts.ParsedCommandLine): void {
+                const myBuildLevel = buildQueue[buildQueuePosition] = buildQueue[buildQueuePosition] || [];
+                if (myBuildLevel.indexOf(fileName) < 0) {
+                    myBuildLevel.push(fileName);
+                }
+
+                const refs = root.projectReferences;
+                if (refs === undefined) return;
+                buildQueuePosition++;
+                for (const ref of refs) {
+                    dependencyMap.addReference(fileName, ref.path);
+                    const resolvedRef = configFileCache.parseConfigFile(ref.path);
+                    if (resolvedRef === undefined) continue;
+                    enumerateReferences(normalizePath(ref.path), resolvedRef);
+                }
+                buildQueuePosition--;
+            }
+
+            /**
+             * Removes entries from arrays which appear in later arrays.
+             * TODO: Use a lookup object to optimize this a bit?
+             */
+            function removeDuplicatesFromBuildQueue(queue: string[][]): void {
+                // No need to check the last array
+                for (let i = 0; i < queue.length - 1; i++) {
+                    queue[i] = queue[i].filter(fn => !occursAfter(fn, i + 1));
+                }
+
+                function occursAfter(s: string, start: number) {
+                    for (let i = start; i < queue.length; i++) {
+                        if (queue[i].indexOf(s) >= 0) return true;
+                    }
+                    return false;
+                }
+            }
+        }
+
+        function buildSingleProject(proj: string, context: BuildContext) {
+            let resultFlags = BuildResultFlags.None;
+            resultFlags |= BuildResultFlags.DeclarationOutputUnchanged;
+
+            const configFile = configFileCache.parseConfigFile(proj);
+            if (!configFile) {
+                // Failed to read the config file
+                resultFlags |= BuildResultFlags.ConfigFileErrors;
+                return resultFlags;
+            }
+
+            if (configFile.fileNames.length === 0) {
+                // Nothing to build - must be a solution file, basically
+                return BuildResultFlags.None;
+            }
+
+            const programOptions: CreateProgramOptions = {
+                projectReferences: configFile.projectReferences,
+                host: host,
+                rootNames: configFile.fileNames,
+                options: configFile.options
+            };
+            const program = ts.createProgram(programOptions);
+
+            // Don't emit anything in the presence of syntactic errors or options diagnostics
+            const syntaxDiagnostics = [...program.getOptionsDiagnostics(), ...program.getSyntacticDiagnostics()];
+            if (syntaxDiagnostics.length) {
+                resultFlags |= BuildResultFlags.SyntaxErrors;
+                for (const diag of syntaxDiagnostics) {
+                    diagReporter(diag);
+                }
+                return resultFlags;
+            }
+
+            // Don't emit .d.ts if there are decl file errors
+            if (program.getCompilerOptions().declaration) {
+                const declDiagnostics = program.getDeclarationDiagnostics();
+                if (declDiagnostics.length) {
+                    resultFlags |= BuildResultFlags.DeclarationEmitErrors;
+                    for (const diag of declDiagnostics) {
+                        diagReporter(diag);
+                    }
+                }
+                return resultFlags;
+            }
+
+            const semanticDiagnostics = [...program.getSemanticDiagnostics()];
+            if (semanticDiagnostics.length) {
+                resultFlags |= BuildResultFlags.TypeErrors;
+                for (const diag of semanticDiagnostics) {
+                    diagReporter(diag);
+                }
+                return resultFlags;
+            }
+
+            program.emit(undefined, (fileName, content, writeBom, onError) => {
+                let priorChangeTime: Date | undefined;
+
+                if (isDeclarationFile(fileName) && host.fileExists(fileName)) {
+                    if (host.readFile(fileName) === content) {
+                        resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
+                        priorChangeTime = host.getLastWriteTime && host.getLastWriteTime(fileName);
+                    }
+                }
+
+                host.writeFile(fileName, content, writeBom, onError, emptyArray);
+                if (priorChangeTime !== undefined) {
+                    context.unchangedOutputs.setValue(fileName, priorChangeTime);
+                }
+            });
+
+            return resultFlags;
+        }
+
+        function buildProjects(configFileNames: string[], context: BuildContext) {
+            // Establish what needs to be built
+            const graph = createDependencyGraph(configFileNames);
+
+            const queue = graph.buildQueue;
+            while (queue.length > 0) {
+                const next = queue[0].pop()!;
+
+                const result = buildSingleProject(next, context);
+                if (result & BuildResultFlags.AnyErrors) {
+                    break;
+                }
+
+                if (queue[0].length === 0) {
+                    queue.pop();
+                }
+            }
+        }
+
         return {
-            getUpToDateStatus
+            getUpToDateStatus,
+            buildProjects
         };
     }
 }

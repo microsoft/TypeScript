@@ -4768,6 +4768,8 @@ namespace ts {
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
         createHash?(data: string): string;
+
+        getLastWriteTime?(fileName: string): Date;
     }
 
     /* @internal */
