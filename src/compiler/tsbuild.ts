@@ -1,6 +1,6 @@
 namespace ts {
-    const MinimumDate = new Date(-8640000000000000);
-    const MaximumDate = new Date(8640000000000000);
+    const minimumDate = new Date(-8640000000000000);
+    const maximumDate = new Date(8640000000000000);
 
     /**
      * A BuildContext tracks what's going on during the course of a build.
@@ -133,7 +133,8 @@ namespace ts {
      * A FileMap maintains a normalized-key to value relationship
      */
     function createFileMap<T>(): FileMap<T> {
-        const lookup: { [key: string]: T } = Object.create(null);
+        // tslint:disable-next-line:no-null-keyword
+        const lookup: { [key: string]: T } = Object.create(/*prototype*/ null);
 
         return {
             setValue,
@@ -141,7 +142,7 @@ namespace ts {
             getValueOrUndefined,
             getValueOrDefault,
             tryGetValue
-        }
+        };
 
         function setValue(fileName: string, value: T) {
             lookup[normalizePath(fileName)] = value;
@@ -151,7 +152,8 @@ namespace ts {
             const f = normalizePath(fileName);
             if (f in lookup) {
                 return lookup[f];
-            } else {
+            }
+            else {
                 throw new Error(`No value corresponding to ${fileName} exists in this map`);
             }
         }
@@ -160,7 +162,8 @@ namespace ts {
             const f = normalizePath(fileName);
             if (f in lookup) {
                 return lookup[f];
-            } else {
+            }
+            else {
                 return undefined;
             }
         }
@@ -169,7 +172,8 @@ namespace ts {
             const f = normalizePath(fileName);
             if (f in lookup) {
                 return lookup[f];
-            } else {
+            }
+            else {
                 return defaultValue;
             }
         }
@@ -178,26 +182,27 @@ namespace ts {
             const f = normalizePath(fileName);
             if (f in lookup) {
                 return [true as true, lookup[f]];
-            } else {
+            }
+            else {
                 return [false as false, undefined];
             }
         }
     }
 
-    function getOutputDeclarationFileName(inputFileName: string, configFile: ts.ParsedCommandLine) {
-        const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile.options, configFile.options.configFilePath), inputFileName, true);
+    function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine) {
+        const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile.options, configFile.options.configFilePath), inputFileName, /*ignoreCase*/ true);
         const outputPath = resolvePath(configFile.options.declarationDir || configFile.options.outDir || getDirectoryPath(configFile.options.configFilePath), relativePath);
         return changeExtension(outputPath, ".d.ts");
     }
 
-    function getOutputJavaScriptFileName(inputFileName: string, configFile: ts.ParsedCommandLine) {
+    function getOutputJavaScriptFileName(inputFileName: string, configFile: ParsedCommandLine) {
         // TODO handle JSX: Preserve
-        const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile.options, configFile.options.configFilePath), inputFileName, true);
+        const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile.options, configFile.options.configFilePath), inputFileName, /*ignoreCase*/ true);
         const outputPath = resolvePath(configFile.options.outDir || getDirectoryPath(configFile.options.configFilePath), relativePath);
         return changeExtension(outputPath, (fileExtensionIs(inputFileName, ".tsx") && configFile.options.jsx === JsxEmit.Preserve) ? ".jsx" : ".js");
     }
 
-    function getOutputFileNames(inputFileName: string, configFile: ts.ParsedCommandLine): ReadonlyArray<string> {
+    function getOutputFileNames(inputFileName: string, configFile: ParsedCommandLine): ReadonlyArray<string> {
         if (configFile.options.outFile) {
             return emptyArray;
         }
@@ -213,7 +218,7 @@ namespace ts {
         return outputs;
     }
 
-    function getOutFileOutputs(project: ts.ParsedCommandLine): ReadonlyArray<string> {
+    function getOutFileOutputs(project: ParsedCommandLine): ReadonlyArray<string> {
         Debug.assert(!!project.options.outFile, "outFile must be set");
         const outputs: string[] = [];
         outputs.push(project.options.outFile);
@@ -226,7 +231,7 @@ namespace ts {
         return outputs;
     }
 
-    function rootDirOfOptions(opts: ts.CompilerOptions, configFileName: string) {
+    function rootDirOfOptions(opts: CompilerOptions, configFileName: string) {
         return opts.rootDir || path.dirname(configFileName);
     }
 
@@ -245,7 +250,7 @@ namespace ts {
 
         return {
             parseConfigFile
-        }
+        };
     }
 
     function newer(date1: Date, date2: Date): Date {
@@ -270,8 +275,8 @@ namespace ts {
         }
 
         function getUpToDateStatusWorker(project: ParsedCommandLine, context: BuildContext): UpToDateStatus {
-            let newestInputFileName: string = '???';
-            let newestInputFileTime = MinimumDate;
+            let newestInputFileName: string = undefined!;
+            let newestInputFileTime = minimumDate;
             // Get timestamps of input files
             for (const inputFile of project.fileNames) {
                 if (!host.fileExists(inputFile)) {
@@ -301,10 +306,10 @@ namespace ts {
             }
 
             // Now see if all outputs are newer than the newest input
-            let oldestOutputFileName: string = "n/a";
-            let oldestOutputFileTime: Date = MinimumDate;
-            let newestOutputFileTime: Date = MaximumDate;
-            let newestDeclarationFileContentChangedTime: Date = MinimumDate;
+            let oldestOutputFileName: string = undefined!;
+            let oldestOutputFileTime: Date = minimumDate;
+            let newestOutputFileTime: Date = maximumDate;
+            let newestDeclarationFileContentChangedTime: Date = minimumDate;
             for (const output of outputs) {
                 // Output is missing
                 if (!host.fileExists(output)) {
@@ -356,7 +361,7 @@ namespace ts {
                     return {
                         type: UpToDateStatusType.UpstreamOutOfDate,
                         upstreamProjectName: ref.path
-                    }
+                    };
                 }
 
                 // If the upstream project's newest file is older than our oldest output, we
