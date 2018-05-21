@@ -94,6 +94,14 @@ declare function escape(string: string): string;
   */
 declare function unescape(string: string): string;
 
+interface Symbol {
+  /** Returns a string representation of an object. */
+  toString(): string;
+
+  /** Returns the primitive value of the specified object. */
+  valueOf(): symbol;
+}
+
 declare type PropertyKey = string | number | symbol;
 
 interface PropertyDescriptor {
@@ -5497,14 +5505,6 @@ declare namespace Reflect {
     function setPrototypeOf(target: object, proto: any): boolean;
 }
 
-
-interface Symbol {
-    /** Returns a string representation of an object. */
-    toString(): string;
-
-    /** Returns the primitive value of the specified object. */
-    valueOf(): symbol;
-}
 
 interface SymbolConstructor {
     /**
@@ -22114,6 +22114,11 @@ declare var WScript: {
      */
     Sleep(intTime: number): void;
 };
+
+/**
+ * WSH is an alias for WScript under Windows Script Host
+ */
+declare var WSH: typeof WScript;
 
 /**
  * Represents an Automation SAFEARRAY
