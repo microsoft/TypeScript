@@ -12777,7 +12777,9 @@ namespace ts {
             const widenLiteralTypes = inference.topLevel &&
                 !hasPrimitiveConstraint(inference.typeParameter) &&
                 (inference.isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), inference.typeParameter));
-            const baseCandidates = widenLiteralTypes ? sameMap(candidates, getWidenedLiteralType) : candidates;
+            const baseCandidates = widenLiteralTypes ? sameMap(candidates, getWidenedLiteralType) :
+                hasPrimitiveConstraint(inference.typeParameter) ? sameMap(candidates, getRegularTypeOfLiteralType) :
+                candidates;
             // If all inferences were made from contravariant positions, infer a common subtype. Otherwise, if
             // union types were requested or if all inferences were made from the return type position, infer a
             // union type. Otherwise, infer a common supertype.
