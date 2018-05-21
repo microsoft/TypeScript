@@ -1398,34 +1398,6 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
-    /**
-     * Find symbol of the given property-name and add the symbol to the given result array
-     * @param symbol a symbol to start searching for the given propertyName
-     * @param propertyName a name of property to search for
-     * @param result an array of symbol of found property symbols
-     * @param previousIterationSymbolsCache a cache of symbol from previous iterations of calling this function to prevent infinite revisiting of the same symbol.
-     *                                The value of previousIterationSymbol is undefined when the function is first called.
-     */
-    function getPropertySymbolsFromBaseTypes<T>(symbol: Symbol, propertyName: string, checker: TypeChecker, cb: (symbol: Symbol) => T | undefined): T | undefined {
-        const seen = createMap<true>();
-        return recur(symbol);
-
-        function recur(symbol: Symbol): T | undefined {
-            // Use `addToSeen` to ensure we don't infinitely recurse in this situation:
-            //      interface C extends C {
-            //          /*findRef*/propName: string;
-            //      }
-            if (!(symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) || !addToSeen(seen, getSymbolId(symbol))) return;
-
-            return firstDefined(symbol.declarations, declaration => firstDefined(getAllSuperTypeNodes(declaration), typeReference => {
-                const type = checker.getTypeAtLocation(typeReference);
-                const propertySymbol = type && type.symbol && checker.getPropertyOfType(type, propertyName);
-                // Visit the typeReference as well to see if it directly or indirectly uses that property
-                return propertySymbol && (firstDefined(checker.getRootSymbols(propertySymbol), cb) || recur(type.symbol));
-            }));
-        }
-    }
-
     function getRelatedSymbol(search: Search, referenceSymbol: Symbol, referenceLocation: Node, state: State): Symbol | undefined {
         const { checker } = state;
         return forEachRelatedSymbol(referenceSymbol, referenceLocation, checker,
