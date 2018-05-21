@@ -1865,8 +1865,7 @@ namespace ts {
             //   * @returns {number}
             //   */
             // var x = function(name) { return name.length; }
-            if (parent.parent &&
-                (getSingleVariableOfVariableStatement(parent.parent) === node)) {
+            if (parent.parent && (getSingleVariableOfVariableStatement(parent.parent) === node)) {
                 getJSDocCommentsAndTagsWorker(parent.parent);
             }
             if (parent.parent && parent.parent.parent &&
@@ -1913,8 +1912,11 @@ namespace ts {
         return parameter && parameter.symbol;
     }
 
-    export function getHostSignatureFromJSDoc(node: JSDocTag): SignatureDeclaration | undefined {
-        const host = getJSDocHost(node);
+    export function getHostSignatureFromJSDoc(node: Node): SignatureDeclaration | undefined {
+        return getHostSignatureFromJSDocHost(getJSDocHost(node));
+    }
+
+    export function getHostSignatureFromJSDocHost(host: HasJSDoc): SignatureDeclaration | undefined {
         const decl = getSourceOfDefaultedAssignment(host) ||
             getSourceOfAssignment(host) ||
             getSingleInitializerOfVariableStatementOrPropertyDeclaration(host) ||
@@ -1925,11 +1927,7 @@ namespace ts {
     }
 
     export function getJSDocHost(node: Node): HasJSDoc {
-        const comment = findAncestor(node.parent,
-            node => !(isJSDocNode(node) || node.flags & NodeFlags.JSDoc) ? "quit" : node.kind === SyntaxKind.JSDocComment);
-        if (comment) {
-            return (comment as JSDoc).parent;
-        }
+        return Debug.assertDefined(findAncestor(node.parent, isJSDoc)).parent;
     }
 
     export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { parent: JSDocTemplateTag }): TypeParameterDeclaration | undefined {
@@ -2876,11 +2874,11 @@ namespace ts {
         };
     }
 
-    export function getResolvedExternalModuleName(host: EmitHost, file: SourceFile): string {
-        return file.moduleName || getExternalModuleNameFromPath(host, file.fileName);
+    export function getResolvedExternalModuleName(host: ModuleNameResolverHost, file: SourceFile, referenceFile?: SourceFile): string {
+        return file.moduleName || getExternalModuleNameFromPath(host, file.fileName, referenceFile && referenceFile.fileName);
     }
 
-    export function getExternalModuleNameFromDeclaration(host: EmitHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode): string {
+    export function getExternalModuleNameFromDeclaration(host: ModuleNameResolverHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode): string {
         const file = resolver.getExternalModuleFileFromDeclaration(declaration);
         if (!file || file.isDeclarationFile) {
             return undefined;
@@ -2891,12 +2889,13 @@ namespace ts {
     /**
      * Resolves a local path to a path which is absolute to the base of the emit
      */
-    export function getExternalModuleNameFromPath(host: EmitHost, fileName: string): string {
+    export function getExternalModuleNameFromPath(host: ModuleNameResolverHost, fileName: string, referencePath?: string): string {
         const getCanonicalFileName = (f: string) => host.getCanonicalFileName(f);
-        const dir = toPath(host.getCommonSourceDirectory(), host.getCurrentDirectory(), getCanonicalFileName);
+        const dir = toPath(referencePath ? getDirectoryPath(referencePath) : host.getCommonSourceDirectory(), host.getCurrentDirectory(), getCanonicalFileName);
         const filePath = getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());
         const relativePath = getRelativePathToDirectoryOrUrl(dir, filePath, dir, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
-        return removeFileExtension(relativePath);
+        const extensionless = removeFileExtension(relativePath);
+        return referencePath ? ensurePathIsNonModuleName(extensionless) : extensionless;
     }
 
     export function getOwnEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost, extension: string) {
@@ -3098,9 +3097,9 @@ namespace ts {
      * Gets the effective type parameters. If the node was parsed in a
      * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
      */
-    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters) {
+    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration> {
         if (isJSDocSignature(node)) {
-            return undefined;
+            return emptyArray;
         }
         if (isJSDocTypeAlias(node)) {
             Debug.assert(node.parent.kind === SyntaxKind.JSDocComment);
@@ -3111,17 +3110,14 @@ namespace ts {
             templateTagNodes.hasTrailingComma = false;
             return templateTagNodes;
         }
-        return node.typeParameters || (isInJavaScriptFile(node) ? getJSDocTypeParameterDeclarations(node) : undefined);
+        return node.typeParameters || (isInJavaScriptFile(node) ? getJSDocTypeParameterDeclarations(node) : emptyArray);
     }
 
-    export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters) {
-        const tags = filter(getJSDocTags(node), isJSDocTemplateTag);
-        for (const tag of tags) {
-            if (!(tag.parent.kind === SyntaxKind.JSDocComment && find(tag.parent.tags, isJSDocTypeAlias))) {
-                // template tags are only available when a typedef isn't already using them
-                return tag.typeParameters;
-            }
-        }
+    export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration> {
+        // template tags are only available when a typedef isn't already using them
+        const tag = find(getJSDocTags(node), (tag): tag is JSDocTemplateTag =>
+            isJSDocTemplateTag(tag) && !(tag.parent.kind === SyntaxKind.JSDocComment && tag.parent.tags!.some(isJSDocTypeAlias)));
+        return (tag && tag.typeParameters) || emptyArray;
     }
 
     /**

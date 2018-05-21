@@ -24,8 +24,8 @@ function C() {
 === tests/cases/conformance/jsdoc/use.js ===
 /** @param {import('./mod1').Con} k */
 function f(k) {
->f : (k: (error: any) => any) => any
->k : (error: any) => any
+>f : (k: import("tests/cases/conformance/jsdoc/mod1").Con) => any
+>k : import("tests/cases/conformance/jsdoc/mod1").Con
 
     if (1 === 2 - 1) {
 >1 === 2 - 1 : boolean
@@ -38,7 +38,7 @@ function f(k) {
     }
     return k({ ok: true})
 >k({ ok: true}) : any
->k : (error: any) => any
+>k : import("tests/cases/conformance/jsdoc/mod1").Con
 >{ ok: true} : { ok: boolean; }
 >ok : boolean
 >true : true

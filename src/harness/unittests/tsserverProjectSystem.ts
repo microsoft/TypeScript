@@ -407,6 +407,12 @@ namespace ts.projectSystem {
         checkArray("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path).fileName), expectedFiles.map(file => file.path));
     }
 
+    function textSpanFromSubstring(str: string, substring: string): TextSpan {
+        const start = str.indexOf(substring);
+        Debug.assert(start !== -1);
+        return createTextSpan(start, substring.length);
+    }
+
     /**
      * Test server cancellation token used to mock host token cancellation requests.
      * The cancelAfterRequest constructor param specifies how many isCancellationRequested() calls
@@ -8381,6 +8387,31 @@ new C();`
 
         it("uses dynamic polling when file is added to subfolder, completion list has new file", () => {
             verifyCompletionListWithNewFileInSubFolder(TestFSWithWatch.Tsc_WatchDirectory.DynamicPolling);
+        });
+    });
+
+    describe("tsserverProjectSystem getEditsForFileRename", () => {
+        it("works for host implementing 'resolveModuleNames' and 'getResolvedModuleWithFailedLookupLocationsFromCache'", () => {
+            const userTs: File = {
+                path: "/user.ts",
+                content: 'import { x } from "./old";',
+            };
+
+            const host = createServerHost([userTs]);
+            const projectService = createProjectService(host);
+            projectService.openClientFile(userTs.path);
+            const project = first(projectService.inferredProjects);
+
+            Debug.assert(!!project.resolveModuleNames);
+
+            const edits = project.getLanguageService().getEditsForFileRename("/old.ts", "/new.ts", testFormatOptions);
+            assert.deepEqual<ReadonlyArray<FileTextChanges>>(edits, [{
+                fileName: "/user.ts",
+                textChanges: [{
+                    span: textSpanFromSubstring(userTs.content, "./old"),
+                    newText: "./new",
+                }],
+            }]);
         });
     });
 

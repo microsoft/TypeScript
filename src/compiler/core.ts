@@ -320,6 +320,15 @@ namespace ts {
         return -1;
     }
 
+    export function findLastIndex<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean, startIndex?: number): number {
+        for (let i = startIndex === undefined ? array.length - 1 : startIndex; i >= 0; i--) {
+            if (predicate(array[i], i)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     /**
      * Returns the first truthy result of `callback`, or else fails.
      * This is like `forEach`, but never returns undefined.
@@ -694,6 +703,23 @@ namespace ts {
             }
         }
         return false;
+    }
+
+    /** Calls the callback with (start, afterEnd) index pairs for each range where 'pred' is true. */
+    export function getRangesWhere<T>(arr: ReadonlyArray<T>, pred: (t: T) => boolean, cb: (start: number, afterEnd: number) => void): void {
+        let start: number | undefined;
+        for (let i = 0; i < arr.length; i++) {
+            if (pred(arr[i])) {
+                start = start === undefined ? i : start;
+            }
+            else {
+                if (start !== undefined) {
+                    cb(start, i);
+                    start = undefined;
+                }
+            }
+        }
+        if (start !== undefined) cb(start, arr.length);
     }
 
     export function concatenate<T>(array1: T[], array2: T[]): T[];
