@@ -8391,6 +8391,7 @@ declare namespace ts.server {
         suppressDiagnosticEvents?: boolean;
         syntaxOnly?: boolean;
         throttleWaitMilliseconds?: number;
+        noGetErrOnBackgroundUpdate?: boolean;
         globalPlugins?: ReadonlyArray<string>;
         pluginProbeLocations?: ReadonlyArray<string>;
         allowLocalPluginLoads?: boolean;
@@ -8410,6 +8411,7 @@ declare namespace ts.server {
         protected canUseEvents: boolean;
         private suppressDiagnosticEvents?;
         private eventHandler;
+        private readonly noGetErrOnBackgroundUpdate?;
         constructor(opts: SessionOptions);
         private sendRequestCompletedEvent;
         private defaultEventHandler;

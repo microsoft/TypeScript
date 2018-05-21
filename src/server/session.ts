@@ -295,6 +295,7 @@ namespace ts.server {
         suppressDiagnosticEvents?: boolean;
         syntaxOnly?: boolean;
         throttleWaitMilliseconds?: number;
+        noGetErrOnBackgroundUpdate?: boolean;
 
         globalPlugins?: ReadonlyArray<string>;
         pluginProbeLocations?: ReadonlyArray<string>;
@@ -319,6 +320,7 @@ namespace ts.server {
         protected canUseEvents: boolean;
         private suppressDiagnosticEvents?: boolean;
         private eventHandler: ProjectServiceEventHandler;
+        private readonly noGetErrOnBackgroundUpdate?: boolean;
 
         constructor(opts: SessionOptions) {
             this.host = opts.host;
@@ -329,6 +331,7 @@ namespace ts.server {
             this.logger = opts.logger;
             this.canUseEvents = opts.canUseEvents;
             this.suppressDiagnosticEvents = opts.suppressDiagnosticEvents;
+            this.noGetErrOnBackgroundUpdate = opts.noGetErrOnBackgroundUpdate;
 
             const { throttleWaitMilliseconds } = opts;
 
@@ -404,7 +407,7 @@ namespace ts.server {
         private projectsUpdatedInBackgroundEvent(openFiles: string[]): void {
             this.projectService.logger.info(`got projects updated in background, updating diagnostics for ${openFiles}`);
             if (openFiles.length) {
-                if (!this.suppressDiagnosticEvents) {
+                if (!this.suppressDiagnosticEvents && !this.noGetErrOnBackgroundUpdate) {
                     const checkList = this.createCheckList(openFiles);
 
                     // For now only queue error checking for open files. We can change this to include non open files as well
