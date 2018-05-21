@@ -3556,6 +3556,11 @@
         "code": 6198,
         "reportsUnnecessary": true
     },
+    "All variables are unused.": {
+        "category": "Error",
+        "code": 6199,
+        "reportsUnnecessary": true
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -3993,6 +3998,10 @@
     "Remove destructuring": {
         "category": "Message",
         "code": 90009
+    },
+    "Remove variable statement": {
+        "category": "Message",
+        "code": 90010
     },
     "Import '{0}' from module \"{1}\"": {
         "category": "Message",
