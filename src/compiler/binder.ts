@@ -2470,16 +2470,11 @@ namespace ts {
                     }
                 });
             }
-            // TODO: This should probably be an assert, and I don't *think* it makes sense to restrict the container kind, but I am not sure
-            // function isJavascriptContainer(node: Node) {
-                // return isClassDeclaration(node) || isFunctionDeclaration(node) || !!getDeclaredJavascriptInitializer(node) || !!getAssignedJavascriptInitializer(node)
-            // }
-            if (!symbol) { // || !isJavascriptContainer(symbol.valueDeclaration)) {
+            if (!symbol || !hasValidJavascriptContainer(symbol)) {
                 return;
             }
 
             // Set up the members collection if it doesn't exist already
-            // TODO: I can probably get rid of the special-case for prototype properties now and just set *exports* on prototype. Not sure about that though.
             const symbolTable = isPrototypeProperty ?
                 (symbol.members || (symbol.members = createSymbolTable())) :
                 (symbol.exports || (symbol.exports = createSymbolTable()));
@@ -2490,6 +2485,22 @@ namespace ts {
             const symbolFlags = (isMethod ? SymbolFlags.Method : SymbolFlags.Property) | jsContainerFlag;
             const symbolExcludes = (isMethod ? SymbolFlags.MethodExcludes : SymbolFlags.PropertyExcludes) & ~jsContainerFlag;
             declareSymbol(symbolTable, symbol, propertyAccess, symbolFlags, symbolExcludes);
+        }
+
+        function hasValidJavascriptContainer(symbol: Symbol): boolean {
+            const node = symbol.valueDeclaration;
+            if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.NamespaceModule | SymbolFlags.JSContainer)) {
+                return true;
+            }
+            const init = isVariableDeclaration(node) ? node.initializer :
+                isBinaryExpression(node) ? node.right :
+                isPropertyAccessExpression(node) && isBinaryExpression(node.parent) ? node.parent.right :
+                undefined;
+            if (init) {
+                return !!getJavascriptInitializer(isBinaryExpression(init) && init.operatorToken.kind === SyntaxKind.BarBarToken ? init.right : init, /*isPrototypeAssignment*/ false);
+            }
+
+            return false;
         }
 
         function getParentOfBinaryExpression(expr: BinaryExpression) {
