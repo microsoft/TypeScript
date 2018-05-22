@@ -22,8 +22,14 @@ namespace ts.refactor {
 
         const startNodeIndex = findIndex(statements, s => s.end > range.pos);
         if (startNodeIndex === -1) return undefined;
+
+        const startStatement = statements[startNodeIndex];
+        if (isNamedDeclaration(startStatement) && startStatement.name && rangeContainsRange(startStatement.name, range)) {
+            return { first: startNodeIndex, afterLast: startNodeIndex + 1 };
+        }
+
         // Can't only partially include the start node or be partially into the next node
-        if (range.pos > statements[startNodeIndex].getStart(file)) return undefined;
+        if (range.pos > startStatement.getStart(file)) return undefined;
         const afterEndNodeIndex = findIndex(statements, s => s.end > range.end, startNodeIndex);
         // Can't be partially into the next node
         if (afterEndNodeIndex !== -1 && (afterEndNodeIndex === 0 || statements[afterEndNodeIndex].getStart(file) < range.end)) return undefined;

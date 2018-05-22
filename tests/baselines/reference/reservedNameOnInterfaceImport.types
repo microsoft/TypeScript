@@ -3,12 +3,12 @@ declare module test {
 >test : any
 
     interface istring { }
->istring : string
+>istring : istring
 
     // Should error; 'test.istring' is a type, so this import conflicts with the 'string' type.
     import string = test.istring;
 >string : any
 >test : any
->istring : string
+>istring : istring
 }
 
