@@ -502,7 +502,7 @@ namespace ts {
             if (project.projectReferences) {
                 for (const ref of project.projectReferences) {
                     const resolvedRef = resolveProjectReferencePath(host, ref);
-                    const refStatus = getUpToDateStatus(configFileCache.parseConfigFile(resolvedRef), context);
+                    const refStatus = getUpToDateStatus(configFileCache.parseConfigFile(resolvedRef));
 
                     // If the upstream project is out of date, then so are we (someone shouldn't have asked, though?)
                     if (refStatus.type !== UpToDateStatusType.UpToDate) {
@@ -767,7 +767,7 @@ namespace ts {
             let next: string;
             while (next = getNext()) {
                 const proj = configFileCache.parseConfigFile(next);
-                const status = getUpToDateStatus(proj, context);
+                const status = getUpToDateStatus(proj);
                 reportProjectStatus(next, status);
 
                 if (status.type === UpToDateStatusType.UpToDate && !context.options.force) {
