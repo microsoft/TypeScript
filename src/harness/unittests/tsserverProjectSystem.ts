@@ -407,6 +407,12 @@ namespace ts.projectSystem {
         checkArray("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path).fileName), expectedFiles.map(file => file.path));
     }
 
+    function textSpanFromSubstring(str: string, substring: string): TextSpan {
+        const start = str.indexOf(substring);
+        Debug.assert(start !== -1);
+        return createTextSpan(start, substring.length);
+    }
+
     /**
      * Test server cancellation token used to mock host token cancellation requests.
      * The cancelAfterRequest constructor param specifies how many isCancellationRequested() calls
@@ -7445,10 +7451,17 @@ namespace ts.projectSystem {
         });
 
         describe("when event handler is not set but session is created with canUseEvents = true", () => {
-            verifyProjectsUpdatedInBackgroundEvent(createSessionThatUsesEvents);
+            describe("without noGetErrOnBackgroundUpdate, diagnostics for open files are queued", () => {
+                verifyProjectsUpdatedInBackgroundEvent(createSessionThatUsesEvents);
+            });
 
-            function createSessionThatUsesEvents(host: TestServerHost): ProjectsUpdatedInBackgroundEventVerifier {
-                const session = createSession(host, { canUseEvents: true });
+            describe("with noGetErrOnBackgroundUpdate, diagnostics for open file are not queued", () => {
+                verifyProjectsUpdatedInBackgroundEvent(host => createSessionThatUsesEvents(host, /*noGetErrOnBackgroundUpdate*/ true));
+            });
+
+
+            function createSessionThatUsesEvents(host: TestServerHost, noGetErrOnBackgroundUpdate?: boolean): ProjectsUpdatedInBackgroundEventVerifier {
+                const session = createSession(host, { canUseEvents: true, noGetErrOnBackgroundUpdate });
 
                 return {
                     session,
@@ -7480,6 +7493,10 @@ namespace ts.projectSystem {
 
                     // Verified the events, reset them
                     session.clearMessages();
+
+                    if (events.length) {
+                        host.checkTimeoutQueueLength(noGetErrOnBackgroundUpdate ? 0 : 1); // Error checking queued only if not noGetErrOnBackgroundUpdate
+                    }
                 }
             }
         });
@@ -8409,9 +8426,96 @@ new C();`
         });
     });
 
-    function textSpanFromSubstring(str: string, substring: string): TextSpan {
-        const start = str.indexOf(substring);
-        Debug.assert(start !== -1);
-        return createTextSpan(start, substring.length);
-    }
+    describe("document registry in project service", () => {
+        const projectRootPath = "/user/username/projects/project";
+        const importModuleContent = `import {a} from "./module1"`;
+        const file: File = {
+            path: `${projectRootPath}/index.ts`,
+            content: importModuleContent
+        };
+        const moduleFile: File = {
+            path: `${projectRootPath}/module1.d.ts`,
+            content: "export const a: number;"
+        };
+        const configFile: File = {
+            path: `${projectRootPath}/tsconfig.json`,
+            content: JSON.stringify({ files: ["index.ts"] })
+        };
+
+        function getProject(service: TestProjectService) {
+            return service.configuredProjects.get(configFile.path);
+        }
+
+        function checkProject(service: TestProjectService, moduleIsOrphan: boolean) {
+            // Update the project
+            const project = getProject(service);
+            project.getLanguageService();
+            checkProjectActualFiles(project, [file.path, libFile.path, configFile.path, ...(moduleIsOrphan ? [] : [moduleFile.path])]);
+            const moduleInfo = service.getScriptInfo(moduleFile.path);
+            assert.isDefined(moduleInfo);
+            assert.equal(moduleInfo.isOrphan(), moduleIsOrphan);
+            const key = service.documentRegistry.getKeyForCompilationSettings(project.getCompilationSettings());
+            assert.deepEqual(service.documentRegistry.getLanguageServiceRefCounts(moduleInfo.path), [[key, moduleIsOrphan ? undefined : 1]]);
+        }
+
+        function createServiceAndHost() {
+            const host = createServerHost([file, moduleFile, libFile, configFile]);
+            const service = createProjectService(host);
+            service.openClientFile(file.path);
+            checkProject(service, /*moduleIsOrphan*/ false);
+            return { host, service };
+        }
+
+        function changeFileToNotImportModule(service: TestProjectService) {
+            const info = service.getScriptInfo(file.path);
+            service.applyChangesToFile(info, [{ span: { start: 0, length: importModuleContent.length }, newText: "" }]);
+            checkProject(service, /*moduleIsOrphan*/ true);
+        }
+
+        function changeFileToImportModule(service: TestProjectService) {
+            const info = service.getScriptInfo(file.path);
+            service.applyChangesToFile(info, [{ span: { start: 0, length: 0 }, newText: importModuleContent }]);
+            checkProject(service, /*moduleIsOrphan*/ false);
+        }
+
+        it("Caches the source file if script info is orphan", () => {
+            const { service } = createServiceAndHost();
+            const project = getProject(service);
+
+            const moduleInfo = service.getScriptInfo(moduleFile.path);
+            const sourceFile = moduleInfo.cacheSourceFile.sourceFile;
+            assert.equal(project.getSourceFile(moduleInfo.path), sourceFile);
+
+            // edit file
+            changeFileToNotImportModule(service);
+            assert.equal(moduleInfo.cacheSourceFile.sourceFile, sourceFile);
+
+            // write content back
+            changeFileToImportModule(service);
+            assert.equal(moduleInfo.cacheSourceFile.sourceFile, sourceFile);
+            assert.equal(project.getSourceFile(moduleInfo.path), sourceFile);
+        });
+
+        it("Caches the source file if script info is orphan, and orphan script info changes", () => {
+            const { host, service } = createServiceAndHost();
+            const project = getProject(service);
+
+            const moduleInfo = service.getScriptInfo(moduleFile.path);
+            const sourceFile = moduleInfo.cacheSourceFile.sourceFile;
+            assert.equal(project.getSourceFile(moduleInfo.path), sourceFile);
+
+            // edit file
+            changeFileToNotImportModule(service);
+            assert.equal(moduleInfo.cacheSourceFile.sourceFile, sourceFile);
+
+            const updatedModuleContent = moduleFile.content + "\nexport const b: number;";
+            host.writeFile(moduleFile.path, updatedModuleContent);
+
+            // write content back
+            changeFileToImportModule(service);
+            assert.notEqual(moduleInfo.cacheSourceFile.sourceFile, sourceFile);
+            assert.equal(project.getSourceFile(moduleInfo.path), moduleInfo.cacheSourceFile.sourceFile);
+            assert.equal(moduleInfo.cacheSourceFile.sourceFile.text, updatedModuleContent);
+        });
+    });
 }

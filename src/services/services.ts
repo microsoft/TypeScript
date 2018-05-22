@@ -545,9 +545,10 @@ namespace ts {
         public referencedFiles: FileReference[];
         public typeReferenceDirectives: FileReference[];
 
-        public syntacticDiagnostics: Diagnostic[];
-        public parseDiagnostics: Diagnostic[];
-        public bindDiagnostics: Diagnostic[];
+        public syntacticDiagnostics: DiagnosticWithLocation[];
+        public parseDiagnostics: DiagnosticWithLocation[];
+        public bindDiagnostics: DiagnosticWithLocation[];
+        public bindSuggestionDiagnostics?: DiagnosticWithLocation[];
 
         public isDeclarationFile: boolean;
         public isDefaultLib: boolean;
@@ -1376,7 +1377,7 @@ namespace ts {
         }
 
         /// Diagnostics
-        function getSyntacticDiagnostics(fileName: string): Diagnostic[] {
+        function getSyntacticDiagnostics(fileName: string): DiagnosticWithLocation[] {
             synchronizeHostData();
 
             return program.getSyntacticDiagnostics(getValidSourceFile(fileName), cancellationToken).slice();
@@ -1404,7 +1405,7 @@ namespace ts {
             return [...semanticDiagnostics, ...declarationDiagnostics];
         }
 
-        function getSuggestionDiagnostics(fileName: string): Diagnostic[] {
+        function getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[] {
             synchronizeHostData();
             return computeSuggestionDiagnostics(getValidSourceFile(fileName), program);
         }

@@ -589,8 +589,8 @@ function zeroOf<T extends number | string | boolean>(value: T) {
 ><ZeroOf<T>>(typeof value === "number" ? 0 : typeof value === "string" ? "" : false) : ZeroOf<T>
 >ZeroOf : ZeroOf<T>
 >T : T
->(typeof value === "number" ? 0 : typeof value === "string" ? "" : false) : false | 0 | ""
->typeof value === "number" ? 0 : typeof value === "string" ? "" : false : false | 0 | ""
+>(typeof value === "number" ? 0 : typeof value === "string" ? "" : false) : false | "" | 0
+>typeof value === "number" ? 0 : typeof value === "string" ? "" : false : false | "" | 0
 >typeof value === "number" : boolean
 >typeof value : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >value : T

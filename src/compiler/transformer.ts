@@ -90,7 +90,7 @@ namespace ts {
         let onSubstituteNode: TransformationContext["onSubstituteNode"] = (_, node) => node;
         let onEmitNode: TransformationContext["onEmitNode"] = (hint, node, callback) => callback(hint, node);
         let state = TransformationState.Uninitialized;
-        const diagnostics: Diagnostic[] = [];
+        const diagnostics: DiagnosticWithLocation[] = [];
 
         // The transformation context is provided to each transformer as part of transformer
         // initialization.

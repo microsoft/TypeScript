@@ -603,7 +603,7 @@ namespace ts {
         }
     }
 
-    export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
+    export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation {
         const sourceFile = getSourceFileOfNode(node);
         return createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1, arg2, arg3);
     }
@@ -613,17 +613,17 @@ namespace ts {
         return createFileDiagnostic(sourceFile, start, nodes.end - start, message, arg0, arg1, arg2, arg3);
     }
 
-    export function createDiagnosticForNodeInSourceFile(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
+    export function createDiagnosticForNodeInSourceFile(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation {
         const span = getErrorSpanForNode(sourceFile, node);
         return createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2, arg3);
     }
 
-    export function createDiagnosticForNodeSpan(sourceFile: SourceFile, startNode: Node, endNode: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
+    export function createDiagnosticForNodeSpan(sourceFile: SourceFile, startNode: Node, endNode: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation {
         const start = skipTrivia(sourceFile.text, startNode.pos);
         return createFileDiagnostic(sourceFile, start, endNode.end - start, message, arg0, arg1, arg2, arg3);
     }
 
-    export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): Diagnostic {
+    export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): DiagnosticWithLocation {
         const sourceFile = getSourceFileOfNode(node);
         const span = getErrorSpanForNode(sourceFile, node);
         return {
@@ -2645,7 +2645,7 @@ namespace ts {
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics = [] as SortedArray<Diagnostic>;
         const filesWithDiagnostics = [] as SortedArray<string>;
-        const fileDiagnostics = createMap<SortedArray<Diagnostic>>();
+        const fileDiagnostics = createMap<SortedArray<DiagnosticWithLocation>>();
         let hasReadNonFileDiagnostics = false;
 
         return {
@@ -2664,8 +2664,8 @@ namespace ts {
             if (diagnostic.file) {
                 diagnostics = fileDiagnostics.get(diagnostic.file.fileName);
                 if (!diagnostics) {
-                    diagnostics = [] as SortedArray<Diagnostic>;
-                    fileDiagnostics.set(diagnostic.file.fileName, diagnostics);
+                    diagnostics = [] as SortedArray<DiagnosticWithLocation>;
+                    fileDiagnostics.set(diagnostic.file.fileName, diagnostics as SortedArray<DiagnosticWithLocation>);
                     insertSorted(filesWithDiagnostics, diagnostic.file.fileName, compareStringsCaseSensitive);
                 }
             }
@@ -2687,12 +2687,14 @@ namespace ts {
             return nonFileDiagnostics;
         }
 
+        function getDiagnostics(fileName: string): DiagnosticWithLocation[];
+        function getDiagnostics(): Diagnostic[];
         function getDiagnostics(fileName?: string): Diagnostic[] {
             if (fileName) {
                 return fileDiagnostics.get(fileName) || [];
             }
 
-            const fileDiags = flatMap(filesWithDiagnostics, f => fileDiagnostics.get(f));
+            const fileDiags: Diagnostic[] = flatMap(filesWithDiagnostics, f => fileDiagnostics.get(f));
             if (!nonFileDiagnostics.length) {
                 return fileDiags;
             }

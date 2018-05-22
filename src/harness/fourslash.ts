@@ -1317,8 +1317,13 @@ Actual: ${stringify(fullActual)}`);
         }
 
         private testDiagnostics(expected: ReadonlyArray<FourSlashInterface.Diagnostic>, diagnostics: ReadonlyArray<ts.Diagnostic>, category: string) {
-            assert.deepEqual(ts.realizeDiagnostics(diagnostics, ts.newLineCharacter), expected.map<ts.RealizedDiagnostic>(e => (
-                { message: e.message, category, code: e.code, ...ts.createTextSpanFromRange(e.range || this.getRanges()[0]) })));
+            assert.deepEqual(ts.realizeDiagnostics(diagnostics, ts.newLineCharacter), expected.map((e): ts.RealizedDiagnostic => ({
+                message: e.message,
+                category,
+                code: e.code,
+                ...ts.createTextSpanFromRange(e.range || this.getRanges()[0]),
+                reportsUnnecessary: e.reportsUnnecessary,
+            })));
         }
 
         public verifyQuickInfoAt(markerName: string, expectedText: string, expectedDocumentation?: string) {
@@ -4422,15 +4427,15 @@ namespace FourSlashInterface {
             this.state.verifyQuickInfoDisplayParts(kind, kindModifiers, textSpan, displayParts, documentation, tags);
         }
 
-        public getSyntacticDiagnostics(expected: ReadonlyArray<ts.RealizedDiagnostic>) {
+        public getSyntacticDiagnostics(expected: ReadonlyArray<Diagnostic>) {
             this.state.getSyntacticDiagnostics(expected);
         }
 
-        public getSemanticDiagnostics(expected: ReadonlyArray<ts.RealizedDiagnostic>) {
+        public getSemanticDiagnostics(expected: ReadonlyArray<Diagnostic>) {
             this.state.getSemanticDiagnostics(expected);
         }
 
-        public getSuggestionDiagnostics(expected: ReadonlyArray<ts.RealizedDiagnostic>) {
+        public getSuggestionDiagnostics(expected: ReadonlyArray<Diagnostic>) {
             this.state.getSuggestionDiagnostics(expected);
         }
 
@@ -4837,6 +4842,7 @@ namespace FourSlashInterface {
         message: string;
         range?: FourSlash.Range;
         code: number;
+        reportsUnnecessary?: true;
     }
 
     export interface GetEditsForFileRenameOptions {

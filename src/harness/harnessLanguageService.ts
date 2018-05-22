@@ -398,13 +398,13 @@ namespace Harness.LanguageService {
         cleanupSemanticCache(): void {
             this.shim.cleanupSemanticCache();
         }
-        getSyntacticDiagnostics(fileName: string): ts.Diagnostic[] {
+        getSyntacticDiagnostics(fileName: string): ts.DiagnosticWithLocation[] {
             return unwrapJSONCallResult(this.shim.getSyntacticDiagnostics(fileName));
         }
-        getSemanticDiagnostics(fileName: string): ts.Diagnostic[] {
+        getSemanticDiagnostics(fileName: string): ts.DiagnosticWithLocation[] {
             return unwrapJSONCallResult(this.shim.getSemanticDiagnostics(fileName));
         }
-        getSuggestionDiagnostics(fileName: string): ts.Diagnostic[] {
+        getSuggestionDiagnostics(fileName: string): ts.DiagnosticWithLocation[] {
             return unwrapJSONCallResult(this.shim.getSuggestionDiagnostics(fileName));
         }
         getCompilerOptionsDiagnostics(): ts.Diagnostic[] {

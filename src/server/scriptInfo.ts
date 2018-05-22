@@ -202,6 +202,12 @@ namespace ts.server {
         return fileName[0] === "^" || getBaseFileName(fileName)[0] === "^";
     }
 
+    /*@internal*/
+    export interface DocumentRegistrySourceFileCache {
+        key: DocumentRegistryBucketKey;
+        sourceFile: SourceFile;
+    }
+
     export class ScriptInfo {
         /**
          * All projects that include this file
@@ -220,6 +226,9 @@ namespace ts.server {
         /*@internal*/
         /** Set to real path if path is different from info.path */
         private realpath: Path | undefined;
+
+        /*@internal*/
+        cacheSourceFile: DocumentRegistrySourceFileCache;
 
         constructor(
             private readonly host: ServerHost,

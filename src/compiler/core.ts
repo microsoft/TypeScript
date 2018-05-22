@@ -14,8 +14,8 @@ namespace ts {
         return pathIsRelative(moduleName) || isRootedDiskPath(moduleName);
     }
 
-    export function sortAndDeduplicateDiagnostics(diagnostics: ReadonlyArray<Diagnostic>): Diagnostic[] {
-        return sortAndDeduplicate(diagnostics, compareDiagnostics);
+    export function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: ReadonlyArray<T>): T[] {
+        return sortAndDeduplicate<T>(diagnostics, compareDiagnostics);
     }
 }
 
@@ -1619,8 +1619,8 @@ namespace ts {
         return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key] || message.message;
     }
 
-    export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: (string | number)[]): Diagnostic;
-    export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): Diagnostic {
+    export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: (string | number)[]): DiagnosticWithLocation;
+    export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): DiagnosticWithLocation {
         Debug.assertGreaterThanOrEqual(start, 0);
         Debug.assertGreaterThanOrEqual(length, 0);
 
@@ -1989,6 +1989,14 @@ namespace ts {
             moduleResolution = getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS ? ModuleResolutionKind.NodeJs : ModuleResolutionKind.Classic;
         }
         return moduleResolution;
+    }
+
+    export function unreachableCodeIsError(options: CompilerOptions): boolean {
+        return options.allowUnreachableCode === false;
+    }
+
+    export function unusedLabelIsError(options: CompilerOptions): boolean {
+        return options.allowUnusedLabels === false;
     }
 
     export function getAreDeclarationMapsEnabled(options: CompilerOptions) {
