@@ -1208,7 +1208,7 @@ namespace ts {
             bind(node.statement);
             popActiveLabel();
             if (!activeLabel.referenced && !options.allowUnusedLabels) {
-                file.bindDiagnostics.push(createDiagnosticForNode(node.label, Diagnostics.Unused_label));
+                errorOrSuggestionOnFirstToken(unusedLabelIsError(options), node, Diagnostics.Unused_label);
             }
             if (!node.statement || node.statement.kind !== SyntaxKind.DoStatement) {
                 // do statement sets current flow inside bindDoStatement
@@ -1912,6 +1912,17 @@ namespace ts {
         function errorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any) {
             const span = getSpanOfTokenAtPosition(file, node.pos);
             file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length, message, arg0, arg1, arg2));
+        }
+
+        function errorOrSuggestionOnFirstToken(isError: boolean, node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any) {
+            const span = getSpanOfTokenAtPosition(file, node.pos);
+            const diag = createFileDiagnostic(file, span.start, span.length, message, arg0, arg1, arg2);
+            if (isError) {
+                file.bindDiagnostics.push(diag);
+            }
+            else {
+                file.bindSuggestionDiagnostics = append(file.bindSuggestionDiagnostics, { ...diag, category: DiagnosticCategory.Suggestion });
+            }
         }
 
         function bind(node: Node): void {
@@ -2730,26 +2741,26 @@ namespace ts {
                 if (reportError) {
                     currentFlow = reportedUnreachableFlow;
 
-                    // unreachable code is reported if
-                    // - user has explicitly asked about it AND
-                    // - statement is in not ambient context (statements in ambient context is already an error
-                    //   so we should not report extras) AND
-                    //   - node is not variable statement OR
-                    //   - node is block scoped variable statement OR
-                    //   - node is not block scoped variable statement and at least one variable declaration has initializer
-                    //   Rationale: we don't want to report errors on non-initialized var's since they are hoisted
-                    //   On the other side we do want to report errors on non-initialized 'lets' because of TDZ
-                    const reportUnreachableCode =
-                        !options.allowUnreachableCode &&
-                        !(node.flags & NodeFlags.Ambient) &&
-                        (
-                            node.kind !== SyntaxKind.VariableStatement ||
-                            getCombinedNodeFlags((<VariableStatement>node).declarationList) & NodeFlags.BlockScoped ||
-                            forEach((<VariableStatement>node).declarationList.declarations, d => d.initializer)
-                        );
+                    if (!options.allowUnreachableCode) {
+                        // unreachable code is reported if
+                        // - user has explicitly asked about it AND
+                        // - statement is in not ambient context (statements in ambient context is already an error
+                        //   so we should not report extras) AND
+                        //   - node is not variable statement OR
+                        //   - node is block scoped variable statement OR
+                        //   - node is not block scoped variable statement and at least one variable declaration has initializer
+                        //   Rationale: we don't want to report errors on non-initialized var's since they are hoisted
+                        //   On the other side we do want to report errors on non-initialized 'lets' because of TDZ
+                        const isError =
+                            unreachableCodeIsError(options) &&
+                            !(node.flags & NodeFlags.Ambient) &&
+                            (
+                                !isVariableStatement(node) ||
+                                !!(getCombinedNodeFlags(node.declarationList) & NodeFlags.BlockScoped) ||
+                                node.declarationList.declarations.some(d => !!d.initializer)
+                            );
 
-                    if (reportUnreachableCode) {
-                        errorOnFirstToken(node, Diagnostics.Unreachable_code_detected);
+                        errorOrSuggestionOnFirstToken(isError, node, Diagnostics.Unreachable_code_detected);
                     }
                 }
             }
