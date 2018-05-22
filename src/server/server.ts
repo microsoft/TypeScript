@@ -506,6 +506,7 @@ namespace ts.server {
                 canUseEvents: true,
                 suppressDiagnosticEvents,
                 syntaxOnly,
+                noGetErrOnBackgroundUpdate,
                 globalPlugins,
                 pluginProbeLocations,
                 allowLocalPluginLoads,
@@ -940,6 +941,7 @@ namespace ts.server {
     const suppressDiagnosticEvents = hasArgument("--suppressDiagnosticEvents");
     const syntaxOnly = hasArgument("--syntaxOnly");
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
+    const noGetErrOnBackgroundUpdate = hasArgument("--noGetErrOnBackgroundUpdate");
 
     logger.info(`Starting TS Server`);
     logger.info(`Version: ${version}`);

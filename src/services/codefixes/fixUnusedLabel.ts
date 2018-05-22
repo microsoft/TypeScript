@@ -9,7 +9,7 @@ namespace ts.codefix {
             return [createCodeFixAction(fixId, changes, Diagnostics.Remove_unused_label, fixId, Diagnostics.Remove_all_unused_labels)];
         },
         fixIds: [fixId],
-        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, diag.file!, diag.start!)),
+        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, diag.file, diag.start)),
     });
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, start: number): void {

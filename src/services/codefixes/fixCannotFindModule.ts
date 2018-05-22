@@ -16,9 +16,9 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (_, diag, commands) => {
-            const pkg = getTypesPackageNameToInstall(context.host, diag.file!, diag.start!, diag.code);
+            const pkg = getTypesPackageNameToInstall(context.host, diag.file, diag.start, diag.code);
             if (pkg) {
-                commands.push(getCommand(diag.file!.fileName, pkg));
+                commands.push(getCommand(diag.file.fileName, pkg));
             }
         }),
     });

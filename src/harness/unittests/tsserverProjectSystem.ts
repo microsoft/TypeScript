@@ -7442,10 +7442,17 @@ namespace ts.projectSystem {
         });
 
         describe("when event handler is not set but session is created with canUseEvents = true", () => {
-            verifyProjectsUpdatedInBackgroundEvent(createSessionThatUsesEvents);
+            describe("without noGetErrOnBackgroundUpdate, diagnostics for open files are queued", () => {
+                verifyProjectsUpdatedInBackgroundEvent(createSessionThatUsesEvents);
+            });
 
-            function createSessionThatUsesEvents(host: TestServerHost): ProjectsUpdatedInBackgroundEventVerifier {
-                const session = createSession(host, { canUseEvents: true });
+            describe("with noGetErrOnBackgroundUpdate, diagnostics for open file are not queued", () => {
+                verifyProjectsUpdatedInBackgroundEvent(host => createSessionThatUsesEvents(host, /*noGetErrOnBackgroundUpdate*/ true));
+            });
+
+
+            function createSessionThatUsesEvents(host: TestServerHost, noGetErrOnBackgroundUpdate?: boolean): ProjectsUpdatedInBackgroundEventVerifier {
+                const session = createSession(host, { canUseEvents: true, noGetErrOnBackgroundUpdate });
 
                 return {
                     session,
@@ -7477,6 +7484,10 @@ namespace ts.projectSystem {
 
                     // Verified the events, reset them
                     session.clearMessages();
+
+                    if (events.length) {
+                        host.checkTimeoutQueueLength(noGetErrOnBackgroundUpdate ? 0 : 1); // Error checking queued only if not noGetErrOnBackgroundUpdate
+                    }
                 }
             }
         });

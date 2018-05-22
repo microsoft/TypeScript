@@ -9,7 +9,7 @@ namespace ts.codefix {
             return [createCodeFixAction(fixId, changes, Diagnostics.Convert_require_to_import, fixId, Diagnostics.Convert_all_require_to_import)];
         },
         fixIds: [fixId],
-        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, diag.file!, diag.start!, context.program)),
+        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, diag.file, diag.start, context.program)),
     });
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, program: Program) {

@@ -14,8 +14,8 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-            const nodes = getNodes(diag.file!, diag.start!);
-            if (nodes) doChanges(changes, diag.file!, nodes.extendsToken, nodes.heritageClauses);
+            const nodes = getNodes(diag.file, diag.start);
+            if (nodes) doChanges(changes, diag.file, nodes.extendsToken, nodes.heritageClauses);
         }),
     });
 

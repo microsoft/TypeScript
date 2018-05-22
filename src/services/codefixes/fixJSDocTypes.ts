@@ -30,7 +30,7 @@ namespace ts.codefix {
             const { fixId, program, sourceFile } = context;
             const checker = program.getTypeChecker();
             return codeFixAll(context, errorCodes, (changes, err) => {
-                const info = getInfo(err.file!, err.start!, checker);
+                const info = getInfo(err.file, err.start, checker);
                 if (!info) return;
                 const { typeNode, type } = info;
                 const fixedType = typeNode.kind === SyntaxKind.JSDocNullableType && fixId === fixIdNullable ? checker.getNullableType(type, TypeFlags.Undefined) : type;

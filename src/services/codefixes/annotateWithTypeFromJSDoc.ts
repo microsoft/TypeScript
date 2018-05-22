@@ -12,8 +12,8 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-            const decl = getDeclaration(diag.file!, diag.start!);
-            if (decl) doChange(changes, diag.file!, decl);
+            const decl = getDeclaration(diag.file, diag.start);
+            if (decl) doChange(changes, diag.file, decl);
         }),
     });
 

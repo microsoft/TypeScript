@@ -23,22 +23,22 @@ namespace ts.codefix {
         fixIds: [fixIdAddDefiniteAssignmentAssertions, fixIdAddUndefinedType, fixIdAddInitializer],
         getAllCodeActions: context => {
             return codeFixAll(context, errorCodes, (changes, diag) => {
-                const propertyDeclaration = getPropertyDeclaration(diag.file!, diag.start!);
+                const propertyDeclaration = getPropertyDeclaration(diag.file, diag.start);
                 if (!propertyDeclaration) return;
 
                 switch (context.fixId) {
                     case fixIdAddDefiniteAssignmentAssertions:
-                        addDefiniteAssignmentAssertion(changes, diag.file!, propertyDeclaration);
+                        addDefiniteAssignmentAssertion(changes, diag.file, propertyDeclaration);
                         break;
                     case fixIdAddUndefinedType:
-                        addUndefinedType(changes, diag.file!, propertyDeclaration);
+                        addUndefinedType(changes, diag.file, propertyDeclaration);
                         break;
                     case fixIdAddInitializer:
                         const checker = context.program.getTypeChecker();
                         const initializer = getInitializer(checker, propertyDeclaration);
                         if (!initializer) return;
 
-                        addInitializer(changes, diag.file!, propertyDeclaration, initializer);
+                        addInitializer(changes, diag.file, propertyDeclaration, initializer);
                         break;
                     default:
                         Debug.fail(JSON.stringify(context.fixId));

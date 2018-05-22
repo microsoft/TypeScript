@@ -13,9 +13,9 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: (context) => codeFixAll(context, errorCodes, (changes, diag) => {
-            const q = getQualifiedName(diag.file!, diag.start!);
+            const q = getQualifiedName(diag.file, diag.start);
             if (q) {
-                doChange(changes, diag.file!, q);
+                doChange(changes, diag.file, q);
             }
         }),
     });

@@ -1734,9 +1734,10 @@ declare namespace ts {
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
         getOptionsDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
         getGlobalDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
-        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<DiagnosticWithLocation>;
+        /** The first time this is called, it will return global diagnostics (no location). */
         getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
-        getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<DiagnosticWithLocation>;
         getConfigFileParsingDiagnostics(): ReadonlyArray<Diagnostic>;
         /**
          * Gets a type checker that can be used to semantically analyze source files in the program.
@@ -2360,6 +2361,11 @@ declare namespace ts {
         code: number;
         source?: string;
     }
+    interface DiagnosticWithLocation extends Diagnostic {
+        file: SourceFile;
+        start: number;
+        length: number;
+    }
     enum DiagnosticCategory {
         Warning = 0,
         Error = 1,
@@ -2756,7 +2762,7 @@ declare namespace ts {
         /** Gets the transformed source files. */
         transformed: T[];
         /** Gets diagnostics for the transformation. */
-        diagnostics?: Diagnostic[];
+        diagnostics?: DiagnosticWithLocation[];
         /**
          * Gets a substitute for a node, if one is available; otherwise, returns the original node.
          *
@@ -2962,7 +2968,7 @@ declare namespace ts {
 }
 declare namespace ts {
     function isExternalModuleNameRelative(moduleName: string): boolean;
-    function sortAndDeduplicateDiagnostics(diagnostics: ReadonlyArray<Diagnostic>): Diagnostic[];
+    function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: ReadonlyArray<T>): T[];
 }
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;
@@ -4501,9 +4507,10 @@ declare namespace ts {
     }
     interface LanguageService {
         cleanupSemanticCache(): void;
-        getSyntacticDiagnostics(fileName: string): Diagnostic[];
+        getSyntacticDiagnostics(fileName: string): DiagnosticWithLocation[];
+        /** The first time this is called, it will return global diagnostics (no location). */
         getSemanticDiagnostics(fileName: string): Diagnostic[];
-        getSuggestionDiagnostics(fileName: string): Diagnostic[];
+        getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[];
         getCompilerOptionsDiagnostics(): Diagnostic[];
         /**
          * @deprecated Use getEncodedSyntacticClassifications instead.
@@ -8180,7 +8187,7 @@ declare namespace ts.server {
         private safelist;
         private legacySafelist;
         private pendingProjectUpdates;
-        readonly currentDirectory: string;
+        readonly currentDirectory: NormalizedPath;
         readonly toCanonicalFileName: (f: string) => string;
         readonly host: ServerHost;
         readonly logger: Logger;
@@ -8395,6 +8402,7 @@ declare namespace ts.server {
         suppressDiagnosticEvents?: boolean;
         syntaxOnly?: boolean;
         throttleWaitMilliseconds?: number;
+        noGetErrOnBackgroundUpdate?: boolean;
         globalPlugins?: ReadonlyArray<string>;
         pluginProbeLocations?: ReadonlyArray<string>;
         allowLocalPluginLoads?: boolean;
@@ -8414,6 +8422,7 @@ declare namespace ts.server {
         protected canUseEvents: boolean;
         private suppressDiagnosticEvents?;
         private eventHandler;
+        private readonly noGetErrOnBackgroundUpdate?;
         constructor(opts: SessionOptions);
         private sendRequestCompletedEvent;
         private defaultEventHandler;

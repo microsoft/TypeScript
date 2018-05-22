@@ -62,7 +62,7 @@ lib/externs.d.ts(17,121): error TS2503: Cannot find namespace 'Protocol'.
 lib/helper.js(59,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/helper.js(77,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/helper.js(101,15): error TS2503: Cannot find namespace 'Protocol'.
-node_modules/@types/node/index.d.ts(911,22): error TS2300: Duplicate identifier 'EventEmitter'.
+node_modules/@types/node/index.d.ts(912,22): error TS2300: Duplicate identifier 'EventEmitter'.
 
 
 

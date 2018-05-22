@@ -41,7 +41,7 @@ namespace ts.codefix {
             const { sourceFile, program, cancellationToken } = context;
             const markSeen = nodeSeenTracker();
             return codeFixAll(context, errorCodes, (changes, err) => {
-                doChange(changes, sourceFile, getTokenAtPosition(err.file!, err.start!, /*includeJsDocComment*/ false), err.code, program, cancellationToken, markSeen);
+                doChange(changes, sourceFile, getTokenAtPosition(err.file, err.start, /*includeJsDocComment*/ false), err.code, program, cancellationToken, markSeen);
             });
         },
     });

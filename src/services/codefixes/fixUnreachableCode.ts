@@ -9,7 +9,7 @@ namespace ts.codefix {
             return [createCodeFixAction(fixId, changes, Diagnostics.Remove_unreachable_code, fixId, Diagnostics.Remove_all_unreachable_code)];
         },
         fixIds: [fixId],
-        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, diag.file!, diag.start!)),
+        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, diag.file, diag.start)),
     });
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, start: number): void {

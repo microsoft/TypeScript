@@ -16,7 +16,7 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-            const nodes = getNodes(diag.file!, diag.start!);
+            const nodes = getNodes(diag.file, diag.start);
             if (!nodes) return;
             doChange(changes, context.sourceFile, nodes);
         }),

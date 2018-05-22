@@ -313,11 +313,11 @@ namespace ts {
 
             getSuggestionDiagnostics: file => {
                 return (suggestionDiagnostics.get(file.fileName) || emptyArray).concat(getUnusedDiagnostics());
-                function getUnusedDiagnostics(): ReadonlyArray<Diagnostic> {
+                function getUnusedDiagnostics(): ReadonlyArray<DiagnosticWithLocation> {
                     if (file.isDeclarationFile) return emptyArray;
 
                     checkSourceFile(file);
-                    const diagnostics: Diagnostic[] = [];
+                    const diagnostics: DiagnosticWithLocation[] = [];
                     Debug.assert(!!(getNodeLinks(file).flags & NodeCheckFlags.TypeChecked));
                     checkUnusedIdentifiers(getPotentiallyUnusedIdentifiers(file), (kind, diag) => {
                         if (!unusedIsError(kind)) {
@@ -481,7 +481,7 @@ namespace ts {
 
         const diagnostics = createDiagnosticCollection();
         // Suggestion diagnostics must have a file. Keyed by source file name.
-        const suggestionDiagnostics = createMultiMap<Diagnostic>();
+        const suggestionDiagnostics = createMultiMap<DiagnosticWithLocation>();
 
         const enum TypeFacts {
             None = 0,
@@ -628,7 +628,7 @@ namespace ts {
             Local,
             Parameter,
         }
-        type AddUnusedDiagnostic = (type: UnusedKind, diagnostic: Diagnostic) => void;
+        type AddUnusedDiagnostic = (type: UnusedKind, diagnostic: DiagnosticWithLocation) => void;
 
         const builtinGlobals = createSymbolTable();
         builtinGlobals.set(undefinedSymbol.escapedName, undefinedSymbol);
@@ -824,12 +824,12 @@ namespace ts {
             diagnostics.add(diagnostic);
         }
 
-        function addErrorOrSuggestion(isError: boolean, diagnostic: Diagnostic) {
+        function addErrorOrSuggestion(isError: boolean, diagnostic: DiagnosticWithLocation) {
             if (isError) {
                 diagnostics.add(diagnostic);
             }
             else {
-                suggestionDiagnostics.add(diagnostic.file!.fileName, { ...diagnostic, category: DiagnosticCategory.Suggestion });
+                suggestionDiagnostics.add(diagnostic.file.fileName, { ...diagnostic, category: DiagnosticCategory.Suggestion });
             }
         }
         function errorOrSuggestion(isError: boolean, location: Node, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void {
@@ -15348,6 +15348,26 @@ namespace ts {
             }
         }
 
+        // Return true if the given expression is possibly a discriminant value. We limit the kinds of
+        // expressions we check to those that don't depend on their contextual type in order not to cause
+        // recursive (and possibly infinite) invocations of getContextualType.
+        function isPossiblyDiscriminantValue(node: Expression): boolean {
+            switch (node.kind) {
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.Identifier:
+                    return true;
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ParenthesizedExpression:
+                    return isPossiblyDiscriminantValue((<PropertyAccessExpression | ParenthesizedExpression>node).expression);
+            }
+            return false;
+        }
+
         // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
         // be "pushed" onto a node using the contextualType property.
         function getApparentTypeOfContextualType(node: Expression): Type | undefined {
@@ -15361,8 +15381,8 @@ namespace ts {
             propLoop: for (const prop of node.properties) {
                 if (!prop.symbol) continue;
                 if (prop.kind !== SyntaxKind.PropertyAssignment) continue;
-                if (isDiscriminantProperty(contextualType, prop.symbol.escapedName)) {
-                    const discriminatingType = getTypeOfNode(prop.initializer)!; // TODO: GH#18217
+                if (isPossiblyDiscriminantValue(prop.initializer) && isDiscriminantProperty(contextualType, prop.symbol.escapedName)) {
+                    const discriminatingType = checkExpression(prop.initializer);
                     for (const type of (contextualType as UnionType).types) {
                         const targetType = getTypeOfPropertyOfType(type, prop.symbol.escapedName);
                         if (targetType && checkTypeAssignableTo(discriminatingType, targetType, /*errorNode*/ undefined)) {

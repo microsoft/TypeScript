@@ -571,6 +571,12 @@ namespace ts.formatting {
                     return childKind !== SyntaxKind.JsxClosingElement;
                 case SyntaxKind.JsxFragment:
                     return childKind !== SyntaxKind.JsxClosingFragment;
+                case SyntaxKind.IntersectionType:
+                case SyntaxKind.UnionType:
+                    if (childKind === SyntaxKind.TypeLiteral) {
+                        return false;
+                    }
+                    // falls through
             }
             // No explicit rule for given nodes so the result will follow the default value argument
             return indentByDefault;
