@@ -8134,7 +8134,6 @@ declare namespace ts.server {
         syntaxOnly?: boolean;
     }
     class ProjectService {
-        private readonly documentRegistry;
         /**
          * Container of all known scripts
          */
