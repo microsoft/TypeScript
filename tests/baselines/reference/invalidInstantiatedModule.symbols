@@ -8,7 +8,7 @@ module M {
 >y : Symbol(Point.y, Decl(invalidInstantiatedModule.ts, 1, 35))
 
     export var Point = 1;  // Error
->Point : Symbol(M.Point, Decl(invalidInstantiatedModule.ts, 2, 14))
+>Point : Symbol(Point, Decl(invalidInstantiatedModule.ts, 2, 14))
 }
 
 module M2 {
