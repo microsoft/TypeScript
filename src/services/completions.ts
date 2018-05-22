@@ -47,7 +47,7 @@ namespace ts.Completions {
             return getLabelCompletionAtPosition(contextToken.parent);
         }
 
-        const completionData = getCompletionData(program, log, sourceFile, position, preferences, /*detailsEntryId*/ undefined);
+        const completionData = getCompletionData(program, log, sourceFile, isUncheckedFile(sourceFile, compilerOptions), position, preferences, /*detailsEntryId*/ undefined);
         if (!completionData) {
             return undefined;
         }
@@ -121,9 +121,9 @@ namespace ts.Completions {
 
         const entries: CompletionEntry[] = [];
 
-        if (isSourceFileJavaScript(sourceFile)) {
+        if (isUncheckedFile(sourceFile, compilerOptions)) {
             const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, sourceFile, typeChecker, compilerOptions.target!, log, completionKind, preferences, propertyAccessToConvert, isJsxInitializer, recommendedCompletion, symbolToOriginInfoMap);
-            getJavaScriptCompletionEntries(sourceFile, location!.pos, uniqueNames, compilerOptions.target!, entries);
+            getJavaScriptCompletionEntries(sourceFile, location!.pos, uniqueNames, compilerOptions.target!, entries); // TODO: GH#18217
         }
         else {
             if ((!symbols || symbols.length === 0) && keywordFilters === KeywordCompletionFilters.None) {
@@ -144,6 +144,10 @@ namespace ts.Completions {
         }
 
         return { isGlobalCompletion: isInSnippetScope, isMemberCompletion, isNewIdentifierLocation, entries };
+    }
+
+    function isUncheckedFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
+        return isSourceFileJavaScript(sourceFile) && !isCheckJsEnabledForFile(sourceFile, compilerOptions);
     }
 
     function isMemberCompletionKind(kind: CompletionKind): boolean {
@@ -488,7 +492,8 @@ namespace ts.Completions {
     }
     function getSymbolCompletionFromEntryId(program: Program, log: Log, sourceFile: SourceFile, position: number, entryId: CompletionEntryIdentifier,
     ): SymbolCompletion | { type: "request", request: Request } | { type: "none" } {
-        const completionData = getCompletionData(program, log, sourceFile, position, { includeCompletionsForModuleExports: true, includeCompletionsWithInsertText: true }, entryId);
+        const compilerOptions = program.getCompilerOptions();
+        const completionData = getCompletionData(program, log, sourceFile, isUncheckedFile(sourceFile, compilerOptions), position, { includeCompletionsForModuleExports: true, includeCompletionsWithInsertText: true }, entryId);
         if (!completionData) {
             return { type: "none" };
         }
@@ -504,7 +509,7 @@ namespace ts.Completions {
         // completion entry.
         return firstDefined<Symbol, SymbolCompletion>(symbols, (symbol): SymbolCompletion | undefined => { // TODO: Shouldn't need return type annotation (GH#12632)
             const origin = symbolToOriginInfoMap[getSymbolId(symbol)];
-            const info = getCompletionEntryDisplayNameForSymbol(symbol, program.getCompilerOptions().target!, origin, completionKind);
+            const info = getCompletionEntryDisplayNameForSymbol(symbol, compilerOptions.target!, origin, completionKind);
             return info && info.name === entryId.name && getSourceFromOrigin(origin) === entryId.source
                 ? { type: "symbol" as "symbol", symbol, location, symbolToOriginInfoMap, previousToken, isJsxInitializer }
                 : undefined;
@@ -759,6 +764,7 @@ namespace ts.Completions {
         program: Program,
         log: (message: string) => void,
         sourceFile: SourceFile,
+        isUncheckedFile: boolean,
         position: number,
         preferences: Pick<UserPreferences, "includeCompletionsForModuleExports" | "includeCompletionsWithInsertText">,
         detailsEntryId: CompletionEntryIdentifier | undefined,
@@ -1060,7 +1066,7 @@ namespace ts.Completions {
         function addTypeProperties(type: Type): void {
             isNewIdentifierLocation = hasIndexSignature(type);
 
-            if (isSourceFileJavaScript(sourceFile)) {
+            if (isUncheckedFile) {
                 // In javascript files, for union types, we don't just get the members that
                 // the individual types have in common, we also include all the members that
                 // each individual type has. This is because we're going to add all identifiers
@@ -1205,7 +1211,7 @@ namespace ts.Completions {
             // If some file is using ES6 modules, assume that it's OK to add more.
             if (programContainsEs6Modules(program)) return true;
             // For JS, stay on the safe side.
-            if (isSourceFileJavaScript(sourceFile)) return false;
+            if (isUncheckedFile) return false;
             // If module transpilation is enabled or we're targeting es6 or above, or not emitting, OK.
             return compilerOptionsIndicateEs6Modules(program.getCompilerOptions());
         }
