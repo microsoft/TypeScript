@@ -888,6 +888,9 @@ namespace ts.Completions {
                     case SyntaxKind.ImportType:
                         node = parent;
                         break;
+                    case SyntaxKind.MetaProperty:
+                        node = parent;
+                        break;
                     default:
                         // There is nothing that precedes the dot, so this likely just a stray character
                         // or leading into a '...' token. Just bail out instead.
@@ -1048,6 +1051,11 @@ namespace ts.Completions {
                         return;
                     }
                 }
+            }
+
+            if(isMetaProperty(node) && node.keywordToken === SyntaxKind.NewKeyword){
+                symbols.push(typeChecker.createSymbol(SymbolFlags.Property, escapeLeadingUnderscores("target")));
+                return;
             }
 
             if (!isTypeLocation) {
