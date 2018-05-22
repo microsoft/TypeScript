@@ -2653,7 +2653,7 @@ namespace ts {
         /**
          * Matches any single directory segment unless it is the last segment and a .min.js file
          * Breakdown:
-         *  [^./]                   # matches everything up to the first . character (excluding directory seperators)
+         *  [^./]                   # matches everything up to the first . character (excluding directory separators)
          *  (\\.(?!min\\.js$))?     # matches . characters but not if they are part of the .min.js file extension
          */
         singleAsteriskRegexFragment: "([^./]|(\\.(?!min\\.js$))?)*",
