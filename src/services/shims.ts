@@ -586,7 +586,7 @@ namespace ts {
         length: number;
         category: string;
         code: number;
-        unused?: {};
+        reportsUnnecessary?: {};
     }
     export function realizeDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, newLine: string): RealizedDiagnostic[] {
         return diagnostics.map(d => realizeDiagnostic(d, newLine));
@@ -598,7 +598,8 @@ namespace ts {
             start: diagnostic.start,
             length: diagnostic.length,
             category: diagnosticCategoryName(diagnostic),
-            code: diagnostic.code
+            code: diagnostic.code,
+            reportsUnnecessary: diagnostic.reportsUnnecessary,
         };
     }
 
@@ -1146,7 +1147,7 @@ namespace ts {
                         typeAcquisition: configFile.typeAcquisition,
                         files: configFile.fileNames,
                         raw: configFile.raw,
-                        errors: realizeDiagnostics(result.parseDiagnostics.concat(configFile.errors), "\r\n")
+                        errors: realizeDiagnostics([...result.parseDiagnostics, ...configFile.errors], "\r\n")
                     };
                 });
         }

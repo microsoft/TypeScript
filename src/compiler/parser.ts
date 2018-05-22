@@ -595,7 +595,7 @@ namespace ts {
         // tslint:enable variable-name
 
         let sourceFile: SourceFile;
-        let parseDiagnostics: Diagnostic[];
+        let parseDiagnostics: DiagnosticWithLocation[];
         let syntaxCursor: IncrementalParser.SyntaxCursor;
 
         let currentToken: SyntaxKind;
@@ -912,6 +912,7 @@ namespace ts {
 
             sourceFile.text = sourceText;
             sourceFile.bindDiagnostics = [];
+            sourceFile.bindSuggestionDiagnostics = undefined;
             sourceFile.languageVersion = languageVersion;
             sourceFile.fileName = normalizePath(fileName);
             sourceFile.languageVariant = getLanguageVariant(scriptKind);

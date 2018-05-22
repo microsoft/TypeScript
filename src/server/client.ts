@@ -346,21 +346,21 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getSyntacticDiagnostics(file: string): Diagnostic[] {
+        getSyntacticDiagnostics(file: string): DiagnosticWithLocation[] {
             return this.getDiagnostics(file, CommandNames.SyntacticDiagnosticsSync);
         }
-        getSemanticDiagnostics(file: string): Diagnostic[] {
+        getSemanticDiagnostics(file: string): DiagnosticWithLocation[] {
             return this.getDiagnostics(file, CommandNames.SemanticDiagnosticsSync);
         }
-        getSuggestionDiagnostics(file: string): Diagnostic[] {
+        getSuggestionDiagnostics(file: string): DiagnosticWithLocation[] {
             return this.getDiagnostics(file, CommandNames.SuggestionDiagnosticsSync);
         }
 
-        private getDiagnostics(file: string, command: CommandNames): Diagnostic[] {
+        private getDiagnostics(file: string, command: CommandNames): DiagnosticWithLocation[] {
             const request = this.processRequest<protocol.SyntacticDiagnosticsSyncRequest | protocol.SemanticDiagnosticsSyncRequest | protocol.SuggestionDiagnosticsSyncRequest>(command, { file, includeLinePosition: true });
             const response = this.processResponse<protocol.SyntacticDiagnosticsSyncResponse | protocol.SemanticDiagnosticsSyncResponse | protocol.SuggestionDiagnosticsSyncResponse>(request);
 
-            return (<protocol.DiagnosticWithLinePosition[]>response.body).map((entry): Diagnostic => {
+            return (<protocol.DiagnosticWithLinePosition[]>response.body).map((entry): DiagnosticWithLocation => {
                 const category = firstDefined(Object.keys(DiagnosticCategory), id =>
                     isString(id) && entry.category === id.toLowerCase() ? (<any>DiagnosticCategory)[id] : undefined);
                 return {

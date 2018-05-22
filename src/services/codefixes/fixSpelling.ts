@@ -19,7 +19,7 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-            const info = getInfo(diag.file!, diag.start!, context);
+            const info = getInfo(diag.file, diag.start, context);
             const { target } = context.host.getCompilationSettings();
             if (info) doChange(changes, context.sourceFile, info.node, info.suggestion, target);
         }),

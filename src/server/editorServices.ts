@@ -339,7 +339,8 @@ namespace ts.server {
         /*@internal*/
         readonly typingsCache: TypingsCache;
 
-        private readonly documentRegistry: DocumentRegistry;
+        /*@internal*/
+        readonly documentRegistry: DocumentRegistry;
 
         /**
          * Container of all known scripts
@@ -403,7 +404,7 @@ namespace ts.server {
         /* @internal */
         pendingEnsureProjectForOpenFiles: boolean;
 
-        readonly currentDirectory: string;
+        readonly currentDirectory: NormalizedPath;
         readonly toCanonicalFileName: (f: string) => string;
 
         public readonly host: ServerHost;
@@ -450,7 +451,7 @@ namespace ts.server {
             if (this.host.realpath) {
                 this.realpathToScriptInfos = createMultiMap();
             }
-            this.currentDirectory = this.host.getCurrentDirectory();
+            this.currentDirectory = toNormalizedPath(this.host.getCurrentDirectory());
             this.toCanonicalFileName = createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
             this.globalCacheLocationDirectoryPath = this.typingsInstaller.globalTypingsCacheLocation &&
                 ensureTrailingDirectorySeparator(this.toPath(this.typingsInstaller.globalTypingsCacheLocation));
@@ -474,7 +475,7 @@ namespace ts.server {
                 extraFileExtensions: []
             };
 
-            this.documentRegistry = createDocumentRegistry(this.host.useCaseSensitiveFileNames, this.currentDirectory);
+            this.documentRegistry = createDocumentRegistryInternal(this.host.useCaseSensitiveFileNames, this.currentDirectory, this);
             const watchLogLevel = this.logger.hasLevel(LogLevel.verbose) ? WatchLogLevel.Verbose :
                 this.logger.loggingEnabled() ? WatchLogLevel.TriggerOnly : WatchLogLevel.None;
             const log: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => this.logger.info(s)) : noop;
@@ -493,6 +494,19 @@ namespace ts.server {
         /*@internal*/
         getNormalizedAbsolutePath(fileName: string) {
             return getNormalizedAbsolutePath(fileName, this.host.getCurrentDirectory());
+        }
+
+        /*@internal*/
+        setDocument(key: DocumentRegistryBucketKey, path: Path, sourceFile: SourceFile) {
+            const info = this.getScriptInfoForPath(path);
+            Debug.assert(!!info);
+            info.cacheSourceFile = { key, sourceFile };
+        }
+
+        /*@internal*/
+        getDocument(key: DocumentRegistryBucketKey, path: Path) {
+            const info = this.getScriptInfoForPath(path);
+            return info && info.cacheSourceFile && info.cacheSourceFile.key === key && info.cacheSourceFile.sourceFile;
         }
 
         /* @internal */
@@ -1329,7 +1343,7 @@ namespace ts.server {
             if (!result.endOfFileToken) {
                 result.endOfFileToken = <EndOfFileToken>{ kind: SyntaxKind.EndOfFileToken };
             }
-            const errors = result.parseDiagnostics;
+            const errors = result.parseDiagnostics as Diagnostic[];
             const parsedCommandLine = parseJsonSourceFileConfigFileContent(
                 result,
                 cachedDirectoryStructureHost,

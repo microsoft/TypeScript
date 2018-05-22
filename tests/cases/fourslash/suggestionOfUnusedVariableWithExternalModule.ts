@@ -20,12 +20,17 @@ goTo.file("/app.js");
 verify.getSuggestionDiagnostics([]);
 
 goTo.file("/mymodule.js");
-verify.getSuggestionDiagnostics([{
-    message: "'root' is declared but its value is never read.",
-    code: 6133,
-    range: range0
-}, {
+verify.getSuggestionDiagnostics([
+    {
+        message: "'root' is declared but its value is never read.",
+        code: 6133,
+        range: range0,
+        reportsUnnecessary: true,
+    },
+    {
         message: "'unusedVar' is declared but its value is never read.",
         code: 6133,
-        range: range1
-}]);
+        range: range1,
+        reportsUnnecessary: true,
+    },
+]);

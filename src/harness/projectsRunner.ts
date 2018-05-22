@@ -154,7 +154,7 @@ namespace project {
                 const configParseResult = ts.parseJsonSourceFileConfigFileContent(result, configParseHost, ts.getDirectoryPath(configFileName), this.compilerOptions);
                 inputFiles = configParseResult.fileNames;
                 this.compilerOptions = configParseResult.options;
-                errors = result.parseDiagnostics.concat(configParseResult.errors);
+                errors = [...result.parseDiagnostics, ...configParseResult.errors];
             }
 
             const compilerHost = new ProjectCompilerHost(this.sys, this.compilerOptions, this.testCaseJustName, this.testCase, moduleKind);

@@ -313,11 +313,11 @@ namespace ts {
 
             getSuggestionDiagnostics: file => {
                 return (suggestionDiagnostics.get(file.fileName) || emptyArray).concat(getUnusedDiagnostics());
-                function getUnusedDiagnostics(): ReadonlyArray<Diagnostic> {
+                function getUnusedDiagnostics(): ReadonlyArray<DiagnosticWithLocation> {
                     if (file.isDeclarationFile) return emptyArray;
 
                     checkSourceFile(file);
-                    const diagnostics: Diagnostic[] = [];
+                    const diagnostics: DiagnosticWithLocation[] = [];
                     Debug.assert(!!(getNodeLinks(file).flags & NodeCheckFlags.TypeChecked));
                     checkUnusedIdentifiers(getPotentiallyUnusedIdentifiers(file), (kind, diag) => {
                         if (!unusedIsError(kind)) {
@@ -481,7 +481,7 @@ namespace ts {
 
         const diagnostics = createDiagnosticCollection();
         // Suggestion diagnostics must have a file. Keyed by source file name.
-        const suggestionDiagnostics = createMultiMap<Diagnostic>();
+        const suggestionDiagnostics = createMultiMap<DiagnosticWithLocation>();
 
         const enum TypeFacts {
             None = 0,
@@ -628,7 +628,7 @@ namespace ts {
             Local,
             Parameter,
         }
-        type AddUnusedDiagnostic = (type: UnusedKind, diagnostic: Diagnostic) => void;
+        type AddUnusedDiagnostic = (type: UnusedKind, diagnostic: DiagnosticWithLocation) => void;
 
         const builtinGlobals = createSymbolTable();
         builtinGlobals.set(undefinedSymbol.escapedName, undefinedSymbol);
@@ -824,7 +824,7 @@ namespace ts {
             diagnostics.add(diagnostic);
         }
 
-        function addErrorOrSuggestion(isError: boolean, diagnostic: Diagnostic) {
+        function addErrorOrSuggestion(isError: boolean, diagnostic: DiagnosticWithLocation) {
             if (isError) {
                 diagnostics.add(diagnostic);
             }
@@ -9286,8 +9286,10 @@ namespace ts {
             return type;
         }
 
-        function getRegularTypeOfLiteralType(type: Type) {
-            return type.flags & TypeFlags.StringOrNumberLiteral && type.flags & TypeFlags.FreshLiteral ? (<LiteralType>type).regularType : type;
+        function getRegularTypeOfLiteralType(type: Type): Type {
+            return type.flags & TypeFlags.StringOrNumberLiteral && type.flags & TypeFlags.FreshLiteral ? (<LiteralType>type).regularType :
+                type.flags & TypeFlags.Union ? getUnionType(sameMap((<UnionType>type).types, getRegularTypeOfLiteralType)) :
+                type;
         }
 
         function getLiteralType(value: string | number, enumId?: number, symbol?: Symbol) {
@@ -12774,10 +12776,12 @@ namespace ts {
             // all inferences were made to top-level occurrences of the type parameter, and
             // the type parameter has no constraint or its constraint includes no primitive or literal types, and
             // the type parameter was fixed during inference or does not occur at top-level in the return type.
-            const widenLiteralTypes = inference.topLevel &&
-                !hasPrimitiveConstraint(inference.typeParameter) &&
+            const primitiveConstraint = hasPrimitiveConstraint(inference.typeParameter);
+            const widenLiteralTypes = !primitiveConstraint && inference.topLevel &&
                 (inference.isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), inference.typeParameter));
-            const baseCandidates = widenLiteralTypes ? sameMap(candidates, getWidenedLiteralType) : candidates;
+            const baseCandidates = primitiveConstraint ? sameMap(candidates, getRegularTypeOfLiteralType) :
+                widenLiteralTypes ? sameMap(candidates, getWidenedLiteralType) :
+                candidates;
             // If all inferences were made from contravariant positions, infer a common subtype. Otherwise, if
             // union types were requested or if all inferences were made from the return type position, infer a
             // union type. Otherwise, infer a common supertype.
@@ -15303,6 +15307,26 @@ namespace ts {
             }
         }
 
+        // Return true if the given expression is possibly a discriminant value. We limit the kinds of
+        // expressions we check to those that don't depend on their contextual type in order not to cause
+        // recursive (and possibly infinite) invocations of getContextualType.
+        function isPossiblyDiscriminantValue(node: Expression): boolean {
+            switch (node.kind) {
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.Identifier:
+                    return true;
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ParenthesizedExpression:
+                    return isPossiblyDiscriminantValue((<PropertyAccessExpression | ParenthesizedExpression>node).expression);
+            }
+            return false;
+        }
+
         // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
         // be "pushed" onto a node using the contextualType property.
         function getApparentTypeOfContextualType(node: Expression): Type {
@@ -15316,8 +15340,8 @@ namespace ts {
             propLoop: for (const prop of node.properties) {
                 if (!prop.symbol) continue;
                 if (prop.kind !== SyntaxKind.PropertyAssignment) continue;
-                if (isDiscriminantProperty(contextualType, prop.symbol.escapedName)) {
-                    const discriminatingType = getTypeOfNode(prop.initializer);
+                if (isPossiblyDiscriminantValue(prop.initializer) && isDiscriminantProperty(contextualType, prop.symbol.escapedName)) {
+                    const discriminatingType = checkExpression(prop.initializer);
                     for (const type of (contextualType as UnionType).types) {
                         const targetType = getTypeOfPropertyOfType(type, prop.symbol.escapedName);
                         if (targetType && checkTypeAssignableTo(discriminatingType, targetType, /*errorNode*/ undefined)) {

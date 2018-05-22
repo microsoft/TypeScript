@@ -121,7 +121,7 @@ function f() {
         x++;
 >x++ : number
 >x : number
-    }    
+    }
     finally {
         x+=3;
 >x+=3 : number
