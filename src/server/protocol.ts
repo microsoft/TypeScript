@@ -1201,7 +1201,7 @@ namespace ts.server.protocol {
         /**
          * Filename of the last file analyzed before disabling the language service. undefined, if the language service is enabled.
          */
-        lastFileExceededProgramSize: string | undefined;
+        lastFileExceededProgramSize?: string;
     }
 
     /**
@@ -1809,7 +1809,7 @@ namespace ts.server.protocol {
 
     export interface CompletionEntryIdentifier {
         name: string;
-        source: string;
+        source?: string;
     }
 
     /**
@@ -1853,7 +1853,7 @@ namespace ts.server.protocol {
         /**
          * Optional modifiers for the kind (such as 'public').
          */
-        kindModifiers: string;
+        kindModifiers?: string;
         /**
          * A string that is used for comparing completion items so that they can be ordered.  This
          * is often the same as the name but may be different in certain circumstances.
@@ -1912,12 +1912,12 @@ namespace ts.server.protocol {
         /**
          * Documentation strings for the symbol.
          */
-        documentation: SymbolDisplayPart[];
+        documentation?: SymbolDisplayPart[];
 
         /**
          * JSDoc tags for the symbol.
          */
-        tags: JSDocTagInfo[];
+        tags?: JSDocTagInfo[];
 
         /**
          * The associated code actions for this entry

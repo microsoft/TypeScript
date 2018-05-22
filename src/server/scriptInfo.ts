@@ -14,11 +14,11 @@ namespace ts.server {
          * The script version cache is generated on demand and text is still retained.
          * Only on edits to the script version cache, the text will be set to undefined
          */
-        private text: string;
+        private text: string | undefined;
         /**
          * Line map for the text when there is no script version cache present
          */
-        private lineMap: number[];
+        private lineMap: number[] | undefined;
         private textVersion = 0;
 
         /**
@@ -115,7 +115,7 @@ namespace ts.server {
 
         public getSnapshot(): IScriptSnapshot {
             return this.useScriptVersionCacheIfValidOrOpen()
-                ? this.svc.getSnapshot()
+                ? this.svc!.getSnapshot()
                 : ScriptSnapshot.fromString(this.getOrLoadText());
         }
 
@@ -129,10 +129,10 @@ namespace ts.server {
             if (!this.useScriptVersionCacheIfValidOrOpen()) {
                 const lineMap = this.getLineMap();
                 const start = lineMap[line]; // -1 since line is 1-based
-                const end = line + 1 < lineMap.length ? lineMap[line + 1] : this.text.length;
+                const end = line + 1 < lineMap.length ? lineMap[line + 1] : this.text!.length;
                 return createTextSpanFromBounds(start, end);
             }
-            return this.svc.lineToTextSpan(line);
+            return this.svc!.lineToTextSpan(line);
         }
 
         /**
@@ -145,7 +145,7 @@ namespace ts.server {
             }
 
             // TODO: assert this offset is actually on the line
-            return this.svc.lineOffsetToPosition(line, offset);
+            return this.svc!.lineOffsetToPosition(line, offset);
         }
 
         positionToLineOffset(position: number): protocol.Location {
@@ -153,7 +153,7 @@ namespace ts.server {
                 const { line, character } = computeLineAndCharacterOfPosition(this.getLineMap(), position);
                 return { line: line + 1, offset: character + 1 };
             }
-            return this.svc.positionToLineOffset(position);
+            return this.svc!.positionToLineOffset(position);
         }
 
         private getFileText(tempFileName?: string) {
@@ -188,7 +188,7 @@ namespace ts.server {
                 Debug.assert(!this.svc || this.pendingReloadFromDisk, "ScriptVersionCache should not be set when reloading from disk");
                 this.reloadWithFileText();
             }
-            return this.text;
+            return this.text!;
         }
 
         private getLineMap() {
@@ -217,7 +217,7 @@ namespace ts.server {
         private preferences: UserPreferences | undefined;
 
         /* @internal */
-        fileWatcher: FileWatcher;
+        fileWatcher: FileWatcher | undefined;
         private textStorage: TextStorage;
 
         /*@internal*/
@@ -294,7 +294,7 @@ namespace ts.server {
                         this.realpath = project.toPath(realpath);
                         // If it is different from this.path, add to the map
                         if (this.realpath !== this.path) {
-                            project.projectService.realpathToScriptInfos.add(this.realpath, this);
+                            project.projectService.realpathToScriptInfos!.add(this.realpath, this); // TODO: GH#18217
                         }
                     }
                 }
@@ -306,8 +306,8 @@ namespace ts.server {
             return this.realpath && this.realpath !== this.path ? this.realpath : undefined;
         }
 
-        getFormatCodeSettings(): FormatCodeSettings { return this.formatSettings; }
-        getPreferences(): UserPreferences { return this.preferences; }
+        getFormatCodeSettings(): FormatCodeSettings | undefined { return this.formatSettings; }
+        getPreferences(): UserPreferences | undefined { return this.preferences; }
 
         attachToProject(project: Project): boolean {
             const isNew = !this.isAttached(project);
@@ -345,7 +345,7 @@ namespace ts.server {
                 case 2:
                     if (this.containingProjects[0] === project) {
                         project.onFileAddedOrRemoved();
-                        this.containingProjects[0] = this.containingProjects.pop();
+                        this.containingProjects[0] = this.containingProjects.pop()!;
                     }
                     else if (this.containingProjects[1] === project) {
                         project.onFileAddedOrRemoved();
@@ -406,7 +406,7 @@ namespace ts.server {
             }
         }
 
-        setOptions(formatSettings: FormatCodeSettings, preferences: UserPreferences): void {
+        setOptions(formatSettings: FormatCodeSettings, preferences: UserPreferences | undefined): void {
             if (formatSettings) {
                 if (!this.formatSettings) {
                     this.formatSettings = getDefaultFormatCodeSettings(this.host);

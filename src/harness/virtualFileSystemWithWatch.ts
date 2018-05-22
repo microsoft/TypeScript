@@ -179,7 +179,7 @@ interface Array<T> {}`
         verifyMapSize(caption, actual, arrayFrom(expectedKeys.keys()));
         expectedKeys.forEach((count, name) => {
             assert.isTrue(actual.has(name), `${caption}: expected to contain ${name}, actual keys: ${arrayFrom(actual.keys())}`);
-            assert.equal(actual.get(name).length, count, `${caption}: Expected to be have ${count} entries for ${name}. Actual entry: ${JSON.stringify(actual.get(name))}`);
+            assert.equal(actual.get(name)!.length, count, `${caption}: Expected to be have ${count} entries for ${name}. Actual entry: ${JSON.stringify(actual.get(name))}`);
         });
     }
 
@@ -322,7 +322,7 @@ interface Array<T> {}`
         readonly watchedFiles = createMultiMap<TestFileWatcher>();
         private readonly executingFilePath: string;
         private readonly currentDirectory: string;
-        private readonly dynamicPriorityWatchFile: HostWatchFile;
+        private readonly dynamicPriorityWatchFile: HostWatchFile | undefined;
         private readonly customRecursiveWatchDirectory: HostWatchDirectory | undefined;
 
         constructor(public withSafeList: boolean, public useCaseSensitiveFileNames: boolean, executingFilePath: string, currentDirectory: string, fileOrFolderorSymLinkList: ReadonlyArray<FileOrFolderOrSymLink>, public readonly newLine = "\n", public readonly useWindowsStylePath?: boolean, private readonly environmentVariables?: Map<string>) {
@@ -465,7 +465,7 @@ interface Array<T> {}`
             else {
                 currentEntry.content = content;
                 currentEntry.modifiedTime = this.now();
-                this.fs.get(getDirectoryPath(currentEntry.path)).modifiedTime = this.now();
+                this.fs.get(getDirectoryPath(currentEntry.path))!.modifiedTime = this.now();
                 if (options && options.invokeDirectoryWatcherInsteadOfFileChanged) {
                     this.invokeDirectoryWatcher(getDirectoryPath(currentEntry.fullPath), currentEntry.fullPath);
                 }
@@ -570,7 +570,7 @@ interface Array<T> {}`
             this.invokeDirectoryWatcher(folder.fullPath, fileOrDirectory.fullPath);
         }
 
-        private removeFileOrFolder(fileOrDirectory: FsFile | FsFolder | FsSymLink, isRemovableLeafFolder: (folder: FsFolder) => boolean, isRenaming?: boolean) {
+        private removeFileOrFolder(fileOrDirectory: FsFile | FsFolder | FsSymLink, isRemovableLeafFolder: (folder: FsFolder) => boolean, isRenaming = false) {
             const basePath = getDirectoryPath(fileOrDirectory.path);
             const baseFolder = this.fs.get(basePath) as FsFolder;
             if (basePath !== fileOrDirectory.path) {
@@ -621,15 +621,15 @@ interface Array<T> {}`
 
         // For overriding the methods
         invokeWatchedDirectoriesCallback(folderFullPath: string, relativePath: string) {
-            invokeWatcherCallbacks(this.watchedDirectories.get(this.toPath(folderFullPath)), cb => this.directoryCallback(cb, relativePath));
+            invokeWatcherCallbacks(this.watchedDirectories.get(this.toPath(folderFullPath))!, cb => this.directoryCallback(cb, relativePath));
         }
 
         invokeWatchedDirectoriesRecursiveCallback(folderFullPath: string, relativePath: string) {
-            invokeWatcherCallbacks(this.watchedDirectoriesRecursive.get(this.toPath(folderFullPath)), cb => this.directoryCallback(cb, relativePath));
+            invokeWatcherCallbacks(this.watchedDirectoriesRecursive.get(this.toPath(folderFullPath))!, cb => this.directoryCallback(cb, relativePath));
         }
 
         invokeFileWatcher(fileFullPath: string, eventKind: FileWatcherEventKind, useFileNameInCallback?: boolean) {
-            invokeWatcherCallbacks(this.watchedFiles.get(this.toPath(fileFullPath)), ({ cb, fileName }) => cb(useFileNameInCallback ? fileName : fileFullPath, eventKind));
+            invokeWatcherCallbacks(this.watchedFiles.get(this.toPath(fileFullPath))!, ({ cb, fileName }) => cb(useFileNameInCallback ? fileName : fileFullPath, eventKind));
         }
 
         private getRelativePathToDirectory(directoryFullPath: string, fileFullPath: string) {
@@ -687,11 +687,11 @@ interface Array<T> {}`
 
         private toFsFolder(path: string): FsFolder {
             const fsFolder = this.toFsEntry(path) as FsFolder;
-            fsFolder.entries = [] as SortedArray<FSEntry>;
+            fsFolder.entries = [] as FSEntry[] as SortedArray<FSEntry>; // https://github.com/Microsoft/TypeScript/issues/19873
             return fsFolder;
         }
 
-        private getRealFsEntry<T extends FSEntry>(isFsEntry: (fsEntry: FSEntry) => fsEntry is T, path: Path, fsEntry = this.fs.get(path)): T | undefined {
+        private getRealFsEntry<T extends FSEntry>(isFsEntry: (fsEntry: FSEntry) => fsEntry is T, path: Path, fsEntry = this.fs.get(path)!): T | undefined {
             if (isFsEntry(fsEntry)) {
                 return fsEntry;
             }
@@ -737,21 +737,21 @@ interface Array<T> {}`
         getModifiedTime(s: string) {
             const path = this.toFullPath(s);
             const fsEntry = this.fs.get(path);
-            return fsEntry && fsEntry.modifiedTime;
+            return (fsEntry && fsEntry.modifiedTime)!; // TODO: GH#18217
         }
 
-        readFile(s: string): string {
+        readFile(s: string): string | undefined {
             const fsEntry = this.getRealFile(this.toFullPath(s));
             return fsEntry ? fsEntry.content : undefined;
         }
 
         getFileSize(s: string) {
             const path = this.toFullPath(s);
-            const entry = this.fs.get(path);
+            const entry = this.fs.get(path)!;
             if (isFsFile(entry)) {
                 return entry.fileSize ? entry.fileSize : entry.content.length;
             }
-            return undefined;
+            return undefined!; // TODO: GH#18217
         }
 
         directoryExists(s: string) {
@@ -812,7 +812,7 @@ interface Array<T> {}`
         }
 
         createSHA256Hash(s: string): string {
-            return sys.createSHA256Hash(s);
+            return sys.createSHA256Hash!(s);
         }
 
         watchFile(fileName: string, cb: FileWatcherCallback, pollingInterval: number) {
@@ -925,7 +925,7 @@ interface Array<T> {}`
             }
             const dirFullPath = this.realpath(getDirectoryPath(fullPath));
             const realFullPath = combinePaths(dirFullPath, getBaseFileName(fullPath));
-            const fsEntry = this.fs.get(this.toPath(realFullPath));
+            const fsEntry = this.fs.get(this.toPath(realFullPath))!;
             if (isFsSymLink(fsEntry)) {
                 return this.realpath(fsEntry.symLink);
             }
@@ -934,7 +934,7 @@ interface Array<T> {}`
         }
 
         readonly exitMessage = "System Exit";
-        exitCode: number;
+        exitCode: number | undefined;
         readonly resolvePath = (s: string) => s;
         readonly getExecutingFilePath = () => this.executingFilePath;
         readonly getCurrentDirectory = () => this.currentDirectory;
@@ -943,7 +943,7 @@ interface Array<T> {}`
             throw new Error(this.exitMessage);
         }
         getEnvironmentVariable(name: string) {
-            return this.environmentVariables && this.environmentVariables.get(name);
+            return this.environmentVariables && this.environmentVariables.get(name) || "";
         }
     }
 }
