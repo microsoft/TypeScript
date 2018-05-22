@@ -648,13 +648,13 @@ namespace ts {
             name: "allowUnusedLabels",
             type: "boolean",
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Do_not_report_errors_on_unused_labels
+            description: Diagnostics.Controls_showing_errors_for_unused_labels_true_Colon_Always_false_Colon_Never_unspecified_Colon_Not_on_command_line_but_in_editor,
         },
         {
             name: "allowUnreachableCode",
             type: "boolean",
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Do_not_report_errors_on_unreachable_code
+            description: Diagnostics.Controls_showing_errors_for_unreachable_code_true_Colon_Always_false_Colon_Never_unspecified_Colon_Not_on_command_line_but_in_editor,
         },
         {
             name: "suppressExcessPropertyErrors",

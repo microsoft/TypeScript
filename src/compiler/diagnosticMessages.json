@@ -3060,7 +3060,7 @@
         "category": "Message",
         "code": 6073
     },
-    "Do not report errors on unused labels.": {
+    "Controls showing errors for unused labels. 'true': Always; 'false': Never; unspecified: Not on command line, but in editor.": {
         "category": "Message",
         "code": 6074
     },
@@ -3072,7 +3072,7 @@
         "category": "Message",
         "code": 6076
     },
-    "Do not report errors on unreachable code.": {
+    "Controls showing errors for unreachable code.  'true': Always; 'false': Never; unspecified: Not on command line, but in editor.": {
         "category": "Message",
         "code": 6077
     },
