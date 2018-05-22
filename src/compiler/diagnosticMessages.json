@@ -3561,6 +3561,10 @@
         "code": 6199,
         "reportsUnnecessary": true
     },
+    "Enable strict checking of 'any' type.": {
+        "category": "Message",
+        "code": 6200
+    },
 
     "Projects to reference": {
         "category": "Message",
