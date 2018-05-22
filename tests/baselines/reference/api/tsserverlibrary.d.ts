@@ -8176,7 +8176,7 @@ declare namespace ts.server {
         private safelist;
         private legacySafelist;
         private pendingProjectUpdates;
-        readonly currentDirectory: string;
+        readonly currentDirectory: NormalizedPath;
         readonly toCanonicalFileName: (f: string) => string;
         readonly host: ServerHost;
         readonly logger: Logger;
