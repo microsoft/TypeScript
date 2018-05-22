@@ -24430,7 +24430,7 @@ namespace ts {
                             continue;
                         }
 
-                        if (isPrototypeProperty(base) && isPrototypeProperty(derived) || base.flags & SymbolFlags.PropertyOrAccessor && derived.flags & SymbolFlags.PropertyOrAccessor) {
+                        if (isPrototypeProperty(base) || base.flags & SymbolFlags.PropertyOrAccessor && derived.flags & SymbolFlags.PropertyOrAccessor) {
                             // method is overridden with method or property/accessor is overridden with property/accessor - correct case
                             continue;
                         }
