@@ -3630,6 +3630,10 @@
         "category": "Message",
         "code": 6358
     },
+    "Project '{0}' is up to date because it was previously built": {
+        "category": "Message",
+        "code": 6359
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

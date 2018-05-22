@@ -1,5 +1,3 @@
-/// <reference path="../vfs.ts" />
-
 namespace ts {
     let currentTime = 100;
     const bfs = new vfs.FileSystem(/*ignoreCase*/ false, { time });
@@ -14,8 +12,8 @@ namespace ts {
     bfs.makeReadonly();
     tick();
 
-    describe("tsbuild tests", () => {
-        it("can build the sample project 'tests' without error", () => {
+    describe("tsbuild - sanity check of clean build of 'sample1' project", () => {
+        it("can build the sample project 'sample1' without error", () => {
             const fs = bfs.shadow();
             const host = new fakes.CompilerHost(fs);
             const builder = createSolutionBuilder(host, reportDiagnostic, { dry: false, force: false, verbose: false });
@@ -24,13 +22,17 @@ namespace ts {
             builder.buildProjects(["."]);
             assertDiagnosticMessages(/*empty*/);
         });
+    });
 
-        it("can detect when and what to rebuild", () => {
-            const fs = bfs.shadow();
-            const host = new fakes.CompilerHost(fs);
-            const builder = createSolutionBuilder(host, reportDiagnostic, { dry: false, force: false, verbose: true });
+    describe("tsbuild - can detect when and what to rebuild", () => {
+        const fs = bfs.shadow();
+        const host = new fakes.CompilerHost(fs);
+        const builder = createSolutionBuilder(host, reportDiagnostic, { dry: false, force: false, verbose: true });
 
-            fs.chdir("/src/tests");
+        fs.chdir("/src/tests");
+
+        it("Builds the project", () => {
+            builder.resetBuildContext();
             builder.buildProjects(["."]);
             assertDiagnosticMessages(Diagnostics.Sorted_list_of_input_projects_Colon_0,
                 Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist,
@@ -40,19 +42,25 @@ namespace ts {
                 Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist,
                 Diagnostics.Building_project_0);
             tick();
+        });
 
-            // All three projects are up to date
+        // All three projects are up to date
+        it("Detects that all projects are up to date", () => {
             clearDiagnostics();
+            builder.resetBuildContext();
             builder.buildProjects(["."]);
             assertDiagnosticMessages(Diagnostics.Sorted_list_of_input_projects_Colon_0,
                 Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2,
                 Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2,
                 Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2);
             tick();
+        });
 
-            // Update a file in the leaf node (tests), only it should rebuild the last one
+        // Update a file in the leaf node (tests), only it should rebuild the last one
+        it("Only builds the leaf node project", () => {
             clearDiagnostics();
             fs.writeFileSync("/src/tests/index.ts", "const m = 10;");
+            builder.resetBuildContext();
             builder.buildProjects(["."]);
 
             assertDiagnosticMessages(Diagnostics.Sorted_list_of_input_projects_Colon_0,
@@ -61,10 +69,13 @@ namespace ts {
                 Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2,
                 Diagnostics.Building_project_0);
             tick();
+        });
 
-            // Update a file in the parent (without affecting types), should get fast downstream builds
+        // Update a file in the parent (without affecting types), should get fast downstream builds
+        it("Detects type-only changes in upstream projects", () => {
             clearDiagnostics();
             replaceText(fs, "/src/core/index.ts", "HELLO WORLD", "WELCOME PLANET");
+            builder.resetBuildContext();
             builder.buildProjects(["."]);
 
             assertDiagnosticMessages(Diagnostics.Sorted_list_of_input_projects_Colon_0,
@@ -81,12 +92,12 @@ namespace ts {
         if (!fs.statSync(path).isFile()) {
             throw new Error(`File ${path} does not exist`);
         }
-        const old = fs.readFileSync(path, 'utf-8');
+        const old = fs.readFileSync(path, "utf-8");
         if (old.indexOf(oldText) < 0) {
             throw new Error(`Text "${oldText}" does not exist in file ${path}`);
         }
         const newContent = old.replace(oldText, newText);
-        fs.writeFileSync(path, newContent, 'utf-8');
+        fs.writeFileSync(path, newContent, "utf-8");
     }
 
     function assertDiagnosticMessages(...expected: DiagnosticMessage[]) {
@@ -114,8 +125,9 @@ namespace ts {
     }
 
     function tick() {
-        currentTime += 100000;
+        currentTime += 60_000;
     }
+
     function time() {
         return currentTime;
     }
@@ -126,7 +138,7 @@ namespace ts {
             const file = getBaseFileName(path);
             vfs.writeFileSync(virtualRoot + "/" + file, Harness.IO.readFile(localRoot + "/" + file));
         }
-        for (const dir of Harness.IO.getDirectories(localRoot)){
+        for (const dir of Harness.IO.getDirectories(localRoot)) {
             loadFsMirror(vfs, localRoot + "/" + dir, virtualRoot + "/" + dir);
         }
     }

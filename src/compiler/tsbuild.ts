@@ -514,13 +514,13 @@ namespace ts {
 
                     // If the upstream project's newest file is older than our oldest output, we
                     // can't be out of date because of it
-                    if (refStatus.newestInputFileTime < oldestOutputFileTime) {
+                    if (refStatus.newestInputFileTime <= oldestOutputFileTime) {
                         continue;
                     }
 
                     // If the upstream project has only change .d.ts files, and we've built
                     // *after* those files, then we're "psuedo up to date" and eligible for a fast rebuild
-                    if (refStatus.newestDeclarationFileContentChangedTime < oldestOutputFileTime) {
+                    if (refStatus.newestDeclarationFileContentChangedTime <= oldestOutputFileTime) {
                         pseudoUpToDate = true;
                         continue;
                     }
@@ -829,7 +829,12 @@ namespace ts {
                     context.verbose(Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, configFileName, status.missingOutputFileName);
                     return;
                 case UpToDateStatusType.UpToDate:
-                    context.verbose(Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, configFileName, status.newestInputFileTime, status.newestOutputFileTime);
+                    if (status.newestInputFileTime !== undefined) {
+                        context.verbose(Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, configFileName, status.newestInputFileTime, status.newestOutputFileTime);
+                    }
+                    else {
+                        context.verbose(Diagnostics.Project_0_is_up_to_date_because_it_was_previously_built, configFileName);
+                    }
                     return;
                 case UpToDateStatusType.UpToDateWithUpstreamTypes:
                     context.verbose(Diagnostics.Project_0_is_up_to_date_with_its_upstream_types, configFileName);
