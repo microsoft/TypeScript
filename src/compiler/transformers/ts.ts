@@ -1964,7 +1964,8 @@ namespace ts {
          * @param node The type reference node.
          */
         function serializeTypeReferenceNode(node: TypeReferenceNode): SerializedTypeNode {
-            switch (resolver.getTypeReferenceSerializationKind(node.typeName, currentScope)) {
+            const kind = resolver.getTypeReferenceSerializationKind(node.typeName, currentScope);
+            switch (kind) {
                 case TypeReferenceSerializationKind.Unknown:
                     const serialized = serializeEntityNameAsExpression(node.typeName, /*useFallback*/ true);
                     const temp = createTempVariable(hoistVariableDeclaration);
@@ -2006,8 +2007,9 @@ namespace ts {
                     return createIdentifier("Promise");
 
                 case TypeReferenceSerializationKind.ObjectType:
-                default:
                     return createIdentifier("Object");
+                default:
+                    return Debug.assertNever(kind);
             }
         }
 
