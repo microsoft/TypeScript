@@ -59,7 +59,8 @@ namespace ts.SignatureHelp {
         }
         else {
             const type = checker.getTypeAtLocation(invocation.called);
-            const candidates = type.getCallSignatures().filter(candidate => !!candidate.typeParameters && candidate.typeParameters.length >= argumentInfo.argumentCount);
+            const signatures = isNewExpression(invocation.called.parent) ? type.getConstructSignatures() : type.getCallSignatures();
+            const candidates = signatures.filter(candidate => !!candidate.typeParameters && candidate.typeParameters.length >= argumentInfo.argumentCount);
             return candidates.length === 0 ? undefined : { candidates, resolvedSignature: first(candidates) };
         }
     }
@@ -204,27 +205,17 @@ namespace ts.SignatureHelp {
                 argumentCount: 1
             };
         }
-        else if (isBinaryExpression(node.parent)) {
-            const info = getInfoForBinaryExpressionResemblingTypeArguments(node.parent);
-            if (!info) return undefined;
-            const { called, nTypeArguments } = info;
-            const argumentsSpan = createTextSpanFromBounds(called.getStart(sourceFile), node.end);
-            return { kind: ArgumentListKind.TypeArguments, invocation: { kind: InvocationKind.TypeArgs, called }, argumentsSpan, argumentIndex: nTypeArguments - 1, argumentCount: nTypeArguments };
+        else {
+            const typeArgInfo = isPossiblyTypeArgumentPosition(node, sourceFile);
+            if (typeArgInfo) {
+                const { called, nTypeArguments } = typeArgInfo;
+                const invocation: Invocation = { kind: InvocationKind.TypeArgs, called };
+                const argumentsSpan = createTextSpanFromBounds(called.getStart(sourceFile), node.end);
+                return { kind: ArgumentListKind.TypeArguments, invocation, argumentsSpan, argumentIndex: nTypeArguments, argumentCount: nTypeArguments + 1 };
+            }
         }
-        return undefined;
-    }
 
-    /** Code like `f<T, U,` will be parsed as a series of `BinaryExpression`s. */
-    function getInfoForBinaryExpressionResemblingTypeArguments(bin: BinaryExpression): { readonly called: Expression, readonly nTypeArguments: number } | undefined {
-        switch (bin.operatorToken.kind) {
-            case SyntaxKind.LessThanToken:
-                return { called: bin.left, nTypeArguments: 1 };
-            case SyntaxKind.CommaToken:
-                const left = isBinaryExpression(bin.left) ? getInfoForBinaryExpressionResemblingTypeArguments(bin.left) : undefined;
-                return left && { called: left.called, nTypeArguments: left.nTypeArguments + 1 };
-            default:
-                return undefined;
-        }
+        return undefined;
     }
 
     function getArgumentIndex(argumentsList: Node, node: Node) {

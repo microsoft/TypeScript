@@ -912,21 +912,26 @@ namespace ts {
         }
     }
 
-    export function isPossiblyTypeArgumentPosition(token: Node, sourceFile: SourceFile) {
+    export interface PossibleTypeArgumentInfo {
+        readonly called: Identifier;
+        readonly nTypeArguments: number;
+    }
+    export function isPossiblyTypeArgumentPosition(token: Node, sourceFile: SourceFile): PossibleTypeArgumentInfo | undefined {
         // This function determines if the node could be type argument position
         // Since during editing, when type argument list is not complete,
         // the tree could be of any shape depending on the tokens parsed before current node,
         // scanning of the previous identifier followed by "<" before current node would give us better result
         // Note that we also balance out the already provided type arguments, arrays, object literals while doing so
         let remainingLessThanTokens = 0;
+        let nTypeArguments = 0;
         while (token) {
             switch (token.kind) {
                 case SyntaxKind.LessThanToken:
                     // Found the beginning of the generic argument expression
                     token = findPrecedingToken(token.getFullStart(), sourceFile);
-                    const tokenIsIdentifier = token && isIdentifier(token);
-                    if (!remainingLessThanTokens || !tokenIsIdentifier) {
-                        return tokenIsIdentifier;
+                    if (!token || !isIdentifier(token)) return undefined;
+                    if (!remainingLessThanTokens) {
+                        return { called: token, nTypeArguments };
                     }
                     remainingLessThanTokens--;
                     break;
@@ -947,25 +952,28 @@ namespace ts {
                     // This can be object type, skip until we find the matching open brace token
                     // Skip until the matching open brace token
                     token = findPrecedingMatchingToken(token, SyntaxKind.OpenBraceToken, sourceFile);
-                    if (!token) return false;
+                    if (!token) return undefined;
                     break;
 
                 case SyntaxKind.CloseParenToken:
                     // This can be object type, skip until we find the matching open brace token
                     // Skip until the matching open brace token
                     token = findPrecedingMatchingToken(token, SyntaxKind.OpenParenToken, sourceFile);
-                    if (!token) return false;
+                    if (!token) return undefined;
                     break;
 
                 case SyntaxKind.CloseBracketToken:
                     // This can be object type, skip until we find the matching open brace token
                     // Skip until the matching open brace token
                     token = findPrecedingMatchingToken(token, SyntaxKind.OpenBracketToken, sourceFile);
-                    if (!token) return false;
+                    if (!token) return undefined;
                     break;
 
                 // Valid tokens in a type name. Skip.
                 case SyntaxKind.CommaToken:
+                    nTypeArguments++;
+                    break;
+
                 case SyntaxKind.EqualsGreaterThanToken:
 
                 case SyntaxKind.Identifier:
@@ -989,13 +997,13 @@ namespace ts {
                     }
 
                     // Invalid token in type
-                    return false;
+                    return undefined;
             }
 
             token = findPrecedingToken(token.getFullStart(), sourceFile);
         }
 
-        return false;
+        return undefined;
     }
 
     /**
