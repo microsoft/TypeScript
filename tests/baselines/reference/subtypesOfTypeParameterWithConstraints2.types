@@ -259,14 +259,14 @@ function f6<T extends String>(x: T) {
 
     var r2 = true ? '' : x; // ok
 >r2 : string | T
->true ? '' : x : T | ""
+>true ? '' : x : "" | T
 >true : true
 >'' : ""
 >x : T
 
     var r2 = true ? x : ''; // ok
 >r2 : string | T
->true ? x : '' : T | ""
+>true ? x : '' : "" | T
 >true : true
 >x : T
 >'' : ""

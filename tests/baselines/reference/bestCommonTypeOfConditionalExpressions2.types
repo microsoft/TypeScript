@@ -30,7 +30,7 @@ var derived2: Derived2;
 
 var r2 = true ? 1 : '';
 >r2 : string | number
->true ? 1 : '' : 1 | ""
+>true ? 1 : '' : "" | 1
 >true : true
 >1 : 1
 >'' : ""

@@ -9286,8 +9286,10 @@ namespace ts {
             return type;
         }
 
-        function getRegularTypeOfLiteralType(type: Type) {
-            return type.flags & TypeFlags.StringOrNumberLiteral && type.flags & TypeFlags.FreshLiteral ? (<LiteralType>type).regularType : type;
+        function getRegularTypeOfLiteralType(type: Type): Type {
+            return type.flags & TypeFlags.StringOrNumberLiteral && type.flags & TypeFlags.FreshLiteral ? (<LiteralType>type).regularType :
+                type.flags & TypeFlags.Union ? getUnionType(sameMap((<UnionType>type).types, getRegularTypeOfLiteralType)) :
+                type;
         }
 
         function getLiteralType(value: string | number, enumId?: number, symbol?: Symbol) {
@@ -12774,10 +12776,12 @@ namespace ts {
             // all inferences were made to top-level occurrences of the type parameter, and
             // the type parameter has no constraint or its constraint includes no primitive or literal types, and
             // the type parameter was fixed during inference or does not occur at top-level in the return type.
-            const widenLiteralTypes = inference.topLevel &&
-                !hasPrimitiveConstraint(inference.typeParameter) &&
+            const primitiveConstraint = hasPrimitiveConstraint(inference.typeParameter);
+            const widenLiteralTypes = !primitiveConstraint && inference.topLevel &&
                 (inference.isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), inference.typeParameter));
-            const baseCandidates = widenLiteralTypes ? sameMap(candidates, getWidenedLiteralType) : candidates;
+            const baseCandidates = primitiveConstraint ? sameMap(candidates, getRegularTypeOfLiteralType) :
+                widenLiteralTypes ? sameMap(candidates, getWidenedLiteralType) :
+                candidates;
             // If all inferences were made from contravariant positions, infer a common subtype. Otherwise, if
             // union types were requested or if all inferences were made from the return type position, infer a
             // union type. Otherwise, infer a common supertype.
