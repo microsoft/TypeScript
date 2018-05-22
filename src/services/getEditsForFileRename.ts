@@ -16,6 +16,7 @@ namespace ts {
 
     function updateTsconfigFiles(program: Program, changeTracker: textChanges.ChangeTracker, oldFilePath: string, newFilePath: string): void {
         const configFile = program.getCompilerOptions().configFile;
+        if (!configFile) return;
         const oldFile = getTsConfigPropArrayElementValue(configFile, "files", oldFilePath);
         if (oldFile) {
             changeTracker.replaceRangeWithText(configFile, createStringRange(oldFile, configFile), newFilePath);

@@ -2,8 +2,8 @@
 namespace ts.refactor {
     const refactorName = "Move to a new file";
     registerRefactor(refactorName, {
-        getAvailableActions(context): ApplicableRefactorInfo[] {
-            if (!context.preferences.allowTextChangesInNewFiles || getFirstAndLastStatementToMove(context) === undefined) return undefined;
+        getAvailableActions(context): ApplicableRefactorInfo[] | undefined {
+            if (!context.preferences.allowTextChangesInNewFiles || getStatementsToMove(context) === undefined) return undefined;
             const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);
             return [{ name: refactorName, description, actions: [{ name: refactorName, description }] }];
         },
@@ -15,20 +15,26 @@ namespace ts.refactor {
         }
     });
 
-    function getFirstAndLastStatementToMove(context: RefactorContext): { readonly first: number, readonly afterLast: number } | undefined {
+    function getRangeToMove(context: RefactorContext): ReadonlyArray<Statement> | undefined {
         const { file } = context;
         const range = createTextRangeFromSpan(getRefactorContextSpan(context));
         const { statements } = file;
 
         const startNodeIndex = findIndex(statements, s => s.end > range.pos);
         if (startNodeIndex === -1) return undefined;
+
+        const startStatement = statements[startNodeIndex];
+        if (isNamedDeclaration(startStatement) && startStatement.name && rangeContainsRange(startStatement.name, range)) {
+            return [statements[startNodeIndex]];
+        }
+
         // Can't only partially include the start node or be partially into the next node
-        if (range.pos > statements[startNodeIndex].getStart(file)) return undefined;
+        if (range.pos > startStatement.getStart(file)) return undefined;
         const afterEndNodeIndex = findIndex(statements, s => s.end > range.end, startNodeIndex);
         // Can't be partially into the next node
         if (afterEndNodeIndex !== -1 && (afterEndNodeIndex === 0 || statements[afterEndNodeIndex].getStart(file) < range.end)) return undefined;
 
-        return { first: startNodeIndex, afterLast: afterEndNodeIndex === -1 ? statements.length : afterEndNodeIndex };
+        return statements.slice(startNodeIndex, afterEndNodeIndex === -1 ? statements.length : afterEndNodeIndex);
     }
 
     function doChange(oldFile: SourceFile, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost): void {
@@ -57,16 +63,15 @@ namespace ts.refactor {
 
     // Filters imports out of the range of statements to move. Imports will be copied to the new file anyway, and may still be needed in the old file.
     function getStatementsToMove(context: RefactorContext): ToMove | undefined {
-        const { statements } = context.file;
-        const { first, afterLast } = getFirstAndLastStatementToMove(context)!;
+        const rangeToMove = getRangeToMove(context);
+        if (rangeToMove === undefined) return undefined;
         const all: Statement[] = [];
         const ranges: StatementRange[] = [];
-        const rangeToMove = statements.slice(first, afterLast);
         getRangesWhere(rangeToMove, s => !isPureImport(s), (start, afterEnd) => {
             for (let i = start; i < afterEnd; i++) all.push(rangeToMove[i]);
             ranges.push({ first: rangeToMove[start], last: rangeToMove[afterEnd - 1] });
         });
-        return { all, ranges };
+        return all.length === 0 ? undefined : { all, ranges };
     }
 
     function isPureImport(node: Node): boolean {
@@ -76,7 +81,7 @@ namespace ts.refactor {
             case SyntaxKind.ImportEqualsDeclaration:
                 return !hasModifier(node, ModifierFlags.Export);
             case SyntaxKind.VariableStatement:
-                return (node as VariableStatement).declarationList.declarations.every(d => d.initializer && isRequireCall(d.initializer, /*checkArgumentIsStringLiteralLike*/ true));
+                return (node as VariableStatement).declarationList.declarations.every(d => !!d.initializer && isRequireCall(d.initializer, /*checkArgumentIsStringLiteralLike*/ true));
             default:
                 return false;
         }
@@ -133,7 +138,7 @@ namespace ts.refactor {
     function deleteUnusedOldImports(oldFile: SourceFile, toMove: ReadonlyArray<Statement>, changes: textChanges.ChangeTracker, toDelete: ReadonlySymbolSet, checker: TypeChecker) {
         for (const statement of oldFile.statements) {
             if (contains(toMove, statement)) continue;
-            forEachImportInStatement(statement, i => deleteUnusedImports(oldFile, i, changes, name => toDelete.has(checker.getSymbolAtLocation(name))));
+            forEachImportInStatement(statement, i => deleteUnusedImports(oldFile, i, changes, name => toDelete.has(checker.getSymbolAtLocation(name)!)));
         }
     }
 
@@ -146,7 +151,7 @@ namespace ts.refactor {
                     const shouldMove = (name: Identifier): boolean => {
                         const symbol = isBindingElement(name.parent)
                             ? getPropertySymbolFromBindingElement(checker, name.parent as BindingElement & { name: Identifier })
-                            : skipAlias(checker.getSymbolAtLocation(name), checker);
+                            : skipAlias(checker.getSymbolAtLocation(name)!, checker); // TODO: GH#18217
                         return !!symbol && movedSymbols.has(symbol);
                     };
                     deleteUnusedImports(sourceFile, importNode, changes, shouldMove); // These will be changed to imports from the new file
@@ -196,7 +201,7 @@ namespace ts.refactor {
         const imports: string[] = [];
         newFileNeedExport.forEach(symbol => {
             if (symbol.escapedName === InternalSymbolName.Default) {
-                defaultImport = createIdentifier(symbolNameNoDefault(symbol));
+                defaultImport = createIdentifier(symbolNameNoDefault(symbol)!); // TODO: GH#18217
             }
             else {
                 imports.push(symbol.name);
@@ -319,7 +324,7 @@ namespace ts.refactor {
         const copiedOldImports: SupportedImportStatement[] = [];
         for (const oldStatement of oldFile.statements) {
             forEachImportInStatement(oldStatement, i => {
-                append(copiedOldImports, filterImport(i, moduleSpecifierFromImport(i), name => importsToCopy.has(checker.getSymbolAtLocation(name))));
+                append(copiedOldImports, filterImport(i, moduleSpecifierFromImport(i), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)));
             });
         }
 
@@ -354,7 +359,7 @@ namespace ts.refactor {
         let newModuleName = moduleName;
         for (let i = 1; ; i++) {
             const name = combinePaths(inDirectory, newModuleName + extension);
-            if (!host.fileExists(name)) return newModuleName;
+            if (!host.fileExists!(name)) return newModuleName; // TODO: GH#18217
             newModuleName = `${moduleName}.${i}`;
         }
     }
@@ -558,7 +563,7 @@ namespace ts.refactor {
         }
     }
 
-    function forEachTopLevelDeclaration<T>(statement: Statement, cb: (node: TopLevelDeclaration) => T): T {
+    function forEachTopLevelDeclaration<T>(statement: Statement, cb: (node: TopLevelDeclaration) => T): T | undefined {
         switch (statement.kind) {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.ClassDeclaration:
@@ -605,7 +610,7 @@ namespace ts.refactor {
             return !isExpressionStatement(decl) && hasModifier(decl, ModifierFlags.Export);
         }
         else {
-            return getNamesToExportInCommonJS(decl).some(name => sourceFile.symbol.exports.has(escapeLeadingUnderscores(name)));
+            return getNamesToExportInCommonJS(decl).some(name => sourceFile.symbol.exports!.has(escapeLeadingUnderscores(name)));
         }
     }
 
@@ -644,7 +649,7 @@ namespace ts.refactor {
         switch (decl.kind) {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.ClassDeclaration:
-                return [decl.name.text];
+                return [decl.name!.text]; // TODO: GH#18217
             case SyntaxKind.VariableStatement:
                 return mapDefined(decl.declarationList.declarations, d => isIdentifier(d.name) ? d.name.text : undefined);
             case SyntaxKind.ModuleDeclaration:
@@ -652,11 +657,11 @@ namespace ts.refactor {
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.ImportEqualsDeclaration:
-                return undefined;
+                return emptyArray;
             case SyntaxKind.ExpressionStatement:
                 return Debug.fail(); // Shouldn't try to add 'export' keyword to `exports.x = ...`
             default:
-                Debug.assertNever(decl);
+                return Debug.assertNever(decl);
         }
     }
 

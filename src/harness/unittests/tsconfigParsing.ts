@@ -135,11 +135,12 @@ namespace ts {
             const parsed = parseConfigFileTextToJson("/apath/tsconfig.json", "invalid");
             assert.deepEqual(parsed.config, { invalid: undefined });
             const expected = createCompilerDiagnostic(Diagnostics._0_expected, "{");
-            assert.equal(parsed.error.messageText, expected.messageText);
-            assert.equal(parsed.error.category, expected.category);
-            assert.equal(parsed.error.code, expected.code);
-            assert.equal(parsed.error.start, 0);
-            assert.equal(parsed.error.length, "invalid".length);
+            const error = parsed.error!;
+            assert.equal(error.messageText, expected.messageText);
+            assert.equal(error.category, expected.category);
+            assert.equal(error.code, expected.code);
+            assert.equal(error.start, 0);
+            assert.equal(error.length, "invalid".length);
         });
 
         it("returns object when users correctly specify library", () => {
