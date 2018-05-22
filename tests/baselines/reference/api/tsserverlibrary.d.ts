@@ -2960,7 +2960,7 @@ declare namespace ts {
     }
 }
 declare namespace ts {
-    const versionMajorMinor = "2.9";
+    const versionMajorMinor = "3.0";
     /** The version of the TypeScript compiler release */
     const version: string;
 }
@@ -4483,6 +4483,7 @@ declare namespace ts {
         fileExists?(path: string): boolean;
         getTypeRootsVersion?(): number;
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
+        getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string): ResolvedModuleWithFailedLookupLocations;
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         getDirectories?(directoryName: string): string[];
         /**
@@ -7871,6 +7872,7 @@ declare namespace ts.server {
         readFile(fileName: string): string | undefined;
         fileExists(file: string): boolean;
         resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModuleFull[];
+        getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations;
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         directoryExists(path: string): boolean;
         getDirectories(path: string): string[];

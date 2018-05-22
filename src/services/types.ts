@@ -207,8 +207,11 @@ namespace ts {
          * LS host can optionally implement this method if it wants to be completely in charge of module name resolution.
          * if implementation is omitted then language service will use built-in module resolution logic and get answers to
          * host specific questions using 'getScriptSnapshot'.
+         *
+         * If this is implemented, `getResolvedModuleWithFailedLookupLocationsFromCache` should be too.
          */
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
+        getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string): ResolvedModuleWithFailedLookupLocations;
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;

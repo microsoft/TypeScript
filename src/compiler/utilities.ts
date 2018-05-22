@@ -1927,11 +1927,7 @@ namespace ts {
     }
 
     export function getJSDocHost(node: Node): HasJSDoc {
-        const comment = findAncestor(node.parent,
-            node => !(isJSDocNode(node) || node.flags & NodeFlags.JSDoc) ? "quit" : node.kind === SyntaxKind.JSDocComment);
-        if (comment) {
-            return (comment as JSDoc).parent;
-        }
+        return Debug.assertDefined(findAncestor(node.parent, isJSDoc)).parent;
     }
 
     export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { parent: JSDocTemplateTag }): TypeParameterDeclaration | undefined {
@@ -3120,9 +3116,9 @@ namespace ts {
     }
 
     export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration> {
-        const tags = filter(getJSDocTags(node), isJSDocTemplateTag);
         // template tags are only available when a typedef isn't already using them
-        const tag = find(tags, tag => !(tag.parent.kind === SyntaxKind.JSDocComment && find(tag.parent.tags, isJSDocTypeAlias)));
+        const tag = find(getJSDocTags(node), (tag): tag is JSDocTemplateTag =>
+            isJSDocTemplateTag(tag) && !(tag.parent.kind === SyntaxKind.JSDocComment && tag.parent.tags!.some(isJSDocTypeAlias)));
         return (tag && tag.typeParameters) || emptyArray;
     }
 
