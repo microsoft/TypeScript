@@ -886,8 +886,6 @@ namespace ts.Completions {
                         node = (parent as QualifiedName).left;
                         break;
                     case SyntaxKind.ImportType:
-                        node = parent;
-                        break;
                     case SyntaxKind.MetaProperty:
                         node = parent;
                         break;

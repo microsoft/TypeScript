@@ -7,5 +7,4 @@
 ////}
 
 goTo.marker("");
-debugger;
 verify.completionListContains("target");
