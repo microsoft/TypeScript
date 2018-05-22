@@ -10,4 +10,4 @@
 //// }
 //// class C implements A {[| |]}
 
-verify.not.codeFixAvailable();
+verify.codeFixAvailable([]);

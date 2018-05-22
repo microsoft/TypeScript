@@ -2997,30 +2997,18 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        public verifyCodeFixAvailable(negative: boolean, info: FourSlashInterface.VerifyCodeFixAvailableOptions[] | undefined) {
+        public verifyCodeFixAvailable(info: FourSlashInterface.VerifyCodeFixAvailableOptions[]) {
             const codeFixes = this.getCodeFixes(this.activeFile.fileName);
-
-            if (negative) {
-                if (codeFixes.length) {
-                    this.raiseError(`verifyCodeFixAvailable failed - expected no fixes but found ${codeFixes.map(c => c.description)}.`);
+            assert.equal(info.length, codeFixes.length);
+            ts.zipWith(codeFixes, info, (fix, info) => {
+                assert.equal(fix.description, info.description);
+                this.assertObjectsEqual(fix.commands, info.commands);
+                for (const change of fix.changes) {
+                    for (const textChange of change.textChanges) {
+                        assert.deepEqual(Object.keys(textChange), ["span", "newText"], `Invalid textChange in codeFix: ${JSON.stringify(fix)}`);
+                    }
                 }
-                return;
-            }
-
-            if (!codeFixes.length) {
-                this.raiseError(`verifyCodeFixAvailable failed - expected code fixes but none found.`);
-            }
-            codeFixes.forEach(fix => fix.changes.forEach(change => {
-                assert.isObject(change, `Invalid change in code fix: ${JSON.stringify(fix)}`);
-                change.textChanges.forEach(textChange => assert.isObject(textChange, `Invalid textChange in codeFix: ${JSON.stringify(fix)}`));
-            }));
-            if (info) {
-                assert.equal(info.length, codeFixes.length);
-                ts.zipWith(codeFixes, info, (fix, info) => {
-                    assert.equal(fix.description, info.description);
-                    this.assertObjectsEqual(fix.commands, info.commands);
-                });
-            }
+            });
         }
 
         public verifyApplicableRefactorAvailableAtMarker(negative: boolean, markerName: string) {
@@ -4106,7 +4094,7 @@ namespace FourSlashInterface {
         }
 
         public codeFixAvailable(options?: VerifyCodeFixAvailableOptions[]) {
-            this.state.verifyCodeFixAvailable(this.negative, options);
+            this.state.verifyCodeFixAvailable(options);
         }
 
         public applicableRefactorAvailableAtMarker(markerName: string) {

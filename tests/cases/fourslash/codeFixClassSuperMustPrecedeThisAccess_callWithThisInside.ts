@@ -9,4 +9,4 @@
 ////    }
 ////}
 
-verify.not.codeFixAvailable();
+verify.codeFixAvailable([]);

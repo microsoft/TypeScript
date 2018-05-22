@@ -8,4 +8,4 @@
 //// }
 //// const x: [|Container.Foo.bar|] = ""
 
-verify.not.codeFixAvailable();
+verify.codeFixAvailable([]);

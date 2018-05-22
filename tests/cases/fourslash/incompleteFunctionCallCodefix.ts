@@ -6,5 +6,4 @@
 ////}
 ////f(
 
-verify.not.codeFixAvailable([]);
-
+verify.codeFixAvailable([]);

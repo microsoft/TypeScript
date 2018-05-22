@@ -8,4 +8,4 @@ test.setTypesRegistry({
 });
 
 // We only give the fix for an implicit-any module, not for a missing module.
-verify.not.codeFixAvailable();
+verify.codeFixAvailable([]);

@@ -15,4 +15,4 @@ verify.rangeAfterCodeFix(`
 x: number;
 `);
 
-verify.not.codeFixAvailable();
+verify.codeFixAvailable([]);
