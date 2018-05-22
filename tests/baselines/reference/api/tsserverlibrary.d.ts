@@ -2960,7 +2960,7 @@ declare namespace ts {
     }
 }
 declare namespace ts {
-    const versionMajorMinor = "3.0";
+    const versionMajorMinor = "2.9";
     /** The version of the TypeScript compiler release */
     const version: string;
 }
