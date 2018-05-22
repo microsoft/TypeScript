@@ -8934,6 +8934,19 @@ namespace ts {
             return type.flags & TypeFlags.Substitution ? (<SubstitutionType>type).typeVariable : type;
         }
 
+        function createConditionalWildcardMapper(root: ConditionalRoot): TypeMapper {
+            if (root.isDistributive && root.inferTypeParameters) {
+                return combineTypeMappers(makeUnaryTypeMapper(root.checkType, wildcardType), createTypeMapper(root.inferTypeParameters, map(root.inferTypeParameters, _ => wildcardType)));
+            }
+            else if (root.isDistributive) {
+                return makeUnaryTypeMapper(root.checkType, wildcardType);
+            }
+            else if (root.inferTypeParameters) {
+                return createTypeMapper(root.inferTypeParameters, map(root.inferTypeParameters, _ => wildcardType));
+            }
+            return identityMapper;
+        }
+
         function getConditionalType(root: ConditionalRoot, mapper: TypeMapper): Type {
             const checkType = instantiateType(root.checkType, mapper);
             const extendsType = instantiateType(root.extendsType, mapper);
@@ -8943,7 +8956,10 @@ namespace ts {
             // If this is a distributive conditional type and the check type is generic we need to defer
             // resolution of the conditional type such that a later instantiation will properly distribute
             // over union types.
-            const isDeferred = root.isDistributive && maybeTypeOfKind(checkType, TypeFlags.Instantiable);
+            // If the true and false branches of the conditional aren't affected by any infer param or check type instantiation, then we can and should try to simplify the type
+            const conditionalMapper = createConditionalWildcardMapper(root);
+            const independent = conditionalMapper === identityMapper || (instantiateType(root.trueType, conditionalMapper) === root.trueType && instantiateType(root.falseType, conditionalMapper) === root.falseType);
+            const isDeferred = !independent && root.isDistributive && maybeTypeOfKind(checkType, TypeFlags.Instantiable);
             let combinedMapper: TypeMapper;
             if (root.inferTypeParameters) {
                 const context = createInferenceContext(root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);

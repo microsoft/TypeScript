@@ -1,0 +1,79 @@
+=== tests/cases/compiler/complexTypeExampleNoHang.ts ===
+interface HCons<Next> {
+>HCons : HCons<Next>
+>Next : Next
+
+    readonly next: Next;
+>next : Next
+>Next : Next
+}
+
+type Unionize<T> = keyof T extends infer K
+>Unionize : keyof T extends string & keyof T ? Record<keyof T, T[keyof T]> : never
+>T : T
+>T : T
+>K : K
+
+  ? K extends string & keyof T ? Record<K, T[K]> : never
+>K : K
+>T : T
+>Record : Record<K, T>
+>K : K
+>T : T
+>K : K
+
+  : never;
+type KeysRec<T> = T extends Record<any, infer V>
+>KeysRec : any
+>T : T
+>T : T
+>Record : Record<K, T>
+>V : V
+
+  ? { "1": HKeys<V>, "0": number }[V extends Whatever ? '1' : '0']
+>"1" : any
+>HKeys : any
+>V : V
+>"0" : number
+>V : V
+>Whatever : No type information available!
+
+  : never;
+type HKeys<T> = KeysRec<Unionize<T>>;
+>HKeys : any
+>T : T
+>KeysRec : any
+>Unionize : keyof T extends string & keyof T ? Record<keyof T, T[keyof T]> : never
+>T : T
+
+type Normalize<T> = T extends HCons<infer N>
+>Normalize : any
+>T : T
+>T : T
+>HCons : HCons<Next>
+>N : N
+
+  ? { "1": Normalize<N>, "0": Shabadoo }[N extends Whatever ? '1' : '0']
+>"1" : any
+>Normalize : any
+>N : N
+>"0" : any
+>Shabadoo : No type information available!
+>N : N
+>Whatever : No type information available!
+
+  : never;
+
+type JustNumber<H extends HCons<any>> = number;
+>JustNumber : number
+>H : H
+>HCons : HCons<Next>
+
+type Keys<T> = JustNumber<Normalize<HKeys<T>>>;
+>Keys : number
+>T : T
+>JustNumber : number
+>Normalize : any
+>HKeys : any
+>T : T
+

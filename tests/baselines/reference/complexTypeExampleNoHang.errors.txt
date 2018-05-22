@@ -1,0 +1,61 @@
+tests/cases/compiler/complexTypeExampleNoHang.ts(8,6): error TS2456: Type alias 'KeysRec' circularly references itself.
+tests/cases/compiler/complexTypeExampleNoHang.ts(9,7): error TS2502: '"1"' is referenced directly or indirectly in its own type annotation.
+tests/cases/compiler/complexTypeExampleNoHang.ts(9,12): error TS2315: Type 'HKeys' is not generic.
+tests/cases/compiler/complexTypeExampleNoHang.ts(9,46): error TS2304: Cannot find name 'Whatever'.
+tests/cases/compiler/complexTypeExampleNoHang.ts(11,6): error TS2456: Type alias 'HKeys' circularly references itself.
+tests/cases/compiler/complexTypeExampleNoHang.ts(11,17): error TS2315: Type 'KeysRec' is not generic.
+tests/cases/compiler/complexTypeExampleNoHang.ts(13,6): error TS2456: Type alias 'Normalize' circularly references itself.
+tests/cases/compiler/complexTypeExampleNoHang.ts(14,7): error TS2502: '"1"' is referenced directly or indirectly in its own type annotation.
+tests/cases/compiler/complexTypeExampleNoHang.ts(14,12): error TS2315: Type 'Normalize' is not generic.
+tests/cases/compiler/complexTypeExampleNoHang.ts(14,31): error TS2304: Cannot find name 'Shabadoo'.
+tests/cases/compiler/complexTypeExampleNoHang.ts(14,52): error TS2304: Cannot find name 'Whatever'.
+tests/cases/compiler/complexTypeExampleNoHang.ts(19,27): error TS2315: Type 'Normalize' is not generic.
+tests/cases/compiler/complexTypeExampleNoHang.ts(19,37): error TS2315: Type 'HKeys' is not generic.
+
+
+==== tests/cases/compiler/complexTypeExampleNoHang.ts (13 errors) ====
+    interface HCons<Next> {
+        readonly next: Next;
+    }
+    
+    type Unionize<T> = keyof T extends infer K
+      ? K extends string & keyof T ? Record<K, T[K]> : never
+      : never;
+    type KeysRec<T> = T extends Record<any, infer V>
+         ~~~~~~~
+!!! error TS2456: Type alias 'KeysRec' circularly references itself.
+      ? { "1": HKeys<V>, "0": number }[V extends Whatever ? '1' : '0']
+          ~~~
+!!! error TS2502: '"1"' is referenced directly or indirectly in its own type annotation.
+               ~~~~~~~~
+!!! error TS2315: Type 'HKeys' is not generic.
+                                                 ~~~~~~~~
+!!! error TS2304: Cannot find name 'Whatever'.
+      : never;
+    type HKeys<T> = KeysRec<Unionize<T>>;
+         ~~~~~
+!!! error TS2456: Type alias 'HKeys' circularly references itself.
+                    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2315: Type 'KeysRec' is not generic.
+    
+    type Normalize<T> = T extends HCons<infer N>
+         ~~~~~~~~~
+!!! error TS2456: Type alias 'Normalize' circularly references itself.
+      ? { "1": Normalize<N>, "0": Shabadoo }[N extends Whatever ? '1' : '0']
+          ~~~
+!!! error TS2502: '"1"' is referenced directly or indirectly in its own type annotation.
+               ~~~~~~~~~~~~
+!!! error TS2315: Type 'Normalize' is not generic.
+                                  ~~~~~~~~
+!!! error TS2304: Cannot find name 'Shabadoo'.
+                                                       ~~~~~~~~
+!!! error TS2304: Cannot find name 'Whatever'.
+      : never;
+    
+    type JustNumber<H extends HCons<any>> = number;
+    
+    type Keys<T> = JustNumber<Normalize<HKeys<T>>>;
+                              ~~~~~~~~~~~~~~~~~~~
+!!! error TS2315: Type 'Normalize' is not generic.
+                                        ~~~~~~~~
+!!! error TS2315: Type 'HKeys' is not generic.

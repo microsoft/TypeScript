@@ -1,0 +1,76 @@
+=== tests/cases/compiler/complexTypeExampleNoHang.ts ===
+interface HCons<Next> {
+>HCons : Symbol(HCons, Decl(complexTypeExampleNoHang.ts, 0, 0))
+>Next : Symbol(Next, Decl(complexTypeExampleNoHang.ts, 0, 16))
+
+    readonly next: Next;
+>next : Symbol(HCons.next, Decl(complexTypeExampleNoHang.ts, 0, 23))
+>Next : Symbol(Next, Decl(complexTypeExampleNoHang.ts, 0, 16))
+}
+
+type Unionize<T> = keyof T extends infer K
+>Unionize : Symbol(Unionize, Decl(complexTypeExampleNoHang.ts, 2, 1))
+>T : Symbol(T, Decl(complexTypeExampleNoHang.ts, 4, 14))
+>T : Symbol(T, Decl(complexTypeExampleNoHang.ts, 4, 14))
+>K : Symbol(K, Decl(complexTypeExampleNoHang.ts, 4, 40))
+
+  ? K extends string & keyof T ? Record<K, T[K]> : never
+>K : Symbol(K, Decl(complexTypeExampleNoHang.ts, 4, 40))
+>T : Symbol(T, Decl(complexTypeExampleNoHang.ts, 4, 14))
+>Record : Symbol(Record, Decl(lib.d.ts, --, --))
+>K : Symbol(K, Decl(complexTypeExampleNoHang.ts, 4, 40))
+>T : Symbol(T, Decl(complexTypeExampleNoHang.ts, 4, 14))
+>K : Symbol(K, Decl(complexTypeExampleNoHang.ts, 4, 40))
+
+  : never;
+type KeysRec<T> = T extends Record<any, infer V>
+>KeysRec : Symbol(KeysRec, Decl(complexTypeExampleNoHang.ts, 6, 10))
+>T : Symbol(T, Decl(complexTypeExampleNoHang.ts, 7, 13))
+>T : Symbol(T, Decl(complexTypeExampleNoHang.ts, 7, 13))
+>Record : Symbol(Record, Decl(lib.d.ts, --, --))
+>V : Symbol(V, Decl(complexTypeExampleNoHang.ts, 7, 45))
+
+  ? { "1": HKeys<V>, "0": number }[V extends Whatever ? '1' : '0']
+>"1" : Symbol("1", Decl(complexTypeExampleNoHang.ts, 8, 5))
+>HKeys : Symbol(HKeys, Decl(complexTypeExampleNoHang.ts, 9, 10))
+>V : Symbol(V, Decl(complexTypeExampleNoHang.ts, 7, 45))
+>"0" : Symbol("0", Decl(complexTypeExampleNoHang.ts, 8, 20))
+>V : Symbol(V, Decl(complexTypeExampleNoHang.ts, 7, 45))
+
+  : never;
+type HKeys<T> = KeysRec<Unionize<T>>;
+>HKeys : Symbol(HKeys, Decl(complexTypeExampleNoHang.ts, 9, 10))
+>T : Symbol(T, Decl(complexTypeExampleNoHang.ts, 10, 11))
+>KeysRec : Symbol(KeysRec, Decl(complexTypeExampleNoHang.ts, 6, 10))
+>Unionize : Symbol(Unionize, Decl(complexTypeExampleNoHang.ts, 2, 1))
+>T : Symbol(T, Decl(complexTypeExampleNoHang.ts, 10, 11))
+
+type Normalize<T> = T extends HCons<infer N>
+>Normalize : Symbol(Normalize, Decl(complexTypeExampleNoHang.ts, 10, 37))
+>T : Symbol(T, Decl(complexTypeExampleNoHang.ts, 12, 15))
+>T : Symbol(T, Decl(complexTypeExampleNoHang.ts, 12, 15))
+>HCons : Symbol(HCons, Decl(complexTypeExampleNoHang.ts, 0, 0))
+>N : Symbol(N, Decl(complexTypeExampleNoHang.ts, 12, 41))
+
+  ? { "1": Normalize<N>, "0": Shabadoo }[N extends Whatever ? '1' : '0']
+>"1" : Symbol("1", Decl(complexTypeExampleNoHang.ts, 13, 5))
+>Normalize : Symbol(Normalize, Decl(complexTypeExampleNoHang.ts, 10, 37))
+>N : Symbol(N, Decl(complexTypeExampleNoHang.ts, 12, 41))
+>"0" : Symbol("0", Decl(complexTypeExampleNoHang.ts, 13, 24))
+>N : Symbol(N, Decl(complexTypeExampleNoHang.ts, 12, 41))
+
+  : never;
+
+type JustNumber<H extends HCons<any>> = number;
+>JustNumber : Symbol(JustNumber, Decl(complexTypeExampleNoHang.ts, 14, 10))
+>H : Symbol(H, Decl(complexTypeExampleNoHang.ts, 16, 16))
+>HCons : Symbol(HCons, Decl(complexTypeExampleNoHang.ts, 0, 0))
+
+type Keys<T> = JustNumber<Normalize<HKeys<T>>>;
+>Keys : Symbol(Keys, Decl(complexTypeExampleNoHang.ts, 16, 47))
+>T : Symbol(T, Decl(complexTypeExampleNoHang.ts, 18, 10))
+>JustNumber : Symbol(JustNumber, Decl(complexTypeExampleNoHang.ts, 14, 10))
+>Normalize : Symbol(Normalize, Decl(complexTypeExampleNoHang.ts, 10, 37))
+>HKeys : Symbol(HKeys, Decl(complexTypeExampleNoHang.ts, 9, 10))
+>T : Symbol(T, Decl(complexTypeExampleNoHang.ts, 18, 10))
+
