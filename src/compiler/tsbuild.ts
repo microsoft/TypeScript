@@ -388,15 +388,25 @@ namespace ts {
 
     export function createSolutionBuilder(host: CompilerHost, reportDiagnostic: DiagnosticReporter, options: BuildOptions) {
         const configFileCache = createConfigFileCache(host);
-        let context: BuildContext = undefined!;
+        let context = createBuildContext(options, reportDiagnostic);
 
         return {
             getUpToDateStatus,
+            getUpToDateStatusOfFile,
             buildProjects,
-            cleanProjects
+            cleanProjects,
+            resetBuildContext
         };
 
-        function getUpToDateStatus(project: ParsedCommandLine, context: BuildContext): UpToDateStatus {
+        function resetBuildContext() {
+            context = createBuildContext(options, reportDiagnostic);
+        }
+
+        function getUpToDateStatusOfFile(configFileName: string): UpToDateStatus {
+            return getUpToDateStatus(configFileCache.parseConfigFile(configFileName));
+        }
+
+        function getUpToDateStatus(project: ParsedCommandLine): UpToDateStatus {
             const prior = context.projectStatus.getValueOrUndefined(project.options.configFilePath);
             if (prior !== undefined) {
                 return prior;
@@ -705,8 +715,6 @@ namespace ts {
         }
 
         function cleanProjects(configFileNames: string[]) {
-            context = createBuildContext(options, reportDiagnostic);
-
             // Get the same graph for cleaning we'd use for building
             const graph = createDependencyGraph(configFileNames);
 
@@ -734,8 +742,6 @@ namespace ts {
         }
 
         function buildProjects(configFileNames: string[]) {
-            context = createBuildContext(options, reportDiagnostic);
-
             const resolvedNames: string[] = [];
             for (const name of configFileNames) {
                 let fullPath = resolvePath(host.getCurrentDirectory(), name);
