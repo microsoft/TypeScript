@@ -7,6 +7,10 @@
 ////    const x = 0;
 ////}
 ////function g(a, b, c) { return a; }
+////{
+////    let a, b;
+////}
+////for (let i = 0, j = 0; ;) {}
 
 verify.codeFixAll({
     fixId: "unusedIdentifier_delete",
@@ -14,5 +18,8 @@ verify.codeFixAll({
     newFileContent:
 `function f() {
 }
-function g(a) { return a; }`,
+function g(a) { return a; }
+{
+}
+for (; ;) {}`,
 });

@@ -10,6 +10,7 @@ namespace ts {
 
     function updateTsconfigFiles(program: Program, changeTracker: textChanges.ChangeTracker, pathUpdater: PathUpdater): void {
         const configFile = program.getCompilerOptions().configFile;
+        if (!configFile) return;
         for (const property of getTsConfigPropArray(configFile, "files")) {
             if (!isArrayLiteralExpression(property.initializer)) continue;
 

@@ -1,6 +1,5 @@
 // @module: commonjs
 // @declaration: true
-
 // @filename: f1.d.ts
 declare module "A" {
     global {

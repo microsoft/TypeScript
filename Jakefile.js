@@ -251,7 +251,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         else {
             options += " --lib es5";
         }
-        options += " --noUnusedLocals --noUnusedParameters";
+        options += " --noUnusedLocals --noUnusedParameters --strictNullChecks";
 
         var cmd = host + " " + compilerPath + " " + options + " ";
         cmd = cmd + sources.join(" ");

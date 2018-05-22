@@ -1,7 +1,7 @@
 /// <reference path="..\harness.ts" />
 
 namespace ts {
-    export function checkResolvedModule(expected: ResolvedModuleFull, actual: ResolvedModuleFull): boolean {
+    export function checkResolvedModule(expected: ResolvedModuleFull | undefined, actual: ResolvedModuleFull): boolean {
         if (!expected === !actual) {
             if (expected) {
                 assert.isTrue(expected.resolvedFileName === actual.resolvedFileName, `'resolvedFileName': expected '${expected.resolvedFileName}' to be equal to '${actual.resolvedFileName}'`);
@@ -71,7 +71,7 @@ namespace ts {
             return file && file.content;
         }
         function realpath(path: string): string {
-            return map.get(path).name;
+            return map.get(path)!.name;
         }
     }
 
@@ -332,7 +332,7 @@ namespace ts {
                 getSourceFile: (fileName: string, languageVersion: ScriptTarget) => {
                     const path = normalizePath(combinePaths(currentDirectory, fileName));
                     const file = files.get(path);
-                    return file && createSourceFile(fileName, file, languageVersion);
+                    return file ? createSourceFile(fileName, file, languageVersion) : undefined;
                 },
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: notImplemented,
@@ -420,7 +420,7 @@ export = C;
                     }
                     const path = getCanonicalFileName(normalizePath(combinePaths(currentDirectory, fileName)));
                     const file = files.get(path);
-                    return file && createSourceFile(fileName, file, languageVersion);
+                    return file ? createSourceFile(fileName, file, languageVersion) : undefined;
                 },
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: notImplemented,
@@ -975,9 +975,9 @@ import b = require("./moduleB");
         function test(typesRoot: string, typeDirective: string, primary: boolean, initialFile: File, targetFile: File, ...otherFiles: File[]) {
             const host = createModuleResolutionHost(/*hasDirectoryExists*/ false, ...[initialFile, targetFile].concat(...otherFiles));
             const result = resolveTypeReferenceDirective(typeDirective, initialFile.name, { typeRoots: [typesRoot] }, host);
-            assert(result.resolvedTypeReferenceDirective.resolvedFileName !== undefined, "expected type directive to be resolved");
-            assert.equal(result.resolvedTypeReferenceDirective.resolvedFileName, targetFile.name, "unexpected result of type reference resolution");
-            assert.equal(result.resolvedTypeReferenceDirective.primary, primary, "unexpected 'primary' value");
+            assert(result.resolvedTypeReferenceDirective!.resolvedFileName !== undefined, "expected type directive to be resolved");
+            assert.equal(result.resolvedTypeReferenceDirective!.resolvedFileName, targetFile.name, "unexpected result of type reference resolution");
+            assert.equal(result.resolvedTypeReferenceDirective!.primary, primary, "unexpected 'primary' value");
         }
 
         it("Can be resolved from primary location", () => {
@@ -1111,10 +1111,7 @@ import b = require("./moduleB");
                 getNewLine: () => "\r\n",
                 useCaseSensitiveFileNames: () => false,
                 readFile: fileName => fileName === file.fileName ? file.text : undefined,
-                resolveModuleNames() {
-                    assert(false, "resolveModuleNames should not be called");
-                    return undefined;
-                }
+                resolveModuleNames: notImplemented,
             };
             createProgram([f.name], {}, compilerHost);
         });
@@ -1145,7 +1142,7 @@ import b = require("./moduleB");
                 readFile: fileName => fileName === file.fileName ? file.text : undefined,
                 resolveModuleNames(moduleNames: string[], _containingFile: string) {
                     assert.deepEqual(moduleNames, ["fs"]);
-                    return [undefined];
+                    return [undefined!]; // TODO: GH#18217
                 }
             };
             createProgram([f.name], {}, compilerHost);

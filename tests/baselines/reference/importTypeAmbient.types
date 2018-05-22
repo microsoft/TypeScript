@@ -69,9 +69,9 @@ declare module "foo2" {
 }
 
 let y: import("foo2").Bar.I = { a: "", b: 0 };
->y : Bar.I
+>y : import("foo2").Bar.I
 >Bar : any
->I : Bar.I
+>I : import("foo2").Bar.I
 >{ a: "", b: 0 } : { a: string; b: number; }
 >a : string
 >"" : ""
