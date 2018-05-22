@@ -339,7 +339,8 @@ namespace ts.server {
         /*@internal*/
         readonly typingsCache: TypingsCache;
 
-        private readonly documentRegistry: DocumentRegistry;
+        /*@internal*/
+        readonly documentRegistry: DocumentRegistry;
 
         /**
          * Container of all known scripts
@@ -475,7 +476,7 @@ namespace ts.server {
                 extraFileExtensions: []
             };
 
-            this.documentRegistry = createDocumentRegistry(this.host.useCaseSensitiveFileNames, this.currentDirectory);
+            this.documentRegistry = createDocumentRegistryInternal(this.host.useCaseSensitiveFileNames, this.currentDirectory, this);
             const watchLogLevel = this.logger.hasLevel(LogLevel.verbose) ? WatchLogLevel.Verbose :
                 this.logger.loggingEnabled() ? WatchLogLevel.TriggerOnly : WatchLogLevel.None;
             const log: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => this.logger.info(s)) : noop;
@@ -494,6 +495,18 @@ namespace ts.server {
         /*@internal*/
         getNormalizedAbsolutePath(fileName: string) {
             return getNormalizedAbsolutePath(fileName, this.host.getCurrentDirectory());
+        }
+
+        /*@internal*/
+        setDocument(key: DocumentRegistryBucketKey, path: Path, sourceFile: SourceFile) {
+            const info = Debug.assertDefined(this.getScriptInfoForPath(path));
+            info.cacheSourceFile = { key, sourceFile };
+        }
+
+        /*@internal*/
+        getDocument(key: DocumentRegistryBucketKey, path: Path): SourceFile | undefined {
+            const info = this.getScriptInfoForPath(path);
+            return info && info.cacheSourceFile && info.cacheSourceFile.key === key ? info.cacheSourceFile.sourceFile : undefined;
         }
 
         /* @internal */

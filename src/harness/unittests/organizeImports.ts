@@ -506,7 +506,29 @@ D();
                 },
                 libFile);
 
-            testOrganizeImports("JsxFactoryUsed",
+            testOrganizeImports("JsxFactoryUsedJsx",
+                {
+                    path: "/test.jsx",
+                    content: `
+import { React, Other } from "react";
+
+<div/>;
+`,
+                },
+                reactLibFile);
+
+            testOrganizeImports("JsxFactoryUsedJs",
+                {
+                    path: "/test.js",
+                    content: `
+import { React, Other } from "react";
+
+<div/>;
+`,
+                },
+                reactLibFile);
+
+            testOrganizeImports("JsxFactoryUsedTsx",
                 {
                     path: "/test.tsx",
                     content: `
@@ -517,7 +539,39 @@ import { React, Other } from "react";
                 },
                 reactLibFile);
 
-            // This is descriptive, rather than normative
+            // TS files are not JSX contexts, so the parser does not treat
+            // `<div/>` as a JSX element.
+            testOrganizeImports("JsxFactoryUsedTs",
+                {
+                    path: "/test.ts",
+                    content: `
+import { React, Other } from "react";
+
+<div/>;
+`,
+                },
+                reactLibFile);
+
+            testOrganizeImports("JsxFactoryUnusedJsx",
+                {
+                    path: "/test.jsx",
+                    content: `
+import { React, Other } from "react";
+`,
+                },
+                reactLibFile);
+
+            // Note: Since the file extension does not end with "x", the jsx compiler option
+            // will not be enabled.  The import should be retained regardless.
+            testOrganizeImports("JsxFactoryUnusedJs",
+                {
+                    path: "/test.js",
+                    content: `
+import { React, Other } from "react";
+`,
+                },
+                reactLibFile);
+
             testOrganizeImports("JsxFactoryUnusedTsx",
                 {
                     path: "/test.tsx",
