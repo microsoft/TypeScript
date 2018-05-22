@@ -681,12 +681,15 @@ namespace ts.Completions {
     }
 
     function getRecommendedCompletion(currentToken: Node, position: number, sourceFile: SourceFile, checker: TypeChecker): Symbol | undefined {
-        const ty = getContextualType(currentToken, position, sourceFile, checker);
-        const symbol = ty && ty.symbol;
-        // Don't include make a recommended completion for an abstract class
-        return symbol && (symbol.flags & SymbolFlags.Enum || symbol.flags & SymbolFlags.Class && !isAbstractConstructorSymbol(symbol))
-            ? getFirstSymbolInChain(symbol, currentToken, checker)
-            : undefined;
+        const contextualType = getContextualType(currentToken, position, sourceFile, checker);
+        // For a union, return the first one with a recommended completion.
+        return firstDefined(contextualType && (contextualType.isUnion() ? contextualType.types : [contextualType]), type => {
+            const symbol = type && type.symbol;
+            // Don't include make a recommended completion for an abstract class
+            return symbol && (symbol.flags & SymbolFlags.EnumMember || symbol.flags & SymbolFlags.Class && !isAbstractConstructorSymbol(symbol))
+                ? getFirstSymbolInChain(symbol, currentToken, checker)
+                : undefined;
+        });
     }
 
     function getContextualType(currentToken: Node, position: number, sourceFile: SourceFile, checker: TypeChecker): Type | undefined {
