@@ -745,6 +745,131 @@ import b = require("./moduleB");
             }
         });
 
+        it("node + baseUrl + path mappings with searchScopes", () => {
+            test(/*hasDirectoryExists*/ false);
+            test(/*hasDirectoryExists*/ true);
+
+            function test(hasDirectoryExists: boolean) {
+                const main: File = { name: "/root/folder1/main.ts" };
+
+                const file1: File = { name: "/root/node_modules/file1.ts" }; // test all scopes
+                const file2: File = { name: "/root/folder1/node_modules/@firstScope/file2/index.d.ts" }; // search scope types
+                const host = createModuleResolutionHost(hasDirectoryExists, file1, file2);
+
+                const options: CompilerOptions = {
+                    moduleResolution: ModuleResolutionKind.NodeJs,
+                    baseUrl: "/root",
+                    jsx: JsxEmit.React,
+                    paths: {
+                        "*": [
+                            "*",
+                            "generated/*"
+                        ],
+                        "somefolder/*": [
+                            "someanotherfolder/*"
+                        ]
+                    },
+                    searchScopes: ["@firstScope", "@secondScope"]
+                };
+                check("file1", file1, [
+                    // first try *
+                    // load from file
+                    "/root/file1.ts",
+                    "/root/file1.tsx",
+                    "/root/file1.d.ts",
+
+                    // load from folder
+                    "/root/file1/package.json",
+                    "/root/file1/index.ts",
+                    "/root/file1/index.tsx",
+                    "/root/file1/index.d.ts",
+
+                    // then try 'generated/*'
+                    // load from file
+                    "/root/generated/file1.ts",
+                    "/root/generated/file1.tsx",
+                    "/root/generated/file1.d.ts",
+
+                    // load from folder
+                    "/root/generated/file1/package.json",
+                    "/root/generated/file1/index.ts",
+                    "/root/generated/file1/index.tsx",
+                    "/root/generated/file1/index.d.ts",
+
+                    // fallback to standard node behavior
+                    "/root/folder1/node_modules/file1/package.json",
+
+                    // load from file
+                    "/root/folder1/node_modules/file1.ts",
+                    "/root/folder1/node_modules/file1.tsx",
+                    "/root/folder1/node_modules/file1.d.ts",
+
+                    // load from folder
+                    "/root/folder1/node_modules/file1/index.ts",
+                    "/root/folder1/node_modules/file1/index.tsx",
+                    "/root/folder1/node_modules/file1/index.d.ts",
+
+                    "/root/folder1/node_modules/@firstScope/file1/package.json",
+                    "/root/folder1/node_modules/@firstScope/file1.d.ts",
+                    "/root/folder1/node_modules/@firstScope/file1/index.d.ts",
+
+                    "/root/folder1/node_modules/@secondScope/file1/package.json",
+                    "/root/folder1/node_modules/@secondScope/file1.d.ts",
+                    "/root/folder1/node_modules/@secondScope/file1/index.d.ts",
+
+                    "/root/node_modules/file1/package.json",
+                    // success on /root/node_modules/file1.ts
+                ], /*isExternalLibraryImport*/ true);
+                check("file2", file2, [
+                    // first try *
+                    // load from file
+                    "/root/file2.ts",
+                    "/root/file2.tsx",
+                    "/root/file2.d.ts",
+
+                    // load from folder
+                    "/root/file2/package.json",
+                    "/root/file2/index.ts",
+                    "/root/file2/index.tsx",
+                    "/root/file2/index.d.ts",
+
+                    // then try 'generated/*'
+                    // load from file
+                    "/root/generated/file2.ts",
+                    "/root/generated/file2.tsx",
+                    "/root/generated/file2.d.ts",
+
+                    // load from folder
+                    "/root/generated/file2/package.json",
+                    "/root/generated/file2/index.ts",
+                    "/root/generated/file2/index.tsx",
+                    "/root/generated/file2/index.d.ts",
+
+                    // fallback to standard node behavior
+                    "/root/folder1/node_modules/file2/package.json",
+
+                    // load from file
+                    "/root/folder1/node_modules/file2.ts",
+                    "/root/folder1/node_modules/file2.tsx",
+                    "/root/folder1/node_modules/file2.d.ts",
+
+                    // load from folder
+                    "/root/folder1/node_modules/file2/index.ts",
+                    "/root/folder1/node_modules/file2/index.tsx",
+                    "/root/folder1/node_modules/file2/index.d.ts",
+
+                    "/root/folder1/node_modules/@firstScope/file2/package.json",
+                    "/root/folder1/node_modules/@firstScope/file2.d.ts",
+                    // success on /root/folder1/node_modules/@firstScope/file2/index.d.ts
+                ], /*isExternalLibraryImport*/ true);
+
+                function check(name: string, expected: File, expectedFailedLookups: string[], isExternalLibraryImport = false) {
+                    const result = resolveModuleName(name, main.name, options, host);
+                    checkResolvedModuleWithFailedLookupLocations(result, createResolvedModule(expected.name, isExternalLibraryImport), expectedFailedLookups);
+                }
+            }
+        });
+
         it ("classic + baseUrl + path mappings", () => {
             // classic mode does not use directoryExists
             test(/*hasDirectoryExists*/ false);
@@ -1151,4 +1276,42 @@ import b = require("./moduleB");
             createProgram([f.name], {}, compilerHost);
         });
     });
+
+    describe("Type search scope resolution: ", () => {
+        function test(searchScope: string, typeDirective: string, primary: boolean, initialFile: File, targetFile: File, ...otherFiles: File[]) {
+            const host = createModuleResolutionHost(/*hasDirectoryExists*/ false, ...[initialFile, targetFile].concat(...otherFiles));
+            const result = resolveTypeReferenceDirective(typeDirective, initialFile.name, { searchScopes: [searchScope] }, host);
+            assert(result.resolvedTypeReferenceDirective.resolvedFileName !== undefined, "expected type directive to be resolved");
+            assert.equal(result.resolvedTypeReferenceDirective.resolvedFileName, targetFile.name, "unexpected result of type reference resolution");
+            assert.equal(result.resolvedTypeReferenceDirective.primary, primary, "unexpected 'primary' value");
+        }
+
+        it("Can be resolved from primary location", () => {
+            {
+                const f1 = { name: "/root/src/app.ts" };
+                const f2 = { name: "/root/src/node_modules/@altTypes/lib/index.d.ts" };
+                test(/*searchScopes*/"@altTypes", /* typeDirective */"lib", /*primary*/ false, f1, f2);
+            }
+            {
+                const f1 = { name: "/root/src/app.ts" };
+                const f2 = { name: "/root/src/node_modules/@altTypes/lib/typings/lib.d.ts" };
+                const packageFile = { name: "/root/src/node_modules/@altTypes/lib/package.json", content: JSON.stringify({ types: "typings/lib.d.ts" }) };
+                test(/*searchScopes*/"@altTypes", /* typeDirective */"lib", /*primary*/ false, f1, f2, packageFile);
+            }
+        });
+        it("Can be resolved from secondary location", () => {
+            {
+                const f1 = { name: "/root/src/app.ts" };
+                const f2 = { name: "/root/node_modules/@altTypes/lib/index.d.ts" };
+                test(/*searchScopes*/"@altTypes", /* typeDirective */"lib", /*primary*/ false, f1, f2);
+            }
+            {
+                const f1 = { name: "/root/src/app.ts" };
+                const f2 = { name: "/root/node_modules/@altTypes/lib/typings/lib.d.ts" };
+                const packageFile = { name: "/root/node_modules/@altTypes/lib/package.json", content: JSON.stringify({ typings: "typings/lib.d.ts" }) };
+                test(/*searchScopes*/"@altTypes", /* typeDirective */"lib", /*primary*/ false, f1, f2, packageFile);
+            }
+        });
+    });
+
 }

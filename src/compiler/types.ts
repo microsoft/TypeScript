@@ -4361,6 +4361,8 @@ namespace ts {
         types?: string[];
         /** Paths used to compute primary types search locations */
         typeRoots?: string[];
+        /** Scopes used to search for type-only packages */
+        searchScopes?: string[];
         /*@internal*/ version?: boolean;
         /*@internal*/ watch?: boolean;
         esModuleInterop?: boolean;

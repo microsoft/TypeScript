@@ -150,31 +150,41 @@ namespace ts {
         }
 
         if (currentDirectory !== undefined) {
-            return getDefaultTypeRoots(currentDirectory, host);
+            return getDefaultTypeRoots(currentDirectory, host, options.searchScopes);
         }
     }
 
     /**
-     * Returns the path to every node_modules/@types directory from some ancestor directory.
+     * Returns the path to every type search scope directory from some ancestor directory.
      * Returns undefined if there are none.
      */
-    function getDefaultTypeRoots(currentDirectory: string, host: { directoryExists?: (directoryName: string) => boolean }): string[] | undefined {
+    function getDefaultTypeRoots(currentDirectory: string, host: { directoryExists?: (directoryName: string) => boolean }, searchScopes?: string[]): string[] | undefined {
         if (!host.directoryExists) {
-            return [combinePaths(currentDirectory, nodeModulesAtTypes)];
+            return nodeModulesAtScopes(searchScopes)
+                .map(nodeModulesAtScope => combinePaths(currentDirectory, nodeModulesAtScope));
             // And if it doesn't exist, tough.
         }
 
         let typeRoots: string[];
         forEachAncestorDirectory(normalizePath(currentDirectory), directory => {
-            const atTypes = combinePaths(directory, nodeModulesAtTypes);
-            if (host.directoryExists(atTypes)) {
-                (typeRoots || (typeRoots = [])).push(atTypes);
+            for (const nodeModulesAtScope of nodeModulesAtScopes(searchScopes)) {
+                const atTypes = combinePaths(directory, nodeModulesAtScope);
+                if (host.directoryExists(atTypes)) {
+                    (typeRoots || (typeRoots = [])).push(atTypes);
+                }
+                return undefined;
             }
-            return undefined;
         });
         return typeRoots;
     }
-    const nodeModulesAtTypes = combinePaths("node_modules", "@types");
+
+    /**
+     * Returns a combination of an array of scopes with a base path, e.g.:
+     * "node_modules/@types"
+     */
+    function nodeModulesAtScopes(searchScopes: string[] = ["@types"], basePath = "node_modules") {
+        return searchScopes.map(scope => combinePaths(basePath, scope));
+    }
 
     /**
      * @param {string | undefined} containingFile - file that contains type reference directive, can be undefined if containing file is unknown.
@@ -1175,15 +1185,21 @@ namespace ts {
             return packageResult;
         }
         if (extensions !== Extensions.JavaScript && extensions !== Extensions.Json) {
-            const nodeModulesAtTypes = combinePaths(nodeModulesFolder, "@types");
-            let nodeModulesAtTypesExists = nodeModulesFolderExists;
-            if (nodeModulesFolderExists && !directoryProbablyExists(nodeModulesAtTypes, state.host)) {
-                if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.Directory_0_does_not_exist_skipping_all_lookups_in_it, nodeModulesAtTypes);
+            // search every scope for the package in question
+            for (const nodeModulesAtTypes of nodeModulesAtScopes(state.compilerOptions.searchScopes, nodeModulesFolder)) {
+                let nodeModulesAtTypesExists = nodeModulesFolderExists;
+                if (nodeModulesFolderExists && !directoryProbablyExists(nodeModulesAtTypes, state.host)) {
+                    if (state.traceEnabled) {
+                        trace(state.host, Diagnostics.Directory_0_does_not_exist_skipping_all_lookups_in_it, nodeModulesAtTypes);
+                    }
+                    nodeModulesAtTypesExists = false;
                 }
-                nodeModulesAtTypesExists = false;
+
+                // return the first successful resolution
+                const maybeModules = loadModuleFromNodeModulesFolder(Extensions.DtsOnly, mangleScopedPackage(moduleName, state), nodeModulesAtTypes, nodeModulesAtTypesExists, failedLookupLocations, state);
+
+                if (maybeModules) return maybeModules;
             }
-            return loadModuleFromNodeModulesFolder(Extensions.DtsOnly, mangleScopedPackage(moduleName, state), nodeModulesAtTypes, nodeModulesAtTypesExists, failedLookupLocations, state);
         }
     }
 
