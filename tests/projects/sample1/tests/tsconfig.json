@@ -1,0 +1,6 @@
+{
+    "references": [
+        { "path": "../core" },
+        { "path": "../logic" }
+    ]
+}

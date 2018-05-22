@@ -6,6 +6,11 @@ namespace vfs {
     export const builtFolder = "/.ts";
 
     /**
+     * Posix-style path to additional mountable folders (./tests/projects in this repo)
+     */
+    export const projectsFolder = "/.projects";
+
+    /**
      * Posix-style path to additional test libraries
      */
     export const testLibFolder = "/.lib";
@@ -404,7 +409,18 @@ namespace vfs {
         }
 
         /**
-         * Get file status.
+         * Change file access times
+         *
+         * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
+         */
+        public utimesSync(path: string, atime: Date, mtime: Date) {
+            const entry = this._walk(this._resolve(path));
+            entry.node.atimeMs = +atime;
+            entry.node.mtimeMs = +mtime;
+        }
+
+        /**
+         * Get file status. If `path` is a symbolic link, it is dereferenced.
          *
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/lstat.html
          *
@@ -413,6 +429,7 @@ namespace vfs {
         public lstatSync(path: string) {
             return this._stat(this._walk(this._resolve(path), /*noFollow*/ true));
         }
+
 
         private _stat(entry: WalkResult) {
             const node = entry.node;
@@ -1282,6 +1299,7 @@ namespace vfs {
                 files: {
                     [builtFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "built/local"), resolver),
                     [testLibFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "tests/lib"), resolver),
+                    [projectsFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "tests/projects"), resolver),
                     [srcFolder]: {}
                 },
                 cwd: srcFolder,

@@ -1073,6 +1073,7 @@ namespace ts {
                     _fs.utimesSync(path, time, time);
                 }
                 catch (e) {
+                    return;
                 }
             }
 
@@ -1081,6 +1082,7 @@ namespace ts {
                     return _fs.unlinkSync(path);
                 }
                 catch (e) {
+                    return;
                 }
             }
 

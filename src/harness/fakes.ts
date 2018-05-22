@@ -131,6 +131,10 @@ namespace fakes {
             return stats ? stats.mtime : undefined;
         }
 
+        public setModifiedTime(path: string, time: Date) {
+            this.vfs.utimesSync(path, time, time);
+        }
+
         public createHash(data: string): string {
             return data;
         }
@@ -250,6 +254,14 @@ namespace fakes {
 
         public directoryExists(directoryName: string): boolean {
             return this.sys.directoryExists(directoryName);
+        }
+
+        public getModifiedTime(fileName: string) {
+            return this.sys.getModifiedTime(fileName);
+        }
+
+        public setModifiedTime(fileName: string, time: Date) {
+            return this.sys.setModifiedTime(fileName, time);
         }
 
         public getDirectories(path: string): string[] {

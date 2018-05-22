@@ -7,7 +7,7 @@ namespace ts {
      * The primary thing we track here is which files were written to,
      * but unchanged, because this enables fast downstream updates
      */
-    interface BuildContext {
+    export interface BuildContext {
         options: BuildOptions;
         /**
          * Map from output file name to its pre-build timestamp
@@ -299,6 +299,9 @@ namespace ts {
 
         function parseConfigFile(configFilePath: string) {
             const sourceFile = host.getSourceFile(configFilePath, ScriptTarget.JSON) as JsonSourceFile;
+            if (sourceFile === undefined) {
+                return undefined;
+            }
             const parsed = parseJsonSourceFileConfigFileContent(sourceFile, configParseHost, getDirectoryPath(configFilePath));
             parsed.options.configFilePath = configFilePath;
             cache.setValue(configFilePath, parsed);
@@ -322,7 +325,7 @@ namespace ts {
         return fileExtensionIs(fileName, ".d.ts");
     }
 
-    function createBuildContext(options: BuildOptions): BuildContext {
+    export function createBuildContext(options: BuildOptions): BuildContext {
         const verboseDiag = options.verbose && createDiagnosticReporter(sys, /*pretty*/ false);
         return {
             options,
@@ -334,18 +337,15 @@ namespace ts {
         };
     }
 
-    export function performBuild(args: string[]) {
-        const diagReporter = createDiagnosticReporter(sys, /*pretty*/true);
-        const host = createCompilerHost({});
-
+    export function performBuild(host: CompilerHost, reportDiagnostic: DiagnosticReporter, args: string[]) {
         let verbose = false;
         let dry = false;
         let force = false;
         let clean = false;
 
         const projects: string[] = [];
-        for (let i = 0; i < args.length; i++) {
-            switch (args[i].toLowerCase()) {
+        for (const arg of args) {
+            switch (arg.toLowerCase()) {
                 case "-v":
                 case "--verbose":
                     verbose = true;
@@ -363,7 +363,7 @@ namespace ts {
                     continue;
             }
             // Not a flag, parse as filename
-            addProject(args[i]);
+            addProject(arg);
         }
 
         if (projects.length === 0) {
@@ -372,7 +372,7 @@ namespace ts {
         }
 
         const context = createBuildContext({ verbose, dry, force });
-        const builder = createSolutionBuilder(host, context);
+        const builder = createSolutionBuilder(host, reportDiagnostic, context);
         if (clean) {
             builder.cleanProjects(projects);
         }
@@ -384,15 +384,14 @@ namespace ts {
             const fileName = resolvePath(host.getCurrentDirectory(), projectSpecification);
             const refPath = resolveProjectReferencePath(host, { path: fileName });
             if (!host.fileExists(refPath)) {
-                diagReporter(createCompilerDiagnostic(Diagnostics.File_0_does_not_exist, fileName));
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_0_does_not_exist, fileName));
             }
             projects.push(refPath);
 
         }
     }
 
-    export function createSolutionBuilder(host: CompilerHost, context: BuildContext) {
-        const diagReporter = createDiagnosticReporter(sys, /*pretty*/true);
+    export function createSolutionBuilder(host: CompilerHost, reportDiagnostic: DiagnosticReporter, context: BuildContext) {
         const configFileCache = createConfigFileCache(host);
 
         return {
@@ -418,7 +417,7 @@ namespace ts {
             else {
                 const outputs: string[] = [];
                 for (const inputFile of project.fileNames) {
-                    (outputs as string[]).push(...getOutputFileNames(inputFile, project));
+                    outputs.push(...getOutputFileNames(inputFile, project));
                 }
                 return outputs;
             }
@@ -553,7 +552,8 @@ namespace ts {
             for (const root of roots) {
                 const config = configFileCache.parseConfigFile(root);
                 if (config === undefined) {
-                    throw new Error(`Could not parse ${root}`);
+                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_0_does_not_exist, root));
+                    continue;
                 }
                 enumerateReferences(normalizePath(root), config);
             }
@@ -564,7 +564,7 @@ namespace ts {
                 dependencyMap
             };
 
-            function enumerateReferences(fileName: string, root: ts.ParsedCommandLine): void {
+            function enumerateReferences(fileName: string, root: ParsedCommandLine): void {
                 const myBuildLevel = buildQueue[buildQueuePosition] = buildQueue[buildQueuePosition] || [];
                 if (myBuildLevel.indexOf(fileName) < 0) {
                     myBuildLevel.push(fileName);
@@ -605,7 +605,7 @@ namespace ts {
         // TODO Accept parsedCommandLine
         function buildSingleProject(proj: string) {
             if (context.options.dry) {
-                diagReporter(createCompilerDiagnostic(Diagnostics.Would_build_project_0, proj));
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Would_build_project_0, proj));
             }
 
             context.verbose(Diagnostics.Building_project_0, proj);
@@ -627,18 +627,18 @@ namespace ts {
 
             const programOptions: CreateProgramOptions = {
                 projectReferences: configFile.projectReferences,
-                host: host,
+                host,
                 rootNames: configFile.fileNames,
                 options: configFile.options
             };
-            const program = ts.createProgram(programOptions);
+            const program = createProgram(programOptions);
 
             // Don't emit anything in the presence of syntactic errors or options diagnostics
             const syntaxDiagnostics = [...program.getOptionsDiagnostics(), ...program.getSyntacticDiagnostics()];
             if (syntaxDiagnostics.length) {
                 resultFlags |= BuildResultFlags.SyntaxErrors;
                 for (const diag of syntaxDiagnostics) {
-                    diagReporter(diag);
+                    reportDiagnostic(diag);
                 }
                 return resultFlags;
             }
@@ -649,7 +649,7 @@ namespace ts {
                 if (declDiagnostics.length) {
                     resultFlags |= BuildResultFlags.DeclarationEmitErrors;
                     for (const diag of declDiagnostics) {
-                        diagReporter(diag);
+                        reportDiagnostic(diag);
                     }
                     return resultFlags;
                 }
@@ -659,13 +659,13 @@ namespace ts {
             if (semanticDiagnostics.length) {
                 resultFlags |= BuildResultFlags.TypeErrors;
                 for (const diag of semanticDiagnostics) {
-                    diagReporter(diag);
+                    reportDiagnostic(diag);
                 }
                 return resultFlags;
             }
 
             let newestDeclarationFileContentChangedTime = minimumDate;
-            program.emit(undefined, (fileName, content, writeBom, onError) => {
+            program.emit(/*targetSourceFile*/ undefined, (fileName, content, writeBom, onError) => {
                 let priorChangeTime: Date | undefined;
 
                 if (isDeclarationFile(fileName) && host.fileExists(fileName)) {
@@ -690,7 +690,7 @@ namespace ts {
 
         function updateOutputTimestamps(proj: ParsedCommandLine) {
             if (context.options.dry) {
-                diagReporter(createCompilerDiagnostic(Diagnostics.Would_build_project_0, proj.options.configFilePath));
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Would_build_project_0, proj.options.configFilePath));
                 return;
             }
 
@@ -731,13 +731,29 @@ namespace ts {
             }
 
             if (context.options.dry) {
-                diagReporter(createCompilerDiagnostic(Diagnostics.Would_delete_the_following_files_Colon_0, fileReport.map(f => `\r\n * ${f}`).join("")));
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Would_delete_the_following_files_Colon_0, fileReport.map(f => `\r\n * ${f}`).join("")));
             }
         }
 
         function buildProjects(configFileNames: string[]) {
+            const resolvedNames: string[] = [];
+            for (const name of configFileNames) {
+                let fullPath = resolvePath(host.getCurrentDirectory(), name);
+                if (host.fileExists(fullPath)) {
+                    resolvedNames.push(fullPath);
+                    continue;
+                }
+                fullPath = combinePaths(fullPath, "tsconfig.json");
+                if (host.fileExists(fullPath)) {
+                    resolvedNames.push(fullPath);
+                    continue;
+                }
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_0_not_found, fullPath));
+                return;
+            }
+
             // Establish what needs to be built
-            const graph = createDependencyGraph(configFileNames);
+            const graph = createDependencyGraph(resolvedNames);
 
             const queue = graph.buildQueue;
             reportBuildQueue(graph);
