@@ -44,7 +44,7 @@ namespace ts {
                     ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importStringLiteral.text, sourceFile.fileName)
                     : program.getResolvedModuleWithFailedLookupLocationsFromCache(importStringLiteral.text, sourceFile.fileName);
                 // We may or may not have picked up on the file being renamed, so maybe successfully resolved to oldFilePath, or maybe that's in failedLookupLocations
-                if (resolved && contains([resolved.resolvedModule && resolved.resolvedModule.resolvedFileName, ...resolved.failedLookupLocations], oldFilePath)) {
+                if (resolved && contains(resolved.resolvedModule ? [resolved.resolvedModule.resolvedFileName] : resolved.failedLookupLocations, oldFilePath)) {
                     result.push({ sourceFile, toUpdate: importStringLiteral });
                 }
             }
