@@ -1053,7 +1053,7 @@ namespace ts.Completions {
                 }
             }
 
-            if(isMetaProperty(node) && node.keywordToken === SyntaxKind.NewKeyword){
+            if (isMetaProperty(node) && node.keywordToken === SyntaxKind.NewKeyword) {
                 symbols.push(typeChecker.createSymbol(SymbolFlags.Property, escapeLeadingUnderscores("target")));
                 return;
             }
