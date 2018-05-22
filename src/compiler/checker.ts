@@ -2672,7 +2672,7 @@ namespace ts {
                     // if the symbolFromSymbolTable is not external module (it could be if it was determined as ambient external module and would be in globals table)
                     // and if symbolFromSymbolTable or alias resolution matches the symbol,
                     // check the symbol can be qualified, it is only then this symbol is accessible
-                    !some(symbolFromSymbolTable.declarations, hasExternalModuleSymbol) &&
+                    !some(symbolFromSymbolTable.declarations, hasNonGlobalAugmentationExternalModuleSymbol) &&
                     (ignoreQualification || canQualifySymbol(symbolFromSymbolTable, meaning));
             }
 
@@ -2704,6 +2704,11 @@ namespace ts {
                             return [symbolFromSymbolTable].concat(accessibleSymbolsFromExports);
                         }
                     }
+                    if (symbolFromSymbolTable.escapedName === symbol.escapedName && symbolFromSymbolTable.exportSymbol) {
+                        if (isAccessible(getMergedSymbol(symbolFromSymbolTable.exportSymbol), /*aliasSymbol*/ undefined, ignoreQualification)) {
+                            return [symbol];
+                        }
+                    }
                 });
             }
         }
@@ -2712,7 +2717,7 @@ namespace ts {
             let qualify = false;
             forEachSymbolTableInScope(enclosingDeclaration, symbolTable => {
                 // If symbol of this name is not available in the symbol table we are ok
-                let symbolFromSymbolTable = symbolTable.get(symbol.escapedName);
+                let symbolFromSymbolTable = getMergedSymbol(symbolTable.get(symbol.escapedName));
                 if (!symbolFromSymbolTable) {
                     // Continue to the next symbol table
                     return false;
@@ -2792,7 +2797,7 @@ namespace ts {
                         return hasAccessibleDeclarations;
                     }
                     else {
-                        if (some(symbol.declarations, hasExternalModuleSymbol)) {
+                        if (some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
                             // Any meaning of a module symbol is always accessible via an `import` type
                             return {
                                 accessibility: SymbolAccessibility.Accessible
@@ -2848,6 +2853,10 @@ namespace ts {
 
         function hasExternalModuleSymbol(declaration: Node) {
             return isAmbientModule(declaration) || (declaration.kind === SyntaxKind.SourceFile && isExternalOrCommonJsModule(<SourceFile>declaration));
+        }
+
+        function hasNonGlobalAugmentationExternalModuleSymbol(declaration: Node) {
+            return isModuleWithStringLiteralName(declaration) || (declaration.kind === SyntaxKind.SourceFile && isExternalOrCommonJsModule(<SourceFile>declaration));
         }
 
         function hasVisibleDeclarations(symbol: Symbol, shouldComputeAliasToMakeVisible: boolean): SymbolVisibilityResult {
@@ -3164,9 +3173,10 @@ namespace ts {
                         !isTypeSymbolAccessible(type.symbol, context.enclosingDeclaration)) {
                         return createTypeReferenceNode(getGeneratedNameForNode((type.symbol.declarations[0] as TypeParameterDeclaration).name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes), /*typeArguments*/ undefined);
                     }
-                    const name = type.symbol ? symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ false) : createIdentifier("?");
                     // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
-                    return createTypeReferenceNode(name, /*typeArguments*/ undefined);
+                    return type.symbol
+                        ? symbolToTypeNode(type.symbol, context, SymbolFlags.Type)
+                        : createTypeReferenceNode(createIdentifier("?"), /*typeArguments*/ undefined);
                 }
                 if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
                     const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
@@ -3712,7 +3722,7 @@ namespace ts {
                         // If this is the last part of outputting the symbol, always output. The cases apply only to parent symbols.
                         endOfChain ||
                         // If a parent symbol is an external module, don't write it. (We prefer just `x` vs `"foo/bar".x`.)
-                        (yieldModuleSymbol || !(!parentSymbol && forEach(symbol.declarations, hasExternalModuleSymbol))) &&
+                        (yieldModuleSymbol || !(!parentSymbol && forEach(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol))) &&
                         // If a parent symbol is an anonymous type, don't write it.
                         !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral))) {
 
