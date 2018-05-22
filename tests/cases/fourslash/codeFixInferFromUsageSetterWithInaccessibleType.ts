@@ -13,4 +13,4 @@
 ////}
 
 goTo.file("/b.ts");
-verify.codeFixAvailable([]);
+verify.not.codeFixAvailable();

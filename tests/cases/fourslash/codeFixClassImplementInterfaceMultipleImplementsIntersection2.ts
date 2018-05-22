@@ -11,4 +11,4 @@
 ////     x: string;
 //// }
 
-verify.codeFixAvailable([]);
+verify.not.codeFixAvailable();

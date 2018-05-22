@@ -19,4 +19,4 @@
 //// }
 
 // No fix because this accesses a nested node_modules
-verify.codeFixAvailable([]);
+verify.not.codeFixAvailable();

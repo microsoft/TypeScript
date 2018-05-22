@@ -12,4 +12,4 @@
 // 2) Make x private, and then insert.
 // 3) Make x not abstract.
 // So we offer no fixes.
-verify.codeFixAvailable([]);
+verify.not.codeFixAvailable();

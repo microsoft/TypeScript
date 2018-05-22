@@ -15,4 +15,4 @@ verify.rangeAfterCodeFix(`
 y: "𣋝ઢȴ¬⏊";
 `);
 
-verify.codeFixAvailable([]);
+verify.not.codeFixAvailable();

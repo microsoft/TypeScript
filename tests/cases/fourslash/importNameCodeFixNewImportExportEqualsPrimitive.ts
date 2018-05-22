@@ -6,4 +6,4 @@
 ////declare var x: number;
 ////export = x;
 
-verify.codeFixAvailable([]); // See GH#20191
+verify.not.codeFixAvailable(); // See GH#20191

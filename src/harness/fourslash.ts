@@ -2997,18 +2997,11 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        public verifyCodeFixAvailable(info: FourSlashInterface.VerifyCodeFixAvailableOptions[]) {
+        public verifyCodeFixAvailable(negative: boolean, expected: FourSlashInterface.VerifyCodeFixAvailableOptions[]): void {
+            assert(!negative || !expected);
             const codeFixes = this.getCodeFixes(this.activeFile.fileName);
-            assert.equal(info.length, codeFixes.length);
-            ts.zipWith(codeFixes, info, (fix, info) => {
-                assert.equal(fix.description, info.description);
-                this.assertObjectsEqual(fix.commands, info.commands);
-                for (const change of fix.changes) {
-                    for (const textChange of change.textChanges) {
-                        assert.deepEqual(Object.keys(textChange), ["span", "newText"], `Invalid textChange in codeFix: ${JSON.stringify(fix)}`);
-                    }
-                }
-            });
+            const actuals = codeFixes.map((fix): FourSlashInterface.VerifyCodeFixAvailableOptions => ({ description: fix.description, commands: fix.commands }));
+            this.assertObjectsEqual(actuals, negative ? ts.emptyArray : expected);
         }
 
         public verifyApplicableRefactorAvailableAtMarker(negative: boolean, markerName: string) {
@@ -4094,7 +4087,7 @@ namespace FourSlashInterface {
         }
 
         public codeFixAvailable(options?: VerifyCodeFixAvailableOptions[]) {
-            this.state.verifyCodeFixAvailable(options);
+            this.state.verifyCodeFixAvailable(this.negative, options);
         }
 
         public applicableRefactorAvailableAtMarker(markerName: string) {

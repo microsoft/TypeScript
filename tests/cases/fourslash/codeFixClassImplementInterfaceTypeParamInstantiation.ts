@@ -6,4 +6,4 @@
 ////
 //// class C implements I { }
 
-verify.codeFixAvailable([]);
+verify.not.codeFixAvailable();

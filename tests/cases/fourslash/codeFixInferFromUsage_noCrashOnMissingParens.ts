@@ -9,4 +9,4 @@
 ////}
 
 // Just testing that we don't crash in `insertTypeAnnotation` from inferFromUsage
-verify.codeFixAvailable([]);
+verify.not.codeFixAvailable();

@@ -4,4 +4,4 @@
 ////declare var x: [1, 2];
 ////x.b;
 
-verify.codeFixAvailable([]);
+verify.not.codeFixAvailable();

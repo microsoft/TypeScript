@@ -2,4 +2,4 @@
 
 ////await a
 
-verify.codeFixAvailable([]);
+verify.not.codeFixAvailable();

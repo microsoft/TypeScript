@@ -6,4 +6,4 @@
 ////    }
 ////}
 
-verify.codeFixAvailable([]);
+verify.not.codeFixAvailable();

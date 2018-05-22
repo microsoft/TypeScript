@@ -14,4 +14,4 @@
 //// let t: T<number>;
 //// t.x;
 
-verify.codeFixAvailable([]);
+verify.not.codeFixAvailable();
