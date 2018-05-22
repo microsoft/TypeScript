@@ -2,8 +2,8 @@
 namespace ts.refactor {
     const refactorName = "Move to a new file";
     registerRefactor(refactorName, {
-        getAvailableActions(context): ApplicableRefactorInfo[] {
-            if (!context.preferences.allowTextChangesInNewFiles || getFirstAndLastStatementToMove(context) === undefined) return undefined;
+        getAvailableActions(context): ApplicableRefactorInfo[] | undefined {
+            if (!context.preferences.allowTextChangesInNewFiles || getStatementsToMove(context) === undefined) return undefined;
             const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);
             return [{ name: refactorName, description, actions: [{ name: refactorName, description }] }];
         },
@@ -15,7 +15,7 @@ namespace ts.refactor {
         }
     });
 
-    function getFirstAndLastStatementToMove(context: RefactorContext): { readonly first: number, readonly afterLast: number } | undefined {
+    function getRangeToMove(context: RefactorContext): ReadonlyArray<Statement> | undefined {
         const { file } = context;
         const range = createTextRangeFromSpan(getRefactorContextSpan(context));
         const { statements } = file;
@@ -25,7 +25,7 @@ namespace ts.refactor {
 
         const startStatement = statements[startNodeIndex];
         if (isNamedDeclaration(startStatement) && startStatement.name && rangeContainsRange(startStatement.name, range)) {
-            return { first: startNodeIndex, afterLast: startNodeIndex + 1 };
+            return [statements[startNodeIndex]];
         }
 
         // Can't only partially include the start node or be partially into the next node
@@ -34,7 +34,7 @@ namespace ts.refactor {
         // Can't be partially into the next node
         if (afterEndNodeIndex !== -1 && (afterEndNodeIndex === 0 || statements[afterEndNodeIndex].getStart(file) < range.end)) return undefined;
 
-        return { first: startNodeIndex, afterLast: afterEndNodeIndex === -1 ? statements.length : afterEndNodeIndex };
+        return statements.slice(startNodeIndex, afterEndNodeIndex === -1 ? statements.length : afterEndNodeIndex);
     }
 
     function doChange(oldFile: SourceFile, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost): void {
@@ -63,16 +63,15 @@ namespace ts.refactor {
 
     // Filters imports out of the range of statements to move. Imports will be copied to the new file anyway, and may still be needed in the old file.
     function getStatementsToMove(context: RefactorContext): ToMove | undefined {
-        const { statements } = context.file;
-        const { first, afterLast } = getFirstAndLastStatementToMove(context)!;
+        const rangeToMove = getRangeToMove(context);
+        if (rangeToMove === undefined) return undefined;
         const all: Statement[] = [];
         const ranges: StatementRange[] = [];
-        const rangeToMove = statements.slice(first, afterLast);
         getRangesWhere(rangeToMove, s => !isPureImport(s), (start, afterEnd) => {
             for (let i = start; i < afterEnd; i++) all.push(rangeToMove[i]);
             ranges.push({ first: rangeToMove[start], last: rangeToMove[afterEnd - 1] });
         });
-        return { all, ranges };
+        return all.length === 0 ? undefined : { all, ranges };
     }
 
     function isPureImport(node: Node): boolean {
