@@ -8459,7 +8459,8 @@ new C();`
                 const moduleInfo = service.getScriptInfo(moduleFile.path);
                 assert.isDefined(moduleInfo);
                 assert.equal(moduleInfo.isOrphan(), moduleIsOrphan);
-                assert.equal(service.documentRegistry.hasDocument(moduleInfo.path), !moduleIsOrphan);
+                const key = service.documentRegistry.getKeyForCompilationSettings(project.getCompilationSettings());
+                assert.deepEqual(service.documentRegistry.getLanguageServiceRefCounts(moduleInfo.path), [[key, moduleIsOrphan ? undefined : 1]]);
             }
         });
     });

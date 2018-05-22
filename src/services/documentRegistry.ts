@@ -88,7 +88,7 @@ namespace ts {
         releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey): void;
 
         /*@internal*/
-        hasDocument(path: Path): boolean;
+        getLanguageServiceRefCounts(path: Path): [string, number | undefined][];
 
         reportStats(): string;
     }
@@ -188,9 +188,10 @@ namespace ts {
             if (!entry && externalCache) {
                 const sourceFile = externalCache.getDocument(key, path);
                 if (sourceFile) {
+                    Debug.assert(acquiring);
                     entry = {
                         sourceFile,
-                        languageServiceRefCount: 1
+                        languageServiceRefCount: 0
                     };
                     bucket.set(path, entry);
                 }
@@ -229,6 +230,7 @@ namespace ts {
                     entry.languageServiceRefCount++;
                 }
             }
+            Debug.assert(entry.languageServiceRefCount !== 0);
 
             return entry.sourceFile;
         }
@@ -252,8 +254,11 @@ namespace ts {
             }
         }
 
-        function hasDocument(path: Path) {
-            return !!forEachEntry(buckets, bucket => bucket.has(path));
+        function getLanguageServiceRefCounts(path: Path) {
+            return arrayFrom(buckets.entries(), ([key, bucket]): [string, number | undefined] => {
+                const entry = bucket.get(path);
+                return [key, entry && entry.languageServiceRefCount];
+            });
         }
 
         return {
@@ -263,7 +268,7 @@ namespace ts {
             updateDocumentWithKey,
             releaseDocument,
             releaseDocumentWithKey,
-            hasDocument,
+            getLanguageServiceRefCounts,
             reportStats,
             getKeyForCompilationSettings
         };
