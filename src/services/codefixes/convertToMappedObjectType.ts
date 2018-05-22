@@ -49,7 +49,7 @@ namespace ts.codefix {
         if (!isIndexSignatureParameterName(token)) return undefined;
 
         const indexSignature = <IndexSignatureDeclaration>token.parent.parent;
-        const container: FixableDeclaration = isInterfaceDeclaration(indexSignature.parent) ? indexSignature.parent : <TypeAliasDeclaration>indexSignature.parent.parent;
+        const container = isInterfaceDeclaration(indexSignature.parent) ? indexSignature.parent : <TypeAliasDeclaration>indexSignature.parent.parent;
         const members = isInterfaceDeclaration(container) ? container.members : (<TypeLiteralNode>container.type).members;
         const otherMembers = filter(members, member => !isIndexSignatureDeclaration(member));
         const parameter = first(indexSignature.parameters);
@@ -63,21 +63,33 @@ namespace ts.codefix {
         };
     }
 
+    function getInterfaceHeritageClauses(declaration: FixableDeclaration): NodeArray<ExpressionWithTypeArguments> | undefined {
+        if (!isInterfaceDeclaration(declaration)) return undefined;
+
+        const heritageClause = getHeritageClause(declaration.heritageClauses, SyntaxKind.ExtendsKeyword);
+        return heritageClause && heritageClause.types;
+    }
+
     function createTypeAliasFromInterface(indexSignature: IndexSignatureDeclaration, declaration: FixableDeclaration, otherMembers: ReadonlyArray<TypeElement>, parameterName: Identifier, parameterType: TypeNode) {
-        const mappedIntersectionType: TypeNode[] = [
-            createMappedTypeNode(
-                hasReadonlyModifier(indexSignature) ? createModifier(SyntaxKind.ReadonlyKeyword) : undefined,
-                createTypeParameterDeclaration(parameterName, parameterType),
-                indexSignature.questionToken,
-                indexSignature.type)
-        ];
+        const heritageClauses = getInterfaceHeritageClauses(declaration);
+        const mappedTypeParameter = createTypeParameterDeclaration(parameterName, parameterType);
+        const mappedIntersectionType = createMappedTypeNode(
+            hasReadonlyModifier(indexSignature) ? createModifier(SyntaxKind.ReadonlyKeyword) : undefined,
+            mappedTypeParameter,
+            indexSignature.questionToken,
+            indexSignature.type);
 
         return createTypeAliasDeclaration(
             declaration.decorators,
             declaration.modifiers,
             declaration.name,
             declaration.typeParameters,
-            createIntersectionTypeNode(append(mappedIntersectionType, otherMembers.length ? createTypeLiteralNode(otherMembers) : undefined))
+            createIntersectionTypeNode(
+                concatenate(
+                    heritageClauses,
+                    append<TypeNode>([mappedIntersectionType], otherMembers.length ? createTypeLiteralNode(otherMembers) : undefined)
+                )
+            )
         );
     }
 
