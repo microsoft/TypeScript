@@ -1345,7 +1345,7 @@ namespace Harness {
 
         export function getErrorBaseline(inputFiles: ReadonlyArray<TestFile>, diagnostics: ReadonlyArray<ts.Diagnostic>, pretty?: boolean) {
             let outputLines = "";
-            const gen = iterateErrorBaseline(inputFiles, diagnostics, pretty);
+            const gen = iterateErrorBaseline(inputFiles, diagnostics, { pretty });
             for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
                 const [, content] = value;
                 outputLines += content;
@@ -1355,7 +1355,7 @@ namespace Harness {
 
         export const diagnosticSummaryMarker = "__diagnosticSummary";
         export const globalErrorsMarker = "__globalErrors";
-        export function *iterateErrorBaseline(inputFiles: ReadonlyArray<TestFile>, diagnostics: ReadonlyArray<ts.Diagnostic>, pretty?: boolean): IterableIterator<[string, string, number]> {
+        export function *iterateErrorBaseline(inputFiles: ReadonlyArray<TestFile>, diagnostics: ReadonlyArray<ts.Diagnostic>, options?: { pretty?: boolean, caseSensitive?: boolean, currentDirectory?: string }): IterableIterator<[string, string, number]> {
             diagnostics = ts.sort(diagnostics, ts.compareDiagnostics);
             let outputLines = "";
             // Count up all errors that were found in files other than lib.d.ts so we don't miss any
@@ -1393,7 +1393,7 @@ namespace Harness {
                 }
             }
 
-            yield [diagnosticSummaryMarker, utils.removeTestPathPrefixes(minimalDiagnosticsToString(diagnostics, pretty)) + IO.newLine() + IO.newLine(), diagnostics.length];
+            yield [diagnosticSummaryMarker, utils.removeTestPathPrefixes(minimalDiagnosticsToString(diagnostics, options && options.pretty)) + IO.newLine() + IO.newLine(), diagnostics.length];
 
             // Report global errors
             const globalErrors = diagnostics.filter(err => !err.file);
@@ -1408,7 +1408,7 @@ namespace Harness {
                 // Filter down to the errors in the file
                 const fileErrors = diagnostics.filter((e): e is ts.DiagnosticWithLocation => {
                     const errFn = e.file;
-                    return errFn && utils.removeTestPathPrefixes(errFn.fileName) === utils.removeTestPathPrefixes(inputFile.unitName);
+                    return errFn && ts.comparePaths(utils.removeTestPathPrefixes(errFn.fileName), utils.removeTestPathPrefixes(inputFile.unitName), options && options.currentDirectory || "", !(options && options.caseSensitive)) === ts.Comparison.EqualTo;
                 });
 
 
