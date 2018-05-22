@@ -1,4 +1,8 @@
 {
+    "compilerOptions": {
+        "composite": true,
+        "declaration": true
+    },
     "references": [
         { "path": "../core" }
     ]

@@ -1,3 +1,6 @@
 {
-    
+    "compilerOptions": {
+        "composite": true,
+        "declaration": true
+    }
 }

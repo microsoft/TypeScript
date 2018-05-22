@@ -317,16 +317,12 @@ namespace ts {
         return date2 > date1 ? date2 : date1;
     }
 
-    function older(date1: Date, date2: Date): Date {
-        return date2 < date1 ? date2 : date1;
-    }
-
     function isDeclarationFile(fileName: string) {
         return fileExtensionIs(fileName, ".d.ts");
     }
 
-    export function createBuildContext(options: BuildOptions): BuildContext {
-        const verboseDiag = options.verbose && createDiagnosticReporter(sys, /*pretty*/ false);
+    export function createBuildContext(options: BuildOptions, reportDiagnostic: DiagnosticReporter): BuildContext {
+        const verboseDiag = options.verbose && reportDiagnostic;
         return {
             options,
             projectStatus: createFileMap(),
@@ -371,8 +367,7 @@ namespace ts {
             addProject(".");
         }
 
-        const context = createBuildContext({ verbose, dry, force });
-        const builder = createSolutionBuilder(host, reportDiagnostic, context);
+        const builder = createSolutionBuilder(host, reportDiagnostic, { verbose, dry, force });
         if (clean) {
             builder.cleanProjects(projects);
         }
@@ -391,8 +386,9 @@ namespace ts {
         }
     }
 
-    export function createSolutionBuilder(host: CompilerHost, reportDiagnostic: DiagnosticReporter, context: BuildContext) {
+    export function createSolutionBuilder(host: CompilerHost, reportDiagnostic: DiagnosticReporter, options: BuildOptions) {
         const configFileCache = createConfigFileCache(host);
+        let context: BuildContext = undefined!;
 
         return {
             getUpToDateStatus,
@@ -473,7 +469,7 @@ namespace ts {
                     oldestOutputFileTime = outputTime;
                     oldestOutputFileName = output;
                 }
-                newestOutputFileTime = older(newestOutputFileTime, outputTime);
+                newestOutputFileTime = newer(newestOutputFileTime, outputTime);
 
                 // Keep track of when the most recent time a .d.ts file was changed.
                 // In addition to file timestamps, we also keep track of when a .d.ts file
@@ -709,6 +705,8 @@ namespace ts {
         }
 
         function cleanProjects(configFileNames: string[]) {
+            context = createBuildContext(options, reportDiagnostic);
+
             // Get the same graph for cleaning we'd use for building
             const graph = createDependencyGraph(configFileNames);
 
@@ -736,6 +734,8 @@ namespace ts {
         }
 
         function buildProjects(configFileNames: string[]) {
+            context = createBuildContext(options, reportDiagnostic);
+
             const resolvedNames: string[] = [];
             for (const name of configFileNames) {
                 let fullPath = resolvePath(host.getCurrentDirectory(), name);
@@ -823,7 +823,7 @@ namespace ts {
                     context.verbose(Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, configFileName, status.missingOutputFileName);
                     return;
                 case UpToDateStatusType.UpToDate:
-                    context.verbose(Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, configFileName, status.newestDeclarationFileContentChangedTime as any, status.newestOutputFileTime);
+                    context.verbose(Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, configFileName, status.newestInputFileTime, status.newestOutputFileTime);
                     return;
                 case UpToDateStatusType.UpToDateWithUpstreamTypes:
                     context.verbose(Diagnostics.Project_0_is_up_to_date_with_its_upstream_types, configFileName);
