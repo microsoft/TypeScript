@@ -53,7 +53,7 @@ namespace ts.codefix {
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const { sourceFile } = context;
                 const startToken = getTokenAtPosition(sourceFile, diag.start, /*includeJsDocComment*/ false);
-                const token = findPrecedingToken(textSpanEnd(diag), diag.file!);
+                const token = findPrecedingToken(textSpanEnd(diag), diag.file);
                 switch (context.fixId) {
                     case fixIdPrefix:
                         if (isIdentifier(token) && canPrefix(token)) {
@@ -62,7 +62,7 @@ namespace ts.codefix {
                         break;
                     case fixIdDelete:
                         // Ignore if this range was already deleted.
-                        if (deleted.some(d => rangeContainsPosition(d, diag.start!))) break;
+                        if (deleted.some(d => rangeContainsPosition(d, diag.start))) break;
 
                         const importDecl = tryGetFullImport(startToken);
                         if (importDecl) {

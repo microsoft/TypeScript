@@ -313,11 +313,11 @@ namespace ts {
 
             getSuggestionDiagnostics: file => {
                 return (suggestionDiagnostics.get(file.fileName) || emptyArray).concat(getUnusedDiagnostics());
-                function getUnusedDiagnostics(): ReadonlyArray<Diagnostic> {
+                function getUnusedDiagnostics(): ReadonlyArray<DiagnosticWithLocation> {
                     if (file.isDeclarationFile) return emptyArray;
 
                     checkSourceFile(file);
-                    const diagnostics: Diagnostic[] = [];
+                    const diagnostics: DiagnosticWithLocation[] = [];
                     Debug.assert(!!(getNodeLinks(file).flags & NodeCheckFlags.TypeChecked));
                     checkUnusedIdentifiers(getPotentiallyUnusedIdentifiers(file), (kind, diag) => {
                         if (!unusedIsError(kind)) {
@@ -481,7 +481,7 @@ namespace ts {
 
         const diagnostics = createDiagnosticCollection();
         // Suggestion diagnostics must have a file. Keyed by source file name.
-        const suggestionDiagnostics = createMultiMap<Diagnostic>();
+        const suggestionDiagnostics = createMultiMap<DiagnosticWithLocation>();
 
         const enum TypeFacts {
             None = 0,
@@ -628,7 +628,7 @@ namespace ts {
             Local,
             Parameter,
         }
-        type AddUnusedDiagnostic = (type: UnusedKind, diagnostic: Diagnostic) => void;
+        type AddUnusedDiagnostic = (type: UnusedKind, diagnostic: DiagnosticWithLocation) => void;
 
         const builtinGlobals = createSymbolTable();
         builtinGlobals.set(undefinedSymbol.escapedName, undefinedSymbol);
@@ -824,7 +824,7 @@ namespace ts {
             diagnostics.add(diagnostic);
         }
 
-        function addErrorOrSuggestion(isError: boolean, diagnostic: Diagnostic) {
+        function addErrorOrSuggestion(isError: boolean, diagnostic: DiagnosticWithLocation) {
             if (isError) {
                 diagnostics.add(diagnostic);
             }

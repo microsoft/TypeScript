@@ -595,7 +595,7 @@ namespace ts {
         // tslint:enable variable-name
 
         let sourceFile: SourceFile;
-        let parseDiagnostics: Diagnostic[];
+        let parseDiagnostics: DiagnosticWithLocation[];
         let syntaxCursor: IncrementalParser.SyntaxCursor;
 
         let currentToken: SyntaxKind;

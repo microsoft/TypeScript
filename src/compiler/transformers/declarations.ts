@@ -1,6 +1,6 @@
 /*@internal*/
 namespace ts {
-    export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): Diagnostic[] {
+    export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] {
         if (file && isSourceFileJavaScript(file)) {
             return []; // No declaration diagnostics for js for now
         }

@@ -1,9 +1,9 @@
 /* @internal */
 namespace ts {
-    export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Program): Diagnostic[] {
+    export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Program): DiagnosticWithLocation[] {
         program.getSemanticDiagnostics(sourceFile);
         const checker = program.getDiagnosticsProducingTypeChecker();
-        const diags: Diagnostic[] = [];
+        const diags: DiagnosticWithLocation[] = [];
 
         if (sourceFile.commonJsModuleIndicator &&
             (programContainsEs6Modules(program) || compilerOptionsIndicateEs6Modules(program.getCompilerOptions())) &&
