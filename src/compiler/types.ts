@@ -4769,7 +4769,9 @@ namespace ts {
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
         createHash?(data: string): string;
 
-        getLastWriteTime?(fileName: string): Date;
+        getModifiedTime?(fileName: string): Date;
+        setModifiedTime?(fileName: string, date: Date): void;
+        deleteFile?(fileName: string): void;
     }
 
     /* @internal */

@@ -47,6 +47,10 @@ namespace ts {
     }
 
     export function executeCommandLine(args: string[]): void {
+        if ((args[0].toLowerCase() === "--build") || (args[0].toLowerCase() === "-b")) {
+            return performBuild(args.slice(1));
+        }
+        
         const commandLine = parseCommandLine(args);
 
         // Configuration file name (if any)

@@ -432,6 +432,7 @@ namespace ts {
         readFile(path: string, encoding?: string): string | undefined;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
+
         /**
          * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that
          * use native OS file watching
@@ -447,6 +448,8 @@ namespace ts {
         getDirectories(path: string): string[];
         readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
         getModifiedTime?(path: string): Date;
+        setModifiedTime?(path: string, time: Date): void;
+        deleteFile?(path: string): void;
         /**
          * This should be cryptographically secure.
          * A good implementation is node.js' `crypto.createHash`. (https://nodejs.org/api/crypto.html#crypto_crypto_createhash_algorithm)
@@ -589,6 +592,8 @@ namespace ts {
                 },
                 readDirectory,
                 getModifiedTime,
+                setModifiedTime,
+                deleteFile,
                 createHash: _crypto ? createMD5HashUsingNativeCrypto : generateDjb2Hash,
                 getMemoryUsage() {
                     if (global.gc) {
@@ -1060,6 +1065,22 @@ namespace ts {
                 }
                 catch (e) {
                     return undefined;
+                }
+            }
+
+            function setModifiedTime(path: string, time: Date) {
+                try {
+                    _fs.utimesSync(path, time, time);
+                }
+                catch (e) {
+                }
+            }
+
+            function deleteFile(path: string) {
+                try {
+                    return _fs.unlinkSync(path);
+                }
+                catch (e) {
                 }
             }
 

@@ -189,7 +189,10 @@ namespace ts {
             getEnvironmentVariable: name => sys.getEnvironmentVariable ? sys.getEnvironmentVariable(name) : "",
             getDirectories: (path: string) => sys.getDirectories(path),
             realpath,
-            readDirectory: (path, extensions, include, exclude, depth) => sys.readDirectory(path, extensions, include, exclude, depth)
+            readDirectory: (path, extensions, include, exclude, depth) => sys.readDirectory(path, extensions, include, exclude, depth),
+            getModifiedTime: path => sys.getModifiedTime(path),
+            setModifiedTime: (path, date) => sys.setModifiedTime(path, date),
+            deleteFile: path => sys.deleteFile(path)
         };
     }
 
@@ -2692,7 +2695,7 @@ namespace ts {
     /**
      * Returns the target config filename of a project reference
      */
-    function resolveProjectReferencePath(host: CompilerHost, ref: ProjectReference): string | undefined {
+    export function resolveProjectReferencePath(host: CompilerHost, ref: ProjectReference): string | undefined {
         if (!host.fileExists(ref.path)) {
             return combinePaths(ref.path, "tsconfig.json");
         }

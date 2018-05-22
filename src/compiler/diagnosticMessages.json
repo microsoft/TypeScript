@@ -3593,6 +3593,43 @@
         "category": "Error",
         "code": 6309
     },
+    "Project '{0}' is out of date because oldest output '{1}' is older than newest input '{2}'": {
+        "category": "Message",
+        "code": 6350
+    },
+    "Project '{0}' is up to date because newest input '{1}' is older than oldest output '{2}'": {
+        "category": "Message",
+        "code": 6351
+    },
+    "Project '{0}' is out of date because output file '{1}' does not exist": {
+        "category": "Message",
+        "code": 6352
+    },
+    
+    "Project '{0}' is up to date with its upstream types": {
+        "category": "Message",
+        "code": 6353
+    },
+    "Sorted list of input projects: {0}": {
+        "category": "Message",
+        "code": 6354
+    },
+    "Would delete the following files:{0}": {
+        "category": "Message",
+        "code": 6355
+    },
+    "Would build project '{0}'": {
+        "category": "Message",
+        "code": 6356
+    },
+    "Building project '{0}'...": {
+        "category": "Message",
+        "code": 6357
+    },
+    "Updating output timestamps of project '{0}'...": {
+        "category": "Message",
+        "code": 6358
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

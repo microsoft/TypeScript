@@ -8,6 +8,7 @@ namespace ts {
      * but unchanged, because this enables fast downstream updates
      */
     interface BuildContext {
+        options: BuildOptions;
         /**
          * Map from output file name to its pre-build timestamp
          */
@@ -17,12 +18,20 @@ namespace ts {
          * Map from config file name to up-to-date status
          */
         projectStatus: FileMap<UpToDateStatus>;
+
+        verbose(diag: DiagnosticMessage, ...args: any[]): void;
     }
 
     type Mapper = ReturnType<typeof createDependencyMapper>;
     interface DependencyGraph {
         buildQueue: string[][];
         dependencyMap: Mapper;
+    }
+
+    interface BuildOptions {
+        dry: boolean;
+        force: boolean;
+        verbose: boolean;
     }
 
     enum BuildResultFlags {
@@ -51,7 +60,7 @@ namespace ts {
         UpToDate,
         /**
          * The project appears out of date because its upstream inputs are newer than its outputs,
-         * but all of its outputs are actually newer than the previous identical outputs of its inputs.
+         * but all of its outputs are actually newer than the previous identical outputs of its (.d.ts) inputs.
          * This means we can Pseudo-build (just touch timestamps), as if we had actually built this project.
          */
         UpToDateWithUpstreamTypes,
@@ -286,11 +295,12 @@ namespace ts {
         const cache = createFileMap<ParsedCommandLine>();
         const configParseHost = parseConfigHostFromCompilerHost(host);
 
-        // TODO: Cache invalidation!
+        // TODO: Cache invalidation under --watch!
 
         function parseConfigFile(configFilePath: string) {
             const sourceFile = host.getSourceFile(configFilePath, ScriptTarget.JSON) as JsonSourceFile;
-            const parsed = parseJsonSourceFileConfigFileContent(sourceFile, configParseHost, configFilePath);
+            const parsed = parseJsonSourceFileConfigFileContent(sourceFile, configParseHost, getDirectoryPath(configFilePath));
+            parsed.options.configFilePath = configFilePath;
             cache.setValue(configFilePath, parsed);
             return parsed;
         }
@@ -312,21 +322,109 @@ namespace ts {
         return fileExtensionIs(fileName, ".d.ts");
     }
 
-    function createSolutionBuilder(host: CompilerHost) {
+    function createBuildContext(options: BuildOptions): BuildContext {
+        const verboseDiag = options.verbose && createDiagnosticReporter(sys, /*pretty*/ false);
+        return {
+            options,
+            projectStatus: createFileMap(),
+            unchangedOutputs: createFileMap(),
+            verbose: options.verbose ? (diag, ...args) => {
+                verboseDiag(createCompilerDiagnostic(diag, ...args));
+            } : () => undefined
+        };
+    }
+
+    export function performBuild(args: string[]) {
+        const diagReporter = createDiagnosticReporter(sys, /*pretty*/true);
+        const host = createCompilerHost({});
+
+        let verbose = false;
+        let dry = false;
+        let force = false;
+        let clean = false;
+
+        const projects: string[] = [];
+        for (let i = 0; i < args.length; i++) {
+            switch (args[i].toLowerCase()) {
+                case "-v":
+                case "--verbose":
+                    verbose = true;
+                    continue;
+                case "-d":
+                case "--dry":
+                    dry = true;
+                    continue;
+                case "-f":
+                case "--force":
+                    force = true;
+                    continue;
+                case "--clean":
+                    clean = true;
+                    continue;
+            }
+            // Not a flag, parse as filename
+            addProject(args[i]);
+        }
+
+        if (projects.length === 0) {
+            // tsc -b invoked with no extra arguments; act as if invoked with "tsc -b ."
+            addProject(".");
+        }
+
+        const context = createBuildContext({ verbose, dry, force });
+        const builder = createSolutionBuilder(host, context);
+        if (clean) {
+            builder.cleanProjects(projects);
+        }
+        else {
+            builder.buildProjects(projects);
+        }
+
+        function addProject(projectSpecification: string) {
+            const fileName = resolvePath(host.getCurrentDirectory(), projectSpecification);
+            const refPath = resolveProjectReferencePath(host, { path: fileName });
+            if (!host.fileExists(refPath)) {
+                diagReporter(createCompilerDiagnostic(Diagnostics.File_0_does_not_exist, fileName));
+            }
+            projects.push(refPath);
+
+        }
+    }
+
+    export function createSolutionBuilder(host: CompilerHost, context: BuildContext) {
         const diagReporter = createDiagnosticReporter(sys, /*pretty*/true);
         const configFileCache = createConfigFileCache(host);
+
+        return {
+            getUpToDateStatus,
+            buildProjects,
+            cleanProjects
+        };
 
         function getUpToDateStatus(project: ParsedCommandLine, context: BuildContext): UpToDateStatus {
             const prior = context.projectStatus.getValueOrUndefined(project.options.configFilePath);
             if (prior !== undefined) {
                 return prior;
             }
-            const actual = getUpToDateStatusWorker(project, context);
+            const actual = getUpToDateStatusWorker(project);
             context.projectStatus.setValue(project.options.configFilePath, actual);
             return actual;
         }
 
-        function getUpToDateStatusWorker(project: ParsedCommandLine, context: BuildContext): UpToDateStatus {
+        function getAllProjectOutputs(project: ParsedCommandLine): ReadonlyArray<string> {
+            if (project.options.outFile) {
+                return getOutFileOutputs(project);
+            }
+            else {
+                const outputs: string[] = [];
+                for (const inputFile of project.fileNames) {
+                    (outputs as string[]).push(...getOutputFileNames(inputFile, project));
+                }
+                return outputs;
+            }
+        }
+
+        function getUpToDateStatusWorker(project: ParsedCommandLine): UpToDateStatus {
             let newestInputFileName: string = undefined!;
             let newestInputFileTime = minimumDate;
             // Get timestamps of input files
@@ -338,7 +436,7 @@ namespace ts {
                     };
                 }
 
-                const inputTime = sys.getModifiedTime(inputFile);
+                const inputTime = host.getModifiedTime(inputFile);
                 if (inputTime > newestInputFileTime) {
                     newestInputFileName = inputFile;
                     newestInputFileTime = inputTime;
@@ -346,21 +444,12 @@ namespace ts {
             }
 
             // Collect the expected outputs of this project
-            let outputs: ReadonlyArray<string>;
-            if (project.options.outFile) {
-                outputs = getOutFileOutputs(project);
-            }
-            else {
-                outputs = [];
-                for (const inputFile of project.fileNames) {
-                    (outputs as string[]).push(...getOutputFileNames(inputFile, project));
-                }
-            }
+            const outputs = getAllProjectOutputs(project);
 
             // Now see if all outputs are newer than the newest input
             let oldestOutputFileName: string = undefined!;
-            let oldestOutputFileTime: Date = minimumDate;
-            let newestOutputFileTime: Date = maximumDate;
+            let oldestOutputFileTime: Date = maximumDate;
+            let newestOutputFileTime: Date = minimumDate;
             let newestDeclarationFileContentChangedTime: Date = minimumDate;
             for (const output of outputs) {
                 // Output is missing
@@ -371,7 +460,7 @@ namespace ts {
                     };
                 }
 
-                const outputTime = sys.getModifiedTime(output);
+                const outputTime = host.getModifiedTime(output);
                 // If an output is older than the newest input, we can stop checking
                 if (outputTime < newestInputFileTime) {
                     return {
@@ -391,13 +480,13 @@ namespace ts {
                 // In addition to file timestamps, we also keep track of when a .d.ts file
                 // had its file touched but not had its contents changed - this allows us
                 // to skip a downstream typecheck
-                if (fileExtensionIs(output, ".d.ts")) {
+                if (isDeclarationFile(output)) {
                     const unchangedTime = context.unchangedOutputs.getValueOrUndefined(output);
                     if (unchangedTime !== undefined) {
                         newestDeclarationFileContentChangedTime = newer(unchangedTime, newestDeclarationFileContentChangedTime);
                     }
                     else {
-                        newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, sys.getModifiedTime(output));
+                        newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, host.getModifiedTime(output));
                     }
                 }
             }
@@ -405,36 +494,40 @@ namespace ts {
             let pseudoUpToDate = false;
             // By here, we know the project is at least up-to-date with its own inputs.
             // See if any of its upstream projects are newer than it
-            for (const ref of project.projectReferences) {
-                const refStatus = getUpToDateStatus(configFileCache.parseConfigFile(ref.path), context);
+            if (project.projectReferences) {
+                for (const ref of project.projectReferences) {
+                    const resolvedRef = resolveProjectReferencePath(host, ref);
+                    const refStatus = getUpToDateStatus(configFileCache.parseConfigFile(resolvedRef), context);
 
-                // If the upstream project is out of date, then so are we (someone shouldn't have asked, though?)
-                if (refStatus.type !== UpToDateStatusType.UpToDate) {
+                    // If the upstream project is out of date, then so are we (someone shouldn't have asked, though?)
+                    if (refStatus.type !== UpToDateStatusType.UpToDate) {
+                        return {
+                            type: UpToDateStatusType.UpstreamOutOfDate,
+                            upstreamProjectName: ref.path
+                        };
+                    }
+
+                    // If the upstream project's newest file is older than our oldest output, we
+                    // can't be out of date because of it
+                    if (refStatus.newestInputFileTime < oldestOutputFileTime) {
+                        continue;
+                    }
+
+                    // If the upstream project has only change .d.ts files, and we've built
+                    // *after* those files, then we're "psuedo up to date" and eligible for a fast rebuild
+                    if (refStatus.newestDeclarationFileContentChangedTime < oldestOutputFileTime) {
+                        pseudoUpToDate = true;
+                        continue;
+                    }
+
+                    // We have an output older than an upstream output - we are out of date
+                    Debug.assert(oldestOutputFileName !== undefined, "Should have an oldest output filename here");
                     return {
-                        type: UpToDateStatusType.UpstreamOutOfDate,
-                        upstreamProjectName: ref.path
+                        type: UpToDateStatusType.OutOfDateWithUpstream,
+                        outOfDateOutputFileName: oldestOutputFileName,
+                        newerProjectName: ref.path
                     };
                 }
-
-                // If the upstream project's newest file is older than our oldest output, we
-                // can't be out of date because of it
-                if (refStatus.newestInputFileTime < oldestOutputFileTime) {
-                    continue;
-                }
-
-                // If the upstream project has only change .d.ts files, and we've built
-                // *after* those files, then we're "psuedo up to date" and eligible for a fast rebuild
-                if (refStatus.newestDeclarationFileContentChangedTime < oldestOutputFileTime) {
-                    pseudoUpToDate = true;
-                    continue;
-                }
-
-                // We have an output older than an upstream output - we are out of date
-                return {
-                    type: UpToDateStatusType.OutOfDateWithUpstream,
-                    outOfDateOutputFileName: oldestOutputFileName,
-                    newerProjectName: ref.path
-                };
             }
 
             // Up to date
@@ -446,6 +539,7 @@ namespace ts {
             };
         }
 
+        // TODO: Use the better algorithm
         function createDependencyGraph(roots: string[]): DependencyGraph {
             // This is a list of list of projects that need to be built.
             // The ordering here is "backwards", i.e. the first entry in the array is the last set of projects that need to be built;
@@ -480,10 +574,11 @@ namespace ts {
                 if (refs === undefined) return;
                 buildQueuePosition++;
                 for (const ref of refs) {
-                    dependencyMap.addReference(fileName, ref.path);
-                    const resolvedRef = configFileCache.parseConfigFile(ref.path);
+                    const actualPath = resolveProjectReferencePath(host, ref);
+                    dependencyMap.addReference(fileName, actualPath);
+                    const resolvedRef = configFileCache.parseConfigFile(actualPath);
                     if (resolvedRef === undefined) continue;
-                    enumerateReferences(normalizePath(ref.path), resolvedRef);
+                    enumerateReferences(normalizePath(actualPath), resolvedRef);
                 }
                 buildQueuePosition--;
             }
@@ -507,7 +602,14 @@ namespace ts {
             }
         }
 
-        function buildSingleProject(proj: string, context: BuildContext) {
+        // TODO Accept parsedCommandLine
+        function buildSingleProject(proj: string) {
+            if (context.options.dry) {
+                diagReporter(createCompilerDiagnostic(Diagnostics.Would_build_project_0, proj));
+            }
+
+            context.verbose(Diagnostics.Building_project_0, proj);
+
             let resultFlags = BuildResultFlags.None;
             resultFlags |= BuildResultFlags.DeclarationOutputUnchanged;
 
@@ -549,8 +651,8 @@ namespace ts {
                     for (const diag of declDiagnostics) {
                         diagReporter(diag);
                     }
+                    return resultFlags;
                 }
-                return resultFlags;
             }
 
             const semanticDiagnostics = [...program.getSemanticDiagnostics()];
@@ -562,47 +664,160 @@ namespace ts {
                 return resultFlags;
             }
 
+            let newestDeclarationFileContentChangedTime = minimumDate;
             program.emit(undefined, (fileName, content, writeBom, onError) => {
                 let priorChangeTime: Date | undefined;
 
                 if (isDeclarationFile(fileName) && host.fileExists(fileName)) {
                     if (host.readFile(fileName) === content) {
+                        // Check for unchanged .d.ts files
                         resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
-                        priorChangeTime = host.getLastWriteTime && host.getLastWriteTime(fileName);
+                        priorChangeTime = host.getModifiedTime && host.getModifiedTime(fileName);
                     }
                 }
 
                 host.writeFile(fileName, content, writeBom, onError, emptyArray);
                 if (priorChangeTime !== undefined) {
+                    newestDeclarationFileContentChangedTime = newer(priorChangeTime, newestDeclarationFileContentChangedTime);
                     context.unchangedOutputs.setValue(fileName, priorChangeTime);
                 }
             });
 
+            context.projectStatus.setValue(proj, { type: UpToDateStatusType.UpToDate, newestDeclarationFileContentChangedTime } as UpToDateStatus);
+
             return resultFlags;
         }
 
-        function buildProjects(configFileNames: string[], context: BuildContext) {
+        function updateOutputTimestamps(proj: ParsedCommandLine) {
+            if (context.options.dry) {
+                diagReporter(createCompilerDiagnostic(Diagnostics.Would_build_project_0, proj.options.configFilePath));
+                return;
+            }
+
+            context.verbose(Diagnostics.Updating_output_timestamps_of_project_0, proj.options.configFilePath);
+            const now = new Date();
+            const outputs = getAllProjectOutputs(proj);
+            let priorNewestUpdateTime = minimumDate;
+            for (const file of outputs) {
+                if (isDeclarationFile(file)) {
+                    priorNewestUpdateTime = newer(priorNewestUpdateTime, host.getModifiedTime(file));
+                }
+                host.setModifiedTime(file, now);
+            }
+
+            context.projectStatus.setValue(proj.options.configFilePath, { type: UpToDateStatusType.UpToDate, newestDeclarationFileContentChangedTime: priorNewestUpdateTime } as UpToDateStatus);
+        }
+
+        function cleanProjects(configFileNames: string[]) {
+            // Get the same graph for cleaning we'd use for building
+            const graph = createDependencyGraph(configFileNames);
+
+            const fileReport: string[] = [];
+            for (const level of graph.buildQueue) {
+                for (const proj of level) {
+                    const parsed = configFileCache.parseConfigFile(proj);
+                    const outputs = getAllProjectOutputs(parsed);
+                    for (const output of outputs) {
+                        if (host.fileExists(output)) {
+                            if (context.options.dry) {
+                                fileReport.push(output);
+                            }
+                            else {
+                                host.deleteFile(output);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (context.options.dry) {
+                diagReporter(createCompilerDiagnostic(Diagnostics.Would_delete_the_following_files_Colon_0, fileReport.map(f => `\r\n * ${f}`).join("")));
+            }
+        }
+
+        function buildProjects(configFileNames: string[]) {
             // Establish what needs to be built
             const graph = createDependencyGraph(configFileNames);
 
             const queue = graph.buildQueue;
-            while (queue.length > 0) {
-                const next = queue[0].pop()!;
+            reportBuildQueue(graph);
 
-                const result = buildSingleProject(next, context);
+            let next: string;
+            while (next = getNext()) {
+                const proj = configFileCache.parseConfigFile(next);
+                const status = getUpToDateStatus(proj, context);
+                reportProjectStatus(next, status);
+
+                if (status.type === UpToDateStatusType.UpToDate && !context.options.force) {
+                    // Up to date, skip
+                    continue;
+                }
+
+                if (status.type === UpToDateStatusType.UpToDateWithUpstreamTypes && !context.options.force) {
+                    // Fake build
+                    updateOutputTimestamps(proj);
+                    continue;
+                }
+
+                const result = buildSingleProject(next);
                 if (result & BuildResultFlags.AnyErrors) {
                     break;
                 }
+            }
 
-                if (queue[0].length === 0) {
-                    queue.pop();
+            function getNext(): string | undefined {
+                if (queue.length === 0) {
+                    return undefined;
                 }
+                while (queue.length > 0) {
+                    const last = queue[queue.length - 1];
+                    if (last.length === 0) {
+                        queue.pop();
+                        continue;
+                    }
+                    return last.pop()!;
+                }
+                return undefined;
             }
         }
 
-        return {
-            getUpToDateStatus,
-            buildProjects
-        };
+        function reportBuildQueue(graph: DependencyGraph) {
+            if (!context.options.verbose) return;
+
+            const names: string[] = [];
+            for (const level of graph.buildQueue) {
+                for (const el of level) {
+                    names.push(el);
+                }
+            }
+            names.reverse();
+            context.verbose(Diagnostics.Sorted_list_of_input_projects_Colon_0, names.map(s => "\r\n    * " + s).join(""));
+        }
+
+        function reportProjectStatus(configFileName: string, status: UpToDateStatus) {
+            if (!context.options.verbose) return;
+            switch (status.type) {
+                case UpToDateStatusType.OutOfDateWithSelf:
+                    context.verbose(Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, configFileName, status.outOfDateOutputFileName, status.newerInputFileName);
+                    return;
+                case UpToDateStatusType.OutOfDateWithUpstream:
+                    context.verbose(Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, configFileName, status.outOfDateOutputFileName, status.newerProjectName);
+                    return;
+                case UpToDateStatusType.OutputMissing:
+                    context.verbose(Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, configFileName, status.missingOutputFileName);
+                    return;
+                case UpToDateStatusType.UpToDate:
+                    context.verbose(Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, configFileName, status.newestDeclarationFileContentChangedTime as any, status.newestOutputFileTime);
+                    return;
+                case UpToDateStatusType.UpToDateWithUpstreamTypes:
+                    context.verbose(Diagnostics.Project_0_is_up_to_date_with_its_upstream_types, configFileName);
+                    return;
+                    case UpToDateStatusType.UpstreamOutOfDate:
+                    context.verbose(Diagnostics.Project_0_is_up_to_date_with_its_upstream_types, configFileName);
+                    return;
+                default:
+                    throw new Error(`Invalid build status - ${UpToDateStatusType[status.type]}`);
+            }
+        }
     }
 }
