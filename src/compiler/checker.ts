@@ -27697,8 +27697,13 @@ namespace ts {
             }
             const seen = createUnderscoreEscapedMap<Flags>();
 
-            for (const prop of node.properties) {
+            for (let index = node.properties.length - 1; index >= 0; --index) {
+                const prop = node.properties[index];
+
                 if (prop.kind === SyntaxKind.SpreadAssignment) {
+                    if (strictNullChecks) {
+                        checkGrammarForDuplicateIdentifier(prop, seen);
+                    }
                     continue;
                 }
                 const name = prop.name;
@@ -27711,6 +27716,14 @@ namespace ts {
                     // having objectAssignmentInitializer is only valid in ObjectAssignmentPattern
                     // outside of destructuring it is a syntax error
                     return grammarErrorOnNode(prop.equalsToken, Diagnostics.can_only_be_used_in_an_object_literal_property_inside_a_destructuring_assignment);
+                }
+
+                if (prop.kind === SyntaxKind.ShorthandPropertyAssignment || prop.kind === SyntaxKind.PropertyAssignment) {
+                    // Grammar checking for computedPropertyName and shorthandPropertyAssignment
+                    checkGrammarForInvalidQuestionMark(prop.questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
+                    if (name.kind === SyntaxKind.NumericLiteral) {
+                        checkGrammarNumericLiteral(name);
+                    }
                 }
 
                 // Modifiers are never allowed on properties except for 'async' on a method declaration
@@ -27730,31 +27743,9 @@ namespace ts {
                 //    c.IsAccessorDescriptor(previous) is true and IsDataDescriptor(propId.descriptor) is true.
                 //    d.IsAccessorDescriptor(previous) is true and IsAccessorDescriptor(propId.descriptor) is true
                 // and either both previous and propId.descriptor have[[Get]] fields or both previous and propId.descriptor have[[Set]] fields
-                let currentKind: Flags;
-                switch (prop.kind) {
-                    case SyntaxKind.PropertyAssignment:
-                    case SyntaxKind.ShorthandPropertyAssignment:
-                        // Grammar checking for computedPropertyName and shorthandPropertyAssignment
-                        checkGrammarForInvalidQuestionMark(prop.questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
-                        if (name.kind === SyntaxKind.NumericLiteral) {
-                            checkGrammarNumericLiteral(name);
-                        }
-                        // falls through
-                    case SyntaxKind.MethodDeclaration:
-                        currentKind = Flags.Property;
-                        break;
-                    case SyntaxKind.GetAccessor:
-                        currentKind = Flags.GetAccessor;
-                        break;
-                    case SyntaxKind.SetAccessor:
-                        currentKind = Flags.SetAccessor;
-                        break;
-                    default:
-                        Debug.assertNever(prop, "Unexpected syntax kind:" + (<Node>prop).kind);
-                }
-
+                const currentKind = getPropertyKind(prop);
                 const effectiveName = getPropertyNameForPropertyNameNode(name);
-                if (effectiveName === undefined) {
+                if (currentKind === undefined || effectiveName === undefined) {
                     continue;
                 }
 
@@ -27777,6 +27768,39 @@ namespace ts {
                     else {
                         return grammarErrorOnNode(name, Diagnostics.An_object_literal_cannot_have_property_and_accessor_with_the_same_name);
                     }
+                }
+            }
+
+            function getPropertyKind (declaration: Declaration): Flags | undefined {
+                if (declaration) {
+                    switch (declaration.kind) {
+                        case SyntaxKind.PropertyAssignment:
+                        case SyntaxKind.ShorthandPropertyAssignment:
+                        case SyntaxKind.PropertySignature:
+                        case SyntaxKind.MethodDeclaration:
+                        case SyntaxKind.MethodSignature:
+                            return Flags.Property;
+                        case SyntaxKind.GetAccessor:
+                            return Flags.GetAccessor;
+                        case SyntaxKind.SetAccessor:
+                            return Flags.SetAccessor;
+                    }
+                }
+                return undefined;
+            }
+
+            function checkGrammarForDuplicateIdentifier(spread: SpreadAssignment, seen: UnderscoreEscapedMap<Flags>) {
+                const type = getTypeOfExpression(spread.expression);
+                if (type && type.flags & TypeFlags.Object) {
+                    const resolvedObjectType = resolveStructuredTypeMembers(type as StructuredType);
+                    resolvedObjectType.members.forEach(member => {
+                        if (!(member.flags & SymbolFlags.Optional) && !seen.has(member.escapedName)) {
+                            const currentKind = getPropertyKind(member.valueDeclaration);
+                            if (currentKind !== undefined) {
+                                seen.set(member.escapedName, currentKind);
+                            }
+                        }
+                    })
                 }
             }
         }
