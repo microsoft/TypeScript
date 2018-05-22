@@ -347,16 +347,4 @@ namespace ts.codefix {
                 }
         }
     }
-
-    class NodeSet {
-        private map = createMap<Node>();
-
-        add(node: Node): void {
-            this.map.set(String(getNodeId(node)), node);
-        }
-
-        some(pred: (node: Node) => boolean): boolean {
-            return forEachEntry(this.map, pred) || false;
-        }
-    }
 }
