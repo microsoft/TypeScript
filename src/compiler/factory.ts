@@ -2465,6 +2465,7 @@ namespace ts {
             if (node.symbolCount !== undefined) updated.symbolCount = node.symbolCount;
             if (node.parseDiagnostics !== undefined) updated.parseDiagnostics = node.parseDiagnostics;
             if (node.bindDiagnostics !== undefined) updated.bindDiagnostics = node.bindDiagnostics;
+            if (node.bindSuggestionDiagnostics !== undefined) updated.bindSuggestionDiagnostics = node.bindSuggestionDiagnostics;
             if (node.lineMap !== undefined) updated.lineMap = node.lineMap;
             if (node.classifiableNames !== undefined) updated.classifiableNames = node.classifiableNames;
             if (node.resolvedModules !== undefined) updated.resolvedModules = node.resolvedModules;

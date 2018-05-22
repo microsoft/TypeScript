@@ -586,7 +586,7 @@ namespace ts {
         length: number;
         category: string;
         code: number;
-        unused?: {};
+        reportsUnnecessary?: {};
     }
     export function realizeDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, newLine: string): RealizedDiagnostic[] {
         return diagnostics.map(d => realizeDiagnostic(d, newLine));
@@ -598,7 +598,8 @@ namespace ts {
             start: diagnostic.start!, // TODO: GH#18217
             length: diagnostic.length!, // TODO: GH#18217
             category: diagnosticCategoryName(diagnostic),
-            code: diagnostic.code
+            code: diagnostic.code,
+            reportsUnnecessary: diagnostic.reportsUnnecessary,
         };
     }
 

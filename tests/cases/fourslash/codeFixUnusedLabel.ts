@@ -1,8 +1,12 @@
 /// <reference path='fourslash.ts' />
 
-// @noUnusedLocals: true
+/////* a */[|label|]/* b */:/* c */while (1) {}
 
-/////* a */label/* b */:/* c */while (1) {}
+verify.getSuggestionDiagnostics([{
+    message: "Unused label.",
+    code: 7028,
+    reportsUnnecessary: true,
+}]);
 
 verify.codeFix({
     description: "Remove unused label",

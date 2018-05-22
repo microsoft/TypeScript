@@ -59,6 +59,7 @@ namespace ts {
             }
         }
 
+        addRange(diags, sourceFile.bindSuggestionDiagnostics);
         return diags.concat(checker.getSuggestionDiagnostics(sourceFile)).sort((d1, d2) => d1.start! - d2.start!);
     }
 
