@@ -92,7 +92,7 @@ namespace ts.OrganizeImports {
     function removeUnusedImports(oldImports: ReadonlyArray<ImportDeclaration>, sourceFile: SourceFile, program: Program) {
         const typeChecker = program.getTypeChecker();
         const jsxNamespace = typeChecker.getJsxNamespace();
-        const jsxContext = sourceFile.languageVariant === LanguageVariant.JSX;
+        const jsxElementsPresent = !!(sourceFile.transformFlags & TransformFlags.ContainsJsx);
 
         const usedImports: ImportDeclaration[] = [];
 
@@ -138,8 +138,8 @@ namespace ts.OrganizeImports {
         return usedImports;
 
         function isDeclarationUsed(identifier: Identifier) {
-            // The JSX factory symbol is always used.
-            return jsxContext && (identifier.text === jsxNamespace) || FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile);
+            // The JSX factory symbol is always used if JSX elements are present - even if they are not allowed.
+            return jsxElementsPresent && (identifier.text === jsxNamespace) || FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile);
         }
     }
 

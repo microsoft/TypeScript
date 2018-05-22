@@ -506,9 +506,44 @@ D();
                 },
                 libFile);
 
-            testOrganizeImports("JsxFactoryUsed",
+            testOrganizeImports("JsxFactoryUsedJsx",
+                {
+                    path: "/test.jsx",
+                    content: `
+import { React, Other } from "react";
+
+<div/>;
+`,
+                },
+                reactLibFile);
+
+            testOrganizeImports("JsxFactoryUsedJs",
+                {
+                    path: "/test.js",
+                    content: `
+import { React, Other } from "react";
+
+<div/>;
+`,
+                },
+                reactLibFile);
+
+            testOrganizeImports("JsxFactoryUsedTsx",
                 {
                     path: "/test.tsx",
+                    content: `
+import { React, Other } from "react";
+
+<div/>;
+`,
+                },
+                reactLibFile);
+
+            // TS files are not JSX contexts, so the parser does not treat
+            // `<div/>` as a JSX element.
+            testOrganizeImports("JsxFactoryUsedTs",
+                {
+                    path: "/test.ts",
                     content: `
 import { React, Other } from "react";
 
@@ -537,7 +572,6 @@ import { React, Other } from "react";
                 },
                 reactLibFile);
 
-            // This is descriptive, rather than normative
             testOrganizeImports("JsxFactoryUnusedTsx",
                 {
                     path: "/test.tsx",
