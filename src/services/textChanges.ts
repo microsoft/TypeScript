@@ -296,6 +296,10 @@ namespace ts.textChanges {
             return this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, oldNode, oldNode, options), newNodes, options);
         }
 
+        public replaceNodeWithText(sourceFile: SourceFile, oldNode: Node, text: string, options: ChangeNodeOptions = useNonAdjustedPositions) {
+            return this.replaceRangeWithText(sourceFile, getAdjustedRange(sourceFile, oldNode, oldNode, options), text);
+        }
+
         public replaceNodeRangeWithNodes(sourceFile: SourceFile, startNode: Node, endNode: Node, newNodes: ReadonlyArray<Node>, options: ReplaceWithMultipleNodesOptions & ConfigurableStartEnd = useNonAdjustedPositions) {
             return this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, startNode, endNode, options), newNodes, options);
         }

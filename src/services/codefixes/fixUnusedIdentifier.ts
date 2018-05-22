@@ -200,25 +200,9 @@ namespace ts.codefix {
                     break;
                 }
 
-                if (isArrowFunction(oldFunction) && oldFunction.parameters.length === 1) {
-                    // Lambdas with exactly one parameter are special because, after removal, there
-                    // must be an empty parameter list (i.e. `()`) and this won't necessarily be the
-                    // case if the parameter is simply removed (e.g. in `x => 1`).
-                    const newFunction = updateArrowFunction(
-                        oldFunction,
-                        oldFunction.modifiers,
-                        oldFunction.typeParameters,
-                        /*parameters*/ undefined,
-                        oldFunction.type,
-                        oldFunction.equalsGreaterThanToken,
-                        oldFunction.body);
-
-                    // Drop leading and trailing trivia of the new function because we're only going
-                    // to replace the span (vs the full span) of the old function - the old leading
-                    // and trailing trivia will remain.
-                    suppressLeadingAndTrailingTrivia(newFunction);
-
-                    changes.replaceNode(sourceFile, oldFunction, newFunction);
+                if (isArrowFunction(oldFunction) && oldFunction.parameters.length === 1 && !findChildOfKind(oldFunction, SyntaxKind.OpenParenToken, sourceFile)) {
+                    // `x => {}` becomes `() => {}`
+                    changes.replaceNodeWithText(sourceFile, oldFunction.parameters[0], "()");
                 }
                 else {
                     changes.deleteNodeInList(sourceFile, parent);
