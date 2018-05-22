@@ -23,7 +23,7 @@ namespace ts.sourcemaps {
     export const identitySourceMapper = { getOriginalPosition: identity, getGeneratedPosition: identity };
 
     export interface SourceMapDecodeHost {
-        readFile(path: string): string;
+        readFile(path: string): string | undefined;
         fileExists(path: string): boolean;
         getCanonicalFileName(path: string): string;
         log(text: string): void;
@@ -52,7 +52,7 @@ namespace ts.sourcemaps {
             if (!maps[targetIndex] || comparePaths(loc.fileName, maps[targetIndex].sourcePath, sourceRoot) !== 0) {
                 return loc;
             }
-            return { fileName: toPath(map.file, sourceRoot, host.getCanonicalFileName), position: maps[targetIndex].emittedPosition }; // Closest pos
+            return { fileName: toPath(map.file!, sourceRoot, host.getCanonicalFileName), position: maps[targetIndex].emittedPosition }; // Closest pos
         }
 
         function getOriginalPosition(loc: SourceMappableLocation): SourceMappableLocation {
@@ -68,7 +68,7 @@ namespace ts.sourcemaps {
 
         function getSourceFileLike(fileName: string, location: string): SourceFileLike | undefined {
             // Lookup file in program, if provided
-            const file: SourceFileLike = program && program.getSourceFile(fileName);
+            const file = program && program.getSourceFile(fileName);
             if (!file) {
                 // Otherwise check the cache (which may hit disk)
                 const path = toPath(fileName, location, host.getCanonicalFileName);
@@ -133,7 +133,7 @@ namespace ts.sourcemaps {
         function processPosition(position: RawSourceMapPosition): ProcessedSourceMapPosition {
             const sourcePath = map.sources[position.sourceIndex];
             return {
-                emittedPosition: getPositionOfLineAndCharacterUsingName(map.file, currentDirectory, position.emittedLine, position.emittedColumn),
+                emittedPosition: getPositionOfLineAndCharacterUsingName(map.file!, currentDirectory, position.emittedLine, position.emittedColumn),
                 sourcePosition: getPositionOfLineAndCharacterUsingName(sourcePath, sourceRoot, position.sourceLine, position.sourceColumn),
                 sourcePath,
                 // TODO: Consider using `name` field to remap the expected identifier to scan for renames to handle another tool renaming oout output
@@ -164,7 +164,7 @@ namespace ts.sourcemaps {
         currentSourceLine: number;
         currentSourceColumn: number;
         currentSourceIndex: number;
-        currentNameIndex: number;
+        currentNameIndex: number | undefined;
         encodedText: string;
         sourceMapNamesLength?: number;
         error?: string;
@@ -282,14 +282,14 @@ namespace ts.sourcemaps {
             return condition;
         }
 
-        function base64VLQFormatDecode() {
+        function base64VLQFormatDecode(): number {
             let moreDigits = true;
             let shiftCount = 0;
             let value = 0;
 
             for (; moreDigits; state.decodingIndex++) {
                 if (createErrorIfCondition(state.decodingIndex >= state.encodedText.length, "Error in decoding base64VLQFormatDecode, past the mapping string")) {
-                    return;
+                    return undefined!; // TODO: GH#18217
                 }
 
                 // 6 digit number

@@ -260,6 +260,7 @@ function getCompilerSettings(base, useBuiltCompiler) {
     for (const key in base) {
         copy[key] = base[key];
     }
+    copy.strictNullChecks = true;
     if (!useDebugMode) {
         if (copy.removeComments === undefined) copy.removeComments = true;
     }

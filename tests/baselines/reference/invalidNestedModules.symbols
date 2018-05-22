@@ -50,7 +50,7 @@ module M2 {
 >X : Symbol(X, Decl(invalidNestedModules.ts, 15, 10), Decl(invalidNestedModules.ts, 21, 11))
 
         export var Point: number; // Error
->Point : Symbol(X.Point, Decl(invalidNestedModules.ts, 23, 18))
+>Point : Symbol(Point, Decl(invalidNestedModules.ts, 23, 18))
     }
 }
 

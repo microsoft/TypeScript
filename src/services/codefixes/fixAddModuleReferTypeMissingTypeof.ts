@@ -7,26 +7,24 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions: context => {
             const { sourceFile, span } = context;
-            const typeContainer = getImportTypeNode(sourceFile, span.start);
-            if (!typeContainer) return undefined;
-
-            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, typeContainer));
+            const importType = getImportTypeNode(sourceFile, span.start);
+            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, importType));
             return [createCodeFixAction(fixId, changes, Diagnostics.Add_missing_typeof, fixId, Diagnostics.Add_missing_typeof)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) =>
-            doChange(changes, context.sourceFile, getImportTypeNode(diag.file, diag.start!))),
+            doChange(changes, context.sourceFile, getImportTypeNode(diag.file, diag.start))),
     });
 
-    function getImportTypeNode(sourceFile: SourceFile, pos: number): ImportTypeNode | undefined {
+    function getImportTypeNode(sourceFile: SourceFile, pos: number): ImportTypeNode {
         const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
         Debug.assert(token.kind === SyntaxKind.ImportKeyword);
         Debug.assert(token.parent.kind === SyntaxKind.ImportType);
         return <ImportTypeNode>token.parent;
     }
 
-    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, typeContainer: ImportTypeNode) {
-        const newTypeNode = updateImportTypeNode(typeContainer, typeContainer.argument, typeContainer.qualifier, typeContainer.typeArguments, /* isTypeOf */ true);
-        changes.replaceNode(sourceFile, typeContainer, newTypeNode);
+    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importType: ImportTypeNode) {
+        const newTypeNode = updateImportTypeNode(importType, importType.argument, importType.qualifier, importType.typeArguments, /* isTypeOf */ true);
+        changes.replaceNode(sourceFile, importType, newTypeNode);
     }
 }

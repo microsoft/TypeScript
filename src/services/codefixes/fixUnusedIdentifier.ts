@@ -9,19 +9,26 @@ namespace ts.codefix {
         Diagnostics.Property_0_is_declared_but_its_value_is_never_read.code,
         Diagnostics.All_imports_in_import_declaration_are_unused.code,
         Diagnostics.All_destructured_elements_are_unused.code,
+        Diagnostics.All_variables_are_unused.code,
     ];
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
             const { errorCode, sourceFile } = context;
-            const importDecl = tryGetFullImport(sourceFile, context.span.start);
+            const startToken = getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false);
+
+            const importDecl = tryGetFullImport(startToken);
             if (importDecl) {
                 const changes = textChanges.ChangeTracker.with(context, t => t.deleteNode(sourceFile, importDecl));
                 return [createCodeFixAction(fixName, changes, [Diagnostics.Remove_import_from_0, showModuleSpecifier(importDecl)], fixIdDelete, Diagnostics.Delete_all_unused_declarations)];
             }
-            const delDestructure = textChanges.ChangeTracker.with(context, t => tryDeleteFullDestructure(t, sourceFile, context.span.start, /*deleted*/ undefined));
+            const delDestructure = textChanges.ChangeTracker.with(context, t => tryDeleteFullDestructure(t, sourceFile, startToken, /*deleted*/ undefined));
             if (delDestructure.length) {
                 return [createCodeFixAction(fixName, delDestructure, Diagnostics.Remove_destructuring, fixIdDelete, Diagnostics.Delete_all_unused_declarations)];
+            }
+            const delVar = textChanges.ChangeTracker.with(context, t => tryDeleteFullVariableStatement(t, sourceFile, startToken, /*deleted*/ undefined));
+            if (delVar.length) {
+                return [createCodeFixAction(fixName, delDestructure, Diagnostics.Remove_variable_statement, fixIdDelete, Diagnostics.Delete_all_unused_declarations)];
             }
 
             const token = getToken(sourceFile, textSpanEnd(context.span));
@@ -45,7 +52,8 @@ namespace ts.codefix {
             const deleted = new NodeSet();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const { sourceFile } = context;
-                const token = findPrecedingToken(textSpanEnd(diag), diag.file!);
+                const startToken = getTokenAtPosition(sourceFile, diag.start, /*includeJsDocComment*/ false);
+                const token = findPrecedingToken(textSpanEnd(diag), diag.file)!;
                 switch (context.fixId) {
                     case fixIdPrefix:
                         if (isIdentifier(token) && canPrefix(token)) {
@@ -54,16 +62,14 @@ namespace ts.codefix {
                         break;
                     case fixIdDelete:
                         // Ignore if this range was already deleted.
-                        if (deleted.some(d => rangeContainsPosition(d, diag.start!))) break;
+                        if (deleted.some(d => rangeContainsPosition(d, diag.start))) break;
 
-                        const importDecl = tryGetFullImport(diag.file!, diag.start!);
+                        const importDecl = tryGetFullImport(startToken);
                         if (importDecl) {
                             changes.deleteNode(sourceFile, importDecl);
                         }
-                        else {
-                            if (!tryDeleteFullDestructure(changes, sourceFile, diag.start!, deleted)) {
-                                tryDeleteDeclaration(changes, sourceFile, token, deleted);
-                            }
+                        else if (!tryDeleteFullDestructure(changes, sourceFile, startToken, deleted) && !tryDeleteFullVariableStatement(changes, sourceFile, startToken, deleted)) {
+                            tryDeleteDeclaration(changes, sourceFile, token, deleted);
                         }
                         break;
                     default:
@@ -74,15 +80,13 @@ namespace ts.codefix {
     });
 
     // Sometimes the diagnostic span is an entire ImportDeclaration, so we should remove the whole thing.
-    function tryGetFullImport(sourceFile: SourceFile, pos: number): ImportDeclaration | undefined {
-        const startToken = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+    function tryGetFullImport(startToken: Node): ImportDeclaration | undefined {
         return startToken.kind === SyntaxKind.ImportKeyword ? tryCast(startToken.parent, isImportDeclaration) : undefined;
     }
 
-    function tryDeleteFullDestructure(changes: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, deletedAncestors: NodeSet | undefined): boolean {
-        const startToken = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+    function tryDeleteFullDestructure(changes: textChanges.ChangeTracker, sourceFile: SourceFile, startToken: Node, deletedAncestors: NodeSet | undefined): boolean {
         if (startToken.kind !== SyntaxKind.OpenBraceToken || !isObjectBindingPattern(startToken.parent)) return false;
-        const decl = startToken.parent.parent;
+        const decl = cast(startToken.parent, isObjectBindingPattern).parent;
         switch (decl.kind) {
             case SyntaxKind.VariableDeclaration:
                 tryDeleteVariableDeclaration(changes, sourceFile, decl, deletedAncestors);
@@ -101,10 +105,20 @@ namespace ts.codefix {
         return true;
     }
 
+    function tryDeleteFullVariableStatement(changes: textChanges.ChangeTracker, sourceFile: SourceFile, startToken: Node, deletedAncestors: NodeSet | undefined) {
+        const declarationList = tryCast(startToken.parent, isVariableDeclarationList);
+        if (declarationList && declarationList.getChildren(sourceFile)[0] === startToken) {
+            if (deletedAncestors) deletedAncestors.add(declarationList);
+            changes.deleteNode(sourceFile, declarationList.parent.kind === SyntaxKind.VariableStatement ? declarationList.parent : declarationList);
+            return true;
+        }
+        return false;
+    }
+
     function getToken(sourceFile: SourceFile, pos: number): Node {
-        const token = findPrecedingToken(pos, sourceFile, /*startNode*/ undefined, /*includeJsDoc*/ true);
+        const token = findPrecedingToken(pos, sourceFile, /*startNode*/ undefined, /*includeJsDoc*/ true)!;
         // this handles var ["computed"] = 12;
-        return token.kind === SyntaxKind.CloseBracketToken ? findPrecedingToken(pos - 1, sourceFile) : token;
+        return token.kind === SyntaxKind.CloseBracketToken ? findPrecedingToken(pos - 1, sourceFile)! : token;
     }
 
     function tryPrefixDeclaration(changes: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, token: Node): void {
@@ -166,8 +180,9 @@ namespace ts.codefix {
             case SyntaxKind.TypeParameter:
                 const typeParameters = getEffectiveTypeParameterDeclarations(<DeclarationWithTypeParameters>parent.parent);
                 if (typeParameters.length === 1) {
-                    const previousToken = getTokenAtPosition(sourceFile, typeParameters.pos - 1, /*includeJsDocComment*/ false);
-                    const nextToken = getTokenAtPosition(sourceFile, typeParameters.end, /*includeJsDocComment*/ false);
+                    const { pos, end } = cast(typeParameters, isNodeArray);
+                    const previousToken = getTokenAtPosition(sourceFile, pos - 1, /*includeJsDocComment*/ false);
+                    const nextToken = getTokenAtPosition(sourceFile, end, /*includeJsDocComment*/ false);
                     Debug.assert(previousToken.kind === SyntaxKind.LessThanToken);
                     Debug.assert(nextToken.kind === SyntaxKind.GreaterThanToken);
 
@@ -193,7 +208,7 @@ namespace ts.codefix {
                         oldFunction,
                         oldFunction.modifiers,
                         oldFunction.typeParameters,
-                        /*parameters*/ undefined,
+                        /*parameters*/ undefined!, // TODO: GH#18217
                         oldFunction.type,
                         oldFunction.equalsGreaterThanToken,
                         oldFunction.body);
@@ -227,7 +242,7 @@ namespace ts.codefix {
 
             // handle case where 'import a = A;'
             case SyntaxKind.ImportEqualsDeclaration:
-                const importEquals = getAncestor(identifier, SyntaxKind.ImportEqualsDeclaration);
+                const importEquals = getAncestor(identifier, SyntaxKind.ImportEqualsDeclaration)!;
                 changes.deleteNode(sourceFile, importEquals);
                 break;
 
@@ -249,15 +264,15 @@ namespace ts.codefix {
                 }
                 else {
                     // import |d,| * as ns from './file'
-                    const start = importClause.name.getStart(sourceFile);
-                    const nextToken = getTokenAtPosition(sourceFile, importClause.name.end, /*includeJsDocComment*/ false);
+                    const start = importClause.name!.getStart(sourceFile);
+                    const nextToken = getTokenAtPosition(sourceFile, importClause.name!.end, /*includeJsDocComment*/ false);
                     if (nextToken && nextToken.kind === SyntaxKind.CommaToken) {
                         // shift first non-whitespace position after comma to the start position of the node
                         const end = skipTrivia(sourceFile.text, nextToken.end, /*stopAfterLineBreaks*/ false, /*stopAtComments*/ true);
                         changes.deleteRange(sourceFile, { pos: start, end });
                     }
                     else {
-                        changes.deleteNode(sourceFile, importClause.name);
+                        changes.deleteNode(sourceFile, importClause.name!);
                     }
                 }
                 break;
@@ -286,7 +301,7 @@ namespace ts.codefix {
             // Delete the entire import declaration
             // |import * as ns from './file'|
             // |import { a } from './file'|
-            const importDecl = getAncestor(namedBindings, SyntaxKind.ImportDeclaration);
+            const importDecl = getAncestor(namedBindings, SyntaxKind.ImportDeclaration)!;
             changes.deleteNode(sourceFile, importDecl);
         }
     }
@@ -330,18 +345,6 @@ namespace ts.codefix {
                     if (deletedAncestors) deletedAncestors.add(varDecl);
                     changes.deleteNodeInList(sourceFile, varDecl);
                 }
-        }
-    }
-
-    class NodeSet {
-        private map = createMap<Node>();
-
-        add(node: Node): void {
-            this.map.set(String(getNodeId(node)), node);
-        }
-
-        some(pred: (node: Node) => boolean): boolean {
-            return forEachEntry(this.map, pred) || false;
         }
     }
 }

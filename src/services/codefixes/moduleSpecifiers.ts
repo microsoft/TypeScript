@@ -182,7 +182,7 @@ namespace ts.moduleSpecifiers {
             return undefined;
         }
 
-        const parts = getNodeModulePathParts(moduleFileName);
+        const parts: NodeModulePathParts = getNodeModulePathParts(moduleFileName)!;
 
         if (!parts) {
             return undefined;
@@ -201,8 +201,8 @@ namespace ts.moduleSpecifiers {
             // If the file is the main module, it can be imported by the package name
             const packageRootPath = path.substring(0, parts.packageRootIndex);
             const packageJsonPath = combinePaths(packageRootPath, "package.json");
-            if (host.fileExists(packageJsonPath)) {
-                const packageJsonContent = JSON.parse(host.readFile(packageJsonPath));
+            if (host.fileExists!(packageJsonPath)) { // TODO: GH#18217
+                const packageJsonContent = JSON.parse(host.readFile!(packageJsonPath)!);
                 if (packageJsonContent) {
                     const mainFileRelative = packageJsonContent.typings || packageJsonContent.types || packageJsonContent.main;
                     if (mainFileRelative) {
@@ -237,7 +237,13 @@ namespace ts.moduleSpecifiers {
         }
     }
 
-    function getNodeModulePathParts(fullPath: string) {
+    interface NodeModulePathParts {
+        readonly topLevelNodeModulesIndex: number;
+        readonly topLevelPackageNameIndex: number;
+        readonly packageRootIndex: number;
+        readonly fileNameIndex: number;
+    }
+    function getNodeModulePathParts(fullPath: string): NodeModulePathParts | undefined {
         // If fullPath can't be valid module file within node_modules, returns undefined.
         // Example of expected pattern: /base/path/node_modules/[@scope/otherpackage/@otherscope/node_modules/]package/[subdirectory/]file.js
         // Returns indices:                       ^            ^                                                      ^             ^
@@ -297,7 +303,7 @@ namespace ts.moduleSpecifiers {
 
     function getPathRelativeToRootDirs(path: string, rootDirs: ReadonlyArray<string>, getCanonicalFileName: GetCanonicalFileName): string | undefined {
         return firstDefined(rootDirs, rootDir => {
-            const relativePath = getRelativePathIfInDirectory(path, rootDir, getCanonicalFileName);
+            const relativePath = getRelativePathIfInDirectory(path, rootDir, getCanonicalFileName)!; // TODO: GH#18217
             return isPathRelativeToParent(relativePath) ? undefined : relativePath;
         });
     }

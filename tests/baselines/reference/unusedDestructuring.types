@@ -25,6 +25,12 @@ const { f: g } = o;
 >g : any
 >o : any
 
+const { h } = o, { i } = o;
+>h : any
+>o : any
+>i : any
+>o : any
+
 function f({ a, b }, { c, d }, { e }) {
 >f : ({ a, b }: { a: any; b: any; }, { c, d }: { c: any; d: any; }, { e }: { e: any; }) => void
 >a : any
