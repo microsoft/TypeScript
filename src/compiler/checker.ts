@@ -15307,6 +15307,26 @@ namespace ts {
             }
         }
 
+        // Return true if the given expression is possibly a discriminant value. We limit the kinds of
+        // expressions we check to those that don't depend on their contextual type in order not to cause
+        // recursive (and possibly infinite) invocations of getContextualType.
+        function isPossiblyDiscriminantValue(node: Expression): boolean {
+            switch (node.kind) {
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.Identifier:
+                    return true;
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ParenthesizedExpression:
+                    return isPossiblyDiscriminantValue((<PropertyAccessExpression | ParenthesizedExpression>node).expression);
+            }
+            return false;
+        }
+
         // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
         // be "pushed" onto a node using the contextualType property.
         function getApparentTypeOfContextualType(node: Expression): Type {
@@ -15320,8 +15340,8 @@ namespace ts {
             propLoop: for (const prop of node.properties) {
                 if (!prop.symbol) continue;
                 if (prop.kind !== SyntaxKind.PropertyAssignment) continue;
-                if (isDiscriminantProperty(contextualType, prop.symbol.escapedName)) {
-                    const discriminatingType = getTypeOfNode(prop.initializer);
+                if (isPossiblyDiscriminantValue(prop.initializer) && isDiscriminantProperty(contextualType, prop.symbol.escapedName)) {
+                    const discriminatingType = checkExpression(prop.initializer);
                     for (const type of (contextualType as UnionType).types) {
                         const targetType = getTypeOfPropertyOfType(type, prop.symbol.escapedName);
                         if (targetType && checkTypeAssignableTo(discriminatingType, targetType, /*errorNode*/ undefined)) {
