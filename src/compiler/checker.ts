@@ -20570,7 +20570,6 @@ namespace ts {
                     const constraint = getBaseConstraintOfType(contextualType) || emptyObjectType;
                     return maybeTypeOfKind(constraint, TypeFlags.String) && maybeTypeOfKind(candidateType, TypeFlags.StringLiteral) ||
                         maybeTypeOfKind(constraint, TypeFlags.Number) && maybeTypeOfKind(candidateType, TypeFlags.NumberLiteral) ||
-                        maybeTypeOfKind(constraint, TypeFlags.Boolean) && maybeTypeOfKind(candidateType, TypeFlags.BooleanLiteral) ||
                         maybeTypeOfKind(constraint, TypeFlags.ESSymbol) && maybeTypeOfKind(candidateType, TypeFlags.UniqueESSymbol) ||
                         isLiteralOfContextualType(candidateType, constraint);
                 }
