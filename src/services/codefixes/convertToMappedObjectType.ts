@@ -4,74 +4,84 @@ namespace ts.codefix {
     const fixId = fixIdAddMissingTypeof;
     const errorCodes = [Diagnostics.An_index_signature_parameter_type_cannot_be_a_union_type_Consider_using_a_mapped_object_type_instead.code];
 
+    type FixableDeclaration = InterfaceDeclaration | TypeAliasDeclaration;
+
     interface Info {
         indexSignature: IndexSignatureDeclaration;
-        container: InterfaceDeclaration;
+        container: FixableDeclaration;
+        otherMembers: ReadonlyArray<TypeElement>;
+        parameterName: Identifier;
+        parameterType: TypeNode;
     }
 
     registerCodeFix({
         errorCodes,
         getCodeActions: context => {
             const { sourceFile, span } = context;
-            const info = getConvertibleSignatureAtPosition(sourceFile, span.start);
+            const info = getFixableSignatureAtPosition(sourceFile, span.start);
             if (!info) return;
-            const { indexSignature, container } = info;
+            const { indexSignature, container, otherMembers, parameterName, parameterType } = info;
 
-            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, indexSignature, container));
-            return [createCodeFixAction(fixId, changes, [Diagnostics.Convert_0_to_mapped_object_type, ""], fixId, [Diagnostics.Convert_0_to_mapped_object_type, ""])];
+            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, indexSignature, container, otherMembers, parameterName, parameterType));
+            return [createCodeFixAction(fixId, changes, [Diagnostics.Convert_0_to_mapped_object_type, idText(container.name)], fixId, [Diagnostics.Convert_0_to_mapped_object_type, idText(container.name)])];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-            const info = getConvertibleSignatureAtPosition(diag.file, diag.start);
+            const info = getFixableSignatureAtPosition(diag.file, diag.start);
             if (!info) return;
-            const { indexSignature, container } = info;
+            const { indexSignature, container, otherMembers, parameterName, parameterType } = info;
 
-            doChange(changes, context.sourceFile, indexSignature, container);
+            doChange(changes, context.sourceFile, indexSignature, container, otherMembers, parameterName, parameterType);
         })
     });
 
-    function isIndexSignatureParameterName(node: Node): node is Identifier {
-        return node && node.parent && node.parent.parent && node.parent.parent.parent &&
-            isIdentifier(node) && isParameter(node.parent) && isIndexSignatureDeclaration(node.parent.parent) && isInterfaceDeclaration(node.parent.parent.parent);
+    function isFixableDeclaration(node: Node): node is FixableDeclaration {
+        return isInterfaceDeclaration(node) || (node.parent && isTypeLiteralNode(node) && isTypeAliasDeclaration(node.parent));
     }
 
-    function getConvertibleSignatureAtPosition(sourceFile: SourceFile, pos: number): Info | undefined {
+    function isIndexSignatureParameterName(node: Node): node is Identifier {
+        return node && node.parent && node.parent.parent && node.parent.parent.parent &&
+            isIdentifier(node) && isParameter(node.parent) && isIndexSignatureDeclaration(node.parent.parent) && isFixableDeclaration(node.parent.parent.parent);
+    }
+
+    function getFixableSignatureAtPosition(sourceFile: SourceFile, pos: number): Info | undefined {
         const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
         if (!isIndexSignatureParameterName(token)) return undefined;
 
         const indexSignature = <IndexSignatureDeclaration>token.parent.parent;
-        const container = <InterfaceDeclaration>indexSignature.parent;
+        const container: FixableDeclaration = isInterfaceDeclaration(indexSignature.parent) ? indexSignature.parent : <TypeAliasDeclaration>indexSignature.parent.parent;
+        const members = isInterfaceDeclaration(container) ? container.members : (<TypeLiteralNode>container.type).members;
+        const otherMembers = filter(members, member => !isIndexSignatureDeclaration(member));
+        const parameter = first(indexSignature.parameters);
 
         return {
             indexSignature,
-            container
+            container,
+            otherMembers,
+            parameterName: <Identifier>parameter.name,
+            parameterType: parameter.type
         };
     }
 
-    function createTypeAliasFromInterface(indexSignature: IndexSignatureDeclaration, declaration: InterfaceDeclaration) {
-        const otherMembersType = createTypeLiteralNode(filter(declaration.members, member => !isIndexSignatureDeclaration(member)));
-        const parameter = first(indexSignature.parameters);
-        const mappedObjectType = createMappedTypeNode(
-            hasReadonlyModifier(indexSignature) ? createModifier(SyntaxKind.ReadonlyKeyword) : undefined,
-            createTypeParameterDeclaration(
-                <Identifier>parameter.name,
-                parameter.type
-            ),
-            indexSignature.questionToken,
-            indexSignature.type
-        );
+    function createTypeAliasFromInterface(indexSignature: IndexSignatureDeclaration, declaration: FixableDeclaration, otherMembers: ReadonlyArray<TypeElement>, parameterName: Identifier, parameterType: TypeNode) {
+        const mappedIntersectionType: TypeNode[] = [
+            createMappedTypeNode(
+                hasReadonlyModifier(indexSignature) ? createModifier(SyntaxKind.ReadonlyKeyword) : undefined,
+                createTypeParameterDeclaration(parameterName, parameterType),
+                indexSignature.questionToken,
+                indexSignature.type)
+        ];
 
         return createTypeAliasDeclaration(
             declaration.decorators,
             declaration.modifiers,
             declaration.name,
             declaration.typeParameters,
-            createIntersectionTypeNode([mappedObjectType, otherMembersType])
+            createIntersectionTypeNode(append(mappedIntersectionType, otherMembers.length ? createTypeLiteralNode(otherMembers) : undefined))
         );
     }
 
-    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, indexSignature: IndexSignatureDeclaration, declaration: InterfaceDeclaration) {
-        const newTypeDeclaration = createTypeAliasFromInterface(indexSignature, declaration);
-        changes.replaceNode(sourceFile, declaration, newTypeDeclaration);
+    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, indexSignature: IndexSignatureDeclaration, declaration: FixableDeclaration, otherMembers: ReadonlyArray<TypeElement>, parameterName: Identifier, parameterType: TypeNode) {
+        changes.replaceNode(sourceFile, declaration, createTypeAliasFromInterface(indexSignature, declaration, otherMembers, parameterName, parameterType));
     }
 }
